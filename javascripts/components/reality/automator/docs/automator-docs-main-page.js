@@ -11,7 +11,8 @@ Vue.component("automator-docs-main-page", {
         v-for="command in commands"
         class="c-automator-docs-page__link"
         @click="$emit('select', command.id)"
-      >{{command.keyword}}</span>
-    </div>
-  `
+      >
+        {{ command.keyword }}
+      </span>
+    </div>`
 });

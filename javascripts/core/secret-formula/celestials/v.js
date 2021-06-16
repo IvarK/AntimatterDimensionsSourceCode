@@ -122,8 +122,8 @@ GameDatabase.celestials.v = {
       currentValue: () => (
         // Dirty hack I know lmao
         Currency.timeTheorems.gte(400000)
-        ? -Math.log10(player.minNegativeBlackHoleThisReality)
-        : 0),
+          ? -Math.log10(player.minNegativeBlackHoleThisReality)
+          : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,
       shardReduction: tiers => 50 * tiers,
       maxShardReduction: goal => goal - 50,

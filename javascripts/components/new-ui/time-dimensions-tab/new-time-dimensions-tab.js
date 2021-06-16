@@ -41,30 +41,35 @@ Vue.component("new-time-dimensions-tab", {
         <primary-button
           class="o-primary-btn--subtab-option"
           @click="maxAll"
-        >Max all</primary-button>
+        >
+          Max all
+        </primary-button>
         <primary-button
           v-if="areAutobuyersUnlocked"
           class="o-primary-btn--subtab-option"
           @click="toggleAllAutobuyers"
-        >Toggle all autobuyers</primary-button>
+        >
+          Toggle all autobuyers
+        </primary-button>
       </div>
       <div>
-        <p>You have gained
-          <span class="c-time-dim-description__accent">{{formatInt(totalUpgrades)}}</span> Tickspeed upgrades from
-          <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> Time Shards.
+        <p>
+          You have gained
+          <span class="c-time-dim-description__accent">{{ formatInt(totalUpgrades) }}</span> Tickspeed upgrades from
+          <span class="c-time-dim-description__accent">{{ format(timeShards, 2, 1) }}</span> Time Shards.
         </p>
         <p>
           Next Tickspeed upgrade at
-          <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}</span>, increasing by
-          <span class="c-time-dim-description__accent">{{formatX(multPerTickspeed, 2, 2)}}</span> per
+          <span class="c-time-dim-description__accent">{{ format(upgradeThreshold, 2, 1) }}</span>, increasing by
+          <span class="c-time-dim-description__accent">{{ formatX(multPerTickspeed, 2, 2) }}</span> per
           Tickspeed upgrade gained.
         </p>
       </div>
       <div>
         The amount each additional upgrade requires will start
-        increasing above {{formatInt(tickspeedSoftcap)}} Tickspeed upgrades.
+        increasing above {{ formatInt(tickspeedSoftcap) }} Tickspeed upgrades.
       </div>
-      <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
+      <div>You are getting {{ format(shardsPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
       <div class="l-dimensions-container">
         <new-time-dimension-row
           v-for="tier in 8"
@@ -74,10 +79,10 @@ Vue.component("new-time-dimensions-tab", {
         />
       </div>
       <div>
-        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} and
-        {{format(costIncreases[1])}} Eternity Points,
+        Time Dimension costs jump at {{ format(costIncreases[0], 2, 2) }} and
+        {{ format(costIncreases[1]) }} Eternity Points,
         <br>
-        and costs increase much faster after {{format(costIncreases[2])}} Eternity Points.
+        and costs increase much faster after {{ format(costIncreases[2]) }} Eternity Points.
         <br>
         Hold shift to see the Eternity Point cost for locked dimensions.
       </div>

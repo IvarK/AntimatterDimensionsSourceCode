@@ -170,13 +170,13 @@ const Enslaved = {
   },
   spendTimeForHint() {
     if (player.celestials.enslaved.stored < this.nextHintCost) return false;
-      player.celestials.enslaved.stored -= this.nextHintCost;
-      if (Enslaved.hintCostIncreases === 0) {
-        player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
-      } else {
-        player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
-      }
-      return true;
+    player.celestials.enslaved.stored -= this.nextHintCost;
+    if (Enslaved.hintCostIncreases === 0) {
+      player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
+    } else {
+      player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
+    }
+    return true;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];

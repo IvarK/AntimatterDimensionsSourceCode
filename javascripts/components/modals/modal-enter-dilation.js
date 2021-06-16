@@ -10,8 +10,8 @@ Vue.component("modal-enter-dilation", {
     },
     message() {
       return `Dilating time will start a new Eternity, and all Dimension multiplier's exponents and
-      Tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
-      you'll be rewarded with Tachyon Particles based on your antimatter and Tachyon Particles.`;
+        Tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
+        you'll be rewarded with Tachyon Particles based on your antimatter and Tachyon Particles.`;
     },
     entranceLabel() {
       return `You are about to enter Dilation`;
@@ -37,10 +37,10 @@ Vue.component("modal-enter-dilation", {
       this.emitClose();
     },
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
-    <h2>{{ entranceLabel }}</h2>
-    <h3>{{ EPSinceLabel }}</h3>
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
+      <h2>{{ entranceLabel }}</h2>
+      <h3>{{ EPSinceLabel }}</h3>
       <div class="c-modal-message__text">
         {{ message }}
       </div>
@@ -49,12 +49,15 @@ Vue.component("modal-enter-dilation", {
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
-        >Cancel</primary-button>
+        >
+          Cancel
+        </primary-button>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
-        >Enter</primary-button>
-        </div>
+        >
+          Enter
+        </primary-button>
       </div>
     </div>`
 });

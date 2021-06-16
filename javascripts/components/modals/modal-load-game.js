@@ -31,19 +31,21 @@ Vue.component("modal-load-game", {
           }
         }
       },
-      template:
-        `<div class="l-modal-options__save-record">
+      template: `
+        <div class="l-modal-options__save-record">
           <strong>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></strong>
           <span>Antimatter: {{ formatAntimatter(antimatter) }}</span>
           <primary-button
             class="o-primary-btn--width-medium"
             @click="load"
-          >Load</primary-button>
+          >
+            Load
+          </primary-button>
         </div>`
     }
   },
-  template:
-    `<modal-options @close="emitClose">
+  template: `
+    <modal-options @close="emitClose">
         <save-game-record v-for="id in 3" :key="id" :saveId="id - 1" />
     </modal-options>`
 });

@@ -16,6 +16,15 @@ Vue.component("automator-editor", {
       scripts: [],
     };
   },
+  created() {
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.updateCurrentScriptID();
+    this.updateScriptList();
+  },
+  beforeDestroy() {
+    EventHub.ui.offAll(this);
+  },
   computed: {
     fullScreen() {
       return this.$viewModel.tabs.reality.automator.fullScreen;
@@ -145,49 +154,56 @@ Vue.component("automator-editor", {
       this.$recompute("currentScriptContent");
     }
   },
-  created() {
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
-    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
-    this.updateCurrentScriptID();
-    this.updateScriptList();
-  },
-  beforeDestroy() {
-    EventHub.ui.offAll(this);
-  },
-  template:
-    `<div class="l-automator-pane">
+  template: `
+    <div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
         <automator-controls />
         <div class="l-automator__script-names">
           <template v-if="!editingName">
-            <select class="l-automator__scripts-dropdown"
-                    @input="onScriptDropdown">
-              <option v-for="script in scripts"
-                      v-bind="selectedScriptAttribute(script.id)"
-                      :value="script.id">{{dropdownLabel(script)}}</option>
+            <select
+              class="l-automator__scripts-dropdown"
+              @input="onScriptDropdown"
+            >
+              <option
+                v-for="script in scripts"
+                v-bind="selectedScriptAttribute(script.id)"
+                :value="script.id"
+              >
+                {{ dropdownLabel(script) }}
+              </option>
               <option value="createNewScript">Create new...</option>
             </select>
-            <automator-button class="far fa-edit" @click="rename"
-                      v-tooltip="'Rename script'"/>
+            <automator-button
+              class="far fa-edit"
+              @click="rename"
+              v-tooltip="'Rename script'"
+            />
           </template>
-          <input v-else ref="renameInput"
-                        class="l-automator__rename-input"
-                        @blur="nameEdited"
-                        @keyup.enter="$refs.renameInput.blur()"/>
+          <input
+            v-else
+            ref="renameInput"
+            class="l-automator__rename-input"
+            @blur="nameEdited"
+            @keyup.enter="$refs.renameInput.blur()"
+          />
         </div>
-          <automator-button class="fas fa-trash"
+        <automator-button
+          class="fas fa-trash"
           @click="deleteScript"
-          v-tooltip="'Delete this script'"/>
+          v-tooltip="'Delete this script'"
+        />
 
-          <automator-button
+        <automator-button
           :class="modeIconClass"
           @click="toggleAutomatorMode()"
-          />
+        />
       </div>
-      <automator-text-editor :currentScriptID="currentScriptID"
-                             :activeLineInfo="activeLineInfo"
-                             :runningScriptID="runningScriptID"
-                             v-if="isTextAutomator"/>
-      <automator-block-editor v-if="isBlockAutomator"/>
+      <automator-text-editor
+        :currentScriptID="currentScriptID"
+        :activeLineInfo="activeLineInfo"
+        :runningScriptID="runningScriptID"
+        v-if="isTextAutomator"
+      />
+      <automator-block-editor v-if="isBlockAutomator" />
     </div>`
 });

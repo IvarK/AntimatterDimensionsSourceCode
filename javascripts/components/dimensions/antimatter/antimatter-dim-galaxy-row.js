@@ -81,11 +81,11 @@ Vue.component("antimatter-dim-galaxy-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
   },
-  template:
-    `<div class="c-antimatter-dim-row">
+  template: `
+    <div class="c-antimatter-dim-row">
       <div class="c-dim-row__label c-dim-row__label--growable" style="height: 6rem;">
-        {{typeName}} ({{sumText}}):
-        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
+        {{ typeName }} ({{ sumText }}):
+        requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
         <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
       </div>
       <primary-button
@@ -94,6 +94,8 @@ Vue.component("antimatter-dim-galaxy-row", {
         :class="tutorialClass"
         @click.exact="buyGalaxy(true)"
         @click.shift.exact="buyGalaxy(false)"
-      >{{buttonText}}</primary-button>
+      >
+        {{ buttonText }}
+      </primary-button>
     </div>`
 });

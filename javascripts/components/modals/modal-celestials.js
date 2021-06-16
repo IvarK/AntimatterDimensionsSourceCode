@@ -105,14 +105,17 @@ Vue.component("modal-celestials", {
       </div>
       <div class="l-options-grid__row">
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                @click="handleNoClick"
-                >Cancel</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          Cancel
+        </primary-button>
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-                @click="handleYesClick"
-                >Begin</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >
+          Begin
+        </primary-button>
       </div>
-    </div>
-  `
+    </div>`
 });

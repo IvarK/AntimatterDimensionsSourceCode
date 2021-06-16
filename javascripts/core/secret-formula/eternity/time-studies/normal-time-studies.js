@@ -86,7 +86,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 51,
       cost: 3,
       requirement: () => TimeStudy(41).isBought || TimeStudy(42).isBought,
-      description: () => `You gain ${formatX(1e15, 0, 0)} more Infinity Points`,
+      description: () => `You gain ${formatX(1e15)} more Infinity Points`,
       effect: 1e15
     },
     {
@@ -307,8 +307,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
       description: () => (Achievement(138).isUnlocked
-      ? `Replicanti Galaxies are ${formatPercents(0.5)} stronger`
-      : `Replicanti are ${formatX(10)} slower until ${format(Number.MAX_VALUE, 2)}` +
+        ? `Replicanti Galaxies are ${formatPercents(0.5)} stronger`
+        : `Replicanti are ${formatX(10)} slower until ${format(Number.MAX_VALUE, 2)}` +
       `, but Replicanti Galaxies are ${formatPercents(0.5)} stronger`),
       effect: 0.5
     },
@@ -319,7 +319,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(131).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(131).isBought && (TimeStudy(142).isBought || TimeStudy(143).isBought),
       description: () => (Perk.studyActiveEP.isBought
-        ? `You gain ${formatX(1e45, 0, 0)} more Infinity Points`
+        ? `You gain ${formatX(1e45)} more Infinity Points`
         : "Multiplier to Infinity Points, which decays over this Infinity"),
       effect: () => (Perk.studyActiveEP.isBought
         ? new Decimal(1e45)
@@ -332,7 +332,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 2,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${formatX(passiveIPMult(), 0, 0)} more Infinity Points`,
+      description: () => `You gain ${formatX(passiveIPMult())} more Infinity Points`,
       effect: passiveIPMult,
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
@@ -355,21 +355,21 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 151,
       cost: 8,
       requirement: () => TimeStudy(141).isBought || TimeStudy(142).isBought || TimeStudy(143).isBought,
-      description: () => `${formatX(1e4, 0, 0)} multiplier on all Time Dimensions`,
+      description: () => `${formatX(1e4)} multiplier on all Time Dimensions`,
       effect: 1e4
     },
     {
       id: 161,
       cost: 7,
       requirement: 151,
-      description: () => `${formatX("1e616", 0, 0)} multiplier on all Antimatter Dimensions`,
+      description: () => `${formatX("1e616")} multiplier on all Antimatter Dimensions`,
       effect: () => new Decimal("1e616")
     },
     {
       id: 162,
       cost: 7,
       requirement: 151,
-      description: () => `${formatX(1e11, 0, 0)} multiplier on all Infinity Dimensions`,
+      description: () => `${formatX(1e11)} multiplier on all Infinity Dimensions`,
       effect: 1e11
     },
     {
@@ -405,7 +405,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: () => (Enslaved.isRunning
         ? "There is not enough space in this Reality"
         : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts`)
-      },
+    },
     {
       id: 193,
       cost: 300,

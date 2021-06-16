@@ -19,12 +19,12 @@ class DimBoost {
     }
 
     let boost = Effects.max(
-        2,
-        InfinityUpgrade.dimboostMult,
-        InfinityChallenge(7).reward,
-        InfinityChallenge(7),
-        TimeStudy(81)
-      )
+      2,
+      InfinityUpgrade.dimboostMult,
+      InfinityChallenge(7).reward,
+      InfinityChallenge(7),
+      TimeStudy(81)
+    )
       .toDecimal()
       .timesEffectsOf(
         TimeStudy(83),
@@ -121,23 +121,23 @@ class DimBoost {
 }
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-    if (Currency.antimatter.gt(Player.infinityLimit)) return;
-    EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
-    player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
-    resetChallengeStuff();
-    if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
-      AntimatterDimensions.reset();
-      player.sacrificed = new Decimal(0);
-      resetTickspeed();
-    }
-    skipResetsIfPossible();
-    const canKeepAntimatter = Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought;
-    if (!forcedAMReset && canKeepAntimatter) {
-      Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
-    } else {
-      Currency.antimatter.reset();
-    }
-    EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
+  if (Currency.antimatter.gt(Player.infinityLimit)) return;
+  EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
+  player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
+  resetChallengeStuff();
+  if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
+    AntimatterDimensions.reset();
+    player.sacrificed = new Decimal(0);
+    resetTickspeed();
+  }
+  skipResetsIfPossible();
+  const canKeepAntimatter = Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought;
+  if (!forcedAMReset && canKeepAntimatter) {
+    Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
+  } else {
+    Currency.antimatter.reset();
+  }
+  EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
 
 function skipResetsIfPossible() {

@@ -79,20 +79,20 @@ Vue.component("modal-confirmation-options", {
     }
   },
   // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
-  template:
-    `<modal-options @close="emitClose" style="width: 50rem">
+  template: `
+    <modal-options @close="emitClose" style="width: 50rem">
       <div>
-        <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:"/>
-        <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:"/>
-        <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
-        <wide-on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
-        <wide-on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
-        <wide-on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:"/>
-        <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:"/>
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:"/>
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:"/>
-        <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:"/>
-        <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:"/>
+        <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
+        <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
+        <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />
+        <wide-on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:" />
+        <wide-on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:" />
+        <wide-on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:" />
+        <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:" />
+        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:" />
+        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:" />
+        <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
+        <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
       </div>
     </modal-options>`
 });

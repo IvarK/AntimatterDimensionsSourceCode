@@ -31,7 +31,7 @@ Vue.component("new-ui", {
       return this.$viewModel.news;
     },
     topMargin() {
-      return this.$viewModel.news ? "" : "margin-top: 3.9rem"
+      return this.$viewModel.news ? "" : "margin-top: 3.9rem";
     }
   },
   methods: {
@@ -50,16 +50,7 @@ Vue.component("new-ui", {
       const isIC8Running = InfinityChallenge(8).isRunning;
       const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running || isIC8Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
-      if (isChallengePowerVisible) {
-        const powerArray = [];
-        if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
-        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 3, 4)}`);
-        if (isIC6Running) powerArray.push(`Matter: /
-          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
-        if (isIC8Running) powerArray.push(`Production: /
-          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
-        this.challengePower = powerArray.join(", ");
-      }
+      if (this.isChallengePowerVisible) updateChallengePower();
 
       this.isInMatterChallenge = Player.isInMatterChallenge;
       if (this.isInMatterChallenge) {
@@ -84,7 +75,7 @@ Vue.component("new-ui", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
       if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
@@ -94,6 +85,16 @@ Vue.component("new-ui", {
       const endOfChallenge = Player.isInAntimatterChallenge && !player.options.retryChallenge;
       this.bigCrunch = endOfChallenge ||
         (Time.thisInfinity.totalMinutes > 1 && Time.bestInfinityRealTime.totalMinutes > 1);
+    },
+    updateChallengePower() {
+      const powerArray = [];
+      if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
+      if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 3, 4)}`);
+      if (isIC6Running) powerArray.push(`Matter: /
+        ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
+      if (isIC8Running) powerArray.push(`Production: /
+        ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
+      this.challengePower = powerArray.join(", ");
     },
     updateCelestial() {
       if (Teresa.isRunning) this.currCelestial = "Teresa's";
@@ -128,50 +129,54 @@ Vue.component("new-ui", {
       } else this.challengeDisplay = "";
     }
   },
-  template:
-  `<div id="page">
-    <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
-    <sidebar />
-    <div class="game-container" :style="topMargin">
-      <news-ticker v-if="news"/>
-      <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
-        <h3>The world has collapsed due to excess antimatter.</h3>
-        <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
-      </div>
-      <div class="tab-container" v-else>
-        <div class="l-reset-buttons-container" v-if="breakInfinity">
-          <game-header-eternity-button/>
-          <game-header-new-dim-button/>
-          <game-header-big-crunch-button/>
+  template: `
+    <div id="page">
+      <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
+      <sidebar />
+      <div class="game-container" :style="topMargin">
+        <news-ticker v-if="news" />
+        <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
+          <h3>The world has collapsed due to excess antimatter.</h3>
+          <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
         </div>
-        <game-header-amounts-line />
-        <div class="l-game-header__antimatter-container">
-          <p>You have <span class="c-game-header__antimatter">{{format(antimatter, 2, 1)}}</span> antimatter.</p>
-          <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
-        </div>
-        <div class="information-header" >
-          <span v-if="isInAnyChallenge">
-            You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
-          </span>
-          </span>
-          <div v-if="isInEffarig">
-            Gamespeed and multipliers are Dilated {{effarigMultNerfText}}
-            <br>
-            Tickspeed is Dilated {{effarigTickNerfText}}
+        <div class="tab-container" v-else>
+          <div class="l-reset-buttons-container" v-if="breakInfinity">
+            <game-header-eternity-button />
+            <game-header-new-dim-button />
+            <game-header-big-crunch-button />
           </div>
-          <div v-if="isInLaitela">
-            Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
+          <game-header-amounts-line />
+          <div class="l-game-header__antimatter-container">
+            <p>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.</p>
+            <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
           </div>
-          <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
-          <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
-          <black-hole-header-row />
+          <div class="information-header">
+            <span v-if="isInAnyChallenge">
+              You are currently in {{ challengeDisplay }}
+              <failable-ec-text v-if="isInFailableEC" />
+            </span>
+            </span>
+            <div v-if="isInEffarig">
+              Gamespeed and multipliers are Dilated {{ effarigMultNerfText }}
+              <br>
+              Tickspeed is Dilated {{ effarigTickNerfText }}
+            </div>
+            <div v-if="isInLaitela">
+              Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
+            </div>
+            <div v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</div>
+            <br><span v-if="isChallengePowerVisible">{{ challengePower }}</span>
+            <black-hole-header-row />
+          </div>
+          <button
+            class="btn-big-crunch btn-big-crunch--small"
+            onclick="bigCrunchResetRequest()"
+            v-if="smallCrunch && !bigCrunch"
+          >
+            Big Crunch
+          </button>
+          <slot />
         </div>
-        <button
-        class="btn-big-crunch btn-big-crunch--small"
-        onclick="bigCrunchResetRequest()"
-        v-if="smallCrunch && !bigCrunch">Big Crunch</button>
-        <slot />
       </div>
-    </div>
-  </div>`
+    </div>`
 });

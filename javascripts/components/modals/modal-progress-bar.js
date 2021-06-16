@@ -24,7 +24,7 @@ Vue.component("modal-progress-bar", {
     <div class="l-modal-overlay c-modal-overlay" style="z-index: 8">
       <div class="l-modal-progress-bar c-modal">
         <div class="c-modal-progress-bar__label">
-          {{progress.label}}
+          {{ progress.label }}
         </div>
         <div>
           Ticks: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
@@ -34,7 +34,7 @@ Vue.component("modal-progress-bar", {
         </div>
         <div class="l-modal-progress-bar__hbox">
           <div class="l-modal-progress-bar__bg c-modal-progress-bar__bg">
-            <div class="l-modal-progress-bar__fg c-modal-progress-bar__fg" :style="foregroundStyle"/>
+            <div class="l-modal-progress-bar__fg c-modal-progress-bar__fg" :style="foregroundStyle" />
           </div>
         </div>
       </div>

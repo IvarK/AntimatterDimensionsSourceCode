@@ -73,13 +73,13 @@ class MatterDimensionState {
     const tierFactor = Math.pow(4, this._tier);
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) *
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
-        .times(this.commonDarkMult)
-        .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
-        .timesEffectsOf(
-          SingularityMilestone.darkEnergyMult,
-          SingularityMilestone.realityDEMultiplier,
-          SingularityMilestone.multFromInfinitied
-        ).toNumber();
+      .times(this.commonDarkMult)
+      .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
+      .timesEffectsOf(
+        SingularityMilestone.darkEnergyMult,
+        SingularityMilestone.realityDEMultiplier,
+        SingularityMilestone.multFromInfinitied
+      ).toNumber();
   }
 
   get adjustedStartingCost() {

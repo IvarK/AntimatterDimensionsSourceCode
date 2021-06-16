@@ -29,7 +29,7 @@ class DimensionState {
 
   /** @abstract */
   get productionPerSecond() { throw new NotImplementedError(); }
-  
+
   get productionPerRealSecond() {
     return this.productionPerSecond.times(getGameSpeedupForDisplay());
   }

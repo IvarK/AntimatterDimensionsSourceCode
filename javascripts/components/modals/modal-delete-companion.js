@@ -51,8 +51,8 @@ Vue.component("modal-delete-companion", {
       Glyphs.removeFromInventory(toDelete);
     }
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
       <div class="c-modal-message__text">
         {{ message }}
       </div>
@@ -60,17 +60,23 @@ Vue.component("modal-delete-companion", {
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleLeftButtonClick"
-        >{{messageIndex < 2 ? "Delete" : "Cancel"}}</primary-button>
+        >
+          {{ messageIndex < 2 ? "Delete" : "Cancel" }}
+        </primary-button>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleRightButtonClick"
-        >{{messageIndex >= 2 ? "Delete" : "Cancel"}}</primary-button>
+        >
+          {{ messageIndex >= 2 ? "Delete" : "Cancel" }}
+        </primary-button>
       </div>
       <div v-else>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
-        >Thank you</primary-button>
+        >
+          Thank you
+        </primary-button>
       </div>
     </div>`
 });

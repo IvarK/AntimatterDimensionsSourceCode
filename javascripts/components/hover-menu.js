@@ -74,13 +74,14 @@ Vue.component("hover-menu", {
     },
   },
   template: `
-    <div class="l-hover-menu__wrapper"
-         v-on="listeners"
-         @contextmenu.prevent="toggleContextMenu" >
+    <div
+      class="l-hover-menu__wrapper"
+      v-on="listeners"
+      @contextmenu.prevent="toggleContextMenu"
+    >
       <slot name="object" ref="clown">
       </slot>
       <slot name="menu" v-if="contextMenuIsVisible">
       </slot>
-    </div>
-    `,
+    </div>`
 });

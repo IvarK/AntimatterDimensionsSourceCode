@@ -103,7 +103,7 @@ function timeDimensionCommonMultiplier() {
       Decimal.pow(
         Math.clampMin(Currency.infinityPower.value.pow(getInfinityConversionRate() / 7).log2(), 1),
         4)
-      .clampMin(1));
+        .clampMin(1));
   }
   return mult;
 }
@@ -191,7 +191,7 @@ class TimeDimensionState extends DimensionState {
   get productionPerSecond() {
     if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
       (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-        return new Decimal(0);
+      return new Decimal(0);
     }
 
     if (EternityChallenge(11).isRunning) {

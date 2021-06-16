@@ -38,10 +38,12 @@ Vue.component("break-infinity-button", {
       else if (!this.isBroken && this.isUnlocked) Modal.breakInfinity.show();
     }
   },
-  template:
-    `<button
+  template: `
+    <button
       v-tooltip="tooltip"
       :class="classObject"
       @click="clicked"
-    >{{text}}</button>`
+    >
+      {{ text }}
+    </button>`
 });

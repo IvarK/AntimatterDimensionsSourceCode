@@ -484,12 +484,12 @@ const Glyphs = {
   copyForRecords(glyphList) {
     // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured
     return glyphList.map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-        color: g.color,
-        symbol: g.symbol, }))
+      type: g.type,
+      level: g.level,
+      strength: g.strength,
+      effects: g.effects,
+      color: g.color,
+      symbol: g.symbol, }))
       .sort((a, b) => b.effects - a.effects);
   },
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs

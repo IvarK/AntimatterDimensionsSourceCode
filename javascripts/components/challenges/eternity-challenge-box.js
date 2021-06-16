@@ -49,15 +49,19 @@ Vue.component("eternity-challenge-box", {
       return "Locked";
     }
   },
-  template:
-    `<div class="c-challenge-box l-challenge-box c-challenge-box--eternity">
-      <hint-text type="challenges" class="l-hint-text--challenge">{{name}}</hint-text>
+  template: `
+    <div class="c-challenge-box l-challenge-box c-challenge-box--eternity">
+      <hint-text type="challenges" class="l-hint-text--challenge">
+        {{ name }}
+      </hint-text>
       <slot name="top" />
       <div class="l-challenge-box__fill" />
       <button
         :class="buttonClassObject"
         @click="$emit('start')"
-      >{{buttonText}}</button>
+      >
+        {{ buttonText }}
+      </button>
       <slot name="bottom" />
     </div>`
 });

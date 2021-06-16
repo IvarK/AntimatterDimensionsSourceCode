@@ -10,14 +10,6 @@ Vue.component("dilation-time-study", {
       requirement: ""
     };
   },
-  computed: {
-    study() {
-      return this.setup.study;
-    },
-    id() {
-      return this.study.id;
-    }
-  },
   created() {
     if (this.id === 1) {
       this.requirement = `Requirement: ${formatInt(5)} EC11 and EC12 completions
@@ -32,6 +24,14 @@ Vue.component("dilation-time-study", {
       this.showRequirement = true;
     }
   },
+  computed: {
+    study() {
+      return this.setup.study;
+    },
+    id() {
+      return this.study.id;
+    }
+  },
   methods: {
     update() {
       const id = this.id;
@@ -40,12 +40,12 @@ Vue.component("dilation-time-study", {
       }
     }
   },
-  template:
-    `<time-study :setup="setup">
+  template: `
+    <time-study :setup="setup">
       <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>
-        <span>{{requirement}}</span>
+        <span>{{ requirement }}</span>
       </template>
     </time-study>`
 });

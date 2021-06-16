@@ -9,8 +9,8 @@ Vue.component("footer-links", {
   created() {
     this.on$(GAME_EVENT.TAB_CHANGED, () => this.isVisible = !Tab.eternity.studies.isOpen);
   },
-  template:
-    `<div v-if="isVisible" class="o-footer">
+  template: `
+    <div v-if="isVisible" class="o-footer">
       <a href="about.html" target="_newtab" onclick="SecretAchievement(33).unlock()">Donate</a> |
       <a href="changelog.html" target="_newtab">Changelog</a> |
       <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |

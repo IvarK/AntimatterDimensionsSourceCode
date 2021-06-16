@@ -2,8 +2,8 @@
 
 Vue.component("modal-cloud-load-conflict", {
   mixins: [modalCloudConflictMixin],
-  template:
-    `<div class="c-modal-options l-modal-options">
+  template: `
+    <div class="c-modal-options l-modal-options">
       <b>Your cloud save appears to be older than your local save. Please select which one you would like to keep.</b>
       <modal-cloud-conflict-record
         :saveData="conflict.local"
@@ -13,7 +13,9 @@ Vue.component("modal-cloud-load-conflict", {
         <primary-button
           class="o-primary-btn--width-medium"
           @click="handleClick(false)"
-        >Load local</primary-button>
+        >
+          Load local
+        </primary-button>
       </modal-cloud-conflict-record>
       <modal-cloud-conflict-record
         :saveData="conflict.cloud"
@@ -23,7 +25,9 @@ Vue.component("modal-cloud-load-conflict", {
         <primary-button
           class="o-primary-btn--width-medium"
           @click="handleClick(true)"
-        >Load cloud</primary-button>
+        >
+          Load cloud
+        </primary-button>
       </modal-cloud-conflict-record>
     </div>`
 });

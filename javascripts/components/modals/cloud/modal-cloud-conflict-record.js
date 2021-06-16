@@ -6,8 +6,8 @@ Vue.component("modal-cloud-conflict-record", {
     saveData: Object,
     saveType: String
   },
-  template:
-    `<div class="l-modal-options__save-record">
+  template: `
+    <div class="l-modal-options__save-record">
       <strong>Save #{{ saveId + 1 }} ({{ saveType }}):</strong>
       <span>Infinities: {{ saveData.infinities }}</span>
       <span>Eternities: {{ saveData.eternities }}</span>

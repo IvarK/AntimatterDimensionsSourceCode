@@ -20,7 +20,7 @@ Vue.component("old-ui", {
   },
   methods: {
     update() {
-      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
       if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
@@ -42,7 +42,7 @@ Vue.component("old-ui", {
         </div>
       </template>
       <template v-else>
-        <news-ticker class="l-old-ui__news-bar" v-if="news"/>
+        <news-ticker class="l-old-ui__news-bar" v-if="news" />
         <game-header class="l-old-ui__header" />
         <old-ui-tab-bar />
         <component v-if="tab.config.before" :is="tab.config.before" />
@@ -56,6 +56,5 @@ Vue.component("old-ui", {
         </div>
         <footer-links class="l-old-ui__footer" />
       </template>
-    </div>
-    `
+    </div>`
 });

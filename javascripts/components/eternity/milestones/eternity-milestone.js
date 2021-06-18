@@ -41,10 +41,15 @@ Vue.component("eternity-milestone", {
     }
   },
   template:`
-    <div class="l-eternity-milestone" v-if="!this.config.invisible" v-tooltip="activeCondition">
+    <div class="l-eternity-milestone" v-if="!this.config.invisible">
       <span class="o-eternity-milestone__goal">
         {{ formatInt(eternities) }} {{ "Eternity" | pluralize(eternities, "Eternities") }}:
       </span>
-      <button :class="rewardClassObject">{{ reward }}</button>
+      <button
+        :class="rewardClassObject"
+        v-tooltip="activeCondition"
+      >
+        {{ reward }}
+      </button>
     </div>`
 });

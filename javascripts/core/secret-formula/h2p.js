@@ -27,8 +27,9 @@ You can transfer your save between places by using the export function, which wi
 random-looking characters into your clipboard. That text contains your save data, which you can load back into the
 game by pasting it into the text box on the import prompt. You need the entirety of the save text for importing to
 work properly, or else the game might not recognize the text as a valid save. Keep in mind that certain messaging
-applications may cut off part of the text if you are using one to transfer the save between devices.
-In addition to importing and exporting to your clipboard, you can also import and export from text files as well.
+applications may cut off part of the text if you are using one to transfer the save between devices. One way to tell
+that this has happened is for text to not end with <b>==</b>. In addition to importing and exporting to your clipboard,
+you can also import and export from text files as well.
 <br>
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
@@ -56,8 +57,8 @@ irreversible and gives you no permanent benefits, secret or otherwise.</b>
       info: () => `
 The game has two different UI layouts - the "old" UI maintains the style of Antimatter Dimensions from before the
 Reality update, while the "new" UI is a redesign based on more modern dark theme styles. Additionally, there are
-various themes which can be applied to modify the appearance of everything in the game. There are a few secret
-themes which can be unlocked through various means. Both UI layouts support all the different possible themes.
+various themes which can be applied to modify the appearance of everything in the game. There are a few secret themes
+which can be unlocked through importing certain phrases. Both UI layouts support all the different possible themes.
 <br>
 <br>
 The notation used to display numbers in the game defaults to Mixed Scientific, but can be changed to one of numerous

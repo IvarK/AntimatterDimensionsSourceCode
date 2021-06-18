@@ -446,8 +446,9 @@ function finishProcessReality(realityProps) {
   Lazy.invalidateAll();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
-  // This immediately gives eternity upgrades instead of after the first eternity
-  if (Teresa.has(TERESA_UNLOCKS.START_EU)) applyRealityUpgradesAfterEternity();
+  if (Teresa.has(TERESA_UNLOCKS.START_EU)) {
+    for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
+  }
 
   if (!isReset) Ra.applyAlchemyReactions();
 

@@ -20,13 +20,15 @@ Vue.component("reality-button", {
       const parts = [];
       if (this.machinesGained.gt(0)) parts.push(`${format(this.machinesGained, 2, 0)}`);
       if (this.imaginaryMachinesGained.gt(0)) parts.push(`${format(this.imaginaryMachinesGained, 2, 0)}i`);
+
+      if (parts.length === 0) return "No Machines gained";
       return `Machines gained: ${parts.join(" + ")}`;
     },
     formatMachineStats() {
       if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
         return `RM this Reality is capped!`;
       }
-      if (this.machinesGained.lt(100) && this.imaginaryMachinesGained.eq(0)) {
+      if (this.machinesGained.gt(0) && this.machinesGained.lt(100) && this.imaginaryMachinesGained.eq(0)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE) && this.imaginaryMachinesGained.eq(0)) {

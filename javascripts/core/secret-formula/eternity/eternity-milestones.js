@@ -117,8 +117,8 @@ GameDatabase.eternity.milestones = {
       return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity. ` +
         (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
     },
-    activeCondition: () => `Must be outside of all Challenges and Dilation,
-      the Eternity Autobuyer must be turned on and set to zero EP.`
+    activeCondition: () => `Must be outside of all Challenges and Dilation
+      and the Eternity Autobuyer must be turned on and set to zero EP.`
   },
   autoInfinities: {
     eternities: 1000,
@@ -131,6 +131,6 @@ GameDatabase.eternity.milestones = {
     },
     activeCondition: () => `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
       the Infinity Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
-      the Eternity Autobuyer must be turned off.`
+      and the Eternity Autobuyer must be turned off.`
   }
 };

@@ -105,11 +105,8 @@ Vue.component("header-challenge-display", {
       }
     },
     exitDisplay() {
-      if (Player.isInAnyChallenge) {
-        return "Exit Challenge";
-      } else if (player.dilation.active) {
-        return "Exit Dilation";
-      }
+      if (Player.isInAnyChallenge) return "Exit Challenge";
+      if (player.dilation.active) return "Exit Dilation";
       return "Exit Reality";
     },
   },

@@ -299,6 +299,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
+
+  reset() {
+    this.value = this.startingValue;
+    player.records.thisReality.maxEP = this.startingValue;
+  }
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {

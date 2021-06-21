@@ -40,7 +40,7 @@ Vue.component("eternity-milestone", {
       this.isReached = this.milestone.isReached;
     }
   },
-  template:`
+  template: `
     <div class="l-eternity-milestone" v-if="!this.config.invisible">
       <span class="o-eternity-milestone__goal">
         {{ formatInt(eternities) }} {{ "Eternity" | pluralize(eternities, "Eternities") }}:

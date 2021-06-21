@@ -118,7 +118,7 @@ GameDatabase.eternity.milestones = {
         (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
     },
     activeCondition: () => `Must be outside of all Challenges and Dilation,
-      Eternity Autobuyer must be turned on set to zero EP.`
+      Eternity Autobuyer must be turned on and set to zero EP.`
   },
   autoInfinities: {
     eternities: 1000,

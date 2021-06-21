@@ -24,7 +24,7 @@ Vue.component("eternity-milestones-tab", {
       return () => this.milestones[(row - 1) * 3 + column - 1];
     }
   },
-  template:`
+  template: `
     <div class="l-eternity-milestone-grid">
       <div>You have {{format(eternityCount, 3)}} {{"Eternity" | pluralize(eternityCount, "Eternities")}}.</div>
       <div>

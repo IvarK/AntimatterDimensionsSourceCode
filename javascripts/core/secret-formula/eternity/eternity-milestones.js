@@ -118,7 +118,7 @@ GameDatabase.eternity.milestones = {
         (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
     },
     activeCondition: () => `Must be outside of all Challenges and Dilation,
-      Eternity Autobuyer must be turned on and set to zero EP.`
+      the Eternity Autobuyer must be turned on and set to zero EP.`
   },
   autoInfinities: {
     eternities: 1000,
@@ -130,7 +130,7 @@ GameDatabase.eternity.milestones = {
         (infinities.gt(0) ? `(currently ${format(infinities, 2, 2)}/hour)` : "(disabled)");
     },
     activeCondition: () => `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
-      Infinity Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
-      Eternity Autobuyer must be turned off.`
+      the Infinity Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
+      the Eternity Autobuyer must be turned off.`
   }
 };

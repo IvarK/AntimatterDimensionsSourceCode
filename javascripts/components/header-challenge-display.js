@@ -109,9 +109,8 @@ Vue.component("header-challenge-display", {
         return "Exit Challenge";
       } else if (player.dilation.active) {
         return "Exit Dilation";
-      } else {
-        return "Exit Reality";
       }
+      return "Exit Reality";
     },
   },
   template: `

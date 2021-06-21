@@ -301,7 +301,7 @@ Currency.eternityPoints = new class extends DecimalCurrency {
   }
 
   reset() {
-    this.value = this.startingValue;
+    super.reset();
     player.records.thisReality.maxEP = this.startingValue;
   }
 }();

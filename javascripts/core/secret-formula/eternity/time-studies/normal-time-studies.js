@@ -411,12 +411,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 300,
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
       description: "Antimatter Dimension multiplier based on Eternities",
-      // This effect is a bit wonky because 1.0285^eternities doesn't even fit in break_infinity once you have a bit
-      // past e308 eternities, and once this threshold is passed the formula actually just returns zero. Rewriting it
-      // to have an explicit conditional makes sure that this doesn't happen; in practice the cap hits just past 1e6.
-      effect: () => (Currency.eternities.gt(1e10)
-        ? new Decimal("1e13000")
-        : Decimal.pow(1.0285, Currency.eternities.value)),
+      effect: () => (Decimal.pow("1e13000", Currency.eternities.value.div(1e6).clampMax(1))),
       cap: new Decimal("1e13000"),
       formatEffect: value => formatX(value, 2, 1)
     },

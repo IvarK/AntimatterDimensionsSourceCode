@@ -26,8 +26,9 @@ Vue.component("eternity-milestones-tab", {
   },
   template: `
     <div class="l-eternity-milestone-grid">
+      <div>You have {{ format(eternityCount, 3) }} {{ "Eternity" | pluralize(eternityCount, "Eternities") }}.</div>
       <div>
-        You have {{ format(eternityCount, 3) }} {{ "Eternity" | pluralize(eternityCount, "Eternities") }}.
+        Offline generation milestones are only active under certain conditions, mouse-over to see these conditions.
       </div>
       <div v-for="row in rows" class="l-eternity-milestone-grid__row">
         <eternity-milestone
@@ -36,14 +37,6 @@ Vue.component("eternity-milestones-tab", {
           :getMilestone="getMilestone(row, column)"
           class="l-eternity-milestone-grid__cell"
         />
-      </div>
-      <div>
-        Offline Eternities only generate outside of all Challenges and Dilation,
-        and when your Eternity Autobuyer is turned on and set to zero EP.
-      </div>
-      <div>
-        Offline Infinities only generate outside of Normal and Infinity Challenges and outside of EC4 and EC12,
-        and when your Infinity Autobuyer is turned on and set to time mode with less than {{ formatInt(60) }} seconds.
       </div>
     </div>`
 });

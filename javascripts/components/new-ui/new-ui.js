@@ -10,7 +10,6 @@ Vue.component("new-ui", {
       realities: 0,
       antimatter: new Decimal(0),
       antimatterPerSec: new Decimal(0),
-      challengeDisplay: "",
       isInMatterChallenge: false,
       matter: new Decimal(0),
       isInEffarig: false,
@@ -19,8 +18,6 @@ Vue.component("new-ui", {
       isInLaitela: false,
       laitelaTimer: 0,
       laitelaEntropy: "",
-      currCelestial: "",
-      isInAnyChallenge: false,
       isChallengePowerVisible: false,
       challengePower: "",
       isInFailableEC: false,
@@ -41,7 +38,6 @@ Vue.component("new-ui", {
       this.breakInfinity = player.break;
       this.realities = Currency.realities.value;
 
-      this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       this.currentEternityChallenge = EternityChallenge.current;
       this.isInFailableEC = this.currentEternityChallenge && [4, 12].includes(this.currentEternityChallenge.id);
       const isC2Running = NormalChallenge(2).isRunning;
@@ -72,9 +68,6 @@ Vue.component("new-ui", {
         }
       }
 
-      this.updateCelestial();
-      this.updateChallengeDisplay();
-
       const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
       if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
         this.bigCrunch = false;
@@ -96,38 +89,6 @@ Vue.component("new-ui", {
         ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
       this.challengePower = powerArray.join(", ");
     },
-    updateCelestial() {
-      if (Teresa.isRunning) this.currCelestial = "Teresa's";
-      else if (Effarig.isRunning) this.currCelestial = "Effarig's";
-      else if (Enslaved.isRunning) this.currCelestial = "The Enslaved Ones'";
-      else if (V.isRunning) this.currCelestial = "V's";
-      else if (Ra.isRunning) this.currCelestial = "Ra's";
-      else if (Laitela.isRunning) this.currCelestial = "Lai'tela's";
-      else this.currCelestial = "";
-    },
-    updateChallengeDisplay() {
-      let displayValue = "";
-
-      const inCelestialReality = this.currCelestial.length !== 0;
-      if (inCelestialReality) displayValue += ` + ${this.currCelestial} Reality`;
-
-      const inDilation = player.dilation.active;
-      if (inDilation) displayValue += " + Time Dilation";
-
-      const normalChallenge = NormalChallenge.current;
-      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.name} Challenge `;
-
-      const infinityChallenge = InfinityChallenge.current;
-      if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;
-
-      const eternityChallenge = EternityChallenge.current;
-      if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
-
-      if (displayValue.length !== 0) this.challengeDisplay = displayValue.substring(3);
-      else if (PlayerProgress.infinityUnlocked()) {
-        this.challengeDisplay = "the Antimatter Universe (no active challenges)";
-      } else this.challengeDisplay = "";
-    }
   },
   template: `
     <div id="page">
@@ -151,11 +112,7 @@ Vue.component("new-ui", {
             <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
           </div>
           <div class="information-header">
-            <span v-if="isInAnyChallenge">
-              You are currently in {{ challengeDisplay }}
-              <failable-ec-text v-if="isInFailableEC" />
-            </span>
-            </span>
+            <header-challenge-display />
             <div v-if="isInEffarig">
               Gamespeed and multipliers are Dilated {{ effarigMultNerfText }}
               <br>

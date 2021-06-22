@@ -21,8 +21,9 @@ Vue.component("antimatter-dim-boost-row", {
       const boosts = this.purchasedBoosts;
 
       let newUnlock = "";
-      if (boosts < DimBoost.maxDimensionsUnlockable - 4) newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+      if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
+        newUnlock = `unlock the ${boosts + 5}th Dimension`;
+      } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
         newUnlock = "unlock Sacrifice";
       }
 

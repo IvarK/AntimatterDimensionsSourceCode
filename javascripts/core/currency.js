@@ -211,8 +211,9 @@ Currency.antimatter = new class extends DecimalCurrency {
   }
 
   get productionPerSecond() {
-    return NormalChallenge(12).isRunning ? AntimatterDimension(1).productionPerRealSecond
-      : AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond);
+    return NormalChallenge(12).isRunning
+      ? AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond)
+      : AntimatterDimension(1).productionPerRealSecond;
   }
 
   get startingValue() {
@@ -297,6 +298,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP2,
       Perk.startEP3
     ).toDecimal();
+  }
+
+  reset() {
+    super.reset();
+    player.records.thisReality.maxEP = this.startingValue;
   }
 }();
 

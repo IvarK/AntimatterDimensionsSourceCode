@@ -323,7 +323,6 @@ Currency.timeTheorems = new class extends DecimalCurrency {
   add(amount) {
     super.add(amount);
     player.timestudy.maxTheorem = player.timestudy.maxTheorem.plus(amount);
-    if (new Decimal(amount).gt(0)) player.achievementChecks.noTheoremPurchases = false;
   }
 
   reset() {

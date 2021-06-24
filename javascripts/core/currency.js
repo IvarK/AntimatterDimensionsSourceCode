@@ -369,7 +369,7 @@ Currency.relicShards = new class extends NumberCurrency {
   set value(value) { player.celestials.effarig.relicShards = value; }
 }();
 
-Currency.imaginaryMachines = new class extends DecimalCurrency {
+Currency.imaginaryMachines = new class extends NumberCurrency {
   get value() { return player.reality.imaginaryMachines; }
   set value(value) { player.reality.imaginaryMachines = value; }
 }();

@@ -536,6 +536,7 @@ function gameLoop(passDiff, options = {}) {
   }
 
   applyAutoprestige(realDiff);
+  updateImaginaryMachines(realDiff)
 
   const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
   Currency.realities.add(uncountabilityGain);
@@ -665,6 +666,11 @@ function applyAutoprestige(diff) {
       .times(diff / 1000);
     Currency.realityMachines.add(addedRM);
   }
+}
+
+function updateImaginaryMachines(diff) {
+  MachineHandler.updateIMCap();
+  Currency.imaginaryMachines.add(MachineHandler.gainedImaginaryMachines(diff));
 }
 
 function updateTachyonGalaxies() {

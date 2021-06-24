@@ -2,16 +2,7 @@
 
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {
-    props.cost = () => getHybridCostScaling(
-      player.reality.imaginaryRebuyables[props.id],
-      1e30,
-      props.initialCost,
-      props.costMult,
-      props.costMult / 10,
-      new Decimal("1e309"),
-      1e3,
-      props.initialCost * props.costMult
-    );
+    props.cost = () => props.initialCost * props.costMult ** player.reality.imaginaryRebuyables[props.id];
     const { effect } = props;
     if (props.isDecimal) props.effect = () => Decimal.pow(effect, player.reality.imaginaryRebuyables[props.id]);
     else props.effect = () => effect * player.reality.imaginaryRebuyables[props.id];

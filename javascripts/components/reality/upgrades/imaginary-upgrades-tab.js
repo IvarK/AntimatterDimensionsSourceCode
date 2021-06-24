@@ -4,6 +4,7 @@ Vue.component("imaginary-upgrades-tab", {
   data() {
     return {
       capRM: new Decimal(0),
+      capIM: 0,
     };
   },
   computed: {
@@ -13,6 +14,7 @@ Vue.component("imaginary-upgrades-tab", {
   methods: {
     update() {
       this.capRM.copyFrom(MachineHandler.hardcapRM);
+      this.capIM = player.reality.iMCap;
     },
     id(row, column) {
       return (row - 1) * 5 + column - 1;
@@ -21,7 +23,12 @@ Vue.component("imaginary-upgrades-tab", {
   template: `
     <div class="l-reality-upgrade-grid">
       You have reached the limits of reality and cannot hold more than {{ format(capRM) }} Reality Machines.
-      Machines gained in excess of this cap will be converted into Imaginary Machines.
+      <br>
+      Machines gained in excess of this cap will raise the maximum amount of Imaginary Machines you can have.
+      (Currently capped at {{ format(capIM, 2, 2) }} Imaginary Machines)
+      <br>
+      Imaginary machines are gained passively over time up to the cap, but the rate of gain slows down exponentially
+      as you approach the cap. (TODO: Put the number in this description after testing)
       <br>
       (More imaginary upgrade info-text once we figure out the details...)
       <br>

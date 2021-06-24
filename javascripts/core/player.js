@@ -329,7 +329,8 @@ let player = {
   partSimulatedReality: 0,
   reality: {
     realityMachines: new Decimal(0),
-    imaginaryMachines: new Decimal(0),
+    imaginaryMachines: 0,
+    iMCap: 0,
     glyphs: {
       active: [],
       inventory: [],

@@ -10,7 +10,7 @@ const MachineHandler = {
       getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);
   },
 
-  get gainedRealityMachines() {
+  get uncappedRM() {
     let log10FinalEP = player.records.thisReality.maxEP.plus(gainedEternityPoints()).log10();
     if (!PlayerProgress.realityUnlocked()) {
       if (log10FinalEP > 8000) log10FinalEP = 8000;
@@ -31,9 +31,16 @@ const MachineHandler = {
     return true;
   },
 
-  get gainedImaginaryMachines() {
-    return this.uncappedRM.gte(this.hardcapRM)
-      ? new Decimal(1)
-      : new Decimal(0);
+  updateIMCap() {
+    if(this.uncappedRM.gte(this.hardcapRM)) {
+      player.reality.iMCap = Math.max(player.reality.iMCap, (this.uncappedRM.log10() - 1000) ** 2);
+    }
+  },
+
+  gainedImaginaryMachines(diff) {
+    const missing = player.reality.iMCap - Currency.imaginaryMachines.value;
+    // Time in seconds to reduce the missing amount by a factor of two
+    const scale = 60;
+    return missing * (1 - 2 ** (-diff / 1000 / scale));
   },
 };

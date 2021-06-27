@@ -971,6 +971,12 @@ GameStorage.devMigrations = {
       }
       player.reality.upgReqs = reqBitmask;
     },
+    player => {
+      // TODO Clean this up before merge, a lot of this will be superfluous once the final data format is figured out
+      if (typeof player.reality.imaginaryMachines !== "number") {
+        player.reality.imaginaryMachines = 0;
+      }
+    },
   ],
 
   patch(player) {

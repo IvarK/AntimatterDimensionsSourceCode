@@ -6,6 +6,8 @@ Vue.component("reality-button", {
       canReality: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(0),
+      projectedRM: new Decimal(0),
+      newIMCap: 0,
       realityTime: 0,
       glyphLevel: 0,
       nextGlyphPercent: 0,
@@ -16,11 +18,8 @@ Vue.component("reality-button", {
   },
   computed: {
     formatMachinesGained() {
-      const parts = [];
-      if (this.machinesGained.gt(0)) parts.push(`${format(this.machinesGained, 2, 0)}`);
-
-      if (parts.length === 0) return "No Machines gained";
-      return `Machines gained: ${parts.join(" + ")}`;
+      if (this.machinesGained.gt(0)) return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      return "No Machines gained";
     },
     formatMachineStats() {
       if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
@@ -28,6 +27,12 @@ Vue.component("reality-button", {
       }
       if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
+      }
+      if (this.machinesGained.eq(0) && this.newIMCap === 0) {
+        return `Projected: ${format(this.projectedRM, 2)} RM`;
+      }
+      if (this.newIMCap !== 0) {
+        return `iM Cap: ${format(this.newIMCap, 2, 2)}i`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
@@ -70,7 +75,9 @@ Vue.component("reality-button", {
       }
       const multiplier = simulatedRealityCount(false) + 1;
       const availableRM = MachineHandler.hardcapRM.minus(Currency.realityMachines.value);
-      this.machinesGained = MachineHandler.gainedRealityMachines.times(multiplier).clampMax(availableRM);
+      this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
+      this.newIMCap = MachineHandler.currentIMCap;
+      this.machinesGained = this.projectedRM.clampMax(availableRM);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();

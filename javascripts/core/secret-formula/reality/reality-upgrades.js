@@ -15,6 +15,10 @@ GameDatabase.reality.upgrades = (function() {
     const { effect } = props;
     props.effect = () => Math.pow(effect + ImaginaryUpgrade(props.id).effectValue, player.reality.rebuyables[props.id] *
       getAdjustedGlyphEffect("realityrow1pow"));
+    props.description = () => props.textTemplate.replace("{value}",
+      ImaginaryUpgrade(props.id).effectValue === 0
+        ? formatInt(effect)
+        : format(effect + ImaginaryUpgrade(props.id).effectValue, 2, 2));
     props.formatEffect = value => formatX(value, 2, 0);
     props.formatCost = value => format(value, 2, 0);
     return props;
@@ -25,7 +29,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 1,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Dilated Time ${formatInt(3)} times faster`,
+      textTemplate: "You gain Dilated Time {value} times faster",
       effect: 3
     }),
     rebuyable({
@@ -33,7 +37,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 2,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Replicanti ${formatInt(3)} times faster`,
+      textTemplate: "You gain Replicanti {value} times faster",
       effect: 3
     }),
     rebuyable({
@@ -41,7 +45,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 3,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${formatInt(3)} times more Eternities`,
+      textTemplate: "You gain {value} times more Eternities",
       effect: 3
     }),
     rebuyable({
@@ -49,7 +53,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 4,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${formatInt(3)} times more Tachyon Particles`,
+      textTemplate: "You gain {value} times more Tachyon Particles",
       effect: 3
     }),
     rebuyable({
@@ -57,7 +61,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 5,
       initialCost: 3,
       costMult: 50,
-      description: () => `You gain ${formatInt(5)} times more Infinities`,
+      textTemplate: "You gain {value} times more Infinities",
       effect: 5
     }),
     {

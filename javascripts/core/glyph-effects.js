@@ -213,7 +213,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Game runs ×{value} faster",
     genericDesc: "Game speed multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("time")
-      ? 1 + Math.pow(level, 0.55)
+      ? 1 + Math.pow(level, 0.35)
       : 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) / 20),
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.multiply,
@@ -228,7 +228,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Eternity gain ×{value}",
     genericDesc: "Eternity gain multiplier",
     effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
-     Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
+      Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
@@ -714,7 +714,7 @@ GameDatabase.reality.glyphEffects = [
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
     genericDesc: "Dilated Time scaling for Glyph level",
     // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
-    effect: () => 0.15,
+    effect: () => 0.1,
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.add,
   }, {

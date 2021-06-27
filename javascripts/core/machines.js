@@ -31,9 +31,13 @@ const MachineHandler = {
     return true;
   },
 
+  get currentIMCap() {
+    return Math.clampMin(this.uncappedRM.log10() - 1000, 0) ** 2;
+  },
+
   updateIMCap() {
-    if(this.uncappedRM.gte(this.hardcapRM)) {
-      player.reality.iMCap = Math.max(player.reality.iMCap, (this.uncappedRM.log10() - 1000) ** 2);
+    if (this.uncappedRM.gte(new Decimal("1e1000"))) {
+      player.reality.iMCap = Math.max(player.reality.iMCap, this.currentIMCap);
     }
   },
 

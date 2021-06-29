@@ -14,7 +14,6 @@ Vue.component("ra-tab", {
       showLaitela: false,
       laitelaLevelReq: 0,
       laitelaGlyphLevelReq: 0,
-      laitelaRealityMachineCost: new Decimal(0),
       petWithRecollection: "",
       isRunning: false,
     };
@@ -40,7 +39,7 @@ Vue.component("ra-tab", {
         pet: Ra.pets.enslaved,
         scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
         scalingUpgradeText: () => `Stored game time
-          ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
+          ${formatX(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2)} and real time
           +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
       {
@@ -81,7 +80,6 @@ Vue.component("ra-tab", {
       this.showLaitela = Ra.pets.v.isUnlocked;
       this.laitelaLevelReq = Laitela.raLevelRequirement;
       this.laitelaGlyphLevelReq = Laitela.realityGlyphLevelRequirement;
-      this.laitelaRealityMachineCost = Laitela.realityMachineCost;
       this.petWithRecollection = Ra.petWithRecollection;
       this.isRunning = Ra.isRunning;
     },
@@ -152,9 +150,6 @@ Vue.component("ra-tab", {
           <p>
             Requires {{ formatInt(laitelaLevelReq) }} total Celestial Memory levels
             and a level {{ formatInt(laitelaGlyphLevelReq) }} Reality Glyph
-          </p>
-          <p>
-            Cost: {{ format(laitelaRealityMachineCost) }} Reality Machines
           </p>
           <div class="o-laitela-run-button__icon" @click="unlockLaitela" />
         </div>

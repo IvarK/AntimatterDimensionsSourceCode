@@ -44,7 +44,7 @@ const MachineHandler = {
   gainedImaginaryMachines(diff) {
     const missing = player.reality.iMCap - Currency.imaginaryMachines.value;
     // Time in seconds to reduce the missing amount by a factor of two
-    const scale = 60;
+    const scale = 60 / ImaginaryUpgrade(13).effectOrDefault(1);
     return missing * (1 - 2 ** (-diff / 1000 / scale));
   },
 };

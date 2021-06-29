@@ -976,6 +976,10 @@ GameStorage.devMigrations = {
       if (typeof player.reality.imaginaryMachines !== "number") {
         player.reality.imaginaryMachines = 0;
       }
+      player.reality.imaginaryUpgReqs = 0;
+      player.auto.imaginaryUpgrades = Array.range(0, 10).map(() => ({
+        isActive: false,
+      }));
     },
   ],
 

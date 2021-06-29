@@ -348,7 +348,8 @@ Vue.component("annihilation-button", {
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
-      this.showAnnihilation = this.hasAnnihilated || !MatterDimensionState.list.some(d => d.amount.eq(0));
+      this.showAnnihilation = Laitela.canAnnihilate &&
+        (this.hasAnnihilated || !MatterDimensionState.list.some(d => d.amount.eq(0)));
       this.matterRequirement = Laitela.annihilationDMRequirement;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
       this.isEnabled = player.celestials.laitela.automation.annihilation;

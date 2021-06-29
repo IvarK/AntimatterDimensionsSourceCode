@@ -1372,9 +1372,7 @@ GameDatabase.celestials.navigation = (function() {
             if (raLevel === requiredRaLevel && !Laitela.isUnlocked) return [
               "Lai'tela's Reality",
               `Reality Glyph level ${formatInt(realityGlyphLevel)} /
-                ${formatInt(Laitela.realityGlyphLevelRequirement)}`,
-              `Reality Machine amount ${format(rm)} /
-                ${format(Laitela.realityMachineCost)}`
+                ${formatInt(Laitela.realityGlyphLevelRequirement)}`
             ];
             return [
               "Lai'tela's Reality"

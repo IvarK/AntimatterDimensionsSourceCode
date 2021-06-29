@@ -153,7 +153,7 @@ let player = {
     realityUpgrades: Array.range(0, 5).map(() => ({
       isActive: false,
     })),
-    imaginaryUpgrades: Array.range(0, 7).map(() => ({
+    imaginaryUpgrades: Array.range(0, 10).map(() => ({
       isActive: false,
     })),
     ipMultBuyer: { isActive: false, },
@@ -370,6 +370,9 @@ let player = {
       5: 0,
       6: 0,
       7: 0,
+      8: 0,
+      9: 0,
+      10: 0,
     },
     perks: new Set(),
     respec: false,

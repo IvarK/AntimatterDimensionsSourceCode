@@ -30,18 +30,14 @@ const Laitela = {
   get realityGlyphLevelRequirement() {
     return 25000;
   },
-  get realityMachineCost() {
-    return new Decimal("1e2000");
-  },
   get canUnlock() {
     return Ra.totalPetLevel >= this.raLevelRequirement &&
       player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
         x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
-      Currency.realityMachines.gte(this.realityMachineCost);
+      ImaginaryUpgrade(15).isBought;
   },
   unlock() {
     if (!this.canUnlock) return false;
-    Currency.realityMachines.purchase(this.realityMachineCost);
     MatterDimension(1).amount = new Decimal(1);
     return true;
   },
@@ -76,7 +72,7 @@ const Laitela = {
     return 8 - this.difficultyTier;
   },
   get continuumUnlocked() {
-    return Laitela.isUnlocked;
+    return ImaginaryUpgrade(16).isBought;
   },
   get continuumActive() {
     return this.continuumUnlocked && !player.auto.disableContinuum;
@@ -103,11 +99,14 @@ const Laitela = {
   get darkMatterMultRatio() {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
+  get canAnnihilate() {
+    return ImaginaryUpgrade(20).isBought && Currency.darkMatter.gte(this.annihilationDMRequirement);
+  },
   get annihilationDMRequirement() {
     return 1e20;
   },
   annihilate(force) {
-    if (!force && Currency.darkMatter.lt(this.annihilationDMRequirement)) return false;
+    if (!force && !this.canAnnihilate) return false;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
@@ -153,7 +152,8 @@ const Laitela = {
   // Greedily buys the cheapest available upgrade until none are affordable
   maxAllDMDimensions(maxTier) {
     // Note that _tier is 0-indexed, so calling with maxTier = 3 will buy up to and including DM3 for example
-    const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0) && d._tier < maxTier);
+    const unlockedDimensions = MatterDimensionState.list
+      .filter(d => d.isUnlocked && d.amount.gt(0) && d._tier < maxTier);
     const upgradeInfo = unlockedDimensions
       .map(d => [
         [d.rawIntervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],

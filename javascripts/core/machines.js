@@ -37,7 +37,7 @@ const MachineHandler = {
 
   // This is where any multipliers need to go, and any display references should use this instead of baseIMCap
   get finalIMCap() {
-    return this.baseIMCap * ImaginaryUpgrade(13).effectOrDefault(1);
+    return player.reality.iMCap * ImaginaryUpgrade(13).effectOrDefault(1);
   },
 
   // Use iMCap to store the base cap; applying multipliers separately avoids some design issues the 3xTP upgrade has

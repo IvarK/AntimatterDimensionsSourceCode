@@ -16,7 +16,7 @@ Vue.component("reality-machines-header", {
       this.imaginaryMachines = Currency.imaginaryMachines.value;
       this.unlockedIM = this.imaginaryMachines > 0 || this.realityMachines.exponent >= 1000;
       this.capRM.copyFrom(MachineHandler.hardcapRM);
-      this.capIM = player.reality.iMCap;
+      this.capIM = MachineHandler.finalIMCap;
     }
   },
   template: `

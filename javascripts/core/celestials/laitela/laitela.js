@@ -34,7 +34,7 @@ const Laitela = {
     return Ra.totalPetLevel >= this.raLevelRequirement &&
       player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
         x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
-      ImaginaryUpgrade(15).isBought;
+      ImaginaryUpgrade(16).isBought;
   },
   unlock() {
     if (!this.canUnlock) return false;

@@ -9,24 +9,24 @@ function playerInfinityUpgradesOnReset() {
   if (RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityUpgrades = new Set(
       ["timeMult", "dimMult", "timeMult2",
-      "skipReset1", "skipReset2", "unspentBonus",
-      "27Mult", "18Mult", "36Mult", "resetMult",
-      "skipReset3", "passiveGen", "45Mult",
-      "resetBoost", "galaxyBoost", "skipResetGalaxy",
-      "totalMult", "currentMult", "postGalaxy",
-      "challengeMult", "achievementMult", "infinitiedMult",
-      "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
-      "ipOffline"]
+        "skipReset1", "skipReset2", "unspentBonus",
+        "27Mult", "18Mult", "36Mult", "resetMult",
+        "skipReset3", "passiveGen", "45Mult",
+        "resetBoost", "galaxyBoost", "skipResetGalaxy",
+        "totalMult", "currentMult", "postGalaxy",
+        "challengeMult", "achievementMult", "infinitiedMult",
+        "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
+        "ipOffline"]
     );
     player.infinityRebuyables = [8, 7, 10];
   } else if (EternityMilestone.keepInfinityUpgrades.isReached) {
     player.infinityUpgrades = new Set(
       ["timeMult", "dimMult", "timeMult2",
-      "skipReset1", "skipReset2", "unspentBonus",
-      "27Mult", "18Mult", "36Mult", "resetMult",
-      "skipReset3", "passiveGen", "45Mult",
-      "resetBoost", "galaxyBoost", "skipResetGalaxy",
-      "ipOffline"]
+        "skipReset1", "skipReset2", "unspentBonus",
+        "27Mult", "18Mult", "36Mult", "resetMult",
+        "skipReset3", "passiveGen", "45Mult",
+        "resetBoost", "galaxyBoost", "skipResetGalaxy",
+        "ipOffline"]
     );
     player.infinityRebuyables = [0, 0, 0];
   } else {
@@ -85,7 +85,7 @@ function totalEPMult() {
       TimeStudy(123),
       RealityUpgrade(12),
       GlyphEffect.epMult
-  );
+    );
 }
 
 function gainedEternityPoints() {
@@ -123,15 +123,15 @@ function gainedGlyphLevel() {
 }
 
 function resetChallengeStuff() {
-    player.chall2Pow = 1;
-    player.chall3Pow = new Decimal(0.01);
-    player.matter = new Decimal(0);
-    player.chall8TotalSacrifice = new Decimal(1);
-    player.postC4Tier = 1;
+  player.chall2Pow = 1;
+  player.chall3Pow = new Decimal(0.01);
+  player.matter = new Decimal(0);
+  player.chall8TotalSacrifice = new Decimal(1);
+  player.postC4Tier = 1;
 }
 
 function ratePerMinute(amount, time) {
-    return Decimal.divide(amount, time / (60 * 1000));
+  return Decimal.divide(amount, time / (60 * 1000));
 }
 
 function averageRun(runs, name) {
@@ -218,24 +218,24 @@ function addRealityTime(time, realTime, rm, level, realities) {
 }
 
 function gainedInfinities() {
-    if (EternityChallenge(4).isRunning) {
-        return new Decimal(1);
-    }
-    let infGain = Effects.max(
-      1,
-      Achievement(87)
-    ).toDecimal();
+  if (EternityChallenge(4).isRunning) {
+    return new Decimal(1);
+  }
+  let infGain = Effects.max(
+    1,
+    Achievement(87)
+  ).toDecimal();
 
-    infGain = infGain.timesEffectsOf(
-      TimeStudy(32),
-      RealityUpgrade(5),
-      RealityUpgrade(7),
-      Achievement(164)
-    );
-    infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
-    infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
-    infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
-    return infGain;
+  infGain = infGain.timesEffectsOf(
+    TimeStudy(32),
+    RealityUpgrade(5),
+    RealityUpgrade(7),
+    Achievement(164)
+  );
+  infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
+  infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+  infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
+  return infGain;
 }
 
 // TODO: remove before release
@@ -536,7 +536,7 @@ function gameLoop(passDiff, options = {}) {
   }
 
   applyAutoprestige(realDiff);
-  updateImaginaryMachines(realDiff)
+  updateImaginaryMachines(realDiff);
 
   const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
   Currency.realities.add(uncountabilityGain);
@@ -579,9 +579,8 @@ function gameLoop(passDiff, options = {}) {
   BlackHoles.updatePhases(blackHoleDiff);
 
   // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
-  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) &&
-    Currency.timeTheorems.max.gte(16617)) {
-      TimeStudy.dilation.purchase(true);
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && Currency.timeTheorems.max.gte(16617)) {
+    TimeStudy.dilation.purchase(true);
   }
 
   applyAutoUnlockPerks();
@@ -836,7 +835,7 @@ window.onload = function() {
 };
 
 window.onfocus = function() {
-    setShiftKey(false);
+  setShiftKey(false);
 };
 
 window.onblur = function() {
@@ -863,21 +862,21 @@ init();
 
 let tweenTime = 0;
 (function() {
-    let lastFrame;
-    function animateTweens(time) {
-        requestAnimationFrame(animateTweens);
-        if (time === undefined || lastFrame === undefined) {
-            lastFrame = time;
-            return;
-        }
-        let delta = time - lastFrame;
-        lastFrame = time;
-        if (player.dilation.active) {
-            delta /= 10;
-        }
-        tweenTime += delta;
-        TWEEN.update(tweenTime);
+  let lastFrame;
+  function animateTweens(time) {
+    requestAnimationFrame(animateTweens);
+    if (time === undefined || lastFrame === undefined) {
+      lastFrame = time;
+      return;
     }
+    let delta = time - lastFrame;
+    lastFrame = time;
+    if (player.dilation.active) {
+      delta /= 10;
+    }
+    tweenTime += delta;
+    TWEEN.update(tweenTime);
+  }
 
-    animateTweens();
+  animateTweens();
 }());

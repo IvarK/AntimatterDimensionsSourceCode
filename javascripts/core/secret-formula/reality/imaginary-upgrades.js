@@ -66,8 +66,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 7,
       initialCost: 2e5,
       costMult: 500,
-      description: () => `Delay glyph level instability by +${formatInt(100)}`,
-      effect: 100,
+      description: () => `Delay glyph level instability by +${formatInt(200)}`,
+      effect: 200,
       formatEffect: value => `+${formatInt(value)}`
     }),
     rebuyable({
@@ -119,12 +119,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Gain free Dimboosts based on iM rebuyable count",
-      effect: () => {
-        const rebuyables = player.reality.imaginaryRebuyables;
-        let total = 0;
-        for (const i in rebuyables) total += rebuyables[i];
-        return 1e4 * total;
-      },
+      effect: () => 1e4 * ImaginaryUpgrades.totalRebuyables,
     },
     {
       name: "?????",
@@ -134,8 +129,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Imaginary Machines generate ${formatInt(3)} times faster`,
-      effect: 3,
+      description: "Increase iM Cap based on iM upgrades purchased",
+      effect: () => 1 + ImaginaryUpgrades.totalRebuyables / 10 + ImaginaryUpgrades.totalSinglePurchase / 2,
+      formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
       name: "?????",
@@ -155,7 +151,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Unlock Lai'tela, Celestial of Dimensions",
+      description: "[Ra 5]",
 
     },
     {
@@ -166,7 +162,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Convert Antimatter Dimensions to Continuum",
+      description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
     },
     {
       name: "?????",
@@ -225,9 +221,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       requirement: () => `[NYI]`,
       hasFailed: () => false,
       checkRequirement: () => false,
-      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Gain more Singularities based on Tesseract count",
-      effect: () => player.celestials.enslaved.tesseracts ** 4,
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      description: () => `Imaginary Machines generate ${formatInt(6)} times faster`,
+      effect: 6,
     },
     {
       name: "?????",
@@ -236,8 +232,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       requirement: () => `[NYI]`,
       hasFailed: () => false,
       checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "[Lai'tela boost 3]",
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+      description: "Gain more Singularities based on Tesseract count",
+      effect: () => player.celestials.enslaved.tesseracts ** 4,
     },
     {
       name: "?????",

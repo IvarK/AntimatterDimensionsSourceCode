@@ -31,20 +31,28 @@ const MachineHandler = {
     return true;
   },
 
-  get currentIMCap() {
+  get baseIMCap() {
     return Math.clampMin(this.uncappedRM.log10() - 1000, 0) ** 2;
   },
 
+  // This is where any multipliers need to go, and any display references should use this instead of baseIMCap
+  get finalIMCap() {
+    return this.baseIMCap * ImaginaryUpgrade(13).effectOrDefault(1);
+  },
+
+  // Use iMCap to store the base cap; applying multipliers separately avoids some design issues the 3xTP upgrade has
   updateIMCap() {
     if (this.uncappedRM.gte(new Decimal("1e1000"))) {
-      player.reality.iMCap = Math.max(player.reality.iMCap, this.currentIMCap);
+      player.reality.iMCap = Math.max(player.reality.iMCap, this.baseIMCap);
     }
   },
 
+  // Time in seconds to reduce the missing amount by a factor of two
+  get scaleTimeForIM() {
+    return 60 / ImaginaryUpgrade(22).effectOrDefault(1);
+  },
+
   gainedImaginaryMachines(diff) {
-    const missing = player.reality.iMCap - Currency.imaginaryMachines.value;
-    // Time in seconds to reduce the missing amount by a factor of two
-    const scale = 60 / ImaginaryUpgrade(13).effectOrDefault(1);
-    return missing * (1 - 2 ** (-diff / 1000 / scale));
+    return (this.finalIMCap - Currency.imaginaryMachines.value) * (1 - 2 ** (-diff / 1000 / this.scaleTimeForIM));
   },
 };

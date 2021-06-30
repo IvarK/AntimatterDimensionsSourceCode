@@ -70,6 +70,15 @@ const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
 
 const ImaginaryUpgrades = {
   all: ImaginaryUpgradeState.index.compact(),
+  get totalRebuyables() {
+    const rebuyables = player.reality.imaginaryRebuyables;
+    let total = 0;
+    for (const i in rebuyables) total += rebuyables[i];
+    return total;
+  },
+  get totalSinglePurchase() {
+    return this.all.countWhere(u => u.isBought);
+  },
   get allBought() {
     // eslint-disable-next-line no-bitwise
     return (player.reality.imaginaryUpgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.imaginaryUpgrades.length - 5);

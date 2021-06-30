@@ -1361,7 +1361,6 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             const raLevel = Ra.totalPetLevel;
             const requiredRaLevel = Laitela.raLevelRequirement;
-            const rm = Currency.realityMachines.value;
             const realityGlyphLevel = player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
               x => x.type === "reality").map(x => x.level).max();
 

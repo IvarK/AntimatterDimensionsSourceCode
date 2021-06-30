@@ -5,6 +5,7 @@ Vue.component("imaginary-upgrades-tab", {
     return {
       capRM: new Decimal(0),
       capIM: 0,
+      scaleTime: 0,
     };
   },
   computed: {
@@ -14,7 +15,8 @@ Vue.component("imaginary-upgrades-tab", {
   methods: {
     update() {
       this.capRM.copyFrom(MachineHandler.hardcapRM);
-      this.capIM = player.reality.iMCap;
+      this.capIM = MachineHandler.finalIMCap;
+      this.scaleTime = MachineHandler.scaleTimeForIM;
     },
     id(row, column) {
       return (row - 1) * 5 + column - 1;
@@ -28,9 +30,8 @@ Vue.component("imaginary-upgrades-tab", {
       you can have. (Currently capped at {{ format(capIM, 2, 2) }} Imaginary Machines)
       <br>
       Imaginary machines are gained passively over time up to the cap, but the rate of gain slows down exponentially
-      as you approach the cap. (TODO: Put the number in this description after testing)
-      <br>
-      (More imaginary upgrade info-text once we figure out the details...)
+      as you approach the cap.
+      The amount of iM below the cap will be cut in half every {{ formatInt(scaleTime) }} seconds.
       <br>
       <br>
       <div v-for="row in 5" class="l-reality-upgrade-grid__row">

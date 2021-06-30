@@ -167,29 +167,29 @@ Vue.component("modal-away-progress", {
           <span v-if="teresaMemoriesShown">
             <b class="c-modal-away-progress__teresa">Teresa's Memories</b> increased from
             <br>
-            {{ format(before.celestials.ra.pets.teresa.memories) }} to
-            {{ format(after.celestials.ra.pets.teresa.memories) }}
+            {{ format(before.celestials.ra.pets.teresa.memories, 2) }} to
+            {{ format(after.celestials.ra.pets.teresa.memories, 2) }}
             <br>
           </span>
           <span v-if="effarigMemoriesShown">
             <b class="c-modal-away-progress__effarig">Effarig's Memories</b> increased from
             <br>
-            {{ format(before.celestials.ra.pets.effarig.memories) }} to
-            {{ format(after.celestials.ra.pets.effarig.memories) }}
+            {{ format(before.celestials.ra.pets.effarig.memories, 2) }} to
+            {{ format(after.celestials.ra.pets.effarig.memories, 2) }}
             <br>
           </span>
           <span v-if="enslavedMemoriesShown">
             <b class="c-modal-away-progress__enslaved">Enslaved's Memories</b> increased from
             <br>
-            {{ format(before.celestials.ra.pets.enslaved.memories) }} to
-            {{ format(after.celestials.ra.pets.enslaved.memories) }}
+            {{ format(before.celestials.ra.pets.enslaved.memories, 2) }} to
+            {{ format(after.celestials.ra.pets.enslaved.memories, 2) }}
             <br>
           </span>
           <span v-if="vMemoriesShown">
             <b class="c-modal-away-progress__v">V's Memories</b> increased from
             <br>
-            {{ format(before.celestials.ra.pets.v.memories) }} to
-            {{ format(after.celestials.ra.pets.v.memories) }}
+            {{ format(before.celestials.ra.pets.v.memories, 2) }} to
+            {{ format(after.celestials.ra.pets.v.memories, 2) }}
           </span>
         </div>
         <div v-if="blackHoleShown">

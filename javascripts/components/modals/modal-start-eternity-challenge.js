@@ -1,6 +1,9 @@
 "use strict";
 
 Vue.component("modal-start-eternity-challenge", {
+  props: {
+    modalConfig: Object,
+  },
   created() {
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
@@ -39,7 +42,7 @@ Vue.component("modal-start-eternity-challenge", {
   },
   methods: {
     handleYesClick() {
-      EternityChallenge(this.modal.id).start();
+      EternityChallenge(this.modal.id).start(this.modalConfig);
       this.emitClose();
     },
     handleNoClick() {

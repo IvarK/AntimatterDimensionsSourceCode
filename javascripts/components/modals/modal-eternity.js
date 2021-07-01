@@ -2,7 +2,7 @@
 
 Vue.component("modal-eternity", {
   props: {
-    propsFromRequest: Object,
+    modalConfig: Object,
   },
   data() {
     return {
@@ -52,9 +52,9 @@ Vue.component("modal-eternity", {
     },
     handleYesClick() {
       if (player.dilation.active) {
-        Reset.exitDilation.request(this.propsFromRequest);
+        Reset.exitDilation.request(this.modalConfig);
       } else {
-        Reset.eternity.request(this.propsFromRequest);
+        Reset.eternity.request(this.modalConfig);
       }
       this.emitClose();
     }
@@ -65,7 +65,6 @@ Vue.component("modal-eternity", {
         <h2>You are about to Eternity</h2>
         <div class="c-modal-message__text">
           {{ message }}
-          <br><span style="color: red">TODO: DILATION EXIT MODAL HI GAMER</span>
           <br>
         </div>
         <br>

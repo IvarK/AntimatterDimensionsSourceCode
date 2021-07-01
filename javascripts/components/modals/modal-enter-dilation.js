@@ -2,7 +2,7 @@
 
 Vue.component("modal-enter-dilation", {
   props: {
-    propsFromRequest: Object,
+    modalConfig: Object,
   },
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
@@ -28,7 +28,7 @@ Vue.component("modal-enter-dilation", {
   },
   methods: {
     handleYesClick() {
-      Reset.enterDilation.request(this.propsFromRequest);
+      Reset.enterDilation.request(this.modalConfig);
       this.emitClose();
     },
     handleNoClick() {

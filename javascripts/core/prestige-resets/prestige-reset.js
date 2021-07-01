@@ -80,8 +80,8 @@ class PrestigeMechanic {
     const needsConfirmation = this.confirmationOption && !props.confirmation && !props.auto;
     if (needsConfirmation) {
       // If we need a confirmation and don't have it, go get it (the modal will return props with confirmation = true)
+      props.confirmation = true;
       this.confirmation(props);
-      console.log("todo modal stuff");
       return;
     }
     // If we don't have enough resources to actually do it, but we're forcing it, reset for no gain.

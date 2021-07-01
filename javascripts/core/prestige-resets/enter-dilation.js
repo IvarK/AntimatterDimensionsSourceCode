@@ -1,6 +1,18 @@
 "use strict";
 
 class EnterDilationReset extends EternityReset {
+  get confirmationOption() {
+    return player.options.confirmations.dilation;
+  }
+
+  set confirmationOption(value) {
+    player.options.confirmations.dilation = value;
+  }
+
+  confirmation(props) {
+    Modal.enterDilation.show(props);
+  }
+
   get animationOption() {
     return player.options.animations.dilation;
   }

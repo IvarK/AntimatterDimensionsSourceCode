@@ -5,6 +5,18 @@ class EternityChallengeReset extends EternityReset {
     return EternityChallenge.isRunning ? EternityChallenge.current.currentGoal : super.goal;
   }
 
+  get confirmationOption() {
+    return player.options.confirmations.challenges;
+  }
+
+  set confirmationOption(value) {
+    player.options.confirmations.challenges = value;
+  }
+
+  confirmation(props) {
+    Modal.startEternityChallenge.show(props);
+  }
+
   tabChange() {
     if (!this.isEarlyGame) return;
     Tab.challenges.eternity.show();

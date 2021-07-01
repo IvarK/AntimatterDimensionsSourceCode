@@ -17,6 +17,18 @@ class EternityReset extends PrestigeMechanic {
     return GAME_EVENT.ETERNITY_RESET_AFTER;
   }
 
+  get confirmationOption() {
+    return player.options.confirmations.eternity;
+  }
+
+  set confirmationOption(value) {
+    player.options.confirmations.eternity = value;
+  }
+
+  confirmation(props) {
+    Modal.eternity.show(props);
+  }
+
   get animationOption() {
     return player.options.animations.eternity;
   }

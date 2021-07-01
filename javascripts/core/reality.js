@@ -339,10 +339,10 @@ function finishProcessReality(realityProps) {
 
   lockAchievementsOnReality();
 
-  // Because initializeChallengeCompletions has some code that completes normal challenges with 2 eternities,
+  // Because Reset.eternity.reset has some code that completes normal challenges with 2 eternities,
   // and we haven't reset eternities yet (and I'm nervous about changing the order of this code),
   // add a flag to indicate that this is a reality reset.
-  initializeChallengeCompletions(true);
+  Reset.eternity.reset(true);
 
   Currency.infinities.reset();
   Currency.infinitiesBanked.reset();
@@ -424,7 +424,7 @@ function finishProcessReality(realityProps) {
   fullResetTimeDimensions();
   resetChallengeStuff();
   AntimatterDimensions.reset();
-  BigCrunchReset.reset(false);
+  Reset.bigCrunch.reset(false);
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();
@@ -447,7 +447,7 @@ function finishProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
-  if (Teresa.has(TERESA_UNLOCKS.START_EU)) applyRealityUpgradesAfterEternity();
+  if (Teresa.has(TERESA_UNLOCKS.START_EU)) Reset.eternity.unlock();
 
   if (!isReset) Ra.applyAlchemyReactions();
 

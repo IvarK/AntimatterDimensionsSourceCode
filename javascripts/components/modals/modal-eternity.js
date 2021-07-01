@@ -1,6 +1,9 @@
 "use strict";
 
 Vue.component("modal-eternity", {
+  props: {
+    propsFromRequest: Object,
+  },
   data() {
     return {
       exitingEC: false,
@@ -48,15 +51,10 @@ Vue.component("modal-eternity", {
       this.emitClose();
     },
     handleYesClick() {
-      if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-        animateAndUndilate();
-        setTimeout(eternity, 1000);
-      } else if (!player.dilation.active && player.options.animations.eternity &&
-        document.body.style.animation === "") {
-        eternityAnimation();
-        setTimeout(eternity, 2250);
+      if (player.dilation.active) {
+        Reset.exitDilation.request(this.propsFromRequest);
       } else {
-        eternity();
+        Reset.eternity.request(this.propsFromRequest);
       }
       this.emitClose();
     }

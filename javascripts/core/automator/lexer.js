@@ -181,7 +181,7 @@ const AutomatorLexer = (() => {
     $autobuyerXCurrentMode: AUTO_CRUNCH_MODE.X_CURRENT,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canCrunch,
-    $prestige: () => bigCrunchResetRequest(true),
+    $prestige: () => Reset.bigCrunch.request({ auto: true }),
     $prestigeLevel: 1,
     $prestigeCurrency: "IP",
     $studyPath: TIME_STUDY_PATH.INFINITY_DIM,
@@ -194,7 +194,7 @@ const AutomatorLexer = (() => {
     $prestigeAvailable: () => Player.canEternity,
     $prestigeLevel: 2,
     $prestigeCurrency: "EP",
-    $prestige: () => eternity(false, true),
+    $prestige: () => eternityResetRequest(true),
     $respec: () => {
       player.respec = true;
     },

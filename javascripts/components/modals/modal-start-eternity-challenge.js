@@ -39,7 +39,7 @@ Vue.component("modal-start-eternity-challenge", {
   },
   methods: {
     handleYesClick() {
-      EternityChallenge(this.modal.id).start(true);
+      EternityChallenge(this.modal.id).start();
       this.emitClose();
     },
     handleNoClick() {

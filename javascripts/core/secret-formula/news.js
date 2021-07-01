@@ -901,7 +901,7 @@ GameDatabase.news = [
     text:
       `<span style='animation: a-game-header__antimatter--glow 3s infinite'>This
       text is made of antimatter. Do not touch or else the universe will collapse.</span>`,
-    onClick: () => BigCrunchReset.animation()
+    onClick: () => Reset.bigCrunch.animation()
   },
   {
     id: "a174",

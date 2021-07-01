@@ -1,28 +1,12 @@
 "use strict";
 
-const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
-  get wasReached() {
-    return false;
-  }
-
-  get wasReachedEver() {
-    return false;
-  }
-
+class BigCrunchReset extends PrestigeMechanic {
   get goal() {
     return Player.isInAntimatterChallenge ? Player.antimatterChallenge.goal : Decimal.NUMBER_MAX_VALUE;
   }
 
   get currencyRequired() {
     return player.records.thisInfinity.maxAM;
-  }
-
-  get currencyGained() {
-    return Currency.infinityPoints;
-  }
-
-  get prestigeStat() {
-    return Currency.infinities;
   }
 
   get eventBefore() {
@@ -33,8 +17,15 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
     return GAME_EVENT.BIG_CRUNCH_AFTER;
   }
 
+  get animationOption() {
+    return player.options.animations.bigCrunch;
+  }
+
+  set animationOption(value) {
+    player.options.animations.bigCrunch = value;
+  }
+
   animation() {
-    if (player.options.animations.bigCrunch) return;
     document.body.style.animation = "implode 2s 1";
     setTimeout(() => {
       document.body.style.animation = "";
@@ -44,7 +35,7 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
   tabChange() {
     if (!PlayerProgress.infinityUnlocked()) {
       Tab.infinity.upgrades.show();
-    } else if (this.isEarlyGame || (Player.isInAntimatterChallenge && !player.options.retryChallenge)) {
+    } else if (this.isEarlyGame) {
       Tab.dimensions.antimatter.show();
     }
   }
@@ -58,12 +49,10 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
       gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
     );
 
-    const infinityPoints = gainedInfinityPoints();
-
     addInfinityTime(
       player.records.thisInfinity.time,
       player.records.thisInfinity.realTime,
-      infinityPoints,
+      gainedInfinityPoints(),
       gainedInfinities().round()
     );
 
@@ -75,7 +64,7 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
     player.achievementChecks.noInfinitiesThisReality = false;
 
     if (!player.usedMaxAll) {
-      const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
+      const bestIpPerMsWithoutMaxAll = gainedInfinityPoints().dividedBy(player.records.thisInfinity.realTime);
       player.records.thisEternity.bestIPMsWithoutMaxAll =
         Decimal.max(bestIpPerMsWithoutMaxAll, player.records.thisEternity.bestIPMsWithoutMaxAll);
     }
@@ -83,8 +72,34 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
   }
 
   gain() {
-    this.currencyGained.add(gainedInfinityPoints());
-    this.prestigeStat.add(gainedInfinities());
+    this.statistics();
+    Currency.infinityPoints.add(gainedInfinityPoints());
+    Currency.infinities.add(gainedInfinities());
+    this.challengeCompletion();
+    this.unlock();
+  }
+
+  challengeCompletion() {
+    const challenge = Player.antimatterChallenge;
+    if (!challenge && !NormalChallenge(1).isCompleted) {
+      NormalChallenge(1).complete();
+    }
+    if (!challenge) return;
+    challenge.complete();
+    challenge.updateChallengeTime();
+    if (!player.options.retryChallenge) {
+      player.challenge.normal.current = 0;
+      player.challenge.infinity.current = 0;
+    }
+  }
+
+  unlock() {
+    if (EternityChallenge(4).tryFail()) return;
+
+    if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
+      EffarigUnlock.infinity.unlock();
+      beginProcessReality(getRealityProps(true));
+    }
   }
 
   reset(forcedSoft) {
@@ -115,29 +130,6 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
     player.replicanti.galaxies = Math.clampMax(remainingGalaxies, player.replicanti.galaxies);
   }
 
-  challengeCompletion() {
-    const challenge = Player.antimatterChallenge;
-    if (!challenge && !NormalChallenge(1).isCompleted) {
-      NormalChallenge(1).complete();
-    }
-    if (!challenge) return;
-    challenge.complete();
-    challenge.updateChallengeTime();
-    if (!player.options.retryChallenge) {
-      player.challenge.normal.current = 0;
-      player.challenge.infinity.current = 0;
-    }
-  }
-
-  unlock() {
-    if (EternityChallenge(4).tryFail()) return;
-
-    if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
-      EffarigUnlock.infinity.unlock();
-      beginProcessReality(getRealityProps(true));
-    }
-  }
-
   get canBePerformed() {
     return super.canBePerformed || Player.isInBrokenChallenge;
   }
@@ -145,12 +137,6 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
   get isEarlyGame() {
     return !player.break && !Achievement(55).isUnlocked;
   }
+}
 
-  performReset() {
-    this.statistics();
-    this.gain();
-    this.reset(true);
-    this.challengeCompletion();
-    this.unlock();
-  }
-}();
+Reset.bigCrunch = new BigCrunchReset();

@@ -83,7 +83,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
         proc = gainedEternityPoints().gte(Currency.eternityPoints.value.times(this.xCurrent));
         break;
     }
-    if (proc) eternity(false, true);
+    if (proc) eternityResetRequest(true);
   }
 
   reset() {

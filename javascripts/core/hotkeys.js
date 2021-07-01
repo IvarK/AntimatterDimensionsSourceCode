@@ -72,7 +72,7 @@ const shortcuts = [
     name: "Big Crunch",
     keys: ["c"],
     type: "bindRepeatableHotkey",
-    function: () => bigCrunchResetRequest(),
+    function: () => Reset.bigCrunch.request(),
     visible: () => true
   }, {
     name: "Replicanti Galaxy",
@@ -132,7 +132,7 @@ const shortcuts = [
     function: () => {
       GameStorage.export();
       return false;
-      },
+    },
     visible: () => true
   }, {
     name: "Open \"How to Play\" pop-up",

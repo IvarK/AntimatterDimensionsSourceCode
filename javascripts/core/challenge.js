@@ -1,10 +1,5 @@
 "use strict";
 
-function startChallenge() {
-  BigCrunchReset.reset(true);
-  if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
-}
-
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
     player.records.thisEternity.maxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
@@ -82,7 +77,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (Player.canCrunch) bigCrunchResetRequest();
+    Reset.bigCrunch.request({ force: true });
     if (this.id === 1 || this.isRunning) return;
     if (!Tab.challenges.isAvailable) return;
 
@@ -93,8 +88,6 @@ class NormalChallengeState extends GameMechanicState {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.show(Enslaved.quotes.EC6C10);
     }
-
-    startChallenge();
   }
 
   get isCompleted() {
@@ -132,7 +125,7 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    BigCrunchReset.reset(true);
+    Reset.bigCrunch.reset(true);
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
@@ -209,8 +202,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
 
-    BigCrunchReset.request();
-    startChallenge();
+    Reset.bigCrunch.request({ force: true });
     player.break = true;
 
     if (EternityChallenge.isRunning) Achievement(115).unlock();
@@ -258,7 +250,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    BigCrunchReset.reset(true);
+    Reset.bigCrunch.reset(true);
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }

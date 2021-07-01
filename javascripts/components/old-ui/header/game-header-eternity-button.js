@@ -79,7 +79,7 @@ Vue.component("game-header-eternity-button", {
   },
   methods: {
     update() {
-      this.isVisible = Currency.infinityPoints.gte(Player.eternityGoal) || EternityChallenge.isRunning;
+      this.isVisible = Currency.infinityPoints.gte(Reset.eternity.goal) || EternityChallenge.isRunning;
       if (!this.isVisible) return;
       this.headerTextColored = player.options.headerTextColored;
       if (!PlayerProgress.eternityUnlocked()) {

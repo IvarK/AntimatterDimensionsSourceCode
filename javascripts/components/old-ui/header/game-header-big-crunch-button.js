@@ -65,7 +65,7 @@ Vue.component("game-header-big-crunch-button", {
     <button
       v-if="isVisible && !tesseractAffordable"
       class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
-      onclick="bigCrunchResetRequest()"
+      onclick="Reset.bigCrunch.request()"
       @mouseover="hover = true"
       @mouseleave="hover = false"
     >

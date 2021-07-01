@@ -22,7 +22,7 @@ Vue.component("dilation-button", {
       if (this.canEternity && this.hasGain) {
         this.tachyonGain.copyFrom(getTachyonGain());
       } else if (this.hasGain) {
-        this.eternityGoal.copyFrom(Player.eternityGoal);
+        this.eternityGoal.copyFrom(Reset.eternity.goal);
       } else {
         this.requiredForGain.copyFrom(getTachyonReq());
       }
@@ -32,7 +32,7 @@ Vue.component("dilation-button", {
     <button
       class="o-dilation-btn"
       :class="isUnlocked ? 'o-dilation-btn--unlocked' : 'o-dilation-btn--locked'"
-      onclick="startDilatedEternityRequest()"
+      onclick="toggleDilated()"
     >
       <span v-if="!isUnlocked">Purchase the Dilation Study to unlock.</span>
       <span v-else-if="!isRunning">Dilate time.</span>

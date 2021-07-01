@@ -1,27 +1,5 @@
 "use strict";
 
-function startEternityChallenge() {
-  initializeChallengeCompletions();
-  initializeResourcesAfterEternity();
-  resetInfinityRuns();
-  InfinityDimensions.fullReset();
-  Replicanti.reset();
-  resetChallengeStuff();
-  AntimatterDimensions.reset();
-  player.replicanti.galaxies = 0;
-  Currency.infinityPoints.reset();
-  InfinityDimensions.resetAmount();
-  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
-  player.records.thisEternity.bestEPmin = new Decimal(0);
-  resetTimeDimensions();
-  resetTickspeed();
-  player.records.thisInfinity.maxAM = new Decimal(0);
-  player.records.thisEternity.maxAM = new Decimal(0);
-  Currency.antimatter.reset();
-  playerInfinityUpgradesOnReset();
-  AchievementTimers.marathon2.reset();
-}
-
 class EternityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
     const effect = config.effect;
@@ -167,15 +145,14 @@ class EternityChallengeState extends GameMechanicState {
     if (this.isUnlocked) Modal.startEternityChallenge.show(this.id);
   }
 
-  start(auto) {
+  start() {
     if (EternityChallenge.isRunning) return false;
     if (!this.isUnlocked) {
       if (this.isFullyCompleted || !TimeStudy.eternityChallenge(this.id).purchase()) return false;
     }
-    // If dilation is active, the { enteringEC: true } parameter will cause
-    // dilation to not be disabled. We still don't force-eternity, though;
-    // this causes TP to still be gained.
-    if (Player.canEternity) eternity(false, auto, { enteringEC: true });
+    // If we can Eternity, gain the rewards from doing such - if we can't, reset for no benefit.
+    // force also means that no confirmation will be asked or animation played, which is desireable.
+    Reset.eternity.request({ force: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
       if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
@@ -187,7 +164,6 @@ class EternityChallengeState extends GameMechanicState {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
       if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
     }
-    startEternityChallenge();
     return true;
   }
 
@@ -212,7 +188,7 @@ class EternityChallengeState extends GameMechanicState {
       Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
-    eternity(true);
+    Reset.eternity.request({ force: true });
   }
 
   fail() {

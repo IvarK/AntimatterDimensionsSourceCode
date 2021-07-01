@@ -1,6 +1,9 @@
 "use strict";
 
 Vue.component("modal-enter-dilation", {
+  props: {
+    propsFromRequest: Object,
+  },
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
@@ -25,12 +28,7 @@ Vue.component("modal-enter-dilation", {
   },
   methods: {
     handleYesClick() {
-      if (player.dilation.active) return;
-      if (player.options.animations.dilation && document.body.style.animation === "") {
-        animateAndDilate();
-      } else {
-        startDilatedEternity();
-      }
+      Reset.enterDilation.request(this.propsFromRequest);
       this.emitClose();
     },
     handleNoClick() {

@@ -343,7 +343,9 @@ const AutomatorCommands = ((() => {
       },
       compile: () => () => {
         if (player.dilation.active) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-        if (startDilatedEternity(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        // TODO: Hey reviewer remind me this exists (the next line) and also tell me what this is supposed to do.
+        // toggleDilated (formerly startDilatedEternity) doesnt return anything - so this wouldnt ever work? right? 
+        if (toggleDilated(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
       blockify: () => ({ target: "DILATION", ...automatorBlocksMap.START })

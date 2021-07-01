@@ -137,7 +137,7 @@ Vue.component("new-ui", {
         <news-ticker v-if="news" />
         <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
           <h3>The world has collapsed due to excess antimatter.</h3>
-          <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
+          <button class="btn-big-crunch" onclick="Reset.bigCrunch.request()">Big Crunch</button>
         </div>
         <div class="tab-container" v-else>
           <div class="l-reset-buttons-container" v-if="breakInfinity">
@@ -170,7 +170,7 @@ Vue.component("new-ui", {
           </div>
           <button
             class="btn-big-crunch btn-big-crunch--small"
-            onclick="bigCrunchResetRequest()"
+            onclick="Reset.bigCrunch.request()"
             v-if="smallCrunch && !bigCrunch"
           >
             Big Crunch

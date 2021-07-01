@@ -212,19 +212,19 @@ dev.setNextNewsMessage = function(id) {
 };
 
 dev.implode = function() {
-  BigCrunchReset.animation();
+  Reset.bigCrunch.animation(true);
 };
 
 dev.eternify = function() {
-  eternityAnimation();
+  Reset.eternity.animation(true);
 };
 
 dev.dilate = function() {
-  animateAndDilate();
+  Reset.enterDilation.animation();
 };
 
 dev.undilate = function() {
-  animateAndUndilate();
+  Reset.exitDilation.animation();
 };
 
 dev.realize = function() {
@@ -487,7 +487,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     doReplicantiTicks();
     player.antimatter = new Decimal("1e309");
     player.records.thisInfinity.maxAM = new Decimal("1e309");
-    BigCrunchReset.request();
+    Reset.bigCrunch.request();
     doReplicantiTicks();
   };
   if (singleId === undefined) {

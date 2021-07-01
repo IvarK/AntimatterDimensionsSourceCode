@@ -12,7 +12,7 @@ Vue.component("game-header-new-dim-button", {
   methods: {
     update() {
       this.isVisible = player.break && !InfinityDimension(8).isUnlocked &&
-        Currency.infinityPoints.lt(Player.eternityGoal);
+        Currency.infinityPoints.lt(Reset.eternity.goal);
       if (!this.isVisible) return;
       const requirement = InfinityDimensions.next().requirement;
       this.requirement.copyFrom(requirement);

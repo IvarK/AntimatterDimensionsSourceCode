@@ -99,9 +99,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
           break;
       }
     }
-    if (proc) {
-      bigCrunchResetRequest(true);
-    }
+    if (proc) Reset.bigCrunch.request({ auto: true });
   }
 
   get resetTickOn() {

@@ -1248,6 +1248,12 @@ screen and (max-width: 480px) {
   width: 12rem;
 }
 
+.o-primary-btn--header-exit {
+  font-size: 0.7rem;
+  width: 10rem;
+  height: 1.5rem;
+}
+
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
   width: 48rem;

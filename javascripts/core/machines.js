@@ -35,9 +35,13 @@ const MachineHandler = {
     return Math.clampMin(this.uncappedRM.log10() - 1000, 0) ** 2;
   },
 
-  // This is where any multipliers need to go, and any display references should use this instead of baseIMCap
-  get finalIMCap() {
+  get currentIMCap() {
     return player.reality.iMCap * ImaginaryUpgrade(13).effectOrDefault(1);
+  },
+
+  // This is iM cap based on in-game values at that instant, may be lower than the actual cap
+  get projectedIMCap() {
+    return this.baseIMCap * ImaginaryUpgrade(13).effectOrDefault(1);
   },
 
   // Use iMCap to store the base cap; applying multipliers separately avoids some design issues the 3xTP upgrade has
@@ -53,6 +57,6 @@ const MachineHandler = {
   },
 
   gainedImaginaryMachines(diff) {
-    return (this.finalIMCap - Currency.imaginaryMachines.value) * (1 - 2 ** (-diff / 1000 / this.scaleTimeForIM));
+    return (this.currentIMCap - Currency.imaginaryMachines.value) * (1 - 2 ** (-diff / 1000 / this.scaleTimeForIM));
   },
 };

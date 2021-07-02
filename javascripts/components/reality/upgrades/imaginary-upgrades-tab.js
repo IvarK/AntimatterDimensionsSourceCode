@@ -15,7 +15,7 @@ Vue.component("imaginary-upgrades-tab", {
   methods: {
     update() {
       this.capRM.copyFrom(MachineHandler.hardcapRM);
-      this.capIM = MachineHandler.finalIMCap;
+      this.capIM = MachineHandler.currentIMCap;
       this.scaleTime = MachineHandler.scaleTimeForIM;
     },
     id(row, column) {

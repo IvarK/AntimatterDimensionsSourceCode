@@ -76,7 +76,7 @@ Vue.component("reality-button", {
       const multiplier = simulatedRealityCount(false) + 1;
       const availableRM = MachineHandler.hardcapRM.minus(Currency.realityMachines.value);
       this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
-      this.newIMCap = MachineHandler.finalIMCap;
+      this.newIMCap = MachineHandler.projectedIMCap;
       this.machinesGained = this.projectedRM.clampMax(availableRM);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;

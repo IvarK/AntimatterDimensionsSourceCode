@@ -116,8 +116,7 @@ Vue.component("header-challenge-display", {
       <failable-ec-text v-if="isInFailableEC" />
       <primary-button
         v-if="showExit"
-        class="o-primary-btn--buy-max"
-        style="font-size: 1rem;"
+        class="o-primary-btn--header-exit"
         @click="exitButtonClicked"
       >
         {{ exitText }}

@@ -10,10 +10,7 @@ class ExitDilationReset extends EternityReset {
   }
 
   confirmation(props) {
-    Reset.exitDilation(props);
-    GameUI.notify.error("its being worked on sorry", 100000);
-    GameUI.notify.error("for now you get no modal", 100000);
-    GameUI.notify.error("TODO: Exiting Dilation Modal NYI", 100000);
+    Modal.exitDilation.show(props);
   }
 
   get animationOption() {

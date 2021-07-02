@@ -152,7 +152,8 @@ class EternityChallengeState extends GameMechanicState {
     }
     // If we can Eternity, gain the rewards from doing such - if we can't, reset for no benefit.
     // force also means that no confirmation will be asked or animation played, which is desireable.
-    Reset.eternity.request({ force: true });
+    Reset.enterEternityChallenge.request({ force: true });
+
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
       if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {

@@ -156,4 +156,18 @@ class EternityReset extends PrestigeMechanic {
   }
 }
 
-Reset.eternity = new EternityReset();
+class EternityResetWithRespec extends EternityReset {
+  reset(reality) {
+    if (player.respec) {
+      respecTimeStudies();
+      player.respec = false;
+    }
+    super.reset(reality);
+  }
+}
+
+// TODO: fix this
+
+Reset.eternity = new EternityResetWithRespec();
+
+Reset.enterEternityChallenge = new EternityReset();

@@ -14,7 +14,7 @@ class EternityChallengeReset extends EternityReset {
   }
 
   confirmation(props) {
-    Modal.startEternityChallenge.show(props);
+    Modal.eternity.show(props);
   }
 
   tabChange() {

@@ -9,11 +9,7 @@ function eternityResetRequest(auto) {
     Reset.exitDilation.request({ auto });
     return;
   }
-  player.dilation.active = false;
-  if (player.respec) {
-    respecTimeStudies(auto);
-    player.respec = false;
-  }
+
   Reset.eternity.request({ auto });
 }
 

@@ -37,7 +37,6 @@ function antimatterDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
-    TriadStudy(4),
     AlchemyResource.dimensionality
   );
 

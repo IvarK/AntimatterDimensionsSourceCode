@@ -10,6 +10,5 @@ Vue.component("drop-down", {
     },
   },
   template: `
-    <span class="o-run-drop-down-icon" v-html="dropDown" />
-  `
+    <span class="o-run-drop-down-icon" v-html="dropDown" />`
 });

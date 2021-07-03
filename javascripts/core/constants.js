@@ -25,6 +25,16 @@ const AUTO_REALITY_MODE = {
   BOTH: 3
 };
 
+const EFFECT_TYPE = {
+  OVERRIDES: "OVERRIDES",
+  ADDENDS: "ADDENDS",
+  SUBTRAHENDS: "SUBTRAHENDS",
+  DIVISORS: "DIVISORS",
+  MULTIPLIERS: "MULTIPLIERS",
+  POWERS: "POWERS",
+  DILATIONS: "DILATIONS",
+};
+
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
 const TS171_MULTIPLIER = 1.25;
 

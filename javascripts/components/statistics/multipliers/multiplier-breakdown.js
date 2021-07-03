@@ -14,10 +14,10 @@ Vue.component("multiplier-breakdown", {
       return EffectScopes.all[this.id];
     },
     multipliers() {
-      return "multipliers" in this.scope.validEffects ? this.scope.validEffects.multipliers : [];
+      return EFFECT_TYPE.MULTIPLIERS in this.scope.validEffects ? this.scope.validEffects.MULTIPLIERS : [];
     },
     powers() {
-      return "powers" in this.scope.validEffects ? this.scope.validEffects.powers : [];
+      return EFFECT_TYPE.POWERS in this.scope.validEffects ? this.scope.validEffects.POWERS : [];
     },
     name() {
       return this.scope.name;
@@ -34,24 +34,25 @@ Vue.component("multiplier-breakdown", {
   template: `
     <div>
       <div v-if="expand">
-          <multiplier-row
+        <multiplier-row
           v-for="(power, i) in powers"
-              :key="'p' + i"
-              :effect="power"
-              operation="powers"/>
-          <multiplier-row
-            v-for="(multiplier, i) in multipliers"
-              :key="'m' + i"
-              :effect="multiplier"
-              operation="multipliers"/>
+          :key="'p' + i"
+          :effect="power"
+          operation="POWERS"
+        />
+        <multiplier-row
+          v-for="(multiplier, i) in multipliers"
+          :key="'m' + i"
+          :effect="multiplier"
+          operation="MULTIPLIERS"
+        />
       </div>
       <div class="c-past-runs-header" @click="toggleExpand">
         <drop-down :shown.sync="expand" />
         <span>
-          <h3 v-if="expand">{{name}} : {{total}}</h3>
-          <span v-else>{{name}} : {{total}}</span>
+          <h3 v-if="expand">{{ name }}: {{ total }}</h3>
+          <span v-else>{{ name }}: {{ total }}</span>
         </span>
       </div>
-    </div>
-  `
+    </div>`
 });

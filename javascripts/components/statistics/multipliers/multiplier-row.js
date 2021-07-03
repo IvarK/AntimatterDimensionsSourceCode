@@ -14,13 +14,13 @@ Vue.component("multiplier-row", {
   computed: {
     displayValue() {
       const SYM = {
-        overides: val => `#${format(val, 2, 2)}`,
-        addends: val => `+${format(val, 2, 2)}`,
-        subtrahends: val => `-${format(val, 2, 2)}`,
-        dividends: val => `/${format(val, 2, 2)}`,
-        multipliers: val => formatX(val, 2, 2),
-        powers: val => formatPow(val, 2, 2),
-        dilations: val => `~${format(val, 2, 2)}`,
+        OVERRIDES: val => `#${format(val, 2, 2)}`,
+        ADDENDS: val => `+${format(val, 2, 2)}`,
+        SUBTRAHENDS: val => `-${format(val, 2, 2)}`,
+        DIVISORS: val => `/${format(val, 2, 2)}`,
+        MULTIPLIERS: val => formatX(val, 2, 2),
+        POWERS: val => formatPow(val, 2, 2),
+        DILATIONS: val => `~${format(val, 2, 2)}`,
       };
       return SYM[this.operation](this.value);
     }
@@ -36,9 +36,8 @@ Vue.component("multiplier-row", {
     }
   },
   template: `
-  <div>
-    <multiplier-breakdown v-if="innerId > -1" :id="innerId"/>
-    <div v-else> {{name}} : {{displayValue}} </div>
-  </div>
-  `
+    <div>
+      <multiplier-breakdown v-if="innerId > -1" :id="innerId" />
+      <div v-else>{{ name }}: {{ displayValue }}</div>
+    </div>`
 });

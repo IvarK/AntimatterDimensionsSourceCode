@@ -19,7 +19,7 @@ class EffectScope {
     this._effects = {};
     this._dependency = 0;
     this._eval = [];
-    this._value = 0;
+    this._value = new Decimal(0);
     this._base = new Decimal(1);
     this._conditional = () => true;
     EffectScopes.add(this);
@@ -88,13 +88,13 @@ class EffectScope {
   _addEffects(type, effects) {
     if (!this._initFn) return this;
     const ApplyFn = {
-      overides: (val, eff) => Effects.last(val, ...eff.reverse()),
-      addends: (val, eff) => val.plusEffectsOf(...eff),
-      subtrahends: (val, eff) => val.minusEffectsOf(...eff),
-      dividends: (val, eff) => val.dividedByEffectsOf(...eff),
-      multipliers: (val, eff) => val.timesEffectsOf(...eff),
-      powers: (val, eff) => val.powEffectsOf(...eff),
-      dilations: (val, eff) => val.dilateByEffectsOf(...eff)
+      OVERRIDES: (val, eff) => Effects.last(val, ...eff.reverse()),
+      ADDENDS: (val, eff) => val.plusEffectsOf(...eff),
+      SUBTRAHENDS: (val, eff) => val.minusEffectsOf(...eff),
+      DIVISORS: (val, eff) => val.dividedByEffectsOf(...eff),
+      MULTIPLIERS: (val, eff) => val.timesEffectsOf(...eff),
+      POWERS: (val, eff) => val.powEffectsOf(...eff),
+      DILATIONS: (val, eff) => val.dilateByEffectsOf(...eff)
     };
 
     this._eval.push(val => ApplyFn[type](val, effects));
@@ -108,32 +108,32 @@ class EffectScope {
     return this;
   }
 
-  addOverides(...effects) {
-    return this._addEffects(EFFECT_TYPE.overides, effects);
+  addOverrides(...effects) {
+    return this._addEffects(EFFECT_TYPE.OVERRIDES, effects);
   }
 
   addAddends(...effects) {
-    return this._addEffects(EFFECT_TYPE.addends, effects);
+    return this._addEffects(EFFECT_TYPE.ADDENDS, effects);
   }
 
   addSubtrahends(...effects) {
-    return this._addEffects(EFFECT_TYPE.subtrahends, effects);
+    return this._addEffects(EFFECT_TYPE.SUBTRAHENDS, effects);
   }
 
-  addDividends(...effects) {
-    return this._addEffects(EFFECT_TYPE.dividends, effects);
+  addDivisors(...effects) {
+    return this._addEffects(EFFECT_TYPE.DIVISORS, effects);
   }
 
   addMultipliers(...effects) {
-    return this._addEffects(EFFECT_TYPE.multipliers, effects);
+    return this._addEffects(EFFECT_TYPE.MULTIPLIERS, effects);
   }
 
   addPowers(...effects) {
-    return this._addEffects(EFFECT_TYPE.powers, effects);
+    return this._addEffects(EFFECT_TYPE.POWERS, effects);
   }
 
   addDilations(...effects) {
-    return this._addEffects(EFFECT_TYPE.dilations, effects);
+    return this._addEffects(EFFECT_TYPE.DILATIONS, effects);
   }
 
   _init() {
@@ -188,13 +188,3 @@ const EffectScopes = (function() {
     update: () => _update(),
   };
 }());
-
-const EFFECT_TYPE = {
-  overides: "overides",
-  addends: "addends",
-  subtrahends: "subtrahends",
-  dividends: "dividends",
-  multipliers: "multipliers",
-  powers: "powers",
-  dilations: "dilations"
-};

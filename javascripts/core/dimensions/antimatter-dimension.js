@@ -47,7 +47,7 @@ const AntimatterDimensionCommonMultiplier = new EffectScope("Antimatter Dimensio
     EternityChallenge(10),
     TriadStudy(4),
     AlchemyResource.dimensionality
-  ).addDividends(
+  ).addDivisors(
     InfinityChallenge(6)
   ));
 
@@ -55,7 +55,7 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
   if (tier === 0) return null;
   return new EffectScope(`Antimatter Dimension ${tier} Multipliers`, scope => {
     // Make Overides Effect Scopes?
-    scope.addOverides(
+    scope.addOverrides(
       new CustomEffect(
         "EC11",
         () =>
@@ -67,7 +67,7 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       )
     );
     if (tier > 6)
-      scope.addOverides(
+      scope.addOverrides(
         new CustomEffect(
           "C10",
           () => new Decimal(1),
@@ -177,7 +177,7 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
     );
 
     scope.addDilations(
-       TimeDilationStrength
+      TimeDilationStrength
     );
 
     scope.addMultipliers(
@@ -200,7 +200,8 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
         () => 1.05,
         undefined,
         // This condition doesnt work right now
-        () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && scope.value.gte(AlchemyResource.inflation.effectValue)
+        () => false
+        // Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && scope.value.gte(AlchemyResource.inflation.effectValue)
       )
     );
 

@@ -7,6 +7,5 @@ Vue.component("multipliers-tab", {
     };
   },
   template: `
-    <multiplier-breakdown :id="id"/>
-  `
+    <multiplier-breakdown :id="id" />`
 });

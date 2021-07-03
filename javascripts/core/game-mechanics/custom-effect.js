@@ -1,5 +1,7 @@
 "use strict";
+
 class CustomEffect extends Effect {
+  // eslint-disable-next-line max-params
   constructor(name, effect, condition, cap) {
     super(effect, condition, cap);
     if (!name) {
@@ -12,7 +14,8 @@ class CustomEffect extends Effect {
     });
   }
 
-  get name() {
-    throw new Error("Name is undefined.");
-  }
+  /**
+   * @abstract
+   */
+  get name() { throw new NotImplementedError(); }
 }

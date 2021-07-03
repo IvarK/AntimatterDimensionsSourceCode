@@ -174,6 +174,7 @@ class TimeDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.time);
     mult = mult.pow(Ra.momentumValue);
+    mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
@@ -199,7 +200,7 @@ class TimeDimensionState extends DimensionState {
     }
     let production = this.amount.times(this.multiplier);
     if (EternityChallenge(7).isRunning) {
-      production = production.dividedBy(Tickspeed.current.dividedBy(1000));
+      production = production.times(Tickspeed.perSecond);
     }
     if (this._tier === 1 && !EternityChallenge(7).isRunning) {
       production = production.pow(getAdjustedGlyphEffect("timeshardpow"));

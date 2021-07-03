@@ -111,7 +111,7 @@ class DimBoost {
   }
 
   static get freeBoosts() {
-    return ImaginaryUpgrade(12).effectValue;
+    return ImaginaryUpgrade(12).effectOrDefault(0);
   }
 
   static get totalBoosts() {

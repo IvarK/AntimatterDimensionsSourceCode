@@ -575,7 +575,7 @@ class AntimatterDimensionState extends DimensionState {
       if (tier === 4) amount = amount.pow(1.4);
       if (tier === 6) amount = amount.pow(1.2);
     }
-    let production = amount.times(this.multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
+    let production = amount.times(this.multiplier).times(Tickspeed.perSecond);
     if (NormalChallenge(2).isRunning) {
       production = production.times(player.chall2Pow);
     }

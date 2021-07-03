@@ -182,12 +182,15 @@ const Tickspeed = {
       .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
   },
 
+  get perSecond() {
+    return Decimal.divide(1000, this.current);
+  },
+
   multiplySameCosts() {
     for (const dimension of AntimatterDimensions.all) {
       if (dimension.cost.e === this.cost.e) dimension.costBumps++;
     }
   }
-
 };
 
 

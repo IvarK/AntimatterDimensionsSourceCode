@@ -16,7 +16,7 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return ImaginaryUpgrade(21).isBought;
+    return ImaginaryUpgrade(20).isBought;
   }
 
   tick() {

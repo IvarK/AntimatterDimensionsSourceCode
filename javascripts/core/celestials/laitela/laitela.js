@@ -34,7 +34,7 @@ const Laitela = {
     return Ra.totalPetLevel >= this.raLevelRequirement &&
       player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
         x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
-      ImaginaryUpgrade(16).isBought;
+      ImaginaryUpgrade(15).isBought;
   },
   unlock() {
     if (!this.canUnlock) return false;
@@ -72,7 +72,7 @@ const Laitela = {
     return 8 - this.difficultyTier;
   },
   get continuumUnlocked() {
-    return ImaginaryUpgrade(16).isBought;
+    return ImaginaryUpgrade(15).isBought;
   },
   get continuumActive() {
     return this.continuumUnlocked && !player.auto.disableContinuum;
@@ -100,7 +100,7 @@ const Laitela = {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
   get canAnnihilate() {
-    return ImaginaryUpgrade(20).isBought && Currency.darkMatter.gte(this.annihilationDMRequirement);
+    return ImaginaryUpgrade(19).isBought && Currency.darkMatter.gte(this.annihilationDMRequirement);
   },
   get annihilationDMRequirement() {
     return 1e20;

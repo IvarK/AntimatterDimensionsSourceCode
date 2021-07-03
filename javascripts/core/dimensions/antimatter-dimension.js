@@ -10,7 +10,7 @@ function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(Currency.infinityPower.value.pow(getInfinityConversionRate()).max(1));
+    multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -52,7 +52,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
-      getInfinityConversionRate()
+      InfinityDimensions.powerConversionRate
     ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
@@ -633,6 +633,7 @@ const AntimatterDimensions = {
     ).times(getAdjustedGlyphEffect("powerbuy10"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
+    mult = mult.pow(ImaginaryUpgrade(14).effectOrDefault(1));
 
     return mult;
   },

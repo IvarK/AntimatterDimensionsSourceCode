@@ -57,6 +57,7 @@ function getTickSpeedMultiplier() {
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
+  galaxies *= 1 + ImaginaryUpgrade(9).effectValue;
   const perGalaxy = new Decimal(0.965);
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }

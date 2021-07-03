@@ -101,7 +101,7 @@ function timeDimensionCommonMultiplier() {
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(
       Decimal.pow(
-        Math.clampMin(Currency.infinityPower.value.pow(getInfinityConversionRate() / 7).log2(), 1),
+        Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7).log2(), 1),
         4)
         .clampMin(1));
   }
@@ -227,7 +227,9 @@ class TimeDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return new Decimal(4).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null);
+    return new Decimal(4)
+      .timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null)
+      .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 
   get e6000ScalingAmount() {

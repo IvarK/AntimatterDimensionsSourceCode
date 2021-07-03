@@ -83,10 +83,10 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     rebuyable({
       name: "?????",
       id: 9,
-      initialCost: 4e10,
+      initialCost: 1e9,
       costMult: 8e3,
       description: () => `Increase Galaxy strength`,
-      effect: 0.01,
+      effect: 0.03,
       formatEffect: value => `+${formatPercents(value)}`
     }),
     rebuyable({
@@ -143,21 +143,23 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 14,
       cost: 4e8,
       requirement: () => `Reach a tickspeed of ${format("1e10000000")} / sec without exceeding ${formatInt(100)}
-        total galaxies in your current reality`,
+        total galaxies (in your current reality)`,
       hasFailed: () => player.achievementChecks.maxGalaxiesThisReality >= 100,
       checkRequirement: () => player.achievementChecks.maxGalaxiesThisReality < 100 &&
         Tickspeed.perSecond.exponent >= 1e7,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "[Something buy10]",
+      description: () => `Raise all dimension per-purchase multipliers to ${formatPow(1.8, 0, 1)}`,
+      effect: 1.8
     },
     {
       name: "?????",
       id: 15,
       cost: 1e8,
-      requirement: () => `[NYI]`,
-      hasFailed: () => false,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      requirement: () => `Reach ${format("1e1500000000000")} antimatter without producing any Infinity Dimensions
+        (in your current reality)`,
+      hasFailed: () => player.achievementChecks.maxID1ThisReality.gt(0),
+      checkRequirement: () => player.achievementChecks.maxID1ThisReality.eq(0) && player.antimatter.exponent >= 1.5e12,
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
     },
     {

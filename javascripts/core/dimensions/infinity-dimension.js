@@ -217,7 +217,9 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return new Decimal(this._powerMultiplier).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.infinity : null);
+    return new Decimal(this._powerMultiplier)
+      .timesEffectsOf(this._tier === 8 ? GlyphSacrifice.infinity : null)
+      .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 
   get purchases() {
@@ -330,6 +332,13 @@ const InfinityDimensions = {
     } else {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
+
+    player.achievementChecks.maxID1ThisReality = player.achievementChecks.maxID1ThisReality
+      .clampMin(InfinityDimension(1).amount);
+  },
+
+  get powerConversionRate() {
+    return 7 + getAdjustedGlyphEffect("infinityrate");
   }
 };
 
@@ -339,8 +348,4 @@ function tryUnlockInfinityDimensions(auto) {
     if (InfinityDimension(tier).isUnlocked) continue;
     InfinityDimension(tier).tryUnlock();
   }
-}
-
-function getInfinityConversionRate() {
-  return 7 + getAdjustedGlyphEffect("infinityrate");
 }

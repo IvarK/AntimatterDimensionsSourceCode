@@ -149,7 +149,7 @@ const SingularityMilestoneThresholds = (function() {
 
 const Singularity = {
   get cap() {
-    return 2e3 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
+    return 200 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
   },
 
   get gainPerCapIncrease() {

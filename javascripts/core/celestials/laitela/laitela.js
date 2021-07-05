@@ -4,15 +4,6 @@ const Laitela = {
   get celestial() {
     return player.celestials.laitela;
   },
-  handleMatterDimensionUnlocks() {
-    for (let i = 1; i <= 3; i++) {
-      const d = MatterDimension(i + 1);
-      if (d.amount.eq(0) && Currency.darkMatter.gte(d.adjustedStartingCost)) {
-        d.amount = new Decimal(1);
-        d.timeSinceLastUpdate = 0;
-      }
-    }
-  },
   get darkEnergyPerSecond() {
     return Array.range(1, 4)
       .map(n => MatterDimension(n))
@@ -78,8 +69,8 @@ const Laitela = {
     return this.continuumUnlocked && !player.auto.disableContinuum;
   },
   get matterExtraPurchaseFactor() {
-    return (1 + Math.pow(Decimal.pLog10(Currency.darkMatter.max) /
-      Math.log10(Number.MAX_VALUE), 0.8) * (1 + SingularityMilestone.continuumMult.effectValue) / 2);
+    return (1 + 2 * Math.pow(Decimal.pLog10(Currency.darkMatter.max) / Math.log10(Number.MAX_VALUE), 0.7) *
+      (1 + SingularityMilestone.continuumMult.effectValue));
   },
   get realityReward() {
     return Math.clampMin(Math.pow(100, this.difficultyTier) *
@@ -87,7 +78,7 @@ const Laitela = {
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
   get entropyGainPerSecond() {
-    return Math.clamp(Math.pow(Currency.antimatter.value.log10() / 1e11, 2), 0, 100) / 100;
+    return Math.clamp(Math.pow(Currency.antimatter.value.log10() / 1e11, 2), 0, 100) / 200;
   },
   get darkMatterMultGain() {
     return Decimal.pow(Currency.darkMatter.value.dividedBy(this.annihilationDMRequirement)

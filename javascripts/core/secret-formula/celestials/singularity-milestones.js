@@ -14,7 +14,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 125,
     limit: 0,
     description: "Continuum percentage multiplier",
-    effect: completions => completions * 0.01,
+    effect: completions => completions * 0.03,
     effectFormat: x => formatX(1 + x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },

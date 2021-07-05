@@ -391,7 +391,6 @@ function gameLoop(passDiff, options = {}) {
   if (AlchemyResource.momentum.isUnlocked) player.celestials.ra.momentumTime += realDiff;
 
   // Lai'tela mechanics should bypass stored real time entirely
-  Laitela.handleMatterDimensionUnlocks();
   Laitela.tickDarkMatter(realDiff);
   Laitela.autobuyerLoop(realDiff);
 

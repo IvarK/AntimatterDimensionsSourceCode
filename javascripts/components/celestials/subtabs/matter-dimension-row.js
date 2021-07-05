@@ -22,6 +22,7 @@ Vue.component("matter-dimension-row", {
       timer: 0,
       timerPecent: 0,
       intervalAscensionBump: 10000,
+      portionDE: 0,
     };
   },
   computed: {
@@ -77,6 +78,7 @@ Vue.component("matter-dimension-row", {
       this.timer = this.dimension.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
       this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectValue;
+      this.portionDE = (this.powerDE * 1000 / this.interval) / Laitela.darkEnergyPerSecond;
     },
     handleIntervalClick() {
       if (this.isIntervalCapped) this.dimension.ascend();
@@ -126,8 +128,11 @@ Vue.component("matter-dimension-row", {
       <div v-if="interval > 200">
         Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})
       </div>
+      <div v-else>
+        {{ format(1000 / interval, 2, 2) }} ticks / sec
+      </div>
       <div>
-        DE: {{ format(powerDE * 1000 / interval, 2, 4) }}/s
+        Dark Energy: {{ format(powerDE * 1000 / interval, 2, 4) }}/s ({{ formatPercents(portionDE, 1) }} of total)
       </div>
     </div>`
 });

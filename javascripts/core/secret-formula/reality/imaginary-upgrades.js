@@ -154,7 +154,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 15,
-      cost: 1e8,
+      cost: 1e9,
       requirement: () => `Reach ${format("1e1500000000000")} antimatter without producing any Infinity Dimensions
         (in your current reality)`,
       hasFailed: () => player.achievementChecks.maxID1ThisReality.gt(0),
@@ -165,11 +165,11 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 16,
-      cost: 2e10,
-      requirement: () => `[NYI]`,
+      cost: 4e9,
+      requirement: () => `Destabilize Lai'tela's Reality in under ${formatInt(30)} seconds twice`,
       hasFailed: () => false,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      checkRequirement: () => Laitela.maxAllowedDimension <= 6,
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock the 2nd Dark Matter Dimension",
     },
     {

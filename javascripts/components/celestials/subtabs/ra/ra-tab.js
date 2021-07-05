@@ -77,7 +77,7 @@ Vue.component("ra-tab", {
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
       this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
       this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
-      this.showLaitela = Ra.pets.v.isUnlocked;
+      this.showLaitela = ImaginaryUpgrade(15).isBought;
       this.laitelaLevelReq = Laitela.raLevelRequirement;
       this.laitelaGlyphLevelReq = Laitela.realityGlyphLevelRequirement;
       this.petWithRecollection = Ra.petWithRecollection;

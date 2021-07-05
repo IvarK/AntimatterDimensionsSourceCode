@@ -5,10 +5,12 @@ Vue.component("laitela-tab", {
     return {
       darkMatter: new Decimal(0),
       maxDarkMatter: new Decimal(0),
+      darkEnergy: 0,
       matterExtraPurchasePercentage: 0,
       autobuyersUnlocked: false,
       singularityPanelVisible: false,
       singularitiesUnlocked: false,
+      singularityCap: 0,
       singularityWaitTime: 0,
     };
   },
@@ -16,15 +18,17 @@ Vue.component("laitela-tab", {
     update() {
       this.darkMatter.copyFrom(Currency.darkMatter);
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
+      this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
       this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
         SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
         SingularityMilestone.autoCondense.isUnlocked ||
         Laitela.darkMatterMult > 1;
-      this.singularityPanelVisible = Currency.singularities.gte(10);
+      this.singularityPanelVisible = Currency.singularities.gt(0);
       this.singularitiesUnlocked = Singularity.capIsReached || this.singularityPanelVisible;
-      this.singularityWaitTime = TimeSpan.fromSeconds((Singularity.cap - player.celestials.laitela.darkEnergy) /
-      Laitela.darkEnergyPerSecond).toStringShort();
+      this.singularityCap = Singularity.cap;
+      this.singularityWaitTime = TimeSpan.fromSeconds((this.singularityCap - this.darkEnergy) /
+        Laitela.darkEnergyPerSecond).toStringShort();
     },
     maxAll() {
       Laitela.maxAllDMDimensions(4);
@@ -60,6 +64,7 @@ Vue.component("laitela-tab", {
       </div>
       <h2 class="c-laitela-singularity-container" v-if="!singularitiesUnlocked">
         Unlock singularities in {{ singularityWaitTime }}.
+        ({{ format(darkEnergy, 2, 2) }}/{{ format(singularityCap, 2) }} Dark Energy)
       </h2>
       <singularity-container v-if="singularitiesUnlocked" />
       <div class="l-laitela-mechanics-container">
@@ -268,7 +273,7 @@ Vue.component("laitela-run-button", {
       <div :class="runButtonClassObject()" @click="startRun"></div>
       <div v-if="realityReward > 1">
         <b>
-          All DM multipliers are {{ formatX(realityReward, 2, 2) }} higher
+          All Dark Matter multipliers are {{ formatX(realityReward, 2, 2) }} higher
         </b>
         <br><br>
         Fastest Completion: {{ completionTime }}
@@ -312,7 +317,9 @@ Vue.component("dark-matter-dimension-group", {
       />
       <div v-if="nextDimensionThreshold !== 0">
         <b>
-          Next Dark Matter Dimension unlocks at {{ format(nextDimensionThreshold) }} Dark Matter.
+          Unlock the next Dark Matter Dimension from an Imaginary Upgrade.
+          <br>
+          (Staring cost: {{ format(nextDimensionThreshold, 2) }} Dark Matter)
         </b>
         <br><br>
       </div>
@@ -374,7 +381,7 @@ Vue.component("annihilation-button", {
     >
       <h2>Annihilation</h2>
       <span v-if="hasAnnihilated">
-        Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
+        Current multiplier to all Dark Matter multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
         <br><br>
       </span>
       <span>
@@ -391,10 +398,10 @@ Vue.component("annihilation-button", {
         adding to your current Annihilation multiplier (requires {{ format(matterRequirement) }} Dark Matter).
       </span>
       <span v-else-if="darkMatter.gte(matterRequirement)">
-        multiplying DM multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
+        multiplying Dark Matter multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
       </span>
       <span v-else>
-        giving a multiplier to all DM multipliers (requires {{ format(matterRequirement) }} Dark Matter).
+        giving a multiplier to all Dark Matter multipliers (requires {{ format(matterRequirement) }} Dark Matter).
       </span>
       <div v-if="hasAnnihilated">
         <br>

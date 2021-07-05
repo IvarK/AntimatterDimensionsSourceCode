@@ -71,11 +71,11 @@ class MatterDimensionState {
       .times(this.commonDarkMult)
       .times(Math.pow(this.powerDMPerAscension, this.dimension.ascensionCount))
       .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied)
-      .dividedBy(Math.pow(10, this._tier));
+      .dividedBy(Math.pow(1e4, this._tier));
   }
 
   get powerDE() {
-    const tierFactor = Math.pow(4, this._tier);
+    const tierFactor = Math.pow(15, this._tier);
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) *
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
       .times(this.commonDarkMult)
@@ -88,7 +88,7 @@ class MatterDimensionState {
   }
 
   get adjustedStartingCost() {
-    const tiers = [0, 1, 3, 5];
+    const tiers = [0, 2, 5, 8];
     return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]);
   }
 

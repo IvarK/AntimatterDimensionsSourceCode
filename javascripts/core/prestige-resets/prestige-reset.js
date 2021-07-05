@@ -40,15 +40,25 @@ class PrestigeMechanic {
   get eventAfter() { throw new NotImplementedError(); }
 
 
+  /**
+   * @returns {boolean} - the confirmation option, if none is provided, undefined.
+   */
   get confirmationOption() { return undefined; }
-
+  /**
+   * @param {boolean} value - the value to set the confirmation option to.
+   */
   set confirmationOption(value) { }
 
   confirmation() { }
 
 
+  /**
+   * @returns {boolean} - the animation option, if none is provided, undefined.
+   */
   get animationOption() { return undefined; }
-
+  /**
+   * @param {boolean} value - the value to set the animation option to.
+   */
   set animationOption(value) { }
 
   animation() { }
@@ -65,17 +75,26 @@ class PrestigeMechanic {
   /** @abstract */
   gain() { throw new NotImplementedError(); }
 
+
+  /**
+   * @returns {boolean} - if the current required is greater than the goal, we can perform this action.
+   * commonly overriden if currencyRequired isn't a Decimal, goal is neither a Decimal nor a number,
+   * or needs additional or alternative requirements.
+   */
   get canBePerformed() {
     return this.currencyRequired.gte(this.goal);
   }
 
 
-  //
-  // props can be:
-  // auto, which prevents confirmation, force, or tab change from happening.
-  // confirmation, which determines if the confirmation modal needs to be displayed.
-  // force, which forces the reset without any gain (does not play the animation or ask for confirmation)
-  // forceAnimation, used to force an animation to occur, even if the player has normally disabled it. (use rarely)
+  /**
+   * @param {object<string, boolean>} props - may contain one or more of the following booleans:
+   * @param {boolean} auto - which prevents confirmation, force, or tab change from happening.
+   * @param {boolean} confirmation - which determines if the confirmation modal needs to be displayed.
+   * @param {boolean} force - which forces the reset without any gain
+   * (does not play the animation or ask for confirmation)
+   * @param {boolean} forceAnimation - used to force an animation to occur, even if the player has normally
+   * disabled it. (use rarely)
+   */
   request(props = {}) {
     const needsConfirmation = this.confirmationOption && !props.confirmation && !props.auto;
     if (needsConfirmation) {

@@ -74,7 +74,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "?????",
       id: 8,
       initialCost: 1e7,
-      costMult: 2e3,
+      costMult: 800,
       description: () => `Multiply Infinity Dimensions by ${format("1e100000")}`,
       effect: new Decimal("1e100000"),
       formatEffect: value => `${formatX(value)}`,
@@ -84,7 +84,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "?????",
       id: 9,
       initialCost: 1e9,
-      costMult: 8e3,
+      costMult: 1000,
       description: () => `Increase Galaxy strength`,
       effect: 0.03,
       formatEffect: value => `+${formatPercents(value)}`
@@ -92,13 +92,11 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     rebuyable({
       name: "?????",
       id: 10,
-      initialCost: 2e13,
-      costMult: 3e4,
-      description: () => `Multiply Singularity gain by ${formatInt(2)}`,
-      effect: new Decimal(2),
-      formatEffect: value => `${formatX(value, 2)}`,
-      // Decimal so that it stacks multiplicatively, gets cast back to Number when used
-      isDecimal: true
+      initialCost: 8e9,
+      costMult: 2000,
+      description: () => `Increase Singularity gain`,
+      effect: 1,
+      formatEffect: value => `${formatX(1 + value, 2)}`,
     }),
     {
       name: "?????",
@@ -175,21 +173,23 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 17,
-      cost: 2e10,
-      requirement: () => `[NYI]`,
+      cost: 8e9,
+      requirement: () => `Automatically condense at least ${formatInt(20)} Singularities at once`,
       hasFailed: () => false,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      checkRequirement: () => Singularity.singularitiesGained >= 20 &&
+        Currency.darkEnergy.gte(Singularity.cap * SingularityMilestone.autoCondense.effectValue),
+      checkEvent: GAME_EVENT.SINGULARITY_RESET_BEFORE,
       description: "Unlock the 3rd Dark Matter Dimension",
     },
     {
       name: "?????",
       id: 18,
       cost: 2e10,
-      requirement: () => `[NYI]`,
+      requirement: () => `Have ${formatInt(80000)} total galaxies`,
       hasFailed: () => false,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      checkRequirement: () => Replicanti.galaxies.total + player.galaxies +
+        player.dilation.totalTachyonGalaxies >= 80000,
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock the 4th Dark Matter Dimension",
     },
     {

@@ -71,7 +71,7 @@ class MatterDimensionState {
       .times(this.commonDarkMult)
       .times(Math.pow(this.powerDMPerAscension, this.dimension.ascensionCount))
       .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied)
-      .dividedBy(Math.pow(1e4, this._tier));
+      .dividedBy(Math.pow(1e4, this._tier ** 0.5));
   }
 
   get powerDE() {
@@ -88,14 +88,14 @@ class MatterDimensionState {
   }
 
   get adjustedStartingCost() {
-    const tiers = [0, 2, 5, 8];
-    return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]);
+    const tiers = [0, 2, 5, 13];
+    return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]) *
+      SingularityMilestone.darkDimensionCostReduction.effectValue;
   }
 
   get rawIntervalCost() {
     return Decimal.pow(this.intervalCostIncrease, this.dimension.intervalUpgrades)
-      .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST);
   }
 
   get intervalCost() {
@@ -108,8 +108,7 @@ class MatterDimensionState {
 
   get rawPowerDMCost() {
     return Decimal.pow(this.powerDMCostIncrease, this.dimension.powerDMUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DM_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST);
   }
 
   get powerDMCost() {
@@ -122,8 +121,7 @@ class MatterDimensionState {
 
   get rawPowerDECost() {
     return Decimal.pow(this.powerDECostIncrease, this.dimension.powerDEUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DE_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST);
   }
 
   get powerDECost() {

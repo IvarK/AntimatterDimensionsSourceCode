@@ -159,7 +159,7 @@ const Singularity = {
   get singularitiesGained() {
     return Math.floor(Math.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases) *
       SingularityMilestone.singularityMult.effectOrDefault(1) *
-      ImaginaryUpgrade(10).effectValue.toNumber());
+      (1 + ImaginaryUpgrade(10).effectValue));
   },
 
   get capIsReached() {

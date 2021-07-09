@@ -394,6 +394,7 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.noReplicantiGalaxies = true;
   player.achievementChecks.maxGalaxiesThisReality = 0;
   player.achievementChecks.maxID1ThisReality = new Decimal(0);
+  player.achievementChecks.maxStudiesThisReality = 0;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   Currency.timeTheorems.reset();

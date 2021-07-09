@@ -43,8 +43,11 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     if (this.id === 15) {
       Tab.celestials.ra.show();
     }
-    if (this.id >= 16 && this.id <= 19) {
+    if (this.id >= 16 && this.id <= 18) {
       MatterDimension(this.id - 14).amount = new Decimal(1);
+      Tab.celestials.laitela.show();
+    }
+    if (this.id === 19) {
       Tab.celestials.laitela.show();
     }
   }

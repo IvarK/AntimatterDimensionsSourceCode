@@ -980,6 +980,7 @@ GameStorage.devMigrations = {
       player.auto.imaginaryUpgrades = Array.range(0, 10).map(() => ({
         isActive: false,
       }));
+      player.achievementChecks.maxStudiesThisReality = player.timestudy.studies.length;
     },
   ],
 

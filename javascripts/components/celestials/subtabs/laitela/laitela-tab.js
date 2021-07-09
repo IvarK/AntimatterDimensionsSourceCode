@@ -319,7 +319,7 @@ Vue.component("dark-matter-dimension-group", {
         <b>
           Unlock the next Dark Matter Dimension from an Imaginary Upgrade.
           <br>
-          (Staring cost: {{ format(nextDimensionThreshold, 2) }} Dark Matter)
+          (Starting cost: {{ format(nextDimensionThreshold, 2) }} Dark Matter)
         </b>
         <br><br>
       </div>
@@ -385,7 +385,7 @@ Vue.component("annihilation-button", {
         <br><br>
       </span>
       <span>
-        Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy,
+        Resets your Dark Matter, Dark Matter Dimension amounts, and Dark Energy,
       </span>
       <span v-if="!hasAnnihilated">
         unlocking Auto-Annihilation, and

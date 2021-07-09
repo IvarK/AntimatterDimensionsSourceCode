@@ -141,20 +141,19 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 14,
       cost: 4e8,
       requirement: () => `Reach a tickspeed of ${format("1e10000000")} / sec without exceeding ${formatInt(100)}
-        total galaxies (in your current reality)`,
+        total galaxies`,
       hasFailed: () => player.achievementChecks.maxGalaxiesThisReality >= 100,
       checkRequirement: () => player.achievementChecks.maxGalaxiesThisReality < 100 &&
         Tickspeed.perSecond.exponent >= 1e7,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => `Raise all dimension per-purchase multipliers to ${formatPow(1.8, 0, 1)}`,
-      effect: 1.8
+      description: () => `Raise all dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
+      effect: 1.5
     },
     {
       name: "?????",
       id: 15,
       cost: 1e9,
-      requirement: () => `Reach ${format("1e1500000000000")} antimatter without producing any Infinity Dimensions
-        (in your current reality)`,
+      requirement: () => `Reach ${format("1e1500000000000")} antimatter without having any Infinity Dimensions`,
       hasFailed: () => player.achievementChecks.maxID1ThisReality.gt(0),
       checkRequirement: () => player.achievementChecks.maxID1ThisReality.eq(0) && player.antimatter.exponent >= 1.5e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -163,7 +162,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 16,
-      cost: 4e9,
+      cost: 3.5e9,
+      formatCost: x => format(x, 1),
       requirement: () => `Destabilize Lai'tela's Reality in under ${formatInt(30)} seconds twice`,
       hasFailed: () => false,
       checkRequirement: () => Laitela.maxAllowedDimension <= 6,
@@ -173,7 +173,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 17,
-      cost: 8e9,
+      cost: 6e9,
       requirement: () => `Automatically condense at least ${formatInt(20)} Singularities at once`,
       hasFailed: () => false,
       checkRequirement: () => Singularity.singularitiesGained >= 20 &&
@@ -184,7 +184,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 18,
-      cost: 2e10,
+      cost: 1.5e10,
+      formatCost: x => format(x, 1),
       requirement: () => `Have ${formatInt(80000)} total galaxies`,
       hasFailed: () => false,
       checkRequirement: () => Replicanti.galaxies.total + player.galaxies +
@@ -195,10 +196,13 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 19,
-      cost: 4e12,
-      requirement: () => `[NYI]`,
-      hasFailed: () => false,
-      checkRequirement: () => false,
+      cost: 2.8e10,
+      formatCost: x => format(x, 1),
+      requirement: () => `Reach ${formatInt(3.85e6)} Tickspeed Continuum without having more than
+        ${formatInt(8)} Time Studies`,
+      hasFailed: () => player.achievementChecks.maxStudiesThisReality > 8,
+      checkRequirement: () => player.achievementChecks.maxStudiesThisReality <= 8 &&
+        Tickspeed.continuumValue >= 3.85e6,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Dark Matter Annihilation",
     },
@@ -226,12 +230,12 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 22,
-      cost: 1e8,
+      cost: 1e20,
       requirement: () => `[NYI]`,
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "[FDB 1]",
+      description: "Annihilation multiplier affects Dark Energy at a reduced rate",
     },
     {
       name: "?????",

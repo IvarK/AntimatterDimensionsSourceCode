@@ -69,7 +69,7 @@ const Laitela = {
     return this.continuumUnlocked && !player.auto.disableContinuum;
   },
   get matterExtraPurchaseFactor() {
-    return (1 + 2 * Math.pow(Decimal.pLog10(Currency.darkMatter.max) / Math.log10(Number.MAX_VALUE), 0.7) *
+    return (1 + 0.5 * Math.pow(Decimal.pLog10(Currency.darkMatter.max) / 50, 0.4) *
       (1 + SingularityMilestone.continuumMult.effectValue));
   },
   get realityReward() {
@@ -94,7 +94,7 @@ const Laitela = {
     return ImaginaryUpgrade(19).isBought && Currency.darkMatter.gte(this.annihilationDMRequirement);
   },
   get annihilationDMRequirement() {
-    return 1e20;
+    return 1e60;
   },
   annihilate(force) {
     if (!force && !this.canAnnihilate) return false;
@@ -102,7 +102,7 @@ const Laitela = {
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
-          amount: new Decimal(0),
+          amount: new Decimal(1),
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,
@@ -111,7 +111,6 @@ const Laitela = {
         }
       )
     );
-    this.celestial.dimensions[0].amount = new Decimal(1);
     Currency.darkMatter.reset();
     Currency.darkEnergy.reset();
     return true;

@@ -65,8 +65,8 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   improvedAscensionDM: {
-    start: 1100,
-    repeat: 5000,
+    start: 200000,
+    repeat: 4000,
     limit: 0,
     description: "Ascension affects Dark Matter production more",
     effect: completions => 100 * completions,
@@ -75,7 +75,7 @@ GameDatabase.celestials.singularityMilestones = {
   },
   // Limited
   ascensionIntervalScaling: {
-    start: 80000,
+    start: 1.2e5,
     repeat: 2400,
     limit: 8,
     description: "Dark Matter Dimensions Ascension increases the interval less",
@@ -133,13 +133,13 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 50000,
     limit: 5,
     description: "Interval cost scaling is better",
-    effect: completions => 1 - 0.05 * completions,
+    effect: completions => 1 - 0.03 * completions,
     effectFormat: x => `${formatPow(x, 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Unique
   darkFromTesseracts: {
-    start: 120,
+    start: 80,
     repeat: 0,
     limit: 1,
     description: "Tesseracts boost Dark Matter and Dark Energy production",
@@ -148,7 +148,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   multFromInfinitied: {
-    start: 1.2e3,
+    start: 3000,
     repeat: 0,
     limit: 1,
     description: "Infinities boost Dark Matter and Dark Energy production",
@@ -157,7 +157,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   dilatedTimeFromSingularities: {
-    start: 1.2e4,
+    start: 8e4,
     repeat: 0,
     limit: 1,
     description: "Singularities improve the repeatable Dilated Time multiplier upgrade",
@@ -167,7 +167,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromGlyphLevel: {
-    start: 1.2e6,
+    start: 3e6,
     repeat: 0,
     limit: 1,
     description: "Boost Dark Matter and Dark Energy production based on highest glyph level",
@@ -176,7 +176,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   gamespeedFromSingularities: {
-    start: 1.2e8,
+    start: 1e8,
     repeat: 0,
     limit: 1,
     description: "Singularities boost game speed",
@@ -185,25 +185,25 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromTheorems: {
-    start: 1e300,
+    start: 2e9,
     repeat: 0,
     limit: 1,
     description: "Time Theorems boost Dark Matter and Dark Energy gain",
-    effect: () => Math.sqrt(Math.clampMin((Currency.timeTheorems.value.log10() - 900) / 100, 1)),
+    effect: () => Math.sqrt(Math.clampMin((Currency.timeTheorems.value.log10() - 1000) / 50, 1)),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   dim4Generation: {
-    start: 1e300,
+    start: 3e11,
     repeat: 0,
     limit: 1,
     description: "Annihilation multiplier generates 4th Dark Matter Dimensions",
     effect: () => Laitela.darkMatterMult,
-    effectFormat: x => `${format(x, 2, 1)}/s (real-time)`,
+    effectFormat: x => `${format(x, 2, 1)}/s`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkFromDM4: {
-    start: 1e300,
+    start: 1e302,
     repeat: 0,
     limit: 1,
     description: "4th Dark Matter Dimension amount boosts Dark Matter and Dark Energy gain",
@@ -212,7 +212,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   theoremPowerFromSingularities: {
-    start: 1e300,
+    start: 1e303,
     repeat: 0,
     limit: 1,
     description: "Singularities give a power effect to Time Theorem gain",
@@ -221,7 +221,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromGamespeed: {
-    start: 1e300,
+    start: 1e304,
     repeat: 0,
     limit: 1,
     description: "Gamespeed boosts Dark Matter and Dark Energy production",
@@ -230,7 +230,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   glyphLevelFromSingularities: {
-    start: 1e300,
+    start: 1e305,
     repeat: 0,
     limit: 1,
     description: "Singularities boost pre-instability glyph level",
@@ -239,7 +239,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromDilatedTime: {
-    start: 1e300,
+    start: 1e306,
     repeat: 0,
     limit: 1,
     description: "Dilated Time boosts Dark Matter production",
@@ -248,7 +248,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   infinitiedPow: {
-    start: 1e300,
+    start: 1e307,
     repeat: 0,
     limit: 1,
     description: "Infinities gain power effect based on singularities",
@@ -257,7 +257,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   tesseractMultFromSingularities: {
-    start: 1e300,
+    start: 1e308,
     repeat: 0,
     limit: 1,
     description: "Singularities make Tesseracts stronger",

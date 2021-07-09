@@ -277,6 +277,8 @@ class NormalTimeStudyState extends TimeStudyState {
       player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
+    player.achievementChecks.maxStudiesThisReality = Math.clampMin(player.achievementChecks.maxStudiesThisReality,
+      player.timestudy.studies.length);
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     return true;
@@ -558,8 +560,8 @@ class TriadStudyState extends TimeStudyState {
 
   get canBeBought() {
     return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
-           V.availableST >= this.STCost &&
-           !this.isBought && this.config.unlocked();
+      V.availableST >= this.STCost &&
+      !this.isBought && this.config.unlocked();
   }
 
   get isBought() {

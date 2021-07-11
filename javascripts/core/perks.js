@@ -48,7 +48,7 @@ const Perk = (function() {
     startEP2: new PerkState(db.startEP2),
     startEP3: new PerkState(db.startEP3),
     startTP: new PerkState(db.startTP),
-    dimboostNonReset: new PerkState(db.dimboostNonReset),
+    antimatterNoReset: new PerkState(db.antimatterNoReset),
     studyPassive: new PerkState(db.studyPassive),
     autounlockEU1: new PerkState(db.autounlockEU1),
     autounlockEU2: new PerkState(db.autounlockEU2),

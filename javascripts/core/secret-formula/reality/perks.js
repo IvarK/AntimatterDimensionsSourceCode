@@ -90,12 +90,12 @@ GameDatabase.reality.perks = {
     },
     effect: () => (Enslaved.isRunning ? 1 : 10)
   },
-  dimboostNonReset: {
+  antimatterNoReset: {
     id: 30,
-    label: "DBNR",
+    label: "ANR",
     family: PERK_FAMILY.ANTIMATTER,
     description: `Dimension Boosts and Antimatter Galaxies no longer reset
-                  Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`
+      Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`
   },
   studyPassive: {
     id: 31,
@@ -434,8 +434,8 @@ GameDatabase.reality.perkConnections = (function() {
   // First item is the start, other items are the ends
   const groups = [
     [p.firstPerk, p.achievementGroup1, p.startAM, p.autounlockEU1, p.bypassEC5Lock],
-    [p.startAM, p.dimboostNonReset, p.startIP1],
-    [p.startEP1, p.dimboostNonReset],
+    [p.startAM, p.antimatterNoReset, p.startIP1],
+    [p.startEP1, p.antimatterNoReset],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
     [p.startIP2, p.bypassIDAntimatter, p.autobuyerFasterReplicanti],
     [p.startEP1, p.startEP2, p.startTP],

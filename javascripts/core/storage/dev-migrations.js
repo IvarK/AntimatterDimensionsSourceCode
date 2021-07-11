@@ -971,6 +971,13 @@ GameStorage.devMigrations = {
       }
       player.reality.upgReqs = reqBitmask;
     },
+    player => {
+      if (player.reality.perks.has(11)) {
+        player.reality.perks.delete(11);
+        player.reality.perkPoints++;
+      }
+      if (player.reality.perks.has(10)) Currency.antimatter.bumpTo(1e130);
+    }
   ],
 
   patch(player) {

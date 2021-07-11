@@ -41,8 +41,7 @@ const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
     firstPerk: new PerkState(db.firstPerk),
-    startAM1: new PerkState(db.startAM1),
-    startAM2: new PerkState(db.startAM2),
+    startAM: new PerkState(db.startAM),
     startIP1: new PerkState(db.startIP1),
     startIP2: new PerkState(db.startIP2),
     startEP1: new PerkState(db.startEP1),

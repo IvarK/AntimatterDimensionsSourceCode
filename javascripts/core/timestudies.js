@@ -111,7 +111,8 @@ function studiesUntil(id) {
   } else if (TimeStudy.preferredPaths.pacePath.path) {
     // If we have a preferred path setup we should buy that one
     buyTimeStudyListUntilID(TimeStudy.preferredPaths.pacePath.studies, id);
-  } else {
+  } else if (!(TimeStudy(141).isBought || TimeStudy(142).isBought || TimeStudy(143).isBought)) {
+    // If we have already purchased one or more of the final pace paths, do not display the unselected error message.
     GameUI.notify.error("You haven't selected a preferred pace path!");
   }
 

@@ -760,6 +760,10 @@ function getGlyphEffectsFromBitmask(bitmask) {
     .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0);
 }
 
+function getGlyphIDsFromBitmask(bitmask) {
+  return getGlyphEffectsFromBitmask(bitmask).map(x => x.id);
+}
+
 class GlyphType {
   /**
    * @param {Object} setup

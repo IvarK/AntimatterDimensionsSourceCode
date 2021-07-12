@@ -5736,6 +5736,10 @@ kbd {
   width: 100%;
 }
 
+.c-rm-store-inner--light {
+  opacity: 0.1;
+}
+
 .c-rm-store-label {
   position: absolute;
   bottom: 0;

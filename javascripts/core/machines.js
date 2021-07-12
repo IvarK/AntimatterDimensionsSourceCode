@@ -32,7 +32,8 @@ const MachineHandler = {
   },
 
   get baseIMCap() {
-    return Math.clampMin(this.uncappedRM.log10() - 1000, 0) ** 2;
+    return (Math.clampMin(this.uncappedRM.log10() - 1000, 0) ** 2) *
+      (Math.clampMin(this.uncappedRM.log10() - 100000, 1) ** 0.2);
   },
 
   get currentIMCap() {
@@ -53,7 +54,7 @@ const MachineHandler = {
 
   // Time in seconds to reduce the missing amount by a factor of two
   get scaleTimeForIM() {
-    return 60 / ImaginaryUpgrade(21).effectOrDefault(1);
+    return 60 / ImaginaryUpgrade(20).effectOrDefault(1);
   },
 
   gainedImaginaryMachines(diff) {

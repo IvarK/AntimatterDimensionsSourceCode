@@ -294,6 +294,9 @@ Vue.component("dark-matter-dimension-group", {
     return {
       activeDimensions: [],
       nextDimensionThreshold: 0,
+      unlockedAnnihilation: false,
+      minAnnihilationDM: 0,
+      hasAnnihilationDM: false,
     };
   },
   computed: {
@@ -306,6 +309,9 @@ Vue.component("dark-matter-dimension-group", {
         .filter(i => MatterDimension(i + 1).amount.eq(0))
         .map(i => MatterDimension(i + 1).adjustedStartingCost)
         .min();
+      this.unlockedAnnihilation = ImaginaryUpgrade(19).isBought;
+      this.minAnnihilationDM = Laitela.annihilationDMRequirement;
+      this.hasAnnihilationDM = Currency.darkMatter.gte(this.minAnnihilationDM);
     },
   },
   template: `
@@ -315,7 +321,21 @@ Vue.component("dark-matter-dimension-group", {
         :key="i"
         :dimension="dimensions[i]"
       />
-      <div v-if="nextDimensionThreshold !== 0">
+      <div v-if="nextDimensionThreshold === 0 && !unlockedAnnihilation">
+        <b>
+          Unlock Dark Matter Annihilation from an Imaginary Upgrade.
+          <br>
+          (Also requires {{ format(minAnnihilationDM, 2) }} Dark Matter)
+        </b>
+        <br><br>
+      </div>
+      <div v-else-if="nextDimensionThreshold === 0 && !hasAnnihilationDM">
+        <b>
+          Annihilation requires {{ format(minAnnihilationDM, 2) }} Dark Matter.
+        </b>
+        <br><br>
+      </div>
+      <div v-else-if="nextDimensionThreshold !== 0">
         <b>
           Unlock the next Dark Matter Dimension from an Imaginary Upgrade.
           <br>
@@ -385,7 +405,7 @@ Vue.component("annihilation-button", {
         <br><br>
       </span>
       <span>
-        Resets your Dark Matter, Dark Matter Dimension amounts, and Dark Energy,
+        Resets your Dark Matter and Dark Matter Dimension amounts,
       </span>
       <span v-if="!hasAnnihilated">
         unlocking Auto-Annihilation, and

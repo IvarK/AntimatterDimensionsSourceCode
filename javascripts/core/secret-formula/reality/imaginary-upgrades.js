@@ -209,12 +209,14 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 20,
-      cost: 3e15,
-      requirement: () => `[NYI]`,
+      cost: 3e12,
+      requirement: () => `Have a Continuum increase of at least ${formatPercents(1)}`,
       hasFailed: () => false,
-      checkRequirement: () => false,
+      checkRequirement: () => Laitela.matterExtraPurchaseFactor >= 2,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Unlock Autobuyers for repeatable iM upgrades",
+      description: () => `Unlock Autobuyers for repeatable iM upgrades and generate Imaginary Machines
+        ${formatInt(10)} times faster`,
+      effect: 10,
     },
     {
       name: "?????",
@@ -224,8 +226,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: () => `Imaginary Machines generate ${formatInt(6)} times faster`,
-      effect: 6,
+      description: "Annihilation multiplier affects Dark Energy at a reduced rate",
     },
     {
       name: "?????",
@@ -235,7 +236,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Annihilation multiplier affects Dark Energy at a reduced rate",
+      description: "[FDB 1]",
     },
     {
       name: "?????",

@@ -112,7 +112,6 @@ const Laitela = {
       )
     );
     Currency.darkMatter.reset();
-    Currency.darkEnergy.reset();
     return true;
   },
   tickDarkMatter(realDiff) {
@@ -134,7 +133,7 @@ const Laitela = {
         d.timeSinceLastUpdate -= d.interval * ticks;
       }
     }
-    if (SingularityMilestone.dim4Generation.isUnlocked) {
+    if (SingularityMilestone.dim4Generation.isUnlocked && Laitela.canAnnihilate) {
       MatterDimension(4).amount = MatterDimension(4).amount
         .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
     }

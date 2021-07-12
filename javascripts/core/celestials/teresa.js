@@ -79,7 +79,7 @@ const Teresa = {
     return Math.min(Math.log10(this.pouredAmount) / 24, 1);
   },
   get possibleFill() {
-    return Math.min(Currency.realityMachines.value.log10() / 24, 1);
+    return Math.min(Currency.realityMachines.value.plus(this.pouredAmount).log10() / 24, 1);
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.pouredAmount, 0.1), 1);

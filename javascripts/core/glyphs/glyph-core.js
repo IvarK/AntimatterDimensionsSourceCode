@@ -102,12 +102,13 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, ignoreLevel, ignoreStrength) {
+  findByValues(finding, ignore = { level, strength, effects }) {
     for (const glyph of this.sortedInventoryList) {
       const type = glyph.type === finding.type;
-      const effects = glyph.effects === finding.effects;
-      const str = ignoreStrength || glyph.strength === finding.strength;
-      const lvl = ignoreLevel || glyph.level === finding.level;
+      const effects = glyph.effects === finding.effects ||
+            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
+      const str = ignore.strength || glyph.strength === finding.strength;
+      const lvl = ignore.level || glyph.level === finding.level;
       const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
       if (type && effects && str && lvl && sym) return glyph;
     }

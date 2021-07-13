@@ -760,6 +760,16 @@ function getGlyphEffectsFromBitmask(bitmask) {
     .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0);
 }
 
+function getGlyphIDsFromBitmask(bitmask) {
+  return getGlyphEffectsFromBitmask(bitmask).map(x => x.id);
+}
+
+function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
+  const needle = getGlyphIDsFromBitmask(needleBitmask);
+  const haystack = getGlyphIDsFromBitmask(haystackBitmask);
+  return haystack.every(x => needle.includes(x));
+}
+
 class GlyphType {
   /**
    * @param {Object} setup

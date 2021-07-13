@@ -105,15 +105,11 @@ const Glyphs = {
   findByValues(finding, ignore = { level, strength, effects }) {
     for (const glyph of this.sortedInventoryList) {
       const type = glyph.type === finding.type;
-      let effects = glyph.effects === finding.effects;
+      const effects = glyph.effects === finding.effects ||
+            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
       const str = ignore.strength || glyph.strength === finding.strength;
       const lvl = ignore.level || glyph.level === finding.level;
       const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
-      if (!effects && ignore.effects) {
-        const findingEffects = getGlyphIDsFromBitmask(finding.effects);
-        const glyphEffects = getGlyphIDsFromBitmask(glyph.effects);
-        effects = findingEffects.every(x => glyphEffects.includes(x));
-      }
       if (type && effects && str && lvl && sym) return glyph;
     }
     return undefined;

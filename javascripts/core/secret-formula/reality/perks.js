@@ -435,7 +435,7 @@ GameDatabase.reality.perkConnections = (function() {
   const groups = [
     [p.firstPerk, p.achievementGroup1, p.startAM, p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM, p.antimatterNoReset, p.startIP1],
-    [p.startEP1, p.antimatterNoReset],
+    [p.antimatterNoReset, p.startEP1],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
     [p.startIP2, p.bypassIDAntimatter, p.autobuyerFasterReplicanti],
     [p.startEP1, p.startEP2, p.startTP],

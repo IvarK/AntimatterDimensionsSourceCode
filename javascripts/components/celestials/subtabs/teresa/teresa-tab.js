@@ -8,6 +8,7 @@ Vue.component("teresa-tab", {
       pouredAmount: 0,
       rm: new Decimal(0),
       percentage: "",
+      possibleFillPercentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
       bestAMSet: [],
@@ -61,6 +62,7 @@ Vue.component("teresa-tab", {
       this.time = now;
       this.pouredAmount = player.celestials.teresa.pouredAmount;
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
+      this.possibleFillPercentage = `${(Teresa.possibleFill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
@@ -133,6 +135,7 @@ Vue.component("teresa-tab", {
             Pour RM
           </button>
           <div class="c-rm-store">
+            <div class="c-rm-store-inner c-rm-store-inner--light" :style="{ height: possibleFillPercentage}"></div>
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label">
                 {{ formatX(rmMult, 2, 2) }} RM gain

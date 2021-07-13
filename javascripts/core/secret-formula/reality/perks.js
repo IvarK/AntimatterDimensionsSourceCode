@@ -21,19 +21,9 @@ GameDatabase.reality.perks = {
     },
     effect: 4,
   },
-  startAM1: {
+  startAM: {
     id: 10,
-    label: "SAM1",
-    family: PERK_FAMILY.ANTIMATTER,
-    get description() {
-      return `Start every reset with ${format(1e15)} antimatter.`;
-    },
-    bumpCurrency: () => Currency.antimatter.bumpTo(1e15),
-    effect: 1e15
-  },
-  startAM2: {
-    id: 11,
-    label: "SAM2",
+    label: "SAM",
     family: PERK_FAMILY.ANTIMATTER,
     get description() {
       return `Start every reset with ${format(1e130)} antimatter.`;
@@ -100,11 +90,12 @@ GameDatabase.reality.perks = {
     },
     effect: () => (Enslaved.isRunning ? 1 : 10)
   },
-  dimboostNonReset: {
+  antimatterNoReset: {
     id: 30,
-    label: "DBNR",
+    label: "ANR",
     family: PERK_FAMILY.ANTIMATTER,
-    description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice."
+    description: `Dimension Boosts and Antimatter Galaxies no longer reset
+      Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`
   },
   studyPassive: {
     id: 31,
@@ -442,9 +433,9 @@ GameDatabase.reality.perkConnections = (function() {
   const p = GameDatabase.reality.perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.firstPerk, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
-    [p.startAM1, p.startAM2, p.startIP1],
-    [p.startAM2, p.startEP1, p.dimboostNonReset],
+    [p.firstPerk, p.achievementGroup1, p.startAM, p.autounlockEU1, p.bypassEC5Lock],
+    [p.startAM, p.antimatterNoReset, p.startIP1],
+    [p.antimatterNoReset, p.startEP1],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
     [p.startIP2, p.bypassIDAntimatter, p.autobuyerFasterReplicanti],
     [p.startEP1, p.startEP2, p.startTP],

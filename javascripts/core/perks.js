@@ -41,15 +41,14 @@ const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
     firstPerk: new PerkState(db.firstPerk),
-    startAM1: new PerkState(db.startAM1),
-    startAM2: new PerkState(db.startAM2),
+    startAM: new PerkState(db.startAM),
     startIP1: new PerkState(db.startIP1),
     startIP2: new PerkState(db.startIP2),
     startEP1: new PerkState(db.startEP1),
     startEP2: new PerkState(db.startEP2),
     startEP3: new PerkState(db.startEP3),
     startTP: new PerkState(db.startTP),
-    dimboostNonReset: new PerkState(db.dimboostNonReset),
+    antimatterNoReset: new PerkState(db.antimatterNoReset),
     studyPassive: new PerkState(db.studyPassive),
     autounlockEU1: new PerkState(db.autounlockEU1),
     autounlockEU2: new PerkState(db.autounlockEU2),

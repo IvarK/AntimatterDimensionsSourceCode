@@ -29,23 +29,26 @@ class SingularityMilestoneState extends GameMechanicState {
     return Currency.singularities.gte(this.start);
   }
 
-  toModifiedCompletions(completions) {
-    if (!this.config.increaseThreshold || completions <= this.config.increaseThreshold) return completions;
-    return this.config.increaseThreshold + (completions - this.config.increaseThreshold) / 3;
+  nerfCompletions(completions) {
+    const softcap = this.config.increaseThreshold;
+    if (!softcap || completions < softcap) return completions;
+    return softcap + (completions - softcap) / 3;
   }
 
-  fromModifiedCompletions(completions) {
-    if (!this.config.increaseThreshold || completions <= this.config.increaseThreshold) return completions;
-    return this.config.increaseThreshold + 3 * (completions - this.config.increaseThreshold);
+  unnerfCompletions(completions) {
+    const softcap = this.config.increaseThreshold;
+    if (!softcap || completions < softcap) return completions;
+    return softcap + (completions - softcap) * 3;
   }
 
   get previousGoal() {
     if (!this.isUnlocked) return 0;
-    return this.start * Math.pow(this.repeat, this.fromModifiedCompletions(this.completions - 1));
+    return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions) - 1);
   }
 
   get nextGoal() {
-    return this.start * Math.pow(this.repeat, this.fromModifiedCompletions(this.completions));
+    if (this.isUnique) return this.start;
+    return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions + 1) - 1);
   }
   
   get rawCompletions() {
@@ -55,8 +58,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get completions() {
-    return Math.min(Math.floor(this.toModifiedCompletions(this.rawCompletions)),
-      this.limit === 0 ? Infinity : this.limit);
+    return Math.min(Math.floor(this.nerfCompletions(this.rawCompletions)), this.limit);
   }
 
   get remainingSingularities() {
@@ -68,7 +70,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get isMaxed() {
-    return (this.isUnique && this.isUnlocked) || (this.limit !== 0 && this.completions >= this.limit);
+    return (this.isUnique && this.isUnlocked) || (this.completions >= this.limit);
   }
 
   get effectDisplay() {
@@ -151,7 +153,7 @@ const SingularityMilestones = {
 // Sorted list of all the values where a singularity milestone exists, used for "new milestone" styling
 const SingularityMilestoneThresholds = (function() {
   return Object.values(GameDatabase.celestials.singularityMilestones)
-    .map(m => Array.range(0, m.limit === 0 ? 50 : m.limit)
+    .map(m => Array.range(0, Math.min(50, m.limit))
       .map(r => m.start * Math.pow(m.repeat, r)))
     .flat(Infinity)
     .filter(n => n < 1e100)

@@ -19,7 +19,7 @@ Vue.component("singularity-milestone", {
       let color;
       if (this.isMaxed) color = "";
       else if (this.isUnique) color = "var(--color-accent)";
-      else if (this.limit > 1) color = "var(--color-good-dark)";
+      else if (Number.isFinite(this.limit)) color = "var(--color-good-dark)";
       else color = "var(--color-good)";
       return {
         background: color,
@@ -29,7 +29,7 @@ Vue.component("singularity-milestone", {
     backgroundStyle() {
       let color;
       if (this.isUnique && this.isMaxed) color = "var(--color-accent)";
-      else if (this.limit > 1 && this.completions >= 1) {
+      else if (Number.isFinite(this.limit) && this.completions >= 1) {
         if (this.isMaxed) color = "var(--color-good-dark)";
         else color = "var(--color-good)";
       } else {
@@ -58,7 +58,7 @@ Vue.component("singularity-milestone", {
       }
     },
     completionsDisplay() {
-      if (this.limit === 0) return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+      if (this.limit === Infinity) return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
       if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
       return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
     }

@@ -12,7 +12,7 @@ GameDatabase.celestials.singularityMilestones = {
   continuumMult: {
     start: 1,
     repeat: 125,
-    limit: 0,
+    limit: Infinity,
     description: "Continuum percentage multiplier",
     effect: completions => completions * 0.03,
     effectFormat: x => formatX(1 + x, 2, 2),
@@ -21,7 +21,7 @@ GameDatabase.celestials.singularityMilestones = {
   darkMatterMult: {
     start: 2,
     repeat: 20,
-    limit: 0,
+    limit: Infinity,
     description: "Dark Matter production multiplier",
     effect: completions => Math.pow(1.5, completions),
     effectFormat: x => formatX(x, 2, 2),
@@ -31,7 +31,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 3,
     repeat: 120,
     increaseThreshold: 10,
-    limit: 0,
+    limit: Infinity,
     description: "Dark Energy production multiplier",
     effect: completions => Math.pow(2, completions),
     effectFormat: x => formatX(x),
@@ -40,7 +40,7 @@ GameDatabase.celestials.singularityMilestones = {
   darkDimensionCostReduction: {
     start: 4,
     repeat: 40,
-    limit: 0,
+    limit: Infinity,
     description: "Dark Matter Dimension upgrades are cheaper",
     effect: completions => Math.pow(0.4, completions),
     effectFormat: x => formatPercents(x, 3),
@@ -51,7 +51,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 50,
     repeat: 3000,
     increaseThreshold: 5,
-    limit: 0,
+    limit: Infinity,
     description: "You gain more Singularities",
     effect: completions => Math.pow(2, completions),
     effectFormat: x => formatX(x, 2, 0),
@@ -60,7 +60,7 @@ GameDatabase.celestials.singularityMilestones = {
   darkDimensionIntervalReduction: {
     start: 10,
     repeat: 100,
-    limit: 0,
+    limit: Infinity,
     description: "Dark Matter Dimension interval decrease",
     effect: completions => Math.pow(0.6, completions),
     effectFormat: x => formatX(x, 2, 2),
@@ -69,7 +69,7 @@ GameDatabase.celestials.singularityMilestones = {
   improvedAscensionDM: {
     start: 200000,
     repeat: 4000,
-    limit: 0,
+    limit: Infinity,
     description: "Ascension affects Dark Matter production more",
     effect: completions => 100 * completions,
     effectFormat: x => format(1000 + x, 2, 0),

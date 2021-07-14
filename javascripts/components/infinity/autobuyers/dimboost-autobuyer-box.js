@@ -4,7 +4,6 @@ Vue.component("dimboost-autobuyer-box", {
   data() {
     return {
       limitDimBoosts: false,
-      isBulkBuyUnlocked: false,
       isBuyMaxUnlocked: false
     };
   },
@@ -18,7 +17,6 @@ Vue.component("dimboost-autobuyer-box", {
   },
   methods: {
     update() {
-      this.isBulkBuyUnlocked = this.autobuyer.isBulkBuyUnlocked;
       this.isBuyMaxUnlocked = this.autobuyer.isBuyMaxUnlocked;
       this.limitDimBoosts = this.autobuyer.limitDimBoosts;
     }
@@ -58,14 +56,6 @@ Vue.component("dimboost-autobuyer-box", {
           :autobuyer="autobuyer"
           type="float"
           property="buyMaxInterval"
-        />
-      </template>
-      <template v-else-if="isBulkBuyUnlocked" slot="prioritySlot">
-        <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Bulk Dimension Boost Amount:</div>
-        <autobuyer-input
-          :autobuyer="autobuyer"
-          type="int"
-          property="bulk"
         />
       </template>
     </autobuyer-box>`

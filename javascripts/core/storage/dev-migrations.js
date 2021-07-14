@@ -977,6 +977,9 @@ GameStorage.devMigrations = {
         player.reality.perkPoints++;
       }
       if (player.reality.perks.has(10)) Currency.antimatter.bumpTo(1e130);
+    },
+    player => {
+      delete player.auto.dimBoost.bulk;
     }
   ],
 

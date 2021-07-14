@@ -94,7 +94,6 @@ let player = {
       limitDimBoosts: false,
       maxDimBoosts: 1,
       galaxies: 10,
-      bulk: 1,
       buyMaxInterval: 0,
       isActive: true,
       lastTick: 0

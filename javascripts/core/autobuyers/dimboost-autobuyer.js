@@ -49,10 +49,6 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     this.data.bulk = value;
   }
 
-  get isBulkBuyUnlocked() {
-    return BreakInfinityUpgrade.bulkDimBoost.isBought;
-  }
-
   get buyMaxInterval() {
     return this.data.buyMaxInterval;
   }
@@ -62,7 +58,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get isBuyMaxUnlocked() {
-    return EternityMilestone.autobuyMaxDimboosts.isReached;
+    return BreakInfinityUpgrade.autobuyMaxDimboosts.isBought;
   }
 
   get interval() {
@@ -87,7 +83,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     }
 
     const limit = this.limitDimBoosts ? this.maxDimBoosts : Number.MAX_VALUE;
-    const bulk = (this.isBulkBuyUnlocked && !DimBoost.canUnlockNewDimension) ? Math.clampMin(this.bulk, 1) : 1;
+    const bulk = 1;
     const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= limit ||
       player.galaxies >= this.galaxies;
     if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;

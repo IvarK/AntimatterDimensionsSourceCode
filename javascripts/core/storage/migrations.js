@@ -837,6 +837,9 @@ GameStorage.migrations = {
 
   deleteDimboostBulk(player) {
     delete player.auto.dimBoost.bulk;
+    if (player.infinityUpgrades.delete("bulkBoost")) {
+      player.infinityUpgrades.add("autobuyMaxDimboosts");
+    }
   },
 
   prePatch(saveData) {

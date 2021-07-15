@@ -980,6 +980,9 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.auto.dimBoost.bulk;
+      if (player.infinityUpgrades.delete("bulkBoost")) {
+        player.infinityUpgrades.add("autobuyMaxDimboosts");
+      }
     }
   ],
 

@@ -278,7 +278,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () =>
         Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Remote Antimatter Galaxy scaling is removed"
+      description: () => `Remote Antimatter Galaxy scaling is moved to ${formatInt(1e5)} galaxies`,
+      effect: 1e5
     },
     {
       name: "Temporal Transcendence",

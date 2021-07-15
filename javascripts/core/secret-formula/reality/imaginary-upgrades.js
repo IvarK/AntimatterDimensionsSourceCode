@@ -221,22 +221,30 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 21,
-      cost: 1e20,
-      requirement: () => `[NYI]`,
-      hasFailed: () => false,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Annihilation multiplier affects Dark Energy at a reduced rate",
+      cost: 1e13,
+      requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled`,
+      hasFailed: () => player.achievementChecks.continuumThisReality,
+      checkRequirement: () => !player.achievementChecks.continuumThisReality &&
+        Currency.antimatter.value.log10() >= 7.4e12,
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+      description: "Annihilation multiplier gain is improved based on iM",
+      effect: () => (Math.log10(Currency.imaginaryMachines.value) - 10) ** 3,
+      formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
       name: "?????",
       id: 22,
-      cost: 1e20,
-      requirement: () => `[NYI]`,
-      hasFailed: () => false,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "[FDB 1]",
+      cost: 1.5e14,
+      formatCost: x => format(x, 1),
+      requirement: () => `Reach ${format("1e150000000000")} antimatter in Effarig's Reality with
+        at least ${formatInt(4)} cursed glyphs equipped`,
+      // Note: 4 cursed glyphs is -12 glyph count, but equipping a positive glyph in the last slot is allowed
+      hasFailed: () => !Effarig.isRunning || player.celestials.v.maxGlyphsThisRun > -10,
+      checkRequirement: () => Effarig.isRunning && player.celestials.v.maxGlyphsThisRun < -10 &&
+        Currency.antimatter.value.exponent >= 1.5e11,
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+      description: () => `Glyph Sacrifice totals for basic glyphs are raised to ${format(1e100)}`,
+      effect: 1e100,
     },
     {
       name: "?????",
@@ -246,8 +254,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => false,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "[FDB 2]",
-      effect: () => player.celestials.enslaved.tesseracts ** 4,
+      description: "Multiply free Dimboost count by Tesseracts",
+      effect: () => player.celestials.enslaved.tesseracts,
     },
     {
       name: "?????",
@@ -256,8 +264,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       requirement: () => `[NYI]`,
       hasFailed: () => false,
       checkRequirement: () => false,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "[FDB 3]",
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+      description: "Increase free Dimboost strength based on Singularity count",
+      effect: () => Math.log10(player.celestials.laitela.singularities),
     },
     {
       // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet

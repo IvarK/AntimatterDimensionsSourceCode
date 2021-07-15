@@ -50,6 +50,9 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     if (this.id === 19) {
       Tab.celestials.laitela.show();
     }
+    if (this.id === 22) {
+      BASIC_GLYPH_TYPES.forEach(x => player.reality.glyphs.sac[x] = ImaginaryUpgrade(22).effectValue);
+    }
   }
 }
 

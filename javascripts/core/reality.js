@@ -333,7 +333,7 @@ function finishProcessReality(realityProps) {
 
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
-  Glyphs.updateGlyphCountForV(true);
+  Glyphs.updateMaxGlyphCount(true);
 
   player.sacrificed = new Decimal(0);
 
@@ -395,6 +395,7 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.maxGalaxiesThisReality = 0;
   player.achievementChecks.maxID1ThisReality = new Decimal(0);
   player.achievementChecks.maxStudiesThisReality = 0;
+  player.achievementChecks.continuumThisReality = Laitela.continuumActive;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   Currency.timeTheorems.reset();

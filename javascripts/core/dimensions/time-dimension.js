@@ -167,7 +167,8 @@ class TimeDimensionState extends DimensionState {
       );
 
     const dim = TimeDimension(tier);
-    mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
+    const bought = tier === 8 ? Math.clampMax(dim.bought, 1e8) : dim.bought;
+    mult = mult.times(Decimal.pow(dim.powerMultiplier, bought));
 
     mult = mult.pow(getAdjustedGlyphEffect("timepow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));

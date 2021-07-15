@@ -15,13 +15,15 @@ function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
     player.achievementChecks.noReplicantiGalaxies = false;
+    if (!EternityMilestone.replicantiNoReset.isReached) {
+      player.dimensionBoosts = 0;
+      softReset(0, true, true);
+    }
   }
 }
 
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
-  //player.dimensionBoosts = 0;
-  //softReset(0);
   player.replicanti.timer = 0;
   let galaxyGain = 1;
   if (Achievement(126).isUnlocked) {

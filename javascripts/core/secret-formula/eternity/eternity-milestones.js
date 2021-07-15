@@ -43,9 +43,9 @@ GameDatabase.eternity.milestones = {
     eternities: 9,
     reward: "Unlock the buy max Antimatter Galaxies Autobuyer mode"
   },
-  autobuyMaxDimboosts: {
+  unlockReplicanti: {
     eternities: 10,
-    reward: "Unlock the buy max Dimension Boost Autobuyer mode"
+    reward: "You start with Replicanti unlocked"
   },
   autobuyerID1: {
     eternities: 11,
@@ -87,13 +87,14 @@ GameDatabase.eternity.milestones = {
     eternities: 30,
     reward: "Start with all Antimatter Dimensions available for purchase"
   },
-  autobuyerReplicantiChance: {
+  replicantiNoReset: {
     eternities: 40,
-    reward: "Unlock the Replicanti Chance Upgrade Autobuyer"
+    reward: `Replicanti Galaxies no longer reset Antimatter, Antimatter Dimensions, 
+      Tickspeed, Dimensional Sacrifice, or Dimension Boosts`
   },
-  unlockReplicanti: {
+  autobuyerReplicantiChance: {
     eternities: 50,
-    reward: "You start with Replicanti unlocked"
+    reward: "Unlock the Replicanti Chance Upgrade Autobuyer"
   },
   autobuyerReplicantiInterval: {
     eternities: 60,

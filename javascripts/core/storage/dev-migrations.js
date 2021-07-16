@@ -961,7 +961,7 @@ GameStorage.devMigrations = {
       // Delete PEC5 (id 64)
       if (player.reality.perks.has(64)) {
         player.reality.perks.delete(64);
-        Currency.realities.add(1);
+        Currency.perkPoints.add(1);
       }
 
       let reqBitmask = 0;
@@ -972,11 +972,12 @@ GameStorage.devMigrations = {
       player.reality.upgReqs = reqBitmask;
     },
     player => {
+      // Delete SAM2 (id 11)
       if (player.reality.perks.has(11)) {
         player.reality.perks.delete(11);
-        player.reality.perkPoints++;
+        Currency.perkPoints.add(1);
       }
-      if (player.reality.perks.has(10)) Currency.antimatter.bumpTo(1e130);
+      if (player.reality.perks.has(10)) Perk.startAM.onPurchased();
     }
   ],
 

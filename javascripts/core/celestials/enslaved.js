@@ -178,6 +178,13 @@ const Enslaved = {
     }
     return true;
   },
+  get extraTesseracts() {
+    return player.celestials.enslaved.tesseracts *
+      (SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1) - 1);
+  },
+  get effectiveTesseractCount() {
+    return player.celestials.enslaved.tesseracts + this.extraTesseracts;
+  },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];
   },
@@ -305,7 +312,20 @@ const Tesseracts = {
     }
     increases.unshift(500e3);
     return increases;
-  }())
+  }()),
+
+  strengthMultiplier: () => {
+    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
+    const extraTesseractEffect = 2 ** Enslaved.extraTesseracts;
+    return boundlessEffect * extraTesseractEffect;
+  },
+
+  strengthMultiplierIncrease: () => {
+    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
+    const extraTesseracts = Enslaved.extraTesseracts +
+      SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
+    return boundlessEffect * 2 ** extraTesseracts - Tesseracts.strengthMultiplier();
+  },
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

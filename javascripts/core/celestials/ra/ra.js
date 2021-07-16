@@ -293,6 +293,11 @@ const Ra = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
+    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
+    if (!BlackHoles.areNegative) {
+      player.minNegativeBlackHoleThisReality = 1;
+    }
+    Glyphs.updateMaxGlyphCount(true);
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;

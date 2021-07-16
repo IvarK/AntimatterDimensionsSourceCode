@@ -12,6 +12,7 @@ GameDatabase.celestials.singularityMilestones = {
   continuumMult: {
     start: 1,
     repeat: 125,
+    increaseThreshold: 20,
     limit: Infinity,
     description: "Continuum percentage multiplier",
     effect: completions => completions * 0.03,
@@ -21,6 +22,7 @@ GameDatabase.celestials.singularityMilestones = {
   darkMatterMult: {
     start: 2,
     repeat: 20,
+    increaseThreshold: 30,
     limit: Infinity,
     description: "Dark Matter production multiplier",
     effect: completions => Math.pow(1.5, completions),
@@ -40,6 +42,7 @@ GameDatabase.celestials.singularityMilestones = {
   darkDimensionCostReduction: {
     start: 4,
     repeat: 40,
+    increaseThreshold: 25,
     limit: Infinity,
     description: "Dark Matter Dimension upgrades are cheaper",
     effect: completions => Math.pow(0.4, completions),
@@ -60,6 +63,7 @@ GameDatabase.celestials.singularityMilestones = {
   darkDimensionIntervalReduction: {
     start: 10,
     repeat: 100,
+    increaseThreshold: 20,
     limit: Infinity,
     description: "Dark Matter Dimension interval decrease",
     effect: completions => Math.pow(0.6, completions),
@@ -146,7 +150,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Tesseracts boost Dark Matter and Dark Energy production",
-    effect: () => Math.pow(1.1, player.celestials.enslaved.tesseracts),
+    effect: () => Math.pow(1.1, Enslaved.effectiveTesseractCount),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
@@ -260,11 +264,11 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   tesseractMultFromSingularities: {
-    start: 8e50,
+    start: 8e45,
     repeat: 0,
     limit: 1,
-    description: "Singularities make Tesseracts stronger",
-    effect: () => 1 + Math.clampMin((Math.log10(Currency.singularities.value) - 30) / 40, 0),
+    description: "Singularities increase effective Tesseract count",
+    effect: () => 1 + Math.log10(Currency.singularities.value) / 80,
     effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   }

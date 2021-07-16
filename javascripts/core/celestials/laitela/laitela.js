@@ -62,6 +62,9 @@ const Laitela = {
   get maxAllowedDimension() {
     return 8 - this.difficultyTier;
   },
+  get isFullyDestabilized() {
+    return Laitela.maxAllowedDimension === 0;
+  },
   get continuumUnlocked() {
     return ImaginaryUpgrade(15).isBought;
   },

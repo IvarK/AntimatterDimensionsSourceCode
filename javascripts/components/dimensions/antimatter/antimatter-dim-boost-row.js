@@ -9,7 +9,7 @@ Vue.component("antimatter-dim-boost-row", {
       },
       isBuyable: false,
       purchasedBoosts: 0,
-      freeBoosts: 0,
+      imaginaryBoosts: 0,
       lockText: null
     };
   },
@@ -43,8 +43,8 @@ Vue.component("antimatter-dim-boost-row", {
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
-      if (this.freeBoosts !== 0) {
-        parts.push(this.freeBoosts);
+      if (this.imaginaryBoosts !== 0) {
+        parts.push(this.imaginaryBoosts);
       }
       const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
@@ -63,7 +63,7 @@ Vue.component("antimatter-dim-boost-row", {
       this.requirement.amount = requirement.amount;
       this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
       this.purchasedBoosts = DimBoost.purchasedBoosts;
-      this.freeBoosts = DimBoost.freeBoosts;
+      this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
     },
     dimensionBoost(bulk) {

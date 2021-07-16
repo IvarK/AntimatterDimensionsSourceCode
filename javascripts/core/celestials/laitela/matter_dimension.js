@@ -76,6 +76,7 @@ class MatterDimensionState {
 
   get powerDE() {
     const tierFactor = Math.pow(15, this._tier);
+    const destabilizeBoost = Laitela.isFullyDestabilized ? 8 : 1;
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) *
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
       .times(this.commonDarkMult)
@@ -84,7 +85,7 @@ class MatterDimensionState {
         SingularityMilestone.darkEnergyMult,
         SingularityMilestone.realityDEMultiplier,
         SingularityMilestone.multFromInfinitied
-      ).toNumber();
+      ).toNumber() * destabilizeBoost;
   }
 
   get adjustedStartingCost() {

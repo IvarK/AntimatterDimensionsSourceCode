@@ -249,24 +249,30 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "?????",
       id: 23,
-      cost: 1e20,
-      requirement: () => `[NYI]`,
-      hasFailed: () => false,
-      checkRequirement: () => false,
+      cost: 6e14,
+      requirement: () => `Reach glyph level ${formatInt(20000)} in Ra's Reality with
+        at most ${formatInt(0)} glyphs equipped`,
+      hasFailed: () => !Ra.isRunning || player.celestials.v.maxGlyphsThisRun > 0,
+      checkRequirement: () => Ra.isRunning && player.celestials.v.maxGlyphsThisRun <= 0 &&
+        gainedGlyphLevel().actualLevel >= 20000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Multiply free Dimboost count by Tesseracts",
-      effect: () => player.celestials.enslaved.tesseracts,
+      description: "Increase free Dimboost count based on Tesseract count",
+      effect: () => Math.floor(0.25 * Enslaved.effectiveTesseractCount ** 2),
+      formatEffect: value => `${formatX(value)}`,
     },
     {
       name: "?????",
       id: 24,
-      cost: 1e20,
-      requirement: () => `[NYI]`,
-      hasFailed: () => false,
-      checkRequirement: () => false,
+      cost: 6e14,
+      requirement: () => `Have ${formatInt(13000)} Antimatter Galaxies in Ra's Reality
+        with a fully inverted Black Hole`,
+      hasFailed: () => !Ra.isRunning || player.minNegativeBlackHoleThisReality > 1e-300,
+      checkRequirement: () => Ra.isRunning && player.minNegativeBlackHoleThisReality <= 1e-300 &&
+        player.galaxies >= 13000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost strength based on Singularity count",
-      effect: () => Math.log10(player.celestials.laitela.singularities),
+      effect: () => Decimal.pow(player.celestials.laitela.singularities, 300),
+      formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
       // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet

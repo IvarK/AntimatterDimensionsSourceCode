@@ -38,7 +38,7 @@ Vue.component("infinity-dim-tab", {
       }
       this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
-      this.nextDimCapIncrease = Enslaved.nextDimCapIncrease;
+      this.nextDimCapIncrease = Enslaved.nextDimCapIncrease * Tesseracts.strengthMultiplierIncrease();
       this.tesseractCost.copyFrom(Enslaved.tesseractCost);
       this.totalDimCap = InfinityDimensions.totalDimCap;
       this.canBuyTesseract = Enslaved.canBuyTesseract;

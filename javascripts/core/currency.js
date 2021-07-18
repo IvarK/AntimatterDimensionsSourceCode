@@ -371,7 +371,9 @@ Currency.relicShards = new class extends NumberCurrency {
 
 Currency.imaginaryMachines = new class extends NumberCurrency {
   get value() { return player.reality.imaginaryMachines; }
-  set value(value) { player.reality.imaginaryMachines = value; }
+  set value(value) {
+    player.reality.imaginaryMachines = Math.min(value, MachineHandler.currentIMCap);
+  }
 }();
 
 Currency.darkMatter = new class extends DecimalCurrency {

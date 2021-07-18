@@ -248,6 +248,7 @@ let player = {
       bestEP: new Decimal(0),
       bestEPSet: [],
       speedSet: [],
+      iMCapSet: [],
     },
   },
   achievementChecks: {

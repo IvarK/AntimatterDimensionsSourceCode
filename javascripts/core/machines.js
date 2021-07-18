@@ -50,7 +50,10 @@ const MachineHandler = {
   // Use iMCap to store the base cap; applying multipliers separately avoids some design issues the 3xTP upgrade has
   updateIMCap() {
     if (this.uncappedRM.gte(this.baseRMCap)) {
-      player.reality.iMCap = Math.max(player.reality.iMCap, this.baseIMCap);
+      if (this.baseIMCap > player.reality.iMCap) {
+        player.records.bestReality.iMCapSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+        player.reality.iMCap = this.baseIMCap;
+      }
     }
   },
 

@@ -40,10 +40,7 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
 
   onPurchased() {
     EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
-    if (this.id === 15) {
-      Tab.celestials.ra.show();
-    }
-    if (this.id >= 16 && this.id <= 18) {
+    if (this.id >= 15 && this.id <= 18) {
       MatterDimension(this.id - 14).amount = new Decimal(1);
       Tab.celestials.laitela.show();
     }

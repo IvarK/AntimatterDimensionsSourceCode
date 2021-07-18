@@ -11,9 +11,6 @@ Vue.component("ra-tab", {
       hasRecollection: false,
       recollectionReq: 0,
       recollectionMult: 1,
-      showLaitela: false,
-      laitelaLevelReq: 0,
-      laitelaGlyphLevelReq: 0,
       petWithRecollection: "",
       isRunning: false,
     };
@@ -77,19 +74,11 @@ Vue.component("ra-tab", {
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
       this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
       this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
-      this.showLaitela = ImaginaryUpgrade(15).isBought;
-      this.laitelaLevelReq = Laitela.raLevelRequirement;
-      this.laitelaGlyphLevelReq = Laitela.realityGlyphLevelRequirement;
       this.petWithRecollection = Ra.petWithRecollection;
       this.isRunning = Ra.isRunning;
     },
     startRun() {
       Modal.celestials.show({ name: "Ra's", number: 4 });
-    },
-    unlockLaitela() {
-      if (Laitela.unlock()) {
-        Tab.celestials.laitela.show(true);
-      }
     },
     toggleMode() {
       Ra.toggleMode();
@@ -143,15 +132,6 @@ Vue.component("ra-tab", {
             Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
             (you need {{ formatInt(recollectionReq - totalLevels) }} more)
           </div>
-        </div>
-        <div class="c-ra-laitela-unlock" v-if="showLaitela">
-          <h1>Unlock Lai'tela</h1>
-          <h2>The Celestial of Dimensions</h2>
-          <p>
-            Requires {{ formatInt(laitelaLevelReq) }} total Celestial Memory levels
-            and a level {{ formatInt(laitelaGlyphLevelReq) }} Reality Glyph
-          </p>
-          <div class="o-laitela-run-button__icon" @click="unlockLaitela" />
         </div>
       </div>
     </div>`

@@ -15,25 +15,8 @@ const Laitela = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
   },
-  get raLevelRequirement() {
-    return 100;
-  },
-  get realityGlyphLevelRequirement() {
-    return 25000;
-  },
-  get canUnlock() {
-    return Ra.totalPetLevel >= this.raLevelRequirement &&
-      player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
-        x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
-      ImaginaryUpgrade(15).isBought;
-  },
-  unlock() {
-    if (!this.canUnlock) return false;
-    MatterDimension(1).amount = new Decimal(1);
-    return true;
-  },
   get isUnlocked() {
-    return MatterDimension(1).amount.gt(0);
+    return ImaginaryUpgrade(15).isBought;
   },
   canBuyUnlock(info) {
     if (Currency.darkMatters.lt(info.price)) return false;

@@ -6913,29 +6913,6 @@ kbd {
   border: 0.1rem solid black;
 }
 
-.c-ra-laitela-unlock {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: Typewriter;
-  color: black;
-  height: 33rem;
-  width: 30rem;
-  margin: 2rem;
-  padding: 1rem;
-  border-radius: 2rem;
-  animation: a-ra-color-shift 10s infinite;
-}
-
-.t-metro .c-ra-laitela-unlock,
-.t-dark-metro .c-ra-laitela-unlock,
-.t-inverted-metro .c-ra-laitela-unlock,
-.t-s8 .c-ra-laitela-unlock {
-  border-radius: 0;
-  border: 0.1rem solid black;
-}
-
 @keyframes a-ra-color-shift {
   0% { background-color: var(--color-ra-pet-teresa); }
   25% { background-color: var(--color-ra-pet-effarig); }

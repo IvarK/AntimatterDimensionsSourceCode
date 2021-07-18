@@ -1343,7 +1343,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
       complete: () => (Laitela.canUnlock || Laitela.isUnlocked
         ? 1
-        : Math.clampMax(0.999, Ra.totalPetLevel / Laitela.raLevelRequirement)),
+        : Math.clampMax(0.999, 1)),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1360,7 +1360,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: () => {
             const raLevel = Ra.totalPetLevel;
-            const requiredRaLevel = Laitela.raLevelRequirement;
+            const requiredRaLevel = 1;
             const realityGlyphLevel = player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
               x => x.type === "reality").map(x => x.level).max();
 
@@ -1371,7 +1371,7 @@ GameDatabase.celestials.navigation = (function() {
             if (raLevel === requiredRaLevel && !Laitela.isUnlocked) return [
               "Lai'tela's Reality",
               `Reality Glyph level ${formatInt(realityGlyphLevel)} /
-                ${formatInt(Laitela.realityGlyphLevelRequirement)}`
+                ${formatInt(1)}`
             ];
             return [
               "Lai'tela's Reality"

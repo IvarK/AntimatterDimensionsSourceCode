@@ -60,8 +60,11 @@ Vue.component("glyph-set-saves", {
     },
     deleteGlyphSet(id) {
       if (!player.reality.glyphs.sets[id].length) return;
-      player.reality.glyphs.sets[id] = [];
-      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
+      if (player.options.confirmations.deleteGlyphSetSave) Modal.glyphSetSaveDelete.show({ glyphSetId: id });
+      else {
+        player.reality.glyphs.sets[id] = [];
+        EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
+      }
     },
   },
   template: `

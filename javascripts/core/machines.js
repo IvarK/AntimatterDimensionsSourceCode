@@ -1,8 +1,10 @@
 "use strict";
 
 const MachineHandler = {
+  get baseRMCap() { return new Decimal("1e1000"); },
+
   get hardcapRM() {
-    return new Decimal("1e1000").times(ImaginaryUpgrade(6).effectValue);
+    return this.baseRMCap.times(ImaginaryUpgrade(6).effectValue);
   },
 
   get realityMachineMultiplier() {
@@ -28,12 +30,12 @@ const MachineHandler = {
   },
 
   get isIMUnlocked() {
-    return Currency.realityMachines.value.gte(new Decimal("1e1000")) || Currency.imaginaryMachines.gt(0);
+    return Currency.realityMachines.value.gte(this.hardcapRM) || Currency.imaginaryMachines.gt(0);
   },
 
   get baseIMCap() {
-    return (Math.clampMin(this.uncappedRM.log10() - 1000, 0) ** 2) *
-      (Math.clampMin(this.uncappedRM.log10() - 100000, 1) ** 0.2);
+    return (Math.pow(Math.clampMin(this.uncappedRM.log10() - 1000, 0), 2)) *
+      (Math.pow(Math.clampMin(this.uncappedRM.log10() - 100000, 1), 0.2));
   },
 
   get currentIMCap() {
@@ -47,7 +49,7 @@ const MachineHandler = {
 
   // Use iMCap to store the base cap; applying multipliers separately avoids some design issues the 3xTP upgrade has
   updateIMCap() {
-    if (this.uncappedRM.gte(new Decimal("1e1000"))) {
+    if (this.uncappedRM.gte(this.baseRMCap)) {
       player.reality.iMCap = Math.max(player.reality.iMCap, this.baseIMCap);
     }
   },
@@ -58,6 +60,7 @@ const MachineHandler = {
   },
 
   gainedImaginaryMachines(diff) {
-    return (this.currentIMCap - Currency.imaginaryMachines.value) * (1 - 2 ** (-diff / 1000 / this.scaleTimeForIM));
+    return (this.currentIMCap - Currency.imaginaryMachines.value) *
+      (1 - Math.pow(2, (-diff / 1000 / this.scaleTimeForIM)));
   },
 };

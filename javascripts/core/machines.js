@@ -28,7 +28,7 @@ const MachineHandler = {
   },
 
   get isIMUnlocked() {
-    return true;
+    return Currency.realityMachines.value.gte(new Decimal("1e1000")) || Currency.imaginaryMachines.gt(0);
   },
 
   get baseIMCap() {

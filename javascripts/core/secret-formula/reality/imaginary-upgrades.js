@@ -278,10 +278,14 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet
       name: "?????",
       id: 25,
-      cost: 1e30,
-      requirement: () => `[NYI]`,
-      checkRequirement: () => false,
-      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      cost: 1.6e15,
+      formatCost: x => format(x, 1),
+      requirement: () => `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
+        at least ${formatInt(4)} empty glyph slots`,
+      hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 || Glyphs.activeList.length > 1,
+      checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
+        Glyphs.activeList.length <= 1,
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Unlock Pelle, Celestial of Antimatter",
     },
   ];

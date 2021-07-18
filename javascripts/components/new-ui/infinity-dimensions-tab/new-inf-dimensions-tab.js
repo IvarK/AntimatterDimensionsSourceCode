@@ -17,7 +17,10 @@ Vue.component("new-inf-dimensions-tab", {
       tesseractCost: new Decimal(0),
       totalDimCap: 0,
       canBuyTesseract: false,
-      enslavedCompleted: false
+      enslavedCompleted: false,
+      boughtTesseracts: 0,
+      extraTesseracts: 0,
+      showExtraTesseracts: false,
     };
   },
   computed: {
@@ -51,6 +54,9 @@ Vue.component("new-inf-dimensions-tab", {
       this.totalDimCap = InfinityDimensions.totalDimCap;
       this.canBuyTesseract = Enslaved.canBuyTesseract;
       this.enslavedCompleted = Enslaved.isCompleted;
+      this.boughtTesseracts = player.celestials.enslaved.tesseracts;
+      this.extraTesseracts = Enslaved.extraTesseracts;
+      this.showExtraTesseracts = this.extraTesseracts > 0;
     },
     maxAll() {
       tryUnlockInfinityDimensions(false);
@@ -107,7 +113,10 @@ Vue.component("new-inf-dimensions-tab", {
           :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
           @click="buyTesseract"
         >
-          <p>Buy a Tesseract</p>
+          <p>Buy a Tesseract
+            ({{ format(boughtTesseracts) }}
+            <span v-if="showExtraTesseracts"> + {{ format(extraTesseracts, 2, 2) }}</span>)
+          </p>
           <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
           <p><b>Costs: {{ format(tesseractCost) }} IP</b></p>
         </button>

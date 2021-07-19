@@ -2,7 +2,8 @@
 
 Vue.component("pelle-upgrade", {
   props: {
-    upgrade: Object
+    upgrade: Object,
+    transparent: Boolean
   },
   data() {
     return {
@@ -24,7 +25,8 @@ Vue.component("pelle-upgrade", {
       return {
         [`pelle-upgrade-${this.upgrade.config.currency}`]: true,
         "pelle-upgrade--canbuy": this.canBeBought,
-        "pelle-upgrade--isbought": this.isBought
+        "pelle-upgrade--isbought": this.isBought,
+        "pelle-upgrade--transparent": this.transparent
       };
     }
   },

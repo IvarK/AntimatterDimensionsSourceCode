@@ -167,6 +167,10 @@ function applyNDPowers(mult, tier) {
     multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
 
+  if (PelleUpgrade.longArmageddonBoost.canBeApplied && Pelle.currentArmageddonDuration > 100 * 1000) {
+    multiplier = multiplier.pow(PelleUpgrade.longArmageddonBoost.effectValue);
+  }
+
   return multiplier;
 }
 

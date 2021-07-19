@@ -12,6 +12,9 @@ Vue.component("pelle-tab", {
       hasChaos: false,
       unstableMatterGain: 0,
       unstableMatterPerMinute: 0,
+      showBoughtUpgrades: false,
+      unboughtUpgrades: [],
+      boughtUpgrades: []
     };
   },
   methods: {
@@ -25,6 +28,8 @@ Vue.component("pelle-tab", {
       this.hasChaos = Pelle.chaos.unlocked;
       this.unstableMatterGain = Pelle.unstableMatterGain;
       this.unstableMatterPerMinute = Pelle.unstableMatterGain / TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
+      this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12)
+      this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought)
     },
     getDoomed() {
       player.celestials.pelle.doomed = true;
@@ -42,8 +47,13 @@ Vue.component("pelle-tab", {
     }
   },
   computed: {
-    upgrades() {
-      return PelleUpgrade.all;
+    visibleUpgrades() {
+      if (!this.showBoughtUpgrades) return this.unboughtUpgrades.slice(0, 9);
+      
+      return this.boughtUpgrades.concat(this.unboughtUpgrades.slice(0, 9));
+    },
+    transparentUpgrades() {
+      return this.unboughtUpgrades.slice(9, 12);
     },
     pelleRebuyable() {
       return {
@@ -67,8 +77,10 @@ Vue.component("pelle-tab", {
         <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="hasPestilence"/>
         <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasChaos"/>
       </div>
+      <button @click="showBoughtUpgrades = !showBoughtUpgrades">Show/Hide bought upgrades</button>
       <div class="pelle-upgrades--container">
-        <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" :key="upg.config.id"/>
+        <pelle-upgrade v-for="upg in visibleUpgrades" :upgrade="upg" :key="upg.config.id"/>
+        <pelle-upgrade v-for="upg in transparentUpgrades" :upgrade="upg" :key="upg.config.id" transparent/>
       </div>
     </div>`
 });

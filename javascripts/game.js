@@ -120,7 +120,9 @@ function gainedEternityPoints() {
   }
 
   if (Pelle.isDoomed) {
-    ep = ep.times(totalEPMult().pow(-4 / 5));
+    if (PelleUpgrade.moreEPMultipliers.canBeApplied) ep = ep.times(totalEPMult().pow(-3 / 5));
+    else ep = ep.times(totalEPMult().pow(-4 / 5));
+
   }
   if (PelleUpgrade.epMultiplierFromUnstableMatter.canBeApplied) {
     ep = ep.times(PelleUpgrade.epMultiplierFromUnstableMatter.effectValue);

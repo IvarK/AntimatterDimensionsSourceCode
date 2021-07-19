@@ -568,7 +568,7 @@ let player = {
       // For recording which ones you permanently have
       infinityUpgrades: new Set(),
       eternityUpgrades: new Set(),
-      lastArmageddonAt: Date.now(),
+      armageddonDuration: 0,
       maxAMThisArmageddon: new Decimal(0),
       rebuyables: {
         permanentTickspeed: 0,

@@ -262,6 +262,33 @@ GameDatabase.celestials.pelle = {
       currency: "infinityPoints",
       effect: 3
     },
+    longArmageddonBoost: {
+      id: 42,
+      description: () => `Antimatter Dimensions are ${formatPow(1.05, 2, 2)} stonger if armageddon has lasted over ${format(100)} seconds.`,
+      cost: 1e35,
+      currency: "eternityPoints",
+      effect: 1.05
+    },
+    moreEPMultipliers: {
+      id: 43,
+      description: "EP multipliers are raised to the power of 0.4 instead of 0.2.",
+      cost: new Decimal("1e2750000"),
+      currency: "antimatter"
+    },
+    chaosMultFromRebuyables: {
+      id: 44,
+      description: "Chaos gain is multiplied based on Chaos rebuyables bought",
+      cost: new Decimal("1e35000"),
+      currency: "infinityPoints",
+      effect: () => 1.3 ** player.celestials.pelle.rebuyables.permanentGalaxies,
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    morePermanentGalaxies: {
+      id: 45,
+      description: () => `Gain ${formatX(4)} more permanent Galaxies from the Chaos buyable`,
+      cost: 1e5,
+      currency: "chaos"
+    },
   },
   rebuyables: {
     permanentTickspeed: {
@@ -309,9 +336,13 @@ GameDatabase.celestials.pelle = {
         }
         return base;
       },
-      description: "Gain a permanent Galaxy",
+      description: () => `Gain ${PelleUpgrade.morePermanentGalaxies.canBeApplied ? 4 : "a"} permanent Galax${PelleUpgrade.morePermanentGalaxies.canBeApplied ? "ies" : "y"}`,
       currency: "chaos",
-      effect: () => player.celestials.pelle.rebuyables.permanentGalaxies,
+      effect: () => {
+        let base = player.celestials.pelle.rebuyables.permanentGalaxies * 10;
+        if (PelleUpgrade.morePermanentGalaxies.canBeApplied) base *= 4;
+        return base;
+      },
       formatEffect: x => format(x, 2, 0)
     }
   }

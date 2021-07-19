@@ -7985,6 +7985,10 @@ kbd {
   background: #670005;
 }
 
+.pelle-upgrade--transparent {
+  opacity: 0.3;
+}
+
 /* #endregion pelle tab*/
 
 

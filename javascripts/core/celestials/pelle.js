@@ -52,6 +52,9 @@ const Pelle = {
       case "equipGlyphs":
         return true;
 
+      case "V":
+        return true;
+
       default:
         return true;
     }
@@ -63,12 +66,13 @@ const Pelle = {
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
-    this.cel.lastArmageddonAt = Date.now();
+    this.cel.armageddonDuration = 0;
 
     this.cel.maxAMThisArmageddon = new Decimal(0);
   },
 
   gameLoop(diff) {
+    this.cel.armageddonDuration += diff;
     if (this.isDoomed && this.currentArmageddonDuration > this.armageddonInterval) {
       this.armageddon(true);
     }
@@ -150,6 +154,7 @@ const Pelle = {
     get gain() {
       let gain = 1;
       if (PelleUpgrade.chaosMultiplier.canBeApplied) gain *= PelleUpgrade.chaosMultiplier.effectValue;
+      if (PelleUpgrade.chaosMultFromRebuyables.canBeApplied) gain *= PelleUpgrade.chaosMultFromRebuyables.effectValue;
       return gain;
     },
     get unlocked() { return PelleUpgrade.chaosUnlock.canBeApplied },
@@ -175,7 +180,7 @@ const Pelle = {
   },
 
   get currentArmageddonDuration() {
-    return Date.now() - this.cel.lastArmageddonAt;
+    return this.cel.armageddonDuration;
   },
 
   // Milliseconds

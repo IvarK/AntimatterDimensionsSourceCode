@@ -31,7 +31,8 @@ class DimBoost {
         TimeStudy(231),
         Achievement(117),
         Achievement(142),
-        GlyphEffect.dimBoostPower
+        GlyphEffect.dimBoostPower,
+        PelleUpgrade.dimensionBoostPower
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
     if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
     return boost;

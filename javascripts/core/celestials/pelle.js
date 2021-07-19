@@ -115,6 +115,7 @@ const Pelle = {
       if (PelleUpgrade.famineGain.canBeApplied) base *= 2;
       if (PelleUpgrade.moreFamine.canBeApplied) base *= 5;
       if (PelleUpgrade.pestilenceUnlock.canBeApplied) base *= Pelle.pestilence.famineGainMult;
+      if (PelleUpgrade.famineMultFromRebuyables.canBeApplied) base *= PelleUpgrade.famineMultFromRebuyables.effectValue;
       return base;
     },
     get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
@@ -139,6 +140,7 @@ const Pelle = {
     get gain() {
       let gain = 1;
       if (Pelle.chaos.unlocked) gain *= Pelle.chaos.pestilenceGainMult;
+      if (PelleUpgrade.pestilenceMultFromRebuyables.canBeApplied) gain *= PelleUpgrade.pestilenceMultFromRebuyables.effectValue;
       return gain 
     },
     get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied },

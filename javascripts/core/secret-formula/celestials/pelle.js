@@ -217,7 +217,10 @@ GameDatabase.celestials.pelle = {
       description: "Unspent Time Theorems increase the armageddon duration.",
       cost: new Decimal("1e4250"),
       currency: "infinityPoints",
-      effect: () => Currency.timeTheorems.value.pow(0.1).max(1).toNumber(),
+      effect: () => {
+        if (!PelleUpgrade.armageddonTimeMultImprove.canBeApplied) return Currency.timeTheorems.value.pow(0.1).max(1).toNumber();
+        return Math.max(TimeTheorems.totalPurchased() ** 0.1, 1);
+      },
       formatEffect: x => formatX(x, 2, 2)
     },
     chaosEffect1stAnd4th: {
@@ -289,15 +292,56 @@ GameDatabase.celestials.pelle = {
       cost: 1e5,
       currency: "chaos"
     },
+    pestilenceMultFromRebuyables: {
+      id: 46,
+      description: "Pestilence gain is multiplied based on Pestilence rebuyables bought",
+      cost: 1e150,
+      currency: "eternityPoints",
+      effect: () => 1.2 ** player.celestials.pelle.rebuyables.permanentDimensionBoosts,
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    dimensionBoostPower: {
+      id: 47,
+      description: () => `Dimension Boosts are ${formatX(1e5)} stronger`,
+      cost: new Decimal("1e40000000"),
+      currency: "antimatter",
+      effect: 1e5
+    },
+    famineMultFromRebuyables: {
+      id: 48,
+      description: "Famine gain is multiplied based on Famine rebuyables bought",
+      cost: new Decimal("1e200000"),
+      currency: "infinityPoints",
+      effect: () => 1.2 ** player.celestials.pelle.rebuyables.permanentTickspeed,
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    armageddonTimeMultImprove: {
+      id: 49,
+      description: "The multiplier to Armageddon duration from unspent Time Theorems is now based on total Time Theorems instead",
+      cost: 1e10,
+      currency: "pestilence"
+    },
+    replicantiSpeedMultipliers: {
+      id: 50,
+      description: "Something that gives back replicanti speed mults, unimplemented, don't buy :)",
+      cost: 1e18,
+      currency: "famine"
+    },
   },
   rebuyables: {
     permanentTickspeed: {
       id: "permanentTickspeed",
       cost: () => {
         let base = (player.celestials.pelle.rebuyables.permanentTickspeed + 1) * 15;
+
         if (player.celestials.pelle.rebuyables.permanentTickspeed > 50) {
           base *= Math.pow(1.5, player.celestials.pelle.rebuyables.permanentTickspeed - 50)
         }
+
+        if (player.celestials.pelle.rebuyables.permanentTickspeed > 100) {
+          base *= Math.pow(3, player.celestials.pelle.rebuyables.permanentTickspeed - 100)
+        }
+
         return base;
       },
       description: () => `Gain ${PelleUpgrade.morePermanentTickspeed.canBeApplied ? 30 : 10} permanent tickspeed upgrades`,
@@ -313,9 +357,15 @@ GameDatabase.celestials.pelle = {
       id: "permanentDimensionBoosts",
       cost: () => {
         let base = (player.celestials.pelle.rebuyables.permanentDimensionBoosts + 1) * 25;
+
         if (player.celestials.pelle.rebuyables.permanentDimensionBoosts > 25) {
           base *= Math.pow(1.5, player.celestials.pelle.rebuyables.permanentDimensionBoosts - 25)
         }
+        
+        if (player.celestials.pelle.rebuyables.permanentDimensionBoosts > 50) {
+          base *= Math.pow(3, player.celestials.pelle.rebuyables.permanentDimensionBoosts - 50)
+        }
+
         return base;
       },
       description: () => `Gain ${PelleUpgrade.morePermanentDimBoosts.canBeApplied ? 50 : 10} permanent Dimension Boosts`,
@@ -331,9 +381,15 @@ GameDatabase.celestials.pelle = {
       id: "permanentGalaxies",
       cost: () => {
         let base = (player.celestials.pelle.rebuyables.permanentGalaxies + 1) * 100;
+
         if (player.celestials.pelle.rebuyables.permanentGalaxies > 10) {
           base *= Math.pow(1.5, player.celestials.pelle.rebuyables.permanentGalaxies - 10)
         }
+        
+        if (player.celestials.pelle.rebuyables.permanentGalaxies > 20) {
+          base *= Math.pow(3, player.celestials.pelle.rebuyables.permanentGalaxies - 20)
+        }
+
         return base;
       },
       description: () => `Gain ${PelleUpgrade.morePermanentGalaxies.canBeApplied ? 4 : "a"} permanent Galax${PelleUpgrade.morePermanentGalaxies.canBeApplied ? "ies" : "y"}`,

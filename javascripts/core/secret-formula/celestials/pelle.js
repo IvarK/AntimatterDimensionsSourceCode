@@ -339,7 +339,7 @@ GameDatabase.celestials.pelle = {
       description: () => `Gain ${PelleUpgrade.morePermanentGalaxies.canBeApplied ? 4 : "a"} permanent Galax${PelleUpgrade.morePermanentGalaxies.canBeApplied ? "ies" : "y"}`,
       currency: "chaos",
       effect: () => {
-        let base = player.celestials.pelle.rebuyables.permanentGalaxies * 10;
+        let base = player.celestials.pelle.rebuyables.permanentGalaxies;
         if (PelleUpgrade.morePermanentGalaxies.canBeApplied) base *= 4;
         return base;
       },

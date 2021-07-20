@@ -56,8 +56,9 @@ Vue.component("matter-dimension-row", {
       return `${format(this.interval, 2, 2)}ms`;
     },
     ascensionTooltip() {
-      return `Multiply interval by ${formatInt(this.intervalAscensionBump)}
-        and both multipliers by ${formatInt(1000)}, but gain the ability to upgrade interval even further`;
+      return `Multiply interval by ${formatInt(this.intervalAscensionBump)}, DM by
+        ${formatInt(this.dimension.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.
+        After ascension you can upgrade interval even further.`;
     }
   },
   methods: {

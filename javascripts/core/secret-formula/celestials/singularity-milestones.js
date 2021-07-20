@@ -77,7 +77,7 @@ GameDatabase.celestials.singularityMilestones = {
     limit: Infinity,
     description: "Ascension affects Dark Matter production more",
     effect: completions => 100 * completions,
-    effectFormat: x => formatX(1000 + x, 1, 0),
+    effectFormat: x => formatX(POWER_DM_PER_ASCENSION + x, 1, 0),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Limited

@@ -48,9 +48,15 @@ const Pelle = {
 
       case "autoec":
         return !PelleUpgrade.autoEc.canBeApplied;
+
+      case "replicantiIntervalMult":
+        return !PelleUpgrade.replicantiSpeedMultipliers.canBeApplied;
+
+      case "tpMults":
+        return !PelleUpgrade.nerfedTPMult.canBeApplied;
       
       case "equipGlyphs":
-        return true;
+        return !PelleUpgrade.firstGlyph.canBeApplied;
 
       case "V":
         return true;
@@ -168,6 +174,7 @@ const Pelle = {
       if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied) dimensionString += "4th, ";
       dimensionString += "6th"
       const hasMultiple = dimensionString.length > 3;
+      if (PelleUpgrade.chaosAllDimensions.canBeApplied) dimensionString = "1st - 7th"
       if (hasMultiple) dimensionString = dimensionString.splice(dimensionString.lastIndexOf(","), 1, " and")
       return `${dimensionString} Antimatter Dimension${hasMultiple ? "s" : ""} ${hasMultiple ? "are" : "is"} ${formatX(this.dimensionDiscount, 2, 2)} cheaper, you gain ${formatX(this.pestilenceGainMult, 2, 2)} more Pestilence. ` 
     }
@@ -289,6 +296,9 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
 
       case "antimatter":
         return "Antimatter";
+        
+      case "dilatedTime":
+        return "Dilated Time";
     }
   }
 }

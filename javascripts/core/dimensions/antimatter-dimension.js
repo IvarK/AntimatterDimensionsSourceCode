@@ -374,6 +374,7 @@ class AntimatterDimensionState extends DimensionState {
 
   get discount() {
     if (
+      (PelleUpgrade.chaosAllDimensions.canBeApplied && this.tier !== 8) ||
       (Pelle.chaos.unlocked && this.tier === 6) ||
       (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied && (this.tier === 1 || this.tier === 4))
     ) return Pelle.chaos.dimensionDiscount;

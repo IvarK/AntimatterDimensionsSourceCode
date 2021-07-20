@@ -595,7 +595,7 @@ function gameLoop(diff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
+  if ((player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) || PelleUpgrade.passiveTPGain.canBeApplied) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;

@@ -124,6 +124,11 @@ const Glyphs = {
   },
   equip(glyph, targetSlot) {
     if (Pelle.isDisabled("equipGlyphs")) return;
+
+    let pelleMaxGlyphs = 1;
+    const glyphsEquipped = Glyphs.active.filter(Boolean).length;
+    if (glyphsEquipped >= pelleMaxGlyphs) return;
+
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");
@@ -568,6 +573,7 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  if (Pelle.isDoomed) return Math.min(level, 10)
   // Copied glyphs have rawLevel === 0
   if (BASIC_GLYPH_TYPES.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
   return level;

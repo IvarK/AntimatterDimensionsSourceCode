@@ -77,14 +77,14 @@ function buyDilationUpgrade(id, bulk) {
       player.dilation.totalTachyonGalaxies = 0;
     }
 
-    if (id === 3) {
+    if (id === 3 && !Pelle.isDisabled("tpMults")) {
       let retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,
         Perk.retroactiveTP2,
         Perk.retroactiveTP3,
         Perk.retroactiveTP4
-      );
+      ) ** (Pelle.isDoomed ? 0.1 : 1);
       if (Enslaved.isRunning) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
@@ -102,6 +102,7 @@ function getTachyonGalaxyMult() {
 }
 
 function getDilationGainPerSecond() {
+  if (Pelle.isDisabled("dtMults")) return new Decimal(Currency.tachyonParticles.value).timesEffectsOf(DilationUpgrade.dtGain);
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
@@ -123,6 +124,7 @@ function getDilationGainPerSecond() {
 }
 
 function tachyonGainMultiplier() {
+  if (Pelle.isDisabled("tpMults")) return new Decimal(1);
   return new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
@@ -130,7 +132,7 @@ function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
-  );
+  ).pow(Pelle.isDoomed ? 0.1 : 1);
 }
 
 function rewardTP() {

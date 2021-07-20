@@ -48,7 +48,7 @@ GameDatabase.reality.glyphSacrifice = [
   }, {
     id: "dilation",
     effect: () => {
-      if (Pelle.isDisabled("glyphsac")) return 0;
+      if (Pelle.isDisabled("glyphsac")) return 1;
       const sacPower = player.reality.glyphs.sac.dilation;
       const exponent = 0.2 * Math.pow(Math.log10(sacPower + 1), 0.1);
       return Math.pow(Math.max(sacPower, 1), exponent);

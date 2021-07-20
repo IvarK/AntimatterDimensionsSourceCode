@@ -111,6 +111,12 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
     // and handling it would make the replicanti code a lot more complicated.
     interval = interval.pow(2);
   }
+  
+  // If you have replicanti speed in doomed, nerf the hell out of it
+  if (Pelle.isDoomed) {
+    if (interval.gt(1)) interval = interval.pow(10);
+    else interval = interval.pow(0.1);
+  }
   return interval;
 }
 

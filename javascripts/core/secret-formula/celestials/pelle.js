@@ -267,7 +267,7 @@ GameDatabase.celestials.pelle = {
     },
     longArmageddonBoost: {
       id: 42,
-      description: () => `Antimatter Dimensions are ${formatPow(1.05, 2, 2)} stonger if armageddon has lasted over ${format(100)} seconds.`,
+      description: () => `Antimatter Dimensions are ${formatPow(1.05, 2, 2)} stronger if armageddon has lasted over ${format(100)} seconds.`,
       cost: 1e35,
       currency: "eternityPoints",
       effect: 1.05
@@ -323,9 +323,40 @@ GameDatabase.celestials.pelle = {
     },
     replicantiSpeedMultipliers: {
       id: 50,
-      description: "Something that gives back replicanti speed mults, unimplemented, don't buy :)",
-      cost: 1e18,
-      currency: "famine"
+      description: "Gain back replicanti speed multipliers, but they are ^0.1 as effective",
+      cost: 1e10,
+      currency: "dilatedTime"
+    },
+    passiveTPGain: {
+      id: 51,
+      description: "Gain Tachyon Particles outside Dilation",
+      cost: 1e12,
+      currency: "dilatedTime"
+    },
+    nerfedTPMult: {
+      id: 52,
+      description: "You gain back your Tachyon Particle multipliers, but they are ^0.1 as effective",
+      cost: new Decimal("1e2000000000"),
+      currency: "antimatter"
+    },
+    chaosAllDimensions: {
+      id: 53,
+      description: "Chaos effect affects all dimensions except 8th",
+      cost: 5e7,
+      currency: "chaos"
+    },
+    infinityDimensionPower: {
+      id: 54,
+      description: () => `Infinity Dimensions are ${formatPow(1.1, 2, 2)} stronger if armageddon has lasted over ${format(450)} seconds.`,
+      cost: new Decimal("1e15000000"),
+      currency: "infinityPoints",
+      effect: 1.1
+    },
+    firstGlyph: {
+      id: 55,
+      description: () => `You can equip a single glyph, its level is forced to 10`,
+      cost: new Decimal("1e40000"),
+      currency: "eternityPoints"
     },
   },
   rebuyables: {

@@ -358,6 +358,12 @@ GameDatabase.celestials.pelle = {
       cost: new Decimal("1e40000"),
       currency: "eternityPoints"
     },
+    retainDTUpgrades: {
+      id: 56,
+      description: () => `Time Dilation upgrades are no longer reset on armageddon`,
+      cost: new Decimal("1e10000000000"),
+      currency: "antimatter"
+    },
   },
   rebuyables: {
     permanentTickspeed: {

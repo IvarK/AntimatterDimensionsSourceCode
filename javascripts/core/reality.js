@@ -413,7 +413,7 @@ function finishProcessReality(realityProps) {
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseTachyonGalaxies = 0;
   player.dilation.totalTachyonGalaxies = 0;
-  player.dilation.upgrades.clear();
+  if (!PelleUpgrade.retainDTUpgrades.canBeApplied) player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: 0,
     2: 0,

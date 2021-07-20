@@ -166,7 +166,7 @@ const Pelle = {
       return gain;
     },
     get unlocked() { return PelleUpgrade.chaosUnlock.canBeApplied },
-    get dimensionDiscount() { return new Decimal(10).pow(Currency.chaos.value.pow(2)) },
+    get dimensionDiscount() { return new Decimal(10).pow(Currency.chaos.value.pow(2)).min(Decimal.MAX_VALUE) },
     get pestilenceGainMult() { return Currency.chaos.value.pow(0.5).plus(1).toNumber() },
     get bonusDescription() { 
       let dimensionString = ""
@@ -174,8 +174,9 @@ const Pelle = {
       if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied) dimensionString += "4th, ";
       dimensionString += "6th"
       const hasMultiple = dimensionString.length > 3;
-      if (PelleUpgrade.chaosAllDimensions.canBeApplied) dimensionString = "1st - 7th"
       if (hasMultiple) dimensionString = dimensionString.splice(dimensionString.lastIndexOf(","), 1, " and")
+      
+      if (PelleUpgrade.chaosAllDimensions.canBeApplied) dimensionString = "1st - 7th"
       return `${dimensionString} Antimatter Dimension${hasMultiple ? "s" : ""} ${hasMultiple ? "are" : "is"} ${formatX(this.dimensionDiscount, 2, 2)} cheaper, you gain ${formatX(this.pestilenceGainMult, 2, 2)} more Pestilence. ` 
     }
   },

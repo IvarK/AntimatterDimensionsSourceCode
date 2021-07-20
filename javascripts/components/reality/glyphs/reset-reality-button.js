@@ -15,7 +15,7 @@ Vue.component("reset-reality-button", {
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
     },
     resetReality() {
-      resetReality();
+      Modal.resetReality.show();
     },
     resetText() {
       if (this.isInCelestialReality && !this.resetCelestial) {
@@ -28,11 +28,11 @@ Vue.component("reset-reality-button", {
     },
   },
   template: `
-  <button :class="['l-reset-reality-button',
-          'c-reset-reality-button',
-          {'c-reset-reality-button-celestial': isInCelestialReality}]"
-          @click="resetReality">
-    <div class="l-reality-button__contents">{{ resetText() }}</div>
-  </button>
-  `
+    <button
+      :class="['l-reset-reality-button', 'c-reset-reality-button',
+        {'c-reset-reality-button-celestial': isInCelestialReality}]"
+      @click="resetReality"
+    >
+      <div class="l-reality-button__contents">{{ resetText() }}</div>
+    </button>`
 });

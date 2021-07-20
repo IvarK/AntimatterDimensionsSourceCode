@@ -220,11 +220,11 @@ dev.eternify = function() {
 };
 
 dev.dilate = function() {
-  dilationAnimation();
+  animateAndDilate();
 };
 
 dev.undilate = function() {
-  undilationAnimation();
+  animateAndUndilate();
 };
 
 dev.realize = function() {
@@ -456,7 +456,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        player.reality.upgReqs[6] = true;
+        // eslint-disable-next-line no-bitwise
+        player.reality.upgReqs = (1 << 6);
         player.reality.upgradeBits = 64;
       }
     ]

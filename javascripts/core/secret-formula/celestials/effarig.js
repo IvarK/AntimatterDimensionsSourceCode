@@ -37,7 +37,6 @@ GameDatabase.celestials.effarig = {
       label: "Eternity",
       get description() {
         return ` Eternities generates Infinities
-          The Tickspeed upgrades from Time Dimensions softcaps ${formatInt(100000)} later
           Infinity Points are no longer limited in any way in Effarig's Reality
           You have unlocked The Enslaved Ones`;
       },

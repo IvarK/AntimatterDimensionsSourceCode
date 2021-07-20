@@ -8,7 +8,7 @@ const GlyphSelection = {
   realityProps: undefined,
 
   get active() {
-    return ui.view.modal.glyphSelection;
+    return Modal.reality.isOpen;
   },
 
   get choiceCount() {
@@ -55,11 +55,9 @@ const GlyphSelection = {
     return glyphList;
   },
 
-  generate(count, realityProps) {
+  generate(count, level = gainedGlyphLevel()) {
     EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
-    this.realityProps = realityProps;
-    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, { isChoosingGlyph: true });
-    ui.view.modal.glyphSelection = true;
+    this.glyphs = this.glyphList(count, level, { isChoosingGlyph: true });
   },
 
   update(level) {
@@ -76,27 +74,16 @@ const GlyphSelection = {
     }
   },
 
-  select(index, sacrifice) {
-    ui.view.modal.glyphSelection = false;
+  select(glyphID, sacrifice) {
     if (sacrifice) {
-      GlyphSacrificeHandler.removeGlyph(this.glyphs[index], true);
+      GlyphSacrificeHandler.removeGlyph(this.glyphs[glyphID], true);
     } else {
-      Glyphs.addToInventory(this.glyphs[index]);
+      Glyphs.addToInventory(this.glyphs[glyphID]);
     }
     this.glyphs = [];
-    triggerManualReality(this.realityProps);
     this.realityProps = undefined;
   }
 };
-
-function confirmReality() {
-  return !player.options.confirmations.reality ||
-    confirm("Reality will reset everything except challenge records. Your Achievements are also reset, " +
-      "but you will automatically get one back every 30 minutes. " +
-      "You will also gain Reality Machines based on your Eternity Points, a Glyph with a power level " +
-      "based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend on quality of " +
-      "life upgrades, and unlock various upgrades.");
-}
 
 function isRealityAvailable() {
   return Currency.eternityPoints.exponent >= 4000 && TimeStudy.reality.isBought;
@@ -119,33 +106,43 @@ function simulatedRealityCount(advancePartSimCounters) {
  * process, if applicable. Auto sacrifice is never triggered.
  */
 function requestManualReality() {
-  if (GlyphSelection.active || !isRealityAvailable() || !confirmReality()) {
+  if (GlyphSelection.active || !isRealityAvailable()) return;
+  if (player.options.confirmations.reality) {
+    Modal.reality.show();
     return;
   }
   if (Glyphs.freeInventorySpace === 0) {
     Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
-  const realityProps = getRealityProps(false, false);
-  if (simulatedRealityCount(false) > 0) {
-    triggerManualReality(realityProps);
-    Glyphs.processSortingAfterReality();
-    return;
+  processManualReality(false);
+}
+
+function processManualReality(sacrifice, glyphID) {
+  if (!isRealityAvailable()) return;
+
+  // If we have a glyph selected, send that along, otherwise pick one at random.
+  // eslint-disable-next-line no-param-reassign
+  if (glyphID === undefined) glyphID = Math.floor(Math.random() * GlyphSelection.choiceCount);
+
+  if (Perk.firstPerk.isEffectActive) {
+    // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
+    // Generation occurs here to prevent RNG from changing if you do more than one reality without firstPerk.
+    GlyphSelection.generate(GlyphSelection.choiceCount);
+    GlyphSelection.select(glyphID, sacrifice);
+  } else if (player.realities === 0) {
+    // If this is our first Reality, give them the companion and the starting power glyph.
+    Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
+    Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
+  } else {
+    // We can't get a random glyph directly here because that disturbs the RNG
+    // (makes it depend on whether you got first perk or not).
+    Glyphs.addToInventory(GlyphSelection.glyphList(1, gainedGlyphLevel(), { isChoosingGlyph: true })[0]);
   }
-  realityProps.alreadyGotGlyph = true;
-  if (GlyphSelection.choiceCount === 1) {
-    if (PlayerProgress.realityUnlocked()) {
-      // We can't get a random glyph directly here because that disturbs the RNG
-      // (makes it depend on whether you got first perk or not).
-      Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, { isChoosingGlyph: true })[0]);
-    } else {
-      Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
-      Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
-    }
-    triggerManualReality(realityProps);
-    return;
-  }
-  GlyphSelection.generate(GlyphSelection.choiceCount, realityProps);
+
+  // We've already gotten a glyph at this point, so the second value has to be true.
+  // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
+  triggerManualReality(getRealityProps(false, true));
 }
 
 function triggerManualReality(realityProps) {
@@ -217,7 +214,6 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
-  Glyphs.processSortingAfterReality();
 }
 
 function updateRealityRecords(realityProps) {
@@ -317,6 +313,7 @@ function beginProcessReality(realityProps) {
         rng.finalize();
       }
     });
+  Glyphs.processSortingAfterReality();
 }
 
 function finishProcessReality(realityProps) {
@@ -462,8 +459,9 @@ function finishProcessReality(realityProps) {
   Lazy.invalidateAll();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
-  // This immediately gives eternity upgrades instead of after the first eternity
-  if (Teresa.has(TERESA_UNLOCKS.START_EU)) applyRealityUpgradesAfterEternity();
+  if (Teresa.has(TERESA_UNLOCKS.START_EU)) {
+    for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
+  }
 
   if (!isReset) Ra.applyAlchemyReactions();
 
@@ -539,15 +537,6 @@ function isInCelestialReality() {
     player.celestials.v.run ||
     player.celestials.ra.run ||
     player.celestials.laitela.run;
-}
-
-function resetReality() {
-  if (confirm("This will put you at the start of your Reality and reset your progress in this Reality, " +
-    "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?")) {
-    beginProcessReality(getRealityProps(true));
-    return true;
-  }
-  return false;
 }
 
 function lockAchievementsOnReality() {

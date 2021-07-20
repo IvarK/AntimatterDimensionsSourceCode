@@ -109,12 +109,12 @@ GameStorage.devMigrations = {
       player.wormhole = [
         player.wormhole,
         {
-        speed: 60 * 6,
-        power: 90,
-        duration: 7,
-        phase: 0,
-        active: false,
-        unlocked: false,
+          speed: 60 * 6,
+          power: 90,
+          duration: 7,
+          phase: 0,
+          active: false,
+          unlocked: false,
         },
         {
           speed: 6 * 6,
@@ -521,7 +521,7 @@ GameStorage.devMigrations = {
           effectCount: 0,
           effectChoices: t.effects.mapToObject(e => e.id, () => false),
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
-      }));
+        }));
       for (const type of generatedTypes) {
         newSettings[type].rarityThreshold = oldSettings[type].rarityThreshold;
         newSettings[type].scoreThreshold = oldSettings[type].scoreThreshold;
@@ -954,6 +954,31 @@ GameStorage.devMigrations = {
       delete player.saveOverThresholdFlag;
       delete player.saveOverThresholdFlagModalDisplayed;
     },
+    player => {
+      if (!Autobuyer.reality.isUnlocked) player.auto.reality.isActive = false;
+    },
+    player => {
+      // Delete PEC5 (id 64)
+      if (player.reality.perks.has(64)) {
+        player.reality.perks.delete(64);
+        Currency.perkPoints.add(1);
+      }
+
+      let reqBitmask = 0;
+      for (let i = 0; i <= player.reality.upgReqs.length; i++) {
+        // eslint-disable-next-line no-bitwise
+        if (player.reality.upgReqs[i]) reqBitmask |= (1 << i);
+      }
+      player.reality.upgReqs = reqBitmask;
+    },
+    player => {
+      // Delete SAM2 (id 11)
+      if (player.reality.perks.has(11)) {
+        player.reality.perks.delete(11);
+        Currency.perkPoints.add(1);
+      }
+      if (player.reality.perks.has(10)) Perk.startAM.onPurchased();
+    }
   ],
 
   patch(player) {

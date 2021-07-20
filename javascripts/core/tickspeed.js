@@ -22,28 +22,28 @@ function getTickSpeedMultiplier() {
   let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies + pelleGalaxies;
   if (Pelle.isDoomed) galaxies /= 2;
   if (galaxies < 3) {
-      // Magic numbers are to retain balancing from before while displaying
-      // them now as positive multipliers rather than negative percentages
-      let baseMultiplier = 1 / 1.1245;
-      if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
-      if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
-      if (NormalChallenge(5).isRunning) {
-        baseMultiplier = 1 / 1.08;
-        if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
-        if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
-      }
-      const perGalaxy = 0.02 * Effects.product(
-        InfinityUpgrade.galaxyBoost,
-        InfinityUpgrade.galaxyBoost.chargedEffect,
-        BreakInfinityUpgrade.galaxyBoost,
-        TimeStudy(212),
-        TimeStudy(232),
-        Achievement(86),
-        Achievement(175),
-        InfinityChallenge(5).reward,
-        PelleUpgrade.antimatterGalaxyBoost
-      );
-      return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
+    // Magic numbers are to retain balancing from before while displaying
+    // them now as positive multipliers rather than negative percentages
+    let baseMultiplier = 1 / 1.1245;
+    if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
+    if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
+    if (NormalChallenge(5).isRunning) {
+      baseMultiplier = 1 / 1.08;
+      if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
+      if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
+    }
+    const perGalaxy = 0.02 * Effects.product(
+      InfinityUpgrade.galaxyBoost,
+      InfinityUpgrade.galaxyBoost.chargedEffect,
+      BreakInfinityUpgrade.galaxyBoost,
+      TimeStudy(212),
+      TimeStudy(232),
+      Achievement(86),
+      Achievement(175),
+      InfinityChallenge(5).reward,
+      PelleUpgrade.antimatterGalaxyBoost
+    );
+    return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
   }
   let baseMultiplier = 0.8;
   if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;
@@ -91,7 +91,7 @@ function buyMaxTickSpeed() {
     costScale.calculateCost(player.totalTickBought + costBumps).lt(Decimal.NUMBER_MAX_VALUE) ||
     inCostScalingChallenge ||
     !tickspeedMultDecreaseMaxed
-    ) {
+  ) {
 
     let shouldContinue = true;
     while (Currency.antimatter.gt(costScale.calculateCost(player.totalTickBought + costBumps)) && shouldContinue) {
@@ -120,8 +120,8 @@ function buyMaxTickSpeed() {
 }
 
 function resetTickspeed() {
-    player.totalTickBought = 0;
-    player.chall9TickspeedCostBumps = 0;
+  player.totalTickBought = 0;
+  player.chall9TickspeedCostBumps = 0;
 }
 
 const Tickspeed = {

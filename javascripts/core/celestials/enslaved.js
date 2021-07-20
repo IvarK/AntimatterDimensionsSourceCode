@@ -47,10 +47,10 @@ const Enslaved = {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get isStoringGameTime() {
-    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+    return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
   },
   get isStoringRealTime() {
-    return player.celestials.enslaved.isStoringReal;
+    return Enslaved.isUnlocked && player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
     return 0.7;
@@ -170,13 +170,13 @@ const Enslaved = {
   },
   spendTimeForHint() {
     if (player.celestials.enslaved.stored < this.nextHintCost) return false;
-      player.celestials.enslaved.stored -= this.nextHintCost;
-      if (Enslaved.hintCostIncreases === 0) {
-        player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
-      } else {
-        player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
-      }
-      return true;
+    player.celestials.enslaved.stored -= this.nextHintCost;
+    if (Enslaved.hintCostIncreases === 0) {
+      player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
+    } else {
+      player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
+    }
+    return true;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];

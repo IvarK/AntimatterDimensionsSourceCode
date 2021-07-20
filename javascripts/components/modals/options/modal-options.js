@@ -1,10 +1,10 @@
 "use strict";
 
 Vue.component("modal-options", {
-  template:
-    `<div class="c-modal-options l-modal-options">
-      <modal-close-button @click="emitClose"/>
-      <slot/>
+  template: `
+    <div class="c-modal-options l-modal-options">
+      <modal-close-button @click="emitClose" />
+      <slot />
     </div>`
 });
 
@@ -33,8 +33,8 @@ const modalOptionsMixin = {
   components: {
     "on-off-button": {
       props: ["value", "text"],
-      template:
-        `<primary-button-on-off
+      template: `
+        <primary-button-on-off
           :value="value"
           :text="text"
           @input="emitInput"
@@ -43,8 +43,8 @@ const modalOptionsMixin = {
     },
     "wide-on-off-button": {
       props: ["value", "text"],
-      template:
-        `<primary-button-on-off
+      template: `
+        <primary-button-on-off
           :value="value"
           :text="text"
           @input="emitInput"

@@ -27,8 +27,9 @@ Vue.component("game-header-big-crunch-button", {
       const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
         Math.round(255 - (1 - ratio) * 10 * 255),
-        ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
-        : Math.round(255 - (1 - ratio) * 10 * 255)
+        ratio > 1
+          ? Math.round(255 - (ratio - 1) * 10 * 255)
+          : Math.round(255 - (1 - ratio) * 10 * 255)
       ];
       return { color: `rgb(${rgb.join(",")})` };
     },
@@ -60,25 +61,27 @@ Vue.component("game-header-big-crunch-button", {
       Tab.dimensions.infinity.show(true);
     },
   },
-  template:
-    `<button
+  template: `
+    <button
       v-if="isVisible && !tesseractAffordable"
       class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
       onclick="bigCrunchResetRequest()"
       @mouseover="hover = true"
       @mouseleave="hover = false"
     >
-      <div v-if="!isPeakIPPMVisible"/>
-      <b>Big Crunch for
-      <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
-      Infinity {{ "Point" | pluralize(gainedIP) }}.</b>
+      <div v-if="!isPeakIPPMVisible"></div>
+      <b>
+        Big Crunch for
+        <span :style="amountStyle">{{ format(gainedIP, 2, 0) }}</span>
+        Infinity {{ "Point" | pluralize(gainedIP) }}.
+      </b>
       <template v-if="isPeakIPPMVisible">
         <br>
-        {{format(currentIPPM, 2, 0)}} IP/min
+        {{ format(currentIPPM, 2, 0) }} IP/min
         <br>
-        Peaked at {{format(peakIPPM, 2, 0)}} IP/min
+        Peaked at {{ format(peakIPPM, 2, 0) }} IP/min
       </template>
-      <div v-else/>
+      <div v-else></div>
     </button>
     <button
       v-else-if="tesseractAffordable"

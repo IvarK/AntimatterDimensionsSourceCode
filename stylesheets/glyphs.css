@@ -332,7 +332,6 @@
   width: 27.4rem;
   padding: 0.5rem 0;
   position: absolute;
-  z-index: 6;
 }
 
 .l-glyph-tooltip--up-left {
@@ -352,76 +351,64 @@
 }
 
 .c-glyph-tooltip {
-  background-color: #4a4a4a;
+  background-color: black;
   color: #fff;
-  font-size: 1.4rem;
-  font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.2rem;
   font-weight: normal;
   text-align: center;
   border-radius: 0.6rem;
   transition: opacity 0.3s;
   text-shadow: none;
-  padding: 1.2rem;
+  padding: 0.6rem;
+  padding-bottom: 0.6rem;
+  border: 0.2rem solid black;
 }
 
-.l-glyph-tooltip::after {
-  content: "";
-  position: absolute;
-  border-width: 0.5rem;
-  border-style: solid;
-  pointer-events: none;
-}
-
-.l-glyph-tooltip--up-left::after {
-  top: 100%;
-  left: 100%;
-  margin-left: -0.5rem;
-  margin-top: -1rem;
-  border-color: transparent transparent #4a4a4a;
-}
-
-.l-glyph-tooltip--down-left::after {
-  top: 0;
-  left: 100%;
-  margin-left: -0.5rem;
-  border-color: #4a4a4a transparent transparent;
-}
-
-.l-glyph-tooltip--up-right::after {
-  top: 100%;
-  left: 0;
-  margin-left: -0.5rem;
-  margin-top: -1rem;
-  border-color: transparent transparent #4a4a4a;
-}
-
-.l-glyph-tooltip--down-right::after {
-  top: 0;
-  left: 0;
-  margin-left: -0.5rem;
-  border-color: #4a4a4a transparent transparent;
+.t-metro .c-glyph-tooltip,
+.t-dark-metro .c-glyph-tooltip,
+.t-inverted-metro .c-glyph-tooltip,
+.t-s8 .c-glyph-tooltip {
+  border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .c-glyph-tooltip__description {
-  width: 19rem;
-  min-height: 3.5rem;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
-.l-glyph-tooltip__level {
-  margin-left: auto;
+.l-glyph-tooltip__info {
+  font-size: 1.1rem;
 }
 
-.l-glyph-tooltip__header {
+.c-glyph-tooltip__header {
   display: flex;
+  flex-direction: column;
+  width: calc(100% + 2.4rem);
+  border: 0.2rem solid;
+  padding: 0.3rem 1rem 0.7rem;
+  font-weight: bold;
+  margin-top: -4rem;
+  background-color: black;
+  border-radius: 0.8rem;
+}
+
+.t-metro .c-glyph-tooltip__header,
+.t-dark-metro .c-glyph-tooltip__header,
+.t-inverted-metro .c-glyph-tooltip__header,
+.t-s8 .c-glyph-tooltip__header {
+  border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .l-glyph-tooltip__effects {
-  margin-top: 0.5rem;
+  margin-top: 0.8rem;
+  margin-bottom: -0.8rem;
 }
 
 .c-glyph-tooltip__sacrifice {
   color: #b4b4b4;
+  font-size: 1rem;
+  font-weight: normal;
 }
 
 .c-glyph-tooltip__sacrifice--touchable {
@@ -431,23 +418,17 @@
   padding: 0.25em 1em;
 }
 
-.l-modal-glyph-selection {
-  position: fixed;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  left: 50vw;
-  top: 50vh;
-  transform: translate(-50%, -50%);
-}
-
 .l-modal-glyph-selection__row {
+  display: flex;
   flex-direction: row;
 }
 
 .l-modal-glyph-selection__glyph {
   margin: 1rem;
+}
+
+.l-modal-glyph-selection__glyph--selected {
+  box-shadow: #B4B420 0 0 1rem 0.5rem !important;
 }
 
 .l-equipped-glyphs {
@@ -1025,5 +1006,59 @@
   }
   100% {
     background: #b67f33;
+  }
+}
+
+@keyframes a-reality-glyph-tooltip-cycle {
+  0% {
+    border-color: #b67f33;
+    box-shadow: 0 0 0.5rem #b67f33, 0 0 0.5rem #b67f33 inset
+  }
+  20% {
+    border-color: #64dd17;
+    box-shadow: 0 0 0.5rem #64dd17, 0 0 0.5rem #64dd17 inset
+  }
+  40% {
+    border-color: #22aa48;
+    box-shadow: 0 0 0.5rem #22aa48, 0 0 0.5rem #22aa48 inset
+  }
+  60% {
+    border-color: #03a9f4;
+    box-shadow: 0 0 0.5rem #03a9f4, 0 0 0.5rem #03a9f4 inset
+  }
+  80% {
+    border-color: #b241e3;
+    box-shadow: 0 0 0.5rem #b241e3, 0 0 0.5rem #b241e3 inset
+  }
+  100% {
+    border-color: #b67f33;
+    box-shadow: 0 0 0.5rem #b67f33, 0 0 0.5rem #b67f33 inset
+  }
+}
+
+@keyframes a-reality-glyph-tooltip-header-cycle {
+  0% {
+    border-color: #b67f33;
+    box-shadow: 0 0 0.5rem 0.1rem #b67f33, 0 0 0.8rem #b67f33 inset
+  }
+  20% {
+    border-color: #64dd17;
+    box-shadow: 0 0 0.5rem 0.1rem #64dd17, 0 0 0.8rem #64dd17 inset
+  }
+  40% {
+    border-color: #22aa48;
+    box-shadow: 0 0 0.5rem 0.1rem #22aa48, 0 0 0.8rem #22aa48 inset
+  }
+  60% {
+    border-color: #03a9f4;
+    box-shadow: 0 0 0.5rem 0.1rem #03a9f4, 0 0 0.8rem #03a9f4 inset
+  }
+  80% {
+    border-color: #b241e3;
+    box-shadow: 0 0 0.5rem 0.1rem #b241e3, 0 0 0.8rem #b241e3 inset
+  }
+  100% {
+    border-color: #b67f33;
+    box-shadow: 0 0 0.5rem 0.1rem #b67f33, 0 0 0.8rem #b67f33 inset
   }
 }

@@ -141,7 +141,7 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-  let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
+  let log10FinalEP = player.records.thisReality.maxEP.plus(gainedEternityPoints()).log10();
   if (!PlayerProgress.realityUnlocked()) {
     if (log10FinalEP > 8000) log10FinalEP = 8000;
     if (log10FinalEP > 6000) log10FinalEP -= (log10FinalEP - 6000) * 0.75;
@@ -428,7 +428,8 @@ function getGameSpeedupForDisplay() {
 // rate.
 // TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
-function gameLoop(diff, options = {}) {
+function gameLoop(passDiff, options = {}) {
+  let diff = passDiff;
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
@@ -907,8 +908,8 @@ function setHoldingR(x) {
 function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
-  Tab.dimensions.antimatter.show();
   GameStorage.load();
+  Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
 }
 

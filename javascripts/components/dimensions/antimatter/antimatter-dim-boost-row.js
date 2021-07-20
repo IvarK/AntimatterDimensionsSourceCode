@@ -21,8 +21,9 @@ Vue.component("antimatter-dim-boost-row", {
       const boosts = this.purchasedBoosts;
 
       let newUnlock = "";
-      if (boosts < DimBoost.maxDimensionsUnlockable - 4) newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+      if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
+        newUnlock = `unlock the ${boosts + 5}th Dimension`;
+      } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
         newUnlock = "unlock Sacrifice";
       }
 
@@ -70,11 +71,11 @@ Vue.component("antimatter-dim-boost-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
-  template:
-    `<div class="c-antimatter-dim-row">
+  template: `
+    <div class="c-antimatter-dim-row">
       <div class="c-dim-row__label c-dim-row__label--growable">
-        Dimension Boost ({{boostCountText}}):
-        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
+        Dimension Boost ({{ boostCountText }}):
+        requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
       </div>
       <primary-button
         :enabled="isBuyable"
@@ -82,6 +83,8 @@ Vue.component("antimatter-dim-boost-row", {
         :class=tutorialClass
         @click.exact="dimensionBoost(true)"
         @click.shift.exact="dimensionBoost(false)"
-      >{{buttonText}}</primary-button>
+      >
+        {{ buttonText }}
+      </primary-button>
     </div>`
 });

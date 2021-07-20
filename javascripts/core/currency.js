@@ -211,16 +211,16 @@ Currency.antimatter = new class extends DecimalCurrency {
   }
 
   get productionPerSecond() {
-    return NormalChallenge(12).isRunning ? AntimatterDimension(1).productionPerRealSecond
-    : AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond);
+    return NormalChallenge(12).isRunning
+      ? AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond)
+      : AntimatterDimension(1).productionPerRealSecond;
   }
 
   get startingValue() {
     if (Pelle.isDisabled()) return new Decimal(100);
     return Effects.max(
       10,
-      Perk.startAM1,
-      Perk.startAM2,
+      Perk.startAM,
       Achievement(21),
       Achievement(37),
       Achievement(54),
@@ -301,6 +301,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
+
+  reset() {
+    super.reset();
+    player.records.thisReality.maxEP = this.startingValue;
+  }
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {
@@ -320,7 +325,6 @@ Currency.timeTheorems = new class extends DecimalCurrency {
   add(amount) {
     super.add(amount);
     player.timestudy.maxTheorem = player.timestudy.maxTheorem.plus(amount);
-    if (new Decimal(amount).gt(0)) player.achievementChecks.noTheoremPurchases = false;
   }
 
   reset() {

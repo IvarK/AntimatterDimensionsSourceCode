@@ -16,6 +16,5 @@ Vue.component("reality-machines-header", {
       You have
       <span class="c-reality-tab__reality-machines">{{ format(realityMachines, 2, 0) }}</span>
       {{ "Reality Machine" | pluralize(realityMachines) }}.
-    </div>
-  `
+    </div>`
 });

@@ -46,7 +46,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tab.dimensions.antimatter.show();
+    Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
     GameUI.notify.info("Game loaded");
   },
 
@@ -109,7 +109,7 @@ const GameStorage = {
     const m = dateObj.getMonth() + 1;
     const d = dateObj.getDate();
     download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
-    GameSaveSerializer.serialize(player));
+      GameSaveSerializer.serialize(player));
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
@@ -212,10 +212,10 @@ function download(filename, text) {
   pom.setAttribute("download", filename);
 
   if (document.createEvent) {
-      const event = document.createEvent("MouseEvents");
-      event.initEvent("click", true, true);
-      pom.dispatchEvent(event);
+    const event = document.createEvent("MouseEvents");
+    event.initEvent("click", true, true);
+    pom.dispatchEvent(event);
   } else {
-      pom.click();
+    pom.click();
   }
 }

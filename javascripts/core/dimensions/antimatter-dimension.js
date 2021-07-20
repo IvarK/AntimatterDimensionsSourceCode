@@ -55,7 +55,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
       getInfinityConversionRate()
-      ).max(1).times(DimBoost.multiplierToNDTier(tier));
+    ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
   let multiplier = new Decimal(1);
@@ -476,9 +476,8 @@ class AntimatterDimensionState extends DimensionState {
    * @param {Decimal} value
    */
   set currencyAmount(value) {
-    return this.tier >= 3 && NormalChallenge(6).isRunning
-      ? AntimatterDimension(this.tier - 2).amount = value
-      : Currency.antimatter.value = value;
+    if (this.tier >= 3 && NormalChallenge(6).isRunning) AntimatterDimension(this.tier - 2).amount = value;
+    else Currency.antimatter.value = value;
   }
 
   /**
@@ -515,7 +514,7 @@ class AntimatterDimensionState extends DimensionState {
     return this.amount.max(this.continuumAmount);
   }
 
-   /**
+  /**
     * @returns {boolean}
     */
   get isAffordable() {
@@ -534,11 +533,8 @@ class AntimatterDimensionState extends DimensionState {
 
   get isAvailableForPurchase() {
     if (Currency.antimatter.gt(Player.infinityLimit)) return false;
-    if (this.tier > DimBoost.totalBoosts + 4) return false;
-    const hasPrevTier = this.tier === 1 ||
-      (Laitela.continuumActive
-        ? AntimatterDimension(this.tier - 1).continuumValue >= 1
-        : AntimatterDimension(this.tier - 1).amount.neq(0));
+    if (!EternityMilestone.unlockAllND.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
+    const hasPrevTier = this.tier === 1 || AntimatterDimension(this.tier - 1).totalAmount.gt(0);
     if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }

@@ -1,32 +1,38 @@
 "use strict";
 
-function dilationAnimation() {
+function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
+  setTimeout(startDilatedEternity, 1000);
 }
 
-function undilationAnimation() {
+function animateAndUndilate() {
   document.body.style.animation = "undilate 2s 1 linear";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
+  setTimeout(() => {
+    eternity(false, false, { switchingDilation: true });
+  }, 1000);
 }
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
+  const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
   if (player.dilation.active) {
-    if (player.options.animations.dilation && document.body.style.animation === "") {
-      undilationAnimation();
-      setTimeout(() => {
-        eternity(false, false, { switchingDilation: true });
-      }, 1000);
+    GameUI.notify.error("its being worked on sorry", 100000);
+    GameUI.notify.error("TODO: Exiting Dilation Modal NYI", 100000);
+    if (playAnimation) {
+      animateAndUndilate();
     } else {
       eternity(false, false, { switchingDilation: true });
     }
   } else if (player.options.confirmations.dilation) {
     Modal.enterDilation.show();
+  } else if (playAnimation) {
+    animateAndDilate();
   } else {
     startDilatedEternity();
   }

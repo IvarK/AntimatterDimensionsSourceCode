@@ -44,8 +44,8 @@ GameDatabase.eternity.dilation = (function() {
       increment: 100,
       description: () =>
         (Perk.bypassTGReset.isBought
-        ? "Reset Tachyon Galaxies, but lower their threshold"
-        : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
+          ? "Reset Tachyon Galaxies, but lower their threshold"
+          : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
       // The 38th purchase is at 1e80, and is the last purchase.
       effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
       formatEffect: () => format(getTachyonGalaxyMult(), 3, 3),
@@ -83,7 +83,7 @@ GameDatabase.eternity.dilation = (function() {
           }
         }
         return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
-          effect above ${formatX(new Decimal("1e9000"))}`;
+          effect above ${formatX("1e9000")}`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

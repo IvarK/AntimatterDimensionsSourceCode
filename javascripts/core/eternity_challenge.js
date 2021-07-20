@@ -164,9 +164,7 @@ class EternityChallengeState extends GameMechanicState {
       this.start();
       return;
     }
-    if (this.isUnlocked) {
-    Modal.startEternityChallenge.show(this.id);
-    }
+    if (this.isUnlocked) Modal.startEternityChallenge.show(this.id);
   }
 
   start(auto) {
@@ -318,8 +316,7 @@ const EternityChallenges = {
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
         Perk.autocompleteEC3,
-        Perk.autocompleteEC4,
-        Perk.autocompleteEC5
+        Perk.autocompleteEC4
       );
       if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;

@@ -40,20 +40,20 @@ Vue.component("game-header-amounts-line", {
       return `(${formatPercents(progress, 2, 2)})`;
     },
   },
-  template:
-    `<div class="l-game-header__amounts-line">
-      <div v-if="showInfinityPoints"
-        class="c-game-header__infinity-points l-game-header__infinity-points">
-          You have
-          <span class="c-game-header__ip-amount">{{formatPoints(infinityPoints)}}</span>
-          Infinity {{ "Point" | pluralize(infinityPoints) }}.
-          <span v-if="isTesseractUnlocked"
-            v-html="tesseractText">
-          </span>
+  template: `
+    <div class="l-game-header__amounts-line">
+      <div
+        v-if="showInfinityPoints"
+        class="c-game-header__infinity-points l-game-header__infinity-points"
+      >
+        You have
+        <span class="c-game-header__ip-amount">{{ formatPoints(infinityPoints) }}</span>
+        Infinity {{ "Point" | pluralize(infinityPoints) }}.
+        <span v-if="isTesseractUnlocked" v-html="tesseractText"></span>
       </div>
       <div v-if="showEternityPoints" class="c-game-header__eternity-points l-game-header__eternity-points">
         You have
-        <span class="c-game-header__ep-amount">{{formatPoints(eternityPoints)}}</span>
+        <span class="c-game-header__ep-amount">{{ formatPoints(eternityPoints) }}</span>
         Eternity {{ "Point" | pluralize(eternityPoints) }}.
         <span v-if="showNextEP">(Next EP at {{ format(nextEP, 1) }} IP)</span>
       </div>

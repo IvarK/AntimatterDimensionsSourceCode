@@ -27,13 +27,13 @@ Vue.component("sidebar", {
       Tab.shop
     ]
   },
-  template:
-  `<div class="sidebar">
-    <sidebar-rm v-if="RMVisible" />
-    <tab-button 
-      v-for="tab in tabs"
-      :key="tab.name"
-      :tab="tab" 
-    />
-  </div>`
+  template: `
+    <div class="sidebar">
+      <sidebar-rm v-if="RMVisible" />
+      <tab-button
+        v-for="tab in tabs"
+        :key="tab.name"
+        :tab="tab"
+      />
+    </div>`
 });

@@ -21,19 +21,9 @@ GameDatabase.reality.perks = {
     },
     effect: 4,
   },
-  startAM1: {
+  startAM: {
     id: 10,
-    label: "SAM1",
-    family: PERK_FAMILY.ANTIMATTER,
-    get description() {
-      return `Start every reset with ${format(1e15)} antimatter.`;
-    },
-    bumpCurrency: () => Currency.antimatter.bumpTo(1e15),
-    effect: 1e15
-  },
-  startAM2: {
-    id: 11,
-    label: "SAM2",
+    label: "SAM",
     family: PERK_FAMILY.ANTIMATTER,
     get description() {
       return `Start every reset with ${format(1e130)} antimatter.`;
@@ -100,11 +90,12 @@ GameDatabase.reality.perks = {
     },
     effect: () => (Enslaved.isRunning ? 1 : 10)
   },
-  dimboostNonReset: {
+  antimatterNoReset: {
     id: 30,
-    label: "DBNR",
+    label: "ANR",
     family: PERK_FAMILY.ANTIMATTER,
-    description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice."
+    description: `Dimension Boosts and Antimatter Galaxies no longer reset
+      Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`
   },
   studyPassive: {
     id: 31,
@@ -212,40 +203,31 @@ GameDatabase.reality.perks = {
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(2)} hours (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).`;
     },
-    effect: 120
+    effect: 80
   },
   autocompleteEC2: {
     id: 61,
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(50)} minutes (real-time).`;
     },
-    effect: 80
+    effect: 50
   },
   autocompleteEC3: {
     id: 62,
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(50)} minutes (real-time).`;
-    },
-    effect: 50
-  },
-  autocompleteEC4: {
-    id: 63,
-    label: "PEC4",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
       return `Auto-complete one Eternity Challenge every ${formatInt(30)} minutes (real-time).`;
     },
     effect: 30
   },
-  autocompleteEC5: {
-    id: 64,
-    label: "PEC5",
+  autocompleteEC4: {
+    id: 63,
+    label: "PEC4",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
       return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).`;
@@ -451,9 +433,9 @@ GameDatabase.reality.perkConnections = (function() {
   const p = GameDatabase.reality.perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.firstPerk, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
-    [p.startAM1, p.startAM2, p.startIP1],
-    [p.startAM2, p.startEP1, p.dimboostNonReset],
+    [p.firstPerk, p.achievementGroup1, p.startAM, p.autounlockEU1, p.bypassEC5Lock],
+    [p.startAM, p.antimatterNoReset, p.startIP1],
+    [p.antimatterNoReset, p.startEP1],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
     [p.startIP2, p.bypassIDAntimatter, p.autobuyerFasterReplicanti],
     [p.startEP1, p.startEP2, p.startTP],
@@ -474,7 +456,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
     [p.autocompleteEC3, p.autocompleteEC4],
-    [p.autocompleteEC4, p.autocompleteEC5],
     [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],

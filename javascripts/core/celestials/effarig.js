@@ -3,7 +3,8 @@
 const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
-  REALITY: 3
+  REALITY: 3,
+  COMPLETED: 4
 };
 
 const Effarig = {
@@ -26,7 +27,10 @@ const Effarig = {
     if (!EffarigUnlock.eternity.isUnlocked) {
       return EFFARIG_STAGES.ETERNITY;
     }
-    return EFFARIG_STAGES.REALITY;
+    if (!EffarigUnlock.reality.isUnlocked) {
+      return EFFARIG_STAGES.REALITY;
+    }
+    return EFFARIG_STAGES.COMPLETED;
   },
   get eternityCap() {
     return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
@@ -71,6 +75,7 @@ const Effarig = {
         c = 29.29;
         break;
       case EFFARIG_STAGES.REALITY:
+      default:
         c = 25;
         break;
     }

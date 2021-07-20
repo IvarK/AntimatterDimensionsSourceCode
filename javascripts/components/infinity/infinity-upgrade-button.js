@@ -21,8 +21,8 @@ Vue.component("infinity-upgrade-button", {
     config() {
       const config = this.upgrade.config;
       return (this.chargePossible && (this.isCharged || this.showingCharged || this.shiftDown))
-      ? config.charged
-      : config;
+        ? config.charged
+        : config;
     },
     classObject() {
       return {
@@ -46,12 +46,14 @@ Vue.component("infinity-upgrade-button", {
       this.isCharged = upgrade.isCharged;
     }
   },
-  template:
-    `<button :class="classObject"
+  template: `
+    <button
+      :class="classObject"
       @mouseenter="showingCharged = canBeCharged"
       @mouseleave="showingCharged = false"
-      @click="upgrade.purchase()">
-      <description-display :config="config"/>
+      @click="upgrade.purchase()"
+    >
+      <description-display :config="config" />
       <effect-display br :config="config" />
       <cost-display br
         v-if="!isBought"

@@ -102,12 +102,13 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, ignoreLevel, ignoreStrength) {
+  findByValues(finding, ignore = { level, strength, effects }) {
     for (const glyph of this.sortedInventoryList) {
       const type = glyph.type === finding.type;
-      const effects = glyph.effects === finding.effects;
-      const str = ignoreStrength || glyph.strength === finding.strength;
-      const lvl = ignoreLevel || glyph.level === finding.level;
+      const effects = glyph.effects === finding.effects ||
+            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
+      const str = ignore.strength || glyph.strength === finding.strength;
+      const lvl = ignore.level || glyph.level === finding.level;
       const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
       if (type && effects && str && lvl && sym) return glyph;
     }
@@ -469,10 +470,10 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    Currency.antimatter = new Decimal(undoData.am);
-    Currency.infinityPoints = new Decimal(undoData.ip);
-    Currency.eternityPoints = new Decimal(undoData.ep);
-    Currency.timeTheorems = new Decimal(undoData.tt);
+    Currency.antimatter.value = new Decimal(undoData.am);
+    Currency.infinityPoints.value = new Decimal(undoData.ip);
+    Currency.eternityPoints.value = new Decimal(undoData.ep);
+    Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
@@ -490,12 +491,12 @@ const Glyphs = {
   copyForRecords(glyphList) {
     // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured
     return glyphList.map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-        color: g.color,
-        symbol: g.symbol, }))
+      type: g.type,
+      level: g.level,
+      strength: g.strength,
+      effects: g.effects,
+      color: g.color,
+      symbol: g.symbol, }))
       .sort((a, b) => b.effects - a.effects);
   },
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs

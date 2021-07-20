@@ -57,7 +57,7 @@ Vue.component("antimatter-dim-galaxy-row", {
         case GALAXY_TYPE.REMOTE:
           return "Increased Galaxy cost scaling: " +
             `Quadratic past ${formatInt(this.distantStart)} (distant),
-              exponential past ${formatInt(800)} (remote)`;
+              exponential past ${formatInt(REMOTE_SCALING_START)} (remote)`;
       }
       return undefined;
     },
@@ -84,11 +84,11 @@ Vue.component("antimatter-dim-galaxy-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
   },
-  template:
-    `<div class="c-antimatter-dim-row">
+  template: `
+    <div class="c-antimatter-dim-row">
       <div class="c-dim-row__label c-dim-row__label--growable" style="height: 6rem;">
-        {{typeName}} ({{sumText}}):
-        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
+        {{ typeName }} ({{ sumText }}):
+        requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
         <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
       </div>
       <primary-button
@@ -97,6 +97,8 @@ Vue.component("antimatter-dim-galaxy-row", {
         :class="tutorialClass"
         @click.exact="buyGalaxy(true)"
         @click.shift.exact="buyGalaxy(false)"
-      >{{buttonText}}</primary-button>
+      >
+        {{ buttonText }}
+      </primary-button>
     </div>`
 });

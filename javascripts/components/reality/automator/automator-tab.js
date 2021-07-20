@@ -40,11 +40,12 @@ Vue.component("automator-tab", {
           :min-percent="40"
           :default-percent="50"
           split="vertical"
-          class="_-automator-split-pane-fix" >
+          class="_-automator-split-pane-fix"
+        >
           <automator-editor slot="paneL" />
           <automator-docs slot="paneR" />
         </split-pane>
       </div>
-      <div style="font-size: 30px" v-else>You need {{formatInt(5)}} Realities to unlock the Automator.</div>
+      <div style="font-size: 30px" v-else>You need {{ formatInt(5) }} Realities to unlock the Automator.</div>
     </div>`
 });

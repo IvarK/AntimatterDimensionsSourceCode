@@ -1,104 +1,6 @@
 "use strict";
 
 Vue.component("game-header", {
-  components: {
-    "challenge-display": {
-      data() {
-        return {
-          activityTokens: [],
-          infinityUnlocked: false
-        };
-      },
-      computed: {
-        parts() {
-          // We need activityToken for NC/IC/EC because plain check of WhateverChallenge.isRunning
-          // won't trigger display update if we, say, switch from one challenge to another
-          function celestialReality(celestial, name) {
-            return {
-              name: () => `${name} Reality`,
-              isActive: token => token,
-              activityToken: () => celestial.isRunning
-            };
-          }
-          return [
-            celestialReality(Teresa, "Teresa's"),
-            celestialReality(Effarig, "Effarig's"),
-            celestialReality(Enslaved, "The Enslaved Ones'"),
-            celestialReality(V, "V's"),
-            celestialReality(Ra, "Ra's"),
-            celestialReality(Laitela, "Lai'tela's"),
-            {
-              name: () => "Time Dilation",
-              isActive: token => token,
-              activityToken: () => player.dilation.active
-            },
-            {
-              name: token => `${NormalChallenge(token).config.name} Challenge`,
-              isActive: token => token > 0,
-              activityToken: () => player.challenge.normal.current
-            },
-            {
-              name: token => `Infinity Challenge ${token}`,
-              isActive: token => token > 0,
-              activityToken: () => player.challenge.infinity.current
-            },
-            {
-              name: token => `Eternity Challenge ${token}`,
-              isActive: token => token > 0,
-              activityToken: () => player.challenge.eternity.current
-            },
-          ];
-        },
-        activeChallengeNames() {
-          const names = [];
-          for (let i = 0; i < this.activityTokens.length; i++) {
-            const token = this.activityTokens[i];
-            const part = this.parts[i];
-            if (!part.isActive(token)) continue;
-            if (part.name(token).includes("Eternity Challenge")) {
-              const currEC = player.challenge.eternity.current;
-              const nextCompletion = EternityChallenge(currEC).completions + 1;
-              let completionText = "";
-              if (Enslaved.isRunning && currEC === 1) {
-                completionText = `(${nextCompletion}/???)`;
-              } else if (nextCompletion === 6) {
-                completionText = `(already completed)`;
-              } else {
-                completionText = `(${nextCompletion}/${formatInt(5)})`;
-              }
-              names.push(`${part.name(token)} ${completionText}`);
-            } else {
-              names.push(part.name(token));
-            }
-          }
-          return names;
-        },
-        isVisible() {
-          return this.infinityUnlocked || this.activeChallengeNames.length > 0;
-        },
-        isInFailableEC() {
-          return this.activeChallengeNames.some(str => str.match(/Eternity Challenge (4|12).*/gu));
-        },
-        challengeDisplay() {
-          if (this.activeChallengeNames.length === 0) {
-            return "the Antimatter Universe (no active challenges)";
-          }
-          return this.activeChallengeNames.join(" + ");
-        }
-      },
-      methods: {
-        update() {
-          this.infinityUnlocked = PlayerProgress.infinityUnlocked();
-          this.activityTokens = this.parts.map(part => part.activityToken());
-        }
-      },
-      template: `
-        <div v-if="isVisible">
-          You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
-        </div>
-      `
-    }
-  },
   data() {
     return {
       isInMatterChallenge: false,
@@ -138,28 +40,30 @@ Vue.component("game-header", {
       this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
     }
   },
-  template:
-    `<div>
-      <challenge-display />
+  template: `
+    <div>
+      <header-challenge-display />
       <div v-if="isInEffarig">
-        Gamespeed and multipliers are Dilated {{effarigMultNerfText}}
+        Gamespeed and multipliers are Dilated {{ effarigMultNerfText }}
         <br>
-        Tickspeed is Dilated {{effarigTickNerfText}}
+        Tickspeed is Dilated {{ effarigTickNerfText }}
       </div>
       <div v-if="isInLaitela">
         Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
       </div>
-      <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
+      <div v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</div>
       <game-header-amounts-line />
       <div>
-        <p>You have <span class="c-game-header__antimatter">{{format(antimatter, 2, 1)}}</span> antimatter.</p>
+        <p>
+          You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.
+        </p>
       </div>
       <div class="l-game-header__buttons-line">
         <game-header-big-crunch-button />
         <game-header-new-dim-button />
         <game-header-eternity-button />
       </div>
-      <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
+      <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
       <game-header-tickspeed-row />
       <black-hole-header-row />
     </div>`

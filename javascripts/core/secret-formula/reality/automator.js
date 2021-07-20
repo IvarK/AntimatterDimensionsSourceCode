@@ -4,6 +4,7 @@ GameDatabase.reality.automator = {
   commands: [
     {
       id: 0,
+      isUnlocked: () => true,
       keyword: "wait",
       name: "<b>wait</b> - wait for something",
       syntax: "<b>wait</b> condition",
@@ -52,6 +53,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 1,
+      isUnlocked: () => true,
       keyword: "start",
       name: "<b>start</b> - start Eternity Challenge (this also unlocks said EC) or Time Dilation",
       syntax: "<b>start</b> [ec<i>X</i>|dilation]",
@@ -62,6 +64,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 2,
+      isUnlocked: () => true,
       keyword: "infinity / eternity / reality",
       name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
       syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [respec] [nowait]</b>,<br> <b>reality [respec] [nowait]</b>",
@@ -93,6 +96,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 3,
+      isUnlocked: () => true,
       keyword: "tt",
       name: "<b>tt</b> - purchases Time Theorems with a resource or buys the maximum possible",
       syntax:
@@ -120,6 +124,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 4,
+      isUnlocked: () => BlackHole(1).isUnlocked,
       keyword: "black hole",
       name: "<b>black hole</b> - turns the Black Hole on and off",
       syntax: "<b>black hole</b> on/off",
@@ -130,6 +135,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 5,
+      isUnlocked: () => Enslaved.isUnlocked,
       keyword: "store time",
       name: "<b>store time</b> - either turns on/off the storing of time or can be used to use stored time",
       syntax: "<b>store time</b> action",
@@ -155,6 +161,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 6,
+      isUnlocked: () => true,
       keyword: "unlock",
       name: "<b>unlock</b> - can be used to unlock certain features",
       syntax: "<b>unlock</b> feature",
@@ -165,6 +172,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 7,
+      isUnlocked: () => true,
       keyword: "auto",
       name: "<b>auto</b> - turn Infinity/Eternity/Reality autobuyers on or off and change their modes",
       syntax: "<b>auto</b> [infinity|eternity|reality] [setting]",
@@ -205,6 +213,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 8,
+      isUnlocked: () => true,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
       syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions] (comparison) [number]",
@@ -217,6 +226,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 9,
+      isUnlocked: () => true,
       keyword: "pause",
       name: "<b>pause</b> - pauses the automator for a set amount of time",
       syntax: "<b>pause</b> [interval]",
@@ -230,12 +240,12 @@ GameDatabase.reality.automator = {
           name: "OTHER",
           items: [
             {
-            header: "<b>Undesirable effects</b>",
-            description: `This command may behave undesirably when it runs during` +
-            `offline progress due to limited tick count. A 1-second pause that` +
-            `is usually 20-30 ticks might be only 1 game tick when processing` +
-             `8 hours of offline progress, which might not be enough for the` +
-             `resources needed for the next line of the script`,
+              header: "<b>Undesirable effects</b>",
+              description: `This command may behave undesirably when it runs during` +
+              `offline progress due to limited tick count. A 1-second pause that` +
+              `is usually 20-30 ticks might be only 1 game tick when processing` +
+              `8 hours of offline progress, which might not be enough for the` +
+              `resources needed for the next line of the script`,
             },
             {
               header: "<b>Alternatives</b>",
@@ -247,6 +257,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 10,
+      isUnlocked: () => true,
       keyword: "until",
       name: "<b>until</b> - repeats commands until a condition or event",
       syntax: `<b>until</b> [condition | event] {<br>
@@ -269,6 +280,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 11,
+      isUnlocked: () => true,
       keyword: "while",
       name: "<b>while</b> - repeats commands while a condition is met",
       syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
@@ -291,6 +303,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 12,
+      isUnlocked: () => true,
       keyword: "studies respec",
       name: "<b>studies respec</b> - respec Time Studies on next Eternity",
       syntax: `<b>studies respec</b>`,
@@ -300,6 +313,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 13,
+      isUnlocked: () => true,
       keyword: "studies load preset",
       name: "<b>studies load preset</b> - Load a saved Time Study preset",
       syntax: `<b>studies load preset [name | number]</b>`,
@@ -312,6 +326,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 14,
+      isUnlocked: () => true,
       keyword: "studies",
       name: "<b>studies</b> - Purchase Time Studies",
       syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
@@ -333,6 +348,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 15,
+      isUnlocked: () => true,
       keyword: "define",
       name: "<b>define</b> - defining constants",
       syntax: `<b>define [constant_name] = [constant]</b>`,
@@ -344,6 +360,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 16,
+      isUnlocked: () => true,
       keyword: "currencies",
       name: "List of <b>currencies</b>",
       syntax: "You can use these in any if, while, until, or wait command.",

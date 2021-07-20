@@ -12,6 +12,39 @@ Vue.component("modal-enslaved-hints", {
       hints: 0,
     };
   },
+  computed: {
+    hintCost() {
+      return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)} years`;
+    },
+    hasProgress(id) {
+      return this.progressEntries.some(entry => entry.id === id);
+    },
+    // Note: This calculation seems to behave extremely poorly if the goal has been raised more than 12 hints worth
+    // of cost bumps and I'm not entirely sure why. There's probably a numerical issue I can't quite figure out, but
+    // considering that much cost raising can't happen in practice I think I'm just going to leave it be.
+    timeEstimate() {
+      if (this.currentStored >= this.nextHintCost) return "";
+
+      // Relevant values are stored as milliseconds, so multiply the rate by 1000 to get to seconds
+      const storeRate = 1000 * (Enslaved.isStoringGameTime
+        ? Enslaved.currentBlackHoleStoreAmountPerMs
+        : getGameSpeedupFactor());
+      const alreadyWaited = this.currentStored / storeRate;
+      const decaylessTime = this.nextHintCost / storeRate;
+
+      // Check if decay is irrelevant and don't do the hard calculations if so
+      const minCostEstimate = (TimeSpan.fromYears(1e40).totalMilliseconds - this.currentStored) / storeRate;
+      if (TimeSpan.fromSeconds(minCostEstimate).totalDays > this.hints) {
+        return `${TimeSpan.fromSeconds(minCostEstimate).toStringShort(true)}`;
+      }
+
+      // Decay is 3x per day, but the math needs decay per second
+      const K = Math.pow(3, 1 / 86400);
+      const x = decaylessTime * Math.log(K) * Math.pow(K, alreadyWaited);
+      const timeToGoal = productLog(x) / Math.log(K) - alreadyWaited;
+      return `${TimeSpan.fromSeconds(timeToGoal).toStringShort(true)}`;
+    }
+  },
   methods: {
     update() {
       this.currentStored = player.celestials.enslaved.stored;
@@ -46,84 +79,54 @@ Vue.component("modal-enslaved-hints", {
       player.celestials.enslaved.glyphHintsGiven++;
     }
   },
-  computed: {
-    hintCost() {
-      return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)} years`;
-    },
-    hasProgress(id) {
-      return this.progressEntries.some(entry => entry.id === id);
-    },
-    // Note: This calculation seems to behave extremely poorly if the goal has been raised more than 12 hints worth
-    // of cost bumps and I'm not entirely sure why. There's probably a numerical issue I can't quite figure out, but
-    // considering that much cost raising can't happen in practice I think I'm just going to leave it be.
-    timeEstimate() {
-      if (this.currentStored >= this.nextHintCost) return "";
-
-      // Relevant values are stored as milliseconds, so multiply the rate by 1000 to get to seconds
-      const storeRate = 1000 * (Enslaved.isStoringGameTime
-        ? Enslaved.currentBlackHoleStoreAmountPerMs
-        : getGameSpeedupFactor());
-      const alreadyWaited = this.currentStored / storeRate;
-      const decaylessTime = this.nextHintCost / storeRate;
-
-      // Check if decay is irrelevant and don't do the hard calculations if so
-      const minCostEstimate = (TimeSpan.fromYears(1e40).totalMilliseconds - this.currentStored) / storeRate;
-      if (TimeSpan.fromSeconds(minCostEstimate).totalDays > this.hints) {
-        return `${TimeSpan.fromSeconds(minCostEstimate).toStringShort(true)}`;
-      }
-
-      // Decay is 3x per day, but the math needs decay per second
-      const K = Math.pow(3, 1 / 86400);
-      const x = decaylessTime * Math.log(K) * Math.pow(K, alreadyWaited);
-      const timeToGoal = productLog(x) / Math.log(K) - alreadyWaited;
-      return `${TimeSpan.fromSeconds(timeToGoal).toStringShort(true)}`;
-    }
-  },
   template: `
     <div class="c-reality-glyph-creation">
-      <modal-close-button @click="emitClose"/>
+      <modal-close-button @click="emitClose" />
       <div>
         This Reality seems to be resisting your efforts to complete it. So far you have done the following:
-      </div><br>
+      </div>
+      <br>
       <div v-for="entry in shownEntries">
-          <div v-if="entry[0]">
-            <b>{{ entry[0] }}</b>
-            <br>
-            - {{ entry[1] }}
-          </div>
-          <div v-else>
-            * <i>Glyph hint: {{ entry[1] }}</i>
-          </div>
+        <div v-if="entry[0]">
+          <b>{{ entry[0] }}</b>
           <br>
-        </div>
-        <div v-if="realityHintsLeft + glyphHintsLeft > 0">
-          You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
-          will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
-          gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
-          divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
-          <br>
-          <br>
-          The next hint will cost {{ hintCost }} Stored Time.
-          <span v-if="currentStored < nextHintCost">
-            You will reach this if you charge your Black Hole for {{ timeEstimate }}.
-          </span>
-          <br>
-          <br>
-          <button class="o-primary-btn"
-            :class="{ 'o-primary-btn--disabled': realityHintsLeft <= 0 || !canGetHint }"
-            v-on:click="giveRealityHint(realityHintsLeft)">
-              Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
-          </button>
-          <br>
-          <button class="o-primary-btn"
-            :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
-            v-on:click="giveGlyphHint(glyphHintsLeft)">
-              Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
-          </button>
+          - {{ entry[1] }}
         </div>
         <div v-else>
-          There are no more hints left!
+          * <i>Glyph hint: {{ entry[1] }}</i>
         </div>
+        <br>
+      </div>
+      <div v-if="realityHintsLeft + glyphHintsLeft > 0">
+        You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
+        will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+        gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
+        divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
+        <br><br>
+        The next hint will cost {{ hintCost }} Stored Time.
+        <span v-if="currentStored < nextHintCost">
+          You will reach this if you charge your Black Hole for {{ timeEstimate }}.
+        </span>
+        <br><br>
+        <button
+          class="o-primary-btn"
+          :class="{ 'o-primary-btn--disabled': realityHintsLeft <= 0 || !canGetHint }"
+          v-on:click="giveRealityHint(realityHintsLeft)"
+        >
+          Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
+        </button>
+        <br>
+        <button
+          class="o-primary-btn"
+          :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
+          v-on:click="giveGlyphHint(glyphHintsLeft)"
+        >
+          Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+        </button>
+      </div>
+      <div v-else>
+        There are no more hints left!
+      </div>
     </div>`,
 });
 
@@ -146,8 +149,13 @@ Vue.component("enslaved-tab", {
     buyableUnlocks: [],
     quote: "",
     currentSpeedUp: 0,
-    hintsUnlocked: false
+    hintsUnlocked: false,
   }),
+  watch: {
+    autoRelease(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
+  },
   computed: {
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
@@ -184,12 +192,10 @@ Vue.component("enslaved-tab", {
         "c-enslaved-run-button__icon": true,
         "c-enslaved-run-button__icon--running": this.isRunning,
       };
-    }
-  },
-  watch: {
-    autoRelease(newValue) {
-      player.celestials.enslaved.isAutoReleasing = newValue;
-    }
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[2].description().split("\n");
+    },
   },
   methods: {
     update() {
@@ -234,10 +240,7 @@ Vue.component("enslaved-tab", {
       Enslaved.buyUnlock(info);
     },
     startRun() {
-      // This needs to be added here before the reset so that TD autobuyers don't buy too much on start
-      player.celestials.enslaved.run = true;
-      if (!resetReality()) return;
-      Enslaved.initializeRun();
+      Modal.celestials.show({ name: "The Enslaved Ones'", number: 2 });
     },
     hasUnlock(info) {
       return Enslaved.has(info);
@@ -283,80 +286,95 @@ Vue.component("enslaved-tab", {
         <div class="l-enslaved-run-container">
           <div v-if="hasUnlock(unlocksInfo.RUN)">
             <div class="c-enslaved-run-button">
-              <div class="c-enslaved-run-button__title">{{realityTitle}}</div>
+              <div class="c-enslaved-run-button__title">{{ realityTitle }}</div>
               <div v-if="completed"><b>(Completed)</b></div>
               <div :class="runButtonClassObject" @click="startRun">
-                <div class="c-enslaved-run-button__icon__sigil fas fa-link" />
-                <div v-if="isRunning" v-for="x in 25" class="c-enslaved-run-button__icon__glitch"
-                                    :style="glitchStyle(x)"/>
+                <div class="c-enslaved-run-button__icon__sigil fas fa-link"></div>
+                <div
+                  v-if="isRunning"
+                  v-for="x in 25"
+                  class="c-enslaved-run-button__icon__glitch"
+                  :style="glitchStyle(x)"
+                ></div>
               </div>
-              <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
-              <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
-              <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
-                applies in actual Dilation)</p>
-              <p>Time Study 192 (uncapped Replicanti) is locked</p>
-              <p>The Black Hole is disabled</p>
-              <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from Dilation Glyphs is disabled</p>
-              <p>Certain challenge goals have been increased</p>
-              <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
+              <div v-for="line in runDescription">
+                {{ line }}
+              </div>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>
             </div>
           </div>
         </div>
         <div class="l-enslaved-upgrades-column">
-          <celestial-quote-history celestial="enslaved"/>
+          <celestial-quote-history celestial="enslaved" />
           <primary-button
             v-if="hintsUnlocked"
             class="o-primary-btn"
-            onclick="Modal.enslavedHints.show()">
-              Examine the Reality more closely...
+            onclick="Modal.enslavedHints.show()"
+          >
+            Examine the Reality more closely...
           </primary-button>
           <div class="l-enslaved-top-container">
             <div class="l-enslaved-top-container__half">
               While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
               and the lost speed is converted into Stored Time. Discharging the Black Hole allows you to skip
               forward in time. Stored Time is also used to unlock certain upgrades.
-              <button :class="['o-enslaved-mechanic-button',
-                              {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
-                      @click="toggleStoreBlackHole">
-                <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
-                <div>{{ isStoringBlackHole ? "Charging Black Hole": "Charge Black Hole" }}</div>
+              <button
+                :class="['o-enslaved-mechanic-button',
+                  {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
+                @click="toggleStoreBlackHole"
+              >
+                <div class="o-enslaved-stored-time">
+                  {{ timeDisplayShort(storedBlackHole) }}
+                </div>
+                <div>
+                  {{ isStoringBlackHole ? "Charging Black Hole": "Charge Black Hole" }}
+                </div>
               </button>
               <button class="o-enslaved-mechanic-button" @click="useStored">
                 Discharge Black Hole
-                <p v-if="isRunning">{{timeDisplayShort(nerfedBlackHoleTime)}} in this Reality</p>
+                <p v-if="isRunning">{{ timeDisplayShort(nerfedBlackHoleTime) }} in this Reality</p>
               </button>
             </div>
             <div class="l-enslaved-top-container__half">
               Storing real time completely halts all production, setting game speed to {{ formatInt(0) }}.
               You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
               Amplified Realities give all the rewards that normal Realities do.
-              <button :class="['o-enslaved-mechanic-button',
-                              {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
-                      @click="toggleStoreReal">
-                <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedReal) }}</div>
-                <div>{{ isStoringReal ? "Storing real time": "Store real time" }}</div>
+              <button
+                :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
+                @click="toggleStoreReal"
+              >
+                <div class="o-enslaved-stored-time">
+                  {{ timeDisplayShort(storedReal) }}
+                </div>
+                <div>
+                  {{ isStoringReal ? "Storing real time": "Store real time" }}
+                </div>
               </button>
-              <button :class="['o-enslaved-mechanic-button',
-                              {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
-                      @click="toggleAutoStoreReal">
-                <div>{{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}</div>
+              <button
+                :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
+                @click="toggleAutoStoreReal"
+              >
+                <div>
+                  {{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}
+                </div>
               </button>
-              <div> Efficiency: {{ storedRealEfficiencyDesc }} </div>
-              <div> Maximum stored real time: {{ storedRealCapDesc }} </div>
+              <div>
+                Efficiency: {{ storedRealEfficiencyDesc }}
+              </div>
+              <div>
+                Maximum stored real time: {{ storedRealCapDesc }}
+              </div>
             </div>
           </div>
           <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
             Black Hole charging rate: {{ storedTimeRate }}
-            <br>
-            <br>
+            <br><br>
             <ad-slider-component
-                v-bind="sliderProps"
-                :value="storedFraction"
-                @input="adjustSlider($event)"
-              />
+              v-bind="sliderProps"
+              :value="storedFraction"
+              @input="adjustSlider($event)"
+            />
           </div>
           <br>
           <div class="l-enslaved-shop-container">
@@ -365,14 +383,15 @@ Vue.component("enslaved-tab", {
               :key="unlock.id"
               class="o-enslaved-shop-button"
               :class="unlockClassObject(unlock)"
-              @click="buyUnlock(unlock)"> 
-                {{ unlock.description() }}
-                <div v-if="!hasUnlock(unlock)">
-                  Costs: {{ timeDisplayShort(unlock.price) }}
-                </div>
-                <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
-                  Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
-                </span>
+              @click="buyUnlock(unlock)"
+            >
+              {{ unlock.description() }}
+              <div v-if="!hasUnlock(unlock)">
+                Costs: {{ timeDisplayShort(unlock.price) }}
+              </div>
+              <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
+                Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
+              </span>
             </button>
           </div>
         </div>

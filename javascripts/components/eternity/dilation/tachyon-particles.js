@@ -97,7 +97,7 @@ Vue.component("tachyon-particle", {
           y: Math.sin(azimuth)
         };
       }
-
+      // eslint-disable-next-line max-params
       function intersect(rayStart, rayUnit, rectAA, rectBB) {
         const dirfrac = {
           x: 1 / rayUnit.x,

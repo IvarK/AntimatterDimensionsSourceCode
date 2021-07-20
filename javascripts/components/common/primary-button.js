@@ -7,10 +7,6 @@ Vue.component("primary-button", {
       default: true
     }
   },
-  template:
-    `<button :class="classObject" v-on="$listeners">
-      <slot/>
-    </button>`,
   computed: {
     classObject() {
       return {
@@ -18,7 +14,11 @@ Vue.component("primary-button", {
         "o-primary-btn--disabled": !this.enabled,
       };
     }
-  }
+  },
+  template: `
+    <button :class="classObject" v-on="$listeners">
+      <slot/>
+    </button>`
 });
 
 Vue.component("primary-button-on-off-custom", {
@@ -28,7 +28,7 @@ Vue.component("primary-button-on-off-custom", {
     value: Boolean
   },
   template:
-    '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</primary-button>'
+    `<primary-button v-bind="$attrs" @click="emitInput(!value)">{{ value ? on : off }}</primary-button>`
 });
 
 Vue.component("primary-button-on-off", {
@@ -36,13 +36,13 @@ Vue.component("primary-button-on-off", {
     text: String,
     value: Boolean
   },
-  template:
-    '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</primary-button>',
   computed: {
     displayText() {
       return `${this.text} ${this.value ? "ON" : "OFF"}`.trim();
     }
-  }
+  },
+  template:
+    `<primary-button v-bind="$attrs" @click="emitInput(!value)">{{ displayText }}</primary-button>`
 });
 
 Vue.component("primary-button-cycle", {
@@ -51,11 +51,11 @@ Vue.component("primary-button-cycle", {
     labels: Array,
     value: Number
   },
-  template:
-    '<primary-button v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{displayText}}</primary-button>',
   computed: {
     displayText() {
       return `${this.text} ${this.labels[this.value]}`.trim();
     }
-  }
+  },
+  template:
+    `<primary-button v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{ displayText }}</primary-button>`
 });

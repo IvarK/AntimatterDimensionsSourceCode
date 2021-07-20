@@ -62,7 +62,7 @@ class AchievementState extends GameMechanicState {
     if (auto) {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
-      GameUI.notify.success(this.name);
+      GameUI.notify.success(`Achievement: ${this.name}`);
     }
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);

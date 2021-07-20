@@ -15,7 +15,6 @@ NormalTimeStudies.pathList = [
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
 
-
 function unlockDilation(quiet) {
   if (!quiet) {
     Tab.eternity.dilation.show();
@@ -90,7 +89,12 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    return;
+    if (TimeStudy.preferredPaths.dimensionPath.path.length === 0) {
+      GameUI.notify.error("You haven't selected a preferred dimension path!");
+      return;
+    }
+    // If we have a preferred path setup we should buy that one
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
   } else {
     // We buy the requested path first
     buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
@@ -104,12 +108,18 @@ function studiesUntil(id) {
   if (id >= 111) TimeStudy(111).purchase();
 
   if (id < 121) return;
-  const pacePaths = getSelectedPacePaths();
   if (id < 151) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
+  } else if (TimeStudy.preferredPaths.pacePath.path) {
+    // If we have a preferred path setup we should buy that one
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.pacePath.studies, id);
+  } else if (!(TimeStudy(141).isBought || TimeStudy(142).isBought || TimeStudy(143).isBought)) {
+    // If we have already purchased one or more of the final pace paths, do not display the unselected error message.
+    GameUI.notify.error("You haven't selected a preferred pace path!");
   }
 
+  const pacePaths = getSelectedPacePaths();
   if (pacePaths.length === 1) {
     // We've chosen a path already
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
@@ -125,8 +135,15 @@ function studiesUntil(id) {
   }
 
   // Attempt to buy things below the pace split, up to the requested study
+  // First we buy up to 201 so we can buy the the second preferred path if needed
   if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
-  buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
+  buyTimeStudyRange(151, Math.min(id, 201));
+
+  // If we have study 201 we should try and buy our second preferred path, granted we have one selected
+  if (TimeStudy(201).isBought && TimeStudy.preferredPaths.dimensionPath.path.length === 2)
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
+
+  buyTimeStudyRange(151, Math.min(id, Math.min(lastInPrevRow, 214)));
   study.purchase();
 
   // Don't bother buying any more studies beyond row 22 unless the player has fully finished V,
@@ -302,6 +319,30 @@ function TimeStudy(id) {
  */
 TimeStudy.boughtNormalTS = function() {
   return player.timestudy.studies.map(id => TimeStudy(id));
+};
+
+TimeStudy.preferredPaths = {
+  get dimensionPath() {
+    return {
+      path: player.timestudy.preferredPaths[0],
+      studies: player.timestudy.preferredPaths[0].reduce((acc, path) =>
+        acc.concat(NormalTimeStudies.paths[path]), [])
+    };
+  },
+  set dimensionPath(value) {
+    const options = [1, 2, 3];
+    player.timestudy.preferredPaths[0] = value.filter(id => options.includes(id));
+  },
+  get pacePath() {
+    return {
+      path: player.timestudy.preferredPaths[1],
+      studies: NormalTimeStudies.paths[player.timestudy.preferredPaths[1]]
+    };
+  },
+  set pacePath(value) {
+    const options = [4, 5, 6];
+    player.timestudy.preferredPaths[1] = options.includes(value) ? value : 0;
+  }
 };
 
 class ECTimeStudyState extends TimeStudyState {

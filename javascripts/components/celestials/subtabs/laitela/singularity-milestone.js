@@ -14,19 +14,6 @@ Vue.component("singularity-milestone", {
     completions: 0,
     limit: 0
   }),
-  methods: {
-    update() {
-      this.isMaxed = this.milestone.isMaxed;
-      this.progressToNext = this.milestone.progressToNext;
-      this.remainingSingularities = this.milestone.remainingSingularities;
-      this.description = this.milestone.description;
-      this.effectDisplay = this.milestone.effectDisplay;
-      this.isUnique = this.milestone.isUnique;
-      if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
-      this.completions = this.milestone.completions;
-      this.limit = this.milestone.limit;
-    },
-  },
   computed: {
     barProgressStyle() {
       let color;
@@ -64,14 +51,10 @@ Vue.component("singularity-milestone", {
     },
     upgradeDirectionIcon() {
       switch (this.milestone.config.upgradeDirection) {
-        case LAITELA_UPGRADE_DIRECTION.SELF_BOOST:
-          return `<b>ᛝ</b>`;
-        case LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN:
-          return `<i class="fas fa-arrows-alt"></i>`;
-        case LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA:
-          return `<i class="fas fa-compress-arrows-alt"></i>`;
-        default:
-          throw new Error("Unspecified Lai'tela upgrade direction in singularity milestone");
+        case LAITELA_UPGRADE_DIRECTION.SELF_BOOST: return `<b>ᛝ</b>`;
+        case LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN: return `<i class="fas fa-arrows-alt"></i>`;
+        case LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA: return `<i class="fas fa-compress-arrows-alt"></i>`;
+        default: throw new Error("Unspecified Lai'tela upgrade direction in singularity milestone");
       }
     },
     completionsDisplay() {
@@ -80,24 +63,39 @@ Vue.component("singularity-milestone", {
       return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
     }
   },
+  methods: {
+    update() {
+      this.isMaxed = this.milestone.isMaxed;
+      this.progressToNext = this.milestone.progressToNext;
+      this.remainingSingularities = this.milestone.remainingSingularities;
+      this.description = this.milestone.description;
+      this.effectDisplay = this.milestone.effectDisplay;
+      this.isUnique = this.milestone.isUnique;
+      if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
+      this.completions = this.milestone.completions;
+      this.limit = this.milestone.limit;
+    },
+  },
   template: `
     <div class="c-laitela-milestone"
       :class="{ 'c-laitela-milestone--completed': isUnique && isMaxed }"
-      :style="[backgroundStyle, newGlowStyle]">
-        <div class="c-laitela-milestone__progress" :style="barProgressStyle"/>
-        <b v-if="!isMaxed">
-          In {{ format(remainingSingularities, 2, 0) }}
-          {{ "Singularity" | pluralize(remainingSingularities, "Singularities")}}
-        </b>
-        <p> <span v-html="upgradeDirectionIcon"/> {{ description }}</p>
-        <br>
-        <b>
-          {{ effectDisplay }}
-          <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
-        </b>
-        <div class="c-laitela-milestone__completions">
-          {{ completionsDisplay }}
-        </div>
-    </div>
-    `
+      :style="[backgroundStyle, newGlowStyle]"
+    >
+      <div class="c-laitela-milestone__progress" :style="barProgressStyle" />
+      <b v-if="!isMaxed">
+        In {{ format(remainingSingularities, 2, 0) }}
+        {{ "Singularity" | pluralize(remainingSingularities, "Singularities") }}
+      </b>
+      <p>
+        <span v-html="upgradeDirectionIcon" /> {{ description }}
+      </p>
+      <br>
+      <b>
+        {{ effectDisplay }}
+        <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
+      </b>
+      <div class="c-laitela-milestone__completions">
+        {{ completionsDisplay }}
+      </div>
+    </div>`
 });

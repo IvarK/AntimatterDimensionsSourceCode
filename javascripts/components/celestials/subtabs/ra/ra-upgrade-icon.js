@@ -39,11 +39,12 @@ Vue.component("ra-upgrade-icon", {
     <div :class="classObject">
       <div v-html="icon" style="font-weight: bold;"></div>
       <div class="c-ra-pet-upgrade__tooltip">
-        <div class="c-ra-pet-upgrade__tooltip__name">{{ petName }} Level {{ formatInt(level) }}</div>
+        <div class="c-ra-pet-upgrade__tooltip__name">
+          {{ petName }} Level {{ formatInt(level) }}
+        </div>
         <div class="c-ra-pet-upgrade__tooltip__description">
           {{ description }}
         </div>
       </div>
-    </div>
-  `
+    </div>`
 });

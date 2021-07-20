@@ -21,8 +21,9 @@ Vue.component("new-dim-boost-row", {
       const boosts = this.purchasedBoosts;
 
       let newUnlock = "";
-      if (boosts < DimBoost.maxDimensionsUnlockable - 4) newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+      if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
+        newUnlock = `unlock the ${boosts + 5}th Dimension`;
+      } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
         newUnlock = "unlock Sacrifice";
       }
 
@@ -70,16 +71,18 @@ Vue.component("new-dim-boost-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
-  template:
-  `<div class="reset-container dimboost">
-    <h4>Dimension Boost ({{boostCountText}})</h4>
-    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
-    <button
-      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
-      :enabled="isBuyable"
-      @click.exact="dimensionBoost(true)"
-      @click.shift.exact="dimensionBoost(false)"
-      >{{buttonText}}</button>
-  </div>`
+  template: `
+    <div class="reset-container dimboost">
+      <h4>Dimension Boost ({{ boostCountText }})</h4>
+      <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
+      <button
+        class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
+        :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
+        :enabled="isBuyable"
+        @click.exact="dimensionBoost(true)"
+        @click.shift.exact="dimensionBoost(false)"
+      >
+        {{ buttonText }}
+      </button>
+    </div>`
 });

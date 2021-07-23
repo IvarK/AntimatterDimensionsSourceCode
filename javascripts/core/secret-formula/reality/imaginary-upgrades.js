@@ -52,7 +52,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       effect: 0.6
     }),
     rebuyable({
-      name: "?????",
+      name: "Elliptic Materiality",
       id: 6,
       initialCost: 1e4,
       costMult: 500,
@@ -62,7 +62,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       isDecimal: true
     }),
     rebuyable({
-      name: "?????",
+      name: "Runic Assurance",
       id: 7,
       initialCost: 2e5,
       costMult: 500,
@@ -71,7 +71,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `+${formatInt(value)}`
     }),
     rebuyable({
-      name: "?????",
+      name: "Hyperbolic Apeirogon",
       id: 8,
       initialCost: 1e7,
       costMult: 800,
@@ -81,7 +81,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       isDecimal: true
     }),
     rebuyable({
-      name: "?????",
+      name: "Cosmic Filament",
       id: 9,
       initialCost: 1e9,
       costMult: 1000,
@@ -90,7 +90,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `+${formatPercents(value)}`
     }),
     rebuyable({
-      name: "?????",
+      name: "Entropic Condensing",
       id: 10,
       initialCost: 8e9,
       costMult: 2000,
@@ -99,7 +99,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatX(1 + value, 2)}`,
     }),
     {
-      name: "?????",
+      name: "Suspicion of Interference",
       id: 11,
       cost: 5e5,
       requirement: () => `${format(1e91)} total Relic Shards
@@ -112,7 +112,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatPow(value, 0, 4)}`,
     },
     {
-      name: "?????",
+      name: "Consequences of Illusions",
       id: 12,
       cost: 5e7,
       requirement: () => `Make a level ${formatInt(9000)} Glyph with a single glyph weight at ${formatInt(100)}`,
@@ -125,7 +125,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${format(value, 1)}`,
     },
     {
-      name: "?????",
+      name: "Transience of Information",
       id: 13,
       cost: 5e7,
       requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected RM within The Enslaved Ones' Reality`,
@@ -137,7 +137,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
-      name: "?????",
+      name: "Recollection of Intrusion",
       id: 14,
       cost: 4e8,
       requirement: () => `Reach a tickspeed of ${format("1e10000000")} / sec without exceeding ${formatInt(100)}
@@ -150,7 +150,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       effect: 1.5
     },
     {
-      name: "?????",
+      name: "Fabrication of Ideals",
       id: 15,
       cost: 1e9,
       requirement: () => `Reach ${format("1e1500000000000")} antimatter without having any Infinity Dimensions`,
@@ -160,7 +160,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
     },
     {
-      name: "?????",
+      name: "Massless Momentum",
       id: 16,
       cost: 3.5e9,
       formatCost: x => format(x, 1),
@@ -171,7 +171,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       description: "Unlock the 2nd Dark Matter Dimension",
     },
     {
-      name: "?????",
+      name: "Chiral Oscillation",
       id: 17,
       cost: 6e9,
       requirement: () => `Automatically condense at least ${formatInt(20)} Singularities at once`,
@@ -182,7 +182,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       description: "Unlock the 3rd Dark Matter Dimension",
     },
     {
-      name: "?????",
+      name: "Dimensional Symmetry",
       id: 18,
       cost: 1.5e10,
       formatCost: x => format(x, 1),
@@ -194,7 +194,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       description: "Unlock the 4th Dark Matter Dimension",
     },
     {
-      name: "?????",
+      name: "Deterministic Radiation",
       id: 19,
       cost: 2.8e10,
       formatCost: x => format(x, 1),
@@ -207,7 +207,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       description: "Unlock Dark Matter Annihilation",
     },
     {
-      name: "?????",
+      name: "Vacuum Acceleration",
       id: 20,
       cost: 3e12,
       requirement: () => `Have a Continuum increase of at least ${formatPercents(1)}`,
@@ -219,7 +219,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       effect: 10,
     },
     {
-      name: "?????",
+      name: "Existential Elimination",
       id: 21,
       cost: 1e13,
       requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled`,
@@ -232,7 +232,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
-      name: "?????",
+      name: "Total Termination",
       id: 22,
       cost: 1.5e14,
       formatCost: x => format(x, 1),
@@ -247,7 +247,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       effect: 1e100,
     },
     {
-      name: "?????",
+      name: "Planar Purification",
       id: 23,
       cost: 6e14,
       requirement: () => `Reach glyph level ${formatInt(20000)} in Ra's Reality with
@@ -261,7 +261,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatX(value)}`,
     },
     {
-      name: "?????",
+      name: "Absolute Annulment",
       id: 24,
       cost: 6e14,
       requirement: () => `Have ${formatInt(13000)} Antimatter Galaxies in Ra's Reality
@@ -276,7 +276,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     },
     {
       // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet
-      name: "?????",
+      name: "Omnipresent Obliteration",
       id: 25,
       cost: 1.6e15,
       formatCost: x => format(x, 1),

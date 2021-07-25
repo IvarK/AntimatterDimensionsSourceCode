@@ -963,7 +963,7 @@ GameStorage.devMigrations = {
       // Delete PEC5 (id 64)
       if (player.reality.perks.has(64)) {
         player.reality.perks.delete(64);
-        Currency.realities.add(1);
+        Currency.perkPoints.add(1);
       }
 
       let reqBitmask = 0;
@@ -974,10 +974,18 @@ GameStorage.devMigrations = {
       player.reality.upgReqs = reqBitmask;
     },
     player => {
+      // Delete SAM2 (id 11)
+      if (player.reality.perks.has(11)) {
+        player.reality.perks.delete(11);
+        Currency.perkPoints.add(1);
+      }
+      if (player.reality.perks.has(10)) Perk.startAM.onPurchased();
+    },
+    player => {
       player.achievementChecks.maxStudiesThisReality = player.timestudy.studies.length;
       player.celestials.teresa.lastRepeatedMachines = new Decimal(player.celestials.teresa.lastRepeatedRM);
       delete player.celestials.teresa.lastRepeatedRM;
-    },
+    }
   ],
 
   patch(player) {

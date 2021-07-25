@@ -48,6 +48,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     }
     if (id === 10) {
       applyRUPG10();
+      playerInfinityUpgradesOnReset();
       EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT);
     }
     if (id === 20 && player.blackHole[0].unlocked) {

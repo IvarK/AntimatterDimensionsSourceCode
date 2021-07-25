@@ -101,17 +101,17 @@ const AutomatorLexer = (() => {
 
   createInCategory(AutomatorCurrency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithEP(true),
+    $buyTT: () => TimeTheorems.buyOne(true, "ep"),
     $getter: () => Currency.eternityPoints.value
   });
   createInCategory(AutomatorCurrency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithIP(true),
+    $buyTT: () => TimeTheorems.buyOne(true, "ip"),
     $getter: () => Currency.infinityPoints.value
   });
   createInCategory(AutomatorCurrency, "AM", /am/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithAntimatter(true),
+    $buyTT: () => TimeTheorems.buyOne(true, "am"),
     $getter: () => Currency.antimatter.value
   });
   createInCategory(AutomatorCurrency, "DT", /dt/i, { $getter: () => Currency.dilatedTime.value });

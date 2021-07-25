@@ -603,8 +603,9 @@ let player = {
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
     headerTextColored: false,
-    ignoreGlyphLevel: true,
-    ignoreGlyphRarity: true,
+    ignoreGlyphEffects: false,
+    ignoreGlyphLevel: false,
+    ignoreGlyphRarity: false,
     showCondenseToMilestone: false,
     showHintText: {
       achievements: false,

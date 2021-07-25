@@ -366,6 +366,7 @@ GameStorage.devMigrations = {
     player => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
+        // eslint-disable-next-line no-prototype-builtins
         if (!pets.hasOwnProperty(prop)) continue;
         const pet = pets[prop];
         const oldExp = pet.exp + 10000 * (Math.pow(1.12, pet.level - 1) - 1) / (0.12);
@@ -378,6 +379,7 @@ GameStorage.devMigrations = {
     player => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
+        // eslint-disable-next-line no-prototype-builtins
         if (!pets.hasOwnProperty(prop)) continue;
         const pet = pets[prop];
         let oldExp = pet.exp;
@@ -972,15 +974,9 @@ GameStorage.devMigrations = {
       player.reality.upgReqs = reqBitmask;
     },
     player => {
-      // TODO Clean this up before merge, a lot of this will be superfluous once the final data format is figured out
-      if (typeof player.reality.imaginaryMachines !== "number") {
-        player.reality.imaginaryMachines = 0;
-      }
-      player.reality.imaginaryUpgReqs = 0;
-      player.auto.imaginaryUpgrades = Array.range(0, 10).map(() => ({
-        isActive: false,
-      }));
       player.achievementChecks.maxStudiesThisReality = player.timestudy.studies.length;
+      player.celestials.teresa.lastRepeatedMachines = new Decimal(player.celestials.teresa.lastRepeatedRM);
+      delete player.celestials.teresa.lastRepeatedRM;
     },
   ],
 

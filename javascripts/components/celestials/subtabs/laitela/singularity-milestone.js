@@ -12,7 +12,9 @@ Vue.component("singularity-milestone", {
     nextEffectDisplay: "",
     start: 0,
     completions: 0,
-    limit: 0
+    limit: 0,
+    showingCondense: false,
+    singularitiesPerCondense: 0,
   }),
   computed: {
     barProgressStyle() {
@@ -58,9 +60,18 @@ Vue.component("singularity-milestone", {
       }
     },
     completionsDisplay() {
-      if (this.limit === Infinity) return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+      if (!Number.isFinite(this.limit)) {
+        return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+      }
       if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
       return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
+    },
+    progressDisplay() {
+      if (this.showingCondense) {
+        return `Condense ${format(this.remainingSingularities / this.singularitiesPerCondense, 2, 2)} times`;
+      }
+      return `In ${format(this.remainingSingularities, 2)} 
+        ${pluralize("Singularity", this.remainingSingularities, "Singularities")}`;
     }
   },
   methods: {
@@ -74,6 +85,8 @@ Vue.component("singularity-milestone", {
       if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
       this.completions = this.milestone.completions;
       this.limit = this.milestone.limit;
+      this.showingCondense = player.options.showCondenseToMilestone;
+      this.singularitiesPerCondense = Singularity.singularitiesGained;
     },
   },
   template: `
@@ -83,8 +96,7 @@ Vue.component("singularity-milestone", {
     >
       <div class="c-laitela-milestone__progress" :style="barProgressStyle" />
       <b v-if="!isMaxed">
-        In {{ format(remainingSingularities, 2, 0) }}
-        {{ "Singularity" | pluralize(remainingSingularities, "Singularities") }}
+        {{ progressDisplay }}
       </b>
       <p>
         <span v-html="upgradeDirectionIcon" /> {{ description }}

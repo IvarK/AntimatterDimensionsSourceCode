@@ -4,7 +4,15 @@ Vue.component("modal-set-save-delete", {
   props: {
     modalConfig: Object
   },
+  data() {
+    return {
+      glyphSet: []
+    };
+  },
   methods: {
+    update() {
+      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.modalConfig.glyphSetId]);
+    },
     handleNoClick() {
       this.emitClose();
     },
@@ -18,8 +26,15 @@ Vue.component("modal-set-save-delete", {
     <div class="c-modal-message l-modal-content--centered">
       <h2>Delete this Glyph Set</h2>
       <div class="c-modal-message__text">
-        Please confirm your desire to delete this Glyph Set.
-        This is permanent and irreversible.
+        Please confirm your desire to delete this Glyph Set:
+        <glyph-set-preview
+          :show=true
+          :isInModal="true"
+          :glyphs="glyphSet"
+        />
+        This will not affect your actual glyphs, only the saved preset.
+        <br>
+        This is permanent and irreversible. 
       </div>
       <div class="l-options-grid__row">
         <primary-button

@@ -23,6 +23,12 @@ Vue.component("infinity-dim-tab", {
       showExtraTesseracts: false,
     };
   },
+  computed: {
+    tesseractCountString() {
+      const extra = this.showExtraTesseracts ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
+      return `${formatInt(this.boughtTesseracts)}${extra}`;
+    },
+  },
   methods: {
     update() {
       this.isEC9Running = EternityChallenge(9).isRunning;
@@ -105,9 +111,8 @@ Vue.component("infinity-dim-tab", {
           :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
           @click="buyTesseract"
         >
-          <p>Buy a Tesseract
-            ({{ format(boughtTesseracts) }}
-            <span v-if="showExtraTesseracts"> + {{ format(extraTesseracts, 2, 2) }}</span>)
+          <p>
+            Buy a Tesseract ({{ tesseractCountString }})
           </p>
           <p>Increase Infinity Dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
           <p><b>Costs: {{ format(tesseractCost) }} IP</b></p>

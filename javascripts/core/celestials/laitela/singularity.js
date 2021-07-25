@@ -154,6 +154,8 @@ const SingularityMilestones = {
 const SingularityMilestoneThresholds = (function() {
   return Object.values(GameDatabase.celestials.singularityMilestones)
     .map(m => Array.range(0, Math.min(50, m.limit))
+      .filter(r => !m.increaseThreshold || r <= m.increaseThreshold ||
+        (r > m.increaseThreshold && ((r - m.increaseThreshold) % 3) === 2))
       .map(r => m.start * Math.pow(m.repeat, r)))
     .flat(Infinity)
     .filter(n => n < 1e100)
@@ -180,7 +182,7 @@ const Singularity = {
   },
 
   increaseCap() {
-    if (player.celestials.laitela.singularityCapIncreases >= 96) return;
+    if (player.celestials.laitela.singularityCapIncreases >= 50) return;
     player.celestials.laitela.singularityCapIncreases++;
   },
 
@@ -200,3 +202,10 @@ const Singularity = {
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
   }
 };
+
+EventHub.logic.on(GAME_EVENT.SINGULARITY_RESET_AFTER, () => {
+  const newMilestones = SingularityMilestones.unseenMilestones.length;
+  if (newMilestones === 0) return;
+  if (newMilestones === 1) GameUI.notify.blackHole(`You reached a Singularity milestone!`);
+  else GameUI.notify.blackHole(`You reached ${formatInt(newMilestones)} Singularity milestones!`);
+});

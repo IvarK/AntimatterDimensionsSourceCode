@@ -104,6 +104,8 @@ Vue.component("statistics-tab", {
             `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`],
           [true, Glyphs.copyForRecords(bestReality.iMCapSet),
             `Imaginary Machine Cap: ${format(player.reality.iMCap, 2, 2)} iM`],
+          [true, Glyphs.copyForRecords(bestReality.laitelaSet),
+            `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
         ];
 
       }

@@ -249,6 +249,7 @@ let player = {
       bestEPSet: [],
       speedSet: [],
       iMCapSet: [],
+      laitelaSet: [],
     },
   },
   achievementChecks: {
@@ -431,7 +432,7 @@ let player = {
       bestRunAM: new Decimal(1),
       bestAMSet: [],
       perkShop: Array.repeat(0, 5),
-      lastRepeatedRM: new Decimal(0)
+      lastRepeatedMachines: new Decimal(0)
     },
     effarig: {
       relicShards: 0,
@@ -604,6 +605,7 @@ let player = {
     headerTextColored: false,
     ignoreGlyphLevel: true,
     ignoreGlyphRarity: true,
+    showCondenseToMilestone: false,
     showHintText: {
       achievements: false,
       achievementUnlockStates: false,

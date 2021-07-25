@@ -7,6 +7,7 @@ Vue.component("glyph-set-preview", {
     glyphs: Array,
     noLevelOverride: Boolean,
     flipTooltip: Boolean,
+    isInModal: Boolean,
     showName: {
       type: Boolean,
       default: true,
@@ -46,6 +47,7 @@ Vue.component("glyph-set-preview", {
           :circular="true"
           :noLevelOverride="noLevelOverride"
           :flipTooltip="flipTooltip"
+          :isInModal="isInModal"
           size="2.8rem"
           :textProportion="0.6"
           glowBlur="0.2rem"

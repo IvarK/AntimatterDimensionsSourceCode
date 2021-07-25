@@ -95,6 +95,8 @@ Vue.component("singularity-container", {
       perStepFactor: 0,
       isAutoEnabled: false,
       hasAutoSingularity: false,
+      nextLowerStep: 0,
+      willCondenseOnDecrease: false,
     };
   },
   computed: {
@@ -131,6 +133,19 @@ Vue.component("singularity-container", {
     autoSingularityRate() {
       const totalTime = this.singularityCap / this.darkEnergyGainPerSecond * this.autoSingularityFactor;
       return this.formatRate(this.singularitiesGained / totalTime);
+    },
+    decreaseTooltip() {
+      if (this.singularityCapIncreases === 0) return "You cannot decrease the cap any further!";
+      const singularities = this.singularitiesGained / this.perStepFactor;
+      return this.willCondenseOnDecrease
+        ? `Decreasing the cap will immediately auto-condense for
+          ${format(singularities, 2)} ${pluralize("Singularity", singularities, "Singularities")}!`
+        : null;
+    },
+    increaseTooltip() {
+      return this.singularityCapIncreases >= 50
+        ? "You cannot increase the cap any further!"
+        : null;
     }
   },
   methods: {
@@ -149,6 +164,8 @@ Vue.component("singularity-container", {
       this.perStepFactor = Singularity.gainPerCapIncrease;
       this.isAutoEnabled = laitela.automation.singularity && SingularityMilestone.autoCondense.isUnlocked;
       this.hasAutoSingularity = Number.isFinite(this.autoSingularityFactor);
+      this.nextLowerStep = this.singularityCap * this.autoSingularityFactor / this.perStepFactor;
+      this.willCondenseOnDecrease = this.isAutoEnabled && this.darkEnergy > this.nextLowerStep;
     },
     doSingularity() {
       Singularity.perform();
@@ -190,10 +207,18 @@ Vue.component("singularity-container", {
           You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
         </div>
         <div v-if="unlockedBulkSingularity">
-          <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
+          <button
+            class="c-laitela-singularity__cap-control"
+            @click="decreaseCap"
+            :ach-tooltip="decreaseTooltip"
+          >
             Decrease Singularity cap.
           </button>
-          <button class="c-laitela-singularity__cap-control" @click="increaseCap">
+          <button
+            class="c-laitela-singularity__cap-control"
+            @click="increaseCap"
+            :ach-tooltip="increaseTooltip"
+          >
             Increase Singularity cap.
           </button>
           <br>
@@ -273,13 +298,23 @@ Vue.component("laitela-run-button", {
       <div :class="runButtonClassObject()" @click="startRun"></div>
       <div v-if="realityReward > 1">
         <b>
-          All Dark Matter multipliers are {{ formatX(realityReward, 2, 2) }} higher
+          All Dark Matter multipliers are {{ formatX(realityReward, 2, 2) }} higher.
         </b>
-        <br><br>
-        Fastest Completion: {{ completionTime }}
-        <br><br>
-        <span v-if="maxDimTier <= 7">
-          Highest active dimension: {{ formatInt(maxDimTier) }}
+        <span v-if="maxDimTier > 0">
+          <br><br>
+          Fastest Completion: {{ completionTime }}
+          <br><br>
+          <span v-if="maxDimTier <= 7">
+            Highest active dimension: {{ formatInt(maxDimTier) }}
+          </span>
+        </span>
+        <span v-else>
+          <br>
+          <b>
+            You also gain an additional {{ formatX(8) }} Dark Energy.
+          </b>
+          <br><br>
+          Laitela's Reality has been fully destabilized and cannot have its reward further improved.
         </span>
         <br><br>
       </div>
@@ -443,19 +478,27 @@ Vue.component("singularity-milestone-pane", {
     return {
       milestones: [],
       hasNew: false,
+      showingCondense: false,
     };
   },
   computed: {
     glowStyle() {
       if (this.hasNew) return { "box-shadow": "inset 0 0 1rem 0.5rem var(--color-celestials)" };
       return {};
+    },
+    milestoneMode() {
+      return this.showingCondense ? "Condense Count" : "Singularities";
     }
   },
   methods: {
     update() {
       this.milestones = SingularityMilestones.nextMilestoneGroup;
       this.hasNew = SingularityMilestones.unseenMilestones.length !== 0;
+      this.showingCondense = player.options.showCondenseToMilestone;
     },
+    toggleMilestoneMode() {
+      player.options.showCondenseToMilestone = !player.options.showCondenseToMilestone;
+    }
   },
   template: `
     <div class="c-laitela-next-milestones">
@@ -464,6 +507,11 @@ Vue.component("singularity-milestone-pane", {
         :style="glowStyle"
       >
         Show all milestones
+      </div>
+      <div class="o-laitela-singularity-modal-button"
+        @click="toggleMilestoneMode"
+      >
+        To Milestones: {{ milestoneMode }}
       </div>
       <singularity-milestone
         v-for="milestone in milestones"

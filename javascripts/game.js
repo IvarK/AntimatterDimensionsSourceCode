@@ -638,20 +638,58 @@ function laitelaRealityTick(realDiff) {
   if (laitelaInfo.entropy >= 1) {
     let completionText = `Lai'tela's Reality has been destabilized after ${Time.thisRealityRealTime.toStringShort()}.`;
     laitelaInfo.entropy = -1;
+    const oldInfo = {
+      fastestCompletion: laitelaInfo.fastestCompletion,
+      difficultyTier: laitelaInfo.difficultyTier,
+      realityReward: Laitela.realityReward
+    };
     laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
     laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
     clearCelestialRuns();
     if (Time.thisRealityRealTime.totalSeconds < 30) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
-      // This causes display oddities at 3 or lower but I don't expect the player to get that far legitimately (?)
-      completionText += `<br><br>Lai'tela's Reality will now disable production from all
-        ${Laitela.maxAllowedDimension + 1}th Dimensions during future runs, but the reward will be
-        ${formatInt(100)} times stronger than before.`;
+      const disabledDim = Laitela.maxAllowedDimension + 1;
+      switch (disabledDim) {
+        case 1:  
+          completionText += `<br><br>Lai'tela's Reality will now completely disable production from all Dimensions.
+            The Reality can still be entered, but further destabilization is no longer possible.
+            For completely destabilizing the Reality, you also get an additional ${formatX(8)} to Dark Energy gain.`;
+          break;
+        case 2:
+          completionText += `<br><br>Lai'tela's Reality will now disable production from all 2nd Dimensions during
+            future runs, but the reward will be ${formatInt(100)} times stronger than before.`;
+          break;
+        case 3:
+          completionText += `<br><br>Lai'tela's Reality will now disable production from all 3rd Dimensions during
+            future runs, but the reward will be ${formatInt(100)} times stronger than before.`;
+          break;
+        case 8:
+          completionText += `<br><br>Lai'tela's Reality will now disable production from all 8th Dimensions during
+            future runs, but the reward will be ${formatInt(100)} times stronger than before. This boost can be
+            repeated for each remaining Dimension by reaching destabilization within ${formatInt(30)} seconds again.`;
+          break;
+        default:
+          completionText += `<br><br>Lai'tela's Reality will now disable production from all
+            ${disabledDim}th Dimensions during future runs, but the reward will be
+            ${formatInt(100)} times stronger than before.`;
+          break;
+      }
+    }
+    if (Laitela.realityReward > oldInfo.realityReward) {
+      completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
+        ➜ ${formatX(Laitela.realityReward, 2, 2)}
+        <br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
+        (${formatInt(8 - oldInfo.difficultyTier)}) ➜
+        ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+        (${formatInt(8 - laitelaInfo.difficultyTier)})`;
+      player.records.bestReality.laitelaSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    } else {
+      completionText += ` You need to destabilize in faster than
+        ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
     Modal.message.show(completionText);
   }
-  if (laitelaInfo.entropy < 0) Currency.antimatter.dropTo(0);
 }
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously

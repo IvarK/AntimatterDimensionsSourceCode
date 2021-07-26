@@ -42,7 +42,7 @@ Vue.component("options-saving-tab", {
   },
   watch: {
     cloudEnabled(newValue) {
-      Enabled = newValue;
+      player.options.cloudEnabled = newValue;
     },
     autosaveInterval(newValue) {
       player.options.autosaveInterval = 1000 * newValue;

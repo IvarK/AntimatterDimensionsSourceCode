@@ -27,9 +27,13 @@ class MatterDimensionState {
     return player.celestials.laitela.dimensions[this._tier];
   }
 
-  get isUnlocked() {
+  get unlockUpgrade() {
     // 0-indexed, and the unlocks start at ID 16 to unlock 2nd DMD
-    return ImaginaryUpgrade(this._tier + 15).isBought;
+    return ImaginaryUpgrade(this._tier + 15);
+  }
+
+  get isUnlocked() {
+    return this.unlockUpgrade.isBought;
   }
 
   get ascensions() {

@@ -37,8 +37,16 @@ const Cloud = {
     };
     const firstInfo = getSaveInfo(first);
     const secondInfo = getSaveInfo(second);
-    if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
+    if (
+      firstInfo.realities === secondInfo.realities && 
+      firstInfo.eternities.eq(secondInfo.eternities) && 
+      firstInfo.infinitied.eq(secondInfo.infinitied)
+    ) {
       return undefined;
+    }
+
+    if (firstInfo.realities > secondInfo.realities) {
+      return first;
     }
 
     if (firstInfo.eternities.gt(secondInfo.eternities)) {

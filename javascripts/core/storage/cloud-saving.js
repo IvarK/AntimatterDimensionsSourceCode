@@ -33,6 +33,7 @@ const Cloud = {
       return {
         infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),
         eternities: typeof deepCopy.eternities === "object" ? deepCopy.eternities : new Decimal(deepCopy.eternities),
+        realities: deepCopy.realities
       };
     };
     const firstInfo = getSaveInfo(first);

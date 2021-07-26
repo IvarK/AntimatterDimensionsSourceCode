@@ -34,14 +34,15 @@ Vue.component("options-saving-tab", {
   },
   data() {
     return {
-      cloudAvailable: false,
       cloudEnabled: false,
-      autosaveInterval: 10
+      autosaveInterval: 10,
+      loggedIn: false,
+      userName: ""
     };
   },
   watch: {
     cloudEnabled(newValue) {
-      player.options.cloudEnabled = newValue;
+      Enabled = newValue;
     },
     autosaveInterval(newValue) {
       player.options.autosaveInterval = 1000 * newValue;
@@ -49,10 +50,12 @@ Vue.component("options-saving-tab", {
   },
   methods: {
     update() {
-      this.cloudAvailable = kong.enabled;
       const options = player.options;
       this.cloudEnabled = options.cloudEnabled;
       this.autosaveInterval = options.autosaveInterval / 1000;
+      this.loggedIn = Cloud.loggedIn;
+      if (!this.loggedIn) return;
+      this.userName = Cloud.user.displayName;
     },
     importAsFile(event) {
       const reader = new FileReader();
@@ -64,6 +67,7 @@ Vue.component("options-saving-tab", {
   },
   template: `
     <div class="l-options-tab">
+      <h2 v-if="loggedIn">Logged in as {{ userName }}</h2>
       <div class="l-options-grid">
         <div class="l-options-grid__row">
           <options-button
@@ -103,16 +107,16 @@ Vue.component("options-saving-tab", {
             oninput="GameOptions.refreshAutosaveInterval()"
           />
         </div>
-        <div class="l-options-grid__row" v-if="cloudAvailable">
+        <div class="l-options-grid__row">
           <options-button
             onclick="GameOptions.cloudSave()"
           >
-            Cloud save
+            {{ loggedIn ? "Cloud save" : "Login to use Cloud Saving"}}
           </options-button>
           <options-button
             onclick="GameOptions.cloudLoad()"
           >
-            Cloud load
+            {{ loggedIn ? "Cloud load" : "Login to use Cloud Saving"}}
           </options-button>
           <primary-button-on-off
             class="o-primary-btn--option l-options-grid__button"
@@ -121,6 +125,9 @@ Vue.component("options-saving-tab", {
           />
         </div>
         <div class="l-options-grid__row">
+          <options-button onclick="GameOptions.logout()" v-if="loggedIn">
+            Logout
+          </options-button>
           <options-button onclick="GameStorage.exportAsFile()">
             Export save as file
           </options-button>

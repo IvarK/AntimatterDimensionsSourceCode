@@ -123,7 +123,8 @@ Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLast
   function getSaveInfo(save) {
     return {
       infinities: save ? save.infinitied : 0,
-      eternities: save ? save.eternities : 0
+      eternities: save ? save.eternities : 0,
+      realities: save ? save.realities : 0
     };
   }
 };

@@ -67,7 +67,10 @@ Vue.component("options-saving-tab", {
   },
   template: `
     <div class="l-options-tab">
-      <h2 v-if="loggedIn">Logged in as {{ userName }}</h2>
+      <h2>
+        <span v-if="loggedIn">Logged in as {{ userName }}</span>
+        <span v-else>Not logged in</span>
+      </h2>
       <div class="l-options-grid">
         <div class="l-options-grid__row">
           <options-button

@@ -11,6 +11,7 @@ Vue.component("modal-cloud-conflict-record", {
       <strong>Save #{{ saveId + 1 }} ({{ saveType }}):</strong>
       <span>Infinities: {{ saveData.infinities }}</span>
       <span>Eternities: {{ saveData.eternities }}</span>
+      <span>Realities: {{ saveData.realities }}</span>
       <slot/>
     </div>`
 });

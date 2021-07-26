@@ -157,9 +157,6 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-      return new Decimal(0);
-    }
     let production = this.amount;
     if (EternityChallenge(11).isRunning) {
       return production;
@@ -173,12 +170,11 @@ class InfinityDimensionState extends DimensionState {
   get multiplier() {
     const tier = this.tier;
 
-    if (EternityChallenge(2).isRunning) {
+    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return new Decimal(0);
     }
-    if (EternityChallenge(11).isRunning) {
-      return new Decimal(1);
-    }
+    if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,

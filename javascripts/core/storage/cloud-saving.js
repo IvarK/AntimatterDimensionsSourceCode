@@ -28,7 +28,7 @@ const Cloud = {
 
   newestSave(first, second) {
     const getSaveInfo = save => {
-      if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
+      if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0), realities: 0 };
       const deepCopy = { ...save };
       return {
         infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),

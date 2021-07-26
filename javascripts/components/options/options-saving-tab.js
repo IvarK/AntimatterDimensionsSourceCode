@@ -67,10 +67,6 @@ Vue.component("options-saving-tab", {
   },
   template: `
     <div class="l-options-tab">
-      <h2>
-        <span v-if="loggedIn">Logged in as {{ userName }}</span>
-        <span v-else>Not logged in</span>
-      </h2>
       <div class="l-options-grid">
         <div class="l-options-grid__row">
           <options-button
@@ -111,15 +107,31 @@ Vue.component("options-saving-tab", {
           />
         </div>
         <div class="l-options-grid__row">
+          <options-button onclick="GameStorage.exportAsFile()">
+            Export save as file
+          </options-button>
+          <options-button class="c-file-import-button">
+            <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
+            <label for="file">Import save from file</label>
+          </options-button>
+        </div>
+        <open-modal-shortcuts />
+      </div>
+      <h2 class="c-cloud-options-header">
+        <span v-if="loggedIn">Logged in as {{ userName }}</span>
+        <span v-else>Not logged in</span>
+      </h2>
+      <div class="l-options-grid">
+        <div class="l-options-grid__row" v-if="loggedIn">
           <options-button
             onclick="GameOptions.cloudSave()"
           >
-            {{ loggedIn ? "Cloud save" : "Login to use Cloud Saving"}}
+            Cloud save
           </options-button>
           <options-button
             onclick="GameOptions.cloudLoad()"
           >
-            {{ loggedIn ? "Cloud load" : "Login to use Cloud Saving"}}
+            Cloud load
           </options-button>
           <primary-button-on-off
             class="o-primary-btn--option l-options-grid__button"
@@ -131,15 +143,10 @@ Vue.component("options-saving-tab", {
           <options-button onclick="GameOptions.logout()" v-if="loggedIn">
             Logout
           </options-button>
-          <options-button onclick="GameStorage.exportAsFile()">
-            Export save as file
-          </options-button>
-          <options-button class="c-file-import-button">
-            <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
-            <label for="file">Import save from file</label>
+          <options-button onclick="GameOptions.login()" v-else>
+            Login to enable Cloud Saving
           </options-button>
         </div>
-        <open-modal-shortcuts />
       </div>
     </div>`
 });

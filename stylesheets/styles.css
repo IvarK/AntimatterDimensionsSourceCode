@@ -2449,6 +2449,10 @@ screen and (max-width: 480px) {
   user-select: none;
 }
 
+.c-cloud-options-header {
+  margin-top: 4rem;
+}
+
 /** replicate box-shadow behavior */
 .t-dark .c-options-grid__notations {
   box-shadow: 0 0 0.7rem 0.2rem #111111;

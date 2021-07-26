@@ -15,13 +15,15 @@ class GameOptions {
   }
 
   static cloudSave() {
-    if (Cloud.loggedIn) Cloud.saveCheck();
-    else Cloud.login();
+    Cloud.saveCheck();
   }
 
   static cloudLoad() {
-    if (Cloud.loggedIn) Cloud.loadCheck();
-    else Cloud.login();
+    Cloud.loadCheck();
+  }
+
+  static login() {
+    Cloud.login();
   }
 
   static logout() {

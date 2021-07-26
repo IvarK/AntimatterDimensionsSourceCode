@@ -1,3 +1,5 @@
+"use strict";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
   authDomain: "antimatter-dimensions-a00f2.firebaseapp.com",
@@ -17,7 +19,7 @@ const Cloud = {
   user: null,
 
   get loggedIn() {
-    return this.user !== null
+    return this.user !== null;
   },
 
   async login() {
@@ -26,25 +28,25 @@ const Cloud = {
 
   newestSave(first, second) {
     const getSaveInfo = save => {
-        if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
-        const deepCopy = { ...save };
-        return {
-            infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),
-            eternities: typeof deepCopy.eternities === "object" ? deepCopy.eternities : new Decimal(deepCopy.eternities)
-        };
-    }
+      if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
+      const deepCopy = { ...save };
+      return {
+        infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),
+        eternities: typeof deepCopy.eternities === "object" ? deepCopy.eternities : new Decimal(deepCopy.eternities),
+      };
+    };
     const firstInfo = getSaveInfo(first);
     const secondInfo = getSaveInfo(second);
     if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
-        return undefined;
+      return undefined;
     }
 
     if (firstInfo.eternities.gt(secondInfo.eternities)) {
-        return first;
+      return first;
     }
 
     if (firstInfo.infinitied.gt(secondInfo.infinitied)) {
-        return first;
+      return first;
     }
 
     return second;
@@ -55,44 +57,47 @@ const Cloud = {
     const snapshot = await this.db.ref(`users/${this.user.id}/player`).get();
     if (snapshot.exists) {
       const encoded = snapshot.val();
-      const uintArray = Base64Binary.decode(encoded.replace(/\-/g, "+").replace(/\_/g, "/"));
+      const uintArray = Base64Binary.decode(encoded.replace(/-/gu, "+").replace(/_/gu, "/"));
       const save = pako.ungzip(uintArray, { to: "string" });
       // TODO: do something with this.
-      console.log(JSON.parse(save));
+      JSON.parse(save);
     }
   },
 
   async saveCheck() {
     const save = await this.load();
-    if (save === null) return this.save();
-
-    const root = GameSaveSerializer.deserialize(save);
-    for (let i = 0; i < 3; i++) {
+    if (save === null) {
+      this.save();
+    } else {
+      const root = GameSaveSerializer.deserialize(save);
+      for (let i = 0; i < 3; i++) {
         const saveId = i;
         const cloudSave = root.saves[saveId];
         const localSave = GameStorage.saves[saveId];
         const newestSaveCheck = this.newestSave(cloudSave, localSave);
         let isConflicted = false;
 
+        // eslint-disable-next-line no-loop-func
         const overwriteCloudSave = () => {
-            root.saves[saveId] = GameStorage.saves[saveId];
+          root.saves[saveId] = GameStorage.saves[saveId];
         };
 
         const sendCloudSave = () => {
-            this.save();
+          this.save();
         };
 
         if (newestSaveCheck === cloudSave) {
-            isConflicted = true;
-            Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
-            Modal.cloudSaveConflict.show();
+          isConflicted = true;
+          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
+          Modal.cloudSaveConflict.show();
         } else {
-            overwriteCloudSave();
+          overwriteCloudSave();
         }
 
         if (!isConflicted) {
-            sendCloudSave();
+          sendCloudSave();
         }
+      }
     }
   },
 
@@ -110,7 +115,9 @@ const Cloud = {
 
   async loadCheck() {
     const save = await this.load();
-    if (save !== null) {
+    if (save === null) {
+      GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
+    } else {
       const root = GameSaveSerializer.deserialize(save);
       for (let i = 0; i < 3; i++) {
         const saveId = i;
@@ -118,6 +125,7 @@ const Cloud = {
         const localSave = GameStorage.saves[saveId];
         const newestSaveCheck = this.newestSave(cloudSave, localSave);
 
+        // eslint-disable-next-line no-loop-func
         const overwriteLocalSave = () => {
           GameStorage.overwriteSlot(saveId, cloudSave);
           GameUI.notify.info(`Cloud save loaded for user ${this.user.displayName}`);
@@ -130,8 +138,6 @@ const Cloud = {
           overwriteLocalSave();
         }
       }
-    } else {
-      GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
     }
   },
 
@@ -148,15 +154,15 @@ const Cloud = {
 
   init() {
     firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            this.user = {
-                id: user.uid,
-                displayName: user.displayName,
-                email: user.email,
-            };
-        } else {
-            this.user = null
-        }
+      if (user) {
+        this.user = {
+          id: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+        };
+      } else {
+        this.user = null;
+      }
     });
   },
 };

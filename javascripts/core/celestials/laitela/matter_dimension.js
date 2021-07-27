@@ -75,7 +75,7 @@ class MatterDimensionState {
       .times(this.commonDarkMult)
       .times(Math.pow(this.powerDMPerAscension, this.dimension.ascensionCount))
       .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied)
-      .dividedBy(Math.pow(1e4, this._tier ** 0.5));
+      .dividedBy(Math.pow(1e4, Math.pow(this._tier, 0.5)));
   }
 
   get powerDE() {

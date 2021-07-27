@@ -316,7 +316,7 @@ const Tesseracts = {
 
   strengthMultiplier: () => {
     const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
-    const extraTesseractEffect = 2 ** Enslaved.extraTesseracts;
+    const extraTesseractEffect = Math.pow(2, Enslaved.extraTesseracts);
     return boundlessEffect * extraTesseractEffect;
   },
 
@@ -324,7 +324,7 @@ const Tesseracts = {
     const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
     const extraTesseracts = Enslaved.extraTesseracts +
       SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
-    return boundlessEffect * 2 ** extraTesseracts - Tesseracts.strengthMultiplier();
+    return boundlessEffect * Math.pow(2, extraTesseracts) - Tesseracts.strengthMultiplier();
   },
 };
 

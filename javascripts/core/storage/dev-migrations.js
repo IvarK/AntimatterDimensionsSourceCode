@@ -366,8 +366,7 @@ GameStorage.devMigrations = {
     player => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (!pets.hasOwnProperty(prop)) continue;
+        if (!Object.prototype.hasOwnProperty.call(pets, prop)) continue;
         const pet = pets[prop];
         const oldExp = pet.exp + 10000 * (Math.pow(1.12, pet.level - 1) - 1) / (0.12);
         pet.level = 1;
@@ -379,8 +378,7 @@ GameStorage.devMigrations = {
     player => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (!pets.hasOwnProperty(prop)) continue;
+        if (!Object.prototype.hasOwnProperty.call(pets, prop)) continue;
         const pet = pets[prop];
         let oldExp = pet.exp;
         for (let lv = 1; lv < pet.level; lv++) {

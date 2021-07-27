@@ -14,7 +14,7 @@ Vue.component("reality-machines-header", {
     update() {
       this.realityMachines.copyFrom(Currency.realityMachines.value);
       this.imaginaryMachines = Currency.imaginaryMachines.value;
-      this.unlockedIM = this.imaginaryMachines > 0 || this.realityMachines.exponent >= 1000;
+      this.unlockedIM = MachineHandler.isIMUnlocked;
       this.capRM.copyFrom(MachineHandler.hardcapRM);
       this.capIM = MachineHandler.currentIMCap;
     }

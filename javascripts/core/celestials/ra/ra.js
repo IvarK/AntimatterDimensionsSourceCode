@@ -547,7 +547,7 @@ const RA_UNLOCKS = {
     description: "Get Enslaved to level 2",
     reward: "Stored game time is amplified and you can store more real time, increasing with Enslaved levels",
     effect: {
-      gameTimeAmplification: () => 20 ** Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap),
+      gameTimeAmplification: () => Math.pow(20, Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap)),
       realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level,
     },
     pet: Ra.pets.enslaved,

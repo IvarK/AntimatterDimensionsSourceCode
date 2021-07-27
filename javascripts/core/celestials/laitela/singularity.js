@@ -31,13 +31,13 @@ class SingularityMilestoneState extends GameMechanicState {
 
   nerfCompletions(completions) {
     const softcap = this.config.increaseThreshold;
-    if (!softcap || completions < softcap) return completions;
+    if (!softcap || (completions < softcap)) return completions;
     return softcap + (completions - softcap) / 3;
   }
 
   unnerfCompletions(completions) {
     const softcap = this.config.increaseThreshold;
-    if (!softcap || completions < softcap) return completions;
+    if (!softcap || (completions < softcap)) return completions;
     return softcap + (completions - softcap) * 3;
   }
 
@@ -74,8 +74,8 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get effectDisplay() {
-    if (!Number.isFinite(this.effectValue)) return "N/A";
-    return this.config.effectFormat(this.effectValue);
+    if (Number.isFinite(this.effectValue)) return this.config.effectFormat(this.effectValue);
+    return "N/A";
   }
 
   get nextEffectDisplay() {

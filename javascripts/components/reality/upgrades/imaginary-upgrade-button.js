@@ -83,6 +83,5 @@ Vue.component("imaginary-upgrade-button", {
         text="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
-    </div>
-  `
+    </div>`
 });

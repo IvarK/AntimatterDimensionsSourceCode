@@ -2,7 +2,7 @@
 
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {
-    props.cost = () => props.initialCost * props.costMult ** player.reality.imaginaryRebuyables[props.id];
+    props.cost = () => props.initialCost * Math.pow(props.costMult, player.reality.imaginaryRebuyables[props.id]);
     const { effect } = props;
     if (props.isDecimal) props.effect = () => Decimal.pow(effect, player.reality.imaginaryRebuyables[props.id]);
     else props.effect = () => effect * player.reality.imaginaryRebuyables[props.id];
@@ -228,7 +228,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
         Currency.antimatter.value.log10() >= 7.4e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Annihilation multiplier gain is improved based on iM",
-      effect: () => (Math.log10(Currency.imaginaryMachines.value) - 10) ** 3,
+      effect: () => Math.pow(Math.log10(Currency.imaginaryMachines.value) - 10, 3),
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
@@ -257,7 +257,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
         gainedGlyphLevel().actualLevel >= 20000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost count based on Tesseract count",
-      effect: () => Math.floor(0.25 * Enslaved.effectiveTesseractCount ** 2),
+      effect: () => Math.floor(0.25 * Math.pow(Enslaved.effectiveTesseractCount, 2)),
       formatEffect: value => `${formatX(value)}`,
     },
     {
@@ -286,7 +286,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
         Glyphs.activeList.length <= 1,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Unlock Pelle, Celestial of Antimatter",
+      description: "Unlock Pelle, Celestial of Antimatter (not implemented yet)",
     },
   ];
 }());

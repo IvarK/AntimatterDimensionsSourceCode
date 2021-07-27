@@ -363,7 +363,7 @@ const ReplicantiUpgrade = {
       const bulk = bulkBuyBinarySearch(Currency.infinityPoints.value, {
         costFunction: x => this.baseCostAfterCount(x).dividedByEffectOf(TimeStudy(233)),
         firstCost: this.cost,
-        comulative: true,
+        cumulative: true,
       }, this.value);
       if (!bulk) return;
       this.value += bulk.quantity;

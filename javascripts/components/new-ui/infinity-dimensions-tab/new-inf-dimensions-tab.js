@@ -30,6 +30,10 @@ Vue.component("new-inf-dimensions-tab", {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${this.sacrificeBoostDisplay}`;
     },
+    tesseractCountString() {
+      const extra = this.showExtraTesseracts ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
+      return `${formatInt(this.boughtTesseracts)}${extra}`;
+    },
   },
   methods: {
     update() {
@@ -113,9 +117,8 @@ Vue.component("new-inf-dimensions-tab", {
           :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
           @click="buyTesseract"
         >
-          <p>Buy a Tesseract
-            ({{ format(boughtTesseracts) }}
-            <span v-if="showExtraTesseracts"> + {{ format(extraTesseracts, 2, 2) }}</span>)
+          <p>
+            Buy a Tesseract ({{ tesseractCountString }})
           </p>
           <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
           <p><b>Costs: {{ format(tesseractCost) }} IP</b></p>

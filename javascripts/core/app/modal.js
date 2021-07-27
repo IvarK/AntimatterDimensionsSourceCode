@@ -121,11 +121,12 @@ Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLast
   });
 
   function getSaveInfo(save) {
-    return {
-      infinities: save ? save.infinitied : 0,
-      eternities: save ? save.eternities : 0,
-      realities: save ? save.realities : 0
-    };
+    const prestiges = { infinities: new Decimal(0), eternities: new Decimal(0), realities: 0 };
+    prestiges.infinities.copyFrom(new Decimal(save.infinities));
+    prestiges.eternities.copyFrom(new Decimal(save.eternities));
+    prestiges.realities = save.realities;
+
+    return prestiges;
   }
 };
 

@@ -28,20 +28,19 @@ const Cloud = {
 
   newestSave(first, second) {
     const getSaveInfo = save => {
-      if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0), realities: 0 };
-      const deepCopy = { ...save };
-      return {
-        infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),
-        eternities: typeof deepCopy.eternities === "object" ? deepCopy.eternities : new Decimal(deepCopy.eternities),
-        realities: deepCopy.realities
-      };
+      const prestiges = { infinities: new Decimal(0), eternities: new Decimal(0), realities: 0 };
+      if (!save) return prestiges;
+      prestiges.infinities.copyFrom(new Decimal(save.infinities));
+      prestiges.eternities.copyFrom(new Decimal(save.eternities));
+      prestiges.realities = save.realities;
+      return prestiges;
     };
     const firstInfo = getSaveInfo(first);
     const secondInfo = getSaveInfo(second);
     if (
       firstInfo.realities === secondInfo.realities && 
       firstInfo.eternities.eq(secondInfo.eternities) && 
-      firstInfo.infinitied.eq(secondInfo.infinitied)
+      firstInfo.infinities.eq(secondInfo.infinities)
     ) {
       return undefined;
     }
@@ -54,7 +53,7 @@ const Cloud = {
       return first;
     }
 
-    if (firstInfo.infinitied.gt(secondInfo.infinitied)) {
+    if (firstInfo.infinities.gt(secondInfo.infinities)) {
       return first;
     }
 
@@ -95,7 +94,7 @@ const Cloud = {
           this.save();
         };
 
-        if (newestSaveCheck === cloudSave) {
+        if (newestSaveCheck === cloudSave && cloudSave && localSave) {
           isConflicted = true;
           Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
           Modal.cloudSaveConflict.show();
@@ -140,7 +139,7 @@ const Cloud = {
           GameUI.notify.info(`Cloud save loaded for user ${this.user.displayName}`);
         };
 
-        if (newestSaveCheck === localSave) {
+        if (newestSaveCheck === localSave && cloudSave && localSave) {
           Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
           Modal.cloudLoadConflict.show();
         } else {

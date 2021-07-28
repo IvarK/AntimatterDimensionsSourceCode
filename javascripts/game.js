@@ -578,10 +578,6 @@ function gameLoop(passDiff, options = {}) {
 
   BlackHoles.updatePhases(blackHoleDiff);
 
-  const totalGalaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;
-  player.achievementChecks.maxGalaxiesThisReality =
-    Math.max(player.achievementChecks.maxGalaxiesThisReality, totalGalaxies);
-
   // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
   if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && Currency.timeTheorems.max.gte(16617)) {
     TimeStudy.dilation.purchase(true);

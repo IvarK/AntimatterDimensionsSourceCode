@@ -24,18 +24,20 @@ Vue.component("singularity-milestone-pane", {
       this.showingCondense = player.options.showCondenseToMilestone;
     },
     toggleMilestoneMode() {
-      player.options.showCondenseToMilestone = !player.options.showCondenseToMilestone;
+      player.options.showCondenseToMilestone = !this.showingCondense;
     }
   },
   template: `
     <div class="c-laitela-next-milestones">
-      <div class="o-laitela-singularity-modal-button"
+      <div
+        class="o-laitela-singularity-modal-button"
         onclick="Modal.singularityMilestones.show()"
         :style="glowStyle"
       >
         Show all milestones
       </div>
-      <div class="o-laitela-singularity-modal-button"
+      <div
+        class="o-laitela-singularity-modal-button"
         @click="toggleMilestoneMode"
       >
         To Milestones: {{ milestoneMode }}

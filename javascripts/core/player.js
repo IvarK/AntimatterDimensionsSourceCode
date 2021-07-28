@@ -264,7 +264,6 @@ let player = {
     noInfinitiesThisReality: true,
     noEternitiesThisReality: true,
     noReplicantiGalaxies: true,
-    maxGalaxiesThisReality: 0,
     maxID1ThisReality: new Decimal(0),
     maxStudiesThisReality: 0,
     continuumThisReality: true,

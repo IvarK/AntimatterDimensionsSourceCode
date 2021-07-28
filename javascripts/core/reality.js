@@ -397,7 +397,6 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.noInfinitiesThisReality = true;
   player.achievementChecks.noEternitiesThisReality = true;
   player.achievementChecks.noReplicantiGalaxies = true;
-  player.achievementChecks.maxGalaxiesThisReality = 0;
   player.achievementChecks.maxID1ThisReality = new Decimal(0);
   player.achievementChecks.maxStudiesThisReality = 0;
   player.achievementChecks.continuumThisReality = Laitela.continuumActive;

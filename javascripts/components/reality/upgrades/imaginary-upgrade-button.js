@@ -57,8 +57,11 @@ Vue.component("imaginary-upgrade-button", {
         class="l-reality-upgrade-btn c-reality-upgrade-btn"
         @click="upgrade.purchase()"
       >
-        <hint-text type="realityUpgrades"
-          class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade">{{config.name}}
+        <hint-text
+          type="realityUpgrades"
+          class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
+        >
+          {{config.name}}
         </hint-text>
         <description-display :config="config"/>
         <description-display

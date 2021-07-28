@@ -107,7 +107,8 @@ Vue.component("annihilation-button", {
     }
   },
   template: `
-    <button class="c-laitela-annihilation-button"
+    <button
+      class="c-laitela-annihilation-button"
       @click="annihilate()"
       v-if="showAnnihilation"
     >
@@ -138,7 +139,8 @@ Vue.component("annihilation-button", {
       <div v-if="hasAnnihilated">
         <br>
         Auto-Annihilate when adding
-        <input type="text"
+        <input
+          type="text"
           v-model="autoAnnihilationInput"
           @change="handleAutoAnnihilationInputChange()"
           @mouseover="isMouseoverDisabled = true"

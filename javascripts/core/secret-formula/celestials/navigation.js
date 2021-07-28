@@ -1395,9 +1395,9 @@ GameDatabase.celestials.navigation = (function() {
         const upgrade = MatterDimension(2).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        return Laitela.difficultyTier === 7
+        return Laitela.difficultyTier === 1
           ? 0
-          : player.celestials.laitela.fastestCompletion / 30;
+          : 30 / player.celestials.laitela.fastestCompletion;
       },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),

@@ -50,8 +50,8 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Ra",
     description() {
-      return `you can't gain Dimension Boosts, and the Tickspeed purchase multiplier is fixed at
-      ${formatX(1.1245, 0, 3)}.\n`;
+      return `you only have ${formatInt(4)} Dimension Boosts and can't gain any more, and the Tickspeed purchase
+      multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
     },
   },
   {

@@ -226,7 +226,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
         Currency.antimatter.value.log10() >= 7.4e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Annihilation multiplier gain is improved based on iM",
-      effect: () => Math.pow(Math.log10(Currency.imaginaryMachines.value) - 10, 3),
+      effect: () => Math.clampMin(Math.pow(Math.log10(Currency.imaginaryMachines.value) - 10, 3), 1),
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {

@@ -1361,8 +1361,8 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             if (Laitela.isUnlocked) return ["Lai'tela's Reality"];
 
-            const hasIDs = player.achievementChecks.maxID1ThisReality.eq(0);
-            if (!hasIDs) return [
+            const hasIDs = player.achievementChecks.maxID1ThisReality.neq(0);
+            if (hasIDs) return [
               "Lai'tela's Reality",
               "The Power of Infinity Dimensions",
               "blocks your path."
@@ -1395,7 +1395,7 @@ GameDatabase.celestials.navigation = (function() {
         const upgrade = MatterDimension(2).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        return Laitela.difficultyTier === 1
+        return Laitela.difficultyTier < 1
           ? 0
           : 30 / player.celestials.laitela.fastestCompletion;
       },

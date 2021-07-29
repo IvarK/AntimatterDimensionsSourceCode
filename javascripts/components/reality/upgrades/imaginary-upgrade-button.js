@@ -61,7 +61,7 @@ Vue.component("imaginary-upgrade-button", {
           type="realityUpgrades"
           class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
         >
-          {{config.name}}
+          {{ config.name }}
         </hint-text>
         <description-display :config="config"/>
         <description-display

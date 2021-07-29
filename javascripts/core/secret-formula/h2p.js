@@ -575,12 +575,12 @@ ${format(TimeDimension(1)._costIncreaseThresholds[2])} EP each dimension purchas
 purpose of cost increases, causing the price to rise much more steeply.
 <br>
 <b>Time Dimension base prices (EP):</b> ${Array.range(1, 8)
-  .map(tier => format(TimeDimension(tier)._baseCost))
-  .join(", ")}
+    .map(tier => format(TimeDimension(tier)._baseCost))
+    .join(", ")}
 <br>
 <b>Time Dimension base price increases:</b> ${Array.range(1, 8)
-  .map(tier => format(TimeDimension(tier)._costMultiplier))
-  .join(", ")}
+    .map(tier => format(TimeDimension(tier)._costMultiplier))
+    .join(", ")}
 <br>
 <br>
 Each threshold to gain another Tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
@@ -698,7 +698,7 @@ can be repeatedly purchased as many times as you can afford them.
     }, {
       name: "Reality",
       info: () => `
-When you reach ${format(5e9)} time theorems, ${formatPostBreak("1e4000")} EP, and have completed the first
+When you reach ${formatPostBreak("1e4000")} EP and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives

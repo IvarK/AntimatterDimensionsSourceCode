@@ -544,10 +544,7 @@ Vue.component("glyph-component", {
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
-      if (!this.$refs.tooltip) {
-        this.$nextTick(() => this.moveTooltipTo(x, y));
-        return;
-      }
+      if (!this.$refs.tooltip) return;
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();

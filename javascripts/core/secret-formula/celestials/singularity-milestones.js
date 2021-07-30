@@ -159,7 +159,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Infinities boost Dark Matter and Dark Energy production",
-    effect: () => Currency.infinitiesTotal.value.plus(1).log10() / 1000,
+    effect: () => Math.clampMin(Currency.infinitiesTotal.value.pLog10() / 1000, 1),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },

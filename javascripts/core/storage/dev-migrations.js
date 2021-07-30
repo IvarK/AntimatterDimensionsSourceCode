@@ -366,7 +366,7 @@ GameStorage.devMigrations = {
     player => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
-        if (!pets.hasOwnProperty(prop)) continue;
+        if (!Object.prototype.hasOwnProperty.call(pets, prop)) continue;
         const pet = pets[prop];
         const oldExp = pet.exp + 10000 * (Math.pow(1.12, pet.level - 1) - 1) / (0.12);
         pet.level = 1;
@@ -378,7 +378,7 @@ GameStorage.devMigrations = {
     player => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
-        if (!pets.hasOwnProperty(prop)) continue;
+        if (!Object.prototype.hasOwnProperty.call(pets, prop)) continue;
         const pet = pets[prop];
         let oldExp = pet.exp;
         for (let lv = 1; lv < pet.level; lv++) {
@@ -978,6 +978,11 @@ GameStorage.devMigrations = {
         Currency.perkPoints.add(1);
       }
       if (player.reality.perks.has(10)) Perk.startAM.onPurchased();
+    },
+    player => {
+      player.achievementChecks.maxStudiesThisReality = player.timestudy.studies.length;
+      player.celestials.teresa.lastRepeatedMachines = new Decimal(player.celestials.teresa.lastRepeatedRM);
+      delete player.celestials.teresa.lastRepeatedRM;
     }
   ],
 

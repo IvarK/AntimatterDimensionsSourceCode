@@ -42,60 +42,74 @@ Vue.component("statistics-tab", {
   },
   methods: {
     update() {
-      this.totalAntimatter.copyFrom(player.records.totalAntimatter);
-      this.realTimePlayed.setFrom(player.records.realTimePlayed);
+      const records = player.records;
+      this.totalAntimatter.copyFrom(records.totalAntimatter);
+      this.realTimePlayed.setFrom(records.realTimePlayed);
       this.newsMessagesSeen = player.news.size;
+
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked || player.devMode;
       const infinity = this.infinity;
+      const bestInfinity = records.bestInfinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
         infinity.count.copyFrom(Currency.infinities);
         infinity.banked.copyFrom(Currency.infinitiesBanked);
-        infinity.hasBest = player.records.bestInfinity.time < 999999999999;
-        infinity.best.setFrom(player.records.bestInfinity.time);
-        infinity.this.setFrom(player.records.thisInfinity.time);
-        infinity.bestRate.copyFrom(player.records.bestInfinity.bestIPminEternity);
+        infinity.hasBest = bestInfinity.time < 999999999999;
+        infinity.best.setFrom(bestInfinity.time);
+        infinity.this.setFrom(records.thisInfinity.time);
+        infinity.bestRate.copyFrom(bestInfinity.bestIPminEternity);
       }
+
       const isEternityUnlocked = progress.isEternityUnlocked || player.devMode;
       const eternity = this.eternity;
+      const bestEternity = records.bestEternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
         eternity.count.copyFrom(Currency.eternities);
-        eternity.hasBest = player.records.bestEternity.time < 999999999999;
-        eternity.best.setFrom(player.records.bestEternity.time);
-        eternity.this.setFrom(player.records.thisEternity.time);
-        eternity.bestRate.copyFrom(player.records.bestEternity.bestEPminReality);
+        eternity.hasBest = bestEternity.time < 999999999999;
+        eternity.best.setFrom(bestEternity.time);
+        eternity.this.setFrom(records.thisEternity.time);
+        eternity.bestRate.copyFrom(bestEternity.bestEPminReality);
       }
+
       const isRealityUnlocked = progress.isRealityUnlocked || player.devMode;
       const reality = this.reality;
+      const bestReality = records.bestReality;
       reality.isUnlocked = isRealityUnlocked;
+
       if (isRealityUnlocked) {
         reality.count = Math.floor(Currency.realities.value);
-        reality.best.setFrom(player.records.bestReality.time);
-        reality.bestReal.setFrom(player.records.bestReality.realTime);
-        reality.this.setFrom(player.records.thisReality.time);
-        reality.totalTimePlayed.setFrom(player.records.totalTimePlayed);
+        reality.best.setFrom(bestReality.time);
+        reality.bestReal.setFrom(bestReality.realTime);
+        reality.this.setFrom(records.thisReality.time);
+        reality.totalTimePlayed.setFrom(records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
-        infinity.thisReal.setFrom(player.records.thisInfinity.realTime);
-        eternity.thisReal.setFrom(player.records.thisEternity.realTime);
-        reality.thisReal.setFrom(player.records.thisReality.realTime);
-        reality.bestRate.copyFrom(player.records.bestReality.RMmin);
-        reality.bestRarity = Math.max(strengthToRarity(player.records.bestReality.glyphStrength), 0);
+        infinity.thisReal.setFrom(records.thisInfinity.realTime);
+        eternity.thisReal.setFrom(records.thisEternity.realTime);
+        reality.thisReal.setFrom(records.thisReality.realTime);
+        reality.bestRate.copyFrom(bestReality.RMmin);
+        reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
+
+        this.recordGlyphInfo = [
+          [true, Glyphs.copyForRecords(bestReality.RMminSet),
+            `Best Reality Machines per minute: ${format(bestReality.RMmin, 2, 2)} RM/min`],
+          [true, Glyphs.copyForRecords(bestReality.glyphLevelSet),
+            `Best Glyph level: ${formatInt(bestReality.glyphLevel)}`],
+          [true, Glyphs.copyForRecords(bestReality.bestEPSet),
+            `Best Eternity Points: ${format(bestReality.bestEP, 2, 2)} Eternity Points`],
+          [true, Glyphs.copyForRecords(bestReality.speedSet),
+            `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
+          [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
+            `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`],
+          [true, Glyphs.copyForRecords(bestReality.iMCapSet),
+            `Imaginary Machine Cap: ${format(player.reality.iMCap, 2, 2)} iM`],
+          [true, Glyphs.copyForRecords(bestReality.laitelaSet),
+            `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
+        ];
+
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
-      this.recordGlyphInfo = [
-        [true, Glyphs.copyForRecords(player.records.bestReality.RMminSet),
-          `Best Reality Machines per minute: ${format(player.records.bestReality.RMmin, 2, 2)} RM/min`],
-        [true, Glyphs.copyForRecords(player.records.bestReality.glyphLevelSet),
-          `Best Glyph level: ${formatInt(player.records.bestReality.glyphLevel)}`],
-        [true, Glyphs.copyForRecords(player.records.bestReality.bestEPSet),
-          `Best Eternity Points: ${format(player.records.bestReality.bestEP, 2, 2)} Eternity Points`],
-        [true, Glyphs.copyForRecords(player.records.bestReality.speedSet),
-          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
-        [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
-          `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`]
-      ];
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());

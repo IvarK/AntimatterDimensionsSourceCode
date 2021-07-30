@@ -1248,6 +1248,12 @@ screen and (max-width: 480px) {
   width: 12rem;
 }
 
+.o-primary-btn--header-exit {
+  font-size: 0.7rem;
+  width: 10rem;
+  height: 1.5rem;
+}
+
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
   width: 48rem;
@@ -6913,29 +6919,6 @@ kbd {
 .t-dark-metro .c-ra-pet-recollection-button,
 .t-inverted-metro .c-ra-pet-recollection-button,
 .t-s8 .c-ra-pet-recollection-button {
-  border-radius: 0;
-  border: 0.1rem solid black;
-}
-
-.c-ra-laitela-unlock {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: Typewriter;
-  color: black;
-  height: 33rem;
-  width: 30rem;
-  margin: 2rem;
-  padding: 1rem;
-  border-radius: 2rem;
-  animation: a-ra-color-shift 10s infinite;
-}
-
-.t-metro .c-ra-laitela-unlock,
-.t-dark-metro .c-ra-laitela-unlock,
-.t-inverted-metro .c-ra-laitela-unlock,
-.t-s8 .c-ra-laitela-unlock {
   border-radius: 0;
   border: 0.1rem solid black;
 }

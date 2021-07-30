@@ -153,6 +153,9 @@ let player = {
     realityUpgrades: Array.range(0, 5).map(() => ({
       isActive: false,
     })),
+    imaginaryUpgrades: Array.range(0, 10).map(() => ({
+      isActive: false,
+    })),
     ipMultBuyer: { isActive: false, },
     epMultBuyer: { isActive: false, },
   },
@@ -245,6 +248,8 @@ let player = {
       bestEP: new Decimal(0),
       bestEPSet: [],
       speedSet: [],
+      iMCapSet: [],
+      laitelaSet: [],
     },
   },
   achievementChecks: {
@@ -259,6 +264,9 @@ let player = {
     noInfinitiesThisReality: true,
     noEternitiesThisReality: true,
     noReplicantiGalaxies: true,
+    maxID1ThisReality: new Decimal(0),
+    maxStudiesThisReality: 0,
+    continuumThisReality: true,
   },
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
@@ -326,6 +334,8 @@ let player = {
   partSimulatedReality: 0,
   reality: {
     realityMachines: new Decimal(0),
+    imaginaryMachines: 0,
+    iMCap: 0,
     glyphs: {
       active: [],
       inventory: [],
@@ -355,6 +365,20 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: 0,
+    imaginaryUpgradeBits: 0,
+    imaginaryUpgReqs: 0,
+    imaginaryRebuyables: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+      9: 0,
+      10: 0,
+    },
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,
@@ -407,7 +431,7 @@ let player = {
       bestRunAM: new Decimal(1),
       bestAMSet: [],
       perkShop: Array.repeat(0, 5),
-      lastRepeatedRM: new Decimal(0)
+      lastRepeatedMachines: new Decimal(0)
     },
     effarig: {
       relicShards: 0,
@@ -581,6 +605,7 @@ let player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
+    showCondenseToMilestone: false,
     showHintText: {
       achievements: false,
       achievementUnlockStates: false,
@@ -619,6 +644,7 @@ let player = {
       harshAutoClean: true,
       glyphUndo: true,
       resetCelestial: true,
+      deleteGlyphSetSave: true,
     },
     awayProgress: {
       antimatter: true,

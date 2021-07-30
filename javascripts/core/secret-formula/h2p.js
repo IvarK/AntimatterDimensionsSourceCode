@@ -237,7 +237,7 @@ another ${formatInt(60)} more.
 Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost increase between Galaxies will increase by
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
-Remote Galaxy scaling: Above ${formatInt(REMOTE_SCALING_START)} Antimatter Galaxies, the <i>total</i> cost
+Remote Galaxy scaling: Above ${formatInt(Galaxy.remoteStart)} Antimatter Galaxies, the <i>total</i> cost
 increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
@@ -575,12 +575,12 @@ ${format(TimeDimension(1)._costIncreaseThresholds[2])} EP each dimension purchas
 purpose of cost increases, causing the price to rise much more steeply.
 <br>
 <b>Time Dimension base prices (EP):</b> ${Array.range(1, 8)
-  .map(tier => format(TimeDimension(tier)._baseCost))
-  .join(", ")}
+    .map(tier => format(TimeDimension(tier)._baseCost))
+    .join(", ")}
 <br>
 <b>Time Dimension base price increases:</b> ${Array.range(1, 8)
-  .map(tier => format(TimeDimension(tier)._costMultiplier))
-  .join(", ")}
+    .map(tier => format(TimeDimension(tier)._costMultiplier))
+    .join(", ")}
 <br>
 <br>
 Each threshold to gain another Tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
@@ -698,7 +698,7 @@ can be repeatedly purchased as many times as you can afford them.
     }, {
       name: "Reality",
       info: () => `
-When you reach ${format(5e9)} time theorems, ${formatPostBreak("1e4000")} EP, and have completed the first
+When you reach ${formatPostBreak("1e4000")} EP and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
@@ -1204,29 +1204,74 @@ that the reaction can't proceed due to not having enough of that reagent to get 
         "decoherence", "force", "exponential", "uncountability", "boundless", "unpredictability", "multiversal"],
       tab: "celestials/alchemy"
     }, {
+      name: "Imaginary Machines",
+      info: () => `
+Once you are able to gain at least ${format(MachineHandler.baseRMCap)} Reality Machines in a single Reality, you
+unlock the ability to gain a new resource called Imaginary Machines. Reality Machines will also become hardcapped
+at ${format(MachineHandler.baseRMCap)}; you will be unable to gain any more past this limit.
+<br>
+<br>
+Additionally you unlock the Imaginary Upgrades tab, which contains a set of upgrades similar to the Reality Upgrades -
+each upgrade has a condition you must fulfill to unlock it and an Imaginary Machine cost to actually purchase it.
+The first two rows of upgrades can be repeatedly bought, while the other three are one-time upgrades.
+<br>
+<br>
+Your iM amount is affected by two things:
+<br>
+<b>iM Cap</b> - There is a maximum amount of iM you can ever have, which is based on the highest RM amount you would
+have been able to get if there were no RM cap. This is updated on a continual basis and thus will immediately increase
+if you ever surpass your previous highest uncapped RM amount.
+<br>
+<b>Current iM</b> - Over time your current iM will passively rise towards your iM cap, in a way that slows down
+exponentially as you approach the cap. By default iM slows down at a rate where the amount you are <i>missing</i>
+(ie. your cap minus your current amount) is cut in half every minute. This growth rate is unaffected by any
+modifiers to game speed.
+`,
+      isUnlocked: () => MachineHandler.isIMUnlocked,
+      tags: ["imaginary", "machines", "reality", "lategame", "endgame"],
+      tab: "reality/upgrades"
+    }, {
+      name: "Continuum",
+      info: () => `
+When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
+called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
+Tickspeed upgrades. These fractional purchases are given for free without spending your antimatter and will provide
+an appropriate portion of their multipler.
+<br>
+<br>
+The purchase buttons for Antimatter Dimensions and Tickspeed become modified to display the number of upgrades
+you would be able to purchase if Continuum was inactive, and the purchase count is scaled smoothly with antimatter.
+For example, having ${format(2e7)} antimatter will give you a continuum value of ${format(5.3, 0, 1)} for Tickspeed,
+which has an initial cost of ${format(1e3)} and increase of ${formatX(10)}. Tickspeed Continuum in this case will then
+give a production boost equal to (upgrade multiplier)<sup>${format(5.3, 0, 1)}</sup>.
+<br>
+<br>
+Some upgrades will multiply Continuum value directly, which gives a production boost without affecting the cost
+scaling. However, these upgrades will not function if Continuum is disabled on the Autobuyers page, which may result
+in a loss of production if disabled. Continuum makes your autobuyers for Antimatter Dimensions obsolete, so all the
+autobuyer settings for Antimatter Dimension autobuyers are now hidden on that tab as long as Continuum is active.
+`,
+      isUnlocked: () => Laitela.continuumUnlocked,
+      tags: ["continuum", "purchase", "reality", "lategame", "endgame"],
+      tab: "celestials/laitela"
+    }, {
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
-Lai'tela is the sixth Celestial, unlocked by having a level ${formatInt(25000)} Reality Glyph,
-a total of ${formatInt(100)} Ra levels, and spending ${formatPostBreak("1e2000")} Reality Machines.
+Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginary upgrade for
+${format(ImaginaryUpgrade(15).cost)} iM.
 <br>
 <br>
-When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
-called Continuum, which gives the same effect as previously but allows for buying fractions of dimensions or
-Tickspeed upgrades. Additionally, these fractional purchases are given for free without spending your antimatter.
-This makes your autobuyers for Antimatter Dimensions obsolete, which is noted on the autobuyers page.
-<br>
-<br>
-Lai'tela gives a new currency called Dark Matter, which gives a multiplier to purchases of dimensions and Tickspeed
-upgrades from Continuum based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by
-Dark Matter Dimensions, in a similar way to all other types of dimensions in the game. There are four Dark Matter
-Dimensions; you start with the first one unlocked immediately and the higher ones are unlocked at increasing amounts
-of Dark Matter. When unlocking dimensions, you are given ${formatInt(1)} of the dimension and cannot gain more without
-having it produced from the next tier up.
+Lai'tela gives a new resource called Dark Matter, which gives a multiplier to all Continuum values based on the
+highest amount of Dark Matter you have ever had. Dark Matter is produced by Dark Matter Dimensions, in a similar
+cascading way to all other types of dimensions in the game. Unlike other dimensions, there are only four Dark Matter
+Dimensions rather than eight. You start with the first one unlocked immediately and the higher ones are unlocked
+via Imaginary Upgrades. When unlocking dimensions, you are given ${formatInt(1)} of the dimension and cannot gain
+more without having it produced from the next tier up.
 <br>
 <br>
 Each Dark Matter Dimension, after a certain interval of time, generates two things: Dark Matter or the next lower
-Dark Matter Dimension and another currency called Dark Energy. Dark Matter and Dark Matter Dimension production
+Dark Matter Dimension and another resource called Dark Energy. Dark Matter and Dark Matter Dimension production
 per interval is equal to the product of your Dark Matter multiplier and the number of dimensions you have, while
 Dark Energy production is independent of your dimension amount. Dark Energy is used to produce Singularities, which
 have their own How to Play entry.
@@ -1234,29 +1279,23 @@ have their own How to Play entry.
 <br>
 Dark Matter Dimensions can have their intervals upgraded down to a minimum of ${formatInt(10)}ms, at which point
 you cannot upgrade the interval any further. You can choose to ascend Dark Matter Dimensions which reach
-that point, which multiplies Dark Matter and Dark Energy values for that Dimension by ${formatInt(1000)}. The interval
-gets multiplied ${formatInt(10000)} (can be reduced with more progress in Lai'tela), but can be upgraded once again.
+that point, which initially multiplies Dark Matter gain by ${formatInt(POWER_DM_PER_ASCENSION)} and Dark Energy by
+${formatInt(POWER_DE_PER_ASCENSION)}. The interval gets multiplied ${formatInt(1200)}, but can be upgraded once again.
 Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
 <br>
 <br>
-When you get ${format(Laitela.annihilationDMRequirement)} Dark Matter, you unlock a prestige called Annihilation.
-Annihilation resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but adds to a permanent multiplier
-to Dark Matter. You can Annihilate multiple times, the additions to the multiplier stack additively, and there is
-no need to annihilate for a greater addition each time.
+An Imaginary Upgrade allows you to unlock a prestige called Annihilation. Annihilation resets your Dark Matter
+and Dark Matter Dimensions, but adds to a permanent multiplier to Dark Matter that applies to all Dark Matter
+Dimensions. You can Annihilate multiple times; the additions to the multiplier stack additively, and there is
+no need to annihilate for a greater addition each time. You must have at least
+${format(Laitela.annihilationDMRequirement)} Dark Matter in order to Annihilate.
 <br>
 <br>
 Lai'tela has a Reality which gives a multiplier to Dark Matter Dimensions' Dark Matter power based on how well you
-do in the Reality.
-<br>
-<br>
-<b>Dark Matter Dimension unlock thresholds (Dark Matter):</b> ${Array.range(1, 4)
-  // DM1 is 10 instead of 0 here, so make a special case to display it properly
-    .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
-    .join(", ")}
-<br>
-<b>Dark Matter Dimension initial interval (seconds):</b> ${Array.range(1, 4)
-    .map(tier => formatInt(Math.pow(4, tier)))
-    .join(", ")}
+do in the Reality. Whenever you complete the Reality in under ${formatInt(30)} seconds, your highest available
+Dimension will be permanently disabled during further attempts of the Reality. Disabling all of your dimensions by
+completing the Reality in under ${formatInt(30)} seconds eight times will also give you a ${formatX(8)} multiplier
+to Dark Energy gain.
 `,
       isUnlocked: () => Laitela.isUnlocked,
       tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
@@ -1267,20 +1306,20 @@ do in the Reality.
 Singularities are a new resource which you can obtain using features within Lai'tela.
 <br>
 <br>
-In order to obtain Singularities, you need to reach ${format(2e3)} Dark Energy. When you do, you get the option to
+In order to obtain Singularities, you need to reach ${format(200)} Dark Energy. When you do, you get the option to
 condense all your Dark Energy into a Singularity, resetting it back to zero. Any extra Dark Energy above this amount
 does not carry over, and is thus wasted. Note that only Dark Energy is reset, the status of your Dark Matter and its
 dimensions stays the same when condensing Singularities.
 <br>
 <br>
-At any point, you can freely increase or decrease the Dark Energy requirement to condense Singularities by a factor of
-${formatInt(10)} (with a minimum of ${format(2e3)}). This increases or decreases the number of Singularities gained
-from resetting at the cap by <i>more than</i> a factor of ${formatInt(10)}, making higher caps worth more if you
-are willing to wait.
+Once you reach ${formatInt(10)} Singularities, you can freely increase or decrease the Dark Energy requirement to
+condense Singularities by a factor of ${formatInt(10)} (with a minimum of ${format(200)}). This increases or decreases
+the number of Singularities gained from resetting at the cap by <i>more than</i> a factor of ${formatInt(10)}, making
+higher caps worth more if you are willing to wait.
 <br>
 <br>
-Reaching a certain number of Singularities will unlock Singularity milestones, which act similarly to Eternity
-milestones. Unlocking these milestones simply requires you to reach the total number of Singularities specified.
+The purpose of Singularities is to unlock Singularity milestones, which act similarly to Eternity milestones. Unlocking
+these milestones simply requires you to reach the total number of Singularities specified; Singularities are not spent.
 There are three types of milestones - one-time milestones, milestones repeatable a limited number of times, and
 milestones which can be repeated indefinitely. Additionally, milestones also have an icon indicating what kind of
 upgrade they generally give:

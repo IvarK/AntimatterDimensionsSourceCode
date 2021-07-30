@@ -7,7 +7,8 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get name() {
-    return `${[`Temporal`, `Replicative`, `Eternal`, `Superluminal`, `Boundless`][this._upgrade - 1]} Amplifier`;
+    const upgrade = this._upgrade;
+    return RealityUpgrade(upgrade).config.name;
   }
 
   get data() {

@@ -309,7 +309,7 @@ dev.buyAllPerks = function() {
 // This should help for balancing different glyph types, strong rounding of values is intentional
 dev.printResourceTotals = function() {
   console.log(`Antimatter: e${Currency.antimatter.exponent.toPrecision(3)}`);
-  console.log(`RM: e${Math.round(gainedRealityMachines().log10())}`);
+  console.log(`RM: e${Math.round(MachineHandler.gainedRealityMachines.log10())}`);
   console.log(`Glyph level: ${100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)}`);
 
   console.log(`Tickspeed: e${-Tickspeed.current.exponent.toPrecision(3)}`);
@@ -569,7 +569,7 @@ dev.testGlyphs = function(config) {
   }
   function finishTrial(index) {
     const done = padString(`${Math.floor(100 * (index + 1) / glyphSets.length)}%`, 4, true);
-    const rm = padString(gainedRealityMachines().toPrecision(2), 9);
+    const rm = padString(MachineHandler.gainedRealityMachines.toPrecision(2), 9);
     const gl = padString(gainedGlyphLevel().actualLevel, 4);
     const ep = padString(player.eternityPoints.exponent.toString(), 6);
     const ip = padString(player.infinityPoints.exponent.toString(), 8);

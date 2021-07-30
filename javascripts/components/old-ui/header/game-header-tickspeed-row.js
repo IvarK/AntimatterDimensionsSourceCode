@@ -28,7 +28,7 @@ Vue.component("game-header-tickspeed-row", {
       return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -55,7 +55,7 @@ Vue.component("game-header-tickspeed-row", {
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(Tickspeed.cost);
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
-      this.tickspeed.copyFrom(Tickspeed.current);
+      this.tickspeed.copyFrom(Tickspeed.perSecond);
       this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;

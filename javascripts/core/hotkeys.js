@@ -284,6 +284,8 @@ function keyboardToggleContinuum() {
   if (!Laitela.continuumUnlocked) return;
   player.auto.disableContinuum = !player.auto.disableContinuum;
   GameUI.notify.info(`${(player.auto.disableContinuum) ? "Disabled" : "Enabled"} Continuum`);
+  // eslint-disable-next-line no-bitwise
+  player.achievementChecks.continuumThisReality |= !player.auto.disableContinuum;
 }
 
 function keyboardAutomatorToggle() {

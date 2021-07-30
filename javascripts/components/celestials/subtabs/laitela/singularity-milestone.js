@@ -12,14 +12,16 @@ Vue.component("singularity-milestone", {
     nextEffectDisplay: "",
     start: 0,
     completions: 0,
-    limit: 0
+    limit: 0,
+    showingCondense: false,
+    singularitiesPerCondense: 0,
   }),
   computed: {
     barProgressStyle() {
       let color;
       if (this.isMaxed) color = "";
       else if (this.isUnique) color = "var(--color-accent)";
-      else if (this.limit > 1) color = "var(--color-good-dark)";
+      else if (Number.isFinite(this.limit)) color = "var(--color-good-dark)";
       else color = "var(--color-good)";
       return {
         background: color,
@@ -29,7 +31,7 @@ Vue.component("singularity-milestone", {
     backgroundStyle() {
       let color;
       if (this.isUnique && this.isMaxed) color = "var(--color-accent)";
-      else if (this.limit > 1 && this.completions >= 1) {
+      else if (Number.isFinite(this.limit) && this.completions >= 1) {
         if (this.isMaxed) color = "var(--color-good-dark)";
         else color = "var(--color-good)";
       } else {
@@ -58,9 +60,18 @@ Vue.component("singularity-milestone", {
       }
     },
     completionsDisplay() {
-      if (this.limit === 0) return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+      if (!Number.isFinite(this.limit)) {
+        return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+      }
       if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
       return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
+    },
+    progressDisplay() {
+      if (this.showingCondense) {
+        return `Condense ${format(this.remainingSingularities / this.singularitiesPerCondense, 2, 2)} times`;
+      }
+      return `In ${format(this.remainingSingularities, 2)} 
+        ${pluralize("Singularity", this.remainingSingularities, "Singularities")}`;
     }
   },
   methods: {
@@ -74,6 +85,8 @@ Vue.component("singularity-milestone", {
       if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
       this.completions = this.milestone.completions;
       this.limit = this.milestone.limit;
+      this.showingCondense = player.options.showCondenseToMilestone;
+      this.singularitiesPerCondense = Singularity.singularitiesGained;
     },
   },
   template: `
@@ -83,8 +96,7 @@ Vue.component("singularity-milestone", {
     >
       <div class="c-laitela-milestone__progress" :style="barProgressStyle" />
       <b v-if="!isMaxed">
-        In {{ format(remainingSingularities, 2, 0) }}
-        {{ "Singularity" | pluralize(remainingSingularities, "Singularities") }}
+        {{ progressDisplay }}
       </b>
       <p>
         <span v-html="upgradeDirectionIcon" /> {{ description }}

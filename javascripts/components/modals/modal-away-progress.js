@@ -7,6 +7,8 @@ Vue.component("modal-away-progress", {
         name: String,
         playerBefore: Object,
         playerAfter: Object,
+        // For most values, simply plugging in the name will be enough. However, in some cases an override
+        // is needed. Only pass in overrides in those cases.
         override: Object,
       },
       computed: {
@@ -19,6 +21,7 @@ Vue.component("modal-away-progress", {
           return overrideAfter === undefined ? this.playerAfter[this.name] : overrideAfter;
         },
         increased() {
+          // Both Decimals and numbers may be passed in. This code handles both.
           const after = this.after;
           const before = this.before;
 
@@ -32,6 +35,7 @@ Vue.component("modal-away-progress", {
         },
         classObject() {
           const overrideClassObj = this.override.classObject;
+          // Format the camelCase name to kebab-case
           const formattedName = this.name.replace(/[A-Z]/gu, match => `-${match.toLowerCase()}`);
           return overrideClassObj === undefined ? `c-modal-away-progress__${formattedName}` : overrideClassObj;
         },
@@ -40,6 +44,7 @@ Vue.component("modal-away-progress", {
         },
         formatName() {
           const overrideName = this.override.name;
+          // Format the camelCase name to Title Case, with spaces added before the capital letters
           const formattedName = this.name
             .replace(/[A-Z]/gu, match => ` ${match}`)
             .replace(/^\w/u, c => c.toUpperCase());
@@ -59,9 +64,9 @@ Vue.component("modal-away-progress", {
         },
       },
       template: `
-        <span v-if="show" :class="classObject">
+        <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
           <b>{{ formatName }}</b> increased from {{ formatBefore }} to {{ formatAfter }}
-        </span>`
+        </div>`
     },
     "away-progress-black-hole": {
       props: {
@@ -86,9 +91,12 @@ Vue.component("modal-away-progress", {
           return this.after.activations - this.before.activations;
         },
         name() {
+          // If its 0 its the first black hole, if its 1 its the second. if its not one of those two, something has gone
+          // wrong, and an error should be thrown.
+          // TODO: Standardize Black Hole handling and naming, this shouldnt be done locally
           if (this.blackHole === 0) return "First";
           if (this.blackHole === 1) return "Second";
-          throw new NotImplementedError();
+          throw new Error("Unknown Black Hole ID in modal-away-progress.js");
         },
         displayName() {
           // If we have the second black hole unlocked, specify which black hole activated.
@@ -96,13 +104,13 @@ Vue.component("modal-away-progress", {
         }
       },
       template: `
-        <span v-if="show">
+        <div v-if="show">
           Your
           <b class="c-modal-away-progress__black-hole">
-            <span v-if="displayName">{{ name }}</span> Black Hole
+            <span v-if="displayName">{{ name }} </span>Black Hole
           </b>
           activated {{ formatInt(activationTimes) }} {{ "time" | pluralize(activationTimes) }}
-        </span>`
+        </div>`
     }
   },
   props: {
@@ -157,6 +165,7 @@ Vue.component("modal-away-progress", {
         },
       };
 
+      // This code grabs all the pets and appends them, formatted correctly, to the object.
       const allPets = Ra.pets.all.map(x => x.name.toLowerCase());
       for (const pet of allPets) {
         Object.assign(statObject, this.getPet(pet));
@@ -180,6 +189,7 @@ Vue.component("modal-away-progress", {
     getPet(pet) {
       const before = this.before.celestials.ra.pets;
       const after = this.after.celestials.ra.pets;
+      // We only show pet memory gain if you haven't capped the pet level, so check that.
       const show = player.options.awayProgress.celestialMemories &&
         this.before.celestials.ra.pets[pet].level < Ra.levelCap;
       return {
@@ -196,28 +206,22 @@ Vue.component("modal-away-progress", {
     <div class="c-modal-away-progress">
       <modal-close-button @click="emitClose" />
       <div class="c-modal-away-progress__header">{{ headerText }}</div>
-
-      <div class="c-modal-away-progress__resources" v-if="!nothingAway">
-
-        <div v-for="(stat, name) in offlineStats" :key="name">
-          <away-progress-helper
-            :name="name"
-            :playerBefore="before"
-            :playerAfter="after"
-            :override="stat"
-          />
-          <br>
-        </div>
-
-        <div v-for="blackHole in [0, 1]" :key="blackHole">
-          <away-progress-black-hole
-            :blackHole="blackHole"
-            :playerBefore="before"
-            :playerAfter="after"
-          />
-          <br>
-        </div>
-
+      <div v-if="!nothingAway" class="c-modal-away-progress__resources">
+        <away-progress-helper
+          v-for="(stat, name) in offlineStats"
+          :key="name"
+          :name="name"
+          :playerBefore="before"
+          :playerAfter="after"
+          :override="stat"
+        />
+        <away-progress-black-hole
+          v-for="blackHole in [0, 1]"
+          :key="blackHole"
+          :blackHole="blackHole"
+          :playerBefore="before"
+          :playerAfter="after"
+        />
       </div>
     </div>`
 });

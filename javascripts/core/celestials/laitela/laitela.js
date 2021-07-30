@@ -4,15 +4,6 @@ const Laitela = {
   get celestial() {
     return player.celestials.laitela;
   },
-  handleMatterDimensionUnlocks() {
-    for (let i = 1; i <= 3; i++) {
-      const d = MatterDimension(i + 1);
-      if (d.amount.eq(0) && Currency.darkMatter.gte(d.adjustedStartingCost)) {
-        d.amount = new Decimal(1);
-        d.timeSinceLastUpdate = 0;
-      }
-    }
-  },
   get darkEnergyPerSecond() {
     return Array.range(1, 4)
       .map(n => MatterDimension(n))
@@ -24,29 +15,8 @@ const Laitela = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
   },
-  get raLevelRequirement() {
-    return 100;
-  },
-  get realityGlyphLevelRequirement() {
-    return 25000;
-  },
-  get realityMachineCost() {
-    return new Decimal("1e2000");
-  },
-  get canUnlock() {
-    return Ra.totalPetLevel >= this.raLevelRequirement &&
-      player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
-        x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
-      Currency.realityMachines.gte(this.realityMachineCost);
-  },
-  unlock() {
-    if (!this.canUnlock) return false;
-    Currency.realityMachines.purchase(this.realityMachineCost);
-    MatterDimension(1).amount = new Decimal(1);
-    return true;
-  },
   get isUnlocked() {
-    return MatterDimension(1).amount.gt(0);
+    return ImaginaryUpgrade(15).isBought;
   },
   canBuyUnlock(info) {
     if (Currency.darkMatters.lt(info.price)) return false;
@@ -75,15 +45,18 @@ const Laitela = {
   get maxAllowedDimension() {
     return 8 - this.difficultyTier;
   },
+  get isFullyDestabilized() {
+    return Laitela.maxAllowedDimension === 0;
+  },
   get continuumUnlocked() {
-    return Laitela.isUnlocked;
+    return ImaginaryUpgrade(15).isBought;
   },
   get continuumActive() {
     return this.continuumUnlocked && !player.auto.disableContinuum;
   },
   get matterExtraPurchaseFactor() {
-    return (1 + Math.pow(Decimal.pLog10(Currency.darkMatter.max) /
-      Math.log10(Number.MAX_VALUE), 0.8) * (1 + SingularityMilestone.continuumMult.effectValue) / 2);
+    return (1 + 0.5 * Math.pow(Decimal.pLog10(Currency.darkMatter.max) / 50, 0.4) *
+      (1 + SingularityMilestone.continuumMult.effectValue));
   },
   get realityReward() {
     return Math.clampMin(Math.pow(100, this.difficultyTier) *
@@ -91,11 +64,11 @@ const Laitela = {
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
   get entropyGainPerSecond() {
-    return Math.clamp(Math.pow(Currency.antimatter.value.log10() / 1e11, 2), 0, 100) / 100;
+    return Math.clamp(Math.pow(Currency.antimatter.value.log10() / 1e11, 2), 0, 100) / 200;
   },
   get darkMatterMultGain() {
     return Decimal.pow(Currency.darkMatter.value.dividedBy(this.annihilationDMRequirement)
-      .plus(1).log10(), 1.5).toNumber();
+      .plus(1).log10(), 1.5).toNumber() * ImaginaryUpgrade(21).effectOrDefault(1);
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
@@ -103,16 +76,19 @@ const Laitela = {
   get darkMatterMultRatio() {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
+  get canAnnihilate() {
+    return ImaginaryUpgrade(19).isBought && Currency.darkMatter.gte(this.annihilationDMRequirement);
+  },
   get annihilationDMRequirement() {
-    return 1e20;
+    return 1e60;
   },
   annihilate(force) {
-    if (!force && Currency.darkMatter.lt(this.annihilationDMRequirement)) return false;
+    if (!force && !this.canAnnihilate) return false;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
-          amount: new Decimal(0),
+          amount: new Decimal(1),
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,
@@ -121,9 +97,7 @@ const Laitela = {
         }
       )
     );
-    this.celestial.dimensions[0].amount = new Decimal(1);
     Currency.darkMatter.reset();
-    Currency.darkEnergy.reset();
     return true;
   },
   tickDarkMatter(realDiff) {
@@ -145,7 +119,7 @@ const Laitela = {
         d.timeSinceLastUpdate -= d.interval * ticks;
       }
     }
-    if (SingularityMilestone.dim4Generation.isUnlocked) {
+    if (SingularityMilestone.dim4Generation.isUnlocked && Laitela.canAnnihilate) {
       MatterDimension(4).amount = MatterDimension(4).amount
         .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
     }
@@ -153,7 +127,8 @@ const Laitela = {
   // Greedily buys the cheapest available upgrade until none are affordable
   maxAllDMDimensions(maxTier) {
     // Note that _tier is 0-indexed, so calling with maxTier = 3 will buy up to and including DM3 for example
-    const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0) && d._tier < maxTier);
+    const unlockedDimensions = MatterDimensionState.list
+      .filter(d => d.isUnlocked && d.amount.gt(0) && d._tier < maxTier);
     const upgradeInfo = unlockedDimensions
       .map(d => [
         [d.rawIntervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],

@@ -77,7 +77,7 @@ Vue.component("alchemy-tab", {
       focusedResourceId: -1,
       reactionsAvailable: false,
       realityCreationVisible: false,
-      reactionProgress: 0,
+      animationTimer: 0,
       estimatedCap: 0,
     };
   },
@@ -103,8 +103,7 @@ Vue.component("alchemy-tab", {
     update() {
       this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationVisible = Ra.pets.effarig.level === 25;
-      const animationTime = 800;
-      this.reactionProgress = (player.records.realTimePlayed % animationTime) / animationTime;
+      this.animationTimer = player.records.realTimePlayed;
       this.estimatedCap = estimatedAlchemyCap();
     },
     orbitSize(orbit) {
@@ -164,8 +163,10 @@ Vue.component("alchemy-tab", {
       const xEnd = reactionArrow.product.x;
       const yEnd = reactionArrow.product.y;
       const pathLength = Math.sqrt(Math.pow(xEnd - xStart, 2) + Math.pow(yEnd - yStart, 2));
-      const leadPoint = Math.max(0, this.reactionProgress - 3 / pathLength);
-      const trailPoint = Math.min(1, this.reactionProgress + 3 / pathLength);
+      const animationTime = pathLength * 40;
+      const reactionProgress = (this.animationTimer % animationTime) / animationTime;
+      const leadPoint = Math.max(0, reactionProgress + 2 / pathLength);
+      const trailPoint = Math.min(1, reactionProgress - 2 / pathLength);
       return {
         x1: `${xStart * (1 - leadPoint) + xEnd * leadPoint}%`,
         y1: `${yStart * (1 - leadPoint) + yEnd * leadPoint}%`,

@@ -203,7 +203,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
   });
   return Object.assign(defaults, {
     reset: false,
-    gainedRM: gainedRealityMachines(),
+    gainedRM: MachineHandler.gainedRealityMachines,
     gainedGlyphLevel: gainedGlyphLevel(),
     gainedShards: Effarig.shardsGained,
     simulatedRealities: simulatedRealityCount(true),
@@ -262,8 +262,13 @@ function giveRealityRewards(realityProps) {
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM.copyFrom(Currency.antimatter);
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
-      player.celestials.teresa.lastRepeatedRM = player.celestials.teresa.lastRepeatedRM
-        .clampMin(Currency.realityMachines.value);
+
+      // Encode iM values into the RM variable as e10000 * iM in order to only require one prop
+      let machineRecord;
+      if (Currency.imaginaryMachines.value === 0) machineRecord = Currency.realityMachines.value;
+      else machineRecord = new Decimal("1e10000").times(Currency.imaginaryMachines.value);
+      player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
+        .clampMin(machineRecord);
     }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
@@ -333,7 +338,7 @@ function finishProcessReality(realityProps) {
 
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
-  Glyphs.updateGlyphCountForV(true);
+  Glyphs.updateMaxGlyphCount(true);
 
   player.sacrificed = new Decimal(0);
 
@@ -392,6 +397,9 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.noInfinitiesThisReality = true;
   player.achievementChecks.noEternitiesThisReality = true;
   player.achievementChecks.noReplicantiGalaxies = true;
+  player.achievementChecks.maxID1ThisReality = new Decimal(0);
+  player.achievementChecks.maxStudiesThisReality = 0;
+  player.achievementChecks.continuumThisReality = Laitela.continuumActive;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   Currency.timeTheorems.reset();

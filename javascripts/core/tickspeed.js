@@ -57,6 +57,7 @@ function getTickSpeedMultiplier() {
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
+  galaxies *= 1 + ImaginaryUpgrade(9).effectValue;
   const perGalaxy = new Decimal(0.965);
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
@@ -182,12 +183,15 @@ const Tickspeed = {
       .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
   },
 
+  get perSecond() {
+    return Decimal.divide(1000, this.current);
+  },
+
   multiplySameCosts() {
     for (const dimension of AntimatterDimensions.all) {
       if (dimension.cost.e === this.cost.e) dimension.costBumps++;
     }
   }
-
 };
 
 

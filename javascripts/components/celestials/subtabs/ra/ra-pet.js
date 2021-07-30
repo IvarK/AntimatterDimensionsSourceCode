@@ -251,6 +251,5 @@ Vue.component("ra-pet", {
             :unlock="unlock" />
         </div>
       </div>
-    </div>
-  `
+    </div>`
 });

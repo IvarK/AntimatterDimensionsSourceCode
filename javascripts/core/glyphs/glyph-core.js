@@ -158,7 +158,7 @@ const Glyphs = {
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -174,7 +174,7 @@ const Glyphs = {
       Modal.message.show("Some of your glyphs could not be unequipped due to lack of inventory space.");
     }
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -185,7 +185,7 @@ const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -427,10 +427,10 @@ const Glyphs = {
     return 1000000;
   },
   get instabilityThreshold() {
-    return 1000 + getAdjustedGlyphEffect("effarigglyph");
+    return 1000 + getAdjustedGlyphEffect("effarigglyph") + ImaginaryUpgrade(7).effectValue;
   },
   get hyperInstabilityThreshold() {
-    return 4000 + getAdjustedGlyphEffect("effarigglyph");
+    return 3000 + this.instabilityThreshold;
   },
   clearUndo() {
     player.reality.glyphs.undo = [];
@@ -495,7 +495,7 @@ const Glyphs = {
   },
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
-  updateGlyphCountForV(startingReality = false) {
+  updateMaxGlyphCount(startingReality = false) {
     const activeGlyphList = this.activeList;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;

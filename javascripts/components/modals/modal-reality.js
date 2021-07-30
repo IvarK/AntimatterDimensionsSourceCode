@@ -50,7 +50,7 @@ Vue.component("modal-reality", {
       this.firstPerk = Perk.firstPerk.isEffectActive;
       this.level = gainedGlyphLevel().actualLevel;
       this.realities = simulatedRealityCount(false) + 1;
-      this.realityMachines.copyFrom(gainedRealityMachines());
+      this.realityMachines.copyFrom(MachineHandler.gainedRealityMachines);
       if (!this.firstPerk) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];

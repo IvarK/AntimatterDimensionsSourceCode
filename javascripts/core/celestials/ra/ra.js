@@ -293,6 +293,11 @@ const Ra = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
+    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
+    if (!BlackHoles.areNegative) {
+      player.minNegativeBlackHoleThisReality = 1;
+    }
+    Glyphs.updateMaxGlyphCount(true);
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
@@ -481,8 +486,8 @@ const RA_UNLOCKS = {
   GLYPH_ALCHEMY: {
     id: 8,
     description: "Get Effarig to level 2",
-    reward: `Unlock Glyph Alchemy, which adds alchemical resources you can increase
-    by Refining Glyphs, and unlocking more resources through Effarig levels. Access through a new Reality tab.`,
+    reward: `Unlock Glyph Alchemy, which adds alchemical resources you can increase by Refining Glyphs. You unlock
+      more resources through Effarig levels. Access through a new Reality tab.`,
     pet: Ra.pets.effarig,
     level: 2,
     displayIcon: `<span class="fas fa-vial"></span>`
@@ -542,7 +547,7 @@ const RA_UNLOCKS = {
     description: "Get Enslaved to level 2",
     reward: "Stored game time is amplified and you can store more real time, increasing with Enslaved levels",
     effect: {
-      gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap) / 100,
+      gameTimeAmplification: () => Math.pow(20, Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap)),
       realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level,
     },
     pet: Ra.pets.enslaved,

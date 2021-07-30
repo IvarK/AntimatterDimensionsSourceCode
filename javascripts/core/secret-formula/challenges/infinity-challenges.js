@@ -86,7 +86,7 @@ GameDatabase.challenges.infinity = [
     formatEffect: value => formatX(value, 1, 2),
     reward: {
       description: "Infinity Dimension multiplier based on Tickspeed",
-      effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
+      effect: () => Tickspeed.perSecond.pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },
     unlockAM: new Decimal("1e22500"),

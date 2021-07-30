@@ -6,8 +6,6 @@ const GALAXY_TYPE = {
   REMOTE: 2
 };
 
-const REMOTE_SCALING_START = 800;
-
 class GalaxyRequirement {
   constructor(tier, amount) {
     this.tier = tier;
@@ -21,6 +19,10 @@ class GalaxyRequirement {
 }
 
 class Galaxy {
+  static get remoteStart() {
+    return RealityUpgrade(21).effectOrDefault(800);
+  }
+
   static get requirement() {
     return this.requirementAt(player.galaxies);
   }
@@ -52,7 +54,7 @@ class Galaxy {
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount *= Math.pow(1.002, galaxies - (REMOTE_SCALING_START - 1));
+      amount *= Math.pow(1.002, galaxies - (Galaxy.remoteStart - 1));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -107,7 +109,7 @@ class Galaxy {
   }
 
   static typeAt(galaxies) {
-    if (galaxies >= REMOTE_SCALING_START && !RealityUpgrade(21).isBought) {
+    if (galaxies >= Galaxy.remoteStart) {
       return GALAXY_TYPE.REMOTE;
     }
     if (EternityChallenge(5).isRunning || galaxies >= this.costScalingStart) {

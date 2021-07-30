@@ -23,8 +23,8 @@ Vue.component("modal-away-progress", {
           const before = this.before;
 
           return after instanceof Decimal
-            ? after.gte(before)
-            : after >= before;
+            ? after.gt(before)
+            : after > before;
         },
         showOption() {
           const overrideAway = this.override.awayProgress;
@@ -77,7 +77,7 @@ Vue.component("modal-away-progress", {
           return this.playerAfter.blackHole[this.blackHole];
         },
         increased() {
-          return this.after.activations >= this.before.activations;
+          return this.after.activations > this.before.activations;
         },
         show() {
           return player.options.awayProgress.blackHole && this.increased;

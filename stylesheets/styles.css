@@ -5161,7 +5161,7 @@ screen and (max-width: 480px) {
   margin-bottom: 1rem;
 }
 
-.c-modal-away-progress__resources div > div {
+.c-modal-away-progress__resources div {
   margin-bottom: 0.2rem;
   padding-bottom: 0.2rem;
   border-bottom: 0.1rem solid;

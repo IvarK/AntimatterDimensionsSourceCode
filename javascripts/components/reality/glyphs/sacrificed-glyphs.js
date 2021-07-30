@@ -126,6 +126,7 @@ Vue.component("sacrificed-glyphs", {
     },
     dragleave(event) {
       if (
+        !event.relatedTarget.classList ||
         event.relatedTarget.classList.contains("c-current-glyph-effects") ||
         event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||
         event.relatedTarget.classList.contains("l-sacrificed-glyphs__type") ||

@@ -52,7 +52,9 @@ const AutoGlyphProcessor = {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
-        const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
+        // This ternary check is required to filter out the additional effects given by Ra-Enslaved 25, which don't
+        // exist in the glyph filter settings. It can be safely ignored since the effect is always given.
+        const effectScore = effectList.map(e => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0)).sum();
         return strengthToRarity(glyph.strength) + effectScore;
       }
       // Picked glyphs are never kept in Alchemy modes.

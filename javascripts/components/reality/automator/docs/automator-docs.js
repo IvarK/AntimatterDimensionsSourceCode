@@ -21,6 +21,9 @@ Vue.component("automator-docs", {
     },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
+    },
+    fullScreenTooltip() {
+      return this.fullScreen ? "Exit full screen" : "Expand to full screen";
     }
   },
   methods: {
@@ -34,11 +37,17 @@ Vue.component("automator-docs", {
   template: `
     <div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls" >
-        <automator-button class="fa-long-arrow-alt-left" @click="commandID = -1" />
+        <automator-button
+          :class="{ 'visibility: false' : commandID !== -1 }"
+          class="fa-long-arrow-alt-left"
+          @click="commandID = -1"
+          v-tooltip="'Return to command list'"
+        />
         <automator-button
           :class="fullScreenIconClass"
           class="l-automator__button--corner"
           @click="fullScreen = !fullScreen"
+          v-tooltip="fullScreenTooltip"
         />
       </div>
       <automator-blocks v-if="isBlockAutomator" />

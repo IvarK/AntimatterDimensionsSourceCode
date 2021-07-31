@@ -8,7 +8,7 @@ GameDatabase.reality.automator = {
       keyword: "wait",
       name: "<b>wait</b> - wait for something",
       syntax: "<b>wait</b> condition",
-      description: "Forces automator to wait for some condition or event",
+      description: "Forces Automator to wait for some condition or event",
       sections: [
         {
           name: "CONDITIONS",
@@ -187,15 +187,15 @@ GameDatabase.reality.automator = {
             {
               header: "<i>number</i> <i>time units</i>",
               description: `Usable with infinity/eternity only.` +
-               `Turn automator on and set it to trigger at the given interval`
+               `Turn Automator on and set it to trigger at the given interval`
             },
             {
               header: "<i>number</i> x current",
-              description: 'Usable with infinity/eternity only. Turn automator on and sets it to "X times current" mode'
+              description: 'Usable with infinity/eternity only. Turn Automator on and sets it to "X times current" mode'
             },
             {
               header: "<i>number currency</i>",
-              description: `Turn automator on and sets it to trigger at a specific amount. The currency must match the
+              description: `Turn Automator on and sets it to trigger at a specific amount. The currency must match the
                             autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality
                             machines" mode`,
             },
@@ -228,7 +228,7 @@ GameDatabase.reality.automator = {
       id: 9,
       isUnlocked: () => true,
       keyword: "pause",
-      name: "<b>pause</b> - pauses the automator for a set amount of time",
+      name: "<b>pause</b> - pauses the Automator for a set amount of time",
       syntax: "<b>pause</b> [interval]",
       examples: [
         "pause 10s",
@@ -331,9 +331,9 @@ GameDatabase.reality.automator = {
       name: "<b>studies</b> - Purchase Time Studies",
       syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
       description: `Purchase Time Studies specified. If <b>nowait</b> is present, then
-        the automator will purchase as many Time Studies as possible at the moment, and move on
+        the Automator will purchase as many Time Studies as possible at the moment, and move on
         to the next command.<br>
-        If <b>nowait</b> is <i>not</i> present, then the automator will buy the studies in order,
+        If <b>nowait</b> is <i>not</i> present, then the Automator will buy the studies in order,
         waiting for them to become available/affordable if necessary.<br>
         The Time Study list can consist of Time Study numbers, separated by spaces or commas, ranges of
         studies (for example, <i>11-62</i>) and the following aliases:<br>

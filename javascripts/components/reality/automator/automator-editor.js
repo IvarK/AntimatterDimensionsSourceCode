@@ -37,11 +37,6 @@ Vue.component("automator-editor", {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
-    playTooltip() {
-      if (this.isRunning) return undefined;
-      if (this.isPaused) return "Resume automator execution";
-      return "Start automator";
-    },
     currentScriptContent() {
       return player.reality.automator.scripts[this.currentScriptID].content;
     },
@@ -57,6 +52,10 @@ Vue.component("automator-editor", {
     },
     activeLine() {
       return AutomatorBackend.state.topLevelScript === this.currentScriptID ? this.activeLineRaw : 0;
+    },
+    automatorModeTooltip() {
+      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) return "Switch to the text editor";
+      return "Switch to the block editor";
     },
   },
   methods: {
@@ -131,7 +130,6 @@ Vue.component("automator-editor", {
       }
       this.$nextTick(() => this.editingName = false);
     },
-
     dropdownLabel(script) {
       let label = script.name;
       if (script.id === this.runningScriptID) {
@@ -140,7 +138,6 @@ Vue.component("automator-editor", {
       }
       return label;
     },
-
     toggleAutomatorMode() {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         BlockAutomator.parseTextFromBlocks();
@@ -150,7 +147,6 @@ Vue.component("automator-editor", {
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
-
       this.$recompute("currentScriptContent");
     }
   },
@@ -192,10 +188,10 @@ Vue.component("automator-editor", {
           @click="deleteScript"
           v-tooltip="'Delete this script'"
         />
-
         <automator-button
           :class="modeIconClass"
           @click="toggleAutomatorMode()"
+          v-tooltip="automatorModeTooltip"
         />
       </div>
       <automator-text-editor

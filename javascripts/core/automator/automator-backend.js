@@ -170,7 +170,7 @@ const AutomatorBackend = {
     return player.reality.automator.state;
   },
 
-  // The automator may be paused at some instruction, but still be on.
+  // The Automator may be paused at some instruction, but still be on.
   get isOn() {
     return !this.stack.isEmpty;
   },
@@ -349,6 +349,13 @@ const AutomatorBackend = {
 
   toggleForceRestart() {
     this.state.forceRestart = !this.state.forceRestart;
+  },
+
+  toggleFollowExecution() {
+    this.state.followExecution = !this.state.followExecution;
+    if (this.state.followExecution) {
+      AutomatorTextUI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
+    }
   },
 
   reset(commands) {

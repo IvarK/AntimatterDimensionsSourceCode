@@ -112,7 +112,7 @@ Vue.component("automator-text-editor", {
       if (lineNumber > 0) {
         this.UI.editor.addLineClass(lineNumber - 1, "background", "c-automator-editor__active-line");
         this.UI.editor.addLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
-        this.UI.editor.scrollIntoView({ line: lineNumber - 1, ch: 0 }, 16);
+        if (AutomatorBackend.state.followExecution) this.UI.editor.scrollIntoView({ line: lineNumber - 1, ch: 0 }, 16);
         this.markedLineNumber = lineNumber;
       }
     },

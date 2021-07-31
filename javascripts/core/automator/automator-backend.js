@@ -347,6 +347,10 @@ const AutomatorBackend = {
     this.state.repeat = !this.state.repeat;
   },
 
+  toggleForceRestart() {
+    this.state.forceRestart = !this.state.forceRestart;
+  },
+
   reset(commands) {
     this.stack.clear();
     this.push(commands);
@@ -430,5 +434,4 @@ const AutomatorBackend = {
       return this._data.length === 0;
     }
   },
-
 };

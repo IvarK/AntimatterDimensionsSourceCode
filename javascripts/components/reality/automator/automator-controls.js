@@ -6,6 +6,7 @@ Vue.component("automator-controls", {
       isRunning: false,
       isPaused: false,
       repeatOn: false,
+      forceRestartOn: false,
     };
   },
   computed: {
@@ -23,6 +24,7 @@ Vue.component("automator-controls", {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.repeatOn = AutomatorBackend.state.repeat;
+      this.forceRestartOn = AutomatorBackend.state.forceRestart;
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
@@ -37,12 +39,13 @@ Vue.component("automator-controls", {
       else AutomatorBackend.start(this.currentScriptID, AUTOMATOR_MODE.SINGLE_STEP);
     },
     repeat: () => AutomatorBackend.toggleRepeat(),
+    restart: () => AutomatorBackend.toggleForceRestart(),
   },
   template: `
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <automator-button class="fa-fast-backward"
         @click="rewind"
-        v-tooltip="'rewind automator to the first command'"
+        v-tooltip="'Rewind automator to the first command'"
       />
       <automator-button
         class="fa-play"
@@ -68,6 +71,12 @@ Vue.component("automator-controls", {
         :class="{ 'c-automator__button--active' : repeatOn }"
         @click="repeat"
         v-tooltip="'Restart script automatically when it completes'"
+      />
+      <automator-button
+        class="fa-reply"
+        :class="{ 'c-automator__button--active' : forceRestartOn }"
+        @click="restart"
+        v-tooltip="'Restart script when undoing/replacing glyphs or finishing/restarting a Reality'"
       />
     </div>`
 });

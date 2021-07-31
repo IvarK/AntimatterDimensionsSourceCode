@@ -398,6 +398,7 @@ let player = {
         topLevelScript: 0,
         editorScript: 0,
         repeat: false,
+        forceRestart: false,
         stack: [],
       },
       scripts: {

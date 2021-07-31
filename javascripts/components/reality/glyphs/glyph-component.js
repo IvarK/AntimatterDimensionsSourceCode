@@ -103,7 +103,7 @@ const GlyphTooltipComponent = {
       type: Boolean,
       default: true,
     },
-    levelOverride: {
+    displayLevel: {
       type: Number,
       default: 0,
     }
@@ -121,7 +121,7 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     effectiveLevel() {
-      return this.levelOverride ? this.levelOverride : this.level;
+      return this.displayLevel ? this.displayLevel : this.level;
     },
     sortedEffects() {
       return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
@@ -167,10 +167,10 @@ const GlyphTooltipComponent = {
       }
     },
     isLevelCapped() {
-      return this.levelOverride && this.levelOverride < this.level;
+      return this.displayLevel && this.displayLevel < this.level;
     },
     isLevelBoosted() {
-      return this.levelOverride && this.levelOverride > this.level;
+      return this.displayLevel && this.displayLevel > this.level;
     },
     rarityText() {
       if (!GlyphTypes[this.type].hasRarity) return "";
@@ -318,10 +318,12 @@ Vue.component("glyph-component", {
       type: Boolean,
       default: false,
     },
-    noLevelOverride: {
+    ignoreModifiedLevel: {
       type: Boolean,
       default: false,
     },
+    realityGlyphBoost: Number,
+    isActiveGlyph: Boolean,
     size: {
       type: String,
       default: "5rem",
@@ -364,7 +366,7 @@ Vue.component("glyph-component", {
       isTouched: false,
       sacrificeReward: 0,
       refineReward: 0,
-      levelOverride: 0,
+      displayLevel: 0,
       isRealityGlyph: false,
       isCursedGlyph: false,
       glyphEffects: [],
@@ -540,7 +542,11 @@ Vue.component("glyph-component", {
         this.currentAction = "refine";
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
+      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+      const adjustedLevel = this.isActiveGlyph
+        ? getAdjustedGlyphLevel(this.glyph)
+        : this.glyph.level + levelBoost;
+      this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
@@ -693,7 +699,7 @@ Vue.component("glyph-component", {
           :currentAction="currentAction"
           :scoreMode="scoreMode"
           :showDeletionText="showSacrifice"
-          :levelOverride="levelOverride"
+          :displayLevel="displayLevel"
           :component="componentID"
         />
       </div>

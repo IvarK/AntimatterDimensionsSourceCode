@@ -137,6 +137,7 @@ Vue.component("equipped-glyphs", {
             :key="idx + logGlyphSacrifice"
             :glyph="glyph"
             :circular="true"
+            :isActiveGlyph="true"
             style="-webkit-user-drag: none;"
           />
           <div

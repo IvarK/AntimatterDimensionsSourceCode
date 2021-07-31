@@ -4,21 +4,23 @@ Vue.component("modal-away-progress", {
   components: {
     "away-progress-helper": {
       props: {
-        name: String,
-        playerBefore: Object,
-        playerAfter: Object,
-        // For most values, simply plugging in the name will be enough. However, in some cases an override
-        // is needed. Only pass in overrides in those cases.
-        override: Object,
+        config: Object,
       },
       computed: {
-        before() {
-          const overrideBefore = this.override.before;
-          return overrideBefore === undefined ? this.playerBefore[this.name] : overrideBefore;
-        },
         after() {
-          const overrideAfter = this.override.after;
-          return overrideAfter === undefined ? this.playerAfter[this.name] : overrideAfter;
+          return this.config.after;
+        },
+        before() {
+          return this.config.before;
+        },
+        classObject() {
+          return this.config.classObject;
+        },
+        name() {
+          return this.config.name;
+        },
+        showOption() {
+          return this.config.awayProgress;
         },
         increased() {
           // Both Decimals and numbers may be passed in. This code handles both.
@@ -26,29 +28,11 @@ Vue.component("modal-away-progress", {
           const before = this.before;
 
           return after instanceof Decimal
-            ? after.gt(before)
-            : after > before;
-        },
-        showOption() {
-          const overrideAway = this.override.awayProgress;
-          return overrideAway === undefined ? player.options.awayProgress[this.name] : overrideAway;
-        },
-        classObject() {
-          const overrideClassObj = this.override.classObject;
-          // Format the camelCase name to kebab-case
-          const formattedName = this.name.replace(/[A-Z]/gu, match => `-${match.toLowerCase()}`);
-          return overrideClassObj === undefined ? `c-modal-away-progress__${formattedName}` : overrideClassObj;
+            ? after.gte(before)
+            : after >= before;
         },
         show() {
           return this.showOption && this.increased;
-        },
-        formatName() {
-          const overrideName = this.override.name;
-          // Format the camelCase name to Title Case, with spaces added before the capital letters
-          const formattedName = this.name
-            .replace(/[A-Z]/gu, match => ` ${match}`)
-            .replace(/^\w/u, c => c.toUpperCase());
-          return overrideName === undefined ? formattedName : overrideName;
         },
         formatBefore() {
           return this.formatPseudo(this.before);
@@ -65,7 +49,7 @@ Vue.component("modal-away-progress", {
       },
       template: `
         <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
-          <b>{{ formatName }}</b> increased from {{ formatBefore }} to {{ formatAfter }}
+          <b>{{ name }}</b> increased from {{ formatBefore }} to {{ formatAfter }}
         </div>`
     },
     "away-progress-black-hole": {
@@ -129,46 +113,10 @@ Vue.component("modal-away-progress", {
       return this.modalConfig.playerAfter;
     },
     offlineStats() {
-      const b = this.before;
-      const a = this.after;
+      const statObject = { };
 
-      const statObject = {
-        antimatter: {},
-        infinityPoints: {},
-        eternityPoints: {},
-        realityMachines: {
-          before: b.reality.realityMachines,
-          after: a.reality.realityMachines,
-        },
-        dilatedTime: {
-          before: b.dilation.dilatedTime,
-          after: a.dilation.dilatedTime,
-        },
-        infinities: {},
-        eternities: {},
-        realities: {},
-        singularities: {
-          before: b.celestials.laitela.singularities,
-          after: a.celestials.laitela.singularities,
-        },
-        darkMatter: {
-          before: b.celestials.laitela.darkMatter,
-          after: a.celestials.laitela.darkMatter,
-        },
-        replicanti: {
-          before: b.replicanti.amount,
-          after: a.replicanti.amount,
-        },
-        replicantiGalaxies: {
-          before: b.replicanti.galaxies,
-          after: a.replicanti.galaxies,
-        },
-      };
-
-      // This code grabs all the pets and appends them, formatted correctly, to the object.
-      const allPets = Ra.pets.all.map(x => x.name.toLowerCase());
-      for (const pet of allPets) {
-        Object.assign(statObject, this.getPet(pet));
+      for (const awayProgress of AwayProgressTypes.all) {
+        Object.assign(statObject, this.getObjectForAway(awayProgress));
       }
 
       return statObject;
@@ -186,18 +134,20 @@ Vue.component("modal-away-progress", {
     update() {
       this.nothingAway = Theme.current().name === "S7";
     },
-    getPet(pet) {
-      const before = this.before.celestials.ra.pets;
-      const after = this.after.celestials.ra.pets;
-      // We only show pet memory gain if you haven't capped the pet level, so check that.
-      const show = player.options.awayProgress.celestialMemories &&
-        this.before.celestials.ra.pets[pet].level < Ra.levelCap;
+    getObjectForAway(item) {
+      const objectName = item.name;
+      const name = item.formatName;
+      const before = item.navigateTo(this.before);
+      const after = item.navigateTo(this.after);
+      const awayProgress = item.option;
+      const classObject = item.classObject;
       return {
-        [`${pet}Memories`]: {
-          name: `${pet.capitalize()}'s Memories`,
-          before: before[pet].memories,
-          after: after[pet].memories,
-          awayProgress: show,
+        [`${objectName}`]: {
+          name,
+          before,
+          after,
+          awayProgress,
+          classObject,
         }
       };
     },
@@ -210,10 +160,7 @@ Vue.component("modal-away-progress", {
         <away-progress-helper
           v-for="(stat, name) in offlineStats"
           :key="name"
-          :name="name"
-          :playerBefore="before"
-          :playerAfter="after"
-          :override="stat"
+          :config="stat"
         />
         <away-progress-black-hole
           v-for="blackHole in [0, 1]"

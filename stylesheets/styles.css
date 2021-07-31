@@ -5178,7 +5178,8 @@ screen and (max-width: 480px) {
     0 0 0.2rem black,
     0 0 0.2rem black;
 }
-
+.c-modal-away-progress__dimension-boosts,
+.c-modal-away-progress__antimatter-galaxies,
 .c-modal-away-progress__antimatter {
   color: var(--color-antimatter)
 }
@@ -5188,35 +5189,33 @@ screen and (max-width: 480px) {
   animation: a-game-header__antimatter--glow 25s infinite;
 }
 
+.c-modal-away-progress__infinities,
 .c-modal-away-progress__infinity-points {
   color: var(--color-infinity);
 }
 
+.c-modal-away-progress__eternities,
 .c-modal-away-progress__eternity-points {
   color: var(--color-eternity);
 }
 
-.c-modal-away-progress__reality-machines {
-  color: var(--color-reality);
-}
-
+.c-modal-away-progress__tachyon-particles,
+.c-modal-away-progress__tachyon-galaxies,
 .c-modal-away-progress__dilated-time {
   color: var(--color-dilation);
 }
 
-.c-modal-away-progress__infinities {
-  color: var(--color-infinity);
-}
-
-.c-modal-away-progress__eternities {
-  color: var(--color-eternity);
-}
-
-.c-modal-away-progress__realities {
+.c-modal-away-progress__realities,
+.c-modal-away-progress__reality-machines,
+.c-modal-away-progress__imaginary-machines {
   color: var(--color-reality);
 }
 
+.c-modal-away-progress__dark-matter b,
+.c-modal-away-progress__dark-energy b,
+.c-modal-away-progress__singularities b,
 .c-modal-away-progress__dark-matter,
+.c-modal-away-progress__dark-energy,
 .c-modal-away-progress__singularities {
   color: var(--color-laitela--base);
   text-shadow:
@@ -5237,19 +5236,20 @@ b.c-modal-away-progress__black-hole {
   color: #03a9f4;
 }
 
-.c-modal-away-progress__teresa-memories {
+.c-modal-away-progress__teresa {
   color: var(--color-ra-pet-teresa);
 }
 
-.c-modal-away-progress__effarig-memories {
+.c-modal-away-progress__relic-shards,
+.c-modal-away-progress__effarig {
   color: var(--color-ra-pet-effarig);
 }
 
-.c-modal-away-progress__enslaved-memories {
+.c-modal-away-progress__enslaved {
   color: var(--color-ra-pet-enslaved);
 }
 
-.c-modal-away-progress__v-memories {
+.c-modal-away-progress__v {
   color: var(--color-ra-pet-v);
 }
 

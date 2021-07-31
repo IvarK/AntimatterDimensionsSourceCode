@@ -117,7 +117,7 @@ Vue.component("modal-reality", {
           :key="index"
           :glyph="glyph"
           :isInModal="true"
-          :noLevelOverride="true"
+          :ignoreModifiedLevel="true"
           :showSacrifice="canSacrifice"
           @click.native="select(index)"
         />

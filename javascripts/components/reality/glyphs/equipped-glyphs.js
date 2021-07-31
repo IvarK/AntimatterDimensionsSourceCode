@@ -4,12 +4,12 @@ Vue.component("equipped-glyphs", {
   data() {
     return {
       glyphs: [],
-      copiedGlyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
       respecIntoProtected: player.options.respecIntoProtected,
       undoAvailable: false,
       undoVisible: false,
+      logGlyphSacrifice: 0,
     };
   },
   created() {
@@ -38,6 +38,15 @@ Vue.component("equipped-glyphs", {
     },
   },
   methods: {
+    update() {
+      this.respec = player.reality.respec;
+      this.respecIntoProtected = player.options.respecIntoProtected;
+      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
+      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
+      // This is necessary to force a re-render by key-swapping for when altered glyph effects are activated
+      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
+        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+    },
     glyphPositionStyle(idx) {
       return {
         position: "absolute",
@@ -83,12 +92,6 @@ Vue.component("equipped-glyphs", {
     toggleRespecIntoProtected() {
       player.options.respecIntoProtected = !player.options.respecIntoProtected;
     },
-    update() {
-      this.respec = player.reality.respec;
-      this.respecIntoProtected = player.options.respecIntoProtected;
-      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
-      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
-    },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
     },
@@ -131,22 +134,16 @@ Vue.component("equipped-glyphs", {
           />
           <glyph-component
             v-if="glyph"
-            :key="idx"
+            :key="idx + logGlyphSacrifice"
             :glyph="glyph"
             :circular="true"
+            :isActiveGlyph="true"
             style="-webkit-user-drag: none;"
           />
           <div
             v-else
             :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
               {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
-          />
-        </div>
-        <div v-for="glyph in copiedGlyphs" :style="copyPositionStyle(glyph)">
-          <glyph-component
-            v-if="glyph"
-            :glyph="glyph"
-            :circular="true"
           />
         </div>
       </div>

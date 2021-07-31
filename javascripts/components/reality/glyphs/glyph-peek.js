@@ -51,7 +51,7 @@ Vue.component("glyph-peek", {
       :showName="false"
       :text="'Upcoming glyph selection:'"
       :glyphs="glyphs"
-      :noLevelOverride="true"
+      :ignoreModifiedLevel="true"
       :showSacrifice="canSacrifice"
       :flipTooltip="true"
     />

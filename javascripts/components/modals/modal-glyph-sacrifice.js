@@ -8,10 +8,18 @@ Vue.component("modal-glyph-sacrifice", {
       gain: 0
     };
   },
+  computed: {
+    message() {
+      return `Do you really want to sacrifice this glyph? Your total power of sacrificed ${this.glyph.type} ` +
+      `glyphs will increase from ${format(player.reality.glyphs.sac[this.glyph.type], 2, 2)} to ` +
+      `${format(player.reality.glyphs.sac[this.glyph.type] + this.gain, 2, 2)}.`;
+    }
+  },
   methods: {
     update() {
       this.glyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
       this.isProtected = this.modalConfig.idx < Glyphs.protectedSlots;
+      this.gain = this.modalConfig.gain;
     },
     handleYesClick() {
       if (this.isProtected) {
@@ -31,8 +39,7 @@ Vue.component("modal-glyph-sacrifice", {
   template: `<div class="c-modal-message l-modal-content--centered">
   <h2>You are about to delete a Glyph</h2>
   <div class="c-modal-message__text">
-    Deleting a Glyph will remove the Glyph from your inventory, and you will not be able to recover it!
-    There is no benefit in deleting a Glyph!
+    {{ message }}
   </div>
   <div class="l-options-grid__row">
   <primary-button

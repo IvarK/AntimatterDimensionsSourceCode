@@ -28,7 +28,7 @@ Vue.component("modal-glyph-delete", {
   <h2>You are about to delete a Glyph</h2>
   <div class="c-modal-message__text">
     Deleting a Glyph will remove the Glyph from your inventory, and you will not be able to recover it!
-    There is no benefit in deleting a Glyph!
+    <div class="c-modal-hard-reset-danger">There is no benefit in deleting a Glyph!</div>
   </div>
   <div class="l-options-grid__row">
   <primary-button

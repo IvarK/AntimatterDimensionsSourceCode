@@ -79,6 +79,7 @@ Modal.glyphUndo = new Modal("modal-glyph-undo");
 Modal.glyphReplace = new Modal("modal-glyph-replace");
 Modal.glyphSacrifice = new Modal("modal-glyph-sacrifice");
 Modal.glyphDelete = new Modal("modal-glyph-delete");
+Modal.glyphRefine = new Modal("modal-glyph-refine");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");

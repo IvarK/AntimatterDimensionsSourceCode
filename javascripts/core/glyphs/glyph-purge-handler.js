@@ -95,21 +95,35 @@ const GlyphSacrificeHandler = {
       return;
     }
     if (this.glyphAlchemyResource(glyph).isUnlocked) {
-      const resource = this.glyphAlchemyResource(glyph);
-      const rawRefinementGain = this.glyphRawRefinementGain(glyph);
-      const refinementGain = this.glyphRefinementGain(glyph);
-      resource.amount += refinementGain;
-      const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
-      const alchemyCap = this.levelAlchemyCap(glyph.level);
-      for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
-        if (glyphTypeName !== glyph.type) {
-          const glyphType = GlyphTypes[glyphTypeName];
-          const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-          const maxResouce = Math.max(alchemyCap, otherResource.amount);
-          otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
-        }
+      if (player.options.confirmations.glyphRefine) {
+        const resource = this.glyphAlchemyResource(glyph);
+        Modal.glyphRefine.show({ 
+          idx: glyph.idx, 
+          resourceName: resource.name, 
+          resourceAmount: resource.amount,
+          gain: this.glyphRefinementGain(glyph),
+          cap: this.levelAlchemyCap(glyph.level)
+        });
+        return;
       }
-      Glyphs.removeFromInventory(glyph);
+      this.actuallyRefineGlyph(glyph);
     }
+  },
+  actuallyRefineGlyph(glyph) {
+    const resource = this.glyphAlchemyResource(glyph);
+    const rawRefinementGain = this.glyphRawRefinementGain(glyph);
+    const refinementGain = this.glyphRefinementGain(glyph);
+    resource.amount += refinementGain;
+    const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
+    const alchemyCap = this.levelAlchemyCap(glyph.level);
+    for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
+      if (glyphTypeName !== glyph.type) {
+        const glyphType = GlyphTypes[glyphTypeName];
+        const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+        const maxResouce = Math.max(alchemyCap, otherResource.amount);
+        otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
+      }
+    }
+    Glyphs.removeFromInventory(glyph);
   }
 };

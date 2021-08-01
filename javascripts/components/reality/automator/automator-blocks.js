@@ -77,6 +77,12 @@ const automatorBlocks = [
   }, {
     cmd: "NOTIFY",
     hasInput: true
+  }, {
+    cmd: "COMMENT",
+    hasInput: true
+  }, {
+    cmd: "DEFINE",
+    hasInput: true
   }
 ];
 

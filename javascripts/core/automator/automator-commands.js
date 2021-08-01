@@ -182,6 +182,22 @@ const AutomatorCommands = ((() => {
       })
     },
     {
+      id: "comment",
+      rule: $ => () => {
+        $.CONSUME(T.Comment);
+      },
+      validate: ctx => {
+        ctx.startLine = ctx.Comment[0].startLine;
+        return true;
+      },
+      // Comments should be no-ops
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      blockify: ctx => ({
+        ...automatorBlocksMap.COMMENT,
+        inputValue: ctx.Comment[0].image.replace(/(#|\/\/)./u, ""),
+      })
+    },
+    {
       id: "define",
       block: null,
       rule: $ => () => {
@@ -204,6 +220,13 @@ const AutomatorCommands = ((() => {
       // Since define creates constants, they are all resolved at compile. The actual define instruction
       // doesn't have to do anything.
       compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      blockify: ctx => {
+        const studyList = ctx.studyList[0].children.studyListEntry;
+        return {
+          ...automatorBlocksMap.DEFINE,
+          inputValue: `${ctx.Identifier[0].image} = ${studyList.map(e => e.children.NumberLiteral[0].image).join(",")}`,
+        };
+      }
     },
     {
       id: "ifBlock",

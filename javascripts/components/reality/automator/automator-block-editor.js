@@ -36,7 +36,8 @@ const BlockAutomator = {
 
     parsed = parsed
       .replace("LOAD", "STUDIES LOAD PRESET")
-      .replace("RESPEC", "STUDIES RESPEC");
+      .replace("RESPEC", "STUDIES RESPEC")
+      .replace("COMMENT", "//");
 
     if (block.target) parsed += ` ${block.target}`;
     if (block.secondaryTarget) parsed += ` ${block.secondaryTarget}`;

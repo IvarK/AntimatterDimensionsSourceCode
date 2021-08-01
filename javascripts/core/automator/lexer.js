@@ -51,7 +51,6 @@ const AutomatorLexer = (() => {
   const Comment = createToken({
     name: "Comment",
     pattern: /(#|\/\/)[^\n]*/,
-    group: Lexer.SKIPPED
   });
 
   const NumberLiteral = createToken({

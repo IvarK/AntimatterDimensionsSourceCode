@@ -76,6 +76,7 @@ Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.glyphUndo = new Modal("modal-glyph-undo");
+Modal.glyphReplace = new Modal("modal-glyph-replace");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");

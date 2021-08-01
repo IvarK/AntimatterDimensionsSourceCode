@@ -97,7 +97,8 @@ Vue.component("equipped-glyphs", {
     },
     undo() {
       if (!this.undoAvailable) return;
-      Modal.glyphUndo.show();
+      if (player.options.confirmations.glyphUndo) Modal.glyphUndo.show();
+      else Glyphs.undo();
     },
     dragEvents(idx) {
       return {

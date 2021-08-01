@@ -28,8 +28,8 @@ Vue.component("modal-away-progress", {
           const before = this.before;
 
           return after instanceof Decimal
-            ? after.gte(before)
-            : after >= before;
+            ? after.gt(before)
+            : after > before;
         },
         show() {
           return this.showOption && this.increased;

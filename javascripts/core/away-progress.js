@@ -5,6 +5,8 @@ class AwayProgress {
     this.name = config.name;
     this.isUnlocked = config.isUnlocked;
     this.showOption = config.showOption === undefined ? true : config.showOption;
+    // This is an array of strings, each one the name of the next entry in the player object to navigate to
+    // If there is no reference, it is accessed directly by the name through the player object.
     this.reference = config.reference === undefined ? [this.name] : config.reference;
   }
 

@@ -4159,7 +4159,7 @@ screen and (max-width: 480px) {
 
 .c-autobuyer-box-row__intervalSlot,
 .c-autobuyer-box-row__toggleSlot,
-.c-autobuyer-box-row__prioritySlot,
+.c-autobuyer-box-row__checkboxSlot,
 .l-autobuyer-box__header {
   width: 25%;
 }

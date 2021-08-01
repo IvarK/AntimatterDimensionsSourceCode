@@ -983,7 +983,8 @@ GameStorage.devMigrations = {
       player.achievementChecks.maxStudiesThisReality = player.timestudy.studies.length;
       player.celestials.teresa.lastRepeatedMachines = new Decimal(player.celestials.teresa.lastRepeatedRM);
       delete player.celestials.teresa.lastRepeatedRM;
-    }
+    },
+    GameStorage.migrations.removePriority,
   ],
 
   patch(player) {

@@ -41,7 +41,7 @@ const Autobuyers = (function() {
     prestige,
     single,
     other,
-    upgradeable: antimatterDimensions.concat([Autobuyer.tickspeed]),
+    upgradeable: antimatterDimensions.concat([Autobuyer.tickspeed], [Autobuyer.dimboost], [Autobuyer.galaxy]),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
@@ -54,13 +54,8 @@ const Autobuyers = (function() {
     tick() {
       PerformanceStats.start("Autobuyers");
 
-      const priorityQueue = [Autobuyer.tickspeed]
-        .concat(antimatterDimensions)
-        .sort((a, b) => a.priority - b.priority);
-
       const autobuyers = prestige.flat()
-        .concat(single.flat(), other.flat(), infinityDimensions, timeDimensions)
-        .concat(priorityQueue)
+        .concat(single.flat(), other.flat(), antimatterDimensions, infinityDimensions, timeDimensions)
         .filter(a => a.canTick);
 
       for (const autobuyer of autobuyers) {

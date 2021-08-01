@@ -63,7 +63,7 @@ Vue.component("reality-autobuyer-box", {
           property="rm"
         />
       </template>
-      <template slot="prioritySlot">
+      <template slot="secondarySlot">
         <div>Target glyph level:</div>
         <autobuyer-input
           :autobuyer="autobuyer"

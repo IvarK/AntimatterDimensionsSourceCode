@@ -104,7 +104,6 @@ let player = {
       cost: 1,
       interval: 500,
       mode: AUTOBUYER_MODE.BUY_SINGLE,
-      priority: 1,
       isActive: true,
       lastTick: 0,
       isBought: false
@@ -119,7 +118,6 @@ let player = {
       interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
       bulk: 1,
       mode: AUTOBUYER_MODE.BUY_10,
-      priority: 1,
       isActive: true,
       lastTick: 0,
       isBought: false

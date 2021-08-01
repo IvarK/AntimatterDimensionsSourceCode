@@ -51,14 +51,6 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     return this.bulk >= this.bulkCap;
   }
 
-  get priority() {
-    return this.data.priority;
-  }
-
-  set priority(value) {
-    this.data.priority = value;
-  }
-
   get mode() {
     return this.data.mode;
   }

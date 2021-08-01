@@ -41,7 +41,7 @@ Vue.component("dimboost-autobuyer-box", {
           property="maxDimBoosts"
         />
       </template>
-      <template :slot=" isBuyMaxUnlocked ? 'prioritySlot' : 'toggleSlot' ">
+      <template :slot=" isBuyMaxUnlocked ? 'secondarySlot' : 'toggleSlot' ">
         <div class="c-autobuyer-box__small-text" style="height: 3rem;">
           Antimatter Galaxies required to always Dimension Boost,
           ignoring the limit:
@@ -60,7 +60,7 @@ Vue.component("dimboost-autobuyer-box", {
           property="buyMaxInterval"
         />
       </template>
-      <template v-else-if="isBulkBuyUnlocked" slot="prioritySlot">
+      <template v-else-if="isBulkBuyUnlocked" slot="secondarySlot">
         <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Bulk Dimension Boost Amount:</div>
         <autobuyer-input
           :autobuyer="autobuyer"

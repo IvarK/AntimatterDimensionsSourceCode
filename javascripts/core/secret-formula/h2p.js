@@ -345,12 +345,6 @@ Tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
 They are located under the Infinity tab in "Autobuyers".
 <br>
 <br>
-<b>Priority:</b> Priorities tell the game which autobuyer will buy
-if two are affordable in the same tick. Priority 1 is bought 1st,
-Priority 2 is bought 2nd, etc. Two equal priorities will pick their
-buying order randomly.
-<br>
-<br>
 <b>Autobuyer Interval:</b> The cooldown period before the autobuyer attempts to make another puchase.
 <br>
 <br>

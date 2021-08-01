@@ -834,6 +834,13 @@ GameStorage.migrations = {
     delete player.infinitiedBank;
   },
 
+  removePriority(player) {
+    for (let i = 0; i < 8; i++) {
+      delete player.auto.antimatterDims[i].priority;
+    }
+    delete player.auto.tickspeed.priority;
+  },
+
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge

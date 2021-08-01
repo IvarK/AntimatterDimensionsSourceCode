@@ -5320,11 +5320,17 @@ b.c-modal-away-progress__black-hole {
 
 .c-modal-options .o-primary-btn--option, .o-primary-btn--option-wide {
   padding: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem;
 }
 
 .c-modal-options .o-primary-btn--width-medium {
   margin-top: 0.7rem;
+}
+
+.c-modal-options__button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /*#region l-modal-options*/

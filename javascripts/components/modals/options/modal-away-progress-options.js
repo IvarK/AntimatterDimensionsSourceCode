@@ -64,7 +64,7 @@ Vue.component("modal-away-progress-options", {
   },
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
-      <div>
+      <div class="c-modal-options__button-container">
         <away-progress-options-helper
           v-for="(entry, id) of all"
           :key="id"

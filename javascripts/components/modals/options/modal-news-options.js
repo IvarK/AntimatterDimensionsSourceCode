@@ -41,12 +41,12 @@ Vue.component("modal-news-options", {
   template: `
     <modal-options @close="emitClose">
       <primary-button
-        class="o-primary-btn--option"
+        class="o-primary-btn o-primary-btn--option-wide"
         onclick="GameOptions.toggleNews()"
       >
         {{ newsOnOffLabel }}
       </primary-button>
-      <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider">
+      <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
         <b>{{ formatInt(parseInt(repeatBuffer)) }} message repeat buffer</b>
         <input
           v-model="repeatBuffer"
@@ -57,7 +57,7 @@ Vue.component("modal-news-options", {
           max="80"
         />
       </div>
-      <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider">
+      <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
         <b>{{ formatPercents(parseFloat(AIChance)) }} AI messages</b>
         <input
           v-model="AIChance"
@@ -68,7 +68,7 @@ Vue.component("modal-news-options", {
           max="1"
         />
       </div>
-      <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider">
+      <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
         <b>{{ formatPercents(parseFloat(speed)) }} scroll speed</b>
         <input
           v-model="speed"

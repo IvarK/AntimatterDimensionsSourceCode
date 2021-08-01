@@ -87,7 +87,7 @@ Vue.component("modal-confirmation-options", {
   // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
-      <div>
+      <div class="c-modal-options__button-container">
         <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />

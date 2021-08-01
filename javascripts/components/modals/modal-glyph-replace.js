@@ -7,7 +7,7 @@ Vue.component("modal-glyph-replace", {
   data() {
     return {
       targetSlot: 0,
-      inventoryIndex: 0,
+      idx: 0,
     };
   },
   methods: {
@@ -26,6 +26,7 @@ Vue.component("modal-glyph-replace", {
       });
       player.reality.glyphs.active.push(this.glyph);
       Glyphs.active[this.targetSlot] = this.glyph;
+      this.glyph.idx = this.targetSlot;
       Glyphs.updateRealityGlyphEffects();
       Glyphs.updateMaxGlyphCount();
       EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);

@@ -33,9 +33,8 @@ const GlyphSacrificeHandler = {
     else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
-    if (force || confirm("Do you really want to delete this glyph?")) {
-      Glyphs.removeFromInventory(glyph);
-    }
+    if (force) Glyphs.removeFromInventory(glyph);
+    else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
     if (!this.canSacrifice) return 0;
@@ -52,11 +51,8 @@ const GlyphSacrificeHandler = {
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
-        `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
-        `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
-        return;
-      }
+      Modal.glyphSacrifice.show({ idx: glyph.idx, gain: toGain });
+      return;
     }
     player.reality.glyphs.sac[glyph.type] += toGain;
     Glyphs.removeFromInventory(glyph);

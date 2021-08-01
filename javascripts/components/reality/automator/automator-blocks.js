@@ -74,8 +74,10 @@ const automatorBlocks = [
   }, {
     cmd: "LOAD",
     hasInput: true
+  }, {
+    cmd: "NOTIFY",
+    hasInput: true
   }
-
 ];
 
 const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
@@ -83,7 +85,6 @@ const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 function findAutomatorBlockByName(name) {
   return automatorBlocks.find(b => b.cmd === name);
 }
-
 
 Vue.component("automator-blocks", {
   data() {

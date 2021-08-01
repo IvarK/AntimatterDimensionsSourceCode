@@ -248,6 +248,28 @@ const AutomatorCommands = ((() => {
       }
     },
     {
+      id: "notify",
+      rule: $ => () => {
+        $.CONSUME(T.Notify);
+        $.CONSUME(T.StringLiteral);
+      },
+      validate: ctx => {
+        ctx.startLine = ctx.Notify[0].startLine;
+        return true;
+      },
+      compile: ctx => {
+        const notifyText = ctx.StringLiteral;
+        return () => {
+          GameUI.notify.info(`Automator: ${notifyText[0].image}`);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        };
+      },
+      blockify: ctx => ({
+        ...automatorBlocksMap.NOTIFY,
+        inputValue: ctx.StringLiteral[0].image,
+      })
+    },
+    {
       // Note: this has to appear before pause
       id: "pauseTime",
       rule: $ => () => {
@@ -289,8 +311,8 @@ const AutomatorCommands = ((() => {
       id: "prestige",
       rule: $ => () => {
         $.CONSUME(T.PrestigeEvent);
-        $.OPTION(() => $.CONSUME(T.Respec));
-        $.OPTION1(() => $.CONSUME(T.Nowait));
+        $.OPTION(() => $.CONSUME(T.Nowait));
+        $.OPTION1(() => $.CONSUME(T.Respec));
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.PrestigeEvent[0].startLine;
@@ -552,17 +574,21 @@ const AutomatorCommands = ((() => {
       id: "unlockDilation",
       rule: $ => () => {
         $.CONSUME(T.Unlock);
+        $.OPTION(() => $.CONSUME(T.Nowait));
         $.CONSUME(T.Dilation);
       },
       validate: ctx => {
         ctx.startLine = ctx.Unlock[0].startLine;
         return true;
       },
-      compile: () => () => {
-        if (PlayerProgress.dilationUnlocked()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-        return TimeStudy.dilation.purchase(true)
-          ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-          : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+      compile: ctx => {
+        const nowait = ctx.Nowait !== undefined;
+        return () => {
+          if (PlayerProgress.dilationUnlocked()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          return TimeStudy.dilation.purchase(true) || nowait
+            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        };
       },
       blockify: () => ({
         target: "DILATION",
@@ -573,6 +599,7 @@ const AutomatorCommands = ((() => {
       id: "unlockEC",
       rule: $ => () => {
         $.CONSUME(T.Unlock);
+        $.OPTION(() => $.CONSUME(T.Nowait));
         $.SUBRULE($.eternityChallenge);
       },
       validate: ctx => {
@@ -580,9 +607,10 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: ctx => {
+        const nowait = ctx.Nowait !== undefined;
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
         return () => {
-          if (EternityChallenge(ecNumber).isUnlocked) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          if (EternityChallenge(ecNumber).isUnlocked || nowait) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           return TimeStudy.eternityChallenge(ecNumber).purchase(true)
             ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
             : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;

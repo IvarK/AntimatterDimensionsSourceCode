@@ -67,22 +67,22 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "infinity / eternity / reality",
       name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
-      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [respec] [nowait]</b>,<br> <b>reality [respec] [nowait]</b>",
+      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [nowait] [respec]</b>,<br> <b>reality [nowait] [respec]</b>",
       sections: [
         {
           name: "MODIFIERS",
           items: [
             {
+              header: "<i>nowait</i>",
+              description: `
+                If it is not possible to prestige, move on to the next command.
+              `
+            },
+            {
               header: "<i>respec</i>",
               description: `
                 Eternity: respec studies and eternity.<br>
                 Reality: unequip glyphs and reality.
-              `
-            },
-            {
-              header: "<i>nowait</i>",
-              description: `
-                If it is not possible to prestige, move on to the next command.
               `
             },
           ]
@@ -164,7 +164,20 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "unlock",
       name: "<b>unlock</b> - can be used to unlock certain features",
-      syntax: "<b>unlock</b> feature",
+      syntax: "<b>unlock [nowait]</b> feature",
+      sections: [
+        {
+          name: "MODIFIERS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If it is not possible to unlock, move on to the next command.
+              `
+            },
+          ]
+        }
+      ],
       examples: [
         "unlock dilation",
         "unlock ec<i>X</i>"
@@ -390,6 +403,21 @@ GameDatabase.reality.automator = {
         `,
         `while ec10 completions >= 1
         <blockquote>commands</blockquote>`
+      ]
+    },
+    {
+      id: 17,
+      isUnlocked: () => true,
+      keyword: "notify",
+      name: "<b>notify</b> - send a progress notification",
+      syntax: "<b>notify</b> \"text\"",
+      description: `Takes the specified text and posts it in the top-right corner as
+        a text notification, in the same spot as other notifications such as auto-save
+        and achievement/upgrade unlocks. Can be useful for seeing automator status while
+        on tabs other than the Automator tab.`,
+      examples: [
+        "notify \"Dilation reached\"",
+        "notify \"ECs completed\""
       ]
     }
   ]

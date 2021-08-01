@@ -54,7 +54,8 @@
       commentRule,
       { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
       {
-        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s/ui,
+        // eslint-disable-next-line max-len
+        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s|notify/ui,
         token: "keyword",
         next: "commandArgs"
       },
@@ -69,7 +70,8 @@
         next: "startUnlock"
       },
       { regex: /infinity\S+|eternity\S+|reality\S+|pause\S+|restart\S+/ui, token: "error", next: "commandDone" },
-      { regex: /infinity|eternity|reality|pause|restart/ui, token: "keyword", next: "commandDone" },
+      { regex: /infinity|eternity|reality/ui, token: "keyword", next: "prestige" },
+      { regex: /pause|restart/ui, token: "keyword", next: "commandDone" },
       { regex: /\}/ui, dedent: true },
       { regex: /\S+\s/ui, token: "error", next: "commandDone" },
     ],
@@ -100,6 +102,12 @@
       { sol: true, next: "start" },
       { regex: /(\/(?!\/)|[^\s#/])+/ui, token: "qualifier", next: "commandDone" },
     ],
+    prestige: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /nowait(\s|$)/ui, token: "property" },
+      { regex: /respec/ui, token: "variable-2" },
+    ],
     commandDone: [
       commentRule,
       { sol: true, next: "start" },
@@ -120,12 +128,14 @@
         token: "variable-2",
         next: "commandDone",
       },
+      { regex: /nowait(\s|$)/ui, token: "property" },
     ],
     commandArgs: [
       commentRule,
       { sol: true, next: "start" },
       { regex: /<=|>=|<|>/ui, token: "operator" },
       { regex: /nowait(\s|$)/ui, token: "property" },
+      { regex: /".*"/ui, token: "string", next: "commandDone" },
       { regex: /on(\s|$)|off(\s|$)|dilation(\s|$)|load(\s|$)|respec(\s|$)/ui, token: "variable-2" },
       { regex: /preset(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
       { regex: /antimatter(\s|$|(?=,))|infinity(\s|$|(?=,))|time(\s|$|(?=,))/ui, token: "variable-2" },

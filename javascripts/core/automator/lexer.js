@@ -43,6 +43,11 @@ const AutomatorLexer = (() => {
     label: "End of line",
   });
 
+  const StringLiteral = createToken({
+    name: "StringLiteral",
+    pattern: /".*"/,
+  });
+
   const Comment = createToken({
     name: "Comment",
     pattern: /(#|\/\/)[^\n]*/,
@@ -265,6 +270,7 @@ const AutomatorLexer = (() => {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyMax(true),
   });
+  createKeyword("Notify", /notify/i);
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
   createKeyword("On", /on/i);
@@ -311,7 +317,7 @@ const AutomatorLexer = (() => {
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
-    HSpace, Comment, EOL,
+    HSpace, StringLiteral, Comment, EOL,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,

@@ -100,12 +100,10 @@ Vue.component("modal-away-progress", {
   props: {
     modalConfig: Object
   },
-  data() {
-    return {
-      nothingAway: false,
-    };
-  },
   computed: {
+    nothingAway() {
+      return Theme.current().name === "S9";
+    },
     before() {
       return this.modalConfig.playerBefore;
     },
@@ -131,9 +129,6 @@ Vue.component("modal-away-progress", {
     },
   },
   methods: {
-    update() {
-      this.nothingAway = Theme.current().name === "S7";
-    },
     getObjectForAway(item) {
       const objectName = item.name;
       const name = item.formatName;

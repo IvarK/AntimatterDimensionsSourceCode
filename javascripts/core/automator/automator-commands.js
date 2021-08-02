@@ -56,14 +56,16 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Auto[0].startLine;
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xCurrent)) {
           V.addError((ctx.duration || ctx.xCurrent)[0],
-            "auto reality cannot be set to a duration or x current");
+            "Auto Reality cannot be set to a duration or x current",
+            "Use RM for Auto Reality");
           return false;
         }
         if (ctx.PrestigeEvent && ctx.currencyAmount) {
           const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
           const specified$ = ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
           if (desired$ !== specified$) {
-            V.addError(ctx.currencyAmount, `AutomatorCurrency doesn't match prestige (${desired$} vs ${specified$})`);
+            V.addError(ctx.currencyAmount, `AutomatorCurrency doesn't match prestige (${desired$} vs ${specified$})`,
+              `Use ${desired$} for the specified prestige resource`);
             return false;
           }
         }
@@ -71,30 +73,35 @@ const AutomatorCommands = ((() => {
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
           (ctx.duration || ctx.xCurrent) && !EternityMilestone.bigCrunchModes.isReached) {
           V.addError((ctx.duration || ctx.xCurrent)[0],
-            "Advanced Infinity autobuyer settings not unlocked");
+            "Advanced Infinity autobuyer settings are not unlocked",
+            `Reach ${EternityMilestone.bigCrunchModes.config.eternities} Eternities to use this command`);
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           (ctx.duration || ctx.xCurrent) && !RealityUpgrade(13).isBought) {
           V.addError((ctx.duration || ctx.xCurrent)[0],
-            "Advanced Eternity autobuyer settings not unlocked");
+            "Advanced Eternity autobuyer settings are not unlocked",
+            "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           !EternityMilestone.autobuyerEternity.isReached) {
-          V.addError(ctx.PrestigeEvent, "Eternity autobuyer not unlocked");
+          V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
+            `Reach ${EternityMilestone.autobuyerEternity.config.eternities} Eternities to use this command`);
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && !NormalChallenge(12).isCompleted) {
-          V.addError(ctx.PrestigeEvent, "Infinity autobuyer not unlocked");
+          V.addError(ctx.PrestigeEvent, "Infinity autobuyer is not unlocked",
+            "Complete the Big Crunch Autobuyer challenge to use this command");
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && !RealityUpgrade(25).isBought) {
-          V.addError(ctx.PrestigeEvent, "Reality autobuyer not unlocked");
+          V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
+            "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
           return false;
         }
         return true;
@@ -164,7 +171,8 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.BlackHole[0].startLine;
         if (!BlackHole(1).isUnlocked) {
-          V.addError(ctx.BlackHole[0], "black hole is not unlocked");
+          V.addError(ctx.BlackHole[0], "Black Hole is not unlocked",
+            "Unlock the Black Hole in order to pause or unpause it");
           return false;
         }
         return true;
@@ -212,7 +220,7 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Define[0].startLine;
         if (!ctx.Identifier || ctx.Identifier[0].isInsertedInRecovery || ctx.Identifier[0].image === "") {
-          V.addError(ctx.Define, "missing variable name");
+          V.addError(ctx.Define, "Missing variable name", "Provide a variable name between DEFINE and =");
           return false;
         }
         return true;
@@ -221,10 +229,21 @@ const AutomatorCommands = ((() => {
       // doesn't have to do anything.
       compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
       blockify: ctx => {
-        const studyList = ctx.studyList[0].children.studyListEntry;
+        const studyListData = ctx.studyList[0].children.studyListEntry;
+        const studyList = [];
+        for (const entry of studyListData) {
+          if (entry.children.NumberLiteral) {
+            // Single study ID or numerical value
+            studyList.push(entry.children.NumberLiteral[0].image);
+          } else {
+            // Study range (eg. "41-71")
+            const range = entry.children.studyRange[0].children;
+            studyList.push(`${range.firstStudy[0].image}-${range.lastStudy[0].image}`);
+          }
+        }
         return {
           ...automatorBlocksMap.DEFINE,
-          inputValue: `${ctx.Identifier[0].image} = ${studyList.map(e => e.children.NumberLiteral[0].image).join(",")}`,
+          inputValue: `${ctx.Identifier[0].image} = ${studyList.join(",")}`,
         };
       }
     },
@@ -304,9 +323,14 @@ const AutomatorCommands = ((() => {
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.Pause[0].startLine;
-        ctx.$duration = ctx.Identifier
-          ? V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION).value
-          : V.visit(ctx.duration);
+        let duration;
+        if (ctx.Identifier) {
+          const lookup = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION);
+          duration = lookup ? lookup.value : lookup;
+        } else {
+          duration = V.visit(ctx.duration);
+        }
+        ctx.$duration = duration;
         return ctx.$duration !== undefined;
       },
       compile: ctx => {
@@ -326,7 +350,7 @@ const AutomatorCommands = ((() => {
         const c = ctx.duration[0].children;
         return {
           ...automatorBlocksMap.PAUSE,
-          inputValue: c.NumberLiteral[0].image + c.TimeUnit[0].image
+          inputValue: `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`
         };
       }
     },
@@ -342,17 +366,20 @@ const AutomatorCommands = ((() => {
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           !EternityMilestone.autobuyerEternity.isReached) {
-          V.addError(ctx.PrestigeEvent, "Eternity autobuyer not unlocked");
+          V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
+            `Reach ${EternityMilestone.autobuyerEternity.config.eternities} Eternities to use this command`);
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && !RealityUpgrade(25).isBought) {
-          V.addError(ctx.PrestigeEvent, "Reality autobuyer not unlocked");
+          V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
+            "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && ctx.Respec) {
-          V.addError(ctx.Respec, "There's no 'respec' for infinity");
+          V.addError(ctx.Respec, "There's no 'respec' for infinity",
+            "Remove 'respec' from the command");
         }
         return true;
       },
@@ -436,7 +463,8 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.StoreTime[0].startLine;
         if (!Enslaved.isUnlocked) {
-          V.addError(ctx.StoreTime[0], "You do not yet know how to store time");
+          V.addError(ctx.StoreTime[0], "You do not yet know how to store time",
+            "Unlock the ability to store time");
           return false;
         }
         return true;
@@ -519,12 +547,14 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Studies[0].startLine;
         if (!ctx.Preset || ctx.Preset[0].isInsertedInRecovery || ctx.Preset[0].image === "") {
-          V.addError(ctx, "Missing preset and preset name");
+          V.addError(ctx, "Missing preset and preset name",
+            "Provide the name of a saved study preset from the Time Studies page");
           return false;
         }
         const split = presetSplitter.exec(ctx.Preset[0].image);
         if (!split) {
-          V.addError(ctx.Preset[0], "Missing preset name or number");
+          V.addError(ctx.Preset[0], "Missing preset name or number",
+            "Provide the name or index (1-6) of a saved study preset from the Time Studies page");
           return false;
         }
         ctx.Preset[0].splitPresetResult = split;
@@ -534,7 +564,8 @@ const AutomatorCommands = ((() => {
           // check to make sure it exists:
           presetIndex = player.timestudy.presets.findIndex(e => e.name === split[2]) + 1;
           if (presetIndex === 0) {
-            V.addError(ctx.Preset[0], `Could not find preset named ${split[2]} (note: names are case sensitive)`);
+            V.addError(ctx.Preset[0], `Could not find preset named ${split[2]} (Note: Names are case-sensitive)`,
+              "Check to make sure you typed in the correct name for your study preset");
             return false;
           }
         } else {

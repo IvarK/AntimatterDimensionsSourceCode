@@ -30,7 +30,8 @@
           startLine: err.line,
           startOffset: err.offset,
           endOffset: err.offset + err.length,
-          info: `Unexpected characters "${this.rawText.substr(err.offset, err.length)}"`,
+          info: `Unexpected characters: ${this.rawText.substr(err.offset, err.length)}`,
+          tip: `${this.rawText.substr(err.offset, err.length)} cannot be part of a command, remove them`
         });
       }
     }
@@ -58,9 +59,11 @@
         if (parseError.name === "NoViableAltException") {
           if (!isEndToken) {
             err.info = `Unexpected input ${parseError.token.image}`;
+            err.tip = `Remove ${parseError.token.image}`;
           }
         } else if (parseError.name === "EarlyExitException") {
           err.info = "Unexpected end of command";
+          err.tip = "Complete the command by adding the other parameters";
         }
         this.errors.push(err);
       }
@@ -94,10 +97,26 @@
       return pos;
     }
 
-    addError(ctx, errInfo) {
+    addError(ctx, errInfo, errTip) {
       const pos = Validator.getPositionRange(ctx);
       pos.info = errInfo;
+      pos.tip = errTip;
       this.errors.push(pos);
+    }
+
+    // There are a few errors generated internally in chevrotain.js which are scanned for and modified in here and
+    // given appropriate fixing tips and minor formatting adjustments. This isn't necessarily comprehensive, but
+    // should hopefully cover the most common cases.
+    generateMissingTips() {
+      for (const err of this.errors) {
+        if (err.info.match(/Expecting/gu)) {
+          err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
+          err.tip = "Use the appropriate type of data in the command as specified in the command help";
+        }
+        if (err.info.match(/End of line/gu)) {
+          err.tip = "Provide the remaining arguments to complete the incomplete command";
+        }
+      }
     }
 
     reset(rawText) {
@@ -109,7 +128,8 @@
     checkTimeStudyNumber(token) {
       const tsNumber = parseFloat(token.image);
       if (!TimeStudy(tsNumber)) {
-        this.addError(token, `Invalid Time Study identifier ${tsNumber}`);
+        this.addError(token, `Invalid Time Study identifier ${tsNumber}`,
+          `Make sure you copied or typed in your time study IDs correctly`);
         return 0;
       }
       return tsNumber;
@@ -119,7 +139,8 @@
       const varName = identifier.image;
       const varInfo = this.variables[varName];
       if (varInfo === undefined) {
-        this.addError(identifier, `Variable ${varName} has not been defined`);
+        this.addError(identifier, `Variable ${varName} has not been defined`,
+          `Use DEFINE to define ${varName} in order to reference it`);
         return undefined;
       }
       if (varInfo.type === AUTOMATOR_VAR_TYPES.UNKNOWN) {
@@ -136,7 +157,8 @@
         const inferenceMessage = varInfo.firstUseLineNumber
           ? `\nIts use on line ${varInfo.firstUseLineNumber} identified it as a ${varInfo.type.name}`
           : "";
-        this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`);
+        this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`,
+          "Defined variables cannot be used as both studies and numbers - define a second variable instead");
         return undefined;
       }
       if (varInfo.value === undefined) throw new Error("Unexpected undefined Automator variable value");
@@ -146,12 +168,12 @@
     duration(ctx) {
       if (ctx.$value) return ctx.$value;
       if (!ctx.TimeUnit || ctx.TimeUnit[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing time unit");
+        this.addError(ctx, "Missing time unit", "Provide a unit of time (eg. seconds or minutes)");
         return undefined;
       }
       const value = parseFloat(ctx.NumberLiteral[0].image) * ctx.TimeUnit[0].tokenType.$scale;
       if (isNaN(value)) {
-        this.addError(ctx, "Error parsing duration");
+        this.addError(ctx, "Error parsing duration", "Provide a properly-formatted number for time");
         return undefined;
       }
       ctx.$value = value;
@@ -161,7 +183,7 @@
     xCurrent(ctx) {
       if (ctx.$value) return ctx.$value;
       if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing multiplier");
+        this.addError(ctx, "Missing multiplier", "Provide a multiplier to set the autobuyer to");
         return undefined;
       }
       ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
@@ -171,7 +193,7 @@
     currencyAmount(ctx) {
       if (ctx.$value) return ctx.$value;
       if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing amount");
+        this.addError(ctx, "Missing amount", "Provide a threshold to set the autobuyer to");
         return undefined;
       }
       ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
@@ -182,7 +204,8 @@
       const varName = ctx.Identifier[0].image;
       if (this.variables[varName] !== undefined) {
         this.addError(ctx.Identifier[0],
-          `Variable ${varName} already defined on line ${this.variables[varName].definitionLineNumber}`);
+          `Variable ${varName} already defined on line ${this.variables[varName].definitionLineNumber}`,
+          "Variables cannot be defined twice; remove or rename the second DEFINE");
         return;
       }
       if (!ctx.duration && !ctx.studyList) return;
@@ -219,7 +242,8 @@
     studyRange(ctx, studiesOut) {
       if (!ctx.firstStudy || ctx.firstStudy[0].isInsertedInRecovery ||
         !ctx.lastStudy || ctx.lastStudy[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing Time Study number in range");
+        this.addError(ctx, "Missing Time Study number in range",
+          "Provide starting and ending IDs for Time Study number ranges");
         return;
       }
       const first = this.checkTimeStudyNumber(ctx.firstStudy[0]);
@@ -237,7 +261,7 @@
       }
       if (ctx.NumberLiteral) {
         if (ctx.NumberLiteral[0].isInsertedInRecovery) {
-          this.addError(ctx, "Missing Time Study number");
+          this.addError(ctx, "Missing Time Study number", "Provide a Time Study ID to purchase");
           return;
         }
         const id = this.checkTimeStudyNumber(ctx.NumberLiteral[0]);
@@ -263,11 +287,13 @@
       };
       if (ctx.ECNumber) {
         if (ctx.ECNumber.isInsertedInRecovery) {
-          this.addError(ctx.Pipe[0], "Missing Eternity Challenge number");
+          this.addError(ctx.Pipe[0], "Missing Eternity Challenge number",
+            "Specify which Eternity Challenge is being referred to");
         }
         const ecNumber = parseFloat(ctx.ECNumber[0].image);
         if (!Number.isInteger(ecNumber) || ecNumber < 0 || ecNumber > 12) {
-          this.addError(ctx.ECNumber, `Invalid Eternity Challenge ID ${ecNumber}`);
+          this.addError(ctx.ECNumber, `Invalid Eternity Challenge ID ${ecNumber}`,
+            `Eternity Challenge ${ecNumber} does not exist, use an integer between ${format(1)} and ${format(12)}`);
         }
         ctx.$cached.ec = ecNumber;
       }
@@ -287,22 +313,24 @@
       super.comparison(ctx);
       if (!ctx.compareValue || ctx.compareValue[0].recoveredNode ||
         ctx.compareValue.length !== 2 || ctx.compareValue[1].recoveredNode) {
-        this.addError(ctx, "Missing value for comparison");
+        this.addError(ctx, "Missing value for comparison", "Ensure that the comparison has two values");
       }
       if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing comparison operator (<, >, <=, >=)");
+        this.addError(ctx, "Missing comparison operator (<, >, <=, >=)", "Insert the appropriate comparison operator");
         return;
       }
       const T = AutomatorLexer.tokenMap;
       if (ctx.ComparisonOperator[0].tokenType === T.OpEQ || ctx.ComparisonOperator[0].tokenType === T.EqualSign) {
-        this.addError(ctx, "Please use an inequality comparison (>,<,>=,<=)");
+        this.addError(ctx, "Please use an inequality comparison (>,<,>=,<=)",
+          "Comparisons cannot be done with equality, only with inequality operators");
       }
     }
 
     badCommand(ctx) {
       const firstToken = ctx.badCommandToken[0].children;
       const firstTokenType = Object.keys(firstToken)[0];
-      this.addError(firstToken[firstTokenType][0], `Unrecognized command ${firstToken[firstTokenType][0].image}`);
+      this.addError(firstToken[firstTokenType][0], `Unrecognized command "${firstToken[firstTokenType][0].image}"`,
+        "Check to make sure you have typed in the command name correctly");
     }
 
     eternityChallenge(ctx) {
@@ -314,11 +342,13 @@
         ecNumber = parseFloat(ctx.NumberLiteral[0].image);
         errToken = ctx.NumberLiteral[0];
       } else {
-        this.addError(ctx, "Missing Eternity Challenge number");
+        this.addError(ctx, "Missing Eternity Challenge number",
+          "Specify which Eternity Challenge is being referred to");
         return;
       }
       if (!Number.isInteger(ecNumber) || ecNumber < 1 || ecNumber > 12) {
-        this.addError(errToken, `Invalid Eternity Challenge ID ${ecNumber}`);
+        this.addError(errToken, `Invalid Eternity Challenge ID ${ecNumber}`,
+          `Eternity Challenge ${ecNumber} does not exist, use an integer between ${format(1)} and ${format(12)}`);
       }
       ctx.$ecNumber = ecNumber;
     }
@@ -326,11 +356,13 @@
     checkBlock(ctx, commandToken) {
       let hadError = false;
       if (!ctx.RCurly || ctx.RCurly[0].isInsertedInRecovery) {
-        this.addError(commandToken[0], "Missing closing }");
+        this.addError(commandToken[0], "Missing closing }",
+          "Your loop has a mismatched brackets, add a corresponding } to close the loop");
         hadError = true;
       }
       if (!ctx.LCurly || ctx.LCurly[0].isInsertedInRecovery) {
-        this.addError(commandToken[0], "Missing opening {");
+        this.addError(commandToken[0], "Missing opening {",
+          "You have a } closing a loop which does not exist, remove the }");
         hadError = true;
       }
       return !hadError;
@@ -463,6 +495,7 @@
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
+    validator.generateMissingTips();
     let compiled;
     if (validator.errors.length === 0 && !validateOnly) {
       compiled = new Compiler().visit(parseResult);
@@ -501,6 +534,7 @@
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
+    validator.generateMissingTips();
     return validator;
   }
 

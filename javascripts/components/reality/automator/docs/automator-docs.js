@@ -4,7 +4,8 @@ Vue.component("automator-docs", {
   data() {
     return {
       commandID: -1,
-      isBlockAutomator: false
+      isBlockAutomator: false,
+      errorCount: 0,
     };
   },
   computed: {
@@ -24,6 +25,9 @@ Vue.component("automator-docs", {
     },
     fullScreenTooltip() {
       return this.fullScreen ? "Exit full screen" : "Expand to full screen";
+    },
+    errorTooltip() {
+      return `Your script has ${this.errorCount} ${pluralize("error", this.errorCount)}`;
     }
   },
   methods: {
@@ -32,6 +36,8 @@ Vue.component("automator-docs", {
     },
     update() {
       this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
+      const currentScript = player.reality.automator.scripts[player.reality.automator.state.editorScript].content;
+      this.errorCount = AutomatorGrammar.compile(currentScript).errors.length;
     }
   },
   template: `
@@ -44,6 +50,13 @@ Vue.component("automator-docs", {
           v-tooltip="'Return to command list'"
         />
         <automator-button
+          v-if="errorCount !== 0"
+          style="color: red;"
+          class="fa-exclamation-triangle"
+          @click="commandID = -2"
+          v-tooltip="errorTooltip"
+        />
+        <automator-button
           :class="fullScreenIconClass"
           class="l-automator__button--corner"
           @click="fullScreen = !fullScreen"
@@ -53,9 +66,10 @@ Vue.component("automator-docs", {
       <automator-blocks v-if="isBlockAutomator" />
       <div class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
-          v-if="command === undefined"
+          v-if="commandID === -1"
           @select="changeCommand"
         />
+        <automator-error-page v-else-if="commandID === -2" />
         <automator-man-page v-else :command="command" />
       </div>
     </div>`

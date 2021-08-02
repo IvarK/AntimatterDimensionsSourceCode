@@ -262,6 +262,7 @@ const AutomatorLexer = (() => {
 
   createKeyword("Auto", /auto/i);
   createKeyword("Buy", /buy/i);
+  createKeyword("Blob", /blob\s\s/i);
   createKeyword("Define", /define/i);
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
@@ -277,7 +278,7 @@ const AutomatorLexer = (() => {
   // Presets are a little special, because they can be named anything (like ec12 or wait)
   // So, we consume the label at the same time as we consume the preset. In order to report
   // errors, we also match just the word preset. And, we have to not match comments.
-  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\s#/])*)?/i);
+  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);

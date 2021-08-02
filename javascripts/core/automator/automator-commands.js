@@ -190,6 +190,18 @@ const AutomatorCommands = ((() => {
       })
     },
     {
+      id: "blob",
+      rule: $ => () => {
+        $.CONSUME(T.Blob);
+      },
+      validate: ctx => {
+        ctx.startLine = ctx.Blob[0].startLine;
+        return true;
+      },
+      // This is an easter egg, it shouldn't do anything
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+    },
+    {
       id: "comment",
       rule: $ => () => {
         $.CONSUME(T.Comment);

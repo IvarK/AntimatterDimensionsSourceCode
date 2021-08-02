@@ -53,6 +53,7 @@
     start: [
       commentRule,
       { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
+      { regex: /blob\s\s/ui, token: "blob" },
       {
         // eslint-disable-next-line max-len
         regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s|notify/ui,

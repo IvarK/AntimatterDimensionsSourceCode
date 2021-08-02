@@ -5171,13 +5171,23 @@ screen and (max-width: 480px) {
   border: none;
 }
 
-.c-modal-away-progress b {
+.c-modal-away-progress {
   text-shadow:
     0 0 0.2rem black,
     0 0 0.2rem black,
     0 0 0.2rem black,
     0 0 0.2rem black;
 }
+
+.c-modal-away-progress b {
+  font-weight: bold;
+  text-shadow:
+    0 0 0.3rem black,
+    0 0 0.3rem black,
+    0 0 0.3rem black,
+    0 0 0.3rem black;
+}
+
 .c-modal-away-progress__dimension-boosts,
 .c-modal-away-progress__antimatter-galaxies,
 .c-modal-away-progress__antimatter {

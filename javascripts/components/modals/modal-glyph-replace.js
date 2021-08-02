@@ -17,20 +17,6 @@ Vue.component("modal-glyph-replace", {
       this.glyph = Glyphs.findByInventoryIndex(this.idx);
     },
     handleYesClick() {
-      // Glyphs.removeFromInventory(this.glyph);
-      // Glyphs.unequip(this.targetSlot, this.idx);
-      // finishProcessReality({
-      //   reset: true,
-      //   glyphUndo: false,
-      //   restoreCelestialState: true,
-      // });
-      // player.reality.glyphs.active.push(this.glyph);
-      // Glyphs.active[this.targetSlot] = this.glyph;
-      // this.glyph.idx = this.targetSlot;
-      // Glyphs.updateRealityGlyphEffects();
-      // Glyphs.updateMaxGlyphCount();
-      // EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-      // Glyphs.validate();
       Glyphs.swapIntoActive(this.glyph, this.targetSlot);
       this.emitClose();
     },

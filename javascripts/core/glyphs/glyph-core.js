@@ -362,10 +362,8 @@ const Glyphs = {
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
     if (!GlyphSacrificeHandler.canSacrifice) return;
     // If auto clean could remove useful glyphs, we warn them.
-    if (isHarsh && player.options.confirmations.harshAutoClean &&
-      // eslint-disable-next-line prefer-template
-      !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
-        "later. Are you sure you want to do this?")) {
+    if (isHarsh && player.options.confirmations.harshAutoClean) {
+      Modal.harshGlyphPurge.show();
       return;
     }
     // We look in backwards order so that later glyphs get cleaned up first

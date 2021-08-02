@@ -48,6 +48,9 @@
 
   const commentRule = { regex: /(\/\/|#).*/u, token: "comment", next: "start" };
 
+  // Note: This is a state machine which determines the syntax highlighting for the automator. It has no bearing on the
+  // actual functionality and behavior of the automator itself. Matches to the supplied regexes will color the matched
+  // text according to the specified color of cm-[token] in liquibyte.css
   CodeMirror.defineSimpleMode("automato", {
     // The start state contains the rules that are intially used
     start: [
@@ -125,7 +128,7 @@
       commentRule,
       { sol: true, next: "start" },
       {
-        regex: /ec(1[0-2]|[1-9])|dilation/ui,
+        regex: /ec\s?(1[0-2]|[1-9])|dilation/ui,
         token: "variable-2",
         next: "commandDone",
       },

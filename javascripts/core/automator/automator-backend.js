@@ -162,6 +162,27 @@ class AutomatorScript {
   }
 }
 
+const AutomatorData = {
+  scriptIndex() {
+    return player.reality.automator.state.editorScript;
+  },
+  currentScriptText() {
+    return player.reality.automator.scripts[this.scriptIndex()].content;
+  },
+  createNewScript(newScript) {
+    const newScriptID = Object.values(player.reality.automator.scripts).length + 1;
+    player.reality.automator.scripts[newScriptID] = {
+      id: `${newScriptID}`,
+      name: "Imported Script",
+      content: newScript
+    };
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
+  },
+  currentErrors() {
+    return AutomatorGrammar.compile(this.currentScriptText()).errors;
+  }
+};
+
 const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
   _scripts: [],

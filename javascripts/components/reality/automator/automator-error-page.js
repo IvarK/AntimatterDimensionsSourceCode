@@ -11,8 +11,7 @@ Vue.component("automator-error-page", {
   },
   methods: {
     update() {
-      const currentScript = player.reality.automator.scripts[player.reality.automator.state.editorScript].content;
-      this.errors = AutomatorGrammar.compile(currentScript).errors.sort((a, b) => a.startLine - b.startLine);
+      this.errors = AutomatorData.currentErrors().sort((a, b) => a.startLine - b.startLine);
     },
     scrollToLine(line) {
       AutomatorTextUI.editor.scrollIntoView({ line, ch: 0 }, 16);

@@ -6,7 +6,15 @@ Vue.component("automator-docs", {
       commandID: -1,
       isBlockAutomator: false,
       errorCount: 0,
+      editingName: false,
+      scripts: [],
     };
+  },
+  created() {
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.updateCurrentScriptID();
+    this.updateScriptList();
   },
   computed: {
     command() {
@@ -28,16 +36,35 @@ Vue.component("automator-docs", {
     },
     errorTooltip() {
       return `Your script has ${this.errorCount} ${pluralize("error", this.errorCount)}`;
+    },
+    currentScriptID: {
+      get() {
+        return this.$viewModel.tabs.reality.automator.editorScriptID;
+      },
+      set(value) {
+        this.$viewModel.tabs.reality.automator.editorScriptID = value;
+      }
+    },
+    currentScriptContent() {
+      return player.reality.automator.scripts[this.currentScriptID].content;
+    },
+    currentScript() {
+      return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
+    },
+    errorStyle() {
+      return {
+        "color": this.errorCount === 0 ? "" : "red"
+      };
     }
   },
   methods: {
-    changeCommand(event) {
-      this.commandID = event;
-    },
     update() {
       this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       const currentScript = player.reality.automator.scripts[player.reality.automator.state.editorScript].content;
       this.errorCount = AutomatorGrammar.compile(currentScript).errors.length;
+    },
+    changeCommand(event) {
+      this.commandID = event;
     },
     exportScript() {
       copyToClipboard(btoa(AutomatorData.currentScriptText()));
@@ -45,7 +72,69 @@ Vue.component("automator-docs", {
     },
     importScript() {
       Modal.importScript.show();
-    }
+    },
+    onGameLoad() {
+      this.updateCurrentScriptID();
+      this.updateScriptList();
+    },
+    updateScriptList() {
+      this.scripts = Object.values(player.reality.automator.scripts).map(script => ({
+        id: script.id,
+        name: script.name,
+      }));
+    },
+    updateCurrentScriptID() {
+      const storedScripts = player.reality.automator.scripts;
+      this.currentScriptID = player.reality.automator.state.editorScript;
+      // This shouldn't happen if things are loaded in the right order, but might as well be sure.
+      if (storedScripts[this.currentScriptID] === undefined) {
+        this.currentScriptID = Object.keys(storedScripts)[0];
+        player.reality.automator.state.editorScript = this.currentScriptID;
+      }
+      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
+    },
+    rename() {
+      this.editingName = true;
+      this.$nextTick(() => {
+        this.$refs.renameInput.value = player.reality.automator.scripts[this.currentScriptID].name;
+        this.$refs.renameInput.focus();
+      });
+    },
+    selectedScriptAttribute(id) {
+      return id === this.currentScriptID ? { selected: "selected" } : {};
+    },
+    createNewScript() {
+      const newScript = AutomatorBackend.newScript();
+      player.reality.automator.state.editorScript = newScript.id;
+      this.updateCurrentScriptID();
+      this.rename();
+    },
+    deleteScript() {
+      Modal.automatorScriptDelete.show({ scriptID: this.currentScriptID });
+    },
+    onScriptDropdown(event) {
+      const menu = event.target;
+      if (menu.selectedIndex === menu.length - 1) this.createNewScript();
+      else player.reality.automator.state.editorScript = this.scripts[menu.selectedIndex].id;
+      this.updateCurrentScriptID();
+    },
+    nameEdited() {
+      // Trim off leading and trailing whitespace
+      const trimmed = this.$refs.renameInput.value.match(/^\s*(.*?)\s*$/u);
+      if (trimmed.length === 2 && trimmed[1].length > 0) {
+        player.reality.automator.scripts[this.currentScriptID].name = trimmed[1];
+        this.updateScriptList();
+      }
+      this.$nextTick(() => this.editingName = false);
+    },
+    dropdownLabel(script) {
+      let label = script.name;
+      if (script.id === this.runningScriptID) {
+        if (this.isRunning) label += " (Running)";
+        else if (this.isPaused) label += " (Paused)";
+      }
+      return label;
+    },
   },
   template: `
     <div class="l-automator-pane">
@@ -54,6 +143,12 @@ Vue.component("automator-docs", {
           class="fa-list"
           @click="commandID = -1"
           v-tooltip="'Command list'"
+        />
+        <automator-button
+          :style="errorStyle"
+          class="fa-exclamation-triangle"
+          @click="commandID = -2"
+          v-tooltip="errorTooltip"
         />
         <automator-button
           class="fa-file-export"
@@ -65,16 +160,42 @@ Vue.component("automator-docs", {
           @click="importScript"
           v-tooltip="'Import automator script'"
         />
+        <div class="l-automator__script-names">
+          <template v-if="!editingName">
+            <select
+              class="l-automator__scripts-dropdown"
+              @input="onScriptDropdown"
+            >
+              <option
+                v-for="script in scripts"
+                v-bind="selectedScriptAttribute(script.id)"
+                :value="script.id"
+              >
+                {{ dropdownLabel(script) }}
+              </option>
+              <option value="createNewScript">Create new...</option>
+            </select>
+            <automator-button
+              class="far fa-edit"
+              @click="rename"
+              v-tooltip="'Rename script'"
+            />
+          </template>
+          <input
+            v-else
+            ref="renameInput"
+            class="l-automator__rename-input"
+            @blur="nameEdited"
+            @keyup.enter="$refs.renameInput.blur()"
+          />
+        </div>
         <automator-button
-          v-if="errorCount !== 0"
-          style="color: red;"
-          class="fa-exclamation-triangle"
-          @click="commandID = -2"
-          v-tooltip="errorTooltip"
+          class="fas fa-trash"
+          @click="deleteScript"
+          v-tooltip="'Delete this script'"
         />
         <automator-button
           :class="fullScreenIconClass"
-          class="l-automator__button--corner"
           @click="fullScreen = !fullScreen"
           v-tooltip="fullScreenTooltip"
         />
@@ -103,6 +224,7 @@ Vue.component("automator-script-import", {
   methods: {
     importSave() {
       AutomatorData.createNewScript(atob(this.input));
+      AutomatorBackend.initializeFromSave();
       this.emitClose();
     },
   },

@@ -374,7 +374,7 @@ const AutomatorBackend = {
 
   toggleFollowExecution() {
     this.state.followExecution = !this.state.followExecution;
-    if (this.state.followExecution) {
+    if (this.isRunning && this.state.followExecution) {
       AutomatorTextUI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
     }
   },

@@ -15,7 +15,8 @@ Vue.component("reset-reality-button", {
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
     },
     resetReality() {
-      Modal.resetReality.show();
+      if (this.isInCelestialReality) Modal.exitCelestialReality.show();
+      else Modal.resetReality.show();
     },
     resetText() {
       if (this.isInCelestialReality && !this.resetCelestial) {

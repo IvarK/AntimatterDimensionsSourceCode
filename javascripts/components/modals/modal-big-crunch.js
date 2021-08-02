@@ -38,7 +38,7 @@ Vue.component("modal-big-crunch", {
     },
     handleYesClick() {
       this.emitClose();
-      bigCrunchReset();
+      bigCrunchResetRequest();
     },
     handleNoClick() {
       this.emitClose();

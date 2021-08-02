@@ -60,12 +60,16 @@ Vue.component("game-header-big-crunch-button", {
     switchToInfinity() {
       Tab.dimensions.infinity.show(true);
     },
+    crunch() {
+      if (player.options.confirmations.bigCrunch) Modal.bigCrunch.show({ first: false });
+      else bigCrunchResetRequest();
+    }
   },
   template: `
     <button
       v-if="isVisible && !tesseractAffordable"
       class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
-      onclick="bigCrunchResetRequest()"
+      @click="crunch"
       @mouseover="hover = true"
       @mouseleave="hover = false"
     >

@@ -27,10 +27,6 @@ function bigCrunchResetRequest(disableAnimation = false) {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);
   } else {
-    if (player.break && player.options.confirmations.bigCrunch) {
-      Modal.bigCrunch.show({ first: false });
-      return;
-    } 
     bigCrunchReset();
   }
 }

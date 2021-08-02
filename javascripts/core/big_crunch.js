@@ -3,7 +3,7 @@
 function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
 }
 
@@ -27,6 +27,10 @@ function bigCrunchResetRequest(disableAnimation = false) {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);
   } else {
+    if (player.break && player.options.confirmations.bigCrunch) {
+      Modal.bigCrunch.show({ first: false });
+      return;
+    } 
     bigCrunchReset();
   }
 }
@@ -35,7 +39,16 @@ function bigCrunchReset() {
   if (!Player.canCrunch) return;
 
   const firstInfinity = !PlayerProgress.infinityUnlocked();
+  // Since achievement 55 unlocks on the BIG_CRUNCH_BEFORE event, we check here if it is and then
+  // compare in the if statmement below if it is now unlocked.
+  const is55Unlocked = Achievement(55).isUnlocked;
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
+  if (is55Unlocked !== Achievement(55).isUnlocked) {
+    Modal.message.show(`
+    Since you just Infinitied in under a minute, the UI changed on the screen. 
+    Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them. 
+    This is purely visual, and is there to prevent flickering.`);
+  }
 
   bigCrunchUpdateStatistics();
 
@@ -48,6 +61,7 @@ function bigCrunchReset() {
   bigCrunchCheckUnlocks();
 
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
+  if (firstInfinity) Modal.bigCrunch.show({ first: true });
 }
 
 function bigCrunchUpdateStatistics() {

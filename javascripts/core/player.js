@@ -645,6 +645,9 @@ let player = {
       glyphUndo: true,
       resetCelestial: true,
       deleteGlyphSetSave: true,
+      glyphRefine: true,
+      bigCrunch: true,
+      replicantiGalaxy: true
     },
     awayProgress: {
       antimatter: true,

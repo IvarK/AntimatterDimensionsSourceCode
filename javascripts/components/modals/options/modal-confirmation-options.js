@@ -16,6 +16,8 @@ Vue.component("modal-confirmation-options", {
       glyphUndo: false,
       resetCelestial: false,
       deleteGlyphSetSave: false,
+      glyphRefine: false,
+      bigCrunch: false,
 
       sacrificeUnlocked: false,
       glyphSacrificeUnlocked: false,
@@ -60,6 +62,15 @@ Vue.component("modal-confirmation-options", {
     deleteGlyphSetSave(newValue) {
       player.options.confirmations.deleteGlyphSetSave = newValue;
     },
+    glyphRefine(newValue) {
+      player.options.confirmations.glyphRefine = newValue;
+    },
+    bigCrunch(newValue) {
+      player.options.confirmations.bigCrunch = newValue;
+    },
+    replicantiGalaxy(newValue) {
+      player.options.confirmations.replicantiGalaxy = newValue;
+    }
   },
   methods: {
     update() {
@@ -76,12 +87,18 @@ Vue.component("modal-confirmation-options", {
       this.glyphUndo = options.glyphUndo;
       this.resetCelestial = options.resetCelestial;
       this.deleteGlyphSetSave = options.deleteGlyphSetSave;
+      this.glyphRefine = options.glyphRefine;
+      this.bigCrunch = options.bigCrunch;
+      this.replicantiGalaxy = options.replicantiGalaxy;
 
       this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
       this.glyphSetSaveUnlocked = EffarigUnlock.setSaves.isUnlocked;
+      this.glyphRefineUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.infinityBroken = player.break;
+      this.replicantiUnlocked = PlayerProgress.eternityUnlocked() || player.replicanti.unl;
     }
   },
   // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
@@ -90,7 +107,9 @@ Vue.component("modal-confirmation-options", {
       <div class="c-modal-options__button-container">
         <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
+        <wide-on-off-button v-if="infinityBroken" v-model="bigCrunch" text="Big Crunch:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />
+        <wide-on-off-button v-if="replicantiUnlocked" v-model="replicantiGalaxy" text="Replicanti Galaxy:" />
         <wide-on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:" />

@@ -67,6 +67,10 @@ Vue.component("new-dim-boost-row", {
       this.lockText = DimBoost.lockText;
     },
     dimensionBoost(bulk) {
+      if (player.options.confirmations.dimboost) {
+        Modal.dimboost.show({ bulk });
+        return;
+      }
       requestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }

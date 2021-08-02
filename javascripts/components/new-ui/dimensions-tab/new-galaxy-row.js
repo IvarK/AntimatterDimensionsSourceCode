@@ -77,6 +77,10 @@ Vue.component("new-galaxy-row", {
       this.lockText = Galaxy.lockText;
     },
     buyGalaxy(bulk) {
+      if (player.options.confirmations.galaxy) {
+        Modal.galaxy.show({ bulk });
+        return;
+      }
       requestGalaxyReset(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },

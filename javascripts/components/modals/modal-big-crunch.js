@@ -2,12 +2,16 @@
 
 Vue.component("modal-big-crunch", {
   props: { modalConfig: Object },
-  data() { return { first: this.modalConfig.first }; },
+  data() {
+    return { 
+      first: this.modalConfig.first,
+      gi: gainedInfinities().round(),
+      gip: gainedInfinityPoints(),
+    }; 
+  },
   computed: {
     message() {
       const f = num => format(num, 2, 2);
-      const gip = gainedInfinityPoints();
-      const gi = gainedInfinities().round();
       if (this.first) return `Welcome to Infinity! Upon Infinity, all Dimensions, Dimension Boosts,
       and Antimatter Galaxies are reset, but in return, you gain an Infinity Point (IP). This
       allows you to buy multiple upgrades that you can find in the Infinity tab. There is no inherent boost for 
@@ -15,8 +19,8 @@ Vue.component("modal-big-crunch", {
       which is the stat shown in the Statistics tab. This contributes to multiple multipliers 
       seen in the Infinity Upgrades tab. `;
       return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset.
-      You will gain ${f(gip)} ${pluralize("Infinity Point", gip)} on Infinity, as well as 
-      ${f(gi)} ${pluralize("Infinity", gi, "Infinities")}.`;
+      You will gain ${f(this.gip)} ${pluralize("Infinity Point", this.gip)} on Infinity, and
+      ${f(this.gi)} ${pluralize("Infinity", this.gi, "Infinities")}.`;
     },
     topLabel() {
       if (this.first) return `Congratulations on reaching Infinity!`;
@@ -28,6 +32,10 @@ Vue.component("modal-big-crunch", {
     }
   },
   methods: { 
+    update() {
+      this.gi = gainedInfinities().round();
+      this.gip = gainedInfinityPoints();
+    },
     handleYesClick() {
       this.emitClose();
       bigCrunchReset();

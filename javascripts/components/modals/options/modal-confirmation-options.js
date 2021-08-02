@@ -18,11 +18,16 @@ Vue.component("modal-confirmation-options", {
       deleteGlyphSetSave: false,
       glyphRefine: false,
       bigCrunch: false,
+      galaxy: false,
+      dimboost: false,
 
       sacrificeUnlocked: false,
       glyphSacrificeUnlocked: false,
       glyphUndoUnlocked: false,
       resetCelestialUnlocked: false,
+      glyphRefineUnlocked: false,
+      infinityBroken: false,
+      replicantUnlocked: false,
     };
   },
   watch: {
@@ -70,6 +75,12 @@ Vue.component("modal-confirmation-options", {
     },
     replicantiGalaxy(newValue) {
       player.options.confirmations.replicantiGalaxy = newValue;
+    },
+    galaxy(newValue) {
+      player.options.confirmations.galaxy = newValue;
+    },
+    dimboost(newValue) {
+      player.options.confirmations.dimboost = newValue;
     }
   },
   methods: {
@@ -90,6 +101,8 @@ Vue.component("modal-confirmation-options", {
       this.glyphRefine = options.glyphRefine;
       this.bigCrunch = options.bigCrunch;
       this.replicantiGalaxy = options.replicantiGalaxy;
+      this.galaxy = options.galaxy;
+      this.dimboost = options.dimboost;
 
       this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
@@ -106,6 +119,8 @@ Vue.component("modal-confirmation-options", {
     <modal-options @close="emitClose" style="width: 50rem">
       <div class="c-modal-options__button-container">
         <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
+        <wide-on-off-button v-if="sacrificeUnlocked" v-model="dimboost" text="Dimension Boost:" />
+        <wide-on-off-button v-if="infinityUnlocked" v-model="galaxy" text="Antimatter Galaxy:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
         <wide-on-off-button v-if="infinityBroken" v-model="bigCrunch" text="Big Crunch:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />

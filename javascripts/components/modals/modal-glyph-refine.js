@@ -9,6 +9,12 @@ Vue.component("modal-glyph-refine", {
       Your current Alchemy cap is ${this.cap}.`;
     }
   },
+  created() {
+    if (this.isProtected) {
+      this.emitClose();
+      Modal.message.show("This Glyph is protected and cannot be refined.");
+    }
+  },
   data() {
     return {
       idx: this.modalConfig.idx,
@@ -26,11 +32,6 @@ Vue.component("modal-glyph-refine", {
       this.after = this.resourceAmount + this.gain;
     },
     handleYesClick() {
-      if (this.isProtected) {
-        this.emitClose();
-        Modal.message.show("This Glyph is protected and cannot be refined.");
-        return;
-      }
       GlyphSacrificeHandler.actuallyRefineGlyph(this.glyph);
       this.emitClose();
     }, 

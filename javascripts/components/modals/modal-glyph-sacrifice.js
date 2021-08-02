@@ -8,6 +8,12 @@ Vue.component("modal-glyph-sacrifice", {
       gain: 0
     };
   },
+  created() {
+    if (this.isProtected) {
+      this.emitClose();
+      Modal.message.show("This Glyph is protected and cannot be refined.");
+    }
+  },
   computed: {
     message() {
       return `Do you really want to sacrifice this glyph? Your total power of sacrificed ${this.glyph.type} ` +
@@ -22,11 +28,6 @@ Vue.component("modal-glyph-sacrifice", {
       this.gain = this.modalConfig.gain;
     },
     handleYesClick() {
-      if (this.isProtected) {
-        this.emitClose();
-        Modal.message.show("This Glyph is protected and cannot be sacrificed.");
-        return;
-      }
       player.reality.glyphs.sac[this.glyph.type] += this.gain;
       Glyphs.removeFromInventory(this.glyph);
       EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, this.glyph);
@@ -36,24 +37,25 @@ Vue.component("modal-glyph-sacrifice", {
       this.emitClose();
     }
   },
-  template: `<div class="c-modal-message l-modal-content--centered">
-  <h2>You are about to delete a Glyph</h2>
-  <div class="c-modal-message__text">
-    {{ message }}
-  </div>
-  <div class="l-options-grid__row">
-  <primary-button
-      class="o-primary-btn--width-medium c-modal-message__okay-btn"
-      @click="handleNoClick"
-    >
-      Cancel
-    </primary-button>
-    <primary-button
-      class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-      @click="handleYesClick"
-    >
-      Confirm
-    </primary-button>
-  </div>
-</div>`
+  template: `
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>You are about to delete a Glyph</h2>
+    <div class="c-modal-message__text">
+      {{ message }}
+    </div>
+    <div class="l-options-grid__row">
+      <primary-button
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </primary-button>
+      <primary-button
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Confirm
+      </primary-button>
+    </div>
+  </div>`
 });

@@ -4,6 +4,12 @@ Vue.component("modal-glyph-delete", {
   props: {
     modalConfig: Object
   },
+  created() {
+    if (this.isProtected) {
+      this.emitClose();
+      Modal.message.show("This Glyph is protected and cannot be refined.");
+    }
+  },
   methods: {
     update() {
       // I do things this way because I find it the easiest way to get the glyph.
@@ -11,11 +17,6 @@ Vue.component("modal-glyph-delete", {
       this.isProtected = this.modalConfig.idx < Glyphs.protectedSlots;
     },
     handleYesClick() {
-      if (this.isProtected) {
-        this.emitClose();
-        Modal.message.show("This Glyph is protected and cannot be deleted.");
-        return;
-      }
       Glyphs.removeFromInventory(this.glyph);
       this.emitClose();
     },

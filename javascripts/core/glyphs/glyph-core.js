@@ -150,7 +150,10 @@ const Glyphs = {
         Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
         return;
       }
-      if (!player.options.confirmations.glyphReplace) return;
+      if (!player.options.confirmations.glyphReplace) {
+        this.swapIntoActive(glyph, targetSlot);
+        return;
+      }
       Modal.glyphReplace.show({ targetSlot, inventoryIndex });
     }
   },
@@ -504,6 +507,22 @@ const Glyphs = {
         glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
       }
     }
+  },
+  swapIntoActive(glyph, targetSlot) {
+    this.removeFromInventory(glyph);
+    this.unequip(targetSlot, glyph.idx);
+    finishProcessReality({
+      reset: true,
+      glyphUndo: false,
+      restoreCelestialState: true,
+    });
+    player.reality.glyphs.active.push(glyph);
+    this.active[targetSlot] = glyph;
+    glyph.idx = targetSlot;
+    this.updateRealityGlyphEffects();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    this.validate();
   }
 };
 

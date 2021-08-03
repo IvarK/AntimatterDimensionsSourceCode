@@ -214,7 +214,7 @@ const AutomatorCommands = ((() => {
       compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
       blockify: ctx => ({
         ...automatorBlocksMap.COMMENT,
-        inputValue: ctx.Comment[0].image.replace(/(#|\/\/)./u, ""),
+        inputValue: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
       })
     },
     {

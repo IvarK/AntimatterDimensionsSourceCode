@@ -60,15 +60,20 @@ Vue.component("automator-docs", {
   methods: {
     update() {
       this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
-      const currentScript = player.reality.automator.scripts[player.reality.automator.state.editorScript].content;
-      this.errorCount = AutomatorGrammar.compile(currentScript).errors.length;
+      this.errorCount = AutomatorData.currentErrors().length;
     },
     changeCommand(event) {
       this.commandID = event;
     },
     exportScript() {
-      copyToClipboard(btoa(AutomatorData.currentScriptText()));
-      GameUI.notify.info("Exported current Automator script to your clipboard");
+      // Cut off leading and trailing whitespace
+      const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
+      if (trimmed.length === 0) {
+        GameUI.notify.error("Could not export blank Automator script!");
+      } else {
+        copyToClipboard(btoa(trimmed));
+        GameUI.notify.info("Exported current Automator script to your clipboard");
+      }
     },
     importScript() {
       Modal.importScript.show();

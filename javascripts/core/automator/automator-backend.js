@@ -170,16 +170,20 @@ const AutomatorData = {
     return player.reality.automator.scripts[this.scriptIndex()].content;
   },
   createNewScript(newScript) {
-    const newScriptID = Object.values(player.reality.automator.scripts).length + 1;
+    const newScriptID = Object.values(player.reality.automator.scripts).length;
     player.reality.automator.scripts[newScriptID] = {
       id: `${newScriptID}`,
-      name: "Imported Script",
+      name: `Imported Script ${newScriptID}`,
       content: newScript
     };
+    GameUI.notify.info(`Imported Script ${newScriptID}`);
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
   currentErrors() {
-    return AutomatorGrammar.compile(this.currentScriptText()).errors;
+    const rawErrors = AutomatorGrammar.compile(this.currentScriptText()).errors;
+    // Note: Sometimes multiple errors generate due to the same line, but it seems like in all tested
+    // cases the duplicate entries have NaN line entries
+    return rawErrors.filter(e => !isNaN(e.startLine));
   }
 };
 

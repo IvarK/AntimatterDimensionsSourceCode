@@ -357,12 +357,12 @@
       let hadError = false;
       if (!ctx.RCurly || ctx.RCurly[0].isInsertedInRecovery) {
         this.addError(commandToken[0], "Missing closing }",
-          "Your loop has a mismatched brackets, add a corresponding } to close the loop");
+          "This loop has mismatched brackets, add a corresponding } on another line to close the loop");
         hadError = true;
       }
       if (!ctx.LCurly || ctx.LCurly[0].isInsertedInRecovery) {
         this.addError(commandToken[0], "Missing opening {",
-          "You have a } closing a loop which does not exist, remove the }");
+          "This line has an extra } closing a loop which does not exist, remove the }");
         hadError = true;
       }
       return !hadError;

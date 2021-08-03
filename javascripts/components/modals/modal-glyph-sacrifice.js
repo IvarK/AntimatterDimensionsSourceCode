@@ -1,61 +1,63 @@
 "use strict";
 
 Vue.component("modal-glyph-sacrifice", {
-  props: { modalConfig: Object },
+  props: {
+    modalConfig: Object
+  },
   data() {
-    return { 
-      isProtected: false,
+    return {
+      currentGlyphSacrifice: 0,
       gain: 0
     };
   },
-  created() {
-    if (this.isProtected) {
-      this.emitClose();
-      Modal.message.show("This Glyph is protected and cannot be refined.");
-    }
-  },
   computed: {
+    glyph() {
+      return Glyphs.findByInventoryIndex(this.modalConfig.idx);
+    },
     message() {
-      return `Do you really want to sacrifice this glyph? Your total power of sacrificed ${this.glyph.type} ` +
-      `glyphs will increase from ${format(player.reality.glyphs.sac[this.glyph.type], 2, 2)} to ` +
-      `${format(player.reality.glyphs.sac[this.glyph.type] + this.gain, 2, 2)}.`;
+      return `Do you really want to sacrifice this glyph? Your total power of sacrificed ${this.glyph.type}
+      glyphs will increase from ${format(this.currentGlyphSacrifice, 2, 2)} to
+      ${format(this.currentGlyphSacrifice + this.gain, 2, 2)}.`;
     }
   },
   methods: {
     update() {
-      this.glyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
-      this.isProtected = this.modalConfig.idx < Glyphs.protectedSlots;
-      this.gain = this.modalConfig.gain;
+      this.currentGlyphSacrifice = player.reality.glyphs.sac[this.glyph.type];
+      this.gain = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+
+      const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
+      if (this.glyph !== newGlyph) {
+        this.emitClose();
+        Modal.message.show("The selected Glyph changed position or was otherwise changed!");
+      }
     },
     handleYesClick() {
-      player.reality.glyphs.sac[this.glyph.type] += this.gain;
-      Glyphs.removeFromInventory(this.glyph);
-      EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, this.glyph);
       this.emitClose();
+      GlyphSacrificeHandler.sacrificeGlyph(this.glyph, true);
     },
     handleNoClick() {
       this.emitClose();
     }
   },
   template: `
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>You are about to delete a Glyph</h2>
-    <div class="c-modal-message__text">
-      {{ message }}
-    </div>
-    <div class="l-options-grid__row">
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </primary-button>
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </primary-button>
-    </div>
-  </div>`
+    <div class="c-modal-message l-modal-content--centered">
+      <h2>You are about to delete a Glyph</h2>
+      <div class="c-modal-message__text">
+        {{ message }}
+      </div>
+      <div class="l-options-grid__row">
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          Cancel
+        </primary-button>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >
+          Confirm
+        </primary-button>
+      </div>
+    </div>`
 });

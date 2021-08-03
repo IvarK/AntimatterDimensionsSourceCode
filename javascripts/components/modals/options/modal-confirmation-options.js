@@ -90,7 +90,6 @@ Vue.component("modal-confirmation-options", {
       this.glyphRefineUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     }
   },
-  // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
       <div>

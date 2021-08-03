@@ -1,17 +1,20 @@
 "use strict";
 
 Vue.component("modal-glyph-undo", {
-  computed: {
-    extraLine() {
-      return Enslaved.isUnlocked ? "\n- stored game time" : "";
-    }
+  data() {
+    return {
+      showStoredGameTime: false,
+    };
   },
   methods: {
+    update() {
+      this.showStoredGameTime = Enslaved.isUnlocked;
+    },
     handleYesClick() {
       Glyphs.undo();
       this.emitClose();
     },
-    handleNoClick() { 
+    handleNoClick() {
       this.emitClose();
     }
   },
@@ -20,18 +23,19 @@ Vue.component("modal-glyph-undo", {
       <h2>You are about to undo equipping a Glyph</h2>
       <div class="c-modal-message__text">
         The last equipped Glyph will be removed.
-        Reality will be reset, but some things will be restored to what they were when it was equipped:<br><br>
-        <div style="text-align:left">
-      - Antimatter, Infinity Points, and Eternity Points<br>
-      - Dilation Upgrades, Tachyon Particles, and Dilated Time<br>
-      - Time Theorems and Eternity Challenge completions<br>
-      - Time Dimension and Reality unlocks<br>
-      - time in current Reality<br>
-      {{ extraLine }}
-      </div>
+        Reality will be reset, but some things will be restored to what they were when it was equipped:
+        <br>
+        <div style="text-align: left">
+          <br>- Antimatter, Infinity Points, and Eternity Points
+          <br>- Dilation Upgrades, Tachyon Particles, and Dilated Time
+          <br>- Time Theorems and Eternity Challenge completions
+          <br>- Time Dimension and Reality unlocks
+          <br>- time in current Reality
+          <span v-if="showStoredGameTime"><br>- stored game time</span>
+        </div>
       </div>
       <div class="l-options-grid__row">
-      <primary-button
+        <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
@@ -44,6 +48,5 @@ Vue.component("modal-glyph-undo", {
           Confirm
         </primary-button>
       </div>
-    </div>
-  `
+    </div>`
 });

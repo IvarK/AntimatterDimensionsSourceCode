@@ -4,6 +4,12 @@ Vue.component("modal-edit-tree", {
   props: {
     modalConfig: Object
   },
+  data() {
+    return {
+      input: player.timestudy.presets[this.modalConfig.id].studies,
+      name: player.timestudy.presets[this.modalConfig.id].name,
+    };
+  },
   computed: {
     tree() {
       if (!this.inputIsValidTree) return false;
@@ -32,17 +38,23 @@ Vue.component("modal-edit-tree", {
           }
         }
         switch (study.path) {
-        case TIME_STUDY_PATH.ANTIMATTER_DIM: firstSplitPaths.add("Antimatter Dims");
-          break;
-        case TIME_STUDY_PATH.INFINITY_DIM: firstSplitPaths.add("Infinity Dims");
-          break;
-        case TIME_STUDY_PATH.TIME_DIM: firstSplitPaths.add("Time Dims");
-          break;
-        case TIME_STUDY_PATH.ACTIVE: secondSplitPaths.add("Active");
-          break;
-        case TIME_STUDY_PATH.PASSIVE: secondSplitPaths.add("Passive");
-          break;
-        case TIME_STUDY_PATH.IDLE: secondSplitPaths.add("Idle");
+          case TIME_STUDY_PATH.ANTIMATTER_DIM:
+            firstSplitPaths.add("Antimatter Dims");
+            break;
+          case TIME_STUDY_PATH.INFINITY_DIM:
+            firstSplitPaths.add("Infinity Dims");
+            break;
+          case TIME_STUDY_PATH.TIME_DIM:
+            firstSplitPaths.add("Time Dims");
+            break;
+          case TIME_STUDY_PATH.ACTIVE:
+            secondSplitPaths.add("Active");
+            break;
+          case TIME_STUDY_PATH.PASSIVE:
+            secondSplitPaths.add("Passive");
+            break;
+          case TIME_STUDY_PATH.IDLE:
+            secondSplitPaths.add("Idle");
         }
       }
       const totalST = this.calculateMissingSTCost([...studies], true);
@@ -72,12 +84,6 @@ Vue.component("modal-edit-tree", {
       }
       return isValid;
     },
-  },
-  data() {
-    return {
-      input: player.timestudy.presets[this.modalConfig.id].studies,
-      name: player.timestudy.presets[this.modalConfig.id].name,
-    };
   },
   methods: {
     confirmEdits() {
@@ -145,16 +151,16 @@ Vue.component("modal-edit-tree", {
         @keyup.enter="confirmEdits"
       />
       <div class="c-modal-import-tree__tree-info">
-      <div v-if="!inputIsValid">Invalid tree</div>
-      <template v-if="inputIsValidTree">
-        <div class="l-modal-import-tree__tree-info-line">
-        Total tree cost:
-        {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
-        <span v-if="tree.totalST !== 0">
-          and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
-        </span>
-        </div>
-        <div class="l-modal-import-tree__tree-info-line">
+        <div v-if="!inputIsValid">Invalid tree</div>
+        <template v-if="inputIsValidTree">
+          <div class="l-modal-import-tree__tree-info-line">
+            Total tree cost:
+            {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            <span v-if="tree.totalST !== 0">
+              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+            </span>
+          </div>
+          <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
             {{ formatCost(tree.missingCost) }} {{ "Time Theorem" | pluralize(tree.missingCost, "Time Theorems") }}
             <span v-if="tree.missingST !== 0">
@@ -172,7 +178,7 @@ Vue.component("modal-edit-tree", {
           <div v-if="tree.hasEternityChallenge" class="l-modal-import-tree__tree-info-line">
             Eternity challenge: {{ tree.eternityChallenge.id }}
           </div>
-      </template>
+        </template>
       </div>
       <primary-button
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
@@ -183,8 +189,3 @@ Vue.component("modal-edit-tree", {
       </primary-button>
     </div>`
 });
-
-// We goin to flavortown USA
-// hi i'm guy fieri and we're rolling out
-// looking for america's greatest
-// diners, drive-ins, and dives.

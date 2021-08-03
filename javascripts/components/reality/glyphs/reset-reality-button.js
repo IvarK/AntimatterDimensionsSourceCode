@@ -15,16 +15,16 @@ Vue.component("reset-reality-button", {
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
     },
     resetReality() {
-      if (this.isInCelestialReality) Modal.exitCelestialReality.show();
-      else Modal.resetReality.show();
+      const confirms = player.options.confirmations;
+      if (this.isInCelestialReality) {
+        if (confirms.resetCelestial) Modal.exitCelestialReality.show();
+        else beginProcessReality(getRealityProps(true));
+      } else if (confirms.resetReality) Modal.resetReality.show();
+      else beginProcessReality(getRealityProps(true));
     },
     resetText() {
-      if (this.isInCelestialReality && !this.resetCelestial) {
-        return "Exit this Celestial early";
-      }
-      if (this.isInCelestialReality && this.resetCelestial) {
-        return "Restart this Celestial";
-      }
+      if (this.isInCelestialReality && !this.resetCelestial) return "Exit this Celestial early";
+      if (this.isInCelestialReality && this.resetCelestial) return "Restart this Celestial";
       return "Start this Reality over";
     },
   },

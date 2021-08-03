@@ -29,11 +29,11 @@ const GlyphSacrificeHandler = {
   removeGlyph(glyph, force = false) {
     if (this.handleSpecialGlyphTypes(glyph)) return;
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    else if (this.isRefining) this.refineGlyph(glyph);
+    else if (this.isRefining) this.attemptRefineGlyph(glyph);
     else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
-    if (force) Glyphs.removeFromInventory(glyph);
+    if (force || !player.options.confirmations.glyphSacrifice) Glyphs.removeFromInventory(glyph);
     else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
@@ -83,33 +83,35 @@ const GlyphSacrificeHandler = {
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);
     return Math.clamp(glyphActualMaxValue - alchemyResource.amount, 0, glyphActualValue);
   },
-  refineGlyph(glyph) {
+  attemptRefineGlyph(glyph) {
     if (glyph.type === "reality") return;
     if (glyph.type === "cursed") {
       Glyphs.removeFromInventory(glyph);
       return;
     }
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || (this.glyphRefinementGain(glyph) === 0 &&
-      !AlchemyResource.decoherence.isUnlocked)) {
+    const decoherence = AlchemyResource.decoherence.isUnlocked;
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ||
+        (this.glyphRefinementGain(glyph) === 0 && !decoherence) ||
+        (decoherence && AlchemyResources.base.every(x => x.data.amount >= Ra.alchemyResourceCap))) {
       this.sacrificeGlyph(glyph, true);
       return;
     }
-    if (this.glyphAlchemyResource(glyph).isUnlocked) {
-      if (player.options.confirmations.glyphRefine) {
-        const resource = this.glyphAlchemyResource(glyph);
-        Modal.glyphRefine.show({ 
-          idx: glyph.idx, 
-          resourceName: resource.name, 
-          resourceAmount: resource.amount,
-          gain: this.glyphRefinementGain(glyph),
-          cap: this.levelAlchemyCap(glyph.level)
-        });
-        return;
-      }
-      this.actuallyRefineGlyph(glyph);
+
+    if (!player.options.confirmations.glyphRefine) {
+      this.refineGlyph(glyph);
+      return;
     }
+    const resource = this.glyphAlchemyResource(glyph);
+    Modal.glyphRefine.show({
+      idx: glyph.idx,
+      resourceName: resource.name,
+      resourceAmount: resource.amount,
+      gain: this.glyphRefinementGain(glyph),
+      cap: this.levelAlchemyCap(glyph.level)
+    });
+
   },
-  actuallyRefineGlyph(glyph) {
+  refineGlyph(glyph) {
     const resource = this.glyphAlchemyResource(glyph);
     const rawRefinementGain = this.glyphRawRefinementGain(glyph);
     const refinementGain = this.glyphRefinementGain(glyph);

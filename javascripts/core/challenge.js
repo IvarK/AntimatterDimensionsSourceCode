@@ -205,11 +205,9 @@ class InfinityChallengeState extends GameMechanicState {
 
   start() {
     if (!this.isUnlocked || this.isRunning) return;
-
+    bigCrunchReset();
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
-
-    bigCrunchReset();
     startChallenge();
     player.break = true;
 

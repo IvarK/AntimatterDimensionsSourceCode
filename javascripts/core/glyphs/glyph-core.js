@@ -361,9 +361,8 @@ const Glyphs = {
     const isHarsh = threshold < 5;
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
     if (!GlyphSacrificeHandler.canSacrifice) return;
-    // If auto clean could remove useful glyphs, we warn them.
-    if (isHarsh && player.options.confirmations.harshAutoClean) {
-      Modal.harshGlyphPurge.show();
+    if (player.options.confirmations.autoClean) {
+      Modal.glyphPurge.show({ harsh: isHarsh });
       return;
     }
     // We look in backwards order so that later glyphs get cleaned up first

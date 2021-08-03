@@ -641,7 +641,7 @@ let player = {
       resetReality: true,
       glyphReplace: true,
       glyphSacrifice: true,
-      harshAutoClean: true,
+      autoClean: true,
       glyphUndo: true,
       resetCelestial: true,
       deleteGlyphSetSave: true,

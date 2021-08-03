@@ -12,7 +12,7 @@ Vue.component("modal-confirmation-options", {
       resetReality: false,
       glyphReplace: false,
       glyphSacrifice: false,
-      harshAutoClean: false,
+      autoClean: false,
       glyphUndo: false,
       resetCelestial: false,
       deleteGlyphSetSave: false,
@@ -55,8 +55,8 @@ Vue.component("modal-confirmation-options", {
     glyphSacrifice(newValue) {
       player.options.confirmations.glyphSacrifice = newValue;
     },
-    harshAutoClean(newValue) {
-      player.options.confirmations.harshAutoClean = newValue;
+    autoClean(newValue) {
+      player.options.confirmations.autoClean = newValue;
     },
     glyphUndo(newValue) {
       player.options.confirmations.glyphUndo = newValue;
@@ -94,7 +94,7 @@ Vue.component("modal-confirmation-options", {
       this.resetReality = options.resetReality;
       this.glyphReplace = options.glyphReplace;
       this.glyphSacrifice = options.glyphSacrifice;
-      this.harshAutoClean = options.harshAutoClean;
+      this.autoClean = options.autoClean;
       this.glyphUndo = options.glyphUndo;
       this.resetCelestial = options.resetCelestial;
       this.deleteGlyphSetSave = options.deleteGlyphSetSave;
@@ -130,7 +130,7 @@ Vue.component("modal-confirmation-options", {
         <wide-on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:" />
         <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:" />
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:" />
+        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="autoClean" text="Auto clean:" />
         <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
         <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
         <wide-on-off-button v-if="glyphSetSaveUnlocked" v-model="deleteGlyphSetSave" text="Delete Glyph Set Save:" />

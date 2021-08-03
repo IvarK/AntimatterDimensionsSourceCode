@@ -2007,6 +2007,15 @@ screen and (max-width: 480px) {
 
 /*#endregion c-game-header__antimatter*/
 
+.l-game-header__challenge-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  top: 50%;
+  font-size: 1.2rem;
+}
+
 .l-game-header__buttons-line {
   position: relative;
 }

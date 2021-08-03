@@ -111,12 +111,16 @@ Vue.component("header-challenge-display", {
     },
   },
   template: `
-    <div v-if="isVisible">
-      You are currently in {{ challengeDisplay }}
+    <div
+      v-if="isVisible"
+      class="l-game-header__challenge-text"
+    >
+      <span style="padding : 0.5rem;">
+        You are currently in {{ challengeDisplay }}
+      </span>
       <failable-ec-text v-if="isInFailableEC" />
       <primary-button
         v-if="showExit"
-        class="o-primary-btn--header-exit"
         @click="exitButtonClicked"
       >
         {{ exitText }}

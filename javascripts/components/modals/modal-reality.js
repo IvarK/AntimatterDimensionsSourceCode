@@ -50,7 +50,8 @@ Vue.component("modal-reality", {
       this.firstPerk = Perk.firstPerk.isEffectActive;
       this.level = gainedGlyphLevel().actualLevel;
       this.realities = simulatedRealityCount(false) + 1;
-      this.realityMachines.copyFrom(MachineHandler.gainedRealityMachines);
+      const availableRM = MachineHandler.hardcapRM.minus(Currency.realityMachines.value);
+      this.realityMachines.copyFrom(MachineHandler.gainedRealityMachines.times(this.realities).clampMax(availableRM));
       if (!this.firstPerk) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];
@@ -71,10 +72,9 @@ Vue.component("modal-reality", {
     },
     gained() {
       return `You will gain
-        ${format(this.realities, 2, 0)} ${pluralize("Reality", this.realities, "Realities")},
-        ${format(this.realities, 2, 0)} Perk ${pluralize("Point", this.realities)} and
-        ${format(this.realityMachines, 2, 0)}
-        Reality ${pluralize("Machine", this.realityMachines)} on Reality.`;
+        ${formatInt(this.realities)} ${pluralize("Reality", this.realities, "Realities")},
+        ${formatInt(this.realities)} Perk ${pluralize("Point", this.realities)} and
+        ${format(this.realityMachines, 2)} Reality ${pluralize("Machine", this.realityMachines)} on Reality.`;
     },
     levelStats() {
       const bestGlyphLevel = player.records.bestReality.glyphLevel;
@@ -126,6 +126,13 @@ Vue.component("modal-reality", {
         {{ levelStats() }}
         <br>
         {{ selectInfo }}
+      </div>
+      <div v-if="realities > 1">
+      <br>
+        After choosing this glyph the game will simulate the rest of your Realities,
+        <br>
+        automatically choosing another {{ formatInt(realities - 1) }} {{ "Glyph" | pluralize(realities - 1) }}
+        based on your Glyph filter settings.
       </div>
       <div class="l-options-grid__row">
         <primary-button

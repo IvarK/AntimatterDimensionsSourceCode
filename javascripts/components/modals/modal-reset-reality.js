@@ -20,10 +20,9 @@ Vue.component("modal-reset-reality", {
         This will put you at the start of your Reality and reset your progress in this Reality,
         giving you no rewards from your progress in your current Reality.
         <br>
-        Are you sure you want to do this?
         <br>
+        Are you sure you want to do this?
       </div>
-      <br><br>
       <div class="l-options-grid__row">
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"

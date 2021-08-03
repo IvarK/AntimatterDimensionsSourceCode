@@ -21,7 +21,10 @@ Vue.component("modal-glyph-undo", {
   template: `
     <div class="c-modal-message l-modal-content--centered">
       <h2>You are about to undo equipping a Glyph</h2>
-      <div class="c-modal-message__text">
+      <div
+        class="c-modal-message__text"
+        style="text-align: left"
+      >
         The last equipped Glyph will be removed.
         Reality will be reset, but some things will be restored to what they were when it was equipped:
         <br>
@@ -30,8 +33,8 @@ Vue.component("modal-glyph-undo", {
           <br>- Dilation Upgrades, Tachyon Particles, and Dilated Time
           <br>- Time Theorems and Eternity Challenge completions
           <br>- Time Dimension and Reality unlocks
-          <br>- time in current Reality
-          <span v-if="showStoredGameTime"><br>- stored game time</span>
+          <br>- Time in current Reality
+          <span v-if="showStoredGameTime"><br>- Stored game time</span>
         </div>
       </div>
       <div class="l-options-grid__row">

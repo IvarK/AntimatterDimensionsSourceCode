@@ -29,7 +29,7 @@ const GlyphSacrificeHandler = {
   removeGlyph(glyph, force = false) {
     if (this.handleSpecialGlyphTypes(glyph)) return;
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    else if (this.isRefining) this.attemptRefineGlyph(glyph);
+    else if (this.isRefining) this.attemptRefineGlyph(glyph, force);
     else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
@@ -83,7 +83,7 @@ const GlyphSacrificeHandler = {
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);
     return Math.clamp(glyphActualMaxValue - alchemyResource.amount, 0, glyphActualValue);
   },
-  attemptRefineGlyph(glyph) {
+  attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
     if (glyph.type === "cursed") {
       Glyphs.removeFromInventory(glyph);
@@ -97,7 +97,7 @@ const GlyphSacrificeHandler = {
       return;
     }
 
-    if (!player.options.confirmations.glyphRefine) {
+    if (!player.options.confirmations.glyphRefine || force) {
       this.refineGlyph(glyph);
       return;
     }

@@ -93,6 +93,7 @@ let player = {
       interval: 4000,
       limitDimBoosts: false,
       maxDimBoosts: 1,
+      limitUntilGalaxies: false,
       galaxies: 10,
       buyMaxInterval: 0,
       isActive: true,

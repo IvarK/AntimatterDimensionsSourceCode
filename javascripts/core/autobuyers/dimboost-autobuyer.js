@@ -33,6 +33,14 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     this.data.maxDimBoosts = value;
   }
 
+  get limitUntilGalaxies() {
+    return this.data.limitUntilGalaxies;
+  }
+
+  set limitUntilGalaxies(value) {
+    this.data.limitUntilGalaxies = value;
+  }
+
   get galaxies() {
     return this.data.galaxies;
   }
@@ -77,17 +85,17 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
 
   tick() {
     if (this.isBuyMaxUnlocked) {
+      const galaxyCondition = !this.limitUntilGalaxies || player.galaxies >= this.galaxies;
+      if (!DimBoost.canUnlockNewDimension && !galaxyCondition) return;
       maxBuyDimBoosts();
       super.tick();
       return;
     }
 
-    const limit = this.limitDimBoosts ? this.maxDimBoosts : Number.MAX_VALUE;
-    const bulk = 1;
-    const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= limit ||
-      player.galaxies >= this.galaxies;
-    if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;
-    softReset(bulk);
+    const limitCondition = !this.limitDimBoosts || DimBoost.purchasedBoosts < this.maxDimBoosts;
+    const galaxyCondition = this.limitUntilGalaxies && player.galaxies >= this.galaxies;
+    if (!limitCondition && !galaxyCondition) return;
+    softReset(1);
     super.tick();
   }
 }();

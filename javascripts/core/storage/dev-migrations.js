@@ -979,6 +979,7 @@ GameStorage.devMigrations = {
       if (player.reality.perks.has(10)) Currency.antimatter.bumpTo(1e130);
     },
     player => {
+      player.auto.dimBoost.limitUntilGalaxies = false;
       delete player.auto.dimBoost.bulk;
       if (player.infinityUpgrades.delete("bulkBoost")) {
         player.infinityUpgrades.add("autobuyMaxDimboosts");

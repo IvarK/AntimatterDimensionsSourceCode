@@ -15,6 +15,12 @@ Vue.component("automator-error-page", {
     },
     scrollToLine(line) {
       AutomatorTextUI.editor.scrollIntoView({ line, ch: 0 }, 16);
+      const errorLine = AutomatorData.currentErrorLine - 1;
+      AutomatorTextUI.editor.removeLineClass(errorLine, "background", "c-automator-editor__error-line");
+      AutomatorTextUI.editor.removeLineClass(errorLine, "gutter", "c-automator-editor__error-line-gutter");
+      AutomatorTextUI.editor.addLineClass(line - 1, "background", "c-automator-editor__error-line");
+      AutomatorTextUI.editor.addLineClass(line - 1, "gutter", "c-automator-editor__error-line-gutter");
+      AutomatorData.currentErrorLine = line;
     }
   },
   template: `

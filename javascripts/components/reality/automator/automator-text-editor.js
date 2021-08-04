@@ -32,6 +32,11 @@ const AutomatorTextUI = {
     this.editor.on("change", editor => {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
+      // Clear error line highlighting as soon as any text is changed; this is significantly more performance-friendly
+      // than running the parser every change to determine if the error still exists
+      const errorLine = AutomatorData.currentErrorLine - 1;
+      AutomatorTextUI.editor.removeLineClass(errorLine, "background", "c-automator-editor__error-line");
+      AutomatorTextUI.editor.removeLineClass(errorLine, "gutter", "c-automator-editor__error-line-gutter");
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   }

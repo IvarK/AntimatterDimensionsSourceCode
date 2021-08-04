@@ -244,7 +244,12 @@ Vue.component("automator-script-import", {
   },
   methods: {
     update() {
-      this.rawDecoded = atob(this.input);
+      try {
+        this.rawDecoded = atob(this.input);
+      } catch (e) {
+        // Improperly encoded saves will cause atob() to throw an exception
+        this.isValid = false;
+      }
       this.decodeSave();
     },
     decodeSave() {
@@ -263,6 +268,7 @@ Vue.component("automator-script-import", {
       this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
     },
     importSave() {
+      if (!this.isValid) return;
       AutomatorData.createNewScript(this.scriptContent, this.scriptName);
       AutomatorBackend.initializeFromSave();
       this.emitClose();

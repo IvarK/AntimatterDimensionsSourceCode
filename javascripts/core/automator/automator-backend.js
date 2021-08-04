@@ -163,6 +163,7 @@ class AutomatorScript {
 }
 
 const AutomatorData = {
+  currentErrorLine: -1,
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },

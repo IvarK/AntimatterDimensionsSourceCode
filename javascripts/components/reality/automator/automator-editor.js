@@ -91,6 +91,8 @@ Vue.component("automator-editor", {
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
+      const scriptID = ui.view.tabs.reality.automator.editorScriptID;
+      AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;

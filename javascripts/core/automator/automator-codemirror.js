@@ -90,6 +90,7 @@
     studiesList: [
       commentRule,
       { sol: true, next: "start" },
+      { regex: /t[1-4]/ui, token: "number" },
       { regex: /antimatter(?=[\s,]|$)|infinity(?=[\s,]|$)|time(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /active(?=[\s,]|$)|passive(?=[\s,]|$)|idle(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
@@ -151,7 +152,7 @@
         token: "variable-2",
       },
       { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
-      { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/ui, token: "number" },
+      { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
       { regex: /\{/ui, indent: true, next: "commandDone" },
       // This seems necessary to have a closing curly brace de-indent automatically in some cases

@@ -235,7 +235,8 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Define[0].startLine;
         if (!ctx.Identifier || ctx.Identifier[0].isInsertedInRecovery || ctx.Identifier[0].image === "") {
-          V.addError(ctx.Define, "Missing variable name", "Provide a variable name between DEFINE and =");
+          V.addError(ctx.Define, "Missing variable name",
+            "Provide a variable name that isn't a command name between DEFINE and =");
           return false;
         }
         return true;
@@ -250,6 +251,9 @@ const AutomatorCommands = ((() => {
           if (entry.children.NumberLiteral) {
             // Single study ID or numerical value
             studyList.push(entry.children.NumberLiteral[0].image);
+          } else if (entry.children.TriadStudy) {
+            // Triad study
+            studyList.push(`T${entry.children.TriadStudy[0].image}`);
           } else {
             // Study range (eg. "41-71")
             const range = entry.children.studyRange[0].children;

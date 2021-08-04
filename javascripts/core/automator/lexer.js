@@ -309,6 +309,14 @@ const AutomatorLexer = (() => {
     longer_alt: Identifier,
   });
 
+  // We allow TriadStudy to consume lots of digits because that makes error reporting more
+  // clear (it's nice to say T123 is an invalid triad study)
+  const TriadStudy = createToken({
+    name: "TriadStudy",
+    pattern: /t[1-9][0-9]*/i,
+    longer_alt: Identifier,
+  });
+
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
@@ -322,7 +330,7 @@ const AutomatorLexer = (() => {
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
     AutomatorCurrency, ...tokenLists.AutomatorCurrency,
-    ECLiteral,
+    ECLiteral, TriadStudy,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,

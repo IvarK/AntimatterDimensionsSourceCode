@@ -106,7 +106,7 @@ Vue.component("automator-text-editor", {
       if (AutomatorBackend.isRunning && AutomatorBackend.state.followExecution) {
         this.UI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
       }
-      if (this.unclearedLines && !AutomatorBackend.isRunning) this.clearAllActiveLines();
+      if (this.unclearedLines && !AutomatorBackend.isOn) this.clearAllActiveLines();
       if (AutomatorBackend.isOn) {
         this.setActiveState(AutomatorBackend.state.topLevelScript, AutomatorBackend.stack.top.lineNumber);
       } else {

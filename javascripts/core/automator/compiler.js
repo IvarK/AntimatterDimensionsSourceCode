@@ -112,10 +112,16 @@
       const modifiedErrors = [];
       let lastLine = 0;
       for (const err of this.errors.sort((a, b) => a.startLine - b.startLine)) {
+        // For some reason chevrotain occasionally gives NaN for error location but it seems like this only ever
+        // happens on the last line of the script, so we can fill in that value to fix it
+        if (isNaN(err.startLine)) {
+          err.startLine = AutomatorData.currentScriptText().split("\n").length;
+        }
+
         // Only take one error from each line. In many cases multiple errors will arise from the same line due to how
         // the parser works, and many of them will be useless or redundant. Also sometimes chevrotain fails to generate
         // a line for an error, in which case it's usually a redundant error which can be ignored.
-        if (err.startLine === lastLine || isNaN(err.startLine)) {
+        if (err.startLine === lastLine) {
           continue;
         }
 
@@ -300,6 +306,15 @@
         const pathId = ctx.StudyPath[0].tokenType.$studyPath;
         const pathStudies = NormalTimeStudies.paths[pathId];
         studiesOut.push(...pathStudies);
+        return;
+      }
+      if (ctx.TriadStudy) {
+        const triadNumber = parseInt(ctx.TriadStudy[0].image.substr(1), 10);
+        if (triadNumber < 1 || triadNumber > 4) {
+          this.addError(ctx, `Invalid Triad Study ID ${triadNumber}`,
+            `Triad Study ${triadNumber} does not exist, use an integer between ${formatInt(1)} and ${formatInt(4)}`);
+        }
+        studiesOut.push(`T${triadNumber}`);
       }
     }
 
@@ -515,11 +530,13 @@
   }
 
   function compile(input, validateOnly = false) {
-    const lexResult = AutomatorLexer.lexer.tokenize(input);
+    // The lexer and codemirror choke on the last line of the script, so we pad it with an invisible newline
+    const script = `${input}\n`;
+    const lexResult = AutomatorLexer.lexer.tokenize(script);
     const tokens = lexResult.tokens;
     parser.input = tokens;
     const parseResult = parser.script();
-    const validator = new Validator(input);
+    const validator = new Validator(script);
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);

@@ -563,7 +563,8 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Studies[0].startLine;
         if (!ctx.Preset || ctx.Preset[0].isInsertedInRecovery || ctx.Preset[0].image === "") {
           V.addError(ctx, "Missing preset and preset name",
-            "Provide the name of a saved study preset from the Time Studies page");
+            `Provide the name of a saved study preset from the Time Studies page. Note this command will not work
+              with presets with purely numerical names.`);
           return false;
         }
         const split = presetSplitter.exec(ctx.Preset[0].image);

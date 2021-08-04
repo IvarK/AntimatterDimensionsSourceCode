@@ -183,10 +183,7 @@ const AutomatorData = {
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
   currentErrors() {
-    const rawErrors = AutomatorGrammar.compile(this.currentScriptText()).errors;
-    // Note: Sometimes multiple errors generate due to the same line, but it seems like in all tested
-    // cases the duplicate entries have NaN line entries
-    return rawErrors.filter(e => !isNaN(e.startLine));
+    return AutomatorGrammar.compile(this.currentScriptText()).errors;
   }
 };
 
@@ -322,8 +319,8 @@ const AutomatorBackend = {
   findScript(id) {
     // I tried really hard to convert IDs from strings into numbers for some cleanup but I just kept getting constant
     // errors everywhere. It needs to be a number so that importing works properly without ID assignment being a mess,
-    // but apparently some deeper things seem to break in a way I can't fix.
-    return this._scripts.find(e => e.id === `${id}`);
+    // but apparently some deeper things seem to break in a way I can't easily fix.
+    return this._scripts.find(e => `${e.id}` === `${id}`);
   },
 
   _createDefaultScript() {

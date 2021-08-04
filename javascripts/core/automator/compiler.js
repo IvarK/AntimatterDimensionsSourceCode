@@ -105,18 +105,46 @@
     }
 
     // There are a few errors generated internally in chevrotain.js which are scanned for and modified in here and
-    // given appropriate fixing tips and minor formatting adjustments. This isn't necessarily comprehensive, but
-    // should hopefully cover the most common cases.
-    generateMissingTips() {
-      for (const err of this.errors) {
-        if (err.info.match(/Expecting/gu)) {
+    // given appropriate fixing tips and minor formatting adjustments, or are alternatively marked as redundant and
+    // filtered out in other parts of the code. This isn't necessarily comprehensive, but should hopefully cover the
+    // most common cases.
+    modifyErrorMessages() {
+      const modifiedErrors = [];
+      let lastLine = 0;
+      for (const err of this.errors.sort((a, b) => a.startLine - b.startLine)) {
+        // Only take one error from each line. In many cases multiple errors will arise from the same line due to how
+        // the parser works, and many of them will be useless or redundant. Also sometimes chevrotain fails to generate
+        // a line for an error, in which case it's usually a redundant error which can be ignored.
+        if (err.startLine === lastLine || isNaN(err.startLine)) {
+          continue;
+        }
+
+        // Errors that already have tips are more reliable in terms of knowing what they're pointing out; if there's
+        // already a tip, don't bother trying to parse and guess at its meaning.
+        if (err.tip) {
+          modifiedErrors.push(err);
+          lastLine = err.startLine;
+          continue;
+        }
+
+        if (err.info.match(/EOF but found.*\}/gu)) {
+          err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
+          err.tip = "Remove }. Parser halted at this line and may miss errors farther down the script.";
+        } else if (err.info.match(/found.*\}/gu)) {
+          err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
+          err.tip = "Remove }";
+        } else if (err.info.match(/Expecting/gu)) {
           err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
           err.tip = "Use the appropriate type of data in the command as specified in the command help";
-        }
-        if (err.info.match(/End of line/gu)) {
+        } else if (err.info.match(/End of line/gu)) {
           err.tip = "Provide the remaining arguments to complete the incomplete command";
+        } else {
+          err.tip = "Unknown Chevrotain error";
         }
+        modifiedErrors.push(err);
+        lastLine = err.startLine;
       }
+      this.errors = modifiedErrors;
     }
 
     reset(rawText) {
@@ -140,7 +168,7 @@
       const varInfo = this.variables[varName];
       if (varInfo === undefined) {
         this.addError(identifier, `Variable ${varName} has not been defined`,
-          `Use DEFINE to define ${varName} in order to reference it`);
+          `Use DEFINE to define ${varName} in order to reference it, or check for typos`);
         return undefined;
       }
       if (varInfo.type === AUTOMATOR_VAR_TYPES.UNKNOWN) {
@@ -495,7 +523,7 @@
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
-    validator.generateMissingTips();
+    validator.modifyErrorMessages();
     let compiled;
     if (validator.errors.length === 0 && !validateOnly) {
       compiled = new Compiler().visit(parseResult);
@@ -534,7 +562,7 @@
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
-    validator.generateMissingTips();
+    validator.modifyErrorMessages();
     return validator;
   }
 

@@ -115,7 +115,7 @@ Vue.component("header-challenge-display", {
       v-if="isVisible"
       class="l-game-header__challenge-text"
     >
-      <span style="padding : 0.5rem;">
+      <span style="padding: 0.5rem;">
         You are currently in {{ challengeDisplay }}
       </span>
       <failable-ec-text v-if="isInFailableEC" />

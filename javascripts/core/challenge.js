@@ -23,7 +23,7 @@ function updateNormalAndInfinityChallenges(diff) {
       // These caps are values which occur at approximately e308 IP
       const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
         Math.clampMax(player.galaxies, 100) / 100;
-      const finalMatterCap = Decimal.pow10(9e15);
+      const finalMatterCap = Decimal.MAX_VALUE;
       player.matter = player.matter.times(Decimal.pow(cappedBase, diff / 100)).clampMax(finalMatterCap);
     }
     if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {

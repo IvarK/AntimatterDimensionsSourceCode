@@ -494,10 +494,10 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.id === 1) unlockDilation(quiet);
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
       if (Currency.realities.eq(0)) {
-        Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} EP and
-          capped at ${format("1e8000")} EP. This is due to balance changes made in the Reality update which affect
-          the difficulty of reaching those amounts of EP, such as increased Time Dimension cost scaling above
-          ${format("1e6000")} EP.`);
+        Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} Eternity
+          Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
+          update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
+          scaling above ${format("1e6000")}.`);
       }
       Tab.reality.glyphs.show();
     }

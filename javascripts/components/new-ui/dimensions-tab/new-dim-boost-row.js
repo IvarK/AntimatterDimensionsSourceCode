@@ -38,7 +38,7 @@ Vue.component("new-dim-boost-row", {
       else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
       return this.lockText === null
-        ? `Reset your Dimensions ${boostEffects}`
+        ? `Reset your Dimensions${boostEffects}`
         : this.lockText;
     },
     boostCountText() {

@@ -80,7 +80,7 @@ Vue.component("automator-docs", {
       } else {
         // Append the script name into the beginning of the string as "name_length|name|"
         const name = AutomatorData.currentScriptName();
-        copyToClipboard(btoa(`${name.length}|${name}|${trimmed}`));
+        copyToClipboard(btoa(`${name.length}||${name}||${trimmed}`));
         GameUI.notify.info("Exported current Automator script to your clipboard");
       }
     },
@@ -253,7 +253,7 @@ Vue.component("automator-script-import", {
       this.decodeSave();
     },
     decodeSave() {
-      const parts = this.rawDecoded.split("|");
+      const parts = this.rawDecoded.split("||");
       if (parts.length !== 3 || parts[1].length !== parseInt(parts[0], 10)) {
         this.isValid = false;
         return;

@@ -154,7 +154,7 @@ class AutomatorScript {
   static create(name) {
     let id = Object.keys(player.reality.automator.scripts).length;
     // On a fresh save, this executes before player is properly initialized
-    if (!id) id = 1;
+    if (!player.reality.automator.scripts || id === 0) id = 1;
     player.reality.automator.scripts[id] = {
       id,
       name,

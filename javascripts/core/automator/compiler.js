@@ -310,7 +310,10 @@
       }
       if (ctx.TriadStudy) {
         const triadNumber = parseInt(ctx.TriadStudy[0].image.substr(1), 10);
-        if (triadNumber < 1 || triadNumber > 4) {
+        if (Ra.pets.v.level < 5) {
+          this.addError(ctx, "Triad Studies not unlocked",
+            "Unlock the triad studies to use them in the Automator");
+        } else if (triadNumber < 1 || triadNumber > 4) {
           this.addError(ctx, `Invalid Triad Study ID ${triadNumber}`,
             `Triad Study ${triadNumber} does not exist, use an integer between ${formatInt(1)} and ${formatInt(4)}`);
         }
@@ -531,7 +534,7 @@
 
   function compile(input, validateOnly = false) {
     // The lexer and codemirror choke on the last line of the script, so we pad it with an invisible newline
-    const script = `${input}\n`;
+    const script = `${input}\n `;
     const lexResult = AutomatorLexer.lexer.tokenize(script);
     const tokens = lexResult.tokens;
     parser.input = tokens;

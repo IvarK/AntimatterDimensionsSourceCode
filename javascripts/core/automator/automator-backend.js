@@ -341,7 +341,7 @@ const AutomatorBackend = {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
     if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
-    const currentScript = this._scripts.find(e => e.id === this.state.topLevelScript);
+    const currentScript = this.findScript(this.state.topLevelScript);
     if (currentScript.commands) {
       const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
@@ -405,7 +405,7 @@ const AutomatorBackend = {
 
   start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
     this.state.topLevelScript = scriptID;
-    const scriptObject = this._scripts.find(s => s.id === scriptID);
+    const scriptObject = this.findScript(scriptID);
     if (compile) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);

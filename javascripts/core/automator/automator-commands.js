@@ -200,6 +200,9 @@ const AutomatorCommands = ((() => {
       },
       // This is an easter egg, it shouldn't do anything
       compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      blockify: () => ({
+        ...automatorBlocksMap.BLOB,
+      })
     },
     {
       id: "comment",

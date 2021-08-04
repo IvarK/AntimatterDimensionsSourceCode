@@ -83,6 +83,11 @@ Vue.component("automator-editor", {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
+      if (AutomatorData.currentErrors().length !== 0 && player.reality.automator.type == AUTOMATOR_TYPE.BLOCK) {
+        Modal.message.show(`Switched to text editor mode; this script has errors
+          which cannot be converted to block mode.`);
+        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+      }
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {

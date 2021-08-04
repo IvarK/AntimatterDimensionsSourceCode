@@ -52,14 +52,14 @@ const automatorBlocks = [
     targets: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
-    cmd: "TT",
-    targets: ["AM", "IP", "EP", "MAX"],
-  }, {
     cmd: "BLACK HOLE",
     targets: ["ON", "OFF"],
   }, {
     cmd: "STORE TIME",
     targets: ["ON", "OFF", "USE"],
+  }, {
+    cmd: "TT",
+    targets: ["AM", "IP", "EP", "MAX"],
   }, {
     cmd: "PAUSE",
     hasInput: true
@@ -83,8 +83,11 @@ const automatorBlocks = [
   }, {
     cmd: "DEFINE",
     hasInput: true
+  }, {
+    cmd: "BLOB"
   }
 ];
+const AUTOMATOR_BLOCKS_BLACKLIST = ["DEFINE", "BLOB"];
 
 const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 
@@ -95,7 +98,7 @@ function findAutomatorBlockByName(name) {
 Vue.component("automator-blocks", {
   data() {
     return {
-      blocks: automatorBlocks
+      blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))
     };
   },
   methods: {

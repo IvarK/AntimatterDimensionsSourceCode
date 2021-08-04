@@ -44,7 +44,7 @@ Vue.component("automator-docs", {
       set(value) {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
         EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
-        AutomatorTextUI.editor.performLint();
+        if (AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
       }
     },
     currentScriptContent() {
@@ -52,6 +52,11 @@ Vue.component("automator-docs", {
     },
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
+    },
+    docStyle() {
+      return {
+        "color": this.commandID === -1 ? "green" : ""
+      };
     },
     errorStyle() {
       return {
@@ -149,6 +154,7 @@ Vue.component("automator-docs", {
     <div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls" >
         <automator-button
+          :style="docStyle"
           class="fa-list"
           @click="commandID = -1"
           v-tooltip="'Command list'"

@@ -404,7 +404,6 @@ let player = {
       },
       scripts: {
       },
-      lastID: 0,
       execTimer: 0,
       type: AUTOMATOR_TYPE.TEXT
     },

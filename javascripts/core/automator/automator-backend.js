@@ -152,7 +152,7 @@ class AutomatorScript {
   }
 
   static create(name) {
-    const id = (++player.reality.automator.lastID).toString();
+    const id = Object.keys(player.reality.automator.scripts).length;
     player.reality.automator.scripts[id] = {
       id,
       name,
@@ -166,17 +166,20 @@ const AutomatorData = {
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },
+  currentScriptName() {
+    return player.reality.automator.scripts[this.scriptIndex()].name;
+  },
   currentScriptText() {
     return player.reality.automator.scripts[this.scriptIndex()].content;
   },
-  createNewScript(newScript) {
+  createNewScript(newScript, name) {
     const newScriptID = Object.values(player.reality.automator.scripts).length;
     player.reality.automator.scripts[newScriptID] = {
       id: `${newScriptID}`,
-      name: `Imported Script ${newScriptID}`,
+      name,
       content: newScript
     };
-    GameUI.notify.info(`Imported Script ${newScriptID}`);
+    GameUI.notify.info(`Imported Script "${name}"`);
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
   currentErrors() {
@@ -317,7 +320,10 @@ const AutomatorBackend = {
   },
 
   findScript(id) {
-    return this._scripts.find(e => e.id === id);
+    // I tried really hard to convert IDs from strings into numbers for some cleanup but I just kept getting constant
+    // errors everywhere. It needs to be a number so that importing works properly without ID assignment being a mess,
+    // but apparently some deeper things seem to break in a way I can't fix.
+    return this._scripts.find(e => e.id === `${id}`);
   },
 
   _createDefaultScript() {

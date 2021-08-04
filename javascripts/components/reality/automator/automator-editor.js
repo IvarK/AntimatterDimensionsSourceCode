@@ -69,6 +69,7 @@ Vue.component("automator-editor", {
           lineNumber: 0,
           scriptID: "0",
         };
+        if (AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
       }
     },
     onGameLoad() {

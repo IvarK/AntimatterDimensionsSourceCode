@@ -43,6 +43,8 @@ Vue.component("automator-docs", {
       },
       set(value) {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
+        EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
+        AutomatorTextUI.editor.performLint();
       }
     },
     currentScriptContent() {
@@ -71,7 +73,9 @@ Vue.component("automator-docs", {
       if (trimmed.length === 0) {
         GameUI.notify.error("Could not export blank Automator script!");
       } else {
-        copyToClipboard(btoa(trimmed));
+        // Append the script name into the beginning of the string as "name_length|name|"
+        const name = AutomatorData.currentScriptName();
+        copyToClipboard(btoa(`${name.length}|${name}|${trimmed}`));
         GameUI.notify.info("Exported current Automator script to your clipboard");
       }
     },
@@ -220,15 +224,40 @@ Vue.component("automator-docs", {
 Vue.component("automator-script-import", {
   data() {
     return {
-      input: ""
+      input: "",
+      rawDecoded: "",
+      isValid: false,
+      scriptName: "",
+      lineCount: 0,
+      scriptContent: "",
+      hasErrors: false,
     };
   },
   mounted() {
     this.$refs.input.select();
   },
   methods: {
+    update() {
+      this.rawDecoded = atob(this.input);
+      this.decodeSave();
+    },
+    decodeSave() {
+      const parts = this.rawDecoded.split("|");
+      if (parts.length !== 3 || parts[1].length !== parseInt(parts[0], 10)) {
+        this.isValid = false;
+        return;
+      }
+      this.scriptName = parts[1];
+      this.scriptContent = parts[2];
+      this.updateScriptInfo();
+      this.isValid = true;
+    },
+    updateScriptInfo() {
+      this.lineCount = this.scriptContent.split("\n").length;
+      this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
+    },
     importSave() {
-      AutomatorData.createNewScript(atob(this.input));
+      AutomatorData.createNewScript(this.scriptContent, this.scriptName);
       AutomatorBackend.initializeFromSave();
       this.emitClose();
     },
@@ -237,7 +266,7 @@ Vue.component("automator-script-import", {
     <div class="c-modal-import l-modal-content--centered">
       <modal-close-button @click="emitClose" />
       <h3>Import Automator Script</h3>
-      Note: This will create a new automator script at the end of your list of scripts named "Imported Script"
+      This will create a new automator script at the end of your list.
       <input
         v-model="input"
         ref="input"
@@ -246,6 +275,20 @@ Vue.component("automator-script-import", {
         @keyup.enter="importSave"
         @keyup.esc="emitClose"
       />
+      <div v-if="isValid">
+        Script name: {{ scriptName }}
+        <br>
+        Line count: {{ lineCount }}
+        <div
+          v-if="hasErrors"
+          style="color: red;"
+        >
+          Warning: This script has errors which need to be fixed before it can be run!
+        </div>
+      </div>
+      <div v-else-if="input.length !== 0">
+        Invalid Automator script string
+      </div>
       <primary-button
         class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
         @click="importSave"

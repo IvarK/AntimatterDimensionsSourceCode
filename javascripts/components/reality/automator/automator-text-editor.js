@@ -53,6 +53,7 @@ Vue.component("automator-text-editor", {
     return {
       markedLineNumber: 0,
       unclearedLines: false,
+      isActiveScript: false,
     };
   },
   watch: {
@@ -103,7 +104,8 @@ Vue.component("automator-text-editor", {
   },
   methods: {
     update() {
-      if (AutomatorBackend.isRunning && AutomatorBackend.state.followExecution) {
+      this.isActiveScript = `${player.reality.automator.state.editorScript}` === this.currentScriptID;
+      if (AutomatorBackend.isRunning && this.isActiveScript && AutomatorBackend.state.followExecution) {
         this.UI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
       }
       if (this.unclearedLines && !AutomatorBackend.isOn) this.clearAllActiveLines();
@@ -147,7 +149,7 @@ Vue.component("automator-text-editor", {
       this.unclearedLines = false;
     },
     setActiveState(scriptID, lineNumber) {
-      if (this.currentScriptID === scriptID) this.markActiveLine(lineNumber);
+      if (`${this.currentScriptID}` === scriptID) this.markActiveLine(lineNumber);
       else this.unmarkActiveLine();
     },
   },

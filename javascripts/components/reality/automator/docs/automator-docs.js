@@ -8,6 +8,9 @@ Vue.component("automator-docs", {
       errorCount: 0,
       editingName: false,
       scripts: [],
+      runningScriptID: 0,
+      isRunning: false,
+      isPaused: false
     };
   },
   created() {
@@ -68,6 +71,9 @@ Vue.component("automator-docs", {
     update() {
       this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       this.errorCount = AutomatorData.currentErrors().length;
+      this.runningScriptID = AutomatorBackend.state.topLevelScript;
+      this.isRunning = AutomatorBackend.isRunning;
+      this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
     },
     changeCommand(event) {
       this.commandID = event;
@@ -142,7 +148,12 @@ Vue.component("automator-docs", {
       this.$nextTick(() => this.editingName = false);
     },
     dropdownLabel(script) {
-      return script.name;
+      let label = script.name;
+      if (`${script.id}` === `${this.runningScriptID}`) {
+        if (this.isRunning) label += " (Running)";
+        else if (this.isPaused) label += " (Paused)";
+      }
+      return label;
     },
   },
   template: `

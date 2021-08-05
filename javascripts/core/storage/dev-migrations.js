@@ -985,15 +985,18 @@ GameStorage.devMigrations = {
       delete player.celestials.teresa.lastRepeatedRM;
     },
     player => {
-      // Make sure scripts are zero-indexed
+      // Make sure scripts are zero-indexed, and load up the correct script on migration
       let newID = 0;
+      let selectedID = 1;
       const shiftedScripts = {};
       for (const id of Object.keys(player.reality.automator.scripts)) {
         shiftedScripts[newID] = player.reality.automator.scripts[id];
         shiftedScripts[newID].id = newID;
+        if (id === player.reality.automator.state.editorScript) selectedID = newID;
         newID++;
       }
       player.reality.automator.scripts = shiftedScripts;
+      player.reality.automator.state.editorScript = selectedID;
 
       delete player.reality.automator.lastID;
     }

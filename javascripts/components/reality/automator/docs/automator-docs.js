@@ -78,7 +78,7 @@ Vue.component("automator-docs", {
       if (trimmed.length === 0) {
         GameUI.notify.error("Could not export blank Automator script!");
       } else {
-        // Append the script name into the beginning of the string as "name_length|name|"
+        // Append the script name into the beginning of the string as "name_length||name||"
         const name = AutomatorData.currentScriptName();
         copyToClipboard(btoa(`${name.length}||${name}||${trimmed}`));
         GameUI.notify.info("Exported current Automator script to your clipboard");
@@ -115,7 +115,7 @@ Vue.component("automator-docs", {
       });
     },
     selectedScriptAttribute(id) {
-      return id === this.currentScriptID ? { selected: "selected" } : {};
+      return `${id}` === `${this.currentScriptID}` ? { selected: "selected" } : {};
     },
     createNewScript() {
       const newScript = AutomatorBackend.newScript();
@@ -142,12 +142,7 @@ Vue.component("automator-docs", {
       this.$nextTick(() => this.editingName = false);
     },
     dropdownLabel(script) {
-      let label = script.name;
-      if (script.id === this.runningScriptID) {
-        if (this.isRunning) label += " (Running)";
-        else if (this.isPaused) label += " (Paused)";
-      }
-      return label;
+      return script.name;
     },
   },
   template: `

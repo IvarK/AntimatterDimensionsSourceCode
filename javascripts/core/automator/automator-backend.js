@@ -183,6 +183,7 @@ const AutomatorData = {
       content: newScript
     };
     GameUI.notify.info(`Imported Script "${name}"`);
+    player.reality.automator.state.editorScript = newScriptID;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
   currentErrors() {

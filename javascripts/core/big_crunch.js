@@ -39,7 +39,7 @@ function bigCrunchReset() {
   // compare in the if statmement below if it is now unlocked.
   const is55Unlocked = Achievement(55).isUnlocked;
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
-  if (is55Unlocked !== Achievement(55).isUnlocked) {
+  if ((is55Unlocked !== Achievement(55).isUnlocked) && !PlayerProgress.realityUnlocked()) {
     Modal.message.show(`
     Since you just Infinitied in under a minute, the UI changed on the screen. 
     Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them. 

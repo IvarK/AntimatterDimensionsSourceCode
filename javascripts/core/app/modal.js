@@ -69,6 +69,7 @@ Modal.awayProgressOptions = new Modal("modal-away-progress-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
+Modal.importScript = new Modal("modal-automator-script-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.editTree = new Modal("modal-edit-tree");

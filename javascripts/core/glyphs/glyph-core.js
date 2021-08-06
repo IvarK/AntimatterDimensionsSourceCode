@@ -476,6 +476,7 @@ const Glyphs = {
       Currency.tachyonParticles.value = new Decimal(undoData.tp);
       Currency.dilatedTime.value = new Decimal(undoData.dt);
     }
+    if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   },
   copyForRecords(glyphList) {
     // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured

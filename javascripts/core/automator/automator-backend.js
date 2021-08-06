@@ -152,7 +152,9 @@ class AutomatorScript {
   }
 
   static create(name) {
-    const id = (++player.reality.automator.lastID).toString();
+    let id = Object.keys(player.reality.automator.scripts).length;
+    // On a fresh save, this executes before player is properly initialized
+    if (!player.reality.automator.scripts || id === 0) id = 1;
     player.reality.automator.scripts[id] = {
       id,
       name,
@@ -162,6 +164,33 @@ class AutomatorScript {
   }
 }
 
+const AutomatorData = {
+  currentErrorLine: -1,
+  scriptIndex() {
+    return player.reality.automator.state.editorScript;
+  },
+  currentScriptName() {
+    return player.reality.automator.scripts[this.scriptIndex()].name;
+  },
+  currentScriptText() {
+    return player.reality.automator.scripts[this.scriptIndex()].content;
+  },
+  createNewScript(newScript, name) {
+    const newScriptID = Object.values(player.reality.automator.scripts).length;
+    player.reality.automator.scripts[newScriptID] = {
+      id: `${newScriptID}`,
+      name,
+      content: newScript
+    };
+    GameUI.notify.info(`Imported Script "${name}"`);
+    player.reality.automator.state.editorScript = newScriptID;
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
+  },
+  currentErrors() {
+    return AutomatorGrammar.compile(this.currentScriptText()).errors;
+  }
+};
+
 const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
   _scripts: [],
@@ -170,7 +199,7 @@ const AutomatorBackend = {
     return player.reality.automator.state;
   },
 
-  // The automator may be paused at some instruction, but still be on.
+  // The Automator may be paused at some instruction, but still be on.
   get isOn() {
     return !this.stack.isEmpty;
   },
@@ -292,7 +321,10 @@ const AutomatorBackend = {
   },
 
   findScript(id) {
-    return this._scripts.find(e => e.id === id);
+    // I tried really hard to convert IDs from strings into numbers for some cleanup but I just kept getting constant
+    // errors everywhere. It needs to be a number so that importing works properly without ID assignment being a mess,
+    // but apparently some deeper things seem to break in a way I can't easily fix.
+    return this._scripts.find(e => `${e.id}` === `${id}`);
   },
 
   _createDefaultScript() {
@@ -310,7 +342,7 @@ const AutomatorBackend = {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
     if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
-    const currentScript = this._scripts.find(e => e.id === this.state.topLevelScript);
+    const currentScript = this.findScript(this.state.topLevelScript);
     if (currentScript.commands) {
       const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
@@ -347,6 +379,23 @@ const AutomatorBackend = {
     this.state.repeat = !this.state.repeat;
   },
 
+  toggleForceRestart() {
+    this.state.forceRestart = !this.state.forceRestart;
+  },
+
+  toggleFollowExecution() {
+    this.state.followExecution = !this.state.followExecution;
+    this.jumpToActiveLine();
+  },
+
+  jumpToActiveLine() {
+    const state = this.state;
+    const focusedScript = state.topLevelScript === state.editorScript;
+    if (focusedScript && this.isRunning && state.followExecution) {
+      AutomatorTextUI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
+    }
+  },
+
   reset(commands) {
     this.stack.clear();
     this.push(commands);
@@ -363,7 +412,7 @@ const AutomatorBackend = {
 
   start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
     this.state.topLevelScript = scriptID;
-    const scriptObject = this._scripts.find(s => s.id === scriptID);
+    const scriptObject = this.findScript(scriptID);
     if (compile) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);
@@ -430,5 +479,4 @@ const AutomatorBackend = {
       return this._data.length === 0;
     }
   },
-
 };

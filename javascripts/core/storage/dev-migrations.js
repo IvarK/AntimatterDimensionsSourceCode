@@ -983,6 +983,22 @@ GameStorage.devMigrations = {
       player.achievementChecks.maxStudiesThisReality = player.timestudy.studies.length;
       player.celestials.teresa.lastRepeatedMachines = new Decimal(player.celestials.teresa.lastRepeatedRM);
       delete player.celestials.teresa.lastRepeatedRM;
+    },
+    player => {
+      // Make sure scripts don't have any gaps in indices, and load up the correct script on migration
+      let newID = 1;
+      let selectedID = 1;
+      const shiftedScripts = {};
+      for (const id of Object.keys(player.reality.automator.scripts)) {
+        shiftedScripts[newID] = player.reality.automator.scripts[id];
+        shiftedScripts[newID].id = newID;
+        if (id === player.reality.automator.state.editorScript) selectedID = newID;
+        newID++;
+      }
+      player.reality.automator.scripts = shiftedScripts;
+      player.reality.automator.state.editorScript = selectedID;
+
+      delete player.reality.automator.lastID;
     }
   ],
 

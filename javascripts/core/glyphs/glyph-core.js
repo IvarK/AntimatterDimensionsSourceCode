@@ -137,30 +137,25 @@ const Glyphs = {
       if (sameSpecialTypeIndex >= 0) return;
       this.removeFromInventory(glyph);
       this.saveUndo(inventoryIndex, targetSlot);
+      player.reality.glyphs.active.push(glyph);
+      glyph.idx = targetSlot;
+      this.active[targetSlot] = glyph;
+      this.updateRealityGlyphEffects();
+      this.updateMaxGlyphCount();
+      EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+      this.validate();
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
         Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
         return;
       }
-      if (player.options.confirmations.glyphReplace &&
-        !confirm("Replacing a glyph will restart this Reality. Proceed?")) return;
-      // Remove from inventory first so that there's room to unequip to the same inventory slot
-      this.removeFromInventory(glyph);
-      this.unequip(targetSlot, inventoryIndex);
-      finishProcessReality({
-        reset: true,
-        glyphUndo: false,
-        restoreCelestialState: true,
-      });
+      if (!player.options.confirmations.glyphReplace) {
+        this.swapIntoActive(glyph, targetSlot);
+        return;
+      }
+      Modal.glyphReplace.show({ targetSlot, inventoryIndex });
     }
-    player.reality.glyphs.active.push(glyph);
-    glyph.idx = targetSlot;
-    this.active[targetSlot] = glyph;
-    this.updateRealityGlyphEffects();
-    this.updateMaxGlyphCount();
-    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-    this.validate();
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
@@ -512,6 +507,22 @@ const Glyphs = {
         glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
       }
     }
+  },
+  swapIntoActive(glyph, targetSlot) {
+    this.removeFromInventory(glyph);
+    this.unequip(targetSlot, glyph.idx);
+    finishProcessReality({
+      reset: true,
+      glyphUndo: false,
+      restoreCelestialState: true,
+    });
+    player.reality.glyphs.active.push(glyph);
+    this.active[targetSlot] = glyph;
+    glyph.idx = targetSlot;
+    this.updateRealityGlyphEffects();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    this.validate();
   }
 };
 

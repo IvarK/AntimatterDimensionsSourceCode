@@ -6,9 +6,16 @@ Vue.component("modal-glyph-undo", {
       showStoredGameTime: false,
     };
   },
+  created() {
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.realityInvalidate);
+  },
   methods: {
     update() {
       this.showStoredGameTime = Enslaved.isUnlocked;
+    },
+    realityInvalidate() {
+      this.emitClose();
+      Modal.message.show("Glyph Undo can only undo with a Reality!");
     },
     handleYesClick() {
       Glyphs.undo();

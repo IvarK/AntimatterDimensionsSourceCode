@@ -137,7 +137,7 @@ GameDatabase.achievements.secret = [
   {
     id: 36,
     name: "While you were away... Nothing happened.",
-    description: "Have nothing happen while you were away."
+    description: "See nothing happen while you were away."
   },
   {
     id: 37,

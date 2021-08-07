@@ -152,7 +152,7 @@ class AutomatorScript {
   }
 
   static create(name) {
-    let id = Object.keys(player.reality.automator.scripts).length;
+    let id = Object.keys(player.reality.automator.scripts).length + 1;
     // On a fresh save, this executes before player is properly initialized
     if (!player.reality.automator.scripts || id === 0) id = 1;
     player.reality.automator.scripts[id] = {
@@ -176,7 +176,7 @@ const AutomatorData = {
     return player.reality.automator.scripts[this.scriptIndex()].content;
   },
   createNewScript(newScript, name) {
-    const newScriptID = Object.values(player.reality.automator.scripts).length;
+    const newScriptID = Object.values(player.reality.automator.scripts).length + 1;
     player.reality.automator.scripts[newScriptID] = {
       id: `${newScriptID}`,
       name,

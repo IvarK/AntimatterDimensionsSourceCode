@@ -9,6 +9,7 @@ Vue.component("tab-button", {
       isAvailable: false,
       isHidden: false,
       subtabVisibilities: [],
+      showSubtabs: false,
       hasNotification: false
     };
   },
@@ -16,7 +17,7 @@ Vue.component("tab-button", {
     classObject() {
       return {
         "o-tab-btn": true,
-        "o-tab-btn--subtabs": this.isAvailable && this.subtabVisibilities.filter(x => x).length > 1,
+        "o-tab-btn--subtabs": this.showSubtabs,
       };
     },
   },
@@ -25,6 +26,7 @@ Vue.component("tab-button", {
       this.isAvailable = this.tab.isAvailable;
       this.isHidden = this.tab.isHidden;
       this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
+      this.showSubtabs = this.isAvailable && this.subtabVisibilities.length >= 1;
       this.hasNotification = this.tab.hasNotification;
     }
   },
@@ -38,7 +40,7 @@ Vue.component("tab-button", {
         {{ tab.name }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
       </div>
       <div v-else class="l-tab-btn-inner">???</div>
-      <div class="subtabs" v-if="isAvailable && subtabVisibilities.length > 1">
+      <div class="subtabs" v-if="showSubtabs">
         <div
           v-for="(subtab, index) in tab.subtabs"
           v-if="subtabVisibilities[index]"

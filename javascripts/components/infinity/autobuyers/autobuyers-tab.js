@@ -13,6 +13,7 @@ Vue.component("autobuyers-tab", {
     <div class="l-autobuyers-tab">
       <autobuyer-toggles />
       <open-modal-shortcuts />
+      <many-autobuyers />
       <reality-autobuyer-box />
       <eternity-autobuyer-box />
       <big-crunch-autobuyer-box />

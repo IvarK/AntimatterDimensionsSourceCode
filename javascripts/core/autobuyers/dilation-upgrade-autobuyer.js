@@ -38,3 +38,4 @@ DilationUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new Dilat
 
 Autobuyer.dilationUpgrade = upgrade => DilationUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.dilationUpgrade.array = DilationUpgradeAutobuyerState.index;
+Autobuyer.dilationUpgrade.array.name = "Dilation Upgrade";

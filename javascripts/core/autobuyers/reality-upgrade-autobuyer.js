@@ -29,3 +29,4 @@ RealityUpgradeAutobuyerState.index = Array.range(1, 5).map(upgrade => new Realit
 
 Autobuyer.realityUpgrade = upgrade => RealityUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.realityUpgrade.array = RealityUpgradeAutobuyerState.index;
+Autobuyer.realityUpgrade.array.name = "Reality Upgrade";

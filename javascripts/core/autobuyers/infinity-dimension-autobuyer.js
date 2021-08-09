@@ -7,7 +7,11 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return `${InfinityDimension(this._tier).displayName} Infinity Dimension`;
+    return InfinityDimension(this._tier).displayName;
+  }
+
+  get fullName() {
+    return `${this.name} Infinity Dimension`;
   }
 
   get data() {
@@ -39,3 +43,4 @@ InfinityDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new Infini
 
 Autobuyer.infinityDimension = tier => InfinityDimensionAutobuyerState.index[tier - 1];
 Autobuyer.infinityDimension.index = InfinityDimensionAutobuyerState.index;
+Autobuyer.infinityDimension.index.name = "Infinity Dimension";

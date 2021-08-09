@@ -4,43 +4,48 @@ const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.index;
   const infinityDimensions = Autobuyer.infinityDimension.index;
   const timeDimensions = Autobuyer.timeDimension.index;
+  
   const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions];
+
   const prestige = [
     [Autobuyer.bigCrunch],
     [Autobuyer.eternity],
     [Autobuyer.reality],
   ];
+
   const singleBinary = [
     [Autobuyer.replicantiGalaxy],
     [Autobuyer.timeTheorem],
     [Autobuyer.ipMult],
     [Autobuyer.epMult],
   ];
+
   const single = [
     [Autobuyer.tickspeed],
     [Autobuyer.sacrifice],
     [Autobuyer.dimboost],
     [Autobuyer.galaxy],
   ].concat(singleBinary);
-  const other = [
+
+  const arrays = [
     Autobuyer.replicantiUpgrade.array,
     Autobuyer.dilationUpgrade.array,
     Autobuyer.blackHolePower.array,
     Autobuyer.realityUpgrade.array,
     Autobuyer.imaginaryUpgrade.array,
   ];
-  const all = dimensions.concat(prestige, single, other);
+  const all = dimensions.concat(prestige, single, arrays);
 
   return {
     all: all.flat(),
-    display: [dimensions, other, singleBinary],
+    display: [dimensions, arrays, singleBinary],
     antimatterDimensions,
     infinityDimensions,
     timeDimensions,
     dimensions,
     prestige,
     single,
-    other,
+    arrays,
     upgradeable: antimatterDimensions.concat([Autobuyer.tickspeed], [Autobuyer.dimboost], [Autobuyer.galaxy]),
 
     get unlocked() {
@@ -55,7 +60,7 @@ const Autobuyers = (function() {
       PerformanceStats.start("Autobuyers");
 
       const autobuyers = prestige.flat()
-        .concat(single.flat(), other.flat(), antimatterDimensions, infinityDimensions, timeDimensions)
+        .concat(single.flat(), arrays.flat(), antimatterDimensions, infinityDimensions, timeDimensions)
         .filter(a => a.canTick);
 
       for (const autobuyer of autobuyers) {

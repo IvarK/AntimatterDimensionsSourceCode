@@ -39,3 +39,4 @@ ReplicantiUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new Rep
 
 Autobuyer.replicantiUpgrade = upgrade => ReplicantiUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.replicantiUpgrade.array = ReplicantiUpgradeAutobuyerState.index;
+Autobuyer.replicantiUpgrade.array.name = "Replicanti Upgrade";

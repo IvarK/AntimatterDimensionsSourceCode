@@ -39,7 +39,10 @@ class DimBoost {
   }
 
   static multiplierToNDTier(tier) {
-    return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
+    const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts + 1 - tier).clampMin(1);
+    const imaginaryBoostMult = DimBoost.power.times(ImaginaryUpgrade(24).effectOrDefault(1))
+      .pow(this.imaginaryBoosts).clampMin(1);
+    return normalBoostMult.times(imaginaryBoostMult);
   }
 
   static get maxDimensionsUnlockable() {
@@ -111,13 +114,17 @@ class DimBoost {
     return Math.floor(player.dimensionBoosts);
   }
 
-  static get freeBoosts() {
+  static get pelleBoosts() {
     // This was originally used for Time Compression, probably use it for something in Lai'tela now
     return PelleRebuyableUpgrade.permanentDimensionBoosts.effectValue;
   }
 
+  static get imaginaryBoosts() {
+    return Ra.isRunning ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
+  }
+
   static get totalBoosts() {
-    return Math.floor(this.purchasedBoosts + this.freeBoosts);
+    return Math.floor(this.purchasedBoosts + this.imaginaryBoosts + this.pelleBoosts);
   }
 }
 

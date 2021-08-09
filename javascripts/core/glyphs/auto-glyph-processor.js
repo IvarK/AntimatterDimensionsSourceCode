@@ -21,6 +21,7 @@ const AutoGlyphProcessor = {
   // on only the glyph itself and not external factors.
   filterValue(glyph) {
     const typeCfg = this.types[glyph.type];
+    if (glyph.type === "cursed") return -Infinity;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
         // Picked glyphs are never kept in this mode
@@ -51,7 +52,9 @@ const AutoGlyphProcessor = {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
-        const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
+        // This ternary check is required to filter out the additional effects given by Ra-Enslaved 25, which don't
+        // exist in the glyph filter settings. It can be safely ignored since the effect is always given.
+        const effectScore = effectList.map(e => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0)).sum();
         return strengthToRarity(glyph.strength) + effectScore;
       }
       // Picked glyphs are never kept in Alchemy modes.
@@ -112,11 +115,11 @@ const AutoGlyphProcessor = {
         GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
         break;
       case AUTO_GLYPH_REJECT.REFINE:
-        GlyphSacrificeHandler.refineGlyph(glyph);
+        GlyphSacrificeHandler.attemptRefineGlyph(glyph, true);
         break;
       case AUTO_GLYPH_REJECT.REFINE_TO_CAP:
         if (GlyphSacrificeHandler.glyphRefinementGain(glyph) === 0) GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
-        else GlyphSacrificeHandler.refineGlyph(glyph);
+        else GlyphSacrificeHandler.attemptRefineGlyph(glyph, true);
         break;
       default:
         throw new Error("Unknown auto Glyph Sacrifice mode");

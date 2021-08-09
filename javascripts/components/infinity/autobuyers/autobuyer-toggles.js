@@ -18,6 +18,8 @@ Vue.component("autobuyer-toggles", {
     },
     disableContinuum(newValue) {
       player.auto.disableContinuum = newValue;
+      // eslint-disable-next-line no-bitwise
+      player.achievementChecks.continuumThisReality |= !player.auto.disableContinuum;
     }
   },
   methods: {

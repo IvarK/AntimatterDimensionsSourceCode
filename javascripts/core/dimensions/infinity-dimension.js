@@ -15,6 +15,7 @@ function infinityDimensionCommonMultiplier() {
       EternityUpgrade.idMultEternities,
       EternityUpgrade.idMultICRecords,
       AlchemyResource.dimensionality,
+      ImaginaryUpgrade(8),
       PelleUpgrade.infDimMultiplier
     );
 
@@ -157,15 +158,12 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-      return new Decimal(0);
-    }
     let production = this.amount;
     if (EternityChallenge(11).isRunning) {
       return production;
     }
     if (EternityChallenge(7).isRunning) {
-      production = production.dividedBy(Tickspeed.current.dividedBy(1000));
+      production = production.times(Tickspeed.perSecond);
     }
     return production.times(this.multiplier);
   }
@@ -173,12 +171,11 @@ class InfinityDimensionState extends DimensionState {
   get multiplier() {
     const tier = this.tier;
 
-    if (EternityChallenge(2).isRunning) {
+    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return new Decimal(0);
     }
-    if (EternityChallenge(11).isRunning) {
-      return new Decimal(1);
-    }
+    if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
@@ -217,7 +214,9 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return new Decimal(this._powerMultiplier).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.infinity : null);
+    return new Decimal(this._powerMultiplier)
+      .timesEffectsOf(this._tier === 8 ? GlyphSacrifice.infinity : null)
+      .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 
   get purchases() {
@@ -310,10 +309,7 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
-    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
-    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
-    return Math.floor(enslavedBoost * boundlessEffect * milestoneEffect);
+    return Math.floor(player.celestials.enslaved.totalDimCapIncrease * Tesseracts.strengthMultiplier());
   },
 
   get totalDimCap() {
@@ -332,6 +328,13 @@ const InfinityDimensions = {
     } else {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
+
+    player.achievementChecks.maxID1ThisReality = player.achievementChecks.maxID1ThisReality
+      .clampMin(InfinityDimension(1).amount);
+  },
+
+  get powerConversionRate() {
+    return 7 + getAdjustedGlyphEffect("infinityrate");
   }
 };
 
@@ -341,8 +344,4 @@ function tryUnlockInfinityDimensions(auto) {
     if (InfinityDimension(tier).isUnlocked) continue;
     InfinityDimension(tier).tryUnlock();
   }
-}
-
-function getInfinityConversionRate() {
-  return 7 + getAdjustedGlyphEffect("infinityrate");
 }

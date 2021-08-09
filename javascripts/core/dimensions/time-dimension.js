@@ -102,7 +102,7 @@ function timeDimensionCommonMultiplier() {
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(
       Decimal.pow(
-        Math.clampMin(Currency.infinityPower.value.pow(getInfinityConversionRate() / 7).log2(), 1),
+        Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7).log2(), 1),
         4)
         .clampMin(1));
   }
@@ -159,6 +159,11 @@ class TimeDimensionState extends DimensionState {
   get multiplier() {
     const tier = this._tier;
 
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
+      return new Decimal(0);
+    }
+
     if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = GameCache.timeDimensionCommonMultiplier.value
       .timesEffectsOf(
@@ -168,13 +173,15 @@ class TimeDimensionState extends DimensionState {
       );
 
     const dim = TimeDimension(tier);
-    mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
+    const bought = tier === 8 ? Math.clampMax(dim.bought, 1e8) : dim.bought;
+    mult = mult.times(Decimal.pow(dim.powerMultiplier, bought));
 
     mult = mult.pow(getAdjustedGlyphEffect("timepow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.time);
     mult = mult.pow(Ra.momentumValue);
+    mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
@@ -190,17 +197,12 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
-      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-      return new Decimal(0);
-    }
-
     if (EternityChallenge(11).isRunning) {
       return this.amount;
     }
     let production = this.amount.times(this.multiplier);
     if (EternityChallenge(7).isRunning) {
-      production = production.dividedBy(Tickspeed.current.dividedBy(1000));
+      production = production.times(Tickspeed.perSecond);
     }
     if (this._tier === 1 && !EternityChallenge(7).isRunning) {
       production = production.pow(getAdjustedGlyphEffect("timeshardpow"));
@@ -227,7 +229,9 @@ class TimeDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return new Decimal(4).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null);
+    return new Decimal(4)
+      .timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null)
+      .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 
   get e6000ScalingAmount() {

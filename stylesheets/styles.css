@@ -2007,6 +2007,15 @@ screen and (max-width: 480px) {
 
 /*#endregion c-game-header__antimatter*/
 
+.l-game-header__challenge-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  top: 50%;
+  font-size: 1.2rem;
+}
+
 .l-game-header__buttons-line {
   position: relative;
 }
@@ -2447,6 +2456,10 @@ screen and (max-width: 480px) {
 
 .c-options-grid__notations {
   user-select: none;
+}
+
+.c-cloud-options-header {
+  margin-top: 4rem;
 }
 
 /** replicate box-shadow behavior */
@@ -5160,14 +5173,14 @@ screen and (max-width: 480px) {
 .c-modal-away-progress__resources div {
   margin-bottom: 0.2rem;
   padding-bottom: 0.2rem;
-  border-bottom: 0.1rem solid;
+  border-bottom: 0.1rem solid var(--color-text);
 }
 
-.c-modal-away-progress__resources div:last-of-type {
+.c-modal-away-progress__resources div:last-child {
   border: none;
 }
 
-.c-modal-away-progress b {
+.c-modal-away-progress {
   text-shadow:
     0 0 0.2rem black,
     0 0 0.2rem black,
@@ -5175,6 +5188,17 @@ screen and (max-width: 480px) {
     0 0 0.2rem black;
 }
 
+.c-modal-away-progress b {
+  font-weight: bold;
+  text-shadow:
+    0 0 0.3rem black,
+    0 0 0.3rem black,
+    0 0 0.3rem black,
+    0 0 0.3rem black;
+}
+
+.c-modal-away-progress__dimension-boosts,
+.c-modal-away-progress__antimatter-galaxies,
 .c-modal-away-progress__antimatter {
   color: var(--color-antimatter)
 }
@@ -5184,35 +5208,34 @@ screen and (max-width: 480px) {
   animation: a-game-header__antimatter--glow 25s infinite;
 }
 
+.c-modal-away-progress__infinities,
 .c-modal-away-progress__infinity-points {
   color: var(--color-infinity);
 }
 
+.c-modal-away-progress__eternities,
 .c-modal-away-progress__eternity-points {
   color: var(--color-eternity);
 }
 
-.c-modal-away-progress__reality-machines {
-  color: var(--color-reality);
-}
-
+.c-modal-away-progress__tachyon-particles,
+.c-modal-away-progress__tachyon-galaxies,
 .c-modal-away-progress__dilated-time {
   color: var(--color-dilation);
 }
 
-.c-modal-away-progress__infinities {
-  color: var(--color-infinity);
-}
-
-.c-modal-away-progress__eternities {
-  color: var(--color-eternity);
-}
-
-.c-modal-away-progress__realities {
+.c-modal-away-progress__realities,
+.c-modal-away-progress__reality-machines,
+.c-modal-away-progress__imaginary-machines {
   color: var(--color-reality);
 }
 
-b.c-modal-away-progress__singularities {
+.c-modal-away-progress__dark-matter b,
+.c-modal-away-progress__dark-energy b,
+.c-modal-away-progress__singularities b,
+.c-modal-away-progress__dark-matter,
+.c-modal-away-progress__dark-energy,
+.c-modal-away-progress__singularities {
   color: var(--color-laitela--base);
   text-shadow:
     0 0 0.2rem var(--color-laitela--accent),
@@ -5227,6 +5250,7 @@ b.c-modal-away-progress__black-hole {
     0 0 0.3rem #e67919;
 }
 
+.c-modal-away-progress__replicanti-galaxies,
 .c-modal-away-progress__replicanti {
   color: #03a9f4;
 }
@@ -5235,6 +5259,7 @@ b.c-modal-away-progress__black-hole {
   color: var(--color-ra-pet-teresa);
 }
 
+.c-modal-away-progress__relic-shards,
 .c-modal-away-progress__effarig {
   color: var(--color-ra-pet-effarig);
 }
@@ -5314,11 +5339,17 @@ b.c-modal-away-progress__black-hole {
 
 .c-modal-options .o-primary-btn--option, .o-primary-btn--option-wide {
   padding: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem;
 }
 
 .c-modal-options .o-primary-btn--width-medium {
   margin-top: 0.7rem;
+}
+
+.c-modal-options__button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /*#region l-modal-options*/

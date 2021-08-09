@@ -305,11 +305,20 @@ GameDatabase.tabs = [
         hidable: true,
       },
       {
+        key: "imag_upgrades",
+        name: "Imaginary Upgrades",
+        symbol: "<i class='fas fa-level-up-alt'></i>",
+        component: "imaginary-upgrades-tab",
+        condition: () => MachineHandler.isIMUnlocked,
+        id: 2,
+        hidable: true,
+      },
+      {
         key: "perks",
         name: "Perks",
         symbol: "<i class='fas fa-project-diagram'></i>",
         component: "perks-tab",
-        id: 2,
+        id: 3,
         hidable: true,
       },
       {
@@ -317,7 +326,7 @@ GameDatabase.tabs = [
         name: "Automator",
         symbol: "<i class='fas fa-cog'></i>",
         component: "automator-tab",
-        id: 3,
+        id: 4,
         hidable: true,
       },
       {
@@ -325,7 +334,7 @@ GameDatabase.tabs = [
         name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
-        id: 4,
+        id: 5,
         hidable: true,
       },
       {
@@ -334,7 +343,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
-        id: 5,
+        id: 6,
         hidable: true,
       },
     ],

@@ -15,11 +15,19 @@ class GameOptions {
   }
 
   static cloudSave() {
-    playFabSaveCheck();
+    Cloud.saveCheck();
   }
 
   static cloudLoad() {
-    playFabLoadCheck();
+    Cloud.loadCheck();
+  }
+
+  static login() {
+    Cloud.login();
+  }
+
+  static logout() {
+    Cloud.logout();
   }
 
   static refreshUpdateRate() {

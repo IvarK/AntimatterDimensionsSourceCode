@@ -85,8 +85,7 @@ Vue.component("ra-pet-level-bar", {
           return `Unlock the ${effarigAlchemyResource.name} resource in Glyph Alchemy, which
           ${effarigAlchemyResource.description}`;
         case "Enslaved":
-          return `+${formatFloat(0.01, 2)} to stored game time power,
-            and you can store an additional hour of real time`;
+          return `${formatX(20)} to stored game time, and you can store an additional hour of real time`;
         case "V":
           return "You can purchase an additional Triad Study";
         default:

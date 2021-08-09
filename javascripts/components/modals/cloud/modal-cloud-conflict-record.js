@@ -9,8 +9,9 @@ Vue.component("modal-cloud-conflict-record", {
   template: `
     <div class="l-modal-options__save-record">
       <strong>Save #{{ saveId + 1 }} ({{ saveType }}):</strong>
-      <span>Infinities: {{ saveData.infinities }}</span>
-      <span>Eternities: {{ saveData.eternities }}</span>
+      <span>Infinities: {{ format(saveData.infinities, 2, 0) }}</span>
+      <span>Eternities: {{ format(saveData.eternities, 2, 0) }}</span>
+      <span>Realities: {{ format(saveData.realities, 2, 0) }}</span>
       <slot/>
     </div>`
 });

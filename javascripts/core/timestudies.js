@@ -285,6 +285,8 @@ class NormalTimeStudyState extends TimeStudyState {
       player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
+    player.achievementChecks.maxStudiesThisReality = Math.clampMin(player.achievementChecks.maxStudiesThisReality,
+      player.timestudy.studies.length);
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     return true;
@@ -498,6 +500,12 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.canBeBought) return false;
     if (this.id === 1) unlockDilation(quiet);
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
+      if (Currency.realities.eq(0)) {
+        Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} Eternity
+          Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
+          update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
+          scaling above ${format("1e6000")}.`);
+      }
       Tab.reality.glyphs.show();
     }
     player.dilation.studies.push(this.id);
@@ -566,8 +574,8 @@ class TriadStudyState extends TimeStudyState {
 
   get canBeBought() {
     return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
-           V.availableST >= this.STCost &&
-           !this.isBought && this.config.unlocked();
+      V.availableST >= this.STCost &&
+      !this.isBought && this.config.unlocked();
   }
 
   get isBought() {

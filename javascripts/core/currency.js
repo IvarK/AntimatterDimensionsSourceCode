@@ -355,6 +355,10 @@ Currency.realities = new class extends NumberCurrency {
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
+  add(amount) {
+    super.add(amount);
+    player.reality.realityMachines = player.reality.realityMachines.clampMax(MachineHandler.hardcapRM);
+  }
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {
@@ -387,11 +391,19 @@ Currency.relicShards = new class extends NumberCurrency {
   set value(value) { player.celestials.effarig.relicShards = value; }
 }();
 
+Currency.imaginaryMachines = new class extends NumberCurrency {
+  get value() { return player.reality.imaginaryMachines; }
+  set value(value) {
+    player.reality.imaginaryMachines = Math.clampMax(value, MachineHandler.currentIMCap);
+  }
+}();
+
 Currency.darkMatter = new class extends DecimalCurrency {
   get value() { return player.celestials.laitela.darkMatter; }
   set value(value) {
-    player.celestials.laitela.darkMatter = value;
-    player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(value);
+    const capped = Decimal.min(value, Number.MAX_VALUE);
+    player.celestials.laitela.darkMatter = capped;
+    player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(capped);
   }
 
   get max() { return player.celestials.laitela.maxDarkMatter; }

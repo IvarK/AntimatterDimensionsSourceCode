@@ -6,6 +6,8 @@ Vue.component("automator-controls", {
       isRunning: false,
       isPaused: false,
       repeatOn: false,
+      forceRestartOn: false,
+      followExecution: false,
     };
   },
   computed: {
@@ -13,9 +15,16 @@ Vue.component("automator-controls", {
       return this.$viewModel.tabs.reality.automator.editorScriptID;
     },
     playTooltip() {
-      if (this.isRunning) return undefined;
-      if (this.isPaused) return "Resume automator execution";
-      return "Start automator";
+      if (this.isPaused) return "Resume Automator execution";
+      if (!this.isRunning) return "Start Automator";
+      return "Pause Automator execution";
+    },
+    playPauseClass() {
+      return {
+        "c-automator__button--active": this.isRunning,
+        "fa-play": !this.isRunning || this.isPaused,
+        "fa-pause": !this.isPaused,
+      };
     },
   },
   methods: {
@@ -23,43 +32,47 @@ Vue.component("automator-controls", {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.repeatOn = AutomatorBackend.state.repeat;
+      this.forceRestartOn = AutomatorBackend.state.forceRestart;
+      this.followExecution = AutomatorBackend.state.followExecution;
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
+      if (this.isRunning) {
+        AutomatorBackend.pause();
+        return;
+      }
       if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) this.$emit("automatorplay");
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
       else AutomatorBackend.start(this.currentScriptID);
     },
-    pause: () => AutomatorBackend.pause(),
     stop: () => AutomatorBackend.stop(),
     step() {
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.SINGLE_STEP;
       else AutomatorBackend.start(this.currentScriptID, AUTOMATOR_MODE.SINGLE_STEP);
     },
     repeat: () => AutomatorBackend.toggleRepeat(),
+    restart: () => AutomatorBackend.toggleForceRestart(),
+    follow: () => AutomatorBackend.toggleFollowExecution(),
   },
   template: `
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-      <automator-button class="fa-fast-backward"
+      <automator-button
+        class="fa-fast-backward"
         @click="rewind"
-        v-tooltip="'rewind automator to the first command'"
+        v-tooltip="'Rewind Automator to the first command'"
       />
       <automator-button
-        class="fa-play"
-        :class="{ 'c-automator__button-play--active' : isRunning }"
+        :class="playPauseClass"
         @click="play"
         v-tooltip="playTooltip"
       />
-      <automator-button class="fa-pause"
-        :class="{ 'c-automator__button--active': isPaused }"
-        @click="pause"
-        v-tooltip="'Pause automator on current command'"
-      />
-      <automator-button class="fa-stop"
+      <automator-button
+        class="fa-stop"
         @click="stop"
-        v-tooltip="'Stop automator and reset position'"
+        v-tooltip="'Stop Automator and reset position'"
       />
-      <automator-button class="fa-step-forward"
+      <automator-button
+        class="fa-step-forward"
         @click="step"
         v-tooltip="'Step forward one line'"
       />
@@ -68,6 +81,18 @@ Vue.component("automator-controls", {
         :class="{ 'c-automator__button--active' : repeatOn }"
         @click="repeat"
         v-tooltip="'Restart script automatically when it completes'"
+      />
+      <automator-button
+        class="fa-reply"
+        :class="{ 'c-automator__button--active' : forceRestartOn }"
+        @click="restart"
+        v-tooltip="'Restart script when finishing or restarting a Reality'"
+      />
+      <automator-button
+        class="fa-indent"
+        :class="{ 'c-automator__button--active' : followExecution }"
+        @click="follow"
+        v-tooltip="'Scroll Automator to follow current line'"
       />
     </div>`
 });

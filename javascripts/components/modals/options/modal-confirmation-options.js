@@ -114,7 +114,6 @@ Vue.component("modal-confirmation-options", {
       this.replicantiUnlocked = PlayerProgress.eternityUnlocked() || player.replicanti.unl;
     }
   },
-  // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
       <div class="c-modal-options__button-container">
@@ -134,6 +133,7 @@ Vue.component("modal-confirmation-options", {
         <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
         <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
         <wide-on-off-button v-if="glyphSetSaveUnlocked" v-model="deleteGlyphSetSave" text="Delete Glyph Set Save:" />
+        <wide-on-off-button v-if="glyphRefineUnlocked" v-model="glyphRefine" text="Glyph refine:" />
       </div>
     </modal-options>`
 });

@@ -139,10 +139,10 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "Recollection of Intrusion",
       id: 14,
-      cost: 4e8,
-      requirement: () => `Reach a tickspeed of ${format("1e80000000000")} / sec within Eternity Challenge 5`,
+      cost: 3.5e8,
+      requirement: () => `Reach a tickspeed of ${format("1e75000000000")} / sec within Eternity Challenge 5`,
       hasFailed: () => false,
-      checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 8e10,
+      checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 7.5e10,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: () => `Raise all dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
       effect: 1.5

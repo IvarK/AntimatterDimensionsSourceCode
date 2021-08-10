@@ -397,12 +397,13 @@ let player = {
         mode: AUTOMATOR_MODE.STOP,
         topLevelScript: 0,
         editorScript: 0,
-        repeat: false,
+        repeat: true,
+        forceRestart: true,
+        followExecution: true,
         stack: [],
       },
       scripts: {
       },
-      lastID: 0,
       execTimer: 0,
       type: AUTOMATOR_TYPE.TEXT
     },

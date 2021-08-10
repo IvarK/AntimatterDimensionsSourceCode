@@ -2,26 +2,28 @@
 
 Vue.component("autobuyers-tab", {
   data: () => ({
-    hasContinuum: false
+    hasContinuum: false,
+    displayADAutobuyersIndividually: false,
   }),
   methods: {
     update() {
       this.hasContinuum = Laitela.continuumActive;
+      this.displayADAutobuyersIndividually = Autobuyer.antimatterDimension(1).hasUnlimitedBulk;
     }
   },
   template: `
     <div class="l-autobuyers-tab">
       <autobuyer-toggles />
       <open-modal-shortcuts />
-      <many-autobuyers />
       <reality-autobuyer-box />
       <eternity-autobuyer-box />
       <big-crunch-autobuyer-box />
       <galaxy-autobuyer-box />
       <dimboost-autobuyer-box />
-      <dimension-autobuyer-box v-if="!hasContinuum" v-for="tier in 8" :key="tier" :tier="tier" />
-      <tickspeed-autobuyer-box v-if="!hasContinuum" />
       <sacrifice-autobuyer-box />
+      <dimension-autobuyer-box v-if="!displayADAutobuyersIndividually" v-for="tier in 8" :key="tier" :tier="tier" />
+      <tickspeed-autobuyer-box v-if="!hasContinuum" />
+      <many-autobuyers />
       <template v-if="hasContinuum">
         Continuum makes Antimatter Dimension and Tickspeed Autobuyers obsolete, as you now automatically have a
         <br>

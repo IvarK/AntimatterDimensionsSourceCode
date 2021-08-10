@@ -2,6 +2,8 @@
 
 
 Vue.component("many-autobuyers", {
+  // There are two types of display: multiple and single.
+  // Dimensions and Arrays both use multiple, and are separated purely for backend reasons.
   computed: {
     dimensions() {
       return Autobuyers.display[0];
@@ -67,35 +69,55 @@ Vue.component("multi-autobuyer-panel", {
   props: {
     autobuyers: Array,
   },
+  data() {
+    return {
+      anyUnlocked: false,
+      sameInterval: false,
+      sameBulk: false,
+    };
+  },
   computed: {
     name() {
-      return `${this.autobuyers.name}`;
+      return this.autobuyers.name;
     },
     boxSize() {
+      // The width of the name panel is 20% - the other 80% is divvied up between the multiple autobuyers.
       return `width: ${80 / this.autobuyers.length}%`;
     },
-  },
-  methods: {
-    anyUnlocked() {
-      return this.autobuyers.some(x => x.isUnlocked);
-    },
-    sameInterval() {
-      if (this.autobuyers[0].interval === undefined) return false;
-      return new Set(this.autobuyers.map(x => x.interval)).size === 1;
-    },
-    sameBulk() {
-      return this.autobuyers.some(x => x.hasUnlimitedBulk) || new Set(this.autobuyers.map(x => x.bulk)).size === 1;
+    showAutobuyers() {
+      // Only display the Antimatter Dimension Autobuyers if the bulk is the same and there are any of them unlocked
+      if (this.name === Autobuyers.antimatterDimensions.name) return this.sameBulk && this.anyUnlocked;
+      return this.anyUnlocked;
     }
   },
+  methods: {
+    update() {
+      // If any of the autobuyers are unlocked, we should display the whole thing.
+      this.anyUnlocked = this.autobuyers.some(x => x.isUnlocked);
+      // If the first autobuyer's interval isn't undefined, check if all the intervals are the same - if they are
+      // we should show the interval on the main autobuyer instead of on each of the sub autobuyers.
+      const sameIntervalSet = new Set(this.autobuyers.map(x => x.interval));
+      this.sameInterval = !sameIntervalSet.has(undefined) && sameIntervalSet.size === 1;
+      // If the first autobuyer's bulk is unlimited, the bulks are the same. Otherwise, we have to check if all the
+      // other bulks are the same.
+      // If they are the same, we should show it on the main instead of on each of the sub autobuyers.
+      const sameBulkSet = new Set(this.autobuyers.map(x => x.bulk));
+      this.sameBulk = this.autobuyers[0].hasUnlimitedBulk || sameBulkSet.size === 1;
+    },
+  },
   template: `
-    <span class="c-autobuyer-box-row" styles="display: flex; padding: 0.25rem" v-if="anyUnlocked()">
+    <span
+      class="c-autobuyer-box-row"
+      styles="display: flex; padding: 0.25rem"
+      v-if="showAutobuyers"
+    >
       <div class="l-autobuyer-box__header--new">
         {{ name }}<br>Autobuyers
         <autobuyer-interval-label
-          v-if="sameInterval() || sameBulk()"
+          v-if="sameInterval || sameBulk"
           :autobuyer="autobuyers[0]"
-          :showInterval="sameInterval()"
-          :showBulk="sameBulk()"
+          :showInterval="sameInterval"
+          :showBulk="sameBulk"
         />
       </div>
       <tiny-autobuyer
@@ -103,8 +125,8 @@ Vue.component("multi-autobuyer-panel", {
         :autobuyer="autobuyer"
         :style="boxSize"
         :key="id"
-        :showInterval="!sameInterval()"
-        :showBulk="!sameBulk()"
+        :showInterval="!sameInterval"
+        :showBulk="!sameBulk"
       />
     </span>`
 });
@@ -113,7 +135,8 @@ Vue.component("multi-autobuyer-panel", {
 Vue.component("tiny-autobuyer", {
   props: {
     autobuyer: Object,
-    boxSize: String,
+    // You may notice that there are no autobuyers where showInterval or showBulk would apply - they are always the same
+    // This is for future-proofing, also for the sunk costs fallacy after trying to fully integrate ADs into this system
     showInterval: Boolean,
     showBulk: Boolean,
   },
@@ -172,8 +195,7 @@ Vue.component("automator-inner-toggle-label", {
   },
   methods: {
     update() {
-      const buyer = this.autobuyer;
-      this.isActive = buyer.isActive;
+      this.isActive = this.autobuyer.isActive;
       this.globalToggle = player.auto.autobuyersOn;
     },
     toggle() {
@@ -268,7 +290,10 @@ Vue.component("autobuyer-interval-label", {
       this.interval = buyer.interval;
       this.bulk = buyer.bulk;
       this.bulkUnlimited = buyer.hasUnlimitedBulk;
-      this.displayInterval = this.interval && this.showInterval;
+      // We should only be displaying the interval if the interval is both !0 and !undefined, and we are told to show it
+      this.displayInterval = this.showInterval && this.interval > 0;
+      // We should only show the bulk if it is unlimited (to show "Unlimited"), or has a bulk amount, to show the bulk
+      // amount. Additionally, it should only be shown if we are told to do so.
       this.displayBulk = this.showBulk && (this.bulkUnlimited || this.bulk > 0);
     }
   },

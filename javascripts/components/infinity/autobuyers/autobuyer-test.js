@@ -69,7 +69,7 @@ Vue.component("multi-autobuyer-panel", {
   },
   computed: {
     name() {
-      return `${this.autobuyers.name} Autobuyers`;
+      return `${this.autobuyers.name}`;
     },
     boxSize() {
       return `width: ${80 / this.autobuyers.length}%`;
@@ -90,7 +90,7 @@ Vue.component("multi-autobuyer-panel", {
   template: `
     <span class="c-autobuyer-box-row" styles="display: flex; padding: 0.25rem" v-if="anyUnlocked()">
       <div class="l-autobuyer-box__header--new">
-        {{ name }}
+        {{ name }}<br>Autobuyers
         <autobuyer-interval-label
           v-if="sameInterval() || sameBulk()"
           :autobuyer="autobuyers[0]"

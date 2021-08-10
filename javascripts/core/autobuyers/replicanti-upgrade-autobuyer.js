@@ -28,7 +28,7 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get hasUnlimitedBulk() {
-    return Achievement(126).isUnlocked;
+    return true;
   }
 
   tick() {

@@ -84,8 +84,7 @@ Vue.component("multi-autobuyer-panel", {
       return new Set(this.autobuyers.map(x => x.interval)).size === 1;
     },
     sameBulk() {
-      if (this.autobuyers[0].bulk === undefined) return false;
-      return new Set(this.autobuyers.map(x => x.bulk)).size === 1;
+      return this.autobuyers.some(x => x.hasUnlimitedBulk) || new Set(this.autobuyers.map(x => x.bulk)).size === 1;
     }
   },
   template: `
@@ -252,6 +251,8 @@ Vue.component("autobuyer-interval-label", {
       interval: 0,
       bulk: 0,
       bulkUnlimited: false,
+      displayInterval: false,
+      displayBulk: false,
     };
   },
   computed: {
@@ -267,13 +268,15 @@ Vue.component("autobuyer-interval-label", {
       this.interval = buyer.interval;
       this.bulk = buyer.bulk;
       this.bulkUnlimited = buyer.hasUnlimitedBulk;
+      this.displayInterval = this.interval && this.showInterval;
+      this.displayBulk = this.showBulk && (this.bulkUnlimited || this.bulk > 0);
     }
   },
   template: `
     <div class="c-autobuyer-box__small-text">
-      <span v-if="interval && showInterval">Current interval: {{ intervalDisplay }} seconds</span>
-      <span v-if="bulk && showBulk">
-        <br>Current bulk: {{ bulkUnlimited ? "Unlimited" : formatX(bulk, 2) }}
+      <span v-if="displayInterval">Current interval: {{ intervalDisplay }} seconds</span>
+      <span v-if="displayBulk">
+        <br v-if="displayInterval">Current bulk: {{ bulkUnlimited ? "Unlimited" : formatX(bulk, 2) }}
       </span>
     </div>`
 });

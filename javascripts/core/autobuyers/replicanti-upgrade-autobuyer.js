@@ -27,6 +27,10 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
     return PRESTIGE_EVENT.ETERNITY;
   }
 
+  get hasUnlimitedBulk() {
+    return Achievement(126).isUnlocked;
+  }
+
   tick() {
     const upgradeName = this._upgradeName;
     if (EternityChallenge(8).isRunning) return;

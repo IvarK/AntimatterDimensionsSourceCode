@@ -30,6 +30,10 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     return PRESTIGE_EVENT.REALITY;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
     const tier = this._tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;

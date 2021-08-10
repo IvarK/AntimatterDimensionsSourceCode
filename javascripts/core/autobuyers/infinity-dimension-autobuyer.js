@@ -30,6 +30,10 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
     return PRESTIGE_EVENT.ETERNITY;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
     const tier = this._tier;
     if (!InfinityDimension(tier).isAvailableForPurchase || EternityChallenge(8).isRunning) return;

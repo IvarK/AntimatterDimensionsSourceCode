@@ -50,7 +50,7 @@ Vue.component("single-autobuyer-row", {
     },
   },
   template: `
-    <span class="c-autobuyer-box-row" styles="display: flex" v-if="isUnlocked">
+    <span v-if="isUnlocked" class="c-autobuyer-box-row">
       <autobuyer-toggle-label :autobuyer="autobuyer" />
       <div>
         {{ name }}
@@ -102,9 +102,9 @@ Vue.component("multiple-autobuyers-row", {
   },
   template: `
     <span
-      class="c-autobuyer-box-row"
-      styles="display: flex; padding: 0.25rem"
       v-if="showAutobuyers"
+      class="c-autobuyer-box-row"
+      styles="padding: .25rem"
     >
       <div class="l-autobuyer-box__header--new">
         {{ name }}<br>Autobuyers
@@ -116,9 +116,9 @@ Vue.component("multiple-autobuyers-row", {
       </div>
       <single-autobuyer-in-row
         v-for="(autobuyer, id) in autobuyers"
+        :key="id"
         :autobuyer="autobuyer"
         :style="boxSize"
-        :key="id"
         :showInterval="!sameInterval"
         :showBulk="!sameBulk"
       />
@@ -246,8 +246,7 @@ Vue.component("autobuyer-mode-button", {
   },
   template: `
     <button
-      class="o-autobuyer-btn"
-      style="width: 80%"
+      class="o-autobuyer-btn o-autobuyer-btn--tiny"
       @click="toggleMode"
     >
       {{ modeDisplay }}
@@ -291,7 +290,7 @@ Vue.component("autobuyer-interval-label", {
       this.interval = buyer.interval;
       this.bulk = buyer.bulk;
       this.bulkUnlimited = buyer.hasUnlimitedBulk;
-      // We should only be displaying the interval if the interval is both !0 and !undefined, and we are told to show it
+      // We should only be displaying the interval if the interval is greater than 0 and we are told to show it
       this.displayInterval = this.showInterval && this.interval > 0;
       // We should only show the bulk if it is unlimited (to show "Unlimited"), or has a bulk amount, to show the bulk
       // amount. Additionally, it should only be shown if we are told to do so.

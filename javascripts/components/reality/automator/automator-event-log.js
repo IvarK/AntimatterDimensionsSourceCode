@@ -3,8 +3,9 @@
 const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
   DISABLED: 0,
   THIS_REALITY: 1,
-  RELATIVE: 2,
-  DATE_TIME: 3,
+  RELATIVE_NOW: 2,
+  RELATIVE_PREV: 3,
+  DATE_TIME: 4,
 };
 
 Vue.component("automator-event-log", {
@@ -49,8 +50,11 @@ Vue.component("automator-event-log", {
           return "";
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.THIS_REALITY:
           return `, ${TimeSpan.fromSeconds(entry.thisReality).toStringShort()} in this Reality`;
-        case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE:
+        case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE_NOW:
           return `, ${TimeSpan.fromMilliseconds(this.currentTime - entry.timestamp).toStringShort()} ago`;
+        case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE_PREV:
+          if (entry.timegap === entry.timestamp) return `, first logged event`;
+          return `, ${TimeSpan.fromMilliseconds(entry.timegap).toStringShort()} after previous event`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.DATE_TIME:
           // By default this also gives day of the week and time zone, so remove those
           return `, ${new Date(entry.timestamp).toString().replace(/^.{4}(.*:..:..).*$/u, "$1")}`;
@@ -96,9 +100,15 @@ Vue.component("automator-event-log", {
           v-tooltip="'Current time this Reality'"
         />
         <button
-          :style="timestampStyle(timestampModeConst('RELATIVE'))"
+          :style="timestampStyle(timestampModeConst('RELATIVE_NOW'))"
           class="fas fa-clock"
-          @click="timestampMode = timestampModeConst('RELATIVE')"
+          @click="timestampMode = timestampModeConst('RELATIVE_NOW')"
+          v-tooltip="'Time elapsed since event'"
+        />
+        <button
+          :style="timestampStyle(timestampModeConst('RELATIVE_PREV'))"
+          class="fas fa-arrow-left"
+          @click="timestampMode = timestampModeConst('RELATIVE_PREV')"
           v-tooltip="'Time elapsed since event'"
         />
         <button

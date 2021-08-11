@@ -61,6 +61,11 @@ Vue.component("automator-docs", {
         "color": this.commandID === -1 ? "green" : ""
       };
     },
+    logStyle() {
+      return {
+        "color": this.commandID === -3 ? "green" : ""
+      };
+    },
     errorStyle() {
       return {
         "color": this.errorCount === 0 ? "" : "red"
@@ -172,6 +177,12 @@ Vue.component("automator-docs", {
           v-tooltip="errorTooltip"
         />
         <automator-button
+          :style="logStyle"
+          class="fa-eye"
+          @click="commandID = -3"
+          v-tooltip="'View recently executed commands'"
+        />
+        <automator-button
           class="fa-file-export"
           @click="exportScript"
           v-tooltip="'Export automator script'"
@@ -228,6 +239,7 @@ Vue.component("automator-docs", {
           @select="changeCommand"
         />
         <automator-error-page v-else-if="commandID === -2" />
+        <automator-event-log v-else-if="commandID === -3" />
         <automator-man-page v-else :command="command" />
       </div>
     </div>`

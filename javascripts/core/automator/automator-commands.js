@@ -489,7 +489,7 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Start[0].startLine;
         return true;
       },
-      compile: () => ctx => {
+      compile: ctx => () => {
         if (player.dilation.active) {
           AutomatorData.logCommandEvent(`Start Dilation encountered but ignored due to already being dilated`,
             ctx.startLine);

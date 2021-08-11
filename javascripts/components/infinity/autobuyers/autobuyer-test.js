@@ -2,40 +2,35 @@
 
 
 Vue.component("many-autobuyers", {
-  // There are two types of display: multiple and single.
-  // Dimensions and Arrays both use multiple, and are separated purely for backend reasons.
+  // There are two types of display: multiple and single. They must be treated differently.
   computed: {
-    dimensions() {
+    mutliple() {
       return Autobuyers.display[0];
     },
-    arrays() {
-      return Autobuyers.display[1];
-    },
     singles() {
-      return Autobuyers.display[2];
+      return Autobuyers.display[1];
     }
   },
   template: `
     <span>
-      <multi-autobuyer-panel
-        v-for="(type, id) in dimensions"
-        :autobuyers="type"
-        :key="id"
-      />
-      <multi-autobuyer-panel
-        v-for="(type, id) in arrays"
-        :autobuyers="type"
-        :key="1000 + id"
-      />
-      <generic-single-autobuyer
-        v-for="(type, id) in singles"
-        :autobuyer="type[0]"
-        :key="2000 + id"
-      />
+      <span>
+        <multiple-autobuyers-row
+          v-for="(type, id) in mutliple"
+          :autobuyers="type"
+          :key="id"
+        />
+      </span>
+      <span>
+        <single-autobuyer-row
+          v-for="(type, id) in singles"
+          :autobuyer="type"
+          :key="id"
+        />
+      </span>
     </span>`
 });
 
-Vue.component("generic-single-autobuyer", {
+Vue.component("single-autobuyer-row", {
   props: {
     autobuyer: Object,
   },
@@ -56,7 +51,7 @@ Vue.component("generic-single-autobuyer", {
   },
   template: `
     <span class="c-autobuyer-box-row" styles="display: flex" v-if="isUnlocked">
-      <automator-inner-toggle-label :autobuyer="autobuyer" />
+      <autobuyer-toggle-label :autobuyer="autobuyer" />
       <div>
         {{ name }}
         <autobuyer-interval-label :autobuyer="autobuyer" />
@@ -65,7 +60,7 @@ Vue.component("generic-single-autobuyer", {
 });
 
 
-Vue.component("multi-autobuyer-panel", {
+Vue.component("multiple-autobuyers-row", {
   props: {
     autobuyers: Array,
   },
@@ -114,13 +109,12 @@ Vue.component("multi-autobuyer-panel", {
       <div class="l-autobuyer-box__header--new">
         {{ name }}<br>Autobuyers
         <autobuyer-interval-label
-          v-if="sameInterval || sameBulk"
           :autobuyer="autobuyers[0]"
           :showInterval="sameInterval"
           :showBulk="sameBulk"
         />
       </div>
-      <tiny-autobuyer
+      <single-autobuyer-in-row
         v-for="(autobuyer, id) in autobuyers"
         :autobuyer="autobuyer"
         :style="boxSize"
@@ -132,7 +126,7 @@ Vue.component("multi-autobuyer-panel", {
 });
 
 
-Vue.component("tiny-autobuyer", {
+Vue.component("single-autobuyer-in-row", {
   props: {
     autobuyer: Object,
     // You may notice that there are no autobuyers where showInterval or showBulk would apply - they are always the same
@@ -161,14 +155,18 @@ Vue.component("tiny-autobuyer", {
   },
   template: `
     <span v-if="isVisible" class="c-autobuyer-box-slot">
-      <automator-inner-toggle-label :autobuyer="autobuyer" />
+      <autobuyer-toggle-label :autobuyer="autobuyer" />
       {{ name }}
-      <autobuyer-interval-label :autobuyer="autobuyer" :showInterval="showInterval" :showBulk="showBulk" />
-      <mode-button v-if="hasMode" :autobuyer="autobuyer" />
+      <autobuyer-interval-label
+        :autobuyer="autobuyer"
+        :showInterval="showInterval"
+        :showBulk="showBulk"
+      />
+      <autobuyer-mode-button v-if="hasMode" :autobuyer="autobuyer" />
     </span>`
 });
 
-Vue.component("automator-inner-toggle-label", {
+Vue.component("autobuyer-toggle-label", {
   props: {
     autobuyer: Object,
   },
@@ -219,7 +217,7 @@ Vue.component("automator-inner-toggle-label", {
     </div>`
 });
 
-Vue.component("mode-button", {
+Vue.component("autobuyer-mode-button", {
   props: {
     autobuyer: Object,
   },
@@ -282,7 +280,10 @@ Vue.component("autobuyer-interval-label", {
     intervalDisplay() {
       const sec = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
       return format(Math.ceil(100 * sec) / 100, 2, 2);
-    }
+    },
+    bulkText() {
+      return `Current bulk: ${this.bulkUnlimited ? "Unlimited" : formatX(this.bulk, 2)}`;
+    },
   },
   methods: {
     update() {
@@ -298,10 +299,13 @@ Vue.component("autobuyer-interval-label", {
     }
   },
   template: `
-    <div class="c-autobuyer-box__small-text">
-      <span v-if="displayInterval">Current interval: {{ intervalDisplay }} seconds</span>
+    <div class="c-autobuyer-box__small-text" v-if="displayInterval || displayBulk">
+      <span v-if="displayInterval">
+        Current interval: {{ intervalDisplay }} seconds
+      </span>
       <span v-if="displayBulk">
-        <br v-if="displayInterval">Current bulk: {{ bulkUnlimited ? "Unlimited" : formatX(bulk, 2) }}
+        <br v-if="displayInterval">
+        {{ bulkText }}
       </span>
     </div>`
 });

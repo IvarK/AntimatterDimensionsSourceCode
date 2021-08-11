@@ -4,27 +4,27 @@ const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.index;
   const infinityDimensions = Autobuyer.infinityDimension.index;
   const timeDimensions = Autobuyer.timeDimension.index;
-  
+
   const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions];
 
   const prestige = [
-    [Autobuyer.bigCrunch],
-    [Autobuyer.eternity],
-    [Autobuyer.reality],
+    Autobuyer.bigCrunch,
+    Autobuyer.eternity,
+    Autobuyer.reality,
   ];
 
   const singleBinary = [
-    [Autobuyer.replicantiGalaxy],
-    [Autobuyer.timeTheorem],
-    [Autobuyer.ipMult],
-    [Autobuyer.epMult],
+    Autobuyer.replicantiGalaxy,
+    Autobuyer.timeTheorem,
+    Autobuyer.ipMult,
+    Autobuyer.epMult,
   ];
 
   const single = [
-    [Autobuyer.tickspeed],
-    [Autobuyer.sacrifice],
-    [Autobuyer.dimboost],
-    [Autobuyer.galaxy],
+    Autobuyer.tickspeed,
+    Autobuyer.sacrifice,
+    Autobuyer.dimboost,
+    Autobuyer.galaxy,
   ].concat(singleBinary);
 
   const arrays = [
@@ -38,7 +38,7 @@ const Autobuyers = (function() {
 
   return {
     all: all.flat(),
-    display: [dimensions, arrays, singleBinary],
+    display: [dimensions.concat(arrays), singleBinary],
     antimatterDimensions,
     infinityDimensions,
     timeDimensions,
@@ -46,7 +46,7 @@ const Autobuyers = (function() {
     prestige,
     single,
     arrays,
-    upgradeable: antimatterDimensions.concat([Autobuyer.tickspeed], [Autobuyer.dimboost], [Autobuyer.galaxy]),
+    upgradeable: antimatterDimensions.concat(Autobuyer.tickspeed, Autobuyer.dimboost, Autobuyer.galaxy),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
@@ -59,9 +59,7 @@ const Autobuyers = (function() {
     tick() {
       PerformanceStats.start("Autobuyers");
 
-      const autobuyers = prestige.flat()
-        .concat(single.flat(), arrays.flat(), antimatterDimensions, infinityDimensions, timeDimensions)
-        .filter(a => a.canTick);
+      const autobuyers = Autobuyers.all.filter(a => a.canTick);
 
       for (const autobuyer of autobuyers) {
         autobuyer.tick();
@@ -71,7 +69,8 @@ const Autobuyers = (function() {
     },
 
     resetTick(prestigeEvent) {
-      for (const autobuyer of Autobuyers.all.filter(n => n.resetTick !== undefined)) {
+      const autobuyers = Autobuyers.all.filter(n => n.resetTick !== undefined);
+      for (const autobuyer of autobuyers) {
         autobuyer.resetTick(prestigeEvent);
       }
     },

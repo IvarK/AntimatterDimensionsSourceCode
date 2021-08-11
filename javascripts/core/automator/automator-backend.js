@@ -166,6 +166,8 @@ class AutomatorScript {
 
 const AutomatorData = {
   currentErrorLine: -1,
+  lastECCompletionCount: 0,
+  eventLog: [],
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },
@@ -188,6 +190,18 @@ const AutomatorData = {
   },
   currentErrors() {
     return AutomatorGrammar.compile(this.currentScriptText()).errors;
+  },
+  logCommandEvent(message, line) {
+    this.eventLog.push({
+      // Messages often overflow the 120 col limit and extra spacing gets included in the message - remove it
+      message: message.replaceAll(/\s?\n\s+/gu, " "),
+      line,
+      thisReality: Time.thisRealityRealTime.totalSeconds,
+      timestamp: Date.now()
+    });
+  },
+  clearEventLog() {
+    this.eventLog = [];
   }
 };
 

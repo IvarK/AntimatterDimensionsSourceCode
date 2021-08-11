@@ -127,6 +127,43 @@ Vue.component("multiple-autobuyers-row", {
 
 
 Vue.component("single-autobuyer-in-row", {
+  components: {
+    "autobuyer-mode-button": {
+      props: {
+        autobuyer: Object,
+      },
+      data() {
+        return {
+          mode: AUTOBUYER_MODE.BUY_SINGLE
+        };
+      },
+      computed: {
+        modeDisplay() {
+          switch (this.mode) {
+            case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
+            case AUTOBUYER_MODE.BUY_10: return "Buys max";
+          }
+          throw "Unknown Dimension Autobuyer mode";
+        }
+      },
+      methods: {
+        update() {
+          this.mode = this.autobuyer.mode;
+        },
+        toggleMode() {
+          this.autobuyer.toggleMode();
+          this.update();
+        }
+      },
+      template: `
+        <button
+          class="o-autobuyer-btn o-autobuyer-btn--tiny"
+          @click="toggleMode"
+        >
+          {{ modeDisplay }}
+        </button>`
+    }
+  },
   props: {
     autobuyer: Object,
     // You may notice that there are no autobuyers where showInterval or showBulk would apply - they are always the same
@@ -215,42 +252,6 @@ Vue.component("autobuyer-toggle-label", {
         type="checkbox"
       />
     </div>`
-});
-
-Vue.component("autobuyer-mode-button", {
-  props: {
-    autobuyer: Object,
-  },
-  data() {
-    return {
-      mode: AUTOBUYER_MODE.BUY_SINGLE
-    };
-  },
-  computed: {
-    modeDisplay() {
-      switch (this.mode) {
-        case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
-        case AUTOBUYER_MODE.BUY_10: return "Buys max";
-      }
-      throw "Unknown Dimension Autobuyer mode";
-    }
-  },
-  methods: {
-    update() {
-      this.mode = this.autobuyer.mode;
-    },
-    toggleMode() {
-      this.autobuyer.toggleMode();
-      this.update();
-    }
-  },
-  template: `
-    <button
-      class="o-autobuyer-btn o-autobuyer-btn--tiny"
-      @click="toggleMode"
-    >
-      {{ modeDisplay }}
-    </button>`
 });
 
 Vue.component("autobuyer-interval-label", {

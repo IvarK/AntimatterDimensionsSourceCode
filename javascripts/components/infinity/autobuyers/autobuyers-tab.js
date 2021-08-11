@@ -42,14 +42,14 @@ Vue.component("simple-autobuyers-multi-box", {
   },
   template: `
     <span>
-      <span>
+      <span class="l-autobuyers-tab">
         <multiple-autobuyers-box
           v-for="(type, id) in mutliple"
           :autobuyers="type"
           :key="id"
         />
       </span>
-      <span>
+      <span class="l-autobuyers-tab">
         <single-autobuyer-box
           v-for="(type, id) in singles"
           :autobuyer="type"

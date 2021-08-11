@@ -124,8 +124,9 @@ Vue.component("new-ui", {
             <div v-if="isInLaitela">
               Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
             </div>
-            <div v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</div>
-            <br><span v-if="isChallengePowerVisible">{{ challengePower }}</span>
+            <br>
+            <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
+            <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
             <black-hole-header-row />
           </div>
           <button

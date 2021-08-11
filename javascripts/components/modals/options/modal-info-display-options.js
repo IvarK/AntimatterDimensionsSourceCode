@@ -55,7 +55,7 @@ Vue.component("modal-info-display-options", {
   },
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
-      <div>
+      <div class="c-modal-options__button-container">
         <wide-on-off-button v-model="achievements" text="Achievement IDs:" />
         <wide-on-off-button v-model="achievementUnlockStates" text="Achievement unlock state indicators:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenge IDs:" />

@@ -32,6 +32,11 @@ const AutomatorTextUI = {
     this.editor.on("change", editor => {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
+      // Clear error line highlighting as soon as any text is changed; this is significantly more performance-friendly
+      // than running the parser every change to determine if the error still exists
+      const errorLine = AutomatorData.currentErrorLine - 1;
+      AutomatorTextUI.editor.removeLineClass(errorLine, "background", "c-automator-editor__error-line");
+      AutomatorTextUI.editor.removeLineClass(errorLine, "gutter", "c-automator-editor__error-line-gutter");
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   }
@@ -47,6 +52,8 @@ Vue.component("automator-text-editor", {
   data() {
     return {
       markedLineNumber: 0,
+      unclearedLines: false,
+      isActiveScript: false,
     };
   },
   watch: {
@@ -96,6 +103,15 @@ Vue.component("automator-text-editor", {
     },
   },
   methods: {
+    update() {
+      AutomatorBackend.jumpToActiveLine();
+      if (this.unclearedLines && !AutomatorBackend.isOn) this.clearAllActiveLines();
+      if (AutomatorBackend.isOn) {
+        this.setActiveState(`${AutomatorBackend.state.topLevelScript}`, AutomatorBackend.stack.top.lineNumber);
+      } else {
+        this.setActiveState("", 0);
+      }
+    },
     onGameLoad() {
       this.UI.documents = {};
     },
@@ -112,9 +128,9 @@ Vue.component("automator-text-editor", {
       if (lineNumber > 0) {
         this.UI.editor.addLineClass(lineNumber - 1, "background", "c-automator-editor__active-line");
         this.UI.editor.addLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
-        this.UI.editor.scrollIntoView({ line: lineNumber - 1, ch: 0 }, 16);
         this.markedLineNumber = lineNumber;
       }
+      this.unclearedLines = true;
     },
     clearActiveLineStyle(lineNumber) {
       if (lineNumber > 0) {
@@ -122,15 +138,15 @@ Vue.component("automator-text-editor", {
         this.UI.editor.removeLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
       }
     },
-    update() {
-      if (AutomatorBackend.isOn) {
-        this.setActiveState(AutomatorBackend.state.topLevelScript, AutomatorBackend.stack.top.lineNumber);
-      } else {
-        this.setActiveState("", 0);
-      }
+    // This only runs once when a script is interrupted and stops during execution because of the player editing the
+    // text, but it needs to loop through and clear all lines since editing text may cause arbitrarily shifts of the
+    // active line index via pasting/deleting large code blocks
+    clearAllActiveLines() {
+      for (let line = 0; line < this.UI.editor.doc.size; line++) this.clearActiveLineStyle(line);
+      this.unclearedLines = false;
     },
     setActiveState(scriptID, lineNumber) {
-      if (this.currentScriptID === scriptID) this.markActiveLine(lineNumber);
+      if (`${this.currentScriptID}` === scriptID) this.markActiveLine(lineNumber);
       else this.unmarkActiveLine();
     },
   },

@@ -101,11 +101,11 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "Suspicion of Interference",
       id: 11,
-      cost: 5e5,
-      requirement: () => `${format(1e91)} total Relic Shards
+      cost: 5e7,
+      requirement: () => `${format(1e90)} total Relic Shards
         (You have ${format(player.celestials.effarig.relicShards, 2)})`,
       hasFailed: () => false,
-      checkRequirement: () => player.celestials.effarig.relicShards >= 1e91,
+      checkRequirement: () => player.celestials.effarig.relicShards >= 1e90,
       checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
       description: "Time Dimension power based on total antimatter",
       effect: () => 1 + Math.log10(player.records.totalAntimatter.log10()) / 100,
@@ -139,10 +139,10 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
     {
       name: "Recollection of Intrusion",
       id: 14,
-      cost: 4e8,
-      requirement: () => `Reach a tickspeed of ${format("1e80000000000")} / sec within Eternity Challenge 5`,
+      cost: 3.5e8,
+      requirement: () => `Reach a tickspeed of ${format("1e75000000000")} / sec within Eternity Challenge 5`,
       hasFailed: () => false,
-      checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 8e10,
+      checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 7.5e10,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: () => `Raise all dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
       effect: 1.5

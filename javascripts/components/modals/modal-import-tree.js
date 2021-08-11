@@ -37,17 +37,23 @@ Vue.component("modal-import-tree", {
           }
         }
         switch (study.path) {
-          case TIME_STUDY_PATH.ANTIMATTER_DIM: firstSplitPaths.add("Antimatter Dims");
+          case TIME_STUDY_PATH.ANTIMATTER_DIM:
+            firstSplitPaths.add("Antimatter Dims");
             break;
-          case TIME_STUDY_PATH.INFINITY_DIM: firstSplitPaths.add("Infinity Dims");
+          case TIME_STUDY_PATH.INFINITY_DIM:
+            firstSplitPaths.add("Infinity Dims");
             break;
-          case TIME_STUDY_PATH.TIME_DIM: firstSplitPaths.add("Time Dims");
+          case TIME_STUDY_PATH.TIME_DIM:
+            firstSplitPaths.add("Time Dims");
             break;
-          case TIME_STUDY_PATH.ACTIVE: secondSplitPaths.add("Active");
+          case TIME_STUDY_PATH.ACTIVE:
+            secondSplitPaths.add("Active");
             break;
-          case TIME_STUDY_PATH.PASSIVE: secondSplitPaths.add("Passive");
+          case TIME_STUDY_PATH.PASSIVE:
+            secondSplitPaths.add("Passive");
             break;
-          case TIME_STUDY_PATH.IDLE: secondSplitPaths.add("Idle");
+          case TIME_STUDY_PATH.IDLE:
+            secondSplitPaths.add("Idle");
         }
       }
       const totalST = this.calculateMissingSTCost([...studies], true);

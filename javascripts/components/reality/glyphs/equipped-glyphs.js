@@ -97,19 +97,8 @@ Vue.component("equipped-glyphs", {
     },
     undo() {
       if (!this.undoAvailable) return;
-      if (player.options.confirmations.glyphUndo &&
-        // eslint-disable-next-line prefer-template
-        !confirm("The last equipped Glyph will be removed. Reality will be reset, but some things will" +
-          " be restored to what they were when it equipped:\n" +
-          " - antimatter, Infinity Points, and Eternity Points;\n" +
-          " - Dilation Upgrades, Tachyon Particles, and Dilated Time;\n" +
-          " - Time Theorems and Eternity Challenge completions;\n" +
-          " - Time Dimension and Reality unlocks;\n" +
-          " - time in current Reality" +
-          (Enslaved.isUnlocked ? ";\n - stored game time" : ""))) {
-        return;
-      }
-      Glyphs.undo();
+      if (player.options.confirmations.glyphUndo) Modal.glyphUndo.show();
+      else Glyphs.undo();
     },
     dragEvents(idx) {
       return {

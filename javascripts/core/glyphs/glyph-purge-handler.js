@@ -29,13 +29,12 @@ const GlyphSacrificeHandler = {
   removeGlyph(glyph, force = false) {
     if (this.handleSpecialGlyphTypes(glyph)) return;
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    else if (this.isRefining) this.refineGlyph(glyph);
+    else if (this.isRefining) this.attemptRefineGlyph(glyph, force);
     else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
-    if (force || confirm("Do you really want to delete this glyph?")) {
-      Glyphs.removeFromInventory(glyph);
-    }
+    if (force || !player.options.confirmations.glyphSacrifice) Glyphs.removeFromInventory(glyph);
+    else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
     if (!this.canSacrifice) return 0;
@@ -52,11 +51,8 @@ const GlyphSacrificeHandler = {
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
-        `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
-        `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
-        return;
-      }
+      Modal.glyphSacrifice.show({ idx: glyph.idx, gain: toGain });
+      return;
     }
     player.reality.glyphs.sac[glyph.type] += toGain;
     Glyphs.removeFromInventory(glyph);
@@ -87,33 +83,49 @@ const GlyphSacrificeHandler = {
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);
     return Math.clamp(glyphActualMaxValue - alchemyResource.amount, 0, glyphActualValue);
   },
-  refineGlyph(glyph) {
+  attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
     if (glyph.type === "cursed") {
       Glyphs.removeFromInventory(glyph);
       return;
     }
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || (this.glyphRefinementGain(glyph) === 0 &&
-      !AlchemyResource.decoherence.isUnlocked)) {
+    const decoherence = AlchemyResource.decoherence.isUnlocked;
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ||
+        (this.glyphRefinementGain(glyph) === 0 && !decoherence) ||
+        (decoherence && AlchemyResources.base.every(x => x.data.amount >= Ra.alchemyResourceCap))) {
       this.sacrificeGlyph(glyph, true);
       return;
     }
-    if (this.glyphAlchemyResource(glyph).isUnlocked) {
-      const resource = this.glyphAlchemyResource(glyph);
-      const rawRefinementGain = this.glyphRawRefinementGain(glyph);
-      const refinementGain = this.glyphRefinementGain(glyph);
-      resource.amount += refinementGain;
-      const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
-      const alchemyCap = this.levelAlchemyCap(glyph.level);
-      for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
-        if (glyphTypeName !== glyph.type) {
-          const glyphType = GlyphTypes[glyphTypeName];
-          const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-          const maxResouce = Math.max(alchemyCap, otherResource.amount);
-          otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
-        }
-      }
-      Glyphs.removeFromInventory(glyph);
+
+    if (!player.options.confirmations.glyphRefine || force) {
+      this.refineGlyph(glyph);
+      return;
     }
+    const resource = this.glyphAlchemyResource(glyph);
+    Modal.glyphRefine.show({
+      idx: glyph.idx,
+      resourceName: resource.name,
+      resourceAmount: resource.amount,
+      gain: this.glyphRefinementGain(glyph),
+      cap: this.levelAlchemyCap(glyph.level)
+    });
+
+  },
+  refineGlyph(glyph) {
+    const resource = this.glyphAlchemyResource(glyph);
+    const rawRefinementGain = this.glyphRawRefinementGain(glyph);
+    const refinementGain = this.glyphRefinementGain(glyph);
+    resource.amount += refinementGain;
+    const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
+    const alchemyCap = this.levelAlchemyCap(glyph.level);
+    for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
+      if (glyphTypeName !== glyph.type) {
+        const glyphType = GlyphTypes[glyphTypeName];
+        const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+        const maxResouce = Math.max(alchemyCap, otherResource.amount);
+        otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
+      }
+    }
+    Glyphs.removeFromInventory(glyph);
   }
 };

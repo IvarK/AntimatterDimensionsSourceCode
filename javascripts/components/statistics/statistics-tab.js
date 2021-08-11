@@ -102,9 +102,9 @@ Vue.component("statistics-tab", {
             `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
           [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
             `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`],
-          [true, Glyphs.copyForRecords(bestReality.iMCapSet),
+          [Currency.imaginaryMachines.gt(0), Glyphs.copyForRecords(bestReality.iMCapSet),
             `Imaginary Machine Cap: ${format(player.reality.iMCap, 2, 2)} iM`],
-          [true, Glyphs.copyForRecords(bestReality.laitelaSet),
+          [Laitela.isUnlocked, Glyphs.copyForRecords(bestReality.laitelaSet),
             `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
         ];
 

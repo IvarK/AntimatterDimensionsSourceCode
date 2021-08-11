@@ -16,6 +16,7 @@ Vue.component("modal-confirmation-options", {
       glyphUndo: false,
       resetCelestial: false,
       deleteGlyphSetSave: false,
+      glyphRefine: false,
 
       sacrificeUnlocked: false,
       glyphSacrificeUnlocked: false,
@@ -60,6 +61,9 @@ Vue.component("modal-confirmation-options", {
     deleteGlyphSetSave(newValue) {
       player.options.confirmations.deleteGlyphSetSave = newValue;
     },
+    glyphRefine(newValue) {
+      player.options.confirmations.glyphRefine = newValue;
+    },
   },
   methods: {
     update() {
@@ -76,18 +80,19 @@ Vue.component("modal-confirmation-options", {
       this.glyphUndo = options.glyphUndo;
       this.resetCelestial = options.resetCelestial;
       this.deleteGlyphSetSave = options.deleteGlyphSetSave;
+      this.glyphRefine = options.glyphRefine;
 
       this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
       this.glyphSetSaveUnlocked = EffarigUnlock.setSaves.isUnlocked;
+      this.glyphRefineUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     }
   },
-  // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
-      <div>
+      <div class="c-modal-options__button-container">
         <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />
@@ -100,6 +105,7 @@ Vue.component("modal-confirmation-options", {
         <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
         <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
         <wide-on-off-button v-if="glyphSetSaveUnlocked" v-model="deleteGlyphSetSave" text="Delete Glyph Set Save:" />
+        <wide-on-off-button v-if="glyphRefineUnlocked" v-model="glyphRefine" text="Glyph refine:" />
       </div>
     </modal-options>`
 });

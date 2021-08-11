@@ -125,6 +125,18 @@
   outline: 0.1rem solid rgb(68, 0, 255);
 }
 
+.c-automator-editor__error-line {
+  background: rgb(172, 6, 23);
+  outline: 0.1rem solid rgb(255, 0, 64);
+}
+
+.c-automator-editor__error-line-gutter {
+  font-weight: bold;
+  background: rgb(172, 6, 23);
+  filter: brightness(200%);
+  outline: 0.1rem solid rgb(255, 0, 64);
+}
+
 .c-automator-editor {
   font-family: Typewriter, serif;
   font-size: 1.4rem;

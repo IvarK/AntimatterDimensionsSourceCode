@@ -85,6 +85,7 @@ Vue.component("multiple-autobuyers-box", {
   },
   data() {
     return {
+      continuumActive: false,
       anyUnlocked: false,
       sameInterval: false,
       sameBulk: false,
@@ -98,14 +99,18 @@ Vue.component("multiple-autobuyers-box", {
       // The width of the name panel is 20% - the other 80% is divvied up between the multiple autobuyers.
       return `width: ${80 / this.autobuyers.length}%`;
     },
+    isADBox() {
+      return this.name === Autobuyers.antimatterDimensions.name;
+    },
     showAutobuyers() {
       // Only display the Antimatter Dimension Autobuyers if the bulk is the same and there are any of them unlocked
-      if (this.name === Autobuyers.antimatterDimensions.name) return this.sameBulk && this.anyUnlocked;
+      if (this.isADBox) return this.anyUnlocked && this.sameBulk && this.sameInterval;
       return this.anyUnlocked;
     }
   },
   methods: {
     update() {
+      this.continuumActive = Laitela.continuumActive;
       // If any of the autobuyers are unlocked, we should display the whole thing.
       this.anyUnlocked = this.autobuyers.some(x => x.isUnlocked);
       // If the first autobuyer's interval isn't undefined, check if all the intervals are the same - if they are
@@ -121,9 +126,8 @@ Vue.component("multiple-autobuyers-box", {
   },
   template: `
     <span
-      v-if="showAutobuyers"
+      v-if="showAutobuyers && !(isADBox && continuumActive)"
       class="c-autobuyer-box-row"
-      styles="padding: .25rem"
     >
       <div class="l-autobuyer-box__header--new">
         {{ name }}<br>Autobuyers
@@ -141,5 +145,13 @@ Vue.component("multiple-autobuyers-box", {
         :showInterval="!sameInterval"
         :showBulk="!sameBulk"
       />
+    </span>
+    <span
+      v-else-if="isADBox && continuumActive"
+      class="c-autobuyer-box-row"
+    >
+      Continuum makes Antimatter Dimension and Tickspeed Autobuyers obsolete, as you now automatically have a
+      <br>
+      certain amount of simulated Antimatter Dimension and Tickspeed purchases based on your antimatter.
     </span>`
 });

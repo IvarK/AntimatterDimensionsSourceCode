@@ -3,12 +3,15 @@
 Vue.component("autobuyers-tab", {
   data: () => ({
     hasContinuum: false,
-    displayADAutobuyersIndividually: false,
+    displayADAutobuyersInOneRow: false,
   }),
   methods: {
     update() {
       this.hasContinuum = Laitela.continuumActive;
-      this.displayADAutobuyersIndividually = Autobuyer.antimatterDimension(1).hasUnlimitedBulk;
+      const sameIntervalSet = new Set(Autobuyers.antimatterDimensions.map(x => x.interval));
+      const sameInterval = !sameIntervalSet.has(undefined) && sameIntervalSet.size === 1;
+      const sameBulk = Autobuyer.antimatterDimension(1).hasUnlimitedBulk;
+      this.displayADAutobuyersInOneRow = sameInterval && sameBulk;
     }
   },
   template: `
@@ -21,14 +24,9 @@ Vue.component("autobuyers-tab", {
       <galaxy-autobuyer-box />
       <dimboost-autobuyer-box />
       <sacrifice-autobuyer-box />
-      <dimension-autobuyer-box v-if="!displayADAutobuyersIndividually" v-for="tier in 8" :key="tier" :tier="tier" />
+      <dimension-autobuyer-box v-if="!displayADAutobuyersInOneRow" v-for="tier in 8" :key="tier" :tier="tier" />
       <tickspeed-autobuyer-box v-if="!hasContinuum" />
       <simple-autobuyers-multi-box />
-      <template v-if="hasContinuum">
-        Continuum makes Antimatter Dimension and Tickspeed Autobuyers obsolete, as you now automatically have a
-        <br>
-        certain amount of simulated Antimatter Dimension and Tickspeed purchases based on your antimatter.
-      </template>
     </div>`
 });
 

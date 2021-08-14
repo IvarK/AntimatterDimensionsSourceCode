@@ -50,7 +50,7 @@ Vue.component("modal-animation-options", {
   },
   template: `
     <modal-options @close="emitClose" style="width: 50rem">
-      <div>
+      <div class="c-modal-options__button-container">
         <wide-on-off-button v-model="floatingText" text="Floating text:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="bigCrunch" text="Big crunch:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />

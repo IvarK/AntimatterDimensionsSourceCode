@@ -115,11 +115,11 @@ const AutoGlyphProcessor = {
         GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
         break;
       case AUTO_GLYPH_REJECT.REFINE:
-        GlyphSacrificeHandler.refineGlyph(glyph);
+        GlyphSacrificeHandler.attemptRefineGlyph(glyph, true);
         break;
       case AUTO_GLYPH_REJECT.REFINE_TO_CAP:
         if (GlyphSacrificeHandler.glyphRefinementGain(glyph) === 0) GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
-        else GlyphSacrificeHandler.refineGlyph(glyph);
+        else GlyphSacrificeHandler.attemptRefineGlyph(glyph, true);
         break;
       default:
         throw new Error("Unknown auto Glyph Sacrifice mode");

@@ -3,8 +3,6 @@
 Vue.component("game-header", {
   data() {
     return {
-      isInMatterChallenge: false,
-      matter: new Decimal(0),
       isInEffarig: false,
       effarigMultNerfText: "",
       effarigTickNerfText: "",
@@ -17,10 +15,6 @@ Vue.component("game-header", {
   },
   methods: {
     update() {
-      this.isInMatterChallenge = Player.isInMatterChallenge;
-      if (this.isInMatterChallenge) {
-        this.matter.copyFrom(Player.effectiveMatterAmount);
-      }
       this.isInEffarig = Effarig.isRunning;
       if (this.isInEffarig) {
         this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(Currency.infinityPower.value), 0, 5)}`;
@@ -51,7 +45,6 @@ Vue.component("game-header", {
       <div v-if="isInLaitela">
         Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
       </div>
-      <div v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</div>
       <game-header-amounts-line />
       <div>
         <p>

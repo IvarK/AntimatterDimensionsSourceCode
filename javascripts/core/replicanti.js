@@ -15,6 +15,10 @@ function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
     player.achievementChecks.noReplicantiGalaxies = false;
+    if (!EternityMilestone.replicantiNoReset.isReached) {
+      player.dimensionBoosts = 0;
+      softReset(0, true, true);
+    }
   }
 }
 

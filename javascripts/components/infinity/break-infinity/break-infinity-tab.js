@@ -21,7 +21,7 @@ Vue.component("break-infinity-tab", {
         ],
         [
           BreakInfinityUpgrade.infinitiedGen,
-          BreakInfinityUpgrade.bulkDimBoost,
+          BreakInfinityUpgrade.autobuyMaxDimboosts,
           BreakInfinityUpgrade.autobuyerSpeed
         ],
         [

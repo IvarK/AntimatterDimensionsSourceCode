@@ -43,10 +43,14 @@ const AutomatorLexer = (() => {
     label: "End of line",
   });
 
+  const StringLiteral = createToken({
+    name: "StringLiteral",
+    pattern: /".*"/,
+  });
+
   const Comment = createToken({
     name: "Comment",
     pattern: /(#|\/\/)[^\n]*/,
-    group: Lexer.SKIPPED
   });
 
   const NumberLiteral = createToken({
@@ -258,6 +262,7 @@ const AutomatorLexer = (() => {
 
   createKeyword("Auto", /auto/i);
   createKeyword("Buy", /buy/i);
+  createKeyword("Blob", /blob\s\s/i);
   createKeyword("Define", /define/i);
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
@@ -265,6 +270,7 @@ const AutomatorLexer = (() => {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyMax(true),
   });
+  createKeyword("Notify", /notify/i);
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
   createKeyword("On", /on/i);
@@ -272,7 +278,7 @@ const AutomatorLexer = (() => {
   // Presets are a little special, because they can be named anything (like ec12 or wait)
   // So, we consume the label at the same time as we consume the preset. In order to report
   // errors, we also match just the word preset. And, we have to not match comments.
-  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\s#/])*)?/i);
+  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);
@@ -303,6 +309,14 @@ const AutomatorLexer = (() => {
     longer_alt: Identifier,
   });
 
+  // We allow TriadStudy to consume lots of digits because that makes error reporting more
+  // clear (it's nice to say T123 is an invalid triad study)
+  const TriadStudy = createToken({
+    name: "TriadStudy",
+    pattern: /t[1-9][0-9]*/i,
+    longer_alt: Identifier,
+  });
+
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
@@ -311,12 +325,12 @@ const AutomatorLexer = (() => {
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
-    HSpace, Comment, EOL,
+    HSpace, StringLiteral, Comment, EOL,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
     AutomatorCurrency, ...tokenLists.AutomatorCurrency,
-    ECLiteral,
+    ECLiteral, TriadStudy,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,

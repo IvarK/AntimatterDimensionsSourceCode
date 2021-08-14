@@ -50,7 +50,8 @@ class Galaxy {
       amount += Math.pow(galaxies, 2) + galaxies;
     } else if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
-      amount += Math.pow((galaxies) - (galaxyCostScalingStart - 1), 2) + (galaxies) - (galaxyCostScalingStart - 1);
+      const galaxiesBeforeDistant = Math.clampMin(galaxies - galaxyCostScalingStart + 1, 0);
+      amount += Math.pow(galaxiesBeforeDistant, 2) + galaxiesBeforeDistant;
     }
 
     if (type === GALAXY_TYPE.REMOTE) {

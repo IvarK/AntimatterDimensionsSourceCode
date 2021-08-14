@@ -34,11 +34,11 @@ Vue.component("new-dim-boost-row", {
 
       let boostEffects = "";
       if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
-      else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
-      else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+      else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
+      else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
       return this.lockText === null
-        ? `Reset your Dimensions to ${boostEffects}`
+        ? `Reset your Dimensions${boostEffects}`
         : this.lockText;
     },
     boostCountText() {

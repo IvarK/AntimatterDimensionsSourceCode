@@ -147,6 +147,7 @@ GameStorage.migrations = {
       GameStorage.migrations.migratePlayerVars(player);
       GameStorage.migrations.consolidateAuto(player);
       GameStorage.migrations.convertTimeTheoremPurchases(player);
+      GameStorage.migrations.deleteDimboostBulk(player);
 
       kong.migratePurchases();
     }
@@ -832,6 +833,13 @@ GameStorage.migrations = {
 
     delete player.infinitied;
     delete player.infinitiedBank;
+  },
+
+  deleteDimboostBulk(player) {
+    delete player.auto.dimBoost.bulk;
+    if (player.infinityUpgrades.delete("bulkBoost")) {
+      player.infinityUpgrades.add("autobuyMaxDimboosts");
+    }
   },
 
   prePatch(saveData) {

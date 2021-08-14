@@ -999,7 +999,8 @@ GameStorage.devMigrations = {
       player.reality.automator.state.editorScript = selectedID;
 
       delete player.reality.automator.lastID;
-    }
+    },
+    GameStorage.migrations.deleteDimboostBulk,
   ],
 
   patch(player) {

@@ -30,7 +30,7 @@ Vue.component("dimboost-autobuyer-box", {
   template: `
     <autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic Dimension Boosts">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
-      <template v-if="isBuyMaxUnlocked" slot="intervalSlot">
+      <template v-if="isBuyMaxUnlocked" slot="checkboxSlot">
         <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Activates every X seconds:</div>
         <autobuyer-input
           :autobuyer="autobuyer"
@@ -38,7 +38,7 @@ Vue.component("dimboost-autobuyer-box", {
           property="buyMaxInterval"
         />
       </template>
-      <template v-else slot="intervalSlot" style="margin-top: 1.2rem;">
+      <template v-else slot="checkboxSlot" style="margin-top: 1.2rem;">
         <div
           class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
           style="margin-top: 1.2rem;"
@@ -62,7 +62,7 @@ Vue.component("dimboost-autobuyer-box", {
           <input type="checkbox" :checked="limitUntilGalaxies" />
           <span v-if="isBuyMaxUnlocked">
             Only Dimboost to unlock new<br>
-            Dimension until X Galaxies:
+            Dimensions until X Galaxies:
           </span>
           <span v-else>
             Galaxies required to always<br>

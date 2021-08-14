@@ -115,7 +115,7 @@ Vue.component("autobuyer-box", {
       </div>
       <div class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></div>
       <div class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></div>
-      <div class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></div>
+      <div class="c-autobuyer-box-row__checkboxSlot"><slot name="checkboxSlot" /></div>
       <div class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></div>
       <div class="l-autobuyer-box__footer" @click="toggle">
         <label

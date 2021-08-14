@@ -4160,19 +4160,10 @@ screen and (max-width: 480px) {
   background: white;
 }
 
+.c-autobuyer-box-row__intervalSlot,
+.c-autobuyer-box-row__toggleSlot,
+.c-autobuyer-box-row__checkboxSlot,
 .l-autobuyer-box__header {
-  width: 25%;
-}
-
-.c-autobuyer-box-row__intervalSlot {
-  width: 25%;
-}
-
-.c-autobuyer-box-row__toggleSlot {
-  width: 25%;
-}
-
-.c-autobuyer-box-row__prioritySlot {
   width: 25%;
 }
 
@@ -4207,10 +4198,6 @@ screen and (max-width: 480px) {
 
 .l-autobuyer-box__fill {
   flex-grow: 1;
-}
-
-.l-autobuyer-box__priority-selector {
-  margin-bottom: 0.5rem;
 }
 
 /*#endregion autobuyer-box*/

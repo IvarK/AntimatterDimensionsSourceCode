@@ -84,7 +84,7 @@ Vue.component("eternity-autobuyer-box", {
           v-bind="modeProps(mode).input"
         />
       </template>
-      <template slot="prioritySlot" style="margin-top: 1.2rem;">
+      <template slot="checkboxSlot" style="margin-top: 1.2rem;">
         <span>Dynamic amount:</span>
         <div
           class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"

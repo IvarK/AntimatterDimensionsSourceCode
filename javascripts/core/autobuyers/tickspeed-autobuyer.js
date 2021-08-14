@@ -30,14 +30,6 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     return true;
   }
 
-  get priority() {
-    return this.data.priority;
-  }
-
-  set priority(value) {
-    this.data.priority = value;
-  }
-
   get mode() {
     return this.data.mode;
   }

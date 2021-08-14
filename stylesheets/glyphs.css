@@ -521,7 +521,7 @@
   height: 6rem;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  place-content: flex-end;
 }
 
 .l-equipped-glyphs__larger {

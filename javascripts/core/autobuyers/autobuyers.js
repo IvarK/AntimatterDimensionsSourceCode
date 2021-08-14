@@ -25,8 +25,9 @@ const Autobuyers = (function() {
   const other = [
     Autobuyer.replicantiUpgrade.array,
     Autobuyer.dilationUpgrade.array,
-    Autobuyer.realityUpgrade.array,
     Autobuyer.blackHolePower.array,
+    Autobuyer.realityUpgrade.array,
+    Autobuyer.imaginaryUpgrade.array,
   ];
   const all = dimensions.concat(prestige, single, other);
 

@@ -34,9 +34,10 @@ Vue.component("options-saving-tab", {
   },
   data() {
     return {
-      cloudAvailable: false,
       cloudEnabled: false,
-      autosaveInterval: 10
+      autosaveInterval: 10,
+      loggedIn: false,
+      userName: ""
     };
   },
   watch: {
@@ -49,10 +50,12 @@ Vue.component("options-saving-tab", {
   },
   methods: {
     update() {
-      this.cloudAvailable = kong.enabled;
       const options = player.options;
       this.cloudEnabled = options.cloudEnabled;
       this.autosaveInterval = options.autosaveInterval / 1000;
+      this.loggedIn = Cloud.loggedIn;
+      if (!this.loggedIn) return;
+      this.userName = Cloud.user.displayName;
     },
     importAsFile(event) {
       const reader = new FileReader();
@@ -103,7 +106,23 @@ Vue.component("options-saving-tab", {
             oninput="GameOptions.refreshAutosaveInterval()"
           />
         </div>
-        <div class="l-options-grid__row" v-if="cloudAvailable">
+        <div class="l-options-grid__row">
+          <options-button onclick="GameStorage.exportAsFile()">
+            Export save as file
+          </options-button>
+          <options-button class="c-file-import-button">
+            <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
+            <label for="file">Import save from file</label>
+          </options-button>
+        </div>
+        <open-modal-shortcuts />
+      </div>
+      <h2 class="c-cloud-options-header">
+        <span v-if="loggedIn">Logged in as {{ userName }}</span>
+        <span v-else>Not logged in</span>
+      </h2>
+      <div class="l-options-grid">
+        <div class="l-options-grid__row" v-if="loggedIn">
           <options-button
             onclick="GameOptions.cloudSave()"
           >
@@ -121,15 +140,13 @@ Vue.component("options-saving-tab", {
           />
         </div>
         <div class="l-options-grid__row">
-          <options-button onclick="GameStorage.exportAsFile()">
-            Export save as file
+          <options-button onclick="GameOptions.logout()" v-if="loggedIn">
+            Logout
           </options-button>
-          <options-button class="c-file-import-button">
-            <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
-            <label for="file">Import save from file</label>
+          <options-button onclick="GameOptions.login()" v-else>
+            Login to enable Cloud Saving
           </options-button>
         </div>
-        <open-modal-shortcuts />
       </div>
     </div>`
 });

@@ -98,11 +98,16 @@ Vue.component("sacrificed-glyphs", {
       empowerThreshold: 0,
       boostThreshold: 0,
       teresaMult: 0,
-      lastRMTeresa: new Decimal(0),
+      lastMachinesTeresa: new Decimal(0),
     };
   },
   computed: {
     types: () => GLYPH_TYPES.filter(type => type !== "cursed" && type !== "companion"),
+    lastMachines() {
+      return this.lastMachinesTeresa.lt(new Decimal("1e10000"))
+        ? `${format(this.lastMachinesTeresa, 2)} Reality Machines`
+        : `${format(this.lastMachinesTeresa.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
+    }
   },
   methods: {
     update() {
@@ -112,7 +117,7 @@ Vue.component("sacrificed-glyphs", {
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;
       this.boostThreshold = GlyphAlteration.boostingThreshold;
       this.teresaMult = Teresa.runRewardMultiplier;
-      this.lastRMTeresa.copyFrom(player.celestials.teresa.lastRepeatedRM);
+      this.lastMachinesTeresa.copyFrom(player.celestials.teresa.lastRepeatedMachines);
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -121,6 +126,7 @@ Vue.component("sacrificed-glyphs", {
     },
     dragleave(event) {
       if (
+        !event.relatedTarget.classList ||
         event.relatedTarget.classList.contains("c-current-glyph-effects") ||
         event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||
         event.relatedTarget.classList.contains("l-sacrificed-glyphs__type") ||
@@ -136,7 +142,7 @@ Vue.component("sacrificed-glyphs", {
       if (isNaN(id)) return;
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
-      GlyphSacrificeHandler.sacrificeGlyph(glyph);
+      GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
       this.hasDragover = false;
     },
   },
@@ -165,8 +171,7 @@ Vue.component("sacrificed-glyphs", {
       </div>
       <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
       <div v-if="teresaMult > 1">
-        (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at
-        {{ format(lastRMTeresa, 2) }} Reality Machines)
+        (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at {{ lastMachines }})
       </div>
       <div v-if="anySacrifices">
         <template v-for="type in types">

@@ -5,8 +5,9 @@ Vue.component("glyph-set-preview", {
     show: Boolean,
     text: String,
     glyphs: Array,
-    noLevelOverride: Boolean,
+    ignoreModifiedLevel: Boolean,
     flipTooltip: Boolean,
+    isInModal: Boolean,
     showName: {
       type: Boolean,
       default: true,
@@ -23,6 +24,20 @@ Vue.component("glyph-set-preview", {
       type: String,
       default: "(No Glyphs equipped)"
     }
+  },
+  data() {
+    return {
+      realityGlyphBoost: 0,
+    };
+  },
+  methods: {
+    update() {
+      // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
+      const realityGlyph = this.glyphs.filter(g => g.type === "reality")[0];
+      this.realityGlyphBoost = realityGlyph
+        ? GameDatabase.reality.glyphEffects.realityglyphlevel.effect(realityGlyph.level)
+        : 0;
+    },
   },
   template: `
     <div v-if="show">
@@ -44,8 +59,10 @@ Vue.component("glyph-set-preview", {
           :showSacrifice="showSacrifice"
           :draggable="false"
           :circular="true"
-          :noLevelOverride="noLevelOverride"
+          :ignoreModifiedLevel="ignoreModifiedLevel"
+          :realityGlyphBoost="realityGlyphBoost"
           :flipTooltip="flipTooltip"
+          :isInModal="isInModal"
           size="2.8rem"
           :textProportion="0.6"
           glowBlur="0.2rem"

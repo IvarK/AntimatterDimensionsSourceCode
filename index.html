@@ -58,6 +58,11 @@
   <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
 </body>
 
+<!-- Here's some firebase stuff -->
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+
 <script type="text/javascript" src="javascripts/lib/vue.js"></script>
 <script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
@@ -80,6 +85,9 @@
 <script type="text/javascript" src="javascripts/lib/closebrackets.js"></script>
 <script type="text/javascript" src="javascripts/lib/ad-notations.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/svg-pan-zoom.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/pako.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/base64-binary.js"></script>
+
 
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
@@ -114,6 +122,7 @@
 <script type="text/javascript" src="javascripts/core/keyboard.js"></script>
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
 <script type="text/javascript" src="javascripts/core/galaxy.js"></script>
+<script type="text/javascript" src="javascripts/core/away-progress.js"></script>
 
 <script type="text/javascript" src="javascripts/core/autobuyers/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyers/antimatter-dimension-autobuyer.js"></script>
@@ -130,6 +139,7 @@
 <script type="text/javascript" src="javascripts/core/autobuyers/time-theorem-autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyers/black-hole-power-autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyers/reality-upgrade-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/imaginary-upgrade-autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyers/replicanti-upgrade-autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyers/dilation-upgrade-autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyers/prestige-currency-multiplier-autobuyer.js"></script>
@@ -141,6 +151,7 @@
 <script type="text/javascript" src="javascripts/core/storage/storage.js"></script>
 <script type="text/javascript" src="javascripts/core/storage/migrations.js?1"></script>
 <script type="text/javascript" src="javascripts/core/storage/dev-migrations.js"></script>
+<script type="text/javascript" src="javascripts/core/storage/cloud-saving.js"></script>
 
 <script type="text/javascript" src="javascripts/core/notations.js"></script>
 <script type="text/javascript" src="javascripts/core/tutorial.js"></script>
@@ -162,6 +173,7 @@
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/eternity-milestones.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/dilation-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/reality-upgrades.js"></script>
+<script type="text/javascript" src="javascripts/core/secret-formula/reality/imaginary-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/perks.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/automator.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/glyph-sacrifices.js"></script>
@@ -252,6 +264,10 @@
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/singularity-milestone.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/singularity-milestones-modal.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/laitela-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/laitela-autobuyer-pane.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/laitela-center-pane.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/milestone-pane.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela/singularity-pane.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/pelle-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/matter-dimension-row.js"></script>
 
@@ -324,6 +340,8 @@
 <script type="text/javascript" src="javascripts/components/reality/perks-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrades-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrade-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/upgrades/imaginary-upgrades-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/upgrades/imaginary-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyphs-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reset-reality-button.js"></script>
@@ -360,6 +378,7 @@
 <script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-docs.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-docs-main-page.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-man-page.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-error-page.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/automator-blocks.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/automator-block-editor.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/automator-block-tab.js"></script>
@@ -387,10 +406,18 @@
 <script type="text/javascript" src="javascripts/components/modals/modal-eternity.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-hard-reset.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-automator-script-delete.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-automator-script-import.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-set-save-delete.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-reality.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-reset-reality.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-exit-celestial-reality.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-celestials.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-preferred-tree.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-glyph-undo.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-glyph-sacrifice.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-glyph-delete.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-glyph-replace.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-glyph-refine.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-news-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-animation-options.js"></script>
@@ -467,9 +494,11 @@
 <script type="text/javascript" src="javascripts/core/time-theorems.js"></script>
 <script type="text/javascript" src="javascripts/core/timestudies.js"></script>
 <script type="text/javascript" src="javascripts/core/reality-upgrades.js"></script>
+<script type="text/javascript" src="javascripts/core/imaginary-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/perks.js"></script>
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>
 <script type="text/javascript" src="javascripts/core/black_hole.js"></script>
+<script type="text/javascript" src="javascripts/core/machines.js"></script>
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
 <script type="text/javascript" src="javascripts/core/kong.js"></script>
 <script type="text/javascript" src="javascripts/core/playfab.js?10"></script>

@@ -178,8 +178,8 @@ GameDatabase.celestials.v = {
       id: 4,
       STCost: 12,
       requirement: [227, 228, 234],
-      description: "Dimensional Sacrifice applies to all Antimatter Dimensions",
-      effect: () => Sacrifice.totalBoost,
+      description: "Dimensional Sacrifice multiplier is squared",
+      effect: 2,
       unlocked: () => Ra.pets.v.level >= 20
     }
   ]

@@ -17,6 +17,10 @@ const GameStorage = {
     const save = localStorage.getItem(this.localStorageKey);
     const root = GameSaveSerializer.deserialize(save);
 
+    this.loadRoot(root);
+  },
+
+  loadRoot(root) {
     if (root === undefined) {
       this.currentSlot = 0;
       this.loadPlayerObject(Player.defaultStart);

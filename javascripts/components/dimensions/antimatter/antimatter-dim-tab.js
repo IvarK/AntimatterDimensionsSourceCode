@@ -3,6 +3,8 @@
 Vue.component("antimatter-dim-tab", {
   data() {
     return {
+      isInMatterChallenge: false,
+      matter: new Decimal(0),
       hasDimensionBoosts: false,
       isChallengePowerVisible: false,
       challengePower: "",
@@ -15,6 +17,10 @@ Vue.component("antimatter-dim-tab", {
   },
   methods: {
     update() {
+      this.isInMatterChallenge = Player.isInMatterChallenge;
+      if (this.isInMatterChallenge) {
+        this.matter.copyFrom(Player.effectiveMatterAmount);
+      }
       this.hasDimensionBoosts = player.dimensionBoosts > 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
@@ -49,6 +55,7 @@ Vue.component("antimatter-dim-tab", {
     <div class="l-old-ui-antimatter-dim-tab">
       <span>{{ multiplierText }}</span>
       <antimatter-dim-tab-header />
+      <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
       <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
       <div class="l-dimensions-container">
         <antimatter-dim-row

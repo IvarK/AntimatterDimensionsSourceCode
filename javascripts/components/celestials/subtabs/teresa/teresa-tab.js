@@ -12,7 +12,7 @@ Vue.component("teresa-tab", {
       rmMult: 0,
       bestAM: new Decimal(0),
       bestAMSet: [],
-      lastRM: new Decimal(0),
+      lastMachines: new Decimal(0),
       runReward: 0,
       perkPoints: 0,
       hasReality: false,
@@ -51,6 +51,11 @@ Vue.component("teresa-tab", {
     runDescription() {
       return GameDatabase.celestials.descriptions[0].description();
     },
+    lastMachinesString() {
+      return this.lastMachines.lt(new Decimal("1e10000"))
+        ? `${format(this.lastMachines, 2)} Reality Machines`
+        : `${format(this.lastMachines.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
+    }
   },
   methods: {
     update() {
@@ -69,7 +74,7 @@ Vue.component("teresa-tab", {
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
-      this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
+      this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);
       this.runReward = Teresa.runRewardMultiplier;
       this.perkPoints = Currency.perkPoints.value;
       this.rm.copyFrom(Currency.realityMachines);
@@ -102,7 +107,7 @@ Vue.component("teresa-tab", {
             {{ runDescription }}
             <br><br>
             <div v-if="bestAM.gt(0)">
-              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
+              You last did Teresa's Reality at {{ lastMachinesString }}.
               <br><br>
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>

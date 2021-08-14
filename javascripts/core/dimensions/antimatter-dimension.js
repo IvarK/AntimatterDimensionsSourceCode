@@ -10,7 +10,7 @@ function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(Currency.infinityPower.value.pow(getInfinityConversionRate()).max(1));
+    multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -37,7 +37,6 @@ function antimatterDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
-    TriadStudy(4),
     AlchemyResource.dimensionality
   );
 
@@ -50,10 +49,11 @@ function antimatterDimensionCommonMultiplier() {
 
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
+  if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) return new Decimal(0);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
-      getInfinityConversionRate()
+      InfinityDimensions.powerConversionRate
     ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
@@ -569,14 +569,13 @@ class AntimatterDimensionState extends DimensionState {
 
   get productionPerSecond() {
     const tier = this.tier;
-    if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return new Decimal(0);
     let amount = this.totalAmount;
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);
       if (tier === 4) amount = amount.pow(1.4);
       if (tier === 6) amount = amount.pow(1.2);
     }
-    let production = amount.times(this.multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
+    let production = amount.times(this.multiplier).times(Tickspeed.perSecond);
     if (NormalChallenge(2).isRunning) {
       production = production.times(player.chall2Pow);
     }
@@ -634,6 +633,7 @@ const AntimatterDimensions = {
     ).times(getAdjustedGlyphEffect("powerbuy10"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
+    mult = mult.pow(ImaginaryUpgrade(14).effectOrDefault(1));
 
     return mult;
   },

@@ -8,7 +8,7 @@ GameDatabase.reality.automator = {
       keyword: "wait",
       name: "<b>wait</b> - wait for something",
       syntax: "<b>wait</b> condition",
-      description: "Forces automator to wait for some condition or event",
+      description: "Forces Automator to wait for some condition or event",
       sections: [
         {
           name: "CONDITIONS",
@@ -67,22 +67,22 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "infinity / eternity / reality",
       name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
-      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [respec] [nowait]</b>,<br> <b>reality [respec] [nowait]</b>",
+      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [nowait] [respec]</b>,<br> <b>reality [nowait] [respec]</b>",
       sections: [
         {
           name: "MODIFIERS",
           items: [
             {
+              header: "<i>nowait</i>",
+              description: `
+                If it is not possible to prestige, move on to the next command.
+              `
+            },
+            {
               header: "<i>respec</i>",
               description: `
                 Eternity: respec studies and eternity.<br>
                 Reality: unequip glyphs and reality.
-              `
-            },
-            {
-              header: "<i>nowait</i>",
-              description: `
-                If it is not possible to prestige, move on to the next command.
               `
             },
           ]
@@ -164,7 +164,20 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "unlock",
       name: "<b>unlock</b> - can be used to unlock certain features",
-      syntax: "<b>unlock</b> feature",
+      syntax: "<b>unlock [nowait]</b> feature",
+      sections: [
+        {
+          name: "MODIFIERS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If it is not possible to unlock, move on to the next command.
+              `
+            },
+          ]
+        }
+      ],
       examples: [
         "unlock dilation",
         "unlock ec<i>X</i>"
@@ -187,15 +200,15 @@ GameDatabase.reality.automator = {
             {
               header: "<i>number</i> <i>time units</i>",
               description: `Usable with infinity/eternity only.` +
-               `Turn automator on and set it to trigger at the given interval`
+               `Turn Automator on and set it to trigger at the given interval`
             },
             {
               header: "<i>number</i> x current",
-              description: 'Usable with infinity/eternity only. Turn automator on and sets it to "X times current" mode'
+              description: 'Usable with infinity/eternity only. Turn Automator on and sets it to "X times current" mode'
             },
             {
               header: "<i>number currency</i>",
-              description: `Turn automator on and sets it to trigger at a specific amount. The currency must match the
+              description: `Turn Automator on and sets it to trigger at a specific amount. The currency must match the
                             autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality
                             machines" mode`,
             },
@@ -228,7 +241,7 @@ GameDatabase.reality.automator = {
       id: 9,
       isUnlocked: () => true,
       keyword: "pause",
-      name: "<b>pause</b> - pauses the automator for a set amount of time",
+      name: "<b>pause</b> - pauses the Automator for a set amount of time",
       syntax: "<b>pause</b> [interval]",
       examples: [
         "pause 10s",
@@ -331,9 +344,9 @@ GameDatabase.reality.automator = {
       name: "<b>studies</b> - Purchase Time Studies",
       syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
       description: `Purchase Time Studies specified. If <b>nowait</b> is present, then
-        the automator will purchase as many Time Studies as possible at the moment, and move on
+        the Automator will purchase as many Time Studies as possible at the moment, and move on
         to the next command.<br>
-        If <b>nowait</b> is <i>not</i> present, then the automator will buy the studies in order,
+        If <b>nowait</b> is <i>not</i> present, then the Automator will buy the studies in order,
         waiting for them to become available/affordable if necessary.<br>
         The Time Study list can consist of Time Study numbers, separated by spaces or commas, ranges of
         studies (for example, <i>11-62</i>) and the following aliases:<br>
@@ -390,6 +403,21 @@ GameDatabase.reality.automator = {
         `,
         `while ec10 completions >= 1
         <blockquote>commands</blockquote>`
+      ]
+    },
+    {
+      id: 17,
+      isUnlocked: () => true,
+      keyword: "notify",
+      name: "<b>notify</b> - send a progress notification",
+      syntax: "<b>notify</b> \"text\"",
+      description: `Takes the specified text and posts it in the top-right corner as
+        a text notification, in the same spot as other notifications such as auto-save
+        and achievement/upgrade unlocks. Can be useful for seeing automator status while
+        on tabs other than the Automator tab.`,
+      examples: [
+        "notify \"Dilation reached\"",
+        "notify \"ECs completed\""
       ]
     }
   ]

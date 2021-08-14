@@ -55,7 +55,7 @@ Vue.component("new-galaxy-row", {
         case GALAXY_TYPE.REMOTE:
           return "Increased Galaxy cost scaling: " +
             `Quadratic past ${formatInt(this.distantStart)} (distant), ` +
-            `exponential past ${formatInt(REMOTE_SCALING_START)} (remote)`;
+            `exponential past ${formatInt(Galaxy.remoteStart)} (remote)`;
       }
       return undefined;
     },

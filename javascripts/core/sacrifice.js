@@ -2,7 +2,7 @@
 
 class Sacrifice {
   // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
-  // sacrifice for the first time. It has the side-effect of hiding it in really early reality, which is probably fine.
+  // sacrifice for the first time.
   static get isVisible() {
     return Achievement(18).isUnlocked || PlayerProgress.realityUnlocked();
   }
@@ -44,23 +44,26 @@ class Sacrifice {
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
 
+  // The code path for calculating the sacrifice exponent is pretty convoluted, but needs to be structured this way
+  // in order to mostly replicate old pre-Reality behavior. There are two key things to note in how sacrifice behaves
+  // which are not immediately apparent here; IC2 changes the formula by getting rid of a log10 (and therefore makes
+  // sacrifice significantly stronger despite the much smaller exponent) and pre-Reality behavior assumed that the
+  // player would already have ach32/57 by the time they complete IC2. As Reality resets achievements, we had to
+  // assume that all things boosting sacrifice can be gotten independently, which resulted in some odd effect stacking.
   static get sacrificeExponent() {
-    let factor;
-    if (NormalChallenge(8).isRunning) {
-      factor = 1;
-    } else if (InfinityChallenge(2).isCompleted) {
-      factor = 1 / 120;
-    } else {
-      factor = 2;
-    }
+    let base;
+    // C8 seems weaker, but it actually follows its own formula which ends up being stronger based on how it stacks
+    if (NormalChallenge(8).isRunning) base = 1;
+    // Pre-Reality this was 100; having ach32/57 results in 1.2x, which is brought back in line by changing to 120
+    else if (InfinityChallenge(2).isCompleted) base = 1 / 120;
+    else base = 2;
 
-    return (1 + Effects.sum(
-      Achievement(32),
-      Achievement(57)
-    )) * (1 + Effects.sum(
-      Achievement(88),
-      TimeStudy(228)
-    )) * factor;
+    // All the factors which go into the multiplier have to combine this way in order to replicate legacy behavior
+    const preIC2 = 1 + Effects.sum(Achievement(32), Achievement(57));
+    const postIC2 = 1 + Effects.sum(Achievement(88), TimeStudy(228));
+    const triad = TriadStudy(4).effectOrDefault(1);
+
+    return base * preIC2 * postIC2 * triad;
   }
 
   static get nextBoost() {

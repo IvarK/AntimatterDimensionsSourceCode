@@ -69,11 +69,18 @@ Modal.awayProgressOptions = new Modal("modal-away-progress-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
+Modal.importScript = new Modal("modal-automator-script-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.editTree = new Modal("modal-edit-tree");
 Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
+Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
+Modal.glyphUndo = new Modal("modal-glyph-undo");
+Modal.glyphReplace = new Modal("modal-glyph-replace");
+Modal.glyphSacrifice = new Modal("modal-glyph-sacrifice");
+Modal.glyphDelete = new Modal("modal-glyph-delete");
+Modal.glyphRefine = new Modal("modal-glyph-refine");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
@@ -88,6 +95,7 @@ Modal.breakInfinity = new Modal("modal-break-infinity");
 Modal.eternity = new Modal("modal-eternity");
 Modal.reality = new Modal("modal-reality");
 Modal.resetReality = new Modal("modal-reset-reality");
+Modal.exitCelestialReality = new Modal("modal-exit-celestial-reality");
 Modal.celestials = new Modal("modal-celestials");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
@@ -121,10 +129,12 @@ Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLast
   });
 
   function getSaveInfo(save) {
-    return {
-      infinities: save ? save.infinitied : 0,
-      eternities: save ? save.eternities : 0
-    };
+    const prestiges = { infinities: new Decimal(0), eternities: new Decimal(0), realities: 0 };
+    prestiges.infinities.copyFrom(new Decimal(save.infinities));
+    prestiges.eternities.copyFrom(new Decimal(save.eternities));
+    prestiges.realities = save.realities;
+
+    return prestiges;
   }
 };
 

@@ -13,8 +13,12 @@ GameDatabase.reality.upgrades = (function() {
       props.initialCost * props.costMult
     );
     const { effect } = props;
-    props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id] *
+    props.effect = () => Math.pow(effect + ImaginaryUpgrade(props.id).effectValue, player.reality.rebuyables[props.id] *
       getAdjustedGlyphEffect("realityrow1pow"));
+    props.description = () => props.textTemplate.replace("{value}",
+      ImaginaryUpgrade(props.id).effectValue === 0
+        ? formatInt(effect)
+        : format(effect + ImaginaryUpgrade(props.id).effectValue, 2, 2));
     props.formatEffect = value => formatX(value, 2, 0);
     props.formatCost = value => format(value, 2, 0);
     return props;
@@ -25,7 +29,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 1,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Dilated Time ${formatInt(3)} times faster`,
+      textTemplate: "You gain Dilated Time {value} times faster",
       effect: 3
     }),
     rebuyable({
@@ -33,7 +37,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 2,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Replicanti ${formatInt(3)} times faster`,
+      textTemplate: "You gain Replicanti {value} times faster",
       effect: 3
     }),
     rebuyable({
@@ -41,7 +45,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 3,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${formatInt(3)} times more Eternities`,
+      textTemplate: "You gain {value} times more Eternities",
       effect: 3
     }),
     rebuyable({
@@ -49,7 +53,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 4,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${formatInt(3)} times more Tachyon Particles`,
+      textTemplate: "You gain {value} times more Tachyon Particles",
       effect: 3
     }),
     rebuyable({
@@ -57,7 +61,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 5,
       initialCost: 3,
       costMult: 50,
-      description: () => `You gain ${formatInt(5)} times more Infinities`,
+      textTemplate: "You gain {value} times more Infinities",
       effect: 5
     }),
     {
@@ -274,7 +278,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () =>
         Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Remote Antimatter Galaxy scaling is removed"
+      description: () => `Remote Antimatter Galaxy scaling is moved to ${formatInt(1e5)} galaxies`,
+      effect: 1e5
     },
     {
       name: "Temporal Transcendence",
@@ -306,7 +311,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 100000,
       requirement: () => `Reality for ${formatInt(5000)} Reality Machines without Glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
-      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
+      checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another Glyph slot",
       effect: () => 1
@@ -318,7 +323,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Reach ${format("1e11111")} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
       checkRequirement: () => Currency.eternityPoints.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Unlock the Reality autobuyer and automator command"
+      description: "Unlock the Reality autobuyer and Automator command"
     },
   ];
 }());

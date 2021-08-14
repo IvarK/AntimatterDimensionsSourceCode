@@ -196,7 +196,7 @@ const V = {
     if (!BlackHoles.areNegative) {
       player.minNegativeBlackHoleThisReality = 1;
     }
-    Glyphs.updateGlyphCountForV(true);
+    Glyphs.updateMaxGlyphCount(true);
   },
   updateTotalRunUnlocks() {
     let sum = 0;

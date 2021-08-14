@@ -11,7 +11,6 @@ Vue.component("autobuyer-box", {
           interval: 0,
           hasMaxedInterval: false,
           bulk: 0,
-          bulkUnlocked: false,
           bulkUnlimited: false,
         };
       },
@@ -27,16 +26,13 @@ Vue.component("autobuyer-box", {
           this.interval = this.autobuyer.interval;
           this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
           this.bulk = this.autobuyer.bulk;
-          // If it's undefined, the autobuyer isn't the dimboost autobuyer
-          // and we don't have to worry about bulk being unlocked.
-          this.bulkUnlocked = this.autobuyer.isBulkBuyUnlocked !== false;
           this.bulkUnlimited = this.autobuyer.hasUnlimitedBulk;
         }
       },
       template: `
         <div class="c-autobuyer-box__small-text">
           Current interval: {{ intervalDisplay }} seconds
-          <span v-if="hasMaxedInterval && bulkUnlocked && bulk">
+          <span v-if="hasMaxedInterval && bulk">
             <br>Current bulk: {{ bulkUnlimited ? "Unlimited" : formatX(bulk, 2) }}
           </span>
         </div>`

@@ -81,10 +81,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
           every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
-    bulkDimBoost: {
-      id: "bulkBoost",
+    autobuyMaxDimboosts: {
+      id: "autobuyMaxDimboosts",
       cost: 5e9,
-      description: "Option to bulk buy Dimension Boosts"
+      description: "Unlock the buy max Dimension Boost Autobuyer mode"
     },
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",

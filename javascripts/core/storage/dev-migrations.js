@@ -1000,6 +1000,7 @@ GameStorage.devMigrations = {
 
       delete player.reality.automator.lastID;
     },
+    GameStorage.migrations.deleteDimboostBulk,
     GameStorage.migrations.removePriority,
   ],
 

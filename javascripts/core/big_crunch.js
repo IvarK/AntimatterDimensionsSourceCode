@@ -391,7 +391,7 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   BreakInfinityUpgrade.slowestChallengeMult = upgrade(db.slowestChallengeMult);
 
   BreakInfinityUpgrade.infinitiedGen = upgrade(db.infinitiedGen);
-  BreakInfinityUpgrade.bulkDimBoost = upgrade(db.bulkDimBoost);
+  BreakInfinityUpgrade.autobuyMaxDimboosts = upgrade(db.autobuyMaxDimboosts);
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 }());
 

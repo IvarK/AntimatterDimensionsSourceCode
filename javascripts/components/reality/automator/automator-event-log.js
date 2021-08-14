@@ -11,38 +11,44 @@ const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
 Vue.component("automator-event-log", {
   data() {
     return {
-      events: [],
+      unsortedEvents: [],
       newestFirst: false,
       timestampMode: 0,
       currentTime: 0,
     };
   },
-  methods: {
-    update() {
+  computed: {
+    events() {
       // eslint-disable-next-line no-nested-ternary
-      const sorted = AutomatorData.eventLog.sort((a, b) => (a.timestamp === b.timestamp
+      const sorted = this.unsortedEvents.sort((a, b) => (a.timestamp === b.timestamp
         ? (a.thisReality === b.thisReality
           ? a.line - b.line
           : a.thisReality - b.thisReality)
         : a.timestamp - b.timestamp));
-      this.events = this.newestFirst ? sorted.reverse() : sorted;
+      return this.newestFirst ? sorted.reverse() : sorted;
+    }
+  },
+  methods: {
+    update() {
+      this.unsortedEvents = AutomatorData.eventLog;
       this.currentTime = Date.now();
     },
     clearLog() {
       AutomatorData.clearEventLog();
+      this.update();
     },
     sortStyle(selected) {
       return {
         "color": selected ? "green" : ""
       };
     },
-    timestampStyle(selected) {
+    timestampStyle(key) {
       return {
-        "color": this.timestampMode === selected ? "green" : ""
+        "color": this.timestampMode === AUTOMATOR_EVENT_TIMESTAMP_MODE[key] ? "green" : ""
       };
     },
-    timestampModeConst(key) {
-      return AUTOMATOR_EVENT_TIMESTAMP_MODE[key];
+    setTimestampMode(key) {
+      this.timestampMode = AUTOMATOR_EVENT_TIMESTAMP_MODE[key];
     },
     timestamp(entry) {
       switch (this.timestampMode) {
@@ -88,39 +94,39 @@ Vue.component("automator-event-log", {
       <div>
         <b>Timestamp style:</b>
         <button
-          :style="timestampStyle(timestampModeConst('DISABLED'))"
+          :style="timestampStyle('DISABLED')"
           class="fas fa-ban"
-          @click="timestampMode = timestampModeConst('DISABLED')"
+          @click="setTimestampMode('DISABLED')"
           v-tooltip="'No timestamps'"
         />
         <button
-          :style="timestampStyle(timestampModeConst('THIS_REALITY'))"
+          :style="timestampStyle('THIS_REALITY')"
           class="fas fa-stopwatch"
-          @click="timestampMode = timestampModeConst('THIS_REALITY')"
+          @click="setTimestampMode('THIS_REALITY')"
           v-tooltip="'Current time this Reality'"
         />
         <button
-          :style="timestampStyle(timestampModeConst('RELATIVE_NOW'))"
+          :style="timestampStyle('RELATIVE_NOW')"
           class="fas fa-clock"
-          @click="timestampMode = timestampModeConst('RELATIVE_NOW')"
+          @click="setTimestampMode('RELATIVE_NOW')"
           v-tooltip="'Time elapsed since event'"
         />
         <button
-          :style="timestampStyle(timestampModeConst('RELATIVE_PREV'))"
+          :style="timestampStyle('RELATIVE_PREV')"
           class="fas fa-arrow-left"
-          @click="timestampMode = timestampModeConst('RELATIVE_PREV')"
+          @click="setTimestampMode('RELATIVE_PREV')"
           v-tooltip="'Time elapsed since event'"
         />
         <button
-          :style="timestampStyle(timestampModeConst('DATE_TIME'))"
+          :style="timestampStyle('DATE_TIME')"
           class="fas fa-user-clock"
-          @click="timestampMode = timestampModeConst('DATE_TIME')"
+          @click="setTimestampMode('DATE_TIME')"
           v-tooltip="'Date and time'"
         />
       </div>
       <span
-        v-for="event in events"
-        :key="timestamp(event) + timestampMode + event.line"
+        v-for="(event, id) in events"
+        :key="id"
       >
         <b>Line {{ event.line }}{{ timestamp(event) }}:</b>
         <div class="c-automator-docs-page__indented">

@@ -94,8 +94,9 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
 
     const limitCondition = !this.limitDimBoosts || DimBoost.purchasedBoosts < this.maxDimBoosts;
     const galaxyCondition = this.limitUntilGalaxies && player.galaxies >= this.galaxies;
-    if (!limitCondition && !galaxyCondition) return;
-    softReset(1);
-    super.tick();
+    if (limitCondition || galaxyCondition) {
+      softReset(1);
+      super.tick();
+    }
   }
 }();

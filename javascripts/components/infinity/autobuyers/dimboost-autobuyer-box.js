@@ -21,9 +21,10 @@ Vue.component("dimboost-autobuyer-box", {
   },
   methods: {
     update() {
-      this.isBuyMaxUnlocked = this.autobuyer.isBuyMaxUnlocked;
-      this.limitDimBoosts = this.autobuyer.limitDimBoosts;
-      this.limitUntilGalaxies = this.autobuyer.limitUntilGalaxies;
+      const autobuyer = this.autobuyer;
+      this.isBuyMaxUnlocked = autobuyer.isBuyMaxUnlocked;
+      this.limitDimBoosts = autobuyer.limitDimBoosts;
+      this.limitUntilGalaxies = autobuyer.limitUntilGalaxies;
     }
   },
   template: `
@@ -61,7 +62,7 @@ Vue.component("dimboost-autobuyer-box", {
           <input type="checkbox" :checked="limitUntilGalaxies" />
           <span v-if="isBuyMaxUnlocked">
             Only Dimboost to unlock new<br>
-            Dimension until X Galaxies:  
+            Dimension until X Galaxies:
           </span>
           <span v-else>
             Galaxies required to always<br>

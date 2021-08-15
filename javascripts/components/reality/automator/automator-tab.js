@@ -36,6 +36,9 @@ Vue.component("automator-tab", {
     <div :class="tabClass" class="c-automator-tab l-automator-tab" >
       <div v-if="automatorUnlocked">
         <div class="c-automator-tab__interval-info">{{ intervalText }}</div>
+        At higher speeds, certain commands may take too long to execute while still maintaining this speed,
+        <br>
+        in which case the next command will be immediately processed after the slower command is run.
         <split-pane
           :min-percent="40"
           :default-percent="50"

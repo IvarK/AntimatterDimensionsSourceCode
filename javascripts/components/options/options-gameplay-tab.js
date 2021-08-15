@@ -18,7 +18,9 @@ Vue.component("options-gameplay-tab", {
       offlineTicks: 0,
       automaticTabSwitching: false,
       infinityUnlocked: false,
-      sacrificeUnlocked: false
+      sacrificeUnlocked: false,
+      automatorUnlocked: false,
+      automatorLogSize: 0,
     };
   },
   watch: {
@@ -37,6 +39,9 @@ Vue.component("options-gameplay-tab", {
     automaticTabSwitching(newValue) {
       player.options.automaticTabSwitching = newValue;
     },
+    automatorLogSize(newValue) {
+      player.options.automatorEvents.maxEntries = parseInt(newValue, 10);
+    },
   },
   methods: {
     update() {
@@ -48,6 +53,8 @@ Vue.component("options-gameplay-tab", {
       this.automaticTabSwitching = options.automaticTabSwitching;
       this.infinityUnlocked = PlayerProgress.current.isInfinityUnlocked;
       this.sacrificeUnlocked = Sacrifice.isVisible;
+      this.automatorUnlocked = Player.automatorUnlocked;
+      this.automatorLogSize = options.automatorEvents.maxEntries;
     }
   },
   template: `
@@ -102,6 +109,22 @@ Vue.component("options-gameplay-tab", {
             style="font-size: 12px;"
             text="Switch tabs on some events (e.g. entering challenges):"
           />
+        </div>
+        <div class="l-options-grid__row">
+          <div
+            v-if="automatorUnlocked"
+            class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"
+          >
+            <b>Automator Log Max: {{ formatInt(parseInt(automatorLogSize)) }}</b>
+            <input
+              v-model="automatorLogSize"
+              class="o-primary-btn--slider__slider"
+              type="range"
+              min="50"
+              step="50"
+              max="500"
+            />
+          </div>
         </div>
         <open-modal-shortcuts />
       </div>

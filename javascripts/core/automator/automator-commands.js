@@ -730,7 +730,7 @@ const AutomatorCommands = ((() => {
         return () => {
           const boughtTT = buyFunction();
           if (boughtTT) {
-            AutomatorData.logCommandEvent(`${formatInt(boughtTT)} TT purchased with ${ctx.TTCurrency.image}`,
+            AutomatorData.logCommandEvent(`${formatInt(boughtTT)} TT purchased with ${ctx.TTCurrency[0].image}`,
               ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }

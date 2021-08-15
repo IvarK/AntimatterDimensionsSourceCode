@@ -15,7 +15,20 @@ Vue.component("automator-event-log", {
       newestFirst: false,
       timestampMode: 0,
       currentTime: 0,
+      maxEntries: 0,
+      clearOnReality: false,
     };
+  },
+  watch: {
+    newestFirst(newValue) {
+      player.options.automatorEvents.newestFirst = newValue;
+    },
+    timestampMode(newValue) {
+      player.options.automatorEvents.timestampType = newValue;
+    },
+    clearOnReality(newValue) {
+      player.options.automatorEvents.clearOnReality = newValue;
+    }
   },
   computed: {
     events() {
@@ -26,12 +39,19 @@ Vue.component("automator-event-log", {
           : a.thisReality - b.thisReality)
         : a.timestamp - b.timestamp));
       return this.newestFirst ? sorted.reverse() : sorted;
+    },
+    clearTooltip() {
+      return `Clear all entries (Max. ${this.maxEntries})`;
     }
   },
   methods: {
     update() {
       this.unsortedEvents = AutomatorData.eventLog;
+      this.newestFirst = player.options.automatorEvents.newestFirst;
+      this.timestampMode = player.options.automatorEvents.timestampType;
       this.currentTime = Date.now();
+      this.maxEntries = player.options.automatorEvents.maxEntries;
+      this.clearOnReality = player.options.automatorEvents.clearOnReality;
     },
     clearLog() {
       AutomatorData.clearEventLog();
@@ -47,6 +67,11 @@ Vue.component("automator-event-log", {
         "color": this.timestampMode === AUTOMATOR_EVENT_TIMESTAMP_MODE[key] ? "green" : ""
       };
     },
+    autoclearStyle() {
+      return {
+        "color": this.clearOnReality ? "green" : ""
+      };
+    },
     setTimestampMode(key) {
       this.timestampMode = AUTOMATOR_EVENT_TIMESTAMP_MODE[key];
     },
@@ -55,7 +80,7 @@ Vue.component("automator-event-log", {
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.DISABLED:
           return "";
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.THIS_REALITY:
-          return `, ${TimeSpan.fromSeconds(entry.thisReality).toStringShort()} in this Reality`;
+          return `, ${TimeSpan.fromSeconds(entry.thisReality).toStringShort()} (real-time) in Reality`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE_NOW:
           return `, ${TimeSpan.fromMilliseconds(this.currentTime - entry.timestamp).toStringShort()} ago`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE_PREV:
@@ -72,6 +97,8 @@ Vue.component("automator-event-log", {
   template: `
     <div class="c-automator-docs-page">
       <div>
+        <i>Note: These are not saved and disappear on refresh</i>
+        <br>
         <b>Entry Sorting:</b>
         <button
           :style="sortStyle(!newestFirst)"
@@ -88,7 +115,13 @@ Vue.component("automator-event-log", {
         <button
           class="fas fa-trash"
           @click="clearLog()"
-          v-tooltip="'Clear all entries'"
+          v-tooltip="clearTooltip"
+        />
+        <button
+          :style="autoclearStyle()"
+          class="fas fa-eraser"
+          @click="clearOnReality = !clearOnReality"
+          v-tooltip="'Clear event log every Reality'"
         />
       </div>
       <div>
@@ -115,7 +148,7 @@ Vue.component("automator-event-log", {
           :style="timestampStyle('RELATIVE_PREV')"
           class="fas fa-arrow-left"
           @click="setTimestampMode('RELATIVE_PREV')"
-          v-tooltip="'Time elapsed since event'"
+          v-tooltip="'Time since last event'"
         />
         <button
           :style="timestampStyle('DATE_TIME')"

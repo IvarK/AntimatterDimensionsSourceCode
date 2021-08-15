@@ -203,6 +203,8 @@ const AutomatorData = {
       timegap: currTime - this.lastEvent
     });
     this.lastEvent = currTime;
+    // Remove the oldest entry if the log is too large
+    if (this.eventLog.length > player.options.automatorEvents.maxEntries) this.eventLog.shift();
   },
   clearEventLog() {
     this.eventLog = [];

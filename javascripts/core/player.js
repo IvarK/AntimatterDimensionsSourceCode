@@ -674,6 +674,12 @@ let player = {
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 10),
     fixedPerkStartingPos: false,
+    automatorEvents: {
+      newestFirst: false,
+      timestampType: 0,
+      maxEntries: 200,
+      clearOnReality: true,
+    }
   },
   IAP: {
     totalSTD: 0,

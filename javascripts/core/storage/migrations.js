@@ -763,10 +763,13 @@ GameStorage.migrations = {
       player.records.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1]);
     }
     player.records.thisInfinity.time = player.thisInfinityTime;
+    player.records.thisInfinity.realTime = player.thisInfinityTime;
     player.records.bestInfinity.time = player.bestInfinityTime;
     player.records.thisEternity.time = player.thisEternity;
+    player.records.thisEternity.realTime = player.thisEternity;
     player.records.bestEternity.time = player.bestEternity;
     player.records.thisReality.time = player.thisReality;
+    player.records.thisReality.realTime = player.thisReality;
   },
 
   deleteOldRecords(player) {

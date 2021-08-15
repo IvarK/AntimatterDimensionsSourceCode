@@ -1318,6 +1318,10 @@ screen and (max-width: 480px) {
   width: 20rem;
   height: 5.5rem;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
 }
 
 .o-primary-btn--option-wide {

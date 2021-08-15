@@ -722,7 +722,7 @@ The minimum level is ${formatInt(1)}.
 <br>
 You get exactly ${formatInt(1)} Perk Point per Reality.
 `,
-      isUnlocked: () => PlayerProgress.realityUnlocked(),
+      isUnlocked: () => PlayerProgress.realityUnlocked() || player.dilation.studies.length >= 6,
       tags: ["rm", "machines", "glyph", "perk", "reset", "prestige", "endgame", "lategame"],
       tab: "reality/upgrades"
     }, {
@@ -761,7 +761,7 @@ asking if you are sure you want to delete the Glyph. Holding shift and ctrl toge
 dialog. <b>However, deleting Glyphs will give you no benefit beyond clearing up inventory space if you do so before
 unlocking Glyph Sacrifice from a Reality upgrade!</b>
 `,
-      isUnlocked: () => PlayerProgress.realityUnlocked(),
+      isUnlocked: () => PlayerProgress.realityUnlocked() || player.dilation.studies.length >= 6,
       tags: ["reality", "sacrifice", "level", "endgame", "lategame"],
       tab: "reality/glyphs"
     }, {
@@ -772,10 +772,11 @@ improvements which you can choose your own path through. All Perks only require 
 <br>
 <br>
 Each Reality you gain ${formatInt(1)} Perk Point which can be spent on a upgrade on the tree, starting with
-"You can now choose from ${formatInt(3)} glyphs on Reality". You can only unlock Perks which are directly adjacent
+"You can now choose from ${formatInt(Perk.firstPerk.config.effect)} glyphs on Reality". You can only unlock Perks 
+which are directly adjacent
 to Perks you already have, although there are loops in the tree which you can go through in either direction.
 `,
-      isUnlocked: () => PlayerProgress.realityUnlocked(),
+      isUnlocked: () => PlayerProgress.realityUnlocked() || player.dilation.studies.length >= 6,
       tags: ["pp", "reality", "tree", "endgame", "lategame"],
       tab: "reality/perks"
     }, {

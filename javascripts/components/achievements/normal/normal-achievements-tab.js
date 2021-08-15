@@ -41,6 +41,7 @@ Vue.component("normal-achievements-tab", {
       achievementPower: 0,
       achTPeffect: 0,
       achCountdown: 0,
+      missingAchievements: 0,
       showAutoAchieve: false,
       isAutoAchieveActive: false,
       hideCompletedRows: false,
@@ -67,7 +68,8 @@ Vue.component("normal-achievements-tab", {
     update() {
       this.achievementPower = Achievements.power;
       this.achTPeffect = RealityUpgrade(8).config.effect();
-      this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
+      this.achCountdown = Achievements.timeToNextAutoAchieve / getGameSpeedupFactor();
+      this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
       this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.hideCompletedRows = player.options.hideCompletedAchievementRows;
@@ -124,7 +126,12 @@ Vue.component("normal-achievements-tab", {
         </div>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Automatically gain the next missing Achievement in {{ timeDisplayNoDecimals(achCountdown) }}.
+        Automatically gain the next missing Achievement in
+        {{ timeDisplayNoDecimals(achCountdown) }}<span v-if="!isAutoAchieveActive"> once Auto is turned on</span>.
+        (left-to-right, top-to-bottom)
+      </div>
+      <div v-else-if="achCountdown === 0 && missingAchievements !== 0" class="c-achievements-tab__header">
+        Automatically gain the next missing Achievement as soon as you enable Auto Achievements.
         (left-to-right, top-to-bottom)
       </div>
       <div class="l-achievement-grid">

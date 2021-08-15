@@ -110,7 +110,7 @@ const Achievements = {
   autoAchieveUpdate(diff) {
     if (!PlayerProgress.realityUnlocked()) return;
     if (!player.reality.autoAchieve) {
-      player.reality.achTimer += diff;
+      player.reality.achTimer = Math.clampMax(player.reality.achTimer + diff, this.period);
       return;
     }
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
@@ -136,12 +136,7 @@ const Achievements = {
     if (!PlayerProgress.realityUnlocked()) return 0;
     if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
-    return (this.availableAutoAchieves + 1) * this.period - player.reality.achTimer;
-  },
-
-  get availableAutoAchieves() {
-    const allRemaining = Achievements.preReality.countWhere(a => !a.isUnlocked);
-    return Math.clampMax(Math.floor(player.reality.achTimer / this.period), allRemaining);
+    return this.period - player.reality.achTimer;
   },
 
   _power: new Lazy(() => {

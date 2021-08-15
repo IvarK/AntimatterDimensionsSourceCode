@@ -318,7 +318,6 @@ GameDatabase.tabs = [
         name: "Perks",
         symbol: "<i class='fas fa-project-diagram'></i>",
         component: "perks-tab",
-        condition: () => PlayerProgress.realityUnlocked(),
         id: 3,
         hidable: true,
       },

@@ -15,7 +15,7 @@ function playerInfinityUpgradesOnReset() {
         "resetBoost", "galaxyBoost", "skipResetGalaxy",
         "totalMult", "currentMult", "postGalaxy",
         "challengeMult", "achievementMult", "infinitiedMult",
-        "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
+        "infinitiedGeneration", "autoBuyerUpgrade", "autobuyMaxDimboosts",
         "ipOffline"]
     );
     player.infinityRebuyables = [8, 7, 10];

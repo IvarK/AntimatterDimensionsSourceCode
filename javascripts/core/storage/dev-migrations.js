@@ -1002,6 +1002,9 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.deleteDimboostBulk,
     GameStorage.migrations.removePriority,
+    player => {
+      player.reality.realityMachines = player.reality.realityMachines.floor();
+    }
   ],
 
   patch(player) {

@@ -135,7 +135,7 @@ const shortcuts = [
     },
     visible: () => true
   }, {
-    name: "Open \"How to Play\" pop-up",
+    name: "Open the shortcut list",
     keys: ["?"],
     type: "bindHotkey",
     function: () => keyboardPressQuentionMark(),

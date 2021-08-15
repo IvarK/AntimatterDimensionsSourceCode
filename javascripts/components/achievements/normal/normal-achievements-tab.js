@@ -126,7 +126,8 @@ Vue.component("normal-achievements-tab", {
         </div>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Automatically gain the next missing Achievement in {{ timeDisplayNoDecimals(achCountdown) }}.
+        Automatically gain the next missing Achievement in
+        {{ timeDisplayNoDecimals(achCountdown) }}<span v-if="!isAutoAchieveActive"> once Auto is turned on</span>.
         (left-to-right, top-to-bottom)
       </div>
       <div v-else-if="achCountdown === 0 && missingAchievements !== 0" class="c-achievements-tab__header">

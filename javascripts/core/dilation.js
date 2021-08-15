@@ -22,8 +22,7 @@ function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
   const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
   if (player.dilation.active) {
-    GameUI.notify.error("its being worked on sorry", 100000);
-    GameUI.notify.error("TODO: Exiting Dilation Modal NYI", 100000);
+    // TODO Dilation modal
     if (playAnimation) {
       animateAndUndilate();
     } else {

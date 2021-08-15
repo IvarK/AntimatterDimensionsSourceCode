@@ -132,7 +132,13 @@ const shortcuts = [
     function: () => {
       GameStorage.export();
       return false;
-      },
+    },
+    visible: () => true
+  }, {
+    name: "Open \"How to Play\" pop-up",
+    keys: ["?"],
+    type: "bindHotkey",
+    function: () => keyboardPressQuentionMark(),
     visible: () => true
   }, {
     name: "Open \"How to Play\" pop-up",

@@ -150,10 +150,6 @@ const GameStorage = {
       guardFromNaNValues(player);
     }
 
-    if (Currency.infinities.gt(0) && !NormalChallenge(1).isCompleted) {
-      NormalChallenge(1).complete();
-    }
-
     ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;

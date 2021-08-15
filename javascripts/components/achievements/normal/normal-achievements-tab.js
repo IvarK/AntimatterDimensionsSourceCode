@@ -1,6 +1,41 @@
 "use strict";
 
 Vue.component("normal-achievements-tab", {
+  components: {
+    "swap-images-button": {
+      data() {
+        return {
+          canSwapImages: false,
+          isCancerImages: false,
+        };
+      },
+      computed: {
+        swapImagesButton() {
+          return this.isCancerImages ? "😂" : ":";
+        },
+        imageSwapperStyleObject() {
+          if (this.canSwapImages) {
+            return { "cursor": "pointer" };
+          }
+          return {};
+        }
+      },
+      methods: {
+        update() {
+          const isCancerTheme = Theme.current().name === "S4";
+          this.canSwapImages = Themes.find("S4").isAvailable() && !isCancerTheme;
+          this.isCancerImages = player.secretUnlocks.cancerAchievements || isCancerTheme;
+        },
+        swapImages() {
+          if (this.canSwapImages) {
+            player.secretUnlocks.cancerAchievements = !player.secretUnlocks.cancerAchievements;
+          }
+        }
+      },
+      template: `
+        <span @click="swapImages" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>`
+    }
+  },
   data() {
     return {
       achievementPower: 0,
@@ -9,14 +44,12 @@ Vue.component("normal-achievements-tab", {
       showAutoAchieve: false,
       isAutoAchieveActive: false,
       hideCompletedRows: false,
-      isCancer: 0,
       achMultBreak: false,
       achMultToIDS: false,
       achMultToTDS: false,
       achMultToBH: false,
       achMultToTP: false,
       achMultToTT: false,
-      canSwapImages: false
     };
   },
   watch: {
@@ -29,15 +62,6 @@ Vue.component("normal-achievements-tab", {
   },
   computed: {
     rows: () => Achievements.allRows,
-    swapImagesButton() {
-      return Theme.current().name === "S4" || this.isCancer ? "😂" : ":";
-    },
-    imageSwapperStyleObject() {
-      if (this.canSwapImages) {
-        return { "cursor": "pointer" };
-      }
-      return {};
-    }
   },
   methods: {
     update() {
@@ -47,14 +71,12 @@ Vue.component("normal-achievements-tab", {
       this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.hideCompletedRows = player.options.hideCompletedAchievementRows;
-      this.isCancer = player.secretUnlocks.cancerAchievements;
       this.achMultBreak = BreakInfinityUpgrade.achievementMult.canBeApplied;
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
       this.achMultToTP = RealityUpgrade(8).isBought;
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
       this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
-      this.canSwapImages = Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4";
     },
     timeDisplay(value) {
       return timeDisplay(value);
@@ -62,11 +84,6 @@ Vue.component("normal-achievements-tab", {
     timeDisplayNoDecimals(value) {
       return timeDisplayNoDecimals(value);
     },
-    swapImages() {
-      if (this.canSwapImages) {
-        player.secretUnlocks.cancerAchievements = !player.secretUnlocks.cancerAchievements;
-      }
-    }
   },
   template: `
     <div class="l-achievements-tab">
@@ -84,10 +101,7 @@ Vue.component("normal-achievements-tab", {
         />
       </div>
       <div class="c-achievements-tab__header">
-        Your Achievements provide a multiplier to
-        <span @click="swapImages()" :style="imageSwapperStyleObject">
-          {{ swapImagesButton }}
-        </span>
+        Your Achievements provide a multiplier to<swap-images-button />
         <div>
           <span>
             Antimatter<span v-if="achMultToTDS && achMultToIDS">, Infinity, and Time</span>

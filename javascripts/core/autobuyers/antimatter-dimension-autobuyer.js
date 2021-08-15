@@ -7,7 +7,11 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return `${AntimatterDimension(this._tier).displayName} Antimatter Dimension`;
+    return AntimatterDimension(this._tier).displayName;
+  }
+
+  get fullName() {
+    return `${this.name} Antimatter Dimension`;
   }
 
   get data() {
@@ -116,3 +120,4 @@ AntimatterDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new Anti
 
 Autobuyer.antimatterDimension = tier => AntimatterDimensionAutobuyerState.index[tier - 1];
 Autobuyer.antimatterDimension.index = AntimatterDimensionAutobuyerState.index;
+Autobuyer.antimatterDimension.index.name = "Antimatter Dimension";

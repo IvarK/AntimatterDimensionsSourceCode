@@ -17,6 +17,10 @@ Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends Au
     return Achievement(138).isUnlocked || !TimeStudy(131).isBought;
   }
 
+  get hasUnlimitedBulk() {
+    return Achievement(126).isUnlocked;
+  }
+
   tick() {
     if (!this.isEnabled) return;
     replicantiGalaxy();

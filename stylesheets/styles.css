@@ -4040,6 +4040,10 @@ screen and (max-width: 480px) {
   background: var(--color-infinity);
 }
 
+.o-autobuyer-btn--tiny {
+  width: 90%;
+}
+
 /*#endregion o-autobuyer-btn*/
 
 /*#region autobuyer-box*/
@@ -4160,11 +4164,53 @@ screen and (max-width: 480px) {
   background: white;
 }
 
+.c-autobuyer-box-slot {
+  position: relative;
+  border: .2rem solid #383232;
+  border-radius: .5rem;
+  margin: .25rem;
+  padding: 1rem .5rem;
+}
+
+.t-metro .c-autobuyer-box-slot,
+.t-inverted-metro .c-autobuyer-box-slot,
+.t-s8 .c-autobuyer-box-slot {
+  border: 0.1rem solid black;
+  border-radius: 0;
+}
+
+.t-dark .c-autobuyer-box-slot {
+  border-color: var(--color-base);
+}
+
+.t-dark-metro .c-autobuyer-box-slot {
+  border: 0.1rem solid var(--color-base);
+  border-radius: 0;
+}
+
+.t-s1 .c-autobuyer-box-slot {
+  border-color: black;
+  background: var(--color-base);
+}
+
+.t-s6 .c-autobuyer-box-slot {
+  border: 0.1rem solid #ccc;
+  background: black;
+}
+
+.t-s8 .c-autobuyer-box-slot {
+  background: white;
+}
+
 .c-autobuyer-box-row__intervalSlot,
 .c-autobuyer-box-row__toggleSlot,
 .c-autobuyer-box-row__checkboxSlot,
 .l-autobuyer-box__header {
   width: 25%;
+}
+
+.l-autobuyer-box__header--new {
+  width: 20%
 }
 
 .l-autobuyer-box__content {
@@ -5148,6 +5194,11 @@ screen and (max-width: 480px) {
   flex-direction: column;
   align-items: center;
   min-width: 40rem;
+  text-shadow:
+    0 0 0.2rem black,
+    0 0 0.2rem black,
+    0 0 0.2rem black,
+    0 0 0.2rem black;
 }
 
 .c-modal-away-progress__header {
@@ -5165,14 +5216,6 @@ screen and (max-width: 480px) {
 
 .c-modal-away-progress__resources div:last-child {
   border: none;
-}
-
-.c-modal-away-progress {
-  text-shadow:
-    0 0 0.2rem black,
-    0 0 0.2rem black,
-    0 0 0.2rem black,
-    0 0 0.2rem black;
 }
 
 .c-modal-away-progress b {

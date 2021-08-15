@@ -109,7 +109,10 @@ const Achievements = {
 
   autoAchieveUpdate(diff) {
     if (!PlayerProgress.realityUnlocked()) return;
-    if (!player.reality.autoAchieve) return;
+    if (!player.reality.autoAchieve) {
+      player.reality.achTimer += diff;
+      return;
+    }
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
     if (Perk.achievementGroup6.isBought) {
       for (const achievement of Achievements.preReality) {
@@ -129,11 +132,16 @@ const Achievements = {
     player.reality.gainedAutoAchievements = true;
   },
 
-  timeToNextAutoAchieve() {
+  get timeToNextAutoAchieve() {
     if (!PlayerProgress.realityUnlocked()) return 0;
     if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
-    return Math.max(this.period - player.reality.achTimer, 1);
+    return (this.availableAutoAchieves + 1) * this.period - player.reality.achTimer;
+  },
+
+  get availableAutoAchieves() {
+    const allRemaining = Achievements.preReality.countWhere(a => !a.isUnlocked);
+    return Math.clampMax(Math.floor(player.reality.achTimer / this.period), allRemaining);
   },
 
   _power: new Lazy(() => {

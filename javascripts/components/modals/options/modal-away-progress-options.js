@@ -38,28 +38,11 @@ Vue.component("modal-away-progress-options", {
   data() {
     return {
       all: Array,
-      celestialMemories: false,
-      blackHole: false
     };
-  },
-  watch: {
-    celestialMemories(newValue) {
-      player.options.awayProgress.celestialMemories = newValue;
-    },
-    blackHole(newValue) {
-      player.options.awayProgress.blackHole = newValue;
-    },
   },
   methods: {
     update() {
       this.all = AwayProgressTypes.all.filter(type => type.showOption && type.isUnlocked());
-
-      this.raUnlocked = V.has(V_UNLOCKS.RA_UNLOCK);
-      this.blackHoleUnlocked = BlackHoles.list[0].isUnlocked;
-
-      const options = player.options.awayProgress;
-      this.celestialMemories = options.celestialMemories;
-      this.blackHole = options.blackHole;
     }
   },
   template: `
@@ -70,8 +53,6 @@ Vue.component("modal-away-progress-options", {
           :key="id"
           :option="entry.name"
         />
-        <wide-on-off-button v-if="raUnlocked" v-model="celestialMemories" text="Celestial Memories:" />
-        <wide-on-off-button v-if="blackHoleUnlocked" v-model="blackHole" text="Black Hole:" />
       </div>
       Note: Selected resources will only show if they've increased.
     </modal-options>`

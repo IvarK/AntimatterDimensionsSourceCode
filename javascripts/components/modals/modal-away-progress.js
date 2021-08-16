@@ -34,7 +34,7 @@ Vue.component("modal-away-progress", {
             : after > before;
         },
         show() {
-          const show = this.showOption && this.increased;
+          const show = this.showOption && this.increased && this.config.isUnlocked;
           if (show) this.$emit("something-happened");
           return show;
         },
@@ -105,6 +105,7 @@ Vue.component("modal-away-progress", {
     getObjectForAway(item) {
       const objectName = item.name;
       const name = item.formatName;
+      const isUnlocked = item.isUnlocked();
       const before = item.navigateTo(this.before);
       const after = item.navigateTo(this.after);
       const awayProgress = item.option;
@@ -113,6 +114,7 @@ Vue.component("modal-away-progress", {
       return {
         [`${objectName}`]: {
           name,
+          isUnlocked,
           before,
           after,
           awayProgress,

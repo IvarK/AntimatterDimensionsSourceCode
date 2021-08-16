@@ -5283,20 +5283,20 @@ screen and (max-width: 480px) {
   color: #03a9f4;
 }
 
-.c-modal-away-progress__teresa {
+.c-modal-away-progress__teresa-memories {
   color: var(--color-ra-pet-teresa);
 }
 
 .c-modal-away-progress__relic-shards,
-.c-modal-away-progress__effarig {
+.c-modal-away-progress__effarig-memories {
   color: var(--color-ra-pet-effarig);
 }
 
-.c-modal-away-progress__enslaved {
+.c-modal-away-progress__enslaved-memories {
   color: var(--color-ra-pet-enslaved);
 }
 
-.c-modal-away-progress__v {
+.c-modal-away-progress__v-memories {
   color: var(--color-ra-pet-v);
 }
 

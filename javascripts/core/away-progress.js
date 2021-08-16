@@ -122,28 +122,36 @@ const AwayProgressTypes = {
     reference: ["celestials", "effarig", "relicShards"],
     isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
   }),
+  celestialMemories: new AwayProgress({
+    name: "celestialMemories",
+    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+  }),
   teresaMemories: new AwayProgress({
     name: "teresaMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "teresa", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.teresa.isUnlocked && !Ra.pets.teresa.isCapped,
     showOption: false,
   }),
   effarigMemories: new AwayProgress({
     name: "effarigMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "effarig", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.effarig.isUnlocked && !Ra.pets.effarig.isCapped,
     showOption: false,
   }),
   enslavedMemories: new AwayProgress({
     name: "enslavedMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "enslaved", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.enslaved.isUnlocked && !Ra.pets.enslaved.isCapped,
     showOption: false,
   }),
   vMemories: new AwayProgress({
     name: "vMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "v", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.v.isUnlocked && !Ra.pets.v.isCapped,
     showOption: false,
   }),
   darkMatter: new AwayProgress({
@@ -161,14 +169,19 @@ const AwayProgressTypes = {
     reference: ["celestials", "laitela", "singularities"],
     isUnlocked: () => Laitela.isUnlocked,
   }),
-  blackHole1: new AwayProgress({
-    name: "firstBlackHole",
+  blackHole: new AwayProgress({
+    name: "blackHole",
+    isUnlocked: () => BlackHole(1).isUnlocked,
+  }),
+  firstblackHole: new AwayProgress({
+    name: "firstblackHole",
     awayOption: "blackHole",
     reference: ["blackHole", "0", "activations"],
     isUnlocked: () => BlackHole(1).isUnlocked,
     classObjectReference: "black-hole",
+    showOption: false,
   }),
-  blackHole2: new AwayProgress({
+  secondBlackHole: new AwayProgress({
     name: "secondBlackHole",
     awayOption: "blackHole",
     reference: ["blackHole", "1", "activations"],

@@ -40,6 +40,7 @@ const PerkNetwork = {
   minScale: 0.2,
   maxScale: 4,
   lastPerkNotation: "",
+  pulseTimer: 0,
   initializeIfNeeded() {
     const notation = Notations.current.name;
     if (this.container !== undefined && notation === this.lastPerkNotation) return;
@@ -65,6 +66,7 @@ const PerkNetwork = {
       nodes: this.nodes,
       edges
     };
+
     const nodeOptions = {
       interaction: {
         hover: true,
@@ -109,7 +111,7 @@ const PerkNetwork = {
       const id = params.nodes[0];
       if (!isFinite(id)) return;
       Perks.find(id).purchase();
-      this.updatePerkColors();
+      this.updatePerkColor();
     });
 
     network.on("dragStart", () => {
@@ -119,7 +121,12 @@ const PerkNetwork = {
       }
     });
 
-    network.on("dragging", () => SecretAchievement(45).tryUnlock());
+    // Change node side while dragging on Cancer theme, but skip the method otherwise because it's mildly intensive
+    network.on("dragging", () => {
+      SecretAchievement(45).tryUnlock();
+      if (Theme.current().name !== "S4") return;
+      PerkNetwork.updatePerkSize();
+    });
 
     network.on("zoom", () => {
       const scale = network.getScale();
@@ -136,13 +143,14 @@ const PerkNetwork = {
     const options = {
       nodes: {
         font: {
-          size: areVisible ? 20 : 0
+          size: areVisible ? 20 : 0,
+          color: Theme.current().isDark ? "#DDDDDD" : "#222222",
         }
       }
     };
     this.network.setOptions(options);
   },
-  updatePerkColors() {
+  updatePerkColor() {
     function nodeColor(perk) {
       const canBeBought = perk.canBeBought;
       const isBought = perk.isBought;
@@ -152,12 +160,14 @@ const PerkNetwork = {
       const secondaryColor = perkColor.secondary;
 
       let backgroundColor;
-      if (canBeBought) backgroundColor = "#000000";
-      else if (isBought) backgroundColor = primaryColor;
-      else backgroundColor = "#656565";
+      if (canBeBought) {
+        if (Theme.current().isDark) backgroundColor = "#DDDDDD";
+        else backgroundColor = "#222222";
+      } else if (isBought) backgroundColor = primaryColor;
+      else backgroundColor = "#65656550";
 
       const hoverColor = canBeBought || isBought ? primaryColor : "#656565";
-      const borderColor = secondaryColor;
+      const borderColor = `${secondaryColor}50`;
 
       return {
         background: backgroundColor,
@@ -176,6 +186,22 @@ const PerkNetwork = {
     const data = Perks.all
       .map(perk => ({ id: perk.id, color: nodeColor(perk) }));
     this.nodes.update(data);
+  },
+  updatePerkSize() {
+    function nodeSize(perk) {
+      PerkNetwork.pulseTimer += 0.1;
+      // Make the nodes pulse continuously on Cancer theme
+      const mod = Theme.current().name === "S4"
+        ? 10 * Math.sin(5 * PerkNetwork.pulseTimer + 0.1 * perk._config.id)
+        : 0;
+      if (perk._config.label === "START") return 30 + mod;
+      if (perk.isBought) return 20 + mod;
+      return 15 + mod;
+    }
+
+    const data = Perks.all
+      .map(perk => ({ id: perk.id, size: nodeSize(perk) }));
+    this.nodes.update(data);
   }
 };
 
@@ -187,14 +213,14 @@ Vue.component("perks-tab", {
     }
   },
   created() {
-    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColors());
-    EventHub.ui.on(GAME_EVENT.REALITY_RESET_AFTER, () => PerkNetwork.updatePerkColors());
+    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColor());
   },
   mounted() {
     PerkNetwork.initializeIfNeeded();
     if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
     else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
-    PerkNetwork.updatePerkColors();
+    PerkNetwork.updatePerkColor();
+    PerkNetwork.updatePerkSize();
     PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);
   },

@@ -31,15 +31,13 @@ Vue.component("tab-button", {
     }
   },
   template: `
-    <div v-if="!isHidden" :class="[classObject, tab.config.UIClass]">
+    <div v-if="!isHidden && isAvailable" :class="[classObject, tab.config.UIClass]">
       <div
-        v-if="isAvailable"
         class="l-tab-btn-inner"
         @click="tab.show(true)"
       >
         {{ tab.name }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
       </div>
-      <div v-else class="l-tab-btn-inner">???</div>
       <div class="subtabs" v-if="showSubtabs">
         <div
           v-for="(subtab, index) in tab.subtabs"

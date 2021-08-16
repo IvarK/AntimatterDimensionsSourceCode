@@ -33,5 +33,6 @@ Vue.component("game-ui", {
       </div>
       <div id="notification-container" class="l-notification-container" />
       <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
+      <sidebar v-if="view.newUI" />
     </div>`
 });

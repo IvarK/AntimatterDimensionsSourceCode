@@ -5,6 +5,8 @@ Vue.component("modal-away-progress", {
     "away-progress-helper": {
       props: {
         config: Object,
+        playerBefore: Object,
+        playerAfter: Object,
       },
       computed: {
         after() {
@@ -32,7 +34,9 @@ Vue.component("modal-away-progress", {
             : after > before;
         },
         show() {
-          return this.showOption && this.increased;
+          const show = this.showOption && this.increased;
+          if (show) this.$emit("something-happened");
+          return show;
         },
         formatBefore() {
           return this.formatPseudo(this.before);
@@ -40,6 +44,13 @@ Vue.component("modal-away-progress", {
         formatAfter() {
           return this.formatPseudo(this.after);
         },
+        isBlackHole() {
+          return this.config.isBlackHole;
+        },
+        formatBlackHoleActivations() {
+          const activations = this.after - this.before;
+          return `${formatInt(activations)} ${pluralize("time", activations)}`;
+        }
       },
       methods: {
         formatPseudo(number) {
@@ -49,60 +60,22 @@ Vue.component("modal-away-progress", {
       },
       template: `
         <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
-          <b>{{ name }}</b> increased from {{ formatBefore }} to {{ formatAfter }}
+          <span v-if="isBlackHole">Your <b>{{ name }}</b> activated {{ formatBlackHoleActivations }}</span>
+          <span v-else><b>{{ name }}</b> increased from {{ formatBefore }} to {{ formatAfter }}</span>
         </div>`
     },
-    "away-progress-black-hole": {
-      props: {
-        blackHole: Number,
-        playerBefore: Object,
-        playerAfter: Object,
-      },
-      computed: {
-        before() {
-          return this.playerBefore.blackHole[this.blackHole];
-        },
-        after() {
-          return this.playerAfter.blackHole[this.blackHole];
-        },
-        increased() {
-          return this.after.activations > this.before.activations;
-        },
-        show() {
-          return player.options.awayProgress.blackHole && this.increased;
-        },
-        activationTimes() {
-          return this.after.activations - this.before.activations;
-        },
-        name() {
-          // If its 0 its the first black hole, if its 1 its the second. if its not one of those two, something has gone
-          // wrong, and an error should be thrown.
-          // TODO: Standardize Black Hole handling and naming, this shouldnt be done locally
-          if (this.blackHole === 0) return "First";
-          if (this.blackHole === 1) return "Second";
-          throw new Error("Unknown Black Hole ID in modal-away-progress.js");
-        },
-        displayName() {
-          // If we have the second black hole unlocked, specify which black hole activated.
-          return this.playerBefore.blackHole[1].unlocked;
-        }
-      },
-      template: `
-        <div v-if="show">
-          Your
-          <b class="c-modal-away-progress__black-hole">
-            <span v-if="displayName">{{ name }} </span>Black Hole
-          </b>
-          activated {{ formatInt(activationTimes) }} {{ "time" | pluralize(activationTimes) }}
-        </div>`
-    }
   },
   props: {
     modalConfig: Object
   },
+  data() {
+    return {
+      somethingHappened: true,
+    };
+  },
   computed: {
     nothingAway() {
-      return Theme.current().name === "S9";
+      return Theme.current().name === "S9" || !this.somethingHappened;
     },
     before() {
       return this.modalConfig.playerBefore;
@@ -136,6 +109,7 @@ Vue.component("modal-away-progress", {
       const after = item.navigateTo(this.after);
       const awayProgress = item.option;
       const classObject = item.classObject;
+      const isBlackHole = item.isBlackHole;
       return {
         [`${objectName}`]: {
           name,
@@ -143,6 +117,7 @@ Vue.component("modal-away-progress", {
           after,
           awayProgress,
           classObject,
+          isBlackHole,
         }
       };
     },
@@ -156,13 +131,9 @@ Vue.component("modal-away-progress", {
           v-for="(stat, name) in offlineStats"
           :key="name"
           :config="stat"
-        />
-        <away-progress-black-hole
-          v-for="blackHole in [0, 1]"
-          :key="blackHole"
-          :blackHole="blackHole"
           :playerBefore="before"
           :playerAfter="after"
+          v-on:something-happened="somethingHappened = true"
         />
       </div>
     </div>`

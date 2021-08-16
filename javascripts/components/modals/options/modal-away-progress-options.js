@@ -1,7 +1,6 @@
 "use strict";
 
 Vue.component("modal-away-progress-options", {
-  mixins: [modalOptionsMixin],
   components: {
     "away-progress-options-helper": {
       mixins: [modalOptionsMixin],

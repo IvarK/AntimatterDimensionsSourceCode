@@ -28,37 +28,37 @@ Vue.component("sidebar-currency", {
   template: `
     <div class="resource">
       <template v-if="showRM">
-        <div v-if="IM === 0">
+        <template v-if="IM === 0">
           <h2 class="o-sidebar-currency--reality">{{ format(RM, 2) }}</h2>
           <div class="resource-information">
             <span class="resource-name">Reality {{ "Machine" | pluralize(RM) }}</span>
           </div>
-        </div>
-        <div v-else>
+        </template>
+        <template v-else>
           <h3 class="o-sidebar-currency--reality">
             {{ format(RM, 2) }}<br> + {{ format(IM, 2) }}i
           </h3>
           <div class="resource-information">
             <span class="resource-name">Machines</span>
           </div>
-        </div>
+        </template>
       </template>
-      <div v-else-if="showEP">
+      <template v-else-if="showEP">
         <h2 class="o-sidebar-currency--eternity">
           {{ format(EP, 2) }}
         </h2>
         <div class="resource-information">
           <span class="resource-name">Eternity {{ "Point" | pluralize(EP) }}</span>
         </div>
-      </div>
-      <div v-else-if="showIP">
+      </template>
+      <template v-else-if="showIP">
         <h2 class="o-sidebar-currency--infinity">
           {{ format(IP, 2) }}
         </h2>
         <div class="resource-information">
           <span class="resource-name">Infinity {{ "Point" | pluralize(IP) }}</span>
         </div>
-      </div>
+      </template>
       <template v-else>
         <h2 class="o-sidebar-currency--antimatter">
           {{ format(AM, 2) }}

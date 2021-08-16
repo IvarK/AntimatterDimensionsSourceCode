@@ -37,27 +37,32 @@ const Cloud = {
     };
     const firstInfo = getSaveInfo(first);
     const secondInfo = getSaveInfo(second);
-    if (
-      firstInfo.realities === secondInfo.realities && 
-      firstInfo.eternities.eq(secondInfo.eternities) && 
-      firstInfo.infinities.eq(secondInfo.infinities)
-    ) {
-      return undefined;
-    }
 
     if (firstInfo.realities > secondInfo.realities) {
       return first;
     }
+    
+    if (firstInfo.realities < secondInfo.realities) {
+      return second;
+    }
 
     if (firstInfo.eternities.gt(secondInfo.eternities)) {
       return first;
+    }
+    
+    if (firstInfo.eternities.lt(secondInfo.eternities)) {
+      return second;
     }
 
     if (firstInfo.infinities.gt(secondInfo.infinities)) {
       return first;
     }
 
-    return second;
+    if (firstInfo.infinities.lt(secondInfo.infinities)) {
+      return second;
+    }
+
+    return undefined;
   },
 
   async loadMobile() {

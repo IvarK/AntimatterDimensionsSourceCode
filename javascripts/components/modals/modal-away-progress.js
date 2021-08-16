@@ -131,8 +131,6 @@ Vue.component("modal-away-progress", {
           v-for="(stat, name) in offlineStats"
           :key="name"
           :config="stat"
-          :playerBefore="before"
-          :playerAfter="after"
           v-on:something-happened="somethingHappened = true"
         />
       </div>

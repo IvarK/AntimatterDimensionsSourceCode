@@ -259,8 +259,7 @@ body.t-s9 {
   top: -0.6rem;
   left: 12rem;
   z-index: 4;
-  transition-duration: 0.15s;
-  transition-delay: 0.2s;
+  transition: pointer-events 0s linear 0s, all 0.15s linear 0.2s;
   padding: 0.5rem;
   padding-left: 0;
 }

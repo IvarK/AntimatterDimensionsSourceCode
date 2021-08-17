@@ -79,10 +79,14 @@ const PerkNetwork = {
     });
   },
   makeNetwork() {
+    // Just for a bit of fun, tangle it up a bit unless the player specifically chooses not to
+    const defaultPos = player.options.fixedPerkStartingPos;
     this.nodes = new vis.DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
-      title: perk.config.description
+      title: perk.config.description,
+      x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
+      y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));
 
     const edges = [];

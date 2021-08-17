@@ -61,7 +61,7 @@ Vue.component("sidebar-currency", {
       </template>
       <template v-else>
         <h2 class="o-sidebar-currency--antimatter">
-          {{ format(AM, 2) }}
+          {{ format(AM, 2, 1) }}
         </h2>
         <div class="resource-information">
           <span class="resource-name">Antimatter</span>

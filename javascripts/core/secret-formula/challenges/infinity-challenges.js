@@ -37,7 +37,7 @@ GameDatabase.challenges.infinity = [
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
-      description: `Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases
+      description: `AD multiplier based on Antimatter Galaxies and Tickspeed purchases
         (same as challenge multiplier)`,
       effect: () => (Laitela.continuumActive
         ? Decimal.pow(1.05 + (player.galaxies * 0.005), Tickspeed.continuumValue)
@@ -63,9 +63,9 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `When buying Antimatter Dimensions 1-4, every AD with cost smaller or equal increases.
-      When buying Antimatter Dimensions 5-8, every AD with cost bigger or equal increases.
-      When buying Tickspeed, every AD with the same cost increases.`,
+      `Buying ADs 1-4 increases all smaller or equal AD costs.
+      Buying ADs 5-8 increases all larger or equal AD costs.
+      Buying tickspeed increases all equal AD costs.`,
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {

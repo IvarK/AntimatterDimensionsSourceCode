@@ -142,6 +142,10 @@ body.t-s9 {
   transition-delay: 0.2s;
 }
 
+.o-tab-btn:hover {
+  z-index: 1;
+}
+
 .sidebar > .o-tab-btn {
   border-left: none;
 }
@@ -165,8 +169,8 @@ body.t-s9 {
 .o-tab-btn::after {
   content: '';
   position: absolute;
-  left: 100%;
-  top: -2%;
+  left: calc(100% + 0.1rem);
+  top: calc(0% + -0.1rem);
   width: 0;
   height: 0;
   border-bottom: 2.3rem solid transparent;
@@ -178,7 +182,7 @@ body.t-s9 {
 }
 
 .o-tab-btn--subtabs:hover::after {
-  border-left-width: 2.3rem;
+  border-left-width: 2.2rem;
 }
 
 .o-tab-btn--infinity::after {

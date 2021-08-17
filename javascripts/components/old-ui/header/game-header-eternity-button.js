@@ -57,7 +57,9 @@ Vue.component("game-header-eternity-button", {
       return { color: `rgb(${rgb.join(",")})` };
     },
     tachyonAmountStyle() {
-      if (this.hover) return { color: "black" };
+      // Hovering over the button makes all the text on the button black; this text inherits that
+      // without us needing to specify a color.
+      if (!this.headerTextColored || this.hover) return {};
       // Note that Infinity and 0 can show up here. We have a special case for
       // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
       let ratio;

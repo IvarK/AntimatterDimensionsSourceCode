@@ -44,17 +44,22 @@ Vue.component("glyph-peek", {
     },
   },
   template: `
-    <glyph-set-preview
+    <span
       v-if="isVisible"
       class="c-glyph-peek"
-      :show="isVisible"
-      :showName="false"
-      :text="'Upcoming glyph selection:'"
-      :glyphs="glyphs"
-      :ignoreModifiedLevel="true"
-      :showSacrifice="canSacrifice"
-      :flipTooltip="true"
-    />
+      onclick="Modal.glyphChoiceInfo.show()"
+    >
+      <glyph-set-preview
+        :show="isVisible"
+        :showName="false"
+        :text="'Upcoming glyph selection:'"
+        :glyphs="glyphs"
+        :ignoreModifiedLevel="true"
+        :showSacrifice="canSacrifice"
+        :flipTooltip="true"
+      />
+      (Click to bring up details)
+    </span>
     <span
       v-else-if="canPeek"
       class="c-glyph-peek"

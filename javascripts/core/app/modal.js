@@ -76,6 +76,7 @@ Modal.editTree = new Modal("modal-edit-tree");
 Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
+Modal.glyphChoiceInfo = new Modal("modal-glyph-choice-info");
 Modal.glyphUndo = new Modal("modal-glyph-undo");
 Modal.glyphReplace = new Modal("modal-glyph-replace");
 Modal.glyphSacrifice = new Modal("modal-glyph-sacrifice");

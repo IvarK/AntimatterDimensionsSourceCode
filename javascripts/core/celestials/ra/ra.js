@@ -30,6 +30,10 @@ class RaPetState {
     return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
   }
 
+  get isCapped() {
+    return this.level >= Ra.levelCap;
+  }
+
   get level() {
     return this.data.level;
   }

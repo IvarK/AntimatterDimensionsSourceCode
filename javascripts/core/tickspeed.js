@@ -65,7 +65,7 @@ function getTickSpeedMultiplier() {
 function buyTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
 
-  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+  if (NormalChallenge(9).isRunning) {
     Tickspeed.multiplySameCosts();
   }
   Currency.antimatter.subtract(Tickspeed.cost);
@@ -81,7 +81,7 @@ function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
-  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+  if (NormalChallenge(9).isRunning) {
     const goal = Player.infinityGoal;
     let cost = Tickspeed.cost;
     while (Currency.antimatter.gt(cost) && cost.lt(goal)) {

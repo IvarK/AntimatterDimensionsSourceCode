@@ -136,7 +136,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${format(Currency.infinitiesBanked.value, 2)}/${format(1e12)} Banked Infinities`,
       checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
-      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
+      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
       effect: () => gainedInfinities().times(0.1),
       formatEffect: value => `${format(value)} per second`
@@ -173,7 +173,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${format(Currency.eternities.value, 2)}/${format(1e7)} Eternities`,
       checkRequirement: () => Currency.eternities.gte(1e7),
-      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
+      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Gain Eternities per second equal to your Reality count",
       effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
       formatEffect: value => `${format(value)} per second`

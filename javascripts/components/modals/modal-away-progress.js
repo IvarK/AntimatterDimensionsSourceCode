@@ -4,48 +4,41 @@ Vue.component("modal-away-progress", {
   components: {
     "away-progress-helper": {
       props: {
-        config: Object,
+        item: Object,
         playerBefore: Object,
         playerAfter: Object,
       },
       computed: {
-        after() {
-          return this.config.after;
-        },
         before() {
-          return this.config.before;
+          return this.item.navigateTo(this.playerBefore);
+        },
+        after() {
+          return this.item.navigateTo(this.playerAfter);
         },
         classObject() {
-          return this.config.classObject;
+          return this.item.classObject;
         },
         name() {
-          return this.config.name;
-        },
-        showOption() {
-          return this.config.awayProgress;
+          return this.item.formatName;
         },
         increased() {
           // Both Decimals and numbers may be passed in. This code handles both.
-          const after = this.after;
           const before = this.before;
+          const after = this.after;
 
           return after instanceof Decimal
             ? after.gt(before)
             : after > before;
         },
         show() {
-          const show = this.showOption && this.increased && this.config.isUnlocked;
+          const show = this.increased && this.item.option && this.item.isUnlocked();
+          // For the achievement and display, we need to emit if something happened to the parent
           if (show) this.$emit("something-happened");
           return show;
         },
-        formatBefore() {
-          return this.formatPseudo(this.before);
-        },
-        formatAfter() {
-          return this.formatPseudo(this.after);
-        },
+        // If its a Black Hole we need different formatting, so find that
         isBlackHole() {
-          return this.config.isBlackHole;
+          return this.item.isBlackHole;
         },
         formatBlackHoleActivations() {
           const activations = this.after - this.before;
@@ -53,6 +46,7 @@ Vue.component("modal-away-progress", {
         }
       },
       methods: {
+        // We want different formatting above and below 1e9 to improve readability
         formatPseudo(number) {
           if (Decimal.lt(number, 1e9)) return formatInt(number);
           return format(number, 2, 2);
@@ -61,7 +55,7 @@ Vue.component("modal-away-progress", {
       template: `
         <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
           <span v-if="isBlackHole">Your <b>{{ name }}</b> activated {{ formatBlackHoleActivations }}</span>
-          <span v-else><b>{{ name }}</b> increased from {{ formatBefore }} to {{ formatAfter }}</span>
+          <span v-else><b>{{ name }}</b> increased from {{ formatPseudo(before) }} to {{ formatPseudo(after) }}</span>
         </div>`
     },
   },
@@ -70,12 +64,12 @@ Vue.component("modal-away-progress", {
   },
   data() {
     return {
-      somethingHappened: true,
+      somethingHappened: false,
     };
   },
   computed: {
-    nothingAway() {
-      return Theme.current().name === "S9" || !this.somethingHappened;
+    nothingHappened() {
+      return Theme.current().name === "S9";
     },
     before() {
       return this.modalConfig.playerBefore;
@@ -84,55 +78,33 @@ Vue.component("modal-away-progress", {
       return this.modalConfig.playerAfter;
     },
     offlineStats() {
-      const statObject = { };
-
-      for (const awayProgress of AwayProgressTypes.all) {
-        Object.assign(statObject, this.getObjectForAway(awayProgress));
-      }
-
-      return statObject;
+      return AwayProgressTypes.all;
     },
     headerText() {
       const timeDisplay = TimeSpan.fromSeconds(this.modalConfig.seconds).toString();
-      if (this.nothingAway) {
-        SecretAchievement(36).unlock();
+      if (this.nothingHappened || !this.somethingHappened) {
         return `While you were away for ${timeDisplay}... Nothing happened.`;
       }
       return `While you were away for ${timeDisplay}: `;
     },
   },
-  methods: {
-    getObjectForAway(item) {
-      const objectName = item.name;
-      const name = item.formatName;
-      const isUnlocked = item.isUnlocked();
-      const before = item.navigateTo(this.before);
-      const after = item.navigateTo(this.after);
-      const awayProgress = item.option;
-      const classObject = item.classObject;
-      const isBlackHole = item.isBlackHole;
-      return {
-        [`${objectName}`]: {
-          name,
-          isUnlocked,
-          before,
-          after,
-          awayProgress,
-          classObject,
-          isBlackHole,
-        }
-      };
-    },
+  mounted() {
+    this.$nextTick(() => {
+      // After all the children have been loaded, check if somethingHappened - if not, give them the achievement!
+      if (this.nothingHappened || !this.somethingHappened) SecretAchievement(36).unlock();
+    });
   },
   template: `
     <div class="c-modal-away-progress">
       <modal-close-button @click="emitClose" />
       <div class="c-modal-away-progress__header">{{ headerText }}</div>
-      <div v-if="!nothingAway" class="c-modal-away-progress__resources">
+      <div v-if="!nothingHappened" class="c-modal-away-progress__resources">
         <away-progress-helper
-          v-for="(stat, name) in offlineStats"
-          :key="name"
-          :config="stat"
+          v-for="(stat, index) of offlineStats"
+          :key="index"
+          :item="stat"
+          :playerBefore="before"
+          :playerAfter="after"
           v-on:something-happened="somethingHappened = true"
         />
       </div>

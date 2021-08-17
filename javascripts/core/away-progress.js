@@ -125,6 +125,7 @@ const AwayProgressTypes = {
   celestialMemories: new AwayProgress({
     name: "celestialMemories",
     isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    // Functions as the visible option for all Memories, never appears due to having no reference.
   }),
   teresaMemories: new AwayProgress({
     name: "teresaMemories",
@@ -172,9 +173,10 @@ const AwayProgressTypes = {
   blackHole: new AwayProgress({
     name: "blackHole",
     isUnlocked: () => BlackHole(1).isUnlocked,
+    // Functions as the visible option for both first & second BHs, never appears due to having no reference.
   }),
-  firstblackHole: new AwayProgress({
-    name: "firstblackHole",
+  firstBlackHole: new AwayProgress({
+    name: "firstBlackHole",
     awayOption: "blackHole",
     reference: ["blackHole", "0", "activations"],
     isUnlocked: () => BlackHole(1).isUnlocked,

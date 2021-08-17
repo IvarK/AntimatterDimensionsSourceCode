@@ -17,7 +17,8 @@ Vue.component("select-theme", {
     },
     setTheme(theme) {
       theme.set();
-      PerkNetwork.makeNetwork();
+      PerkNetwork.forceNetworkRemake();
+      PerkNetwork.initializeIfNeeded();
     }
   },
   template: `

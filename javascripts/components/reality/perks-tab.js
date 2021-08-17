@@ -145,6 +145,9 @@ const PerkNetwork = {
     const network = new vis.Network(container, nodeData, nodeOptions);
     this.network = network;
   },
+  forceNetworkRemake() {
+    this.container = undefined;
+  },
   resetPosition() {
     this.network.moveTo({ position: { x: -600, y: -300 }, scale: 0.8, offset: { x: 0, y: 0 } });
   },

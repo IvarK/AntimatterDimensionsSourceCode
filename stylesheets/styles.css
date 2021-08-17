@@ -3105,7 +3105,7 @@ screen and (max-width: 480px) {
 /*#region c-challenge-box*/
 
 .c-challenge-box {
-  width: 39rem;
+  width: 40rem;
   height: 13rem;
   padding: 0.5rem 0.4rem;
   box-sizing: border-box;

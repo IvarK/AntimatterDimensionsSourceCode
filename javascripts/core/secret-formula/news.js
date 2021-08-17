@@ -671,7 +671,9 @@ GameDatabase.news = [
   },
   {
     id: "a129",
-    text: "<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>"
+    text:
+      `<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>
+      https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>`
   },
   {
     id: "a130",

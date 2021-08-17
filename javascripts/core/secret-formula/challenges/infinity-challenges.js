@@ -63,9 +63,9 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `Costs increase like in Tickspeed Challenge (C9), except buying Antimatter Dimensions 1-4 instead causes all
-        smaller or equal AD costs to increase and buying Antimatter Dimensions 5-8 causes all instead causes all
-        larger or equal AD costs to increase.`,
+      `When buying Antimatter Dimensions 1-4, every AD with cost smaller or equal increases.
+      When buying Antimatter Dimensions 5-8, every AD with cost bigger or equal increases.
+      When buying Tickspeed, every AD with the same cost increases.`,
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {

@@ -2970,8 +2970,8 @@ screen and (max-width: 480px) {
   content: "you can click the colon at the end of this line in any other theme to turn on these achievement images";
   font-size: 0.8rem;
   position: absolute;
-  margin-left: 23rem;
-  margin-top: -8rem;
+  margin-left: 16rem;
+  margin-top: -9rem;
   width: 20rem;
 }
 

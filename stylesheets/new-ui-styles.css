@@ -100,19 +100,34 @@ body.t-s9 {
   font-size: 0.8em;
 }
 
-.o-sidebar-currency--antimatter {color: black;}
-.t-normal .o-sidebar-currency--antimatter {color: var(--color-accent);}
+.o-sidebar-currency--antimatter {
+  color: black;
+}
+
+.t-normal .o-sidebar-currency--antimatter {
+  color: var(--color-accent);
+}
+
 .t-dark .o-sidebar-currency--antimatter,
 .t-s6 .o-sidebar-currency--antimatter {
   animation: a-game-header__antimatter--glow 25s infinite;
 }
+
 .t-dark-metro .o-sidebar-currency--antimatter {
   color: #e0e0e0;
 }
 
-.o-sidebar-currency--infinity  { color: var(--color-infinity) }
-.o-sidebar-currency--eternity  { color: var(--color-eternity) }
-.o-sidebar-currency--reality { color: var(--color-reality) }
+.o-sidebar-currency--infinity  {
+  color: var(--color-infinity)
+}
+
+.o-sidebar-currency--eternity  {
+  color: var(--color-eternity)
+}
+
+.o-sidebar-currency--reality {
+  color: var(--color-reality)
+}
 
 .resource-infinity-canreset,
 .resource-eternity-canreset {

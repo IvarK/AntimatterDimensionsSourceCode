@@ -29,7 +29,7 @@ Vue.component("sidebar", {
     <div class="sidebar">
       <sidebar-currency />
       <tab-button
-        v-for="(tab, index) in tabs"
+        v-for="tab in tabs"
         :key="tab.name"
         :tab="tab"
       />

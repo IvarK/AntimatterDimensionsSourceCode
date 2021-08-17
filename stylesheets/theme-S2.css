@@ -18,6 +18,7 @@ body {
 .t-s2 .l-notification-container,
 .t-s2 .c-modal,
 .t-s2 #TTbuttons,
+.t-s2 .sidebar,
 .t-s2 .c-glyph-tooltip {
     filter: sepia(100%) hue-rotate(180deg) saturate(250%);
 }

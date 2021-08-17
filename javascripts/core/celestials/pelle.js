@@ -8,7 +8,7 @@ const Pelle = {
 
     switch (mechanic) {
 
-      // case: "glyphs"
+      // Case: "glyphs"
 
       case "IPGain":
         return !PelleUpgrade.ipGain.canBeApplied;
@@ -87,13 +87,15 @@ const Pelle = {
       this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
     }
 
-    const currencies = ['famine', 'pestilence', 'chaos'];
+    const currencies = ["famine", "pestilence", "chaos"];
 
     currencies.forEach(currency => {
       if (!this[currency].unlocked) return;
       this.cel[currency].timer += TimeSpan.fromMilliseconds(diff).totalSeconds * 10 / this[currency].fillTime;
       if (this.cel[currency].timer > 10) {
-        this.cel[currency].amount = this.cel[currency].amount.plus(this[currency].gain * (Math.floor(this.cel[currency].timer / 10)));
+        this.cel[currency].amount = this.cel[currency].amount.plus(
+          this[currency].gain * (Math.floor(this.cel[currency].timer / 10))
+        );
         this.cel[currency].timer = 0;
         if (currency === "chaos") {
           for (let i = 1; i <= 8; i++) {
@@ -101,7 +103,7 @@ const Pelle = {
           }
         }
       }
-    })
+    });
 
     if (PelleUpgrade.passiveUnstableMatter.canBeApplied) {
       this.cel.unstableMatter = this.cel.unstableMatter.plus(
@@ -112,7 +114,7 @@ const Pelle = {
 
   famine: {
     get fillTime() {
-      let div = PelleUpgrade.famineGain.canBeApplied ? 2 : 1;
+      const div = PelleUpgrade.famineGain.canBeApplied ? 2 : 1;
       const speedUpgradeEffect = 1.2 ** player.celestials.pelle.famine.speedUpgrades;
       return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) / div / speedUpgradeEffect;
     },
@@ -124,35 +126,45 @@ const Pelle = {
       if (PelleUpgrade.famineMultFromRebuyables.canBeApplied) base *= PelleUpgrade.famineMultFromRebuyables.effectValue;
       return base;
     },
-    get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
+    get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied; },
     get multiplierToAntimatter() {
       let base = Decimal.pow(1.1, player.celestials.pelle.famine.amount);
       if (base.gte(1e100)) {
         // After 1e100 the effect is raised to ^1/10
-        base = (new Decimal(1e100)).times(base.dividedBy(1e100).plus(1).log10() ** 5)
+        base = (new Decimal(1e100)).times(base.dividedBy(1e100).plus(1).log10() ** 5);
       }
-      return base
+      return base;
     },
-    get exponentToAntimatter() { return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10 },
+    get exponentToAntimatter() { 
+      return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10;
+    },
     get bonusDescription() {
-      return `Multiplies Antimatter Dimensions by ${formatX(this.multiplierToAntimatter, 2, 2)} ${this.multiplierToAntimatter.gte(1e100) ? "(softcapped)" : ""} and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`
+      const softCapped = this.multiplierToAntimatter.gte(1e100);
+      return `Multiplies Antimatter Dimensions by ` +
+        `${formatX(this.multiplierToAntimatter, 2, 2)} ${softCapped ? "(softcapped)" : ""}` +
+        ` and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`;
     }
   },
   pestilence: {
     get fillTime() { 
       const speedUpgradeEffect = 1.2 ** player.celestials.pelle.pestilence.speedUpgrades;
-      return 10 / (Math.log10(Replicanti.amount.log10() + 1) + 1) / speedUpgradeEffect
+      return 10 / (Math.log10(Replicanti.amount.log10() + 1) + 1) / speedUpgradeEffect;
     },
     get gain() {
       let gain = 1;
       if (Pelle.chaos.unlocked) gain *= Pelle.chaos.pestilenceGainMult;
-      if (PelleUpgrade.pestilenceMultFromRebuyables.canBeApplied) gain *= PelleUpgrade.pestilenceMultFromRebuyables.effectValue;
-      return gain 
+      if (PelleUpgrade.pestilenceMultFromRebuyables.canBeApplied) {
+        gain *= PelleUpgrade.pestilenceMultFromRebuyables.effectValue;
+      }
+      return gain;
     },
-    get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied },
-    get armageddonTimeMultiplier() { return Math.max(player.celestials.pelle.pestilence.amount.plus(1).log10(), 1) },
-    get famineGainMult() { return player.celestials.pelle.pestilence.amount.pow(0.5).plus(1).toNumber() },
-    get bonusDescription() { return `Armageddon lasts ${formatX(this.armageddonTimeMultiplier, 2, 2)} longer, you gain ${formatX(this.famineGainMult, 2, 2)} more Famine.` }
+    get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied; },
+    get armageddonTimeMultiplier() { return Math.max(player.celestials.pelle.pestilence.amount.plus(1).log10(), 1); },
+    get famineGainMult() { return player.celestials.pelle.pestilence.amount.pow(0.5).plus(1).toNumber(); },
+    get bonusDescription() { 
+      return `Armageddon lasts ${formatX(this.armageddonTimeMultiplier, 2, 2)} ` +
+        `longer, you gain ${formatX(this.famineGainMult, 2, 2)} more Famine.`;
+    }
   },
   chaos: {
     get fillTime() { 
@@ -165,19 +177,21 @@ const Pelle = {
       if (PelleUpgrade.chaosMultFromRebuyables.canBeApplied) gain *= PelleUpgrade.chaosMultFromRebuyables.effectValue;
       return gain;
     },
-    get unlocked() { return PelleUpgrade.chaosUnlock.canBeApplied },
-    get dimensionDiscount() { return new Decimal(10).pow(Currency.chaos.value.pow(2)).min(Decimal.MAX_VALUE) },
-    get pestilenceGainMult() { return Currency.chaos.value.pow(0.5).plus(1).toNumber() },
+    get unlocked() { return PelleUpgrade.chaosUnlock.canBeApplied; },
+    get dimensionDiscount() { return new Decimal(10).pow(Currency.chaos.value.pow(2)).min(Decimal.MAX_VALUE); },
+    get pestilenceGainMult() { return Currency.chaos.value.pow(0.5).plus(1).toNumber(); },
     get bonusDescription() { 
-      let dimensionString = ""
+      let dimensionString = "";
       if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied) dimensionString += "1st, ";
       if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied) dimensionString += "4th, ";
-      dimensionString += "6th"
+      dimensionString += "6th";
       const hasMultiple = dimensionString.length > 3;
-      if (hasMultiple) dimensionString = dimensionString.splice(dimensionString.lastIndexOf(","), 1, " and")
+      if (hasMultiple) dimensionString = dimensionString.splice(dimensionString.lastIndexOf(","), 1, " and");
       
-      if (PelleUpgrade.chaosAllDimensions.canBeApplied) dimensionString = "1st - 7th"
-      return `${dimensionString} Antimatter Dimension${hasMultiple ? "s" : ""} ${hasMultiple ? "are" : "is"} ${formatX(this.dimensionDiscount, 2, 2)} cheaper, you gain ${formatX(this.pestilenceGainMult, 2, 2)} more Pestilence. ` 
+      if (PelleUpgrade.chaosAllDimensions.canBeApplied) dimensionString = "1st - 7th";
+      return `${dimensionString} Antimatter Dimension${hasMultiple ? "s" : ""} ${hasMultiple ? "are" : "is"} ` +
+        `${formatX(this.dimensionDiscount, 2, 2)} cheaper, ` +
+        `you gain ${formatX(this.pestilenceGainMult, 2, 2)} more Pestilence.`;
     }
   },
 
@@ -212,7 +226,7 @@ const Pelle = {
       gain *= PelleUpgrade.timeMultToUnstable.effectValue;
     }
     if (PelleUpgrade.rgMultToUnstable.canBeApplied) {
-      gain *= PelleUpgrade.rgMultToUnstable.effectValue
+      gain *= PelleUpgrade.rgMultToUnstable.effectValue;
     }
     return gain;
   }
@@ -221,7 +235,7 @@ const Pelle = {
 class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   get currency() {
-    return Currency[this.config.currency]
+    return Currency[this.config.currency];
   }
 
   get boughtAmount() {
@@ -237,7 +251,7 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
   }
 
   get currencyDisplay() {
-    switch(this.config.currency) {
+    switch (this.config.currency) {
       case "unstableMatter":
         return "Unstable Matter";
 
@@ -249,6 +263,9 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
       case "chaos":
         return "Chaos";
+
+      default:
+        return "";
     }
   }
 }
@@ -256,11 +273,11 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 class PelleUpgradeState extends SetPurchasableMechanicState {
 
   get set() {
-    return player.celestials.pelle.upgrades
+    return player.celestials.pelle.upgrades;
   }
 
   get currency() {
-    return Currency[this.config.currency]
+    return Currency[this.config.currency];
   }
 
   get description() {
@@ -276,7 +293,7 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
   }
 
   get currencyDisplay() {
-    switch(this.config.currency) {
+    switch (this.config.currency) {
       case "unstableMatter":
         return "Unstable Matter";
 
@@ -300,30 +317,33 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
         
       case "dilatedTime":
         return "Dilated Time";
+
+      default:
+        return "";
     }
   }
 }
 
 const PelleUpgrade = (function() {
   const db = GameDatabase.celestials.pelle.upgrades;
-  const obj = {}
+  const obj = {};
   Object.keys(db).forEach(key => {
     obj[key] = new PelleUpgradeState(db[key]);
-  })
+  });
   return {
     all: Object.values(obj),
     ...obj
-  }
+  };
 }());
 
 const PelleRebuyableUpgrade = (function() {
   const db = GameDatabase.celestials.pelle.rebuyables;
-  const obj = {}
+  const obj = {};
   Object.keys(db).forEach(key => {
     obj[key] = new RebuyablePelleUpgradeState(db[key]);
-  })
+  });
   return {
     all: Object.values(obj),
     ...obj
-  }
+  };
 }());

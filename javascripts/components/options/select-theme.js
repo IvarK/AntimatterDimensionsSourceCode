@@ -14,6 +14,10 @@ Vue.component("select-theme", {
   methods: {
     update() {
       this.availableThemeNames = Themes.available().map(t => t.name);
+    },
+    setTheme(theme) {
+      theme.set();
+      PerkNetwork.makeNetwork();
     }
   },
   template: `
@@ -22,7 +26,7 @@ Vue.component("select-theme", {
         v-for="theme in themes"
         :key="theme.name"
         class="o-primary-btn l-select-theme__item c-select-theme__item"
-        @click="theme.set()"
+        @click="setTheme(theme)"
       >
         {{ theme.displayName() }}
       </div>

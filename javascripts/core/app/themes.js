@@ -58,6 +58,7 @@ Theme.current = function() {
 Theme.set = function(name) {
   const theme = Themes.find(name);
   theme.set();
+  PerkNetwork.makeNetwork();
   return theme;
 };
 

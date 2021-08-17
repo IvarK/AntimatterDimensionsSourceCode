@@ -46,6 +46,39 @@ const PerkNetwork = {
     if (this.container !== undefined && notation === this.lastPerkNotation) return;
     this.lastPerkNotation = notation;
 
+    this.makeNetwork();
+    
+    this.network.on("click", params => {
+      const id = params.nodes[0];
+      if (!isFinite(id)) return;
+      Perks.find(id).purchase();
+      this.updatePerkColor();
+      this.updatePerkSize();
+    });
+
+    this.network.on("dragStart", () => {
+      const tooltip = container.getElementsByClassName("vis-tooltip")[0];
+      if (tooltip !== undefined) {
+        tooltip.style.visibility = "hidden";
+      }
+    });
+
+    // Change node side while dragging on Cancer theme, but skip the method otherwise because it's mildly intensive
+    this.network.on("dragging", () => {
+      SecretAchievement(45).tryUnlock();
+      if (Theme.current().name !== "S4") return;
+      PerkNetwork.updatePerkSize();
+    });
+
+    this.network.on("zoom", () => {
+      const scale = this.network.getScale();
+      const clampedScale = Math.clamp(scale, this.minScale, this.maxScale);
+      if (scale !== clampedScale) {
+        this.network.moveTo({ scale: clampedScale });
+      }
+    });
+  },
+  makeNetwork() {
     this.nodes = new vis.DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
@@ -90,7 +123,8 @@ const PerkNetwork = {
         selectionWidth: width => width,
         color: {
           inherit: "to"
-        }
+        },
+        hidden: ui.view.theme === "S9"
       },
     };
 
@@ -106,35 +140,6 @@ const PerkNetwork = {
 
     const network = new vis.Network(container, nodeData, nodeOptions);
     this.network = network;
-
-    network.on("click", params => {
-      const id = params.nodes[0];
-      if (!isFinite(id)) return;
-      Perks.find(id).purchase();
-      this.updatePerkColor();
-    });
-
-    network.on("dragStart", () => {
-      const tooltip = container.getElementsByClassName("vis-tooltip")[0];
-      if (tooltip !== undefined) {
-        tooltip.style.visibility = "hidden";
-      }
-    });
-
-    // Change node side while dragging on Cancer theme, but skip the method otherwise because it's mildly intensive
-    network.on("dragging", () => {
-      SecretAchievement(45).tryUnlock();
-      if (Theme.current().name !== "S4") return;
-      PerkNetwork.updatePerkSize();
-    });
-
-    network.on("zoom", () => {
-      const scale = network.getScale();
-      const clampedScale = Math.clamp(scale, this.minScale, this.maxScale);
-      if (scale !== clampedScale) {
-        network.moveTo({ scale: clampedScale });
-      }
-    });
   },
   resetPosition() {
     this.network.moveTo({ position: { x: -600, y: -300 }, scale: 0.8, offset: { x: 0, y: 0 } });
@@ -194,8 +199,9 @@ const PerkNetwork = {
       const mod = Theme.current().name === "S4"
         ? 10 * Math.sin(5 * PerkNetwork.pulseTimer + 0.1 * perk._config.id)
         : 0;
-      if (perk._config.label === "START") return 30 + mod;
-      if (perk.isBought) return 20 + mod;
+      if (perk._config.label === "START") return 35 + mod;
+      if (perk.isBought) return 25 + mod;
+      if (perk.canBeBought) return 20 + mod;
       return 15 + mod;
     }
 

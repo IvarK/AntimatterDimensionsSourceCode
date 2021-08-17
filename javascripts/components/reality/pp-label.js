@@ -14,5 +14,7 @@ Vue.component("pp-label", {
   template: `
     <div class="c-perk-tab__header">
       You have <span class="c-perk-tab__perk-points">{{ format(pp, 2, 0) }}</span> {{ "Perk Point" | pluralize(pp) }}.
+      <br>
+      Perks choices are permanent and cannot be respecced.
     </div>`
 });

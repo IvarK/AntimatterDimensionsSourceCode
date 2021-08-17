@@ -503,6 +503,10 @@ class DilationTimeStudyState extends TimeStudyState {
     }
     player.dilation.studies.push(this.id);
     Currency.timeTheorems.subtract(this.cost);
+    if (this.id === 6 && !PlayerProgress.realityUnlocked()) {
+      // We need to do this at the end so that rupgs can be unlocked.
+      EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
+    }
     return true;
   }
 }

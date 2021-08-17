@@ -138,7 +138,7 @@ const GameStorage = {
       const isPreviousVersionSave = playerObject.version < 13;
       player = this.migrations.patch(playerObject);
       if (isPreviousVersionSave) {
-        // Needed to check some reality upgrades which are usually only checked on eternity.
+        // Needed to check some notification about reality unlock study.
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
       this.devMigrations.patch(player);

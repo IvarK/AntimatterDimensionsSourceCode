@@ -102,7 +102,7 @@ Vue.component("normal-achievements-tab", {
           text="Auto Achievements:"
         />
       </div>
-      <div class="c-achievements-tab__header">
+      <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">
         Your Achievements provide a multiplier to<swap-images-button />
         <div>
           <span>
@@ -125,14 +125,16 @@ Vue.component("normal-achievements-tab", {
           </span>
         </div>
       </div>
-      <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Automatically gain the next missing Achievement in
-        {{ timeDisplayNoDecimals(achCountdown) }}<span v-if="!isAutoAchieveActive"> once Auto is turned on</span>.
-        (left-to-right, top-to-bottom)
-      </div>
-      <div v-else-if="achCountdown === 0 && missingAchievements !== 0" class="c-achievements-tab__header">
-        Automatically gain the next missing Achievement as soon as you enable Auto Achievements.
-        (left-to-right, top-to-bottom)
+      <div v-if="showAutoAchieve" class="c-achievements-tab__header">
+        <div v-if="achCountdown > 0">
+          Automatically gain the next missing Achievement in
+          {{ timeDisplayNoDecimals(achCountdown) }}<span v-if="!isAutoAchieveActive"> once Auto is turned on</span>.
+          (left-to-right, top-to-bottom)
+        </div>
+        <div v-else-if="achCountdown === 0 && missingAchievements !== 0">
+          Automatically gain the next missing Achievement as soon as you enable Auto Achievements.
+          (left-to-right, top-to-bottom)
+        </div>
       </div>
       <div class="l-achievement-grid">
         <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />

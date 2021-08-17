@@ -2966,13 +2966,13 @@ screen and (max-width: 480px) {
   user-select: none;
 }
 
-.t-s4 .c-achievements-tab__header::after {
-  content: "you can click the period at the end of this in any other theme to turn on these achievement images";
+.t-s4 .c-achievements-tab__header--multipliers::after {
+  content: "you can click the colon at the end of this line in any other theme to turn on these achievement images";
   font-size: 0.8rem;
   position: absolute;
   margin-left: 23rem;
-  width: 19rem;
-  margin-top: -1.6rem;
+  margin-top: -8rem;
+  width: 20rem;
 }
 
 .c-achievements-tab__timer {

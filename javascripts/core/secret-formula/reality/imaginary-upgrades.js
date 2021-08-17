@@ -276,7 +276,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet
       name: "Omnipresent Obliteration",
       id: 25,
-      cost: 1.6e15,
+      cost: 1.54e14,
       formatCost: x => format(x, 1),
       requirement: () => `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
         at least ${formatInt(4)} empty glyph slots`,
@@ -284,7 +284,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
         Glyphs.activeList.length <= 1,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Unlock Pelle, Celestial of Antimatter (not implemented yet)",
+      description: "Unlock Pelle, Celestial of Antimatter",
     },
   ];
 }());

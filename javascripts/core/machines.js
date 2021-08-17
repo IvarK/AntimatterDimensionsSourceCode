@@ -4,7 +4,7 @@ const MachineHandler = {
   get baseRMCap() { return new Decimal("1e1000"); },
 
   get hardcapRM() {
-    return this.baseRMCap.times(ImaginaryUpgrade(6).effectValue);
+    return this.baseRMCap.times(ImaginaryUpgrade(6).effectOrDefault(1));
   },
 
   get realityMachineMultiplier() {

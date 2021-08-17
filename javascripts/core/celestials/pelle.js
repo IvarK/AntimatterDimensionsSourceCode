@@ -1,6 +1,10 @@
 "use strict";
 
 const Pelle = {
+
+  get isUnlocked() {
+    return ImaginaryUpgrade(25).isBought;
+  },
   // This will check if a specific mechanic is disabled, like old PelleFlag(x).isActive,
   // Initially it will only have isDoomed check but we will have upgrades that let you get stuff back
   isDisabled(mechanic) {

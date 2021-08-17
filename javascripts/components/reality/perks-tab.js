@@ -57,7 +57,7 @@ const PerkNetwork = {
     });
 
     this.network.on("dragStart", () => {
-      const tooltip = container.getElementsByClassName("vis-tooltip")[0];
+      const tooltip = this.container.getElementsByClassName("vis-tooltip")[0];
       if (tooltip !== undefined) {
         tooltip.style.visibility = "hidden";
       }
@@ -170,13 +170,14 @@ const PerkNetwork = {
 
       let backgroundColor;
       if (canBeBought) {
-        if (Theme.current().isDark) backgroundColor = "#DDDDDD";
-        else backgroundColor = "#222222";
+        if (Theme.current().isDark) backgroundColor = "#EEEEEE";
+        else backgroundColor = "#111111";
       } else if (isBought) backgroundColor = primaryColor;
-      else backgroundColor = "#65656550";
+      else if (Theme.current().isDark) backgroundColor = "#333333";
+      else backgroundColor = "#CCCCCC";
 
       const hoverColor = canBeBought || isBought ? primaryColor : "#656565";
-      const borderColor = `${secondaryColor}50`;
+      const borderColor = `${secondaryColor}`;
 
       return {
         background: backgroundColor,
@@ -206,7 +207,7 @@ const PerkNetwork = {
       if (perk._config.label === "START") return 35 + mod;
       if (perk.isBought) return 25 + mod;
       if (perk.canBeBought) return 20 + mod;
-      return 15 + mod;
+      return 12 + mod;
     }
 
     const data = Perks.all

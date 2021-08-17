@@ -671,7 +671,7 @@ GameDatabase.news = [
   },
   {
     id: "a129",
-    text: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    text: "<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>"
   },
   {
     id: "a130",
@@ -1053,7 +1053,7 @@ GameDatabase.news = [
   },
   {
     id: "a194",
-    text: "<a href='https://www.youtube.com/watch?v=agxG5K38g1c' target='_blank'>THIS LINK IS NOT A RICK ROLL.</a></a>"
+    text: "<a href='https://youtube.com/watch?v=iJgNpm8cTE8' target='_blank'>This link is not a rick roll.</a>"
   },
   {
     id: "a195",

@@ -10,6 +10,7 @@ class AwayProgress {
     // If there is no reference, it is accessed directly by the name through the player object.
     this.reference = config.reference === undefined ? [this.name] : config.reference;
     this.classObjectReference = config.classObjectReference === undefined ? this.name : config.classObjectReference;
+    this.appearsInAwayModal = config.appearsInAwayModal === undefined ? true : config.appearsInAwayModal;
   }
 
   get option() {
@@ -32,10 +33,6 @@ class AwayProgress {
     return this.name
       .replace(/[A-Z]/gu, match => ` ${match}`)
       .replace(/^\w/u, c => c.toUpperCase());
-  }
-
-  get isBlackHole() {
-    return this.name.includes("BlackHole");
   }
 
   // Pass in player object. Navigate to there using each reference point. Return the place you arrived at.
@@ -126,6 +123,7 @@ const AwayProgressTypes = {
     name: "celestialMemories",
     isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
     // Functions as the visible option for all Memories, never appears due to having no reference.
+    appearsInAwayModal: false,
   }),
   teresaMemories: new AwayProgress({
     name: "teresaMemories",
@@ -174,6 +172,7 @@ const AwayProgressTypes = {
     name: "blackHole",
     isUnlocked: () => BlackHole(1).isUnlocked,
     // Functions as the visible option for both first & second BHs, never appears due to having no reference.
+    appearsInAwayModal: false,
   }),
   firstBlackHole: new AwayProgress({
     name: "firstBlackHole",

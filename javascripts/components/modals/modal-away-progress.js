@@ -15,6 +15,12 @@ Vue.component("modal-away-progress", {
         after() {
           return this.item.navigateTo(this.playerAfter);
         },
+        formatBefore() {
+          return this.formatPseudo(this.before);
+        },
+        formatAfter() {
+          return this.formatPseudo(this.after);
+        },
         classObject() {
           return this.item.classObject;
         },
@@ -22,6 +28,8 @@ Vue.component("modal-away-progress", {
           return this.item.formatName;
         },
         increased() {
+          // If they would visually display as the same number, they shouldn't be treated as if they increased
+          if (this.formatAfter === this.formatBefore) return false;
           // Both Decimals and numbers may be passed in. This code handles both.
           const before = this.before;
           const after = this.after;
@@ -31,14 +39,15 @@ Vue.component("modal-away-progress", {
             : after > before;
         },
         show() {
+          if (!this.item.appearsInAwayModal) return false;
           const show = this.increased && this.item.option && this.item.isUnlocked();
           // For the achievement and display, we need to emit if something happened to the parent
           if (show) this.$emit("something-happened");
           return show;
         },
-        // If its a Black Hole we need different formatting, so find that
         isBlackHole() {
-          return this.item.isBlackHole;
+          // If its a Black Hole we need different formatting, so find that
+          return this.item.name.includes("BlackHole");
         },
         formatBlackHoleActivations() {
           const activations = this.after - this.before;
@@ -55,7 +64,7 @@ Vue.component("modal-away-progress", {
       template: `
         <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
           <span v-if="isBlackHole">Your <b>{{ name }}</b> activated {{ formatBlackHoleActivations }}</span>
-          <span v-else><b>{{ name }}</b> increased from {{ formatPseudo(before) }} to {{ formatPseudo(after) }}</span>
+          <span v-else><b>{{ name }}</b> increased from {{ formatBefore }} to {{ formatAfter }}</span>
         </div>`
     },
   },

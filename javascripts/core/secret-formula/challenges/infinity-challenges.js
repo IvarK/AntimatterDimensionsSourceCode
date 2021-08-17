@@ -65,7 +65,7 @@ GameDatabase.challenges.infinity = [
     description:
       `Buying ADs 1-4 increases all smaller or equal AD costs.
       Buying ADs 5-8 increases all larger or equal AD costs.
-      Buying tickspeed increases all equal AD costs.`,
+      Buying Tickspeed increases all equal AD costs.`,
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {

@@ -7,6 +7,7 @@ body.t-inverted {
 .t-inverted .l-notification-container,
 .t-inverted .c-modal,
 .t-inverted #TTbuttons,
+.t-inverted .sidebar,
 .t-inverted .c-glyph-tooltip {
   filter: invert(100%);
 }

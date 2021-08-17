@@ -79,40 +79,31 @@ function buyTickSpeed() {
 
 function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
-  const costBumps = player.chall9TickspeedCostBumps;
-  const inCostScalingChallenge = NormalChallenge(9).isRunning;
-  const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isCapped;
-  const costScale = Tickspeed.costScale;
+  let boughtTickspeed = false;
 
-  if (
-    costScale.calculateCost(player.totalTickBought + costBumps).lt(Decimal.NUMBER_MAX_VALUE) ||
-    inCostScalingChallenge ||
-    !tickspeedMultDecreaseMaxed
-  ) {
-
-    let shouldContinue = true;
-    while (Currency.antimatter.gt(costScale.calculateCost(player.totalTickBought + costBumps)) && shouldContinue) {
-      if (inCostScalingChallenge) {
-        Tickspeed.multiplySameCosts();
-      }
-      Currency.antimatter.subtract(costScale.calculateCost(player.totalTickBought + costBumps));
+  if (NormalChallenge(9).isRunning) {
+    const goal = Player.infinityGoal;
+    let cost = Tickspeed.cost;
+    while (Currency.antimatter.gt(cost) && cost.lt(goal)) {
+      Tickspeed.multiplySameCosts();
+      Currency.antimatter.subtract(cost);
       player.totalTickBought++;
-      player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-      if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-      if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.NUMBER_MAX_VALUE) &&
-        !inCostScalingChallenge &&
-        tickspeedMultDecreaseMaxed) {
-        shouldContinue = false;
-      }
+      boughtTickspeed = true;
+      cost = Tickspeed.cost;
     }
-  }
-  if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.NUMBER_MAX_VALUE)) {
-    const purchases = costScale.getMaxBought(player.totalTickBought + costBumps, Currency.antimatter.value);
+  } else {
+    const purchases = Tickspeed.costScale.getMaxBought(player.totalTickBought, Currency.antimatter.value);
     if (purchases === null) {
       return;
     }
-    player.totalTickBought += purchases.quantity;
     Currency.antimatter.subtract(Decimal.pow10(purchases.logPrice));
+    player.totalTickBought += purchases.quantity;
+    boughtTickspeed = true;
+  }
+
+  if (boughtTickspeed) {
+    player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
+    if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   }
 }
 

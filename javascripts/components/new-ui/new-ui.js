@@ -96,7 +96,6 @@ Vue.component("new-ui", {
   template: `
     <div id="page">
       <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
-      <sidebar />
       <div class="game-container" :style="topMargin">
         <news-ticker v-if="news" />
         <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">

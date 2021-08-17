@@ -548,9 +548,9 @@ class AntimatterDimensionState extends DimensionState {
 
   multiplyIC5Costs() {
     for (const dimension of AntimatterDimensions.all.filter(dim => dim.tier !== this.tier)) {
-      if (this.tier <= 4 && dimension.cost.e <= this.cost.e) {
+      if (this.tier <= 4 && dimension.cost.lt(this.cost)) {
         dimension.costBumps++;
-      } else if (this.tier >= 5 && dimension.cost.e >= this.cost.e) {
+      } else if (this.tier >= 5 && dimension.cost.gt(this.cost)) {
         dimension.costBumps++;
       }
     }

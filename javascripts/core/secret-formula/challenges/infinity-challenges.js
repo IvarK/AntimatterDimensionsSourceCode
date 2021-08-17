@@ -63,9 +63,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `Buying ADs 1-4 increases all smaller or equal AD costs.
-      Buying ADs 5-8 increases all larger or equal AD costs.
-      Buying Tickspeed increases all equal AD costs.`,
+      `Buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase,
+      and buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {

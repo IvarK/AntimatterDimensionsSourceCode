@@ -65,7 +65,7 @@ function getTickSpeedMultiplier() {
 function buyTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
 
-  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+  if (NormalChallenge(9).isRunning) {
     Tickspeed.multiplySameCosts();
   }
   Currency.antimatter.subtract(Tickspeed.cost);
@@ -80,7 +80,7 @@ function buyTickSpeed() {
 function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   const costBumps = player.chall9TickspeedCostBumps;
-  const inCostScalingChallenge = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
+  const inCostScalingChallenge = NormalChallenge(9).isRunning;
   const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isCapped;
   const costScale = Tickspeed.costScale;
 

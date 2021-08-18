@@ -52,9 +52,15 @@ function giveEternityRewards(auto) {
 }
 
 function eternityAnimation() {
-  document.body.style.animation = "eternify 3s 1";
+  document.getElementById("ui").style.animation = "eternify 3s 1";
+  document.getElementById("notification-container").style.animation = "eternify 3s 1";
+  document.getElementById("TTbuttons").style.animation = "eternify 3s 1";
+  if (ui.newUI) document.getElementById("sidebar").style.animation = "eternify 3s 1";
   setTimeout(() => {
-    document.body.style.animation = "";
+    document.getElementById("ui").style.animation = "";
+    document.getElementById("notification-container").style.animation = "";
+    document.getElementById("TTbuttons").style.animation = "";
+    if (ui.newUI) document.getElementById("sidebar").style.animation = "";
   }, 3000);
 }
 

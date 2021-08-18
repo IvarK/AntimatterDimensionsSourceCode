@@ -26,7 +26,7 @@ Vue.component("sidebar", {
     ]
   },
   template: `
-    <div class="sidebar">
+    <div id="sidebar">
       <sidebar-currency />
       <tab-button
         v-for="tab in tabs"

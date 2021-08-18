@@ -1,9 +1,15 @@
 "use strict";
 
 function bigCrunchAnimation() {
-  document.body.style.animation = "implode 2s 1";
+  document.getElementById("ui").style.animation = "implode 2s 1";
+  document.getElementById("notification-container").style.animation = "implode 2s 1";
+  if (Tabs.current._currentSubtab.key) document.getElementById("TTbuttons").style.animation = "implode 2s 1";
+  if (ui.newUI) document.getElementById("sidebar").style.animation = "implode 2s 1";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.getElementById("ui").style.animation = "";
+    document.getElementById("notification-container").style.animation = "";
+    if (Tabs.current._currentSubtab.key) document.getElementById("TTbuttons").style.animation = "";
+    if (ui.newUI) document.getElementById("sidebar").style.animation = "";
   }, 2000);
 }
 

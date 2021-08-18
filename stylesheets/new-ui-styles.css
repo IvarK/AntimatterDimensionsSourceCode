@@ -42,7 +42,7 @@ body.t-s9 {
   width: 100%;
 }
 
-.sidebar {
+#sidebar {
   display: flex;
   flex-direction: column;
   width: 12rem;
@@ -51,10 +51,10 @@ body.t-s9 {
   z-index: 5;
 }
 
-.sidebar:hover .subtabs,
-.sidebar:hover .l-tab-btn-inner,
-.sidebar:hover .o-tab-btn,
-.sidebar:hover .o-tab-btn::after {
+#sidebar:hover .subtabs,
+#sidebar:hover .l-tab-btn-inner,
+#sidebar:hover .o-tab-btn,
+#sidebar:hover .o-tab-btn::after {
   transition-delay: 0s;
 }
 
@@ -161,7 +161,7 @@ body.t-s9 {
   z-index: 1;
 }
 
-.sidebar > .o-tab-btn {
+#sidebar > .o-tab-btn {
   border-left: none;
 }
 

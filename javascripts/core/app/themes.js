@@ -42,6 +42,7 @@ const Theme = function Theme(name, colors) {
     player.options.theme = name;
     ui.view.theme = name;
     window.getSelection().removeAllRanges();
+    PerkNetwork.forceNetworkRemake();
   };
 
   this.isDark = colors.isDark;
@@ -58,8 +59,6 @@ Theme.current = function() {
 Theme.set = function(name) {
   const theme = Themes.find(name);
   theme.set();
-  PerkNetwork.forceNetworkRemake();
-  PerkNetwork.initializeIfNeeded();
   return theme;
 };
 

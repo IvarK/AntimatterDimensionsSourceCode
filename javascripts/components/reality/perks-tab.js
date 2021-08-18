@@ -66,8 +66,7 @@ const PerkNetwork = {
     // Change node side while dragging on Cancer theme, but skip the method otherwise because it's mildly intensive
     this.network.on("dragging", () => {
       SecretAchievement(45).tryUnlock();
-      if (Theme.current().name !== "S4") return;
-      PerkNetwork.updatePerkSize();
+      if (Theme.current().name === "S4") PerkNetwork.updatePerkSize();
     });
 
     this.network.on("zoom", () => {
@@ -147,6 +146,7 @@ const PerkNetwork = {
   },
   forceNetworkRemake() {
     this.container = undefined;
+    this.initializeIfNeeded();
   },
   resetPosition() {
     this.network.moveTo({ position: { x: -600, y: -300 }, scale: 0.8, offset: { x: 0, y: 0 } });

@@ -7,6 +7,10 @@ const MachineHandler = {
     return this.baseRMCap.times(ImaginaryUpgrade(6).effectValue);
   },
 
+  get distanceToRMCap() {
+    return this.hardcapRM.minus(Currency.realityMachines.value);
+  },
+
   get realityMachineMultiplier() {
     return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
       getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);

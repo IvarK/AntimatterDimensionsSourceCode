@@ -316,8 +316,8 @@ GameDatabase.achievements.normal = [
     get description() { return `Infinity in ${formatInt(1)} minute or less.`; },
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 1,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Start with ${format(1e10)} antimatter.`; },
-    effect: 1e10
+    get reward() { return `Start with ${format(2e10)} antimatter.`; },
+    effect: 2e10
   },
   {
     id: 56,

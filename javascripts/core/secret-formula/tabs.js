@@ -354,7 +354,7 @@ GameDatabase.tabs = [
     key: "celestials",
     name: "Celestials",
     UIClass: "o-tab-btn--celestial",
-    condition: () => RealityUpgrades.allBought,
+    condition: () => Teresa.isUnlocked,
     id: 8,
     hidable: true,
     subtabs: [

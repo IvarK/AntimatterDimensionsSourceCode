@@ -772,7 +772,7 @@ improvements which you can choose your own path through. All Perks only require 
 <br>
 <br>
 Each Reality you gain ${formatInt(1)} Perk Point which can be spent on a upgrade on the tree, starting with
-"You can now choose from ${formatInt(Perk.firstPerk.config.effect)} glyphs on Reality". You can only unlock Perks 
+"You can now choose from ${formatInt(Perk.firstPerk.config.effect)} glyphs on Reality". You can only unlock Perks
 which are directly adjacent
 to Perks you already have, although there are loops in the tree which you can go through in either direction.
 `,
@@ -876,7 +876,7 @@ Defeating a Celestial has different conditions depending on the Celestial's mech
 <br>
 All Celestials have their own Celestial Reality, but how the Reality is relevant will depend on the celestial.
 `,
-      isUnlocked: () => RealityUpgrades.allBought,
+      isUnlocked: () => Teresa.isUnlocked,
       tags: ["reality", "challenges", "endgame", "lategame"],
       tab: ""
     }, {
@@ -897,7 +897,7 @@ ${Teresa.runCompleted
 Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
 `,
-      isUnlocked: () => RealityUpgrades.allBought,
+      isUnlocked: () => Teresa.isUnlocked,
       tags: ["rm", "endgame", "lategame", "perks", "sacrifice", "boo", "ghost"],
       tab: "celestials/teresa"
     }, {

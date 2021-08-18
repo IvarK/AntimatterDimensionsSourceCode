@@ -39,6 +39,9 @@ const Teresa = {
   lastUnlock: "SHOP",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
+  get isUnlocked() {
+    return Achievement(147).isUnlocked;
+  },
   pourRM(diff) {
     if (this.pouredAmount >= Teresa.pouredAmountCap) return;
     this.timePoured += diff;

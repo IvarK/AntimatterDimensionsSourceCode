@@ -12,6 +12,7 @@ Vue.component("modal-confirmation-options", {
       resetReality: false,
       glyphReplace: false,
       glyphSacrifice: false,
+      glyphSelection: false,
       harshAutoClean: false,
       glyphUndo: false,
       resetCelestial: false,
@@ -49,6 +50,9 @@ Vue.component("modal-confirmation-options", {
     glyphSacrifice(newValue) {
       player.options.confirmations.glyphSacrifice = newValue;
     },
+    glyphSelection(newValue) {
+      player.options.confirmations.glyphSelection = newValue;
+    },
     harshAutoClean(newValue) {
       player.options.confirmations.harshAutoClean = newValue;
     },
@@ -76,6 +80,7 @@ Vue.component("modal-confirmation-options", {
       this.resetReality = options.resetReality;
       this.glyphReplace = options.glyphReplace;
       this.glyphSacrifice = options.glyphSacrifice;
+      this.glyphSelection = options.glyphSelection;
       this.harshAutoClean = options.harshAutoClean;
       this.glyphUndo = options.glyphUndo;
       this.resetCelestial = options.resetCelestial;
@@ -84,6 +89,7 @@ Vue.component("modal-confirmation-options", {
 
       this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.teresaUnlocked = Teresa.isUnlocked;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
       this.glyphSetSaveUnlocked = EffarigUnlock.setSaves.isUnlocked;
@@ -102,6 +108,7 @@ Vue.component("modal-confirmation-options", {
         <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:" />
         <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:" />
         <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:" />
+        <wide-on-off-button v-if="teresaUnlocked" v-model="glyphSelection" text="Glyph Selection:" />
         <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
         <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
         <wide-on-off-button v-if="glyphSetSaveUnlocked" v-model="deleteGlyphSetSave" text="Delete Glyph Set Save:" />

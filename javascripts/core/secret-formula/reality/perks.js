@@ -30,9 +30,9 @@ GameDatabase.reality.perks = {
     label: "SAM",
     family: PERK_FAMILY.ANTIMATTER,
     get description() {
-      return `Start every reset with ${format(1e130)} antimatter.`;
+      return `Start every reset with ${format(2e130)} antimatter.`;
     },
-    bumpCurrency: () => Currency.antimatter.bumpTo(1e130),
+    bumpCurrency: () => Currency.antimatter.bumpTo(2e130),
     effect: 2e130,
     defaultPosition: {
       x: -190,

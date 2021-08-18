@@ -33,7 +33,7 @@ GameDatabase.reality.perks = {
       return `Start every reset with ${format(1e130)} antimatter.`;
     },
     bumpCurrency: () => Currency.antimatter.bumpTo(1e130),
-    effect: 1e130,
+    effect: 2e130,
     defaultPosition: {
       x: -190,
       y: 0

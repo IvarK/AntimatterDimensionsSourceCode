@@ -673,6 +673,7 @@ let player = {
     hiddenSubtabBits: Array.repeat(0, 10),
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 10),
+    fixedPerkStartingPos: false,
   },
   IAP: {
     totalSTD: 0,

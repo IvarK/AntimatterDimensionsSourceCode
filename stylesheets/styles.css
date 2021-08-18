@@ -8544,7 +8544,7 @@ input.o-automator-block-input {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   width: 90rem;
   height: 50rem;
-  border: 0.1rem solid black;
+  border: 0.2rem solid black;
 }
 
 .c-perk-network__canvas {

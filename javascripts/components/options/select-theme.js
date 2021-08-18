@@ -14,9 +14,6 @@ Vue.component("select-theme", {
   methods: {
     update() {
       this.availableThemeNames = Themes.available().map(t => t.name);
-    },
-    setTheme(theme) {
-      theme.set();
     }
   },
   template: `
@@ -25,7 +22,7 @@ Vue.component("select-theme", {
         v-for="theme in themes"
         :key="theme.name"
         class="o-primary-btn l-select-theme__item c-select-theme__item"
-        @click="setTheme(theme)"
+        @click="theme.set()"
       >
         {{ theme.displayName() }}
       </div>

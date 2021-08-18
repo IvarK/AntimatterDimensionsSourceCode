@@ -671,19 +671,45 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 86rem;
+  width: 74rem;
 }
 
-.c-glyph-choice {
-  display: grid;
-  justify-items: center;
+.c-glyph-choice-single-glyph {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
-  grid-template-columns: repeat(5, 1fr);
   border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
   margin: 0.5rem;
   height: 12rem;
-  width: 42rem;
+  width: 36rem;
+}
+
+.c-glyph-choice-icon {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  background-color: #222222;
+  border: 0.1rem solid #b8b8b8;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  height: 8.5rem;
+  width: 8.5rem;
+}
+
+.c-glyph-choice-effect-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: space-around;
+  color: white;
+  background-color: #222222;
+  border: 0.1rem solid #b8b8b8;
+  border-radius: 0.5rem;
+  height: 11rem;
+  width: 25rem;
 }
 
 .t-metro .c-glyph-peek,

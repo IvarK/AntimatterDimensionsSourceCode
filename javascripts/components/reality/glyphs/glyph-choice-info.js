@@ -36,6 +36,9 @@ Vue.component("modal-glyph-choice-info", {
         this.refreshGlyphs();
       }
     },
+    capitalize(str) {
+      return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+    },
     refreshGlyphs() {
       this.canRefresh = true;
       this.glyphs = GlyphSelection.glyphList(
@@ -49,11 +52,14 @@ Vue.component("modal-glyph-choice-info", {
       const rawDesc = typeof dbEntry.shortDesc === "function"
         ? dbEntry.shortDesc()
         : dbEntry.shortDesc;
+      const singleValue = dbEntry.formatSingleEffect
+        ? dbEntry.formatSingleEffect(value)
+        : dbEntry.formatEffect(value);
       const alteredValue = dbEntry.conversion
         ? dbEntry.formatSecondaryEffect(dbEntry.conversion(value))
         : "";
       return `${rawDesc}`
-        .replace("{value}", dbEntry.formatEffect(value))
+        .replace("{value}", singleValue)
         .replace("{value2}", alteredValue);
     },
     glyphEffectList(glyph) {
@@ -64,16 +70,27 @@ Vue.component("modal-glyph-choice-info", {
       // Filter out undefined results since shortDesc only exists for generated effects
       return effectStrings.filter(s => s !== "undefined");
     },
-    styleObject(glyph) {
-      const effectCount = this.glyphEffectList(glyph).length;
+    typeStyle(glyph) {
       return {
-        "grid-column": "span 3",
-        "font-size": `${effectCount > 4 ? 1 : 1.3}rem`
+        "color": `${GlyphTypes[glyph.type].color}`,
+        "font-weight": "bold"
+      };
+    },
+    rarityStyle(glyph) {
+      return {
+        "color": `${getRarity(glyph.strength).color}`,
+        "font-weight": "bold"
+      };
+    },
+    effectStyle(glyph) {
+      return {
+        "font-size": `${glyph.type === "effarig" ? 1 : 1.2}rem`,
       };
     },
   },
   template: `
-    <div>
+    <div style="background-color: inherit;">
+      <modal-close-button @click="emitClose" />
       <h3>Potential Glyphs for this Reality</h3>
       Projected Glyph Level: {{ formatInt(level) }}
       <br>
@@ -81,28 +98,34 @@ Vue.component("modal-glyph-choice-info", {
       <div class="c-glyph-choice-container">
         <div
           v-for="(g, idx) in glyphs"
-          class="c-glyph-choice"
+          class="c-glyph-choice-single-glyph"
         >
-          <glyph-component
-            :key="idx"
-            style="margin: 0.1rem;"
-            :glyph="g"
-            :showSacrifice="canSacrifice"
-            :draggable="false"
-            :circular="true"
-            :ignoreModifiedLevel="true"
-            :isInModal="true"
-            size="5rem"
-            :textProportion="0.5"
-            glowBlur="0.4rem"
-            glowSpread="0.1rem"
-          />
-          <div>
-            Rarity:
-            <br>
-            {{ formatPercents(getRarityValue(g.strength), 1) }}
+          <div class="c-glyph-choice-icon">
+            <div :style="typeStyle(g)">
+              {{ capitalize(g.type) }}
+            </div>
+            <glyph-component
+              :key="idx"
+              style="margin: 0.1rem;"
+              :glyph="g"
+              :showSacrifice="canSacrifice"
+              :draggable="false"
+              :circular="true"
+              :ignoreModifiedLevel="true"
+              :isInModal="true"
+              size="4rem"
+              :textProportion="0.5"
+              glowBlur="0.4rem"
+              glowSpread="0.1rem"
+            />
+            <div :style="rarityStyle(g)">
+              {{ formatPercents(getRarityValue(g.strength), 1) }}
+            </div>
           </div>
-          <div :style="styleObject(g)">
+          <div
+            class="c-glyph-choice-effect-list"
+            :style="effectStyle(g)"
+          >
             <div v-for="effectText in glyphEffectList(g)">
               {{ effectText }}
             </div>

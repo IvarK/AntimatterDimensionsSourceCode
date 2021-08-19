@@ -321,7 +321,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount
+    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount, 10
   );
   if (maxBought === null) {
     return;
@@ -470,7 +470,7 @@ class AntimatterDimensionState extends DimensionState {
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) return 0;
-    return this.costScale.getContinuumValue(Currency.antimatter.value) * Laitela.matterExtraPurchaseFactor;
+    return this.costScale.getContinuumValue(Currency.antimatter.value, 10) * Laitela.matterExtraPurchaseFactor;
   }
 
   /**

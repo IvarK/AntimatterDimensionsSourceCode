@@ -184,8 +184,8 @@ GameDatabase.achievements.normal = [
     get description() { return `Infinity in under ${formatInt(2)} hours.`; },
     checkRequirement: () => Time.thisInfinityRealTime.totalHours <= 2,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Start with ${formatInt(2000)} antimatter.`; },
-    effect: 2000
+    get reward() { return `Start with ${formatInt(5000)} antimatter.`; },
+    effect: 5000
   },
   {
     id: 38,
@@ -307,8 +307,8 @@ GameDatabase.achievements.normal = [
     get description() { return `Infinity in ${formatInt(10)} minutes or less.`; },
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 10,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Start with ${format(2e5)} antimatter.`; },
-    effect: 2e5
+    get reward() { return `Start with ${format(5e5)} antimatter.`; },
+    effect: 5e5
   },
   {
     id: 55,
@@ -316,8 +316,8 @@ GameDatabase.achievements.normal = [
     get description() { return `Infinity in ${formatInt(1)} minute or less.`; },
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 1,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Start with ${format(2e10)} antimatter.`; },
-    effect: 2e10
+    get reward() { return `Start with ${format(5e10)} antimatter.`; },
+    effect: 5e10
   },
   {
     id: 56,
@@ -512,9 +512,9 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
-      return `Start with ${format(2e25)} antimatter.`;
+      return `Start with ${format(5e25)} antimatter.`;
     },
-    effect: 2e25
+    effect: 5e25
   },
   {
     id: 81,
@@ -708,8 +708,8 @@ GameDatabase.achievements.normal = [
     get description() { return `Eternity in under ${formatInt(30)} seconds.`; },
     checkRequirement: () => Time.thisEternity.totalSeconds <= 30,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-    get reward() { return `Start Eternities with ${format(2e25)} Infinity Points.`; },
-    effect: 2e25
+    get reward() { return `Start Eternities with ${format(5e25)} Infinity Points.`; },
+    effect: 5e25
   },
   {
     id: 105,

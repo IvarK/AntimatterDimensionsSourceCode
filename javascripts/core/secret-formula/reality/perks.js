@@ -30,10 +30,10 @@ GameDatabase.reality.perks = {
     label: "SAM",
     family: PERK_FAMILY.ANTIMATTER,
     get description() {
-      return `Start every reset with ${format(2e130)} antimatter.`;
+      return `Start every reset with ${format(5e130)} antimatter.`;
     },
-    bumpCurrency: () => Currency.antimatter.bumpTo(2e130),
-    effect: 2e130,
+    bumpCurrency: () => Currency.antimatter.bumpTo(5e130),
+    effect: 5e130,
     defaultPosition: {
       x: -190,
       y: 0
@@ -44,10 +44,10 @@ GameDatabase.reality.perks = {
     label: "SIP1",
     family: PERK_FAMILY.INFINITY,
     get description() {
-      return `Start every Eternity and Reality with ${format(2e15)} Infinity Points.`;
+      return `Start every Eternity and Reality with ${format(5e15)} Infinity Points.`;
     },
-    bumpCurrency: () => Currency.infinityPoints.bumpTo(2e15),
-    effect: 2e15,
+    bumpCurrency: () => Currency.infinityPoints.bumpTo(5e15),
+    effect: 5e15,
     defaultPosition: {
       x: -375,
       y: -15
@@ -58,10 +58,10 @@ GameDatabase.reality.perks = {
     label: "SIP2",
     family: PERK_FAMILY.INFINITY,
     get description() {
-      return `Start every Eternity and Reality with ${format(2e130)} Infinity Points.`;
+      return `Start every Eternity and Reality with ${format(5e130)} Infinity Points.`;
     },
-    bumpCurrency: () => Currency.infinityPoints.bumpTo(2e130),
-    effect: 2e130,
+    bumpCurrency: () => Currency.infinityPoints.bumpTo(5e130),
+    effect: 5e130,
     defaultPosition: {
       x: -445,
       y: -175
@@ -86,10 +86,10 @@ GameDatabase.reality.perks = {
     label: "SEP2",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Start every Reality with ${format(2000)} Eternity Points.`;
+      return `Start every Reality with ${format(5000)} Eternity Points.`;
     },
-    bumpCurrency: () => Currency.eternityPoints.bumpTo(2000),
-    effect: 2000,
+    bumpCurrency: () => Currency.eternityPoints.bumpTo(5000),
+    effect: 5000,
     defaultPosition: {
       x: -565,
       y: 205
@@ -100,10 +100,10 @@ GameDatabase.reality.perks = {
     label: "SEP3",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Start every Reality with ${format(1e9)} Eternity Points.`;
+      return `Start every Reality with ${format(5e9)} Eternity Points.`;
     },
-    bumpCurrency: () => Currency.eternityPoints.bumpTo(1e9),
-    effect: 1e9,
+    bumpCurrency: () => Currency.eternityPoints.bumpTo(5e9),
+    effect: 5e9,
     defaultPosition: {
       x: -700,
       y: 240

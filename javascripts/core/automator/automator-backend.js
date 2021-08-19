@@ -165,8 +165,17 @@ class AutomatorScript {
 }
 
 const AutomatorData = {
+  currentInfoPane: 0,
+  // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
+  // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative
+  // of looping through and clearing every line (bad for performance)
   currentErrorLine: -1,
+  currentEventLine: -1,
+  // Used for getting the correct EC count in event log
   lastECCompletionCount: 0,
+  // Used as a flag to make sure that wait commands only add one entry to the log instead of every execution attempt
+  isWaiting: false,
+  waitStart: 0,
   lastEvent: 0,
   eventLog: [],
   scriptIndex() {
@@ -326,6 +335,7 @@ const AutomatorBackend = {
         }
         this.stop();
       } else if (this.stack.top.commandState && this.stack.top.commandState.advanceOnPop) {
+        AutomatorData.logCommandEvent(`Exiting IF block`, this.stack.top.commandState.ifEndLine);
         return this.nextCommand();
       }
     } else {

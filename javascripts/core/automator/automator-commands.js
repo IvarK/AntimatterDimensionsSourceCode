@@ -29,12 +29,12 @@ const AutomatorCommands = ((() => {
       run: () => {
         if (!evalComparison()) {
           AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
-            moving to line ${ctx.RCurly[0].startLine + 1} (end of while loop)`, ctx.startLine);
+            exiting loop at line ${ctx.RCurly[0].startLine + 1} (end of loop)`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         AutomatorBackend.push(commands);
         AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), 
-          moving to line ${ctx.LCurly[0].startLine + 1} (start of while loop)`, ctx.startLine);
+          moving to line ${ctx.LCurly[0].startLine + 1} (start of loop)`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
       blockCommands: commands,
@@ -155,22 +155,31 @@ const AutomatorCommands = ((() => {
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
           autobuyer.isActive = on;
+          let currSetting = "";
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
             autobuyer.time = duration / 1000;
+            // Can't do the units provided in the script because it's been parsed away like 4 layers up the call stack
+            currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : format(autobuyer.time)} seconds`;
           } else if (xCurrent !== undefined) {
             autobuyer.mode = xCurrentMode;
             autobuyer.xCurrent = new Decimal(xCurrent);
+            currSetting = `${format(xCurrent, 2, 2)} times current`;
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {
               autobuyer.rm = new Decimal(fixedAmount);
+              currSetting = `${format(autobuyer.rm, 2)} RM`;
             } else {
               autobuyer.amount = new Decimal(fixedAmount);
+              currSetting = `${fixedAmount} ${ctx.PrestigeEvent[0].image === "infinity" ? "IP" : "EP"}`;
             }
           }
-          AutomatorData.logCommandEvent(`Automatic ${ctx.PrestigeEvent[0].image} turned ${ctx.On ? "ON" : "OFF"}`,
-            ctx.startLine);
+          // Settings are drawn from the actual automator text; it's not feasible to parse out all the settings
+          // for every combination of autobuyers when they get turned off
+          const settingString = ctx.On ? `(Setting: ${currSetting})` : "";
+          AutomatorData.logCommandEvent(`Automatic ${ctx.PrestigeEvent[0].image} turned ${ctx.On ? "ON" : "OFF"}
+            ${settingString}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -328,7 +337,10 @@ const AutomatorCommands = ((() => {
             // If the commandState is empty, it means we haven't evaluated the if yet
             if (S.commandState !== null) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             // We use this flag to make "single step" advance to the next command after the if when the block ends
-            S.commandState = { advanceOnPop: true };
+            S.commandState = {
+              advanceOnPop: true,
+              ifEndLine: ctx.RCurly[0].startLine
+            };
             if (!evalComparison()) {
               AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
                 skipping to line ${ctx.RCurly[0].startLine + 1}`, ctx.startLine);
@@ -734,6 +746,8 @@ const AutomatorCommands = ((() => {
               ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
+          AutomatorData.logCommandEvent(`Attempted to purchase TT with ${ctx.TTCurrency[0].image} 
+            but could not afford any`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
       },
@@ -836,21 +850,35 @@ const AutomatorCommands = ((() => {
         const commands = C.visit(ctx.block);
         if (ctx.comparison) {
           const evalComparison = C.visit(ctx.comparison);
-          return compileConditionLoop(() => !evalComparison(), commands);
+          return compileConditionLoop(() => !evalComparison(), commands, ctx);
         }
         const prestigeLevel = ctx.PrestigeEvent[0].tokenType.$prestigeLevel;
+        let prestigeName;
+        switch (ctx.PrestigeEvent[0].tokenType) {
+          case T.Infinity:
+            prestigeName = "Infinity";
+            break;
+          case T.Eternity:
+            prestigeName = "Eternity";
+            break;
+          case T.Reality:
+            prestigeName = "Reality";
+            break;
+          default:
+            throw Error("Unrecognized prestige layer in until loop");
+        }
         return {
           run: S => {
             if (S.commandState === null) {
               S.commandState = { prestigeLevel: 0 };
             }
             if (S.commandState.prestigeLevel >= prestigeLevel) {
-              AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
-                moving to line ${ctx.RCurly[0].startLine + 1} (end of until loop)`, ctx.startLine);
+              AutomatorData.logCommandEvent(`${prestigeName} prestige has occurred, exiting until loop`,
+                ctx.startLine);
               return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             }
             AutomatorBackend.push(commands);
-            AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), 
+            AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet,
               moving to line ${ctx.LCurly[0].startLine + 1} (start of until loop)`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
@@ -891,10 +919,17 @@ const AutomatorCommands = ((() => {
         const doneWaiting = evalComparison();
         return () => {
           if (doneWaiting) {
+            const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
             AutomatorData.logCommandEvent(`Continuing after WAIT 
-              (${parseConditionalIntoText(ctx)} is true)`, ctx.startLine);
+              (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+            AutomatorData.isWaiting = false;
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
+          if (!AutomatorData.isWaiting) {
+            AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
+            AutomatorData.waitStart = Date.now();
+          }
+          AutomatorData.isWaiting = true;
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
@@ -927,12 +962,19 @@ const AutomatorCommands = ((() => {
             S.commandState = { prestigeLevel: 0 };
           }
           const prestigeOccurred = S.commandState.prestigeLevel >= prestigeLevel;
+          const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
           if (prestigeOccurred) {
-            const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
-            AutomatorData.logCommandEvent(`Continuing after WAIT 
-              (${prestigeName} occurred for ${findLastPrestigeRecord(prestigeName)})`, ctx.startLine);
+            const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
+            AutomatorData.logCommandEvent(`Continuing after WAIT (${prestigeName} occurred for
+              ${findLastPrestigeRecord(prestigeName)}, after ${timeWaited})`, ctx.startLine);
+            AutomatorData.isWaiting = false;
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
+          if (!AutomatorData.isWaiting) {
+            AutomatorData.logCommandEvent(`Started WAIT for ${prestigeName}`, ctx.startLine);
+            AutomatorData.waitStart = Date.now();
+          }
+          AutomatorData.isWaiting = true;
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },

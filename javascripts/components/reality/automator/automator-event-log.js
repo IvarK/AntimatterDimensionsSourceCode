@@ -92,6 +92,15 @@ Vue.component("automator-event-log", {
         default:
           throw Error("Unrecognized timestamp mode in Automator event log");
       }
+    },
+    scrollToLine(line) {
+      AutomatorTextUI.editor.scrollIntoView({ line, ch: 0 }, 16);
+      const eventLine = AutomatorData.currentEventLine - 1;
+      AutomatorTextUI.editor.removeLineClass(eventLine, "background", "c-automator-editor__event-line");
+      AutomatorTextUI.editor.removeLineClass(eventLine, "gutter", "c-automator-editor__event-line-gutter");
+      AutomatorTextUI.editor.addLineClass(line - 1, "background", "c-automator-editor__event-line");
+      AutomatorTextUI.editor.addLineClass(line - 1, "gutter", "c-automator-editor__event-line-gutter");
+      AutomatorData.currentEventLine = line;
     }
   },
   template: `
@@ -114,7 +123,7 @@ Vue.component("automator-event-log", {
         />
         <button
           class="fas fa-trash"
-          @click="clearLog()"
+          @click="clearLog"
           v-tooltip="clearTooltip"
         />
         <button
@@ -162,6 +171,11 @@ Vue.component("automator-event-log", {
         :key="id"
       >
         <b>Line {{ event.line }}{{ timestamp(event) }}:</b>
+        <button
+          class="fas fa-arrow-circle-right"
+          @click="scrollToLine(event.line)"
+          v-tooltip="'Jump to line'"
+        />
         <div class="c-automator-docs-page__indented">
           <i>{{ event.message }}</i>
         </div>

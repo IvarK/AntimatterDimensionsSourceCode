@@ -1055,7 +1055,7 @@ GameDatabase.news = [
   },
   {
     id: "a194",
-    text: 
+    text:
        `<a href='https://youtube.com/watch?v=iJgNpm8cTE8' target='_blank'>This link is not a rick roll.
        It's a reference to a certain scene in the movie Star Wars that was also referenced by a certain
        website and was a very popular meme.</a>`
@@ -2725,7 +2725,7 @@ GameDatabase.news = [
     text:
       `"Zurkrbarg, Celestial of Privacy" has announced their plans to release a new version
       of their popular social media universe, "All".`,
-    get unlocked() { return RealityUpgrades.allBought; }
+    get unlocked() { return Teresa.isUnlocked; }
   },
   {
     id: "l71",

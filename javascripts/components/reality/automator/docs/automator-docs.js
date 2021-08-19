@@ -3,7 +3,7 @@
 Vue.component("automator-docs", {
   data() {
     return {
-      commandID: -1,
+      infoPaneID: -1,
       isBlockAutomator: false,
       errorCount: 0,
       editingName: false,
@@ -19,9 +19,14 @@ Vue.component("automator-docs", {
     this.updateCurrentScriptID();
     this.updateScriptList();
   },
+  watch: {
+    infoPaneID(newValue) {
+      AutomatorData.currentInfoPane = newValue;
+    }
+  },
   computed: {
     command() {
-      return GameDatabase.reality.automator.commands[this.commandID];
+      return GameDatabase.reality.automator.commands[this.infoPaneID];
     },
     fullScreen: {
       get() {
@@ -58,17 +63,24 @@ Vue.component("automator-docs", {
     },
     docStyle() {
       return {
-        "color": this.commandID === -1 ? "green" : ""
+        "color": this.infoPaneID === -1 ? "green" : ""
+      };
+    },
+    logStyle() {
+      return {
+        "color": this.infoPaneID === -3 ? "green" : ""
       };
     },
     errorStyle() {
+      const errorlessColor = this.infoPaneID === -2 ? "green" : "";
       return {
-        "color": this.errorCount === 0 ? "" : "red"
+        "color": this.errorCount === 0 ? errorlessColor : "red"
       };
     }
   },
   methods: {
     update() {
+      this.infoPaneID = AutomatorData.currentInfoPane;
       this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       this.errorCount = AutomatorData.currentErrors().length;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
@@ -76,7 +88,7 @@ Vue.component("automator-docs", {
       this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
     },
     changeCommand(event) {
-      this.commandID = event;
+      this.infoPaneID = event;
     },
     exportScript() {
       // Cut off leading and trailing whitespace
@@ -162,14 +174,20 @@ Vue.component("automator-docs", {
         <automator-button
           :style="docStyle"
           class="fa-list"
-          @click="commandID = -1"
+          @click="infoPaneID = -1"
           v-tooltip="'Command list'"
         />
         <automator-button
           :style="errorStyle"
           class="fa-exclamation-triangle"
-          @click="commandID = -2"
+          @click="infoPaneID = -2"
           v-tooltip="errorTooltip"
+        />
+        <automator-button
+          :style="logStyle"
+          class="fa-eye"
+          @click="infoPaneID = -3"
+          v-tooltip="'View recently executed commands'"
         />
         <automator-button
           class="fa-file-export"
@@ -224,10 +242,11 @@ Vue.component("automator-docs", {
       <automator-blocks v-if="isBlockAutomator" />
       <div class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
-          v-if="commandID === -1"
+          v-if="infoPaneID === -1"
           @select="changeCommand"
         />
-        <automator-error-page v-else-if="commandID === -2" />
+        <automator-error-page v-else-if="infoPaneID === -2" />
+        <automator-event-log v-else-if="infoPaneID === -3" />
         <automator-man-page v-else :command="command" />
       </div>
     </div>`

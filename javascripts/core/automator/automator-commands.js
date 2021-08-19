@@ -24,15 +24,52 @@ const AutomatorCommands = ((() => {
   EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => prestigeNotify(T.Reality.$prestigeLevel));
 
   // Used by while and until
-  function compileConditionLoop(evalComparison, commands) {
+  function compileConditionLoop(evalComparison, commands, ctx) {
     return {
       run: () => {
-        if (!evalComparison()) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        if (!evalComparison()) {
+          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
+            exiting loop at line ${ctx.RCurly[0].startLine + 1} (end of loop)`, ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
         AutomatorBackend.push(commands);
+        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), 
+          moving to line ${ctx.LCurly[0].startLine + 1} (start of loop)`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
       blockCommands: commands,
     };
+  }
+
+  // Extracts the conditional out of a command and returns it as text
+  function parseConditionalIntoText(ctx) {
+    const comp = ctx.comparison[0].children;
+    const getters = comp.compareValue.map(cv => (
+      cv.children.AutomatorCurrency
+        ? () => cv.children.AutomatorCurrency[0].image
+        : () => format(cv.children.$value, 2, 2)
+    ));
+    const compareFn = comp.ComparisonOperator[0].image;
+    return `${getters[0]()} ${compareFn} ${getters[1]()}`;
+  }
+
+  // Determines how much (prestige currency) the previous (layer) reset gave, for event logging
+  function findLastPrestigeRecord(layer) {
+    let addedECs, gainedEP;
+    switch (layer) {
+      case "INFINITY":
+        return `${format(player.records.lastTenInfinities[0][1], 2)} IP`;
+      case "ETERNITY":
+        addedECs = AutomatorData.lastECCompletionCount;
+        gainedEP = `${format(player.records.lastTenEternities[0][1], 2)} EP`;
+        return addedECs === 0
+          ? `${gainedEP}`
+          : `${gainedEP}, ${addedECs} completions`;
+      case "REALITY":
+        return `${format(player.records.lastTenRealities[0][1], 2)} RM`;
+      default:
+        throw Error(`Unrecognized prestige ${layer} in Automator event log`);
+    }
   }
 
   return [
@@ -118,20 +155,31 @@ const AutomatorCommands = ((() => {
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
           autobuyer.isActive = on;
+          let currSetting = "";
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
             autobuyer.time = duration / 1000;
+            // Can't do the units provided in the script because it's been parsed away like 4 layers up the call stack
+            currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : format(autobuyer.time)} seconds`;
           } else if (xCurrent !== undefined) {
             autobuyer.mode = xCurrentMode;
             autobuyer.xCurrent = new Decimal(xCurrent);
+            currSetting = `${format(xCurrent, 2, 2)} times current`;
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {
               autobuyer.rm = new Decimal(fixedAmount);
+              currSetting = `${format(autobuyer.rm, 2)} RM`;
             } else {
               autobuyer.amount = new Decimal(fixedAmount);
+              currSetting = `${fixedAmount} ${ctx.PrestigeEvent[0].image === "infinity" ? "IP" : "EP"}`;
             }
           }
+          // Settings are drawn from the actual automator text; it's not feasible to parse out all the settings
+          // for every combination of autobuyers when they get turned off
+          const settingString = (autobuyer.isActive && currSetting !== "") ? `(Setting: ${currSetting})` : "";
+          AutomatorData.logCommandEvent(`Automatic ${ctx.PrestigeEvent[0].image}
+            turned ${autobuyer.isActive ? "ON" : "OFF"} ${settingString}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -181,6 +229,7 @@ const AutomatorCommands = ((() => {
         const on = Boolean(ctx.On);
         return () => {
           if (on === BlackHoles.arePaused) BlackHoles.togglePause();
+          AutomatorData.logCommandEvent(`Black Holes toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -288,9 +337,18 @@ const AutomatorCommands = ((() => {
             // If the commandState is empty, it means we haven't evaluated the if yet
             if (S.commandState !== null) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             // We use this flag to make "single step" advance to the next command after the if when the block ends
-            S.commandState = { advanceOnPop: true };
-            if (!evalComparison()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+            S.commandState = {
+              advanceOnPop: true,
+              ifEndLine: ctx.RCurly[0].startLine
+            };
+            if (!evalComparison()) {
+              AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
+                skipping to line ${ctx.RCurly[0].startLine + 1}`, ctx.startLine);
+              return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+            }
             AutomatorBackend.push(commands);
+            AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), 
+              entering IF block`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
           blockCommands: commands,
@@ -322,6 +380,7 @@ const AutomatorCommands = ((() => {
         const notifyText = ctx.StringLiteral;
         return () => {
           GameUI.notify.info(`Automator: ${notifyText[0].image}`);
+          AutomatorData.logCommandEvent(`NOTIFY call: ${notifyText[0].image}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -355,14 +414,20 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const duration = ctx.$duration;
         return S => {
+          const dur = ctx.duration[0].children;
+          const timeString = `${dur.NumberLiteral[0].image} ${dur.TimeUnit[0].image.replace("\\s", "")}`;
           if (S.commandState === null) {
             S.commandState = { timeMs: 0 };
+            AutomatorData.logCommandEvent(`Pause started (waiting ${timeString})`, ctx.startLine);
           } else {
             S.commandState.timeMs += Math.max(Time.unscaledDeltaTime.milliseconds, AutomatorBackend.currentInterval);
           }
-          return S.commandState.timeMs >= duration
-            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+          const finishPause = S.commandState.timeMs >= duration;
+          if (finishPause) {
+            AutomatorData.logCommandEvent(`Pause finished (waited ${timeString})`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
       blockify: ctx => {
@@ -409,12 +474,16 @@ const AutomatorCommands = ((() => {
         return () => {
           const available = prestigeToken.$prestigeAvailable();
           if (!available) {
-            return nowait
-              ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-              : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+            if (!nowait) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+            AutomatorData.logCommandEvent(`Auto-${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
+              ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           if (respec) prestigeToken.$respec();
           prestigeToken.$prestige();
+          const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
+          AutomatorData.logCommandEvent(`Auto-${prestigeName} triggered 
+            (${findLastPrestigeRecord(prestigeName)})`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
       },
@@ -432,9 +501,16 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Start[0].startLine;
         return true;
       },
-      compile: () => () => {
-        if (player.dilation.active) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-        if (startDilatedEternity(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+      compile: ctx => () => {
+        if (player.dilation.active) {
+          AutomatorData.logCommandEvent(`Start Dilation encountered but ignored due to already being dilated`,
+            ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        if (startDilatedEternity(true)) {
+          AutomatorData.logCommandEvent(`Dilation entered`, ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
       blockify: () => ({ target: "DILATION", ...automatorBlocksMap.START })
@@ -453,13 +529,20 @@ const AutomatorCommands = ((() => {
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
         return () => {
           const ec = EternityChallenge(ecNumber);
-          if (ec.isRunning) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          if (ec.isRunning) {
+            AutomatorData.logCommandEvent(`Start EC encountered but ignored due to already being in the specified EC`,
+              ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
           if (!EternityChallenge(ecNumber).isUnlocked) {
             if (!TimeStudy.eternityChallenge(ecNumber).purchase(true)) {
               return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
             }
           }
-          if (ec.start(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+          if (ec.start(true)) {
+            AutomatorData.logCommandEvent(`Eternity Challenge ${ecNumber} started`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+          }
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
@@ -490,12 +573,19 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         if (ctx.Use) return () => {
-          if (Enslaved.isUnlocked) Enslaved.useStoredTime(false);
+          if (Enslaved.isUnlocked) {
+            Enslaved.useStoredTime(false);
+            AutomatorData.logCommandEvent(`Stored time used`, ctx.startLine);
+          } else {
+            AutomatorData.logCommandEvent(`Attempted to use stored time, but failed (not unlocked yet)`,
+              ctx.startLine);
+          }
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
         const on = Boolean(ctx.On);
         return () => {
           if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();
+          AutomatorData.logCommandEvent(`Storing time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -528,19 +618,31 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const studies = ctx.$studies;
         if (ctx.Nowait === undefined) return () => {
+          let purchasedStudies = 0;
           for (const tsNumber of studies.normal) {
             if (TimeStudy(tsNumber).isBought) continue;
             if (!TimeStudy(tsNumber).purchase()) {
               if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
+              if (purchasedStudies > 0) {
+                AutomatorData.logCommandEvent(`Purchased ${purchasedStudies} time 
+                  ${pluralize("study", purchasedStudies, "studies")} and stopped at study 
+                  ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
+              }
               return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
             }
+            purchasedStudies++;
           }
           if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
+            AutomatorData.logCommandEvent(`Purchased all specified time studies`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
-          return TimeStudy.eternityChallenge(studies.ec).purchase(true)
-            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+          const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(true);
+          if (unlockedEC) {
+            AutomatorData.logCommandEvent(`Purchased all specified time studies and unlocked Eternity Challenge 
+              ${studies.ec}`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
         return () => {
           for (const tsNumber of studies.normal) TimeStudy(tsNumber).purchase();
@@ -598,6 +700,7 @@ const AutomatorCommands = ((() => {
         const presetIndex = ctx.$presetIndex;
         return () => {
           importStudyTree(player.timestudy.presets[presetIndex - 1].studies, true);
+          AutomatorData.logCommandEvent(`Loaded study ${ctx.Preset[0].image}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -616,8 +719,9 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Studies[0].startLine;
         return true;
       },
-      compile: () => () => {
+      compile: ctx => () => {
         player.respec = true;
+        AutomatorData.logCommandEvent(`Turned study respec ON`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       },
       blockify: () => automatorBlocksMap.RESPEC
@@ -635,9 +739,17 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         const buyFunction = ctx.TTCurrency[0].tokenType.$buyTT;
-        return () => (buyFunction()
-          ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-          : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION);
+        return () => {
+          const boughtTT = buyFunction();
+          if (boughtTT) {
+            AutomatorData.logCommandEvent(`${formatInt(boughtTT)} TT purchased with ${ctx.TTCurrency[0].image}`,
+              ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          AutomatorData.logCommandEvent(`Attempted to purchase TT with ${ctx.TTCurrency[0].image} 
+            but could not afford any`, ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        };
       },
       blockify: ctx => ({
         target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
@@ -658,10 +770,21 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const nowait = ctx.Nowait !== undefined;
         return () => {
-          if (PlayerProgress.dilationUnlocked()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-          return TimeStudy.dilation.purchase(true) || nowait
-            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+          if (PlayerProgress.dilationUnlocked()) {
+            AutomatorData.logCommandEvent(`Skipped dilation unlock due to being already unlocked`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          const unlockedThisTick = TimeStudy.dilation.purchase(true);
+          if (unlockedThisTick) {
+            AutomatorData.logCommandEvent(`Unlocked Dilation`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          if (nowait) {
+            AutomatorData.logCommandEvent(`Skipped dilation unlock due to lack of requirements (NOWAIT)`,
+              ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
       blockify: () => ({
@@ -684,10 +807,20 @@ const AutomatorCommands = ((() => {
         const nowait = ctx.Nowait !== undefined;
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
         return () => {
-          if (EternityChallenge(ecNumber).isUnlocked || nowait) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-          return TimeStudy.eternityChallenge(ecNumber).purchase(true)
-            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+          if (EternityChallenge(ecNumber).isUnlocked) {
+            AutomatorData.logCommandEvent(`Skipped EC ${ecNumber} unlock due to being already unlocked`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          if (nowait) {
+            AutomatorData.logCommandEvent(`EC ${ecNumber} unlock failed and skipped (NOWAIT)`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          const purchased = TimeStudy.eternityChallenge(ecNumber).purchase(true);
+          if (purchased) {
+            AutomatorData.logCommandEvent(`EC ${ecNumber} unlocked`, ctx.startLine);
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
       blockify: ctx => ({
@@ -717,16 +850,36 @@ const AutomatorCommands = ((() => {
         const commands = C.visit(ctx.block);
         if (ctx.comparison) {
           const evalComparison = C.visit(ctx.comparison);
-          return compileConditionLoop(() => !evalComparison(), commands);
+          return compileConditionLoop(() => !evalComparison(), commands, ctx);
         }
         const prestigeLevel = ctx.PrestigeEvent[0].tokenType.$prestigeLevel;
+        let prestigeName;
+        switch (ctx.PrestigeEvent[0].tokenType) {
+          case T.Infinity:
+            prestigeName = "Infinity";
+            break;
+          case T.Eternity:
+            prestigeName = "Eternity";
+            break;
+          case T.Reality:
+            prestigeName = "Reality";
+            break;
+          default:
+            throw Error("Unrecognized prestige layer in until loop");
+        }
         return {
           run: S => {
             if (S.commandState === null) {
               S.commandState = { prestigeLevel: 0 };
             }
-            if (S.commandState.prestigeLevel >= prestigeLevel) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+            if (S.commandState.prestigeLevel >= prestigeLevel) {
+              AutomatorData.logCommandEvent(`${prestigeName} prestige has occurred, exiting until loop`,
+                ctx.startLine);
+              return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+            }
             AutomatorBackend.push(commands);
+            AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet,
+              moving to line ${ctx.LCurly[0].startLine + 1} (start of until loop)`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
           blockCommands: commands
@@ -763,9 +916,27 @@ const AutomatorCommands = ((() => {
       },
       compile: (ctx, C) => {
         const evalComparison = C.visit(ctx.comparison);
-        return () => (evalComparison()
-          ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-          : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION);
+        const doneWaiting = evalComparison();
+        return () => {
+          if (doneWaiting) {
+            const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
+            if (AutomatorData.isWaiting) {
+              AutomatorData.logCommandEvent(`Continuing after WAIT 
+                (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+            } else {
+              AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
+                ctx.startLine);
+            }
+            AutomatorData.isWaiting = false;
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          if (!AutomatorData.isWaiting) {
+            AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
+            AutomatorData.waitStart = Date.now();
+          }
+          AutomatorData.isWaiting = true;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        };
       },
       blockify: (ctx, B) => {
         const commands = [];
@@ -795,9 +966,21 @@ const AutomatorCommands = ((() => {
           if (S.commandState === null) {
             S.commandState = { prestigeLevel: 0 };
           }
-          return S.commandState.prestigeLevel >= prestigeLevel
-            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
-            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+          const prestigeOccurred = S.commandState.prestigeLevel >= prestigeLevel;
+          const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
+          if (prestigeOccurred) {
+            const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
+            AutomatorData.logCommandEvent(`Continuing after WAIT (${prestigeName} occurred for
+              ${findLastPrestigeRecord(prestigeName)}, after ${timeWaited})`, ctx.startLine);
+            AutomatorData.isWaiting = false;
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          }
+          if (!AutomatorData.isWaiting) {
+            AutomatorData.logCommandEvent(`Started WAIT for ${prestigeName}`, ctx.startLine);
+            AutomatorData.waitStart = Date.now();
+          }
+          AutomatorData.isWaiting = true;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
       blockify: ctx => ({
@@ -819,7 +1002,7 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.While[0].startLine;
         return V.checkBlock(ctx, ctx.While);
       },
-      compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block)),
+      compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block), ctx),
       blockify: (ctx, B) => {
         const commands = [];
         B.visit(ctx.block, commands);

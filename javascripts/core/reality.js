@@ -336,6 +336,7 @@ function finishProcessReality(realityProps) {
     if (player.celestials.ra.disCharge) disChargeAll();
   }
   if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
+  if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
 
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();

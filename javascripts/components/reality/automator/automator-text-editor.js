@@ -37,6 +37,9 @@ const AutomatorTextUI = {
       const errorLine = AutomatorData.currentErrorLine - 1;
       AutomatorTextUI.editor.removeLineClass(errorLine, "background", "c-automator-editor__error-line");
       AutomatorTextUI.editor.removeLineClass(errorLine, "gutter", "c-automator-editor__error-line-gutter");
+      const eventLine = AutomatorData.currentEventLine - 1;
+      AutomatorTextUI.editor.removeLineClass(eventLine, "background", "c-automator-editor__event-line");
+      AutomatorTextUI.editor.removeLineClass(eventLine, "gutter", "c-automator-editor__event-line-gutter");
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   }

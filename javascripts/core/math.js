@@ -334,8 +334,11 @@ class ExponentialCostScaling {
    * @param {Decimal} money
    * @returns {QuantityAndPrice|null} maximum value of bought that money can buy up to
    */
-  getMaxBought(currentPurchases, money, numberPerSet) {
-    money = money.div(numberPerSet);
+  getMaxBought(currentPurchases, rawMoney, numberPerSet) {
+    // We need to divide money by the number of things we need to buy per set
+    // so that we don't, for example, buy all of a set of 10 dimensions
+    // when we can only afford 1.
+    money = rawMoney.div(numberPerSet);
     const logMoney = money.log10();
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;
@@ -371,8 +374,13 @@ class ExponentialCostScaling {
    * @param {Decimal} money
    * @returns {number} maximum value of bought that money can buy up to
    */
-  getContinuumValue(money, numberPerSet) {
-    money = money.div(numberPerSet);
+  getContinuumValue(rawMoney, numberPerSet) {
+    // We need to divide money by the number of things we need to buy per set
+    // so that we don't, for example, buy all of a set of 10 dimensions
+    // when we can only afford 1. In the specific case of continuum this means,
+    // for example, that 10 AM buys 2/3 of a set of 10 first dimensions rather than
+    // buying the whole set of 10, which at least feels more correct.
+    money = rawMoney.div(numberPerSet);
     const logMoney = money.log10();
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;

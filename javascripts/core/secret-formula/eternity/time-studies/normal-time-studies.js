@@ -93,8 +93,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 61,
       cost: 3,
       requirement: 51,
-      description: () => `You gain ${formatX(10)} more Eternity Points`,
-      effect: 10
+      description: () => `You gain ${formatX(15)} more Eternity Points`,
+      effect: 15
     },
     {
       id: 62,

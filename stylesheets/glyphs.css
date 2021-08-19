@@ -677,9 +677,8 @@
 .c-glyph-choice-single-glyph {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
-  border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
   margin: 0.5rem;
   height: 12rem;
@@ -689,27 +688,43 @@
 .c-glyph-choice-icon {
   display: flex;
   flex-direction: column;
-  justify-items: center;
+  justify-content: space-evenly;
   align-items: center;
-  background-color: #222222;
-  border: 0.1rem solid #b8b8b8;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 0.2rem solid rgba(0, 0, 0, 0.15);
   border-radius: 0.5rem;
   font-size: 1.2rem;
-  height: 8.5rem;
-  width: 8.5rem;
+  height: 9rem;
+  width: 9rem;
+  text-shadow: 0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0 black;
+  box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5);
+}
+
+.t-metro .c-glyph-choice-icon,
+.t-dark-metro .c-glyph-choice-icon,
+.t-inverted-metro .c-glyph-choice-icon,
+.t-s8 .c-glyph-choice-icon {
+  border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .c-glyph-choice-effect-list {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-content: space-around;
-  color: white;
-  background-color: #222222;
-  border: 0.1rem solid #b8b8b8;
+  justify-content: space-evenly;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 0.2rem solid rgba(0, 0, 0, 0.15);
   border-radius: 0.5rem;
   height: 11rem;
   width: 25rem;
+}
+
+.t-metro .c-glyph-choice-effect-list,
+.t-dark-metro .c-glyph-choice-effect-list,
+.t-inverted-metro .c-glyph-choice-effect-list,
+.t-s8 .c-glyph-choice-effect-list {
+  border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .t-metro .c-glyph-peek,

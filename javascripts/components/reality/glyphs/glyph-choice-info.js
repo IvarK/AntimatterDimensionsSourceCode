@@ -25,6 +25,15 @@ Vue.component("modal-glyph-choice-info", {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.refreshGlyphs);
     this.refreshGlyphs();
   },
+  computed: {
+    maxGlyphEffects() {
+      let maxEffects = 1;
+      for (const glyph of this.glyphs) {
+        maxEffects = Math.max(getGlyphEffectsFromBitmask(glyph.effects).filter(e => e.isGenerated).length, maxEffects);
+      }
+      return maxEffects;
+    }
+  },
   methods: {
     update() {
       this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
@@ -70,6 +79,15 @@ Vue.component("modal-glyph-choice-info", {
       // Filter out undefined results since shortDesc only exists for generated effects
       return effectStrings.filter(s => s !== "undefined");
     },
+    glyphEffectListHeight(effects) {
+      const heights = [
+        "3rem",
+        "6rem",
+        "8rem",
+        "11rem"
+      ];
+      return heights[effects - 1];
+    },
     typeStyle(glyph) {
       return {
         "color": `${GlyphTypes[glyph.type].color}`,
@@ -85,6 +103,7 @@ Vue.component("modal-glyph-choice-info", {
     effectStyle(glyph) {
       return {
         "font-size": `${glyph.type === "effarig" ? 1 : 1.2}rem`,
+        "height": this.glyphEffectListHeight(this.maxGlyphEffects)
       };
     },
   },

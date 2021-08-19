@@ -334,7 +334,8 @@ class ExponentialCostScaling {
    * @param {Decimal} money
    * @returns {QuantityAndPrice|null} maximum value of bought that money can buy up to
    */
-  getMaxBought(currentPurchases, money) {
+  getMaxBought(currentPurchases, money, numberPerSet) {
+    money = money.div(numberPerSet);
     const logMoney = money.log10();
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;
@@ -360,7 +361,7 @@ class ExponentialCostScaling {
       const pExcess = newPurchases - this._purchasesBeforeScaling;
       logPrice = (newPurchases - 1) * logMult + logBase + 0.5 * pExcess * (pExcess - 1) * this._logCostScale;
     }
-    return { quantity: newPurchases - currentPurchases, logPrice };
+    return { quantity: newPurchases - currentPurchases, logPrice: logPrice + Math.log10(numberPerSet) };
   }
 
   /**
@@ -370,7 +371,8 @@ class ExponentialCostScaling {
    * @param {Decimal} money
    * @returns {number} maximum value of bought that money can buy up to
    */
-  getContinuumValue(money) {
+  getContinuumValue(money, numberPerSet) {
+    money = money.div(numberPerSet);
     const logMoney = money.log10();
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;

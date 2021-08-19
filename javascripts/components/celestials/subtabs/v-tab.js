@@ -196,6 +196,8 @@ Vue.component("v-tab", {
                   <glyph-set-preview
                     :show=true
                     :glyphs="runGlyphs[hex.id]"
+                    :text="hex.config.name"
+                    :textHidden="true"
                   />
                 </p>
                 <div v-if="hex.canBeReduced && showReduction">

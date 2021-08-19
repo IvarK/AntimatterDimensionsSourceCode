@@ -114,6 +114,8 @@ Vue.component("teresa-tab", {
               Glyph Set used:
               <glyph-set-preview
                 :show=true
+                text="Teresa's Best Glyph Set"
+                :textHidden="true"
                 :forceNameColor=false
                 :glyphs="bestAMSet"
               />

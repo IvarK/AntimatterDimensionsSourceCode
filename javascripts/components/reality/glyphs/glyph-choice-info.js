@@ -1,29 +1,178 @@
 "use strict";
 
+// eslint-disable-next-line prefer-const
+let GlyphShowcaseSet = [];
+
 Vue.component("modal-glyph-choice-info", {
+  components: {
+    "glyph-box-helper": {
+      props: {
+        idx: Number,
+        glyph: Object,
+        showLevel: Boolean,
+        realityGlyphBoost: {
+          type: Number,
+          default: 0
+        },
+        maxGlyphEffects: Number,
+        showSacrifice: Boolean,
+      },
+      data() {
+        return {
+          canSacrifice: false,
+        };
+      },
+      computed: {
+        type() {
+          return this.glyph.type;
+        },
+        typeCapitalized() {
+          return this.type.capitalize();
+        },
+        level() {
+          return this.glyph.level;
+        },
+        displayLevel() {
+          if (BASIC_GLYPH_TYPES.includes(this.type)) return this.level + this.realityGlyphBoost;
+          return this.level;
+        },
+        effectiveLevel() {
+          return this.displayLevel ? this.displayLevel : this.level;
+        },
+        isLevelCapped() {
+          return this.displayLevel && this.displayLevel < this.level;
+        },
+        isLevelBoosted() {
+          return this.displayLevel && this.displayLevel > this.level;
+        },
+        levelText() {
+          if (this.type === "companion") return "";
+          // eslint-disable-next-line no-nested-ternary
+          const arrow = this.isLevelCapped
+            ? "<i class='fas fa-sort-down'></i>"
+            : (this.isLevelBoosted ? "<i class='fas fa-sort-up'></i>" : "");
+          // eslint-disable-next-line no-nested-ternary
+          const color = this.isLevelCapped
+            ? "#ff4444"
+            : (this.isLevelBoosted ? "#44FF44" : "var(--color-text);");
+          return `<span style="color: ${color}">
+                  ${arrow}${formatInt(this.effectiveLevel)}${arrow}
+                  </span>`;
+        },
+        typeStyle() {
+          return {
+            color: `${GlyphTypes[this.type].color}`,
+            "font-weight": "bold",
+            animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+          };
+        },
+        rarityStyle() {
+          return {
+            "color": `${getRarity(this.glyph.strength).color}`,
+            "font-weight": "bold"
+          };
+        },
+        effectStyle() {
+          return {
+            "font-size": `${this.type === "effarig" ? 1 : 1.2}rem`,
+            "height": this.glyphEffectListHeight(this.maxGlyphEffects)
+          };
+        },
+        glyphEffectList() {
+          const db = GameDatabase.reality.glyphEffects;
+          const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength);
+          const effectStrings = effects
+            .map(e => this.formatEffectString(db[e.id], e.value));
+          // Filter out undefined results since shortDesc only exists for generated effects
+          return effectStrings.filter(s => s !== "undefined");
+        },
+        rarityPercent() {
+          return formatPercents(strengthToRarity(this.glyph.strength) / 100, 1);
+        },
+      },
+      methods: {
+        update() {
+          this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
+        },
+        glyphEffectListHeight(effects) {
+          const heights = [
+            "3rem",
+            "6rem",
+            "8rem",
+            "11rem"
+          ];
+          return heights[effects - 1];
+        },
+        formatEffectString(dbEntry, value) {
+          const rawDesc = typeof dbEntry.shortDesc === "function"
+            ? dbEntry.shortDesc()
+            : dbEntry.shortDesc;
+          const singleValue = dbEntry.formatSingleEffect
+            ? dbEntry.formatSingleEffect(value)
+            : dbEntry.formatEffect(value);
+          const alteredValue = dbEntry.conversion
+            ? dbEntry.formatSecondaryEffect(dbEntry.conversion(value))
+            : "";
+          return `${rawDesc}`
+            .replace("{value}", singleValue)
+            .replace("{value2}", alteredValue);
+        },
+      },
+      template: `
+        <div>
+          <div class="c-glyph-choice-icon">
+            <span :style="typeStyle">{{ typeCapitalized }}</span>
+            <div v-html="levelText" v-if="showLevel"></div>
+            <glyph-component
+              :key="idx"
+              style="margin: 0.1rem;"
+              :glyph="glyph"
+              :showSacrifice="showSacrifice && canSacrifice"
+              :draggable="false"
+              :circular="true"
+              :ignoreModifiedLevel="false"
+              :realityGlyphBoost="realityGlyphBoost"
+              :isInModal="true"
+              size="4rem"
+              :textProportion="0.5"
+              glowBlur="0.4rem"
+              glowSpread="0.1rem"
+            />
+            <div :style="rarityStyle">
+              {{ rarityPercent }}
+            </div>
+          </div>
+          <div
+            class="c-glyph-choice-effect-list"
+            :style="effectStyle"
+          >
+            <div v-for="effectText in glyphEffectList">
+              {{ effectText }}
+            </div>
+          </div>
+        </div>
+      </div>`
+    }
+  },
+  props: {
+    modalConfig: {
+      name: String,
+      closeOn: String,
+      showGlobalGlyphLevel: Boolean,
+      showSetName: Boolean,
+      displaySacrifice: Boolean,
+    }
+  },
   data() {
     return {
       glyphs: [],
       level: 0,
-      canPeek: false,
-      isVisible: false,
-      canRefresh: false,
       canSacrifice: false,
+      realityGlyphBoost: 0,
     };
   },
   created() {
-    // This refreshes the glyphs shown after every reality, and also doesn't
-    // allow it to refresh if you're choosing glyphs (at that point,
-    // your choices are your choices). This is technically incorrect since
-    // while you're choosing glyphs the level might increase, and this code
-    // stops it from increasing in the glyphs shown here, but with
-    // the glyph choice popup open, you can't see the tooltips, so there's
-    // no way for the player to notice that.
-    this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
-      this.canRefresh = false;
-    });
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.refreshGlyphs);
-    this.refreshGlyphs();
+    this.on$(this.modalConfig.closeOn, this.emitClose);
   },
   computed: {
     maxGlyphEffects() {
@@ -32,124 +181,41 @@ Vue.component("modal-glyph-choice-info", {
         maxEffects = Math.max(getGlyphEffectsFromBitmask(glyph.effects).filter(e => e.isGenerated).length, maxEffects);
       }
       return maxEffects;
-    }
+    },
   },
   methods: {
     update() {
-      this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
-      // Hide this before first reality since then it'll confuse the player,
-      // and due to pre-selected first glyph might well be incorrect anyway.
-      this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought;
-      this.canPeek = PlayerProgress.realityUnlocked();
-      if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
-        this.refreshGlyphs();
-      }
-    },
-    capitalize(str) {
-      return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
-    },
-    refreshGlyphs() {
-      this.canRefresh = true;
-      this.glyphs = GlyphSelection.glyphList(
-        GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
-      this.level = gainedGlyphLevel().actualLevel;
-    },
-    getRarityValue(str) {
-      return strengthToRarity(str) / 100;
-    },
-    formatEffectString(dbEntry, value) {
-      const rawDesc = typeof dbEntry.shortDesc === "function"
-        ? dbEntry.shortDesc()
-        : dbEntry.shortDesc;
-      const singleValue = dbEntry.formatSingleEffect
-        ? dbEntry.formatSingleEffect(value)
-        : dbEntry.formatEffect(value);
-      const alteredValue = dbEntry.conversion
-        ? dbEntry.formatSecondaryEffect(dbEntry.conversion(value))
-        : "";
-      return `${rawDesc}`
-        .replace("{value}", singleValue)
-        .replace("{value2}", alteredValue);
-    },
-    glyphEffectList(glyph) {
-      const db = GameDatabase.reality.glyphEffects;
-      const effects = getGlyphEffectValuesFromBitmask(glyph.effects, this.level, glyph.strength);
-      const effectStrings = effects
-        .map(e => this.formatEffectString(db[e.id], e.value));
-      // Filter out undefined results since shortDesc only exists for generated effects
-      return effectStrings.filter(s => s !== "undefined");
-    },
-    glyphEffectListHeight(effects) {
-      const heights = [
-        "3rem",
-        "6rem",
-        "8rem",
-        "11rem"
-      ];
-      return heights[effects - 1];
-    },
-    typeStyle(glyph) {
-      return {
-        "color": `${GlyphTypes[glyph.type].color}`,
-        "font-weight": "bold"
-      };
-    },
-    rarityStyle(glyph) {
-      return {
-        "color": `${getRarity(glyph.strength).color}`,
-        "font-weight": "bold"
-      };
-    },
-    effectStyle(glyph) {
-      return {
-        "font-size": `${glyph.type === "effarig" ? 1 : 1.2}rem`,
-        "height": this.glyphEffectListHeight(this.maxGlyphEffects)
-      };
+      this.glyphs = GlyphShowcaseSet.filter(x => x);
+      this.level = this.glyphs[0].level;
+      // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
+      const realityGlyph = this.glyphs.filter(g => g.type === "reality")[0];
+      this.realityGlyphBoost = realityGlyph
+        ? GameDatabase.reality.glyphEffects.realityglyphlevel.effect(realityGlyph.level)
+        : 0;
     },
   },
   template: `
     <div style="background-color: inherit;">
       <modal-close-button @click="emitClose" />
-      <h3>Potential Glyphs for this Reality</h3>
-      Projected Glyph Level: {{ formatInt(level) }}
-      <br>
-      <br>
+      <h3>{{ modalConfig.name }}</h3>
+      <div v-if="modalConfig.showGlobalGlyphLevel">Projected Glyph Level: {{ formatInt(level) }}</div>
+      <glyph-set-name
+        v-if="modalConfig.showSetName"
+        :glyphSet="glyphs"
+        :forceColor="true"
+      />
       <div class="c-glyph-choice-container">
-        <div
-          v-for="(g, idx) in glyphs"
+        <glyph-box-helper
           class="c-glyph-choice-single-glyph"
-        >
-          <div class="c-glyph-choice-icon">
-            <div :style="typeStyle(g)">
-              {{ capitalize(g.type) }}
-            </div>
-            <glyph-component
-              :key="idx"
-              style="margin: 0.1rem;"
-              :glyph="g"
-              :showSacrifice="canSacrifice"
-              :draggable="false"
-              :circular="true"
-              :ignoreModifiedLevel="true"
-              :isInModal="true"
-              size="4rem"
-              :textProportion="0.5"
-              glowBlur="0.4rem"
-              glowSpread="0.1rem"
-            />
-            <div :style="rarityStyle(g)">
-              {{ formatPercents(getRarityValue(g.strength), 1) }}
-            </div>
-          </div>
-          <div
-            class="c-glyph-choice-effect-list"
-            :style="effectStyle(g)"
-          >
-            <div v-for="effectText in glyphEffectList(g)">
-              {{ effectText }}
-            </div>
-          </div>
-        </div>
+          v-for="(glyph, idx) in glyphs"
+          :key="idx"
+          :idx="idx"
+          :glyph="glyph"
+          :showLevel="!modalConfig.showGlobalGlyphLevel"
+          :realityGlyphBoost="realityGlyphBoost"
+          :maxGlyphEffects="maxGlyphEffects"
+          :showSacrifice="modalConfig.displaySacrifice"
+        />
       </div>
     </div>`
 });

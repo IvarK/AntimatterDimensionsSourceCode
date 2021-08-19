@@ -694,8 +694,8 @@
   border: 0.2rem solid rgba(0, 0, 0, 0.15);
   border-radius: 0.5rem;
   font-size: 1.2rem;
-  height: 9rem;
-  width: 9rem;
+  height: 10rem;
+  width: 10rem;
   text-shadow: 0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0 black;
   box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5);
 }

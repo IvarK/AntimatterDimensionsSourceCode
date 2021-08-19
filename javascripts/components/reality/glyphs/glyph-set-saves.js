@@ -45,6 +45,9 @@ Vue.component("glyph-set-saves", {
     refreshGlyphSets() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
     },
+    setName(id) {
+      return `Glyph Set Save #${id + 1}`;
+    },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = Glyphs.active.filter(g => g !== null);
@@ -109,6 +112,8 @@ Vue.component("glyph-set-saves", {
         <div>
           <glyph-set-preview
             class="l-glyph-set-save-spacing"
+            :text="setName(id)"
+            :textHidden=true
             :show=true
             :glyphs="set"
             :flipTooltip=true

@@ -177,9 +177,9 @@ const AutomatorCommands = ((() => {
           }
           // Settings are drawn from the actual automator text; it's not feasible to parse out all the settings
           // for every combination of autobuyers when they get turned off
-          const settingString = ctx.On ? `(Setting: ${currSetting})` : "";
-          AutomatorData.logCommandEvent(`Automatic ${ctx.PrestigeEvent[0].image} turned ${ctx.On ? "ON" : "OFF"}
-            ${settingString}`, ctx.startLine);
+          const settingString = (autobuyer.isActive && currSetting !== "") ? `(Setting: ${currSetting})` : "";
+          AutomatorData.logCommandEvent(`Automatic ${ctx.PrestigeEvent[0].image}
+            turned ${autobuyer.isActive ? "ON" : "OFF"} ${settingString}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
@@ -920,8 +920,13 @@ const AutomatorCommands = ((() => {
         return () => {
           if (doneWaiting) {
             const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
-            AutomatorData.logCommandEvent(`Continuing after WAIT 
-              (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+            if (AutomatorData.isWaiting) {
+              AutomatorData.logCommandEvent(`Continuing after WAIT 
+                (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+            } else {
+              AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
+                ctx.startLine);
+            }
             AutomatorData.isWaiting = false;
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }

@@ -17,6 +17,7 @@ Vue.component("automator-event-log", {
       currentTime: 0,
       maxEntries: 0,
       clearOnReality: false,
+      clearOnRestart: false,
     };
   },
   watch: {
@@ -28,6 +29,9 @@ Vue.component("automator-event-log", {
     },
     clearOnReality(newValue) {
       player.options.automatorEvents.clearOnReality = newValue;
+    },
+    clearOnRestart(newValue) {
+      player.options.automatorEvents.clearOnRestart = newValue;
     }
   },
   computed: {
@@ -46,12 +50,14 @@ Vue.component("automator-event-log", {
   },
   methods: {
     update() {
+      const eventSettings = player.options.automatorEvents;
       this.unsortedEvents = AutomatorData.eventLog;
-      this.newestFirst = player.options.automatorEvents.newestFirst;
-      this.timestampMode = player.options.automatorEvents.timestampType;
+      this.newestFirst = eventSettings.newestFirst;
+      this.timestampMode = eventSettings.timestampType;
       this.currentTime = Date.now();
-      this.maxEntries = player.options.automatorEvents.maxEntries;
-      this.clearOnReality = player.options.automatorEvents.clearOnReality;
+      this.maxEntries = eventSettings.maxEntries;
+      this.clearOnReality = eventSettings.clearOnReality;
+      this.clearOnRestart = eventSettings.clearOnRestart;
     },
     clearLog() {
       AutomatorData.clearEventLog();
@@ -67,9 +73,14 @@ Vue.component("automator-event-log", {
         "color": this.timestampMode === AUTOMATOR_EVENT_TIMESTAMP_MODE[key] ? "green" : ""
       };
     },
-    autoclearStyle() {
+    clearRealityStyle() {
       return {
         "color": this.clearOnReality ? "green" : ""
+      };
+    },
+    clearRestartStyle() {
+      return {
+        "color": this.clearOnRestart ? "green" : ""
       };
     },
     setTimestampMode(key) {
@@ -127,10 +138,16 @@ Vue.component("automator-event-log", {
           v-tooltip="clearTooltip"
         />
         <button
-          :style="autoclearStyle()"
+          :style="clearRealityStyle()"
           class="fas fa-eraser"
           @click="clearOnReality = !clearOnReality"
           v-tooltip="'Clear event log every Reality'"
+        />
+        <button
+          :style="clearRestartStyle()"
+          class="fas fa-backspace"
+          @click="clearOnRestart = !clearOnRestart"
+          v-tooltip="'Clear event log on script restart'"
         />
       </div>
       <div>

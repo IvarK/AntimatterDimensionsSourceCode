@@ -449,6 +449,8 @@ const AutomatorBackend = {
       this.reset(scriptObject.commands);
       this.state.mode = initialMode;
     }
+    AutomatorData.isWaiting = false;
+    if (player.options.automatorEvents.clearOnRestart) AutomatorData.clearEventLog();
   },
 
   restart() {

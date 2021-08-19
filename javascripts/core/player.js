@@ -679,6 +679,7 @@ let player = {
       timestampType: 0,
       maxEntries: 200,
       clearOnReality: true,
+      clearOnRestart: true,
     }
   },
   IAP: {

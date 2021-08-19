@@ -19,6 +19,7 @@ Vue.component("modal-confirmation-options", {
       deleteGlyphSetSave: false,
       glyphRefine: false,
 
+      realityAutobuyerUnlocked: false,
       sacrificeUnlocked: false,
       glyphSacrificeUnlocked: false,
       glyphUndoUnlocked: false,
@@ -89,7 +90,7 @@ Vue.component("modal-confirmation-options", {
 
       this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
-      this.teresaUnlocked = Teresa.isUnlocked;
+      this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
       this.glyphSetSaveUnlocked = EffarigUnlock.setSaves.isUnlocked;
@@ -108,7 +109,7 @@ Vue.component("modal-confirmation-options", {
         <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:" />
         <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:" />
         <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:" />
-        <wide-on-off-button v-if="teresaUnlocked" v-model="glyphSelection" text="Glyph Selection:" />
+        <wide-on-off-button v-if="realityAutobuyerUnlocked" v-model="glyphSelection" text="Glyph Selection:" />
         <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
         <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
         <wide-on-off-button v-if="glyphSetSaveUnlocked" v-model="deleteGlyphSetSave" text="Delete Glyph Set Save:" />

@@ -307,6 +307,8 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
     bulkLeft--;
   }
 
+  if (bulkLeft <= 0) return;
+
   // Buy in a while loop in order to properly trigger abnormal price increases
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     while (dimension.isAffordableUntil10 && dimension.cost.lt(goal) && bulkLeft > 0) {

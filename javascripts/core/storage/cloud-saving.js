@@ -26,45 +26,6 @@ const Cloud = {
     await this.auth.signInWithPopup(this.provider);
   },
 
-  newestSave(first, second) {
-    const getSaveInfo = save => {
-      const prestiges = { infinities: new Decimal(0), eternities: new Decimal(0), realities: 0 };
-      if (!save) return prestiges;
-      prestiges.infinities.copyFrom(new Decimal(save.infinities));
-      prestiges.eternities.copyFrom(new Decimal(save.eternities));
-      prestiges.realities = save.realities;
-      return prestiges;
-    };
-    const firstInfo = getSaveInfo(first);
-    const secondInfo = getSaveInfo(second);
-
-    if (firstInfo.realities > secondInfo.realities) {
-      return first;
-    }
-    
-    if (firstInfo.realities < secondInfo.realities) {
-      return second;
-    }
-
-    if (firstInfo.eternities.gt(secondInfo.eternities)) {
-      return first;
-    }
-    
-    if (firstInfo.eternities.lt(secondInfo.eternities)) {
-      return second;
-    }
-
-    if (firstInfo.infinities.gt(secondInfo.infinities)) {
-      return first;
-    }
-
-    if (firstInfo.infinities.lt(secondInfo.infinities)) {
-      return second;
-    }
-
-    return undefined;
-  },
-
   async loadMobile() {
     if (!this.user) return;
     const snapshot = await this.db.ref(`users/${this.user.id}/player`).get();
@@ -87,7 +48,10 @@ const Cloud = {
         const saveId = i;
         const cloudSave = root.saves[saveId];
         const localSave = GameStorage.saves[saveId];
-        const newestSaveCheck = this.newestSave(cloudSave, localSave);
+        const saveComparison = {
+          farther: ProgressChecker.compareSaveProgress(cloudSave, localSave),
+          older: ProgressChecker.compareSaveTimes(cloudSave, localSave)
+        };
         let isConflicted = false;
 
         // eslint-disable-next-line no-loop-func
@@ -99,9 +63,11 @@ const Cloud = {
           this.save();
         };
 
-        if (newestSaveCheck === cloudSave && cloudSave && localSave) {
+        // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
+        const hasBoth = cloudSave && localSave;
+        if (hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1)) {
           isConflicted = true;
-          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
+          Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
           Modal.cloudSaveConflict.show();
         } else {
           overwriteCloudSave();
@@ -136,7 +102,10 @@ const Cloud = {
         const saveId = i;
         const cloudSave = root.saves[saveId];
         const localSave = GameStorage.saves[saveId];
-        const newestSaveCheck = this.newestSave(cloudSave, localSave);
+        const saveComparison = {
+          farther: ProgressChecker.compareSaveProgress(cloudSave, localSave),
+          older: ProgressChecker.compareSaveTimes(cloudSave, localSave)
+        };
 
         // eslint-disable-next-line no-loop-func
         const overwriteLocalSave = () => {
@@ -144,8 +113,10 @@ const Cloud = {
           GameUI.notify.info(`Cloud save loaded for user ${this.user.displayName}`);
         };
 
-        if (newestSaveCheck === localSave && cloudSave && localSave) {
-          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
+        // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
+        const hasBoth = cloudSave && localSave;
+        if (hasBoth && (saveComparison.older === 1 || saveComparison.farther !== -1)) {
+          Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
           Modal.cloudLoadConflict.show();
         } else {
           overwriteLocalSave();

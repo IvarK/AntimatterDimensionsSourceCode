@@ -4,7 +4,18 @@ Vue.component("modal-cloud-save-conflict", {
   mixins: [modalCloudConflictMixin],
   template:
     `<div class="c-modal-options l-modal-options">
-      <b>Your local save appears to be older than your cloud save. Would you like to overwrite the cloud save?</b>
+      <b>
+        <span v-if="conflict.saveComparison.older === -1">
+          Your cloud save appears to be older than your local save.
+        </span>
+        <span v-else-if="conflict.saveComparison.farther === -1">
+          Your cloud save appears to be farther than your local save.
+        </span>
+        <span v-else>
+          Your local save and cloud save appear to have similar amounts of progress.
+        </span>
+        Would you like to overwrite the cloud save?
+      </b>
       <modal-cloud-conflict-record
         :saveData="conflict.local"
         :saveId="conflict.saveId"
@@ -27,5 +38,6 @@ Vue.component("modal-cloud-save-conflict", {
       >
         No
       </primary-button>
+      <b>(Placeholder for ignore button)</b>
     </div>`
 });

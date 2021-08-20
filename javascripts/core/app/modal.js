@@ -120,9 +120,10 @@ Modal.celestialQuote = new class extends Modal {
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
 // eslint-disable-next-line max-params
-Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
+Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept, onLastConflict) {
   ui.view.modal.cloudConflicts.push({
     saveId,
+    saveComparison,
     cloud: getSaveInfo(cloudSave),
     local: getSaveInfo(localSave),
     onAccept,

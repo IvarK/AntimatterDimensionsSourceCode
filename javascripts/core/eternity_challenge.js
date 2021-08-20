@@ -20,6 +20,7 @@ function startEternityChallenge() {
   Currency.antimatter.reset();
   playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
+  ECTimeStudyState.invalidateCachedRequirements();
 }
 
 class EternityChallengeRewardState extends GameMechanicState {

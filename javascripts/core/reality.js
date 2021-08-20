@@ -454,6 +454,7 @@ function finishProcessReality(realityProps) {
   else Tab.dimensions.antimatter.show();
 
   Lazy.invalidateAll();
+  ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   if (Teresa.has(TERESA_UNLOCKS.START_EU)) {

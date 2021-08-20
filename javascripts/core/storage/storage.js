@@ -155,6 +155,7 @@ const GameStorage = {
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
 
+    ECTimeStudyState.invalidateCachedRequirements();
     recalculateAllGlyphs();
     checkPerkValidity();
     V.updateTotalRunUnlocks();

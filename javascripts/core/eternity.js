@@ -122,6 +122,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
+  ECTimeStudyState.invalidateCachedRequirements();
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;

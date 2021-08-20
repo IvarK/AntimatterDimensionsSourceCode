@@ -343,6 +343,7 @@ TimeStudy.preferredPaths = {
 class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.ETERNITY_CHALLENGE);
+    this.invalidateRequirement();
   }
 
   get isBought() {
@@ -430,7 +431,15 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get requirementCurrent() {
-    return this.config.requirement.current();
+    const current = this.config.requirement.current();
+    if (this.cachedCurrentRequirement === undefined) {
+      this.cachedCurrentRequirement = current;
+    } else if (typeof current === "number") {
+      this.cachedCurrentRequirement = Math.max(this.cachedCurrentRequirement, current);
+    } else {
+      this.cachedCurrentRequirement = this.cachedCurrentRequirement.clampMin(current);
+    }
+    return this.cachedCurrentRequirement;
   }
 
   get isSecondaryRequirementMet() {
@@ -443,6 +452,10 @@ class ECTimeStudyState extends TimeStudyState {
     const current = this.requirementCurrent;
     const total = this.requirementTotal;
     return typeof current === "number" ? current >= total : current.gte(total);
+  }
+
+  invalidateRequirement() {
+    this.cachedCurrentRequirement = undefined;
   }
 }
 
@@ -466,6 +479,10 @@ TimeStudy.eternityChallenge.current = function() {
   return player.challenge.eternity.unlocked
     ? TimeStudy.eternityChallenge(player.challenge.eternity.unlocked)
     : undefined;
+};
+
+ECTimeStudyState.invalidateCachedRequirements = function() {
+  ECTimeStudyState.studies.forEach(study => study.invalidateRequirement());
 };
 
 class DilationTimeStudyState extends TimeStudyState {

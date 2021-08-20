@@ -14,6 +14,7 @@ Vue.component("sidebar", {
   computed: {
     tabs: () => [
       Tab.dimensions,
+      Tab.automation,
       Tab.challenges,
       Tab.infinity,
       Tab.eternity,

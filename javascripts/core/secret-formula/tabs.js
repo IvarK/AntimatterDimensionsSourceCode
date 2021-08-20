@@ -135,13 +135,38 @@ GameDatabase.tabs = [
     ]
   },
   {
+    key: "automation",
+    name: "Automation",
+    id: 4,
+    hidable: true,
+    subtabs: [
+      {
+        key: "autobuyers",
+        name: "Autobuyers",
+        symbol: "<i class='fas fa-cog'></i>",
+        component: "autobuyers-tab",
+        id: 0,
+        hidable: true,
+      },
+      {
+        key: "automator",
+        name: "Automator",
+        symbol: "<i class='fas fa-code'></i>",
+        component: "automator-tab",
+        condition: () => PlayerProgress.realityUnlocked(),
+        id: 1,
+        hidable: true,
+      },
+    ]
+  },
+  {
     key: "challenges",
     name: "Challenges",
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked() ||
       PlayerProgress.infinityUnlocked(),
-    id: 4,
+    id: 5,
     hidable: true,
     subtabs: [
       {
@@ -184,17 +209,9 @@ GameDatabase.tabs = [
     name: "Infinity",
     UIClass: "o-tab-btn--infinity",
     before: "infinity-points-header",
-    id: 5,
+    id: 6,
     hidable: true,
     subtabs: [
-      {
-        key: "autobuyers",
-        name: "Autobuyers",
-        symbol: "<i class='fas fa-cog'></i>",
-        component: "autobuyers-tab",
-        id: 0,
-        hidable: true,
-      },
       {
         key: "upgrades",
         name: "Infinity Upgrades",
@@ -204,7 +221,7 @@ GameDatabase.tabs = [
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           PlayerProgress.infinityUnlocked(),
-        id: 1,
+        id: 0,
         hidable: true,
       },
       {
@@ -216,7 +233,7 @@ GameDatabase.tabs = [
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           PlayerProgress.infinityUnlocked(),
-        id: 2,
+        id: 1,
         hidable: true,
       },
       {
@@ -228,7 +245,7 @@ GameDatabase.tabs = [
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           PlayerProgress.infinityUnlocked(),
-        id: 3,
+        id: 2,
         hidable: true,
       }
     ],
@@ -241,7 +258,7 @@ GameDatabase.tabs = [
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked(),
     before: "eternity-points-header",
-    id: 6,
+    id: 7,
     hidable: true,
     subtabs: [
       {
@@ -285,7 +302,7 @@ GameDatabase.tabs = [
     before: "reality-machines-header",
     UIClass: "o-tab-btn--reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
-    id: 7,
+    id: 8,
     hidable: true,
     subtabs: [
       {
@@ -322,21 +339,12 @@ GameDatabase.tabs = [
         hidable: true,
       },
       {
-        key: "automator",
-        name: "Automator",
-        symbol: "<i class='fas fa-cog'></i>",
-        component: "automator-tab",
-        condition: () => PlayerProgress.realityUnlocked(),
-        id: 4,
-        hidable: true,
-      },
-      {
         key: "hole",
         name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
         condition: () => PlayerProgress.realityUnlocked(),
-        id: 5,
+        id: 4,
         hidable: true,
       },
       {
@@ -345,7 +353,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
-        id: 6,
+        id: 5,
         hidable: true,
       },
     ],
@@ -355,7 +363,7 @@ GameDatabase.tabs = [
     name: "Celestials",
     UIClass: "o-tab-btn--celestial",
     condition: () => Teresa.isUnlocked,
-    id: 8,
+    id: 9,
     hidable: true,
     subtabs: [
       {
@@ -435,7 +443,7 @@ GameDatabase.tabs = [
     name: "Shop",
     newUIClass: "shop",
     condition: () => kong.enabled || player.IAP.totalSTD > 0,
-    id: 9,
+    id: 10,
     hidable: true,
     subtabs: [
       {

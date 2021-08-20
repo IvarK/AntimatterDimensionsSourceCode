@@ -7,6 +7,7 @@ Vue.component("old-ui-tab-bar", {
       Tab.options,
       Tab.statistics,
       Tab.achievements,
+      Tab.automation,
       Tab.challenges,
       Tab.infinity,
       Tab.eternity,

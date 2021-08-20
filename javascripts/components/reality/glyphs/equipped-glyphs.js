@@ -13,7 +13,7 @@ Vue.component("equipped-glyphs", {
     };
   },
   created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   computed: {
@@ -108,11 +108,11 @@ Vue.component("equipped-glyphs", {
       };
     },
     showModal() {
-      GlyphShowcaseSet = this.glyphs;
       Modal.glyphChoiceInfo.show({
         name: "Equipped Glyphs",
-        closeOn: GAME_EVENT.GLYPHS_CHANGED,
-        showGlobalGlyphLevel: false,
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
+        isGlyphSelection: false,
         showSetName: true,
         displaySacrifice: true,
       });

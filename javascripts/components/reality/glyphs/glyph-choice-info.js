@@ -1,8 +1,5 @@
 "use strict";
 
-// eslint-disable-next-line prefer-const
-let GlyphShowcaseSet = [];
-
 Vue.component("modal-glyph-choice-info", {
   components: {
     "glyph-box-helper": {
@@ -157,8 +154,9 @@ Vue.component("modal-glyph-choice-info", {
   props: {
     modalConfig: {
       name: String,
+      glyphSet: Array,
       closeOn: String,
-      showGlobalGlyphLevel: Boolean,
+      isGlyphSelection: Boolean,
       showSetName: Boolean,
       displaySacrifice: Boolean,
     }
@@ -166,7 +164,7 @@ Vue.component("modal-glyph-choice-info", {
   data() {
     return {
       glyphs: [],
-      level: 0,
+      gainedLevel: 0,
       canSacrifice: false,
       realityGlyphBoost: 0,
     };
@@ -175,6 +173,9 @@ Vue.component("modal-glyph-choice-info", {
     this.on$(this.modalConfig.closeOn, this.emitClose);
   },
   computed: {
+    isGlyphSelection() {
+      return this.modalConfig.isGlyphSelection;
+    },
     maxGlyphEffects() {
       let maxEffects = 1;
       for (const glyph of this.glyphs) {
@@ -185,8 +186,10 @@ Vue.component("modal-glyph-choice-info", {
   },
   methods: {
     update() {
-      this.glyphs = GlyphShowcaseSet.filter(x => x);
-      this.level = this.glyphs[0].level;
+      this.glyphs = this.isGlyphSelection
+        ? GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false })
+        : this.modalConfig.glyphSet.filter(x => x);
+      this.gainedLevel = gainedGlyphLevel().actualLevel;
       // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
       const realityGlyph = this.glyphs.filter(g => g.type === "reality")[0];
       this.realityGlyphBoost = realityGlyph
@@ -198,7 +201,7 @@ Vue.component("modal-glyph-choice-info", {
     <div style="background-color: inherit;">
       <modal-close-button @click="emitClose" />
       <h3>{{ modalConfig.name }}</h3>
-      <div v-if="modalConfig.showGlobalGlyphLevel">Projected Glyph Level: {{ formatInt(level) }}</div>
+      <div v-if="isGlyphSelection">Projected Glyph Level: {{ formatInt(gainedLevel) }}</div>
       <glyph-set-name
         v-if="modalConfig.showSetName"
         :glyphSet="glyphs"
@@ -211,7 +214,7 @@ Vue.component("modal-glyph-choice-info", {
           :key="idx"
           :idx="idx"
           :glyph="glyph"
-          :showLevel="!modalConfig.showGlobalGlyphLevel"
+          :showLevel="!isGlyphSelection"
           :realityGlyphBoost="realityGlyphBoost"
           :maxGlyphEffects="maxGlyphEffects"
           :showSacrifice="modalConfig.displaySacrifice"

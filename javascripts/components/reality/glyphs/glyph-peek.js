@@ -43,11 +43,11 @@ Vue.component("glyph-peek", {
       this.level = gainedGlyphLevel().actualLevel;
     },
     showModal() {
-      GlyphShowcaseSet = this.glyphs;
       Modal.glyphChoiceInfo.show({
         name: "Potential Glyphs for this Reality",
+        glyphSet: this.glyphs,
         closeOn: GAME_EVENT.REALITY_RESET_AFTER,
-        showGlobalGlyphLevel: true,
+        isGlyphSelection: true,
         showSetName: false,
         displaySacrifice: true,
       });

@@ -141,6 +141,7 @@ function initializeChallengeCompletions(isReality) {
   }
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
+  ECTimeStudyState.invalidateCachedRequirements();
 }
 
 function initializeResourcesAfterEternity() {

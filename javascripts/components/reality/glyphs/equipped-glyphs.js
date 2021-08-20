@@ -108,7 +108,7 @@ Vue.component("equipped-glyphs", {
       };
     },
     showModal() {
-      Modal.glyphChoiceInfo.show({
+      Modal.glyphShowcasePanel.show({
         name: "Equipped Glyphs",
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,

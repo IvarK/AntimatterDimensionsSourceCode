@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("modal-glyph-choice-info", {
+Vue.component("modal-glyph-showcase-panel", {
   components: {
     "glyph-box-helper": {
       props: {

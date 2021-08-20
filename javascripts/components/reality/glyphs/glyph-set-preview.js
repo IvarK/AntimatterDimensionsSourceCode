@@ -41,7 +41,7 @@ Vue.component("glyph-set-preview", {
     },
     showModal() {
       if (this.isInModal) return;
-      Modal.glyphChoiceInfo.show({
+      Modal.glyphShowcasePanel.show({
         name: this.text,
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,

@@ -62,7 +62,7 @@ Vue.component("current-glyph-effects", {
     };
   },
   created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   computed: {

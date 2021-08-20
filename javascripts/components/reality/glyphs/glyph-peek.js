@@ -42,19 +42,34 @@ Vue.component("glyph-peek", {
         GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
       this.level = gainedGlyphLevel().actualLevel;
     },
+    showModal() {
+      Modal.glyphShowcasePanel.show({
+        name: "Potential Glyphs for this Reality",
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.REALITY_RESET_AFTER,
+        isGlyphSelection: true,
+        showSetName: false,
+        displaySacrifice: true,
+      });
+    }
   },
   template: `
-    <glyph-set-preview
+    <span
       v-if="isVisible"
       class="c-glyph-peek"
-      :show="isVisible"
-      :showName="false"
-      :text="'Upcoming glyph selection:'"
-      :glyphs="glyphs"
-      :ignoreModifiedLevel="true"
-      :showSacrifice="canSacrifice"
-      :flipTooltip="true"
-    />
+      @click="showModal"
+    >
+      <glyph-set-preview
+        :show="isVisible"
+        :showName="false"
+        :text="'Upcoming glyph selection:'"
+        :glyphs="glyphs"
+        :ignoreModifiedLevel="true"
+        :showSacrifice="canSacrifice"
+        :flipTooltip="true"
+      />
+      (Click to bring up details)
+    </span>
     <span
       v-else-if="canPeek"
       class="c-glyph-peek"

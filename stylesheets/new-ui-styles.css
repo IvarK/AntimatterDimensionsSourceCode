@@ -889,6 +889,17 @@ body.t-s9 {
   box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
 }
 
+.t-normal .c-glyph-choice-icon {
+
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 0.2rem solid rgba(0, 0, 0, 0.4);
+}
+
+.t-normal .c-glyph-choice-effect-list {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 0.2rem solid rgba(0, 0, 0, 0.4);
+}
+
 .l-help-me {
   position: absolute;
   top: 4.9rem;

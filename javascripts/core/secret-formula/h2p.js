@@ -760,6 +760,12 @@ You can delete Glyphs from your inventory by shift-clicking them, which will pro
 asking if you are sure you want to delete the Glyph. Holding shift and ctrl together while clicking will bypass this
 dialog. <b>However, deleting Glyphs will give you no benefit beyond clearing up inventory space if you do so before
 unlocking Glyph Sacrifice from a Reality upgrade!</b>
+<br>
+<br>
+Clicking a group of circular Glyphs outside of a modal window will open up a modal which displays a detailed summary
+of all those glyphs and their various attributes. The summary will show the information for all Glyphs at once with
+slightly shorter descriptions, making it more suitable for sharing with others. This can be done for Glyph records
+in the Statistics page, your equipped Glyphs, and the Upcoming Glyph Selection this Reality.
 `,
       isUnlocked: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
       tags: ["reality", "sacrifice", "level", "endgame", "lategame"],
@@ -977,11 +983,12 @@ ${formatInt(5)}, which allows you to keep Glyphs without that effect as long as 
 <br>
 <br>
 Glyph Set Saves are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
-Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped glyphs into sets.
-You cannot overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped.
+Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped Glyphs into sets.
+You cannot overwrite a set, you must delete it first. When you load a set, each Glyph in it is found and equipped.
 If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when
-there are no equipped glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best glyph from
-the possible glyphs will always be the one equipped.
+there are no equipped Glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best Glyph from
+the possible Glyphs will always be the one equipped. Just like other groups of circular Glyphs, you can click
+any of them in order to bring up a modal summarizing the whole set of Glyphs.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;

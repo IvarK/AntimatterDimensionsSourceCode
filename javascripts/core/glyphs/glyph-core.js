@@ -142,6 +142,7 @@ const Glyphs = {
       this.active[targetSlot] = glyph;
       this.updateRealityGlyphEffects();
       this.updateMaxGlyphCount();
+      EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
       EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
       this.validate();
     } else {
@@ -170,6 +171,7 @@ const Glyphs = {
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -181,6 +183,7 @@ const Glyphs = {
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -522,6 +525,7 @@ const Glyphs = {
     glyph.idx = targetSlot;
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   }

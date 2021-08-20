@@ -13,7 +13,7 @@ Vue.component("equipped-glyphs", {
     };
   },
   created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   computed: {
@@ -107,6 +107,16 @@ Vue.component("equipped-glyphs", {
         drop: $event => this.drop($event, idx),
       };
     },
+    showModal() {
+      Modal.glyphShowcasePanel.show({
+        name: "Equipped Glyphs",
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
+        isGlyphSelection: false,
+        showSetName: true,
+        displaySacrifice: true,
+      });
+    }
   },
   template: `
     <div class="l-equipped-glyphs">
@@ -115,6 +125,7 @@ Vue.component("equipped-glyphs", {
           v-for="(glyph, idx) in glyphs"
           :style="glyphPositionStyle(idx)"
           v-on="dragEvents(idx)"
+          @click="showModal"
         >
           <!-- the drop zone is a bit larger than the glyph itself. -->
           <div

@@ -642,7 +642,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "All dimension power +{value}",
     totalDesc: "All dimension multipliers ^{value}",
     genericDesc: "All dimension multipliers ^x",
-    shortDesc: "Dimension power +{value}",
+    shortDesc: "All Dimension power +{value}",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500,
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
@@ -679,6 +679,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: `All Galaxies are {value} weaker`,
     totalDesc: "All Galaxy strength -{value}",
+    shortDesc: "Galaxy Strength -{value}",
     // Multiplies by 0.768 per glyph
     effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.03),
     formatEffect: x => formatPercents(1 - x, 2),
@@ -688,7 +689,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 1,
     isGenerated: false,
     glyphTypes: ["cursed"],
-    singleDesc: "All dimension multipliers ^{value}",
+    singleDesc: "All Dimension multipliers ^{value}",
+    shortDesc: "All Dimensions ^{value}",
     // Multiplies by 0.734 per glyph
     effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.035),
     formatEffect: x => format(x, 3, 3),
@@ -700,6 +702,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: "The threshold for Tickspeed Upgrades from Time Dimensions is multiplied by ×{value}",
     totalDesc: "The threshold for Tickspeed Upgrades from Time Dimensions is increased by ×{value}",
+    shortDesc: "TD Tickspeed threshold ×{value}",
     // Additive 3.82 per glyph
     effect: (level, strength) => Math.log10(level) * (strength / 3.5),
     formatEffect: x => format(x, 3, 3),
@@ -711,6 +714,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: "Divide Eternity Point gain by {value}",
     totalDesc: "Eternity Point gain / {value}",
+    shortDesc: "EP / {value}",
     // Divides e666.6 per glyph
     effect: (level, strength) => Decimal.pow10(-level / 10 * (strength / 3.5)),
     formatEffect: x => format(x.reciprocal()),
@@ -722,6 +726,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Increase the effective level of equipped basic Glyphs by {value}",
     totalDesc: "Equipped basic Glyph level +{value}",
+    shortDesc: "Basic Glyph Level +{value}",
     effect: level => Math.floor(Math.sqrt(level * 90)),
     formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
@@ -732,6 +737,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "All Galaxies are {value} stronger",
     totalDesc: "All Galaxy strength +{value}",
+    shortDesc: "Galaxy Strength +{value}",
     effect: level => 1 + Math.pow(level / 100000, 0.5),
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
@@ -742,6 +748,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Multiplier from Reality Upgrade Amplifiers ^{value}",
     totalDesc: "Reality Upgrade Amplifier multiplier ^{value}",
+    shortDesc: "Amplifier Multiplier ^{value}",
     effect: level => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
@@ -755,6 +762,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: () => `Dilated Time scaling for next Glyph level: ^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
     genericDesc: "Dilated Time scaling for Glyph level",
+    shortDesc: "DT pow. for level +{value}",
     // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
     effect: () => 0.1,
     formatEffect: x => format(x, 2, 2),
@@ -767,6 +775,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, " +
       "and plot the demise of all who stand against you. This one-of-a-kind Glyph will never leave you.",
     totalDesc: "+{value} happiness",
+    shortDesc: "Doesn't want to kill you",
     effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
     formatEffect: x => formatPercents(x, 2, 2),
     combine: GlyphCombiner.add,
@@ -776,6 +785,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: false,
     glyphTypes: ["companion"],
     singleDesc: "Thanks for your dedication for the game! You reached {value} Eternity Points on your first Reality.",
+    shortDesc: "It loves you very, very much",
     totalDesc: () => (Enslaved.isRunning ? "Help me" : "Yay!"),
     // The EP value for this is entirely encoded in rarity, but level needs to be present to
     // make sure the proper parameter is being used. The actual glyph level shouldn't do anything.

@@ -57,15 +57,23 @@ Vue.component("modal-glyph-showcase-panel", {
                   </span>`;
         },
         typeStyle() {
+          // Special case for cursed glyphs because its black default has poor contrast on some themes
+          // TODO Update this when we "fix" new UI Normal because #5151EC looks kinda weird
+          const color = this.glyph.type === "cursed"
+            ? "#5151EC"
+            : GlyphTypes[this.type].color;
           return {
-            color: `${GlyphTypes[this.type].color}`,
+            color: `${color}`,
             "font-weight": "bold",
             animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
           };
         },
         rarityStyle() {
+          let color;
+          if (this.glyph.type === "companion") color = GlyphTypes[this.type].color;
+          else color = getRarity(this.glyph.strength).color;
           return {
-            "color": `${getRarity(this.glyph.strength).color}`,
+            "color": `${color}`,
             "font-weight": "bold"
           };
         },
@@ -77,14 +85,16 @@ Vue.component("modal-glyph-showcase-panel", {
         },
         glyphEffectList() {
           const db = GameDatabase.reality.glyphEffects;
-          const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength);
+          const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength)
+            .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));
           const effectStrings = effects
             .map(e => this.formatEffectString(db[e.id], e.value));
           // Filter out undefined results since shortDesc only exists for generated effects
           return effectStrings.filter(s => s !== "undefined");
         },
         rarityPercent() {
-          return formatPercents(strengthToRarity(this.glyph.strength) / 100, 1);
+          if (this.glyph.type === "companion" || this.glyph.type === "cursed") return "";
+          return formatRarity(strengthToRarity(this.glyph.strength));
         },
       },
       methods: {

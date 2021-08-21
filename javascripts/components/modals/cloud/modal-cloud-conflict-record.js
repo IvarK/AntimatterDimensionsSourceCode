@@ -8,30 +8,34 @@ Vue.component("modal-cloud-conflict-record", {
   },
   computed: {
     timePlayed() {
-      return `${TimeSpan.fromMilliseconds(saveData.records.realTimePlayed).toString()}`;
+      return `${TimeSpan.fromMilliseconds(this.saveData.realTimePlayed).toString()}`;
     },
     antimatter() {
-      return `${format(saveData.records.totalAntimatter, 2, 1)}`;
+      return `${format(this.saveData.totalAntimatter, 2, 1)}`;
     },
     prestigeCount() {
-      if (saveData.realities > 0) return `Realities: ${formatSmall(saveData.realities)}`;
-      if (saveData.eternities.gt(0)) return `Eternities: ${formatSmall(saveData.eternities)}`;
-      if (saveData.infinities.gt(0)) return `Infinities: ${formatSmall(saveData.infinities)}`;
+      const data = this.saveData;
+      if (data.realities > 0) return `Realities: ${this.formatSmall(data.realities)}`;
+      if (data.eternities.gt(0)) return `Eternities: ${this.formatSmall(data.eternities)}`;
+      if (data.infinities.gt(0)) return `Infinities: ${this.formatSmall(data.infinities)}`;
       return "(No prestige layers reached yet.)";
     },
     prestigeResource() {
-      if (saveData.reality.realityMachines.gt(0)) {
-        return `Reality Machines: ${format(saveData.reality.realityMachines, 2)}`;
+      const data = this.saveData;
+      if (data.realityMachines.gt(0)) {
+        const imString = data.imaginaryMachines > 0
+          ? ` + ${format(data.imaginaryMachines, 2, 2)}i`
+          : "";
+        return `Reality Machines: ${format(data.realityMachines, 2)}${imString}`;
       }
-      if (saveData.eternityPoints.gt(0)) return `Eternity Points: ${format(saveData.eternityPoints, 2)}`;
-      if (saveData.infinityPoints.gt(0)) return `Infinity Points: ${format(saveData.infinityPoints, 2)}`;
+      if (data.eternityPoints.gt(0)) return `Eternity Points: ${format(data.eternityPoints, 2)}`;
+      if (data.infinityPoints.gt(0)) return `Infinity Points: ${format(data.infinityPoints, 2)}`;
       return "";
     },
     extraProgressIndicator() {
-      if (saveData.realities > 0) {
-        return `Best Glyph Level: ${formatInt(player.records.bestReality.glyphLevel)}`;
-      }
-      if (saveData.dilation.dilatedTime.gt(0)) return `Dilated Time: ${format(saveData.dilation.dilatedTime, 2)}`;
+      const data = this.saveData;
+      if (data.realities > 0) return `Best Glyph Level: ${formatInt(data.bestLevel)}`;
+      if (data.dilatedTime.gt(0)) return `Dilated Time: ${format(data.dilatedTime, 2)}`;
       return "";
     },
   },
@@ -43,7 +47,7 @@ Vue.component("modal-cloud-conflict-record", {
   },
   template: `
     <div class="l-modal-options__save-record">
-      <strong>Save #{{ saveId + 1 }} ({{ saveType }}):</strong>
+      <strong>{{ saveType }} (Slot #{{ saveId + 1 }}):</strong>
       <span>Time Played: {{ timePlayed }}</span>
       <span>Total Antimatter: {{ antimatter }}</span>
       <span>{{ prestigeCount }}</span>
@@ -56,20 +60,15 @@ Vue.component("modal-cloud-conflict-record", {
 const modalCloudConflictMixin = {
   computed: {
     conflict() {
-      return this.$viewModel.modal.cloudConflicts[0];
+      return this.$viewModel.modal.cloudConflict;
     }
   },
   methods: {
     handleClick(accepted) {
-      const conflicts = this.$viewModel.modal.cloudConflicts;
       if (accepted) {
         safeCall(this.conflict.onAccept);
       }
-      if (conflicts.length === 1) {
-        safeCall(this.conflict.onLastConflict);
-        Modal.hide();
-      }
-      conflicts.shift();
+      Modal.hide();
     }
   }
 };

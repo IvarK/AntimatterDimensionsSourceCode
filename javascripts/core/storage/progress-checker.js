@@ -43,11 +43,12 @@ const ProgressChecker = {
     if (save.eternities.gt(0)) return save.eternities.toNumber();
     if (save.infinities.gt(1000)) return 1000 * Math.sqrt(save.infinityPoints.log10() / 310);
     if (save.infinities.gt(0)) return save.infinities.toNumber();
-    return 330 * save.galaxies + 20 * save.dimensionBoosts + save.antimatter.value.log10() / 30;
+    return 330 * save.galaxies + 20 * save.dimensionBoosts + save.antimatter.log10() / 30;
   },
 
   // Note: Don't use this function as an absolute indicator of progress as it's unreliable when numbers are close
   getCompositeProgress(save) {
+    if (!save) return 0;
     return this.getProgressStage(save) + this.getProgressWithinStage(save) / 1000;
   },
 
@@ -59,8 +60,9 @@ const ProgressChecker = {
     return 0;
   },
 
-  // Returns -1 or 1 based on which save is older
+  // Returns -1 or 1 based on which save is older. Return 0 if one is undefined, will be handled upstream
   compareSaveTimes(first, second) {
+    if (!first || !second) return 0;
     const timeDifference = first.records.realTimePlayed - second.records.realTimePlayed;
     if (timeDifference >= 0) return -1;
     return 1;

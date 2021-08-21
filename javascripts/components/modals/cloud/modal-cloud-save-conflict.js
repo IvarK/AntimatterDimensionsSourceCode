@@ -2,8 +2,17 @@
 
 Vue.component("modal-cloud-save-conflict", {
   mixins: [modalCloudConflictMixin],
+  methods: {
+    saveClick(accepted) {
+      Cloud.hasSeenSavingConflict = true;
+      Cloud.shouldOverwriteCloudSave = accepted;
+      this.handleClick(accepted);
+    }
+  },
   template:
-    `<div class="c-modal-options l-modal-options">
+    `<div class="c-modal-options l-modal-options" style="width : 50rem">
+      <modal-close-button @click="emitClose" />
+      <h1>Save Game to Cloud</h1>
       <b>
         <span v-if="conflict.saveComparison.older === -1">
           Your cloud save appears to be older than your local save.
@@ -14,30 +23,33 @@ Vue.component("modal-cloud-save-conflict", {
         <span v-else>
           Your local save and cloud save appear to have similar amounts of progress.
         </span>
-        Would you like to overwrite the cloud save?
       </b>
+      <br>
       <modal-cloud-conflict-record
         :saveData="conflict.local"
         :saveId="conflict.saveId"
-        saveType="local"
+        saveType="Local Save"
       />
       <modal-cloud-conflict-record
         :saveData="conflict.cloud"
         :saveId="conflict.saveId"
-        saveType="cloud"
+        saveType="Cloud Save"
       />
+      <br>
+      Would you like to overwrite the cloud save? Your choice here will apply for every
+      time the game automatically attempts to cloud save, until the page is reloaded.
       <primary-button
-        class="o-primary-btn--width-medium"
-        @click="handleClick(true)"
+        class="o-primary-btn"
+        @click="saveClick(true)"
       >
-        Yes
+        Overwrite cloud save
       </primary-button>
+      <br>
       <primary-button
-        class="o-primary-btn--width-medium"
-        @click="handleClick(false)"
+        class="o-primary-btn"
+        @click="saveClick(false)"
       >
-        No
+        Do not overwrite
       </primary-button>
-      <b>(Placeholder for ignore button)</b>
     </div>`
 });

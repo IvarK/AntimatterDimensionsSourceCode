@@ -3,7 +3,9 @@
 Vue.component("modal-cloud-load-conflict", {
   mixins: [modalCloudConflictMixin],
   template: `
-    <div class="c-modal-options l-modal-options">
+    <div class="c-modal-options l-modal-options" style="width : 50rem">
+      <modal-close-button @click="emitClose" />
+      <h1>Load Game from Cloud</h1>
       <b>
         <span v-if="conflict.saveComparison.older === 1">
           Your local save appears to be older than your cloud save.
@@ -16,31 +18,29 @@ Vue.component("modal-cloud-load-conflict", {
         </span>
         Please select the save you want to load.
       </b>
+      <br>
       <modal-cloud-conflict-record
         :saveData="conflict.local"
         :saveId="conflict.saveId"
-        saveType="local"
+        saveType="Local Save"
+      />
+      <primary-button
+        class="o-primary-btn"
+        @click="handleClick(false)"
       >
-        <primary-button
-          class="o-primary-btn--width-medium"
-          @click="handleClick(false)"
-        >
-          Load local save
-        </primary-button>
-      </modal-cloud-conflict-record>
+        Keep local save
+      </primary-button>
+      <br>
       <modal-cloud-conflict-record
         :saveData="conflict.cloud"
         :saveId="conflict.saveId"
-        saveType="cloud"
+        saveType="Cloud Save"
+      />
+      <primary-button
+        class="o-primary-btn"
+        @click="handleClick(true)"
       >
-        <primary-button
-          class="o-primary-btn--width-medium"
-          @click="handleClick(true)"
-        >
-          Load cloud save
-        </primary-button>
-      </modal-cloud-conflict-record>
-      <b>This message will only show up once, when you load up the game.
-      You can make it appear again by manually loading from the Options menu.</b>
+        Load cloud save (overwrite local save)
+      </primary-button>
     </div>`
 });

@@ -6,7 +6,7 @@ let ui = {
     modal: {
       queue: [],
       current: undefined,
-      cloudConflicts: [],
+      cloudConflict: [],
       progressBar: undefined,
     },
     tabs: {

@@ -1004,7 +1004,11 @@ GameStorage.devMigrations = {
     GameStorage.migrations.removePriority,
     player => {
       player.reality.realityMachines = player.reality.realityMachines.floor();
-    }
+    },
+    player => {
+      player.hiddenSubtabBits = Array.repeat(0, 11);
+      player.lastOpenSubtab = Array.repeat(0, 11);
+    },
   ],
 
   patch(player) {

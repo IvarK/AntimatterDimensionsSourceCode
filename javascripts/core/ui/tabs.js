@@ -16,7 +16,7 @@ class SubtabState {
 
   get isHidden() {
     // eslint-disable-next-line no-bitwise
-    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) && 
+    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) &&
       this.config.hidable;
   }
 
@@ -105,7 +105,7 @@ class TabState {
     } else {
       this._currentSubtab = subtab;
     }
-    if (!this._currentSubtab.isUnlocked) this.resetCurrentSubtab();
+    if (this._currentSubtab === undefined || !this._currentSubtab.isUnlocked) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
     const tabNotificationKey = this.config.key + this._currentSubtab.key;
     if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);

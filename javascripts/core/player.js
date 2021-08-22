@@ -671,9 +671,9 @@ let player = {
       blackHole: true
     },
     hiddenTabBits: 0,
-    hiddenSubtabBits: Array.repeat(0, 10),
+    hiddenSubtabBits: Array.repeat(0, 11),
     lastOpenTab: 0,
-    lastOpenSubtab: Array.repeat(0, 10),
+    lastOpenSubtab: Array.repeat(0, 11),
     fixedPerkStartingPos: false,
     automatorEvents: {
       newestFirst: false,

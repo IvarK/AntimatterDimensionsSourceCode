@@ -9,19 +9,19 @@ Vue.component("modal-cloud-save-conflict", {
       this.handleClick(accepted);
     }
   },
-  template:
-    `<div class="c-modal-options l-modal-options" style="width : 50rem">
+  template: `
+    <div class="c-modal-options l-modal-options" style="width: 50rem">
       <modal-close-button @click="emitClose" />
       <h1>Save Game to Cloud</h1>
       <b>
         <span v-if="conflict.saveComparison.older === -1">
-          Your cloud save appears to be older than your local save.
+          Your Cloud Save appears to be older than your Local Save.
         </span>
         <span v-else-if="conflict.saveComparison.farther === -1">
-          Your cloud save appears to be farther than your local save.
+          Your Cloud Save appears to be farther than your Local Save.
         </span>
         <span v-else>
-          Your local save and cloud save appear to have similar amounts of progress.
+          Your Local Save and Cloud Save appear to have similar amounts of progress.
         </span>
       </b>
       <br>

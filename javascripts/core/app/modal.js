@@ -152,7 +152,7 @@ Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, 
     resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
     resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
     resources.realityMachines.copyFrom(new Decimal(save.reality.realityMachines));
-    resources.imaginaryMachines = save.reality.iMCap
+    resources.imaginaryMachines = save.reality.iMCap;
     resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
     resources.bestLevel = save.records.bestReality.glyphLevel;
 

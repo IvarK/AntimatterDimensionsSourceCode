@@ -8,10 +8,10 @@ Vue.component("modal-cloud-conflict-record", {
   },
   computed: {
     timePlayed() {
-      return `${TimeSpan.fromMilliseconds(this.saveData.realTimePlayed).toString()}`;
+      return `Time Played: ${TimeSpan.fromMilliseconds(this.saveData.realTimePlayed).toString()}`;
     },
     antimatter() {
-      return `${format(this.saveData.totalAntimatter, 2, 1)}`;
+      return `Total Antimatter: ${format(this.saveData.totalAntimatter, 2, 1)}`;
     },
     prestigeCount() {
       const data = this.saveData;
@@ -47,13 +47,17 @@ Vue.component("modal-cloud-conflict-record", {
   },
   template: `
     <div class="l-modal-options__save-record">
-      <strong>{{ saveType }} (Slot #{{ saveId + 1 }}):</strong>
-      <span>Time Played: {{ timePlayed }}</span>
-      <span>Total Antimatter: {{ antimatter }}</span>
-      <span>{{ prestigeCount }}</span>
-      <span>{{ prestigeResource }}</span>
-      <span>{{ extraProgressIndicator }}</span>
-      <slot/>
+      <h3>{{ saveType }} (Slot #{{ saveId + 1 }}):</h3>
+      {{ timePlayed }}
+      <br>
+      {{ antimatter }}
+      <br>
+      {{ prestigeCount }}
+      <br>
+      {{ prestigeResource }}
+      <br>
+      {{ extraProgressIndicator }}
+      <slot />
     </div>`
 });
 

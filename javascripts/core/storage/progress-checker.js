@@ -34,16 +34,30 @@ const ProgressChecker = {
   // don't necessarily indicate strictly farther progress when they're close to each other, but the general trend is
   // that 1000 will be approximately "equal to" 0 on the next stage
   getProgressWithinStage(save) {
-    if (save.reality.iMCap > 0) return 50 * Math.log10(save.reality.iMCap);
-    if (save.realities > 50) return 1000 * Math.sqrt(save.reality.realityMachines.log10() / 1000);
-    if (save.realities > 0) return 20 * save.realities;
-    if (save.dilation.dilatedTime.gt(1e15)) return 1000 * Math.sqrt((save.eternityPoints.log10() - 1300) / 6700);
-    if (save.dilation.dilatedTime.gt(0)) return save.dilation.dilatedTime.log10() / 0.015;
-    if (save.eternities.gt(1000)) return 1000 * Math.sqrt(save.eternityPoints.log10() / 1300);
-    if (save.eternities.gt(0)) return save.eternities.toNumber();
-    if (save.infinities.gt(1000)) return 1000 * Math.sqrt(save.infinityPoints.log10() / 310);
-    if (save.infinities.gt(0)) return save.infinities.toNumber();
-    return 330 * save.galaxies + 20 * save.dimensionBoosts + save.antimatter.log10() / 30;
+    switch (this.getProgressStage(save)) {
+      case PROGRESS_STAGE.PRE_INFINITY:
+        return (330 * save.galaxies) + (20 * save.dimensionBoosts) + (save.antimatter.log10() / 30);
+      case PROGRESS_STAGE.EARLY_INFINITY:
+        return save.infinities.toNumber();
+      case PROGRESS_STAGE.INFINITY:
+        return 1000 * Math.sqrt(save.infinityPoints.log10() / 310);
+      case PROGRESS_STAGE.EARLY_ETERNITY:
+        return save.eternities.toNumber();
+      case PROGRESS_STAGE.ETERNITY:
+        return 1000 * Math.sqrt(save.eternityPoints.log10() / 1300);
+      case PROGRESS_STAGE.EARLY_DILATION:
+        return save.dilation.dilatedTime.log10() / 0.015;
+      case PROGRESS_STAGE.LATE_ETERNITY:
+        return 1000 * Math.sqrt((save.eternityPoints.log10() - 1300) / 6700);
+      case PROGRESS_STAGE.EARLY_REALITY:
+        return 20 * save.realities;
+      case PROGRESS_STAGE.REALITY:
+        return 1000 * Math.sqrt(save.reality.realityMachines.log10() / 1000);
+      case PROGRESS_STAGE.IMAGINARY_MACHINES:
+        return 50 * Math.log10(save.reality.iMCap);
+      default:
+        throw Error("Unrecognized progress stage in getProgressWithinStage");
+    }
   },
 
   // Note: Don't use this function as an absolute indicator of progress as it's unreliable when numbers are close

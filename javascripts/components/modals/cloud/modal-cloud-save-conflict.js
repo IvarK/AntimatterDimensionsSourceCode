@@ -36,13 +36,13 @@ Vue.component("modal-cloud-save-conflict", {
         saveType="Cloud Save"
       />
       <br>
-      Would you like to overwrite the cloud save? Your choice here will apply for every
-      time the game automatically attempts to cloud save, until the page is reloaded.
+      Would you like to overwrite the Cloud Save? Your choice here will apply for every
+      time the game automatically attempts to Cloud Save, until the page is reloaded.
       <primary-button
         class="o-primary-btn"
         @click="saveClick(true)"
       >
-        Overwrite cloud save
+        Overwrite Cloud Save
       </primary-button>
       <br>
       <primary-button

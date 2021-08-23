@@ -15,6 +15,7 @@ Vue.component("dilation-upgrade", {
       isAffordable: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
+      boughtAmount: 0,
       timeUntilCost: new Decimal(0),
     };
   },
@@ -52,6 +53,7 @@ Vue.component("dilation-upgrade", {
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
+        this.boughtAmount = upgrade.boughtAmount;
         return;
       }
       this.isBought = upgrade.isBought;
@@ -68,7 +70,10 @@ Vue.component("dilation-upgrade", {
           :length="70"
           name="o-dilation-upgrade__description"
         />
-        <effect-display br :config="upgrade.config" />
+        <effect-display br
+          :config="upgrade.config"
+          :key="boughtAmount"
+        />
         <cost-display br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"

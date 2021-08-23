@@ -270,7 +270,7 @@ function maxAll() {
   buyMaxTickSpeed();
 }
 
-function buyMaxDimension(tier, bulk = Infinity, auto = false) {
+function buyMaxDimension(tier, bulk = Infinity) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;

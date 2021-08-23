@@ -150,10 +150,7 @@ const shortcuts = [
     name: "Modify visible tabs",
     keys: ["tab"],
     type: "bindHotkey",
-    function: () => {
-      Modal.hiddenTabs.show();
-      return false;
-    },
+    function: () => keyboardVisibleTabsToggle(),
     visible: () => true
   }, {
     name: "Close pop-up or open options",
@@ -349,6 +346,15 @@ function keyboardH2PToggle() {
   if (Modal.isOpen) return;
   Modal.h2p.show();
   ui.view.h2pActive = true;
+}
+
+function keyboardVisibleTabsToggle() {
+  if (Modal.hiddenTabs.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.hiddenTabs.show();
 }
 
 function keyboardTabChange(direction) {

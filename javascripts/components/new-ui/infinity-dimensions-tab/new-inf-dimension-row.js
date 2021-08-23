@@ -96,7 +96,10 @@ Vue.component("new-inf-dimension-row", {
       buyManyInfinityDimension(this.tier);
     },
     buyMaxInfinityDimension() {
-      if (!this.isUnlocked) return;
+      if (!this.isUnlocked) {
+        InfinityDimension(this.tier).tryUnlock(true);
+        return;
+      }
       buyMaxInfDims(this.tier);
     },
   },

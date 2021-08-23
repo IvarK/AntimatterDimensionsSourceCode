@@ -138,25 +138,37 @@ const shortcuts = [
     name: "Open the shortcut list",
     keys: ["?"],
     type: "bindHotkey",
-    function: () => keyboardPressQuentionMark(),
+    function: () => {
+      keyboardPressQuentionMark();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Open \"How to Play\" pop-up",
     keys: ["h"],
     type: "bindHotkey",
-    function: () => keyboardH2PToggle(),
+    function: () => {
+      keyboardH2PToggle();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Modify visible tabs",
     keys: ["tab"],
     type: "bindHotkey",
-    function: () => keyboardVisibleTabsToggle(),
+    function: () => {
+      keyboardVisibleTabsToggle();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Close pop-up or open options",
     keys: ["esc"],
     type: "bindHotkey",
-    function: () => keyboardPressEscape(),
+    function: () => {
+      keyboardPressEscape();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Paying respects",

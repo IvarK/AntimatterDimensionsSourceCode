@@ -357,7 +357,6 @@ function keyboardH2PToggle() {
   }
   if (Modal.isOpen) return;
   Modal.h2p.show();
-  ui.view.h2pActive = true;
 }
 
 function keyboardVisibleTabsToggle() {

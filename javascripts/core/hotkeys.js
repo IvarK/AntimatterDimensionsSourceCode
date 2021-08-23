@@ -87,11 +87,29 @@ const shortcuts = [
     function: () => eternityResetRequest(),
     visible: () => PlayerProgress.eternityUnlocked() || Player.canEternity
   }, {
+    name: "Respec Time Studies and Eternity",
+    keys: ["shift+e"],
+    type: "bindRepeatableHotkey",
+    function: () => {
+      player.respec = true;
+      eternityResetRequest();
+    },
+    visible: () => PlayerProgress.eternityUnlocked()
+  }, {
     name: "Reality",
     keys: ["y"],
     type: "bindRepeatableHotkey",
     function: () => requestManualReality(),
     visible: () => PlayerProgress.realityUnlocked() || isRealityAvailable()
+  }, {
+    name: "Unequip Glyphs and Reality",
+    keys: ["shift+y"],
+    type: "bindRepeatableHotkey",
+    function: () => {
+      player.reality.respec = true;
+      requestManualReality();
+    },
+    visible: () => PlayerProgress.realityUnlocked()
   }, {
     name: "Start/Pause Automator",
     keys: ["u"],

@@ -81,8 +81,8 @@ GameDatabase.reality.automator = {
             {
               header: "<i>respec</i>",
               description: `
-                Eternity: respec studies and eternity.<br>
-                Reality: unequip glyphs and reality.
+                Eternity: respec Time Studies and Eternity.<br>
+                Reality: unequip Glyphs and Reality.
               `
             },
           ]

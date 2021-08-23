@@ -124,9 +124,9 @@ Vue.component("new-dimension-row", {
         @click="buy"
       >
         <div
+          v-tooltip="boughtTooltip"
           class="button-content"
           :enabled="isAffordable || isContinuumActive"
-          :ach-tooltip="boughtTooltip"
           :class="tutorialClass()"
         >
           <span v-if="isPrevented">

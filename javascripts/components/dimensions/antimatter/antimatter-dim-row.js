@@ -2,7 +2,6 @@
 
 Vue.component("antimatter-dim-row", {
   props: {
-    floatingText: Array,
     tier: Number
   },
   data() {
@@ -136,12 +135,5 @@ Vue.component("antimatter-dim-row", {
           {{ format(until10Cost) }}
         </template>
       </primary-button>
-      <div
-        v-for="text in floatingText"
-        :key="text.key"
-        class='c-antimatter-dim-row__floating-text'
-      >
-        {{ text.text }}
-      </div>
     </div>`,
 });

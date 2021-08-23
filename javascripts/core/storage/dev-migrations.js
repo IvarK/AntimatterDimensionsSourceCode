@@ -1004,7 +1004,8 @@ GameStorage.devMigrations = {
     GameStorage.migrations.removePriority,
     player => {
       player.reality.realityMachines = player.reality.realityMachines.floor();
-    }
+    },
+    GameStorage.migrations.deleteFloatingTextOption,
   ],
 
   patch(player) {

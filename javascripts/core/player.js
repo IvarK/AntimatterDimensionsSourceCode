@@ -623,7 +623,6 @@ let player = {
       dips: true
     },
     animations: {
-      floatingText: true,
       bigCrunch: true,
       eternity: true,
       dilation: true,

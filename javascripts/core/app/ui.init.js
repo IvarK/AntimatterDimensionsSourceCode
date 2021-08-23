@@ -10,11 +10,6 @@ let ui = {
       progressBar: undefined,
     },
     tabs: {
-      dimensions: {
-        antimatter: {
-          floatingText: Array.from({ length: 9 }, () => [])
-        },
-      },
       reality: {
         openGlyphWeights: false,
         currentGlyphTooltip: -1,

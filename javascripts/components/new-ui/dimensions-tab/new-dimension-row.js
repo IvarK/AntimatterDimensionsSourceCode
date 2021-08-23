@@ -2,7 +2,6 @@
 
 Vue.component("new-dimension-row", {
   props: {
-    floatingText: Array,
     tier: Number
   },
   data() {
@@ -147,12 +146,5 @@ Vue.component("new-dimension-row", {
           <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
         </div>
       </button>
-      <div
-        v-for="text in floatingText"
-        :key="text.key"
-        class='c-antimatter-dim-row__floating-text'
-      >
-        {{ text.text }}
-      </div>
     </div>`
 });

@@ -120,7 +120,6 @@ function sacrificeReset(auto) {
   }
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, formatX(nextBoost, 2, 1));
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(AntimatterDimension(1).amount);
   const isAch118Unlocked = Achievement(118).isUnlocked;

@@ -62,7 +62,6 @@ Vue.component("antimatter-dim-tab", {
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :floatingText="$viewModel.tabs.dimensions.antimatter.floatingText[tier]"
         />
         <antimatter-dim-boost-row />
         <antimatter-dim-galaxy-row />

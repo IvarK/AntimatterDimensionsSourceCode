@@ -83,7 +83,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
-    formatEffect: value => formatX(value, 1, 2),
+    formatEffect: value => `/${formatX(value, 1, 2)}`,
     reward: {
       description: "Infinity Dimension multiplier based on Tickspeed",
       effect: () => Tickspeed.perSecond.pow(0.0005),

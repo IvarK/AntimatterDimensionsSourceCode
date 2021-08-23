@@ -17,42 +17,47 @@ const PROGRESS_STAGE = {
 
 const ProgressChecker = {
   // Returns an enum in an ordered list defined by certain progress breakpoints in the game
+  // Note that cloud saves will have Decimal props stored as Strings which need to be converted
   getProgressStage(save) {
     if (save.reality.iMCap > 0) return PROGRESS_STAGE.IMAGINARY_MACHINES;
     if (save.realities > 50) return PROGRESS_STAGE.REALITY;
     if (save.realities > 0) return PROGRESS_STAGE.EARLY_REALITY;
-    if (save.dilation.dilatedTime.gt(1e15)) return PROGRESS_STAGE.LATE_ETERNITY;
-    if (save.dilation.dilatedTime.gt(0)) return PROGRESS_STAGE.EARLY_DILATION;
-    if (save.eternities.gt(1000)) return PROGRESS_STAGE.ETERNITY;
-    if (save.eternities.gt(0)) return PROGRESS_STAGE.EARLY_ETERNITY;
-    if (save.infinities.gt(1000)) return PROGRESS_STAGE.INFINITY;
-    if (save.infinities.gt(0)) return PROGRESS_STAGE.EARLY_INFINITY;
+    const dilatedTime = new Decimal(save.dilation.dilatedTime);
+    if (dilatedTime.gt(1e15)) return PROGRESS_STAGE.LATE_ETERNITY;
+    if (dilatedTime.gt(0)) return PROGRESS_STAGE.EARLY_DILATION;
+    const eternities = new Decimal(save.eternities);
+    if (eternities.gt(1000)) return PROGRESS_STAGE.ETERNITY;
+    if (eternities.gt(0)) return PROGRESS_STAGE.EARLY_ETERNITY;
+    const infinities = new Decimal(save.eternities);
+    if (infinities.gt(1000)) return PROGRESS_STAGE.INFINITY;
+    if (infinities.gt(0)) return PROGRESS_STAGE.EARLY_INFINITY;
     return PROGRESS_STAGE.PRE_INFINITY;
   },
 
   // Returns a Number scaled roughly 0-1000 which can be used to compare progress within the same stage. Higher values
   // don't necessarily indicate strictly farther progress when they're close to each other, but the general trend is
   // that 1000 will be approximately "equal to" 0 on the next stage
+  // The new Decimal followed by toNumber is effectively using break_infinity to parse a Decimal String for us
   getProgressWithinStage(save) {
     switch (this.getProgressStage(save)) {
       case PROGRESS_STAGE.PRE_INFINITY:
-        return (330 * save.galaxies) + (20 * save.dimensionBoosts) + (save.antimatter.log10() / 30);
+        return (330 * save.galaxies) + (20 * save.dimensionBoosts) + (new Decimal(save.antimatter).log10() / 30);
       case PROGRESS_STAGE.EARLY_INFINITY:
-        return save.infinities.toNumber();
+        return new Decimal(save.infinities).toNumber();
       case PROGRESS_STAGE.INFINITY:
-        return 1000 * Math.sqrt(save.infinityPoints.log10() / 310);
+        return 1000 * Math.sqrt(new Decimal(save.infinityPoints).log10() / 310);
       case PROGRESS_STAGE.EARLY_ETERNITY:
-        return save.eternities.toNumber();
+        return new Decimal(save.eternities).toNumber();
       case PROGRESS_STAGE.ETERNITY:
-        return 1000 * Math.sqrt(save.eternityPoints.log10() / 1300);
+        return 1000 * Math.sqrt(new Decimal(save.eternityPoints).log10() / 1300);
       case PROGRESS_STAGE.EARLY_DILATION:
-        return save.dilation.dilatedTime.log10() / 0.015;
+        return new Decimal(save.dilation.dilatedTime).log10() / 0.015;
       case PROGRESS_STAGE.LATE_ETERNITY:
-        return 1000 * Math.sqrt((save.eternityPoints.log10() - 1300) / 6700);
+        return 1000 * Math.sqrt((new Decimal(save.eternityPoints).log10() - 1300) / 6700);
       case PROGRESS_STAGE.EARLY_REALITY:
         return 20 * save.realities;
       case PROGRESS_STAGE.REALITY:
-        return 1000 * Math.sqrt(save.reality.realityMachines.log10() / 1000);
+        return 1000 * Math.sqrt(new Decimal(save.reality.realityMachines).log10() / 1000);
       case PROGRESS_STAGE.IMAGINARY_MACHINES:
         return 50 * Math.log10(save.reality.iMCap);
       default:

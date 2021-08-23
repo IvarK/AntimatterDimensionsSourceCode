@@ -43,7 +43,7 @@ Vue.component("antimatter-dim-tab", {
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
 
-      this.multiplierText = `Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
       if (this.isSacrificeUnlocked) this.multiplierText +=
         ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },

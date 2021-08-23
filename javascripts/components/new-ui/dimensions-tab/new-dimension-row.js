@@ -143,9 +143,9 @@ Vue.component("new-dimension-row", {
             Cost: {{ costDisplay }}
           </span>
         </div>
-        <div class="fill" v-if="!isContinuumActive && isUnlocked && isAffordable && !isPrevented">
-          <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
-          <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
+        <div class="fill" v-if="!isContinuumActive && isUnlocked && !isPrevented">
+          <div class="fill-purchased" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
+          <div class="fill-possible" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
         </div>
       </button>
     </div>`

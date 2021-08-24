@@ -772,8 +772,6 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
-  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 
@@ -799,9 +797,13 @@ function simulateTime(seconds, real, fast) {
   if (InfinityUpgrade.ipOffline.isBought) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
-
-  let loopFn = () => gameLoop(largeDiff);
+  
   let remainingRealSeconds = seconds;
+  let loopFn = i => {
+    let diff = remainingRealSeconds / i;
+    gameLoop(diff);
+    remainingRealSeconds -= diff;
+  }
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
@@ -821,6 +823,7 @@ function simulateTime(seconds, real, fast) {
     GameStorage.postLoadStuff();
     afterSimulation(seconds, playerStart);
   } else {
+    let progress = {};
     ui.view.modal.progressBar = {};
     ui.view.modal.progressBar.label = "Simulating offline time...";
     Async.run(loopFn,
@@ -835,7 +838,18 @@ function simulateTime(seconds, real, fast) {
             label: "Simulating offline time...",
             current: doneSoFar,
             max: ticks,
-            startTime: Date.now()
+            startTime: Date.now(),
+            button: {
+              text: 'Speed up',
+              click: () => {
+                let newRemaining = Math.min(progress.remaining, 1000);
+                // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+                progress.maxIter -= progress.remaining - newRemaining;
+                progress.remaining = newRemaining;
+                // We update the progress bar max data (remaining will update automatically).
+                ui.$viewModel.modal.progressBar.max = progress.maxIter;
+              }
+            }
           };
         },
         asyncProgress: doneSoFar => {
@@ -848,7 +862,8 @@ function simulateTime(seconds, real, fast) {
         },
         then: () => {
           afterSimulation(seconds, playerStart);
-        }
+        },
+        progress: progress
       });
   }
 }

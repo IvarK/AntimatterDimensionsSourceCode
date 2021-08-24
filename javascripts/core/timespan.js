@@ -236,17 +236,17 @@ class TimeSpan {
    */
   toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
-    if (totalSeconds <= 1 / 1000 && totalSeconds >= 1 / 2e6) {
+    if (totalSeconds < 1 / 1000 && totalSeconds >= 1 / 2e6) {
       // Don't show this if it rounds to 0.
       return `${format(1000 * totalSeconds, 0, 3)} ms`;
     }
-    if (totalSeconds <= 1) {
+    if (totalSeconds < 1) {
       return `${format(1000 * totalSeconds)} ms`;
     }
-    if (totalSeconds <= 10) {
+    if (totalSeconds < 10) {
       return `${format(totalSeconds, 0, 3)} seconds`;
     }
-    if (totalSeconds <= 60) {
+    if (totalSeconds < 60) {
       return `${format(totalSeconds, 0, 2)} seconds`;
     }
     if (this.totalHours < 100) {

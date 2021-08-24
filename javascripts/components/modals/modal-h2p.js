@@ -1,6 +1,11 @@
 "use strict";
 
 Vue.component("modal-h2p", {
+  props: {
+    modalConfig: {
+      forcedTab: undefined
+    }
+  },
   data() {
     return {
       tabId: 0,
@@ -12,7 +17,8 @@ Vue.component("modal-h2p", {
     const tab = this.$viewModel.tab;
     const subtab = `${tab}/${this.$viewModel.subtab}`;
     const matchedEntry = unlockedTabs.find(h2pTab => h2pTab.tab === subtab || h2pTab.tab === tab);
-    this.activeTab = matchedEntry || unlockedTabs[0];
+    this.activeTab = ui.view.h2pForcedTab || matchedEntry || unlockedTabs[0];
+    ui.view.h2pForcedTab = undefined;
   },
   computed: {
     activeTab: {
@@ -28,16 +34,11 @@ Vue.component("modal-h2p", {
     }
   },
   methods: {
-    update() {
-      if (ui.view.h2pForcedTab !== undefined) this.activeTab = ui.view.h2pForcedTab;
-    },
     exit() {
       Modal.hide();
-      ui.view.h2pForcedTab = undefined;
     },
     setActiveTab(tab) {
       this.activeTab = tab;
-      ui.view.h2pForcedTab = undefined;
     }
   },
   template: `

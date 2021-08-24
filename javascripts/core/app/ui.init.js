@@ -46,7 +46,8 @@ let ui = {
     news: false,
     initialized: false,
     tutorialState: 0,
-    tutorialActive: true
+    tutorialActive: true,
+    h2pForcedTab: undefined,
   },
   notationName: "",
   formatPreBreak: false,

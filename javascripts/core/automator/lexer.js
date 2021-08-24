@@ -123,6 +123,10 @@ const AutomatorLexer = (() => {
   createInCategory(AutomatorCurrency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
   createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.realityMachines.value });
 
+  createInCategory(AutomatorCurrency, "infinities", /infinities/i, { $getter: () => Currency.infinities.value });
+  createInCategory(AutomatorCurrency, "eternities", /eternities/i, { $getter: () => Currency.eternities.value });
+  createInCategory(AutomatorCurrency, "realities", /realities/i, { $getter: () => Currency.realities.value });
+
   createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
     $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
@@ -135,8 +139,8 @@ const AutomatorLexer = (() => {
     $autocomplete: "pending RM",
     $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))
   });
-  createInCategory(AutomatorCurrency, "GlyphLevel", /glyph[ \t]+level/i, {
-    $autocomplete: "glyph level",
+  createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
+    $autocomplete: "pending glyph level",
     $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
   });
 
@@ -148,7 +152,7 @@ const AutomatorLexer = (() => {
     $autocomplete: "TT",
     $getter: () => Currency.timeTheorems.value,
   });
-  createInCategory(AutomatorCurrency, "Total_TT", /total tt/i, {
+  createInCategory(AutomatorCurrency, "Total_TT", /total[ \t]+tt/i, {
     $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });

@@ -9,7 +9,7 @@ class Sacrifice {
 
   static get canSacrifice() {
     return DimBoost.totalBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
-      AntimatterDimension(8).totalAmount.gt(0);
+      AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityGoal);
   }
 
   static get disabledCondition() {

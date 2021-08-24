@@ -115,8 +115,8 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return AntimatterDimension(2).amount.gt(0) ||
-            EternityMilestone.unlockAllND.isReached || PlayerProgress.realityUnlocked();
+    return AntimatterDimension(2).bought > 0 || EternityMilestone.unlockAllND.isReached ||
+      PlayerProgress.realityUnlocked();
   },
 
   get isAvailableForPurchase() {

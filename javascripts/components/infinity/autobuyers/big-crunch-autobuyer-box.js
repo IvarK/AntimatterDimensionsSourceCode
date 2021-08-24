@@ -7,6 +7,8 @@ Vue.component("big-crunch-autobuyer-box", {
       mode: AUTO_CRUNCH_MODE.AMOUNT,
       hasAdditionalModes: false,
       increaseWithMult: true,
+      willIgnoreSettings: false,
+      challengeGoal: new Decimal(0),
     };
   },
   watch: {
@@ -28,6 +30,8 @@ Vue.component("big-crunch-autobuyer-box", {
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
       this.increaseWithMult = this.autobuyer.increaseWithMult;
+      this.willIgnoreSettings = Player.isInAntimatterChallenge;
+      this.challengeGoal.copyFrom(Player.infinityGoal);
     },
     modeProps(mode) {
       switch (mode) {
@@ -66,8 +70,12 @@ Vue.component("big-crunch-autobuyer-box", {
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
       <template v-if="postBreak">
         <template slot="intervalSlot">
+          <span v-if="willIgnoreSettings">
+            Auto-Crunch at Challenge goal:
+            <b>{{ format(challengeGoal, 2, 2) }} AM</b>
+          </span>
           <select
-            v-if="hasAdditionalModes"
+            v-else-if="hasAdditionalModes"
             class="c-autobuyer-box__mode-select"
             @change="changeMode"
           >
@@ -84,7 +92,7 @@ Vue.component("big-crunch-autobuyer-box", {
           </span>
         </template>
         <template slot="toggleSlot">
-          <autobuyer-input
+          <autobuyer-input v-if="!willIgnoreSettings"
             :autobuyer="autobuyer"
             :key="mode"
             v-bind="modeProps(mode).input"

@@ -27,14 +27,14 @@
   position: fixed;
   left: 0;
   right: 0;
-  top: -1.7rem;
+  top: -4.9rem;
   bottom: 0;
   margin-top: 0;
   z-index: 4;
 }
 
 .l-automator-tab--full-screen > div {
-  height: 100%;
+  height: calc(100% - 4.9rem);
   width: 100%;
 }
 

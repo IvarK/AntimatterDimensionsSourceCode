@@ -34,6 +34,7 @@ Vue.component("automator-docs", {
       },
       set(value) {
         this.$viewModel.tabs.reality.automator.fullScreen = value;
+        AutomatorData.isEditorFullscreen = value;
       }
     },
     fullScreenIconClass() {

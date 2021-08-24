@@ -178,6 +178,7 @@ const AutomatorData = {
   waitStart: 0,
   lastEvent: 0,
   eventLog: [],
+  isEditorFullscreen: false,
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },

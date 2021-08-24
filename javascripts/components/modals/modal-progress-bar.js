@@ -40,7 +40,9 @@ Vue.component("modal-progress-bar", {
             <div class="l-modal-progress-bar__fg c-modal-progress-bar__fg" :style="foregroundStyle" />
           </div>
         </div>
-        <primary-button v-if="button" class="o-primary-btn--width-medium" @click="button.click()">{{ button.text }}</button>
+        <primary-button v-if="button" class="o-primary-btn--width-medium" @click="button.click()">
+          {{ button.text }}
+        </primary-button>
       </div>
     </div>`,
 });

@@ -800,10 +800,10 @@ function simulateTime(seconds, real, fast) {
   
   let remainingRealSeconds = seconds;
   let loopFn = i => {
-    let diff = remainingRealSeconds / i;
+    const diff = remainingRealSeconds / i;
     gameLoop(diff);
     remainingRealSeconds -= diff;
-  }
+  };
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
@@ -823,7 +823,7 @@ function simulateTime(seconds, real, fast) {
     GameStorage.postLoadStuff();
     afterSimulation(seconds, playerStart);
   } else {
-    let progress = {};
+    const progress = {};
     ui.view.modal.progressBar = {};
     ui.view.modal.progressBar.label = "Simulating offline time...";
     Async.run(loopFn,
@@ -842,7 +842,7 @@ function simulateTime(seconds, real, fast) {
             button: {
               text: 'Speed up',
               click: () => {
-                let newRemaining = Math.min(progress.remaining, 1000);
+                const newRemaining = Math.min(progress.remaining, 1000);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
                 progress.maxIter -= progress.remaining - newRemaining;
                 progress.remaining = newRemaining;
@@ -863,7 +863,7 @@ function simulateTime(seconds, real, fast) {
         then: () => {
           afterSimulation(seconds, playerStart);
         },
-        progress: progress
+        progress
       });
   }
 }

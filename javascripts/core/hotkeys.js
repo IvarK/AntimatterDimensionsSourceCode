@@ -139,7 +139,7 @@ const shortcuts = [
     keys: ["?"],
     type: "bindHotkey",
     function: () => {
-      keyboardPressQuentionMark();
+      keyboardPressQuestionMark();
       return false;
     },
     visible: () => true
@@ -341,7 +341,7 @@ function keyboardPressEscape() {
   }
 }
 
-function keyboardPressQuentionMark() {
+function keyboardPressQuestionMark() {
   if (Modal.shortcuts.isOpen) {
     Modal.hide();
     return;

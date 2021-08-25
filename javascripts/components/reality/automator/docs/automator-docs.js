@@ -19,6 +19,9 @@ Vue.component("automator-docs", {
     this.updateCurrentScriptID();
     this.updateScriptList();
   },
+  destroyed() {
+    this.fullScreen = false;
+  },
   watch: {
     infoPaneID(newValue) {
       AutomatorData.currentInfoPane = newValue;

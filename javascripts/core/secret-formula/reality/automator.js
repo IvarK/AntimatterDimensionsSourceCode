@@ -384,10 +384,13 @@ GameDatabase.reality.automator = {
       <b>ip</b> - current infinity point amount  <br>
       <b>ep</b> - current eternity point amount  <br>
       <b>rm</b> - current reality machine amount  <br>
+      <b>infinities</b> - current infinity amount <br>
+      <b>eternities</b> - current eternity amount <br>
+      <b>realities</b> - current reality amount <br>
       <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
       <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
       <b>pending rm</b> - RM gained on reality (0 if not available)<br>
-      <b>glyph level</b> - glyph level gained on reality (0 if not available)<br>
+      <b>pending glyph level</b> - glyph level gained on reality (0 if not available)<br>
       <b>dt</b> - dilated time amount  <br>
       <b>tp</b> - tachyon particle amount  <br>
       <b>rg</b> - replicanti galaxy amount (does not use scientific)<br>

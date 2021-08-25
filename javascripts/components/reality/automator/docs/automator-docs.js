@@ -19,6 +19,9 @@ Vue.component("automator-docs", {
     this.updateCurrentScriptID();
     this.updateScriptList();
   },
+  destroyed() {
+    this.fullScreen = false;
+  },
   watch: {
     infoPaneID(newValue) {
       AutomatorData.currentInfoPane = newValue;
@@ -34,6 +37,7 @@ Vue.component("automator-docs", {
       },
       set(value) {
         this.$viewModel.tabs.reality.automator.fullScreen = value;
+        AutomatorData.isEditorFullscreen = value;
       }
     },
     fullScreenIconClass() {

@@ -591,6 +591,7 @@ let player = {
     commas: true,
     updateRate: 33,
     newUI: true,
+    sidebarMinimized: false,
     offlineProgress: true,
     automaticTabSwitching: true,
     respecIntoProtected: false,

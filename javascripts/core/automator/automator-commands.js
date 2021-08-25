@@ -914,29 +914,27 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Wait[0].startLine;
         return true;
       },
-      compile: (ctx, C) => {
+      compile: (ctx, C) => () => {
         const evalComparison = C.visit(ctx.comparison);
         const doneWaiting = evalComparison();
-        return () => {
-          if (doneWaiting) {
-            const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
-            if (AutomatorData.isWaiting) {
-              AutomatorData.logCommandEvent(`Continuing after WAIT 
-                (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
-            } else {
-              AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
-                ctx.startLine);
-            }
-            AutomatorData.isWaiting = false;
-            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        if (doneWaiting) {
+          const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
+          if (AutomatorData.isWaiting) {
+            AutomatorData.logCommandEvent(`Continuing after WAIT 
+              (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+          } else {
+            AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
+              ctx.startLine);
           }
-          if (!AutomatorData.isWaiting) {
-            AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
-            AutomatorData.waitStart = Date.now();
-          }
-          AutomatorData.isWaiting = true;
-          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
-        };
+          AutomatorData.isWaiting = false;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        if (!AutomatorData.isWaiting) {
+          AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
+          AutomatorData.waitStart = Date.now();
+        }
+        AutomatorData.isWaiting = true;
+        return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
       blockify: (ctx, B) => {
         const commands = [];

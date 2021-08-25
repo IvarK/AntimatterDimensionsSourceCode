@@ -89,7 +89,7 @@ const shortcuts = [
   }, {
     name: "Toggle Time Study respec",
     keys: ["shift+e"],
-    type: "bindRepeatableHotkey",
+    type: "bindHotkey",
     function: () => player.respec = !player.respec,
     visible: () => PlayerProgress.eternityUnlocked()
   }, {
@@ -101,7 +101,7 @@ const shortcuts = [
   }, {
     name: "Toggle Glyph unequip",
     keys: ["shift+y"],
-    type: "bindRepeatableHotkey",
+    type: "bindHotkey",
     function: () => player.reality.respec = !player.reality.respec,
     visible: () => PlayerProgress.realityUnlocked()
   }, {

@@ -40,7 +40,10 @@ Vue.component("modal-progress-bar", {
             <div class="l-modal-progress-bar__fg c-modal-progress-bar__fg" :style="foregroundStyle" />
           </div>
         </div>
-        <primary-button v-if="button" class="o-primary-btn--width-medium" @click="button.click()">
+        <primary-button v-if="button && button.condition(progress.current, progress.max)"
+          class="o-primary-btn--width-medium"
+          @click="button.click()"
+          :ach-tooltip="button.tooltip">
           {{ button.text }}
         </primary-button>
       </div>

@@ -841,6 +841,9 @@ function simulateTime(seconds, real, fast) {
             startTime: Date.now(),
             button: {
               text: 'Speed up',
+              condition: (current, max) => max - current > 1000,
+              tooltip: `Simulate only ${formatInt(1000)} more ticks 
+              (can't be done with less than ${formatInt(1000)} ticks left)`,
               click: () => {
                 const newRemaining = Math.min(progress.remaining, 1000);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.

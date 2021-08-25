@@ -8542,8 +8542,8 @@ input.o-automator-block-input {
   user-select: none;
   -webkit-user-drag: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  width: 90rem;
-  height: 50rem;
+  width: 60rem;
+  height: 60rem;
   border: 0.2rem solid black;
 }
 

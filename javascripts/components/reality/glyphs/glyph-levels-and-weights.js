@@ -18,6 +18,7 @@ Vue.component("glyph-levels-and-weights", {
       isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
+      visibleRows: [],
       rows: 3,
     };
   },
@@ -31,6 +32,7 @@ Vue.component("glyph-levels-and-weights", {
     this.resetSavedWeights();
     // Used to debounce this row disappearing
     this.lastInstability = 0;
+    if (Glyphs.factorsOpen) this.$parent.$emit("openrequest");
   },
   mounted() {
     // Effarig unlock sets a flag to open this dropdown
@@ -38,6 +40,10 @@ Vue.component("glyph-levels-and-weights", {
       this.$viewModel.tabs.reality.openGlyphWeights = false;
       this.$parent.$emit("openrequest");
     }
+  },
+  destroyed() {
+    // Matches substring since there are states for opening in progress, all of which have "open" as a substring
+    Glyphs.factorsOpen = this.$parent.state.name.match("OPEN") !== null;
   },
   computed: {
     gridStyle() {
@@ -47,39 +53,6 @@ Vue.component("glyph-levels-and-weights", {
         "grid-template-columns": columns,
         "grid-auto-rows": "1fr",
       };
-    },
-    rowStyleEP() {
-      return this.makeRowStyle(1);
-    },
-    rowStyleReplicanti() {
-      return this.makeRowStyle(2);
-    },
-    rowStyleDT() {
-      return this.makeRowStyle(3);
-    },
-    rowStyleEternities() {
-      return this.makeRowStyle(4);
-    },
-    rowStylePerkShop() {
-      return this.makeRowStyle(5);
-    },
-    rowStyleShard() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible);
-    },
-    rowStyleSingularity() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible);
-    },
-    rowStylePenalty() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
-        this.singularityVisible);
-    },
-    rowStyleRow() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
-        this.singularityVisible + this.penaltyVisible);
-    },
-    rowStyleAchievement() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
-        this.singularityVisible + this.penaltyVisible + this.rowVisible);
     },
     adjustOutlineStyle() {
       const rows = 5 + (this.showAutoAdjustWeights ? 1 : 0);
@@ -126,7 +99,8 @@ Vue.component("glyph-levels-and-weights", {
       } else if (this.penaltyVisible) {
         if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
       }
-      this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.rowVisible + this.penaltyVisible;
+      this.refreshVisibleRows();
+      this.rows = this.visibleRows.length;
       if (this.adjustVisible && this.rows < 6) {
         // Keep UI from getting crammed
         this.rows = 6;
@@ -144,6 +118,23 @@ Vue.component("glyph-levels-and-weights", {
       }
       this.showAutoAdjustWeights = Achievement(165).isUnlocked;
       this.isAutoAdjustWeightsOn = player.celestials.effarig.autoAdjustGlyphWeights;
+    },
+    // The order that elements gets pushed in this method determines the display order
+    refreshVisibleRows() {
+      this.visibleRows = ["ep", "replicanti", "dt"];
+      if (this.eternityVisible) this.visibleRows.push("eternities");
+      if (this.perkShopVisible) this.visibleRows.push("perk shop");
+      if (this.shardVisible) this.visibleRows.push("shards");
+      if (this.singularityVisible) this.visibleRows.push("singularities");
+      if (this.penaltyVisible) this.visibleRows.push("instability");
+      if (this.rowVisible) this.visibleRows.push("upgrade rows");
+      if (this.achievementVisible) this.visibleRows.push("achievements");
+    },
+    rowStyle(factor) {
+      const row = this.visibleRows.findIndex(r => r === factor) + 1;
+      // A bit of a hack, if we can't find the resource then factor is actually a number for the padding div
+      if (row === 0) return this.makeRowStyle(factor);
+      return this.makeRowStyle(row);
     },
     formatFactor(x) {
       // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
@@ -211,81 +202,85 @@ Vue.component("glyph-levels-and-weights", {
   template: `
     <div ref="grid" :style="gridStyle" class="l-glyph-levels-and-weights c-glyph-levels-and-weights">
       <!-- Put down a placeholder div to keep the adjuster from getting cramped -->
-      <div v-if="adjustVisible" :style="makeRowStyle(6)"></div>
-      <div :style="rowStyleEP" class="l-glyph-levels-and-weights__factor">
+      <div v-if="adjustVisible" :style="makeRowStyle(6)" />
+      <div :style="rowStyle('ep')" class="l-glyph-levels-and-weights__factor">
         {{ factorString(factors.ep) }}
       </div>
-      <div :style="rowStyleEP" class="l-glyph-levels-and-weights__factor-val">{{ formatFactor(factors.ep.value) }}</div>
-      <div :style="rowStyleReplicanti" class="l-glyph-levels-and-weights__factor">
+      <div :style="rowStyle('ep')" class="l-glyph-levels-and-weights__factor-val">
+        {{ formatFactor(factors.ep.value) }}
+      </div>
+      <div :style="rowStyle('replicanti')" class="l-glyph-levels-and-weights__factor">
         {{ factorString(factors.repl) }}
       </div>
-      <div :style="rowStyleReplicanti" class="l-glyph-levels-and-weights__operator">×</div>
-      <div :style="rowStyleReplicanti" class="l-glyph-levels-and-weights__factor-val">
+      <div :style="rowStyle('replicanti')" class="l-glyph-levels-and-weights__operator">×</div>
+      <div :style="rowStyle('replicanti')" class="l-glyph-levels-and-weights__factor-val">
         {{ formatFactor(factors.repl.value) }}
       </div>
-      <div :style="rowStyleDT" class="l-glyph-levels-and-weights__factor">
+      <div :style="rowStyle('dt')" class="l-glyph-levels-and-weights__factor">
         {{ factorString(factors.dt) }}
       </div>
-      <div :style="rowStyleDT" class="l-glyph-levels-and-weights__operator">×</div>
-      <div :style="rowStyleDT" class="l-glyph-levels-and-weights__factor-val">{{ formatFactor(factors.dt.value) }}</div>
+      <div :style="rowStyle('dt')" class="l-glyph-levels-and-weights__operator">×</div>
+      <div :style="rowStyle('dt')" class="l-glyph-levels-and-weights__factor-val">
+        {{ formatFactor(factors.dt.value) }}
+      </div>
       <template v-if="eternityVisible">
-        <div :style="rowStyleEternities" class="l-glyph-levels-and-weights__factor">
+        <div :style="rowStyle('eternities')" class="l-glyph-levels-and-weights__factor">
           {{ factorString(factors.eter) }}
         </div>
-        <div :style="rowStyleEternities" class="l-glyph-levels-and-weights__operator">×</div>
-        <div :style="rowStyleEternities" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('eternities')" class="l-glyph-levels-and-weights__operator">×</div>
+        <div :style="rowStyle('eternities')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatFactor(factors.eter.value) }}
         </div>
       </template>
       <template v-if="perkShopVisible">
-        <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__factor">
+        <div :style="rowStyle('perk shop')" class="l-glyph-levels-and-weights__factor">
           Perk shop
         </div>
-        <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('perk shop')" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyle('perk shop')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatPerkShop }}
         </div>
       </template>
       <template v-if="shardVisible">
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor">
+        <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__factor">
           {{ formatInt(100) }}×Shards^{{ formatInt(2) }}
         </div>
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatFactor(factors.shardFactor) }}
         </div>
       </template>
       <template v-if="singularityVisible">
-        <div :style="rowStyleSingularity" class="l-glyph-levels-and-weights__factor">
+        <div :style="rowStyle('singularities')" class="l-glyph-levels-and-weights__factor">
           Singularities
         </div>
-        <div :style="rowStyleSingularity" class="l-glyph-levels-and-weights__operator">×</div>
-        <div :style="rowStyleSingularity" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('singularities')" class="l-glyph-levels-and-weights__operator">×</div>
+        <div :style="rowStyle('singularities')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatFactor(factors.singularityEffect) }}
         </div>
       </template>
       <template v-if="penaltyVisible">
-        <div :style="rowStylePenalty" class="l-glyph-levels-and-weights__factor">Instability</div>
-        <div :style="rowStylePenalty" class="l-glyph-levels-and-weights__operator">/</div>
-        <div :style="rowStylePenalty" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('instability')" class="l-glyph-levels-and-weights__factor">Instability</div>
+        <div :style="rowStyle('instability')" class="l-glyph-levels-and-weights__operator">/</div>
+        <div :style="rowStyle('instability')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatFactor(factors.scalePenalty) }}
         </div>
       </template>
       <template v-if="rowVisible">
-        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__factor">
+        <div :style="rowStyle('upgrade rows')" class="l-glyph-levels-and-weights__factor">
           Upgrade Rows
         </div>
-        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('upgrade rows')" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyle('upgrade rows')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatInt(factors.rowFactor) }}
         </div>
       </template>
       <template v-if="achievementVisible">
-        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor">
+        <div :style="rowStyle('achievements')" class="l-glyph-levels-and-weights__factor">
           Achievements
         </div>
-        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyle('achievements')" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyle('achievements')" class="l-glyph-levels-and-weights__factor-val">
           {{ formatInt(factors.achievementFactor) }}
         </div>
       </template>
@@ -310,28 +305,28 @@ Vue.component("glyph-levels-and-weights", {
             text="Auto adjustment:"
           />
         </div>
-        <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEP">
+        <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('ep')">
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.ep"
             @input="adjustSlider('ep', $event)"
           />
         </div>
-        <div class="l-glyph-levels-and-weights__slider" :style="rowStyleReplicanti">
+        <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('replicanti')">
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.repl"
             @input="adjustSlider('repl', $event)"
           />
         </div>
-        <div class="l-glyph-levels-and-weights__slider" :style="rowStyleDT">
+        <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('dt')">
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.dt"
             @input="adjustSlider('dt', $event)"
           />
         </div>
-        <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEternities">
+        <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('eternities')">
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.eternities"

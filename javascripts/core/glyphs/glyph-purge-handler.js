@@ -1,6 +1,6 @@
 "use strict";
 
-// Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
+// Gives a maximum resource total possible, based on the level setting of the Reality autobuyer. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
   return GlyphSacrificeHandler.levelAlchemyCap(Math.clampMin(Autobuyer.reality.glyph, 0));

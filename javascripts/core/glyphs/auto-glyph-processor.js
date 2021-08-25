@@ -144,32 +144,32 @@ function getGlyphLevelSources() {
   const eternityPoints = Player.canEternity
     ? Currency.eternityPoints.value.plus(gainedEternityPoints())
     : Currency.eternityPoints.value;
-  const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()) / 4000, 0.5);
+  const epCoeff = 0.016;
+  const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()), 0.5) * epCoeff;
   const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
-  // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
-  // factors assigned to repl and dt can be arbitrarily tuned
-  const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
+  const replCoeff = 0.025;
+  const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * replCoeff;
   const dtPow = 1.3 + getAdjustedGlyphEffect("realityDTglyph");
-  const dtBase = Math.pow(Math.max(1, Currency.dilatedTime.value.pLog10()), dtPow) * 0.02514867;
+  const dtCoeff = 0.025;
+  const dtBase = Math.pow(Math.max(1, Currency.dilatedTime.value.pLog10()), dtPow) * dtCoeff;
   const eterBase = Effects.max(1, RealityUpgrade(18));
   return {
     ep: {
       name: "EP",
       value: epBase,
-      // This is sqrt(1/4000)
-      coeff: 0.01581,
+      coeff: epCoeff,
       exp: 0.5,
     },
     repl: {
       name: "Replicanti",
       value: replBase,
-      coeff: 0.02514,
+      coeff: replCoeff,
       exp: replPow,
     },
     dt: {
       name: "DT",
       value: dtBase,
-      coeff: 0.02514,
+      coeff: dtCoeff,
       exp: dtPow,
     },
     eter: {
@@ -215,7 +215,7 @@ function getGlyphLevelInputs() {
     const input = source.value;
     const powEffect = Math.pow(4 * weight, blendExp);
     source.value = (input > 0 ? Math.pow(input * preScale, powEffect) / preScale : 0);
-    source.coeff *= Math.pow(preScale, powEffect) - 1;
+    source.coeff = Math.pow(preScale, powEffect - 1) * Math.pow(source.coeff, powEffect);
     source.exp *= powEffect;
   };
   adjustFactor(sources.ep, weights.ep / 100);

@@ -47,7 +47,7 @@ Vue.component("glyph-levels-and-weights", {
   },
   computed: {
     gridStyle() {
-      const columns = this.adjustVisible ? "10em 1.2em 7em 18rem 1rem" : "auto 1.2em 6em";
+      const columns = this.adjustVisible ? "11em 1.2em 7em 18rem 1rem" : "15em 1.2em 7em";
       return {
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
@@ -129,6 +129,7 @@ Vue.component("glyph-levels-and-weights", {
       if (this.penaltyVisible) this.visibleRows.push("instability");
       if (this.rowVisible) this.visibleRows.push("upgrade rows");
       if (this.achievementVisible) this.visibleRows.push("achievements");
+      this.visibleRows.push("level");
     },
     rowStyle(factor) {
       const row = this.visibleRows.findIndex(r => r === factor) + 1;
@@ -142,6 +143,11 @@ Vue.component("glyph-levels-and-weights", {
       return Notations.current.isPainful || x > 1000
         ? format(x, 2, 2)
         : x.toPrecision(5).slice(0, 6);
+    },
+    formatLevel(x) {
+      return x > 1000
+        ? formatInt(Math.floor(x))
+        : format(x, 2, 4);
     },
     makeRowStyle(r) {
       return {
@@ -196,7 +202,7 @@ Vue.component("glyph-levels-and-weights", {
     },
     factorString(source) {
       const name = this.adjustVisible ? source.name.substring(0, 4) : source.name;
-      return `${format(source.coeff, 2, 2)}×${name}^${format(source.exp, 2, 3)}`;
+      return `${format(source.coeff, 2, 4)}×${name}^${format(source.exp, 2, 3)}`;
     }
   },
   template: `
@@ -284,6 +290,12 @@ Vue.component("glyph-levels-and-weights", {
           {{ formatInt(factors.achievementFactor) }}
         </div>
       </template>
+      <div :style="rowStyle('level')" class="l-glyph-levels-and-weights__factor">
+        Final Level
+      </div>
+      <div :style="rowStyle('level')" class="l-glyph-levels-and-weights__factor-val">
+        {{ formatLevel(factors.actualLevel) }}
+      </div>
       <template v-if="adjustVisible">
         <div :style="adjustOutlineStyle" class="l-glyph-levels-and-weights__adjust-outline"></div>
         <div class="l-glyph-levels-and-weights__adjust-label">

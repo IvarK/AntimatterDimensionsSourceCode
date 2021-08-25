@@ -165,7 +165,8 @@ class AutomatorScript {
 }
 
 const AutomatorData = {
-  currentInfoPane: 0,
+  // -1 is the ID for the documentation page
+  currentInfoPane: -1,
   // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
   // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative
   // of looping through and clearing every line (bad for performance)
@@ -179,6 +180,7 @@ const AutomatorData = {
   lastEvent: 0,
   eventLog: [],
   isEditorFullscreen: false,
+  lastSaved: Date.now(),
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },
@@ -384,6 +386,7 @@ const AutomatorBackend = {
   },
 
   saveScript(id, data) {
+    AutomatorData.lastSaved = Date.now();
     this.findScript(id).save(data);
     if (id === this.state.topLevelScript) this.stop();
   },

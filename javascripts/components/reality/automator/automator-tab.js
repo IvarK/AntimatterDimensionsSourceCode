@@ -4,7 +4,8 @@ Vue.component("automator-tab", {
   data() {
     return {
       automatorUnlocked: false,
-      interval: 0
+      interval: 0,
+      lastSavedString: 0,
     };
   },
   computed: {
@@ -30,6 +31,10 @@ Vue.component("automator-tab", {
     update() {
       this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
+      const saveGap = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.lastSaved);
+      this.lastSavedString = saveGap.totalSeconds < 10
+        ? `${formatInt(saveGap.totalSeconds)} ${pluralize("second", Math.round(saveGap.totalSeconds))}`
+        : saveGap.toString();
     }
   },
   template: `
@@ -39,6 +44,8 @@ Vue.component("automator-tab", {
         At higher speeds, certain commands may take too long to execute while still maintaining this speed,
         <br>
         in which case the next command will be immediately processed after the slower command is run.
+        <br>
+        Script was last saved {{ lastSavedString }} ago.
         <split-pane
           :min-percent="40"
           :default-percent="50"

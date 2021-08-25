@@ -138,20 +138,26 @@ const shortcuts = [
     name: "Open the shortcut list",
     keys: ["?"],
     type: "bindHotkey",
-    function: () => keyboardPressQuentionMark(),
+    function: () => {
+      keyboardPressQuestionMark();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Open \"How to Play\" pop-up",
     keys: ["h"],
     type: "bindHotkey",
-    function: () => keyboardH2PToggle(),
+    function: () => {
+      keyboardH2PToggle();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Modify visible tabs",
     keys: ["tab"],
     type: "bindHotkey",
     function: () => {
-      Modal.hiddenTabs.show();
+      keyboardVisibleTabsToggle();
       return false;
     },
     visible: () => true
@@ -159,7 +165,10 @@ const shortcuts = [
     name: "Close pop-up or open options",
     keys: ["esc"],
     type: "bindHotkey",
-    function: () => keyboardPressEscape(),
+    function: () => {
+      keyboardPressEscape();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Paying respects",
@@ -332,7 +341,7 @@ function keyboardPressEscape() {
   }
 }
 
-function keyboardPressQuentionMark() {
+function keyboardPressQuestionMark() {
   if (Modal.shortcuts.isOpen) {
     Modal.hide();
     return;
@@ -348,7 +357,15 @@ function keyboardH2PToggle() {
   }
   if (Modal.isOpen) return;
   Modal.h2p.show();
-  ui.view.h2pActive = true;
+}
+
+function keyboardVisibleTabsToggle() {
+  if (Modal.hiddenTabs.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.hiddenTabs.show();
 }
 
 function keyboardTabChange(direction) {

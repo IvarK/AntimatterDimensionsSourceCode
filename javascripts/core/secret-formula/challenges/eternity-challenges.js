@@ -96,6 +96,7 @@ GameDatabase.challenges.eternity = [
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: new Decimal("1e2000"),
     goalIncrease: new Decimal("1e530"),
+    effect: () => TimeDimension(1).productionPerSecond,
     reward: {
       description: "1st Time Dimension produces 8th Infinity Dimensions",
       effect: completions => TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1).clampMin(0),

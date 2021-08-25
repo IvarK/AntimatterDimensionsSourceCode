@@ -2136,15 +2136,6 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.c-antimatter-dim-row__floating-text {
-  position: absolute;
-  bottom: 2rem;
-  left: 15rem;
-  animation: float 1s 1;
-  color: green;
-  opacity: 0;
-}
-
 /*#endregion c-dimension-row*/
 
 /*#region c-progress-bar*/

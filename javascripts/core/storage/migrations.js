@@ -148,6 +148,7 @@ GameStorage.migrations = {
       GameStorage.migrations.consolidateAuto(player);
       GameStorage.migrations.convertTimeTheoremPurchases(player);
       GameStorage.migrations.deleteDimboostBulk(player);
+      GameStorage.migrations.deleteFloatingTextOption(player);
 
       kong.migratePurchases();
     }
@@ -844,12 +845,16 @@ GameStorage.migrations = {
       player.infinityUpgrades.add("autobuyMaxDimboosts");
     }
   },
-  
+
   removePriority(player) {
     for (let i = 0; i < 8; i++) {
       delete player.auto.antimatterDims[i].priority;
     }
     delete player.auto.tickspeed.priority;
+  },
+
+  deleteFloatingTextOption(player) {
+    delete player.options.animations.floatingText;
   },
 
   prePatch(saveData) {

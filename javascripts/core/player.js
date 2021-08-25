@@ -606,14 +606,14 @@ let player = {
     ignoreGlyphRarity: false,
     showCondenseToMilestone: false,
     showHintText: {
-      achievements: false,
-      achievementUnlockStates: false,
-      challenges: false,
-      studies: false,
+      achievements: true,
+      achievementUnlockStates: true,
+      challenges: true,
+      studies: true,
       glyphEffectDots: true,
-      realityUpgrades: false,
-      perks: false,
-      alchemy: false,
+      realityUpgrades: true,
+      perks: true,
+      alchemy: true,
     },
     chart: {
       updateRate: 1000,
@@ -623,7 +623,6 @@ let player = {
       dips: true
     },
     animations: {
-      floatingText: true,
       bigCrunch: true,
       eternity: true,
       dilation: true,

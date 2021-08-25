@@ -199,7 +199,6 @@ Vue.component("alchemy-tab", {
     showAlchemyHowTo() {
       ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Glyph Alchemy")[0];
       Modal.h2p.show();
-      ui.view.h2pActive = true;
     },
     toggleAllReactions() {
       const reactions = AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);

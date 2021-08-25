@@ -431,14 +431,14 @@ body.t-s9 {
   width: 100%;
 }
 
-.fill1 {
+.fill-purchased {
   height: 100%;
   width: 20%;
   background-color: var(--color-good);
   float: left;
 }
 
-.fill2 {
+.fill-possible {
   height: 100%;
   width: 40%;
   background-color: var(--color-good-dark);

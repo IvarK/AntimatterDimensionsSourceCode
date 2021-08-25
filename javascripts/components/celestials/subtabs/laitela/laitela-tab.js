@@ -36,7 +36,6 @@ Vue.component("laitela-tab", {
     showLaitelaHowTo() {
       ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Lai'tela")[0];
       Modal.h2p.show();
-      ui.view.h2pActive = true;
     },
   },
   template: `

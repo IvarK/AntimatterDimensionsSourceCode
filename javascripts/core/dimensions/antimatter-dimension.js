@@ -185,13 +185,6 @@ function onBuyDimension(tier) {
   if (tier === 1) player.achievementChecks.noFirstDimensions = false;
 }
 
-function floatText(tier, text) {
-  if (!player.options.animations.floatingText) return;
-  const floatingText = ui.view.tabs.dimensions.antimatter.floatingText[tier];
-  floatingText.push({ text, key: UIID.next() });
-  setTimeout(() => floatingText.shift(), 1000);
-}
-
 function buyOneDimension(tier) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
@@ -208,10 +201,6 @@ function buyOneDimension(tier) {
 
   dimension.amount = dimension.amount.plus(1);
   dimension.bought++;
-
-  if (dimension.boughtBefore10 === 0) {
-    floatText(tier, formatX(AntimatterDimensions.buyTenMultiplier, 2, 1));
-  }
 
   if (tier === 1) {
     Achievement(28).tryUnlock();
@@ -234,7 +223,6 @@ function buyManyDimension(tier) {
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
 
-  floatText(tier, format(AntimatterDimensions.buyTenMultiplier, 2, 1));
   onBuyDimension(tier);
 
   return true;
@@ -252,10 +240,6 @@ function buyAsManyAsYouCanBuy(tier) {
   dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(howMany);
   dimension.bought += howMany;
-
-  if (dimension.boughtBefore10 === 0) {
-    floatText(tier, format(AntimatterDimensions.buyTenMultiplier, 2, 1));
-  }
 
   onBuyDimension(tier);
 
@@ -286,7 +270,7 @@ function maxAll() {
   buyMaxTickSpeed();
 }
 
-function buyMaxDimension(tier, bulk = Infinity, auto = false) {
+function buyMaxDimension(tier, bulk = Infinity) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
@@ -298,8 +282,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
     buyOneDimension(8);
     return;
   }
-
-  const multBefore = Decimal.pow(AntimatterDimensions.buyTenMultiplier, dimension.bought / 10);
 
   // Buy any remaining until 10 before attempting to bulk-buy
   if (Currency.antimatter.purchase(cost)) {
@@ -331,10 +313,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
-  const multAfter = Decimal.pow(AntimatterDimensions.buyTenMultiplier, dimension.bought / 10);
-  if (multBefore.neq(multAfter) && auto === false) {
-    floatText(tier, format(multAfter.dividedBy(multBefore), 2, 1));
-  }
 }
 
 

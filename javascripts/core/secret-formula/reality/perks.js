@@ -299,7 +299,9 @@ GameDatabase.reality.perks = {
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).
+              ECs will be completed sequentially, requiring all previous
+              ECs to be fully completed before progressing to the next EC.`;
     },
     effect: 80,
     defaultPosition: {

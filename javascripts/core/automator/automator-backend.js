@@ -375,7 +375,7 @@ const AutomatorBackend = {
     } else {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
-    if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
+    if (!scriptIds.includes(`${this.state.topLevelScript}`)) this.state.topLevelScript = scriptIds[0];
     const currentScript = this.findScript(this.state.topLevelScript);
     if (currentScript.commands) {
       const commands = currentScript.commands;

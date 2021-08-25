@@ -45,6 +45,10 @@ Vue.component("automator-error-page", {
             <i>Suggested fix: {{ error.tip }}</i>
           </div>
         </span>
+        <i>
+          Note: Sometimes errors may cause the automator to be unable to scan the rest of the script.
+          This may result in some errors "disappearing" due to other errors occurring in earlier lines.
+        </i>
       </div>
     </div>`
 });

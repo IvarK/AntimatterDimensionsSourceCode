@@ -3,7 +3,7 @@
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelAlchemyCap(player.records.lastTenRealities.map(([, , , , lvl]) => lvl).max());
+  return GlyphSacrificeHandler.levelAlchemyCap(Math.clampMin(Autobuyer.reality.glyph, 0));
 }
 
 // This actually deals with both sacrifice and refining, but I wasn't 100% sure what to call it

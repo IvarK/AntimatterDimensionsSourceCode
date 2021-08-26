@@ -200,8 +200,9 @@ const AutomatorData = {
     player.reality.automator.state.editorScript = newScriptID;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
-  currentErrors() {
-    return AutomatorGrammar.compile(this.currentScriptText()).errors;
+  currentErrors(script) {
+    const toCheck = script || this.currentScriptText();
+    return AutomatorGrammar.compile(toCheck).errors;
   },
   logCommandEvent(message, line) {
     const currTime = Date.now();

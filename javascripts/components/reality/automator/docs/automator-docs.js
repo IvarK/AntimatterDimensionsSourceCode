@@ -182,6 +182,12 @@ Vue.component("automator-docs", {
           v-tooltip="'Command list'"
         />
         <automator-button
+          v-if="isBlockAutomator"
+          class="fa-cubes"
+          @click="infoPaneID = -4"
+          v-tooltip="'Command menu for Block editor mode'"
+        />
+        <automator-button
           :style="errorStyle"
           class="fa-exclamation-triangle"
           @click="infoPaneID = -2"
@@ -243,7 +249,6 @@ Vue.component("automator-docs", {
           v-tooltip="fullScreenTooltip"
         />
       </div>
-      <automator-blocks v-if="isBlockAutomator" />
       <div class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
           v-if="infoPaneID === -1"
@@ -251,6 +256,7 @@ Vue.component("automator-docs", {
         />
         <automator-error-page v-else-if="infoPaneID === -2" />
         <automator-event-log v-else-if="infoPaneID === -3" />
+        <automator-blocks v-else-if="infoPaneID === -4" />
         <automator-man-page v-else :command="command" />
       </div>
     </div>`

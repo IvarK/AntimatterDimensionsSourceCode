@@ -116,17 +116,20 @@ Vue.component("automator-blocks", {
     }
   },
   template: `
-    <div class="c-automator-docs">
-      <draggable
-        :list="blocks"
-        :group="{ name: 'code-blocks', pull: 'clone', put: false }"
-        :sort="false"
-        :clone="clone"
-        class="c-automator-command-list"
+    <draggable
+      :list="blocks"
+      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+      :sort="false"
+      :clone="clone"
+      style="display: flex; align-items: center; flex-wrap: wrap;"
+    >
+      <div
+        v-for="block in blocks"
+        :key="block.id"
+        class="o-automator-command o-automator-block-list"
       >
-        <div v-for="block in blocks" :key="block.id" class="o-automator-command">
-          {{ block.cmd }}
-        </div>
-      </draggable>
-    </div>`
+        {{ block.cmd }}
+      </div>
+    </draggable>
+    `
 });

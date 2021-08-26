@@ -1,7 +1,11 @@
 "use strict";
 
-const Theme = function Theme(name, colors) {
+const Theme = function Theme(name, config) {
   this.name = name;
+
+  this.isDark = config.isDark;
+
+  this.isMetro = config.isMetro;
 
   this.isDefault = function() {
     return name === "Normal";
@@ -28,12 +32,12 @@ const Theme = function Theme(name, colors) {
   };
 
   this.set = function() {
-    for (const c of document.body.classList) {
-      if (c.startsWith("t-")) {
-        document.body.classList.remove(c);
-      }
-    }
+    // Remove all entries in the class list from the class list
+    document.body.classList.remove(...document.body.classList);
+
     document.body.classList.add(this.cssClass());
+    if (this.isMetro) document.body.classList.add("t-universal-metro");
+
     if (this.isAnimated() && player.options.animations.background) {
       document.getElementById("background-animations").style.display = "block";
     } else {
@@ -44,8 +48,6 @@ const Theme = function Theme(name, colors) {
     window.getSelection().removeAllRanges();
     PerkNetwork.forceNetworkRemake();
   };
-
-  this.isDark = colors.isDark;
 
   this.cssClass = function() {
     return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
@@ -113,23 +115,31 @@ Theme.dark = function(name) {
   return new Theme(name, colors);
 };
 
+Theme.create = function(name, settings = {}) {
+  const config = {
+    isDark: settings.isDark === undefined ? false : settings.isDark,
+    isMetro: settings.isMetro === undefined ? false : settings.isMetro,
+  };
+  return new Theme(name, config);
+};
+
 const Themes = {
   all: [
-    Theme.light("Normal"),
-    Theme.light("Metro"),
-    Theme.dark("Dark"),
-    Theme.dark("Dark Metro"),
-    Theme.light("Inverted"),
-    Theme.light("Inverted Metro"),
-    Theme.light("S1"),
-    Theme.light("S2"),
-    Theme.light("S3"),
-    Theme.light("S4"),
-    Theme.light("S5"),
-    Theme.dark("S6"),
-    Theme.light("S7"),
-    Theme.light("S8"),
-    Theme.light("S9")
+    Theme.create("Normal"),
+    Theme.create("Metro", { isMetro: true }),
+    Theme.create("Dark", { isDark: true }),
+    Theme.create("Dark Metro", { isDark: true, isMetro: true }),
+    Theme.create("Inverted"),
+    Theme.create("Inverted Metro", { isMetro: true }),
+    Theme.create("S1"),
+    Theme.create("S2"),
+    Theme.create("S3"),
+    Theme.create("S4"),
+    Theme.create("S5"),
+    Theme.create("S6", { isDark: true }),
+    Theme.create("S7"),
+    Theme.create("S8", { isMetro: true }),
+    Theme.create("S9"),
   ],
 
   available() {

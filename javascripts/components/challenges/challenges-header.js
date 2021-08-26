@@ -84,6 +84,10 @@ Vue.component("challenges-header", {
       <div>
         Some Normal Challenges have requirements to be able to run that challenge.
       </div>
+      <div>
+        If you have the Big Crunch Autobuyer and it is turned on, it will
+        immediately Crunch when reaching a Challenge's antimatter goal.
+      </div>
       <div v-if="autoEC && isAutoECVisible">
         Eternity Challenges are automatically completed sequentially, requiring all previous
         Eternity Challenges to be fully completed before any progress is made.

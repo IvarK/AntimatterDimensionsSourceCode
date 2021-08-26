@@ -70,11 +70,13 @@ Vue.component("dilation-upgrade", {
           :length="70"
           name="o-dilation-upgrade__description"
         />
-        <effect-display br
+        <effect-display
+          br
           :config="upgrade.config"
           :key="boughtAmount"
         />
-        <cost-display br
+        <cost-display
+          br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"
           singular="Dilated Time"

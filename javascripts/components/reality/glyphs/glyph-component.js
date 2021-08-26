@@ -260,9 +260,8 @@ const GlyphTooltipComponent = {
       if (!AlchemyResource[this.type].isUnlocked) return "";
       const refinementText = `${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
       const isCurrentAction = this.currentAction === "refine";
-      const actionName = this.refineReward === 0 ? "Capped" : "Refine";
       return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
-              ${actionName}: ${refinementText}
+              Refine: ${refinementText}
               </span>`;
     },
     scoreText() {
@@ -527,11 +526,11 @@ Vue.component("glyph-component", {
       const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
       glyphInfo.type = this.glyph.type;
       glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      glyphInfo.refineValue = GlyphSacrificeHandler.glyphRefinementGain(this.glyph);
+      glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
         : 0;
       if (
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||

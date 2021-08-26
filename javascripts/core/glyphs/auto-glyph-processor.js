@@ -134,7 +134,7 @@ function autoAdjustGlyphWeights() {
   player.celestials.effarig.glyphWeights.ep = 100 * f(sources.ep.value) / totalWeight;
   player.celestials.effarig.glyphWeights.repl = 100 * f(sources.repl.value) / totalWeight;
   player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dt.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eter.value) / totalWeight;
+  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eternities.value) / totalWeight;
 }
 
 function getGlyphLevelSources() {
@@ -172,7 +172,7 @@ function getGlyphLevelSources() {
       coeff: dtCoeff,
       exp: dtPow,
     },
-    eter: {
+    eternities: {
       name: "Eternities",
       value: eterBase,
       // These are copied from Reality Upgrade 18's gameDB entry
@@ -221,10 +221,10 @@ function getGlyphLevelInputs() {
   adjustFactor(sources.ep, weights.ep / 100);
   adjustFactor(sources.repl, weights.repl / 100);
   adjustFactor(sources.dt, weights.dt / 100);
-  adjustFactor(sources.eter, weights.eternities / 100);
+  adjustFactor(sources.eternities, weights.eternities / 100);
   const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
   const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
-  let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eter.value *
+  let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
     perkShopEffect + shardFactor;
 
   const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.isUnlocked
@@ -262,7 +262,7 @@ function getGlyphLevelInputs() {
     ep: sources.ep,
     repl: sources.repl,
     dt: sources.dt,
-    eter: sources.eter,
+    eter: sources.eternities,
     perkShop: perkShopEffect,
     scalePenalty,
     rowFactor,

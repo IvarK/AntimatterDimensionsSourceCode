@@ -348,7 +348,7 @@ const Ra = {
   updateAlchemyFlow() {
     const expAvgFactor = player.options.updateRate / 1000;
     for (const resource of AlchemyResources.all) {
-      resource.flow = (1 - expAvgFactor) * resource.flow + expAvgFactor * (resource.amount - resource.before);
+      resource.flow = (1 - expAvgFactor) * resource.flow + (resource.amount - resource.before);
       resource.before = resource.amount;
     }
   },

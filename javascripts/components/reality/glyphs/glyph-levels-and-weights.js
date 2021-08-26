@@ -18,7 +18,6 @@ Vue.component("glyph-levels-and-weights", {
       isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
-      visibleRows: [],
       rows: 3,
     };
   },
@@ -81,7 +80,21 @@ Vue.component("glyph-levels-and-weights", {
     },
     totalWeights() {
       return this.weights.ep + this.weights.repl + this.weights.dt + this.weights.eternities;
-    }
+    },
+    // The order that elements gets pushed in this method determines the display order
+    visibleRows() {
+      const rows = ["ep", "replicanti", "dt"];
+      if (this.eternityVisible) rows.push("eternities");
+      if (this.perkShopVisible) rows.push("perk shop");
+      if (this.shardVisible) rows.push("shards");
+      if (this.singularityVisible) rows.push("singularities");
+      if (this.penaltyVisible) rows.push("instability");
+      if (this.rowVisible) rows.push("upgrade rows");
+      if (this.achievementVisible) rows.push("achievements");
+      rows.push("level");
+      rows.push("info");
+      return rows;
+    },
   },
   methods: {
     update() {
@@ -99,7 +112,6 @@ Vue.component("glyph-levels-and-weights", {
       } else if (this.penaltyVisible) {
         if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
       }
-      this.refreshVisibleRows();
       this.rows = this.visibleRows.length;
       if (this.adjustVisible && this.rows < 6) {
         // Keep UI from getting crammed
@@ -118,18 +130,6 @@ Vue.component("glyph-levels-and-weights", {
       }
       this.showAutoAdjustWeights = Achievement(165).isUnlocked;
       this.isAutoAdjustWeightsOn = player.celestials.effarig.autoAdjustGlyphWeights;
-    },
-    // The order that elements gets pushed in this method determines the display order
-    refreshVisibleRows() {
-      this.visibleRows = ["ep", "replicanti", "dt"];
-      if (this.eternityVisible) this.visibleRows.push("eternities");
-      if (this.perkShopVisible) this.visibleRows.push("perk shop");
-      if (this.shardVisible) this.visibleRows.push("shards");
-      if (this.singularityVisible) this.visibleRows.push("singularities");
-      if (this.penaltyVisible) this.visibleRows.push("instability");
-      if (this.rowVisible) this.visibleRows.push("upgrade rows");
-      if (this.achievementVisible) this.visibleRows.push("achievements");
-      this.visibleRows.push("level");
     },
     rowStyle(factor) {
       const row = this.visibleRows.findIndex(r => r === factor) + 1;
@@ -295,6 +295,13 @@ Vue.component("glyph-levels-and-weights", {
       </div>
       <div :style="rowStyle('level')" class="l-glyph-levels-and-weights__factor-val">
         {{ formatLevel(factors.actualLevel) }}
+      </div>
+      <div
+        :style="rowStyle('info')"
+        style="{ grid-column-start: 1; grid-column-end: 5; }"
+        class="l-glyph-levels-and-weights__factor"
+      >
+        Note: All resources here are log10 of their actual values
       </div>
       <template v-if="adjustVisible">
         <div :style="adjustOutlineStyle" class="l-glyph-levels-and-weights__adjust-outline"></div>

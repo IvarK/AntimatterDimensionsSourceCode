@@ -116,6 +116,13 @@ Vue.component("equipped-glyphs", {
         showSetName: true,
         displaySacrifice: true,
       });
+    },
+    clickGlyph(glyph, idx) {
+      if (glyph.symbol === "key266b") {
+        const double = 1 + Math.round(Math.random());
+        const sound = (1 + idx) * double;
+        new Audio(`audio/note${sound}.mp3`).play();
+      }
     }
   },
   template: `
@@ -139,6 +146,7 @@ Vue.component("equipped-glyphs", {
             :circular="true"
             :isActiveGlyph="true"
             style="-webkit-user-drag: none;"
+            @clicked="clickGlyph(glyph, idx)"
           />
           <div
             v-else

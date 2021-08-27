@@ -1,32 +1,32 @@
 * {
-    border-radius: 40% !important;
+  border-radius: 40% !important;
 }
 
 * {
-    font-family: "Comic Sans MS", cursive, sans-serif !important;
+  font-family: "Comic Sans MS", cursive, sans-serif !important;
 }
 
 html{
-	background-color: #FF00FF;
-    color: black !important;
-    background-attachment:fixed;
-    background-position:center bottom;	
-	border: 0.1rem solid white !important;
+  background-color: #FF00FF;
+  color: black !important;
+  background-attachment:fixed;
+  background-position:center bottom;
+  border: 0.1rem solid white !important;
 }
 
 #container {
-    cursor: url(cursor.cur),  auto !important;
+  cursor: url(cursor.cur),  auto !important;
 }
 
 body {
-	background: #0FFF0F !important;
-    border: 0.1rem solid white !important;
+  background: #0FFF0F !important;
+  border: 0.1rem solid white !important;
 }
 
 .o-achievement {
-    border-radius: 0.8rem !important;
+  border-radius: 0.8rem !important;
 }
 
 * {
-	box-shadow: 1px 1px 1px 0 #9E9E9E;
+  box-shadow: 1px 1px 1px 0 #9E9E9E;
 }

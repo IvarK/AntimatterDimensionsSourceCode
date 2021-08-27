@@ -4869,7 +4869,7 @@ screen and (max-width: 480px) {
   font-size: 1.05rem;
   border: 0.1rem solid;
   width: 17rem;
-  height: 9rem;
+  height: 9.5rem;
   transition-duration: 0.2s;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;
@@ -8533,8 +8533,8 @@ input.o-automator-block-input {
   user-select: none;
   -webkit-user-drag: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  width: 90rem;
-  height: 50rem;
+  width: 60rem;
+  height: 60rem;
   border: 0.2rem solid black;
 }
 

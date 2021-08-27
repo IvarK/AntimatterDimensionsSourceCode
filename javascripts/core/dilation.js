@@ -96,8 +96,10 @@ function buyDilationUpgrade(id, bulk = 1) {
   return true;
 }
 
-function getTachyonGalaxyMult() {
-  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
+function getTachyonGalaxyMult(thresholdUpgrade) {
+  // This specifically needs to be an undefined check because sometimes thresholdUpgrade is zero
+  const upgrade = thresholdUpgrade === undefined ? DilationUpgrade.galaxyThreshold.effectValue : thresholdUpgrade;
+  const thresholdMult = 3.65 * upgrade + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
   return 1 + thresholdMult * glyphReduction;

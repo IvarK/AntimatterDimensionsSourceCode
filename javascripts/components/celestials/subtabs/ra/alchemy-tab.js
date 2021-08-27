@@ -78,7 +78,8 @@ Vue.component("alchemy-tab", {
       reactionsAvailable: false,
       realityCreationVisible: false,
       animationTimer: 0,
-      estimatedCap: 0,
+      alchemyCap: 0,
+      capFactor: 0,
     };
   },
   computed: {
@@ -103,8 +104,9 @@ Vue.component("alchemy-tab", {
     update() {
       this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationVisible = Ra.pets.effarig.level === 25;
-      this.animationTimer = player.records.realTimePlayed;
-      this.estimatedCap = estimatedAlchemyCap();
+      this.animationTimer += 35;
+      this.alchemyCap = Ra.alchemyResourceCap;
+      this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -232,7 +234,8 @@ Vue.component("alchemy-tab", {
         </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Your Alchemy Resource cap, based on the Glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.
+      When refining a glyph, it will only give you resources up to a cap
+      of {{ formatX(capFactor) }} its refinement value.
       <span v-if="reactionsAvailable">
         Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>

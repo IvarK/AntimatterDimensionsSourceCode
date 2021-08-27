@@ -346,9 +346,12 @@ const Ra = {
     }
   },
   updateAlchemyFlow() {
+    // This is an exponential moving average where every change added to the sum decays away over some characteristic
+    // time span. expAvgFactor needs to be equal to the tick rate in order for the actual value over time to be
+    // independent of it, and the Math.pow() makes each contribution decay to 1/e of the original value over 5 seconds.
     const expAvgFactor = player.options.updateRate / 1000;
     for (const resource of AlchemyResources.all) {
-      resource.flow = (1 - expAvgFactor) * resource.flow + expAvgFactor * (resource.amount - resource.before);
+      resource.flow = Math.pow(1 - expAvgFactor, 0.2) * resource.flow + (resource.amount - resource.before);
       resource.before = resource.amount;
     }
   },

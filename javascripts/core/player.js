@@ -675,6 +675,7 @@ let player = {
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 10),
     fixedPerkStartingPos: false,
+    perkPhysicsEnabled: true,
     automatorEvents: {
       newestFirst: false,
       timestampType: 0,

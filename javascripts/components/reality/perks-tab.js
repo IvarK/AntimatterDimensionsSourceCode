@@ -41,6 +41,7 @@ const PerkNetwork = {
   maxScale: 4,
   lastPerkNotation: "",
   pulseTimer: 0,
+  initialStabilization: false,
   initializeIfNeeded() {
     const notation = Notations.current.name;
     if (this.container !== undefined && notation === this.lastPerkNotation) return;
@@ -75,6 +76,15 @@ const PerkNetwork = {
       if (scale !== clampedScale) {
         this.network.moveTo({ scale: clampedScale });
       }
+    });
+
+    this.network.on("stabilizationIterationsDone", () => {
+      // Centering the perk tree doesn't work until the physics-based movement has stopped after the initial creation
+      if (!this.initialStabilization) {
+        this.resetPosition();
+        this.initialStabilization = true;
+      }
+      this.setPhysics(player.options.perkPhysicsEnabled);
     });
   },
   makeNetwork() {
@@ -144,12 +154,18 @@ const PerkNetwork = {
     const network = new vis.Network(container, nodeData, nodeOptions);
     this.network = network;
   },
+  setPhysics(state) {
+    this.network.physics.physicsEnabled = state;
+  },
   forceNetworkRemake() {
     this.container = undefined;
     this.initializeIfNeeded();
+    // Tangled trees use physics to bring it to a semi-usable state; it gets set properly again after stabilization
+    this.setPhysics(true);
   },
   resetPosition() {
-    this.network.moveTo({ position: { x: -600, y: -300 }, scale: 0.8, offset: { x: 0, y: 0 } });
+    const centerPerk = PerkNetwork.network.body.nodes[GameDatabase.reality.perks.firstPerk.id];
+    this.network.moveTo({ position: { x: centerPerk.x, y: centerPerk.y }, scale: 0.8, offset: { x: 0, y: 0 } });
   },
   setLabelVisibility(areVisible) {
     const options = {
@@ -230,12 +246,12 @@ Vue.component("perks-tab", {
     EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColor());
   },
   mounted() {
+    PerkNetwork.initialStabilization = false;
     PerkNetwork.initializeIfNeeded();
     if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
     else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
     PerkNetwork.updatePerkColor();
     PerkNetwork.updatePerkSize();
-    PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);
   },
   computed: {

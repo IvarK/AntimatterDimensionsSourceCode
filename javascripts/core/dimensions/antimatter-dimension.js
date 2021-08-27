@@ -640,5 +640,7 @@ const AntimatterDimensions = {
     if (NormalChallenge(12).isRunning) {
       AntimatterDimension(2).produceCurrency(Currency.antimatter, diff);
     }
+    // Production may overshoot the goal on the final tick of the challenge
+    if (hasBigCrunchGoal) Currency.antimatter.dropTo(Player.infinityGoal);
   }
 };

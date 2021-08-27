@@ -598,6 +598,7 @@ let player = {
     offlineTicks: 1000,
     showLastTenInfinitiesGainPerTime: false,
     autosaveInterval: 30000,
+    showTimeSinceSave: true,
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,

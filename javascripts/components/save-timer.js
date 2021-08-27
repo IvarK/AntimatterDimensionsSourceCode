@@ -5,6 +5,7 @@ Vue.component("save-timer", {
     return {
       currentTime: 0,
       lastSave: 0,
+      showTimeSinceSave: false,
     };
   },
   computed: {
@@ -16,10 +17,11 @@ Vue.component("save-timer", {
     update() {
       this.lastSave = GameStorage.lastSaveTime;
       this.currentTime = Date.now();
+      this.showTimeSinceSave = player.options.showTimeSinceSave;
     }
   },
   template: `
-    <div class="o-save-timer">
+    <div class="o-save-timer" v-if="showTimeSinceSave">
       Time since last save: {{ time }}
     </div>`
 });

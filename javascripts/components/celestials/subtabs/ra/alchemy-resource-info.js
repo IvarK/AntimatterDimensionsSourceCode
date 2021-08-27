@@ -54,8 +54,8 @@ Vue.component("alchemy-resource-info", {
       const sign = this.flow >= 0 ? "+" : "-";
       if (Math.abs(this.flow) < 0.01) return "None";
       const resourceText = `${sign}${format(Math.abs(this.flow), 2, 2)}/sec`;
-      const color = this.flow > 0 ? "156, 204, 101" : "204, 102, 102";
-      return `<span style="color:rgb(${color})">${resourceText}</span>`;
+      const color = this.flow > 0 ? "9CCC65" : "CC6666";
+      return `<span style="color:#${color}">${resourceText}</span>`;
     }
   },
   methods: {

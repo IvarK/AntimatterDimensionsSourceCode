@@ -41,6 +41,7 @@ const Cloud = {
   },
 
   async saveCheck() {
+    GameIntervals.checkCloudSave.restart();
     const save = await this.load();
     if (save === null) {
       this.save();

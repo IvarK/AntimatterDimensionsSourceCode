@@ -19,6 +19,7 @@ body {
 .t-s2 .c-modal,
 .t-s2 #TTbuttons,
 .t-s2 .sidebar,
+.t-s2 .o-save-timer,
 .t-s2 .c-glyph-tooltip {
     filter: sepia(100%) hue-rotate(180deg) saturate(250%);
 }

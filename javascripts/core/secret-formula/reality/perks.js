@@ -584,7 +584,7 @@ GameDatabase.reality.perks = {
       return `Reduce the Achievement timer to ${formatInt(6)} minutes per
         Achievement (${formatInt(6)} minute decrease).`;
     },
-    effect: 4,
+    effect: 6,
     defaultPosition: {
       x: -175,
       y: -365
@@ -598,7 +598,7 @@ GameDatabase.reality.perks = {
       return `Reduce the Achievement timer to ${formatInt(2)} minutes per
         Achievement (${formatInt(4)} minute decrease).`;
     },
-    effect: 2,
+    effect: 4,
     defaultPosition: {
       x: -180,
       y: -500

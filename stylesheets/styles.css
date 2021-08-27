@@ -582,6 +582,21 @@ button:focus {
   z-index: 999;
 }
 
+.o-save-timer {
+  color: var(--color-text);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-base);
+  white-space: nowrap;
+  border-top: 0.1rem solid var(--color-accent);
+  border-right: 0.1rem solid var(--color-accent);
+  cursor: pointer;
+  user-select: none;
+  padding: 0 .5rem;
+  z-index: 5;
+}
+
 .l-reality-button {
   display: block;
   margin-bottom: 2rem;

@@ -1007,6 +1007,7 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.deleteFloatingTextOption,
     player => {
+      player.records.thisEternity.maxIP.copyFrom(player.infinityPoints);
       player.auto.bigCrunch.xHighest = player.auto.bigCrunch.xCurrent;
       player.auto.eternity.xHighest = player.auto.eternity.xCurrent;
       delete player.auto.bigCrunch.xCurrent;

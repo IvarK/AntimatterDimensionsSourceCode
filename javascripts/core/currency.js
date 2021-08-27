@@ -260,6 +260,11 @@ Currency.infinityPoints = new class extends DecimalCurrency {
       Achievement(104)
     ).toDecimal();
   }
+
+  reset() {
+    super.reset();
+    player.records.thisEternity.maxIP = this.startingValue;
+  }
 }();
 
 Currency.infinityPower = new class extends DecimalCurrency {

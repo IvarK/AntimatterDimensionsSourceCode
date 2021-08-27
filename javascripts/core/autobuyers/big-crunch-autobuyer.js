@@ -53,12 +53,12 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     this.data.time = value;
   }
 
-  get xCurrent() {
-    return this.data.xCurrent;
+  get xHighest() {
+    return this.data.xHighest;
   }
 
-  set xCurrent(value) {
-    this.data.xCurrent = value;
+  set xHighest(value) {
+    this.data.xHighest = value;
   }
 
   autoInfinitiesAvailable(considerMilestoneReached) {
@@ -92,8 +92,8 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
         case AUTO_CRUNCH_MODE.TIME:
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
-        case AUTO_CRUNCH_MODE.X_CURRENT:
-          proc = gainedInfinityPoints().gte(Currency.infinityPoints.value.times(this.xCurrent));
+        case AUTO_CRUNCH_MODE.X_HIGHEST:
+          proc = gainedInfinityPoints().gte(Currency.infinityPoints.value.times(this.xHighest));
           break;
       }
     }

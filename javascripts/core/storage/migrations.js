@@ -611,7 +611,7 @@ GameStorage.migrations = {
           autobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE) ? condition.toNumber() : autobuyer.time;
           break;
         case "relative":
-          autobuyer.xCurrent = condition;
+          autobuyer.xHighest = condition;
           break;
       }
       autobuyer.isActive = old.isOn;

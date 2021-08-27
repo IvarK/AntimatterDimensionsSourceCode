@@ -1006,6 +1006,12 @@ GameStorage.devMigrations = {
       player.reality.realityMachines = player.reality.realityMachines.floor();
     },
     GameStorage.migrations.deleteFloatingTextOption,
+    player => {
+      player.auto.bigCrunch.xHighest = player.auto.bigCrunch.xCurrent;
+      player.auto.eternity.xHighest = player.auto.eternity.xCurrent;
+      delete player.auto.bigCrunch.xCurrent;
+      delete player.auto.eternity.xCurrent;
+    },
   ],
 
   patch(player) {

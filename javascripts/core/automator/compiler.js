@@ -214,7 +214,7 @@
       return ctx.$value;
     }
 
-    xCurrent(ctx) {
+    xHighest(ctx) {
       if (ctx.$value) return ctx.$value;
       if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing multiplier", "Provide a multiplier to set the autobuyer to");

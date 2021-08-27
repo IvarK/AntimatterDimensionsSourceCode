@@ -701,7 +701,7 @@ you a new currency known as Reality Machines, a Glyph, and a Perk Point.
 <br>
 Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the 
 pre-Reality Achievements and all of their associated rewards. You need to re-do them in order to get their rewards
-again, but you will also passively unlock the next incomplete Achievement every ${timeDisplayNoDecimals(32 * 60000)}
+again, but you will also passively unlock the next incomplete Achievement every ${timeDisplayNoDecimals(30 * 60000)}
 without any effort even if you otherwise don't have the requirements to do so.
 This also happens offline at the same rate.
 <br>

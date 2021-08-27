@@ -36,7 +36,7 @@ Vue.component("modal-reality", {
     firstReality() {
       return `Reality will reset everything except challenge records.
         Your Achievements are also reset, but you will automatically get one back every
-        ${timeDisplayNoDecimals(32 * 60000)}. You will also gain Reality Machines based on your Eternity Points, a
+        ${timeDisplayNoDecimals(30 * 60000)}. You will also gain Reality Machines based on your Eternity Points, a
         Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
         on quality of life upgrades, and unlock various upgrades.`;
     },

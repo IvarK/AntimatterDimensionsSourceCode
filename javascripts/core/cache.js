@@ -71,7 +71,7 @@ const GameCache = {
   timeStudies: new Lazy(() => NormalTimeStudyState.studies
     .map(s => player.timestudy.studies.includes(s.id))),
 
-  achievementPeriod: new Lazy(() => TimeSpan.fromMinutes(32 - Effects.sum(
+  achievementPeriod: new Lazy(() => TimeSpan.fromMinutes(30 - Effects.sum(
     Perk.achievementGroup1,
     Perk.achievementGroup2,
     Perk.achievementGroup3,

@@ -3,6 +3,10 @@
 Vue.component("multiplier-breakdown", {
   props: {
     id: Number,
+    operation: {
+      type: String,
+      default: "BASE"
+    }
   },
   data() {
     return {
@@ -10,6 +14,19 @@ Vue.component("multiplier-breakdown", {
     };
   },
   computed: {
+    displayValue() {
+      const SYM = {
+        OVERRIDES: val => `#${format(val, 2, 2)}`,
+        ADDENDS: val => `+${format(val, 2, 2)}`,
+        SUBTRAHENDS: val => `-${format(val, 2, 2)}`,
+        DIVISORS: val => `/${format(val, 2, 2)}`,
+        MULTIPLIERS: val => formatX(val, 2, 2),
+        POWERS: val => formatPow(val, 2, 2),
+        DILATIONS: val => `~${format(val, 2, 2)}`,
+        BASE: val => format(val, 2, 2)
+      };
+      return SYM[this.operation](this.scope.value);
+    },
     scope() {
       return EffectScopes.all[this.id];
     },
@@ -23,7 +40,7 @@ Vue.component("multiplier-breakdown", {
       return this.scope.name;
     },
     total() {
-      return format(this.scope.value, 2, 2);
+      return this.displayValue;
     }
   },
   methods: {
@@ -33,26 +50,26 @@ Vue.component("multiplier-breakdown", {
   },
   template: `
     <div>
-      <div v-if="expand">
-        <multiplier-row
-          v-for="(power, i) in powers"
-          :key="'p' + i"
-          :effect="power"
-          operation="POWERS"
-        />
+      <div class="c-multiplier-tab-breakdown" v-if="expand">
         <multiplier-row
           v-for="(multiplier, i) in multipliers"
           :key="'m' + i"
           :effect="multiplier"
           operation="MULTIPLIERS"
         />
+        <multiplier-row
+          v-for="(power, i) in powers"
+          :key="'p' + i"
+          :effect="power"
+          operation="POWERS"
+        />
       </div>
-      <div class="c-past-runs-header" @click="toggleExpand">
-        <drop-down :shown.sync="expand" />
-        <span>
-          <h3 v-if="expand">{{ name }}: {{ total }}</h3>
-          <span v-else>{{ name }}: {{ total }}</span>
-        </span>
+      <div class="c-multiplier-tab-row-entry c-multiplier-tab-header" @click="toggleExpand">
+        <div class="c-multiplier-tab-row-name">
+          <drop-down :shown.sync="expand" />
+          <span> {{name}} </span>
+        </div>
+        <div class="c-multiplier-tab-row-value"> {{total}}  </div>
       </div>
     </div>`
 });

@@ -65,7 +65,7 @@ class EffectScope {
       Object.entries(this.effects).map(([operation, effects]) =>
         [operation, effects.filter(effect =>
           effect.canBeApplied &&
-          (!new Decimal(effect.effectValue).eq(1) || !new Decimal(effect.effectValue).eq(0))
+          (!new Decimal(effect.effectValue).eq(1) && !new Decimal(effect.effectValue).eq(0))
         )]
       ).filter(([, effects]) => effects.length > 0)
     );

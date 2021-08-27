@@ -2513,12 +2513,78 @@ screen and (max-width: 480px) {
 
 /*#endregion c-stats-tab*/
 
+/*#region Multiplier Tab*/
+.c-multiplier-tab {
+  user-select: none;
+  font-size: 1.2rem;
+  width: 100rem;
+  align-self: center;
+}
+
+.t-dark .c-multiplier-tab {
+  color: #888888;
+}
+
+.t-dark-metro .c-multiplier-tab {
+  color: #757575;
+}
+
+.t-s2 .c-multiplier-tab {
+  color: white;
+}
+
+.t-s6 .c-multiplier-tab {
+  color: #e0e0e0;
+}
+
+.c-multiplier-tab-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0.5rem;
+}
+
+.c-multiplier-tab-row-value {
+  align-self: right;
+}
+
+.c-multiplier-tab-row-name {
+  align-self: left;
+}
+
+.c-multiplier-tab-breakdown {
+  display: flex;
+  align-items: center;
+  margin-left: 4rem;
+  flex-direction: column;
+}
+
+.c-multiplier-tab-row-entry {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.c-multiplier-tab-header {
+  cursor: pointer;
+}
+
+.c-multiplier-tab-header .c-multiplier-tab-row-name {
+  font-weight: bold;
+}
+
+.c-multiplier-tab-header .o-run-drop-down-icon {
+  font-size: 1.1em;
+  margin-right: 1rem;
+}
+
+/*#endregion Multiplier Tab*/
+
 /*#region Past Prestige Runs*/
 
 .c-past-runs-header {
   cursor: pointer;
   user-select: none;
-
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -2527,10 +2593,9 @@ screen and (max-width: 480px) {
   align-items: baseline;
 }
 
-.o-run-drop-down-icon {
-  font-size: 1.5em;
-  margin-left: 2rem;
-  margin-right: 2rem;
+.c-past-runs-header .o-run-drop-down-icon {
+  font-size: 1.4em;
+  margin-right: 1rem;
 }
 
 /*#endregion Past Prestige Runs*/
@@ -8825,19 +8890,4 @@ input.o-automator-block-input {
 .t-s6 .c-autobuyer-buy-box,
 .t-s8 .c-autobuyer-buy-box {
   height: 6.2rem;
-}
-
-.multiplier-tab {
-  user-select: none;
-}
-
-.multiplier-tab .total {
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-.multiplier-tab .title {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
 }

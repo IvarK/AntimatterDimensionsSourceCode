@@ -538,7 +538,7 @@ function isInCelestialReality() {
 }
 
 function lockAchievementsOnReality() {
-  if (Perk.achievementGroup6.isBought) return;
+  if (Perk.achievementGroup5.isBought) return;
   for (const achievement of Achievements.preReality) {
     achievement.lock();
   }

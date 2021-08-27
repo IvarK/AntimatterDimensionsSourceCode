@@ -567,10 +567,10 @@ GameDatabase.reality.perks = {
     label: "ACH2",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(14)} minutes per
-        Achievement (${formatInt(6)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(12)} minutes per
+        Achievement (${formatInt(8)} minute decrease).`;
     },
-    effect: 6,
+    effect: 8,
     defaultPosition: {
       x: -115,
       y: -250
@@ -581,10 +581,10 @@ GameDatabase.reality.perks = {
     label: "ACH3",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(9)} minutes per
-        Achievement (${formatInt(5)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(6)} minutes per
+        Achievement (${formatInt(6)} minute decrease).`;
     },
-    effect: 5,
+    effect: 6,
     defaultPosition: {
       x: -175,
       y: -365
@@ -595,7 +595,7 @@ GameDatabase.reality.perks = {
     label: "ACH4",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(5)} minutes per
+      return `Reduce the Achievement timer to ${formatInt(2)} minutes per
         Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 4,
@@ -606,27 +606,13 @@ GameDatabase.reality.perks = {
   },
   achievementGroup5: {
     id: 205,
-    label: "ACH5",
-    family: PERK_FAMILY.ACHIEVEMENT,
-    get description() {
-      return `Reduce the Achievement timer to ${formatInt(2)} minutes per
-        Achievement (${formatInt(3)} minute decrease).`;
-    },
-    effect: 3,
-    defaultPosition: {
-      x: -195,
-      y: -630
-    }
-  },
-  achievementGroup6: {
-    id: 206,
     label: "ACHNR",
     family: PERK_FAMILY.ACHIEVEMENT,
     description: "Reality no longer resets your Achievements.",
     effect: 2,
     defaultPosition: {
-      x: -225,
-      y: -755
+      x: -195,
+      y: -630
     }
   }
 };
@@ -673,7 +659,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.achievementGroup2, p.achievementGroup3],
     [p.achievementGroup3, p.achievementGroup4],
     [p.achievementGroup4, p.achievementGroup5],
-    [p.achievementGroup5, p.achievementGroup6],
   ];
   const connections = {};
   for (const perk of Object.values(GameDatabase.reality.perks)) {

@@ -1006,6 +1006,13 @@ GameStorage.devMigrations = {
       player.reality.realityMachines = player.reality.realityMachines.floor();
     },
     GameStorage.migrations.deleteFloatingTextOption,
+    player => {
+      // Delete ACH5
+      if (player.reality.perks.has(206)) {
+        player.reality.perks.delete(206);
+        Currency.perkPoints.add(1);
+      }
+    },
   ],
 
   patch(player) {

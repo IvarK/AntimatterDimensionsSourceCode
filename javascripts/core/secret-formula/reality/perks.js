@@ -553,10 +553,10 @@ GameDatabase.reality.perks = {
     label: "ACH1",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(16)} minutes per
-        Achievement (${formatInt(16)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(20)} minutes per
+        Achievement (${formatInt(10)} minute decrease).`;
     },
-    effect: 16,
+    effect: 10,
     defaultPosition: {
       x: -45,
       y: -135
@@ -567,7 +567,7 @@ GameDatabase.reality.perks = {
     label: "ACH2",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(8)} minutes per
+      return `Reduce the Achievement timer to ${formatInt(12)} minutes per
         Achievement (${formatInt(8)} minute decrease).`;
     },
     effect: 8,
@@ -581,8 +581,8 @@ GameDatabase.reality.perks = {
     label: "ACH3",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(4)} minutes per
-        Achievement (${formatInt(4)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(6)} minutes per
+        Achievement (${formatInt(6)} minute decrease).`;
     },
     effect: 4,
     defaultPosition: {
@@ -596,7 +596,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
       return `Reduce the Achievement timer to ${formatInt(2)} minutes per
-        Achievement (${formatInt(2)} minute decrease).`;
+        Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 2,
     defaultPosition: {

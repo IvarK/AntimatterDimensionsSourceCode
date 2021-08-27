@@ -79,11 +79,10 @@ Vue.component("new-dimension-row", {
     },
     buy() {
       if (this.isContinuumActive) return;
-      // TODO: Buy Until is on
-      if (this.buyUntil10) {
-        buyAsManyAsYouCanBuy(this.tier);
-      } else {
+      if (this.howManyCanBuy === 1) {
         buyOneDimension(this.tier);
+      } else {
+        buyAsManyAsYouCanBuy(this.tier);
       }
 
       if (this.tier === 2) {

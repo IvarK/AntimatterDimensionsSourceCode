@@ -593,7 +593,7 @@ button:focus {
   border-right: 0.1rem solid var(--color-accent);
   cursor: pointer;
   user-select: none;
-  padding-left: 1rem;
+  padding: 0 .5rem;
   z-index: 5;
 }
 

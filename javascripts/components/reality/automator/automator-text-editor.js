@@ -32,16 +32,42 @@ const AutomatorTextUI = {
     this.editor.on("change", editor => {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
-      // Clear error line highlighting as soon as any text is changed; this is significantly more performance-friendly
-      // than running the parser every change to determine if the error still exists
-      const errorLine = AutomatorData.currentErrorLine - 1;
-      AutomatorTextUI.editor.removeLineClass(errorLine, "background", "c-automator-editor__error-line");
-      AutomatorTextUI.editor.removeLineClass(errorLine, "gutter", "c-automator-editor__error-line-gutter");
-      const eventLine = AutomatorData.currentEventLine - 1;
-      AutomatorTextUI.editor.removeLineClass(eventLine, "background", "c-automator-editor__event-line");
-      AutomatorTextUI.editor.removeLineClass(eventLine, "gutter", "c-automator-editor__event-line-gutter");
+      // Clear all line highlighting as soon as any text is changed
+      this.clearAllHighlightedLines("Active");
+      this.clearAllHighlightedLines("Error");
+      this.clearAllHighlightedLines("Event");
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
+  },
+  scrollToLine(line) {
+    this.editor.scrollIntoView({ line, ch: 0 });
+  },
+  // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
+  // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative
+  // of looping through and clearing every line (bad for performance)
+  currentActiveLine: -1,
+  currentErrorLine: -1,
+  currentEventLine: -1,
+  updateHighlightedLine(line, key) {
+    this.removeHighlightedLine(key);
+    this.addHighlightedLine(line, key);
+  },
+  removeHighlightedLine(key) {
+    const removedLine = this[`current${key}Line`] - 1;
+    this.editor.removeLineClass(removedLine, "background", `c-automator-editor__${key.toLowerCase()}-line`);
+    this.editor.removeLineClass(removedLine, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+    this[`current${key}Line`] = -1;
+  },
+  addHighlightedLine(line, key) {
+    this.editor.addLineClass(line - 1, "background", `c-automator-editor__${key.toLowerCase()}-line`);
+    this.editor.addLineClass(line - 1, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+    this[`current${key}Line`] = line;
+  },
+  clearAllHighlightedLines(key) {
+    for (let line = 0; line < this.editor.doc.size; line++) {
+      this.editor.removeLineClass(line, "background", `c-automator-editor__${key.toLowerCase()}-line`);
+      this.editor.removeLineClass(line, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+    }
   }
 };
 
@@ -119,33 +145,17 @@ Vue.component("automator-text-editor", {
       this.UI.documents = {};
     },
     unmarkActiveLine() {
-      if (this.markedLineNumber > 0) {
-        this.UI.editor.removeLineClass(this.markedLineNumber - 1, "background", "c-automator-editor__active-line");
-        this.UI.editor.removeLineClass(this.markedLineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
-      }
-      this.markedLineNumber = 0;
+      this.UI.removeHighlightedLine("Active");
     },
     markActiveLine(lineNumber) {
-      if (this.markedLineNumber === lineNumber) return;
-      this.unmarkActiveLine();
-      if (lineNumber > 0) {
-        this.UI.editor.addLineClass(lineNumber - 1, "background", "c-automator-editor__active-line");
-        this.UI.editor.addLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
-        this.markedLineNumber = lineNumber;
-      }
+      this.UI.updateHighlightedLine(lineNumber, "Active");
       this.unclearedLines = true;
-    },
-    clearActiveLineStyle(lineNumber) {
-      if (lineNumber > 0) {
-        this.UI.editor.removeLineClass(lineNumber - 1, "background", "c-automator-editor__active-line");
-        this.UI.editor.removeLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
-      }
     },
     // This only runs once when a script is interrupted and stops during execution because of the player editing the
     // text, but it needs to loop through and clear all lines since editing text may cause arbitrarily shifts of the
     // active line index via pasting/deleting large code blocks
     clearAllActiveLines() {
-      for (let line = 0; line < this.UI.editor.doc.size; line++) this.clearActiveLineStyle(line);
+      this.UI.clearAllHighlightedLines("Active");
       this.unclearedLines = false;
     },
     setActiveState(scriptID, lineNumber) {

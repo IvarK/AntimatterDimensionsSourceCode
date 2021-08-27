@@ -97,6 +97,10 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
+    uncappedRefineReward: {
+      type: Number,
+      default: 0,
+    },
     currentAction: String,
     scoreMode: Number,
     showDeletionText: {
@@ -258,7 +262,10 @@ const GlyphTooltipComponent = {
     refineText() {
       if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
       if (!AlchemyResource[this.type].isUnlocked) return "";
-      const refinementText = `${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      let refinementText = `${format(this.uncappedRefineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      if (this.uncappedRefineReward !== this.refineReward) {
+        refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
+      }
       const isCurrentAction = this.currentAction === "refine";
       return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
               Refine: ${refinementText}
@@ -364,6 +371,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
+      uncappedRefineReward: 0,
       refineReward: 0,
       displayLevel: 0,
       isRealityGlyph: false,
@@ -529,8 +537,11 @@ Vue.component("glyph-component", {
       glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
+        : 0;
+      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : 0;
       if (
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
@@ -695,6 +706,7 @@ Vue.component("glyph-component", {
           :style="zIndexStyle"
           :sacrificeReward="sacrificeReward"
           :refineReward="refineReward"
+          :uncappedRefineReward="uncappedRefineReward"
           :currentAction="currentAction"
           :scoreMode="scoreMode"
           :showDeletionText="showSacrifice"

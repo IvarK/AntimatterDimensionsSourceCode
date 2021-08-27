@@ -53,7 +53,9 @@ Vue.component("alchemy-resource-info", {
     formattedFlow() {
       const sign = this.flow >= 0 ? "+" : "-";
       if (Math.abs(this.flow) < 0.01) return "None";
-      return `${sign}${format(Math.abs(this.flow), 2, 2)}/sec`;
+      const resourceText = `${sign}${format(Math.abs(this.flow), 2, 2)}/sec`;
+      const color = this.flow > 0 ? "156, 204, 101" : "204, 102, 102";
+      return `<span style="color:rgb(${color})">${resourceText}</span>`;
     }
   },
   methods: {
@@ -74,7 +76,7 @@ Vue.component("alchemy-resource-info", {
       <span class="c-alchemy-resource-info__title">
         {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
       </span>
-      <span>Current: {{ resourceAmount }} (Recent change: {{ formattedFlow }})</span>
+      <span>Current: {{ resourceAmount }} (Recent change: <span v-html="formattedFlow" />)</span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
       <span><effect-display title="Effect" :config="effectConfig" /></span>

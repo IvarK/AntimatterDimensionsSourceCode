@@ -1013,6 +1013,13 @@ GameStorage.devMigrations = {
         Currency.perkPoints.add(1);
       }
     },
+    player => {
+      player.records.thisEternity.maxIP.copyFrom(player.infinityPoints);
+      player.auto.bigCrunch.xHighest = player.auto.bigCrunch.xCurrent;
+      player.auto.eternity.xHighest = player.auto.eternity.xCurrent;
+      delete player.auto.bigCrunch.xCurrent;
+      delete player.auto.eternity.xCurrent;
+    },
   ],
 
   patch(player) {

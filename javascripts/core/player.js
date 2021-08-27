@@ -64,7 +64,7 @@ let player = {
       amount: new Decimal(1),
       increaseWithMult: true,
       time: 1,
-      xCurrent: new Decimal(1),
+      xHighest: new Decimal(1),
       isActive: false
     },
     bigCrunch: {
@@ -74,7 +74,7 @@ let player = {
       amount: new Decimal(1),
       increaseWithMult: true,
       time: 1,
-      xCurrent: new Decimal(1),
+      xHighest: new Decimal(1),
       isActive: true,
       lastTick: 0
     },

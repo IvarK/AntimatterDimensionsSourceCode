@@ -93,7 +93,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
         case AUTO_CRUNCH_MODE.X_HIGHEST:
-          proc = gainedInfinityPoints().gte(Currency.infinityPoints.value.times(this.xHighest));
+          proc = gainedInfinityPoints().gte(player.records.thisEternity.maxIP.times(this.xHighest));
           break;
       }
     }

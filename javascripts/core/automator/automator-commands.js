@@ -164,7 +164,7 @@ const AutomatorCommands = ((() => {
           } else if (xHighest !== undefined) {
             autobuyer.mode = xHighestMode;
             autobuyer.xHighest = new Decimal(xHighest);
-            currSetting = `${format(xHighest, 2, 2)} times current`;
+            currSetting = `${format(xHighest, 2, 2)} times highest`;
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {

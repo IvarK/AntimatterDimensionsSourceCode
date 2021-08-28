@@ -1681,6 +1681,7 @@ screen and (max-width: 480px) {
   color: var(--color-infinity);
   background-color: black;
   border-color: var(--color-infinity);
+  font-weight: bold;
 }
 
 .o-infinity-button:hover {
@@ -1708,6 +1709,11 @@ screen and (max-width: 480px) {
   box-shadow: 1px 1px 1px 0 black;
   border-width: 0.1rem;
   border-radius: 0;
+}
+
+.o-infinity-button--unavailable {
+  cursor: default;
+  opacity: 0.5;
 }
 
 /*#region Eternity*/
@@ -1790,6 +1796,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-button--unavailable {
   cursor: default;
+  opacity: 0.5;
 }
 
 /*#endregion Eternity*/

@@ -200,10 +200,10 @@ class TimeSpan {
     if (this.years > 1e6) {
       return `${format(this.totalYears, 3, 0)} years`;
     }
-    if (this.totalSeconds > 10) {
+    if (this.totalSeconds >= 10) {
       return this.toStringNoDecimals();
     }
-    return `${format(this.totalSeconds, 3, 3)} seconds`;
+    return this.toStringShort();
   }
 
   /**
@@ -236,8 +236,11 @@ class TimeSpan {
    */
   toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
-    if (totalSeconds < 1 / 1000 && totalSeconds >= 1 / 2e6) {
+    if (totalSeconds < 1e-6) {
       // Don't show this if it rounds to 0.
+      return `< ${format(0.001, 0, 3)} ms`;
+    }
+    if (totalSeconds < 1e-3) {
       return `${format(1000 * totalSeconds, 0, 3)} ms`;
     }
     if (totalSeconds < 1) {

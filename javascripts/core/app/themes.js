@@ -7,6 +7,8 @@ const Theme = function Theme(name, config) {
 
   this.isMetro = config.isMetro;
 
+  this.isAnimated = config.isAnimated;
+
   this.isDefault = function() {
     return name === "Normal";
   };
@@ -20,10 +22,6 @@ const Theme = function Theme(name, config) {
     return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
   };
 
-  this.isAnimated = function() {
-    const list = ["S1", "S6"];
-    return list.includes(this.name);
-  };
 
   this.displayName = function() {
     if (!this.isSecret() || !this.isAvailable()) return name;
@@ -38,7 +36,7 @@ const Theme = function Theme(name, config) {
     document.body.classList.add(this.cssClass());
     if (this.isMetro) document.body.classList.add("t-universal-metro");
 
-    if (this.isAnimated() && player.options.animations.background) {
+    if (this.isAnimated && player.options.animations.background) {
       document.getElementById("background-animations").style.display = "block";
     } else {
       document.getElementById("background-animations").style.display = "none";
@@ -101,45 +99,33 @@ Theme.tryUnlock = function(name) {
   return true;
 };
 
-Theme.light = function(name) {
-  const colors = {
-    isDark: false
-  };
-  return new Theme(name, colors);
-};
-
-Theme.dark = function(name) {
-  const colors = {
-    isDark: true
-  };
-  return new Theme(name, colors);
-};
-
-Theme.create = function(name, settings = {}) {
+Theme.create = function(name, settings) {
   const config = {
-    isDark: settings.isDark === undefined ? false : settings.isDark,
-    isMetro: settings.isMetro === undefined ? false : settings.isMetro,
+    isDark: false || settings.dark,
+    isMetro: false || settings.metro,
+    isAnimated: false || settings.animated,
   };
   return new Theme(name, config);
 };
 
 const Themes = {
   all: [
-    Theme.create("Normal"),
-    Theme.create("Metro", { isMetro: true }),
-    Theme.create("Dark", { isDark: true }),
-    Theme.create("Dark Metro", { isDark: true, isMetro: true }),
-    Theme.create("Inverted"),
-    Theme.create("Inverted Metro", { isMetro: true }),
-    Theme.create("S1"),
-    Theme.create("S2"),
-    Theme.create("S3"),
-    Theme.create("S4"),
-    Theme.create("S5"),
-    Theme.create("S6", { isDark: true }),
-    Theme.create("S7"),
-    Theme.create("S8", { isMetro: true }),
-    Theme.create("S9"),
+    /* eslint-disable no-multi-spaces */
+    Theme.create("Normal",          {                                             }),
+    Theme.create("Metro",           {             metro: true                     }),
+    Theme.create("Dark",            { dark: true                                  }),
+    Theme.create("Dark Metro",      { dark: true, metro: true                     }),
+    Theme.create("Inverted",        {                                             }),
+    Theme.create("Inverted Metro",  {             metro: true                     }),
+    Theme.create("S1",              {                           animated: true    }),
+    Theme.create("S2",              {                                             }),
+    Theme.create("S3",              {                                             }),
+    Theme.create("S4",              {                                             }),
+    Theme.create("S5",              {                                             }),
+    Theme.create("S6",              { dark: true,               animated: true    }),
+    Theme.create("S7",              {                                             }),
+    Theme.create("S8",              {             metro: true                     }),
+    Theme.create("S9",              {                                             }),
   ],
 
   available() {

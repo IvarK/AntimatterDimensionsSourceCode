@@ -1657,9 +1657,6 @@ screen and (max-width: 480px) {
 .t-universal-metro .o-infinity-button {
   border-width: 0.1rem;
   border-radius: 0;
-}
-
-.t-universal-metro .o-infinity-button {
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
 }
 
@@ -2708,6 +2705,8 @@ screen and (max-width: 480px) {
 }
 
 .t-universal-metro .o-achievement__indicator {
+  border-width: 0.1rem;
+  border-radius: 0;
   background: #66bb6a;
   border-color: #43a047;
 }
@@ -2749,11 +2748,6 @@ screen and (max-width: 480px) {
 .o-achievement__indicator--secret {
   background: #555;
   border-color: black;
-}
-
-.t-universal-metro .o-achievement__indicator {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 /*#region themes*/

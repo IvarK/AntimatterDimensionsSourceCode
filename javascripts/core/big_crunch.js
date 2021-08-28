@@ -3,7 +3,7 @@
 function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
 }
 

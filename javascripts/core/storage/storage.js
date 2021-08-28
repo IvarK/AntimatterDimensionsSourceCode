@@ -8,6 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
+  lastSaveTime: Date.now(),
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -90,7 +91,9 @@ const GameStorage = {
 
   save(silent = false, manual = false) {
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
+    this.lastSaveTime = Date.now();
     const root = {
       current: this.currentSlot,
       saves: this.saves

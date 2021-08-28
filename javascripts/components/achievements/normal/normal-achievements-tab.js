@@ -70,7 +70,7 @@ Vue.component("normal-achievements-tab", {
       this.achTPeffect = RealityUpgrade(8).config.effect();
       this.achCountdown = Achievements.timeToNextAutoAchieve / getGameSpeedupFactor();
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
-      this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup6.isBought;
+      this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup5.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.hideCompletedRows = player.options.hideCompletedAchievementRows;
       this.achMultBreak = BreakInfinityUpgrade.achievementMult.canBeApplied;

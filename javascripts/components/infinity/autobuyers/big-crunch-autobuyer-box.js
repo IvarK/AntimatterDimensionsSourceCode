@@ -19,7 +19,7 @@ Vue.component("big-crunch-autobuyer-box", {
     modes: () => [
       AUTO_CRUNCH_MODE.AMOUNT,
       AUTO_CRUNCH_MODE.TIME,
-      AUTO_CRUNCH_MODE.X_CURRENT,
+      AUTO_CRUNCH_MODE.X_HIGHEST,
     ]
   },
   methods: {
@@ -45,10 +45,10 @@ Vue.component("big-crunch-autobuyer-box", {
             type: "float"
           },
         };
-        case AUTO_CRUNCH_MODE.X_CURRENT: return {
-          title: "X times current IP",
+        case AUTO_CRUNCH_MODE.X_HIGHEST: return {
+          title: "X times highest IP",
           input: {
-            property: "xCurrent",
+            property: "xHighest",
             type: "decimal"
           },
         };

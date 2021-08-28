@@ -29,6 +29,7 @@ const Glyphs = {
   active: [],
   copies: [],
   levelBoost: 0,
+  factorsOpen: false,
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },

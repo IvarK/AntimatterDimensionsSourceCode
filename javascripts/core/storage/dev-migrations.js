@@ -1006,6 +1006,20 @@ GameStorage.devMigrations = {
       player.reality.realityMachines = player.reality.realityMachines.floor();
     },
     GameStorage.migrations.deleteFloatingTextOption,
+    player => {
+      // Delete ACH5
+      if (player.reality.perks.has(206)) {
+        player.reality.perks.delete(206);
+        Currency.perkPoints.add(1);
+      }
+    },
+    player => {
+      player.records.thisEternity.maxIP.copyFrom(player.infinityPoints);
+      player.auto.bigCrunch.xHighest = player.auto.bigCrunch.xCurrent;
+      player.auto.eternity.xHighest = player.auto.eternity.xCurrent;
+      delete player.auto.bigCrunch.xCurrent;
+      delete player.auto.eternity.xCurrent;
+    },
   ],
 
   patch(player) {

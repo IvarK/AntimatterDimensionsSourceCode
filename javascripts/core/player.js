@@ -64,7 +64,7 @@ let player = {
       amount: new Decimal(1),
       increaseWithMult: true,
       time: 1,
-      xCurrent: new Decimal(1),
+      xHighest: new Decimal(1),
       isActive: false
     },
     bigCrunch: {
@@ -74,7 +74,7 @@ let player = {
       amount: new Decimal(1),
       increaseWithMult: true,
       time: 1,
-      xCurrent: new Decimal(1),
+      xHighest: new Decimal(1),
       isActive: true,
       lastTick: 0
     },
@@ -598,6 +598,7 @@ let player = {
     offlineTicks: 1000,
     showLastTenInfinitiesGainPerTime: false,
     autosaveInterval: 30000,
+    showTimeSinceSave: true,
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
@@ -675,6 +676,7 @@ let player = {
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 10),
     fixedPerkStartingPos: false,
+    perkPhysicsEnabled: true,
     automatorEvents: {
       newestFirst: false,
       timestampType: 0,

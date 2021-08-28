@@ -573,6 +573,21 @@ button:focus {
   z-index: 999;
 }
 
+.o-save-timer {
+  color: var(--color-text);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-base);
+  white-space: nowrap;
+  border-top: 0.1rem solid var(--color-accent);
+  border-right: 0.1rem solid var(--color-accent);
+  cursor: pointer;
+  user-select: none;
+  padding: 0 .5rem;
+  z-index: 5;
+}
+
 .l-reality-button {
   display: block;
   margin-bottom: 2rem;
@@ -4686,7 +4701,7 @@ screen and (max-width: 480px) {
   font-size: 1.05rem;
   border: 0.1rem solid;
   width: 17rem;
-  height: 9rem;
+  height: 9.5rem;
   transition-duration: 0.2s;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;
@@ -8221,8 +8236,8 @@ input.o-automator-block-input {
   user-select: none;
   -webkit-user-drag: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  width: 90rem;
-  height: 50rem;
+  width: 60rem;
+  height: 60rem;
   border: 0.2rem solid black;
 }
 

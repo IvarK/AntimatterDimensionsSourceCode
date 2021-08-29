@@ -196,7 +196,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 16,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.strength >= 1.5))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && g.strength >= 1.5))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
         const equipped = Glyphs.activeList.countWhere(g => g.strength >= 1.5);
@@ -214,7 +214,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2);
         const equipped = Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2);
@@ -232,7 +232,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 18,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each at level ${formatInt(10)} or higher
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.level >= 10))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && g.level >= 10))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
         const equipped = Glyphs.activeList.countWhere(g => g.level >= 10);

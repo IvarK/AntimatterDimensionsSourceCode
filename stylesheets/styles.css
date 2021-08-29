@@ -1681,19 +1681,12 @@ screen and (max-width: 480px) {
   color: var(--color-infinity);
   background-color: black;
   border-color: var(--color-infinity);
+  font-weight: bold;
 }
 
 .o-infinity-button:hover {
   color: black;
   background-color: var(--color-infinity);
-}
-
-.o-infinity-button span {
-  transition-duration: 0.2s;
-}
-
-.o-infinity-button:hover span {
-  color: black;
 }
 
 .t-metro .o-infinity-button,
@@ -1710,6 +1703,11 @@ screen and (max-width: 480px) {
   border-radius: 0;
 }
 
+.o-infinity-button--unavailable {
+  cursor: default;
+  opacity: 0.5;
+}
+
 /*#region Eternity*/
 
 .o-eternity-button {
@@ -1723,18 +1721,6 @@ screen and (max-width: 480px) {
   color: black;
   background-color: var(--color-eternity);
   cursor: pointer;
-}
-
-.o-eternity-button span {
-  transition-duration: 0.2s;
-}
-
-.o-eternity-button:hover span {
-  color: black;
-}
-
-.t-s1 .o-eternity-button:hover span {
-  color: var(--color-text);
 }
 
 .t-metro .o-eternity-button,
@@ -1790,6 +1776,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-button--unavailable {
   cursor: default;
+  opacity: 0.5;
 }
 
 /*#endregion Eternity*/

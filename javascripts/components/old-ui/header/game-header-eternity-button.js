@@ -44,7 +44,11 @@ Vue.component("game-header-eternity-button", {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (!this.headerTextColored || this.hover || this.currentEP.lt(1e50)) return {};
+      if (!this.headerTextColored || this.currentEP.lt(1e50)) return {};
+      if (this.hover) return {
+        color: "black",
+        "transition-duration": "0.2s"
+      };
 
       const ratio = this.gainedEP.log10() / this.currentEP.log10();
       const rgb = [
@@ -54,7 +58,10 @@ Vue.component("game-header-eternity-button", {
           ? Math.round(255 - (ratio - 1) * 10 * 255)
           : Math.round(255 - (1 - ratio) * 10 * 255)
       ];
-      return { color: `rgb(${rgb.join(",")})` };
+      return {
+        color: `rgb(${rgb.join(",")})`,
+        "transition-duration": "0.2s"
+     };
     },
     tachyonAmountStyle() {
       // Hovering over the button makes all the text on the button black; this text inherits that
@@ -81,17 +88,24 @@ Vue.component("game-header-eternity-button", {
   },
   methods: {
     update() {
-      this.isVisible = Currency.infinityPoints.gte(Player.eternityGoal) || EternityChallenge.isRunning;
+      this.isVisible = player.records.thisEternity.maxIP.gte(Decimal.NUMBER_MAX_VALUE) ||
+        EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked;
       if (!this.isVisible) return;
+      this.canEternity = Player.canEternity;
+      this.eternityGoal.copyFrom(Player.eternityGoal);
       this.headerTextColored = player.options.headerTextColored;
+
+      if (!this.canEternity) {
+        this.type = EP_BUTTON_DISPLAY_TYPE.CANNOT_ETERNITY;
+        return;
+      }
+
       if (!PlayerProgress.eternityUnlocked()) {
         this.type = EP_BUTTON_DISPLAY_TYPE.FIRST_TIME;
         return;
       }
 
       if (EternityChallenge.isRunning) {
-        this.canEternity = Player.canEternity;
-        this.eternityGoal.copyFrom(Player.eternityGoal);
         if (!Perk.studyECBulk.isBought) {
           this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE;
           return;
@@ -147,8 +161,15 @@ Vue.component("game-header-eternity-button", {
       @mouseover="hover = true"
       @mouseleave="hover = false"
     >
+      <!-- Cannot Eternity -->
+      <template v-if="type === -1">
+        Reach {{ format(eternityGoal, 2, 2) }}
+        <br>
+        Infinity Points
+      </template>
+
       <!-- First time -->
-      <template v-if="type === 0">
+      <template v-else-if="type === 0">
         Other times await... I need to become Eternal
       </template>
 
@@ -171,8 +192,7 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Challenge -->
       <template v-else-if="type === 2 || (type === 6 && !canEternity)">
-        <span v-if="canEternity">Other challenges await... I need to become Eternal</span>
-        <span v-else>Reach {{ format(eternityGoal, 2, 2) }} IP to complete the current challenge</span>
+        Other challenges await... I need to become Eternal
       </template>
 
       <!-- Dilation -->
@@ -217,6 +237,7 @@ Vue.component("game-header-eternity-button", {
 });
 
 const EP_BUTTON_DISPLAY_TYPE = {
+  CANNOT_ETERNITY: -1,
   FIRST_TIME: 0,
   NORMAL: 1,
   CHALLENGE: 2,

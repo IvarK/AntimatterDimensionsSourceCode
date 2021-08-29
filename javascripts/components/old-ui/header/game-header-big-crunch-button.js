@@ -29,7 +29,11 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      if (!this.headerTextColored || this.hover || this.currentIP.lt(1e50)) return {};
+      if (!this.headerTextColored || this.currentIP.lt(1e50)) return {};
+      if (this.hover) return {
+        color: "black",
+        "transition-duration": "0.2s"
+      };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       const rgb = [
@@ -39,7 +43,10 @@ Vue.component("game-header-big-crunch-button", {
           ? Math.round(255 - (ratio - 1) * 10 * 255)
           : Math.round(255 - (1 - ratio) * 10 * 255)
       ];
-      return { color: `rgb(${rgb.join(",")})` };
+      return {
+        color: `rgb(${rgb.join(",")})`,
+        "transition-duration": "0.2s"
+     };
     },
   },
   methods: {

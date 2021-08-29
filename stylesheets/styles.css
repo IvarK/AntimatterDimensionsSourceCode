@@ -1689,14 +1689,6 @@ screen and (max-width: 480px) {
   background-color: var(--color-infinity);
 }
 
-.o-infinity-button span {
-  transition-duration: 0.2s;
-}
-
-.o-infinity-button:hover span {
-  color: black;
-}
-
 .t-metro .o-infinity-button,
 .t-inverted-metro .o-infinity-button,
 .t-s8 .o-infinity-button {
@@ -1729,18 +1721,6 @@ screen and (max-width: 480px) {
   color: black;
   background-color: var(--color-eternity);
   cursor: pointer;
-}
-
-.o-eternity-button span {
-  transition-duration: 0.2s;
-}
-
-.o-eternity-button:hover span {
-  color: black;
-}
-
-.t-s1 .o-eternity-button:hover span {
-  color: var(--color-text);
 }
 
 .t-metro .o-eternity-button,

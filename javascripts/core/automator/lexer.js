@@ -152,7 +152,7 @@ const AutomatorLexer = (() => {
     $autocomplete: "TT",
     $getter: () => Currency.timeTheorems.value,
   });
-  createInCategory(AutomatorCurrency, "Total_TT", /total[ \t]+tt/i, {
+  createInCategory(AutomatorCurrency, "TotalTT", /total[ \t]+tt/i, {
     $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
@@ -363,10 +363,22 @@ const AutomatorLexer = (() => {
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
 
+  const standardizeAutomatorCurrencyName = function (x) {
+    for (let i of tokenLists["AutomatorCurrency"]) {
+      // Check for a match of the full string.
+      if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {
+        return i.$autocomplete.toUpperCase();
+      }
+    }
+  }
+  
   return {
     lexer,
     tokens: automatorTokens,
     tokenIds,
     tokenMap,
+    standardizeAutomatorCurrencyName,
   };
 })();
+
+const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

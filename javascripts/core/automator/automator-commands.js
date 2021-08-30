@@ -365,7 +365,7 @@ const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.IF,
           ...comparison,
-          target: comparison.target.toUpperCase()
+          target: standardizeAutomatorCurrencyName(comparison.target)
         };
       }
     },
@@ -756,7 +756,7 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
+        target: standardizeAutomatorCurrencyName(ctx.TTCurrency[0].tokenType.name),
         ...automatorBlocksMap.TT
       })
     },
@@ -898,7 +898,7 @@ const AutomatorCommands = ((() => {
             nest: commands,
             ...automatorBlocksMap.UNTIL,
             ...comparison,
-            target: comparison.target.toUpperCase()
+            target: standardizeAutomatorCurrencyName(comparison.target)
           };
         }
         return {
@@ -948,7 +948,7 @@ const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WAIT,
           ...comparison,
-          target: comparison.target.toUpperCase()
+          target: standardizeAutomatorCurrencyName(comparison.target)
         };
       }
     },
@@ -1008,10 +1008,12 @@ const AutomatorCommands = ((() => {
       blockify: (ctx, B) => {
         const commands = [];
         B.visit(ctx.block, commands);
+        const comparison = B.visit(ctx.comparison);
         return {
           nest: commands,
           ...automatorBlocksMap.WHILE,
-          ...B.visit(ctx.comparison)
+          ...comparison,
+          target: standardizeAutomatorCurrencyName(comparison.target)
         };
       }
     }

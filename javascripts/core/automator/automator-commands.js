@@ -756,7 +756,7 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: standardizeAutomatorCurrencyName(ctx.TTCurrency[0].tokenType.name),
+        target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
         ...automatorBlocksMap.TT
       })
     },

@@ -303,6 +303,9 @@ const AutomatorCommands = ((() => {
           } else if (entry.children.TriadStudy && Ra.pets.v.level >= 5) {
             // Triad study (this also should be prevented by the general "can't convert errored scripts" if locked)
             studyList.push(`T${entry.children.TriadStudy[0].image}`);
+          } else if (entry.children.StudyPath) {
+            // Study path (eg. "time")
+            studyList.push(entry.children.StudyPath[0].image);
           } else {
             // Study range (eg. "41-71")
             const range = entry.children.studyRange[0].children;
@@ -611,6 +614,7 @@ const AutomatorCommands = ((() => {
           const varInfo = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
           if (!varInfo) return;
           ctx.$studies = varInfo.value;
+          ctx.$studies.image = ctx.Identifier[0].image;
         } else if (ctx.studyList) {
           ctx.$studies = V.visit(ctx.studyList);
         }

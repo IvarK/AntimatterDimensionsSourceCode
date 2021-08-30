@@ -456,6 +456,7 @@ const AutomatorBackend = {
   },
 
   restart() {
+    this.start(this.state.topLevelScript, AUTOMATOR_MODE.RUN);
     if (this.stack.isEmpty) return;
     this.reset(this.stack._data[0].commands);
   },

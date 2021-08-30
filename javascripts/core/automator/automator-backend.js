@@ -263,11 +263,16 @@ const AutomatorBackend = {
 
   update(diff) {
     if (!this.isOn) return;
+    let stack;
     switch (this.mode) {
       case AUTOMATOR_MODE.PAUSE:
         return;
       case AUTOMATOR_MODE.SINGLE_STEP:
         this.singleStep();
+        stack = AutomatorBackend.stack.top;
+        // If single step completes the last line and repeat is off, the command stack will be empty and
+        // scrolling will cause an error
+        if (stack) AutomatorTextUI.scrollToLine(stack.lineNumber - 1);
         this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
       case AUTOMATOR_MODE.RUN:

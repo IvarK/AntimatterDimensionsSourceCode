@@ -32,13 +32,16 @@ const AutomatorTextUI = {
     this.editor.on("change", editor => {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
-      // Clear all line highlighting as soon as any text is changed
+      // Clear all line highlighting as soon as any text is changed. We can't use the locations of previously
+      // highlighted lines because changes may shift the line numbers around before they're cleared.
       this.clearAllHighlightedLines("Active");
       this.clearAllHighlightedLines("Error");
       this.clearAllHighlightedLines("Event");
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   },
+  // Used to return back to the same line the editor was on from before switching tabs
+  savedVertPos: 0,
   scrollToLine(line) {
     this.editor.scrollIntoView({ line, ch: 0 });
   },
@@ -114,11 +117,19 @@ Vue.component("automator-text-editor", {
     this.$nextTick(() => {
       this.UI.editor.refresh();
       this.UI.editor.performLint();
+      // Take the scroll attribute of the editor and convert into a line number, then use the scrollToLine function
+      // in order to move the editor back to the line it was on before switching tabs. I suspect this has a chance
+      // to be device-dependent somehow, but it seems to seems to have worked fairly accurately on all situations
+      // I was able to test personally - Chrome/FF, varying screen zoom settings, and varying monitor resolutions.
+      const UNITS_PER_LINE = 15.305;
+      const targetLine = Math.round(AutomatorTextUI.savedVertPos / UNITS_PER_LINE) + 24;
+      AutomatorTextUI.scrollToLine(Math.clampMax(targetLine, AutomatorTextUI.editor.lastLine() + 1));
     });
   },
   beforeDestroy() {
     // This will stick around, otherwise
     this.unmarkActiveLine();
+    AutomatorTextUI.savedVertPos = AutomatorTextUI.editor.doc.scrollTop;
     this.$refs.container.removeChild(this.UI.container);
     EventHub.ui.offAll(this);
   },

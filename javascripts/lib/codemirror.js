@@ -4434,10 +4434,10 @@
   else if (safari) { wheelPixelsPerUnit = -1/3; }
 
   function wheelEventDelta(e) {
-    var dx = e.wheelDeltaX, dy = e.wheelDeltaY;
+    var dx = e.deltaX, dy = e.deltaY;
     if (dx == null && e.detail && e.axis == e.HORIZONTAL_AXIS) { dx = e.detail; }
     if (dy == null && e.detail && e.axis == e.VERTICAL_AXIS) { dy = e.detail; }
-    else if (dy == null) { dy = e.wheelDelta; }
+    else if (dy == null) { dy = e.delta; }
     return {x: dx, y: dy}
   }
   function wheelEventPixels(e) {
@@ -7987,7 +7987,6 @@
       if (d.scroller.clientHeight) {
         updateScrollTop(cm, d.scroller.scrollTop);
         setScrollLeft(cm, d.scroller.scrollLeft, true);
-        signal(cm, "scroll", cm);
       }
     });
 

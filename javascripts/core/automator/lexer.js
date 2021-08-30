@@ -362,8 +362,13 @@ const AutomatorLexer = (() => {
 
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
-
+  
+  const automatorCurrencyNames = tokenLists["AutomatorCurrency"].map(i => i.$autocomplete.toUpperCase());
+  
   const standardizeAutomatorCurrencyName = function (x) {
+    // This first line exists for this function to usually return quickly;
+    // otherwise it's called enough to cause lag.
+    if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
     for (let i of tokenLists["AutomatorCurrency"]) {
       // Check for a match of the full string.
       if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {

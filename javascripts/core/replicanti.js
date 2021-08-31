@@ -370,6 +370,7 @@ const ReplicantiUpgrade = {
         cumulative: true,
       }, this.value);
       if (!bulk) return;
+      Currency.infinityPoints.subtract(bulk.purchasePrice);
       this.value += bulk.quantity;
       this.baseCost = this.baseCostAfterCount(this.value);
     }

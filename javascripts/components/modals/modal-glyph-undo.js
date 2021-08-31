@@ -18,8 +18,8 @@ Vue.component("modal-glyph-undo", {
       Modal.message.show("Glyph Undo can only undo with a Reality!");
     },
     handleYesClick() {
-      Glyphs.undo();
       this.emitClose();
+      Glyphs.undo();
     },
     handleNoClick() {
       this.emitClose();

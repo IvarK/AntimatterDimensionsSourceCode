@@ -456,6 +456,8 @@ const AutomatorBackend = {
   },
 
   restart() {
+    // Sometimes this leads to start getting called twice in quick succession but it's close enough
+    // that there's usually no command in between (possibly same tick).
     this.start(this.state.topLevelScript, AUTOMATOR_MODE.RUN);
     if (this.stack.isEmpty) return;
     this.reset(this.stack._data[0].commands);

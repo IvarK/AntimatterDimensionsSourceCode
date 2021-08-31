@@ -119,8 +119,9 @@ Vue.component("equipped-glyphs", {
     },
     clickGlyph(glyph, idx) {
       if (glyph.symbol === "key266b") {
-        const double = 1 + Math.round(Math.random());
-        const sound = (1 + idx) * double;
+        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is false, so increase by 6
+        const increase = Math.round(Math.random()) ? 6 : 1;
+        const sound = idx + increase;
         new Audio(`audio/note${sound}.mp3`).play();
       }
     }

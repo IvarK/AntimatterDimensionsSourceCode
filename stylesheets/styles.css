@@ -1870,9 +1870,7 @@ screen and (max-width: 480px) {
   animation: a-tesseract-shift 5s infinite;
 }
 
-.t-dark .c-game-header__tesseract-available,
-.t-dark-metro .c-game-header__tesseract-available,
-.t-s6 .c-game-header__tesseract-available {
+.t-universal-dark .c-game-header__tesseract-available {
   background: #EEEEEE;
   animation: a-tesseract-shift-dark 5s infinite;
 }
@@ -1882,9 +1880,7 @@ screen and (max-width: 480px) {
   color: #00c5ff;
 }
 
-.t-dark .c-infinity-dim-tab__tesseract-available:hover,
-.t-dark-metro .c-infinity-dim-tab__tesseract-available:hover,
-.t-s6 .c-infinity-dim-tab__tesseract-available:hover {
+.t-universal-dark .c-infinity-dim-tab__tesseract-available:hover {
   background: white;
 }
 
@@ -2193,9 +2189,7 @@ screen and (max-width: 480px) {
   animation: a-tesseract-shift 5s infinite;
 }
 
-.t-dark .c-infinity-dim-tab__tesseract-button,
-.t-dark-metro .c-infinity-dim-tab__tesseract-button,
-.t-s6 .c-infinity-dim-tab__tesseract-button {
+.t-universal-dark .c-infinity-dim-tab__tesseract-button {
   background: #EEEEEE;
   animation: a-tesseract-shift-dark 5s infinite;
 }
@@ -2205,9 +2199,7 @@ screen and (max-width: 480px) {
   color: #00c5ff;
 }
 
-.t-dark .c-infinity-dim-tab__tesseract-button:hover,
-.t-dark-metro .c-infinity-dim-tab__tesseract-button:hover,
-.t-s6 .c-infinity-dim-tab__tesseract-button:hover {
+.t-universal-dark .c-infinity-dim-tab__tesseract-button:hover {
   background: white;
 }
 
@@ -2218,9 +2210,7 @@ screen and (max-width: 480px) {
   animation: none;
 }
 
-.t-dark .c-infinity-dim-tab__tesseract-button--disabled,
-.t-dark-metro .c-infinity-dim-tab__tesseract-button--disabled,
-.t-s6 .c-infinity-dim-tab__tesseract-button--disabled {
+.t-universal-dark .c-infinity-dim-tab__tesseract-button--disabled {
   background: #444040;
   color: #bfdde8;
   cursor: default;
@@ -2232,9 +2222,7 @@ screen and (max-width: 480px) {
   color: #bfdde8;
 }
 
-.t-dark .c-infinity-dim-tab__tesseract-button--disabled:hover,
-.t-dark-metro .c-infinity-dim-tab__tesseract-button--disabled:hover,
-.t-s6 .c-infinity-dim-tab__tesseract-button--disabled:hover {
+.t-universal-dark .c-infinity-dim-tab__tesseract-button--disabled:hover {
   background: #444040;
   color: #bfdde8;
 }
@@ -2645,14 +2633,12 @@ screen and (max-width: 480px) {
   z-index: 0;
 }
 
-.t-dark .o-achievement__tooltip,
-.t-dark-metro .o-achievement__tooltip {
+.t-universal-dark .o-achievement__tooltip {
   border: 0.1rem solid var(--color-text);
   background: #111111;
 }
 
-.t-dark .o-achievement__tooltip:after,
-.t-dark-metro .o-achievement__tooltip:after {
+.t-universal-dark .o-achievement__tooltip:after {
   border-top-color: var(--color-text);
 }
 
@@ -2902,9 +2888,7 @@ screen and (max-width: 480px) {
   margin: 0.5rem auto;
 }
 
-.t-dark .c-achievements-tab__timer,
-.t-dark-metro .c-achievements-tab__timer,
-.t-s6 .c-achievements-tab__timer {
+.t-universal-dark .c-achievements-tab__timer {
   color: #757575;
 }
 
@@ -3755,10 +3739,8 @@ screen and (max-width: 480px) {
   background-color: var(--color-bad);
 }
 
-.t-dark .o-autobuyer-input--invalid,
-.t-dark-metro .o-autobuyer-input--invalid,
-.t-s1 .o-autobuyer-input--invalid,
-.t-s6 .o-autobuyer-input--invalid {
+.t-universal-dark .o-autobuyer-input--invalid,
+.t-s1 .o-autobuyer-input--invalid {
   background-color: var(--color-bad);
 }
 
@@ -4484,9 +4466,7 @@ screen and (max-width: 480px) {
 }
 
 .t-metro .c-dilation-tab__tachyons,
-.t-dark .c-dilation-tab__tachyons,
-.t-dark-metro .c-dilation-tab__tachyons,
-.t-s6 .c-dilation-tab__tachyons,
+.t-universal-dark .c-dilation-tab__tachyons,
 .t-s8 .c-dilation-tab__tachyons {
   color: #64ddad;
 }
@@ -4513,18 +4493,10 @@ screen and (max-width: 480px) {
 .t-metro .c-dilation-tab__dilated-time-income,
 .t-metro .c-dilation-tab__galaxy-threshold,
 .t-metro .c-dilation-tab__galaxies,
-.t-dark .c-dilation-tab__dilated-time,
-.t-dark .c-dilation-tab__dilated-time-income,
-.t-dark .c-dilation-tab__galaxy-threshold,
-.t-dark .c-dilation-tab__galaxies,
-.t-dark-metro .c-dilation-tab__dilated-time,
-.t-dark-metro .c-dilation-tab__dilated-time-income,
-.t-dark-metro .c-dilation-tab__galaxy-threshold,
-.t-dark-metro .c-dilation-tab__galaxies,
-.t-s6 .c-dilation-tab__dilated-time,
-.t-s6 .c-dilation-tab__dilated-time-income,
-.t-s6 .c-dilation-tab__galaxy-threshold,
-.t-s6 .c-dilation-tab__galaxies,
+.t-universal-dark .c-dilation-tab__dilated-time,
+.t-universal-dark .c-dilation-tab__dilated-time-income,
+.t-universal-dark .c-dilation-tab__galaxy-threshold,
+.t-universal-dark .c-dilation-tab__galaxies,
 .t-s8 .c-dilation-tab__dilated-time,
 .t-s8 .c-dilation-tab__dilated-time-income,
 .t-s8 .c-dilation-tab__galaxy-threshold,
@@ -4823,9 +4795,7 @@ screen and (max-width: 480px) {
   fill: black;
 }
 
-.t-dark .o-tachyon-particle,
-.t-dark-metro .o-tachyon-particle,
-.t-s6 .o-tachyon-particle {
+.t-universal-dark .o-tachyon-particle {
   fill: white;
 }
 
@@ -8349,9 +8319,7 @@ input.o-automator-block-input {
     0.1rem -0.1rem 0.1rem black;
 }
 
-.t-dark .o-h2p-tab-button,
-.t-dark-metro .o-h2p-tab-button,
-.t-s6 .o-h2p-tab-button{
+.t-universal-dark .o-h2p-tab-button {
   border-bottom: 0.1rem solid white;
 }
 

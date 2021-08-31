@@ -716,9 +716,7 @@
   box-shadow: 0 0 0.1rem 0.1rem  rgb(0, 0, 0);
 }
 
-.t-dark .c-sacrificed-glyphs--dragover,
-.t-dark-metro .c-sacrificed-glyphs--dragover,
-.t-s6 .c-sacrificed-glyphs--dragover {
+.t-universal-dark .c-sacrificed-glyphs--dragover {
   border-color: rgb(255, 255, 255);
   box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
 }
@@ -796,9 +794,7 @@
   background-color: gainsboro;
 }
 
-.t-dark .c-glyph-inventory__slot,
-.t-dark-metro .c-glyph-inventory__slot,
-.t-s6 .c-glyph-inventory__slot {
+.t-universal-dark .c-glyph-inventory__slot {
   background-color: #333;
 }
 

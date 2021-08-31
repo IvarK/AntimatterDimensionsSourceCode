@@ -488,9 +488,7 @@
   stroke: black;
 }
 
-.t-dark .o-time-study-connection--bought,
-.t-dark-metro .o-time-study-connection--bought,
-.t-s6 .o-time-study-connection--bought {
+.t-universal-dark .o-time-study-connection--bought {
   stroke: #bbbbbb;
 }
 

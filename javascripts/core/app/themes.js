@@ -35,6 +35,7 @@ const Theme = function Theme(name, config) {
 
     document.body.classList.add(this.cssClass());
     if (this.isMetro) document.body.classList.add("t-universal-metro");
+    if (this.isDark) document.body.classList.add("t-universal-dark");
 
     if (this.isAnimated && player.options.animations.background) {
       document.getElementById("background-animations").style.display = "block";

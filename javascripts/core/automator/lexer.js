@@ -152,7 +152,7 @@ const AutomatorLexer = (() => {
     $autocomplete: "TT",
     $getter: () => Currency.timeTheorems.value,
   });
-  createInCategory(AutomatorCurrency, "Total_TT", /total[ \t]+tt/i, {
+  createInCategory(AutomatorCurrency, "TotalTT", /total[ \t]+tt/i, {
     $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
@@ -362,11 +362,30 @@ const AutomatorLexer = (() => {
 
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
-
+  
+  const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
+  
+  const standardizeAutomatorCurrencyName = function(x) {
+    // This first line exists for this function to usually return quickly;
+    // otherwise it's called enough to cause lag.
+    if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+    for (const i of tokenLists.AutomatorCurrency) {
+      // Check for a match of the full string.
+      if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {
+        return i.$autocomplete.toUpperCase();
+      }
+    }
+    // If we get to this point something has gone wrong, a currency name didn't match any of the currency regexps.
+    throw new Error(`${x} does not seem to be an automator currency`);
+  };
+  
   return {
     lexer,
     tokens: automatorTokens,
     tokenIds,
     tokenMap,
+    standardizeAutomatorCurrencyName,
   };
 })();
+
+const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

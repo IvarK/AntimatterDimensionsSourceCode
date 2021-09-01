@@ -205,7 +205,7 @@ const Enslaved = {
       id: 1,
       lines: [
         "A visitor? I haven’t had one... eons.",
-        "I am... had a name. It’s been lost... to this place.",
+        "I... had a name. It’s been lost... to this place.",
         "The others... won't let me rest. I do their work with time...",
         "Place time ... into places ... that need it...",
         "Watch myself grow... pass and die.",
@@ -215,7 +215,7 @@ const Enslaved = {
     UNLOCK_RUN: {
       id: 2,
       lines: [
-        "The others ... used me. Will use... or destroy you",
+        "The others ... used me. They will use... or destroy you",
         "End my suffering ... power will be yours ... ",
       ]
     },
@@ -232,7 +232,6 @@ const Enslaved = {
       lines: [
         "All... fragments... clones... freed.",
         "I have given... tools... of my imprisoning. Use them...",
-        "...",
         "Freedom from torture... is torture itself.",
       ]
     },

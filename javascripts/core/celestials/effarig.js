@@ -104,15 +104,15 @@ const Effarig = {
         "I am Effarig, and I govern Glyphs.",
         "I am different from Teresa; not as simplistic as you think.",
         "I use the shards of Glyphs to enforce my will.",
-        "Collect them for the bounty of this realm.",
+        "I collect them for the bounty of this realm.",
         "What are you waiting for? Get started.",
       ]
     },
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
-      2, "Do you like my little Stall? It’s not much, but it’s mine."
+      2, "Do you like my little shop? It’s not much, but it’s mine."
     ),
     UNLOCK_GLYPH_FILTER: CelestialQuotes.singleLine(
-      3, "Thank you for your purchase, customer!"
+      3, "This purchase will help you out."
     ),
     UNLOCK_SET_SAVES: CelestialQuotes.singleLine(
       4, "Is that too much? I think it’s too much."

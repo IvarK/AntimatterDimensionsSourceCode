@@ -825,7 +825,6 @@ function simulateTime(seconds, real, fast) {
   } else {
     const progress = {};
     ui.view.modal.progressBar = {};
-    ui.view.modal.progressBar.label = "Simulating offline time...";
     Async.run(loopFn,
       ticks,
       {
@@ -835,15 +834,18 @@ function simulateTime(seconds, real, fast) {
         asyncEntry: doneSoFar => {
           GameIntervals.stop();
           ui.$viewModel.modal.progressBar = {
-            label: "Simulating offline time...",
+            label: "Offline Progress Simulation",
+            info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
+              gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
+              you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
+              simulate the rest of the time with only ${formatInt(1000)} more ticks.`,
+            progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
             startTime: Date.now(),
             button: {
-              text: 'Speed up',
+              text: "Speed up",
               condition: (current, max) => max - current > 1000,
-              tooltip: `Simulate only ${formatInt(1000)} more ticks 
-              (can't be done with less than ${formatInt(1000)} ticks left)`,
               click: () => {
                 const newRemaining = Math.min(progress.remaining, 1000);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.

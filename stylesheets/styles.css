@@ -5527,6 +5527,7 @@ kbd {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  width: 40rem;
   left: 50vw;
   top: 50vh;
   transform: translate(-50%, -50%);
@@ -5539,6 +5540,7 @@ kbd {
 }
 
 .c-modal-progress-bar__label {
+  font-size: large;
   padding-bottom: 0.5rem;
 }
 

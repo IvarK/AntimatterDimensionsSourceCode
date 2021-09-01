@@ -42,7 +42,9 @@ Vue.component("automator-error-page", {
         </span>
         <i>
           Note: Sometimes errors may cause the automator to be unable to scan the rest of the script.
-          This may result in some errors "disappearing" due to other errors occurring in earlier lines.
+          This may result in some errors "disappearing" due to other errors occurring in earlier lines. 
+          Additionally, some of the suggested fixes may be potentially misleading due to the cause of
+          the error being unclear.
         </i>
       </div>
     </div>`

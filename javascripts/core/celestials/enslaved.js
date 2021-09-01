@@ -95,7 +95,7 @@ const Enslaved = {
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
       release = Enslaved.storedTimeInsideEnslaved(release);
-      if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.giveProgress();
+      if (Time.thisReality.totalYears + TimeSpan.fromMilliseconds(release).totalYears > 1) EnslavedProgress.storedTime.giveProgress();
     }
     if (autoRelease) release *= 0.01;
     this.nextTickDiff = Math.clampMax(release, this.timeCap);

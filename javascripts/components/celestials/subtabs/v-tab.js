@@ -134,6 +134,7 @@ Vue.component("v-tab", {
   },
   template: `
     <div class="l-v-celestial-tab">
+      <celestial-quote-history celestial="v" />
       <div v-if="!mainUnlock" class="c-v-info-text">
         {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} Reality Machines
         <br>

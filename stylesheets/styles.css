@@ -6462,6 +6462,12 @@ kbd {
 
 /* #startregion v tab */
 
+.l-v-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .l-v-unlocks-container {
   display: flex;
   flex-wrap: wrap;

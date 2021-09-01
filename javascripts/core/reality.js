@@ -279,6 +279,8 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
+
+  if (V.isRunning) V.quotes.show(V.quotes.REALITY_COMPLETE);
 }
 
 // Due to simulated realities taking a long time in late game, this function might not immediately

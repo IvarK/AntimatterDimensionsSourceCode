@@ -302,9 +302,22 @@ function beginProcessReality(realityProps) {
       asyncEntry: doneSoFar => {
         GameIntervals.stop();
         ui.$viewModel.modal.progressBar = {
-          label: "Processing new glyphs...",
+          label: "Simulating Amplified Reality",
+          info: () => `The game is currently calculating all the resources you would gain from repeating the
+            Reality you just completed ${formatInt(glyphsToProcess)} more times.`,
+          progressName: "Realities",
           current: doneSoFar,
           max: glyphsToProcess,
+          startTime: Date.now(),
+          buttons: [{
+            text: "Skip Glyphs (not yet implemented)",
+            condition: (current, max) => max - current > 100,
+            click: () => {
+              // TODO Fill this in with some code that attempts to take some glyphs as a representative sample
+              // and gives an appropriate amount of glyph sacrifice from that sample. See offline progress
+              // Async.run() for how to update progress bar visuals properly.
+            }
+          }]
         };
       },
       asyncProgress: doneSoFar => {

@@ -16,6 +16,9 @@ Vue.component("modal-progress-bar", {
         TimeSpan.fromMilliseconds(timeSinceStart / (this.progress.current / this.progress.max)).totalSeconds -
         TimeSpan.fromMilliseconds(timeSinceStart).totalSeconds
         , 1);
+    },
+    buttons() {
+      return this.progress.buttons || [];
     }
   },
   methods: {
@@ -27,7 +30,11 @@ Vue.component("modal-progress-bar", {
           {{ progress.label }}
         </div>
         <div>
-          Ticks: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
+          {{ progress.info() }}
+        </div>
+        <br>
+        <div>
+          {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
         </div>
         <div>
           Remaining: {{ remaining }} seconds
@@ -37,6 +44,12 @@ Vue.component("modal-progress-bar", {
             <div class="l-modal-progress-bar__fg c-modal-progress-bar__fg" :style="foregroundStyle" />
           </div>
         </div>
+        <br>
+        <primary-button v-for="button in buttons" v-if="button.condition(progress.current, progress.max)"
+          class="o-primary-btn--width-medium"
+          @click="button.click()">
+          {{ button.text }}
+        </primary-button>
       </div>
     </div>`,
 });

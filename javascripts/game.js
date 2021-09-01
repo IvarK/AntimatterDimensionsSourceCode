@@ -772,8 +772,6 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
-  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 
@@ -799,9 +797,13 @@ function simulateTime(seconds, real, fast) {
   if (InfinityUpgrade.ipOffline.isBought) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
-
-  let loopFn = () => gameLoop(largeDiff);
+  
   let remainingRealSeconds = seconds;
+  let loopFn = i => {
+    const diff = remainingRealSeconds / i;
+    gameLoop(diff);
+    remainingRealSeconds -= diff;
+  };
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
@@ -821,8 +823,8 @@ function simulateTime(seconds, real, fast) {
     GameStorage.postLoadStuff();
     afterSimulation(seconds, playerStart);
   } else {
+    const progress = {};
     ui.view.modal.progressBar = {};
-    ui.view.modal.progressBar.label = "Simulating offline time...";
     Async.run(loopFn,
       ticks,
       {
@@ -832,10 +834,37 @@ function simulateTime(seconds, real, fast) {
         asyncEntry: doneSoFar => {
           GameIntervals.stop();
           ui.$viewModel.modal.progressBar = {
-            label: "Simulating offline time...",
+            label: "Offline Progress Simulation",
+            info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
+              gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
+              you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
+              simulate the rest of the time with only ${formatInt(1000)} more ticks, or the "CANCEL" button to
+              not do any more offline ticks (and use remaining offline time in the first online tick).`,
+            progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
-            startTime: Date.now()
+            startTime: Date.now(),
+            buttons: [{
+              text: "Speed up",
+              condition: (current, max) => max - current > 1000,
+              click: () => {
+                const newRemaining = Math.min(progress.remaining, 1000);
+                // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+                progress.maxIter -= progress.remaining - newRemaining;
+                progress.remaining = newRemaining;
+                // We update the progress bar max data (remaining will update automatically).
+                ui.$viewModel.modal.progressBar.max = progress.maxIter;
+              }
+            },
+            {
+              text: "CANCEL",
+              condition: () => true,
+              click: () => {
+                // We jump to the end.
+                progress.maxIter -= progress.remaining;
+                progress.remaining = 0;
+              }
+            }]
           };
         },
         asyncProgress: doneSoFar => {
@@ -848,7 +877,8 @@ function simulateTime(seconds, real, fast) {
         },
         then: () => {
           afterSimulation(seconds, playerStart);
-        }
+        },
+        progress
       });
   }
 }

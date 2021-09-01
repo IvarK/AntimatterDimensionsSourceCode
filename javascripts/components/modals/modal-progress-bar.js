@@ -17,8 +17,8 @@ Vue.component("modal-progress-bar", {
         TimeSpan.fromMilliseconds(timeSinceStart).totalSeconds
         , 1);
     },
-    button() {
-      return this.progress.button;
+    buttons() {
+      return this.progress.buttons || [];
     }
   },
   methods: {
@@ -45,10 +45,9 @@ Vue.component("modal-progress-bar", {
           </div>
         </div>
         <br>
-        <primary-button v-if="button && button.condition(progress.current, progress.max)"
+        <primary-button v-for="button in buttons" v-if="button.condition(progress.current, progress.max)"
           class="o-primary-btn--width-medium"
-          @click="button.click()"
-          :ach-tooltip="button.tooltip">
+          @click="button.click()">
           {{ button.text }}
         </primary-button>
       </div>

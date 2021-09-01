@@ -309,15 +309,15 @@ function beginProcessReality(realityProps) {
           current: doneSoFar,
           max: glyphsToProcess,
           startTime: Date.now(),
-          button: {
-            text: "Skip Glyphs",
+          buttons: [{
+            text: "Skip Glyphs (not yet implemented)",
             condition: (current, max) => max - current > 100,
             click: () => {
               // TODO Fill this in with some code that attempts to take some glyphs as a representative sample
               // and gives an appropriate amount of glyph sacrifice from that sample. See offline progress
               // Async.run() for how to update progress bar visuals properly.
             }
-          }
+          }]
         };
       },
       asyncProgress: doneSoFar => {

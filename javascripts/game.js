@@ -838,12 +838,13 @@ function simulateTime(seconds, real, fast) {
             info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
-              simulate the rest of the time with only ${formatInt(1000)} more ticks.`,
+              simulate the rest of the time with only ${formatInt(1000)} more ticks, or the "CANCEL" button to
+              not do any more offline ticks (and use remaining offline time in the first online tick).`,
             progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
             startTime: Date.now(),
-            button: {
+            buttons: [{
               text: "Speed up",
               condition: (current, max) => max - current > 1000,
               click: () => {
@@ -854,7 +855,16 @@ function simulateTime(seconds, real, fast) {
                 // We update the progress bar max data (remaining will update automatically).
                 ui.$viewModel.modal.progressBar.max = progress.maxIter;
               }
-            }
+            },
+            {
+              text: "CANCEL",
+              condition: () => true,
+              click: () => {
+                // We jump to the end.
+                progress.maxIter -= progress.remaining;
+                progress.remaining = 0;
+              }
+            }]
           };
         },
         asyncProgress: doneSoFar => {

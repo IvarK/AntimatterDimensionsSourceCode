@@ -105,13 +105,8 @@ Vue.component("automator-event-log", {
       }
     },
     scrollToLine(line) {
-      AutomatorTextUI.editor.scrollIntoView({ line, ch: 0 }, 16);
-      const eventLine = AutomatorData.currentEventLine - 1;
-      AutomatorTextUI.editor.removeLineClass(eventLine, "background", "c-automator-editor__event-line");
-      AutomatorTextUI.editor.removeLineClass(eventLine, "gutter", "c-automator-editor__event-line-gutter");
-      AutomatorTextUI.editor.addLineClass(line - 1, "background", "c-automator-editor__event-line");
-      AutomatorTextUI.editor.addLineClass(line - 1, "gutter", "c-automator-editor__event-line-gutter");
-      AutomatorData.currentEventLine = line;
+      AutomatorTextUI.scrollToLine(line);
+      AutomatorTextUI.updateHighlightedLine(line, "Event");
     }
   },
   template: `

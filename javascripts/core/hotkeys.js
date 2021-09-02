@@ -311,15 +311,21 @@ function keyboardAutomatorToggle() {
     } else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     } else {
-      GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      // Only attempt to start the visible script instead of the existing script if it isn't already running
+      const visibleIndex = player.reality.automator.state.editorScript;
+      const visibleScript = player.reality.automator.scripts[visibleIndex].content;
       AutomatorBackend.restart();
-      AutomatorBackend.start();
+      AutomatorBackend.start(visibleIndex);
+      if (AutomatorData.currentErrors(AutomatorData.currentScriptText(visibleScript)).length === 0) {
+        GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      } else {
+        GameUI.notify.error(`Cannot start script "${AutomatorBackend.scriptName}" (has errors)`);
+      }
       return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
-
   }
 }
 

@@ -8444,6 +8444,13 @@ kbd {
   cursor: grab;
 }
 
+.o-automator-block-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5.5rem;
+}
+
 .c-automator-docs .o-automator-command {
   margin-bottom: 0.5rem;
   margin-right: 0.5rem;

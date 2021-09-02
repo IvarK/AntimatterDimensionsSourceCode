@@ -167,11 +167,6 @@ class AutomatorScript {
 const AutomatorData = {
   // -1 is the ID for the documentation page
   currentInfoPane: -1,
-  // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
-  // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative
-  // of looping through and clearing every line (bad for performance)
-  currentErrorLine: -1,
-  currentEventLine: -1,
   // Used for getting the correct EC count in event log
   lastECCompletionCount: 0,
   // Used as a flag to make sure that wait commands only add one entry to the log instead of every execution attempt
@@ -200,8 +195,9 @@ const AutomatorData = {
     player.reality.automator.state.editorScript = newScriptID;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
-  currentErrors() {
-    return AutomatorGrammar.compile(this.currentScriptText()).errors;
+  currentErrors(script) {
+    const toCheck = script || this.currentScriptText();
+    return AutomatorGrammar.compile(toCheck).errors;
   },
   logCommandEvent(message, line) {
     const currTime = Date.now();
@@ -267,11 +263,16 @@ const AutomatorBackend = {
 
   update(diff) {
     if (!this.isOn) return;
+    let stack;
     switch (this.mode) {
       case AUTOMATOR_MODE.PAUSE:
         return;
       case AUTOMATOR_MODE.SINGLE_STEP:
         this.singleStep();
+        stack = AutomatorBackend.stack.top;
+        // If single step completes the last line and repeat is off, the command stack will be empty and
+        // scrolling will cause an error
+        if (stack) AutomatorTextUI.scrollToLine(stack.lineNumber - 1);
         this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
       case AUTOMATOR_MODE.RUN:
@@ -425,7 +426,7 @@ const AutomatorBackend = {
     const state = this.state;
     const focusedScript = state.topLevelScript === state.editorScript;
     if (focusedScript && this.isRunning && state.followExecution) {
-      AutomatorTextUI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
+      AutomatorTextUI.scrollToLine(AutomatorBackend.stack.top.lineNumber - 1);
     }
   },
 

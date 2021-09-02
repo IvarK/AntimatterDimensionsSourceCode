@@ -481,6 +481,7 @@ let player = {
     v: {
       unlockBits: 0,
       run: false,
+      quotes: [],
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],

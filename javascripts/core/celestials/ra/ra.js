@@ -242,6 +242,7 @@ const Ra = {
     }
   },
   memoryTick(realDiff, generateChunks) {
+    if (!this.isUnlocked) return;
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   productionPerMemoryChunk() {
@@ -317,6 +318,9 @@ const Ra = {
   theoremBoostFactor() {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, Currency.timeTheorems.value.pLog10() - 350) / 50);
+  },
+  get isUnlocked() {
+    return V.spaceTheorems >= 36;
   },
   get isRunning() {
     return player.celestials.ra.run;

@@ -732,7 +732,7 @@ const Player = {
   },
 
   get canCrunch() {
-    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true;
+    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return false;
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
     return player.records.thisInfinity.maxAM.gte(goal);

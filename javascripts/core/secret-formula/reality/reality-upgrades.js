@@ -321,7 +321,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 25,
       cost: 100000,
       requirement: () => `Reach ${format("1e11111")} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
-      checkRequirement: () => Currency.eternityPoints.exponent >= 11111,
+      checkRequirement: () => player.records.bestReality.bestEP.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Unlock the Reality autobuyer and Automator command"
     },

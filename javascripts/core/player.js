@@ -771,7 +771,7 @@ const Player = {
   get eternityGoal() {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
-      : Decimal.NUMBER_MAX_VALUE;
+      : requiredIPForEP(1);
   },
 
   get automatorUnlocked() {

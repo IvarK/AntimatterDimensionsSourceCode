@@ -375,6 +375,7 @@ function finishProcessReality(realityProps) {
   player.records.thisInfinity.realTime = 0;
   player.dimensionBoosts = 0;
   player.galaxies = 0;
+  player.spreadingCancer = 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;

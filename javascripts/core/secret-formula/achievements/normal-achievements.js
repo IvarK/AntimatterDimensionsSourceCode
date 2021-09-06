@@ -1241,7 +1241,9 @@ GameDatabase.achievements.normal = [
     name: "The First Antihistorian",
     get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
     checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
+    effect: 10,
   },
   {
     id: 174,

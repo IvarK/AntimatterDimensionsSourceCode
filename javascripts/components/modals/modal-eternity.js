@@ -19,7 +19,7 @@ Vue.component("modal-eternity", {
           You will also gain an Eternity Point and unlock various upgrades.`;
     },
     gainedEPOnEternity() {
-      return `You will gain ${format(gainedEternityPoints(), 2)} Eternity Points on Eternity.`;
+      return `You will gain ${format(gainedEternityPoints(), 2)} Eternity ${pluralize("Point", gainedEternityPoints())} on Eternity.`;
     },
     startWithIP() {
       return this.startingIP.gt(0)

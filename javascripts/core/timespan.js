@@ -243,6 +243,12 @@ class TimeSpan {
       return `${format(1000 * totalSeconds, 0, 3)} ms`;
     }
     if (totalSeconds < 1) {
+      // This catches all the cases when totalSeconds is less than 1 but not
+      // between 5e-7 and 1e-3. This includes two types of cases:
+      // (1) those less than or equal to 5e-7, which most notations will format as 0
+      // (the most notable case of this kind is 0 itself).
+      // (2) those greater than or equal to 1e-3, which will be formatted with default settings
+      // (for most notations, rounding to the nearest integer number of milliseconds)
       return `${format(1000 * totalSeconds)} ms`;
     }
     if (totalSeconds < 10) {

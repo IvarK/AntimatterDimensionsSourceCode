@@ -236,14 +236,19 @@ class TimeSpan {
    */
   toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
-    if (totalSeconds < 1e-6) {
-      // Don't show this if it rounds to 0.
-      return `< ${format(0.001, 0, 3)} ms`;
-    }
-    if (totalSeconds < 1e-3) {
+    if (totalSeconds > 5e-7 && totalSeconds < 1e-3) {
+      // This conditional happens when when the time is less than 1 millisecond
+      // but big enough not to round to 0 with 3 decimal places (so showing decimal places
+      // won't just show 0 and waste space).
       return `${format(1000 * totalSeconds, 0, 3)} ms`;
     }
     if (totalSeconds < 1) {
+      // This catches all the cases when totalSeconds is less than 1 but not
+      // between 5e-7 and 1e-3. This includes two types of cases:
+      // (1) those less than or equal to 5e-7, which most notations will format as 0
+      // (the most notable case of this kind is 0 itself).
+      // (2) those greater than or equal to 1e-3, which will be formatted with default settings
+      // (for most notations, rounding to the nearest integer number of milliseconds)
       return `${format(1000 * totalSeconds)} ms`;
     }
     if (totalSeconds < 10) {

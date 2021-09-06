@@ -803,7 +803,7 @@ function simulateTime(seconds, real, fast) {
   let remainingRealSeconds = seconds;
   let loopFn = i => {
     const diff = remainingRealSeconds / i;
-    gameLoop(diff);
+    gameLoop(1000 * diff);
     remainingRealSeconds -= diff;
   };
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
@@ -819,8 +819,8 @@ function simulateTime(seconds, real, fast) {
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {
     GameIntervals.stop();
-    for (let i = 0; i < 50; i++) {
-      loopFn();
+    for (let remaining = 50; remaining > 0; remaining--) {
+      loopFn(remaining);
     }
     GameStorage.postLoadStuff();
     afterSimulation(seconds, playerStart);

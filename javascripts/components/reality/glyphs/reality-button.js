@@ -112,8 +112,10 @@ Vue.component("reality-button", {
       if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier) {
         return true;
       }
-      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) return true;
-      if (Enslaved.isRunning && !Enslaved.isCompleted) return true;
+      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked && Currency.eternityPoints.value.exponent > 4000) {
+        return true;
+      }
+      if (Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000) return true;
       return false;
     },
     classObject() {

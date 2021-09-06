@@ -13,6 +13,7 @@ Vue.component("ra-tab", {
       recollectionMult: 1,
       petWithRecollection: "",
       isRunning: false,
+      memoryBoosts: "",
     };
   },
   computed: {
@@ -67,7 +68,7 @@ Vue.component("ra-tab", {
   },
   methods: {
     update() {
-      this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
       this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
@@ -76,6 +77,7 @@ Vue.component("ra-tab", {
       this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
       this.petWithRecollection = Ra.petWithRecollection;
       this.isRunning = Ra.isRunning;
+      this.memoryBoosts = Ra.memoryBoostResources;
     },
     startRun() {
       Modal.celestials.show({ name: "Ra's", number: 4 });
@@ -87,9 +89,11 @@ Vue.component("ra-tab", {
   template: `
     <div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header" v-if="!isRaCapped">
-        Each Memory Chunk generates a base of
+        Each Memory Chunk generates a base of one Memory per second, which has been increased to
         {{ format(memoriesPerChunk, 2, 3) }} {{ "Memory" | pluralize(memoriesPerChunk, "Memories") }}
         per second.
+        <br>
+        This is being increased due to {{ memoryBoosts }}.
       </div>
       <div class="c-ra-memory-header" v-else>
         All Memories have been returned.

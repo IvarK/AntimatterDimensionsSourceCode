@@ -150,7 +150,7 @@ class RaPetState {
       : 0;
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
-    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk() *
+    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk *
       this.memoryUpgradeCurrentMult;
     this.memoryChunks += newMemoryChunks;
     this.memories += newMemories;
@@ -184,7 +184,7 @@ const Ra = {
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
       get chunkGain() { return "Relic Shards gained"; }
-      get memoryGain() { return "best glyph level"; }
+      get memoryGain() { return "best Glyph level"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
@@ -212,7 +212,7 @@ const Ra = {
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
       get chunkGain() { return "Infinity Power"; }
-      get memoryGain() { return "total Celestial Memory levels"; }
+      get memoryGain() { return "total Memory levels"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5); }
@@ -245,12 +245,20 @@ const Ra = {
     if (!this.isUnlocked) return;
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
-  productionPerMemoryChunk() {
+  get productionPerMemoryChunk() {
     let res = RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectOrDefault(1);
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }
     return res;
+  },
+  get memoryBoostResources() {
+    const boostList = [];
+    for (const pet of Ra.pets.all) {
+      if (pet.isUnlocked) boostList.push(pet.memoryGain);
+    }
+    if (Ra.has(RA_UNLOCKS.TT_BOOST)) boostList.push("current Time Theorems");
+    return `${boostList.slice(0, -1).join(", ")} and ${boostList[boostList.length - 1]}`;
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredMemoriesForLevel(level) {
@@ -548,7 +556,7 @@ const RA_UNLOCKS = {
   AUTO_BLACK_HOLE_POWER: {
     id: 14,
     description: "Unlock Enslaved",
-    reward: "Black Hole power upgrades are bought automatically",
+    reward: "Unlock Black Hole power upgrade autobuyers",
     pet: Ra.pets.enslaved,
     level: 1,
     displayIcon: `<span class="fas fa-circle"></span>`
@@ -647,6 +655,8 @@ const RA_UNLOCKS = {
     description: "Get V to level 10",
     reward: "Time Theorems boost all forms of continuous non-dimension production",
     effect: {
+      // All of these are accessed directly from RA_UNLOCKS across much of the game, but are effectively dummied out
+      // before the upgrade itself is unlocked due to theoremBoostFactor evaluating to zero if the upgrade is missing.
       ttGen: () => Math.pow(10, 5 * Ra.theoremBoostFactor()),
       eternity: () => Math.pow(10, 2 * Ra.theoremBoostFactor()),
       infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),

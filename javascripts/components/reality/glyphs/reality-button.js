@@ -106,12 +106,28 @@ Vue.component("reality-button", {
     formatThresholdText(condition, threshold, resourceName) {
       if (condition) return "";
       return `(${format(threshold, 2, 2)} ${resourceName} to improve)`;
+    },
+    // Make the button have a visual animation if Realitying will give a reward
+    hasSpecialReward() {
+      if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier) {
+        return true;
+      }
+      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) return true;
+      if (Enslaved.isRunning && !Enslaved.isCompleted) return true;
+      return false;
+    },
+    classObject() {
+      return {
+        "c-reality-button--unlocked": this.canReality,
+        "c-reality-button--locked": !this.canReality,
+        "c-reality-button--special": this.hasSpecialReward(),
+      };
     }
   },
   template: `
     <button
-      :class="['l-reality-button', 'c-reality-button', 'infotooltip',
-        canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
+      class="l-reality-button c-reality-button infotooltip"
+      :class="classObject()"
       @click="handleClick"
     >
       <div class="l-reality-button__contents">

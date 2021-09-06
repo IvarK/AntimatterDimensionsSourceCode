@@ -626,6 +626,16 @@ button:focus {
   border-style: solid;
 }
 
+.c-reality-button--special {
+  animation: a-celstial-reward-glow 3s infinite;
+}
+
+@keyframes a-celstial-reward-glow {
+  0%   { box-shadow: inset 0 0 4rem var(--color-celestials) }
+  50%  { box-shadow: inset 0 0 0 }
+  100%  { box-shadow: inset 0 0 4rem var(--color-celestials) }
+}
+
 .t-dark-metro .c-reality-button,
 .t-inverted-metro .c-reality-button,
 .t-metro .c-reality-button,

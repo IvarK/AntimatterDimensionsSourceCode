@@ -145,4 +145,19 @@ GameDatabase.tabNotifications = {
     condition: () => player.celestials.teresa.pouredAmount !== 0 && Teresa.isUnlocked,
     events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT]
   },
+  alchemyUnlock: {
+    id: 11,
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "glyphs"
+      },
+      {
+        parent: "reality",
+        tab: "alchemy"
+      }
+    ],
+    condition: () => player.celestials.ra.pets.effarig.level >= 2,
+    events: [GAME_EVENT.GAME_TICK_AFTER]
+  },
 };

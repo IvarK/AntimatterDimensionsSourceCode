@@ -154,6 +154,7 @@ function initializeResourcesAfterEternity() {
   player.records.thisInfinity.realTime = 0;
   player.dimensionBoosts = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
+  player.spreadingCancer = 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);

@@ -92,8 +92,10 @@ Vue.component("ra-tab", {
         Each Memory Chunk generates a base of one Memory per second, which has been increased to
         {{ format(memoriesPerChunk, 2, 3) }} {{ "Memory" | pluralize(memoriesPerChunk, "Memories") }}
         per second.
-        <br>
-        This is being increased due to {{ memoryBoosts }}.
+        <span v-if="memoriesPerChunk > 1">
+          <br>
+          This is being increased due to {{ memoryBoosts }}.
+        </span>
       </div>
       <div class="c-ra-memory-header" v-else>
         All Memories have been returned.

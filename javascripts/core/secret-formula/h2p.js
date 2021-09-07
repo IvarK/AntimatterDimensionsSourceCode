@@ -1306,8 +1306,8 @@ have their own How to Play entry.
 Dark Matter Dimensions can have their intervals upgraded down to a minimum of ${formatInt(10)}ms, at which point
 you cannot upgrade the interval any further. You can choose to ascend Dark Matter Dimensions which reach
 that point, which initially multiplies Dark Matter gain by ${formatInt(POWER_DM_PER_ASCENSION)} and Dark Energy by
-${formatInt(POWER_DE_PER_ASCENSION)}. The interval gets multiplied ${formatInt(1200)}, but can be upgraded once again.
-Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
+${formatInt(POWER_DE_PER_ASCENSION)}. The interval gets multiplied by ${formatInt(1200)}, but can be upgraded once
+again. Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
 <br>
 <br>
 An Imaginary Upgrade allows you to unlock a prestige called Annihilation. Annihilation resets your Dark Matter

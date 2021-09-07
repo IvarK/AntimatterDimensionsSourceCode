@@ -48,7 +48,7 @@ const Enslaved = {
   },
   get isStoringGameTime() {
     return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused &&
-      !EternityChallenge(12).isRunning;
+      !EternityChallenge(12).isRunning && !Laitela.isRunning;
   },
   get isStoringRealTime() {
     return Enslaved.isUnlocked && player.celestials.enslaved.isStoringReal;

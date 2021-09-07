@@ -201,7 +201,7 @@ GameDatabase.achievements.normal = [
     id: 41,
     name: "Spreading Cancer",
     get description() { return `Buy ${formatInt(10)} Antimatter Galaxies in total while using cancer notation.`; },
-    checkRequirement: () => player.spreadingCancer >= 10,
+    checkRequirement: () => player.secretUnlocks.spreadingCancer >= 10,
     checkEvent: [GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER]
   },
   {

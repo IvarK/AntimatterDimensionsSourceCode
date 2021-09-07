@@ -174,6 +174,7 @@ let player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
+    spreadingCancer: 0,
     why: 0,
     dragging: 0,
     themes: new Set(),

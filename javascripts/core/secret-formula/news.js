@@ -2253,7 +2253,7 @@ GameDatabase.news = [
   {
     id: "l8",
     text: "A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.",
-    get unlocked() { return player.spreadingCancer > 0; }
+    get unlocked() { return player.secretUnlocks.spreadingCancer > 0; }
   },
   {
     id: "l9",
@@ -2369,7 +2369,7 @@ GameDatabase.news = [
   {
     id: "l22",
     text: "Anti Emoji Movie a huge hit!",
-    get unlocked() { return player.spreadingCancer >= 5; }
+    get unlocked() { return player.secretUnlocks.spreadingCancer >= 5; }
   },
   {
     id: "l23",
@@ -2494,7 +2494,7 @@ GameDatabase.news = [
   {
     id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    get unlocked() { return player.spreadingCancer >= 3999; }
+    get unlocked() { return player.secretUnlocks.spreadingCancer >= 3999; }
   },
   {
     id: "l46",

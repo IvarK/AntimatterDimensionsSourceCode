@@ -125,7 +125,7 @@ function galaxyReset() {
   player.galaxies++;
   if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
   softReset(0);
-  if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
+  if (Notations.current === Notation.cancer) player.secretUnlocks.spreadingCancer++;
   player.achievementChecks.noSacrifices = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
@@ -146,7 +146,7 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   const newGalaxies = Math.clampMax(
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
     limit);
-  if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
+  if (Notations.current === Notation.cancer) player.secretUnlocks.spreadingCancer += newGalaxies - player.galaxies;
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();

@@ -174,6 +174,7 @@ let player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
+    spreadingCancer: 0,
     why: 0,
     dragging: 0,
     themes: new Set(),
@@ -771,7 +772,7 @@ const Player = {
   get eternityGoal() {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
-      : Decimal.NUMBER_MAX_VALUE;
+      : requiredIPForEP(1);
   },
 
   get automatorUnlocked() {

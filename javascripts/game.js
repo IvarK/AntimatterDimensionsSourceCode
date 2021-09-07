@@ -457,14 +457,16 @@ function gameLoop(passDiff, options = {}) {
       const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
-      Enslaved.currentBlackHoleStoreAmountPerMs = (totalTimeFactor - reducedTimeFactor) * amplification;
+      const beforeStore = player.celestials.enslaved.stored;
       player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
-        diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
+        diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
+      Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored - beforeStore) / diff;
       speedFactor = reducedTimeFactor;
     }
     diff *= speedFactor;
   } else if (fixedSpeedActive) {
     diff *= getGameSpeedupFactor();
+    Enslaved.currentBlackHoleStoreAmountPerMs = 0;
   }
   player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
   Enslaved.isReleaseTick = false;

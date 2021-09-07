@@ -37,5 +37,6 @@ const TabNotification = (function() {
     blackHoleUnlock: new TabNotificationState(db.blackHoleUnlock),
     automatorUnlock: new TabNotificationState(db.automatorUnlock),
     teresaUnlock: new TabNotificationState(db.teresaUnlock),
+    alchemyUnlock: new TabNotificationState(db.alchemyUnlock),
   };
 }());

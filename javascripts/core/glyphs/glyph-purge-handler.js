@@ -107,6 +107,14 @@ const GlyphSacrificeHandler = {
   },
   refineGlyph(glyph) {
     const resource = this.glyphAlchemyResource(glyph);
+    // This technically completely trashes the glyph for no rewards if not unlocked, but this will only happen ever
+    // if the player specificially tries to do so (in which case they're made aware that it's useless) or if the
+    // Reality choices contain *only* locked glyph choices. That's a rare enough edge case that I think it's okay
+    // to just delete it instead of complicating the program flow more than it already is by attempting sacrifice.
+    if (!resource.isUnlocked) {
+      Glyphs.removeFromInventory(glyph);
+      return;
+    }
     const rawRefinementGain = this.glyphRawRefinementGain(glyph);
     const refinementGain = this.glyphRefinementGain(glyph);
     resource.amount += refinementGain;

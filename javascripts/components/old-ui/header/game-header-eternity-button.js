@@ -6,7 +6,6 @@ Vue.component("game-header-eternity-button", {
       isVisible: false,
       type: EP_BUTTON_DISPLAY_TYPE.FIRST_TIME,
       gainedEP: new Decimal(0),
-      minIP: new Decimal(0),
       currentEP: new Decimal(0),
       currentEPPM: new Decimal(0),
       peakEPPM: new Decimal(0),
@@ -31,9 +30,6 @@ Vue.component("game-header-eternity-button", {
         "o-eternity-button--dilation": this.isDilation,
         "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
       };
-    },
-    isGainedEPAmountZero() {
-      return this.gainedEP.eq(0);
     },
     peakEPPMThreshold: () => new Decimal("1e100"),
     isPeakEPPMVisible() {
@@ -61,7 +57,7 @@ Vue.component("game-header-eternity-button", {
       return {
         color: `rgb(${rgb.join(",")})`,
         "transition-duration": "0.2s"
-     };
+      };
     },
     tachyonAmountStyle() {
       // Hovering over the button makes all the text on the button black; this text inherits that
@@ -116,7 +112,6 @@ Vue.component("game-header-eternity-button", {
       }
 
       const gainedEP = gainedEternityPoints();
-      if (this.gainedEP.eq(0)) this.minIP = requiredIPForEP(1);
       this.currentEP.copyFrom(Currency.eternityPoints);
       this.gainedEP.copyFrom(gainedEP);
       const hasNewContent = !PlayerProgress.realityUnlocked() &&
@@ -178,12 +173,7 @@ Vue.component("game-header-eternity-button", {
         Eternity for
         <span :style="amountStyle">{{ format(gainedEP, 2, 0) }}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>
-        <template v-if="isGainedEPAmountZero">
-          Reach {{ format(minIP) }} IP to
-          <br>
-          gain Eternity Points
-        </template>
-        <template v-else-if="isPeakEPPMVisible">
+        <template v-if="isPeakEPPMVisible">
           {{ format(currentEPPM, 2, 2) }} EP/min
           <br>
           Peaked at {{ format(peakEPPM, 2, 2) }} EP/min

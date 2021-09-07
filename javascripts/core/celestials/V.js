@@ -137,7 +137,7 @@ const V_UNLOCKS = {
   },
   FAST_AUTO_EC: {
     id: 3,
-    reward: "Achievement multiplier affects Auto-EC completion time.",
+    reward: "Achievement multiplier reduces Auto-EC completion time.",
     get description() { return `Have ${formatInt(10)} V-Achievements`; },
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each

@@ -18,8 +18,11 @@ Vue.component("autobuyer-toggles", {
     },
     disableContinuum(newValue) {
       player.auto.disableContinuum = newValue;
-      // eslint-disable-next-line no-bitwise
-      player.achievementChecks.continuumThisReality |= !player.auto.disableContinuum;
+      // If continuum is not disabled (i.e., is enabled) we note that
+      // it's been enabled in the relevant achievement check.
+      if (!player.auto.disableContinuum) {
+        player.achievementChecks.continuumThisReality = true;
+      }
     }
   },
   methods: {

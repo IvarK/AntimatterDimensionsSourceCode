@@ -1020,6 +1020,10 @@ GameStorage.devMigrations = {
       delete player.auto.bigCrunch.xCurrent;
       delete player.auto.eternity.xCurrent;
     },
+    player => {
+      // Fix an issue where a boolean property could become int and trigger number checking code.
+      player.achievementChecks.continuumThisReality = Boolean(player.achievementChecks.continuumThisReality);
+    }
   ],
 
   patch(player) {

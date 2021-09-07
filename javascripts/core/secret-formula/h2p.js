@@ -505,8 +505,8 @@ from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing 
       name: "Eternity",
       info: () => `
 Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this
-point except challenge times, Achievements, and total antimatter. You will be able to access more content after your
-first Eternity.
+point except challenge times, Achievements, and anything under the General section of the Statistics tab. You will be
+able to access more content after your first Eternity.
 <br>
 <br>
 You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
@@ -695,13 +695,13 @@ can be repeatedly purchased as many times as you can afford them.
 When you reach ${formatPostBreak("1e4000")} EP and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
-will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
+will reset almost the entire game up to this point, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
 <br>
 <br>
 Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the 
-pre-Reality Achievements and all of their associated rewards. However, you will still all values related to statistics 
-such as total antimatter produced, total time played, and fastest Challenge completion times.
+pre-Reality Achievements and all of their associated rewards. However, you will still keep all values under the General
+header in the Statistics tab and all of your best Challenge times.
 <br>
 <br>
 You need to redo the requirements for each Achievement in order to get their rewards again, but you will also passively

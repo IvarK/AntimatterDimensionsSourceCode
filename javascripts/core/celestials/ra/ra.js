@@ -255,10 +255,13 @@ const Ra = {
   get memoryBoostResources() {
     const boostList = [];
     for (const pet of Ra.pets.all) {
-      if (pet.isUnlocked) boostList.push(pet.memoryGain);
+      if (pet.memoryProductionMultiplier !== 1) boostList.push(pet.memoryGain);
     }
     if (Ra.has(RA_UNLOCKS.TT_BOOST)) boostList.push("current Time Theorems");
-    return `${boostList.slice(0, -1).join(", ")} and ${boostList[boostList.length - 1]}`;
+
+    if (boostList.length === 1) return `${boostList[0]}`;
+    if (boostList.length === 2) return `${boostList[0]} and ${boostList[1]}`;
+    return `${boostList.slice(0, -1).join(", ")}, and ${boostList[boostList.length - 1]}`;
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredMemoriesForLevel(level) {

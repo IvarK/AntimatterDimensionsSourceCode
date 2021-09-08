@@ -45,17 +45,19 @@ Vue.component("replicanti-gain-text", {
       }
 
       const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / LOG10_MAX_VALUE);
-      let baseGalaxiesPerSecond, effectiveMaxRG;
+      const timeFromZeroRG = galaxies => 50 * Math.log((galaxies + 49.5) / 49.5);
+      let baseGalaxiesPerSecond, effectiveMaxRG, effectiveCurrentRG;
       if (RealityUpgrade(6).isBought) {
         baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
-        const timeFromZeroRG = galaxies => 50 * Math.log((galaxies + 49.5) / 49.5);
         effectiveMaxRG = timeFromZeroRG(Replicanti.galaxies.max + Replicanti.galaxies.extra) -
+          timeFromZeroRG(Replicanti.galaxies.extra);
+        effectiveCurrentRG = timeFromZeroRG(Replicanti.galaxies.bought + Replicanti.galaxies.extra) -
           timeFromZeroRG(Replicanti.galaxies.extra);
       } else {
         baseGalaxiesPerSecond = galaxiesPerSecond;
         effectiveMaxRG = Replicanti.galaxies.max;
+        effectiveCurrentRG = Replicanti.galaxies.bought;
       }
-      const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
       
       if (remainingTime === 0) {
         this.remainingTimeText = "At Infinite Replicanti";
@@ -74,7 +76,10 @@ Vue.component("replicanti-gain-text", {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} Replicanti
           ${pluralize("Galaxy", galaxiesPerSecond, "Galaxies")} per second`;
         }
-        this.galaxyText += ` (all Replicanti Galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
+        const allGalaxyTime = Decimal.divide(effectiveMaxRG - effectiveCurrentRG, baseGalaxiesPerSecond).toNumber();
+        const thisGalaxyTime = remainingTime - baseGalaxiesPerSecond.reciprocal().toNumber();
+        this.galaxyText += ` (all Replicanti Galaxies within 
+          ${TimeSpan.fromSeconds(Math.clampMin(allGalaxyTime + thisGalaxyTime, 0))})`;
       } else {
         this.galaxyText = ``;
       }

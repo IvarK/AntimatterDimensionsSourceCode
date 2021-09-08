@@ -11,6 +11,8 @@ Vue.component("replicanti-tab", {
       mult: new Decimal(0),
       hasTDMult: false,
       multTD: new Decimal(0),
+      hasDTMult: false,
+      multDT: new Decimal(0),
       hasRaisedCap: false,
       replicantiCap: new Decimal(0),
       distantRG: 0,
@@ -57,7 +59,23 @@ Vue.component("replicanti-tab", {
         },
         cost => `+${formatInt(1)} Costs: ${format(cost)} IP`
       );
-    }
+    },
+    boostText() {
+      const boostList = [];
+      boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.mult, 2, 2)}</span>
+        multiplier on all Infinity Dimensions`);
+      if (this.hasTDMult) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multTD, 2, 2)}</span>
+          multiplier on all Time Dimensions`);
+      }
+      if (this.hasDTMult) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
+          multiplier to Dilated Time`);
+      }
+      if (boostList.length === 1) return `${boostList[0]}.`;
+      if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;
+      return `${boostList.slice(0, -1).join(",<br>")},<br> and ${boostList[boostList.length - 1]}.`;
+    },
   },
   methods: {
     update() {
@@ -74,6 +92,9 @@ Vue.component("replicanti-tab", {
       this.mult.copyFrom(replicantiMult());
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
+      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0;
+      this.multDT = Math.clampMin(Decimal.log10(player.replicanti.amount) *
+        getAdjustedGlyphEffect("replicationdtgain"), 1);
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
@@ -109,16 +130,9 @@ Vue.component("replicanti-tab", {
         <p class="c-replicanti-description">
           You have
           <span class="c-replicanti-description__accent">{{ format(amount, 2, 0) }}</span>
-          Replicanti, translated to a
+          Replicanti, translated to
           <br>
-          <span class="c-replicanti-description__accent">{{ formatX(mult, 2, 2) }}</span>
-          multiplier on all Infinity Dimensions
-          <span v-if="hasTDMult">
-            <br>
-            and a
-            <span class="c-replicanti-description__accent">{{ formatX(multTD, 2, 2) }}</span>
-            multiplier on all Time Dimensions
-          </span>
+          <span v-html="boostText" />
         </p>
         <br>
         <div class="l-replicanti-upgrade-row">

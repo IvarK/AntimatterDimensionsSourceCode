@@ -76,11 +76,14 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get canTick() {
-    return DimBoost.canBeBought && super.canTick;
+    return DimBoost.canBeBought && DimBoost.requirement.isSatisfied && super.canTick;
   }
 
   get resetTickOn() {
-    return Achievement(143).isUnlocked ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.INFINITY;
+    // Resetting on infinity seems slightly faster than resetting on galaxy before
+    // "Yo dawg, I heard you liked reskins...", and about the same afterwards,
+    // so we always reset on infinity rather than galaxy.
+    return PRESTIGE_EVENT.INFINITY;
   }
 
   tick() {

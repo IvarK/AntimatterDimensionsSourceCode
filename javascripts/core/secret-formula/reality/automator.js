@@ -48,7 +48,8 @@ GameDatabase.reality.automator = {
       examples: [
         "wait infinity",
         "wait am >= 1e308",
-        "wait completions >= 5 or wait EC9 Completions >= 4",
+        "wait pending completions >= 5",
+        "wait EC9 Completions >= 4",
       ]
     },
     {

@@ -9,7 +9,7 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "antimatter",
-        name: "Dimensions",
+        name: "Antimatter Dimensions",
         symbol: "Ω",
         component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab",

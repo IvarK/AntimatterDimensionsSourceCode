@@ -119,6 +119,11 @@ the game closed.
     {
       name: "Dimensions",
       info: () => `
+Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
+with ${formatInt(10)} antimatter when you first open the game. And you can
+spend it to buy the 1st Dimension to start the game.
+<br>
+<br>
 Dimensions are your production units in game. The first Dimension produces your antimatter.
 Each consecutive Dimension produces the previous one, allowing you to have steady growth.
 There are eight Dimensions total.
@@ -743,7 +748,8 @@ Level - This contributes to how strong your Glyph is, and it scales based on how
 it from.
 <br>
 Rarity - This is a percentage, between ${formatPercents(0)} and ${formatPercents(1)}, which also affects the strength
-of your Glyph. This is random, but can be influenced by various upgrades.
+of your Glyph. This is random, but can be influenced by various upgrades. The percentage is effectively a quality
+rating, higher values are better.
 <br>
 Effects - These are the boosts that equipping the Glyph will give you, and can contain up to four effects. Stronger
 Glyphs will generally have more effects than weaker Glyphs.

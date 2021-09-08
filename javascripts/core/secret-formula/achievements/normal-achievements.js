@@ -287,7 +287,7 @@ GameDatabase.achievements.normal = [
   {
     id: 52,
     name: "Age of Automation",
-    description: "Max Antimatter Dimension and Tickspeed upgrade autobuyers.",
+    description: "Max the interval for Antimatter Dimension and Tickspeed upgrade autobuyers.",
     checkRequirement: () => Autobuyers.antimatterDimensions.concat(Autobuyer.tickspeed)
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
@@ -295,7 +295,7 @@ GameDatabase.achievements.normal = [
   {
     id: 53,
     name: "Definitely not worth it",
-    description: "Max all normal autobuyers.",
+    description: "Max the intervals for all normal autobuyers.",
     // The upgradeable autobuyers are dimensions, tickspeed, dimension boost,
     // galaxy, and big crunch (the ones you get from normal challenges).
     // We don't count autobuyers which can be upgraded via e.g. perks as upgradeable.

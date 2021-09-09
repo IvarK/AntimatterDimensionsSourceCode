@@ -119,7 +119,7 @@ GameDatabase.tabs = [
       {
         key: "normal",
         name: "Achievements",
-        symbol: "<i class='fas fa-star'></i>",
+        symbol: "<i class='fas fa-trophy'></i>",
         component: "normal-achievements-tab",
         id: 0,
         hidable: true,
@@ -263,7 +263,7 @@ GameDatabase.tabs = [
       {
         key: "milestones",
         name: "Eternity Milestones",
-        symbol: "<i class='fas fa-trophy'></i>",
+        symbol: "<i class='fas fa-star'></i>",
         component: "eternity-milestones-tab",
         id: 2,
         hidable: true,

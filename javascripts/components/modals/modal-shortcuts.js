@@ -28,7 +28,9 @@ Vue.component("modal-shortcuts", {
   },
   template: `
     <div class="c-modal-shortcuts l-modal-shortcuts">
+      <modal-close-button @click="emitClose" />
       <div class="l-modal-shortcuts__column">
+        <h2>Hotkey List</h2>
         <div class="l-modal-shortcuts-row">
           <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Buy 1 Dimension</span>
           <kbd>shift</kbd><kbd>1</kbd>-<kbd>shift</kbd><kbd>8</kbd>
@@ -47,6 +49,7 @@ Vue.component("modal-shortcuts", {
         </div>
       </div>
       <div class="l-modal-shortcuts__column l-modal-shortcuts__column--right">
+        <div style="height: 3rem;" />
         <div class="l-modal-shortcuts-row">
           <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Modifier key</span>
           <kbd>shift</kbd>

@@ -83,8 +83,12 @@ Vue.component("modal-enslaved-hints", {
     }
   },
   template: `
-    <div class="c-reality-glyph-creation">
+    <div
+      class="c-reality-glyph-creation"
+      style="height: 60rem; overflow-y: scroll;"
+    >
       <modal-close-button @click="emitClose" />
+      <h2>Cracks in The Enslaved Ones' Reality</h2>
       <div>
         This Reality seems to be resisting your efforts to complete it. So far you have done the following:
       </div>

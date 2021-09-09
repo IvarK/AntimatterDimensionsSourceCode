@@ -46,7 +46,8 @@ const Autobuyers = (function() {
     prestige,
     single,
     arrays,
-    upgradeable: antimatterDimensions.concat(Autobuyer.tickspeed, Autobuyer.dimboost, Autobuyer.galaxy),
+    upgradeable: antimatterDimensions.concat(
+      Autobuyer.tickspeed, Autobuyer.dimboost, Autobuyer.galaxy, Autobuyer.bigCrunch),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);

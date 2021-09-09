@@ -20,10 +20,11 @@ Vue.component("autobuyer-box", {
           const formatted = format(sec, 2, 2);
           // The concern here is that the Big Crunch autobuyer (or any other)
           // might seem to be capped but not actually be. We fix this by checking
-          // if it appears capped but isn't, and if so we use 0.11 instead.
-          // This doesn't work in e.g. Roman notation (it still looks capped)
+          // if it appears capped (formatted === format(0.1, 2, 2))
+          // but isn't (sec > 0.1), and if so we use 0.11 instead.
+          // This doesn't work in e.g. Roman notation (formatting 0.11 still looks capped)
           // but showing something else in Roman notation would be very inaccurate.
-          if (formatted === format(0.1, 2, 2)) {
+          if (formatted === format(0.1, 2, 2) && sec > 0.1) {
             return format(0.11, 2, 2);
           }
           return formatted;

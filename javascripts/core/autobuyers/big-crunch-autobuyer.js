@@ -79,10 +79,17 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
       this.amount = this.amount.times(mult);
     }
   }
+  
+  get canTick() {
+    return Player.canCrunch && super.canTick;
+  }
+
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
 
   tick() {
-    if (Player.canCrunch) super.tick();
-    if (Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE)) return;
+    super.tick();
     let proc = !player.break || Player.isInAntimatterChallenge;
     if (!proc) {
       switch (this.mode) {
@@ -100,10 +107,6 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     if (proc) {
       bigCrunchResetRequest(true);
     }
-  }
-
-  get resetTickOn() {
-    return PRESTIGE_EVENT.ETERNITY;
   }
 
   reset() {

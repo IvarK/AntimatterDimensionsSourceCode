@@ -15,6 +15,7 @@ class SubtabState {
   }
 
   get isHidden() {
+    if (Enslaved.isRunning) return false;
     // eslint-disable-next-line no-bitwise
     return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) && 
       this.config.hidable;
@@ -50,6 +51,21 @@ class SubtabState {
       this.config.id === Tabs.current._currentSubtab.config.id) return;
     // eslint-disable-next-line no-bitwise
     player.options.hiddenSubtabBits[this._parent.config.id] ^= (1 << this.config.id);
+
+    // If this subtab is the "current" subtab and it gets hidden, we need to change it to one which is still visible
+    if (player.options.hiddenSubtabBits[this._parent.config.id] !== 0) {
+      const lowestVisibleSubtabID = Math.min(...this._parent.subtabs.filter(s => s.isAvailable).map(s => s.config.id));
+      // When manually hiding all the subtabs, lowestVisibleSubtabID somehow gets set to Infinity on the last subtab.
+      // We have two cases to consider when the player next modifies the subtab - they unhide the entire tab in which
+      // case it makes the most sense to default them to the first subtab, or they manually unhide a subtab while the
+      // tab itself is still hidden (which is handled in the else-if).
+      player.options.lastOpenSubtab[this._parent.config.id] = Number.isFinite(lowestVisibleSubtabID)
+        ? lowestVisibleSubtabID
+        : 0;
+    } else if (this._parent.subtabs.countWhere(s => s.isAvailable) === 1) {
+      // As noted above, this happens when this is the only visible subtab. Set the visible subtab to this one.
+      player.options.lastOpenSubtab[this._parent.config.id] = this.config.id;
+    }
   }
 
   get isOpen() {
@@ -76,6 +92,7 @@ class TabState {
   }
 
   get isHidden() {
+    if (Enslaved.isRunning) return false;
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
     return (((player.options.hiddenTabBits & (1 << this.config.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;

@@ -116,6 +116,14 @@ Vue.component("equipped-glyphs", {
         showSetName: true,
         displaySacrifice: true,
       });
+    },
+    clickGlyph(glyph, idx) {
+      if (glyph.symbol === "key266b") {
+        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is true, so increase by 6
+        const increase = Math.round(Math.random()) ? 6 : 1;
+        const sound = idx + increase;
+        new Audio(`audio/note${sound}.mp3`).play();
+      }
     }
   },
   template: `
@@ -139,6 +147,7 @@ Vue.component("equipped-glyphs", {
             :circular="true"
             :isActiveGlyph="true"
             style="-webkit-user-drag: none;"
+            @clicked="clickGlyph(glyph, idx)"
           />
           <div
             v-else

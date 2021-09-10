@@ -14,13 +14,8 @@ Vue.component("automator-error-page", {
       this.errors = AutomatorData.currentErrors();
     },
     scrollToLine(line) {
-      AutomatorTextUI.editor.scrollIntoView({ line, ch: 0 }, 16);
-      const errorLine = AutomatorData.currentErrorLine - 1;
-      AutomatorTextUI.editor.removeLineClass(errorLine, "background", "c-automator-editor__error-line");
-      AutomatorTextUI.editor.removeLineClass(errorLine, "gutter", "c-automator-editor__error-line-gutter");
-      AutomatorTextUI.editor.addLineClass(line - 1, "background", "c-automator-editor__error-line");
-      AutomatorTextUI.editor.addLineClass(line - 1, "gutter", "c-automator-editor__error-line-gutter");
-      AutomatorData.currentErrorLine = line;
+      AutomatorTextUI.scrollToLine(line);
+      AutomatorTextUI.updateHighlightedLine(line, "Error");
     }
   },
   template: `
@@ -47,7 +42,9 @@ Vue.component("automator-error-page", {
         </span>
         <i>
           Note: Sometimes errors may cause the automator to be unable to scan the rest of the script.
-          This may result in some errors "disappearing" due to other errors occurring in earlier lines.
+          This may result in some errors "disappearing" due to other errors occurring in earlier lines. 
+          Additionally, some of the suggested fixes may be potentially misleading due to the cause of
+          the error being unclear.
         </i>
       </div>
     </div>`

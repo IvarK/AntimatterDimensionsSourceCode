@@ -68,15 +68,19 @@ const Async = {
    * @private
    */
   async _run(fun, maxIter, config) {
-    let remaining = this.runForTime(fun, maxIter, config);
+    if (!config.progress) config.progress = {};
+    // We need to use config.progress variables because something else could change them
+    // (e.g. someone speeding up offline progress)
+    config.progress.maxIter = maxIter;
+    config.progress.remaining = this.runForTime(fun, config.progress.maxIter, config);
     const sleepTime = config.sleepTime || 1;
-    if (!remaining) return;
-    if (config.asyncEntry) config.asyncEntry(maxIter - remaining);
+    if (!config.progress.remaining) return;
+    if (config.asyncEntry) config.asyncEntry(config.progress.maxIter - config.progress.remaining);
     do {
       await this.sleepPromise(sleepTime);
-      remaining = this.runForTime(fun, remaining, config);
-      if (config.asyncProgress) config.asyncProgress(maxIter - remaining);
-    } while (remaining > 0);
+      config.progress.remaining = this.runForTime(fun, config.progress.remaining, config);
+      if (config.asyncProgress) config.asyncProgress(config.progress.maxIter - config.progress.remaining);
+    } while (config.progress.remaining > 0);
     if (config.asyncExit) config.asyncExit();
   }
 };

@@ -201,7 +201,7 @@ GameDatabase.achievements.normal = [
     id: 41,
     name: "Spreading Cancer",
     get description() { return `Buy ${formatInt(10)} Antimatter Galaxies in total while using cancer notation.`; },
-    checkRequirement: () => player.spreadingCancer >= 10,
+    checkRequirement: () => player.secretUnlocks.spreadingCancer >= 10,
     checkEvent: [GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER]
   },
   {
@@ -288,7 +288,7 @@ GameDatabase.achievements.normal = [
     id: 52,
     name: "Age of Automation",
     description: "Max Antimatter Dimension and Tickspeed upgrade autobuyers.",
-    checkRequirement: () => Autobuyers.upgradeable
+    checkRequirement: () => Autobuyers.antimatterDimensions.concat(Autobuyer.tickspeed)
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
@@ -296,8 +296,10 @@ GameDatabase.achievements.normal = [
     id: 53,
     name: "Definitely not worth it",
     description: "Max all normal autobuyers.",
+    // The upgradeable autobuyers are dimensions, tickspeed, dimension boost,
+    // galaxy, and big crunch (the ones you get from normal challenges).
+    // We don't count autobuyers which can be upgraded via e.g. perks as upgradeable.
     checkRequirement: () => Autobuyers.upgradeable
-      .concat([Autobuyer.galaxy, Autobuyer.dimboost, Autobuyer.bigCrunch])
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 12,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
@@ -1241,7 +1243,9 @@ GameDatabase.achievements.normal = [
     name: "The First Antihistorian",
     get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
     checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
+    effect: 10,
   },
   {
     id: 174,

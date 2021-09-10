@@ -134,6 +134,7 @@ Vue.component("v-tab", {
   },
   template: `
     <div class="l-v-celestial-tab">
+      <celestial-quote-history celestial="v" />
       <div v-if="!mainUnlock" class="c-v-info-text">
         {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} Reality Machines
         <br>
@@ -167,7 +168,8 @@ Vue.component("v-tab", {
           <br><br>
           Cursed Glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>
-          Each Hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
+          Each Hard V-Achievement counts as two V-achievements and will award {{ formatInt(2) }} Space Theorems
+          instead of {{ formatInt(1) }}.
           <br>
           Goal reduction is significantly more expensive for Hard V-Achievements.
         </div>

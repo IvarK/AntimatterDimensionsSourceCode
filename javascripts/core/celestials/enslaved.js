@@ -47,7 +47,8 @@ const Enslaved = {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get isStoringGameTime() {
-    return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+    return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused &&
+      !EternityChallenge(12).isRunning && !Laitela.isRunning;
   },
   get isStoringRealTime() {
     return Enslaved.isUnlocked && player.celestials.enslaved.isStoringReal;
@@ -95,7 +96,9 @@ const Enslaved = {
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
       release = Enslaved.storedTimeInsideEnslaved(release);
-      if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.giveProgress();
+      if (Time.thisReality.totalYears + TimeSpan.fromMilliseconds(release).totalYears > 1) {
+        EnslavedProgress.storedTime.giveProgress();
+      }
     }
     if (autoRelease) release *= 0.01;
     this.nextTickDiff = Math.clampMax(release, this.timeCap);
@@ -205,7 +208,7 @@ const Enslaved = {
       id: 1,
       lines: [
         "A visitor? I haven’t had one... eons.",
-        "I am... had a name. It’s been lost... to this place.",
+        "I... had a name. It’s been lost... to this place.",
         "The others... won't let me rest. I do their work with time...",
         "Place time ... into places ... that need it...",
         "Watch myself grow... pass and die.",
@@ -215,7 +218,7 @@ const Enslaved = {
     UNLOCK_RUN: {
       id: 2,
       lines: [
-        "The others ... used me. Will use... or destroy you",
+        "The others ... used me. They will use... or destroy you",
         "End my suffering ... power will be yours ... ",
       ]
     },
@@ -232,7 +235,6 @@ const Enslaved = {
       lines: [
         "All... fragments... clones... freed.",
         "I have given... tools... of my imprisoning. Use them...",
-        "...",
         "Freedom from torture... is torture itself.",
       ]
     },

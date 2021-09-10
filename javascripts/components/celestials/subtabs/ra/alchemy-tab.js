@@ -234,7 +234,9 @@ Vue.component("alchemy-tab", {
         </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      When refining a glyph, it will only give you resources up to a cap
+      Glyphs can now be refined using your Glyph filter in the Glyphs tab.
+      <br>
+      When refining a Glyph, it will only give you resources up to a cap
       of {{ formatX(capFactor) }} its refinement value.
       <span v-if="reactionsAvailable">
         Reactions trigger once every time you Reality, unaffected by amplification from stored real time.

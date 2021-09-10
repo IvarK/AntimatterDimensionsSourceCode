@@ -388,7 +388,9 @@ function gameLoop(passDiff, options = {}) {
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
-  if (AlchemyResource.momentum.isUnlocked) player.celestials.ra.momentumTime += realDiff;
+  if (AlchemyResource.momentum.isUnlocked) {
+    player.celestials.ra.momentumTime += realDiff * Achievement(173).effectOrDefault(1);
+  }
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.tickDarkMatter(realDiff);
@@ -455,14 +457,16 @@ function gameLoop(passDiff, options = {}) {
       const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
-      Enslaved.currentBlackHoleStoreAmountPerMs = (totalTimeFactor - reducedTimeFactor) * amplification;
+      const beforeStore = player.celestials.enslaved.stored;
       player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
-        diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
+        diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
+      Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored - beforeStore) / diff;
       speedFactor = reducedTimeFactor;
     }
     diff *= speedFactor;
   } else if (fixedSpeedActive) {
     diff *= getGameSpeedupFactor();
+    Enslaved.currentBlackHoleStoreAmountPerMs = 0;
   }
   player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
   Enslaved.isReleaseTick = false;
@@ -772,8 +776,6 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
-  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 
@@ -799,9 +801,23 @@ function simulateTime(seconds, real, fast) {
   if (InfinityUpgrade.ipOffline.isBought) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
-
-  let loopFn = () => gameLoop(largeDiff);
+  
   let remainingRealSeconds = seconds;
+  // During async code the number of ticks remaining can go down suddenly
+  // from "Speed up" which means tick length needs to go up, and thus
+  // you can't just divide total time by total ticks to get tick length.
+  // For example, suppose you had 6000 offline ticks, and called "Speed up"
+  // 1000 ticks in, meaning that after "Speed up" there'd only be 1000 ticks more
+  // (so 1000 + 1000 = 2000 ticks total). Dividing total time by total ticks would
+  // use 1/6th of the total time before "Speed up" (1000 of 6000 ticks), and 1/2 after
+  // (1000 of 2000 ticks). Short of some sort of magic user prediction to figure out
+  // whether the user *will* press "Speed up" at some point, dividing remaining time
+  // by remaining ticks seems like the best thing to do.
+  let loopFn = i => {
+    const diff = remainingRealSeconds / i;
+    gameLoop(1000 * diff);
+    remainingRealSeconds -= diff;
+  };
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
@@ -814,15 +830,21 @@ function simulateTime(seconds, real, fast) {
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {
+    // Fast simulations happen when simulating between 10 and 50 seconds of offline time.
+    // One easy way to get this is to autosave every 30 or 60 seconds, wait until the save timer
+    // in the bottom-left hits 15 seconds, and refresh (without saving directly beforehand).
     GameIntervals.stop();
-    for (let i = 0; i < 50; i++) {
-      loopFn();
+    // Fast simulations are always 50 ticks. They're done in this weird countdown way because
+    // we want to be able to call the same function that we call when using async code (to avoid
+    // duplicating functions), and that function expects a parameter saying how many ticks are remaining.
+    for (let remaining = 50; remaining > 0; remaining--) {
+      loopFn(remaining);
     }
     GameStorage.postLoadStuff();
     afterSimulation(seconds, playerStart);
   } else {
+    const progress = {};
     ui.view.modal.progressBar = {};
-    ui.view.modal.progressBar.label = "Simulating offline time...";
     Async.run(loopFn,
       ticks,
       {
@@ -832,10 +854,37 @@ function simulateTime(seconds, real, fast) {
         asyncEntry: doneSoFar => {
           GameIntervals.stop();
           ui.$viewModel.modal.progressBar = {
-            label: "Simulating offline time...",
+            label: "Offline Progress Simulation",
+            info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
+              gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
+              you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
+              simulate the rest of the time with only ${formatInt(1000)} more ticks, or the "CANCEL" button to
+              not do any more offline ticks (and use remaining offline time in the first online tick).`,
+            progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
-            startTime: Date.now()
+            startTime: Date.now(),
+            buttons: [{
+              text: "Speed up",
+              condition: (current, max) => max - current > 1000,
+              click: () => {
+                const newRemaining = Math.min(progress.remaining, 1000);
+                // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+                progress.maxIter -= progress.remaining - newRemaining;
+                progress.remaining = newRemaining;
+                // We update the progress bar max data (remaining will update automatically).
+                ui.$viewModel.modal.progressBar.max = progress.maxIter;
+              }
+            },
+            {
+              text: "CANCEL",
+              condition: () => true,
+              click: () => {
+                // We jump to the end.
+                progress.maxIter -= progress.remaining;
+                progress.remaining = 0;
+              }
+            }]
           };
         },
         asyncProgress: doneSoFar => {
@@ -848,7 +897,8 @@ function simulateTime(seconds, real, fast) {
         },
         then: () => {
           afterSimulation(seconds, playerStart);
-        }
+        },
+        progress
       });
   }
 }

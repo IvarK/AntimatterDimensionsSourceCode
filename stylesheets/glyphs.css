@@ -841,6 +841,16 @@
   right: -9rem;
 }
 
+.l-glyph-side-box-button--attention {
+  animation: a-glyph-side-box-button-glow 1s infinite;
+}
+
+@keyframes a-glyph-side-box-button-glow {
+  0%   { box-shadow: inset 0 0 2rem var(--color-ra-pet-effarig) }
+  50%  { box-shadow: inset 0 0 0 }
+  100%  { box-shadow: inset 0 0 2rem var(--color-ra-pet-effarig) }
+}
+
 .o-glyph-color-checkbox {
   display: flex;
   justify-content: center;

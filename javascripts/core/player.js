@@ -174,6 +174,7 @@ let player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
+    spreadingCancer: 0,
     why: 0,
     dragging: 0,
     themes: new Set(),
@@ -481,6 +482,7 @@ let player = {
     v: {
       unlockBits: 0,
       run: false,
+      quotes: [],
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -731,14 +733,14 @@ const Player = {
   },
 
   get canCrunch() {
-    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true;
+    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return false;
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
     return player.records.thisInfinity.maxAM.gte(goal);
   },
 
   get canEternity() {
-    return Currency.infinityPoints.gte(Player.eternityGoal);
+    return player.records.thisEternity.maxIP.gte(Player.eternityGoal);
   },
 
   get bestRunIPPM() {
@@ -770,7 +772,7 @@ const Player = {
   get eternityGoal() {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
-      : Decimal.NUMBER_MAX_VALUE;
+      : requiredIPForEP(1);
   },
 
   get automatorUnlocked() {

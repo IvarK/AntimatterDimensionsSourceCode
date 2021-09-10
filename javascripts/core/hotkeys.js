@@ -87,11 +87,23 @@ const shortcuts = [
     function: () => eternityResetRequest(),
     visible: () => PlayerProgress.eternityUnlocked() || Player.canEternity
   }, {
+    name: "Toggle Time Study respec",
+    keys: ["shift+e"],
+    type: "bindHotkey",
+    function: () => player.respec = !player.respec,
+    visible: () => PlayerProgress.eternityUnlocked()
+  }, {
     name: "Reality",
     keys: ["y"],
     type: "bindRepeatableHotkey",
     function: () => requestManualReality(),
     visible: () => PlayerProgress.realityUnlocked() || isRealityAvailable()
+  }, {
+    name: "Toggle Glyph unequip",
+    keys: ["shift+y"],
+    type: "bindHotkey",
+    function: () => player.reality.respec = !player.reality.respec,
+    visible: () => PlayerProgress.realityUnlocked()
   }, {
     name: "Start/Pause Automator",
     keys: ["u"],
@@ -299,8 +311,11 @@ function keyboardToggleContinuum() {
   if (!Laitela.continuumUnlocked) return;
   player.auto.disableContinuum = !player.auto.disableContinuum;
   GameUI.notify.info(`${(player.auto.disableContinuum) ? "Disabled" : "Enabled"} Continuum`);
-  // eslint-disable-next-line no-bitwise
-  player.achievementChecks.continuumThisReality |= !player.auto.disableContinuum;
+  // If continuum is not disabled (i.e., is enabled) we note that
+  // it's been enabled in the relevant achievement check.
+  if (!player.auto.disableContinuum) {
+    player.achievementChecks.continuumThisReality = true;
+  }
 }
 
 function keyboardAutomatorToggle() {
@@ -311,15 +326,21 @@ function keyboardAutomatorToggle() {
     } else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     } else {
-      GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      // Only attempt to start the visible script instead of the existing script if it isn't already running
+      const visibleIndex = player.reality.automator.state.editorScript;
+      const visibleScript = player.reality.automator.scripts[visibleIndex].content;
       AutomatorBackend.restart();
-      AutomatorBackend.start();
+      AutomatorBackend.start(visibleIndex);
+      if (AutomatorData.currentErrors(AutomatorData.currentScriptText(visibleScript)).length === 0) {
+        GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      } else {
+        GameUI.notify.error(`Cannot start script "${AutomatorBackend.scriptName}" (has errors)`);
+      }
       return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
-
   }
 }
 

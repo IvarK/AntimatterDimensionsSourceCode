@@ -7,6 +7,7 @@ Vue.component("header-challenge-display", {
       infinityUnlocked: false,
       showExit: false,
       exitText: "",
+      resetCelestial: false,
     };
   },
   computed: {
@@ -92,6 +93,7 @@ Vue.component("header-challenge-display", {
       this.activityTokens = this.parts.map(part => part.activityToken());
       this.showExit = this.activeChallengeNames.length !== 0;
       this.exitText = this.exitDisplay();
+      this.resetCelestial = player.options.retryCelestial;
     },
     // Process exit requests from the inside out; exit any Challenges first, then dilation, then Celestial Reality
     exitButtonClicked() {
@@ -107,6 +109,7 @@ Vue.component("header-challenge-display", {
     exitDisplay() {
       if (Player.isInAnyChallenge) return "Exit Challenge";
       if (player.dilation.active) return "Exit Dilation";
+      if (this.resetCelestial) return "Restart Reality";
       return "Exit Reality";
     },
   },

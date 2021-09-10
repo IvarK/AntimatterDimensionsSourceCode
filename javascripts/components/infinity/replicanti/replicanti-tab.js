@@ -35,6 +35,8 @@ Vue.component("replicanti-tab", {
           // Checking isCapped() prevents text overflow when formatted as "__ ➜ __"
           return TimeSpan.fromMilliseconds(intervalNum).toStringShort(false);
         }
+        if (actualInterval.lt(0.01)) return `< ${format(0.01, 2, 2)}ms`;
+        if (actualInterval.gt(1000)) return `${format(actualInterval.div(1000), 2, 2)}s`;
         return `${format(actualInterval, 2, 2)}ms`;
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,

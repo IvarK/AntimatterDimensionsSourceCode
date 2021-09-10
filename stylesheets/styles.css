@@ -617,6 +617,16 @@ button:focus {
   border-style: solid;
 }
 
+.c-reality-button--special {
+  animation: a-celstial-reward-glow 3s infinite;
+}
+
+@keyframes a-celstial-reward-glow {
+  0%   { box-shadow: inset 0 0 4rem var(--color-celestials) }
+  50%  { box-shadow: inset 0 0 0 }
+  100%  { box-shadow: inset 0 0 4rem var(--color-celestials) }
+}
+
 .t-universal-metro .c-reality-button {
   border-width: 0.1rem;
   border-radius: 0;
@@ -1639,6 +1649,7 @@ screen and (max-width: 480px) {
   color: var(--color-infinity);
   background-color: black;
   border-color: var(--color-infinity);
+  font-weight: bold;
 }
 
 .o-infinity-button:hover {
@@ -1662,6 +1673,11 @@ screen and (max-width: 480px) {
 
 .t-dark-metro .o-infinity-button {
   box-shadow: 1px 1px 1px 0 black;
+}
+
+.o-infinity-button--unavailable {
+  cursor: default;
+  opacity: 0.5;
 }
 
 /*#region Eternity*/
@@ -1738,6 +1754,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-button--unavailable {
   cursor: default;
+  opacity: 0.5;
 }
 
 /*#endregion Eternity*/
@@ -5302,6 +5319,7 @@ kbd {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  width: 40rem;
   left: 50vw;
   top: 50vh;
   transform: translate(-50%, -50%);
@@ -5314,6 +5332,7 @@ kbd {
 }
 
 .c-modal-progress-bar__label {
+  font-size: large;
   padding-bottom: 0.5rem;
 }
 
@@ -6210,11 +6229,17 @@ kbd {
 
 /* #startregion v tab */
 
+.l-v-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .l-v-unlocks-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 81.25rem;
+  width: 97.5rem;
   margin: auto;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -6224,8 +6249,8 @@ kbd {
 
 .l-v-unlocks-container li {
   position: relative;
-  width: 22.5rem;
-  padding: 0 0 26rem;
+  width: 27rem;
+  padding: 0 0 31.2rem;
   list-style-type: none;
   transform: rotate(-60deg) skewY(30deg);
   overflow: hidden;
@@ -6261,7 +6286,11 @@ kbd {
 
 .o-v-unlock-name {
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+}
+
+.o-v-unlock-desc {
+  font-size: 1.2rem;
 }
 
 .o-v-unlock-amount {
@@ -6348,8 +6377,8 @@ kbd {
 }
 
 .c-v-run-button__line {
-  width: 10rem;
-  height: 2rem;
+  width: 12rem;
+  height: 2.4rem;
   position: absolute;
   background: #e3c759;
   z-index: -1;
@@ -6362,20 +6391,20 @@ kbd {
 }
 
 .c-v-run-button__line--1 {
-  top: 19.5rem;
-  left: 10.5rem;
+  top: 23.4rem;
+  left: 12.6rem;
   transform: rotate(-30deg);
 }
 
 .c-v-run-button__line--2 {
-  top: 12rem;
-  left: -2.5rem;
+  top: 14.4rem;
+  left: -3rem;
   transform: rotate(90deg);
 }
 
 .c-v-run-button__line--3 {
-  top: 4.5rem;
-  left: 10.5rem;
+  top: 5.4rem;
+  left: 12.6rem;
   transform: rotate(30deg);
 }
 
@@ -6392,21 +6421,21 @@ kbd {
 }
 
 @keyframes a-c-v-run-button__line--1--move {
-  0% {top: 19.5rem; left: 10.5rem; transform: rotate(-30deg);}
-  50% {top: 19.5rem; left: 1.5rem; transform: rotate(30deg);}
-  100% {top: 19.5rem; left: 10.5rem; transform: rotate(-30deg);}
+  0% {top: 23.4rem; left: 12.6rem; transform: rotate(-30deg);}
+  50% {top: 23.4rem; left: 1.8rem; transform: rotate(30deg);}
+  100% {top: 23.4rem; left: 12.6rem; transform: rotate(-30deg);}
 }
 
 @keyframes a-c-v-run-button__line--2--move {
-  0% {top: 12rem; left: -2.5rem; transform: rotate(90deg);}
-  50% {top: 4.5rem; left: 2rem; transform: rotate(150deg);}
-  100% {top: 12rem; left: -2.5rem; transform: rotate(90deg);}
+  0% {top: 14.4rem; left: -3rem; transform: rotate(90deg);}
+  50% {top: 5.4rem; left: 2.4rem; transform: rotate(150deg);}
+  100% {top: 14.4rem; left: -3rem; transform: rotate(90deg);}
 }
 
 @keyframes a-c-v-run-button__line--3--move {
-  0% {top: 4.5rem; left: 10.5rem; transform: rotate(30deg);}
-  50% {top: 12rem; left: 14.5rem; transform: rotate(90deg);}
-  100% {top: 4.5rem; left: 10.5rem; transform: rotate(30deg);}
+  0% {top: 5.4rem; left: 12.6rem; transform: rotate(30deg);}
+  50% {top: 14.4rem; left: 17.4rem; transform: rotate(90deg);}
+  100% {top: 5.4rem; left: 12.6rem; transform: rotate(30deg);}
 }
 
 @keyframes a-c-v-run-button__line--burst {
@@ -8105,6 +8134,13 @@ kbd {
   width: 8.5rem;
   user-select: none;
   cursor: grab;
+}
+
+.o-automator-block-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5.5rem;
 }
 
 .c-automator-docs .o-automator-command {

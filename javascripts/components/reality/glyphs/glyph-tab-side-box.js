@@ -9,6 +9,7 @@ Vue.component("glyph-tab-side-box", {
       unlockedSets: false,
       unlockedAlchemy: false,
       unlockedAny: false,
+      hasRefined: false,
     };
   },
   methods: {
@@ -18,6 +19,7 @@ Vue.component("glyph-tab-side-box", {
       this.unlockedSets = EffarigUnlock.setSaves.isUnlocked;
       this.unlockedAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       this.unlockedAny = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
+      this.hasRefined = AlchemyResources.all.map(res => res.amount).some(a => a > 0);
     },
     setSidebarState(state) {
       player.reality.showSidebarPanel = state;
@@ -46,6 +48,7 @@ Vue.component("glyph-tab-side-box", {
           </button>
           <button
             class="l-glyph-side-box-button c-reality-upgrade-btn"
+            :class="[hasRefined ? '' : 'l-glyph-side-box-button--attention']"
             v-if="unlockedAlchemy"
             @click="setSidebarState(2)"
           >

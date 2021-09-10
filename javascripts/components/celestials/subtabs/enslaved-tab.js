@@ -16,6 +16,9 @@ Vue.component("modal-enslaved-hints", {
     hintCost() {
       return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)} years`;
     },
+    formattedStored() {
+      return `${format(TimeSpan.fromMilliseconds(this.currentStored).totalYears, 2)} years`;
+    },
     hasProgress(id) {
       return this.progressEntries.some(entry => entry.id === id);
     },
@@ -103,7 +106,7 @@ Vue.component("modal-enslaved-hints", {
         gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
         divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
         <br><br>
-        The next hint will cost {{ hintCost }} Stored Time.
+        The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
         <span v-if="currentStored < nextHintCost">
           You will reach this if you charge your Black Hole for {{ timeEstimate }}.
         </span>
@@ -180,7 +183,7 @@ Vue.component("enslaved-tab", {
     sliderProps() {
       return {
         min: 0,
-        max: 1000,
+        max: 990,
         interval: 1,
         show: true,
         width: "60rem",
@@ -389,7 +392,7 @@ Vue.component("enslaved-tab", {
               <div v-if="!hasUnlock(unlock)">
                 Costs: {{ timeDisplayShort(unlock.price) }}
               </div>
-              <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
+              <span v-if="isStoringBlackHole && !hasUnlock(unlock) && timeUntilBuy(unlock.price) > 0">
                 Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
               </span>
             </button>

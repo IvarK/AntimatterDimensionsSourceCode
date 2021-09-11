@@ -187,7 +187,11 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   purchase() {
-    if (super.purchase()) return true;
+    if (super.purchase()) {
+      // This applies the 4th column of infinity upgrades retroactively
+      if (this.config.id.includes("skip")) skipResetsIfPossible();
+      return true;
+    }
     if (this.canCharge) {
       this.charge();
       return true;

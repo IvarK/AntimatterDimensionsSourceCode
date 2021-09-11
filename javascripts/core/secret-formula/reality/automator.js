@@ -424,6 +424,22 @@ GameDatabase.reality.automator = {
         "notify \"Dilation reached\"",
         "notify \"ECs completed\""
       ]
-    }
+    },
+    {
+      id: 18,
+      isUnlocked: () => true,
+      keyword: "(Comments)",
+      name: "<b>#|//</b> - leaves a comment in your script",
+      syntax: "<b>#</b> text<br><b>//</b> text",
+      description: `Allows you to leave a note to yourself within your script. This may be
+        useful for organizing or keeping track of which parts of your script do various things,
+        in a way that appears more readable than just the commands. These commands will do nothing
+        positive or negative for the automator's functionality, and only serve as a tool to
+        help you keep the steps of your scripts easier to follow if desired.`,
+      examples: [
+        "# Get 1e20 before starting EC1",
+        "// This loop alternates dilation and pushing"
+      ]
+    },
   ]
 };

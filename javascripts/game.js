@@ -752,16 +752,19 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerBefore) {
+function afterSimulation(seconds, playerBefore, hotkeySetting) {
   if (seconds > 600) {
     const playerAfter = deepmerge.all([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
   GameUI.notify.showBlackHoles = true;
+  player.options.hotkeys = hotkeySetting;
 }
 
 function simulateTime(seconds, real, fast) {
+  const playerHotkeySetting = player.options.hotkeys;
+  player.options.hotkeys = false;
   // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
@@ -841,7 +844,7 @@ function simulateTime(seconds, real, fast) {
       loopFn(remaining);
     }
     GameStorage.postLoadStuff();
-    afterSimulation(seconds, playerStart);
+    afterSimulation(seconds, playerStart, playerHotkeySetting);
   } else {
     const progress = {};
     ui.view.modal.progressBar = {};
@@ -858,8 +861,9 @@ function simulateTime(seconds, real, fast) {
             info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
-              simulate the rest of the time with only ${formatInt(1000)} more ticks, or the "CANCEL" button to
-              not do any more offline ticks (and use remaining offline time in the first online tick).`,
+              simulate the rest of the time with ${formatInt(1000)} more ticks (${formatInt(100)} ticks if less than
+              ${formatInt(3000)} remain). The "CANCEL" button will instead use all the remaining offline time in the
+              first online tick.`,
             progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
@@ -868,7 +872,8 @@ function simulateTime(seconds, real, fast) {
               text: "Speed up",
               condition: (current, max) => max - current > 1000,
               click: () => {
-                const newRemaining = Math.min(progress.remaining, 1000);
+                const newTicks = progress.remaining < 3000 ? 100 : 1000;
+                const newRemaining = Math.min(progress.remaining, newTicks);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
                 progress.maxIter -= progress.remaining - newRemaining;
                 progress.remaining = newRemaining;
@@ -896,7 +901,7 @@ function simulateTime(seconds, real, fast) {
           GameStorage.postLoadStuff();
         },
         then: () => {
-          afterSimulation(seconds, playerStart);
+          afterSimulation(seconds, playerStart, playerHotkeySetting);
         },
         progress
       });

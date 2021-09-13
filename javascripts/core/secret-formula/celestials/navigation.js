@@ -586,7 +586,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return Currency.realities.value / GameDatabase.celestials.v.mainUnlock.realities;
+        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 1);
+        return db.progress();
       },
       drawOrder: -1,
       node: {
@@ -599,12 +600,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Realities condition for V";
-            const realities = Currency.realities.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.realities;
+            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 1);
+            if (complete >= 1) return `${db.name} condition for V`;
             return [
               "V",
-              `Reach ${format(realities, 2)} / ${format(goal, 2)} Realities.`
+              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
             ];
           },
           angle: -135,
@@ -625,8 +625,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.eternities.value.pLog10() /
-                Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
+        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 2);
+        return db.progress();
       },
       drawOrder: -1,
       node: {
@@ -639,12 +639,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Eternity condition for V";
-            const eternities = Currency.eternities.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.eternities;
+            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 2);
+            if (complete >= 1) return `${db.name} condition for V`;
             return [
               "V",
-              `Reach ${format(eternities, 2)} / ${format(goal, 2)} Eternities.`
+              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
             ];
           },
           angle: -135,
@@ -666,8 +665,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.infinitiesTotal.value.pLog10() /
-                Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
+        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 3);
+        return db.progress();
       },
       drawOrder: -1,
       node: {
@@ -680,12 +679,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Infinity condition for V";
-            const infinities = Currency.infinitiesTotal.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.infinities;
+            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 3);
+            if (complete >= 1) return `${db.name} condition for V`;
             return [
               "V",
-              `Reach ${format(infinities, 2)} / ${format(goal, 2)} Infinities.`
+              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
             ];
           },
           angle: -135,
@@ -706,8 +704,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.dilatedTime.value.pLog10() /
-          GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
+        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 4);
+        return db.progress();
       },
       drawOrder: -1,
       node: {
@@ -720,12 +718,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Dilated Time condition for V";
-            const dilatedTime = Currency.dilatedTime.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.dilatedTime;
+            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 4);
+            if (complete >= 1) return `${db.name} condition for V`;
             return [
               "V",
-              `Reach ${format(dilatedTime, 2)} / ${format(goal, 2)} Dilated Time.`
+              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
             ];
           },
           angle: -135,
@@ -746,8 +743,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return (emphasizeEnd(player.replicanti.amount.pLog10() /
-          GameDatabase.celestials.v.mainUnlock.replicanti.log10()));
+        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 5);
+        return db.progress();
       },
       drawOrder: -1,
       node: {
@@ -760,12 +757,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Replicanti condition for V";
-            const replicanti = player.replicanti.amount;
-            const goal = GameDatabase.celestials.v.mainUnlock.replicanti;
+            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 5);
+            if (complete >= 1) return `${db.name} condition for V`;
             return [
               "V",
-              `Reach ${format(replicanti, 2)} / ${format(goal, 2)} Replicanti.`
+              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
             ];
           },
           angle: -135,
@@ -786,8 +782,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.realityMachines.value.pLog10() /
-          Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
+        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 6);
+        return db.progress();
       },
       drawOrder: -1,
       node: {
@@ -800,12 +796,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Reality Machines condition for V";
-            const rm = Currency.realityMachines.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.rm;
+            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 6);
+            if (complete >= 1) return `${db.name} condition for V`;
             return [
               "V",
-              `Reach ${format(rm, 2)} / ${format(goal, 2)} Reality Machines.`
+              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
             ];
           },
           angle: -135,

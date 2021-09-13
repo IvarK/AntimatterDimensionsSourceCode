@@ -6,13 +6,56 @@ const V_REDUCTION_MODE = {
 };
 
 GameDatabase.celestials.v = {
+  // Note: mainUnlock IDs here are one-indexed to match with navigation indices
   mainUnlock: {
-    realities: 10000,
-    eternities: 1e70,
-    infinities: 1e160,
-    dilatedTime: new Decimal("1e320"),
-    replicanti: new Decimal("1e320000"),
-    rm: 1e60,
+    realities: {
+      id: 1,
+      name: "Realities",
+      resource: () => Currency.realities.value,
+      requirement: 10000,
+      format: x => formatInt(x),
+      progress: () => Currency.realities.value / 10000,
+    },
+    eternities: {
+      id: 2,
+      name: "Eternities",
+      resource: () => Currency.eternities.value,
+      requirement: 1e70,
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.eternities.value.pLog10() / 70),
+    },
+    infinities: {
+      id: 3,
+      name: "Infinities",
+      resource: () => Currency.infinitiesTotal.value,
+      requirement: 1e160,
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.infinitiesTotal.value.pLog10() / 160),
+    },
+    dilatedTime: {
+      id: 4,
+      name: "Dilated Time",
+      resource: () => Currency.dilatedTime.value,
+      requirement: new Decimal("1e320"),
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.dilatedTime.value.pLog10() / 320),
+    },
+    replicanti: {
+      id: 5,
+      name: "Replicanti",
+      resource: () => player.replicanti.amount,
+      requirement: new Decimal("1e320000"),
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(player.replicanti.amount.pLog10() / 320000),
+    },
+    rm: {
+      id: 6,
+      name: "Reality Machines",
+      resource: () => Currency.realityMachines.value,
+      requirement: 1e60,
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.realityMachines.value.pLog10() / 60),
+    },
   },
   runUnlocks: [
     {

@@ -1103,12 +1103,12 @@ without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
 <br>
 After the subtab is unlocked from the Achievement, you are met with another set of requirements to fully unlock V.
-You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities and have
-${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent).
-Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
-${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
-${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and
-${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.
+You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities.requirement)} Realities and have
+${format(GameDatabase.celestials.v.mainUnlock.rm.requirement)} RM (which is not spent).
+Additionally you need to reach ${format(GameDatabase.celestials.v.mainUnlock.eternities.requirement)} Eternities,
+${format(GameDatabase.celestials.v.mainUnlock.infinities.requirement)} Infinities,
+${format(GameDatabase.celestials.v.mainUnlock.dilatedTime.requirement)} Dilated Time, and
+${format(GameDatabase.celestials.v.mainUnlock.replicanti.requirement)} Replicanti, all in the same reality.
 <br>
 <br>
 When you meet all of those requirements, you will be able to access V's Reality. However, completing the

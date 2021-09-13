@@ -142,6 +142,7 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
+    offlineEnabled: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
     isRunning: false,
@@ -210,6 +211,7 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
+      this.offlineEnabled = player.options.offlineProgress;
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
@@ -232,6 +234,7 @@ Vue.component("enslaved-tab", {
       Enslaved.toggleStoreReal();
     },
     toggleAutoStoreReal() {
+      if (!this.offlineEnabled) return;
       Enslaved.toggleAutoStoreReal();
     },
     useStored() {
@@ -359,11 +362,15 @@ Vue.component("enslaved-tab", {
                 </div>
               </button>
               <button
-                :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
+                :class="['o-enslaved-mechanic-button',
+                  {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled}]"
                 @click="toggleAutoStoreReal"
               >
-                <div>
+                <div v-if="offlineEnabled">
                   {{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}
+                </div>
+                <div v-else>
+                  Offline Progress is disabled
                 </div>
               </button>
               <div>

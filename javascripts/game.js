@@ -202,7 +202,7 @@ function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
 }
 
 function isOfflineEPGainEnabled() {
-  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+  return player.options.offlineProgress && !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
     !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
@@ -798,7 +798,7 @@ function simulateTime(seconds, real, fast) {
     Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
   }
 
-  if (InfinityUpgrade.ipOffline.isBought) {
+  if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
   

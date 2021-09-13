@@ -196,9 +196,12 @@ GameDatabase.infinity.upgrades = (function() {
     ipOffline: {
       id: "ipOffline",
       cost: 1000,
-      description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
-      effect: () =>
-        player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      description: () => (player.options.offlineProgress
+        ? `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`
+        : "This upgrade would give offline IP generation, but offline production is currently disabled"),
+      effect: () => (player.options.offlineProgress
+        ? player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2)
+        : new Decimal(0)),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
     },
     ipMult: {

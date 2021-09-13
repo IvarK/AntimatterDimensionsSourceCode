@@ -281,8 +281,6 @@ let player = {
   timeShards: new Decimal(0),
   totalTickGained: 0,
   totalTickBought: 0,
-  offlineProd: 0,
-  offlineProdCost: 1e7,
   replicanti: {
     unl: false,
     amount: new Decimal(0),

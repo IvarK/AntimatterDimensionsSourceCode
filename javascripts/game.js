@@ -134,7 +134,11 @@ function ratePerMinute(amount, time) {
   return Decimal.divide(amount, time / (60 * 1000));
 }
 
-function averageRun(runs, name) {
+function averageRun(allRuns, name) {
+  // Filter out all runs which have the default infinite value for time, but if we're left with no valid runs then we
+  // take just one entry so that the averages also have the same value and we don't get division by zero.
+  let runs = allRuns.filter(run => run[0] !== Number.MAX_VALUE);
+  if (runs.length === 0) runs = [allRuns[0]];
   const totalTime = runs.map(run => run[0]).sum();
   const totalAmount = runs
     .map(run => run[1])

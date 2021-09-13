@@ -151,7 +151,7 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "The first row of eternity upgrades automatically unlock after the first Eternity of a Reality.",
+    description: "The first row of eternity upgrades is automatically purchased after the first Eternity of a Reality.",
     defaultPosition: {
       x: 50,
       y: 150
@@ -162,7 +162,7 @@ GameDatabase.reality.perks = {
     label: "EU2",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `The second row of eternity upgrades automatically unlock
+      return `The second row of eternity upgrades is automatically purchased
         at ${formatX(1e10)} times less than their original price`;
     },
     defaultPosition: {

@@ -52,7 +52,8 @@ class SubtabState {
     // eslint-disable-next-line no-bitwise
     player.options.hiddenSubtabBits[this._parent.config.id] ^= (1 << this.config.id);
 
-    // If this subtab is the "current" subtab and it gets hidden, we need to change it to one which is still visible
+    // If this subtab is the last visited subtab within its tab and it gets hidden by the player in the modal,
+    // we need to change the last visited subtab to one which is still visible
     if (player.options.hiddenSubtabBits[this._parent.config.id] !== 0) {
       const lowestVisibleSubtabID = Math.min(...this._parent.subtabs.filter(s => s.isAvailable).map(s => s.config.id));
       // When manually hiding all the subtabs, lowestVisibleSubtabID somehow gets set to Infinity on the last subtab.
@@ -132,8 +133,10 @@ class TabState {
     if (manual) {
       Modal.hide();
     }
-    this.unhideTab();
-    this._currentSubtab.unhideTab();
+    if (!Enslaved.isRunning) {
+      this.unhideTab();
+      this._currentSubtab.unhideTab();
+    }
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }
 

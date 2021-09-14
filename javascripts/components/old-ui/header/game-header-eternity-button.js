@@ -117,7 +117,7 @@ Vue.component("game-header-eternity-button", {
       const hasNewContent = !PlayerProgress.realityUnlocked() &&
         Currency.eternityPoints.exponent >= 4000 &&
         Currency.timeTheorems.gte(5e9) &&
-        player.replicanti.amount.exponent > 20000;
+        player.records.thisReality.maxReplicanti.exponent > 20000;
 
       if (player.dilation.active) {
         this.type = hasNewContent

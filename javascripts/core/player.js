@@ -235,6 +235,8 @@ let player = {
       maxIP: new Decimal(0),
       maxEP: new Decimal(0),
       bestEternitiesPerMs: new Decimal(0),
+      maxReplicanti: new Decimal(0),
+      maxDT: new Decimal(0),
     },
     bestReality: {
       time: Number.MAX_VALUE,

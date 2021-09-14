@@ -35,18 +35,18 @@ GameDatabase.celestials.v = {
     dilatedTime: {
       id: 4,
       name: "Dilated Time",
-      resource: () => Currency.dilatedTime.value,
+      resource: () => player.records.thisReality.maxDT,
       requirement: new Decimal("1e320"),
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(Currency.dilatedTime.value.pLog10() / 320),
+      progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10() / 320),
     },
     replicanti: {
       id: 5,
       name: "Replicanti",
-      resource: () => player.replicanti.amount,
+      resource: () => player.records.thisReality.maxReplicanti,
       requirement: new Decimal("1e320000"),
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(player.replicanti.amount.pLog10() / 320000),
+      progress: () => emphasizeEnd(player.records.thisReality.maxReplicanti.pLog10() / 320000),
     },
     rm: {
       id: 6,

@@ -76,10 +76,13 @@ Vue.component("replicanti-gain-text", {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} Replicanti
           ${pluralize("Galaxy", galaxiesPerSecond, "Galaxies")} per second`;
         }
+        // Take the total time from zero replicanti to max RG + e308 replicanti and then subtract away the time which
+        // has already elapsed. The time elapsed is calculated from your current RG total (including the current one)
+        // and then subtracts away the time spent in the current RG so far.
         const allGalaxyTime = Decimal.divide(effectiveMaxRG - effectiveCurrentRG, baseGalaxiesPerSecond).toNumber();
-        const thisGalaxyTime = remainingTime - baseGalaxiesPerSecond.reciprocal().toNumber();
+        const thisGalaxyTime = baseGalaxiesPerSecond.reciprocal().toNumber() - remainingTime;
         this.galaxyText += ` (all Replicanti Galaxies within 
-          ${TimeSpan.fromSeconds(Math.clampMin(allGalaxyTime + thisGalaxyTime, 0))})`;
+          ${TimeSpan.fromSeconds(Math.clampMin(allGalaxyTime - thisGalaxyTime, 0))})`;
       } else {
         this.galaxyText = ``;
       }

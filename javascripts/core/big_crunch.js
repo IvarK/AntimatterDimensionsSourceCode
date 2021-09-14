@@ -129,8 +129,7 @@ function secondSoftReset(forcedNDReset = false) {
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
-  if (player.replicanti.unl)
-    player.replicanti.amount = new Decimal(1);
+  if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
   player.replicanti.galaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;

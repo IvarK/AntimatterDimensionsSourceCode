@@ -136,14 +136,18 @@ Vue.component("v-tab", {
     <div class="l-v-celestial-tab">
       <celestial-quote-history celestial="v" />
       <div v-if="!mainUnlock" class="c-v-info-text">
-        <v-unlock-requirement v-for="req in mainDB" :dbEntry="req" />
+        <v-unlock-requirement
+          v-for="req in mainDB"
+          :dbEntry="req"
+          :key="req.name"
+        />
         <div class="l-v-milestones-grid__row">
           <div
             :class="celestialUnlockClassObject"
             @click="unlockCelestial()"
           >
             <p>{{ vUnlock.description }}</p>
-            <p>Reward: {{ rewardText(vUnlock) }}</p>
+            <p>{{ rewardText(vUnlock) }}</p>
           </div>
         </div>
       </div>

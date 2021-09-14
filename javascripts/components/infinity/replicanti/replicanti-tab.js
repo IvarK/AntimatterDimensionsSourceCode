@@ -70,7 +70,7 @@ Vue.component("replicanti-tab", {
       }
       if (this.hasDTMult) {
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
-          multiplier to Dilated Time`);
+          multiplier to Dilated Time (from Glyphs)`);
       }
       if (boostList.length === 1) return `${boostList[0]}.`;
       if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;

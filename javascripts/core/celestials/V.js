@@ -109,7 +109,7 @@ const VRunUnlocks = {
 const V_UNLOCKS = {
   V_ACHIEVEMENT_UNLOCK: {
     id: 0,
-    reward: "Fully unlocks V, The Celestial Of Achievements",
+    reward: "Unlock V, The Celestial Of Achievements",
     description: "Meet all the above requirements simultaneously",
     requirement: () => Object.values(GameDatabase.celestials.v.mainUnlock).every(e => e.progress() >= 1)
   },

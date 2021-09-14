@@ -171,6 +171,8 @@ function replicantiLoop(diff) {
   if (areRGsBeingBought && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
     replicantiGalaxy();
   }
+  player.records.thisReality.maxReplicanti = player.records.thisReality.maxReplicanti
+    .clampMin(player.replicanti.amount);
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);
   PerformanceStats.end();
 }

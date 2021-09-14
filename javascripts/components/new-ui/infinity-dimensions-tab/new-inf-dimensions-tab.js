@@ -20,7 +20,6 @@ Vue.component("new-inf-dimensions-tab", {
       enslavedCompleted: false,
       boughtTesseracts: 0,
       extraTesseracts: 0,
-      showExtraTesseracts: false,
     };
   },
   computed: {
@@ -31,7 +30,7 @@ Vue.component("new-inf-dimensions-tab", {
       return `Boosts 8th Antimatter Dimension by ${this.sacrificeBoostDisplay}`;
     },
     tesseractCountString() {
-      const extra = this.showExtraTesseracts ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
+      const extra = this.extraTesseracts > 0 ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
       return `${formatInt(this.boughtTesseracts)}${extra}`;
     },
   },
@@ -53,14 +52,13 @@ Vue.component("new-inf-dimensions-tab", {
       }
       this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
-      this.nextDimCapIncrease = Enslaved.nextDimCapIncrease * Tesseracts.strengthMultiplierIncrease();
-      this.tesseractCost.copyFrom(Enslaved.tesseractCost);
+      this.nextDimCapIncrease = Tesseracts.nextTesseractIncrease;
+      this.tesseractCost.copyFrom(Tesseracts.nextCost);
       this.totalDimCap = InfinityDimensions.totalDimCap;
-      this.canBuyTesseract = Enslaved.canBuyTesseract;
+      this.canBuyTesseract = Tesseracts.canBuyTesseract;
       this.enslavedCompleted = Enslaved.isCompleted;
-      this.boughtTesseracts = player.celestials.enslaved.tesseracts;
-      this.extraTesseracts = Enslaved.extraTesseracts;
-      this.showExtraTesseracts = this.extraTesseracts > 0;
+      this.boughtTesseracts = Tesseracts.bought;
+      this.extraTesseracts = Tesseracts.extra;
     },
     maxAll() {
       tryUnlockInfinityDimensions(false);
@@ -70,7 +68,7 @@ Vue.component("new-inf-dimensions-tab", {
       toggleAllInfDims();
     },
     buyTesseract() {
-      Enslaved.buyTesseract();
+      Tesseracts.buyTesseract();
     }
   },
   template: `

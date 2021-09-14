@@ -255,7 +255,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
         gainedGlyphLevel().actualLevel >= 20000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost count based on Tesseract count",
-      effect: () => Math.floor(0.25 * Math.pow(Enslaved.effectiveTesseractCount, 2)),
+      effect: () => Math.floor(0.25 * Math.pow(Tesseracts.effectiveCount, 2)),
       formatEffect: value => `${formatX(value)}`,
     },
     {

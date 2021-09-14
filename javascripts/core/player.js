@@ -471,7 +471,6 @@ let player = {
       run: false,
       completed: false,
       tesseracts: 0,
-      totalDimCapIncrease: 0,
       feltEternity: false,
       progressBits: 0,
       hintBits: 0,

@@ -181,28 +181,6 @@ const Enslaved = {
     }
     return true;
   },
-  get extraTesseracts() {
-    return player.celestials.enslaved.tesseracts *
-      (SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1) - 1);
-  },
-  get effectiveTesseractCount() {
-    return player.celestials.enslaved.tesseracts + this.extraTesseracts;
-  },
-  get tesseractCost() {
-    return Tesseracts.costs[player.celestials.enslaved.tesseracts];
-  },
-  get nextDimCapIncrease() {
-    return Tesseracts.increases[player.celestials.enslaved.tesseracts];
-  },
-  get canBuyTesseract() {
-    return Currency.infinityPoints.gte(this.tesseractCost);
-  },
-  buyTesseract() {
-    if (!this.canBuyTesseract) return;
-
-    player.celestials.enslaved.totalDimCapIncrease += this.nextDimCapIncrease;
-    player.celestials.enslaved.tesseracts++;
-  },
   quotes: new CelestialQuotes("enslaved", {
     INITIAL: {
       id: 1,
@@ -299,34 +277,51 @@ const EnslavedProgress = (function() {
 }());
 
 const Tesseracts = {
-  costs: (function() {
-    const costs = [Decimal.pow10(20e6), Decimal.pow10(40e6), Decimal.pow10(60e6)];
-    for (let i = 0; i < 32; i++) {
-      costs.push(costs[i + 2].pow(2 * (i + 1)));
-    }
-    return costs;
-  }()),
-
-  increases: (function() {
-    const increases = [];
-    for (let i = 0; i < 34; i++) {
-      increases.push(500e3 * Math.pow(2, i));
-    }
-    increases.unshift(500e3);
-    return increases;
-  }()),
-
-  strengthMultiplier: () => {
-    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
-    const extraTesseractEffect = Math.pow(2, Enslaved.extraTesseracts);
-    return boundlessEffect * extraTesseractEffect;
+  get bought() {
+    return player.celestials.enslaved.tesseracts;
   },
 
-  strengthMultiplierIncrease: () => {
-    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
-    const extraTesseracts = Enslaved.extraTesseracts +
-      SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
-    return boundlessEffect * Math.pow(2, extraTesseracts) - Tesseracts.strengthMultiplier();
+  get extra() {
+    return this.bought * (SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1) - 1);
+  },
+
+  get effectiveCount() {
+    return this.bought + this.extra;
+  },
+
+  buyTesseract() {
+    if (!this.canBuyTesseract) return;
+    player.celestials.enslaved.tesseracts++;
+  },
+
+  // This used to be a somewhat complicated function which spaced costs out super-exponentially, but the decision to
+  // hardcap all resources (as feasible) to e9e15 meant that in practice only the first 10 or so could actually be
+  // obtained. Changing the function to a hardcoded array is better for understanding the code since it's small.
+  // Note that costs go a bit past e9e15 because while AM is capped at e9e15, most other resources (including IP)
+  // aren't and can go a tiny bit past it.
+  BASE_COSTS: [2, 4, 6, 12, 48, 288, 2304, 23040, 276480, 3870720, 61931520, 1114767360],
+  costs(index) {
+    // In practice this should never happen, but have it just to be safe
+    if (index >= this.BASE_COSTS.length) return Decimal.pow10(Number.MAX_VALUE);
+    return Decimal.pow10(1e7 * this.BASE_COSTS[Math.floor(index)]);
+  },
+
+  get nextCost() {
+    return this.costs(this.bought);
+  },
+
+  get canBuyTesseract() {
+    return Enslaved.isCompleted && Currency.infinityPoints.gte(Tesseracts.nextCost);
+  },
+
+  capIncrease(count = this.bought) {
+    const totalCount = count * SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
+    const base = totalCount < 1 ? 0 : 250e3 * Math.pow(2, totalCount);
+    return base * (AlchemyResource.boundless.effectValue + 1);
+  },
+
+  get nextTesseractIncrease() {
+    return this.capIncrease(this.bought + 1) - this.capIncrease(this.bought);
   },
 };
 

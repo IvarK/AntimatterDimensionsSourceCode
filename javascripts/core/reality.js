@@ -419,6 +419,7 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.continuumThisReality = Laitela.continuumActive;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
+  player.records.thisReality.maxReplicanti = new Decimal(0);
   Currency.timeTheorems.reset();
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
@@ -437,6 +438,7 @@ function finishProcessReality(realityProps) {
   };
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
+  player.records.thisReality.maxDT = new Decimal(0);
   player.dilation.lastEP = new Decimal(-1);
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
@@ -536,7 +538,14 @@ function clearCelestialRuns() {
   };
   player.celestials.teresa.run = false;
   player.celestials.effarig.run = false;
-  player.celestials.enslaved.run = false;
+  // Enslaved forces all tabs to be visible, but exiting via the header might leave the player on a tab which is
+  // otherwise normally hidden - in that case we force them to the Enslaved tab. We could scan for the lowest-index tab
+  // and subtab, but all other things being equal the Enslaved tab makes the most sense. The run flag is toggled
+  // *before* the check because otherwise isHidden will always evaluate to false due to still being in Enslaved.
+  if (Enslaved.isRunning) {
+    player.celestials.enslaved.run = false;
+    if (Tabs.current.isHidden || Tabs.current._currentSubtab.isHidden) Tab.celestials.enslaved.show();
+  }
   player.celestials.v.run = false;
   player.celestials.ra.run = false;
   player.celestials.laitela.run = false;

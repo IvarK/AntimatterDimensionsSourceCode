@@ -129,8 +129,7 @@ function secondSoftReset(forcedNDReset = false) {
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
-  if (player.replicanti.unl)
-    player.replicanti.amount = new Decimal(1);
+  if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
   player.replicanti.galaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
@@ -187,7 +186,11 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   purchase() {
-    if (super.purchase()) return true;
+    if (super.purchase()) {
+      // This applies the 4th column of infinity upgrades retroactively
+      if (this.config.id.includes("skip")) skipResetsIfPossible();
+      return true;
+    }
     if (this.canCharge) {
       this.charge();
       return true;

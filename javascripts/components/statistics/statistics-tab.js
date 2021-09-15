@@ -11,6 +11,8 @@ Vue.component("statistics-tab", {
         isUnlocked: false,
         count: new Decimal(0),
         banked: new Decimal(0),
+        projectedBanked: new Decimal(0),
+        bankRate: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -57,6 +59,11 @@ Vue.component("statistics-tab", {
       if (isInfinityUnlocked) {
         infinity.count.copyFrom(Currency.infinities);
         infinity.banked.copyFrom(Currency.infinitiesBanked);
+        infinity.projectedBanked = new Decimal(0).plusEffectsOf(
+          Achievement(131),
+          TimeStudy(191)
+        );
+        infinity.bankRate = infinity.projectedBanked.div(records.thisEternity.time).times(60000);
         infinity.hasBest = bestInfinity.time < 999999999999;
         infinity.best.setFrom(bestInfinity.time);
         infinity.this.setFrom(records.thisInfinity.time);
@@ -88,6 +95,7 @@ Vue.component("statistics-tab", {
         reality.totalTimePlayed.setFrom(records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
         infinity.thisReal.setFrom(records.thisInfinity.realTime);
+        infinity.bankRate = infinity.projectedBanked.div(records.thisEternity.realTime).times(60000);
         eternity.thisReal.setFrom(records.thisEternity.realTime);
         reality.thisReal.setFrom(records.thisReality.realTime);
         reality.bestRate.copyFrom(bestReality.RMmin);
@@ -136,11 +144,12 @@ Vue.component("statistics-tab", {
         </div>
         <div>
           <br>
-          <div
-            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
-            v-for="line in matterScale"
-          >
-            {{ line }}
+          <div style="height: 5rem;">
+            <div v-for="line in matterScale">
+              {{ line }}
+            </div>
+            <br v-if="matterScale.length < 2">
+            <br v-if="matterScale.length < 3">
           </div>
         </div>
         <br>
@@ -187,6 +196,11 @@ Vue.component("statistics-tab", {
         </div>
         <div v-else>
           You have no Eternities<span v-if="reality.isUnlocked"> this Reality</span>.
+        </div>
+        <div v-if="infinity.projectedBanked.gt(0)">
+          You will gain {{ formatDecimalAmount(infinity.projectedBanked) }} Banked
+          {{ "Infinity" | pluralize(infinity.projectedBanked, "Infinities") }} on Eternity
+          ({{ formatDecimalAmount(infinity.bankRate) }} per minute).
         </div>
         <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
         <div v-else>You have no fastest Eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>

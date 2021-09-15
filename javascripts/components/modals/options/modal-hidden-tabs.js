@@ -4,11 +4,13 @@ Vue.component("modal-hidden-tabs", {
   data() {
     return {
       tabs: null,
+      isEnslaved: false,
     };
   },
   methods: {
     update() {
       this.tabs = Tab;
+      this.isEnslaved = Enslaved.isRunning;
     },
   },
   template: `
@@ -19,6 +21,12 @@ Vue.component("modal-hidden-tabs", {
       <br>
       Some tabs cannot be hidden, and you cannot hide your current tab.
       <br>
+      <div v-if="isEnslaved">
+        <br>
+        <i>You must... see everywhere...</i>
+        <br>
+        (You cannot hide your tabs within this Reality)
+      </div>
       <div v-for="tab in tabs" class="l-hide-modal-tab-container">
         <tab-modal-subtab-group :tab="tab" />
       </div>
@@ -65,8 +73,10 @@ Vue.component("tab-modal-subtab-group", {
     },
     toggleVisibility() {
       // If this tab and all subtabs are hidden, unhide all subtabs too
-      if (this.tab.isHidden && this.subtabs.every(t => t.isHidden)) {
-        for (const subtab of this.subtabs) subtab.toggleVisibility();
+      if (this.tab.isHidden && this.subtabs.every(t => t.isHidden || !t.isUnlocked)) {
+        for (const subtab of this.subtabs) {
+          if (subtab.isUnlocked) subtab.toggleVisibility();
+        }
         this.tab.unhideTab();
       } else this.tab.toggleVisibility();
     },

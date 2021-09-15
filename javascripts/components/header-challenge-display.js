@@ -122,6 +122,7 @@ Vue.component("header-challenge-display", {
         You are currently in {{ challengeDisplay }}
       </span>
       <failable-ec-text v-if="isInFailableEC" />
+      <span style="padding: 0.3rem;" />
       <primary-button
         v-if="showExit"
         @click="exitButtonClicked"

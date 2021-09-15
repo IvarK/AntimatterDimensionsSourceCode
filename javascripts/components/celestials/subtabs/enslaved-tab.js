@@ -83,8 +83,9 @@ Vue.component("modal-enslaved-hints", {
     }
   },
   template: `
-    <div class="c-reality-glyph-creation">
+    <div class="c-enslaved-hint-modal">
       <modal-close-button @click="emitClose" />
+      <h2>Cracks in The Enslaved Ones' Reality</h2>
       <div>
         This Reality seems to be resisting your efforts to complete it. So far you have done the following:
       </div>
@@ -138,6 +139,7 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
+    offlineEnabled: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
     isRunning: false,
@@ -199,6 +201,11 @@ Vue.component("enslaved-tab", {
     runDescription() {
       return GameDatabase.celestials.descriptions[2].description().split("\n");
     },
+    realTimeButtonText() {
+      if (!this.offlineEnabled) return "Offline Progress is disabled";
+      if (this.autoStoreReal) return "Offline time stored";
+      return "Offline time used for production";
+    }
   },
   methods: {
     update() {
@@ -206,6 +213,7 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
+      this.offlineEnabled = player.options.offlineProgress;
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
@@ -228,6 +236,7 @@ Vue.component("enslaved-tab", {
       Enslaved.toggleStoreReal();
     },
     toggleAutoStoreReal() {
+      if (!this.offlineEnabled) return;
       Enslaved.toggleAutoStoreReal();
     },
     useStored() {
@@ -355,12 +364,11 @@ Vue.component("enslaved-tab", {
                 </div>
               </button>
               <button
-                :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
+                :class="['o-enslaved-mechanic-button',
+                  {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled}]"
                 @click="toggleAutoStoreReal"
               >
-                <div>
-                  {{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}
-                </div>
+                {{ realTimeButtonText }}
               </button>
               <div>
                 Efficiency: {{ storedRealEfficiencyDesc }}

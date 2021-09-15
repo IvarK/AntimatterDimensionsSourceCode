@@ -235,6 +235,8 @@ let player = {
       maxIP: new Decimal(0),
       maxEP: new Decimal(0),
       bestEternitiesPerMs: new Decimal(0),
+      maxReplicanti: new Decimal(0),
+      maxDT: new Decimal(0),
     },
     bestReality: {
       time: Number.MAX_VALUE,
@@ -281,8 +283,6 @@ let player = {
   timeShards: new Decimal(0),
   totalTickGained: 0,
   totalTickBought: 0,
-  offlineProd: 0,
-  offlineProdCost: 1e7,
   replicanti: {
     unl: false,
     amount: new Decimal(0),

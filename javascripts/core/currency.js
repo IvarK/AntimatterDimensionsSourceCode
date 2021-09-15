@@ -346,7 +346,10 @@ Currency.tachyonParticles = new class extends DecimalCurrency {
 
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }
-  set value(value) { player.dilation.dilatedTime = value; }
+  set value(value) {
+    player.dilation.dilatedTime = value;
+    player.records.thisReality.maxDT = player.records.thisReality.maxDT.max(value);
+  }
 }();
 
 Currency.realities = new class extends NumberCurrency {

@@ -119,6 +119,11 @@ the game closed.
     {
       name: "Dimensions",
       info: () => `
+Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
+with ${formatInt(10)} antimatter when you first open the game. And you can
+spend it to buy the 1st Dimension to start the game.
+<br>
+<br>
 Dimensions are your production units in game. The first Dimension produces your antimatter.
 Each consecutive Dimension produces the previous one, allowing you to have steady growth.
 There are eight Dimensions total.
@@ -743,7 +748,8 @@ Level - This contributes to how strong your Glyph is, and it scales based on how
 it from.
 <br>
 Rarity - This is a percentage, between ${formatPercents(0)} and ${formatPercents(1)}, which also affects the strength
-of your Glyph. This is random, but can be influenced by various upgrades.
+of your Glyph. This is random, but can be influenced by various upgrades. The percentage is effectively a quality
+rating, higher values are better.
 <br>
 Effects - These are the boosts that equipping the Glyph will give you, and can contain up to four effects. Stronger
 Glyphs will generally have more effects than weaker Glyphs.
@@ -1097,12 +1103,12 @@ without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
 <br>
 After the subtab is unlocked from the Achievement, you are met with another set of requirements to fully unlock V.
-You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities and have
-${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent).
-Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
-${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
-${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and
-${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.
+You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities.requirement)} Realities and have
+${format(GameDatabase.celestials.v.mainUnlock.rm.requirement)} unspent RM.
+Additionally you need to reach ${format(GameDatabase.celestials.v.mainUnlock.eternities.requirement)} Eternities,
+${format(GameDatabase.celestials.v.mainUnlock.infinities.requirement)} Infinities,
+${format(GameDatabase.celestials.v.mainUnlock.dilatedTime.requirement)} Dilated Time, and
+${format(GameDatabase.celestials.v.mainUnlock.replicanti.requirement)} Replicanti, all in the same reality.
 <br>
 <br>
 When you meet all of those requirements, you will be able to access V's Reality. However, completing the

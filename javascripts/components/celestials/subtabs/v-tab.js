@@ -4,13 +4,9 @@ Vue.component("v-tab", {
   data() {
     return {
       mainUnlock: false,
+      canUnlockCelestial: false,
+      mainUnlockDB: [],
       totalUnlocks: 0,
-      realities: 0,
-      infinities: new Decimal(0),
-      eternities: new Decimal(0),
-      dilatedTime: new Decimal(0),
-      replicanti: new Decimal(0),
-      rm: new Decimal(0),
       pp: 0,
       showReduction: false,
       runRecords: [],
@@ -22,6 +18,12 @@ Vue.component("v-tab", {
     };
   },
   computed: {
+    celestialUnlockClassObject() {
+      return {
+        "o-v-milestone": true,
+        "o-v-milestone--unlocked": this.canUnlockCelestial,
+      };
+    },
     // If V is flipped, change the layout of the grid
     hexGrid() {
       return this.isFlipped && this.wantsFlipped
@@ -63,7 +65,6 @@ Vue.component("v-tab", {
         ],
       ];
     },
-    db: () => GameDatabase.celestials.v,
     runButtonClassObject() {
       return {
         "l-v-hexagon": true,
@@ -78,13 +79,9 @@ Vue.component("v-tab", {
   methods: {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
+      this.canUnlockCelestial = V.canUnlockCelestial;
+      this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
       this.totalUnlocks = V.spaceTheorems;
-      this.realities = Currency.realities.value;
-      this.infinities.copyFrom(Currency.infinitiesTotal);
-      this.eternities.copyFrom(Currency.eternities);
-      this.dilatedTime.copyFrom(Currency.dilatedTime);
-      this.replicanti.copyFrom(player.replicanti.amount);
-      this.rm.copyFrom(Currency.realityMachines);
       this.pp = Currency.perkPoints.value;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
       this.runRecords = Array.from(player.celestials.v.runRecords);
@@ -93,6 +90,9 @@ Vue.component("v-tab", {
       this.wantsFlipped = player.celestials.v.wantsFlipped;
       this.isRunning = V.isRunning;
       this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+    },
+    unlockCelestial() {
+      if (V.canUnlockCelestial) V.unlockCelestial();
     },
     startRun() {
       Modal.celestials.show({ name: "V's", number: 3 });
@@ -126,7 +126,7 @@ Vue.component("v-tab", {
     },
     reductionTooltip(hex) {
       return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
-      to reduce goal by ${format(hex.config.perReductionStep)}`;
+        to reduce goal by ${format(hex.config.perReductionStep)}`;
     },
     toggleFlipped() {
       player.celestials.v.wantsFlipped = !this.wantsFlipped;
@@ -136,22 +136,18 @@ Vue.component("v-tab", {
     <div class="l-v-celestial-tab">
       <celestial-quote-history celestial="v" />
       <div v-if="!mainUnlock" class="c-v-info-text">
-        {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} Reality Machines
-        <br>
-        {{ format(realities, 2, 0) }} / {{ format(db.mainUnlock.realities, 2, 0) }} Realities
-        <br>
-        {{ format(eternities, 2, 0) }} / {{ format(db.mainUnlock.eternities, 2, 0) }} Eternities
-        <br>
-        {{ format(infinities, 2, 0) }} / {{ format(db.mainUnlock.infinities, 2, 0) }} Infinities
-        <br>
-        {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} Dilated Time
-        <br>
-        {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} Replicanti
-        <br>
+        <v-unlock-requirement
+          v-for="req in mainUnlockDB"
+          :dbEntry="req"
+          :key="req.name"
+        />
         <div class="l-v-milestones-grid__row">
-          <div class="o-v-milestone">
+          <div
+            :class="celestialUnlockClassObject"
+            @click="unlockCelestial"
+          >
             <p>{{ vUnlock.description }}</p>
-            <p>Reward: {{ rewardText(vUnlock) }}</p>
+            <p>{{ rewardText(vUnlock) }}</p>
           </div>
         </div>
       </div>
@@ -261,5 +257,39 @@ Vue.component("v-tab", {
           </div>
         </div>
       </div>
+    </div>`
+});
+
+Vue.component("v-unlock-requirement", {
+  props: {
+    dbEntry: Object,
+  },
+  data() {
+    return {
+      resource: new Decimal(0),
+      progress: 0,
+    };
+  },
+  computed: {
+    barProgressStyle() {
+      const color = this.progress === 1
+        ? "var(--color-v--base)"
+        : "#6b5f2e";
+      return {
+        background: color,
+        width: `${100 * this.progress}%`
+      };
+    },
+  },
+  methods: {
+    update() {
+      this.resource.copyFrom(new Decimal(this.dbEntry.resource()));
+      this.progress = Math.clampMax(this.dbEntry.progress(), 1);
+    }
+  },
+  template: `
+    <div class="c-v-unlock-bar">
+      <div class="c-v-unlock-bar__progress" :style="barProgressStyle" />
+      {{ dbEntry.format(resource) }} / {{ dbEntry.format(dbEntry.requirement) }} {{ dbEntry.name }}
     </div>`
 });

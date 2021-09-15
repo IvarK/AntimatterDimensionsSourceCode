@@ -64,6 +64,31 @@ Vue.component("normal-achievements-tab", {
   },
   computed: {
     rows: () => Achievements.allRows,
+    boostText() {
+      const boostList = [];
+
+      const dimMultList = [];
+      dimMultList.push("Antimatter");
+      if (this.achMultToIDS) dimMultList.push("Infinity");
+      if (this.achMultToTDS) dimMultList.push("Time");
+      const dimMult = `Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
+      switch (dimMultList.length) {
+        case 1:
+          boostList.push(`${dimMultList[0]} ${dimMult}`);
+          break;
+        case 2:
+          boostList.push(`${dimMultList[0]} and ${dimMultList[1]} ${dimMult}`);
+          break;
+        default:
+          boostList.push(`${dimMultList.slice(0, -1).join(", ")},
+            and ${dimMultList[dimMultList.length - 1]} ${dimMult}`);
+      }
+
+      if (this.achMultToTP) boostList.push(`Tachyon Particles: ${formatX(this.achTPeffect, 2, 3)}`);
+      if (this.achMultToBH) boostList.push(`Black Hole Power: ${formatX(this.achievementPower, 2, 3)}`);
+      if (this.achMultToTT) boostList.push(`Time Theorem production: ${formatX(this.achievementPower, 2, 3)}`);
+      return `${boostList.join("<br>")}`;
+    },
   },
   methods: {
     update() {
@@ -107,26 +132,7 @@ Vue.component("normal-achievements-tab", {
       </div>
       <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">
         Your Achievements provide a multiplier to<swap-images-button />
-        <div>
-          <span>
-            Antimatter<span v-if="achMultToTDS && achMultToIDS">, Infinity, and Time</span>
-            <span v-else-if="achMultToTDS"> and Time</span>
-            <span v-else-if="achMultToIDS"> and Infinity</span>
-            Dimensions: {{ formatX(achievementPower, 2, 3) }}
-          </span>
-          <br>
-          <span v-if="achMultToTP">
-            Tachyon Particles: {{ formatX(achTPeffect, 2, 3) }}
-          </span>
-          <br>
-          <span v-if="achMultToBH">
-            Black Hole Power: {{ formatX(achievementPower, 2, 3) }}
-          </span>
-          <br>
-          <span v-if="achMultToTT">
-            Time Theorem production: {{ formatX(achievementPower, 2, 3) }}
-          </span>
-        </div>
+        <div v-html="boostText" />
       </div>
       <div v-if="showAutoAchieve" class="c-achievements-tab__header">
         <div v-if="achCountdown > 0">

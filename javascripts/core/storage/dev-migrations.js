@@ -1027,6 +1027,9 @@ GameStorage.devMigrations = {
     player => {
       player.secretUnlocks.spreadingCancer = player.spreadingCancer;
       delete player.spreadingCancer;
+    },
+    player => {
+      delete player.celestials.enslaved.totalDimCapIncrease;
     }
   ],
 

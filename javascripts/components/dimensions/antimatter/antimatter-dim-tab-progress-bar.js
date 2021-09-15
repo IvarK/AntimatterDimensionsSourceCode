@@ -28,7 +28,7 @@ Vue.component("antimatter-dim-tab-progress-bar", {
       } else if (!player.break) {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       } else if (Enslaved.isCompleted) {
-        setProgress(Currency.infinityPoints.value, Enslaved.tesseractCost, "Percentage to next Tesseract");
+        setProgress(Currency.infinityPoints.value, Tesseracts.nextCost, "Percentage to next Tesseract");
       } else if (PlayerProgress.dilationUnlocked()) {
         setProgress(Currency.eternityPoints.value, new Decimal("1e4000"), "Percentage to Reality");
       } else if (InfinityDimension(8).isUnlocked) {

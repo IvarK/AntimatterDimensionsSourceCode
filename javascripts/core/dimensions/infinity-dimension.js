@@ -307,7 +307,7 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    return Math.floor(player.celestials.enslaved.totalDimCapIncrease * Tesseracts.strengthMultiplier());
+    return Math.floor(Tesseracts.capIncrease());
   },
 
   get totalDimCap() {

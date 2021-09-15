@@ -4,6 +4,21 @@ function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
 }
 
+function vUnlockProgress(index) {
+  if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  return db.progress();
+}
+
+function vUnlockLegendLabel(complete, index) {
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  if (complete >= 1) return `${db.name} condition for V`;
+  return [
+    "V",
+    `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
+  ];
+}
+
 const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
@@ -584,11 +599,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-1": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 1);
-        return db.progress();
-      },
+      complete: () => vUnlockProgress(1),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -599,14 +610,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 1);
-            if (complete >= 1) return `${db.name} condition for V`;
-            return [
-              "V",
-              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 1),
           angle: -135,
           diagonal: 16,
           horizontal: 16,
@@ -623,11 +627,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-2": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 2);
-        return db.progress();
-      },
+      complete: () => vUnlockProgress(2),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -638,14 +638,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 2);
-            if (complete >= 1) return `${db.name} condition for V`;
-            return [
-              "V",
-              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 2),
           angle: -135,
           diagonal: 30,
           horizontal: 16,
@@ -663,11 +656,7 @@ GameDatabase.celestials.navigation = (function() {
 
     "v-unlock-3": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 3);
-        return db.progress();
-      },
+      complete: () => vUnlockProgress(3),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -678,14 +667,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 3);
-            if (complete >= 1) return `${db.name} condition for V`;
-            return [
-              "V",
-              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 3),
           angle: -135,
           diagonal: 45,
           horizontal: 16,
@@ -702,11 +684,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-4": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 4);
-        return db.progress();
-      },
+      complete: () => vUnlockProgress(4),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -717,14 +695,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 4);
-            if (complete >= 1) return `${db.name} condition for V`;
-            return [
-              "V",
-              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 4),
           angle: -135,
           diagonal: 60,
           horizontal: 16,
@@ -741,11 +712,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-5": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 5);
-        return db.progress();
-      },
+      complete: () => vUnlockProgress(5),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -756,14 +723,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 5);
-            if (complete >= 1) return `${db.name} condition for V`;
-            return [
-              "V",
-              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 5),
           angle: -135,
           diagonal: 75,
           horizontal: 16,
@@ -780,11 +740,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-6": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 6);
-        return db.progress();
-      },
+      complete: () => vUnlockProgress(6),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -795,14 +751,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === 6);
-            if (complete >= 1) return `${db.name} condition for V`;
-            return [
-              "V",
-              `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 6),
           angle: -135,
           diagonal: 90,
           horizontal: 16,

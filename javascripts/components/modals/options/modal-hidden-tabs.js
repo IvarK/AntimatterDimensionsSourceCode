@@ -23,7 +23,7 @@ Vue.component("modal-hidden-tabs", {
       <br>
       <div v-if="isEnslaved">
         <br>
-        <i>You need... to look... everywhere...</i>
+        <i>You must... see everywhere...</i>
         <br>
         (You cannot hide your tabs within this Reality)
       </div>

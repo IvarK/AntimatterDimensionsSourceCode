@@ -7,11 +7,6 @@ Vue.component("modal-away-progress", {
         item: Object,
         playerBefore: Object,
         playerAfter: Object,
-      },  
-      data() {
-        return {
-          isVeryLarge: false,
-        };
       },
       computed: {
         before() {
@@ -57,14 +52,14 @@ Vue.component("modal-away-progress", {
         formatBlackHoleActivations() {
           const activations = this.after - this.before;
           return `${formatInt(activations)} ${pluralize("time", activations)}`;
+        },
+        isVeryLarge() {
+          return this.isBlackHole
+            ? false
+            : Decimal.gt(this.before, Decimal.pow10(1e9));
         }
       },
       methods: {
-        update() {
-          this.isVeryLarge = this.isBlackHole
-            ? false
-            : Decimal.gt(this.before, Decimal.pow10(1e9));
-        },
         // We want different formatting above and below 1e9 to improve readability
         formatPseudo(number) {
           // Surrounding text is formatted differently to specify that this is log10

@@ -26,10 +26,8 @@ class TabNotificationState {
     for (const location of this.config.tabsToHighLight) {
       const tab = GameDatabase.tabs.find(t => t.key === location.parent);
       const subtab = tab.subtabs.find(t => t.key === location.tab);
-      // eslint-disable-next-line no-bitwise
-      player.options.hiddenTabBits &= ~(1 << tab.id);
-      // eslint-disable-next-line no-bitwise
-      player.options.hiddenSubtabBits[tab.id] &= ~(1 << subtab.id);
+      tab.unhideTab();
+      subtab.unhideTab();
     }
   }
 }

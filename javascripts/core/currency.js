@@ -350,11 +350,6 @@ Currency.dilatedTime = new class extends DecimalCurrency {
     player.dilation.dilatedTime = value;
     player.records.thisReality.maxDT = player.records.thisReality.maxDT.max(value);
   }
-
-  reset() {
-    super.reset();
-    player.records.thisReality.maxDT = new Decimal(0);
-  }
 }();
 
 Currency.realities = new class extends NumberCurrency {

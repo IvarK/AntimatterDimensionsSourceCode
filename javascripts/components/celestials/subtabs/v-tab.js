@@ -5,7 +5,7 @@ Vue.component("v-tab", {
     return {
       mainUnlock: false,
       canUnlockCelestial: false,
-      mainDB: [],
+      mainUnlockDB: [],
       totalUnlocks: 0,
       pp: 0,
       showReduction: false,
@@ -80,7 +80,7 @@ Vue.component("v-tab", {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.canUnlockCelestial = V.canUnlockCelestial;
-      this.mainDB = GameDatabase.celestials.v.mainUnlock;
+      this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
       this.totalUnlocks = V.spaceTheorems;
       this.pp = Currency.perkPoints.value;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
@@ -137,14 +137,14 @@ Vue.component("v-tab", {
       <celestial-quote-history celestial="v" />
       <div v-if="!mainUnlock" class="c-v-info-text">
         <v-unlock-requirement
-          v-for="req in mainDB"
+          v-for="req in mainUnlockDB"
           :dbEntry="req"
           :key="req.name"
         />
         <div class="l-v-milestones-grid__row">
           <div
             :class="celestialUnlockClassObject"
-            @click="unlockCelestial()"
+            @click="unlockCelestial"
           >
             <p>{{ vUnlock.description }}</p>
             <p>{{ rewardText(vUnlock) }}</p>

@@ -48,7 +48,7 @@ GameDatabase.celestials.v = {
       format: x => format(x, 2),
       progress: () => emphasizeEnd(player.records.thisReality.maxReplicanti.pLog10() / 320000),
     },
-    rm: {
+    realityMachines: {
       id: 6,
       name: "Reality Machines",
       resource: () => Currency.realityMachines.value,

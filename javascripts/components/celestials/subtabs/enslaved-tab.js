@@ -83,10 +83,7 @@ Vue.component("modal-enslaved-hints", {
     }
   },
   template: `
-    <div
-      class="c-reality-glyph-creation"
-      style="height: 60rem; overflow-y: scroll;"
-    >
+    <div class="c-enslaved-hint-modal">
       <modal-close-button @click="emitClose" />
       <h2>Cracks in The Enslaved Ones' Reality</h2>
       <div>

@@ -438,6 +438,7 @@ function finishProcessReality(realityProps) {
   };
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
+  player.records.thisReality.maxDT = new Decimal(0);
   player.dilation.lastEP = new Decimal(-1);
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;

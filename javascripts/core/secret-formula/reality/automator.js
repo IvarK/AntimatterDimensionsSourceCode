@@ -49,7 +49,7 @@ GameDatabase.reality.automator = {
         "wait infinity",
         "wait am >= 1e308",
         "wait pending completions >= 5",
-        "wait EC9 Completions >= 4",
+        "wait EC9 completions >= 4",
       ]
     },
     {

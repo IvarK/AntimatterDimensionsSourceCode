@@ -145,12 +145,11 @@ Vue.component("statistics-tab", {
         <div>
           <br>
           <div style="height: 5rem;">
-            <div
-              v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
-              v-for="line in matterScale"
-            >
+            <div v-for="line in matterScale">
               {{ line }}
             </div>
+            <br v-if="matterScale.length < 2">
+            <br v-if="matterScale.length < 3">
           </div>
         </div>
         <br>

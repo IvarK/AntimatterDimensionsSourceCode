@@ -146,6 +146,6 @@ Vue.component("new-inf-dimensions-tab", {
         You have {{ formatInt(EC8PurchasesLeft) }} {{ "purchase" | pluralize(EC8PurchasesLeft) }} left.
       </div>
       <br>
-      Hold shift to see the Infinity Point cost for locked dimensions.
+      Hold shift to see the Infinity Point cost for locked Infinity Dimensions.
     </div>`
 });

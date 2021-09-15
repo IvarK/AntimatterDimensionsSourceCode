@@ -6461,6 +6461,17 @@ kbd {
   100% {transform: rotate(360deg)}
 }
 
+.c-enslaved-hint-modal {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  padding: 0.25rem 1rem;
+  width: 60rem;
+  height: 60rem;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
 /* #endregion enslaved tab*/
 
 /* #startregion v tab */

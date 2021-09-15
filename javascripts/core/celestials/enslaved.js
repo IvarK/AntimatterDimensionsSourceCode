@@ -299,6 +299,7 @@ const Tesseracts = {
   // obtained. Changing the function to a hardcoded array is better for understanding the code since it's small.
   // Note that costs go a bit past e9e15 because while AM is capped at e9e15, most other resources (including IP)
   // aren't and can go a tiny bit past it.
+  // The formula is a hardcoded 2, 4, 6 followed by successive multiplication by 2x, 4x, 6x, and so on.
   BASE_COSTS: [2, 4, 6, 12, 48, 288, 2304, 23040, 276480, 3870720, 61931520, 1114767360],
   costs(index) {
     // In practice this should never happen, but have it just to be safe

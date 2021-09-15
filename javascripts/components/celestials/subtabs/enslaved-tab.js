@@ -201,6 +201,11 @@ Vue.component("enslaved-tab", {
     runDescription() {
       return GameDatabase.celestials.descriptions[2].description().split("\n");
     },
+    realTimeButtonText() {
+      if (!this.offlineEnabled) return "Offline Progress is disabled";
+      if (this.autoStoreReal) return "Offline time stored";
+      return "Offline time used for production";
+    }
   },
   methods: {
     update() {
@@ -363,12 +368,7 @@ Vue.component("enslaved-tab", {
                   {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled}]"
                 @click="toggleAutoStoreReal"
               >
-                <div v-if="offlineEnabled">
-                  {{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}
-                </div>
-                <div v-else>
-                  Offline Progress is disabled
-                </div>
+                {{ realTimeButtonText }}
               </button>
               <div>
                 Efficiency: {{ storedRealEfficiencyDesc }}

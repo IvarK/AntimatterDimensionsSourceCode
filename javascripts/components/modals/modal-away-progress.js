@@ -71,10 +71,9 @@ Vue.component("modal-away-progress", {
       template: `
         <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
           <span v-if="isBlackHole">Your <b>{{ name }}</b> activated {{ formatBlackHoleActivations }}</span>
-          <span v-else-if="isVeryLarge">
-            <b>{{ name }}</b> <i>exponent</i> increased from {{ formatBefore }} to {{ formatAfter }}
+          <span v-else>
+            <b>{{ name }}</b> <i v-if="isVeryLarge">exponent <i> increased from {{ formatBefore }} to {{ formatAfter }}
           </span>
-          <span v-else><b>{{ name }}</b> increased from {{ formatBefore }} to {{ formatAfter }}</span>
         </div>`
     },
   },

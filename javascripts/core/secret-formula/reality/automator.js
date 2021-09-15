@@ -49,7 +49,7 @@ GameDatabase.reality.automator = {
         "wait infinity",
         "wait am >= 1e308",
         "wait pending completions >= 5",
-        "wait EC9 completions >= 4",
+        "wait ec9 completions >= 4",
       ]
     },
     {
@@ -437,8 +437,8 @@ GameDatabase.reality.automator = {
         positive or negative for the automator's functionality, and only serve as a tool to
         help you keep the steps of your scripts easier to follow if desired.`,
       examples: [
-        "# Get 1e20 before starting EC1",
-        "// This loop alternates dilation and pushing"
+        "# get 1e20 before starting ec1",
+        "// this loop alternates dilation and pushing"
       ]
     },
   ]

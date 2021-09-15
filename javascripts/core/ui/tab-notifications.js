@@ -24,7 +24,7 @@ class TabNotificationState {
     
     // Force all tabs and subtabs of this notification to be unhidden
     for (const location of this.config.tabsToHighLight) {
-      const tab = GameDatabase.tabs.find(t => t.key === location.parent);
+      const tab = Tabs.all.find(t => t.key === location.parent);
       const subtab = tab.subtabs.find(t => t.key === location.tab);
       tab.unhideTab();
       subtab.unhideTab();

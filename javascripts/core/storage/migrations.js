@@ -348,24 +348,24 @@ GameStorage.migrations = {
   },
 
   adjustAchievementVars(player) {
-    player.achievementChecks.onlyFirstDimensions = player.dead;
+    player.requirementChecks.eternity.onlyAD1 = player.dead;
     delete player.dead;
-    player.achievementChecks.onlyEighthDimensions = player.dimlife;
+    player.requirementChecks.eternity.onlyAD8 = player.dimlife;
     delete player.dimlife;
     // Just initialize all these to false, which is basically always correct.
-    player.achievementChecks.noAntimatterProduced = false;
-    player.achievementChecks.noFirstDimensions = false;
-    player.achievementChecks.noEighthDimensions = false;
+    player.requirementChecks.reality.noAM = false;
+    player.requirementChecks.eternity.noAD1 = false;
+    player.requirementChecks.infinity.noAD8 = false;
     // If someone has 0 max replicanti galaxies, they can't have gotten any.
     // If they have more than 0 max replicanti galaxies, we don't give them
     // the benefit of the doubt.
-    player.achievementChecks.noReplicantiGalaxies = player.replicanti.gal === 0;
+    player.requirementChecks.eternity.noRG = player.replicanti.gal === 0;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||
       player.challenge.eternity.unlocked !== 0
-    ) player.achievementChecks.noTheoremPurchases = false;
-    if (player.sacrificed.gt(0)) player.achievementChecks.noSacrifices = false;
+    ) player.requirementChecks.reality.noPurchasedTT = false;
+    if (player.sacrificed.gt(0)) player.requirementChecks.infinity.noSacrifice = false;
   },
 
   adjustThemes(player) {
@@ -700,8 +700,8 @@ GameStorage.migrations = {
   },
 
   setNoInfinitiesOrEternitiesThisReality(player) {
-    player.achievementChecks.noInfinitiesThisReality = player.infinities.eq(0) && player.eternities.eq(0);
-    player.achievementChecks.noEternitiesThisReality = player.eternities.eq(0);
+    player.requirementChecks.reality.noInfinities = player.infinities.eq(0) && player.eternities.eq(0);
+    player.requirementChecks.reality.noEternities = player.eternities.eq(0);
   },
 
   setTutorialState(player) {

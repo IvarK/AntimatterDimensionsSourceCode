@@ -93,8 +93,7 @@ Vue.component("replicanti-tab", {
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
       this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0;
-      this.multDT = Math.clampMin(Decimal.log10(player.replicanti.amount) *
-        getAdjustedGlyphEffect("replicationdtgain"), 1);
+      this.multDT = Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1);
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;

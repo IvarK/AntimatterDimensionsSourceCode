@@ -18,7 +18,7 @@ function infinityDimensionCommonMultiplier() {
       ImaginaryUpgrade(8)
     );
 
-  if (Replicanti.areUnlocked && player.replicanti.amount.gt(1)) {
+  if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
   return mult;

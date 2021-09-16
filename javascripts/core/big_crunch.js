@@ -95,13 +95,13 @@ function bigCrunchTabChange(firstInfinity) {
 }
 
 function bigCrunchReplicanti() {
-  const currentReplicanti = player.replicanti.amount;
+  const currentReplicanti = Replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
 
   let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {
-    player.replicanti.amount = currentReplicanti;
+    Replicanti.amount = currentReplicanti;
     remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }
   if (TimeStudy(33).isBought) {
@@ -128,7 +128,7 @@ function secondSoftReset(forcedNDReset = false) {
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
-  if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
+  if (player.replicanti.unl) Replicanti.amount = new Decimal(1);
   player.replicanti.galaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
@@ -238,7 +238,7 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  ipMult = ipMult.times(player.replicanti.amount.powEffectOf(AlchemyResource.exponential));
+  ipMult = ipMult.times(Replicanti.amount.powEffectOf(AlchemyResource.exponential));
   return ipMult;
 }
 

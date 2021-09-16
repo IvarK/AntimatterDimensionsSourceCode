@@ -509,7 +509,7 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   Currency.eternities.bumpTo(100);
-  player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  Replicanti.amount = Replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
 }
 

@@ -654,7 +654,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Gain ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti in ${formatInt(1)} hour.`; },
     get reward() { return `You keep your Replicanti and ${formatInt(1)} Replicanti Galaxy on Infinity.`; },
     checkRequirement: () =>
-      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
+      (Replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
       Time.thisInfinityRealTime.totalHours <= 1,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER
   },
@@ -741,7 +741,7 @@ GameDatabase.achievements.normal = [
     id: 108,
     name: "We COULD afford 9",
     get description() { return `Eternity with exactly ${formatInt(9)} Replicanti.`; },
-    checkRequirement: () => player.replicanti.amount.round().eq(9),
+    checkRequirement: () => Replicanti.amount.round().eq(9),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -944,7 +944,7 @@ GameDatabase.achievements.normal = [
     id: 134,
     name: "When will it be enough?",
     get description() { return `Reach ${formatPostBreak("1e18000")} Replicanti.`; },
-    checkRequirement: () => player.replicanti.amount.exponent >= 18000,
+    checkRequirement: () => Replicanti.amount.exponent >= 18000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return `You gain Replicanti ${formatInt(2)} times faster

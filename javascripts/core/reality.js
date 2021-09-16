@@ -378,8 +378,7 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  player.infMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);

@@ -1033,8 +1033,7 @@ GameStorage.devMigrations = {
     },
     player => {
       for (const i of player.reality.glyphs.undo) {
-        for (const j of ['thisInfinityTime', 'thisInfinityRealTime',
-        'thisEternityTime', 'thisEternityRealTime']) {
+        for (const j of ["thisInfinityTime", "thisInfinityRealTime", "thisEternityTime", "thisEternityRealTime"]) {
           if (!(j in i)) {
             // This is 1 second, seems like a solid default value for saves without the property.
             i[j] = 1000;
@@ -1043,6 +1042,7 @@ GameStorage.devMigrations = {
       }
     },
     player => {
+      // Requirement migration/refactor
       player.requirementChecks = {
         infinity: {
           maxAll: player.usedMaxAll,
@@ -1081,6 +1081,7 @@ GameStorage.devMigrations = {
       delete player.minNegativeBlackHoleThisReality;
       delete player.celestials.v.maxGlyphsThisRun;
 
+      // Separate news-specific data
       player.newsStats = {
         uselessNewsClicks: player.secretUnlocks.uselessNewsClicks,
         paperclips: player.secretUnlocks.paperclips,
@@ -1091,7 +1092,8 @@ GameStorage.devMigrations = {
       delete player.secretUnlocks.paperclips;
       delete player.secretUnlocks.newsQueuePosition;
       delete player.secretUnlocks.eiffelTowerChapter;
-    }
+    },
+    GameStorage.migrations.refactorDoubleIPRebuyable
   ],
 
   patch(player) {

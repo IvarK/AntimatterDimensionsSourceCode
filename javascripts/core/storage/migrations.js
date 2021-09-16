@@ -82,12 +82,9 @@ GameStorage.migrations = {
       // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST
       if (isDevEnvironment()) GameStorage.devMigrations.setLatestTestVersion(player);
 
-      // Last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards,
+      // Last update version check, fix emoji/cancer issue,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
       // And all other kinds of stuff
-      if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
-      if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
-
       player.realTimePlayed = player.totalTimePlayed;
       player.thisReality = player.totalTimePlayed;
       player.thisInfinityRealTime = player.thisInfinityTime * 100;
@@ -149,6 +146,7 @@ GameStorage.migrations = {
       GameStorage.migrations.convertTimeTheoremPurchases(player);
       GameStorage.migrations.deleteDimboostBulk(player);
       GameStorage.migrations.deleteFloatingTextOption(player);
+      GameStorage.migrations.refactorDoubleIPRebuyable(player);
 
       kong.migratePurchases();
     }
@@ -855,6 +853,14 @@ GameStorage.migrations = {
 
   deleteFloatingTextOption(player) {
     delete player.options.animations.floatingText;
+  },
+
+  refactorDoubleIPRebuyable(player) {
+    // A bit of a hack, but needs to be done this way to not trigger the non-Decimal assignment crash check code
+    const purchases = new Decimal(player.infMult).log2();
+    delete player.infMult;
+    player.infMult = Math.round(purchases);
+    delete player.infMultCost;
   },
 
   prePatch(saveData) {

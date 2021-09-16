@@ -294,13 +294,29 @@ function disChargeAll() {
   ]);
 }());
 
+// The repeatable 2xIP upgrade has an odd cost structure - it follows a shallow exponential (step *10) up to e3M, at
+// which point it follows a steeper one (step *1e10) up to e6M before finally hardcapping. At the hardcap, there's 
+// an extra bump that increases the multipler itself from e993k to e1M. All these numbers are specified in
+// GameDatabase.infinity.upgrades.ipMult
 class InfinityIPMultUpgrade extends GameMechanicState {
   get cost() {
-    return this.config.cost();
+    if (this.purchaseCount >= this.purchasesAtIncrease) {
+      return this.config.costIncreaseThreshold
+        .times(Decimal.pow(this.costIncrease, this.purchaseCount - this.purchasesAtIncrease));
+    }
+    return Decimal.pow(this.costIncrease, this.purchaseCount + 1);
+  }
+
+  get purchaseCount() {
+    return player.infMult;
+  }
+
+  get purchasesAtIncrease() {
+    return this.config.costIncreaseThreshold.log10() - 1;
   }
 
   get hasIncreasedCost() {
-    return this.cost.gte(this.config.costIncreaseThreshold);
+    return this.purchaseCount >= this.purchasesAtIncrease;
   }
 
   get costIncrease() {
@@ -326,25 +342,16 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     return !this.isCapped && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
+  // This is only ever called with amount = 1 or within buyMax under conditions that ensure the scaling doesn't
+  // change mid-purchase
   purchase(amount = 1) {
     if (!this.canBeBought) return;
-    const mult = Decimal.pow(2, amount);
-    player.infMult = player.infMult.times(mult);
     if (!TimeStudy(181).isBought) {
-      Autobuyer.bigCrunch.bumpAmount(mult);
+      Autobuyer.bigCrunch.bumpAmount(Decimal.pow(2, amount));
     }
-    const costIncrease = this.costIncrease;
-    Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, costIncrease, 0));
-    player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
-    this.adjustToCap();
+    Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
+    player.infMult += amount;
     GameUI.update();
-  }
-
-  adjustToCap() {
-    if (this.isCapped) {
-      player.infMult.copyFrom(this.config.cap());
-      player.infMultCost.copyFrom(this.config.costCap);
-    }
   }
 
   buyMax() {

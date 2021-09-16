@@ -152,8 +152,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 15,
       cost: 1e9,
       requirement: () => `Reach ${format("1e1500000000000")} antimatter without having any Infinity Dimensions`,
-      hasFailed: () => player.achievementChecks.maxID1ThisReality.gt(0),
-      checkRequirement: () => player.achievementChecks.maxID1ThisReality.eq(0) && player.antimatter.exponent >= 1.5e12,
+      hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
+      checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
     },
@@ -198,8 +198,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatCost: x => format(x, 1),
       requirement: () => `Reach ${formatInt(3.85e6)} Tickspeed Continuum without having more than
         ${formatInt(8)} Time Studies`,
-      hasFailed: () => player.achievementChecks.maxStudiesThisReality > 8,
-      checkRequirement: () => player.achievementChecks.maxStudiesThisReality <= 8 &&
+      hasFailed: () => player.requirementChecks.reality.maxStudies > 8,
+      checkRequirement: () => player.requirementChecks.reality.maxStudies <= 8 &&
         Tickspeed.continuumValue >= 3.85e6,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Dark Matter Annihilation",
@@ -221,8 +221,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 21,
       cost: 1e13,
       requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled`,
-      hasFailed: () => player.achievementChecks.continuumThisReality,
-      checkRequirement: () => !player.achievementChecks.continuumThisReality &&
+      hasFailed: () => !player.requirementChecks.reality.noContinuum,
+      checkRequirement: () => player.requirementChecks.reality.noContinuum &&
         Currency.antimatter.value.log10() >= 7.4e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Annihilation multiplier gain is improved based on iM",

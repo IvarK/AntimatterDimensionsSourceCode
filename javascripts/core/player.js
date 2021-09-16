@@ -28,7 +28,6 @@ let player = {
   achievementBits: Array.repeat(0, 15),
   secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
-  usedMaxAll: false,
   infinityRebuyables: [0, 0, 0],
   challenge: {
     normal: {
@@ -174,13 +173,12 @@ let player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
-    spreadingCancer: 0,
-    why: 0,
-    dragging: 0,
     themes: new Set(),
     viewSecretTS: false,
-    uselessNewsClicks: 0,
     cancerAchievements: false,
+  },
+  newsStats: {
+    uselessNewsClicks: 0,
     paperclips: 0,
     newsQueuePosition: 1000,
     eiffelTowerChapter: 0
@@ -189,6 +187,34 @@ let player = {
     Reality: true,
     Eternity: true,
     Infinity: true
+  },
+  requirementChecks: {
+    infinity: {
+      maxAll: false,
+      noSacrifice: true,
+      noAD8: true,
+    },
+    eternity: {
+      onlyAD1: true,
+      onlyAD8: true,
+      noAD1: true,
+      noRG: true,
+    },
+    reality: {
+      noAM: true,
+      noTriads: true,
+      noPurchasedTT: true,
+      noInfinities: true,
+      noEternities: true,
+      noContinuum: true,
+      maxID1: new Decimal(0),
+      maxStudies: 0,
+    },
+    permanent: {
+      cancerGalaxies: 0,
+      singleTickspeed: 0,
+      perkTreeDragging: 0
+    }
   },
   records: {
     gameCreatedTime: Date.now(),
@@ -253,27 +279,10 @@ let player = {
       laitelaSet: [],
     },
   },
-  achievementChecks: {
-    noSacrifices: true,
-    onlyEighthDimensions: true,
-    onlyFirstDimensions: true,
-    noEighthDimensions: true,
-    noFirstDimensions: true,
-    noAntimatterProduced: true,
-    noTriadStudies: true,
-    noTheoremPurchases: true,
-    noInfinitiesThisReality: true,
-    noEternitiesThisReality: true,
-    noReplicantiGalaxies: true,
-    maxID1ThisReality: new Decimal(0),
-    maxStudiesThisReality: 0,
-    continuumThisReality: true,
-  },
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,
   infinityPower: new Decimal(1),
-  spreadingCancer: 0,
   postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
@@ -776,6 +785,43 @@ const Player = {
 
   get automatorUnlocked() {
     return Currency.realities.gte(5);
+  },
+
+  resetRequirements(key) {
+    // This switch case intentionally falls through because every lower layer should be reset as well
+    switch (key) {
+      case "reality":
+        player.requirementChecks.reality = {
+          noAM: true,
+          noTriads: true,
+          noPurchasedTT: true,
+          // Note that these two checks are only used before the "flow" upgrades which passively generate infinities
+          // and eternities - they still remain true unless a manual prestige is done
+          noInfinities: true,
+          noEternities: true,
+          noContinuum: true,
+          maxID1: new Decimal(0),
+          maxStudies: 0,
+        };
+      // eslint-disable-next-line no-fallthrough
+      case "eternity":
+        player.requirementChecks.eternity = {
+          onlyAD1: true,
+          onlyAD8: true,
+          noAD1: true,
+          noRG: true,
+        };
+      // eslint-disable-next-line no-fallthrough
+      case "infinity":
+        player.requirementChecks.infinity = {
+          maxAll: false,
+          noSacrifice: true,
+          noAD8: true,
+        };
+        break;
+      default:
+        throw Error("Unrecognized prestige layer for requirement reset");
+    }
   }
 };
 

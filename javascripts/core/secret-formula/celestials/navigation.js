@@ -556,7 +556,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => EffarigUnlock.reality.isUnlocked,
       complete: () => {
         if (Achievement(151).isUnlocked) return 1;
-        if (!player.achievementChecks.noEighthDimensions) return 0;
+        if (!player.requirementChecks.infinity.noAD8) return 0;
 
         return player.galaxies / 800;
       },
@@ -576,7 +576,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = 800;
             if (complete >= 1) return "V's Reality";
-            const galaxies = player.achievementChecks.noEighthDimensions ? player.galaxies : 0;
+            const galaxies = player.requirementChecks.infinity.noAD8 ? player.galaxies : 0;
             return [
               "V's unlock Achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
@@ -1305,7 +1305,7 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             if (Laitela.isUnlocked) return ["Lai'tela's Reality"];
 
-            const hasIDs = player.achievementChecks.maxID1ThisReality.neq(0);
+            const hasIDs = player.requirementChecks.reality.maxID1.neq(0);
             if (hasIDs) return [
               "Lai'tela's Reality",
               "The Power of Infinity Dimensions",

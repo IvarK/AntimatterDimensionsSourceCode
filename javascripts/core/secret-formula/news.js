@@ -1172,7 +1172,7 @@ GameDatabase.news = [
   {
     id: "a210",
     get text() {
-      const clicks = player.secretUnlocks.uselessNewsClicks;
+      const clicks = player.newsStats.uselessNewsClicks;
       const plural = pluralize("time", clicks, "times");
       if (clicks === 1) {
         return `Nothing happens when you click this text. And yet, you've clicked it.`;
@@ -1183,7 +1183,7 @@ GameDatabase.news = [
       return "Nothing happens when you click this text. And you understand that.";
     },
     onClick() {
-      player.secretUnlocks.uselessNewsClicks++;
+      player.newsStats.uselessNewsClicks++;
       return this.text;
     }
   },
@@ -1699,7 +1699,7 @@ GameDatabase.news = [
   {
     id: "a288",
     get text() {
-      const position = player.secretUnlocks.newsQueuePosition--;
+      const position = player.newsStats.newsQueuePosition--;
       if (position > 1) {
         return `Thank you for contacting customer support. Your satisfaction is very important to us, and a company
           representative will be with you shortly. You are now at position ${position} in the queue. Thank you for
@@ -1712,14 +1712,14 @@ GameDatabase.news = [
     id: "a289",
     text: "Click here to disassemble the news ticker for a trace amount of paperclips.",
     onClick() {
-      player.secretUnlocks.paperclips++;
+      player.newsStats.paperclips++;
       GameOptions.toggleNews();
     }
   },
   {
     id: "a290",
     get text() {
-      const paperclips = player.secretUnlocks.paperclips;
+      const paperclips = player.newsStats.paperclips;
       return `You see, this news isn't normal news. It is being produced by the first news dimension. If you want
         to unlock more news, you have to collect enough paperclips to build the second news dimension. You
         currently have ${paperclips} ${pluralize("paperclip", paperclips, "paperclips")}, but you need
@@ -1765,7 +1765,7 @@ GameDatabase.news = [
       onClick() {
         if (wasClicked) return undefined;
         wasClicked = true;
-        player.secretUnlocks.paperclips++;
+        player.newsStats.paperclips++;
         return this.text;
       }
     };
@@ -2208,8 +2208,8 @@ GameDatabase.news = [
         not listened to, if Paris is stubborn in the idea of dishonoring Paris, we will have, at least, you and us,
         hear a protest that honors.`
       ];
-      const chapter = chapters[player.secretUnlocks.eiffelTowerChapter];
-      player.secretUnlocks.eiffelTowerChapter = (player.secretUnlocks.eiffelTowerChapter + 1) % 5;
+      const chapter = chapters[player.newsStats.eiffelTowerChapter];
+      player.newsStats.eiffelTowerChapter = (player.newsStats.eiffelTowerChapter + 1) % 5;
       return chapter;
     }
   },
@@ -2253,7 +2253,7 @@ GameDatabase.news = [
   {
     id: "l8",
     text: "A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.",
-    get unlocked() { return player.secretUnlocks.spreadingCancer > 0; }
+    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies > 0; }
   },
   {
     id: "l9",
@@ -2369,7 +2369,7 @@ GameDatabase.news = [
   {
     id: "l22",
     text: "Anti Emoji Movie a huge hit!",
-    get unlocked() { return player.secretUnlocks.spreadingCancer >= 5; }
+    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies >= 5; }
   },
   {
     id: "l23",
@@ -2494,7 +2494,7 @@ GameDatabase.news = [
   {
     id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    get unlocked() { return player.secretUnlocks.spreadingCancer >= 3999; }
+    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies >= 3999; }
   },
   {
     id: "l46",
@@ -3879,7 +3879,7 @@ GameDatabase.news = [
     text: "Click here to disassemble the news ticker for a trace amount of useless paperclips.",
     onClick() {
       GameOptions.toggleNews();
-      player.secretUnlocks.paperclips++;
+      player.newsStats.paperclips++;
     }
   },
   {

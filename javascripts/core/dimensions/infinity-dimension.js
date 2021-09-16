@@ -327,7 +327,7 @@ const InfinityDimensions = {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
 
-    player.achievementChecks.maxID1ThisReality = player.achievementChecks.maxID1ThisReality
+    player.requirementChecks.reality.maxID1 = player.requirementChecks.reality.maxID1
       .clampMin(InfinityDimension(1).amount);
   },
 

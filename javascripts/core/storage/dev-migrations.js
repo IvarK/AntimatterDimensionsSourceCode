@@ -1041,6 +1041,52 @@ GameStorage.devMigrations = {
           }
         }
       }
+    },
+    player => {
+      player.requirementChecks = {
+        infinity: {
+          maxAll: player.usedMaxAll,
+          noSacrifice: player.achievementChecks.noSacrifices,
+          noAD8: player.achievementChecks.noEighthDimensions,
+        },
+        eternity: {
+          onlyAD1: player.achievementChecks.onlyFirstDimensions,
+          onlyAD8: player.achievementChecks.onlyEighthDimensions,
+          noAD1: player.achievementChecks.noFirstDimensions,
+          noRG: player.achievementChecks.noEighthDimensions,
+        },
+        reality: {
+          noAM: player.achievementChecks.noAntimatterProduced,
+          noTriads: player.achievementChecks.noTriadStudies,
+          noPurchasedTT: player.achievementChecks.noTheoremPurchases,
+          noInfinities: player.achievementChecks.noInfinitiesThisReality,
+          noEternities: player.achievementChecks.noEternitiesThisReality,
+          noContinuum: !player.achievementChecks.continuumThisReality,
+          maxID1: player.achievementChecks.maxID1ThisReality,
+          maxStudies: player.achievementChecks.maxStudiesThisReality,
+        },
+        permanent: {
+          cancerGalaxies: player.secretUnlocks.spreadingCancer,
+          singleTickspeed: player.secretUnlocks.why,
+          perkTreeDragging: player.secretUnlocks.dragging,
+        }
+      };
+      delete player.usedMaxAll;
+      delete player.secretUnlocks.spreadingCancer;
+      delete player.secretUnlocks.why;
+      delete player.secretUnlocks.dragging;
+      delete player.achievementChecks;
+
+      player.newsStats = {
+        uselessNewsClicks: player.secretUnlocks.uselessNewsClicks,
+        paperclips: player.secretUnlocks.paperclips,
+        newsQueuePosition: player.secretUnlocks.newsQueuePosition,
+        eiffelTowerChapter: player.secretUnlocks.eiffelTowerChapter,
+      };
+      delete player.secretUnlocks.uselessNewsClicks;
+      delete player.secretUnlocks.paperclips;
+      delete player.secretUnlocks.newsQueuePosition;
+      delete player.secretUnlocks.eiffelTowerChapter;
     }
   ],
 

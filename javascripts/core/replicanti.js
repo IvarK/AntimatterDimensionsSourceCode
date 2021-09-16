@@ -14,7 +14,7 @@ const ReplicantiGrowth = {
 function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
-    player.achievementChecks.noReplicantiGalaxies = false;
+    player.requirementChecks.eternity.noRG = false;
     if (!EternityMilestone.replicantiNoReset.isReached) {
       player.dimensionBoosts = 0;
       softReset(0, true, true);

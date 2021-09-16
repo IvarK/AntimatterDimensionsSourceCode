@@ -71,7 +71,7 @@ function buyTickSpeed() {
   Currency.antimatter.subtract(Tickspeed.cost);
   player.totalTickBought++;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-  player.secretUnlocks.why++;
+  player.requirementChecks.permanent.singleTickspeed++;
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   GameUI.update();
   return true;

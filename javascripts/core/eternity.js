@@ -75,9 +75,7 @@ function eternity(force, auto, specialConditions = {}) {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     if (!player.dilation.active) giveEternityRewards(auto);
-    // If somehow someone manages to force their first eternity
-    // (e.g., by starting an EC), they haven't really done an eternity yet.
-    player.achievementChecks.noEternitiesThisReality = false;
+    player.requirementChecks.reality.noEternities = false;
   }
 
   if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -165,12 +163,7 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.achievementChecks.noSacrifices = true;
-  player.achievementChecks.onlyEighthDimensions = true;
-  player.achievementChecks.onlyFirstDimensions = true;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noFirstDimensions = true;
-  player.achievementChecks.noReplicantiGalaxies = true;
+  Player.resetRequirements("eternity");
 }
 
 function applyRealityUpgradesAfterEternity() {

@@ -403,7 +403,7 @@ function finishProcessReality(realityProps) {
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  Player.resetRequirements("reality");
+  if (!realityProps.glyphUndo) Player.resetRequirements("reality");
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   player.records.thisReality.maxReplicanti = new Decimal(0);

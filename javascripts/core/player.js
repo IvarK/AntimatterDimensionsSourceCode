@@ -209,6 +209,8 @@ let player = {
       noContinuum: true,
       maxID1: new Decimal(0),
       maxStudies: 0,
+      maxGlyphs: 0,
+      slowestBH: 0,
     },
     permanent: {
       cancerGalaxies: 0,
@@ -430,7 +432,6 @@ let player = {
   blackHolePause: false,
   blackHolePauseTime: 0,
   blackHoleNegative: 1,
-  minNegativeBlackHoleThisReality: 0,
   celestials: {
     teresa: {
       pouredAmount: 0,
@@ -498,7 +499,6 @@ let player = {
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      maxGlyphsThisRun: 0,
       wantsFlipped: true,
     },
     ra: {
@@ -788,6 +788,7 @@ const Player = {
   },
 
   resetRequirements(key) {
+    const glyphCount = player.requirementChecks.reality.maxGlyphs;
     // This switch case intentionally falls through because every lower layer should be reset as well
     switch (key) {
       case "reality":
@@ -795,13 +796,17 @@ const Player = {
           noAM: true,
           noTriads: true,
           noPurchasedTT: true,
-          // Note that these two checks are only used before the "flow" upgrades which passively generate infinities
-          // and eternities - they still remain true unless a manual prestige is done
+          // Note that these two checks below are only used before the "flow" upgrades which passively generate
+          // infinities and eternities - they still remain true unless a manual prestige is done
           noInfinities: true,
           noEternities: true,
           noContinuum: true,
           maxID1: new Decimal(0),
           maxStudies: 0,
+          // This only gets set to the correct value when Glyphs.updateMaxGlyphCount is called, which always happens
+          // before this part of the code is reached in the Reality reset. Nevertheless, we want to keep its old value.
+          maxGlyphs: glyphCount,
+          slowestBH: BlackHoles.areNegative ? player.blackHoleNegative : 1,
         };
       // eslint-disable-next-line no-fallthrough
       case "eternity":

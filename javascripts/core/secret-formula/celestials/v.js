@@ -148,7 +148,7 @@ GameDatabase.celestials.v = {
       // This achievement has internally negated values since the check is always greater than
       values: [1, 4, 7, 10, 13],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
-      currentValue: () => -player.celestials.v.maxGlyphsThisRun,
+      currentValue: () => -player.requirementChecks.reality.maxGlyphs,
       formatRecord: x => formatInt(-x),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
@@ -165,7 +165,7 @@ GameDatabase.celestials.v = {
       currentValue: () => (
         // Dirty hack I know lmao
         Currency.timeTheorems.gte(400000)
-          ? -Math.log10(player.minNegativeBlackHoleThisReality)
+          ? -Math.log10(player.requirementChecks.reality.slowestBH)
           : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,
       shardReduction: tiers => 50 * tiers,

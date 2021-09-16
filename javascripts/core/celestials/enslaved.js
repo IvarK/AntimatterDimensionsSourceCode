@@ -92,7 +92,7 @@ const Enslaved = {
   useStoredTime(autoRelease) {
     if (!this.canRelease(autoRelease)) return;
     if (EternityChallenge(12).isRunning) return;
-    player.minNegativeBlackHoleThisReality = 1;
+    player.requirementChecks.reality.slowestBH = 1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
       release = Enslaved.storedTimeInsideEnslaved(release);

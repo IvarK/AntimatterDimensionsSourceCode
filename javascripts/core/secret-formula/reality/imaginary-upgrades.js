@@ -237,8 +237,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       requirement: () => `Reach ${format("1e150000000000")} antimatter in Effarig's Reality with
         at least ${formatInt(4)} cursed glyphs equipped`,
       // Note: 4 cursed glyphs is -12 glyph count, but equipping a positive glyph in the last slot is allowed
-      hasFailed: () => !Effarig.isRunning || player.celestials.v.maxGlyphsThisRun > -10,
-      checkRequirement: () => Effarig.isRunning && player.celestials.v.maxGlyphsThisRun < -10 &&
+      hasFailed: () => !Effarig.isRunning || player.requirementChecks.reality.maxGlyphs > -10,
+      checkRequirement: () => Effarig.isRunning && player.requirementChecks.reality.maxGlyphs < -10 &&
         Currency.antimatter.value.exponent >= 1.5e11,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: () => `Glyph Sacrifice totals for basic glyphs are raised to ${format(1e100)}`,
@@ -250,8 +250,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 6e14,
       requirement: () => `Reach glyph level ${formatInt(20000)} in Ra's Reality with
         at most ${formatInt(0)} glyphs equipped`,
-      hasFailed: () => !Ra.isRunning || player.celestials.v.maxGlyphsThisRun > 0,
-      checkRequirement: () => Ra.isRunning && player.celestials.v.maxGlyphsThisRun <= 0 &&
+      hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.maxGlyphs > 0,
+      checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.maxGlyphs <= 0 &&
         gainedGlyphLevel().actualLevel >= 20000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost count based on Tesseract count",
@@ -264,8 +264,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 6e14,
       requirement: () => `Have ${formatInt(13000)} Antimatter Galaxies in Ra's Reality
         with a fully inverted Black Hole`,
-      hasFailed: () => !Ra.isRunning || player.minNegativeBlackHoleThisReality > 1e-300,
-      checkRequirement: () => Ra.isRunning && player.minNegativeBlackHoleThisReality <= 1e-300 &&
+      hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.slowestBH > 1e-300,
+      checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.slowestBH <= 1e-300 &&
         player.galaxies >= 13000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost strength based on Singularity count",

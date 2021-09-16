@@ -1062,8 +1062,10 @@ GameStorage.devMigrations = {
           noInfinities: player.achievementChecks.noInfinitiesThisReality,
           noEternities: player.achievementChecks.noEternitiesThisReality,
           noContinuum: !player.achievementChecks.continuumThisReality,
-          maxID1: player.achievementChecks.maxID1ThisReality,
+          maxID1: new Decimal(player.achievementChecks.maxID1ThisReality),
           maxStudies: player.achievementChecks.maxStudiesThisReality,
+          maxGlyphs: player.celestials.v.maxGlyphsThisRun,
+          slowestBH: player.minNegativeBlackHoleThisReality,
         },
         permanent: {
           cancerGalaxies: player.secretUnlocks.spreadingCancer,
@@ -1076,6 +1078,8 @@ GameStorage.devMigrations = {
       delete player.secretUnlocks.why;
       delete player.secretUnlocks.dragging;
       delete player.achievementChecks;
+      delete player.minNegativeBlackHoleThisReality;
+      delete player.celestials.v.maxGlyphsThisRun;
 
       player.newsStats = {
         uselessNewsClicks: player.secretUnlocks.uselessNewsClicks,

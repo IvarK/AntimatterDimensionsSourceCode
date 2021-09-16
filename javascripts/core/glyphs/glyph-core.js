@@ -506,8 +506,8 @@ const Glyphs = {
   updateMaxGlyphCount(startingReality = false) {
     const activeGlyphList = this.activeList;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
-    if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
-    player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
+    if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
+    player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {

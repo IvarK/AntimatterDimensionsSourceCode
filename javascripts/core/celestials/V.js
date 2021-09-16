@@ -198,12 +198,7 @@ const V = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.v.run = true;
-    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
-    if (!BlackHoles.areNegative) {
-      player.minNegativeBlackHoleThisReality = 1;
-    }
     this.quotes.show(this.quotes.REALITY_ENTER);
-    Glyphs.updateMaxGlyphCount(true);
   },
   updateTotalRunUnlocks() {
     let sum = 0;
@@ -224,7 +219,6 @@ const V = {
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      maxGlyphsThisRun: 0
     };
     this.spaceTheorems = 0;
   },

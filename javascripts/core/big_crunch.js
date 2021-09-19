@@ -56,7 +56,7 @@ function bigCrunchUpdateStatistics() {
   player.records.thisInfinity.bestIPmin = new Decimal(0);
 
   player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
-    gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
+    gainedInfinities().round().dividedBy(Math.clampMin(33, player.records.thisInfinity.realTime))
   );
 
   const infinityPoints = gainedInfinityPoints();
@@ -76,7 +76,7 @@ function bigCrunchUpdateStatistics() {
   player.achievementChecks.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
-    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
+    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(Math.clampMin(33, player.records.thisInfinity.realTime));
     player.records.thisEternity.bestIPMsWithoutMaxAll =
       Decimal.max(bestIpPerMsWithoutMaxAll, player.records.thisEternity.bestIPMsWithoutMaxAll);
   }

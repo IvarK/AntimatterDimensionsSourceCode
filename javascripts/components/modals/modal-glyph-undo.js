@@ -40,7 +40,7 @@ Vue.component("modal-glyph-undo", {
           <br>- Dilation Upgrades, Tachyon Particles, and Dilated Time
           <br>- Time Theorems and Eternity Challenge completions
           <br>- Time Dimension and Reality unlocks
-          <br>- Time in current Reality
+          <br>- Time in current Infinity/Eternity/Reality
           <span v-if="showStoredGameTime"><br>- Stored game time</span>
         </div>
       </div>

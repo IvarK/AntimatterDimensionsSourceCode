@@ -63,7 +63,7 @@ Vue.component("statistics-tab", {
           Achievement(131),
           TimeStudy(191)
         );
-        infinity.bankRate = infinity.projectedBanked.div(records.thisEternity.time).times(60000);
+        infinity.bankRate = infinity.projectedBanked.div(Math.clampMin(33, records.thisEternity.time)).times(60000);
         infinity.hasBest = bestInfinity.time < 999999999999;
         infinity.best.setFrom(bestInfinity.time);
         infinity.this.setFrom(records.thisInfinity.time);
@@ -95,7 +95,7 @@ Vue.component("statistics-tab", {
         reality.totalTimePlayed.setFrom(records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
         infinity.thisReal.setFrom(records.thisInfinity.realTime);
-        infinity.bankRate = infinity.projectedBanked.div(records.thisEternity.realTime).times(60000);
+        infinity.bankRate = infinity.projectedBanked.div(Math.clampMin(33, records.thisEternity.realTime)).times(60000);
         eternity.thisReal.setFrom(records.thisEternity.realTime);
         reality.thisReal.setFrom(records.thisReality.realTime);
         reality.bestRate.copyFrom(bestReality.RMmin);

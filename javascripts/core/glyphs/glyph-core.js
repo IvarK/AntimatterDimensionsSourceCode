@@ -443,6 +443,10 @@ const Glyphs = {
       ep: new Decimal(Currency.eternityPoints.value),
       tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
+      thisInfinityTime: player.records.thisInfinity.time,
+      thisInfinityRealTime: player.records.thisInfinity.realTime,
+      thisEternityTime: player.records.thisEternity.time,
+      thisEternityRealTime: player.records.thisEternity.realTime,
       thisRealityTime: player.records.thisReality.time,
       thisRealityRealTime: player.records.thisReality.realTime,
       storedTime: player.celestials.enslaved.stored,
@@ -468,6 +472,10 @@ const Glyphs = {
     Currency.eternityPoints.value = new Decimal(undoData.ep);
     Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
+    player.records.thisInfinity.time = undoData.thisInfinityTime;
+    player.records.thisInfinity.realTime = undoData.thisInfinityRealTime;
+    player.records.thisEternity.time = undoData.thisEternityTime;
+    player.records.thisEternity.realTime = undoData.thisEternityRealTime;
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
     player.celestials.enslaved.stored = undoData.storedTime || 0;

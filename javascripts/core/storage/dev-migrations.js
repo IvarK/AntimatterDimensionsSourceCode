@@ -1030,6 +1030,17 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.celestials.enslaved.totalDimCapIncrease;
+    },
+    player => {
+      for (let i of player.reality.glyphs.undo) {
+        for (let j of ['thisInfinityTime', 'thisInfinityRealTime',
+        'thisEternityTime', 'thisEternityRealTime']) {
+          if (!(j in i)) {
+            // This is 1 second, seems like a solid default value for saves without the property.
+            i[j] = 1000;
+          }
+        }
+      }
     }
   ],
 

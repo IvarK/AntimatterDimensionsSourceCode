@@ -61,7 +61,7 @@ Vue.component("game-header-big-crunch-button", {
       this.gainedIP.copyFrom(gainedIP);
       this.peakIPPM.copyFrom(player.records.thisInfinity.bestIPmin);
       if (this.isPeakIPPMVisible) {
-        this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
+        this.currentIPPM.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
       }
       this.tesseractAffordable = Tesseracts.canBuyTesseract;
     },

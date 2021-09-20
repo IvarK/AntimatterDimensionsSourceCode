@@ -93,6 +93,7 @@ Vue.component("news-ticker", {
 
       NewsHandler.addSeenNews(this.currentNews.id);
       if (NewsHandler.uniqueTickersSeen >= 50) Achievement(22).unlock();
+      player.news.totalSeen++;
 
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },

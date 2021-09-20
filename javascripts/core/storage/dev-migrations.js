@@ -1084,6 +1084,14 @@ GameStorage.devMigrations = {
       delete player.minNegativeBlackHoleThisReality;
       delete player.celestials.v.maxGlyphsThisRun;
 
+      // Refactor news storage format to bitmask array
+      const oldNewsArray = player.news;
+      delete player.news;
+      player.news = {};
+      player.news.seen = {};
+      for (const id of oldNewsArray) NewsHandler.addSeenNews(id);
+      player.news.totalSeen = NewsHandler.uniqueTickersSeen;
+
       // Separate news-specific data
       player.news.specialTickerData = {
         uselessNewsClicks: player.secretUnlocks.uselessNewsClicks,
@@ -1095,13 +1103,6 @@ GameStorage.devMigrations = {
       delete player.secretUnlocks.paperclips;
       delete player.secretUnlocks.newsQueuePosition;
       delete player.secretUnlocks.eiffelTowerChapter;
-
-      // Refactor news storage format to bitmask array
-      const oldNews = player.news;
-      delete player.news;
-      player.news = {};
-      player.news.seen = {};
-      for (const id of oldNews) NewsHandler.addSeenNews(id);
     },
     GameStorage.migrations.refactorDoubleIPRebuyable
   ],

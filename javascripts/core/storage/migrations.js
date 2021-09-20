@@ -122,7 +122,6 @@ GameStorage.migrations = {
       GameStorage.migrations.removePostC3Reward(player);
       GameStorage.migrations.renameMoney(player);
       GameStorage.migrations.moveAutobuyers(player);
-      GameStorage.migrations.convertNews(player);
       GameStorage.migrations.convertEternityCountToDecimal(player);
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
@@ -146,6 +145,7 @@ GameStorage.migrations = {
       GameStorage.migrations.deleteDimboostBulk(player);
       GameStorage.migrations.deleteFloatingTextOption(player);
       GameStorage.migrations.refactorDoubleIPRebuyable(player);
+      GameStorage.migrations.convertNews(player);
 
       kong.migratePurchases();
     }
@@ -637,7 +637,32 @@ GameStorage.migrations = {
   },
 
   convertNews(player) {
-    for (const id of player.newsArray) NewsHandler.addSeenNews(id);
+    const oldNewsArray = new Set(player.newsArray);
+    player.news = {};
+    player.news.seen = {};
+    player.news.specialTickerData = {
+      uselessNewsClicks: 0,
+      paperclips: 0,
+      newsQueuePosition: 1000,
+      eiffelTowerChapter: 0
+    };
+
+    // This loop is copied more or less straight out of NewsHandler.addSeenNews with the extraneous comments and
+    // spacing removed. There was something strange with variable scoping that was causing player.news.seen to be
+    // updated within NewsHandler, but then immediately becoming empty again once we were back at this level of
+    // function calls (ie. out of the scope of NewsHandler). Sloppy, but nevertheless it does seem to work.
+    const maskLength = NewsHandler.BITS_PER_MASK;
+    for (const id of oldNewsArray) {
+      const groups = id.match(/([a-z]+)(\d+)/u);
+      const type = groups[1];
+      const number = parseInt(groups[2], 10);
+      if (!player.news.seen[type]) player.news.seen[type] = [];
+      while (maskLength * player.news.seen[type].length < number) player.news.seen[type].push(0);
+      // eslint-disable-next-line no-bitwise
+      player.news.seen[type][Math.floor(number / maskLength)] |= 1 << (number % maskLength);
+    }
+
+    player.news.totalSeen = NewsHandler.uniqueTickersSeen;
     delete player.newsArray;
   },
 

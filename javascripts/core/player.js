@@ -170,7 +170,7 @@ let player = {
       newsQueuePosition: 1000,
       eiffelTowerChapter: 0
     },
-    newsSeen: 0,
+    totalSeen: 0,
   },
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,

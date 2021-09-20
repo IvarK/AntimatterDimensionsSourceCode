@@ -48,7 +48,7 @@ Vue.component("statistics-tab", {
       const records = player.records;
       this.totalAntimatter.copyFrom(records.totalAntimatter);
       this.realTimePlayed.setFrom(records.realTimePlayed);
-      this.newsMessagesSeen = player.news.size;
+      this.newsMessagesSeen = NewsHandler.uniqueTickersSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
 
       const progress = PlayerProgress.current;

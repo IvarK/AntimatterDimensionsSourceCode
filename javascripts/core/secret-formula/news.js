@@ -3,7 +3,6 @@
 // A = always there
 // L = locked
 // J = joke/unreasonable condition
-// E = enslaved hints (practically but not technically missable)
 // R = random chance condition
 // P = patreon
 // AI = created with gpt2
@@ -1172,7 +1171,7 @@ GameDatabase.news = [
   {
     id: "a210",
     get text() {
-      const clicks = player.newsStats.uselessNewsClicks;
+      const clicks = player.news.specialTickerData.uselessNewsClicks;
       const plural = pluralize("time", clicks, "times");
       if (clicks === 1) {
         return `Nothing happens when you click this text. And yet, you've clicked it.`;
@@ -1183,7 +1182,7 @@ GameDatabase.news = [
       return "Nothing happens when you click this text. And you understand that.";
     },
     onClick() {
-      player.newsStats.uselessNewsClicks++;
+      player.news.specialTickerData.uselessNewsClicks++;
       return this.text;
     }
   },
@@ -1699,7 +1698,7 @@ GameDatabase.news = [
   {
     id: "a288",
     get text() {
-      const position = player.newsStats.newsQueuePosition--;
+      const position = player.news.specialTickerData.newsQueuePosition--;
       if (position > 1) {
         return `Thank you for contacting customer support. Your satisfaction is very important to us, and a company
           representative will be with you shortly. You are now at position ${position} in the queue. Thank you for
@@ -1712,14 +1711,14 @@ GameDatabase.news = [
     id: "a289",
     text: "Click here to disassemble the news ticker for a trace amount of paperclips.",
     onClick() {
-      player.newsStats.paperclips++;
+      player.news.specialTickerData.paperclips++;
       GameOptions.toggleNews();
     }
   },
   {
     id: "a290",
     get text() {
-      const paperclips = player.newsStats.paperclips;
+      const paperclips = player.news.specialTickerData.paperclips;
       return `You see, this news isn't normal news. It is being produced by the first news dimension. If you want
         to unlock more news, you have to collect enough paperclips to build the second news dimension. You
         currently have ${paperclips} ${pluralize("paperclip", paperclips, "paperclips")}, but you need
@@ -1765,7 +1764,7 @@ GameDatabase.news = [
       onClick() {
         if (wasClicked) return undefined;
         wasClicked = true;
-        player.newsStats.paperclips++;
+        player.news.specialTickerData.paperclips++;
         return this.text;
       }
     };
@@ -2208,8 +2207,8 @@ GameDatabase.news = [
         not listened to, if Paris is stubborn in the idea of dishonoring Paris, we will have, at least, you and us,
         hear a protest that honors.`
       ];
-      const chapter = chapters[player.newsStats.eiffelTowerChapter];
-      player.newsStats.eiffelTowerChapter = (player.newsStats.eiffelTowerChapter + 1) % 5;
+      const chapter = chapters[player.news.specialTickerData.eiffelTowerChapter];
+      player.news.specialTickerData.eiffelTowerChapter = (player.news.specialTickerData.eiffelTowerChapter + 1) % 5;
       return chapter;
     }
   },
@@ -2414,52 +2413,52 @@ GameDatabase.news = [
   {
     id: "l30",
     text: "Does Hevi just pick quotes to put into the game?",
-    get unlocked() { return player.news.size >= 30; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 30; }
   },
   {
     id: "l31",
     text: "New news company has become rivals with us. They are made entirely of antimatter.",
-    get unlocked() { return player.news.size >= 80; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 80; }
   },
   {
     id: "l32",
     text: "How many times can we use \"Anti\" in a row before people stop listening?",
-    get unlocked() { return player.news.size >= 100; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 100; }
   },
   {
     id: "l33",
     text: "Does Hevi even check #news-ticker-suggestions anymore?",
-    get unlocked() { return player.news.size >= 120; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 120; }
   },
   {
     id: "l34",
     text: "Need more quotes! -hevipelle",
-    get unlocked() { return player.news.size >= 135; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 135; }
   },
   {
     id: "l35",
     text: "Man destroys known universe with antimatter, writes news tickers to keep from feeling lonely.",
-    get unlocked() { return player.news.size >= 150; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 150; }
   },
   {
     id: "l36",
     text: "You're almost there!",
-    get unlocked() { return player.news.size >= 160; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 160; }
   },
   {
     id: "l37",
     text: "You can stop now",
-    get unlocked() { return player.news.size >= 165; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 165; }
   },
   {
     id: "l38",
     text: "fucking hacker",
-    get unlocked() { return player.news.size > GameDatabase.news.length; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen > GameDatabase.news.length; }
   },
   {
     id: "l39",
     text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
-    get unlocked() { return player.news.has("c1"); }
+    get unlocked() { return NewsHandler.hasSeenNews("c1"); }
   },
   {
     id: "l40",
@@ -2467,7 +2466,7 @@ GameDatabase.news = [
       `I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th
       dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen,
       We should have listened.`,
-    get unlocked() { return player.news.has("b22"); }
+    get unlocked() { return NewsHandler.hasSeenNews("b22"); }
   },
   {
     id: "l41",
@@ -2805,118 +2804,6 @@ GameDatabase.news = [
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
     get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
-  },
-  {
-    id: "e1",
-    get text() {
-      return "Sometimes you want to break things, sometimes you want to use broken things.";
-    },
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e2",
-    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e3",
-    text:
-      `You can get Antimatter Galaxies the same way you can get more than
-      2 Antimatter Galaxies without Infinity being broken.`,
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e4",
-    get text() {
-      return `You can't get <span style='color: black; background: black;'>REDACTED</span>?
-        You couldn't get those anyway, why do you care?`;
-    },
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e5",
-    text:
-      `No, you can't decrease <span style='color: black; background: black;'>REDACTED</span>
-      to ×1.8, but it's still worth acting as if you could.`,
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e6",
-    text: "Have you tried rotating your screen 14 degrees counterclockwise?",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e7",
-    get text() {
-      return `${format("1e201600")} IP? I'm finally done!`;
-    },
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e8",
-    text: `Go there and stand away from me /
-    <span style='color: black; background: black;'>RE</span>
-    <span style='color: black; background: black;'>REDA</span>
-    <span style='color: black; background: black;'>RE</span>
-    <span style='color: black; background: black;'>RE</span>
-    <span style='color: black; background: black;'>REDAC</span>
-    <span style='color: black; background: black;'>RED</span>
-    <span style='color: black; background: black;'>REDACTED</span>`,
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e9",
-    text: "Social distancing with regard to Eternity is not encouraged.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e10",
-    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e11",
-    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a different celestial.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e12",
-    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e13",
-    get text() {
-      return `Did you know? While in The Enslaved Ones' Reality for more than
-        ${TimeSpan.fromMinutes(15)}, there's a small chance of a fairly-useless
-        hint in a news ticker message! Over ${TimeSpan.fromHours(2)}, the hints
-        will get slightly more useful and less convoluted, but remain fairly impossible to figure out!`;
-    },
-    get unlocked() { return Enslaved.isRunning; }
   },
   {
     id: "r1",
@@ -3879,7 +3766,7 @@ GameDatabase.news = [
     text: "Click here to disassemble the news ticker for a trace amount of useless paperclips.",
     onClick() {
       GameOptions.toggleNews();
-      player.newsStats.paperclips++;
+      player.news.specialTickerData.paperclips++;
     }
   },
   {

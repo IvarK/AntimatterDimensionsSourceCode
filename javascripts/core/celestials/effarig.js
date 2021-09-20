@@ -58,7 +58,7 @@ const Effarig = {
       .filter(g => !generatedTypes.includes(g.type))
       // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
+    return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;

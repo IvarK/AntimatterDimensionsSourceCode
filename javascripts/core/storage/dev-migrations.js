@@ -341,8 +341,11 @@ GameStorage.devMigrations = {
         allGlyphs[i].id = i;
       }
     },
+    // eslint-disable-next-line no-unused-vars
     player => {
-      GameStorage.migrations.clearNewsArray(player);
+      // This used to clearNewsArray, which cleared all news entries completely. Unsure what exactly that accomplished,
+      // but convertNews should accomplish the same migration purpose. However, this entry still needs to stay here as
+      // a no-op because otherwise save conversion will have an off-by-one error and generally break entirely.
     },
     player => {
       GameStorage.migrations.removeTickspeed(player);
@@ -422,7 +425,7 @@ GameStorage.devMigrations = {
       delete player.autoRealityMode;
       delete player.autoEternityMode;
     },
-    GameStorage.migrations.convertNewsToSet,
+    GameStorage.migrations.convertNews,
     GameStorage.migrations.convertEternityCountToDecimal,
     GameStorage.migrations.renameDimboosts,
     player => {
@@ -1082,7 +1085,7 @@ GameStorage.devMigrations = {
       delete player.celestials.v.maxGlyphsThisRun;
 
       // Separate news-specific data
-      player.newsStats = {
+      player.news.specialTickerData = {
         uselessNewsClicks: player.secretUnlocks.uselessNewsClicks,
         paperclips: player.secretUnlocks.paperclips,
         newsQueuePosition: player.secretUnlocks.newsQueuePosition,
@@ -1092,6 +1095,13 @@ GameStorage.devMigrations = {
       delete player.secretUnlocks.paperclips;
       delete player.secretUnlocks.newsQueuePosition;
       delete player.secretUnlocks.eiffelTowerChapter;
+
+      // Refactor news storage format to bitmask array
+      const oldNews = player.news;
+      delete player.news;
+      player.news = {};
+      player.news.seen = {};
+      for (const id of oldNews) NewsHandler.addSeenNews(id);
     },
     GameStorage.migrations.refactorDoubleIPRebuyable
   ],

@@ -118,12 +118,11 @@ GameStorage.migrations = {
       GameStorage.migrations.adjustAchievementVars(player);
       GameStorage.migrations.uniformDimensions(player);
       GameStorage.migrations.removeEternityChallGoal(player);
-      GameStorage.migrations.clearNewsArray(player);
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
       GameStorage.migrations.renameMoney(player);
       GameStorage.migrations.moveAutobuyers(player);
-      GameStorage.migrations.convertNewsToSet(player);
+      GameStorage.migrations.convertNews(player);
       GameStorage.migrations.convertEternityCountToDecimal(player);
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
@@ -435,10 +434,6 @@ GameStorage.migrations = {
     delete player.eternityChallGoal;
   },
 
-  clearNewsArray(player) {
-    player.newsArray = [];
-  },
-
   removeTickspeed(player) {
     delete player.tickspeed;
     player.tickSpeedCost = new Decimal(1000);
@@ -641,8 +636,8 @@ GameStorage.migrations = {
     delete player.eternityBuyer;
   },
 
-  convertNewsToSet(player) {
-    player.news = new Set(player.newsArray);
+  convertNews(player) {
+    for (const id of player.newsArray) NewsHandler.addSeenNews(id);
     delete player.newsArray;
   },
 

@@ -70,7 +70,7 @@ GameDatabase.achievements.normal = [
     id: 22,
     name: "FAKE NEWS!",
     get description() { return `Encounter ${formatInt(50)} different news messages.`; },
-    checkRequirement: () => player.news.size >= 50,
+    checkRequirement: () => NewsHandler.uniqueTickersSeen >= 50,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {

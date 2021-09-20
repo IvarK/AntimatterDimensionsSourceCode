@@ -161,7 +161,17 @@ let player = {
   infinitiesBanked: new Decimal(0),
   dimensionBoosts: 0,
   galaxies: 0,
-  news: new Set(),
+  news: {
+    // This is properly handled in NewsHandler.addSeenNews which adds properties as needed
+    seen: {},
+    specialTickerData: {
+      uselessNewsClicks: 0,
+      paperclips: 0,
+      newsQueuePosition: 1000,
+      eiffelTowerChapter: 0
+    },
+    newsSeen: 0,
+  },
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
@@ -176,12 +186,6 @@ let player = {
     themes: new Set(),
     viewSecretTS: false,
     cancerAchievements: false,
-  },
-  newsStats: {
-    uselessNewsClicks: 0,
-    paperclips: 0,
-    newsQueuePosition: 1000,
-    eiffelTowerChapter: 0
   },
   shownRuns: {
     Reality: true,

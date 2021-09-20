@@ -91,8 +91,8 @@ Vue.component("news-ticker", {
         line.style.transform = "translateX(-100%)";
       }
 
-      player.news.add(this.currentNews.id);
-      if (player.news.size >= 50) Achievement(22).unlock();
+      NewsHandler.addSeenNews(this.currentNews.id);
+      if (NewsHandler.uniqueTickersSeen >= 50) Achievement(22).unlock();
 
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },

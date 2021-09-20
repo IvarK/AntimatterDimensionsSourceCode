@@ -214,14 +214,14 @@ GameDatabase.reality.upgrades = (function() {
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects
-        (${formatInt(Glyphs.activeList.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2))} equipped)`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2))} equipped)`,
       hasFailed: () => {
-        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2);
-        const equipped = Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2);
+        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2);
+        const equipped = Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2);
         const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
         return equipped + Math.min(availableGlyphs, availableSlots) < 4;
       },
-      checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
+      checkRequirement: () => Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: () => `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
       effect: 0.5,

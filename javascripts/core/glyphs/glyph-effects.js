@@ -113,7 +113,8 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   return glyphEffect.effect(getAdjustedGlyphLevel(glyph), glyph.strength);
 }
 
-function countEffectsFromBitmask(bitmask) {
+// Note this function is used for both glyph bitmasks and news ticker bitmasks
+function countValuesFromBitmask(bitmask) {
   let numEffects = 0;
   let bits = bitmask;
   while (bits !== 0) {
@@ -124,6 +125,7 @@ function countEffectsFromBitmask(bitmask) {
   }
   return numEffects;
 }
+
 // Returns both effect value and softcap status
 function getActiveGlyphEffects() {
   let effectValues = orderedEffectList

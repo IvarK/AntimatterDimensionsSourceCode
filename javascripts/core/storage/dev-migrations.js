@@ -1052,27 +1052,28 @@ GameStorage.devMigrations = {
     },
     player => {
       // Requirement migration/refactor
+      const oldChecks = player.achievementChecks;
       player.requirementChecks = {
         infinity: {
           maxAll: player.usedMaxAll,
-          noSacrifice: player.achievementChecks.noSacrifices,
-          noAD8: player.achievementChecks.noEighthDimensions,
+          noSacrifice: oldChecks.noSacrifices,
+          noAD8: oldChecks.noEighthDimensions,
         },
         eternity: {
-          onlyAD1: player.achievementChecks.onlyFirstDimensions,
-          onlyAD8: player.achievementChecks.onlyEighthDimensions,
-          noAD1: player.achievementChecks.noFirstDimensions,
-          noRG: player.achievementChecks.noEighthDimensions,
+          onlyAD1: oldChecks.onlyFirstDimensions,
+          onlyAD8: oldChecks.onlyEighthDimensions,
+          noAD1: oldChecks.noFirstDimensions,
+          noRG: oldChecks.noEighthDimensions,
         },
         reality: {
-          noAM: player.achievementChecks.noAntimatterProduced,
-          noTriads: player.achievementChecks.noTriadStudies,
-          noPurchasedTT: player.achievementChecks.noTheoremPurchases,
-          noInfinities: player.achievementChecks.noInfinitiesThisReality,
-          noEternities: player.achievementChecks.noEternitiesThisReality,
-          noContinuum: !player.achievementChecks.continuumThisReality,
-          maxID1: new Decimal(player.achievementChecks.maxID1ThisReality),
-          maxStudies: player.achievementChecks.maxStudiesThisReality,
+          noAM: oldChecks.noAntimatterProduced,
+          noTriads: oldChecks.noTriadStudies,
+          noPurchasedTT: oldChecks.noTheoremPurchases,
+          noInfinities: oldChecks.noInfinitiesThisReality,
+          noEternities: oldChecks.noEternitiesThisReality,
+          noContinuum: !oldChecks.continuumThisReality,
+          maxID1: new Decimal(oldChecks.maxID1ThisReality),
+          maxStudies: oldChecks.maxStudiesThisReality,
           maxGlyphs: player.celestials.v.maxGlyphsThisRun,
           slowestBH: player.minNegativeBlackHoleThisReality,
         },

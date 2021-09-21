@@ -137,9 +137,13 @@ Vue.component("statistics-tab", {
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
         <div>
+          You have seen {{ formatInt(totalNews) }}
+          news {{ "message" | pluralize(totalNews) }}
+          in total.
+        </div>
+        <div>
           You have seen {{ formatInt(uniqueNews) }} unique
-          news ticker {{ "message" | pluralize(uniqueNews) }}
-          ({{ formatInt(totalNews) }} total).
+          news {{ "message" | pluralize(uniqueNews) }}.
         </div>
         <div>
           You have unlocked {{ formatInt(secretAchievementCount) }} Secret

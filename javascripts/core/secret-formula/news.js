@@ -2458,7 +2458,7 @@ GameDatabase.news = [
   {
     id: "l39",
     text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
-    get unlocked() { return NewsHandler.hasSeenNews("c1"); }
+    get unlocked() { return NewsHandler.hasSeenNews("l1"); }
   },
   {
     id: "l40",
@@ -2466,7 +2466,7 @@ GameDatabase.news = [
       `I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th
       dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen,
       We should have listened.`,
-    get unlocked() { return NewsHandler.hasSeenNews("b22"); }
+    get unlocked() { return NewsHandler.hasSeenNews("l58"); }
   },
   {
     id: "l41",
@@ -2763,6 +2763,11 @@ GameDatabase.news = [
     id: "l73",
     text: "A long time ago in a distant galaxy far, far away, the cost scaling changed.",
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l74",
+    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
     id: "j1",

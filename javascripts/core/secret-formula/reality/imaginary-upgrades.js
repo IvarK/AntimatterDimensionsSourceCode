@@ -151,7 +151,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "Fabrication of Ideals",
       id: 15,
       cost: 1e9,
-      requirement: () => `Reach ${format("1e1500000000000")} antimatter without having any Infinity Dimensions`,
+      requirement: () => `Reach ${format("1e1500000000000")} antimatter without
+        ever having any 1st Infinity Dimensions`,
       hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
       checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,

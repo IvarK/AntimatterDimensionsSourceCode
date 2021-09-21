@@ -799,8 +799,9 @@ const Player = {
           noAM: true,
           noTriads: true,
           noPurchasedTT: true,
-          // Note that these two checks below are only used before the "flow" upgrades which passively generate
-          // infinities and eternities - they still remain true unless a manual prestige is done
+          // Note that these two checks below are only used in row 2, which is in principle always before the "flow"
+          // upgrades in row 3 which passively generate infinities/eternities. These upgrades won't cause a lockout
+          // as these requirements are only invalidated on manual infinities or eternities.
           noInfinities: true,
           noEternities: true,
           noContinuum: true,

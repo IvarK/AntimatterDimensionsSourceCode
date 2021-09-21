@@ -861,17 +861,23 @@ GameStorage.devMigrations = {
       player.celestials.ra.pets.effarig.memories = player.celestials.ra.pets.effarig.exp;
       player.celestials.ra.pets.enslaved.memories = player.celestials.ra.pets.enslaved.exp;
       player.celestials.ra.pets.v.memories = player.celestials.ra.pets.v.exp;
-      player.achievementChecks.noSacrifices = player.noSacrifices;
-      player.achievementChecks.onlyEighthDimensions = player.onlyEighthDimensions;
-      player.achievementChecks.onlyFirstDimensions = player.onlyFirstDimensions;
-      player.achievementChecks.noEighthDimensions = player.noEighthDimensions;
-      player.achievementChecks.noFirstDimensions = player.noFirstDimensions;
-      player.achievementChecks.noAntimatterProduced = player.noAntimatterProduced;
-      player.achievementChecks.noTriadStudies = player.noTriadStudies;
-      player.achievementChecks.noTheoremPurchases = player.noTheoremPurchases;
-      player.achievementChecks.noInfinitiesThisReality = player.noInfinitiesThisReality;
-      player.achievementChecks.noEternitiesThisReality = player.noEternitiesThisReality;
-      player.achievementChecks.noReplicantiGalaxies = player.noReplicantiGalaxies;
+      player.achievementChecks = {
+        noSacrifices: player.noSacrifices,
+        onlyEighthDimensions: player.onlyEighthDimensions,
+        onlyFirstDimensions: player.onlyFirstDimensions,
+        noEighthDimensions: player.noEighthDimensions,
+        noFirstDimensions: player.noFirstDimensions,
+        noAntimatterProduced: player.noAntimatterProduced,
+        noTriadStudies: player.noTriadStudies,
+        noTheoremPurchases: player.noTheoremPurchases,
+        noInfinitiesThisReality: player.noInfinitiesThisReality,
+        noEternitiesThisReality: player.noEternitiesThisReality,
+        noReplicantiGalaxies: player.noReplicantiGalaxies,
+        // Not necessarily accurate, but these defaults prevent some people from effortlessly completing some
+        // otherwise very difficult unlocks immediately upon migration
+        maxID1ThisReality: new Decimal(1),
+        continuumThisReality: true,
+      };
       player.dilation.baseTachyonGalaxies = player.dilation.baseFreeGalaxies;
       player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 

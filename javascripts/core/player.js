@@ -28,7 +28,6 @@ let player = {
   achievementBits: Array.repeat(0, 15),
   secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
-  usedMaxAll: false,
   infinityRebuyables: [0, 0, 0],
   challenge: {
     normal: {
@@ -162,7 +161,17 @@ let player = {
   infinitiesBanked: new Decimal(0),
   dimensionBoosts: 0,
   galaxies: 0,
-  news: new Set(),
+  news: {
+    // This is properly handled in NewsHandler.addSeenNews which adds properties as needed
+    seen: {},
+    specialTickerData: {
+      uselessNewsClicks: 0,
+      paperclips: 0,
+      newsQueuePosition: 1000,
+      eiffelTowerChapter: 0
+    },
+    totalSeen: 0,
+  },
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
@@ -174,21 +183,44 @@ let player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
-    spreadingCancer: 0,
-    why: 0,
-    dragging: 0,
     themes: new Set(),
     viewSecretTS: false,
-    uselessNewsClicks: 0,
     cancerAchievements: false,
-    paperclips: 0,
-    newsQueuePosition: 1000,
-    eiffelTowerChapter: 0
   },
   shownRuns: {
     Reality: true,
     Eternity: true,
     Infinity: true
+  },
+  requirementChecks: {
+    infinity: {
+      maxAll: false,
+      noSacrifice: true,
+      noAD8: true,
+    },
+    eternity: {
+      onlyAD1: true,
+      onlyAD8: true,
+      noAD1: true,
+      noRG: true,
+    },
+    reality: {
+      noAM: true,
+      noTriads: true,
+      noPurchasedTT: true,
+      noInfinities: true,
+      noEternities: true,
+      noContinuum: true,
+      maxID1: new Decimal(0),
+      maxStudies: 0,
+      maxGlyphs: 0,
+      slowestBH: 0,
+    },
+    permanent: {
+      cancerGalaxies: 0,
+      singleTickspeed: 0,
+      perkTreeDragging: 0
+    }
   },
   records: {
     gameCreatedTime: Date.now(),
@@ -253,27 +285,9 @@ let player = {
       laitelaSet: [],
     },
   },
-  achievementChecks: {
-    noSacrifices: true,
-    onlyEighthDimensions: true,
-    onlyFirstDimensions: true,
-    noEighthDimensions: true,
-    noFirstDimensions: true,
-    noAntimatterProduced: true,
-    noTriadStudies: true,
-    noTheoremPurchases: true,
-    noInfinitiesThisReality: true,
-    noEternitiesThisReality: true,
-    noReplicantiGalaxies: true,
-    maxID1ThisReality: new Decimal(0),
-    maxStudiesThisReality: 0,
-    continuumThisReality: true,
-  },
-  infMult: new Decimal(1),
-  infMultCost: new Decimal(10),
+  infMult: 0,
   version: 13,
   infinityPower: new Decimal(1),
-  spreadingCancer: 0,
   postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
@@ -421,7 +435,6 @@ let player = {
   blackHolePause: false,
   blackHolePauseTime: 0,
   blackHoleNegative: 1,
-  minNegativeBlackHoleThisReality: 0,
   celestials: {
     teresa: {
       pouredAmount: 0,
@@ -489,7 +502,6 @@ let player = {
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      maxGlyphsThisRun: 0,
       wantsFlipped: true,
     },
     ra: {
@@ -776,6 +788,49 @@ const Player = {
 
   get automatorUnlocked() {
     return Currency.realities.gte(5);
+  },
+
+  resetRequirements(key) {
+    const glyphCount = player.requirementChecks.reality.maxGlyphs;
+    // This switch case intentionally falls through because every lower layer should be reset as well
+    switch (key) {
+      case "reality":
+        player.requirementChecks.reality = {
+          noAM: true,
+          noTriads: true,
+          noPurchasedTT: true,
+          // Note that these two checks below are only used in row 2, which is in principle always before the "flow"
+          // upgrades in row 3 which passively generate infinities/eternities. These upgrades won't cause a lockout
+          // as these requirements are only invalidated on manual infinities or eternities.
+          noInfinities: true,
+          noEternities: true,
+          noContinuum: true,
+          maxID1: new Decimal(0),
+          maxStudies: 0,
+          // This only gets set to the correct value when Glyphs.updateMaxGlyphCount is called, which always happens
+          // before this part of the code is reached in the Reality reset. Nevertheless, we want to keep its old value.
+          maxGlyphs: glyphCount,
+          slowestBH: BlackHoles.areNegative ? player.blackHoleNegative : 1,
+        };
+      // eslint-disable-next-line no-fallthrough
+      case "eternity":
+        player.requirementChecks.eternity = {
+          onlyAD1: true,
+          onlyAD8: true,
+          noAD1: true,
+          noRG: true,
+        };
+      // eslint-disable-next-line no-fallthrough
+      case "infinity":
+        player.requirementChecks.infinity = {
+          maxAll: false,
+          noSacrifice: true,
+          noAD8: true,
+        };
+        break;
+      default:
+        throw Error("Unrecognized prestige layer for requirement reset");
+    }
   }
 };
 

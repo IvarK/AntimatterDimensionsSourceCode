@@ -207,7 +207,7 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   add(amount) {
     super.add(amount);
-    if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
+    if (amount.gt(0)) player.requirementChecks.reality.noAM = false;
   }
 
   get productionPerSecond() {

@@ -378,8 +378,7 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  player.infMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -403,20 +402,7 @@ function finishProcessReality(realityProps) {
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.achievementChecks.noSacrifices = true;
-  player.achievementChecks.onlyEighthDimensions = true;
-  player.achievementChecks.onlyFirstDimensions = true;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noFirstDimensions = true;
-  player.achievementChecks.noAntimatterProduced = true;
-  player.achievementChecks.noTriadStudies = true;
-  player.achievementChecks.noTheoremPurchases = true;
-  player.achievementChecks.noInfinitiesThisReality = true;
-  player.achievementChecks.noEternitiesThisReality = true;
-  player.achievementChecks.noReplicantiGalaxies = true;
-  player.achievementChecks.maxID1ThisReality = new Decimal(0);
-  player.achievementChecks.maxStudiesThisReality = 0;
-  player.achievementChecks.continuumThisReality = Laitela.continuumActive;
+  if (!realityProps.glyphUndo) Player.resetRequirements("reality");
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   player.records.thisReality.maxReplicanti = new Decimal(0);
@@ -523,7 +509,7 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   Currency.eternities.bumpTo(100);
-  player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  Replicanti.amount = Replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
 }
 

@@ -132,7 +132,7 @@ function sacrificeReset() {
   } else if (!isAch118Unlocked) {
     AntimatterDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
-  player.achievementChecks.noSacrifices = false;
+  player.requirementChecks.infinity.noSacrifice = false;
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }

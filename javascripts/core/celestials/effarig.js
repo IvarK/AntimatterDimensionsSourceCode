@@ -18,8 +18,7 @@ const Effarig = {
     if (!isRestarting) {
       Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. Infinity Power
         reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.`);  
-    }  
-    Glyphs.updateMaxGlyphCount(true);
+    }
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -59,7 +58,7 @@ const Effarig = {
       .filter(g => !generatedTypes.includes(g.type))
       // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
+    return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;

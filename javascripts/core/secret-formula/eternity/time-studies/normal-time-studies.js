@@ -35,7 +35,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 11,
       description: () => `Improve replicanti multiplier formula to
       (log2(x)^${formatInt(2)})+x${formatPow(0.032, 3, 3)}`,
-      effect: () => player.replicanti.amount.pow(0.032)
+      effect: () => Replicanti.amount.pow(0.032)
     },
     {
       id: 22,
@@ -209,7 +209,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: 91,
       description: "Antimatter Dimension multiplier equal to Replicanti amount",
-      effect: () => Decimal.max(player.replicanti.amount, 1),
+      effect: () => Decimal.max(Replicanti.amount, 1),
       formatEffect: value => formatX(value, 2, 1)
     },
     {

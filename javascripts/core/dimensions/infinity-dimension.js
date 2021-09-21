@@ -18,7 +18,7 @@ function infinityDimensionCommonMultiplier() {
       ImaginaryUpgrade(8)
     );
 
-  if (Replicanti.areUnlocked && player.replicanti.amount.gt(1)) {
+  if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
   return mult;
@@ -327,7 +327,7 @@ const InfinityDimensions = {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
 
-    player.achievementChecks.maxID1ThisReality = player.achievementChecks.maxID1ThisReality
+    player.requirementChecks.reality.maxID1 = player.requirementChecks.reality.maxID1
       .clampMin(InfinityDimension(1).amount);
   },
 

@@ -5,7 +5,8 @@ Vue.component("statistics-tab", {
     return {
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
-      newsMessagesSeen: 0,
+      uniqueNews: 0,
+      totalNews: 0,
       secretAchievementCount: 0,
       infinity: {
         isUnlocked: false,
@@ -48,7 +49,8 @@ Vue.component("statistics-tab", {
       const records = player.records;
       this.totalAntimatter.copyFrom(records.totalAntimatter);
       this.realTimePlayed.setFrom(records.realTimePlayed);
-      this.newsMessagesSeen = player.news.size;
+      this.uniqueNews = NewsHandler.uniqueTickersSeen;
+      this.totalNews = player.news.totalSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
 
       const progress = PlayerProgress.current;
@@ -135,8 +137,13 @@ Vue.component("statistics-tab", {
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
         <div>
-          You have seen {{ formatInt(newsMessagesSeen) }} unique
-          news ticker {{ "message" | pluralize(newsMessagesSeen) }}.
+          You have seen {{ formatInt(totalNews) }}
+          news {{ "message" | pluralize(totalNews) }}
+          in total.
+        </div>
+        <div>
+          You have seen {{ formatInt(uniqueNews) }} unique
+          news {{ "message" | pluralize(uniqueNews) }}.
         </div>
         <div>
           You have unlocked {{ formatInt(secretAchievementCount) }} Secret

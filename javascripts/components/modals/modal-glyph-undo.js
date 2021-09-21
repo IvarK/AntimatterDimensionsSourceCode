@@ -43,6 +43,10 @@ Vue.component("modal-glyph-undo", {
           <br>- Time in current Infinity/Eternity/Reality
           <span v-if="showStoredGameTime"><br>- Stored game time</span>
         </div>
+        <br>
+        Note that if you invalidate special requirements for certain things (such as the achievement for completing
+        a Reality without producing antimatter), they will remain invalid even after undoing. In those cases, you will
+        need to complete the conditions in a single Reality without using undo.
       </div>
       <div class="l-options-grid__row">
         <primary-button

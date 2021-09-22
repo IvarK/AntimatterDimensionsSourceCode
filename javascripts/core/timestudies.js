@@ -256,15 +256,15 @@ class NormalTimeStudyState extends TimeStudyState {
     return typeof req === "number" ? TimeStudy(req).isBought : req();
   }
 
-  checkVRequirement() {
-    const req = this.config.requirementV;
-    return req === undefined
-      ? false
-      : req() && V.availableST >= this.STCost;
+  // This checks for and forbids buying studies due to being part of a set which can't normally be bought
+  // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
+  checkSetRequirement() {
+    if (!this.config.requiresST) return true;
+    return this.config.requiresST() ? V.availableST >= this.STCost : true;
   }
 
   get canBeBought() {
-    return this.checkRequirement() || this.checkVRequirement();
+    return this.checkRequirement() && this.checkSetRequirement();
   }
 
   get isEffectActive() {
@@ -272,9 +272,8 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
-    if (this.isBought || !this.isAffordable) return false;
-    if (!this.checkRequirement()) {
-      if (!this.checkVRequirement()) return false;
+    if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
+    if (this.config.requiresST && this.config.requiresST()) {
       player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);

@@ -30,14 +30,12 @@ Vue.component("normal-time-study", {
   methods: {
     update() {
       this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
-      const canBeBought = typeof this.study.config.requirement === "function"
-        ? this.study.config.requirement()
-        : TimeStudy(this.study.config.requirement).isBought;
-
-      this.showSTCost = !canBeBought && V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) &&
-                        this.study.config.requirementV !== undefined &&
-                        this.study.config.requirementV() &&
-                        this.study.STCost !== undefined;
+      // We don't show ST cost if purchased because the first 1-2 of each "set" won't actually cost ST. There's no
+      // particularly sensible way to accurately display the actual ST spent other than tracing through buy order
+      // of all current studies for every study, and even then it looks odd in practice because then a few studies
+      // appear more expensive simply due to buy order.
+      this.showSTCost = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && !TimeStudy(this.study.id).isBought &&
+        this.study.config.requiresST !== undefined && this.study.config.requiresST();
     },
   },
   template: `

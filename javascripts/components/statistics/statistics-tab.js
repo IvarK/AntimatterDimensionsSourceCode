@@ -44,6 +44,22 @@ Vue.component("statistics-tab", {
       recordGlyphInfo: [],
     };
   },
+  computed: {
+    // These are here to avoid extra spaces in-game pre-reality and to get around codefactor 120-char limits in the
+    // HTML template due to the fact that adding a linebreak also adds a space
+    infinityCountString() {
+      const num = this.infinity.count;
+      return num.gt(0)
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Infinity", num, "Infinities")}`
+        : "no Infinities";
+    },
+    eternityCountString() {
+      const num = this.eternity.count;
+      return num.gt(0)
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num, "Eternities")}`
+        : "no Eternities";
+    }
+  },
   methods: {
     update() {
       const records = player.records;
@@ -163,13 +179,8 @@ Vue.component("statistics-tab", {
       </div>
       <div v-if="infinity.isUnlocked">
         <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
-        <div v-if="infinity.count.gt(0)">
-          You have {{ formatDecimalAmount(infinity.count) }}
-          {{ "Infinity" | pluralize(infinity.count, "Infinities") }}
-          <span v-if="eternity.isUnlocked">this Eternity</span>.
-        </div>
-        <div v-else>
-          You have no Infinities<span v-if="eternity.isUnlocked"> this Eternity</span>.
+        <div>
+          You have {{ infinityCountString }}<span v-if="eternity.isUnlocked"> this Eternity</span>.
         </div>
         <div v-if="infinity.banked.gt(0)">
           You have {{ formatDecimalAmount(infinity.banked) }} Banked
@@ -196,13 +207,8 @@ Vue.component("statistics-tab", {
       </div>
       <div v-if="eternity.isUnlocked">
         <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
-        <div v-if="eternity.count.gt(0)">
-          You have {{ formatDecimalAmount(eternity.count) }}
-          {{ "Eternity" | pluralize(eternity.count, "Eternities") }}
-          <span v-if="reality.isUnlocked">this Reality</span>.
-        </div>
-        <div v-else>
-          You have no Eternities<span v-if="reality.isUnlocked"> this Reality</span>.
+        <div>
+          You have {{ eternityCountString }}<span v-if="reality.isUnlocked"> this Reality</span>.
         </div>
         <div v-if="infinity.projectedBanked.gt(0)">
           You will gain {{ formatDecimalAmount(infinity.projectedBanked) }} Banked

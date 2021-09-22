@@ -7,8 +7,9 @@ Vue.component("past-runs-container", {
   data() {
     return {
       isRealityUnlocked: false,
-      showGainPerTime: false,
+      showResources: false,
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
+      hasEmptyRecord: false,
       shown: true
     };
   },
@@ -48,9 +49,10 @@ Vue.component("past-runs-container", {
   methods: {
     update() {
       this.runs = this.clone(this.getRuns());
+      this.hasEmptyRecord = this.runs[0][0] === Number.MAX_VALUE;
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
       this.shown = player.shownRuns[this.singular];
-      this.showGainPerTime = player.options.showLastTenInfinitiesGainPerTime;
+      this.showResources = player.options.showLastTenResourceGain;
     },
     clone(runs) {
       return runs.map(run =>
@@ -73,7 +75,12 @@ Vue.component("past-runs-container", {
     runTime: run => timeDisplayShort(run[0]),
     runGain: run => format(run[1], 2, 0),
     runPrestigeCountGain: (run, isAverage) => format(run[2], 2, isAverage ? 1 : 0),
-    realRunTime: run => (run[3] === undefined ? "unrecorded" : timeDisplayShort(run[3]))
+    realRunTime: run => (run[3] === undefined ? "unrecorded" : timeDisplayShort(run[3])),
+    runLengthString(run) {
+      const gameTimeString = this.runTime(run);
+      const realTimeString = this.isRealityUnlocked ? ` (${this.realRunTime(run)} real time)` : "";
+      return `${gameTimeString}${realTimeString}`;
+    }
   },
   template: `
     <div v-if="condition">
@@ -84,7 +91,7 @@ Vue.component("past-runs-container", {
       >
         <span class="o-run-drop-down-icon" v-html="dropDown" />
         <span>
-          <h3>Past {{ formatInt(10) }} {{ plural }}</h3>
+          <h3>Last {{ formatInt(10) }} {{ plural }}:</h3>
         </span>
       </div>
       <div v-show="shown">
@@ -97,38 +104,29 @@ Vue.component("past-runs-container", {
           </span>
           <span v-else>
             <span>
-              The {{ singular }} {{ formatInt(index + 1) }}
-              {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
+              {{ formatInt(index + 1) }}: {{ runLengthString(run) }},
             </span>
-            <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
-            <span>and gave </span>
-            <span v-if="showGainPerTime">
-              {{ averageRunGain(run, 1, points) }} and {{ averageRunGain(run, 2, prestigeCount) }}.
+            <span v-if="showResources">
+              {{ reward(runGain(run), run, false) }}, {{ averageRunGain(run, 1, points) }}
             </span>
             <span v-else>
-              {{ reward(runGain(run), run, false) }} and
-              {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }}.
+              {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }},
+              {{ averageRunGain(run, 2, prestigeCount) }}
             </span>
           </span>
         </div>
         <br>
       </div>
-      <div>
-        <span>Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
-        <span v-if="showGainPerTime">
-          <span>Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}.</span>
-          <span>Average {{ prestigeCount }} gain:
-            {{ averageRunGain(averageRun, 2, prestigeCount) }}.</span>
-        </span>
-        <span v-else>
-          <span>
-            Average {{ points }} gain: {{ reward(runGain(averageRun), averageRun, true) }}.
-          </span>
-          <span>
-            Average {{ prestigeCount }} gain:
-            {{ prestigeCountReward(runPrestigeCountGain(averageRun, true), averageRun) }}.
-          </span>
-        </span>
+      <div v-if="!hasEmptyRecord">
+        Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}
+        <span v-if="isRealityUnlocked">({{ realRunTime(averageRun) }} real time)</span>
+        <br>
+        Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}
+        <br>
+        Average {{ prestigeCount }} gain: {{ averageRunGain(averageRun, 2, prestigeCount) }}
+      </div>
+      <div v-else>
+        You have no records for {{ plural }} yet.
       </div>
     </div>`
 });

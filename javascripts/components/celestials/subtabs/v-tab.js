@@ -280,6 +280,14 @@ Vue.component("v-unlock-requirement", {
         width: `${100 * this.progress}%`
       };
     },
+    textStyle() {
+      return {
+        color: this.progress === 1
+          ? "black"
+          : "var(--color-text)",
+        "border-color": "var(--color-text)",
+      };
+    },
   },
   methods: {
     update() {
@@ -288,7 +296,7 @@ Vue.component("v-unlock-requirement", {
     }
   },
   template: `
-    <div class="c-v-unlock-bar">
+    <div class="c-v-unlock-bar" :style="textStyle">
       <div class="c-v-unlock-bar__progress" :style="barProgressStyle" />
       {{ dbEntry.format(resource) }} / {{ dbEntry.format(dbEntry.requirement) }} {{ dbEntry.name }}
     </div>`

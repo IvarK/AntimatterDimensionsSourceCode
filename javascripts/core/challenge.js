@@ -1,7 +1,6 @@
 "use strict";
 
 function startChallenge() {
-  secondSoftReset(true);
   if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
@@ -88,7 +87,7 @@ class NormalChallengeState extends GameMechanicState {
   start() {
     if (this.id === 1 || this.isRunning) return;
     if (!Tab.challenges.isUnlocked) return;
-    if (Player.canCrunch) bigCrunchResetRequest();
+    bigCrunchResetRequest();
 
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
@@ -136,7 +135,7 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    secondSoftReset(true);
+    bigCrunchResetRequest();
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
@@ -260,7 +259,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    secondSoftReset(true);
+    bigCrunchReset();
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }

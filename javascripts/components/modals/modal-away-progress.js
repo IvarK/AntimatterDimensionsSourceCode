@@ -47,7 +47,7 @@ Vue.component("modal-away-progress", {
         },
         isBlackHole() {
           // If its a Black Hole we need different formatting, so find that
-          return this.item.name.includes("blackHole");
+          return this.name.includes("Black Hole");
         },
         formatBlackHoleActivations() {
           const activations = this.after - this.before;

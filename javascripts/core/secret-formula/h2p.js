@@ -843,6 +843,11 @@ which are normally completely unaffected (eg. DT/TT generation), and effects whi
 (eg. idle path IP/EP multipliers).
 <br>
 <br>
+While most features in the game are boosted by this increased game speed, there are some which remain unaffected.
+In these cases, it will be specifically mentioned that a given time is stated as <i>real time</i> as opposed to
+<i>game time</i>. One such example is the set of perks which automatically completes Eternity Challenges over time.
+<br>
+<br>
 You can buy upgrades for the Black Hole by using Reality Machines. There are three upgrades for the Black Hole:
 <br>
 Interval - How long the Black Hole is inactive between bursts,

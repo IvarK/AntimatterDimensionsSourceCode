@@ -174,7 +174,7 @@ GameDatabase.reality.perks = {
     id: 42,
     label: "UD1",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the second row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically purchase the second row of Dilation Upgrades.",
     defaultPosition: {
       x: 165,
       y: 565
@@ -184,7 +184,7 @@ GameDatabase.reality.perks = {
     id: 43,
     label: "UD2",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the third row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically purchase the third row of Dilation Upgrades.",
     defaultPosition: {
       x: 310,
       y: 605
@@ -194,7 +194,7 @@ GameDatabase.reality.perks = {
     id: 44,
     label: "ATT",
     family: PERK_FAMILY.DILATION,
-    description: "Auto-unlock the passive Time Theorem generation Dilation Upgrade once you can afford it.",
+    description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
     defaultPosition: {
       x: 460,
       y: 580

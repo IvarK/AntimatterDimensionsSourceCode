@@ -23,8 +23,8 @@ const Autobuyers = (function() {
   const single = [
     Autobuyer.tickspeed,
     Autobuyer.sacrifice,
-    Autobuyer.dimboost,
     Autobuyer.galaxy,
+    Autobuyer.dimboost,
   ].concat(singleBinary);
 
   const arrays = [

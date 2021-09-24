@@ -251,6 +251,11 @@ class NormalTimeStudyState extends TimeStudyState {
     return GameCache.timeStudies.value[this.id];
   }
 
+  // The gameDB entries have a check for if a study requires ST to be purchased or not; since eventually all studies
+  // are simultaneously purchasable, the only "universal" requirement to purchase is having the previous study
+  // in the tree. The requiresST prop, if it exists, is a check which returns true if having certain other studies
+  // causes a lock-out (eg. true for all active path studies if idle is already purchased). If it doesn't exist
+  // in the gameDB entry, it's assumed to be false and therefore there's no lockout.
   costsST() {
     return this.config.requiresST && this.config.requiresST();
   }

@@ -285,7 +285,7 @@ const EternityChallenges = {
   autoComplete: {
     tick() {
       if (!player.reality.autoEC) return;
-      if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+      if (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)) {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {

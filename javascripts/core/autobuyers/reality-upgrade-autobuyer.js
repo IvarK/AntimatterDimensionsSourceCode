@@ -16,7 +16,7 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES);
+    return Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC);
   }
 
   tick() {

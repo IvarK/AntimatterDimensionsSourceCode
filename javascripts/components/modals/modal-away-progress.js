@@ -62,6 +62,9 @@ Vue.component("modal-away-progress", {
       methods: {
         // We want different formatting above and below 1e9 to improve readability
         formatPseudo(number) {
+          // Sometimes it's undefined and that throws errors, because this method is also used to determine whether or
+          // not any text is even shown at all and sometimes this gets checked on variables which don't have values yet
+          if (!number) return "";
           // Surrounding text is formatted differently to specify that this is log10
           if (this.isVeryLarge) return formatInt(Math.floor(number.log10()));
           if (Decimal.lt(number, 1e9)) return formatInt(number);

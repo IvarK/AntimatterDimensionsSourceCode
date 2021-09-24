@@ -251,6 +251,10 @@ class NormalTimeStudyState extends TimeStudyState {
     return GameCache.timeStudies.value[this.id];
   }
 
+  costsST() {
+    return this.config.requiresST && this.config.requiresST();
+  }
+
   checkRequirement() {
     const req = this.config.requirement;
     return typeof req === "number" ? TimeStudy(req).isBought : req();
@@ -259,8 +263,7 @@ class NormalTimeStudyState extends TimeStudyState {
   // This checks for and forbids buying studies due to being part of a set which can't normally be bought
   // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
   checkSetRequirement() {
-    if (!this.config.requiresST) return true;
-    return this.config.requiresST() ? V.availableST >= this.STCost : true;
+    return this.costsST() ? V.availableST >= this.STCost : true;
   }
 
   get canBeBought() {
@@ -273,9 +276,7 @@ class NormalTimeStudyState extends TimeStudyState {
 
   purchase() {
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
-    if (this.config.requiresST && this.config.requiresST()) {
-      player.celestials.v.STSpent += this.STCost;
-    }
+    if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
     player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,
       player.timestudy.studies.length);

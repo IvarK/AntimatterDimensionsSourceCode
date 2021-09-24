@@ -35,7 +35,7 @@ Vue.component("normal-time-study", {
       // of all current studies for every study, and even then it looks odd in practice because then a few studies
       // appear more expensive simply due to buy order.
       this.showSTCost = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && !TimeStudy(this.study.id).isBought &&
-        this.study.config.requiresST !== undefined && this.study.config.requiresST();
+        TimeStudy(this.study.id).costsST();
     },
   },
   template: `

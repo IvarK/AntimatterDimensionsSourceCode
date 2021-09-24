@@ -624,8 +624,8 @@ const RA_UNLOCKS = {
   INSTANT_AUTOEC: {
     id: 22,
     description: "Get V to level 2",
-    reward: () => `Auto-Eternity Challenges happen instantly and Time Dilation is unlocked automatically
-      at ${formatInt(17000)} Time Theorems`,
+    reward: () => `Time Dilation is unlocked automatically for free at ${formatInt(13000)} Time Theorems outside of
+      Celestial Realities and Auto-Eternity Challenges happen instantly`,
     pet: Ra.pets.v,
     level: 2,
     displayIcon: `<span class="fas fa-fast-forward"></span>`

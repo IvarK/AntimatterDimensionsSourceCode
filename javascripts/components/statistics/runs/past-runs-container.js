@@ -91,7 +91,7 @@ Vue.component("past-runs-container", {
       >
         <span class="o-run-drop-down-icon" v-html="dropDown" />
         <span>
-          <h3>Last {{ formatInt(10) }} {{ plural }}:</h3>
+          <h3>Last {{ formatInt(10) }} {{ prestigeCount }}:</h3>
         </span>
       </div>
       <div v-show="shown">
@@ -118,15 +118,15 @@ Vue.component("past-runs-container", {
         <br>
       </div>
       <div v-if="!hasEmptyRecord">
-        Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}
+        Last {{ formatInt(10) }} {{ prestigeCount }} average time: {{ runTime(averageRun) }}
         <span v-if="isRealityUnlocked">({{ realRunTime(averageRun) }} real time)</span>
         <br>
         Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}
         <br>
         Average {{ prestigeCount }} gain: {{ averageRunGain(averageRun, 2, prestigeCount) }}
       </div>
-      <div v-else>
-        You have no records for {{ plural }} yet.
+      <div v-else style="height: 5.4rem;">
+        You have no records for {{ prestigeCount }} yet.
       </div>
     </div>`
 });

@@ -174,7 +174,7 @@ GameDatabase.reality.perks = {
     id: 42,
     label: "UD1",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, automatically purchase the second row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     defaultPosition: {
       x: 165,
       y: 565
@@ -184,7 +184,7 @@ GameDatabase.reality.perks = {
     id: 43,
     label: "UD2",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, automatically purchase the third row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     defaultPosition: {
       x: 310,
       y: 605

@@ -586,8 +586,11 @@ function gameLoop(passDiff, options = {}) {
 
   BlackHoles.updatePhases(blackHoleDiff);
 
-  // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
-  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && Currency.timeTheorems.max.gte(16617)) {
+  // Instant EC also unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
+  // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
+  // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && Currency.timeTheorems.max.gte(13000) && !isInCelestialReality()) {
+    Currency.timeTheorems.add(TimeStudy.dilation.cost);
     TimeStudy.dilation.purchase(true);
   }
 

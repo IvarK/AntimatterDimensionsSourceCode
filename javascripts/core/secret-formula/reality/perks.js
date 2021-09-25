@@ -506,8 +506,7 @@ GameDatabase.reality.perks = {
     label: "TTMA1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems
-        every ${formatInt(4)} seconds (real-time).`;
+      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems every ${formatInt(4)} seconds.`;
     },
     effect: 4,
     defaultPosition: {
@@ -519,7 +518,7 @@ GameDatabase.reality.perks = {
     id: 105,
     label: "TTMA2",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Upgrade the Time Theorem Autobuyer to autobuy max Time Theorems every second (real-time).",
+    description: "Upgrade the Time Theorem Autobuyer to autobuy max Time Theorems every second.",
     effect: 1,
     defaultPosition: {
       x: 255,
@@ -531,7 +530,7 @@ GameDatabase.reality.perks = {
     label: "TTMA3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(2)} times per second (real-time).`;
+      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(2)} times per second.`;
     },
     effect: 0.5,
     defaultPosition: {
@@ -544,7 +543,7 @@ GameDatabase.reality.perks = {
     label: "TTMA4",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(4)} times per second (real-time).`;
+      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(4)} times per second.`;
     },
     effect: 0.25,
     defaultPosition: {

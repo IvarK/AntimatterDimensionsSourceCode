@@ -151,7 +151,10 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, automatically unlock the first row of Eternity Upgrades for free.",
+    get description() {
+		return `After the first Eternity of a Reality,
+			automatically unlock the first row of Eternity Upgrades for free.`;
+	  },
     defaultPosition: {
       x: 50,
       y: 150
@@ -503,7 +506,8 @@ GameDatabase.reality.perks = {
     label: "TTMA1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems every ${formatInt(4)} seconds (real-time).`;
+      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems
+        every ${formatInt(4)} seconds (real-time).`;
     },
     effect: 4,
     defaultPosition: {

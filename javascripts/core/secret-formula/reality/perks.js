@@ -151,7 +151,8 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "The first row of Eternity Upgrades is automatically purchased after the first Eternity of a Reality.",
+    description: `After the first Eternity of a Reality,
+      automatically unlock the first row of Eternity Upgrades for free.`,
     defaultPosition: {
       x: 50,
       y: 150

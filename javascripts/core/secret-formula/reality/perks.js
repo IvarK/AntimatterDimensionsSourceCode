@@ -151,7 +151,7 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "The first row of Eternity Upgrades is automatically purchased after the first Eternity of a Reality.",
+    description: "After the first Eternity of a Reality, automatically unlock the first row of Eternity Upgrades for free.",
     defaultPosition: {
       x: 50,
       y: 150
@@ -503,7 +503,7 @@ GameDatabase.reality.perks = {
     label: "TTMA1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems every ${formatInt(4)} seconds.`;
+      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems every ${formatInt(4)} seconds (real-time).`;
     },
     effect: 4,
     defaultPosition: {
@@ -515,7 +515,7 @@ GameDatabase.reality.perks = {
     id: 105,
     label: "TTMA2",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Upgrade the Time Theorem Autobuyer to autobuy max Time Theorems every second.",
+    description: "Upgrade the Time Theorem Autobuyer to autobuy max Time Theorems every second (real-time).",
     effect: 1,
     defaultPosition: {
       x: 255,
@@ -527,7 +527,7 @@ GameDatabase.reality.perks = {
     label: "TTMA3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(2)} times per second.`;
+      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(2)} times per second (real-time).`;
     },
     effect: 0.5,
     defaultPosition: {
@@ -540,7 +540,7 @@ GameDatabase.reality.perks = {
     label: "TTMA4",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(4)} times per second.`;
+      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(4)} times per second (real-time).`;
     },
     effect: 0.25,
     defaultPosition: {

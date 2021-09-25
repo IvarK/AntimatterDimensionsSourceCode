@@ -2545,6 +2545,10 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
+.c-stats-tab-subheader {
+  height: 15rem;
+}
+
 .c-stats-tab-infinity {
   color: var(--color-infinity);
 }
@@ -5545,6 +5549,14 @@ kbd {
 .c-modal-progress-bar__label {
   font-size: large;
   padding-bottom: 0.5rem;
+}
+
+.l-modal-progress-bar__buttons {
+  display: flex;
+  flex-direction: row;
+  width: 25rem;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .l-modal-progress-bar__bg {

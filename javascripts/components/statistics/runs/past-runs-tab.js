@@ -11,8 +11,8 @@ Vue.component("past-runs-tab", {
           condition: () => PlayerProgress.realityUnlocked(),
           getRuns: () => player.records.lastTenRealities,
           reward: (runGain, run, average) => (average
-            ? `${runGain} ${pluralize("Reality Machine", run[1])}`
-            : `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`),
+            ? `${runGain} RM`
+            : `a level ${formatInt(run[4])} glyph, ${runGain} RM`),
           // Note that runGain is a string so we can't use it for pluralize
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
         },
@@ -35,26 +35,26 @@ Vue.component("past-runs-tab", {
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
         },
       },
-      showLastTenInfinitiesGainPerTime: false
+      showLastTenResourceGain: false
     };
   },
   watch: {
-    showLastTenInfinitiesGainPerTime(newValue) {
-      player.options.showLastTenInfinitiesGainPerTime = newValue;
+    showLastTenResourceGain(newValue) {
+      player.options.showLastTenResourceGain = newValue;
     }
   },
   methods: {
     update() {
-      this.showLastTenInfinitiesGainPerTime = player.options.showLastTenInfinitiesGainPerTime;
+      this.showLastTenResourceGain = player.options.showLastTenResourceGain;
     }
   },
   template: `
     <div class="c-stats-tab">
       <div class="c-subtab-option-container">
         <primary-button-on-off-custom
-          v-model="showLastTenInfinitiesGainPerTime"
-          on="Show resource gain"
-          off="Show resource gain/time"
+          v-model="showLastTenResourceGain"
+          on="Showing resource gain"
+          off="Showing prestige count gain"
           class="o-primary-btn--subtab-option"
         />
       </div>

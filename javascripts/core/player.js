@@ -609,7 +609,7 @@ let player = {
     automaticTabSwitching: true,
     respecIntoProtected: false,
     offlineTicks: 1000,
-    showLastTenInfinitiesGainPerTime: false,
+    showLastTenResourceGain: true,
     autosaveInterval: 30000,
     showTimeSinceSave: true,
     exportedFileCount: 0,

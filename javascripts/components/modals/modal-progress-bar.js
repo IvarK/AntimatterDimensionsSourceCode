@@ -45,11 +45,15 @@ Vue.component("modal-progress-bar", {
           </div>
         </div>
         <br>
-        <primary-button v-for="button in buttons" v-if="button.condition(progress.current, progress.max)"
-          class="o-primary-btn--width-medium"
-          @click="button.click()">
-          {{ button.text }}
-        </primary-button>
+        <div class="l-modal-progress-bar__buttons">
+          <primary-button v-for="button in buttons" v-if="button.condition(progress.current, progress.max)"
+            class="o-primary-btn--width-medium"
+            :key="button.text"
+            @click="button.click"
+          >
+            {{ button.text }}
+          </primary-button>
+        </div>
       </div>
     </div>`,
 });

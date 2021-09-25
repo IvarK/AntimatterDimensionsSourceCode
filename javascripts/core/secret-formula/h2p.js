@@ -71,7 +71,7 @@ when exponents are larger than ${format(1e9)}.
 <br>
 Many events in the game trigger full-screen animations or pop-up modals which require you to confirm that you want to
 continue. All of these animations and confirmations can be disabled on an individual basis through the options,
-although the ability to disable any given animation or confirmation will only appear after then have already shown up
+although the ability to disable any given animation or confirmation will only appear after they have already shown up
 at least once.
 `,
       isUnlocked: () => true,
@@ -180,7 +180,7 @@ ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
     }, {
       name: "Tickspeed",
       info: () => `
-Production in the game happens on each “tick" which initially occurs once per second. By buying Tickspeed upgrades,
+Production in the game happens on each "tick" which initially occurs once per second. By buying Tickspeed upgrades,
 you can make your Dimensions produce faster, as if multiple ticks occur in each second.
 <br>
 <br>
@@ -281,7 +281,7 @@ Each Achievement has conditions that must be met before they are earned.
 Some are very simple, and some are significantly trickier.
 <br>
 <br>
-You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed Achievement, as
+You will receive a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed Achievement, as
 well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many Achievements have their
 own rewards.
 `,
@@ -515,7 +515,7 @@ able to access more content after your first Eternity.
 <br>
 <br>
 You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
-you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more
+you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will receive more Eternity Points the more
 Infinity Points you had before going Eternal. You will also gain one "Eternity" for completing an Eternity.
 <br>
 <br>
@@ -672,7 +672,7 @@ having to complete the secondary requirement again.
 Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
 beating both EC11 and EC12 five times, and after acquiring a total of ${formatInt(13000)} TT.
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
-Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will raised to the power of
+Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will be raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them.
 <br>
 <br>
@@ -789,7 +789,7 @@ Perks are a type of upgrade unlocked upon Reality. Each Perk effect varies, but 
 improvements which you can choose your own path through. All Perks only require ${formatInt(1)} Perk Point to buy.
 <br>
 <br>
-Each Reality you gain ${formatInt(1)} Perk Point which can be spent on a upgrade on the tree, starting with
+Each Reality you gain ${formatInt(1)} Perk Point which can be spent on an upgrade on the tree, starting with
 "You can now choose from ${formatInt(Perk.firstPerk.config.effect)} glyphs on Reality". You can only unlock Perks
 which are directly adjacent
 to Perks you already have, although there are loops in the tree which you can go through in either direction.
@@ -811,7 +811,7 @@ you have certain features (like the Black Hole and Stored Time) to be able to us
 <br>
 <br>
 You are able to create new scripts by clicking on the dropdown, and then clicking the "Create New..." option.
-To rename a script, click the pencil next to the dropdown. Scripts are automativally saved as you edit them.
+To rename a script, click the pencil next to the dropdown. Scripts are automatically saved as you edit them.
 You can create as many scripts as you want.
 <br>
 <br>
@@ -974,7 +974,7 @@ Shards. This allows you to set weights for each resource (EP, DT, Replicanti, Et
 level of Glyphs gained on Reality.
 <br>
 <br>
-Automatic Glyph Filtering is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
+Automatic Glyph Filtering is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
 Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
 with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. There are three basic modes:
@@ -991,7 +991,7 @@ compared to is specified by your input in the text box.
 can be set individually per glyph type.
 <br>
 <br>
-Additionaly, there are two more advanced modes with some additional flexibility:
+Additionally, there are two more advanced modes with some additional flexibility:
 <br>
 <b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
 you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum

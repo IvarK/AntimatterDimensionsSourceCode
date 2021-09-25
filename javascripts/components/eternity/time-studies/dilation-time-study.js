@@ -7,7 +7,7 @@ Vue.component("dilation-time-study", {
   data() {
     return {
       showRequirement: false,
-      currentTT: new Decimal(0),
+      maxTT: new Decimal(0),
     };
   },
   computed: {
@@ -20,7 +20,7 @@ Vue.component("dilation-time-study", {
     requirement() {
       if (this.id === 1) {
         return `Requirement: ${formatInt(5)} EC11 and EC12 completions
-          and ${formatInt(this.currentTT)}/${formatInt(13000)} total Time Theorems`;
+          and ${formatInt(this.maxTT)}/${formatInt(13000)} total Time Theorems`;
       }
       if (this.id === 6) {
         const achRows = Perk.firstPerk.isBought ? "" : ` and ${formatInt(13)} rows of Achievements`;
@@ -32,7 +32,7 @@ Vue.component("dilation-time-study", {
   methods: {
     update() {
       if (this.id === 1) {
-        this.currentTT.copyFrom(Currency.timeTheorems.max);
+        this.maxTT.copyFrom(Currency.timeTheorems.max);
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
       }
       if (this.id === 6) {

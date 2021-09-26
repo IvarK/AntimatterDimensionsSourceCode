@@ -811,7 +811,7 @@ function simulateTime(seconds, real, fast) {
   if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
-  
+
   let remainingRealSeconds = seconds;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus
@@ -924,7 +924,6 @@ window.onload = function() {
     }
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";
-    init();
   }, 500);
 };
 
@@ -952,7 +951,7 @@ function init() {
   kong.init();
 }
 
-
+init();
 
 let tweenTime = 0;
 (function() {

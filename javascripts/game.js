@@ -924,6 +924,7 @@ window.onload = function() {
     }
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";
+    init();
   }, 500);
 };
 
@@ -951,7 +952,7 @@ function init() {
   kong.init();
 }
 
-init();
+
 
 let tweenTime = 0;
 (function() {

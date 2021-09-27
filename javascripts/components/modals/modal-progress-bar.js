@@ -22,6 +22,20 @@ Vue.component("modal-progress-bar", {
     }
   },
   methods: {
+    // The code is less redundant if we check the condition here instead of within the button object itself
+    canBeClicked(button) {
+      return button.condition(this.progress.current, this.progress.max);
+    },
+    buttonClicked(button) {
+      if (!this.canBeClicked(button)) return;
+      button.click();
+    },
+    buttonClass(button) {
+      return {
+        "o-primary-btn--width-medium": true,
+        "o-primary-btn--disabled": !this.canBeClicked(button),
+      };
+    }
   },
   template: `
     <div class="l-modal-overlay c-modal-overlay" style="z-index: 8">
@@ -46,10 +60,10 @@ Vue.component("modal-progress-bar", {
         </div>
         <br>
         <div class="l-modal-progress-bar__buttons">
-          <primary-button v-for="button in buttons" v-if="button.condition(progress.current, progress.max)"
-            class="o-primary-btn--width-medium"
+          <primary-button v-for="button in buttons"
+            :class="buttonClass(button)"
             :key="button.text"
-            @click="button.click"
+            @click="buttonClicked(button)"
           >
             {{ button.text }}
           </primary-button>

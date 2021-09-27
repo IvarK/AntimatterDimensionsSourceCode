@@ -868,19 +868,18 @@ function simulateTime(seconds, real, fast) {
             info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
-              simulate the rest of the time with ${formatInt(1000)} more ticks (${formatInt(100)} ticks if less than
-              ${formatInt(3000)} remain). The "CANCEL" button will instead use all the remaining offline time in the
-              first online tick.`,
+              simulate the rest of the time with half as many ticks (down to a minimum of ${formatInt(500)} ticks
+              remaining). The "CANCEL" button will instead use all the remaining offline time in the first online
+              tick.`,
             progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
             startTime: Date.now(),
             buttons: [{
               text: "Speed up",
-              condition: (current, max) => max - current > 1000,
+              condition: (current, max) => max - current > 500,
               click: () => {
-                const newTicks = progress.remaining < 3000 ? 100 : 1000;
-                const newRemaining = Math.min(progress.remaining, newTicks);
+                const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
                 progress.maxIter -= progress.remaining - newRemaining;
                 progress.remaining = newRemaining;

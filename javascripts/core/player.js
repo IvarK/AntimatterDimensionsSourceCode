@@ -214,7 +214,7 @@ let player = {
       maxID1: new Decimal(0),
       maxStudies: 0,
       maxGlyphs: 0,
-      slowestBH: 0,
+      slowestBH: 1,
     },
     permanent: {
       cancerGalaxies: 0,

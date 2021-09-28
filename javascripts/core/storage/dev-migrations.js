@@ -1111,7 +1111,10 @@ GameStorage.devMigrations = {
       delete player.secretUnlocks.newsQueuePosition;
       delete player.secretUnlocks.eiffelTowerChapter;
     },
-    GameStorage.migrations.refactorDoubleIPRebuyable
+    GameStorage.migrations.refactorDoubleIPRebuyable,
+    player => {
+      if (player.requirementChecks.reality.slowestBH === 0) player.requirementChecks.reality.slowestBH = 1;
+    },
   ],
 
   patch(player) {

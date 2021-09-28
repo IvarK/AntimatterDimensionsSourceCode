@@ -309,11 +309,6 @@ const Ra = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
-    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
-    if (!BlackHoles.areNegative) {
-      player.minNegativeBlackHoleThisReality = 1;
-    }
-    Glyphs.updateMaxGlyphCount(true);
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
@@ -618,19 +613,19 @@ const RA_UNLOCKS = {
     level: 25,
     displayIcon: `<span class="fas fa-clock"></span>`
   },
-  AUTO_REALITY_UPGRADES: {
+  AUTO_RU_AND_INSTANT_EC: {
     id: 21,
     description: "Unlock V",
-    reward: "The rebuyable Reality upgrades are bought automatically",
+    reward: "The rebuyable Reality upgrades are bought automatically and Auto-Eternity Challenges happen instantly",
     pet: Ra.pets.v,
     level: 1,
     displayIcon: `<span class="fas fa-sync-alt"></span>`
   },
-  INSTANT_AUTOEC: {
+  AUTO_DILATION_UNLOCK: {
     id: 22,
     description: "Get V to level 2",
-    reward: () => `Auto-Eternity Challenges happen instantly and Time Dilation is unlocked automatically
-      at ${formatInt(17000)} Time Theorems`,
+    reward: () => `Time Dilation is unlocked automatically for free at ${formatInt(13000)} Time Theorems outside of
+      Celestial Realities`,
     pet: Ra.pets.v,
     level: 2,
     displayIcon: `<span class="fas fa-fast-forward"></span>`

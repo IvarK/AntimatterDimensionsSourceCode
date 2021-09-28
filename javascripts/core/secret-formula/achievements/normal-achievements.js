@@ -70,7 +70,7 @@ GameDatabase.achievements.normal = [
     id: 22,
     name: "FAKE NEWS!",
     get description() { return `Encounter ${formatInt(50)} different news messages.`; },
-    checkRequirement: () => player.news.size >= 50,
+    checkRequirement: () => NewsHandler.uniqueTickersSeen >= 50,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
@@ -194,14 +194,14 @@ GameDatabase.achievements.normal = [
       return `Buy an Antimatter Galaxy without Dimensional Sacrificing.
         (Your Antimatter Galaxies are reset on Infinity.)`;
     },
-    checkRequirement: () => player.achievementChecks.noSacrifices,
+    checkRequirement: () => player.requirementChecks.infinity.noSacrifice,
     checkEvent: GAME_EVENT.GALAXY_RESET_BEFORE
   },
   {
     id: 41,
     name: "Spreading Cancer",
     get description() { return `Buy ${formatInt(10)} Antimatter Galaxies in total while using cancer notation.`; },
-    checkRequirement: () => player.secretUnlocks.spreadingCancer >= 10,
+    checkRequirement: () => player.requirementChecks.permanent.cancerGalaxies >= 10,
     checkEvent: [GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER]
   },
   {
@@ -287,7 +287,7 @@ GameDatabase.achievements.normal = [
   {
     id: 52,
     name: "Age of Automation",
-    description: "Max Antimatter Dimension and Tickspeed upgrade autobuyers.",
+    description: "Max the interval for Antimatter Dimension and Tickspeed upgrade autobuyers.",
     checkRequirement: () => Autobuyers.antimatterDimensions.concat(Autobuyer.tickspeed)
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
@@ -295,7 +295,7 @@ GameDatabase.achievements.normal = [
   {
     id: 53,
     name: "Definitely not worth it",
-    description: "Max all normal autobuyers.",
+    description: "Max the intervals for all normal autobuyers.",
     // The upgradeable autobuyers are dimensions, tickspeed, dimension boost,
     // galaxy, and big crunch (the ones you get from normal challenges).
     // We don't count autobuyers which can be upgraded via e.g. perks as upgradeable.
@@ -654,7 +654,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Gain ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti in ${formatInt(1)} hour.`; },
     get reward() { return `You keep your Replicanti and ${formatInt(1)} Replicanti Galaxy on Infinity.`; },
     checkRequirement: () =>
-      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
+      (Replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
       Time.thisInfinityRealTime.totalHours <= 1,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER
   },
@@ -683,7 +683,7 @@ GameDatabase.achievements.normal = [
     id: 101,
     name: "8 nobody got time for that",
     description: "Eternity without buying Antimatter Dimensions 1-7.",
-    checkRequirement: () => player.achievementChecks.onlyEighthDimensions,
+    checkRequirement: () => player.requirementChecks.eternity.onlyAD8,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -741,7 +741,7 @@ GameDatabase.achievements.normal = [
     id: 108,
     name: "We COULD afford 9",
     get description() { return `Eternity with exactly ${formatInt(9)} Replicanti.`; },
-    checkRequirement: () => player.replicanti.amount.round().eq(9),
+    checkRequirement: () => Replicanti.amount.round().eq(9),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -839,7 +839,7 @@ GameDatabase.achievements.normal = [
     id: 122,
     name: "You're already dead.",
     description: "Eternity without buying Antimatter Dimensions 2-8.",
-    checkRequirement: () => player.achievementChecks.onlyFirstDimensions,
+    checkRequirement: () => player.requirementChecks.eternity.onlyAD1,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -864,7 +864,7 @@ GameDatabase.achievements.normal = [
       or any 1st Antimatter Dimensions in your current Eternity.`;
     },
     checkRequirement: () => Currency.infinityPoints.exponent >= 90 &&
-      player.achievementChecks.noFirstDimensions && Currency.infinities.eq(0),
+      player.requirementChecks.eternity.noAD1 && Currency.infinities.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Infinity Point multiplier based on time spent this Infinity.",
     effect() {
@@ -920,7 +920,7 @@ GameDatabase.achievements.normal = [
       return `Have ${formatInt(569)} Antimatter Galaxies without getting any
       Replicanti Galaxies in your current Eternity.`;
     },
-    checkRequirement: () => player.galaxies >= 569 && player.achievementChecks.noReplicantiGalaxies,
+    checkRequirement: () => player.galaxies >= 569 && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1),
@@ -935,7 +935,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
-      player.infMultCost.equals(10) &&
+      player.infMult === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "You start Eternities with all Infinity Challenges unlocked and completed."
@@ -944,7 +944,7 @@ GameDatabase.achievements.normal = [
     id: 134,
     name: "When will it be enough?",
     get description() { return `Reach ${formatPostBreak("1e18000")} Replicanti.`; },
-    checkRequirement: () => player.replicanti.amount.exponent >= 18000,
+    checkRequirement: () => Replicanti.amount.exponent >= 18000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return `You gain Replicanti ${formatInt(2)} times faster
@@ -1082,7 +1082,7 @@ GameDatabase.achievements.normal = [
       return `Get ${formatInt(800)} Antimatter Galaxies without
       buying 8th Antimatter Dimensions in your current Infinity.`;
     },
-    checkRequirement: () => player.galaxies >= 800 && player.achievementChecks.noEighthDimensions,
+    checkRequirement: () => player.galaxies >= 800 && player.requirementChecks.infinity.noAD8,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Unlock V, the Celestial of Achievements."
   },
@@ -1097,7 +1097,7 @@ GameDatabase.achievements.normal = [
     id: 153,
     name: "More like \"reallydoesn'tmatter\"",
     description: "Reality without producing antimatter.",
-    checkRequirement: () => player.achievementChecks.noAntimatterProduced,
+    checkRequirement: () => player.requirementChecks.reality.noAM,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
   {
@@ -1122,7 +1122,7 @@ GameDatabase.achievements.normal = [
     id: 156,
     name: "College Dropout",
     description: "Reality without buying Time Theorems.",
-    checkRequirement: () => player.achievementChecks.noTheoremPurchases,
+    checkRequirement: () => player.requirementChecks.reality.noPurchasedTT,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     reward: "Free coupon to McDonalds™️."
   },
@@ -1235,7 +1235,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
-      player.achievementChecks.noTriadStudies,
+      player.requirementChecks.reality.noTriads,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
   {

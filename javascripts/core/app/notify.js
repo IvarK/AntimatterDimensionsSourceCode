@@ -6,6 +6,10 @@ GameUI.notify = (function() {
   const enterAnimation = "a-notification--enter";
   const leaveAnimation = "a-notification--leave";
   function showNotification(text, elClass, duration = 2000) {
+    if(!GameUI.initialized) {
+      setTimeout(showNotification, 500, text, elClass, duration);
+      return;
+    }
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);

@@ -2495,6 +2495,10 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
+.c-stats-tab-subheader {
+  height: 15rem;
+}
+
 .c-stats-tab-infinity {
   color: var(--color-infinity);
 }
@@ -5336,6 +5340,14 @@ kbd {
   padding-bottom: 0.5rem;
 }
 
+.l-modal-progress-bar__buttons {
+  display: flex;
+  flex-direction: row;
+  width: 25rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .l-modal-progress-bar__bg {
   width: 20rem;
   margin-left: 1rem;
@@ -6225,6 +6237,17 @@ kbd {
   100% {transform: rotate(360deg)}
 }
 
+.c-enslaved-hint-modal {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  padding: 0.25rem 1rem;
+  width: 60rem;
+  height: 60rem;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
 /* #endregion enslaved tab*/
 
 /* #startregion v tab */
@@ -6309,6 +6332,24 @@ kbd {
   flex-direction: row;
   justify-content: center;
   margin: 0.5rem;
+}
+
+.c-v-unlock-bar {
+  width: 40rem;
+  padding: 0.6rem;
+  margin: 1rem 0 0;
+  border-radius: 0.5rem;
+  border: 0.2rem solid;
+  position: relative;
+  z-index: 0;
+}
+
+.c-v-unlock-bar__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -1;
 }
 
 .o-v-milestone {

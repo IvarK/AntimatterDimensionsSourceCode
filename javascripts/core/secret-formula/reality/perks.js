@@ -151,7 +151,8 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "The first row of eternity upgrades automatically unlock after the first Eternity of a Reality.",
+    description: `After the first Eternity of a Reality,
+      automatically unlock the first row of Eternity Upgrades for free.`,
     defaultPosition: {
       x: 50,
       y: 150
@@ -162,7 +163,7 @@ GameDatabase.reality.perks = {
     label: "EU2",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `The second row of eternity upgrades automatically unlock
+      return `The second row of Eternity Upgrades is automatically purchased
         at ${formatX(1e10)} times less than their original price`;
     },
     defaultPosition: {
@@ -174,7 +175,7 @@ GameDatabase.reality.perks = {
     id: 42,
     label: "UD1",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the second row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     defaultPosition: {
       x: 165,
       y: 565
@@ -184,7 +185,7 @@ GameDatabase.reality.perks = {
     id: 43,
     label: "UD2",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the third row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     defaultPosition: {
       x: 310,
       y: 605
@@ -194,7 +195,7 @@ GameDatabase.reality.perks = {
     id: 44,
     label: "ATT",
     family: PERK_FAMILY.DILATION,
-    description: "Auto-unlock the passive Time Theorem generation Dilation Upgrade once you can afford it.",
+    description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
     defaultPosition: {
       x: 460,
       y: 580

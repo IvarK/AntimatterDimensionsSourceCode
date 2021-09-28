@@ -109,17 +109,9 @@ const VRunUnlocks = {
 const V_UNLOCKS = {
   V_ACHIEVEMENT_UNLOCK: {
     id: 0,
-    reward: "Fully unlocks V, The Celestial Of Achievements",
+    reward: "Unlock V, The Celestial Of Achievements",
     description: "Meet all the above requirements simultaneously",
-    requirement: () => {
-      const db = GameDatabase.celestials.v.mainUnlock;
-      return (Currency.realities.gte(db.realities) &&
-              Currency.eternities.gte(db.eternities) &&
-              Currency.infinitiesTotal.gte(db.infinities) &&
-              Currency.dilatedTime.gte(db.dilatedTime) &&
-              player.replicanti.amount.gte(db.replicanti) &&
-              Currency.realityMachines.gte(db.rm));
-    }
+    requirement: () => Object.values(GameDatabase.celestials.v.mainUnlock).every(e => e.progress() >= 1)
   },
   SHARD_REDUCTION: {
     id: 1,
@@ -170,16 +162,9 @@ const V = {
   displayName: "V",
   spaceTheorems: 0,
   checkForUnlocks() {
-
-    if (!V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.requirement()) {
-      // eslint-disable-next-line no-bitwise
-      player.celestials.v.unlockBits |= (1 << V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id);
-      GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
-      V.quotes.show(V.quotes.UNLOCK);
-    }
-
     for (const key of Object.keys(V_UNLOCKS)) {
       const unl = V_UNLOCKS[key];
+      if (unl.id === V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id) continue;
       if (unl.requirement() && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise
         player.celestials.v.unlockBits |= (1 << unl.id);
@@ -197,6 +182,15 @@ const V = {
       Ra.checkForUnlocks();
     }
   },
+  get canUnlockCelestial() {
+    return V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.requirement();
+  },
+  unlockCelestial() {
+    // eslint-disable-next-line no-bitwise
+    player.celestials.v.unlockBits |= (1 << V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id);
+    GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
+    V.quotes.show(V.quotes.UNLOCK);
+  },
   has(info) {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.v.unlockBits & (1 << info.id));
@@ -204,12 +198,7 @@ const V = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.v.run = true;
-    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
-    if (!BlackHoles.areNegative) {
-      player.minNegativeBlackHoleThisReality = 1;
-    }
     this.quotes.show(this.quotes.REALITY_ENTER);
-    Glyphs.updateMaxGlyphCount(true);
   },
   updateTotalRunUnlocks() {
     let sum = 0;
@@ -230,7 +219,6 @@ const V = {
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      maxGlyphsThisRun: 0
     };
     this.spaceTheorems = 0;
   },

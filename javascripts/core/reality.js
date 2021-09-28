@@ -217,7 +217,7 @@ function autoReality() {
 }
 
 function updateRealityRecords(realityProps) {
-  const thisRunRMmin = realityProps.gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes);
+  const thisRunRMmin = realityProps.gainedRM.dividedBy(Math.clampMin(0.0005, Time.thisRealityRealTime.totalMinutes));
   if (player.records.bestReality.RMmin.lt(thisRunRMmin)) {
     player.records.bestReality.RMmin = thisRunRMmin;
     player.records.bestReality.RMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -378,8 +378,7 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  player.infMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -403,22 +402,10 @@ function finishProcessReality(realityProps) {
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.achievementChecks.noSacrifices = true;
-  player.achievementChecks.onlyEighthDimensions = true;
-  player.achievementChecks.onlyFirstDimensions = true;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noFirstDimensions = true;
-  player.achievementChecks.noAntimatterProduced = true;
-  player.achievementChecks.noTriadStudies = true;
-  player.achievementChecks.noTheoremPurchases = true;
-  player.achievementChecks.noInfinitiesThisReality = true;
-  player.achievementChecks.noEternitiesThisReality = true;
-  player.achievementChecks.noReplicantiGalaxies = true;
-  player.achievementChecks.maxID1ThisReality = new Decimal(0);
-  player.achievementChecks.maxStudiesThisReality = 0;
-  player.achievementChecks.continuumThisReality = Laitela.continuumActive;
+  if (!realityProps.glyphUndo) Player.resetRequirements("reality");
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
+  player.records.thisReality.maxReplicanti = new Decimal(0);
   Currency.timeTheorems.reset();
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
@@ -437,6 +424,7 @@ function finishProcessReality(realityProps) {
   };
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
+  player.records.thisReality.maxDT = new Decimal(0);
   player.dilation.lastEP = new Decimal(-1);
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
@@ -521,7 +509,7 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   Currency.eternities.bumpTo(100);
-  player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  Replicanti.amount = Replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
 }
 
@@ -536,7 +524,14 @@ function clearCelestialRuns() {
   };
   player.celestials.teresa.run = false;
   player.celestials.effarig.run = false;
-  player.celestials.enslaved.run = false;
+  // Enslaved forces all tabs to be visible, but exiting via the header might leave the player on a tab which is
+  // otherwise normally hidden - in that case we force them to the Enslaved tab. We could scan for the lowest-index tab
+  // and subtab, but all other things being equal the Enslaved tab makes the most sense. The run flag is toggled
+  // *before* the check because otherwise isHidden will always evaluate to false due to still being in Enslaved.
+  if (Enslaved.isRunning) {
+    player.celestials.enslaved.run = false;
+    if (Tabs.current.isHidden || Tabs.current._currentSubtab.isHidden) Tab.celestials.enslaved.show();
+  }
   player.celestials.v.run = false;
   player.celestials.ra.run = false;
   player.celestials.laitela.run = false;

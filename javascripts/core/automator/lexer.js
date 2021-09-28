@@ -146,7 +146,7 @@ const AutomatorLexer = (() => {
 
   createInCategory(AutomatorCurrency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
-    $getter: () => player.replicanti.amount,
+    $getter: () => Replicanti.amount,
   });
   createInCategory(AutomatorCurrency, "TT", /(tt|time theorems?)/i, {
     $autocomplete: "TT",

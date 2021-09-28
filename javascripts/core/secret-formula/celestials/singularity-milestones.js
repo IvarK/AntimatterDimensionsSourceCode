@@ -150,7 +150,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Tesseracts boost Dark Matter and Dark Energy production",
-    effect: () => Math.pow(1.1, Enslaved.effectiveTesseractCount),
+    effect: () => Math.pow(1.1, Tesseracts.effectiveCount),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },

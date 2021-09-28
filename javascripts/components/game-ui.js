@@ -21,8 +21,12 @@ Vue.component("game-ui", {
     }
   },
   template: `
-    <div id="ui-container" style="display: flex; justify-content: center;">
-      <div v-if="view.initialized" id="ui" class="c-game-ui">
+    <div
+      v-if="view.initialized"
+      id="ui-container"
+      style="display: flex; justify-content: center;"
+    >
+      <div id="ui" class="c-game-ui">
         <component :is="uiLayout">
           <component :is="page" />
         </component>

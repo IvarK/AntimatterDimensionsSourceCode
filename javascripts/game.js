@@ -134,7 +134,11 @@ function ratePerMinute(amount, time) {
   return Decimal.divide(amount, time / (60 * 1000));
 }
 
-function averageRun(runs, name) {
+function averageRun(allRuns, name) {
+  // Filter out all runs which have the default infinite value for time, but if we're left with no valid runs then we
+  // take just one entry so that the averages also have the same value and we don't get division by zero.
+  let runs = allRuns.filter(run => run[0] !== Number.MAX_VALUE);
+  if (runs.length === 0) runs = [allRuns[0]];
   const totalTime = runs.map(run => run[0]).sum();
   const totalAmount = runs
     .map(run => run[1])
@@ -202,7 +206,7 @@ function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
 }
 
 function isOfflineEPGainEnabled() {
-  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+  return player.options.offlineProgress && !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
     !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
@@ -513,7 +517,7 @@ function gameLoop(passDiff, options = {}) {
     let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.records.bestInfinity.time);
+      infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7)
@@ -557,7 +561,7 @@ function gameLoop(passDiff, options = {}) {
   const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
-  const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
+  const currentIPmin = gainedInfinityPoints().dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes));
   if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch)
     player.records.thisInfinity.bestIPmin = currentIPmin;
 
@@ -568,7 +572,7 @@ function gameLoop(passDiff, options = {}) {
   replicantiLoop(diff);
 
 
-  const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
+  const currentEPmin = gainedEternityPoints().dividedBy(Math.clampMin(0.0005, Time.thisEternityRealTime.totalMinutes));
   if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity)
     player.records.thisEternity.bestEPmin = currentEPmin;
 
@@ -582,8 +586,11 @@ function gameLoop(passDiff, options = {}) {
 
   BlackHoles.updatePhases(blackHoleDiff);
 
-  // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
-  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && Currency.timeTheorems.max.gte(16617)) {
+  // Unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
+  // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
+  // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
+  if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) && Currency.timeTheorems.max.gte(13000) && !isInCelestialReality()) {
+    Currency.timeTheorems.add(TimeStudy.dilation.cost);
     TimeStudy.dilation.purchase(true);
   }
 
@@ -752,16 +759,19 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerBefore) {
+function afterSimulation(seconds, playerBefore, hotkeySetting) {
   if (seconds > 600) {
     const playerAfter = deepmerge.all([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
   GameUI.notify.showBlackHoles = true;
+  player.options.hotkeys = hotkeySetting;
 }
 
 function simulateTime(seconds, real, fast) {
+  const playerHotkeySetting = player.options.hotkeys;
+  player.options.hotkeys = false;
   // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
@@ -798,10 +808,10 @@ function simulateTime(seconds, real, fast) {
     Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
   }
 
-  if (InfinityUpgrade.ipOffline.isBought) {
+  if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
-  
+
   let remainingRealSeconds = seconds;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus
@@ -841,7 +851,7 @@ function simulateTime(seconds, real, fast) {
       loopFn(remaining);
     }
     GameStorage.postLoadStuff();
-    afterSimulation(seconds, playerStart);
+    afterSimulation(seconds, playerStart, playerHotkeySetting);
   } else {
     const progress = {};
     ui.view.modal.progressBar = {};
@@ -858,8 +868,9 @@ function simulateTime(seconds, real, fast) {
             info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
-              simulate the rest of the time with only ${formatInt(1000)} more ticks, or the "CANCEL" button to
-              not do any more offline ticks (and use remaining offline time in the first online tick).`,
+              simulate the rest of the time with ${formatInt(1000)} more ticks (${formatInt(100)} ticks if less than
+              ${formatInt(3000)} remain). The "CANCEL" button will instead use all the remaining offline time in the
+              first online tick.`,
             progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
@@ -868,7 +879,8 @@ function simulateTime(seconds, real, fast) {
               text: "Speed up",
               condition: (current, max) => max - current > 1000,
               click: () => {
-                const newRemaining = Math.min(progress.remaining, 1000);
+                const newTicks = progress.remaining < 3000 ? 100 : 1000;
+                const newRemaining = Math.min(progress.remaining, newTicks);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
                 progress.maxIter -= progress.remaining - newRemaining;
                 progress.remaining = newRemaining;
@@ -896,7 +908,7 @@ function simulateTime(seconds, real, fast) {
           GameStorage.postLoadStuff();
         },
         then: () => {
-          afterSimulation(seconds, playerStart);
+          afterSimulation(seconds, playerStart, playerHotkeySetting);
         },
         progress
       });

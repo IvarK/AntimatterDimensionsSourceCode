@@ -179,10 +179,10 @@ function onBuyDimension(tier) {
 
   player.postC4Tier = tier;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-  if (tier !== 8) player.achievementChecks.onlyEighthDimensions = false;
-  if (tier !== 1) player.achievementChecks.onlyFirstDimensions = false;
-  if (tier === 8) player.achievementChecks.noEighthDimensions = false;
-  if (tier === 1) player.achievementChecks.noFirstDimensions = false;
+  if (tier !== 8) player.requirementChecks.eternity.onlyAD8 = false;
+  if (tier !== 1) player.requirementChecks.eternity.onlyAD1 = false;
+  if (tier === 8) player.requirementChecks.infinity.noAD8 = false;
+  if (tier === 1) player.requirementChecks.eternity.noAD1 = false;
 }
 
 function buyOneDimension(tier) {
@@ -259,7 +259,7 @@ function buyUntilTen(tier) {
 function maxAll() {
   if (Laitela.continuumActive || Currency.antimatter.gt(Player.infinityLimit)) return;
 
-  player.usedMaxAll = true;
+  player.requirementChecks.infinity.maxAll = true;
 
   for (let tier = 1; tier < 9; tier++) {
     buyMaxDimension(tier);
@@ -634,7 +634,7 @@ const AntimatterDimensions = {
       AntimatterDimension(tier + nextTierOffset).produceDimensions(AntimatterDimension(tier), diff / 10);
     }
     if (AntimatterDimension(1).amount.gt(0)) {
-      player.achievementChecks.noFirstDimensions = false;
+      player.requirementChecks.eternity.noAD1 = false;
     }
     AntimatterDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {

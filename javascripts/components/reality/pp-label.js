@@ -31,15 +31,17 @@ Vue.component("pp-label", {
       Perk choices are permanent and cannot be respecced.
       <br>
       <div>
-        <primary-button-on-off
+        <primary-button-on-off-custom
           v-model="fixedLoadPos"
           class="o-primary-btn"
-          text="Lay out tree as untangled:"
+          on="Starting tree layout: Untangled"
+          off="Starting tree layout: Random Positions"
         />
-        <primary-button-on-off
+        <primary-button-on-off-custom
           v-model="physicsEnabled"
           class="o-primary-btn"
-          text="Enable Physics:"
+          on="Physics: Enabled"
+          off="Physics: Disabled"
         />
       </div>
     </div>`

@@ -41,6 +41,7 @@ Vue.component("normal-achievements-tab", {
       achievementPower: 0,
       achTPeffect: 0,
       achCountdown: 0,
+      totalCountdown: 0,
       missingAchievements: 0,
       showAutoAchieve: false,
       isAutoAchieveActive: false,
@@ -63,12 +64,39 @@ Vue.component("normal-achievements-tab", {
   },
   computed: {
     rows: () => Achievements.allRows,
+    boostText() {
+      const boostList = [];
+
+      const dimMultList = [];
+      dimMultList.push("Antimatter");
+      if (this.achMultToIDS) dimMultList.push("Infinity");
+      if (this.achMultToTDS) dimMultList.push("Time");
+      const dimMult = `Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
+      switch (dimMultList.length) {
+        case 1:
+          boostList.push(`${dimMultList[0]} ${dimMult}`);
+          break;
+        case 2:
+          boostList.push(`${dimMultList[0]} and ${dimMultList[1]} ${dimMult}`);
+          break;
+        default:
+          boostList.push(`${dimMultList.slice(0, -1).join(", ")},
+            and ${dimMultList[dimMultList.length - 1]} ${dimMult}`);
+      }
+
+      if (this.achMultToTP) boostList.push(`Tachyon Particles: ${formatX(this.achTPeffect, 2, 3)}`);
+      if (this.achMultToBH) boostList.push(`Black Hole Power: ${formatX(this.achievementPower, 2, 3)}`);
+      if (this.achMultToTT) boostList.push(`Time Theorem production: ${formatX(this.achievementPower, 2, 3)}`);
+      return `${boostList.join("<br>")}`;
+    },
   },
   methods: {
     update() {
       this.achievementPower = Achievements.power;
       this.achTPeffect = RealityUpgrade(8).config.effect();
       this.achCountdown = Achievements.timeToNextAutoAchieve / getGameSpeedupFactor();
+      this.totalCountdown = ((Achievements.preReality.countWhere(a => !a.isUnlocked) - 1) * Achievements.period +
+        Achievements.timeToNextAutoAchieve) / getGameSpeedupFactor();
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
       this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup5.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
@@ -104,26 +132,7 @@ Vue.component("normal-achievements-tab", {
       </div>
       <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">
         Your Achievements provide a multiplier to<swap-images-button />
-        <div>
-          <span>
-            Antimatter<span v-if="achMultToTDS && achMultToIDS">, Infinity, and Time</span>
-            <span v-else-if="achMultToTDS"> and Time</span>
-            <span v-else-if="achMultToIDS"> and Infinity</span>
-            Dimensions: {{ formatX(achievementPower, 2, 3) }}
-          </span>
-          <br>
-          <span v-if="achMultToTP">
-            Tachyon Particles: {{ formatX(achTPeffect, 2, 3) }}
-          </span>
-          <br>
-          <span v-if="achMultToBH">
-            Black Hole Power: {{ formatX(achievementPower, 2, 3) }}
-          </span>
-          <br>
-          <span v-if="achMultToTT">
-            Time Theorem production: {{ formatX(achievementPower, 2, 3) }}
-          </span>
-        </div>
+        <div v-html="boostText" />
       </div>
       <div v-if="showAutoAchieve" class="c-achievements-tab__header">
         <div v-if="achCountdown > 0">
@@ -135,6 +144,11 @@ Vue.component("normal-achievements-tab", {
           Automatically gain the next missing Achievement as soon as you enable Auto Achievements.
           (left-to-right, top-to-bottom)
         </div>
+        <div v-if="totalCountdown > 0">
+          You will regain all remaining achievements after {{ timeDisplayNoDecimals(totalCountdown) }} if Auto
+          Achievement stays enabled.
+        </div>
+        <br>
       </div>
       <div class="l-achievement-grid">
         <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />

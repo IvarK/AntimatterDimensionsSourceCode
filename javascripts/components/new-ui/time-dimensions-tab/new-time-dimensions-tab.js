@@ -84,7 +84,7 @@ Vue.component("new-time-dimensions-tab", {
         <br>
         and costs increase much faster after {{ format(costIncreases[2]) }} Eternity Points.
         <br>
-        Hold shift to see the Eternity Point cost for locked dimensions.
+        Hold shift to see the Eternity Point cost for locked Time Dimensions.
       </div>
     </div>`
 });

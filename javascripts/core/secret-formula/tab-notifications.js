@@ -135,7 +135,7 @@ GameDatabase.tabNotifications = {
     tabsToHighLight: [
       {
         parent: "celestials",
-        tab: "navigation"
+        tab: "celestial-navigation"
       },
       {
         parent: "celestials",

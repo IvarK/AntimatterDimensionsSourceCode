@@ -32,6 +32,9 @@ Vue.component("infinity-dim-row", {
     }
   },
   computed: {
+    shiftDown() {
+      return ui.view.shiftDown;
+    },
     name() {
       return InfinityDimension(this.tier).shortDisplayName;
     },
@@ -40,7 +43,7 @@ Vue.component("infinity-dim-row", {
     },
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
-      if (this.isUnlocked) {
+      if (this.isUnlocked || this.shiftDown) {
         if (this.isCapped) return "Capped";
         return this.showCostTitle ? `Cost: ${format(this.cost)} IP` : `${format(this.cost)} IP`;
       }

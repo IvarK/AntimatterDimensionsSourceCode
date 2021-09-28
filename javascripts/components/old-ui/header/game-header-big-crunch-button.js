@@ -8,8 +8,6 @@ Vue.component("game-header-big-crunch-button", {
       currentIPPM: new Decimal(0),
       peakIPPM: new Decimal(0),
       currentIP: new Decimal(0),
-      tesseractUnlocked: false,
-      tesseractCost: new Decimal(0),
       tesseractAffordable: false,
       canCrunch: false,
       infinityGoal: new Decimal(0),
@@ -46,7 +44,7 @@ Vue.component("game-header-big-crunch-button", {
       return {
         color: `rgb(${rgb.join(",")})`,
         "transition-duration": "0.2s"
-     };
+      };
     },
   },
   methods: {
@@ -63,11 +61,9 @@ Vue.component("game-header-big-crunch-button", {
       this.gainedIP.copyFrom(gainedIP);
       this.peakIPPM.copyFrom(player.records.thisInfinity.bestIPmin);
       if (this.isPeakIPPMVisible) {
-        this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
+        this.currentIPPM.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
       }
-      this.tesseractUnlocked = Enslaved.isCompleted;
-      this.tesseractCost = Enslaved.tesseractCost;
-      this.tesseractAffordable = this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost);
+      this.tesseractAffordable = Tesseracts.canBuyTesseract;
     },
     switchToInfinity() {
       Tab.dimensions.infinity.show(true);

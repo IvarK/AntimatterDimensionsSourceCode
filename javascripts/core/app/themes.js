@@ -1,7 +1,13 @@
 "use strict";
 
-const Theme = function Theme(name, colors) {
+const Theme = function Theme(name, config) {
   this.name = name;
+
+  this.isDark = config.isDark;
+
+  this.isMetro = config.isMetro;
+
+  this.isAnimated = config.isAnimated;
 
   this.isDefault = function() {
     return name === "Normal";
@@ -16,11 +22,6 @@ const Theme = function Theme(name, colors) {
     return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
   };
 
-  this.isAnimated = function() {
-    const list = ["S1", "S6"];
-    return list.includes(this.name);
-  };
-
   this.displayName = function() {
     if (!this.isSecret() || !this.isAvailable()) return name;
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
@@ -28,13 +29,14 @@ const Theme = function Theme(name, colors) {
   };
 
   this.set = function() {
-    for (const c of document.body.classList) {
-      if (c.startsWith("t-")) {
-        document.body.classList.remove(c);
-      }
-    }
+    // Remove all entries in the class list from the class list
+    document.body.classList.remove(...document.body.classList);
+
     document.body.classList.add(this.cssClass());
-    if (this.isAnimated() && player.options.animations.background) {
+    if (this.isMetro) document.body.classList.add("s-base--metro");
+    if (this.isDark) document.body.classList.add("s-base--dark");
+
+    if (this.isAnimated && player.options.animations.background) {
       document.getElementById("background-animations").style.display = "block";
     } else {
       document.getElementById("background-animations").style.display = "none";
@@ -44,8 +46,6 @@ const Theme = function Theme(name, colors) {
     window.getSelection().removeAllRanges();
     PerkNetwork.forceNetworkRemake();
   };
-
-  this.isDark = colors.isDark;
 
   this.cssClass = function() {
     return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
@@ -99,37 +99,33 @@ Theme.tryUnlock = function(name) {
   return true;
 };
 
-Theme.light = function(name) {
-  const colors = {
-    isDark: false
+Theme.create = function(name, settings) {
+  const config = {
+    isDark: false || settings.dark,
+    isMetro: false || settings.metro,
+    isAnimated: false || settings.animated,
   };
-  return new Theme(name, colors);
-};
-
-Theme.dark = function(name) {
-  const colors = {
-    isDark: true
-  };
-  return new Theme(name, colors);
+  return new Theme(name, config);
 };
 
 const Themes = {
   all: [
-    Theme.light("Normal"),
-    Theme.light("Metro"),
-    Theme.dark("Dark"),
-    Theme.dark("Dark Metro"),
-    Theme.light("Inverted"),
-    Theme.light("Inverted Metro"),
-    Theme.light("S1"),
-    Theme.light("S2"),
-    Theme.light("S3"),
-    Theme.light("S4"),
-    Theme.light("S5"),
-    Theme.dark("S6"),
-    Theme.light("S7"),
-    Theme.light("S8"),
-    Theme.light("S9")
+    /* eslint-disable no-multi-spaces */
+    Theme.create("Normal",          {                                             }),
+    Theme.create("Metro",           {             metro: true,                    }),
+    Theme.create("Dark",            { dark: true                                  }),
+    Theme.create("Dark Metro",      { dark: true, metro: true,                    }),
+    Theme.create("Inverted",        {                                             }),
+    Theme.create("Inverted Metro",  {             metro: true,                    }),
+    Theme.create("S1",              {                           animated: true,   }),
+    Theme.create("S2",              {                                             }),
+    Theme.create("S3",              {                                             }),
+    Theme.create("S4",              {                                             }),
+    Theme.create("S5",              {                                             }),
+    Theme.create("S6",              { dark: true,               animated: true,   }),
+    Theme.create("S7",              {                                             }),
+    Theme.create("S8",              {             metro: true,                    }),
+    Theme.create("S9",              {                                             }),
   ],
 
   available() {

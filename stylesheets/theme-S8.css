@@ -1,25 +1,25 @@
 body.t-s8 {
-    background: url('../images/s8-bg.jpg') no-repeat;
-    color: black;
-    background-color: white;
-    height: 100%; 
+  background: url('../images/s8-bg.jpg') no-repeat;
+  color: black;
+  background-color: white;
+  height: 100%;
 
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .t-s8 .container {
-    color: black;
+  color: black;
 }
 
 /*metro  theme with less box shadows*/
 
 
 .t-s8 input, .t-s8 select {
-    border: 0.1rem solid #A9A9A9;
+  border: 0.1rem solid #A9A9A9;
 }
 
 .t-s8 .c-tt-buy-button--unlocked {

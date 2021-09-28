@@ -1,51 +1,51 @@
 * {
-    font-family: "Arial";
-    transition-duration: 1ms !important;
-    border-width: 1px !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    animation: none !important;
+  font-family: "Arial";
+  transition-duration: 1ms !important;
+  border-width: 1px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  animation: none !important;
 }
 
 #ui {
-    filter: saturate(0) !important;
+  filter: saturate(0) !important;
 }
 
 button {
-    -webkit-border-radius: 0 !important;
-    -moz-border-radius: 0 !important;
-    border-radius: 0 !important;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
-    background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
-    background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 
-    padding: 3px !important;
-    border: 0.1rem solid #9B9B9B !important;
-    color: black !important;
-    text-decoration: none !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
+  background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  padding: 3px !important;
+  border: 0.1rem solid #9B9B9B !important;
+  color: black !important;
+  text-decoration: none !important;
 }
 
 .o-primary-btn {
-    -webkit-border-radius: 0 !important;
-    -moz-border-radius: 0 !important;
-    border-radius: 0 !important;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
-    background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
-    background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 
-    padding: 3px !important;
-    border: 0.1rem solid #9B9B9B !important;
-    color: black !important;
-    text-decoration: none !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
+  background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  padding: 3px !important;
+  border: 0.1rem solid #9B9B9B !important;
+  color: black !important;
+  text-decoration: none !important;
 }
 
 button:hover {
-    border: 0.1rem solid #737373 !important;
+  border: 0.1rem solid #737373 !important;
 }
 
 .c-glyph-tooltip {
-    filter: saturate(0);
-    text-shadow: none !important;
+  filter: saturate(0);
+  text-shadow: none !important;
 }
 
 .c-glyph-tooltip__effect span {
-    text-shadow: none !important;
+  text-shadow: none !important;
 }

@@ -30,7 +30,7 @@
   border-radius: 0.5rem;
 }
 
-.t-universal-metro .c-glyph-sacrifice-options {
+.s-base--metro .c-glyph-sacrifice-options {
   border-width: 0.1rem;
   border-radius: 0;
 }
@@ -62,7 +62,7 @@
   transition: color 0.2s;
 }
 
-.t-universal-metro .c-glyph-sacrifice-options__option {
+.s-base--metro .c-glyph-sacrifice-options__option {
   border-width: 0.1rem;
 }
 
@@ -358,7 +358,7 @@
   border: 0.2rem solid black;
 }
 
-.t-universal-metro .c-glyph-tooltip {
+.s-base--metro .c-glyph-tooltip {
   border-radius: 0;
   border-width: 0.1rem;
 }
@@ -383,7 +383,7 @@
   border-radius: 0.8rem;
 }
 
-.t-universal-metro .c-glyph-tooltip__header {
+.s-base--metro .c-glyph-tooltip__header {
   border-radius: 0;
   border-width: 0.1rem;
 }
@@ -559,7 +559,7 @@
   overflow: auto;
 }
 
-.t-universal-metro .c-current-glyph-effects {
+.s-base--metro .c-current-glyph-effects {
   border-radius: 0;
 }
 
@@ -600,7 +600,7 @@
   border-top-right-radius: 0.5rem;
 }
 
-.t-universal-metro .c-glyph-info-options {
+.s-base--metro .c-glyph-info-options {
   border-radius: 0;
 }
 
@@ -682,7 +682,7 @@
   box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5);
 }
 
-.t-universal-metro .c-glyph-choice-icon {
+.s-base--metro .c-glyph-choice-icon {
   border-radius: 0;
   border-width: 0.1rem;
 }
@@ -698,12 +698,12 @@
   width: 25rem;
 }
 
-.t-universal-metro .c-glyph-choice-effect-list {
+.s-base--metro .c-glyph-choice-effect-list {
   border-radius: 0;
   border-width: 0.1rem;
 }
 
-.t-universal-metro .c-glyph-peek {
+.s-base--metro .c-glyph-peek {
   border-radius: 0;
 }
 
@@ -716,7 +716,7 @@
   box-shadow: 0 0 0.1rem 0.1rem  rgb(0, 0, 0);
 }
 
-.t-universal-dark .c-sacrificed-glyphs--dragover {
+.s-base--dark .c-sacrificed-glyphs--dragover {
   border-color: rgb(255, 255, 255);
   box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
 }
@@ -794,7 +794,7 @@
   background-color: gainsboro;
 }
 
-.t-universal-dark .c-glyph-inventory__slot {
+.s-base--dark .c-glyph-inventory__slot {
   background-color: #333;
 }
 
@@ -868,7 +868,7 @@
   transition-duration: 0.2s;
 }
 
-.t-universal-metro .o-glyph-color-checkbox {
+.s-base--metro .o-glyph-color-checkbox {
   border-radius: 0;
 }
 

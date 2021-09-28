@@ -22,7 +22,6 @@ const Theme = function Theme(name, config) {
     return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
   };
 
-
   this.displayName = function() {
     if (!this.isSecret() || !this.isAvailable()) return name;
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
@@ -34,8 +33,8 @@ const Theme = function Theme(name, config) {
     document.body.classList.remove(...document.body.classList);
 
     document.body.classList.add(this.cssClass());
-    if (this.isMetro) document.body.classList.add("t-universal-metro");
-    if (this.isDark) document.body.classList.add("t-universal-dark");
+    if (this.isMetro) document.body.classList.add("s-base--metro");
+    if (this.isDark) document.body.classList.add("s-base--dark");
 
     if (this.isAnimated && player.options.animations.background) {
       document.getElementById("background-animations").style.display = "block";
@@ -113,19 +112,19 @@ const Themes = {
   all: [
     /* eslint-disable no-multi-spaces */
     Theme.create("Normal",          {                                             }),
-    Theme.create("Metro",           {             metro: true                     }),
+    Theme.create("Metro",           {             metro: true,                    }),
     Theme.create("Dark",            { dark: true                                  }),
-    Theme.create("Dark Metro",      { dark: true, metro: true                     }),
+    Theme.create("Dark Metro",      { dark: true, metro: true,                    }),
     Theme.create("Inverted",        {                                             }),
-    Theme.create("Inverted Metro",  {             metro: true                     }),
-    Theme.create("S1",              {                           animated: true    }),
+    Theme.create("Inverted Metro",  {             metro: true,                    }),
+    Theme.create("S1",              {                           animated: true,   }),
     Theme.create("S2",              {                                             }),
     Theme.create("S3",              {                                             }),
     Theme.create("S4",              {                                             }),
     Theme.create("S5",              {                                             }),
-    Theme.create("S6",              { dark: true,               animated: true    }),
+    Theme.create("S6",              { dark: true,               animated: true,   }),
     Theme.create("S7",              {                                             }),
-    Theme.create("S8",              {             metro: true                     }),
+    Theme.create("S8",              {             metro: true,                    }),
     Theme.create("S9",              {                                             }),
   ],
 

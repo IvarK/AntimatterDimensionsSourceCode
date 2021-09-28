@@ -73,13 +73,13 @@
   box-shadow: 0.1rem 0.1rem 0.1rem 0 black;
 }
 
-.t-universal-metro .o-time-study--unavailable,
+.s-base--metro .o-time-study--unavailable,
 .t-s1 .o-time-study--unavailable {
   color: black;
   border: none;
 }
 
-.t-universal-metro .o-time-study {
+.s-base--metro .o-time-study {
   border-radius: 0;
 }
 
@@ -488,7 +488,7 @@
   stroke: black;
 }
 
-.t-universal-dark .o-time-study-connection--bought {
+.s-base--dark .o-time-study-connection--bought {
   stroke: #bbbbbb;
 }
 

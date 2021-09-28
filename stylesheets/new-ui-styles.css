@@ -725,7 +725,7 @@ body.t-s9 {
   background: rgba(182, 127, 51, 0.3);
 }
 
-.t-universal-metro .c-infinity-dim-row:nth-child(even) {
+.s-base--metro .c-infinity-dim-row:nth-child(even) {
   background: rgba(255, 152, 0, 0.3);
 }
 
@@ -746,7 +746,7 @@ body.t-s9 {
   background: rgba(179, 65, 224, 0.3);
 }
 
-.t-universal-metro .c-time-dim-row:nth-child(even) {
+.s-base--metro .c-time-dim-row:nth-child(even) {
   background: rgba(103, 58, 183, 0.3);
 }
 
@@ -903,6 +903,6 @@ body.t-s9 {
   transition-delay: 0s;
 }
 
-.t-universal-metro .l-help-me {
+.s-base--metro .l-help-me {
   border-radius: 0;
 }

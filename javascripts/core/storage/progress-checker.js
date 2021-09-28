@@ -28,7 +28,7 @@ const ProgressChecker = {
     const eternities = new Decimal(save.eternities);
     if (eternities.gt(1000)) return PROGRESS_STAGE.ETERNITY;
     if (eternities.gt(0)) return PROGRESS_STAGE.EARLY_ETERNITY;
-    const infinities = new Decimal(save.eternities);
+    const infinities = new Decimal(save.infinities);
     if (infinities.gt(1000)) return PROGRESS_STAGE.INFINITY;
     if (infinities.gt(0)) return PROGRESS_STAGE.EARLY_INFINITY;
     return PROGRESS_STAGE.PRE_INFINITY;

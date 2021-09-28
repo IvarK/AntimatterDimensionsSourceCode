@@ -283,6 +283,7 @@ class ExponentialCostScaling {
     this._logCostScale = ExponentialCostScaling.log10(param.costScale);
     if (param.purchasesBeforeScaling !== undefined) {
       this._purchasesBeforeScaling = param.purchasesBeforeScaling;
+    // eslint-disable-next-line no-negated-condition
     } else if (param.scalingCostThreshold !== undefined) {
       this._purchasesBeforeScaling = Math.ceil(
         (ExponentialCostScaling.log10(param.scalingCostThreshold) - this._logBaseCost) / this._logBaseIncrease);

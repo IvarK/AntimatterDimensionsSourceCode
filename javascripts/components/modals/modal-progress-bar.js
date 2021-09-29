@@ -1,6 +1,39 @@
 "use strict";
 
 Vue.component("modal-progress-bar", {
+  components: {
+    "offline-speedup-button": {
+      props: {
+        button: Object,
+        progress: Object,
+      },
+      computed: {
+        canBeClicked() {
+          return this.button.condition(this.progress.current, this.progress.max);
+        },
+        buttonClass() {
+          return {
+            "o-primary-btn--width-medium": true,
+            "o-primary-btn--disabled": !this.canBeClicked,
+          };
+        }
+      },
+      methods: {
+        buttonClicked() {
+          if (!this.canBeClicked) return;
+          this.button.click();
+        }
+      },
+      template: `
+        <primary-button
+          :class="buttonClass"
+          :key="button.text"
+          @click="buttonClicked"
+        >
+          {{ button.text }}
+        </primary-button>`
+    },
+  },
   computed: {
     progress() {
       return this.$viewModel.modal.progressBar;
@@ -19,22 +52,6 @@ Vue.component("modal-progress-bar", {
     },
     buttons() {
       return this.progress.buttons || [];
-    }
-  },
-  methods: {
-    // The code is less redundant if we check the condition here instead of within the button object itself
-    canBeClicked(button) {
-      return button.condition(this.progress.current, this.progress.max);
-    },
-    buttonClicked(button) {
-      if (!this.canBeClicked(button)) return;
-      button.click();
-    },
-    buttonClass(button) {
-      return {
-        "o-primary-btn--width-medium": true,
-        "o-primary-btn--disabled": !this.canBeClicked(button),
-      };
     }
   },
   template: `
@@ -60,13 +77,12 @@ Vue.component("modal-progress-bar", {
         </div>
         <br>
         <div class="l-modal-progress-bar__buttons">
-          <primary-button v-for="button in buttons"
-            :class="buttonClass(button)"
+          <offline-speedup-button
+            v-for="button in buttons"
             :key="button.text"
-            @click="buttonClicked(button)"
-          >
-            {{ button.text }}
-          </primary-button>
+            :button="button"
+            :progress="progress"
+          />
         </div>
       </div>
     </div>`,

@@ -311,7 +311,7 @@ function beginProcessReality(realityProps) {
     // We assume that whether or not a glyph type is picked at all in the sample is representative of how the player
     // configured their filter (eg. if a certain type never shows up in all 1000 then it's probably safe to say that
     // they configured the filter to specifically reject all of them). We assume that the actually selected types are
-    // uniformy distributed, which isn't necessarily true but probably the best result when only sacrificing glyphs.
+    // uniformly distributed, which isn't necessarily true but probably the best result when only sacrificing glyphs.
     types: new Set()
   };
 
@@ -667,7 +667,7 @@ function clearCelestialRuns() {
 }
 
 function isInCelestialReality() {
-  return Object.entries(player.celestials).map(x => x[1].run).includes(true);
+  return Object.values(player.celestials).some(x => x.run);
 }
 
 function lockAchievementsOnReality() {

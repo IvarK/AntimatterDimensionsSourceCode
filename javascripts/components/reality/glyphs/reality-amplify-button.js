@@ -3,16 +3,18 @@
 Vue.component("reality-amplify-button", {
   data: () => ({
     isVisible: false,
+    isDisabled: false,
     isActive: false,
     ratio: 1,
     canAmplify: false,
   }),
   methods: {
     update() {
-      this.isVisible = Enslaved.isUnlocked && !isInCelestialReality();
+      this.isVisible = Enslaved.isUnlocked;
+      this.isDisabled = isInCelestialReality();
       this.isActive = Enslaved.boostReality;
       this.ratio = Enslaved.realityBoostRatio;
-      this.canAmplify = this.ratio > 1;
+      this.canAmplify = !this.isDisabled && this.ratio > 1;
     },
     toggleActive() {
       if (!this.canAmplify) return;
@@ -29,7 +31,10 @@ Vue.component("reality-amplify-button", {
         style="width: 25rem"
         @click="toggleActive"
       >
-        <div v-if="canAmplify">
+        <div v-if="isDisabled">
+          Amplification has been disabled for your current Reality
+        </div>
+        <div v-else-if="canAmplify">
           <span v-if="isActive">This Reality will be amplified</span>
           <span v-else>Amplify this Reality</span>
           using stored real time, multiplying all rewards by ×{{ formatInt(ratio) }}

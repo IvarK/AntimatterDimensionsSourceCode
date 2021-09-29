@@ -301,18 +301,41 @@ function beginProcessReality(realityProps) {
   let fastToggle = false;
   // There's a potential rabbit hole of making the sample ever more accurate to the situation of actually generating
   // all the glyphs, but here we make some compromises which are probably mostly accurate in most cases by considering
-  // just the distribution of sacrifice values and which types get picked
+  // just the distribution of sacrifice values between types and nothing else beyond that
   const glyphSample = {
     toGenerate: 0,
-    count: 0,
-    totalSacrifice: 0,
-    // This is (variance * sample count), which is used to get standard deviation later on and makes the math nicer
-    varProdSacrifice: 0,
-    // We assume that whether or not a glyph type is picked at all in the sample is representative of how the player
-    // configured their filter (eg. if a certain type never shows up in all 1000 then it's probably safe to say that
-    // they configured the filter to specifically reject all of them). We assume that the actually selected types are
-    // uniformly distributed, which isn't necessarily true but probably the best result when only sacrificing glyphs.
-    types: new Set()
+    // We track each glyph type separately; there is the possibility for the glyph filter to be configured in such a
+    // way that some types get significantly more or less sacrifice value than the others
+    sampleStats: generatedTypes.map(t => ({
+      type: t,
+      count: 0,
+      totalSacrifice: 0,
+      // This is (variance * sample count), which is used to get standard deviation later on and makes the math nicer
+      varProdSacrifice: 0,
+    })),
+    totalStats: {
+      count: 0,
+      totalSacrifice: 0,
+      varProdSacrifice: 0,
+    },
+  };
+
+  // Incrementally calculate mean and variance in a way that doesn't require storing a list of entries
+  // See https://datagenetics.com/blog/november22017/index.html for derivation
+  const addToStats = (stats, value) => {
+    const oldMean = stats.totalSacrifice / stats.count;
+    stats.totalSacrifice += value;
+    stats.count++;
+    const newMean = stats.totalSacrifice / stats.count;
+    // Mathematically this is zero on the first iteration, but oldMean is NaN due to division by zero
+    if (stats.count !== 1) stats.varProdSacrifice += (value - oldMean) * (value - newMean);
+  };
+
+  // Helper function for pulling a random sacrifice value from the sample we gathered
+  const sampleFromStats = (stats, glyphsToGenerate) => {
+    const mean = stats.totalSacrifice / stats.count;
+    const stdev = Math.sqrt(stats.varProdSacrifice / stats.count);
+    return normalDistribution(mean * glyphsToGenerate, stdev * Math.sqrt(glyphsToGenerate));
   };
 
   // The function we run in the Async loop is either the expected "generate and filter all glyphs normally"
@@ -327,17 +350,13 @@ function beginProcessReality(realityProps) {
       const glyphChoices = GlyphSelection.glyphList(GlyphSelection.choiceCount,
         realityProps.gainedGlyphLevel, { rng });
       const sampleGlyph = AutoGlyphProcessor.pick(glyphChoices);
-      glyphSample.types.add(sampleGlyph.type);
       const sacGain = GlyphSacrificeHandler.glyphSacrificeGain(sampleGlyph);
 
-      // Incrementally calculate mean and variance in a way that doesn't require storing a list of entries
-      // See https://datagenetics.com/blog/november22017/index.html for derivation
-      const oldMean = glyphSample.totalSacrifice / glyphSample.count;
-      glyphSample.totalSacrifice += sacGain;
-      glyphSample.count++;
-      const newMean = glyphSample.totalSacrifice / glyphSample.count;
-      // Mathematically this is zero on the first iteration, but oldMean is NaN due to division by zero
-      if (glyphSample.count !== 1) glyphSample.varProdSacrifice += (sacGain - oldMean) * (sacGain - newMean);
+      // Code and math later on is a lot simpler if we add to both a type-specific stat object and a total stats
+      // object right here instead of attempting to combine the types into a total later on
+      const thisTypeStats = glyphSample.sampleStats.find(s => s.type === sampleGlyph.type);
+      addToStats(thisTypeStats, sacGain);
+      addToStats(glyphSample.totalStats, sacGain);
     } else {
       processAutoGlyph(realityProps.gainedGlyphLevel, rng);
     }
@@ -400,11 +419,6 @@ function beginProcessReality(realityProps) {
       then: () => {
         // This is where we update sacrifice values if we ended up doing quick mode
         if (glyphSample.toGenerate > 0) {
-          // Note that mean/stdev are per glyph, so the distribution itself needs to have glyph count in it as well.
-          // Means and variances (stdev^2) are additive for uncorrelated random variables
-          const mean = glyphSample.totalSacrifice / glyphSample.count;
-          const stdev = Math.sqrt(glyphSample.varProdSacrifice / glyphSample.count);
-          let totalSac = normalDistribution(mean * glyphSample.toGenerate, stdev * Math.sqrt(glyphSample.toGenerate));
 
           // Note: This is the only score mode we consider doing special behavior for because it's the only mode where
           // sacrificing a glyph can significantly affect future glyph choices. Alchemy is not a factor because
@@ -413,7 +427,9 @@ function beginProcessReality(realityProps) {
             // General behavior for repeated sacrifice with these settings is that all sacrifice values will increase
             // at an approximately equal rate because any type that falls behind will get prioritized by the filter.
             // We fake this behavior by attempting to fill the lower values until all are equal, and then filling all
-            // types equally with whatever is left
+            // types equally with whatever is left. We pull from the total stats here because this filter mode
+            // effectively ignores types when assigning scores and picking glyphs
+            let totalSac = sampleFromStats(glyphSample.totalStats, glyphSample.toGenerate);
 
             // Incrementing sacrifice totals without regard to glyph type and reassigning the final values in the same
             // ascending order as the starting order makes the code simpler to work with, so we do that
@@ -445,11 +461,10 @@ function beginProcessReality(realityProps) {
               player.reality.glyphs.sac[sortedSacTotals[index].type] = sacArray[index];
             }
           } else {
-            // We can cheat a little bit in this case - we can only run quick mode if we're generating at least 1000
-            // glyphs total, so the per-glyph amount is comparatively small enough that we can get away with treating
-            // sacrifice as a continuous resource, assuming that all chosen types were approximately equal chance.
-            for (const type of glyphSample.types.values()) {
-              player.reality.glyphs.sac[type] += totalSac / glyphSample.types.size;
+            // Give sacrifice values proportionally according to what we found in the sampling stats
+            for (const stats of glyphSample.sampleStats) {
+              const toGenerate = glyphSample.toGenerate * stats.count / 1000;
+              player.reality.glyphs.sac[stats.type] += sampleFromStats(stats, toGenerate);
             }
           }
         }

@@ -333,13 +333,14 @@ function beginProcessReality(realityProps) {
 
   // Helper function for pulling a random sacrifice value from the sample we gathered
   const sampleFromStats = (stats, glyphsToGenerate) => {
+    if (stats.count === 0) return 0;
     const mean = stats.totalSacrifice / stats.count;
     const stdev = Math.sqrt(stats.varProdSacrifice / stats.count);
     return normalDistribution(mean * glyphsToGenerate, stdev * Math.sqrt(glyphsToGenerate));
   };
 
   // The function we run in the Async loop is either the expected "generate and filter all glyphs normally"
-  // behavior (fastToggle === false) or a function that takes a representative sample of 1000 glyphs and
+  // behavior (fastToggle === false) or a function that takes a representative sample of 10000 glyphs and
   // analyzes them in order to extrapolate how much sacrifice value to give instead of actually generating
   // and giving any glyphs because the player asked for faster performance (fastToggle === true)
   const glyphFunction = () => {
@@ -361,6 +362,7 @@ function beginProcessReality(realityProps) {
       processAutoGlyph(realityProps.gainedGlyphLevel, rng);
     }
   };
+  const glyphsToSample = 10000;
   Async.run(glyphFunction,
     glyphsToProcess,
     {
@@ -373,7 +375,7 @@ function beginProcessReality(realityProps) {
           label: "Simulating Amplified Reality",
           info: () => `The game is currently calculating all the resources you would gain from repeating the
             Reality you just completed ${formatInt(glyphsToProcess)} more times. Pressing "Quick Glyphs" with
-            more than ${formatInt(1000)} Glyphs remaining will speed up the calculation by automatically
+            more than ${formatInt(glyphsToSample)} Glyphs remaining will speed up the calculation by automatically
             sacrificing all the remaining Glyphs you would get. Pressing "Skip Glyphs" will ignore all resources
             related to Glyphs and stop the simulation after giving all other resources.
             ${Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ? "Pressing either button to speed up simulation will not update" +
@@ -384,16 +386,16 @@ function beginProcessReality(realityProps) {
           startTime: Date.now(),
           buttons: [{
             text: "Quick Glyphs",
-            condition: (current, max) => max - current > 1000,
+            condition: (current, max) => max - current > glyphsToSample,
             click: () => {
-              // This changes the simulating function to one that just takes a representative sample of 1000 random
+              // This changes the simulating function to one that just takes a representative sample of 10000 random
               // glyphs to determine what sacrifice totals to give (this is defined above)
               fastToggle = true;
               glyphSample.toGenerate = progress.remaining;
 
-              // We only simulate 1000 glyphs for a sample, but that still might take some time to do
-              progress.maxIter -= progress.remaining - 1000;
-              progress.remaining = 1000;
+              // We only simulate a smaller set of glyphs for a sample, but that still might take some time to do
+              progress.maxIter -= progress.remaining - glyphsToSample;
+              progress.remaining = glyphsToSample;
               // We update the progress bar max data (remaining will update automatically).
               ui.$viewModel.modal.progressBar.max = progress.maxIter;
             }
@@ -463,7 +465,7 @@ function beginProcessReality(realityProps) {
           } else {
             // Give sacrifice values proportionally according to what we found in the sampling stats
             for (const stats of glyphSample.sampleStats) {
-              const toGenerate = glyphSample.toGenerate * stats.count / 1000;
+              const toGenerate = glyphSample.toGenerate * stats.count / glyphsToSample;
               player.reality.glyphs.sac[stats.type] += sampleFromStats(stats, toGenerate);
             }
           }

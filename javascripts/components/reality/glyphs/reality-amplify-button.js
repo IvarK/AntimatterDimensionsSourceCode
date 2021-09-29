@@ -32,7 +32,7 @@ Vue.component("reality-amplify-button", {
         @click="toggleActive"
       >
         <div v-if="isDisabled">
-          Amplification has been disabled for your current Reality
+          You cannot amplify Celestial Realities
         </div>
         <div v-else-if="canAmplify">
           <span v-if="isActive">This Reality will be amplified</span>

@@ -27,7 +27,6 @@ Vue.component("modal-progress-bar", {
       template: `
         <primary-button
           :class="buttonClass"
-          :key="button.text"
           @click="buttonClicked"
         >
           {{ button.text }}
@@ -78,8 +77,8 @@ Vue.component("modal-progress-bar", {
         <br>
         <div class="l-modal-progress-bar__buttons">
           <offline-speedup-button
-            v-for="button in buttons"
-            :key="button.text"
+            v-for="(button, id) in buttons"
+            :key="id"
             :button="button"
             :progress="progress"
           />

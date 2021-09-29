@@ -109,7 +109,8 @@ body.t-s9 {
 }
 
 .t-dark .o-sidebar-currency--antimatter,
-.t-s6 .o-sidebar-currency--antimatter {
+.t-s6 .o-sidebar-currency--antimatter,
+.t-s10 .o-sidebar-currency--antimatter {
   animation: a-game-header__antimatter--glow 25s infinite;
 }
 
@@ -675,7 +676,9 @@ body.t-s9 {
 }
 
 .t-s6 .o-autobuyer-input,
-.t-s6 .c-autobuyer-box__mode-select {
+.t-s6 .c-autobuyer-box__mode-select,
+.t-s10 .o-autobuyer-input,
+.t-s10 .c-autobuyer-box__mode-select {
   color: white;
   background-color: black;
   border: 0.1rem solid #888;

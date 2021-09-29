@@ -667,12 +667,7 @@ function clearCelestialRuns() {
 }
 
 function isInCelestialReality() {
-  return player.celestials.teresa.run ||
-    player.celestials.effarig.run ||
-    player.celestials.enslaved.run ||
-    player.celestials.v.run ||
-    player.celestials.ra.run ||
-    player.celestials.laitela.run;
+  return Object.entries(player.celestials).map(x => x[1].run).includes(true);
 }
 
 function lockAchievementsOnReality() {

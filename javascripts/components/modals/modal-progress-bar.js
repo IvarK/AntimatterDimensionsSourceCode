@@ -1,6 +1,38 @@
 "use strict";
 
 Vue.component("modal-progress-bar", {
+  components: {
+    "offline-speedup-button": {
+      props: {
+        button: Object,
+        progress: Object,
+      },
+      computed: {
+        canBeClicked() {
+          return this.button.condition(this.progress.current, this.progress.max);
+        },
+        buttonClass() {
+          return {
+            "o-primary-btn--width-medium": true,
+            "o-primary-btn--disabled": !this.canBeClicked,
+          };
+        }
+      },
+      methods: {
+        buttonClicked() {
+          if (!this.canBeClicked) return;
+          this.button.click();
+        }
+      },
+      template: `
+        <primary-button
+          :class="buttonClass"
+          @click="buttonClicked"
+        >
+          {{ button.text }}
+        </primary-button>`
+    },
+  },
   computed: {
     progress() {
       return this.$viewModel.modal.progressBar;
@@ -20,8 +52,6 @@ Vue.component("modal-progress-bar", {
     buttons() {
       return this.progress.buttons || [];
     }
-  },
-  methods: {
   },
   template: `
     <div class="l-modal-overlay c-modal-overlay" style="z-index: 8">
@@ -46,13 +76,12 @@ Vue.component("modal-progress-bar", {
         </div>
         <br>
         <div class="l-modal-progress-bar__buttons">
-          <primary-button v-for="button in buttons" v-if="button.condition(progress.current, progress.max)"
-            class="o-primary-btn--width-medium"
-            :key="button.text"
-            @click="button.click"
-          >
-            {{ button.text }}
-          </primary-button>
+          <offline-speedup-button
+            v-for="(button, id) in buttons"
+            :key="id"
+            :button="button"
+            :progress="progress"
+          />
         </div>
       </div>
     </div>`,

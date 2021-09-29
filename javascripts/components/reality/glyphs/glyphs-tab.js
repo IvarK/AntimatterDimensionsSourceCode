@@ -31,7 +31,7 @@ Vue.component("glyphs-tab", {
       this.showInstability = player.records.bestReality.glyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
-      this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      this.isInCelestialReality = isInCelestialReality();
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";

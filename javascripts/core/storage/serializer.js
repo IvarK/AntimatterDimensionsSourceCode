@@ -81,14 +81,14 @@ const GameSaveSerializer = {
     {
       encode(x) {
         const a = Array.from(x);
-        return (a.length % 2) + [...Array(Math.floor(a.length / 2 + 1))].map(
-          (_, i) => String.fromCharCode(a[2 * i] * 256 + (a[2 * i + 1] || 0))).join('');
+        return (a.length % 2) + Array.range(0, Math.floor((a.length + 1) / 2)).map(
+          i => String.fromCharCode(a[2 * i] * 256 + (a[2 * i + 1] || 0))).join('');
       },
       decode(x) {
         const full = Array.from(x);
         const offset = Number(full[0]);
         const a = full.slice(1);
-        const nums = a.flatMap((i) => {
+        const nums = a.flatMap(i => {
           const code = i.charCodeAt(0);
           return [Math.floor(code / 256), code % 256];
         });

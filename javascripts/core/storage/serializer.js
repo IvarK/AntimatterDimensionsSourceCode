@@ -62,7 +62,7 @@ const GameSaveSerializer = {
     // we can replace Paa by Pab, etc. (P is for pako).
     // If we run out of two-letter combinations,
     // it's because we had over 500 versions, which would be bad for other reasons.
-    { encode: x => 'Paa' + x, decode: x => x.slice(3) }
+    { encode: x => `Paa${x}`, decode: x => x.slice(3) }
   ],
   // Apply each step's encode function in encoding order.
   encodeText(text) {
@@ -75,8 +75,7 @@ const GameSaveSerializer = {
   decodeText(text) {
     if (text.startsWith('Paa')) {
       return this.steps.reduceRight((x, step) => step.decode(x), text);
-    } else {
-      return atob(text);
     }
+    return atob(text);
   }
 };

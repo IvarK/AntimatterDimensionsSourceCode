@@ -28,6 +28,8 @@ const GameSaveSerializer = {
   // Define these now so we don't keep creating new ones, which vaguely seems bad.
   encoder: new TextEncoder(),
   decoder: new TextDecoder(),
+  // This is a magic string savefiles should start with.
+  saveFileStartingString: 'AntimatterDimensionsSaveFileAAA',
   // Steps are given in encoding order.
   // It's important that `this` is what it should be in these function calls
   // (encoder/decoded for the first element, window for the fourth)
@@ -46,7 +48,9 @@ const GameSaveSerializer = {
       encode: x => Array.from(x).map(i => String.fromCharCode(i)).join(''),
       decode: x => Uint8Array.from(Array.from(x).map(i => i.charCodeAt(0)))
     },
-    // This step makes the characters in saves printable.
+    // This step makes the characters in saves printable. At this point in the process, all characters
+    // will already have codepoints less than 256 (from the previous step), so emoji in the original save
+    // won't break this.
     { encode: x => btoa(x), decode: x => atob(x) },
     // This step removes + and /, because if they occur, you can double-click on a save and get
     // everything up to the first + or /, which can be hard to debug. We don't do anything with =
@@ -58,11 +62,13 @@ const GameSaveSerializer = {
       encode: x => x.replace(/0/gu, '0a').replace(/\+/gu, '0b').replace(/\//gu, '0c'),
       decode: x => x.replace(/0b/gu, '+').replace(/0c/gu, '/').replace(/0a/gu, '0')
     },
-    // This is a version marker. If we change how we encode saves,
-    // we can replace Paa by Pab, etc. (P is for pako).
-    // If we run out of two-letter combinations,
-    // it's because we had over 500 versions, which would be bad for other reasons.
-    { encode: x => `Paa${x}`, decode: x => x.slice(3) }
+    // This is a version marker, as well as indicating to players that this is an AD save.
+    // We can change the last 3 letters of the string savefiles start with from AAA
+    // if we want a new version of savefile encoding.
+    {
+      encode: x => `${GameSaveSerializer.saveFileStartingString}${x}`,
+      decode: x => x.slice(GameSaveSerializer.saveFileStartingString.length)
+    }
   ],
   // Apply each step's encode function in encoding order.
   encodeText(text) {
@@ -71,9 +77,10 @@ const GameSaveSerializer = {
   // Apply each step's decode function in decoding order (reverse of encoding order).
   // Only do this if we recognize the initial version. If not, just use atob.
   // Old saves always started with eYJ and old automator scripts (where this
-  // function is also used) won't start with Paa (atob of it will start with an equals sign).
+  // function is also used) are very unlikely to start with our magic string
+  // due to it being more than a few characters long.
   decodeText(text) {
-    if (text.startsWith('Paa')) {
+    if (text.startsWith(this.saveFileStartingString)) {
       return this.steps.reduceRight((x, step) => step.decode(x), text);
     }
     return atob(text);

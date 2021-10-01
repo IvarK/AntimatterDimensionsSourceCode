@@ -46,7 +46,7 @@ const Cloud = {
     if (save === null) {
       this.save();
     } else {
-      const root = GameSaveSerializer.deserialize(save);
+      const root = GameSaveSerializer.deserialize(save, cloud=true);
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
       const localSave = GameStorage.saves[saveId];
@@ -81,7 +81,7 @@ const Cloud = {
       saves: GameStorage.saves,
     };
 
-    this.db.ref(`users/${this.user.id}/web`).set(GameSaveSerializer.serialize(root));
+    this.db.ref(`users/${this.user.id}/web`).set(GameSaveSerializer.serialize(root, cloud=true));
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 
@@ -90,7 +90,7 @@ const Cloud = {
     if (save === null) {
       GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
     } else {
-      const root = GameSaveSerializer.deserialize(save);
+      const root = GameSaveSerializer.deserialize(save, cloud=true);
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
       const localSave = GameStorage.saves[saveId];

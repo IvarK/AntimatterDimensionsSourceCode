@@ -146,7 +146,36 @@ const Tabs = (function() {
     all: Object.values(Tab),
     get current() {
       return Tabs.all.find(tab => tab.isOpen);
-    }
+    },
+    oldUI: [
+      Tab.dimensions,
+      Tab.options,
+      Tab.statistics,
+      Tab.achievements,
+      Tab.automation,
+      Tab.challenges,
+      Tab.infinity,
+      Tab.eternity,
+      Tab.reality,
+      Tab.celestials,
+      Tab.shop
+    ],
+    newUI: [
+      Tab.dimensions,
+      Tab.automation,
+      Tab.challenges,
+      Tab.infinity,
+      Tab.eternity,
+      Tab.reality,
+      Tab.celestials,
+      Tab.achievements,
+      Tab.statistics,
+      Tab.options,
+      Tab.shop
+    ],
+    get currentUIFormat() {
+      return ui.view.newUI ? this.newUI : this.oldUI;
+    },
   };
 }());
 

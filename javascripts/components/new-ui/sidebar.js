@@ -12,19 +12,7 @@ Vue.component("sidebar", {
     }
   },
   computed: {
-    tabs: () => [
-      Tab.dimensions,
-      Tab.automation,
-      Tab.challenges,
-      Tab.infinity,
-      Tab.eternity,
-      Tab.reality,
-      Tab.celestials,
-      Tab.achievements,
-      Tab.statistics,
-      Tab.options,
-      Tab.shop
-    ]
+    tabs: () => Tabs.newUI
   },
   template: `
     <div class="sidebar">

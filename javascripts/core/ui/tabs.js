@@ -16,7 +16,7 @@ class SubtabState {
 
   get isHidden() {
     // eslint-disable-next-line no-bitwise
-    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) &&
+    return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
       this.config.hidable;
   }
 
@@ -25,15 +25,19 @@ class SubtabState {
   }
 
   get isAvailable() {
-    return !this.isHidden && this.isUnlocked;
+    return this.isOpen || !this.isHidden && this.isUnlocked;
   }
 
   get hasNotification() {
-    return player.tabNotifications.has(this._parent.config.key + this.key);
+    return player.tabNotifications.has(this._parent.key + this.key);
   }
 
   get key() {
     return this.config.key;
+  }
+
+  get id() {
+    return this.config.id;
   }
 
   show(manual) {
@@ -41,15 +45,15 @@ class SubtabState {
   }
 
   unhideTab() {
+    this._parent.unhideTab();
     // eslint-disable-next-line no-bitwise
-    player.options.hiddenSubtabBits[this._parent.config.id] &= ~(1 << this.config.id);
+    player.options.hiddenSubtabBits[this._parent.id] &= ~(1 << this.id);
   }
 
   toggleVisibility() {
-    if (this._parent.config.id === Tabs.current.config.id &&
-      this.config.id === Tabs.current._currentSubtab.config.id) return;
+    if (this._parent.id === Tabs.current.id && this.id === Tabs.current._currentSubtab.id) return;
     // eslint-disable-next-line no-bitwise
-    player.options.hiddenSubtabBits[this._parent.config.id] ^= (1 << this.config.id);
+    player.options.hiddenSubtabBits[this._parent.id] ^= (1 << this.id);
   }
 
   get isOpen() {
@@ -68,17 +72,25 @@ class TabState {
       subtabs.push(subtab);
     }
     this.subtabs = subtabs;
-    this._currentSubtab = subtabs.filter(tab => tab.isUnlocked)[0];
+    this._currentSubtab = subtabs.find(s => s.id === player.options.lastOpenSubtab[this.id]);
   }
 
   get name() {
     return this.config.name;
   }
 
+  get key() {
+    return this.config.key;
+  }
+
+  get id() {
+    return this.config.id;
+  }
+
   get isHidden() {
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
-    return (((player.options.hiddenTabBits & (1 << this.config.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
+    return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
   }
 
   get isUnlocked() {
@@ -86,11 +98,11 @@ class TabState {
   }
 
   get isAvailable() {
-    return !this.isHidden && this.isUnlocked;
+    return this.isOpen || !this.isHidden && this.isUnlocked;
   }
 
   get isOpen() {
-    return ui.view.tab === this.config.key;
+    return ui.view.tab === this.key;
   }
 
   get hasNotification() {
@@ -99,15 +111,19 @@ class TabState {
 
   show(manual, subtab = undefined) {
     if (!manual && !player.options.automaticTabSwitching) return;
-    ui.view.tab = this.config.key;
+    ui.view.tab = this.key;
     if (subtab === undefined) {
-      this._currentSubtab = this.subtabs.find(s => s.config.id === player.options.lastOpenSubtab[this.config.id]);
+      this._currentSubtab = this.subtabs.find(s => s.id === player.options.lastOpenSubtab[this.id]);
     } else {
+      subtab.unhideTab();
       this._currentSubtab = subtab;
     }
-    if (this._currentSubtab === undefined || !this._currentSubtab.isUnlocked) this.resetCurrentSubtab();
+
+    if (!this._currentSubtab.isAvailable) this.resetToAvailable();
+    if (!this._currentSubtab.isUnlocked) this.resetToUnlocked();
+
     ui.view.subtab = this._currentSubtab.key;
-    const tabNotificationKey = this.config.key + this._currentSubtab.key;
+    const tabNotificationKey = this.key + this._currentSubtab.key;
     if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
 
     // Makes it so that the glyph tooltip doesn't stay on tab change
@@ -115,24 +131,26 @@ class TabState {
     if (manual) {
       Modal.hide();
     }
-    this.unhideTab();
-    this._currentSubtab.unhideTab();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }
 
   unhideTab() {
     // eslint-disable-next-line no-bitwise
-    player.options.hiddenTabBits &= ~(1 << this.config.id);
+    player.options.hiddenTabBits &= ~(1 << this.id);
   }
 
   toggleVisibility() {
-    if (this.config.id === Tabs.current.config.id) return;
+    if (this.id === Tabs.current.id) return;
     // eslint-disable-next-line no-bitwise
-    player.options.hiddenTabBits ^= (1 << this.config.id);
+    player.options.hiddenTabBits ^= (1 << this.id);
   }
 
-  resetCurrentSubtab() {
-    this._currentSubtab = this.subtabs.filter(tab => tab.isUnlocked)[0];
+  resetToAvailable() {
+    this._currentSubtab = this.subtabs.find(tab => tab.isAvailable);
+  }
+
+  resetToUnlocked() {
+    this._currentSubtab = this.subtabs.find(tab => tab.isUnlocked);
   }
 }
 
@@ -180,7 +198,7 @@ const Tabs = (function() {
 }());
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  const currTab = Tabs.current.config.id;
+  const currTab = Tabs.current.id;
   player.options.lastOpenTab = currTab;
-  player.options.lastOpenSubtab[currTab] = Tabs.current._currentSubtab.config.id;
+  player.options.lastOpenSubtab[currTab] = Tabs.current._currentSubtab.id;
 });

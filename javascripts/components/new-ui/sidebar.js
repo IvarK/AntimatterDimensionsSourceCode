@@ -3,19 +3,19 @@
 Vue.component("sidebar", {
   data() {
     return {
-      newsEnabled: false
+      isHidden: false,
     };
-  },
-  methods: {
-    update() {
-      this.newsEnabled = player.options.news.enabled;
-    }
   },
   computed: {
     tabs: () => Tabs.newUI
   },
+  methods: {
+    update() {
+      this.isHidden = AutomatorData.isEditorFullscreen;
+    },
+  },
   template: `
-    <div class="sidebar">
+    <div class="sidebar" v-if="!isHidden">
       <sidebar-currency />
       <tab-button
         v-for="tab in tabs"

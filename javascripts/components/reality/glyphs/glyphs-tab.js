@@ -31,7 +31,7 @@ Vue.component("glyphs-tab", {
       this.showInstability = player.records.bestReality.glyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
-      this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      this.isInCelestialReality = isInCelestialReality();
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";
@@ -88,7 +88,7 @@ Vue.component("glyphs-tab", {
             This effect is even stronger above level {{ formatInt(hyperInstabilityThreshold) }}.
           </div>
           <expanding-control-box
-            label="Glyph level factors"
+            label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
           >
             <glyph-levels-and-weights slot="dropdown" />

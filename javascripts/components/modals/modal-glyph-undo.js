@@ -18,8 +18,8 @@ Vue.component("modal-glyph-undo", {
       Modal.message.show("Glyph Undo can only undo with a Reality!");
     },
     handleYesClick() {
-      Glyphs.undo();
       this.emitClose();
+      Glyphs.undo();
     },
     handleNoClick() {
       this.emitClose();
@@ -40,9 +40,13 @@ Vue.component("modal-glyph-undo", {
           <br>- Dilation Upgrades, Tachyon Particles, and Dilated Time
           <br>- Time Theorems and Eternity Challenge completions
           <br>- Time Dimension and Reality unlocks
-          <br>- Time in current Reality
+          <br>- Time in current Infinity/Eternity/Reality
           <span v-if="showStoredGameTime"><br>- Stored game time</span>
         </div>
+        <br>
+        Note that if you invalidate special requirements for certain things (such as the achievement for completing
+        a Reality without producing antimatter), they will remain invalid even after undoing. In those cases, you will
+        need to complete the conditions in a single Reality without using undo.
       </div>
       <div class="l-options-grid__row">
         <primary-button

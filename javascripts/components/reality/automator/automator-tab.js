@@ -4,7 +4,7 @@ Vue.component("automator-tab", {
   data() {
     return {
       automatorUnlocked: false,
-      interval: 0
+      interval: 0,
     };
   },
   computed: {
@@ -22,8 +22,9 @@ Vue.component("automator-tab", {
       const speedupText = `Each Reality makes it run ${formatPercents(0.006, 1)} faster, up to a maximum of
         ${formatInt(1000)} per second.`;
       return this.interval === 1
-        ? `The Automator is running at max speed (${formatInt(1000)} commands per second).`
-        : `The Automator is running ${format(1000 / this.interval, 2, 2)} commands per second. ${speedupText}`;
+        ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
+        : `The Automator is running ${format(1000 / this.interval, 2, 2)} commands per real-time second. 
+          ${speedupText}`;
     }
   },
   methods: {
@@ -39,6 +40,8 @@ Vue.component("automator-tab", {
         At higher speeds, certain commands may take too long to execute while still maintaining this speed,
         <br>
         in which case the next command will be immediately processed after the slower command is run.
+        <br>
+        The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
         <split-pane
           :min-percent="40"
           :default-percent="50"

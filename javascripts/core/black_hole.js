@@ -324,7 +324,7 @@ const BlackHoles = {
 
   togglePause: () => {
     if (!BlackHoles.areUnlocked) return;
-    if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
+    if (player.blackHolePause) player.requirementChecks.reality.slowestBH = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.records.realTimePlayed;
     const pauseType = BlackHoles.areNegative ? "inverted" : "paused";

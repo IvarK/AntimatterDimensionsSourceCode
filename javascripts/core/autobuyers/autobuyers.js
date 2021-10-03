@@ -23,8 +23,8 @@ const Autobuyers = (function() {
   const single = [
     Autobuyer.tickspeed,
     Autobuyer.sacrifice,
-    Autobuyer.dimboost,
     Autobuyer.galaxy,
+    Autobuyer.dimboost,
   ].concat(singleBinary);
 
   const arrays = [
@@ -46,7 +46,8 @@ const Autobuyers = (function() {
     prestige,
     single,
     arrays,
-    upgradeable: antimatterDimensions.concat(Autobuyer.tickspeed, Autobuyer.dimboost, Autobuyer.galaxy),
+    upgradeable: antimatterDimensions.concat(
+      Autobuyer.tickspeed, Autobuyer.dimboost, Autobuyer.galaxy, Autobuyer.bigCrunch),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);

@@ -71,7 +71,7 @@ when exponents are larger than ${format(1e9)}.
 <br>
 Many events in the game trigger full-screen animations or pop-up modals which require you to confirm that you want to
 continue. All of these animations and confirmations can be disabled on an individual basis through the options,
-although the ability to disable any given animation or confirmation will only appear after then have already shown up
+although the ability to disable any given animation or confirmation will only appear after they have already shown up
 at least once.
 `,
       isUnlocked: () => true,
@@ -119,6 +119,11 @@ the game closed.
     {
       name: "Dimensions",
       info: () => `
+Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
+with ${formatInt(10)} antimatter when you first open the game. And you can
+spend it to buy the 1st Dimension to start the game.
+<br>
+<br>
 Dimensions are your production units in game. The first Dimension produces your antimatter.
 Each consecutive Dimension produces the previous one, allowing you to have steady growth.
 There are eight Dimensions total.
@@ -175,7 +180,7 @@ ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
     }, {
       name: "Tickspeed",
       info: () => `
-Production in the game happens on each “tick" which initially occurs once per second. By buying Tickspeed upgrades,
+Production in the game happens on each "tick" which initially occurs once per second. By buying Tickspeed upgrades,
 you can make your Dimensions produce faster, as if multiple ticks occur in each second.
 <br>
 <br>
@@ -276,7 +281,7 @@ Each Achievement has conditions that must be met before they are earned.
 Some are very simple, and some are significantly trickier.
 <br>
 <br>
-You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed Achievement, as
+You will receive a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed Achievement, as
 well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many Achievements have their
 own rewards.
 `,
@@ -505,12 +510,12 @@ from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing 
       name: "Eternity",
       info: () => `
 Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this
-point except challenge times, Achievements, and total antimatter. You will be able to access more content after your
-first Eternity.
+point except challenge times, Achievements, and anything under the General section of the Statistics tab. You will be
+able to access more content after your first Eternity.
 <br>
 <br>
 You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
-you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more
+you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will receive more Eternity Points the more
 Infinity Points you had before going Eternal. You will also gain one "Eternity" for completing an Eternity.
 <br>
 <br>
@@ -667,7 +672,7 @@ having to complete the secondary requirement again.
 Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
 beating both EC11 and EC12 five times, and after acquiring a total of ${formatInt(13000)} TT.
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
-Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will raised to the power of
+Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will be raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them.
 <br>
 <br>
@@ -695,14 +700,20 @@ can be repeatedly purchased as many times as you can afford them.
 When you reach ${formatPostBreak("1e4000")} EP and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
-will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
+will reset almost the entire game up to this point, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
 <br>
 <br>
-Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of
-the pre-Reality Achievements and all of their associated rewards. You need to re-do them in order to get their
-rewards again, but you will also passively unlock the next incomplete Achievement every half hour without any
-effort even if you otherwise don't have the requirements to do so. This also happens offline at the same rate.
+Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the 
+pre-Reality Achievements and all of their associated rewards. However, you will still keep all values under the General
+header in the Statistics tab and all of your best Challenge times.
+<br>
+<br>
+You need to redo the requirements for each Achievement in order to get their rewards again, but you will also passively
+unlock the next incomplete Achievement every ${timeDisplayNoDecimals(30 * 60000)} without any effort even if you
+otherwise don't have the requirements to do so. This automatic completion can be disabled, in which case the timer will
+count down to zero and pause, immediately completing another Achievement immediately when unpaused. The timer still
+progresses at the same rate while offline.
 <br>
 <br>
 Reality Machines can be spent on different upgrades throughout the Reality tab and are your primary currency from this
@@ -737,7 +748,8 @@ Level - This contributes to how strong your Glyph is, and it scales based on how
 it from.
 <br>
 Rarity - This is a percentage, between ${formatPercents(0)} and ${formatPercents(1)}, which also affects the strength
-of your Glyph. This is random, but can be influenced by various upgrades.
+of your Glyph. This is random, but can be influenced by various upgrades. The percentage is effectively a quality
+rating, higher values are better.
 <br>
 Effects - These are the boosts that equipping the Glyph will give you, and can contain up to four effects. Stronger
 Glyphs will generally have more effects than weaker Glyphs.
@@ -777,7 +789,7 @@ Perks are a type of upgrade unlocked upon Reality. Each Perk effect varies, but 
 improvements which you can choose your own path through. All Perks only require ${formatInt(1)} Perk Point to buy.
 <br>
 <br>
-Each Reality you gain ${formatInt(1)} Perk Point which can be spent on a upgrade on the tree, starting with
+Each Reality you gain ${formatInt(1)} Perk Point which can be spent on an upgrade on the tree, starting with
 "You can now choose from ${formatInt(Perk.firstPerk.config.effect)} glyphs on Reality". You can only unlock Perks
 which are directly adjacent
 to Perks you already have, although there are loops in the tree which you can go through in either direction.
@@ -799,7 +811,7 @@ you have certain features (like the Black Hole and Stored Time) to be able to us
 <br>
 <br>
 You are able to create new scripts by clicking on the dropdown, and then clicking the "Create New..." option.
-To rename a script, click the pencil next to the dropdown. Scripts are automativally saved as you edit them.
+To rename a script, click the pencil next to the dropdown. Scripts are automatically saved as you edit them.
 You can create as many scripts as you want.
 <br>
 <br>
@@ -829,6 +841,11 @@ Increased game speed from Black Holes is much stronger than tickspeed because un
 <i>everything equally</i>, including things which are only partially affected (eg. Infinity/Time Dimensions), things
 which are normally completely unaffected (eg. DT/TT generation), and effects which are boosted purely on time spent
 (eg. idle path IP/EP multipliers).
+<br>
+<br>
+While most features in the game are boosted by this increased game speed, there are some which remain unaffected.
+In these cases, it will be specifically mentioned that a given time is stated as <i>real time</i> as opposed to
+<i>game time</i>. One such example is the set of perks which automatically completes Eternity Challenges over time.
 <br>
 <br>
 You can buy upgrades for the Black Hole by using Reality Machines. There are three upgrades for the Black Hole:
@@ -872,24 +889,28 @@ speed boost was active. Pausing and unpausing affects both Black Holes; they can
     }, {
       name: "Celestials",
       info: () => `
-Once you get all of the Reality upgrades, the first Celestial is unlocked.
-This opens up a new tab to the right of Reality.
+Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of 
+Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you 
+progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually 
+be revealed as you approach it, generally with a visual indication of your progress towards the next step.
 <br>
 <br>
-Each Celestial has unique mechanics and upgrades, and you need to defeat all seven.
-Defeating a Celestial has different conditions depending on the Celestial's mechanics.
+Each Celestial has unique mechanics and upgrades, and you need to defeat all seven to beat the game.
+Unlocking or defeating a Celestial has different conditions depending on the Celestial's mechanics.
 <br>
 <br>
-All Celestials have their own Celestial Reality, but how the Reality is relevant will depend on the celestial.
+All Celestials have their own Celestial Reality, but how the Reality is relevant to each Celestial and the rest of
+the game will depend on the Celestial.
 `,
       isUnlocked: () => Teresa.isUnlocked,
       tags: ["reality", "challenges", "endgame", "lategame"],
-      tab: ""
+      tab: "celestials/celestial-navigation"
     }, {
       name: "Teresa, Celestial of Reality",
       alias: "Teresa",
       info: () => `
 Teresa is the first Celestial. They are unlocked by obtaining all of the Reality upgrades.
+<br>
 <br>
 On the main screen, there is a bar with a button above it that says "Pour RM". This allows you to put your RM into the
 container for a Reality Machine multiplier. RM which has been poured into the container can't be retrieved.
@@ -899,7 +920,7 @@ When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, y
 When you complete Teresa's Reality,
 ${Teresa.runCompleted
     ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
-    : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}.
+    : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see the reward)</div>"}.
 Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
 `,
@@ -912,6 +933,7 @@ you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will
       info: () => `
 Effarig is the second Celestial you encounter.
 They are unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
+<br>
 <br>
 Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of Glyph effects during
 a Reality. The number of distinct effects active during the Reality very strongly affects Relic Shard gain, and EP
@@ -927,8 +949,8 @@ Effarig's final unlock is their own Reality at ${format(GameDatabase.celestials.
 Shards.
 ${EffarigUnlock.run.isUnlocked
     ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
-    "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
-    : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
+      "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
+    : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see details about the Reality)</div>"
 }
 <br>
 <br>
@@ -936,10 +958,10 @@ Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
   // Can't really make a nested template here without generally making a mess of the code
   // eslint-disable-next-line prefer-template
-    ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
-    formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only " +
-    "have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
-    : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
+    ? "a new Glyph type, <span style='color: var(--color-bad);'>Effarig</span> Glyphs. Effarig Glyphs have " +
+      formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only" +
+      " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
+    : "<span style='color: var(--color-bad);'>(complete Effarig's Reality to see details about the reward)</span>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
@@ -952,7 +974,7 @@ Shards. This allows you to set weights for each resource (EP, DT, Replicanti, Et
 level of Glyphs gained on Reality.
 <br>
 <br>
-Automatic Glyph Filtering is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
+Automatic Glyph Filtering is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
 Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
 with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. There are three basic modes:
@@ -969,7 +991,7 @@ compared to is specified by your input in the text box.
 can be set individually per glyph type.
 <br>
 <br>
-Additionaly, there are two more advanced modes with some additional flexibility:
+Additionally, there are two more advanced modes with some additional flexibility:
 <br>
 <b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
 you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
@@ -1020,12 +1042,14 @@ any modifiers to game speed when it is used, only when it is stored.
 <br>
 Storing real time completely stops all production, effectively pausing your game. For every real-time second that
 passes, you gain stored real time (modified by some efficiency factor). You can use stored real time in order to
-amplify a Reality in the Glyphs tab. This uses all of your stored real time at once in order to attempt to repeat that
+amplify a Reality in the Glyphs tab. When you complete the Reality, this uses all of your stored real time at once
+in order to attempt to repeat that
 exact Reality over and over, giving you all the rewards you would normally get from the repetitions. For example, if
 you have ${formatInt(50)} minutes stored and amplify a Reality which has lasted ${formatInt(10)} minutes and would
 give ${format(1e30)} RM and ${format(1e12)} Relic Shards, the amplified Reality will give you ${format(5e30)} RM,
 ${format(5e12)} Relic Shards, ${formatInt(5)} Glyphs (subject to your filtering settings),
 and ${formatInt(5)} Perk Points.
+<br>
 <br>
 You can toggle a setting to automatically store offline time as stored real time.
 <br>
@@ -1036,14 +1060,17 @@ years of stored time. It increases the softcap to Tickspeed upgrades gained from
 by ${format(1e5)} Tickspeed upgrades.
 <br>
 <br>
-At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years, you are able to finally unlock
-their Reality. The reward for completing The Enslaved Ones' Reality is
+At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored time, you are able to
+finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is 
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
-    : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
+    : "<span style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see reward details)</span>"}
+<br>
+<br>
 The Enslaved Ones will not directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
+      // TODO Add the rest of the testers here too before release; this is all only pre wave 1
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers",
         "ikerstream", "realrapidjazz", "saturnus", "earth", "garnet", "pichusuperlover"],
       tab: "celestials/enslaved"
@@ -1061,6 +1088,11 @@ Tesseracts allow you to raise this cap by spending Infinity Points.
 The cost of Tesseracts increases super-exponentially, but each successive Tesseract is significantly stronger than
 the last in order to make up for that. Tesseract count is never reset, meaning that once purchased, you don't need
 to reach the IP cost again in order to take advantage of the raised cap in later realities.
+<br>
+<br>
+You can see additional information about your current Tesseract count and the cost of the next one in the Infinity
+Dimensions tab. Additionally, your current Infinity Points will now also show a percentage towards the next Tesseract.
+If affordable, the Infinity button itself will visually change and bring you to the Infinity Dimension tab when clicked.
 `,
       isUnlocked: () => Enslaved.isCompleted,
       tags: ["reality", "lategame", "endgame", "tesseract", "id"],
@@ -1076,13 +1108,13 @@ They are unlocked by completing Achievement ID 151 (row ${formatInt(15)}, column
 without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
 <br>
-After being unlocked from the Achievement, you are met with another set of requirements to fully unlock V.
-You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities and have
-${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent).
-Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
-${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
-${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and
-${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.
+After the subtab is unlocked from the Achievement, you are met with another set of requirements to fully unlock V.
+You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities.requirement)} Realities and have
+${format(GameDatabase.celestials.v.mainUnlock.realityMachines.requirement)} unspent RM.
+Additionally you need to reach ${format(GameDatabase.celestials.v.mainUnlock.eternities.requirement)} Eternities,
+${format(GameDatabase.celestials.v.mainUnlock.infinities.requirement)} Infinities,
+${format(GameDatabase.celestials.v.mainUnlock.dilatedTime.requirement)} Dilated Time, and
+${format(GameDatabase.celestials.v.mainUnlock.replicanti.requirement)} Replicanti, all in the same reality.
 <br>
 <br>
 When you meet all of those requirements, you will be able to access V's Reality. However, completing the
@@ -1122,7 +1154,7 @@ older Celestials in a stronger way, by using their memories. Over time, you will
 Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
 <br>
 <br>
-Each previous Celestial within Ra gains levels based on memories, which are generated passively over time from
+Each previous Celestial within Ra gains levels by using memories, which are generated passively over time from
 memory chunks. Memory chunks can only be gained by entering Ra's Reality, but inside of the Reality chunks will
 be generated passively based on certain resource totals. If you are storing real time, you will not gain any
 chunks inside of Ra's Reality, but memories will still be generated normally. Having a total of
@@ -1130,36 +1162,37 @@ ${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Ce
 which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
 <br>
 <br>
-You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}
-with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}.
+Memories can be spent on three things - an increase to chunk gain, an increase to memory gain, and leveling up
+the Celestial. You start Ra with only Teresa unlocked and each successive Celestial is unlocked by reaching level
+${formatInt(8)} with the previous Celestial. Levels are capped at ${formatInt(25)}.
 <br>
 <br>
 Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. They also
-improve your glyph effects once you reach certain thresholds in glyph sacrifice value.
+improve your Glyph effects once you reach certain thresholds in Glyph sacrifice value.
 <br>
 <br>
 At level ${formatInt(2)}, Effarig unlocks
 ${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
-    ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
-    "all random elements of glyph generation. This also has its own How To Play entry."
-    : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
+    ? "a new mechanic called Glyph Alchemy and later on also makes Effarig Glyphs stronger while gradually removing " +
+      "almost all random elements of glyph generation. Glyph Alchemy also has its own How To Play entry."
+    : "<span style='color: var(--color-bad);'>(unlock Effarig within Ra to see unlock details)</span>"}
 <br>
 <br>
 The Enslaved Ones unlocks
 ${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
     ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
-    : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
+    : "<span style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see unlock details)</span>"}
 <br>
 <br>
 V unlocks
 ${Ra.has(RA_UNLOCKS.V_UNLOCK)
-    ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
-    "They also unlock a smaller set of more difficult V Achievements to complete for additional Space Theorems."
-    : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
+    ? "Triad Studies, which are new Studies near the bottom of the tree which cost Space Theorems. Each Triad Study " +
+      "requires you to also have the three nearby studies as well in order to purchase them. They also unlock a " +
+      "smaller set of more difficult V Achievements to complete for additional Space Theorems."
+    : "<span style='color: var(--color-bad);'>(unlock V within Ra to see unlock details)</span>"}
 <br>
 <br>
-Having a level ${formatInt(25000)} Reality Glyph, a total of ${formatInt(100)} Ra levels, and
-${formatPostBreak("1e2000")} Reality Machines will allow you to unlock the next Celestial.`,
+Ra will not directly unlock the next Celestial.`,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
@@ -1204,7 +1237,7 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       tags: ["reality", "lategame", "endgame", "ra", "effarig", "alchemy", "power", "infinity", "time", "replication",
         "dilation", "cardinality", "eternity", "dimensionality", "inflation", "alternation", "synergism", "momentum",
         "decoherence", "force", "exponential", "uncountability", "boundless", "unpredictability", "multiversal"],
-      tab: "celestials/alchemy"
+      tab: "reality/alchemy"
     }, {
       name: "Imaginary Machines",
       info: () => `
@@ -1228,10 +1261,13 @@ if you ever surpass your previous highest uncapped RM amount.
 exponentially as you approach the cap. By default iM slows down at a rate where the amount you are <i>missing</i>
 (ie. your cap minus your current amount) is cut in half every minute. This growth rate is unaffected by any
 modifiers to game speed.
+<br>
+<br>
+Imaginary Machine upgrades will unlock the final two Celestials.
 `,
       isUnlocked: () => MachineHandler.isIMUnlocked,
       tags: ["imaginary", "machines", "reality", "lategame", "endgame"],
-      tab: "reality/upgrades"
+      tab: "reality/imag_upgrades"
     }, {
       name: "Continuum",
       info: () => `
@@ -1255,7 +1291,7 @@ autobuyer settings for Antimatter Dimension autobuyers are now hidden on that ta
 `,
       isUnlocked: () => Laitela.continuumUnlocked,
       tags: ["continuum", "purchase", "reality", "lategame", "endgame"],
-      tab: "celestials/laitela"
+      tab: ""
     }, {
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
@@ -1282,8 +1318,8 @@ have their own How to Play entry.
 Dark Matter Dimensions can have their intervals upgraded down to a minimum of ${formatInt(10)}ms, at which point
 you cannot upgrade the interval any further. You can choose to ascend Dark Matter Dimensions which reach
 that point, which initially multiplies Dark Matter gain by ${formatInt(POWER_DM_PER_ASCENSION)} and Dark Energy by
-${formatInt(POWER_DE_PER_ASCENSION)}. The interval gets multiplied ${formatInt(1200)}, but can be upgraded once again.
-Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
+${formatInt(POWER_DE_PER_ASCENSION)}. The interval gets multiplied by ${formatInt(1200)}, but can be upgraded once
+again. Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
 <br>
 <br>
 An Imaginary Upgrade allows you to unlock a prestige called Annihilation. Annihilation resets your Dark Matter
@@ -1334,7 +1370,7 @@ upgrade they generally give:
 `,
       isUnlocked: () => Laitela.isUnlocked,
       tags: ["reality", "lategame", "endgame", "laitela", "dark"],
-      tab: "celestials/singularity"
+      tab: ""
     }, {
       name: "Pelle, Celestial of Antimatter",
       alias: "Pelle",

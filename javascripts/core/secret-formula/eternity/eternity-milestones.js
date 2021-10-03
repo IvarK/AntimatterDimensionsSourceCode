@@ -25,11 +25,15 @@ GameDatabase.eternity.milestones = {
     eternities: 6,
     reward: () => {
       const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
+      if (!player.options.offlineProgress) return `This milestone would give offline EP generation, but offline progress
+        is currently disabled.`;
       return `While offline, gain ${formatPercents(0.25)} of your best Eternity Points per minute from previous
-      Eternities. (Currently ${format(EPmin, 2, 2)} EP/min)`;
+        Eternities. (Currently ${format(EPmin, 2, 2)} EP/min)`;
     },
-    activeCondition: () => `Active as long as neither of the other offline milestones
-      (${formatInt(200)} or ${formatInt(1000)}) are also active.`
+    activeCondition: () => (player.options.offlineProgress
+      ? `Active as long as neither of the other offline milestones 
+        (${formatInt(200)} or ${formatInt(1000)}) are also active.`
+      : ""),
   },
   autoIC: {
     eternities: 7,
@@ -111,6 +115,8 @@ GameDatabase.eternity.milestones = {
   autoEternities: {
     eternities: 200,
     reward: () => {
+      if (!player.options.offlineProgress) return `This milestone would generate eternities offline, but offline
+        progress is currently disabled.`;
       const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true);
       // As far as I can tell, using templates here as Codefactor wants would lead to nested templates,
       // which seems messy to say the least.
@@ -118,20 +124,26 @@ GameDatabase.eternity.milestones = {
       return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity. ` +
         (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
     },
-    activeCondition: () => `Must be outside of all Challenges and Dilation
-      and the Eternity Autobuyer must be turned on and set to zero EP.`
+    activeCondition: () => (player.options.offlineProgress
+      ? `Must be outside of all Challenges and Dilation
+        and the Eternity Autobuyer must be turned on and set to zero EP.`
+      : ""),
   },
   autoInfinities: {
     eternities: 1000,
     reward: () => {
+      if (!player.options.offlineProgress) return `This milestone would generate infinities offline, but offline
+        progress is currently disabled.`;
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true);
       // eslint-disable-next-line prefer-template
       return `While offline, gain Infinities equal to ${formatPercents(0.5)}
         your best Infinities/hour this Eternity. ` +
         (infinities.gt(0) ? `(currently ${format(infinities, 2, 2)}/hour)` : "(disabled)");
     },
-    activeCondition: () => `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
-      the Infinity Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
-      and the Eternity Autobuyer must be turned off.`
+    activeCondition: () => (player.options.offlineProgress
+      ? `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
+        the Infinity Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
+        and the Eternity Autobuyer must be turned off.`
+      : ""),
   }
 };

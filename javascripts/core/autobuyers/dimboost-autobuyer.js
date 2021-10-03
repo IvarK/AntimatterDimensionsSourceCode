@@ -76,11 +76,20 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get canTick() {
-    return DimBoost.canBeBought && super.canTick;
+    return DimBoost.canBeBought && DimBoost.requirement.isSatisfied && super.canTick;
   }
 
   get resetTickOn() {
-    return Achievement(143).isUnlocked ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.INFINITY;
+    // Before max dimboost, we want to do dimboosts as quickly as possible,
+    // so we reset the autobuyer's timer to 0 after every galaxy.
+    // After max dimboost, we'll generally have "Blink of an eye",
+    // so doing a dimboost right after a galaxy will do a single dimboost
+    // and then wait for the autobuyer interval to do any more dimboosts,
+    // which seems unideal and in fact does slow getting dimboosts/galaxies
+    // at the start of infinities down by about 20%.
+    // After "Yo dawg, I heard you liked reskins...", it doesn't matter much
+    // which we do (less than 1 tick difference, it seems).
+    return this.isBuyMaxUnlocked ? PRESTIGE_EVENT.INFINITY : PRESTIGE_EVENT.ANTIMATTER_GALAXY;
   }
 
   tick() {

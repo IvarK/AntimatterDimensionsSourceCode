@@ -114,7 +114,7 @@ const Achievements = {
       return;
     }
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
-    if (Perk.achievementGroup6.isBought) {
+    if (Perk.achievementGroup5.isBought) {
       for (const achievement of Achievements.preReality) {
         achievement.unlock(true);
       }

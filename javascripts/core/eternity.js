@@ -36,7 +36,7 @@ function giveEternityRewards(auto) {
   }
 
   player.records.thisReality.bestEternitiesPerMs = player.records.thisReality.bestEternitiesPerMs.clampMin(
-    RealityUpgrade(3).effectOrDefault(1) / Math.clampMin(33, player.records.thisEternity.realTime)
+    newEternities.div(Math.clampMin(33, player.records.thisEternity.realTime))
   );
   player.records.bestEternity.bestEPminReality =
     player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
@@ -75,9 +75,7 @@ function eternity(force, auto, specialConditions = {}) {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     if (!player.dilation.active) giveEternityRewards(auto);
-    // If somehow someone manages to force their first eternity
-    // (e.g., by starting an EC), they haven't really done an eternity yet.
-    player.achievementChecks.noEternitiesThisReality = false;
+    player.requirementChecks.reality.noEternities = false;
   }
 
   if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -122,6 +120,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
+  ECTimeStudyState.invalidateCachedRequirements();
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
@@ -155,8 +154,7 @@ function initializeResourcesAfterEternity() {
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  player.infMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   player.records.thisEternity.time = 0;
@@ -164,12 +162,7 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.achievementChecks.noSacrifices = true;
-  player.achievementChecks.onlyEighthDimensions = true;
-  player.achievementChecks.onlyFirstDimensions = true;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noFirstDimensions = true;
-  player.achievementChecks.noReplicantiGalaxies = true;
+  Player.resetRequirements("eternity");
 }
 
 function applyRealityUpgradesAfterEternity() {

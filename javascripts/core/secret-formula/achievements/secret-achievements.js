@@ -58,7 +58,7 @@ GameDatabase.achievements.secret = [
     id: 22,
     name: "Cancer = Spread",
     get description() { return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using cancer notation.`; },
-    checkRequirement: () => player.spreadingCancer >= 1e5,
+    checkRequirement: () => player.requirementChecks.permanent.cancerGalaxies >= 1e5,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {
@@ -131,7 +131,7 @@ GameDatabase.achievements.secret = [
     id: 35,
     name: "Should we tell them about buy max...",
     get description() { return `Buy single Tickspeed upgrades ${formatInt(1e5)} times.`; },
-    checkRequirement: () => player.secretUnlocks.why >= 1e5,
+    checkRequirement: () => player.requirementChecks.permanent.singleTickspeed >= 1e5,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -177,7 +177,7 @@ GameDatabase.achievements.secret = [
     id: 45,
     name: "This dragging is dragging on",
     description: "Drag the Perks around for a minute.",
-    checkRequirement: () => player.secretUnlocks.dragging++ / 100 >= 60
+    checkRequirement: () => player.requirementChecks.permanent.perkTreeDragging++ / 100 >= 60
   },
   {
     id: 46,

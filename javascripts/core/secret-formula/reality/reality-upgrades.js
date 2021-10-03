@@ -69,10 +69,10 @@ GameDatabase.reality.upgrades = (function() {
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
-      hasFailed: () => !(player.achievementChecks.noReplicantiGalaxies &&
-        player.achievementChecks.noEternitiesThisReality),
-      checkRequirement: () => player.achievementChecks.noReplicantiGalaxies &&
-        player.achievementChecks.noEternitiesThisReality,
+      // Note that while noRG resets on eternity, the reality-level check will be false after the first eternity.
+      // The noRG variable is eternity-level as it's also used for an achievement check
+      hasFailed: () => !(player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities),
+      checkRequirement: () => player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
       effect: () => 1 + Replicanti.galaxies.total / 50,
@@ -83,8 +83,8 @@ GameDatabase.reality.upgrades = (function() {
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 Antimatter Galaxy",
-      hasFailed: () => !(player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality),
-      checkRequirement: () => player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality,
+      hasFailed: () => !(player.galaxies <= 1 && player.requirementChecks.reality.noInfinities),
+      checkRequirement: () => player.galaxies <= 1 && player.requirementChecks.reality.noInfinities,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinity gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + player.galaxies / 30,
@@ -123,9 +123,9 @@ GameDatabase.reality.upgrades = (function() {
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} Infinity Points`,
-      hasFailed: () => !player.achievementChecks.noEternitiesThisReality,
+      hasFailed: () => !player.requirementChecks.reality.noEternities,
       checkRequirement: () => Currency.infinityPoints.exponent >= 450 &&
-        player.achievementChecks.noEternitiesThisReality,
+        player.requirementChecks.reality.noEternities,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`,
       effect: () => 100
@@ -196,7 +196,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 16,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.strength >= 1.5))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && g.strength >= 1.5))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
         const equipped = Glyphs.activeList.countWhere(g => g.strength >= 1.5);
@@ -214,14 +214,14 @@ GameDatabase.reality.upgrades = (function() {
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2))} equipped)`,
       hasFailed: () => {
-        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2);
-        const equipped = Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2);
+        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2);
+        const equipped = Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2);
         const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
         return equipped + Math.min(availableGlyphs, availableSlots) < 4;
       },
-      checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
+      checkRequirement: () => Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: () => `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
       effect: 0.5,
@@ -232,7 +232,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 18,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each at level ${formatInt(10)} or higher
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.level >= 10))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && g.level >= 10))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
         const equipped = Glyphs.activeList.countWhere(g => g.level >= 10);
@@ -321,7 +321,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 25,
       cost: 100000,
       requirement: () => `Reach ${format("1e11111")} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
-      checkRequirement: () => Currency.eternityPoints.exponent >= 11111,
+      checkRequirement: () => player.records.bestReality.bestEP.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Unlock the Reality autobuyer and Automator command"
     },

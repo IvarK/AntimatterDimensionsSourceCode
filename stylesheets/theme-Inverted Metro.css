@@ -1,5 +1,5 @@
 body.t-inverted-metro {
-    background-color: black;
+  background-color: black;
 }
 
 .t-inverted-metro #container,
@@ -8,6 +8,7 @@ body.t-inverted-metro {
 .t-inverted-metro .c-modal,
 .t-inverted-metro #TTbuttons,
 .t-inverted-metro .sidebar,
+.t-inverted-metro .o-save-timer,
 .t-inverted-metro .c-glyph-tooltip {
   filter: invert(100%);
 }

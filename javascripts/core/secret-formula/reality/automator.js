@@ -48,7 +48,8 @@ GameDatabase.reality.automator = {
       examples: [
         "wait infinity",
         "wait am >= 1e308",
-        "wait completions >= 5 or wait EC9 Completions >= 4",
+        "wait pending completions >= 5",
+        "wait ec9 completions >= 4",
       ]
     },
     {
@@ -81,8 +82,8 @@ GameDatabase.reality.automator = {
             {
               header: "<i>respec</i>",
               description: `
-                Eternity: respec studies and eternity.<br>
-                Reality: unequip glyphs and reality.
+                Eternity: respec Time Studies and Eternity.<br>
+                Reality: unequip Glyphs and Reality.
               `
             },
           ]
@@ -108,14 +109,14 @@ GameDatabase.reality.automator = {
             {
               header: "<i>resources</i>",
               description: `
-              Buys with a specific resource.<br>
-              <b>Resources</b>: am (Antimatter), ip (Infinity Points), ep (Eternity Points)
+                Buys with a specific resource.<br>
+                <b>Resources</b>: am (Antimatter), ip (Infinity Points), ep (Eternity Points)
               `
             },
             {
               header: "<i>max</i>",
               description: `
-              Buys the maximum number of time theorems from all resources.
+                Buys the maximum number of time theorems from all resources.
               `
             },
           ]
@@ -146,13 +147,13 @@ GameDatabase.reality.automator = {
             {
               header: "<i>on/off</i>",
               description: `
-            Turns storing time on or off.
-            `
+                Turns storing time on or off.
+              `
             },
             {
               header: "<i>use</i>",
               description: `
-              Uses stored time.
+                Uses stored time.
               `
             }
           ]
@@ -195,22 +196,23 @@ GameDatabase.reality.automator = {
           items: [
             {
               header: "<i>on</i> | <i>off</i>",
-              description: "Turns autobuyer on or off",
+              description: "Turns autobuyer on or off.",
             },
             {
               header: "<i>number</i> <i>time units</i>",
-              description: `Usable with infinity/eternity only.` +
-               `Turn Automator on and set it to trigger at the given interval`
+              description: `Usable with infinity/eternity only. 
+                Turns the autobuyer on and set it to trigger at the given interval`
             },
             {
-              header: "<i>number</i> x current",
-              description: 'Usable with infinity/eternity only. Turn Automator on and sets it to "X times current" mode'
+              header: "<i>number</i> x highest",
+              description: `Usable with infinity/eternity only. Turns the autobuyer on and sets it to
+                "X times highest" mode`
             },
             {
               header: "<i>number currency</i>",
-              description: `Turn Automator on and sets it to trigger at a specific amount. The currency must match the
-                            autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality
-                            machines" mode`,
+              description: `Turns the autobuyer on and sets it to trigger at a specific amount. The currency must
+                match the autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality 
+                machines" mode`,
             },
           ]
         }
@@ -220,7 +222,7 @@ GameDatabase.reality.automator = {
         "auto eternity off",
         "auto infinity 30s",
         "auto eternity 10 seconds",
-        "auto eternity 1e100 x current",
+        "auto eternity 1e100 x highest",
         "auto infinity 1e1e4 ip"
       ]
     },
@@ -229,7 +231,8 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions] (comparison) [number]",
+      syntax: `<b>if</b> [am|ip|ep|dt|tp|rg|rep|infinities|eternities|realities|tt|total tt|pending glyph level|
+        pending completions|ec[number] completions] (comparison) [number]`,
       examples: [
         "if ep <= 1e3000",
         "if dt >= 1e50",
@@ -254,11 +257,10 @@ GameDatabase.reality.automator = {
           items: [
             {
               header: "<b>Undesirable effects</b>",
-              description: `This command may behave undesirably when it runs during` +
-              `offline progress due to limited tick count. A 1-second pause that` +
-              `is usually 20-30 ticks might be only 1 game tick when processing` +
-              `8 hours of offline progress, which might not be enough for the` +
-              `resources needed for the next line of the script`,
+              description: `This command may behave undesirably when it runs during offline progress due to limited 
+                tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing 8 
+                hours of offline progress, which might not be enough for the resources needed for the next line of the 
+                script`,
             },
             {
               header: "<b>Alternatives</b>",
@@ -274,15 +276,15 @@ GameDatabase.reality.automator = {
       keyword: "until",
       name: "<b>until</b> - repeats commands until a condition or event",
       syntax: `<b>until</b> [condition | event] {<br>
-        <blockquote>commands</blockquote>
-      }<br>
-      <b>condition</b>: [quantity] (comparison) [number]<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ecx completions]<br>
-      <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
+          <blockquote>commands</blockquote>
+        }<br>
+        <b>condition</b>: [quantity] (comparison) [number]<br>
+        <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ecx completions]<br>
+        <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
       description: `Commands are repeated; the condition is checked at the start and every
-      time the loop repeats. If an event is specified, then the loop will repeat until the
-      event occurs. (The event has to happen after the loop begins).<br>
-      A variable name may be used in place of <b>number</b>, see <b>define</b>`,
+        time the loop repeats. If an event is specified, then the loop will repeat until the
+        event occurs. (The event has to happen after the loop begins).<br>
+        A variable name may be used in place of <b>number</b>, see <b>define</b>`,
       examples: [
         `until ep > 1e500 {<br>
           <blockquote>
@@ -297,14 +299,14 @@ GameDatabase.reality.automator = {
       keyword: "while",
       name: "<b>while</b> - repeats commands while a condition is met",
       syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
-        <blockquote>commands</blockquote>
-      }<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions]<br>
-      <b>comparison</b>: [<|<=|>=|>]<br>
-      <b>number</b>: Number in normal or scientific notation`,
+          <blockquote>commands</blockquote>
+        }<br>
+        <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions]<br>
+        <b>comparison</b>: [<|<=|>=|>]<br>
+        <b>number</b>: Number in normal or scientific notation`,
       description: `Commands are repeated; the condition is checked at the start and every
-      time the loop repeats.<br>
-      A variable name may be used in place of <b>number</b>, see <b>define</b>`,
+        time the loop repeats.<br>
+        A variable name may be used in place of <b>number</b>, see <b>define</b>`,
       examples: [
         `while ep < 1e500 {<br>
           <blockquote>
@@ -378,24 +380,27 @@ GameDatabase.reality.automator = {
       name: "List of <b>currencies</b>",
       syntax: "You can use these in any if, while, until, or wait command.",
       description: `This is a list of "currencies" or numbers that you can use.<br>
-      Note that when used, most currencies will need to be in scientific notation.<br>
-      <b>am</b> - antimatter amount  <br>
-      <b>ip</b> - current infinity point amount  <br>
-      <b>ep</b> - current eternity point amount  <br>
-      <b>rm</b> - current reality machine amount  <br>
-      <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
-      <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
-      <b>pending rm</b> - RM gained on reality (0 if not available)<br>
-      <b>glyph level</b> - glyph level gained on reality (0 if not available)<br>
-      <b>dt</b> - dilated time amount  <br>
-      <b>tp</b> - tachyon particle amount  <br>
-      <b>rg</b> - replicanti galaxy amount (does not use scientific)<br>
-      <b>rep</b> - replicanti amount <br>
-      <b>tt</b> - time theorem amount <br>
-      <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
-      <b>total completions</b> - total completions of all eternity challenges <br>
-      <b>pending completions</b> - total completions of current EC at eternity <br>
-      <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
+        Note that when used, most currencies will need to be in scientific notation.<br>
+        <b>am</b> - antimatter amount  <br>
+        <b>ip</b> - current infinity point amount  <br>
+        <b>ep</b> - current eternity point amount  <br>
+        <b>rm</b> - current reality machine amount  <br>
+        <b>infinities</b> - current infinity amount <br>
+        <b>eternities</b> - current eternity amount <br>
+        <b>realities</b> - current reality amount <br>
+        <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
+        <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
+        <b>pending rm</b> - RM gained on reality (0 if not available)<br>
+        <b>pending glyph level</b> - glyph level gained on reality (0 if not available)<br>
+        <b>dt</b> - dilated time amount  <br>
+        <b>tp</b> - tachyon particle amount  <br>
+        <b>rg</b> - replicanti galaxy amount (does not use scientific)<br>
+        <b>rep</b> - replicanti amount <br>
+        <b>tt</b> - time theorem amount <br>
+        <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
+        <b>total completions</b> - total completions of all eternity challenges <br>
+        <b>pending completions</b> - total completions of current EC at eternity <br>
+        <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
       `,
       examples: [
         `if total tt >= 5
@@ -419,6 +424,22 @@ GameDatabase.reality.automator = {
         "notify \"Dilation reached\"",
         "notify \"ECs completed\""
       ]
-    }
+    },
+    {
+      id: 18,
+      isUnlocked: () => true,
+      keyword: "(Comments)",
+      name: "<b>#|//</b> - leaves a comment in your script",
+      syntax: "<b>#</b> text<br><b>//</b> text",
+      description: `Allows you to leave a note to yourself within your script. This may be
+        useful for organizing or keeping track of which parts of your script do various things,
+        in a way that appears more readable than just the commands. These commands will do nothing
+        positive or negative for the automator's functionality, and only serve as a tool to
+        help you keep the steps of your scripts easier to follow if desired.`,
+      examples: [
+        "# get 1e20 before starting ec1",
+        "// this loop alternates dilation and pushing"
+      ]
+    },
   ]
 };

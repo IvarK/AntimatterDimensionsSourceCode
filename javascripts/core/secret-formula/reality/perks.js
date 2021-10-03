@@ -151,7 +151,8 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "The first row of eternity upgrades automatically unlock after the first Eternity of a Reality.",
+    description: `After the first Eternity of a Reality,
+      automatically unlock the first row of Eternity Upgrades for free.`,
     defaultPosition: {
       x: 50,
       y: 150
@@ -162,7 +163,7 @@ GameDatabase.reality.perks = {
     label: "EU2",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `The second row of eternity upgrades automatically unlock
+      return `The second row of Eternity Upgrades is automatically purchased
         at ${formatX(1e10)} times less than their original price`;
     },
     defaultPosition: {
@@ -174,7 +175,7 @@ GameDatabase.reality.perks = {
     id: 42,
     label: "UD1",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the second row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     defaultPosition: {
       x: 165,
       y: 565
@@ -184,7 +185,7 @@ GameDatabase.reality.perks = {
     id: 43,
     label: "UD2",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the third row of Dilation Upgrades.",
+    description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     defaultPosition: {
       x: 310,
       y: 605
@@ -194,7 +195,7 @@ GameDatabase.reality.perks = {
     id: 44,
     label: "ATT",
     family: PERK_FAMILY.DILATION,
-    description: "Auto-unlock the passive Time Theorem generation Dilation Upgrade once you can afford it.",
+    description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
     defaultPosition: {
       x: 460,
       y: 580
@@ -299,7 +300,9 @@ GameDatabase.reality.perks = {
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).
+              ECs will be completed sequentially, requiring all previous
+              ECs to be fully completed before progressing to the next EC.`;
     },
     effect: 80,
     defaultPosition: {
@@ -565,10 +568,10 @@ GameDatabase.reality.perks = {
     label: "ACH2",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(14)} minutes per
-        Achievement (${formatInt(6)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(12)} minutes per
+        Achievement (${formatInt(8)} minute decrease).`;
     },
-    effect: 6,
+    effect: 8,
     defaultPosition: {
       x: -115,
       y: -250
@@ -579,10 +582,10 @@ GameDatabase.reality.perks = {
     label: "ACH3",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(9)} minutes per
-        Achievement (${formatInt(5)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(6)} minutes per
+        Achievement (${formatInt(6)} minute decrease).`;
     },
-    effect: 5,
+    effect: 6,
     defaultPosition: {
       x: -175,
       y: -365
@@ -593,7 +596,7 @@ GameDatabase.reality.perks = {
     label: "ACH4",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the Achievement timer to ${formatInt(5)} minutes per
+      return `Reduce the Achievement timer to ${formatInt(2)} minutes per
         Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 4,
@@ -604,27 +607,13 @@ GameDatabase.reality.perks = {
   },
   achievementGroup5: {
     id: 205,
-    label: "ACH5",
-    family: PERK_FAMILY.ACHIEVEMENT,
-    get description() {
-      return `Reduce the Achievement timer to ${formatInt(2)} minutes per
-        Achievement (${formatInt(3)} minute decrease).`;
-    },
-    effect: 3,
-    defaultPosition: {
-      x: -195,
-      y: -630
-    }
-  },
-  achievementGroup6: {
-    id: 206,
     label: "ACHNR",
     family: PERK_FAMILY.ACHIEVEMENT,
     description: "Reality no longer resets your Achievements.",
     effect: 2,
     defaultPosition: {
-      x: -225,
-      y: -755
+      x: -195,
+      y: -630
     }
   }
 };
@@ -671,7 +660,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.achievementGroup2, p.achievementGroup3],
     [p.achievementGroup3, p.achievementGroup4],
     [p.achievementGroup4, p.achievementGroup5],
-    [p.achievementGroup5, p.achievementGroup6],
   ];
   const connections = {};
   for (const perk of Object.values(GameDatabase.reality.perks)) {

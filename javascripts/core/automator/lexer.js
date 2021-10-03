@@ -123,6 +123,10 @@ const AutomatorLexer = (() => {
   createInCategory(AutomatorCurrency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
   createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.realityMachines.value });
 
+  createInCategory(AutomatorCurrency, "infinities", /infinities/i, { $getter: () => Currency.infinities.value });
+  createInCategory(AutomatorCurrency, "eternities", /eternities/i, { $getter: () => Currency.eternities.value });
+  createInCategory(AutomatorCurrency, "realities", /realities/i, { $getter: () => Currency.realities.value });
+
   createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
     $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
@@ -135,20 +139,20 @@ const AutomatorLexer = (() => {
     $autocomplete: "pending RM",
     $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))
   });
-  createInCategory(AutomatorCurrency, "GlyphLevel", /glyph[ \t]+level/i, {
-    $autocomplete: "glyph level",
+  createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
+    $autocomplete: "pending glyph level",
     $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
   });
 
   createInCategory(AutomatorCurrency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
-    $getter: () => player.replicanti.amount,
+    $getter: () => Replicanti.amount,
   });
   createInCategory(AutomatorCurrency, "TT", /(tt|time theorems?)/i, {
     $autocomplete: "TT",
     $getter: () => Currency.timeTheorems.value,
   });
-  createInCategory(AutomatorCurrency, "Total_TT", /total tt/i, {
+  createInCategory(AutomatorCurrency, "TotalTT", /total[ \t]+tt/i, {
     $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
@@ -182,7 +186,7 @@ const AutomatorLexer = (() => {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.bigCrunch,
     $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
-    $autobuyerXCurrentMode: AUTO_CRUNCH_MODE.X_CURRENT,
+    $autobuyerXHighestMode: AUTO_CRUNCH_MODE.X_HIGHEST,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canCrunch,
     $prestige: () => bigCrunchResetRequest(true),
@@ -193,7 +197,7 @@ const AutomatorLexer = (() => {
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
-    $autobuyerXCurrentMode: AUTO_ETERNITY_MODE.X_CURRENT,
+    $autobuyerXHighestMode: AUTO_ETERNITY_MODE.X_HIGHEST,
     $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canEternity,
     $prestigeLevel: 2,
@@ -297,8 +301,8 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
-  createKeyword("XCurrent", /x[ \t]+current/i, {
-    $autocomplete: "x current",
+  createKeyword("XHighest", /x[ \t]+highest/i, {
+    $autocomplete: "x highest",
   });
 
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
@@ -358,11 +362,30 @@ const AutomatorLexer = (() => {
 
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
-
+  
+  const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
+  
+  const standardizeAutomatorCurrencyName = function(x) {
+    // This first line exists for this function to usually return quickly;
+    // otherwise it's called enough to cause lag.
+    if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+    for (const i of tokenLists.AutomatorCurrency) {
+      // Check for a match of the full string.
+      if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {
+        return i.$autocomplete.toUpperCase();
+      }
+    }
+    // If we get to this point something has gone wrong, a currency name didn't match any of the currency regexps.
+    throw new Error(`${x} does not seem to be an automator currency`);
+  };
+  
   return {
     lexer,
     tokens: automatorTokens,
     tokenIds,
     tokenMap,
+    standardizeAutomatorCurrencyName,
   };
 })();
+
+const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

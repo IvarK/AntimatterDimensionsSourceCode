@@ -20,12 +20,11 @@ Vue.component("infinity-dim-tab", {
       enslavedCompleted: false,
       boughtTesseracts: 0,
       extraTesseracts: 0,
-      showExtraTesseracts: false,
     };
   },
   computed: {
     tesseractCountString() {
-      const extra = this.showExtraTesseracts ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
+      const extra = this.extraTesseracts > 0 ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
       return `${formatInt(this.boughtTesseracts)}${extra}`;
     },
   },
@@ -47,14 +46,13 @@ Vue.component("infinity-dim-tab", {
       }
       this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
-      this.nextDimCapIncrease = Enslaved.nextDimCapIncrease * Tesseracts.strengthMultiplierIncrease();
-      this.tesseractCost.copyFrom(Enslaved.tesseractCost);
+      this.nextDimCapIncrease = Tesseracts.nextTesseractIncrease;
+      this.tesseractCost.copyFrom(Tesseracts.nextCost);
       this.totalDimCap = InfinityDimensions.totalDimCap;
-      this.canBuyTesseract = Enslaved.canBuyTesseract;
+      this.canBuyTesseract = Tesseracts.canBuyTesseract;
       this.enslavedCompleted = Enslaved.isCompleted;
-      this.boughtTesseracts = player.celestials.enslaved.tesseracts;
-      this.extraTesseracts = Enslaved.extraTesseracts;
-      this.showExtraTesseracts = this.extraTesseracts > 0;
+      this.boughtTesseracts = Tesseracts.bought;
+      this.extraTesseracts = Tesseracts.extra;
     },
     maxAll() {
       tryUnlockInfinityDimensions(false);
@@ -64,7 +62,7 @@ Vue.component("infinity-dim-tab", {
       toggleAllInfDims();
     },
     buyTesseract() {
-      Enslaved.buyTesseract();
+      Tesseracts.buyTesseract();
     }
   },
   template: `
@@ -139,5 +137,7 @@ Vue.component("infinity-dim-tab", {
       >
         You have {{ formatInt(EC8PurchasesLeft) }} {{ "purchase" | pluralize(EC8PurchasesLeft) }} left.
       </div>
+      <br>
+      Hold shift to see the Infinity Point cost for locked Infinity Dimensions.
     </div>`
 });

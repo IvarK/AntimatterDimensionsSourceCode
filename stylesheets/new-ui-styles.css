@@ -431,14 +431,14 @@ body.t-s9 {
   width: 100%;
 }
 
-.fill1 {
+.fill-purchased {
   height: 100%;
   width: 20%;
   background-color: var(--color-good);
   float: left;
 }
 
-.fill2 {
+.fill-possible {
   height: 100%;
   width: 40%;
   background-color: var(--color-good-dark);
@@ -725,10 +725,7 @@ body.t-s9 {
   background: rgba(182, 127, 51, 0.3);
 }
 
-.t-metro .c-infinity-dim-row:nth-child(even),
-.t-dark-metro .c-infinity-dim-row:nth-child(even),
-.t-inverted-metro .c-infinity-dim-row:nth-child(even),
-.t-s8 .c-infinity-dim-row:nth-child(even) {
+.s-base--metro .c-infinity-dim-row:nth-child(even) {
   background: rgba(255, 152, 0, 0.3);
 }
 
@@ -749,10 +746,7 @@ body.t-s9 {
   background: rgba(179, 65, 224, 0.3);
 }
 
-.t-metro .c-time-dim-row:nth-child(even),
-.t-dark-metro .c-time-dim-row:nth-child(even),
-.t-inverted-metro .c-time-dim-row:nth-child(even),
-.t-s8 .c-time-dim-row:nth-child(even) {
+.s-base--metro .c-time-dim-row:nth-child(even) {
   background: rgba(103, 58, 183, 0.3);
 }
 
@@ -909,9 +903,6 @@ body.t-s9 {
   transition-delay: 0s;
 }
 
-.t-metro .l-help-me,
-.t-dark-metro .l-help-me,
-.t-inverted-metro .l-help-me,
-.t-s8 .l-help-me {
+.s-base--metro .l-help-me {
   border-radius: 0;
 }

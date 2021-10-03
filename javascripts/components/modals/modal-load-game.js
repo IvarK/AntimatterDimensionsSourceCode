@@ -33,7 +33,7 @@ Vue.component("modal-load-game", {
       },
       template: `
         <div class="l-modal-options__save-record">
-          <strong>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></strong>
+          <h3>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></h3>
           <span>Antimatter: {{ formatAntimatter(antimatter) }}</span>
           <primary-button
             class="o-primary-btn--width-medium"

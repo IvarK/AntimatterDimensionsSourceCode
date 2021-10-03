@@ -1,5 +1,5 @@
 body.t-inverted {
-    background-color: black;
+  background-color: black;
 }
 
 .t-inverted #container,
@@ -8,6 +8,7 @@ body.t-inverted {
 .t-inverted .c-modal,
 .t-inverted #TTbuttons,
 .t-inverted .sidebar,
+.t-inverted .o-save-timer,
 .t-inverted .c-glyph-tooltip {
   filter: invert(100%);
 }

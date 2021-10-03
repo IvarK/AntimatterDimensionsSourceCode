@@ -94,10 +94,10 @@ Vue.component("challenges-header", {
       >
         <div class="l-challenges-tab__auto-ec-timers">
           <span v-if="remainingECTiers > 1">
-            Next Auto Eternity Challenge completion in: {{ untilNextEC }}
+            Next Auto Eternity Challenge completion in: {{ untilNextEC }} (real time)
           </span>
           <span>
-            All Auto Eternity Challenge completions in: {{ untilAllEC }}
+            All Auto Eternity Challenge completions in: {{ untilAllEC }} (real time)
           </span>
         </div>
       </div>

@@ -65,18 +65,17 @@ class TimeStudyTreeLayout {
       type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                     null, TS(41), TS(42), EC(5)                      ),
-        normalRow(                       null,   TS(51),  TS(62)                        ),
-        normalRow(                               TS(61)                                 )
+        normalRow(                               TS(51)                                 )
       );
     } else {
       this.rows.push(
         normalRow(                           TS(41), TS(42)                             ),
-        normalRow(                       null,   TS(51),  EC(5)                         ),
-        normalRow(                       null,   TS(61),  TS(62)                        )
+        normalRow(                       null,   TS(51),  EC(5)                         )
       );
     }
 
     this.rows.push(
+      normalRow(                       null,   TS(61),  TS(62)                        ),
       normalRow(                      TS(71),  TS(72),  TS(73)                        ),
       normalRow(                      TS(81),  TS(82),  TS(83)                        ),
       normalRow(                      TS(91),  TS(92),  TS(93)                        ),

@@ -15,6 +15,7 @@ class SubtabState {
   }
 
   get isHidden() {
+    if (Enslaved.isRunning) return false;
     // eslint-disable-next-line no-bitwise
     return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
       this.config.hidable;
@@ -57,7 +58,7 @@ class SubtabState {
   }
 
   get isOpen() {
-    return ui.view.subtab === this.key;
+    return ui.view.tab === this._parent.key && ui.view.subtab === this.key;
   }
 }
 
@@ -88,6 +89,7 @@ class TabState {
   }
 
   get isHidden() {
+    if (Enslaved.isRunning) return false;
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
     return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
@@ -115,12 +117,12 @@ class TabState {
     if (subtab === undefined) {
       this._currentSubtab = this.subtabs.find(s => s.id === player.options.lastOpenSubtab[this.id]);
     } else {
-      subtab.unhideTab();
+      if (!Enslaved.isRunning) subtab.unhideTab();
       this._currentSubtab = subtab;
     }
 
-    if (!this._currentSubtab.isAvailable) this.resetToAvailable();
     if (!this._currentSubtab.isUnlocked) this.resetToUnlocked();
+    if (!this._currentSubtab.isAvailable) this.resetToAvailable();
 
     ui.view.subtab = this._currentSubtab.key;
     const tabNotificationKey = this.key + this._currentSubtab.key;
@@ -128,9 +130,7 @@ class TabState {
 
     // Makes it so that the glyph tooltip doesn't stay on tab change
     ui.view.tabs.reality.currentGlyphTooltip = -1;
-    if (manual) {
-      Modal.hide();
-    }
+    if (manual) Modal.hide();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }
 
@@ -147,6 +147,10 @@ class TabState {
 
   resetToAvailable() {
     this._currentSubtab = this.subtabs.find(tab => tab.isAvailable);
+    if (this._currentSubtab === undefined) {
+      this._currentSubtab = this.subtabs[0];
+      this._currentSubtab.unhideTab();
+    }
   }
 
   resetToUnlocked() {

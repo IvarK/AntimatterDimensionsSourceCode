@@ -101,6 +101,7 @@ const Laitela = {
     return true;
   },
   tickDarkMatter(realDiff) {
+    if (!this.isUnlocked) return;
     for (let i = 1; i <= 4; i++) {
       const d = MatterDimension(i);
       d.timeSinceLastUpdate += realDiff;
@@ -152,6 +153,7 @@ const Laitela = {
     }
   },
   autobuyerLoop(realDiff) {
+    if (!this.isUnlocked) return;
     const laitela = player.celestials.laitela;
 
     const interval = SingularityMilestone.darkAutobuyerSpeed.effectValue;

@@ -9,15 +9,16 @@ class Sacrifice {
 
   static get canSacrifice() {
     return DimBoost.totalBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
-      AntimatterDimension(8).totalAmount.gt(0);
+      AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit);
   }
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.totalBoosts < 5) return `requires ${formatInt(5)} Dimension Boosts`;
-    if (AntimatterDimension(8).totalAmount.eq(0)) return "no 8th Antimatter Dimensions";
+    if (DimBoost.totalBoosts < 5) return `Requires ${formatInt(5)} Dimension Boosts`;
+    if (AntimatterDimension(8).totalAmount.eq(0)) return "No 8th Antimatter Dimensions";
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
-    return "";
+    if (Player.isInAntimatterChallenge) return "Challenge goal reached";
+    return "Need to Crunch";
   }
 
   static getSacrificeDescription(changes) {
@@ -107,7 +108,7 @@ class Sacrifice {
   }
 }
 
-function sacrificeReset(auto) {
+function sacrificeReset() {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
     Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
@@ -120,7 +121,6 @@ function sacrificeReset(auto) {
   }
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, formatX(nextBoost, 2, 1));
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(AntimatterDimension(1).amount);
   const isAch118Unlocked = Achievement(118).isUnlocked;
@@ -132,7 +132,7 @@ function sacrificeReset(auto) {
   } else if (!isAch118Unlocked) {
     AntimatterDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
-  player.achievementChecks.noSacrifices = false;
+  player.requirementChecks.infinity.noSacrifice = false;
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }

@@ -28,7 +28,7 @@ Vue.component("game-header-amounts-line", {
         if (this.showNextEP) this.nextEP.copyFrom(requiredIPForEP(gainedEternityPoints().floor().toNumber() + 1));
       }
       this.isTesseractUnlocked = Enslaved.isCompleted;
-      this.tesseractCost = Enslaved.tesseractCost;
+      this.tesseractCost = Tesseracts.nextCost;
       this.tesseractText = this.tesseractProgress();
     },
     formatPoints(points) {

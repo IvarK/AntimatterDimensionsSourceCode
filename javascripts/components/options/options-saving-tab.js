@@ -36,6 +36,7 @@ Vue.component("options-saving-tab", {
     return {
       cloudEnabled: false,
       autosaveInterval: 10,
+      showTimeSinceSave: false,
       loggedIn: false,
       userName: ""
     };
@@ -46,6 +47,9 @@ Vue.component("options-saving-tab", {
     },
     autosaveInterval(newValue) {
       player.options.autosaveInterval = 1000 * newValue;
+    },
+    showTimeSinceSave(newValue) {
+      player.options.showTimeSinceSave = newValue;
     }
   },
   methods: {
@@ -53,6 +57,7 @@ Vue.component("options-saving-tab", {
       const options = player.options;
       this.cloudEnabled = options.cloudEnabled;
       this.autosaveInterval = options.autosaveInterval / 1000;
+      this.showTimeSinceSave = options.showTimeSinceSave;
       this.loggedIn = Cloud.loggedIn;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
@@ -114,6 +119,11 @@ Vue.component("options-saving-tab", {
             <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
             <label for="file">Import save from file</label>
           </options-button>
+          <primary-button-on-off
+            v-model="showTimeSinceSave"
+            class="o-primary-btn--option l-options-grid__button"
+            text="Display time since save:"
+          />
         </div>
         <open-modal-shortcuts />
       </div>

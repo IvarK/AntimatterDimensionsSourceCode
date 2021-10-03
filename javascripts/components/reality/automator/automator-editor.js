@@ -92,11 +92,12 @@ Vue.component("automator-editor", {
     },
     toggleAutomatorMode() {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
-      AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
+        // This saves the script after converting it.
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
       } else if (BlockAutomator.fromText(this.currentScriptContent)) {
+        AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");

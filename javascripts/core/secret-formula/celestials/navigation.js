@@ -4,6 +4,21 @@ function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
 }
 
+function vUnlockProgress(index) {
+  if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  return db.progress();
+}
+
+function vUnlockLegendLabel(complete, index) {
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  if (complete >= 1) return `${db.name} condition for V`;
+  return [
+    "V",
+    `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
+  ];
+}
+
 const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
@@ -541,7 +556,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => EffarigUnlock.reality.isUnlocked,
       complete: () => {
         if (Achievement(151).isUnlocked) return 1;
-        if (!player.achievementChecks.noEighthDimensions) return 0;
+        if (!player.requirementChecks.infinity.noAD8) return 0;
 
         return player.galaxies / 800;
       },
@@ -561,7 +576,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = 800;
             if (complete >= 1) return "V's Reality";
-            const galaxies = player.achievementChecks.noEighthDimensions ? player.galaxies : 0;
+            const galaxies = player.requirementChecks.infinity.noAD8 ? player.galaxies : 0;
             return [
               "V's unlock Achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
@@ -584,10 +599,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-1": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return Currency.realities.value / GameDatabase.celestials.v.mainUnlock.realities;
-      },
+      complete: () => vUnlockProgress(1),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -598,15 +610,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Realities condition for V";
-            const realities = Currency.realities.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.realities;
-            return [
-              "V",
-              `Reach ${format(realities, 2)} / ${format(goal, 2)} Realities.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 1),
           angle: -135,
           diagonal: 16,
           horizontal: 16,
@@ -623,11 +627,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-2": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.eternities.value.pLog10() /
-                Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
-      },
+      complete: () => vUnlockProgress(2),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -638,15 +638,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Eternity condition for V";
-            const eternities = Currency.eternities.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.eternities;
-            return [
-              "V",
-              `Reach ${format(eternities, 2)} / ${format(goal, 2)} Eternities.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 2),
           angle: -135,
           diagonal: 30,
           horizontal: 16,
@@ -664,11 +656,7 @@ GameDatabase.celestials.navigation = (function() {
 
     "v-unlock-3": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.infinitiesTotal.value.pLog10() /
-                Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
-      },
+      complete: () => vUnlockProgress(3),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -679,15 +667,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Infinity condition for V";
-            const infinities = Currency.infinitiesTotal.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.infinities;
-            return [
-              "V",
-              `Reach ${format(infinities, 2)} / ${format(goal, 2)} Infinities.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 3),
           angle: -135,
           diagonal: 45,
           horizontal: 16,
@@ -704,11 +684,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-4": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.dilatedTime.value.pLog10() /
-          GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
-      },
+      complete: () => vUnlockProgress(4),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -719,15 +695,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Dilated Time condition for V";
-            const dilatedTime = Currency.dilatedTime.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.dilatedTime;
-            return [
-              "V",
-              `Reach ${format(dilatedTime, 2)} / ${format(goal, 2)} Dilated Time.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 4),
           angle: -135,
           diagonal: 60,
           horizontal: 16,
@@ -744,11 +712,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-5": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return (emphasizeEnd(player.replicanti.amount.pLog10() /
-          GameDatabase.celestials.v.mainUnlock.replicanti.log10()));
-      },
+      complete: () => vUnlockProgress(5),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -759,15 +723,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Replicanti condition for V";
-            const replicanti = player.replicanti.amount;
-            const goal = GameDatabase.celestials.v.mainUnlock.replicanti;
-            return [
-              "V",
-              `Reach ${format(replicanti, 2)} / ${format(goal, 2)} Replicanti.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 5),
           angle: -135,
           diagonal: 75,
           horizontal: 16,
@@ -784,11 +740,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-6": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.realityMachines.value.pLog10() /
-          Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
-      },
+      complete: () => vUnlockProgress(6),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -799,15 +751,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Reality Machines condition for V";
-            const rm = Currency.realityMachines.value;
-            const goal = GameDatabase.celestials.v.mainUnlock.rm;
-            return [
-              "V",
-              `Reach ${format(rm, 2)} / ${format(goal, 2)} Reality Machines.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 6),
           angle: -135,
           diagonal: 90,
           horizontal: 16,
@@ -1113,7 +1057,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "effarig-pet": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => Ra.pets.teresa.level / 10,
+      complete: () => Ra.pets.teresa.level / 8,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1128,7 +1072,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.teresa.level;
             const level = Ra.pets.effarig.level;
-            if (complete !== 1 && level === 1) return `Ra's Teresa Memory level ${unlocked} / ${formatInt(10)}`;
+            if (complete !== 1 && level === 1) return `Ra's Teresa Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's Effarig Memories have all been returned`;
             return [
               "Ra's Effarig Memory level",
@@ -1164,7 +1108,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "enslaved-pet": {
       visible: () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
-      complete: () => Ra.pets.effarig.level / 10,
+      complete: () => Ra.pets.effarig.level / 8,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1179,7 +1123,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.effarig.level;
             const level = Ra.pets.enslaved.level;
-            if (complete !== 1 && level === 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(10)}`;
+            if (complete !== 1 && level === 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's Enslaved Memories have all been returned`;
             return [
               "Ra's Enslaved Memory level",
@@ -1215,7 +1159,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-pet": {
       visible: () => Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
-      complete: () => Ra.pets.enslaved.level / 10,
+      complete: () => Ra.pets.enslaved.level / 8,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1230,7 +1174,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.enslaved.level;
             const level = Ra.pets.v.level;
-            if (complete !== 1 && level === 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(10)}`;
+            if (complete !== 1 && level === 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's V Memories have all been returned`;
             return [
               "Ra's V Memory level",
@@ -1361,7 +1305,7 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             if (Laitela.isUnlocked) return ["Lai'tela's Reality"];
 
-            const hasIDs = player.achievementChecks.maxID1ThisReality.neq(0);
+            const hasIDs = player.requirementChecks.reality.maxID1.neq(0);
             if (hasIDs) return [
               "Lai'tela's Reality",
               "The Power of Infinity Dimensions",

@@ -114,8 +114,8 @@ Vue.component("ra-pet-level-bar", {
     timeToGoalString(expToGain) {
       const pet = this.pet;
       // Quadratic formula for growth (uses constant growth for a = 0)
-      const a = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
-      const b = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
+      const a = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
+      const b = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
       const c = -expToGain;
       const estimate = a === 0
         ? -c / b

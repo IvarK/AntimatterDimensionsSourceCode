@@ -83,7 +83,7 @@ const AutomatorCommands = ((() => {
           { ALT: () => $.CONSUME(T.Off) },
           { ALT: () => $.OR1([
             { ALT: () => $.SUBRULE($.duration) },
-            { ALT: () => $.SUBRULE($.xCurrent) },
+            { ALT: () => $.SUBRULE($.xHighest) },
             { ALT: () => $.SUBRULE($.currencyAmount) },
           ]) },
         ]);
@@ -91,9 +91,9 @@ const AutomatorCommands = ((() => {
       // eslint-disable-next-line complexity
       validate: (ctx, V) => {
         ctx.startLine = ctx.Auto[0].startLine;
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xCurrent)) {
-          V.addError((ctx.duration || ctx.xCurrent)[0],
-            "Auto Reality cannot be set to a duration or x current",
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xHighest)) {
+          V.addError((ctx.duration || ctx.xHighest)[0],
+            "Auto Reality cannot be set to a duration or x highest",
             "Use RM for Auto Reality");
           return false;
         }
@@ -108,16 +108,16 @@ const AutomatorCommands = ((() => {
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
-          (ctx.duration || ctx.xCurrent) && !EternityMilestone.bigCrunchModes.isReached) {
-          V.addError((ctx.duration || ctx.xCurrent)[0],
+          (ctx.duration || ctx.xHighest) && !EternityMilestone.bigCrunchModes.isReached) {
+          V.addError((ctx.duration || ctx.xHighest)[0],
             "Advanced Infinity autobuyer settings are not unlocked",
             `Reach ${EternityMilestone.bigCrunchModes.config.eternities} Eternities to use this command`);
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
-          (ctx.duration || ctx.xCurrent) && !RealityUpgrade(13).isBought) {
-          V.addError((ctx.duration || ctx.xCurrent)[0],
+          (ctx.duration || ctx.xHighest) && !RealityUpgrade(13).isBought) {
+          V.addError((ctx.duration || ctx.xHighest)[0],
             "Advanced Eternity autobuyer settings are not unlocked",
             "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
           return false;
@@ -145,12 +145,12 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         const isReality = ctx.PrestigeEvent[0].tokenType === T.Reality;
-        const on = Boolean(ctx.On || ctx.duration || ctx.xCurrent || ctx.currencyAmount);
+        const on = Boolean(ctx.On || ctx.duration || ctx.xHighest || ctx.currencyAmount);
         const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
-        const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
+        const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount ? ctx.currencyAmount[0].children.$value : undefined;
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
-        const xCurrentMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXCurrentMode;
+        const xHighestMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXHighestMode;
         const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
@@ -161,10 +161,10 @@ const AutomatorCommands = ((() => {
             autobuyer.time = duration / 1000;
             // Can't do the units provided in the script because it's been parsed away like 4 layers up the call stack
             currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : format(autobuyer.time)} seconds`;
-          } else if (xCurrent !== undefined) {
-            autobuyer.mode = xCurrentMode;
-            autobuyer.xCurrent = new Decimal(xCurrent);
-            currSetting = `${format(xCurrent, 2, 2)} times current`;
+          } else if (xHighest !== undefined) {
+            autobuyer.mode = xHighestMode;
+            autobuyer.xHighest = new Decimal(xHighest);
+            currSetting = `${format(xHighest, 2, 2)} times highest`;
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {
@@ -187,7 +187,7 @@ const AutomatorCommands = ((() => {
         const duration = ctx.duration
           ? `${ctx.duration[0].children.NumberLiteral[0].image} ${ctx.duration[0].children.TimeUnit[0].image}`
           : undefined;
-        const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
+        const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
           ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}
             ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
@@ -196,7 +196,7 @@ const AutomatorCommands = ((() => {
         let input = "";
 
         if (duration) input = duration;
-        else if (xCurrent) input = `${xCurrent} x current`;
+        else if (xHighest) input = `${xHighest} x highest`;
         else if (fixedAmount) input = `${fixedAmount}`;
         else input = (on ? "ON" : "OFF");
 
@@ -303,6 +303,9 @@ const AutomatorCommands = ((() => {
           } else if (entry.children.TriadStudy && Ra.pets.v.level >= 5) {
             // Triad study (this also should be prevented by the general "can't convert errored scripts" if locked)
             studyList.push(`T${entry.children.TriadStudy[0].image}`);
+          } else if (entry.children.StudyPath) {
+            // Study path (eg. "time")
+            studyList.push(entry.children.StudyPath[0].image);
           } else {
             // Study range (eg. "41-71")
             const range = entry.children.studyRange[0].children;
@@ -362,7 +365,7 @@ const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.IF,
           ...comparison,
-          target: comparison.target.toUpperCase()
+          target: standardizeAutomatorCurrencyName(comparison.target)
         };
       }
     },
@@ -611,6 +614,7 @@ const AutomatorCommands = ((() => {
           const varInfo = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
           if (!varInfo) return;
           ctx.$studies = varInfo.value;
+          ctx.$studies.image = ctx.Identifier[0].image;
         } else if (ctx.studyList) {
           ctx.$studies = V.visit(ctx.studyList);
         }
@@ -894,7 +898,7 @@ const AutomatorCommands = ((() => {
             nest: commands,
             ...automatorBlocksMap.UNTIL,
             ...comparison,
-            target: comparison.target.toUpperCase()
+            target: standardizeAutomatorCurrencyName(comparison.target)
           };
         }
         return {
@@ -914,29 +918,27 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Wait[0].startLine;
         return true;
       },
-      compile: (ctx, C) => {
+      compile: (ctx, C) => () => {
         const evalComparison = C.visit(ctx.comparison);
         const doneWaiting = evalComparison();
-        return () => {
-          if (doneWaiting) {
-            const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
-            if (AutomatorData.isWaiting) {
-              AutomatorData.logCommandEvent(`Continuing after WAIT 
-                (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
-            } else {
-              AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
-                ctx.startLine);
-            }
-            AutomatorData.isWaiting = false;
-            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        if (doneWaiting) {
+          const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
+          if (AutomatorData.isWaiting) {
+            AutomatorData.logCommandEvent(`Continuing after WAIT 
+              (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+          } else {
+            AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
+              ctx.startLine);
           }
-          if (!AutomatorData.isWaiting) {
-            AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
-            AutomatorData.waitStart = Date.now();
-          }
-          AutomatorData.isWaiting = true;
-          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
-        };
+          AutomatorData.isWaiting = false;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        if (!AutomatorData.isWaiting) {
+          AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
+          AutomatorData.waitStart = Date.now();
+        }
+        AutomatorData.isWaiting = true;
+        return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
       blockify: (ctx, B) => {
         const commands = [];
@@ -946,7 +948,7 @@ const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WAIT,
           ...comparison,
-          target: comparison.target.toUpperCase()
+          target: standardizeAutomatorCurrencyName(comparison.target)
         };
       }
     },
@@ -1006,10 +1008,12 @@ const AutomatorCommands = ((() => {
       blockify: (ctx, B) => {
         const commands = [];
         B.visit(ctx.block, commands);
+        const comparison = B.visit(ctx.comparison);
         return {
           nest: commands,
           ...automatorBlocksMap.WHILE,
-          ...B.visit(ctx.comparison)
+          ...comparison,
+          target: standardizeAutomatorCurrencyName(comparison.target)
         };
       }
     }

@@ -96,8 +96,10 @@ function buyDilationUpgrade(id, bulk = 1) {
   return true;
 }
 
-function getTachyonGalaxyMult() {
-  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
+function getTachyonGalaxyMult(thresholdUpgrade) {
+  // This specifically needs to be an undefined check because sometimes thresholdUpgrade is zero
+  const upgrade = thresholdUpgrade === undefined ? DilationUpgrade.galaxyThreshold.effectValue : thresholdUpgrade;
+  const thresholdMult = 3.65 * upgrade + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
   return 1 + thresholdMult * glyphReduction;
@@ -114,11 +116,9 @@ function getDilationGainPerSecond() {
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(
-    Math.clampMin(Decimal.log10(player.replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
+    Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
-  if (Enslaved.isRunning) {
-    dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  }
+  if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;

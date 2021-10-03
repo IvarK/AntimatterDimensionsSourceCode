@@ -59,6 +59,8 @@ Vue.component("current-glyph-effects", {
   data() {
     return {
       effects: [],
+      hasEffarig: false,
+      hasReality: false,
     };
   },
   created() {
@@ -69,6 +71,15 @@ Vue.component("current-glyph-effects", {
     isSoftcapActive() {
       return this.effects.length && !this.effects.every(e => e.value.capped === false);
     },
+    uniqueGlyphText() {
+      if (!this.hasEffarig && !this.hasReality) return "";
+      const uniqueGlyphs = [];
+      if (this.hasEffarig) uniqueGlyphs.push(`<span style="color: ${GlyphTypes.effarig.color};">Effarig</span>`);
+      if (this.hasReality) uniqueGlyphs.push(
+        `<span style="animation: a-reality-glyph-description-cycle 10s infinite;">Reality</span>`);
+      return `You cannot have more than one ${uniqueGlyphs.join(" or ")} 
+        Glyph equipped${uniqueGlyphs.length > 1 ? " each." : "."}`;
+    },
     noEffects() {
       return !this.effects.length;
     },
@@ -77,9 +88,13 @@ Vue.component("current-glyph-effects", {
     }
   },
   methods: {
+    update() {
+      this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
+      this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
+    },
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
-    }
+    },
   },
   template: `
     <div class="c-current-glyph-effects l-current-glyph-effects">
@@ -87,11 +102,13 @@ Vue.component("current-glyph-effects", {
         Currently active glyph effects:
       </div>
       <glyph-set-name :glyphSet="glyphSet" />
-      <br>
+      <br v-if="isSoftcapActive || hasEffarig || hasReality">
+      <span v-html="uniqueGlyphText" />
       <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
         <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
         due to a softcap
       </div>
+      <br>
       <div v-if="noEffects">
         None (equip Glyphs to get their effects)
       </div>

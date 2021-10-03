@@ -150,7 +150,7 @@ class RaPetState {
       : 0;
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
-    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk() *
+    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk *
       this.memoryUpgradeCurrentMult;
     this.memoryChunks += newMemoryChunks;
     this.memories += newMemories;
@@ -184,7 +184,7 @@ const Ra = {
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
       get chunkGain() { return "Relic Shards gained"; }
-      get memoryGain() { return "best glyph level"; }
+      get memoryGain() { return "best Glyph level"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
@@ -212,7 +212,7 @@ const Ra = {
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
       get chunkGain() { return "Infinity Power"; }
-      get memoryGain() { return "total Celestial Memory levels"; }
+      get memoryGain() { return "total Memory levels"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5); }
@@ -242,14 +242,26 @@ const Ra = {
     }
   },
   memoryTick(realDiff, generateChunks) {
+    if (!this.isUnlocked) return;
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
-  productionPerMemoryChunk() {
+  get productionPerMemoryChunk() {
     let res = RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectOrDefault(1);
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }
     return res;
+  },
+  get memoryBoostResources() {
+    const boostList = [];
+    for (const pet of Ra.pets.all) {
+      if (pet.memoryProductionMultiplier !== 1) boostList.push(pet.memoryGain);
+    }
+    if (Ra.has(RA_UNLOCKS.TT_BOOST)) boostList.push("current Time Theorems");
+
+    if (boostList.length === 1) return `${boostList[0]}`;
+    if (boostList.length === 2) return `${boostList[0]} and ${boostList[1]}`;
+    return `${boostList.slice(0, -1).join(", ")}, and ${boostList[boostList.length - 1]}`;
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredMemoriesForLevel(level) {
@@ -297,11 +309,6 @@ const Ra = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
-    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
-    if (!BlackHoles.areNegative) {
-      player.minNegativeBlackHoleThisReality = 1;
-    }
-    Glyphs.updateMaxGlyphCount(true);
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
@@ -317,6 +324,9 @@ const Ra = {
   theoremBoostFactor() {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, Currency.timeTheorems.value.pLog10() - 350) / 50);
+  },
+  get isUnlocked() {
+    return V.spaceTheorems >= 36;
   },
   get isRunning() {
     return player.celestials.ra.run;
@@ -346,9 +356,12 @@ const Ra = {
     }
   },
   updateAlchemyFlow() {
+    // This is an exponential moving average where every change added to the sum decays away over some characteristic
+    // time span. expAvgFactor needs to be equal to the tick rate in order for the actual value over time to be
+    // independent of it, and the Math.pow() makes each contribution decay to 1/e of the original value over 5 seconds.
     const expAvgFactor = player.options.updateRate / 1000;
     for (const resource of AlchemyResources.all) {
-      resource.flow = (1 - expAvgFactor) * resource.flow + expAvgFactor * (resource.amount - resource.before);
+      resource.flow = Math.pow(1 - expAvgFactor, 0.2) * resource.flow + (resource.amount - resource.before);
       resource.before = resource.amount;
     }
   },
@@ -541,7 +554,7 @@ const RA_UNLOCKS = {
   AUTO_BLACK_HOLE_POWER: {
     id: 14,
     description: "Unlock Enslaved",
-    reward: "Black Hole power upgrades are bought automatically",
+    reward: "Unlock Black Hole power upgrade autobuyers",
     pet: Ra.pets.enslaved,
     level: 1,
     displayIcon: `<span class="fas fa-circle"></span>`
@@ -600,19 +613,19 @@ const RA_UNLOCKS = {
     level: 25,
     displayIcon: `<span class="fas fa-clock"></span>`
   },
-  AUTO_REALITY_UPGRADES: {
+  AUTO_RU_AND_INSTANT_EC: {
     id: 21,
     description: "Unlock V",
-    reward: "The rebuyable Reality upgrades are bought automatically",
+    reward: "The rebuyable Reality upgrades are bought automatically and Auto-Eternity Challenges happen instantly",
     pet: Ra.pets.v,
     level: 1,
     displayIcon: `<span class="fas fa-sync-alt"></span>`
   },
-  INSTANT_AUTOEC: {
+  AUTO_DILATION_UNLOCK: {
     id: 22,
     description: "Get V to level 2",
-    reward: () => `Auto-Eternity Challenges happen instantly and Time Dilation is unlocked automatically
-      at ${formatInt(17000)} Time Theorems`,
+    reward: () => `Time Dilation is unlocked automatically for free at ${formatInt(13000)} Time Theorems outside of
+      Celestial Realities`,
     pet: Ra.pets.v,
     level: 2,
     displayIcon: `<span class="fas fa-fast-forward"></span>`
@@ -640,6 +653,8 @@ const RA_UNLOCKS = {
     description: "Get V to level 10",
     reward: "Time Theorems boost all forms of continuous non-dimension production",
     effect: {
+      // All of these are accessed directly from RA_UNLOCKS across much of the game, but are effectively dummied out
+      // before the upgrade itself is unlocked due to theoremBoostFactor evaluating to zero if the upgrade is missing.
       ttGen: () => Math.pow(10, 5 * Ra.theoremBoostFactor()),
       eternity: () => Math.pow(10, 2 * Ra.theoremBoostFactor()),
       infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),

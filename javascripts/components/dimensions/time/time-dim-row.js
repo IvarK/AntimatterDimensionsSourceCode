@@ -11,6 +11,7 @@ Vue.component("time-dim-row", {
       isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
+      bought: 0,
       rateOfChange: new Decimal(0),
       cost: new Decimal(0),
       isAvailableForPurchase: false,
@@ -18,6 +19,7 @@ Vue.component("time-dim-row", {
       requirementReached: false,
       realityUnlocked: false,
       showTTCost: false,
+      ttCost: 0,
     };
   },
   watch: {
@@ -38,22 +40,19 @@ Vue.component("time-dim-row", {
         : "";
     },
     buttonContents() {
-      if (this.showTTCost) {
-        return this.formattedTTCost;
-      }
+      if (this.showTTCost) return this.formattedTTCost;
       return this.formattedEPCost;
     },
     tooltipContents() {
-      if (this.showTTCost) {
-        return this.formattedEPCost;
-      }
-      return null;
+      if (this.showTTCost) return this.formattedEPCost;
+      if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} Time Dimension`;
+      return `Purchased ${formatInt(this.bought)} ${pluralize("time", this.bought)}`;
     },
     showRow() {
       return this.realityUnlocked || this.isUnlocked || this.requirementReached;
     },
     formattedTTCost() {
-      return `Unlock: ${format(DilationTimeStudyState.studies[this.tier - 3].cost)} TT`;
+      return `Unlock: ${format(this.ttCost)} TT`;
     },
     formattedEPCost() {
       return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
@@ -67,6 +66,7 @@ Vue.component("time-dim-row", {
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
+      this.bought = dimension.bought;
       if (tier < 8) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
@@ -79,6 +79,7 @@ Vue.component("time-dim-row", {
       this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
       this.showTTCost = !this.isUnlocked && !this.shiftDown;
+      if (this.tier > 4) this.ttCost = TimeStudy.timeDimension(this.tier).cost;
     },
     buyTimeDimension() {
       if (!this.isUnlocked) {

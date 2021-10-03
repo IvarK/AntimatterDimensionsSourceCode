@@ -56,7 +56,7 @@ class TimeTheoremPurchaseType {
       this.add(1);
       purchased = true;
     }
-    if (purchased) player.achievementChecks.noTheoremPurchases = false;
+    if (purchased) player.requirementChecks.reality.noPurchasedTT = false;
     return purchased;
   }
 

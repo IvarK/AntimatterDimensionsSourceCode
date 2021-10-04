@@ -135,6 +135,10 @@ const AutomatorLexer = (() => {
     $autocomplete: "pending EP",
     $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
   });
+  createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
+    $autocomplete: "pending TP",
+    $getter: () => getTachyonGain(),
+  });
   createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",
     $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))

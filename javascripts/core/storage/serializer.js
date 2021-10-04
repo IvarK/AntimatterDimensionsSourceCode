@@ -3,7 +3,7 @@
 const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);
-    return this.encodeText(json, false);
+    return this.encodeText(json, "savefile");
   },
   // eslint-disable-next-line no-unused-vars
   jsonConverter(key, value) {
@@ -18,7 +18,7 @@ const GameSaveSerializer = {
   deserialize(data) {
     if (typeof data !== "string") return undefined;
     try {
-      const json = this.decodeText(data, false);
+      const json = this.decodeText(data, "savefile");
       // eslint-disable-next-line no-unused-vars
       return JSON.parse(json, (k, v) => ((v === Infinity) ? "Infinity" : v));
     } catch (e) {
@@ -28,11 +28,10 @@ const GameSaveSerializer = {
   // Define these now so we don't keep creating new ones, which vaguely seems bad.
   encoder: new TextEncoder(),
   decoder: new TextDecoder(),
-  // This is a magic string savefiles should start with.
-  savefileStartingString: "AntimatterDimensionsSavefileFormatAAA",
-  automatorScriptStartingString: "AntimatterDimensionsAutomatorScriptFormatAAA",
-  startingString(isScript) {
-    return isScript ? this.automatorScriptStartingString : this.savefileStartingString;
+  // These are magic strings that savefiles/automator scripts should start with.
+  startingString: {
+    savefile: "AntimatterDimensionsSavefileFormatAAA",
+    ["automator script"]: "AntimatterDimensionsAutomatorScriptFormatAAA"
   },
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
@@ -69,28 +68,28 @@ const GameSaveSerializer = {
       decode: x => x.replace(/0b/gu, "+").replace(/0c/gu, "/").replace(/0a/gu, "0")
     }
   ],
-  getSteps(isScript) {
+  getSteps(type) {
     // This is a version marker, as well as indicating to players that this is from AD
     // and whether it's a save or automator script. We can change the last 3 letters
     // of the string savefiles start with from AAA to something else,
     // if we want a new version of savefile encoding.
     return this.steps.concat({
-      encode: x => `${GameSaveSerializer.startingString(isScript)}${x}`,
-      decode: x => x.slice(GameSaveSerializer.startingString(isScript).length)
+      encode: x => `${GameSaveSerializer.startingString[type]}${x}`,
+      decode: x => x.slice(GameSaveSerializer.startingString[type].length)
     });
   },
   // Apply each step's encode function in encoding order.
-  encodeText(text, isScript) {
-    return this.getSteps(isScript).reduce((x, step) => step.encode(x), text);
+  encodeText(text, type) {
+    return this.getSteps(type).reduce((x, step) => step.encode(x), text);
   },
   // Apply each step's decode function in decoding order (reverse of encoding order).
   // Only do this if we recognize the initial version. If not, just use atob.
   // Old saves always started with eYJ and old automator scripts (where this
   // function is also used) are very unlikely to start with our magic string
   // due to it being more than a few characters long.
-  decodeText(text, isScript) {
-    if (text.startsWith(this.startingString(isScript))) {
-      return this.getSteps(isScript).reduceRight((x, step) => step.decode(x), text);
+  decodeText(text, type) {
+    if (text.startsWith(this.startingString[type])) {
+      return this.getSteps(type).reduceRight((x, step) => step.decode(x), text);
     }
     return atob(text);
   }

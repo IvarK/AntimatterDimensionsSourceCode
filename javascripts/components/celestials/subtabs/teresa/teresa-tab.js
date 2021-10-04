@@ -18,6 +18,7 @@ Vue.component("teresa-tab", {
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
+      raisedPerkShop: false,
       isRunning: false,
       canUnlockNextPour: false,
     };
@@ -26,13 +27,15 @@ Vue.component("teresa-tab", {
     unlockInfo: () => Teresa.unlockInfo,
     pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
-      return [
+      const upgrades = [
         PerkShopUpgrade.glyphLevel,
         PerkShopUpgrade.rmMult,
         PerkShopUpgrade.bulkDilation,
         PerkShopUpgrade.autoSpeed,
         PerkShopUpgrade.musicGlyph,
       ];
+      if (this.raisedPerkShop) upgrades.push(PerkShopUpgrade.fillMusicGlyph);
+      return upgrades;
     },
     runButtonClassObject() {
       return {
@@ -72,6 +75,7 @@ Vue.component("teresa-tab", {
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
+      this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
       this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);
@@ -128,7 +132,7 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            You gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute every second.
+            Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">

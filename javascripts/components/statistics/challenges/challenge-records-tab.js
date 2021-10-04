@@ -21,7 +21,7 @@ Vue.component("challenge-records-tab", {
       <challenge-records-list
         :start="2"
         :times="normalChallenges"
-        name="Challenge"
+        name="Normal Challenge"
       />
       <challenge-records-list
         v-if="infinityChallengesUnlocked"

@@ -102,7 +102,7 @@ Vue.component("automator-docs", {
       } else {
         // Append the script name into the beginning of the string as "name_length||name||"
         const name = AutomatorData.currentScriptName();
-        copyToClipboard(GameSaveSerializer.encodeText(`${name.length}||${name}||${trimmed}`));
+        copyToClipboard(GameSaveSerializer.encodeText(`${name.length}||${name}||${trimmed}`, true));
         GameUI.notify.info("Exported current Automator script to your clipboard");
       }
     },

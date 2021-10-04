@@ -3,7 +3,7 @@
 const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);
-    return this.encodeText(json);
+    return this.encodeText(json, false);
   },
   // eslint-disable-next-line no-unused-vars
   jsonConverter(key, value) {
@@ -18,7 +18,7 @@ const GameSaveSerializer = {
   deserialize(data) {
     if (typeof data !== "string") return undefined;
     try {
-      const json = this.decodeText(data);
+      const json = this.decodeText(data, false);
       // eslint-disable-next-line no-unused-vars
       return JSON.parse(json, (k, v) => ((v === Infinity) ? "Infinity" : v));
     } catch (e) {
@@ -29,7 +29,11 @@ const GameSaveSerializer = {
   encoder: new TextEncoder(),
   decoder: new TextDecoder(),
   // This is a magic string savefiles should start with.
-  saveFileStartingString: 'AntimatterDimensionsSaveFileAAA',
+  savefileStartingString: "AntimatterDimensionsSavefileFormatAAA",
+  automatorScriptStartingString: "AntimatterDimensionsAutomatorScriptFormatAAA",
+  startingString(isScript) {
+    return isScript ? this.automatorScriptStartingString : this.savefileStartingString;
+  },
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
   // from having them be different seems not to be worth it.
@@ -47,7 +51,7 @@ const GameSaveSerializer = {
     // This step converts from unsigned 8-bit arrays to strings with codepoints less than 256.
     // We need to do this outselves because GameSaveSerializer.decoder would give us unicode sometimes.
     {
-      encode: x => Array.from(x).map(i => String.fromCharCode(i)).join(''),
+      encode: x => Array.from(x).map(i => String.fromCharCode(i)).join(""),
       decode: x => Uint8Array.from(Array.from(x).map(i => i.charCodeAt(0)))
     },
     // This step makes the characters in saves printable. At this point in the process, all characters
@@ -61,29 +65,32 @@ const GameSaveSerializer = {
     // These regex have no potentially-unicode characters, I think, and they're applied to strings
     // with just ASCII anyway, but I'm adding u to make Codeacy happy.
     {
-      encode: x => x.replace(/0/gu, '0a').replace(/\+/gu, '0b').replace(/\//gu, '0c'),
-      decode: x => x.replace(/0b/gu, '+').replace(/0c/gu, '/').replace(/0a/gu, '0')
-    },
-    // This is a version marker, as well as indicating to players that this is an AD save.
-    // We can change the last 3 letters of the string savefiles start with from AAA
-    // if we want a new version of savefile encoding.
-    {
-      encode: x => `${GameSaveSerializer.saveFileStartingString}${x}`,
-      decode: x => x.slice(GameSaveSerializer.saveFileStartingString.length)
-    },
+      encode: x => x.replace(/0/gu, "0a").replace(/\+/gu, "0b").replace(/\//gu, "0c"),
+      decode: x => x.replace(/0b/gu, "+").replace(/0c/gu, "/").replace(/0a/gu, "0")
+    }
   ],
+  getSteps(isScript) {
+    // This is a version marker, as well as indicating to players that this is from AD
+    // and whether it's a save or automator script. We can change the last 3 letters
+    // of the string savefiles start with from AAA to something else,
+    // if we want a new version of savefile encoding.
+    return this.steps.concat({
+      encode: x => `${GameSaveSerializer.startingString(isScript)}${x}`,
+      decode: x => x.slice(GameSaveSerializer.startingString(isScript).length)
+    });
+  },
   // Apply each step's encode function in encoding order.
-  encodeText(text) {
-    return this.steps.reduce((x, step) => step.encode(x), text);
+  encodeText(text, isScript) {
+    return this.getSteps(isScript).reduce((x, step) => step.encode(x), text);
   },
   // Apply each step's decode function in decoding order (reverse of encoding order).
   // Only do this if we recognize the initial version. If not, just use atob.
   // Old saves always started with eYJ and old automator scripts (where this
   // function is also used) are very unlikely to start with our magic string
   // due to it being more than a few characters long.
-  decodeText(text) {
-    if (text.startsWith(this.saveFileStartingString)) {
-      return this.steps.reduceRight((x, step) => step.decode(x), text);
+  decodeText(text, isScript) {
+    if (text.startsWith(this.startingString(isScript))) {
+      return this.getSteps(isScript).reduceRight((x, step) => step.decode(x), text);
     }
     return atob(text);
   }

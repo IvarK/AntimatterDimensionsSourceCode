@@ -9,7 +9,7 @@ const TERESA_UNLOCKS = {
   EPGEN: {
     id: 1,
     price: 1e18,
-    description: "Unlock Teresa's Eternity Point generation.",
+    description: "Unlock passive Eternity Point generation.",
   },
   EFFARIG: {
     id: 2,
@@ -19,7 +19,7 @@ const TERESA_UNLOCKS = {
   SHOP: {
     id: 3,
     price: 1e24,
-    description: "Unlock Perk Point Shop.",
+    description: "Unlock the Perk Point Shop.",
   },
   UNDO: {
     id: 4,

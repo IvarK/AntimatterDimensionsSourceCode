@@ -128,7 +128,7 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            You gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute every second.
+            Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">

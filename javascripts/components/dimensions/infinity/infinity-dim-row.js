@@ -6,6 +6,7 @@ Vue.component("infinity-dim-row", {
   },
   data() {
     return {
+      hasPrevTier: false,
       isUnlocked: false,
       multiplier: new Decimal(0),
       baseAmount: 0,
@@ -63,13 +64,15 @@ Vue.component("infinity-dim-row", {
       return `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
     },
     showRow() {
-      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0);
+      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0) ||
+        this.hasPrevTier;
     }
   },
   methods: {
     update() {
       const tier = this.tier;
       const dimension = InfinityDimension(tier);
+      this.hasPrevTier = tier === 1 || InfinityDimension(tier - 1).isUnlocked;
       const autobuyer = Autobuyer.infinityDimension(tier);
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);

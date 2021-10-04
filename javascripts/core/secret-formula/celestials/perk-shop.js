@@ -7,7 +7,7 @@ GameDatabase.celestials.perkShop = (function() {
   function rebuyable(config) {
     return {
       id: config.id,
-      cost: () => rebuyableCost(config.initialCost, config.increment, config.id),
+      cost: () => (config.cost ? config.cost() : rebuyableCost(config.initialCost, config.increment, config.id)),
       cap: config.cap,
       costCap: config.costCap,
       description: config.description,
@@ -25,7 +25,7 @@ GameDatabase.celestials.perkShop = (function() {
       description: () => `Increase glyph levels by ${formatPercents(0.05)}`,
       effect: bought => Math.pow(1.05, bought),
       formatEffect: value => formatX(value, 2, 2),
-      formatCost: value => format(value, 2, 0),
+      formatCost: value => format(value, 2),
       costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? Math.pow(1.05, 20) : Math.pow(1.05, 11))
     }),
@@ -35,8 +35,8 @@ GameDatabase.celestials.perkShop = (function() {
       increment: 2,
       description: "Double Reality Machine gain",
       effect: bought => Math.pow(2, bought),
-      formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0),
+      formatEffect: value => formatX(value, 2),
+      formatCost: value => format(value, 2),
       costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
     }),
@@ -46,8 +46,8 @@ GameDatabase.celestials.perkShop = (function() {
       increment: 2,
       description: "Buy twice as many Dilation Upgrades at once.",
       effect: bought => Math.pow(2, bought),
-      formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0),
+      formatEffect: value => formatX(value, 2),
+      formatCost: value => format(value, 2),
       costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1638400 : 1600),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 16384 : 16),
     }),
@@ -58,19 +58,26 @@ GameDatabase.celestials.perkShop = (function() {
       description: () => `Infinity Dimension, Time Dimension, Time Theorem, Dilation,
         and Replicanti autobuyers are ${formatX(2)} faster.`,
       effect: bought => Math.pow(2, bought),
-      formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0),
+      formatEffect: value => formatX(value, 2),
+      formatCost: value => format(value, 2),
       costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64000 : 4000),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64 : 4)
     }),
     musicGlyph: rebuyable({
       id: 4,
-      initialCost: 1,
-      increment: 1,
       description: () => `Receive a Music Glyph of a random type that is ${formatPercents(0.8)} of your highest level.
         (Try clicking it!)`,
-      effect: bought => Decimal.pow(3, bought),
-      formatCost: value => format(value, 2, 0),
+      cost: () => 1,
+      formatCost: value => formatInt(value),
+      costCap: () => Number.MAX_VALUE,
+      cap: () => Number.MAX_VALUE
+    }),
+    // Only appears with the perk shop increase upgrade
+    fillMusicGlyph: rebuyable({
+      id: 5,
+      description: () => `Fill all empty slots in your inventory with Music Glyphs`,
+      cost: () => Glyphs.freeInventorySpace,
+      formatCost: value => formatInt(value),
       costCap: () => Number.MAX_VALUE,
       cap: () => Number.MAX_VALUE
     }),

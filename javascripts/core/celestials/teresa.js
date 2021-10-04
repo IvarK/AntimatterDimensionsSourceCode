@@ -153,6 +153,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }
+    // Give a single music glyph
     if (this.id === 4) {
       if (Glyphs.freeInventorySpace === 0) {
         // Refund the perk point if they didn't actually get a glyph
@@ -162,6 +163,12 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
         Glyphs.addToInventory(GlyphGenerator.musicGlyph());
         GameUI.notify.success("Created a Music Glyph");
       }
+    }
+    // Fill the inventory with music glyphs
+    if (this.id === 5) {
+      const toCreate = Glyphs.freeInventorySpace;
+      for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      GameUI.notify.success(`Created ${toCreate} ${pluralize("Music Glyph", toCreate)}`);
     }
   }
 }
@@ -174,6 +181,7 @@ const PerkShopUpgrade = (function() {
     bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
     autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
     musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
+    fillMusicGlyph: new PerkShopUpgradeState(db.fillMusicGlyph),
   };
 }());
 

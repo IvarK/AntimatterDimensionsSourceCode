@@ -29,9 +29,17 @@ const GameSaveSerializer = {
   encoder: new TextEncoder(),
   decoder: new TextDecoder(),
   // These are magic strings that savefiles/automator scripts should start with.
+  // Due to the way atob/btoa work, old saves (before the reality update and for
+  // a significant part of its development) always started with eYJ even though
+  // it wasn't explicitly added. If you want to make a mod of AD, you may want to
+  // rename "savefile" to "modless savefile" or something and create a new
+  // "savefile" or "mod savefile" property with a string like
+  // "AntimatterDimensions[mod name]SavefileFormatAAA", so that people don't
+  // confuse your saves with AD saves but can still import AD saves (this will
+  // also require changing some other code slightly, particularly decode).
   startingString: {
     savefile: "AntimatterDimensionsSavefileFormatAAA",
-    ["automator script"]: "AntimatterDimensionsAutomatorScriptFormatAAA"
+    "automator script": "AntimatterDimensionsAutomatorScriptFormatAAA"
   },
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
@@ -82,11 +90,14 @@ const GameSaveSerializer = {
   encodeText(text, type) {
     return this.getSteps(type).reduce((x, step) => step.encode(x), text);
   },
-  // Apply each step's decode function in decoding order (reverse of encoding order).
-  // Only do this if we recognize the initial version. If not, just use atob.
-  // Old saves always started with eYJ and old automator scripts (where this
-  // function is also used) are very unlikely to start with our magic string
-  // due to it being more than a few characters long.
+  // Apply each step's decode function, in decoding order (which is the reverse
+  // of encoding order). We only do this if we recognize the string which tells
+  // us the save version. If we don't see it, we assume the save's old and just
+  // use atob. If you're adding a new savefile version, or you're making a mod,
+  // add another case to this conditional. Old saves (before the reality update
+  // and for a significant part of its development) always started with eYJ and
+  // old automator scripts (where this function is also used) are very unlikely
+  // to start with our magic string because it is longer than a few characters.
   decodeText(text, type) {
     if (text.startsWith(this.startingString[type])) {
       return this.getSteps(type).reduceRight((x, step) => step.decode(x), text);

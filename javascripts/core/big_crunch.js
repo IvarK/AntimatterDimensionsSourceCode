@@ -44,7 +44,7 @@ function bigCrunchReset() {
   Currency.infinities.add(gainedInfinities().round());
 
   bigCrunchTabChange(firstInfinity);
-  bigCrunchReplicanti();
+  bigCrunchResetValues();
   bigCrunchCheckUnlocks();
 
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
@@ -94,9 +94,12 @@ function bigCrunchTabChange(firstInfinity) {
   }
 }
 
-function bigCrunchReplicanti() {
+function bigCrunchResetValues() {
   const currentReplicanti = Replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
+  // For unknown reasons, everything but keeping of RGs (including resetting of RGs)
+  // is done in the function called below. For now, we're just trying to keep
+  // code structure similar to what it was before to avoid new bugs.
   secondSoftReset(true);
 
   let remainingGalaxies = 0;

@@ -6,20 +6,15 @@ Vue.component("challenge-records-list", {
     start: Number,
     times: Array
   },
-  data() {
-    return {
-      completedAllChallenges: false,
-    };
-  },
   computed: {
     timeSum() {
       return this.times.reduce((acc, prev) => acc + prev);
+    },
+    completedAllChallenges() {
+      return this.timeSum < Number.MAX_VALUE;
     }
   },
   methods: {
-    update() {
-      this.completedAllChallenges = this.timeSum < Number.MAX_VALUE;
-    },
     timeDisplayShort(time) {
       return timeDisplayShort(time);
     },

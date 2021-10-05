@@ -8,6 +8,7 @@ GameDatabase.celestials.perkShop = (function() {
     return {
       id: config.id,
       cost: () => (config.cost ? config.cost() : rebuyableCost(config.initialCost, config.increment, config.id)),
+      otherReq: config.otherReq,
       cap: config.cap,
       costCap: config.costCap,
       description: config.description,
@@ -76,7 +77,8 @@ GameDatabase.celestials.perkShop = (function() {
     fillMusicGlyph: rebuyable({
       id: 5,
       description: () => `Fill all empty slots in your inventory with Music Glyphs`,
-      cost: () => Glyphs.freeInventorySpace,
+      cost: () => Math.clampMin(Glyphs.freeInventorySpace, 1),
+      otherReq: () => Glyphs.freeInventorySpace > 0,
       formatCost: value => formatInt(value),
       costCap: () => Number.MAX_VALUE,
       cap: () => Number.MAX_VALUE

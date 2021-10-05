@@ -90,16 +90,13 @@ class NormalChallengeState extends GameMechanicState {
   start() {
     if (this.id === 1 || this.isRunning) return;
     if (!Tab.challenges.isUnlocked) return;
-    bigCrunchResetValues();
-
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
-
+    bigCrunchResetValues();
     if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.show(Enslaved.quotes.EC6C10);
     }
-
     startChallengeUI();
   }
 
@@ -211,12 +208,11 @@ class InfinityChallengeState extends GameMechanicState {
 
   start() {
     if (!this.isUnlocked || this.isRunning) return;
-    bigCrunchResetValues();
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
+    bigCrunchResetValues();
     startChallengeUI();
     player.break = true;
-
     if (EternityChallenge.isRunning) Achievement(115).unlock();
   }
 

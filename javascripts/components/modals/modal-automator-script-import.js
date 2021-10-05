@@ -18,9 +18,9 @@ Vue.component("modal-automator-script-import", {
   methods: {
     update() {
       try {
-        this.rawDecoded = atob(this.input);
+        this.rawDecoded = GameSaveSerializer.decodeText(this.input, "automator script");
       } catch (e) {
-        // Improperly encoded saves will cause atob() to throw an exception
+        // Improperly encoded scripts will cause decodeText() to throw an exception
         this.isValid = false;
       }
       this.decodeSave();

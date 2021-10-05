@@ -106,15 +106,17 @@ GameDatabase.reality.upgrades = (function() {
       name: "Linguistically Expand",
       id: 9,
       cost: 15,
-      requirement: () => `Reality using only a single level ${formatInt(3)}+ Glyph.`,
+      requirement: () => `Eternity for ${format("1e4000")} Eternity Points using
+        only a single level ${formatInt(3)}+ Glyph.`,
       hasFailed: () => {
         const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
           (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
         const hasValidGlyphInInventory = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
         return invalidEquippedGlyphs || (Glyphs.activeList.length === 0 && !hasValidGlyphInInventory);
       },
-      checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
+        Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Gain another Glyph slot",
       effect: () => 1
     },

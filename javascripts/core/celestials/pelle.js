@@ -72,7 +72,7 @@ const Pelle = {
 
   armageddon(gainStuff) {
     if (gainStuff) {
-      this.cel.unstableMatter = this.cel.unstableMatter.plus(this.unstableMatterGain);
+      this.cel.remnants = this.cel.remnants.plus(this.remnantsGain);
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
@@ -203,7 +203,7 @@ const Pelle = {
     return [142, 141, 125, 117, 92, 91];
   },
 
-  get unstableMatterGain() {
+  get remnantsGain() {
     const gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
     return gain;
   }
@@ -229,8 +229,8 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   get currencyDisplay() {
     switch (this.config.currency) {
-      case "unstableMatter":
-        return "Unstable Matter";
+      case "remnants":
+        return "Remnants";
 
       case "famine":
         return "Famine";
@@ -271,8 +271,8 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
 
   get currencyDisplay() {
     switch (this.config.currency) {
-      case "unstableMatter":
-        return "Unstable Matter";
+      case "remnants":
+        return "Remnants";
 
       case "famine":
         return "Famine";

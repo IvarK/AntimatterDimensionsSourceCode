@@ -574,7 +574,7 @@ let player = {
     pelle: {
       doomed: false,
       upgrades: new Set(),
-      unstableMatter: new Decimal(0),
+      remnants: new Decimal(0),
       famine: {
         amount: new Decimal(0),
         timer: 0,

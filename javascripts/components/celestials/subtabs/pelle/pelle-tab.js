@@ -6,12 +6,12 @@ Vue.component("pelle-tab", {
       isDoomed: false,
       armageddonInterval: 0,
       currentArmageddonDuration: 0,
-      unstableMatter: new Decimal(0),
+      remnants: new Decimal(0),
       hasFamine: false,
       hasPestilence: false,
       hasChaos: false,
-      unstableMatterGain: 0,
-      unstableMatterPerMinute: 0,
+      remnantsGain: 0,
+      remnantsPerMinute: 0,
       showBoughtUpgrades: false,
       unboughtUpgrades: [],
       boughtUpgrades: []
@@ -22,12 +22,12 @@ Vue.component("pelle-tab", {
       this.isDoomed = Pelle.isDoomed;
       this.armageddonInterval = Pelle.armageddonInterval;
       this.currentArmageddonDuration = Pelle.currentArmageddonDuration;
-      this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
+      this.remnants.copyFrom(player.celestials.pelle.remnants);
       this.hasFamine = Pelle.famine.unlocked;
       this.hasPestilence = Pelle.pestilence.unlocked;
       this.hasChaos = Pelle.chaos.unlocked;
-      this.unstableMatterGain = Pelle.unstableMatterGain;
-      this.unstableMatterPerMinute = Pelle.unstableMatterGain / 
+      this.remnantsGain = Pelle.remnantsGain;
+      this.remnantsPerMinute = Pelle.remnantsGain / 
         TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
       this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12);
       this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought);
@@ -69,9 +69,9 @@ Vue.component("pelle-tab", {
       <button @click="getDoomed()">Doom your reality lol</button>
       <p>Armageddon has lasted {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval / 1000, 2, 2) }} seconds</p>
       <p>
-        You have <b>{{ format(unstableMatter, 2, 2) }}</b>
-        Unstable matter, you will gain {{ format(unstableMatterGain, 2, 2) }} 
-        on next Armageddon ({{ format(unstableMatterPerMinute, 2, 2)}} / min).
+        You have <b>{{ format(remnants, 2, 2) }}</b>
+        Remnants, you will gain {{ format(remnantsGain, 2, 2) }} 
+        on next Armageddon ({{ format(remnantsPerMinute, 2, 2)}} / min).
       </p>
       <div class="c-pelle-currency-container">
         <pelle-currency currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>

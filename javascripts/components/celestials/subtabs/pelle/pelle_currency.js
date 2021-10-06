@@ -14,7 +14,7 @@ Vue.component("pelle-currency", {
       canBeBought: false,
       showRebuyable: false,
       speedUpgrades: 0,
-      unstableMatter: new Decimal(0)
+      remnants: new Decimal(0)
     };
   },
   computed: {
@@ -60,7 +60,7 @@ Vue.component("pelle-currency", {
       }
     },
     canBuySpeedUpgrade() {
-      return this.unstableMatter.gte(this.speedUpgradeConfig.cost);
+      return this.remnants.gte(this.speedUpgradeConfig.cost);
     },
     speedUpgradeClass() {
       return {
@@ -78,7 +78,7 @@ Vue.component("pelle-currency", {
 
       this.canBeBought = this.rebuyable.canBeBought;
       this.speedUpgrades = player.celestials.pelle[this.currency].speedUpgrades;
-      this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
+      this.remnants.copyFrom(player.celestials.pelle.remnants);
 
       switch (this.config.id) {
         case "permanentTickspeed":
@@ -114,7 +114,7 @@ Vue.component("pelle-currency", {
     },
     purchaseSpeedUpgrade() {
       if (!this.canBuySpeedUpgrade) return;
-      player.celestials.pelle.unstableMatter = player.celestials.pelle.unstableMatter.minus(this.speedUpgradeConfig.cost);
+      player.celestials.pelle.remnants = player.celestials.pelle.remnants.minus(this.speedUpgradeConfig.cost);
       player.celestials.pelle[this.currency].speedUpgrades++;
     }
   },
@@ -134,8 +134,8 @@ Vue.component("pelle-currency", {
       <effect-display br :config="speedUpgradeConfig" />
       <cost-display br
         :config="speedUpgradeConfig"
-        singular="Unstable Matter"
-        plural="Unstable Matter"
+        singular="Remnant"
+        plural="Remnants"
       />
     </div>
     <div

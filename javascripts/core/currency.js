@@ -366,9 +366,9 @@ Currency.perkPoints = new class extends NumberCurrency {
   set value(value) { player.reality.perkPoints = value; }
 }();
 
-Currency.unstableMatter = new class extends DecimalCurrency {
-  get value() { return player.celestials.pelle.unstableMatter; }
-  set value(value) { player.celestials.pelle.unstableMatter = value; }
+Currency.remnants = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.remnants; }
+  set value(value) { player.celestials.pelle.remnants = value; }
 }();
 
 Currency.famine = new class extends DecimalCurrency {

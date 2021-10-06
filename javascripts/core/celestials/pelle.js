@@ -15,52 +15,52 @@ const Pelle = {
       // Case: "glyphs"
 
       case "IPGain":
-        return !PelleUpgrade.ipGain.canBeApplied;
+        return true;
 
       case "EPGain":
-        return !PelleUpgrade.epGain.canBeApplied;
+        return true;
 
       case "achievements":
-        return !PelleUpgrade.achievementsBack.canBeApplied;
+        return true;
 
       case "IPMults":
-        return !PelleUpgrade.nerfedIPMult.canBeApplied;
+        return true;
 
       case "EPMults":
-        return !PelleUpgrade.nerfedEPMult.canBeApplied;
+        return true;
 
       case "galaxies":
-        return !PelleUpgrade.nerfedGalaxies.canBeApplied;
+        return true;
 
       case "InfinitiedMults":
-        return !PelleUpgrade.infinitiedGain.canBeApplied;
+        return true;
 
       case "infinitiedGen":
-        return !PelleUpgrade.passivePrestigeGain.canBeApplied;
+        return true;
 
       case "eternityGain":
-        return !PelleUpgrade.eternityGain.canBeApplied;
+        return true;
 
       case "eternityMults":
         return true;
 
       case "studies":
-        return !PelleUpgrade.studiesUnlock.canBeApplied;
+        return true;
 
       case "EPgen":
-        return !PelleUpgrade.passiveEP.canBeApplied;
+        return true;
 
       case "autoec":
-        return !PelleUpgrade.autoEc.canBeApplied;
+        return true;
 
       case "replicantiIntervalMult":
-        return !PelleUpgrade.replicantiSpeedMultipliers.canBeApplied;
+        return true;
 
       case "tpMults":
-        return !PelleUpgrade.nerfedTPMult.canBeApplied;
+        return true;
       
       case "equipGlyphs":
-        return !PelleUpgrade.firstGlyph.canBeApplied;
+        return true;
 
       case "V":
         return true;
@@ -108,29 +108,19 @@ const Pelle = {
         }
       }
     });
-
-    if (PelleUpgrade.passiveUnstableMatter.canBeApplied) {
-      this.cel.unstableMatter = this.cel.unstableMatter.plus(
-        this.unstableMatterGain * (TimeSpan.fromMilliseconds(diff).totalSeconds / 3)
-      );
-    }
   },
 
   famine: {
     get fillTime() {
-      const div = PelleUpgrade.famineGain.canBeApplied ? 2 : 1;
+      const div = 1;
       const speedUpgradeEffect = 1.2 ** player.celestials.pelle.famine.speedUpgrades;
       return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) / div / speedUpgradeEffect;
     },
     get gain() {
-      let base = 1;
-      if (PelleUpgrade.famineGain.canBeApplied) base *= 2;
-      if (PelleUpgrade.moreFamine.canBeApplied) base *= 5;
-      if (PelleUpgrade.pestilenceUnlock.canBeApplied) base *= Pelle.pestilence.famineGainMult;
-      if (PelleUpgrade.famineMultFromRebuyables.canBeApplied) base *= PelleUpgrade.famineMultFromRebuyables.effectValue;
+      const base = 1;
       return base;
     },
-    get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied; },
+    get unlocked() { return false; },
     get multiplierToAntimatter() {
       let base = Decimal.pow(1.1, player.celestials.pelle.famine.amount);
       if (base.gte(1e100)) {
@@ -157,12 +147,9 @@ const Pelle = {
     get gain() {
       let gain = 1;
       if (Pelle.chaos.unlocked) gain *= Pelle.chaos.pestilenceGainMult;
-      if (PelleUpgrade.pestilenceMultFromRebuyables.canBeApplied) {
-        gain *= PelleUpgrade.pestilenceMultFromRebuyables.effectValue;
-      }
       return gain;
     },
-    get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied; },
+    get unlocked() { return false; },
     get armageddonTimeMultiplier() { return Math.max(player.celestials.pelle.pestilence.amount.plus(1).log10(), 1); },
     get famineGainMult() { return player.celestials.pelle.pestilence.amount.pow(0.5).plus(1).toNumber(); },
     get bonusDescription() { 
@@ -176,23 +163,17 @@ const Pelle = {
       return 10 / (Currency.timeShards.value.plus(1).log10() ** 0.3 / 3) / speedUpgradeEffect;
     },
     get gain() {
-      let gain = 1;
-      if (PelleUpgrade.chaosMultiplier.canBeApplied) gain *= PelleUpgrade.chaosMultiplier.effectValue;
-      if (PelleUpgrade.chaosMultFromRebuyables.canBeApplied) gain *= PelleUpgrade.chaosMultFromRebuyables.effectValue;
+      const gain = 1;
       return gain;
     },
-    get unlocked() { return PelleUpgrade.chaosUnlock.canBeApplied; },
+    get unlocked() { return false; },
     get dimensionDiscount() { return new Decimal(10).pow(Currency.chaos.value.pow(2)).min(Decimal.MAX_VALUE); },
     get pestilenceGainMult() { return Currency.chaos.value.pow(0.5).plus(1).toNumber(); },
     get bonusDescription() { 
       let dimensionString = "";
-      if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied) dimensionString += "1st, ";
-      if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied) dimensionString += "4th, ";
       dimensionString += "6th";
       const hasMultiple = dimensionString.length > 3;
       if (hasMultiple) dimensionString = dimensionString.splice(dimensionString.lastIndexOf(","), 1, " and");
-      
-      if (PelleUpgrade.chaosAllDimensions.canBeApplied) dimensionString = "1st - 7th";
       return `${dimensionString} Antimatter Dimension${hasMultiple ? "s" : ""} ${hasMultiple ? "are" : "is"} ` +
         `${formatX(this.dimensionDiscount, 2, 2)} cheaper, ` +
         `you gain ${formatX(this.pestilenceGainMult, 2, 2)} more Pestilence.`;
@@ -213,10 +194,8 @@ const Pelle = {
 
   // Milliseconds
   get armageddonInterval() {
-    let base = PelleUpgrade.longerArmageddon.canBeApplied ? 5000 : 500;
-    if (PelleUpgrade.doubleArmageddon.canBeApplied) base *= 2;
+    let base = 5000;
     if (this.pestilence.unlocked) base *= Pelle.pestilence.armageddonTimeMultiplier;
-    if (PelleUpgrade.unspentTTArmageddon.canBeApplied) base *= PelleUpgrade.unspentTTArmageddon.effectValue;
     return base;
   },
 
@@ -225,13 +204,7 @@ const Pelle = {
   },
 
   get unstableMatterGain() {
-    let gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
-    if (PelleUpgrade.timeMultToUnstable.canBeApplied) {
-      gain *= PelleUpgrade.timeMultToUnstable.effectValue;
-    }
-    if (PelleUpgrade.rgMultToUnstable.canBeApplied) {
-      gain *= PelleUpgrade.rgMultToUnstable.effectValue;
-    }
+    const gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
     return gain;
   }
 };

@@ -15,8 +15,7 @@ function infinityDimensionCommonMultiplier() {
       EternityUpgrade.idMultEternities,
       EternityUpgrade.idMultICRecords,
       AlchemyResource.dimensionality,
-      ImaginaryUpgrade(8),
-      PelleUpgrade.infDimMultiplier
+      ImaginaryUpgrade(8)
     );
 
   if (Replicanti.areUnlocked && player.replicanti.amount.gt(1)) {
@@ -187,7 +186,7 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
-    mult = mult.powEffectsOf(AlchemyResource.infinity, PelleUpgrade.infinityDimensionPower);
+    mult = mult.powEffectsOf(AlchemyResource.infinity);
     mult = mult.pow(Ra.momentumValue);
 
     if (player.dilation.active) {
@@ -294,7 +293,6 @@ const InfinityDimensions = {
   },
 
   resetAmount() {
-    if (Pelle.isDoomed && PelleUpgrade.infDimRetain.canBeApplied) return;
     Currency.infinityPower.reset();
     for (const dimension of InfinityDimensions.all) {
       dimension.resetAmount();
@@ -302,7 +300,6 @@ const InfinityDimensions = {
   },
 
   fullReset() {
-    if (Pelle.isDoomed && PelleUpgrade.infDimRetain.canBeApplied) return;
     for (const dimension of InfinityDimensions.all) {
       dimension.fullReset();
     }

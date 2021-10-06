@@ -23,13 +23,14 @@ Vue.component("pelle-tab", {
       this.armageddonInterval = Pelle.armageddonInterval;
       this.currentArmageddonDuration = Pelle.currentArmageddonDuration;
       this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
-      this.hasFamine =  Pelle.famine.unlocked;
+      this.hasFamine = Pelle.famine.unlocked;
       this.hasPestilence = Pelle.pestilence.unlocked;
       this.hasChaos = Pelle.chaos.unlocked;
       this.unstableMatterGain = Pelle.unstableMatterGain;
-      this.unstableMatterPerMinute = Pelle.unstableMatterGain / TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
-      this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12)
-      this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought)
+      this.unstableMatterPerMinute = Pelle.unstableMatterGain / 
+        TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
+      this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12);
+      this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought);
     },
     getDoomed() {
       player.celestials.pelle.doomed = true;

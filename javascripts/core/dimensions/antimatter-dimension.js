@@ -167,10 +167,6 @@ function applyNDPowers(mult, tier) {
     multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
 
-  if (PelleUpgrade.longArmageddonBoost.canBeApplied && Pelle.currentArmageddonDuration > 100 * 1000) {
-    multiplier = multiplier.pow(PelleUpgrade.longArmageddonBoost.effectValue);
-  }
-
   return multiplier;
 }
 
@@ -373,11 +369,7 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   get discount() {
-    if (
-      (PelleUpgrade.chaosAllDimensions.canBeApplied && this.tier !== 8) ||
-      (Pelle.chaos.unlocked && this.tier === 6) ||
-      (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied && (this.tier === 1 || this.tier === 4))
-    ) return Pelle.chaos.dimensionDiscount;
+    if (Pelle.chaos.unlocked && this.tier === 6) return Pelle.chaos.dimensionDiscount;
 
     return new Decimal(1);
   }

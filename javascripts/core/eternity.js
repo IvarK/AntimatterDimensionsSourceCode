@@ -107,7 +107,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.respec = false;
   }
 
-  if (!Pelle.isDoomed || !PelleUpgrade.retainIP.canBeApplied) {
+  if (!Pelle.isDoomed) {
     Currency.infinityPoints.reset();
   }
   InfinityDimensions.resetAmount();
@@ -157,7 +157,7 @@ function initializeResourcesAfterEternity() {
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  if (!Pelle.isDoomed || !PelleUpgrade.ipGain.canBeApplied) {
+  if (!Pelle.isDoomed) {
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
   }

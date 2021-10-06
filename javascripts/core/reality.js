@@ -362,18 +362,18 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  if (!Pelle.isDoomed || !PelleUpgrade.ipGain.canBeApplied) {
+  if (!Pelle.isDoomed) {
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
   }
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
-  if (!PelleUpgrade.retainEP.canBeApplied || !Pelle.isDoomed || !realityProps.armageddon) {
+  if (!Pelle.isDoomed || !realityProps.armageddon) {
     Currency.eternityPoints.reset();
   }
 
-  if (!PelleUpgrade.retainEternityUpgrades.canBeApplied || !Pelle.isDoomed) {
+  if (!Pelle.isDoomed) {
     // This has to be reset before player.eternities to make the bumpLimit logic work correctly
     EternityUpgrade.epMult.reset();
   }
@@ -382,7 +382,7 @@ function finishProcessReality(realityProps) {
   player.records.thisEternity.realTime = 0;
   player.records.bestEternity.time = 999999999999;
   player.records.bestEternity.realTime = 999999999999;
-  if (!PelleUpgrade.retainEternityUpgrades.canBeApplied || !Pelle.isDoomed) {
+  if (!Pelle.isDoomed) {
     player.eternityUpgrades.clear();
   }
   player.totalTickGained = 0;
@@ -410,7 +410,7 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.continuumThisReality = Laitela.continuumActive;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  if (!PelleUpgrade.retainTimeStudies.canBeApplied || !Pelle.isDoomed) {
+  if (!Pelle.isDoomed) {
     Currency.timeTheorems.reset();
     player.celestials.v.triadStudies = [];
     player.celestials.v.STSpent = 0;
@@ -422,7 +422,7 @@ function finishProcessReality(realityProps) {
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseTachyonGalaxies = 0;
   player.dilation.totalTachyonGalaxies = 0;
-  if (!PelleUpgrade.retainDTUpgrades.canBeApplied) player.dilation.upgrades.clear();
+  player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: 0,
     2: 0,
@@ -439,7 +439,7 @@ function finishProcessReality(realityProps) {
   resetInfinityRuns();
   resetEternityRuns();
   InfinityDimensions.fullReset();
-  if (!PelleUpgrade.retainTimeDimensions.canBeApplied || !Pelle.isDoomed) {
+  if (!Pelle.isDoomed) {
     fullResetTimeDimensions();
   }
   resetChallengeStuff();
@@ -458,7 +458,7 @@ function finishProcessReality(realityProps) {
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();
-  if (!Pelle.isDoomed || !PelleUpgrade.retainIP.canBeApplied) {
+  if (!Pelle.isDoomed) {
     Currency.infinityPoints.reset();
   }
 

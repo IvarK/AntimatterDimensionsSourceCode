@@ -107,9 +107,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.respec = false;
   }
 
-  if (!Pelle.isDoomed) {
-    Currency.infinityPoints.reset();
-  }
+  Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
   player.records.thisInfinity.bestIPmin = new Decimal(0);
   player.records.bestInfinity.bestIPminEternity = new Decimal(0);
@@ -157,10 +155,8 @@ function initializeResourcesAfterEternity() {
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  if (!Pelle.isDoomed) {
-    player.infMult = new Decimal(1);
-    player.infMultCost = new Decimal(10);
-  }
+  player.infMult = new Decimal(1);
+  player.infMultCost = new Decimal(10);
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   player.records.thisEternity.time = 0;

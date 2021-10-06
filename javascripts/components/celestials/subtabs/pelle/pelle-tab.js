@@ -14,7 +14,8 @@ Vue.component("pelle-tab", {
       remnantsPerMinute: 0,
       showBoughtUpgrades: false,
       unboughtUpgrades: [],
-      boughtUpgrades: []
+      boughtUpgrades: [],
+      currentArmageddonSpeedup: 0
     };
   },
   methods: {
@@ -31,6 +32,7 @@ Vue.component("pelle-tab", {
         TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
       this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12);
       this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought);
+      this.currentArmageddonSpeedup = Pelle.armageddonSpeedModifier;
     },
     getDoomed() {
       player.celestials.pelle.doomed = true;
@@ -67,16 +69,22 @@ Vue.component("pelle-tab", {
   template:
     `<div class="l-pelle-celestial-tab">
       <button @click="getDoomed()">Doom your reality lol</button>
-      <p>Armageddon has lasted {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval / 1000, 2, 2) }} seconds</p>
+      <p>
+        Armageddon has lasted 
+        {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval / 1000, 2, 2) }} 
+        seconds. Sped up by {{ formatX(currentArmageddonSpeedup, 2, 2) }} due to current antimatter/s.</p>
       <p>
         You have <b>{{ format(remnants, 2, 2) }}</b>
         Remnants, you will gain {{ format(remnantsGain, 2, 2) }} 
         on next Armageddon ({{ format(remnantsPerMinute, 2, 2)}} / min).
       </p>
       <div class="c-pelle-currency-container">
-        <pelle-currency currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>
-        <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="hasPestilence"/>
-        <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasChaos"/>
+        <pelle-currency 
+          currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>
+        <pelle-currency 
+          currency="pestilence" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="hasPestilence"/>
+        <pelle-currency 
+          currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasChaos"/>
       </div>
       <button @click="showBoughtUpgrades = !showBoughtUpgrades">Show/Hide bought upgrades</button>
       <div class="pelle-upgrades--container">

@@ -82,7 +82,7 @@ const Pelle = {
   },
 
   gameLoop(diff) {
-    this.cel.armageddonDuration += diff;
+    this.cel.armageddonDuration += diff * this.armageddonSpeedModifier;
     if (this.isDoomed && this.currentArmageddonDuration > this.armageddonInterval) {
       this.armageddon(true);
     }
@@ -197,6 +197,10 @@ const Pelle = {
     let base = 5000;
     if (this.pestilence.unlocked) base *= Pelle.pestilence.armageddonTimeMultiplier;
     return base;
+  },
+
+  get armageddonSpeedModifier() {
+    return Math.max(Math.log10(Currency.antimatter.productionPerSecond.plus(1).log10() + 1) ** 2, 1);
   },
 
   get disabledAchievements() {

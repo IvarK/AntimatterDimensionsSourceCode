@@ -81,8 +81,7 @@ function gainedInfinityPoints() {
   }
 
   if (Pelle.isDoomed) {
-    if (PelleUpgrade.moreIPMultipliers.canBeApplied) ip = ip.times(GameCache.totalIPMult.value.pow(-1 / 3));
-    else ip = ip.times(GameCache.totalIPMult.value.pow(-2 / 3));
+    ip = ip.times(GameCache.totalIPMult.value.pow(-2 / 3));
   }
   return ip.floor();
 }
@@ -120,12 +119,8 @@ function gainedEternityPoints() {
   }
 
   if (Pelle.isDoomed) {
-    if (PelleUpgrade.moreEPMultipliers.canBeApplied) ep = ep.times(totalEPMult().pow(-3 / 5));
-    else ep = ep.times(totalEPMult().pow(-4 / 5));
+    ep = ep.times(totalEPMult().pow(-4 / 5));
 
-  }
-  if (PelleUpgrade.epMultiplierFromUnstableMatter.canBeApplied) {
-    ep = ep.times(PelleUpgrade.epMultiplierFromUnstableMatter.effectValue);
   }
   return ep.floor();
 }
@@ -569,7 +564,7 @@ function gameLoop(passDiff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if ((player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) || PelleUpgrade.passiveTPGain.canBeApplied) rewardTP();
+  if ((player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP))) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;

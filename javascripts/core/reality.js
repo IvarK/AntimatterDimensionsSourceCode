@@ -362,29 +362,21 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  if (!Pelle.isDoomed) {
-    player.infMult = new Decimal(1);
-    player.infMultCost = new Decimal(10);
-  }
+  player.infMult = new Decimal(1);
+  player.infMultCost = new Decimal(10);
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
-  if (!Pelle.isDoomed || !realityProps.armageddon) {
-    Currency.eternityPoints.reset();
-  }
+  Currency.eternityPoints.reset();
 
-  if (!Pelle.isDoomed) {
-    // This has to be reset before player.eternities to make the bumpLimit logic work correctly
-    EternityUpgrade.epMult.reset();
-  }
+  // This has to be reset before player.eternities to make the bumpLimit logic work correctly
+  EternityUpgrade.epMult.reset();
   Currency.eternities.reset();
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.records.bestEternity.time = 999999999999;
   player.records.bestEternity.realTime = 999999999999;
-  if (!Pelle.isDoomed) {
-    player.eternityUpgrades.clear();
-  }
+  player.eternityUpgrades.clear();
   player.totalTickGained = 0;
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
@@ -410,12 +402,10 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.continuumThisReality = Laitela.continuumActive;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  if (!Pelle.isDoomed) {
-    Currency.timeTheorems.reset();
-    player.celestials.v.triadStudies = [];
-    player.celestials.v.STSpent = 0;
-    player.dilation.studies = [];
-  }
+  Currency.timeTheorems.reset();
+  player.celestials.v.triadStudies = [];
+  player.celestials.v.STSpent = 0;
+  player.dilation.studies = [];
   player.dilation.active = false;
   Currency.tachyonParticles.reset();
   Currency.dilatedTime.reset();
@@ -439,9 +429,7 @@ function finishProcessReality(realityProps) {
   resetInfinityRuns();
   resetEternityRuns();
   InfinityDimensions.fullReset();
-  if (!Pelle.isDoomed) {
-    fullResetTimeDimensions();
-  }
+  fullResetTimeDimensions();
   resetChallengeStuff();
   AntimatterDimensions.reset();
   secondSoftReset();
@@ -458,9 +446,7 @@ function finishProcessReality(realityProps) {
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();
-  if (!Pelle.isDoomed) {
-    Currency.infinityPoints.reset();
-  }
+  Currency.infinityPoints.reset();
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
   else Tab.dimensions.antimatter.show();

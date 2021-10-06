@@ -82,15 +82,15 @@ Vue.component("pelle-currency", {
 
       switch (this.config.id) {
         case "permanentTickspeed":
-          this.showRebuyable = PelleUpgrade.famineRebuyable.canBeApplied;
+          this.showRebuyable = false;
           break;
 
         case "permanentDimensionBoosts":
-          this.showRebuyable = PelleUpgrade.pestilenceRebuyable.canBeApplied;
+          this.showRebuyable = false;
           break;
 
         case "permanentGalaxies":
-          this.showRebuyable = PelleUpgrade.chaosRebuyable.canBeApplied;
+          this.showRebuyable = false;
           break;
       }
     },

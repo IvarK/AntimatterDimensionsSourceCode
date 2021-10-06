@@ -37,7 +37,8 @@ function antimatterDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
-    AlchemyResource.dimensionality
+    AlchemyResource.dimensionality,
+    PelleUpgrade.antimatterDimBaseMult
   );
 
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));

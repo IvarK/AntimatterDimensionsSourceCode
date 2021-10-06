@@ -1,5 +1,44 @@
 "use strict";
 
+const disabledMechanicUnlocks = {
+  IPGain: () => ({}),
+  EPGain: () => ({}),
+  achievements: () => ({}),
+  IPMults: () => ({}),
+  EPMults: () => ({}),
+  galaxies: () => ({}),
+  InfinitiedMults: () => ({}),
+  infinitiedGen: () => ({}),
+  eternityGain: () => ({}),
+  eternityMults: () => ({}),
+  studies: () => ({}),
+  EPgen: () => ({}),
+  autoec: () => ({}),
+  replicantiIntervalMult: () => ({}),
+  tpMults: () => ({}),
+  equipGlyphs: () => ({}),
+  V: () => ({}),
+  singularity: () => ({}),
+  continuum: () => ({}),
+  alchemy: () => ({}),
+  achievementMult: () => ({}),
+  blackhole: () => ({}),
+  effarig: () => ({}),
+  imaginaryUpgrades: () => ({}),
+  glyphsac: () => ({}),
+  antimatterDimAutobuyer1: () => PelleUpgrade.antimatterDimAutobuyers1,
+  antimatterDimAutobuyer2: () => PelleUpgrade.antimatterDimAutobuyers1,
+  antimatterDimAutobuyer3: () => PelleUpgrade.antimatterDimAutobuyers2,
+  antimatterDimAutobuyer4: () => PelleUpgrade.antimatterDimAutobuyers2,
+  antimatterDimAutobuyer5: () => ({}),
+  antimatterDimAutobuyer6: () => ({}),
+  antimatterDimAutobuyer7: () => ({}),
+  antimatterDimAutobuyer8: () => ({}),
+  tickspeedAutobuyer: () => ({}),
+  dimBoostAutobuyer: () => ({}),
+  galaxyAutobuyer: () => ({}),
+};
+
 const Pelle = {
 
   get isUnlocked() {
@@ -10,69 +49,19 @@ const Pelle = {
   isDisabled(mechanic) {
     if (!this.isDoomed) return false;
 
-    switch (mechanic) {
-
-      // Case: "glyphs"
-
-      case "IPGain":
-        return true;
-
-      case "EPGain":
-        return true;
-
-      case "achievements":
-        return true;
-
-      case "IPMults":
-        return true;
-
-      case "EPMults":
-        return true;
-
-      case "galaxies":
-        return true;
-
-      case "InfinitiedMults":
-        return true;
-
-      case "infinitiedGen":
-        return true;
-
-      case "eternityGain":
-        return true;
-
-      case "eternityMults":
-        return true;
-
-      case "studies":
-        return true;
-
-      case "EPgen":
-        return true;
-
-      case "autoec":
-        return true;
-
-      case "replicantiIntervalMult":
-        return true;
-
-      case "tpMults":
-        return true;
-      
-      case "equipGlyphs":
-        return true;
-
-      case "V":
-        return true;
-
-      default:
-        return true;
+    if (!mechanic) return true;
+    if (!disabledMechanicUnlocks[mechanic]) {
+      // eslint-disable-next-line
+      console.error(`Mechanic ${mechanic} isn't present in the disabledMechanicUnlocks!`);
+      return true;
     }
+    const upgrade = disabledMechanicUnlocks[mechanic]();
+    return Boolean(!upgrade.canBeApplied);
   },
 
   armageddon(gainStuff) {
     if (gainStuff) {
-      this.cel.remnants = this.cel.remnants.plus(this.remnantsGain);
+      this.cel.remnants = this.cel.remnants.plus(this.remnantsGain).min(this.remnantsLimit);
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
@@ -158,7 +147,7 @@ const Pelle = {
     }
   },
   chaos: {
-    get fillTime() { 
+    get fillTime() {
       const speedUpgradeEffect = 1.2 ** player.celestials.pelle.chaos.speedUpgrades;
       return 10 / (Currency.timeShards.value.plus(1).log10() ** 0.3 / 3) / speedUpgradeEffect;
     },
@@ -208,8 +197,15 @@ const Pelle = {
   },
 
   get remnantsGain() {
-    const gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
+    let gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
+    if (PelleUpgrade.starterRemnantMult.canBeApplied) gain *= 1.5;
     return gain;
+  },
+
+  get remnantsLimit() {
+    let limit = 50;
+    if (PelleUpgrade.remnantGainLimitMult.canBeApplied) limit *= PelleUpgrade.remnantGainLimitMult.effectValue;
+    return limit;
   }
 };
 

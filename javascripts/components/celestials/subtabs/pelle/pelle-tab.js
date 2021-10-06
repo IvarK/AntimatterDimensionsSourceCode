@@ -15,7 +15,8 @@ Vue.component("pelle-tab", {
       showBoughtUpgrades: false,
       unboughtUpgrades: [],
       boughtUpgrades: [],
-      currentArmageddonSpeedup: 0
+      currentArmageddonSpeedup: 0,
+      remnantLimit: 0,
     };
   },
   methods: {
@@ -28,11 +29,12 @@ Vue.component("pelle-tab", {
       this.hasPestilence = Pelle.pestilence.unlocked;
       this.hasChaos = Pelle.chaos.unlocked;
       this.remnantsGain = Pelle.remnantsGain;
-      this.remnantsPerMinute = Pelle.remnantsGain / 
-        TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
       this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12);
       this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought);
       this.currentArmageddonSpeedup = Pelle.armageddonSpeedModifier;
+      this.remnantsPerMinute = Pelle.remnantsGain / 
+        TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes * this.currentArmageddonSpeedup;
+      this.remnantLimit = Pelle.remnantsLimit;
     },
     getDoomed() {
       player.celestials.pelle.doomed = true;
@@ -74,7 +76,7 @@ Vue.component("pelle-tab", {
         {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval / 1000, 2, 2) }} 
         seconds. Sped up by {{ formatX(currentArmageddonSpeedup, 2, 2) }} due to current antimatter/s.</p>
       <p>
-        You have <b>{{ format(remnants, 2, 2) }}</b>
+        You have <b>{{ format(remnants, 2, 2) }}/{{ format(remnantLimit, 2, 0)}}</b>
         Remnants, you will gain {{ format(remnantsGain, 2, 2) }} 
         on next Armageddon ({{ format(remnantsPerMinute, 2, 2)}} / min).
       </p>

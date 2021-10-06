@@ -2,7 +2,45 @@
 
 GameDatabase.celestials.pelle = {
   upgrades: {
-    
+    antimatterDimBaseMult: {
+      id: 1,
+      description: "4x to all Antimatter Dimension multipliers",
+      cost: 50,
+      currency: "remnants",
+      effect: 4
+    },
+    antimatterDimAutobuyers1: {
+      id: 2,
+      description: "Gain back autobuyers for Antimatter Dimensions 1 and 2",
+      cost: 50,
+      currency: "remnants"
+    },
+    starterRemnantMult: {
+      id: 3,
+      description: "Multiply Remnant gain by 1.5",
+      cost: 50,
+      currency: "remnants"
+    },
+    remnantGainLimitMult: {
+      id: 4,
+      description: "Multiply Remnant gain limit by 1.5 for each upgrade bought",
+      cost: 50,
+      currency: "remnants",
+      effect: () => 1.5 ** PelleUpgrade.all.filter(u => u.isBought).length,
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    antimatterDimAutobuyers2: {
+      id: 5,
+      description: "Gain back autobuyers for Antimatter Dimensions 3 and 4",
+      cost: 250,
+      currency: "remnants"
+    },
+    famineUnlock: {
+      id: 6,
+      description: "Unlock Famine",
+      cost: 250,
+      currency: "remnants"
+    },
   },
   rebuyables: {
     permanentTickspeed: {

@@ -5,26 +5,27 @@ GameDatabase.celestials.pelle = {
     antimatterDimBaseMult: {
       id: 1,
       description: "4x to all Antimatter Dimension multipliers",
-      cost: 50,
+      cost: 10,
       currency: "remnants",
       effect: 4
     },
     antimatterDimAutobuyers1: {
       id: 2,
       description: "Gain back autobuyers for Antimatter Dimensions 1 and 2",
-      cost: 50,
+      cost: 10,
       currency: "remnants"
     },
     starterRemnantMult: {
       id: 3,
       description: "Multiply Remnant gain by 1.5",
-      cost: 50,
-      currency: "remnants"
+      cost: 10,
+      currency: "remnants",
+      effect: 1.5
     },
     remnantGainLimitMult: {
       id: 4,
       description: "Multiply Remnant gain limit by 1.5 for each upgrade bought",
-      cost: 50,
+      cost: 10,
       currency: "remnants",
       effect: () => 1.5 ** PelleUpgrade.all.filter(u => u.isBought).length,
       formatEffect: x => formatX(x, 2, 2)
@@ -32,14 +33,50 @@ GameDatabase.celestials.pelle = {
     antimatterDimAutobuyers2: {
       id: 5,
       description: "Gain back autobuyers for Antimatter Dimensions 3 and 4",
-      cost: 250,
+      cost: 50,
       currency: "remnants"
     },
-    famineUnlock: {
+    dimensionPurchaseMultiplier: {
       id: 6,
-      description: "Unlock Famine",
+      description: "Dimension purchase multiplier is 1.5x bigger",
+      cost: 50,
+      currency: "remnants",
+      effect: 1.5
+    },
+    longerArmageddon: {
+      id: 7,
+      description: "Armageddon lasts 2x as much",
+      cost: 50,
+      currency: "remnants",
+      effect: 2
+    },
+    remnantsBasedOnArmageddon: {
+      id: 8,
+      description: "Get more remnants based on armageddon length",
+      cost: 50,
+      currency: "remnants",
+      effect: () => Pelle.armageddonInterval.dividedBy(5000).pow(1.05),
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    dimBoostAutobuyer: {
+      id: 9,
+      description: "Get back Dimensional Boost Autobuyer",
       cost: 250,
-      currency: "remnants"
+      currency: "remnants",
+      effect: 2
+    },
+    firstDimBoost: {
+      id: 10,
+      description: () => `First antimatter dimension is ${formatX(1000)} stronger`,
+      cost: 250,
+      currency: "remnants",
+      effect: 1000
+    },
+    IPGain: {
+      id: 11,
+      description: () => `You can gain IP again, but the gain is raised to ${formatPow(0.3, 1, 1)}`,
+      cost: 250,
+      currency: "remnants",
     },
   },
   rebuyables: {

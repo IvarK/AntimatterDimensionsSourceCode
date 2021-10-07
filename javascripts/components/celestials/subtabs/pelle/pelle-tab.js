@@ -4,14 +4,14 @@ Vue.component("pelle-tab", {
   data() {
     return {
       isDoomed: false,
-      armageddonInterval: 0,
+      armageddonInterval: new Decimal(0),
       currentArmageddonDuration: 0,
       remnants: new Decimal(0),
       hasFamine: false,
       hasPestilence: false,
       hasChaos: false,
-      remnantsGain: 0,
-      remnantsPerMinute: 0,
+      remnantsGain: new Decimal(0),
+      remnantsPerMinute: new Decimal(0),
       showBoughtUpgrades: false,
       unboughtUpgrades: [],
       boughtUpgrades: [],
@@ -22,18 +22,19 @@ Vue.component("pelle-tab", {
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
-      this.armageddonInterval = Pelle.armageddonInterval;
+      this.armageddonInterval.copyFrom(Pelle.armageddonInterval);
       this.currentArmageddonDuration = Pelle.currentArmageddonDuration;
       this.remnants.copyFrom(player.celestials.pelle.remnants);
       this.hasFamine = Pelle.famine.unlocked;
       this.hasPestilence = Pelle.pestilence.unlocked;
       this.hasChaos = Pelle.chaos.unlocked;
-      this.remnantsGain = Pelle.remnantsGain;
+      this.remnantsGain.copyFrom(Pelle.remnantsGain);
       this.unboughtUpgrades = PelleUpgrade.all.filter(upg => !upg.isBought).slice(0, 12);
       this.boughtUpgrades = PelleUpgrade.all.filter(upg => upg.isBought);
       this.currentArmageddonSpeedup = Pelle.armageddonSpeedModifier;
-      this.remnantsPerMinute = Pelle.remnantsGain / 
-        TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes * this.currentArmageddonSpeedup;
+      this.remnantsPerMinute = Pelle.remnantsGain
+        .dividedBy(TimeSpan.fromMilliseconds(Pelle.armageddonInterval.toNumber()).totalMinutes)
+        .times(this.currentArmageddonSpeedup);
       this.remnantLimit = Pelle.remnantsLimit;
     },
     getDoomed() {
@@ -73,7 +74,7 @@ Vue.component("pelle-tab", {
       <button @click="getDoomed()">Doom your reality lol</button>
       <p>
         Armageddon has lasted 
-        {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval / 1000, 2, 2) }} 
+        {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval.dividedBy(1000), 2, 2) }} 
         seconds. Sped up by {{ formatX(currentArmageddonSpeedup, 2, 2) }} due to current antimatter/s.</p>
       <p>
         You have <b>{{ format(remnants, 2, 2) }}/{{ format(remnantLimit, 2, 0)}}</b>

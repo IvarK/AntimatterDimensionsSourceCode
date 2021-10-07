@@ -115,7 +115,8 @@ function applyNDMultipliers(mult, tier) {
         Achievement(31),
         Achievement(68),
         Achievement(71),
-        TimeStudy(234)
+        TimeStudy(234),
+        PelleUpgrade.firstDimBoost
       );
   }
   if (tier === 8) {
@@ -639,7 +640,8 @@ const AntimatterDimensions = {
 
     mult = mult.timesEffectsOf(
       InfinityUpgrade.buy10Mult,
-      Achievement(58)
+      Achievement(58),
+      PelleUpgrade.dimensionPurchaseMultiplier
     ).times(getAdjustedGlyphEffect("powerbuy10"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);

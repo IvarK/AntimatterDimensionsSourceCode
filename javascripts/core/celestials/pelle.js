@@ -1,7 +1,7 @@
 "use strict";
 
 const disabledMechanicUnlocks = {
-  IPGain: () => ({}),
+  IPGain: () => PelleUpgrade.IPGain,
   EPGain: () => ({}),
   achievements: () => ({}),
   IPMults: () => ({}),
@@ -35,8 +35,10 @@ const disabledMechanicUnlocks = {
   antimatterDimAutobuyer7: () => ({}),
   antimatterDimAutobuyer8: () => ({}),
   tickspeedAutobuyer: () => ({}),
-  dimBoostAutobuyer: () => ({}),
+  dimBoostAutobuyer: () => PelleUpgrade.dimBoostAutobuyer,
   galaxyAutobuyer: () => ({}),
+  rupg10: () => ({}),
+  dtMults: () => ({})
 };
 
 const Pelle = {
@@ -71,13 +73,13 @@ const Pelle = {
   },
 
   gameLoop(diff) {
-    this.cel.armageddonDuration += diff * this.armageddonSpeedModifier;
-    if (this.isDoomed && this.currentArmageddonDuration > this.armageddonInterval) {
-      this.armageddon(true);
+    if (this.isDoomed) {
+      this.cel.armageddonDuration += diff * this.armageddonSpeedModifier;
+      this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
     }
 
-    if (this.isDoomed) {
-      this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
+    if (this.isDoomed && this.armageddonInterval.lte(this.currentArmageddonDuration)) {
+      this.armageddon(true);
     }
 
     const currencies = ["famine", "pestilence", "chaos"];
@@ -183,12 +185,18 @@ const Pelle = {
 
   // Milliseconds
   get armageddonInterval() {
-    let base = 5000;
+    let base = new Decimal(5000);
+
+    base = base.timesEffectsOf(
+      PelleUpgrade.longerArmageddon,
+    );
+
     if (this.pestilence.unlocked) base *= Pelle.pestilence.armageddonTimeMultiplier;
     return base;
   },
 
   get armageddonSpeedModifier() {
+    if (!Pelle.isDoomed) return 1;
     return Math.max(Math.log10(Currency.antimatter.productionPerSecond.plus(1).log10() + 1) ** 2, 1);
   },
 
@@ -198,12 +206,16 @@ const Pelle = {
 
   get remnantsGain() {
     let gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
-    if (PelleUpgrade.starterRemnantMult.canBeApplied) gain *= 1.5;
+
+    gain = new Decimal(gain).timesEffectsOf(
+      PelleUpgrade.remnantsBasedOnArmageddon,
+      PelleUpgrade.starterRemnantMult
+    );
     return gain;
   },
 
   get remnantsLimit() {
-    let limit = 50;
+    let limit = 10;
     if (PelleUpgrade.remnantGainLimitMult.canBeApplied) limit *= PelleUpgrade.remnantGainLimitMult.effectValue;
     return limit;
   }

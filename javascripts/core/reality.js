@@ -446,7 +446,7 @@ function finishProcessReality(realityProps) {
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();
-  Currency.infinityPoints.reset();
+  if (!Pelle.isDoomed) Currency.infinityPoints.reset();
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
   else Tab.dimensions.antimatter.show();
@@ -499,11 +499,13 @@ function applyRUPG10() {
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
-  player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
-  player.galaxies = Math.max(1, player.galaxies);
-  player.break = true;
-  Currency.eternities.bumpTo(100);
-  player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  if (!Pelle.isDisabled("rupg10")) {
+    player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
+    player.galaxies = Math.max(1, player.galaxies);
+    player.break = true;
+    Currency.eternities.bumpTo(100);
+    player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  }
   Replicanti.unlock(true);
 }
 

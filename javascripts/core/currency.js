@@ -274,6 +274,7 @@ Currency.eternities = new class extends DecimalCurrency {
   set value(value) { player.eternities = value; }
 
   get startingValue() {
+    if (Pelle.isDoomed) return new Decimal(0);
     return Effects.max(
       0,
       RealityUpgrade(10)

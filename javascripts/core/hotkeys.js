@@ -48,13 +48,13 @@ const shortcuts = [
     name: "Dimension Boost",
     keys: ["d"],
     type: "bindRepeatableHotkey",
-    function: () => requestDimensionBoost(true),
+    function: () => Reset.dimensionBoost.request({ gain: { bulk: true } }),
     visible: () => true
   }, {
     name: "Single Dimension Boost",
     keys: ["shift", "d"],
     type: "bindRepeatableHotkey",
-    function: () => requestDimensionBoost(false),
+    function: () => Reset.dimensionBoost.request({ gain: { bulk: false } }),
     visible: () => false
   }, {
     name: "Antimatter Galaxy",

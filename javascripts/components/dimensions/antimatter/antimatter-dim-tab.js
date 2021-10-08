@@ -42,7 +42,7 @@ Vue.component("antimatter-dim-tab", {
         ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
     quickReset() {
-      softReset(-1, true, true);
+      loseDimensionBoost();
     }
   },
   template: `

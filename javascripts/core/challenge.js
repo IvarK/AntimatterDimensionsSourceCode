@@ -21,7 +21,7 @@ function updateNormalAndInfinityChallenges(diff) {
     if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning) {
       Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
         `${format(player.matter, 2, 2)} matter.`);
-      softReset(0);
+      Reset.dimensionBoost.reset();
     }
   }
 

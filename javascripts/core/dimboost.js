@@ -60,6 +60,7 @@ class DimBoost {
   }
 
   static get canBeBought() {
+    if (Currency.antimatter.gt(Player.infinityLimit)) return false;
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) return false;
     if (Ra.isRunning) return false;
     if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
@@ -118,63 +119,32 @@ class DimBoost {
   static get totalBoosts() {
     return Math.floor(this.purchasedBoosts + this.freeBoosts);
   }
-}
 
-function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-  if (Currency.antimatter.gt(Player.infinityLimit)) return;
-  EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
-  player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
-  resetChallengeStuff();
-  if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
-    AntimatterDimensions.reset();
-    player.sacrificed = new Decimal(0);
-    resetTickspeed();
-  }
-  skipResetsIfPossible();
-  const canKeepAntimatter = Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought;
-  if (!forcedAMReset && canKeepAntimatter) {
-    Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
-  } else {
-    Currency.antimatter.reset();
-  }
-  EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
-}
-
-function skipResetsIfPossible() {
-  if (Player.isInAntimatterChallenge) return;
-  if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
-    player.dimensionBoosts = 4;
-    if (player.galaxies === 0) player.galaxies = 1;
-  } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts < 3) player.dimensionBoosts = 3;
-  else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts < 2) player.dimensionBoosts = 2;
-  else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
-}
-
-function requestDimensionBoost(bulk) {
-  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
-  if (!DimBoost.canBeBought) return;
-  if (BreakInfinityUpgrade.bulkDimBoost.isBought && bulk) maxBuyDimBoosts(true);
-  else softReset(1);
-
-  for (let tier = 1; tier < 9; tier++) {
-    const mult = DimBoost.multiplierToNDTier(tier);
-    if (mult.gt(1)) floatText(tier, formatX(mult));
+  static get startingDimensionBoosts() {
+    return Effects.max(
+      0,
+      InfinityUpgrade.skipReset1,
+      InfinityUpgrade.skipReset2,
+      InfinityUpgrade.skipReset3,
+      InfinityUpgrade.skipResetGalaxy,
+    );
   }
 }
 
-function maxBuyDimBoosts() {
+function loseDimensionBoost() {
+  player.dimensionBoosts = Math.max(0, player.dimensionBoosts - 1);
+  Reset.dimensionBoost.reset({ force: true });
+  Currency.antimatter.reset();
+}
+
+function purchasableDimensionBoostAmount() {
   // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
-  if (DimBoost.canUnlockNewDimension) {
-    if (DimBoost.requirement.isSatisfied) softReset(1);
-    return;
-  }
+  if (DimBoost.canUnlockNewDimension && DimBoost.requirement.isSatisfied) return 1;
   const req1 = DimBoost.bulkRequirement(1);
-  if (!req1.isSatisfied) return;
+  if (!req1.isSatisfied) return 0;
   const req2 = DimBoost.bulkRequirement(2);
-  if (!req2.isSatisfied) {
-    softReset(1);
-    return;
-  }
+  if (!req2.isSatisfied) return 1;
+
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
@@ -182,8 +152,7 @@ function maxBuyDimBoosts() {
   let maxBoosts = Math.min(Number.MAX_VALUE,
     1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
-    softReset(maxBoosts);
-    return;
+    return maxBoosts;
   }
   // But in case of EC5 it's not, so do binary search for appropriate boost amount
   let minBoosts = 2;
@@ -192,5 +161,5 @@ function maxBuyDimBoosts() {
     if (DimBoost.bulkRequirement(middle).isSatisfied) minBoosts = middle;
     else maxBoosts = middle;
   }
-  softReset(minBoosts);
+  return minBoosts;
 }

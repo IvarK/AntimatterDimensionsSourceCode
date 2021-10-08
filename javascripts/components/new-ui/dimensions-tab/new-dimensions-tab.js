@@ -90,7 +90,7 @@ Vue.component("new-dimensions-tab", {
         <primary-button
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
-          onclick="softReset(-1, true, true)"
+          onclick="loseDimensionBoost()"
         >
           Perform a Dimension Boost reset
           <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>

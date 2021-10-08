@@ -102,12 +102,15 @@ class BigCrunchReset extends PrestigeMechanic {
     }
   }
 
-  reset(forcedSoft) {
+  reset() {
     player.dimensionBoosts = 0;
     player.galaxies = 0;
     player.records.thisInfinity.maxAM = new Decimal(0);
     Currency.antimatter.reset();
-    softReset(0, forcedSoft);
+    Reset.dimensionBoost.reset();
+    AntimatterDimensions.reset();
+    player.sacrificed = new Decimal(0);
+    resetTickspeed();
     InfinityDimensions.resetAmount();
     player.records.thisInfinity.time = 0;
     player.records.thisInfinity.lastBuyTime = 0;

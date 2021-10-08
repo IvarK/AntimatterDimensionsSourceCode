@@ -60,13 +60,13 @@ Vue.component("antimatter-dim-boost-row", {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
+      this.isBuyable = requirement.isSatisfied && Reset.dimensionBoost.canBePerformed;
       this.purchasedBoosts = DimBoost.purchasedBoosts;
       this.freeBoosts = DimBoost.freeBoosts;
       this.lockText = DimBoost.lockText;
     },
     dimensionBoost(bulk) {
-      requestDimensionBoost(bulk);
+      Reset.dimensionBoost.request({ gain: { bulk } });
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },

@@ -72,7 +72,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get canTick() {
-    return DimBoost.canBeBought && super.canTick;
+    return Reset.dimensionBoost.canBePerformed && super.canTick;
   }
 
   get resetTickOn() {
@@ -81,7 +81,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
 
   tick() {
     if (this.isBuyMaxUnlocked) {
-      maxBuyDimBoosts();
+      Reset.dimensionBoost.request({ gain: { bulk: true } });
       super.tick();
       return;
     }
@@ -91,7 +91,9 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= limit ||
       player.galaxies >= this.galaxies;
     if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;
-    softReset(bulk);
+    // While this is bad code, this specific code has already been changed on main, and so when next main is merged
+    // into this branch, this will be removed and thus fixed.
+    Reset.dimensionBoost.request({ gain: { bulk: bulk !== 1 } });
     super.tick();
   }
 }();

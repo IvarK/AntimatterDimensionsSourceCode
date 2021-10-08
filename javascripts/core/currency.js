@@ -124,7 +124,7 @@ class Currency {
   }
 
   subtract(amount) {
-    this.value = this.operations.max(this.operations.subtract(this.value, amount), 0);
+    this.value = this.operations.max(this.operations.subtract(this.value, amount), this.startingValue);
   }
 
   multiply(amount) {
@@ -132,7 +132,7 @@ class Currency {
   }
 
   divide(amount) {
-    this.value = this.operations.divide(this.value, amount);
+    this.value = this.operations.max(this.operations.divide(this.value, amount), this.startingValue);
   }
 
   eq(amount) {
@@ -169,6 +169,9 @@ class Currency {
     this.value = this.operations.min(this.value, value);
   }
 
+  /**
+   * @abstract
+   */
   get startingValue() { throw new NotImplementedError(); }
 
   reset() {

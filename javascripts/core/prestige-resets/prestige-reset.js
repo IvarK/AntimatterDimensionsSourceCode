@@ -17,15 +17,15 @@ class PrestigeMechanic {
 
   /**
    * @abstract
-   * @returns {Decimal}
+   * @returns {Currency|Decimal|number}
    */
-  get goal() { throw new NotImplementedError(); }
+  get goal() { return new Decimal(0); }
 
   /**
    * @abstract
    * @returns {Currency|Decimal}
    */
-  get currencyRequired() { throw new NotImplementedError(); }
+  get currencyRequired() { return new Decimal(0); }
 
   /**
    * @abstract
@@ -67,14 +67,10 @@ class PrestigeMechanic {
   tabChange() { }
 
   /** @abstract */
-  statistics() { throw new NotImplementedError(); }
+  gain() { throw new NotImplementedError(); }
 
   /** @abstract */
   reset() { throw new NotImplementedError(); }
-
-  /** @abstract */
-  gain() { throw new NotImplementedError(); }
-
 
   /**
    * @returns {boolean} - if the current required is greater than the goal, we can perform this action.
@@ -87,13 +83,12 @@ class PrestigeMechanic {
 
 
   /**
-   * @param {object<string, boolean>} props - may contain one or more of the following booleans:
-   * @param {boolean} auto - which prevents confirmation, force, or tab change from happening.
-   * @param {boolean} confirmation - which determines if the confirmation modal needs to be displayed.
-   * @param {boolean} force - which forces the reset without any gain
-   * (does not play the animation or ask for confirmation)
-   * @param {boolean} forceAnimation - used to force an animation to occur, even if the player has normally
-   * disabled it. (use rarely)
+   * @param {object}  props           may contain one or more of the following booleans:
+   * @param {boolean} auto            which prevents confirmation, force, or tab change from happening.
+   * @param {boolean} confirmation    which determines if the confirmation modal needs to be displayed.
+   * @param {boolean} force           which forces the reset without any gain. does not play the animation
+   * @param {boolean} forceAnimation  used to force an animation to occur, even if the player has normally disabled it.
+   * @param {object}  gain            used to pass special props, typically a bulk boolean, to the gain function
    */
   request(props = {}) {
     const needsConfirmation = this.confirmationOption && !props.confirmation && !props.auto;
@@ -103,6 +98,10 @@ class PrestigeMechanic {
       this.confirmation(props);
       return;
     }
+
+    // If we cannot do the reset, and it is not being forced, stop the request here.
+    if (!this.canBePerformed && !props.force) return;
+
     // If we don't have enough resources to actually do it, but we're forcing it, reset for no gain.
     const noGain = !this.canBePerformed && props.force;
     // If its not auto, the option is enabled, and we aren't resetting for no gain, play the animiation.
@@ -114,8 +113,8 @@ class PrestigeMechanic {
     EventHub.dispatch(this.eventBefore);
     if (animationPlays) this.animation();
     if (tabChangeHappens) this.tabChange();
-    if (!noGain) this.gain();
-    this.reset(true);
+    if (!noGain) this.gain(props.gain);
+    this.reset();
     EventHub.dispatch(this.eventAfter);
   }
 }

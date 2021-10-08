@@ -108,7 +108,8 @@
 }
 
 .s-base--metro .c-news-ticker,
-.t-s6 .c-news-ticker {
+.t-s6 .c-news-ticker,
+.t-s10 .c-news-ticker {
   border-width: 0.1rem;
 }
 
@@ -125,7 +126,8 @@
   background-color: #dbd242
 }
 
-.t-s6 .c-news-ticker {
+.t-s6 .c-news-ticker,
+.t-s10 .c-news-ticker {
   background-color: black;
 }
 

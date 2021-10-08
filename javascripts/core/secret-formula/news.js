@@ -1408,6 +1408,9 @@ GameDatabase.news = [
         S7: "I always had fond memories of that background from my childhood.",
         S8: "it makes it a lot easier to sneak in a little gameplay at the office.",
         S9: "lol you can't even ever see this in the game",
+        S10:
+          `it has a crisp and soothing design that really appeals, and its background is complex and enthralling.
+          It gives you the feeling of standing at the helm of a futuristic interstellar ship.`,
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.

@@ -463,7 +463,8 @@
   background-color: #333;
 }
 
-.t-s6 .c-equipped-glyphs__empty {
+.t-s6 .c-equipped-glyphs__empty,
+.t-s10 .c-equipped-glyphs__empty {
   background-color: #333333;
 }
 
@@ -585,7 +586,8 @@
   align-items: center
 }
 
-.t-s6 .l-glyph-info-wrapper {
+.t-s6 .l-glyph-info-wrapper,
+.t-s10 .l-glyph-info-wrapper {
   background-color: black;
 }
 

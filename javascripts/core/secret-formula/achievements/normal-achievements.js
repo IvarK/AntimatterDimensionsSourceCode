@@ -202,7 +202,7 @@ GameDatabase.achievements.normal = [
     name: "No DLC required",
     get description() { return `Buy ${formatInt(16)} Infinity Upgrades.`; },
     checkRequirement: () => player.infinityUpgrades.size >= 16,
-    checkEvent: [GAME_EVENT.INFINITY_UPGRADE_BOUGHT, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
+    checkEvent: [GAME_EVENT.INFINITY_UPGRADE_BOUGHT, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     get reward() { return `Unlock two new Infinity Upgrades- x${formatInt(2)} IP multiplier and offline IP generation.`; },
   },
   {

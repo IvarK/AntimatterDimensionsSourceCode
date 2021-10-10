@@ -3,7 +3,11 @@
 const Theme = function Theme(name, config) {
   this.name = name;
 
-  this.isDark = config.isDark;
+  this.isDark = function() {
+    return config.isDark === undefined
+      ? player.options.newUI
+      : config.isDark;
+  };
 
   this.isMetro = config.isMetro;
 
@@ -32,7 +36,7 @@ const Theme = function Theme(name, config) {
 
     document.body.classList.add(this.cssClass());
     if (this.isMetro) document.body.classList.add("s-base--metro");
-    if (this.isDark) document.body.classList.add("s-base--dark");
+    if (this.isDark()) document.body.classList.add("s-base--dark");
 
     if (this.isAnimated && player.options.animations.background) {
       document.getElementById("background-animations").style.display = "block";
@@ -104,7 +108,7 @@ Theme.tryUnlock = function(name) {
 
 Theme.create = function(name, settings) {
   const config = {
-    isDark: false || settings.dark,
+    isDark: settings.dark,
     isMetro: false || settings.metro,
     isAnimated: false || settings.animated,
     isSecret: false || settings.secret,
@@ -112,25 +116,26 @@ Theme.create = function(name, settings) {
   return new Theme(name, config);
 };
 
+// Note: "Normal" theme is light on old UI and dark on new UI, so we leave it undefined and check old/new UI elsewhere
 const Themes = {
   all: [
     /* eslint-disable no-multi-spaces */
     Theme.create("Normal",          {                                                         }),
-    Theme.create("Metro",           {             metro: true,                                }),
+    Theme.create("Metro",           { dark: false, metro: true,                               }),
     Theme.create("Dark",            { dark: true,                                             }),
-    Theme.create("Dark Metro",      { dark: true, metro: true,                                }),
-    Theme.create("Inverted",        {                                                         }),
-    Theme.create("Inverted Metro",  {             metro: true,                                }),
-    Theme.create("S1",              {                          animated: true, secret: true,  }),
-    Theme.create("S2",              {                                          secret: true,  }),
-    Theme.create("S3",              {                                          secret: true,  }),
-    Theme.create("S4",              {                                          secret: true,  }),
-    Theme.create("S5",              {                                          secret: true,  }),
-    Theme.create("S6",              { dark: true,              animated: true, secret: true,  }),
-    Theme.create("S7",              {                                          secret: true,  }),
-    Theme.create("S8",              {             metro: true,                 secret: true,  }),
-    Theme.create("S9",              {                                          secret: true,  }),
-    Theme.create("S10",             { dark: true, metro: true, animated: true, secret: true,  }),
+    Theme.create("Dark Metro",      { dark: true,  metro: true,                               }),
+    Theme.create("Inverted",        { dark: false,                                            }),
+    Theme.create("Inverted Metro",  { dark: false, metro: true,                               }),
+    Theme.create("S1",              { dark: false,              animated: true, secret: true, }),
+    Theme.create("S2",              { dark: false,                              secret: true, }),
+    Theme.create("S3",              { dark: false,                              secret: true, }),
+    Theme.create("S4",              { dark: false,                              secret: true, }),
+    Theme.create("S5",              { dark: false,                              secret: true, }),
+    Theme.create("S6",              { dark: true,               animated: true, secret: true, }),
+    Theme.create("S7",              { dark: false,                              secret: true, }),
+    Theme.create("S8",              { dark: false, metro: true,                 secret: true, }),
+    Theme.create("S9",              { dark: false,                              secret: true, }),
+    Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),
   ],
 
   available() {

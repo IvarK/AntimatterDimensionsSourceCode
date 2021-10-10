@@ -40,6 +40,7 @@ Vue.component("modal-reality-glyph-creation", {
   template: `
     <div class="c-reality-glyph-creation">
       <modal-close-button @click="emitClose" />
+      <h2>Reality Glyph Creation</h2>
       <div>
         Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph. Rarity will always be 100% and level
         scales on your current reality resource amount (which is all consumed). All other alchemy resources will be

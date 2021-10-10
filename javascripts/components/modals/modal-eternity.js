@@ -14,12 +14,14 @@ Vue.component("modal-eternity", {
   computed: {
     message() {
       return PlayerProgress.eternityUnlocked()
-        ? `Eternity will reset everything except Achievements and challenge records.`
-        : `Eternity will reset everything except Achievements and challenge records.
-          You will also gain an Eternity Point and unlock various upgrades.`;
+        ? `Eternity will reset everything except Achievements, Challenge records, and anything under the General header
+          on the Statistics tab.`
+        : `Eternity will reset everything except Achievements, Challenge records, and anything under the General header
+          on the Statistics tab. You will also gain an Eternity Point and unlock various upgrades.`;
     },
     gainedEPOnEternity() {
-      return `You will gain ${format(gainedEternityPoints(), 2)} Eternity Points on Eternity.`;
+      return `You will gain ${format(gainedEternityPoints(), 2)} Eternity ${pluralize("Point", gainedEternityPoints())}
+        on Eternity.`;
     },
     startWithIP() {
       return this.startingIP.gt(0)
@@ -67,7 +69,7 @@ Vue.component("modal-eternity", {
         <h2>You are about to Eternity</h2>
         <div class="c-modal-message__text">
           {{ message }}
-          <br><span style="color: red">TODO: DILATION EXIT MODAL HI GAMER</span>
+          <!-- TODO: DILATION EXIT MODAL HI GAMER -->
           <br>
         </div>
         <br>

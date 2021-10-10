@@ -339,7 +339,7 @@ dev.printResourceTotals = function() {
 
   console.log(`Infinities: e${Math.round(player.infinitied.log10())}`);
   console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
-  console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(player.replicanti.amount.log10() / 1e5 + 0.5))}`);
+  console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(Replicanti.amount.log10() / 1e5 + 0.5))}`);
 
   console.log(`TT: e${Math.round(player.timestudy.theorem.log10())}`);
   console.log(`DT: e${Math.round(player.dilation.dilatedTime.log10())}`);
@@ -480,7 +480,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     function doReplicantiTicks() {
       for (let j = 0; j <= 5; j++) {
         replicantiLoop(Math.pow(10, j));
-        resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
+        resultList.push(Notation.scientific.formatDecimal(Replicanti.amount, 5, 5));
         resultList.push(player.replicanti.galaxies);
         resultList.push(Replicanti.galaxies.total);
       }

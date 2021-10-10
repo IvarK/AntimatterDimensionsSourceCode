@@ -2,7 +2,6 @@
 
 Vue.component("antimatter-dim-row", {
   props: {
-    floatingText: Array,
     tier: Number
   },
   data() {
@@ -11,6 +10,7 @@ Vue.component("antimatter-dim-row", {
       isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
+      bought: 0,
       boughtBefore10: 0,
       rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
@@ -34,17 +34,17 @@ Vue.component("antimatter-dim-row", {
         ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
-    cappedTooltip() {
-      return this.isCapped
-        ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
-        : null;
-    },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
     },
     showRow() {
       return this.isShown || this.isUnlocked || this.amount.gt(0);
-    }
+    },
+    boughtTooltip() {
+      if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
+      if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
+      return `Purchased ${formatInt(this.bought)} ${pluralize("time", this.bought)}`;
+    },
   },
   methods: {
     update() {
@@ -55,6 +55,8 @@ Vue.component("antimatter-dim-row", {
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.totalAmount);
+      this.totalAmount = dimension.totalAmount;
+      this.bought = dimension.bought;
       this.boughtBefore10 = dimension.boughtBefore10;
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
@@ -114,7 +116,7 @@ Vue.component("antimatter-dim-row", {
         :enabled="isAffordable && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
         :class="tutorialClass()"
-        :ach-tooltip="cappedTooltip"
+        :ach-tooltip="boughtTooltip"
         @click="buySingle"
       >
         <span v-if="isCapped">Capped</span>
@@ -125,7 +127,7 @@ Vue.component("antimatter-dim-row", {
       <primary-button
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
-        :ach-tooltip="cappedTooltip"
+        :ach-tooltip="boughtTooltip"
         @click="buyUntil10"
       >
         <span v-if="isCapped">Capped</span>
@@ -136,12 +138,5 @@ Vue.component("antimatter-dim-row", {
           {{ format(until10Cost) }}
         </template>
       </primary-button>
-      <div
-        v-for="text in floatingText"
-        :key="text.key"
-        class='c-antimatter-dim-row__floating-text'
-      >
-        {{ text.text }}
-      </div>
     </div>`,
 });

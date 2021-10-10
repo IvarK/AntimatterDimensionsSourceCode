@@ -165,7 +165,16 @@ class AutomatorScript {
 }
 
 const AutomatorData = {
-  currentErrorLine: -1,
+  // -1 is the ID for the documentation page
+  currentInfoPane: -1,
+  // Used for getting the correct EC count in event log
+  lastECCompletionCount: 0,
+  // Used as a flag to make sure that wait commands only add one entry to the log instead of every execution attempt
+  isWaiting: false,
+  waitStart: 0,
+  lastEvent: 0,
+  eventLog: [],
+  isEditorFullscreen: false,
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },
@@ -186,8 +195,27 @@ const AutomatorData = {
     player.reality.automator.state.editorScript = newScriptID;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
-  currentErrors() {
-    return AutomatorGrammar.compile(this.currentScriptText()).errors;
+  currentErrors(script) {
+    const toCheck = script || this.currentScriptText();
+    return AutomatorGrammar.compile(toCheck).errors;
+  },
+  logCommandEvent(message, line) {
+    const currTime = Date.now();
+    this.eventLog.push({
+      // Messages often overflow the 120 col limit and extra spacing gets included in the message - remove it
+      message: message.replaceAll(/\s?\n\s+/gu, " "),
+      line,
+      thisReality: Time.thisRealityRealTime.totalSeconds,
+      timestamp: currTime,
+      timegap: currTime - this.lastEvent
+    });
+    this.lastEvent = currTime;
+    // Remove the oldest entry if the log is too large
+    if (this.eventLog.length > player.options.automatorEvents.maxEntries) this.eventLog.shift();
+  },
+  clearEventLog() {
+    this.eventLog = [];
+    this.lastEvent = 0;
   }
 };
 
@@ -235,11 +263,16 @@ const AutomatorBackend = {
 
   update(diff) {
     if (!this.isOn) return;
+    let stack;
     switch (this.mode) {
       case AUTOMATOR_MODE.PAUSE:
         return;
       case AUTOMATOR_MODE.SINGLE_STEP:
         this.singleStep();
+        stack = AutomatorBackend.stack.top;
+        // If single step completes the last line and repeat is off, the command stack will be empty and
+        // scrolling will cause an error
+        if (stack) AutomatorTextUI.scrollToLine(stack.lineNumber - 1);
         this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
       case AUTOMATOR_MODE.RUN:
@@ -305,6 +338,7 @@ const AutomatorBackend = {
         }
         this.stop();
       } else if (this.stack.top.commandState && this.stack.top.commandState.advanceOnPop) {
+        AutomatorData.logCommandEvent(`Exiting IF block`, this.stack.top.commandState.ifEndLine);
         return this.nextCommand();
       }
     } else {
@@ -341,7 +375,7 @@ const AutomatorBackend = {
     } else {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
-    if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
+    if (!scriptIds.includes(`${this.state.topLevelScript}`)) this.state.topLevelScript = scriptIds[0];
     const currentScript = this.findScript(this.state.topLevelScript);
     if (currentScript.commands) {
       const commands = currentScript.commands;
@@ -392,7 +426,7 @@ const AutomatorBackend = {
     const state = this.state;
     const focusedScript = state.topLevelScript === state.editorScript;
     if (focusedScript && this.isRunning && state.followExecution) {
-      AutomatorTextUI.editor.scrollIntoView({ line: AutomatorBackend.stack.top.lineNumber - 1, ch: 0 }, 16);
+      AutomatorTextUI.scrollToLine(AutomatorBackend.stack.top.lineNumber - 1);
     }
   },
 
@@ -418,9 +452,14 @@ const AutomatorBackend = {
       this.reset(scriptObject.commands);
       this.state.mode = initialMode;
     }
+    AutomatorData.isWaiting = false;
+    if (player.options.automatorEvents.clearOnRestart) AutomatorData.clearEventLog();
   },
 
   restart() {
+    // Sometimes this leads to start getting called twice in quick succession but it's close enough
+    // that there's usually no command in between (possibly same tick).
+    this.start(this.state.topLevelScript, AUTOMATOR_MODE.RUN);
     if (this.stack.isEmpty) return;
     this.reset(this.stack._data[0].commands);
   },

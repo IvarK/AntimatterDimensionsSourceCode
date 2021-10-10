@@ -36,7 +36,7 @@ class Modal {
     ui.view.modal.queue.shift();
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
     else ui.view.modal.current = ui.view.modal.queue[0];
-    ui.view.modal.cloudConflicts = [];
+    ui.view.modal.cloudConflict = [];
   }
 
   static hideAll() {
@@ -77,6 +77,7 @@ Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.glyphPurge = new Modal("modal-glyph-purge");
+Modal.glyphShowcasePanel = new Modal("modal-glyph-showcase-panel");
 Modal.glyphUndo = new Modal("modal-glyph-undo");
 Modal.glyphReplace = new Modal("modal-glyph-replace");
 Modal.glyphSacrifice = new Modal("modal-glyph-sacrifice");
@@ -124,22 +125,43 @@ Modal.celestialQuote = new class extends Modal {
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
 // eslint-disable-next-line max-params
-Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
-  ui.view.modal.cloudConflicts.push({
+Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
+  Modal.hide();
+  ui.view.modal.cloudConflict = {
     saveId,
+    saveComparison,
     cloud: getSaveInfo(cloudSave),
     local: getSaveInfo(localSave),
-    onAccept,
-    onLastConflict
-  });
+    onAccept
+  };
 
   function getSaveInfo(save) {
-    const prestiges = { infinities: new Decimal(0), eternities: new Decimal(0), realities: 0 };
-    prestiges.infinities.copyFrom(new Decimal(save.infinities));
-    prestiges.eternities.copyFrom(new Decimal(save.eternities));
-    prestiges.realities = save.realities;
+    const resources = {
+      realTimePlayed: 0,
+      totalAntimatter: new Decimal(0),
+      infinities: new Decimal(0),
+      eternities: new Decimal(0),
+      realities: 0,
+      infinityPoints: new Decimal(0),
+      eternityPoints: new Decimal(0),
+      realityMachines: new Decimal(0),
+      imaginaryMachines: 0,
+      dilatedTime: new Decimal(0),
+      bestLevel: 0,
+    };
+    resources.realTimePlayed = save.records.realTimePlayed;
+    resources.totalAntimatter.copyFrom(new Decimal(save.records.totalAntimatter));
+    resources.infinities.copyFrom(new Decimal(save.infinities));
+    resources.eternities.copyFrom(new Decimal(save.eternities));
+    resources.realities = save.realities;
+    resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
+    resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
+    resources.realityMachines.copyFrom(new Decimal(save.reality.realityMachines));
+    resources.imaginaryMachines = save.reality.iMCap;
+    resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
+    resources.bestLevel = save.records.bestReality.glyphLevel;
 
-    return prestiges;
+    return resources;
   }
 };
 

@@ -89,8 +89,8 @@ Vue.component("black-hole-tab", {
     adjustSliderNegative(value) {
       this.negativeSlider = value;
       player.blackHoleNegative = Math.pow(10, -this.negativeSlider);
-      player.minNegativeBlackHoleThisReality = Math.max(
-        player.minNegativeBlackHoleThisReality,
+      player.requirementChecks.reality.slowestBH = Math.max(
+        player.requirementChecks.reality.slowestBH,
         player.blackHoleNegative
       );
     },

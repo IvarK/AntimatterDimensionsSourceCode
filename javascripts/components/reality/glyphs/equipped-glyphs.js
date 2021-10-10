@@ -13,7 +13,7 @@ Vue.component("equipped-glyphs", {
     };
   },
   created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   computed: {
@@ -107,6 +107,24 @@ Vue.component("equipped-glyphs", {
         drop: $event => this.drop($event, idx),
       };
     },
+    showModal() {
+      Modal.glyphShowcasePanel.show({
+        name: "Equipped Glyphs",
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
+        isGlyphSelection: false,
+        showSetName: true,
+        displaySacrifice: true,
+      });
+    },
+    clickGlyph(glyph, idx) {
+      if (glyph.symbol === "key266b") {
+        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is true, so increase by 6
+        const increase = Math.round(Math.random()) ? 6 : 1;
+        const sound = idx + increase;
+        new Audio(`audio/note${sound}.mp3`).play();
+      }
+    }
   },
   template: `
     <div class="l-equipped-glyphs">
@@ -115,6 +133,7 @@ Vue.component("equipped-glyphs", {
           v-for="(glyph, idx) in glyphs"
           :style="glyphPositionStyle(idx)"
           v-on="dragEvents(idx)"
+          @click="showModal"
         >
           <!-- the drop zone is a bit larger than the glyph itself. -->
           <div
@@ -128,6 +147,7 @@ Vue.component("equipped-glyphs", {
             :circular="true"
             :isActiveGlyph="true"
             style="-webkit-user-drag: none;"
+            @clicked="clickGlyph(glyph, idx)"
           />
           <div
             v-else

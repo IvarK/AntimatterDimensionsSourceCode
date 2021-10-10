@@ -3,15 +3,8 @@
 Vue.component("sidebar", {
   data() {
     return {
-      RMVisible: false,
-      newsEnabled: false
+      isHidden: false,
     };
-  },
-  methods: {
-    update() {
-      this.RMVisible = PlayerProgress.realityUnlocked();
-      this.newsEnabled = player.options.news.enabled;
-    }
   },
   computed: {
     tabs: () => [
@@ -25,11 +18,16 @@ Vue.component("sidebar", {
       Tab.statistics,
       Tab.options,
       Tab.shop
-    ]
+    ],
+  },
+  methods: {
+    update() {
+      this.isHidden = AutomatorData.isEditorFullscreen;
+    },
   },
   template: `
-    <div class="sidebar">
-      <sidebar-rm v-if="RMVisible" />
+    <div class="sidebar" v-if="!isHidden">
+      <sidebar-currency />
       <tab-button
         v-for="tab in tabs"
         :key="tab.name"

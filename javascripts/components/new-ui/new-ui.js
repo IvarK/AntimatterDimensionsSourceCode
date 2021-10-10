@@ -63,16 +63,10 @@ Vue.component("new-ui", {
         }
       }
 
-      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
-      if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
-        this.bigCrunch = false;
-        this.smallCrunch = false;
-        return;
-      }
-      this.smallCrunch = true;
-      const endOfChallenge = Player.isInAntimatterChallenge && !player.options.retryChallenge;
-      this.bigCrunch = endOfChallenge ||
-        (Time.thisInfinity.totalMinutes > 1 && Time.bestInfinityRealTime.totalMinutes > 1);
+      const crunchButtonVisible = !player.break && Player.canCrunch;
+      const reachedInfinityInMinute = Time.bestInfinityRealTime.totalMinutes <= 1;
+      this.bigCrunch = crunchButtonVisible && !reachedInfinityInMinute;
+      this.smallCrunch = crunchButtonVisible && reachedInfinityInMinute;
     },
     updateChallengePower() {
       const isC2Running = NormalChallenge(2).isRunning;
@@ -96,7 +90,6 @@ Vue.component("new-ui", {
   template: `
     <div id="page">
       <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
-      <sidebar />
       <div class="game-container" :style="topMargin">
         <news-ticker v-if="news" />
         <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">

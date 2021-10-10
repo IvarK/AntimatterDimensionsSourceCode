@@ -40,15 +40,62 @@ const PerkNetwork = {
   minScale: 0.2,
   maxScale: 4,
   lastPerkNotation: "",
+  pulseTimer: 0,
+  initialStabilization: false,
   initializeIfNeeded() {
     const notation = Notations.current.name;
     if (this.container !== undefined && notation === this.lastPerkNotation) return;
     this.lastPerkNotation = notation;
 
+    this.makeNetwork();
+    
+    this.network.on("click", params => {
+      const id = params.nodes[0];
+      if (!isFinite(id)) return;
+      Perks.find(id).purchase();
+      this.updatePerkColor();
+      this.updatePerkSize();
+    });
+
+    this.network.on("dragStart", () => {
+      const tooltip = this.container.getElementsByClassName("vis-tooltip")[0];
+      if (tooltip !== undefined) {
+        tooltip.style.visibility = "hidden";
+      }
+    });
+
+    // Change node side while dragging on Cancer theme, but skip the method otherwise because it's mildly intensive
+    this.network.on("dragging", () => {
+      SecretAchievement(45).tryUnlock();
+      if (Theme.current().name === "S4") PerkNetwork.updatePerkSize();
+    });
+
+    this.network.on("zoom", () => {
+      const scale = this.network.getScale();
+      const clampedScale = Math.clamp(scale, this.minScale, this.maxScale);
+      if (scale !== clampedScale) {
+        this.network.moveTo({ scale: clampedScale });
+      }
+    });
+
+    this.network.on("stabilizationIterationsDone", () => {
+      // Centering the perk tree doesn't work until the physics-based movement has stopped after the initial creation
+      if (!this.initialStabilization) {
+        this.resetPosition();
+        this.initialStabilization = true;
+      }
+      this.setPhysics(player.options.perkPhysicsEnabled);
+    });
+  },
+  makeNetwork() {
+    // Just for a bit of fun, tangle it up a bit unless the player specifically chooses not to
+    const defaultPos = player.options.fixedPerkStartingPos;
     this.nodes = new vis.DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
-      title: perk.config.description
+      title: perk.config.description,
+      x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
+      y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));
 
     const edges = [];
@@ -65,6 +112,7 @@ const PerkNetwork = {
       nodes: this.nodes,
       edges
     };
+
     const nodeOptions = {
       interaction: {
         hover: true,
@@ -88,7 +136,8 @@ const PerkNetwork = {
         selectionWidth: width => width,
         color: {
           inherit: "to"
-        }
+        },
+        hidden: ui.view.theme === "S9"
       },
     };
 
@@ -104,45 +153,32 @@ const PerkNetwork = {
 
     const network = new vis.Network(container, nodeData, nodeOptions);
     this.network = network;
-
-    network.on("click", params => {
-      const id = params.nodes[0];
-      if (!isFinite(id)) return;
-      Perks.find(id).purchase();
-      this.updatePerkColors();
-    });
-
-    network.on("dragStart", () => {
-      const tooltip = container.getElementsByClassName("vis-tooltip")[0];
-      if (tooltip !== undefined) {
-        tooltip.style.visibility = "hidden";
-      }
-    });
-
-    network.on("dragging", () => SecretAchievement(45).tryUnlock());
-
-    network.on("zoom", () => {
-      const scale = network.getScale();
-      const clampedScale = Math.clamp(scale, this.minScale, this.maxScale);
-      if (scale !== clampedScale) {
-        network.moveTo({ scale: clampedScale });
-      }
-    });
+  },
+  setPhysics(state) {
+    this.network.physics.physicsEnabled = state;
+  },
+  forceNetworkRemake() {
+    this.container = undefined;
+    this.initializeIfNeeded();
+    // Tangled trees use physics to bring it to a semi-usable state; it gets set properly again after stabilization
+    this.setPhysics(true);
   },
   resetPosition() {
-    this.network.moveTo({ position: { x: -600, y: -300 }, scale: 0.8, offset: { x: 0, y: 0 } });
+    const centerPerk = PerkNetwork.network.body.nodes[GameDatabase.reality.perks.firstPerk.id];
+    this.network.moveTo({ position: { x: centerPerk.x, y: centerPerk.y }, scale: 0.8, offset: { x: 0, y: 0 } });
   },
   setLabelVisibility(areVisible) {
     const options = {
       nodes: {
         font: {
-          size: areVisible ? 20 : 0
+          size: areVisible ? 20 : 0,
+          color: Theme.current().isDark ? "#DDDDDD" : "#222222",
         }
       }
     };
     this.network.setOptions(options);
   },
-  updatePerkColors() {
+  updatePerkColor() {
     function nodeColor(perk) {
       const canBeBought = perk.canBeBought;
       const isBought = perk.isBought;
@@ -152,12 +188,15 @@ const PerkNetwork = {
       const secondaryColor = perkColor.secondary;
 
       let backgroundColor;
-      if (canBeBought) backgroundColor = "#000000";
-      else if (isBought) backgroundColor = primaryColor;
-      else backgroundColor = "#656565";
+      if (canBeBought) {
+        if (Theme.current().isDark) backgroundColor = "#EEEEEE";
+        else backgroundColor = "#111111";
+      } else if (isBought) backgroundColor = primaryColor;
+      else if (Theme.current().isDark) backgroundColor = "#333333";
+      else backgroundColor = "#CCCCCC";
 
       const hoverColor = canBeBought || isBought ? primaryColor : "#656565";
-      const borderColor = secondaryColor;
+      const borderColor = `${secondaryColor}`;
 
       return {
         background: backgroundColor,
@@ -176,6 +215,23 @@ const PerkNetwork = {
     const data = Perks.all
       .map(perk => ({ id: perk.id, color: nodeColor(perk) }));
     this.nodes.update(data);
+  },
+  updatePerkSize() {
+    function nodeSize(perk) {
+      PerkNetwork.pulseTimer += 0.1;
+      // Make the nodes pulse continuously on Cancer theme
+      const mod = Theme.current().name === "S4"
+        ? 10 * Math.sin(5 * PerkNetwork.pulseTimer + 0.1 * perk._config.id)
+        : 0;
+      if (perk._config.label === "START") return 35 + mod;
+      if (perk.isBought) return 25 + mod;
+      if (perk.canBeBought) return 20 + mod;
+      return 12 + mod;
+    }
+
+    const data = Perks.all
+      .map(perk => ({ id: perk.id, size: nodeSize(perk) }));
+    this.nodes.update(data);
   }
 };
 
@@ -187,15 +243,15 @@ Vue.component("perks-tab", {
     }
   },
   created() {
-    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColors());
-    EventHub.ui.on(GAME_EVENT.REALITY_RESET_AFTER, () => PerkNetwork.updatePerkColors());
+    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColor());
   },
   mounted() {
+    PerkNetwork.initialStabilization = false;
     PerkNetwork.initializeIfNeeded();
     if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
     else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
-    PerkNetwork.updatePerkColors();
-    PerkNetwork.resetPosition();
+    PerkNetwork.updatePerkColor();
+    PerkNetwork.updatePerkSize();
     this.$refs.tab.appendChild(PerkNetwork.container);
   },
   computed: {

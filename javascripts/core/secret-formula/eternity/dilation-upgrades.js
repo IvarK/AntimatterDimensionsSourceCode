@@ -34,8 +34,8 @@ GameDatabase.eternity.dilation = (function() {
           : 2;
         return Decimal.pow(base, bought);
       },
-      formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0),
+      formatEffect: value => formatX(value, 2),
+      formatCost: value => format(value, 2),
       purchaseCap: Number.MAX_VALUE
     }),
     galaxyThreshold: rebuyable({
@@ -48,8 +48,13 @@ GameDatabase.eternity.dilation = (function() {
           : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
       // The 38th purchase is at 1e80, and is the last purchase.
       effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
-      formatEffect: () => format(getTachyonGalaxyMult(), 3, 3),
-      formatCost: value => format(value, 2, 0),
+      formatEffect: effect => {
+        if (effect === 0) return `${formatX(getTachyonGalaxyMult(effect), 4, 4)}`;
+        const nextEffect = effect === Math.pow(0.8, 37) ? 0 : 0.8 * effect;
+        return `${formatX(getTachyonGalaxyMult(effect), 4, 4)} ➜
+          Next: ${formatX(getTachyonGalaxyMult(nextEffect), 4, 4)}`;
+      },
+      formatCost: value => format(value, 2),
       purchaseCap: 38
     }),
     tachyonGain: rebuyable({
@@ -60,8 +65,8 @@ GameDatabase.eternity.dilation = (function() {
         ? `Multiply the amount of Tachyon Particles gained by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`
         : "Triple the amount of Tachyon Particles gained."),
       effect: bought => Decimal.pow(3, bought),
-      formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0),
+      formatEffect: value => formatX(value, 2),
+      formatCost: value => format(value, 2),
       purchaseCap: Number.MAX_VALUE
     }),
     doubleGalaxies: {

@@ -27,10 +27,14 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
     return PRESTIGE_EVENT.REALITY;
   }
 
+  get bulk() {
+    return PerkShopUpgrade.bulkDilation.effectOrDefault(1);
+  }
+
   tick() {
     super.tick();
     const upgradeName = this._upgradeName;
-    DilationUpgrade[upgradeName].purchase(true);
+    DilationUpgrade[upgradeName].purchase(this.bulk);
   }
 }
 
@@ -38,3 +42,4 @@ DilationUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new Dilat
 
 Autobuyer.dilationUpgrade = upgrade => DilationUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.dilationUpgrade.array = DilationUpgradeAutobuyerState.index;
+Autobuyer.dilationUpgrade.array.name = "Dilation Upgrade";

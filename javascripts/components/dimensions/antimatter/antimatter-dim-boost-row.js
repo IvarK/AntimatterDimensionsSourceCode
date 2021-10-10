@@ -33,7 +33,7 @@ Vue.component("antimatter-dim-boost-row", {
       if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
 
       let boostEffects = "";
-      if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
+      if (NormalChallenge(8).isRunning) boostEffects = ` to ${newUnlock}`;
       else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
       else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 

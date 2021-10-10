@@ -14,7 +14,7 @@ body.t-s1 {
 }
 
 #container.container {
-    color: black !important;
+  color: black !important;
 }
 
 .t-s1 .c-tt-buy-button--unlocked {
@@ -57,7 +57,7 @@ body.t-s1 {
 }
 
 @keyframes snowFade {
-    0% {opacity: 0;}
-    50% {opacity: 1;}
-    100% {opacity: 0;}
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
 }

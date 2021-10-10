@@ -144,8 +144,10 @@
           err.tip = "Use the appropriate type of data in the command as specified in the command help";
         } else if (err.info.match(/End of line/gu)) {
           err.tip = "Provide the remaining arguments to complete the incomplete command";
+        } else if (err.info.match(/EOF but found:/gu)) {
+          err.tip = "Remove extra command argument";
         } else {
-          err.tip = "Unknown Chevrotain error";
+          err.tip = "This error's cause is unclear";
         }
         modifiedErrors.push(err);
         lastLine = err.startLine;
@@ -214,7 +216,7 @@
       return ctx.$value;
     }
 
-    xCurrent(ctx) {
+    xHighest(ctx) {
       if (ctx.$value) return ctx.$value;
       if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing multiplier", "Provide a multiplier to set the autobuyer to");

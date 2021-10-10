@@ -81,10 +81,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
           every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
-    bulkDimBoost: {
-      id: "bulkBoost",
+    autobuyMaxDimboosts: {
+      id: "autobuyMaxDimboosts",
       cost: 5e9,
-      description: "Option to bulk buy Dimension Boosts"
+      description: "Unlock the buy max Dimension Boost Autobuyer mode"
     },
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",
@@ -118,7 +118,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
         if (!BreakInfinityUpgrade.ipGen.isCapped) {
           generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
-        return `${generation} of your best IP/min from last 10 Infinities, works offline`;
+        const offlineString = player.options.offlineProgress ? ", works offline" : "";
+        return `${generation} of your best IP/min from your last 10 Infinities${offlineString}`;
       },
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
       title: true

@@ -18,7 +18,7 @@ function infinityDimensionCommonMultiplier() {
       ImaginaryUpgrade(8)
     );
 
-  if (Replicanti.areUnlocked && player.replicanti.amount.gt(1)) {
+  if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
   return mult;
@@ -149,6 +149,7 @@ class InfinityDimensionState extends DimensionState {
       // We need a extra 10x here (since ID8 production is per-second and
       // other ID production is per-10-seconds).
       EternityChallenge(7).reward.applyEffect(v => toGain = v.times(10));
+      if (EternityChallenge(7).isRunning) EternityChallenge(7).applyEffect(v => toGain = v.times(10));
     } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
@@ -306,7 +307,7 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    return Math.floor(player.celestials.enslaved.totalDimCapIncrease * Tesseracts.strengthMultiplier());
+    return Math.floor(Tesseracts.capIncrease());
   },
 
   get totalDimCap() {
@@ -326,7 +327,7 @@ const InfinityDimensions = {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
 
-    player.achievementChecks.maxID1ThisReality = player.achievementChecks.maxID1ThisReality
+    player.requirementChecks.reality.maxID1 = player.requirementChecks.reality.maxID1
       .clampMin(InfinityDimension(1).amount);
   },
 

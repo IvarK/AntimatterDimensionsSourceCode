@@ -18,7 +18,7 @@ Vue.component("eternity-autobuyer-box", {
     modes: () => [
       AUTO_ETERNITY_MODE.AMOUNT,
       AUTO_ETERNITY_MODE.TIME,
-      AUTO_ETERNITY_MODE.X_CURRENT,
+      AUTO_ETERNITY_MODE.X_HIGHEST,
     ]
   },
   methods: {
@@ -43,10 +43,10 @@ Vue.component("eternity-autobuyer-box", {
             type: "float"
           },
         };
-        case AUTO_ETERNITY_MODE.X_CURRENT: return {
-          title: "X times current EP",
+        case AUTO_ETERNITY_MODE.X_HIGHEST: return {
+          title: "X times highest EP",
           input: {
-            property: "xCurrent",
+            property: "xHighest",
             type: "decimal"
           },
         };
@@ -84,7 +84,7 @@ Vue.component("eternity-autobuyer-box", {
           v-bind="modeProps(mode).input"
         />
       </template>
-      <template slot="prioritySlot" style="margin-top: 1.2rem;">
+      <template slot="checkboxSlot" style="margin-top: 1.2rem;">
         <span>Dynamic amount:</span>
         <div
           class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"

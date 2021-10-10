@@ -28,6 +28,7 @@ function giveEternityRewards(auto) {
         challenge.addCompletion();
         completionCount++;
       }
+      AutomatorData.lastECCompletionCount = completionCount;
       if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
     player.etercreq = 0;
@@ -35,7 +36,7 @@ function giveEternityRewards(auto) {
   }
 
   player.records.thisReality.bestEternitiesPerMs = player.records.thisReality.bestEternitiesPerMs.clampMin(
-    RealityUpgrade(3).effectOrDefault(1) / Math.clampMin(33, player.records.thisEternity.realTime)
+    newEternities.div(Math.clampMin(33, player.records.thisEternity.realTime))
   );
   player.records.bestEternity.bestEPminReality =
     player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
@@ -74,9 +75,7 @@ function eternity(force, auto, specialConditions = {}) {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     if (!player.dilation.active) giveEternityRewards(auto);
-    // If somehow someone manages to force their first eternity
-    // (e.g., by starting an EC), they haven't really done an eternity yet.
-    player.achievementChecks.noEternitiesThisReality = false;
+    player.requirementChecks.reality.noEternities = false;
   }
 
   if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -121,6 +120,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
+  ECTimeStudyState.invalidateCachedRequirements();
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
@@ -154,8 +154,7 @@ function initializeResourcesAfterEternity() {
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  player.infMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   player.records.thisEternity.time = 0;
@@ -163,12 +162,7 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.achievementChecks.noSacrifices = true;
-  player.achievementChecks.onlyEighthDimensions = true;
-  player.achievementChecks.onlyFirstDimensions = true;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noFirstDimensions = true;
-  player.achievementChecks.noReplicantiGalaxies = true;
+  Player.resetRequirements("eternity");
 }
 
 function applyRealityUpgradesAfterEternity() {
@@ -211,13 +205,13 @@ const EternityMilestone = (function() {
     autoEP: new EternityMilestoneState(db.autoEP),
     autoIC: new EternityMilestoneState(db.autoIC),
     autobuyMaxGalaxies: new EternityMilestoneState(db.autobuyMaxGalaxies),
-    autobuyMaxDimboosts: new EternityMilestoneState(db.autobuyMaxDimboosts),
+    unlockReplicanti: new EternityMilestoneState(db.unlockReplicanti),
     autobuyerID: tier => infinityDims[tier - 1],
     keepBreakUpgrades: new EternityMilestoneState(db.keepBreakUpgrades),
     autoUnlockID: new EternityMilestoneState(db.autoUnlockID),
     unlockAllND: new EternityMilestoneState(db.unlockAllND),
+    replicantiNoReset: new EternityMilestoneState(db.replicantiNoReset),
     autobuyerReplicantiChance: new EternityMilestoneState(db.autobuyerReplicantiChance),
-    unlockReplicanti: new EternityMilestoneState(db.unlockReplicanti),
     autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
@@ -266,7 +260,9 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   set boughtAmount(value) {
-    const diff = value - player.epmultUpgrades;
+    // Reality resets will make this bump amount negative, causing it to visually appear as 0 even when it isn't.
+    // A dev migration fixes bad autobuyer states and this change ensures it doesn't happen again
+    const diff = Math.clampMin(value - player.epmultUpgrades, 0);
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();

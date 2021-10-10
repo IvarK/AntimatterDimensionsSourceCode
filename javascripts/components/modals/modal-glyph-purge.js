@@ -71,32 +71,30 @@ Vue.component("modal-glyph-purge", {
     }
   },
   template: `
-  <div class="c-modal-message l-modal-content--centered">
-  <h2>{{ topLabel }}</h2>
-  <div class="c-modal-message__text">
-  This could delete glyphs in your inventory that are good enough that you might want to use them
-  later. Are you sure you want to do this? This process is irreversible!
-  <br>
-  {{ explanation }}
-  </div>
-  <br>
-  <div class="c-modal-hard-reset-danger">
-    {{ extraMessage }}
-  </div>
-  <div class="l-options-grid__row">
-  <primary-button
-      class="o-primary-btn--width-medium c-modal-message__okay-btn"
-      @click="handleNoClick"
-    >
-      Cancel
-    </primary-button>
-    <primary-button
-      class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-      @click="handleYesClick"
-    >
-      Confirm
-    </primary-button>
-  </div>
-</div>
-  `
+    <div class="c-modal-message l-modal-content--centered">
+      <h2>{{ topLabel }}</h2>
+      <div class="c-modal-message__text">
+        This could delete glyphs in your inventory that are good enough that you might want to use them
+        later. Are you sure you want to do this? This process is irreversible! <br>
+        {{ explanation }}
+      </div>
+      <br>
+      <div class="c-modal-hard-reset-danger">
+        {{ extraMessage }}
+      </div>
+      <div class="l-options-grid__row">
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          Cancel
+        </primary-button>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >
+          Confirm
+        </primary-button>
+      </div>
+    </div>`
 });

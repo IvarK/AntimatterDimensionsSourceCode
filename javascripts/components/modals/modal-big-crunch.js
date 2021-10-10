@@ -43,26 +43,25 @@ Vue.component("modal-big-crunch", {
     }
   },
   template: `
-  <div class="c-modal-message l-modal-content--centered">
-  <h2>{{ topLabel }}</h2>
-  <div class="c-modal-message__text">
-    {{ message }}
-  </div>
-  <div class="l-options-grid__row">
-  <primary-button
-      class="o-primary-btn--width-medium c-modal-message__okay-btn"
-      @click="handleNoClick"
-    >
-      {{ buttonLabel }}
-    </primary-button>
-    <primary-button
-      class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-      @click="handleYesClick"
-      v-if="!first"
-    >
-      Confirm
-    </primary-button>
-  </div>
-</div>
-  `
+    <div class="c-modal-message l-modal-content--centered">
+      <h2>{{ topLabel }}</h2>
+      <div class="c-modal-message__text">
+        {{ message }}
+      </div>
+      <div class="l-options-grid__row">
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          {{ buttonLabel }}
+        </primary-button>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+          v-if="!first"
+        >
+          Confirm
+        </primary-button>
+      </div>
+    </div>`
 });

@@ -52,12 +52,15 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerSt
       : super.interval;
   }
 
+  get canTick() {
+    return Galaxy.canBeBought && Galaxy.requirement.isSatisfied && super.canTick;
+  }
+
   get resetTickOn() {
     return PRESTIGE_EVENT.INFINITY;
   }
 
   tick() {
-    if (!Galaxy.requirement.isSatisfied) return;
     super.tick();
     const limit = this.limitGalaxies ? this.maxGalaxies : Number.MAX_VALUE;
     requestGalaxyReset(this.isBuyMaxUnlocked, limit);

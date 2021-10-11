@@ -4,24 +4,27 @@ class AwayProgress {
   constructor(config) {
     this.name = config.name;
     this.isUnlocked = config.isUnlocked;
+    this.awayOption = config.awayOption === undefined ? this.name : config.awayOption;
     this.showOption = config.showOption === undefined ? true : config.showOption;
     // This is an array of strings, each one the name of the next entry in the player object to navigate to
     // If there is no reference, it is accessed directly by the name through the player object.
     this.reference = config.reference === undefined ? [this.name] : config.reference;
+    this.classObjectReference = config.classObjectReference === undefined ? this.name : config.classObjectReference;
+    this.appearsInAwayModal = config.appearsInAwayModal === undefined ? true : config.appearsInAwayModal;
   }
 
   get option() {
-    return player.options.awayProgress[this.name];
+    return player.options.awayProgress[this.awayOption];
   }
 
   set option(value) {
-    player.options.awayProgress[this.name] = value;
+    player.options.awayProgress[this.awayOption] = value;
   }
 
   get classObject() {
     // Format the camelCase name to kebab-case
     return `c-modal-away-progress__${
-      this.name.replace(/[A-Z]/gu, match => `-${match.toLowerCase()}`)
+      this.classObjectReference.replace(/[A-Z]/gu, match => `-${match.toLowerCase()}`)
     }`;
   }
 
@@ -116,28 +119,38 @@ const AwayProgressTypes = {
     reference: ["celestials", "effarig", "relicShards"],
     isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
   }),
+  celestialMemories: new AwayProgress({
+    name: "celestialMemories",
+    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    // Functions as the visible option for all Memories, never appears due to having no reference.
+    appearsInAwayModal: false,
+  }),
   teresaMemories: new AwayProgress({
     name: "teresaMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "teresa", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.teresa.isUnlocked && !Ra.pets.teresa.isCapped,
     showOption: false,
   }),
   effarigMemories: new AwayProgress({
     name: "effarigMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "effarig", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.effarig.isUnlocked && !Ra.pets.effarig.isCapped,
     showOption: false,
   }),
   enslavedMemories: new AwayProgress({
     name: "enslavedMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "enslaved", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.enslaved.isUnlocked && !Ra.pets.enslaved.isCapped,
     showOption: false,
   }),
   vMemories: new AwayProgress({
     name: "vMemories",
+    awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "v", "memories"],
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => Ra.pets.v.isUnlocked && !Ra.pets.v.isCapped,
     showOption: false,
   }),
   darkMatter: new AwayProgress({
@@ -154,6 +167,28 @@ const AwayProgressTypes = {
     name: "singularities",
     reference: ["celestials", "laitela", "singularities"],
     isUnlocked: () => Laitela.isUnlocked,
+  }),
+  blackHole: new AwayProgress({
+    name: "blackHole",
+    isUnlocked: () => BlackHole(1).isUnlocked,
+    // Functions as the visible option for both first & second BHs, never appears due to having no reference.
+    appearsInAwayModal: false,
+  }),
+  firstBlackHole: new AwayProgress({
+    name: "firstBlackHole",
+    awayOption: "blackHole",
+    reference: ["blackHole", "0", "activations"],
+    isUnlocked: () => BlackHole(1).isUnlocked,
+    classObjectReference: "black-hole",
+    showOption: false,
+  }),
+  secondBlackHole: new AwayProgress({
+    name: "secondBlackHole",
+    awayOption: "blackHole",
+    reference: ["blackHole", "1", "activations"],
+    isUnlocked: () => BlackHole(2).isUnlocked,
+    classObjectReference: "black-hole",
+    showOption: false,
   }),
 };
 

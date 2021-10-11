@@ -74,10 +74,9 @@ Vue.component("reality-button", {
         return result;
       }
       const multiplier = simulatedRealityCount(false) + 1;
-      const availableRM = MachineHandler.hardcapRM.minus(Currency.realityMachines.value);
       this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
       this.newIMCap = MachineHandler.projectedIMCap;
-      this.machinesGained = this.projectedRM.clampMax(availableRM);
+      this.machinesGained = this.projectedRM.clampMax(MachineHandler.distanceToRMCap);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();
@@ -97,7 +96,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (TimeStudy.reality.isBought && Currency.eternityPoints.exponent >= 4000) {
+      if (TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000) {
         requestManualReality();
       }
     },
@@ -107,12 +106,30 @@ Vue.component("reality-button", {
     formatThresholdText(condition, threshold, resourceName) {
       if (condition) return "";
       return `(${format(threshold, 2, 2)} ${resourceName} to improve)`;
+    },
+    // Make the button have a visual animation if Realitying will give a reward
+    hasSpecialReward() {
+      if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier) {
+        return true;
+      }
+      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked && Currency.eternityPoints.value.exponent > 4000) {
+        return true;
+      }
+      if (Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000) return true;
+      return false;
+    },
+    classObject() {
+      return {
+        "c-reality-button--unlocked": this.canReality,
+        "c-reality-button--locked": !this.canReality,
+        "c-reality-button--special": this.hasSpecialReward(),
+      };
     }
   },
   template: `
     <button
-      :class="['l-reality-button', 'c-reality-button', 'infotooltip',
-        canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
+      class="l-reality-button c-reality-button infotooltip"
+      :class="classObject()"
       @click="handleClick"
     >
       <div class="l-reality-button__contents">

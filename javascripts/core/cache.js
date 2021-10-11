@@ -76,8 +76,7 @@ const GameCache = {
     Perk.achievementGroup2,
     Perk.achievementGroup3,
     Perk.achievementGroup4,
-    Perk.achievementGroup5,
-    Perk.achievementGroup6
+    Perk.achievementGroup5
   )).totalMilliseconds),
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),

@@ -105,7 +105,7 @@ Vue.component("alchemy-resource-arc", {
   methods: {
     update() {
       this.amount = this.resource.amount;
-      this.fillFraction = Math.clamp(this.amount / estimatedAlchemyCap(), 0, 1);
+      this.fillFraction = Math.clamp(this.amount / Ra.alchemyResourceCap, 0, 1);
     }
   },
   template: `

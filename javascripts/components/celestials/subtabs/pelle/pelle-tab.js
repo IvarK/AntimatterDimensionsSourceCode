@@ -43,8 +43,7 @@ Vue.component("pelle-tab", {
       Glyphs.unequipAll();
       respecTimeStudies(true);
       Currency.infinityPoints.reset();
-      player.infMult = new Decimal(1);
-      player.infMultCost = new Decimal(10);
+      player.infMult = 0;
       Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
       disChargeAll();
     },

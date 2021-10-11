@@ -87,11 +87,23 @@ const shortcuts = [
     function: () => eternityResetRequest(),
     visible: () => PlayerProgress.eternityUnlocked() || Player.canEternity
   }, {
+    name: "Toggle Time Study respec",
+    keys: ["shift+e"],
+    type: "bindHotkey",
+    function: () => player.respec = !player.respec,
+    visible: () => PlayerProgress.eternityUnlocked()
+  }, {
     name: "Reality",
     keys: ["y"],
     type: "bindRepeatableHotkey",
     function: () => requestManualReality(),
     visible: () => PlayerProgress.realityUnlocked() || isRealityAvailable()
+  }, {
+    name: "Toggle Glyph unequip",
+    keys: ["shift+y"],
+    type: "bindHotkey",
+    function: () => player.reality.respec = !player.reality.respec,
+    visible: () => PlayerProgress.realityUnlocked()
   }, {
     name: "Start/Pause Automator",
     keys: ["u"],
@@ -132,20 +144,32 @@ const shortcuts = [
     function: () => {
       GameStorage.export();
       return false;
-      },
+    },
+    visible: () => true
+  }, {
+    name: "Open the shortcut list",
+    keys: ["?"],
+    type: "bindHotkey",
+    function: () => {
+      keyboardPressQuestionMark();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Open \"How to Play\" pop-up",
     keys: ["h"],
     type: "bindHotkey",
-    function: () => keyboardH2PToggle(),
+    function: () => {
+      keyboardH2PToggle();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Modify visible tabs",
     keys: ["tab"],
     type: "bindHotkey",
     function: () => {
-      Modal.hiddenTabs.show();
+      keyboardVisibleTabsToggle();
       return false;
     },
     visible: () => true
@@ -153,7 +177,10 @@ const shortcuts = [
     name: "Close pop-up or open options",
     keys: ["esc"],
     type: "bindHotkey",
-    function: () => keyboardPressEscape(),
+    function: () => {
+      keyboardPressEscape();
+      return false;
+    },
     visible: () => true
   }, {
     name: "Paying respects",
@@ -284,8 +311,10 @@ function keyboardToggleContinuum() {
   if (!Laitela.continuumUnlocked) return;
   player.auto.disableContinuum = !player.auto.disableContinuum;
   GameUI.notify.info(`${(player.auto.disableContinuum) ? "Disabled" : "Enabled"} Continuum`);
-  // eslint-disable-next-line no-bitwise
-  player.achievementChecks.continuumThisReality |= !player.auto.disableContinuum;
+  // If continuum is not disabled (i.e. is enabled) we update the relevant requirement check.
+  if (!player.auto.disableContinuum) {
+    player.requirementChecks.reality.noContinuum = false;
+  }
 }
 
 function keyboardAutomatorToggle() {
@@ -296,15 +325,21 @@ function keyboardAutomatorToggle() {
     } else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     } else {
-      GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      // Only attempt to start the visible script instead of the existing script if it isn't already running
+      const visibleIndex = player.reality.automator.state.editorScript;
+      const visibleScript = player.reality.automator.scripts[visibleIndex].content;
       AutomatorBackend.restart();
-      AutomatorBackend.start();
+      AutomatorBackend.start(visibleIndex);
+      if (AutomatorData.currentErrors(AutomatorData.currentScriptText(visibleScript)).length === 0) {
+        GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      } else {
+        GameUI.notify.error(`Cannot start script "${AutomatorBackend.scriptName}" (has errors)`);
+      }
       return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
-
   }
 }
 
@@ -326,7 +361,7 @@ function keyboardPressEscape() {
   }
 }
 
-function keyboardPressQuentionMark() {
+function keyboardPressQuestionMark() {
   if (Modal.shortcuts.isOpen) {
     Modal.hide();
     return;
@@ -342,7 +377,15 @@ function keyboardH2PToggle() {
   }
   if (Modal.isOpen) return;
   Modal.h2p.show();
-  ui.view.h2pActive = true;
+}
+
+function keyboardVisibleTabsToggle() {
+  if (Modal.hiddenTabs.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.hiddenTabs.show();
 }
 
 function keyboardTabChange(direction) {

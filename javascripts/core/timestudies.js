@@ -256,21 +256,28 @@ class NormalTimeStudyState extends TimeStudyState {
     return GameCache.timeStudies.value[this.id];
   }
 
+  // The gameDB entries have a check for if a study requires ST to be purchased or not; since eventually all studies
+  // are simultaneously purchasable, the only "universal" requirement to purchase is having the previous study
+  // in the tree. The requiresST prop, if it exists, is a check which returns true if having certain other studies
+  // causes a lock-out (eg. true for all active path studies if idle is already purchased). If it doesn't exist
+  // in the gameDB entry, it's assumed to be false and therefore there's no lockout.
+  costsST() {
+    return this.config.requiresST && this.config.requiresST();
+  }
+
   checkRequirement() {
     const req = this.config.requirement;
     return typeof req === "number" ? TimeStudy(req).isBought : req();
   }
 
-  checkVRequirement() {
-    if (Pelle.isDisabled("V")) return false;
-    const req = this.config.requirementV;
-    return req === undefined
-      ? false
-      : req() && V.availableST >= this.STCost;
+  // This checks for and forbids buying studies due to being part of a set which can't normally be bought
+  // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
+  checkSetRequirement() {
+    return this.costsST() ? !Pelle.isDisabled("V") && (V.availableST >= this.STCost) : true;
   }
 
   get canBeBought() {
-    return !Pelle.isDisabled("studies") && (this.checkRequirement() || this.checkVRequirement());
+    return !Pelle.isDisabled("studies") && this.checkRequirement() && this.checkSetRequirement();
   }
 
   get isEffectActive() {
@@ -279,13 +286,10 @@ class NormalTimeStudyState extends TimeStudyState {
 
   purchase() {
     if (Pelle.isDisabled("studies")) return false;
-    if (this.isBought || !this.isAffordable) return false;
-    if (!this.checkRequirement()) {
-      if (!this.checkVRequirement()) return false;
-      player.celestials.v.STSpent += this.STCost;
-    }
+    if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
+    if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
-    player.achievementChecks.maxStudiesThisReality = Math.clampMin(player.achievementChecks.maxStudiesThisReality,
+    player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,
       player.timestudy.studies.length);
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
@@ -350,6 +354,7 @@ TimeStudy.preferredPaths = {
 class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.ETERNITY_CHALLENGE);
+    this.invalidateRequirement();
   }
 
   get isBought() {
@@ -437,7 +442,15 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get requirementCurrent() {
-    return this.config.requirement.current();
+    const current = this.config.requirement.current();
+    if (this.cachedCurrentRequirement === undefined) {
+      this.cachedCurrentRequirement = current;
+    } else if (typeof current === "number") {
+      this.cachedCurrentRequirement = Math.max(this.cachedCurrentRequirement, current);
+    } else {
+      this.cachedCurrentRequirement = this.cachedCurrentRequirement.clampMin(current);
+    }
+    return this.cachedCurrentRequirement;
   }
 
   get isSecondaryRequirementMet() {
@@ -450,6 +463,10 @@ class ECTimeStudyState extends TimeStudyState {
     const current = this.requirementCurrent;
     const total = this.requirementTotal;
     return typeof current === "number" ? current >= total : current.gte(total);
+  }
+
+  invalidateRequirement() {
+    this.cachedCurrentRequirement = undefined;
   }
 }
 
@@ -473,6 +490,10 @@ TimeStudy.eternityChallenge.current = function() {
   return player.challenge.eternity.unlocked
     ? TimeStudy.eternityChallenge(player.challenge.eternity.unlocked)
     : undefined;
+};
+
+ECTimeStudyState.invalidateCachedRequirements = function() {
+  ECTimeStudyState.studies.forEach(study => study.invalidateRequirement());
 };
 
 class DilationTimeStudyState extends TimeStudyState {
@@ -510,6 +531,10 @@ class DilationTimeStudyState extends TimeStudyState {
     }
     player.dilation.studies.push(this.id);
     Currency.timeTheorems.subtract(this.cost);
+    if (this.id === 6 && !PlayerProgress.realityUnlocked()) {
+      // We need to do this at the end so that rupgs can be unlocked.
+      EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
+    }
     return true;
   }
 }
@@ -594,7 +619,7 @@ class TriadStudyState extends TimeStudyState {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
-    player.achievementChecks.noTriadStudies = false;
+    player.requirementChecks.reality.noTriads = false;
   }
 
   purchaseUntil() {

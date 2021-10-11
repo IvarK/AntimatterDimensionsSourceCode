@@ -207,7 +207,7 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   add(amount) {
     super.add(amount);
-    if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
+    if (amount.gt(0)) player.requirementChecks.reality.noAM = false;
   }
 
   get productionPerSecond() {
@@ -261,6 +261,11 @@ Currency.infinityPoints = new class extends DecimalCurrency {
       Perk.startIP2,
       Achievement(104)
     ).toDecimal();
+  }
+
+  reset() {
+    super.reset();
+    player.records.thisEternity.maxIP = this.startingValue;
   }
 }();
 
@@ -345,7 +350,10 @@ Currency.tachyonParticles = new class extends DecimalCurrency {
 
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }
-  set value(value) { player.dilation.dilatedTime = value; }
+  set value(value) {
+    player.dilation.dilatedTime = value;
+    player.records.thisReality.maxDT = player.records.thisReality.maxDT.max(value);
+  }
 }();
 
 Currency.realities = new class extends NumberCurrency {

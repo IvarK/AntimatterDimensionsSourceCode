@@ -27,21 +27,21 @@
   position: fixed;
   left: 0;
   right: 0;
-  top: -1.7rem;
+  top: -6.5rem;
   bottom: 0;
   margin-top: 0;
   z-index: 4;
 }
 
 .l-automator-tab--full-screen > div {
-  height: 100%;
+  height: calc(100% - 6.5rem);
   width: 100%;
 }
 
 .l-automator-pane {
   display: flex;
   flex-direction: column;
-  height: 100%
+  height: 100%;
 }
 
 .l-automator-pane__content {
@@ -123,6 +123,18 @@
   background: rgb(43, 6, 92);
   filter: brightness(200%);
   outline: 0.1rem solid rgb(68, 0, 255);
+}
+
+.c-automator-editor__event-line {
+  background: rgb(0, 127, 0);
+  outline: 0.1rem solid rgb(25, 200, 25);
+}
+
+.c-automator-editor__event-line-gutter {
+  font-weight: bold;
+  background: rgb(0, 127, 0);
+  filter: brightness(200%);
+  outline: 0.1rem solid rgb(25, 200, 25);
 }
 
 .c-automator-editor__error-line {

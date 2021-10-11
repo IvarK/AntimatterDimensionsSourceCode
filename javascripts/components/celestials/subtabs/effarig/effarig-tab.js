@@ -39,6 +39,8 @@ Vue.component("effarig-tab", {
       relicShards: 0,
       shardRarityBoost: 0,
       shardsGained: 0,
+      amplification: 0,
+      amplifiedShards: 0,
       runUnlocked: false,
       quote: "",
       isRunning: false,
@@ -74,6 +76,8 @@ Vue.component("effarig-tab", {
       this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost;
       this.shardsGained = Effarig.shardsGained;
+      this.amplification = simulatedRealityCount(false);
+      this.amplifiedShards = this.shardsGained * (1 + this.amplification);
       this.quote = Effarig.quote;
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
@@ -113,11 +117,22 @@ Vue.component("effarig-tab", {
             +{{ format(shardRarityBoost, 2, 2) }}%.
           </div>
           <div class="c-effarig-relic-description">
-            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next Reality. More Eternity Points
+            You will gain {{ format(shardsGained, 2) }} Relic Shards next Reality.
+            <span v-if="amplification !== 0">
+              <br>
+              Due to amplification of your current Reality,
+              <br>
+              you will actually gain a total of
+              {{ format(amplifiedShards, 2) }} Relic Shards.
+            </span>
+          </div>
+          <div class="c-effarig-relic-description">
             <br>
-            slightly increases Relic Shards gained. More distinct Glyph
+            More Eternity Points slightly increases Relic Shards
             <br>
-            effects significantly increases Relic Shards gained.
+            gained. More distinct Glyph effects significantly
+            <br>
+            increases Relic Shards gained.
           </div>
           <effarig-unlock-button
             v-for="(unlock, i) in shopUnlocks"

@@ -4,6 +4,7 @@ Vue.component("glyph-set-preview", {
   props: {
     show: Boolean,
     text: String,
+    textHidden: Boolean,
     glyphs: Array,
     ignoreModifiedLevel: Boolean,
     flipTooltip: Boolean,
@@ -38,14 +39,25 @@ Vue.component("glyph-set-preview", {
         ? GameDatabase.reality.glyphEffects.realityglyphlevel.effect(realityGlyph.level)
         : 0;
     },
+    showModal() {
+      if (this.isInModal) return;
+      Modal.glyphShowcasePanel.show({
+        name: this.text,
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,
+        isGlyphSelection: false,
+        showSetName: true,
+        displaySacrifice: this.showSacrifice,
+      });
+    }
   },
   template: `
     <div v-if="show">
-      <span v-if="text">
+      <span v-if="text && !textHidden">
         {{ text }}
         <br>
       </span>
-      <span v-if="glyphs.length !== 0">
+      <span v-if="glyphs.length !== 0" @click="showModal">
         <glyph-set-name
           v-if="showName"
           :glyphSet="glyphs"

@@ -29,6 +29,7 @@ const Glyphs = {
   active: [],
   copies: [],
   levelBoost: 0,
+  factorsOpen: false,
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },
@@ -148,6 +149,7 @@ const Glyphs = {
       this.active[targetSlot] = glyph;
       this.updateRealityGlyphEffects();
       this.updateMaxGlyphCount();
+      EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
       EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
       this.validate();
     } else {
@@ -176,6 +178,7 @@ const Glyphs = {
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -187,6 +190,7 @@ const Glyphs = {
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -445,6 +449,10 @@ const Glyphs = {
       ep: new Decimal(Currency.eternityPoints.value),
       tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
+      thisInfinityTime: player.records.thisInfinity.time,
+      thisInfinityRealTime: player.records.thisInfinity.realTime,
+      thisEternityTime: player.records.thisEternity.time,
+      thisEternityRealTime: player.records.thisEternity.realTime,
       thisRealityTime: player.records.thisReality.time,
       thisRealityRealTime: player.records.thisReality.realTime,
       storedTime: player.celestials.enslaved.stored,
@@ -470,6 +478,10 @@ const Glyphs = {
     Currency.eternityPoints.value = new Decimal(undoData.ep);
     Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
+    player.records.thisInfinity.time = undoData.thisInfinityTime;
+    player.records.thisInfinity.realTime = undoData.thisInfinityRealTime;
+    player.records.thisEternity.time = undoData.thisEternityTime;
+    player.records.thisEternity.realTime = undoData.thisEternityRealTime;
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
     player.celestials.enslaved.stored = undoData.storedTime || 0;
@@ -500,8 +512,8 @@ const Glyphs = {
   updateMaxGlyphCount(startingReality = false) {
     const activeGlyphList = this.activeList;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
-    if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
-    player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
+    if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
+    player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
@@ -528,6 +540,7 @@ const Glyphs = {
     glyph.idx = targetSlot;
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   }

@@ -160,13 +160,8 @@ function skipResetsIfPossible() {
 function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
-  if (BreakInfinityUpgrade.bulkDimBoost.isBought && bulk) maxBuyDimBoosts(true);
+  if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts(true);
   else softReset(1);
-
-  for (let tier = 1; tier < 9; tier++) {
-    const mult = DimBoost.multiplierToNDTier(tier);
-    if (mult.gt(1)) floatText(tier, formatX(mult));
-  }
 }
 
 function maxBuyDimBoosts() {

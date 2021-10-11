@@ -9,7 +9,7 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "antimatter",
-        name: "Dimensions",
+        name: "Antimatter Dimensions",
         symbol: "Ω",
         component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab",
@@ -119,7 +119,7 @@ GameDatabase.tabs = [
       {
         key: "normal",
         name: "Achievements",
-        symbol: "<i class='fas fa-star'></i>",
+        symbol: "<i class='fas fa-trophy'></i>",
         component: "normal-achievements-tab",
         id: 0,
         hidable: true,
@@ -263,7 +263,7 @@ GameDatabase.tabs = [
       {
         key: "milestones",
         name: "Eternity Milestones",
-        symbol: "<i class='fas fa-trophy'></i>",
+        symbol: "<i class='fas fa-star'></i>",
         component: "eternity-milestones-tab",
         id: 2,
         hidable: true,
@@ -326,6 +326,7 @@ GameDatabase.tabs = [
         name: "Automator",
         symbol: "<i class='fas fa-cog'></i>",
         component: "automator-tab",
+        condition: () => PlayerProgress.realityUnlocked(),
         id: 4,
         hidable: true,
       },
@@ -334,6 +335,7 @@ GameDatabase.tabs = [
         name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
+        condition: () => PlayerProgress.realityUnlocked(),
         id: 5,
         hidable: true,
       },
@@ -352,7 +354,7 @@ GameDatabase.tabs = [
     key: "celestials",
     name: "Celestials",
     UIClass: "o-tab-btn--celestial",
-    condition: () => RealityUpgrades.allBought,
+    condition: () => Teresa.isUnlocked,
     id: 8,
     hidable: true,
     subtabs: [

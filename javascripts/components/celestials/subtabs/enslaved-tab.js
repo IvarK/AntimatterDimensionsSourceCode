@@ -16,6 +16,9 @@ Vue.component("modal-enslaved-hints", {
     hintCost() {
       return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)} years`;
     },
+    formattedStored() {
+      return `${format(TimeSpan.fromMilliseconds(this.currentStored).totalYears, 2)} years`;
+    },
     hasProgress(id) {
       return this.progressEntries.some(entry => entry.id === id);
     },
@@ -80,8 +83,9 @@ Vue.component("modal-enslaved-hints", {
     }
   },
   template: `
-    <div class="c-reality-glyph-creation">
+    <div class="c-enslaved-hint-modal">
       <modal-close-button @click="emitClose" />
+      <h2>Cracks in The Enslaved Ones' Reality</h2>
       <div>
         This Reality seems to be resisting your efforts to complete it. So far you have done the following:
       </div>
@@ -103,7 +107,7 @@ Vue.component("modal-enslaved-hints", {
         gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
         divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
         <br><br>
-        The next hint will cost {{ hintCost }} Stored Time.
+        The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
         <span v-if="currentStored < nextHintCost">
           You will reach this if you charge your Black Hole for {{ timeEstimate }}.
         </span>
@@ -135,6 +139,7 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
+    offlineEnabled: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
     isRunning: false,
@@ -180,7 +185,7 @@ Vue.component("enslaved-tab", {
     sliderProps() {
       return {
         min: 0,
-        max: 1000,
+        max: 990,
         interval: 1,
         show: true,
         width: "60rem",
@@ -196,6 +201,11 @@ Vue.component("enslaved-tab", {
     runDescription() {
       return GameDatabase.celestials.descriptions[2].description().split("\n");
     },
+    realTimeButtonText() {
+      if (!this.offlineEnabled) return "Offline Progress is disabled";
+      if (this.autoStoreReal) return "Offline time stored";
+      return "Offline time used for production";
+    }
   },
   methods: {
     update() {
@@ -203,6 +213,7 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
+      this.offlineEnabled = player.options.offlineProgress;
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
@@ -225,6 +236,7 @@ Vue.component("enslaved-tab", {
       Enslaved.toggleStoreReal();
     },
     toggleAutoStoreReal() {
+      if (!this.offlineEnabled) return;
       Enslaved.toggleAutoStoreReal();
     },
     useStored() {
@@ -352,12 +364,11 @@ Vue.component("enslaved-tab", {
                 </div>
               </button>
               <button
-                :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
+                :class="['o-enslaved-mechanic-button',
+                  {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled}]"
                 @click="toggleAutoStoreReal"
               >
-                <div>
-                  {{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}
-                </div>
+                {{ realTimeButtonText }}
               </button>
               <div>
                 Efficiency: {{ storedRealEfficiencyDesc }}
@@ -389,7 +400,7 @@ Vue.component("enslaved-tab", {
               <div v-if="!hasUnlock(unlock)">
                 Costs: {{ timeDisplayShort(unlock.price) }}
               </div>
-              <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
+              <span v-if="isStoringBlackHole && !hasUnlock(unlock) && timeUntilBuy(unlock.price) > 0">
                 Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
               </span>
             </button>

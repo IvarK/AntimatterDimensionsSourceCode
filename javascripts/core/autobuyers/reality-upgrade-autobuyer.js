@@ -16,7 +16,7 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES);
+    return Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC);
   }
 
   tick() {
@@ -29,3 +29,4 @@ RealityUpgradeAutobuyerState.index = Array.range(1, 5).map(upgrade => new Realit
 
 Autobuyer.realityUpgrade = upgrade => RealityUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.realityUpgrade.array = RealityUpgradeAutobuyerState.index;
+Autobuyer.realityUpgrade.array.name = "Reality Upgrade";

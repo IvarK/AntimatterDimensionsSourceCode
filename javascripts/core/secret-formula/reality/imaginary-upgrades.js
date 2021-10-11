@@ -151,9 +151,10 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "Fabrication of Ideals",
       id: 15,
       cost: 1e9,
-      requirement: () => `Reach ${format("1e1500000000000")} antimatter without having any Infinity Dimensions`,
-      hasFailed: () => player.achievementChecks.maxID1ThisReality.gt(0),
-      checkRequirement: () => player.achievementChecks.maxID1ThisReality.eq(0) && player.antimatter.exponent >= 1.5e12,
+      requirement: () => `Reach ${format("1e1500000000000")} antimatter without
+        ever having any 1st Infinity Dimensions`,
+      hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
+      checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
     },
@@ -198,8 +199,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatCost: x => format(x, 1),
       requirement: () => `Reach ${formatInt(3.85e6)} Tickspeed Continuum without having more than
         ${formatInt(8)} Time Studies`,
-      hasFailed: () => player.achievementChecks.maxStudiesThisReality > 8,
-      checkRequirement: () => player.achievementChecks.maxStudiesThisReality <= 8 &&
+      hasFailed: () => player.requirementChecks.reality.maxStudies > 8,
+      checkRequirement: () => player.requirementChecks.reality.maxStudies <= 8 &&
         Tickspeed.continuumValue >= 3.85e6,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Dark Matter Annihilation",
@@ -221,8 +222,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 21,
       cost: 1e13,
       requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled`,
-      hasFailed: () => player.achievementChecks.continuumThisReality,
-      checkRequirement: () => !player.achievementChecks.continuumThisReality &&
+      hasFailed: () => !player.requirementChecks.reality.noContinuum,
+      checkRequirement: () => player.requirementChecks.reality.noContinuum &&
         Currency.antimatter.value.log10() >= 7.4e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Annihilation multiplier gain is improved based on iM",
@@ -237,8 +238,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       requirement: () => `Reach ${format("1e150000000000")} antimatter in Effarig's Reality with
         at least ${formatInt(4)} cursed glyphs equipped`,
       // Note: 4 cursed glyphs is -12 glyph count, but equipping a positive glyph in the last slot is allowed
-      hasFailed: () => !Effarig.isRunning || player.celestials.v.maxGlyphsThisRun > -10,
-      checkRequirement: () => Effarig.isRunning && player.celestials.v.maxGlyphsThisRun < -10 &&
+      hasFailed: () => !Effarig.isRunning || player.requirementChecks.reality.maxGlyphs > -10,
+      checkRequirement: () => Effarig.isRunning && player.requirementChecks.reality.maxGlyphs < -10 &&
         Currency.antimatter.value.exponent >= 1.5e11,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: () => `Glyph Sacrifice totals for basic glyphs are raised to ${format(1e100)}`,
@@ -250,12 +251,12 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 6e14,
       requirement: () => `Reach glyph level ${formatInt(20000)} in Ra's Reality with
         at most ${formatInt(0)} glyphs equipped`,
-      hasFailed: () => !Ra.isRunning || player.celestials.v.maxGlyphsThisRun > 0,
-      checkRequirement: () => Ra.isRunning && player.celestials.v.maxGlyphsThisRun <= 0 &&
+      hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.maxGlyphs > 0,
+      checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.maxGlyphs <= 0 &&
         gainedGlyphLevel().actualLevel >= 20000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost count based on Tesseract count",
-      effect: () => Math.floor(0.25 * Math.pow(Enslaved.effectiveTesseractCount, 2)),
+      effect: () => Math.floor(0.25 * Math.pow(Tesseracts.effectiveCount, 2)),
       formatEffect: value => `${formatX(value)}`,
     },
     {
@@ -264,8 +265,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 6e14,
       requirement: () => `Have ${formatInt(13000)} Antimatter Galaxies in Ra's Reality
         with a fully inverted Black Hole`,
-      hasFailed: () => !Ra.isRunning || player.minNegativeBlackHoleThisReality > 1e-300,
-      checkRequirement: () => Ra.isRunning && player.minNegativeBlackHoleThisReality <= 1e-300 &&
+      hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.slowestBH > 1e-300,
+      checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.slowestBH <= 1e-300 &&
         player.galaxies >= 13000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost strength based on Singularity count",

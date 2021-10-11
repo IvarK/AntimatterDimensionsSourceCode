@@ -88,8 +88,7 @@ const Perk = (function() {
     achievementGroup2: new PerkState(db.achievementGroup2),
     achievementGroup3: new PerkState(db.achievementGroup3),
     achievementGroup4: new PerkState(db.achievementGroup4),
-    achievementGroup5: new PerkState(db.achievementGroup5),
-    achievementGroup6: new PerkState(db.achievementGroup6)
+    achievementGroup5: new PerkState(db.achievementGroup5)
   };
 }());
 

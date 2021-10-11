@@ -29,3 +29,4 @@ ImaginaryUpgradeAutobuyerState.index = Array.range(1, 10).map(upgrade => new Ima
 
 Autobuyer.imaginaryUpgrade = upgrade => ImaginaryUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.imaginaryUpgrade.array = ImaginaryUpgradeAutobuyerState.index;
+Autobuyer.imaginaryUpgrade.array.name = "Imaginary Upgrade";

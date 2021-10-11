@@ -2,10 +2,14 @@
 
 const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<=", "!="];
 const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
-  "IP", "EP", "RM",
-  "PENDING IP", "PENDING EP", "PENDING RM", "GLYPH LEVEL",
-  "AM", "REPLICANTI", "RG", "TT", "DT", "PENDING COMPLETIONS", "TP"
+  "AM", "IP", "EP", "RM", "INFINITIES", "ETERNITIES", "REALITIES",
+  "PENDING IP", "PENDING EP", "PENDING TP", "PENDING RM", "PENDING GLYPH LEVEL",
+  "DT", "TP", "RG", "REP", "TT", "TOTAL TT", "TOTAL COMPLETIONS", "PENDING COMPLETIONS",
+  "EC1 COMPLETIONS", "EC2 COMPLETIONS", "EC3 COMPLETIONS", "EC4 COMPLETIONS",
+  "EC5 COMPLETIONS", "EC6 COMPLETIONS", "EC7 COMPLETIONS", "EC8 COMPLETIONS",
+  "EC9 COMPLETIONS", "EC10 COMPLETIONS", "EC11 COMPLETIONS", "EC12 COMPLETIONS",
 ];
+
 const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
 const automatorBlocks = [
@@ -116,17 +120,20 @@ Vue.component("automator-blocks", {
     }
   },
   template: `
-    <div class="c-automator-docs">
-      <draggable
-        :list="blocks"
-        :group="{ name: 'code-blocks', pull: 'clone', put: false }"
-        :sort="false"
-        :clone="clone"
-        class="c-automator-command-list"
+    <draggable
+      :list="blocks"
+      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+      :sort="false"
+      :clone="clone"
+      style="display: flex; align-items: center; flex-wrap: wrap;"
+    >
+      <div
+        v-for="block in blocks"
+        :key="block.id"
+        class="o-automator-command o-automator-block-list"
       >
-        <div v-for="block in blocks" :key="block.id" class="o-automator-command">
-          {{ block.cmd }}
-        </div>
-      </draggable>
-    </div>`
+        {{ block.cmd }}
+      </div>
+    </draggable>
+    `
 });

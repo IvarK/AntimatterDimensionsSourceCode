@@ -341,8 +341,11 @@ GameStorage.devMigrations = {
         allGlyphs[i].id = i;
       }
     },
+    // eslint-disable-next-line no-unused-vars
     player => {
-      GameStorage.migrations.clearNewsArray(player);
+      // This used to clearNewsArray, which cleared all news entries completely. Unsure what exactly that accomplished,
+      // but convertNews should accomplish the same migration purpose. However, this entry still needs to stay here as
+      // a no-op because otherwise save conversion will have an off-by-one error and generally break entirely.
     },
     player => {
       GameStorage.migrations.removeTickspeed(player);
@@ -422,7 +425,7 @@ GameStorage.devMigrations = {
       delete player.autoRealityMode;
       delete player.autoEternityMode;
     },
-    GameStorage.migrations.convertNewsToSet,
+    GameStorage.migrations.convertNews,
     GameStorage.migrations.convertEternityCountToDecimal,
     GameStorage.migrations.renameDimboosts,
     player => {
@@ -858,17 +861,23 @@ GameStorage.devMigrations = {
       player.celestials.ra.pets.effarig.memories = player.celestials.ra.pets.effarig.exp;
       player.celestials.ra.pets.enslaved.memories = player.celestials.ra.pets.enslaved.exp;
       player.celestials.ra.pets.v.memories = player.celestials.ra.pets.v.exp;
-      player.achievementChecks.noSacrifices = player.noSacrifices;
-      player.achievementChecks.onlyEighthDimensions = player.onlyEighthDimensions;
-      player.achievementChecks.onlyFirstDimensions = player.onlyFirstDimensions;
-      player.achievementChecks.noEighthDimensions = player.noEighthDimensions;
-      player.achievementChecks.noFirstDimensions = player.noFirstDimensions;
-      player.achievementChecks.noAntimatterProduced = player.noAntimatterProduced;
-      player.achievementChecks.noTriadStudies = player.noTriadStudies;
-      player.achievementChecks.noTheoremPurchases = player.noTheoremPurchases;
-      player.achievementChecks.noInfinitiesThisReality = player.noInfinitiesThisReality;
-      player.achievementChecks.noEternitiesThisReality = player.noEternitiesThisReality;
-      player.achievementChecks.noReplicantiGalaxies = player.noReplicantiGalaxies;
+      player.achievementChecks = {
+        noSacrifices: player.noSacrifices,
+        onlyEighthDimensions: player.onlyEighthDimensions,
+        onlyFirstDimensions: player.onlyFirstDimensions,
+        noEighthDimensions: player.noEighthDimensions,
+        noFirstDimensions: player.noFirstDimensions,
+        noAntimatterProduced: player.noAntimatterProduced,
+        noTriadStudies: player.noTriadStudies,
+        noTheoremPurchases: player.noTheoremPurchases,
+        noInfinitiesThisReality: player.noInfinitiesThisReality,
+        noEternitiesThisReality: player.noEternitiesThisReality,
+        noReplicantiGalaxies: player.noReplicantiGalaxies,
+        // Not necessarily accurate, but these defaults prevent some people from effortlessly completing some
+        // otherwise very difficult unlocks immediately upon migration
+        maxID1ThisReality: new Decimal(1),
+        continuumThisReality: true,
+      };
       player.dilation.baseTachyonGalaxies = player.dilation.baseFreeGalaxies;
       player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 
@@ -999,7 +1008,117 @@ GameStorage.devMigrations = {
       player.reality.automator.state.editorScript = selectedID;
 
       delete player.reality.automator.lastID;
-    }
+    },
+    GameStorage.migrations.deleteDimboostBulk,
+    GameStorage.migrations.removePriority,
+    player => {
+      player.reality.realityMachines = player.reality.realityMachines.floor();
+    },
+    GameStorage.migrations.deleteFloatingTextOption,
+    player => {
+      // Delete ACH5
+      if (player.reality.perks.has(206)) {
+        player.reality.perks.delete(206);
+        Currency.perkPoints.add(1);
+      }
+    },
+    player => {
+      player.records.thisEternity.maxIP.copyFrom(player.infinityPoints);
+      player.auto.bigCrunch.xHighest = player.auto.bigCrunch.xCurrent;
+      player.auto.eternity.xHighest = player.auto.eternity.xCurrent;
+      delete player.auto.bigCrunch.xCurrent;
+      delete player.auto.eternity.xCurrent;
+    },
+    player => {
+      // Fix an issue where a boolean property could become int and trigger number checking code.
+      player.achievementChecks.continuumThisReality = Boolean(player.achievementChecks.continuumThisReality);
+    },
+    player => {
+      player.secretUnlocks.spreadingCancer = player.spreadingCancer;
+      delete player.spreadingCancer;
+    },
+    player => {
+      delete player.celestials.enslaved.totalDimCapIncrease;
+    },
+    player => {
+      for (const i of player.reality.glyphs.undo) {
+        for (const j of ["thisInfinityTime", "thisInfinityRealTime", "thisEternityTime", "thisEternityRealTime"]) {
+          if (!(j in i)) {
+            // This is 1 second, seems like a solid default value for saves without the property.
+            i[j] = 1000;
+          }
+        }
+      }
+    },
+    player => {
+      // Requirement migration/refactor
+      const oldChecks = player.achievementChecks;
+      player.requirementChecks = {
+        infinity: {
+          maxAll: player.usedMaxAll,
+          noSacrifice: oldChecks.noSacrifices,
+          noAD8: oldChecks.noEighthDimensions,
+        },
+        eternity: {
+          onlyAD1: oldChecks.onlyFirstDimensions,
+          onlyAD8: oldChecks.onlyEighthDimensions,
+          noAD1: oldChecks.noFirstDimensions,
+          noRG: oldChecks.noEighthDimensions,
+        },
+        reality: {
+          noAM: oldChecks.noAntimatterProduced,
+          noTriads: oldChecks.noTriadStudies,
+          noPurchasedTT: oldChecks.noTheoremPurchases,
+          noInfinities: oldChecks.noInfinitiesThisReality,
+          noEternities: oldChecks.noEternitiesThisReality,
+          noContinuum: !oldChecks.continuumThisReality,
+          maxID1: new Decimal(oldChecks.maxID1ThisReality),
+          maxStudies: oldChecks.maxStudiesThisReality,
+          maxGlyphs: player.celestials.v.maxGlyphsThisRun,
+          slowestBH: player.minNegativeBlackHoleThisReality,
+        },
+        permanent: {
+          cancerGalaxies: player.secretUnlocks.spreadingCancer,
+          singleTickspeed: player.secretUnlocks.why,
+          perkTreeDragging: player.secretUnlocks.dragging,
+        }
+      };
+      delete player.usedMaxAll;
+      delete player.secretUnlocks.spreadingCancer;
+      delete player.secretUnlocks.why;
+      delete player.secretUnlocks.dragging;
+      delete player.achievementChecks;
+      delete player.minNegativeBlackHoleThisReality;
+      delete player.celestials.v.maxGlyphsThisRun;
+
+      // Refactor news storage format to bitmask array
+      const oldNewsArray = player.news;
+      delete player.news;
+      player.news = {};
+      player.news.seen = {};
+      for (const id of oldNewsArray) NewsHandler.addSeenNews(id);
+      player.news.totalSeen = NewsHandler.uniqueTickersSeen;
+
+      // Separate news-specific data
+      player.news.specialTickerData = {
+        uselessNewsClicks: player.secretUnlocks.uselessNewsClicks,
+        paperclips: player.secretUnlocks.paperclips,
+        newsQueuePosition: player.secretUnlocks.newsQueuePosition,
+        eiffelTowerChapter: player.secretUnlocks.eiffelTowerChapter,
+      };
+      delete player.secretUnlocks.uselessNewsClicks;
+      delete player.secretUnlocks.paperclips;
+      delete player.secretUnlocks.newsQueuePosition;
+      delete player.secretUnlocks.eiffelTowerChapter;
+    },
+    GameStorage.migrations.refactorDoubleIPRebuyable,
+    player => {
+      if (player.requirementChecks.reality.slowestBH === 0) player.requirementChecks.reality.slowestBH = 1;
+    },
+    player => {
+      // #1764 fix - EM200 bug from eternity autobuyer appearing to be zero but not actually being zero
+      if (player.auto.eternity.amount.lt(0.01)) player.auto.eternity.amount = new Decimal(0);
+    },
   ],
 
   patch(player) {

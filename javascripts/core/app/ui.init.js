@@ -6,15 +6,10 @@ let ui = {
     modal: {
       queue: [],
       current: undefined,
-      cloudConflicts: [],
+      cloudConflict: [],
       progressBar: undefined,
     },
     tabs: {
-      dimensions: {
-        antimatter: {
-          floatingText: Array.from({ length: 9 }, () => [])
-        },
-      },
       reality: {
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
@@ -51,7 +46,8 @@ let ui = {
     news: false,
     initialized: false,
     tutorialState: 0,
-    tutorialActive: true
+    tutorialActive: true,
+    h2pForcedTab: undefined,
   },
   notationName: "",
   formatPreBreak: false,

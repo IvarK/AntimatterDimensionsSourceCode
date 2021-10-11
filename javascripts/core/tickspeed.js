@@ -17,7 +17,7 @@ function getTickSpeedMultiplier() {
   // this value should not be contributed to total replicanti galaxies
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
-  freeGalaxies *= 1 + Math.max(0, player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
+  freeGalaxies *= 1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   const pelleGalaxies = PelleRebuyableUpgrade.permanentGalaxies.effectValue;
   let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies + pelleGalaxies;
   if (Pelle.isDoomed) galaxies /= 2;
@@ -67,13 +67,13 @@ function getTickSpeedMultiplier() {
 function buyTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
 
-  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+  if (NormalChallenge(9).isRunning) {
     Tickspeed.multiplySameCosts();
   }
   Currency.antimatter.subtract(Tickspeed.cost);
   player.totalTickBought++;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-  player.secretUnlocks.why++;
+  player.requirementChecks.permanent.singleTickspeed++;
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   GameUI.update();
   return true;
@@ -94,7 +94,7 @@ function buyMaxTickSpeed() {
       cost = Tickspeed.cost;
     }
   } else {
-    const purchases = Tickspeed.costScale.getMaxBought(player.totalTickBought, Currency.antimatter.value);
+    const purchases = Tickspeed.costScale.getMaxBought(player.totalTickBought, Currency.antimatter.value, 1);
     if (purchases === null) {
       return;
     }
@@ -117,8 +117,8 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return AntimatterDimension(2).amount.gt(0) ||
-            EternityMilestone.unlockAllND.isReached || PlayerProgress.realityUnlocked();
+    return AntimatterDimension(2).bought > 0 || EternityMilestone.unlockAllND.isReached ||
+      PlayerProgress.realityUnlocked();
   },
 
   get isAvailableForPurchase() {
@@ -159,7 +159,7 @@ const Tickspeed = {
 
   get continuumValue() {
     if (!this.isUnlocked) return 0;
-    return this.costScale.getContinuumValue(Currency.antimatter.value) * Laitela.matterExtraPurchaseFactor;
+    return this.costScale.getContinuumValue(Currency.antimatter.value, 1) * Laitela.matterExtraPurchaseFactor;
   },
 
   get permanentTickspeed() {
@@ -211,15 +211,11 @@ const FreeTickspeed = {
   },
 
   fromShards(shards) {
-    if (!shards.gt(0)) return {
-      newAmount: 0,
-      nextShards: new Decimal(1),
-    };
     const tickmult = (1 + (Effects.min(1.33, TimeStudy(171)) - 1) *
       Math.max(getAdjustedGlyphEffect("cursedtickspeed"), 1));
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
-    const uncapped = logShards / logTickmult;
+    const uncapped = Math.max(0, logShards / logTickmult);
     if (uncapped <= FreeTickspeed.softcap) {
       this.multToNext = tickmult;
       return {

@@ -82,12 +82,9 @@ GameStorage.migrations = {
       // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST
       if (isDevEnvironment()) GameStorage.devMigrations.setLatestTestVersion(player);
 
-      // Last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards,
+      // Last update version check, fix emoji/cancer issue,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
       // And all other kinds of stuff
-      if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
-      if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
-
       player.realTimePlayed = player.totalTimePlayed;
       player.thisReality = player.totalTimePlayed;
       player.thisInfinityRealTime = player.thisInfinityTime * 100;
@@ -121,12 +118,10 @@ GameStorage.migrations = {
       GameStorage.migrations.adjustAchievementVars(player);
       GameStorage.migrations.uniformDimensions(player);
       GameStorage.migrations.removeEternityChallGoal(player);
-      GameStorage.migrations.clearNewsArray(player);
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
       GameStorage.migrations.renameMoney(player);
       GameStorage.migrations.moveAutobuyers(player);
-      GameStorage.migrations.convertNewsToSet(player);
       GameStorage.migrations.convertEternityCountToDecimal(player);
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
@@ -147,6 +142,10 @@ GameStorage.migrations = {
       GameStorage.migrations.migratePlayerVars(player);
       GameStorage.migrations.consolidateAuto(player);
       GameStorage.migrations.convertTimeTheoremPurchases(player);
+      GameStorage.migrations.deleteDimboostBulk(player);
+      GameStorage.migrations.deleteFloatingTextOption(player);
+      GameStorage.migrations.refactorDoubleIPRebuyable(player);
+      GameStorage.migrations.convertNews(player);
 
       kong.migratePurchases();
     }
@@ -346,24 +345,24 @@ GameStorage.migrations = {
   },
 
   adjustAchievementVars(player) {
-    player.achievementChecks.onlyFirstDimensions = player.dead;
+    player.requirementChecks.eternity.onlyAD1 = player.dead;
     delete player.dead;
-    player.achievementChecks.onlyEighthDimensions = player.dimlife;
+    player.requirementChecks.eternity.onlyAD8 = player.dimlife;
     delete player.dimlife;
     // Just initialize all these to false, which is basically always correct.
-    player.achievementChecks.noAntimatterProduced = false;
-    player.achievementChecks.noFirstDimensions = false;
-    player.achievementChecks.noEighthDimensions = false;
+    player.requirementChecks.reality.noAM = false;
+    player.requirementChecks.eternity.noAD1 = false;
+    player.requirementChecks.infinity.noAD8 = false;
     // If someone has 0 max replicanti galaxies, they can't have gotten any.
     // If they have more than 0 max replicanti galaxies, we don't give them
     // the benefit of the doubt.
-    player.achievementChecks.noReplicantiGalaxies = player.replicanti.gal === 0;
+    player.requirementChecks.eternity.noRG = player.replicanti.gal === 0;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||
       player.challenge.eternity.unlocked !== 0
-    ) player.achievementChecks.noTheoremPurchases = false;
-    if (player.sacrificed.gt(0)) player.achievementChecks.noSacrifices = false;
+    ) player.requirementChecks.reality.noPurchasedTT = false;
+    if (player.sacrificed.gt(0)) player.requirementChecks.infinity.noSacrifice = false;
   },
 
   adjustThemes(player) {
@@ -433,10 +432,6 @@ GameStorage.migrations = {
 
   removeEternityChallGoal(player) {
     delete player.eternityChallGoal;
-  },
-
-  clearNewsArray(player) {
-    player.newsArray = [];
   },
 
   removeTickspeed(player) {
@@ -609,7 +604,7 @@ GameStorage.migrations = {
           autobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE) ? condition.toNumber() : autobuyer.time;
           break;
         case "relative":
-          autobuyer.xCurrent = condition;
+          autobuyer.xHighest = condition;
           break;
       }
       autobuyer.isActive = old.isOn;
@@ -641,8 +636,33 @@ GameStorage.migrations = {
     delete player.eternityBuyer;
   },
 
-  convertNewsToSet(player) {
-    player.news = new Set(player.newsArray);
+  convertNews(player) {
+    const oldNewsArray = new Set(player.newsArray);
+    player.news = {};
+    player.news.seen = {};
+    player.news.specialTickerData = {
+      uselessNewsClicks: 0,
+      paperclips: 0,
+      newsQueuePosition: 1000,
+      eiffelTowerChapter: 0
+    };
+
+    // This loop is copied more or less straight out of NewsHandler.addSeenNews with the extraneous comments and
+    // spacing removed. There was something strange with variable scoping that was causing player.news.seen to be
+    // updated within NewsHandler, but then immediately becoming empty again once we were back at this level of
+    // function calls (ie. out of the scope of NewsHandler). Sloppy, but nevertheless it does seem to work.
+    const maskLength = NewsHandler.BITS_PER_MASK;
+    for (const id of oldNewsArray) {
+      const groups = id.match(/([a-z]+)(\d+)/u);
+      const type = groups[1];
+      const number = parseInt(groups[2], 10);
+      if (!player.news.seen[type]) player.news.seen[type] = [];
+      while (maskLength * player.news.seen[type].length < number) player.news.seen[type].push(0);
+      // eslint-disable-next-line no-bitwise
+      player.news.seen[type][Math.floor(number / maskLength)] |= 1 << (number % maskLength);
+    }
+
+    player.news.totalSeen = NewsHandler.uniqueTickersSeen;
     delete player.newsArray;
   },
 
@@ -698,8 +718,8 @@ GameStorage.migrations = {
   },
 
   setNoInfinitiesOrEternitiesThisReality(player) {
-    player.achievementChecks.noInfinitiesThisReality = player.infinities.eq(0) && player.eternities.eq(0);
-    player.achievementChecks.noEternitiesThisReality = player.eternities.eq(0);
+    player.requirementChecks.reality.noInfinities = player.infinities.eq(0) && player.eternities.eq(0);
+    player.requirementChecks.reality.noEternities = player.eternities.eq(0);
   },
 
   setTutorialState(player) {
@@ -762,10 +782,13 @@ GameStorage.migrations = {
       player.records.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1]);
     }
     player.records.thisInfinity.time = player.thisInfinityTime;
+    player.records.thisInfinity.realTime = player.thisInfinityTime;
     player.records.bestInfinity.time = player.bestInfinityTime;
     player.records.thisEternity.time = player.thisEternity;
+    player.records.thisEternity.realTime = player.thisEternity;
     player.records.bestEternity.time = player.bestEternity;
     player.records.thisReality.time = player.thisReality;
+    player.records.thisReality.realTime = player.thisReality;
   },
 
   deleteOldRecords(player) {
@@ -832,6 +855,32 @@ GameStorage.migrations = {
 
     delete player.infinitied;
     delete player.infinitiedBank;
+  },
+
+  deleteDimboostBulk(player) {
+    delete player.auto.dimBoost.bulk;
+    if (player.infinityUpgrades.delete("bulkBoost")) {
+      player.infinityUpgrades.add("autobuyMaxDimboosts");
+    }
+  },
+
+  removePriority(player) {
+    for (let i = 0; i < 8; i++) {
+      delete player.auto.antimatterDims[i].priority;
+    }
+    delete player.auto.tickspeed.priority;
+  },
+
+  deleteFloatingTextOption(player) {
+    delete player.options.animations.floatingText;
+  },
+
+  refactorDoubleIPRebuyable(player) {
+    // A bit of a hack, but needs to be done this way to not trigger the non-Decimal assignment crash check code
+    const purchases = new Decimal(player.infMult).log2();
+    delete player.infMult;
+    player.infMult = Math.round(purchases);
+    delete player.infMultCost;
   },
 
   prePatch(saveData) {

@@ -15,7 +15,7 @@ function playerInfinityUpgradesOnReset() {
         "resetBoost", "galaxyBoost", "skipResetGalaxy",
         "totalMult", "currentMult", "postGalaxy",
         "challengeMult", "achievementMult", "infinitiedMult",
-        "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
+        "infinitiedGeneration", "autoBuyerUpgrade", "autobuyMaxDimboosts",
         "ipOffline"]
     );
     player.infinityRebuyables = [8, 7, 10];
@@ -154,7 +154,11 @@ function ratePerMinute(amount, time) {
   return Decimal.divide(amount, time / (60 * 1000));
 }
 
-function averageRun(runs, name) {
+function averageRun(allRuns, name) {
+  // Filter out all runs which have the default infinite value for time, but if we're left with no valid runs then we
+  // take just one entry so that the averages also have the same value and we don't get division by zero.
+  let runs = allRuns.filter(run => run[0] !== Number.MAX_VALUE);
+  if (runs.length === 0) runs = [allRuns[0]];
   const totalTime = runs.map(run => run[0]).sum();
   const totalAmount = runs
     .map(run => run[1])
@@ -222,7 +226,7 @@ function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
 }
 
 function isOfflineEPGainEnabled() {
-  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+  return player.options.offlineProgress && !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
     !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
@@ -409,7 +413,9 @@ function gameLoop(passDiff, options = {}) {
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
-  if (AlchemyResource.momentum.isUnlocked) player.celestials.ra.momentumTime += realDiff;
+  if (AlchemyResource.momentum.isUnlocked) {
+    player.celestials.ra.momentumTime += realDiff * Achievement(173).effectOrDefault(1);
+  }
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.tickDarkMatter(realDiff);
@@ -476,14 +482,16 @@ function gameLoop(passDiff, options = {}) {
       const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
-      Enslaved.currentBlackHoleStoreAmountPerMs = (totalTimeFactor - reducedTimeFactor) * amplification;
+      const beforeStore = player.celestials.enslaved.stored;
       player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
-        diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
+        diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
+      Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored - beforeStore) / diff;
       speedFactor = reducedTimeFactor;
     }
     diff *= speedFactor;
   } else if (fixedSpeedActive) {
     diff *= getGameSpeedupFactor();
+    Enslaved.currentBlackHoleStoreAmountPerMs = 0;
   }
   player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
   Enslaved.isReleaseTick = false;
@@ -531,7 +539,7 @@ function gameLoop(passDiff, options = {}) {
   const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
-  const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
+  const currentIPmin = gainedInfinityPoints().dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes));
   if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch)
     player.records.thisInfinity.bestIPmin = currentIPmin;
 
@@ -542,7 +550,7 @@ function gameLoop(passDiff, options = {}) {
   replicantiLoop(diff);
 
 
-  const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
+  const currentEPmin = gainedEternityPoints().dividedBy(Math.clampMin(0.0005, Time.thisEternityRealTime.totalMinutes));
   if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity)
     player.records.thisEternity.bestEPmin = currentEPmin;
 
@@ -556,8 +564,11 @@ function gameLoop(passDiff, options = {}) {
 
   BlackHoles.updatePhases(blackHoleDiff);
 
-  // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
-  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && Currency.timeTheorems.max.gte(16617)) {
+  // Unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
+  // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
+  // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
+  if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) && Currency.timeTheorems.max.gte(13000) && !isInCelestialReality()) {
+    Currency.timeTheorems.add(TimeStudy.dilation.cost);
     TimeStudy.dilation.purchase(true);
   }
 
@@ -606,7 +617,7 @@ function passivePrestigeGen() {
     let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.records.bestInfinity.time);
+      infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7)
@@ -776,16 +787,19 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerBefore) {
+function afterSimulation(seconds, playerBefore, hotkeySetting) {
   if (seconds > 600) {
     const playerAfter = deepmerge.all([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
   GameUI.notify.showBlackHoles = true;
+  player.options.hotkeys = hotkeySetting;
 }
 
 function simulateTime(seconds, real, fast) {
+  const playerHotkeySetting = player.options.hotkeys;
+  player.options.hotkeys = false;
   // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
@@ -800,8 +814,6 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
-  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 
@@ -824,12 +836,26 @@ function simulateTime(seconds, real, fast) {
     Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
   }
 
-  if (InfinityUpgrade.ipOffline.isBought) {
+  if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
 
-  let loopFn = () => gameLoop(largeDiff);
   let remainingRealSeconds = seconds;
+  // During async code the number of ticks remaining can go down suddenly
+  // from "Speed up" which means tick length needs to go up, and thus
+  // you can't just divide total time by total ticks to get tick length.
+  // For example, suppose you had 6000 offline ticks, and called "Speed up"
+  // 1000 ticks in, meaning that after "Speed up" there'd only be 1000 ticks more
+  // (so 1000 + 1000 = 2000 ticks total). Dividing total time by total ticks would
+  // use 1/6th of the total time before "Speed up" (1000 of 6000 ticks), and 1/2 after
+  // (1000 of 2000 ticks). Short of some sort of magic user prediction to figure out
+  // whether the user *will* press "Speed up" at some point, dividing remaining time
+  // by remaining ticks seems like the best thing to do.
+  let loopFn = i => {
+    const diff = remainingRealSeconds / i;
+    gameLoop(1000 * diff);
+    remainingRealSeconds -= diff;
+  };
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
@@ -842,15 +868,21 @@ function simulateTime(seconds, real, fast) {
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {
+    // Fast simulations happen when simulating between 10 and 50 seconds of offline time.
+    // One easy way to get this is to autosave every 30 or 60 seconds, wait until the save timer
+    // in the bottom-left hits 15 seconds, and refresh (without saving directly beforehand).
     GameIntervals.stop();
-    for (let i = 0; i < 50; i++) {
-      loopFn();
+    // Fast simulations are always 50 ticks. They're done in this weird countdown way because
+    // we want to be able to call the same function that we call when using async code (to avoid
+    // duplicating functions), and that function expects a parameter saying how many ticks are remaining.
+    for (let remaining = 50; remaining > 0; remaining--) {
+      loopFn(remaining);
     }
     GameStorage.postLoadStuff();
-    afterSimulation(seconds, playerStart);
+    afterSimulation(seconds, playerStart, playerHotkeySetting);
   } else {
+    const progress = {};
     ui.view.modal.progressBar = {};
-    ui.view.modal.progressBar.label = "Simulating offline time...";
     Async.run(loopFn,
       ticks,
       {
@@ -860,10 +892,38 @@ function simulateTime(seconds, real, fast) {
         asyncEntry: doneSoFar => {
           GameIntervals.stop();
           ui.$viewModel.modal.progressBar = {
-            label: "Simulating offline time...",
+            label: "Offline Progress Simulation",
+            info: () => `The game is being run at a lower accuracy in order to quickly calculate the resources you
+              gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
+              you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
+              simulate the rest of the time with half as many ticks (down to a minimum of ${formatInt(500)} ticks
+              remaining). The "CANCEL" button will instead use all the remaining offline time in the first online
+              tick.`,
+            progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
-            startTime: Date.now()
+            startTime: Date.now(),
+            buttons: [{
+              text: "Speed up",
+              condition: (current, max) => max - current > 500,
+              click: () => {
+                const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
+                // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+                progress.maxIter -= progress.remaining - newRemaining;
+                progress.remaining = newRemaining;
+                // We update the progress bar max data (remaining will update automatically).
+                ui.$viewModel.modal.progressBar.max = progress.maxIter;
+              }
+            },
+            {
+              text: "CANCEL",
+              condition: () => true,
+              click: () => {
+                // We jump to the end.
+                progress.maxIter -= progress.remaining;
+                progress.remaining = 0;
+              }
+            }]
           };
         },
         asyncProgress: doneSoFar => {
@@ -875,8 +935,9 @@ function simulateTime(seconds, real, fast) {
           GameStorage.postLoadStuff();
         },
         then: () => {
-          afterSimulation(seconds, playerStart);
-        }
+          afterSimulation(seconds, playerStart, playerHotkeySetting);
+        },
+        progress
       });
   }
 }

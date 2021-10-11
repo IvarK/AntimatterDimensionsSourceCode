@@ -10,9 +10,9 @@ Vue.component("reset-reality-button", {
   },
   methods: {
     update() {
-      this.canReality = TimeStudy.reality.isBought && Currency.eternityPoints.exponent >= 4000;
+      this.canReality = TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000;
       this.resetCelestial = player.options.retryCelestial;
-      this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      this.isInCelestialReality = isInCelestialReality();
     },
     resetReality() {
       const confirms = player.options.confirmations;

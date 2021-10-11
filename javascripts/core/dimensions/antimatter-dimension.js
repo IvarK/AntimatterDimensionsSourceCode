@@ -183,17 +183,10 @@ function onBuyDimension(tier) {
 
   player.postC4Tier = tier;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-  if (tier !== 8) player.achievementChecks.onlyEighthDimensions = false;
-  if (tier !== 1) player.achievementChecks.onlyFirstDimensions = false;
-  if (tier === 8) player.achievementChecks.noEighthDimensions = false;
-  if (tier === 1) player.achievementChecks.noFirstDimensions = false;
-}
-
-function floatText(tier, text) {
-  if (!player.options.animations.floatingText) return;
-  const floatingText = ui.view.tabs.dimensions.antimatter.floatingText[tier];
-  floatingText.push({ text, key: UIID.next() });
-  setTimeout(() => floatingText.shift(), 1000);
+  if (tier !== 8) player.requirementChecks.eternity.onlyAD8 = false;
+  if (tier !== 1) player.requirementChecks.eternity.onlyAD1 = false;
+  if (tier === 8) player.requirementChecks.infinity.noAD8 = false;
+  if (tier === 1) player.requirementChecks.eternity.noAD1 = false;
 }
 
 function buyOneDimension(tier) {
@@ -212,10 +205,6 @@ function buyOneDimension(tier) {
 
   dimension.amount = dimension.amount.plus(1);
   dimension.bought++;
-
-  if (dimension.boughtBefore10 === 0) {
-    floatText(tier, formatX(AntimatterDimensions.buyTenMultiplier, 2, 1));
-  }
 
   if (tier === 1) {
     Achievement(28).tryUnlock();
@@ -238,7 +227,6 @@ function buyManyDimension(tier) {
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
 
-  floatText(tier, format(AntimatterDimensions.buyTenMultiplier, 2, 1));
   onBuyDimension(tier);
 
   return true;
@@ -256,10 +244,6 @@ function buyAsManyAsYouCanBuy(tier) {
   dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(howMany);
   dimension.bought += howMany;
-
-  if (dimension.boughtBefore10 === 0) {
-    floatText(tier, format(AntimatterDimensions.buyTenMultiplier, 2, 1));
-  }
 
   onBuyDimension(tier);
 
@@ -279,7 +263,7 @@ function buyUntilTen(tier) {
 function maxAll() {
   if (Laitela.continuumActive || Currency.antimatter.gt(Player.infinityLimit)) return;
 
-  player.usedMaxAll = true;
+  player.requirementChecks.infinity.maxAll = true;
 
   for (let tier = 1; tier < 9; tier++) {
     buyMaxDimension(tier);
@@ -290,7 +274,7 @@ function maxAll() {
   buyMaxTickSpeed();
 }
 
-function buyMaxDimension(tier, bulk = Infinity, auto = false) {
+function buyMaxDimension(tier, bulk = Infinity) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
@@ -303,13 +287,13 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
     return;
   }
 
-  const multBefore = Decimal.pow(AntimatterDimensions.buyTenMultiplier, dimension.bought / 10);
-
   // Buy any remaining until 10 before attempting to bulk-buy
   if (Currency.antimatter.purchase(cost)) {
     buyUntilTen(tier);
     bulkLeft--;
   }
+
+  if (bulkLeft <= 0) return;
 
   // Buy in a while loop in order to properly trigger abnormal price increases
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
@@ -323,7 +307,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount
+    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount, 10
   );
   if (maxBought === null) {
     return;
@@ -333,10 +317,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
-  const multAfter = Decimal.pow(AntimatterDimensions.buyTenMultiplier, dimension.bought / 10);
-  if (multBefore.neq(multAfter) && auto === false) {
-    floatText(tier, format(multAfter.dividedBy(multBefore), 2, 1));
-  }
 }
 
 
@@ -479,7 +459,7 @@ class AntimatterDimensionState extends DimensionState {
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) return 0;
-    return this.costScale.getContinuumValue(Currency.antimatter.value) * Laitela.matterExtraPurchaseFactor;
+    return this.costScale.getContinuumValue(Currency.antimatter.value, 10) * Laitela.matterExtraPurchaseFactor;
   }
 
   /**
@@ -559,9 +539,9 @@ class AntimatterDimensionState extends DimensionState {
 
   multiplyIC5Costs() {
     for (const dimension of AntimatterDimensions.all.filter(dim => dim.tier !== this.tier)) {
-      if (this.tier <= 4 && dimension.cost.e <= this.cost.e) {
+      if (this.tier <= 4 && dimension.cost.lt(this.cost)) {
         dimension.costBumps++;
-      } else if (this.tier >= 5 && dimension.cost.e >= this.cost.e) {
+      } else if (this.tier >= 5 && dimension.cost.gt(this.cost)) {
         dimension.costBumps++;
       }
     }
@@ -666,11 +646,13 @@ const AntimatterDimensions = {
       AntimatterDimension(tier + nextTierOffset).produceDimensions(AntimatterDimension(tier), diff / 10);
     }
     if (AntimatterDimension(1).amount.gt(0)) {
-      player.achievementChecks.noFirstDimensions = false;
+      player.requirementChecks.eternity.noAD1 = false;
     }
     AntimatterDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {
       AntimatterDimension(2).produceCurrency(Currency.antimatter, diff);
     }
+    // Production may overshoot the goal on the final tick of the challenge
+    if (hasBigCrunchGoal) Currency.antimatter.dropTo(Player.infinityGoal);
   }
 };

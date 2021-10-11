@@ -7,7 +7,11 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return `${TimeDimension(this._tier).displayName} Time Dimension`;
+    return TimeDimension(this._tier).displayName;
+  }
+
+  get fullName() {
+    return `${this.name} Time Dimension`;
   }
 
   get data() {
@@ -26,6 +30,10 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     return PRESTIGE_EVENT.REALITY;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
     const tier = this._tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
@@ -42,3 +50,4 @@ TimeDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new TimeDimens
 
 Autobuyer.timeDimension = tier => TimeDimensionAutobuyerState.index[tier - 1];
 Autobuyer.timeDimension.index = TimeDimensionAutobuyerState.index;
+Autobuyer.timeDimension.index.name = "Time Dimension";

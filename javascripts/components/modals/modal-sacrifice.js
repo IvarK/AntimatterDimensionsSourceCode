@@ -18,10 +18,10 @@ Vue.component("modal-sacrifice", {
         1st Antmatter Dimensions you had at the time of Sacrificing.`;
     },
     currently() {
-      return `Multiplier is currently ${formatX(Sacrifice.totalBoost, 2)}.`;
+      return `Multiplier is currently ${formatX(Sacrifice.totalBoost, 2, 2)}.`;
     },
     afterSacrifice() {
-      return `Multiplier will increase to ${formatX(Sacrifice.nextBoost.times(Sacrifice.totalBoost), 2)}
+      return `Multiplier will increase to ${formatX(Sacrifice.nextBoost.times(Sacrifice.totalBoost), 2, 2)}
         on Dimensional Sacrifice.`;
     }
   },

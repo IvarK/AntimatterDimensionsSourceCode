@@ -7,6 +7,7 @@ Vue.component("header-challenge-display", {
       infinityUnlocked: false,
       showExit: false,
       exitText: "",
+      resetCelestial: false,
     };
   },
   computed: {
@@ -92,6 +93,7 @@ Vue.component("header-challenge-display", {
       this.activityTokens = this.parts.map(part => part.activityToken());
       this.showExit = this.activeChallengeNames.length !== 0;
       this.exitText = this.exitDisplay();
+      this.resetCelestial = player.options.retryCelestial;
     },
     // Process exit requests from the inside out; exit any Challenges first, then dilation, then Celestial Reality
     exitButtonClicked() {
@@ -100,6 +102,8 @@ Vue.component("header-challenge-display", {
         current.exit();
       } else if (player.dilation.active) {
         startDilatedEternityRequest();
+      } else if (player.options.confirmations.resetCelestial) {
+        Modal.exitCelestialReality.show();
       } else {
         beginProcessReality(getRealityProps(true));
       }
@@ -107,6 +111,7 @@ Vue.component("header-challenge-display", {
     exitDisplay() {
       if (Player.isInAnyChallenge) return "Exit Challenge";
       if (player.dilation.active) return "Exit Dilation";
+      if (this.resetCelestial) return "Restart Reality";
       return "Exit Reality";
     },
   },
@@ -119,6 +124,7 @@ Vue.component("header-challenge-display", {
         You are currently in {{ challengeDisplay }}
       </span>
       <failable-ec-text v-if="isInFailableEC" />
+      <span style="padding: 0.3rem;" />
       <primary-button
         v-if="showExit"
         @click="exitButtonClicked"

@@ -17,6 +17,8 @@ const Cloud = {
   auth: firebase.auth(),
   db: firebase.database(),
   user: null,
+  hasSeenSavingConflict: false,
+  shouldOverwriteCloudSave: true,
 
   get loggedIn() {
     return this.user !== null;
@@ -24,40 +26,6 @@ const Cloud = {
 
   async login() {
     await this.auth.signInWithPopup(this.provider);
-  },
-
-  newestSave(first, second) {
-    const getSaveInfo = save => {
-      const prestiges = { infinities: new Decimal(0), eternities: new Decimal(0), realities: 0 };
-      if (!save) return prestiges;
-      prestiges.infinities.copyFrom(new Decimal(save.infinities));
-      prestiges.eternities.copyFrom(new Decimal(save.eternities));
-      prestiges.realities = save.realities;
-      return prestiges;
-    };
-    const firstInfo = getSaveInfo(first);
-    const secondInfo = getSaveInfo(second);
-    if (
-      firstInfo.realities === secondInfo.realities && 
-      firstInfo.eternities.eq(secondInfo.eternities) && 
-      firstInfo.infinities.eq(secondInfo.infinities)
-    ) {
-      return undefined;
-    }
-
-    if (firstInfo.realities > secondInfo.realities) {
-      return first;
-    }
-
-    if (firstInfo.eternities.gt(secondInfo.eternities)) {
-      return first;
-    }
-
-    if (firstInfo.infinities.gt(secondInfo.infinities)) {
-      return first;
-    }
-
-    return second;
   },
 
   async loadMobile() {
@@ -73,43 +41,39 @@ const Cloud = {
   },
 
   async saveCheck() {
+    GameIntervals.checkCloudSave.restart();
     const save = await this.load();
     if (save === null) {
       this.save();
     } else {
       const root = GameSaveSerializer.deserialize(save);
-      for (let i = 0; i < 3; i++) {
-        const saveId = i;
-        const cloudSave = root.saves[saveId];
-        const localSave = GameStorage.saves[saveId];
-        const newestSaveCheck = this.newestSave(cloudSave, localSave);
-        let isConflicted = false;
+      const saveId = GameStorage.currentSlot;
+      const cloudSave = root.saves[saveId];
+      const localSave = GameStorage.saves[saveId];
+      const saveComparison = {
+        farther: ProgressChecker.compareSaveProgress(cloudSave, localSave),
+        older: ProgressChecker.compareSaveTimes(cloudSave, localSave)
+      };
 
-        // eslint-disable-next-line no-loop-func
-        const overwriteCloudSave = () => {
-          root.saves[saveId] = GameStorage.saves[saveId];
-        };
+      // eslint-disable-next-line no-loop-func
+      const overwriteAndSendCloudSave = () => {
+        root.saves[saveId] = GameStorage.saves[saveId];
+        this.save(saveId);
+      };
 
-        const sendCloudSave = () => {
-          this.save();
-        };
-
-        if (newestSaveCheck === cloudSave && cloudSave && localSave) {
-          isConflicted = true;
-          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
-          Modal.cloudSaveConflict.show();
-        } else {
-          overwriteCloudSave();
-        }
-
-        if (!isConflicted) {
-          sendCloudSave();
-        }
+      // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
+      const hasBoth = cloudSave && localSave;
+      const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1);
+      if (hasConflict && !this.hasSeenSavingConflict) {
+        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
+        Modal.cloudSaveConflict.show();
+      } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {
+        overwriteAndSendCloudSave();
       }
     }
   },
 
-  save() {
+  save(slot) {
     if (!this.user) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     const root = {
@@ -118,7 +82,7 @@ const Cloud = {
     };
 
     this.db.ref(`users/${this.user.id}/web`).set(GameSaveSerializer.serialize(root));
-    GameUI.notify.info(`Game saved to cloud with user ${this.user.displayName}`);
+    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 
   async loadCheck() {
@@ -127,24 +91,27 @@ const Cloud = {
       GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
     } else {
       const root = GameSaveSerializer.deserialize(save);
-      for (let i = 0; i < 3; i++) {
-        const saveId = i;
-        const cloudSave = root.saves[saveId];
-        const localSave = GameStorage.saves[saveId];
-        const newestSaveCheck = this.newestSave(cloudSave, localSave);
+      const saveId = GameStorage.currentSlot;
+      const cloudSave = root.saves[saveId];
+      const localSave = GameStorage.saves[saveId];
+      const saveComparison = {
+        farther: ProgressChecker.compareSaveProgress(cloudSave, localSave),
+        older: ProgressChecker.compareSaveTimes(cloudSave, localSave)
+      };
 
-        // eslint-disable-next-line no-loop-func
-        const overwriteLocalSave = () => {
-          GameStorage.overwriteSlot(saveId, cloudSave);
-          GameUI.notify.info(`Cloud save loaded for user ${this.user.displayName}`);
-        };
+      // eslint-disable-next-line no-loop-func
+      const overwriteLocalSave = () => {
+        GameStorage.overwriteSlot(saveId, cloudSave);
+        GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
+      };
 
-        if (newestSaveCheck === localSave && cloudSave && localSave) {
-          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
-          Modal.cloudLoadConflict.show();
-        } else {
-          overwriteLocalSave();
-        }
+      // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
+      const hasBoth = cloudSave && localSave;
+      if (hasBoth && (saveComparison.older === 1 || saveComparison.farther !== -1)) {
+        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
+        Modal.cloudLoadConflict.show();
+      } else {
+        overwriteLocalSave();
       }
     }
   },

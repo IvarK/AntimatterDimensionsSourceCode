@@ -20,8 +20,8 @@ Vue.component("modal-confirmation-options", {
       deleteGlyphSetSave: false,
       glyphRefine: false,
       bigCrunch: false,
-      galaxy: false,
-      dimboost: false,
+      antimatterGalaxy: false,
+      dimensionBoost: false,
 
       realityAutobuyerUnlocked: false,
       sacrificeUnlocked: false,
@@ -85,11 +85,11 @@ Vue.component("modal-confirmation-options", {
     replicantiGalaxy(newValue) {
       player.options.confirmations.replicantiGalaxy = newValue;
     },
-    galaxy(newValue) {
-      player.options.confirmations.galaxy = newValue;
+    antimatterGalaxy(newValue) {
+      player.options.confirmations.antimatterGalaxy = newValue;
     },
-    dimboost(newValue) {
-      player.options.confirmations.dimboost = newValue;
+    dimensionBoost(newValue) {
+      player.options.confirmations.dimensionBoost = newValue;
     }
   },
   methods: {
@@ -112,8 +112,8 @@ Vue.component("modal-confirmation-options", {
       this.glyphRefine = options.glyphRefine;
       this.bigCrunch = options.bigCrunch;
       this.replicantiGalaxy = options.replicantiGalaxy;
-      this.galaxy = options.galaxy;
-      this.dimboost = options.dimboost;
+      this.antimatterGalaxy = options.antimatterGalaxy;
+      this.dimensionBoost = options.dimensionBoost;
 
       this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
@@ -130,8 +130,8 @@ Vue.component("modal-confirmation-options", {
     <modal-options @close="emitClose" style="width: 50rem">
       <div class="c-modal-options__button-container">
         <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
-        <wide-on-off-button v-if="sacrificeUnlocked" v-model="dimboost" text="Dimension Boost:" />
-        <wide-on-off-button v-if="infinityUnlocked" v-model="galaxy" text="Antimatter Galaxy:" />
+        <wide-on-off-button v-if="sacrificeUnlocked" v-model="dimensionBoost" text="Dimension Boost:" />
+        <wide-on-off-button v-if="infinityUnlocked" v-model="antimatterGalaxy" text="Antimatter Galaxy:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
         <wide-on-off-button v-if="infinityBroken" v-model="bigCrunch" text="Big Crunch:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />

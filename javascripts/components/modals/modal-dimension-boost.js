@@ -1,51 +1,23 @@
 "use strict";
 
-Vue.component("modal-dimboost", {
+Vue.component("modal-dimension-boost", {
   props: { modalConfig: Object },
-  data() { 
-    return { 
-      bulk: this.modalConfig.bulk,
-      newBoosts: 1,
-    }; 
-  },
   computed: {
+    bulk() { return this.modalConfig.bulk; },
     topLabel() {
-      if (this.bulk) return `You are about to purchase ${formatInt(this.newBoosts, 2)} 
-      ${pluralize("Dimension Boost", this.newBoosts)}`;
+      const newBoosts = this.bulk ? this.getCanBuy() : 1;
+      if (this.bulk) return `You are about to purchase ${formatInt(newBoosts, 2)} 
+      ${pluralize("Dimension Boost", newBoosts)}`;
       return `You are about to purchase a Dimension Boost`;
     },
     message() {
-      return `This will reset all of your Antimatter Dimensions, tickspeed, and Antimatter. In return you will 
-      ${this.boostEffects}. `;
+      return `${this.boostEffects}? `;
     },
     boostEffects() {
-      // Code ripped from antimatter-dim-boost-row.js, computed -> buttonText()
-      const boosts = DimBoost.purchasedBoosts;
-
-      let newUnlock = "";
-      if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
-        newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
-        newUnlock = "unlock Sacrifice";
-      }
-
-      const formattedMultText = `get a ${formatX(DimBoost.power, 2, 1)} multiplier `;
-      let dimensionRange = `to the 1st Dimension`;
-      if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
-      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
-
-      let boostEffects = "";
-      if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
-      else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
-      else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
-
-      return boostEffects;
+      return DimBoost.unlockedStuff();
     }
   },
   methods: {
-    update() {
-      this.newBoosts = this.bulk ? this.getCanBuy() : 1;
-    },
     handleYesClick() {
       this.emitClose();
       requestDimensionBoost(this.bulk);
@@ -55,7 +27,7 @@ Vue.component("modal-dimboost", {
       this.emitClose();
     },
     getCanBuy() {
-      // Code ripped from dimboost.js, function maxBuyDimBoosts()
+      // Code based off of dimboost.js, function maxBuyDimBoosts()
       const req1 = DimBoost.bulkRequirement(1);
       const req2 = DimBoost.bulkRequirement(2);
       const increase = req2.amount - req1.amount;

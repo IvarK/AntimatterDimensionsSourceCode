@@ -1,33 +1,32 @@
 "use strict";
 
-Vue.component("modal-galaxy", {
+Vue.component("modal-antimatter-galaxy", {
   props: { modalConfig: Object },
   data() {
     return {
-      bulk: this.modalConfig.bulk,
       newGalaxies: 0,
     };
   },
   computed: {
+    bulk() { return this.modalConfig.bulk; },
     topLabel() {
       if (this.bulk) return `You are about to purchase ${formatInt(this.newGalaxies, 2)} 
       ${pluralize("Antimatter Galaxy", this.newGalaxies, "Antimatter Galaxies")}`;
       return `You are about to purchase an Antimatter Galaxy`;
     },
     message() {
-      function getMessage() {
-        if (Perk.antimatterNoReset.isBought) return `This will reset nothing, and you will receive a small
+      let message = "";
+      if (Perk.antimatterNoReset.isBought) message = `This will reset nothing, and you will receive a small
          (but impactful) boost to tickspeed upgrades.`;
-        if (Achievement(111).isUnlocked) return `This will reset all of your Antimatter Dimensions, 
+      if (Achievement(111).isUnlocked) message = `This will reset all of your Antimatter Dimensions, 
         your Dimension Boosts, and tickspeed. However, you will receive a small (but impactful) boost 
         to tickspeed upgrades.`;
-        return `This will reset all of your Antimatter Dimensions, your Dimension Boosts, 
+      message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts, 
         tickspeed, and Antimatter. However, you will receive a small (but impactful) boost to tickspeed upgrades.`;
-      }
       if (this.bulk) return `Are you sure you want to purchase ${formatInt(this.newGalaxies, 2)} 
-      ${pluralize("Antimatter Galaxy", this.newGalaxies, "Antimatter Galaxies")}? ${getMessage()}`;
+      ${pluralize("Antimatter Galaxy", this.newGalaxies, "Antimatter Galaxies")}? ${message}`;
       return `Are you sure you want to purchase an Antimatter Galaxy? 
-      ${getMessage()}`;
+      ${message}`;
     }
   },
   methods: {

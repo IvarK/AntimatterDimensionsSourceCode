@@ -69,7 +69,7 @@ Vue.component("game-header-big-crunch-button", {
       Tab.dimensions.infinity.show(true);
     },
     crunch() {
-      if (player.options.confirmations.bigCrunch) Modal.bigCrunch.show({ first: false });
+      if (player.options.confirmations.bigCrunch) Modal.bigCrunch.show();
       else bigCrunchResetRequest();
     }
   },

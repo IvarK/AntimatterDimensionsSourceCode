@@ -18,28 +18,7 @@ Vue.component("new-dim-boost-row", {
       return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
-      const boosts = this.purchasedBoosts;
-
-      let newUnlock = "";
-      if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
-        newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
-        newUnlock = "unlock Sacrifice";
-      }
-
-      const formattedMultText = `give a ${formatX(DimBoost.power, 2, 1)} multiplier `;
-      let dimensionRange = `to the 1st Dimension`;
-      if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
-      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
-
-      let boostEffects = "";
-      if (NormalChallenge(8).isRunning) boostEffects = ` to ${newUnlock}`;
-      else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
-      else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
-
-      return this.lockText === null
-        ? `Reset your Dimensions${boostEffects}`
-        : this.lockText;
+      return DimBoost.unlockedStuff();
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
@@ -67,8 +46,9 @@ Vue.component("new-dim-boost-row", {
       this.lockText = DimBoost.lockText;
     },
     dimensionBoost(bulk) {
-      if (player.options.confirmations.dimboost) {
-        Modal.dimboost.show({ bulk });
+      if (!DimBoost.requirement.isSatisfied) return;
+      if (player.options.confirmations.dimensionBoost) {
+        Modal.dimensionBoost.show({ bulk });
         return;
       }
       requestDimensionBoost(bulk);

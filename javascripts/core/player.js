@@ -663,8 +663,8 @@ let player = {
       glyphRefine: true,
       bigCrunch: true,
       replicantiGalaxy: true,
-      galaxy: true,
-      dimboost: true
+      antimatterGalaxy: true,
+      dimensionBoost: true
     },
     awayProgress: {
       antimatter: true,

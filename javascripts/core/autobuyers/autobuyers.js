@@ -77,6 +77,7 @@ const Autobuyers = (function() {
     },
 
     reset() {
+      if (Pelle.isDoomed) return;
       for (const autobuyer of Autobuyers.all) {
         autobuyer.reset();
       }

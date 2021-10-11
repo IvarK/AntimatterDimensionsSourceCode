@@ -4,7 +4,7 @@ const disabledMechanicUnlocks = {
   IPGain: () => PelleUpgrade.IPGain,
   EPGain: () => ({}),
   achievements: () => ({}),
-  IPMults: () => ({}),
+  IPMults: () => PelleUpgrade.IPMults,
   EPMults: () => ({}),
   galaxies: () => ({}),
   InfinitiedMults: () => ({}),
@@ -30,11 +30,11 @@ const disabledMechanicUnlocks = {
   antimatterDimAutobuyer2: () => PelleUpgrade.antimatterDimAutobuyers1,
   antimatterDimAutobuyer3: () => PelleUpgrade.antimatterDimAutobuyers2,
   antimatterDimAutobuyer4: () => PelleUpgrade.antimatterDimAutobuyers2,
-  antimatterDimAutobuyer5: () => ({}),
-  antimatterDimAutobuyer6: () => ({}),
-  antimatterDimAutobuyer7: () => ({}),
-  antimatterDimAutobuyer8: () => ({}),
-  tickspeedAutobuyer: () => ({}),
+  antimatterDimAutobuyer5: () => PelleUpgrade.antimatterDimAutobuyers3,
+  antimatterDimAutobuyer6: () => PelleUpgrade.antimatterDimAutobuyers3,
+  antimatterDimAutobuyer7: () => PelleUpgrade.antimatterDimAutobuyers4,
+  antimatterDimAutobuyer8: () => PelleUpgrade.antimatterDimAutobuyers4,
+  tickspeedAutobuyer: () => PelleUpgrade.tickspeedAutoBuyer,
   dimBoostAutobuyer: () => PelleUpgrade.dimBoostAutobuyer,
   galaxyAutobuyer: () => ({}),
   rupg10: () => ({}),
@@ -189,6 +189,7 @@ const Pelle = {
 
     base = base.timesEffectsOf(
       PelleUpgrade.longerArmageddon,
+      PelleUpgrade.longerArmageddonBasedOnRemnants
     );
 
     if (this.pestilence.unlocked) base *= Pelle.pestilence.armageddonTimeMultiplier;

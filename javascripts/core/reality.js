@@ -361,9 +361,11 @@ function finishProcessReality(realityProps) {
   player.galaxies = 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = false;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  if (!Pelle.isDoomed) {
+    player.break = false;
+    player.infMult = new Decimal(1);
+    player.infMultCost = new Decimal(10);
+  }
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);

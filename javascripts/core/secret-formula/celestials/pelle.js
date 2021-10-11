@@ -4,10 +4,10 @@ GameDatabase.celestials.pelle = {
   upgrades: {
     antimatterDimBaseMult: {
       id: 1,
-      description: "4x to all Antimatter Dimension multipliers",
+      description: "7x to all Antimatter Dimension multipliers",
       cost: 10,
       currency: "remnants",
-      effect: 4
+      effect: 7
     },
     antimatterDimAutobuyers1: {
       id: 2,
@@ -17,43 +17,44 @@ GameDatabase.celestials.pelle = {
     },
     starterRemnantMult: {
       id: 3,
-      description: "Multiply Remnant gain by 1.5",
+      description: "Multiply Remnant gain by the number of upgrades",
       cost: 10,
       currency: "remnants",
-      effect: 1.5
+      effect: () => player.celestials.pelle.upgrades.size,
+      formatEffect: x => formatX(x, 0, 0)
     },
     remnantGainLimitMult: {
       id: 4,
-      description: "Multiply Remnant gain limit by 1.5 for each upgrade bought",
+      description: "Multiply Remnant gain limit by 2 for each upgrade bought",
       cost: 10,
       currency: "remnants",
-      effect: () => 1.5 ** PelleUpgrade.all.filter(u => u.isBought).length,
+      effect: () => 2 ** PelleUpgrade.all.filter(u => u.isBought).length,
       formatEffect: x => formatX(x, 2, 2)
     },
     antimatterDimAutobuyers2: {
       id: 5,
       description: "Gain back autobuyers for Antimatter Dimensions 3 and 4",
-      cost: 50,
+      cost: 150,
       currency: "remnants"
     },
     dimensionPurchaseMultiplier: {
       id: 6,
       description: "Dimension purchase multiplier is 1.5x bigger",
-      cost: 50,
+      cost: 150,
       currency: "remnants",
       effect: 1.5
     },
     longerArmageddon: {
       id: 7,
       description: "Armageddon lasts 2x as much",
-      cost: 50,
+      cost: 150,
       currency: "remnants",
       effect: 2
     },
     remnantsBasedOnArmageddon: {
       id: 8,
       description: "Get more remnants based on armageddon length",
-      cost: 50,
+      cost: 150,
       currency: "remnants",
       effect: () => Pelle.armageddonInterval.dividedBy(5000).pow(1.05),
       formatEffect: x => formatX(x, 2, 2)
@@ -61,22 +62,47 @@ GameDatabase.celestials.pelle = {
     dimBoostAutobuyer: {
       id: 9,
       description: "Get back Dimensional Boost Autobuyer",
-      cost: 250,
+      cost: 2250,
       currency: "remnants",
-      effect: 2
     },
-    firstDimBoost: {
+    antimatterDimAutobuyers3: {
       id: 10,
-      description: () => `First antimatter dimension is ${formatX(1000)} stronger`,
-      cost: 250,
-      currency: "remnants",
-      effect: 1000
+      description: "Gain back autobuyers for Antimatter Dimensions 5 and 6",
+      cost: 2250,
+      currency: "remnants"
     },
     IPGain: {
       id: 11,
-      description: () => `You can gain IP again, but the gain is raised to ${formatPow(0.3, 1, 1)}`,
-      cost: 250,
+      description: () => `You can gain IP again`,
+      cost: 2250,
       currency: "remnants",
+    },
+    longerArmageddonBasedOnRemnants: {
+      id: 12,
+      description: () => `Make armageddon last longer based on how close to the limit your remnant amount is`,
+      cost: 2250,
+      currency: "remnants",
+      effect: () => player.celestials.pelle.remnants.div(Pelle.remnantsLimit).times(4).plus(1),
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    tickspeedAutoBuyer: {
+      id: 13,
+      description: "Get back Tickspeed Autobuyer",
+      cost: 30000,
+      currency: "remnants",
+    },
+    IPMults: {
+      id: 14,
+      description: "Get back IP multipliers, but raise their power to 0.3",
+      cost: 30000,
+      currency: "remnants",
+    },
+    antimatterDimAutobuyers4: {
+      id: 15,
+      description: () => `Gain back autobuyers for Antimatter Dimensions 7 and 8`,
+      cost: 1.5e5,
+      currency: "remnants",
+      effect: 1000
     },
   },
   rebuyables: {
@@ -148,6 +174,12 @@ GameDatabase.celestials.pelle = {
         return base;
       },
       formatEffect: x => format(x, 2, 0)
+    }
+  },
+  strikes: {
+    infinity: {
+      requirement: () => player.antimatter.gte(Number.MAX_VALUE),
+
     }
   }
 };

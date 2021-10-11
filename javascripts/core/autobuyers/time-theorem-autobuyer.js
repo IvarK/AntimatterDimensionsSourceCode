@@ -21,7 +21,7 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
   }
 
   get isUnlocked() {
-    return Perk.autobuyerTT1.isBought;
+    return Perk.autobuyerTT1.isBought && !Pelle.isDoomed;
   }
 
   get resetTickOn() {

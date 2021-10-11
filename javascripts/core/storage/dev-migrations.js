@@ -1119,6 +1119,11 @@ GameStorage.devMigrations = {
       // #1764 fix - EM200 bug from eternity autobuyer appearing to be zero but not actually being zero
       if (player.auto.eternity.amount.lt(0.01)) player.auto.eternity.amount = new Decimal(0);
     },
+    player => {
+      for (const resource of AlchemyResources.base) {
+        resource.updateHighestRefinementValue(resource.amount);
+      }
+    },
   ],
 
   patch(player) {

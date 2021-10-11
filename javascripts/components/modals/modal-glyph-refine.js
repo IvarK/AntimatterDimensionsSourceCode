@@ -17,16 +17,19 @@ Vue.component("modal-glyph-refine", {
     glyph() {
       return Glyphs.findByInventoryIndex(this.modalConfig.idx);
     },
+    resource() {
+      return GlyphSacrificeHandler.glyphAlchemyResource(this.glyph);
+    },
     resourceName() {
-      return GlyphSacrificeHandler.glyphAlchemyResource(this.glyph).name;
+      return this.resource.name;
     },
   },
   methods: {
     update() {
-      this.resourceAmount = GlyphSacrificeHandler.glyphAlchemyResource(this.glyph).amount;
-      this.resourceUnlocked = AlchemyResource[this.glyph.type].isUnlocked;
+      this.resourceAmount = this.resource.amount;
+      this.resourceUnlocked = this.resource.isUnlocked;
       this.gain = GlyphSacrificeHandler.glyphRefinementGain(this.glyph);
-      this.cap = GlyphSacrificeHandler.levelAlchemyCap(this.glyph.level);
+      this.cap = this.resource.cap;
 
       this.after = this.resourceAmount + this.gain;
 

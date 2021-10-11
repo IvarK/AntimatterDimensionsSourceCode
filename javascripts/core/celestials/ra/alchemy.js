@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * @abstract
+ */
 class AlchemyResourceState extends GameMechanicState {
   get name() {
     return this.config.name;
@@ -73,6 +76,39 @@ class AlchemyResourceState extends GameMechanicState {
 
   get reaction() {
     return AlchemyReactions.all[this.id];
+  }
+
+  get cap() {
+    throw new NotImplementedError();
+  }
+
+  get capped() {
+    return this.amount >= this.cap;
+  }
+}
+
+class BasicAlchemyResourceState extends AlchemyResourceState {
+  get highestRefinementValue() {
+    return player.celestials.ra.highestRefinementValue[this.name];
+  }
+
+  set highestRefinementValue(value) {
+    player.celestials.ra.highestRefinementValue[this.name] = value;
+  }
+
+  updateHighestRefinementValue(value) {
+    this.highestRefinementValue = Math.max(this.highestRefinementValue, value);
+  }
+
+  get cap() {
+    return Math.clampMax(Ra.alchemyResourceCap, this.highestRefinementValue);
+  }
+}
+
+class AdvancedAlchemyResourceState extends AlchemyResourceState {
+  get cap() {
+    const reagentCaps = this.reaction.reagents.map(x => x.resource.cap);
+    return Math.min(...reagentCaps);
   }
 }
 
@@ -183,7 +219,10 @@ const AlchemyResource = (function() {
     config.id = resource;
     config.before = 0;
     config.flow = 0;
-    return new AlchemyResourceState(config);
+    if (config.isBaseResource) {
+      return new BasicAlchemyResourceState(config);
+    }
+    return new AdvancedAlchemyResourceState(config);
   }
 
   return {

@@ -4,6 +4,7 @@ Vue.component("glyph-inventory", {
   data() {
     return {
       inventory: [],
+      newGlyphs: [],
       doubleClickTimeOut: null,
       clickedGlyphId: null,
       glyphSacrificeUnlocked: false,
@@ -22,6 +23,7 @@ Vue.component("glyph-inventory", {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.protectedRows = player.reality.glyphs.protectedRows;
+      this.newGlyphs = Glyphs.unseen;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -65,6 +67,9 @@ Vue.component("glyph-inventory", {
     },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
+    },
+    isNew(index) {
+      return this.newGlyphs.includes(this.inventory[index].id);
     }
   },
   template: `
@@ -92,6 +97,7 @@ Vue.component("glyph-inventory", {
           <glyph-component
             v-if="inventory[toIndex(row, col)]"
             :glyph="inventory[toIndex(row, col)]"
+            :isNew="isNew(toIndex(row, col))"
             :showSacrifice="glyphSacrificeUnlocked"
             :draggable="true"
             @shiftClicked="removeGlyph($event, false)"

@@ -27,7 +27,7 @@ function strengthToRarity(x) {
 const Glyphs = {
   inventory: [],
   active: [],
-  copies: [],
+  unseen: [],
   levelBoost: 0,
   factorsOpen: false,
   get inventoryList() {
@@ -251,6 +251,7 @@ const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
+    if (!requestedInventoryIndex && !this.unseen.includes(glyph.id)) this.unseen.push(glyph.id);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },

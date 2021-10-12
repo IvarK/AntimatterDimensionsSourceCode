@@ -1120,8 +1120,8 @@ GameStorage.devMigrations = {
       if (player.auto.eternity.amount.lt(0.01)) player.auto.eternity.amount = new Decimal(0);
     },
     player => {
-      player.hiddenSubtabBits = Array.repeat(0, 11);
-      player.lastOpenSubtab = Array.repeat(0, 11);
+      player.options.hiddenSubtabBits = Array.repeat(0, 11);
+      player.options.lastOpenSubtab = Array.repeat(0, 11);
     },
   ],
 

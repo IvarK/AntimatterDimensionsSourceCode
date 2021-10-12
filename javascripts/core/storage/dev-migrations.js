@@ -1121,12 +1121,12 @@ GameStorage.devMigrations = {
     },
     player => {
       const highestRefinementData = [
-        { name: "Power", id: ALCHEMY_RESOURCE.POWER },
-        { name: "Infinity", id: ALCHEMY_RESOURCE.INFINITY },
-        { name: "Time", id: ALCHEMY_RESOURCE.TIME },
-        { name: "Replication", id: ALCHEMY_RESOURCE.REPLICATION },
-        { name: "Dilation", id: ALCHEMY_RESOURCE.DILATION },
-        { name: "Effarig", id: ALCHEMY_RESOURCE.EFFARIG }
+        { name: "power", id: ALCHEMY_RESOURCE.POWER },
+        { name: "infinity", id: ALCHEMY_RESOURCE.INFINITY },
+        { name: "time", id: ALCHEMY_RESOURCE.TIME },
+        { name: "replication", id: ALCHEMY_RESOURCE.REPLICATION },
+        { name: "dilation", id: ALCHEMY_RESOURCE.DILATION },
+        { name: "effarig", id: ALCHEMY_RESOURCE.EFFARIG }
       ];
       for (const resource of highestRefinementData) {
         player.celestials.ra.highestRefinementValue[resource.name] = player.celestials.ra.alchemy[resource.id].amount;

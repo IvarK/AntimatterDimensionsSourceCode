@@ -4,6 +4,12 @@
  * @abstract
  */
 class AlchemyResourceState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this.ema = new ExponentialMovingAverage();
+    this._before = 0;
+  }
+
   get name() {
     return this.config.name;
   }
@@ -33,19 +39,15 @@ class AlchemyResourceState extends GameMechanicState {
   }
 
   get before() {
-    return this.config.before;
+    return this._before;
   }
 
   set before(value) {
-    this.config.before = value;
+    this._before = value;
   }
 
   get flow() {
-    return this.config.flow;
-  }
-
-  set flow(value) {
-    this.config.flow = value;
+    return this.ema.average;
   }
 
   get unlockedWith() {
@@ -88,12 +90,19 @@ class AlchemyResourceState extends GameMechanicState {
 }
 
 class BasicAlchemyResourceState extends AlchemyResourceState {
+  constructor(config) {
+    super(config);
+    // The names are capitalized, so we need to convert them to lower case
+    // in order to access highestRefinementValue values which are not capitalized.
+    this._name = config.name.toLowerCase();
+  }
+
   get highestRefinementValue() {
-    return player.celestials.ra.highestRefinementValue[this.name];
+    return player.celestials.ra.highestRefinementValue[this._name];
   }
 
   set highestRefinementValue(value) {
-    player.celestials.ra.highestRefinementValue[this.name] = value;
+    player.celestials.ra.highestRefinementValue[this._name] = value;
   }
 
   updateHighestRefinementValue(value) {
@@ -218,8 +227,6 @@ const AlchemyResource = (function() {
   function createResource(resource) {
     const config = GameDatabase.celestials.alchemy.resources[resource];
     config.id = resource;
-    config.before = 0;
-    config.flow = 0;
     if (config.isBaseResource) {
       return new BasicAlchemyResourceState(config);
     }

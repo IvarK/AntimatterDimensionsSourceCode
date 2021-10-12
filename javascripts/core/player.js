@@ -541,12 +541,12 @@ let player = {
           reaction: false
         })),
       highestRefinementValue: {
-        Power: 0,
-        Infinity: 0,
-        Time: 0,
-        Replication: 0,
-        Dilation: 0,
-        Effarig: 0
+        power: 0,
+        infinity: 0,
+        time: 0,
+        replication: 0,
+        dilation: 0,
+        effarig: 0
       },
       momentumTime: 0,
       unlocksBits: 0,

@@ -16,6 +16,7 @@ GameDatabase.h2p = {
   tabs: [
     {
       name: "Your savefile",
+      id: 0,
       info: () => `
 Your game's save data is stored on your computer's browser data, which means that clearing your browser's cache and
 cookies will also delete your save file. Similarly, if you are playing in a private or incognito window, your save
@@ -54,6 +55,7 @@ irreversible and gives you no permanent benefits, secret or otherwise.</b>
     },
     {
       name: "Customization",
+      id: 1,
       info: () => `
 The game has two different UI layouts - the "old" UI maintains the style of Antimatter Dimensions from before the
 Reality update, while the "new" UI is a redesign based on more modern dark theme styles. Additionally, there are
@@ -81,6 +83,7 @@ at least once.
     },
     {
       name: "Offline Progress",
+      id: 2,
       info: () => `
 Antimatter Dimensions has a catch-up mechanic which attempts to simulate the game's behavior if the game is closed for
 an extended period of time. The simulation behavior is only somewhat accurate, as the game is too mathematically
@@ -118,6 +121,7 @@ the game closed.
     },
     {
       name: "Dimensions",
+      id: 3,
       info: () => `
 Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
 with ${formatInt(10)} antimatter when you first open the game. And you can
@@ -179,6 +183,7 @@ ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
       tab: "dimensions/antimatter"
     }, {
       name: "Tickspeed",
+      id: 4,
       info: () => `
 Production in the game happens on each "tick" which initially occurs once per second. By buying Tickspeed upgrades,
 you can make your Dimensions produce faster, as if multiple ticks occur in each second.
@@ -205,6 +210,7 @@ in the Options tab.
       tab: "dimensions/antimatter"
     }, {
       name: "Dimension Boost",
+      id: 5,
       info: () => `
 <b>Dimension Boost:</b> This resets all of your Dimensions and your Antimatter, but unlocks another Dimension for
 you to purchase and boosts your Dimension multipliers. The 1st Dimension Boost requires ${formatInt(20)} 4th
@@ -226,6 +232,7 @@ the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
       tab: "dimensions/antimatter"
     }, {
       name: "Antimatter Galaxies",
+      id: 6,
       info: () => `
 Purchasing an Antimatter Galaxy will reset your game back to the point where only ${formatInt(4)} Dimensions are
 available, but will increase the effect of your Tickspeed upgrades by +${format(0.02, 0, 2)} for your first two
@@ -253,6 +260,7 @@ increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant s
       tab: "dimensions/antimatter"
     }, {
       name: "Dimensional Sacrifice",
+      id: 7,
       info: () => `
 <b>You unlock Dimensional Sacrifice after your first Dimension Boost.</b>
 <br>
@@ -275,6 +283,7 @@ ${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sac
       tab: "dimensions/antimatter"
     }, {
       name: "Achievements",
+      id: 8,
       // This one could use some work!
       info: () => `
 Each Achievement has conditions that must be met before they are earned.
@@ -290,6 +299,7 @@ own rewards.
       tab: "achievements"
     }, {
       name: "Infinity",
+      id: 9,
       info: () => `
 Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
 or about ${formatPostBreak(Number.MAX_VALUE, 6)},
@@ -319,6 +329,7 @@ You must buy all ${formatInt(16)} previous Infinity Upgrades to start purchasing
       tab: "infinity/upgrades"
     }, {
       name: "Challenges",
+      id: 10,
       info: () => `
 Challenges are unlocked after your first Infinity; they change in-game mechanics in different ways to create more
 difficult Infinity circumstances. To complete a challenge, you must reach ${formatPostBreak(Number.MAX_VALUE, 2)}
@@ -341,6 +352,7 @@ The rightmost column of Infinity Upgrades does not work in challenges.
       tab: "challenges/normal"
     }, {
       name: "Autobuyers",
+      id: 11,
       info: () => `
 <b>Autobuyers:</b>
 <br>
@@ -392,6 +404,7 @@ individual autobuyer settings.
       tab: "infinity/autobuyers"
     }, {
       name: "Break Infinity",
+      id: 12,
       info: () => `
 Once you Break Infinity, you are no longer limited to ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter and can start
 gaining more than ${formatInt(1)} IP per crunch depending on how much more antimatter you have when you crunch.
@@ -413,6 +426,7 @@ Tickspeed upgrade costs as well.
       tab: "infinity/break"
     }, {
       name: "Infinity Dimensions",
+      id: 13,
       info: () => `
 <b>Unlocking Infinity Dimensions:</b> Infinity Dimensions are unlocked by reaching a certain amount of antimatter.
 <br>
@@ -456,6 +470,7 @@ affected by Tickspeed upgrades.
       tab: "dimensions/infinity"
     }, {
       name: "Infinity Challenges",
+      id: 14,
       // This one could use some work!
       info: () => `
 Infinity Challenges are like Normal Challenges, but they have higher end goals and are generally harder. Instead of
@@ -475,6 +490,7 @@ amount of antimatter before you can attempt them.
       tab: "challenges/infinity"
     }, {
       name: "Replicanti",
+      id: 15,
       info: () => `
 Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
@@ -508,6 +524,7 @@ from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing 
       tab: "infinity/replicanti"
     }, {
       name: "Eternity",
+      id: 16,
       info: () => `
 Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this
 point except challenge times, Achievements, and anything under the General section of the Statistics tab. You will be
@@ -531,6 +548,7 @@ ${formatInt(2)} EP until ${formatPostBreak("1e349")}.
       tab: "eternity/upgrades"
     }, {
       name: "Eternity Milestones",
+      id: 17,
       info: () => `
 To make Eternities faster and more convenient, you will unlock various buffs as you get more "Eternity". These
 buffs will generally let you start with certain upgrades you would otherwise lose after Eternity, give you new
@@ -554,6 +572,7 @@ properly, as noted on the milestone page itself.
       tab: "eternity/milestones"
     }, {
       name: "Time Dimensions",
+      id: 18,
       info: () => `
 After your first Eternity, you unlock Time Dimensions. You buy them with Eternity Points and they provide Time Shards,
 which generate Tickspeed upgrades. These Tickspeed upgrades function like normal Tickspeed upgrades but don't increase
@@ -592,6 +611,7 @@ per ${formatInt(50000)} upgrades (${formatX(1.000006, 0, 6)} per upgrade).
       tab: "dimensions/time"
     }, {
       name: "Time Studies",
+      id: 19,
       info: () => `
 A Time Study is a powerful post-Eternity upgrade, which costs a new resource called Time Theorems. Time Studies can
 boost the production of anything you have seen so far in the game, or even change the way some formulas work.
@@ -643,6 +663,7 @@ the middle of an Eternity.
       tab: "eternity/studies"
     }, {
       name: "Eternity Challenges",
+      id: 20,
       info: () => `
 Eternity Challenges are another set of challenges which are unlocked by the Time Study tree. They require a certain
 amount of Time Theorems to enter, plus a secondary requirement which you must meet when you unlock the challenge.
@@ -667,6 +688,7 @@ having to complete the secondary requirement again.
       tab: "challenges/eternity"
     }, {
       name: "Time Dilation",
+      id: 21,
       // This could use a rewrite the sentence structure and grammer is kind rough
       info: () => `
 Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
@@ -696,6 +718,7 @@ can be repeatedly purchased as many times as you can afford them.
       tab: "eternity/dilation"
     }, {
       name: "Reality",
+      id: 22,
       info: () => `
 When you reach ${formatPostBreak("1e4000")} EP and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
@@ -738,6 +761,7 @@ You get exactly ${formatInt(1)} Perk Point per Reality.
       tab: "reality/upgrades"
     }, {
       name: "Glyphs",
+      id: 23,
       info: () => `
 A Glyph is an equippable object that has four attributes:
 <br>
@@ -784,6 +808,7 @@ in the Statistics page, your equipped Glyphs, and the Upcoming Glyph Selection t
       tab: "reality/glyphs"
     }, {
       name: "Perks",
+      id: 24,
       info: () => `
 Perks are a type of upgrade unlocked upon Reality. Each Perk effect varies, but most are QoL (quality of life)
 improvements which you can choose your own path through. All Perks only require ${formatInt(1)} Perk Point to buy.
@@ -799,6 +824,7 @@ to Perks you already have, although there are loops in the tree which you can go
       tab: "reality/perks"
     }, {
       name: "Automator",
+      id: 25,
       info: () => `
 The Automator is unlocked upon reaching ${formatInt(5)} Realities.
 It uses a scripting language that allows you to automate nearly the entire game.
@@ -831,6 +857,7 @@ text mode, and switching between block and text mode will automatically translat
       tab: "reality/automator"
     }, {
       name: "Black Hole",
+      id: 26,
       info: () => `
 The Black Hole is a feature which speeds up how fast the game runs, on a periodic cycle.
 The game will run at normal speed for some amount of time, then have a burst of running extremely fast for a short
@@ -888,6 +915,7 @@ speed boost was active. Pausing and unpausing affects both Black Holes; they can
       tab: "reality/hole"
     }, {
       name: "Celestials",
+      id: 27,
       info: () => `
 Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of 
 Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you 
@@ -908,6 +936,7 @@ the game will depend on the Celestial.
     }, {
       name: "Teresa, Celestial of Reality",
       alias: "Teresa",
+      id: 28,
       info: () => `
 Teresa is the first Celestial. They are unlocked by obtaining all of the Reality upgrades.
 <br>
@@ -930,6 +959,7 @@ you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will
     }, {
       name: "Effarig, Celestial of Ancient Relics",
       alias: "Effarig",
+      id: 29,
       info: () => `
 Effarig is the second Celestial you encounter.
 They are unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
@@ -968,6 +998,7 @@ ${EffarigUnlock.reality.isUnlocked
       tab: "celestials/effarig"
     }, {
       name: "Advanced Glyph Mechanics",
+      id: 30,
       info: () => `
 Glyph level Adjustment is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.adjuster.cost)} Relic
 Shards. This allows you to set weights for each resource (EP, DT, Replicanti, Eternities), in how much they affect the
@@ -1024,6 +1055,7 @@ and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Po
     }, {
       name: "The Enslaved Ones, Celestial of Time",
       alias: "Enslaved Ones",
+      id: 31,
       info: () => `
 The Enslaved Ones are the third Celestial, unlocked by completing Effarig's Eternity.
 <br>
@@ -1076,6 +1108,7 @@ The Enslaved Ones will not directly unlock the next Celestial.
       tab: "celestials/enslaved"
     }, {
       name: "Tesseracts",
+      id: 32,
       info: () => `
 Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
 <br>
@@ -1100,6 +1133,7 @@ If affordable, the Infinity button itself will visually change and bring you to 
     }, {
       name: "V, Celestial of Achievements",
       alias: "V",
+      id: 33,
       info: () => `
 V is a special Celestial in the sense that they are not unlocked by another Celestial,
 but are instead unlocked by completing a certain Achievement.
@@ -1148,6 +1182,7 @@ Reaching ${formatInt(36)} V-Achievements (and therefore completing all of V's Ac
     }, {
       name: "Ra, Celestial of the Forgotten",
       alias: "Ra",
+      id: 34,
       info: () => `
 Ra is the fifth Celestial, unlocked by fully completing all of V's Achievements. They bring back mechanics from
 older Celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
@@ -1199,6 +1234,7 @@ Ra will not directly unlock the next Celestial.`,
       tab: "celestials/ra"
     }, {
       name: "Glyph Alchemy",
+      id: 35,
       info: () => `
 Glyph Alchemy is a mechanic unlocked by reaching Effarig level ${formatInt(2)} in Ra. It unlocks the ability to
 use up your glyphs by refining them into alchemy resources associated with their type. Each resource gives some
@@ -1240,6 +1276,7 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       tab: "reality/alchemy"
     }, {
       name: "Imaginary Machines",
+      id: 36,
       info: () => `
 Once you are able to gain at least ${format(MachineHandler.baseRMCap)} Reality Machines in a single Reality, you
 unlock the ability to gain a new resource called Imaginary Machines. Reality Machines will also become hardcapped
@@ -1270,6 +1307,7 @@ Imaginary Machine upgrades will unlock the final two Celestials.
       tab: "reality/imag_upgrades"
     }, {
       name: "Continuum",
+      id: 37,
       info: () => `
 When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
 called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
@@ -1295,6 +1333,7 @@ autobuyer settings for Antimatter Dimension autobuyers are now hidden on that ta
     }, {
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
+      id: 38,
       info: () => `
 Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginary upgrade for
 ${format(ImaginaryUpgrade(15).cost)} iM.
@@ -1340,6 +1379,7 @@ to Dark Energy gain.
       tab: "celestials/laitela"
     }, {
       name: "Singularities",
+      id: 39,
       info: () => `
 Singularities are a new resource which you can obtain using features within Lai'tela.
 <br>
@@ -1374,6 +1414,7 @@ upgrade they generally give:
     }, {
       name: "Pelle, Celestial of Antimatter",
       alias: "Pelle",
+      id: 40,
       info: () => `
 <h1>Work in Progress</h1>
 `,
@@ -1442,6 +1483,8 @@ upgrade they generally give:
         result.add(match);
       }
     }
-    return Array.from(result);
+    const results = Array.from(result);
+    results.sort((a, b) => a.id - b.id);
+    return results;
   };
 }());

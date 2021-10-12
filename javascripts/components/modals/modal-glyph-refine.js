@@ -26,10 +26,11 @@ Vue.component("modal-glyph-refine", {
   },
   methods: {
     update() {
-      this.resourceAmount = this.resource.amount;
-      this.resourceUnlocked = this.resource.isUnlocked;
+      const resource = this.resource;
+      this.resourceAmount = resource.amount;
+      this.resourceUnlocked = resource.isUnlocked;
       this.gain = GlyphSacrificeHandler.glyphRefinementGain(this.glyph);
-      this.cap = this.resource.cap;
+      this.cap = resource.cap;
 
       this.after = this.resourceAmount + this.gain;
 

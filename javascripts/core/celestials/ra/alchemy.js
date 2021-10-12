@@ -50,6 +50,14 @@ class AlchemyResourceState extends GameMechanicState {
     return this.ema.average;
   }
 
+  get fillFraction() {
+    return Math.clamp(this.amount / this.cap, 0, 1);
+  }
+
+  get amountUntilCap() {
+    return this.cap - this.amount;
+  }
+
   get unlockedWith() {
     return Ra.pets.effarig;
   }
@@ -80,9 +88,10 @@ class AlchemyResourceState extends GameMechanicState {
     return AlchemyReactions.all[this.id];
   }
 
-  get cap() {
-    throw new NotImplementedError();
-  }
+  /**
+   * @abstract
+   */
+  get cap() { throw new NotImplementedError(); }
 
   get capped() {
     return this.amount >= this.cap;

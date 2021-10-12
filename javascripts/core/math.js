@@ -1378,7 +1378,6 @@ class ExponentialMovingAverage {
     } else {
       const absValue = Math.abs(value);
       const absAverage = Math.abs(this._average);
-      const differentSign = value * this._average < 0;
       const highOutlier = absValue > absAverage * this.highOutlierThreshold;
       const lowOutlier = absValue < absAverage * this.lowOutlierThreshold;
       const outlier = highOutlier || lowOutlier;

@@ -50,7 +50,10 @@ Vue.component("alchemy-resource-info", {
       };
     },
     resourceAmount() {
-      return `${formatFloat(this.amount, 1)}/${formatFloat(this.cap, 1)}`;
+      return formatFloat(this.amount, 1);
+    },
+    resourceCap() {
+      return formatFloat(this.cap, 1);
     },
     formattedFlow() {
       const sign = this.flow >= 0 ? "+" : "-";
@@ -80,8 +83,10 @@ Vue.component("alchemy-resource-info", {
       <span class="c-alchemy-resource-info__title">
         {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
       </span>
-      <span v-if="capped">Capped: {{ resourceAmount }} (Recent change: <span v-html="formattedFlow" />)</span>
-      <span v-else>Current: {{ resourceAmount }} (Recent change: <span v-html="formattedFlow" />)</span>
+      <span>
+        {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
+        (Recent change: <span v-html="formattedFlow" />)
+      </span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
       <span><effect-display title="Effect" :config="effectConfig" /></span>

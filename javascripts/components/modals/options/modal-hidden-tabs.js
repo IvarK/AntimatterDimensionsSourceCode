@@ -51,7 +51,7 @@ Vue.component("tab-modal-subtab-group", {
       };
     },
     isCurrentTab() {
-      return this.tab.config.id === Tabs.current.config.id;
+      return this.tab.id === Tabs.current.id;
     },
     classObjectButton() {
       return {
@@ -61,7 +61,7 @@ Vue.component("tab-modal-subtab-group", {
         "c-hide-modal-button--inactive": this.hidden,
         "c-hide-modal-button--always-visible": !this.tab.config.hidable || this.isCurrentTab,
         "c-hide-modal-button--current": this.isCurrentTab,
-        [`c-hide-modal-tab-button--${this.tab.config.key}`]: !this.isCurrentTab,
+        [`c-hide-modal-tab-button--${this.tab.key}`]: !this.isCurrentTab,
       };
     },
   },
@@ -81,7 +81,7 @@ Vue.component("tab-modal-subtab-group", {
       } else this.tab.toggleVisibility();
     },
     getKey(subtab) {
-      return `${this.tab.config.id} ${subtab.config.id} ${subtab.isHidden}`;
+      return `${this.tab.id} ${subtab.id} ${subtab.isHidden}`;
     }
   },
   template: `
@@ -121,8 +121,8 @@ Vue.component("tab-modal-subtab-button", {
   },
   computed: {
     isCurrentSubtab() {
-      return this.tab.config.id === Tabs.current.config.id &&
-        this.subtab.config.id === Tabs.current._currentSubtab.config.id;
+      return this.tab.id === Tabs.current.id &&
+        this.subtab.id === Tabs.current._currentSubtab.id;
     },
     classObject() {
       return {
@@ -132,7 +132,7 @@ Vue.component("tab-modal-subtab-button", {
         "c-hide-modal-button--inactive": this.hidden,
         "c-hide-modal-button--always-visible": !this.subtab.config.hidable || this.isCurrentSubtab,
         "c-hide-modal-button--current": this.isCurrentSubtab,
-        [`c-hide-modal-tab-button--${this.tab.config.key}`]: !this.isCurrentSubtab,
+        [`c-hide-modal-tab-button--${this.tab.key}`]: !this.isCurrentSubtab,
       };
     },
   },

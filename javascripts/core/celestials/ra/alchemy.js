@@ -201,14 +201,15 @@ class AlchemyReaction {
     if (!this.isActive || this.reactionYield === 0) return;
     const unpredictabilityEffect = AlchemyResource.unpredictability.effectValue;
     const times = 1 + poissonDistribution(unpredictabilityEffect / (1 - unpredictabilityEffect));
+    const cap = this._product.cap;
     for (let i = 0; i < times; i++) {
       const reactionYield = this.actualYield;
       for (const reagent of this._reagents) {
         reagent.resource.amount -= reactionYield * reagent.cost;
       }
-      this._product.amount += reactionYield * this.reactionProduction;
-      // Within a certain amount of the cap, just give the last bit for free so the cap is actually reached
-      if (Ra.alchemyResourceCap - this._product.amount < 0.05) this._product.amount = Ra.alchemyResourceCap;
+      // The minimum reaction yield is 0.05 so the cap is actually reached
+      const effectiveYield = Math.clampMin(reactionYield * this.reactionProduction, 0.05);
+      this._product.amount = Math.clampMax(this._product.amount + effectiveYield, cap);
     }
   }
 }

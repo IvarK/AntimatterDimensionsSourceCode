@@ -7,6 +7,7 @@ Vue.component("alchemy-resource-info", {
   data() {
     return {
       amount: 0,
+      cap: 0,
       capped: false,
       flow: 0,
       isReactionActive: false,
@@ -49,7 +50,7 @@ Vue.component("alchemy-resource-info", {
       };
     },
     resourceAmount() {
-      return formatFloat(this.amount, 1);
+      return `${formatFloat(this.amount, 1)}/${formatFloat(this.cap, 1)}`;
     },
     formattedFlow() {
       const sign = this.flow >= 0 ? "+" : "-";
@@ -63,6 +64,7 @@ Vue.component("alchemy-resource-info", {
     update() {
       const resource = this.resource;
       this.amount = resource.amount;
+      this.cap = resource.cap;
       this.capped = resource.capped;
       this.flow = resource.flow;
       this.isUnlocked = resource.isUnlocked;

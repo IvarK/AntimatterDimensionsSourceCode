@@ -65,15 +65,15 @@ const GlyphSacrificeHandler = {
   glyphRawRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
-    return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+    const rarityModifier = strengthToRarity(glyph.strength) / 100;
+    return this.glyphRefinementEfficiency * glyphMaxValue * rarityModifier;
   },
   glyphRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
     const resource = this.glyphAlchemyResource(glyph);
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
-    const alchemyResource = this.glyphAlchemyResource(glyph);
-    const glyphActualMaxValue = resource.cap;
-    return Math.clamp(glyphActualMaxValue - alchemyResource.amount, 0, glyphActualValue);
+    const missingUntilCap = resource.cap - resource.amount;
+    return Math.clamp(missingUntilCap, 0, glyphActualValue);
   },
   attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
@@ -117,13 +117,12 @@ const GlyphSacrificeHandler = {
     const refinementGain = this.glyphRefinementGain(glyph);
     resource.amount += refinementGain;
     const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
-    const alchemyCap = resource.cap;
     for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
       if (glyphTypeName !== glyph.type) {
         const glyphType = GlyphTypes[glyphTypeName];
         const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-        const maxResouce = Math.max(alchemyCap, otherResource.amount);
-        otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
+        const maxResource = Math.max(otherResource.cap, otherResource.amount);
+        otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResource);
       }
     }
     if (resource.isBaseResource) {

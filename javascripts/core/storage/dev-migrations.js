@@ -1120,8 +1120,16 @@ GameStorage.devMigrations = {
       if (player.auto.eternity.amount.lt(0.01)) player.auto.eternity.amount = new Decimal(0);
     },
     player => {
-      for (const resource of AlchemyResources.base) {
-        resource.updateHighestRefinementValue(resource.amount);
+      const highestRefinementData = [
+        { name: "Power", id: ALCHEMY_RESOURCE.POWER },
+        { name: "Infinity", id: ALCHEMY_RESOURCE.INFINITY },
+        { name: "Time", id: ALCHEMY_RESOURCE.TIME },
+        { name: "Replication", id: ALCHEMY_RESOURCE.REPLICATION },
+        { name: "Dilation", id: ALCHEMY_RESOURCE.DILATION },
+        { name: "Effarig", id: ALCHEMY_RESOURCE.EFFARIG }
+      ];
+      for (const resource of highestRefinementData) {
+        player.celestials.ra.highestRefinementValue[resource.name] = player.celestials.ra.alchemy[resource.id].amount;
       }
     },
   ],

@@ -617,6 +617,7 @@ let player = {
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
     headerTextColored: false,
+    showNewGlyphIcon: true,
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,

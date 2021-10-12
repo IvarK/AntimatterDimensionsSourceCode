@@ -69,7 +69,7 @@ Vue.component("glyph-inventory", {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
     },
     isNew(index) {
-      return this.newGlyphs.includes(this.inventory[index].id);
+      return player.options.showNewGlyphIcon && this.newGlyphs.includes(this.inventory[index].id);
     }
   },
   template: `

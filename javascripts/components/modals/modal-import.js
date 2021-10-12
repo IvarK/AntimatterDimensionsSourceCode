@@ -10,9 +10,14 @@ Vue.component("modal-import", {
     this.$refs.input.select();
   },
   computed: {
-    player() {
+    saveCheckString() {
       const save = GameSaveSerializer.deserialize(this.input);
-      return GameStorage.verifyPlayerObject(save) ? save : undefined;
+      const rawString = GameStorage.checkPlayerObject(save);
+      // Keep the length bounded; we don't want the modal to be too big for the screen for particularly bad errors
+      return rawString.length > 300 ? `${rawString.slice(0, 297)}...` : rawString;
+    },
+    player() {
+      return this.saveCheckString === "" ? GameSaveSerializer.deserialize(this.input) : undefined;
     },
     progress() {
       return PlayerProgress.of(this.player);
@@ -67,7 +72,11 @@ Vue.component("modal-import", {
           <div v-if="progress.isRealityUnlocked">Realities: {{ formatPostBreak(player.realities, 2, 0) }}</div>
           <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
         </template>
-        <div v-else-if="hasInput">Not a valid save</div>
+        <div v-else-if="hasInput">
+          Not a valid save
+          <br>
+          {{ saveCheckString }}
+        </div>
       </div>
       <primary-button
         v-if="inputIsValid"

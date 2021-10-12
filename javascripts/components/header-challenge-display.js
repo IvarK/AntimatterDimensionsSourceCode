@@ -102,6 +102,8 @@ Vue.component("header-challenge-display", {
         current.exit();
       } else if (player.dilation.active) {
         startDilatedEternityRequest();
+      } else if (player.options.confirmations.resetCelestial) {
+        Modal.exitCelestialReality.show();
       } else {
         beginProcessReality(getRealityProps(true));
       }

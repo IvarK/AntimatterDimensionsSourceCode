@@ -260,7 +260,9 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   set boughtAmount(value) {
-    const diff = value - player.epmultUpgrades;
+    // Reality resets will make this bump amount negative, causing it to visually appear as 0 even when it isn't.
+    // A dev migration fixes bad autobuyer states and this change ensures it doesn't happen again
+    const diff = Math.clampMin(value - player.epmultUpgrades, 0);
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();

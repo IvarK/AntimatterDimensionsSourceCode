@@ -1,4 +1,4 @@
-.t-s6 #stars {
+.t-s10 #stars {
   display: block;
   /* Make video to at least 100% wide and tall */
   min-width: 100%;
@@ -16,7 +16,7 @@
   transform: translate(-50%,-50%);
 }
 
-body.t-s6 {
+body.t-s10 {
   color: #999;
   background: black;
   background-image: url('../images/stars-bg.png');
@@ -24,38 +24,38 @@ body.t-s6 {
   background-position: center;
 }
 
-.t-s6 .c-tt-amount {
+.t-s10 .c-tt-amount {
   color: #64DD17;
   text-shadow: 0 0 7px #64DD17;
 }
 
-.t-s6 .c-tt-buy-button--unlocked {
+.t-s10 .c-tt-buy-button--unlocked {
   color: #3AACD6;
   background: black;
   border: 0.1rem solid #3AACD6;
 }
 
-.t-s6 .c-tt-buy-button--unlocked:hover {
+.t-s10 .c-tt-buy-button--unlocked:hover {
   color: black;
   background: #3AACD6;
 }
 
-.t-s6 .c-tt-buy-button--locked {
+.t-s10 .c-tt-buy-button--locked {
   color: grey;
   background: black;
   border: 0.1rem solid grey;
 }
 
-.t-s6 .c-tt-buy-button--locked:hover {
+.t-s10 .c-tt-buy-button--locked:hover {
   color: black;
   background: var(--color-bad);
   border: 0.1rem solid var(--color-bad);
 }
 
-.t-s6 .c-rm-amount__desc {
+.t-s10 .c-rm-amount__desc {
   color: #999;
 }
 
-.t-s6 #realityanimbg {
+.t-s10 #realityanimbg {
   filter: invert(1);
 }

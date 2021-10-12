@@ -86,7 +86,7 @@ const GlyphSelection = {
 };
 
 function isRealityAvailable() {
-  return Currency.eternityPoints.exponent >= 4000 && TimeStudy.reality.isBought;
+  return player.records.thisReality.maxEP.exponent >= 4000 && TimeStudy.reality.isBought;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
@@ -121,23 +121,43 @@ function requestManualReality() {
 function processManualReality(sacrifice, glyphID) {
   if (!isRealityAvailable()) return;
 
-  // If we have a glyph selected, send that along, otherwise pick one at random.
-  // eslint-disable-next-line no-param-reassign
-  if (glyphID === undefined) glyphID = Math.floor(Math.random() * GlyphSelection.choiceCount);
-
-  if (Perk.firstPerk.isEffectActive) {
-    // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
-    // Generation occurs here to prevent RNG from changing if you do more than one reality without firstPerk.
-    GlyphSelection.generate(GlyphSelection.choiceCount);
-    GlyphSelection.select(glyphID, sacrifice);
-  } else if (player.realities === 0) {
+  if (player.realities === 0) {
     // If this is our first Reality, give them the companion and the starting power glyph.
     Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
     Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
+  } else if (Perk.firstPerk.isEffectActive) {
+    // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
+    GlyphSelection.generate(GlyphSelection.choiceCount);
+
+    // If we don't actually have a chosen ID, that means a manual reality was done with the modal disabled or the
+    // modal showed up and the player decided not to pick anything
+    if (glyphID === undefined) {
+      if (EffarigUnlock.glyphFilter.isUnlocked) {
+        // If the player has the glyph filter, we apply the filter to the choices instead of picking randomly
+        let newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
+        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+          AutoGlyphProcessor.getRidOfGlyph(newGlyph);
+          newGlyph = null;
+        }
+        if (newGlyph && Glyphs.freeInventorySpace > 0) {
+          Glyphs.addToInventory(newGlyph);
+        }
+      } else {
+        // This doesn't use the seeded RNG, but this isn't exploitable since the player can just reenable
+        // the modal and choose themselves anyway. The alternative is adding an extra seeded RNG call
+        // everywhere else to ensure RNG consistency, which is probably undesirable
+        GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), sacrifice);
+      }
+    } else {
+      // In this case, we already picked a choice in the modal
+      GlyphSelection.select(glyphID, sacrifice);
+    }
   } else {
-    // We can't get a random glyph directly here because that disturbs the RNG
-    // (makes it depend on whether you got first perk or not).
-    Glyphs.addToInventory(GlyphSelection.glyphList(1, gainedGlyphLevel(), { isChoosingGlyph: true })[0]);
+    // We can't get a random glyph directly here because that makes the RNG depend on when you get the first
+    // perk. Instead we (arbitrarily) select the first one instead of allowing a choice. The internals of
+    // generate() still advance the seed properly as if we actually had a choice of more than one glyph
+    GlyphSelection.generate(1);
+    GlyphSelection.select(0, sacrifice);
   }
 
   // We've already gotten a glyph at this point, so the second value has to be true.

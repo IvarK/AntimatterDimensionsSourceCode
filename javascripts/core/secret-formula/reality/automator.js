@@ -390,6 +390,7 @@ GameDatabase.reality.automator = {
         <b>realities</b> - current reality amount <br>
         <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
         <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
+        <b>pending tp</b> - TP gained on exiting dilation<br>
         <b>pending rm</b> - RM gained on reality (0 if not available)<br>
         <b>pending glyph level</b> - glyph level gained on reality (0 if not available)<br>
         <b>dt</b> - dilated time amount  <br>

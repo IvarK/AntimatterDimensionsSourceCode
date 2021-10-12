@@ -6,6 +6,7 @@ Vue.component("modal-reality", {
       showReality: false,
       showGlyphSelection: false,
       firstPerk: false,
+      hasFilter: false,
       glyphs: GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false }),
       bestLevel: 0,
       levelDifference: 0,
@@ -45,7 +46,8 @@ Vue.component("modal-reality", {
     },
     selectInfo() {
       return `Selecting Confirm ${this.canSacrifice ? "or Sacrifice " : ""}
-        without selecting a glyph will randomly select a glyph.`;
+        without selecting a Glyph will 
+        ${this.hasFilter ? "choose a Glyph based on your filter settings" : "randomly select a Glyph"}.`;
     },
     gained() {
       return `You will gain
@@ -66,6 +68,7 @@ Vue.component("modal-reality", {
       this.showReality = player.options.confirmations.reality;
       this.showGlyphSelection = player.options.confirmations.glyphSelection;
       this.firstPerk = Perk.firstPerk.isEffectActive;
+      this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
       this.simRealities = 1 + simulatedRealityCount(false);
       const simRMGained = MachineHandler.gainedRealityMachines.times(this.simRealities);

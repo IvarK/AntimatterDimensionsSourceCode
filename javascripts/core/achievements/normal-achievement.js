@@ -55,6 +55,11 @@ class AchievementState extends GameMechanicState {
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
+    if (this.id === 55 && !PlayerProgress.realityUnlocked()) {
+      Modal.message(`Since you just Infinitied in under a minute, the UI changed on the screen. 
+      Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them. 
+      This is purely visual, and is there to prevent flickering.`);
+    }
     if (auto) {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {

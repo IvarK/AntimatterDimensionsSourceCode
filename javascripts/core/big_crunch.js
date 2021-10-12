@@ -35,16 +35,7 @@ function bigCrunchReset() {
   if (!Player.canCrunch) return;
 
   const firstInfinity = !PlayerProgress.infinityUnlocked();
-  // Since achievement 55 unlocks on the BIG_CRUNCH_BEFORE event, we check here if it is and then
-  // compare in the if statmement below if it is now unlocked.
-  const is55Unlocked = Achievement(55).isUnlocked;
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
-  if ((is55Unlocked !== Achievement(55).isUnlocked) && !PlayerProgress.realityUnlocked()) {
-    Modal.message.show(`
-    Since you just Infinitied in under a minute, the UI changed on the screen. 
-    Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them. 
-    This is purely visual, and is there to prevent flickering.`);
-  }
 
   bigCrunchUpdateStatistics();
 

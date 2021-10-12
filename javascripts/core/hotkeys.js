@@ -389,7 +389,7 @@ function keyboardVisibleTabsToggle() {
 }
 
 function keyboardTabChange(direction) {
-  // Current tabs. Defined here as both tab and subtab movements require knowning your current tab.
+  // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
   if (direction === "up" || direction === "down") {
     // Make an array of the keys of all the unlocked and visible tabs

@@ -39,7 +39,7 @@ Vue.component("reality-reminder", {
   },
   methods: {
     update() {
-      this.isVisible = TimeStudy.reality.isBought && this.suggestions.length !== 0;
+      this.isVisible = TimeStudy.reality.isBought && !isInCelestialReality() && this.suggestions.length !== 0;
       this.ecCount = EternityChallenges.completions;
       this.currLog10EP = player.eternityPoints.log10();
       this.cheapestLog10TD = Math.min(...Array.dimensionTiers.map(x => TimeDimension(x).cost.log10()));

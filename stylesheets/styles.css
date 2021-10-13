@@ -6689,6 +6689,7 @@ kbd {
 
 .s-base--metro .c-ra-upgrade-bar {
   border-width: 0.1rem;
+  height: 2.625rem;
 }
 
 .c-ra-upgrade-bar__inner {
@@ -6946,27 +6947,32 @@ kbd {
   background: grey;
   color: black;
   border: .2rem solid black;
+  border-right: 0;
   border-radius: 1rem;
   font-size: 1.3rem;
   transition-duration: 0.2s;
   position: relative;
-  margin-right: -0.2rem;
 }
 
 .s-base--metro .c-ra-pet-upgrade {
   border-radius: 0;
   border-width: 0.1rem;
-  margin-right: -0.1rem;
+  height: 2.625rem;
 }
 
 .c-ra-pet-upgrade__right,
 .c-ra-pet-upgrade__top {
-  margin-left: -0.2rem;
+  margin-bottom: -0.1rem;
+}
+
+.c-ra-pet-upgrade__bot {
+  margin-top: -0.1rem;
 }
 
 .s-base--metro .c-ra-pet-upgrade__right,
 .s-base--metro .c-ra-pet-upgrade__top {
-  margin-left: -0.1rem;
+  margin-top: 0.1rem;
+  margin-bottom: -0.05rem;
 }
 
 .c-ra-pet-upgrade__tooltip {

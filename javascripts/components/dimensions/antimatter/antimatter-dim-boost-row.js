@@ -18,7 +18,7 @@ Vue.component("antimatter-dim-boost-row", {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
-      return DimBoost.unlockedStuff();
+      return DimBoost.unlockedByBoost;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];

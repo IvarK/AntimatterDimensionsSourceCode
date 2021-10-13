@@ -109,7 +109,8 @@ class DimBoost {
     return new DimBoostRequirement(tier, amount);
   }
 
-  static unlockedStuff() {
+  static get unlockedByBoost() {
+    if (DimBoost.lockText !== null) return DimBoost.lockText;
     const boosts = DimBoost.purchasedBoosts;
 
     let newUnlock = "";
@@ -132,9 +133,7 @@ class DimBoost {
     let areDimensionsReset = "Reset your Dimensions";
     if (Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) areDimensionsReset = "Reset nothing";
 
-    return DimBoost.lockText === null
-      ? `${areDimensionsReset}${boostEffects}`
-      : DimBoost.lockText;
+    return `${areDimensionsReset}${boostEffects}`;
   }
 
   static get purchasedBoosts() {

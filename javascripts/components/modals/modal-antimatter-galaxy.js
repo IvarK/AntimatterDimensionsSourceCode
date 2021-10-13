@@ -33,13 +33,10 @@ Vue.component("modal-antimatter-galaxy", {
     update() {
       const req = Galaxy.requirement;
       const dim = AntimatterDimension(req.tier);
-      const bulk = bulkBuyBinarySearch(new Decimal(dim.amount.toNumber()), {
+      const bulk = bulkBuyBinarySearch(dim.amount, {
         costFunction: x => Galaxy.requirementAt(x).amount,
         cumulative: false,
       }, player.galaxies);
-      // This is so finicky lul but it WORKS! Basically bulk is just the thing from buyableGalaxies, and that's
-      // what causes the error (https://i.imgur.com/xjR3NYu.gif) so basically I was like "well hey if it causes it
-      // there let's stop that from ever happening in the first place" and lo and behold this is what I got.
       if (bulk) {
         if (Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) > this.newGalaxies) {
           this.newGalaxies = Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) - player.galaxies;

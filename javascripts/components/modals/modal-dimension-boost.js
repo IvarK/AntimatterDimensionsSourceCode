@@ -11,11 +11,8 @@ Vue.component("modal-dimension-boost", {
       return `You are about to purchase a Dimension Boost`;
     },
     message() {
-      return `${this.boostEffects}? `;
+      return `${DimBoost.unlockedByBoost}?`;
     },
-    boostEffects() {
-      return DimBoost.unlockedStuff();
-    }
   },
   methods: {
     handleYesClick() {

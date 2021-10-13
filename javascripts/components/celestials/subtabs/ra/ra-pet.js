@@ -185,7 +185,7 @@ Vue.component("ra-pet", {
                 <div class="c-ra-upgrade-bar__inner" :style="barStyle('memory')"></div>
               </div>
             </div>
-            <div class="l-ra-pet-upgrade">
+            <div class="l-ra-pet-upgrade c-ra-pet-upgrade__bottom">
               <div
                 :class="upgradeClassObject('chunk')"
                 @click="petConfig.pet.purchaseChunkUpgrade()"

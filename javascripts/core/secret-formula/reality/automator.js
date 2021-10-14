@@ -386,7 +386,7 @@ GameDatabase.reality.automator = {
         <b>ep</b> - current eternity point amount  <br>
         <b>rm</b> - current reality machine amount  <br>
         <b>infinities</b> - current infinity amount <br>
-        <b>infinities banked</b> - current banked infinity amount <br>
+        <b>banked infinities</b> - current banked infinity amount <br>
         <b>eternities</b> - current eternity amount <br>
         <b>realities</b> - current reality amount <br>
         <b>pending ip</b> - IP gained on crunch (0 if not available)<br>

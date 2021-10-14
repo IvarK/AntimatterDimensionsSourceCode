@@ -38,9 +38,18 @@ const GameSaveSerializer = {
   // confuse your saves with AD saves but can still import AD saves (this will
   // also require changing some other code slightly, particularly decode).
   startingString: {
-    savefile: "AntimatterDimensionsSavefileFormatAAA",
-    "automator script": "AntimatterDimensionsAutomatorScriptFormatAAA"
+    savefile: "AntimatterDimensionsSavefileFormat",
+    "automator script": "AntimatterDimensionsAutomatorScriptFormat"
   },
+  // The ending strings aren't as verbose so that we can save a little space.
+  endingString: {
+    savefile: "EndOfSavefile",
+    "automator script": "EndOfAutomatorScript",
+  },
+  // This should always be three characters long, and should ideally go AAA, AAB, AAC, etc.
+  // so that we can do inequality tests on it to compare versions (though skipping a version
+  // shouldn't be a problem).
+  version: "AAB",
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
   // from having them be different seems not to be worth it.
@@ -50,6 +59,9 @@ const GameSaveSerializer = {
   // In the fifth element, order of operations is important: we don't want to encode 0s we added in encoding
   // (i.e. + -> 0b -> 0ab is undesired) or to accidentally decode 0ac -> 0c -> / (slash)
   // when encoding says (as it should) 0c -> 0ac.
+  // These functions contain the code that does different things in different versions.
+  // Right now we only have code for steps to only apply in certain versions; add a condition to the step.
+  // It wouldn't be too hard to allow steps to depend on version though.
   steps: [
     // This step transforms saves into unsigned 8-bit arrays, as pako requires.
     { encode: x => GameSaveSerializer.encoder.encode(x), decode: x => GameSaveSerializer.decoder.decode(x) },
@@ -66,41 +78,48 @@ const GameSaveSerializer = {
     // won't break this.
     { encode: x => btoa(x), decode: x => atob(x) },
     // This step removes + and /, because if they occur, you can double-click on a save and get
-    // everything up to the first + or /, which can be hard to debug. We don't do anything with =
-    // because although double-click doesn't copy it, btoa ignores it and is happy without trailing =
-    // (it's disregarded padding).
-    // These regex have no potentially-unicode characters, I think, and they're applied to strings
-    // with just ASCII anyway, but I'm adding u to make Codeacy happy.
+    // everything up to the first + or /, which can be hard to debug. We also remove = (always trailing)
+    // because btoa just ignores it. These regex have no potentially-unicode characters, I think,
+    // and they're applied to strings with just ASCII anyway, but I'm adding u to make Codeacy happy.
     {
-      encode: x => x.replace(/0/gu, "0a").replace(/\+/gu, "0b").replace(/\//gu, "0c"),
+      encode: x => x.replace(/=+$/gu, "").replace(/0/gu, "0a").replace(/\+/gu, "0b").replace(/\//gu, "0c"),
       decode: x => x.replace(/0b/gu, "+").replace(/0c/gu, "/").replace(/0a/gu, "0")
+    },
+    {
+      encode: (x, type) => x + GameSaveSerializer.endingString[type],
+      decode: (x, type) => x.slice(0, x.length - GameSaveSerializer.endingString[type].length),
+      condition: version => version >= "AAB"
     }
   ],
-  getSteps(type) {
+  getSteps(type, version) {
     // This is a version marker, as well as indicating to players that this is from AD
     // and whether it's a save or automator script. We can change the last 3 letters
     // of the string savefiles start with from AAA to something else,
     // if we want a new version of savefile encoding.
-    return this.steps.concat({
-      encode: x => `${GameSaveSerializer.startingString[type]}${x}`,
-      decode: x => x.slice(GameSaveSerializer.startingString[type].length)
+    return this.steps.filter(i => (!i.condition) || i.condition(version)).concat({
+      encode: x => `${GameSaveSerializer.startingString[type] + GameSaveSerializer.version}${x}`,
+      decode: x => x.slice(GameSaveSerializer.startingString[type].length + 3)
     });
   },
   // Apply each step's encode function in encoding order.
   encodeText(text, type) {
-    return this.getSteps(type).reduce((x, step) => step.encode(x), text);
+    return this.getSteps(type, this.version).reduce((x, step) => step.encode(x, type), text);
   },
   // Apply each step's decode function, in decoding order (which is the reverse
   // of encoding order). We only do this if we recognize the string which tells
   // us the save version. If we don't see it, we assume the save's old and just
-  // use atob. If you're adding a new savefile version, or you're making a mod,
+  // use atob. If you're adding a new savefile version, make sure its length is
+  // three characters and alter the encoding/decoding functions as is described
+  // in the comment above the definition of steps. If you're making a mod, then
   // add another case to this conditional. Old saves (before the reality update
   // and for a significant part of its development) always started with eYJ and
   // old automator scripts (where this function is also used) are very unlikely
   // to start with our magic string because it is longer than a few characters.
   decodeText(text, type) {
     if (text.startsWith(this.startingString[type])) {
-      return this.getSteps(type).reduceRight((x, step) => step.decode(x), text);
+      let len = this.startingString[type].length;
+      let version = text.slice(len, len + 3);
+      return this.getSteps(type, version).reduceRight((x, step) => step.decode(x, type), text);
     }
     return atob(text);
   }

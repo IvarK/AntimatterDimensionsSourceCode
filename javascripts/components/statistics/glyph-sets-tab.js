@@ -29,7 +29,10 @@ Vue.component("glyph-sets-tab", {
   },
   template: `
     <div class="c-stats-tab">
-      <div v-for="(set, idx) in recordGlyphInfo">
+      <div
+        v-for="(set, idx) in recordGlyphInfo"
+        :key="idx"
+      >
         <glyph-set-preview
           :key="idx"
           :show="set[0]"

@@ -5,6 +5,8 @@ Vue.component("reality-reminder", {
     return {
       isVisible: false,
       ecCount: 0,
+      missingAchievements: 0,
+      unpurchasedDilationUpgrades: 0,
       currLog10EP: 0,
       cheapestLog10TD: 0,
       multEPLog10Cost: 0,
@@ -19,6 +21,12 @@ Vue.component("reality-reminder", {
       if (this.purchasableTS > 0) {
         arr.push(`Purchase more studies (${formatInt(this.purchasableTS)} available)`);
       }
+      if (this.missingAchievements > 0) {
+        arr.push(`Complete the rest of your achievements (${formatInt(this.missingAchievements)})`);
+      }
+      if (this.unpurchasedDilationUpgrades > 0) {
+        arr.push(`Purchase the remaining dilation upgrades (${formatInt(this.unpurchasedDilationUpgrades)})`);
+      }
       if (this.currLog10EP > 1.1 * this.cheapestLog10TD) {
         arr.push(`Purchase more TDs (cheapest: ${format(Decimal.pow10(this.cheapestLog10TD))} EP)`);
       }
@@ -26,7 +34,7 @@ Vue.component("reality-reminder", {
         arr.push(`Purchase more ${formatX(5)} EP (cost: ${format(Decimal.pow10(this.multEPLog10Cost))} EP)`);
       }
       if (this.ecCount < 60) {
-        arr.push(`Finish the rest of your ECs (${formatInt(this.ecCount)}/${formatInt(60)})`);
+        arr.push(`Finish the rest of your ECs (Done: ${formatInt(this.ecCount)}/${formatInt(60)})`);
       }
       if (!this.hasDilated) {
         arr.push("Perform a Dilated Eternity");
@@ -41,13 +49,16 @@ Vue.component("reality-reminder", {
     update() {
       this.isVisible = TimeStudy.reality.isBought && !isInCelestialReality() && this.suggestions.length !== 0;
       this.ecCount = EternityChallenges.completions;
+      this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
+      // Repeatable dilation upgrades don't have isBought, but do have boughtAmount
+      this.unpurchasedDilationUpgrades = Object.values(DilationUpgrade)
+        .countWhere(u => (u.isBought === undefined ? u.boughtAmount === 0 : !u.isBought));
       this.currLog10EP = player.eternityPoints.log10();
-      this.cheapestLog10TD = Math.min(...Array.dimensionTiers.map(x => TimeDimension(x).cost.log10()));
+      this.cheapestLog10TD = Math.min(...TimeDimensions.all.map(x => x.cost.log10()));
       this.multEPLog10Cost = EternityUpgrade.epMult.cost.log10();
       this.purchasableTS = NormalTimeStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought) +
         TriadStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought);
-      // This assumes that TP was only ever retroactively multiplied by the perks
-      this.hasDilated = player.dilation.tachyonParticles.pLog10() - 1 > DilationUpgrade.tachyonGain.effectValue.log10();
+      this.hasDilated = player.dilation.lastEP.gt(0);
       this.availableCharges = Ra.chargesLeft;
     },
   },

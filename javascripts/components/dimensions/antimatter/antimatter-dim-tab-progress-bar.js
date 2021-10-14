@@ -40,8 +40,8 @@ Vue.component("antimatter-dim-tab-progress-bar", {
             if (goal) {
               setProgress(Currency.infinityPoints.value, goal, "Percentage to next Challenge completion");
             } else {
-              // In a fully complete EC, there's nothing useful we can show so we just pin it at 100% and say so
-              setProgress(Currency.infinityPoints.value, 10, "This Challenge is already fully complete!");
+              // In a fully completed EC, there's nothing useful we can show so we just pin it at 100% and say so
+              setProgress(Currency.infinityPoints.value, 10, "This Challenge is already fully completed!");
             }
           } else {
             setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity Challenge goal");
@@ -59,10 +59,14 @@ Vue.component("antimatter-dim-tab-progress-bar", {
         setProgress(Currency.eternityPoints.value, new Decimal("1e4000"), "Percentage to Reality");
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity");
+      } else if (InfinityDimension(1).isUnlocked) {
+        setProgress(Currency.antimatter.value,
+          InfinityDimensions.next().requirement,
+          "Percentage to unlock a new Infinity Dimension");
       } else if (player.break) {
         setProgress(Currency.antimatter.value,
           InfinityDimensions.next().requirement,
-          "Percentage to next Infinity Dimension unlock");
+          "Percentage to unlock a new type of Dimension");
       } else {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       }

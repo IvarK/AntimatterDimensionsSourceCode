@@ -41,7 +41,6 @@ Vue.component("options-visual-tab", {
       autosaveInterval: 3000,
       headerTextColored: true,
       realityReached: false,
-      showNewGlyphIcon: true,
     };
   },
   watch: {
@@ -54,9 +53,6 @@ Vue.component("options-visual-tab", {
     },
     headerTextColored(newValue) {
       player.options.headerTextColored = newValue;
-    },
-    showNewGlyphIcon(newValue) {
-      player.options.showNewGlyphIcon = newValue;
     },
   },
   computed: {
@@ -78,7 +74,6 @@ Vue.component("options-visual-tab", {
       this.commas = options.commas;
       this.updateRate = options.updateRate;
       this.headerTextColored = options.headerTextColored;
-      this.showNewGlyphIcon = options.showNewGlyphIcon;
       this.realityReached = PlayerProgress.realityUnlocked();
     },
   },
@@ -154,12 +149,6 @@ Vue.component("options-visual-tab", {
             v-model="headerTextColored"
             class="o-primary-btn--option l-options-grid__button"
             text="Relative prestige gain text coloring:"
-          />
-          <primary-button-on-off
-            v-if="realityReached"
-            v-model="showNewGlyphIcon"
-            class="o-primary-btn--option l-options-grid__button"
-            text='Show "New!" icon on new Glyphs:'
           />
         </div>
         <open-modal-shortcuts />

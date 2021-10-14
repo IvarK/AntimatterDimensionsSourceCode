@@ -534,10 +534,7 @@ Vue.component("glyph-component", {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
-      // Remove the "New!" icon immediately
-      const index = Glyphs.unseen.indexOf(this.glyph.id);
-      if (index > -1) Glyphs.unseen.splice(index, 1);
-
+      Glyphs.removeNewFlag(this.glyph);
       this.tooltipLoaded = true;
       const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
       glyphInfo.type = this.glyph.type;

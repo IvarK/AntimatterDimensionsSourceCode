@@ -48,7 +48,7 @@ Vue.component("antimatter-dim-tab-progress-bar", {
           }
         } else if (player.dilation.active) {
           if (player.dilation.lastEP.gt(0)) {
-            setProgress(Currency.antimatter.value, getTachyonReq(), "Percentage to more TP in Dilation");
+            setProgress(Currency.antimatter.value, getTachyonReq(), "Percentage to gain more TP in Dilation");
           } else {
             setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity in Dilation");
           }

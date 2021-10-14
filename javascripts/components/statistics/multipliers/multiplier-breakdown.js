@@ -50,26 +50,29 @@ Vue.component("multiplier-breakdown", {
   },
   template: `
     <div>
-      <div class="c-multiplier-tab-breakdown" v-if="expand">
-        <multiplier-row
-          v-for="(multiplier, i) in multipliers"
-          :key="'m' + i"
-          :effect="multiplier"
-          operation="MULTIPLIERS"
-        />
-        <multiplier-row
-          v-for="(power, i) in powers"
-          :key="'p' + i"
-          :effect="power"
-          operation="POWERS"
-        />
-      </div>
       <div class="c-multiplier-tab-row-entry c-multiplier-tab-header" @click="toggleExpand">
         <div class="c-multiplier-tab-row-name">
           <drop-down :shown.sync="expand" />
           <span> {{name}} </span>
         </div>
-        <div class="c-multiplier-tab-row-value"> {{total}}  </div>
+        <div class="c-multiplier-tab-row-value" v-if="!expand"> {{total}}  </div>
       </div>
+      <transition name="expandMulti">
+        <div class="c-multiplier-tab-breakdown" v-if="expand">
+          <multiplier-row
+            v-for="(multiplier, i) in multipliers"
+            :key="'m' + i"
+            :effect="multiplier"
+            operation="MULTIPLIERS"
+          />
+          <multiplier-row
+            v-for="(power, i) in powers"
+            :key="'p' + i"
+            :effect="power"
+            operation="POWERS"
+          />
+          </div>
+      </transition>
+      <h3 v-if="expand"> TOTAL MULTIPLIER </h3>
     </div>`
 });

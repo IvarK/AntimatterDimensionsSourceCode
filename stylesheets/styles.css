@@ -2517,7 +2517,7 @@ screen and (max-width: 480px) {
 .c-multiplier-tab {
   user-select: none;
   font-size: 1.2rem;
-  width: 100rem;
+  width: 80rem;
   align-self: center;
 }
 
@@ -2557,6 +2557,23 @@ screen and (max-width: 480px) {
   align-items: center;
   margin-left: 4rem;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.expandMulti-enter-active {
+  animation: expand-multiplier-breakdown 1s;
+}
+.expandMulti-leave-active {
+  animation: expand-multiplier-breakdown 1s reverse;
+}
+
+@keyframes expand-multiplier-breakdown {
+  0% {
+    height: 0px;
+  }
+  100% {
+    height: 400px;
+  }
 }
 
 .c-multiplier-tab-row-entry {

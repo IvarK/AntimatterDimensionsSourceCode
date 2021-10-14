@@ -40,7 +40,7 @@ Vue.component("multiplier-row", {
       <multiplier-breakdown v-if="innerId > -1" :id="innerId" :operation="operation" />
       <div class="c-multiplier-tab-row-entry" v-else>
         <div class="c-multiplier-tab-row-name">{{ name }}</div>
-        <div class="c-multiplier-tab-row-value"> {{ displayValue }}</div>
+        <div class="c-multiplier-tab-row-value"> {{ displayValue }}       TOTAL VALUE</div>
       </div>
     </div>`
 });

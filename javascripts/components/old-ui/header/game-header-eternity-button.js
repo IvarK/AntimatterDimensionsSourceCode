@@ -7,8 +7,8 @@ Vue.component("game-header-eternity-button", {
       type: EP_BUTTON_DISPLAY_TYPE.FIRST_TIME,
       gainedEP: new Decimal(0),
       currentEP: new Decimal(0),
-      currentEPPM: new Decimal(0),
-      peakEPPM: new Decimal(0),
+      currentEPRate: new Decimal(0),
+      peakEPRate: new Decimal(0),
       currentTachyons: new Decimal(0),
       gainedTachyons: new Decimal(0),
       challengeCompletions: 0,
@@ -31,16 +31,17 @@ Vue.component("game-header-eternity-button", {
         "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
       };
     },
-    peakEPPMThreshold: () => new Decimal("1e100"),
-    isPeakEPPMVisible() {
-      return this.currentEPPM.lte(this.peakEPPMThreshold);
+    // Show EP/min below this threshold, color the EP number above it
+    rateThreshold: () => 1e100,
+    showEPRate() {
+      return this.currentEPRate.lte(this.rateThreshold);
     },
     isDilation() {
       return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (!this.headerTextColored || this.currentEP.lt(1e50)) return {};
+      if (!this.headerTextColored || this.currentEP.lt(this.rateThreshold)) return {};
       if (this.hover) return {
         color: "black",
         "transition-duration": "0.2s"
@@ -131,10 +132,12 @@ Vue.component("game-header-eternity-button", {
       this.type = hasNewContent
         ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
         : EP_BUTTON_DISPLAY_TYPE.NORMAL;
-      this.currentEPPM.copyFrom(gainedEP.dividedBy(
-        TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
-      );
-      this.peakEPPM.copyFrom(player.records.thisEternity.bestEPmin);
+      if (this.showEPRate) {
+        this.currentEPRate.copyFrom(gainedEP.dividedBy(
+          TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
+        );
+        this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
+      }
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -171,12 +174,12 @@ Vue.component("game-header-eternity-button", {
       <!-- Normal -->
       <template v-else-if="type === 1">
         Eternity for
-        <span :style="amountStyle">{{ format(gainedEP, 2, 0) }}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
+        <span :style="amountStyle">{{ format(gainedEP, 2) }}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>
-        <template v-if="isPeakEPPMVisible">
-          {{ format(currentEPPM, 2, 2) }} EP/min
+        <template v-if="showEPRate">
+          {{ format(currentEPRate, 2, 2) }} EP/min
           <br>
-          Peaked at {{ format(peakEPPM, 2, 2) }} EP/min
+          Peaked at {{ format(peakEPRate, 2, 2) }} EP/min
         </template>
       </template>
 

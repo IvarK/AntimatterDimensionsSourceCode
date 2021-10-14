@@ -433,6 +433,7 @@ let player = {
     activations: 0,
   })),
   blackHolePause: false,
+  blackHoleAutoPauseMode: 0,
   blackHolePauseTime: 0,
   blackHoleNegative: 1,
   celestials: {
@@ -616,6 +617,7 @@ let player = {
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
     headerTextColored: false,
+    showNewGlyphIcon: true,
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,

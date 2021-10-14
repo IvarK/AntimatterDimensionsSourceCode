@@ -27,7 +27,7 @@ function strengthToRarity(x) {
 const Glyphs = {
   inventory: [],
   active: [],
-  copies: [],
+  unseen: [],
   levelBoost: 0,
   factorsOpen: false,
   get inventoryList() {
@@ -158,6 +158,8 @@ const Glyphs = {
       }
       Modal.glyphReplace.show({ targetSlot, inventoryIndex });
     }
+    // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
+    this.removeNewFlag(glyph);
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
@@ -251,8 +253,16 @@ const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
+    if (!requestedInventoryIndex) this.addNewFlag(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
+  },
+  addNewFlag(glyph) {
+    if (!this.unseen.includes(glyph.id)) this.unseen.push(glyph.id);
+  },
+  removeNewFlag(glyph) {
+    const index = Glyphs.unseen.indexOf(glyph.id);
+    if (index > -1) Glyphs.unseen.splice(index, 1);
   },
   removeFromInventory(glyph) {
     // This can get called on a glyph not in inventory, during auto sacrifice.

@@ -595,7 +595,7 @@ button:focus {
 
 .l-reality-button {
   display: block;
-  margin-bottom: 2rem;
+  padding: 1.2rem;
 }
 
 .l-reality-button__contents {
@@ -624,6 +624,18 @@ button:focus {
 
 .c-reality-button--special {
   animation: a-celstial-reward-glow 3s infinite;
+}
+
+.c-reality-reminder {
+  border: 0.1rem solid #b8b8b8;
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  margin-top: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 0;
+  width: 35rem;
+  height: 18rem;
 }
 
 @keyframes a-celstial-reward-glow {
@@ -671,7 +683,7 @@ button:focus {
 
 .l-reset-reality-button {
   display: block;
-  margin-bottom: 2rem;
+  margin: 1rem;
 }
 
 .c-reset-reality-button {
@@ -8042,7 +8054,7 @@ kbd {
 .l-reality-button-column {
   display: flex;
   flex-direction: column;
-  padding-top: 5rem;
+  padding-top: 1rem;
   align-items: center;
   margin-right: 2rem;
 }
@@ -8050,7 +8062,7 @@ kbd {
 .l-player-glyphs-column {
   display: flex;
   flex-direction: column;
-  padding-top: 2rem;
+  padding-top: 1rem;
   justify-content: flex-start;
 }
 

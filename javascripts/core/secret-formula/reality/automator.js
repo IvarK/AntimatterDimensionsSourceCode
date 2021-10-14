@@ -231,7 +231,7 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: `<b>if</b> [am|ip|ep|dt|tp|rg|rep|infinities|eternities|realities|tt|total tt|pending glyph level|
+      syntax: `<b>if</b> [am|ip|ep|dt|tp|rg|rep|infinities|infinities banked|eternities|realities|tt|total tt|pending glyph level|
         pending completions|ec[number] completions] (comparison) [number]`,
       examples: [
         "if ep <= 1e3000",
@@ -386,6 +386,7 @@ GameDatabase.reality.automator = {
         <b>ep</b> - current eternity point amount  <br>
         <b>rm</b> - current reality machine amount  <br>
         <b>infinities</b> - current infinity amount <br>
+        <b>infinities banked</b> - current banked infinity amount <br>
         <b>eternities</b> - current eternity amount <br>
         <b>realities</b> - current reality amount <br>
         <b>pending ip</b> - IP gained on crunch (0 if not available)<br>

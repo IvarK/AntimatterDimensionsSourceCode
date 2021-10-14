@@ -117,8 +117,8 @@ const GameSaveSerializer = {
   // to start with our magic string because it is longer than a few characters.
   decodeText(text, type) {
     if (text.startsWith(this.startingString[type])) {
-      let len = this.startingString[type].length;
-      let version = text.slice(len, len + 3);
+      const len = this.startingString[type].length;
+      const version = text.slice(len, len + 3);
       return this.getSteps(type, version).reduceRight((x, step) => step.decode(x, type), text);
     }
     return atob(text);

@@ -18,10 +18,10 @@ Vue.component("modal-antimatter-galaxy", {
       let message = "";
       if (Perk.antimatterNoReset.isBought) message = `This will reset nothing, and you will receive a small
          (but impactful) boost to tickspeed upgrades.`;
-      if (Achievement(111).isUnlocked) message = `This will reset all of your Antimatter Dimensions, 
+      else if (Achievement(111).isUnlocked) message = `This will reset all of your Antimatter Dimensions, 
         your Dimension Boosts, and tickspeed. However, you will receive a small (but impactful) boost 
         to tickspeed upgrades.`;
-      message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts, 
+      else message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts, 
         tickspeed, and Antimatter. However, you will receive a small (but impactful) boost to tickspeed upgrades.`;
       if (this.bulk) return `Are you sure you want to purchase ${formatInt(this.newGalaxies, 2)} 
       ${pluralize("Antimatter Galaxy", this.newGalaxies, "Antimatter Galaxies")}? ${message}`;

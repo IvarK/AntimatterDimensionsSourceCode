@@ -124,7 +124,7 @@ const AutomatorLexer = (() => {
   createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.realityMachines.value });
 
   createInCategory(AutomatorCurrency, "infinities", /infinities/i, { $getter: () => Currency.infinities.value });
-  createInCategory(AutomatorCurrency, "infinitiesBanked", /banked[ \t]+infinities/i, {
+  createInCategory(AutomatorCurrency, "bankedInfinities", /banked[ \t]+infinities/i, {
     $autocomplete: "banked infinities",
     $getter: () => Currency.bankedInfinities.value
   });

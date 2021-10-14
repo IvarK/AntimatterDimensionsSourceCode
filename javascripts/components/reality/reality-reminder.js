@@ -47,8 +47,9 @@ Vue.component("reality-reminder", {
   },
   methods: {
     update() {
-      // TODO: replace the true with "this.suggestions.length !== 0" after making it so this does not flicker the rest of the glyph tab sidebar
-      this.isVisible = TimeStudy.reality.isBought && !isInCelestialReality() && true;
+      // TODO: add the line below to the isVisible check after making it so this does not flicker the rest of the glyph tab sidebar
+      // TimeStudy.reality.isBought && this.suggestions.length !== 0
+      this.isVisible = !isInCelestialReality();
       this.ecCount = EternityChallenges.completions;
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
       // Repeatable dilation upgrades don't have isBought, but do have boughtAmount

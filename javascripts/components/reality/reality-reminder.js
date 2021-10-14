@@ -19,13 +19,13 @@ Vue.component("reality-reminder", {
     suggestions() {
       const arr = [];
       if (this.purchasableTS > 0) {
-        arr.push(`Purchase more studies (${formatInt(this.purchasableTS)} available)`);
+        arr.push(`Purchase more Time Studies (${formatInt(this.purchasableTS)} available)`);
       }
       if (this.missingAchievements > 0) {
-        arr.push(`Complete the rest of your achievements (${formatInt(this.missingAchievements)})`);
+        arr.push(`Complete the rest of your Achievements (${formatInt(this.missingAchievements)} left)`);
       }
       if (this.unpurchasedDilationUpgrades > 0) {
-        arr.push(`Purchase the remaining dilation upgrades (${formatInt(this.unpurchasedDilationUpgrades)})`);
+        arr.push(`Purchase the remaining Dilation Upgrades (${formatInt(this.unpurchasedDilationUpgrades)} left)`);
       }
       if (this.currLog10EP > 1.1 * this.cheapestLog10TD) {
         arr.push(`Purchase more TDs (cheapest: ${format(Decimal.pow10(this.cheapestLog10TD))} EP)`);

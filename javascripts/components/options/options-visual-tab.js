@@ -40,7 +40,6 @@ Vue.component("options-visual-tab", {
       updateRate: 0,
       autosaveInterval: 3000,
       headerTextColored: true,
-      realityReached: false,
     };
   },
   watch: {
@@ -74,7 +73,6 @@ Vue.component("options-visual-tab", {
       this.commas = options.commas;
       this.updateRate = options.updateRate;
       this.headerTextColored = options.headerTextColored;
-      this.realityReached = PlayerProgress.realityUnlocked();
     },
   },
   template: `

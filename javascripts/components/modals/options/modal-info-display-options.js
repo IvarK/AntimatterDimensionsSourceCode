@@ -65,7 +65,7 @@ Vue.component("modal-info-display-options", {
         <wide-on-off-button v-model="achievementUnlockStates" text="Achievement unlock state indicators:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenge IDs:" />
         <wide-on-off-button v-if="eternityUnlocked" v-model="studies" text="Time Study IDs:" />
-        <wide-on-off-button v-if="realityUnlocked" v-model="newGlyphs" text="New Glyph icon:" />
+        <wide-on-off-button v-if="realityUnlocked" v-model="newGlyphs" text="New Glyph identifier:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="glyphEffectDots" text="Glyph effect dots:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="realityUpgrades" text="Reality Upgrade names:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="perks" text="Perk IDs:" />

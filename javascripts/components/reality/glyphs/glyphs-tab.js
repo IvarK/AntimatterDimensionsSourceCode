@@ -66,9 +66,7 @@ Vue.component("glyphs-tab", {
       <div class="l-glyphs-tab">
         <div class="l-reality-button-column">
           <glyph-peek />
-          <br>
           <reality-button />
-          <br>
           <reality-reminder />
           <reset-reality-button v-if = "resetRealityDisplayed" />
           <div v-if="isInCelestialReality">

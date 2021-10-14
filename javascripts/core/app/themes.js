@@ -108,7 +108,7 @@ Theme.tryUnlock = function(name) {
 
 Theme.create = function(name, settings) {
   const config = {
-    isDark: settings.dark,
+    isDark: false || settings.dark,
     isMetro: false || settings.metro,
     isAnimated: false || settings.animated,
     isSecret: false || settings.secret,

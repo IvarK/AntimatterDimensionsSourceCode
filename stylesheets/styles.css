@@ -595,6 +595,7 @@ button:focus {
 
 .l-reality-button {
   display: block;
+  padding: 1.2rem;
 }
 
 .l-reality-button__contents {
@@ -634,6 +635,7 @@ button:focus {
   margin-right: 1rem;
   margin-bottom: 0;
   width: 35rem;
+  height: 18rem;
 }
 
 @keyframes a-celstial-reward-glow {

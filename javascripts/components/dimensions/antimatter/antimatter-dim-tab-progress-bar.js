@@ -47,7 +47,11 @@ Vue.component("antimatter-dim-tab-progress-bar", {
             setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity Challenge goal");
           }
         } else if (player.dilation.active) {
-          setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity in Dilation");
+          if (player.dilation.lastEP.gt(0)) {
+            setProgress(Currency.antimatter.value, getTachyonReq(), "Percentage to more TP in Dilation");
+          } else {
+            setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity in Dilation");
+          }
         } else {
           // Lai'tela destabilization; since the progress bar is logarithmically-scaled, we need to pow10 the arguments
           setProgress(Decimal.pow10(player.celestials.laitela.entropy), 10, "Percentage to Destabilized Reality");

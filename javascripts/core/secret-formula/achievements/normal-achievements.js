@@ -208,7 +208,7 @@ GameDatabase.achievements.normal = [
       GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT
     ],
     get reward() {
-      return `Unlock two new Infinity Upgrades- ${formatInt(2)} IP multiplier and offline IP generation.`;
+      return `Unlock two new Infinity Upgrades- x${formatInt(2)} IP multiplier and offline IP generation.`;
     },
   },
   {

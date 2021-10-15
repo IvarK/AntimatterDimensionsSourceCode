@@ -31,8 +31,11 @@ function bigCrunchResetRequest(disableAnimation = false) {
   }
 }
 
-function bigCrunchReset() {
-  if (!Player.canCrunch) return;
+function bigCrunchReset(forced = false) {
+  if (!Player.canCrunch) {
+    if (forced) bigCrunchResetValues();
+    return;
+  }
 
   const firstInfinity = !PlayerProgress.infinityUnlocked();
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);

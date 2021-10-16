@@ -309,12 +309,8 @@ function keyboardToggleAutobuyers() {
 
 function keyboardToggleContinuum() {
   if (!Laitela.continuumUnlocked) return;
-  player.auto.disableContinuum = !player.auto.disableContinuum;
+  Laitela.disableContinuum(!player.auto.disableContinuum);
   GameUI.notify.info(`${(player.auto.disableContinuum) ? "Disabled" : "Enabled"} Continuum`);
-  // If continuum is not disabled (i.e. is enabled) we update the relevant requirement check.
-  if (!player.auto.disableContinuum) {
-    player.requirementChecks.reality.noContinuum = false;
-  }
 }
 
 function keyboardAutomatorToggle() {

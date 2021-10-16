@@ -54,8 +54,8 @@ const Laitela = {
   get continuumActive() {
     return this.continuumUnlocked && !player.auto.disableContinuum;
   },
-  disableContinuum(x) {
-    player.auto.disableContinuum = x;
+  setContinuum(x) {
+    player.auto.disableContinuum = !x;
     // If continuum is now not disabled (i.e. is enabled) we update the relevant requirement check.
     if (!player.auto.disableContinuum) {
       player.requirementChecks.reality.noContinuum = false;

@@ -17,7 +17,7 @@ Vue.component("autobuyer-toggles", {
       player.auto.bulkOn = newValue;
     },
     disableContinuum(newValue) {
-      Laitela.disableContinuum(newValue);
+      Laitela.setContinuum(!newValue);
     }
   },
   methods: {

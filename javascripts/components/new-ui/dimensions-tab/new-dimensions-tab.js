@@ -37,12 +37,12 @@ Vue.component("new-dimensions-tab", {
       }
       // "Continuum" => "Until 10" => "Buy 1" => "Continuum"
       if (this.isContinuumActive) {
-        Laitela.disableContinuum(true);
+        Laitela.setContinuum(false);
         player.buyUntil10 = true;
       } else if (player.buyUntil10) {
         player.buyUntil10 = false;
       } else {
-        Laitela.disableContinuum(false);
+        Laitela.setContinuum(true);
       }
     },
     getUntil10Display() {

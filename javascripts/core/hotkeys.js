@@ -309,7 +309,9 @@ function keyboardToggleAutobuyers() {
 
 function keyboardToggleContinuum() {
   if (!Laitela.continuumUnlocked) return;
-  Laitela.disableContinuum(!player.auto.disableContinuum);
+  // This is a toggle despite the lack of !, because player.auto.disableContinuum
+  // is negated compared to whether continuum is on.
+  Laitela.setContinuum(player.auto.disableContinuum);
   GameUI.notify.info(`${(player.auto.disableContinuum) ? "Disabled" : "Enabled"} Continuum`);
 }
 

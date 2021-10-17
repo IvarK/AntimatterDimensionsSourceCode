@@ -101,8 +101,5 @@ Vue.component("dimension-autobuyer-box", {
       <template slot="toggleSlot">
         <button class="o-autobuyer-btn" @click="toggleMode">{{ modeDisplay }}</button>
       </template>
-      <template slot="prioritySlot">
-        <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
-      </template>
     </autobuyer-box>`
 });

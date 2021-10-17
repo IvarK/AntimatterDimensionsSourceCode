@@ -53,21 +53,19 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     this.data.time = value;
   }
 
-  get xCurrent() {
-    return this.data.xCurrent;
+  get xHighest() {
+    return this.data.xHighest;
   }
 
-  set xCurrent(value) {
-    this.data.xCurrent = value;
+  set xHighest(value) {
+    this.data.xHighest = value;
   }
 
   autoInfinitiesAvailable(considerMilestoneReached) {
     return (considerMilestoneReached || EternityMilestone.autoInfinities.isReached) &&
-      !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning &&
-      !Player.isInAntimatterChallenge &&
-      this.data.isActive &&
-      this.mode === AUTO_CRUNCH_MODE.TIME &&
-      this.time < 60 &&
+      !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning && !Player.isInAntimatterChallenge &&
+      player.auto.autobuyersOn && this.data.isActive &&
+      !Autobuyer.eternity.isActive && this.mode === AUTO_CRUNCH_MODE.TIME && this.time < 60 &&
       !Autobuyer.eternity.autoEternitiesAvailable();
   }
 
@@ -81,10 +79,17 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
       this.amount = this.amount.times(mult);
     }
   }
+  
+  get canTick() {
+    return Player.canCrunch && super.canTick;
+  }
+
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
 
   tick() {
-    if (Player.canCrunch) super.tick();
-    if (Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE)) return;
+    super.tick();
     let proc = !player.break || Player.isInAntimatterChallenge;
     if (!proc) {
       switch (this.mode) {
@@ -94,16 +99,12 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
         case AUTO_CRUNCH_MODE.TIME:
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
-        case AUTO_CRUNCH_MODE.X_CURRENT:
-          proc = gainedInfinityPoints().gte(Currency.infinityPoints.value.times(this.xCurrent));
+        case AUTO_CRUNCH_MODE.X_HIGHEST:
+          proc = gainedInfinityPoints().gte(player.records.thisEternity.maxIP.times(this.xHighest));
           break;
       }
     }
     if (proc) Reset.bigCrunch.request({ auto: true });
-  }
-
-  get resetTickOn() {
-    return PRESTIGE_EVENT.ETERNITY;
   }
 
   reset() {

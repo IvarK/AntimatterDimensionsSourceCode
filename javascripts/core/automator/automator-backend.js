@@ -152,7 +152,9 @@ class AutomatorScript {
   }
 
   static create(name) {
-    const id = (++player.reality.automator.lastID).toString();
+    let id = Object.keys(player.reality.automator.scripts).length + 1;
+    // On a fresh save, this executes before player is properly initialized
+    if (!player.reality.automator.scripts || id === 0) id = 1;
     player.reality.automator.scripts[id] = {
       id,
       name,
@@ -162,6 +164,61 @@ class AutomatorScript {
   }
 }
 
+const AutomatorData = {
+  // -1 is the ID for the documentation page
+  currentInfoPane: -1,
+  // Used for getting the correct EC count in event log
+  lastECCompletionCount: 0,
+  // Used as a flag to make sure that wait commands only add one entry to the log instead of every execution attempt
+  isWaiting: false,
+  waitStart: 0,
+  lastEvent: 0,
+  eventLog: [],
+  isEditorFullscreen: false,
+  scriptIndex() {
+    return player.reality.automator.state.editorScript;
+  },
+  currentScriptName() {
+    return player.reality.automator.scripts[this.scriptIndex()].name;
+  },
+  currentScriptText() {
+    return player.reality.automator.scripts[this.scriptIndex()].content;
+  },
+  createNewScript(newScript, name) {
+    const newScriptID = Object.values(player.reality.automator.scripts).length + 1;
+    player.reality.automator.scripts[newScriptID] = {
+      id: `${newScriptID}`,
+      name,
+      content: newScript
+    };
+    GameUI.notify.info(`Imported Script "${name}"`);
+    player.reality.automator.state.editorScript = newScriptID;
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
+  },
+  currentErrors(script) {
+    const toCheck = script || this.currentScriptText();
+    return AutomatorGrammar.compile(toCheck).errors;
+  },
+  logCommandEvent(message, line) {
+    const currTime = Date.now();
+    this.eventLog.push({
+      // Messages often overflow the 120 col limit and extra spacing gets included in the message - remove it
+      message: message.replaceAll(/\s?\n\s+/gu, " "),
+      line,
+      thisReality: Time.thisRealityRealTime.totalSeconds,
+      timestamp: currTime,
+      timegap: currTime - this.lastEvent
+    });
+    this.lastEvent = currTime;
+    // Remove the oldest entry if the log is too large
+    if (this.eventLog.length > player.options.automatorEvents.maxEntries) this.eventLog.shift();
+  },
+  clearEventLog() {
+    this.eventLog = [];
+    this.lastEvent = 0;
+  }
+};
+
 const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
   _scripts: [],
@@ -170,7 +227,7 @@ const AutomatorBackend = {
     return player.reality.automator.state;
   },
 
-  // The automator may be paused at some instruction, but still be on.
+  // The Automator may be paused at some instruction, but still be on.
   get isOn() {
     return !this.stack.isEmpty;
   },
@@ -206,11 +263,16 @@ const AutomatorBackend = {
 
   update(diff) {
     if (!this.isOn) return;
+    let stack;
     switch (this.mode) {
       case AUTOMATOR_MODE.PAUSE:
         return;
       case AUTOMATOR_MODE.SINGLE_STEP:
         this.singleStep();
+        stack = AutomatorBackend.stack.top;
+        // If single step completes the last line and repeat is off, the command stack will be empty and
+        // scrolling will cause an error
+        if (stack) AutomatorTextUI.scrollToLine(stack.lineNumber - 1);
         this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
       case AUTOMATOR_MODE.RUN:
@@ -276,6 +338,7 @@ const AutomatorBackend = {
         }
         this.stop();
       } else if (this.stack.top.commandState && this.stack.top.commandState.advanceOnPop) {
+        AutomatorData.logCommandEvent(`Exiting IF block`, this.stack.top.commandState.ifEndLine);
         return this.nextCommand();
       }
     } else {
@@ -292,7 +355,10 @@ const AutomatorBackend = {
   },
 
   findScript(id) {
-    return this._scripts.find(e => e.id === id);
+    // I tried really hard to convert IDs from strings into numbers for some cleanup but I just kept getting constant
+    // errors everywhere. It needs to be a number so that importing works properly without ID assignment being a mess,
+    // but apparently some deeper things seem to break in a way I can't easily fix.
+    return this._scripts.find(e => `${e.id}` === `${id}`);
   },
 
   _createDefaultScript() {
@@ -309,8 +375,8 @@ const AutomatorBackend = {
     } else {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
-    if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
-    const currentScript = this._scripts.find(e => e.id === this.state.topLevelScript);
+    if (!scriptIds.includes(`${this.state.topLevelScript}`)) this.state.topLevelScript = scriptIds[0];
+    const currentScript = this.findScript(this.state.topLevelScript);
     if (currentScript.commands) {
       const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
@@ -347,6 +413,23 @@ const AutomatorBackend = {
     this.state.repeat = !this.state.repeat;
   },
 
+  toggleForceRestart() {
+    this.state.forceRestart = !this.state.forceRestart;
+  },
+
+  toggleFollowExecution() {
+    this.state.followExecution = !this.state.followExecution;
+    this.jumpToActiveLine();
+  },
+
+  jumpToActiveLine() {
+    const state = this.state;
+    const focusedScript = state.topLevelScript === state.editorScript;
+    if (focusedScript && this.isRunning && state.followExecution) {
+      AutomatorTextUI.scrollToLine(AutomatorBackend.stack.top.lineNumber - 1);
+    }
+  },
+
   reset(commands) {
     this.stack.clear();
     this.push(commands);
@@ -363,15 +446,20 @@ const AutomatorBackend = {
 
   start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
     this.state.topLevelScript = scriptID;
-    const scriptObject = this._scripts.find(s => s.id === scriptID);
+    const scriptObject = this.findScript(scriptID);
     if (compile) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);
       this.state.mode = initialMode;
     }
+    AutomatorData.isWaiting = false;
+    if (player.options.automatorEvents.clearOnRestart) AutomatorData.clearEventLog();
   },
 
   restart() {
+    // Sometimes this leads to start getting called twice in quick succession but it's close enough
+    // that there's usually no command in between (possibly same tick).
+    this.start(this.state.topLevelScript, AUTOMATOR_MODE.RUN);
     if (this.stack.isEmpty) return;
     this.reset(this.stack._data[0].commands);
   },
@@ -430,5 +518,4 @@ const AutomatorBackend = {
       return this._data.length === 0;
     }
   },
-
 };

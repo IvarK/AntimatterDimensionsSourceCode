@@ -20,16 +20,10 @@ Vue.component("old-ui", {
   },
   methods: {
     update() {
-      const inBrokenChallenge = Player.isInBrokenChallenge;
-      if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
-        this.bigCrunch = false;
-        this.smallCrunch = false;
-        return;
-      }
-      this.smallCrunch = true;
-      const endOfChallenge = Player.isInAntimatterChallenge && !player.options.retryChallenge;
-      this.bigCrunch = endOfChallenge ||
-        (Time.thisInfinity.totalMinutes > 1 && Time.bestInfinityRealTime.totalMinutes > 1);
+      const crunchButtonVisible = !player.break && Player.canCrunch;
+      const reachedInfinityInMinute = Time.bestInfinityRealTime.totalMinutes <= 1;
+      this.bigCrunch = crunchButtonVisible && !reachedInfinityInMinute;
+      this.smallCrunch = crunchButtonVisible && reachedInfinityInMinute;
     }
   },
   template: `

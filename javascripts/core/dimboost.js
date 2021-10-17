@@ -38,7 +38,10 @@ class DimBoost {
   }
 
   static multiplierToNDTier(tier) {
-    return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
+    const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts + 1 - tier).clampMin(1);
+    const imaginaryBoostMult = DimBoost.power.times(ImaginaryUpgrade(24).effectOrDefault(1))
+      .pow(this.imaginaryBoosts).clampMin(1);
+    return normalBoostMult.times(imaginaryBoostMult);
   }
 
   static get maxDimensionsUnlockable() {
@@ -89,9 +92,9 @@ class DimBoost {
       TimeStudy(222)
     );
     if (tier === 6 && NormalChallenge(10).isRunning) {
-      amount += Math.ceil((targetResets - 3) * (20 - discount));
+      amount += Math.round((targetResets - 3) * (20 - discount));
     } else if (tier === 8) {
-      amount += Math.ceil((targetResets - 5) * (15 - discount));
+      amount += Math.round((targetResets - 5) * (15 - discount));
     }
     if (EternityChallenge(5).isRunning) {
       amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
@@ -102,22 +105,21 @@ class DimBoost {
 
     amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
-    amount = Math.ceil(amount);
+    amount = Math.round(amount);
 
     return new DimBoostRequirement(tier, amount);
   }
 
   static get purchasedBoosts() {
-    return Math.floor(player.dimensionBoosts);
+    return Math.floor(Currency.dimensionBoosts.value);
   }
 
-  static get freeBoosts() {
-    // This was originally used for Time Compression, probably use it for something in Lai'tela now
-    return 0;
+  static get imaginaryBoosts() {
+    return Ra.isRunning ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
   }
 
   static get totalBoosts() {
-    return Math.floor(this.purchasedBoosts + this.freeBoosts);
+    return Math.floor(this.purchasedBoosts + this.imaginaryBoosts);
   }
 
   static get startingDimensionBoosts() {
@@ -132,7 +134,7 @@ class DimBoost {
 }
 
 function loseDimensionBoost() {
-  player.dimensionBoosts = Math.max(0, player.dimensionBoosts - 1);
+  Currency.dimensionBoosts.subtract(1);
   Reset.dimensionBoost.reset({ force: true });
   Currency.antimatter.reset();
 }

@@ -34,10 +34,5 @@ Vue.component("tickspeed-autobuyer-box", {
         <button class="o-autobuyer-btn" @click="toggleMode" v-if="isUnlocked">{{ modeDisplay }}</button>
         <button class="o-autobuyer-btn" v-else>Complete the challenge to change mode</button>
       </template>
-      <autobuyer-priority-selector
-        :autobuyer="autobuyer"
-        class="l-autobuyer-box__priority-selector"
-        slot="prioritySlot"
-      />
     </autobuyer-box>`
 });

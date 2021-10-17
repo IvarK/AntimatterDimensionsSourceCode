@@ -21,6 +21,14 @@ class TabNotificationState {
       .forEach(tab => player.tabNotifications.add(tab));
     // eslint-disable-next-line no-bitwise
     player.triggeredTabNotificationBits |= 1 << this.config.id;
+
+    // Force all tabs and subtabs of this notification to be unhidden
+    for (const location of this.config.tabsToHighLight) {
+      const tab = Tabs.all.find(t => t.config.key === location.parent);
+      const subtab = tab.subtabs.find(t => t.key === location.tab);
+      tab.unhideTab();
+      subtab.unhideTab();
+    }
   }
 }
 
@@ -37,5 +45,6 @@ const TabNotification = (function() {
     blackHoleUnlock: new TabNotificationState(db.blackHoleUnlock),
     automatorUnlock: new TabNotificationState(db.automatorUnlock),
     teresaUnlock: new TabNotificationState(db.teresaUnlock),
+    alchemyUnlock: new TabNotificationState(db.alchemyUnlock),
   };
 }());

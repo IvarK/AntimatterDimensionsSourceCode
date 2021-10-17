@@ -149,8 +149,7 @@ GameDatabase.infinity.upgrades = (function() {
       id: "passiveGen",
       cost: 10,
       description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
-      // Cutting corners: this is not actual effect (player.infMult is), but
-      // it is totalIPMult that is displyed on upgrade
+      // Cutting corners: this is not actual effect, but it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
@@ -200,17 +199,22 @@ GameDatabase.infinity.upgrades = (function() {
     ipOffline: {
       id: "ipOffline",
       cost: 1000,
-      description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
-      effect: () =>
-        player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      description: () => (player.options.offlineProgress
+        ? `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`
+        : "This upgrade would give offline Infinity Point generation, but offline progress is currently disabled"),
+      effect: () => (player.options.offlineProgress
+        ? player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2)
+        : new Decimal(0)),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
     },
     ipMult: {
-      cost: () => player.infMultCost,
+      cost: () => InfinityUpgrade.ipMult.cost,
       costCap: new Decimal("1e6000000"),
       costIncreaseThreshold: new Decimal("1e3000000"),
       description: () => `Multiply Infinity Points from all sources by ${formatX(2)}`,
-      effect: () => player.infMult,
+      // Normally the multiplier caps at e993k or so with 3299999 purchases, but if the cost is capped then we just give
+      // an extra e7k to make the multiplier look nice
+      effect: () => (player.infMult === 3299999 ? Decimal.pow10(1e6) : Decimal.pow(2, player.infMult)),
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
       formatEffect: value => formatX(value, 2, 2),
     }

@@ -3,13 +3,17 @@
 Vue.component("modal-reality", {
   data() {
     return {
+      showReality: false,
+      showGlyphSelection: false,
       firstPerk: false,
+      hasFilter: false,
       glyphs: GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false }),
+      bestLevel: 0,
       levelDifference: 0,
       selectedGlyph: undefined,
       canRefresh: false,
       level: 0,
-      realities: 0,
+      simRealities: 0,
       realityMachines: new Decimal(0),
     };
   },
@@ -31,9 +35,9 @@ Vue.component("modal-reality", {
   },
   computed: {
     firstReality() {
-      return `Reality will reset everything except challenge records.
-        Your Achievements are also reset, but you will automatically get one back every 30 minutes.
-        You will also gain Reality Machines based on your Eternity Points, a
+      return `Reality will reset everything except Challenge records and anything under the General header on the
+        Statistics tab. Your Achievements are also reset, but you will automatically get one back every
+        ${timeDisplayNoDecimals(30 * 60000)}. You will also gain Reality Machines based on your Eternity Points, a
         Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
         on quality of life upgrades, and unlock various upgrades.`;
     },
@@ -42,15 +46,33 @@ Vue.component("modal-reality", {
     },
     selectInfo() {
       return `Selecting Confirm ${this.canSacrifice ? "or Sacrifice " : ""}
-        without selecting a glyph will randomly select a glyph.`;
-    }
+        without selecting a Glyph will 
+        ${this.hasFilter ? "choose a Glyph based on your filter settings" : "randomly select a Glyph"}.`;
+    },
+    gained() {
+      return `You will gain
+        ${formatInt(this.simRealities)} ${pluralize("Reality", this.simRealities, "Realities")},
+        ${formatInt(this.simRealities)} ${pluralize("Perk Point", this.simRealities)} and
+        ${format(this.realityMachines, 2)} ${pluralize("Reality Machine", this.realityMachines)} on Reality.`;
+    },
+    levelStats() {
+      // Bit annoying to read due to needing >, <, and =, with = needing a different format.
+      return `You will get a level ${formatInt(this.level)} Glyph on Reality, which is
+        ${this.level === this.bestLevel ? "equal to" : `
+        ${formatInt(this.levelDifference)} ${pluralize("level", this.levelDifference)}
+        ${this.level > this.bestLevel ? "higher" : "lower"} than`} your best.`;
+    },
   },
   methods: {
     update() {
+      this.showReality = player.options.confirmations.reality;
+      this.showGlyphSelection = player.options.confirmations.glyphSelection;
       this.firstPerk = Perk.firstPerk.isEffectActive;
+      this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
-      this.realities = simulatedRealityCount(false) + 1;
-      this.realityMachines.copyFrom(gainedRealityMachines());
+      this.simRealities = 1 + simulatedRealityCount(false);
+      const simRMGained = MachineHandler.gainedRealityMachines.times(this.simRealities);
+      this.realityMachines.copyFrom(simRMGained.clampMax(MachineHandler.distanceToRMCap));
       if (!this.firstPerk) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];
@@ -61,28 +83,14 @@ Vue.component("modal-reality", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.level);
+      this.bestLevel = player.records.bestReality.glyphLevel;
+      this.levelDifference = Math.abs(this.bestLevel - this.level);
     },
     glyphClass(index) {
       return {
         "l-modal-glyph-selection__glyph": true,
         "l-modal-glyph-selection__glyph--selected": this.selectedGlyph === index,
       };
-    },
-    gained() {
-      return `You will gain
-        ${format(this.realities, 2, 0)} ${pluralize("Reality", this.realities, "Realities")},
-        ${format(this.realities, 2, 0)} Perk ${pluralize("Point", this.realities)} and
-        ${format(this.realityMachines, 2, 0)}
-        Reality ${pluralize("Machine", this.realityMachines)} on Reality.`;
-    },
-    levelStats() {
-      const bestGlyphLevel = player.records.bestReality.glyphLevel;
-      // Bit annoying to read due to needing >, <, and =, with = needing a different format.
-      return `You will get a level ${formatInt(this.level)} Glyph on Reality, which is
-        ${this.level === bestGlyphLevel ? "equal to" : `
-        ${formatInt(this.levelDifference)} ${pluralize("level", this.levelDifference)}
-        ${this.level > bestGlyphLevel ? "higher" : "lower"} than`} your best.`;
     },
     getGlyphs() {
       this.canRefresh = true;
@@ -103,29 +111,37 @@ Vue.component("modal-reality", {
   template: `
     <div class="c-modal-message l-modal-content--centered">
       <h2>You are about to Reality</h2>
-      <div class="c-modal-message__text" v-if="!firstPerk">
-        {{ firstReality }}
-      </div>
-      <div class="c-modal-message__text">
-        {{ gained() }}
-      </div>
-      <br>
-      <div class="l-glyph-selection__row" v-if="firstPerk">
+      <span v-if="showReality">
+        <div class="c-modal-message__text" v-if="!firstPerk">
+          {{ firstReality }}
+        </div>
+        <div class="c-modal-message__text">
+          {{ gained }}
+        </div>
+      </span>
+      <div class="l-glyph-selection__row" v-if="firstPerk && showGlyphSelection">
         <glyph-component
           v-for="(glyph, index) in glyphs"
           :class="glyphClass(index)"
           :key="index"
           :glyph="glyph"
           :isInModal="true"
-          :noLevelOverride="true"
+          :ignoreModifiedLevel="true"
           :showSacrifice="canSacrifice"
           @click.native="select(index)"
         />
       </div>
       <div v-if="firstPerk">
-        {{ levelStats() }}
+        {{ levelStats }}
         <br>
-        {{ selectInfo }}
+        <span v-if="showGlyphSelection">{{ selectInfo }}</span>
+      </div>
+      <div v-if="simRealities > 1">
+        <br>
+        After choosing this glyph the game will simulate the rest of your Realities,
+        <br>
+        automatically choosing another {{ formatInt(simRealities - 1) }} {{ "Glyph" | pluralize(simRealities - 1) }}
+        based on your Glyph filter settings.
       </div>
       <div class="l-options-grid__row">
         <primary-button

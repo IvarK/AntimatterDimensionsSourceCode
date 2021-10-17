@@ -13,6 +13,10 @@ Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
     return EternityMilestone.autobuyerIPMult.isReached;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
     InfinityUpgrade.ipMult.buyMax();
   }
@@ -29,6 +33,10 @@ Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
 
   get isUnlocked() {
     return RealityUpgrade(13).isBought;
+  }
+
+  get hasUnlimitedBulk() {
+    return true;
   }
 
   tick() {

@@ -8,15 +8,17 @@ Vue.component("teresa-tab", {
       pouredAmount: 0,
       rm: new Decimal(0),
       percentage: "",
+      possibleFillPercentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
       bestAMSet: [],
-      lastRM: new Decimal(0),
+      lastMachines: new Decimal(0),
       runReward: 0,
       perkPoints: 0,
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
+      raisedPerkShop: false,
       isRunning: false,
       canUnlockNextPour: false,
     };
@@ -25,13 +27,15 @@ Vue.component("teresa-tab", {
     unlockInfo: () => Teresa.unlockInfo,
     pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
-      return [
+      const upgrades = [
         PerkShopUpgrade.glyphLevel,
         PerkShopUpgrade.rmMult,
         PerkShopUpgrade.bulkDilation,
         PerkShopUpgrade.autoSpeed,
         PerkShopUpgrade.musicGlyph,
       ];
+      if (this.raisedPerkShop) upgrades.push(PerkShopUpgrade.fillMusicGlyph);
+      return upgrades;
     },
     runButtonClassObject() {
       return {
@@ -50,6 +54,11 @@ Vue.component("teresa-tab", {
     runDescription() {
       return GameDatabase.celestials.descriptions[0].description();
     },
+    lastMachinesString() {
+      return this.lastMachines.lt(new Decimal("1e10000"))
+        ? `${format(this.lastMachines, 2)} Reality Machines`
+        : `${format(this.lastMachines.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
+    }
   },
   methods: {
     update() {
@@ -61,13 +70,15 @@ Vue.component("teresa-tab", {
       this.time = now;
       this.pouredAmount = player.celestials.teresa.pouredAmount;
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
+      this.possibleFillPercentage = `${(Teresa.possibleFill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
+      this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
-      this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
+      this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);
       this.runReward = Teresa.runRewardMultiplier;
       this.perkPoints = Currency.perkPoints.value;
       this.rm.copyFrom(Currency.realityMachines);
@@ -100,13 +111,15 @@ Vue.component("teresa-tab", {
             {{ runDescription }}
             <br><br>
             <div v-if="bestAM.gt(0)">
-              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
+              You last did Teresa's Reality at {{ lastMachinesString }}.
               <br><br>
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
               Glyph Set used:
               <glyph-set-preview
                 :show=true
+                text="Teresa's Best Glyph Set"
+                :textHidden="true"
                 :forceNameColor=false
                 :glyphs="bestAMSet"
               />
@@ -119,7 +132,7 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            You gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute every second.
+            Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
@@ -133,6 +146,7 @@ Vue.component("teresa-tab", {
             Pour RM
           </button>
           <div class="c-rm-store">
+            <div class="c-rm-store-inner c-rm-store-inner--light" :style="{ height: possibleFillPercentage}"></div>
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label">
                 {{ formatX(rmMult, 2, 2) }} RM gain

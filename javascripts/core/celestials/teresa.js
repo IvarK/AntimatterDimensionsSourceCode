@@ -9,7 +9,7 @@ const TERESA_UNLOCKS = {
   EPGEN: {
     id: 1,
     price: 1e18,
-    description: "Unlock Teresa's Eternity Point generation.",
+    description: "Unlock passive Eternity Point generation.",
   },
   EFFARIG: {
     id: 2,
@@ -19,7 +19,7 @@ const TERESA_UNLOCKS = {
   SHOP: {
     id: 3,
     price: 1e24,
-    description: "Unlock Perk Point Shop.",
+    description: "Unlock the Perk Point Shop.",
   },
   UNDO: {
     id: 4,
@@ -39,6 +39,9 @@ const Teresa = {
   lastUnlock: "SHOP",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
+  get isUnlocked() {
+    return Achievement(147).isUnlocked;
+  },
   pourRM(diff) {
     if (this.pouredAmount >= Teresa.pouredAmountCap) return;
     this.timePoured += diff;
@@ -77,6 +80,9 @@ const Teresa = {
   },
   get fill() {
     return Math.min(Math.log10(this.pouredAmount) / 24, 1);
+  },
+  get possibleFill() {
+    return Math.min(Currency.realityMachines.value.plus(this.pouredAmount).log10() / 24, 1);
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.pouredAmount, 0.1), 1);
@@ -140,13 +146,15 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return this.cost < this.currency.value;
+    const otherReq = this.config.otherReq ? this.config.otherReq() : true;
+    return this.cost < this.currency.value && otherReq;
   }
 
   onPurchased() {
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }
+    // Give a single music glyph
     if (this.id === 4) {
       if (Glyphs.freeInventorySpace === 0) {
         // Refund the perk point if they didn't actually get a glyph
@@ -156,6 +164,12 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
         Glyphs.addToInventory(GlyphGenerator.musicGlyph());
         GameUI.notify.success("Created a Music Glyph");
       }
+    }
+    // Fill the inventory with music glyphs
+    if (this.id === 5) {
+      const toCreate = Glyphs.freeInventorySpace;
+      for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      GameUI.notify.success(`Created ${toCreate} ${pluralize("Music Glyph", toCreate)}`);
     }
   }
 }
@@ -168,6 +182,7 @@ const PerkShopUpgrade = (function() {
     bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
     autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
     musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
+    fillMusicGlyph: new PerkShopUpgradeState(db.fillMusicGlyph),
   };
 }());
 

@@ -137,7 +137,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   requestStart() {
-    if (!Tab.challenges.eternity.isAvailable || this.isRunning) return;
+    if (!Tab.challenges.eternity.isUnlocked || this.isRunning) return;
     if (!player.options.confirmations.challenges) {
       this.start();
       return;
@@ -156,10 +156,10 @@ class EternityChallengeState extends GameMechanicState {
 
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
+      if (player.requirementChecks.reality.slowestBH < 1) {
         SecretAchievement(42).unlock();
       }
-      if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
+      player.requirementChecks.reality.slowestBH = 1;
     }
     if (Enslaved.isRunning) {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
@@ -261,7 +261,7 @@ const EternityChallenges = {
   autoComplete: {
     tick() {
       if (!player.reality.autoEC) return;
-      if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+      if (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)) {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {
@@ -292,8 +292,7 @@ const EternityChallenges = {
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
         Perk.autocompleteEC3,
-        Perk.autocompleteEC4,
-        Perk.autocompleteEC5
+        Perk.autocompleteEC4
       );
       if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;

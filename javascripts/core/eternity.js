@@ -1,6 +1,7 @@
 "use strict";
 
 function eternityResetRequest(auto) {
+  if (!Reset.eternity.canBePerformed) return;
   if (EternityChallenge.isRunning) {
     Reset.eternityChallenge.request({ auto });
     return;
@@ -36,13 +37,13 @@ const EternityMilestone = (function() {
     autoEP: new EternityMilestoneState(db.autoEP),
     autoIC: new EternityMilestoneState(db.autoIC),
     autobuyMaxGalaxies: new EternityMilestoneState(db.autobuyMaxGalaxies),
-    autobuyMaxDimboosts: new EternityMilestoneState(db.autobuyMaxDimboosts),
+    unlockReplicanti: new EternityMilestoneState(db.unlockReplicanti),
     autobuyerID: tier => infinityDims[tier - 1],
     keepBreakUpgrades: new EternityMilestoneState(db.keepBreakUpgrades),
     autoUnlockID: new EternityMilestoneState(db.autoUnlockID),
     unlockAllND: new EternityMilestoneState(db.unlockAllND),
+    replicantiNoReset: new EternityMilestoneState(db.replicantiNoReset),
     autobuyerReplicantiChance: new EternityMilestoneState(db.autobuyerReplicantiChance),
-    unlockReplicanti: new EternityMilestoneState(db.unlockReplicanti),
     autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
@@ -91,7 +92,9 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   set boughtAmount(value) {
-    const diff = value - player.epmultUpgrades;
+    // Reality resets will make this bump amount negative, causing it to visually appear as 0 even when it isn't.
+    // A dev migration fixes bad autobuyer states and this change ensures it doesn't happen again
+    const diff = Math.clampMin(value - player.epmultUpgrades, 0);
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();

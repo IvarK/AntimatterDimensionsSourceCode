@@ -10,20 +10,21 @@ Vue.component("reset-reality-button", {
   },
   methods: {
     update() {
-      this.canReality = TimeStudy.reality.isBought && Currency.eternityPoints.exponent >= 4000;
+      this.canReality = TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000;
       this.resetCelestial = player.options.retryCelestial;
-      this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      this.isInCelestialReality = isInCelestialReality();
     },
     resetReality() {
-      Modal.resetReality.show();
+      const confirms = player.options.confirmations;
+      if (this.isInCelestialReality) {
+        if (confirms.resetCelestial) Modal.exitCelestialReality.show();
+        else beginProcessReality(getRealityProps(true));
+      } else if (confirms.resetReality) Modal.resetReality.show();
+      else beginProcessReality(getRealityProps(true));
     },
     resetText() {
-      if (this.isInCelestialReality && !this.resetCelestial) {
-        return "Exit this Celestial early";
-      }
-      if (this.isInCelestialReality && this.resetCelestial) {
-        return "Restart this Celestial";
-      }
+      if (this.isInCelestialReality && !this.resetCelestial) return "Exit this Celestial early";
+      if (this.isInCelestialReality && this.resetCelestial) return "Restart this Celestial";
       return "Start this Reality over";
     },
   },

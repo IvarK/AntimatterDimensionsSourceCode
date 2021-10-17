@@ -102,6 +102,7 @@ const AutomatorGrammar = (function() {
           { ALT: () => $.SUBRULE($.studyRange) },
           { ALT: () => $.CONSUME(T.NumberLiteral) },
           { ALT: () => $.CONSUME(T.StudyPath) },
+          { ALT: () => $.CONSUME(T.TriadStudy) },
         ]);
         $.OPTION(() => $.CONSUME(T.Comma));
       });
@@ -112,9 +113,9 @@ const AutomatorGrammar = (function() {
         $.CONSUME1(T.NumberLiteral, { LABEL: "lastStudy" });
       });
 
-      $.RULE("xCurrent", () => {
+      $.RULE("xHighest", () => {
         $.CONSUME(T.NumberLiteral);
-        $.CONSUME(T.XCurrent);
+        $.CONSUME(T.XHighest);
       });
 
       $.RULE("currencyAmount", () => {

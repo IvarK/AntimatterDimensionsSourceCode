@@ -9,7 +9,7 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "antimatter",
-        name: "Dimensions",
+        name: "Antimatter Dimensions",
         symbol: "Ω",
         component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab",
@@ -119,7 +119,7 @@ GameDatabase.tabs = [
       {
         key: "normal",
         name: "Achievements",
-        symbol: "<i class='fas fa-star'></i>",
+        symbol: "<i class='fas fa-trophy'></i>",
         component: "normal-achievements-tab",
         id: 0,
         hidable: true,
@@ -263,7 +263,7 @@ GameDatabase.tabs = [
       {
         key: "milestones",
         name: "Eternity Milestones",
-        symbol: "<i class='fas fa-trophy'></i>",
+        symbol: "<i class='fas fa-star'></i>",
         component: "eternity-milestones-tab",
         id: 2,
         hidable: true,
@@ -305,11 +305,20 @@ GameDatabase.tabs = [
         hidable: true,
       },
       {
+        key: "imag_upgrades",
+        name: "Imaginary Upgrades",
+        symbol: "<i class='fas fa-level-up-alt'></i>",
+        component: "imaginary-upgrades-tab",
+        condition: () => MachineHandler.isIMUnlocked,
+        id: 2,
+        hidable: true,
+      },
+      {
         key: "perks",
         name: "Perks",
         symbol: "<i class='fas fa-project-diagram'></i>",
         component: "perks-tab",
-        id: 2,
+        id: 3,
         hidable: true,
       },
       {
@@ -317,7 +326,8 @@ GameDatabase.tabs = [
         name: "Automator",
         symbol: "<i class='fas fa-cog'></i>",
         component: "automator-tab",
-        id: 3,
+        condition: () => PlayerProgress.realityUnlocked(),
+        id: 4,
         hidable: true,
       },
       {
@@ -325,7 +335,8 @@ GameDatabase.tabs = [
         name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
-        id: 4,
+        condition: () => PlayerProgress.realityUnlocked(),
+        id: 5,
         hidable: true,
       },
       {
@@ -334,7 +345,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
-        id: 5,
+        id: 6,
         hidable: true,
       },
     ],
@@ -343,7 +354,7 @@ GameDatabase.tabs = [
     key: "celestials",
     name: "Celestials",
     UIClass: "o-tab-btn--celestial",
-    condition: () => RealityUpgrades.allBought,
+    condition: () => Teresa.isUnlocked,
     id: 8,
     hidable: true,
     subtabs: [

@@ -3,7 +3,6 @@
 function toggleDilated(auto) {
   if (player.dilation.active) Reset.exitDilation.request({ auto });
   else Reset.enterDilation.request({ auto });
-  // TODO: Modal.enterDilation.show(); for entering Dilation
 }
 
 const DIL_UPG_NAMES = [
@@ -11,7 +10,7 @@ const DIL_UPG_NAMES = [
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
 ];
 
-function buyDilationUpgrade(id, bulk) {
+function buyDilationUpgrade(id, bulk = 1) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3) {
@@ -25,11 +24,8 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(Currency.dilatedTime.value,
       upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
-    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
+    buying = Math.clampMax(buying, bulk);
     buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
-    if (!bulk) {
-      buying = Math.clampMax(buying, 1);
-    }
     const cost = Decimal.sumGeometricSeries(buying, upgrade.config.initialCost, upgrade.config.increment, upgAmount);
     Currency.dilatedTime.subtract(cost);
     player.dilation.rebuyables[id] += buying;
@@ -57,8 +53,10 @@ function buyDilationUpgrade(id, bulk) {
   return true;
 }
 
-function getTachyonGalaxyMult() {
-  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
+function getTachyonGalaxyMult(thresholdUpgrade) {
+  // This specifically needs to be an undefined check because sometimes thresholdUpgrade is zero
+  const upgrade = thresholdUpgrade === undefined ? DilationUpgrade.galaxyThreshold.effectValue : thresholdUpgrade;
+  const thresholdMult = 3.65 * upgrade + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
   return 1 + thresholdMult * glyphReduction;
@@ -75,11 +73,9 @@ function getDilationGainPerSecond() {
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(
-    Math.clampMin(Decimal.log10(player.replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
+    Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
-  if (Enslaved.isRunning) {
-    dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  }
+  if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;

@@ -29,6 +29,7 @@ const Glyphs = {
   active: [],
   copies: [],
   levelBoost: 0,
+  factorsOpen: false,
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },
@@ -102,12 +103,13 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, ignoreLevel, ignoreStrength) {
+  findByValues(finding, ignore = { level, strength, effects }) {
     for (const glyph of this.sortedInventoryList) {
       const type = glyph.type === finding.type;
-      const effects = glyph.effects === finding.effects;
-      const str = ignoreStrength || glyph.strength === finding.strength;
-      const lvl = ignoreLevel || glyph.level === finding.level;
+      const effects = glyph.effects === finding.effects ||
+            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
+      const str = ignore.strength || glyph.strength === finding.strength;
+      const lvl = ignore.level || glyph.level === finding.level;
       const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
       if (type && effects && str && lvl && sym) return glyph;
     }
@@ -136,30 +138,26 @@ const Glyphs = {
       if (sameSpecialTypeIndex >= 0) return;
       this.removeFromInventory(glyph);
       this.saveUndo(inventoryIndex, targetSlot);
+      player.reality.glyphs.active.push(glyph);
+      glyph.idx = targetSlot;
+      this.active[targetSlot] = glyph;
+      this.updateRealityGlyphEffects();
+      this.updateMaxGlyphCount();
+      EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
+      EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+      this.validate();
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
         Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
         return;
       }
-      if (player.options.confirmations.glyphReplace &&
-        !confirm("Replacing a glyph will restart this Reality. Proceed?")) return;
-      // Remove from inventory first so that there's room to unequip to the same inventory slot
-      this.removeFromInventory(glyph);
-      this.unequip(targetSlot, inventoryIndex);
-      finishProcessReality({
-        reset: true,
-        glyphUndo: false,
-        restoreCelestialState: true,
-      });
+      if (!player.options.confirmations.glyphReplace) {
+        this.swapIntoActive(glyph, targetSlot);
+        return;
+      }
+      Modal.glyphReplace.show({ targetSlot, inventoryIndex });
     }
-    player.reality.glyphs.active.push(glyph);
-    glyph.idx = targetSlot;
-    this.active[targetSlot] = glyph;
-    this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
-    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-    this.validate();
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
@@ -173,7 +171,8 @@ const Glyphs = {
       Modal.message.show("Some of your glyphs could not be unequipped due to lack of inventory space.");
     }
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -184,7 +183,8 @@ const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -426,10 +426,10 @@ const Glyphs = {
     return 1000000;
   },
   get instabilityThreshold() {
-    return 1000 + getAdjustedGlyphEffect("effarigglyph");
+    return 1000 + getAdjustedGlyphEffect("effarigglyph") + ImaginaryUpgrade(7).effectValue;
   },
   get hyperInstabilityThreshold() {
-    return 4000 + getAdjustedGlyphEffect("effarigglyph");
+    return 3000 + this.instabilityThreshold;
   },
   clearUndo() {
     player.reality.glyphs.undo = [];
@@ -443,6 +443,10 @@ const Glyphs = {
       ep: new Decimal(Currency.eternityPoints.value),
       tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
+      thisInfinityTime: player.records.thisInfinity.time,
+      thisInfinityRealTime: player.records.thisInfinity.realTime,
+      thisEternityTime: player.records.thisEternity.time,
+      thisEternityRealTime: player.records.thisEternity.realTime,
       thisRealityTime: player.records.thisReality.time,
       thisRealityRealTime: player.records.thisReality.realTime,
       storedTime: player.celestials.enslaved.stored,
@@ -468,6 +472,10 @@ const Glyphs = {
     Currency.eternityPoints.value = new Decimal(undoData.ep);
     Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
+    player.records.thisInfinity.time = undoData.thisInfinityTime;
+    player.records.thisInfinity.realTime = undoData.thisInfinityRealTime;
+    player.records.thisEternity.time = undoData.thisEternityTime;
+    player.records.thisEternity.realTime = undoData.thisEternityRealTime;
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
     player.celestials.enslaved.stored = undoData.storedTime || 0;
@@ -480,6 +488,7 @@ const Glyphs = {
       Currency.tachyonParticles.value = new Decimal(undoData.tp);
       Currency.dilatedTime.value = new Decimal(undoData.dt);
     }
+    if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   },
   copyForRecords(glyphList) {
     // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured
@@ -494,11 +503,11 @@ const Glyphs = {
   },
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
-  updateGlyphCountForV(startingReality = false) {
+  updateMaxGlyphCount(startingReality = false) {
     const activeGlyphList = this.activeList;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
-    if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
-    player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
+    if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
+    player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
@@ -511,6 +520,23 @@ const Glyphs = {
         glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
       }
     }
+  },
+  swapIntoActive(glyph, targetSlot) {
+    this.removeFromInventory(glyph);
+    this.unequip(targetSlot, glyph.idx);
+    finishProcessReality({
+      reset: true,
+      glyphUndo: false,
+      restoreCelestialState: true,
+    });
+    player.reality.glyphs.active.push(glyph);
+    this.active[targetSlot] = glyph;
+    glyph.idx = targetSlot;
+    this.updateRealityGlyphEffects();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    this.validate();
   }
 };
 
@@ -567,8 +593,7 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
-  // Copied glyphs have rawLevel === 0
-  if (BASIC_GLYPH_TYPES.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
+  if (BASIC_GLYPH_TYPES.includes(glyph.type)) return level + Glyphs.levelBoost;
   return level;
 }
 

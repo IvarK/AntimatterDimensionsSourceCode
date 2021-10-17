@@ -6,6 +6,7 @@ Vue.component("infinity-dim-row", {
   },
   data() {
     return {
+      hasPrevTier: false,
       isUnlocked: false,
       multiplier: new Decimal(0),
       baseAmount: 0,
@@ -22,7 +23,8 @@ Vue.component("infinity-dim-row", {
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
       requirementReached: false,
       eternityReached: false,
-      showCostTitle: false
+      showCostTitle: false,
+      enslavedRunning: false,
     };
   },
   watch: {
@@ -31,6 +33,9 @@ Vue.component("infinity-dim-row", {
     }
   },
   computed: {
+    shiftDown() {
+      return ui.view.shiftDown;
+    },
     name() {
       return InfinityDimension(this.tier).shortDisplayName;
     },
@@ -39,7 +44,7 @@ Vue.component("infinity-dim-row", {
     },
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
-      if (this.isUnlocked) {
+      if (this.isUnlocked || this.shiftDown) {
         if (this.isCapped) return "Capped";
         return this.showCostTitle ? `Cost: ${format(this.cost)} IP` : `${format(this.cost)} IP`;
       }
@@ -54,18 +59,20 @@ Vue.component("infinity-dim-row", {
       return format(this.hardcap, 1, 1);
     },
     capTooltip() {
-      return this.isCapped
-        ? `Cap reached at ${format(this.capIP)} IP`
-        : `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
+      if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
+      if (this.isCapped) return `Cap reached at ${format(this.capIP)} IP`;
+      return `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
     },
     showRow() {
-      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0);
+      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0) ||
+        this.hasPrevTier;
     }
   },
   methods: {
     update() {
       const tier = this.tier;
       const dimension = InfinityDimension(tier);
+      this.hasPrevTier = tier === 1 || InfinityDimension(tier - 1).isUnlocked;
       const autobuyer = Autobuyer.infinityDimension(tier);
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);
@@ -89,6 +96,7 @@ Vue.component("infinity-dim-row", {
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
       this.showCostTitle = this.cost.exponent < 1000000;
+      this.enslavedRunning = Enslaved.isRunning;
     },
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {
@@ -98,7 +106,10 @@ Vue.component("infinity-dim-row", {
       buyManyInfinityDimension(this.tier);
     },
     buyMaxInfinityDimension() {
-      if (!this.isUnlocked) return;
+      if (!this.isUnlocked) {
+        InfinityDimension(this.tier).tryUnlock(true);
+        return;
+      }
       buyMaxInfDims(this.tier);
     },
   },

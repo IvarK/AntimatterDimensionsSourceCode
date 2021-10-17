@@ -6,6 +6,8 @@ Vue.component("reality-button", {
       canReality: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(0),
+      projectedRM: new Decimal(0),
+      newIMCap: 0,
       realityTime: 0,
       glyphLevel: 0,
       nextGlyphPercent: 0,
@@ -16,14 +18,21 @@ Vue.component("reality-button", {
   },
   computed: {
     formatMachinesGained() {
-      return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      if (this.machinesGained.gt(0)) return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      return "No Machines gained";
     },
     formatMachineStats() {
       if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
         return `RM this Reality is capped!`;
       }
-      if (this.machinesGained.lt(100)) {
+      if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
+      }
+      if (this.machinesGained.eq(0) && this.newIMCap === 0) {
+        return `Projected: ${format(this.projectedRM, 2)} RM`;
+      }
+      if (this.newIMCap !== 0) {
+        return `iM Cap: ${format(this.newIMCap, 2, 2)}i`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
@@ -55,7 +64,7 @@ Vue.component("reality-button", {
         return;
       }
       function EPforRM(rm) {
-        const adjusted = Decimal.divide(rm, getRealityMachineMultiplier());
+        const adjusted = Decimal.divide(rm, MachineHandler.realityMachineMultiplier);
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
         let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
@@ -65,7 +74,9 @@ Vue.component("reality-button", {
         return result;
       }
       const multiplier = simulatedRealityCount(false) + 1;
-      this.machinesGained = gainedRealityMachines().times(multiplier);
+      this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
+      this.newIMCap = MachineHandler.projectedIMCap;
+      this.machinesGained = this.projectedRM.clampMax(MachineHandler.distanceToRMCap);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();
@@ -85,7 +96,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (TimeStudy.reality.isBought && Currency.eternityPoints.exponent >= 4000) {
+      if (TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000) {
         requestManualReality();
       }
     },
@@ -95,12 +106,30 @@ Vue.component("reality-button", {
     formatThresholdText(condition, threshold, resourceName) {
       if (condition) return "";
       return `(${format(threshold, 2, 2)} ${resourceName} to improve)`;
+    },
+    // Make the button have a visual animation if Realitying will give a reward
+    hasSpecialReward() {
+      if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier) {
+        return true;
+      }
+      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked && Currency.eternityPoints.value.exponent > 4000) {
+        return true;
+      }
+      if (Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000) return true;
+      return false;
+    },
+    classObject() {
+      return {
+        "c-reality-button--unlocked": this.canReality,
+        "c-reality-button--locked": !this.canReality,
+        "c-reality-button--special": this.hasSpecialReward(),
+      };
     }
   },
   template: `
     <button
-      :class="['l-reality-button', 'c-reality-button', 'infotooltip',
-        canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
+      class="l-reality-button c-reality-button infotooltip"
+      :class="classObject()"
       @click="handleClick"
     >
       <div class="l-reality-button__contents">

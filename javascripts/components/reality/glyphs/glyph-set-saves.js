@@ -5,11 +5,15 @@ Vue.component("glyph-set-saves", {
     return {
       hasEquipped: true,
       glyphSets: [],
+      effects: false,
       rarity: false,
       level: false,
     };
   },
   watch: {
+    effects(newValue) {
+      player.options.ignoreGlyphEffects = newValue;
+    },
     rarity(newValue) {
       player.options.ignoreGlyphRarity = newValue;
     },
@@ -34,11 +38,15 @@ Vue.component("glyph-set-saves", {
   methods: {
     update() {
       this.hasEquipped = Glyphs.activeList.length > 0;
+      this.effects = player.options.ignoreGlyphEffects;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
     },
     refreshGlyphSets() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
+    },
+    setName(id) {
+      return `Glyph Set Save #${id + 1}`;
     },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
@@ -48,7 +56,10 @@ Vue.component("glyph-set-saves", {
     loadGlyphSet(set) {
       if (this.hasEquipped || !set.length) return;
       for (let i = 0; i < set.length; i++) {
-        const glyph = Glyphs.findByValues(set[i], this.level, this.rarity);
+        const level = this.level;
+        const strength = this.rarity;
+        const effects = this.effects;
+        const glyph = Glyphs.findByValues(set[i], { level, strength, effects });
         if (!glyph) {
           GameUI.notify.error(`Could not fully load the Glyph Set due to missing Glyph!`);
           continue;
@@ -60,8 +71,11 @@ Vue.component("glyph-set-saves", {
     },
     deleteGlyphSet(id) {
       if (!player.reality.glyphs.sets[id].length) return;
-      player.reality.glyphs.sets[id] = [];
-      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
+      if (player.options.confirmations.deleteGlyphSetSave) Modal.glyphSetSaveDelete.show({ glyphSetId: id });
+      else {
+        player.reality.glyphs.sets[id] = [];
+        EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
+      }
     },
   },
   template: `
@@ -73,7 +87,12 @@ Vue.component("glyph-set-saves", {
       <div>
         Type: Always
         <br>
-        Effects: Always
+        <primary-button-on-off-custom
+          class="o-primary-btn--reality-upgrade-toggle"
+          v-model="effects"
+          on="Effects: Disabled"
+          off="Effects: Enabled"
+        />
         <br>
         <primary-button-on-off-custom
           class="o-primary-btn--reality-upgrade-toggle"
@@ -93,6 +112,8 @@ Vue.component("glyph-set-saves", {
         <div>
           <glyph-set-preview
             class="l-glyph-set-save-spacing"
+            :text="setName(id)"
+            :textHidden=true
             :show=true
             :glyphs="set"
             :flipTooltip=true

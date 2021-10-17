@@ -8,6 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
+  lastSaveTime: Date.now(),
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -17,6 +18,10 @@ const GameStorage = {
     const save = localStorage.getItem(this.localStorageKey);
     const root = GameSaveSerializer.deserialize(save);
 
+    this.loadRoot(root);
+  },
+
+  loadRoot(root) {
     if (root === undefined) {
       this.currentSlot = 0;
       this.loadPlayerObject(Player.defaultStart);
@@ -86,7 +91,9 @@ const GameStorage = {
 
   save(silent = false, manual = false) {
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
+    this.lastSaveTime = Date.now();
     const root = {
       current: this.currentSlot,
       saves: this.saves
@@ -134,7 +141,7 @@ const GameStorage = {
       const isPreviousVersionSave = playerObject.version < 13;
       player = this.migrations.patch(playerObject);
       if (isPreviousVersionSave) {
-        // Needed to check some reality upgrades which are usually only checked on eternity.
+        // Needed to check some notification about reality unlock study.
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
       this.devMigrations.patch(player);
@@ -146,15 +153,12 @@ const GameStorage = {
       guardFromNaNValues(player);
     }
 
-    if (Currency.infinities.gt(0) && !NormalChallenge(1).isCompleted) {
-      NormalChallenge(1).complete();
-    }
-
     ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
 
+    ECTimeStudyState.invalidateCachedRequirements();
     recalculateAllGlyphs();
     checkPerkValidity();
     V.updateTotalRunUnlocks();

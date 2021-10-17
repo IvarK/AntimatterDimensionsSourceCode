@@ -13,8 +13,12 @@ GameDatabase.reality.upgrades = (function() {
       props.initialCost * props.costMult
     );
     const { effect } = props;
-    props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id] *
+    props.effect = () => Math.pow(effect + ImaginaryUpgrade(props.id).effectValue, player.reality.rebuyables[props.id] *
       getAdjustedGlyphEffect("realityrow1pow"));
+    props.description = () => props.textTemplate.replace("{value}",
+      ImaginaryUpgrade(props.id).effectValue === 0
+        ? formatInt(effect)
+        : format(effect + ImaginaryUpgrade(props.id).effectValue, 2, 2));
     props.formatEffect = value => formatX(value, 2, 0);
     props.formatCost = value => format(value, 2, 0);
     return props;
@@ -25,7 +29,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 1,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Dilated Time ${formatInt(3)} times faster`,
+      textTemplate: "You gain Dilated Time {value} times faster",
       effect: 3
     }),
     rebuyable({
@@ -33,7 +37,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 2,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Replicanti ${formatInt(3)} times faster`,
+      textTemplate: "You gain Replicanti {value} times faster",
       effect: 3
     }),
     rebuyable({
@@ -41,7 +45,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 3,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${formatInt(3)} times more Eternities`,
+      textTemplate: "You gain {value} times more Eternities",
       effect: 3
     }),
     rebuyable({
@@ -49,7 +53,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 4,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${formatInt(3)} times more Tachyon Particles`,
+      textTemplate: "You gain {value} times more Tachyon Particles",
       effect: 3
     }),
     rebuyable({
@@ -57,7 +61,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 5,
       initialCost: 3,
       costMult: 50,
-      description: () => `You gain ${formatInt(5)} times more Infinities`,
+      textTemplate: "You gain {value} times more Infinities",
       effect: 5
     }),
     {
@@ -65,10 +69,10 @@ GameDatabase.reality.upgrades = (function() {
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
-      hasFailed: () => !(player.achievementChecks.noReplicantiGalaxies &&
-        player.achievementChecks.noEternitiesThisReality),
-      checkRequirement: () => player.achievementChecks.noReplicantiGalaxies &&
-        player.achievementChecks.noEternitiesThisReality,
+      // Note that while noRG resets on eternity, the reality-level check will be false after the first eternity.
+      // The noRG variable is eternity-level as it's also used for an achievement check
+      hasFailed: () => !(player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities),
+      checkRequirement: () => player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
       effect: () => 1 + Replicanti.galaxies.total / 50,
@@ -79,8 +83,8 @@ GameDatabase.reality.upgrades = (function() {
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 Antimatter Galaxy",
-      hasFailed: () => !(player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality),
-      checkRequirement: () => player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality,
+      hasFailed: () => !(player.galaxies <= 1 && player.requirementChecks.reality.noInfinities),
+      checkRequirement: () => player.galaxies <= 1 && player.requirementChecks.reality.noInfinities,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinity gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + player.galaxies / 30,
@@ -102,15 +106,17 @@ GameDatabase.reality.upgrades = (function() {
       name: "Linguistically Expand",
       id: 9,
       cost: 15,
-      requirement: () => `Reality using only a single level ${formatInt(3)}+ Glyph.`,
+      requirement: () => `Eternity for ${format("1e4000")} Eternity Points using
+        only a single level ${formatInt(3)}+ Glyph.`,
       hasFailed: () => {
         const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
           (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
         const hasValidGlyphInInventory = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
         return invalidEquippedGlyphs || (Glyphs.activeList.length === 0 && !hasValidGlyphInInventory);
       },
-      checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
-      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
+        Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Gain another Glyph slot",
       effect: () => 1
     },
@@ -119,9 +125,9 @@ GameDatabase.reality.upgrades = (function() {
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} Infinity Points`,
-      hasFailed: () => !player.achievementChecks.noEternitiesThisReality,
+      hasFailed: () => !player.requirementChecks.reality.noEternities,
       checkRequirement: () => Currency.infinityPoints.exponent >= 450 &&
-        player.achievementChecks.noEternitiesThisReality,
+        player.requirementChecks.reality.noEternities,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`,
       effect: () => 100
@@ -132,7 +138,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${format(Currency.infinitiesBanked.value, 2)}/${format(1e12)} Banked Infinities`,
       checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
-      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
+      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
       effect: () => gainedInfinities().times(0.1),
       formatEffect: value => `${format(value)} per second`
@@ -169,7 +175,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${format(Currency.eternities.value, 2)}/${format(1e7)} Eternities`,
       checkRequirement: () => Currency.eternities.gte(1e7),
-      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
+      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Gain Eternities per second equal to your Reality count",
       effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
       formatEffect: value => `${format(value)} per second`
@@ -192,7 +198,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 16,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.strength >= 1.5))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && g.strength >= 1.5))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
         const equipped = Glyphs.activeList.countWhere(g => g.strength >= 1.5);
@@ -210,14 +216,14 @@ GameDatabase.reality.upgrades = (function() {
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2))} equipped)`,
       hasFailed: () => {
-        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2);
-        const equipped = Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2);
+        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2);
+        const equipped = Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2);
         const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
         return equipped + Math.min(availableGlyphs, availableSlots) < 4;
       },
-      checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
+      checkRequirement: () => Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: () => `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
       effect: 0.5,
@@ -228,7 +234,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 18,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each at level ${formatInt(10)} or higher
-        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.level >= 10))})`,
+        (${formatInt(Glyphs.activeList.countWhere(g => g && g.level >= 10))} equipped)`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
         const equipped = Glyphs.activeList.countWhere(g => g.level >= 10);
@@ -274,7 +280,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () =>
         Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Remote Antimatter Galaxy scaling is removed"
+      description: () => `Remote Antimatter Galaxy scaling is moved to ${formatInt(1e5)} galaxies`,
+      effect: 1e5
     },
     {
       name: "Temporal Transcendence",
@@ -306,7 +313,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 100000,
       requirement: () => `Reality for ${formatInt(5000)} Reality Machines without Glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
-      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
+      checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another Glyph slot",
       effect: () => 1
@@ -316,9 +323,9 @@ GameDatabase.reality.upgrades = (function() {
       id: 25,
       cost: 100000,
       requirement: () => `Reach ${format("1e11111")} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
-      checkRequirement: () => Currency.eternityPoints.exponent >= 11111,
+      checkRequirement: () => player.records.bestReality.bestEP.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Unlock the Reality autobuyer and automator command"
+      description: "Unlock the Reality autobuyer and Automator command"
     },
   ];
 }());

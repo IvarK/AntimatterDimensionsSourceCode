@@ -33,6 +33,14 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     this.data.maxDimBoosts = value;
   }
 
+  get limitUntilGalaxies() {
+    return this.data.limitUntilGalaxies;
+  }
+
+  set limitUntilGalaxies(value) {
+    this.data.limitUntilGalaxies = value;
+  }
+
   get galaxies() {
     return this.data.galaxies;
   }
@@ -49,10 +57,6 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     this.data.bulk = value;
   }
 
-  get isBulkBuyUnlocked() {
-    return BreakInfinityUpgrade.bulkDimBoost.isBought;
-  }
-
   get buyMaxInterval() {
     return this.data.buyMaxInterval;
   }
@@ -62,7 +66,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get isBuyMaxUnlocked() {
-    return EternityMilestone.autobuyMaxDimboosts.isReached;
+    return BreakInfinityUpgrade.autobuyMaxDimboosts.isBought;
   }
 
   get interval() {
@@ -76,24 +80,32 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get resetTickOn() {
-    return Achievement(143).isUnlocked ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.INFINITY;
+    // Before max dimboost, we want to do dimboosts as quickly as possible,
+    // so we reset the autobuyer's timer to 0 after every galaxy.
+    // After max dimboost, we'll generally have "Blink of an eye",
+    // so doing a dimboost right after a galaxy will do a single dimboost
+    // and then wait for the autobuyer interval to do any more dimboosts,
+    // which seems unideal and in fact does slow getting dimboosts/galaxies
+    // at the start of infinities down by about 20%.
+    // After "Yo dawg, I heard you liked reskins...", it doesn't matter much
+    // which we do (less than 1 tick difference, it seems).
+    return this.isBuyMaxUnlocked ? PRESTIGE_EVENT.INFINITY : PRESTIGE_EVENT.ANTIMATTER_GALAXY;
   }
 
   tick() {
     if (this.isBuyMaxUnlocked) {
+      const galaxyCondition = !this.limitUntilGalaxies || Currency.antimatterGalaxies.gte(this.galaxies);
+      if (!DimBoost.canUnlockNewDimension && !galaxyCondition) return;
       Reset.dimensionBoost.request({ gain: { bulk: true } });
       super.tick();
       return;
     }
 
-    const limit = this.limitDimBoosts ? this.maxDimBoosts : Number.MAX_VALUE;
-    const bulk = (this.isBulkBuyUnlocked && !DimBoost.canUnlockNewDimension) ? Math.clampMin(this.bulk, 1) : 1;
-    const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= limit ||
-      player.galaxies >= this.galaxies;
-    if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;
-    // While this is bad code, this specific code has already been changed on main, and so when next main is merged
-    // into this branch, this will be removed and thus fixed.
-    Reset.dimensionBoost.request({ gain: { bulk: bulk !== 1 } });
-    super.tick();
+    const limitCondition = !this.limitDimBoosts || DimBoost.purchasedBoosts < this.maxDimBoosts;
+    const galaxyCondition = this.limitUntilGalaxies && Currency.antimatterGalaxies.gte(this.galaxies);
+    if (limitCondition || galaxyCondition) {
+      Reset.dimensionBoost.request({ gain: { bulk: false } });
+      super.tick();
+    }
   }
 }();

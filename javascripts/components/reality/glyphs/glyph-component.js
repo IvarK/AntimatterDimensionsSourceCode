@@ -97,13 +97,17 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
+    uncappedRefineReward: {
+      type: Number,
+      default: 0,
+    },
     currentAction: String,
     scoreMode: Number,
     showDeletionText: {
       type: Boolean,
       default: true,
     },
-    levelOverride: {
+    displayLevel: {
       type: Number,
       default: 0,
     }
@@ -121,7 +125,7 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     effectiveLevel() {
-      return this.levelOverride ? this.levelOverride : this.level;
+      return this.displayLevel ? this.displayLevel : this.level;
     },
     sortedEffects() {
       return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
@@ -167,10 +171,10 @@ const GlyphTooltipComponent = {
       }
     },
     isLevelCapped() {
-      return this.levelOverride && this.levelOverride < this.level;
+      return this.displayLevel && this.displayLevel < this.level;
     },
     isLevelBoosted() {
-      return this.levelOverride && this.levelOverride > this.level;
+      return this.displayLevel && this.displayLevel > this.level;
     },
     rarityText() {
       if (!GlyphTypes[this.type].hasRarity) return "";
@@ -258,11 +262,13 @@ const GlyphTooltipComponent = {
     refineText() {
       if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
       if (!AlchemyResource[this.type].isUnlocked) return "";
-      const refinementText = `${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      let refinementText = `${format(this.uncappedRefineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      if (this.uncappedRefineReward !== this.refineReward) {
+        refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
+      }
       const isCurrentAction = this.currentAction === "refine";
-      const actionName = this.refineReward === 0 ? "Capped" : "Refine";
       return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
-              ${actionName}: ${refinementText}
+              Refine: ${refinementText}
               </span>`;
     },
     scoreText() {
@@ -318,10 +324,12 @@ Vue.component("glyph-component", {
       type: Boolean,
       default: false,
     },
-    noLevelOverride: {
+    ignoreModifiedLevel: {
       type: Boolean,
       default: false,
     },
+    realityGlyphBoost: Number,
+    isActiveGlyph: Boolean,
     size: {
       type: String,
       default: "5rem",
@@ -363,8 +371,9 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
+      uncappedRefineReward: 0,
       refineReward: 0,
-      levelOverride: 0,
+      displayLevel: 0,
       isRealityGlyph: false,
       isCursedGlyph: false,
       glyphEffects: [],
@@ -525,9 +534,12 @@ Vue.component("glyph-component", {
       const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
       glyphInfo.type = this.glyph.type;
       glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      glyphInfo.refineValue = GlyphSacrificeHandler.glyphRefinementGain(this.glyph);
+      glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
+        : 0;
       this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : 0;
@@ -540,14 +552,15 @@ Vue.component("glyph-component", {
         this.currentAction = "refine";
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
+      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+      const adjustedLevel = this.isActiveGlyph
+        ? getAdjustedGlyphLevel(this.glyph)
+        : this.glyph.level + levelBoost;
+      this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
-      if (!this.$refs.tooltip) {
-        this.$nextTick(() => this.moveTooltipTo(x, y));
-        return;
-      }
+      if (!this.$refs.tooltip) return;
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();
@@ -693,10 +706,11 @@ Vue.component("glyph-component", {
           :style="zIndexStyle"
           :sacrificeReward="sacrificeReward"
           :refineReward="refineReward"
+          :uncappedRefineReward="uncappedRefineReward"
           :currentAction="currentAction"
           :scoreMode="scoreMode"
           :showDeletionText="showSacrifice"
-          :levelOverride="levelOverride"
+          :displayLevel="displayLevel"
           :component="componentID"
         />
       </div>

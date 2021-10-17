@@ -2,10 +2,14 @@
 
 const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<=", "!="];
 const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
-  "IP", "EP", "RM",
-  "PENDING IP", "PENDING EP", "PENDING RM", "GLYPH LEVEL",
-  "AM", "REPLICANTI", "RG", "TT", "DT", "PENDING COMPLETIONS", "TP"
+  "AM", "IP", "EP", "RM", "INFINITIES", "ETERNITIES", "REALITIES",
+  "PENDING IP", "PENDING EP", "PENDING TP", "PENDING RM", "PENDING GLYPH LEVEL",
+  "DT", "TP", "RG", "REP", "TT", "TOTAL TT", "TOTAL COMPLETIONS", "PENDING COMPLETIONS",
+  "EC1 COMPLETIONS", "EC2 COMPLETIONS", "EC3 COMPLETIONS", "EC4 COMPLETIONS",
+  "EC5 COMPLETIONS", "EC6 COMPLETIONS", "EC7 COMPLETIONS", "EC8 COMPLETIONS",
+  "EC9 COMPLETIONS", "EC10 COMPLETIONS", "EC11 COMPLETIONS", "EC12 COMPLETIONS",
 ];
+
 const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
 const automatorBlocks = [
@@ -52,14 +56,14 @@ const automatorBlocks = [
     targets: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
-    cmd: "TT",
-    targets: ["AM", "IP", "EP", "MAX"],
-  }, {
     cmd: "BLACK HOLE",
     targets: ["ON", "OFF"],
   }, {
     cmd: "STORE TIME",
     targets: ["ON", "OFF", "USE"],
+  }, {
+    cmd: "TT",
+    targets: ["AM", "IP", "EP", "MAX"],
   }, {
     cmd: "PAUSE",
     hasInput: true
@@ -74,9 +78,20 @@ const automatorBlocks = [
   }, {
     cmd: "LOAD",
     hasInput: true
+  }, {
+    cmd: "NOTIFY",
+    hasInput: true
+  }, {
+    cmd: "COMMENT",
+    hasInput: true
+  }, {
+    cmd: "DEFINE",
+    hasInput: true
+  }, {
+    cmd: "BLOB"
   }
-
 ];
+const AUTOMATOR_BLOCKS_BLACKLIST = ["DEFINE", "BLOB"];
 
 const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 
@@ -84,11 +99,10 @@ function findAutomatorBlockByName(name) {
   return automatorBlocks.find(b => b.cmd === name);
 }
 
-
 Vue.component("automator-blocks", {
   data() {
     return {
-      blocks: automatorBlocks
+      blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))
     };
   },
   methods: {
@@ -106,17 +120,20 @@ Vue.component("automator-blocks", {
     }
   },
   template: `
-    <div class="c-automator-docs">
-      <draggable
-        :list="blocks"
-        :group="{ name: 'code-blocks', pull: 'clone', put: false }"
-        :sort="false"
-        :clone="clone"
-        class="c-automator-command-list"
+    <draggable
+      :list="blocks"
+      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+      :sort="false"
+      :clone="clone"
+      style="display: flex; align-items: center; flex-wrap: wrap;"
+    >
+      <div
+        v-for="block in blocks"
+        :key="block.id"
+        class="o-automator-command o-automator-block-list"
       >
-        <div v-for="block in blocks" :key="block.id" class="o-automator-command">
-          {{ block.cmd }}
-        </div>
-      </draggable>
-    </div>`
+        {{ block.cmd }}
+      </div>
+    </draggable>
+    `
 });

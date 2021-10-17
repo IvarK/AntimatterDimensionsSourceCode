@@ -10,15 +10,25 @@ Vue.component("options-gameplay-tab", {
         ><slot /></primary-button>`
     },
   },
+  // This puts the slider in the right spot on initialization
+  created() {
+    const ticks = player.options.offlineTicks;
+    const exponent = Math.floor(Math.log10(ticks));
+    const mantissa = (ticks / Math.pow(10, exponent)) - 1;
+    this.offlineSlider = 10 * exponent + mantissa;
+  },
   data() {
     return {
       retryChallenge: false,
       offlineProgress: false,
       hotkeys: false,
+      offlineSlider: 0,
       offlineTicks: 0,
       automaticTabSwitching: false,
       infinityUnlocked: false,
-      sacrificeUnlocked: false
+      sacrificeUnlocked: false,
+      automatorUnlocked: false,
+      automatorLogSize: 0,
     };
   },
   watch: {
@@ -31,11 +41,14 @@ Vue.component("options-gameplay-tab", {
     hotkeys(newValue) {
       player.options.hotkeys = newValue;
     },
-    offlineTicks(newValue) {
-      player.options.offlineTicks = parseInt(newValue, 10);
+    offlineSlider(newValue) {
+      player.options.offlineTicks = this.parseOfflineSlider(newValue);
     },
     automaticTabSwitching(newValue) {
       player.options.automaticTabSwitching = newValue;
+    },
+    automatorLogSize(newValue) {
+      player.options.automatorEvents.maxEntries = parseInt(newValue, 10);
     },
   },
   methods: {
@@ -44,10 +57,18 @@ Vue.component("options-gameplay-tab", {
       this.retryChallenge = options.retryChallenge;
       this.offlineProgress = options.offlineProgress;
       this.hotkeys = options.hotkeys;
-      this.offlineTicks = options.offlineTicks;
+      this.offlineTicks = player.options.offlineTicks;
       this.automaticTabSwitching = options.automaticTabSwitching;
       this.infinityUnlocked = PlayerProgress.current.isInfinityUnlocked;
       this.sacrificeUnlocked = Sacrifice.isVisible;
+      this.automatorUnlocked = Player.automatorUnlocked;
+      this.automatorLogSize = options.automatorEvents.maxEntries;
+    },
+    // Given the endpoints of 24-60, this produces 500, 600, ... , 900, 1000, 2000, ... , 1e7 ticks
+    // It's essentially 10^(x/10) but with the mantissa spaced linearly instead of logarithmically
+    parseOfflineSlider(str) {
+      const value = parseInt(str, 10);
+      return (1 + value % 10) * Math.pow(10, Math.floor(value / 10));
     }
   },
   template: `
@@ -86,14 +107,14 @@ Vue.component("options-gameplay-tab", {
             You do not have anything that requires confirmation
           </options-button>
           <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
-            <b>Offline ticks: {{ formatInt(parseInt(offlineTicks)) }}</b>
+            <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>
             <input
-              v-model="offlineTicks"
               class="o-primary-btn--slider__slider"
+              v-model="offlineSlider"
               type="range"
-              min="100"
-              step="100"
-              max="10000"
+              min="24"
+              step="1"
+              max="60"
             />
           </div>
           <primary-button-on-off
@@ -102,6 +123,22 @@ Vue.component("options-gameplay-tab", {
             style="font-size: 12px;"
             text="Switch tabs on some events (e.g. entering challenges):"
           />
+        </div>
+        <div class="l-options-grid__row">
+          <div
+            v-if="automatorUnlocked"
+            class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"
+          >
+            <b>Automator Log Max: {{ formatInt(parseInt(automatorLogSize)) }}</b>
+            <input
+              v-model="automatorLogSize"
+              class="o-primary-btn--slider__slider"
+              type="range"
+              min="50"
+              step="50"
+              max="500"
+            />
+          </div>
         </div>
         <open-modal-shortcuts />
       </div>

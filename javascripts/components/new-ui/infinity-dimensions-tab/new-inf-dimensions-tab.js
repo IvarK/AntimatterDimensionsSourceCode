@@ -17,7 +17,9 @@ Vue.component("new-inf-dimensions-tab", {
       tesseractCost: new Decimal(0),
       totalDimCap: 0,
       canBuyTesseract: false,
-      enslavedCompleted: false
+      enslavedCompleted: false,
+      boughtTesseracts: 0,
+      extraTesseracts: 0,
     };
   },
   computed: {
@@ -27,12 +29,16 @@ Vue.component("new-inf-dimensions-tab", {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${this.sacrificeBoostDisplay}`;
     },
+    tesseractCountString() {
+      const extra = this.extraTesseracts > 0 ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
+      return `${formatInt(this.boughtTesseracts)}${extra}`;
+    },
   },
   methods: {
     update() {
       this.isEC9Running = EternityChallenge(9).isRunning;
       this.infinityPower.copyFrom(Currency.infinityPower);
-      this.conversionRate = getInfinityConversionRate();
+      this.conversionRate = InfinityDimensions.powerConversionRate;
       if (this.isEC9Running) {
         this.dimMultiplier.copyFrom(Decimal.pow(Math.max(this.infinityPower.log2(), 1), 4).max(1));
       } else {
@@ -46,11 +52,13 @@ Vue.component("new-inf-dimensions-tab", {
       }
       this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
-      this.nextDimCapIncrease = Enslaved.nextDimCapIncrease;
-      this.tesseractCost.copyFrom(Enslaved.tesseractCost);
+      this.nextDimCapIncrease = Tesseracts.nextTesseractIncrease;
+      this.tesseractCost.copyFrom(Tesseracts.nextCost);
       this.totalDimCap = InfinityDimensions.totalDimCap;
-      this.canBuyTesseract = Enslaved.canBuyTesseract;
+      this.canBuyTesseract = Tesseracts.canBuyTesseract;
       this.enslavedCompleted = Enslaved.isCompleted;
+      this.boughtTesseracts = Tesseracts.bought;
+      this.extraTesseracts = Tesseracts.extra;
     },
     maxAll() {
       tryUnlockInfinityDimensions(false);
@@ -60,7 +68,7 @@ Vue.component("new-inf-dimensions-tab", {
       toggleAllInfDims();
     },
     buyTesseract() {
-      Enslaved.buyTesseract();
+      Tesseracts.buyTesseract();
     }
   },
   template: `
@@ -107,7 +115,9 @@ Vue.component("new-inf-dimensions-tab", {
           :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
           @click="buyTesseract"
         >
-          <p>Buy a Tesseract</p>
+          <p>
+            Buy a Tesseract ({{ tesseractCountString }})
+          </p>
           <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
           <p><b>Costs: {{ format(tesseractCost) }} IP</b></p>
         </button>
@@ -133,5 +143,7 @@ Vue.component("new-inf-dimensions-tab", {
       >
         You have {{ formatInt(EC8PurchasesLeft) }} {{ "purchase" | pluralize(EC8PurchasesLeft) }} left.
       </div>
+      <br>
+      Hold shift to see the Infinity Point cost for locked Infinity Dimensions.
     </div>`
 });

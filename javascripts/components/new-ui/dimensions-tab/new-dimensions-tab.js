@@ -13,6 +13,7 @@ Vue.component("new-dimensions-tab", {
       multiplierText: "",
       disabledCondition: "",
       isQuickResetAvailable: false,
+      hasContinuum: false,
       isContinuumActive: false,
     };
   },
@@ -28,8 +29,21 @@ Vue.component("new-dimensions-tab", {
     sacrifice() {
       sacrificeBtnClick();
     },
-    toggleUntil10() {
-      player.buyUntil10 = !player.buyUntil10;
+    // Toggle single/10 without Continuum, otherwise cycle through all 3 if it's unlocked
+    changeBuyMode() {
+      if (!this.hasContinuum) {
+        player.buyUntil10 = !player.buyUntil10;
+        return;
+      }
+      // "Continuum" => "Until 10" => "Buy 1" => "Continuum"
+      if (this.isContinuumActive) {
+        player.auto.disableContinuum = true;
+        player.buyUntil10 = true;
+      } else if (player.buyUntil10) {
+        player.buyUntil10 = false;
+      } else {
+        player.auto.disableContinuum = false;
+      }
     },
     getUntil10Display() {
       if (this.isContinuumActive) return "Continuum";
@@ -38,6 +52,7 @@ Vue.component("new-dimensions-tab", {
     update() {
       this.hasDimensionBoosts = player.dimensionBoosts > 0;
       this.buyUntil10 = player.buyUntil10;
+      this.hasContinuum = Laitela.continuumUnlocked;
       this.isContinuumActive = Laitela.continuumActive;
       this.isQuickResetAvailable = Player.isInAntimatterChallenge && Player.antimatterChallenge.isQuickResettable;
 
@@ -51,7 +66,7 @@ Vue.component("new-dimensions-tab", {
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
 
-      this.multiplierText = `Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
       if (this.isSacrificeUnlocked) this.multiplierText +=
         ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
@@ -59,7 +74,7 @@ Vue.component("new-dimensions-tab", {
   template: `
     <div class="l-antimatter-dim-tab">
       <div class="modes-container">
-        <button class="o-primary-btn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">
+        <button class="o-primary-btn" @click="changeBuyMode" style="width: 100px; height: 30px; padding: 0;">
           {{ getUntil10Display() }}
         </button>
         <primary-button

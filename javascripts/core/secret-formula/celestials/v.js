@@ -6,13 +6,56 @@ const V_REDUCTION_MODE = {
 };
 
 GameDatabase.celestials.v = {
+  // Note: mainUnlock IDs here are one-indexed to match with navigation indices
   mainUnlock: {
-    realities: 10000,
-    eternities: 1e70,
-    infinities: 1e160,
-    dilatedTime: new Decimal("1e320"),
-    replicanti: new Decimal("1e320000"),
-    rm: 1e60,
+    realities: {
+      id: 1,
+      name: "Realities",
+      resource: () => Currency.realities.value,
+      requirement: 10000,
+      format: x => formatInt(x),
+      progress: () => Currency.realities.value / 10000,
+    },
+    eternities: {
+      id: 2,
+      name: "Eternities",
+      resource: () => Currency.eternities.value,
+      requirement: 1e70,
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.eternities.value.pLog10() / 70),
+    },
+    infinities: {
+      id: 3,
+      name: "Infinities",
+      resource: () => Currency.infinitiesTotal.value,
+      requirement: 1e160,
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.infinitiesTotal.value.pLog10() / 160),
+    },
+    dilatedTime: {
+      id: 4,
+      name: "Dilated Time",
+      resource: () => player.records.thisReality.maxDT,
+      requirement: new Decimal("1e320"),
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10() / 320),
+    },
+    replicanti: {
+      id: 5,
+      name: "Replicanti",
+      resource: () => player.records.thisReality.maxReplicanti,
+      requirement: new Decimal("1e320000"),
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(player.records.thisReality.maxReplicanti.pLog10() / 320000),
+    },
+    realityMachines: {
+      id: 6,
+      name: "Reality Machines",
+      resource: () => Currency.realityMachines.value,
+      requirement: 1e60,
+      format: x => format(x, 2),
+      progress: () => emphasizeEnd(Currency.realityMachines.value.pLog10() / 60),
+    },
   },
   runUnlocks: [
     {
@@ -105,7 +148,7 @@ GameDatabase.celestials.v = {
       // This achievement has internally negated values since the check is always greater than
       values: [1, 4, 7, 10, 13],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
-      currentValue: () => -player.celestials.v.maxGlyphsThisRun,
+      currentValue: () => -player.requirementChecks.reality.maxGlyphs,
       formatRecord: x => formatInt(-x),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
@@ -122,7 +165,7 @@ GameDatabase.celestials.v = {
       currentValue: () => (
         // Dirty hack I know lmao
         Currency.timeTheorems.gte(400000)
-          ? -Math.log10(player.minNegativeBlackHoleThisReality)
+          ? -Math.log10(player.requirementChecks.reality.slowestBH)
           : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,
       shardReduction: tiers => 50 * tiers,
@@ -178,8 +221,8 @@ GameDatabase.celestials.v = {
       id: 4,
       STCost: 12,
       requirement: [227, 228, 234],
-      description: "Dimensional Sacrifice applies to all Antimatter Dimensions",
-      effect: () => Sacrifice.totalBoost,
+      description: "Dimensional Sacrifice multiplier is squared",
+      effect: 2,
       unlocked: () => Ra.pets.v.level >= 20
     }
   ]

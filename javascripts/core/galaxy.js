@@ -6,8 +6,6 @@ const GALAXY_TYPE = {
   REMOTE: 2
 };
 
-const REMOTE_SCALING_START = 800;
-
 class GalaxyRequirement {
   constructor(tier, amount) {
     this.tier = tier;
@@ -21,8 +19,12 @@ class GalaxyRequirement {
 }
 
 class Galaxy {
+  static get remoteStart() {
+    return RealityUpgrade(21).effectOrDefault(800);
+  }
+
   static get requirement() {
-    return this.requirementAt(player.galaxies);
+    return this.requirementAt(Currency.antimatterGalaxies.value);
   }
 
   /**
@@ -34,9 +36,9 @@ class Galaxy {
     const bulk = bulkBuyBinarySearch(new Decimal(currency), {
       costFunction: x => this.requirementAt(x).amount,
       cumulative: false,
-    }, player.galaxies);
+    }, Currency.antimatterGalaxies.value);
     if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
-    return player.galaxies + bulk.quantity;
+    return Currency.antimatterGalaxies.value + bulk.quantity;
   }
 
   static requirementAt(galaxies) {
@@ -48,11 +50,12 @@ class Galaxy {
       amount += Math.pow(galaxies, 2) + galaxies;
     } else if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
-      amount += Math.pow((galaxies) - (galaxyCostScalingStart - 1), 2) + (galaxies) - (galaxyCostScalingStart - 1);
+      const galaxiesBeforeDistant = Math.clampMin(galaxies - galaxyCostScalingStart + 1, 0);
+      amount += Math.pow(galaxiesBeforeDistant, 2) + galaxiesBeforeDistant;
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount *= Math.pow(1.002, galaxies - (REMOTE_SCALING_START - 1));
+      amount *= Math.pow(1.002, galaxies - (Galaxy.remoteStart - 1));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -103,11 +106,11 @@ class Galaxy {
   }
 
   static get type() {
-    return this.typeAt(player.galaxies);
+    return this.typeAt(Currency.antimatterGalaxies.value);
   }
 
   static typeAt(galaxies) {
-    if (galaxies >= REMOTE_SCALING_START && !RealityUpgrade(21).isBought) {
+    if (galaxies >= Galaxy.remoteStart) {
       return GALAXY_TYPE.REMOTE;
     }
     if (EternityChallenge(5).isRunning || galaxies >= this.costScalingStart) {
@@ -119,34 +122,33 @@ class Galaxy {
 
 function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
-  player.galaxies++;
-  if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
+  Currency.antimatterGalaxies.add(1);
+  if (!Achievement(143).isUnlocked) Currency.dimensionBoosts.reset();
   Reset.dimensionBoost.reset();
-  if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
-  player.achievementChecks.noSacrifices = true;
+  // This is specifically reset here because the check is actually per-galaxy and not per-infinity
+  player.requirementChecks.infinity.noSacrifice = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 
 function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
-  if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+  if (Currency.antimatterGalaxies.gte(limit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;
 }
 
 function maxBuyGalaxies(limit = Number.MAX_VALUE) {
-  if (player.galaxies >= limit || !Galaxy.canBeBought) return false;
+  if (Currency.antimatterGalaxies.gte(limit) || !Galaxy.canBeBought) return false;
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
   const dim = AntimatterDimension(req.tier);
   const newGalaxies = Math.clampMax(
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
-    limit);
-  if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
+    limit) - Currency.antimatterGalaxies.value;
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:
-  player.galaxies = newGalaxies - 1;
+  Currency.antimatterGalaxies.add(newGalaxies - 1);
   galaxyReset();
-  if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.giveProgress();
+  if (Enslaved.isRunning && Currency.antimatterGalaxies.gt(1)) EnslavedProgress.c10.giveProgress();
   return true;
 }

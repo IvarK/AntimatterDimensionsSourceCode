@@ -5,11 +5,15 @@ Vue.component("statistics-tab", {
     return {
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
-      newsMessagesSeen: 0,
+      uniqueNews: 0,
+      totalNews: 0,
+      secretAchievementCount: 0,
       infinity: {
         isUnlocked: false,
         count: new Decimal(0),
         banked: new Decimal(0),
+        projectedBanked: new Decimal(0),
+        bankRate: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -40,62 +44,100 @@ Vue.component("statistics-tab", {
       recordGlyphInfo: [],
     };
   },
+  computed: {
+    // These are here to avoid extra spaces in-game pre-reality and to get around codefactor 120-char limits in the
+    // HTML template due to the fact that adding a linebreak also adds a space
+    infinityCountString() {
+      const num = this.infinity.count;
+      return num.gt(0)
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Infinity", num, "Infinities")}`
+        : "no Infinities";
+    },
+    eternityCountString() {
+      const num = this.eternity.count;
+      return num.gt(0)
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num, "Eternities")}`
+        : "no Eternities";
+    }
+  },
   methods: {
     update() {
-      this.totalAntimatter.copyFrom(player.records.totalAntimatter);
-      this.realTimePlayed.setFrom(player.records.realTimePlayed);
-      this.newsMessagesSeen = player.news.size;
+      const records = player.records;
+      this.totalAntimatter.copyFrom(records.totalAntimatter);
+      this.realTimePlayed.setFrom(records.realTimePlayed);
+      this.uniqueNews = NewsHandler.uniqueTickersSeen;
+      this.totalNews = player.news.totalSeen;
+      this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
+
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked || player.devMode;
       const infinity = this.infinity;
+      const bestInfinity = records.bestInfinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
         infinity.count.copyFrom(Currency.infinities);
         infinity.banked.copyFrom(Currency.infinitiesBanked);
-        infinity.hasBest = player.records.bestInfinity.time < 999999999999;
-        infinity.best.setFrom(player.records.bestInfinity.time);
-        infinity.this.setFrom(player.records.thisInfinity.time);
-        infinity.bestRate.copyFrom(player.records.bestInfinity.bestIPminEternity);
+        infinity.projectedBanked = new Decimal(0).plusEffectsOf(
+          Achievement(131),
+          TimeStudy(191)
+        );
+        infinity.bankRate = infinity.projectedBanked.div(Math.clampMin(33, records.thisEternity.time)).times(60000);
+        infinity.hasBest = bestInfinity.time < 999999999999;
+        infinity.best.setFrom(bestInfinity.time);
+        infinity.this.setFrom(records.thisInfinity.time);
+        infinity.bestRate.copyFrom(bestInfinity.bestIPminEternity);
       }
+
       const isEternityUnlocked = progress.isEternityUnlocked || player.devMode;
       const eternity = this.eternity;
+      const bestEternity = records.bestEternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
         eternity.count.copyFrom(Currency.eternities);
-        eternity.hasBest = player.records.bestEternity.time < 999999999999;
-        eternity.best.setFrom(player.records.bestEternity.time);
-        eternity.this.setFrom(player.records.thisEternity.time);
-        eternity.bestRate.copyFrom(player.records.bestEternity.bestEPminReality);
+        eternity.hasBest = bestEternity.time < 999999999999;
+        eternity.best.setFrom(bestEternity.time);
+        eternity.this.setFrom(records.thisEternity.time);
+        eternity.bestRate.copyFrom(bestEternity.bestEPminReality);
       }
+
       const isRealityUnlocked = progress.isRealityUnlocked || player.devMode;
       const reality = this.reality;
+      const bestReality = records.bestReality;
       reality.isUnlocked = isRealityUnlocked;
+
       if (isRealityUnlocked) {
         reality.count = Math.floor(Currency.realities.value);
-        reality.best.setFrom(player.records.bestReality.time);
-        reality.bestReal.setFrom(player.records.bestReality.realTime);
-        reality.this.setFrom(player.records.thisReality.time);
-        reality.totalTimePlayed.setFrom(player.records.totalTimePlayed);
+        reality.best.setFrom(bestReality.time);
+        reality.bestReal.setFrom(bestReality.realTime);
+        reality.this.setFrom(records.thisReality.time);
+        reality.totalTimePlayed.setFrom(records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
-        infinity.thisReal.setFrom(player.records.thisInfinity.realTime);
-        eternity.thisReal.setFrom(player.records.thisEternity.realTime);
-        reality.thisReal.setFrom(player.records.thisReality.realTime);
-        reality.bestRate.copyFrom(player.records.bestReality.RMmin);
-        reality.bestRarity = Math.max(strengthToRarity(player.records.bestReality.glyphStrength), 0);
+        infinity.thisReal.setFrom(records.thisInfinity.realTime);
+        infinity.bankRate = infinity.projectedBanked.div(Math.clampMin(33, records.thisEternity.realTime)).times(60000);
+        eternity.thisReal.setFrom(records.thisEternity.realTime);
+        reality.thisReal.setFrom(records.thisReality.realTime);
+        reality.bestRate.copyFrom(bestReality.RMmin);
+        reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
+
+        this.recordGlyphInfo = [
+          [true, Glyphs.copyForRecords(bestReality.RMminSet),
+            `Best Reality Machines per minute: ${format(bestReality.RMmin, 2, 2)} RM/min`],
+          [true, Glyphs.copyForRecords(bestReality.glyphLevelSet),
+            `Best Glyph level: ${formatInt(bestReality.glyphLevel)}`],
+          [true, Glyphs.copyForRecords(bestReality.bestEPSet),
+            `Best Eternity Points: ${format(bestReality.bestEP, 2, 2)} Eternity Points`],
+          [true, Glyphs.copyForRecords(bestReality.speedSet),
+            `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
+          [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
+            `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`],
+          [Currency.imaginaryMachines.gt(0), Glyphs.copyForRecords(bestReality.iMCapSet),
+            `Imaginary Machine Cap: ${format(player.reality.iMCap, 2, 2)} iM`],
+          [Laitela.isUnlocked, Glyphs.copyForRecords(bestReality.laitelaSet),
+            `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
+        ];
+
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
-      this.recordGlyphInfo = [
-        [true, Glyphs.copyForRecords(player.records.bestReality.RMminSet),
-          `Best Reality Machines per minute: ${format(player.records.bestReality.RMmin, 2, 2)} RM/min`],
-        [true, Glyphs.copyForRecords(player.records.bestReality.glyphLevelSet),
-          `Best Glyph level: ${formatInt(player.records.bestReality.glyphLevel)}`],
-        [true, Glyphs.copyForRecords(player.records.bestReality.bestEPSet),
-          `Best Eternity Points: ${format(player.records.bestReality.bestEP, 2, 2)} Eternity Points`],
-        [true, Glyphs.copyForRecords(player.records.bestReality.speedSet),
-          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
-        [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
-          `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`]
-      ];
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
@@ -111,29 +153,34 @@ Vue.component("statistics-tab", {
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
         <div>
-          You have seen {{ formatInt(newsMessagesSeen) }} unique
-          news ticker {{ "message" | pluralize(newsMessagesSeen) }}.
+          You have seen {{ formatInt(totalNews) }}
+          news {{ "message" | pluralize(totalNews) }}
+          in total.
+        </div>
+        <div>
+          You have seen {{ formatInt(uniqueNews) }} unique
+          news {{ "message" | pluralize(uniqueNews) }}.
+        </div>
+        <div>
+          You have unlocked {{ formatInt(secretAchievementCount) }} Secret
+          {{ "Achievement" | pluralize(secretAchievementCount) }}.
         </div>
         <div>
           <br>
-          <div
-            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
-            v-for="line in matterScale"
-          >
-            {{ line }}
+          <div style="height: 5rem;">
+            <div v-for="line in matterScale">
+              {{ line }}
+            </div>
+            <br v-if="matterScale.length < 2">
+            <br v-if="matterScale.length < 3">
           </div>
         </div>
         <br>
       </div>
-      <div v-if="infinity.isUnlocked">
+      <div v-if="infinity.isUnlocked" class="c-stats-tab-subheader">
         <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
-        <div v-if="infinity.count.gt(0)">
-          You have {{ formatDecimalAmount(infinity.count) }}
-          {{ "Infinity" | pluralize(infinity.count, "Infinities") }}
-          <span v-if="eternity.isUnlocked">this Eternity</span>.
-        </div>
-        <div v-else>
-          You have no Infinities<span v-if="eternity.isUnlocked"> this Eternity</span>.
+        <div>
+          You have {{ infinityCountString }}<span v-if="eternity.isUnlocked"> this Eternity</span>.
         </div>
         <div v-if="infinity.banked.gt(0)">
           You have {{ formatDecimalAmount(infinity.banked) }} Banked
@@ -158,15 +205,18 @@ Vue.component("statistics-tab", {
         </div>
         <br>
       </div>
-      <div v-if="eternity.isUnlocked">
+      <div v-if="eternity.isUnlocked" class="c-stats-tab-subheader">
         <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
-        <div v-if="eternity.count.gt(0)">
-          You have {{ formatDecimalAmount(eternity.count) }}
-          {{ "Eternity" | pluralize(eternity.count, "Eternities") }}
-          <span v-if="reality.isUnlocked">this Reality</span>.
+        <div>
+          You have {{ eternityCountString }}<span v-if="reality.isUnlocked"> this Reality</span>.
         </div>
-        <div v-else>
-          You have no Eternities<span v-if="reality.isUnlocked"> this Reality</span>.
+        <div v-if="infinity.projectedBanked.gt(0)">
+          You will gain {{ formatDecimalAmount(infinity.projectedBanked) }} Banked
+          {{ "Infinity" | pluralize(infinity.projectedBanked, "Infinities") }} on Eternity
+          ({{ formatDecimalAmount(infinity.bankRate) }} per minute).
+        </div>
+        <div v-else-if="infinity.banked.gt(0)">
+          You will gain no Banked Infinities on Eternity.
         </div>
         <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
         <div v-else>You have no fastest Eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
@@ -182,7 +232,7 @@ Vue.component("statistics-tab", {
         </div>
         <br>
       </div>
-      <div v-if="reality.isUnlocked">
+      <div v-if="reality.isUnlocked" class="c-stats-tab-subheader">
         <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
         <div>You have {{ formatInt(reality.count) }} {{ "Reality" | pluralize(reality.count, "Realities") }}.</div>
         <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>

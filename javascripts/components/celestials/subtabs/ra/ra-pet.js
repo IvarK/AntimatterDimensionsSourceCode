@@ -68,7 +68,7 @@ Vue.component("ra-pet", {
       this.requiredMemories = pet.requiredMemories;
       this.memoryChunks = pet.memoryChunks;
       this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
-      this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk() * this.currentMemoryMult;
+      this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk * this.currentMemoryMult;
       this.canGetMemoryChunks = pet.canGetMemoryChunks;
       this.memoryMultiplier = pet.memoryProductionMultiplier;
       this.memoryUpgradeCost = pet.memoryUpgradeCost;
@@ -83,8 +83,8 @@ Vue.component("ra-pet", {
     },
     timeToGoalString(expToGain) {
       // Quadratic formula for growth (uses constant growth for a = 0)
-      const a = Ra.productionPerMemoryChunk() * this.currentMemoryMult * this.memoryChunksPerSecond / 2;
-      const b = Ra.productionPerMemoryChunk() * this.currentMemoryMult * this.memoryChunks;
+      const a = Ra.productionPerMemoryChunk * this.currentMemoryMult * this.memoryChunksPerSecond / 2;
+      const b = Ra.productionPerMemoryChunk * this.currentMemoryMult * this.memoryChunks;
       const c = -expToGain;
       const estimate = a === 0
         ? -c / b
@@ -251,6 +251,5 @@ Vue.component("ra-pet", {
             :unlock="unlock" />
         </div>
       </div>
-    </div>
-  `
+    </div>`
 });

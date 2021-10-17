@@ -81,6 +81,10 @@ Vue.component("infinity-challenges-tab", {
   template: `
     <div class="l-challenges-tab">
       <challenges-header />
+      <div>
+        An active Big Crunch Autobuyer will Crunch immediately when 
+        reaching an Infinity Challenge's antimatter goal, regardless of settings.
+      </div>
       <div>{{ nextAtDisplay }}</div>
       <challenge-grid :count="8" :isChallengeVisible="isChallengeVisible">
         <infinity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

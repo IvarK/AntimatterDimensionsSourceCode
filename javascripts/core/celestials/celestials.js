@@ -50,7 +50,8 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Ra",
     description() {
-      return `you can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
+      return `you only have ${formatInt(4)} Dimension Boosts and can't gain any more, and the Tickspeed purchase
+      multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
     },
   },
   {
@@ -58,7 +59,7 @@ GameDatabase.celestials.descriptions = [
     description() {
       return `Infinity Point and Eternity Point gain are Dilated.\
       Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes,\
-      and Black Hole discharging and pulsing is disabled.\n
+      and Black Hole storing/discharging/pulsing are disabled.\n
       Antimatter generates entropy inside of this Reality.\
       At ${formatPercents(1)} entropy, the Reality becomes destabilized\
       and you gain a reward based on how quickly you reached ${formatPercents(1)}.\

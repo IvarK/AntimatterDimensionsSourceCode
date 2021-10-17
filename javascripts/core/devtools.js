@@ -314,7 +314,7 @@ dev.printResourceTotals = function() {
 
   console.log(`Tickspeed: e${-Tickspeed.current.exponent.toPrecision(3)}`);
   console.log(`Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`);
-  const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
+  const aGalaxy = 100 * Math.floor(Currency.antimatterGalaxies.value / 100 + 0.5);
   const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
   const dGalaxy = 100 * Math.floor(player.dilation.totalTachyonGalaxies / 100 + 0.5);
   console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
@@ -575,7 +575,8 @@ dev.testGlyphs = function(config) {
     const ip = padString(player.infinityPoints.exponent.toString(), 8);
     const am = padString(Currency.antimatter.exponent.toString(), 12);
     const dimboosts = DimBoost.purchasedBoosts;
-    const galaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;
+    const galaxies =
+      Replicanti.galaxies.total + Currency.antimatterGalaxies.value + player.dilation.totalTachyonGalaxies;
     const glyphData = glyphSets[index].map(glyphToShortString).sum();
     console.log(`${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
       `dimboosts=${dimboosts} galaxies=${galaxies}`);

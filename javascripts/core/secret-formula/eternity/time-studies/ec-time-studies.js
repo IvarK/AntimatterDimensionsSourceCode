@@ -46,7 +46,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 130,
     requirement: {
       resource: "Antimatter Galaxies",
-      current: () => player.galaxies,
+      current: () => Currency.antimatterGalaxies.value,
       required: completions => 160 + completions * 14,
       formatValue: formatInt
     }

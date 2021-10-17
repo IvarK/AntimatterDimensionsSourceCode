@@ -66,7 +66,7 @@ Vue.component("new-galaxy-row", {
   methods: {
     update() {
       this.type = Galaxy.type;
-      this.galaxies.normal = player.galaxies;
+      this.galaxies.normal = Currency.antimatterGalaxies.value;
       this.galaxies.replicanti = Replicanti.galaxies.total;
       this.galaxies.dilation = player.dilation.totalTachyonGalaxies;
       const requirement = Galaxy.requirement;

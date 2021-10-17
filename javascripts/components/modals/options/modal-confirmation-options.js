@@ -88,7 +88,8 @@ Vue.component("modal-confirmation-options", {
       this.deleteGlyphSetSave = options.deleteGlyphSetSave;
       this.glyphRefine = options.glyphRefine;
 
-      this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
+      this.sacrificeUnlocked =
+        PlayerProgress.infinityUnlocked() || Currency.dimensionBoosts.gte(5) || Currency.antimatterGalaxies.gt(0);
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);

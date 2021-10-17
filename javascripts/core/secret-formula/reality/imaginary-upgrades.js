@@ -117,7 +117,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 5e7,
       requirement: () => `Make a level ${formatInt(9000)} Glyph with a single glyph weight at ${formatInt(100)}`,
       hasFailed: () => false,
-      checkRequirement: () => Object.values(player.celestials.effarig.glyphWeights).some(w => w === 100) && 
+      checkRequirement: () => Object.values(player.celestials.effarig.glyphWeights).some(w => w === 100) &&
         gainedGlyphLevel().actualLevel >= 9000,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain free Dimboosts based on iM rebuyable count",
@@ -187,7 +187,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatCost: x => format(x, 1),
       requirement: () => `Have ${formatInt(80000)} total galaxies`,
       hasFailed: () => false,
-      checkRequirement: () => Replicanti.galaxies.total + player.galaxies +
+      checkRequirement: () => Replicanti.galaxies.total + Currency.antimatterGalaxies.value +
         player.dilation.totalTachyonGalaxies >= 80000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock the 4th Dark Matter Dimension",
@@ -267,7 +267,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
         with a fully inverted Black Hole`,
       hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.slowestBH > 1e-300,
       checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.slowestBH <= 1e-300 &&
-        player.galaxies >= 13000,
+        Currency.antimatterGalaxies.value >= 13000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Increase free Dimboost strength based on Singularity count",
       effect: () => Decimal.pow(player.celestials.laitela.singularities, 300),

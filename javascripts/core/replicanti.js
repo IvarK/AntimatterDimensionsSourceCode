@@ -16,8 +16,8 @@ function addReplicantiGalaxies(newGalaxies) {
     player.replicanti.galaxies += newGalaxies;
     player.requirementChecks.eternity.noRG = false;
     if (!EternityMilestone.replicantiNoReset.isReached) {
-      player.dimensionBoosts = 0;
-      softReset(0, true, true);
+      Currency.dimensionBoosts.reset();
+      Reset.dimensionBoost.reset({ force: true });
     }
   }
 }

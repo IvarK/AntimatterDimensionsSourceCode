@@ -31,6 +31,7 @@ class EternityChallengeReset extends EternityReset {
         challenge.addCompletion();
         completionCount++;
       }
+      AutomatorData.lastECCompletionCount = completionCount;
       if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
     player.etercreq = 0;

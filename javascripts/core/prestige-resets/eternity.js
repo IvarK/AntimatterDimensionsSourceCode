@@ -71,6 +71,7 @@ class EternityReset extends PrestigeMechanic {
     Currency.eternityPoints.add(gainedEternityPoints());
     Currency.eternities.add(gainedEternities());
     Currency.infinitiesBanked.add(gainedBankedInfinities());
+    player.requirementChecks.reality.noEternities = false;
     this.unlock();
   }
 
@@ -85,6 +86,7 @@ class EternityReset extends PrestigeMechanic {
   }
 
   reset(reality = false) {
+    playerInfinityUpgradesOnReset();
     // Reset Normal and Infinity Challenges
     NormalChallenges.clearCompletions();
     InfinityChallenges.clearCompletions();
@@ -111,13 +113,12 @@ class EternityReset extends PrestigeMechanic {
     player.records.thisInfinity.time = 0;
     player.records.thisInfinity.lastBuyTime = 0;
     player.records.thisInfinity.realTime = 0;
-    player.dimensionBoosts = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
-    player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
+    Currency.dimensionBoosts.reset();
+    Currency.antimatterGalaxies.reset();
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.replicanti.galaxies = 0;
-    player.infMult = new Decimal(1);
-    player.infMultCost = new Decimal(10);
+    player.infMult = 0;
     Currency.infinityPower.reset();
     Currency.timeShards.reset();
     player.records.thisEternity.time = 0;
@@ -126,12 +127,7 @@ class EternityReset extends PrestigeMechanic {
     player.eterc8ids = 50;
     player.eterc8repl = 40;
 
-    player.achievementChecks.noSacrifices = true;
-    player.achievementChecks.onlyEighthDimensions = true;
-    player.achievementChecks.onlyFirstDimensions = true;
-    player.achievementChecks.noEighthDimensions = true;
-    player.achievementChecks.noFirstDimensions = true;
-    player.achievementChecks.noReplicantiGalaxies = true;
+    Player.resetRequirements("eternity");
 
     Currency.infinityPoints.reset();
     InfinityDimensions.resetAmount();
@@ -146,13 +142,17 @@ class EternityReset extends PrestigeMechanic {
     player.records.thisInfinity.maxAM = new Decimal(0);
     player.records.thisEternity.maxAM = new Decimal(0);
     Currency.antimatter.reset();
+    ECTimeStudyState.invalidateCachedRequirements();
 
     resetInfinityRuns();
     InfinityDimensions.fullReset();
     Replicanti.reset();
     resetChallengeStuff();
     AntimatterDimensions.reset();
-    playerInfinityUpgradesOnReset();
+  }
+
+  get canBePerformed() {
+    return super.canBePerformed && Player.canEternity;
   }
 }
 

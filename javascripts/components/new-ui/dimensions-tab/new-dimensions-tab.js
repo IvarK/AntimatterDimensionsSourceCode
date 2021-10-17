@@ -50,7 +50,7 @@ Vue.component("new-dimensions-tab", {
       return this.buyUntil10 ? "Until 10" : "Buy 1";
     },
     update() {
-      this.hasDimensionBoosts = player.dimensionBoosts > 0;
+      this.hasDimensionBoosts = Currency.dimensionBoosts.gt(0);
       this.buyUntil10 = player.buyUntil10;
       this.hasContinuum = Laitela.continuumUnlocked;
       this.isContinuumActive = Laitela.continuumActive;

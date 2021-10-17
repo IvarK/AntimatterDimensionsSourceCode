@@ -18,17 +18,18 @@ function getTickSpeedMultiplier() {
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies *= 1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
+  const antimatterGalaxies = Currency.antimatterGalaxies.value;
+  let galaxies = antimatterGalaxies + replicantiGalaxies + freeGalaxies;
   if (galaxies < 3) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages
     let baseMultiplier = 1 / 1.1245;
-    if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
-    if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
+    if (Currency.antimatterGalaxies.eq(1)) baseMultiplier = 1 / 1.11888888;
+    if (Currency.antimatterGalaxies.eq(2)) baseMultiplier = 1 / 1.11267177;
     if (NormalChallenge(5).isRunning) {
       baseMultiplier = 1 / 1.08;
-      if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
-      if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
+      if (Currency.antimatterGalaxies.eq(1)) baseMultiplier = 1 / 1.07632;
+      if (Currency.antimatterGalaxies.eq(2)) baseMultiplier = 1 / 1.072;
     }
     const perGalaxy = 0.02 * Effects.product(
       InfinityUpgrade.galaxyBoost,

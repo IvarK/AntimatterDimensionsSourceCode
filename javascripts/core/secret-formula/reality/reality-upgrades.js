@@ -83,11 +83,11 @@ GameDatabase.reality.upgrades = (function() {
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 Antimatter Galaxy",
-      hasFailed: () => !(player.galaxies <= 1 && player.requirementChecks.reality.noInfinities),
-      checkRequirement: () => player.galaxies <= 1 && player.requirementChecks.reality.noInfinities,
+      hasFailed: () => !(Currency.antimatterGalaxies.lte(1) && player.requirementChecks.reality.noInfinities),
+      checkRequirement: () => Currency.antimatterGalaxies.lte(1) && player.requirementChecks.reality.noInfinities,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinity gain is boosted from Antimatter Galaxy count",
-      effect: () => 1 + player.galaxies / 30,
+      effect: () => 1 + Currency.antimatterGalaxies.value / 30,
       formatEffect: value => formatX(value, 2, 2)
     },
     {
@@ -275,10 +275,10 @@ GameDatabase.reality.upgrades = (function() {
       name: "Cosmic Conglomerate",
       id: 21,
       cost: 100000,
-      requirement: () => `${formatInt(Replicanti.galaxies.total + player.galaxies +
+      requirement: () => `${formatInt(Replicanti.galaxies.total + Currency.antimatterGalaxies.value +
         player.dilation.totalTachyonGalaxies)}/${formatInt(2800)} total Galaxies from all types`,
       checkRequirement: () =>
-        Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
+        Replicanti.galaxies.total + Currency.antimatterGalaxies.value + player.dilation.totalTachyonGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: () => `Remote Antimatter Galaxy scaling is moved to ${formatInt(1e5)} galaxies`,
       effect: 1e5

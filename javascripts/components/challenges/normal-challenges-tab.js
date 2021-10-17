@@ -36,7 +36,7 @@ Vue.component("normal-challenges-tab", {
         update() {
           this.isUnlocked = this.challenge.isUnlocked;
           this.isRunning = this.challenge.isRunning;
-          this.isBroken = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.challengeId);
+          this.isBroken = Player.isInBrokenChallenge;
           this.isCompleted = this.challenge.isCompleted && !this.isBroken;
         }
       },
@@ -59,7 +59,7 @@ Vue.component("normal-challenges-tab", {
     <div class="l-challenges-tab">
       <challenges-header />
       <div>
-        If you have an active Big Crunch Autobuyer, it will attempt to Crunch 
+        If you have an active Big Crunch Autobuyer, it will attempt to Crunch
         as soon as possible when reaching Infinite antimatter.
       </div>
       <challenge-grid :count="12">

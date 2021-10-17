@@ -2223,7 +2223,7 @@ GameDatabase.news = [
   {
     id: "l2",
     text: "Nerf the galaxies please.",
-    get unlocked() { return player.galaxies === 2 || Currency.infinities.gt(0); }
+    get unlocked() { return Currency.antimatterGalaxies.eq(2) || Currency.infinities.gt(0); }
   },
   {
     id: "l3",
@@ -2245,7 +2245,7 @@ GameDatabase.news = [
     text:
       `Antimatter people seem to be even more afraid of 13 then we are. They destroyed
       entire galaxies just to remove 13 from their percents.`,
-    get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
+    get unlocked() { return Currency.antimatterGalaxies.gt(0) || Currency.infinities.gt(0); }
   },
   {
     id: "l7",
@@ -2267,14 +2267,14 @@ GameDatabase.news = [
     text:
       `The Heavenly Pelle has generated too much antimatter and needed to create another galaxy.
       This one can be seen in the southwestern sky.`,
-    get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
+    get unlocked() { return Currency.antimatterGalaxies.gt(0) || Currency.infinities.gt(0); }
   },
   {
     id: "l11",
     text: "9th Dimension is a lie.",
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2283,7 +2283,7 @@ GameDatabase.news = [
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2292,7 +2292,7 @@ GameDatabase.news = [
     text: "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2301,7 +2301,7 @@ GameDatabase.news = [
     text: "Why is there no 9th dimension? Because 7 8 9.",
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2310,7 +2310,7 @@ GameDatabase.news = [
     text: "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2321,7 +2321,7 @@ GameDatabase.news = [
       before you encounter bad things, so you should be fine`,
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2334,7 +2334,7 @@ GameDatabase.news = [
       forcefully to avoid getting the offline achievement.`,
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2343,7 +2343,7 @@ GameDatabase.news = [
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2354,7 +2354,7 @@ GameDatabase.news = [
       one with matter, and a large time vortex.`,
     get unlocked() {
       return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      Currency.antimatterGalaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },

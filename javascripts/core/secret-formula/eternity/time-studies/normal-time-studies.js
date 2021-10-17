@@ -71,7 +71,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 31,
       description: () => `All Galaxies give a ${formatX(1.2, 1, 1)} multiplier to Infinity Points gained`,
       effect: () =>
-        Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
+        Decimal.pow(1.2,
+          Replicanti.galaxies.total + Currency.antimatterGalaxies.value + player.dilation.totalTachyonGalaxies
+        ),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -559,7 +561,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(223).isBought || TimeStudy(224).isBought,
       requiresST: () => TimeStudy(231).isBought,
       description: "All Galaxies are stronger based on Antimatter Galaxies",
-      effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
+      effect: () => Math.pow(1 + Currency.antimatterGalaxies.value / 1000, 0.2),
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },
     {

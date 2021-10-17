@@ -558,7 +558,7 @@ GameDatabase.celestials.navigation = (function() {
         if (Achievement(151).isUnlocked) return 1;
         if (!player.requirementChecks.infinity.noAD8) return 0;
 
-        return player.galaxies / 800;
+        return Currency.antimatterGalaxies.value / 800;
       },
       drawOrder: -1,
       node: {
@@ -576,7 +576,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = 800;
             if (complete >= 1) return "V's Reality";
-            const galaxies = player.requirementChecks.infinity.noAD8 ? player.galaxies : 0;
+            const galaxies = player.requirementChecks.infinity.noAD8 ? Currency.antimatterGalaxies.value : 0;
             return [
               "V's unlock Achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
@@ -1512,7 +1512,8 @@ GameDatabase.celestials.navigation = (function() {
         const upgrade = MatterDimension(4).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        return (Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies) / 80000;
+        return (Replicanti.galaxies.total + Currency.antimatterGalaxies.value + player.dilation.totalTachyonGalaxies) /
+          80000;
       },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1541,7 +1542,10 @@ GameDatabase.celestials.navigation = (function() {
               ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
             ];
 
-            const allGalaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;
+            const allGalaxies =
+              Replicanti.galaxies.total +
+              Currency.antimatterGalaxies.value +
+              player.dilation.totalTachyonGalaxies;
             return [
               dmdText,
               `Have ${format(80000)} total Galaxies`,

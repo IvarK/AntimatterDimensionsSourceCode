@@ -389,51 +389,35 @@ function keyboardVisibleTabsToggle() {
 }
 
 function keyboardTabChange(direction) {
-  // Current tabs
-  const currentTab = Tabs.current.config.key;
-  const currentSubtab = Tabs.current._currentSubtab.key;
-  // Make an array of all the unlocked tabs
-  let tabs = Tabs.all.filter(i => i.config.key === currentTab || i.isAvailable && i.config.key !== "shop")
-    .map(i => i.config.key);
-  const subtabs = Tabs.current.subtabs.filter(i => i.key === currentSubtab || i.isAvailable).map(i => i.key);
-  // Reconfigure the tab order if its New UI
-  if (ui.view.newUI) {
-    const newUITabChange = ["achievements", "statistics", "options"].filter(i => Tab[i].isAvailable);
-    tabs = tabs.filter(tab => !newUITabChange.includes(tab));
-    tabs.push(...newUITabChange);
-  }
-  if (Tab.shop.isAvailable) tabs.push("shop");
-
-  // Find the index of the tab and subtab we are on
-  let top = tabs.indexOf(currentTab);
-  let sub = subtabs.indexOf(currentSubtab);
-
-  // Move in that direction
-  switch (direction) {
-    case "up":
-      top--;
-      break;
-    case "down":
-      top++;
-      break;
-    case "left":
-      sub--;
-      break;
-    case "right":
-      sub++;
-      break;
-    default:
-      throw new Error("Invalid keyboard movement direction");
-  }
-  // Loop around if needed
-  top = (top + tabs.length) % tabs.length;
-  sub = (sub + subtabs.length) % subtabs.length;
-
-  // And now we go there. Return false so the arrow keys don't do anything else
+  // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
+  const currentTab = Tabs.current.key;
   if (direction === "up" || direction === "down") {
+    // Make an array of the keys of all the unlocked and visible tabs
+    const tabs = Tabs.currentUIFormat.flatMap(i => (i.isAvailable ? [i.key] : []));
+    // Find the index of the tab we are on
+    let top = tabs.indexOf(currentTab);
+    // Move in the desired direction
+    if (direction === "up") top--;
+    else top++;
+    // Loop around if needed
+    top = (top + tabs.length) % tabs.length;
+    // And now we go there.
     Tab[tabs[top]].show(true);
-  } else {
-    Tab[tabs[top]][subtabs[sub]].show(true);
+  } else if (direction === "left" || direction === "right") {
+    // Current subtabs
+    const currentSubtab = Tabs.current._currentSubtab.key;
+    // Make an array of the keys of all the unlocked and visible subtabs
+    const subtabs = Tabs.current.subtabs.flatMap(i => (i.isAvailable ? [i.key] : []));
+    // Find the index of the subtab we are on
+    let sub = subtabs.indexOf(currentSubtab);
+    // Move in the desired direction
+    if (direction === "left") sub--;
+    else sub++;
+    // Loop around if needed
+    sub = (sub + subtabs.length) % subtabs.length;
+    // And now we go there.
+    Tab[currentTab][subtabs[sub]].show(true);
   }
+  // Return false so the arrow keys don't do anything else
   return false;
 }

@@ -172,7 +172,7 @@ const PerkNetwork = {
       nodes: {
         font: {
           size: areVisible ? 20 : 0,
-          color: Theme.current().isDark ? "#DDDDDD" : "#222222",
+          color: Theme.current().isDark() ? "#DDDDDD" : "#222222",
         }
       }
     };
@@ -189,10 +189,10 @@ const PerkNetwork = {
 
       let backgroundColor;
       if (canBeBought) {
-        if (Theme.current().isDark) backgroundColor = "#EEEEEE";
+        if (Theme.current().isDark()) backgroundColor = "#EEEEEE";
         else backgroundColor = "#111111";
       } else if (isBought) backgroundColor = primaryColor;
-      else if (Theme.current().isDark) backgroundColor = "#333333";
+      else if (Theme.current().isDark()) backgroundColor = "#333333";
       else backgroundColor = "#CCCCCC";
 
       const hoverColor = canBeBought || isBought ? primaryColor : "#656565";

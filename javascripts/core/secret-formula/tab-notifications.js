@@ -123,7 +123,7 @@ GameDatabase.tabNotifications = {
     id: 9,
     tabsToHighLight: [
       {
-        parent: "reality",
+        parent: "automation",
         tab: "automator"
       }
     ],

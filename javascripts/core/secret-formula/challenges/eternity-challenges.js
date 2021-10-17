@@ -80,12 +80,11 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {
-      description: "Reduce Antimatter Dimension cost multiplier growth",
+      description: "Further reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
       formatEffect: value => {
-        const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
-        const applied = base - value;
-        return `${formatX(base, 2, 1)} ➜ ${formatX(applied, 2, 1)}`;
+        const total = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward)) - value;
+        return `-${format(value, 2, 1)} (${formatX(total, 2, 1)} total)`;
       }
     }
   },
@@ -160,12 +159,11 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),
     reward: {
-      description: "Reduce Tickspeed cost multiplier growth",
+      description: "Further reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
       formatEffect: value => {
-        const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
-        const applied = base - value;
-        return `${formatX(base, 2, 2)} ➜ ${formatX(applied, 2, 2)}`;
+        const total = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward)) - value;
+        return `-${format(value, 2, 2)} (${formatX(total, 2, 2)} total)`;
       }
     }
   },

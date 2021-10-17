@@ -433,6 +433,7 @@ let player = {
     activations: 0,
   })),
   blackHolePause: false,
+  blackHoleAutoPauseMode: 0,
   blackHolePauseTime: 0,
   blackHoleNegative: 1,
   celestials: {
@@ -616,6 +617,7 @@ let player = {
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
     headerTextColored: false,
+    showNewGlyphIcon: true,
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
@@ -685,9 +687,9 @@ let player = {
       blackHole: true
     },
     hiddenTabBits: 0,
-    hiddenSubtabBits: Array.repeat(0, 10),
+    hiddenSubtabBits: Array.repeat(0, 11),
     lastOpenTab: 0,
-    lastOpenSubtab: Array.repeat(0, 10),
+    lastOpenSubtab: Array.repeat(0, 11),
     fixedPerkStartingPos: false,
     perkPhysicsEnabled: true,
     automatorEvents: {

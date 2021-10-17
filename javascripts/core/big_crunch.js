@@ -53,6 +53,7 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
         Currency.dimensionBoosts.bumpTo(Currency.dimensionBoosts.startingValue);
         Currency.antimatterGalaxies.bumpTo(Currency.antimatterGalaxies.startingValue);
       }
+      EventHub.dispatch(GAME_EVENT.INFINITY_UPGRADE_BOUGHT);
       return true;
     }
     if (this.canCharge) {

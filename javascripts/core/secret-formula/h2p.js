@@ -4,13 +4,13 @@ GameDatabase.h2p = {
   /**
    * @template
    * {
-   *  name: {String}
-   *  alias: {String}
-   *  id: {Number}
-   *  info: {function: @return String}
-   *  isUnlocked: {function: @return Boolean}
-   *  tags: {Array: String}
-   *  tab: {String} "tab/subtab"
+   *  @property {String} name   Internal name for the tab entry
+   *  @property {String} alias  Display name for the tab; if not present, will use the internal name
+   *  @property {Number} id     Unique ID for each entry (generated in-game, not explicitly stated)
+   *  @property {function: @return String} info         Text body of information for the entry
+   *  @property {function: @return Boolean} isUnlocked  Condition for when the entry is visible and searchable
+   *  @property {Array: String} tags  List of keywords which are linked to this tab in the search function
+   *  @property {String} tab    Key of a tab+subtab combination which will default the h2p to this entry if opened
    * }
    */
   tabs: [
@@ -1442,6 +1442,8 @@ upgrade they generally give:
         result.add(match);
       }
     }
-    return Array.from(result);
+    const results = Array.from(result);
+    results.sort((a, b) => a.id - b.id);
+    return results;
   };
 }());

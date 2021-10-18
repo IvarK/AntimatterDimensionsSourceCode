@@ -591,12 +591,12 @@ let player = {
         timer: 0,
         speedUpgrades: 0
       },
-      pestilence:  {
+      pestilence: {
         amount: new Decimal(0),
         timer: 0,
         speedUpgrades: 0
       },
-      chaos:  {
+      chaos: {
         amount: new Decimal(0),
         timer: 0,
         speedUpgrades: 0
@@ -612,7 +612,8 @@ let player = {
         permanentGalaxies: 0
       },
       infinityRebuyables: [0, 0, 0],
-      ipMult: new Decimal(1)
+      ipMult: new Decimal(1),
+      progressBits: 0
     }
   },
   tabNotifications: new Set(),

@@ -178,8 +178,11 @@ GameDatabase.celestials.pelle = {
   },
   strikes: {
     infinity: {
+      id: 1,
       requirement: () => player.antimatter.gte(Number.MAX_VALUE),
-
+      requirementDescription: "Reach Infinity",
+      penaltyDescription: "Antimatter Dimensions are raised to power of 0.8",
+      rewardDescription: "Unlock Famine"
     }
   }
 };

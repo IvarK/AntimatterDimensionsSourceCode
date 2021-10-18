@@ -92,6 +92,8 @@ Vue.component("pelle-tab", {
         <pelle-currency 
           currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasChaos"/>
       </div>
+      <div class="c-pelle-strike-container">
+      </div>
       <button @click="showBoughtUpgrades = !showBoughtUpgrades">Show/Hide bought upgrades</button>
       <div class="pelle-upgrades--container">
         <pelle-upgrade v-for="upg in visibleUpgrades" :upgrade="upg" :key="upg.config.id"/>

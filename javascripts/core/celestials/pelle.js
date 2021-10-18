@@ -76,6 +76,7 @@ const Pelle = {
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff * this.armageddonSpeedModifier;
       this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
+      PelleStrikes.all.forEach(strike => strike.tryUnlockStrike());
     }
 
     if (this.isDoomed && this.armageddonInterval.lte(this.currentArmageddonDuration)) {
@@ -335,5 +336,33 @@ const PelleRebuyableUpgrade = (function() {
   return {
     all: Object.values(obj),
     ...obj
+  };
+}());
+
+class PelleStrikeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
+  }
+
+  get hasStrike() {
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.pelle.progressBits & (1 << this.id));
+  }
+
+  tryUnlockStrike() {
+    if (!this.hasProgress && this._config.requirement()) {
+      GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
+      // eslint-disable-next-line no-bitwise
+      player.celestials.pelle.progressBits |= (1 << this.id);
+    }
+  }
+}
+
+const PelleStrikes = (function() {
+  const db = GameDatabase.celestials.pelle.strikes;
+  return {
+    infinity: new PelleStrikeState(db.infinity),
+    all: Object.keys(db).map(key => db[key])
   };
 }());

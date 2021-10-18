@@ -806,7 +806,7 @@ const Player = {
           // as these requirements are only invalidated on manual infinities or eternities.
           noInfinities: true,
           noEternities: true,
-          noContinuum: !player.auto.disableContinuum,
+          noContinuum: player.auto.disableContinuum,
           maxID1: new Decimal(0),
           maxStudies: 0,
           // This only gets set to the correct value when Glyphs.updateMaxGlyphCount is called, which always happens

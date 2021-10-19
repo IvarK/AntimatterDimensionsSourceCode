@@ -96,7 +96,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000) {
+      if (this.canReality) {
         requestManualReality();
       }
     },

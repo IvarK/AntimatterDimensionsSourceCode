@@ -144,7 +144,7 @@ Vue.component("black-hole-tab", {
   template: `
     <div class="l-black-hole-tab">
       <div v-if="isEnslaved">
-        The physics of this Reality do not permit singularities.
+        The physics of this Reality disables Black Hole.
       </div>
       <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
         <black-hole-unlock-button @blackholeunlock="startAnimation" />

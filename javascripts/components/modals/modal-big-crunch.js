@@ -2,10 +2,10 @@
 
 Vue.component("modal-big-crunch", {
   data() {
-    return { 
+    return {
       gainedInfinities: gainedInfinities().round(),
       gainedInfinityPoints: gainedInfinityPoints(),
-    }; 
+    };
   },
   computed: {
     message() {
@@ -14,7 +14,7 @@ Vue.component("modal-big-crunch", {
       and ${format(this.gainedInfinities, 2, 2)} ${pluralize("Infinity", this.gainedInfinities, "Infinities")}.`;
     },
   },
-  methods: { 
+  methods: {
     update() {
       this.gainedInfinities = gainedInfinities().round();
       this.gainedInfinityPoints = gainedInfinityPoints();

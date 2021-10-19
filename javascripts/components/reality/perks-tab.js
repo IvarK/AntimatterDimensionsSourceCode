@@ -48,7 +48,7 @@ const PerkNetwork = {
     this.lastPerkNotation = notation;
 
     this.makeNetwork();
-    
+
     this.network.on("click", params => {
       const id = params.nodes[0];
       if (!isFinite(id)) return;

@@ -79,7 +79,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
       this.amount = this.amount.times(mult);
     }
   }
-  
+
   get canTick() {
     return Player.canCrunch && super.canTick;
   }

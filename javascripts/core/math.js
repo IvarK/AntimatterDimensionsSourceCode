@@ -982,7 +982,7 @@ class Vector {
   }
 
   round(factor) {
-    return new Vector(Math.round(this.x * factor) / factor, Math.round(this.y * factor) / factor);    
+    return new Vector(Math.round(this.x * factor) / factor, Math.round(this.y * factor) / factor);
   }
 
   get copy() {

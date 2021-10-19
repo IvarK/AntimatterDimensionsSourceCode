@@ -40,7 +40,7 @@ Vue.component("new-ui", {
 
       this.currentEternityChallenge = EternityChallenge.current;
       this.isInFailableEC = this.currentEternityChallenge && [4, 12].includes(this.currentEternityChallenge.id);
-      
+
       this.updateChallengePower();
 
       this.isInMatterChallenge = Player.isInMatterChallenge;

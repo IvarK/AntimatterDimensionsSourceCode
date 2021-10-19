@@ -26,7 +26,7 @@ kong.submitStats = function(name, value) {
 };
 
 class ShopPurchaseState extends RebuyableMechanicState {
-  
+
   get currency() {
     return player.IAP.totalSTD - player.IAP.spentSTD;
   }
@@ -113,19 +113,19 @@ kong.updatePurchases = function() {
     for (let i = 0; i < result.data.length; i++) {
       const item = result.data[i];
       switch (item.identifier) {
-        case "doublemult": 
-        totalSTD += 30; 
+        case "doublemult":
+        totalSTD += 30;
         break;
 
-        case "doubleip": 
+        case "doubleip":
         totalSTD += 40;
         break;
 
-        case "tripleep": 
+        case "tripleep":
         totalSTD += 50;
         break;
 
-        case "alldimboost": 
+        case "alldimboost":
         totalSTD += 60;
         break;
 
@@ -148,7 +148,7 @@ kong.updatePurchases = function() {
         case "500worthofstd":
         totalSTD += 1000;
         break;
-        
+
       }
     }
     if (player.IAP.totalSTD !== totalSTD) {

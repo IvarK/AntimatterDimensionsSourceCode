@@ -38,7 +38,7 @@ Vue.component("automator-editor", {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    modeIconClass() { 
+    modeIconClass() {
       return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code";
     },
     isTextAutomator() {

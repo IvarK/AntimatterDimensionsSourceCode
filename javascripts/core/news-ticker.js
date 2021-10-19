@@ -20,7 +20,7 @@ const NewsHandler = {
     // either not persisting outside of this function or being immediately overwritten if the props aren't specifically
     // added here for some reason (as opposed to being initialized to empty in player.js)
     if (!player.news.seen[type]) player.news.seen[type] = [];
-    
+
     // If the bit array isn't large enough (ie. the numerical ID is the largest we've seen so far by a long shot), then
     // we pad the array with zeroes until we can fit the new ID in before actually adding it.
     while (this.BITS_PER_MASK * player.news.seen[type].length <= number) player.news.seen[type].push(0);

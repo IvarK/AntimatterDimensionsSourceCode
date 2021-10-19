@@ -218,7 +218,7 @@ const BlackHoleAnimation = (function() {
       }
       const delta = time - this.lastFrame;
       this.lastFrame = time;
-      
+
       this.planet.update(this.totalPhase(), this.eccentricity, this.period);
 
       this.context.clearRect(0, 0, 400, 400);

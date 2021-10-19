@@ -17,7 +17,7 @@ class SubtabState {
   get isHidden() {
     if (Enslaved.isRunning) return false;
     // eslint-disable-next-line no-bitwise
-    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) && 
+    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) &&
       this.config.hidable;
   }
 

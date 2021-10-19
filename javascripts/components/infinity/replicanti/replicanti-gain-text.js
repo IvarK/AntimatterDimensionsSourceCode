@@ -58,13 +58,13 @@ Vue.component("replicanti-gain-text", {
         effectiveMaxRG = Replicanti.galaxies.max;
         effectiveCurrentRG = Replicanti.galaxies.bought;
       }
-      
+
       if (remainingTime === 0) {
         this.remainingTimeText = "At Infinite Replicanti";
       } else {
         this.remainingTimeText = `${TimeSpan.fromSeconds(remainingTime)} remaining until Infinite Replicanti`;
       }
-      
+
       // If the player can get RG, this text is redundant with text below.
       if (Replicanti.galaxies.max === 0) {
         this.remainingTimeText += ` (${TimeSpan.fromSeconds(totalTime)} total)`;

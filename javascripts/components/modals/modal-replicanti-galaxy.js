@@ -9,9 +9,9 @@ Vue.component("modal-replicanti-galaxy", {
   computed: {
     message() {
       return `A Replicanti Galaxy functions as a regular, standard Antimatter Galaxy would. It, however, does not 
-      increase the cost on Antimatter Galaxies. It will ${Achievement(126).isUnlocked 
+      increase the cost on Antimatter Galaxies. It will ${Achievement(126).isUnlocked
     ? `divide your Replicanti by ${format(Number.MAX_VALUE, 2, 2)} 
-    (${format(this.replicanti, 2, 2)} to ${format(this.replicanti.divide(Number.MAX_VALUE), 2, 2)})` 
+    (${format(this.replicanti, 2, 2)} to ${format(this.replicanti.divide(Number.MAX_VALUE), 2, 2)})`
     : `reset your Replicanti to ${formatInt(1)}`}.`;
     }
   },

@@ -50,7 +50,7 @@ class SingularityMilestoneState extends GameMechanicState {
     if (this.isUnique) return this.start;
     return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions + 1) - 1);
   }
-  
+
   get rawCompletions() {
     if (this.isUnique) return this.isUnlocked ? 1 : 0;
     if (!this.isUnlocked) return 0;

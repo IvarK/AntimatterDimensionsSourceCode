@@ -42,7 +42,7 @@ Vue.component("black-hole-tab", {
     sliderPropsStoring() {
       return {
         min: 0,
-        max: 1000,
+        max: 990,
         interval: 1,
         show: true,
         width: "60rem",

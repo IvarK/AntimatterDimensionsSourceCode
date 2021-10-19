@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-clean-options", {
+Vue.component("glyph-clean-button-group", {
   data() {
     return {
       glyphSacrificeUnlocked: false,

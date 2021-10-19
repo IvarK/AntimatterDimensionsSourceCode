@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-sort-options", {
+Vue.component("glyph-sort-button-group", {
   data() {
     return {
       showScoreFilter: false,

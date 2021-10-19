@@ -212,7 +212,7 @@ Vue.component("selected-effect-toggle", {
     </div>`
 });
 
-Vue.component("glyph-sacrifice-options", {
+Vue.component("glyph-filter-panel", {
   components: {
     "auto-sac-effect-tab": AutoSacEffectTab,
     "auto-sac-advanced-tab": AutoSacAdvancedTab,

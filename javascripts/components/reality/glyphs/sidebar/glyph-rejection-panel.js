@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-auto-pick-options", {
+Vue.component("glyph-rejection-panel", {
   data() {
     return {
       mode: AUTO_GLYPH_REJECT.SACRIFICE,

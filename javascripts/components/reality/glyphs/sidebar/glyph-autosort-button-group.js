@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-header", {
+Vue.component("glyph-autosort-button-group", {
   data() {
     return {
       autoSort: 0,

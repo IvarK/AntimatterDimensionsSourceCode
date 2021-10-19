@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-set-saves", {
+Vue.component("glyph-set-save-panel", {
   data() {
     return {
       hasEquipped: true,

@@ -93,7 +93,7 @@ Vue.component("glyphs-tab", {
             <glyph-levels-and-weights slot="dropdown" />
           </expanding-control-box>
           <br>
-          <glyph-tab-side-box />
+          <glyph-tab-sidebar />
         </div>
         <div class="l-player-glyphs-column">
           <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />

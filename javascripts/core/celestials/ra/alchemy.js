@@ -6,7 +6,7 @@
 class AlchemyResourceState extends GameMechanicState {
   constructor(config) {
     super(config);
-    this.ema = new ExponentialMovingAverage();
+    this.ema = new ExponentialMovingAverage(0.01, 10, 100, 0.01);
     this._before = 0;
   }
 

@@ -1376,11 +1376,14 @@ class ExponentialMovingAverage {
     if (this._average === undefined) {
       this._average = value;
     } else {
+      this._average += this.alpha * (value - this._average);
+      
       const absValue = Math.abs(value);
       const absAverage = Math.abs(this._average);
       const highOutlier = absValue > absAverage * this.highOutlierThreshold;
       const lowOutlier = absValue < absAverage * this.lowOutlierThreshold;
       const outlier = highOutlier || lowOutlier;
+      
       if (outlier) {
         this.outliers++;
         if (this.outliers >= this.maxOutliers) {
@@ -1388,7 +1391,6 @@ class ExponentialMovingAverage {
           this.outliers = 0;
         }
       } else {
-        this._average += this.alpha * (value - this._average);
         this.outliers = 0;
       }
     }

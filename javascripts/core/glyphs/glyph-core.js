@@ -42,6 +42,10 @@ const Glyphs = {
   get allGlyphs() {
     return this.inventoryList.concat(this.activeList);
   },
+  // Returns an array of inventory indices of all glyphs, with all null entries filtered out
+  get glyphIndexArray() {
+    return this.inventory.filter(g => g).map(g => g.idx);
+  },
   findFreeIndex(useProtectedSlots) {
     this.validate();
     const isUsableIndex = index => (useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots);
@@ -60,10 +64,81 @@ const Glyphs = {
   get totalSlots() {
     return 120;
   },
-  // Always ensure at least one unprotected row for new glyphs, to prevent some potentially odd-looking behavior
-  changeProtectedRows(rowsToAdd) {
-    player.reality.glyphs.protectedRows = Math.clamp(player.reality.glyphs.protectedRows + rowsToAdd, 0, 11);
+  changeProtectedRows(rowChange) {
+    // Always ensure at least one unprotected row for new glyphs, to prevent some potentially odd-looking behavior
+    const newRows = Math.clamp(player.reality.glyphs.protectedRows + rowChange, 0, this.totalSlots / 10 - 1);
+    const rowsToAdd = newRows - player.reality.glyphs.protectedRows;
+
+    if (rowsToAdd > 0) {
+      // Attempt to shift unprotected glyphs downward if there are any empty unprotected rows. The time complexity on
+      // this algorithm isn't that good, but this isn't a particularly hot path and any "smarter" algorithms likely
+      // aren't worth the reduced code readability
+      let rowsMoved = 0;
+      while (rowsMoved < rowsToAdd) {
+        // Try to shift down all the unprotected rows from top to bottom, repeating until either no shifting is
+        // possible or we've freed up the row
+        let hasMoved = false;
+        for (let orig = this.protectedSlots / 10 + rowsMoved; !hasMoved && orig < this.totalSlots / 10; orig++) {
+          hasMoved = hasMoved || this.moveGlyphRow(orig, orig + 1);
+        }
+        // No movement happened this scan; there's nothing else we can do here
+        if (!hasMoved) break;
+        // Check if the topmost unprotected row is free. This isn't necessarily guaranteed because it could come from
+        // merging lower rows, which means the empty row isn't in the right spot
+        if (!this.glyphIndexArray.some(idx => Math.floor(idx / 10) === this.protectedSlots / 10)) {
+          rowsMoved++;
+        }
+      }
+    } else if (rowsToAdd < 0) {
+      // Similar algorithm to above; we scan repeatedly over protected slots and repeatedly attempt to free up the row
+      // that's going to switch to being unprotected
+      let rowsMoved = 0;
+      while (rowsMoved < -rowsToAdd) {
+        let hasMoved = false;
+        for (let orig = this.protectedSlots / 10 - rowsMoved - 1; !hasMoved && orig > 0; orig--) {
+          hasMoved = hasMoved || this.moveGlyphRow(orig, orig - 1);
+        }
+        if (!hasMoved) break;
+        if (!this.glyphIndexArray.some(idx => Math.floor(idx / 10) === this.protectedSlots / 10 - 1)) {
+          rowsMoved++;
+          // In addition to all the protected glyph movement, we also move the entire unprotected inventory up one row
+          for (let orig = this.protectedSlots / 10 - rowsMoved; orig < this.totalSlots / 10; orig++) {
+            this.moveGlyphRow(orig, orig - 1);
+          }
+        }
+      }
+    }
+
+    player.reality.glyphs.protectedRows = newRows;
     this.validate();
+  },
+  // Move all glyphs from the origin row to the destination row, does nothing if a column-preserving move operation
+  // isn't possible. Returns a boolean indicating success/failure on glyph moving. Row is 0-indexed
+  moveGlyphRow(orig, dest) {
+    if (orig >= this.totalSlots / 10 || dest >= this.totalSlots / 10) return false;
+    if (this.glyphIndexArray.some(idx => Math.floor(idx / 10) === dest)) {
+      // Destination row has some glyphs, attempt to merge the rows
+      const hasOverlap = [...Array(10).keys()]
+        .some(col => this.inventory[10 * orig + col] !== null && this.inventory[10 * dest + col] !== null);
+      if (hasOverlap) return false;
+      for (let col = 0; col < 10; col++) {
+        const glyph = this.inventory[10 * orig + col];
+        if (glyph !== null) {
+          this.moveToSlot(glyph, 10 * dest + col);
+        }
+      }
+      this.validate();
+      return true;
+    }
+    // Destination row is empty, just move the glyphs
+    for (let col = 0; col < 10; col++) {
+      const glyph = this.inventory[10 * orig + col];
+      if (glyph !== null) {
+        this.moveToSlot(glyph, 10 * dest + col);
+      }
+    }
+    this.validate();
+    return true;
   },
   refreshActive() {
     this.active = new Array(this.activeSlotCount).fill(null);
@@ -253,7 +328,7 @@ const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
-    if (!requestedInventoryIndex) this.addNewFlag(glyph);
+    if (requestedInventoryIndex === undefined) this.addNewFlag(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -298,18 +373,16 @@ const Glyphs = {
     for (const t of Object.values(byType)) {
       t.glyphs.sort(sortFunction);
       t.padding = Math.ceil(t.glyphs.length / 10) * 10 - t.glyphs.length;
-      // Try to get a full row of padding if possible in some cases
-      if (t.padding < 5 && t.glyphs.length > 8) t.padding += 10;
       totalDesiredPadding += t.padding;
     }
+    // If we want more padding than we actually have available, trim it down until it fits
     while (totalDesiredPadding > freeSpace) {
-      // Try to remove padding 5 at a time if possible
       let biggestPadding = sortOrder[0];
       for (const t of sortOrder) {
         if (byType[t].padding > byType[biggestPadding].padding) biggestPadding = t;
       }
-      let delta = byType[biggestPadding].padding > 5 ? 5 : 1;
-      if (byType[biggestPadding].padding > 12) delta = 10;
+      // Try to remove padding 5 at a time if possible
+      const delta = byType[biggestPadding].padding > 5 ? 5 : 1;
       totalDesiredPadding -= delta;
       byType[biggestPadding].padding -= delta;
     }

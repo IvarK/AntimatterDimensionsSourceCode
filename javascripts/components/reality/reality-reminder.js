@@ -50,11 +50,15 @@ Vue.component("reality-reminder", {
       }
       return arr;
     },
+    canBeExpanded() {
+      return this.canReality && this.suggestions.length !== 0;
+    },
     styleObject() {
       let color;
-      if (!this.canReality || this.suggestions.length !== 0) color = "var(--color-bad)";
+      if (!this.canReality || this.canBeExpanded) color = "var(--color-bad)";
       else color = "var(--color-good)";
-      const height = this.isExpanded ? `${8 + 1.5 * this.suggestions.length}rem` : "6.5rem";
+      // Has both is and canBe in order to force the height back to its minimum size when all suggestions are done
+      const height = (this.canBeExpanded && this.isExpanded) ? `${8 + 1.5 * this.suggestions.length}rem` : "6.5rem";
       return {
         color,
         height,
@@ -82,7 +86,7 @@ Vue.component("reality-reminder", {
       this.availableCharges = Ra.chargesLeft;
     },
     clicked() {
-      if (!this.canReality) return;
+      if (!this.canBeExpanded) return;
       this.isExpanded = !this.isExpanded;
     },
   },

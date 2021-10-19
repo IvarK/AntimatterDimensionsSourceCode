@@ -24,6 +24,7 @@ Vue.component("modal-dimension-boost", {
       this.emitClose();
     },
     getCanBuy() {
+      if (DimBoost.purchasedBoosts < 4) return 1;
       // Code based off of dimboost.js, function maxBuyDimBoosts()
       const req1 = DimBoost.bulkRequirement(1);
       const req2 = DimBoost.bulkRequirement(2);

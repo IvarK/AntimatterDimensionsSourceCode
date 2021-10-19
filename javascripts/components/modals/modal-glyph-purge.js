@@ -5,11 +5,10 @@ Vue.component("modal-glyph-purge", {
   data() {
     return {
       glyphsDeleted: 0,
-      glyphsTotal: 0,
-      harsh: false,
     };
   },
   computed: {
+    glyphsTotal() { return Glyphs.inventory.filter(thing => thing !== null).length; },
     harsh() { return this.modalConfig.harsh; },
     extraMessage() {
       this.handleDeletion(false);

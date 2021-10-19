@@ -34,6 +34,10 @@ class PlayerProgress {
     return PlayerProgress.current.isInfinityUnlocked;
   }
 
+  static hasBroken() {
+    return player.break || this.isEternityUnlocked || this.isRealityUnlocked;
+  }
+
   static replicantiUnlocked() {
     return Replicanti.areUnlocked || this.isEternityUnlocked;
   }

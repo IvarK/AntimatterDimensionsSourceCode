@@ -7,6 +7,7 @@ Vue.component("black-hole-tab", {
       isPaused: false,
       isEnslaved: false,
       isNegativeBHUnlocked: false,
+      pauseMode: 0,
       negativeSlider: 0,
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
@@ -48,6 +49,18 @@ Vue.component("black-hole-tab", {
         tooltip: false
       };
     },
+    pauseModeString() {
+      switch (this.pauseMode) {
+        case BLACK_HOLE_PAUSE_MODE.NO_PAUSE:
+          return "Do not pause";
+        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1:
+          return this.hasBH2 ? "Before BH1" : "Before activation";
+        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH2:
+          return "Before BH2";
+        default:
+          throw new Error("Unrecognized BH offline pausing mode");
+      }
+    }
   },
   methods: {
     update() {
@@ -55,6 +68,7 @@ Vue.component("black-hole-tab", {
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
       this.isNegativeBHUnlocked = V.isFlipped && BlackHole(1).isPermanent && BlackHole(2).isPermanent;
+      this.pauseMode = player.blackHoleAutoPauseMode;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
@@ -85,6 +99,24 @@ Vue.component("black-hole-tab", {
         player.celestials.enslaved.isAutoReleasing = false;
       }
       this.update();
+    },
+    changePauseMode() {
+      let steps;
+      switch (this.pauseMode) {
+        case BLACK_HOLE_PAUSE_MODE.NO_PAUSE:
+          // Note: We don't need to check for permanent BH2 because the button disappears at that point
+          steps = BlackHole(1).isPermanent ? 2 : 1;
+          break;
+        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1:
+          steps = this.hasBH2 ? 1 : 2;
+          break;
+        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH2:
+          steps = 1;
+          break;
+        default:
+          throw new Error("Unrecognized BH offline pausing mode");
+      }
+      player.blackHoleAutoPauseMode = (this.pauseMode + steps) % Object.values(BLACK_HOLE_PAUSE_MODE).length;
     },
     adjustSliderNegative(value) {
       this.negativeSlider = value;
@@ -127,6 +159,14 @@ Vue.component("black-hole-tab", {
             @click="togglePause"
           >
             {{ isPaused ? "Resume" : "Pause" }} Black Hole
+          </button>
+          <button
+            class="o-primary-btn o-primary-btn--subtab-option"
+            style="width: 25rem;"
+            @click="changePauseMode"
+            v-if="!isPermanent"
+          >
+            Auto-pause: {{ pauseModeString }}
           </button>
         </div>
         <canvas class="c-black-hole-canvas" ref="canvas" width="400" height="400" />

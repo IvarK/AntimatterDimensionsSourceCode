@@ -54,6 +54,13 @@ const Laitela = {
   get continuumActive() {
     return this.continuumUnlocked && !player.auto.disableContinuum;
   },
+  setContinuum(x) {
+    player.auto.disableContinuum = !x;
+    // If continuum is now not disabled (i.e. is enabled) we update the relevant requirement check.
+    if (!player.auto.disableContinuum) {
+      player.requirementChecks.reality.noContinuum = false;
+    }
+  },
   get matterExtraPurchaseFactor() {
     return (1 + 0.5 * Math.pow(Decimal.pLog10(Currency.darkMatter.max) / 50, 0.4) *
       (1 + SingularityMilestone.continuumMult.effectValue));

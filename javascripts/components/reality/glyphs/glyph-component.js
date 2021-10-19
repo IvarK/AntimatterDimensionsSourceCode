@@ -320,6 +320,10 @@ Vue.component("glyph-component", {
   props: {
     glyph: Object,
     isInModal: Boolean,
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
     showSacrifice: {
       type: Boolean,
       default: false,
@@ -530,6 +534,7 @@ Vue.component("glyph-component", {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
+      Glyphs.removeNewFlag(this.glyph);
       this.tooltipLoaded = true;
       const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
       glyphInfo.type = this.glyph.type;
@@ -713,6 +718,9 @@ Vue.component("glyph-component", {
           :displayLevel="displayLevel"
           :component="componentID"
         />
+      </div>
+      <div class="l-new-glyph" v-if="isNew">
+        New!
       </div>
       <div
         ref="over"

@@ -1120,6 +1120,10 @@ GameStorage.devMigrations = {
       if (player.auto.eternity.amount.lt(0.01)) player.auto.eternity.amount = new Decimal(0);
     },
     player => {
+      player.options.hiddenSubtabBits = Array.repeat(0, 11);
+      player.options.lastOpenSubtab = Array.repeat(0, 11);
+    },
+    player => {
       const highestRefinementData = [
         { name: "power", id: ALCHEMY_RESOURCE.POWER },
         { name: "infinity", id: ALCHEMY_RESOURCE.INFINITY },

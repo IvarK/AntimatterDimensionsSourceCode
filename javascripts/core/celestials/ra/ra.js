@@ -346,7 +346,14 @@ const Ra = {
   set petWithRecollection(name) {
     player.celestials.ra.petWithRecollection = name;
   },
-  applyAlchemyReactions() {
+  updateAlchemyFlow(realityRealTime) {
+    const perSecond = 1000 / realityRealTime;
+    for (const resource of AlchemyResources.all) {
+      resource.ema.addValue((resource.amount - resource.before) * perSecond);
+      resource.before = resource.amount;
+    }
+  },
+  applyAlchemyReactions(realityRealTime) {
     if (!Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)) return;
     const sortedReactions = AlchemyReactions.all
       .compact()
@@ -354,16 +361,7 @@ const Ra = {
     for (const reaction of sortedReactions) {
       reaction.combineReagents();
     }
-  },
-  updateAlchemyFlow() {
-    // This is an exponential moving average where every change added to the sum decays away over some characteristic
-    // time span. expAvgFactor needs to be equal to the tick rate in order for the actual value over time to be
-    // independent of it, and the Math.pow() makes each contribution decay to 1/e of the original value over 5 seconds.
-    const expAvgFactor = player.options.updateRate / 1000;
-    for (const resource of AlchemyResources.all) {
-      resource.flow = Math.pow(1 - expAvgFactor, 0.2) * resource.flow + (resource.amount - resource.before);
-      resource.before = resource.amount;
-    }
+    this.updateAlchemyFlow(realityRealTime);
   },
   get alchemyResourceCap() {
     return 25000;

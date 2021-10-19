@@ -1123,6 +1123,19 @@ GameStorage.devMigrations = {
       player.options.hiddenSubtabBits = Array.repeat(0, 11);
       player.options.lastOpenSubtab = Array.repeat(0, 11);
     },
+    player => {
+      const highestRefinementData = [
+        { name: "power", id: ALCHEMY_RESOURCE.POWER },
+        { name: "infinity", id: ALCHEMY_RESOURCE.INFINITY },
+        { name: "time", id: ALCHEMY_RESOURCE.TIME },
+        { name: "replication", id: ALCHEMY_RESOURCE.REPLICATION },
+        { name: "dilation", id: ALCHEMY_RESOURCE.DILATION },
+        { name: "effarig", id: ALCHEMY_RESOURCE.EFFARIG }
+      ];
+      for (const resource of highestRefinementData) {
+        player.celestials.ra.highestRefinementValue[resource.name] = player.celestials.ra.alchemy[resource.id].amount;
+      }
+    },
   ],
 
   patch(player) {

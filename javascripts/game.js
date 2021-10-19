@@ -610,7 +610,6 @@ function gameLoop(passDiff, options = {}) {
   laitelaRealityTick(realDiff);
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
-  Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);

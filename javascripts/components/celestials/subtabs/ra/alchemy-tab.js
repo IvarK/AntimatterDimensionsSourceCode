@@ -237,7 +237,7 @@ Vue.component("alchemy-tab", {
       Glyphs can now be refined using your Glyph filter in the Glyphs tab.
       <br>
       When refining a Glyph, it will only give you resources up to a cap
-      of {{ formatX(capFactor) }} its refinement value.
+      of {{ formatX(capFactor) }} its highest refinement value.
       <span v-if="reactionsAvailable">
         Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>

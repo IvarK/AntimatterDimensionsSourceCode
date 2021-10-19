@@ -1205,27 +1205,26 @@ use up your glyphs by refining them into alchemy resources associated with their
 kind of a boost to certain parts of the game based on how much of them you have.
 <br>
 <br>
-The amount of a resource you get from a glyph is based on the cube of the glyph's level, scaled so that level
-${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single glyph itself,
-however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this maximum value, and
-also can't give you more resources than the cap. This cap is applied per glyph, and you will never lose resources
-when you try to refine a glyph.
-<br>
-(This calculation applies for perfect ${formatPercents(1)}
-rarity glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
+In addition to all their other properties, Glyphs now have a <i>refinement value</i> which determines how much of
+its associated alchemy resource it is worth. This value is based on the cube of the glyph's level, scaled
+so that level ${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single Glyph itself,
+however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this value when refined.
+These are values for ${formatPercents(1)} rarity Glyphs; Glyphs of lower rarity still have the same cap but give
+proportionally less resources. For example, a ${formatPercents(0.5)} rarity Glyph will give only half as much.
 <br>
 <br>
-As an example of how the cap works, a level ${formatInt(10000)} glyph is worth
-${formatInt(10000 * GlyphSacrificeHandler.glyphRefinementEfficiency)} resources normally, but will be worth less if you
-already have at least ${formatInt(10000 * (1 - GlyphSacrificeHandler.glyphRefinementEfficiency))} of that resource
-(bringing you up to a maximum of ${formatInt(10000)} after refinement). The glyph is worth nothing at all if you
-already have ${formatInt(10000)} resources or more, as that is the cap for level ${formatInt(10000)} glyphs.
+Alchemy resources cannot be gained indefinitely; there is a per-resource cap which is based on the highest refinement
+value of all the Glyphs of that type you have refined. For example, if the highest level Time Glyph you have refined
+is level ${formatInt(8000)} (alchemy value: ${formatInt(GlyphSacrificeHandler.levelRefinementValue(8000))}), then no
+matter how many Time Glyphs you refine, you can never have more than
+${formatInt(GlyphSacrificeHandler.levelRefinementValue(8000))} of the Time resource until you refine another Time Glyph
+with a higher refinement value.
 <br>
 <br>
 Alchemy resources can be combined together in certain combinations in order to create new compound resources, which
 are unlocked at certain Effarig levels. Resources are combined once per Reality, unaffected by real time
-amplification. The amount of compound resources you can have after a reaction is limited to the amount of the reagents
-that go into it, which means all of your resources are ultimately limited by your glyph level.
+amplification. Reactions have a higher yield and thus happen faster when your reagent amounts are higher. The cap for
+compound resources is equal to the lowest cap amongst all of its reagents.
 <br>
 <br>
 To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can

@@ -48,7 +48,7 @@ function bigCrunchReset() {
   bigCrunchCheckUnlocks();
 
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-  if (firstInfinity) Modal.message(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
+  if (firstInfinity) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
   Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that
   you can find in the Infinity tab. Also, you gained an Infinitied stat, which is the stat shown in the Statistics 
   tab.`);
@@ -302,7 +302,7 @@ function disChargeAll() {
 }());
 
 // The repeatable 2xIP upgrade has an odd cost structure - it follows a shallow exponential (step *10) up to e3M, at
-// which point it follows a steeper one (step *1e10) up to e6M before finally hardcapping. At the hardcap, there's 
+// which point it follows a steeper one (step *1e10) up to e6M before finally hardcapping. At the hardcap, there's
 // an extra bump that increases the multipler itself from e993k to e1M. All these numbers are specified in
 // GameDatabase.infinity.upgrades.ipMult
 class InfinityIPMultUpgrade extends GameMechanicState {

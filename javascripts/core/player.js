@@ -395,7 +395,7 @@ let player = {
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,
-    showSidebarPanel: 0,
+    showSidebarPanel: GLYPH_SIDEBAR_MODE.INVENTORY_MANAGEMENT,
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,

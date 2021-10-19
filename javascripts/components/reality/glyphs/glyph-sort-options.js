@@ -25,6 +25,8 @@ Vue.component("glyph-sort-options", {
   },
   template: `
     <div>
+      Sort Glyphs:
+      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="Arranges by decreasing level×rarity"

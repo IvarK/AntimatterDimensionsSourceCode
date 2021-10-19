@@ -60,6 +60,8 @@ Vue.component("glyph-clean-options", {
   },
   template: `
     <div v-if="glyphSacrificeUnlocked">
+      Remove weaker Glyphs:
+      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         :ach-tooltip="autoCleanTooltip"

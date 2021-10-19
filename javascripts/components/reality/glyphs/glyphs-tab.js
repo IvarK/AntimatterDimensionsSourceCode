@@ -62,7 +62,6 @@ Vue.component("glyphs-tab", {
   },
   template: `
     <div>
-      <glyph-header />
       <div class="l-glyphs-tab">
         <div class="l-reality-button-column">
           <glyph-peek />
@@ -94,7 +93,6 @@ Vue.component("glyphs-tab", {
             <glyph-levels-and-weights slot="dropdown" />
           </expanding-control-box>
           <br>
-          <glyph-clean-options />
           <glyph-tab-side-box />
         </div>
         <div class="l-player-glyphs-column">

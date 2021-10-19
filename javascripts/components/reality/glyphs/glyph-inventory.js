@@ -75,13 +75,6 @@ Vue.component("glyph-inventory", {
   template: `
     <div class="l-glyph-inventory">
       Click and drag or double-click to equip Glyphs.
-      <br>
-      The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows") }}
-      of slots are protected slots and are unaffected by anything which
-      <br>
-      may move or delete Glyphs. New Glyphs will never be inserted into these slots.
-      <glyph-protected-row-options />
-      <glyph-sort-options />
       <div
         v-for="row in rowCount"
         class="l-glyph-inventory__row"
@@ -110,9 +103,20 @@ Vue.component("glyph-inventory", {
 });
 
 Vue.component("glyph-protected-row-options", {
+  data() {
+    return {
+      protectedRows: 0,
+    };
+  },
+  computed: {
+    questionmarkTooltip() {
+      return `Protected slots are unaffected by anything which may move or delete Glyphs.
+        New Glyphs will never be inserted into these slots.`;
+    }
+  },
   methods: {
     update() {
-      this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
+      this.protectedRows = player.reality.glyphs.protectedRows;
     },
     addRow() {
       Glyphs.changeProtectedRows(1);
@@ -123,6 +127,9 @@ Vue.component("glyph-protected-row-options", {
   },
   template: `
     <div>
+      <div class="c-glyph-sacrifice-options__option--active o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
+      Protected Slots: ({{ format(protectedRows, 2) }} {{ "row" | pluralize(protectedRows, "rows") }})
+      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="One row is permanently un-protected for new glyphs"

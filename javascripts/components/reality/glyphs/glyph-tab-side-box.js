@@ -5,6 +5,7 @@ Vue.component("glyph-tab-side-box", {
   data() {
     return {
       type: 0,
+      sidebarEnum: {},
       unlockedFilter: false,
       unlockedSets: false,
       unlockedAlchemy: false,
@@ -15,9 +16,11 @@ Vue.component("glyph-tab-side-box", {
   methods: {
     update() {
       this.type = player.reality.showSidebarPanel;
+      this.sidebarEnum = GLYPH_SIDEBAR_MODE;
       this.unlockedFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.unlockedSets = EffarigUnlock.setSaves.isUnlocked;
       this.unlockedAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      // We always have inventory management available, but there's no point in showing options if it's the only one
       this.unlockedAny = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
       this.hasRefined = AlchemyResources.all.map(res => res.amount).some(a => a > 0);
     },
@@ -26,7 +29,7 @@ Vue.component("glyph-tab-side-box", {
     }
   },
   template: `
-    <div v-if="unlockedAny">
+    <div>
       <div class="l-glyph-side-box-position">
         <div
           class="l-glyph-side-box-button-position"
@@ -34,15 +37,21 @@ Vue.component("glyph-tab-side-box", {
         >
           <button
             class="l-glyph-side-box-button c-reality-upgrade-btn"
+            @click="setSidebarState(sidebarEnum.INVENTORY_MANAGEMENT)"
+          >
+            Manage Inventory
+          </button>
+          <button
+            class="l-glyph-side-box-button c-reality-upgrade-btn"
             v-if="unlockedFilter"
-            @click="setSidebarState(0)"
+            @click="setSidebarState(sidebarEnum.FILTER_SETTINGS)"
           >
             Glyph Filter
           </button>
           <button
             class="l-glyph-side-box-button c-reality-upgrade-btn"
             v-if="unlockedSets"
-            @click="setSidebarState(1)"
+            @click="setSidebarState(sidebarEnum.SAVED_SETS)"
           >
             Glyph Set Saves
           </button>
@@ -50,14 +59,15 @@ Vue.component("glyph-tab-side-box", {
             class="l-glyph-side-box-button c-reality-upgrade-btn"
             :class="[hasRefined ? '' : 'l-glyph-side-box-button--attention']"
             v-if="unlockedAlchemy"
-            @click="setSidebarState(2)"
+            @click="setSidebarState(sidebarEnum.SACRIFICE_TYPE)"
           >
             Sacrifice Type
           </button>
         </div>
       </div>
-      <glyph-sacrifice-options v-if="type===0 && unlockedFilter" />
-      <glyph-set-saves v-else-if="type===1 && unlockedSets" />
-      <glyph-auto-pick-options v-if="type===2 && unlockedAlchemy" />
+      <glyph-sidebar-inventory-management v-if="type === sidebarEnum.INVENTORY_MANAGEMENT" />
+      <glyph-sacrifice-options v-else-if="type === sidebarEnum.FILTER_SETTINGS && unlockedFilter" />
+      <glyph-set-saves v-else-if="type === sidebarEnum.SAVED_SETS && unlockedSets" />
+      <glyph-auto-pick-options v-else-if="type === sidebarEnum.SACRIFICE_TYPE && unlockedAlchemy" />
     </div>`
 });

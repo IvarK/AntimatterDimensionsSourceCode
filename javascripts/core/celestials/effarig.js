@@ -188,11 +188,11 @@ class EffarigUnlockState extends GameMechanicState {
         break;
       case EffarigUnlock.glyphFilter:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_GLYPH_FILTER);
-        player.reality.showSidebarPanel = 0;
+        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.FILTER_SETTINGS;
         break;
       case EffarigUnlock.setSaves:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_SET_SAVES);
-        player.reality.showSidebarPanel = 1;
+        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.SAVED_SETS;
         break;
       case EffarigUnlock.run:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);

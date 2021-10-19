@@ -8,7 +8,7 @@ class CustomEffect extends Effect {
    * @param {effectValueCallback} cap - Callback used to calculate the effect's maximum value or constant numeric maximum value
    */
   constructor(name, effect, condition, cap) {
-    super(effect, condition, cap);
+    super(effect, cap, condition);
     if (!name) {
       return;
     }

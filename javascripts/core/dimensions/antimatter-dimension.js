@@ -11,7 +11,7 @@ const AntimatterDimensionCommonMultiplier = new EffectScope("Antimatter Dimensio
         )).addPowers(
           new CustomEffect(
             "Infinity Power Conversion Rate",
-            getInfinityConversionRate
+            InfinityDimensions.powerConversionRate
           )
       );
       scoped.condition = () => !EternityChallenge(9).isRunning;
@@ -59,7 +59,7 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
         "EC11",
         () =>
           player.infinityPower.pow(
-            getInfinityConversionRate()
+            InfinityDimensions.powerConversionRate
           ).max(1).times(DimBoost.multiplierToNDTier(tier)),
         () => EternityChallenge(11).isRunning
       ),
@@ -153,7 +153,6 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       new CustomEffect(
         "Infinity Challenge 4",
         () => InfinityChallenge(4).effectValue,
-        undefined,
         () => InfinityChallenge(4).isRunning && player.postC4Tier !== tier
       ),
       InfinityChallenge(4).reward,
@@ -166,13 +165,11 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       new CustomEffect(
         "V Dimension Power",
         () => V_UNLOCKS.ND_POW.effect(),
-        undefined,
         () => V.has(V_UNLOCKS.ND_POW)
       ),
       new CustomEffect(
         "Dilation Glyph Power",
         () => getAdjustedGlyphEffect("dilationpow"),
-        undefined,
         () => player.dilation.active
       )
     );
@@ -193,13 +190,12 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       new CustomEffect(
         "V Celestial Penalty",
         () => 0.5,
-        undefined,
         () => V.isRunning
       ),
       new CustomEffect(
         "Alchemy Inflation",
         () => 1.05,
-        () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)
+        () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && scope.value.gte(AlchemyResource.inflation.effectValue)
       )
     );
 

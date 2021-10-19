@@ -1,6 +1,6 @@
 "use strict";
 
-class EffectScope {
+class EffectScope extends CustomEffect{
 
   /**
    * Intialization callback for an Effect Scope
@@ -14,15 +14,75 @@ class EffectScope {
    */
 
   constructor(name, initFn) {
-    this._name = name;
+    super(name, () => this.value, () => this.initialized && this.condition())
     this._initFn = initFn || (() => this);
     this._effects = {};
     this._dependency = 0;
     this._eval = [];
-    this._value = new Decimal(0);
     this._base = new Decimal(1);
     this._conditional = () => true;
     EffectScopes.add(this);
+  }
+
+  _init() {
+    if (!this._initFn) return this;
+    this._initFn(this);
+    for (const name in this._effects) {
+      this._effects[name].forEach(effect => {
+        if (effect instanceof EffectScope) {
+          effect._init();
+          this._dependency = Math.max(this._dependency, effect._dependency + 1);
+        }
+      });
+    }
+
+    Object.defineProperty(this, "effects", {
+        configurable: false,
+        writable: false,
+        value: this._effects
+    });
+    delete this._effects;
+
+    Object.defineProperty(this, "base", {
+      configurable: false,
+      writable: false,
+      enumerable: true,
+      value: this._base,
+    });
+    this.cachedValue = this._base;
+
+    delete this._base;
+
+    Object.defineProperty(this, "eval", {
+      configurable: false,
+      writable: false,
+      value: this._eval,
+    })
+
+    delete this._eval;
+
+    Object.defineProperty(this, "condition", {
+      configurable: false,
+      writable: false,
+      value: this._conditional,
+    });
+
+    delete this._conditional;
+
+    Object.defineProperty(this, "value", {
+      configurable: false,
+      get: () => this.cachedValue
+    })
+
+    Object.defineProperty(this, "initialized", {
+      configurable: false,
+      writable: false,
+      value: true
+    })
+
+    delete this._initFn;
+
+    return this;
   }
 
   /**
@@ -44,22 +104,6 @@ class EffectScope {
     this._conditional = callback;
   }
 
-  get base() {
-    return this._base;
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  get value() {
-    return this._value;
-  }
-
-  get effects() {
-    return this._effects;
-  }
-
   get validEffects() {
     return Object.fromEntries(
       Object.entries(this.effects).map(([operation, effects]) =>
@@ -70,15 +114,6 @@ class EffectScope {
       ).filter(([, effects]) => effects.length > 0)
     );
   }
-
-  get effectValue() {
-    return this._value;
-  }
-
-  get canBeApplied() {
-    return this._conditional();
-  }
-
 
   /**
    * @param {EFFECT_TYPE} type
@@ -136,31 +171,10 @@ class EffectScope {
     return this._addEffects(EFFECT_TYPE.DILATIONS, effects);
   }
 
-  _init() {
-    if (!this._initFn) return this;
-    this._initFn(this);
-    for (const name in this._effects) {
-      this._effects[name].forEach(effect => {
-        if (effect instanceof EffectScope) {
-          effect._init();
-          this._dependency = Math.max(this._dependency, effect._dependency + 1);
-        }
-      });
-    }
-    delete this._initFn;
-
-    return this;
-  }
-
   update() {
-    if (this._initFn) return this;
-    this._value = this._eval.reduce((val, applyFn) => applyFn(val), this._base).clampMin(this._base);
+    if (!this.initialized) return this;
+    this.cachedValue = this.eval.reduce((val, applyFn) => applyFn(val), this.base).clampMin(this.base);
     return this;
-  }
-
-  applyEffect(applyFn) {
-    if (!this.initFn && this._conditional())
-      applyFn(this.value);
   }
 }
 
@@ -171,6 +185,7 @@ const EffectScopes = (function() {
   const _init = () => {
     scopeList.forEach(scope => scope._init());
     compiled = scopeList.sort((a, b) => a._dependency - b._dependency);
+    scopeList.forEach(scope => delete scope._dependency)
     init = true;
   };
   const _update = () => {

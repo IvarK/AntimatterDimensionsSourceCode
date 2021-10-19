@@ -30,22 +30,29 @@ Vue.component("multiplier-breakdown", {
     scope() {
       return EffectScopes.all[this.id];
     },
-    multipliers() {
-      return EFFECT_TYPE.MULTIPLIERS in this.scope.validEffects ? this.scope.validEffects.MULTIPLIERS : [];
-    },
-    powers() {
-      return EFFECT_TYPE.POWERS in this.scope.validEffects ? this.scope.validEffects.POWERS : [];
+    orderedEffects() {
+      const effectScope = this.scope;
+      return effectScope.effectOrder.filter(
+        effect =>
+          effect.type in effectScope.validEffects && effectScope.validEffects[effect.type].includes(effect.effect)
+      );
     },
     name() {
       return this.scope.name;
     },
     total() {
       return this.displayValue;
+    },
+    base() {
+      return format(this.scope.base, 2, 2);
     }
   },
   methods: {
     toggleExpand() {
       this.expand = !this.expand;
+    },
+    runningTotalUntil(effect) {
+      return this.scope.applyEffectsUntil(effect)
     }
   },
   template: `
@@ -55,24 +62,19 @@ Vue.component("multiplier-breakdown", {
           <drop-down :shown.sync="expand" />
           <span> {{name}} </span>
         </div>
-        <div class="c-multiplier-tab-row-value" v-if="!expand"> {{total}}  </div>
-      </div>
+        <slot>
+          <div class="c-multiplier-tab-row-value" v-if="!expand"> {{total}}  </div></slot>
+        </div>
       <transition name="expandMulti">
         <div class="c-multiplier-tab-breakdown" v-if="expand">
           <multiplier-row
-            v-for="(multiplier, i) in multipliers"
-            :key="'m' + i"
-            :effect="multiplier"
-            operation="MULTIPLIERS"
-          />
-          <multiplier-row
-            v-for="(power, i) in powers"
-            :key="'p' + i"
-            :effect="power"
-            operation="POWERS"
+            v-for="effect in orderedEffects"
+            :key="effect.id"
+            :effect="effect.effect"
+            :total="runningTotalUntil(effect)"
+            :operation="effect.type"
           />
           </div>
       </transition>
-      <h3 v-if="expand"> TOTAL MULTIPLIER </h3>
     </div>`
 });

@@ -16,9 +16,11 @@ class EffectScope extends CustomEffect{
   constructor(name, initFn) {
     super(name, () => this.value, () => this.initialized && this.condition())
     this._initFn = initFn || (() => this);
+    this._effectOrder = [];
     this._effects = {};
     this._dependency = 0;
     this._eval = [];
+    this._overrides = [];
     this._base = new Decimal(1);
     this._conditional = () => true;
     EffectScopes.add(this);
@@ -36,12 +38,25 @@ class EffectScope extends CustomEffect{
       });
     }
 
+    if (this._overrides.length > 0) {
+      this._eval.push(...this._overrides);
+    }
+    delete this._overrides
+
     Object.defineProperty(this, "effects", {
         configurable: false,
         writable: false,
         value: this._effects
     });
     delete this._effects;
+
+    Object.defineProperty(this, "effectOrder", {
+      configurable: false,
+      writable: false,
+      value: this._effectOrder
+    });
+
+    delete this._effectOrder;
 
     Object.defineProperty(this, "base", {
       configurable: false,
@@ -105,6 +120,9 @@ class EffectScope extends CustomEffect{
   }
 
   get validEffects() {
+    let override = this.effects[EFFECT_TYPE.OVERRIDES].find(effect => effect.canBeApplied)
+    if (override)
+      return Object.fromEntries([[EFFECT_TYPE.OVERRIDES, [override]]]);
     return Object.fromEntries(
       Object.entries(this.effects).map(([operation, effects]) =>
         [operation, effects.filter(effect =>
@@ -121,7 +139,7 @@ class EffectScope extends CustomEffect{
    */
 
   _addEffects(type, effects) {
-    if (!this._initFn) return this;
+    if (this.initialized) return this;
     const ApplyFn = {
       OVERRIDES: (val, eff) => Effects.last(val, ...eff.reverse()),
       ADDENDS: (val, eff) => val.plusEffectsOf(...eff),
@@ -131,8 +149,18 @@ class EffectScope extends CustomEffect{
       POWERS: (val, eff) => val.powEffectsOf(...eff),
       DILATIONS: (val, eff) => val.dilateByEffectsOf(...eff)
     };
+    if (type == EFFECT_TYPE.OVERRIDES)
+      this._overrides.push(val => ApplyFn[type](val, effects));
+    else
+      this._eval.push(val => ApplyFn[type](val, effects));
 
-    this._eval.push(val => ApplyFn[type](val, effects));
+    this._effectOrder.push(...effects.map((effect, idx) => {
+      return {
+        effect,
+        type,
+        id: this._effectOrder.length + idx,
+      }
+    }, this));
 
     if (this._effects[type]) {
       this._effects[type].push(...effects);
@@ -175,6 +203,28 @@ class EffectScope extends CustomEffect{
     if (!this.initialized) return this;
     this.cachedValue = this.eval.reduce((val, applyFn) => applyFn(val), this.base).clampMin(this.base);
     return this;
+  }
+
+  effectInScope(effect) {
+    return this.effectOrder.some(oEff => oEff === effect)
+  }
+
+  applyEffectsUntil(effect) {
+    if (!this.effectInScope(effect))
+      return this.base;
+     const ApplyFn =  {
+        OVERRIDES: (val, eff) => Effects.last(val, eff),
+        ADDENDS: (val, eff) => val.plusEffectsOf(eff),
+        SUBTRAHENDS: (val, eff) => val.minusEffectsOf(eff),
+        DIVISORS: (val, eff) => val.dividedByEffectsOf(eff),
+        MULTIPLIERS: (val, eff) => val.timesEffectsOf(eff),
+        POWERS: (val, eff) => val.powEffectsOf(eff),
+        DILATIONS: (val, eff) => val.dilateByEffectsOf(eff)
+     }
+    let lastId = effect.id;
+    return this.effectOrder.reduce((val, effect) =>
+      effect.id <= lastId ? ApplyFn[effect.type](val, effect.effect) : val, this.base
+    );
   }
 }
 

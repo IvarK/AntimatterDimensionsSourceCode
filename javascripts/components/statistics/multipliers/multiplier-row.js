@@ -4,6 +4,7 @@ Vue.component("multiplier-row", {
   props: {
     effect: Object,
     operation: String,
+    total: Object
   },
   data() {
     return {
@@ -23,6 +24,9 @@ Vue.component("multiplier-row", {
         DILATIONS: val => `~${format(val, 2, 2)}`,
       };
       return SYM[this.operation](this.value);
+    },
+    displayTotal() {
+      return format(this.total, 2, 2)
     }
   },
   methods: {
@@ -37,10 +41,12 @@ Vue.component("multiplier-row", {
   },
   template: `
     <div class="c-multiplier-tab-row">
-      <multiplier-breakdown v-if="innerId > -1" :id="innerId" :operation="operation" />
+      <multiplier-breakdown v-if="innerId > -1" :id="innerId" :operation="operation">
+        <div class="c-multiplier-tab-row-value"> {{ displayValue }} Total: {{ displayTotal }}</div>
+      </multiplier-breakdown>
       <div class="c-multiplier-tab-row-entry" v-else>
         <div class="c-multiplier-tab-row-name">{{ name }}</div>
-        <div class="c-multiplier-tab-row-value"> {{ displayValue }}       TOTAL VALUE</div>
+        <div class="c-multiplier-tab-row-value"> {{ displayValue }} Total: {{ displayTotal }}</div>
       </div>
     </div>`
 });

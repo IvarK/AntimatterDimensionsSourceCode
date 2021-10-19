@@ -51,7 +51,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
+    Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
     GameUI.notify.info("Game loaded");
   },
 
@@ -60,7 +60,7 @@ const GameStorage = {
       return;
     }
     const player = GameSaveSerializer.deserialize(saveData);
-    if (!this.verifyPlayerObject(player)) {
+    if (this.checkPlayerObject(player) !== "") {
       Modal.message.show("Could not load the save");
       return;
     }
@@ -85,8 +85,47 @@ const GameStorage = {
     this.save(true);
   },
 
-  verifyPlayerObject(save) {
-    return save !== undefined && save !== null && (save.money !== undefined || save.antimatter !== undefined);
+  // Some minimal save verification; if the save is valid then this returns an empty string, otherwise it returns a
+  // a string roughly stating what's wrong with the save. In order for importing to work properly, this must return
+  // an empty string.
+  checkPlayerObject(save) {
+    if (save === undefined || save === null) return "Save is empty";
+    // Right now all we do is check for the existence of an antimatter prop, but if we wanted to do further save
+    // verification then here's where we'd do it
+    if (save.money === undefined && save.antimatter === undefined) return "Save does not have antimatter property";
+
+    // Recursively check for any NaN props and add any we find to an array
+    const invalidProps = [];
+    function checkNaN(obj, path) {
+      let hasNaN = false;
+      for (const key in obj) {
+        const prop = obj[key];
+        let thisNaN;
+        switch (typeof prop) {
+          case "object":
+            thisNaN = checkNaN(prop, `${path}.${key}`);
+            hasNaN = hasNaN || thisNaN;
+            break;
+          case "number":
+            thisNaN = Number.isNaN(prop);
+            hasNaN = hasNaN || thisNaN;
+            if (thisNaN) invalidProps.push(`${path}.${key}`);
+            break;
+          case "string":
+            // If we're attempting to import, all NaN entries will still be strings
+            thisNaN = prop === "NaN";
+            hasNaN = hasNaN || thisNaN;
+            if (thisNaN) invalidProps.push(`${path}.${key}`);
+            break;
+        }
+      }
+      return hasNaN;
+    }
+    checkNaN(save, "player");
+
+    if (invalidProps.length === 0) return "";
+    return `${invalidProps.length} NaN player ${pluralize("property", invalidProps.length, "properties")} found:
+      ${invalidProps.join(", ")}`;
   },
 
   save(silent = false, manual = false) {
@@ -129,10 +168,13 @@ const GameStorage = {
   loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
     this.saved = 0;
 
-    if (
-      playerObject === Player.defaultStart ||
-      !this.verifyPlayerObject(playerObject)
-    ) {
+    const checkString = this.checkPlayerObject(playerObject);
+    if (playerObject === Player.defaultStart || checkString !== "") {
+      if (checkString !== "") {
+        // TODO Probably remove this before release, it's mostly only helpful for debugging in development
+        // eslint-disable-next-line no-console
+        console.log(`Savefile was invalid and has been reset - ${checkString}`);
+      }
       player = deepmerge.all([{}, Player.defaultStart]);
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();

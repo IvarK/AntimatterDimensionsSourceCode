@@ -2366,7 +2366,7 @@ GameDatabase.news = [
   {
     id: "l21",
     text: "I've got 1.79e308 problems, but none of them antimatter.",
-    get unlocked() { return Currency.infinities.gt(0) && !player.break; }
+    get unlocked() { return Currency.infinities.gt(0) && !PlayerProgress.hasBroken(); }
   },
   {
     id: "l22",

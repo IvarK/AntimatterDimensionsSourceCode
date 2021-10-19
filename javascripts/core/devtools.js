@@ -113,7 +113,7 @@ dev.fixSave = function() {
   const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
   const fixed = save.replace(/NaN/gui, "10");
   const saveData = JSON.parse(fixed);
-  if (!saveData || !GameStorage.verifyPlayerObject(saveData)) {
+  if (!saveData || GameStorage.checkPlayerObject(saveData) !== "") {
     Modal.message.show("Could not fix the save.");
     return;
   }

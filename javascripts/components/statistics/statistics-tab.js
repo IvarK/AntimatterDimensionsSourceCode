@@ -41,7 +41,6 @@ Vue.component("statistics-tab", {
         bestRarity: 0,
       },
       matterScale: [],
-      recordGlyphInfo: [],
     };
   },
   computed: {
@@ -118,24 +117,6 @@ Vue.component("statistics-tab", {
         reality.thisReal.setFrom(records.thisReality.realTime);
         reality.bestRate.copyFrom(bestReality.RMmin);
         reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
-
-        this.recordGlyphInfo = [
-          [true, Glyphs.copyForRecords(bestReality.RMminSet),
-            `Best Reality Machines per minute: ${format(bestReality.RMmin, 2, 2)} RM/min`],
-          [true, Glyphs.copyForRecords(bestReality.glyphLevelSet),
-            `Best Glyph level: ${formatInt(bestReality.glyphLevel)}`],
-          [true, Glyphs.copyForRecords(bestReality.bestEPSet),
-            `Best Eternity Points: ${format(bestReality.bestEP, 2, 2)} Eternity Points`],
-          [true, Glyphs.copyForRecords(bestReality.speedSet),
-            `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
-          [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
-            `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`],
-          [Currency.imaginaryMachines.gt(0), Glyphs.copyForRecords(bestReality.iMCapSet),
-            `Imaginary Machine Cap: ${format(player.reality.iMCap, 2, 2)} iM`],
-          [Laitela.isUnlocked, Glyphs.copyForRecords(bestReality.laitelaSet),
-            `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
-        ];
-
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
     },
@@ -148,9 +129,9 @@ Vue.component("statistics-tab", {
       <div>
         <div class="c-stats-tab-general">General</div>
         <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
-        <div>You have played for {{ realTimePlayed }}.</div>
+        <div>You have played for {{ realTimePlayed }}. (real time)</div>
         <div v-if="reality.isUnlocked">
-          Your existence has spanned {{ reality.totalTimePlayed }} of time.
+          Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
         </div>
         <div>
           You have seen {{ formatInt(totalNews) }}
@@ -246,13 +227,6 @@ Vue.component("statistics-tab", {
         </div>
         <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
         <br>
-      <glyph-set-preview
-        v-for="(set, idx) in recordGlyphInfo"
-        :key="idx"
-        :show="set[0]"
-        :glyphs="set[1]"
-        :text="set[2]"
-      />
       </div>
     </div>`
 });

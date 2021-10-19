@@ -9,7 +9,8 @@ Vue.component("infinity-upgrades-tab", {
       disCharge: false,
       ipMultSoftCap: 0,
       ipMultHardCap: 0,
-      eternityUnlocked: false
+      eternityUnlocked: false,
+      bottomRowUnlocked: false
     };
   },
   watch: {
@@ -63,6 +64,7 @@ Vue.component("infinity-upgrades-tab", {
       this.ipMultSoftCap = GameDatabase.infinity.upgrades.ipMult.costIncreaseThreshold;
       this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
       this.eternityUnlocked = PlayerProgress.current.isEternityUnlocked;
+      this.bottomRowUnlocked = Achievement(41).isUnlocked;
     },
     btnClassObject(column) {
       const classObject = {
@@ -106,14 +108,14 @@ Vue.component("infinity-upgrades-tab", {
           />
         </div>
       </div>
-      <div class="l-infinity-upgrades-bottom-row">
+      <div class="l-infinity-upgrades-bottom-row" v-if="bottomRowUnlocked">
         <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
         <infinity-upgrade-button
           :upgrade="offlineIpUpgrade"
           :class="btnClassObject(1)"
         />
       </div>
-      <div v-if="eternityUnlocked">
+      <div v-if="eternityUnlocked && bottomRowUnlocked">
         The Infinity Point multiplier becomes more expensive
         <br>
         above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points, and cannot be purchased past

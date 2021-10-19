@@ -5,8 +5,8 @@ Vue.component("game-header-big-crunch-button", {
     return {
       isVisible: false,
       gainedIP: new Decimal(0),
-      currentIPPM: new Decimal(0),
-      peakIPPM: new Decimal(0),
+      currentIPRate: new Decimal(0),
+      peakIPRate: new Decimal(0),
       currentIP: new Decimal(0),
       tesseractAffordable: false,
       canCrunch: false,
@@ -22,12 +22,13 @@ Vue.component("game-header-big-crunch-button", {
         "o-infinity-button--unavailable": !this.canCrunch
       };
     },
-    peakIPPMThreshold: () => new Decimal("1e100"),
-    isPeakIPPMVisible() {
-      return this.peakIPPM.lte(this.peakIPPMThreshold);
+    // Show IP/min below this threshold, color the IP number above it
+    rateThreshold: () => 1e100,
+    showIPRate() {
+      return this.peakIPRate.lte(this.rateThreshold);
     },
     amountStyle() {
-      if (!this.headerTextColored || this.currentIP.lt(1e50)) return {};
+      if (!this.headerTextColored || this.currentIP.lt(this.rateThreshold)) return {};
       if (this.hover) return {
         color: "black",
         "transition-duration": "0.2s"
@@ -59,9 +60,9 @@ Vue.component("game-header-big-crunch-button", {
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(Currency.infinityPoints);
       this.gainedIP.copyFrom(gainedIP);
-      this.peakIPPM.copyFrom(player.records.thisInfinity.bestIPmin);
-      if (this.isPeakIPPMVisible) {
-        this.currentIPPM.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
+      if (this.showIPRate) {
+        this.currentIPRate.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
+        this.peakIPRate.copyFrom(player.records.thisInfinity.bestIPmin);
       }
       this.tesseractAffordable = Tesseracts.canBuyTesseract;
     },
@@ -98,19 +99,19 @@ Vue.component("game-header-big-crunch-button", {
 
       <!-- Can Crunch -->
       <template v-else>
-        <div v-if="!isPeakIPPMVisible"></div>
+        <div v-if="!showIPRate" />
         <b>
           Big Crunch for
-          <span :style="amountStyle">{{ format(gainedIP, 2, 0) }}</span>
+          <span :style="amountStyle">{{ format(gainedIP, 2) }}</span>
           Infinity {{ "Point" | pluralize(gainedIP) }}.
         </b>
-        <template v-if="isPeakIPPMVisible">
+        <template v-if="showIPRate">
           <br>
-          {{ format(currentIPPM, 2, 0) }} IP/min
+          {{ format(currentIPRate, 2) }} IP/min
           <br>
-          Peaked at {{ format(peakIPPM, 2, 0) }} IP/min
+          Peaked at {{ format(peakIPRate, 2) }} IP/min
         </template>
-        <div v-else></div>
+        <div v-else />
       </template>
     </button>
 

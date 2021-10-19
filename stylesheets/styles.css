@@ -595,7 +595,7 @@ button:focus {
 
 .l-reality-button {
   display: block;
-  margin-bottom: 2rem;
+  padding: 1.2rem;
 }
 
 .l-reality-button__contents {
@@ -624,6 +624,18 @@ button:focus {
 
 .c-reality-button--special {
   animation: a-celstial-reward-glow 3s infinite;
+}
+
+.c-reality-reminder {
+  border: 0.1rem solid #b8b8b8;
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  margin-top: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 0;
+  width: 35rem;
+  height: 18rem;
 }
 
 @keyframes a-celstial-reward-glow {
@@ -671,7 +683,7 @@ button:focus {
 
 .l-reset-reality-button {
   display: block;
-  margin-bottom: 2rem;
+  margin: 1rem;
 }
 
 .c-reset-reality-button {
@@ -6689,6 +6701,7 @@ kbd {
 
 .s-base--metro .c-ra-upgrade-bar {
   border-width: 0.1rem;
+  height: 2.625rem;
 }
 
 .c-ra-upgrade-bar__inner {
@@ -6946,27 +6959,32 @@ kbd {
   background: grey;
   color: black;
   border: .2rem solid black;
+  border-right: 0;
   border-radius: 1rem;
   font-size: 1.3rem;
   transition-duration: 0.2s;
   position: relative;
-  margin-right: -0.2rem;
 }
 
 .s-base--metro .c-ra-pet-upgrade {
   border-radius: 0;
   border-width: 0.1rem;
-  margin-right: -0.1rem;
+  height: 2.625rem;
 }
 
 .c-ra-pet-upgrade__right,
 .c-ra-pet-upgrade__top {
-  margin-left: -0.2rem;
+  margin-bottom: -0.1rem;
+}
+
+.c-ra-pet-upgrade__bottom {
+  margin-top: -0.1rem;
 }
 
 .s-base--metro .c-ra-pet-upgrade__right,
 .s-base--metro .c-ra-pet-upgrade__top {
-  margin-left: -0.1rem;
+  margin-top: 0.1rem;
+  margin-bottom: -0.05rem;
 }
 
 .c-ra-pet-upgrade__tooltip {
@@ -8036,7 +8054,7 @@ kbd {
 .l-reality-button-column {
   display: flex;
   flex-direction: column;
-  padding-top: 5rem;
+  padding-top: 1rem;
   align-items: center;
   margin-right: 2rem;
 }
@@ -8044,7 +8062,7 @@ kbd {
 .l-player-glyphs-column {
   display: flex;
   flex-direction: column;
-  padding-top: 2rem;
+  padding-top: 1rem;
   justify-content: flex-start;
 }
 

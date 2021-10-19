@@ -76,6 +76,12 @@ const GlyphRarities = [
   },
 ];
 
+const BLACK_HOLE_PAUSE_MODE = {
+  NO_PAUSE: 0,
+  PAUSE_BEFORE_BH1: 1,
+  PAUSE_BEFORE_BH2: 2,
+};
+
 const AUTO_SORT_MODE = {
   NONE: 0,
   POWER: 1,

@@ -67,8 +67,7 @@ Vue.component("ra-pet-level-bar", {
         case "Teresa":
           return Math.min(12, Math.floor(this.level / 2)) !== Math.min(12, Math.floor((this.level + 1) / 2));
         case "Effarig":
-          return AlchemyResources.all.filter(
-            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1).length > 0;
+          return AlchemyResources.all.filter(res => res.unlockedAt === this.level + 1).length > 0;
         case "Enslaved":
           return true;
         case "V":
@@ -78,18 +77,15 @@ Vue.component("ra-pet-level-bar", {
       }
     },
     nextScalingUpgrade() {
+      const effarigAlchemyResource = AlchemyResources.all.filter(res => res.unlockedAt === this.level + 1)[0];
       switch (this.pet.name) {
         case "Teresa":
           return "You can charge an additional Infinity Upgrade";
         case "Effarig":
-          return `Unlock the ${AlchemyResources.all.filter(
-            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-          )[0]._config.name} resource in Glyph Alchemy, which ${AlchemyResources.all.filter(
-            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-          )[0]._config.description}`;
+          return `Unlock the ${effarigAlchemyResource.name} resource in Glyph Alchemy, which
+          ${effarigAlchemyResource.description}`;
         case "Enslaved":
-          return `+${formatFloat(0.01, 2)} to stored game time power,
-            and you can store an additional hour of real time`;
+          return `${formatX(20)} to stored game time, and you can store an additional hour of real time`;
         case "V":
           return "You can purchase an additional Triad Study";
         default:
@@ -118,16 +114,16 @@ Vue.component("ra-pet-level-bar", {
     timeToGoalString(expToGain) {
       const pet = this.pet;
       // Quadratic formula for growth (uses constant growth for a = 0)
-      const a = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
-      const b = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
+      const a = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
+      const b = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
       const c = -expToGain;
       const estimate = a === 0
         ? -c / b
         : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
-        if (Number.isFinite(estimate)) {
-          return `in ${TimeSpan.fromSeconds(estimate).toStringShort(false)}`;
-        }
-        return "";
+      if (Number.isFinite(estimate)) {
+        return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
+      }
+      return "";
     },
   },
   template: `
@@ -141,7 +137,9 @@ Vue.component("ra-pet-level-bar", {
       >
         <span class="fas fa-arrow-up"></span>
         <div class="c-ra-pet-upgrade__tooltip">
-          <div class="c-ra-pet-upgrade__tooltip__name">Level {{ pet.name }} to {{ formatInt(this.level + 1) }}</div>
+          <div class="c-ra-pet-upgrade__tooltip__name">
+            Level {{ pet.name }} to {{ formatInt(this.level + 1) }}
+          </div>
           <div class="c-ra-pet-upgrade__tooltip__description">
             {{ reward }}
             <div v-if="showNextScalingUpgrade" :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }">
@@ -154,6 +152,5 @@ Vue.component("ra-pet-level-bar", {
           </div>
         </div>
       </div>
-    </div>
-  `
+    </div>`
 });

@@ -23,9 +23,18 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
     return ReplicantiUpgrade[this._upgradeName].autobuyerMilestone.isReached;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
+
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
     const upgradeName = this._upgradeName;
     if (EternityChallenge(8).isRunning) return;
+    super.tick();
     ReplicantiUpgrade[upgradeName].autobuyerTick();
   }
 }
@@ -34,3 +43,4 @@ ReplicantiUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new Rep
 
 Autobuyer.replicantiUpgrade = upgrade => ReplicantiUpgradeAutobuyerState.index[upgrade - 1];
 Autobuyer.replicantiUpgrade.array = ReplicantiUpgradeAutobuyerState.index;
+Autobuyer.replicantiUpgrade.array.name = "Replicanti Upgrade";

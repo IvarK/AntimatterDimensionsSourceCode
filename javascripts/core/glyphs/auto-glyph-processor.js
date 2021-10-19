@@ -21,6 +21,7 @@ const AutoGlyphProcessor = {
   // on only the glyph itself and not external factors.
   filterValue(glyph) {
     const typeCfg = this.types[glyph.type];
+    if (glyph.type === "cursed") return -Infinity;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
         // Picked glyphs are never kept in this mode
@@ -51,7 +52,9 @@ const AutoGlyphProcessor = {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
-        const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
+        // This ternary check is required to filter out the additional effects given by Ra-Enslaved 25, which don't
+        // exist in the glyph filter settings. It can be safely ignored since the effect is always given.
+        const effectScore = effectList.map(e => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0)).sum();
         return strengthToRarity(glyph.strength) + effectScore;
       }
       // Picked glyphs are never kept in Alchemy modes.
@@ -112,11 +115,11 @@ const AutoGlyphProcessor = {
         GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
         break;
       case AUTO_GLYPH_REJECT.REFINE:
-        GlyphSacrificeHandler.refineGlyph(glyph);
+        GlyphSacrificeHandler.attemptRefineGlyph(glyph, true);
         break;
       case AUTO_GLYPH_REJECT.REFINE_TO_CAP:
         if (GlyphSacrificeHandler.glyphRefinementGain(glyph) === 0) GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
-        else GlyphSacrificeHandler.refineGlyph(glyph);
+        else GlyphSacrificeHandler.attemptRefineGlyph(glyph, true);
         break;
       default:
         throw new Error("Unknown auto Glyph Sacrifice mode");
@@ -127,11 +130,11 @@ const AutoGlyphProcessor = {
 function autoAdjustGlyphWeights() {
   const sources = getGlyphLevelSources();
   const f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
-  const totalWeight = Object.values(sources).map(f).sum();
-  player.celestials.effarig.glyphWeights.ep = 100 * f(sources.epBase) / totalWeight;
-  player.celestials.effarig.glyphWeights.repl = 100 * f(sources.replBase) / totalWeight;
-  player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dtBase) / totalWeight;
-  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eterBase) / totalWeight;
+  const totalWeight = Object.values(sources).map(s => f(s.value)).sum();
+  player.celestials.effarig.glyphWeights.ep = 100 * f(sources.ep.value) / totalWeight;
+  player.celestials.effarig.glyphWeights.repl = 100 * f(sources.repl.value) / totalWeight;
+  player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dt.value) / totalWeight;
+  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eternities.value) / totalWeight;
 }
 
 function getGlyphLevelSources() {
@@ -139,22 +142,48 @@ function getGlyphLevelSources() {
   // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
   // in getGlyphLevelInputs. These *Base values are the nominal inputs, as they would be multiplied without Effarig
   const eternityPoints = Player.canEternity
-    ? player.eternityPoints.plus(gainedEternityPoints())
-    : player.eternityPoints;
-  const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()) / 4000, 0.5);
-  // @ts-ignore
+    ? Currency.eternityPoints.value.plus(gainedEternityPoints())
+    : Currency.eternityPoints.value;
+  const epCoeff = 0.016;
+  const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()), 0.5) * epCoeff;
   const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
-  // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
-  // factors assigned to repl and dt can be arbitrarily tuned
-  const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
+  const replCoeff = 0.025;
+  const replBase = Math.pow(Math.max(1, player.records.thisReality.maxReplicanti.log10()), replPow) * replCoeff;
   const dtPow = 1.3 + getAdjustedGlyphEffect("realityDTglyph");
-  const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.pLog10()), dtPow) * 0.02514867;
+  const dtCoeff = 0.025;
+  const dtBase = Math.pow(Math.max(1, player.records.thisReality.maxDT.pLog10()), dtPow) * dtCoeff;
   const eterBase = Effects.max(1, RealityUpgrade(18));
-  return { epBase, replBase, dtBase, eterBase };
+  return {
+    ep: {
+      name: "EP",
+      value: epBase,
+      coeff: epCoeff,
+      exp: 0.5,
+    },
+    repl: {
+      name: "Replicanti",
+      value: replBase,
+      coeff: replCoeff,
+      exp: replPow,
+    },
+    dt: {
+      name: "DT",
+      value: dtBase,
+      coeff: dtCoeff,
+      exp: dtPow,
+    },
+    eternities: {
+      name: "Eternities",
+      value: eterBase,
+      // These are copied from Reality Upgrade 18's gameDB entry
+      coeff: 0.45,
+      exp: 0.5,
+    }
+  };
 }
 
 function getGlyphLevelInputs() {
-  const { epBase, replBase, dtBase, eterBase } = getGlyphLevelSources();
+  const sources = getGlyphLevelSources();
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -182,15 +211,21 @@ function getGlyphLevelInputs() {
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
   const weights = player.celestials.effarig.glyphWeights;
-  const adjustFactor = (input, weight) =>
-    (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
-  const epEffect = adjustFactor(epBase, weights.ep / 100);
-  const replEffect = adjustFactor(replBase, weights.repl / 100);
-  const dtEffect = adjustFactor(dtBase, weights.dt / 100);
-  const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
+  const adjustFactor = (source, weight) => {
+    const input = source.value;
+    const powEffect = Math.pow(4 * weight, blendExp);
+    source.value = (input > 0 ? Math.pow(input * preScale, powEffect) / preScale : 0);
+    source.coeff = Math.pow(preScale, powEffect - 1) * Math.pow(source.coeff, powEffect);
+    source.exp *= powEffect;
+  };
+  adjustFactor(sources.ep, weights.ep / 100);
+  adjustFactor(sources.repl, weights.repl / 100);
+  adjustFactor(sources.dt, weights.dt / 100);
+  adjustFactor(sources.eternities, weights.eternities / 100);
   const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
   const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
-  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect + shardFactor;
+  let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
+    perkShopEffect + shardFactor;
 
   const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.isUnlocked
     ? SingularityMilestone.glyphLevelFromSingularities.effectValue
@@ -224,15 +259,16 @@ function getGlyphLevelInputs() {
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {
-    epEffect,
-    replEffect,
-    dtEffect,
-    eterEffect,
+    ep: sources.ep,
+    repl: sources.repl,
+    dt: sources.dt,
+    eter: sources.eternities,
     perkShop: perkShopEffect,
     scalePenalty,
     rowFactor,
     achievementFactor,
     shardFactor,
+    singularityEffect,
     rawLevel: baseLevel,
     actualLevel: Math.max(1, scaledLevel),
     capped: levelCapped

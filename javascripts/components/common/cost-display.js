@@ -53,7 +53,6 @@ Vue.component("cost-display", {
   template: `
     <span v-if="isVisible">
       <br v-if="br">
-      {{title}} {{costDisplay}} {{singular | pluralize(cost, plural)}}
-    </span>
-  `
+      {{ title }} {{ costDisplay }} {{ singular | pluralize(cost, plural) }}
+    </span>`
 });

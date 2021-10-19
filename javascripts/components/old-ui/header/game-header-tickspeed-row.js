@@ -28,7 +28,7 @@ Vue.component("game-header-tickspeed-row", {
       return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -55,34 +55,39 @@ Vue.component("game-header-tickspeed-row", {
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(Tickspeed.cost);
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
-      this.tickspeed.copyFrom(Tickspeed.current);
+      this.tickspeed.copyFrom(Tickspeed.perSecond);
       this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
-  template:
-    `<div :class="classObject">
-      <div>{{multiplierDisplay}}</div>
+  template: `
+    <div :class="classObject">
+      <div>{{ multiplierDisplay }}</div>
       <div>
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
           :style="{ width: isContinuumActive ? '25rem' : ''}"
-          onclick="buyTickSpeed()">
-            <span v-if="isContinuumActive">Continuum: {{continuumString}}</span>
-            <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
-            <span v-else>{{format(cost)}}<br></span>
+          onclick="buyTickSpeed()"
+        >
+          <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
+          <span v-else-if="showCostTitle">Cost: {{ format(cost) }}</span>
+          <span v-else>{{ format(cost) }}<br></span>
         </primary-button>
         <primary-button
           v-if="!isContinuumActive"
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"
-          onclick="buyMaxTickSpeed()">
-            Buy Max
+          onclick="buyMaxTickSpeed()"
+        >
+          Buy Max
         </primary-button>
       </div>
-      <div>{{tickspeedDisplay}} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></div>
+      <div>
+        {{ tickspeedDisplay }}
+        <game-header-gamespeed-display v-if="!isGameSpeedNormal" />
+      </div>
     </div>`
 });

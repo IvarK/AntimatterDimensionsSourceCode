@@ -2,8 +2,7 @@
 
 Vue.component("secret-achievement", {
   props: {
-    row: Number,
-    column: Number
+    achievement: Object
   },
   data() {
     return {
@@ -12,17 +11,17 @@ Vue.component("secret-achievement", {
     };
   },
   computed: {
-    achId() {
-      return this.row * 10 + this.column;
+    id() {
+      return this.achievement.id;
     },
-    achievement() {
-      return SecretAchievement(this.achId);
+    config() {
+      return this.achievement.config;
     },
     styleObject() {
-      if (this.isUnlocked) {
-        return { "background-position": `-${(this.column - 1) * 104}px -${(this.row - 1) * 104}px` };
+      return this.isUnlocked ? {
+        "background-position": `-${(this.achievement.column - 1) * 104}px -${(this.achievement.row - 1) * 104}px`
       }
-      return {};
+        : {};
     },
     classObject() {
       return {
@@ -44,33 +43,43 @@ Vue.component("secret-achievement", {
       };
     },
   },
-  created() {
-    this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
-    this.updateState();
-  },
   methods: {
-    updateState() {
+    update() {
       this.isUnlocked = this.achievement.isUnlocked;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
     },
+    onMouseEnter() {
+      clearTimeout(this.mouseOverInterval);
+      this.isMouseOver = true;
+    },
+    onMouseLeave() {
+      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
+    },
     onClick() {
-      if (this.achId === 11 && !this.isUnlocked) {
+      if (this.id === 11 && !this.isUnlocked) {
         SecretAchievement(11).unlock();
       }
     }
   },
-  template:
-    `<div
+  template: `
+    <div
       :class="classObject"
       :style="styleObject"
-      @click="onClick">
-      <hint-text type="achievements" class="l-hint-text--achievement">S{{row}}{{column}}</hint-text>
+      @click="onClick"
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
+    >
+      <hint-text type="achievements" class="l-hint-text--achievement">
+        S{{ id }}
+      </hint-text>
       <div class="o-achievement__tooltip">
-        <div class="o-achievement__tooltip__name">{{ this.achievement.config.name }} ({{ achId }})</div>
-        <div v-if="this.isUnlocked" class="o-achievement__tooltip__description">
-          {{ this.achievement.config.description }}
+        <div class="o-achievement__tooltip__name">
+          {{ config.name }} (S{{ id }})
+        </div>
+        <div v-if="isUnlocked" class="o-achievement__tooltip__description">
+          {{ config.description }}
         </div>
       </div>
       <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>
-     </div>`
+    </div>`
 });

@@ -32,6 +32,10 @@ Vue.component("glyph-set-name", {
       ],
     };
   },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
+    this.sortGlyphList();
+  },
   computed: {
     setName() {
       this.sortGlyphList();
@@ -166,6 +170,7 @@ Vue.component("glyph-set-name", {
       return this.mainGlyphName.color;
     },
     textStyle() {
+      this.$recompute("mainGlyphName");
       // If you have the player option to not show color enabled, and this isn't a special case forcing color, return {}
       if (!this.isColored && !this.forceColor) return {};
       // Otherwise, lets set the shadow to be 4, each offset to a different corner, and bluring by 1px,
@@ -179,10 +184,6 @@ Vue.component("glyph-set-name", {
         animation: this.mainGlyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     }
-  },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
-    this.sortGlyphList();
   },
   methods: {
     update() {

@@ -10,15 +10,6 @@ Vue.component("effarig-unlock-button", {
       isAvailable: false
     };
   },
-  methods: {
-    update() {
-      this.isBought = this.unlock.isUnlocked;
-      this.isAvailable = Effarig.shardAmount >= this.unlock.cost;
-    },
-    purchase() {
-      this.unlock.purchase();
-    }
-  },
   computed: {
     config() {
       return this.unlock.config;
@@ -31,9 +22,18 @@ Vue.component("effarig-unlock-button", {
       };
     }
   },
+  methods: {
+    update() {
+      this.isBought = this.unlock.isUnlocked;
+      this.isAvailable = Currency.relicShards.gte(this.unlock.cost);
+    },
+    purchase() {
+      this.unlock.purchase();
+    }
+  },
   template: `
     <button :class="classObject" @click="purchase">
-      <description-display :config="config"/>
+      <description-display :config="config" />
       <cost-display
         v-if="!isBought"
         :config="config"

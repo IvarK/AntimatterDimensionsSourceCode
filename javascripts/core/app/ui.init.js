@@ -6,16 +6,10 @@ let ui = {
     modal: {
       queue: [],
       current: undefined,
-      cloudConflicts: [],
-      glyphSelection: false,
+      cloudConflict: [],
       progressBar: undefined,
     },
     tabs: {
-      dimensions: {
-        antimatter: {
-          floatingText: Array.from({ length: 9 }, () => [])
-        },
-      },
       reality: {
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
@@ -25,6 +19,12 @@ let ui = {
           id: 0,
           type: "",
           sacrificeValue: 0,
+        },
+        mouseoverGlyphInfo: {
+          id: 0,
+          type: "",
+          sacrificeValue: 0,
+          refineValue: 0,
         },
         automator: {
           fullScreen: false,
@@ -46,7 +46,8 @@ let ui = {
     news: false,
     initialized: false,
     tutorialState: 0,
-    tutorialActive: true
+    tutorialActive: true,
+    h2pForcedTab: undefined,
   },
   notationName: "",
   formatPreBreak: false,

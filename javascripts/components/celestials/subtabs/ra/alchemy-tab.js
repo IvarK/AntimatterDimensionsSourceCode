@@ -77,8 +77,9 @@ Vue.component("alchemy-tab", {
       focusedResourceId: -1,
       reactionsAvailable: false,
       realityCreationVisible: false,
-      reactionProgress: 0,
-      estimatedCap: 0,
+      animationTimer: 0,
+      alchemyCap: 0,
+      capFactor: 0,
     };
   },
   computed: {
@@ -103,9 +104,9 @@ Vue.component("alchemy-tab", {
     update() {
       this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationVisible = Ra.pets.effarig.level === 25;
-      const animationTime = 800;
-      this.reactionProgress = (player.records.realTimePlayed % animationTime) / animationTime;
-      this.estimatedCap = estimatedAlchemyCap();
+      this.animationTimer += 35;
+      this.alchemyCap = Ra.alchemyResourceCap;
+      this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -164,8 +165,10 @@ Vue.component("alchemy-tab", {
       const xEnd = reactionArrow.product.x;
       const yEnd = reactionArrow.product.y;
       const pathLength = Math.sqrt(Math.pow(xEnd - xStart, 2) + Math.pow(yEnd - yStart, 2));
-      const leadPoint = Math.max(0, this.reactionProgress - 3 / pathLength);
-      const trailPoint = Math.min(1, this.reactionProgress + 3 / pathLength);
+      const animationTime = pathLength * 40;
+      const reactionProgress = (this.animationTimer % animationTime) / animationTime;
+      const leadPoint = Math.max(0, reactionProgress + 2 / pathLength);
+      const trailPoint = Math.min(1, reactionProgress - 2 / pathLength);
       return {
         x1: `${xStart * (1 - leadPoint) + xEnd * leadPoint}%`,
         y1: `${yStart * (1 - leadPoint) + yEnd * leadPoint}%`,
@@ -186,6 +189,7 @@ Vue.component("alchemy-tab", {
         "o-alchemy-reaction-path": this.isUnlocked(reactionArrow),
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
+        "o-alchemy-reaction-path--not-focused": !this.isFocusedReaction(reactionArrow) && this.focusedResourceId !== -1
       };
     },
     reactionArrowClass(reactionArrow) {
@@ -197,7 +201,6 @@ Vue.component("alchemy-tab", {
     showAlchemyHowTo() {
       ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Glyph Alchemy")[0];
       Modal.h2p.show();
-      ui.view.h2pActive = true;
     },
     toggleAllReactions() {
       const reactions = AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);
@@ -226,10 +229,15 @@ Vue.component("alchemy-tab", {
           v-if="realityCreationVisible"
           class="o-primary-btn--subtab-option"
           onclick="Modal.realityGlyph.show()"
-        >View Reality Glyph creation</primary-button>
+        >
+          View Reality Glyph creation
+        </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Your Alchemy Resource cap, based on the Glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.
+      Glyphs can now be refined using your Glyph filter in the Glyphs tab.
+      <br>
+      When refining a Glyph, it will only give you resources up to a cap
+      of {{ formatX(capFactor) }} its refinement value.
       <span v-if="reactionsAvailable">
         Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>

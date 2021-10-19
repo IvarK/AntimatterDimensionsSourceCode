@@ -18,7 +18,7 @@ Vue.component("eternity-autobuyer-box", {
     modes: () => [
       AUTO_ETERNITY_MODE.AMOUNT,
       AUTO_ETERNITY_MODE.TIME,
-      AUTO_ETERNITY_MODE.X_CURRENT,
+      AUTO_ETERNITY_MODE.X_HIGHEST,
     ]
   },
   methods: {
@@ -43,10 +43,10 @@ Vue.component("eternity-autobuyer-box", {
             type: "float"
           },
         };
-        case AUTO_ETERNITY_MODE.X_CURRENT: return {
-          title: "X times current EP",
+        case AUTO_ETERNITY_MODE.X_HIGHEST: return {
+          title: "X times highest EP",
           input: {
-            property: "xCurrent",
+            property: "xHighest",
             type: "decimal"
           },
         };
@@ -59,21 +59,23 @@ Vue.component("eternity-autobuyer-box", {
       this.mode = mode;
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Eternity">
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" name="Automatic Eternity">
       <template slot="intervalSlot">
         <select
           v-if="hasAdditionalModes"
           class="c-autobuyer-box__mode-select"
           @change="changeMode"
-          >
+        >
           <option
             v-for="optionMode in modes"
             :value="optionMode"
             :selected="mode === optionMode"
-          >{{modeProps(optionMode).title}}</option>
+          >
+            {{ modeProps(optionMode).title }}
+          </option>
         </select>
-        <span v-else>{{modeProps(mode).title}}:</span>
+        <span v-else>{{ modeProps(mode).title }}:</span>
       </template>
       <template slot="toggleSlot">
         <autobuyer-input
@@ -82,13 +84,13 @@ Vue.component("eternity-autobuyer-box", {
           v-bind="modeProps(mode).input"
         />
       </template>
-      <template slot="prioritySlot" style="margin-top: 1.2rem;">
+      <template slot="checkboxSlot" style="margin-top: 1.2rem;">
         <span>Dynamic amount:</span>
         <div
-            class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-            @click="increaseWithMult = !increaseWithMult"
-          >
-          <input type="checkbox" :checked="increaseWithMult"/>
+          class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+          @click="increaseWithMult = !increaseWithMult"
+        >
+          <input type="checkbox" :checked="increaseWithMult" />
         </div>
       </template>
     </autobuyer-box>`

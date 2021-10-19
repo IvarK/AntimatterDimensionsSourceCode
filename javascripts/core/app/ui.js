@@ -68,7 +68,7 @@ Vue.mixin({
 function makeRecomputable(watcher, key, recomputed) {
   const original = watcher.getter;
   recomputed[key] = true;
-  
+
   // eslint-disable-next-line no-sequences
   watcher.getter = vm => (recomputed[key], original.call(vm, vm));
 }
@@ -166,7 +166,8 @@ const UIID = (function() {
   const vTooltip = VTooltip.VTooltip.options;
   vTooltip.defaultClass = "general-tooltip";
   vTooltip.popover.defaultBaseClass = "general-tooltip";
-  vTooltip.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
+  vTooltip.defaultTemplate =
+    '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
 }());
 
 (function() {
@@ -217,7 +218,7 @@ ui = new Vue({
           this.view.tabs.reality.currentGlyphTooltip = -1;
           document.removeEventListener("click", GameUI.globalClickListener);
           GameUI.globalClickListener = null;
-        }
+        };
         document.addEventListener("click", GameUI.globalClickListener);
       } else if (newVal === -1 && GameUI.globalClickListener) {
         document.removeEventListener("click", GameUI.globalClickListener);
@@ -232,4 +233,3 @@ ui = new Vue({
   },
   template: "<game-ui />"
 });
-

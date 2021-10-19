@@ -74,11 +74,21 @@ class VRunUnlockState extends GameMechanicState {
     }
 
     while (this.completions < this.config.values.length &&
-      Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
-        if (!V.isFlipped && this.config.isHard) continue;
-        this.completions++;
-        GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
-        V.updateTotalRunUnlocks();
+    Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+      if (!V.isFlipped && this.config.isHard) continue;
+      this.completions++;
+      GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
+
+      for (const quote of Object.values(V.quotes)) {
+        // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
+        if (quote.requirement && quote.requirement()) {
+          // TODO If multiple quotes show up simultaneously, this only seems to actually show one of them and skips the
+          // rest. This might be related to the modal stacking issue
+          V.quotes.show(quote);
+        }
+      }
+
+      V.updateTotalRunUnlocks();
     }
   }
 }
@@ -99,17 +109,9 @@ const VRunUnlocks = {
 const V_UNLOCKS = {
   V_ACHIEVEMENT_UNLOCK: {
     id: 0,
-    reward: "Fully unlocks V, The Celestial Of Achievements",
+    reward: "Unlock V, The Celestial Of Achievements",
     description: "Meet all the above requirements simultaneously",
-    requirement: () => {
-      const db = GameDatabase.celestials.v.mainUnlock;
-      return (player.realities >= db.realities &&
-              player.eternities.gte(db.eternities) &&
-              player.infinitied.plus(player.infinitiedBank).gte(db.infinities) &&
-              player.dilation.dilatedTime.gte(db.dilatedTime) &&
-              player.replicanti.amount.gte(db.replicanti) &&
-              player.reality.realityMachines.gte(db.rm));
-    }
+    requirement: () => Object.values(GameDatabase.celestials.v.mainUnlock).every(e => e.progress() >= 1)
   },
   SHARD_REDUCTION: {
     id: 1,
@@ -127,11 +129,11 @@ const V_UNLOCKS = {
   },
   FAST_AUTO_EC: {
     id: 3,
-    reward: "Achievement multiplier affects Auto-EC completion time.",
+    reward: "Achievement multiplier reduces Auto-EC completion time.",
     get description() { return `Have ${formatInt(10)} V-Achievements`; },
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each
-    format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort(false)} for full completion`,
+    format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`,
     requirement: () => V.spaceTheorems >= 10
   },
   AUTO_AUTOCLEAN: {
@@ -157,17 +159,12 @@ const V_UNLOCKS = {
 };
 
 const V = {
+  displayName: "V",
   spaceTheorems: 0,
   checkForUnlocks() {
-
-    if (!V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.requirement()) {
-      // eslint-disable-next-line no-bitwise
-      player.celestials.v.unlockBits |= (1 << V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id);
-      GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
-    }
-
     for (const key of Object.keys(V_UNLOCKS)) {
       const unl = V_UNLOCKS[key];
+      if (unl.id === V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id) continue;
       if (unl.requirement() && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise
         player.celestials.v.unlockBits |= (1 << unl.id);
@@ -185,6 +182,15 @@ const V = {
       Ra.checkForUnlocks();
     }
   },
+  get canUnlockCelestial() {
+    return V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.requirement();
+  },
+  unlockCelestial() {
+    // eslint-disable-next-line no-bitwise
+    player.celestials.v.unlockBits |= (1 << V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id);
+    GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
+    V.quotes.show(V.quotes.UNLOCK);
+  },
   has(info) {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.v.unlockBits & (1 << info.id));
@@ -192,11 +198,7 @@ const V = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.v.run = true;
-    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
-    if (!BlackHoles.areNegative) {
-      player.minNegativeBlackHoleThisReality = 1;
-    }
-    Glyphs.updateGlyphCountForV(true);
+    this.quotes.show(this.quotes.REALITY_ENTER);
   },
   updateTotalRunUnlocks() {
     let sum = 0;
@@ -210,13 +212,13 @@ const V = {
     player.celestials.v = {
       unlockBits: 0,
       run: false,
+      quotes: [],
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      maxGlyphsThisRun: 0
     };
     this.spaceTheorems = 0;
   },
@@ -238,4 +240,99 @@ const V = {
   nextHardReductionCost(currReductionSteps) {
     return 1000 * Math.pow(1.15, currReductionSteps);
   },
+  quotes: new CelestialQuotes("v", {
+    INITIAL: CelestialQuotes.singleLine(
+      1, "How pathetic..."
+    ),
+    UNLOCK: {
+      id: 2,
+      lines: [
+        "Welcome to my Reality.",
+        "I'm surprised you could reach it.",
+        "This is my realm after all...",
+        "Not everyone is as great as me.",
+      ]
+    },
+    REALITY_ENTER: {
+      id: 3,
+      lines: [
+        "Good luck with that!",
+        "You'll need it.",
+        "My reality is flawless. You will fail.",
+      ]
+    },
+    REALITY_COMPLETE: {
+      id: 4,
+      lines: [
+        "So fast...",
+        "Don't think so much of yourself.",
+        "This is just the beginning.",
+        "You will never be better than me.",
+      ]
+    },
+    ACHIEVEMENT_1: {
+      id: 5,
+      requirement: () => V.spaceTheorems >= 1,
+      lines: [
+        "Only one? Pathetic.",
+        "Your accomplishments pale in comparison to mine.",
+      ]
+    },
+    ACHIEVEMENT_6: {
+      id: 6,
+      requirement: () => V.spaceTheorems >= 6,
+      lines: [
+        "This is nothing.",
+        "Don't be so full of yourself.",
+      ]
+    },
+    HEX_1: {
+      id: 7,
+      requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 1,
+      lines: [
+        "Don't think it'll get any easier from now on.",
+        "You're awfully proud for such a little achievement.",
+      ]
+    },
+    ACHIEVEMENT_12: {
+      id: 8,
+      requirement: () => V.spaceTheorems >= 12,
+      lines: [
+        "How did you...",
+        "This barely amounts to anything!",
+        "You will never complete them all.",
+      ]
+    },
+    ACHIEVEMENT_24: {
+      id: 9,
+      requirement: () => V.spaceTheorems >= 24,
+      lines: [
+        "Impossible...",
+        "After how difficult it was for me...",
+      ]
+    },
+    HEX_3: {
+      id: 10,
+      requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 3,
+      lines: [
+        "No... No... No...",
+        "This can't be...",
+      ]
+    },
+    ALL_ACHIEVEMENTS: {
+      id: 11,
+      requirement: () => V.spaceTheorems >= 36,
+      lines: [
+        "I... how did you do it...",
+        "I worked so hard to get them...",
+        "I am the greatest...",
+        "No one is better than me...",
+        "No one... no one... no on-",
+      ]
+    }
+  }),
 };
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.v.isOpen) V.quotes.show(V.quotes.INITIAL);
+});

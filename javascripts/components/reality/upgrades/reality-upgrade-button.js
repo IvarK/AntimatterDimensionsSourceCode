@@ -15,6 +15,11 @@ Vue.component("reality-upgrade-button", {
       isAutobuyerOn: false
     };
   },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
+    }
+  },
   computed: {
     config() {
       return this.upgrade.config;
@@ -33,11 +38,6 @@ Vue.component("reality-upgrade-button", {
       };
     }
   },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
-    }
-  },
   methods: {
     update() {
       const upgrade = this.upgrade;
@@ -46,7 +46,7 @@ Vue.component("reality-upgrade-button", {
       this.isRebuyable = upgrade.isRebuyable;
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
-      this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES);
+      this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC);
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
     }
   },
@@ -57,10 +57,13 @@ Vue.component("reality-upgrade-button", {
         class="l-reality-upgrade-btn c-reality-upgrade-btn"
         @click="upgrade.purchase()"
       >
-        <hint-text type="realityUpgrades"
-          class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade">{{config.name}}
+        <hint-text
+          type="realityUpgrades"
+          class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
+        >
+          {{ config.name }}
         </hint-text>
-        <description-display :config="config"/>
+        <description-display :config="config" />
         <description-display
           v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
           :config="requirementConfig"
@@ -83,6 +86,5 @@ Vue.component("reality-upgrade-button", {
         text="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
-    </div>
-  `
+    </div>`
 });

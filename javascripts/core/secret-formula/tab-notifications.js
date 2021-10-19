@@ -60,7 +60,7 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && player.infinityPoints.gte(1e140),
+      !PlayerProgress.eternityUnlocked() && Currency.infinityPoints.gte(1e140),
     events: [GAME_EVENT.BIG_CRUNCH_AFTER]
   },
   firstEternity: {
@@ -116,18 +116,18 @@ GameDatabase.tabNotifications = {
         tab: "hole"
       }
     ],
-    condition: () => !BlackHoles.areUnlocked && player.reality.realityMachines.gte(100),
+    condition: () => !BlackHoles.areUnlocked && Currency.realityMachines.gte(100),
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
     id: 9,
     tabsToHighLight: [
       {
-        parent: "reality",
+        parent: "automation",
         tab: "automator"
       }
     ],
-    condition: () => player.realities === 5,
+    condition: () => Currency.realities.eq(5),
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   teresaUnlock: {
@@ -135,14 +135,29 @@ GameDatabase.tabNotifications = {
     tabsToHighLight: [
       {
         parent: "celestials",
-        tab: "navigation"
+        tab: "celestial-navigation"
       },
       {
         parent: "celestials",
         tab: "teresa"
       }
     ],
-    condition: () => player.celestials.teresa.pouredAmount !== 0 && RealityUpgrades.allBought,
+    condition: () => player.celestials.teresa.pouredAmount !== 0 && Teresa.isUnlocked,
     events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT]
+  },
+  alchemyUnlock: {
+    id: 11,
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "glyphs"
+      },
+      {
+        parent: "reality",
+        tab: "alchemy"
+      }
+    ],
+    condition: () => player.celestials.ra.pets.effarig.level >= 2,
+    events: [GAME_EVENT.GAME_TICK_AFTER]
   },
 };

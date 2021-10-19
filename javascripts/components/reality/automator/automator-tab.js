@@ -4,7 +4,7 @@ Vue.component("automator-tab", {
   data() {
     return {
       automatorUnlocked: false,
-      interval: 0
+      interval: 0,
     };
   },
   computed: {
@@ -22,13 +22,14 @@ Vue.component("automator-tab", {
       const speedupText = `Each Reality makes it run ${formatPercents(0.006, 1)} faster, up to a maximum of
         ${formatInt(1000)} per second.`;
       return this.interval === 1
-        ? `The automator is running at max speed (${formatInt(1000)} commands per second).`
-        : `The automator is running ${format(1000 / this.interval, 2, 2)} commands per second. ${speedupText}`;
+        ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
+        : `The Automator is running ${format(1000 / this.interval, 2, 2)} commands per real-time second. 
+          ${speedupText}`;
     }
   },
   methods: {
     update() {
-      this.automatorUnlocked = player.realities > 4;
+      this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
     }
   },
@@ -36,15 +37,21 @@ Vue.component("automator-tab", {
     <div :class="tabClass" class="c-automator-tab l-automator-tab" >
       <div v-if="automatorUnlocked">
         <div class="c-automator-tab__interval-info">{{ intervalText }}</div>
+        At higher speeds, certain commands may take too long to execute while still maintaining this speed,
+        <br>
+        in which case the next command will be immediately processed after the slower command is run.
+        <br>
+        The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
         <split-pane
           :min-percent="40"
           :default-percent="50"
           split="vertical"
-          class="_-automator-split-pane-fix" >
+          class="_-automator-split-pane-fix"
+        >
           <automator-editor slot="paneL" />
           <automator-docs slot="paneR" />
         </split-pane>
       </div>
-      <div style="font-size: 30px" v-else>You need {{formatInt(5)}} Realities to unlock the Automator.</div>
+      <div style="font-size: 30px" v-else>You need {{ formatInt(5) }} Realities to unlock the Automator.</div>
     </div>`
 });

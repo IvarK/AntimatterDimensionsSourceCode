@@ -48,13 +48,18 @@
 
   const commentRule = { regex: /(\/\/|#).*/u, token: "comment", next: "start" };
 
+  // Note: This is a state machine which determines the syntax highlighting for the automator. It has no bearing on the
+  // actual functionality and behavior of the automator itself. Matches to the supplied regexes will color the matched
+  // text according to the specified color of cm-[token] in liquibyte.css
   CodeMirror.defineSimpleMode("automato", {
     // The start state contains the rules that are intially used
     start: [
       commentRule,
       { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
+      { regex: /blob\s\s/ui, token: "blob" },
       {
-        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s/ui,
+        // eslint-disable-next-line max-len
+        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s|notify/ui,
         token: "keyword",
         next: "commandArgs"
       },
@@ -69,7 +74,8 @@
         next: "startUnlock"
       },
       { regex: /infinity\S+|eternity\S+|reality\S+|pause\S+|restart\S+/ui, token: "error", next: "commandDone" },
-      { regex: /infinity|eternity|reality|pause|restart/ui, token: "keyword", next: "commandDone" },
+      { regex: /infinity|eternity|reality/ui, token: "keyword", next: "prestige" },
+      { regex: /pause|restart/ui, token: "keyword", next: "commandDone" },
       { regex: /\}/ui, dedent: true },
       { regex: /\S+\s/ui, token: "error", next: "commandDone" },
     ],
@@ -84,8 +90,9 @@
     studiesList: [
       commentRule,
       { sol: true, next: "start" },
-      { regex: /antimatter(?=[\s,]|$)|infinity(?=[\s,]|$)|time(?=[\s,]|$)/ui, token: "variable-2" },
-      { regex: /active(?=[\s,]|$)|passive(?=[\s,]|$)|idle(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /t[1-4]/ui, token: "number" },
+      { regex: /(antimatter|infinity|time)(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /(active|passive|idle)(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
       { regex: /[1-9][0-9]+/ui, token: "number" },
     ],
@@ -99,6 +106,12 @@
       commentRule,
       { sol: true, next: "start" },
       { regex: /(\/(?!\/)|[^\s#/])+/ui, token: "qualifier", next: "commandDone" },
+    ],
+    prestige: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /nowait(\s|$)/ui, token: "property" },
+      { regex: /respec/ui, token: "variable-2" },
     ],
     commandDone: [
       commentRule,
@@ -116,28 +129,33 @@
       commentRule,
       { sol: true, next: "start" },
       {
-        regex: /ec(1[0-2]|[1-9])|dilation/ui,
+        regex: /ec\s?(1[0-2]|[1-9])|dilation/ui,
         token: "variable-2",
         next: "commandDone",
       },
+      { regex: /nowait(\s|$)/ui, token: "property" },
     ],
     commandArgs: [
       commentRule,
       { sol: true, next: "start" },
       { regex: /<=|>=|<|>/ui, token: "operator" },
       { regex: /nowait(\s|$)/ui, token: "property" },
-      { regex: /on(\s|$)|off(\s|$)|dilation(\s|$)|load(\s|$)|respec(\s|$)/ui, token: "variable-2" },
-      { regex: /preset(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
-      { regex: /antimatter(\s|$|(?=,))|infinity(\s|$|(?=,))|time(\s|$|(?=,))/ui, token: "variable-2" },
-      { regex: /x[\t ]+current(\s|$)/ui, token: "variable-2" },
-      { regex: /pending[\t ]+(completions|ip|ep|rm)(\s|$)|glyph[\t ]+level(\s|$)/ui, token: "variable-2" },
+      { regex: /".*"/ui, token: "string", next: "commandDone" },
+      { regex: /(on|off|dilation|load|respec)(\s|$)/ui, token: "variable-2" },
+      { regex: /(preset|eternity|reality|use)(\s|$)/ui, token: "variable-2" },
+      { regex: /(antimatter|infinity|time)(\s|$|(?=,))/ui, token: "variable-2" },
+      { regex: /(active|passive|idle)(\s|$|(?=,))/ui, token: "variable-2" },
+      { regex: /x[\t ]+highest(\s|$)/ui, token: "variable-2" },
+      { regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui, token: "variable-2" },
+      { regex: /total[\t ]+(completions|tt)(\s|$)/ui, token: "variable-2" },
       { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
+      { regex: /(am|ip|ep|max)(\s|$)/ui, token: "variable-2" },
       {
-        regex: /am(\s|$)|ip(\s|$)|ep(\s|$)|rm(\s|$)|rg(\s|$)|dt(\s|$)|tp(\s|$)|tt(\s|$)|max(\s|$)|total tt(\s|$)/ui,
+        regex: /(rm|rg|dt|tp|tt|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
         token: "variable-2",
       },
       { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
-      { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/ui, token: "number" },
+      { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
       { regex: /\{/ui, indent: true, next: "commandDone" },
       // This seems necessary to have a closing curly brace de-indent automatically in some cases

@@ -39,13 +39,48 @@ class AutobuyerState {
   reset() { }
 }
 
+
 /**
  * @abstract
  */
-class UpgradeableAutobuyerState extends AutobuyerState {
+class IntervaledAutobuyerState extends AutobuyerState {
+  get interval() {
+    return this.data.interval;
+  }
+
+  get canTick() {
+    return super.canTick && this.timeSinceLastTick >= this.interval;
+  }
+
+  get timeSinceLastTick() {
+    return player.records.realTimePlayed - this.data.lastTick;
+  }
+
+  tick() {
+    this.data.lastTick = player.records.realTimePlayed;
+  }
+
   /**
    * @abstract
    */
+  get resetTickOn() { throw new NotImplementedError(); }
+
+  resetTick(prestigeEvent) {
+    if (prestigeEvent >= this.resetTickOn) this.data.lastTick = 0;
+  }
+
+  // eslint-disable-next-line no-empty-function
+  reset() { }
+}
+
+
+/**
+ * @abstract
+ */
+class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
+  /**
+  * @abstract
+  */
   get baseInterval() { throw new NotImplementedError(); }
 
   get cost() {
@@ -59,23 +94,6 @@ class UpgradeableAutobuyerState extends AutobuyerState {
 
   get hasMaxedInterval() {
     return this.data.interval <= 100;
-  }
-
-  get canTick() {
-    return super.canTick && this.timeSinceLastTick >= this.interval;
-  }
-
-  get timeSinceLastTick() {
-    return player.records.realTimePlayed - this.data.lastTick;
-  }
-
-  tick() {
-    const realTimePlayed = player.records.realTimePlayed;
-    const interval = this.interval;
-    // Don't allow more than one interval worth of time to accumulate (at most one autobuyer tick)
-    this.data.lastTick = Math.max(
-      Math.min(this.data.lastTick + interval, realTimePlayed),
-      realTimePlayed - interval);
   }
 
   upgradeInterval(free) {
@@ -99,36 +117,6 @@ class UpgradeableAutobuyerState extends AutobuyerState {
     this.data.interval = this.baseInterval;
     this.data.cost = 1;
   }
-}
-
-
-/**
- * @abstract
- */
-class IntervaledAutobuyerState extends AutobuyerState {
-  get interval() {
-    return this.data.interval;
-  }
-
-  get canTick() {
-    return super.canTick && this.timeSinceLastTick >= this.interval;
-  }
-
-  get timeSinceLastTick() {
-    return player.records.realTimePlayed - this.data.lastTick;
-  }
-
-  tick() {
-    const realTimePlayed = player.records.realTimePlayed;
-    const interval = this.interval;
-    // Don't allow more than one interval worth of time to accumulate (at most one autobuyer tick)
-    this.data.lastTick = Math.max(
-      Math.min(this.data.lastTick + interval, realTimePlayed),
-      realTimePlayed - interval);
-  }
-
-  // eslint-disable-next-line no-empty-function
-  reset() { }
 }
 
 const Autobuyer = {};

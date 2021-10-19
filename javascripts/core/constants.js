@@ -1,5 +1,13 @@
 "use strict";
 
+const PRESTIGE_EVENT = {
+  DIMENSION_BOOST: 0,
+  ANTIMATTER_GALAXY: 1,
+  INFINITY: 2,
+  ETERNITY: 3,
+  REALITY: 4,
+};
+
 const AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,
@@ -9,13 +17,13 @@ const AUTOBUYER_MODE = {
 const AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_CURRENT: 2
+  X_HIGHEST: 2
 };
 
 const AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_CURRENT: 2
+  X_HIGHEST: 2
 };
 
 const AUTO_REALITY_MODE = {
@@ -77,6 +85,12 @@ const GlyphRarities = [
     color: "white"
   },
 ];
+
+const BLACK_HOLE_PAUSE_MODE = {
+  NO_PAUSE: 0,
+  PAUSE_BEFORE_BH1: 1,
+  PAUSE_BEFORE_BH2: 2,
+};
 
 const AUTO_SORT_MODE = {
   NONE: 0,

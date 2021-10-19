@@ -3,18 +3,22 @@
 const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
-  REALITY: 3
+  REALITY: 3,
+  COMPLETED: 4
 };
 
 const Effarig = {
   displayName: "Effarig",
   initializeRun() {
+    const isRestarting = player.celestials.effarig.run;
     clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show(false);
-    Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
-      "Infinity Power reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.");
+    if (!isRestarting) {
+      Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. Infinity Power
+        reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.`);  
+    }
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -26,7 +30,10 @@ const Effarig = {
     if (!EffarigUnlock.eternity.isUnlocked) {
       return EFFARIG_STAGES.ETERNITY;
     }
-    return EFFARIG_STAGES.REALITY;
+    if (!EffarigUnlock.reality.isUnlocked) {
+      return EFFARIG_STAGES.REALITY;
+    }
+    return EFFARIG_STAGES.COMPLETED;
   },
   get eternityCap() {
     return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
@@ -51,21 +58,15 @@ const Effarig = {
       .filter(g => !generatedTypes.includes(g.type))
       // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
+    return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
-    return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+    return Math.floor(Math.pow(Currency.eternityPoints.exponent / 7500, this.glyphEffectAmount)) *
       AlchemyResource.effarig.effectValue;
   },
-  get shardAmount() {
-    return player.celestials.effarig.relicShards;
-  },
-  set shardAmount(x) {
-    player.celestials.effarig.relicShards = x;
-  },
   get maxRarityBoost() {
-    return 5 * Math.log10(Math.log10(this.shardAmount + 10));
+    return 5 * Math.log10(Math.log10(Currency.relicShards.value + 10));
   },
   nerfFactor(power) {
     let c;
@@ -77,6 +78,7 @@ const Effarig = {
         c = 29.29;
         break;
       case EFFARIG_STAGES.REALITY:
+      default:
         c = 25;
         break;
     }
@@ -84,12 +86,12 @@ const Effarig = {
   },
   get tickspeed() {
     const base = 3 + Tickspeed.baseValue.reciprocal().log10();
-    const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
+    const pow = 0.7 + 0.1 * this.nerfFactor(Currency.timeShards.value);
     return Decimal.pow10(Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
     const base = new Decimal(mult).pLog10();
-    const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
+    const pow = 0.25 + 0.25 * this.nerfFactor(Currency.infinityPower.value);
     return Decimal.pow10(Math.pow(base, pow));
   },
   get bonusRG() {
@@ -104,15 +106,15 @@ const Effarig = {
         "I am Effarig, and I govern Glyphs.",
         "I am different from Teresa; not as simplistic as you think.",
         "I use the shards of Glyphs to enforce my will.",
-        "Collect them for the bounty of this realm.",
+        "I collect them for the bounty of this realm.",
         "What are you waiting for? Get started.",
       ]
     },
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
-      2, "Do you like my little Stall? It’s not much, but it’s mine."
+      2, "Do you like my little shop? It’s not much, but it’s mine."
     ),
     UNLOCK_GLYPH_FILTER: CelestialQuotes.singleLine(
-      3, "Thank you for your purchase, customer!"
+      3, "This purchase will help you out."
     ),
     UNLOCK_SET_SAVES: CelestialQuotes.singleLine(
       4, "Is that too much? I think it’s too much."
@@ -180,9 +182,8 @@ class EffarigUnlockState extends GameMechanicState {
   }
 
   purchase() {
-    if (this.isUnlocked || Effarig.shardAmount < this.cost) return;
+    if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return;
     this.unlock();
-    Effarig.shardAmount -= this.cost;
     switch (this) {
       case EffarigUnlock.adjuster:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);

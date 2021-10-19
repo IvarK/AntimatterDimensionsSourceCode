@@ -1,6 +1,6 @@
 "use strict";
 
-Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.replicantiGalaxies;
   }
@@ -15,6 +15,10 @@ Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends In
 
   get isEnabled() {
     return Achievement(138).isUnlocked || !TimeStudy(131).isBought;
+  }
+
+  get hasUnlimitedBulk() {
+    return Achievement(126).isUnlocked;
   }
 
   tick() {

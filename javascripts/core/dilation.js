@@ -1,32 +1,37 @@
 "use strict";
 
-function dilationAnimation() {
+function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
+  setTimeout(startDilatedEternity, 1000);
 }
 
-function undilationAnimation() {
+function animateAndUndilate() {
   document.body.style.animation = "undilate 2s 1 linear";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
+  setTimeout(() => {
+    eternity(false, false, { switchingDilation: true });
+  }, 1000);
 }
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
+  const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
   if (player.dilation.active) {
-    if (player.options.animations.dilation && document.body.style.animation === "") {
-      undilationAnimation();
-      setTimeout(() => {
-        eternity(false, false, { switchingDilation: true });
-      }, 1000);
+    // TODO Dilation modal
+    if (playAnimation) {
+      animateAndUndilate();
     } else {
       eternity(false, false, { switchingDilation: true });
     }
   } else if (player.options.confirmations.dilation) {
     Modal.enterDilation.show();
+  } else if (playAnimation) {
+    animateAndDilate();
   } else {
     startDilatedEternity();
   }
@@ -39,7 +44,6 @@ function startDilatedEternity(auto) {
     return;
   }
   Achievement(136).unlock();
-  player.dilation.lastEP = player.eternityPoints;
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
 }
@@ -49,31 +53,27 @@ const DIL_UPG_NAMES = [
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
 ];
 
-function buyDilationUpgrade(id, bulk) {
+function buyDilationUpgrade(id, bulk = 1) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3) {
-    if (player.dilation.dilatedTime.lt(upgrade.cost)) return false;
     if (player.dilation.upgrades.has(id)) return false;
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(upgrade.cost);
+    if (!Currency.dilatedTime.purchase(upgrade.cost)) return false;
     player.dilation.upgrades.add(id);
     if (id === 4) player.dilation.totalTachyonGalaxies *= 2;
   } else {
     const upgAmount = player.dilation.rebuyables[id];
-    if (player.dilation.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
+    if (Currency.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
 
-    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
+    let buying = Decimal.affordGeometricSeries(Currency.dilatedTime.value,
       upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
-    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
+    buying = Math.clampMax(buying, bulk);
     buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
-    if (!bulk) {
-      buying = Math.clampMax(buying, 1);
-    }
     const cost = Decimal.sumGeometricSeries(buying, upgrade.config.initialCost, upgrade.config.increment, upgAmount);
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
+    Currency.dilatedTime.subtract(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
-      if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      if (!Perk.bypassTGReset.isBought) Currency.dilatedTime.reset();
       player.dilation.nextThreshold = new Decimal(1000);
       player.dilation.baseTachyonGalaxies = 0;
       player.dilation.totalTachyonGalaxies = 0;
@@ -90,22 +90,23 @@ function buyDilationUpgrade(id, bulk) {
       if (Enslaved.isRunning) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles
-        .times(Decimal.pow(retroactiveTPFactor, buying));
+      Currency.tachyonParticles.multiply(Decimal.pow(retroactiveTPFactor, buying));
     }
   }
   return true;
 }
 
-function getTachyonGalaxyMult() {
-  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
+function getTachyonGalaxyMult(thresholdUpgrade) {
+  // This specifically needs to be an undefined check because sometimes thresholdUpgrade is zero
+  const upgrade = thresholdUpgrade === undefined ? DilationUpgrade.galaxyThreshold.effectValue : thresholdUpgrade;
+  const thresholdMult = 3.65 * upgrade + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
   return 1 + thresholdMult * glyphReduction;
 }
 
 function getDilationGainPerSecond() {
-  let dtRate = new Decimal(player.dilation.tachyonParticles)
+  let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
@@ -115,11 +116,9 @@ function getDilationGainPerSecond() {
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(
-    Math.clampMin(Decimal.log10(player.replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
+    Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
-  if (Enslaved.isRunning) {
-    dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  }
+  if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
@@ -137,7 +136,8 @@ function tachyonGainMultiplier() {
 }
 
 function rewardTP() {
-  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(Currency.antimatter.value));
+  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value));
+  player.dilation.lastEP.copyFrom(Currency.eternityPoints);
 }
 
 // Returns the TP that would be gained this run
@@ -151,12 +151,12 @@ function getTP(antimatter) {
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
 function getTachyonGain() {
-  return getTP(Currency.antimatter.value).minus(player.dilation.tachyonParticles).clampMin(0);
+  return getTP(Currency.antimatter.value).minus(Currency.tachyonParticles.value).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
-  let effectiveTP = player.dilation.tachyonParticles;
+  let effectiveTP = Currency.tachyonParticles.value;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP

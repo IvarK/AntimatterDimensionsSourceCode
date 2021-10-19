@@ -39,7 +39,7 @@ class SecretAchievementState extends GameMechanicState {
     if (this.isUnlocked) return;
     // eslint-disable-next-line no-bitwise
     player.secretAchievementBits[this.row - 1] |= this._bitmask;
-    GameUI.notify.success(this.name);
+    GameUI.notify.success(`Secret Achievement: ${this.name}`);
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }
 
@@ -59,5 +59,14 @@ const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */
-  all: SecretAchievement.index.compact()
+  all: SecretAchievement.index.compact(),
+
+  get allRows() {
+    const count = SecretAchievements.all.map(a => a.row).max();
+    return SecretAchievements.rows(1, count);
+  },
+
+  rows: (start, count) => Array.range(start, count).map(SecretAchievements.row),
+
+  row: row => Array.range(row * 10 + 1, 8).map(SecretAchievement),
 };

@@ -26,8 +26,8 @@ GameDatabase.celestials.effarig = {
       id: 4,
       label: "Infinity",
       get description() {
-        return ` Infinitied stat raises the Replicanti cap
-        Infinitied stat increases your max Replicanti Galaxies
+        return ` Infinities raise the Replicanti cap
+        Infinities increase your max Replicanti Galaxies
         Base Infinity Point gain is capped at ${format(1e200)} in Effarig's Reality
         Each type of Infinity Point multiplier is capped at ${format(1e50)} in Effarig's Reality`;
       },
@@ -36,8 +36,7 @@ GameDatabase.celestials.effarig = {
       id: 5,
       label: "Eternity",
       get description() {
-        return ` Eternitied stat generates Infinitied stat
-          The Tickspeed upgrades from Time Dimensions softcaps ${formatInt(100000)} later
+        return ` Eternities generates Infinities
           Infinity Points are no longer limited in any way in Effarig's Reality
           You have unlocked The Enslaved Ones`;
       },

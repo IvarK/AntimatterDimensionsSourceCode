@@ -36,7 +36,9 @@ const BlockAutomator = {
 
     parsed = parsed
       .replace("LOAD", "STUDIES LOAD PRESET")
-      .replace("RESPEC", "STUDIES RESPEC");
+      .replace("RESPEC", "STUDIES RESPEC")
+      .replace("COMMENT", "//")
+      .replace("BLOB", "blob  ");
 
     if (block.target) parsed += ` ${block.target}`;
     if (block.secondaryTarget) parsed += ` ${block.secondaryTarget}`;
@@ -102,14 +104,15 @@ Vue.component("automator-block-editor", {
       this.parseRequest();
     },
   },
-  template:
-    `<div class="c-automator-block-editor">
+  template: `
+    <div class="c-automator-block-editor">
       <draggable
         v-on:end="parseRequest"
         v-model="lines"
         group="code-blocks"
         class="c-automator-blocks"
-        ghost-class="c-automator-block-row-ghost">
+        ghost-class="c-automator-block-row-ghost"
+      >
         <automator-single-block
           v-for="(block, index) in lines"
           :key="block.id"
@@ -117,7 +120,7 @@ Vue.component("automator-block-editor", {
           :block="block"
           :updateBlock="updateBlock"
           :deleteBlock="deleteBlock"
-          ></automator-single-block>
+        />
       </draggable>
     </div>`
 });

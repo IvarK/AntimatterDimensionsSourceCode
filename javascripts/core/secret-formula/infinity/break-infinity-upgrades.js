@@ -9,10 +9,15 @@ GameDatabase.infinity.breakUpgrades = (function() {
       maxUpgrades: config.maxUpgrades,
       description: config.description,
       effect: () => effectFunction(player.infinityRebuyables[config.id]),
-      formatEffect: config.formatEffect || (value => (value === config.maxUpgrades
-        ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)}`
-        : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`
-      )),
+      // There isn't enough room in the button to fit the EC reduction and "Next:" at the same time while still
+      // presenting all the information in an understandable way, so we only show it if the upgrade is maxed
+      formatEffect: config.formatEffect ||
+        (value => {
+          const afterECText = config.afterEC ? config.afterEC() : "";
+          return value === config.maxUpgrades
+            ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} ${afterECText}`
+            : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`;
+        }),
       formatCost: value => format(value, 2, 0),
       noTitle: !config.title
     };
@@ -42,8 +47,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Antimatter Dimensions gain a multiplier based on Infinitied stat",
-      effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
+      description: "Antimatter Dimensions gain a multiplier based on Infinities",
+      effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {
@@ -57,13 +62,15 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "challengeMult",
       cost: 1e7,
       description: "Antimatter Dimensions gain a multiplier based on slowest challenge run",
-      effect: () => Decimal.max(50 / Time.worstChallenge.totalMinutes, 1),
-      formatEffect: value => formatX(value, 2, 2)
+      effect: () => Decimal.clampMin(50 / Time.worstChallenge.totalMinutes, 1),
+      formatEffect: value => formatX(value, 2, 2),
+      hasCap: true,
+      cap: new Decimal(3e4)
     },
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate Infinitied stat based on your fastest Infinity",
+      description: "Passively generate Infinities based on your fastest Infinity",
       effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";
@@ -79,15 +86,15 @@ GameDatabase.infinity.breakUpgrades = (function() {
           every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
-    bulkDimBoost: {
-      id: "bulkBoost",
+    autobuyMaxDimboosts: {
+      id: "autobuyMaxDimboosts",
       cost: 5e9,
-      description: "Option to bulk buy Dimension Boosts"
+      description: "Unlock the buy max Dimension Boost Autobuyer mode"
     },
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",
       cost: 1e15,
-      description: "Autobuyers purchased with antimatter or unlocked from Normal Challenges work twice as fast"
+      description: "Autobuyers unlocked or improved by Normal Challenges work twice as fast"
     },
     tickspeedCostMult: rebuyable({
       id: 0,
@@ -95,6 +102,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
       costIncrease: 5,
       maxUpgrades: 8,
       description: "Reduce post-infinity tickspeed cost multiplier scaling",
+      afterEC: () => (EternityChallenge(11).completions > 0
+        ? `After EC11: ${formatX(Player.tickSpeedMultDecrease, 2, 2)}`
+        : ""
+      ),
       title: false,
     }),
     dimCostMult: rebuyable({
@@ -103,6 +114,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
       costIncrease: 5e3,
       maxUpgrades: 7,
       description: "Reduce post-infinity Antimatter Dimension cost multiplier scaling",
+      afterEC: () => (EternityChallenge(6).completions > 0
+        ? `After EC6: ${formatX(Player.dimensionMultDecrease, 2, 2)}`
+        : ""
+      ),
       title: false,
     }),
     ipGen: rebuyable({
@@ -116,7 +131,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
         if (!BreakInfinityUpgrade.ipGen.isCapped) {
           generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
-        return `${generation} of your best IP/min from last 10 Infinities, works offline`;
+        const offlineString = player.options.offlineProgress ? ", works offline" : "";
+        return `${generation} of your best IP/min from your last 10 Infinities${offlineString}`;
       },
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
       title: true

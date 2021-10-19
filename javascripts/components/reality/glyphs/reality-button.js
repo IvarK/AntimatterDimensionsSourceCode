@@ -6,6 +6,8 @@ Vue.component("reality-button", {
       canReality: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(0),
+      projectedRM: new Decimal(0),
+      newIMCap: 0,
       realityTime: 0,
       glyphLevel: 0,
       nextGlyphPercent: 0,
@@ -16,11 +18,21 @@ Vue.component("reality-button", {
   },
   computed: {
     formatMachinesGained() {
-      return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      if (this.machinesGained.gt(0)) return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      return "No Machines gained";
     },
     formatMachineStats() {
-      if (this.machinesGained.lt(100)) {
+      if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
+        return `RM this Reality is capped!`;
+      }
+      if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
+      }
+      if (this.machinesGained.eq(0) && this.newIMCap === 0) {
+        return `Projected: ${format(this.projectedRM, 2)} RM`;
+      }
+      if (this.newIMCap !== 0) {
+        return `iM Cap: ${format(this.newIMCap, 2, 2)}i`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
@@ -52,17 +64,19 @@ Vue.component("reality-button", {
         return;
       }
       function EPforRM(rm) {
-        const adjusted = Decimal.divide(rm, getRealityMachineMultiplier());
+        const adjusted = Decimal.divide(rm, MachineHandler.realityMachineMultiplier);
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
         let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
-        if (player.realities === 0 && result.gte("1e6000") && player.saveOverThresholdFlag) {
+        if (!PlayerProgress.realityUnlocked() && result.gte("1e6000")) {
           result = result.div("1e6000").pow(4).times("1e6000");
         }
         return result;
       }
       const multiplier = simulatedRealityCount(false) + 1;
-      this.machinesGained = gainedRealityMachines().times(multiplier);
+      this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
+      this.newIMCap = MachineHandler.projectedIMCap;
+      this.machinesGained = this.projectedRM.clampMax(MachineHandler.distanceToRMCap);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();
@@ -82,7 +96,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (TimeStudy.reality.isBought && player.eternityPoints.gte("1e4000")) {
+      if (TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000) {
         requestManualReality();
       }
     },
@@ -92,38 +106,59 @@ Vue.component("reality-button", {
     formatThresholdText(condition, threshold, resourceName) {
       if (condition) return "";
       return `(${format(threshold, 2, 2)} ${resourceName} to improve)`;
+    },
+    // Make the button have a visual animation if Realitying will give a reward
+    hasSpecialReward() {
+      if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier) {
+        return true;
+      }
+      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked && Currency.eternityPoints.value.exponent > 4000) {
+        return true;
+      }
+      if (Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000) return true;
+      return false;
+    },
+    classObject() {
+      return {
+        "c-reality-button--unlocked": this.canReality,
+        "c-reality-button--locked": !this.canReality,
+        "c-reality-button--special": this.hasSpecialReward(),
+      };
     }
   },
   template: `
-  <button :class="['l-reality-button', 'c-reality-button', 'infotooltip',
-                   canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
-          @click="handleClick">
-    <div class="l-reality-button__contents">
-      <template v-if="canReality">
-      <div class="c-reality-button__header">Make a new Reality</div>
-        <div>{{formatMachinesGained}}</div>
-        <div>{{formatMachineStats}}</div>
-        <div>{{formatGlyphLevel}}</div>
-      </template>
-      <template v-else-if="hasRealityStudy">
-        <div>Get {{format("1e4000", 0, 0)}} Eternity Points to unlock a new Reality</div>
-      </template>
-      <template v-else>
-        <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
-      </template>
-      <div class="infotooltiptext" v-if="canReality">
-        <div>Other resources gained:</div>
-        <div>{{ppGained}} Perk {{ "Point" | pluralize(ppGained) }}</div>
-        <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-        <div v-for="celestialInfo in celestialRunText">
-          <span v-if="celestialInfo[0]">
-            {{ celestialInfo[1] }}
-            <br>
-            {{ celestialInfo[2] }}
-          </span>
+    <div class="l-reality-button">
+      <button
+        class="c-reality-button infotooltip"
+        :class="classObject()"
+        @click="handleClick"
+      >
+        <div class="l-reality-button__contents">
+          <template v-if="canReality">
+            <div class="c-reality-button__header">Make a new Reality</div>
+            <div>{{ formatMachinesGained }}</div>
+            <div>{{ formatMachineStats }}</div>
+            <div>{{ formatGlyphLevel }}</div>
+          </template>
+          <template v-else-if="hasRealityStudy">
+            <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
+          </template>
+          <template v-else>
+            <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
+          </template>
+          <div class="infotooltiptext" v-if="canReality">
+            <div>Other resources gained:</div>
+            <div>{{ ppGained }} Perk {{ "Point" | pluralize(ppGained) }}</div>
+            <div v-if="shardsGained !== 0">{{ shardsGainedText }}</div>
+            <div v-for="celestialInfo in celestialRunText">
+              <span v-if="celestialInfo[0]">
+                {{ celestialInfo[1] }}
+                <br>
+                {{ celestialInfo[2] }}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </button>
-  `
+      </button>
+    </div>`
 });

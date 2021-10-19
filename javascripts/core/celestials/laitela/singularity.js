@@ -30,43 +30,56 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return Laitela.singularities >= this.start;
+    return Currency.singularities.gte(this.start);
+  }
+
+  nerfCompletions(completions) {
+    const softcap = this.config.increaseThreshold;
+    if (!softcap || (completions < softcap)) return completions;
+    return softcap + (completions - softcap) / 3;
+  }
+
+  unnerfCompletions(completions) {
+    const softcap = this.config.increaseThreshold;
+    if (!softcap || (completions < softcap)) return completions;
+    return softcap + (completions - softcap) * 3;
   }
 
   get previousGoal() {
     if (!this.isUnlocked) return 0;
-    return this.start * Math.pow(this.repeat, this.completions - 1);
+    return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions) - 1);
   }
 
   get nextGoal() {
-    return this.start * Math.pow(this.repeat, this.completions);
+    if (this.isUnique) return this.start;
+    return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions + 1) - 1);
+  }
+  
+  get rawCompletions() {
+    if (this.isUnique) return this.isUnlocked ? 1 : 0;
+    if (!this.isUnlocked) return 0;
+    return 1 + (Math.log(Currency.singularities.value) - Math.log(this.start)) / Math.log(this.repeat);
   }
 
   get completions() {
-    if (this.isUnique) return this.isUnlocked ? 1 : 0;
-    if (!this.isUnlocked) return 0;
-
-    return Math.min(Math.floor(
-      1 + Math.log(Laitela.singularities) /
-        Math.log(this.repeat) - Math.log(this.start) / Math.log(this.repeat)
-    ), this.limit === 0 ? Infinity : this.limit);
+    return Math.min(Math.floor(this.nerfCompletions(this.rawCompletions)), this.limit);
   }
 
   get remainingSingularities() {
-    return this.nextGoal - Laitela.singularities;
+    return this.nextGoal - Currency.singularities.value;
   }
 
   get progressToNext() {
-    return formatPercents((Laitela.singularities - this.previousGoal) / this.nextGoal);
+    return formatPercents((Currency.singularities.value - this.previousGoal) / this.nextGoal);
   }
 
   get isMaxed() {
-    return (this.isUnique && this.isUnlocked) || (this.limit !== 0 && this.completions >= this.limit);
+    return (this.isUnique && this.isUnlocked) || (this.completions >= this.limit);
   }
 
   get effectDisplay() {
-    if (this.effectValue === Infinity || this.effectValue === -Infinity) return "N/A";
-    return this.config.effectFormat(this.effectValue);
+    if (Number.isFinite(this.effectValue)) return this.config.effectFormat(this.effectValue);
+    return "N/A";
   }
 
   get nextEffectDisplay() {
@@ -118,6 +131,7 @@ const SingularityMilestone = (function() {
 
 const SingularityMilestones = {
   all: Object.values(SingularityMilestone),
+  lastNotified: player.celestials.laitela.lastCheckedMilestones,
 
   get sorted() {
     return this.all.sort((a, b) => a.remainingSingularities - b.remainingSingularities);
@@ -137,14 +151,20 @@ const SingularityMilestones = {
   get unseenMilestones() {
     const laitela = player.celestials.laitela;
     return SingularityMilestoneThresholds
-      .filter(s => s > laitela.lastCheckedMilestones && s <= laitela.singularities);
+      .filter(s => s > laitela.lastCheckedMilestones && Currency.singularities.gte(s));
+  },
+
+  get unnotifiedMilestones() {
+    return SingularityMilestoneThresholds.filter(s => s > this.lastNotified && Currency.singularities.gte(s));
   }
 };
 
 // Sorted list of all the values where a singularity milestone exists, used for "new milestone" styling
 const SingularityMilestoneThresholds = (function() {
   return Object.values(GameDatabase.celestials.singularityMilestones)
-    .map(m => Array.range(0, m.limit === 0 ? 50 : m.limit)
+    .map(m => Array.range(0, Math.min(50, m.limit))
+      .filter(r => !m.increaseThreshold || r <= m.increaseThreshold ||
+        (r > m.increaseThreshold && ((r - m.increaseThreshold) % 3) === 2))
       .map(r => m.start * Math.pow(m.repeat, r)))
     .flat(Infinity)
     .filter(n => n < 1e100)
@@ -153,7 +173,7 @@ const SingularityMilestoneThresholds = (function() {
 
 const Singularity = {
   get cap() {
-    return 2e3 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
+    return 200 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
   },
 
   get gainPerCapIncrease() {
@@ -162,15 +182,16 @@ const Singularity = {
 
   get singularitiesGained() {
     return Math.floor(Math.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases) *
-        SingularityMilestone.singularityMult.effectOrDefault(1));
+      SingularityMilestone.singularityMult.effectOrDefault(1) *
+      (1 + ImaginaryUpgrade(10).effectValue));
   },
 
   get capIsReached() {
-    return player.celestials.laitela.darkEnergy > this.cap;
+    return Currency.darkEnergy.gte(this.cap);
   },
 
   increaseCap() {
-    if (player.celestials.laitela.singularityCapIncreases >= 96) return;
+    if (player.celestials.laitela.singularityCapIncreases >= 50) return;
     player.celestials.laitela.singularityCapIncreases++;
   },
 
@@ -181,13 +202,22 @@ const Singularity = {
 
   perform() {
     if (!this.capIsReached) return;
-    const laitela = player.celestials.laitela;
 
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_BEFORE);
 
-    laitela.darkEnergy = 0;
-    laitela.singularities += this.singularitiesGained;
+    Currency.darkEnergy.reset();
+    Currency.singularities.add(this.singularitiesGained);
 
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
   }
 };
+
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => SingularityMilestones.lastNotified = Currency.singularities.value);
+
+EventHub.logic.on(GAME_EVENT.SINGULARITY_RESET_AFTER, () => {
+  const newMilestones = SingularityMilestones.unnotifiedMilestones.length;
+  if (newMilestones === 0) return;
+  if (newMilestones === 1) GameUI.notify.blackHole(`You reached a Singularity milestone!`);
+  else GameUI.notify.blackHole(`You reached ${formatInt(newMilestones)} Singularity milestones!`);
+  SingularityMilestones.lastNotified = Currency.singularities.value;
+});

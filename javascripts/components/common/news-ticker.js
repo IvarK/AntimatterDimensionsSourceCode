@@ -41,7 +41,7 @@ Vue.component("news-ticker", {
     prepareNextMessage() {
       const line = this.$refs.line;
       if (line === undefined) return;
-      
+
       const isUnlocked = news => news.unlocked || news.unlocked === undefined;
 
       if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
@@ -68,7 +68,7 @@ Vue.component("news-ticker", {
       line.innerHTML = this.currentNews.text;
 
       line.style["transition-duration"] = "0ms";
-      if (this?.currentNews.id === "a244" || this?.currentNews.id === "ai63" ) {
+      if (this.currentNews?.id === "a244" || this.currentNews?.id === "ai63") {
         line.style.transform = "translateX(-100%)";
       } else {
         line.style.transform = "translateX(0)";
@@ -91,8 +91,9 @@ Vue.component("news-ticker", {
         line.style.transform = "translateX(-100%)";
       }
 
-      player.news.add(this.currentNews.id);
-      if (player.news.size >= 50) Achievement(22).unlock();
+      NewsHandler.addSeenNews(this.currentNews.id);
+      if (NewsHandler.uniqueTickersSeen >= 50) Achievement(22).unlock();
+      player.news.totalSeen++;
 
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },
@@ -109,6 +110,5 @@ Vue.component("news-ticker", {
   template: `
     <div ref="ticker" class="c-news-ticker">
       <span ref="line" class="c-news-line c-news-ticker__line" @click="onLineClick" />
-    </div>
-  `
+    </div>`
 });

@@ -16,18 +16,19 @@ Vue.component("challenge-records-tab", {
       this.infinityChallenges = player.challenge.infinity.bestTimes.slice(0);
     }
   },
-  template:
-    `<div class="l-challenge-records-tab c-stats-tab">
-        <challenge-records-list
-            :start="2"
-            :times="normalChallenges"
-            name="Challenge"
-        />
-        <challenge-records-list v-if="infinityChallengesUnlocked"
-            :start="1"
-            :times="infinityChallenges"
-            name="Infinity Challenge"
-            class="l-challenge-records-tab__infinity_challenges"
-        />
+  template: `
+    <div class="l-challenge-records-tab c-stats-tab">
+      <challenge-records-list
+        :start="2"
+        :times="normalChallenges"
+        name="Normal Challenge"
+      />
+      <challenge-records-list
+        v-if="infinityChallengesUnlocked"
+        :start="1"
+        :times="infinityChallenges"
+        name="Infinity Challenge"
+        class="l-challenge-records-tab__infinity_challenges"
+      />
     </div>`
 });

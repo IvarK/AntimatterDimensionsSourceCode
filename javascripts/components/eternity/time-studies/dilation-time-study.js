@@ -6,9 +6,8 @@ Vue.component("dilation-time-study", {
   },
   data() {
     return {
-      showCost: true,
       showRequirement: false,
-      requirement: ""
+      maxTT: new Decimal(0),
     };
   },
   computed: {
@@ -17,37 +16,36 @@ Vue.component("dilation-time-study", {
     },
     id() {
       return this.study.id;
-    }
-  },
-  created() {
-    if (this.id === 1) {
-      this.requirement = `Requirement: ${formatInt(5)} EC11 and EC12 completions
-        and ${formatInt(13000)} total Time Theorems`;
-    }
-    if (this.id === 6) {
-      if (player.realities > 0) {
-        this.requirement = `Requirement: ${format("1e4000")} Eternity Points`;
-      } else {
-        this.requirement = `Requirement: ${format("1e4000")} Eternity Points and ${formatInt(13)} rows of Achievements`;
+    },
+    requirement() {
+      if (this.id === 1) {
+        return `Requirement: ${formatInt(5)} EC11 and EC12 completions
+          and ${formatInt(this.maxTT)}/${formatInt(13000)} total Time Theorems`;
       }
-      this.showRequirement = true;
+      if (this.id === 6) {
+        const achRows = Perk.firstPerk.isBought ? "" : ` and ${formatInt(13)} rows of Achievements`;
+        return `Requirement: ${format("1e4000")} Eternity Points${achRows}`;
+      }
+      return "";
     }
   },
   methods: {
     update() {
-      const id = this.id;
-      this.showCost = id !== 6 || player.realities === 0;
-      if (id === 1) {
+      if (this.id === 1) {
+        this.maxTT.copyFrom(Currency.timeTheorems.max);
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
+      }
+      if (this.id === 6) {
+        this.showRequirement = true;
       }
     }
   },
-  template:
-    `<time-study :setup="setup" :showCost="showCost">
+  template: `
+    <time-study :setup="setup">
       <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>
-        <span>{{requirement}}</span>
+        <span>{{ requirement }}</span>
       </template>
     </time-study>`
 });

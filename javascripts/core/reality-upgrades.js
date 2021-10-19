@@ -23,7 +23,8 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return player.reality.upgReqs[this.id];
+    // eslint-disable-next-line no-bitwise
+    return (player.reality.upgReqs & (1 << this.id)) !== 0;
   }
 
   get isPossible() {
@@ -31,11 +32,11 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
-    player.reality.upgReqs[this.id] = true;
-    if (player.realities > 0 || TimeStudy.reality.isBought) {
-      GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
-    }
+    const realityReached = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
+    if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    // eslint-disable-next-line no-bitwise
+    player.reality.upgReqs |= (1 << this.id);
+    GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
   }
 
   onPurchased() {
@@ -46,6 +47,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     }
     if (id === 10) {
       applyRUPG10();
+      playerInfinityUpgradesOnReset();
       EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT);
     }
     if (id === 20 && player.blackHole[0].unlocked) {
@@ -71,8 +73,8 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
 RealityUpgradeState.index = mapGameData(
   GameDatabase.reality.upgrades,
   config => (config.id < 6
-      ? new RebuyableRealityUpgradeState(config)
-      : new RealityUpgradeState(config))
+    ? new RebuyableRealityUpgradeState(config)
+    : new RealityUpgradeState(config))
 );
 
 /**

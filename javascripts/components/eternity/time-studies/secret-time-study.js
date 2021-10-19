@@ -54,7 +54,7 @@ Vue.component("secret-time-study", {
         // If you're in Enslaved and haven't gotten the secret study
         player.secretUnlocks.viewSecretTS = true;
         EnslavedProgress.secretStudy.giveProgress();
-        player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
+        Currency.timeTheorems.add(this.enslavedTT);
       } else if (!this.isEnslaved && this.isVisible) {
         // If you aren't in Enslaved, double clicking will hide the study
         const clickTime = Date.now();
@@ -77,14 +77,16 @@ Vue.component("secret-time-study", {
       }
     },
   },
-  template:
-    `<button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
+  template: `
+    <button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
       <span>
-        {{description}}
+        {{ description }}
         <br>
-        {{hide}}
+        {{ hide }}
         <br>
-        <span v-if="cost !== 0">Cost: {{cost}} Time Theorems</span>
+        <span v-if="cost !== 0">
+          Cost: {{ cost }} Time Theorems
+        </span>
       </span>
     </button>`
 });

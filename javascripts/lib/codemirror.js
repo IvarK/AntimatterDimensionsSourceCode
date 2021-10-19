@@ -873,11 +873,23 @@
   // Find the line object corresponding to the given line number.
   function getLine(doc, n) {
     n -= doc.first;
-    if (n < 0 || n >= doc.size) { throw new Error("There is no line " + (n + doc.first) + " in the document.") }
+    if (n < 0 || n > doc.size) { throw new Error("There is no line " + (n + doc.first) + " in the document.") }
     var chunk = doc;
     while (!chunk.lines) {
       for (var i = 0;; ++i) {
-        var child = chunk.children[i], sz = child.chunkSize();
+        var child = chunk.children[i];
+        let sz;
+        // For some reason lines seem to be stored internally as an array of "chunks" of 25 lines each. The way the
+        // loop was originally structured always fails on the last line, and apparently the codemirror devs decided to
+        // just prevent the last line from being accessed as their solution. This try/catch also works; the exceptional
+        // case should only ever happen on the very last line of the script. (This might only work because we pad all
+        // with an invisible ending newline?)
+        try {
+          sz = child.chunkSize();
+        } catch {
+          const lines = chunk.children[i - 1].lines;
+          return lines[lines.length - 1];
+        }
         if (n < sz) { chunk = child; break }
         n -= sz;
       }
@@ -4434,10 +4446,10 @@
   else if (safari) { wheelPixelsPerUnit = -1/3; }
 
   function wheelEventDelta(e) {
-    var dx = e.wheelDeltaX, dy = e.wheelDeltaY;
+    var dx = e.deltaX, dy = e.deltaY;
     if (dx == null && e.detail && e.axis == e.HORIZONTAL_AXIS) { dx = e.detail; }
     if (dy == null && e.detail && e.axis == e.VERTICAL_AXIS) { dy = e.detail; }
-    else if (dy == null) { dy = e.wheelDelta; }
+    else if (dy == null) { dy = e.delta; }
     return {x: dx, y: dy}
   }
   function wheelEventPixels(e) {
@@ -7987,7 +7999,6 @@
       if (d.scroller.clientHeight) {
         updateScrollTop(cm, d.scroller.scrollTop);
         setScrollLeft(cm, d.scroller.scrollLeft, true);
-        signal(cm, "scroll", cm);
       }
     });
 

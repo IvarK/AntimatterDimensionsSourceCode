@@ -3,12 +3,12 @@
 function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
 }
 
 function handleChallengeCompletion() {
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  const challenge = Player.antimatterChallenge;
   if (!challenge && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
@@ -35,15 +35,16 @@ function bigCrunchReset() {
   if (!Player.canCrunch) return;
 
   const firstInfinity = !PlayerProgress.infinityUnlocked();
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
 
   bigCrunchUpdateStatistics();
 
   const infinityPoints = gainedInfinityPoints();
-  player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-  player.infinitied = player.infinitied.plus(gainedInfinities().round());
+  Currency.infinityPoints.add(infinityPoints);
+  Currency.infinities.add(gainedInfinities().round());
 
   bigCrunchTabChange(firstInfinity);
-  bigCrunchReplicanti();
+  bigCrunchResetValues();
   bigCrunchCheckUnlocks();
 
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
@@ -55,7 +56,7 @@ function bigCrunchUpdateStatistics() {
   player.records.thisInfinity.bestIPmin = new Decimal(0);
 
   player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
-    gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
+    gainedInfinities().round().dividedBy(Math.clampMin(33, player.records.thisInfinity.realTime))
   );
 
   const infinityPoints = gainedInfinityPoints();
@@ -72,37 +73,38 @@ function bigCrunchUpdateStatistics() {
   player.records.bestInfinity.realTime =
     Math.min(player.records.bestInfinity.realTime, player.records.thisInfinity.realTime);
 
-  player.achievementChecks.noInfinitiesThisReality = false;
+  player.requirementChecks.reality.noInfinities = false;
 
-  if (!player.usedMaxAll) {
-    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
+  if (!player.requirementChecks.infinity.maxAll) {
+    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(Math.clampMin(33, player.records.thisInfinity.realTime));
     player.records.thisEternity.bestIPMsWithoutMaxAll =
       Decimal.max(bestIpPerMsWithoutMaxAll, player.records.thisEternity.bestIPMsWithoutMaxAll);
   }
-  player.usedMaxAll = false;
 }
 
 function bigCrunchTabChange(firstInfinity) {
   const earlyGame = player.records.bestInfinity.time > 60000 && !player.break;
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
+  const inAntimatterChallenge = Player.isInAntimatterChallenge;
   handleChallengeCompletion();
 
   if (firstInfinity) {
     Tab.infinity.upgrades.show();
-  } else if (earlyGame || (challenge && !player.options.retryChallenge)) {
+  } else if (earlyGame || (inAntimatterChallenge && !player.options.retryChallenge)) {
     Tab.dimensions.antimatter.show();
   }
 }
 
-function bigCrunchReplicanti() {
-  const currentReplicanti = player.replicanti.amount;
+function bigCrunchResetValues() {
+  const currentReplicanti = Replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
+  // For unknown reasons, everything but keeping of RGs (including resetting of RGs)
+  // is done in the function called below. For now, we're just trying to keep
+  // code structure similar to what it was before to avoid new bugs.
   secondSoftReset(true);
 
   let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {
-    player.replicanti.amount = currentReplicanti;
+    Replicanti.amount = currentReplicanti;
     remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }
   if (TimeStudy(33).isBought) {
@@ -129,14 +131,12 @@ function secondSoftReset(forcedNDReset = false) {
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
-  if (player.replicanti.unl)
-    player.replicanti.amount = new Decimal(1);
+  if (player.replicanti.unl) Replicanti.amount = new Decimal(1);
   player.replicanti.galaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
   player.records.thisInfinity.realTime = 0;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noSacrifices = true;
+  Player.resetRequirements("infinity");
   AchievementTimers.marathon2.reset();
 }
 
@@ -195,7 +195,12 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   purchase() {
-    if (super.purchase()) return true;
+    if (super.purchase()) {
+      // This applies the 4th column of infinity upgrades retroactively
+      if (this.config.id.includes("skip")) skipResetsIfPossible();
+      EventHub.dispatch(GAME_EVENT.INFINITY_UPGRADE_BOUGHT);
+      return true;
+    }
     if (this.canCharge) {
       this.charge();
       return true;
@@ -245,7 +250,7 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  ipMult = ipMult.times(player.replicanti.amount.powEffectOf(AlchemyResource.exponential));
+  ipMult = ipMult.times(Replicanti.amount.powEffectOf(AlchemyResource.exponential));
   return ipMult;
 }
 
@@ -301,13 +306,29 @@ function disChargeAll() {
   ]);
 }());
 
+// The repeatable 2xIP upgrade has an odd cost structure - it follows a shallow exponential (step *10) up to e3M, at
+// which point it follows a steeper one (step *1e10) up to e6M before finally hardcapping. At the hardcap, there's 
+// an extra bump that increases the multipler itself from e993k to e1M. All these numbers are specified in
+// GameDatabase.infinity.upgrades.ipMult
 class InfinityIPMultUpgrade extends GameMechanicState {
   get cost() {
-    return this.config.cost();
+    if (this.purchaseCount >= this.purchasesAtIncrease) {
+      return this.config.costIncreaseThreshold
+        .times(Decimal.pow(this.costIncrease, this.purchaseCount - this.purchasesAtIncrease));
+    }
+    return Decimal.pow(this.costIncrease, this.purchaseCount + 1);
+  }
+
+  get purchaseCount() {
+    return player.infMult;
+  }
+
+  get purchasesAtIncrease() {
+    return this.config.costIncreaseThreshold.log10() - 1;
   }
 
   get hasIncreasedCost() {
-    return this.cost.gte(this.config.costIncreaseThreshold);
+    return this.purchaseCount >= this.purchasesAtIncrease;
   }
 
   get costIncrease() {
@@ -330,36 +351,27 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get canBeBought() {
-    return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+    return !this.isCapped && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
+  // This is only ever called with amount = 1 or within buyMax under conditions that ensure the scaling doesn't
+  // change mid-purchase
   purchase(amount = 1) {
     if (!this.canBeBought) return;
-    const mult = Decimal.pow(2, amount);
-    player.infMult = player.infMult.times(mult);
     if (!TimeStudy(181).isBought) {
-      Autobuyer.bigCrunch.bumpAmount(mult);
+      Autobuyer.bigCrunch.bumpAmount(Decimal.pow(2, amount));
     }
-    const costIncrease = this.costIncrease;
-    player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
-    player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
-    this.adjustToCap();
+    Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
+    player.infMult += amount;
     GameUI.update();
-  }
-
-  adjustToCap() {
-    if (this.isCapped) {
-      player.infMult.copyFrom(this.config.cap());
-      player.infMultCost.copyFrom(this.config.costCap);
-    }
   }
 
   buyMax() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
-      // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
-      const purchases = buyUntil - this.cost.exponent + 1;
+      // Only allow IP below the softcap to be used
+      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costIncreaseThreshold);
+      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0).toNumber();
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
@@ -367,8 +379,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
     // it will go in this part)
     if (this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
-      const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
+      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costCap);
+      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0).toNumber();
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
@@ -403,7 +415,7 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   BreakInfinityUpgrade.slowestChallengeMult = upgrade(db.slowestChallengeMult);
 
   BreakInfinityUpgrade.infinitiedGen = upgrade(db.infinitiedGen);
-  BreakInfinityUpgrade.bulkDimBoost = upgrade(db.bulkDimBoost);
+  BreakInfinityUpgrade.autobuyMaxDimboosts = upgrade(db.autobuyMaxDimboosts);
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 }());
 
@@ -454,8 +466,7 @@ function preProductionGenerateIP(diff) {
     let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
     if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
     const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
-    player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
+    Currency.infinityPoints.add(gainedThisTick);
   }
-  player.infinityPoints = player.infinityPoints
-    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
+  Currency.infinityPoints.add(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
 }

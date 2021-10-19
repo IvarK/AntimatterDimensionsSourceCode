@@ -5,7 +5,11 @@ GameUI.notify = (function() {
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
   const leaveAnimation = "a-notification--leave";
-  function showNotification(text, elClass) {
+  function showNotification(text, elClass, duration = 2000) {
+    if(!GameUI.initialized) {
+      setTimeout(showNotification, 500, text, elClass, duration);
+      return;
+    }
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);
@@ -26,17 +30,16 @@ GameUI.notify = (function() {
       el.classList.add(leaveAnimation);
       setTimeout(() => el.remove(), 500);
     }
-    setTimeout(() => leave(), 2000);
+    setTimeout(() => leave(), duration);
     el.onclick = () => leave();
   }
   return {
-    success: text => showNotification(text, "o-notification--success"),
-    error: text => showNotification(text, "o-notification--error"),
-    info: text => showNotification(text, "o-notification--info"),
-    eternity: text => showNotification(text, "o-notification--eternity"),
-    reality: text => showNotification(text, "o-notification--reality"),
-    blackHole: text => showNotification(text, "o-notification--black-hole"),
-    memory: (text, petName) => showNotification(text, `o-notification--memory-${petName.toLowerCase()}`),
+    success: (text, duration) => showNotification(text, "o-notification--success", duration),
+    error: (text, duration) => showNotification(text, "o-notification--error", duration),
+    info: (text, duration) => showNotification(text, "o-notification--info", duration),
+    eternity: (text, duration) => showNotification(text, "o-notification--eternity", duration),
+    reality: (text, duration) => showNotification(text, "o-notification--reality", duration),
+    blackHole: (text, duration) => showNotification(text, "o-notification--black-hole", duration),
     showBlackHoles: true
   };
 }());

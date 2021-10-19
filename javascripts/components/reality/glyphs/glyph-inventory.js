@@ -4,24 +4,26 @@ Vue.component("glyph-inventory", {
   data() {
     return {
       inventory: [],
+      newGlyphs: [],
       doubleClickTimeOut: null,
       clickedGlyphId: null,
       glyphSacrificeUnlocked: false,
       protectedRows: 0,
     };
   },
-  computed: {
-    rowCount: () => Glyphs.totalSlots / 10,
-    colCount: () => 10,
-  },
   created() {
     this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
+  },
+  computed: {
+    rowCount: () => Glyphs.totalSlots / 10,
+    colCount: () => 10,
   },
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.protectedRows = player.reality.glyphs.protectedRows;
+      this.newGlyphs = Glyphs.unseen;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -65,37 +67,46 @@ Vue.component("glyph-inventory", {
     },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
+    },
+    isNew(index) {
+      return player.options.showNewGlyphIcon && this.newGlyphs.includes(this.inventory[index].id);
     }
   },
   template: `
-  <div class="l-glyph-inventory">
-    Click and drag or double-click to equip Glyphs.
-    <br>
-    The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows")}}
-    of slots are protected slots and are unaffected by anything which
-    <br>
-    may move or delete Glyphs. New Glyphs will never be inserted into these slots.
-    <glyph-protected-row-options />
-    <glyph-sort-options />
-    <div v-for="row in rowCount"
-      class="l-glyph-inventory__row"
-      :key="protectedRows + row">
-        <div v-for="col in colCount"
-           class="l-glyph-inventory__slot"
-           :class="slotClass(toIndex(row, col))"
-           @dragover="allowDrag"
-           @drop="drop(toIndex(row, col), $event)">
-        <glyph-component v-if="inventory[toIndex(row, col)]"
-          :glyph="inventory[toIndex(row, col)]"
-          :showSacrifice="glyphSacrificeUnlocked"
-          :draggable="true"
-          @shiftClicked="removeGlyph($event, false)"
-          @ctrlShiftClicked="removeGlyph($event, true)"
-          @clicked="clickGlyph(col, $event)"/>
+    <div class="l-glyph-inventory">
+      Click and drag or double-click to equip Glyphs.
+      <br>
+      The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows") }}
+      of slots are protected slots and are unaffected by anything which
+      <br>
+      may move or delete Glyphs. New Glyphs will never be inserted into these slots.
+      <glyph-protected-row-options />
+      <glyph-sort-options />
+      <div
+        v-for="row in rowCount"
+        class="l-glyph-inventory__row"
+        :key="protectedRows + row"
+      >
+        <div
+          v-for="col in colCount"
+          class="l-glyph-inventory__slot"
+          :class="slotClass(toIndex(row, col))"
+          @dragover="allowDrag"
+          @drop="drop(toIndex(row, col), $event)"
+        >
+          <glyph-component
+            v-if="inventory[toIndex(row, col)]"
+            :glyph="inventory[toIndex(row, col)]"
+            :isNew="isNew(toIndex(row, col))"
+            :showSacrifice="glyphSacrificeUnlocked"
+            :draggable="true"
+            @shiftClicked="removeGlyph($event, false)"
+            @ctrlShiftClicked="removeGlyph($event, true)"
+            @clicked="clickGlyph(col, $event)"
+          />
+        </div>
       </div>
-    </div>
-  </div>
-  `,
+    </div>`
 });
 
 Vue.component("glyph-protected-row-options", {
@@ -112,15 +123,18 @@ Vue.component("glyph-protected-row-options", {
   },
   template: `
     <div>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+      <button
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="One row is permanently un-protected for new glyphs"
-        @click="addRow">
-          Add a protected row
+        @click="addRow"
+      >
+        Add a protected row
       </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        @click="removeRow">
-          Remove a protected row
+      <button
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        @click="removeRow"
+      >
+        Remove a protected row
       </button>
-    </div>
-  `,
+    </div>`
 });

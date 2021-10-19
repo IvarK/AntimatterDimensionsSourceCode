@@ -4,6 +4,21 @@ function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
 }
 
+function vUnlockProgress(index) {
+  if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  return db.progress();
+}
+
+function vUnlockLegendLabel(complete, index) {
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  if (complete >= 1) return `${db.name} condition for V`;
+  return [
+    "V",
+    `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
+  ];
+}
+
 const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
@@ -204,7 +219,7 @@ GameDatabase.celestials.navigation = (function() {
       // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
       // even if the player has enough relic shards to buy it.
       complete: () => (EffarigUnlock.run.isUnlocked
-        ? 1 : Math.clampMax(0.999, Decimal.pLog10(Effarig.shardAmount) /
+        ? 1 : Math.clampMax(0.999, Decimal.pLog10(Currency.relicShards.value) /
           Math.log10(EffarigUnlock.run.cost))),
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
@@ -217,7 +232,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Unlock Effarig's Reality";
-            const rs = Effarig.shardAmount;
+            const rs = Currency.relicShards.value;
             const cost = EffarigUnlock.run.cost;
             return [
               "Unlock Effarig's Reality",
@@ -283,7 +298,7 @@ GameDatabase.celestials.navigation = (function() {
         if (EffarigUnlock.eternity.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;
 
-        return player.infinityPoints.pLog10() / Decimal.NUMBER_MAX_VALUE.log10();
+        return Currency.infinityPoints.value.pLog10() / Decimal.NUMBER_MAX_VALUE.log10();
       },
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
@@ -298,7 +313,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Eternity";
-            const ip = Effarig.isRunning ? player.infinityPoints : 0;
+            const ip = Effarig.isRunning ? Currency.infinityPoints.value : 0;
             return [
               "Effarig's Eternity",
               `Reach ${format(ip, 2)} / ${format(Number.MAX_VALUE, 2)}`,
@@ -332,7 +347,7 @@ GameDatabase.celestials.navigation = (function() {
         if (EffarigUnlock.reality.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;
 
-        return player.eternityPoints.pLog10() / 4000;
+        return Currency.eternityPoints.value.pLog10() / 4000;
       },
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
@@ -349,7 +364,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Reality";
-            const ep = Effarig.isRunning ? player.eternityPoints : 0;
+            const ep = Effarig.isRunning ? Currency.eternityPoints.value : 0;
             const goal = new Decimal("1e4000");
             return [
               "Effarig's Reality",
@@ -499,7 +514,7 @@ GameDatabase.celestials.navigation = (function() {
         if (Enslaved.isCompleted) return 1;
         if (!Enslaved.isRunning) return 0;
 
-        return player.eternityPoints.pLog10() / 4000;
+        return Currency.eternityPoints.value.pLog10() / 4000;
       },
       node: {
         clickAction: () => Tab.celestials.enslaved.show(true),
@@ -516,7 +531,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "The Enslaved Ones' Reality";
-            const ep = Enslaved.isRunning ? player.eternityPoints : 0;
+            const ep = Enslaved.isRunning ? Currency.eternityPoints.value : 0;
             const goal = new Decimal("1e4000");
             return [
               "The Enslaved Ones' Reality",
@@ -533,7 +548,7 @@ GameDatabase.celestials.navigation = (function() {
         pathStart: 0,
         pathEnd: 1,
         path: new LinearPath(Positions.enslavedGlyphRarity, new Vector(650 + 74 * Math.sqrt(0.75), 250 + 74 * 0.5))
-        .trimStart(23),
+          .trimStart(23),
         fill: "#ffa337",
       }
     },
@@ -541,7 +556,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => EffarigUnlock.reality.isUnlocked,
       complete: () => {
         if (Achievement(151).isUnlocked) return 1;
-        if (!player.achievementChecks.noEighthDimensions) return 0;
+        if (!player.requirementChecks.infinity.noAD8) return 0;
 
         return player.galaxies / 800;
       },
@@ -550,7 +565,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.v.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "⌬",
-        symbolOffset: "0.25rem",
+        symbolOffset: "0.25",
         fill: "#ffe066",
         position: Positions.vUnlockAchievement,
         ring: {
@@ -561,7 +576,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = 800;
             if (complete >= 1) return "V's Reality";
-            const galaxies = player.achievementChecks.noEighthDimensions ? player.galaxies : 0;
+            const galaxies = player.requirementChecks.infinity.noAD8 ? player.galaxies : 0;
             return [
               "V's unlock Achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
@@ -584,10 +599,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-1": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return player.realities / GameDatabase.celestials.v.mainUnlock.realities;
-      },
+      complete: () => vUnlockProgress(1),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -598,15 +610,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Realities condition for V";
-            const realities = player.realities;
-            const goal = GameDatabase.celestials.v.mainUnlock.realities;
-            return [
-              "V",
-              `Reach ${format(realities, 2)} / ${format(goal, 2)} Realities.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 1),
           angle: -135,
           diagonal: 16,
           horizontal: 16,
@@ -623,10 +627,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-2": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.eternities.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
-      },
+      complete: () => vUnlockProgress(2),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -637,15 +638,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Eternity condition for V";
-            const eternities = player.eternities;
-            const goal = GameDatabase.celestials.v.mainUnlock.eternities;
-            return [
-              "V",
-              `Reach ${format(eternities, 2)} / ${format(goal, 2)} Eternities.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 2),
           angle: -135,
           diagonal: 30,
           horizontal: 16,
@@ -663,10 +656,7 @@ GameDatabase.celestials.navigation = (function() {
 
     "v-unlock-3": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.infinitied.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
-      },
+      complete: () => vUnlockProgress(3),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -677,15 +667,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Infinity condition for V";
-            const infinities = player.infinitied;
-            const goal = GameDatabase.celestials.v.mainUnlock.infinities;
-            return [
-              "V",
-              `Reach ${format(infinities, 2)} / ${format(goal, 2)} Infinities.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 3),
           angle: -135,
           diagonal: 45,
           horizontal: 16,
@@ -702,11 +684,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-4": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.dilation.dilatedTime.pLog10() /
-          GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
-      },
+      complete: () => vUnlockProgress(4),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -717,15 +695,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Dilated Time condition for V";
-            const dilatedTime = player.dilation.dilatedTime;
-            const goal = GameDatabase.celestials.v.mainUnlock.dilatedTime;
-            return [
-              "V",
-              `Reach ${format(dilatedTime, 2)} / ${format(goal, 2)} Dilated Time.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 4),
           angle: -135,
           diagonal: 60,
           horizontal: 16,
@@ -742,11 +712,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-5": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return (emphasizeEnd(player.replicanti.amount.pLog10() /
-          GameDatabase.celestials.v.mainUnlock.replicanti.log10()));
-      },
+      complete: () => vUnlockProgress(5),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -757,15 +723,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Replicanti condition for V";
-            const replicanti = player.replicanti.amount;
-            const goal = GameDatabase.celestials.v.mainUnlock.replicanti;
-            return [
-              "V",
-              `Reach ${format(replicanti, 2)} / ${format(goal, 2)} Replicanti.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 5),
           angle: -135,
           diagonal: 75,
           horizontal: 16,
@@ -782,11 +740,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-unlock-6": {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => {
-        if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.reality.realityMachines.pLog10() /
-          Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
-      },
+      complete: () => vUnlockProgress(6),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -797,15 +751,7 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            if (complete >= 1) return "Reality Machines condition for V";
-            const rm = player.reality.realityMachines;
-            const goal = GameDatabase.celestials.v.mainUnlock.rm;
-            return [
-              "V",
-              `Reach ${format(rm, 2)} / ${format(goal, 2)} Reality Machines.`
-            ];
-          },
+          text: complete => vUnlockLegendLabel(complete, 6),
           angle: -135,
           diagonal: 90,
           horizontal: 16,
@@ -1045,7 +991,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.ra.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "\uf185",
-        symbolOffset: "0.25rem",
+        symbolOffset: "0.25",
         fill: "#9063de",
         position: Positions.raReality,
         ring: {
@@ -1111,7 +1057,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "effarig-pet": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => Ra.pets.teresa.level / 10,
+      complete: () => Ra.pets.teresa.level / 8,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1126,7 +1072,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.teresa.level;
             const level = Ra.pets.effarig.level;
-            if (complete !== 1 && level === 1) return `Ra's Teresa Memory level ${unlocked} / ${formatInt(10)}`;
+            if (complete !== 1 && level === 1) return `Ra's Teresa Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's Effarig Memories have all been returned`;
             return [
               "Ra's Effarig Memory level",
@@ -1162,7 +1108,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "enslaved-pet": {
       visible: () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
-      complete: () => Ra.pets.effarig.level / 10,
+      complete: () => Ra.pets.effarig.level / 8,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1177,7 +1123,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.effarig.level;
             const level = Ra.pets.enslaved.level;
-            if (complete !== 1 && level === 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(10)}`;
+            if (complete !== 1 && level === 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's Enslaved Memories have all been returned`;
             return [
               "Ra's Enslaved Memory level",
@@ -1213,7 +1159,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-pet": {
       visible: () => Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
-      complete: () => Ra.pets.enslaved.level / 10,
+      complete: () => Ra.pets.enslaved.level / 8,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1228,7 +1174,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.enslaved.level;
             const level = Ra.pets.v.level;
-            if (complete !== 1 && level === 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(10)}`;
+            if (complete !== 1 && level === 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's V Memories have all been returned`;
             return [
               "Ra's V Memory level",
@@ -1339,16 +1285,16 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-unlock": {
       visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
-      complete: () => (Laitela.canUnlock || Laitela.isUnlocked
+      complete: () => (MatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked
         ? 1
-        : Math.clampMax(0.999, Ra.totalPetLevel / Laitela.raLevelRequirement)),
+        : Math.clampMax(0.999, player.antimatter.exponent / 1.5e12)),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "ᛝ",
         symbolScale: 1.6,
-        symbolOffset: "0.1rem",
+        symbolOffset: "0.1",
         fill: "white",
         position: Positions.laitelaFirstCenter,
         ring: {
@@ -1357,25 +1303,20 @@ GameDatabase.celestials.navigation = (function() {
         alwaysShowLegend: true,
         legend: {
           text: () => {
-            const raLevel = Ra.totalPetLevel;
-            const requiredRaLevel = Laitela.raLevelRequirement;
-            const rm = player.reality.realityMachines;
-            const realityGlyphLevel = player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
-              x => x.type === "reality").map(x => x.level).max();
+            if (Laitela.isUnlocked) return ["Lai'tela's Reality"];
 
-            if (raLevel < requiredRaLevel) return [
-              "Lai'tela unlock",
-              `Total Celestial Memory levels ${formatInt(raLevel)} / ${formatInt(requiredRaLevel)}.`
-            ];
-            if (raLevel === requiredRaLevel && !Laitela.isUnlocked) return [
+            const hasIDs = player.requirementChecks.reality.maxID1.neq(0);
+            if (hasIDs) return [
               "Lai'tela's Reality",
-              `Reality Glyph level ${formatInt(realityGlyphLevel)} /
-                ${formatInt(Laitela.realityGlyphLevelRequirement)}`,
-              `Reality Machine amount ${format(rm)} /
-                ${format(Laitela.realityMachineCost)}`
+              "The Power of Infinity Dimensions",
+              "blocks your path."
             ];
+
+            const antimatter = Currency.antimatter.value;
+            const amGoal = Decimal.pow10(1.5e12);
             return [
-              "Lai'tela's Reality"
+              "Lai'tela's Reality",
+              `${format(antimatter)} / ${format(amGoal)}`
             ];
           },
           angle: 260,
@@ -1394,7 +1335,14 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-2nd-dim": {
       visible: () => Laitela.isUnlocked,
-      complete: () => Laitela.maxDarkMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
+      complete: () => {
+        const upgrade = MatterDimension(2).unlockUpgrade;
+        if (upgrade.canBeBought || upgrade.isBought) return 1;
+        if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
+        return Laitela.difficultyTier < 1
+          ? 0
+          : 30 / player.celestials.laitela.fastestCompletion;
+      },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1405,14 +1353,30 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            const goal = MatterDimension(2).adjustedStartingCost;
-            const places = complete >= 1 ? 0 : 2;
-            if (complete !== 1) return [
-            "2nd Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
+            const dmdText = "2nd Dark Matter Dimension";
+            const dim = MatterDimension(2);
+            if (dim.amount.gte(1)) return [dmdText];
+
+            const goal = dim.adjustedStartingCost;
+            if (complete >= 1) return [
+              dmdText,
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.amount.gte(1) ? 0 : 2)} / ${format(goal)}`
+            ];
+
+            const upgrade = MatterDimension(2).unlockUpgrade;
+            if (upgrade.isAvailableForPurchase) return [
+              dmdText,
+              `Imaginary Machines
+              ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+            ];
+
+            if (player.celestials.laitela.fastestCompletion > 30 && Laitela.difficultyTier < 0) return [
+              dmdText,
+              `Beat Laitela's Reality in less that ${format(30)} seconds`
             ];
             return [
-            "2nd Dark Matter Dimension",
+              dmdText,
+              `Beat Laitela's Reality`
             ];
           },
           angle: 135,
@@ -1429,13 +1393,11 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-3rd-dim": {
+    "laitela-singularity": {
       visible: () => Laitela.isUnlocked,
-      complete: () => {
-        const cost2 = MatterDimension(2).adjustedStartingCost;
-        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost2).log10(), 0) /
-        Math.log10(MatterDimension(3).adjustedStartingCost / cost2);
-      },
+      complete: () => (Currency.singularities.gte(1)
+        ? 1
+        : Math.clampMax(0.999, Currency.darkEnergy.value / Singularity.cap)),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1445,17 +1407,10 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: complete => {
-            const goal = MatterDimension(3).adjustedStartingCost;
-            const places = complete >= 1 ? 0 : 2;
-            if (complete !== 1) return [
-            "3rd Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
-            ];
-            return [
-            "3rd Dark Matter Dimension",
-            ];
-          },
+          text: [
+            "Condense your Dark Energy",
+            "Into a Singularity"
+          ],
           angle: 45,
           diagonal: 65,
           horizontal: 16,
@@ -1470,12 +1425,13 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-4th-dim-left": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
+    "laitela-3rd-dim-left": {
+      visible: () => MatterDimension(2).isUnlocked && Currency.singularities.gte(1),
       complete: () => {
-        const cost3 = MatterDimension(3).adjustedStartingCost;
-        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost3).log10(), 0) /
-        Math.log10(MatterDimension(4).adjustedStartingCost / cost3);
+        const upgrade = MatterDimension(3).unlockUpgrade;
+        if (upgrade.canBeBought || upgrade.isBought) return 1;
+        if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
+        return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
       },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1487,14 +1443,27 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            const goal = MatterDimension(4).adjustedStartingCost;
-            const places = complete >= 1 ? 0 : 2;
-            if (complete !== 1) return [
-            "4th Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
+            const dmdText = "3rd Dark Matter Dimension";
+            const dim = MatterDimension(3);
+            if (dim.amount.gte(1)) return [dmdText];
+
+            const goal = dim.adjustedStartingCost;
+            if (complete >= 1) return [
+              dmdText,
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.amount.gte(1) ? 0 : 2)} / ${format(goal)}`
             ];
+
+            const upgrade = MatterDimension(3).unlockUpgrade;
+            if (upgrade.isAvailableForPurchase) return [
+              dmdText,
+              `Imaginary Machines
+              ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+            ];
+
             return [
-            "4th Dark Matter Dimension",
+              dmdText,
+              `Automatically Condense ${format(20)} Singularities at once`,
+              `${format(Math.clampMax(Singularity.singularitiesGained, 20))} / ${format(20)}`
             ];
           },
           angle: 15,
@@ -1511,12 +1480,13 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-4th-dim-right": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
+    "laitela-3rd-dim-right": {
+      visible: () => MatterDimension(2).isUnlocked && Currency.singularities.gte(1),
       complete: () => {
-        const cost3 = MatterDimension(3).adjustedStartingCost;
-        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost3).log10(), 0) /
-        Math.log10(MatterDimension(4).adjustedStartingCost / cost3);
+        const upgrade = MatterDimension(3).unlockUpgrade;
+        if (upgrade.canBeBought || upgrade.isBought) return 1;
+        if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
+        return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
       },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1536,9 +1506,14 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-annihilation": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
-      complete: () => Number(Laitela.darkMatterMult > 1),
+    "laitela-4th-dim": {
+      visible: () => MatterDimension(3).isUnlocked,
+      complete: () => {
+        const upgrade = MatterDimension(4).unlockUpgrade;
+        if (upgrade.canBeBought || upgrade.isBought) return 1;
+        if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
+        return (Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies) / 80000;
+      },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1548,10 +1523,31 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: [
-            "Annihilate your",
-            "Dark Matter Dimensions"
-          ],
+          text: complete => {
+            const dmdText = "4th Dark Matter Dimension";
+            const dim = MatterDimension(4);
+            if (dim.amount.gte(1)) return [dmdText];
+
+            const goal = dim.adjustedStartingCost;
+            if (complete >= 1) return [
+              dmdText,
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.amount.gte(1) ? 0 : 2)} / ${format(goal)}`
+            ];
+
+            const upgrade = MatterDimension(4).unlockUpgrade;
+            if (upgrade.isAvailableForPurchase) return [
+              dmdText,
+              `Imaginary Machines
+              ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+            ];
+
+            const allGalaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;
+            return [
+              dmdText,
+              `Have ${format(80000)} total Galaxies`,
+              `${format(Math.clampMax(allGalaxies, 80000))} / ${format(80000)}`
+            ];
+          },
           angle: 135,
           diagonal: 30,
           horizontal: 16,
@@ -1566,9 +1562,16 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       },
     },
-    "laitela-singularity": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
-      complete: () => Laitela.singularities,
+    "laitela-annihilation": {
+      visible: () => MatterDimension(4).isUnlocked,
+      complete: () => {
+        const upgrade = ImaginaryUpgrade(19);
+        if (upgrade.canBeBought || upgrade.isBought) return 1;
+        if (upgrade.isAvailableForPurchase) return Currency.imaginaryMachines.value / upgrade.cost;
+        return upgrade.isPossible
+          ? Tickspeed.continuumValue / 3850000
+          : 0;
+      },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1579,8 +1582,8 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: [
-            "Condense your Dark Energy",
-            "Into a Singularity"
+            "Annihilate your",
+            "Dark Matter Dimensions"
           ],
           angle: 45,
           diagonal: 30,
@@ -1597,13 +1600,13 @@ GameDatabase.celestials.navigation = (function() {
       },
     },
     "laitela-destabilization-left": {
-      visible: () => Laitela.singularities > 0 && Laitela.darkMatterMult > 1,
-      complete: () => Laitela.difficultyTier / 4,
+      visible: () => MatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
+      complete: () => Laitela.difficultyTier / 8,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "ᛝ",
         symbolScale: 1.6,
-        symbolOffset: "0.1rem",
+        symbolOffset: "0.1",
         fill: "white",
         position: Positions.laitelaThirdCenter,
         ring: {
@@ -1614,14 +1617,16 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete < 1) return [
               "Destabalize Lai'tela's Reality",
-              "To the point where you can",
-              "Only use 4 Dimensions"
+              "To the point where you cannot",
+              "use any Dimensions",
+              `${format(Laitela.difficultyTier)} / ${format(8)}`
             ];
             return [
-              "Destabilized Lai'tela's Reality"
+              "Completely destabilized",
+              "Lai'tela's Reality",
             ];
           },
-          angle: 100,
+          angle: 0,
           diagonal: 15,
           horizontal: 8,
         },
@@ -1636,8 +1641,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-destabilization-right": {
-      visible: () => Laitela.singularities > 0 && Laitela.darkMatterMult > 1,
-      complete: () => Laitela.difficultyTier / 4,
+      visible: () => MatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
+      complete: () => Laitela.difficultyTier / 8,
       node: {
         fill: "white",
         position: Positions.laitelaThirdCenter,

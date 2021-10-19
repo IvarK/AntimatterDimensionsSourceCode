@@ -2,7 +2,6 @@
 
 Vue.component("new-dimension-row", {
   props: {
-    floatingText: Array,
     tier: Number
   },
   data() {
@@ -11,6 +10,7 @@ Vue.component("new-dimension-row", {
       isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
+      bought: 0,
       boughtBefore10: 0,
       rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
@@ -39,17 +39,17 @@ Vue.component("new-dimension-row", {
         ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
-    cappedTooltip() {
-      return this.isCapped
-        ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
-        : null;
-    },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
     },
     showRow() {
       return this.isShown || this.isUnlocked || this.amount.gt(0);
-    }
+    },
+    boughtTooltip() {
+      if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
+      if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
+      return `Purchased ${formatInt(this.bought)} ${pluralize("time", this.bought)}`;
+    },
   },
   methods: {
     update() {
@@ -61,6 +61,7 @@ Vue.component("new-dimension-row", {
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
       this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
+      this.bought = dimension.bought;
       this.boughtBefore10 = dimension.boughtBefore10;
       this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
       this.singleCost.copyFrom(dimension.cost);
@@ -78,13 +79,12 @@ Vue.component("new-dimension-row", {
     },
     buy() {
       if (this.isContinuumActive) return;
-      // TODO: Buy Until is on
-      if (this.buyUntil10) {
-        buyAsManyAsYouCanBuy(this.tier);
-      } else {
+      if (this.howManyCanBuy === 1) {
         buyOneDimension(this.tier);
+      } else {
+        buyAsManyAsYouCanBuy(this.tier);
       }
-      
+
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       }
@@ -95,8 +95,8 @@ Vue.component("new-dimension-row", {
     tutorialClass() {
       if (this.tier === 1) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
-      } 
-      
+      }
+
       if (this.tier === 2) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
       }
@@ -104,45 +104,48 @@ Vue.component("new-dimension-row", {
       return {};
     }
   },
-  template:
-  `<div v-show="showRow" class="c-antimatter-dim-row"
-    :class="{ 'c-dim-row--not-reached': !isUnlocked }">
-    <div class="c-dim-row__label c-dim-row__name">
-      {{name}} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{amountDisplay}}
-      <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
-    </div>
-    <button class="o-primary-btn o-primary-btn--new" @click="buy"
-      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isPrevented}">
-        <div class="button-content"
-          :enabled="isAffordable || isContinuumActive"
-          :ach-tooltip="cappedTooltip"
-          :class="tutorialClass()">
-            <span v-if="isPrevented">
-              Shattered by Enslaved
-            </span>
-            <span v-else-if="isContinuumActive">
-              Continuum:
-              <br>
-              {{ continuumString }}
-            </span>
-            <span v-else>
-              Buy {{ howManyCanBuy }}
-              <br>
-              Cost: {{ costDisplay }}
-            </span>
-        </div>
-        <div class="fill" v-if="!isContinuumActive && isUnlocked && isAffordable && !isPrevented">
-          <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
-          <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
-        </div>
-    </button>
+  template: `
     <div
-      v-for="text in floatingText"
-      :key="text.key"
-      class='c-antimatter-dim-row__floating-text'
-    >{{text.text}}</div>
-  </div>`
+      v-show="showRow"
+      class="c-antimatter-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked }"
+    >
+      <div class="c-dim-row__label c-dim-row__name">
+        {{ name }} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{ formatX(multiplier, 1, 1) }}</span>
+      </div>
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{ amountDisplay }}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
+      </div>
+      <button
+        class="o-primary-btn o-primary-btn--new"
+        :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isPrevented}"
+        @click="buy"
+      >
+        <div
+          v-tooltip="boughtTooltip"
+          class="button-content"
+          :enabled="isAffordable || isContinuumActive"
+          :class="tutorialClass()"
+        >
+          <span v-if="isPrevented">
+            Shattered by Enslaved
+          </span>
+          <span v-else-if="isContinuumActive">
+            Continuum:
+            <br>
+            {{ continuumString }}
+          </span>
+          <span v-else>
+            Buy {{ howManyCanBuy }}
+            <br>
+            Cost: {{ costDisplay }}
+          </span>
+        </div>
+        <div class="fill" v-if="!isContinuumActive && isUnlocked && !isPrevented">
+          <div class="fill-purchased" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
+          <div class="fill-possible" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
+        </div>
+      </button>
+    </div>`
 });

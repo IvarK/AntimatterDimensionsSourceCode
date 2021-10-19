@@ -30,8 +30,8 @@ Vue.component("glyph-peek", {
       this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
       // Hide this before first reality since then it'll confuse the player,
       // and due to pre-selected first glyph might well be incorrect anyway.
-      this.isVisible = player.realities > 0 && TimeStudy.reality.isBought;
-      this.canPeek = player.realities > 0;
+      this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought;
+      this.canPeek = PlayerProgress.realityUnlocked();
       if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }
@@ -42,22 +42,40 @@ Vue.component("glyph-peek", {
         GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
       this.level = gainedGlyphLevel().actualLevel;
     },
+    showModal() {
+      Modal.glyphShowcasePanel.show({
+        name: "Potential Glyphs for this Reality",
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.REALITY_RESET_AFTER,
+        isGlyphSelection: true,
+        showSetName: false,
+        displaySacrifice: true,
+      });
+    }
   },
   template: `
-  <glyph-set-preview v-if="isVisible"
-    class="c-glyph-peek"
-    :show="isVisible"
-    :showName="false"
-    :text="'Upcoming glyph selection:'"
-    :glyphs="glyphs"
-    :noLevelOverride="true"
-    :showSacrifice="canSacrifice"
-    :flipTooltip="true"/>
-  <span v-else-if="canPeek"
-    class="c-glyph-peek">
+    <span
+      v-if="isVisible"
+      class="c-glyph-peek"
+      @click="showModal"
+    >
+      <glyph-set-preview
+        :show="isVisible"
+        :showName="false"
+        :text="'Upcoming glyph selection:'"
+        :glyphs="glyphs"
+        :ignoreModifiedLevel="true"
+        :showSacrifice="canSacrifice"
+        :flipTooltip="true"
+      />
+      (Click to bring up details)
+    </span>
+    <span
+      v-else-if="canPeek"
+      class="c-glyph-peek"
+    >
       Purchase the Reality study to see
       <br>
       this Reality's glyph choices
-  </span>
-  `,
+    </span>`
 });

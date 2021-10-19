@@ -30,20 +30,16 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     return true;
   }
 
-  get priority() {
-    return this.data.priority;
-  }
-
-  set priority(value) {
-    this.data.priority = value;
-  }
-
   get mode() {
     return this.data.mode;
   }
 
   set mode(value) {
     this.data.mode = value;
+  }
+
+  get canUnlockSlowVersion() {
+    return player.records.thisEternity.maxAM.gte(this.antimatterCost);
   }
 
   toggleMode() {
@@ -67,8 +63,12 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
   }
 
   purchase() {
-    if (player.records.totalAntimatter.lt(this.antimatterCost)) return;
+    if (!this.canUnlockSlowVersion) return;
     this.data.isBought = true;
+  }
+
+  get resetTickOn() {
+    return Perk.antimatterNoReset.isBought ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
   }
 
   reset() {

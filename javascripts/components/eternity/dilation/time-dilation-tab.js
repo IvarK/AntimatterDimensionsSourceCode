@@ -40,8 +40,8 @@ Vue.component("time-dilation-tab", {
   },
   methods: {
     update() {
-      this.tachyons.copyFrom(player.dilation.tachyonParticles);
-      this.dilatedTime.copyFrom(player.dilation.dilatedTime);
+      this.tachyons.copyFrom(Currency.tachyonParticles);
+      this.dilatedTime.copyFrom(Currency.dilatedTime);
       this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
@@ -53,28 +53,28 @@ Vue.component("time-dilation-tab", {
       }
     }
   },
-  template:
-    `<div class="l-dilation-tab">
+  template: `
+    <div class="l-dilation-tab">
       <span>
         You have
-        <span class="c-dilation-tab__tachyons">{{format(tachyons, 2, 1)}}</span>
-        Tachyon {{"Particle" | pluralize(tachyons)}}.
+        <span class="c-dilation-tab__tachyons">{{ format(tachyons, 2, 1) }}</span>
+        Tachyon {{ "Particle" | pluralize(tachyons) }}.
       </span>
       <dilation-button />
       <span>
         You have
-        <span class="c-dilation-tab__dilated-time">{{format(dilatedTime, 2, 1)}}</span>
+        <span class="c-dilation-tab__dilated-time">{{ format(dilatedTime, 2, 1) }}</span>
         Dilated Time.
-        <span class="c-dilation-tab__dilated-time-income">+{{format(dilatedTimeIncome, 2, 1)}}/s</span>
+        <span class="c-dilation-tab__dilated-time-income">+{{ format(dilatedTimeIncome, 2, 1) }}/s</span>
       </span>
       <span>
         Next <span v-if="tachyonGalaxyGain == 2"> pair of </span>
         <span v-else-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
-        Tachyon {{ "Galaxy" | pluralize(tachyonGalaxyGain, "Galaxies")}} at
-        <span class="c-dilation-tab__galaxy-threshold">{{format(galaxyThreshold, 2, 1)}}</span>
+        Tachyon {{ "Galaxy" | pluralize(tachyonGalaxyGain, "Galaxies") }} at
+        <span class="c-dilation-tab__galaxy-threshold">{{ format(galaxyThreshold, 2, 1) }}</span>
         Dilated Time, gained total of
-        <span class="c-dilation-tab__galaxies">{{formatInt(galaxies)}}</span>
-        Tachyon {{ "Galaxy" | pluralize(galaxies, "Galaxies")}}
+        <span class="c-dilation-tab__galaxies">{{ formatInt(galaxies) }}</span>
+        Tachyon {{ "Galaxy" | pluralize(galaxies, "Galaxies") }}
       </span>
       <div class="l-dilation-upgrades-grid">
         <div class="l-dilation-upgrades-grid__row">

@@ -12,8 +12,8 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description() {
       return PlayerProgress.eternityUnlocked()
-      ? "Reach Infinity for the first time outside of a challenge."
-      : "Reach Infinity for the first time.";
+        ? "Reach Infinity for the first time outside of a challenge."
+        : "Reach Infinity for the first time.";
     },
     name: "1st Antimatter Dimension Autobuyer",
     reward: "Upgradeable 1st Antimatter Dimension Autobuyer",

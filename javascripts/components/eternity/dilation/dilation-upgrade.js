@@ -15,6 +15,8 @@ Vue.component("dilation-upgrade", {
       isAffordable: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
+      boughtAmount: 0,
+      timeUntilCost: new Decimal(0),
     };
   },
   watch: {
@@ -32,17 +34,26 @@ Vue.component("dilation-upgrade", {
         "o-dilation-upgrade--bought": this.isBought,
         "o-dilation-upgrade--capped": this.isCapped,
       };
+    },
+    timeEstimate() {
+      if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
+      if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
+      if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
+      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
     }
   },
   methods: {
     update() {
       const upgrade = this.upgrade;
+      this.timeUntilCost = Decimal.sub(upgrade.cost, Currency.dilatedTime.value)
+        .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
+        this.boughtAmount = upgrade.boughtAmount;
         return;
       }
       this.isBought = upgrade.isBought;
@@ -51,16 +62,21 @@ Vue.component("dilation-upgrade", {
       }
     }
   },
-  template:
-    `<div class="l-spoon-btn-group">
-      <button :class="classObject" @click="upgrade.purchase()">
+  template: `
+    <div class="l-spoon-btn-group">
+      <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
         <description-display
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"
         />
-        <effect-display br :config="upgrade.config" />
-        <cost-display br
+        <effect-display
+          br
+          :config="upgrade.config"
+          :key="boughtAmount"
+        />
+        <cost-display
+          br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"
           singular="Dilated Time"

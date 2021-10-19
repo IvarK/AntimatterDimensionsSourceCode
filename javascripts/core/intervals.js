@@ -55,7 +55,7 @@ const GameIntervals = (function() {
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
     save: interval(() => GameStorage.save(), () => player.options.autosaveInterval),
     checkCloudSave: interval(() => {
-      if (playFabId !== -1 && player.options.cloud) playFabSaveCheck();
+      if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
     }, 300000),
     submitKongStats: interval(() => {
       kong.submitStats("Log10 of total antimatter", player.records.totalAntimatter.e);
@@ -64,9 +64,9 @@ const GameIntervals = (function() {
       kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.challenge.normal.bestTimes[8]));
       kong.submitStats("Fastest Infinity time (ms)", Math.floor(player.records.bestInfinity.time));
       // FIXME: Infinitified is now Decimal so decide what happens here!
-      // kong.submitStats('Infinitied', Player.totalInfinitied);
+      // kong.submitStats('Infinitied', Currency.infinitiesTotal);
       // FIXME: Eternity count is now a Decimal.
-      // kong.submitStats("Eternities", player.eternities);
+      // kong.submitStats("Eternities", Currency.eternities);
       kong.submitStats("Achievements", Achievements.effectiveCount +
         SecretAchievements.all.countWhere(a => a.isUnlocked));
     }, 60000),

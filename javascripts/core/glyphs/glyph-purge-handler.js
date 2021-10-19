@@ -1,11 +1,5 @@
 "use strict";
 
-// Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
-// actually enforce any special behavior, but instead only affects various UI properties.
-function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelAlchemyCap(player.records.lastTenRealities.map(([, , , , lvl]) => lvl).max());
-}
-
 // This actually deals with both sacrifice and refining, but I wasn't 100% sure what to call it
 const GlyphSacrificeHandler = {
   get canSacrifice() {
@@ -14,18 +8,27 @@ const GlyphSacrificeHandler = {
   get isRefining() {
     return Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
   },
+  handleSpecialGlyphTypes(glyph) {
+    switch (glyph.type) {
+      case "companion":
+        Modal.deleteCompanion.show();
+        return true;
+      case "cursed":
+        Glyphs.removeFromInventory(glyph);
+        return true;
+    }
+    return false;
+  },
   // Removes a glyph, accounting for sacrifice unlock and alchemy state
   removeGlyph(glyph, force = false) {
+    if (this.handleSpecialGlyphTypes(glyph)) return;
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    else if (this.isRefining) this.refineGlyph(glyph);
+    else if (this.isRefining) this.attemptRefineGlyph(glyph, force);
     else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
-    if (glyph.type === "companion") {
-      Modal.deleteCompanion.show();
-    } else if (force || confirm("Do you really want to delete this glyph?")) {
-      Glyphs.removeFromInventory(glyph);
-    }
+    if (force || !player.options.confirmations.glyphSacrifice) Glyphs.removeFromInventory(glyph);
+    else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
     if (!this.canSacrifice) return 0;
@@ -37,19 +40,13 @@ const GlyphSacrificeHandler = {
       Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1), power);
   },
   sacrificeGlyph(glyph, force = false) {
-    if (glyph.type === "cursed") {
-      Glyphs.removeFromInventory(glyph);
-      return;
-    }
-
+    // This also needs to be here because this method is called directly from drag-and-drop sacrificing
+    if (this.handleSpecialGlyphTypes(glyph)) return;
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
-        `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
-        `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
-          return;
-      }
+      Modal.glyphSacrifice.show({ idx: glyph.idx, gain: toGain });
+      return;
     }
     player.reality.glyphs.sac[glyph.type] += toGain;
     Glyphs.removeFromInventory(glyph);
@@ -74,39 +71,63 @@ const GlyphSacrificeHandler = {
     return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   },
   glyphRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
     const alchemyResource = this.glyphAlchemyResource(glyph);
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);
     return Math.clamp(glyphActualMaxValue - alchemyResource.amount, 0, glyphActualValue);
   },
-  refineGlyph(glyph) {
+  attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
     if (glyph.type === "cursed") {
       Glyphs.removeFromInventory(glyph);
       return;
     }
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || (this.glyphRefinementGain(glyph) === 0 &&
-      !AlchemyResource.decoherence.isUnlocked)) {
+    const decoherence = AlchemyResource.decoherence.isUnlocked;
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ||
+        (this.glyphRefinementGain(glyph) === 0 && !decoherence) ||
+        (decoherence && AlchemyResources.base.every(x => x.data.amount >= Ra.alchemyResourceCap))) {
       this.sacrificeGlyph(glyph, true);
       return;
     }
-    if (this.glyphAlchemyResource(glyph).isUnlocked) {
-      const resource = this.glyphAlchemyResource(glyph);
-      const rawRefinementGain = this.glyphRawRefinementGain(glyph);
-      const refinementGain = this.glyphRefinementGain(glyph);
-      resource.amount += refinementGain;
-      const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
-      const alchemyCap = this.levelAlchemyCap(glyph.level);
-      for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
-        if (glyphTypeName !== glyph.type) {
-          const glyphType = GlyphTypes[glyphTypeName];
-          const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-          const maxResouce = Math.max(alchemyCap, otherResource.amount);
-          otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
-        }
-      }
-      Glyphs.removeFromInventory(glyph);
+
+    if (!player.options.confirmations.glyphRefine || force) {
+      this.refineGlyph(glyph);
+      return;
     }
+    const resource = this.glyphAlchemyResource(glyph);
+    Modal.glyphRefine.show({
+      idx: glyph.idx,
+      resourceName: resource.name,
+      resourceAmount: resource.amount,
+      gain: this.glyphRefinementGain(glyph),
+      cap: this.levelAlchemyCap(glyph.level)
+    });
+
+  },
+  refineGlyph(glyph) {
+    const resource = this.glyphAlchemyResource(glyph);
+    // This technically completely trashes the glyph for no rewards if not unlocked, but this will only happen ever
+    // if the player specificially tries to do so (in which case they're made aware that it's useless) or if the
+    // Reality choices contain *only* locked glyph choices. That's a rare enough edge case that I think it's okay
+    // to just delete it instead of complicating the program flow more than it already is by attempting sacrifice.
+    if (!resource.isUnlocked) {
+      Glyphs.removeFromInventory(glyph);
+      return;
+    }
+    const rawRefinementGain = this.glyphRawRefinementGain(glyph);
+    const refinementGain = this.glyphRefinementGain(glyph);
+    resource.amount += refinementGain;
+    const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
+    const alchemyCap = this.levelAlchemyCap(glyph.level);
+    for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
+      if (glyphTypeName !== glyph.type) {
+        const glyphType = GlyphTypes[glyphTypeName];
+        const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+        const maxResouce = Math.max(alchemyCap, otherResource.amount);
+        otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
+      }
+    }
+    Glyphs.removeFromInventory(glyph);
   }
 };

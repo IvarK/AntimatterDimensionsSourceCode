@@ -62,7 +62,7 @@ class AchievementState extends GameMechanicState {
     if (auto) {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
-      GameUI.notify.success(this.name);
+      GameUI.notify.success(`Achievement: ${this.name}`);
     }
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
@@ -112,10 +112,13 @@ const Achievements = {
   },
 
   autoAchieveUpdate(diff) {
-    if (player.realities === 0) return;
-    if (!player.reality.autoAchieve) return;
+    if (!PlayerProgress.realityUnlocked()) return;
+    if (!player.reality.autoAchieve) {
+      player.reality.achTimer = Math.clampMax(player.reality.achTimer + diff, this.period);
+      return;
+    }
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
-    if (Perk.achievementGroup6.isBought) {
+    if (Perk.achievementGroup5.isBought) {
       for (const achievement of Achievements.preReality) {
         achievement.unlock(true);
       }
@@ -133,11 +136,11 @@ const Achievements = {
     player.reality.gainedAutoAchievements = true;
   },
 
-  timeToNextAutoAchieve() {
-    if (player.realities === 0) return 0;
+  get timeToNextAutoAchieve() {
+    if (!PlayerProgress.realityUnlocked()) return 0;
     if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
-    return Math.max(this.period - player.reality.achTimer, 1);
+    return this.period - player.reality.achTimer;
   },
 
   _power: new Lazy(() => {

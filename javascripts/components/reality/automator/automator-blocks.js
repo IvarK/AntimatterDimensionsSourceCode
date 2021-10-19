@@ -2,33 +2,37 @@
 
 const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<=", "!="];
 const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
-  "IP", "EP", "RM",
-  "PENDING IP", "PENDING EP", "PENDING RM", "GLYPH LEVEL",
-  "AM", "REPLICANTI", "RG", "TT", "DT", "PENDING COMPLETIONS", "TP"
+  "AM", "IP", "EP", "RM", "INFINITIES", "BANKED INFINITIES", "ETERNITIES", "REALITIES",
+  "PENDING IP", "PENDING EP", "PENDING TP", "PENDING RM", "PENDING GLYPH LEVEL",
+  "DT", "TP", "RG", "REP", "TT", "TOTAL TT", "TOTAL COMPLETIONS", "PENDING COMPLETIONS",
+  "EC1 COMPLETIONS", "EC2 COMPLETIONS", "EC3 COMPLETIONS", "EC4 COMPLETIONS",
+  "EC5 COMPLETIONS", "EC6 COMPLETIONS", "EC7 COMPLETIONS", "EC8 COMPLETIONS",
+  "EC9 COMPLETIONS", "EC10 COMPLETIONS", "EC11 COMPLETIONS", "EC12 COMPLETIONS",
 ];
-const AUTOMATOR_BLOCKS_RESETS = ['INFINITY', 'ETERNITY', 'REALITY'];
 
-const automator_blocks = [
+const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
+
+const automatorBlocks = [
   {
-    cmd: 'WAIT',
+    cmd: "WAIT",
     targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
-    cmd: 'IF',
+    cmd: "IF",
     targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
-    cmd: 'WHILE',
+    cmd: "WHILE",
     targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
-    cmd: 'UNTIL',
+    cmd: "UNTIL",
     targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
@@ -38,82 +42,98 @@ const automator_blocks = [
     cmd: "STUDIES",
     hasInput: true
   }, {
-    cmd: 'UNLOCK',
-    targets: ['EC', 'DILATION'],
+    cmd: "UNLOCK",
+    targets: ["EC", "DILATION"],
     hasInput: true,
-    targetsWithoutInput: ['DILATION']
+    targetsWithoutInput: ["DILATION"]
   }, {
-    cmd: 'START',
-    targets: ['EC', 'DILATION'],
+    cmd: "START",
+    targets: ["EC", "DILATION"],
     hasInput: true,
-    targetsWithoutInput: ['DILATION']
+    targetsWithoutInput: ["DILATION"]
   }, {
-    cmd: 'AUTO',
+    cmd: "AUTO",
     targets: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
-    cmd: 'TT',
-    targets: ['AM', 'IP', 'EP', 'MAX'],
+    cmd: "BLACK HOLE",
+    targets: ["ON", "OFF"],
   }, {
-    cmd: 'BLACK HOLE',
-    targets: ['ON', 'OFF'],
+    cmd: "STORE TIME",
+    targets: ["ON", "OFF", "USE"],
   }, {
-    cmd: 'STORE TIME',
-    targets: ['ON', 'OFF', 'USE'],
+    cmd: "TT",
+    targets: ["AM", "IP", "EP", "MAX"],
   }, {
-    cmd: 'PAUSE',
+    cmd: "PAUSE",
     hasInput: true
   }, {
-    cmd: 'RESPEC'
+    cmd: "RESPEC"
   }, {
-    cmd: 'INFINITY'
+    cmd: "INFINITY"
   }, {
-    cmd: 'ETERNITY'
+    cmd: "ETERNITY"
   }, {
-    cmd: 'REALITY'
+    cmd: "REALITY"
   }, {
-    cmd: 'LOAD',
+    cmd: "LOAD",
     hasInput: true
+  }, {
+    cmd: "NOTIFY",
+    hasInput: true
+  }, {
+    cmd: "COMMENT",
+    hasInput: true
+  }, {
+    cmd: "DEFINE",
+    hasInput: true
+  }, {
+    cmd: "BLOB"
   }
-
 ];
+const AUTOMATOR_BLOCKS_BLACKLIST = ["DEFINE", "BLOB"];
 
-const automatorBlocksMap = automator_blocks.mapToObject(b => b.cmd, b => b);
+const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 
 function findAutomatorBlockByName(name) {
-  return automator_blocks.find( b => b.cmd === name)
+  return automatorBlocks.find(b => b.cmd === name);
 }
-
 
 Vue.component("automator-blocks", {
   data() {
     return {
-      blocks: automator_blocks
-    }
+      blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))
+    };
   },
   methods: {
     clone(block) {
-      let b = {
+      const b = {
         ...block,
         id: UIID.next()
-      }
+      };
 
-      if (block.nested && !block.nest) b.nest = []
-      if (block.targets) b.target = ""
-      if (block.hasInput) b.inputValue = ""
-      if (block.secondaryTargets) b.secondaryTarget = ""
-      return b
+      if (block.nested && !block.nest) b.nest = [];
+      if (block.targets) b.target = "";
+      if (block.hasInput) b.inputValue = "";
+      if (block.secondaryTargets) b.secondaryTarget = "";
+      return b;
     }
   },
-  template:
-    `<div class="c-automator-docs">
-      <draggable 
-        :list="blocks"
-        :group="{ name: 'code-blocks', pull: 'clone', put: false }"
-        :sort="false"
-        :clone="clone"
-        class="c-automator-command-list">
-        <div v-for="block in blocks" :key="block.id" class="o-automator-command"> {{ block.cmd }}</div>
-      </draggable>
-    </div>`
+  template: `
+    <draggable
+      :list="blocks"
+      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+      :sort="false"
+      :clone="clone"
+      style="display: flex; align-items: center; flex-wrap: wrap;"
+    >
+      <div
+        v-for="block in blocks"
+        :key="block.id"
+        class="o-automator-command o-automator-block-list"
+      >
+        {{ block.cmd }}
+      </div>
+    </draggable>
+    `
 });

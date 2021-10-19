@@ -55,7 +55,7 @@ Vue.component("time-study-connection", {
       this.isBought = this.setup.isBought;
     },
     percents(value) {
-      return value * 100 + "%";
+      return `${value * 100}%`;
     }
   },
   template:

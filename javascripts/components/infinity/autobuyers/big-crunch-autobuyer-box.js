@@ -19,7 +19,7 @@ Vue.component("big-crunch-autobuyer-box", {
     modes: () => [
       AUTO_CRUNCH_MODE.AMOUNT,
       AUTO_CRUNCH_MODE.TIME,
-      AUTO_CRUNCH_MODE.X_CURRENT,
+      AUTO_CRUNCH_MODE.X_HIGHEST,
     ]
   },
   methods: {
@@ -45,10 +45,10 @@ Vue.component("big-crunch-autobuyer-box", {
             type: "float"
           },
         };
-        case AUTO_CRUNCH_MODE.X_CURRENT: return {
-          title: "X times current IP",
+        case AUTO_CRUNCH_MODE.X_HIGHEST: return {
+          title: "X times highest IP",
           input: {
-            property: "xCurrent",
+            property: "xHighest",
             type: "decimal"
           },
         };
@@ -61,8 +61,8 @@ Vue.component("big-crunch-autobuyer-box", {
       this.mode = mode;
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" :showInterval="!postBreak" name="Automatic Big Crunch">
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" :showInterval="!postBreak" name="Automatic Big Crunch">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
       <template v-if="postBreak">
         <template slot="intervalSlot">
@@ -75,9 +75,13 @@ Vue.component("big-crunch-autobuyer-box", {
               v-for="optionMode in modes"
               :value="optionMode"
               :selected="mode === optionMode"
-            >{{modeProps(optionMode).title}}</option>
+            >
+              {{ modeProps(optionMode).title }}
+            </option>
           </select>
-          <span v-else>{{modeProps(mode).title}}:</span>
+          <span v-else>
+            {{ modeProps(mode).title }}:
+          </span>
         </template>
         <template slot="toggleSlot">
           <autobuyer-input
@@ -86,13 +90,13 @@ Vue.component("big-crunch-autobuyer-box", {
             v-bind="modeProps(mode).input"
           />
         </template>
-        <template slot="prioritySlot" style="margin-top: 1.2rem;">
+        <template slot="checkboxSlot" style="margin-top: 1.2rem;">
           <span>Dynamic amount:</span>
           <div
-              class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-              @click="increaseWithMult = !increaseWithMult"
-            >
-            <input type="checkbox" :checked="increaseWithMult"/>
+            class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+            @click="increaseWithMult = !increaseWithMult"
+          >
+            <input type="checkbox" :checked="increaseWithMult" />
           </div>
         </template>
       </template>

@@ -35,7 +35,7 @@ Vue.component("tt-shop", {
       return this.minimizeAvailable && this.shopMinimized;
     },
     formattedTheorems() {
-      if (this.theoremAmount.gte(1e9)) {
+      if (this.theoremAmount.gte(1e6)) {
         return format(this.theoremAmount, 2);
       }
       if (!(Teresa.isRunning || Enslaved.isRunning) &&
@@ -74,39 +74,39 @@ Vue.component("tt-shop", {
       return `${format(am)} AM`;
     },
     buyWithAM() {
-      TimeTheorems.buyWithAntimatter();
+      TimeTheorems.buyOne(false, "am");
     },
     formatIP(ip) {
       return `${format(ip)} IP`;
     },
     buyWithIP() {
-      TimeTheorems.buyWithIP();
+      TimeTheorems.buyOne(false, "ip");
     },
     formatEP(ep) {
       return `${format(ep, 2, 0)} EP`;
     },
     buyWithEP() {
-      TimeTheorems.buyWithEP();
+      TimeTheorems.buyOne(false, "ep");
     },
     buyMaxTheorems() {
       TimeTheorems.buyMax();
     },
     update() {
-      this.theoremAmount.copyFrom(player.timestudy.theorem);
+      this.theoremAmount.copyFrom(Currency.timeTheorems);
       this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
-      this.totalTimeTheorems.copyFrom(player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()));
+      this.totalTimeTheorems.copyFrom(Currency.timeTheorems.max);
       this.shopMinimized = player.timestudy.shopMinimized;
-      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
-      this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
+      this.hasTTAutobuyer = Autobuyer.timeTheorem.isUnlocked;
       this.isAutobuyerOn = Autobuyer.timeTheorem.isActive;
+      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || this.hasTTAutobuyer;
       const budget = this.budget;
-      budget.am.copyFrom(Currency.antimatter);
-      budget.ip.copyFrom(player.infinityPoints);
-      budget.ep.copyFrom(player.eternityPoints);
+      budget.am.copyFrom(TimeTheoremPurchaseType.am.currency);
+      budget.ip.copyFrom(TimeTheoremPurchaseType.ip.currency);
+      budget.ep.copyFrom(TimeTheoremPurchaseType.ep.currency);
       const costs = this.costs;
-      costs.am.copyFrom(player.timestudy.amcost);
-      costs.ip.copyFrom(player.timestudy.ipcost);
-      costs.ep.copyFrom(player.timestudy.epcost);
+      costs.am.copyFrom(TimeTheoremPurchaseType.am.cost);
+      costs.ip.copyFrom(TimeTheoremPurchaseType.ip.cost);
+      costs.ep.copyFrom(TimeTheoremPurchaseType.ep.cost);
       this.showST = V.spaceTheorems > 0;
       this.STamount = V.availableST;
       this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
@@ -116,6 +116,12 @@ Vue.component("tt-shop", {
     <div id="TTbuttons">
       <div class="ttshop-container ttshop-background">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
+        <button
+          class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+          onClick="Modal.preferredTree.show()"
+        >
+          <i class='fas fa-cog'></i>
+        </button>
           <p id="timetheorems">
             <span class="c-tt-amount">
               {{ formattedTheorems }}
@@ -140,12 +146,15 @@ Vue.component("tt-shop", {
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
-          <tt-buy-button :budget="budget.am" :cost="costs.am" :formatCost="formatAM" :action="buyWithAM"/>
-          <tt-buy-button :budget="budget.ip" :cost="costs.ip" :formatCost="formatIP" :action="buyWithIP"/>
-          <tt-buy-button :budget="budget.ep" :cost="costs.ep" :formatCost="formatEP" :action="buyWithEP"/>
+          <tt-buy-button :budget="budget.am" :cost="costs.am" :formatCost="formatAM" :action="buyWithAM" />
+          <tt-buy-button :budget="budget.ip" :cost="costs.ip" :formatCost="formatIP" :action="buyWithIP" />
+          <tt-buy-button :budget="budget.ep" :cost="costs.ep" :formatCost="formatEP" :action="buyWithEP" />
           <div class="l-tt-buy-max-vbox">
-            <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
-              @click="buyMaxTheorems">
+            <button
+              v-if="!minimized"
+              class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
+              @click="buyMaxTheorems"
+            >
               Buy max
             </button>
             <primary-button-on-off
@@ -215,38 +224,39 @@ Vue.component("tt-save-load-button", {
     }
   },
   template: `
-  <hover-menu class="l-tt-save-load-btn__wrapper">
-    <button slot="object"
-            class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
-            @click.shift.exact="save"
-            @click.exact="load">
-      {{displayName}}
-    </button>
-    <div slot="menu"
-         class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
-      <input type="text" size="4" maxlength="4"
-             class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
-             :value="name"
-             ach-tooltip="Set a custom name (up to 4 characters)"
-             @keyup.esc="hideContextMenu"
-             @blur="nicknameBlur" />
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
-    </div>
-  </hover-menu>
-`,
+    <hover-menu class="l-tt-save-load-btn__wrapper">
+      <button
+        slot="object"
+        class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+        @click.shift.exact="save"
+        @click.exact="load"
+      >
+        {{ displayName }}
+      </button>
+      <div
+        slot="menu"
+        class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu"
+      >
+        <input
+          type="text"
+          size="4"
+          maxlength="4"
+          class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+          :value="name"
+          ach-tooltip="Set a custom name (up to 4 characters)"
+          @keyup.esc="hideContextMenu"
+          @blur="nicknameBlur"
+        />
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
+      </div>
+    </hover-menu>`
 });
 
 Vue.component("tt-buy-button", {
   props: ["budget", "cost", "formatCost", "action"],
-  template: `
-    <button class="l-tt-buy-button c-tt-buy-button"
-            :class="enabledClass"
-            @click="action">
-      {{ formatCost(cost) }}
-    </button>`,
   computed: {
     isEnabled() {
       return this.budget.gte(this.cost);
@@ -254,5 +264,13 @@ Vue.component("tt-buy-button", {
     enabledClass() {
       return this.isEnabled ? "c-tt-buy-button--unlocked" : "c-tt-buy-button--locked";
     }
-  }
+  },
+  template: `
+    <button
+      class="l-tt-buy-button c-tt-buy-button"
+      :class="enabledClass"
+      @click="action"
+    >
+      {{ formatCost(cost) }}
+    </button>`
 });

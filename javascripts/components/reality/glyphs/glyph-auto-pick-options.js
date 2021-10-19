@@ -29,22 +29,21 @@ Vue.component("glyph-auto-pick-options", {
     },
   },
   template: `
-  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    <span class="c-glyph-sacrifice-options__advanced">
-      Behavior for deleted and filtered
+    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+      <span class="c-glyph-sacrifice-options__advanced">
+        Behavior for deleted and filtered
+        <br>
+        Glyphs in non-Alchemy modes:
+      </span>
       <br>
-      Glyphs in non-Alchemy modes:
-    </span>
-    <br>
-    <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">
-      Always sacrifice
-    </div>
-    <div :class="optionClass(modes.REFINE)" @click="setMode(modes.REFINE)">
-      Always refine
-    </div>
-    <div :class="optionClass(modes.REFINE_TO_CAP)" @click="setMode(modes.REFINE_TO_CAP)">
-      Refine to cap, then sacrifice
-    </div>
-  </div>
-  `
+      <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">
+        Always sacrifice
+      </div>
+      <div :class="optionClass(modes.REFINE)" @click="setMode(modes.REFINE)">
+        Always refine
+      </div>
+      <div :class="optionClass(modes.REFINE_TO_CAP)" @click="setMode(modes.REFINE_TO_CAP)">
+        Refine to cap, then sacrifice
+      </div>
+    </div>`
 });

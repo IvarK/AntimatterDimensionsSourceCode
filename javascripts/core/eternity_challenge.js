@@ -9,7 +9,7 @@ function startEternityChallenge() {
   resetChallengeStuff();
   AntimatterDimensions.reset();
   player.replicanti.galaxies = 0;
-  player.infinityPoints = Player.startingIP;
+  Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
   player.records.bestInfinity.bestIPminEternity = new Decimal(0);
   player.records.thisEternity.bestEPmin = new Decimal(0);
@@ -18,8 +18,9 @@ function startEternityChallenge() {
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
-  playerInfinityUpgradesOnEternity();
+  playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
+  ECTimeStudyState.invalidateCachedRequirements();
 }
 
 class EternityChallengeRewardState extends GameMechanicState {
@@ -103,7 +104,7 @@ class EternityChallengeState extends GameMechanicState {
       return status;
     }
 
-    let totalCompletions = this.completionsAtIP(player.infinityPoints);
+    let totalCompletions = this.completionsAtIP(Currency.infinityPoints.value);
     const maxValidCompletions = this.maxValidCompletions;
     if (totalCompletions > maxValidCompletions) {
       totalCompletions = maxValidCompletions;
@@ -129,7 +130,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isGoalReached() {
-    return player.infinityPoints.gte(this.currentGoal);
+    return Currency.infinityPoints.gte(this.currentGoal);
   }
 
   get canBeCompleted() {
@@ -159,28 +160,29 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   requestStart() {
-    if (!Tab.challenges.eternity.isAvailable || this.isRunning) return;
+    if (!Tab.challenges.eternity.isUnlocked || this.isRunning) return;
     if (!player.options.confirmations.challenges) {
       this.start();
       return;
     }
-    if (this.isUnlocked) {
-    Modal.startEternityChallenge.show(this.id);
-    }
+    if (this.isUnlocked) Modal.startEternityChallenge.show(this.id);
   }
 
   start(auto) {
-    if (!this.isUnlocked || EternityChallenge.isRunning) return false;
+    if (EternityChallenge.isRunning) return false;
+    if (!this.isUnlocked) {
+      if (this.isFullyCompleted || !TimeStudy.eternityChallenge(this.id).purchase()) return false;
+    }
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
     if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
+      if (player.requirementChecks.reality.slowestBH < 1) {
         SecretAchievement(42).unlock();
       }
-      if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
+      player.requirementChecks.reality.slowestBH = 1;
     }
     if (Enslaved.isRunning) {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
@@ -207,9 +209,8 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   exit() {
-    const nestedChallenge = NormalChallenge.current || InfinityChallenge.current;
-    if (nestedChallenge !== undefined) {
-      nestedChallenge.exit();
+    if (Player.isInAntimatterChallenge) {
+      Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
     eternity(true);
@@ -284,7 +285,7 @@ const EternityChallenges = {
   autoComplete: {
     tick() {
       if (!player.reality.autoEC) return;
-      if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+      if (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)) {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {
@@ -315,8 +316,7 @@ const EternityChallenges = {
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
         Perk.autocompleteEC3,
-        Perk.autocompleteEC4,
-        Perk.autocompleteEC5
+        Perk.autocompleteEC4
       );
       if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;

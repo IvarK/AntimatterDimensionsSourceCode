@@ -2,7 +2,7 @@
 
 Vue.component("secret-achievement-row", {
   props: {
-    row: Number
+    row: Array
   },
   data() {
     return {
@@ -17,23 +17,17 @@ Vue.component("secret-achievement-row", {
       };
     }
   },
-  created() {
-    this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
-    this.updateState();
-  },
   methods: {
-    updateState() {
-      const unlockState = Array.range(1, 8).map(i => SecretAchievement(this.row * 10 + i).isUnlocked);
-      this.isCompleted = !unlockState.includes(false);
+    update() {
+      this.isCompleted = this.row.every(a => a.isUnlocked);
     }
   },
-  template:
-    `<div :class="classObject">
+  template: `
+    <div :class="classObject">
       <secret-achievement
-        v-for="column in 8"
-        :key="column"
-        :row="row"
-        :column="column"
+        v-for="(achievement, i) in row"
+        :key="i"
+        :achievement="achievement"
         class="l-achievement-grid__cell"
       />
     </div>`

@@ -21,8 +21,8 @@ Vue.component("tachyon-particles", {
   },
   methods: {
     update() {
-      this.count = player.dilation.tachyonParticles.gte(1)
-        ? Math.clampMin(Math.floor(20 * Math.log10(player.dilation.tachyonParticles.exponent)), 1)
+      this.count = Currency.tachyonParticles.gte(1)
+        ? Math.clampMin(Math.floor(20 * Math.log10(Currency.tachyonParticles.exponent)), 1)
         : 0;
     },
     updateSize() {
@@ -97,7 +97,7 @@ Vue.component("tachyon-particle", {
           y: Math.sin(azimuth)
         };
       }
-
+      // eslint-disable-next-line max-params
       function intersect(rayStart, rayUnit, rectAA, rectBB) {
         const dirfrac = {
           x: 1 / rayUnit.x,

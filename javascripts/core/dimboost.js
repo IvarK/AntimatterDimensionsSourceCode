@@ -19,12 +19,12 @@ class DimBoost {
     }
 
     let boost = Effects.max(
-        2,
-        InfinityUpgrade.dimboostMult,
-        InfinityChallenge(7).reward,
-        InfinityChallenge(7),
-        TimeStudy(81)
-      )
+      2,
+      InfinityUpgrade.dimboostMult,
+      InfinityChallenge(7).reward,
+      InfinityChallenge(7),
+      TimeStudy(81)
+    )
       .toDecimal()
       .timesEffectsOf(
         TimeStudy(83),
@@ -38,7 +38,10 @@ class DimBoost {
   }
 
   static multiplierToNDTier(tier) {
-    return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
+    const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts + 1 - tier).clampMin(1);
+    const imaginaryBoostMult = DimBoost.power.times(ImaginaryUpgrade(24).effectOrDefault(1))
+      .pow(this.imaginaryBoosts).clampMin(1);
+    return normalBoostMult.times(imaginaryBoostMult);
   }
 
   static get maxDimensionsUnlockable() {
@@ -63,7 +66,7 @@ class DimBoost {
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) return false;
     if (Ra.isRunning) return false;
     if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
-       (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
+       (!player.break || Player.isInAntimatterChallenge)) return false;
     return true;
   }
 
@@ -88,9 +91,9 @@ class DimBoost {
       TimeStudy(222)
     );
     if (tier === 6 && NormalChallenge(10).isRunning) {
-      amount += Math.ceil((targetResets - 3) * (20 - discount));
+      amount += Math.round((targetResets - 3) * (20 - discount));
     } else if (tier === 8) {
-      amount += Math.ceil((targetResets - 5) * (15 - discount));
+      amount += Math.round((targetResets - 5) * (15 - discount));
     }
     if (EternityChallenge(5).isRunning) {
       amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
@@ -101,7 +104,7 @@ class DimBoost {
 
     amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
-    amount = Math.ceil(amount);
+    amount = Math.round(amount);
 
     return new DimBoostRequirement(tier, amount);
   }
@@ -110,40 +113,37 @@ class DimBoost {
     return Math.floor(player.dimensionBoosts);
   }
 
-  static get freeBoosts() {
-    // This was originally used for Time Compression, probably use it for something in Lai'tela now
-    return 0;
+  static get imaginaryBoosts() {
+    return Ra.isRunning ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
   }
 
   static get totalBoosts() {
-    return Math.floor(this.purchasedBoosts + this.freeBoosts);
+    return Math.floor(this.purchasedBoosts + this.imaginaryBoosts);
   }
 }
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-    if (Currency.antimatter.gt(Player.infinityLimit)) return;
-    EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
-    player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
-    resetChallengeStuff();
-    if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
-      AntimatterDimensions.reset();
-      player.sacrificed = new Decimal(0);
-      resetTickspeed();
-    }
-    skipResetsIfPossible();
-    const canKeepAntimatter = Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought;
-    if (!forcedAMReset && canKeepAntimatter) {
-      Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
-    } else {
-      Currency.antimatter.reset();
-    }
-    EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
+  if (Currency.antimatter.gt(Player.infinityLimit)) return;
+  EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
+  player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
+  resetChallengeStuff();
+  if (forcedNDReset || !Perk.antimatterNoReset.isBought) {
+    AntimatterDimensions.reset();
+    player.sacrificed = new Decimal(0);
+    resetTickspeed();
+  }
+  skipResetsIfPossible();
+  const canKeepAntimatter = Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought;
+  if (!forcedAMReset && canKeepAntimatter) {
+    Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
+  } else {
+    Currency.antimatter.reset();
+  }
+  EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
 
 function skipResetsIfPossible() {
-  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
-    return;
-  }
+  if (Player.isInAntimatterChallenge) return;
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
     player.dimensionBoosts = 4;
     if (player.galaxies === 0) player.galaxies = 1;
@@ -155,13 +155,8 @@ function skipResetsIfPossible() {
 function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
-  if (BreakInfinityUpgrade.bulkDimBoost.isBought && bulk) maxBuyDimBoosts(true);
+  if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts(true);
   else softReset(1);
-
-  for (let tier = 1; tier < 9; tier++) {
-    const mult = DimBoost.multiplierToNDTier(tier);
-    if (mult.gt(1)) floatText(tier, formatX(mult));
-  }
 }
 
 function maxBuyDimBoosts() {

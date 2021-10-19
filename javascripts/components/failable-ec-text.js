@@ -14,18 +14,19 @@ Vue.component("failable-ec-text", {
 
       const ratio = this.currentResource.div(this.maximumResource).toNumber();
       // Goes from green to yellow to red. If theme is light, use a slightly lighter yellow
-      // by not allowing full red and gree at the same time.
-      const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
+      // by not allowing full red and green at the same time.
+      const darkTheme = Theme.current().isDark() && Theme.current().name !== "S6";
       // Setting this constant to 2 will give green - yellow - red, setting it to 1
       // will give a straight line between green and red in colorspace, intermediate values
       // will give intermediate results.
+      // The last factor in the green term darkens the text on light themes to provide better contrast
       const c = darkTheme ? 2 : 1.5;
       const rgb = [
         Math.round(Math.min(c * ratio, 1) * 255),
-        Math.round(Math.min(c * (1 - ratio), 1) * 255),
+        Math.round(Math.min(c * (1 - ratio), 1) * 255 * (darkTheme ? 1 : 0.7)),
         0
       ];
-      
+
       return { color: `rgb(${rgb.join(",")})` };
     },
     text() {
@@ -42,7 +43,7 @@ Vue.component("failable-ec-text", {
       if (EternityChallenge.current && [4, 12].includes(EternityChallenge.current.id)) {
         this.currentEternityChallengeId = EternityChallenge.current.id;
         if (this.currentEternityChallengeId === 4) {
-          this.currentResource.copyFrom(player.infinitied);
+          this.currentResource.copyFrom(Currency.infinities);
         } else {
           this.currentResource = new Decimal(Time.thisEternity.totalSeconds);
         }
@@ -52,5 +53,5 @@ Vue.component("failable-ec-text", {
     },
   },
   template:
-  `<span> - <span :style="textStyle">{{text}}</span></span>`
+  `<span> - <span :style="textStyle">{{ text }}</span></span>`
 });

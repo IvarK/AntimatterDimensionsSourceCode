@@ -43,10 +43,14 @@ const AutomatorLexer = (() => {
     label: "End of line",
   });
 
+  const StringLiteral = createToken({
+    name: "StringLiteral",
+    pattern: /".*"/,
+  });
+
   const Comment = createToken({
     name: "Comment",
     pattern: /(#|\/\/)[^\n]*/,
-    group: Lexer.SKIPPED
   });
 
   const NumberLiteral = createToken({
@@ -64,7 +68,7 @@ const AutomatorLexer = (() => {
     pattern: Lexer.NA,
   });
 
-  const Currency = createCategory("Currency");
+  const AutomatorCurrency = createCategory("AutomatorCurrency");
   const PrestigeEvent = createCategory("PrestigeEvent");
   const StudyPath = createCategory("StudyPath");
   const TimeUnit = createCategory("TimeUnit");
@@ -99,62 +103,74 @@ const AutomatorLexer = (() => {
   });
   EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
-  createInCategory(Currency, "EP", /ep/i, {
+  createInCategory(AutomatorCurrency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithEP(true),
-    $getter: () => player.eternityPoints
+    $buyTT: () => TimeTheorems.buyOne(true, "ep"),
+    $getter: () => Currency.eternityPoints.value
   });
-  createInCategory(Currency, "IP", /ip/i, {
+  createInCategory(AutomatorCurrency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithIP(true),
-    $getter: () => player.infinityPoints
+    $buyTT: () => TimeTheorems.buyOne(true, "ip"),
+    $getter: () => Currency.infinityPoints.value
   });
-  createInCategory(Currency, "AM", /am/i, {
+  createInCategory(AutomatorCurrency, "AM", /am/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithAntimatter(true),
-    $getter: () => player.antimatter
+    $buyTT: () => TimeTheorems.buyOne(true, "am"),
+    $getter: () => Currency.antimatter.value
   });
-  createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
-  createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
-  createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
-  createInCategory(Currency, "RM", /rm/i, { $getter: () => player.reality.realityMachines });
+  createInCategory(AutomatorCurrency, "DT", /dt/i, { $getter: () => Currency.dilatedTime.value });
+  createInCategory(AutomatorCurrency, "TP", /tp/i, { $getter: () => Currency.tachyonParticles.value });
+  createInCategory(AutomatorCurrency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
+  createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.realityMachines.value });
 
-  createInCategory(Currency, "PendingIP", /pending[ \t]+ip/i, {
+  createInCategory(AutomatorCurrency, "infinities", /infinities/i, { $getter: () => Currency.infinities.value });
+  createInCategory(AutomatorCurrency, "bankedInfinities", /banked[ \t]+infinities/i, {
+    $autocomplete: "banked infinities",
+    $getter: () => Currency.infinitiesBanked.value
+  });
+  createInCategory(AutomatorCurrency, "eternities", /eternities/i, { $getter: () => Currency.eternities.value });
+  createInCategory(AutomatorCurrency, "realities", /realities/i, { $getter: () => Currency.realities.value });
+
+  createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
     $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
   });
-  createInCategory(Currency, "PendingEP", /pending[ \t]+ep/i, {
+  createInCategory(AutomatorCurrency, "PendingEP", /pending[ \t]+ep/i, {
     $autocomplete: "pending EP",
     $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
   });
-  createInCategory(Currency, "PendingRM", /pending[ \t]+rm/i, {
-    $autocomplete: "pending RM",
-    $getter: () => (isRealityAvailable() ? gainedRealityMachines() : new Decimal(0))
+  createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
+    $autocomplete: "pending TP",
+    $getter: () => (player.dilation.active ? getTachyonGain() : new Decimal(0)),
   });
-  createInCategory(Currency, "GlyphLevel", /glyph[ \t]+level/i, {
-    $autocomplete: "glyph level",
+  createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
+    $autocomplete: "pending RM",
+    $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))
+  });
+  createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
+    $autocomplete: "pending glyph level",
     $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
   });
 
-  createInCategory(Currency, "Rep", /rep(licanti)?/i, {
+  createInCategory(AutomatorCurrency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
-    $getter: () => player.replicanti.amount,
+    $getter: () => Replicanti.amount,
   });
-  createInCategory(Currency, "TT", /(tt|time theorems?)/i, {
+  createInCategory(AutomatorCurrency, "TT", /(tt|time theorems?)/i, {
     $autocomplete: "TT",
-    $getter: () => player.timestudy.theorem,
+    $getter: () => Currency.timeTheorems.value,
   });
-  createInCategory(Currency, "Total_TT", /total tt/i, {
+  createInCategory(AutomatorCurrency, "TotalTT", /total[ \t]+tt/i, {
     $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
 
-  createInCategory(Currency, "TotalCompletions", /total[ \t]+completions/i, {
+  createInCategory(AutomatorCurrency, "TotalCompletions", /total[ \t]+completions/i, {
     $autocomplete: "total completions",
     $getter: () => EternityChallenges.completions,
   });
 
-  createInCategory(Currency, "PendingCompletions", /pending[ \t]+completions/i, {
+  createInCategory(AutomatorCurrency, "PendingCompletions", /pending[ \t]+completions/i, {
     $autocomplete: "pending completions",
     $getter: () => {
       // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
@@ -165,7 +181,7 @@ const AutomatorLexer = (() => {
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;
-    createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
+    createInCategory(AutomatorCurrency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
       $autocomplete: `ec${i} completions`,
       // eslint-disable-next-line no-loop-func
       $getter: () => EternityChallenge(id).completions
@@ -178,7 +194,7 @@ const AutomatorLexer = (() => {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.bigCrunch,
     $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
-    $autobuyerXCurrentMode: AUTO_CRUNCH_MODE.X_CURRENT,
+    $autobuyerXHighestMode: AUTO_CRUNCH_MODE.X_HIGHEST,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canCrunch,
     $prestige: () => bigCrunchResetRequest(true),
@@ -189,7 +205,7 @@ const AutomatorLexer = (() => {
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
-    $autobuyerXCurrentMode: AUTO_ETERNITY_MODE.X_CURRENT,
+    $autobuyerXHighestMode: AUTO_ETERNITY_MODE.X_HIGHEST,
     $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canEternity,
     $prestigeLevel: 2,
@@ -258,6 +274,7 @@ const AutomatorLexer = (() => {
 
   createKeyword("Auto", /auto/i);
   createKeyword("Buy", /buy/i);
+  createKeyword("Blob", /blob\s\s/i);
   createKeyword("Define", /define/i);
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
@@ -265,6 +282,7 @@ const AutomatorLexer = (() => {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyMax(true),
   });
+  createKeyword("Notify", /notify/i);
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
   createKeyword("On", /on/i);
@@ -272,7 +290,7 @@ const AutomatorLexer = (() => {
   // Presets are a little special, because they can be named anything (like ec12 or wait)
   // So, we consume the label at the same time as we consume the preset. In order to report
   // errors, we also match just the word preset. And, we have to not match comments.
-  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\s#/])*)?/i);
+  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);
@@ -291,8 +309,8 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
-  createKeyword("XCurrent", /x[ \t]+current/i, {
-    $autocomplete: "x current",
+  createKeyword("XHighest", /x[ \t]+highest/i, {
+    $autocomplete: "x highest",
   });
 
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
@@ -300,6 +318,14 @@ const AutomatorLexer = (() => {
   const ECLiteral = createToken({
     name: "ECLiteral",
     pattern: /ec[1-9][0-9]*/i,
+    longer_alt: Identifier,
+  });
+
+  // We allow TriadStudy to consume lots of digits because that makes error reporting more
+  // clear (it's nice to say T123 is an invalid triad study)
+  const TriadStudy = createToken({
+    name: "TriadStudy",
+    pattern: /t[1-9][0-9]*/i,
     longer_alt: Identifier,
   });
 
@@ -311,12 +337,12 @@ const AutomatorLexer = (() => {
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
-    HSpace, Comment, EOL,
+    HSpace, StringLiteral, Comment, EOL,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
-    Currency, ...tokenLists.Currency,
-    ECLiteral,
+    AutomatorCurrency, ...tokenLists.AutomatorCurrency,
+    ECLiteral, TriadStudy,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
@@ -344,11 +370,30 @@ const AutomatorLexer = (() => {
 
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
-
+  
+  const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
+  
+  const standardizeAutomatorCurrencyName = function(x) {
+    // This first line exists for this function to usually return quickly;
+    // otherwise it's called enough to cause lag.
+    if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+    for (const i of tokenLists.AutomatorCurrency) {
+      // Check for a match of the full string.
+      if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {
+        return i.$autocomplete.toUpperCase();
+      }
+    }
+    // If we get to this point something has gone wrong, a currency name didn't match any of the currency regexps.
+    throw new Error(`${x} does not seem to be an automator currency`);
+  };
+  
   return {
     lexer,
     tokens: automatorTokens,
     tokenIds,
     tokenMap,
+    standardizeAutomatorCurrencyName,
   };
 })();
+
+const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

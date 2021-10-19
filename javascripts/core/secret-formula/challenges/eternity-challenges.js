@@ -20,7 +20,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e175"),
     reward: {
       description: "1st Infinity Dimension multiplier based on Infinity Power",
-      effect: completions => player.infinityPower.pow(1.5 / (700 - completions * 100)).clampMin(1),
+      effect: completions => Currency.infinityPower.value.pow(1.5 / (700 - completions * 100)).clampMin(1),
       cap: new Decimal("1e100"),
       formatEffect: value => formatX(value, 2, 1)
     }
@@ -38,23 +38,23 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 4,
-    description: "All Infinitied stat multipliers and generators are disabled.",
+    description: "All Infinity multipliers and generators are disabled.",
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
-    checkRestriction: restriction => player.infinitied.lte(restriction),
+    checkRestriction: restriction => Currency.infinities.lte(restriction),
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
     failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
-      effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),
+      effect: completions => Currency.infinityPoints.value.pow(0.003 + completions * 0.002),
       cap: new Decimal("1e200"),
       formatEffect: value => formatX(value, 2, 1)
     }
   },
   {
     id: 5,
-    description: () => `Antimatter Galaxy cost increase scaling starts instantly (normally at ${formatInt(100)}
+    description: () => `Antimatter Galaxy cost increase scaling starts immediately (normally at ${formatInt(100)}
       Galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),
@@ -80,12 +80,11 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {
-      description: "Reduce Antimatter Dimension cost multiplier growth",
+      description: "Further reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
       formatEffect: value => {
-        const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
-        const applied = base - value;
-        return `${formatX(base, 2, 1)} ➜ ${formatX(applied, 2, 1)}`;
+        const total = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward)) - value;
+        return `-${format(value, 2, 1)} (${formatX(total, 2, 1)} total)`;
       }
     }
   },
@@ -96,6 +95,7 @@ GameDatabase.challenges.eternity = [
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: new Decimal("1e2000"),
     goalIncrease: new Decimal("1e530"),
+    effect: () => TimeDimension(1).productionPerSecond,
     reward: {
       description: "1st Time Dimension produces 8th Infinity Dimensions",
       effect: completions => TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1).clampMin(0),
@@ -111,7 +111,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
       effect: completions => {
-        const infinityPower = Math.log10(player.infinityPower.pLog10() + 1);
+        const infinityPower = Math.log10(Currency.infinityPower.value.pLog10() + 1);
         return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);
       },
       formatEffect: value => formatPercents(value, 2)
@@ -126,7 +126,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e250"),
     reward: {
       description: "Infinity Dimension multiplier based on Time Shards",
-      effect: completions => player.timeShards.pow(completions * 0.1).clampMin(1),
+      effect: completions => Currency.timeShards.value.pow(completions * 0.1).clampMin(1),
       cap: new Decimal("1e400"),
       formatEffect: value => formatX(value, 2, 1)
     }
@@ -135,17 +135,17 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinitied stat to Antimatter Dimensions (Infinitied^${formatInt(950)}).`;
+        Infinities to Antimatter Dimensions (Infinities^${formatInt(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
-    effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
+    effect: () => Decimal.pow(Currency.infinitiesTotal.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
-      description: "Time Dimension multiplier based on Infinitied stat",
+      description: "Time Dimension multiplier based on Infinities",
       effect: completions => {
-        const mult = Player.totalInfinitied.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
+        const mult = Currency.infinitiesTotal.value.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: value => formatX(value, 2, 1)
@@ -159,18 +159,17 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),
     reward: {
-      description: "Reduce Tickspeed cost multiplier growth",
+      description: "Further reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
       formatEffect: value => {
-        const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
-        const applied = base - value;
-        return `${formatX(base, 2, 2)} ➜ ${formatX(applied, 2, 2)}`;
+        const total = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward)) - value;
+        return `-${format(value, 2, 2)} (${formatX(total, 2, 2)} total)`;
       }
     }
   },
   {
     id: 12,
-    description: () => (player.realities > 0
+    description: () => (PlayerProgress.realityUnlocked()
       ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
       : `The game runs ×${formatInt(1000)} slower.`),
     goal: new Decimal("1e110000"),

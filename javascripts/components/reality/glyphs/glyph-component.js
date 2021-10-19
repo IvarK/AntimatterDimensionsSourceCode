@@ -12,8 +12,8 @@ const GlyphTooltipEffect = {
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&
         this.effectConfig.alterationType !== ALTERATION_TYPE.ADDITION)
-          ? this.effectConfig.alteredColor()
-          : undefined;
+        ? this.effectConfig.alteredColor()
+        : undefined;
     },
     additionColor() {
       return this.effectConfig.alterationType === ALTERATION_TYPE.ADDITION
@@ -56,7 +56,7 @@ const GlyphTooltipEffect = {
         color: this.boostColor,
         "text-shadow": `0 0 0.4rem ${this.boostColor}`
       } : {
-          color: "#76EE76",
+        color: "#76EE76",
       };
     },
   },
@@ -70,13 +70,12 @@ const GlyphTooltipEffect = {
   },
   template: `
     <div class="c-glyph-tooltip__effect">
-      <span v-html="convertedParts[0]"/>
-      <span v-if="hasValue" :style="valueStyle">{{primaryEffectText}}</span>
-      <span v-html="convertedParts[1]"/>
-      <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
-      <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>
-    </div>
-    `
+      <span v-html="convertedParts[0]" />
+      <span v-if="hasValue" :style="valueStyle">{{ primaryEffectText }}</span>
+      <span v-html="convertedParts[1]" />
+      <span v-if="hasSecondaryValue" :style="valueStyle">{{ secondaryEffectText }}</span>
+      <span v-if="hasSecondaryValue" v-html="convertedParts[2]" />
+    </div>`
 };
 
 const GlyphTooltipComponent = {
@@ -85,6 +84,7 @@ const GlyphTooltipComponent = {
   },
   props: {
     type: String,
+    color: String,
     strength: Number,
     level: Number,
     effects: Number,
@@ -93,21 +93,39 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
+    refineReward: {
+      type: Number,
+      default: 0,
+    },
+    uncappedRefineReward: {
+      type: Number,
+      default: 0,
+    },
+    currentAction: String,
+    scoreMode: Number,
     showDeletionText: {
       type: Boolean,
       default: true,
     },
-    levelOverride: {
+    displayLevel: {
       type: Number,
       default: 0,
     }
+  },
+  mounted() {
+    // By attaching the tooltip to the body element, we make sure it ends up on top of anything
+    // else, with no z order shenanigans
+    document.body.appendChild(this.$el);
+  },
+  destroyed() {
+    document.body.removeChild(this.$el);
   },
   computed: {
     onTouchDevice() {
       return GameUI.touchDevice;
     },
     effectiveLevel() {
-      return this.levelOverride ? this.levelOverride : this.level;
+      return this.displayLevel ? this.displayLevel : this.level;
     },
     sortedEffects() {
       return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
@@ -118,15 +136,23 @@ const GlyphTooltipComponent = {
       return getRarity(this.strength);
     },
     descriptionStyle() {
+      let color;
+      // Avoid pink tooltips for music glyphs
+      if (this.color === "#FF80AB") {
+        color = this.rarityInfo.color;
+      } else if (this.type === "cursed") {
+        color = "black";
+      } else {
+        color = this.color || this.rarityInfo.color;
+      }
       return {
-        color: this.rarityInfo.color,
-        "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-                        -1px -1px 1px black, 1px -1px 1px black,
-                        0 0 3px ${this.rarityInfo.color}`,
-        float: "left",
-        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined,
-        "margin-top": this.type === "reality" ? "0.7rem" : undefined,
-        "margin-left": this.type === "reality" ? "0.7rem" : undefined
+        color,
+        "text-shadow": this.type === "cursed"
+          ? undefined
+          : `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
+            -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
+            0 0 0.3rem ${color}`,
+        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },
     description() {
@@ -139,48 +165,35 @@ const GlyphTooltipComponent = {
         case "reality":
           return `Pure Glyph of ${glyphName}`;
         default:
-          return `${this.rarityInfo.name} Glyph of ${glyphName} (${formatRarity(strengthToRarity(this.strength))})`;
+          return `${this.rarityInfo.name} Glyph of ${glyphName}${this.color === "#FF80AB"
+            ? "<span style='color: #FF80AB'>(♫)</span>"
+            : ""}`;
       }
     },
     isLevelCapped() {
-      return this.levelOverride && this.levelOverride < this.level;
+      return this.displayLevel && this.displayLevel < this.level;
     },
     isLevelBoosted() {
-      return this.levelOverride && this.levelOverride > this.level;
+      return this.displayLevel && this.displayLevel > this.level;
+    },
+    rarityText() {
+      if (!GlyphTypes[this.type].hasRarity) return "";
+      return `| Rarity:
+        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
     },
     levelText() {
       if (this.type === "companion") return "";
       // eslint-disable-next-line no-nested-ternary
-      const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
-      return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
-    },
-    levelStyle() {
+      const arrow = this.isLevelCapped
+        ? "<i class='fas fa-sort-down'></i>"
+        : (this.isLevelBoosted ? "<i class='fas fa-sort-up'></i>" : "");
       // eslint-disable-next-line no-nested-ternary
-      const color = this.isLevelCapped ? "#FF1111" : (this.isLevelBoosted ? "#44FF44" : "");
-      return { color };
-    },
-    sacrificeText() {
-      if (this.type === "companion") return "";
-      if (this.type === "cursed") return "Gives nothing when sacrificed or refined";
-      if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
-        if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
-        const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
-        const limitText = this.sacrificeReward === 0
-          ? ` (limit reached)`
-          : ``;
-        return this.onTouchDevice
-          ? `Refine for ${refinementText}${limitText}`
-          : `Can be refined for ${refinementText}${limitText}`;
-      }
-      const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
-      const showFilterScoreModes = [AUTO_GLYPH_SCORE.RARITY, AUTO_GLYPH_SCORE.RARITY_THRESHOLDS,
-        AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
-      const filterScoreText = showFilterScoreModes.includes(AutoGlyphProcessor.scoreMode)
-        ? `\nGlyph Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`
-        : "";
-      return this.onTouchDevice
-        ? `Sacrifice for ${powerText}${filterScoreText}`
-        : `Can be sacrificed for ${powerText}${filterScoreText}`;
+      const color = this.isLevelCapped
+        ? "#ff4444"
+        : (this.isLevelBoosted ? "#44FF44" : "");
+      return `Level: <span style="color: ${color}">
+              ${arrow}${formatInt(this.effectiveLevel)}${arrow}
+              </span>`;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -189,10 +202,35 @@ const GlyphTooltipComponent = {
         dragEnd: this.dragEnd,
       } : {};
     },
-    pointerEventStyle() {
+    glyphTooltipStyle() {
       // With computer mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
-      return this.onTouchDevice ? {} : { "pointer-events": "none" };
+      return {
+        "pointer-events": this.onTouchDevice ? undefined : "none",
+        "border-color": GlyphTypes[this.type].color,
+        "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
+        animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
+        color: this.type === "cursed" ? "black" : undefined,
+        background: this.type === "cursed" ? "white" : undefined
+      };
+    },
+    glyphHeaderStyle() {
+      let color;
+      // Music glyphs and cursed glyphs
+      if (this.color === "#FF80AB") {
+        color = this.rarityInfo.color;
+      } else if (this.type === "cursed") {
+        color = "black";
+      } else {
+        color = this.color || this.rarityInfo.color;
+      }
+      return {
+        "border-color": color,
+        "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
+        animation: this.type === "reality" ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
+        color: this.type === "cursed" ? "black" : undefined,
+        background: this.type === "cursed" ? "white" : undefined
+      };
     }
   },
   methods: {
@@ -213,37 +251,66 @@ const GlyphTooltipComponent = {
     removeGlyph() {
       GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
-  },
-  mounted() {
-    // By attaching the tooltip to the body element, we make sure it ends up on top of anything
-    // else, with no z order shenanigans
-    document.body.appendChild(this.$el);
-  },
-  destroyed() {
-    document.body.removeChild(this.$el);
+    sacrificeText() {
+      if (this.type === "companion" || this.type === "cursed") return "";
+      const powerText = `${format(this.sacrificeReward, 2, 2)}`;
+      const isCurrentAction = this.currentAction === "sacrifice";
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+              Sacrifice: ${powerText}
+              </span>`;
+    },
+    refineText() {
+      if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
+      if (!AlchemyResource[this.type].isUnlocked) return "";
+      let refinementText = `${format(this.uncappedRefineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      if (this.uncappedRefineReward !== this.refineReward) {
+        refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
+      }
+      const isCurrentAction = this.currentAction === "refine";
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+              Refine: ${refinementText}
+              </span>`;
+    },
+    scoreText() {
+      if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
+      const showFilterScoreModes = [AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
+      if (!showFilterScoreModes.includes(this.scoreMode)) return "";
+      return `Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`;
+    }
   },
   template: `
-  <div class="l-glyph-tooltip c-glyph-tooltip"
-       :style="pointerEventStyle"
-       v-on="eventHandlers">
-    <div class="l-glyph-tooltip__header">
-      <span class="c-glyph-tooltip__description"
-            :style="descriptionStyle">{{description}}</span>
-      <span class="l-glyph-tooltip__level" :style="levelStyle">{{levelText}}</span>
-    </div>
-    <div class="l-glyph-tooltip__effects">
-      <effect-desc v-for="e in sortedEffects"
-                   :key="e.id"
-                   :effect="e.id"
-                   :value="e.value"/>
-    </div>
-    <div v-if="showDeletionText"
-         :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
-         v-on="onTouchDevice ? { click: removeGlyph } : {}">
-      {{sacrificeText}}
-    </div>
-  </div>
-  `,
+    <div
+      class="l-glyph-tooltip c-glyph-tooltip"
+      :style="glyphTooltipStyle"
+      v-on="eventHandlers"
+    >
+      <div class="c-glyph-tooltip__header" :style="glyphHeaderStyle">
+        <span class="c-glyph-tooltip__description" :style="descriptionStyle" v-html="description"></span>
+        <span class="l-glyph-tooltip__info">
+          <span v-html="levelText"></span>
+          <span v-html="rarityText"></span>
+        </span>
+        <span v-if="showDeletionText">
+          <span
+            :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
+            v-on="onTouchDevice ? { click: removeGlyph } : {}"
+          >
+            <span v-html="sacrificeText()"></span>
+            <span v-if="sacrificeText() && refineText()"> | </span>
+            <span v-html="refineText()"></span>
+          </span>
+        </span>
+        <span class="c-glyph-tooltip__sacrifice">{{ scoreText() }}</span>
+      </div>
+      <div class="l-glyph-tooltip__effects">
+        <effect-desc
+          v-for="e in sortedEffects"
+          :key="e.id"
+          :effect="e.id"
+          :value="e.value"
+        />
+      </div>
+    </div>`
 };
 
 Vue.component("glyph-component", {
@@ -252,14 +319,21 @@ Vue.component("glyph-component", {
   },
   props: {
     glyph: Object,
+    isInModal: Boolean,
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
     showSacrifice: {
       type: Boolean,
       default: false,
     },
-    noLevelOverride: {
+    ignoreModifiedLevel: {
       type: Boolean,
       default: false,
     },
+    realityGlyphBoost: Number,
+    isActiveGlyph: Boolean,
     size: {
       type: String,
       default: "5rem",
@@ -301,12 +375,22 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
-      levelOverride: 0,
+      uncappedRefineReward: 0,
+      refineReward: 0,
+      displayLevel: 0,
       isRealityGlyph: false,
+      isCursedGlyph: false,
       glyphEffects: [],
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
     };
+  },
+  created() {
+    this.$on("tooltip-touched", () => this.hideTooltip());
+  },
+  beforeDestroy() {
+    if (this.isCurrentTooltip) this.hideTooltip();
+    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
   },
   computed: {
     hasTooltip() {
@@ -321,6 +405,9 @@ Vue.component("glyph-component", {
         return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
       }
       return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
+    },
+    zIndexStyle() {
+      return { "z-index": this.isInModal ? 7 : 6 };
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;
@@ -353,11 +440,12 @@ Vue.component("glyph-component", {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: rarityColor,
-        "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
+        color: this.isCursedGlyph ? "black" : rarityColor,
+        "text-shadow": this.isCursedGlyph ? "-0.04em 0.04em 0.08em black" : `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
-        "padding-bottom": this.bottomPadding
+        "padding-bottom": this.bottomPadding,
+        background: this.isCursedGlyph ? "white" : undefined
       };
     },
     mouseEventHandlers() {
@@ -394,16 +482,10 @@ Vue.component("glyph-component", {
       }
     },
   },
-  created() {
-    this.$on("tooltip-touched", () => this.hideTooltip());
-  },
-  beforeDestroy() {
-    if (this.isCurrentTooltip) this.hideTooltip();
-    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
-  },
   methods: {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
+      this.isCursedGlyph = this.glyph.type === "cursed";
       this.glyphEffects = this.extractGlyphEffects();
       this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
     },
@@ -448,23 +530,42 @@ Vue.component("glyph-component", {
       return effectIDs;
     },
     hideTooltip() {
+      this.$viewModel.tabs.reality.mouseoverGlyphInfo.type = "";
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
+      Glyphs.removeNewFlag(this.glyph);
       this.tooltipLoaded = true;
+      const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
+      glyphInfo.type = this.glyph.type;
+      glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = GlyphSacrificeHandler.isRefining &&
-        ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
+        : 0;
+      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
-        : GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
+        : 0;
+      if (
+        AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
+        (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward === 0)
+      ) {
+        this.currentAction = "sacrifice";
+      } else {
+        this.currentAction = "refine";
+      }
+      this.scoreMode = AutoGlyphProcessor.scoreMode;
+      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+      const adjustedLevel = this.isActiveGlyph
+        ? getAdjustedGlyphLevel(this.glyph)
+        : this.glyph.level + levelBoost;
+      this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
-      if (!this.$refs.tooltip) {
-        this.$nextTick(() => this.moveTooltipTo(x, y));
-        return;
-      }
+      if (!this.$refs.tooltip) return;
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();
@@ -495,7 +596,7 @@ Vue.component("glyph-component", {
       this.hideTooltip();
     },
     mouseMove(ev) {
-      if (this.isTouched) return;
+      if (this.isTouched || Theme.current().name === "S7") return;
       this.moveTooltipTo(ev.clientX, ev.clientY);
     },
     dragStart(ev) {
@@ -574,45 +675,61 @@ Vue.component("glyph-component", {
         width: "0.3rem",
         height: "0.3rem",
         "border-radius": "50%",
-        background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
+        background: this.isCursedGlyph ? "black" : `${this.glyph.color || getRarity(this.glyph.strength).color}`,
         transform: `translate(${dx}rem, ${dy}rem)`,
-        animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
+        animation: this.isRealityGlyph ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     }
   },
   template: `
-  <!-- The naive approach with a border and box-shadow seems to have problems with
-      weird seams/artifacts at the edges. This makes for a rather complex workaround -->
-    <div :style="outerStyle"
-         :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
-         :draggable="draggable"
-         v-on="draggable ? { dragstart: dragStart,
-                             dragend: dragEnd,
-                             drag: drag } : {}">
-      <div ref="glyph"
-           :style="innerStyle"
-           :class="['l-glyph-component', 'c-glyph-component']">
-        {{symbol}}
-        <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
-          :style="glyphEffectIcon(x)"/>
-        <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
+    <!-- The naive approach with a border and box-shadow seems to have problems with
+          weird seams/artifacts at the edges. This makes for a rather complex workaround -->
+    <div
+      :style="outerStyle"
+      :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
+      :draggable="draggable"
+      v-on="draggable ? { dragstart: dragStart, dragend: dragEnd, drag: drag } : {}"
+    >
+      <div
+        ref="glyph"
+        :style="innerStyle"
+        :class="['l-glyph-component', 'c-glyph-component']"
+      >
+        {{ symbol }}
+        <div
+          v-if="$viewModel.shiftDown || showGlyphEffectDots"
+          v-for="x in glyphEffects"
+          :style="glyphEffectIcon(x)"
+        />
+        <glyph-tooltip
+          v-if="hasTooltip && tooltipLoaded"
           v-show="isCurrentTooltip"
           ref="tooltip"
           v-bind="glyph"
           :class="tooltipDirectionClass"
+          :style="zIndexStyle"
           :sacrificeReward="sacrificeReward"
+          :refineReward="refineReward"
+          :uncappedRefineReward="uncappedRefineReward"
+          :currentAction="currentAction"
+          :scoreMode="scoreMode"
           :showDeletionText="showSacrifice"
-          :levelOverride="levelOverride"
-          :component="componentID"/>
+          :displayLevel="displayLevel"
+          :component="componentID"
+        />
       </div>
-      <div ref="over"
-           :style="overStyle"
-           v-on="mouseEventHandlers"
-           @click.shift.exact="$emit('shiftClicked', glyph.id)"
-           @click.ctrl.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
-           @click.meta.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
-           @click.exact="$emit('clicked', glyph.id)"/>
-    </div>
-  `,
+      <div class="l-new-glyph" v-if="isNew">
+        New!
+      </div>
+      <div
+        ref="over"
+        :style="overStyle"
+        v-on="mouseEventHandlers"
+        @click.shift.exact="$emit('shiftClicked', glyph.id)"
+        @click.ctrl.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
+        @click.meta.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
+        @click.exact="$emit('clicked', glyph.id)"
+      />
+    </div>`
 });

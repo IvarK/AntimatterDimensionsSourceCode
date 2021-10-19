@@ -120,7 +120,7 @@ const Time = {
     this.toMilliseconds(timespan, value => player.records.bestInfinity.time = value);
   },
 
-    /**
+  /**
    * @returns {TimeSpan}
    */
   get bestInfinityRealTime() {

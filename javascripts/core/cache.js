@@ -46,7 +46,7 @@ class Lazy {
 }
 
 const GameCache = {
-  worstChallengeTime: new Lazy(() => Math.max(player.challenge.normal.bestTimes.max(), 100)),
+  worstChallengeTime: new Lazy(() => player.challenge.normal.bestTimes.max()),
 
   bestRunIPPM: new Lazy(() =>
     player.records.lastTenInfinities
@@ -55,30 +55,29 @@ const GameCache = {
   ),
 
   averageRealTimePerEternity: new Lazy(() => player.records.lastTenEternities
-      .map(run => run[3])
-      .reduce(Number.sumReducer) / (1000 * player.records.lastTenEternities.length)),
+    .map(run => run[3])
+    .reduce(Number.sumReducer) / (1000 * player.records.lastTenEternities.length)),
 
   tickSpeedMultDecrease: new Lazy(() => 10 - Effects.sum(
-      BreakInfinityUpgrade.tickspeedCostMult,
-      EternityChallenge(11).reward
-    )),
+    BreakInfinityUpgrade.tickspeedCostMult,
+    EternityChallenge(11).reward
+  )),
 
   dimensionMultDecrease: new Lazy(() => 10 - Effects.sum(
-      BreakInfinityUpgrade.dimCostMult,
-      EternityChallenge(6).reward
-    )),
+    BreakInfinityUpgrade.dimCostMult,
+    EternityChallenge(6).reward
+  )),
 
   timeStudies: new Lazy(() => NormalTimeStudyState.studies
-      .map(s => player.timestudy.studies.includes(s.id))),
+    .map(s => player.timestudy.studies.includes(s.id))),
 
   achievementPeriod: new Lazy(() => TimeSpan.fromMinutes(30 - Effects.sum(
-      Perk.achievementGroup1,
-      Perk.achievementGroup2,
-      Perk.achievementGroup3,
-      Perk.achievementGroup4,
-      Perk.achievementGroup5,
-      Perk.achievementGroup6
-    )).totalMilliseconds),
+    Perk.achievementGroup1,
+    Perk.achievementGroup2,
+    Perk.achievementGroup3,
+    Perk.achievementGroup4,
+    Perk.achievementGroup5
+  )).totalMilliseconds),
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 

@@ -31,7 +31,7 @@ GameDatabase.achievements.secret = [
     name: "Do you enjoy pain?",
     get description() {
       return `Use a "painful" notation for ${formatInt(10)} real-time minutes
-      after having eternitied at least once.`;
+      after doing an Eternity.`;
     },
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
@@ -56,9 +56,9 @@ GameDatabase.achievements.secret = [
   },
   {
     id: 22,
-    name: "Cancer = Spread",
+    name: "Deep fried",
     get description() { return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using cancer notation.`; },
-    checkRequirement: () => player.spreadingCancer >= 1e5,
+    checkRequirement: () => player.requirementChecks.permanent.cancerGalaxies >= 1e5,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {
@@ -131,13 +131,13 @@ GameDatabase.achievements.secret = [
     id: 35,
     name: "Should we tell them about buy max...",
     get description() { return `Buy single Tickspeed upgrades ${formatInt(1e5)} times.`; },
-    checkRequirement: () => player.secretUnlocks.why >= 1e5,
+    checkRequirement: () => player.requirementChecks.permanent.singleTickspeed >= 1e5,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 36,
     name: "While you were away... Nothing happened.",
-    description: "Have nothing happen while you were away."
+    description: "See nothing happen while you were away."
   },
   {
     id: 37,
@@ -177,7 +177,7 @@ GameDatabase.achievements.secret = [
     id: 45,
     name: "This dragging is dragging on",
     description: "Drag the Perks around for a minute.",
-    checkRequirement: () => player.secretUnlocks.dragging++ / 100 >= 60
+    checkRequirement: () => player.requirementChecks.permanent.perkTreeDragging++ / 100 >= 60
   },
   {
     id: 46,

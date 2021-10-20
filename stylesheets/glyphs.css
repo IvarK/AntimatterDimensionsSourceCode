@@ -529,7 +529,7 @@
 }
 
 .c-current-glyph-effects__effect--capped {
-  color: #ff8000;
+  color: #ff8000 !important;
 }
 
 .l-current-glyph-effects__capped-header {

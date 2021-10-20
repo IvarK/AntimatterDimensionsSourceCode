@@ -85,7 +85,9 @@ Vue.component("eternity-challenges-tab", {
           this.canBeUnlocked = TimeStudy.eternityChallenge(challenge.id).canBeBought;
         },
         start() {
-          this.challenge.requestStart();
+          if (this.canBeUnlocked) {
+            TimeStudy.eternityChallenge(this.challenge.id).purchase();
+          } else this.challenge.requestStart();
         },
         goalAtCompletions(completions) {
           return format(this.challenge.goalAtCompletions(completions), 2, 1);

@@ -260,18 +260,12 @@
       }
       // We don't visit studyList because it might actually be just a number in this case
       const studies = ctx.studyList[0].children.studyListEntry;
-      if (
-        studies.length > 1 || 
-        studies[0].children.studyRange ||
-        studies[0].children.StudyPath || 
-        studies[0].children.Comma || 
-        studies[0].children.TriadStudy
-      ) {
+      if (studies.length > 1 || studies[0].children.studyRange ||
+        studies[0].children.StudyPath || studies[0].children.Comma) {
         def.type = AUTOMATOR_VAR_TYPES.STUDIES;
         def.value = this.visit(ctx.studyList);
         return;
       }
-
       // We assume the value is a number; in some cases, we might overwrite it if we see
       // this variable used in studies
       def.value = new Decimal(studies[0].children.NumberLiteral[0].image);

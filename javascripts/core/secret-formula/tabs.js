@@ -111,7 +111,7 @@ GameDatabase.tabs = [
       {
         key: "glyph sets",
         name: "Glyph Set Records",
-        symbol: "<i class='fas fa-ellipsis-h'></i>",
+        symbol: "<i class='fas fa-list-ol'></i>",
         component: "glyph-sets-tab",
         condition: () => PlayerProgress.realityUnlocked(),
         id: 3,

@@ -824,7 +824,9 @@ Vue.component("ad-slider-component", {
       }
     },
     increment(dir) {
-      this.setValue(this.getValue() + dir * this.interval);
+      const newVal = this.getValue() + dir * this.interval;
+      if (newVal > this.max || newVal < this.min) return;
+      this.setValue(newVal);
     },
     setValue(val, noCb, speed) {
       if (this.isDiff(this.val, val)) {

@@ -959,7 +959,7 @@ ${EffarigUnlock.reality.isUnlocked
   // Can't really make a nested template here without generally making a mess of the code
   // eslint-disable-next-line prefer-template
     ? "a new Glyph type, <span style='color: var(--color-bad);'>Effarig</span> Glyphs. Effarig Glyphs have " +
-      formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only" +
+      formatInt(7) + " different possible effects, which you can view in the Glyph filter settings. You can only" +
       " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
     : "<span style='color: var(--color-bad);'>(complete Effarig's Reality to see details about the reward)</span>"}
 `,
@@ -998,7 +998,7 @@ you specify, but this score is modified based on your inputs for effects. The Gl
 number of effects and having all of the effects you choose, and its score is lowered by ${formatInt(200)} for every
 missing effect. This guarantees that any glyph that doesn't have the effects you want will be below the threshold.
 <br>
-<b>Advanced Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
+<b>Effect Score Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
 your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
 the threshold to any value you want. One possible way you can use this behavior is to give a weaker effect a value of
 ${formatInt(5)}, which allows you to keep Glyphs without that effect as long as they are rarer.
@@ -1013,9 +1013,10 @@ the possible Glyphs will always be the one equipped. Just like other groups of c
 any of them in order to bring up a modal summarizing the whole set of Glyphs.
 <br>
 <br>
-<i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;
-for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score ${formatInt(999)}
-and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is never picked.</i>
+<i>Note: If desired, "Specified Effect Mode" and "Effect Score Mode" can be used to filter out some Glyph types
+entirely; for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score 
+${formatInt(999)} and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is
+never picked.</i>
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "threshold", "set", "save", "reality", "lategame",

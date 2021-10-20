@@ -290,7 +290,7 @@ Vue.component("glyph-filter-panel", {
         case this.modes.SPECIFIED_EFFECT:
           icon = "fas fa-tasks";
           break;
-        case this.modes.ADVANCED_MODE:
+        case this.modes.EFFECT_SCORE:
           icon = "fas fa-list-ol";
           break;
         case this.modes.LOWEST_ALCHEMY:
@@ -335,19 +335,19 @@ Vue.component("glyph-filter-panel", {
     filterMode(index) {
       switch (index) {
         case this.modes.LOWEST_SACRIFICE:
-          return "Lowest total Glyph Sacrifice";
+          return "Lowest Total Glyph Sacrifice";
         case this.modes.EFFECT_COUNT:
-          return "Number of effects";
+          return "Number of Effects";
         case this.modes.RARITY_THRESHOLD:
-          return "Rarity Threshold Mode";
+          return "Rarity Threshold";
         case this.modes.SPECIFIED_EFFECT:
-          return "Specified effect mode";
-        case this.modes.ADVANCED_MODE:
-          return "Advanced mode";
+          return "Specified Effect";
+        case this.modes.EFFECT_SCORE:
+          return "Effect Score";
         case this.modes.LOWEST_ALCHEMY:
           return "Lowest Alchemy Resource";
         case this.modes.ALCHEMY_VALUE:
-          return "Refinement value";
+          return "Refinement Value";
         default:
           throw Error("Unrecognized glyph filter mode");
       }
@@ -443,7 +443,7 @@ Vue.component("glyph-filter-panel", {
         (click to toggle effects on/off)
       </div>
       <div
-        v-if="mode === modes.ADVANCED_MODE"
+        v-if="mode === modes.EFFECT_SCORE"
         class="c-glyph-sacrifice-options__advanced"
       >
         <span

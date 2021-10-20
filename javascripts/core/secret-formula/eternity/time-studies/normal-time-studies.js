@@ -418,8 +418,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 201,
       cost: 900,
-      requirement: () => TimeStudy(192).isBought &&
-        (!DilationUpgrade.timeStudySplit.isBought || DilationUpgrade.ttGenerator.isBought),
+      requirement: () => TimeStudy(192).isBought,
       description: "Pick another path from the first split"
     },
     {

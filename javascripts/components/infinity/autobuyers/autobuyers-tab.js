@@ -11,7 +11,7 @@ Vue.component("autobuyers-tab", {
       const sameIntervalSet = new Set(Autobuyers.antimatterDimensions.map(x => x.interval));
       const sameInterval = !sameIntervalSet.has(undefined) && sameIntervalSet.size === 1;
       const sameBulk = Autobuyer.antimatterDimension(1).hasUnlimitedBulk;
-      const allAutobuyersBought = !Autobuyers.antimatterDimensions.some(autobuyer => !autobuyer.isBought);
+      const allAutobuyersBought = Autobuyers.antimatterDimensions.every(autobuyer => autobuyer.isUnlocked);
       this.displayADAutobuyersInOneRow = sameInterval && sameBulk && allAutobuyersBought;
     }
   },
@@ -27,7 +27,7 @@ Vue.component("autobuyers-tab", {
       <sacrifice-autobuyer-box />
       <dimension-autobuyer-box v-if="!displayADAutobuyersInOneRow" v-for="tier in 8" :key="tier" :tier="tier" />
       <tickspeed-autobuyer-box v-if="!hasContinuum" />
-      <simple-autobuyers-multi-box v-if="displayADAutobuyersInOneRow"/>
+      <simple-autobuyers-multi-box v-if="displayADAutobuyersInOneRow" />
     </div>`
 });
 

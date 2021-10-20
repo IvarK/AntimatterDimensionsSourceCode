@@ -33,13 +33,8 @@ Vue.component("current-glyph-effects", {
           const glyphName = this.effectConfig.id === "timeshardpow"
             ? GlyphTypes.time
             : GlyphTypes[this.effectConfig.glyphTypes];
-
-          let glyphColor = glyphName.color;
-          if (glyphName.id === "cursed") glyphColor = "#5151ec";
-          if (this.effect.value.capped) glyphColor = "";
-          
           return {
-            color: glyphColor,
+            color: glyphName.id === "cursed" ? "#5151ec" : glyphName.color,
             "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                             -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                             0 0 3px ${glyphName.color}`,

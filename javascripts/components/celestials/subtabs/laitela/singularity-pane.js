@@ -85,7 +85,7 @@ Vue.component("singularity-container", {
       this.perStepFactor = Singularity.gainPerCapIncrease;
       this.isAutoEnabled = laitela.automation.singularity && SingularityMilestone.autoCondense.isUnlocked;
       this.hasAutoSingularity = Number.isFinite(this.autoSingularityFactor);
-      this.nextLowerStep = this.singularityCap * this.autoSingularityFactor / 10;
+      this.nextLowerStep = this.singularityCap * this.autoSingularityFactor / this.perStepFactor;
       this.willCondenseOnDecrease = this.isAutoEnabled && this.darkEnergy > this.nextLowerStep;
     },
     doSingularity() {

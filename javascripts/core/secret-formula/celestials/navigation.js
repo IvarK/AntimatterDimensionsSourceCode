@@ -1372,11 +1372,11 @@ GameDatabase.celestials.navigation = (function() {
 
             if (player.celestials.laitela.fastestCompletion > 30 && Laitela.difficultyTier < 0) return [
               dmdText,
-              `Beat Laitela's Reality in less that ${format(30)} seconds`
+              `Beat Lai'tela's Reality in less that ${format(30)} seconds`
             ];
             return [
               dmdText,
-              `Beat Laitela's Reality`
+              `Beat Lai'tela's Reality`
             ];
           },
           angle: 135,

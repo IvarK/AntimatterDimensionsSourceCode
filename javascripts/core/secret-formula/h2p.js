@@ -1273,7 +1273,7 @@ Imaginary Machine upgrades will unlock the final two Celestials.
 When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
 called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
 Tickspeed upgrades. These fractional purchases are given for free without spending your antimatter and will provide
-an appropriate portion of their multipler.
+an appropriate portion of their multiplier.
 <br>
 <br>
 The purchase buttons for Antimatter Dimensions and Tickspeed become modified to display the number of upgrades

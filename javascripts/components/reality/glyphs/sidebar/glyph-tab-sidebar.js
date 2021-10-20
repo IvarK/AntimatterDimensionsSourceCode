@@ -65,7 +65,7 @@ Vue.component("glyph-tab-sidebar", {
           </button>
         </div>
       </div>
-      <glyph-sidebar-inventory-management-panel v-if="type === sidebarEnum.INVENTORY_MANAGEMENT" />
+      <glyph-inventory-management-panel v-if="type === sidebarEnum.INVENTORY_MANAGEMENT" />
       <glyph-filter-panel v-else-if="type === sidebarEnum.FILTER_SETTINGS && unlockedFilter" />
       <glyph-set-save-panel v-else-if="type === sidebarEnum.SAVED_SETS && unlockedSets" />
       <glyph-rejection-panel v-else-if="type === sidebarEnum.SACRIFICE_TYPE && unlockedAlchemy" />

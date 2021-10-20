@@ -26,6 +26,14 @@
   opacity: 0.5;
 }
 
+.c-glyph-filter-mode-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: 1.6rem;
+  padding: 0.5rem;
+}
+
 .l-glyph-sacrifice-options {
   display: inline-flex;
   flex-direction: column;

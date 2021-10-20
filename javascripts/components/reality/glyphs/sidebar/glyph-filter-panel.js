@@ -219,7 +219,7 @@ Vue.component("glyph-filter-panel", {
   },
   data() {
     return {
-      mode: AUTO_GLYPH_SCORE.NONE,
+      mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
       effectCount: 0,
       lockedTypes: GlyphTypes.locked.map(e => e.id),
       advancedType: GLYPH_TYPES[0],
@@ -266,13 +266,47 @@ Vue.component("glyph-filter-panel", {
     }
   },
   methods: {
+    update() {
+      this.effectCount = player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
+      this.mode = AutoGlyphProcessor.scoreMode;
+      for (const type of generatedTypes) {
+        this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
+      }
+      this.lockedTypes = GlyphTypes.locked.map(e => e.id);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+    },
     optionClass(idx) {
+      let icon;
+      switch (idx) {
+        case this.modes.LOWEST_SACRIFICE:
+          icon = "fas fa-burn";
+          break;
+        case this.modes.EFFECT_COUNT:
+          icon = "fas fa-list-ul";
+          break;
+        case this.modes.RARITY_THRESHOLD:
+          icon = "fas fa-gem";
+          break;
+        case this.modes.SPECIFIED_EFFECT:
+          icon = "fas fa-tasks";
+          break;
+        case this.modes.ADVANCED_MODE:
+          icon = "fas fa-list-ol";
+          break;
+        case this.modes.LOWEST_ALCHEMY:
+          icon = "fas fa-atom";
+          break;
+        case this.modes.ALCHEMY_VALUE:
+          icon = "fas fa-flask";
+          break;
+        default:
+          throw Error("Unrecognized glyph filter mode");
+      }
       return [
         idx === this.mode
           ? "c-glyph-sacrifice-options__option--active"
           : "c-glyph-sacrifice-options__option--inactive",
-        "c-glyph-sacrifice-options__option",
-        "l-glyph-sacrifice-options__option"
+        icon
       ];
     },
     strengthThreshold(type) {
@@ -284,15 +318,6 @@ Vue.component("glyph-filter-panel", {
         color,
         "text-shadow": `0 0 0.25rem ${color}, 0 0 0.5rem ${color}, 0 0 0.75rem ${color}, 0 0 1rem ${color}`,
       } : {};
-    },
-    update() {
-      this.effectCount = player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
-      this.mode = AutoGlyphProcessor.scoreMode;
-      for (const type of generatedTypes) {
-        this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
-      }
-      this.lockedTypes = GlyphTypes.locked.map(e => e.id);
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     setMode(m) {
       AutoGlyphProcessor.scoreMode = m;
@@ -306,6 +331,26 @@ Vue.component("glyph-filter-panel", {
         this.effectCount = Math.clamp(inputValue, 0, 8);
         player.celestials.effarig.glyphScoreSettings.simpleEffectCount = this.effectCount;
       }
+    },
+    filterMode(index) {
+      switch (index) {
+        case this.modes.LOWEST_SACRIFICE:
+          return "Lowest total Glyph Sacrifice";
+        case this.modes.EFFECT_COUNT:
+          return "Number of effects";
+        case this.modes.RARITY_THRESHOLD:
+          return "Rarity Threshold Mode";
+        case this.modes.SPECIFIED_EFFECT:
+          return "Specified effect mode";
+        case this.modes.ADVANCED_MODE:
+          return "Advanced mode";
+        case this.modes.LOWEST_ALCHEMY:
+          return "Lowest Alchemy Resource";
+        case this.modes.ALCHEMY_VALUE:
+          return "Refinement value";
+        default:
+          throw Error("Unrecognized glyph filter mode");
+      }
     }
   },
   template: `
@@ -313,33 +358,28 @@ Vue.component("glyph-filter-panel", {
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
       </div>
-      <div :class="optionClass(modes.LOWEST_SACRIFICE)" @click="setMode(modes.LOWEST_SACRIFICE)">
-        Lowest total Glyph Sacrifice
-      </div>
-      <div :class="optionClass(modes.EFFECT_COUNT)" @click="setMode(modes.EFFECT_COUNT)">
-        Number of effects
-      </div>
-      <div :class="optionClass(modes.RARITY_THRESHOLD)" @click="setMode(modes.RARITY_THRESHOLD)">
-        Rarity Threshold Mode
-      </div>
-      <div :class="optionClass(modes.SPECIFIED_EFFECT)" @click="setMode(modes.SPECIFIED_EFFECT)">
-        Specified effect mode
-      </div>
-      <div :class="optionClass(modes.ADVANCED_MODE)" @click="setMode(modes.ADVANCED_MODE)">
-        ❃.✮:▹ Advanced mode ◃:✮.❃
-      </div>
-      <div v-if="alchemyUnlocked" :class="optionClass(modes.LOWEST_ALCHEMY)" @click="setMode(modes.LOWEST_ALCHEMY)">
-        🜁 🜄 Lowest Alchemy Resource 🜃 🜂
-      </div>
-      <div v-if="alchemyUnlocked" :class="optionClass(modes.ALCHEMY_VALUE)" @click="setMode(modes.ALCHEMY_VALUE)">
-        🜁 🜄 Refinement value 🜃 🜂
+      <div class="c-glyph-sacrifice-options" style="padding: 0.8rem;">
+        <div class="c-glyph-sacrifice-options__option--active">
+          Current Filter Mode:
+          <br>
+          {{ filterMode(mode) }}
+          <br>
+        </div>
+        <div class="c-glyph-filter-mode-container">
+          <div
+            v-for="index in modes"
+            :class="optionClass(index)"
+            @click="setMode(index)"
+            v-tooltip="filterMode(index)"
+          />
+        </div>
       </div>
       <div v-if="mode === modes.LOWEST_SACRIFICE" class="c-glyph-sacrifice-options__advanced">
         <br> Glyph score is assigned based on
         <br> type; the type you have the least
-        <br> total Glyph Sacrifice value of is given
-        <br> the highest score.
-        <br> (this mode never keeps Glyphs)
+        <br> total Glyph Sacrifice value of is
+        <br> given the highest score.
+        <br> This mode never keeps Glyphs.
       </div>
       <div v-if="mode === modes.EFFECT_COUNT" class=" c-glyph-sacrifice-options__advanced">
         <br> Glyphs must have at least
@@ -422,12 +462,12 @@ Vue.component("glyph-filter-panel", {
       <div v-if="mode === modes.LOWEST_ALCHEMY" class="c-glyph-sacrifice-options__advanced">
         <br> Glyph score is assigned based
         <br> on current Alchemy Resource totals.
-        <br> (this mode never keeps Glyphs)
+        <br> This mode never keeps Glyphs.
       </div>
       <div v-if="mode === modes.ALCHEMY_VALUE" class="c-glyph-sacrifice-options__advanced">
         <br> Glyphs will be assigned values
         <br> based on refinement value.
-        <br> (this mode never keeps Glyphs)
+        <br> This mode never keeps Glyphs.
       </div>
     </div>`
 });

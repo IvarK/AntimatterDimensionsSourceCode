@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-sidebar-inventory-management-panel", {
+Vue.component("glyph-inventory-management-panel", {
   template: `
     <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
       <glyph-sort-button-group />

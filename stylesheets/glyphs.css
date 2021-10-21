@@ -662,13 +662,9 @@
 .c-glyph-peek {
   border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
-  padding: 1.2rem;
-  margin-top: 0;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 0;
+  padding: 1rem;
   height: 9rem;
-  width: 30rem;
+  width: calc(100% - 1rem);
 }
 
 .c-glyph-choice-container {

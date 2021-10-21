@@ -65,20 +65,29 @@ Vue.component("glyphs-tab", {
       <div class="l-glyphs-tab">
         <div class="l-reality-button-column">
           <glyph-peek />
-          <reality-button />
-          <reality-reminder />
-          <reset-reality-button v-if = "resetRealityDisplayed" />
-          <div v-if="isInCelestialReality">
-            <input
-              type="checkbox"
-              id="autoRestart"
-              v-model="autoRestartCelestialRuns"
-              :value="autoRestartCelestialRuns"
-              @input="toggleAutoRestartCelestial()"
-            >
-            <label for="autoRestart">Repeat this Celestial's Reality</label>
+
+          <div class="l-reality-button-group">
+            <div class="l-reality-button-group-half">
+              <reset-reality-button v-if="resetRealityDisplayed" />
+
+              <div v-if="isInCelestialReality">
+                <input
+                  type="checkbox"
+                  id="autoRestart"
+                  v-model="autoRestartCelestialRuns"
+                  :value="autoRestartCelestialRuns"
+                  @input="toggleAutoRestartCelestial()"
+                >
+                <label for="autoRestart">Repeat this Celestial's Reality</label>
+              </div>
+              <reality-amplify-button v-else />
+
+            </div>
+            <reality-button />
           </div>
-          <reality-amplify-button />
+
+          <reality-reminder />
+
           <div v-if="showInstability">
             Glyphs are becoming unstable.
             <br>
@@ -90,7 +99,7 @@ Vue.component("glyphs-tab", {
             label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
           >
-            <glyph-levels-and-weights slot="dropdown" />
+          <glyph-levels-and-weights slot="dropdown" />
           </expanding-control-box>
           <br>
           <glyph-tab-sidebar />

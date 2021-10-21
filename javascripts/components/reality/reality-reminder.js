@@ -58,7 +58,7 @@ Vue.component("reality-reminder", {
       if (!this.canReality || this.canBeExpanded) color = "var(--color-bad)";
       else color = "var(--color-good)";
       // Has both is and canBe in order to force the height back to its minimum size when all suggestions are done
-      const height = (this.canBeExpanded && this.isExpanded) ? `${8 + 1.5 * this.suggestions.length}rem` : "6.5rem";
+      const height = (this.canBeExpanded && this.isExpanded) ? `${6.5 + 1.5 * this.suggestions.length}rem` : "5rem";
       return {
         color,
         height,

@@ -52,9 +52,10 @@ Vue.component("reality-button", {
       const glyphState = getGlyphLevelInputs();
       let level = glyphState.actualLevel;
       if (!isFinite(level)) level = 0;
+      const decimalPoints = this.glyphLevel > 1000 ? 0 : 1;
       return glyphState.capped
         ? "Capped"
-        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), 1)}`;
+        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
@@ -127,7 +128,7 @@ Vue.component("reality-button", {
     }
   },
   template: `
-    <div class="l-reality-button">
+    <div class="l-reality-button l-reality-button-group-half">
       <button
         class="c-reality-button infotooltip"
         :class="classObject()"

@@ -170,7 +170,7 @@ class EternityChallengeState extends GameMechanicState {
 
   start(auto) {
     if (EternityChallenge.isRunning) return false;
-    if (!this.isUnlocked || this.isFullyCompleted) return false;
+    if (!this.isUnlocked) return false;
     
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;

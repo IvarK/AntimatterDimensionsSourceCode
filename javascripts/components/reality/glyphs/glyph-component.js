@@ -110,7 +110,8 @@ const GlyphTooltipComponent = {
     displayLevel: {
       type: Number,
       default: 0,
-    }
+    },
+    changeWatcher: Number
   },
   mounted() {
     // By attaching the tooltip to the body element, we make sure it ends up on top of anything
@@ -302,7 +303,7 @@ const GlyphTooltipComponent = {
       <div class="l-glyph-tooltip__effects">
         <effect-desc
           v-for="e in sortedEffects"
-          :key="e.id"
+          :key="e.id + changeWatcher"
           :effect="e.id"
           :value="e.value"
         />
@@ -725,6 +726,7 @@ Vue.component("glyph-component", {
           :showDeletionText="showSacrifice"
           :displayLevel="displayLevel"
           :component="componentID"
+          :changeWatcher="logGlyphSacrifice"
         />
       </div>
       <div class="l-new-glyph" v-if="isNew">

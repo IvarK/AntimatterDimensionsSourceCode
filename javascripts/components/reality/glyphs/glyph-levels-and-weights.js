@@ -249,7 +249,7 @@ Vue.component("glyph-levels-and-weights", {
       </template>
       <template v-if="shardVisible">
         <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__factor">
-          {{ formatInt(100) }}×Shards^{{ formatInt(2) }}
+          {{ formatInt(100) }}×Shards{{ formatPow(2) }}
         </div>
         <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__operator">+</div>
         <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__factor-val">

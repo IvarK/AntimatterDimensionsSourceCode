@@ -66,6 +66,7 @@ Vue.component("current-glyph-effects", {
       effects: [],
       hasEffarig: false,
       hasReality: false,
+      logGlyphSacrifice: 0,
     };
   },
   created() {
@@ -92,10 +93,18 @@ Vue.component("current-glyph-effects", {
       return Glyphs.activeList;
     }
   },
+  watch: {
+    logGlyphSacrifice() {
+      this.glyphsChanged();
+    }
+  },
   methods: {
     update() {
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
+
+      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
+        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
     },
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
@@ -117,6 +126,6 @@ Vue.component("current-glyph-effects", {
       <div v-if="noEffects">
         None (equip Glyphs to get their effects)
       </div>
-      <current-effect v-for="effect in effects" :key="effect.id" :effect="effect" />
+      <current-effect v-for="effect in effects" :key="effect.id + logGlyphSacrifice" :effect="effect" />
     </div>`
 });

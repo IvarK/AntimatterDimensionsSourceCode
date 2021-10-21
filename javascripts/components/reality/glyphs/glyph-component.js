@@ -118,6 +118,11 @@ const GlyphTooltipComponent = {
     // else, with no z order shenanigans
     document.body.appendChild(this.$el);
   },
+  watch: {
+    changeWatcher() {
+      this.$recompute("sortedEffects");
+    }
+  },
   computed: {
     onTouchDevice() {
       return GameUI.touchDevice;

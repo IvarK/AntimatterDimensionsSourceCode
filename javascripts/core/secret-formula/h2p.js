@@ -950,7 +950,7 @@ Shards.
 ${EffarigUnlock.run.isUnlocked
     ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
       "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
-    : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see details about the Reality)</div>"
+    : "<div style='color: var(--color-effarig--base);'>(unlock Effarig's Reality to see details about it)</div>"
 }
 <br>
 <br>
@@ -958,10 +958,11 @@ Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
   // Can't really make a nested template here without generally making a mess of the code
   // eslint-disable-next-line prefer-template
-    ? "a new Glyph type, <span style='color: var(--color-bad);'>Effarig</span> Glyphs. Effarig Glyphs have " +
+    ? "a new Glyph type, <span style='color: var(--color-effarig--base);'>Effarig</span> Glyphs. Effarig Glyphs have " +
       formatInt(7) + " different possible effects, which you can view in the Glyph filter settings. You can only" +
-      " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
-    : "<span style='color: var(--color-bad);'>(complete Effarig's Reality to see details about the reward)</span>"}
+      " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) +
+      " effects. Lastly, the RM multiplier and Glyph instability effects cannot appear together on the same Glyph."
+    : "<span style='color: var(--color-effarig--base);'>(complete Effarig's Reality to see reward details)</span>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],

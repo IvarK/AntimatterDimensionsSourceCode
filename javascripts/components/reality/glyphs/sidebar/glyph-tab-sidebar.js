@@ -30,34 +30,31 @@ Vue.component("glyph-tab-sidebar", {
   },
   template: `
     <div>
-      <div class="l-glyph-side-box-position">
-        <div
-          class="l-glyph-side-box-button-position"
-          v-if="unlockedFilter && unlockedSets"
-        >
+      <div>
+        <div v-if="unlockedFilter && unlockedSets" class="l-glyph-side-box-position">
           <button
-            class="l-glyph-side-box-button c-reality-upgrade-btn"
+            class="l-glyph-sidebar-button c-reality-upgrade-btn"
             @click="setSidebarState(sidebarEnum.INVENTORY_MANAGEMENT)"
           >
             Manage Inventory
           </button>
           <button
-            class="l-glyph-side-box-button c-reality-upgrade-btn"
+            class="l-glyph-sidebar-button c-reality-upgrade-btn"
             v-if="unlockedFilter"
             @click="setSidebarState(sidebarEnum.FILTER_SETTINGS)"
           >
             Glyph Filter
           </button>
           <button
-            class="l-glyph-side-box-button c-reality-upgrade-btn"
+            class="l-glyph-sidebar-button c-reality-upgrade-btn"
             v-if="unlockedSets"
             @click="setSidebarState(sidebarEnum.SAVED_SETS)"
           >
-            Glyph Set Saves
+            Saved Glyph Sets
           </button>
           <button
-            class="l-glyph-side-box-button c-reality-upgrade-btn"
-            :class="[hasRefined ? '' : 'l-glyph-side-box-button--attention']"
+            class="l-glyph-sidebar-button c-reality-upgrade-btn"
+            :class="[hasRefined ? '' : 'l-glyph-sidebar-button--attention']"
             v-if="unlockedAlchemy"
             @click="setSidebarState(sidebarEnum.SACRIFICE_TYPE)"
           >

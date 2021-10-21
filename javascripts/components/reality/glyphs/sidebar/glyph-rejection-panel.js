@@ -29,7 +29,7 @@ Vue.component("glyph-rejection-panel", {
     },
   },
   template: `
-    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
       <span class="c-glyph-sacrifice-options__advanced">
         Behavior for deleted and filtered
         <br>

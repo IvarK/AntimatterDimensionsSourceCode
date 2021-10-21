@@ -61,13 +61,8 @@ const AutoSacAdvancedTab = {
     <div class="l-auto-sac-type-tab">
       <div class="l-auto-sac-type-tab__row-wrapper">
         <div>
-          <div class="c-auto-sac-type-tab__header">
-            Threshold score
-            <div class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
-          </div>
-          <div class="l-auto-sac-type-tab__help-text">
-            rarity % + Σ effects
-          </div>
+          <b>Threshold score</b> (rarity % + effects)
+          <div class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
         </div>
         <input
           type="number"
@@ -143,8 +138,7 @@ const AutoSacEffectTab = {
   template: `
     <div class="c-glyph-sacrifice-options__advanced">
       <div>
-        Selected Glyphs will have<br>
-        at least
+        Selected Glyphs will have at least
         <input
           type="number"
           min="0"
@@ -153,11 +147,8 @@ const AutoSacEffectTab = {
           ref="effectCount" @blur="setEffectCount"
           class="c-auto-sac-effect-tab__input"
         />
-        effects total,
-        <br>
-        which must include all of
-        <br>
-        the following effects:
+        effects total, which must include <i>all</i> of the following effects:
+        (click to toggle effects on/off)
         <span class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</span>
       </div>
       <div v-for="effect in effects" class="l-auto-sac-type-tab__row-wrapper">
@@ -381,12 +372,12 @@ Vue.component("glyph-filter-panel", {
     }
   },
   template: `
-    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-      <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
-        <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
-      </div>
+    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
       <div class="c-glyph-sacrifice-options" style="padding: 0.8rem;">
         <div class="c-glyph-sacrifice-options__option--active">
+          <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
+            <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
+          </div>
           Current Filter Mode:
           <br>
           {{ filterMode(mode) }}
@@ -402,14 +393,16 @@ Vue.component("glyph-filter-panel", {
         </div>
       </div>
       <div v-if="mode === modes.LOWEST_SACRIFICE" class="c-glyph-sacrifice-options__advanced">
-        <br> Glyph score is assigned based on
-        <br> type; the type you have the least
-        <br> total Glyph Sacrifice value of is
-        <br> given the highest score.
-        <br> This mode never keeps Glyphs.
+        <br>
+        Glyph score is assigned based on type. Priority is given to Glyphs belonging to the type of which you have
+        the least total Glyph Sacrifice value.
+        <br>
+        <br>
+        This mode never keeps Glyphs, but will instead always sacrifice the Glyph it chooses.
       </div>
       <div v-if="mode === modes.EFFECT_COUNT" class=" c-glyph-sacrifice-options__advanced">
-        <br> Glyphs must have at least
+        <br>
+        Glyphs must have at least
         <input
           type="number"
           min="0"
@@ -419,8 +412,7 @@ Vue.component("glyph-filter-panel", {
           @blur="setEffectCount"
           class="c-auto-sac-effect-tab__input"
         />
-        <br> effects to be chosen. Rarer
-        <br> Glyphs are preferred in ties.
+        effects to be chosen. Rarer Glyphs are preferred in ties.
       </div>
       <div
         v-if="mode === modes.RARITY_THRESHOLD"
@@ -436,6 +428,7 @@ Vue.component("glyph-filter-panel", {
           <ad-slider-component
             v-bind="raritySliderProps"
             :value="rarityThresholds[type.id]"
+            :width="'29rem'"
             @input="setRarityThreshold(type.id, $event)"
           />
         </div>
@@ -444,15 +437,19 @@ Vue.component("glyph-filter-panel", {
         v-if="mode === modes.SPECIFIED_EFFECT"
         class="c-glyph-sacrifice-options__advanced"
       >
-        <span
-          v-for="type in glyphTypes"
-          :key="type.id"
-          class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
-          :style="advancedTypeSelectStyle(type)"
-          @click="advancedType=type.id"
-        >
-          {{ type.symbol }}
-        </span>
+        <div>
+          Glyph Type:
+          <span
+            v-for="type in glyphTypes"
+            :key="type.id"
+            class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
+            :style="advancedTypeSelectStyle(type)"
+            @click="advancedType=type.id"
+          >
+            {{ type.symbol }}
+          </span>
+        </div>
+        <br>
         <div class="l-glyph-sacrifice-options__rarity-slider-div">
           <glyph-component
             :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
@@ -461,40 +458,51 @@ Vue.component("glyph-filter-panel", {
           <ad-slider-component
             v-bind="raritySliderProps"
             :value="rarityThresholds[advancedType]"
+            :width="'29rem'"
             @input="setRarityThreshold(advancedType, $event)"
           />
         </div>
         <template v-for="type in glyphTypes">
           <auto-sac-effect-tab v-show="type.id === advancedType" :glyph-type="type.id" />
         </template>
-        (click to toggle effects on/off)
       </div>
       <div
         v-if="mode === modes.EFFECT_SCORE"
         class="c-glyph-sacrifice-options__advanced"
       >
-        <span
-          v-for="type in glyphTypes"
-          :key="type.id"
-          class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
-          :style="advancedTypeSelectStyle(type)"
-          @click="advancedType=type.id"
-        >
-          {{ type.symbol }}
-        </span>
+        <div>
+          Glyph Type:
+          <span
+            v-for="type in glyphTypes"
+            :key="type.id"
+            class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
+            :style="advancedTypeSelectStyle(type)"
+            @click="advancedType=type.id"
+          >
+            {{ type.symbol }}
+          </span>
+        </div>
+        <br>
         <template v-for="type in glyphTypes">
           <auto-sac-advanced-tab v-show="type.id === advancedType" :glyph-type="type.id" />
         </template>
       </div>
       <div v-if="mode === modes.LOWEST_ALCHEMY" class="c-glyph-sacrifice-options__advanced">
-        <br> Glyph score is assigned based
-        <br> on current Alchemy Resource totals.
-        <br> This mode never keeps Glyphs.
+        <br>
+        Glyph score is assigned based on current Alchemy Resource totals. Priority is given to the Glyph type with
+        the lowest associated alchemy resource total.
+        <br>
+        <br>
+        This mode never keeps Glyphs.
       </div>
       <div v-if="mode === modes.ALCHEMY_VALUE" class="c-glyph-sacrifice-options__advanced">
-        <br> Glyphs will be assigned values
-        <br> based on refinement value.
-        <br> This mode never keeps Glyphs.
+        <br>
+        Glyphs will be assigned values based on <i>current</i> refinement value, accounting for the type-specific
+        resource caps. Priority is given to Glyphs which are worth the most alchemy resources; Glyphs which would
+        cause you to hit a cap are effectively worth less.
+        <br>
+        <br>
+        This mode never keeps Glyphs.
       </div>
     </div>`
 });

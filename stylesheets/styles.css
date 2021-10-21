@@ -8039,8 +8039,8 @@ kbd {
 .o-questionmark {
   border-radius: 50%;
   border: 0.1rem solid;
-  width: 1.2em;
-  height: 1.2em;
+  width: 1.2rem;
+  height: 1.2rem;
   font-size: smaller;
   display: inline-flex;
   align-items: center;

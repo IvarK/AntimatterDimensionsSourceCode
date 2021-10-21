@@ -37,8 +37,8 @@
 .l-glyph-sacrifice-options {
   display: inline-flex;
   flex-direction: column;
-  padding: 2rem;
-  margin-top: 2rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
   position: relative;
   width: 27rem;
 }
@@ -56,8 +56,8 @@
 
 .l-glyph-sacrifice-options__help {
   position: absolute;
-  left: calc(100% - 0.2rem);
-  top: 0.2rem;
+  left: calc(100% - 1.4rem);
+  top: 1rem;
   transform: translateX(-100%);
   z-index: 2;
 }
@@ -111,7 +111,6 @@
   justify-content: space-between;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
-  width: 19rem;
 }
 
 .c-glyph-sacrifice-options__rarity-slider-process {
@@ -223,7 +222,6 @@
   border-radius: 0.5em;
   border: 0.1rem solid;
   padding: 0.25em 0.5em;
-  width: 12em;
   min-height: 3em;
 }
 
@@ -247,21 +245,16 @@
 
 .l-specified-effect-tab__effect-desc {
   display: inline-flex;
-  width: 22rem;
+  width: 36rem;
   align-items: center;
   justify-content: center;
 }
 
 .l-auto-sac-type-tab__effect-desc {
   display: inline-flex;
-  width: 18rem;
+  width: 28rem;
   align-items: center;
   justify-content: center;
-}
-
-.c-auto-sac-type-tab__header {
-  font-size: larger;
-  font-weight: bold;
 }
 
 .l-glyph-sacrifice-options__advanced-type-select {
@@ -515,14 +508,22 @@
   margin-bottom: 1rem;
 }
 
+.c-glyph-set-save-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 7rem;
+}
+
+.c-glyph-set-save-setting-button {
+  width: 14rem;
+}
+
 .c-glyph-set-save-button {
   height: 2.5rem;
   font-weight: bold;
   font-size: 1.3rem;
-}
-
-.l-glyph-set-save-button-spacing {
-  margin-top: 0.4rem;
 }
 
 .l-glyph-set-save-spacing {
@@ -845,24 +846,26 @@
 }
 
 .l-glyph-side-box-position {
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 5rem;
+  width: 36rem;
 }
 
-.l-glyph-side-box-button {
+.l-glyph-sidebar-button {
   display: flex;
   flex-direction: column;
   width: 8rem;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
+  height: 4rem;
+  padding: 0.5rem;
 }
 
-.l-glyph-side-box-button-position {
-  position: absolute;
-  top: 2rem;
-  right: -9rem;
+.l-glyph-sidebar-panel-size {
+  width: 36rem;
 }
 
-.l-glyph-side-box-button--attention {
+.l-glyph-sidebar-button--attention {
   animation: a-glyph-side-box-button-glow 1s infinite;
 }
 

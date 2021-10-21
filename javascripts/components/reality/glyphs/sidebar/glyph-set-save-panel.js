@@ -32,7 +32,7 @@ Vue.component("glyph-set-save-panel", {
       You can only load a set when you have no Glyphs equipped.`;
     },
     noSet() {
-      return `No Set Saved`;
+      return `No set saved in this slot`;
     },
   },
   methods: {
@@ -79,39 +79,40 @@ Vue.component("glyph-set-save-panel", {
     },
   },
   template: `
-    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
       </div>
       When searching for Glyphs to load, check:
-      <div>
-        Type: Always
-        <br>
+      <div class="c-glyph-set-save-container">
+        <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
+        <button class="o-primary-btn o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button">
+          Type: Always
+        </button>
         <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle"
+          class="o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button"
           v-model="effects"
           on="Effects: Disabled"
           off="Effects: Enabled"
         />
-        <br>
         <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle"
+          class="o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button"
           v-model="level"
           on="Level: Disabled"
           off="Level: Enabled"
         />
-        <br>
         <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle"
+          class="o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button"
           v-model="rarity"
           on="Rarity: Disabled"
           off="Rarity: Enabled"
         />
       </div>
-      <div v-for="(set, id) in glyphSets">
-        <div>
+      <br>
+      Your saved Glyph sets:
+      <div class="c-glyph-set-save-container" v-for="(set, id) in glyphSets">
+        <div style="width: 16rem">
           <glyph-set-preview
-            class="l-glyph-set-save-spacing"
             :text="setName(id)"
             :textHidden=true
             :show=true
@@ -120,29 +121,27 @@ Vue.component("glyph-set-save-panel", {
             :noneText=noSet
           />
         </div>
-        <div class="l-glyph-set-save-button-spacing">
-          <button
-            class="c-reality-upgrade-btn c-glyph-set-save-button"
-            :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
-            @click="saveGlyphSet(id)"
-          >
-            Save
-          </button>
-          <button
-            class="c-reality-upgrade-btn c-glyph-set-save-button"
-            :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
-            @click="deleteGlyphSet(id)"
-          >
-            Delete
-          </button>
-          <button
-            class="c-reality-upgrade-btn c-glyph-set-save-button"
-            :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
-            @click="loadGlyphSet(set)"
-          >
-            Load
-          </button>
-        </div>
+        <button
+          class="c-reality-upgrade-btn c-glyph-set-save-button"
+          :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
+          @click="saveGlyphSet(id)"
+        >
+          Save
+        </button>
+        <button
+          class="c-reality-upgrade-btn c-glyph-set-save-button"
+          :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
+          @click="loadGlyphSet(set)"
+        >
+          Load
+        </button>
+        <button
+          class="c-reality-upgrade-btn c-glyph-set-save-button"
+          :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
+          @click="deleteGlyphSet(id)"
+        >
+          Delete
+        </button>
       </div>
     </div>`
 });

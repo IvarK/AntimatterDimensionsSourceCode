@@ -110,15 +110,18 @@ const GlyphTooltipComponent = {
     displayLevel: {
       type: Number,
       default: 0,
-    }
+    },
+    changeWatcher: Number
   },
   mounted() {
     // By attaching the tooltip to the body element, we make sure it ends up on top of anything
     // else, with no z order shenanigans
     document.body.appendChild(this.$el);
   },
-  destroyed() {
-    document.body.removeChild(this.$el);
+  watch: {
+    changeWatcher() {
+      this.$recompute("sortedEffects");
+    }
   },
   computed: {
     onTouchDevice() {
@@ -305,7 +308,7 @@ const GlyphTooltipComponent = {
       <div class="l-glyph-tooltip__effects">
         <effect-desc
           v-for="e in sortedEffects"
-          :key="e.id"
+          :key="e.id + changeWatcher"
           :effect="e.id"
           :value="e.value"
         />
@@ -383,6 +386,7 @@ Vue.component("glyph-component", {
       glyphEffects: [],
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
+      logGlyphSacrifice: 0
     };
   },
   created() {
@@ -482,12 +486,22 @@ Vue.component("glyph-component", {
       }
     },
   },
+  watch: {
+    logGlyphSacrifice() {
+      this.tooltipLoaded = false;
+      if (this.isCurrentTooltip) this.showTooltip();
+    }
+  },
   methods: {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
       this.isCursedGlyph = this.glyph.type === "cursed";
       this.glyphEffects = this.extractGlyphEffects();
       this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
+
+      
+      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
+        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
     },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
@@ -717,6 +731,7 @@ Vue.component("glyph-component", {
           :showDeletionText="showSacrifice"
           :displayLevel="displayLevel"
           :component="componentID"
+          :changeWatcher="logGlyphSacrifice"
         />
       </div>
       <div class="l-new-glyph" v-if="isNew">

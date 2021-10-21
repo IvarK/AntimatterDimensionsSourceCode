@@ -199,6 +199,7 @@ Vue.component("glyph-set-name", {
     },
     sortGlyphList() {
       // Get the percent for each type, then sort it based on type and then default order, to make it consistent
+      this.$recompute("textColor");
       this.multipleGlyphList.forEach(i => i.perc = this.calculateGlyphPercent(i.type));
       this.multipleGlyphList.sort((a, b) => (a.perc === b.perc
         ? this.defaultOrder.indexOf(a.type) - this.defaultOrder.indexOf(b.type)

@@ -369,6 +369,21 @@ Vue.component("glyph-filter-panel", {
         default:
           throw Error("Unrecognized glyph filter mode");
       }
+    },
+    isUnlocked(index) {
+      switch (index) {
+        case this.modes.LOWEST_SACRIFICE:
+        case this.modes.EFFECT_COUNT:
+        case this.modes.RARITY_THRESHOLD:
+        case this.modes.SPECIFIED_EFFECT:
+        case this.modes.EFFECT_SCORE:
+          return true;
+        case this.modes.LOWEST_ALCHEMY:
+        case this.modes.ALCHEMY_VALUE:
+          return this.alchemyUnlocked;
+        default:
+          throw Error("Unrecognized glyph filter mode");
+      }
     }
   },
   template: `
@@ -386,6 +401,7 @@ Vue.component("glyph-filter-panel", {
         <div class="c-glyph-filter-mode-container">
           <div
             v-for="index in modes"
+            v-if="isUnlocked(index)"
             :class="optionClass(index)"
             @click="setMode(index)"
             v-tooltip="filterMode(index)"

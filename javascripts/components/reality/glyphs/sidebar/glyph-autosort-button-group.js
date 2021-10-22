@@ -44,6 +44,7 @@ Vue.component("glyph-autosort-button-group", {
     <div>
       <div class="c-glyph-sacrifice-options__option--active o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
       Automatic Glyph Arrangement:
+      <br>
       <primary-button-cycle
         v-model="autoSort"
         class="l-glyph-inventory__sort c-reality-upgrade-btn"

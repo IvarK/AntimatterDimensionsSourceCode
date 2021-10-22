@@ -38,7 +38,7 @@
   display: inline-flex;
   flex-direction: column;
   padding: 1rem;
-  margin-top: 0.5rem;
+  margin-top: -0.2rem;
   position: relative;
   width: 27rem;
 }
@@ -245,14 +245,14 @@
 
 .l-specified-effect-tab__effect-desc {
   display: inline-flex;
-  width: 36rem;
+  width: 100%;
   align-items: center;
   justify-content: center;
 }
 
 .l-auto-sac-type-tab__effect-desc {
   display: inline-flex;
-  width: 28rem;
+  width: calc(100% - 5rem);
   align-items: center;
   justify-content: center;
 }
@@ -512,8 +512,14 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+.c-glyph-single-set-save {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
   align-items: flex-end;
-  height: 7rem;
+  height: 7.5rem;
 }
 
 .c-glyph-set-save-setting-button {
@@ -841,24 +847,46 @@
   width: 0%;
 }
 
-.l-glyph-side-box-position {
+.l-glyph-sidebar-option-container {
+  display: flex;
+  flex-direction: column;
+  height: 5rem;
+  width: 100%;
+}
+
+.l-glyph-sidebar-tab-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   height: 5rem;
-  width: 36rem;
+  width: 100%;
+}
+
+.c-glyph-sidebar-button {
+  background-color: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem 0.5rem 0 0;
+  border-style: solid solid none solid;
+  color: var(--color-reality-light);
+  cursor: pointer;
+  transition-duration: 0.15s;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter, serif;
 }
 
 .l-glyph-sidebar-button {
   display: flex;
   flex-direction: column;
-  width: 8rem;
+  justify-content: center;
+  align-items: center;
+  width: 25%
+  ;margin: 0 0.5rem;
   height: 4rem;
-  padding: 0.5rem;
 }
 
 .l-glyph-sidebar-panel-size {
-  width: 36rem;
+  width: 100%;
 }
 
 .l-glyph-sidebar-button--attention {

@@ -419,9 +419,7 @@ Vue.component("glyph-filter-panel", {
         class="l-glyph-sacrifice-options__rarity-sliders"
       >
         <span class="c-glyph-sacrifice-options__advanced">
-          Any Glyphs with rarity below these
-          <br>
-          thresholds will be sacrificed.
+          Any Glyphs with rarity below these thresholds will be sacrificed.
         </span>
         <div v-for="type in glyphTypes" :key="type.id" class="l-glyph-sacrifice-options__rarity-slider-div">
           <glyph-component :glyph="{type: type.id, strength: strengthThreshold(type.id) }" v-bind="glyphIconProps" />

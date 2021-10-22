@@ -26,41 +26,48 @@ Vue.component("glyph-tab-sidebar", {
     },
     setSidebarState(state) {
       player.reality.showSidebarPanel = state;
+    },
+    sidebarStyle(index) {
+      return {
+        "z-index": player.reality.showSidebarPanel === index ? 1 : 0,
+      };
     }
   },
   template: `
-    <div>
-      <div>
-        <div v-if="unlockedFilter && unlockedSets" class="l-glyph-side-box-position">
-          <button
-            class="l-glyph-sidebar-button c-reality-upgrade-btn"
-            @click="setSidebarState(sidebarEnum.INVENTORY_MANAGEMENT)"
-          >
-            Manage Inventory
-          </button>
-          <button
-            class="l-glyph-sidebar-button c-reality-upgrade-btn"
-            v-if="unlockedFilter"
-            @click="setSidebarState(sidebarEnum.FILTER_SETTINGS)"
-          >
-            Glyph Filter
-          </button>
-          <button
-            class="l-glyph-sidebar-button c-reality-upgrade-btn"
-            v-if="unlockedSets"
-            @click="setSidebarState(sidebarEnum.SAVED_SETS)"
-          >
-            Saved Glyph Sets
-          </button>
-          <button
-            class="l-glyph-sidebar-button c-reality-upgrade-btn"
-            :class="[hasRefined ? '' : 'l-glyph-sidebar-button--attention']"
-            v-if="unlockedAlchemy"
-            @click="setSidebarState(sidebarEnum.SACRIFICE_TYPE)"
-          >
-            Sacrifice Type
-          </button>
-        </div>
+    <div class="l-glyph-sidebar-option-container">
+      <div v-if="unlockedFilter && unlockedSets" class="l-glyph-sidebar-tab-container">
+        <button
+          class="l-glyph-sidebar-button c-glyph-sidebar-button"
+          :style="sidebarStyle(sidebarEnum.INVENTORY_MANAGEMENT)"
+          @click="setSidebarState(sidebarEnum.INVENTORY_MANAGEMENT)"
+        >
+          Manage Inventory
+        </button>
+        <button
+          class="l-glyph-sidebar-button c-glyph-sidebar-button"
+          v-if="unlockedFilter"
+          :style="sidebarStyle(sidebarEnum.FILTER_SETTINGS)"
+          @click="setSidebarState(sidebarEnum.FILTER_SETTINGS)"
+        >
+          Glyph Filter
+        </button>
+        <button
+          class="l-glyph-sidebar-button c-glyph-sidebar-button"
+          v-if="unlockedSets"
+          :style="sidebarStyle(sidebarEnum.SAVED_SETS)"
+          @click="setSidebarState(sidebarEnum.SAVED_SETS)"
+        >
+          Saved Glyph Sets
+        </button>
+        <button
+          class="l-glyph-sidebar-button c-glyph-sidebar-button"
+          :class="[hasRefined ? '' : 'l-glyph-sidebar-button--attention']"
+          v-if="unlockedAlchemy"
+          :style="sidebarStyle(sidebarEnum.SACRIFICE_TYPE)"
+          @click="setSidebarState(sidebarEnum.SACRIFICE_TYPE)"
+        >
+          Sacrifice Type
+        </button>
       </div>
       <glyph-inventory-management-panel v-if="type === sidebarEnum.INVENTORY_MANAGEMENT" />
       <glyph-filter-panel v-else-if="type === sidebarEnum.FILTER_SETTINGS && unlockedFilter" />

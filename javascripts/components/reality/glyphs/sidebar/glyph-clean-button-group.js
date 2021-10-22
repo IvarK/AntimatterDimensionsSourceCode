@@ -76,14 +76,12 @@ Vue.component("glyph-clean-button-group", {
       >
         Harsh Purge Glyphs
       </button>
-      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         @click="deleteAllUnprotected"
       >
         {{ removeString }} all unprotected glyphs
       </button>
-      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         v-if="hasFilter"

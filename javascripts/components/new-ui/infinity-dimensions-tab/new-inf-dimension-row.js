@@ -40,7 +40,7 @@ Vue.component("new-inf-dimension-row", {
       return InfinityDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
-      return ` (+${format(this.rateOfChange, 2, 2)}%/s)`;
+      return ` (+${formatPercents(this.rateOfChange.div(100).toNumber(), 2)}/s)`;
     },
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;

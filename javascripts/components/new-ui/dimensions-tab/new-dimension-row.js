@@ -36,7 +36,7 @@ Vue.component("new-dimension-row", {
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
+        ? ` (+${formatPercents(this.rateOfChange, 2, 2)}/s)`
         : "";
     },
     continuumString() {

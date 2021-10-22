@@ -426,7 +426,7 @@ Vue.component("glyph-filter-panel", {
           <ad-slider-component
             v-bind="raritySliderProps"
             :value="rarityThresholds[type.id]"
-            :width="'29rem'"
+            :width="'100%'"
             @input="setRarityThreshold(type.id, $event)"
           />
         </div>
@@ -456,7 +456,7 @@ Vue.component("glyph-filter-panel", {
           <ad-slider-component
             v-bind="raritySliderProps"
             :value="rarityThresholds[advancedType]"
-            :width="'29rem'"
+            :width="'100%'"
             @input="setRarityThreshold(advancedType, $event)"
           />
         </div>

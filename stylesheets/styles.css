@@ -2440,6 +2440,7 @@ screen and (max-width: 480px) {
 }
 
 .l-options-grid__button {
+  width: 22rem;
   margin: 0.5rem 0.8rem;
 }
 
@@ -7865,7 +7866,7 @@ kbd {
 
 .c-glyph-level-factors-dropdown-header {
   color: var(--color-reality-light);
-  width: auto;
+  width: calc(100% - 1rem);
   font-weight: bold;
   text-align: center;
   background: black;

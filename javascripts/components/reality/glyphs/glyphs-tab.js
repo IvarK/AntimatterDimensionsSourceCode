@@ -89,17 +89,20 @@ Vue.component("glyphs-tab", {
           <reality-reminder />
 
           <div v-if="showInstability">
+            <br>
             Glyphs are becoming unstable.
             <br>
             Glyph levels higher than {{ formatInt(instabilityThreshold) }} are harder to reach.
             <br>
             This effect is even stronger above level {{ formatInt(hyperInstabilityThreshold) }}.
+            <br>
+            <br>
           </div>
           <expanding-control-box
             label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
           >
-          <glyph-levels-and-weights slot="dropdown" />
+            <glyph-levels-and-weights slot="dropdown" />
           </expanding-control-box>
           <br>
           <glyph-tab-sidebar />

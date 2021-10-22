@@ -880,13 +880,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 25%
-  ;margin: 0 0.5rem;
+  width: 25%;
+  margin: 0 0.8rem;
   height: 4rem;
 }
 
 .l-glyph-sidebar-panel-size {
-  width: 100%;
+  width: calc(100% - 1rem);
+  margin-left: 0.5rem;
+  padding: 1rem;
 }
 
 .l-glyph-sidebar-button--attention {

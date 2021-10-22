@@ -46,8 +46,10 @@ Vue.component("glyph-levels-and-weights", {
   },
   computed: {
     gridStyle() {
-      const columns = this.adjustVisible ? "11em 1.2em 7em 18rem 1rem" : "15em 1.2em 7em";
+      // Column specifications: {factor_name, math_operator, factor_value, weight_adjustment, padding}
+      const columns = this.adjustVisible ? "32% 3% 15% 48% 2%" : "65% 5% 30%";
       return {
+        width: "100%",
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
         "grid-auto-rows": "1fr",
@@ -328,6 +330,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.ep"
+            :width="'100%'"
             @input="adjustSlider('ep', $event)"
           />
         </div>
@@ -335,6 +338,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.repl"
+            :width="'100%'"
             @input="adjustSlider('repl', $event)"
           />
         </div>
@@ -342,6 +346,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.dt"
+            :width="'100%'"
             @input="adjustSlider('dt', $event)"
           />
         </div>
@@ -349,6 +354,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.eternities"
+            :width="'100%'"
             @input="adjustSlider('eternities', $event)"
           />
         </div>

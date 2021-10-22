@@ -4,16 +4,23 @@ Vue.component("glyph-protected-row-button-group", {
   data() {
     return {
       protectedRows: 0,
+      moveGlyphs: false,
     };
+  },
+  watch: {
+    moveGlyphs(newValue) {
+      player.reality.moveGlyphsOnProtection = newValue;
+    },
   },
   computed: {
     questionmarkTooltip() {
-      return `Protected slots are unaffected by anything which may move or delete Glyphs.
+      return `Protected slots are unaffected by anything which may move or purge Glyphs.
         New Glyphs will never be inserted into these slots.`;
     }
   },
   methods: {
     update() {
+      this.moveGlyphs = player.reality.moveGlyphsOnProtection;
       this.protectedRows = player.reality.glyphs.protectedRows;
     },
     addRow() {
@@ -30,7 +37,7 @@ Vue.component("glyph-protected-row-button-group", {
       <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="One row is permanently un-protected for new glyphs"
+        ach-tooltip="One row is permanently un-protected for new Glyphs"
         @click="addRow"
       >
         Add a protected row
@@ -41,7 +48,10 @@ Vue.component("glyph-protected-row-button-group", {
       >
         Remove a protected row
       </button>
-      <br>
-      <br>
+      <primary-button-on-off
+        v-model="moveGlyphs"
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        text="Move Glyphs on changing row count:"
+      />
     </div>`
 });

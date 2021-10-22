@@ -89,7 +89,7 @@ const Glyphs = {
           rowsMoved++;
         }
       }
-    } else if (rowsToAdd < 0) {
+    } else {
       // Similar algorithm to above; we scan repeatedly over protected slots and repeatedly attempt to free up the row
       // that's going to switch to being unprotected
       let rowsMoved = 0;
@@ -115,6 +115,7 @@ const Glyphs = {
   // Move all glyphs from the origin row to the destination row, does nothing if a column-preserving move operation
   // isn't possible. Returns a boolean indicating success/failure on glyph moving. Row is 0-indexed
   moveGlyphRow(orig, dest) {
+    if (!player.reality.moveGlyphsOnProtection) return false;
     if (orig >= this.totalSlots / 10 || dest >= this.totalSlots / 10) return false;
     if (this.glyphIndexArray.some(idx => Math.floor(idx / 10) === dest)) {
       // Destination row has some glyphs, attempt to merge the rows

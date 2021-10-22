@@ -12,7 +12,7 @@ Vue.component("reality-amplify-button", {
     tooltip() {
       if (this.isDisabled) return "You cannot amplify Celestial Realities";
       if (!this.canAmplify) {
-        return "Store more or complete the Reality more quickly to amplify";
+        return "Store more or complete the Reality faster to amplify";
       }
       return null;
     }

@@ -294,38 +294,33 @@ Vue.component("glyph-filter-panel", {
       this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     optionClass(idx) {
-      let icon;
-      switch (idx) {
-        case this.modes.LOWEST_SACRIFICE:
-          icon = "fas fa-burn";
-          break;
-        case this.modes.EFFECT_COUNT:
-          icon = "fas fa-list-ul";
-          break;
-        case this.modes.RARITY_THRESHOLD:
-          icon = "fas fa-gem";
-          break;
-        case this.modes.SPECIFIED_EFFECT:
-          icon = "fas fa-tasks";
-          break;
-        case this.modes.EFFECT_SCORE:
-          icon = "fas fa-list-ol";
-          break;
-        case this.modes.LOWEST_ALCHEMY:
-          icon = "fas fa-atom";
-          break;
-        case this.modes.ALCHEMY_VALUE:
-          icon = "fas fa-flask";
-          break;
-        default:
-          throw Error("Unrecognized glyph filter mode");
-      }
+      const icon = this.modeIcon(idx);
       return [
         idx === this.mode
           ? "c-glyph-sacrifice-options__option--active"
           : "c-glyph-sacrifice-options__option--inactive",
         icon
       ];
+    },
+    modeIcon(idx) {
+      switch (idx) {
+        case this.modes.LOWEST_SACRIFICE:
+          return "fas fa-burn";
+        case this.modes.EFFECT_COUNT:
+          return "fas fa-list-ul";
+        case this.modes.RARITY_THRESHOLD:
+          return "fas fa-gem";
+        case this.modes.SPECIFIED_EFFECT:
+          return "fas fa-tasks";
+        case this.modes.EFFECT_SCORE:
+          return "fas fa-list-ol";
+        case this.modes.LOWEST_ALCHEMY:
+          return "fas fa-atom";
+        case this.modes.ALCHEMY_VALUE:
+          return "fas fa-flask";
+        default:
+          throw Error("Unrecognized glyph filter mode");
+      }
     },
     strengthThreshold(type) {
       return rarityToStrength(this.rarityThresholds[type]);
@@ -404,7 +399,7 @@ Vue.component("glyph-filter-panel", {
             v-if="isUnlocked(index)"
             :class="optionClass(index)"
             @click="setMode(index)"
-            v-tooltip="filterMode(index)"
+            v-tooltip.bottom="filterMode(index)"
           />
         </div>
       </div>

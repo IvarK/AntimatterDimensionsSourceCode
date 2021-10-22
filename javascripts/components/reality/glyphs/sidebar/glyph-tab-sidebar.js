@@ -9,7 +9,7 @@ Vue.component("glyph-tab-sidebar", {
       unlockedFilter: false,
       unlockedSets: false,
       unlockedAlchemy: false,
-      unlockedAny: false,
+      hasMoreOptions: false,
       hasRefined: false,
     };
   },
@@ -21,7 +21,7 @@ Vue.component("glyph-tab-sidebar", {
       this.unlockedSets = EffarigUnlock.setSaves.isUnlocked;
       this.unlockedAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       // We always have inventory management available, but there's no point in showing options if it's the only one
-      this.unlockedAny = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
+      this.hasMoreOptions = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
       this.hasRefined = AlchemyResources.all.map(res => res.amount).some(a => a > 0);
     },
     setSidebarState(state) {
@@ -35,7 +35,7 @@ Vue.component("glyph-tab-sidebar", {
   },
   template: `
     <div class="l-glyph-sidebar-option-container">
-      <div v-if="unlockedFilter && unlockedSets" class="l-glyph-sidebar-tab-container">
+      <div v-if="hasMoreOptions" class="l-glyph-sidebar-tab-container">
         <button
           class="l-glyph-sidebar-button c-glyph-sidebar-button"
           :style="sidebarStyle(sidebarEnum.INVENTORY_MANAGEMENT)"

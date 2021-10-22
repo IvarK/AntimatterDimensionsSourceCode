@@ -56,7 +56,5 @@ Vue.component("glyph-sort-button-group", {
       >
         Collapse empty space
       </button>
-      <br>
-      <br>
     </div>`
 });

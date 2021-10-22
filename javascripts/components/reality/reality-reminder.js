@@ -19,7 +19,7 @@ Vue.component("reality-reminder", {
   },
   created() {
     // Collapsing it after every reality resets the height to its fixed minimum value, stopping screen jitter
-    EventHub.ui.on(GAME_EVENT.REALITY_RESET_AFTER, () => this.isExpanded = false, this);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.isExpanded = false);
   },
   computed: {
     suggestions() {
@@ -54,9 +54,7 @@ Vue.component("reality-reminder", {
       return this.canReality && this.suggestions.length !== 0;
     },
     styleObject() {
-      let color;
-      if (!this.canReality || this.canBeExpanded) color = "var(--color-bad)";
-      else color = "var(--color-good)";
+      const color = (!this.canReality || this.canBeExpanded) ? "var(--color-bad)" : "var(--color-good)";
       // Has both is and canBe in order to force the height back to its minimum size when all suggestions are done
       const height = (this.canBeExpanded && this.isExpanded) ? `${6.5 + 1.5 * this.suggestions.length}rem` : "5rem";
       return {

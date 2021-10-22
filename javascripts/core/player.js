@@ -399,6 +399,7 @@ let player = {
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,
+    moveGlyphsOnProtection: false,
     perkPoints: 0,
     autoEC: true,
     lastAutoEC: 0,

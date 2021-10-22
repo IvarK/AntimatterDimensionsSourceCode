@@ -98,6 +98,7 @@ Vue.component("glyphs-tab", {
             <br>
             <br>
           </div>
+          <br v-else>
           <expanding-control-box
             label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
@@ -109,7 +110,7 @@ Vue.component("glyphs-tab", {
         </div>
         <div class="l-player-glyphs-column">
           <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />
-          <div class="l-equipped-glyphs-wrapper">
+          <div class="l-equipped-glyphs-and-effects-container">
             <equipped-glyphs />
             <div class="l-glyph-info-wrapper">
               <span class="l-glyph-color-box" @click="toggleGlyphTextColors">

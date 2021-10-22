@@ -41,7 +41,7 @@ Vue.component("reality-amplify-button", {
         :ach-tooltip="tooltip"
       >
         <div v-if="canAmplify">
-          <span v-if="isActive">This Reality will be amplified:</span>
+          <span v-if="isActive">Will be amplified:</span>
           <span v-else>Amplify this Reality:</span>
           <br>
           All rewards ×{{ formatInt(ratio) }}

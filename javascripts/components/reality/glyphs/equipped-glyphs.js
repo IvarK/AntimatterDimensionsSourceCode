@@ -158,7 +158,7 @@ Vue.component("equipped-glyphs", {
       </div>
       <div class="l-equipped-glyphs__buttons">
         <button
-          class="l-equipped-glyphs__large c-reality-upgrade-btn"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           :class="{'c-reality-upgrade-btn--bought': respec}"
           :ach-tooltip="respecTooltip"
           @click="toggleRespec"
@@ -167,18 +167,15 @@ Vue.component("equipped-glyphs", {
         </button>
         <button
           v-if="undoVisible"
-          class="l-equipped-glyphs__small c-reality-upgrade-btn"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
           :ach-tooltip="undoTooltip"
           @click="undo"
         >
-          Undo
+          Rewind to <b>undo</b> the last equipped Glyph
         </button>
-      </div>
-      <div class="l-equipped-glyphs__buttons">
         <button
-          class="l-equipped-glyphs__large c-reality-upgrade-btn"
-          :class="{'l-equipped-glyphs__larger' : undoVisible}"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           @click="toggleRespecIntoProtected"
         >
           Unequip Glyphs to:

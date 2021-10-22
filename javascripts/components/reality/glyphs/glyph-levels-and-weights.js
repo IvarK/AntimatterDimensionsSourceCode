@@ -47,7 +47,7 @@ Vue.component("glyph-levels-and-weights", {
   computed: {
     gridStyle() {
       // Column specifications: {factor_name, math_operator, factor_value, weight_adjustment, padding}
-      const columns = this.adjustVisible ? "32% 3% 15% 48% 2%" : "65% 5% 30%";
+      const columns = this.adjustVisible ? "30% 3% 17% 48% 2%" : "80% 5% 15%";
       return {
         width: "100%",
         "-ms-grid-columns": columns,

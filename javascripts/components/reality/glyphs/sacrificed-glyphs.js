@@ -71,7 +71,6 @@ Vue.component("sacrificed-glyphs", {
       template: `
         <div
           v-if="amount > 0"
-          class="l-sacrificed-glyphs__type"
           :style="style"
         >
           <div>

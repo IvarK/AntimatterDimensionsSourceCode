@@ -8060,7 +8060,7 @@ kbd {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 42rem;
+  width: 44rem;
   margin-right: 2rem;
 }
 
@@ -8069,6 +8069,8 @@ kbd {
   flex-direction: row;
   width: 100%;
   height: 9rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .l-reality-button-group-half {
@@ -8084,6 +8086,7 @@ kbd {
   flex-direction: column;
   padding-top: 1rem;
   justify-content: flex-start;
+  width: 65rem;
 }
 
 .l-reality-upgrade-grid {

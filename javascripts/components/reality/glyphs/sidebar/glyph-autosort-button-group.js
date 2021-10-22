@@ -62,5 +62,7 @@ Vue.component("glyph-autosort-button-group", {
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         text="Auto Purge on Realities:"
       />
+      <br>
+      <br>
     </div>`
 });

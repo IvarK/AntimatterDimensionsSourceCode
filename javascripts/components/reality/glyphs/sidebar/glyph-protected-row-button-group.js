@@ -41,5 +41,7 @@ Vue.component("glyph-protected-row-button-group", {
       >
         Remove a protected row
       </button>
+      <br>
+      <br>
     </div>`
 });

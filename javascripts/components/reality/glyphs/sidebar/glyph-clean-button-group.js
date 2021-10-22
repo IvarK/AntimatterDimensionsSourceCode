@@ -90,5 +90,7 @@ Vue.component("glyph-clean-button-group", {
       >
         {{ removeString }} all Glyphs rejected by filtering
       </button>
+      <br>
+      <br>
     </div>`
 });

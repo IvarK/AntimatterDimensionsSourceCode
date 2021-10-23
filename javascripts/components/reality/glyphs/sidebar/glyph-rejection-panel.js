@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-auto-pick-options", {
+Vue.component("glyph-rejection-panel", {
   data() {
     return {
       mode: AUTO_GLYPH_REJECT.SACRIFICE,
@@ -29,7 +29,7 @@ Vue.component("glyph-auto-pick-options", {
     },
   },
   template: `
-    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
       <span class="c-glyph-sacrifice-options__advanced">
         Behavior for deleted and filtered
         <br>

@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-header", {
+Vue.component("glyph-autosort-button-group", {
   data() {
     return {
       autoSort: 0,
@@ -26,6 +26,9 @@ Vue.component("glyph-header", {
       const availableSortModes = ["NONE", "POWER", "EFFECT"];
       if (this.showScoreFilter) availableSortModes.push("SCORE");
       return availableSortModes;
+    },
+    questionmarkTooltip() {
+      return `The automatic settings below will apply after every Reality`;
     }
   },
   methods: {
@@ -39,6 +42,9 @@ Vue.component("glyph-header", {
   },
   template: `
     <div>
+      <div class="c-glyph-sacrifice-options__option--active o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
+      Automatic Glyph Arrangement:
+      <br>
       <primary-button-cycle
         v-model="autoSort"
         class="l-glyph-inventory__sort c-reality-upgrade-btn"

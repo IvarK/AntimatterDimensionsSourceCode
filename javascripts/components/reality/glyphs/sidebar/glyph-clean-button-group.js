@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-clean-options", {
+Vue.component("glyph-clean-button-group", {
   data() {
     return {
       glyphSacrificeUnlocked: false,
@@ -60,6 +60,8 @@ Vue.component("glyph-clean-options", {
   },
   template: `
     <div v-if="glyphSacrificeUnlocked">
+      Remove weaker Glyphs:
+      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         :ach-tooltip="autoCleanTooltip"
@@ -74,14 +76,12 @@ Vue.component("glyph-clean-options", {
       >
         Harsh Purge Glyphs
       </button>
-      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         @click="deleteAllUnprotected"
       >
         {{ removeString }} all unprotected glyphs
       </button>
-      <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         v-if="hasFilter"

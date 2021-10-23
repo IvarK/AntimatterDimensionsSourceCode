@@ -32,7 +32,7 @@ Vue.component("glyph-set-save-panel", {
       You can only load a set when you have no Glyphs equipped.`;
     },
     noSet() {
-      return `No set saved in this slot`;
+      return `No Glyph Set saved in this slot`;
     },
   },
   methods: {

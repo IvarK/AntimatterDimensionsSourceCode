@@ -508,7 +508,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(226).isBought,
       description: "You gain extra Replicanti Galaxies based on your Replicanti amount",
       effect: () => Math.floor(Replicanti.amount.exponent / 1000),
-      formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
+      formatEffect: value => `+${quantifyInt("RG", value)}`
     },
     {
       id: 226,
@@ -518,7 +518,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(225).isBought,
       description: "You gain extra Replicanti Galaxies based on their max",
       effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 15),
-      formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
+      formatEffect: value => `+${quantifyInt("RG", value)}`
     },
     {
       id: 227,

@@ -84,6 +84,9 @@ Vue.component("modal-edit-tree", {
       }
       return isValid;
     },
+    formatWithCommas() {
+      return formatWithCommas;
+    },
   },
   methods: {
     confirmEdits() {
@@ -95,9 +98,6 @@ Vue.component("modal-edit-tree", {
     },
     formatPaths(paths) {
       return Array.from(paths).join(", ");
-    },
-    formatCost(cost) {
-      return formatWithCommas(cost);
     },
     calculateMissingSTCost(studiesToBuy, ignoreCurrentStudies) {
       // Explicitly hardcoding how the study tree affects total ST should be fine here, as it massively simplifies
@@ -155,16 +155,16 @@ Vue.component("modal-edit-tree", {
         <template v-if="inputIsValidTree">
           <div class="l-modal-import-tree__tree-info-line">
             Total tree cost:
-            {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            {{ "Time Theorem" | quantify(tree.totalCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.totalST !== 0">
-              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+              and {{ "Space Theorem" | quantify(tree.totalST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
-            {{ formatCost(tree.missingCost) }} {{ "Time Theorem" | pluralize(tree.missingCost, "Time Theorems") }}
+            {{ "Time Theorem" | quantify(tree.missingCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.missingST !== 0">
-              and {{ formatCost(tree.missingST) }} {{ "Space Theorem" | pluralize(tree.missingST, "Space Theorems") }}
+              and {{ "Space Theorem" | quantify(tree.missingST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div v-if="tree.firstSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">

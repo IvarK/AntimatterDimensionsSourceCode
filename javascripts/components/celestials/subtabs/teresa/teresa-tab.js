@@ -101,7 +101,7 @@ Vue.component("teresa-tab", {
     <div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="teresa" />
       <div>
-        You have {{ format(rm, 2, 2) }} {{ "Reality Machine" | pluralize(rm) }}.
+        You have {{ "Reality Machine" | quantify(rm, 2, 2) }}.
       </div>
       <div class="l-mechanics-container">
         <div class="l-teresa-mechanic-container" v-if="hasReality">
@@ -166,7 +166,7 @@ Vue.component("teresa-tab", {
         <div class="l-rm-container-labels l-teresa-mechanic-container" />
         <div class="c-teresa-shop" v-if="hasPerkShop">
           <span class="o-teresa-pp">
-            You have {{ format(perkPoints, 2, 0) }} {{ "Perk Point" | pluralize(perkPoints) }}.
+            You have {{ "Perk Point" | quantify(perkPoints, 2, 0) }}.
           </span>
           <perk-shop-upgrade
             v-for="upgrade in upgrades"

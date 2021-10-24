@@ -169,7 +169,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     if (this.id === 5) {
       const toCreate = Glyphs.freeInventorySpace;
       for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
-      GameUI.notify.success(`Created ${toCreate} ${pluralize("Music Glyph", toCreate)}`);
+      GameUI.notify.success(`Created ${quantifyInt("Music Glyph", toCreate)}`);
     }
   }
 }

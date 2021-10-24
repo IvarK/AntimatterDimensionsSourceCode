@@ -46,20 +46,20 @@ Vue.component("modal-reality", {
     },
     selectInfo() {
       return `Selecting Confirm ${this.canSacrifice ? "or Sacrifice " : ""}
-        without selecting a Glyph will 
+        without selecting a Glyph will
         ${this.hasFilter ? "choose a Glyph based on your filter settings" : "randomly select a Glyph"}.`;
     },
     gained() {
       return `You will gain
-        ${formatInt(this.simRealities)} ${pluralize("Reality", this.simRealities, "Realities")},
-        ${formatInt(this.simRealities)} ${pluralize("Perk Point", this.simRealities)} and
-        ${format(this.realityMachines, 2)} ${pluralize("Reality Machine", this.realityMachines)} on Reality.`;
+        ${quantifyInt("Reality", this.simRealities)},
+        ${quantifyInt("Perk Point", this.simRealities)} and
+        ${quantify("Reality Machine", this.realityMachines, 2)} on Reality.`;
     },
     levelStats() {
       // Bit annoying to read due to needing >, <, and =, with = needing a different format.
       return `You will get a level ${formatInt(this.level)} Glyph on Reality, which is
         ${this.level === this.bestLevel ? "equal to" : `
-        ${formatInt(this.levelDifference)} ${pluralize("level", this.levelDifference)}
+        ${quantifyInt("level", this.levelDifference)}
         ${this.level > this.bestLevel ? "higher" : "lower"} than`} your best.`;
     },
   },
@@ -140,7 +140,7 @@ Vue.component("modal-reality", {
         <br>
         After choosing this glyph the game will simulate the rest of your Realities,
         <br>
-        automatically choosing another {{ formatInt(simRealities - 1) }} {{ "Glyph" | pluralize(simRealities - 1) }}
+        automatically choosing another {{ "Glyph" | quantifyInt(simRealities - 1) }}
         based on your Glyph filter settings.
       </div>
       <div class="l-options-grid__row">

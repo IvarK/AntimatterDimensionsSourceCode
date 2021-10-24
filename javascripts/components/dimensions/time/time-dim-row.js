@@ -46,7 +46,7 @@ Vue.component("time-dim-row", {
     tooltipContents() {
       if (this.showTTCost) return this.formattedEPCost;
       if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} Time Dimension`;
-      return `Purchased ${formatInt(this.bought)} ${pluralize("time", this.bought)}`;
+      return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     showRow() {
       return this.realityUnlocked || this.isUnlocked || this.requirementReached;

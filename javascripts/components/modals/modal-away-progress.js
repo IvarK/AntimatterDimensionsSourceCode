@@ -51,7 +51,7 @@ Vue.component("modal-away-progress", {
         },
         formatBlackHoleActivations() {
           const activations = this.after - this.before;
-          return `${formatInt(activations)} ${pluralize("time", activations)}`;
+          return quantifyInt("time", activations);
         },
         isVeryLarge() {
           return this.isBlackHole

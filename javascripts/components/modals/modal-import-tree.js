@@ -89,7 +89,10 @@ Vue.component("modal-import-tree", {
     },
     inputIsSecret() {
       return sha512_256(this.truncatedInput) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
-    }
+    },
+    formatWithCommas() {
+      return formatWithCommas;
+    },
   },
   methods: {
     importTree() {
@@ -160,16 +163,16 @@ Vue.component("modal-import-tree", {
         <template v-else-if="inputIsValidTree">
           <div class="l-modal-import-tree__tree-info-line">
             Total tree cost:
-            {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            {{ "Time Theorem" | quantify(tree.totalCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.totalST !== 0">
-              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+              and {{ "Space Theorem" | quantify(tree.totalST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
-            {{ formatCost(tree.missingCost) }} {{ "Time Theorem" | pluralize(tree.missingCost, "Time Theorems") }}
+            {{ "Time Theorem" | quantify(tree.missingCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.missingST !== 0">
-              and {{ formatCost(tree.missingST) }} {{ "Space Theorem" | pluralize(tree.missingST, "Space Theorems") }}
+              and {{ "Space Theorem" | quantify(tree.missingST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div v-if="tree.firstSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">

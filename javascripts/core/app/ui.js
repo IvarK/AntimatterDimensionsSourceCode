@@ -34,6 +34,9 @@ Vue.mixin({
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);
     },
+    formatPow(value, places, placesUnder1000) {
+      return formatPow(value, places, placesUnder1000);
+    },
     formatPostBreak(value, places, placesUnder1000) {
       return formatPostBreak(value, places, placesUnder1000);
     }

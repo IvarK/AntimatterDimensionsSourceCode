@@ -135,7 +135,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinities to Antimatter Dimensions (Infinities^${formatInt(950)}).`;
+        Infinities to Antimatter Dimensions (Infinities${formatPow(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },

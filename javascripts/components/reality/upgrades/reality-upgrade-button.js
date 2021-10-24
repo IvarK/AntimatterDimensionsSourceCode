@@ -75,8 +75,7 @@ Vue.component("reality-upgrade-button", {
           <cost-display
             v-if="!isBought"
             :config="config"
-            singular="Reality Machine"
-            plural="Reality Machines"
+            name="Reality Machine"
           />
         </template>
       </button>

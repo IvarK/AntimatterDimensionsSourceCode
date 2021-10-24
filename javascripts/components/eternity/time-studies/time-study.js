@@ -110,11 +110,11 @@ Vue.component("time-study", {
              @click.exact="handleClick"
              @click.shift.exact="shiftClick">
       <slot />
-      <cost-display br
+      <cost-display
+        br
         v-if="(showCost && !showSTCost) || STCost === 0"
         :config="config"
-        singular="Time Theorem"
-        plural="Time Theorems"
+        name="Time Theorem"
       />
       <div v-else-if="showSTCost">
         Cost: <span v-if="config.cost">

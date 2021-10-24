@@ -31,7 +31,7 @@ Vue.component("antimatter-dim-row", {
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${formatPercents(this.rateOfChange.div(100).toNumber(), 2)}/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     continuumString() {

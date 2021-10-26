@@ -55,7 +55,7 @@ const GameIntervals = (function() {
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
     save: interval(() => GameStorage.save(), () => player.options.autosaveInterval),
     checkCloudSave: interval(() => {
-      if (playFabId !== -1 && player.options.cloud) playFabSaveCheck();
+      if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
     }, 300000),
     submitKongStats: interval(() => {
       kong.submitStats("Log10 of total antimatter", player.records.totalAntimatter.e);

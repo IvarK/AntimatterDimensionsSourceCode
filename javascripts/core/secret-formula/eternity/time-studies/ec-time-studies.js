@@ -26,7 +26,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 40,
     requirement: {
       resource: "8th Antimatter Dimensions",
-      current: () => AntimatterDimension(8).amount,
+      current: () => AntimatterDimension(8).totalAmount,
       required: completions => new Decimal(17300 + completions * 1250),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
@@ -68,7 +68,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "antimatter",
       current: () => Currency.antimatter.value,
       required: completions => DC.E300000.pow(completions).times(DC.E500000),
-      formatValue: value => format(value, 0, 0)
+      formatValue: value => format(value)
     }
   },
   {
@@ -78,7 +78,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Infinity Points",
       current: () => Currency.infinityPoints.value,
       required: completions => DC.E1000.pow(completions).times(DC.E4000),
-      formatValue: value => format(value, 0, 0)
+      formatValue: value => format(value)
     }
   },
   {
@@ -88,7 +88,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Infinity Power",
       current: () => Currency.infinityPower.value,
       required: completions => DC.E2000.pow(completions).times(DC.E17500),
-      formatValue: value => format(value, 0, 0)
+      formatValue: value => format(value)
     }
   },
   {
@@ -98,7 +98,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Eternity Points",
       current: () => Currency.eternityPoints.value,
       required: completions => DC.E20.pow(completions).times(DC.E100),
-      formatValue: value => format(value, 0, 0)
+      formatValue: value => format(value)
     }
   },
   {

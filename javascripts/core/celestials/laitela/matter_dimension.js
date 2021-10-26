@@ -27,6 +27,15 @@ class MatterDimensionState {
     return player.celestials.laitela.dimensions[this._tier];
   }
 
+  get unlockUpgrade() {
+    // 0-indexed, and the unlocks start at ID 16 to unlock 2nd DMD
+    return ImaginaryUpgrade(this._tier + 15);
+  }
+
+  get isUnlocked() {
+    return this.unlockUpgrade.isBought;
+  }
+
   get ascensions() {
     return this.dimension.ascensionCount;
   }
@@ -66,31 +75,32 @@ class MatterDimensionState {
       .times(this.commonDarkMult)
       .times(Math.pow(this.powerDMPerAscension, this.dimension.ascensionCount))
       .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied)
-      .dividedBy(Math.pow(10, this._tier));
+      .dividedBy(Math.pow(1e4, Math.pow(this._tier, 0.5)));
   }
 
   get powerDE() {
-    const tierFactor = Math.pow(4, this._tier);
+    const tierFactor = Math.pow(15, this._tier);
+    const destabilizeBoost = Laitela.isFullyDestabilized ? 8 : 1;
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) *
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
-        .times(this.commonDarkMult)
-        .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
-        .timesEffectsOf(
-          SingularityMilestone.darkEnergyMult,
-          SingularityMilestone.realityDEMultiplier,
-          SingularityMilestone.multFromInfinitied
-        ).toNumber();
+      .times(this.commonDarkMult)
+      .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
+      .timesEffectsOf(
+        SingularityMilestone.darkEnergyMult,
+        SingularityMilestone.realityDEMultiplier,
+        SingularityMilestone.multFromInfinitied
+      ).toNumber() * destabilizeBoost;
   }
 
   get adjustedStartingCost() {
-    const tiers = [0, 1, 3, 5];
-    return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]);
+    const tiers = [0, 2, 5, 13];
+    return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]) *
+      SingularityMilestone.darkDimensionCostReduction.effectValue;
   }
 
   get rawIntervalCost() {
     return Decimal.pow(this.intervalCostIncrease, this.dimension.intervalUpgrades)
-      .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST);
   }
 
   get intervalCost() {
@@ -103,8 +113,7 @@ class MatterDimensionState {
 
   get rawPowerDMCost() {
     return Decimal.pow(this.powerDMCostIncrease, this.dimension.powerDMUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DM_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST);
   }
 
   get powerDMCost() {
@@ -117,8 +126,7 @@ class MatterDimensionState {
 
   get rawPowerDECost() {
     return Decimal.pow(this.powerDECostIncrease, this.dimension.powerDEUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DE_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST);
   }
 
   get powerDECost() {

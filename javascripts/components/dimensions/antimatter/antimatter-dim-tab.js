@@ -3,6 +3,8 @@
 Vue.component("antimatter-dim-tab", {
   data() {
     return {
+      isInMatterChallenge: false,
+      matter: new Decimal(0),
       hasDimensionBoosts: false,
       isChallengePowerVisible: false,
       challengePower: "",
@@ -15,6 +17,10 @@ Vue.component("antimatter-dim-tab", {
   },
   methods: {
     update() {
+      this.isInMatterChallenge = Player.isInMatterChallenge;
+      if (this.isInMatterChallenge) {
+        this.matter.copyFrom(Player.effectiveMatterAmount);
+      }
       this.hasDimensionBoosts = player.dimensionBoosts > 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
@@ -37,7 +43,7 @@ Vue.component("antimatter-dim-tab", {
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
 
-      this.multiplierText = `Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
       if (this.isSacrificeUnlocked) this.multiplierText +=
         ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
@@ -45,17 +51,17 @@ Vue.component("antimatter-dim-tab", {
       softReset(-1, true, true);
     }
   },
-  template:
-    `<div class="l-old-ui-antimatter-dim-tab">
+  template: `
+    <div class="l-old-ui-antimatter-dim-tab">
       <span>{{ multiplierText }}</span>
       <antimatter-dim-tab-header />
-      <span v-if="isChallengePowerVisible">{{challengePower}}</span>
+      <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
+      <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
       <div class="l-dimensions-container">
         <antimatter-dim-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :floatingText="$viewModel.tabs.dimensions.antimatter.floatingText[tier]"
         />
         <antimatter-dim-boost-row />
         <antimatter-dim-galaxy-row />
@@ -64,7 +70,8 @@ Vue.component("antimatter-dim-tab", {
         v-if="isQuickResetAvailable"
         class="o-primary-btn--quick-reset"
         @click="quickReset"
-      >Perform a Dimension Boost reset
+      >
+        Perform a Dimension Boost reset
         <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
         <span v-else> for no gain</span>
       </primary-button>

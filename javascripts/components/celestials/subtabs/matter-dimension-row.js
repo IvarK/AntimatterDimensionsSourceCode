@@ -22,6 +22,7 @@ Vue.component("matter-dimension-row", {
       timer: 0,
       timerPecent: 0,
       intervalAscensionBump: 10000,
+      portionDE: 0,
     };
   },
   computed: {
@@ -55,8 +56,9 @@ Vue.component("matter-dimension-row", {
       return `${format(this.interval, 2, 2)}ms`;
     },
     ascensionTooltip() {
-      return `Multiply interval by ${formatInt(this.intervalAscensionBump)}
-        and both multipliers by ${formatInt(1000)}, but gain the ability to upgrade interval even further`;
+      return `Multiply interval by ${formatInt(this.intervalAscensionBump)}, DM by
+        ${formatInt(this.dimension.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.
+        After ascension you can upgrade interval even further.`;
     }
   },
   methods: {
@@ -77,45 +79,61 @@ Vue.component("matter-dimension-row", {
       this.timer = this.dimension.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
       this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectValue;
+      this.portionDE = (this.powerDE * 1000 / this.interval) / Laitela.darkEnergyPerSecond;
     },
     handleIntervalClick() {
       if (this.isIntervalCapped) this.dimension.ascend();
       else this.dimension.buyInterval();
     }
   },
-  template:
-  `<div class="c-matter-dimension-container">
-    <div class="o-matter-dimension-amount"> {{ name }} {{ ascensionText }}: {{ format(amount, 2, 0) }}</div>
-    <div class="c-matter-dimension-buttons">
-      <button 
-        @click="handleIntervalClick()" 
-        class="o-matter-dimension-button" 
-        :class="intervalClassObject"> 
+  template: `
+    <div class="c-matter-dimension-container">
+      <div class="o-matter-dimension-amount">
+        {{ name }} {{ ascensionText }}: {{ format(amount, 2, 0) }}
+      </div>
+      <div class="c-matter-dimension-buttons">
+        <button
+          @click="handleIntervalClick()"
+          class="o-matter-dimension-button"
+          :class="intervalClassObject"
+        >
           {{ intervalText }}
           <span v-if="isIntervalCapped">
-            <br>Ascend!
+            <br>
+            Ascend!
             <span :ach-tooltip="ascensionTooltip">
               <i class="fas fa-question-circle"></i>
             </span>
           </span>
-          <span v-else><br>Cost: {{ format(intervalCost, 2, 0) }}</span>
-      </button>
-      <button
-        @click="dimension.buyPowerDM()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }">
+          <span v-else>
+            <br>Cost: {{ format(intervalCost, 2, 0) }}
+          </span>
+        </button>
+        <button
+          @click="dimension.buyPowerDM()"
+          class="o-matter-dimension-button"
+          :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }"
+        >
           DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ format(powerDMCost, 2, 0) }}
-      </button>
-      <button
-        @click="dimension.buyPowerDE()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }">
-          DE +{{ format(powerDE, 2, 4) }}<br>Cost: {{ format(powerDECost, 2, 0) }}
-      </button>
-    </div>
-    <div v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})</div>
-    <div>DE: {{ format(powerDE * 1000 / interval, 2, 4) }}/s</div>
-  </div>
-
-  `
-})
+        </button>
+        <button
+          @click="dimension.buyPowerDE()"
+          class="o-matter-dimension-button"
+          :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }"
+        >
+          DE +{{ format(powerDE, 2, 4) }}
+          <br>
+          Cost: {{ format(powerDECost, 2, 0) }}
+        </button>
+      </div>
+      <div v-if="interval > 200">
+        Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})
+      </div>
+      <div v-else>
+        {{ format(1000 / interval, 2, 2) }} ticks / sec
+      </div>
+      <div>
+        Dark Energy: {{ format(powerDE * 1000 / interval, 2, 4) }}/s ({{ formatPercents(portionDE, 1) }} of total)
+      </div>
+    </div>`
+});

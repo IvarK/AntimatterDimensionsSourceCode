@@ -28,3 +28,4 @@ BlackHolePowerAutobuyerState.index = Array.range(1, 2).map(blackHole => new Blac
 
 Autobuyer.blackHolePower = blackHole => BlackHolePowerAutobuyerState.index[blackHole - 1];
 Autobuyer.blackHolePower.array = BlackHolePowerAutobuyerState.index;
+Autobuyer.blackHolePower.array.name = "Black Hole Power";

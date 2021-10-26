@@ -1,10 +1,10 @@
 "use strict";
 
 Vue.component("modal-options", {
-  template:
-    `<div class="c-modal-options l-modal-options">
-      <modal-close-button @click="emitClose"/>
-      <slot/>
+  template: `
+    <div class="c-modal-options l-modal-options">
+      <modal-close-button @click="emitClose" />
+      <slot />
     </div>`
 });
 
@@ -27,14 +27,14 @@ const modalOptionsMixin = {
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
       this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
-      this.animatedThemeUnlocked = Themes.find("S1").isAvailable() || Themes.find("S6").isAvailable();
+      this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
     }
   },
   components: {
     "on-off-button": {
       props: ["value", "text"],
-      template:
-        `<primary-button-on-off
+      template: `
+        <primary-button-on-off
           :value="value"
           :text="text"
           @input="emitInput"
@@ -43,8 +43,8 @@ const modalOptionsMixin = {
     },
     "wide-on-off-button": {
       props: ["value", "text"],
-      template:
-        `<primary-button-on-off
+      template: `
+        <primary-button-on-off
           :value="value"
           :text="text"
           @input="emitInput"

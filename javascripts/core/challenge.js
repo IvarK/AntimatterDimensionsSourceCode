@@ -1,7 +1,9 @@
 "use strict";
 
-function startChallenge() {
-  secondSoftReset(true);
+// This function does *not* reset anything. Only call it when you've already
+// done all the non-UI stuff. Right now the only UI thing to do is switch to
+// the AD tab.
+function startChallengeUI() {
   if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
@@ -20,10 +22,14 @@ function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
       if (player.matter.eq(0)) player.matter = DC.D1;
-      player.matter = player.matter
-        .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
+      // These caps are values which occur at approximately e308 IP
+      const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
+        Math.clampMax(player.galaxies, 100) / 100;
+      const finalMatterCap = Decimal.MAX_VALUE;
+      player.matter = player.matter.times(Decimal.pow(cappedBase, diff / 100)).clampMax(finalMatterCap);
     }
-   if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning) {
+    if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
+      Modal.hideAll();
       Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
         `${format(player.matter, 2, 2)} matter.`);
       softReset(0);
@@ -73,7 +79,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   requestStart() {
-    if (!Tab.challenges.isAvailable) return;
+    if (!Tab.challenges.isUnlocked) return;
     if (!player.options.confirmations.challenges) {
       this.start();
       return;
@@ -83,17 +89,15 @@ class NormalChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1 || this.isRunning) return;
-    if (!Tab.challenges.isAvailable) return;
-
+    if (!Tab.challenges.isUnlocked) return;
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
-
+    bigCrunchResetValues();
     if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.show(Enslaved.quotes.EC6C10);
     }
-
-    startChallenge();
+    startChallengeUI();
   }
 
   get isCompleted() {
@@ -131,7 +135,7 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    secondSoftReset(true);
+    bigCrunchResetValues();
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
@@ -204,14 +208,11 @@ class InfinityChallengeState extends GameMechanicState {
 
   start() {
     if (!this.isUnlocked || this.isRunning) return;
-
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
-
-    bigCrunchReset();
-    startChallenge();
+    bigCrunchResetValues();
+    startChallengeUI();
     player.break = true;
-
     if (EternityChallenge.isRunning) Achievement(115).unlock();
   }
 
@@ -257,7 +258,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    secondSoftReset(true);
+    bigCrunchResetValues();
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }

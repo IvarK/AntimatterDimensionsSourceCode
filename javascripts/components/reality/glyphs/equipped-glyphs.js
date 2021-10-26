@@ -4,13 +4,16 @@ Vue.component("equipped-glyphs", {
   data() {
     return {
       glyphs: [],
-      copiedGlyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
       respecIntoProtected: player.options.respecIntoProtected,
       undoAvailable: false,
       undoVisible: false,
     };
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
   },
   computed: {
     // Empty slots are bigger due to the enlarged drop zone
@@ -33,11 +36,14 @@ Vue.component("equipped-glyphs", {
         : "Undo is only available for Glyphs equipped during this Reality";
     },
   },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
-    this.glyphsChanged();
-  },
   methods: {
+    update() {
+      this.respec = player.reality.respec;
+      this.respecIntoProtected = player.options.respecIntoProtected;
+      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
+      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
+      // This is necessary to force a re-render by key-swapping for when altered glyph effects are activated
+    },
     glyphPositionStyle(idx) {
       return {
         position: "absolute",
@@ -83,30 +89,13 @@ Vue.component("equipped-glyphs", {
     toggleRespecIntoProtected() {
       player.options.respecIntoProtected = !player.options.respecIntoProtected;
     },
-    update() {
-      this.respec = player.reality.respec;
-      this.respecIntoProtected = player.options.respecIntoProtected;
-      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
-      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
-    },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
     },
     undo() {
       if (!this.undoAvailable) return;
-      if (player.options.confirmations.glyphUndo &&
-        // eslint-disable-next-line prefer-template
-        !confirm("The last equipped Glyph will be removed. Reality will be reset, but some things will" +
-          " be restored to what they were when it equipped:\n" +
-          " - antimatter, Infinity Points, and Eternity Points;\n" +
-          " - Dilation Upgrades, Tachyon Particles, and Dilated Time;\n" +
-          " - Time Theorems and Eternity Challenge completions;\n" +
-          " - Time Dimension and Reality unlocks;\n" +
-          " - time in current Reality" +
-          (Enslaved.isUnlocked ? ";\n - stored game time" : ""))) {
-        return;
-      }
-      Glyphs.undo();
+      if (player.options.confirmations.glyphUndo) Modal.glyphUndo.show();
+      else Glyphs.undo();
     },
     dragEvents(idx) {
       return {
@@ -115,56 +104,82 @@ Vue.component("equipped-glyphs", {
         drop: $event => this.drop($event, idx),
       };
     },
+    showModal() {
+      Modal.glyphShowcasePanel.show({
+        name: "Equipped Glyphs",
+        glyphSet: this.glyphs,
+        closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
+        isGlyphSelection: false,
+        showSetName: true,
+        displaySacrifice: true,
+      });
+    },
+    clickGlyph(glyph, idx) {
+      if (glyph.symbol === "key266b") {
+        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is true, so increase by 6
+        const increase = Math.round(Math.random()) ? 6 : 1;
+        const sound = idx + increase;
+        new Audio(`audio/note${sound}.mp3`).play();
+      }
+    }
   },
   template: `
-  <div class="l-equipped-glyphs">
-    <div class="l-equipped-glyphs__slots">
-      <div v-for="(glyph, idx) in glyphs"
-           :style="glyphPositionStyle(idx)"
-           v-on="dragEvents(idx)">
-        <!-- the drop zone is a bit larger than the glyph itself. -->
-        <div class="l-equipped-glyphs__dropzone"
-             v-on="dragEvents(idx)" />
-        <glyph-component v-if="glyph"
-                         :key="idx"
-                         :glyph="glyph"
-                         :circular="true"
-                         style="-webkit-user-drag: none;"/>
-        <div v-else
-             :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
-                      {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />
+    <div class="l-equipped-glyphs">
+      <div class="l-equipped-glyphs__slots">
+        <div
+          v-for="(glyph, idx) in glyphs"
+          :style="glyphPositionStyle(idx)"
+          v-on="dragEvents(idx)"
+          @click="showModal"
+        >
+          <!-- the drop zone is a bit larger than the glyph itself. -->
+          <div
+            class="l-equipped-glyphs__dropzone"
+            v-on="dragEvents(idx)"
+          />
+          <glyph-component
+            v-if="glyph"
+            :key="idx"
+            :glyph="glyph"
+            :circular="true"
+            :isActiveGlyph="true"
+            style="-webkit-user-drag: none;"
+            @clicked="clickGlyph(glyph, idx)"
+          />
+          <div
+            v-else
+            :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
+              {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
+          />
+        </div>
       </div>
-      <div v-for="glyph in copiedGlyphs" :style="copyPositionStyle(glyph)">
-        <glyph-component v-if="glyph"
-                          :glyph="glyph"
-                          :circular="true"/>
+      <div class="l-equipped-glyphs__buttons">
+        <button
+          class="l-glyph-equip-button c-reality-upgrade-btn"
+          :class="{'c-reality-upgrade-btn--bought': respec}"
+          :ach-tooltip="respecTooltip"
+          @click="toggleRespec"
+        >
+          Unequip Glyphs on Reality
+        </button>
+        <button
+          v-if="undoVisible"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
+          :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
+          :ach-tooltip="undoTooltip"
+          @click="undo"
+        >
+          Rewind to <b>undo</b> the last equipped Glyph
+        </button>
+        <button
+          class="l-glyph-equip-button c-reality-upgrade-btn"
+          @click="toggleRespecIntoProtected"
+        >
+          Unequip Glyphs to:
+          <br>
+          <span v-if="respecIntoProtected">Protected slots</span>
+          <span v-else>Main inventory</span>
+        </button>
       </div>
-    </div>
-    <div class="l-equipped-glyphs__buttons">
-      <button class="l-equipped-glyphs__large c-reality-upgrade-btn"
-              :class="{'c-reality-upgrade-btn--bought': respec}"
-              :ach-tooltip="respecTooltip"
-              @click="toggleRespec">
-        Unequip Glyphs on Reality
-      </button>
-      <button v-if="undoVisible"
-              class="l-equipped-glyphs__small c-reality-upgrade-btn"
-              :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
-              :ach-tooltip="undoTooltip"
-              @click="undo">
-        Undo
-      </button>
-    </div>
-    <div class="l-equipped-glyphs__buttons">
-      <button class="l-equipped-glyphs__large c-reality-upgrade-btn"
-              :class="{'l-equipped-glyphs__larger' : undoVisible}"
-              @click="toggleRespecIntoProtected">
-        Unequip Glyphs to:
-        <br>
-        <span v-if="respecIntoProtected">Protected slots</span>
-        <span v-else>Main inventory</span>
-      </button>
-    </div>
-  </div>
-  `,
+    </div>`
 });

@@ -27,8 +27,9 @@ function strengthToRarity(x) {
 const Glyphs = {
   inventory: [],
   active: [],
-  copies: [],
+  unseen: [],
   levelBoost: 0,
+  factorsOpen: false,
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },
@@ -40,6 +41,10 @@ const Glyphs = {
   },
   get allGlyphs() {
     return this.inventoryList.concat(this.activeList);
+  },
+  // Returns an array of inventory indices of all glyphs, with all null entries filtered out
+  get glyphIndexArray() {
+    return this.inventory.filter(g => g).map(g => g.idx);
   },
   findFreeIndex(useProtectedSlots) {
     this.validate();
@@ -59,10 +64,82 @@ const Glyphs = {
   get totalSlots() {
     return 120;
   },
-  // Always ensure at least one unprotected row for new glyphs, to prevent some potentially odd-looking behavior
-  changeProtectedRows(rowsToAdd) {
-    player.reality.glyphs.protectedRows = Math.clamp(player.reality.glyphs.protectedRows + rowsToAdd, 0, 11);
+  changeProtectedRows(rowChange) {
+    // Always ensure at least one unprotected row for new glyphs, to prevent some potentially odd-looking behavior
+    const newRows = Math.clamp(player.reality.glyphs.protectedRows + rowChange, 0, this.totalSlots / 10 - 1);
+    const rowsToAdd = newRows - player.reality.glyphs.protectedRows;
+
+    if (rowsToAdd > 0) {
+      // Attempt to shift unprotected glyphs downward if there are any empty unprotected rows. The time complexity on
+      // this algorithm isn't that good, but this isn't a particularly hot path and any "smarter" algorithms likely
+      // aren't worth the reduced code readability
+      let rowsMoved = 0;
+      while (rowsMoved < rowsToAdd) {
+        // Try to shift down all the unprotected rows from top to bottom, repeating until either no shifting is
+        // possible or we've freed up the row
+        let hasMoved = false;
+        for (let orig = this.protectedSlots / 10 + rowsMoved; !hasMoved && orig < this.totalSlots / 10; orig++) {
+          hasMoved = hasMoved || this.moveGlyphRow(orig, orig + 1);
+        }
+        // No movement happened this scan; there's nothing else we can do here
+        if (!hasMoved) break;
+        // Check if the topmost unprotected row is free. This isn't necessarily guaranteed because it could come from
+        // merging lower rows, which means the empty row isn't in the right spot
+        if (!this.glyphIndexArray.some(idx => Math.floor(idx / 10) === this.protectedSlots / 10)) {
+          rowsMoved++;
+        }
+      }
+    } else {
+      // Similar algorithm to above; we scan repeatedly over protected slots and repeatedly attempt to free up the row
+      // that's going to switch to being unprotected
+      let rowsMoved = 0;
+      while (rowsMoved < -rowsToAdd) {
+        let hasMoved = false;
+        for (let orig = this.protectedSlots / 10 - rowsMoved - 1; !hasMoved && orig > 0; orig--) {
+          hasMoved = hasMoved || this.moveGlyphRow(orig, orig - 1);
+        }
+        if (!hasMoved) break;
+        if (!this.glyphIndexArray.some(idx => Math.floor(idx / 10) === this.protectedSlots / 10 - 1)) {
+          rowsMoved++;
+          // In addition to all the protected glyph movement, we also move the entire unprotected inventory up one row
+          for (let orig = this.protectedSlots / 10 - rowsMoved; orig < this.totalSlots / 10; orig++) {
+            this.moveGlyphRow(orig, orig - 1);
+          }
+        }
+      }
+    }
+
+    player.reality.glyphs.protectedRows = newRows;
     this.validate();
+  },
+  // Move all glyphs from the origin row to the destination row, does nothing if a column-preserving move operation
+  // isn't possible. Returns a boolean indicating success/failure on glyph moving. Row is 0-indexed
+  moveGlyphRow(orig, dest) {
+    if (!player.reality.moveGlyphsOnProtection) return false;
+    if (orig >= this.totalSlots / 10 || dest >= this.totalSlots / 10) return false;
+    if (this.glyphIndexArray.some(idx => Math.floor(idx / 10) === dest)) {
+      // Destination row has some glyphs, attempt to merge the rows
+      const hasOverlap = [...Array(10).keys()]
+        .some(col => this.inventory[10 * orig + col] !== null && this.inventory[10 * dest + col] !== null);
+      if (hasOverlap) return false;
+      for (let col = 0; col < 10; col++) {
+        const glyph = this.inventory[10 * orig + col];
+        if (glyph !== null) {
+          this.moveToSlot(glyph, 10 * dest + col);
+        }
+      }
+      this.validate();
+      return true;
+    }
+    // Destination row is empty, just move the glyphs
+    for (let col = 0; col < 10; col++) {
+      const glyph = this.inventory[10 * orig + col];
+      if (glyph !== null) {
+        this.moveToSlot(glyph, 10 * dest + col);
+      }
+    }
+    this.validate();
+    return true;
   },
   refreshActive() {
     this.active = new Array(this.activeSlotCount).fill(null);
@@ -102,12 +179,13 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, ignoreLevel, ignoreStrength) {
+  findByValues(finding, ignore = { level, strength, effects }) {
     for (const glyph of this.sortedInventoryList) {
       const type = glyph.type === finding.type;
-      const effects = glyph.effects === finding.effects;
-      const str = ignoreStrength || glyph.strength === finding.strength;
-      const lvl = ignoreLevel || glyph.level === finding.level;
+      const effects = glyph.effects === finding.effects ||
+            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
+      const str = ignore.strength || glyph.strength === finding.strength;
+      const lvl = ignore.level || glyph.level === finding.level;
       const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
       if (type && effects && str && lvl && sym) return glyph;
     }
@@ -136,30 +214,28 @@ const Glyphs = {
       if (sameSpecialTypeIndex >= 0) return;
       this.removeFromInventory(glyph);
       this.saveUndo(inventoryIndex, targetSlot);
+      player.reality.glyphs.active.push(glyph);
+      glyph.idx = targetSlot;
+      this.active[targetSlot] = glyph;
+      this.updateRealityGlyphEffects();
+      this.updateMaxGlyphCount();
+      EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
+      EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+      this.validate();
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
         Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
         return;
       }
-      if (player.options.confirmations.glyphReplace &&
-        !confirm("Replacing a glyph will restart this Reality. Proceed?")) return;
-      // Remove from inventory first so that there's room to unequip to the same inventory slot
-      this.removeFromInventory(glyph);
-      this.unequip(targetSlot, inventoryIndex);
-      finishProcessReality({
-        reset: true,
-        glyphUndo: false,
-        restoreCelestialState: true,
-      });
+      if (!player.options.confirmations.glyphReplace) {
+        this.swapIntoActive(glyph, targetSlot);
+        return;
+      }
+      Modal.glyphReplace.show({ targetSlot, inventoryIndex });
     }
-    player.reality.glyphs.active.push(glyph);
-    glyph.idx = targetSlot;
-    this.active[targetSlot] = glyph;
-    this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
-    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-    this.validate();
+    // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
+    this.removeNewFlag(glyph);
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
@@ -173,7 +249,8 @@ const Glyphs = {
       Modal.message.show("Some of your glyphs could not be unequipped due to lack of inventory space.");
     }
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -184,7 +261,8 @@ const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
-    this.updateGlyphCountForV();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -251,8 +329,16 @@ const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
+    if (requestedInventoryIndex === undefined) this.addNewFlag(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
+  },
+  addNewFlag(glyph) {
+    if (!this.unseen.includes(glyph.id)) this.unseen.push(glyph.id);
+  },
+  removeNewFlag(glyph) {
+    const index = Glyphs.unseen.indexOf(glyph.id);
+    if (index > -1) Glyphs.unseen.splice(index, 1);
   },
   removeFromInventory(glyph) {
     // This can get called on a glyph not in inventory, during auto sacrifice.
@@ -288,18 +374,16 @@ const Glyphs = {
     for (const t of Object.values(byType)) {
       t.glyphs.sort(sortFunction);
       t.padding = Math.ceil(t.glyphs.length / 10) * 10 - t.glyphs.length;
-      // Try to get a full row of padding if possible in some cases
-      if (t.padding < 5 && t.glyphs.length > 8) t.padding += 10;
       totalDesiredPadding += t.padding;
     }
+    // If we want more padding than we actually have available, trim it down until it fits
     while (totalDesiredPadding > freeSpace) {
-      // Try to remove padding 5 at a time if possible
       let biggestPadding = sortOrder[0];
       for (const t of sortOrder) {
         if (byType[t].padding > byType[biggestPadding].padding) biggestPadding = t;
       }
-      let delta = byType[biggestPadding].padding > 5 ? 5 : 1;
-      if (byType[biggestPadding].padding > 12) delta = 10;
+      // Try to remove padding 5 at a time if possible
+      const delta = byType[biggestPadding].padding > 5 ? 5 : 1;
       totalDesiredPadding -= delta;
       byType[biggestPadding].padding -= delta;
     }
@@ -426,10 +510,10 @@ const Glyphs = {
     return 1000000;
   },
   get instabilityThreshold() {
-    return 1000 + getAdjustedGlyphEffect("effarigglyph");
+    return 1000 + getAdjustedGlyphEffect("effarigglyph") + ImaginaryUpgrade(7).effectValue;
   },
   get hyperInstabilityThreshold() {
-    return 4000 + getAdjustedGlyphEffect("effarigglyph");
+    return 3000 + this.instabilityThreshold;
   },
   clearUndo() {
     player.reality.glyphs.undo = [];
@@ -443,6 +527,10 @@ const Glyphs = {
       ep: new Decimal(Currency.eternityPoints.value),
       tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
+      thisInfinityTime: player.records.thisInfinity.time,
+      thisInfinityRealTime: player.records.thisInfinity.realTime,
+      thisEternityTime: player.records.thisEternity.time,
+      thisEternityRealTime: player.records.thisEternity.realTime,
       thisRealityTime: player.records.thisReality.time,
       thisRealityRealTime: player.records.thisReality.realTime,
       storedTime: player.celestials.enslaved.stored,
@@ -468,6 +556,10 @@ const Glyphs = {
     Currency.eternityPoints.value = new Decimal(undoData.ep);
     Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
+    player.records.thisInfinity.time = undoData.thisInfinityTime;
+    player.records.thisInfinity.realTime = undoData.thisInfinityRealTime;
+    player.records.thisEternity.time = undoData.thisEternityTime;
+    player.records.thisEternity.realTime = undoData.thisEternityRealTime;
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
     player.celestials.enslaved.stored = undoData.storedTime || 0;
@@ -480,25 +572,26 @@ const Glyphs = {
       Currency.tachyonParticles.value = new Decimal(undoData.tp);
       Currency.dilatedTime.value = new Decimal(undoData.dt);
     }
+    if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   },
   copyForRecords(glyphList) {
     // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured
     return glyphList.map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-        color: g.color,
-        symbol: g.symbol, }))
+      type: g.type,
+      level: g.level,
+      strength: g.strength,
+      effects: g.effects,
+      color: g.color,
+      symbol: g.symbol, }))
       .sort((a, b) => b.effects - a.effects);
   },
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
-  updateGlyphCountForV(startingReality = false) {
+  updateMaxGlyphCount(startingReality = false) {
     const activeGlyphList = this.activeList;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
-    if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
-    player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
+    if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
+    player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
@@ -511,6 +604,23 @@ const Glyphs = {
         glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
       }
     }
+  },
+  swapIntoActive(glyph, targetSlot) {
+    this.removeFromInventory(glyph);
+    this.unequip(targetSlot, glyph.idx);
+    finishProcessReality({
+      reset: true,
+      glyphUndo: false,
+      restoreCelestialState: true,
+    });
+    player.reality.glyphs.active.push(glyph);
+    this.active[targetSlot] = glyph;
+    glyph.idx = targetSlot;
+    this.updateRealityGlyphEffects();
+    this.updateMaxGlyphCount();
+    EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    this.validate();
   }
 };
 
@@ -567,8 +677,7 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
-  // Copied glyphs have rawLevel === 0
-  if (BASIC_GLYPH_TYPES.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
+  if (BASIC_GLYPH_TYPES.includes(glyph.type)) return level + Glyphs.levelBoost;
   return level;
 }
 

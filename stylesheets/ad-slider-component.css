@@ -32,6 +32,7 @@ SOFTWARE.
   display: flex;
   position: relative;
   align-items: center;
+  width: 100%;
 }
 
 .l-ad-slider--horizontal {

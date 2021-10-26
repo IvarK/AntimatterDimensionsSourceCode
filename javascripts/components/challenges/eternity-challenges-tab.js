@@ -85,7 +85,9 @@ Vue.component("eternity-challenges-tab", {
           this.canBeUnlocked = TimeStudy.eternityChallenge(challenge.id).canBeBought;
         },
         start() {
-          this.challenge.requestStart();
+          if (this.canBeUnlocked) {
+            TimeStudy.eternityChallenge(this.challenge.id).purchase();
+          } else this.challenge.requestStart();
         },
         goalAtCompletions(completions) {
           return format(this.challenge.goalAtCompletions(completions), 2, 1);
@@ -103,10 +105,16 @@ Vue.component("eternity-challenges-tab", {
           <description-display :config="config" slot="top" />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
-              <div>Completed {{formatInt(completions)}} {{"time" | pluralize(completions)}}</div>
-              <div v-if="!isCompleted">{{goalDisplay}}</div>
+              <div>
+                Completed {{ formatInt(completions) }} {{ "time" | pluralize(completions) }}
+              </div>
+              <div v-if="!isCompleted">
+                {{ goalDisplay }}
+              </div>
             </div>
-            <span v-if="showGoalSpan">Goal Span: {{firstGoal}} IP - {{lastGoal}} IP</span>
+            <span v-if="showGoalSpan">
+              Goal Span: {{ firstGoal }} IP - {{ lastGoal }} IP
+            </span>
             <span>
               Reward:
               <description-display
@@ -144,16 +152,15 @@ Vue.component("eternity-challenges-tab", {
         (this.showAllChallenges && PlayerProgress.realityUnlocked());
     }
   },
-  template:
-    `<div class="l-challenges-tab">
-      <challenges-header/>
-      <div>Complete Eternity Challenges again for a bigger reward, maximum of {{formatInt(5)}} times.</div>
+  template: `
+    <div class="l-challenges-tab">
+      <challenges-header />
+      <div>Complete Eternity Challenges again for a bigger reward, maximum of {{ formatInt(5) }} times.</div>
       <div v-if="unlockedCount !== 12">
-        (You have unlocked {{ formatInt(unlockedCount) }}
-        out of {{ formatInt(12) }} Eternity Challenges)
+        You have seen {{ formatInt(unlockedCount) }} out of {{ formatInt(12) }} Eternity Challenges.
       </div>
       <div v-else>
-        You have unlocked all {{ formatInt(12) }} Eternity Challenges
+        You have seen all {{ formatInt(12) }} Eternity Challenges.
       </div>
       <challenge-grid :count="12" :isChallengeVisible="isChallengeVisible">
         <eternity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

@@ -218,6 +218,38 @@ class BlackHoleState {
     // This used to always use the period of blackHole[0], now it doesn't,
     // will this cause other bugs?
     this._data.phase += activePeriod;
+
+    // This conditional is a bit convoluted because the more straightforward check of just pausing if it activates
+    // soon will result in it pausing every tick, including the tick it gets manually unpaused. This is unintuitive
+    // because it forces the player to change auto-pause modes every time it reaches activation again. Instead, we
+    // check if before the conditional is false before this tick and true afterwards; this ensures it only ever pauses
+    // once per cycle, right at the activation threshold. We give it a buffer equal to the acceleration time so that
+    // it's at full speed once by the time it actually activates.
+    const beforeTick = this.phase - activePeriod, afterTick = this.phase;
+    const threhold = this.interval - BlackHoles.ACCELERATION_TIME;
+    const willActivateOnUnpause = !this.isActive && beforeTick < threhold && afterTick >= threhold;
+    switch (player.blackHoleAutoPauseMode) {
+      case BLACK_HOLE_PAUSE_MODE.NO_PAUSE:
+        break;
+      case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1:
+        if (this.id === 1 && willActivateOnUnpause) {
+          BlackHoles.togglePause();
+          GameUI.notify.blackHole(`${RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole"} 
+            automatically paused.`);
+          return;
+        }
+        break;
+      case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH2:
+        if (willActivateOnUnpause && (this.id === 2 || (this.id === 1 && BlackHole(2).isCharged))) {
+          BlackHoles.togglePause();
+          GameUI.notify.blackHole(`Black Holes automatically paused.`);
+          return;
+        }
+        break;
+      default:
+        throw new Error("Unrecognized BH offline pausing mode");
+    }
+
     if (this.phase >= this.cycleLength) {
       // One activation for each full cycle.
       this._data.activations += Math.floor(this.phase / this.cycleLength);
@@ -324,7 +356,7 @@ const BlackHoles = {
 
   togglePause: () => {
     if (!BlackHoles.areUnlocked) return;
-    if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
+    if (player.blackHolePause) player.requirementChecks.reality.slowestBH = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.records.realTimePlayed;
     const pauseType = BlackHoles.areNegative ? "inverted" : "paused";
@@ -332,8 +364,9 @@ const BlackHoles = {
   },
 
   get unpauseAccelerationFactor() {
+    if (this.arePermanent) return 1;
     return Math.clamp((player.records.realTimePlayed - player.blackHolePauseTime) /
-    (1000 * this.ACCELERATION_TIME), 0, 1);
+      (1000 * this.ACCELERATION_TIME), 0, 1);
   },
 
   get arePaused() {

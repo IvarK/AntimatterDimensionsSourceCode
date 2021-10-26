@@ -2,22 +2,23 @@
 
 class Sacrifice {
   // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
-  // sacrifice for the first time. It has the side-effect of hiding it in really early reality, which is probably fine.
+  // sacrifice for the first time.
   static get isVisible() {
     return Achievement(18).isUnlocked || PlayerProgress.realityUnlocked();
   }
 
   static get canSacrifice() {
     return DimBoost.totalBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
-      AntimatterDimension(8).totalAmount.gt(0);
+      AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit);
   }
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.totalBoosts < 5) return `requires ${formatInt(5)} Dimension Boosts`;
-    if (AntimatterDimension(8).totalAmount.eq(0)) return "no 8th Antimatter Dimensions";
+    if (DimBoost.totalBoosts < 5) return `Requires ${formatInt(5)} Dimension Boosts`;
+    if (AntimatterDimension(8).totalAmount.eq(0)) return "No 8th Antimatter Dimensions";
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
-    return "";
+    if (Player.isInAntimatterChallenge) return "Challenge goal reached";
+    return "Need to Crunch";
   }
 
   static getSacrificeDescription(changes) {
@@ -44,23 +45,26 @@ class Sacrifice {
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
 
+  // The code path for calculating the sacrifice exponent is pretty convoluted, but needs to be structured this way
+  // in order to mostly replicate old pre-Reality behavior. There are two key things to note in how sacrifice behaves
+  // which are not immediately apparent here; IC2 changes the formula by getting rid of a log10 (and therefore makes
+  // sacrifice significantly stronger despite the much smaller exponent) and pre-Reality behavior assumed that the
+  // player would already have ach32/57 by the time they complete IC2. As Reality resets achievements, we had to
+  // assume that all things boosting sacrifice can be gotten independently, which resulted in some odd effect stacking.
   static get sacrificeExponent() {
-    let factor;
-    if (NormalChallenge(8).isRunning) {
-      factor = 1;
-    } else if (InfinityChallenge(2).isCompleted) {
-      factor = 1 / 120;
-    } else {
-      factor = 2;
-    }
+    let base;
+    // C8 seems weaker, but it actually follows its own formula which ends up being stronger based on how it stacks
+    if (NormalChallenge(8).isRunning) base = 1;
+    // Pre-Reality this was 100; having ach32/57 results in 1.2x, which is brought back in line by changing to 120
+    else if (InfinityChallenge(2).isCompleted) base = 1 / 120;
+    else base = 2;
 
-    return (1 + Effects.sum(
-      Achievement(32),
-      Achievement(57)
-    )) * (1 + Effects.sum(
-      Achievement(88),
-      TimeStudy(228)
-    )) * factor;
+    // All the factors which go into the multiplier have to combine this way in order to replicate legacy behavior
+    const preIC2 = 1 + Effects.sum(Achievement(32), Achievement(57));
+    const postIC2 = 1 + Effects.sum(Achievement(88), TimeStudy(228));
+    const triad = TriadStudy(4).effectOrDefault(1);
+
+    return base * preIC2 * postIC2 * triad;
   }
 
   static get nextBoost() {
@@ -104,7 +108,7 @@ class Sacrifice {
   }
 }
 
-function sacrificeReset(auto) {
+function sacrificeReset() {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
     Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
@@ -117,7 +121,6 @@ function sacrificeReset(auto) {
   }
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, formatX(nextBoost, 2, 1));
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(AntimatterDimension(1).amount);
   const isAch118Unlocked = Achievement(118).isUnlocked;
@@ -129,20 +132,16 @@ function sacrificeReset(auto) {
   } else if (!isAch118Unlocked) {
     AntimatterDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
-  player.achievementChecks.noSacrifices = false;
+  player.requirementChecks.infinity.noSacrifice = false;
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }
 
 function sacrificeBtnClick() {
-  if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return false;
+  if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return;
   if (player.options.confirmations.sacrifice) {
-    if (!confirm("Dimensional Sacrifice will remove all of your 1st through 7th Antimatter Dimensions " +
-      "(with the cost and multiplier unchanged), for a boost to the 8th Antimatter Dimension based on the total " +
-      "amount of 1st Antimatter Dimensions sacrificed. It will take time to regain production.")) {
-      return false;
-    }
+    Modal.sacrifice.show();
+  } else {
+    sacrificeReset();
   }
-
-  return sacrificeReset();
 }

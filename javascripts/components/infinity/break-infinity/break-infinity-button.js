@@ -20,13 +20,11 @@ Vue.component("break-infinity-button", {
     },
     tooltip() {
       if (this.isEnslaved) return "...eons stacked on eons stacked on eons stacked on eons stacked on ...";
-      return (this.isUnlocked && !this.isBroken)
-        ? "Cost multipliers post-infinity will begin increasing faster, but so will the Infinity Point gain"
-        : undefined;
+      return undefined;
     },
     text() {
       if (this.isEnslaved) return "FEEL ETERNITY";
-      return this.isBroken ? "FIX INFINITY" : "BREAK INFINITY";
+      return this.isBroken ? "INFINITY IS BROKEN" : "BREAK INFINITY";
     }
   },
   methods: {
@@ -37,13 +35,15 @@ Vue.component("break-infinity-button", {
     },
     clicked() {
       if (this.isEnslaved) Enslaved.feelEternity();
-      else breakInfinity();
+      else if (!this.isBroken && this.isUnlocked) Modal.breakInfinity.show();
     }
   },
-  template:
-    `<button
+  template: `
+    <button
       v-tooltip="tooltip"
       :class="classObject"
       @click="clicked"
-    >{{text}}</button>`
+    >
+      {{ text }}
+    </button>`
 });

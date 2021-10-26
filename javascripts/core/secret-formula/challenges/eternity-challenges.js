@@ -80,12 +80,11 @@ GameDatabase.challenges.eternity = [
     goal: DC.E850,
     goalIncrease: DC.E250,
     reward: {
-      description: "Reduce Antimatter Dimension cost multiplier growth",
+      description: "Further reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
       formatEffect: value => {
-        const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
-        const applied = base - value;
-        return `${formatX(base, 2, 1)} ➜ ${formatX(applied, 2, 1)}`;
+        const total = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward)) - value;
+        return `-${format(value, 2, 1)} (${formatX(total, 2, 1)} total)`;
       }
     }
   },
@@ -96,6 +95,7 @@ GameDatabase.challenges.eternity = [
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: DC.E2000,
     goalIncrease: DC.E530,
+    effect: () => TimeDimension(1).productionPerSecond,
     reward: {
       description: "1st Time Dimension produces 8th Infinity Dimensions",
       effect: completions => TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1).clampMin(0),
@@ -135,7 +135,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinities to Antimatter Dimensions (Infinities^${formatInt(950)}).`;
+        Infinities to Antimatter Dimensions (Infinities${formatPow(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -159,12 +159,11 @@ GameDatabase.challenges.eternity = [
     goal: DC.E500,
     goalIncrease: DC.E200,
     reward: {
-      description: "Reduce Tickspeed cost multiplier growth",
+      description: "Further reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
       formatEffect: value => {
-        const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
-        const applied = base - value;
-        return `${formatX(base, 2, 2)} ➜ ${formatX(applied, 2, 2)}`;
+        const total = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward)) - value;
+        return `-${format(value, 2, 2)} (${formatX(total, 2, 2)} total)`;
       }
     }
   },

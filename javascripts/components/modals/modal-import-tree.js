@@ -6,11 +6,14 @@ Vue.component("modal-import-tree", {
       input: ""
     };
   },
+  mounted() {
+    this.$refs.input.select();
+  },
   computed: {
     tree() {
       if (!this.inputIsValidTree) return false;
-      const formattedInput = this.input.split("|")[0].split(",");
-      const eternityChallenge = TimeStudy.eternityChallenge(this.input.split("|")[1]);
+      const formattedInput = this.truncatedInput.split("|")[0].split(",");
+      const eternityChallenge = TimeStudy.eternityChallenge(this.truncatedInput.split("|")[1]);
       const hasEternityChallenge = eternityChallenge !== undefined;
       const studies = new Set();
       for (const study of formattedInput) {
@@ -34,17 +37,23 @@ Vue.component("modal-import-tree", {
           }
         }
         switch (study.path) {
-          case TIME_STUDY_PATH.ANTIMATTER_DIM: firstSplitPaths.add("Antimatter Dims");
+          case TIME_STUDY_PATH.ANTIMATTER_DIM:
+            firstSplitPaths.add("Antimatter Dims");
             break;
-          case TIME_STUDY_PATH.INFINITY_DIM: firstSplitPaths.add("Infinity Dims");
+          case TIME_STUDY_PATH.INFINITY_DIM:
+            firstSplitPaths.add("Infinity Dims");
             break;
-          case TIME_STUDY_PATH.TIME_DIM: firstSplitPaths.add("Time Dims");
+          case TIME_STUDY_PATH.TIME_DIM:
+            firstSplitPaths.add("Time Dims");
             break;
-          case TIME_STUDY_PATH.ACTIVE: secondSplitPaths.add("Active");
+          case TIME_STUDY_PATH.ACTIVE:
+            secondSplitPaths.add("Active");
             break;
-          case TIME_STUDY_PATH.PASSIVE: secondSplitPaths.add("Passive");
+          case TIME_STUDY_PATH.PASSIVE:
+            secondSplitPaths.add("Passive");
             break;
-          case TIME_STUDY_PATH.IDLE: secondSplitPaths.add("Idle");
+          case TIME_STUDY_PATH.IDLE:
+            secondSplitPaths.add("Idle");
         }
       }
       const totalST = this.calculateMissingSTCost([...studies], true);
@@ -60,14 +69,18 @@ Vue.component("modal-import-tree", {
         hasEternityChallenge
       };
     },
+    truncatedInput() {
+      // If last character is "," remove it
+      return this.input.replace(/,$/u, "");
+    },
     hasInput() {
-      return this.input !== "";
+      return this.truncatedInput !== "";
     },
     inputIsValid() {
       return this.inputIsValidTree || this.inputIsSecret;
     },
     inputIsValidTree() {
-      const formattedInput = this.input.split("|")[0].split(",");
+      const formattedInput = this.truncatedInput.split("|")[0].split(",");
       let isValid = true;
       for (const study of formattedInput) {
         if (TimeStudy(study) === undefined) isValid = false;
@@ -75,18 +88,15 @@ Vue.component("modal-import-tree", {
       return isValid;
     },
     inputIsSecret() {
-      return sha512_256(this.input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
+      return sha512_256(this.truncatedInput) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
     }
-  },
-  mounted() {
-    this.$refs.input.select();
   },
   methods: {
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       Modal.hide();
-      importStudyTree(this.input);
+      importStudyTree(this.truncatedInput);
     },
     formatCost(cost) {
       return formatWithCommas(cost);
@@ -133,9 +143,9 @@ Vue.component("modal-import-tree", {
       return totalSTSpent;
     },
   },
-  template:
-    `<div class="c-modal-import-tree l-modal-content--centered">
-      <modal-close-button @click="emitClose"/>
+  template: `
+    <div class="c-modal-import-tree l-modal-content--centered">
+      <modal-close-button @click="emitClose" />
       <h3>Input your tree</h3>
       <input
         v-model="input"
@@ -180,6 +190,8 @@ Vue.component("modal-import-tree", {
         v-if="inputIsValid"
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="importTree"
-      >Import</primary-button>
+      >
+        Import
+      </primary-button>
     </div>`
 });

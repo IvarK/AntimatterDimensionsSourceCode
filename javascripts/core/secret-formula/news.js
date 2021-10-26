@@ -3,7 +3,6 @@
 // A = always there
 // L = locked
 // J = joke/unreasonable condition
-// E = enslaved hints (practically but not technically missable)
 // R = random chance condition
 // P = patreon
 // AI = created with gpt2
@@ -671,7 +670,9 @@ GameDatabase.news = [
   },
   {
     id: "a129",
-    text: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    text:
+      `<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>
+      https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>`
   },
   {
     id: "a130",
@@ -1053,7 +1054,10 @@ GameDatabase.news = [
   },
   {
     id: "a194",
-    text: "<a href='https://www.youtube.com/watch?v=agxG5K38g1c' target='_blank'>THIS LINK IS NOT A RICK ROLL.</a></a>"
+    text:
+       `<a href='https://youtube.com/watch?v=iJgNpm8cTE8' target='_blank'>This link is not a rick roll.
+       It's a reference to a certain scene in the movie Star Wars that was also referenced by a certain
+       website and was a very popular meme.</a>`
   },
   {
     id: "a195",
@@ -1167,7 +1171,7 @@ GameDatabase.news = [
   {
     id: "a210",
     get text() {
-      const clicks = player.secretUnlocks.uselessNewsClicks;
+      const clicks = player.news.specialTickerData.uselessNewsClicks;
       const plural = pluralize("time", clicks, "times");
       if (clicks === 1) {
         return `Nothing happens when you click this text. And yet, you've clicked it.`;
@@ -1178,7 +1182,7 @@ GameDatabase.news = [
       return "Nothing happens when you click this text. And you understand that.";
     },
     onClick() {
-      player.secretUnlocks.uselessNewsClicks++;
+      player.news.specialTickerData.uselessNewsClicks++;
       return this.text;
     }
   },
@@ -1404,6 +1408,9 @@ GameDatabase.news = [
         S7: "I always had fond memories of that background from my childhood.",
         S8: "it makes it a lot easier to sneak in a little gameplay at the office.",
         S9: "lol you can't even ever see this in the game",
+        S10:
+          `it has a crisp and soothing design that really appeals, and its background is complex and enthralling.
+          It gives you the feeling of standing at the helm of a futuristic interstellar ship.`,
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.
@@ -1694,7 +1701,7 @@ GameDatabase.news = [
   {
     id: "a288",
     get text() {
-      const position = player.secretUnlocks.newsQueuePosition--;
+      const position = player.news.specialTickerData.newsQueuePosition--;
       if (position > 1) {
         return `Thank you for contacting customer support. Your satisfaction is very important to us, and a company
           representative will be with you shortly. You are now at position ${position} in the queue. Thank you for
@@ -1707,14 +1714,14 @@ GameDatabase.news = [
     id: "a289",
     text: "Click here to disassemble the news ticker for a trace amount of paperclips.",
     onClick() {
-      player.secretUnlocks.paperclips++;
+      player.news.specialTickerData.paperclips++;
       GameOptions.toggleNews();
     }
   },
   {
     id: "a290",
     get text() {
-      const paperclips = player.secretUnlocks.paperclips;
+      const paperclips = player.news.specialTickerData.paperclips;
       return `You see, this news isn't normal news. It is being produced by the first news dimension. If you want
         to unlock more news, you have to collect enough paperclips to build the second news dimension. You
         currently have ${paperclips} ${pluralize("paperclip", paperclips, "paperclips")}, but you need
@@ -1760,7 +1767,7 @@ GameDatabase.news = [
       onClick() {
         if (wasClicked) return undefined;
         wasClicked = true;
-        player.secretUnlocks.paperclips++;
+        player.news.specialTickerData.paperclips++;
         return this.text;
       }
     };
@@ -2116,6 +2123,99 @@ GameDatabase.news = [
       disregard any undeserved compliments.`
   },
   {
+    id: "a341",
+    text: "Game under construction: All mechanics must wear hardcaps."
+  },
+  {
+    id: "a342",
+    text: "Of course paperclips have a use, you use them to hold papers together. But who uses paper anymore?"
+  },
+  {
+    id: "a343",
+    get text() {
+      // Caps in ~68 years of real playtime then turns into "Infinite%"
+      return `Global Challenge - across all AD players, accumulate ${format(1e308)} contest-paperclips (noted by the
+        square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
+        tickspeed while above ${format(1e200)} tickspeed upgrades! Current global progress -
+        ${format(Math.pow(player.records.realTimePlayed, 25))}/${format(1e308)}
+        (${formatPercents(Math.log10(Math.pow(player.records.realTimePlayed, 25)) / 308, 3)})`;
+    }
+  },
+  {
+    id: "a344",
+    text:
+      `Real life is an enigma. No one knows how it really works. There are many questions left unanswered:
+      What is the meaning of life? Are we all living inside a simulation? How do you do antitables? Where and
+      how did existence begin? These are all the questions that always linger in the back of our heads, and
+      the answers to them? We may never know.`
+  },
+  {
+    id: "a345",
+    text: "Japanese complain, as haikus can't be shown here. Conflict arises."
+  },
+  {
+    id: "a346",
+    text:
+      `Did you know Antimatter Dimensions is also available on Android? <a
+      href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions">
+      Click here to check it out!<a>`
+  },
+  {
+    id: "a347",
+    text:
+      `Pluto isn't a state. The 50 states, as we all know, are: Adverb, Air, Artemis, Asia, Atlantic, Bargaining,
+      Bilabial, Braille, Candela, Comma, Dacron, Dairy, Dative, Dexterity, Disenchanter, Dodecahedron, Erie,
+      Eukaryota, Folklore, Great Pyramid, Halogen, Igneous, Italy, Kansas, Kilimanjaro, Lambda, Leviticus, Libra,
+      Liquid, Lymphatic, Mesozoic, Microwave, Muon, North, Nova Scotia, Octagon, October, P = NP, Perissodactyla,
+      Polk, Potassium, Pulley, Quinary, Rook, Saturn, Tiana, Tiger, Varaha, Yale, and Yellow.`
+  },
+  {
+    id: "a348",
+    text: "<span style='color: red'>[News Message removed by moderator]<span>"
+  },
+  {
+    id: "a349",
+    get text() {
+      const chapters = [
+        `We have come, writers, painters, sculptors, architects, passionate enthusiasts of the hitherto untouched
+        beauty of Paris, to protest with all our strength, all our indignation, in the name of the unknown French
+        taste, in the name of art and of French history threatened, against the erection, in the heart of our
+        capital, of the useless and monstrous Eiffel Tower, which public malignity, often marked by common sense
+        and the spirit of justice, has already named of "Tower of Babel". Without falling into the exaltation of
+        chauvinism, we have the right to proclaim that Paris is the unrivaled city in the world. Above the streets,
+        the widened boulevards, and the magnificent walks, rise the most noble monuments that the human race has
+        produced. The soul of France, creator of masterpieces, shines amidst this august flowering of stones. Italy,
+        Germany and Flanders, so justifiably proud of their artistic legacy, possess nothing comparable to ours,
+        and from all corners of the universe Paris attracts curiosities and admiration.`,
+        `Are we going to let all this be profaned? Will the city of Paris go on to associate itself longer with the
+        baroques, with the mercantile imaginations of a machine builder, to become irreparably ugly and dishonor
+        itself? For the Eiffel Tower, which commercial America itself would not want, is, doubtless, the dishonor
+        of Paris. Everyone feels it, everyone says it, everyone deeply grieves it, and we are only a weak echo of
+        the universal opinion, so legitimately alarmed.`,
+        `Finally, when the foreigners come to visit our Exhibition, they will exclaim, astonished: "What? It is this
+        horror that the French have found to give us an idea of their taste so much vaunted? And they will be right
+        to make fun of us, because the Paris of the sublime gothics, the Paris of Jean Goujon, Germain Pilon, Puget,
+        Rude, Barye, etc., will have become the Paris of M. Eiffel.`,
+        `It suffices, moreover, to realize what we are doing, to imagine for a moment a vertiginously ridiculous
+        tower dominating Paris, as well as a gigantic factory chimney, crushing with its barbarian mass. Our Lady,
+        the Sainte-Chapelle, the dome of the Invalides, the Arc de Triomphe, all our humiliated monuments, all our
+        shrunken architectures, which will disappear in this astonishing dream. And for twenty years, we will see
+        how to stretch out over the entire city, still quivering with the genius of so many centuries, we will see
+        the odious shadow of the odious column of bolted sheet metal stretch like an ink stain ...`,
+        `It's up to you, Monsieur and dear compatriot, to you who love Paris so much, who have embellished it so
+        much, who have so often protected it against the administrative devastation and the vandalism of industrial
+        enterprises, that it is the honor to defend it once more. We leave it to you to plead the cause of Paris,
+        knowing that you will deploy all the energy, all the eloquence that must inspire an artist such as you love
+        what is beautiful, what is great, what is right ... And if our cry of alarm is not heard, if our reasons are
+        not listened to, if Paris is stubborn in the idea of dishonoring Paris, we will have, at least, you and us,
+        hear a protest that honors.`
+      ];
+      const chapter = chapters[player.news.specialTickerData.eiffelTowerChapter];
+      player.news.specialTickerData.eiffelTowerChapter = (player.news.specialTickerData.eiffelTowerChapter + 1) % 5;
+      return chapter;
+    }
+  },
+  {
     id: "l1",
     text: "You just made your 1,000,000,000,000,000th antimatter. This one tastes like chicken.",
     get unlocked() { return Currency.antimatter.exponent === 15; }
@@ -2155,7 +2255,7 @@ GameDatabase.news = [
   {
     id: "l8",
     text: "A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.",
-    get unlocked() { return player.spreadingCancer > 0; }
+    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies > 0; }
   },
   {
     id: "l9",
@@ -2266,12 +2366,12 @@ GameDatabase.news = [
   {
     id: "l21",
     text: "I've got 1.79e308 problems, but none of them antimatter.",
-    get unlocked() { return Currency.infinities.gt(0) && !player.break; }
+    get unlocked() { return Currency.infinities.gt(0) && !PlayerProgress.hasBroken(); }
   },
   {
     id: "l22",
     text: "Anti Emoji Movie a huge hit!",
-    get unlocked() { return player.spreadingCancer >= 5; }
+    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies >= 5; }
   },
   {
     id: "l23",
@@ -2316,52 +2416,52 @@ GameDatabase.news = [
   {
     id: "l30",
     text: "Does Hevi just pick quotes to put into the game?",
-    get unlocked() { return player.news.size >= 30; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 30; }
   },
   {
     id: "l31",
     text: "New news company has become rivals with us. They are made entirely of antimatter.",
-    get unlocked() { return player.news.size >= 80; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 80; }
   },
   {
     id: "l32",
     text: "How many times can we use \"Anti\" in a row before people stop listening?",
-    get unlocked() { return player.news.size >= 100; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 100; }
   },
   {
     id: "l33",
     text: "Does Hevi even check #news-ticker-suggestions anymore?",
-    get unlocked() { return player.news.size >= 120; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 120; }
   },
   {
     id: "l34",
     text: "Need more quotes! -hevipelle",
-    get unlocked() { return player.news.size >= 135; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 135; }
   },
   {
     id: "l35",
     text: "Man destroys known universe with antimatter, writes news tickers to keep from feeling lonely.",
-    get unlocked() { return player.news.size >= 150; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 150; }
   },
   {
     id: "l36",
     text: "You're almost there!",
-    get unlocked() { return player.news.size >= 160; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 160; }
   },
   {
     id: "l37",
     text: "You can stop now",
-    get unlocked() { return player.news.size >= 165; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen >= 165; }
   },
   {
     id: "l38",
     text: "fucking hacker",
-    get unlocked() { return player.news.size > GameDatabase.news.length; }
+    get unlocked() { return NewsHandler.uniqueTickersSeen > GameDatabase.news.length; }
   },
   {
     id: "l39",
     text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
-    get unlocked() { return player.news.has("c1"); }
+    get unlocked() { return NewsHandler.hasSeenNews("l1"); }
   },
   {
     id: "l40",
@@ -2369,7 +2469,7 @@ GameDatabase.news = [
       `I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th
       dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen,
       We should have listened.`,
-    get unlocked() { return player.news.has("b22"); }
+    get unlocked() { return NewsHandler.hasSeenNews("l58"); }
   },
   {
     id: "l41",
@@ -2396,7 +2496,7 @@ GameDatabase.news = [
   {
     id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    get unlocked() { return player.spreadingCancer >= 3999; }
+    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies >= 3999; }
   },
   {
     id: "l46",
@@ -2499,7 +2599,7 @@ GameDatabase.news = [
       But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was
       them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All
       the planet. All the solar system. All the galaxy. All.`,
-      get unlocked() { return player.replicanti.unl; }
+    get unlocked() { return player.replicanti.unl; }
   },
   {
     id: "l58",
@@ -2526,7 +2626,7 @@ GameDatabase.news = [
       `The debate on the singular form of Replicanti rages on. Team "Replicantus"'s base has been ransacked
       by Team "Also Replicanti", and many of their dimensions were stolen. Team "The Plural Is Replicantis"
       is still lying low after their plan to hack the dictionary failed.`,
-      get unlocked() { return player.replicanti.unl; }
+    get unlocked() { return player.replicanti.unl; }
   },
   {
     id: "l60",
@@ -2547,21 +2647,21 @@ GameDatabase.news = [
     text:
       `Computer scientists are outraged, "What even are Infinity Points? IP stands for Internet Protocol!".
       Debates continue to intensify, more at 7.`,
-      get unlocked() { return PlayerProgress.infinityUnlocked(); }
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
   {
     id: "l63",
     text:
       `Do you feel that time has been going slower? Study reveals that 1 second now last approximately 1.3 seconds.
       Scientists are calling this phenomenon Time Dilation.`,
-      get unlocked() { return PlayerProgress.dilationUnlocked(); }
+    get unlocked() { return PlayerProgress.dilationUnlocked(); }
   },
   {
     id: "l64",
     text:
       `Injustice in the Antimatter Academia: Beginners are only allowed to choose one field of study while the elite
       can pick all three. "Its just not fair, man. How come they can do it?" Questions frustrated student.`,
-      get unlocked() { return PlayerProgress.eternityUnlocked(); }
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "l65",
@@ -2627,13 +2727,50 @@ GameDatabase.news = [
     text:
       `"Zurkrbarg, Celestial of Privacy" has announced their plans to release a new version
       of their popular social media universe, "All".`,
-    get unlocked() { return RealityUpgrades.allBought; }
+    get unlocked() { return Teresa.isUnlocked; }
   },
   {
     id: "l71",
-    text:
-      "Other languages await... I need to become a programmer",
+    text: "Other languages await... I need to become a programmer",
     get unlocked() { return Player.canEternity || PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l72",
+    get text() {
+      const scenarios = [
+        `our contestants struggle to survive in the desolate wasteland of Eternity Challenge 8 -
+        running out of Replicanti and Infinity Dimensions, what will they turn to?`,
+        "we investigate reports of a Time Shard mine collapsing at 26:90.",
+        "we invite an amateur on to explain what the reward for Infinity Challenge 9 would be.",
+        "our friends over at ANN explain how they produce their broadcasts.",
+        "we invite local idle gamers over to explain how they play their favorite games.",
+        `<span style='font-family: Barrio'>send 10,000 Support The Developer
+        coins or you will never see RealiTV again.</span>`,
+        "we break down exactly what went wrong in the black hole powering our city yesterday.",
+        "we go over our 10-day weather forcasts.",
+        `YOU MUST PAY ${format(player.reality.realityMachines.times(10).max(10))}
+        REALITY MACHINES TO CONTINUE VIEWING THIS PROGRAM.`,
+        "we witness the release of the hypnodrones.",
+        "our great and grand overlord lets us have a single antimatter.",
+        `Bill Nye explains how Replicanti replicate, and teaches how to spot dangerous conspiracy theories
+        such as "ingesting antimatter is perfectly fine" and "Antimatter Galaxies aren't worth it".`,
+        "the world's greatest philosophers debate if we are the real antimatter.",
+        "resident baker explains how ordinary objects can transmorph into cake if not watched constantly."
+      ];
+      const scenario = scenarios.randomElement();
+      return `Next time on RealiTV, ${scenario}`;
+    },
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
+  },
+  {
+    id: "l73",
+    text: "A long time ago in a distant galaxy far, far away, the cost scaling changed.",
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l74",
+    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
     id: "j1",
@@ -2675,118 +2812,6 @@ GameDatabase.news = [
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
     get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
-  },
-  {
-    id: "e1",
-    get text() {
-      return "Sometimes you want to break things, sometimes you want to use broken things.";
-    },
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e2",
-    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e3",
-    text:
-      `You can get Antimatter Galaxies the same way you can get more than
-      2 Antimatter Galaxies without Infinity being broken.`,
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e4",
-    get text() {
-      return `You can't get <span style='color: black; background: black;'>REDACTED</span>?
-        You couldn't get those anyway, why do you care?`;
-    },
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
-    }
-  },
-  {
-    id: "e5",
-    text:
-      `No, you can't decrease <span style='color: black; background: black;'>REDACTED</span>
-      to ×1.8, but it's still worth acting as if you could.`,
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e6",
-    text: "Have you tried rotating your screen 14 degrees counterclockwise?",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e7",
-    get text() {
-      return `${format(DC.E201600, 0, 0)} IP? I'm finally done!`;
-    },
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e8",
-    text: `Go there and stand away from me /
-    <span style='color: black; background: black;'>RE</span>
-    <span style='color: black; background: black;'>REDA</span>
-    <span style='color: black; background: black;'>RE</span>
-    <span style='color: black; background: black;'>RE</span>
-    <span style='color: black; background: black;'>REDAC</span>
-    <span style='color: black; background: black;'>RED</span>
-    <span style='color: black; background: black;'>REDACTED</span>`,
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e9",
-    text: "Social distancing with regard to Eternity is not encouraged.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e10",
-    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e11",
-    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a different celestial.",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e12",
-    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
-    get unlocked() {
-      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
-    }
-  },
-  {
-    id: "e13",
-    get text() {
-      return `Did you know? While in The Enslaved Ones' Reality for more than
-        ${TimeSpan.fromMinutes(15)}, there's a small chance of a fairly-useless
-        hint in a news ticker message! Over ${TimeSpan.fromHours(2)}, the hints
-        will get slightly more useful and less convoluted, but remain fairly impossible to figure out!`;
-    },
-    get unlocked() { return Enslaved.isRunning; }
   },
   {
     id: "r1",
@@ -3749,7 +3774,7 @@ GameDatabase.news = [
     text: "Click here to disassemble the news ticker for a trace amount of useless paperclips.",
     onClick() {
       GameOptions.toggleNews();
-      player.secretUnlocks.paperclips++;
+      player.news.specialTickerData.paperclips++;
     }
   },
   {

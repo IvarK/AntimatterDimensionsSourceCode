@@ -12,10 +12,10 @@ Vue.component("automator-man-page", {
       <div class="c-automator-docs-page__indented" v-html="command.syntax" />
       <template v-if="command.description">
         <b>DESCRIPTION</b>
-        <div class="c-automator-docs-page__indented"v-html="command.description" />
+        <div class="c-automator-docs-page__indented" v-html="command.description" />
       </template>
       <template v-for="section in command.sections">
-        <b>{{section.name}}</b>
+        <b>{{ section.name }}</b>
         <template v-for="item in section.items">
           <div class="c-automator-docs-page__indented">
             <div v-html="item.header" />
@@ -27,6 +27,5 @@ Vue.component("automator-man-page", {
         <b>EXAMPLES</b>
         <div v-for="example in command.examples" class="c-automator-docs-page__indented" v-html="example" />
       </template>
-    </div>
-  `
+    </div>`
 });

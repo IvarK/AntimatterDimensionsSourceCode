@@ -63,8 +63,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `Costs increase like in Tickspeed Challenge (C9), but additonally buying Antimatter Dimensions 1-4 causes all
-        smaller costs to increase and buying Antimatter Dimensions 5-8 causes all larger costs to increase.`,
+      `Buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase,
+      and buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
     goal: DC.E16500,
     isQuickResettable: true,
     reward: {
@@ -83,10 +83,10 @@ GameDatabase.challenges.infinity = [
     goal: DC.D2E22222,
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
-    formatEffect: value => formatX(value, 1, 2),
+    formatEffect: value => `/${format(value, 1, 2)}`,
     reward: {
       description: "Infinity Dimension multiplier based on Tickspeed",
-      effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
+      effect: () => Tickspeed.perSecond.pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },
     unlockAM: DC.E22500,
@@ -95,12 +95,12 @@ GameDatabase.challenges.infinity = [
     id: 7,
     description: () =>
       `You can't get Antimatter Galaxies, but Dimension Boost multiplier
-      ${formatX(2.5, 1, 1)} ➜ ${formatX(10, 0, 0)}`,
+      ${formatX(2.5, 1, 1)} ➜ ${formatX(10)}`,
     goal: DC.E10000,
     isQuickResettable: false,
     effect: 10,
     reward: {
-      description: () => `Dimension Boost multiplier ${formatX(2.5, 1, 1)} ➜ ${formatX(4, 0, 0)}`,
+      description: () => `Dimension Boost multiplier ${formatX(2.5, 1, 1)} ➜ ${formatX(4)}`,
       effect: 4
     },
     unlockAM: DC.E23000,

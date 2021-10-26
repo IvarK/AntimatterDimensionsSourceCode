@@ -41,15 +41,14 @@ const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
     firstPerk: new PerkState(db.firstPerk),
-    startAM1: new PerkState(db.startAM1),
-    startAM2: new PerkState(db.startAM2),
+    startAM: new PerkState(db.startAM),
     startIP1: new PerkState(db.startIP1),
     startIP2: new PerkState(db.startIP2),
     startEP1: new PerkState(db.startEP1),
     startEP2: new PerkState(db.startEP2),
     startEP3: new PerkState(db.startEP3),
     startTP: new PerkState(db.startTP),
-    dimboostNonReset: new PerkState(db.dimboostNonReset),
+    antimatterNoReset: new PerkState(db.antimatterNoReset),
     studyPassive: new PerkState(db.studyPassive),
     autounlockEU1: new PerkState(db.autounlockEU1),
     autounlockEU2: new PerkState(db.autounlockEU2),
@@ -69,7 +68,6 @@ const Perk = (function() {
     autocompleteEC2: new PerkState(db.autocompleteEC2),
     autocompleteEC3: new PerkState(db.autocompleteEC3),
     autocompleteEC4: new PerkState(db.autocompleteEC4),
-    autocompleteEC5: new PerkState(db.autocompleteEC5),
     studyActiveEP: new PerkState(db.studyActiveEP),
     studyIdleEP: new PerkState(db.studyIdleEP),
     studyECRequirement: new PerkState(db.studyECRequirement),
@@ -90,8 +88,7 @@ const Perk = (function() {
     achievementGroup2: new PerkState(db.achievementGroup2),
     achievementGroup3: new PerkState(db.achievementGroup3),
     achievementGroup4: new PerkState(db.achievementGroup4),
-    achievementGroup5: new PerkState(db.achievementGroup5),
-    achievementGroup6: new PerkState(db.achievementGroup6)
+    achievementGroup5: new PerkState(db.achievementGroup5)
   };
 }());
 

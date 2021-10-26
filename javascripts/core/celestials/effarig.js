@@ -3,18 +3,22 @@
 const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
-  REALITY: 3
+  REALITY: 3,
+  COMPLETED: 4
 };
 
 const Effarig = {
   displayName: "Effarig",
   initializeRun() {
+    const isRestarting = player.celestials.effarig.run;
     clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show(false);
-    Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
-      "Infinity Power reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.");
+    if (!isRestarting) {
+      Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. Infinity Power
+        reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.`);  
+    }
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -26,7 +30,10 @@ const Effarig = {
     if (!EffarigUnlock.eternity.isUnlocked) {
       return EFFARIG_STAGES.ETERNITY;
     }
-    return EFFARIG_STAGES.REALITY;
+    if (!EffarigUnlock.reality.isUnlocked) {
+      return EFFARIG_STAGES.REALITY;
+    }
+    return EFFARIG_STAGES.COMPLETED;
   },
   get eternityCap() {
     return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? DC.E50 : undefined;
@@ -51,7 +58,7 @@ const Effarig = {
       .filter(g => !generatedTypes.includes(g.type))
       // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
+    return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
@@ -71,6 +78,7 @@ const Effarig = {
         c = 29.29;
         break;
       case EFFARIG_STAGES.REALITY:
+      default:
         c = 25;
         break;
     }
@@ -98,15 +106,15 @@ const Effarig = {
         "I am Effarig, and I govern Glyphs.",
         "I am different from Teresa; not as simplistic as you think.",
         "I use the shards of Glyphs to enforce my will.",
-        "Collect them for the bounty of this realm.",
+        "I collect them for the bounty of this realm.",
         "What are you waiting for? Get started.",
       ]
     },
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
-      2, "Do you like my little Stall? It’s not much, but it’s mine."
+      2, "Do you like my little shop? It’s not much, but it’s mine."
     ),
     UNLOCK_GLYPH_FILTER: CelestialQuotes.singleLine(
-      3, "Thank you for your purchase, customer!"
+      3, "This purchase will help you out."
     ),
     UNLOCK_SET_SAVES: CelestialQuotes.singleLine(
       4, "Is that too much? I think it’s too much."
@@ -180,11 +188,11 @@ class EffarigUnlockState extends GameMechanicState {
         break;
       case EffarigUnlock.glyphFilter:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_GLYPH_FILTER);
-        player.reality.showSidebarPanel = 0;
+        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.FILTER_SETTINGS;
         break;
       case EffarigUnlock.setSaves:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_SET_SAVES);
-        player.reality.showSidebarPanel = 1;
+        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.SAVED_SETS;
         break;
       case EffarigUnlock.run:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);

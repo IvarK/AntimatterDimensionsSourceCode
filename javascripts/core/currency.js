@@ -207,19 +207,19 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   add(amount) {
     super.add(amount);
-    if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
+    if (amount.gt(0)) player.requirementChecks.reality.noAM = false;
   }
 
   get productionPerSecond() {
-    return NormalChallenge(12).isRunning ? AntimatterDimension(1).productionPerRealSecond
-    : AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond);
+    return NormalChallenge(12).isRunning
+      ? AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond)
+      : AntimatterDimension(1).productionPerRealSecond;
   }
 
   get startingValue() {
     return Effects.max(
       10,
-      Perk.startAM1,
-      Perk.startAM2,
+      Perk.startAM,
       Achievement(21),
       Achievement(37),
       Achievement(54),
@@ -260,6 +260,11 @@ Currency.infinityPoints = new class extends DecimalCurrency {
       Achievement(104)
     ).toDecimal();
   }
+
+  reset() {
+    super.reset();
+    player.records.thisEternity.maxIP = this.startingValue;
+  }
 }();
 
 Currency.infinityPower = new class extends DecimalCurrency {
@@ -298,6 +303,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
+
+  reset() {
+    super.reset();
+    player.records.thisReality.maxEP = this.startingValue;
+  }
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {
@@ -317,7 +327,6 @@ Currency.timeTheorems = new class extends DecimalCurrency {
   add(amount) {
     super.add(amount);
     player.timestudy.maxTheorem = player.timestudy.maxTheorem.plus(amount);
-    if (new Decimal(amount).gt(0)) player.achievementChecks.noTheoremPurchases = false;
   }
 
   reset() {
@@ -337,7 +346,10 @@ Currency.tachyonParticles = new class extends DecimalCurrency {
 
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }
-  set value(value) { player.dilation.dilatedTime = value; }
+  set value(value) {
+    player.dilation.dilatedTime = value;
+    player.records.thisReality.maxDT = player.records.thisReality.maxDT.max(value);
+  }
 }();
 
 Currency.realities = new class extends NumberCurrency {
@@ -348,6 +360,10 @@ Currency.realities = new class extends NumberCurrency {
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
+  add(amount) {
+    super.add(amount);
+    player.reality.realityMachines = player.reality.realityMachines.clampMax(MachineHandler.hardcapRM);
+  }
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {
@@ -360,11 +376,19 @@ Currency.relicShards = new class extends NumberCurrency {
   set value(value) { player.celestials.effarig.relicShards = value; }
 }();
 
+Currency.imaginaryMachines = new class extends NumberCurrency {
+  get value() { return player.reality.imaginaryMachines; }
+  set value(value) {
+    player.reality.imaginaryMachines = Math.clampMax(value, MachineHandler.currentIMCap);
+  }
+}();
+
 Currency.darkMatter = new class extends DecimalCurrency {
   get value() { return player.celestials.laitela.darkMatter; }
   set value(value) {
-    player.celestials.laitela.darkMatter = value;
-    player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(value);
+    const capped = Decimal.min(value, Number.MAX_VALUE);
+    player.celestials.laitela.darkMatter = capped;
+    player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(capped);
   }
 
   get max() { return player.celestials.laitela.maxDarkMatter; }

@@ -11,7 +11,9 @@ const GameDatabase = {
     glyphEffects: {},
     glyphSacrifice: {},
   },
-  celestials: {}
+  celestials: {
+    descriptions: {},
+  }
 };
 
 function mapGameData(gameData, mapFn) {

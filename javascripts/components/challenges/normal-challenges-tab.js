@@ -51,13 +51,17 @@ Vue.component("normal-challenges-tab", {
           @start="challenge.requestStart()"
         >
           <description-display :config="config" slot="top" />
-          <span slot="bottom">Reward: {{challenge.config.reward}}</span>
+          <span slot="bottom">Reward: {{ challenge.config.reward }}</span>
         </challenge-box>`
     }
   },
-  template:
-    `<div class="l-challenges-tab">
-      <challenges-header/>
+  template: `
+    <div class="l-challenges-tab">
+      <challenges-header />
+      <div>
+        If you have an active Big Crunch Autobuyer, it will attempt to Crunch 
+        as soon as possible when reaching Infinite antimatter.
+      </div>
       <challenge-grid :count="12">
         <normal-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />
       </challenge-grid>

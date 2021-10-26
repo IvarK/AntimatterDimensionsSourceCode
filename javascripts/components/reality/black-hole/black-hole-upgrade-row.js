@@ -50,6 +50,5 @@ Vue.component("black-hole-upgrade-row", {
       <black-hole-upgrade-button v-if="!isPermanent" :config="intervalConfig" />
       <black-hole-upgrade-button :config="powerConfig" />
       <black-hole-upgrade-button v-if="!isPermanent" :config="durationConfig" />
-    </div>
-  `
+    </div>`
 });

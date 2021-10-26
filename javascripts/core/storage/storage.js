@@ -8,6 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
+  lastSaveTime: Date.now(),
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -17,6 +18,10 @@ const GameStorage = {
     const save = localStorage.getItem(this.localStorageKey);
     const root = GameSaveSerializer.deserialize(save);
 
+    this.loadRoot(root);
+  },
+
+  loadRoot(root) {
     if (root === undefined) {
       this.currentSlot = 0;
       this.loadPlayerObject(Player.defaultStart);
@@ -46,7 +51,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tab.dimensions.antimatter.show();
+    Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
     GameUI.notify.info("Game loaded");
   },
 
@@ -55,7 +60,7 @@ const GameStorage = {
       return;
     }
     const player = GameSaveSerializer.deserialize(saveData);
-    if (!this.verifyPlayerObject(player)) {
+    if (this.checkPlayerObject(player) !== "") {
       Modal.message.show("Could not load the save");
       return;
     }
@@ -80,13 +85,54 @@ const GameStorage = {
     this.save(true);
   },
 
-  verifyPlayerObject(save) {
-    return save !== undefined && save !== null && (save.money !== undefined || save.antimatter !== undefined);
+  // Some minimal save verification; if the save is valid then this returns an empty string, otherwise it returns a
+  // a string roughly stating what's wrong with the save. In order for importing to work properly, this must return
+  // an empty string.
+  checkPlayerObject(save) {
+    if (save === undefined || save === null) return "Save is empty";
+    // Right now all we do is check for the existence of an antimatter prop, but if we wanted to do further save
+    // verification then here's where we'd do it
+    if (save.money === undefined && save.antimatter === undefined) return "Save does not have antimatter property";
+
+    // Recursively check for any NaN props and add any we find to an array
+    const invalidProps = [];
+    function checkNaN(obj, path) {
+      let hasNaN = false;
+      for (const key in obj) {
+        const prop = obj[key];
+        let thisNaN;
+        switch (typeof prop) {
+          case "object":
+            thisNaN = checkNaN(prop, `${path}.${key}`);
+            hasNaN = hasNaN || thisNaN;
+            break;
+          case "number":
+            thisNaN = Number.isNaN(prop);
+            hasNaN = hasNaN || thisNaN;
+            if (thisNaN) invalidProps.push(`${path}.${key}`);
+            break;
+          case "string":
+            // If we're attempting to import, all NaN entries will still be strings
+            thisNaN = prop === "NaN";
+            hasNaN = hasNaN || thisNaN;
+            if (thisNaN) invalidProps.push(`${path}.${key}`);
+            break;
+        }
+      }
+      return hasNaN;
+    }
+    checkNaN(save, "player");
+
+    if (invalidProps.length === 0) return "";
+    return `${invalidProps.length} NaN player ${pluralize("property", invalidProps.length, "properties")} found:
+      ${invalidProps.join(", ")}`;
   },
 
   save(silent = false, manual = false) {
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
+    this.lastSaveTime = Date.now();
     const root = {
       current: this.currentSlot,
       saves: this.saves
@@ -109,7 +155,7 @@ const GameStorage = {
     const m = dateObj.getMonth() + 1;
     const d = dateObj.getDate();
     download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
-    GameSaveSerializer.serialize(player));
+      GameSaveSerializer.serialize(player));
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
@@ -122,10 +168,13 @@ const GameStorage = {
   loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
     this.saved = 0;
 
-    if (
-      playerObject === Player.defaultStart ||
-      !this.verifyPlayerObject(playerObject)
-    ) {
+    const checkString = this.checkPlayerObject(playerObject);
+    if (playerObject === Player.defaultStart || checkString !== "") {
+      if (checkString !== "") {
+        // TODO Probably remove this before release, it's mostly only helpful for debugging in development
+        // eslint-disable-next-line no-console
+        console.log(`Savefile was invalid and has been reset - ${checkString}`);
+      }
       player = deepmerge.all([{}, Player.defaultStart]);
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
@@ -134,7 +183,7 @@ const GameStorage = {
       const isPreviousVersionSave = playerObject.version < 13;
       player = this.migrations.patch(playerObject);
       if (isPreviousVersionSave) {
-        // Needed to check some reality upgrades which are usually only checked on eternity.
+        // Needed to check some notification about reality unlock study.
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
       this.devMigrations.patch(player);
@@ -146,15 +195,12 @@ const GameStorage = {
       guardFromNaNValues(player);
     }
 
-    if (Currency.infinities.gt(0) && !NormalChallenge(1).isCompleted) {
-      NormalChallenge(1).complete();
-    }
-
     ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
 
+    ECTimeStudyState.invalidateCachedRequirements();
     recalculateAllGlyphs();
     checkPerkValidity();
     V.updateTotalRunUnlocks();
@@ -212,10 +258,10 @@ function download(filename, text) {
   pom.setAttribute("download", filename);
 
   if (document.createEvent) {
-      const event = document.createEvent("MouseEvents");
-      event.initEvent("click", true, true);
-      pom.dispatchEvent(event);
+    const event = document.createEvent("MouseEvents");
+    event.initEvent("click", true, true);
+    pom.dispatchEvent(event);
   } else {
-      pom.click();
+    pom.click();
   }
 }

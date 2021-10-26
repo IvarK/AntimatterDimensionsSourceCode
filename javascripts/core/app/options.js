@@ -15,11 +15,21 @@ class GameOptions {
   }
 
   static cloudSave() {
-    playFabSaveCheck();
+    // This flag suppresses the modal on autosave, but this function is only called with manual saves
+    Cloud.hasSeenSavingConflict = false;
+    Cloud.saveCheck();
   }
 
   static cloudLoad() {
-    playFabLoadCheck();
+    Cloud.loadCheck();
+  }
+
+  static login() {
+    Cloud.login();
+  }
+
+  static logout() {
+    Cloud.logout();
   }
 
   static refreshUpdateRate() {
@@ -28,7 +38,7 @@ class GameOptions {
     }
     GameIntervals.gameLoop.restart();
   }
-  
+
   static refreshAutosaveInterval() {
     GameIntervals.save.restart();
   }

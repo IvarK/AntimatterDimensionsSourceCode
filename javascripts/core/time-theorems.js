@@ -34,10 +34,7 @@ class TimeTheoremPurchaseType {
   get costIncrement() { throw new NotImplementedError(); }
 
   get bulkPossible() {
-    return Math.floor(
-      this.currency.value.times(this.costIncrement.sub(1)).div(this.cost).plus(1).log10() /
-      this.costIncrement.log10()
-    );
+    return Decimal.affordGeometricSeries(this.currency.value, this.cost, this.costIncrement, 0).toNumber();
   }
 
   bulkCost(amount) {
@@ -59,6 +56,7 @@ class TimeTheoremPurchaseType {
       this.add(1);
       purchased = true;
     }
+    if (purchased) player.requirementChecks.reality.noPurchasedTT = false;
     return purchased;
   }
 
@@ -104,17 +102,18 @@ const TimeTheorems = {
   },
 
   buyOne(auto = false, type) {
-    if (!this.checkForBuying(auto)) return false;
-    if (!TimeTheoremPurchaseType[type].purchase(false)) return false;
-    return true;
+    if (!this.checkForBuying(auto)) return 0;
+    if (!TimeTheoremPurchaseType[type].purchase(false)) return 0;
+    return 1;
   },
 
   buyMax(auto = false) {
-    if (!this.checkForBuying(auto)) return;
-    TimeTheoremPurchaseType.am.purchase(true);
-    TimeTheoremPurchaseType.ip.purchase(true);
-    TimeTheoremPurchaseType.ep.purchase(true);
- },
+    if (!this.checkForBuying(auto)) return 0;
+    const ttAM = TimeTheoremPurchaseType.am.purchase(true);
+    const ttIP = TimeTheoremPurchaseType.ip.purchase(true);
+    const ttEP = TimeTheoremPurchaseType.ep.purchase(true);
+    return ttAM + ttIP + ttEP;
+  },
 
   totalPurchased() {
     return TimeTheoremPurchaseType.am.amount +

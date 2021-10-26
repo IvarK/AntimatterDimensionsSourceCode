@@ -8,30 +8,34 @@ Vue.component("teresa-tab", {
       pouredAmount: 0,
       rm: new Decimal(0),
       percentage: "",
+      possibleFillPercentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
       bestAMSet: [],
-      lastRM: new Decimal(0),
+      lastMachines: new Decimal(0),
       runReward: 0,
       perkPoints: 0,
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
+      raisedPerkShop: false,
       isRunning: false,
-      canUnlockNextPour: false
+      canUnlockNextPour: false,
     };
   },
   computed: {
     unlockInfo: () => Teresa.unlockInfo,
     pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
-      return [
+      const upgrades = [
         PerkShopUpgrade.glyphLevel,
         PerkShopUpgrade.rmMult,
         PerkShopUpgrade.bulkDilation,
         PerkShopUpgrade.autoSpeed,
         PerkShopUpgrade.musicGlyph,
       ];
+      if (this.raisedPerkShop) upgrades.push(PerkShopUpgrade.fillMusicGlyph);
+      return upgrades;
     },
     runButtonClassObject() {
       return {
@@ -46,6 +50,14 @@ Vue.component("teresa-tab", {
         "c-teresa-pour": true,
         "c-teresa-pour--unlock-available": this.canUnlockNextPour
       };
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[0].description();
+    },
+    lastMachinesString() {
+      return this.lastMachines.lt(new Decimal("1e10000"))
+        ? `${format(this.lastMachines, 2)} Reality Machines`
+        : `${format(this.lastMachines.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
     }
   },
   methods: {
@@ -58,13 +70,15 @@ Vue.component("teresa-tab", {
       this.time = now;
       this.pouredAmount = player.celestials.teresa.pouredAmount;
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
+      this.possibleFillPercentage = `${(Teresa.possibleFill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
+      this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
-      this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
+      this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);
       this.runReward = Teresa.runRewardMultiplier;
       this.perkPoints = Currency.perkPoints.value;
       this.rm.copyFrom(Currency.realityMachines);
@@ -73,38 +87,42 @@ Vue.component("teresa-tab", {
         .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
     },
     startRun() {
-      if (!resetReality()) return;
-      Teresa.initializeRun();
+      Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
     unlockDescriptionStyle(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return {
-         bottom: `${(100 * pos).toFixed(2)}%`,
+        bottom: `${(100 * pos).toFixed(2)}%`,
       };
     },
   },
   template: `
     <div class="l-teresa-celestial-tab">
-      <celestial-quote-history celestial="teresa"/>
-      <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
+      <celestial-quote-history celestial="teresa" />
+      <div>
+        You have {{ format(rm, 2, 2) }} {{ "Reality Machine" | pluralize(rm) }}.
+      </div>
       <div class="l-mechanics-container">
         <div class="l-teresa-mechanic-container" v-if="hasReality">
           <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
-            Start Teresa's Reality. Glyph Time Theorem generation is disabled and
-            you gain less Infinity Points and Eternity Points (x^{{format(0.55, 2, 2)}}).
+            Start Teresa's Reality.
+            {{ runDescription }}
             <br><br>
             <div v-if="bestAM.gt(0)">
-              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
+              You last did Teresa's Reality at {{ lastMachinesString }}.
               <br><br>
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
               Glyph Set used:
               <glyph-set-preview
                 :show=true
+                text="Teresa's Best Glyph Set"
+                :textHidden="true"
                 :forceNameColor=false
-                :glyphs="bestAMSet" />
+                :glyphs="bestAMSet"
+              />
             </div>
             <div v-else>
               You have not completed Teresa's Reality yet.
@@ -114,7 +132,7 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            You gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute every second.
+            Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
@@ -124,25 +142,31 @@ Vue.component("teresa-tab", {
             @mouseup="pour = false"
             @touchend="pour = false"
             @mouseleave="pour = false"
-          >Pour RM</button>
+          >
+            Pour RM
+          </button>
           <div class="c-rm-store">
+            <div class="c-rm-store-inner c-rm-store-inner--light" :style="{ height: possibleFillPercentage}"></div>
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ formatX(rmMult, 2, 2) }} RM gain
-                <br>{{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
+              <div class="c-rm-store-label">
+                {{ formatX(rmMult, 2, 2) }} RM gain
+                <br>
+                {{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
               </div>
             </div>
             <div v-for="unlockInfo in unlockInfo"
               class="c-teresa-unlock-description"
               :style="unlockDescriptionStyle(unlockInfo)"
-              :id="unlockInfo.id">
-                {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
+              :id="unlockInfo.id"
+            >
+              {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
             </div>
           </div>
         </div>
-        <div class="l-rm-container-labels l-teresa-mechanic-container"/>
+        <div class="l-rm-container-labels l-teresa-mechanic-container" />
         <div class="c-teresa-shop" v-if="hasPerkShop">
           <span class="o-teresa-pp">
-            You have {{ format(perkPoints, 2, 0) }} {{"Perk Point" | pluralize(perkPoints)}}.
+            You have {{ format(perkPoints, 2, 0) }} {{ "Perk Point" | pluralize(perkPoints) }}.
           </span>
           <perk-shop-upgrade
             v-for="upgrade in upgrades"

@@ -50,16 +50,16 @@ Vue.component("replicanti-galaxy-button", {
       this.update();
     }
   },
-  template:
-    `<div class="l-spoon-btn-group">
+  template: `
+    <div class="l-spoon-btn-group">
       <primary-button
         :enabled="isAvailable"
         class="o-primary-btn--replicanti-galaxy"
         onclick="replicantiGalaxy()"
       >
-        {{resetActionDisplay}} for a Replicanti Galaxy
+        {{ resetActionDisplay }} for a Replicanti Galaxy
         <br>
-        {{galaxyCountDisplay}}
+        {{ galaxyCountDisplay }}
       </primary-button>
       <primary-button-on-off-custom
         v-if="isAutoUnlocked"

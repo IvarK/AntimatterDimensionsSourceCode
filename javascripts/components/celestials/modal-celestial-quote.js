@@ -40,18 +40,24 @@ Vue.component("modal-celestial-quote", {
     }
   },
   template: `
-  <div class="l-modal-overlay c-modal-overlay">
-    <div class="l-modal-celestial-quote c-modal">
-      <i :style="prevStyle"
-         class="c-modal-celestial-quote__arrow fas fa-chevron-circle-left"
-         @click="prevQuote"/>
-      <div class="l-modal-celestial-quote__text">
-        <div v-if="currentQuote.showName"><b>{{currentCelestialName}}:</b></div>
-        {{currentQuote.line.replace("*", "")}}
+    <div class="l-modal-overlay c-modal-overlay">
+      <div class="l-modal-celestial-quote c-modal">
+        <i
+          :style="prevStyle"
+          class="c-modal-celestial-quote__arrow fas fa-chevron-circle-left"
+          @click="prevQuote"
+        />
+        <div class="l-modal-celestial-quote__text">
+          <div v-if="currentQuote.showName">
+            <b>{{ currentCelestialName }}:</b>
+          </div>
+          {{ currentQuote.line.replace("*", "") }}
+        </div>
+        <i
+          class="c-modal-celestial-quote__arrow fas"
+          :class="nextClass"
+          @click="nextClick"
+        />
       </div>
-      <i class="c-modal-celestial-quote__arrow fas"
-         :class="nextClass"
-         @click="nextClick" />
-      </div>
-  </div>`,
+    </div>`,
 });

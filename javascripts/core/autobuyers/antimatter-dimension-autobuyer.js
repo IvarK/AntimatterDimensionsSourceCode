@@ -7,7 +7,11 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return `${AntimatterDimension(this._tier).displayName} Antimatter Dimension`;
+    return AntimatterDimension(this._tier).displayName;
+  }
+
+  get fullName() {
+    return `${this.name} Antimatter Dimension`;
   }
 
   get data() {
@@ -36,23 +40,19 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   get bulk() {
     // Use 1e100 to avoid issues with Infinity.
-    return this.hasUnlimitedBulk ? 1e100 : this.data.bulk;
+    return this.hasUnlimitedBulk ? 1e100 : Math.clampMax(this.data.bulk, this.bulkCap);
   }
 
   get hasUnlimitedBulk() {
     return Achievement(61).isUnlocked;
   }
 
+  get bulkCap() {
+    return 512;
+  }
+
   get hasMaxedBulk() {
-    return this.bulk >= 1e10;
-  }
-
-  get priority() {
-    return this.data.priority;
-  }
-
-  set priority(value) {
-    this.data.priority = value;
+    return this.bulk >= this.bulkCap;
   }
 
   get mode() {
@@ -84,7 +84,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
         buyOneDimension(tier);
         break;
       case AUTOBUYER_MODE.BUY_10:
-        buyMaxDimension(tier, player.auto.bulkOn ? this.bulk : 1, true);
+        buyMaxDimension(tier, player.auto.bulkOn ? this.bulk : 1);
         break;
     }
   }
@@ -92,7 +92,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
     if (!Currency.infinityPoints.purchase(this.cost)) return;
-    this.data.bulk = Math.clampMax(this.bulk * 2, 1e10);
+    this.data.bulk = Math.clampMax(this.bulk * 2, this.bulkCap);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
     GameUI.update();
@@ -104,7 +104,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get resetTickOn() {
-    return Perk.dimboostNonReset.isBought ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
+    return Perk.antimatterNoReset.isBought ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
   }
 
   reset() {
@@ -120,3 +120,4 @@ AntimatterDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new Anti
 
 Autobuyer.antimatterDimension = tier => AntimatterDimensionAutobuyerState.index[tier - 1];
 Autobuyer.antimatterDimension.index = AntimatterDimensionAutobuyerState.index;
+Autobuyer.antimatterDimension.index.name = "Antimatter Dimension";

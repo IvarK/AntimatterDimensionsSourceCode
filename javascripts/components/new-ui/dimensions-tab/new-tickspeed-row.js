@@ -28,7 +28,7 @@ Vue.component("new-tickspeed-row", {
       return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -55,17 +55,17 @@ Vue.component("new-tickspeed-row", {
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(Tickspeed.cost);
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
-      this.tickspeed.copyFrom(Tickspeed.current);
+      this.tickspeed.copyFrom(Tickspeed.perSecond);
       this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
-  template:
-  `<div :class="classObject">
+  template: `
+    <div :class="classObject">
       <div class="tickspeed-labels">
-        <span>{{ tickspeedDisplay }} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></span>
+        <span>{{ tickspeedDisplay }} <game-header-gamespeed-display v-if="!isGameSpeedNormal" /></span>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">
@@ -73,13 +73,14 @@ Vue.component("new-tickspeed-row", {
           class="o-primary-btn tickspeed-btn"
           :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
           :enabled="isAffordable"
-          onclick="buyTickSpeed()">
-            <span v-if="isContinuumActive">
-              {{ continuumString }} (cont.)
-            </span>
-            <span v-else>
-              Cost: {{ format(cost) }}
-            </span>
+          onclick="buyTickSpeed()"
+        >
+          <span v-if="isContinuumActive">
+            {{ continuumString }} (cont.)
+          </span>
+          <span v-else>
+            Cost: {{ format(cost) }}
+          </span>
         </button>
         <button
           v-if="!isContinuumActive"
@@ -87,7 +88,9 @@ Vue.component("new-tickspeed-row", {
           :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
           :enabled="isAffordable"
           onclick="buyMaxTickSpeed()"
-          >Buy Max</button>
+        >
+          Buy Max
+        </button>
       </div>
     </div>`
 });

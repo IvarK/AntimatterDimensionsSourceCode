@@ -12,7 +12,8 @@ Vue.component("game-header-new-dim-button", {
   methods: {
     update() {
       this.isVisible = player.break && !InfinityDimension(8).isUnlocked &&
-        Currency.infinityPoints.lt(Player.eternityGoal);
+        player.records.thisEternity.maxIP.lt(Decimal.NUMBER_MAX_VALUE) &&
+        !EternityMilestone.autoUnlockID.isReached;
       if (!this.isVisible) return;
       const requirement = InfinityDimensions.next().requirement;
       this.requirement.copyFrom(requirement);
@@ -20,14 +21,17 @@ Vue.component("game-header-new-dim-button", {
       this.anyInfinityDimensionUnlocked = InfinityDimension(1).isUnlocked;
     }
   },
-  template:
-    `<primary-button
+  template: `
+    <primary-button
       v-if="isVisible"
       :enabled="isAffordable"
       class="o-primary-btn--new-dim l-game-header__new-dim-btn"
       onclick="InfinityDimensions.unlockNext(); Tab.dimensions.infinity.show()"
     >
-      Get {{format(requirement, 0, 0)}} antimatter<br/>to unlock a new
-      <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span><span v-else>type of Dimension</span>.
+      Get {{ format(requirement) }} antimatter
+      <br>
+      to unlock a new
+      <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span>
+      <span v-else>type of Dimension</span>.
     </primary-button>`
 });

@@ -1,64 +1,67 @@
 "use strict";
 
-const Theme = function Theme(name, colors) {
-    this.name = name;
+const Theme = function Theme(name, config) {
+  this.name = name;
 
-    this.isDefault = function() {
-        return name === "Normal";
-    };
+  this.isDark = function() {
+    return this.isDefault()
+      ? player.options.newUI
+      : config.isDark;
+  };
 
-    this.isSecret = function() {
-        return !this.isDefault() && name.length === 2;
-    };
+  this.isMetro = config.isMetro;
 
-    this.isAvailable = function() {
-        if (!this.isSecret()) return true;
-        return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
-    };
+  this.isAnimated = config.isAnimated;
 
-    this.isAnimated = function() {
-        const list = ["S1", "S6"];
-        return list.includes(this.name);
-    };
+  this.isSecret = config.isSecret;
 
-    this.displayName = function() {
-        if (!this.isSecret() || !this.isAvailable()) return name;
-        // Secret themes are stored as "S9Whatever", so we need to strip the SN part
-        return player.secretUnlocks.themes.find(theme => theme.includes(name)).substr(2);
-    };
+  this.isDefault = function() {
+    return name === "Normal";
+  };
 
-    this.set = function() {
-        for (const c of document.body.classList) {
-          if (c.startsWith("t-")) {
-            document.body.classList.remove(c);
-          }
-        }
-        document.body.classList.add(this.cssClass());
-        if (this.isAnimated() && player.options.animations.background) {
-            document.getElementById("background-animations").style.display = "block";
-        } else {
-            document.getElementById("background-animations").style.display = "none";
-        }
-        player.options.theme = name;
-        ui.view.theme = name;
-        window.getSelection().removeAllRanges();
-    };
+  this.isAvailable = function() {
+    if (!this.isSecret) return true;
+    return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
+  };
 
-    this.isDark = colors.isDark;
+  this.displayName = function() {
+    if (!this.isSecret || !this.isAvailable()) return name;
+    // Secret themes are stored as "S9Whatever", so we need to strip the SN part
+    return player.secretUnlocks.themes.find(theme => theme.includes(name)).replace(/\S[0-9]*/u, "");
+  };
 
-    this.cssClass = function() {
-      return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
-    };
+  this.set = function() {
+    // Remove all entries in the class list from the class list
+    document.body.classList.remove(...document.body.classList);
+
+    document.body.classList.add(this.cssClass());
+    if (this.isMetro) document.body.classList.add("s-base--metro");
+    if (this.isDark()) document.body.classList.add("s-base--dark");
+
+    if (this.isAnimated && player.options.animations.background) {
+      document.getElementById("background-animations").style.display = "block";
+    } else {
+      document.getElementById("background-animations").style.display = "none";
+    }
+    player.options.theme = name;
+    ui.view.theme = name;
+    window.getSelection().removeAllRanges();
+    PerkNetwork.forceNetworkRemake();
+  };
+
+  this.cssClass = function() {
+    return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
+  };
 };
 
 Theme.current = function() {
-    return Themes.find(player.options.theme);
+  return Themes.find(player.options.theme);
 };
 
 Theme.set = function(name) {
-    const theme = Themes.find(name);
-    theme.set();
-    return theme;
+  const theme = Themes.find(name);
+  theme.set();
+  return theme;
 };
 
 Theme.secretThemeIndex = function(name) {
@@ -71,7 +74,8 @@ Theme.secretThemeIndex = function(name) {
     "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137",
     "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7",
     "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19",
-    "dba8336cd3224649d07952b00045a6ec3c8df277aa8a0a0e3e7c2aaa77f1fbb9"
+    "dba8336cd3224649d07952b00045a6ec3c8df277aa8a0a0e3e7c2aaa77f1fbb9",
+    "73de8a7f9efa1cbffc80a8effc9891a799127cd204b3a8b023bea8f513ed4753",
   ];
   const sha = sha512_256(name.toUpperCase());
   return secretThemes.indexOf(sha);
@@ -81,63 +85,67 @@ Theme.isSecretTheme = function(name) {
   return Theme.secretThemeIndex(name) !== -1;
 };
 
+Theme.animatedThemeUnlocked = function() {
+  return Themes.all.some(theme => theme.isAvailable && theme.isAnimated);
+};
+
 Theme.tryUnlock = function(name) {
-    const index = Theme.secretThemeIndex(name);
-    if (index === -1) {
-      return false;
-    }
-    const prefix = `S${index + 1}`;
-    const fullName = prefix + name.capitalize();
-    const isAlreadyUnlocked = player.secretUnlocks.themes.has(fullName);
-    player.secretUnlocks.themes.add(fullName);
-    Theme.set(prefix);
-    SecretAchievement(25).unlock();
-    if (!isAlreadyUnlocked) {
-      GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
-    }
-    return true;
+  const index = Theme.secretThemeIndex(name);
+  if (index === -1) {
+    return false;
+  }
+  const prefix = `S${index + 1}`;
+  const fullName = prefix + name.capitalize();
+  const isAlreadyUnlocked = player.secretUnlocks.themes.has(fullName);
+  player.secretUnlocks.themes.add(fullName);
+  Theme.set(prefix);
+  SecretAchievement(25).unlock();
+  if (!isAlreadyUnlocked) {
+    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
+  }
+  return true;
 };
 
-Theme.light = function(name) {
-    const colors = {
-        isDark: false
-    };
-    return new Theme(name, colors);
-};
-
-Theme.dark = function(name) {
-    const colors = {
-        isDark: true
-    };
-    return new Theme(name, colors);
+Theme.create = function(name, settings) {
+  const config = {
+    isDark: false || settings.dark,
+    isMetro: false || settings.metro,
+    isAnimated: false || settings.animated,
+    isSecret: false || settings.secret,
+  };
+  return new Theme(name, config);
 };
 
 const Themes = {
-    all: [
-        Theme.light("Normal"),
-        Theme.light("Metro"),
-        Theme.dark("Dark"),
-        Theme.dark("Dark Metro"),
-        Theme.light("Inverted"),
-        Theme.light("Inverted Metro"),
-        Theme.light("S1"),
-        Theme.light("S2"),
-        Theme.light("S3"),
-        Theme.light("S4"),
-        Theme.light("S5"),
-        Theme.dark("S6"),
-        Theme.light("S7"),
-        Theme.light("S8"),
-        Theme.light("S9")
-    ],
+  all: [
+    /* eslint-disable no-multi-spaces */
+    // Note that "Normal" is a special case where dark is overridden elsewhere with whether or not the UI is New
+    Theme.create("Normal",          {                                                         }),
+    Theme.create("Metro",           {              metro: true,                               }),
+    Theme.create("Dark",            { dark: true,                                             }),
+    Theme.create("Dark Metro",      { dark: true,  metro: true,                               }),
+    Theme.create("Inverted",        {                                                         }),
+    Theme.create("Inverted Metro",  {              metro: true,                               }),
+    Theme.create("S1",              {                           animated: true, secret: true, }),
+    Theme.create("S2",              {                                           secret: true, }),
+    Theme.create("S3",              {                                           secret: true, }),
+    Theme.create("S4",              {                                           secret: true, }),
+    Theme.create("S5",              {                                           secret: true, }),
+    Theme.create("S6",              { dark: true,               animated: true, secret: true, }),
+    Theme.create("S7",              {                                           secret: true, }),
+    Theme.create("S8",              {              metro: true,                 secret: true, }),
+    Theme.create("S9",              {                                           secret: true, }),
+    Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),
+    /* eslint-enable no-multi-spaces */
+  ],
 
-    available() {
-        return Themes.all
-            .filter(theme => theme.isAvailable());
-    },
+  available() {
+    return Themes.all
+      .filter(theme => theme.isAvailable());
+  },
 
-    find(name) {
-        return Themes.all
-            .find(theme => theme.name === name);
-    }
+  find(name) {
+    return Themes.all
+      .find(theme => theme.name === name);
+  }
 };

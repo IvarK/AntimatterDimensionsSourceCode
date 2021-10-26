@@ -15,7 +15,7 @@ Vue.component("failable-ec-text", {
       const ratio = this.currentResource.div(this.maximumResource).toNumber();
       // Goes from green to yellow to red. If theme is light, use a slightly lighter yellow
       // by not allowing full red and green at the same time.
-      const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
+      const darkTheme = Theme.current().isDark() && Theme.current().name !== "S6";
       // Setting this constant to 2 will give green - yellow - red, setting it to 1
       // will give a straight line between green and red in colorspace, intermediate values
       // will give intermediate results.
@@ -53,5 +53,5 @@ Vue.component("failable-ec-text", {
     },
   },
   template:
-  `<span> - <span :style="textStyle">{{text}}</span></span>`
+  `<span> - <span :style="textStyle">{{ text }}</span></span>`
 });

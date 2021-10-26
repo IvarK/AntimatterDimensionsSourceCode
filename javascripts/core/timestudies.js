@@ -15,7 +15,6 @@ NormalTimeStudies.pathList = [
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
 
-
 function unlockDilation(quiet) {
   if (!quiet) {
     Tab.eternity.dilation.show();
@@ -87,7 +86,12 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    return;
+    if (TimeStudy.preferredPaths.dimensionPath.path.length === 0) {
+      GameUI.notify.error("You haven't selected a preferred dimension path!");
+      return;
+    }
+    // If we have a preferred path setup we should buy that one
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
   } else {
     // We buy the requested path first
     buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
@@ -101,12 +105,18 @@ function studiesUntil(id) {
   if (id >= 111) TimeStudy(111).purchase();
 
   if (id < 121) return;
-  const pacePaths = getSelectedPacePaths();
   if (id < 151) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
+  } else if (TimeStudy.preferredPaths.pacePath.path) {
+    // If we have a preferred path setup we should buy that one
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.pacePath.studies, id);
+  } else if (!(TimeStudy(141).isBought || TimeStudy(142).isBought || TimeStudy(143).isBought)) {
+    // If we have already purchased one or more of the final pace paths, do not display the unselected error message.
+    GameUI.notify.error("You haven't selected a preferred pace path!");
   }
 
+  const pacePaths = getSelectedPacePaths();
   if (pacePaths.length === 1) {
     // We've chosen a path already
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
@@ -122,8 +132,15 @@ function studiesUntil(id) {
   }
 
   // Attempt to buy things below the pace split, up to the requested study
+  // First we buy up to 201 so we can buy the the second preferred path if needed
   if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
-  buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
+  buyTimeStudyRange(151, Math.min(id, 201));
+
+  // If we have study 201 we should try and buy our second preferred path, granted we have one selected
+  if (TimeStudy(201).isBought && TimeStudy.preferredPaths.dimensionPath.path.length === 2)
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
+
+  buyTimeStudyRange(151, Math.min(id, Math.min(lastInPrevRow, 214)));
   study.purchase();
 
   // Don't bother buying any more studies beyond row 22 unless the player has fully finished V,
@@ -234,20 +251,28 @@ class NormalTimeStudyState extends TimeStudyState {
     return GameCache.timeStudies.value[this.id];
   }
 
+  // The gameDB entries have a check for if a study requires ST to be purchased or not; since eventually all studies
+  // are simultaneously purchasable, the only "universal" requirement to purchase is having the previous study
+  // in the tree. The requiresST prop, if it exists, is a check which returns true if having certain other studies
+  // causes a lock-out (eg. true for all active path studies if idle is already purchased). If it doesn't exist
+  // in the gameDB entry, it's assumed to be false and therefore there's no lockout.
+  costsST() {
+    return this.config.requiresST && this.config.requiresST();
+  }
+
   checkRequirement() {
     const req = this.config.requirement;
     return typeof req === "number" ? TimeStudy(req).isBought : req();
   }
 
-  checkVRequirement() {
-    const req = this.config.requirementV;
-    return req === undefined
-      ? false
-      : req() && V.availableST >= this.STCost;
+  // This checks for and forbids buying studies due to being part of a set which can't normally be bought
+  // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
+  checkSetRequirement() {
+    return this.costsST() ? V.availableST >= this.STCost : true;
   }
 
   get canBeBought() {
-    return this.checkRequirement() || this.checkVRequirement();
+    return this.checkRequirement() && this.checkSetRequirement();
   }
 
   get isEffectActive() {
@@ -255,12 +280,11 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
-    if (this.isBought || !this.isAffordable) return false;
-    if (!this.checkRequirement()) {
-      if (!this.checkVRequirement()) return false;
-      player.celestials.v.STSpent += this.STCost;
-    }
+    if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
+    if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
+    player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,
+      player.timestudy.studies.length);
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     return true;
@@ -297,9 +321,34 @@ TimeStudy.boughtNormalTS = function() {
   return player.timestudy.studies.map(id => TimeStudy(id));
 };
 
+TimeStudy.preferredPaths = {
+  get dimensionPath() {
+    return {
+      path: player.timestudy.preferredPaths[0],
+      studies: player.timestudy.preferredPaths[0].reduce((acc, path) =>
+        acc.concat(NormalTimeStudies.paths[path]), [])
+    };
+  },
+  set dimensionPath(value) {
+    const options = [1, 2, 3];
+    player.timestudy.preferredPaths[0] = value.filter(id => options.includes(id));
+  },
+  get pacePath() {
+    return {
+      path: player.timestudy.preferredPaths[1],
+      studies: NormalTimeStudies.paths[player.timestudy.preferredPaths[1]]
+    };
+  },
+  set pacePath(value) {
+    const options = [4, 5, 6];
+    player.timestudy.preferredPaths[1] = options.includes(value) ? value : 0;
+  }
+};
+
 class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.ETERNITY_CHALLENGE);
+    this.invalidateRequirement();
   }
 
   get isBought() {
@@ -387,7 +436,15 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get requirementCurrent() {
-    return this.config.requirement.current();
+    const current = this.config.requirement.current();
+    if (this.cachedCurrentRequirement === undefined) {
+      this.cachedCurrentRequirement = current;
+    } else if (typeof current === "number") {
+      this.cachedCurrentRequirement = Math.max(this.cachedCurrentRequirement, current);
+    } else {
+      this.cachedCurrentRequirement = this.cachedCurrentRequirement.clampMin(current);
+    }
+    return this.cachedCurrentRequirement;
   }
 
   get isSecondaryRequirementMet() {
@@ -400,6 +457,10 @@ class ECTimeStudyState extends TimeStudyState {
     const current = this.requirementCurrent;
     const total = this.requirementTotal;
     return typeof current === "number" ? current >= total : current.gte(total);
+  }
+
+  invalidateRequirement() {
+    this.cachedCurrentRequirement = undefined;
   }
 }
 
@@ -423,6 +484,10 @@ TimeStudy.eternityChallenge.current = function() {
   return player.challenge.eternity.unlocked
     ? TimeStudy.eternityChallenge(player.challenge.eternity.unlocked)
     : undefined;
+};
+
+ECTimeStudyState.invalidateCachedRequirements = function() {
+  ECTimeStudyState.studies.forEach(study => study.invalidateRequirement());
 };
 
 class DilationTimeStudyState extends TimeStudyState {
@@ -450,10 +515,20 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.canBeBought) return false;
     if (this.id === 1) unlockDilation(quiet);
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
+      if (Currency.realities.eq(0)) {
+        Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} Eternity
+          Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
+          update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
+          scaling above ${format("1e6000")}.`);
+      }
       Tab.reality.glyphs.show();
     }
     player.dilation.studies.push(this.id);
     Currency.timeTheorems.subtract(this.cost);
+    if (this.id === 6 && !PlayerProgress.realityUnlocked()) {
+      // We need to do this at the end so that rupgs can be unlocked.
+      EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
+    }
     return true;
   }
 }
@@ -518,8 +593,8 @@ class TriadStudyState extends TimeStudyState {
 
   get canBeBought() {
     return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
-           V.availableST >= this.STCost &&
-           !this.isBought && this.config.unlocked();
+      V.availableST >= this.STCost &&
+      !this.isBought && this.config.unlocked();
   }
 
   get isBought() {
@@ -538,7 +613,7 @@ class TriadStudyState extends TimeStudyState {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
-    player.achievementChecks.noTriadStudies = false;
+    player.requirementChecks.reality.noTriads = false;
   }
 
   purchaseUntil() {

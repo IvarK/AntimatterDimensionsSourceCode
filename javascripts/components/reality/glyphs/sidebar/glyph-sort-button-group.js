@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-sort-options", {
+Vue.component("glyph-sort-button-group", {
   data() {
     return {
       showScoreFilter: false,
@@ -25,27 +25,36 @@ Vue.component("glyph-sort-options", {
   },
   template: `
     <div>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+      Sort Glyphs:
+      <br>
+      <button
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="Arranges by decreasing level×rarity"
-        @click="sortByPower">
-          Sort by power
+        @click="sortByPower"
+      >
+        Sort by power
       </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+      <button
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="Groups Glyphs together based on effects"
-        @click="sortByEffect">
-          Sort by effect
+        @click="sortByEffect"
+      >
+        Sort by effect
       </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+      <button
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
         v-if="showScoreFilter"
         ach-tooltip="Arranges by decreasing Glyph filter score"
-        @click="sortByScore">
-          Sort by score
+        @click="sortByScore"
+      >
+        Sort by score
       </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+      <button
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="Moves all Glyphs to the earliest empty slots"
-        @click="collapseEmpty">
-          Collapse empty space
+        @click="collapseEmpty"
+      >
+        Collapse empty space
       </button>
-    </div>
-  `,
+    </div>`
 });

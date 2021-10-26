@@ -12,17 +12,12 @@ Vue.component("modal-delete-companion", {
     },
     message() {
       switch (this.messageIndex) {
-        case 0:
-          return "Are you sure you want to get rid of your Companion Glyph?";
-        case 1:
-          return "You will not receive any cake.";
-        case 2:
-          return "This is permanent! You will not get another Companion Glyph!";
-        case 3:
-          return "You deleted your faithful Companion Glyph more quickly than any " +
-            "other test subject on record. Congratulations.";
-        default:
-          return "Invalid message index";
+        case 0: return "Are you sure you want to get rid of your Companion Glyph?";
+        case 1: return "You will not receive any cake.";
+        case 2: return "This is permanent! You will not get another Companion Glyph!";
+        case 3: return `You deleted your faithful Companion Glyph more quickly than any
+                        other test subject on record. Congratulations.`;
+        default: return "Invalid message index";
       }
     }
   },
@@ -56,8 +51,8 @@ Vue.component("modal-delete-companion", {
       Glyphs.removeFromInventory(toDelete);
     }
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
       <div class="c-modal-message__text">
         {{ message }}
       </div>
@@ -65,17 +60,23 @@ Vue.component("modal-delete-companion", {
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleLeftButtonClick"
-        >{{messageIndex < 2 ? "Delete" : "Cancel"}}</primary-button>
+        >
+          {{ messageIndex < 2 ? "Delete" : "Cancel" }}
+        </primary-button>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleRightButtonClick"
-        >{{messageIndex >= 2 ? "Delete" : "Cancel"}}</primary-button>
+        >
+          {{ messageIndex >= 2 ? "Delete" : "Cancel" }}
+        </primary-button>
       </div>
       <div v-else>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
-        >Thank you</primary-button>
+        >
+          Thank you
+        </primary-button>
       </div>
     </div>`
 });

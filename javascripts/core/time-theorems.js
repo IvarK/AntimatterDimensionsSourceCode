@@ -107,11 +107,11 @@ const TimeTheorems = {
     return 1;
   },
 
-  buyMax(auto = false) {
+  buyMax(auto = false, isMax) {
     if (!this.checkForBuying(auto)) return 0;
-    const ttAM = TimeTheoremPurchaseType.am.purchase(true);
-    const ttIP = TimeTheoremPurchaseType.ip.purchase(true);
-    const ttEP = TimeTheoremPurchaseType.ep.purchase(true);
+    const ttAM = TimeTheoremPurchaseType.am.purchase(isMax);
+    const ttIP = TimeTheoremPurchaseType.ip.purchase(isMax);
+    const ttEP = TimeTheoremPurchaseType.ep.purchase(isMax);
     return ttAM + ttIP + ttEP;
   },
 

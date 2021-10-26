@@ -369,32 +369,31 @@ GameDatabase.reality.perks = {
     effect: 1 / 3,
     defaultPosition: new Vector(490, 450)
   },
-  autobuyerTT1: {
+  ttFree: {
     id: 104,
-    label: "TTMA1",
+    label: "TTF",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems every ${formatInt(4)} seconds.`;
+      return `Purchasing Time Theorems no longer spends your Antimatter, Infinity Points, or Eternity Points.`;
     },
-    effect: 4,
     defaultPosition: new Vector(190, -410)
   },
-  autobuyerTT2: {
+  ttBuySingle: {
     id: 105,
-    label: "TTMA2",
+    label: "TTS",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Upgrade the Time Theorem Autobuyer to autobuy max Time Theorems every second.",
+    description: "Unlock a Time Theorem Autobuyer which buys single Theorems every tick.",
     effect: 1,
     defaultPosition: new Vector(255, -540)
   },
-  autobuyerTT3: {
+  ttBuyMax: {
     id: 106,
-    label: "TTMA3",
+    label: "TTM",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(2)} times per second.`;
+      return `Upgrade the Time Theorem Autobuyer to buy max Time Theorems.`;
     },
-    effect: 0.5,
+    effect: Number.POSITIVE_INFINITY,
     defaultPosition: new Vector(360, -625)
   },
   achievementGroup1: {
@@ -477,7 +476,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.studyPassive, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
-    [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
+    [p.studyActiveEP, p.bypassEC2Lock, p.ttFree],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],
     [p.retroactiveTP1, p.bypassTGReset, p.startTP, p.retroactiveTP2],
@@ -485,8 +484,8 @@ GameDatabase.reality.perkConnections = (function() {
     [p.retroactiveTP3, p.retroactiveTP4],
     [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassTGReset],
     [p.autobuyerFasterID],
-    [p.autobuyerTT1, p.autobuyerTT2],
-    [p.autobuyerTT2, p.autobuyerTT3],
+    [p.ttFree, p.ttBuySingle],
+    [p.ttBuySingle, p.ttBuyMax],
     [p.achievementGroup1, p.achievementGroup2],
     [p.achievementGroup2, p.achievementGroup3],
     [p.achievementGroup3, p.achievementGroup4],

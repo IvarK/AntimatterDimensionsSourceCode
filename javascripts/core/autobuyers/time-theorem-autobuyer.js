@@ -10,17 +10,13 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
   }
 
   get interval() {
-    const period = Effects.min(
-      Number.POSITIVE_INFINITY,
-      Perk.autobuyerTT1,
-      Perk.autobuyerTT2,
-      Perk.autobuyerTT3
-    );
-    return TimeSpan.fromSeconds(period).totalMilliseconds / PerkShopUpgrade.autoSpeed.effectOrDefault(1);
+    if (!Perk.ttBuySingle.isBought) return Number.POSITIVE_INFINITY;
+    // Activates every tick
+    return 0;
   }
 
   get isUnlocked() {
-    return Perk.autobuyerTT1.isBought;
+    return Perk.ttBuySingle.isBought;
   }
 
   get resetTickOn() {
@@ -29,6 +25,6 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
 
   tick() {
     super.tick();
-    TimeTheorems.buyMax(true);
+    TimeTheorems.buyMax(true, Perk.ttBuyMax.isBought);
   }
 }();

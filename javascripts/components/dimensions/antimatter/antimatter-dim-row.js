@@ -43,7 +43,7 @@ Vue.component("antimatter-dim-row", {
     boughtTooltip() {
       if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
-      return `Purchased ${quantifyInt("time", this.bought)}`;
+      return `Purchased ${quantify("time", this.bought, 2, 2)}`;
     },
   },
   methods: {

@@ -58,7 +58,7 @@ Vue.component("time-dilation-tab", {
       <span>
         You have
         <span class="c-dilation-tab__tachyons">{{ format(tachyons, 2, 1) }}</span>
-        {{ "Tachyon Particle" | pluralize(tachyons) }}
+        {{ "Tachyon Particle" | pluralize(tachyons) }}.
       </span>
       <dilation-button />
       <span>

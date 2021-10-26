@@ -33,11 +33,10 @@ Vue.component("modal-eternity", {
         return `Eternity Challenge ${ec.id} is already fully completed.`;
       }
       if (!Perk.studyECBulk.isBought) {
-        return `You will gain one completion of Eternity Challenge ${EternityChallenge.current.id}.`;
+        return `You will gain one completion of Eternity Challenge ${ec.id}.`;
       }
-
-      return `You will gain ${quantify("completion", ec.gainedCompletionStatus.gainedCompletions)}
-        for Eternity Challenge ${ec.id}.`;
+      const gainedCompletions = ec.gainedCompletionStatus.gainedCompletions;
+      return `You will gain ${quantifyInt("completion", gainedCompletions)} for Eternity Challenge ${ec.id}.`;
     }
   },
   methods: {

@@ -36,21 +36,21 @@ Vue.component("glyph-protected-row-button-group", {
       Protected Slots: ({{ format(protectedRows, 2) }} {{ "row" | pluralize(protectedRows, "rows") }})
       <br>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="One row is permanently un-protected for new Glyphs"
+        class="c-glyph-inventory-option c-reality-upgrade-btn"
         @click="addRow"
       >
         Add a protected row
+        <div class="c-glyph-inventory-option__tooltip">One row is permanently un-protected for new Glyphs</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option c-reality-upgrade-btn"
         @click="removeRow"
       >
         Remove a protected row
       </button>
       <primary-button-on-off
         v-model="moveGlyphs"
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option c-reality-upgrade-btn"
         text="Move Glyphs on changing row count:"
       />
     </div>`

@@ -47,19 +47,19 @@ Vue.component("glyph-autosort-button-group", {
       <br>
       <primary-button-cycle
         v-model="autoSort"
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option c-reality-upgrade-btn"
         text="Auto-sort Mode:"
         :labels="sortModes"
       />
       <primary-button-on-off
         v-model="autoCollapse"
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option c-reality-upgrade-btn"
         text="Auto-collapse space:"
       />
       <primary-button-on-off
         v-if="showAutoAutoClean"
         v-model="autoAutoClean"
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option c-reality-upgrade-btn"
         text="Auto Purge on Realities:"
       />
     </div>`

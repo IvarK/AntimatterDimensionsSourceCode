@@ -296,6 +296,7 @@ Vue.component("glyph-filter-panel", {
     optionClass(idx) {
       const icon = this.modeIcon(idx);
       return [
+        "c-glyph-sacrifice-options__option",
         idx === this.mode
           ? "c-glyph-sacrifice-options__option--active"
           : "c-glyph-sacrifice-options__option--inactive",
@@ -383,7 +384,7 @@ Vue.component("glyph-filter-panel", {
   },
   template: `
     <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
-      <div class="c-glyph-sacrifice-options" style="padding: 0.8rem;">
+      <div class="c-glyph-sacrifice-options">
         <div class="c-glyph-sacrifice-options__option--active">
           <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
             <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
@@ -399,8 +400,9 @@ Vue.component("glyph-filter-panel", {
             v-if="isUnlocked(index)"
             :class="optionClass(index)"
             @click="setMode(index)"
-            v-tooltip.bottom="filterMode(index)"
-          />
+          >
+            <div class="c-glyph-sacrifice-options__option__tooltip">{{ filterMode(index) }}</div>
+          </div>
         </div>
       </div>
       <div v-if="mode === modes.LOWEST_SACRIFICE" class="c-glyph-sacrifice-options__advanced">

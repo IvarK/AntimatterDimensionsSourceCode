@@ -255,16 +255,6 @@ GameDatabase.reality.perks = {
     effect: 30,
     defaultPosition: new Vector(325, 325)
   },
-  autocompleteEC4: {
-    id: 63,
-    label: "PEC4",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).`;
-    },
-    effect: 20,
-    defaultPosition: new Vector(205, 270)
-  },
   studyActiveEP: {
     id: 70,
     label: "ACT",
@@ -407,16 +397,6 @@ GameDatabase.reality.perks = {
     effect: 0.5,
     defaultPosition: new Vector(360, -625)
   },
-  autobuyerTT4: {
-    id: 107,
-    label: "TTMA4",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(4)} times per second.`;
-    },
-    effect: 0.25,
-    defaultPosition: new Vector(485, -675)
-  },
   achievementGroup1: {
     id: 201,
     label: "ACH1",
@@ -497,7 +477,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.studyPassive, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
-    [p.autocompleteEC3, p.autocompleteEC4],
     [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],
@@ -508,7 +487,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autobuyerFasterID],
     [p.autobuyerTT1, p.autobuyerTT2],
     [p.autobuyerTT2, p.autobuyerTT3],
-    [p.autobuyerTT3, p.autobuyerTT4],
     [p.achievementGroup1, p.achievementGroup2],
     [p.achievementGroup2, p.achievementGroup3],
     [p.achievementGroup3, p.achievementGroup4],

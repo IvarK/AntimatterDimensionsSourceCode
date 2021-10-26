@@ -14,8 +14,7 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
       Number.POSITIVE_INFINITY,
       Perk.autobuyerTT1,
       Perk.autobuyerTT2,
-      Perk.autobuyerTT3,
-      Perk.autobuyerTT4
+      Perk.autobuyerTT3
     );
     return TimeSpan.fromSeconds(period).totalMilliseconds / PerkShopUpgrade.autoSpeed.effectOrDefault(1);
   }

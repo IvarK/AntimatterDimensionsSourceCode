@@ -1137,6 +1137,18 @@ GameStorage.devMigrations = {
       }
     },
     GameStorage.migrations.deletePostChallUnlocked,
+    player => {
+      // Delete PEC4 (id 63)
+      if (player.reality.perks.has(63)) {
+        player.reality.perks.delete(63);
+        Currency.perkPoints.add(1);
+      }
+      // Delete TTMA4 (id 107)
+      if (player.reality.perks.has(107)) {
+        player.reality.perks.delete(107);
+        Currency.perkPoints.add(1);
+      }
+    },
   ],
 
   patch(player) {

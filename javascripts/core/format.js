@@ -104,8 +104,8 @@ const ALWAYS_SINGULAR = [
  * @param  {string} word           - word to be pluralized
  * @param  {number|Decimal} amount - amount to be used to determine if the value is plural
  * @param  {string} [plural]       - if defined, a specific plural to override the generated plural
- * @return {string}                - if the {amount} is anything other than one, return the {plural} provided or the
- *                                   plural form of the input {word}. If the {amount} is singular, return {word}
+ * @return {string} - if the {amount} is anything other than one, return the {plural} provided or the
+ *                    plural form of the input {word}. If the {amount} is singular, return {word}
  */
 function pluralize(word, amount, plural) {
   // If either word or amount is undefined, we cannot continue.
@@ -127,9 +127,8 @@ function pluralize(word, amount, plural) {
   // Go through the Map PLURAL_HELPER, using the supplied regex, returning the string with text replaced if any matches
   // are found.
   for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
-    if (word.match(match)) {
-      return word.replace(match, replaceWith);
-    }
+    const newWord = word.replace(match, replaceWith);
+    if (word !== newWord) return newWord;
   }
   // Return the word but with an 's'
   return `${word}s`;

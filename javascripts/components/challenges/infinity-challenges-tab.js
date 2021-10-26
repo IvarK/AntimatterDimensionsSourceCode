@@ -55,14 +55,14 @@ Vue.component("infinity-challenges-tab", {
   },
   data() {
     return {
-      postChallUnlocked: 0,
+      nextIC: 0,
       showAllChallenges: false
     };
   },
   computed: {
     nextAtDisplay() {
-      const first = this.postChallUnlocked === 0;
-      const next = InfinityChallenge(this.postChallUnlocked + 1)?.config.unlockAM;
+      const first = this.nextIC?.id === 1;
+      const next = InfinityChallenges.nextICUnlockAM;
 
       if (first) return `The first Infinity Challenge unlocks at ${format(next)} antimatter.`;
       return next === undefined
@@ -72,11 +72,11 @@ Vue.component("infinity-challenges-tab", {
   },
   methods: {
     update() {
-      this.postChallUnlocked = player.postChallUnlocked;
+      this.nextIC = InfinityChallenges.nextIC;
       this.showAllChallenges = player.options.showAllChallenges;
     },
     isChallengeVisible(id) {
-      return player.postChallUnlocked >= id || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
+      return InfinityChallenge(id).isUnlocked || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
     }
   },
   template: `

@@ -32,7 +32,7 @@ Vue.component("plus-minus-button", {
       };
     },
     iconClass() {
-      return this.type === "plus" ? "fas fa-plus" : "fas fa-minus"
+      return this.type === "plus" ? "fas fa-plus" : "fas fa-minus";
     }
   },
   template: `

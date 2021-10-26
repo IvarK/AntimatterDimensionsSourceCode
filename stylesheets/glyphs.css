@@ -572,7 +572,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin: 1rem 6.3rem 0rem;
+  margin: 1rem 6.3rem 0;
 }
 
 .c-glyph-single-set-save {

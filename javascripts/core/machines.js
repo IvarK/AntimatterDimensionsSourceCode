@@ -1,7 +1,7 @@
 "use strict";
 
 const MachineHandler = {
-  get baseRMCap() { return new Decimal("1e1000"); },
+  get baseRMCap() { return DC.E1000; },
 
   get hardcapRM() {
     return this.baseRMCap.times(ImaginaryUpgrade(6).effectValue);
@@ -22,7 +22,7 @@ const MachineHandler = {
       if (log10FinalEP > 8000) log10FinalEP = 8000;
       if (log10FinalEP > 6000) log10FinalEP -= (log10FinalEP - 6000) * 0.75;
     }
-    let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
+    let rmGain = DC.E3.pow(log10FinalEP / 4000 - 1);
     // Increase base RM gain if <10 RM
     if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
     rmGain = rmGain.times(this.realityMachineMultiplier);

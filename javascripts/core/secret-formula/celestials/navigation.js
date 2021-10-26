@@ -1313,7 +1313,7 @@ GameDatabase.celestials.navigation = (function() {
             ];
 
             const antimatter = Currency.antimatter.value;
-            const amGoal = Decimal.pow10(1.5e12);
+            const amGoal = DC.E1_5E12;
             return [
               "Lai'tela's Reality",
               `${format(antimatter)} / ${format(amGoal)}`

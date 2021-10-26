@@ -351,7 +351,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   purchase(amount = 1) {
     if (!this.canBeBought) return;
     if (!TimeStudy(181).isBought) {
-      Autobuyer.bigCrunch.bumpAmount(Decimal.pow(2, amount));
+      Autobuyer.bigCrunch.bumpAmount(DC.D2.pow(amount));
     }
     Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
     player.infMult += amount;

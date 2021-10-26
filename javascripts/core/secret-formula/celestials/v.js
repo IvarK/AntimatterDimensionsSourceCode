@@ -1,5 +1,4 @@
-DC.E320
-se strict";
+"use strict";
 
 const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
@@ -8,8 +7,8 @@ const V_REDUCTION_MODE = {
 
 GameDatabase.celestials.v = {
   // Note: mainUnlock IDs here are one-indexed to match with navigation indices
-  DC.E320
-  realities: {
+  mainUnlock: {
+    realities: {
       id: 1,
       name: "Realities",
       resource: () => Currency.realities.value,

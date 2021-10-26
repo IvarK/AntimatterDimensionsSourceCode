@@ -45,7 +45,7 @@ function replicantiGalaxy() {
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
   // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
-  const uncappedAmount = Decimal.pow(10, log10GainFactor.plus(Replicanti.amount.log10()));
+  const uncappedAmount = DC.E1.pow(log10GainFactor.plus(Replicanti.amount.log10()));
   // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
   if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
     if (isAutobuyerActive) {

@@ -12,7 +12,7 @@ GameDatabase.challenges.infinity = [
       effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
       formatEffect: value => formatX(value, 1, 1)
     },
-    unlockAM: new Decimal("1e2000"),
+    unlockAM: DC.E2000,
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ GameDatabase.challenges.infinity = [
         ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": false })} ➜
         ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": true })}`,
     },
-    unlockAM: new Decimal("1e11000"),
+    unlockAM: DC.E11000,
   },
   {
     id: 3,

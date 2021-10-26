@@ -191,7 +191,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: 82,
       description: "Infinity Dimension multiplier based on fastest Eternity time",
-      effect: () => Decimal.pow(2, 60 / Math.max(Time.bestEternity.totalSeconds, 2)),
+      effect: () => DC.D2.pow(60 / Math.max(Time.bestEternity.totalSeconds, 2)),
       cap: DC.C2P30,
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -216,7 +216,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 92,
       description: "Replicanti Galaxies boost Replicanti multiplier",
-      effect: () => Decimal.pow(5, player.replicanti.galaxies),
+      effect: () => DC.D5.pow(player.replicanti.galaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
     {

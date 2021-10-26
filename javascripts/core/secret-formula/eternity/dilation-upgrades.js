@@ -64,7 +64,7 @@ GameDatabase.eternity.dilation = (function() {
       description: () => (Enslaved.isRunning
         ? `Multiply the amount of Tachyon Particles gained by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`
         : "Triple the amount of Tachyon Particles gained."),
-      effect: bought => Decimal.pow(3, bought),
+      effect: bought => DC.D3.pow(bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
       purchaseCap: Number.MAX_VALUE

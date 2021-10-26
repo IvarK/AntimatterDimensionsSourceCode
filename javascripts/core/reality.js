@@ -286,7 +286,7 @@ function giveRealityRewards(realityProps) {
       // Encode iM values into the RM variable as e10000 * iM in order to only require one prop
       let machineRecord;
       if (Currency.imaginaryMachines.value === 0) machineRecord = Currency.realityMachines.value;
-      else machineRecord = new Decimal("1e10000").times(Currency.imaginaryMachines.value);
+      else machineRecord = DC.E10000.times(Currency.imaginaryMachines.value);
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
@@ -571,7 +571,7 @@ function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) Player.resetRequirements("reality");
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  player.records.thisReality.maxReplicanti = new Decimal(0);
+  player.records.thisReality.maxReplicanti = DC.D0;
   Currency.timeTheorems.reset();
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;

@@ -200,7 +200,7 @@ GameDatabase.infinity.upgrades = (function() {
         : "This upgrade would give offline Infinity Point generation, but offline progress is currently disabled"),
       effect: () => (player.options.offlineProgress
         ? player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2)
-        : new Decimal(0)),
+        : DC.D0),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
     },
     ipMult: {
@@ -210,7 +210,7 @@ GameDatabase.infinity.upgrades = (function() {
       description: () => `Multiply Infinity Points from all sources by ${formatX(2)}`,
       // Normally the multiplier caps at e993k or so with 3299999 purchases, but if the cost is capped then we just give
       // an extra e7k to make the multiplier look nice
-      effect: () => (player.infMult === 3299999 ? DC.E1E6 : Decimal.pow(2, player.infMult)),
+      effect: () => (player.infMult === 3299999 ? DC.E1E6 : DC.D2.pow(player.infMult)),
       cap: () => Effarig.eternityCap || DC.E1E6,
       formatEffect: value => formatX(value, 2, 2),
     }

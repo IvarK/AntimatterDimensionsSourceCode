@@ -141,7 +141,7 @@ const AutomatorLexer = (() => {
   });
   createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
     $autocomplete: "pending TP",
-    $getter: () => (player.dilation.active ? getTachyonGain() : new Decimal(0)),
+    $getter: () => (player.dilation.active ? getTachyonGain() : DC.D0),
   });
   createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",

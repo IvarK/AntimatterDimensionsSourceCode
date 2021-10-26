@@ -321,7 +321,7 @@ class ExponentialCostScaling {
     const logCost = excess > 0
       ? currentPurchases * logMult + logBase + 0.5 * excess * (excess + 1) * this._logCostScale
       : currentPurchases * logMult + logBase;
-    return Decimal.pow(10, logCost);
+    return DC.E1.pow(logCost);
   }
 
   /**
@@ -982,7 +982,7 @@ class Vector {
   }
 
   round(factor) {
-    return new Vector(Math.round(this.x * factor) / factor, Math.round(this.y * factor) / factor);    
+    return new Vector(Math.round(this.x * factor) / factor, Math.round(this.y * factor) / factor);
   }
 
   get copy() {
@@ -1377,13 +1377,13 @@ class ExponentialMovingAverage {
       this._average = value;
     } else {
       this._average += this.alpha * (value - this._average);
-      
+
       const absValue = Math.abs(value);
       const absAverage = Math.abs(this._average);
       const highOutlier = absValue > absAverage * this.highOutlierThreshold;
       const lowOutlier = absValue < absAverage * this.lowOutlierThreshold;
       const outlier = highOutlier || lowOutlier;
-      
+
       if (outlier) {
         this.outliers++;
         if (this.outliers >= this.maxOutliers) {

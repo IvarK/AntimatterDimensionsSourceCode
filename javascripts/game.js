@@ -89,7 +89,7 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
-  let ep = Decimal.pow(5, Currency.infinityPoints.value.plus(
+  let ep = DC.D5.pow(Currency.infinityPoints.value.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {

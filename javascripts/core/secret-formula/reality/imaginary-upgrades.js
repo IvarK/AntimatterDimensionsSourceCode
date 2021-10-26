@@ -76,7 +76,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 1e7,
       costMult: 800,
       description: () => `Multiply Infinity Dimensions by ${format("1e100000")}`,
-      effect: new Decimal("1e100000"),
+      effect: DC.E100000,
       formatEffect: value => `${formatX(value)}`,
       isDecimal: true
     }),
@@ -117,7 +117,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 5e7,
       requirement: () => `Make a level ${formatInt(9000)} Glyph with a single glyph weight at ${formatInt(100)}`,
       hasFailed: () => false,
-      checkRequirement: () => Object.values(player.celestials.effarig.glyphWeights).some(w => w === 100) && 
+      checkRequirement: () => Object.values(player.celestials.effarig.glyphWeights).some(w => w === 100) &&
         gainedGlyphLevel().actualLevel >= 9000,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain free Dimboosts based on iM rebuyable count",

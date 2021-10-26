@@ -211,7 +211,7 @@ let player = {
       noInfinities: true,
       noEternities: true,
       noContinuum: true,
-      maxID1: new Decimal(0),
+      maxID1: DC.D0,
       maxStudies: 0,
       maxGlyphs: 0,
       slowestBH: 1,
@@ -816,7 +816,7 @@ const Player = {
           noInfinities: true,
           noEternities: true,
           noContinuum: player.auto.disableContinuum,
-          maxID1: new Decimal(0),
+          maxID1: DC.D0,
           maxStudies: 0,
           // This only gets set to the correct value when Glyphs.updateMaxGlyphCount is called, which always happens
           // before this part of the code is reached in the Reality reset. Nevertheless, we want to keep its old value.

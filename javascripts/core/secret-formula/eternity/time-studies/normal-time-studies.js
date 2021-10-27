@@ -494,8 +494,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(223).isBought,
       description() {
         const effect = TimeStudy(224).effectValue;
-        const noun = effect === 1 ? "Galaxy" : "Galaxies";
-        return `Distant Galaxy cost scaling starts ${formatInt(effect)} ${noun} later
+        return `Distant Galaxy cost scaling starts ${quantifyInt("Galaxy", effect)} later
           (${formatInt(1)} per ${formatInt(2000)} Dim Boosts)`;
       },
       effect: () => Math.floor(DimBoost.totalBoosts / 2000)

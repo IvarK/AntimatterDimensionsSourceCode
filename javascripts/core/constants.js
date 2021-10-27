@@ -39,6 +39,7 @@ const DC = {
   D1_2:                 new Decimal("1.2"),
   D1_3:                 new Decimal("1.3"),
   D2:                   new Decimal("2"),
+  D3:                   new Decimal("3"),
   D4:                   new Decimal("4"),
   D5:                   new Decimal("5"),
   D6_66:                new Decimal("6.66"),

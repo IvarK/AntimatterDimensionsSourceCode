@@ -386,7 +386,7 @@
   transition: color 0.2s;
 }
 
-.c-glyph-auto-pick-options__option {
+.s-base--metro .c-glyph-auto-pick-options__option {
   border-width: 0.1rem;
 }
 
@@ -647,7 +647,7 @@
   background-color: var(--color-reality-light);
 }
 
-.c-glyph-set-save-button {
+.s-base--metro .c-glyph-set-save-button {
   border-width: 0.1rem;
   border-radius: 0;
 }

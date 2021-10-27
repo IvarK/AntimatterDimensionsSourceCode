@@ -94,7 +94,9 @@ Vue.component("button-cycle", {
     }
   },
   template:
-    `<unstyled-button v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{ displayText }}</unstyled-button>`
+    `<unstyled-button
+      v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{ displayText }}
+    </unstyled-button>`
 });
 
 Vue.component("primary-button-cycle", {

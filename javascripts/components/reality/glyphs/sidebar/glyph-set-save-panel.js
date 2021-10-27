@@ -89,22 +89,22 @@ Vue.component("glyph-set-save-panel", {
       for "better" Glyphs to match as well.
       <div class="c-glyph-set-save-container">
         <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
-        <button class="o-primary-btn c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
-          Type: Exact (locked)
+        <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
+          Type: Exact (fixed)
         </button>
-        <primary-button-on-off-custom
+        <button-on-off-custom
           class="c-glyph-set-save-setting-button"
           v-model="effects"
           on="Effects: Including"
           off="Effects: Exact"
         />
-        <primary-button-on-off-custom
+        <button-on-off-custom
           class="c-glyph-set-save-setting-button"
           v-model="level"
           on="Level: Increased"
           off="Level: Exact"
         />
-        <primary-button-on-off-custom
+        <button-on-off-custom
           class="c-glyph-set-save-setting-button"
           v-model="rarity"
           on="Rarity: Increased"
@@ -124,22 +124,22 @@ Vue.component("glyph-set-save-panel", {
           />
         </div>
         <button
-          class="c-reality-upgrade-btn c-glyph-set-save-button"
-          :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
           @click="saveGlyphSet(id)"
         >
           Save
         </button>
         <button
-          class="c-reality-upgrade-btn c-glyph-set-save-button"
-          :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
           @click="loadGlyphSet(set)"
         >
           Load
         </button>
         <button
-          class="c-reality-upgrade-btn c-glyph-set-save-button"
-          :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': !set.length}"
           @click="deleteGlyphSet(id)"
         >
           Delete

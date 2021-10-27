@@ -42,24 +42,25 @@ Vue.component("glyph-autosort-button-group", {
   },
   template: `
     <div>
-      <div class="c-glyph-sacrifice-options__option--active o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
-      Automatic Glyph Arrangement:
-      <br>
-      <primary-button-cycle
+      <div class="l-glyph-sacrifice-options__header">
+        <div class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
+        Automatic Glyph Arrangement:
+      </div>
+      <button-cycle
         v-model="autoSort"
-        class="c-glyph-inventory-option c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         text="Auto-sort Mode:"
         :labels="sortModes"
       />
-      <primary-button-on-off
+      <button-on-off
         v-model="autoCollapse"
-        class="c-glyph-inventory-option c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         text="Auto-collapse space:"
       />
-      <primary-button-on-off
+      <button-on-off
         v-if="showAutoAutoClean"
         v-model="autoAutoClean"
-        class="c-glyph-inventory-option c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         text="Auto Purge on Realities:"
       />
     </div>`

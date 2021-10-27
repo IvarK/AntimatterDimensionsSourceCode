@@ -39,11 +39,13 @@
   flex-direction: column;
   padding: 1rem;
   margin-top: -0.2rem;
+  margin-left: 0.5rem;
   position: relative;
   width: 27rem;
 }
 
 .c-glyph-sacrifice-options {
+  color: var(--color-reality-light);
   background: black;
   border: 0.2rem solid var(--color-reality);
   border-radius: 0.5rem;
@@ -55,6 +57,10 @@
 .s-base--metro .c-glyph-sacrifice-options {
   border-width: 0.1rem;
   border-radius: 0;
+}
+
+.l-glyph-sacrifice-options__header {
+  margin-bottom: 0.4rem;
 }
 
 .l-glyph-sacrifice-options__help {
@@ -380,6 +386,10 @@
   transition: color 0.2s;
 }
 
+.c-glyph-auto-pick-options__option {
+  border-width: 0.1rem;
+}
+
 .c-glyph-auto-pick-options__option:hover {
   color: var(--color-reality-light);
 }
@@ -585,36 +595,72 @@
 
 .c-glyph-set-save-setting-button {
   width: 13rem;
-  font-size: 0.9rem !important;
-  background-color: black !important;
-  color: var(--color-reality-light) !important;
-  border: 0.2rem solid var(--color-reality) !important;
+  height: 2.5rem;
+  font-size: 0.9rem;
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  background-color: black;
+  color: var(--color-reality-light);
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem;
   margin-bottom: 1rem;
-  box-shadow: none !important;
+  transition-duration: 0.2s;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
 }
 
 .s-base--metro .c-glyph-set-save-setting-button {
-  border-width: 0.1rem !important;
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-glyph-set-save-setting-button:hover {
-  background-color: var(--color-reality-light) !important;
-  color: black !important;
+  background-color: var(--color-reality-light);
+  color: black;
 }
 
 .c-glyph-set-save-setting-button--disabled {
-  cursor: default !important;
+  cursor: default;
 }
 
 .c-glyph-set-save-setting-button--disabled:hover {
-  background-color: black !important;
-  color: var(--color-reality-light) !important;
+  background-color: black;
+  color: var(--color-reality-light);
 }
 
 .c-glyph-set-save-button {
   height: 2.5rem;
+  color: var(--color-reality-light);
+  background-color: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition-duration: 0.2s;
+  text-align: center;
+  font-size: 1rem;
   font-weight: bold;
-  font-size: 1.3rem;
+  font-family: Typewriter, serif;
+}
+
+.c-glyph-set-save-button:hover {
+  color: black;
+  background-color: var(--color-reality-light);
+}
+
+.c-glyph-set-save-button {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.c-glyph-set-save-button--unavailable {
+  color: var(--color-bad);
+  border-color: var(--color-bad);
+  cursor: default;
+}
+
+.c-glyph-set-save-button--unavailable:hover {
+  color: var(--color-bad);
+  background: black;
 }
 
 .l-glyph-set-save-spacing {
@@ -905,16 +951,26 @@
   margin-bottom: 0.5rem;
   position: relative;
   font-weight: bold;
-  color: var(--color-reality-light) !important;
-  background-color: black !important;
-  border-color: var(--color-reality) !important;
-  box-shadow: none !important;
+  color: var(--color-reality-light);
+  background-color: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem;
+  transition-duration: 0.2s;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter, serif;
+  cursor: pointer;
 }
 
 .c-glyph-inventory-option:hover {
-  color: black !important;
-  background-color: var(--color-reality-light) !important;
-  border-color: var(--color-reality-light) !important;
+  color: black;
+  background-color: var(--color-reality-light);
+  border-color: var(--color-reality-light);
+}
+
+.s-base--metro .c-glyph-inventory-option {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-glyph-inventory-option__tooltip {
@@ -1065,8 +1121,6 @@
 
 .l-glyph-sidebar-panel-size {
   width: calc(100% - 1rem);
-  margin-left: 0.5rem;
-  padding: 1rem;
 }
 
 .l-glyph-sidebar-button--attention {

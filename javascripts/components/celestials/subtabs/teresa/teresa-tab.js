@@ -56,8 +56,8 @@ Vue.component("teresa-tab", {
     },
     lastMachinesString() {
       return this.lastMachines.lt(new Decimal("1e10000"))
-        ? `${format(this.lastMachines, 2)} Reality Machines`
-        : `${format(this.lastMachines.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
+        ? `${quantify("Reality Machine", this.lastMachines, 2)}`
+        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(new Decimal("1e10000")), 2)}`;
     }
   },
   methods: {

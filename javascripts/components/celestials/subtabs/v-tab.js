@@ -125,7 +125,7 @@ Vue.component("v-tab", {
       }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      return `Spend ${quantify("Perk Point", hex.reductionCost, 2, 0)}
         to reduce goal by ${format(hex.config.perReductionStep)}`;
     },
     toggleFlipped() {

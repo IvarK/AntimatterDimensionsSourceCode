@@ -24,7 +24,7 @@ Vue.component("modal-eternity", {
     },
     startWithIP() {
       return this.startingIP.gt(0)
-        ? `You will start your next Eternity with ${format(this.startingIP, 2)} Infinity Points.`
+        ? `You will start your next Eternity with ${quantify("Infinity Point", this.startingIP, 2)}.`
         : ``;
     },
     eternityChallenge() {

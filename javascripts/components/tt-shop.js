@@ -55,7 +55,7 @@ Vue.component("tt-shop", {
       return `${format(this.theoremGeneration, 2, 2)} TT/sec`;
     },
     totalTimeTheoremText() {
-      return `${format(this.totalTimeTheorems, 2, 2)} total Time Theorems`;
+      return `${quantify("total Time Theorem", this.totalTimeTheorems, 2, 2)}`;
     },
     minimizeArrowStyle() {
       return {

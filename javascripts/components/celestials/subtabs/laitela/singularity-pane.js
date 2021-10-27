@@ -23,7 +23,7 @@ Vue.component("singularity-container", {
   computed: {
     singularityFormText() {
       const formText = this.singularitiesGained === 1 ? "condense all Dark Energy into a Singularity"
-        : `condense all Dark Energy into ${format(this.singularitiesGained, 2, 0)} Singularities`;
+        : `condense all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2, 0)}`;
       if (this.canPerformSingularity) {
         // Capitalize the string
         return `${formText.capitalize()}`;

@@ -68,7 +68,8 @@ Vue.component("singularity-milestone", {
     },
     progressDisplay() {
       if (this.showingCondense) {
-        return `Condense ${format(this.remainingSingularities / this.singularitiesPerCondense, 2, 2)} times`;
+        const remaningCondenses = this.remainingSingularities / this.singularitiesPerCondense;
+        return `Condense ${quantify("time", remaningCondenses, 2, 2)}`;
       }
       return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
     }

@@ -704,7 +704,7 @@ will reset almost the entire game up to this point, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
 <br>
 <br>
-Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the 
+Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the
 pre-Reality Achievements and all of their associated rewards. However, you will still keep all values under the General
 header in the Statistics tab and all of your best Challenge times.
 <br>
@@ -889,9 +889,9 @@ speed boost was active. Pausing and unpausing affects both Black Holes; they can
     }, {
       name: "Celestials",
       info: () => `
-Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of 
-Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you 
-progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually 
+Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of
+Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you
+progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually
 be revealed as you approach it, generally with a visual indication of your progress towards the next step.
 <br>
 <br>
@@ -977,11 +977,11 @@ level of Glyphs gained on Reality.
 <br>
 Automatic Glyph Filtering is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
 Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
-with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
+with the highest score. After picking this Glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. There are three basic modes:
 <br>
 <b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
-particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
+particular Glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
 This mode doesn't have a threshold and always sacrifices your glyphs.
 <br>
 <b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
@@ -1015,7 +1015,7 @@ any of them in order to bring up a modal summarizing the whole set of Glyphs.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Effect Score Mode" can be used to filter out some Glyph types
-entirely; for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score 
+entirely; for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score
 ${formatInt(999)} and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is
 never picked.</i>
 `,
@@ -1063,7 +1063,7 @@ by ${format(1e5)} Tickspeed upgrades.
 <br>
 <br>
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored time, you are able to
-finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is 
+finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
     : "<span style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see reward details)</span>"}
@@ -1208,7 +1208,7 @@ kind of a boost to certain parts of the game based on how much of them you have.
 <br>
 <br>
 In addition to all their other properties, Glyphs now have a <i>refinement value</i> which determines how much of
-its associated alchemy resource it is worth. This value is based on the cube of the glyph's level, scaled
+its associated alchemy resource it is worth. This value is based on the cube of the Glyph's level, scaled
 so that level ${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single Glyph itself,
 however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this value when refined.
 These are values for ${formatPercents(1)} rarity Glyphs; Glyphs of lower rarity still have the same cap but give

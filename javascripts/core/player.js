@@ -288,7 +288,6 @@ let player = {
   infMult: 0,
   version: 13,
   infinityPower: new Decimal(1),
-  postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
   eternities: new Decimal(0),

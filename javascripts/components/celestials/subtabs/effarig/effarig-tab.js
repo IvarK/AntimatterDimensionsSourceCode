@@ -74,7 +74,7 @@ Vue.component("effarig-tab", {
   methods: {
     update() {
       this.relicShards = Currency.relicShards.value;
-      this.shardRarityBoost = Effarig.maxRarityBoost;
+      this.shardRarityBoost = Effarig.maxRarityBoost / 100;
       this.shardsGained = Effarig.shardsGained;
       this.amplification = simulatedRealityCount(false);
       this.amplifiedShards = this.shardsGained * (1 + this.amplification);
@@ -114,7 +114,7 @@ Vue.component("effarig-tab", {
             You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases
             <br>
             the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
-            +{{ format(shardRarityBoost, 2, 2) }}%.
+            +{{ formatPercents(shardRarityBoost, 2) }}.
           </div>
           <div class="c-effarig-relic-description">
             You will gain {{ format(shardsGained, 2) }} Relic Shards next Reality.

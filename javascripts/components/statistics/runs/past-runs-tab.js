@@ -12,7 +12,7 @@ Vue.component("past-runs-tab", {
           getRuns: () => player.records.lastTenRealities,
           reward: (runGain, run, average) => (average
             ? `${runGain} RM`
-            : `a level ${formatInt(run[4])} glyph, ${runGain} RM`),
+            : `a level ${formatInt(run[4])} Glyph, ${runGain} RM`),
           // Note that runGain is a string so we can't use it for pluralize
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2])}`,
         },

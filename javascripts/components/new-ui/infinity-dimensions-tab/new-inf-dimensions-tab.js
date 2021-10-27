@@ -97,7 +97,7 @@ Vue.component("new-inf-dimensions-tab", {
           <br>
           <span v-if="!isEC9Running">
             increased by
-            <span class="c-infinity-dim-description__accent">^{{ format(conversionRate, 2, 3) }}</span>
+            <span class="c-infinity-dim-description__accent">{{ formatPow(conversionRate, 2, 3) }}</span>
           </span>
           <span v-else>
             translated

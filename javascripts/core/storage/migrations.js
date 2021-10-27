@@ -883,6 +883,10 @@ GameStorage.migrations = {
     delete player.infMultCost;
   },
 
+  deletePostChallUnlocked(player) {
+    delete player.postChallUnlocked;
+  },
+
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge

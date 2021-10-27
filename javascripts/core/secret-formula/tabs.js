@@ -191,11 +191,7 @@ GameDatabase.tabs = [
         name: "Infinity Challenges",
         symbol: "∞",
         component: "infinity-challenges-tab",
-        condition: () =>
-          PlayerProgress.realityUnlocked() ||
-          PlayerProgress.eternityUnlocked() ||
-          Currency.antimatter.exponent >= 2000 ||
-          player.postChallUnlocked > 0,
+        condition: () => PlayerProgress.hasBroken(),
         id: 1,
         hidable: true
       },

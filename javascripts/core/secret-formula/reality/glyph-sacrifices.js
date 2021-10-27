@@ -32,7 +32,7 @@ GameDatabase.reality.glyphSacrifice = [
       const exponent = 0.2 * Math.pow(Math.log10(sacPower + 1), 0.1);
       return Math.pow(Math.max(sacPower, 1), exponent);
     },
-    description: amount => `Multiply Tachyon Particle gain by ${format(amount, 2, 2)}x`
+    description: amount => `Multiply Tachyon Particle gain by ${formatX(amount, 2, 2)}`
   }, {
     id: "effarig",
     effect: () => 2 * Math.log10(player.reality.glyphs.sac.effarig / 1e20 + 1),

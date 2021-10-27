@@ -34,7 +34,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: 11,
       description: () => `Improve replicanti multiplier formula to
-      (log2(x)^${formatInt(2)})+x${formatPow(0.032, 3, 3)}`,
+      (log2(x)${formatPow(2)})+x${formatPow(0.032, 3, 3)}`,
       effect: () => Replicanti.amount.pow(0.032)
     },
     {
@@ -48,7 +48,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 31,
       cost: 3,
       requirement: 21,
-      description: () => `Powers up bonuses that are based on your Infinities (Bonuses^${formatInt(4)})`,
+      description: () => `Powers up bonuses that are based on your Infinities (Bonuses${formatPow(4)})`,
       effect: 4
     },
     {

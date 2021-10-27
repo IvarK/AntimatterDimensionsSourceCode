@@ -84,6 +84,17 @@ function formatWithCommas(value) {
   return decimalPointSplit.join(".");
 }
 
+/**
+ * Check if a number or Decimal is equal to 1.
+ * @param  {number|Decimal} amount
+ * @return {Boolean} - if the {amount} was equal to 1.
+ */
+function isSingular(amount) {
+  if (typeof amount === "number") return amount === 1;
+  if (amount instanceof Decimal) return amount.eq(1);
+  throw `Amount must be either a number or Decimal. Instead, amount was ${amount}`;
+}
+
 // Some letters in the english language pluralize in a different manner than simply adding an 's' to the end.
 // As such, the regex match should be placed in the first location, followed by the desired string it
 // should be replaced with. Note that $ refers to the EndOfLine for regex, and should be included if the plural occurs
@@ -111,17 +122,9 @@ function pluralize(word, amount, plural) {
   // If either word or amount is undefined, we cannot continue.
   if (word === undefined || amount === undefined) throw "Arguments must be defined";
 
-  // If the word is in the ALWAYS_SINGULAR array, return true. Otherwise, check if its a number or Decimal type, and
-  // check if that is equal to 1.
-  const isSingular = () => {
-    if (ALWAYS_SINGULAR.includes(word.toLowerCase())) return true;
-    if (typeof amount === "number") return amount === 1;
-    if (amount instanceof Decimal) return amount.eq(1);
-    throw `Amount must be either a number or Decimal. Instead, amount was ${amount}`;
-  };
-
-  // If its singular, return the word itself. Afterwards, if plural is defined, return plural
-  if (isSingular()) return word;
+  // If the word is ALWAYS_SINGULAR or its singular, return the word itself.
+  // Afterwards, if there was a specific plural passed in, return that.
+  if (ALWAYS_SINGULAR.includes(word.toLowerCase()) || isSingular(amount)) return word;
   if (plural) return plural;
 
   // Go through the Map PLURAL_HELPER, using the supplied regex, returning the string with text replaced if any matches

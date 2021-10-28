@@ -44,6 +44,7 @@ function breakInfinity() {
     if (autobuyer.data.interval !== undefined) autobuyer.maxIntervalForFree();
   }
   player.break = !player.break;
+  TabNotification.ICUnlock.tryTrigger();
   EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
   GameUI.update();
 }
@@ -565,7 +566,7 @@ function gameLoop(passDiff, options = {}) {
   if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch)
     player.records.thisInfinity.bestIPmin = currentIPmin;
 
-  tryUnlockInfinityChallenges();
+  tryCompleteInfinityChallenges();
 
   EternityChallenges.autoComplete.tick();
 

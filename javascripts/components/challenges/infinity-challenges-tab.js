@@ -55,15 +55,16 @@ Vue.component("infinity-challenges-tab", {
   },
   data() {
     return {
-      postChallUnlocked: 0,
+      nextIC: 0,
       showAllChallenges: false
     };
   },
   computed: {
     nextAtDisplay() {
-      const next = this.postChallUnlocked < 8
-        ? InfinityChallenge(this.postChallUnlocked + 1).config.unlockAM
-        : undefined;
+      const first = this.nextIC?.id === 1;
+      const next = InfinityChallenges.nextICUnlockAM;
+
+      if (first) return `The first Infinity Challenge unlocks at ${format(next)} antimatter.`;
       return next === undefined
         ? "All Infinity Challenges unlocked"
         : `Next Infinity Challenge unlocks at ${format(next)} antimatter.`;
@@ -71,18 +72,18 @@ Vue.component("infinity-challenges-tab", {
   },
   methods: {
     update() {
-      this.postChallUnlocked = player.postChallUnlocked;
+      this.nextIC = InfinityChallenges.nextIC;
       this.showAllChallenges = player.options.showAllChallenges;
     },
     isChallengeVisible(id) {
-      return player.postChallUnlocked >= id || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
+      return InfinityChallenge(id).isUnlocked || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
     }
   },
   template: `
     <div class="l-challenges-tab">
       <challenges-header />
       <div>
-        An active Big Crunch Autobuyer will Crunch immediately when 
+        An active Big Crunch Autobuyer will Crunch immediately when
         reaching an Infinity Challenge's antimatter goal, regardless of settings.
       </div>
       <div>{{ nextAtDisplay }}</div>

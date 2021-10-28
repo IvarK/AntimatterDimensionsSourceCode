@@ -562,6 +562,7 @@ let player = {
       maxDarkMatter: new Decimal(0),
       run: false,
       unlockBits: 0,
+      quotes: [],
       dimensions: Array.range(0, 4).map(() =>
         ({
           amount: new Decimal(0),

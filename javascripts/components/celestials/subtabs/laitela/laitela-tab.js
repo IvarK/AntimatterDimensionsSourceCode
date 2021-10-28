@@ -40,6 +40,7 @@ Vue.component("laitela-tab", {
   },
   template: `
     <div class="l-laitela-celestial-tab">
+      <celestial-quote-history celestial="laitela" />
       <div class="c-subtab-option-container">
         <primary-button
           class="o-primary-btn--subtab-option"

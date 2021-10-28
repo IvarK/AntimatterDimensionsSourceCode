@@ -657,6 +657,11 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
+      for (const quote of Object.values(Laitela.quotes)) {
+        if (quote.destabilize && laitelaInfo.difficultyTier >= quote.destabilize) {
+          Laitela.quotes.show(quote);
+        }
+      }
     }
     if (Laitela.realityReward > oldInfo.realityReward) {
       completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}

@@ -548,6 +548,7 @@ let player = {
         dilation: 0,
         effarig: 0
       },
+      quotes: [],
       momentumTime: 0,
       unlocksBits: 0,
       run: false,

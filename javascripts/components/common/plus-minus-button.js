@@ -20,7 +20,7 @@ Vue.component("plus-minus-button", {
   },
   computed: {
     iconClass() {
-      return this.type === "plus" ? "fas fa-plus" : "fas fa-minus";
+      return `fas fa-${this.type}`;
     }
   },
   template: `

@@ -578,11 +578,15 @@
   margin: 0.5rem;
 }
 
+.l-glyph-set-save__header {
+  margin-top: 1rem;
+}
+
 .c-glyph-set-save-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin: 1rem 6.3rem 0;
+  margin: 1rem 7rem 0;
 }
 
 .c-glyph-single-set-save {
@@ -594,7 +598,7 @@
 }
 
 .c-glyph-set-save-setting-button {
-  width: 13rem;
+  width: 12.5rem;
   height: 2.5rem;
   font-size: 0.9rem;
   font-family: Typewriter, serif;
@@ -605,7 +609,6 @@
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   transition-duration: 0.2s;
-  padding: 0.3rem 1rem;
   cursor: pointer;
 }
 

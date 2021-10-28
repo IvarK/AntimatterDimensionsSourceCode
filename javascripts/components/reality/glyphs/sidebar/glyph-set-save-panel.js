@@ -83,10 +83,11 @@ Vue.component("glyph-set-save-panel", {
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
       </div>
-      <br>
+      <div class="l-glyph-set-save__header">
       When searching for Glyphs to load, try to match the following. "Exact" will only count Glyphs
       with identical properties to be part of the set. The other settings will, loosely speaking, allow
       for "better" Glyphs to match as well.
+      </div>
       <div class="c-glyph-set-save-container">
         <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
         <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">

@@ -67,7 +67,7 @@
 .l-glyph-sacrifice-options__help {
   position: absolute;
   left: calc(100% - 1.8rem);
-  top: 0rem;
+  top: 0;
   z-index: 2;
 }
 

@@ -90,7 +90,7 @@ Vue.component("glyph-set-save-panel", {
       <div class="c-glyph-set-save-container">
         <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
         <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
-          Type: Exact (fixed)
+          Type: Exact (always)
         </button>
         <button-on-off-custom
           class="c-glyph-set-save-setting-button"

@@ -19,25 +19,13 @@ Vue.component("plus-minus-button", {
     this.computedSize = this.$el.offsetWidth;
   },
   computed: {
-    outerStyle() {
-      return {
-        height: "1.6rem",
-        width: "1.6rem",
-        display: "flex",
-        "justify-content": "center",
-        "align-items": "center",
-        "font-size": "1rem",
-        "border-radius": "50%",
-        border: `0.1rem solid ${this.color}`,
-      };
-    },
     iconClass() {
       return this.type === "plus" ? "fas fa-plus" : "fas fa-minus";
     }
   },
   template: `
     <div
-      :style="outerStyle"
+      class="c-ad-slider__button"
       v-repeating-click="{ delay: 500 }"
       @firstclick="$emit('click')"
       @repeatclick="$emit('click')"

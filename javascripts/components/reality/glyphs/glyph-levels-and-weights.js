@@ -311,7 +311,7 @@ Vue.component("glyph-levels-and-weights", {
           Adjust weights
           <div class="l-glyph-levels-and-weights__reset-btn-outer">
             <div
-              class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn"
+              class="c-glyph-levels-and-weights__reset-btn"
               @click="resetWeights"
             >
               Reset
@@ -319,10 +319,10 @@ Vue.component("glyph-levels-and-weights", {
           </div>
         </div>
         <div class="l-glyph-levels-and-weights__adjust-auto">
-          <primary-button-on-off
+          <button-on-off
             v-if="showAutoAdjustWeights"
             v-model="isAutoAdjustWeightsOn"
-            class="l-glyph-levels-and-weights__auto-btn c-glyph-levels-and-weights__auto-btn"
+            class="c-glyph-levels-and-weights__auto-btn"
             text="Auto adjustment:"
           />
         </div>

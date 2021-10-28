@@ -52,6 +52,7 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   padding: 0.8rem 0.8rem 0.5rem;
+  position: relative;
 }
 
 .s-base--metro .c-glyph-sacrifice-options {
@@ -65,9 +66,8 @@
 
 .l-glyph-sacrifice-options__help {
   position: absolute;
-  left: calc(100% - 1.4rem);
-  top: 1rem;
-  transform: translateX(-100%);
+  left: calc(100% - 1.8rem);
+  top: 0rem;
   z-index: 2;
 }
 
@@ -1114,7 +1114,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 20%;
+  width: 100%;
   margin: 0 0.5rem;
   height: 4rem;
 }

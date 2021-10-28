@@ -17,7 +17,7 @@ Vue.component("primary-button", {
   },
   template: `
     <button :class="classObject" v-on="$listeners">
-      <slot/>
+      <slot />
     </button>`
 });
 
@@ -30,7 +30,7 @@ Vue.component("unstyled-button", {
   },
   template: `
     <button v-on="$listeners">
-      <slot/>
+      <slot />
     </button>`
 });
 
@@ -93,8 +93,8 @@ Vue.component("button-cycle", {
       return `${this.text} ${this.labels[this.value]}`.trim();
     }
   },
-  template:
-    `<unstyled-button
+  template: `
+    <unstyled-button
       v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{ displayText }}
     </unstyled-button>`
 });

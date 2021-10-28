@@ -385,15 +385,13 @@ Vue.component("glyph-filter-panel", {
   template: `
     <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
       <div class="c-glyph-sacrifice-options">
-        <div>
-          <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
-            <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
-          </div>
-          Current Filter Mode:
-          <br>
-          {{ filterMode(mode) }}
-          <br>
+        <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
+          <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
         </div>
+        Current Filter Mode:
+        <br>
+        {{ filterMode(mode) }}
+        <br>
         <div class="c-glyph-filter-mode-container">
           <div
             v-for="index in modes"

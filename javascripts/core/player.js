@@ -288,7 +288,6 @@ let player = {
   infMult: 0,
   version: 13,
   infinityPower: DC.D1,
-  postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: DC.D0,
   eternities: DC.D0,

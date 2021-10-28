@@ -15,8 +15,8 @@ Vue.component("modal-glyph-sacrifice", {
       return Glyphs.findByInventoryIndex(this.modalConfig.idx);
     },
     message() {
-      return `Do you really want to sacrifice this glyph? Your total power of sacrificed ${this.glyph.type}
-      glyphs will increase from ${format(this.currentGlyphSacrifice, 2, 2)} to
+      return `Do you really want to sacrifice this Glyph? Your total power of sacrificed ${this.glyph.type}
+      Glyphs will increase from ${format(this.currentGlyphSacrifice, 2, 2)} to
       ${format(this.currentGlyphSacrifice + this.gain, 2, 2)}.`;
     }
   },

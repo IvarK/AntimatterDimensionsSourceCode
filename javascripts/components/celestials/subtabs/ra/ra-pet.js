@@ -144,7 +144,7 @@ Vue.component("ra-pet", {
         <br v-else>
         <div v-if="!isCapped">
           <div>
-            {{ name }} has {{ format(memories, 2) }} Memories
+            {{ name }} has {{ "Memory" | quantify(memories, 2) }}
           </div>
         </div>
         <div class="l-ra-pet-middle-container" v-if="!isCapped">
@@ -164,7 +164,7 @@ Vue.component("ra-pet", {
                     Gain {{ formatPercents(0.3) }} more Memories
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
-                    Cost: {{ format(memoryUpgradeCost, 2, 2) }} Memories
+                    Cost: {{ "Memory" | quantify(memoryUpgradeCost, 2, 2) }}
                     <span v-if="memories <= memoryUpgradeCost">
                       {{ nextMemoryUpgradeEstimate }}
                     </span>
@@ -200,7 +200,7 @@ Vue.component("ra-pet", {
                     Gain {{ formatPercents(0.5) }} more Memory Chunks
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
-                    Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories
+                    Cost: {{ "Memory" | quantify(chunkUpgradeCost, 2, 2) }}
                     <span v-if="memories <= chunkUpgradeCost">
                       {{ nextMemoryChunkUpgradeEstimate }}
                     </span>
@@ -226,10 +226,10 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="!isCapped">
           <div>
-            {{ format(memoryChunks, 2, 2) }} Memory Chunks, {{ format(memoriesPerSecond, 2, 2) }} Memories/sec
+            {{ "Memory Chunk" | quantify(memoryChunks, 2, 2) }}, {{ "Memory" | quantify(memoriesPerSecond, 2, 2) }}/sec
           </div>
           <div>
-            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} Memory Chunks/sec
+            Gaining {{ "Memory Chunk" | quantify(memoryChunksPerSecond, 2, 2) }}/sec
             <span :ach-tooltip="chunkTooltip">
               <i class="fas fa-question-circle"></i>
             </span>

@@ -58,7 +58,7 @@ Vue.component("new-inf-dimension-row", {
     capTooltip() {
       if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
       if (this.isCapped) return `Cap reached at ${format(this.capIP)} IP`;
-      return `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
+      return `Purchased ${quantifyInt("time", this.purchases)}`;
     },
     showRow() {
       return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0) ||

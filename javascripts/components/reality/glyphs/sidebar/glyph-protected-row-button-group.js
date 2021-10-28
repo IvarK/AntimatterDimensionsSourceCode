@@ -33,7 +33,7 @@ Vue.component("glyph-protected-row-button-group", {
   template: `
     <div>
       <div class="c-glyph-sacrifice-options__option--active o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
-      Protected Slots: ({{ format(protectedRows, 2) }} {{ "row" | pluralize(protectedRows, "rows") }})
+      Protected Slots: ({{ "row" | quantifyInt(protectedRows) }})
       <br>
       <button
         class="l-glyph-inventory__sort c-reality-upgrade-btn"

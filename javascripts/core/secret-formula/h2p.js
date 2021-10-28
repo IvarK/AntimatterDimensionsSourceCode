@@ -977,11 +977,11 @@ level of Glyphs gained on Reality.
 <br>
 Automatic Glyph Filtering is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
 Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
-with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
+with the highest score. After picking this Glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. There are three basic modes:
 <br>
 <b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
-particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
+particular Glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
 This mode doesn't have a threshold and always sacrifices your glyphs.
 <br>
 <b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
@@ -1208,7 +1208,7 @@ kind of a boost to certain parts of the game based on how much of them you have.
 <br>
 <br>
 In addition to all their other properties, Glyphs now have a <i>refinement value</i> which determines how much of
-its associated alchemy resource it is worth. This value is based on the cube of the glyph's level, scaled
+its associated alchemy resource it is worth. This value is based on the cube of the Glyph's level, scaled
 so that level ${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single Glyph itself,
 however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this value when refined.
 These are values for ${formatPercents(1)} rarity Glyphs; Glyphs of lower rarity still have the same cap but give

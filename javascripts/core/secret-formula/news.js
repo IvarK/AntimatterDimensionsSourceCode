@@ -1172,12 +1172,12 @@ GameDatabase.news = [
     id: "a210",
     get text() {
       const clicks = player.news.specialTickerData.uselessNewsClicks;
-      const plural = pluralize("time", clicks, "times");
+      const quantity = quantify("time", clicks);
       if (clicks === 1) {
         return `Nothing happens when you click this text. And yet, you've clicked it.`;
       }
       if (clicks > 1) {
-        return `Nothing happens when you click this text. And yet, you've clicked it ${clicks} ${plural}.`;
+        return `Nothing happens when you click this text. And yet, you've clicked it ${quantity}.`;
       }
       return "Nothing happens when you click this text. And you understand that.";
     },
@@ -1724,8 +1724,8 @@ GameDatabase.news = [
       const paperclips = player.news.specialTickerData.paperclips;
       return `You see, this news isn't normal news. It is being produced by the first news dimension. If you want
         to unlock more news, you have to collect enough paperclips to build the second news dimension. You
-        currently have ${paperclips} ${pluralize("paperclip", paperclips, "paperclips")}, but you need
-        ${paperclips + 10} paperclips to afford it.`;
+        currently have ${quantifyInt("paperclip", paperclips)}, but you need
+        ${formatInt(paperclips + 10)} paperclips to afford it.`;
     }
   },
   {

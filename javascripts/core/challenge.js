@@ -7,14 +7,10 @@ function startChallengeUI() {
   if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
-function tryUnlockInfinityChallenges() {
-  while (player.postChallUnlocked < 8 &&
-    player.records.thisEternity.maxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
-    ++player.postChallUnlocked;
-    TabNotification.ICUnlock.tryTrigger();
-    if (EternityMilestone.autoIC.isReached) {
-      InfinityChallenge(player.postChallUnlocked).complete();
-    }
+function tryCompleteInfinityChallenges() {
+  if (EternityMilestone.autoIC.isReached) {
+    const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
+    for (const challenge of toComplete) challenge.complete();
   }
 }
 
@@ -189,8 +185,12 @@ class InfinityChallengeState extends GameMechanicState {
     this._reward = new InfinityChallengeRewardState(config.reward, this);
   }
 
+  get unlockAM() {
+    return this.config.unlockAM;
+  }
+
   get isUnlocked() {
-    return player.postChallUnlocked >= this.id;
+    return player.records.thisEternity.maxAM.gte(this.unlockAM) || Achievement(133).isUnlocked;
   }
 
   get isRunning() {
@@ -292,6 +292,12 @@ const InfinityChallenges = {
   },
   clearCompletions() {
     player.challenge.infinity.completedBits = 0;
+  },
+  get nextIC() {
+    return InfinityChallenges.all.find(x => !x.isUnlocked);
+  },
+  get nextICUnlockAM() {
+    return this.nextIC?.unlockAM;
   },
   /**
    * @returns {InfinityChallengeState[]}

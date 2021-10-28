@@ -171,7 +171,7 @@ class EternityChallengeState extends GameMechanicState {
   start(auto) {
     if (EternityChallenge.isRunning) return false;
     if (!this.isUnlocked) return false;
-    
+
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
@@ -219,10 +219,9 @@ class EternityChallengeState extends GameMechanicState {
     this.exit();
     let reason;
     if (this.id === 4) {
-      reason = restriction => `having more than ${formatInt(restriction)} Infinities`;
+      reason = restriction => `having more than ${quantifyInt("Infinity", restriction)}`;
     } else if (this.id === 12) {
-      reason = restriction => `spending more than ${format(restriction, 0, 1)}
-        in-game ${restriction === 1 ? "second" : "seconds"} in it`;
+      reason = restriction => `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
     Modal.message.show(`You failed Eternity Challenge ${this.id} due to
       ${reason(this.config.restriction(this.completions))}; you have now exited it.`);

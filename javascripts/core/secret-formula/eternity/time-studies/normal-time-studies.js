@@ -493,8 +493,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(223).isBought,
       description() {
         const effect = TimeStudy(224).effectValue;
-        const noun = effect === 1 ? "Galaxy" : "Galaxies";
-        return `Distant Galaxy cost scaling starts ${formatInt(effect)} ${noun} later
+        return `Distant Galaxy cost scaling starts ${quantifyInt("Galaxy", effect)} later
           (${formatInt(1)} per ${formatInt(2000)} Dim Boosts)`;
       },
       effect: () => Math.floor(DimBoost.totalBoosts / 2000)
@@ -507,7 +506,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(226).isBought,
       description: "You gain extra Replicanti Galaxies based on your Replicanti amount",
       effect: () => Math.floor(Replicanti.amount.exponent / 1000),
-      formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
+      formatEffect: value => `+${quantifyInt("RG", value)}`
     },
     {
       id: 226,
@@ -517,7 +516,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(225).isBought,
       description: "You gain extra Replicanti Galaxies based on their max",
       effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 15),
-      formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
+      formatEffect: value => `+${quantifyInt("RG", value)}`
     },
     {
       id: 227,

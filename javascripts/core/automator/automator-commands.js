@@ -28,12 +28,12 @@ const AutomatorCommands = ((() => {
     return {
       run: () => {
         if (!evalComparison()) {
-          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
+          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
             exiting loop at line ${ctx.RCurly[0].startLine + 1} (end of loop)`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         AutomatorBackend.push(commands);
-        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), 
+        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true),
           moving to line ${ctx.LCurly[0].startLine + 1} (start of loop)`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
@@ -111,7 +111,7 @@ const AutomatorCommands = ((() => {
           (ctx.duration || ctx.xHighest) && !EternityMilestone.bigCrunchModes.isReached) {
           V.addError((ctx.duration || ctx.xHighest)[0],
             "Advanced Infinity autobuyer settings are not unlocked",
-            `Reach ${EternityMilestone.bigCrunchModes.config.eternities} Eternities to use this command`);
+            `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)} to use this command`);
           return false;
         }
 
@@ -126,7 +126,8 @@ const AutomatorCommands = ((() => {
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           !EternityMilestone.autobuyerEternity.isReached) {
           V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${EternityMilestone.autobuyerEternity.config.eternities} Eternities to use this command`);
+            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
+            to use this command`);
           return false;
         }
 
@@ -160,7 +161,7 @@ const AutomatorCommands = ((() => {
             autobuyer.mode = durationMode;
             autobuyer.time = duration / 1000;
             // Can't do the units provided in the script because it's been parsed away like 4 layers up the call stack
-            currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : format(autobuyer.time)} seconds`;
+            currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : quantify("second", autobuyer.time)}`;
           } else if (xHighest !== undefined) {
             autobuyer.mode = xHighestMode;
             autobuyer.xHighest = new Decimal(xHighest);
@@ -345,12 +346,12 @@ const AutomatorCommands = ((() => {
               ifEndLine: ctx.RCurly[0].startLine
             };
             if (!evalComparison()) {
-              AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), 
+              AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
                 skipping to line ${ctx.RCurly[0].startLine + 1}`, ctx.startLine);
               return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             }
             AutomatorBackend.push(commands);
-            AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), 
+            AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true),
               entering IF block`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
@@ -454,7 +455,8 @@ const AutomatorCommands = ((() => {
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           !EternityMilestone.autobuyerEternity.isReached) {
           V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${EternityMilestone.autobuyerEternity.config.eternities} Eternities to use this command`);
+            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
+            to use this command`);
           return false;
         }
 
@@ -485,7 +487,7 @@ const AutomatorCommands = ((() => {
           if (respec) prestigeToken.$respec();
           prestigeToken.$prestige();
           const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
-          AutomatorData.logCommandEvent(`Auto-${prestigeName} triggered 
+          AutomatorData.logCommandEvent(`Auto-${prestigeName} triggered
             (${findLastPrestigeRecord(prestigeName)})`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
@@ -628,9 +630,8 @@ const AutomatorCommands = ((() => {
             if (!TimeStudy(tsNumber).purchase()) {
               if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
               if (purchasedStudies > 0) {
-                AutomatorData.logCommandEvent(`Purchased ${purchasedStudies} time 
-                  ${pluralize("study", purchasedStudies, "studies")} and stopped at study 
-                  ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
+                AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)}
+                and stopped at study ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
               }
               return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
             }
@@ -642,7 +643,7 @@ const AutomatorCommands = ((() => {
           }
           const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(true);
           if (unlockedEC) {
-            AutomatorData.logCommandEvent(`Purchased all specified time studies and unlocked Eternity Challenge 
+            AutomatorData.logCommandEvent(`Purchased all specified time studies and unlocked Eternity Challenge
               ${studies.ec}`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
@@ -750,7 +751,7 @@ const AutomatorCommands = ((() => {
               ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
-          AutomatorData.logCommandEvent(`Attempted to purchase TT with ${ctx.TTCurrency[0].image} 
+          AutomatorData.logCommandEvent(`Attempted to purchase TT with ${ctx.TTCurrency[0].image}
             but could not afford any`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
@@ -924,7 +925,7 @@ const AutomatorCommands = ((() => {
         if (doneWaiting) {
           const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
           if (AutomatorData.isWaiting) {
-            AutomatorData.logCommandEvent(`Continuing after WAIT 
+            AutomatorData.logCommandEvent(`Continuing after WAIT
               (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
           } else {
             AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,

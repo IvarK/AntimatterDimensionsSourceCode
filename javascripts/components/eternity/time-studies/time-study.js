@@ -110,17 +110,17 @@ Vue.component("time-study", {
              @click.exact="handleClick"
              @click.shift.exact="shiftClick">
       <slot />
-      <cost-display br
+      <cost-display
+        br
         v-if="(showCost && !showSTCost) || STCost === 0"
         :config="config"
-        singular="Time Theorem"
-        plural="Time Theorems"
+        name="Time Theorem"
       />
       <div v-else-if="showSTCost">
         Cost: <span v-if="config.cost">
-          {{ formatInt(config.cost) }} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems") }} and
+          {{ "Time Theorem" | quantifyInt(config.cost) }} and
         </span>
-        {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems") }}
+        {{ "Space Theorem" | quantifyInt(STCost) }}
       </div>
     </button>`
 });

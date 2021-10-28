@@ -30,7 +30,7 @@ Vue.component("glyph-clean-button-group", {
         .length;
       return removeCount === 0
         ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
-        : `This will remove ${formatInt(removeCount)} ${pluralize("Glyph", removeCount)}!`;
+        : `This will remove ${quantifyInt("Glyph", removeCount)}!`;
     }
   },
   methods: {

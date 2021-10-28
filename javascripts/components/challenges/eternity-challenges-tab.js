@@ -106,7 +106,7 @@ Vue.component("eternity-challenges-tab", {
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
               <div>
-                Completed {{ formatInt(completions) }} {{ "time" | pluralize(completions) }}
+                Completed {{ "time" | quantifyInt(completions) }}
               </div>
               <div v-if="!isCompleted">
                 {{ goalDisplay }}

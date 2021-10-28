@@ -61,7 +61,7 @@ GameDatabase.celestials.v = {
     {
       id: 0,
       name: "Glyph Knight",
-      description: value => `Unlock Reality with at most ${formatInt(-value)} ${pluralize("Glyph", -value)} equipped.`,
+      description: value => `Unlock Reality with at most ${quantifyInt("Glyph", -value)} equipped.`,
       // This achievement has internally negated values since the check is always greater than
       values: [-5, -4, -3, -2, -1, 0],
       condition: () => V.isRunning && TimeStudy.reality.isBought,

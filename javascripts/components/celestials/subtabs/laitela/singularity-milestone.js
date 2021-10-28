@@ -61,17 +61,17 @@ Vue.component("singularity-milestone", {
     },
     completionsDisplay() {
       if (!Number.isFinite(this.limit)) {
-        return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+        return quantifyInt("completion", this.completions);
       }
       if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
       return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
     },
     progressDisplay() {
       if (this.showingCondense) {
-        return `Condense ${format(this.remainingSingularities / this.singularitiesPerCondense, 2, 2)} times`;
+        const remaningCondenses = this.remainingSingularities / this.singularitiesPerCondense;
+        return `Condense ${quantify("time", remaningCondenses, 2, 2)}`;
       }
-      return `In ${format(this.remainingSingularities, 2)} 
-        ${pluralize("Singularity", this.remainingSingularities, "Singularities")}`;
+      return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
     }
   },
   methods: {

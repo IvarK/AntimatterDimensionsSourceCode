@@ -102,10 +102,10 @@ Vue.component("reality-reminder", {
         You are ready to complete this Reality!
       </span>
       <span v-else>
-        You have {{ formatInt(suggestions.length) }} {{ "thing" | pluralize(suggestions.length) }}
+        You have {{ "thing" | quantifyInt(suggestions.length) }}
         you may want to do before Reality. {{ clickText }}
         <div
-          v-if="isExpanded" 
+          v-if="isExpanded"
           style="font-size: 1rem;"
         >
           <br>

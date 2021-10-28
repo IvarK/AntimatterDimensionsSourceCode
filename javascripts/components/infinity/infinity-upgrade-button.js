@@ -59,11 +59,11 @@ Vue.component("infinity-upgrade-button", {
     >
       <description-display :config="config" />
       <effect-display br v-if="!isDisabled" :config="config" />
-      <cost-display br
+      <cost-display
+        br
         v-if="!isBought"
         :config="config"
-        singular="Infinity Point"
-        plural="Infinity Points"
+        name="Infinity Point"
       />
       <slot />
     </button>`

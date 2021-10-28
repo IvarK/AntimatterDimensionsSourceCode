@@ -44,7 +44,7 @@ Vue.component("reality-button", {
       return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {
-      return `${format(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
+      return quantify("Relic Shard", this.shardsGained, 2);
     }
   },
   methods: {
@@ -149,7 +149,7 @@ Vue.component("reality-button", {
           </template>
           <div class="infotooltiptext" v-if="canReality">
             <div>Other resources gained:</div>
-            <div>{{ ppGained }} Perk {{ "Point" | pluralize(ppGained) }}</div>
+            <div>{{ "Perk Point" | quantifyInt(ppGained) }}</div>
             <div v-if="shardsGained !== 0">{{ shardsGainedText }}</div>
             <div v-for="celestialInfo in celestialRunText">
               <span v-if="celestialInfo[0]">

@@ -147,7 +147,7 @@ Vue.component("ra-pet-level-bar", {
             </div>
           </div>
           <div class="c-ra-pet-upgrade__tooltip__footer">
-            Cost: {{ format(requiredMemories, 2, 2) }} Memories
+            Cost: {{ "Memory" | quantify(requiredMemories, 2, 2) }}
             <span v-if="memories <= requiredMemories">{{ nextLevelEstimate }}</span>
           </div>
         </div>

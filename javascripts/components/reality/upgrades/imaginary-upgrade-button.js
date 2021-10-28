@@ -75,8 +75,7 @@ Vue.component("imaginary-upgrade-button", {
           <cost-display
             v-if="!isBought"
             :config="config"
-            singular="Imaginary Machine"
-            plural="Imaginary Machines"
+            name="Imaginary Machine"
           />
         </template>
       </button>

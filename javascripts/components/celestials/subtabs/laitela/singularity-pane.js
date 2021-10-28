@@ -23,7 +23,7 @@ Vue.component("singularity-container", {
   computed: {
     singularityFormText() {
       const formText = this.singularitiesGained === 1 ? "condense all Dark Energy into a Singularity"
-        : `condense all Dark Energy into ${format(this.singularitiesGained, 2, 0)} Singularities`;
+        : `condense all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2, 0)}`;
       if (this.canPerformSingularity) {
         // Capitalize the string
         return `${formText.capitalize()}`;
@@ -60,7 +60,7 @@ Vue.component("singularity-container", {
       const singularities = this.singularitiesGained / this.perStepFactor;
       return this.willCondenseOnDecrease
         ? `Decreasing the cap will immediately auto-condense for
-          ${format(singularities, 2)} ${pluralize("Singularity", singularities, "Singularities")}!`
+          ${quantify("Singularity", singularities, 2)}!`
         : null;
     },
     increaseTooltip() {
@@ -107,7 +107,7 @@ Vue.component("singularity-container", {
     <div class="c-laitela-singularity-container">
       <div>
         <h2>
-          You have {{ format(singularities, 2, 0) }} {{ "Singularity" | pluralize(singularities, "Singularities") }}
+          You have {{ "Singularity" | quantify(singularities, 2, 0) }}
         </h2>
         <button
           class="c-laitela-singularity"

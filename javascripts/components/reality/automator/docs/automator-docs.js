@@ -47,7 +47,7 @@ Vue.component("automator-docs", {
       return this.fullScreen ? "Exit full screen" : "Expand to full screen";
     },
     errorTooltip() {
-      return `Your script has ${this.errorCount} ${pluralize("error", this.errorCount)}`;
+      return `Your script has ${quantify("error", this.errorCount)}`;
     },
     currentScriptID: {
       get() {

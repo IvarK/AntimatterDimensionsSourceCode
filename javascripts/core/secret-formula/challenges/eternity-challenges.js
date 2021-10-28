@@ -43,7 +43,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => Currency.infinities.lte(restriction),
-    formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
+    formatRestriction: restriction => `in ${quantifyInt("Infinity", restriction)} or less`,
     failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
@@ -61,7 +61,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
-      formatEffect: value => `${formatInt(value)} Antimatter Galaxies later`
+      formatEffect: value => `${quantifyInt("Antimatter Galaxy", value)} later`
     }
   },
   {
@@ -176,8 +176,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
-    formatRestriction: restriction => `in ${format(restriction, 0, 1)} in-game
-      ${restriction === 1 ? "second" : "seconds"} or less.`,
+    formatRestriction: restriction => `in ${quantify("in-game second", restriction, 0, 1)} or less.`,
     failedRestriction: "(Too slow for more)",
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",

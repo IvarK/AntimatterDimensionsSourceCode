@@ -51,7 +51,7 @@ Vue.component("antimatter-dim-galaxy-row", {
     costScalingText() {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
-          return `Each Galaxy is more expensive past ${formatInt(this.distantStart)} Galaxies`;
+          return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.distantStart)}`;
         case GALAXY_TYPE.REMOTE:
           return "Increased Galaxy cost scaling: " +
             `Quadratic past ${formatInt(this.distantStart)} (distant),

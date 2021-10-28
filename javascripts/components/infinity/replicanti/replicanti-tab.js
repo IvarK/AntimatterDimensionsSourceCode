@@ -69,8 +69,9 @@ Vue.component("replicanti-tab", {
           multiplier on all Time Dimensions from a Dilation Upgrade`);
       }
       if (this.hasDTMult) {
+        const additionalEffect = GlyphAlteration.isAdded("replication") ? "and Replicanti speed " : "";
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
-          multiplier to Dilated Time from Glyphs`);
+          multiplier to Dilated Time ${additionalEffect}from Glyphs`);
       }
       if (boostList.length === 1) return `${boostList[0]}.`;
       if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;

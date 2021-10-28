@@ -1136,6 +1136,7 @@ GameStorage.devMigrations = {
         player.celestials.ra.highestRefinementValue[resource.name] = player.celestials.ra.alchemy[resource.id].amount;
       }
     },
+    GameStorage.migrations.deletePostChallUnlocked,
   ],
 
   patch(player) {

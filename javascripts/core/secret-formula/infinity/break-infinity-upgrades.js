@@ -81,9 +81,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         );
         infinities = infinities.times(getAdjustedGlyphEffect("infinityinfmult"));
         infinities = infinities.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
-        return `${format(infinities)}
-          ${pluralize("Infinity", infinities, "Infinities")}
-          every ${Time.bestInfinity.times(5).toStringShort()}`;
+        return `${quantify("Infinity", infinities)} every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
     autobuyMaxDimboosts: {

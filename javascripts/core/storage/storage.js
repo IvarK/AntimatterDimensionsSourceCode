@@ -124,7 +124,7 @@ const GameStorage = {
     checkNaN(save, "player");
 
     if (invalidProps.length === 0) return "";
-    return `${invalidProps.length} NaN player ${pluralize("property", invalidProps.length, "properties")} found:
+    return `${quantify("NaN player property", invalidProps.length)} found:
       ${invalidProps.join(", ")}`;
   },
 

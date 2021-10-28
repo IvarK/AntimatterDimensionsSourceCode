@@ -45,24 +45,11 @@ Vue.component("tachyon-particle", {
   props: {
     bounds: Object
   },
-  data() {
-    return {
-      x: 0,
-      y: 0
-    };
+  mounted() {
+    this.fly();
   },
-  created() {
-    this.tween = null;
-    if (GameUI.initialized) {
-      this.fly();
-    } else {
-      Vue.nextTick(() => this.fly());
-    }
-  },
-  destroyed() {
-    if (this.tween !== null) {
-      TWEEN.remove(this.tween);
-    }
+  beforeDestroy() {
+    TWEEN.remove(this.tween);
   },
   methods: {
     fly() {
@@ -82,10 +69,13 @@ Vue.component("tachyon-particle", {
       };
       const duration = intersectionLength / speed;
 
-      this.x = start.x;
-      this.y = start.y;
-      this.tween = new TWEEN.Tween(this.$data)
+      const position = start;
+      this.tween = new TWEEN.Tween(position)
         .to(intersection, duration)
+        .onUpdate(() => {
+          this.$el.setAttribute("cx", position.x);
+          this.$el.setAttribute("cy", position.y);
+        })
         .easing(TWEEN.Easing.Linear.None)
         .onComplete(this.fly.bind(this))
         .start(tweenTime);
@@ -112,5 +102,5 @@ Vue.component("tachyon-particle", {
     }
   },
   template:
-    `<circle :cx="x" :cy="y" r="2" class="o-tachyon-particle" />`
+    `<circle r="2" class="o-tachyon-particle" />`
 });

@@ -12,9 +12,9 @@ Vue.component("past-runs-tab", {
           getRuns: () => player.records.lastTenRealities,
           reward: (runGain, run, average) => (average
             ? `${runGain} RM`
-            : `a level ${formatInt(run[4])} glyph, ${runGain} RM`),
+            : `a level ${formatInt(run[4])} Glyph, ${runGain} RM`),
           // Note that runGain is a string so we can't use it for pluralize
-          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2])}`,
         },
         eternity: {
           name: "Eternity",
@@ -23,7 +23,7 @@ Vue.component("past-runs-tab", {
           condition: () => PlayerProgress.eternityUnlocked(),
           getRuns: () => player.records.lastTenEternities,
           reward: runGain => `${runGain} EP`,
-          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Eternity", run[2], "Eternities")}`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Eternity", run[2])}`,
         },
         infinity: {
           name: "Infinity",
@@ -32,7 +32,7 @@ Vue.component("past-runs-tab", {
           condition: () => PlayerProgress.infinityUnlocked(),
           getRuns: () => player.records.lastTenInfinities,
           reward: runGain => `${runGain} IP`,
-          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2])}`,
         },
       },
       showLastTenResourceGain: false

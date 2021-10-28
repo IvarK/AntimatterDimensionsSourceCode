@@ -79,8 +79,7 @@ Vue.component("dilation-upgrade", {
           br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"
-          singular="Dilated Time"
-          plural="Dilated Time"
+          name="Dilated Time"
         />
       </button>
       <primary-button-on-off

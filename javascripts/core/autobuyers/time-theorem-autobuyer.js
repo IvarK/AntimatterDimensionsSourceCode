@@ -1,6 +1,6 @@
 "use strict";
 
-Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.timeTheorems;
   }
@@ -9,22 +9,11 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
     return `Time Theorem`;
   }
 
-  get interval() {
-    if (!Perk.ttBuySingle.isBought) return Number.POSITIVE_INFINITY;
-    // Activates every tick
-    return 0;
-  }
-
   get isUnlocked() {
     return Perk.ttBuySingle.isBought;
   }
 
-  get resetTickOn() {
-    return PRESTIGE_EVENT.REALITY;
-  }
-
   tick() {
-    super.tick();
-    TimeTheorems.buyMax(true, Perk.ttBuyMax.isBought);
+    return Perk.ttBuyMax.isBought ? TimeTheorems.buyMax(true) : TimeTheorems.buyOneOfEach();
   }
 }();

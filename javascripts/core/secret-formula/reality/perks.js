@@ -228,11 +228,11 @@ GameDatabase.reality.perks = {
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).
+      return `Auto-complete one Eternity Challenge every ${formatInt(60)} minutes (real-time).
               ECs will be completed sequentially, requiring all previous
               ECs to be fully completed before progressing to the next EC.`;
     },
-    effect: 80,
+    effect: 60,
     defaultPosition: new Vector(345, 135)
   },
   autocompleteEC2: {
@@ -240,9 +240,9 @@ GameDatabase.reality.perks = {
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(50)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(40)} minutes (real-time).`;
     },
-    effect: 50,
+    effect: 40,
     defaultPosition: new Vector(425, 235)
   },
   autocompleteEC3: {
@@ -250,9 +250,9 @@ GameDatabase.reality.perks = {
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(30)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).`;
     },
-    effect: 30,
+    effect: 20,
     defaultPosition: new Vector(325, 325)
   },
   studyActiveEP: {
@@ -382,7 +382,7 @@ GameDatabase.reality.perks = {
     id: 105,
     label: "TTS",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Unlock a Time Theorem Autobuyer which buys single Theorems every tick.",
+    description: "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
     effect: 1,
     defaultPosition: new Vector(255, -540)
   },

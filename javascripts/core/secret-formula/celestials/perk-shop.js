@@ -56,7 +56,7 @@ GameDatabase.celestials.perkShop = (function() {
       id: 3,
       initialCost: 1000,
       increment: 2,
-      description: () => `Infinity Dimension, Time Dimension, Time Theorem, Dilation,
+      description: () => `Infinity Dimension, Time Dimension, Dilation,
         and Replicanti autobuyers are ${formatX(2)} faster.`,
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2),

@@ -35,7 +35,7 @@ class TimeTheoremPurchaseType {
 
   get bulkPossible() {
     if (Perk.ttFree.isBought) {
-      return Math.floor(this.currency.value.divide(this.cost).log(this.costIncrement.toNumber()) + 1);
+      return Math.floor(this.currency.value.divide(this.cost).log10() / this.costIncrement.log10() + 1);
     }
     return Decimal.affordGeometricSeries(this.currency.value, this.cost, this.costIncrement, 0).toNumber();
   }
@@ -116,11 +116,20 @@ const TimeTheorems = {
     return 1;
   },
 
-  buyMax(auto = false, isMax) {
+  // This is only called via automation and there's no manual use-case, so we assume auto is true and simplify a bit
+  buyOneOfEach() {
+    if (!this.checkForBuying(true)) return 0;
+    const ttAM = this.buyOne(true, "am");
+    const ttIP = this.buyOne(true, "ip");
+    const ttEP = this.buyOne(true, "ep");
+    return ttAM + ttIP + ttEP;
+  },
+
+  buyMax(auto = false) {
     if (!this.checkForBuying(auto)) return 0;
-    const ttAM = TimeTheoremPurchaseType.am.purchase(isMax);
-    const ttIP = TimeTheoremPurchaseType.ip.purchase(isMax);
-    const ttEP = TimeTheoremPurchaseType.ep.purchase(isMax);
+    const ttAM = TimeTheoremPurchaseType.am.purchase(true);
+    const ttIP = TimeTheoremPurchaseType.ip.purchase(true);
+    const ttEP = TimeTheoremPurchaseType.ep.purchase(true);
     return ttAM + ttIP + ttEP;
   },
 

@@ -970,7 +970,7 @@ GameStorage.devMigrations = {
       // Delete PEC5 (id 64)
       if (player.reality.perks.has(64)) {
         player.reality.perks.delete(64);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
 
       let reqBitmask = 0;
@@ -984,7 +984,7 @@ GameStorage.devMigrations = {
       // Delete SAM2 (id 11)
       if (player.reality.perks.has(11)) {
         player.reality.perks.delete(11);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
       if (player.reality.perks.has(10)) Perk.startAM.onPurchased();
     },
@@ -1019,7 +1019,7 @@ GameStorage.devMigrations = {
       // Delete ACH5
       if (player.reality.perks.has(206)) {
         player.reality.perks.delete(206);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
     },
     player => {
@@ -1141,13 +1141,14 @@ GameStorage.devMigrations = {
       // Delete PEC4 (id 63)
       if (player.reality.perks.has(63)) {
         player.reality.perks.delete(63);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
       // Delete TTMA4 (id 107)
       if (player.reality.perks.has(107)) {
         player.reality.perks.delete(107);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
+      delete player.auto.timeTheorems.lastTick;
     },
   ],
 

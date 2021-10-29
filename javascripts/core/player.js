@@ -138,7 +138,6 @@ let player = {
     })),
     timeTheorems: {
       isActive: false,
-      lastTick: 0,
     },
     dilationUpgrades: Array.range(0, 3).map(() => ({
       isActive: false,

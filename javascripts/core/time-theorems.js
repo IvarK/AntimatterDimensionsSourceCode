@@ -34,9 +34,14 @@ class TimeTheoremPurchaseType {
   get costIncrement() { throw new NotImplementedError(); }
 
   get bulkPossible() {
+    if (Perk.ttFree.isBought) {
+      return Math.floor(this.currency.value.divide(this.cost).log10() / this.costIncrement.log10() + 1);
+    }
     return Decimal.affordGeometricSeries(this.currency.value, this.cost, this.costIncrement, 0).toNumber();
   }
 
+  // Note: This is actually just the cost of the largest term of the geometric series. If buying EP without the
+  // perk that makes them free, this will be incorrect, but the EP object already overrides this anyway
   bulkCost(amount) {
     return this.cost.times(this.costIncrement.pow(amount - 1));
   }
@@ -45,13 +50,14 @@ class TimeTheoremPurchaseType {
     if (this.currency.lt(this.cost)) return false;
     let purchased = false;
     const amount = this.bulkPossible;
+    const buyFn = cost => (Perk.ttFree.isBought ? this.currency.gt(cost) : this.currency.purchase(cost));
     // This will sometimes buy one too few for EP, so we just have to buy 1 after.
-    if (bulk && this.currency.purchase(this.bulkCost(amount))) {
+    if (bulk && buyFn(this.bulkCost(amount))) {
       Currency.timeTheorems.add(amount);
       this.add(amount);
       purchased = true;
     }
-    if (this.currency.purchase(this.cost)) {
+    if (buyFn(this.cost)) {
       Currency.timeTheorems.add(1);
       this.add(1);
       purchased = true;
@@ -91,7 +97,10 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   get costBase() { return new Decimal(1); }
   get costIncrement() { return new Decimal(2); }
 
-  bulkCost(amount) { return this.costIncrement.pow(amount + this.amount).subtract(this.cost); }
+  bulkCost(amount) {
+    if (Perk.ttFree.isBought) return this.cost.times(this.costIncrement.pow(amount - 1));
+    return this.costIncrement.pow(amount + this.amount).subtract(this.cost);
+  }
 }();
 
 const TimeTheorems = {
@@ -105,6 +114,15 @@ const TimeTheorems = {
     if (!this.checkForBuying(auto)) return 0;
     if (!TimeTheoremPurchaseType[type].purchase(false)) return 0;
     return 1;
+  },
+
+  // This is only called via automation and there's no manual use-case, so we assume auto is true and simplify a bit
+  buyOneOfEach() {
+    if (!this.checkForBuying(true)) return 0;
+    const ttAM = this.buyOne(true, "am");
+    const ttIP = this.buyOne(true, "ip");
+    const ttEP = this.buyOne(true, "ep");
+    return ttAM + ttIP + ttEP;
   },
 
   buyMax(auto = false) {

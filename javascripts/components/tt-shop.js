@@ -89,7 +89,7 @@ Vue.component("tt-shop", {
       TimeTheorems.buyOne(false, "ep");
     },
     buyMaxTheorems() {
-      TimeTheorems.buyMax();
+      TimeTheorems.buyMax(false);
     },
     update() {
       this.theoremAmount.copyFrom(Currency.timeTheorems);

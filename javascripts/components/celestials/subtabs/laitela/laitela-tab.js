@@ -40,7 +40,6 @@ Vue.component("laitela-tab", {
   },
   template: `
     <div class="l-laitela-celestial-tab">
-      <celestial-quote-history celestial="laitela" />
       <div class="c-subtab-option-container">
         <primary-button
           class="o-primary-btn--subtab-option"
@@ -55,6 +54,7 @@ Vue.component("laitela-tab", {
           Max all Dark Matter Dimensions
         </primary-button>
       </div>
+      <celestial-quote-history celestial="laitela" />
       <div class="o-laitela-matter-amount">
         You have {{ format(darkMatter.floor(), 2, 0) }} Dark Matter.
       </div>

@@ -12,23 +12,8 @@ const Laitela = {
       .map(d => d.powerDE * 1000 / d.interval)
       .sum();
   },
-  has(info) {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
-  },
   get isUnlocked() {
     return ImaginaryUpgrade(15).isBought;
-  },
-  canBuyUnlock(info) {
-    if (Currency.darkMatters.lt(info.price)) return false;
-    return !this.has(info);
-  },
-  buyUnlock(info) {
-    if (!this.canBuyUnlock(info)) return false;
-    Currency.darkMatter.purchase(info.price);
-    // eslint-disable-next-line no-bitwise
-    player.celestials.laitela.unlockBits |= (1 << info.id);
-    return true;
   },
   initializeRun() {
     clearCelestialRuns();

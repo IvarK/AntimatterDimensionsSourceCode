@@ -205,7 +205,7 @@ const Singularity = {
     Currency.singularities.add(this.singularitiesGained);
     
     for (const quote of Object.values(Laitela.quotes)) {
-      if (quote.singularities && Currency.singularities.value >= quote.singularities) {
+      if (Currency.singularities.value >= quote.singularities) {
         Laitela.quotes.show(quote);
       }
     }

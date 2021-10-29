@@ -284,6 +284,9 @@ const Ra = {
   get levelCap() {
     return 25;
   },
+  get maxTotalPetLevel() {
+    return this.levelCap * this.pets.all.length;
+  },
   checkForUnlocks() {
     if (!V.has(V_UNLOCKS.RA_UNLOCK)) return;
     for (const unl of Object.values(RA_UNLOCKS)) {
@@ -498,7 +501,7 @@ const Ra = {
     },
     MAX_LEVELS: {
       id: 14,
-      requirement: () => Ra.totalPetLevel === Ra.levelCap * 4,
+      requirement: () => Ra.totalPetLevel === Ra.maxTotalPetLevel,
       lines: [
         "Finally, I remember everything.",
         "This darkness that banished me.",

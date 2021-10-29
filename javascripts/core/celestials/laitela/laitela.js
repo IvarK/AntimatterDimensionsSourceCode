@@ -217,7 +217,7 @@ const Laitela = {
         "Were you truly once one of them?",
         "You have taken control of the darkness so quickly.",
         "Molded them into Dimensions and Points just like one of us.",
-        "Who... ARE you?",
+        "What... ARE you?",
       ]
     },
     // Note: This happens around e10-e11 singularities

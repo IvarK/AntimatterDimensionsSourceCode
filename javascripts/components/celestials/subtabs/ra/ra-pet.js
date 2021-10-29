@@ -56,7 +56,7 @@ Vue.component("ra-pet", {
   },
   methods: {
     update() {
-      this.isRaCapped = Ra.totalPetLevel === Ra.levelCap * 4;
+      this.isRaCapped = Ra.totalPetLevel === Ra.maxTotalPetLevel;
       this.pet = this.petConfig.pet;
       const pet = this.pet;
       this.isCapped = pet.level === Ra.levelCap;

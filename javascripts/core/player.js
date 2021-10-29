@@ -797,7 +797,7 @@ const Player = {
   },
 
   get automatorUnlocked() {
-    return Currency.realities.gte(5);
+    return AutomatorPoints.totalPoints >= AutomatorPoints.requiredPoints;
   },
 
   resetRequirements(key) {

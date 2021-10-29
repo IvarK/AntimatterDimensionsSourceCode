@@ -27,9 +27,12 @@ Vue.component("glyph-tab-sidebar", {
     setSidebarState(state) {
       player.reality.showSidebarPanel = state;
     },
-    sidebarStyle(index) {
+    sidebarClass(index) {
       return {
-        "z-index": player.reality.showSidebarPanel === index ? 1 : 0,
+        "l-glyph-sidebar-button": true,
+        "c-glyph-sidebar-button": true,
+        "c-glyph-sidebar-button--active": index === player.reality.showSidebarPanel,
+        "l-glyph-sidebar-button--attention": index === this.sidebarEnum.SACRIFICE_TYPE && !this.hasRefined
       };
     }
   },
@@ -37,33 +40,28 @@ Vue.component("glyph-tab-sidebar", {
     <div class="l-glyph-sidebar-option-container">
       <div v-if="hasMoreOptions" class="l-glyph-sidebar-tab-container">
         <button
-          class="l-glyph-sidebar-button c-glyph-sidebar-button"
-          :style="sidebarStyle(sidebarEnum.INVENTORY_MANAGEMENT)"
+          :class="sidebarClass(sidebarEnum.INVENTORY_MANAGEMENT)"
           @click="setSidebarState(sidebarEnum.INVENTORY_MANAGEMENT)"
         >
           Manage Inventory
         </button>
         <button
-          class="l-glyph-sidebar-button c-glyph-sidebar-button"
+          :class="sidebarClass(sidebarEnum.FILTER_SETTINGS)"
           v-if="unlockedFilter"
-          :style="sidebarStyle(sidebarEnum.FILTER_SETTINGS)"
           @click="setSidebarState(sidebarEnum.FILTER_SETTINGS)"
         >
           Glyph Filter
         </button>
         <button
-          class="l-glyph-sidebar-button c-glyph-sidebar-button"
+          :class="sidebarClass(sidebarEnum.SAVED_SETS)"
           v-if="unlockedSets"
-          :style="sidebarStyle(sidebarEnum.SAVED_SETS)"
           @click="setSidebarState(sidebarEnum.SAVED_SETS)"
         >
           Saved Glyph Sets
         </button>
         <button
-          class="l-glyph-sidebar-button c-glyph-sidebar-button"
-          :class="[hasRefined ? '' : 'l-glyph-sidebar-button--attention']"
+          :class="sidebarClass(sidebarEnum.SACRIFICE_TYPE)"
           v-if="unlockedAlchemy"
-          :style="sidebarStyle(sidebarEnum.SACRIFICE_TYPE)"
           @click="setSidebarState(sidebarEnum.SACRIFICE_TYPE)"
         >
           Sacrifice Type

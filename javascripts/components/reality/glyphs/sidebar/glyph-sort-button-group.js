@@ -25,36 +25,35 @@ Vue.component("glyph-sort-button-group", {
   },
   template: `
     <div>
-      Sort Glyphs:
-      <br>
+      <div class="l-glyph-sacrifice-options__header">Sort Glyphs:</div>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Arranges by decreasing level×rarity"
+        class="c-glyph-inventory-option"
         @click="sortByPower"
       >
         Sort by power
+        <div class="c-glyph-inventory-option__tooltip">Arranges by decreasing level×rarity</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Groups Glyphs together based on effects"
+        class="c-glyph-inventory-option"
         @click="sortByEffect"
       >
         Sort by effect
+        <div class="c-glyph-inventory-option__tooltip">Groups Glyphs together based on effects</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         v-if="showScoreFilter"
-        ach-tooltip="Arranges by decreasing Glyph filter score"
         @click="sortByScore"
       >
         Sort by score
+        <div class="c-glyph-inventory-option__tooltip">Arranges by decreasing Glyph filter score</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Moves all Glyphs to the earliest empty slots"
+        class="c-glyph-inventory-option"
         @click="collapseEmpty"
       >
         Collapse empty space
+        <div class="c-glyph-inventory-option__tooltip">Moves all Glyphs to the earliest empty slots</div>
       </button>
     </div>`
 });

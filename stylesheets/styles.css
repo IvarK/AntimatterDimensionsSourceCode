@@ -130,6 +130,7 @@ html {
   --color-infinity: #7d3c1b;
   --color-eternity: #639565;
   --color-reality: #AFA3A5;
+  --color-reality-light: #e8e3e4;
   --color-celestials: #F2D6C1;
   --color-prestige--accent: black;
 }
@@ -7994,18 +7995,16 @@ kbd {
   background-color: black;
   box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   border-radius: 0.8rem;
+  transition-duration: 0.2s;
+}
+
+.c-glyph-levels-and-weights__slider-handle:hover {
+  color: black;
+  background-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__reset-btn-outer {
-  z-index:2;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.l-glyph-levels-and-weights__reset-btn {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
 }
 
 .c-glyph-levels-and-weights__reset-btn {
@@ -8013,6 +8012,9 @@ kbd {
   background-color: black;
   border-radius: 0.5rem;
   border: 0.1rem solid var(--color-reality-light);
+  padding: 0.2rem 0.5rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .c-glyph-levels-and-weights__reset-btn:hover {
@@ -8020,17 +8022,22 @@ kbd {
   background-color: var(--color-reality-light);
 }
 
-.l-glyph-levels-and-weights__auto-btn {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  font-size: 10px;
+.s-base--metro .c-glyph-levels-and-weights__reset-btn {
+  border-radius: 0;
 }
 
 .c-glyph-levels-and-weights__auto-btn {
+  font-size: 1rem;
+  font-family: Typewriter;
+  font-weight: bold;
   color: var(--color-reality-light);
   background-color: black;
+  height: 2.5rem;
   border-radius: 0.5rem;
   border: 0.1rem solid var(--color-reality-light);
+  padding: 0.2rem 0.5rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .c-glyph-levels-and-weights__auto-btn:hover {
@@ -8038,16 +8045,21 @@ kbd {
   background-color: var(--color-reality-light);
 }
 
+.s-base--metro .c-glyph-levels-and-weights__auto-btn {
+  border-radius: 0;
+}
+
 .o-questionmark {
   border-radius: 50%;
   border: 0.1rem solid;
   width: 1.2rem;
   height: 1.2rem;
-  font-size: smaller;
+  font-size: 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
+  user-select: none;
 }
 
 .l-glyphs-tab {

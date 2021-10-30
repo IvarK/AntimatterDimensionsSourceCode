@@ -4,8 +4,6 @@ Vue.component("automator-tab", {
   data() {
     return {
       automatorUnlocked: false,
-      currentPoints: 0,
-      unlockThreshold: 0,
       interval: 0,
     };
   },
@@ -32,8 +30,6 @@ Vue.component("automator-tab", {
   methods: {
     update() {
       this.automatorUnlocked = Player.automatorUnlocked;
-      this.currentPoints = AutomatorPoints.totalPoints;
-      this.unlockThreshold = AutomatorPoints.requiredPoints;
       this.interval = AutomatorBackend.currentInterval;
     }
   },
@@ -56,9 +52,6 @@ Vue.component("automator-tab", {
           <automator-docs slot="paneR" />
         </split-pane>
       </div>
-      <div style="font-size: 2rem" v-else>
-        You have {{ formatInt(currentPoints) }} / {{ formatInt(unlockThreshold) }}
-        Automator Points for unlocking the Automator.
-      </div>
+      <automator-points-list v-else />
     </div>`
 });

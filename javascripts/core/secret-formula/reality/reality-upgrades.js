@@ -131,6 +131,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`,
       automatorPoints: 15,
+      shortDescription: () => `Start with ${formatInt(100)} Eternities`,
       effect: () => 100
     },
     {
@@ -142,6 +143,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
       automatorPoints: 5,
+      shortDescription: () => `Continuous Infinity generation`,
       effect: () => gainedInfinities().times(0.1),
       formatEffect: value => `${format(value)} per second`
     },
@@ -171,6 +173,7 @@ GameDatabase.reality.upgrades = (function() {
       description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier,
       and improved Eternity autobuyers`,
       automatorPoints: 10,
+      shortDescription: () => `TD, ${formatX(5)} EP, and improved Eternity Autobuyers`,
     },
     {
       name: "The Eternal Flow",
@@ -181,6 +184,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Gain Eternities per second equal to your Reality count",
       automatorPoints: 5,
+      shortDescription: () => `Continuous Eternity generation`,
       effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
       formatEffect: value => `${format(value)} per second`
     },
@@ -274,6 +278,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Black Hole 2",
       automatorPoints: 10,
+      shortDescription: () => `Second Black Hole`,
       formatCost: value => format(value, 1, 0)
     },
     {
@@ -332,6 +337,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Unlock the Reality autobuyer and Automator command",
       automatorPoints: 100,
+      shortDescription: () => `Reality Autobuyer`,
     },
   ];
 }());

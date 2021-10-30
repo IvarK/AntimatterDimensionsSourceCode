@@ -3,13 +3,13 @@
 }
 
 .c-automator-tab {
-  height: 45rem;
-  width: 94rem;
+  height: 60rem;
+  width: 110rem;
 }
 
 .c-automator-tab > div {
   height: 45rem;
-  width: 94rem;
+  width: 110rem;
 }
 
 .c-automator-tab--full-screen {
@@ -21,6 +21,27 @@
   position: relative;
   align-self: center;
   margin-top: 0.5rem;
+}
+
+.l-automator-points-list-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.l-automator-points-list-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.c-automator-points-list-col {
+  width: 32%;
+  border: 0.15rem solid var(--color-text);
+  padding: 1rem;
+  text-align: left;
+  overflow: auto;
 }
 
 .l-automator-tab--full-screen {

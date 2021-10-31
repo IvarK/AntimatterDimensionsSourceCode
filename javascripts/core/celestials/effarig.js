@@ -155,6 +155,7 @@ const Effarig = {
       ]
     }
   }),
+  symbol: "Ϙ"
 };
 
 class EffarigUnlockState extends GameMechanicState {

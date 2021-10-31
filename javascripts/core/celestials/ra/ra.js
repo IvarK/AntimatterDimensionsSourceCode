@@ -514,6 +514,7 @@ const Ra = {
       ]
     },
   }),
+  symbol: "<i class='fas fa-sun'></i>"
 };
 
 const GlyphAlteration = {

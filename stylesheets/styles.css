@@ -5484,15 +5484,79 @@ kbd {
   align-items: center;
   left: 50vw;
   top: 50vh;
-  width: 40rem;
-  height: 10rem;
+  width: 30rem;
+  height: 30rem;
   transform: translate(-50%, -50%);
+}
+
+.c-modal-cestial-quote__symbol {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  font-size: 25rem;
+  opacity: 0.2;
+  text-shadow: 0rem 0rem 2rem;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.c-modal-celestial-quote--teresa {
+  color: var(--color-teresa--base);
+  background-color: black;
+  border-color: var(--color-teresa--base);
+  box-shadow: 0 0 1rem var(--color-teresa--base), 0 0 1rem var(--color-teresa--base) inset;
+}
+
+.c-modal-celestial-quote--effarig {
+  color: var(--color-effarig--base);
+  background-color: black;
+  border-color: var(--color-effarig--base);
+  box-shadow: 0 0 1rem var(--color-effarig--base), 0 0 1rem var(--color-effarig--base) inset;
+}
+
+.c-modal-celestial-quote--enslaved {
+  color: var(--color-enslaved-base);
+  background-color: black;
+  border-color: var(--color-enslaved-base);
+  box-shadow: 0 0 1rem var(--color-enslaved-base), 0 0 1rem var(--color-enslaved-base) inset;
+}
+
+.c-modal-celestial-quote--v {
+  color: var(--color-v--base);
+  background-color: black;
+  border-color: var(--color-v--base);
+  box-shadow: 0 0 1rem var(--color-v--base), 0 0 1rem var(--color-v--base) inset;
+}
+
+.c-modal-celestial-quote--ra {
+  color: #9575cd;
+  background-color: black;
+  border-color: #9575cd;
+  box-shadow: 0 0 1rem #9575cd, 0 0 1rem #9575cd inset;
+}
+
+.c-modal-celestial-quote--laitela {
+  color: var(--color-laitela--accent);
+  background-color: var(--color-laitela--base);
+  border-color: var(--color-laitela--accent);
+  box-shadow: 0 0 1rem var(--color-laitela--accent), 0 0 1rem var(--color-laitela--accent) inset;
 }
 
 .c-modal-celestial-quote__arrow {
   font-size: 150%;
   margin: 0.5rem;
-  color: #444;
+  cursor: pointer;
+}
+
+.c-modal-celestial-quote__end {
+  position: absolute;
+  font-size: 150%;
+  cursor: pointer;
+  left: calc(50% - 1rem);
+  bottom: 1.5rem;
 }
 
 .l-modal-celestial-quote__text {
@@ -5657,7 +5721,6 @@ kbd {
 }
 
 .c-celestial-quote-history__button--disabled {
-  cursor: not-allowed;
   opacity: 0.6;
 }
 

@@ -307,6 +307,7 @@ const Laitela = {
       ]
     },
   }),
+  symbol: "ᛝ"
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

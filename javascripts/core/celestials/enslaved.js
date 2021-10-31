@@ -228,6 +228,7 @@ const Enslaved = {
       ]
     },
   }),
+  symbol: "<i class='fas fa-link'></i>"
 };
 
 class EnslavedProgressState extends GameMechanicState {

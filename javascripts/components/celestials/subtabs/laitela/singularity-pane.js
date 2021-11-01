@@ -107,7 +107,7 @@ Vue.component("singularity-container", {
     <div class="c-laitela-singularity-container">
       <div>
         <h2>
-          You have {{ "Singularity" | quantify(singularities, 2, 0) }}
+          You have {{ quantify("Singularity", singularities, 2, 0) }}
         </h2>
         <button
           class="c-laitela-singularity"

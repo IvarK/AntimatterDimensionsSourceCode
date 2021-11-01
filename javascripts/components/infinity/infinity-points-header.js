@@ -17,6 +17,6 @@ Vue.component("infinity-points-header", {
     <div v-show="isVisible" class="c-infinity-tab__header">
       You have
       <span class="c-infinity-tab__infinity-points">{{ format(infinityPoints, 2, 0) }}</span>
-      {{ "Infinity Point" | pluralize(infinityPoints) }}.
+      {{ pluralize("Infinity Point", infinityPoints) }}.
     </div>`
 });

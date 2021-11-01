@@ -89,7 +89,7 @@ Vue.component("ra-tab", {
     <div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header" v-if="!isRaCapped">
         Each Memory Chunk generates a base of one Memory per second, which has been increased to
-        {{ "Memory" | quantify(memoriesPerChunk, 2, 3) }}
+        {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
         per second.
         <span v-if="memoriesPerChunk > 1">
           <br>

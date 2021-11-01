@@ -15,6 +15,6 @@ Vue.component("eternity-points-header", {
     <div class="c-eternity-tab__header">
       You have
       <span class="c-eternity-tab__eternity-points">{{ format(eternityPoints, 2, 0) }}</span>
-      {{ "Eternity Point" | pluralize(eternityPoints) }}.
+      {{ pluralize("Eternity Point", eternityPoints) }}.
     </div>`
 });

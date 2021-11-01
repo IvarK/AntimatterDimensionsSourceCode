@@ -39,12 +39,12 @@ Vue.component("dilation-button", {
       <span v-else-if="canEternity && hasGain">
         Disable Dilation.
         <br>
-        Gain {{ "Tachyon Particle" | quantify(tachyonGain, 2, 1) }}.
+        Gain {{ quantify("Tachyon Particle", tachyonGain, 2, 1) }}.
       </span>
       <span v-else-if="hasGain">
         Disable Dilation.
         <br>
-        Reach {{ "Infinity Point" | quantify(eternityGoal, 1, 0) }} to Eternity and gain Tachyon Particles.
+        Reach {{ quantify("Infinity Point", eternityGoal, 1, 0) }} to Eternity and gain Tachyon Particles.
       </span>
       <span v-else>
         Disable Dilation.

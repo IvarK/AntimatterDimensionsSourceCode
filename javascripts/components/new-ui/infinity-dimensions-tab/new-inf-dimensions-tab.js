@@ -141,7 +141,7 @@ Vue.component("new-inf-dimensions-tab", {
         v-if="isEC8Running"
         class="l-infinity-dim-tab__ec8-purchases"
       >
-        You have {{ "purchase" | quantifyInt(EC8PurchasesLeft) }} left.
+        You have {{ quantifyInt("purchase", EC8PurchasesLeft) }} left.
       </div>
       <br>
       Hold shift to see the Infinity Point cost for locked Infinity Dimensions.

@@ -111,19 +111,19 @@ Vue.component("effarig-tab", {
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
           <div class="c-effarig-relics">
-            You have {{ "Relic Shard" | quantify(relicShards, 2, 0) }}, which increases
+            You have {{ quantify("Relic Shard", relicShards, 2, 0) }}, which increases
             <br>
             the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
             +{{ formatPercents(shardRarityBoost, 2) }}.
           </div>
           <div class="c-effarig-relic-description">
-            You will gain {{ "Relic Shard" | quantify(shardsGained, 2) }} next Reality.
+            You will gain {{ quantify("Relic Shard", shardsGained, 2) }} next Reality.
             <span v-if="amplification !== 0">
               <br>
               Due to amplification of your current Reality,
               <br>
               you will actually gain a total of
-              {{ "Relic Shard" | quantify(amplifiedShards, 2) }}.
+              {{ quantify("Relic Shard", amplifiedShards, 2) }}.
             </span>
           </div>
           <div class="c-effarig-relic-description">

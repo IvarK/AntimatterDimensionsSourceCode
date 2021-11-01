@@ -24,7 +24,7 @@ Vue.component("automator-error-page", {
         No script errors found!
       </div>
       <div v-else>
-        <b>Your script has the following {{ "error" | quantify(errors.length) }}:</b>
+        <b>Your script has the following {{ quantify("error", errors.length) }}:</b>
         <br>
         <span v-for="error in errors">
           <b>On line {{ error.startLine }}:</b>

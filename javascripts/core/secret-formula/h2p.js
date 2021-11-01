@@ -28,8 +28,8 @@ random-looking characters into your clipboard. That text contains your save data
 game by pasting it into the text box on the import prompt. You need the entirety of the save text for importing to
 work properly, or else the game might not recognize the text as a valid save. Keep in mind that certain messaging
 applications may cut off part of the text if you are using one to transfer the save between devices. One way to tell
-that this has happened is for text to not end with <b>==</b>. In addition to importing and exporting to your clipboard,
-you can also import and export from text files as well.
+that this has happened is for text to not end with <b>${GameSaveSerializer.endingString.savefile}</b>. In addition to 
+importing and exporting to your clipboard, you can also import and export from text files as well.
 <br>
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most

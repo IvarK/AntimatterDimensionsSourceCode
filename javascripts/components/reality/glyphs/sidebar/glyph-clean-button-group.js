@@ -43,10 +43,14 @@ Vue.component("glyph-clean-button-group", {
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP;
     },
     autoClean() {
-      Glyphs.autoClean();
+      if (player.options.confirmations.autoClean) {
+        Modal.glyphPurge.show({ harsh: false });
+      }
     },
     harshAutoClean() {
-      Glyphs.harshAutoClean();
+      if (player.options.confirmations.autoClean) {
+        Modal.glyphPurge.show({ harsh: true });
+      }
     },
     deleteAllUnprotected() {
       Glyphs.deleteAllUnprotected();

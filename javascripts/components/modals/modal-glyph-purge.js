@@ -2,16 +2,12 @@
 
 Vue.component("modal-glyph-purge", {
   props: { modalConfig: Object },
-  data() {
-    return {
-      glyphsDeleted: 0,
-    };
-  },
   computed: {
-    glyphsTotal() { return Glyphs.inventory.filter(thing => thing !== null).length; },
+    glyphsTotal() { return Glyphs.inventory.filter(slot => slot !== null).length; },
     harsh() { return this.modalConfig.harsh; },
+    threshold() { return this.harsh ? 1 : 5; },
+    glyphsDeleted() { return Glyphs.autoClean(this.threshold, false); },
     extraMessage() {
-      this.handleDeletion(false);
       return `${this.whichType} will delete ${this.glyphsDeleted}/${this.glyphsTotal} of your Glyphs.`;
     },
     explanation() {
@@ -28,30 +24,10 @@ Vue.component("modal-glyph-purge", {
     },
   },
   methods: {
-    handleDeletion(deleteGlyphs) {
-      for (let inventoryIndex = Glyphs.totalSlots - 1; inventoryIndex >= Glyphs.protectedSlots; --inventoryIndex) {
-        const glyph = Glyphs.inventory[inventoryIndex];
-        const threshold = this.harsh ? 1 : 5;
-        if (glyph === null) continue;
-        // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
-        const isCustomGlyph = glyph.color !== undefined || glyph.symbol !== undefined;
-        if (isCustomGlyph && !this.harsh) continue;
-        // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
-        // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
-        // Harsh purge is threshold 1.
-        if (Glyphs.isObjectivelyUseless(glyph, threshold)) {
-          if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
-          else this.glyphsDeleted++;
-        }
-      }
-    },
     handleYesClick() {
-      this.glyphsTotal = Glyphs.inventoryList.length;
       this.emitClose();
-      this.handleDeletion(true);
+      Glyphs.autoClean(this.harsh ? 1 : 5, true);
       if (player.reality.autoCollapse) Glyphs.collapseEmptySlots();
-      Modal.message.show(`${this.whichType} deleted ${this.glyphsDeleted}/${this.glyphsTotal} 
-      of your Glyphs.`);
     },
     handleNoClick() {
       this.emitClose();
@@ -64,6 +40,7 @@ Vue.component("modal-glyph-purge", {
         This could delete Glyphs in your inventory that are good enough that you might want to use them
         later. Are you sure you want to do this? This process is irreversible! Purging will Purge Glyphs based on your
         Purge mode.
+        <br>
         <br>
         {{ explanation }}
       </div>

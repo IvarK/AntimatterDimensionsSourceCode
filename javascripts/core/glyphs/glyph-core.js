@@ -440,14 +440,11 @@ const Glyphs = {
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean(threshold = 5) {
+  autoClean(threshold = 5, deleteGlyphs = true) {
     const isHarsh = threshold < 5;
+    let toBeDeleted = 0;
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
-    if (!GlyphSacrificeHandler.canSacrifice) return;
-    if (player.options.confirmations.autoClean) {
-      Modal.glyphPurge.show({ harsh: isHarsh });
-      return;
-    }
+    if (!GlyphSacrificeHandler.canSacrifice) return 0;
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
@@ -458,10 +455,13 @@ const Glyphs = {
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
       if (threshold === 0 || this.isObjectivelyUseless(glyph, threshold)) {
-        AutoGlyphProcessor.getRidOfGlyph(glyph);
+        if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
+        else toBeDeleted++;
       }
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
+    if (!deleteGlyphs) return toBeDeleted;
+    return 0;
   },
   harshAutoClean() {
     this.autoClean(1);

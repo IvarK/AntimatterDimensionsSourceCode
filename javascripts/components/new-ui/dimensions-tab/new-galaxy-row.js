@@ -77,7 +77,7 @@ Vue.component("new-galaxy-row", {
       this.lockText = Galaxy.lockText;
     },
     buyGalaxy(bulk) {
-      if (player.options.confirmations.antimatterGalaxy) {
+      if (player.options.confirmations.antimatterGalaxy && this.canBeBought) {
         Modal.antimatterGalaxy.show({ bulk });
         return;
       }

@@ -94,6 +94,7 @@ Vue.component("options-gameplay-tab", {
         </div>
         <div class="l-options-grid__row">
           <options-button
+            v-if="sacrificeUnlocked"
             class="o-primary-btn--option"
             onclick="Modal.confirmationOptions.show()"
           >

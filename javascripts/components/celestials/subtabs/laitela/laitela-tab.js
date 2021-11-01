@@ -54,6 +54,7 @@ Vue.component("laitela-tab", {
           Max all Dark Matter Dimensions
         </primary-button>
       </div>
+      <celestial-quote-history celestial="laitela" />
       <div class="o-laitela-matter-amount">
         You have {{ format(darkMatter.floor(), 2, 0) }} Dark Matter.
       </div>

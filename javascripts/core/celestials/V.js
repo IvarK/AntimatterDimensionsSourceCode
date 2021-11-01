@@ -331,6 +331,7 @@ const V = {
       ]
     }
   }),
+  symbol: "⌬"
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

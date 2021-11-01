@@ -548,6 +548,7 @@ let player = {
         dilation: 0,
         effarig: 0
       },
+      quotes: [],
       momentumTime: 0,
       unlocksBits: 0,
       run: false,
@@ -560,7 +561,7 @@ let player = {
       darkMatter: new Decimal(0),
       maxDarkMatter: new Decimal(0),
       run: false,
-      unlockBits: 0,
+      quotes: [],
       dimensions: Array.range(0, 4).map(() =>
         ({
           amount: new Decimal(0),

@@ -87,17 +87,20 @@ Vue.component("ra-tab", {
   },
   template: `
     <div class="l-ra-celestial-tab">
-      <div class="c-ra-memory-header" v-if="!isRaCapped">
-        Each Memory Chunk generates a base of one Memory per second, which has been increased to
-        {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
-        per second.
-        <span v-if="memoriesPerChunk > 1">
-          <br>
-          This is being increased due to {{ memoryBoosts }}.
-        </span>
-      </div>
-      <div class="c-ra-memory-header" v-else>
-        All Memories have been returned.
+      <div class="c-ra-memory-header">
+        <celestial-quote-history celestial="ra" />
+        <div v-if="!isRaCapped">
+          Each Memory Chunk generates a base of one Memory per second, which has been increased to
+          {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
+          per second.
+          <span v-if="memoriesPerChunk > 1">
+            <br>
+            This is being increased due to {{ memoryBoosts }}.
+          </span>
+        </div>
+        <div v-else>
+          All Memories have been returned.
+        </div>
       </div>
       <div>
         Mouse-over the icons below the bar to see descriptions of upgrades,

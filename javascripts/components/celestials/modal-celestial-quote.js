@@ -14,23 +14,29 @@ Vue.component("modal-celestial-quote", {
     currentCelestialName() {
       return Celestials[this.currentQuote.celestial].displayName;
     },
-    isLastQuote() {
-      return this.index >= this.quotes.length - 1;
+    currentCelestialSymbol() {
+      return Celestials[this.currentQuote.celestial].symbol;
     },
     prevStyle() {
       return this.index > 0 ? {} : { visibility: "hidden" };
     },
-    nextClass() {
-      return this.isLastQuote ? "fa-check-circle" : "fa-chevron-circle-right";
+    nextStyle() {
+      return this.index >= this.quotes.length - 1 ? { visibility: "hidden" } : {};
     },
+    endStyle() {
+      return this.index >= this.quotes.length - 1 ? {} : { visibility: "hidden" };
+    },
+    modalClass() {
+      return [
+        "l-modal-celestial-quote",
+        "c-modal",
+        `c-modal-celestial-quote--${this.currentQuote.celestial}`
+      ];
+    }
   },
   methods: {
     nextClick() {
-      if (this.isLastQuote) {
-        this.close();
-      } else {
-        ++this.index;
-      }
+      ++this.index;
     },
     prevQuote() {
       this.index = Math.max(this.index - 1, 0);
@@ -41,22 +47,28 @@ Vue.component("modal-celestial-quote", {
   },
   template: `
     <div class="l-modal-overlay c-modal-overlay">
-      <div class="l-modal-celestial-quote c-modal">
+      <div :class="modalClass">
         <i
           :style="prevStyle"
           class="c-modal-celestial-quote__arrow fas fa-chevron-circle-left"
           @click="prevQuote"
         />
+        <span class="c-modal-cestial-quote__symbol" v-html="currentCelestialSymbol"></span>
         <div class="l-modal-celestial-quote__text">
           <div v-if="currentQuote.showName">
-            <b>{{ currentCelestialName }}:</b>
+            <b>{{ currentCelestialName }}</b>
           </div>
           {{ currentQuote.line.replace("*", "") }}
         </div>
         <i
-          class="c-modal-celestial-quote__arrow fas"
-          :class="nextClass"
+          :style="nextStyle"
+          class="c-modal-celestial-quote__arrow fas fa-chevron-circle-right"
           @click="nextClick"
+        />
+        <i
+          :style="endStyle"
+          class="c-modal-celestial-quote__end fas fa-check-circle"
+          @click="close()"
         />
       </div>
     </div>`,

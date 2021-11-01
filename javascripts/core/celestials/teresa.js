@@ -121,6 +121,7 @@ const Teresa = {
       ]
     }
   }),
+  symbol: "Ϟ"
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {

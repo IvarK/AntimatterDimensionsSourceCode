@@ -389,7 +389,7 @@ const Ra = {
       id: 1,
       lines: [
         "A... visitor?",
-        "I'm here! I'm the one you’re looking for... I think...",
+        "I am here! I am the one you’re looking for... I think...",
         "What even was I again?",
         "Oh right, the Celestial of Memories.",
       ]
@@ -397,7 +397,7 @@ const Ra = {
     REALITY_ENTER: {
       id: 2,
       lines: [
-        "I haven't seen the others in so long...",
+        "I have not seen the others in so long...",
         "Can you help me remember them?",
         "I could give you powers in exchange.",
       ]
@@ -431,8 +431,8 @@ const Ra = {
       id: 6,
       requirement: () => Ra.pets.effarig.level >= 15,
       lines: [
-        "Effarig had a filter thing?",
-        "And I also remember a scary reality...",
+        "Effarig was very particular?",
+        "And I also remember a frightening reality...",
         "It was about... suffering?",
       ]
     },
@@ -440,16 +440,16 @@ const Ra = {
       id: 7,
       requirement: () => Ra.pets.enslaved.level >= 2,
       lines: [
-        "I can't remember this one completely...",
+        "I cannot remember this one completely...",
       ]
     },
     ENSLAVED_LATE: {
       id: 8,
       requirement: () => Ra.pets.enslaved.level >= 15,
       lines: [
-        "I'm starting to remember...",
-        "Why I'm here...",
-        "Why I'm alone...",
+        "I am starting to remember...",
+        "Why I am here...",
+        "Why I am alone...",
         "Help me.",
       ]
     },
@@ -458,7 +458,7 @@ const Ra = {
       requirement: () => Ra.pets.v.level >= 2,
       lines: [
         "Had I met this one?",
-        "So lonely, yet chosen to be so...",
+        "So lonely, yet willingly so...",
       ]
     },
     V_LATE: {
@@ -475,15 +475,15 @@ const Ra = {
       lines: [
         "I remembered something!",
         "Watch this!",
-        "It's recollection!",
-        "I can focus even harder on remembering someone now!",
+        "Recollection!",
+        "I can focus even harder on remembering them now!",
       ]
     },
     MID_MEMORIES: {
       id: 12,
       requirement: () => Ra.totalPetLevel >= 50,
       lines: [
-        "I can't make my own homes, er, Realities.",
+        "Realities are my homes, yet I cannot make my own Reality.",
         "I can only copy the ones of my friends.",
         "But... why am I hearing voices?",
         "Are they asking for help?",
@@ -493,7 +493,7 @@ const Ra = {
       id: 13,
       requirement: () => Ra.totalPetLevel >= 80,
       lines: [
-        "I think they're telling me to stop.",
+        "I think they are telling me to stop.",
         "You... whatever you are?",
         "What is happening?",
         "Am I doing something wrong?",
@@ -510,7 +510,7 @@ const Ra = {
         "My powers...",
         "They steal, they corrupt.",
         "Please leave.",
-        "I don't want to hurt you too.",
+        "I do not want to hurt you too.",
       ]
     },
   }),

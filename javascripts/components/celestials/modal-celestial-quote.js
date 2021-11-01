@@ -31,7 +31,7 @@ Vue.component("modal-celestial-quote", {
         "l-modal-celestial-quote",
         "c-modal",
         `c-modal-celestial-quote--${this.currentQuote.celestial}`
-      ]
+      ];
     }
   },
   methods: {

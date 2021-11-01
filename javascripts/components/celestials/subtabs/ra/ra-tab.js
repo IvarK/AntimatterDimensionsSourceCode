@@ -91,11 +91,7 @@ Vue.component("ra-tab", {
         <celestial-quote-history celestial="ra" />
         <div v-if="!isRaCapped">
           Each Memory Chunk generates a base of one Memory per second, which has been increased to
-<<<<<<< HEAD
           {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
-=======
-          {{ "Memory" | quantify(memoriesPerChunk, 2, 3) }}
->>>>>>> Address idly PR comments
           per second.
           <span v-if="memoriesPerChunk > 1">
             <br>

@@ -417,7 +417,8 @@ let player = {
       scripts: {
       },
       execTimer: 0,
-      type: AUTOMATOR_TYPE.TEXT
+      type: AUTOMATOR_TYPE.TEXT,
+      forceUnlock: false,
     },
     achTimer: 0,
   },
@@ -797,7 +798,7 @@ const Player = {
   },
 
   get automatorUnlocked() {
-    return AutomatorPoints.totalPoints >= AutomatorPoints.requiredPoints;
+    return AutomatorPoints.totalPoints >= AutomatorPoints.requiredPoints || player.reality.automator.forceUnlock;
   },
 
   resetRequirements(key) {

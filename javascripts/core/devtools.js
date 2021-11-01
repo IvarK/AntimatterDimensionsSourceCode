@@ -595,3 +595,8 @@ dev.testGlyphs = function(config) {
 dev.devMode = function() {
   player.devMode = !player.devMode;
 };
+
+// May want to make this command in particular publicly known if automator gating is a common complaint post-release
+dev.unlockAutomator = function() {
+  player.reality.automator.forceUnlock = true;
+};

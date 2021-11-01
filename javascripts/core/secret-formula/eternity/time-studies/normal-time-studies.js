@@ -34,7 +34,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: 11,
       description: () => `Improve replicanti multiplier formula to
-      (log2(x)^${formatInt(2)})+x${formatPow(0.032, 3, 3)}`,
+      (log2(x)${formatPow(2)})+x${formatPow(0.032, 3, 3)}`,
       effect: () => Replicanti.amount.pow(0.032)
     },
     {
@@ -48,7 +48,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 31,
       cost: 3,
       requirement: 21,
-      description: () => `Powers up bonuses that are based on your Infinities (Bonuses^${formatInt(4)})`,
+      description: () => `Powers up bonuses that are based on your Infinities (Bonuses${formatPow(4)})`,
       effect: 4
     },
     {
@@ -418,8 +418,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 201,
       cost: 900,
-      requirement: () => TimeStudy(192).isBought &&
-        (!DilationUpgrade.timeStudySplit.isBought || DilationUpgrade.ttGenerator.isBought),
+      requirement: () => TimeStudy(192).isBought,
       description: "Pick another path from the first split"
     },
     {
@@ -495,8 +494,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(223).isBought,
       description() {
         const effect = TimeStudy(224).effectValue;
-        const noun = effect === 1 ? "Galaxy" : "Galaxies";
-        return `Distant Galaxy cost scaling starts ${formatInt(effect)} ${noun} later
+        return `Distant Galaxy cost scaling starts ${quantifyInt("Galaxy", effect)} later
           (${formatInt(1)} per ${formatInt(2000)} Dim Boosts)`;
       },
       effect: () => Math.floor(DimBoost.totalBoosts / 2000)
@@ -509,7 +507,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(226).isBought,
       description: "You gain extra Replicanti Galaxies based on your Replicanti amount",
       effect: () => Math.floor(Replicanti.amount.exponent / 1000),
-      formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
+      formatEffect: value => `+${quantifyInt("RG", value)}`
     },
     {
       id: 226,
@@ -519,7 +517,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: () => TimeStudy(225).isBought,
       description: "You gain extra Replicanti Galaxies based on their max",
       effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 15),
-      formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
+      formatEffect: value => `+${quantifyInt("RG", value)}`
     },
     {
       id: 227,

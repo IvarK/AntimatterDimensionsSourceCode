@@ -9,7 +9,6 @@ Vue.component("equipped-glyphs", {
       respecIntoProtected: player.options.respecIntoProtected,
       undoAvailable: false,
       undoVisible: false,
-      logGlyphSacrifice: 0,
     };
   },
   created() {
@@ -44,8 +43,6 @@ Vue.component("equipped-glyphs", {
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
       // This is necessary to force a re-render by key-swapping for when altered glyph effects are activated
-      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
-        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
     },
     glyphPositionStyle(idx) {
       return {
@@ -142,7 +139,7 @@ Vue.component("equipped-glyphs", {
           />
           <glyph-component
             v-if="glyph"
-            :key="idx + logGlyphSacrifice"
+            :key="idx"
             :glyph="glyph"
             :circular="true"
             :isActiveGlyph="true"
@@ -158,7 +155,7 @@ Vue.component("equipped-glyphs", {
       </div>
       <div class="l-equipped-glyphs__buttons">
         <button
-          class="l-equipped-glyphs__large c-reality-upgrade-btn"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           :class="{'c-reality-upgrade-btn--bought': respec}"
           :ach-tooltip="respecTooltip"
           @click="toggleRespec"
@@ -167,18 +164,15 @@ Vue.component("equipped-glyphs", {
         </button>
         <button
           v-if="undoVisible"
-          class="l-equipped-glyphs__small c-reality-upgrade-btn"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
           :ach-tooltip="undoTooltip"
           @click="undo"
         >
-          Undo
+          Rewind to <b>undo</b> the last equipped Glyph
         </button>
-      </div>
-      <div class="l-equipped-glyphs__buttons">
         <button
-          class="l-equipped-glyphs__large c-reality-upgrade-btn"
-          :class="{'l-equipped-glyphs__larger' : undoVisible}"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           @click="toggleRespecIntoProtected"
         >
           Unequip Glyphs to:

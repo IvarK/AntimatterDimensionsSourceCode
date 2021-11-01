@@ -229,7 +229,7 @@ const StuffButton = {
     <button class="button button--stuff" @click="stuff.purchase()">
       Amount: {{ format(amount, 2) }}
       <br>
-      Power: {{ format(prestige, 2) }}x
+      Power: {{ formatX(prestige, 2) }}
       <br>
       Cost: {{ format(cost, 2) }}
     </button>`
@@ -252,7 +252,7 @@ const PrestigeButton = {
   },
   template: `
     <button v-if="canPrestige" class="button button--prestige" @click="stuff.doPrestige()">
-      Reset to increase bonus to {{ format(nextPrestige, 2) }}x boost.
+      Reset to increase bonus to {{ formatX(nextPrestige, 2) }} boost.
     </button>`
 };
 

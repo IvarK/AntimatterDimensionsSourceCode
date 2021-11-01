@@ -111,7 +111,7 @@ GameDatabase.tabs = [
       {
         key: "glyph sets",
         name: "Glyph Set Records",
-        symbol: "<i class='fas fa-list-ol'></i>",
+        symbol: "<i class='fas fa-ellipsis-h'></i>",
         component: "glyph-sets-tab",
         condition: () => PlayerProgress.realityUnlocked(),
         id: 3,
@@ -191,11 +191,7 @@ GameDatabase.tabs = [
         name: "Infinity Challenges",
         symbol: "∞",
         component: "infinity-challenges-tab",
-        condition: () =>
-          PlayerProgress.realityUnlocked() ||
-          PlayerProgress.eternityUnlocked() ||
-          Currency.antimatter.exponent >= 2000 ||
-          player.postChallUnlocked > 0,
+        condition: () => PlayerProgress.hasBroken(),
         id: 1,
         hidable: true
       },

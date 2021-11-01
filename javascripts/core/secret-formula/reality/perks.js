@@ -20,10 +20,7 @@ GameDatabase.reality.perks = {
       and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
     },
     effect: 4,
-    defaultPosition: {
-      x: 0,
-      y: 0
-    }
+    defaultPosition: new Vector(0, 0)
   },
   startAM: {
     id: 10,
@@ -34,10 +31,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.antimatter.bumpTo(5e130),
     effect: 5e130,
-    defaultPosition: {
-      x: -190,
-      y: 0
-    }
+    defaultPosition: new Vector(-190, 0)
   },
   startIP1: {
     id: 12,
@@ -48,10 +42,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e15),
     effect: 5e15,
-    defaultPosition: {
-      x: -375,
-      y: -15
-    }
+    defaultPosition: new Vector(-375, -15)
   },
   startIP2: {
     id: 13,
@@ -62,10 +53,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e130),
     effect: 5e130,
-    defaultPosition: {
-      x: -445,
-      y: -175
-    }
+    defaultPosition: new Vector(-445, -175)
   },
   startEP1: {
     id: 14,
@@ -76,10 +64,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.eternityPoints.bumpTo(10),
     effect: 10,
-    defaultPosition: {
-      x: -415,
-      y: 165
-    }
+    defaultPosition: new Vector(-415, 165)
   },
   startEP2: {
     id: 15,
@@ -90,10 +75,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.eternityPoints.bumpTo(5000),
     effect: 5000,
-    defaultPosition: {
-      x: -565,
-      y: 205
-    }
+    defaultPosition: new Vector(-565, 205)
   },
   startEP3: {
     id: 16,
@@ -104,10 +86,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.eternityPoints.bumpTo(5e9),
     effect: 5e9,
-    defaultPosition: {
-      x: -700,
-      y: 240
-    }
+    defaultPosition: new Vector(-700, 240)
   },
   startTP: {
     id: 17,
@@ -117,10 +96,7 @@ GameDatabase.reality.perks = {
       return `After unlocking Dilation, gain ${formatInt(10)} Tachyon Particles.`;
     },
     effect: () => (Enslaved.isRunning ? 1 : 10),
-    defaultPosition: {
-      x: -385,
-      y: 335
-    }
+    defaultPosition: new Vector(-385, 335)
   },
   antimatterNoReset: {
     id: 30,
@@ -128,10 +104,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ANTIMATTER,
     description: `Dimension Boosts and Antimatter Galaxies no longer reset
       Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`,
-    defaultPosition: {
-      x: -275,
-      y: 120
-    }
+    defaultPosition: new Vector(-275, 120)
   },
   studyPassive: {
     id: 31,
@@ -142,10 +115,7 @@ GameDatabase.reality.perks = {
         Time Study 142 to ${formatX(1e50)} Infinity Points.
         In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`;
     },
-    defaultPosition: {
-      x: 300,
-      y: -130
-    }
+    defaultPosition: new Vector(300, -130)
   },
   autounlockEU1: {
     id: 40,
@@ -153,10 +123,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ETERNITY,
     description: `After the first Eternity of a Reality,
       automatically unlock the first row of Eternity Upgrades for free.`,
-    defaultPosition: {
-      x: 50,
-      y: 150
-    }
+    defaultPosition: new Vector(50, 150)
   },
   autounlockEU2: {
     id: 41,
@@ -166,50 +133,35 @@ GameDatabase.reality.perks = {
       return `The second row of Eternity Upgrades is automatically purchased
         at ${formatX(1e10)} times less than their original price`;
     },
-    defaultPosition: {
-      x: 50,
-      y: 325
-    }
+    defaultPosition: new Vector(50, 325)
   },
   autounlockDilation1: {
     id: 42,
     label: "UD1",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
-    defaultPosition: {
-      x: 165,
-      y: 565
-    }
+    defaultPosition: new Vector(165, 565)
   },
   autounlockDilation2: {
     id: 43,
     label: "UD2",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
-    defaultPosition: {
-      x: 310,
-      y: 605
-    }
+    defaultPosition: new Vector(310, 605)
   },
   autounlockDilation3: {
     id: 44,
     label: "ATT",
     family: PERK_FAMILY.DILATION,
     description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
-    defaultPosition: {
-      x: 460,
-      y: 580
-    }
+    defaultPosition: new Vector(460, 580)
   },
   autounlockTD: {
     id: 45,
     label: "ATD",
     family: PERK_FAMILY.DILATION,
     description: "Auto-unlock Time Dimensions 5-8 once you can afford them.",
-    defaultPosition: {
-      x: 605,
-      y: 575
-    }
+    defaultPosition: new Vector(605, 575)
   },
   autounlockReality: {
     id: 46,
@@ -219,30 +171,21 @@ GameDatabase.reality.perks = {
       return `Auto-unlocks Reality once you have ${format("1e4000")} Eternity Points
         and have unlocked Time Dimension 8.`;
     },
-    defaultPosition: {
-      x: 725,
-      y: 505
-    }
+    defaultPosition: new Vector(725, 505)
   },
   bypassIDAntimatter: {
     id: 51,
     label: "IDR",
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements.",
-    defaultPosition: {
-      x: -580,
-      y: -230
-    }
+    defaultPosition: new Vector(-580, -230)
   },
   bypassTGReset: {
     id: 52,
     label: "TGR",
     family: PERK_FAMILY.DILATION,
     description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time.",
-    defaultPosition: {
-      x: -145,
-      y: 520
-    }
+    defaultPosition: new Vector(-145, 520)
   },
   bypassECDilation: {
     id: 53,
@@ -250,114 +193,74 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.DILATION,
     description: "Remove the Eternity Challenge 11, Eternity Challenge 12, and total Time Theorem " +
       "requirements from Time Dilation unlock.",
-    defaultPosition: {
-      x: 0,
-      y: 640
-    }
+    defaultPosition: new Vector(0, 640)
   },
   bypassEC1Lock: {
     id: 54,
     label: "EC1R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 1 requirement from Time Study 181.",
-    defaultPosition: {
-      x: 450,
-      y: -160
-    }
+    defaultPosition: new Vector(450, -160)
   },
   bypassEC2Lock: {
     id: 55,
     label: "EC2R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 2 requirement from Time Study 181.",
-    defaultPosition: {
-      x: 350,
-      y: -270
-    }
+    defaultPosition: new Vector(350, -270)
   },
   bypassEC3Lock: {
     id: 56,
     label: "EC3R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 3 requirement from Time Study 181.",
-    defaultPosition: {
-      x: 410,
-      y: -25
-    }
+    defaultPosition: new Vector(410, -25)
   },
   bypassEC5Lock: {
     id: 57,
     label: "EC5R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 5 requirement from Time Study 62.",
-    defaultPosition: {
-      x: 155,
-      y: -85
-    }
+    defaultPosition: new Vector(155, -85)
   },
   autocompleteEC1: {
     id: 60,
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).
+      return `Auto-complete one Eternity Challenge every ${formatInt(60)} minutes (real-time).
               ECs will be completed sequentially, requiring all previous
               ECs to be fully completed before progressing to the next EC.`;
     },
-    effect: 80,
-    defaultPosition: {
-      x: 345,
-      y: 135
-    }
+    effect: 60,
+    defaultPosition: new Vector(345, 135)
   },
   autocompleteEC2: {
     id: 61,
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(50)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(40)} minutes (real-time).`;
     },
-    effect: 50,
-    defaultPosition: {
-      x: 425,
-      y: 235
-    }
+    effect: 40,
+    defaultPosition: new Vector(425, 235)
   },
   autocompleteEC3: {
     id: 62,
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(30)} minutes (real-time).`;
-    },
-    effect: 30,
-    defaultPosition: {
-      x: 325,
-      y: 325
-    }
-  },
-  autocompleteEC4: {
-    id: 63,
-    label: "PEC4",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
       return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).`;
     },
     effect: 20,
-    defaultPosition: {
-      x: 205,
-      y: 270
-    }
+    defaultPosition: new Vector(325, 325)
   },
   studyActiveEP: {
     id: 70,
     label: "ACT",
     family: PERK_FAMILY.ETERNITY,
     description: "Active path multipliers are always maximized.",
-    defaultPosition: {
-      x: 195,
-      y: -260
-    }
+    defaultPosition: new Vector(195, -260)
   },
   studyIdleEP: {
     id: 71,
@@ -367,20 +270,14 @@ GameDatabase.reality.perks = {
       return `Idle path multipliers start as if you have spent ${formatInt(15)} minutes in this Infinity/Eternity.`;
     },
     effect: 15,
-    defaultPosition: {
-      x: 265,
-      y: 25
-    }
+    defaultPosition: new Vector(265, 25)
   },
   studyECRequirement: {
     id: 72,
     label: "ECR",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove non–Time Theorem requirements for unlocking Eternity Challenges.",
-    defaultPosition: {
-      x: 605,
-      y: -160
-    }
+    defaultPosition: new Vector(605, -160)
   },
   studyECBulk: {
     id: 73,
@@ -389,10 +286,7 @@ GameDatabase.reality.perks = {
     description:
       `You can complete multiple tiers of Eternity Challenges at once if
       you reach the goal for a higher completion of that challenge.`,
-    defaultPosition: {
-      x: 740,
-      y: -135
-    }
+    defaultPosition: new Vector(740, -135)
   },
   retroactiveTP1: {
     id: 80,
@@ -403,10 +297,7 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(1.5, 1)}.`;
     },
     effect: 1.5,
-    defaultPosition: {
-      x: -290,
-      y: 460
-    }
+    defaultPosition: new Vector(-290, 460)
   },
   retroactiveTP2: {
     id: 81,
@@ -417,10 +308,7 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatInt(2)}.`;
     },
     effect: 2,
-    defaultPosition: {
-      x: -200,
-      y: 360
-    }
+    defaultPosition: new Vector(-200, 360)
   },
   retroactiveTP3: {
     id: 82,
@@ -431,10 +319,7 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(2.5, 1)}.`;
     },
     effect: 2.5,
-    defaultPosition: {
-      x: -120,
-      y: 260
-    }
+    defaultPosition: new Vector(-120, 260)
   },
   retroactiveTP4: {
     id: 83,
@@ -445,20 +330,14 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatInt(3)}.`;
     },
     effect: 3,
-    defaultPosition: {
-      x: -65,
-      y: 145
-    }
+    defaultPosition: new Vector(-65, 145)
   },
   autobuyerDilation: {
     id: 100,
     label: "DAU",
     family: PERK_FAMILY.AUTOMATION,
     description: "Unlock autobuyers for the repeatable Dilation Upgrades.",
-    defaultPosition: {
-      x: 20,
-      y: 500
-    }
+    defaultPosition: new Vector(20, 500)
   },
   autobuyerFasterID: {
     id: 101,
@@ -468,10 +347,7 @@ GameDatabase.reality.perks = {
       return `Infinity Dimension autobuyers work ${formatX(3)} faster.`;
     },
     effect: 1 / 3,
-    defaultPosition: {
-      x: -515,
-      y: -20
-    }
+    defaultPosition: new Vector(-515, -20)
   },
   autobuyerFasterReplicanti: {
     id: 102,
@@ -481,10 +357,7 @@ GameDatabase.reality.perks = {
       return `Replicanti autobuyers work ${formatX(3)} faster.`;
     },
     effect: 1 / 3,
-    defaultPosition: {
-      x: -425,
-      y: -310
-    }
+    defaultPosition: new Vector(-425, -310)
   },
   autobuyerFasterDilation: {
     id: 103,
@@ -494,60 +367,34 @@ GameDatabase.reality.perks = {
       return `Dilation Upgrade autobuyers work ${formatX(3)} faster.`;
     },
     effect: 1 / 3,
-    defaultPosition: {
-      x: 490,
-      y: 450
-    }
+    defaultPosition: new Vector(490, 450)
   },
-  autobuyerTT1: {
+  ttFree: {
     id: 104,
-    label: "TTMA1",
+    label: "TTF",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Unlock a Time Theorem Autobuyer that autobuys max Time Theorems every ${formatInt(4)} seconds.`;
+      return `Purchasing Time Theorems no longer spends your Antimatter, Infinity Points, or Eternity Points.`;
     },
-    effect: 4,
-    defaultPosition: {
-      x: 190,
-      y: -410
-    }
+    defaultPosition: new Vector(190, -410)
   },
-  autobuyerTT2: {
+  ttBuySingle: {
     id: 105,
-    label: "TTMA2",
+    label: "TTS",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Upgrade the Time Theorem Autobuyer to autobuy max Time Theorems every second.",
+    description: "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
     effect: 1,
-    defaultPosition: {
-      x: 255,
-      y: -540
-    }
+    defaultPosition: new Vector(255, -540)
   },
-  autobuyerTT3: {
+  ttBuyMax: {
     id: 106,
-    label: "TTMA3",
+    label: "TTM",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(2)} times per second.`;
+      return `Upgrade the Time Theorem Autobuyer to buy max Time Theorems.`;
     },
-    effect: 0.5,
-    defaultPosition: {
-      x: 360,
-      y: -625
-    }
-  },
-  autobuyerTT4: {
-    id: 107,
-    label: "TTMA4",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
-      return `Upgrade the Time Theorem Autobuyer to max Time Theorems ${formatInt(4)} times per second.`;
-    },
-    effect: 0.25,
-    defaultPosition: {
-      x: 485,
-      y: -675
-    }
+    effect: Number.POSITIVE_INFINITY,
+    defaultPosition: new Vector(360, -625)
   },
   achievementGroup1: {
     id: 201,
@@ -558,10 +405,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(10)} minute decrease).`;
     },
     effect: 10,
-    defaultPosition: {
-      x: -45,
-      y: -135
-    }
+    defaultPosition: new Vector(-45, -135)
   },
   achievementGroup2: {
     id: 202,
@@ -572,10 +416,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(8)} minute decrease).`;
     },
     effect: 8,
-    defaultPosition: {
-      x: -115,
-      y: -250
-    }
+    defaultPosition: new Vector(-115, -250)
   },
   achievementGroup3: {
     id: 203,
@@ -586,10 +427,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(6)} minute decrease).`;
     },
     effect: 6,
-    defaultPosition: {
-      x: -175,
-      y: -365
-    }
+    defaultPosition: new Vector(-175, -365)
   },
   achievementGroup4: {
     id: 204,
@@ -600,10 +438,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 4,
-    defaultPosition: {
-      x: -180,
-      y: -500
-    }
+    defaultPosition: new Vector(-180, -500)
   },
   achievementGroup5: {
     id: 205,
@@ -611,10 +446,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ACHIEVEMENT,
     description: "Reality no longer resets your Achievements.",
     effect: 2,
-    defaultPosition: {
-      x: -195,
-      y: -630
-    }
+    defaultPosition: new Vector(-195, -630)
   }
 };
 
@@ -644,8 +476,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.studyPassive, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
-    [p.autocompleteEC3, p.autocompleteEC4],
-    [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
+    [p.studyActiveEP, p.bypassEC2Lock, p.ttFree],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],
     [p.retroactiveTP1, p.bypassTGReset, p.startTP, p.retroactiveTP2],
@@ -653,9 +484,8 @@ GameDatabase.reality.perkConnections = (function() {
     [p.retroactiveTP3, p.retroactiveTP4],
     [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassTGReset],
     [p.autobuyerFasterID],
-    [p.autobuyerTT1, p.autobuyerTT2],
-    [p.autobuyerTT2, p.autobuyerTT3],
-    [p.autobuyerTT3, p.autobuyerTT4],
+    [p.ttFree, p.ttBuySingle],
+    [p.ttBuySingle, p.ttBuyMax],
     [p.achievementGroup1, p.achievementGroup2],
     [p.achievementGroup2, p.achievementGroup3],
     [p.achievementGroup3, p.achievementGroup4],

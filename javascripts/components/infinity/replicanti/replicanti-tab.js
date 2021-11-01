@@ -69,8 +69,9 @@ Vue.component("replicanti-tab", {
           multiplier on all Time Dimensions from a Dilation Upgrade`);
       }
       if (this.hasDTMult) {
+        const additionalEffect = GlyphAlteration.isAdded("replication") ? "and Replicanti speed " : "";
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
-          multiplier to Dilated Time from Glyphs`);
+          multiplier to Dilated Time ${additionalEffect}from Glyphs`);
       }
       if (boostList.length === 1) return `${boostList[0]}.`;
       if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;
@@ -117,12 +118,11 @@ Vue.component("replicanti-tab", {
       </primary-button>
       <template v-else>
         <div v-if="isInEC8">
-          You have {{ formatInt(ec8Purchases) }} {{ "purchase" | pluralize(ec8Purchases) }} left.
+          You have {{ "purchase" | quantifyInt(ec8Purchases) }} left.
         </div>
         <div v-if="hasRaisedCap">
           Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
-          and is giving you {{ formatInt(effarigInfinityBonusRG) }} extra Replicanti
-          {{ "Galaxy" | pluralize(effarigInfinityBonusRG, "Galaxies") }}
+          and is giving you {{ "extra Replicanti Galaxy" | quantifyInt(effarigInfinityBonusRG) }}
           <br>
           due to the reward from Effarig's Infinity. (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }})
         </div>

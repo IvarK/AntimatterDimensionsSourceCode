@@ -824,7 +824,9 @@ Vue.component("ad-slider-component", {
       }
     },
     increment(dir) {
-      this.setValue(this.getValue() + dir * this.interval);
+      const newVal = this.getValue() + dir * this.interval;
+      if (newVal > this.max || newVal < this.min) return;
+      this.setValue(newVal);
     },
     setValue(val, noCb, speed) {
       if (this.isDiff(this.val, val)) {
@@ -1013,7 +1015,7 @@ Vue.component("ad-slider-component", {
   template: `
   <div :class="['l-ad-slider', flowDirection, disabledClass, { 'l-ad-slider--has-label': piecewiseLabel }]"
        v-show="show">
-       <plus-minus-button v-if="plusMinusButtons" type="minus" size="1.6rem" class="derp" @click="increment(-1)"/>
+       <plus-minus-button v-if="plusMinusButtons" type="minus" size="1.6rem" @click="increment(-1)"/>
     <div ref="wrap"
       :class="['l-ad-slider__wrap', stateClass]"
       :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
@@ -1177,6 +1179,6 @@ Vue.component("ad-slider-component", {
     </div>
     </div>
   </div>
-  <plus-minus-button v-if="plusMinusButtons" type="plus" size="1.6rem" class="derp" @click="increment(1)"/>
+  <plus-minus-button v-if="plusMinusButtons" type="plus" size="1.6rem" @click="increment(1)"/>
   </div>`
 });

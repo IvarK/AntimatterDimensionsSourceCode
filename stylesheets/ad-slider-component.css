@@ -32,6 +32,7 @@ SOFTWARE.
   display: flex;
   position: relative;
   align-items: center;
+  width: 100%;
 }
 
 .l-ad-slider--horizontal {
@@ -186,6 +187,24 @@ SOFTWARE.
 
 .l-ad-slider--vertical-reverse .l-ad-slider__dot {
   top: 0;
+}
+
+.c-ad-slider__button {
+  height: 1.6rem;
+  width: 1.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  border-radius: 50%;
+  border: 0.1rem solid var(--color-reality-light);
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.c-ad-slider__button:hover {
+  color: black;
+  background-color: var(--color-reality-light);
 }
 
 .l-ad-slider__wrap .ad-slider-tooltip-wrap {

@@ -42,7 +42,7 @@ Vue.component("black-hole-tab", {
     sliderPropsStoring() {
       return {
         min: 0,
-        max: 1000,
+        max: 990,
         interval: 1,
         show: true,
         width: "60rem",
@@ -81,8 +81,8 @@ Vue.component("black-hole-tab", {
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
         const cycleCount = Math.floor(BlackHole(2).timeToNextStateChange / BlackHole(1).cycleLength);
-        this.detailedBH2 = `Black Hole 2 will activate after ${formatInt(cycleCount)} more
-          ${pluralize("cycle", cycleCount)} of Black Hole 1.`;
+        this.detailedBH2 = `Black Hole 2 will activate after ${quantifyInt("more cycle", cycleCount)}
+          of Black Hole 1.`;
       } else if (BlackHole(2).isCharged) {
         this.detailedBH2 = `Black Hole 2 will activate with Black Hole 1, for ${TimeSpan.fromSeconds(
           Math.min(BlackHole(1).duration, BlackHole(2).duration - BlackHole(2).phase)).toStringShort()}.`;
@@ -144,7 +144,7 @@ Vue.component("black-hole-tab", {
   template: `
     <div class="l-black-hole-tab">
       <div v-if="isEnslaved">
-        The physics of this Reality do not permit singularities.
+        The physics of this Reality do not allow the existence of Black Holes.
       </div>
       <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
         <black-hole-unlock-button @blackholeunlock="startAnimation" />

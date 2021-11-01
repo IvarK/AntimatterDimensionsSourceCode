@@ -174,7 +174,7 @@ Vue.component("game-header-eternity-button", {
       <!-- Normal -->
       <template v-else-if="type === 1">
         Eternity for
-        <span :style="amountStyle">{{ format(gainedEP, 2) }}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
+        <span :style="amountStyle">{{ format(gainedEP, 2) }}</span> {{ "Eternity Point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="showEPRate">
           {{ format(currentEPRate, 2, 2) }} EP/min
@@ -191,7 +191,7 @@ Vue.component("game-header-eternity-button", {
       <!-- Dilation -->
       <template v-else-if="type === 3">
         Eternity for <span :style="tachyonAmountStyle">{{ format(gainedTachyons, 2, 1) }}</span>
-        Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
+        {{ "Tachyon Particle" | pluralize(gainedTachyons) }}
       </template>
 
       <!-- New content available -->
@@ -215,7 +215,7 @@ Vue.component("game-header-eternity-button", {
         </template>
         <template v-else>
           <br>
-          {{ formatInt(gainedCompletions) }} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
+          {{ "completion" | quantifyInt(gainedCompletions) }} on Eternity
           <template v-if="failedRestriction">
             <br>
             {{ failedRestriction }}

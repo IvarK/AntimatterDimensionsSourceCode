@@ -142,7 +142,7 @@ Vue.component("laitela-run-button", {
             You also gain an additional {{ formatX(8) }} Dark Energy.
           </b>
           <br><br>
-          Laitela's Reality has been fully destabilized and cannot have its reward further improved.
+          Lai'tela's Reality has been fully destabilized and cannot have its reward further improved.
         </span>
         <br><br>
       </div>

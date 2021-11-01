@@ -21,7 +21,7 @@ Vue.component("glyph-sets-tab", {
         [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
           `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`],
         [Currency.imaginaryMachines.gt(0), Glyphs.copyForRecords(bestReality.iMCapSet),
-          `Imaginary Machine Cap: ${format(player.reality.iMCap, 2, 2)} iM`],
+          `Imaginary Machine Cap: ${format(MachineHandler.currentIMCap, 2, 2)} iM`],
         [Laitela.isUnlocked, Glyphs.copyForRecords(bestReality.laitelaSet),
           `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
       ];

@@ -517,6 +517,7 @@ function finishProcessReality(realityProps) {
     player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 
+  const realityRealTime = player.records.thisReality.realTime;
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
   if (!realityProps.glyphUndo) {
@@ -638,7 +639,7 @@ function finishProcessReality(realityProps) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   }
 
-  if (!isReset) Ra.applyAlchemyReactions();
+  if (!isReset) Ra.applyAlchemyReactions(realityRealTime);
 
   player.reality.gainedAutoAchievements = false;
 

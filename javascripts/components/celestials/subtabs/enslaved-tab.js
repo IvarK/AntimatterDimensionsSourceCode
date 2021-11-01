@@ -14,10 +14,10 @@ Vue.component("modal-enslaved-hints", {
   },
   computed: {
     hintCost() {
-      return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)} years`;
+      return `${quantify("year", TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)}`;
     },
     formattedStored() {
-      return `${format(TimeSpan.fromMilliseconds(this.currentStored).totalYears, 2)} years`;
+      return `${quantify("year", TimeSpan.fromMilliseconds(this.currentStored).totalYears, 2)}`;
     },
     hasProgress(id) {
       return this.progressEntries.some(entry => entry.id === id);

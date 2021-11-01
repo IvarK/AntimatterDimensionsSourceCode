@@ -75,13 +75,6 @@ Vue.component("glyph-inventory", {
   template: `
     <div class="l-glyph-inventory">
       Click and drag or double-click to equip Glyphs.
-      <br>
-      The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows") }}
-      of slots are protected slots and are unaffected by anything which
-      <br>
-      may move or delete Glyphs. New Glyphs will never be inserted into these slots.
-      <glyph-protected-row-options />
-      <glyph-sort-options />
       <div
         v-for="row in rowCount"
         class="l-glyph-inventory__row"
@@ -106,35 +99,5 @@ Vue.component("glyph-inventory", {
           />
         </div>
       </div>
-    </div>`
-});
-
-Vue.component("glyph-protected-row-options", {
-  methods: {
-    update() {
-      this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
-    },
-    addRow() {
-      Glyphs.changeProtectedRows(1);
-    },
-    removeRow() {
-      Glyphs.changeProtectedRows(-1);
-    }
-  },
-  template: `
-    <div>
-      <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="One row is permanently un-protected for new glyphs"
-        @click="addRow"
-      >
-        Add a protected row
-      </button>
-      <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        @click="removeRow"
-      >
-        Remove a protected row
-      </button>
     </div>`
 });

@@ -48,7 +48,7 @@ const AutoGlyphProcessor = {
         }
         return strengthToRarity(glyph.strength) - 200 * missingEffects;
       }
-      case AUTO_GLYPH_SCORE.ADVANCED_MODE: {
+      case AUTO_GLYPH_SCORE.EFFECT_SCORE: {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
@@ -82,7 +82,7 @@ const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT:
         return this.types[glyph.type].rarityThreshold;
-      case AUTO_GLYPH_SCORE.ADVANCED_MODE:
+      case AUTO_GLYPH_SCORE.EFFECT_SCORE:
         return this.types[glyph.type].scoreThreshold;
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:

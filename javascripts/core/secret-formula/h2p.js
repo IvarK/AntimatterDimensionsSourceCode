@@ -704,7 +704,7 @@ will reset almost the entire game up to this point, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
 <br>
 <br>
-Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the 
+Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of the
 pre-Reality Achievements and all of their associated rewards. However, you will still keep all values under the General
 header in the Statistics tab and all of your best Challenge times.
 <br>
@@ -889,9 +889,9 @@ speed boost was active. Pausing and unpausing affects both Black Holes; they can
     }, {
       name: "Celestials",
       info: () => `
-Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of 
-Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you 
-progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually 
+Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of
+Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you
+progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually
 be revealed as you approach it, generally with a visual indication of your progress towards the next step.
 <br>
 <br>
@@ -950,7 +950,7 @@ Shards.
 ${EffarigUnlock.run.isUnlocked
     ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
       "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
-    : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see details about the Reality)</div>"
+    : "<div style='color: var(--color-effarig--base);'>(unlock Effarig's Reality to see details about it)</div>"
 }
 <br>
 <br>
@@ -958,10 +958,11 @@ Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
   // Can't really make a nested template here without generally making a mess of the code
   // eslint-disable-next-line prefer-template
-    ? "a new Glyph type, <span style='color: var(--color-bad);'>Effarig</span> Glyphs. Effarig Glyphs have " +
-      formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only" +
-      " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
-    : "<span style='color: var(--color-bad);'>(complete Effarig's Reality to see details about the reward)</span>"}
+    ? "a new Glyph type, <span style='color: var(--color-effarig--base);'>Effarig</span> Glyphs. Effarig Glyphs have " +
+      formatInt(7) + " different possible effects, which you can view in the Glyph filter settings. You can only" +
+      " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) +
+      " effects. Lastly, the RM multiplier and Glyph instability effects cannot appear together on the same Glyph."
+    : "<span style='color: var(--color-effarig--base);'>(complete Effarig's Reality to see reward details)</span>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
@@ -976,11 +977,11 @@ level of Glyphs gained on Reality.
 <br>
 Automatic Glyph Filtering is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
 Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
-with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
+with the highest score. After picking this Glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. There are three basic modes:
 <br>
 <b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
-particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
+particular Glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
 This mode doesn't have a threshold and always sacrifices your glyphs.
 <br>
 <b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
@@ -998,7 +999,7 @@ you specify, but this score is modified based on your inputs for effects. The Gl
 number of effects and having all of the effects you choose, and its score is lowered by ${formatInt(200)} for every
 missing effect. This guarantees that any glyph that doesn't have the effects you want will be below the threshold.
 <br>
-<b>Advanced Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
+<b>Effect Score Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
 your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
 the threshold to any value you want. One possible way you can use this behavior is to give a weaker effect a value of
 ${formatInt(5)}, which allows you to keep Glyphs without that effect as long as they are rarer.
@@ -1013,9 +1014,10 @@ the possible Glyphs will always be the one equipped. Just like other groups of c
 any of them in order to bring up a modal summarizing the whole set of Glyphs.
 <br>
 <br>
-<i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;
-for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score ${formatInt(999)}
-and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is never picked.</i>
+<i>Note: If desired, "Specified Effect Mode" and "Effect Score Mode" can be used to filter out some Glyph types
+entirely; for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score
+${formatInt(999)} and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is
+never picked.</i>
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "threshold", "set", "save", "reality", "lategame",
@@ -1061,7 +1063,7 @@ by ${format(1e5)} Tickspeed upgrades.
 <br>
 <br>
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored time, you are able to
-finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is 
+finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
     : "<span style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see reward details)</span>"}
@@ -1205,27 +1207,26 @@ use up your glyphs by refining them into alchemy resources associated with their
 kind of a boost to certain parts of the game based on how much of them you have.
 <br>
 <br>
-The amount of a resource you get from a glyph is based on the cube of the glyph's level, scaled so that level
-${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single glyph itself,
-however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this maximum value, and
-also can't give you more resources than the cap. This cap is applied per glyph, and you will never lose resources
-when you try to refine a glyph.
-<br>
-(This calculation applies for perfect ${formatPercents(1)}
-rarity glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
+In addition to all their other properties, Glyphs now have a <i>refinement value</i> which determines how much of
+its associated alchemy resource it is worth. This value is based on the cube of the Glyph's level, scaled
+so that level ${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single Glyph itself,
+however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this value when refined.
+These are values for ${formatPercents(1)} rarity Glyphs; Glyphs of lower rarity still have the same cap but give
+proportionally less resources. For example, a ${formatPercents(0.5)} rarity Glyph will give only half as much.
 <br>
 <br>
-As an example of how the cap works, a level ${formatInt(10000)} glyph is worth
-${formatInt(10000 * GlyphSacrificeHandler.glyphRefinementEfficiency)} resources normally, but will be worth less if you
-already have at least ${formatInt(10000 * (1 - GlyphSacrificeHandler.glyphRefinementEfficiency))} of that resource
-(bringing you up to a maximum of ${formatInt(10000)} after refinement). The glyph is worth nothing at all if you
-already have ${formatInt(10000)} resources or more, as that is the cap for level ${formatInt(10000)} glyphs.
+Alchemy resources cannot be gained indefinitely; there is a per-resource cap which is based on the highest refinement
+value of all the Glyphs of that type you have refined. For example, if the highest level Time Glyph you have refined
+is level ${formatInt(8000)} (alchemy value: ${formatInt(GlyphSacrificeHandler.levelRefinementValue(8000))}), then no
+matter how many Time Glyphs you refine, you can never have more than
+${formatInt(GlyphSacrificeHandler.levelRefinementValue(8000))} of the Time resource until you refine another Time Glyph
+with a higher refinement value.
 <br>
 <br>
 Alchemy resources can be combined together in certain combinations in order to create new compound resources, which
 are unlocked at certain Effarig levels. Resources are combined once per Reality, unaffected by real time
-amplification. The amount of compound resources you can have after a reaction is limited to the amount of the reagents
-that go into it, which means all of your resources are ultimately limited by your glyph level.
+amplification. Reactions have a higher yield and thus happen faster when your reagent amounts are higher. The cap for
+compound resources is equal to the lowest cap amongst all of its reagents.
 <br>
 <br>
 To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can
@@ -1274,7 +1275,7 @@ Imaginary Machine upgrades will unlock the final two Celestials.
 When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
 called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
 Tickspeed upgrades. These fractional purchases are given for free without spending your antimatter and will provide
-an appropriate portion of their multipler.
+an appropriate portion of their multiplier.
 <br>
 <br>
 The purchase buttons for Antimatter Dimensions and Tickspeed become modified to display the number of upgrades

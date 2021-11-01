@@ -44,7 +44,7 @@ Vue.component("reality-button", {
       return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {
-      return `${format(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
+      return quantify("Relic Shard", this.shardsGained, 2);
     }
   },
   methods: {
@@ -52,9 +52,10 @@ Vue.component("reality-button", {
       const glyphState = getGlyphLevelInputs();
       let level = glyphState.actualLevel;
       if (!isFinite(level)) level = 0;
+      const decimalPoints = this.glyphLevel > 1000 ? 0 : 1;
       return glyphState.capped
         ? "Capped"
-        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), 1)}`;
+        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
@@ -96,7 +97,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (TimeStudy.reality.isBought && player.records.thisReality.maxEP.exponent >= 4000) {
+      if (this.canReality) {
         requestManualReality();
       }
     },
@@ -127,7 +128,7 @@ Vue.component("reality-button", {
     }
   },
   template: `
-    <div class="l-reality-button">
+    <div class="l-reality-button l-reality-button-group-half">
       <button
         class="c-reality-button infotooltip"
         :class="classObject()"
@@ -148,7 +149,7 @@ Vue.component("reality-button", {
           </template>
           <div class="infotooltiptext" v-if="canReality">
             <div>Other resources gained:</div>
-            <div>{{ ppGained }} Perk {{ "Point" | pluralize(ppGained) }}</div>
+            <div>{{ "Perk Point" | quantifyInt(ppGained) }}</div>
             <div v-if="shardsGained !== 0">{{ shardsGainedText }}</div>
             <div v-for="celestialInfo in celestialRunText">
               <span v-if="celestialInfo[0]">

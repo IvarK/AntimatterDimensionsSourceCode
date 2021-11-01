@@ -138,7 +138,6 @@ let player = {
     })),
     timeTheorems: {
       isActive: false,
-      lastTick: 0,
     },
     dilationUpgrades: Array.range(0, 3).map(() => ({
       isActive: false,
@@ -288,7 +287,6 @@ let player = {
   infMult: 0,
   version: 13,
   infinityPower: new Decimal(1),
-  postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
   eternities: new Decimal(0),
@@ -395,10 +393,11 @@ let player = {
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,
-    showSidebarPanel: 0,
+    showSidebarPanel: GLYPH_SIDEBAR_MODE.INVENTORY_MANAGEMENT,
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,
+    moveGlyphsOnProtection: false,
     perkPoints: 0,
     autoEC: true,
     lastAutoEC: 0,
@@ -541,6 +540,14 @@ let player = {
           amount: 0,
           reaction: false
         })),
+      highestRefinementValue: {
+        power: 0,
+        infinity: 0,
+        time: 0,
+        replication: 0,
+        dilation: 0,
+        effarig: 0
+      },
       momentumTime: 0,
       unlocksBits: 0,
       run: false,

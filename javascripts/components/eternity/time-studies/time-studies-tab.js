@@ -222,8 +222,30 @@ Vue.component("time-studies-tab", {
     return {
       respec: player.respec,
       layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
-      vLevel: 0
+      vLevel: 0,
+      renderedStudyCount: 0,
+      renderedConnectionCount: 0
     };
+  },
+  created() {
+    const incrementRenderedCount = () => {
+      let shouldRequestNextFrame = false;
+      if (this.renderedStudyCount < this.allStudies.length) {
+        this.renderedStudyCount += 2;
+        shouldRequestNextFrame = true;
+      }
+      if (this.renderedConnectionCount < this.allConnections.length) {
+        this.renderedConnectionCount += 2;
+        shouldRequestNextFrame = true;
+      }
+      if (shouldRequestNextFrame) {
+        this.renderAnimationId = requestAnimationFrame(incrementRenderedCount);
+      }
+    };
+    incrementRenderedCount();
+  },
+  beforeDestroy() {
+    cancelAnimationFrame(this.renderAnimationId);
   },
   watch: {
     respec(newValue) {
@@ -237,6 +259,18 @@ Vue.component("time-studies-tab", {
   computed: {
     layout() {
       return TimeStudyTreeLayout.create(this.layoutType);
+    },
+    allStudies() {
+      return this.layout.studies;
+    },
+    studies() {
+      return this.allStudies.slice(0, this.renderedStudyCount);
+    },
+    allConnections() {
+      return this.layout.connections;
+    },
+    connections() {
+      return this.allConnections.slice(0, this.renderedConnectionCount);
     },
     treeStyleObject() {
       return {
@@ -291,7 +325,7 @@ Vue.component("time-studies-tab", {
       </div>
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
         <component
-          v-for="(setup, index) in layout.studies"
+          v-for="(setup, index) in studies"
           :key="setup.study.type.toString() + setup.study.id.toString()"
           :setup="setup"
           :is="studyComponent(setup.study)"
@@ -299,7 +333,7 @@ Vue.component("time-studies-tab", {
         <secret-time-study :setup="layout.secretStudy" />
         <svg :style="treeStyleObject" class="l-time-study-connection">
           <time-study-connection
-            v-for="(setup, index) in layout.connections"
+            v-for="(setup, index) in connections"
             :key="'connection' + index"
             :setup="setup"
           />

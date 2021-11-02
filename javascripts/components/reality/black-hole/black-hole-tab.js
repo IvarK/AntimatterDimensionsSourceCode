@@ -151,6 +151,9 @@ Vue.component("black-hole-tab", {
         The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
+        <br>
+        <br>
+        Unlocking the Black Hole also gives {{ formatInt(10) }} Automator Points.
       </div>
       <template v-else>
         <div class="c-subtab-option-container">

@@ -17,7 +17,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.REALITY,
     get description() {
       return `Remove the achievement requirement from the Reality Study
-      and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
+      and allow you to choose from ${formatInt(4)} different Glyphs on Reality.`;
     },
     effect: 4,
     defaultPosition: new Vector(0, 0)

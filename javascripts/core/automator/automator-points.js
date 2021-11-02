@@ -34,13 +34,13 @@ GameDatabase.reality.otherAutomatorPoints = (function() {
       name: "Reality Count",
       automatorPoints: () => 2 * Math.clampMax(Currency.realities.value, 100),
       shortDescription: () => `+${formatInt(2)} per Reality, up to ${formatInt(100)} Realities`,
-      formattedValue: () => `Currently: ${2 * Math.clampMax(Currency.realities.value, 100)} Points`,
+      symbol: "Ϟ",
     },
     {
-      name: "Unlocking the Black Hole",
+      name: "Black Hole",
       automatorPoints: () => (BlackHole(1).isUnlocked ? 10 : 0),
-      shortDescription: () => `+${formatInt(10)} if unlocked`,
-      formattedValue: () => "",
+      shortDescription: () => `Unlocking gives ${formatInt(10)} AP`,
+      symbol: "<i class='fas fa-circle'></i>",
     },
   ];
 }());

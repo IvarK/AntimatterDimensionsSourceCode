@@ -7,7 +7,6 @@ Vue.component("automator-points-list", {
       unlockThreshold: 0,
       fromPerks: 0,
       fromUpgrades: 0,
-      fromOther: 0,
     };
   },
   computed: {
@@ -22,7 +21,6 @@ Vue.component("automator-points-list", {
       this.unlockThreshold = ap.requiredPoints;
       this.fromPerks = ap.pointsFromPerks;
       this.fromUpgrades = ap.pointsFromUpgrades;
-      this.fromOther = ap.pointsFromOther;
     },
     textColor(hasBought) {
       return {
@@ -48,6 +46,17 @@ Vue.component("automator-points-list", {
             <b>{{ perk.config.label }}</b> ({{ perk.config.automatorPoints }}) - {{ perk.config.shortDescription() }}
           </div>
         </div>
+        <div class="l-automator-points-list-col">
+          <div class="c-automator-points-list-cell" v-for="source in otherSources">
+            <span style="font-size: 1.5rem;">
+              {{ source.name }} ({{ formatInt(source.automatorPoints()) }})
+            </span>
+            <br>
+            <br>
+            {{ source.shortDescription() }}
+            <span class="c-automator-points-list-symbol" v-html="source.symbol" />
+          </div>
+        </div>
         <div class="l-automator-points-list-col c-automator-points-list-col">
           <span style="font-size: 1.5rem;">
             Purchasing Reality Upgrades: ({{ formatInt(fromUpgrades) }})
@@ -57,21 +66,6 @@ Vue.component("automator-points-list", {
             <b>{{ upgrade.config.name }}</b> ({{ upgrade.config.automatorPoints }})
             <br>
             {{ upgrade.config.shortDescription() }}
-            <br>
-            <br>
-          </div>
-        </div>
-        <div class="l-automator-points-list-col c-automator-points-list-col">
-          <span style="font-size: 1.5rem;">
-            Other Sources: ({{ formatInt(fromOther) }})
-          </span>
-          <br>
-          <div v-for="source in otherSources">
-            <b>{{ source.name }}</b>
-            <br>
-            {{ source.shortDescription() }}
-            <br>
-            {{ source.formattedValue() }}
             <br>
             <br>
           </div>

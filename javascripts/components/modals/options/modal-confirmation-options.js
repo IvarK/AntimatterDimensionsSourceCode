@@ -22,6 +22,7 @@ Vue.component("modal-confirmation-options", {
       bigCrunch: false,
       antimatterGalaxy: false,
       dimensionBoost: false,
+      replicantiGalaxy: false,
 
       realityAutobuyerUnlocked: false,
       sacrificeUnlocked: false,

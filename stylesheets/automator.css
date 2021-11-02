@@ -38,6 +38,7 @@
 }
 
 .c-automator-points-list-col {
+  position: relative;
   border: 0.15rem solid var(--color-text);
   padding: 1rem;
   text-align: left;
@@ -65,6 +66,15 @@
   text-shadow: 0 0 2rem;
   width: 100%;
   height: 100%;
+  pointer-events: none;
+}
+
+.c-automator-points-list-ap {
+  position: absolute;
+  top: 0.5rem;
+  right: 1.5rem;
+  font-size: 2.5rem;
+  opacity: 0.6;
   pointer-events: none;
 }
 

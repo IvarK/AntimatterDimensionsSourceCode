@@ -798,7 +798,7 @@ const Player = {
   },
 
   get automatorUnlocked() {
-    return AutomatorPoints.totalPoints >= AutomatorPoints.requiredPoints || player.reality.automator.forceUnlock;
+    return AutomatorPoints.totalPoints >= AutomatorPoints.pointsForAutomator || player.reality.automator.forceUnlock;
   },
 
   resetRequirements(key) {

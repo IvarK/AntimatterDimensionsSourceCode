@@ -1,17 +1,26 @@
 "use strict";
 
 const AutomatorPoints = {
+  get perks() {
+    return Perks.all.filter(p => p.automatorPoints);
+  },
+
+  // This also rejects rebuyables, where automatorPoints is undefined
+  get upgrades() {
+    return RealityUpgrades.all.filter(p => p.automatorPoints);
+  },
+
   get pointsFromPerks() {
-    return Perks.all
-      .filter(p => p._config.automatorPoints && p.isBought)
-      .map(p => p._config.automatorPoints)
+    return this.perks
+      .filter(p => p.isBought)
+      .map(p => p.automatorPoints)
       .sum();
   },
 
   get pointsFromUpgrades() {
-    return RealityUpgrades.all
-      .filter(p => p._config.automatorPoints && p.isBought)
-      .map(p => p._config.automatorPoints)
+    return this.upgrades
+      .filter(p => p.isBought)
+      .map(p => p.automatorPoints)
       .sum();
   },
 
@@ -23,7 +32,7 @@ const AutomatorPoints = {
     return this.pointsFromPerks + this.pointsFromUpgrades + this.pointsFromOther;
   },
 
-  get requiredPoints() {
+  get pointsForAutomator() {
     return 100;
   }
 };

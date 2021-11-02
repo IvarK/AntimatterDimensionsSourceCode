@@ -9,6 +9,18 @@ class PerkState extends SetPurchasableMechanicState {
     this.connectedPerks = [];
   }
 
+  get automatorPoints() {
+    return this.config.automatorPoints ? this.config.automatorPoints : 0;
+  }
+
+  get label() {
+    return this.config.label;
+  }
+
+  get shortDescription() {
+    return this.config.shortDescription ? this.config.shortDescription() : "";
+  }
+
   get currency() {
     return Currency.perkPoints;
   }

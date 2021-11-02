@@ -248,7 +248,7 @@ const V = {
       id: 2,
       lines: [
         "Welcome to my Reality.",
-        "I'm surprised you could reach it.",
+        "I am surprised you could reach it.",
         "This is my realm after all...",
         "Not everyone is as great as me.",
       ]
@@ -257,7 +257,7 @@ const V = {
       id: 3,
       lines: [
         "Good luck with that!",
-        "You'll need it.",
+        "You will need it.",
         "My reality is flawless. You will fail.",
       ]
     },
@@ -265,7 +265,7 @@ const V = {
       id: 4,
       lines: [
         "So fast...",
-        "Don't think so much of yourself.",
+        "Do not think so much of yourself.",
         "This is just the beginning.",
         "You will never be better than me.",
       ]
@@ -283,15 +283,15 @@ const V = {
       requirement: () => V.spaceTheorems >= 6,
       lines: [
         "This is nothing.",
-        "Don't be so full of yourself.",
+        "Do not be so full of yourself.",
       ]
     },
     HEX_1: {
       id: 7,
       requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 1,
       lines: [
-        "Don't think it'll get any easier from now on.",
-        "You're awfully proud for such a little achievement.",
+        "Do not think it will get any easier from now on.",
+        "You are awfully proud for such a little achievement.",
       ]
     },
     ACHIEVEMENT_12: {
@@ -316,7 +316,7 @@ const V = {
       requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 3,
       lines: [
         "No... No... No...",
-        "This can't be...",
+        "This cannot be...",
       ]
     },
     ALL_ACHIEVEMENTS: {

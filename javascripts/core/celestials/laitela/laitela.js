@@ -225,9 +225,9 @@ const Laitela = {
       id: 4,
       lines: [
         "Back to square one.",
-        "We, the Celestials transcend time and existence",
-        "We always know that whatever is lost always comes back eventually",
-        "Even if we were to cease, we'd just come back stronger.",
+        "We, the Celestials transcend time and existence.",
+        "We always know that whatever is lost always comes back eventually.",
+        "Even if we were to cease, we would just come back stronger.",
         "The cycle... repeats forever.",
         "Do they also understand? Or was it only you as well?",
         "I feel like I should know the answer...",
@@ -240,7 +240,7 @@ const Laitela = {
         "You seem to be having too much fun.",
         "Just like they did before meeting their... fate.",
         "You freed them of their eternal imprisonment, yes?",
-        "I always felt regret how harsh I was that day.",
+        "I always regret how harsh I was that day.",
         "Maybe it doesn't matter.",
         "But I digress. Let's keep constricting this Reality.",
       ]
@@ -253,8 +253,8 @@ const Laitela = {
         "That was the first thing you turned into Dimensions?",
         "It could not have been an accident.",
         "How did you... attain the power to control it?",
-        "This never happened in all of existence... Or did it?",
-        "My endless knowledge... Is it waning?",
+        "This never happened in all of existence... or did it?",
+        "My endless knowledge... is it waning?",
       ]
     },
     SINGULARITY_2: {

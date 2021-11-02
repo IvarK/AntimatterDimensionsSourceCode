@@ -2,16 +2,19 @@
 
 Vue.component("normal-achievement", {
   props: {
-    achievement: Object
+    /** @type AchievementState */
+    achievement: {
+      type: Object,
+      required: true
+    },
   },
   data() {
     return {
       isUnlocked: false,
       isMouseOver: false,
-      mouseOverInterval: 0,
       isCancer: false,
-      row: 0,
-      showUnlockState: false
+      showUnlockState: false,
+      realityUnlocked: false
     };
   },
   computed: {
@@ -31,40 +34,45 @@ Vue.component("normal-achievement", {
         "o-achievement": true,
         "o-achievement--locked": !this.isUnlocked,
         "o-achievement--unlocked": this.isUnlocked,
-        "o-achievement--waiting": !this.isUnlocked && PlayerProgress.realityUnlocked() && this.row <= 13,
-        "o-achievement--blink": this.id === 78 && !this.isUnlocked,
+        "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement,
+        "o-achievement--blink": !this.isUnlocked && this.id === 78,
         "o-achievement--normal": !this.isCancer,
         "o-achievement--cancer": this.isCancer
       };
     },
-    indicator() {
-      const achievement = this.achievement;
-      if (achievement.isUnlocked) return "<i class='fas fa-check'></i>";
-      if (PlayerProgress.realityUnlocked() && achievement.row <= 13) return "<i class='far fa-clock'></i>";
-      return "<i class='fas fa-times'></i>";
+    indicatorIconClass() {
+      if (this.isUnlocked) return "fas fa-check";
+      if (this.isPreRealityAchievement) return "far fa-clock";
+      return "fas fa-times";
     },
     indicatorClassObject() {
       return {
         "o-achievement__indicator": true,
-        "o-achievement__indicator--locked": !this.isUnlocked && (!PlayerProgress.realityUnlocked() || this.row > 13),
-        "o-achievement__indicator--waiting": !this.isUnlocked && PlayerProgress.realityUnlocked() && this.row <= 13,
+        "o-achievement__indicator--locked": !this.isUnlocked && !this.isPreRealityAchievement,
+        "o-achievement__indicator--waiting": !this.isUnlocked && this.isPreRealityAchievement,
       };
     },
+    isPreRealityAchievement() {
+      return this.realityUnlocked && this.achievement.row <= 13;
+    }
   },
   methods: {
     update() {
       this.isUnlocked = this.achievement.isUnlocked;
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
-      this.row = this.achievement.row;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
+      this.realityUnlocked = PlayerProgress.realityUnlocked();
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
       this.isMouseOver = true;
     },
     onMouseLeave() {
-      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
+      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.mouseOverInterval);
   },
   template: `
     <div
@@ -77,17 +85,21 @@ Vue.component("normal-achievement", {
         {{ id }}
       </hint-text>
       <div class="o-achievement__tooltip">
-        <div class="o-achievement__tooltip__name">
-          {{ config.name }} ({{ id }})
-        </div>
-        <div class="o-achievement__tooltip__description">
-          {{ config.description }}
-        </div>
-        <div v-if="config.reward" class="o-achievement__tooltip__reward">
-          Reward: {{ config.reward }}
-          <effect-display br v-if="config.formatEffect" :config="config" />
-        </div>
+        <template v-if="isMouseOver">
+          <div class="o-achievement__tooltip__name">
+            {{ config.name }} ({{ id }})
+          </div>
+          <div class="o-achievement__tooltip__description">
+            {{ config.description }}
+          </div>
+          <div v-if="config.reward" class="o-achievement__tooltip__reward">
+            Reward: {{ config.reward }}
+            <effect-display br v-if="config.formatEffect" :config="config" />
+          </div>
+        </template>
       </div>
-      <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>
+      <div v-if="showUnlockState" :class="indicatorClassObject">
+        <i :class="indicatorIconClass" />
+      </div>
     </div>`
 });

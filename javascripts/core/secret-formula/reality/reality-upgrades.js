@@ -171,9 +171,9 @@ GameDatabase.reality.upgrades = (function() {
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier,
-      and improved Eternity autobuyers`,
+        and improved Eternity autobuyers`,
       automatorPoints: 10,
-      shortDescription: () => `TD, ${formatX(5)} EP, and improved Eternity Autobuyers`,
+      shortDescription: () => `TD and ${formatX(5)} EP Autobuyers, improved Eternity Autobuyer`,
     },
     {
       name: "The Eternal Flow",

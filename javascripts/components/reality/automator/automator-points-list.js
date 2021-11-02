@@ -33,40 +33,49 @@ Vue.component("automator-points-list", {
         You gain Automator Points from the following sources:
       </div>
       <div class="l-automator-points-list-container">
-        <div class="l-automator-points-list-col c-automator-points-list-col">
-          <span class="c-automator-points-list-ap">{{ formatInt(fromPerks) }} AP</span>
-          <span style="font-size: 1.5rem;">
+        <div class="l-automator-points-list-side-col c-automator-points-list-col">
+          <span class="c-automator-points-list-ap--large">{{ formatInt(fromPerks) }} AP</span>
+          <span style="font-size: 1.8rem;">
             Perks
           </span>
-          <br>
-          <div v-for="perk in perkSources" :style="textColor(perk.isBought)">
-            <b>{{ perk.label }}</b> ({{ perk.automatorPoints }}) - {{ perk.shortDescription }}
+          <div
+            v-for="perk in perkSources"
+            class="c-automator-points-list-single-entry"
+            :style="textColor(perk.isBought)"
+          >
+            <b>{{ perk.label }}</b> - {{ perk.shortDescription }}
+            <span class="c-automator-points-list-ap">{{ perk.automatorPoints }} AP</span>
           </div>
         </div>
-        <div class="l-automator-points-list-col">
+        <div class="l-automator-points-list-center-col">
           <div class="c-automator-points-list-cell" v-for="source in otherSources">
-            <span class="c-automator-points-list-ap">{{ formatInt(source.automatorPoints()) }} AP</span>
-            <span style="font-size: 1.5rem;">
+            <span class="c-automator-points-list-ap--large">{{ formatInt(source.automatorPoints()) }} AP</span>
+            <span style="font-size: 1.8rem;">
               {{ source.name }}
             </span>
             <br>
             <br>
-            {{ source.shortDescription() }}
+            <span :style="textColor(source.automatorPoints() > 0)">
+              {{ source.shortDescription() }}
+            </span>
             <span class="c-automator-points-list-symbol" v-html="source.symbol" />
           </div>
         </div>
-        <div class="l-automator-points-list-col c-automator-points-list-col">
-          <span class="c-automator-points-list-ap">{{ formatInt(fromUpgrades) }} AP</span>
-          <span style="font-size: 1.5rem;">
+        <div class="l-automator-points-list-side-col c-automator-points-list-col">
+          <span class="c-automator-points-list-ap--large">{{ formatInt(fromUpgrades) }} AP</span>
+          <span style="font-size: 1.8rem;">
             Reality Upgrades
           </span>
-          <br>
-          <div v-for="upgrade in upgradeSources" :style="textColor(upgrade.isBought)">
-            <b>{{ upgrade.name }}</b> ({{ upgrade.automatorPoints }})
+          <div
+            v-for="upgrade in upgradeSources"
+            class="c-automator-points-list-single-entry"
+            :style="textColor(upgrade.isBought)"
+            style="font-size: 1.3rem;"
+          >
+            <b>{{ upgrade.name }}</b>
+            <span class="c-automator-points-list-ap">{{ upgrade.automatorPoints }} AP</span>
             <br>
             {{ upgrade.shortDescription }}
-            <br>
-            <br>
           </div>
         </div>
       </div>

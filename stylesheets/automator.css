@@ -3,12 +3,12 @@
 }
 
 .c-automator-tab {
-  height: 60rem;
+  height: 45rem;
   width: 100rem;
 }
 
 .c-automator-tab > div {
-  height: 45rem;
+  height: 30rem;
   width: 100rem;
 }
 
@@ -28,13 +28,7 @@
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1rem;
-}
-
-.l-automator-points-list-col {
-  display: flex;
-  flex-direction: column;
-  width: 32%;
-  justify-content: space-between;
+  user-select: none;
 }
 
 .c-automator-points-list-col {
@@ -42,6 +36,20 @@
   border: 0.15rem solid var(--color-text);
   padding: 1rem;
   text-align: left;
+}
+
+.l-automator-points-list-side-col {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  justify-content: space-between;
+}
+
+.l-automator-points-list-center-col {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  justify-content: space-between;
 }
 
 .c-automator-points-list-cell {
@@ -61,7 +69,7 @@
   align-items: center;
   top: 0;
   left: 0;
-  font-size: 18rem;
+  font-size: 15rem;
   opacity: 0.2;
   text-shadow: 0 0 2rem;
   width: 100%;
@@ -69,13 +77,21 @@
   pointer-events: none;
 }
 
+.c-automator-points-list-single-entry {
+  position: relative;
+}
+
 .c-automator-points-list-ap {
   position: absolute;
-  top: 0.5rem;
-  right: 1.5rem;
-  font-size: 2.5rem;
+  right: 0;
+  opacity: 0.8;
+}
+
+.c-automator-points-list-ap--large {
+  position: absolute;
+  right: 1rem;
+  font-size: 1.8rem;
   opacity: 0.6;
-  pointer-events: none;
 }
 
 .l-automator-tab--full-screen {

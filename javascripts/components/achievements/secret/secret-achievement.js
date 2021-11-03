@@ -56,7 +56,7 @@ Vue.component("secret-achievement", {
       this.isMouseOver = true;
     },
     onMouseLeave() {
-      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
+      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
     },
     onClick() {
       if (this.id === 11) {

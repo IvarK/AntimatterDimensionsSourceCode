@@ -8,7 +8,7 @@
 }
 
 .c-automator-tab > div {
-  height: 30rem;
+  height: 45rem;
   width: 100rem;
 }
 
@@ -75,6 +75,13 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.c-automator-points-list-perk-label {
+  display: inline-block;
+  width: 3rem;
+  max-width: 3rem;
+  font-weight: bold;
 }
 
 .c-automator-points-list-single-entry {

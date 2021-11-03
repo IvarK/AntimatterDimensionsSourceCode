@@ -43,7 +43,8 @@ Vue.component("automator-points-list", {
             class="c-automator-points-list-single-entry"
             :style="textColor(perk.isBought)"
           >
-            <b>{{ perk.label }}</b> - {{ perk.shortDescription }}
+            <span class="c-automator-points-list-perk-label">{{ perk.label }}</span>
+             - {{ perk.shortDescription }}
             <span class="c-automator-points-list-ap">{{ perk.automatorPoints }} AP</span>
           </div>
         </div>

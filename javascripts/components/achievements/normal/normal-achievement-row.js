@@ -2,7 +2,11 @@
 
 Vue.component("normal-achievement-row", {
   props: {
-    row: Array
+    /** @type AchievementState[] */
+    row: {
+      type: Array,
+      required: true
+    },
   },
   data() {
     return {

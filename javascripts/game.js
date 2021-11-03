@@ -289,9 +289,9 @@ const GAME_SPEED_EFFECT = {
 };
 
 /**
-  * @param {number[]} effectsToConsider A list of various game speed changing effects to apply when calculating
+  * @param {number[]?} effectsToConsider A list of various game speed changing effects to apply when calculating
   *   the game speed.  If left undefined, all effects will be applied.
-  * @param {number} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
+  * @param {number?} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
   *   to be active for the purposes of game speed calculation. This is only used during offline black hole stuff.
   */
 function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {

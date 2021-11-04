@@ -105,10 +105,11 @@ const PLURAL_HELPER = new Map([
   [/x$/u, "xes"],
 ]);
 
-// Some terms in the game are plural by default. These terms should be added, in all lowercase, to this array.
-const ALWAYS_SINGULAR = [
-  "dilated time",
-];
+// Some terms require specific (or no) handling when plural. These terms should be added, in Word Case, to this Map.
+// Words will be added to this Map when a valid plural for it is found on being run through the pluralize function.
+const pluralDatabase = new Map([
+  ["Dilated Time", "Dilated Time"],
+]);
 
 /**
  * A function that pluralizes a word based on a designated amount
@@ -119,22 +120,25 @@ const ALWAYS_SINGULAR = [
  *                    plural form of the input {word}. If the {amount} is singular, return {word}
  */
 function pluralize(word, amount, plural) {
-  // If either word or amount is undefined, we cannot continue.
   if (word === undefined || amount === undefined) throw "Arguments must be defined";
 
-  // If the word is ALWAYS_SINGULAR or its singular, return the word itself.
-  // Afterwards, if there was a specific plural passed in, return that.
-  if (ALWAYS_SINGULAR.includes(word.toLowerCase()) || isSingular(amount)) return word;
-  if (plural) return plural;
+  if (isSingular(amount)) return word;
+  if (plural !== undefined) return plural;
+  if (pluralDatabase.has(word)) return pluralDatabase.get(word);
 
-  // Go through the Map PLURAL_HELPER, using the supplied regex, returning the string with text replaced if any matches
-  // are found.
+  // Go through the Map PLURAL_HELPER, using the supplied regex,
+  // returning the string with text replaced if any matches are found.
   for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
     const newWord = word.replace(match, replaceWith);
-    if (word !== newWord) return newWord;
+    if (word !== newWord) {
+      pluralDatabase.set(word, newWord);
+      return newWord;
+    }
   }
-  // Return the word but with an 's'
-  return `${word}s`;
+
+  const newWord = `${word}s`;
+  pluralDatabase.set(word, newWord);
+  return newWord;
 }
 
 /**
@@ -177,4 +181,3 @@ function makeEnumeration(items) {
   const last = items[items.length - 1];
   return `${commaSeparated}, and ${last}`;
 }
-

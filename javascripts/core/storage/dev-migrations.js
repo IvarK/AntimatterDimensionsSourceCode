@@ -1150,6 +1150,17 @@ GameStorage.devMigrations = {
       }
       delete player.auto.timeTheorems.lastTick;
     },
+    player => {
+      // We can't reliably check if the player has or hasn't unlocked the automator via automator points without
+      // essentially copy-pasting all the automator point code here (in the interest of avoiding use of globals).
+      // So, in the range of progress where it's unclear, we stop it entirely in case it hasn't actually unlocked yet.
+      if (player.realities > 5 && player.realities < 50) {
+        player.reality.automator.state.mode = 1;
+        player.reality.automator.state.stack = [];
+        player.reality.automator.state.repeat = false;
+        player.reality.automator.state.forceRestart = false;
+      }
+    },
   ],
 
   patch(player) {

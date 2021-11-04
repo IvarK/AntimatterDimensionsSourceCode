@@ -67,7 +67,7 @@ Vue.component("black-hole-tab", {
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
-      this.isNegativeBHUnlocked = V.isFlipped && BlackHole(1).isPermanent && BlackHole(2).isPermanent;
+      this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
       this.pauseMode = player.blackHoleAutoPauseMode;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
@@ -77,21 +77,7 @@ Vue.component("black-hole-tab", {
       this.hasBH2 = BlackHole(2).isUnlocked;
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];
-
-      if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
-      else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
-        const cycleCount = Math.floor(BlackHole(2).timeToNextStateChange / BlackHole(1).cycleLength);
-        this.detailedBH2 = `Black Hole 2 will activate after ${quantifyInt("more cycle", cycleCount)}
-          of Black Hole 1.`;
-      } else if (BlackHole(2).isCharged) {
-        this.detailedBH2 = `Black Hole 2 will activate with Black Hole 1, for ${TimeSpan.fromSeconds(
-          Math.min(BlackHole(1).duration, BlackHole(2).duration - BlackHole(2).phase)).toStringShort()}.`;
-      } else {
-        const bh2Offset = BlackHole(2).timeToNextStateChange - BlackHole(1).timeToNextStateChange;
-        const bh2Duration = Math.min(BlackHole(1).duration - bh2Offset, BlackHole(2).duration);
-        this.detailedBH2 = `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Offset).toStringShort()} after
-          Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
-      }
+      this.detailedBH2 = BlackHoles.bh2Status;
     },
     togglePause() {
       BlackHoles.togglePause();
@@ -179,7 +165,14 @@ Vue.component("black-hole-tab", {
             :key="'state' + i"
             :blackHole="blackHole"
           />
-          {{ detailedBH2 }}
+          <span v-if="hasBH2 && !isPermanent">
+            <b>{{ detailedBH2 }}</b>
+            <br>
+            The timer for Black Hole 2 only advances while Black Hole 1 is active.
+            <br>
+            Upgrades affect the internal timer; the header shows real time until next activation.
+          </span>
+          <br>
           <div v-if="!isPermanent">
             Black holes become permanently active when they are active for more than {{ formatPercents(0.9999, 2) }}
             of the time.

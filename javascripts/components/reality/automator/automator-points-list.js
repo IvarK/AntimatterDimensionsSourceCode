@@ -28,7 +28,7 @@ Vue.component("automator-points-list", {
     <div>
       <div style="font-size: 2rem;">
         You have {{ formatInt(totalPoints) }} / {{ formatInt(pointsForAutomator) }}
-        Automator Points for unlocking the Automator.
+        Automator Points towards unlocking the Automator.
         <br>
         You gain Automator Points from the following sources:
       </div>

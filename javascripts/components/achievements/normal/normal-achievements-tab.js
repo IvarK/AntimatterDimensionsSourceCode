@@ -49,6 +49,7 @@ Vue.component("normal-achievements-tab", {
       achMultToBH: false,
       achMultToTP: false,
       achMultToTT: false,
+      renderedRows: []
     };
   },
   watch: {
@@ -57,6 +58,7 @@ Vue.component("normal-achievements-tab", {
     },
     hideCompletedRows(newValue) {
       player.options.hideCompletedAchievementRows = newValue;
+      this.startRowRendering();
     }
   },
   computed: {
@@ -98,8 +100,46 @@ Vue.component("normal-achievements-tab", {
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
       this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
     },
+    startRowRendering() {
+      const unlockedRows = [];
+      const lockedRows = [];
+      for (let i = 0; i < this.rows.length; i++) {
+        const targetArray = this.rows[i].every(a => a.isUnlocked) ? unlockedRows : lockedRows;
+        targetArray.push(i);
+      }
+      const renderedLockedRows = lockedRows.filter(row => this.renderedRows.includes(row));
+      const nonRenderedLockedRows = lockedRows.filter(row => !this.renderedRows.includes(row));
+      let rowsToRender;
+      if (player.options.hideCompletedAchievementRows) {
+        this.renderedRows = unlockedRows.concat(renderedLockedRows);
+        rowsToRender = nonRenderedLockedRows;
+      } else {
+        this.renderedRows = renderedLockedRows;
+        rowsToRender = unlockedRows.concat(nonRenderedLockedRows);
+      }
+      const stepThroughRendering = () => {
+        const ROWS_PER_FRAME = 2;
+        for (let i = 0; i < ROWS_PER_FRAME; i++) {
+          if (rowsToRender.length === 0) {
+            return;
+          }
+          this.renderedRows.push(rowsToRender.shift());
+        }
+        this.renderAnimationId = requestAnimationFrame(stepThroughRendering);
+      };
+      stepThroughRendering();
+    },
+    isRendered(row) {
+      return this.renderedRows.includes(row);
+    },
     timeDisplay,
     timeDisplayNoDecimals,
+  },
+  created() {
+    this.startRowRendering();
+  },
+  beforeDestroy() {
+    cancelAnimationFrame(this.renderAnimationId);
   },
   template: `
     <div class="l-achievements-tab">
@@ -137,7 +177,7 @@ Vue.component("normal-achievements-tab", {
         <br>
       </div>
       <div class="l-achievement-grid">
-        <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />
+        <normal-achievement-row v-for="(row, i) in rows" v-if="isRendered(i)" :key="i" :row="row" />
       </div>
     </div>`
 });

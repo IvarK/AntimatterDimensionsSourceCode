@@ -45,7 +45,7 @@ Vue.component("automator-points-list", {
           >
             <span class="c-automator-points-list-perk-label">{{ perk.label }}</span>
              - {{ perk.shortDescription }}
-            <span class="c-automator-points-list-ap">{{ perk.automatorPoints }} AP</span>
+            <span class="c-automator-points-list-ap">{{ formatInt(perk.automatorPoints) }} AP</span>
           </div>
         </div>
         <div class="l-automator-points-list-center-col">
@@ -74,7 +74,7 @@ Vue.component("automator-points-list", {
             style="font-size: 1.3rem;"
           >
             <b>{{ upgrade.name }}</b>
-            <span class="c-automator-points-list-ap">{{ upgrade.automatorPoints }} AP</span>
+            <span class="c-automator-points-list-ap">{{ formatInt(upgrade.automatorPoints) }} AP</span>
             <br>
             {{ upgrade.shortDescription }}
           </div>

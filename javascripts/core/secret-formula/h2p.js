@@ -402,7 +402,7 @@ individual autobuyer settings.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],
-      tab: "infinity/autobuyers"
+      tab: "automation/autobuyers"
     }, {
       name: "Break Infinity",
       info: () => `
@@ -813,7 +813,11 @@ to Perks you already have, although there are loops in the tree which you can go
     }, {
       name: "Automator",
       info: () => `
-The Automator is unlocked upon reaching ${formatInt(5)} Realities.
+The Automator is unlocked upon reaching a total of ${formatInt(AutomatorPoints.pointsForAutomator)} Automator Points.
+Automator Points are given when unlocking various Perks or Reality Upgrades, by unlocking the Black Hole, or by
+simply completing more Realities.
+<br>
+<br>
 It uses a scripting language that allows you to automate nearly the entire game.
 The interface has two panes, a script pane on the left where you enter the commands to automate the game, and a
 documentation pane on the right that has information on all the commands available to you.
@@ -838,10 +842,17 @@ you are unfamiliar with programming. To enter commands in block mode, drag the b
 documentation pane into the script pane and drop it where you want the command to go. Commands can be freely
 rearranged by dragging the blocks around if needed. Clicking the top-right button in block mode will switch back to
 text mode, and switching between block and text mode will automatically translate your script as well.
+<br>
+<br>
+Just like your entire savefile, individual Automator scripts can be imported and exported from the game.
+Properly-formatted script strings will begin with <b>${GameSaveSerializer.startingString["automator script"]}</b> and
+end with <b>${GameSaveSerializer.endingString["automator script"]}</b>. If this is not the case then part of your script
+was lost in the process of copy-pasting. The import function will load the script into a new slot; your current script
+will not be lost or overwritten.
 `,
       isUnlocked: () => Player.automatorUnlocked,
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
-      tab: "reality/automator"
+      tab: "automation/automator"
     }, {
       name: "Black Hole",
       info: () => `

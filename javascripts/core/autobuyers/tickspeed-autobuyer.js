@@ -50,6 +50,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
       .nextSibling(this.mode);
   }
 
+  get canTick() {
+    return Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable && super.canTick;
+  }
+
   tick() {
     super.tick();
     switch (this.mode) {

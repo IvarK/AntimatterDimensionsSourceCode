@@ -26,10 +26,11 @@ if you play the game on Chrome, you won't find your save on Firefox.
 You can transfer your save between places by using the export function, which will copy a <i>very</i> long string of
 random-looking characters into your clipboard. That text contains your save data, which you can load back into the
 game by pasting it into the text box on the import prompt. You need the entirety of the save text for importing to
-work properly, or else the game might not recognize the text as a valid save. Keep in mind that certain messaging
-applications may cut off part of the text if you are using one to transfer the save between devices. One way to tell
-that this has happened is for text to not end with <b>==</b>. In addition to importing and exporting to your clipboard,
-you can also import and export from text files as well.
+work properly, or else the game might not recognize the text as a valid save. Certain messaging applications may
+cut off part of the text if you are using one to transfer the save between devices. A properly-formatted save string
+will start with <b>${GameSaveSerializer.startingString.savefile}</b> and end with
+<b>${GameSaveSerializer.endingString.savefile}</b>, so if that is not the case then part of your save is missing.
+In addition to importing and exporting to your clipboard, you can also import and export from text files as well.
 <br>
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
@@ -43,13 +44,19 @@ do right before closing it might not be saved unless you wait for the autosave i
 length of the autosave interval is adjustable.
 <br>
 <br>
+You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
+with the same save on any device which is also logged into the same account. Saving and loading from the Cloud will
+automatically overwrite the other save unless the other save is either older or has noticeably more progression, in
+which case a modal will appear which asks you which save you want to keep.
+<br>
+<br>
 You can completely reset your save at any point if desired by clicking the button, which brings up a prompt you need
 to fill out in order to make sure you intentionally wanted to reset. Going through with this reset will only clear
 your current save; the other save slots will be unaffected. <b>Resetting your game in this way is completely
 irreversible and gives you no permanent benefits, secret or otherwise.</b>
 `,
       isUnlocked: () => true,
-      tags: ["choose", "save", "import", "export", "reset"],
+      tags: ["choose", "cloud", "google", "save", "import", "export", "reset"],
       tab: "options/saving"
     },
     {

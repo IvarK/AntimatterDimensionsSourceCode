@@ -708,8 +708,10 @@ GameStorage.migrations = {
       }
       // Handle the changed achievement "No DLC Required" correctly (otherwise saves could miss it).
       if (player.infinityUpgrades.size >= 16 || player.eternities.gte(0) || player.realities > 0) {
+        // eslint-disable-next-line no-bitwise
         newAchievements[3] |= 1;
       } else {
+        // eslint-disable-next-line no-bitwise
         newAchievements[3] &= ~1;
       }
     };

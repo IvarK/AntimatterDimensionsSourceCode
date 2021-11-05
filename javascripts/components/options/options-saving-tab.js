@@ -151,13 +151,13 @@ Vue.component("options-saving-tab", {
         </div>
         <div class="l-options-grid__row">
           <options-button onclick="GameOptions.logout()" v-if="loggedIn">
-            Logout from Cloud Saving
+            Disconnect Google Account and Disable Cloud Saving
           </options-button>
           <options-button onclick="GameOptions.login()"
             v-else
-            v-tooltip="'This will connect your Google Account to your Antimatter Dimensions savefile'"
+            v-tooltip="'This will connect your Google Account to your Antimatter Dimensions savefiles'"
           >
-            Login with Google to enable Cloud Saving
+            Login with Google to Enable Cloud Saving
           </options-button>
         </div>
       </div>

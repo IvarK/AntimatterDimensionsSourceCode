@@ -381,43 +381,6 @@ const BlackHoles = {
     return BlackHoles.list.every(bh => bh.isPermanent);
   },
 
-  get bh2Status() {
-    const bh1Remaining = BlackHole(1).timeWithPreviousActiveToNextStateChange;
-    const bh2Remaining = BlackHole(2).timeWithPreviousActiveToNextStateChange;
-
-    // Both BH active
-    if (BlackHole(1).isActive && BlackHole(2).isActive) {
-      const bh2Duration = Math.min(bh1Remaining, bh2Remaining);
-      return `Black Hole 2 is active for the next ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}!`;
-    }
-    
-    // BH1 active, BH2 will trigger before BH1 runs out
-    if (BlackHole(1).isActive && (bh2Remaining < bh1Remaining)) {
-      const bh2Duration = Math.min(bh1Remaining - bh2Remaining, BlackHole(2).duration);
-      return `Black Hole 2 will activate before Black Hole 1 deactivates,
-        for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}`;
-    }
-    
-    // BH2 won't start yet next cycle
-    if (BlackHole(1).isActive || (bh2Remaining > BlackHole(1).duration)) {
-      const cycleCount = BlackHole(1).isActive
-        ? Math.floor((bh2Remaining - bh1Remaining) / BlackHole(1).duration) + 1
-        : Math.floor(bh2Remaining / BlackHole(1).duration);
-      return `Black Hole 2 will activate after ${quantifyInt("more active cycle", cycleCount)} of Black Hole 1.`;
-    }
-    
-    // BH1 inactive, BH2 ready to go when BH1 activates
-    if (BlackHole(2).isCharged) {
-      const bh2Duration = Math.min(BlackHole(1).duration, bh2Remaining);
-      return `Black Hole 2 will activate with Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
-    }
-
-    // BH1 inactive, BH2 starts at some point after BH1 activates
-    const bh2Duration = Math.min(BlackHole(1).duration - bh2Remaining, BlackHole(2).duration);
-    return `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Remaining).toStringShort()} after
-      Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
-  },
-
   updatePhases(blackHoleDiff) {
     if (!this.areUnlocked || this.arePaused) return;
     // This code is intended to successfully update the black hole phases

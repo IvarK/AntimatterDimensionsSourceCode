@@ -27,9 +27,13 @@ You can transfer your save between places by using the export function, which wi
 random-looking characters into your clipboard. That text contains your save data, which you can load back into the
 game by pasting it into the text box on the import prompt. You need the entirety of the save text for importing to
 work properly, or else the game might not recognize the text as a valid save. Certain messaging applications may
-cut off part of the text if you are using one to transfer the save between devices. A properly-formatted save string
-will start with <b>${GameSaveSerializer.startingString.savefile}</b> and end with
-<b>${GameSaveSerializer.endingString.savefile}</b>, so if that is not the case then part of your save is missing.
+cut off part of the text if you are using one to transfer the save between devices.
+<br>
+<br>
+A properly-formatted save string from the Reality update will start with
+<b>${GameSaveSerializer.startingString.savefile}</b> and end with <b>${GameSaveSerializer.endingString.savefile}</b>.
+If you are importing from a version of the game from before Reality was released, it will instead start with <b>eyJ</b>
+and end with <b>==</b>. If neither of these are the case, then part of your save is missing and it will fail to import.
 In addition to importing and exporting to your clipboard, you can also import and export from text files as well.
 <br>
 <br>
@@ -45,7 +49,9 @@ length of the autosave interval is adjustable.
 <br>
 <br>
 You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
-with the same save on any device which is also logged into the same account. Saving and loading from the Cloud will
+with the same save on any device which is also logged into the same account. Cloud saving is only compatable with other
+saves on the web version of the game; saves from the Android app of the game will not be automatically linked via
+Cloud saving. Saving and loading from the Cloud will
 automatically overwrite the other save unless the other save is either older or has noticeably more progression, in
 which case a modal will appear which asks you which save you want to keep.
 <br>

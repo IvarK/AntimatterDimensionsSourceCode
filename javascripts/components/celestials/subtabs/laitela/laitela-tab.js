@@ -66,12 +66,12 @@ Vue.component("laitela-tab", {
       <celestial-quote-history celestial="laitela" />
       <div class="o-laitela-matter-amount">
         You have
-        <span :style="styleObject">{{ format(darkMatter.floor(), 2) }}</span>
-        Dark Matter.
+        <span :style="styleObject">{{ format(darkMatter, 2) }}</span>
+        Dark Matter<span v-if="isDMCapped"> (capped)</span>.
       </div>
       <div class="o-laitela-matter-amount">
         Your maximum Dark Matter ever is
-        <span :style="styleObject">{{ format(maxDarkMatter.floor(), 2) }}</span>,
+        <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span>,
         giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum.
       </div>
       <h2 class="c-laitela-singularity-container" v-if="!singularitiesUnlocked">

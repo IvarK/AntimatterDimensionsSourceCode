@@ -44,7 +44,7 @@ Vue.component("black-hole-state-row", {
         Active ({{ nextChange }} remaining)
       </template>
       <template v-else-if="id === 2 && isCharged">
-        Charged (Activates with Black Hole 1, {{ nextChange }} remaining)
+        Charged (Activates with Black Hole {{ formatInt(1) }}, {{ nextChange }} remaining)
       </template>
       <template v-else>
         Inactive (Activation in {{ nextChange }})

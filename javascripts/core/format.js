@@ -177,6 +177,11 @@ function quantifyInt(name, value) {
   return `${number} ${plural}`;
 }
 
+/**
+ * Creates an enumated string, using the oxford comma, such that "a"; "a, b"; "a, b, and c"
+ * @param  {string[]} items - an array of items to enumerate
+ * @return {string} - a string of {items}, separated by commas and/or and as needed.
+ */
 function makeEnumeration(items) {
   if (items.length === 0) return "";
   if (items.length === 1) return items[0];

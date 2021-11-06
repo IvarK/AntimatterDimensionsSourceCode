@@ -949,6 +949,8 @@ function simulateTime(seconds, real, fast) {
               click: () => {
                 const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+                // This, and the below similar code in "SKIP", are needed or the progress bar to be accurate
+                // (both with respect to the number of ticks it shows and with respect to how full it is).
                 progress.maxIter -= progress.remaining - newRemaining;
                 progress.remaining = newRemaining;
                 // We update the progress bar max data (remaining will update automatically).

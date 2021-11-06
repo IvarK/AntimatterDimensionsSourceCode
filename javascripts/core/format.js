@@ -103,6 +103,7 @@ function isSingular(amount) {
 const PLURAL_HELPER = new Map([
   [/y$/u, "ies"],
   [/x$/u, "xes"],
+  [/$/u, "s"]
 ]);
 
 // Some terms require specific (or no) handling when plural. These terms should be added, in Word Case, to this Map.
@@ -123,22 +124,25 @@ function pluralize(word, amount, plural) {
   if (word === undefined || amount === undefined) throw "Arguments must be defined";
 
   if (isSingular(amount)) return word;
-  if (plural !== undefined) return plural;
-  if (pluralDatabase.has(word)) return pluralDatabase.get(word);
+  const existingPlural = plural ?? pluralDatabase.get(word);
+  if (existingPlural !== undefined) return existingPlural;
 
-  // Go through the Map PLURAL_HELPER, using the supplied regex,
-  // returning the string with text replaced if any matches are found.
-  for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
-    const newWord = word.replace(match, replaceWith);
-    if (word !== newWord) {
-      pluralDatabase.set(word, newWord);
-      return newWord;
-    }
-  }
-
-  const newWord = `${word}s`;
+  const newWord = generatePlural(word);
   pluralDatabase.set(word, newWord);
   return newWord;
+}
+
+/**
+ * Creates a new plural based on PLURAL_HELPER and adds it to pluralDatabase
+ * @param  {string} word - a word to be pluralized using the regex in PLURAL_HELPER
+ * @return {string} - returns the pluralized word. if no pluralized word is found, simply returns the word itself.
+ */
+function generatePlural(word) {
+  for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
+    const newWord = word.replace(match, replaceWith);
+    if (word !== newWord) return newWord;
+  }
+  return word;
 }
 
 /**

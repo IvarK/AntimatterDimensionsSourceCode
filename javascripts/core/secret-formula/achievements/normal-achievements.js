@@ -1048,7 +1048,7 @@ GameDatabase.achievements.normal = [
   {
     id: 145,
     name: "Are you sure these are the right way around?",
-    description: "Have the Black Hole interval smaller than the duration.",
+    description: "Have either Black Hole interval smaller than its duration.",
     checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration),
     checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
     get reward() { return `Black Hole intervals are ${formatPercents(0.1)} shorter.`; },

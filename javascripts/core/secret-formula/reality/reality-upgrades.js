@@ -276,7 +276,7 @@ GameDatabase.reality.upgrades = (function() {
       hasFailed: () => !BlackHole(1).isUnlocked && Currency.realityMachines.lt(100),
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 1 && BlackHole(1).isUnlocked,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => `Unlock Black Hole ${formatInt(2)}`,
+      description: "Unlock Black Hole 2",
       automatorPoints: 10,
       shortDescription: () => `Second Black Hole`,
       formatCost: value => format(value, 1, 0)

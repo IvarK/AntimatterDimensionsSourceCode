@@ -82,19 +82,17 @@ Vue.component("black-hole-tab", {
     bh2Status() {
       const bh1Remaining = BlackHole(1).timeWithPreviousActiveToNextStateChange;
       const bh2Remaining = BlackHole(2).timeWithPreviousActiveToNextStateChange;
-      const bh1Str = `Black Hole ${formatInt(1)}`;
-      const bh2Str = `Black Hole ${formatInt(2)}`;
 
       // Both BH active
       if (BlackHole(1).isActive && BlackHole(2).isActive) {
         const bh2Duration = Math.min(bh1Remaining, bh2Remaining);
-        return `${bh2Str} is active for the next ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}!`;
+        return `Black Hole 2 is active for the next ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}!`;
       }
       
       // BH1 active, BH2 will trigger before BH1 runs out
       if (BlackHole(1).isActive && (bh2Remaining < bh1Remaining)) {
         const bh2Duration = Math.min(bh1Remaining - bh2Remaining, BlackHole(2).duration);
-        return `${bh2Str} will activate before ${bh1Str} deactivates,
+        return `Black Hole 2 will activate before Black Hole 1 deactivates,
           for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}`;
       }
       
@@ -103,19 +101,20 @@ Vue.component("black-hole-tab", {
         const cycleCount = BlackHole(1).isActive
           ? Math.floor((bh2Remaining - bh1Remaining) / BlackHole(1).duration) + 1
           : Math.floor(bh2Remaining / BlackHole(1).duration);
-        return `${bh2Str} will activate after ${quantifyInt("more active cycle", cycleCount)} of ${bh1Str}.`;
+        return `Black Hole 2 will activate after ${quantifyInt("more active cycle", cycleCount)} of Black Hole 1.`;
       }
       
       // BH1 inactive, BH2 ready to go when BH1 activates
       if (BlackHole(2).isCharged) {
         const bh2Duration = Math.min(BlackHole(1).duration, bh2Remaining);
-        return `${bh2Str} will activate with ${bh1Str}, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
+        return `Black Hole 2 will activate with Black Hole 1,
+          for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
       }
 
       // BH1 inactive, BH2 starts at some point after BH1 activates
       const bh2Duration = Math.min(BlackHole(1).duration - bh2Remaining, BlackHole(2).duration);
-      return `${bh2Str} will activate ${TimeSpan.fromSeconds(bh2Remaining).toStringShort()} after
-        ${bh1Str}, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
+      return `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Remaining).toStringShort()} after
+        Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
     },
     togglePause() {
       BlackHoles.togglePause();
@@ -206,7 +205,7 @@ Vue.component("black-hole-tab", {
           <span v-if="hasBH2 && !isPermanent">
             <b>{{ detailedBH2 }}</b>
             <br>
-            The timer for Black Hole {{ formatInt(2) }} only advances while Black Hole {{ formatInt(1) }} is active.
+            The timer for Black Hole 2 only advances while Black Hole 1 is active.
             <br>
             Upgrades affect the internal timer; the header shows real time until next activation.
           </span>

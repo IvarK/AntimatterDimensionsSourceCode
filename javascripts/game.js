@@ -959,7 +959,7 @@ function simulateTime(seconds, real, fast) {
             },
             {
               text: "SKIP",
-              condition: (current, max) => current > 10,
+              condition: current => current > 10,
               click: () => {
                 // We jump to 10 from the end (condition guarantees there are at least 10 left).
                 // We subtract the number of ticks we skipped, which is progress.remaining - 10.

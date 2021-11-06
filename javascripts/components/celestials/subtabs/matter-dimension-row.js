@@ -84,12 +84,18 @@ Vue.component("matter-dimension-row", {
     handleIntervalClick() {
       if (this.isIntervalCapped) this.dimension.ascend();
       else this.dimension.buyInterval();
+    },
+    // All the values are internally Decimals and technically allowed to go above Infinity. This is a special case
+    // however; it looks better in-game if we just format it as Infinity instead, as the resource used for these costs
+    // is itself hardcapped at e308 and we specifically want to format here (and nowhere else) as Infinity.
+    formatDMCost(cost) {
+      return cost.gt(Number.MAX_VALUE) ? Notations.current.infinite : format(cost, 2);
     }
   },
   template: `
     <div class="c-matter-dimension-container">
       <div class="o-matter-dimension-amount">
-        {{ name }} {{ ascensionText }}: {{ format(amount, 2, 0) }}
+        {{ name }} {{ ascensionText }}: {{ format(amount, 2) }}
       </div>
       <div class="c-matter-dimension-buttons">
         <button
@@ -106,7 +112,7 @@ Vue.component("matter-dimension-row", {
             </span>
           </span>
           <span v-else>
-            <br>Cost: {{ format(intervalCost, 2, 0) }}
+            <br>Cost: {{ formatDMCost(intervalCost) }}
           </span>
         </button>
         <button
@@ -114,7 +120,7 @@ Vue.component("matter-dimension-row", {
           class="o-matter-dimension-button"
           :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }"
         >
-          DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ format(powerDMCost, 2, 0) }}
+          DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ formatDMCost(powerDMCost) }}
         </button>
         <button
           @click="dimension.buyPowerDE()"
@@ -123,7 +129,7 @@ Vue.component("matter-dimension-row", {
         >
           DE +{{ format(powerDE, 2, 4) }}
           <br>
-          Cost: {{ format(powerDECost, 2, 0) }}
+          Cost: {{ formatDMCost(powerDECost) }}
         </button>
       </div>
       <div v-if="interval > 200">

@@ -30,6 +30,8 @@ Vue.component("pp-label", {
       <br>
       Perk choices are permanent and cannot be respecced.
       <br>
+      Diamond-shaped perks also give Automator Points.
+      <br>
       <div>
         <primary-button-on-off-custom
           v-model="fixedLoadPos"

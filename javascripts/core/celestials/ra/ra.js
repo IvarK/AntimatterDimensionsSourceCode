@@ -389,7 +389,7 @@ const Ra = {
       id: 1,
       lines: [
         "A... visitor?",
-        "I am here! I am the one you’re looking for... I think...",
+        "I am here! I am the one you are looking for... I think...",
         "What even was I again?",
         "Oh right, the Celestial of Memories.",
       ]
@@ -432,7 +432,7 @@ const Ra = {
       requirement: () => Ra.pets.effarig.level >= 15,
       lines: [
         "Effarig was very particular?",
-        "And I also remember a frightening reality...",
+        "And I also remember a frightening Reality...",
         "It was about... suffering?",
       ]
     },

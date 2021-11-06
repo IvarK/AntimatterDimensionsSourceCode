@@ -13,6 +13,7 @@ Vue.component("automator-points-list", {
     perkSources: () => AutomatorPoints.perks,
     upgradeSources: () => AutomatorPoints.upgrades,
     otherSources: () => GameDatabase.reality.otherAutomatorPoints,
+    automatorInterval: () => AutomatorBackend.currentInterval,
   },
   methods: {
     update() {
@@ -79,6 +80,15 @@ Vue.component("automator-points-list", {
             {{ upgrade.shortDescription }}
           </div>
         </div>
+      </div>
+      <br>
+      <div>
+        The automator uses a custom scripting language which allows (amongst other things) buying full
+        Time Study trees, entering Eternity Challenges, or starting Dilation. It can also force prestige
+        events on certain conditions independently from your Autobuyers or modify some of your Autobuyer settings.
+        <br>
+        The speed of the Automator gradually speeds up as you get more Realities. If unlocked right now,
+        it would run {{ format(1000 / automatorInterval, 2, 2) }} commands per real-time second.
       </div>
     </div>`
 });

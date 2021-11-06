@@ -937,8 +937,8 @@ function simulateTime(seconds, real, fast) {
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
               simulate the rest of the time with half as many ticks (down to a minimum of ${formatInt(500)} ticks
-              remaining). The "CANCEL" button will instead use all the remaining offline time in the first online
-              tick.`,
+              remaining). The "SKIP" button will instead use all the remaining offline time in ${formatInt(10)}
+              ticks.`,
             progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
@@ -956,12 +956,13 @@ function simulateTime(seconds, real, fast) {
               }
             },
             {
-              text: "CANCEL",
-              condition: () => true,
+              text: "SKIP",
+              condition: (current, max) => current > 10,
               click: () => {
-                // We jump to the end.
-                progress.maxIter -= progress.remaining;
-                progress.remaining = 0;
+                // We jump to 10 from the end (condition guarantees there are at least 10 left).
+                // We subtract the number of ticks we skipped, which is progress.remaining - 10.
+                progress.maxIter -= progress.remaining - 10;
+                progress.remaining = 10;
               }
             }]
           };

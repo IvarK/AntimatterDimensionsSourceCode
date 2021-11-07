@@ -111,11 +111,7 @@ class BasicAlchemyResourceState extends AlchemyResourceState {
   }
 
   set highestRefinementValue(value) {
-    player.celestials.ra.highestRefinementValue[this._name] = value;
-  }
-
-  updateHighestRefinementValue(value) {
-    this.highestRefinementValue = Math.max(this.highestRefinementValue, value);
+    player.celestials.ra.highestRefinementValue[this._name] = Math.max(this.highestRefinementValue, value);
   }
 
   get cap() {

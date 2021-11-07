@@ -126,7 +126,7 @@ const GlyphSacrificeHandler = {
       }
     }
     if (resource.isBaseResource) {
-      resource.updateHighestRefinementValue(rawRefinementGain / this.glyphRefinementEfficiency);
+      resource.highestRefinementValue = rawRefinementGain / this.glyphRefinementEfficiency;
     }
     Glyphs.removeFromInventory(glyph);
   }

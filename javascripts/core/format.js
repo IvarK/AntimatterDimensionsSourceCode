@@ -103,12 +103,14 @@ function isSingular(amount) {
 const PLURAL_HELPER = new Map([
   [/y$/u, "ies"],
   [/x$/u, "xes"],
+  [/$/u, "s"]
 ]);
 
-// Some terms in the game are plural by default. These terms should be added, in all lowercase, to this array.
-const ALWAYS_SINGULAR = [
-  "dilated time",
-];
+// Some terms require specific (or no) handling when plural. These terms should be added, in Word Case, to this Map.
+// Words will be added to this Map when a valid plural for it is found on being run through the pluralize function.
+const pluralDatabase = new Map([
+  ["Dilated Time", "Dilated Time"],
+]);
 
 /**
  * A function that pluralizes a word based on a designated amount
@@ -119,22 +121,28 @@ const ALWAYS_SINGULAR = [
  *                    plural form of the input {word}. If the {amount} is singular, return {word}
  */
 function pluralize(word, amount, plural) {
-  // If either word or amount is undefined, we cannot continue.
   if (word === undefined || amount === undefined) throw "Arguments must be defined";
 
-  // If the word is ALWAYS_SINGULAR or its singular, return the word itself.
-  // Afterwards, if there was a specific plural passed in, return that.
-  if (ALWAYS_SINGULAR.includes(word.toLowerCase()) || isSingular(amount)) return word;
-  if (plural) return plural;
+  if (isSingular(amount)) return word;
+  const existingPlural = plural ?? pluralDatabase.get(word);
+  if (existingPlural !== undefined) return existingPlural;
 
-  // Go through the Map PLURAL_HELPER, using the supplied regex, returning the string with text replaced if any matches
-  // are found.
+  const newWord = generatePlural(word);
+  pluralDatabase.set(word, newWord);
+  return newWord;
+}
+
+/**
+ * Creates a new plural based on PLURAL_HELPER and adds it to pluralDatabase
+ * @param  {string} word - a word to be pluralized using the regex in PLURAL_HELPER
+ * @return {string} - returns the pluralized word. if no pluralized word is found, simply returns the word itself.
+ */
+function generatePlural(word) {
   for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
     const newWord = word.replace(match, replaceWith);
     if (word !== newWord) return newWord;
   }
-  // Return the word but with an 's'
-  return `${word}s`;
+  return word;
 }
 
 /**
@@ -169,6 +177,11 @@ function quantifyInt(name, value) {
   return `${number} ${plural}`;
 }
 
+/**
+ * Creates an enumated string, using the oxford comma, such that "a"; "a and b"; "a, b, and c"
+ * @param  {string[]} items - an array of items to enumerate
+ * @return {string} - a string of {items}, separated by commas and/or and as needed.
+ */
 function makeEnumeration(items) {
   if (items.length === 0) return "";
   if (items.length === 1) return items[0];
@@ -177,4 +190,3 @@ function makeEnumeration(items) {
   const last = items[items.length - 1];
   return `${commaSeparated}, and ${last}`;
 }
-

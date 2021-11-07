@@ -72,6 +72,7 @@ const GlyphSacrificeHandler = {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
     const resource = this.glyphAlchemyResource(glyph);
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
+    if (resource.cap === 0) return glyphActualValue;
     return Math.clamp(resource.amountUntilCap, 0, glyphActualValue);
   },
   attemptRefineGlyph(glyph, force) {

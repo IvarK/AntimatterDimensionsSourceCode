@@ -75,6 +75,9 @@ const GlyphSacrificeHandler = {
     if (resource.cap === 0) return glyphActualValue;
     return Math.clamp(resource.amountUntilCap, 0, glyphActualValue);
   },
+  highestRefinementValue(glyph) {
+    return this.glyphRawRefinementGain(glyph) / this.glyphRefinementEfficiency;
+  },
   attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
     if (glyph.type === "cursed") {
@@ -126,7 +129,7 @@ const GlyphSacrificeHandler = {
       }
     }
     if (resource.isBaseResource) {
-      resource.highestRefinementValue = rawRefinementGain / this.glyphRefinementEfficiency;
+      resource.highestRefinementValue = this.highestRefinementValue(glyph);
     }
     Glyphs.removeFromInventory(glyph);
   }

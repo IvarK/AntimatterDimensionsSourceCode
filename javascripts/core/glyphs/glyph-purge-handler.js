@@ -72,7 +72,20 @@ const GlyphSacrificeHandler = {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
     const resource = this.glyphAlchemyResource(glyph);
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
-    return Math.clamp(resource.amountUntilCap, 0, glyphActualValue);
+    if (resource.cap === 0) return glyphActualValue;
+    const amountUntilCap = this.glyphEffectiveCap(glyph) - resource.amount;
+    return Math.clamp(amountUntilCap, 0, glyphActualValue);
+  },
+  // The glyph that is being refined can increase the cap, which means the effective cap
+  // will be the current resource cap or the cap after this glyph is refined, whichever is higher.
+  glyphEffectiveCap(glyph) {
+    const resource = this.glyphAlchemyResource(glyph);
+    const currentCap = resource.cap;
+    const capAfterRefinement = this.highestRefinementValue(glyph);
+    return Math.max(currentCap, capAfterRefinement);
+  },
+  highestRefinementValue(glyph) {
+    return this.glyphRawRefinementGain(glyph) / this.glyphRefinementEfficiency;
   },
   attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
@@ -125,7 +138,7 @@ const GlyphSacrificeHandler = {
       }
     }
     if (resource.isBaseResource) {
-      resource.updateHighestRefinementValue(rawRefinementGain / this.glyphRefinementEfficiency);
+      resource.highestRefinementValue = this.highestRefinementValue(glyph);
     }
     Glyphs.removeFromInventory(glyph);
   }

@@ -54,10 +54,6 @@ class AlchemyResourceState extends GameMechanicState {
     return Math.clamp(this.amount / this.cap, 0, 1);
   }
 
-  get amountUntilCap() {
-    return this.cap - this.amount;
-  }
-
   get unlockedWith() {
     return Ra.pets.effarig;
   }
@@ -111,11 +107,7 @@ class BasicAlchemyResourceState extends AlchemyResourceState {
   }
 
   set highestRefinementValue(value) {
-    player.celestials.ra.highestRefinementValue[this._name] = value;
-  }
-
-  updateHighestRefinementValue(value) {
-    this.highestRefinementValue = Math.max(this.highestRefinementValue, value);
+    player.celestials.ra.highestRefinementValue[this._name] = Math.max(this.highestRefinementValue, value);
   }
 
   get cap() {

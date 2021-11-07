@@ -54,10 +54,6 @@ class AlchemyResourceState extends GameMechanicState {
     return Math.clamp(this.amount / this.cap, 0, 1);
   }
 
-  get amountUntilCap() {
-    return this.cap - this.amount;
-  }
-
   get unlockedWith() {
     return Ra.pets.effarig;
   }

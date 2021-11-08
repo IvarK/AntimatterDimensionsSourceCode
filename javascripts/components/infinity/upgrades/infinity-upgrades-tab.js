@@ -95,7 +95,8 @@ Vue.component("infinity-upgrades-tab", {
       </div>
       <div v-if="!chargeUnlocked">
         Each upgrade requires the one above it to be purchased first.
-        The bottom two upgrades require the other {{ formatInt(16) }} to already be purchased.
+        <br v-if="!bottomRowUnlocked">
+        The bottom two upgrades <span v-if="!bottomRowUnlocked">(once they're unlocked via the achievement "No DLC required")</span> require the other {{ formatInt(16) }} to already be purchased.
       </div>
       <br>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">

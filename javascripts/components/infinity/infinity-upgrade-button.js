@@ -45,9 +45,11 @@ Vue.component("infinity-upgrade-button", {
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;
-      // A bit hacky, but the offline passive IP upgrade is the only one which will ever be zero. We use this to
-      // hide the effect value in order to be consistent with the other offline progress upgrades which hide as well
-      this.isDisabled = typeof upgrade.config.effect === "function" && Decimal.eq(upgrade.config.effect(), 0);
+      // A bit hacky, but the offline passive IP upgrade (the one that doesn't work online)
+      // should hide its effect value if offline progress is disabled, in order to be
+      // consistent with the other offline progress upgrades which hide as well.
+      // (Other upgrades, including rebuyables, should never hide their effect).
+      this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled();
     }
   },
   template: `

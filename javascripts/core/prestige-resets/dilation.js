@@ -42,7 +42,7 @@ class EnterDilationReset extends BaseEternityReset {
   }
 
   get canBePerformed() {
-    return PlayerProgress.dilationUnlocked();
+    return super.canBePerformed && PlayerProgress.dilationUnlocked();
   }
 }
 
@@ -89,7 +89,7 @@ class ExitDilationReset extends BaseEternityReset {
   }
 
   get canBePerformed() {
-    return player.dilation.active;
+    return super.canBePerformed && player.dilation.active;
   }
 }
 

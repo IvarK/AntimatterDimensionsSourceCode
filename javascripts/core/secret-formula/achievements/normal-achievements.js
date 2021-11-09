@@ -121,8 +121,8 @@ GameDatabase.achievements.normal = [
   {
     id: 31,
     name: "I forgot to nerf that",
-    get description() { return `Get any Antimatter Dimension multiplier over ${format(1e31)}.`; },
-    checkRequirement: () => AntimatterDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
+    get description() { return `Get any Antimatter Dimension multiplier over ${formatX(1e31)}.`; },
+    checkRequirement: () => AntimatterDimensions.all.some(x => x.multiplier.exponent >= 31),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `1st Antimatter Dimensions are ${formatPercents(0.05)} stronger.`; },
     effect: 1.05
@@ -461,9 +461,10 @@ GameDatabase.achievements.normal = [
   {
     id: 72,
     name: "Can't hold all these infinities",
-    get description() { return `Get all Antimatter Dimension multipliers over ${format(1e308)}.`; },
-    checkRequirement: () => Array.range(1, 8)
-      .every(tier => AntimatterDimension(tier).multiplier.exponent >= 308),
+    get description() {
+      return `Get all Antimatter Dimension multipliers over ${formatX(Decimal.NUMBER_MAX_VALUE, 1)}.`;
+    },
+    checkRequirement: () => AntimatterDimensions.all.every(x => x.multiplier.gte(Decimal.NUMBER_MAX_VALUE)),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `All Antimatter Dimensions are ${formatPercents(0.1)} stronger.`; },
     effect: 1.1

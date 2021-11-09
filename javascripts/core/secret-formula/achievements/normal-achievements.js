@@ -462,7 +462,7 @@ GameDatabase.achievements.normal = [
     id: 72,
     name: "Can't hold all these infinities",
     get description() {
-      return `Get all Antimatter Dimension multipliers over ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)}.`;
+      return `Get all Antimatter Dimension multipliers over ${formatX(Decimal.NUMBER_MAX_VALUE, 1)}.`;
     },
     checkRequirement: () => AntimatterDimensions.all.every(x => x.multiplier.gte(Decimal.NUMBER_MAX_VALUE)),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,

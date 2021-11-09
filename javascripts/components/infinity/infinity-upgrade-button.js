@@ -39,6 +39,9 @@ Vue.component("infinity-upgrade-button", {
   },
   methods: {
     update() {
+      // Note that this component is used by both infinity upgrades and break infinity upgrades
+      // (putting this comment here rather than at the top of the component since this function
+      // seems more likely to be read).
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
       this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect;

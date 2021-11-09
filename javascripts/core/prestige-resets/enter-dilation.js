@@ -1,6 +1,6 @@
 "use strict";
 
-class EnterDilationReset extends EternityReset {
+class EnterDilationReset extends BaseEternityReset {
   get confirmationOption() {
     return player.options.confirmations.dilation;
   }

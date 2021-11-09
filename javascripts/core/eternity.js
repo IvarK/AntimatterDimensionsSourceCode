@@ -3,7 +3,7 @@
 function eternityResetRequest(auto) {
   if (!Reset.eternity.canBePerformed) return;
   if (EternityChallenge.isRunning) {
-    Reset.eternityChallenge.request({ auto });
+    Reset.exitEternityChallenge.request({ auto });
     return;
   }
   if (player.dilation.active) {

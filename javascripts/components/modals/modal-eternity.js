@@ -54,7 +54,7 @@ Vue.component("modal-eternity", {
     },
     handleYesClick() {
       if (this.exitingEC) {
-        Reset.eternityChallenge.request(this.modalConfig);
+        Reset.exitEternityChallenge.request(this.modalConfig);
       } else {
         Reset.eternity.request(this.modalConfig);
       }

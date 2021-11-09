@@ -1,6 +1,6 @@
 "use strict";
 
-class EternityChallengeReset extends EternityReset {
+class EternityChallengeReset extends BaseEternityReset {
   get goal() {
     return EternityChallenge.isRunning ? EternityChallenge.current.currentGoal : super.goal;
   }
@@ -46,4 +46,6 @@ class EternityChallengeReset extends EternityReset {
   }
 }
 
-Reset.eternityChallenge = new EternityChallengeReset();
+Reset.enterEternityChallenge = new BaseEternityReset();
+
+Reset.exitEternityChallenge = new EternityChallengeReset();

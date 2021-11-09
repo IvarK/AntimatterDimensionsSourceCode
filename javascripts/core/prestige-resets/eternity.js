@@ -1,6 +1,6 @@
 "use strict";
 
-class EternityReset extends PrestigeMechanic {
+class BaseEternityReset extends PrestigeMechanic {
   get goal() {
     return Decimal.NUMBER_MAX_VALUE;
   }
@@ -156,7 +156,7 @@ class EternityReset extends PrestigeMechanic {
   }
 }
 
-class EternityResetWithRespec extends EternityReset {
+Reset.eternity = new class EternityResetWithRespec extends BaseEternityReset {
   reset(reality) {
     if (player.respec) {
       respecTimeStudies();
@@ -164,10 +164,4 @@ class EternityResetWithRespec extends EternityReset {
     }
     super.reset(reality);
   }
-}
-
-// TODO: fix this
-
-Reset.eternity = new EternityResetWithRespec();
-
-Reset.enterEternityChallenge = new EternityReset();
+}();

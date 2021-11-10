@@ -7,6 +7,7 @@ Vue.component("equipped-glyphs", {
       dragoverIndex: -1,
       respec: player.reality.respec,
       respecIntoProtected: player.options.respecIntoProtected,
+      undoSlotsAvailable: 0,
       undoAvailable: false,
       undoVisible: false,
     };
@@ -30,6 +31,7 @@ Vue.component("equipped-glyphs", {
         : "Your currently-equipped Glyphs will stay equipped on Reality.";
     },
     undoTooltip() {
+      if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
       return this.undoAvailable
         ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
           " (Most resources will be fully reset)")
@@ -40,8 +42,9 @@ Vue.component("equipped-glyphs", {
     update() {
       this.respec = player.reality.respec;
       this.respecIntoProtected = player.options.respecIntoProtected;
+      this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
-      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
       // This is necessary to force a re-render by key-swapping for when altered glyph effects are activated
     },
     glyphPositionStyle(idx) {

@@ -679,6 +679,12 @@ function applyRUPG10() {
   Replicanti.unlock(true);
 }
 
+function switchToCelestial(target) {
+  for (const [key, celestial] of Object.entries(player.celestials)) {
+    celestial.run = key === target;
+  }
+}
+
 function clearCelestialRuns() {
   const saved = {
     teresa: player.celestials.teresa.run,

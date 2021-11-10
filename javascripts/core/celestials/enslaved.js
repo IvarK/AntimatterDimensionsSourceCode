@@ -123,8 +123,7 @@ const Enslaved = {
     return true;
   },
   initializeRun() {
-    clearCelestialRuns();
-    player.celestials.enslaved.run = true;
+    switchToCelestial("enslaved");
     player.secretUnlocks.viewSecretTS = false;
     this.feltEternity = false;
     this.quotes.show(this.quotes.START_RUN);

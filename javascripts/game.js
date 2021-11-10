@@ -661,7 +661,7 @@ function laitelaRealityTick(realDiff) {
     };
     laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
     laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
-    clearCelestialRuns();
+    switchToCelestial(null);
     if (Time.thisRealityRealTime.totalSeconds < 30) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;

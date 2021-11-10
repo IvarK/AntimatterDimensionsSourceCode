@@ -307,8 +307,7 @@ const Ra = {
     return Boolean(player.celestials.ra.unlockBits & (1 << info.id));
   },
   initializeRun() {
-    clearCelestialRuns();
-    player.celestials.ra.run = true;
+    switchToCelestial("ra");
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;

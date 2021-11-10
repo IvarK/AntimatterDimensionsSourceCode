@@ -66,8 +66,7 @@ const Teresa = {
     return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
   initializeRun() {
-    clearCelestialRuns();
-    player.celestials.teresa.run = true;
+    switchToCelestial("teresa");
   },
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();

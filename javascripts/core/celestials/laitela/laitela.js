@@ -30,8 +30,7 @@ const Laitela = {
     return true;
   },
   initializeRun() {
-    clearCelestialRuns();
-    this.celestial.run = true;
+    switchToCelestial("laitela");
   },
   get isRunning() {
     return this.celestial.run;

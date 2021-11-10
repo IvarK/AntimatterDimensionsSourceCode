@@ -196,8 +196,7 @@ const V = {
     return Boolean(player.celestials.v.unlockBits & (1 << info.id));
   },
   initializeRun() {
-    clearCelestialRuns();
-    player.celestials.v.run = true;
+    switchToCelestial("v");
     this.quotes.show(this.quotes.REALITY_ENTER);
   },
   updateTotalRunUnlocks() {

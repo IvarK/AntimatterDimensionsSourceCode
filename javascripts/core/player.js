@@ -752,7 +752,7 @@ const Player = {
   },
 
   get canEternity() {
-    return player.records.thisEternity.maxIP.gte(Player.eternityGoal);
+    return player.records.thisEternity.maxIP.plus(gainedInfinityPoints()).gte(Player.eternityGoal);
   },
 
   get bestRunIPPM() {

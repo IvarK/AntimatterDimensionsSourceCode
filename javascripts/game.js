@@ -90,7 +90,7 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
-  let ep = Decimal.pow(5, Currency.infinityPoints.value.plus(
+  let ep = Decimal.pow(5, player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {

@@ -113,7 +113,7 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   return glyphEffect.effect(getAdjustedGlyphLevel(glyph), glyph.strength);
 }
 
-// Note this function is used for both glyph bitmasks and news ticker bitmasks
+// Note this function is used for glyph bitmasks, news ticker bitmasks, and offline achievements
 function countValuesFromBitmask(bitmask) {
   let numEffects = 0;
   let bits = bitmask;

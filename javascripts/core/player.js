@@ -685,6 +685,7 @@ let player = {
       tachyonParticles: true,
       dilatedTime: true,
       tachyonGalaxies: true,
+      achievementCount: true,
       realities: true,
       realityMachines: true,
       imaginaryMachines: true,

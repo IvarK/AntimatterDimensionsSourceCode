@@ -744,16 +744,6 @@ const Player = {
     return this.antimatterChallenge || EternityChallenge.current;
   },
 
-  get effectiveMatterAmount() {
-    if (NormalChallenge(11).isRunning) {
-      return player.matter;
-    }
-    if (InfinityChallenge(6).isRunning) {
-      return Decimal.pow(player.matter, 20);
-    }
-    return new Decimal(0);
-  },
-
   get canCrunch() {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return false;
     const challenge = NormalChallenge.current || InfinityChallenge.current;

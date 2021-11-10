@@ -22,7 +22,7 @@ function updateNormalAndInfinityChallenges(diff) {
       const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
         Math.clampMax(player.galaxies, 100) / 100;
       const finalMatterCap = Decimal.MAX_VALUE;
-      player.matter = player.matter.times(Decimal.pow(cappedBase, diff / 100)).clampMax(finalMatterCap);
+      player.matter = player.matter.times(Decimal.pow(cappedBase, diff / 20)).clampMax(finalMatterCap);
     }
     if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       Modal.hideAll();

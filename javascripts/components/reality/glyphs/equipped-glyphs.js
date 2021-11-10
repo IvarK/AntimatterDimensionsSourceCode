@@ -45,7 +45,6 @@ Vue.component("equipped-glyphs", {
       this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
-      // This is necessary to force a re-render by key-swapping for when altered glyph effects are activated
     },
     glyphPositionStyle(idx) {
       return {

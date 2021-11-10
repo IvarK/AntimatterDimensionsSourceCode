@@ -118,6 +118,15 @@ const GlyphTooltipComponent = {
     // else, with no z order shenanigans
     document.body.appendChild(this.$el);
   },
+  destroyed() {
+    try {
+      document.body.removeChild(this.$el);
+    } catch (e) {
+      // If the tooltip isn't visible, then it can't be removed on account of not being there in the first place.
+      // Trying to remove it anyway causes an exception to be thrown but otherwise nothing seems to actually affect
+      // the game. Nevertheless, including this try/catch no-op suppresses console error spam.
+    }
+  },
   watch: {
     changeWatcher() {
       this.$recompute("sortedEffects");
@@ -498,8 +507,6 @@ Vue.component("glyph-component", {
       this.isCursedGlyph = this.glyph.type === "cursed";
       this.glyphEffects = this.extractGlyphEffects();
       this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
-
-      
       this.logGlyphSacrifice = BASIC_GLYPH_TYPES
         .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
     },
@@ -544,6 +551,7 @@ Vue.component("glyph-component", {
       return effectIDs;
     },
     hideTooltip() {
+      this.tooltipLoaded = false;
       this.$viewModel.tabs.reality.mouseoverGlyphInfo.type = "";
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },

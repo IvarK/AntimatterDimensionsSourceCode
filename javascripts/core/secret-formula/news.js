@@ -125,9 +125,11 @@ GameDatabase.news = [
   },
   {
     id: "a27",
-    text:
-      `A new religion has been created, and it's spreading like wildfire. The believers of this religion worship
-      the Heavenly Pelle, the goddess of antimatter. They also believe that 10^308 is infinite.`
+    get text() {
+      return `A new religion has been created, and it's spreading like wildfire. The believers of this religion worship
+        the Heavenly Pelle, the goddess of antimatter. They also believe that ${format(Number.MAX_VALUE, 2)}
+        is infinite.`;
+    }
   },
   {
     id: "a28",
@@ -666,7 +668,9 @@ GameDatabase.news = [
   },
   {
     id: "a128",
-    text: "Antimatter_Dimensions.mp1.79e308"
+    get text() {
+      return `Antimatter_Dimensions.mp${format(Number.MAX_VALUE, 2)}`;
+    }
   },
   {
     id: "a129",
@@ -1310,7 +1314,9 @@ GameDatabase.news = [
   },
   {
     id: "a231",
-    text: "One, two, skip a few, 99, 1.79e308!"
+    get text() {
+      return `One, two, skip a few, 99, ${format(Number.MAX_VALUE, 2)}!`;
+    }
   },
   {
     id: "a232",
@@ -1318,7 +1324,10 @@ GameDatabase.news = [
   },
   {
     id: "a233",
-    text: "Level 10 crook, Level 1.79e308 Boss, that's how Antimatter Dimensions works."
+    get text() {
+      return `Level ${formatInt(10)} crook, Level ${format(Number.MAX_VALUE, 2)} Boss,
+        that's how Antimatter Dimensions works.`;
+    }
   },
   {
     id: "a234",
@@ -1502,7 +1511,9 @@ GameDatabase.news = [
   },
   {
     id: "a255",
-    text: "Bruh Sound Effect #1.79e308."
+    get text() {
+      return `Bruh Sound Effect #${format(Number.MAX_VALUE, 2)}.`;
+    }
   },
   {
     id: "a256",
@@ -1644,14 +1655,16 @@ GameDatabase.news = [
   },
   {
     id: "a279",
-    text:
-      `Coming soon to all good retailers- Antimatter Dimensions: The Board Game! Enjoy the thrill of watching huge
-      numbers go up without the need for a PC or mobile phone. Comes complete with everything you need including a
-      mixed scientific calculator, 1.79e308 antimatter counters, a high quality plastic BUY MAX button, and over a
+    get text() {
+      return `Coming soon to all good retailers- Antimatter Dimensions: The Board Game! Enjoy the thrill of watching
+      huge numbers go up without the need for a PC or mobile phone. Comes complete with everything you need including a
+      mixed scientific calculator, ${format(Number.MAX_VALUE, 2)} antimatter counters, a high quality plastic
+      BUY MAX button, and over a
       thousand news message cards with all the irrelevant memes you know and love! You can finally enjoy AD the way
       it was meant to be played. AD: The Board Game is also available in travel size, so you can even experience
       the joy of calculating logarithmic growth while you're on the go! BUY AD: The Board Game TODAY! Warning: may
-      contain traces of actual matter. Replicanti sold separately. 9th Dimension not included.`,
+      contain traces of actual matter. Replicanti sold separately. 9th Dimension not included.`;
+    },
     isAdvertising: true
   },
   {
@@ -2133,12 +2146,14 @@ GameDatabase.news = [
   {
     id: "a343",
     get text() {
+      const fakeProgress = Math.pow(player.records.realTimePlayed, 25);
       // Caps in ~68 years of real playtime then turns into "Infinite%"
-      return `Global Challenge - across all AD players, accumulate ${format(1e308)} contest-paperclips (noted by the
+      return `Global Challenge - across all AD players, accumulate ${format(Number.MAX_VALUE, 2)} contest-paperclips
+        (noted by the
         square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
         tickspeed while above ${format(1e200)} tickspeed upgrades! Current global progress -
-        ${format(Math.pow(player.records.realTimePlayed, 25))}/${format(1e308)}
-        (${formatPercents(Math.log10(Math.pow(player.records.realTimePlayed, 25)) / 308, 3)})`;
+        ${format(fakeProgress)}/${format(Number.MAX_VALUE, 2)}
+        (${formatPercents(Math.log10(fakeProgress) / Math.log10(Number.MAX_VALUE), 3)})`;
     }
   },
   {
@@ -2365,7 +2380,7 @@ GameDatabase.news = [
   },
   {
     id: "l21",
-    text: "I've got 1.79e308 problems, but none of them antimatter.",
+    get text() { return `I've got ${format(Number.MAX_VALUE, 2)} problems, but none of them antimatter.`; },
     get unlocked() { return Currency.infinities.gt(0) && !PlayerProgress.hasBroken(); }
   },
   {
@@ -2887,7 +2902,7 @@ GameDatabase.news = [
   },
   {
     id: "ai5",
-    text: "Local man finds 1.79e308 Planck volumes in his freezer."
+    get text() { return `Local man finds ${format(Number.MAX_VALUE, 2)} Planck volumes in his freezer.`; }
   },
   {
     id: "ai6",
@@ -3164,7 +3179,7 @@ GameDatabase.news = [
   },
   {
     id: "ai74",
-    text: "Ad bonus: $1.79e308 (random team)"
+    get text() { return `Ad bonus: $${format(Number.MAX_VALUE, 2)} (random team)`; }
   },
   {
     id: "ai75",
@@ -3172,7 +3187,7 @@ GameDatabase.news = [
   },
   {
     id: "ai76",
-    text: "Now releasing: Dimsension 1.79e308"
+    get text() { return `Now releasing: Dimsension ${format(Number.MAX_VALUE, 2)}`; }
   },
   {
     id: "ai77",
@@ -3331,7 +3346,7 @@ GameDatabase.news = [
   },
   {
     id: "ai112",
-    text: "This is the last time, to buy items, you must pay a small fee of 1.79e308 real money."
+    get text() { return `This is the last time, to buy items, you must pay a small fee of ${format(Number.MAX_VALUE, 2)} real money.`; }
   },
   {
     id: "ai113",
@@ -3867,7 +3882,7 @@ GameDatabase.news = [
   },
   {
     id: "ai244",
-    text: "The Big Crunch. What could that be?  About 4*1024 Big Crunch points?  About 1.8e308 antimatter points?  About the same as a galaxy?  About the same as a galaxy, you say? Just look at that.  An antimatter galaxy.  Only this game can provide such a vast amount of antimatter, and it's FUN!  I said \"fun\"!  What's not to love?"
+    get text() { return `The Big Crunch. What could that be?  About 4*1024 Big Crunch points?  About ${format(Number.MAX_VALUE, 2)} antimatter points?  About the same as a galaxy?  About the same as a galaxy, you say? Just look at that.  An antimatter galaxy.  Only this game can provide such a vast amount of antimatter, and it's FUN!  I said "fun"!  What's not to love?`; }
   },
   {
     id: "ai245",
@@ -4123,7 +4138,7 @@ GameDatabase.news = [
   },
   {
     id: "ai308",
-    text: "If you are reading this, that means 1.79e308 matter to you."
+    get text() { return `If you are reading this, that means ${format(Number.MAX_VALUE, 2)} matter to you.`; }
   },
   {
     id: "ai309",
@@ -4399,7 +4414,7 @@ GameDatabase.news = [
   },
   {
     id: "ai377",
-    text: "The year is 1 BILLIONAIRE, the antimatter is 41%, and the dimension is 1e1e8. The standard deviation of a measurement is how small your problems are. This makes people think that the values they are using are general and normal, which leads to many nerfs and even breakdowns. In the year 1e308 the temperature has risen and the moon is the same color as the Earth. There are no signs of life except for the occasional plankton blooming in the sea. There are theories that the antimatter has a magnetic moment, but the experiments so far don't seem to suggest that it does. There are over a million species of antimatter, but none have been seen to blink or produce light. Scientists suggest that many types of matter may be \"behind\" the antimatter, but \"they\" don't \"talk\" to each other."
+    get text() { return `The year is 1 BILLIONAIRE, the antimatter is 41%, and the dimension is 1e1e8. The standard deviation of a measurement is how small your problems are. This makes people think that the values they are using are general and normal, which leads to many nerfs and even breakdowns. In the year ${format(Number.MAX_VALUE, 2)} the temperature has risen and the moon is the same color as the Earth. There are no signs of life except for the occasional plankton blooming in the sea. There are theories that the antimatter has a magnetic moment, but the experiments so far don't seem to suggest that it does. There are over a million species of antimatter, but none have been seen to blink or produce light. Scientists suggest that many types of matter may be "behind" the antimatter, but "they" don't "talk" to each other.`; }
   },
   {
     id: "ai378",
@@ -4627,7 +4642,7 @@ GameDatabase.news = [
   },
   {
     id: "ai434",
-    text: "You have no power, but you do control a large quantity of time, which you will use to your advantage. You have no power, but you do own a large amount of data, which will be of great help in your quest for \"the truth\". You have no power, but you do own a large amount of time, which will be of great help in your quest to \"knock on as many doors as possible\". You have no power, but you do own a large amount of IP, which will be a valuable asset in your quest to make your \"citizen footage\" (which you can view, for a small fee of $1.79e308)\"."
+    get text() { return `You have no power, but you do control a large quantity of time, which you will use to your advantage. You have no power, but you do own a large amount of data, which will be of great help in your quest for "the truth". You have no power, but you do own a large amount of time, which will be of great help in your quest to "knock on as many doors as possible". You have no power, but you do own a large amount of IP, which will be a valuable asset in your quest to make your "citizen footage" (which you can view, for a small fee of $${format(Number.MAX_VALUE, 2)})".`; }
   },
   {
     id: "ai435",
@@ -4845,7 +4860,7 @@ GameDatabase.news = [
   },
   {
     id: "ai488",
-    text: "Welcome and welcome back to another episode of Anti-Fashion Pants, where we watch people's wares as they are sold at stupid clothing stores. This week's subject is... antilasers. People are able to manufacture and use antimatter lasers to shoot antimatter bullets at will, making them able to completely wipe out cities in their sights. This is a dangerous skill to have, as people are not only untrustworthy but also physically incapable of using it. The skill, however, is able to... Produce 1.8e308 antimatter bullets a minute, over a period of 10 years. People are also able to use anti-matter to fire anti-matter bullets at will, making them able to exterminate entire cities in their sights."
+    get text() { return `Welcome and welcome back to another episode of Anti-Fashion Pants, where we watch people's wares as they are sold at stupid clothing stores. This week's subject is... antilasers. People are able to manufacture and use antimatter lasers to shoot antimatter bullets at will, making them able to completely wipe out cities in their sights. This is a dangerous skill to have, as people are not only untrustworthy but also physically incapable of using it. The skill, however, is able to... Produce ${format(Number.MAX_VALUE, 2)} antimatter bullets a minute, over a period of 10 years. People are also able to use anti-matter to fire anti-matter bullets at will, making them able to exterminate entire cities in their sights.`; }
   },
   {
     id: "ai489",
@@ -4989,7 +5004,7 @@ GameDatabase.news = [
   },
   {
     id: "ai524",
-    text: "\"Help, I'm doomed to fall for the rest of my life\" (requires 1.79e308 paperclips)"
+    get text() { return `"Help, I'm doomed to fall for the rest of my life" (requires ${format(Number.MAX_VALUE, 2)} paperclips)`; }
   },
   {
     id: "ai525",
@@ -5358,7 +5373,7 @@ GameDatabase.news = [
   },
   {
     id: "ai616",
-    text: "In a recent talk, Yann LeCun said that \"A new currency is born.\" The first incarnation of Antimeta: the currency of the new currency. It's called BTC and it's the difference between 1 and 1.8e308. It's easy to lose your money, since a single bitcoin can't be exchanged for more than 1.8e308 BTC."
+    get text() { return `In a recent talk, Yann LeCun said that "A new currency is born." The first incarnation of Antimeta: the currency of the new currency. It's called BTC and it's the difference between 1 and ${format(Number.MAX_VALUE, 2)}. It's easy to lose your money, since a single bitcoin can't be exchanged for more than ${format(Number.MAX_VALUE, 2)} BTC.`; }
   },
   {
     id: "ai617",
@@ -5403,7 +5418,7 @@ GameDatabase.news = [
   },
   {
     id: "ai627",
-    text: "This mod adds a message that when clicked it disables all your current achievements. This mod also adds a new achievement: you have reached 1.79e308 antimatter, you have not been clicked once."
+    get text() { return `This mod adds a message that when clicked it disables all your current achievements. This mod also adds a new achievement: you have reached ${format(Number.MAX_VALUE, 2)} antimatter, you have not been clicked once.`; }
   },
   {
     id: "ai628",
@@ -5445,7 +5460,7 @@ GameDatabase.news = [
   },
   {
     id: "ai637",
-    text: "If you are reading this in the AD Server, it's probably best not to bother with the \"Matter\" achievement. Seriously, what did you think you were doing, anyway, the achievement is fake and wouldn't exist if it weren't for the \"you are a worm\" achievement. That's a worm achievement, you get one every 1.79e308 news tickers you read."
+    get text() { return `If you are reading this in the AD Server, it's probably best not to bother with the "Matter" achievement. Seriously, what did you think you were doing, anyway, the achievement is fake and wouldn't exist if it weren't for the "you are a worm" achievement. That's a worm achievement, you get one every ${format(Number.MAX_VALUE, 2)} news tickers you read.`; }
   },
   {
     id: "ai638",
@@ -5465,7 +5480,7 @@ GameDatabase.news = [
   },
   {
     id: "ai642",
-    text: "I'm confused why the game doesn't just give you a [REDACTED] when you get 1.79e308 antimatter."
+    get text() { return `I'm confused why the game doesn't just give you a [REDACTED] when you get ${format(Number.MAX_VALUE, 2)} antimatter.`; }
   },
   {
     id: "ai643",
@@ -5743,7 +5758,7 @@ GameDatabase.news = [
   },
   {
     id: "ai711",
-    text: "Tired of the 1.8e308 AD update? Don't worry, there are a variety of ways to get rid of that annoying ad!"
+    get text() { return `Tired of the ${format(Number.MAX_VALUE, 2)} AD update? Don't worry, there are a variety of ways to get rid of that annoying ad!`; }
   },
   {
     id: "ai712",
@@ -5767,7 +5782,7 @@ GameDatabase.news = [
   },
   {
     id: "ai717",
-    text: "I'd say our odds of seeing a seventh dimension are about 1 in 1.8e308"
+    get text() { return `I'd say our odds of seeing a seventh dimension are about 1 in ${format(Number.MAX_VALUE, 2)}`; }
   },
   {
     id: "ai718",
@@ -5839,11 +5854,11 @@ GameDatabase.news = [
   },
   {
     id: "ai735",
-    text: "Antimatter is absolutely and totally rare. Of the 1.79e308 known cases of antimatter creation, 99.9999% of them have negative e's, which means that 99.9999% of the cases will produce negative e's."
+    get text() { return `Antimatter is absolutely and totally rare. Of the ${format(Number.MAX_VALUE, 2)} known cases of antimatter creation, 99.9999% of them have negative e's, which means that 99.9999% of the cases will produce negative e's.`; }
   },
   {
     id: "ai736",
-    text: "It's the year 1.79e308, Hevi has just unlocked the 9th dimension, and the world has fallen into chaos and discord due to the Anti-Hevi revolution."
+    get text() { return `It's the year ${format(Number.MAX_VALUE, 2)}, Hevi has just unlocked the 9th dimension, and the world has fallen into chaos and discord due to the Anti-Hevi revolution.`; }
   },
   {
     id: "ai737",
@@ -5891,7 +5906,7 @@ GameDatabase.news = [
   },
   {
     id: "ai748",
-    text: "Somebody: \"What do you mean, 4 is more than 2?\" Me: \"Well, I mean, 4 is 1.8e308, 2 is 2, etc...\""
+    get text() { return `Somebody: "What do you mean, 4 is more than 2?" Me: "Well, I mean, 4 is ${format(Number.MAX_VALUE, 2)}, 2 is 2, etc..."`; }
   },
   {
     id: "ai749",
@@ -6322,7 +6337,7 @@ GameDatabase.news = [
   },
   {
     id: "ai855",
-    text: "Is the Big Crunch the end of the world? No, it's the beginning of a new era. The era will last for e308 days."
+    get text() { return `Is the Big Crunch the end of the world? No, it's the beginning of a new era. The era will last for ${format(Number.MAX_VALUE, 2)} days.`; }
   },
   {
     id: "ai856",
@@ -6604,7 +6619,7 @@ GameDatabase.news = [
   },
   {
     id: "ai925",
-    text: "The time has come to reveal the next expansion for Antimatter Dimensions: the 1.79e308th Dimension. It will be released in -5 hours, it costs 1.79e308 human souls as of now, and it has nothing to do with matter or antimatter."
+    get text() { return `The time has come to reveal the next expansion for Antimatter Dimensions: the ${format(Number.MAX_VALUE, 2)}th Dimension. It will be released in -5 hours, it costs ${format(Number.MAX_VALUE, 2)} human souls as of now, and it has nothing to do with matter or antimatter.`; }
   },
   {
     id: "ai926",
@@ -6664,7 +6679,7 @@ GameDatabase.news = [
   },
   {
     id: "ai940",
-    text: "It's the year 1.79e308, Hevi is still trying to figure out how to fix the update."
+    get text() { return `It's the year ${format(Number.MAX_VALUE, 2)}, Hevi is still trying to figure out how to fix the update.`; }
   },
   {
     id: "ai941",
@@ -6760,7 +6775,7 @@ GameDatabase.news = [
   },
   {
     id: "ai964",
-    text: "Although the majority of players would say that the 9th dimension is not a thing, a handful of people would go and level it up in the most epic way imaginable. These people would use the power of the 9th dimension and achieve, like, 1.79e308 EP with it. No? Well, they are the exceptions to the rule.",
+    get text() { return `Although the majority of players would say that the 9th dimension is not a thing, a handful of people would go and level it up in the most epic way imaginable. These people would use the power of the 9th dimension and achieve, like, ${format(Number.MAX_VALUE, 2)} EP with it. No? Well, they are the exceptions to the rule.`; },
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
@@ -6893,6 +6908,6 @@ GameDatabase.news = [
   },
   {
     id: "ai997",
-    text: "The intergalactic antimatter trade has been severely disrupted, trading entire galaxies for the occasional paperclip. Cargo stands are no longer used. Oddly enough, the entire dimension has become a dumping ground for discarded plastic and other useless garbage. It's almost as if the rest of the multiverse isn't producing enough good  antiparticles to feed the growing population. Unfortunately, the situation is forcing the entire multiverse to scramble to find ways to meet the growing needs of the antimatter-eating  dev, who claims to have over 1.7e308 specimens left to collect."
+    get text() { return `The intergalactic antimatter trade has been severely disrupted, trading entire galaxies for the occasional paperclip. Cargo stands are no longer used. Oddly enough, the entire dimension has become a dumping ground for discarded plastic and other useless garbage. It's almost as if the rest of the multiverse isn't producing enough good  antiparticles to feed the growing population. Unfortunately, the situation is forcing the entire multiverse to scramble to find ways to meet the growing needs of the antimatter-eating  dev, who claims to have over ${format(Number.MAX_VALUE, 2)} specimens left to collect.`; }
   }
 ];

@@ -1,4 +1,7 @@
-"use strict";
+import "../../common/cost-display.js";
+import "../../common/hint-text.js";
+import "../../common/effect-display.js";
+import "../../common/description-display.js";
 
 Vue.component("imaginary-upgrade-button", {
   props: {

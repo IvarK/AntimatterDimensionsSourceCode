@@ -9,9 +9,7 @@
   },
   "parserOptions": {
     "ecmaVersion": 2021,
-    "ecmaFeatures": {
-      "impliedStrict": false
-    }
+    "sourceType": "module"
   },
   "rules": {
     "no-console": "warn",

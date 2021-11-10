@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-away-progress", {
   components: {
     "away-progress-helper": {

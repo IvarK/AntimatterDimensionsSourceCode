@@ -1,5 +1,3 @@
-"use strict";
-
 class SubtabState {
   constructor(parent, config) {
     this._parent = parent;
@@ -158,12 +156,12 @@ class TabState {
   }
 }
 
-const Tab = GameDatabase.tabs.mapToObject(
+export const Tab = GameDatabase.tabs.mapToObject(
   config => config.key,
   config => new TabState(config)
 );
 
-const Tabs = (function() {
+export const Tabs = (function() {
   return {
     all: Object.values(Tab),
     get current() {

@@ -1,4 +1,5 @@
-"use strict";
+import "./time-study.js";
+import "../../common/description-display.js";
 
 Vue.component("dilation-time-study", {
   props: {

@@ -1,4 +1,7 @@
-"use strict";
+import "./glyph-sort-button-group.js";
+import "./glyph-protected-row-button-group.js";
+import "./glyph-autosort-button-group.js";
+import "./glyph-clean-button-group.js";
 
 Vue.component("glyph-inventory-management-panel", {
   template: `

@@ -1,6 +1,6 @@
-"use strict";
+import { GameMechanicState } from "./game-mechanics/index.js";
 
-const NormalTimeStudies = {};
+export const NormalTimeStudies = {};
 
 NormalTimeStudies.pathList = [
   { path: TIME_STUDY_PATH.ANTIMATTER_DIM, studies: [71, 81, 91, 101] },
@@ -15,7 +15,7 @@ NormalTimeStudies.pathList = [
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
 
-function unlockDilation(quiet) {
+export function unlockDilation(quiet) {
   if (!quiet) {
     Tab.eternity.dilation.show();
   }
@@ -149,7 +149,7 @@ function studiesUntil(id) {
   buyTimeStudyRange(221, 234);
 }
 
-function respecTimeStudies(auto) {
+export function respecTimeStudies(auto) {
   for (const study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
@@ -170,7 +170,7 @@ function respecTimeStudies(auto) {
   }
 }
 
-function studyTreeExportString() {
+export function studyTreeExportString() {
   let studyString = player.timestudy.studies.toString();
   if (player.celestials.v.triadStudies.length !== 0) {
     const triadString = player.celestials.v.triadStudies.map(id => `T${id}`);
@@ -179,12 +179,12 @@ function studyTreeExportString() {
   return `${studyString}|${player.challenge.eternity.unlocked}`;
 }
 
-function exportStudyTree() {
+export function exportStudyTree() {
   copyToClipboard(studyTreeExportString());
   GameUI.notify.info("Exported current Time Studies to your clipboard");
 }
 
-function importStudyTree(input, auto) {
+export function importStudyTree(input, auto) {
   const splitOnEC = input.split("|");
   splitOnEC[0].split(",")
     .map(TimeStudy)
@@ -199,7 +199,7 @@ function importStudyTree(input, auto) {
   }
 }
 
-const TimeStudyType = {
+export const TimeStudyType = {
   NORMAL: 0,
   ETERNITY_CHALLENGE: 1,
   DILATION: 2,
@@ -240,7 +240,7 @@ class TimeStudyState extends GameMechanicState {
   }
 }
 
-class NormalTimeStudyState extends TimeStudyState {
+export class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.NORMAL);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
@@ -309,7 +309,7 @@ NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefi
 /**
  * @returns {NormalTimeStudyState}
  */
-function TimeStudy(id) {
+ export function TimeStudy(id) {
   if (/^T[1-4]$/u.test(id)) return TriadStudy(id.slice(1));
   return NormalTimeStudyState.studies[id];
 }
@@ -345,7 +345,7 @@ TimeStudy.preferredPaths = {
   }
 };
 
-class ECTimeStudyState extends TimeStudyState {
+export class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.ETERNITY_CHALLENGE);
     this.invalidateRequirement();
@@ -490,7 +490,7 @@ ECTimeStudyState.invalidateCachedRequirements = function() {
   ECTimeStudyState.studies.forEach(study => study.invalidateRequirement());
 };
 
-class DilationTimeStudyState extends TimeStudyState {
+export class DilationTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.DILATION);
   }
@@ -561,7 +561,7 @@ TimeStudy.boughtDilationTS = function() {
 };
 
 
-class TimeStudyConnection {
+export class TimeStudyConnection {
   constructor(from, to, override) {
     this._from = from;
     this._to = to;
@@ -586,7 +586,7 @@ class TimeStudyConnection {
 }
 
 
-class TriadStudyState extends TimeStudyState {
+export class TriadStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.TRIAD);
   }
@@ -628,7 +628,7 @@ TriadStudyState.studies = mapGameData(
   config => new TriadStudyState(config)
 );
 
-function TriadStudy(id) {
+export function TriadStudy(id) {
   return TriadStudyState.studies[id];
 }
 

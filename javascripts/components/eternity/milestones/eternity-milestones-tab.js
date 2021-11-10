@@ -1,4 +1,4 @@
-"use strict";
+import "./eternity-milestone.js";
 
 Vue.component("eternity-milestones-tab", {
   data() {

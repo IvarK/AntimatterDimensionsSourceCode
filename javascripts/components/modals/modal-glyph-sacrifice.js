@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-glyph-sacrifice", {
   props: {
     modalConfig: Object

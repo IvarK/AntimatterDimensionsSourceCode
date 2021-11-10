@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("cost-display", {
   props: {
     config: Object,

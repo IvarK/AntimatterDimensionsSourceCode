@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("antimatter-dim-tab-progress-bar", {
   data() {
     return {

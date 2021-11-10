@@ -1,4 +1,5 @@
-"use strict";
+import "./sidebar-resources/sidebar-currency.js";
+import "./tab-button.js";
 
 Vue.component("sidebar", {
   data() {

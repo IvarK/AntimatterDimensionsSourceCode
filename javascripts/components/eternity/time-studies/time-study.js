@@ -1,7 +1,7 @@
-"use strict";
+import "../../common/cost-display.js";
+import { rem } from "./rem.js";
 
 Vue.component("time-study", {
-  mixins: [remMixin],
   data() {
     return {
       isBought: false,
@@ -27,8 +27,8 @@ Vue.component("time-study", {
     },
     styleObject() {
       return {
-        top: this.rem(this.setup.top),
-        left: this.rem(this.setup.left)
+        top: rem(this.setup.top),
+        left: rem(this.setup.left)
       };
     },
     classObject() {
@@ -125,7 +125,7 @@ Vue.component("time-study", {
     </button>`
 });
 
-class TimeStudySetup {
+export class TimeStudySetup {
   constructor(props) {
     this.study = props.study;
     this.row = props.row;

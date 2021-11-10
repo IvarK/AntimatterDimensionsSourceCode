@@ -1,4 +1,5 @@
-"use strict";
+import "./ra-upgrade-icon.js";
+import "./ra-pet-level-bar.js";
 
 Vue.component("ra-pet", {
   props: {

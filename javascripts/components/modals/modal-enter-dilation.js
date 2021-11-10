@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-enter-dilation", {
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);

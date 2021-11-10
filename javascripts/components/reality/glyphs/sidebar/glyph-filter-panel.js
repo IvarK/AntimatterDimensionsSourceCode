@@ -1,4 +1,5 @@
-"use strict";
+import "../glyph-component.js";
+import "../../../common/ad-slider-component.js";
 
 const AutoSacAdvancedTab = {
   props: {
@@ -203,7 +204,7 @@ Vue.component("selected-effect-toggle", {
       if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) return "";
 
       const effarigSettings = AutoGlyphProcessor.types.effarig.effectChoices;
-      if (effarigSettings.effarigrm && effarigSettings.effarigglyph && 
+      if (effarigSettings.effarigrm && effarigSettings.effarigglyph &&
         (this.effect.id === "effarigrm" || this.effect.id === "effarigglyph")) {
         return "RM multiplier and Glyph instability cannot occur together on the same Glyph!";
       }

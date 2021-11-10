@@ -1,6 +1,4 @@
-"use strict";
-
-const GALAXY_TYPE = {
+export const GALAXY_TYPE = {
   NORMAL: 0,
   DISTANT: 1,
   REMOTE: 2
@@ -18,7 +16,7 @@ class GalaxyRequirement {
   }
 }
 
-class Galaxy {
+export class Galaxy {
   static get remoteStart() {
     return RealityUpgrade(21).effectOrDefault(800);
   }
@@ -131,7 +129,7 @@ function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 
-function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
+export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
   if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();

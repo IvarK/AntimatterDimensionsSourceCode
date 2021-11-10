@@ -1,6 +1,4 @@
-"use strict";
-
-const AutomatorPoints = {
+export const AutomatorPoints = {
   get perks() {
     return Perks.all.filter(p => p.automatorPoints);
   },

@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 
 class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   constructor(tier) {

@@ -1,6 +1,8 @@
-"use strict";
+import { GameDatabase } from "../secret-formula/game-database.js";
+import { RebuyableMechanicState } from "../game-mechanics/index.js";
+import { CelestialQuotes } from "./quotes.js";
 
-const TERESA_UNLOCKS = {
+export const TERESA_UNLOCKS = {
   RUN: {
     id: 0,
     price: 1e14,
@@ -33,7 +35,7 @@ const TERESA_UNLOCKS = {
   }
 };
 
-const Teresa = {
+export const Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
@@ -175,7 +177,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 }
 
-const PerkShopUpgrade = (function() {
+export const PerkShopUpgrade = (function() {
   const db = GameDatabase.celestials.perkShop;
   return {
     glyphLevel: new PerkShopUpgradeState(db.glyphLevel),

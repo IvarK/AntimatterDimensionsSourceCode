@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-start-normal-challenge", {
   created() {
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);

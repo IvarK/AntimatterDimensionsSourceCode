@@ -1,9 +1,7 @@
-"use strict";
-
 Vue.component('pelle-tab', {
   data: function() {
     return {
-      
+
     };
   },
   methods: {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("ra-upgrade-icon", {
   props: {
     unlock: Object,

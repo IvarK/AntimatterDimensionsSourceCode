@@ -1,4 +1,4 @@
-"use strict";
+import "../reality/glyphs/glyph-component.js";
 
 Vue.component("modal-reality", {
   data() {

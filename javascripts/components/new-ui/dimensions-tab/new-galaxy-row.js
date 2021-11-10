@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("new-galaxy-row", {
   data() {
     return {

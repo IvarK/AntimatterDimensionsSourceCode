@@ -1,4 +1,4 @@
-"use strict";
+import { modalOptionsMixin } from "./modal-options.js";
 
 Vue.component("modal-info-display-options", {
   mixins: [modalOptionsMixin],

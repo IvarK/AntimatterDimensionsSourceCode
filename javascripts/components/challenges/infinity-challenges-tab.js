@@ -1,4 +1,8 @@
-"use strict";
+import "./challenges-header.js";
+import "./challenge-grid.js";
+import "./challenge-box.js";
+import "../common/effect-display.js";
+import "../common/description-display.js";
 
 Vue.component("infinity-challenges-tab", {
   components: {

@@ -1,6 +1,4 @@
-"use strict";
-
-const TUTORIAL_STATE = {
+export const TUTORIAL_STATE = {
   DIM1: 0,
   DIM2: 1,
   DIMBOOST: 2,
@@ -29,7 +27,7 @@ const tutorialStates = [
   }
 ];
 
-const Tutorial = {
+export const Tutorial = {
 
   // Class to be given to glowing components
   glowingClass(atState, conditional = true) {

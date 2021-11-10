@@ -1,4 +1,7 @@
-"use strict";
+import "../../common/hint-text.js";
+import "../../common/effect-display.js";
+import "../../common/description-display.js";
+import "./time-study.js";
 
 Vue.component("normal-time-study", {
   props: {

@@ -1,4 +1,4 @@
-"use strict";
+import { ProgressChecker } from "./progress-checker.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
@@ -12,7 +12,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const Cloud = {
+export const Cloud = {
   provider: new firebase.auth.GoogleAuthProvider(),
   auth: firebase.auth(),
   db: firebase.database(),

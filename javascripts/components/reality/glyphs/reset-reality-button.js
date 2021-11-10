@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("reset-reality-button", {
   data() {
     return {

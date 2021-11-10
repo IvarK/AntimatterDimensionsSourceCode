@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("old-ui-subtab-button", {
   props: {
     subtab: Object

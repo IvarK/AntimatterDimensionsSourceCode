@@ -1,4 +1,6 @@
-"use strict";
+import "../../common/cost-display.js";
+import "../../common/effect-display.js";
+import "../../common/description-display.js";
 
 Vue.component("black-hole-upgrade-button", {
   props: {

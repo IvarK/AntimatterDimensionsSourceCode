@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("news-ticker", {
   data() {
     return {

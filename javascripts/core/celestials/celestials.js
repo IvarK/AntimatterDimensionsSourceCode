@@ -1,6 +1,11 @@
-"use strict";
+import { Teresa } from "./teresa.js";
+import { Effarig } from "./effarig.js";
+import { Enslaved } from "./enslaved.js";
+import { V } from "./V.js";
+import { Ra } from "./ra/ra.js";
+import { Laitela } from "./laitela/laitela.js";
 
-const Celestials = {
+export const Celestials = {
   teresa: Teresa,
   effarig: Effarig,
   enslaved: Enslaved,

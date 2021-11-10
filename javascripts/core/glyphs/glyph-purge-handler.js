@@ -1,7 +1,5 @@
-"use strict";
-
 // This actually deals with both sacrifice and refining, but I wasn't 100% sure what to call it
-const GlyphSacrificeHandler = {
+export const GlyphSacrificeHandler = {
   get canSacrifice() {
     return RealityUpgrade(19).isBought;
   },

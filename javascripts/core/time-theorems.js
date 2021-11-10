@@ -1,9 +1,7 @@
-"use strict";
-
 /**
  * @abstract
  */
-class TimeTheoremPurchaseType {
+export class TimeTheoremPurchaseType {
   /**
   * @abstract
   */
@@ -103,7 +101,7 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   }
 }();
 
-const TimeTheorems = {
+export const TimeTheorems = {
   checkForBuying(auto) {
     if (PlayerProgress.realityUnlocked() || TimeDimension(1).bought) return true;
     if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");

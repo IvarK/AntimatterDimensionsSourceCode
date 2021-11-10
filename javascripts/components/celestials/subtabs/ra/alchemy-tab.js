@@ -1,4 +1,5 @@
-"use strict";
+import "./alchemy-circle-node.js";
+import "./alchemy-resource-info.js";
 
 class AlchemyOrbitLayout {
   constructor(tier, radius, angleOffset = 0) {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-message", {
   data: () => ({
     message: ""

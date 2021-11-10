@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("replicanti-galaxy-button", {
   data() {
     return {

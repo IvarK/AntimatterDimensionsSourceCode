@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-delete-companion", {
   data() {
     return {

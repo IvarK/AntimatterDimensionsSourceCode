@@ -1,6 +1,4 @@
-"use strict";
-
-const GameSaveSerializer = {
+export const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);
     return this.encodeText(json, "savefile");

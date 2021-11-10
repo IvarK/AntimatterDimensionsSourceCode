@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("automator-controls", {
   data() {
     return {

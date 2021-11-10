@@ -1,6 +1,4 @@
-"use strict";
-
-const BlackHoleAnimation = (function() {
+export const BlackHoleAnimation = (function() {
   const PLANET_SIZE = 1.5;
   const PARTICLE_SIZE = 0.5;
   const PARTICLE_COUNT = 120;
@@ -218,7 +216,7 @@ const BlackHoleAnimation = (function() {
       }
       const delta = time - this.lastFrame;
       this.lastFrame = time;
-      
+
       this.planet.update(this.totalPhase(), this.eccentricity, this.period);
 
       this.context.clearRect(0, 0, 400, 400);

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("replicanti-upgrade-button", {
   props: {
     setup: Object
@@ -63,7 +61,7 @@ Vue.component("replicanti-upgrade-button", {
     </div>`
 });
 
-class ReplicantiUpgradeButtonSetup {
+export class ReplicantiUpgradeButtonSetup {
   constructor(upgrade, formatDescription, formatCost) {
     this.upgrade = upgrade;
     this.formatDescription = formatDescription;

@@ -1,4 +1,4 @@
-"use strict";
+import "./time-study.js";
 
 Vue.component("ec-time-study", {
   props: {

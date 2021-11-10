@@ -1,5 +1,3 @@
-"use strict";
-
 const BezTestData = {
   P0: new Vector(300, 300),
   scale: 100,

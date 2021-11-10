@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-eternity", {
   data() {
     return {

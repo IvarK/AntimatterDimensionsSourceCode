@@ -1,4 +1,4 @@
-"use strict";
+import { GameMechanicState } from "../../game-mechanics/index.js";
 
 class SingularityMilestoneState extends GameMechanicState {
   constructor(config) {
@@ -50,7 +50,7 @@ class SingularityMilestoneState extends GameMechanicState {
     if (this.isUnique) return this.start;
     return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions + 1) - 1);
   }
-  
+
   get rawCompletions() {
     if (this.isUnique) return this.isUnlocked ? 1 : 0;
     if (!this.isUnlocked) return 0;
@@ -91,7 +91,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 }
 
-const SingularityMilestone = (function() {
+export const SingularityMilestone = (function() {
   const db = GameDatabase.celestials.singularityMilestones;
   return {
     continuumMult: new SingularityMilestoneState(db.continuumMult),
@@ -125,7 +125,7 @@ const SingularityMilestone = (function() {
   };
 }());
 
-const SingularityMilestones = {
+export const SingularityMilestones = {
   all: Object.values(SingularityMilestone),
   lastNotified: player.celestials.laitela.lastCheckedMilestones,
 
@@ -167,7 +167,7 @@ const SingularityMilestoneThresholds = (function() {
     .sort((a, b) => a - b);
 }());
 
-const Singularity = {
+export const Singularity = {
   get cap() {
     return 200 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
   },
@@ -203,7 +203,7 @@ const Singularity = {
 
     Currency.darkEnergy.reset();
     Currency.singularities.add(this.singularitiesGained);
-    
+
     for (const quote of Object.values(Laitela.quotes)) {
       if (Currency.singularities.value >= quote.singularities) {
         Laitela.quotes.show(quote);

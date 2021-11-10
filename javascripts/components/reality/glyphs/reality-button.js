@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("reality-button", {
   data() {
     return {

@@ -1,4 +1,9 @@
-"use strict";
+import "./singularity-pane.js";
+import "./milestone-pane.js";
+import "./laitela-center-pane.js";
+import "./laitela-autobuyer-pane.js";
+import "./singularity-milestone.js";
+import "../../celestial-quote-history.js";
 
 Vue.component("laitela-tab", {
   data() {

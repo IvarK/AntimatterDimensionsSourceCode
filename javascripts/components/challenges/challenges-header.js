@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("challenges-header", {
   data() {
     return {

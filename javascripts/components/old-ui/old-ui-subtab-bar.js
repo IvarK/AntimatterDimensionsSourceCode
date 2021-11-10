@@ -1,4 +1,4 @@
-"use strict";
+import "./old-ui-subtab-button.js";
 
 Vue.component("old-ui-subtab-bar", {
   data() {

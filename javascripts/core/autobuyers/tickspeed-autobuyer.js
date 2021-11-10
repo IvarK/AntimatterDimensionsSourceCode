@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 
 Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {

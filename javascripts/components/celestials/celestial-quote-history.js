@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("celestial-quote-history", {
   props: {
     celestial: String,

@@ -1,7 +1,7 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 // Used for UI purposes to give different theming for different kinds of upgrades
-const LAITELA_UPGRADE_DIRECTION = {
+export const LAITELA_UPGRADE_DIRECTION = {
   SELF_BOOST: 0,
   BOOSTS_MAIN: 1,
   BOOSTS_LAITELA: 2

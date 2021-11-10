@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("old-ui-tab-button", {
   props: {
     tab: Object

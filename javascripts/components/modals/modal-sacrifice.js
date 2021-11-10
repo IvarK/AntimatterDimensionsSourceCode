@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-sacrifice", {
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);

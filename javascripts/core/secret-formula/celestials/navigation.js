@@ -1,16 +1,16 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
-function emphasizeEnd(fraction) {
+export function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
 }
 
-function vUnlockProgress(index) {
+export function vUnlockProgress(index) {
   if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
   const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
   return db.progress();
 }
 
-function vUnlockLegendLabel(complete, index) {
+export function vUnlockLegendLabel(complete, index) {
   const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
   if (complete >= 1) return `${db.name} condition for V`;
   return [
@@ -19,7 +19,7 @@ function vUnlockLegendLabel(complete, index) {
   ];
 }
 
-const CELESTIAL_NAV_DRAW_ORDER = {
+export const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
   NODE_BG: 0,

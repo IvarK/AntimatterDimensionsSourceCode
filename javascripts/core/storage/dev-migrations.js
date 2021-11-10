@@ -1,4 +1,4 @@
-"use strict";
+import { GameStorage } from "./storage.js";
 
 function arrayToBits(array) {
   let bits = 0;

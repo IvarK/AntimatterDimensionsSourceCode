@@ -1,4 +1,5 @@
-"use strict";
+import "../../common/hint-text.js";
+import "../../common/effect-display.js";
 
 Vue.component("normal-achievement", {
   props: {

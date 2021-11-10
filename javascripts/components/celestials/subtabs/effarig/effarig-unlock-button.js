@@ -1,4 +1,5 @@
-"use strict";
+import "../../../common/cost-display.js";
+import "../../../common/description-display.js";
 
 Vue.component("effarig-unlock-button", {
   props: {

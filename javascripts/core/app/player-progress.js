@@ -1,6 +1,4 @@
-"use strict";
-
-class PlayerProgress {
+export class PlayerProgress {
   constructor(player) {
     this._player = player;
   }

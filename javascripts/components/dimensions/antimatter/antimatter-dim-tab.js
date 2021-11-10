@@ -1,4 +1,8 @@
-"use strict";
+import "./antimatter-dim-tab-header.js";
+import "./antimatter-dim-row.js";
+import "./antimatter-dim-boost-row.js";
+import "./antimatter-dim-galaxy-row.js";
+import "./antimatter-dim-tab-progress-bar.js";
 
 Vue.component("antimatter-dim-tab", {
   data() {

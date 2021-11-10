@@ -1,4 +1,4 @@
-"use strict";
+import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 
 class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {
@@ -74,9 +74,9 @@ ImaginaryUpgradeState.index = mapGameData(
     : new ImaginaryUpgradeState(config))
 );
 
-const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
+export const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
 
-const ImaginaryUpgrades = {
+export const ImaginaryUpgrades = {
   all: ImaginaryUpgradeState.index.compact(),
   get totalRebuyables() {
     const rebuyables = player.reality.imaginaryRebuyables;

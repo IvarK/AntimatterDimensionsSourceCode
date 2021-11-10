@@ -1,9 +1,8 @@
 // Note: chevrotain doesn't play well with unicode regex
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
-"use strict";
 
-const AutomatorLexer = (() => {
+export const AutomatorLexer = (() => {
   const createToken = chevrotain.createToken;
   const Lexer = chevrotain.Lexer;
 
@@ -370,9 +369,9 @@ const AutomatorLexer = (() => {
 
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
-  
+
   const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
-  
+
   const standardizeAutomatorCurrencyName = function(x) {
     // This first line exists for this function to usually return quickly;
     // otherwise it's called enough to cause lag.
@@ -386,7 +385,7 @@ const AutomatorLexer = (() => {
     // If we get to this point something has gone wrong, a currency name didn't match any of the currency regexps.
     throw new Error(`${x} does not seem to be an automator currency`);
   };
-  
+
   return {
     lexer,
     tokens: automatorTokens,
@@ -396,4 +395,4 @@ const AutomatorLexer = (() => {
   };
 })();
 
-const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;
+export const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

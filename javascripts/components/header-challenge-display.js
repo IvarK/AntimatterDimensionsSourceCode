@@ -1,4 +1,4 @@
-"use strict";
+import "./failable-ec-text.js";
 
 Vue.component("header-challenge-display", {
   data() {

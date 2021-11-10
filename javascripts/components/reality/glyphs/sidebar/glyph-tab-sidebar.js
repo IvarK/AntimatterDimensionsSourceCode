@@ -1,5 +1,7 @@
-"use strict";
-
+import "./glyph-rejection-panel.js";
+import "./glyph-set-save-panel.js";
+import "./glyph-filter-panel.js";
+import "./glyph-inventory-management-panel.js";
 
 Vue.component("glyph-tab-sidebar", {
   data() {

@@ -1,4 +1,4 @@
-"use strict";
+import "./secret-achievement.js";
 
 Vue.component("secret-achievement-row", {
   props: {

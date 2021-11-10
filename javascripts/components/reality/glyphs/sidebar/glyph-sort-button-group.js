@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("glyph-sort-button-group", {
   data() {
     return {

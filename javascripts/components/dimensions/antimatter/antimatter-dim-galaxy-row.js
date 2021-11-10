@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("antimatter-dim-galaxy-row", {
   data() {
     return {

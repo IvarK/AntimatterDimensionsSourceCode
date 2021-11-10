@@ -124,7 +124,7 @@ class Currency {
   }
 
   subtract(amount) {
-    this.value = this.operations.max(this.operations.subtract(this.value, amount), this.startingValue);
+    this.value = this.operations.max(this.operations.subtract(this.value, amount), 0);
   }
 
   multiply(amount) {
@@ -132,7 +132,7 @@ class Currency {
   }
 
   divide(amount) {
-    this.value = this.operations.max(this.operations.divide(this.value, amount), this.startingValue);
+    this.value = this.operations.divide(this.value, amount);
   }
 
   eq(amount) {

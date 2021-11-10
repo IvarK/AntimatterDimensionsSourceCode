@@ -1,4 +1,5 @@
-"use strict";
+import "../infinity-upgrade-button.js";
+import "./break-infinity-button.js";
 
 Vue.component("break-infinity-tab", {
   data() {

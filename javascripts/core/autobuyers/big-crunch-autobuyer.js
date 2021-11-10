@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 
 Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -79,7 +79,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
       this.amount = this.amount.times(mult);
     }
   }
-  
+
   get canTick() {
     return Player.canCrunch && super.canTick;
   }

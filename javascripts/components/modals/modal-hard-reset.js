@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-hard-reset", {
   computed: {
     modal() {

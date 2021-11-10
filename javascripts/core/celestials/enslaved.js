@@ -1,6 +1,8 @@
-"use strict";
+import { GameDatabase } from "../secret-formula/game-database.js";
+import { GameMechanicState } from "../game-mechanics/index.js";
+import { CelestialQuotes } from "./quotes.js";
 
-const ENSLAVED_UNLOCKS = {
+export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
     id: 0,
     price: TimeSpan.fromYears(1e35).totalMilliseconds,
@@ -20,7 +22,7 @@ const ENSLAVED_UNLOCKS = {
   }
 };
 
-const Enslaved = {
+export const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
   BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
@@ -263,7 +265,7 @@ class EnslavedProgressState extends GameMechanicState {
   }
 }
 
-const EnslavedProgress = (function() {
+export const EnslavedProgress = (function() {
   const db = GameDatabase.celestials.enslaved.progress;
   return {
     hintsUnlocked: new EnslavedProgressState(db.hintsUnlocked),
@@ -277,7 +279,7 @@ const EnslavedProgress = (function() {
   };
 }());
 
-const Tesseracts = {
+export const Tesseracts = {
   get bought() {
     return player.celestials.enslaved.tesseracts;
   },

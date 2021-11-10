@@ -1,4 +1,4 @@
-"use strict";
+import "./challenge-records-list.js";
 
 Vue.component("challenge-records-tab", {
   data() {

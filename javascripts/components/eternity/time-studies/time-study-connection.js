@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("time-study-connection", {
   data() {
     return {
@@ -69,7 +67,7 @@ Vue.component("time-study-connection", {
     />`
 });
 
-class TimeStudyConnectionSetup {
+export class TimeStudyConnectionSetup {
   constructor(connection) {
     this.connection = connection;
   }

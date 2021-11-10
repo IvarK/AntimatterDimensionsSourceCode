@@ -1,4 +1,14 @@
-"use strict";
+import "./autobuyer-toggles.js";
+import "./multiple-autobuyers-box.js";
+import "./single-autobuyer-box.js";
+import "./big-crunch-autobuyer-box.js";
+import "./sacrifice-autobuyer-box.js";
+import "./tickspeed-autobuyer-box.js";
+import "./dimension-autobuyer-box.js";
+import "./galaxy-autobuyer-box.js";
+import "./dimboost-autobuyer-box.js";
+import "./eternity-autobuyer-box.js";
+import "./reality-autobuyer-box.js";
 
 Vue.component("autobuyers-tab", {
   data: () => ({

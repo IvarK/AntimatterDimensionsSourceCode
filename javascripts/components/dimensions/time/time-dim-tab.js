@@ -1,4 +1,4 @@
-"use strict";
+import "./time-dim-row.js";
 
 Vue.component("time-dim-tab", {
   data() {

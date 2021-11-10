@@ -1,11 +1,11 @@
-"use strict";
+import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 
 class RealityUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {
     super(config);
     this.registerEvents(config.checkEvent, () => this.tryUnlock());
   }
-  
+
   get automatorPoints() {
     return this.config.automatorPoints ? this.config.automatorPoints : 0;
   }
@@ -93,9 +93,9 @@ RealityUpgradeState.index = mapGameData(
  * @param {number} id
  * @return {RealityUpgradeState|RebuyableRealityUpgradeState}
  */
-const RealityUpgrade = id => RealityUpgradeState.index[id];
+export const RealityUpgrade = id => RealityUpgradeState.index[id];
 
-const RealityUpgrades = {
+export const RealityUpgrades = {
   /**
    * @type {(RealityUpgradeState|RebuyableRealityUpgradeState)[]}
    */

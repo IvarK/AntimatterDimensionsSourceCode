@@ -1,4 +1,6 @@
-"use strict";
+import "./autobuyer-interval-button.js";
+import "./autobuyer-input.js";
+import "./autobuyer-box.js";
 
 Vue.component("dimboost-autobuyer-box", {
   data() {

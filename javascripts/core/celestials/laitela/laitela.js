@@ -1,6 +1,6 @@
-"use strict";
+import { CelestialQuotes } from "../quotes.js";
 
-const Laitela = {
+export const Laitela = {
   displayName: "Lai'tela",
   get celestial() {
     return player.celestials.laitela;

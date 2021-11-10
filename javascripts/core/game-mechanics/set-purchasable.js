@@ -1,9 +1,9 @@
-"use strict";
+import { PurchasableMechanicState } from "./puchasable.js";
 
 /**
  * @abstract
  */
-class SetPurchasableMechanicState extends PurchasableMechanicState {
+export class SetPurchasableMechanicState extends PurchasableMechanicState {
   /**
    * @abstract
    */

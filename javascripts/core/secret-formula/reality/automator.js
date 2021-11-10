@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.reality.automator = {
   commands: [
@@ -200,7 +200,7 @@ GameDatabase.reality.automator = {
             },
             {
               header: "<i>number</i> <i>time units</i>",
-              description: `Usable with infinity/eternity only. 
+              description: `Usable with infinity/eternity only.
                 Turns the autobuyer on and set it to trigger at the given interval`
             },
             {
@@ -211,7 +211,7 @@ GameDatabase.reality.automator = {
             {
               header: "<i>number currency</i>",
               description: `Turns the autobuyer on and sets it to trigger at a specific amount. The currency must
-                match the autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality 
+                match the autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality
                 machines" mode`,
             },
           ]
@@ -256,9 +256,9 @@ GameDatabase.reality.automator = {
           items: [
             {
               header: "<b>Undesirable effects</b>",
-              description: `This command may behave undesirably when it runs during offline progress due to limited 
-                tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing 8 
-                hours of offline progress, which might not be enough for the resources needed for the next line of the 
+              description: `This command may behave undesirably when it runs during offline progress due to limited
+                tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing 8
+                hours of offline progress, which might not be enough for the resources needed for the next line of the
                 script`,
             },
             {

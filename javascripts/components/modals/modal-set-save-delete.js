@@ -1,4 +1,4 @@
-"use strict";
+import "../reality/glyphs/glyph-set-preview.js";
 
 Vue.component("modal-set-save-delete", {
   props: {
@@ -34,7 +34,7 @@ Vue.component("modal-set-save-delete", {
         />
         This will not affect your actual glyphs, only the saved preset.
         <br>
-        This is permanent and irreversible. 
+        This is permanent and irreversible.
       </div>
       <div class="l-options-grid__row">
         <primary-button

@@ -1,4 +1,6 @@
-"use strict";
+import "./select-theme.js";
+import "./select-notation.js";
+import "../common/expanding-control-box.js";
 
 Vue.component("options-visual-tab", {
   components: {

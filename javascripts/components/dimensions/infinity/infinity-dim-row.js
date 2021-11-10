@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("infinity-dim-row", {
   props: {
     tier: Number

@@ -1,4 +1,15 @@
-"use strict";
+import "./sidebar/glyph-tab-sidebar.js";
+import "./glyph-peek.js";
+import "./reality-amplify-button.js";
+import "./glyph-inventory.js";
+import "./sacrificed-glyphs.js";
+import "./current-glyph-effects.js";
+import "./equipped-glyphs.js";
+import "./glyph-levels-and-weights.js";
+import "./reset-reality-button.js";
+import "./reality-button.js";
+import "../reality-reminder.js";
+import "../../common/expanding-control-box.js";
 
 Vue.component("glyphs-tab", {
   data: () => ({

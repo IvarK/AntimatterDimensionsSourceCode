@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("autobuyer-toggle-label", {
   props: {
     autobuyer: Object,

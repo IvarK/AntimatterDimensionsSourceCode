@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-reality-glyph-creation", {
   data() {
     return {

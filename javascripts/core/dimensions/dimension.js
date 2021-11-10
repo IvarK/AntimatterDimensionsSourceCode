@@ -1,6 +1,4 @@
-"use strict";
-
-class DimensionState {
+export class DimensionState {
   constructor(getData, tier) {
     this._tier = tier;
     this._getData = getData;

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("autobuyer-input", {
   props: {
     autobuyer: Object,

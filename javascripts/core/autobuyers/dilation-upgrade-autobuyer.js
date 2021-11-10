@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   constructor(upgrade) {

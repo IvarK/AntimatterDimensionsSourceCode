@@ -1,5 +1,3 @@
-"use strict";
-
 class TabNotificationState {
   constructor(config) {
     this.config = config;
@@ -32,7 +30,7 @@ class TabNotificationState {
   }
 }
 
-const TabNotification = (function() {
+export const TabNotification = (function() {
   const db = GameDatabase.tabNotifications;
   return {
     firstInfinity: new TabNotificationState(db.firstInfinity),

@@ -1,4 +1,4 @@
-"use strict";
+import "./imaginary-upgrade-button.js";
 
 Vue.component("imaginary-upgrades-tab", {
   data() {

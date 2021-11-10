@@ -1,6 +1,4 @@
-"use strict";
-
-const PerformanceStats = {
+export const PerformanceStats = {
   container: document.getElementById("performance-stats"),
   samplePeriod: 10 * 1000,
   isOn: false,

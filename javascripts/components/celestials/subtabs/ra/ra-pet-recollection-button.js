@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("ra-pet-recollection-button", {
   props: {
     petConfig: Object,

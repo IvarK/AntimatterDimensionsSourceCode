@@ -1,4 +1,7 @@
-"use strict";
+import "./challenges-header.js";
+import "./challenge-grid.js";
+import "./challenge-box.js";
+import "../common/description-display.js";
 
 Vue.component("normal-challenges-tab", {
   components: {
@@ -59,7 +62,7 @@ Vue.component("normal-challenges-tab", {
     <div class="l-challenges-tab">
       <challenges-header />
       <div>
-        If you have an active Big Crunch Autobuyer, it will attempt to Crunch 
+        If you have an active Big Crunch Autobuyer, it will attempt to Crunch
         as soon as possible when reaching Infinite antimatter.
       </div>
       <challenge-grid :count="12">

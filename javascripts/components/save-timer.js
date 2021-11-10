@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("save-timer", {
   data() {
     return {

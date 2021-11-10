@@ -1,6 +1,4 @@
-"use strict";
-
-const MachineHandler = {
+export const MachineHandler = {
   get baseRMCap() { return new Decimal("1e1000"); },
 
   get hardcapRM() {

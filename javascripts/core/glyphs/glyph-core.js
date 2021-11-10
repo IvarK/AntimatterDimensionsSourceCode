@@ -1,6 +1,6 @@
-"use strict";
+import { GameMechanicState } from "../game-mechanics/index.js";
 
-const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
+export const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "timeshardpow", "powermult", "powerdimboost", "powerbuy10",
   "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
   "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
@@ -11,20 +11,20 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",
   "companiondescription", "companionEP"];
 
-const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
+export const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
-const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
+export const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
 
-function rarityToStrength(x) {
+export function rarityToStrength(x) {
   return x * 2.5 / 100 + 1;
 }
 
-function strengthToRarity(x) {
+export function strengthToRarity(x) {
   return (x - 1) * 100 / 2.5;
 }
 
-const Glyphs = {
+export const Glyphs = {
   inventory: [],
   active: [],
   unseen: [],
@@ -625,7 +625,7 @@ const Glyphs = {
 
 class GlyphSacrificeState extends GameMechanicState { }
 
-const GlyphSacrifice = (function() {
+export const GlyphSacrifice = (function() {
   const db = GameDatabase.reality.glyphSacrifice;
   return {
     time: new GlyphSacrificeState(db.time),
@@ -638,7 +638,7 @@ const GlyphSacrifice = (function() {
   };
 }());
 
-function recalculateAllGlyphs() {
+export function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     calculateGlyph(player.reality.glyphs.active[i]);
   }
@@ -653,7 +653,7 @@ function recalculateAllGlyphs() {
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and recalculates effects
-function calculateGlyph(glyph) {
+export function calculateGlyph(glyph) {
   if (glyph.color === undefined && glyph.symbol === undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
     if (glyph.rawLevel === undefined) {
@@ -668,11 +668,11 @@ function calculateGlyph(glyph) {
   }
 }
 
-function getRarity(x) {
+export function getRarity(x) {
   return GlyphRarities.find(e => x >= e.minStrength);
 }
 
-function getAdjustedGlyphLevel(glyph) {
+export function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
@@ -680,7 +680,7 @@ function getAdjustedGlyphLevel(glyph) {
   return level;
 }
 
-function respecGlyphs() {
+export function respecGlyphs() {
   Glyphs.unequipAll();
   player.reality.respec = false;
 }

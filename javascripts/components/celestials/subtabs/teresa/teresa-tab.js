@@ -1,4 +1,6 @@
-"use strict";
+import "./perk-shop-upgrade.js";
+import "../../celestial-quote-history.js";
+import "../../../reality/glyphs/glyph-set-preview.js";
 
 Vue.component("teresa-tab", {
   data() {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-celestial-quote", {
   data: () => ({
     index: 0,

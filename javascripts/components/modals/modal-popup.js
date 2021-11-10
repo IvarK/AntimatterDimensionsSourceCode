@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-popup", {
   props: {
     modal: {

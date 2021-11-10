@@ -1,4 +1,8 @@
-"use strict";
+import "../common/news-ticker.js";
+import "../common/footer-links.js";
+import "./old-ui-subtab-bar.js";
+import "./old-ui-tab-bar.js";
+import "./header/game-header.js";
 
 Vue.component("old-ui", {
   components: {

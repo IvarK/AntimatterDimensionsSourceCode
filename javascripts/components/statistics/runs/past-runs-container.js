@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("past-runs-container", {
   props: {
     layer: Object,

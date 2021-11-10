@@ -1,4 +1,4 @@
-"use strict";
+import "./glyph-component.js";
 
 Vue.component("glyph-inventory", {
   data() {

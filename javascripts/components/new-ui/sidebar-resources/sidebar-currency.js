@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("sidebar-currency", {
   data() {
     return {

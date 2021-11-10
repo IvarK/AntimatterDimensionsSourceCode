@@ -1,4 +1,5 @@
-"use strict";
+import "./effarig-unlock-button.js";
+import "../../celestial-quote-history.js";
 
 Vue.component("effarig-tab", {
   components: {

@@ -1,4 +1,5 @@
-"use strict";
+import "./autobuyer-input.js";
+import "./autobuyer-box.js";
 
 Vue.component("eternity-autobuyer-box", {
   data() {

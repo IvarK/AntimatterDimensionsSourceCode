@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("automator-single-block", {
   props: {
     block: Object,

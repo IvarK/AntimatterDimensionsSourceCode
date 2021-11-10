@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-automator-script-delete", {
   props: {
     modalConfig: Object

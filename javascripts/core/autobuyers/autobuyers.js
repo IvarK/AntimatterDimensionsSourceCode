@@ -1,6 +1,6 @@
-"use strict";
+import { Autobuyer } from "./autobuyer.js";
 
-const Autobuyers = (function() {
+export const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.index;
   const infinityDimensions = Autobuyer.infinityDimension.index;
   const timeDimensions = Autobuyer.timeDimension.index;

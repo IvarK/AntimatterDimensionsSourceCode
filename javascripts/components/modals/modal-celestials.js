@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-celestials", {
   components: {
     "modal-ra-pet-display": {

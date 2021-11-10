@@ -1,5 +1,3 @@
-"use strict";
-
 const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
   DISABLED: 0,
   THIS_REALITY: 1,

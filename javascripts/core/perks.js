@@ -1,4 +1,4 @@
-"use strict";
+import { SetPurchasableMechanicState } from "./game-mechanics/index.js";
 
 class PerkState extends SetPurchasableMechanicState {
   constructor(config) {
@@ -49,7 +49,7 @@ class PerkState extends SetPurchasableMechanicState {
   }
 }
 
-const Perk = (function() {
+export const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
     firstPerk: new PerkState(db.firstPerk),
@@ -102,7 +102,7 @@ const Perk = (function() {
   };
 }());
 
-const Perks = {
+export const Perks = {
   all: Object.values(Perk),
   /**
    * @param {number} id
@@ -117,7 +117,7 @@ for (const perk of Perks.all) {
   perk.initializeConnections();
 }
 
-function checkPerkValidity() {
+export function checkPerkValidity() {
   if (player.reality.perks.every(id => Perks.find(id) !== undefined)) return;
   dev.respecPerks();
   if (Currency.perkPoints.gte(Perks.all.length)) {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("new-time-dimension-row", {
   props: {
     tier: Number,

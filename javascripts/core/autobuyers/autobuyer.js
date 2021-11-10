@@ -1,9 +1,7 @@
-"use strict";
-
 /**
  * @abstract
  */
-class AutobuyerState {
+export class AutobuyerState {
   /**
    * @abstract
    */
@@ -43,7 +41,7 @@ class AutobuyerState {
 /**
  * @abstract
  */
-class IntervaledAutobuyerState extends AutobuyerState {
+export class IntervaledAutobuyerState extends AutobuyerState {
   get interval() {
     return this.data.interval;
   }
@@ -77,7 +75,7 @@ class IntervaledAutobuyerState extends AutobuyerState {
 /**
  * @abstract
  */
-class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
+export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   /**
   * @abstract
   */
@@ -119,4 +117,5 @@ class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   }
 }
 
-const Autobuyer = {};
+export const Autobuyer = {};
+window.Autobuyer = Autobuyer;

@@ -1,4 +1,4 @@
-"use strict";
+import { GameMechanicState } from "./game-mechanics/index.js";
 
 // This function does *not* reset anything. Only call it when you've already
 // done all the non-UI stuff. Right now the only UI thing to do is switch to
@@ -7,14 +7,14 @@ function startChallengeUI() {
   if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
-function tryCompleteInfinityChallenges() {
+export function tryCompleteInfinityChallenges() {
   if (EternityMilestone.autoIC.isReached) {
     const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
     for (const challenge of toComplete) challenge.complete();
   }
 }
 
-function updateNormalAndInfinityChallenges(diff) {
+export function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
       Currency.matter.bumpTo(1);
@@ -139,7 +139,7 @@ class NormalChallengeState extends GameMechanicState {
  * @param {number} id
  * @return {NormalChallengeState}
  */
-const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
+export const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
 
 /**
  * @returns {NormalChallengeState}
@@ -154,7 +154,7 @@ Object.defineProperty(NormalChallenge, "isRunning", {
   get: () => player.challenge.normal.current !== 0,
 });
 
-const NormalChallenges = {
+export const NormalChallenges = {
   /**
    * @type {NormalChallengeState[]}
    */
@@ -266,7 +266,7 @@ class InfinityChallengeState extends GameMechanicState {
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
+export const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
 
 /**
  * @returns {InfinityChallengeState}
@@ -281,7 +281,7 @@ Object.defineProperty(InfinityChallenge, "isRunning", {
   get: () => InfinityChallenge.current !== undefined,
 });
 
-const InfinityChallenges = {
+export const InfinityChallenges = {
   /**
    * @type {InfinityChallengeState[]}
    */

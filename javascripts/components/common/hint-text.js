@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("hint-text", {
   props: {
     type: String

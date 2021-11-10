@@ -1,4 +1,4 @@
-"use strict";
+import "../reality/glyphs/glyph-set-preview.js";
 
 Vue.component("glyph-sets-tab", {
   data() {

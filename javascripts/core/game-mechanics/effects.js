@@ -1,6 +1,4 @@
-"use strict";
-
-const Effects = {
+export const Effects = {
   /**
    * @param effectSources
    * @return {Number}

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("antimatter-dim-row", {
   props: {
     tier: Number

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("new-dim-boost-row", {
   data() {
     return {

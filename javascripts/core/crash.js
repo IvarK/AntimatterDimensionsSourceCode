@@ -1,13 +1,11 @@
-"use strict";
-
-class NotImplementedError extends Error {
+window.NotImplementedError = class NotImplementedError extends Error {
   constructor() {
     super("The method is not implemented.");
     this.name = "NotImplementedError";
   }
-}
+};
 
-const GlobalErrorHandler = {
+window.GlobalErrorHandler = {
   handled: false,
   cleanStart: false,
   onerror(event) {
@@ -36,7 +34,7 @@ const GlobalErrorHandler = {
     clearHandles(requestAnimationFrame, cancelAnimationFrame);
   },
   crash(message) {
-    if (GameUI.initialized) {
+    if (window.GameUI !== undefined && GameUI.initialized) {
       Modal.message.show(`${message}<br>Check the console for more details`);
     }
     // eslint-disable-next-line no-debugger

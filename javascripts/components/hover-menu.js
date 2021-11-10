@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * This slotted component manages a context menu that is accessible both
  * by right clicking and by hovering; this is mostly about wrangling timers.

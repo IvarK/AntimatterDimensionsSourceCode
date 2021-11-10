@@ -1,4 +1,5 @@
-"use strict";
+import { AutomatorGrammar } from "./parser.js";
+import { AutomatorLexer } from "./lexer.js";
 
 (function() {
   function walkSuggestion(suggestion, prefix, output) {

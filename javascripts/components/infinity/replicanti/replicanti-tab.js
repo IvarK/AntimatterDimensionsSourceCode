@@ -1,4 +1,6 @@
-"use strict";
+import "./replicanti-gain-text.js";
+import "./replicanti-galaxy-button.js";
+import { ReplicantiUpgradeButtonSetup } from "./replicanti-upgrade-button.js";
 
 Vue.component("replicanti-tab", {
   data() {

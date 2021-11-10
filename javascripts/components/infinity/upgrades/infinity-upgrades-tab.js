@@ -1,4 +1,5 @@
-"use strict";
+import "../infinity-upgrade-button.js";
+import "./ip-multiplier-button.js";
 
 Vue.component("infinity-upgrades-tab", {
   data() {

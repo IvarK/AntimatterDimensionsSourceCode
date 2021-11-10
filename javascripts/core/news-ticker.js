@@ -1,8 +1,6 @@
-"use strict";
-
 // All news IDs follow the format [letter(s)][number] so we always assume that's the case and make sure to access the
 // relevant props within player.news.seen
-const NewsHandler = {
+export const NewsHandler = {
   // In principle 32 should work but something seems to go wrong with negative numbers in the function that counts
   // the number of bits in a bitmask, so we have to use 31.
   BITS_PER_MASK: 31,
@@ -20,7 +18,7 @@ const NewsHandler = {
     // either not persisting outside of this function or being immediately overwritten if the props aren't specifically
     // added here for some reason (as opposed to being initialized to empty in player.js)
     if (!player.news.seen[type]) player.news.seen[type] = [];
-    
+
     // If the bit array isn't large enough (ie. the numerical ID is the largest we've seen so far by a long shot), then
     // we pad the array with zeroes until we can fit the new ID in before actually adding it.
     while (this.BITS_PER_MASK * player.news.seen[type].length <= number) player.news.seen[type].push(0);

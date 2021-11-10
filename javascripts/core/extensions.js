@@ -1,5 +1,3 @@
-"use strict";
-
 Array.prototype.distinct = function() {
     return this.filter(function (value, index, self) {
         return self.indexOf(value) === index;
@@ -74,7 +72,7 @@ Decimal.prototype.copyFrom = function(decimal) {
   this.exponent = decimal.exponent;
 };
 
-const copyToClipboard = (function() {
+window.copyToClipboard = (function() {
   let el = document.createElement('textarea');
   document.body.appendChild(el);
   el.style.position = "absolute";
@@ -92,7 +90,7 @@ const copyToClipboard = (function() {
   };
 }());
 
-function safeCall(fn) {
+window.safeCall = function safeCall(fn) {
     if (fn) fn();
 }
 

@@ -1,4 +1,6 @@
-"use strict";
+import { AutomatorCommands } from "./automator-commands.js";
+import { AutomatorGrammar } from "./parser.js";
+import { AutomatorLexer } from "./lexer.js";
 
 (function() {
   if (AutomatorGrammar === undefined) {
@@ -261,10 +263,10 @@
       // We don't visit studyList because it might actually be just a number in this case
       const studies = ctx.studyList[0].children.studyListEntry;
       if (
-        studies.length > 1 || 
+        studies.length > 1 ||
         studies[0].children.studyRange ||
-        studies[0].children.StudyPath || 
-        studies[0].children.Comma || 
+        studies[0].children.StudyPath ||
+        studies[0].children.Comma ||
         studies[0].children.TriadStudy
       ) {
         def.type = AUTOMATOR_VAR_TYPES.STUDIES;

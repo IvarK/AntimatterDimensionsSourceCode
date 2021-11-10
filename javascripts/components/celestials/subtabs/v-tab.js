@@ -1,4 +1,5 @@
-"use strict";
+import "../../reality/glyphs/glyph-set-preview.js";
+import "../celestial-quote-history.js";
 
 Vue.component("v-tab", {
   data() {

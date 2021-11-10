@@ -1,6 +1,4 @@
-"use strict";
-
-const Theme = function Theme(name, config) {
+export const Theme = function Theme(name, config) {
   this.name = name;
 
   this.isDark = function() {
@@ -116,7 +114,7 @@ Theme.create = function(name, settings) {
   return new Theme(name, config);
 };
 
-const Themes = {
+export const Themes = {
   all: [
     /* eslint-disable no-multi-spaces */
     // Note that "Normal" is a special case where dark is overridden elsewhere with whether or not the UI is New

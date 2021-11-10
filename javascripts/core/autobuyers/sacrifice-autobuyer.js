@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
   get data() {

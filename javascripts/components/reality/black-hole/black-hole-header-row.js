@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("black-hole-status-text", {
   props: {
     blackHole: Object

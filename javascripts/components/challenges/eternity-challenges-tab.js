@@ -108,9 +108,7 @@ Vue.component("eternity-challenges-tab", {
               <div>
                 Completed {{ quantifyInt("time", completions) }}
               </div>
-              <div v-if="!isCompleted">
-                {{ goalDisplay }}
-              </div>
+              {{ goalDisplay }}
             </div>
             <span v-if="showGoalSpan">
               Goal Span: {{ firstGoal }} IP - {{ lastGoal }} IP

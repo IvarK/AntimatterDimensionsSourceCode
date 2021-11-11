@@ -85,7 +85,7 @@ Vue.component("game-header-eternity-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.records.thisEternity.maxIP.gte(Decimal.NUMBER_MAX_VALUE) ||
+      this.isVisible = Player.canEternity ||
         EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked;
       if (!this.isVisible) return;
       this.canEternity = Player.canEternity;

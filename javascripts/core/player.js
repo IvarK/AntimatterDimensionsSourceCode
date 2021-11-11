@@ -602,7 +602,8 @@ let player = {
       enabled: true,
       repeatBuffer: 40,
       AIChance: 0,
-      speed: 1
+      speed: 1,
+      includeAnimated: true,
     },
     notation: "Mixed scientific",
     retryChallenge: false,
@@ -685,6 +686,7 @@ let player = {
       tachyonParticles: true,
       dilatedTime: true,
       tachyonGalaxies: true,
+      achievementCount: true,
       realities: true,
       realityMachines: true,
       imaginaryMachines: true,
@@ -742,16 +744,6 @@ const Player = {
 
   get anyChallenge() {
     return this.antimatterChallenge || EternityChallenge.current;
-  },
-
-  get effectiveMatterAmount() {
-    if (NormalChallenge(11).isRunning) {
-      return player.matter;
-    }
-    if (InfinityChallenge(6).isRunning) {
-      return Decimal.pow(player.matter, 20);
-    }
-    return new Decimal(0);
   },
 
   get canCrunch() {

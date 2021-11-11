@@ -4,6 +4,7 @@ Vue.component("news-ticker", {
   data() {
     return {
       recentTickers: [],
+      enableAnimation: false,
     };
   },
   watch: {
@@ -18,9 +19,17 @@ Vue.component("news-ticker", {
   beforeDestroy() {
     this.clearTimeouts();
   },
+  computed: {
+    classObject() {
+      return {
+        "c-disable-ticker-animation": !this.enableAnimation,
+      };
+    }
+  },
   methods: {
     update() {
       if (this.currentNews && this.currentNews.dynamic) this.$refs.line.innerHTML = this.currentNews.text;
+      this.enableAnimation = player.options.news.includeAnimated;
     },
     restart() {
       // TODO: Proper delay before ui is initialized
@@ -109,6 +118,11 @@ Vue.component("news-ticker", {
   },
   template: `
     <div ref="ticker" class="c-news-ticker">
-      <span ref="line" class="c-news-line c-news-ticker__line" @click="onLineClick" />
+      <span
+        ref="line"
+        class="c-news-line c-news-ticker__line"
+        :class="classObject"
+        @click="onLineClick"
+      />
     </div>`
 });

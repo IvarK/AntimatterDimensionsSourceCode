@@ -553,6 +553,10 @@ button:focus {
   transition: transform linear;
 }
 
+.c-disable-ticker-animation > * {
+  animation-play-state: paused !important;
+}
+
 .c-news-line {
   display: inline-block;
   font-family: Typewriter, serif;
@@ -5163,6 +5167,7 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-away-progress__realities,
+.c-modal-away-progress__achievement-count,
 .c-modal-away-progress__reality-machines,
 .c-modal-away-progress__imaginary-machines {
   color: var(--color-reality);

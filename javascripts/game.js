@@ -90,7 +90,7 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
-  let ep = Decimal.pow(5, Currency.infinityPoints.value.plus(
+  let ep = Decimal.pow(5, player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
@@ -126,7 +126,7 @@ function gainedGlyphLevel() {
 function resetChallengeStuff() {
   player.chall2Pow = 1;
   player.chall3Pow = new Decimal(0.01);
-  player.matter = new Decimal(0);
+  Currency.matter.reset();
   player.chall8TotalSacrifice = new Decimal(1);
   player.postC4Tier = 1;
 }

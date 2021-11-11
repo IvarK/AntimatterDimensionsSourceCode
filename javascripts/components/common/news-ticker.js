@@ -118,7 +118,8 @@ Vue.component("news-ticker", {
   },
   template: `
     <div ref="ticker" class="c-news-ticker">
-      <span ref="line"
+      <span
+        ref="line"
         class="c-news-line c-news-ticker__line"
         :class="classObject"
         @click="onLineClick"

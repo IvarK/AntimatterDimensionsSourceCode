@@ -45,7 +45,7 @@ Vue.component("new-ui", {
 
       this.isInMatterChallenge = Player.isInMatterChallenge;
       if (this.isInMatterChallenge) {
-        this.matter.copyFrom(Currency.matter.value);
+        this.matter.copyFrom(Currency.matter);
       }
       this.isInEffarig = Effarig.isRunning;
       if (this.isInEffarig) {

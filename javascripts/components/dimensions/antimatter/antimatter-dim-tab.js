@@ -19,7 +19,7 @@ Vue.component("antimatter-dim-tab", {
     update() {
       this.isInMatterChallenge = Player.isInMatterChallenge;
       if (this.isInMatterChallenge) {
-        this.matter.copyFrom(Currency.matter.value);
+        this.matter.copyFrom(Currency.matter);
       }
       this.hasDimensionBoosts = player.dimensionBoosts > 0;
       const isC2Running = NormalChallenge(2).isRunning;

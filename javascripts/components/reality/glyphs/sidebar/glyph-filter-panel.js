@@ -382,6 +382,7 @@ Vue.component("glyph-filter-panel", {
       }
     },
     bumpRarity(type) {
+      // Note: As the minimum of an empty array is zero, this wraps around to 0% again if clicked at 100% rarity
       const newRarity = GlyphRarities
         .map(r => strengthToRarity(r.minStrength))
         .filter(s => s > this.rarityThresholds[type])
@@ -471,7 +472,7 @@ Vue.component("glyph-filter-panel", {
           </span>
         </div>
         <br>
-        <div class="l-glyph-sacrifice-options__rarity-slider-div">
+        <div class="l-glyph-sacrifice-options__rarity-slider-div" @click="bumpRarity(advancedType)">
           <glyph-component
             :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
             v-bind="glyphIconProps"

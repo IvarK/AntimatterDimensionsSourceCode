@@ -107,6 +107,8 @@ Vue.component("equipped-glyphs", {
       };
     },
     showModal() {
+      // If there aren't any glyphs equipped, the array is full of nulls which get filtered out by x => x
+      if (this.glyphs.filter(x => x).length === 0) return;
       Modal.glyphShowcasePanel.show({
         name: "Equipped Glyphs",
         glyphSet: this.glyphs,

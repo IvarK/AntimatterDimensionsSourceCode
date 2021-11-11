@@ -380,6 +380,13 @@ Vue.component("glyph-filter-panel", {
         default:
           throw Error("Unrecognized glyph filter mode");
       }
+    },
+    bumpRarity(type) {
+      const newRarity = GlyphRarities
+        .map(r => strengthToRarity(r.minStrength))
+        .filter(s => s > this.rarityThresholds[type])
+        .min();
+      this.setRarityThreshold(type, newRarity);
     }
   },
   template: `
@@ -432,7 +439,12 @@ Vue.component("glyph-filter-panel", {
         <span class="c-glyph-sacrifice-options__advanced">
           Any Glyphs with rarity below these thresholds will be sacrificed.
         </span>
-        <div v-for="type in glyphTypes" :key="type.id" class="l-glyph-sacrifice-options__rarity-slider-div">
+        <div
+          v-for="type in glyphTypes"
+          :key="type.id"
+          class="l-glyph-sacrifice-options__rarity-slider-div"
+          @click="bumpRarity(type.id)"
+        >
           <glyph-component :glyph="{type: type.id, strength: strengthThreshold(type.id) }" v-bind="glyphIconProps" />
           <ad-slider-component
             v-bind="raritySliderProps"

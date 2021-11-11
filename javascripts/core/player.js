@@ -602,7 +602,8 @@ let player = {
       enabled: true,
       repeatBuffer: 40,
       AIChance: 0,
-      speed: 1
+      speed: 1,
+      includeAnimated: true,
     },
     notation: "Mixed scientific",
     retryChallenge: false,

@@ -7,7 +7,8 @@ Vue.component("modal-news-options", {
       enabled: false,
       repeatBuffer: 40,
       AIChance: 0,
-      speed: 1
+      speed: 1,
+      includeAnimated: false,
     };
   },
   watch: {
@@ -23,6 +24,9 @@ Vue.component("modal-news-options", {
     speed(newValue) {
       player.options.news.speed = parseFloat(newValue, 10);
     },
+    includeAnimated(newValue) {
+      player.options.news.includeAnimated = newValue;
+    },
   },
   computed: {
     newsOnOffLabel() {
@@ -36,6 +40,7 @@ Vue.component("modal-news-options", {
       this.repeatBuffer = options.repeatBuffer;
       this.AIChance = options.AIChance;
       this.speed = options.speed;
+      this.includeAnimated = options.includeAnimated;
     }
   },
   template: `
@@ -79,5 +84,10 @@ Vue.component("modal-news-options", {
           max="2"
         />
       </div>
+      <wide-on-off-button
+        class="o-primary-btn o-primary-btn--option-wide"
+        v-model="includeAnimated"
+        text="Animated News:"
+      />
     </modal-options>`
 });

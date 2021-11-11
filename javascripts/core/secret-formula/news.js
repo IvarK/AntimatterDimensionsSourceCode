@@ -871,14 +871,12 @@ GameDatabase.news = [
     text:
       `<span style='animation: a-game-header__antimatter--glow 2s infinite'>
       PLEASE HELP, I'VE CONSUMED TWICE MY DAILY DOSE OF ANTIMATTER!</span>`,
-    animated: true,
   },
   {
     id: "a167",
     text:
       `Oh, I appear to have run out of <span style='animation: a-existence-glow 3s
       infinite; font-size: 1.8rem; color: white; line-height: 0;'>Existence</span>.`,
-    animated: true,
   },
   {
     id: "a168",
@@ -909,7 +907,6 @@ GameDatabase.news = [
       `<span style='animation: a-game-header__antimatter--glow 3s infinite'>This
       text is made of antimatter. Do not touch or else the universe will collapse.</span>`,
     onClick: () => bigCrunchAnimation(),
-    animated: true,
   },
   {
     id: "a174",
@@ -917,7 +914,6 @@ GameDatabase.news = [
       `<span style='font-family: runescape; color: yellow; text-shadow: 0.1rem 0.1rem black; letter-spacing: 0.1rem;
       font-size: 2rem; line-height: 0; animation: text-flash 1s steps(1, end) infinite;'
       >FREE RUNE ARMOR TRIMMING</span>`,
-    animated: true,
   },
   {
     id: "a175",
@@ -1001,7 +997,6 @@ GameDatabase.news = [
       </span><span style='animation: text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
       R̸̡̛̛̪̝̟̱̣̹̭̟̣̀̈̀̏̉̌͝͠Õ̶͙͈͖̠͇̬͍̟̰U̵̩̫͉̝͔̼͎̦̔̓̽͌͊̏̇̓̀̓̀Ņ̸͍͇̘̙̥̰͉̲͕͈̥̍͛̃̑͝Ḑ̵̤̻̖̱̘̯̝̖̈̌̄̕͝
       Ī̶̜̱̈́̑̃̉̄̋̔͐͋͠Ṅ̴͎̞͍̽͊͛̈́̅͛̈̅̚͠Ģ̸̢̾͊S̷̫̼̜̼͇̋͛̎͑͆̅̓̇</span>`,
-    animated: true,
   },
   {
     id: "a185",
@@ -1020,7 +1015,6 @@ GameDatabase.news = [
       '>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
       text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span
       style='animation: text-grow 1s infinite'>\\(^_^)\\</span>`,
-    animated: true,
   },
   {
     id: "a187",
@@ -1088,7 +1082,6 @@ GameDatabase.news = [
       return `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color};
         animation: text-grow 0.4s infinite;'>Disco Time!</span>`;
     },
-    animated: true,
   },
   {
     id: "a197",
@@ -1332,7 +1325,7 @@ GameDatabase.news = [
   {
     id: "a233",
     get text() {
-      return `Level ${formatInt(10)} crook, Level ${format(Number.MAX_VALUE, 2)} Boss,
+      return `Level 10 crook, Level ${format(Number.MAX_VALUE, 2)} Boss,
         that's how Antimatter Dimensions works.`;
     }
   },
@@ -1359,7 +1352,6 @@ GameDatabase.news = [
       dude." AD Player: "You are like a little baby. Watch this: <span style='animation: text-crunch ${newsAnimSpd(22)}s
       1; font-size: 0;'>C R O N C H</span>"`;
     },
-    animated: true,
   },
   {
     id: "a239",
@@ -1438,7 +1430,6 @@ GameDatabase.news = [
   {
     id: "a246",
     text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
-    animated: true,
   },
   (function() {
     let isFlipped = false;
@@ -1504,7 +1495,6 @@ GameDatabase.news = [
     get text() {
       return `<span style='animation: text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
     },
-    animated: true,
   },
   {
     id: "a253",
@@ -1921,7 +1911,6 @@ GameDatabase.news = [
       Friday: <span style="color: #222">Coal dust</span> Saturday: <span style="color: #222">Coal dust</span>
       with chances of <span style="color: indigo">indigo</span> in the late afternoon
       Sunday: <span style="color: white; animation: a-existence-glow 3s infinite">Void</span>`,
-    animated: true,
   },
   {
     id: "a310",

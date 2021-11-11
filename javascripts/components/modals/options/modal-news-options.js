@@ -87,7 +87,7 @@ Vue.component("modal-news-options", {
       <wide-on-off-button
         class="o-primary-btn o-primary-btn--option-wide"
         v-model="includeAnimated"
-        text="Animated News:"
+        text="Animation Effects:"
       />
     </modal-options>`
 });

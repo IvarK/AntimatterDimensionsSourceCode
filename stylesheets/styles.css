@@ -553,6 +553,10 @@ button:focus {
   transition: transform linear;
 }
 
+.c-disable-ticker-animation > * {
+  animation-play-state: paused !important;
+}
+
 .c-news-line {
   display: inline-block;
   font-family: Typewriter, serif;

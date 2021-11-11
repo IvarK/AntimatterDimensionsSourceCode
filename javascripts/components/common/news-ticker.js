@@ -4,6 +4,7 @@ Vue.component("news-ticker", {
   data() {
     return {
       recentTickers: [],
+      enableAnimation: false,
     };
   },
   watch: {
@@ -18,9 +19,17 @@ Vue.component("news-ticker", {
   beforeDestroy() {
     this.clearTimeouts();
   },
+  computed: {
+    classObject() {
+      return {
+        "c-disable-ticker-animation": !this.enableAnimation,
+      };
+    }
+  },
   methods: {
     update() {
       if (this.currentNews && this.currentNews.dynamic) this.$refs.line.innerHTML = this.currentNews.text;
+      this.enableAnimation = player.options.news.includeAnimated;
     },
     restart() {
       // TODO: Proper delay before ui is initialized
@@ -43,14 +52,13 @@ Vue.component("news-ticker", {
       if (line === undefined) return;
 
       const isUnlocked = news => news.unlocked || news.unlocked === undefined;
-      const isEnabled = news => news.unlocked === undefined || news.unlocked === player.options.news.includeAnimated;
 
       if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
         this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
         nextNewsMessageId = undefined;
       } else if (this.currentNews && this.currentNews.id === "a236") {
         this.currentNews = GameDatabase.news
-          .filter(message => message.isAdvertising && isUnlocked(message) && isEnabled(message))
+          .filter(message => message.isAdvertising && isUnlocked(message))
           .randomElement();
       } else {
         const isAI = Math.random() < player.options.news.AIChance;
@@ -110,6 +118,10 @@ Vue.component("news-ticker", {
   },
   template: `
     <div ref="ticker" class="c-news-ticker">
-      <span ref="line" class="c-news-line c-news-ticker__line" @click="onLineClick" />
+      <span ref="line"
+        class="c-news-line c-news-ticker__line"
+        :class="classObject"
+        @click="onLineClick"
+      />
     </div>`
 });

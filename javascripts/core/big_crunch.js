@@ -158,7 +158,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
 class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
-    if (Array.isArray(requirement) || typeof requirement === 'function') {
+    if (Array.isArray(requirement) || typeof requirement === "function") {
       this._requirements = requirement;
     } else if (requirement === undefined) {
       this._requirements = [];
@@ -179,7 +179,7 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return typeof this._requirements === 'function' ? this._requirements()
+    return typeof this._requirements === "function" ? this._requirements()
       : this._requirements.every(x => x.isBought);
   }
 

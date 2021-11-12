@@ -15,7 +15,8 @@ Vue.component("new-galaxy-row", {
       },
       canBeBought: false,
       distantStart: 0,
-      lockText: null
+      lockText: null,
+      canBulkBuy: false,
     };
   },
   computed: {
@@ -75,10 +76,12 @@ Vue.component("new-galaxy-row", {
       this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.lockText = Galaxy.lockText;
+      this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
     },
     buyGalaxy(bulk) {
       if (player.options.confirmations.antimatterGalaxy && this.canBeBought) {
-        Modal.antimatterGalaxy.show({ bulk });
+        const buyBulk = this.canBulkBuy && bulk;
+        Modal.antimatterGalaxy.show({ bulk: buyBulk });
         return;
       }
       requestGalaxyReset(bulk);

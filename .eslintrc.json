@@ -151,7 +151,7 @@
     "no-nested-ternary": "error",
     "no-new-object": "error",
     "no-tabs": "error",
-    "no-trailing-spaces": "error",
+    "no-trailing-spaces": "warn",
     "no-unneeded-ternary": "error",
     "no-whitespace-before-property": "error",
     "object-curly-spacing": [

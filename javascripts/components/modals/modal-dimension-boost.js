@@ -1,19 +1,26 @@
 "use strict";
 
 Vue.component("modal-dimension-boost", {
+  data() {
+    return {
+      unlockedByBoost: String,
+    };
+  },
   props: { modalConfig: Object },
   computed: {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {
-      const newBoosts = this.bulk ? this.getCanBuy() : 1;
-      if (this.bulk) return `You are about to purchase ${quantifyInt("Dimension Boost", newBoosts)}`;
+      if (this.bulk) return `You are about to purchase ${quantifyInt("Dimension Boost", this.getCanBuy())}`;
       return `You are about to purchase a Dimension Boost`;
     },
     message() {
-      return `${DimBoost.unlockedByBoost}?`;
+      return `${this.unlockedByBoost}?`;
     },
   },
   methods: {
+    update() {
+      this.unlockedByBoost = DimBoost.unlockedByBoost;
+    },
     handleYesClick() {
       this.emitClose();
       requestDimensionBoost(this.bulk);

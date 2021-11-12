@@ -1,25 +1,25 @@
 "use strict";
 
 Vue.component("modal-glyph-purge", {
-  props: {
-    modalConfig: Object,
-    glyphsTotal: Number,
-    glyphsDeleted: Number,
+  data() {
+    return {
+      glyphsTotal: Number,
+      glyphsDeleted: Number,
+    };
   },
+  props: { modalConfig: Object, },
   computed: {
     harsh() { return this.modalConfig.harsh; },
     threshold() { return this.harsh ? 1 : 5; },
     extraMessage() {
-      return `${this.whichType} will delete ${this.glyphsDeleted}/${this.glyphsTotal} of your Glyphs.`;
+      return `${this.harsh ? `Harsh Purging` : `Purging`} will delete ${this.glyphsDeleted}/${this.glyphsTotal} 
+      of your Glyphs.`;
     },
     explanation() {
       if (this.harsh) return `Harsh Purging deletes Glyphs that are strictly worse than any other Glyph in your
       inventory. For example, if there is a Glyph that has all better effects than another, the worse is deleted.`;
       return `Purging deletes Glyphs that are worse than enough other Glyphs. Instead of keeping one good Glyph,
       like Harsh Purge, it keeps five.`;
-    },
-    whichType() {
-      return this.harsh ? `Harsh Purging` : `Purging`;
     },
     topLabel() {
       return `You are about to ${this.harsh ? `Harsh Purge` : `Purge`} your Glyphs`;
@@ -32,7 +32,7 @@ Vue.component("modal-glyph-purge", {
     },
     handleYesClick() {
       this.emitClose();
-      Glyphs.autoClean(this.harsh ? 1 : 5, true);
+      Glyphs.autoClean(this.threshold, true);
     },
     handleNoClick() {
       this.emitClose();

@@ -116,7 +116,7 @@ Vue.component("modal-confirmation-options", {
       this.antimatterGalaxy = options.antimatterGalaxy;
       this.dimensionBoost = options.dimensionBoost;
 
-      this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
+      this.sacrificeUnlocked = Sacrifice.isVisible;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);

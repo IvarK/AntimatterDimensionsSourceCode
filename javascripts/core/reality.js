@@ -286,8 +286,8 @@ function giveRealityRewards(realityProps) {
     Modal.message.show(`You have completed Teresa's Reality! ${isHigher
       ? `Since you gained more Antimatter, you increased your 
       Glyph Sacrifice multiplier from ${f(current)} to ${f(newMultiplier)}`
-      : `You did not gain more Antimatter during this run, so you did not increase your 
-      Glyph Sacrifice multiplier.`}`);
+      : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier 
+      from Teresa did not increase`}.`);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM.copyFrom(Currency.antimatter);
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));

@@ -150,7 +150,7 @@ Vue.component("replicanti-tab", {
         <br><br>
         <replicanti-gain-text />
         <br>
-        <replicanti-galaxy-button v-if="canSeeGalaxyButton"/>
+        <replicanti-galaxy-button v-if="canSeeGalaxyButton" />
       </template>
     </div>`
 });

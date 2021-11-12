@@ -45,15 +45,19 @@ Vue.component("glyph-clean-button-group", {
     autoClean() {
       if (player.options.confirmations.autoClean) {
         Modal.glyphPurge.show({ harsh: false });
+      } else {
+        Glyphs.autoClean(5);
       }
     },
     harshAutoClean() {
       if (player.options.confirmations.autoClean) {
         Modal.glyphPurge.show({ harsh: true });
+      } else {
+        Glyphs.autoClean(1);
       }
     },
     deleteAllUnprotected() {
-      Glyphs.deleteAllUnprotected();
+      Modal.deleteAllUnprotectedGlyphs.show();
     },
     deleteAllRejected() {
       Glyphs.deleteAllRejected();

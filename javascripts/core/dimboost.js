@@ -52,29 +52,42 @@ class DimBoost {
     return DimBoost.purchasedBoosts + 4 < DimBoost.maxDimensionsUnlockable;
   }
 
-  static get challenge8MaxBoosts() {
-    // In Challenge 8, the only boosts that are useful are the first 5
-    // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
-    // combined, among other things), only the first 2 are useful
-    // (they unlock new dimensions).
-    // There's no actual problem with bulk letting the player get
-    // more boosts than this; it's just that boosts beyond this are pointless.
-    return NormalChallenge(10).isRunning ? 2 : 5;
+  static get maxBoosts() {
+    if (Ra.isRunning) {
+      // Ra makes boosting impossible. Note that this function isn't called
+      // when giving initial boosts, so the player will still get those.
+      return 0;
+    }
+    if (InfinityChallenge(1).isRunning) {
+      // Usually, in Challenge 8, the only boosts that are useful are the first 5
+      // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
+      // combined, among other things), only the first 2 are useful
+      // (they unlock new dimensions).
+      // There's no actual problem with bulk letting the player get
+      // more boosts than this; it's just that boosts beyond this are pointless.
+      return 2;
+    }
+    if (NormalChallenge(8).isRunning) {
+      // See above. It's important we check for this after checking for IC1 since otherwise
+      // this case would trigger when we're in IC1.
+      return 5;
+    }
+    return Infinity;
   }
 
   static get canBeBought() {
-    if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) return false;
-    if (Ra.isRunning) return false;
+    if (DimBoost.purchasedBoosts >= this.maxBoosts) return false;
     if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
        (!player.break || Player.isInAntimatterChallenge)) return false;
     return true;
   }
 
   static get lockText() {
-    if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
-      return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
+    if (DimBoost.purchasedBoosts >= this.maxBoosts) {
+      if (Ra.isRunning) return "Locked (Ra's Reality)";
+      if (InfinityChallenge(1).isRunning) return "Locked (Infinity Challenge 1)";
+      if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
     }
-    if (Ra.isRunning) return "Locked (Ra's reality)";
     return null;
   }
 

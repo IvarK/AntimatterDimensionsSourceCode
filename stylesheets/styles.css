@@ -130,6 +130,7 @@ html {
   --color-infinity: #7d3c1b;
   --color-eternity: #639565;
   --color-reality: #AFA3A5;
+  --color-reality-light: #e8e3e4;
   --color-celestials: #F2D6C1;
   --color-prestige--accent: black;
 }
@@ -550,6 +551,10 @@ button:focus {
 .c-news-ticker__line {
   padding-left: 100%;
   transition: transform linear;
+}
+
+.c-disable-ticker-animation > * {
+  animation-play-state: paused !important;
 }
 
 .c-news-line {
@@ -5162,6 +5167,7 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-away-progress__realities,
+.c-modal-away-progress__achievement-count,
 .c-modal-away-progress__reality-machines,
 .c-modal-away-progress__imaginary-machines {
   color: var(--color-reality);
@@ -5483,15 +5489,79 @@ kbd {
   align-items: center;
   left: 50vw;
   top: 50vh;
-  width: 40rem;
-  height: 10rem;
+  width: 30rem;
+  height: 30rem;
   transform: translate(-50%, -50%);
+}
+
+.c-modal-cestial-quote__symbol {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  font-size: 25rem;
+  opacity: 0.2;
+  text-shadow: 0 0 2rem;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.c-modal-celestial-quote--teresa {
+  color: var(--color-teresa--base);
+  background-color: black;
+  border-color: var(--color-teresa--base);
+  box-shadow: 0 0 1rem var(--color-teresa--base), 0 0 1rem var(--color-teresa--base) inset;
+}
+
+.c-modal-celestial-quote--effarig {
+  color: var(--color-effarig--base);
+  background-color: black;
+  border-color: var(--color-effarig--base);
+  box-shadow: 0 0 1rem var(--color-effarig--base), 0 0 1rem var(--color-effarig--base) inset;
+}
+
+.c-modal-celestial-quote--enslaved {
+  color: var(--color-enslaved-base);
+  background-color: black;
+  border-color: var(--color-enslaved-base);
+  box-shadow: 0 0 1rem var(--color-enslaved-base), 0 0 1rem var(--color-enslaved-base) inset;
+}
+
+.c-modal-celestial-quote--v {
+  color: var(--color-v--base);
+  background-color: black;
+  border-color: var(--color-v--base);
+  box-shadow: 0 0 1rem var(--color-v--base), 0 0 1rem var(--color-v--base) inset;
+}
+
+.c-modal-celestial-quote--ra {
+  color: #9575cd;
+  background-color: black;
+  border-color: #9575cd;
+  box-shadow: 0 0 1rem #9575cd, 0 0 1rem #9575cd inset;
+}
+
+.c-modal-celestial-quote--laitela {
+  color: var(--color-laitela--accent);
+  background-color: var(--color-laitela--base);
+  border-color: var(--color-laitela--accent);
+  box-shadow: 0 0 1rem var(--color-laitela--accent), 0 0 1rem var(--color-laitela--accent) inset;
 }
 
 .c-modal-celestial-quote__arrow {
   font-size: 150%;
   margin: 0.5rem;
-  color: #444;
+  cursor: pointer;
+}
+
+.c-modal-celestial-quote__end {
+  position: absolute;
+  font-size: 150%;
+  cursor: pointer;
+  left: calc(50% - 1rem);
+  bottom: 1.5rem;
 }
 
 .l-modal-celestial-quote__text {
@@ -5656,7 +5726,6 @@ kbd {
 }
 
 .c-celestial-quote-history__button--disabled {
-  cursor: not-allowed;
   opacity: 0.6;
 }
 
@@ -6720,8 +6789,10 @@ kbd {
 }
 
 .c-ra-memory-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 1.3rem;
-  margin-top: 1.5rem;
   font-weight: bold;
 }
 
@@ -7994,18 +8065,16 @@ kbd {
   background-color: black;
   box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   border-radius: 0.8rem;
+  transition-duration: 0.2s;
+}
+
+.c-glyph-levels-and-weights__slider-handle:hover {
+  color: black;
+  background-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__reset-btn-outer {
-  z-index:2;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.l-glyph-levels-and-weights__reset-btn {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
 }
 
 .c-glyph-levels-and-weights__reset-btn {
@@ -8013,6 +8082,9 @@ kbd {
   background-color: black;
   border-radius: 0.5rem;
   border: 0.1rem solid var(--color-reality-light);
+  padding: 0.2rem 0.5rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .c-glyph-levels-and-weights__reset-btn:hover {
@@ -8020,17 +8092,22 @@ kbd {
   background-color: var(--color-reality-light);
 }
 
-.l-glyph-levels-and-weights__auto-btn {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  font-size: 10px;
+.s-base--metro .c-glyph-levels-and-weights__reset-btn {
+  border-radius: 0;
 }
 
 .c-glyph-levels-and-weights__auto-btn {
+  font-size: 1rem;
+  font-family: Typewriter;
+  font-weight: bold;
   color: var(--color-reality-light);
   background-color: black;
+  height: 2.5rem;
   border-radius: 0.5rem;
   border: 0.1rem solid var(--color-reality-light);
+  padding: 0.2rem 0.5rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .c-glyph-levels-and-weights__auto-btn:hover {
@@ -8038,16 +8115,21 @@ kbd {
   background-color: var(--color-reality-light);
 }
 
+.s-base--metro .c-glyph-levels-and-weights__auto-btn {
+  border-radius: 0;
+}
+
 .o-questionmark {
   border-radius: 50%;
   border: 0.1rem solid;
   width: 1.2rem;
   height: 1.2rem;
-  font-size: smaller;
+  font-size: 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
+  user-select: none;
 }
 
 .l-glyphs-tab {

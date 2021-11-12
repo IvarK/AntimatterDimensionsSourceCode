@@ -2,7 +2,11 @@
 
 Vue.component("secret-achievement-row", {
   props: {
-    row: Array
+    /** @type SecretAchievementState[] */
+    row: {
+      type: Array,
+      required: true
+    }
   },
   data() {
     return {

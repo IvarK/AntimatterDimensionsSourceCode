@@ -111,18 +111,18 @@ const Effarig = {
       ]
     },
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
-      2, "Do you like my little shop? It’s not much, but it’s mine."
+      2, "Do you like my little shop? It is not much, but it is mine."
     ),
     UNLOCK_GLYPH_FILTER: CelestialQuotes.singleLine(
       3, "This purchase will help you out."
     ),
     UNLOCK_SET_SAVES: CelestialQuotes.singleLine(
-      4, "Is that too much? I think it’s too much."
+      4, "Is that too much? I think it is too much."
     ),
     UNLOCK_RUN: {
       id: 5,
       lines: [
-        "You bought out my entire stock... well, at least I‘m rich now.",
+        "You bought out my entire stock... well, at least I am rich now.",
         "The heart of my Reality is suffering. Each Layer is harder than the last.",
         "I hope you never complete it.",
       ]
@@ -139,9 +139,9 @@ const Effarig = {
       id: 7,
       lines: [
         "* You have completed Effarig's Eternity.",
-        "This is the limit. I don’t want you to proceed past this point.",
-        "You won't finish this in your lifetime.",
-        "I'll just wait here until you give up.",
+        "This is the limit. I do not want you to proceed past this point.",
+        "You will not finish this in your lifetime.",
+        "I will just wait here until you give up.",
       ]
     },
     COMPLETE_REALITY: {
@@ -149,12 +149,13 @@ const Effarig = {
       lines: [
         "* You have completed Effarig's Reality.",
         "So this is the diabolical power... what frightened the others...",
-        "Do you think this was worth it? Trampling on what I’ve done?",
-        "And for what purpose? You could’ve joined, we could’ve cooperated.",
-        "But no. It’s over. Leave while I cling onto what’s left.",
+        "Do you think this was worth it? Trampling on what I have done?",
+        "And for what purpose? You could have joined, we could have cooperated.",
+        "But no. It is over. Leave while I cling onto what is left.",
       ]
     }
   }),
+  symbol: "Ϙ"
 };
 
 class EffarigUnlockState extends GameMechanicState {

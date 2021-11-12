@@ -5,6 +5,18 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     super(config);
     this.registerEvents(config.checkEvent, () => this.tryUnlock());
   }
+  
+  get automatorPoints() {
+    return this.config.automatorPoints ? this.config.automatorPoints : 0;
+  }
+
+  get name() {
+    return this.config.name;
+  }
+
+  get shortDescription() {
+    return this.config.shortDescription ? this.config.shortDescription() : "";
+  }
 
   get currency() {
     return Currency.realityMachines;

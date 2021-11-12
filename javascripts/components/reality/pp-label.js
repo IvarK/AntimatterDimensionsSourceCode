@@ -26,9 +26,11 @@ Vue.component("pp-label", {
   },
   template: `
     <div class="c-perk-tab__header">
-      You have <span class="c-perk-tab__perk-points">{{ format(pp, 2, 0) }}</span> {{ "Perk Point" | pluralize(pp) }}.
+      You have <span class="c-perk-tab__perk-points">{{ format(pp, 2, 0) }}</span> {{ pluralize("Perk Point", pp) }}.
       <br>
       Perk choices are permanent and cannot be respecced.
+      <br>
+      Diamond-shaped perks also give Automator Points.
       <br>
       <div>
         <primary-button-on-off-custom

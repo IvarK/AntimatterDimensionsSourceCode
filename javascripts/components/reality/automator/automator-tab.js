@@ -52,6 +52,6 @@ Vue.component("automator-tab", {
           <automator-docs slot="paneR" />
         </split-pane>
       </div>
-      <div style="font-size: 30px" v-else>You need {{ formatInt(5) }} Realities to unlock the Automator.</div>
+      <automator-points-list v-else />
     </div>`
 });

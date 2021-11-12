@@ -83,35 +83,35 @@ Vue.component("glyph-set-save-panel", {
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
       </div>
-      <br>
+      <div class="l-glyph-set-save__header">
       When searching for Glyphs to load, try to match the following. "Exact" will only count Glyphs
       with identical properties to be part of the set. The other settings will, loosely speaking, allow
       for "better" Glyphs to match as well.
+      </div>
       <div class="c-glyph-set-save-container">
         <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
-        <button class="o-primary-btn o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button">
-          Type: Exact
+        <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
+          Type: Exact (always)
         </button>
-        <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button"
+        <button-on-off-custom
+          class="c-glyph-set-save-setting-button"
           v-model="effects"
           on="Effects: Including"
           off="Effects: Exact"
         />
-        <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button"
+        <button-on-off-custom
+          class="c-glyph-set-save-setting-button"
           v-model="level"
           on="Level: Increased"
           off="Level: Exact"
         />
-        <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle c-glyph-set-save-setting-button"
+        <button-on-off-custom
+          class="c-glyph-set-save-setting-button"
           v-model="rarity"
           on="Rarity: Increased"
           off="Rarity: Exact"
         />
       </div>
-      <br>
       Your saved Glyph sets:
       <div class="c-glyph-single-set-save" v-for="(set, id) in glyphSets">
         <div style="width: 16rem">
@@ -125,22 +125,22 @@ Vue.component("glyph-set-save-panel", {
           />
         </div>
         <button
-          class="c-reality-upgrade-btn c-glyph-set-save-button"
-          :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
           @click="saveGlyphSet(id)"
         >
           Save
         </button>
         <button
-          class="c-reality-upgrade-btn c-glyph-set-save-button"
-          :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
           @click="loadGlyphSet(set)"
         >
           Load
         </button>
         <button
-          class="c-reality-upgrade-btn c-glyph-set-save-button"
-          :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': !set.length}"
           @click="deleteGlyphSet(id)"
         >
           Delete

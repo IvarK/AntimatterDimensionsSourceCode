@@ -99,7 +99,7 @@ Vue.component("game-header-big-crunch-button", {
         <b>
           Big Crunch for
           <span :style="amountStyle">{{ format(gainedIP, 2) }}</span>
-          Infinity {{ "Point" | pluralize(gainedIP) }}.
+          Infinity {{ pluralize("Point", gainedIP) }}.
         </b>
         <template v-if="showIPRate">
           <br>

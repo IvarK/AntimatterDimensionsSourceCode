@@ -706,6 +706,14 @@ GameStorage.migrations = {
         // eslint-disable-next-line no-bitwise
         newAchievements[row - 1] |= (1 << (column - 1));
       }
+      // Handle the changed achievement "No DLC Required" correctly (otherwise saves could miss it).
+      if (player.infinityUpgrades.size >= 16 || player.eternities.gte(0) || player.realities > 0) {
+        // eslint-disable-next-line no-bitwise
+        newAchievements[3] |= 1;
+      } else {
+        // eslint-disable-next-line no-bitwise
+        newAchievements[3] &= ~1;
+      }
     };
 
     player.achievementBits = Array.repeat(0, 15);

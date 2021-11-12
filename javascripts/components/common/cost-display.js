@@ -47,6 +47,6 @@ Vue.component("cost-display", {
   template: `
     <span v-if="isVisible">
       <br v-if="br">
-      {{ title }} {{ name | quantify(cost, 0, 0, formatCost) }}
+      {{ title }} {{ quantify(name, cost, 0, 0, formatCost) }}
     </span>`
 });

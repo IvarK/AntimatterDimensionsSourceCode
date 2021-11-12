@@ -138,7 +138,6 @@ let player = {
     })),
     timeTheorems: {
       isActive: false,
-      lastTick: 0,
     },
     dilationUpgrades: Array.range(0, 3).map(() => ({
       isActive: false,
@@ -418,7 +417,8 @@ let player = {
       scripts: {
       },
       execTimer: 0,
-      type: AUTOMATOR_TYPE.TEXT
+      type: AUTOMATOR_TYPE.TEXT,
+      forceUnlock: false,
     },
     achTimer: 0,
   },
@@ -549,6 +549,7 @@ let player = {
         dilation: 0,
         effarig: 0
       },
+      quotes: [],
       momentumTime: 0,
       unlocksBits: 0,
       run: false,
@@ -561,7 +562,7 @@ let player = {
       darkMatter: DC.D0,
       maxDarkMatter: DC.D0,
       run: false,
-      unlockBits: 0,
+      quotes: [],
       dimensions: Array.range(0, 4).map(() =>
         ({
           amount: DC.D0,
@@ -601,7 +602,8 @@ let player = {
       enabled: true,
       repeatBuffer: 40,
       AIChance: 0,
-      speed: 1
+      speed: 1,
+      includeAnimated: true,
     },
     notation: "Mixed scientific",
     retryChallenge: false,
@@ -684,6 +686,7 @@ let player = {
       tachyonParticles: true,
       dilatedTime: true,
       tachyonGalaxies: true,
+      achievementCount: true,
       realities: true,
       realityMachines: true,
       imaginaryMachines: true,
@@ -743,16 +746,6 @@ const Player = {
     return this.antimatterChallenge || EternityChallenge.current;
   },
 
-  get effectiveMatterAmount() {
-    if (NormalChallenge(11).isRunning) {
-      return player.matter;
-    }
-    if (InfinityChallenge(6).isRunning) {
-      return Decimal.pow(player.matter, 20);
-    }
-    return DC.D0;
-  },
-
   get canCrunch() {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return false;
     const challenge = NormalChallenge.current || InfinityChallenge.current;
@@ -797,7 +790,7 @@ const Player = {
   },
 
   get automatorUnlocked() {
-    return Currency.realities.gte(5);
+    return AutomatorPoints.totalPoints >= AutomatorPoints.pointsForAutomator || player.reality.automator.forceUnlock;
   },
 
   resetRequirements(key) {

@@ -970,7 +970,7 @@ GameStorage.devMigrations = {
       // Delete PEC5 (id 64)
       if (player.reality.perks.has(64)) {
         player.reality.perks.delete(64);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
 
       let reqBitmask = 0;
@@ -984,7 +984,7 @@ GameStorage.devMigrations = {
       // Delete SAM2 (id 11)
       if (player.reality.perks.has(11)) {
         player.reality.perks.delete(11);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
       if (player.reality.perks.has(10)) Perk.startAM.onPurchased();
     },
@@ -1019,7 +1019,7 @@ GameStorage.devMigrations = {
       // Delete ACH5
       if (player.reality.perks.has(206)) {
         player.reality.perks.delete(206);
-        Currency.perkPoints.add(1);
+        player.reality.perkPoints++;
       }
     },
     player => {
@@ -1137,6 +1137,30 @@ GameStorage.devMigrations = {
       }
     },
     GameStorage.migrations.deletePostChallUnlocked,
+    player => {
+      // Delete PEC4 (id 63)
+      if (player.reality.perks.has(63)) {
+        player.reality.perks.delete(63);
+        player.reality.perkPoints++;
+      }
+      // Delete TTMA4 (id 107)
+      if (player.reality.perks.has(107)) {
+        player.reality.perks.delete(107);
+        player.reality.perkPoints++;
+      }
+      delete player.auto.timeTheorems.lastTick;
+    },
+    player => {
+      // We can't reliably check if the player has or hasn't unlocked the automator via automator points without
+      // essentially copy-pasting all the automator point code here (in the interest of avoiding use of globals).
+      // So, in the range of progress where it's unclear, we stop it entirely in case it hasn't actually unlocked yet.
+      if (player.realities > 5 && player.realities < 50) {
+        player.reality.automator.state.mode = 1;
+        player.reality.automator.state.stack = [];
+        player.reality.automator.state.repeat = false;
+        player.reality.automator.state.forceRestart = false;
+      }
+    },
   ],
 
   patch(player) {

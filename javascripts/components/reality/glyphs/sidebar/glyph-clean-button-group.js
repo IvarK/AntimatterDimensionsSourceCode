@@ -60,35 +60,34 @@ Vue.component("glyph-clean-button-group", {
   },
   template: `
     <div v-if="glyphSacrificeUnlocked">
-      Remove weaker Glyphs:
-      <br>
+      <div class="l-glyph-sacrifice-options__header">Remove weaker Glyphs:</div>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        :ach-tooltip="autoCleanTooltip"
+        class="c-glyph-inventory-option"
         @click="autoClean"
       >
         Purge Glyphs
+        <div class="c-glyph-inventory-option__tooltip">{{ autoCleanTooltip }}</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        :ach-tooltip="harshAutoCleanTooltip"
+        class="c-glyph-inventory-option"
         @click="harshAutoClean"
       >
         Harsh Purge Glyphs
+        <div class="c-glyph-inventory-option__tooltip">{{ harshAutoCleanTooltip }}</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         @click="deleteAllUnprotected"
       >
         {{ removeString }} all unprotected glyphs
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         v-if="hasFilter"
-        :ach-tooltip="deleteRejectedTooltip"
         @click="deleteAllRejected"
       >
         {{ removeString }} all Glyphs rejected by filtering
+        <div class="c-glyph-inventory-option__tooltip" style="width: 90%; left: 5%;">{{ deleteRejectedTooltip }}</div>
       </button>
     </div>`
 });

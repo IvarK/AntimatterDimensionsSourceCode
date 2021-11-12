@@ -9,6 +9,9 @@ class AwayProgress {
     // This is an array of strings, each one the name of the next entry in the player object to navigate to
     // If there is no reference, it is accessed directly by the name through the player object.
     this.reference = config.reference === undefined ? [this.name] : config.reference;
+    // Most of the entries in offline progress are props which can be directly read from the player object, but eg. for
+    // achievements the raw data is an array of bitmasks. This structure allows generic support for indirect values.
+    this.applyFn = config.applyFn === undefined ? x => x : config.applyFn;
     this.classObjectReference = config.classObjectReference === undefined ? this.name : config.classObjectReference;
     this.appearsInAwayModal = config.appearsInAwayModal === undefined ? true : config.appearsInAwayModal;
   }
@@ -41,7 +44,7 @@ class AwayProgress {
     for (const goTo of this.reference) {
       place = place[goTo];
     }
-    return place;
+    return this.applyFn(place);
   }
 }
 
@@ -99,6 +102,12 @@ const AwayProgressTypes = {
     name: "tachyonGalaxies",
     reference: ["dilation", "totalTachyonGalaxies"],
     isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
+  }),
+  achievements: new AwayProgress({
+    name: "achievementCount",
+    reference: ["achievementBits"],
+    applyFn: x => x.map(b => countValuesFromBitmask(b)).sum(),
+    isUnlocked: () => PlayerProgress.realityUnlocked(),
   }),
   realities: new AwayProgress({
     name: "realities",

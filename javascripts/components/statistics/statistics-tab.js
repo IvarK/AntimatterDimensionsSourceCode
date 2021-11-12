@@ -134,13 +134,13 @@ Vue.component("statistics-tab", {
           Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
         </div>
         <div>
-          You have seen {{ "news message" | quantifyInt(totalNews) }} in total.
+          You have seen {{ quantifyInt("news message", totalNews) }} in total.
         </div>
         <div>
-          You have seen {{ "unique news message" | quantifyInt(uniqueNews) }}.
+          You have seen {{ quantifyInt("unique news message", uniqueNews) }}.
         </div>
         <div>
-          You have unlocked {{ "Secret Achievement" | quantifyInt(secretAchievementCount) }}.
+          You have unlocked {{ quantifyInt("Secret Achievement", secretAchievementCount) }}.
         </div>
         <div>
           <br>
@@ -161,7 +161,7 @@ Vue.component("statistics-tab", {
         </div>
         <div v-if="infinity.banked.gt(0)">
           You have {{ formatDecimalAmount(infinity.banked) }}
-          {{ "Banked Infinity" | pluralize(infinity.banked) }}.
+          {{ pluralize("Banked Infinity", infinity.banked) }}.
         </div>
         <div v-if="infinity.hasBest">
           Your fastest Infinity was {{ infinity.best.toStringShort() }}.
@@ -189,7 +189,7 @@ Vue.component("statistics-tab", {
         </div>
         <div v-if="infinity.projectedBanked.gt(0)">
           You will gain {{ formatDecimalAmount(infinity.projectedBanked) }}
-          {{ "Banked Infinity" | pluralize(infinity.projectedBanked) }} on Eternity
+          {{ pluralize("Banked Infinity", infinity.projectedBanked) }} on Eternity
           ({{ formatDecimalAmount(infinity.bankRate) }} per minute).
         </div>
         <div v-else-if="infinity.banked.gt(0)">
@@ -211,7 +211,7 @@ Vue.component("statistics-tab", {
       </div>
       <div v-if="reality.isUnlocked" class="c-stats-tab-subheader">
         <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
-        <div>You have {{ "Reality" | pluralize(reality.count, 0, 0, formatInt) }}.</div>
+        <div>You have {{ quantify("Reality", reality.count, 0, 0, formatInt) }}.</div>
         <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
         <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
         <div>

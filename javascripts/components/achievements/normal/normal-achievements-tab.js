@@ -14,17 +14,14 @@ Vue.component("normal-achievements-tab", {
           return this.isCancerImages ? "😂" : ":";
         },
         imageSwapperStyleObject() {
-          if (this.canSwapImages) {
-            return { "cursor": "pointer" };
-          }
-          return {};
+          return this.canSwapImages ? { "cursor": "pointer" } : {};
         }
       },
       methods: {
         update() {
           const isCancerTheme = Theme.current().name === "S4";
-          this.canSwapImages = Themes.find("S4").isAvailable() && !isCancerTheme;
-          this.isCancerImages = player.secretUnlocks.cancerAchievements || isCancerTheme;
+          this.canSwapImages = !isCancerTheme && Themes.find("S4").isAvailable();
+          this.isCancerImages = isCancerTheme || player.secretUnlocks.cancerAchievements;
         },
         swapImages() {
           if (this.canSwapImages) {
@@ -39,7 +36,7 @@ Vue.component("normal-achievements-tab", {
   data() {
     return {
       achievementPower: 0,
-      achTPeffect: 0,
+      achTPEffect: 0,
       achCountdown: 0,
       totalCountdown: 0,
       missingAchievements: 0,
@@ -52,6 +49,7 @@ Vue.component("normal-achievements-tab", {
       achMultToBH: false,
       achMultToTP: false,
       achMultToTT: false,
+      renderedRows: []
     };
   },
   watch: {
@@ -60,43 +58,37 @@ Vue.component("normal-achievements-tab", {
     },
     hideCompletedRows(newValue) {
       player.options.hideCompletedAchievementRows = newValue;
+      this.startRowRendering();
     }
   },
   computed: {
     rows: () => Achievements.allRows,
     boostText() {
+      const achievementPower = formatX(this.achievementPower, 2, 3);
+      const achTPEffect = formatX(this.achTPEffect, 2, 3);
+
       const boostList = [];
 
       const dimMultList = [];
       dimMultList.push("Antimatter");
       if (this.achMultToIDS) dimMultList.push("Infinity");
       if (this.achMultToTDS) dimMultList.push("Time");
-      const dimMult = `Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
-      switch (dimMultList.length) {
-        case 1:
-          boostList.push(`${dimMultList[0]} ${dimMult}`);
-          break;
-        case 2:
-          boostList.push(`${dimMultList[0]} and ${dimMultList[1]} ${dimMult}`);
-          break;
-        default:
-          boostList.push(`${dimMultList.slice(0, -1).join(", ")},
-            and ${dimMultList[dimMultList.length - 1]} ${dimMult}`);
-      }
+      boostList.push(`${makeEnumeration(dimMultList)} Dimensions: ${achievementPower}`);
 
-      if (this.achMultToTP) boostList.push(`Tachyon Particles: ${formatX(this.achTPeffect, 2, 3)}`);
-      if (this.achMultToBH) boostList.push(`Black Hole Power: ${formatX(this.achievementPower, 2, 3)}`);
-      if (this.achMultToTT) boostList.push(`Time Theorem production: ${formatX(this.achievementPower, 2, 3)}`);
+      if (this.achMultToTP) boostList.push(`Tachyon Particles: ${achTPEffect}`);
+      if (this.achMultToBH) boostList.push(`Black Hole Power: ${achievementPower}`);
+      if (this.achMultToTT) boostList.push(`Time Theorem production: ${achievementPower}`);
       return `${boostList.join("<br>")}`;
     },
   },
   methods: {
     update() {
+      const gameSpeedupFactor = getGameSpeedupFactor();
       this.achievementPower = Achievements.power;
-      this.achTPeffect = RealityUpgrade(8).config.effect();
-      this.achCountdown = Achievements.timeToNextAutoAchieve / getGameSpeedupFactor();
+      this.achTPEffect = RealityUpgrade(8).config.effect();
+      this.achCountdown = Achievements.timeToNextAutoAchieve / gameSpeedupFactor;
       this.totalCountdown = ((Achievements.preReality.countWhere(a => !a.isUnlocked) - 1) * Achievements.period +
-        Achievements.timeToNextAutoAchieve) / getGameSpeedupFactor();
+        Achievements.timeToNextAutoAchieve) / gameSpeedupFactor;
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
       this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup5.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
@@ -108,12 +100,46 @@ Vue.component("normal-achievements-tab", {
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
       this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
     },
-    timeDisplay(value) {
-      return timeDisplay(value);
+    startRowRendering() {
+      const unlockedRows = [];
+      const lockedRows = [];
+      for (let i = 0; i < this.rows.length; i++) {
+        const targetArray = this.rows[i].every(a => a.isUnlocked) ? unlockedRows : lockedRows;
+        targetArray.push(i);
+      }
+      const renderedLockedRows = lockedRows.filter(row => this.renderedRows.includes(row));
+      const nonRenderedLockedRows = lockedRows.filter(row => !this.renderedRows.includes(row));
+      let rowsToRender;
+      if (player.options.hideCompletedAchievementRows) {
+        this.renderedRows = unlockedRows.concat(renderedLockedRows);
+        rowsToRender = nonRenderedLockedRows;
+      } else {
+        this.renderedRows = renderedLockedRows;
+        rowsToRender = unlockedRows.concat(nonRenderedLockedRows);
+      }
+      const stepThroughRendering = () => {
+        const ROWS_PER_FRAME = 2;
+        for (let i = 0; i < ROWS_PER_FRAME; i++) {
+          if (rowsToRender.length === 0) {
+            return;
+          }
+          this.renderedRows.push(rowsToRender.shift());
+        }
+        this.renderAnimationId = requestAnimationFrame(stepThroughRendering);
+      };
+      stepThroughRendering();
     },
-    timeDisplayNoDecimals(value) {
-      return timeDisplayNoDecimals(value);
+    isRendered(row) {
+      return this.renderedRows.includes(row);
     },
+    timeDisplay,
+    timeDisplayNoDecimals,
+  },
+  created() {
+    this.startRowRendering();
+  },
+  beforeDestroy() {
+    cancelAnimationFrame(this.renderAnimationId);
   },
   template: `
     <div class="l-achievements-tab">
@@ -151,7 +177,7 @@ Vue.component("normal-achievements-tab", {
         <br>
       </div>
       <div class="l-achievement-grid">
-        <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />
+        <normal-achievement-row v-for="(row, i) in rows" v-if="isRendered(i)" :key="i" :row="row" />
       </div>
     </div>`
 });

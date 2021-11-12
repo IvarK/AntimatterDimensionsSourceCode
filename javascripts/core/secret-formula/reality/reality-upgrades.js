@@ -130,6 +130,8 @@ GameDatabase.reality.upgrades = (function() {
         player.requirementChecks.reality.noEternities,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`,
+      automatorPoints: 15,
+      shortDescription: () => `Start with ${formatInt(100)} Eternities`,
       effect: () => 100
     },
     {
@@ -140,6 +142,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
+      automatorPoints: 5,
+      shortDescription: () => `Continuous Infinity generation`,
       effect: () => gainedInfinities().times(0.1),
       formatEffect: value => `${format(value)} per second`
     },
@@ -167,7 +171,9 @@ GameDatabase.reality.upgrades = (function() {
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier,
-      and improved Eternity autobuyers`
+        and improved Eternity autobuyers`,
+      automatorPoints: 10,
+      shortDescription: () => `TD and ${formatX(5)} EP Autobuyers, improved Eternity Autobuyer`,
     },
     {
       name: "The Eternal Flow",
@@ -177,6 +183,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Currency.eternities.gte(1e7),
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Gain Eternities per second equal to your Reality count",
+      automatorPoints: 5,
+      shortDescription: () => `Continuous Eternity generation`,
       effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
       formatEffect: value => `${format(value)} per second`
     },
@@ -269,6 +277,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 1 && BlackHole(1).isUnlocked,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Black Hole 2",
+      automatorPoints: 10,
+      shortDescription: () => `Second Black Hole`,
       formatCost: value => format(value, 1, 0)
     },
     {
@@ -325,7 +335,9 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Reach ${format(DC.E11111)} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
       checkRequirement: () => player.records.bestReality.bestEP.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Unlock the Reality autobuyer and Automator command"
+      description: "Unlock the Reality autobuyer and Automator command",
+      automatorPoints: 100,
+      shortDescription: () => `Reality Autobuyer`,
     },
   ];
 }());

@@ -38,12 +38,15 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 4,
-    description: "All Infinity multipliers and generators are disabled.",
+    description: `All Infinity multipliers and generators are disabled. The goal must be reached within a certain
+      number of Infinities or else you will fail the Challenge.`,
     goal: DC.E2750,
     goalIncrease: DC.E550,
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => Currency.infinities.lte(restriction),
-    formatRestriction: restriction => `in ${quantifyInt("Infinity", restriction)} or less`,
+    formatRestriction: restriction => (restriction === 0
+      ? "without any Infinities"
+      : `in ${quantifyInt("Infinity", restriction)} or less`),
     failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
@@ -170,8 +173,10 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => (PlayerProgress.realityUnlocked()
-      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
-      : `The game runs ×${formatInt(1000)} slower.`),
+      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
+        within a certain amount of time or you will fail the Challenge.`
+      : `The game runs ×${formatInt(1000)} slower. The goal must be reached
+        within a certain amount of time or you will fail the Challenge.`),
     goal: DC.E110000,
     goalIncrease: DC.E12000,
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,

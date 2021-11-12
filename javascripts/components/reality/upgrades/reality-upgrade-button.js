@@ -7,6 +7,7 @@ Vue.component("reality-upgrade-button", {
   data() {
     return {
       isAvailableForPurchase: false,
+      automatorPoints: false,
       canBeBought: false,
       isRebuyable: false,
       isBought: false,
@@ -42,6 +43,7 @@ Vue.component("reality-upgrade-button", {
     update() {
       const upgrade = this.upgrade;
       this.isAvailableForPurchase = upgrade.isAvailableForPurchase;
+      this.automatorPoints = this.config.automatorPoints;
       this.canBeBought = upgrade.canBeBought;
       this.isRebuyable = upgrade.isRebuyable;
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
@@ -78,6 +80,9 @@ Vue.component("reality-upgrade-button", {
             name="Reality Machine"
           />
         </template>
+        <b v-if="automatorPoints && !isBought">
+          (+{{ formatInt(automatorPoints) }} AP)
+        </b>
       </button>
       <primary-button-on-off
         v-if="isRebuyable && isAutoUnlocked"

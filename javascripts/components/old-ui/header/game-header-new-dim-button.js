@@ -11,8 +11,7 @@ Vue.component("game-header-new-dim-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.break && !InfinityDimension(8).isUnlocked &&
-        player.records.thisEternity.maxIP.lt(Decimal.NUMBER_MAX_VALUE) &&
+      this.isVisible = player.break && !InfinityDimension(8).isUnlocked && !Player.canEternity &&
         !EternityMilestone.autoUnlockID.isReached;
       if (!this.isVisible) return;
       const requirement = InfinityDimensions.next().requirement;

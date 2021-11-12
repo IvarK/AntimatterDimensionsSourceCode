@@ -47,7 +47,7 @@ Vue.component("ep-multiplier-button", {
         <br>
         Currently: {{ formatX(multiplier, 2, 0) }}
         <br>
-        Cost: {{ "Eternity Point" | quantify(cost, 2, 0) }}
+        Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
       </button>
       <primary-button
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"

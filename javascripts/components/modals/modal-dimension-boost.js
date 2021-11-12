@@ -6,8 +6,7 @@ Vue.component("modal-dimension-boost", {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {
       const newBoosts = this.bulk ? this.getCanBuy() : 1;
-      if (this.bulk) return `You are about to purchase ${formatInt(newBoosts, 2)} 
-      ${pluralize("Dimension Boost", newBoosts)}`;
+      if (this.bulk) return `You are about to purchase ${quantifyInt("Dimension Boost", newBoosts)}`;
       return `You are about to purchase a Dimension Boost`;
     },
     message() {

@@ -1,12 +1,14 @@
 "use strict";
 
 Vue.component("modal-glyph-purge", {
-  props: { modalConfig: Object },
+  props: {
+    modalConfig: Object,
+    glyphsTotal: Number,
+    glyphsDeleted: Number,
+  },
   computed: {
-    glyphsTotal() { return Glyphs.inventory.filter(slot => slot !== null).length; },
     harsh() { return this.modalConfig.harsh; },
     threshold() { return this.harsh ? 1 : 5; },
-    glyphsDeleted() { return Glyphs.autoClean(this.threshold, false); },
     extraMessage() {
       return `${this.whichType} will delete ${this.glyphsDeleted}/${this.glyphsTotal} of your Glyphs.`;
     },
@@ -24,10 +26,13 @@ Vue.component("modal-glyph-purge", {
     },
   },
   methods: {
+    update() {
+      this.glyphsTotal = Glyphs.inventory.filter(slot => slot !== null).length;
+      this.glyphsDeleted = Glyphs.autoClean(this.threshold, false);
+    },
     handleYesClick() {
       this.emitClose();
       Glyphs.autoClean(this.harsh ? 1 : 5, true);
-      if (player.reality.autoCollapse) Glyphs.collapseEmptySlots();
     },
     handleNoClick() {
       this.emitClose();

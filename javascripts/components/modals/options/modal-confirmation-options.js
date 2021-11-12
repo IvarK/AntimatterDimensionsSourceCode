@@ -135,15 +135,14 @@ Vue.component("modal-confirmation-options", {
         <wide-on-off-button v-if="infinityUnlocked" v-model="antimatterGalaxy" text="Antimatter Galaxy:" />
         <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
         <wide-on-off-button v-if="infinityBroken" v-model="bigCrunch" text="Big Crunch:" />
-        <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />
         <wide-on-off-button v-if="replicantiUnlocked" v-model="replicantiGalaxy" text="Replicanti Galaxy:" />
+        <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />
         <wide-on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:" />
         <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:" />
         <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:" />
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="autoClean" text="Auto clean:" />
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:" />
+        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="autoClean" text="Glyph Purge:" />
         <wide-on-off-button v-if="realityAutobuyerUnlocked" v-model="glyphSelection" text="Glyph Selection:" />
         <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
         <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />

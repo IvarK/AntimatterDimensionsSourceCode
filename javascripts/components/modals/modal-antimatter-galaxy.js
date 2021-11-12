@@ -5,43 +5,47 @@ Vue.component("modal-antimatter-galaxy", {
   data() {
     return {
       newGalaxies: 0,
+      achievement111Unlocked: false,
+      perkANRBought: false,
     };
   },
   computed: {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {
-      if (this.bulk) return `You are about to purchase ${formatInt(this.newGalaxies, 2)} 
-      ${pluralize("Antimatter Galaxy", this.newGalaxies, "Antimatter Galaxies")}`;
+      if (this.bulk) return `You are about to purchase ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}`;
       return `You are about to purchase an Antimatter Galaxy`;
     },
     message() {
       let message = "";
-      if (Perk.antimatterNoReset.isBought) message = `This will reset nothing, and you will receive a small
-         (but impactful) boost to Tickspeed upgrades.`;
-      else if (Achievement(111).isUnlocked) message = `This will reset all of your Antimatter Dimensions, 
+      if (this.perkANRBought) message = `This will reset nothing, and you will receive a small
+         boost to Tickspeed upgrades.`;
+      else if (this.achievement111Unlocked) message = `This will reset all of your Antimatter Dimensions, 
         your Dimension Boosts, and Tickspeed. However, you will receive a small (but impactful) boost 
         to Tickspeed upgrades.`;
       else message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts, 
         Tickspeed, and Antimatter. However, you will receive a small (but impactful) boost to Tickspeed upgrades.`;
-      if (this.bulk) return `Are you sure you want to purchase ${formatInt(this.newGalaxies, 2)} 
-      ${pluralize("Antimatter Galaxy", this.newGalaxies, "Antimatter Galaxies")}? ${message}`;
+      if (this.bulk) return `Are you sure you want to purchase 
+      ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}? ${message}`;
       return `Are you sure you want to purchase an Antimatter Galaxy? 
       ${message}`;
     }
   },
   methods: {
     update() {
-      const req = Galaxy.requirement;
-      const dim = AntimatterDimension(req.tier);
-      const bulk = bulkBuyBinarySearch(dim.amount, {
-        costFunction: x => Galaxy.requirementAt(x).amount,
-        cumulative: false,
-      }, player.galaxies);
-      if (bulk) {
-        if (Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) > this.newGalaxies) {
-          this.newGalaxies = Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) - player.galaxies;
+      if (this.bulk) {
+        const req = Galaxy.requirement;
+        const dim = AntimatterDimension(req.tier);
+        const bulk = bulkBuyBinarySearch(dim.amount, {
+          costFunction: x => Galaxy.requirementAt(x).amount,
+          cumulative: false,
+        }, player.galaxies);
+        if (bulk) {
+          this.newGalaxies = Math.max(this.newGalaxies,
+            Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) - player.galaxies);
         }
       }
+      this.achievement111Unlocked = Achievement(111).isUnlocked;
+      this.perkANRBought = Perk.antimatterNoReset.isBought;
     },
     handleYesClick() {
       this.emitClose();

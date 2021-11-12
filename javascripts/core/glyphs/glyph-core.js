@@ -444,7 +444,7 @@ const Glyphs = {
     const isHarsh = threshold < 5;
     let toBeDeleted = 0;
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
-    if (!GlyphSacrificeHandler.canSacrifice) return 0;
+    if (!GlyphSacrificeHandler.canSacrifice) return toBeDeleted;
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
@@ -456,12 +456,11 @@ const Glyphs = {
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
       if (threshold === 0 || this.isObjectivelyUseless(glyph, threshold)) {
         if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
-        else toBeDeleted++;
+        toBeDeleted++;
       }
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
-    if (!deleteGlyphs) return toBeDeleted;
-    return 0;
+    return toBeDeleted;
   },
   harshAutoClean() {
     this.autoClean(1);

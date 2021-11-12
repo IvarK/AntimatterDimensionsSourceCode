@@ -149,7 +149,7 @@ Vue.component("reality-button", {
           </template>
           <div class="infotooltiptext" v-if="canReality">
             <div>Other resources gained:</div>
-            <div>{{ "Perk Point" | quantifyInt(ppGained) }}</div>
+            <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
             <div v-if="shardsGained !== 0">{{ shardsGainedText }}</div>
             <div v-for="celestialInfo in celestialRunText">
               <span v-if="celestialInfo[0]">

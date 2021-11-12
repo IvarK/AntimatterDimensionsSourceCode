@@ -93,10 +93,6 @@ Vue.component("infinity-upgrades-tab", {
         <br>
         Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
       </div>
-      <div v-if="!chargeUnlocked">
-        Each upgrade requires the one above it to be purchased first.
-        The bottom two upgrades require the other {{ formatInt(16) }} to already be purchased.
-      </div>
       <br>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">

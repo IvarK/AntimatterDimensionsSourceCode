@@ -313,7 +313,7 @@ class BlackHoleState {
 
   description(capitalized) {
     if (RealityUpgrade(20).isBought) {
-      return `Black Hole ${formatInt(this.id)}`;
+      return `Black Hole ${this.id}`;
     }
     return capitalized ? "The Black Hole" : "the Black Hole";
   }

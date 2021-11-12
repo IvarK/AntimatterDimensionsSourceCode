@@ -140,7 +140,7 @@ Vue.component("modal-reality", {
         <br>
         After choosing this glyph the game will simulate the rest of your Realities,
         <br>
-        automatically choosing another {{ "Glyph" | quantifyInt(simRealities - 1) }}
+        automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
         based on your Glyph filter settings.
       </div>
       <div class="l-options-grid__row">

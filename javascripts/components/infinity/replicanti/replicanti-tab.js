@@ -120,11 +120,11 @@ Vue.component("replicanti-tab", {
       </primary-button>
       <template v-else>
         <div v-if="isInEC8">
-          You have {{ "purchase" | quantifyInt(ec8Purchases) }} left.
+          You have {{ quantifyInt("purchase", ec8Purchases) }} left.
         </div>
         <div v-if="hasRaisedCap">
           Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
-          and is giving you {{ "extra Replicanti Galaxy" | quantifyInt(effarigInfinityBonusRG) }}
+          and is giving you {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
           <br>
           due to the reward from Effarig's Infinity. (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }})
         </div>

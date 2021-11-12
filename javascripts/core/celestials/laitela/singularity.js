@@ -203,6 +203,12 @@ const Singularity = {
 
     Currency.darkEnergy.reset();
     Currency.singularities.add(this.singularitiesGained);
+    
+    for (const quote of Object.values(Laitela.quotes)) {
+      if (Currency.singularities.value >= quote.singularities) {
+        Laitela.quotes.show(quote);
+      }
+    }
 
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
   }

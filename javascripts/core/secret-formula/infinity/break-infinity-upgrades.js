@@ -9,6 +9,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       maxUpgrades: config.maxUpgrades,
       description: config.description,
       effect: () => effectFunction(player.infinityRebuyables[config.id]),
+      isDisabled: config.isDisabled,
       // There isn't enough room in the button to fit the EC reduction and "Next:" at the same time while still
       // presenting all the information in an understandable way, so we only show it if the upgrade is maxed
       formatEffect: config.formatEffect ||
@@ -132,6 +133,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         const offlineString = player.options.offlineProgress ? ", works offline" : "";
         return `${generation} of your best IP/min from your last 10 Infinities${offlineString}`;
       },
+      isDisabled: effect => effect.eq(0),
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
       title: true
     })

@@ -17,17 +17,16 @@ function tryCompleteInfinityChallenges() {
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
-      if (player.matter.eq(0)) player.matter = new Decimal(1);
+      Currency.matter.bumpTo(1);
       // These caps are values which occur at approximately e308 IP
       const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
         Math.clampMax(player.galaxies, 100) / 100;
-      const finalMatterCap = Decimal.MAX_VALUE;
-      player.matter = player.matter.times(Decimal.pow(cappedBase, diff / 100)).clampMax(finalMatterCap);
+      Currency.matter.multiply(Decimal.pow(cappedBase, diff / 20));
     }
-    if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
+    if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       Modal.hideAll();
       Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
-        `${format(player.matter, 2, 2)} matter.`);
+        `${format(Currency.matter.value, 2, 2)} matter.`);
       softReset(0);
     }
   }

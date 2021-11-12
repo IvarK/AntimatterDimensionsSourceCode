@@ -158,7 +158,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
 class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
-    if (Array.isArray(requirement)) {
+    if (Array.isArray(requirement) || typeof requirement === 'function') {
       this._requirements = requirement;
     } else if (requirement === undefined) {
       this._requirements = [];
@@ -179,7 +179,8 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return this._requirements.every(x => x.isBought);
+    return typeof this._requirements === 'function' ? this._requirements()
+      : this._requirements.every(x => x.isBought);
   }
 
   get isEffectActive() {
@@ -296,10 +297,7 @@ function disChargeAll() {
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
 
-  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, [
-    InfinityUpgrade.resetBoost, InfinityUpgrade.galaxyBoost,
-    InfinityUpgrade.ipGen, InfinityUpgrade.skipResetGalaxy
-  ]);
+  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, () => Achievement(41).isUnlocked);
 }());
 
 // The repeatable 2xIP upgrade has an odd cost structure - it follows a shallow exponential (step *10) up to e3M, at
@@ -340,10 +338,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get isRequirementSatisfied() {
-    return InfinityUpgrade.resetBoost.isBought &&
-      InfinityUpgrade.galaxyBoost.isBought &&
-      InfinityUpgrade.ipGen.isBought &&
-      InfinityUpgrade.skipResetGalaxy.isBought;
+    return Achievement(41).isUnlocked;
   }
 
   get canBeBought() {

@@ -26,10 +26,15 @@ if you play the game on Chrome, you won't find your save on Firefox.
 You can transfer your save between places by using the export function, which will copy a <i>very</i> long string of
 random-looking characters into your clipboard. That text contains your save data, which you can load back into the
 game by pasting it into the text box on the import prompt. You need the entirety of the save text for importing to
-work properly, or else the game might not recognize the text as a valid save. Keep in mind that certain messaging
-applications may cut off part of the text if you are using one to transfer the save between devices. One way to tell
-that this has happened is for text to not end with <b>${GameSaveSerializer.endingString.savefile}</b>. In addition to 
-importing and exporting to your clipboard, you can also import and export from text files as well.
+work properly, or else the game might not recognize the text as a valid save. Certain messaging applications may
+cut off part of the text if you are using one to transfer the save between devices.
+<br>
+<br>
+A properly-formatted save string from the Reality update will start with
+<b>${GameSaveSerializer.startingString.savefile}</b> and end with <b>${GameSaveSerializer.endingString.savefile}</b>.
+If you are importing from a version of the game from before Reality was released, it will instead start with <b>eyJ</b>
+and end with <b>==</b>. If neither of these are the case, then part of your save is missing and it will fail to import.
+In addition to importing and exporting to your clipboard, you can also import and export from text files as well.
 <br>
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
@@ -43,13 +48,21 @@ do right before closing it might not be saved unless you wait for the autosave i
 length of the autosave interval is adjustable.
 <br>
 <br>
+You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
+with the same save on any device which is also logged into the same account. Cloud saving is only compatable with other
+saves on the web version of the game; saves from the Android app of the game will not be automatically linked via
+Cloud saving. Saving and loading from the Cloud will
+automatically overwrite the other save unless the other save is either older or has noticeably more progression, in
+which case a modal will appear which asks you which save you want to keep.
+<br>
+<br>
 You can completely reset your save at any point if desired by clicking the button, which brings up a prompt you need
 to fill out in order to make sure you intentionally wanted to reset. Going through with this reset will only clear
 your current save; the other save slots will be unaffected. <b>Resetting your game in this way is completely
 irreversible and gives you no permanent benefits, secret or otherwise.</b>
 `,
       isUnlocked: () => true,
-      tags: ["choose", "save", "import", "export", "reset"],
+      tags: ["choose", "cloud", "google", "save", "import", "export", "reset"],
       tab: "options/saving"
     },
     {
@@ -389,7 +402,7 @@ individual autobuyer settings.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],
-      tab: "infinity/autobuyers"
+      tab: "automation/autobuyers"
     }, {
       name: "Break Infinity",
       info: () => `
@@ -800,7 +813,11 @@ to Perks you already have, although there are loops in the tree which you can go
     }, {
       name: "Automator",
       info: () => `
-The Automator is unlocked upon reaching ${formatInt(5)} Realities.
+The Automator is unlocked upon reaching a total of ${formatInt(AutomatorPoints.pointsForAutomator)} Automator Points.
+Automator Points are given when unlocking various Perks or Reality Upgrades, by unlocking the Black Hole, or by
+simply completing more Realities.
+<br>
+<br>
 It uses a scripting language that allows you to automate nearly the entire game.
 The interface has two panes, a script pane on the left where you enter the commands to automate the game, and a
 documentation pane on the right that has information on all the commands available to you.
@@ -825,10 +842,17 @@ you are unfamiliar with programming. To enter commands in block mode, drag the b
 documentation pane into the script pane and drop it where you want the command to go. Commands can be freely
 rearranged by dragging the blocks around if needed. Clicking the top-right button in block mode will switch back to
 text mode, and switching between block and text mode will automatically translate your script as well.
+<br>
+<br>
+Just like your entire savefile, individual Automator scripts can be imported and exported from the game.
+Properly-formatted script strings will begin with <b>${GameSaveSerializer.startingString["automator script"]}</b> and
+end with <b>${GameSaveSerializer.endingString["automator script"]}</b>. If this is not the case then part of your script
+was lost in the process of copy-pasting. The import function will load the script into a new slot; your current script
+will not be lost or overwritten.
 `,
       isUnlocked: () => Player.automatorUnlocked,
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
-      tab: "reality/automator"
+      tab: "automation/automator"
     }, {
       name: "Black Hole",
       info: () => `

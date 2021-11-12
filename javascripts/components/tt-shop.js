@@ -124,11 +124,11 @@ Vue.component("tt-shop", {
         </button>
           <p id="timetheorems">
             <span class="c-tt-amount">
-              {{ "Time Theorem" | quantify(theoremAmount, 2, 0, formatTimeTheoremType) }}
+              {{ quantify("Time Theorem", theoremAmount, 2, 0, formatTimeTheoremType) }}
             </span>
             <span v-if="showST">
               <br>
-              {{ "Space Theorem" | quantifyInt(STamount) }}
+              {{ quantifyInt("Space Theorem", STamount) }}
             </span>
           </p>
           <div style="display: flex; flex-direction: column; align-items: left;">

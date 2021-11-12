@@ -48,13 +48,13 @@ Vue.component("game-header-amounts-line", {
       >
         You have
         <span class="c-game-header__ip-amount">{{ formatPoints(infinityPoints) }}</span>
-        {{ "Infinity Point" | pluralize(infinityPoints) }}.
+        {{ pluralize("Infinity Point", infinityPoints) }}.
         <span v-if="isTesseractUnlocked" v-html="tesseractText"></span>
       </div>
       <div v-if="showEternityPoints" class="c-game-header__eternity-points l-game-header__eternity-points">
         You have
         <span class="c-game-header__ep-amount">{{ formatPoints(eternityPoints) }}</span>
-        {{ "Eternity Point" | pluralize(eternityPoints) }}.
+        {{ pluralize("Eternity Point", eternityPoints) }}.
         <span v-if="showNextEP">(Next EP at {{ format(nextEP, 1) }} IP)</span>
       </div>
     </div>`

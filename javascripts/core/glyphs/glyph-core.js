@@ -209,11 +209,10 @@ const Glyphs = {
     if (glyph.type === "effarig" || glyph.type === "reality") {
       sameSpecialTypeIndex = this.active.findIndex(x => x && x.type === glyph.type);
     }
-    const inventoryIndex = glyph.idx;
     if (this.active[targetSlot] === null) {
       if (sameSpecialTypeIndex >= 0) return;
       this.removeFromInventory(glyph);
-      this.saveUndo(inventoryIndex, targetSlot);
+      this.saveUndo(targetSlot);
       player.reality.glyphs.active.push(glyph);
       glyph.idx = targetSlot;
       this.active[targetSlot] = glyph;
@@ -232,7 +231,7 @@ const Glyphs = {
         this.swapIntoActive(glyph, targetSlot);
         return;
       }
-      Modal.glyphReplace.show({ targetSlot, inventoryIndex });
+      Modal.glyphReplace.show({ targetSlot, inventoryIndex: glyph.idx });
     }
     // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
     this.removeNewFlag(glyph);
@@ -514,9 +513,8 @@ const Glyphs = {
   clearUndo() {
     player.reality.glyphs.undo = [];
   },
-  saveUndo(oldIndex, targetSlot) {
+  saveUndo(targetSlot) {
     const undoData = {
-      oldIndex,
       targetSlot,
       am: new Decimal(Currency.antimatter.value),
       ip: new Decimal(Currency.infinityPoints.value),
@@ -539,9 +537,10 @@ const Glyphs = {
     player.reality.glyphs.undo.push(undoData);
   },
   undo() {
-    if (player.reality.glyphs.undo.length === 0) return;
+    const inventorySlot = Glyphs.findFreeIndex(player.options.respecIntoProtected);
+    if (inventorySlot === -1 || player.reality.glyphs.undo.length === 0) return;
     const undoData = player.reality.glyphs.undo.pop();
-    this.unequip(undoData.targetSlot, undoData.oldIndex);
+    this.unequip(undoData.targetSlot, inventorySlot);
     finishProcessReality({
       reset: true,
       glyphUndo: true,

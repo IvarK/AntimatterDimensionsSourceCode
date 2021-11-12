@@ -60,38 +60,61 @@ Vue.component("black-hole-tab", {
         default:
           throw new Error("Unrecognized BH offline pausing mode");
       }
-    }
+    },
   },
   methods: {
     update() {
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
-      this.isNegativeBHUnlocked = V.isFlipped && BlackHole(1).isPermanent && BlackHole(2).isPermanent;
+      this.isPermanent = BlackHoles.arePermanent;
+      this.isNegativeBHUnlocked = V.isFlipped && this.isPermanent;
       this.pauseMode = player.blackHoleAutoPauseMode;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
-      this.isPermanent = BlackHoles.arePermanent;
       this.hasBH2 = BlackHole(2).isUnlocked;
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];
+      this.detailedBH2 = this.bh2Status();
+    },
+    bh2Status() {
+      const bh1Remaining = BlackHole(1).timeWithPreviousActiveToNextStateChange;
+      const bh2Remaining = BlackHole(2).timeWithPreviousActiveToNextStateChange;
 
-      if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
-      else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
-        const cycleCount = Math.floor(BlackHole(2).timeToNextStateChange / BlackHole(1).cycleLength);
-        this.detailedBH2 = `Black Hole 2 will activate after ${quantifyInt("more cycle", cycleCount)}
-          of Black Hole 1.`;
-      } else if (BlackHole(2).isCharged) {
-        this.detailedBH2 = `Black Hole 2 will activate with Black Hole 1, for ${TimeSpan.fromSeconds(
-          Math.min(BlackHole(1).duration, BlackHole(2).duration - BlackHole(2).phase)).toStringShort()}.`;
-      } else {
-        const bh2Offset = BlackHole(2).timeToNextStateChange - BlackHole(1).timeToNextStateChange;
-        const bh2Duration = Math.min(BlackHole(1).duration - bh2Offset, BlackHole(2).duration);
-        this.detailedBH2 = `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Offset).toStringShort()} after
-          Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
+      // Both BH active
+      if (BlackHole(1).isActive && BlackHole(2).isActive) {
+        const bh2Duration = Math.min(bh1Remaining, bh2Remaining);
+        return `Black Hole 2 is active for the next ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}!`;
       }
+      
+      // BH1 active, BH2 will trigger before BH1 runs out
+      if (BlackHole(1).isActive && (bh2Remaining < bh1Remaining)) {
+        const bh2Duration = Math.min(bh1Remaining - bh2Remaining, BlackHole(2).duration);
+        return `Black Hole 2 will activate before Black Hole 1 deactivates,
+          for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}`;
+      }
+      
+      // BH2 won't start yet next cycle
+      if (BlackHole(1).isActive || (bh2Remaining > BlackHole(1).duration)) {
+        const cycleCount = BlackHole(1).isActive
+          ? Math.floor((bh2Remaining - bh1Remaining) / BlackHole(1).duration) + 1
+          : Math.floor(bh2Remaining / BlackHole(1).duration);
+        return `Black Hole 2 will activate after ${quantifyInt("more active cycle", cycleCount)} of Black Hole 1.`;
+      }
+      
+      // BH1 inactive, BH2 ready to go when BH1 activates
+      if (BlackHole(2).isCharged) {
+        const bh2Duration = Math.min(BlackHole(1).duration, bh2Remaining);
+        return `Black Hole 2 will activate with Black Hole 1,
+          for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
+      }
+
+      // BH1 inactive, BH2 starts at some point after BH1 activates
+      const bh2Duration = Math.min(BlackHole(1).duration - bh2Remaining, BlackHole(2).duration);
+      return `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Remaining).toStringShort()} after
+        Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
     },
     togglePause() {
       BlackHoles.togglePause();
@@ -151,6 +174,9 @@ Vue.component("black-hole-tab", {
         The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
+        <br>
+        <br>
+        Unlocking the Black Hole also gives {{ formatInt(10) }} Automator Points.
       </div>
       <template v-else>
         <div class="c-subtab-option-container">
@@ -176,7 +202,14 @@ Vue.component("black-hole-tab", {
             :key="'state' + i"
             :blackHole="blackHole"
           />
-          {{ detailedBH2 }}
+          <span v-if="hasBH2 && !isPermanent">
+            <b>{{ detailedBH2 }}</b>
+            <br>
+            The timer for Black Hole 2 only advances while Black Hole 1 is active.
+            <br>
+            Upgrades affect the internal timer; the header shows real time until next activation.
+          </span>
+          <br>
           <div v-if="!isPermanent">
             Black holes become permanently active when they are active for more than {{ formatPercents(0.9999, 2) }}
             of the time.

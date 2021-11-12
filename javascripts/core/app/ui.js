@@ -39,7 +39,10 @@ Vue.mixin({
     },
     formatPostBreak(value, places, placesUnder1000) {
       return formatPostBreak(value, places, placesUnder1000);
-    }
+    },
+    pluralize,
+    quantify,
+    quantifyInt
   },
   created() {
     if (this.update) {
@@ -75,11 +78,6 @@ function makeRecomputable(watcher, key, recomputed) {
   // eslint-disable-next-line no-sequences
   watcher.getter = vm => (recomputed[key], original.call(vm, vm));
 }
-
-
-Vue.filter("pluralize", pluralize);
-Vue.filter("quantify", quantify);
-Vue.filter("quantifyInt", quantifyInt);
 
 const ReactivityComplainer = {
   complain() {

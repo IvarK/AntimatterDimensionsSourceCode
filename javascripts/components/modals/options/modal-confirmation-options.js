@@ -29,6 +29,7 @@ Vue.component("modal-confirmation-options", {
       glyphSacrificeUnlocked: false,
       glyphUndoUnlocked: false,
       resetCelestialUnlocked: false,
+      glyphSetSaveUnlocked: false,
       glyphRefineUnlocked: false,
       infinityBroken: false,
       replicantUnlocked: false,
@@ -112,13 +113,13 @@ Vue.component("modal-confirmation-options", {
       this.deleteGlyphSetSave = options.deleteGlyphSetSave;
       this.glyphRefine = options.glyphRefine;
       this.bigCrunch = options.bigCrunch;
-      this.replicantiGalaxy = options.replicantiGalaxy;
       this.antimatterGalaxy = options.antimatterGalaxy;
       this.dimensionBoost = options.dimensionBoost;
+      this.replicantiGalaxy = options.replicantiGalaxy;
 
+      this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.sacrificeUnlocked = Sacrifice.isVisible;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
-      this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
       this.glyphSetSaveUnlocked = EffarigUnlock.setSaves.isUnlocked;

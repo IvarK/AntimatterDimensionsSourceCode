@@ -467,13 +467,16 @@ const Glyphs = {
   deleteAllUnprotected() {
     this.autoClean(0);
   },
-  deleteAllRejected() {
+  deleteAllRejected(deleteGlyphs = true) {
+    let toBeDeleted = 0;
     for (const glyph of Glyphs.inventory) {
       if (glyph !== null && glyph.idx >= this.protectedSlots && !AutoGlyphProcessor.wouldKeep(glyph)) {
-        AutoGlyphProcessor.getRidOfGlyph(glyph);
+        if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
+        toBeDeleted++;
       }
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
+    return toBeDeleted;
   },
   collapseEmptySlots() {
     const unprotectedGlyphs = player.reality.glyphs.inventory

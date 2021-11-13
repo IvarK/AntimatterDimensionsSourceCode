@@ -3,8 +3,8 @@
 Vue.component("modal-delete-all-unprotected-glyphs", {
   computed: {
     refiningSacrificingOrDeleting() {
-      if (GlyphSacrificeHandler.isRefining) return `refine`;
-      if (GlyphSacrificeHandler.canSacrifice) return `sacrifice`;
+      if (GlyphSacrificeHandler.isRefining) return `Refine`;
+      if (GlyphSacrificeHandler.canSacrifice) return `Sacrifice`;
       return `delete`;
     },
     topLabel() {

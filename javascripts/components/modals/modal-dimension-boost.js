@@ -1,12 +1,12 @@
 "use strict";
 
 Vue.component("modal-dimension-boost", {
+  props: { modalConfig: Object },
   data() {
     return {
       unlockedByBoost: String,
     };
   },
-  props: { modalConfig: Object },
   computed: {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {

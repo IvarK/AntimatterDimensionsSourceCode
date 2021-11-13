@@ -7,6 +7,10 @@ Vue.component("modal-big-crunch", {
       gainedInfinityPoints: Decimal,
     };
   },
+  created() {
+    this.$on(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.$on(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     message() {
       return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. You will gain 

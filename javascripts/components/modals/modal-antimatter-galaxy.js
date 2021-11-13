@@ -9,6 +9,10 @@ Vue.component("modal-antimatter-galaxy", {
       perkANRBought: false,
     };
   },
+  created() {
+    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
+  },
   computed: {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {

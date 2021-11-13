@@ -5,21 +5,24 @@ Vue.component("modal-dimension-boost", {
   data() {
     return {
       unlockedByBoost: String,
+      canBuy: Number
     };
   },
   computed: {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {
-      if (this.bulk) return `You are about to purchase ${quantifyInt("Dimension Boost", this.getCanBuy())}`;
+      if (this.bulk) return `You are about to purchase ${quantifyInt("Dimension Boost", this.canBuy)}`;
       return `You are about to purchase a Dimension Boost`;
     },
     message() {
-      return `${this.unlockedByBoost}?`;
+      return `This will ${this.unlockedByBoost}. Are you sure you want to do this?`;
     },
   },
   methods: {
     update() {
-      this.unlockedByBoost = DimBoost.unlockedByBoost;
+      // Make sure we make the first character of the string lowercase, as it's a part of a longer string
+      this.unlockedByBoost = DimBoost.unlockedByBoost.charAt(0).toLowerCase() + DimBoost.unlockedByBoost.slice(1);
+      this.canBuy = this.getCanBuy();
     },
     handleYesClick() {
       this.emitClose();

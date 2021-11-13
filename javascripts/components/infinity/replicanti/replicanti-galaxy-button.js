@@ -50,6 +50,7 @@ Vue.component("replicanti-galaxy-button", {
       this.update();
     },
     handleClick() {
+      if (!this.isAvailable) return;
       if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
       else replicantiGalaxy();
     }

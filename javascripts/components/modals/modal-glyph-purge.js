@@ -1,13 +1,13 @@
 "use strict";
 
 Vue.component("modal-glyph-purge", {
+  props: { modalConfig: Object },
   data() {
     return {
       glyphsTotal: Number,
       glyphsDeleted: Number,
     };
   },
-  props: { modalConfig: Object, },
   computed: {
     harsh() { return this.modalConfig.harsh; },
     threshold() { return this.harsh ? 1 : 5; },

@@ -1,10 +1,16 @@
 "use strict";
 
 Vue.component("modal-delete-all-unprotected-glyphs", {
+  data() {
+    return {
+      isRefining: Boolean,
+      isSacrificing: Boolean,
+    };
+  },
   computed: {
     refiningSacrificingOrDeleting() {
-      if (GlyphSacrificeHandler.isRefining) return `Refine`;
-      if (GlyphSacrificeHandler.canSacrifice) return `Sacrifice`;
+      if (this.isRefining) return `Refine`;
+      if (this.isSacrificing) return `Sacrifice`;
       return `delete`;
     },
     topLabel() {
@@ -16,6 +22,10 @@ Vue.component("modal-delete-all-unprotected-glyphs", {
     }
   },
   methods: {
+    update() {
+      this.isRefining = GlyphSacrificeHandler.isRefining;
+      this.isSacrificing = GlyphSacrificeHandler.canSacrifice;
+    },
     handleYesClick() {
       this.emitClose();
       Glyphs.deleteAllUnprotected();

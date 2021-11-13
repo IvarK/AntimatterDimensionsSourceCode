@@ -5,11 +5,12 @@ Vue.component("modal-delete-all-rejected-glyphs", {
     return {
       glyphsTotal: Number,
       glyphsDeleted: Number,
+      isRefining: Boolean,
     };
   },
   computed: {
     refiningOrSacrificing() {
-      if (GlyphSacrificeHandler.isRefining) return `Refine`;
+      if (this.isRefining) return `Refine`;
       return `Sacrifice`;
     },
     topLabel() {
@@ -28,6 +29,7 @@ Vue.component("modal-delete-all-rejected-glyphs", {
     update() {
       this.glyphsTotal = Glyphs.inventory.filter(slot => slot !== null).length;
       this.glyphsDeleted = Glyphs.deleteAllRejected(false);
+      this.isRefining = GlyphSacrificeHandler.isRefining;
     },
     handleYesClick() {
       this.emitClose();

@@ -61,7 +61,8 @@ Vue.component("glyph-clean-button-group", {
       Modal.deleteAllUnprotectedGlyphs.show();
     },
     deleteAllRejected() {
-      if (this.removeCount !== 0) Modal.deleteAllRejectedGlyphs.show();
+      if (!this.removeCount === 0) Modal.deleteAllRejectedGlyphs.show();
+      else GameUI.notify.error(`There are no Glyphs that can be removed!`);
     },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";

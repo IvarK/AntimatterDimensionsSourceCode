@@ -59,7 +59,7 @@ Vue.component("replicanti-galaxy-button", {
       <primary-button
         :enabled="isAvailable"
         class="o-primary-btn--replicanti-galaxy"
-        onclick="handleClick"
+        @click="handleClick"
       >
         {{ resetActionDisplay }} for a Replicanti Galaxy
         <br>

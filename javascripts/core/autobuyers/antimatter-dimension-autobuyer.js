@@ -38,6 +38,10 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     return true;
   }
 
+  get disabledByContinuum() {
+    return Laitela.continuumActive;
+  }
+
   get bulk() {
     // Use 1e100 to avoid issues with Infinity.
     return this.hasUnlimitedBulk ? 1e100 : Math.clampMax(this.data.bulk, this.bulkCap);

@@ -192,7 +192,7 @@ class DecimalCurrency extends Currency {
   get operations() { return MathOperations.decimal; }
   get mantissa() { return this.value.mantissa; }
   get exponent() { return this.value.exponent; }
-  get startingValue() { return DC.D0; }
+  get startingValue() { return new Decimal(DC.D0); }
 }
 window.DecimalCurrency = DecimalCurrency;
 
@@ -299,7 +299,7 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     player.eternityPoints = value;
     player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
     if (player.records.bestReality.bestEP.lt(value)) {
-      player.records.bestReality.bestEP.copyFrom(Currency.eternityPoints);
+      player.records.bestReality.bestEP = value;
       player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
   }

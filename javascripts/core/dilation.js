@@ -138,7 +138,7 @@ function tachyonGainMultiplier() {
 
 export function rewardTP() {
   Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value));
-  player.dilation.lastEP.copyFrom(Currency.eternityPoints);
+  player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
 // Returns the TP that would be gained this run

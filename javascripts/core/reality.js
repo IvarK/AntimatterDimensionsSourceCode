@@ -280,7 +280,7 @@ function giveRealityRewards(realityProps) {
 
   if (Teresa.isRunning) {
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
-      player.celestials.teresa.bestRunAM.copyFrom(Currency.antimatter);
+      player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
 
       // Encode iM values into the RM variable as e10000 * iM in order to only require one prop

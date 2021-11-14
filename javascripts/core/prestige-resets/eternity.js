@@ -93,12 +93,7 @@ class BaseEternityReset extends PrestigeMechanic {
     if (!reality && EternityMilestone.keepAutobuyers.isReached) {
       NormalChallenges.completeAll();
     }
-    if (Achievement(133).isUnlocked) {
-      player.postChallUnlocked = 8;
-      InfinityChallenges.completeAll();
-    } else {
-      player.postChallUnlocked = 0;
-    }
+    if (Achievement(133).isUnlocked) InfinityChallenges.completeAll();
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = 0;
 

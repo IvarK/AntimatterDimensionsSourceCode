@@ -175,7 +175,7 @@ window.player = {
   },
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
-  chall3Pow: DC.D1EM2,
+  chall3Pow: DC.D0_01,
   matter: DC.D1,
   chall9TickspeedCostBumps: 0,
   chall8TotalSacrifice: DC.D1,

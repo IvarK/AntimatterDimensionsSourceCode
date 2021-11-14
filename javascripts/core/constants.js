@@ -19,17 +19,16 @@ export const DC = deepFreeze({
   // D[0-9]: Decimal mantissa variable
   // _: decimal (.) part of the mantissa
   // E[0-9]: Decimal exponent variable
-  // EM[0-9]: indicates Decimal exponent variable is negative
   // C: Calculation. D - .div, P - .pow
 
   /* eslint-disable key-spacing */
   DM1:                  new Decimal("-1"),
   D0:                   new Decimal("0"),
 
-  D1EM2:                new Decimal("0.01"),
-  D5_5EM1:              new Decimal("0.55"),
-  D1EM1:                new Decimal("0.1"),
-  D4EM1:                new Decimal("0.4"),
+  D0_01:                new Decimal("0.01"),
+  D0_1:                 new Decimal("0.1"),
+  D0_4:                 new Decimal("0.4"),
+  D0_55:                new Decimal("0.55"),
   D0_8446303389034288:  new Decimal("0.8446303389034288"),
   D0_95:                new Decimal("0.95"),
   D0_965:               new Decimal("0.965"),

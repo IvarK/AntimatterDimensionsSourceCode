@@ -127,7 +127,7 @@ export function gainedGlyphLevel() {
 
 export function resetChallengeStuff() {
   player.chall2Pow = 1;
-  player.chall3Pow = DC.D1EM2;
+  player.chall3Pow = DC.D0_01;
   Currency.matter.reset();
   player.chall8TotalSacrifice = DC.D1;
   player.postC4Tier = 1;
@@ -703,7 +703,7 @@ function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
   if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
-    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D1EM2)
+    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }
 

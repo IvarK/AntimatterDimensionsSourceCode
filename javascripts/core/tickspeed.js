@@ -40,7 +40,7 @@ export function getTickSpeedMultiplier() {
       Achievement(175),
       InfinityChallenge(5).reward
     );
-    return DC.D1EM2.clampMin(baseMultiplier - (galaxies * perGalaxy));
+    return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
   if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;

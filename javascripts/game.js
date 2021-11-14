@@ -44,6 +44,7 @@ function breakInfinity() {
     if (autobuyer.data.interval !== undefined) autobuyer.maxIntervalForFree();
   }
   player.break = !player.break;
+  TabNotification.ICUnlock.tryTrigger();
   EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
   GameUI.update();
 }
@@ -89,7 +90,7 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
-  let ep = Decimal.pow(5, Currency.infinityPoints.value.plus(
+  let ep = Decimal.pow(5, player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
@@ -125,7 +126,7 @@ function gainedGlyphLevel() {
 function resetChallengeStuff() {
   player.chall2Pow = 1;
   player.chall3Pow = new Decimal(0.01);
-  player.matter = new Decimal(0);
+  Currency.matter.reset();
   player.chall8TotalSacrifice = new Decimal(1);
   player.postC4Tier = 1;
 }
@@ -297,9 +298,9 @@ const GAME_SPEED_EFFECT = {
 };
 
 /**
-  * @param {number[]} effectsToConsider A list of various game speed changing effects to apply when calculating
+  * @param {number[]?} effectsToConsider A list of various game speed changing effects to apply when calculating
   *   the game speed.  If left undefined, all effects will be applied.
-  * @param {number} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
+  * @param {number?} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
   *   to be active for the purposes of game speed calculation. This is only used during offline black hole stuff.
   */
 function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
@@ -574,7 +575,7 @@ function gameLoop(passDiff, options = {}) {
   if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch)
     player.records.thisInfinity.bestIPmin = currentIPmin;
 
-  tryUnlockInfinityChallenges();
+  tryCompleteInfinityChallenges();
 
   EternityChallenges.autoComplete.tick();
 
@@ -619,7 +620,6 @@ function gameLoop(passDiff, options = {}) {
   laitelaRealityTick(realDiff);
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
-  Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
@@ -666,6 +666,11 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
+      for (const quote of Object.values(Laitela.quotes)) {
+        if (laitelaInfo.difficultyTier >= quote.destabilize) {
+          Laitela.quotes.show(quote);
+        }
+      }
     }
     if (Laitela.realityReward > oldInfo.realityReward) {
       completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
@@ -941,8 +946,8 @@ function simulateTime(seconds, real, fast) {
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
               simulate the rest of the time with half as many ticks (down to a minimum of ${formatInt(500)} ticks
-              remaining). The "CANCEL" button will instead use all the remaining offline time in the first online
-              tick.`,
+              remaining). The "SKIP" button will instead use all the remaining offline time in ${formatInt(10)}
+              ticks.`,
             progressName: "Ticks",
             current: doneSoFar,
             max: ticks,
@@ -953,6 +958,8 @@ function simulateTime(seconds, real, fast) {
               click: () => {
                 const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+                // This, and the below similar code in "SKIP", are needed or the progress bar to be accurate
+                // (both with respect to the number of ticks it shows and with respect to how full it is).
                 progress.maxIter -= progress.remaining - newRemaining;
                 progress.remaining = newRemaining;
                 // We update the progress bar max data (remaining will update automatically).
@@ -960,12 +967,13 @@ function simulateTime(seconds, real, fast) {
               }
             },
             {
-              text: "CANCEL",
-              condition: () => true,
+              text: "SKIP",
+              condition: (current, max) => max - current > 10,
               click: () => {
-                // We jump to the end.
-                progress.maxIter -= progress.remaining;
-                progress.remaining = 0;
+                // We jump to 10 from the end (condition guarantees there are at least 10 left).
+                // We subtract the number of ticks we skipped, which is progress.remaining - 10.
+                progress.maxIter -= progress.remaining - 10;
+                progress.remaining = 10;
               }
             }]
           };

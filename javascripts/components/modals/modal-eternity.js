@@ -23,12 +23,11 @@ Vue.component("modal-eternity", {
           on the Statistics tab. You will also gain an Eternity Point and unlock various upgrades.`;
     },
     gainedEPOnEternity() {
-      return `You will gain ${format(gainedEternityPoints(), 2)} Eternity ${pluralize("Point", gainedEternityPoints())}
-        on Eternity.`;
+      return `You will gain ${quantify("Eternity Point", gainedEternityPoints(), 2)} on Eternity.`;
     },
     startWithIP() {
       return this.startingIP.gt(0)
-        ? `You will start your next Eternity with ${format(this.startingIP, 2)} Infinity Points.`
+        ? `You will start your next Eternity with ${quantify("Infinity Point", this.startingIP, 2)}.`
         : ``;
     },
     eternityChallenge() {
@@ -37,11 +36,10 @@ Vue.component("modal-eternity", {
         return `Eternity Challenge ${ec.id} is already fully completed.`;
       }
       if (!Perk.studyECBulk.isBought) {
-        return `You will gain one completion of Eternity Challenge ${EternityChallenge.current.id}.`;
+        return `You will gain one completion of Eternity Challenge ${ec.id}.`;
       }
-
-      return `You will gain ${ec.gainedCompletionStatus.gainedCompletions}
-        ${pluralize("completion", ec.gainedCompletionStatus.gainedCompletions)} for Eternity Challenge ${ec.id}.`;
+      const gainedCompletions = ec.gainedCompletionStatus.gainedCompletions;
+      return `You will gain ${quantifyInt("completion", gainedCompletions)} for Eternity Challenge ${ec.id}.`;
     }
   },
   methods: {

@@ -62,25 +62,34 @@ Vue.component("glyphs-tab", {
   },
   template: `
     <div>
-      <glyph-header />
       <div class="l-glyphs-tab">
         <div class="l-reality-button-column">
           <glyph-peek />
-          <reality-button />
-          <reality-reminder />
-          <reset-reality-button v-if = "resetRealityDisplayed" />
-          <div v-if="isInCelestialReality">
-            <input
-              type="checkbox"
-              id="autoRestart"
-              v-model="autoRestartCelestialRuns"
-              :value="autoRestartCelestialRuns"
-              @input="toggleAutoRestartCelestial()"
-            >
-            <label for="autoRestart">Repeat this Celestial's Reality</label>
+
+          <div class="l-reality-button-group">
+            <div class="l-reality-button-group-half">
+              <reset-reality-button v-if="resetRealityDisplayed" />
+
+              <div v-if="isInCelestialReality">
+                <input
+                  type="checkbox"
+                  id="autoRestart"
+                  v-model="autoRestartCelestialRuns"
+                  :value="autoRestartCelestialRuns"
+                  @input="toggleAutoRestartCelestial()"
+                >
+                <label for="autoRestart">Repeat this Celestial's Reality</label>
+              </div>
+              <reality-amplify-button v-else />
+
+            </div>
+            <reality-button />
           </div>
-          <reality-amplify-button />
+
+          <reality-reminder />
+
           <div v-if="showInstability">
+            <br>
             Glyphs are becoming unstable.
             <br>
             Glyph levels higher than {{ formatInt(instabilityThreshold) }} are harder to reach.
@@ -90,16 +99,15 @@ Vue.component("glyphs-tab", {
           <expanding-control-box
             label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
+            style="margin: 2rem;"
           >
             <glyph-levels-and-weights slot="dropdown" />
           </expanding-control-box>
-          <br>
-          <glyph-clean-options />
-          <glyph-tab-side-box />
+          <glyph-tab-sidebar />
         </div>
         <div class="l-player-glyphs-column">
           <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />
-          <div class="l-equipped-glyphs-wrapper">
+          <div class="l-equipped-glyphs-and-effects-container">
             <equipped-glyphs />
             <div class="l-glyph-info-wrapper">
               <span class="l-glyph-color-box" @click="toggleGlyphTextColors">

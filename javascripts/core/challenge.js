@@ -1,30 +1,25 @@
 "use strict";
 
-function tryUnlockInfinityChallenges() {
-  while (player.postChallUnlocked < 8 &&
-    player.records.thisEternity.maxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
-    ++player.postChallUnlocked;
-    TabNotification.ICUnlock.tryTrigger();
-    if (EternityMilestone.autoIC.isReached) {
-      InfinityChallenge(player.postChallUnlocked).complete();
-    }
+function tryCompleteInfinityChallenges() {
+  if (EternityMilestone.autoIC.isReached) {
+    const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
+    for (const challenge of toComplete) challenge.complete();
   }
 }
 
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
-      if (player.matter.eq(0)) player.matter = new Decimal(1);
+      Currency.matter.bumpTo(1);
       // These caps are values which occur at approximately e308 IP
       const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
         Math.clampMax(Currency.antimatterGalaxies.value, 100) / 100;
-      const finalMatterCap = Decimal.MAX_VALUE;
-      player.matter = player.matter.times(Decimal.pow(cappedBase, diff / 100)).clampMax(finalMatterCap);
+      Currency.matter.multiply(Decimal.pow(cappedBase, diff / 20));
     }
-    if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
+    if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       Modal.hideAll();
       Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
-        `${format(player.matter, 2, 2)} matter.`);
+        `${format(Currency.matter.value, 2, 2)} matter.`);
       Reset.dimensionBoost.reset();
     }
   }
@@ -185,8 +180,12 @@ class InfinityChallengeState extends GameMechanicState {
     this._reward = new InfinityChallengeRewardState(config.reward, this);
   }
 
+  get unlockAM() {
+    return this.config.unlockAM;
+  }
+
   get isUnlocked() {
-    return player.postChallUnlocked >= this.id;
+    return player.records.thisEternity.maxAM.gte(this.unlockAM) || Achievement(133).isUnlocked;
   }
 
   get isRunning() {
@@ -296,6 +295,12 @@ const InfinityChallenges = {
   },
   clearCompletions() {
     player.challenge.infinity.completedBits = 0;
+  },
+  get nextIC() {
+    return InfinityChallenges.all.find(x => !x.isUnlocked);
+  },
+  get nextICUnlockAM() {
+    return this.nextIC?.unlockAM;
   },
   /**
    * @returns {InfinityChallengeState[]}

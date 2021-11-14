@@ -54,28 +54,28 @@ Vue.component("glyph-peek", {
     }
   },
   template: `
-    <span
-      v-if="isVisible"
-      class="c-glyph-peek"
-      @click="showModal"
-    >
-      <glyph-set-preview
-        :show="isVisible"
-        :showName="false"
-        :text="'Upcoming glyph selection:'"
-        :glyphs="glyphs"
-        :ignoreModifiedLevel="true"
-        :showSacrifice="canSacrifice"
-        :flipTooltip="true"
-      />
-      (Click to bring up details)
-    </span>
-    <span
-      v-else-if="canPeek"
-      class="c-glyph-peek"
-    >
-      Purchase the Reality study to see
-      <br>
-      this Reality's glyph choices
-    </span>`
+    <div class="c-glyph-peek">
+      <div
+        v-if="isVisible"
+        @click="showModal"
+      >
+        <glyph-set-preview
+          :show="isVisible"
+          :showName="false"
+          :text="'Upcoming glyph selection:'"
+          :glyphs="glyphs"
+          :ignoreModifiedLevel="true"
+          :showSacrifice="canSacrifice"
+          :flipTooltip="true"
+        />
+        (Click to bring up details)
+      </div>
+      <div
+        v-else-if="canPeek"
+      >
+        Purchase the Reality study to see
+        <br>
+        this Reality's glyph choices
+      </div>
+    </div>`
 });

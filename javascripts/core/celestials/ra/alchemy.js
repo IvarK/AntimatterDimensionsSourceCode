@@ -1,6 +1,15 @@
 "use strict";
 
+/**
+ * @abstract
+ */
 class AlchemyResourceState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this.ema = new ExponentialMovingAverage(0.01, 10, 100, 0.01);
+    this._before = 0;
+  }
+
   get name() {
     return this.config.name;
   }
@@ -30,19 +39,19 @@ class AlchemyResourceState extends GameMechanicState {
   }
 
   get before() {
-    return this.config.before;
+    return this._before;
   }
 
   set before(value) {
-    this.config.before = value;
+    this._before = value;
   }
 
   get flow() {
-    return this.config.flow;
+    return this.ema.average;
   }
 
-  set flow(value) {
-    this.config.flow = value;
+  get fillFraction() {
+    return Math.clamp(this.amount / this.cap, 0, 1);
   }
 
   get unlockedWith() {
@@ -73,6 +82,43 @@ class AlchemyResourceState extends GameMechanicState {
 
   get reaction() {
     return AlchemyReactions.all[this.id];
+  }
+
+  /**
+   * @abstract
+   */
+  get cap() { throw new NotImplementedError(); }
+
+  get capped() {
+    return this.amount >= this.cap;
+  }
+}
+
+class BasicAlchemyResourceState extends AlchemyResourceState {
+  constructor(config) {
+    super(config);
+    // The names are capitalized, so we need to convert them to lower case
+    // in order to access highestRefinementValue values which are not capitalized.
+    this._name = config.name.toLowerCase();
+  }
+
+  get highestRefinementValue() {
+    return player.celestials.ra.highestRefinementValue[this._name];
+  }
+
+  set highestRefinementValue(value) {
+    player.celestials.ra.highestRefinementValue[this._name] = Math.max(this.highestRefinementValue, value);
+  }
+
+  get cap() {
+    return Math.clampMax(Ra.alchemyResourceCap, this.highestRefinementValue);
+  }
+}
+
+class AdvancedAlchemyResourceState extends AlchemyResourceState {
+  get cap() {
+    const reagentCaps = this.reaction.reagents.map(x => x.resource.cap);
+    return Math.min(...reagentCaps);
   }
 }
 
@@ -165,14 +211,15 @@ class AlchemyReaction {
     if (!this.isActive || this.reactionYield === 0) return;
     const unpredictabilityEffect = AlchemyResource.unpredictability.effectValue;
     const times = 1 + poissonDistribution(unpredictabilityEffect / (1 - unpredictabilityEffect));
+    const cap = this._product.cap;
     for (let i = 0; i < times; i++) {
       const reactionYield = this.actualYield;
       for (const reagent of this._reagents) {
         reagent.resource.amount -= reactionYield * reagent.cost;
       }
-      this._product.amount += reactionYield * this.reactionProduction;
-      // Within a certain amount of the cap, just give the last bit for free so the cap is actually reached
-      if (Ra.alchemyResourceCap - this._product.amount < 0.05) this._product.amount = Ra.alchemyResourceCap;
+      // The minimum reaction yield is 0.05 so the cap is actually reached
+      const effectiveYield = Math.clampMin(reactionYield * this.reactionProduction, 0.05);
+      this._product.amount = Math.clampMax(this._product.amount + effectiveYield, cap);
     }
   }
 }
@@ -181,9 +228,10 @@ const AlchemyResource = (function() {
   function createResource(resource) {
     const config = GameDatabase.celestials.alchemy.resources[resource];
     config.id = resource;
-    config.before = 0;
-    config.flow = 0;
-    return new AlchemyResourceState(config);
+    if (config.isBaseResource) {
+      return new BasicAlchemyResourceState(config);
+    }
+    return new AdvancedAlchemyResourceState(config);
   }
 
   return {

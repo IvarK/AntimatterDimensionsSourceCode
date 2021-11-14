@@ -82,7 +82,7 @@ GameDatabase.challenges.infinity = [
       divides the multiplier on all of your Antimatter Dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
-    effect: () => player.matter.clampMin(1),
+    effect: () => Currency.matter.value.clampMin(1),
     formatEffect: value => `/${format(value, 1, 2)}`,
     reward: {
       description: "Infinity Dimension multiplier based on Tickspeed",

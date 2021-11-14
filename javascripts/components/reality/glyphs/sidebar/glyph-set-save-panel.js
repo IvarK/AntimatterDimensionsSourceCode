@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-set-saves", {
+Vue.component("glyph-set-save-panel", {
   data() {
     return {
       hasEquipped: true,
@@ -32,7 +32,7 @@ Vue.component("glyph-set-saves", {
       You can only load a set when you have no Glyphs equipped.`;
     },
     noSet() {
-      return `No Set Saved`;
+      return `No Glyph Set saved in this slot`;
     },
   },
   methods: {
@@ -79,39 +79,43 @@ Vue.component("glyph-set-saves", {
     },
   },
   template: `
-    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
       </div>
-      When searching for Glyphs to load, check:
-      <div>
-        Type: Always
-        <br>
-        <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle"
+      <div class="l-glyph-set-save__header">
+      When searching for Glyphs to load, try to match the following. "Exact" will only count Glyphs
+      with identical properties to be part of the set. The other settings will, loosely speaking, allow
+      for "better" Glyphs to match as well.
+      </div>
+      <div class="c-glyph-set-save-container">
+        <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
+        <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
+          Type: Exact (always)
+        </button>
+        <button-on-off-custom
+          class="c-glyph-set-save-setting-button"
           v-model="effects"
-          on="Effects: Disabled"
-          off="Effects: Enabled"
+          on="Effects: Including"
+          off="Effects: Exact"
         />
-        <br>
-        <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle"
+        <button-on-off-custom
+          class="c-glyph-set-save-setting-button"
           v-model="level"
-          on="Level: Disabled"
-          off="Level: Enabled"
+          on="Level: Increased"
+          off="Level: Exact"
         />
-        <br>
-        <primary-button-on-off-custom
-          class="o-primary-btn--reality-upgrade-toggle"
+        <button-on-off-custom
+          class="c-glyph-set-save-setting-button"
           v-model="rarity"
-          on="Rarity: Disabled"
-          off="Rarity: Enabled"
+          on="Rarity: Increased"
+          off="Rarity: Exact"
         />
       </div>
-      <div v-for="(set, id) in glyphSets">
-        <div>
+      Your saved Glyph sets:
+      <div class="c-glyph-single-set-save" v-for="(set, id) in glyphSets">
+        <div style="width: 16rem">
           <glyph-set-preview
-            class="l-glyph-set-save-spacing"
             :text="setName(id)"
             :textHidden=true
             :show=true
@@ -120,29 +124,27 @@ Vue.component("glyph-set-saves", {
             :noneText=noSet
           />
         </div>
-        <div class="l-glyph-set-save-button-spacing">
-          <button
-            class="c-reality-upgrade-btn c-glyph-set-save-button"
-            :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
-            @click="saveGlyphSet(id)"
-          >
-            Save
-          </button>
-          <button
-            class="c-reality-upgrade-btn c-glyph-set-save-button"
-            :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
-            @click="deleteGlyphSet(id)"
-          >
-            Delete
-          </button>
-          <button
-            class="c-reality-upgrade-btn c-glyph-set-save-button"
-            :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
-            @click="loadGlyphSet(set)"
-          >
-            Load
-          </button>
-        </div>
+        <button
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
+          @click="saveGlyphSet(id)"
+        >
+          Save
+        </button>
+        <button
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
+          @click="loadGlyphSet(set)"
+        >
+          Load
+        </button>
+        <button
+          class="c-glyph-set-save-button"
+          :class="{'c-glyph-set-save-button--unavailable': !set.length}"
+          @click="deleteGlyphSet(id)"
+        >
+          Delete
+        </button>
       </div>
     </div>`
 });

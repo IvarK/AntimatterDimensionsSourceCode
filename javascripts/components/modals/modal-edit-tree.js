@@ -84,6 +84,9 @@ Vue.component("modal-edit-tree", {
       }
       return isValid;
     },
+    formatWithCommas() {
+      return formatWithCommas;
+    },
   },
   methods: {
     confirmEdits() {
@@ -95,9 +98,6 @@ Vue.component("modal-edit-tree", {
     },
     formatPaths(paths) {
       return Array.from(paths).join(", ");
-    },
-    formatCost(cost) {
-      return formatWithCommas(cost);
     },
     calculateMissingSTCost(studiesToBuy, ignoreCurrentStudies) {
       // Explicitly hardcoding how the study tree affects total ST should be fine here, as it massively simplifies
@@ -155,24 +155,24 @@ Vue.component("modal-edit-tree", {
         <template v-if="inputIsValidTree">
           <div class="l-modal-import-tree__tree-info-line">
             Total tree cost:
-            {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            {{ quantify("Time Theorem", tree.totalCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.totalST !== 0">
-              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+              and {{ quantify("Space Theorem", tree.totalST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
-            {{ formatCost(tree.missingCost) }} {{ "Time Theorem" | pluralize(tree.missingCost, "Time Theorems") }}
+            {{ quantify("Time Theorem", tree.missingCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.missingST !== 0">
-              and {{ formatCost(tree.missingST) }} {{ "Space Theorem" | pluralize(tree.missingST, "Space Theorems") }}
+              and {{ quantify("Space Theorem", tree.missingST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div v-if="tree.firstSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
-            {{ "First split path:" | pluralize(tree.firstSplitPaths.size, "First split paths:") }}
+            {{ pluralize("First split path", tree.firstSplitPaths.size) }}:
             {{ formatPaths(tree.firstSplitPaths) }}
           </div>
           <div v-if="tree.secondSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
-            {{ "Second split path:" | pluralize(tree.secondSplitPaths.size, "Second split paths:") }}
+            {{ pluralize("Second split path", tree.secondSplitPaths.size) }}:
             {{ formatPaths(tree.secondSplitPaths) }}
             </div>
           <div v-if="tree.hasEternityChallenge" class="l-modal-import-tree__tree-info-line">

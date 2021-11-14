@@ -89,7 +89,9 @@ const GameStorage = {
   // a string roughly stating what's wrong with the save. In order for importing to work properly, this must return
   // an empty string.
   checkPlayerObject(save) {
-    if (save === undefined || save === null) return "Save is empty";
+    // Sometimes save is the output of GameSaveSerializer.deserialize, and if that function fails then it will result
+    // in the input parameter here being undefined
+    if (save === undefined || save === null) return "Save decoding failed (invalid format)";
     // Right now all we do is check for the existence of an antimatter prop, but if we wanted to do further save
     // verification then here's where we'd do it
     if (save.money === undefined && save.antimatter === undefined) return "Save does not have antimatter property";
@@ -124,7 +126,7 @@ const GameStorage = {
     checkNaN(save, "player");
 
     if (invalidProps.length === 0) return "";
-    return `${invalidProps.length} NaN player ${pluralize("property", invalidProps.length, "properties")} found:
+    return `${quantify("NaN player property", invalidProps.length)} found:
       ${invalidProps.join(", ")}`;
   },
 

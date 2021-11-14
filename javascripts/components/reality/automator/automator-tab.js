@@ -23,7 +23,7 @@ Vue.component("automator-tab", {
         ${formatInt(1000)} per second.`;
       return this.interval === 1
         ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
-        : `The Automator is running ${format(1000 / this.interval, 2, 2)} commands per real-time second. 
+        : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second. 
           ${speedupText}`;
     }
   },
@@ -52,6 +52,6 @@ Vue.component("automator-tab", {
           <automator-docs slot="paneR" />
         </split-pane>
       </div>
-      <div style="font-size: 30px" v-else>You need {{ formatInt(5) }} Realities to unlock the Automator.</div>
+      <automator-points-list v-else />
     </div>`
 });

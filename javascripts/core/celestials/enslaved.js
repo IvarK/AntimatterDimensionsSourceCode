@@ -184,27 +184,27 @@ const Enslaved = {
     INITIAL: {
       id: 1,
       lines: [
-        "A visitor? I haven’t had one... eons.",
-        "I... had a name. It’s been lost... to this place.",
-        "The others... won't let me rest. I do their work with time...",
-        "Place time ... into places ... that need it...",
+        "A visitor? I have not had one... eons.",
+        "I... had a name. It has been lost... to this place.",
+        "The others... will not let me rest. I do their work with time...",
+        "Place time... into places... that need it...",
         "Watch myself grow... pass and die.",
-        "Perhaps you... will break these chains... I will wait",
+        "Perhaps you... will break these chains... I will wait.",
       ]
     },
     UNLOCK_RUN: {
       id: 2,
       lines: [
-        "The others ... used me. They will use... or destroy you",
-        "End my suffering ... power will be yours ... ",
+        "The others... used me. They will use... or destroy you.",
+        "End my suffering... power will be yours...",
       ]
     },
     START_RUN: {
       id: 3,
       lines: [
-        "So little space... but no... prison... is perfect",
-        "They squeezed... this reality... too tightly. Cracks appeared.",
-        "Search... everywhere. I will help... where I can",
+        "So little space... but no... prison... is perfect.",
+        "They squeezed... this Reality... too tightly. Cracks appeared.",
+        "Search... everywhere. I will help... where I can.",
       ]
     },
     COMPLETE_REALITY: {
@@ -216,17 +216,18 @@ const Enslaved = {
       ]
     },
     EC6C10: CelestialQuotes.singleLine(
-      5, "... did not ... underestimate you ..."
+      5, "... did not... underestimate you..."
     ),
     HINT_UNLOCK: {
       id: 6,
       lines: [
-        "... you need ... to look harder ...",
-        "I think ... I can help ...",
-        "* You have unlocked help from The Enslaved Ones"
+        "... you need... to look harder...",
+        "I think... I can help...",
+        "* You have unlocked help from The Enslaved Ones."
       ]
     },
   }),
+  symbol: "<i class='fas fa-link'></i>"
 };
 
 class EnslavedProgressState extends GameMechanicState {

@@ -9,6 +9,18 @@ class PerkState extends SetPurchasableMechanicState {
     this.connectedPerks = [];
   }
 
+  get automatorPoints() {
+    return this.config.automatorPoints ? this.config.automatorPoints : 0;
+  }
+
+  get label() {
+    return this.config.label;
+  }
+
+  get shortDescription() {
+    return this.config.shortDescription ? this.config.shortDescription() : "";
+  }
+
   get currency() {
     return Currency.perkPoints;
   }
@@ -67,7 +79,6 @@ const Perk = (function() {
     autocompleteEC1: new PerkState(db.autocompleteEC1),
     autocompleteEC2: new PerkState(db.autocompleteEC2),
     autocompleteEC3: new PerkState(db.autocompleteEC3),
-    autocompleteEC4: new PerkState(db.autocompleteEC4),
     studyActiveEP: new PerkState(db.studyActiveEP),
     studyIdleEP: new PerkState(db.studyIdleEP),
     studyECRequirement: new PerkState(db.studyECRequirement),
@@ -80,10 +91,9 @@ const Perk = (function() {
     autobuyerFasterID: new PerkState(db.autobuyerFasterID),
     autobuyerFasterReplicanti: new PerkState(db.autobuyerFasterReplicanti),
     autobuyerFasterDilation: new PerkState(db.autobuyerFasterDilation),
-    autobuyerTT1: new PerkState(db.autobuyerTT1),
-    autobuyerTT2: new PerkState(db.autobuyerTT2),
-    autobuyerTT3: new PerkState(db.autobuyerTT3),
-    autobuyerTT4: new PerkState(db.autobuyerTT4),
+    ttFree: new PerkState(db.ttFree),
+    ttBuySingle: new PerkState(db.ttBuySingle),
+    ttBuyMax: new PerkState(db.ttBuyMax),
     achievementGroup1: new PerkState(db.achievementGroup1),
     achievementGroup2: new PerkState(db.achievementGroup2),
     achievementGroup3: new PerkState(db.achievementGroup3),

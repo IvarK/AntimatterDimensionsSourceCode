@@ -4,6 +4,7 @@ Vue.component("laitela-tab", {
   data() {
     return {
       darkMatter: new Decimal(0),
+      isDMCapped: false,
       maxDarkMatter: new Decimal(0),
       darkEnergy: 0,
       matterExtraPurchasePercentage: 0,
@@ -14,9 +15,17 @@ Vue.component("laitela-tab", {
       singularityWaitTime: 0,
     };
   },
+  computed: {
+    styleObject() {
+      return {
+        color: this.isDMCapped ? "var(--color-bad)" : "",
+      };
+    },
+  },
   methods: {
     update() {
       this.darkMatter.copyFrom(Currency.darkMatter);
+      this.isDMCapped = this.darkMatter.eq(Number.MAX_VALUE);
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
@@ -54,11 +63,15 @@ Vue.component("laitela-tab", {
           Max all Dark Matter Dimensions
         </primary-button>
       </div>
+      <celestial-quote-history celestial="laitela" />
       <div class="o-laitela-matter-amount">
-        You have {{ format(darkMatter.floor(), 2, 0) }} Dark Matter.
+        You have
+        <span :style="styleObject">{{ format(darkMatter, 2) }}</span>
+        Dark Matter<span v-if="isDMCapped"> (capped)</span>.
       </div>
       <div class="o-laitela-matter-amount">
-        Your maximum Dark Matter ever is {{ format(maxDarkMatter.floor(), 2, 0) }},
+        Your maximum Dark Matter ever is
+        <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span>,
         giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum.
       </div>
       <h2 class="c-laitela-singularity-container" v-if="!singularitiesUnlocked">
@@ -142,7 +155,7 @@ Vue.component("laitela-run-button", {
             You also gain an additional {{ formatX(8) }} Dark Energy.
           </b>
           <br><br>
-          Laitela's Reality has been fully destabilized and cannot have its reward further improved.
+          Lai'tela's Reality has been fully destabilized and cannot have its reward further improved.
         </span>
         <br><br>
       </div>

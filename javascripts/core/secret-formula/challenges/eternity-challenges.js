@@ -38,12 +38,15 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 4,
-    description: "All Infinity multipliers and generators are disabled.",
+    description: `All Infinity multipliers and generators are disabled. The goal must be reached within a certain
+      number of Infinities or else you will fail the Challenge.`,
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => Currency.infinities.lte(restriction),
-    formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
+    formatRestriction: restriction => (restriction === 0
+      ? "without any Infinities"
+      : `in ${quantifyInt("Infinity", restriction)} or less`),
     failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
@@ -61,7 +64,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
-      formatEffect: value => `${formatInt(value)} Antimatter Galaxies later`
+      formatEffect: value => `${quantifyInt("Antimatter Galaxy", value)} later`
     }
   },
   {
@@ -135,7 +138,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinities to Antimatter Dimensions (Infinities^${formatInt(950)}).`;
+        Infinities to Antimatter Dimensions (Infinities${formatPow(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -170,14 +173,15 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => (PlayerProgress.realityUnlocked()
-      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
-      : `The game runs ×${formatInt(1000)} slower.`),
+      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
+        within a certain amount of time or you will fail the Challenge.`
+      : `The game runs ×${formatInt(1000)} slower. The goal must be reached
+        within a certain amount of time or you will fail the Challenge.`),
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
-    formatRestriction: restriction => `in ${format(restriction, 0, 1)} in-game
-      ${restriction === 1 ? "second" : "seconds"} or less.`,
+    formatRestriction: restriction => `in ${quantify("in-game second", restriction, 0, 1)} or less.`,
     failedRestriction: "(Too slow for more)",
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",

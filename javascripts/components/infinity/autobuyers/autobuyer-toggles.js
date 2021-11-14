@@ -17,11 +17,7 @@ Vue.component("autobuyer-toggles", {
       player.auto.bulkOn = newValue;
     },
     disableContinuum(newValue) {
-      player.auto.disableContinuum = newValue;
-      // If continuum is not disabled (i.e. is enabled) we update the relevant requirement check.
-      if (!player.auto.disableContinuum) {
-        player.requirementChecks.reality.noContinuum = false;
-      }
+      Laitela.setContinuum(!newValue);
     }
   },
   methods: {

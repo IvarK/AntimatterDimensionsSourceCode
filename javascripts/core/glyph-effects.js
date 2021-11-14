@@ -306,7 +306,7 @@ GameDatabase.reality.glyphEffects = [
       ? "Generates {value} Time Theorems/hour [and\nmultiplies Time Theorem generation by] {value2}"
       : "Generates {value} Time Theorems per hour"),
     totalDesc: () => (GlyphAlteration.isAdded("dilation")
-      ? "Generating {value} Time Theorems/hour and Time Theorem generation x{value2}"
+      ? "Generating {value} Time Theorems/hour and Time Theorem generation ×{value2}"
       : "Generating {value} Time Theorems per hour"),
     genericDesc: () => (GlyphAlteration.isAdded("dilation")
       ? "Time Theorem generation and multiplier"
@@ -499,7 +499,7 @@ GameDatabase.reality.glyphEffects = [
       ? "Antimatter Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
       : "Antimatter Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Antimatter Dimension multipliers ^{value} and Antimatter Galaxy cost x{value2}"
+      ? "Antimatter Dimension multipliers ^{value} and Antimatter Galaxy cost ×{value2}"
       : "Antimatter Dimension multipliers ^{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("power")
       ? "Antimatter Dimensions multipliers ^x and Antimatter Galaxy cost multiplier"

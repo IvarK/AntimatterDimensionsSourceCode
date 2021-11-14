@@ -3,7 +3,9 @@
 Vue.component("reality-reminder", {
   data() {
     return {
+      canReality: false,
       isVisible: false,
+      isExpanded: false,
       ecCount: 0,
       missingAchievements: 0,
       unpurchasedDilationUpgrades: 0,
@@ -14,6 +16,10 @@ Vue.component("reality-reminder", {
       hasDilated: 0,
       availableCharges: 0,
     };
+  },
+  created() {
+    // Collapsing it after every reality resets the height to its fixed minimum value, stopping screen jitter
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.isExpanded = false);
   },
   computed: {
     suggestions() {
@@ -27,10 +33,10 @@ Vue.component("reality-reminder", {
       if (this.unpurchasedDilationUpgrades > 0) {
         arr.push(`Purchase the remaining Dilation Upgrades (${formatInt(this.unpurchasedDilationUpgrades)} left)`);
       }
-      if (this.currLog10EP > 1.1 * this.cheapestLog10TD) {
+      if (this.currLog10EP > 1.3 * this.cheapestLog10TD) {
         arr.push(`Purchase more TDs (cheapest: ${format(Decimal.pow10(this.cheapestLog10TD))} EP)`);
       }
-      if (this.currLog10EP > 1.1 * this.multEPLog10Cost) {
+      if (this.currLog10EP > 1.3 * this.multEPLog10Cost) {
         arr.push(`Purchase more ${formatX(5)} EP (cost: ${format(Decimal.pow10(this.multEPLog10Cost))} EP)`);
       }
       if (this.ecCount < 60) {
@@ -43,12 +49,26 @@ Vue.component("reality-reminder", {
         arr.push(`Charge more Infinity Upgrades (${formatInt(this.availableCharges)} available)`);
       }
       return arr;
+    },
+    canBeExpanded() {
+      return this.canReality && this.suggestions.length !== 0;
+    },
+    styleObject() {
+      const color = (!this.canReality || this.canBeExpanded) ? "var(--color-bad)" : "var(--color-good)";
+      // Has both is and canBe in order to force the height back to its minimum size when all suggestions are done
+      const height = (this.canBeExpanded && this.isExpanded) ? `${6.5 + 1.5 * this.suggestions.length}rem` : "5rem";
+      return {
+        color,
+        height,
+      };
+    },
+    clickText() {
+      return `(click to ${this.isExpanded ? "collapse" : "expand"})`;
     }
   },
   methods: {
     update() {
-      // TODO: add the line below to the isVisible check after making it so this does not flicker the rest of the glyph tab sidebar
-      // TimeStudy.reality.isBought && this.suggestions.length !== 0
+      this.canReality = TimeStudy.reality.isBought;
       this.isVisible = !isInCelestialReality();
       this.ecCount = EternityChallenges.completions;
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
@@ -63,17 +83,36 @@ Vue.component("reality-reminder", {
       this.hasDilated = player.dilation.lastEP.gt(0);
       this.availableCharges = Ra.chargesLeft;
     },
+    clicked() {
+      if (!this.canBeExpanded) return;
+      this.isExpanded = !this.isExpanded;
+    },
   },
   template: `
     <div
       v-if="isVisible"
       class="c-reality-reminder"
+      :style="styleObject"
+      @click="clicked"
     >
-      You may want to do the following before Reality:
-      <br>
-      <br>
-      <div v-for="suggestion in suggestions">
-        {{ suggestion }}
-      </div>
+      <span v-if="!canReality">
+        You still need to unlock Reality in the Time Study Tree.
+      </span>
+      <span v-else-if="suggestions.length === 0">
+        You are ready to complete this Reality!
+      </span>
+      <span v-else>
+        You have {{ quantifyInt("thing", suggestions.length) }}
+        you may want to do before Reality. {{ clickText }}
+        <div
+          v-if="isExpanded"
+          style="font-size: 1rem;"
+        >
+          <br>
+          <div v-for="suggestion in suggestions">
+            {{ suggestion }}
+          </div>
+        </div>
+      </span>
     </div>`
 });

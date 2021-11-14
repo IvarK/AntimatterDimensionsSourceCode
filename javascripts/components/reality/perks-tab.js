@@ -93,7 +93,9 @@ const PerkNetwork = {
     this.nodes = new vis.DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
-      title: perk.config.description,
+      shape: perk.config.automatorPoints ? "diamond" : "dot",
+      title: `${perk.config.description}
+        ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`,
       x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
       y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));
@@ -135,7 +137,7 @@ const PerkNetwork = {
         hoverWidth: width => width,
         selectionWidth: width => width,
         color: {
-          inherit: "to"
+          inherit: "both"
         },
         hidden: ui.view.theme === "S9"
       },

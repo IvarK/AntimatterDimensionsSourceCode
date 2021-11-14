@@ -125,7 +125,7 @@ Vue.component("v-tab", {
       }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      return `Spend ${quantify("Perk Point", hex.reductionCost, 2, 0)}
         to reduce goal by ${format(hex.config.perReductionStep)}`;
     },
     toggleFlipped() {
@@ -170,7 +170,7 @@ Vue.component("v-tab", {
           Goal reduction is significantly more expensive for Hard V-Achievements.
         </div>
         <div v-if="showReduction" class="c-v-info-text">
-          You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
+          You have {{ quantify("Perk Point", pp, 2, 0) }}.
         </div>
         <div class="l-v-unlocks-container">
           <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]">

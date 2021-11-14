@@ -222,8 +222,7 @@ GameDatabase.reality.automator = {
         "auto eternity off",
         "auto infinity 30s",
         "auto eternity 10 seconds",
-        "auto eternity 1e100 x highest",
-        "auto infinity 1e1e4 ip"
+        "auto eternity 1e100 x highest"
       ]
     },
     {

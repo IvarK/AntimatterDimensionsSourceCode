@@ -271,6 +271,13 @@ Currency.antimatterGalaxies = new class extends NumberCurrency {
   }
 }();
 
+Currency.matter = new class extends DecimalCurrency {
+  get value() { return player.matter; }
+  set value(value) {
+    player.matter = Decimal.min(value, Decimal.MAX_VALUE);
+  }
+}();
+
 Currency.infinities = new class extends DecimalCurrency {
   get value() { return player.infinities; }
   set value(value) { player.infinities = value; }

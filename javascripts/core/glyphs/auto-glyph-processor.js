@@ -48,7 +48,7 @@ const AutoGlyphProcessor = {
         }
         return strengthToRarity(glyph.strength) - 200 * missingEffects;
       }
-      case AUTO_GLYPH_SCORE.ADVANCED_MODE: {
+      case AUTO_GLYPH_SCORE.EFFECT_SCORE: {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
@@ -58,11 +58,11 @@ const AutoGlyphProcessor = {
         return strengthToRarity(glyph.strength) + effectScore;
       }
       // Picked glyphs are never kept in Alchemy modes.
-      // Glyphs for non-unlocked Alchemy Resources are assigned NEGATIVE_INFINITY
+      // Glyphs for non-unlocked or capped Alchemy Resources are assigned NEGATIVE_INFINITY
       // to make them picked last, because we can't refine them.
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
-        return resource.isUnlocked
+        return resource.isUnlocked && !resource.capped
           ? -resource.amount
           : Number.NEGATIVE_INFINITY;
       }
@@ -82,7 +82,7 @@ const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT:
         return this.types[glyph.type].rarityThreshold;
-      case AUTO_GLYPH_SCORE.ADVANCED_MODE:
+      case AUTO_GLYPH_SCORE.EFFECT_SCORE:
         return this.types[glyph.type].scoreThreshold;
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:

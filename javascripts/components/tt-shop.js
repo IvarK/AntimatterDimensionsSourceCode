@@ -34,15 +34,15 @@ Vue.component("tt-shop", {
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;
     },
-    formattedTheorems() {
+    formatTimeTheoremType() {
       if (this.theoremAmount.gte(1e6)) {
-        return format(this.theoremAmount, 2);
+        return format;
       }
       if (!(Teresa.isRunning || Enslaved.isRunning) &&
         getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
-        return formatFloat(this.theoremAmount, 2);
+        return formatFloat;
       }
-      return formatInt(this.theoremAmount);
+      return formatInt;
     },
     TTgenRateText() {
       if (this.theoremGeneration.lt(1 / 3600)) {
@@ -55,7 +55,7 @@ Vue.component("tt-shop", {
       return `${format(this.theoremGeneration, 2, 2)} TT/sec`;
     },
     totalTimeTheoremText() {
-      return `${format(this.totalTimeTheorems, 2, 2)} total Time Theorems`;
+      return `${quantify("total Time Theorem", this.totalTimeTheorems, 2, 2)}`;
     },
     minimizeArrowStyle() {
       return {
@@ -89,7 +89,7 @@ Vue.component("tt-shop", {
       TimeTheorems.buyOne(false, "ep");
     },
     buyMaxTheorems() {
-      TimeTheorems.buyMax();
+      TimeTheorems.buyMax(false);
     },
     update() {
       this.theoremAmount.copyFrom(Currency.timeTheorems);
@@ -124,12 +124,11 @@ Vue.component("tt-shop", {
         </button>
           <p id="timetheorems">
             <span class="c-tt-amount">
-              {{ formattedTheorems }}
-              {{ "Time Theorem" | pluralize(theoremAmount, "Time Theorems") }}
+              {{ quantify("Time Theorem", theoremAmount, 2, 0, formatTimeTheoremType) }}
             </span>
             <span v-if="showST">
               <br>
-              {{ formatInt(STamount) }} {{ "Space Theorem" | pluralize(STamount, "Space Theorems") }}
+              {{ quantifyInt("Space Theorem", STamount) }}
             </span>
           </p>
           <div style="display: flex; flex-direction: column; align-items: left;">

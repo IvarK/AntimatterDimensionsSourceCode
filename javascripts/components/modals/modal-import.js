@@ -73,7 +73,7 @@ Vue.component("modal-import", {
           <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
         </template>
         <div v-else-if="hasInput">
-          Not a valid save
+          Not a valid save:
           <br>
           {{ saveCheckString }}
         </div>

@@ -7,9 +7,9 @@ Vue.component("equipped-glyphs", {
       dragoverIndex: -1,
       respec: player.reality.respec,
       respecIntoProtected: player.options.respecIntoProtected,
+      undoSlotsAvailable: 0,
       undoAvailable: false,
       undoVisible: false,
-      logGlyphSacrifice: 0,
     };
   },
   created() {
@@ -31,6 +31,7 @@ Vue.component("equipped-glyphs", {
         : "Your currently-equipped Glyphs will stay equipped on Reality.";
     },
     undoTooltip() {
+      if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
       return this.undoAvailable
         ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
           " (Most resources will be fully reset)")
@@ -41,11 +42,9 @@ Vue.component("equipped-glyphs", {
     update() {
       this.respec = player.reality.respec;
       this.respecIntoProtected = player.options.respecIntoProtected;
+      this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
-      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
-      // This is necessary to force a re-render by key-swapping for when altered glyph effects are activated
-      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
-        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
     },
     glyphPositionStyle(idx) {
       return {
@@ -108,6 +107,8 @@ Vue.component("equipped-glyphs", {
       };
     },
     showModal() {
+      // If there aren't any glyphs equipped, the array is full of nulls which get filtered out by x => x
+      if (this.glyphs.filter(x => x).length === 0) return;
       Modal.glyphShowcasePanel.show({
         name: "Equipped Glyphs",
         glyphSet: this.glyphs,
@@ -142,7 +143,7 @@ Vue.component("equipped-glyphs", {
           />
           <glyph-component
             v-if="glyph"
-            :key="idx + logGlyphSacrifice"
+            :key="idx"
             :glyph="glyph"
             :circular="true"
             :isActiveGlyph="true"
@@ -158,7 +159,7 @@ Vue.component("equipped-glyphs", {
       </div>
       <div class="l-equipped-glyphs__buttons">
         <button
-          class="l-equipped-glyphs__large c-reality-upgrade-btn"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           :class="{'c-reality-upgrade-btn--bought': respec}"
           :ach-tooltip="respecTooltip"
           @click="toggleRespec"
@@ -167,18 +168,15 @@ Vue.component("equipped-glyphs", {
         </button>
         <button
           v-if="undoVisible"
-          class="l-equipped-glyphs__small c-reality-upgrade-btn"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
           :ach-tooltip="undoTooltip"
           @click="undo"
         >
-          Undo
+          Rewind to <b>undo</b> the last equipped Glyph
         </button>
-      </div>
-      <div class="l-equipped-glyphs__buttons">
         <button
-          class="l-equipped-glyphs__large c-reality-upgrade-btn"
-          :class="{'l-equipped-glyphs__larger' : undoVisible}"
+          class="l-glyph-equip-button c-reality-upgrade-btn"
           @click="toggleRespecIntoProtected"
         >
           Unequip Glyphs to:

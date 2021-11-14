@@ -38,6 +38,10 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     return true;
   }
 
+  get disabledByContinuum() {
+    return Laitela.continuumActive;
+  }
+
   get bulk() {
     // Use 1e100 to avoid issues with Infinity.
     return this.hasUnlimitedBulk ? 1e100 : Math.clampMax(this.data.bulk, this.bulkCap);
@@ -75,10 +79,14 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
       .nextSibling(this.mode);
   }
 
+  get canTick() {
+    const dim = AntimatterDimension(this._tier);
+    return dim.isAvailableForPurchase && dim.isAffordable && super.canTick;
+  }
+
   tick() {
-    const tier = this._tier;
-    if (!AntimatterDimension(tier).isAvailableForPurchase) return;
     super.tick();
+    const tier = this._tier;
     switch (this.mode) {
       case AUTOBUYER_MODE.BUY_SINGLE:
         buyOneDimension(tier);

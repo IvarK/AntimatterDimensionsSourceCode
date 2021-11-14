@@ -17,7 +17,6 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     return Player.defaultStart.auto.tickspeed.interval;
   }
 
-
   get isBought() {
     return this.data.isBought;
   }
@@ -28,6 +27,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
 
   get canBeBought() {
     return true;
+  }
+
+  get disabledByContinuum() {
+    return Laitela.continuumActive;
   }
 
   get mode() {
@@ -48,6 +51,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
       AUTOBUYER_MODE.BUY_MAX
     ]
       .nextSibling(this.mode);
+  }
+
+  get canTick() {
+    return Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable && super.canTick;
   }
 
   tick() {

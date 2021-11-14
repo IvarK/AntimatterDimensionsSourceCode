@@ -282,7 +282,7 @@ GameKeyboard.bind("enter up up down down left right left right b a", () => {
 
 // Toggle autobuyers
 function toggleAutobuyer(buyer) {
-  if (Laitela.continuumActive && (buyer.name === "Tickspeed" || buyer.hasUnlimitedBulk)) {
+  if (buyer.disabledByContinuum) {
     GameUI.notify.info("Continuum is enabled, you cannot alter this autobuyer");
   } else if (buyer.isUnlocked) {
     buyer.toggle();
@@ -292,7 +292,7 @@ function toggleAutobuyer(buyer) {
 }
 
 function toggleBuySingles(buyer) {
-  if (Laitela.continuumActive && (buyer.name === "Tickspeed" || buyer.hasUnlimitedBulk)) {
+  if (buyer.disabledByContinuum) {
     GameUI.notify.info("Continuum is enabled, you cannot alter this autobuyer");
   } else if (buyer.isUnlocked && buyer.toggleMode !== null) {
     buyer.toggleMode();
@@ -309,12 +309,10 @@ function keyboardToggleAutobuyers() {
 
 function keyboardToggleContinuum() {
   if (!Laitela.continuumUnlocked) return;
-  player.auto.disableContinuum = !player.auto.disableContinuum;
+  // This is a toggle despite the lack of !, because player.auto.disableContinuum
+  // is negated compared to whether continuum is on.
+  Laitela.setContinuum(player.auto.disableContinuum);
   GameUI.notify.info(`${(player.auto.disableContinuum) ? "Disabled" : "Enabled"} Continuum`);
-  // If continuum is not disabled (i.e. is enabled) we update the relevant requirement check.
-  if (!player.auto.disableContinuum) {
-    player.requirementChecks.reality.noContinuum = false;
-  }
 }
 
 function keyboardAutomatorToggle() {

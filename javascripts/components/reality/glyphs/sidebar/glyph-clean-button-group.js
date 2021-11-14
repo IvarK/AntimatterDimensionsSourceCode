@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("glyph-clean-options", {
+Vue.component("glyph-clean-button-group", {
   data() {
     return {
       glyphSacrificeUnlocked: false,
@@ -30,7 +30,7 @@ Vue.component("glyph-clean-options", {
         .length;
       return removeCount === 0
         ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
-        : `This will remove ${formatInt(removeCount)} ${pluralize("glyph", removeCount)}!`;
+        : `This will remove ${quantifyInt("Glyph", removeCount)}!`;
     }
   },
   methods: {
@@ -60,35 +60,34 @@ Vue.component("glyph-clean-options", {
   },
   template: `
     <div v-if="glyphSacrificeUnlocked">
+      <div class="l-glyph-sacrifice-options__header">Remove weaker Glyphs:</div>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        :ach-tooltip="autoCleanTooltip"
+        class="c-glyph-inventory-option"
         @click="autoClean"
       >
         Purge Glyphs
+        <div class="c-glyph-inventory-option__tooltip">{{ autoCleanTooltip }}</div>
       </button>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        :ach-tooltip="harshAutoCleanTooltip"
+        class="c-glyph-inventory-option"
         @click="harshAutoClean"
       >
         Harsh Purge Glyphs
+        <div class="c-glyph-inventory-option__tooltip">{{ harshAutoCleanTooltip }}</div>
       </button>
-      <br>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         @click="deleteAllUnprotected"
       >
         {{ removeString }} all unprotected glyphs
       </button>
-      <br>
       <button
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        class="c-glyph-inventory-option"
         v-if="hasFilter"
-        :ach-tooltip="deleteRejectedTooltip"
         @click="deleteAllRejected"
       >
         {{ removeString }} all Glyphs rejected by filtering
+        <div class="c-glyph-inventory-option__tooltip" style="width: 90%; left: 5%;">{{ deleteRejectedTooltip }}</div>
       </button>
     </div>`
 });

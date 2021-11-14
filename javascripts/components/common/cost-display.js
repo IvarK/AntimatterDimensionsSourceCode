@@ -4,8 +4,7 @@ Vue.component("cost-display", {
   props: {
     config: Object,
     br: Boolean,
-    singular: String,
-    plural: String,
+    name: String,
     title: {
       type: String,
       default: "Cost:",
@@ -26,7 +25,7 @@ Vue.component("cost-display", {
         const cost = config.cost;
         if (cost === undefined) return;
         this.isVisible = true;
-        this.formatCost = this.config.formatCost;
+        this.formatCost = this.config.formatCost ? this.config.formatCost : format;
         if (typeof cost !== "function") {
           this.cost = typeof cost === "number" ? cost : Decimal.fromDecimal(cost);
           return;
@@ -40,11 +39,6 @@ Vue.component("cost-display", {
       }
     }
   },
-  computed: {
-    costDisplay() {
-      return this.formatCost ? this.formatCost(this.cost) : format(this.cost);
-    }
-  },
   methods: {
     update() {
       if (this.updateFn) this.updateFn();
@@ -53,6 +47,6 @@ Vue.component("cost-display", {
   template: `
     <span v-if="isVisible">
       <br v-if="br">
-      {{ title }} {{ costDisplay }} {{ singular | pluralize(cost, plural) }}
+      {{ title }} {{ quantify(name, cost, 0, 0, formatCost) }}
     </span>`
 });

@@ -38,8 +38,7 @@ Vue.component("perk-shop-upgrade", {
         <cost-display
           v-if="!isCapped"
           :config="upgrade.config"
-          singular="Perk point"
-          plural="Perk points"
+          name="Perk Point"
         />
       </button>
     </div>`

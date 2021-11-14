@@ -34,9 +34,15 @@ Vue.mixin({
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);
     },
+    formatPow(value, places, placesUnder1000) {
+      return formatPow(value, places, placesUnder1000);
+    },
     formatPostBreak(value, places, placesUnder1000) {
       return formatPostBreak(value, places, placesUnder1000);
-    }
+    },
+    pluralize,
+    quantify,
+    quantifyInt
   },
   created() {
     if (this.update) {
@@ -72,23 +78,6 @@ function makeRecomputable(watcher, key, recomputed) {
   // eslint-disable-next-line no-sequences
   watcher.getter = vm => (recomputed[key], original.call(vm, vm));
 }
-
-function pluralize(value, amount, plural) {
-  if (value === undefined || amount === undefined)
-    throw "Arguments must be defined";
-  let isSingular = true;
-  if (typeof amount === "number") {
-    isSingular = amount === 1;
-  } else if (amount instanceof Decimal) {
-    isSingular = amount.eq(1);
-  } else {
-    throw "Amount must be either a number or Decimal";
-  }
-  if (isSingular) return value;
-  return plural === undefined ? `${value}s` : plural;
-}
-
-Vue.filter("pluralize", pluralize);
 
 const ReactivityComplainer = {
   complain() {

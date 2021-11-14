@@ -71,7 +71,6 @@ Vue.component("sacrificed-glyphs", {
       template: `
         <div
           v-if="amount > 0"
-          class="l-sacrificed-glyphs__type"
           :style="style"
         >
           <div>
@@ -105,8 +104,8 @@ Vue.component("sacrificed-glyphs", {
     types: () => GLYPH_TYPES.filter(type => type !== "cursed" && type !== "companion"),
     lastMachines() {
       return this.lastMachinesTeresa.lt(new Decimal("1e10000"))
-        ? `${format(this.lastMachinesTeresa, 2)} Reality Machines`
-        : `${format(this.lastMachinesTeresa.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
+        ? `${quantify("Reality Machine", this.lastMachinesTeresa, 2)}`
+        : `${quantify("Imaginary Machine", this.lastMachinesTeresa.dividedBy(new Decimal("1e10000")), 2)}`;
     }
   },
   methods: {

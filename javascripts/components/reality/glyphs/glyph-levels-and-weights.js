@@ -46,8 +46,10 @@ Vue.component("glyph-levels-and-weights", {
   },
   computed: {
     gridStyle() {
-      const columns = this.adjustVisible ? "11em 1.2em 7em 18rem 1rem" : "15em 1.2em 7em";
+      // Column specifications: {factor_name, math_operator, factor_value, weight_adjustment, padding}
+      const columns = this.adjustVisible ? "30% 3% 17% 48% 2%" : "80% 5% 15%";
       return {
+        width: "100%",
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
         "grid-auto-rows": "1fr",
@@ -249,7 +251,7 @@ Vue.component("glyph-levels-and-weights", {
       </template>
       <template v-if="shardVisible">
         <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__factor">
-          {{ formatInt(100) }}×Shards^{{ formatInt(2) }}
+          {{ formatInt(100) }}×Shards{{ formatPow(2) }}
         </div>
         <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__operator">+</div>
         <div :style="rowStyle('shards')" class="l-glyph-levels-and-weights__factor-val">
@@ -309,7 +311,7 @@ Vue.component("glyph-levels-and-weights", {
           Adjust weights
           <div class="l-glyph-levels-and-weights__reset-btn-outer">
             <div
-              class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn"
+              class="c-glyph-levels-and-weights__reset-btn"
               @click="resetWeights"
             >
               Reset
@@ -317,10 +319,10 @@ Vue.component("glyph-levels-and-weights", {
           </div>
         </div>
         <div class="l-glyph-levels-and-weights__adjust-auto">
-          <primary-button-on-off
+          <button-on-off
             v-if="showAutoAdjustWeights"
             v-model="isAutoAdjustWeightsOn"
-            class="l-glyph-levels-and-weights__auto-btn c-glyph-levels-and-weights__auto-btn"
+            class="c-glyph-levels-and-weights__auto-btn"
             text="Auto adjustment:"
           />
         </div>
@@ -328,6 +330,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.ep"
+            :width="'100%'"
             @input="adjustSlider('ep', $event)"
           />
         </div>
@@ -335,6 +338,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.repl"
+            :width="'100%'"
             @input="adjustSlider('repl', $event)"
           />
         </div>
@@ -342,6 +346,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.dt"
+            :width="'100%'"
             @input="adjustSlider('dt', $event)"
           />
         </div>
@@ -349,6 +354,7 @@ Vue.component("glyph-levels-and-weights", {
           <ad-slider-component
             v-bind="sliderProps"
             :value="weights.eternities"
+            :width="'100%'"
             @input="adjustSlider('eternities', $event)"
           />
         </div>

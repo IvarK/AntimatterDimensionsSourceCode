@@ -99,18 +99,18 @@ const Teresa = {
     INITIAL: {
       id: 1,
       lines: [
-        "We've been observing you",
-        "You have shown promise with your bending of the reality",
+        "We have been observing you.",
+        "You have shown promise with your bending of Reality.",
         "We are the Celestials, and we want you to join us.",
-        "My name is Teresa, the Celestial Of Reality",
+        "My name is Teresa, the Celestial Of Reality.",
         "Prove your worth.",
       ]
     },
     UNLOCK_REALITY: CelestialQuotes.singleLine(
-      2, "I'll let you inside my Reality, mortal. Don't get crushed by it."
+      2, "I will let you inside my Reality, mortal. Do not get crushed by it."
     ),
     COMPLETE_REALITY: CelestialQuotes.singleLine(
-      3, "Why are you still here... You were supposed to fail"
+      3, "Why are you still here... you were supposed to fail."
     ),
     EFFARIG: {
       id: 4,
@@ -120,6 +120,7 @@ const Teresa = {
       ]
     }
   }),
+  symbol: "Ϟ"
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {
@@ -168,7 +169,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     if (this.id === 5) {
       const toCreate = Glyphs.freeInventorySpace;
       for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
-      GameUI.notify.success(`Created ${toCreate} ${pluralize("Music Glyph", toCreate)}`);
+      GameUI.notify.success(`Created ${quantifyInt("Music Glyph", toCreate)}`);
     }
   }
 }

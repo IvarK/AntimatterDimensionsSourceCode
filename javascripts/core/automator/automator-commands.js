@@ -111,7 +111,7 @@ const AutomatorCommands = ((() => {
           (ctx.duration || ctx.xHighest) && !EternityMilestone.bigCrunchModes.isReached) {
           V.addError((ctx.duration || ctx.xHighest)[0],
             "Advanced Infinity autobuyer settings are not unlocked",
-            `Reach ${EternityMilestone.bigCrunchModes.config.eternities} Eternities to use this command`);
+            `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)} to use this command`);
           return false;
         }
 
@@ -126,7 +126,8 @@ const AutomatorCommands = ((() => {
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           !EternityMilestone.autobuyerEternity.isReached) {
           V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${EternityMilestone.autobuyerEternity.config.eternities} Eternities to use this command`);
+            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
+            to use this command`);
           return false;
         }
 
@@ -160,7 +161,7 @@ const AutomatorCommands = ((() => {
             autobuyer.mode = durationMode;
             autobuyer.time = duration / 1000;
             // Can't do the units provided in the script because it's been parsed away like 4 layers up the call stack
-            currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : format(autobuyer.time)} seconds`;
+            currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : quantify("second", autobuyer.time)}`;
           } else if (xHighest !== undefined) {
             autobuyer.mode = xHighestMode;
             autobuyer.xHighest = new Decimal(xHighest);
@@ -454,7 +455,8 @@ const AutomatorCommands = ((() => {
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
           !EternityMilestone.autobuyerEternity.isReached) {
           V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${EternityMilestone.autobuyerEternity.config.eternities} Eternities to use this command`);
+            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
+            to use this command`);
           return false;
         }
 
@@ -628,9 +630,8 @@ const AutomatorCommands = ((() => {
             if (!TimeStudy(tsNumber).purchase()) {
               if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
               if (purchasedStudies > 0) {
-                AutomatorData.logCommandEvent(`Purchased ${purchasedStudies} time
-                  ${pluralize("study", purchasedStudies, "studies")} and stopped at study
-                  ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
+                AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)}
+                and stopped at study ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
               }
               return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
             }

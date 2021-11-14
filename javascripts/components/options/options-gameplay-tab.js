@@ -15,7 +15,7 @@ Vue.component("options-gameplay-tab", {
     const ticks = player.options.offlineTicks;
     const exponent = Math.floor(Math.log10(ticks));
     const mantissa = (ticks / Math.pow(10, exponent)) - 1;
-    this.offlineSlider = 10 * exponent + mantissa;
+    this.offlineSlider = 9 * exponent + mantissa;
   },
   data() {
     return {
@@ -64,11 +64,11 @@ Vue.component("options-gameplay-tab", {
       this.automatorUnlocked = Player.automatorUnlocked;
       this.automatorLogSize = options.automatorEvents.maxEntries;
     },
-    // Given the endpoints of 24-60, this produces 500, 600, ... , 900, 1000, 2000, ... , 1e7 ticks
+    // Given the endpoints of 22-54, this produces 500, 600, ... , 900, 1000, 2000, ... , 1e6 ticks
     // It's essentially 10^(x/10) but with the mantissa spaced linearly instead of logarithmically
     parseOfflineSlider(str) {
       const value = parseInt(str, 10);
-      return (1 + value % 10) * Math.pow(10, Math.floor(value / 10));
+      return (1 + value % 9) * Math.pow(10, Math.floor(value / 9));
     }
   },
   template: `
@@ -112,9 +112,9 @@ Vue.component("options-gameplay-tab", {
               class="o-primary-btn--slider__slider"
               v-model="offlineSlider"
               type="range"
-              min="24"
+              min="22"
               step="1"
-              max="60"
+              max="54"
             />
           </div>
           <primary-button-on-off

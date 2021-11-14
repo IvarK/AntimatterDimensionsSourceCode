@@ -26,7 +26,7 @@ Vue.component("reality-machines-header", {
         {{ format(realityMachines, 2) }}
         <span v-if="unlockedIM">+ {{ format(imaginaryMachines, 2, 2) }}i</span>
       </span>
-      {{ "Reality Machine" | pluralize(realityMachines) }}.
+      {{ pluralize("Reality Machine", realityMachines) }}.
       <span v-if="unlockedIM">
         (Cap: {{ format(capRM, 2, 2) }} + {{ format(capIM, 2, 2) }}i)
       </span>

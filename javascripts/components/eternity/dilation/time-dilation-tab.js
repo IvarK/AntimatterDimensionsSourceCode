@@ -58,7 +58,7 @@ Vue.component("time-dilation-tab", {
       <span>
         You have
         <span class="c-dilation-tab__tachyons">{{ format(tachyons, 2, 1) }}</span>
-        Tachyon {{ "Particle" | pluralize(tachyons) }}.
+        {{ pluralize("Tachyon Particle", tachyons) }}.
       </span>
       <dilation-button />
       <span>
@@ -70,11 +70,11 @@ Vue.component("time-dilation-tab", {
       <span>
         Next <span v-if="tachyonGalaxyGain == 2"> pair of </span>
         <span v-else-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
-        Tachyon {{ "Galaxy" | pluralize(tachyonGalaxyGain, "Galaxies") }} at
+        {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
         <span class="c-dilation-tab__galaxy-threshold">{{ format(galaxyThreshold, 2, 1) }}</span>
         Dilated Time, gained total of
         <span class="c-dilation-tab__galaxies">{{ formatInt(galaxies) }}</span>
-        Tachyon {{ "Galaxy" | pluralize(galaxies, "Galaxies") }}
+        {{ pluralize("Tachyon Galaxy", galaxies) }}
       </span>
       <div class="l-dilation-upgrades-grid">
         <div class="l-dilation-upgrades-grid__row">

@@ -1354,3 +1354,45 @@ class PiecewisePath {
   }
 }
 
+// https://stackoverflow.com/a/9201081
+class ExponentialMovingAverage {
+  constructor(alpha = 0.02, maxOutliers = 5, highOutlierThreshold = 3, lowOutlierThreshold = 0.4) {
+    this.alpha = alpha;
+    this.maxOutliers = maxOutliers;
+    this.highOutlierThreshold = highOutlierThreshold;
+    this.lowOutlierThreshold = lowOutlierThreshold;
+    this.outliers = 0;
+    this._average = undefined;
+  }
+
+  get average() {
+    if (this._average === undefined) {
+      return 0;
+    }
+    return this._average;
+  }
+
+  addValue(value) {
+    if (this._average === undefined) {
+      this._average = value;
+    } else {
+      this._average += this.alpha * (value - this._average);
+      
+      const absValue = Math.abs(value);
+      const absAverage = Math.abs(this._average);
+      const highOutlier = absValue > absAverage * this.highOutlierThreshold;
+      const lowOutlier = absValue < absAverage * this.lowOutlierThreshold;
+      const outlier = highOutlier || lowOutlier;
+      
+      if (outlier) {
+        this.outliers++;
+        if (this.outliers >= this.maxOutliers) {
+          this._average = value;
+          this.outliers = 0;
+        }
+      } else {
+        this.outliers = 0;
+      }
+    }
+  }
+}

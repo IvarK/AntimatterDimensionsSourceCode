@@ -31,11 +31,11 @@ Vue.component("eternity-upgrade-button", {
     <button :class="classObject" @click="upgrade.purchase()">
       <description-display :config="upgrade.config" />
       <effect-display br :config="upgrade.config" />
-      <cost-display br
+      <cost-display
+        br
         v-if="!isBought"
         :config="upgrade.config"
-        singular="Eternity Point"
-        plural="Eternity Points"
+        name="Eternity Point"
       />
     </button>`
 });

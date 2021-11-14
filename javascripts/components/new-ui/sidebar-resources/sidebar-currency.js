@@ -31,7 +31,7 @@ Vue.component("sidebar-currency", {
         <template v-if="IM === 0">
           <h2 class="o-sidebar-currency--reality">{{ format(RM, 2) }}</h2>
           <div class="resource-information">
-            <span class="resource-name">Reality {{ "Machine" | pluralize(RM) }}</span>
+            <span class="resource-name">{{ pluralize("Reality Machine", RM) }}</span>
           </div>
         </template>
         <template v-else>
@@ -48,7 +48,7 @@ Vue.component("sidebar-currency", {
           {{ format(EP, 2) }}
         </h2>
         <div class="resource-information">
-          <span class="resource-name">Eternity {{ "Point" | pluralize(EP) }}</span>
+          <span class="resource-name">{{ pluralize("Eternity Point", EP) }}</span>
         </div>
       </template>
       <template v-else-if="showIP">
@@ -56,7 +56,7 @@ Vue.component("sidebar-currency", {
           {{ format(IP, 2) }}
         </h2>
         <div class="resource-information">
-          <span class="resource-name">Infinity {{ "Point" | pluralize(IP) }}</span>
+          <span class="resource-name">{{ pluralize("Infinity Point", IP) }}</span>
         </div>
       </template>
       <template v-else>

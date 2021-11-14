@@ -33,8 +33,13 @@ Vue.component("current-glyph-effects", {
           const glyphName = this.effectConfig.id === "timeshardpow"
             ? GlyphTypes.time
             : GlyphTypes[this.effectConfig.glyphTypes];
+
+          let glyphColor = glyphName.color;
+          if (glyphName.id === "cursed") glyphColor = "#5151ec";
+          if (this.effect.value.capped) glyphColor = "";
+          
           return {
-            color: glyphName.id === "cursed" ? "#5151ec" : glyphName.color,
+            color: glyphColor,
             "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                             -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                             0 0 3px ${glyphName.color}`,
@@ -61,6 +66,7 @@ Vue.component("current-glyph-effects", {
       effects: [],
       hasEffarig: false,
       hasReality: false,
+      logGlyphSacrifice: 0,
     };
   },
   created() {
@@ -87,10 +93,18 @@ Vue.component("current-glyph-effects", {
       return Glyphs.activeList;
     }
   },
+  watch: {
+    logGlyphSacrifice() {
+      this.glyphsChanged();
+    }
+  },
   methods: {
     update() {
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
+
+      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
+        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
     },
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
@@ -112,6 +126,6 @@ Vue.component("current-glyph-effects", {
       <div v-if="noEffects">
         None (equip Glyphs to get their effects)
       </div>
-      <current-effect v-for="effect in effects" :key="effect.id" :effect="effect" />
+      <current-effect v-for="effect in effects" :key="effect.id + logGlyphSacrifice" :effect="effect" />
     </div>`
 });

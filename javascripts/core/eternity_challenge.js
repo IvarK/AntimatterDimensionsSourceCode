@@ -147,9 +147,7 @@ class EternityChallengeState extends GameMechanicState {
 
   start() {
     if (EternityChallenge.isRunning) return false;
-    if (!this.isUnlocked) {
-      if (this.isFullyCompleted || !TimeStudy.eternityChallenge(this.id).purchase()) return false;
-    }
+    if (!this.isUnlocked) return false;
     // If we can Eternity, gain the rewards from doing such - if we can't, reset for no benefit.
     // force also means that no confirmation will be asked or animation played, which is desireable.
     Reset.enterEternityChallenge.request({ force: true });
@@ -196,10 +194,9 @@ class EternityChallengeState extends GameMechanicState {
     this.exit();
     let reason;
     if (this.id === 4) {
-      reason = restriction => `having more than ${formatInt(restriction)} Infinities`;
+      reason = restriction => `having more than ${quantifyInt("Infinity", restriction)}`;
     } else if (this.id === 12) {
-      reason = restriction => `spending more than ${format(restriction, 0, 1)}
-        in-game ${restriction === 1 ? "second" : "seconds"} in it`;
+      reason = restriction => `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
     Modal.message.show(`You failed Eternity Challenge ${this.id} due to
       ${reason(this.config.restriction(this.completions))}; you have now exited it.`);
@@ -291,8 +288,7 @@ const EternityChallenges = {
         Number.MAX_VALUE,
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
-        Perk.autocompleteEC3,
-        Perk.autocompleteEC4
+        Perk.autocompleteEC3
       );
       if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;

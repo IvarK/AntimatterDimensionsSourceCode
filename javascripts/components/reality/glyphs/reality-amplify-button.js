@@ -8,6 +8,15 @@ Vue.component("reality-amplify-button", {
     ratio: 1,
     canAmplify: false,
   }),
+  computed: {
+    tooltip() {
+      if (this.isDisabled) return "You cannot amplify Celestial Realities";
+      if (!this.canAmplify) {
+        return "Store more or complete the Reality faster to amplify";
+      }
+      return null;
+    }
+  },
   methods: {
     update() {
       this.isVisible = Enslaved.isUnlocked;
@@ -24,24 +33,21 @@ Vue.component("reality-amplify-button", {
   template: `
     <div
       v-if="isVisible"
-      class="l-reality-amplify-button"
     >
       <button
-        :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
-        style="width: 25rem"
+        :class="['l-reality-amplify-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
+        style="width: 100%"
         @click="toggleActive"
+        :ach-tooltip="tooltip"
       >
-        <div v-if="isDisabled">
-          You cannot amplify Celestial Realities
-        </div>
-        <div v-else-if="canAmplify">
-          <span v-if="isActive">This Reality will be amplified</span>
-          <span v-else>Amplify this Reality</span>
-          using stored real time, multiplying all rewards by ×{{ formatInt(ratio) }}
+        <div v-if="canAmplify">
+          <span v-if="isActive">Will be amplified:</span>
+          <span v-else>Amplify this Reality:</span>
+          <br>
+          All rewards ×{{ formatInt(ratio) }}
         </div>
         <div v-else>
-          You do not have enough stored real time to amplify. Store more or complete the Reality in a
-          shorter amount of time.
+          Not enough stored real time to amplify.
         </div>
       </button>
     </div>`

@@ -205,6 +205,7 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () => (player.options.offlineProgress
         ? player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2)
         : new Decimal(0)),
+      isDisabled: () => !player.options.offlineProgress,
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
     },
     ipMult: {

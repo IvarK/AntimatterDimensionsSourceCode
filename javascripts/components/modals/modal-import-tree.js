@@ -12,8 +12,8 @@ Vue.component("modal-import-tree", {
   computed: {
     tree() {
       if (!this.inputIsValidTree) return false;
-      const formattedInput = this.input.split("|")[0].split(",");
-      const eternityChallenge = TimeStudy.eternityChallenge(this.input.split("|")[1]);
+      const formattedInput = this.truncatedInput.split("|")[0].split(",");
+      const eternityChallenge = TimeStudy.eternityChallenge(this.truncatedInput.split("|")[1]);
       const hasEternityChallenge = eternityChallenge !== undefined;
       const studies = new Set();
       for (const study of formattedInput) {
@@ -69,14 +69,18 @@ Vue.component("modal-import-tree", {
         hasEternityChallenge
       };
     },
+    truncatedInput() {
+      // If last character is "," remove it
+      return this.input.replace(/,$/u, "");
+    },
     hasInput() {
-      return this.input !== "";
+      return this.truncatedInput !== "";
     },
     inputIsValid() {
       return this.inputIsValidTree || this.inputIsSecret;
     },
     inputIsValidTree() {
-      const formattedInput = this.input.split("|")[0].split(",");
+      const formattedInput = this.truncatedInput.split("|")[0].split(",");
       let isValid = true;
       for (const study of formattedInput) {
         if (TimeStudy(study) === undefined) isValid = false;
@@ -84,15 +88,18 @@ Vue.component("modal-import-tree", {
       return isValid;
     },
     inputIsSecret() {
-      return sha512_256(this.input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
-    }
+      return sha512_256(this.truncatedInput) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
+    },
+    formatWithCommas() {
+      return formatWithCommas;
+    },
   },
   methods: {
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       Modal.hide();
-      importStudyTree(this.input);
+      importStudyTree(this.truncatedInput);
     },
     formatCost(cost) {
       return formatWithCommas(cost);
@@ -156,24 +163,24 @@ Vue.component("modal-import-tree", {
         <template v-else-if="inputIsValidTree">
           <div class="l-modal-import-tree__tree-info-line">
             Total tree cost:
-            {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            {{ quantify("Time Theorem", tree.totalCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.totalST !== 0">
-              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+              and {{ quantify("Space Theorem", tree.totalST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
-            {{ formatCost(tree.missingCost) }} {{ "Time Theorem" | pluralize(tree.missingCost, "Time Theorems") }}
+            {{ quantify("Time Theorem", tree.missingCost, 0, 0, formatWithCommas) }}
             <span v-if="tree.missingST !== 0">
-              and {{ formatCost(tree.missingST) }} {{ "Space Theorem" | pluralize(tree.missingST, "Space Theorems") }}
+              and {{ quantify("Space Theorem", tree.missingST, 0, 0, formatWithCommas) }}
             </span>
           </div>
           <div v-if="tree.firstSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
-            {{ "First split path:" | pluralize(tree.firstSplitPaths.size, "First split paths:") }}
+            {{ pluralize("First split path", tree.firstSplitPaths.size) }}:
             {{ formatPaths(tree.firstSplitPaths) }}
           </div>
           <div v-if="tree.secondSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
-            {{ "Second split path:" | pluralize(tree.secondSplitPaths.size, "Second split paths:") }}
+            {{ pluralize("Second split path", tree.secondSplitPaths.size) }}:
             {{ formatPaths(tree.secondSplitPaths) }}
             </div>
           <div v-if="tree.hasEternityChallenge" class="l-modal-import-tree__tree-info-line">

@@ -22,15 +22,14 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.teresa,
         scalingUpgradeVisible: () => Ra.totalCharges > 0,
-        scalingUpgradeText: () => `You can Charge ${formatInt(Ra.totalCharges)}
-          Infinity ${pluralize("Upgrade", Ra.totalCharges)}.`,
+        scalingUpgradeText: () => `You can Charge ${quantifyInt("Infinity Upgrade", Ra.totalCharges)}.`,
       },
       {
         pet: Ra.pets.effarig,
         scalingUpgradeVisible: () => AlchemyResources.all.filter(r => r.isUnlocked).length > 0,
         scalingUpgradeText: () => {
           const resources = AlchemyResources.all.filter(r => r.isUnlocked).length;
-          return `You have unlocked ${formatInt(resources)} Alchemy ${pluralize("Resource", resources)}.`;
+          return `You have unlocked ${quantifyInt("Alchemy Resource", resources)}.`;
         },
       },
       {
@@ -45,7 +44,7 @@ Vue.component("ra-tab", {
         scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
         scalingUpgradeText: level => {
           const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${formatInt(triadCount)} Triad ${pluralize("Study", triadCount, "Studies")}.`;
+          return `You have unlocked ${quantifyInt("Triad Study", triadCount)}.`;
         },
       }
     ],
@@ -88,17 +87,20 @@ Vue.component("ra-tab", {
   },
   template: `
     <div class="l-ra-celestial-tab">
-      <div class="c-ra-memory-header" v-if="!isRaCapped">
-        Each Memory Chunk generates a base of one Memory per second, which has been increased to
-        {{ format(memoriesPerChunk, 2, 3) }} {{ "Memory" | pluralize(memoriesPerChunk, "Memories") }}
-        per second.
-        <span v-if="memoriesPerChunk > 1">
-          <br>
-          This is being increased due to {{ memoryBoosts }}.
-        </span>
-      </div>
-      <div class="c-ra-memory-header" v-else>
-        All Memories have been returned.
+      <div class="c-ra-memory-header">
+        <celestial-quote-history celestial="ra" />
+        <div v-if="!isRaCapped">
+          Each Memory Chunk generates a base of one Memory per second, which has been increased to
+          {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
+          per second.
+          <span v-if="memoriesPerChunk > 1">
+            <br>
+            This is being increased due to {{ memoryBoosts }}.
+          </span>
+        </div>
+        <div v-else>
+          All Memories have been returned.
+        </div>
       </div>
       <div>
         Mouse-over the icons below the bar to see descriptions of upgrades,

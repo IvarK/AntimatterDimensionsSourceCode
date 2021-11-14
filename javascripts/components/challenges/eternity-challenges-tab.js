@@ -85,7 +85,9 @@ Vue.component("eternity-challenges-tab", {
           this.canBeUnlocked = TimeStudy.eternityChallenge(challenge.id).canBeBought;
         },
         start() {
-          this.challenge.requestStart();
+          if (this.canBeUnlocked) {
+            TimeStudy.eternityChallenge(this.challenge.id).purchase();
+          } else this.challenge.requestStart();
         },
         goalAtCompletions(completions) {
           return format(this.challenge.goalAtCompletions(completions), 2, 1);
@@ -104,11 +106,9 @@ Vue.component("eternity-challenges-tab", {
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
               <div>
-                Completed {{ formatInt(completions) }} {{ "time" | pluralize(completions) }}
+                Completed {{ quantifyInt("time", completions) }}
               </div>
-              <div v-if="!isCompleted">
-                {{ goalDisplay }}
-              </div>
+              {{ goalDisplay }}
             </div>
             <span v-if="showGoalSpan">
               Goal Span: {{ firstGoal }} IP - {{ lastGoal }} IP

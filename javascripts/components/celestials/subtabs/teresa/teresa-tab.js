@@ -56,8 +56,8 @@ Vue.component("teresa-tab", {
     },
     lastMachinesString() {
       return this.lastMachines.lt(new Decimal("1e10000"))
-        ? `${format(this.lastMachines, 2)} Reality Machines`
-        : `${format(this.lastMachines.dividedBy(new Decimal("1e10000")), 2)} Imaginary Machines`;
+        ? `${quantify("Reality Machine", this.lastMachines, 2)}`
+        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(new Decimal("1e10000")), 2)}`;
     }
   },
   methods: {
@@ -101,7 +101,7 @@ Vue.component("teresa-tab", {
     <div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="teresa" />
       <div>
-        You have {{ format(rm, 2, 2) }} {{ "Reality Machine" | pluralize(rm) }}.
+        You have {{ quantify("Reality Machine", rm, 2, 2) }}.
       </div>
       <div class="l-mechanics-container">
         <div class="l-teresa-mechanic-container" v-if="hasReality">
@@ -166,7 +166,7 @@ Vue.component("teresa-tab", {
         <div class="l-rm-container-labels l-teresa-mechanic-container" />
         <div class="c-teresa-shop" v-if="hasPerkShop">
           <span class="o-teresa-pp">
-            You have {{ format(perkPoints, 2, 0) }} {{ "Perk Point" | pluralize(perkPoints) }}.
+            You have {{ quantify("Perk Point", perkPoints, 2, 0) }}.
           </span>
           <perk-shop-upgrade
             v-for="upgrade in upgrades"

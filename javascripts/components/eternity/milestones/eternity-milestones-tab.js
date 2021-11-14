@@ -26,7 +26,7 @@ Vue.component("eternity-milestones-tab", {
   },
   template: `
     <div class="l-eternity-milestone-grid">
-      <div>You have {{ format(eternityCount, 3) }} {{ "Eternity" | pluralize(eternityCount, "Eternities") }}.</div>
+      <div>You have {{ quantify("Eternity", eternityCount, 3) }}.</div>
       <div>
         Offline generation milestones are only active under certain conditions, mouse-over to see these conditions.
       </div>

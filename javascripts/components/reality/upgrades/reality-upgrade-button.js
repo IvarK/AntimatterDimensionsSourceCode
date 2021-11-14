@@ -1,11 +1,12 @@
 import "../../common/hint-text.js";
-import "../../common/effect-display.js";
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("reality-upgrade-button", {
   components: {
     DescriptionDisplay,
+    EffectDisplay,
     CostDisplay
   },
   props: {
@@ -80,7 +81,7 @@ Vue.component("reality-upgrade-button", {
           class="c-reality-upgrade-btn__requirement"
         />
         <template v-else>
-          <effect-display :config="config" />
+          <EffectDisplay :config="config"/>
           <CostDisplay
             v-if="!isBought"
             :config="config"

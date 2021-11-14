@@ -1,7 +1,10 @@
 import "../../common/hint-text.js";
-import "../../common/effect-display.js";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("normal-achievement", {
+  components: {
+    EffectDisplay
+  },
   props: {
     /** @type AchievementState */
     achievement: {
@@ -95,7 +98,11 @@ Vue.component("normal-achievement", {
           </div>
           <div v-if="config.reward" class="o-achievement__tooltip__reward">
             Reward: {{ config.reward }}
-            <effect-display br v-if="config.formatEffect" :config="config" />
+            <EffectDisplay
+              br
+              v-if="config.formatEffect"
+              :config="config"
+            />
           </div>
         </template>
       </div>

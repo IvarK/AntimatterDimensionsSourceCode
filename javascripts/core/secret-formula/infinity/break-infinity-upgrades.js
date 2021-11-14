@@ -21,7 +21,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
             : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`;
         }),
       formatCost: value => format(value, 2, 0),
-      noTitle: !config.title
+      noLabel: !config.label
     };
   }
 
@@ -106,7 +106,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         ? `After EC11: ${formatX(Player.tickSpeedMultDecrease, 2, 2)}`
         : ""
       ),
-      title: false,
+      label: false,
     }),
     dimCostMult: rebuyable({
       id: 1,
@@ -118,7 +118,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         ? `After EC6: ${formatX(Player.dimensionMultDecrease, 2, 2)}`
         : ""
       ),
-      title: false,
+      label: false,
     }),
     ipGen: rebuyable({
       id: 2,
@@ -136,7 +136,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       },
       isDisabled: effect => effect.eq(0),
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
-      title: true
+      label: true
     })
   };
 }());

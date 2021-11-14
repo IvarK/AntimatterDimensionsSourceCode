@@ -1,10 +1,11 @@
-import "../../common/effect-display.js";
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("eternity-upgrade-button", {
   components: {
     DescriptionDisplay,
+    EffectDisplay,
     CostDisplay
   },
   props: {
@@ -36,7 +37,10 @@ Vue.component("eternity-upgrade-button", {
   template: `
     <button :class="classObject" @click="upgrade.purchase()">
       <DescriptionDisplay :config="upgrade.config"/>
-      <effect-display br :config="upgrade.config" />
+      <EffectDisplay
+        br
+        :config="upgrade.config"
+      />
       <CostDisplay
         br
         v-if="!isBought"

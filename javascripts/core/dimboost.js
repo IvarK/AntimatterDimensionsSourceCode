@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 class DimBoostRequirement {
   constructor(tier, amount) {
     this.tier = tier;

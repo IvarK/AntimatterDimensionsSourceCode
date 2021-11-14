@@ -1,4 +1,5 @@
 import { SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 export function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";

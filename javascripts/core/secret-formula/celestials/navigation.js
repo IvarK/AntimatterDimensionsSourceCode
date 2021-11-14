@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 export function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);

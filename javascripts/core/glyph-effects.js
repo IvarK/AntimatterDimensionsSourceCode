@@ -1,4 +1,5 @@
 import { GameDatabase } from "./secret-formula/game-database.js";
+import { DC } from "./constants.js";
 
 // There is a little too much stuff about glyph effects to put in constants.
 

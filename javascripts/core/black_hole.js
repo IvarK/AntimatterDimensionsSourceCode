@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 class BlackHoleUpgradeState {
   constructor(config) {
     const { getAmount, setAmount, calculateValue, initialCost, costMult } = config;

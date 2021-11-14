@@ -1,4 +1,5 @@
 import { GameMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 export function startEternityChallenge() {
   initializeChallengeCompletions();

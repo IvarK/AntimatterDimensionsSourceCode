@@ -1,4 +1,5 @@
 import { CelestialQuotes } from "../quotes.js";
+import { DC } from "../../constants.js";
 
 export const Laitela = {
   displayName: "Lai'tela",

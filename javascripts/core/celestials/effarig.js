@@ -1,6 +1,7 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
 import { GameMechanicState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
+import { DC } from "../constants.js";
 
 export const EFFARIG_STAGES = {
   INFINITY: 1,

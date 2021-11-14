@@ -1,6 +1,7 @@
 import "./perk-shop-upgrade.js";
 import "../../celestial-quote-history.js";
 import "../../../reality/glyphs/glyph-set-preview.js";
+import { DC } from "../../../../core/constants.js";
 
 Vue.component("teresa-tab", {
   data() {

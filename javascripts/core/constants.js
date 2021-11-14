@@ -6,7 +6,7 @@ window.PRESTIGE_EVENT = {
   REALITY: 4,
 };
 
-window.DC = {
+export const DC = {
   // Naming Scheme:
   // D[0-9]: Decimal mantissa variable
   // _: decimal (.) part of the mantissa
@@ -181,7 +181,7 @@ function deepFreeze(obj) {
   return Object.freeze(obj);
 }
 
-deepFreeze(window.DC);
+deepFreeze(DC);
 
 window.AUTOBUYER_MODE = {
   BUY_SINGLE: 1,

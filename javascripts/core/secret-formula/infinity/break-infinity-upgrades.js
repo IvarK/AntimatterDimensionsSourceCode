@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {

@@ -1,5 +1,6 @@
 import { GlyphTypes } from "./glyph-effects.js";
 import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
+import { DC } from "./constants.js";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const

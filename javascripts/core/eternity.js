@@ -1,4 +1,5 @@
 import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);

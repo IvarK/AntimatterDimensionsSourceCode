@@ -1,3 +1,6 @@
+import { DC } from "../../../core/constants.js";
+
+
 Vue.component("antimatter-dim-tab-progress-bar", {
   data() {
     return {

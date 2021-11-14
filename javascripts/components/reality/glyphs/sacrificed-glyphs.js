@@ -1,3 +1,6 @@
+import { DC } from "../../../core/constants.js";
+
+
 Vue.component("sacrificed-glyphs", {
   components: {
     "type-sacrifice": {

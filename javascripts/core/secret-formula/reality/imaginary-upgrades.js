@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {

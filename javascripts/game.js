@@ -1,5 +1,6 @@
 import { isLocalEnvironment } from "./core/devtools.js";
 import { playFabLogin } from "./core/playfab.js";
+import { DC } from "./core/constants.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");

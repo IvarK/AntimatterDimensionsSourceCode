@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 /**
  * Object that manages the selection of glyphs offered to the player
  */

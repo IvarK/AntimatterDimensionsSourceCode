@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 /* eslint-disable no-console */
 // Disabling no-console here seems
 // reasonable, since these are the devtools after all

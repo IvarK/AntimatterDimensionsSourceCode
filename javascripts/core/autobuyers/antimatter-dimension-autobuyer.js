@@ -1,4 +1,5 @@
 import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { DC } from "../constants.js";
 
 class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   constructor(tier) {

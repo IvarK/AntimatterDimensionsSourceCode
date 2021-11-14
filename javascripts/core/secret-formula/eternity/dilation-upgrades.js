@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.eternity.dilation = (function() {
   function rebuyableCost(initialCost, increment, id) {

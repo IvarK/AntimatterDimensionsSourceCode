@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 export const PERK_FAMILY = {
   ANTIMATTER: "ANTIMATTER",

@@ -1,3 +1,5 @@
+import { DC } from "../../core/constants.js";
+
 Vue.component("statistics-tab", {
   data() {
     return {

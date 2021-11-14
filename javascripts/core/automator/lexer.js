@@ -1,6 +1,8 @@
 // Note: chevrotain doesn't play well with unicode regex
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
+import { DC } from "../constants.js";
+
 
 export const AutomatorLexer = (() => {
   const createToken = chevrotain.createToken;

@@ -1,4 +1,5 @@
 import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {

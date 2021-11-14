@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 export function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
@@ -365,7 +366,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Effarig's Reality";
             const ep = Effarig.isRunning ? Currency.eternityPoints.value : 0;
-            const goal = new Decimal("1e4000");
+            const goal = DC.E4000;
             return [
               "Effarig's Reality",
               `Reach ${format(ep, 2)} / ${format(goal, 2)}`,
@@ -532,7 +533,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "The Enslaved Ones' Reality";
             const ep = Enslaved.isRunning ? Currency.eternityPoints.value : 0;
-            const goal = new Decimal("1e4000");
+            const goal = DC.E4000;
             return [
               "The Enslaved Ones' Reality",
               `Reach ${format(ep, 2)} / ${format(goal, 2)}`,
@@ -1313,7 +1314,7 @@ GameDatabase.celestials.navigation = (function() {
             ];
 
             const antimatter = Currency.antimatter.value;
-            const amGoal = Decimal.pow10(1.5e12);
+            const amGoal = DC.E1_5E12;
             return [
               "Lai'tela's Reality",
               `${format(antimatter)} / ${format(amGoal)}`

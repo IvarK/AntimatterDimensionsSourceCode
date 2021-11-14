@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 /**
  * Object that manages the selection of glyphs offered to the player
  */
@@ -284,7 +286,7 @@ function giveRealityRewards(realityProps) {
       // Encode iM values into the RM variable as e10000 * iM in order to only require one prop
       let machineRecord;
       if (Currency.imaginaryMachines.value === 0) machineRecord = Currency.realityMachines.value;
-      else machineRecord = new Decimal("1e10000").times(Currency.imaginaryMachines.value);
+      else machineRecord = DC.E10000.times(Currency.imaginaryMachines.value);
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
@@ -521,7 +523,7 @@ export function finishProcessReality(realityProps) {
   recalculateAllGlyphs();
   Glyphs.updateMaxGlyphCount(true);
 
-  player.sacrificed = new Decimal(0);
+  player.sacrificed = DC.D0;
 
   lockAchievementsOnReality();
 
@@ -569,7 +571,7 @@ export function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) Player.resetRequirements("reality");
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  player.records.thisReality.maxReplicanti = new Decimal(0);
+  player.records.thisReality.maxReplicanti = DC.D0;
   Currency.timeTheorems.reset();
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
@@ -577,7 +579,7 @@ export function finishProcessReality(realityProps) {
   player.dilation.active = false;
   Currency.tachyonParticles.reset();
   Currency.dilatedTime.reset();
-  player.dilation.nextThreshold = new Decimal(1000);
+  player.dilation.nextThreshold = DC.E3;
   player.dilation.baseTachyonGalaxies = 0;
   player.dilation.totalTachyonGalaxies = 0;
   player.dilation.upgrades.clear();
@@ -586,10 +588,10 @@ export function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.records.thisInfinity.maxAM = new Decimal(0);
-  player.records.thisEternity.maxAM = new Decimal(0);
-  player.records.thisReality.maxDT = new Decimal(0);
-  player.dilation.lastEP = new Decimal(-1);
+  player.records.thisInfinity.maxAM = DC.D0;
+  player.records.thisEternity.maxAM = DC.D0;
+  player.records.thisReality.maxDT = DC.D0;
+  player.dilation.lastEP = DC.DM1;
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
@@ -605,13 +607,13 @@ export function finishProcessReality(realityProps) {
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();
-  player.records.thisInfinity.bestIPmin = new Decimal(0);
-  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
-  player.records.thisEternity.bestEPmin = new Decimal(0);
-  player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
-  player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
-  player.records.bestEternity.bestEPminReality = new Decimal(0);
-  player.records.thisReality.bestEternitiesPerMs = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = DC.D0;
+  player.records.bestInfinity.bestIPminEternity = DC.D0;
+  player.records.thisEternity.bestEPmin = DC.D0;
+  player.records.thisEternity.bestInfinitiesPerMs = DC.D0;
+  player.records.thisEternity.bestIPMsWithoutMaxAll = DC.D0;
+  player.records.bestEternity.bestEPminReality = DC.D0;
+  player.records.thisReality.bestEternitiesPerMs = DC.D0;
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();

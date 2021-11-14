@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {
@@ -66,7 +67,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: () => Decimal.clampMin(50 / Time.worstChallenge.totalMinutes, 1),
       formatEffect: value => formatX(value, 2, 2),
       hasCap: true,
-      cap: new Decimal(3e4)
+      cap: DC.D3E4
     },
     infinitiedGen: {
       id: "infinitiedGeneration",
@@ -75,7 +76,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";
-        let infinities = new Decimal(1);
+        let infinities = DC.D1;
         infinities = infinities.timesEffectsOf(
           RealityUpgrade(5),
           RealityUpgrade(7)

@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 /* eslint-disable no-console */
 // Disabling no-console here seems
 // reasonable, since these are the devtools after all
@@ -149,8 +151,8 @@ dev.refundDilStudies = function() {
 };
 
 dev.resetDilation = function() {
-  player.dilation.dilatedTime = new Decimal(0);
-  player.dilation.tachyonParticles = new Decimal(0);
+  player.dilation.dilatedTime = DC.D0;
+  player.dilation.tachyonParticles = DC.D0;
   player.dilation.rebuyables[1] = 0;
   player.dilation.rebuyables[2] = 0;
   player.dilation.rebuyables[3] = 0;
@@ -319,17 +321,17 @@ dev.printResourceTotals = function() {
   console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
   console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
 
-  let ADmults = new Decimal(1);
+  let ADmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
     ADmults = ADmults.times(AntimatterDimension(i).multiplier);
   }
   console.log(`AD mults: e${ADmults.log10().toPrecision(3)}`);
-  let IDmults = new Decimal(1);
+  let IDmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
     IDmults = IDmults.times(InfinityDimension(i).multiplier);
   }
   console.log(`ID mults: e${IDmults.log10().toPrecision(3)}`);
-  let TDmults = new Decimal(1);
+  let TDmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
     TDmults = TDmults.times(TimeDimension(i).multiplier);
   }
@@ -358,7 +360,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const situationLists = [
     [
       function() {
-        player.infinitied = new Decimal(1e12);
+        player.infinitied = DC.E12;
         player.celestials.effarig.unlockBits = 64;
       }
     ],
@@ -466,8 +468,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const runSituation = function(id) {
     Replicanti.galaxies.isPlayerHoldingR = false;
     GameStorage.loadPlayerObject(Player.defaultStart);
-    player.infinitied = new Decimal(1);
-    player.infinityPoints = new Decimal(1e150);
+    player.infinitied = DC.D1;
+    player.infinityPoints = DC.E150;
     Replicanti.unlock();
     player.replicanti.chance = 1;
     for (let i = 0; i < situationLists.length; i++) {
@@ -485,8 +487,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       }
     }
     doReplicantiTicks();
-    player.antimatter = new Decimal("1e309");
-    player.records.thisInfinity.maxAM = new Decimal("1e309");
+    player.antimatter = DC.E309;
+    player.records.thisInfinity.maxAM = DC.E309;
     bigCrunchReset();
     doReplicantiTicks();
   };

@@ -1,6 +1,7 @@
 import "./perk-shop-upgrade.js";
 import "../../celestial-quote-history.js";
 import "../../../reality/glyphs/glyph-set-preview.js";
+import { DC } from "../../../../core/constants.js";
 
 Vue.component("teresa-tab", {
   data() {
@@ -57,9 +58,9 @@ Vue.component("teresa-tab", {
       return GameDatabase.celestials.descriptions[0].description();
     },
     lastMachinesString() {
-      return this.lastMachines.lt(new Decimal("1e10000"))
+      return this.lastMachines.lt(DC.E10000)
         ? `${quantify("Reality Machine", this.lastMachines, 2)}`
-        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(new Decimal("1e10000")), 2)}`;
+        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(DC.E10000), 2)}`;
     }
   },
   methods: {

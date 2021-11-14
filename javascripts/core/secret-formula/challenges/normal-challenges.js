@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 // I tried to make it relatively simple to add more locks; the idea is that you give it a value here
 // and then it's all handled in the backend
@@ -17,7 +18,7 @@ GameDatabase.challenges.normal = [
     },
     name: "1st Antimatter Dimension Autobuyer",
     reward: "Upgradeable 1st Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 2,
@@ -28,7 +29,7 @@ GameDatabase.challenges.normal = [
       `gradually coming back over ${formatInt(3)} minutes.`,
     name: "2nd Antimatter Dimension Autobuyer",
     reward: "Upgradeable 2nd Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 3,
@@ -39,7 +40,7 @@ GameDatabase.challenges.normal = [
       bonus that resets after Dimension Boosts and Antimatter Galaxies.`,
     name: "3rd Antimatter Dimension",
     reward: "Upgradeable 3rd Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 4,
@@ -49,7 +50,7 @@ GameDatabase.challenges.normal = [
       "like a sacrifice without the boost.",
     name: "4th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 4th Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 5,
@@ -59,7 +60,7 @@ GameDatabase.challenges.normal = [
       () => `The Tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.1245, 0, 3)}.`,
     name: "5th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 5th Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 6,
@@ -69,7 +70,7 @@ GameDatabase.challenges.normal = [
       "instead of antimatter. Antimatter Dimension prices are modified.",
     name: "6th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 6th Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 7,
@@ -80,7 +81,7 @@ GameDatabase.challenges.normal = [
       by ${formatX(0.2, 1, 1)} per Dimension Boost, up to a maximum of ${formatX(2)}.`,
     name: "7th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 7th Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 8,
@@ -90,7 +91,7 @@ GameDatabase.challenges.normal = [
       "Dimensional Sacrifice is significantly stronger and resets antimatter and all Antimatter Dimensions.",
     name: "8th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 8th Antimatter Dimension Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 9,
@@ -100,7 +101,7 @@ GameDatabase.challenges.normal = [
       "everything else of equal cost will increase to its next cost step.",
     name: "Tickspeed Autobuyer",
     reward: "Upgradeable Tickspeed Autobuyer",
-    lockedAt: new Decimal(0),
+    lockedAt: DC.D0,
   },
   {
     id: 10,
@@ -110,7 +111,7 @@ GameDatabase.challenges.normal = [
       "and Antimatter Galaxy costs modified."),
     name: "Automated Dimension Boosts",
     reward: "Dimension Boosts Autobuyer",
-    lockedAt: new Decimal(16),
+    lockedAt: DC.D16,
   },
   {
     id: 11,
@@ -120,7 +121,7 @@ GameDatabase.challenges.normal = [
       "Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus."),
     name: "Automated Antimatter Galaxies",
     reward: "Antimatter Galaxies Autobuyer",
-    lockedAt: new Decimal(16),
+    lockedAt: DC.D16,
   },
   {
     id: 12,
@@ -131,6 +132,6 @@ GameDatabase.challenges.normal = [
       "are made stronger to compensate."),
     name: "Automated Big Crunches",
     reward: "Big Crunches Autobuyer",
-    lockedAt: new Decimal(16),
+    lockedAt: DC.D16,
   }
 ];

@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.eternity.upgrades = {
   idMultEP: {
@@ -31,8 +32,8 @@ GameDatabase.eternity.upgrades = {
     id: 3,
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
-    effect: () => Decimal.pow(2, 30 / Time.infinityChallengeSum.totalSeconds),
-    cap: Decimal.pow(2, 30 / 0.61),
+    effect: () => DC.D2.pow(30 / Time.infinityChallengeSum.totalSeconds),
+    cap: DC.D2P30D0_61,
     formatEffect: value => formatX(value, 2, 1)
   },
   tdMultAchs: {

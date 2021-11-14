@@ -1,6 +1,8 @@
+import { DC } from "./constants.js";
+
 export function getTickSpeedMultiplier() {
-  if (InfinityChallenge(3).isRunning) return new Decimal(1);
-  if (Ra.isRunning) return new Decimal(1 / 1.1245);
+  if (InfinityChallenge(3).isRunning) return DC.D1;
+  if (Ra.isRunning) return DC.C1D1_1245;
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;
   replicantiGalaxies *= (1 + Effects.sum(
@@ -38,7 +40,7 @@ export function getTickSpeedMultiplier() {
       Achievement(175),
       InfinityChallenge(5).reward
     );
-    return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
+    return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
   if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;
@@ -56,7 +58,7 @@ export function getTickSpeedMultiplier() {
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectValue;
-  const perGalaxy = new Decimal(0.965);
+  const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
 
@@ -162,13 +164,12 @@ export const Tickspeed = {
     let boughtTickspeed;
     if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
     else boughtTickspeed = player.totalTickBought;
-    return new Decimal(1000)
-      .timesEffectsOf(
-        Achievement(36),
-        Achievement(45),
-        Achievement(66),
-        Achievement(83)
-      )
+    return DC.E3.timesEffectsOf(
+      Achievement(36),
+      Achievement(45),
+      Achievement(66),
+      Achievement(83)
+    )
       .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
   },
 

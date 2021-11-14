@@ -1,3 +1,5 @@
+import { DC } from "../../constants.js";
+
 /**
  * Constants for easily adjusting values
  */
@@ -52,7 +54,7 @@ export class MatterDimensionState {
   }
 
   get commonDarkMult() {
-    return new Decimal(1).timesEffectsOf(
+    return DC.D1.timesEffectsOf(
       SingularityMilestone.darkFromTesseracts,
       SingularityMilestone.darkFromGlyphLevel,
       SingularityMilestone.darkFromTheorems,

@@ -1,4 +1,5 @@
 import { GameDatabase } from "./game-database.js";
+import { DC } from "../constants.js";
 
 // A = always there
 // L = locked
@@ -2536,7 +2537,7 @@ GameDatabase.news = [
   {
     id: "l50",
     text: "You can probably stop farming for eternities now...",
-    get unlocked() { return Currency.eternities.gt(2000000); }
+    get unlocked() { return Currency.eternities.gt(DC.D2E6); }
   },
   {
     id: "l51",

@@ -1,3 +1,6 @@
+import { DC } from "../../../core/constants.js";
+
+
 Vue.component("sacrificed-glyphs", {
   components: {
     "type-sacrifice": {
@@ -101,9 +104,9 @@ Vue.component("sacrificed-glyphs", {
   computed: {
     types: () => GLYPH_TYPES.filter(type => type !== "cursed" && type !== "companion"),
     lastMachines() {
-      return this.lastMachinesTeresa.lt(new Decimal("1e10000"))
+      return this.lastMachinesTeresa.lt(DC.E10000)
         ? `${quantify("Reality Machine", this.lastMachinesTeresa, 2)}`
-        : `${quantify("Imaginary Machine", this.lastMachinesTeresa.dividedBy(new Decimal("1e10000")), 2)}`;
+        : `${quantify("Imaginary Machine", this.lastMachinesTeresa.dividedBy(DC.E10000), 2)}`;
     }
   },
   methods: {

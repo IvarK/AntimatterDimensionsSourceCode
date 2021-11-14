@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 /* eslint-disable no-use-before-define */
 /* eslint-disable max-params */
 
@@ -72,7 +74,7 @@ window.bulkBuyBinarySearch = function bulkBuyBinarySearch(money, costInfo, alrea
   if (!isCumulative) {
     return { quantity: canBuy, purchasePrice: baseCost };
   }
-  let otherCost = new Decimal(0);
+  let otherCost = DC.D0;
   // Account for costs leading up to that purchase; we are basically adding things
   // up until they are insignificant
   let count = 0;
@@ -324,7 +326,7 @@ window.ExponentialCostScaling = class ExponentialCostScaling {
     const logCost = excess > 0
       ? currentPurchases * logMult + logBase + 0.5 * excess * (excess + 1) * this._logCostScale
       : currentPurchases * logMult + logBase;
-    return Decimal.pow(10, logCost);
+    return DC.E1.pow(logCost);
   }
 
   /**

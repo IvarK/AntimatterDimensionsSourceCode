@@ -1,6 +1,7 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
 import { GameMechanicState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
+import { DC } from "../constants.js";
 
 export const EFFARIG_STAGES = {
   INFINITY: 1,
@@ -38,7 +39,7 @@ export const Effarig = {
     return EFFARIG_STAGES.COMPLETED;
   },
   get eternityCap() {
-    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
+    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? DC.E50 : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {

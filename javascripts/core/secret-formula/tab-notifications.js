@@ -1,4 +1,5 @@
 import { GameDatabase } from "./game-database.js";
+import { DC } from "../constants.js";
 
 GameDatabase.tabNotifications = {
   firstInfinity: {
@@ -60,7 +61,7 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && Currency.infinityPoints.gte(1e140),
+      !PlayerProgress.eternityUnlocked() && Currency.infinityPoints.gte(DC.E140),
     events: [GAME_EVENT.BIG_CRUNCH_AFTER]
   },
   firstEternity: {

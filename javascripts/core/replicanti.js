@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
 // OoM past the cap (default is 308.25 (log10 of 1.8e308), 1.2, Number.MAX_VALUE)
 export const ReplicantiGrowth = {
@@ -33,7 +35,7 @@ export function replicantiGalaxy() {
     if (galaxyGain < 1) return;
     Replicanti.amount = Decimal.pow10(logReplicanti - LOG10_MAX_VALUE * galaxyGain);
   } else {
-    Replicanti.amount = new Decimal(1);
+    Replicanti.amount = DC.D1;
   }
   addReplicantiGalaxies(galaxyGain);
 }
@@ -43,7 +45,7 @@ export function replicantiGalaxy() {
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
   // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
-  const uncappedAmount = Decimal.pow(10, log10GainFactor.plus(Replicanti.amount.log10()));
+  const uncappedAmount = DC.E1.pow(log10GainFactor.plus(Replicanti.amount.log10()));
   // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
   if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
     if (isAutobuyerActive) {
@@ -342,13 +344,13 @@ export const ReplicantiUpgrade = {
     get costIncrease() {
       const galaxies = this.value;
       let increase = EternityChallenge(6).isRunning
-        ? Decimal.pow(1e2, galaxies).times(1e2)
-        : Decimal.pow(1e5, galaxies).times(1e25);
+        ? DC.E2.pow(galaxies).times(DC.E2)
+        : DC.E5.pow(galaxies).times(DC.E25);
       if (galaxies >= this.distantRGStart) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - this.distantRGStart + 5));
+        increase = increase.times(DC.E50.pow(galaxies - this.distantRGStart + 5));
       }
       if (galaxies >= this.remoteRGStart) {
-        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - this.remoteRGStart + 1, 2)));
+        increase = increase.times(DC.E5.pow(Math.pow(galaxies - this.remoteRGStart + 1, 2)));
       }
       return increase;
     }
@@ -408,24 +410,24 @@ export const Replicanti = {
     const unlocked = force ? false : EternityMilestone.unlockReplicanti.isReached;
     player.replicanti = {
       unl: unlocked,
-      amount: unlocked ? new Decimal(1) : new Decimal(0),
+      amount: unlocked ? DC.D1 : DC.D0,
       timer: 0,
       chance: 0.01,
-      chanceCost: new Decimal(1e150),
+      chanceCost: DC.E150,
       interval: 1000,
-      intervalCost: new Decimal(1e140),
+      intervalCost: DC.E140,
       boughtGalaxyCap: 0,
       galaxies: 0,
-      galCost: new Decimal(1e170),
+      galCost: DC.E170,
     };
   },
   unlock(freeUnlock = false) {
     if (player.replicanti.unl) return;
-    if (freeUnlock || Currency.infinityPoints.gte(1e140)) {
-      if (!freeUnlock) Currency.infinityPoints.subtract(1e140);
+    if (freeUnlock || Currency.infinityPoints.gte(DC.E140)) {
+      if (!freeUnlock) Currency.infinityPoints.subtract(DC.E140);
       player.replicanti.unl = true;
       player.replicanti.timer = 0;
-      Replicanti.amount = new Decimal(1);
+      Replicanti.amount = DC.D1;
     }
   },
   get amount() {

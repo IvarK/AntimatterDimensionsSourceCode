@@ -1,11 +1,12 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.challenges.eternity = [
   {
     id: 1,
     description: "Time Dimensions are disabled.",
-    goal: new Decimal("1e1800"),
-    goalIncrease: new Decimal("1e200"),
+    goal: DC.E1800,
+    goalIncrease: DC.E200,
     reward: {
       description: "Time Dimension multiplier based on time spent this Eternity",
       effect: completions =>
@@ -16,20 +17,20 @@ GameDatabase.challenges.eternity = [
   {
     id: 2,
     description: "Infinity Dimensions are disabled.",
-    goal: new Decimal("1e975"),
-    goalIncrease: new Decimal("1e175"),
+    goal: DC.E975,
+    goalIncrease: DC.E175,
     reward: {
       description: "1st Infinity Dimension multiplier based on Infinity Power",
       effect: completions => Currency.infinityPower.value.pow(1.5 / (700 - completions * 100)).clampMin(1),
-      cap: new Decimal("1e100"),
+      cap: DC.E100,
       formatEffect: value => formatX(value, 2, 1)
     }
   },
   {
     id: 3,
     description: "Antimatter Dimensions 5-8 don't produce anything. Dimensional Sacrifice is disabled.",
-    goal: new Decimal("1e600"),
-    goalIncrease: new Decimal("1e75"),
+    goal: DC.E600,
+    goalIncrease: DC.E75,
     reward: {
       description: () => `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions`,
       effect: completions => completions * 0.72,
@@ -40,8 +41,8 @@ GameDatabase.challenges.eternity = [
     id: 4,
     description: `All Infinity multipliers and generators are disabled. The goal must be reached within a certain
       number of Infinities or else you will fail the Challenge.`,
-    goal: new Decimal("1e2750"),
-    goalIncrease: new Decimal("1e550"),
+    goal: DC.E2750,
+    goalIncrease: DC.E550,
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => Currency.infinities.lte(restriction),
     formatRestriction: restriction => (restriction === 0
@@ -51,7 +52,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
       effect: completions => Currency.infinityPoints.value.pow(0.003 + completions * 0.002),
-      cap: new Decimal("1e200"),
+      cap: DC.E200,
       formatEffect: value => formatX(value, 2, 1)
     }
   },
@@ -59,8 +60,8 @@ GameDatabase.challenges.eternity = [
     id: 5,
     description: () => `Antimatter Galaxy cost increase scaling starts immediately (normally at ${formatInt(100)}
       Galaxies). Dimension Boost costs scaling is massively increased.`,
-    goal: new Decimal("1e750"),
-    goalIncrease: new Decimal("1e400"),
+    goal: DC.E750,
+    goalIncrease: DC.E400,
     reward: {
       description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
@@ -80,8 +81,8 @@ GameDatabase.challenges.eternity = [
       return "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
               " Galaxies is massively reduced.";
     },
-    goal: new Decimal("1e850"),
-    goalIncrease: new Decimal("1e250"),
+    goal: DC.E850,
+    goalIncrease: DC.E250,
     reward: {
       description: "Further reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
@@ -96,8 +97,8 @@ GameDatabase.challenges.eternity = [
     description:
       "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
-    goal: new Decimal("1e2000"),
-    goalIncrease: new Decimal("1e530"),
+    goal: DC.E2000,
+    goalIncrease: DC.E530,
     effect: () => TimeDimension(1).productionPerSecond,
     reward: {
       description: "1st Time Dimension produces 8th Infinity Dimensions",
@@ -109,8 +110,8 @@ GameDatabase.challenges.eternity = [
     id: 8,
     description: () => `You can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
       upgrades ${formatInt(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
-    goal: new Decimal("1e1300"),
-    goalIncrease: new Decimal("1e900"),
+    goal: DC.E1300,
+    goalIncrease: DC.E900,
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
       effect: completions => {
@@ -125,12 +126,12 @@ GameDatabase.challenges.eternity = [
     description:
       `You can't buy Tickspeed upgrades. Infinity Power instead multiplies
       Time Dimensions with greatly reduced effect.`,
-    goal: new Decimal("1e1750"),
-    goalIncrease: new Decimal("1e250"),
+    goal: DC.E1750,
+    goalIncrease: DC.E250,
     reward: {
       description: "Infinity Dimension multiplier based on Time Shards",
       effect: completions => Currency.timeShards.value.pow(completions * 0.1).clampMin(1),
-      cap: new Decimal("1e400"),
+      cap: DC.E400,
       formatEffect: value => formatX(value, 2, 1)
     }
   },
@@ -142,8 +143,8 @@ GameDatabase.challenges.eternity = [
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
-    goal: new Decimal("1e3000"),
-    goalIncrease: new Decimal("1e300"),
+    goal: DC.E3000,
+    goalIncrease: DC.E300,
     effect: () => Decimal.pow(Currency.infinitiesTotal.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
       description: "Time Dimension multiplier based on Infinities",
@@ -159,8 +160,8 @@ GameDatabase.challenges.eternity = [
     description:
       `All dimension multipliers and powers are disabled except for the multipliers from
       Infinity Power and Dimension Boosts (to Antimatter Dimensions).`,
-    goal: new Decimal("1e500"),
-    goalIncrease: new Decimal("1e200"),
+    goal: DC.E500,
+    goalIncrease: DC.E200,
     reward: {
       description: "Further reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
@@ -177,8 +178,8 @@ GameDatabase.challenges.eternity = [
         within a certain amount of time or you will fail the Challenge.`
       : `The game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),
-    goal: new Decimal("1e110000"),
-    goalIncrease: new Decimal("1e12000"),
+    goal: DC.E110000,
+    goalIncrease: DC.E12000,
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
     formatRestriction: restriction => `in ${quantify("in-game second", restriction, 0, 1)} or less.`,

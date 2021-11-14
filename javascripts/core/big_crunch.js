@@ -1,4 +1,5 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 export function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
@@ -53,7 +54,7 @@ export function bigCrunchReset() {
 function bigCrunchUpdateStatistics() {
   player.records.bestInfinity.bestIPminEternity =
     player.records.bestInfinity.bestIPminEternity.clampMin(player.records.thisInfinity.bestIPmin);
-  player.records.thisInfinity.bestIPmin = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = DC.D0;
 
   player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
     gainedInfinities().round().dividedBy(Math.clampMin(33, player.records.thisInfinity.realTime))
@@ -127,11 +128,11 @@ function bigCrunchCheckUnlocks() {
 export function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = DC.D0;
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
-  if (player.replicanti.unl) Replicanti.amount = new Decimal(1);
+  if (player.replicanti.unl) Replicanti.amount = DC.D1;
   player.replicanti.galaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
@@ -154,7 +155,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
 export class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
-    if (Array.isArray(requirement) || typeof requirement === 'function') {
+    if (Array.isArray(requirement) || typeof requirement === "function") {
       this._requirements = requirement;
     } else if (requirement === undefined) {
       this._requirements = [];
@@ -175,7 +176,7 @@ export class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return typeof this._requirements === 'function' ? this._requirements()
+    return typeof this._requirements === "function" ? this._requirements()
       : this._requirements.every(x => x.isBought);
   }
 
@@ -224,9 +225,9 @@ export class InfinityUpgrade extends SetPurchasableMechanicState {
 
 export function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
-    return new Decimal(1);
+    return DC.D1;
   }
-  let ipMult = new Decimal(1)
+  let ipMult = DC.D1
     .times(ShopPurchase.IPPurchases.currentMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -346,7 +347,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   purchase(amount = 1) {
     if (!this.canBeBought) return;
     if (!TimeStudy(181).isBought) {
-      Autobuyer.bigCrunch.bumpAmount(Decimal.pow(2, amount));
+      Autobuyer.bigCrunch.bumpAmount(DC.D2.pow(amount));
     }
     Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
     player.infMult += amount;
@@ -451,5 +452,5 @@ export function preProductionGenerateIP(diff) {
     const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
     Currency.infinityPoints.add(gainedThisTick);
   }
-  Currency.infinityPoints.add(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
+  Currency.infinityPoints.add(BreakInfinityUpgrade.ipGen.effectOrDefault(DC.D0).times(diff / 60000));
 }

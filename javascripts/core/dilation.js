@@ -1,4 +1,5 @@
 import { SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 export function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";
@@ -74,7 +75,7 @@ export function buyDilationUpgrade(id, bulk = 1) {
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
       if (!Perk.bypassTGReset.isBought) Currency.dilatedTime.reset();
-      player.dilation.nextThreshold = new Decimal(1000);
+      player.dilation.nextThreshold = DC.E3;
       player.dilation.baseTachyonGalaxies = 0;
       player.dilation.totalTachyonGalaxies = 0;
     }
@@ -125,7 +126,7 @@ export function getDilationGainPerSecond() {
 }
 
 function tachyonGainMultiplier() {
-  return new Decimal(1).timesEffectsOf(
+  return DC.D1.timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
     Achievement(132),

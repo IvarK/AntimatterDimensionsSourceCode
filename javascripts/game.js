@@ -1,5 +1,6 @@
 import { isLocalEnvironment } from "./core/devtools.js";
 import { playFabLogin } from "./core/playfab.js";
+import { DC } from "./core/constants.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -60,7 +61,7 @@ export function gainedInfinityPoints() {
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
-    ip = ip.min(1e200);
+    ip = ip.min(DC.E200);
   }
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
@@ -91,7 +92,7 @@ function totalEPMult() {
 }
 
 export function gainedEternityPoints() {
-  let ep = Decimal.pow(5, player.records.thisEternity.maxIP.plus(
+  let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
@@ -126,9 +127,9 @@ export function gainedGlyphLevel() {
 
 export function resetChallengeStuff() {
   player.chall2Pow = 1;
-  player.chall3Pow = new Decimal(0.01);
+  player.chall3Pow = DC.D0_01;
   Currency.matter.reset();
-  player.chall8TotalSacrifice = new Decimal(1);
+  player.chall8TotalSacrifice = DC.D1;
   player.postC4Tier = 1;
 }
 
@@ -171,7 +172,7 @@ export function addInfinityTime(time, realTime, ip, infinities) {
 export function resetInfinityRuns() {
   player.records.lastTenInfinities = Array.from(
     { length: 10 },
-    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
+    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -181,7 +182,7 @@ export function resetInfinityRuns() {
 export function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.records.thisEternity.bestInfinitiesPerMs.times(ms).dividedBy(2))
-    : new Decimal(0);
+    : DC.D0;
 }
 
 // eslint-disable-next-line max-params
@@ -194,7 +195,7 @@ export function addEternityTime(time, realTime, ep, eternities) {
 export function resetEternityRuns() {
   player.records.lastTenEternities = Array.from(
     { length: 10 },
-    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
+    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]
   );
   GameCache.averageRealTimePerEternity.invalidate();
 }
@@ -204,7 +205,7 @@ export function resetEternityRuns() {
 export function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.eternity.autoEternitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.records.thisReality.bestEternitiesPerMs.times(ms).dividedBy(2))
-    : new Decimal(0);
+    : DC.D0;
 }
 
 function isOfflineEPGainEnabled() {
@@ -213,7 +214,7 @@ function isOfflineEPGainEnabled() {
 }
 
 export function getOfflineEPGain(ms) {
-  if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return DC.D0;
   return player.records.bestEternity.bestEPminReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
@@ -225,7 +226,7 @@ export function addRealityTime(time, realTime, rm, level, realities) {
 
 export function gainedInfinities() {
   if (EternityChallenge(4).isRunning) {
-    return new Decimal(1);
+    return DC.D1;
   }
   let infGain = Effects.max(
     1,
@@ -515,7 +516,7 @@ export function gameLoop(passDiff, options = {}) {
   }
 
   if (!EternityChallenge(4).isRunning) {
-    let infGen = new Decimal(0);
+    let infGen = DC.D0;
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
       infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
@@ -702,7 +703,7 @@ function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
   if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
-    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(0.01)
+    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }
 
@@ -725,7 +726,7 @@ function updateTachyonGalaxies() {
   const thresholdMult = getTachyonGalaxyMult();
   player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
     1 + Math.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
-  player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
+  player.dilation.nextThreshold = DC.E3.times(new Decimal(thresholdMult)
     .pow(player.dilation.baseTachyonGalaxies));
   player.dilation.totalTachyonGalaxies =
     Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
@@ -747,7 +748,7 @@ export function getTTPerSecond() {
   // Dilation TT generation
   const dilationTT = DilationUpgrade.ttGenerator.isBought
     ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
-    : new Decimal(0);
+    : DC.D0;
 
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);

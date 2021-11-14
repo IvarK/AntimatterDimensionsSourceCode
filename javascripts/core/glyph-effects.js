@@ -1,4 +1,5 @@
 import { GameDatabase } from "./secret-formula/game-database.js";
+import { DC } from "./constants.js";
 
 // There is a little too much stuff about glyph effects to put in constants.
 
@@ -20,7 +21,7 @@ export const GlyphCombiner = Object.freeze({
   // we have to add 1 - x.length to the actual sum, so that if all the exponents are close to 1 the result
   // is also close to 1 rather than close to x.length.
   addExponents: x => x.reduce(Number.sumReducer, 1 - x.length),
-  multiplyDecimal: x => x.reduce(Decimal.prodReducer, new Decimal(1))
+  multiplyDecimal: x => x.reduce(Decimal.prodReducer, DC.D1)
 });
 
 /**
@@ -271,7 +272,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Dilated Time gain ×{value}",
     shortDesc: "DT ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
-      ? Decimal.pow(1.005, level).times(15)
+      ? DC.D1_005.pow(level).times(15)
       : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
@@ -345,7 +346,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Replication speed multiplier",
     shortDesc: "Replication speed ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("replication")
-      ? Decimal.pow(1.007, level).times(10)
+      ? DC.D1_007.pow(level).times(10)
       : Decimal.times(level, strength).times(3)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
@@ -484,7 +485,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Infinity gain multiplier",
     shortDesc: "Infinities ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
-      ? Decimal.pow(1.02, level)
+      ? DC.D1_02.pow(level)
       : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
@@ -523,7 +524,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Antimatter Dimension multipliers ×{value}",
     shortDesc: "AD ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
-      ? Decimal.pow(11111, level * 220)
+      ? DC.D11111.pow(level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),
     formatEffect: x => formatPostBreak(x, 2, 0),
     combine: GlyphCombiner.multiplyDecimal,

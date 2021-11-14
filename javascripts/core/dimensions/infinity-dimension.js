@@ -1,4 +1,5 @@
 import { DimensionState } from "./dimension.js";
+import { DC } from "../constants.js";
 
 export function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(ShopPurchase.allDimPurchases.currentMult)
@@ -87,14 +88,14 @@ class InfinityDimensionState extends DimensionState {
     super(() => player.dimensions.infinity, tier);
     const UNLOCK_REQUIREMENTS = [
       undefined,
-      new Decimal("1e1100"),
-      new Decimal("1e1900"),
-      new Decimal("1e2400"),
-      new Decimal("1e10500"),
-      new Decimal("1e30000"),
-      new Decimal("1e45000"),
-      new Decimal("1e54000"),
-      new Decimal("1e60000"),
+      DC.E1100,
+      DC.E1900,
+      DC.E2400,
+      DC.E10500,
+      DC.E30000,
+      DC.E45000,
+      DC.E54000,
+      DC.E60000,
     ];
     this._unlockRequirement = UNLOCK_REQUIREMENTS[tier];
     const COST_MULTS = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30];
@@ -144,7 +145,7 @@ class InfinityDimensionState extends DimensionState {
 
   get rateOfChange() {
     const tier = this.tier;
-    let toGain = new Decimal(0);
+    let toGain = DC.D0;
     if (tier === 8) {
       // We need a extra 10x here (since ID8 production is per-second and
       // other ID production is per-10-seconds).
@@ -173,9 +174,9 @@ class InfinityDimensionState extends DimensionState {
 
     if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
       (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-      return new Decimal(0);
+      return DC.D0;
     }
-    if (EternityChallenge(11).isRunning) return new Decimal(1);
+    if (EternityChallenge(11).isRunning) return DC.D1;
     let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
@@ -247,7 +248,7 @@ class InfinityDimensionState extends DimensionState {
 
   fullReset() {
     this.cost = new Decimal(this.baseCost);
-    this.amount = new Decimal(0);
+    this.amount = DC.D0;
     this.bought = 0;
     this.baseAmount = 0;
     this.isUnlocked = false;

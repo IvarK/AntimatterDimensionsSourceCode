@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 class DimBoostRequirement {
   constructor(tier, amount) {
     this.tier = tier;
@@ -13,7 +15,7 @@ class DimBoostRequirement {
 export class DimBoost {
   static get power() {
     if (NormalChallenge(8).isRunning) {
-      return new Decimal(1);
+      return DC.D1;
     }
 
     let boost = Effects.max(
@@ -140,7 +142,7 @@ export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
   resetChallengeStuff();
   if (forcedNDReset || !Perk.antimatterNoReset.isBought) {
     AntimatterDimensions.reset();
-    player.sacrificed = new Decimal(0);
+    player.sacrificed = DC.D0;
     resetTickspeed();
   }
   skipResetsIfPossible();

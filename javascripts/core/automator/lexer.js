@@ -1,6 +1,8 @@
 // Note: chevrotain doesn't play well with unicode regex
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
+import { DC } from "../constants.js";
+
 
 export const AutomatorLexer = (() => {
   const createToken = chevrotain.createToken;
@@ -132,19 +134,19 @@ export const AutomatorLexer = (() => {
 
   createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
-    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
+    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingEP", /pending[ \t]+ep/i, {
     $autocomplete: "pending EP",
-    $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
+    $getter: () => (Player.canEternity ? gainedEternityPoints() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
     $autocomplete: "pending TP",
-    $getter: () => (player.dilation.active ? getTachyonGain() : new Decimal(0)),
+    $getter: () => (player.dilation.active ? getTachyonGain() : DC.D0),
   });
   createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",
-    $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))
+    $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
     $autocomplete: "pending glyph level",

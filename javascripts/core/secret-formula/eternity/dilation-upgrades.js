@@ -1,4 +1,5 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.eternity.dilation = (function() {
   function rebuyableCost(initialCost, increment, id) {
@@ -64,7 +65,7 @@ GameDatabase.eternity.dilation = (function() {
       description: () => (Enslaved.isRunning
         ? `Multiply the amount of Tachyon Particles gained by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`
         : "Triple the amount of Tachyon Particles gained."),
-      effect: bought => Decimal.pow(3, bought),
+      effect: bought => DC.D3.pow(bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
       purchaseCap: Number.MAX_VALUE
@@ -88,7 +89,7 @@ GameDatabase.eternity.dilation = (function() {
           }
         }
         return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
-          effect above ${formatX("1e9000")}`;
+          effect above ${formatX(DC.E9000)}`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

@@ -1,4 +1,5 @@
 import { GameMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 // This function does *not* reset anything. Only call it when you've already
 // done all the non-UI stuff. Right now the only UI thing to do is switch to
@@ -32,7 +33,7 @@ export function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
+    player.chall3Pow = player.chall3Pow.times(DC.D1_00038.pow(diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
   }
 
   if (NormalChallenge(2).isRunning) {
@@ -112,7 +113,7 @@ class NormalChallengeState extends GameMechanicState {
 
   get goal() {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.id)) {
-      return Decimal.pow10(1e15);
+      return DC.E1E15;
     }
     return Decimal.NUMBER_MAX_VALUE;
   }

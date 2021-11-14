@@ -1,3 +1,5 @@
+import { DC } from "./constants.js";
+
 export class Sacrifice {
   // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
   // sacrifice for the first time.
@@ -67,7 +69,7 @@ export class Sacrifice {
 
   static get nextBoost() {
     const nd1Amount = AntimatterDimension(1).amount;
-    if (nd1Amount.eq(0)) return new Decimal(1);
+    if (nd1Amount.eq(0)) return DC.D1;
     const sacrificed = player.sacrificed.clampMin(1);
     let prePowerSacrificeMult;
     // Pre-reality update C8 works really weirdly - every sacrifice, the current sacrifice multiplier gets applied to
@@ -87,7 +89,7 @@ export class Sacrifice {
   }
 
   static get totalBoost() {
-    if (player.sacrificed.eq(0)) return new Decimal(1);
+    if (player.sacrificed.eq(0)) return DC.D1;
     // C8 uses a variable that keeps track of a sacrifice boost that persists across sacrifice-resets and isn't
     // used anywhere else, which also naturally takes account of the exponent from achievements and time studies.
     if (NormalChallenge(8).isRunning) {

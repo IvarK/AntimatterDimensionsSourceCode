@@ -1,8 +1,11 @@
 import "../../../common/effect-display.js";
-import "../../../common/cost-display.js";
 import "../../../common/description-display.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("perk-shop-upgrade", {
+  components: {
+    CostDisplay
+  },
   props: {
     upgrade: Object
   },
@@ -37,7 +40,7 @@ Vue.component("perk-shop-upgrade", {
         <br>
         <effect-display :config="upgrade.config" />
         <br>
-        <cost-display
+        <CostDisplay
           v-if="!isCapped"
           :config="upgrade.config"
           name="Perk Point"

@@ -1,8 +1,11 @@
-import "../../common/cost-display.js";
 import "../../common/effect-display.js";
 import "../../common/description-display.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("black-hole-upgrade-button", {
+  components: {
+    CostDisplay
+  },
   props: {
     config: Object
   },
@@ -58,7 +61,7 @@ Vue.component("black-hole-upgrade-button", {
       >
         <description-display :config="config" />
         <effect-display :config="effectConfig" :title="config.effectTitle" />
-        <cost-display
+        <CostDisplay
           v-if="!isCapped"
           :config="costConfig"
           name="Reality Machine"

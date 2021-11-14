@@ -1,9 +1,12 @@
-import "../../common/cost-display.js";
 import "../../common/hint-text.js";
 import "../../common/effect-display.js";
 import "../../common/description-display.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("imaginary-upgrade-button", {
+  components: {
+    CostDisplay
+  },
   props: {
     upgrade: Object
   },
@@ -75,7 +78,7 @@ Vue.component("imaginary-upgrade-button", {
         />
         <template v-else>
           <effect-display :config="config" />
-          <cost-display
+          <CostDisplay
             v-if="!isBought"
             :config="config"
             name="Imaginary Machine"

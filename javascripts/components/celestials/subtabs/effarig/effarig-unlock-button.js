@@ -1,7 +1,10 @@
-import "../../../common/cost-display.js";
 import "../../../common/description-display.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("effarig-unlock-button", {
+  components: {
+    CostDisplay
+  },
   props: {
     unlock: Object
   },
@@ -35,11 +38,11 @@ Vue.component("effarig-unlock-button", {
   template: `
     <button :class="classObject" @click="purchase">
       <description-display :config="config" />
-      <cost-display
+      <CostDisplay
         v-if="!isBought"
         :config="config"
         name="Relic Shard"
-        title=""
+        label=""
       />
       <div v-else>
         (Unlocked)

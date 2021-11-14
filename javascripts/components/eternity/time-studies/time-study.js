@@ -1,7 +1,10 @@
-import "../../common/cost-display.js";
 import { rem } from "./rem.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("time-study", {
+  components: {
+    CostDisplay
+  },
   data() {
     return {
       isBought: false,
@@ -110,7 +113,7 @@ Vue.component("time-study", {
              @click.exact="handleClick"
              @click.shift.exact="shiftClick">
       <slot />
-      <cost-display
+      <CostDisplay
         br
         v-if="(showCost && !showSTCost) || STCost === 0"
         :config="config"

@@ -1,8 +1,11 @@
-import "../../common/cost-display.js";
 import "../../common/effect-display.js";
 import "../../common/description-display.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("dilation-upgrade", {
+  components: {
+    CostDisplay
+  },
   props: {
     isRebuyable: {
       type: Boolean,
@@ -77,7 +80,7 @@ Vue.component("dilation-upgrade", {
           :config="upgrade.config"
           :key="boughtAmount"
         />
-        <cost-display
+        <CostDisplay
           br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"

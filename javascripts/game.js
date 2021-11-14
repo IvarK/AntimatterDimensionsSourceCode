@@ -1,4 +1,3 @@
-import { isLocalEnvironment } from "./core/devtools.js";
 import { playFabLogin } from "./core/playfab.js";
 import { DC } from "./core/constants.js";
 
@@ -243,36 +242,6 @@ export function gainedInfinities() {
   infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
   infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
   return infGain;
-}
-
-// TODO: remove before release
-if (!isLocalEnvironment()) {
-  let commit;
-  setInterval(() => {
-    const url = "https://api.github.com/repos/IvarK/IToughtAboutCurseWordsButThatWouldBeMeanToOmsi/commits/master";
-    const headers = new Headers();
-    // Yes, this is my GitHub API key for reading private repo details
-    headers.append("Authorization", `Basic ${btoa("WaitingIdly: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")}`);
-
-    fetch(url, { method: "GET", headers })
-      .then(response => response.json())
-      .then(json => {
-        if (commit === undefined) {
-          commit = json.sha;
-          return;
-        }
-        if (commit === json.sha) return;
-        // GH Pages need some time to get rebuilt, so show message after 60 seconds
-        setTimeout(() => {
-          Modal.message.show(
-            "Refresh the page (game will be saved), we've got new stuff: " +
-              `"${json.commit.message}" by ${json.author.login}`,
-            updateRefresh,
-            true
-          );
-        }, 60000);
-      });
-  }, 60000);
 }
 
 export function updateRefresh() {

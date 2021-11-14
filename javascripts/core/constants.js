@@ -6,7 +6,15 @@ window.PRESTIGE_EVENT = {
   REALITY: 4,
 };
 
-export const DC = {
+function deepFreeze(obj) {
+  Object.keys(obj).forEach(prop => {
+    const reference = obj[prop];
+    if (typeof reference === "object") deepFreeze(reference);
+  });
+  return Object.freeze(obj);
+}
+
+export const DC = deepFreeze({
   // Naming Scheme:
   // D[0-9]: Decimal mantissa variable
   // _: decimal (.) part of the mantissa
@@ -172,16 +180,7 @@ export const DC = {
   E1E8:                 new Decimal("1e100000000"),
   E1_5E12:              new Decimal("1e1500000000000"),
   E1E15:                new Decimal("1e1000000000000000"),
-};
-
-function deepFreeze(obj) {
-  Object.keys(obj).forEach(prop => {
-    if (typeof obj[prop] === "object") deepFreeze(obj[prop]);
-  });
-  return Object.freeze(obj);
-}
-
-deepFreeze(DC);
+});
 
 window.AUTOBUYER_MODE = {
   BUY_SINGLE: 1,

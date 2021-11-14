@@ -191,11 +191,19 @@ function gameLoop() {
   updateUI();
 }
 
+
+function format(value, places, placesUnder1000) {
+  return notation.format(value, places, placesUnder1000);
+}
+
+function formatX(value, places, placesUnder1000) {
+  return `×${format(value, places, placesUnder1000)}`;
+}
+
 Vue.mixin({
   methods: {
-    format(value, places, placesUnder1000) {
-      return notation.format(value, places, placesUnder1000);
-    }
+    format,
+    formatX
   },
   created() {
     if (this.update) {

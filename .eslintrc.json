@@ -3,12 +3,12 @@
     "eslint:recommended"
   ],
   "env": {
-    "es2021": true,
-    "browser": true,
-    "jquery": true
+    "es6": true,
+    "node": true,
+    "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 2021,
+    "ecmaVersion": 6,
     "sourceType": "module"
   },
   "rules": {

@@ -262,7 +262,7 @@ if (!isLocalEnvironment()) {
           return;
         }
         if (commit === json.sha) return;
-        // GH Pages need some time to get rebuilt, so show message after 30 seconds
+        // GH Pages need some time to get rebuilt, so show message after 60 seconds
         setTimeout(() => {
           Modal.message.show(
             "Refresh the page (game will be saved), we've got new stuff: " +
@@ -270,7 +270,7 @@ if (!isLocalEnvironment()) {
             updateRefresh,
             true
           );
-        }, 30000);
+        }, 60000);
       });
   }, 60000);
 }

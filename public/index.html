@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>Antimatter Dimensions</title>
   <link rel="icon" type="image/png" href="icon.png">
-  <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8" />
+  <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." >
   <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
-  <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
@@ -56,41 +57,39 @@
     </video>
   </div>
   <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
+
+  <!-- Here's some firebase stuff -->
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+
+  <script type="text/javascript" src="lib/vue.js"></script>
+  <script type="text/javascript" src="lib/v-tooltip.min.js"></script>
+  <script type="text/javascript" src="lib/mousetrap.min.js"></script>
+  <script type="text/javascript" src="lib/break_infinity.min.js"></script>
+  <script type="text/javascript" src="lib/lz-string.min.js"></script>
+  <script type="text/javascript" src="lib/vis-network.min.js"></script>
+  <script type="text/javascript" src="lib/sha512.min.js"></script>
+  <script type="text/javascript" src="lib/deepmerge.js"></script>
+  <script type="text/javascript" src="lib/Sortable.min.js"></script>
+  <script type="text/javascript" src="lib/vuedraggable.umd.min.js"></script>
+  <script type="text/javascript" src="lib/Tween.min.js"></script>
+  <script type="text/javascript" src="lib/gamma.js"></script>
+  <script type="text/javascript" src="lib/vue-split-pane.min.js"></script>
+  <script type="text/javascript" src="lib/chevrotain.min.js"></script>
+  <script type="text/javascript" src="lib/codemirror.js"></script>
+  <script type="text/javascript" src="lib/simple.js"></script>
+  <script type="text/javascript" src="lib/show-hint.js"></script>
+  <script type="text/javascript" src="lib/lint.js"></script>
+  <script type="text/javascript" src="lib/active-line.js"></script>
+  <script type="text/javascript" src="lib/closebrackets.js"></script>
+  <script type="text/javascript" src="lib/ad-notations.min.js"></script>
+  <script type="text/javascript" src="lib/svg-pan-zoom.min.js"></script>
+  <script type="text/javascript" src="lib/pako.min.js"></script>
+  <script type="text/javascript" src="lib/base64-binary.js"></script>
+  <script type="text/javascript" src="lib/DragDropTouch.js"></script>
+  <script type="text/javascript" src="lib/longpress.js"></script>
+
+  <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 </body>
-
-<!-- Here's some firebase stuff -->
-<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
-
-<script type="text/javascript" src="javascripts/lib/vue.js"></script>
-<script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/break_infinity.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/lz-string.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/vis-network.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/sha512.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/deepmerge.js"></script>
-<script type="text/javascript" src="javascripts/lib/Sortable.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/vuedraggable.umd.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/Tween.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/gamma.js"></script>
-<script type="text/javascript" src="javascripts/lib/vue-split-pane.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/chevrotain.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/codemirror.js"></script>
-<script type="text/javascript" src="javascripts/lib/simple.js"></script>
-<script type="text/javascript" src="javascripts/lib/show-hint.js"></script>
-<script type="text/javascript" src="javascripts/lib/lint.js"></script>
-<script type="text/javascript" src="javascripts/lib/active-line.js"></script>
-<script type="text/javascript" src="javascripts/lib/closebrackets.js"></script>
-<script type="text/javascript" src="javascripts/lib/ad-notations.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/svg-pan-zoom.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/pako.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/base64-binary.js"></script>
-<script type="text/javascript" src="javascripts/lib/DragDropTouch.js"></script>
-<script type="text/javascript" src="javascripts/lib/longpress.js"></script>
-
-<script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
-
-<script type="module" src="javascripts/main.js"></script>
 </html>

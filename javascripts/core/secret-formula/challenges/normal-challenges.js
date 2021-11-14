@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 // I tried to make it relatively simple to add more locks; the idea is that you give it a value here
 // and then it's all handled in the backend

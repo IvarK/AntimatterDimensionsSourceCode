@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("glyph-clean-button-group", {
   data() {
     return {

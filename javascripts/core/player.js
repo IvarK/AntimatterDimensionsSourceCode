@@ -1,8 +1,9 @@
-"use strict";
+import { GlyphTypes } from "./glyph-effects.js";
+import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
-let player = {
+window.player = {
   antimatter: DC.E1,
   dimensions: {
     antimatter: Array.range(0, 8).map(() => ({
@@ -723,7 +724,7 @@ let player = {
   devMode: false,
 };
 
-const Player = {
+export const Player = {
   defaultStart: deepmerge.all([{}, player]),
 
   get isInMatterChallenge() {
@@ -837,7 +838,7 @@ const Player = {
   }
 };
 
-function guardFromNaNValues(obj) {
+export function guardFromNaNValues(obj) {
   function isObject(ob) {
     return ob !== null && typeof ob === "object" && !(ob instanceof Decimal);
   }

@@ -1,4 +1,4 @@
-"use strict";
+import "../matter-dimension-row.js";
 
 Vue.component("dark-matter-dimension-group", {
   data() {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("options-gameplay-tab", {
   components: {
     "options-button": {

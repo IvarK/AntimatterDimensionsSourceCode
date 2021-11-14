@@ -1,6 +1,4 @@
-"use strict";
-
-function getTickSpeedMultiplier() {
+export function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return DC.D1;
   if (Ra.isRunning) return DC.C1D1_1245;
   // Note that this already includes the "50% more" active path effect
@@ -62,7 +60,7 @@ function getTickSpeedMultiplier() {
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
 
-function buyTickSpeed() {
+export function buyTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
 
   if (NormalChallenge(9).isRunning) {
@@ -77,7 +75,7 @@ function buyTickSpeed() {
   return true;
 }
 
-function buyMaxTickSpeed() {
+export function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
@@ -107,12 +105,12 @@ function buyMaxTickSpeed() {
   }
 }
 
-function resetTickspeed() {
+export function resetTickspeed() {
   player.totalTickBought = 0;
   player.chall9TickspeedCostBumps = 0;
 }
 
-const Tickspeed = {
+export const Tickspeed = {
 
   get isUnlocked() {
     return AntimatterDimension(2).bought > 0 || EternityMilestone.unlockAllND.isReached ||
@@ -185,7 +183,7 @@ const Tickspeed = {
 };
 
 
-const FreeTickspeed = {
+export const FreeTickspeed = {
   BASE_SOFTCAP: 300000,
   GROWTH_RATE: 6e-6,
   GROWTH_EXP: 2,

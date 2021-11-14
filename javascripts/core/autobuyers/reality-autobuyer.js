@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
   get data() {

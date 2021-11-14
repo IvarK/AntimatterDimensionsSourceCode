@@ -1,13 +1,15 @@
-"use strict";
+import { GameDatabase } from "../secret-formula/game-database.js";
+import { GameMechanicState } from "../game-mechanics/index.js";
+import { CelestialQuotes } from "./quotes.js";
 
-const EFFARIG_STAGES = {
+export const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
   REALITY: 3,
   COMPLETED: 4
 };
 
-const Effarig = {
+export const Effarig = {
   displayName: "Effarig",
   initializeRun() {
     const isRestarting = player.celestials.effarig.run;
@@ -17,7 +19,7 @@ const Effarig = {
     Tab.reality.glyphs.show(false);
     if (!isRestarting) {
       Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. Infinity Power
-        reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.`);  
+        reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.`);
     }
   },
   get isRunning() {
@@ -204,7 +206,7 @@ class EffarigUnlockState extends GameMechanicState {
   }
 }
 
-const EffarigUnlock = (function() {
+export const EffarigUnlock = (function() {
   const db = GameDatabase.celestials.effarig.unlocks;
   return {
     adjuster: new EffarigUnlockState(db.adjuster),

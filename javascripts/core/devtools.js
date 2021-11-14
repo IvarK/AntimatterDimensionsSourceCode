@@ -1,9 +1,8 @@
-"use strict";
 /* eslint-disable no-console */
 // Disabling no-console here seems
 // reasonable, since these are the devtools after all
-const dev = {};
-const specialGlyphSymbols = {
+export const dev = {};
+export const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
   key2606: "☆", key2607: "☇", key2608: "☈", key2609: "☉", key260a: "☊", key260b: "☋",
   key260c: "☌", key260d: "☍", key260e: "☎", key260f: "☏", key2610: "☐", key2611: "☑",
@@ -205,7 +204,7 @@ dev.removeAch = function(name) {
   return "failed to delete achievement";
 };
 
-let nextNewsMessageId = undefined;
+window.nextNewsMessageId = undefined;
 
 dev.setNextNewsMessage = function(id) {
   nextNewsMessageId = id;
@@ -238,18 +237,18 @@ dev.respecPerks = function() {
   GameCache.buyablePerks.invalidate();
 };
 
-function isDevEnvironment() {
+export function isDevEnvironment() {
   const href = window.location.href;
   return href.split("//")[1].length > 20 || isLocalEnvironment();
 }
 
-function isLocalEnvironment() {
+export function isLocalEnvironment() {
   const href = window.location.href;
   return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
-let tempSpeedupToggle = false;
-let tempSpeedupFactor = 500;
+window.tempSpeedupToggle = false;
+window.tempSpeedupFactor = 500;
 // Speeds up game, intentionally doesn't persist between refreshes
 // With no arguments, toggles on/off
 dev.goFast = function(speed) {
@@ -261,8 +260,8 @@ dev.goFast = function(speed) {
   }
 };
 
-let tempAmplifyToggle = false;
-let tempAmplifyFactor = 100;
+window.tempAmplifyToggle = false;
+window.tempAmplifyFactor = 100;
 // Amplifies every reality you do, intentionally doesn't persist between refreshes
 // With no arguments, toggles on/off
 dev.amplify = function(amplification) {

@@ -1,4 +1,4 @@
-"use strict";
+import "./old-ui-tab-button.js";
 
 Vue.component("old-ui-tab-bar", {
   computed: {

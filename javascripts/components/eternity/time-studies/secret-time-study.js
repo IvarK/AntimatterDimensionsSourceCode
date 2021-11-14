@@ -1,7 +1,6 @@
-"use strict";
+import { rem } from "./rem.js";
 
 Vue.component("secret-time-study", {
-  mixins: [remMixin],
   props: {
     setup: Object
   },
@@ -26,8 +25,8 @@ Vue.component("secret-time-study", {
     },
     styleObject() {
       return {
-        top: this.rem(this.setup.top),
-        left: this.rem(this.setup.left)
+        top: rem(this.setup.top),
+        left: rem(this.setup.left)
       };
     },
     classObject() {

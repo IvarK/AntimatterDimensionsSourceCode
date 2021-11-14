@@ -1,4 +1,6 @@
-"use strict";
+import { GameDatabase } from "../secret-formula/game-database.js";
+import { GameMechanicState } from "../game-mechanics/index.js";
+import { CelestialQuotes } from "./quotes.js";
 
 /**
  * Information about how to format runUnlocks:
@@ -97,16 +99,16 @@ class VRunUnlockState extends GameMechanicState {
  * @param {number} id
  * @return {VRunUnlockState}
  */
-const VRunUnlock = VRunUnlockState.createAccessor(GameDatabase.celestials.v.runUnlocks);
+export const VRunUnlock = VRunUnlockState.createAccessor(GameDatabase.celestials.v.runUnlocks);
 
-const VRunUnlocks = {
+export const VRunUnlocks = {
   /**
    * @type {VRunUnlockState[]}
    */
   all: VRunUnlock.index.compact(),
 };
 
-const V_UNLOCKS = {
+export const V_UNLOCKS = {
   V_ACHIEVEMENT_UNLOCK: {
     id: 0,
     reward: "Unlock V, The Celestial Of Achievements",
@@ -160,7 +162,7 @@ const V_UNLOCKS = {
   }
 };
 
-const V = {
+export const V = {
   displayName: "V",
   spaceTheorems: 0,
   checkForUnlocks() {

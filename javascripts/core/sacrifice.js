@@ -1,6 +1,4 @@
-"use strict";
-
-class Sacrifice {
+export class Sacrifice {
   // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
   // sacrifice for the first time.
   static get isVisible() {
@@ -108,7 +106,7 @@ class Sacrifice {
   }
 }
 
-function sacrificeReset() {
+export function sacrificeReset() {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
     Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
@@ -137,7 +135,7 @@ function sacrificeReset() {
   return true;
 }
 
-function sacrificeBtnClick() {
+export function sacrificeBtnClick() {
   if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return;
   if (player.options.confirmations.sacrifice) {
     Modal.sacrifice.show();

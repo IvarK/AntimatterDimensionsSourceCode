@@ -1,4 +1,4 @@
-"use strict";
+import "./black-hole-upgrade-button.js";
 
 Vue.component("black-hole-upgrade-row", {
   props: {

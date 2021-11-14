@@ -1,6 +1,6 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
-const V_REDUCTION_MODE = {
+export const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
   DIVISION: 2
 };

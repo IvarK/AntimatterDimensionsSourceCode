@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * Constants for easily adjusting values
  */
@@ -13,12 +11,12 @@ const POWER_DM_START_COST = 10;
 const POWER_DE_START_COST = 10;
 
 // No constant for interval since it's tied to a milestone
-const POWER_DM_PER_ASCENSION = 500;
-const POWER_DE_PER_ASCENSION = 500;
+export const POWER_DM_PER_ASCENSION = 500;
+export const POWER_DE_PER_ASCENSION = 500;
 
 const COST_MULT_PER_TIER = 1200;
 
-class MatterDimensionState {
+export class MatterDimensionState {
   constructor(tier) {
     this._tier = tier;
   }
@@ -216,8 +214,8 @@ MatterDimensionState.list = Array.range(1, 4).map(tier => new MatterDimensionSta
 
 /**
  * @param {number} tier
- * @return {AntimatterDimensionState}
+ * @return {MatterDimensionState}
  */
-function MatterDimension(tier) {
+export function MatterDimension(tier) {
   return MatterDimensionState.list[tier - 1];
 }

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("automator-points-list", {
   data() {
     return {

@@ -1,6 +1,4 @@
-"use strict";
-
-class Effect {
+export class Effect {
   constructor(effect, cap, condition) {
     if (effect === undefined || this.isCustomEffect) {
       return;

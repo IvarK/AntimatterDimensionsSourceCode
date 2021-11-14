@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "./game-database.js";
 
 // A = always there
 // L = locked

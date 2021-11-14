@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("reality-amplify-button", {
   data: () => ({
     isVisible: false,

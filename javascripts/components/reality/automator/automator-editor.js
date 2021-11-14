@@ -1,4 +1,7 @@
-"use strict";
+import "./automator-block-editor.js";
+import "./automator-text-editor.js";
+import "./automator-controls.js";
+import "./automator-button.js";
 
 Vue.component("automator-editor", {
   data() {
@@ -38,7 +41,7 @@ Vue.component("automator-editor", {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    modeIconClass() { 
+    modeIconClass() {
       return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code";
     },
     isTextAutomator() {

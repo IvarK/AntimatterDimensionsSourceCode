@@ -1,5 +1,3 @@
-"use strict";
-
 // This wraps a control box of some sort (like glyph weight adjust) in
 // a dropdown menu like container.
 // You can force it to open programatically by sending it an openrequest event

@@ -1,5 +1,3 @@
-"use strict";
-
 /** @abstract */
 class AutomatorCommandInterface {
   constructor(id) {
@@ -13,11 +11,11 @@ class AutomatorCommandInterface {
 
 AutomatorCommandInterface.all = [];
 
-function AutomatorCommand(id) {
+export function AutomatorCommand(id) {
   return AutomatorCommandInterface.all[id];
 }
 
-const AUTOMATOR_COMMAND_STATUS = Object.freeze({
+export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   NEXT_INSTRUCTION: 0,
   NEXT_TICK_SAME_INSTRUCTION: 1,
   NEXT_TICK_NEXT_INSTRUCTION: 2,
@@ -25,21 +23,21 @@ const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   SAME_INSTRUCTION: 3,
 });
 
-const AUTOMATOR_MODE = Object.freeze({
+export const AUTOMATOR_MODE = Object.freeze({
   PAUSE: 1,
   RUN: 2,
   SINGLE_STEP: 3,
 });
 
 
-const AUTOMATOR_VAR_TYPES = {
+export const AUTOMATOR_VAR_TYPES = {
   NUMBER: { id: 0, name: "number" },
   STUDIES: { id: 1, name: "studies" },
   DURATION: { id: 2, name: "duration" },
   UNKNOWN: { id: -1, name: "unknown" },
 };
 
-const AUTOMATOR_TYPE = Object.freeze({
+export const AUTOMATOR_TYPE = Object.freeze({
   TEXT: 0,
   BLOCK: 1
 });
@@ -111,7 +109,7 @@ class AutomatorStackEntry {
   }
 }
 
-class AutomatorScript {
+export class AutomatorScript {
   constructor(id) {
     if (!id) throw new Error("Invalid Automator script ID");
     this._id = id;
@@ -164,7 +162,7 @@ class AutomatorScript {
   }
 }
 
-const AutomatorData = {
+export const AutomatorData = {
   // -1 is the ID for the documentation page
   currentInfoPane: -1,
   // Used for getting the correct EC count in event log
@@ -219,7 +217,7 @@ const AutomatorData = {
   }
 };
 
-const AutomatorBackend = {
+export const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
   _scripts: [],
 

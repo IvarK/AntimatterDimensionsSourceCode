@@ -1,6 +1,4 @@
-"use strict";
-
-const AutomatorTextUI = {
+export const AutomatorTextUI = {
   wrapper: null,
   editor: null,
   mode: {

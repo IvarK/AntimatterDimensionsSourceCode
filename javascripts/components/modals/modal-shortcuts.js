@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("open-modal-shortcuts", {
   template: `
     <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">

@@ -1,4 +1,4 @@
-"use strict";
+import "./normal-achievement.js";
 
 Vue.component("normal-achievement-row", {
   props: {

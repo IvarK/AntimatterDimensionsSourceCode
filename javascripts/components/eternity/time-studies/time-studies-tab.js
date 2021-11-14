@@ -1,4 +1,11 @@
-"use strict";
+import "./normal-time-study.js";
+import "./secret-time-study.js";
+import "./triad-time-study.js";
+import "./ec-time-study.js";
+import "./dilation-time-study.js";
+import { rem } from "./rem.js";
+import { TimeStudySetup } from "./time-study.js";
+import { TimeStudyConnectionSetup } from "./time-study-connection.js";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -217,7 +224,6 @@ const STUDY_TREE_LAYOUT_TYPE = {
 };
 
 Vue.component("time-studies-tab", {
-  mixins: [remMixin],
   data() {
     return {
       respec: player.respec,
@@ -274,8 +280,8 @@ Vue.component("time-studies-tab", {
     },
     treeStyleObject() {
       return {
-        width: this.rem(this.layout.width),
-        height: this.rem(this.layout.height)
+        width: rem(this.layout.width),
+        height: rem(this.layout.height)
       };
     },
     respecClassObject() {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-edit-tree", {
   props: {
     modalConfig: Object

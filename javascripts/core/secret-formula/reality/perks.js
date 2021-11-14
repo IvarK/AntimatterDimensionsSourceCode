@@ -1,6 +1,6 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
-const PERK_FAMILY = {
+export const PERK_FAMILY = {
   ANTIMATTER: "ANTIMATTER",
   INFINITY: "INFINITY",
   ETERNITY: "ETERNITY",

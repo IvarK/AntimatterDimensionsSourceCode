@@ -1,6 +1,6 @@
-"use strict";
+import { GameMechanicState } from "./game-mechanics/index.js";
 
-function startEternityChallenge() {
+export function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
   resetInfinityRuns();
@@ -241,7 +241,7 @@ class EternityChallengeState extends GameMechanicState {
  * @param id
  * @return {EternityChallengeState}
  */
-const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
+export const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
 
 /**
  * @returns {EternityChallengeState}
@@ -256,7 +256,7 @@ Object.defineProperty(EternityChallenge, "isRunning", {
   get: () => player.challenge.eternity.current !== 0,
 });
 
-const EternityChallenges = {
+export const EternityChallenges = {
   /**
    * @type {EternityChallengeState[]}
    */

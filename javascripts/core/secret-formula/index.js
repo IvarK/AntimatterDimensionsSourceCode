@@ -1,0 +1,33 @@
+import "./game-database.js";
+
+import "./tabs.js";
+import "./tab-notifications.js";
+import "./news.js";
+import "./achievements/normal-achievements.js";
+import "./achievements/secret-achievements.js";
+import "./challenges/normal-challenges.js";
+import "./challenges/infinity-challenges.js";
+import "./challenges/eternity-challenges.js";
+import "./infinity/infinity-upgrades.js";
+import "./infinity/break-infinity-upgrades.js";
+import "./eternity/time-studies/normal-time-studies.js";
+import "./eternity/time-studies/ec-time-studies.js";
+import "./eternity/time-studies/dilation-time-studies.js";
+import "./eternity/eternity-upgrades.js";
+import "./eternity/eternity-milestones.js";
+import "./eternity/dilation-upgrades.js";
+import "./reality/reality-upgrades.js";
+import "./reality/imaginary-upgrades.js";
+export * from "./reality/perks.js";
+import "./reality/automator.js";
+import "./reality/glyph-sacrifices.js";
+import "./celestials/perk-shop.js";
+import "./celestials/effarig.js";
+import "./celestials/enslaved.js";
+export * from "./celestials/v.js";
+import "./celestials/alchemy.js";
+import "./shop-purchases.js";
+export * from "./celestials/navigation.js";
+export * from "./celestials/singularity-milestones.js";
+
+import "./h2p.js";

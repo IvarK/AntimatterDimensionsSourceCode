@@ -1,8 +1,8 @@
-"use strict";
+import { DimensionState } from "./dimension.js";
 
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
-function antimatterDimensionCommonMultiplier() {
+export function antimatterDimensionCommonMultiplier() {
   let multiplier = DC.D1;
 
   multiplier = multiplier.times(Achievements.power);
@@ -47,7 +47,7 @@ function antimatterDimensionCommonMultiplier() {
   return multiplier;
 }
 
-function getDimensionFinalMultiplierUncached(tier) {
+export function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
   if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) return DC.D0;
   if (NormalChallenge(10).isRunning && tier > 6) return DC.D1;
@@ -185,7 +185,7 @@ function onBuyDimension(tier) {
   if (tier === 1) player.requirementChecks.eternity.noAD1 = false;
 }
 
-function buyOneDimension(tier) {
+export function buyOneDimension(tier) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
@@ -211,7 +211,7 @@ function buyOneDimension(tier) {
   return true;
 }
 
-function buyManyDimension(tier) {
+export function buyManyDimension(tier) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
@@ -228,7 +228,7 @@ function buyManyDimension(tier) {
   return true;
 }
 
-function buyAsManyAsYouCanBuy(tier) {
+export function buyAsManyAsYouCanBuy(tier) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
   const howMany = dimension.howManyCanBuy;
@@ -256,7 +256,7 @@ function buyUntilTen(tier) {
   onBuyDimension(tier);
 }
 
-function maxAll() {
+export function maxAll() {
   if (Laitela.continuumActive || Currency.antimatter.gt(Player.infinityLimit)) return;
 
   player.requirementChecks.infinity.maxAll = true;
@@ -270,7 +270,7 @@ function maxAll() {
   buyMaxTickSpeed();
 }
 
-function buyMaxDimension(tier, bulk = Infinity) {
+export function buyMaxDimension(tier, bulk = Infinity) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
@@ -316,7 +316,7 @@ function buyMaxDimension(tier, bulk = Infinity) {
 }
 
 
-function canAfford(cost) {
+export function canAfford(cost) {
   return (player.break || cost.lt(Decimal.NUMBER_MAX_VALUE)) && Currency.antimatter.gte(cost);
 }
 
@@ -578,9 +578,9 @@ class AntimatterDimensionState extends DimensionState {
  * @param {number} tier
  * @return {AntimatterDimensionState}
  */
-const AntimatterDimension = AntimatterDimensionState.createAccessor();
+export const AntimatterDimension = AntimatterDimensionState.createAccessor();
 
-const AntimatterDimensions = {
+export const AntimatterDimensions = {
   /**
    * @type {AntimatterDimensionState[]}
    */

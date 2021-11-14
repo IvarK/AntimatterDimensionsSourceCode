@@ -1,4 +1,4 @@
-"use strict";
+import { GameMechanicState } from "../../game-mechanics/index.js";
 
 /**
  * @abstract
@@ -224,7 +224,7 @@ class AlchemyReaction {
   }
 }
 
-const AlchemyResource = (function() {
+export const AlchemyResource = (function() {
   function createResource(resource) {
     const config = GameDatabase.celestials.alchemy.resources[resource];
     config.id = resource;
@@ -259,12 +259,12 @@ const AlchemyResource = (function() {
   };
 }());
 
-const AlchemyResources = {
+export const AlchemyResources = {
   all: Object.values(AlchemyResource),
   base: Object.values(AlchemyResource).filter(r => r.isBaseResource)
 };
 
-const AlchemyReactions = (function() {
+export const AlchemyReactions = (function() {
   // For convenience and readability, stuff is named differently in GameDatabase
   function mapReagents(resource) {
     return resource.config.reagents

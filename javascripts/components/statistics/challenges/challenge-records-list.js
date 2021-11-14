@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("challenge-records-list", {
   props: {
     name: String,

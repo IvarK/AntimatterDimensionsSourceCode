@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "serve": "serve"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "serve": "^13.0.2"
+  }
+}

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("automator-error-page", {
   data() {
     return {

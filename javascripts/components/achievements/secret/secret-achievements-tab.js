@@ -1,4 +1,4 @@
-"use strict";
+import "./secret-achievement-row.js";
 
 Vue.component("secret-achievements-tab", {
   computed: {

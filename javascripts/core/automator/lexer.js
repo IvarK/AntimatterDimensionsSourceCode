@@ -1,9 +1,8 @@
 // Note: chevrotain doesn't play well with unicode regex
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
-"use strict";
 
-const AutomatorLexer = (() => {
+export const AutomatorLexer = (() => {
   const createToken = chevrotain.createToken;
   const Lexer = chevrotain.Lexer;
 
@@ -396,4 +395,4 @@ const AutomatorLexer = (() => {
   };
 })();
 
-const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;
+export const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

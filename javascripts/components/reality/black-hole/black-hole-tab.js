@@ -1,4 +1,8 @@
-"use strict";
+import "./black-hole-unlock-button.js";
+import "./black-hole-upgrade-row.js";
+import "./black-hole-state-row.js";
+import "../../common/ad-slider-component.js";
+import { BlackHoleAnimation } from "./black-hole-animation.js";
 
 Vue.component("black-hole-tab", {
   data() {
@@ -88,14 +92,14 @@ Vue.component("black-hole-tab", {
         const bh2Duration = Math.min(bh1Remaining, bh2Remaining);
         return `Black Hole 2 is active for the next ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}!`;
       }
-      
+
       // BH1 active, BH2 will trigger before BH1 runs out
       if (BlackHole(1).isActive && (bh2Remaining < bh1Remaining)) {
         const bh2Duration = Math.min(bh1Remaining - bh2Remaining, BlackHole(2).duration);
         return `Black Hole 2 will activate before Black Hole 1 deactivates,
           for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}`;
       }
-      
+
       // BH2 won't start yet next cycle
       if (BlackHole(1).isActive || (bh2Remaining > BlackHole(1).duration)) {
         const cycleCount = BlackHole(1).isActive
@@ -103,7 +107,7 @@ Vue.component("black-hole-tab", {
           : Math.floor(bh2Remaining / BlackHole(1).duration);
         return `Black Hole 2 will activate after ${quantifyInt("more active cycle", cycleCount)} of Black Hole 1.`;
       }
-      
+
       // BH1 inactive, BH2 ready to go when BH1 activates
       if (BlackHole(2).isCharged) {
         const bh2Duration = Math.min(BlackHole(1).duration, bh2Remaining);

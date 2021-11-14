@@ -1,9 +1,9 @@
-"use strict";
+import { Effect } from "./effect.js";
 
 /**
  * @abstract
  */
-class GameMechanicState extends Effect {
+export class GameMechanicState extends Effect {
   constructor(config) {
     if (!config) {
       throw new Error("Must specify config for GameMechanicState");

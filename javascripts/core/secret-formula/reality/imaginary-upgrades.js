@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {

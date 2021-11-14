@@ -1,9 +1,7 @@
-"use strict";
-
 /**
  * Object that manages the selection of glyphs offered to the player
  */
-const GlyphSelection = {
+export const GlyphSelection = {
   glyphs: [],
   realityProps: undefined,
 
@@ -85,13 +83,13 @@ const GlyphSelection = {
   }
 };
 
-function isRealityAvailable() {
+export function isRealityAvailable() {
   return player.records.thisReality.maxEP.exponent >= 4000 && TimeStudy.reality.isBought;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
 // with false for checking and true for actual usage, and only "used" once per reality.
-function simulatedRealityCount(advancePartSimCounters) {
+export function simulatedRealityCount(advancePartSimCounters) {
   const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio - 1 : 0;
   const multiversalSim = AlchemyResource.multiversal.effectValue;
   const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1;
@@ -105,7 +103,7 @@ function simulatedRealityCount(advancePartSimCounters) {
  * Triggered when the user clicks the reality button. This triggers the glyph selection
  * process, if applicable. Auto sacrifice is never triggered.
  */
-function requestManualReality() {
+export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   if (player.options.confirmations.reality || player.options.confirmations.glyphSelection) {
     Modal.reality.show();
@@ -118,7 +116,7 @@ function requestManualReality() {
   processManualReality(false);
 }
 
-function processManualReality(sacrifice, glyphID) {
+export function processManualReality(sacrifice, glyphID) {
   if (!isRealityAvailable()) return;
 
   if (player.realities === 0) {
@@ -174,7 +172,7 @@ function triggerManualReality(realityProps) {
   }
 }
 
-function runRealityAnimation() {
+export function runRealityAnimation() {
   document.getElementById("ui").style.userSelect = "none";
   document.getElementById("ui").style.animation = "realize 10s 1";
   document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
@@ -213,7 +211,7 @@ function processAutoGlyph(gainedLevel, rng) {
   }
 }
 
-function getRealityProps(isReset, alreadyGotGlyph = false) {
+export function getRealityProps(isReset, alreadyGotGlyph = false) {
   const defaults = {
     glyphUndo: false,
     restoreCelestialState: false,
@@ -231,7 +229,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
   });
 }
 
-function autoReality() {
+export function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
 }
@@ -305,7 +303,7 @@ function giveRealityRewards(realityProps) {
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
 // reality, but start an update loop that shows a progress bar.
-function beginProcessReality(realityProps) {
+export function beginProcessReality(realityProps) {
   if (realityProps.reset) {
     finishProcessReality(realityProps);
     return;
@@ -501,7 +499,7 @@ function beginProcessReality(realityProps) {
   Glyphs.processSortingAfterReality();
 }
 
-function finishProcessReality(realityProps) {
+export function finishProcessReality(realityProps) {
   const finalEP = Currency.eternityPoints.value.plus(gainedEternityPoints());
   if (player.records.bestReality.bestEP.lt(finalEP)) {
     player.records.bestReality.bestEP = new Decimal(finalEP);
@@ -654,7 +652,7 @@ function restoreCelestialRuns(celestialRunState) {
 
 // This is also called when the upgrade is purchased, be aware of potentially having "default" values overwrite values
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
-function applyRUPG10() {
+export function applyRUPG10() {
   NormalChallenges.completeAll();
 
   player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
@@ -679,7 +677,7 @@ function applyRUPG10() {
   Replicanti.unlock(true);
 }
 
-function clearCelestialRuns() {
+export function clearCelestialRuns() {
   const saved = {
     teresa: player.celestials.teresa.run,
     effarig: player.celestials.effarig.run,
@@ -704,7 +702,7 @@ function clearCelestialRuns() {
   return saved;
 }
 
-function isInCelestialReality() {
+export function isInCelestialReality() {
   return Object.values(player.celestials).some(x => x.run);
 }
 

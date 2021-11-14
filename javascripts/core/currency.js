@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @abstract
  */
@@ -102,7 +100,7 @@ MathOperations.decimal = new class DecimalMathOperations extends MathOperations 
 /**
  * @abstract
  */
-class Currency {
+export class Currency {
   /**
    * @abstract
    */
@@ -193,6 +191,7 @@ class DecimalCurrency extends Currency {
   get exponent() { return this.value.exponent; }
   get startingValue() { return DC.D0; }
 }
+window.DecimalCurrency = DecimalCurrency;
 
 Currency.antimatter = new class extends DecimalCurrency {
   get value() { return player.antimatter; }

@@ -1,4 +1,4 @@
-"use strict";
+import "../../../common/effect-display.js";
 
 Vue.component("alchemy-resource-info", {
   props: {

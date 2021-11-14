@@ -1,6 +1,4 @@
-"use strict";
-
-const GameIntervals = (function() {
+export const GameIntervals = (function() {
   const interval = (handler, timeout) => {
     let id = -1;
     return {

@@ -1,8 +1,6 @@
-"use strict";
-
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
 // OoM past the cap (default is 308.25 (log10 of 1.8e308), 1.2, Number.MAX_VALUE)
-const ReplicantiGrowth = {
+export const ReplicantiGrowth = {
   get scaleLog10() {
     return Math.log10(Number.MAX_VALUE);
   },
@@ -22,7 +20,7 @@ function addReplicantiGalaxies(newGalaxies) {
   }
 }
 
-function replicantiGalaxy() {
+export function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.replicanti.timer = 0;
   let galaxyGain = 1;
@@ -79,7 +77,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
 // has just crunched and is still at cap due to "Is this safe?" reward
 // (in which case interval should be as if not over cap). This is why we have
 // the overCapOverride parameter, to tell us which case we are in.
-function getReplicantiInterval(overCapOverride, intervalIn) {
+export function getReplicantiInterval(overCapOverride, intervalIn) {
   let interval = intervalIn || player.replicanti.interval;
   const amount = Replicanti.amount;
   const overCap = overCapOverride === undefined ? amount.gt(replicantiCap()) : overCapOverride;
@@ -116,7 +114,7 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
   return interval;
 }
 
-function replicantiCap() {
+export function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked
     ? Currency.infinitiesTotal.value
       .pow(TimeStudy(31).isBought ? 120 : 30)
@@ -125,7 +123,7 @@ function replicantiCap() {
     : Decimal.NUMBER_MAX_VALUE;
 }
 
-function replicantiLoop(diff) {
+export function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   PerformanceStats.start("Replicanti");
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
@@ -176,7 +174,7 @@ function replicantiLoop(diff) {
   PerformanceStats.end();
 }
 
-function replicantiMult() {
+export function replicantiMult() {
   return Decimal.pow(Decimal.log2(Replicanti.amount.clampMin(1)), 2)
     .plusEffectOf(TimeStudy(21))
     .timesEffectOf(TimeStudy(102))
@@ -235,7 +233,7 @@ class ReplicantiUpgradeState {
   }
 }
 
-const ReplicantiUpgrade = {
+export const ReplicantiUpgrade = {
   chance: new class ReplicantiChanceUpgrade extends ReplicantiUpgradeState {
     get id() { return 1; }
 
@@ -402,7 +400,7 @@ const ReplicantiUpgrade = {
   }(),
 };
 
-const Replicanti = {
+export const Replicanti = {
   get areUnlocked() {
     return player.replicanti.unl;
   },

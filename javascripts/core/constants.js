@@ -1,6 +1,4 @@
-"use strict";
-
-const PRESTIGE_EVENT = {
+window.PRESTIGE_EVENT = {
   DIMENSION_BOOST: 0,
   ANTIMATTER_GALAXY: 1,
   INFINITY: 2,
@@ -8,7 +6,7 @@ const PRESTIGE_EVENT = {
   REALITY: 4,
 };
 
-const DC = {
+window.DC = {
   // Naming Scheme:
   // D[0-9]: Decimal mantissa variable
   // _: decimal (.) part of the mantissa
@@ -183,27 +181,27 @@ function deepFreeze(obj) {
   return Object.freeze(obj);
 }
 
-deepFreeze(DC);
+deepFreeze(window.DC);
 
-const AUTOBUYER_MODE = {
+window.AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,
   BUY_MAX: 100,
 };
 
-const AUTO_CRUNCH_MODE = {
+window.AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
   X_HIGHEST: 2
 };
 
-const AUTO_ETERNITY_MODE = {
+window.AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
   X_HIGHEST: 2
 };
 
-const AUTO_REALITY_MODE = {
+window.AUTO_REALITY_MODE = {
   RM: 0,
   GLYPH: 1,
   EITHER: 2,
@@ -211,13 +209,13 @@ const AUTO_REALITY_MODE = {
 };
 
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
-const TS171_MULTIPLIER = 1.25;
+window.TS171_MULTIPLIER = 1.25;
 
 // Used as drag and drop data type
-const GLYPH_MIME_TYPE = "text/x-ivark-glyph";
+window.GLYPH_MIME_TYPE = "text/x-ivark-glyph";
 
 // These need to be in descending order for searching over them to work trivially
-const GlyphRarities = [
+window.GlyphRarities = [
   {
     minStrength: 3.5,
     name: "Celestial",
@@ -253,27 +251,27 @@ const GlyphRarities = [
   },
 ];
 
-const BLACK_HOLE_PAUSE_MODE = {
+window.BLACK_HOLE_PAUSE_MODE = {
   NO_PAUSE: 0,
   PAUSE_BEFORE_BH1: 1,
   PAUSE_BEFORE_BH2: 2,
 };
 
-const GLYPH_SIDEBAR_MODE = {
+window.GLYPH_SIDEBAR_MODE = {
   INVENTORY_MANAGEMENT: 0,
   FILTER_SETTINGS: 1,
   SAVED_SETS: 2,
   SACRIFICE_TYPE: 3,
 };
 
-const AUTO_SORT_MODE = {
+window.AUTO_SORT_MODE = {
   NONE: 0,
   POWER: 1,
   EFFECT: 2,
   SCORE: 3
 };
 
-const AUTO_GLYPH_SCORE = {
+window.AUTO_GLYPH_SCORE = {
   LOWEST_SACRIFICE: 0,
   EFFECT_COUNT: 1,
   RARITY_THRESHOLD: 2,
@@ -283,13 +281,13 @@ const AUTO_GLYPH_SCORE = {
   ALCHEMY_VALUE: 6
 };
 
-const AUTO_GLYPH_REJECT = {
+window.AUTO_GLYPH_REJECT = {
   SACRIFICE: 0,
   REFINE: 1,
   REFINE_TO_CAP: 2,
 };
 
-const TIME_STUDY_PATH = {
+window.TIME_STUDY_PATH = {
   NONE: 0,
   ANTIMATTER_DIM: 1,
   INFINITY_DIM: 2,
@@ -301,7 +299,7 @@ const TIME_STUDY_PATH = {
   DARK: 8
 };
 
-const ALCHEMY_RESOURCE = {
+window.ALCHEMY_RESOURCE = {
   POWER: 0,
   INFINITY: 1,
   TIME: 2,

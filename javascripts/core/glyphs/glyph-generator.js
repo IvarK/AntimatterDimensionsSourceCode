@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * It turns out reading and writing the RNG state from player is really slow, for
  * some reason. Thus, it's very advantageous to get an RNG as a local variable, and only
@@ -52,7 +50,7 @@ class GlyphRNG {
   get isFake() { throw new NotImplementedError(); }
 }
 
-const GlyphGenerator = {
+export const GlyphGenerator = {
   fakeSeed: Date.now() % Math.pow(2, 32),
   fakeSecondGaussian: null,
   /* eslint-disable lines-between-class-members */

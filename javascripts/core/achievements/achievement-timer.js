@@ -1,5 +1,3 @@
-"use strict";
-
 class AchievementTimer {
   constructor(isRealTime) {
     this.time = 0;
@@ -27,7 +25,7 @@ class AchievementTimer {
   }
 }
 
-const AchievementTimers = {
+export const AchievementTimers = {
   marathon1: new AchievementTimer(false),
   marathon2: new AchievementTimer(false),
   pain: new AchievementTimer(true),

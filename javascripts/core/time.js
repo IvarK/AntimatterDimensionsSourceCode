@@ -1,6 +1,4 @@
-"use strict";
-
-const DeltaTimeState = {
+export const DeltaTimeState = {
   deltaTime: new TimeSpan(0),
   unscaledDeltaTime: new TimeSpan(0),
   update(deltaTime, gameDeltaTime) {
@@ -9,7 +7,7 @@ const DeltaTimeState = {
   }
 };
 
-const Time = {
+export const Time = {
   /**
    * @param {Function} getValue
    * @returns {TimeSpan}

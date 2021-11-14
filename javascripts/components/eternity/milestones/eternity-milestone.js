@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("eternity-milestone", {
   props: {
     getMilestone: Function

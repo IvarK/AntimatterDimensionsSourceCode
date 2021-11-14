@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("new-inf-dimension-row", {
   props: {
     tier: Number

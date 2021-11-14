@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {

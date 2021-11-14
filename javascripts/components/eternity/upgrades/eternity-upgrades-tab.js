@@ -1,4 +1,5 @@
-"use strict";
+import "./ep-multiplier-button.js";
+import "./eternity-upgrade-button.js";
 
 Vue.component("eternity-upgrades-tab", {
   computed: {

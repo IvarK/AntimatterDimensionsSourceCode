@@ -1,5 +1,3 @@
-"use strict";
-
 // If you change this, try to keep the syntaxes and tenses the same to avoid solecisms
 const GLYPH_NAMES = {
   companion: { name: "Huggable" },

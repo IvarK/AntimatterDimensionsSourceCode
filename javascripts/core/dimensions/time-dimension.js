@@ -1,6 +1,6 @@
-"use strict";
+import { DimensionState } from "./dimension.js";
 
-function buySingleTimeDimension(tier) {
+export function buySingleTimeDimension(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
   if (Currency.eternityPoints.lt(dim.cost)) return false;
@@ -13,11 +13,11 @@ function buySingleTimeDimension(tier) {
   return true;
 }
 
-function resetTimeDimensions() {
+export function resetTimeDimensions() {
   for (const dim of TimeDimensions.all) dim.amount = new Decimal(dim.bought);
 }
 
-function fullResetTimeDimensions() {
+export function fullResetTimeDimensions() {
   for (const dim of TimeDimensions.all) {
     dim.cost = new Decimal(dim.baseCost);
     dim.amount = DC.D0;
@@ -25,14 +25,14 @@ function fullResetTimeDimensions() {
   }
 }
 
-function toggleAllTimeDims() {
+export function toggleAllTimeDims() {
   const areEnabled = Autobuyer.timeDimension(1).isActive;
   for (let i = 1; i < 9; i++) {
     Autobuyer.timeDimension(i).isActive = !areEnabled;
   }
 }
 
-function buyMaxTimeDimension(tier) {
+export function buyMaxTimeDimension(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
   if (Enslaved.isRunning) return buySingleTimeDimension(tier);
@@ -49,7 +49,7 @@ function buyMaxTimeDimension(tier) {
   return true;
 }
 
-function maxAllTimeDimensions(checkAutobuyers = false) {
+export function maxAllTimeDimensions(checkAutobuyers = false) {
   // Default behavior: Buy as many as possible, starting with the highest dimension first
   // (reduces overhead at higher EP)
   if (Currency.eternityPoints.exponent >= 10) {
@@ -79,7 +79,7 @@ function maxAllTimeDimensions(checkAutobuyers = false) {
   }
 }
 
-function timeDimensionCommonMultiplier() {
+export function timeDimensionCommonMultiplier() {
   let mult = new Decimal(ShopPurchase.allDimPurchases.currentMult)
     .timesEffectsOf(
       Achievement(105),
@@ -257,9 +257,9 @@ class TimeDimensionState extends DimensionState {
  * @param {number} tier
  * @return {TimeDimensionState}
  */
-const TimeDimension = TimeDimensionState.createAccessor();
+export const TimeDimension = TimeDimensionState.createAccessor();
 
-const TimeDimensions = {
+export const TimeDimensions = {
   /**
    * @type {TimeDimensionState[]}
    */
@@ -286,7 +286,7 @@ const TimeDimensions = {
   }
 };
 
-function tryUnlockTimeDimensions() {
+export function tryUnlockTimeDimensions() {
   if (TimeDimension(8).isUnlocked) return;
   for (let tier = 5; tier <= 8; ++tier) {
     if (TimeDimension(tier).isUnlocked) continue;

@@ -1,6 +1,4 @@
-"use strict";
-
-function playFabLogin() {
+export function playFabLogin() {
   try {
     var authTicket = kongregate.services.getGameAuthToken();
     var requestData = {

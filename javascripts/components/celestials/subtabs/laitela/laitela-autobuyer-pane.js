@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("laitela-autobuyer-settings", {
   data() {
     return {

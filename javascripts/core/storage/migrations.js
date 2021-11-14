@@ -1,4 +1,4 @@
-"use strict";
+import { GameStorage } from "./storage.js";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {

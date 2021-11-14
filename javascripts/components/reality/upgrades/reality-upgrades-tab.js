@@ -1,4 +1,4 @@
-"use strict";
+import "./reality-upgrade-button.js";
 
 Vue.component("reality-upgrades-tab", {
   computed: {

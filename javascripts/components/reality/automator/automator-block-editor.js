@@ -1,6 +1,6 @@
-"use strict";
+import "./automator-single-block.js";
 
-const BlockAutomator = {
+export const BlockAutomator = {
   _idArray: [],
 
   get lines() {

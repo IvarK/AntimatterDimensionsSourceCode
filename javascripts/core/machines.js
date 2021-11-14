@@ -1,6 +1,4 @@
-"use strict";
-
-const MachineHandler = {
+export const MachineHandler = {
   get baseRMCap() { return DC.E1000; },
 
   get hardcapRM() {

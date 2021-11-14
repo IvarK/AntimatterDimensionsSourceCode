@@ -1,4 +1,4 @@
-"use strict";
+import { modalCloudConflictMixin } from "./modal-cloud-conflict-record.js";
 
 Vue.component("modal-cloud-save-conflict", {
   mixins: [modalCloudConflictMixin],

@@ -1,9 +1,10 @@
-"use strict";
+import { notify } from "./notify.js";
+import { state } from "./ui.init.js";
 
 Vue.mixin({
   computed: {
     $viewModel() {
-      return ui.view;
+      return state.view;
     }
   },
   methods: {
@@ -100,7 +101,8 @@ const ReactivityComplainer = {
   }
 };
 
-const GameUI = {
+export const GameUI = {
+  notify,
   events: [],
   flushPromise: undefined,
   initialized: false,
@@ -146,7 +148,7 @@ const GameUI = {
   }
 };
 
-const UIID = (function() {
+export const UIID = (function() {
   let id = 0;
   return { next: () => id++ };
 }());
@@ -174,9 +176,9 @@ const UIID = (function() {
   };
 }());
 
-ui = new Vue({
+export const ui = new Vue({
   el: "#ui",
-  data: ui,
+  data: state,
   computed: {
     notation() {
       return Notations.find(this.notationName);

@@ -1,4 +1,4 @@
-"use strict";
+import "./infinity-dim-row.js";
 
 Vue.component("infinity-dim-tab", {
   data() {

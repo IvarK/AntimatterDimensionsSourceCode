@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-options", {
   template: `
     <div class="c-modal-options l-modal-options">
@@ -8,7 +6,7 @@ Vue.component("modal-options", {
     </div>`
 });
 
-const modalOptionsMixin = {
+export const modalOptionsMixin = {
   data() {
     return {
       infinityUnlocked: false,

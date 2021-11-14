@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("failable-ec-text", {
   data() {
     return {

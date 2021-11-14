@@ -1,6 +1,6 @@
-"use strict";
+import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 
-function bigCrunchAnimation() {
+export function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
   setTimeout(() => {
     document.body.style.animation = "";
@@ -21,7 +21,7 @@ function handleChallengeCompletion() {
   }
 }
 
-function bigCrunchResetRequest(disableAnimation = false) {
+export function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
   if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
     bigCrunchAnimation();
@@ -31,7 +31,7 @@ function bigCrunchResetRequest(disableAnimation = false) {
   }
 }
 
-function bigCrunchReset() {
+export function bigCrunchReset() {
   if (!Player.canCrunch) return;
 
   const firstInfinity = !PlayerProgress.infinityUnlocked();
@@ -94,7 +94,7 @@ function bigCrunchTabChange(firstInfinity) {
   }
 }
 
-function bigCrunchResetValues() {
+export function bigCrunchResetValues() {
   const currentReplicanti = Replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   // For unknown reasons, everything but keeping of RGs (including resetting of RGs)
@@ -124,7 +124,7 @@ function bigCrunchCheckUnlocks() {
   }
 }
 
-function secondSoftReset(forcedNDReset = false) {
+export function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
   player.records.thisInfinity.maxAM = DC.D0;
@@ -151,7 +151,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
   }
 }
 
-class InfinityUpgrade extends SetPurchasableMechanicState {
+export class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
     if (Array.isArray(requirement) || typeof requirement === 'function') {
@@ -222,7 +222,7 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 }
 
-function totalIPMult() {
+export function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
     return DC.D1;
   }
@@ -247,7 +247,7 @@ function totalIPMult() {
   return ipMult;
 }
 
-function disChargeAll() {
+export function disChargeAll() {
   const upgrades = [
     InfinityUpgrade.totalTimeMult,
     InfinityUpgrade.dim18mult,
@@ -376,7 +376,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
 InfinityUpgrade.ipMult = new InfinityIPMultUpgrade(GameDatabase.infinity.upgrades.ipMult);
 
-class BreakInfinityUpgrade extends SetPurchasableMechanicState {
+export class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   get currency() {
     return Currency.infinityPoints;
   }
@@ -434,7 +434,7 @@ BreakInfinityUpgrade.dimCostMult = new class extends RebuyableBreakInfinityUpgra
 
 BreakInfinityUpgrade.ipGen = new RebuyableBreakInfinityUpgradeState(GameDatabase.infinity.breakUpgrades.ipGen);
 
-function preProductionGenerateIP(diff) {
+export function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {
     const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
     let genCount;

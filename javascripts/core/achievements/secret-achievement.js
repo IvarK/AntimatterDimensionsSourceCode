@@ -1,4 +1,4 @@
-"use strict";
+import { GameMechanicState } from "../game-mechanics/index.js";
 
 class SecretAchievementState extends GameMechanicState {
   constructor(config) {
@@ -53,9 +53,9 @@ class SecretAchievementState extends GameMechanicState {
  * @param {number} id
  * @returns {SecretAchievementState}
  */
-const SecretAchievement = SecretAchievementState.createAccessor(GameDatabase.achievements.secret);
+export const SecretAchievement = SecretAchievementState.createAccessor(GameDatabase.achievements.secret);
 
-const SecretAchievements = {
+export const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */

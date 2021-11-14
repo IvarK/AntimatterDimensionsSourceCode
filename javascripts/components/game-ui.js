@@ -1,4 +1,9 @@
-"use strict";
+import "./old-ui/old-ui.js";
+import "./new-ui/new-ui.js";
+import "./save-timer.js";
+import "./help-me.js";
+import "./tt-shop.js";
+import "./new-ui/sidebar.js";
 
 Vue.component("game-ui", {
   computed: {

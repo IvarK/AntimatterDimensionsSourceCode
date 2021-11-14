@@ -1,6 +1,6 @@
-"use strict";
+import { DimensionState } from "./dimension.js";
 
-function infinityDimensionCommonMultiplier() {
+export function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(ShopPurchase.allDimPurchases.currentMult)
     .timesEffectsOf(
       Achievement(75),
@@ -24,7 +24,7 @@ function infinityDimensionCommonMultiplier() {
   return mult;
 }
 
-function buyManyInfinityDimension(tier) {
+export function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
   Currency.infinityPoints.subtract(dim.cost);
@@ -39,7 +39,7 @@ function buyManyInfinityDimension(tier) {
   return true;
 }
 
-function buyMaxInfDims(tier) {
+export function buyMaxInfDims(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
   const costMult = dim.costMultiplier;
@@ -68,14 +68,14 @@ function canBuyInfinityDimension(tier) {
 
 }
 
-function buyMaxInfinityDimensions() {
+export function buyMaxInfinityDimensions() {
   if (EternityChallenge(8).isRunning) return;
   for (const tier of Array.dimensionTiers) {
     buyMaxInfDims(tier);
   }
 }
 
-function toggleAllInfDims() {
+export function toggleAllInfDims() {
   const areEnabled = Autobuyer.infinityDimension(1).isActive;
   for (let i = 1; i < 9; i++) {
     Autobuyer.infinityDimension(i).isActive = !areEnabled;
@@ -270,9 +270,9 @@ class InfinityDimensionState extends DimensionState {
  * @param {number} tier
  * @return {InfinityDimensionState}
  */
-const InfinityDimension = InfinityDimensionState.createAccessor();
+export const InfinityDimension = InfinityDimensionState.createAccessor();
 
-const InfinityDimensions = {
+export const InfinityDimensions = {
   /**
    * @type {InfinityDimensionState[]}
    */
@@ -336,7 +336,7 @@ const InfinityDimensions = {
   }
 };
 
-function tryUnlockInfinityDimensions(auto) {
+export function tryUnlockInfinityDimensions(auto) {
   if (auto && (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked)) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;

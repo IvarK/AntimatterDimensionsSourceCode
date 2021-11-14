@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerState {
   get data() {

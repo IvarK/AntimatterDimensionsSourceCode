@@ -1,18 +1,18 @@
-"use strict";
+import { GameDatabase } from "./secret-formula/game-database.js";
 
 // There is a little too much stuff about glyph effects to put in constants.
 
 // The last glyph type you can only get if you got effarig reality
-const GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig",
+export const GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig",
   "reality", "cursed", "companion"];
-const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation"];
-const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
-const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
+export const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation"];
+export const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
+export const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
-const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎",
+export const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎",
   effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
-const GlyphCombiner = Object.freeze({
+export const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
   multiply: x => x.reduce(Number.prodReducer, 1),
   // For exponents, the base value is 1, so when we add two exponents a and b we want to get a + b - 1,
@@ -186,13 +186,13 @@ class GlyphEffectConfig {
   }
 }
 
-const ALTERATION_TYPE = {
+export const ALTERATION_TYPE = {
   ADDITION: 1,
   EMPOWER: 2,
   BOOST: 3
 };
 
-const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
+export const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
 
 GameDatabase.reality.glyphEffects = [
   {
@@ -796,27 +796,27 @@ GameDatabase.reality.glyphEffects = [
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 
-function findGlyphTypeEffects(glyphType) {
+export function findGlyphTypeEffects(glyphType) {
   return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
 }
 
-function makeGlyphEffectBitmask(effectList) {
+export function makeGlyphEffectBitmask(effectList) {
   // eslint-disable-next-line no-bitwise
   return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
 }
 
-function getGlyphEffectsFromBitmask(bitmask) {
+export function getGlyphEffectsFromBitmask(bitmask) {
   return orderedEffectList
     .map(effectName => GameDatabase.reality.glyphEffects[effectName])
     // eslint-disable-next-line no-bitwise
     .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0);
 }
 
-function getGlyphIDsFromBitmask(bitmask) {
+export function getGlyphIDsFromBitmask(bitmask) {
   return getGlyphEffectsFromBitmask(bitmask).map(x => x.id);
 }
 
-function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
+export function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
   const needle = getGlyphIDsFromBitmask(needleBitmask);
   const haystack = getGlyphIDsFromBitmask(haystackBitmask);
   return haystack.every(x => needle.includes(x));
@@ -887,7 +887,7 @@ class GlyphType {
   }
 }
 
-const GlyphTypes = {
+export const GlyphTypes = {
   time: new GlyphType({
     id: "time",
     symbol: GLYPH_SYMBOLS.time,

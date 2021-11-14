@@ -1,6 +1,4 @@
-"use strict";
-
-class CelestialQuotes {
+export class CelestialQuotes {
   constructor(celestialName, quoteData) {
     this.quotesById = [];
     for (const quoteKey of Object.keys(quoteData)) {

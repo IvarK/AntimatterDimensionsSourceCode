@@ -1,4 +1,4 @@
-"use strict";
+import "./new-inf-dimension-row.js";
 
 Vue.component("new-inf-dimensions-tab", {
   data() {

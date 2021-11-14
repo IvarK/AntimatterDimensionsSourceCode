@@ -1,4 +1,4 @@
-"use strict";
+import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
@@ -52,19 +52,19 @@ function giveEternityRewards(auto) {
   }
 }
 
-function eternityAnimation() {
+export function eternityAnimation() {
   document.body.style.animation = "eternify 3s 1";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 3000);
 }
 
-function eternityResetRequest() {
+export function eternityResetRequest() {
   if (!Player.canEternity) return;
   askEternityConfirmation();
 }
 
-function eternity(force, auto, specialConditions = {}) {
+export function eternity(force, auto, specialConditions = {}) {
   if (specialConditions.switchingDilation && !Player.canEternity) {
     // eslint-disable-next-line no-param-reassign
     force = true;
@@ -126,7 +126,7 @@ function eternity(force, auto, specialConditions = {}) {
   return true;
 }
 
-function initializeChallengeCompletions(isReality) {
+export function initializeChallengeCompletions(isReality) {
   NormalChallenges.clearCompletions();
   InfinityChallenges.clearCompletions();
   if (!isReality && EternityMilestone.keepAutobuyers.isReached) {
@@ -137,7 +137,7 @@ function initializeChallengeCompletions(isReality) {
   player.challenge.infinity.current = 0;
 }
 
-function initializeResourcesAfterEternity() {
+export function initializeResourcesAfterEternity() {
   player.sacrificed = DC.D0;
   Currency.infinities.reset();
   player.records.bestInfinity.time = 999999999999;
@@ -177,7 +177,7 @@ function askEternityConfirmation() {
   }
 }
 
-class EternityMilestoneState {
+export class EternityMilestoneState {
   constructor(config) {
     this.config = config;
   }
@@ -187,7 +187,7 @@ class EternityMilestoneState {
   }
 }
 
-const EternityMilestone = (function() {
+export const EternityMilestone = (function() {
   const db = GameDatabase.eternity.milestones;
   const infinityDims = Array.dimensionTiers
     .map(tier => new EternityMilestoneState(db[`autobuyerID${tier}`]));
@@ -215,7 +215,7 @@ const EternityMilestone = (function() {
   };
 }());
 
-const EternityMilestones = {
+export const EternityMilestones = {
   // This is a bit of a hack because autobuyerID is a function that returns EternityMilestoneState objects instead of a
   // EternityMilestoneState object itself
   all: Object.values(EternityMilestone)
@@ -311,7 +311,7 @@ class EPMultiplierState extends GameMechanicState {
 }
 
 
-const EternityUpgrade = (function() {
+export const EternityUpgrade = (function() {
   const db = GameDatabase.eternity.upgrades;
   return {
     idMultEP: new EternityUpgradeState(db.idMultEP),

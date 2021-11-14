@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && node build/post-build.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

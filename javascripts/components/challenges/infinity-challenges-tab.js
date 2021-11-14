@@ -1,14 +1,15 @@
 import "./challenges-header.js";
 import "./challenge-grid.js";
 import "./challenge-box.js";
-import "../common/effect-display.js";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("infinity-challenges-tab", {
   components: {
     "infinity-challenge-box": {
       components: {
-        DescriptionDisplay
+        DescriptionDisplay,
+        EffectDisplay
       },
       props: {
         challengeId: Number
@@ -50,7 +51,10 @@ Vue.component("infinity-challenges-tab", {
         >
           <template slot="top">
             <DescriptionDisplay :config="config"/>
-            <effect-display v-if="isRunning" :config="config" />
+            <EffectDisplay
+              v-if="isRunning"
+              :config="config"
+            />
           </template>
           <div slot="bottom" class="l-challenge-box__bottom--infinity">
             <span>Goal: {{ format(config.goal) }} antimatter</span>
@@ -58,7 +62,10 @@ Vue.component("infinity-challenges-tab", {
               :config="config.reward"
               label="Reward:"
             />
-            <effect-display v-if="isCompleted" :config="config.reward" />
+            <EffectDisplay
+              v-if="isCompleted"
+              :config="config.reward"
+            />
           </div>
         </challenge-box>`
     }

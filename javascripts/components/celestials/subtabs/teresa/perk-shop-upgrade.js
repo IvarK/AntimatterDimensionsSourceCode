@@ -1,10 +1,11 @@
-import "../../../common/effect-display.js";
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("perk-shop-upgrade", {
   components: {
     DescriptionDisplay,
+    EffectDisplay,
     CostDisplay
   },
   props: {
@@ -39,7 +40,7 @@ Vue.component("perk-shop-upgrade", {
           :length="70"
         />
         <br>
-        <effect-display :config="upgrade.config" />
+        <EffectDisplay :config="upgrade.config"/>
         <br>
         <CostDisplay
           v-if="!isCapped"

@@ -1,10 +1,11 @@
-import "../../common/effect-display.js";
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("dilation-upgrade", {
   components: {
     DescriptionDisplay,
+    EffectDisplay,
     CostDisplay
   },
   props: {
@@ -76,7 +77,7 @@ Vue.component("dilation-upgrade", {
           :length="70"
           name="o-dilation-upgrade__description"
         />
-        <effect-display
+        <EffectDisplay
           br
           :config="upgrade.config"
           :key="boughtAmount"

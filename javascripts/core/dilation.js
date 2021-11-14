@@ -204,7 +204,7 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 
   get isCapped() {
-    return this.config.reachedCapFn();
+    return this.config.reachedCap();
   }
 
   purchase(bulk) {

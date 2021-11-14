@@ -1,6 +1,9 @@
-import "../../../common/effect-display.js";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("alchemy-resource-info", {
+  components: {
+    EffectDisplay
+  },
   props: {
     resource: Object
   },
@@ -89,7 +92,12 @@ Vue.component("alchemy-resource-info", {
       </span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-      <span><effect-display title="Effect" :config="effectConfig" /></span>
+      <span>
+        <EffectDisplay
+          label="Effect"
+          :config="effectConfig"
+        />
+      </span>
     </div>
     <div :class="classObject" v-else>
       Unlock requirement: {{ unlockRequirement }}

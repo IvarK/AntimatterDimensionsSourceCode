@@ -2,11 +2,14 @@ import "./challenges-header.js";
 import "./challenge-grid.js";
 import "./eternity-challenge-box.js";
 import "../common/effect-display.js";
-import "../common/description-display.js";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("eternity-challenges-tab", {
   components: {
     "eternity-challenge-box": {
+      components: {
+        DescriptionDisplay
+      },
       props: {
         challengeId: Number
       },
@@ -106,7 +109,10 @@ Vue.component("eternity-challenges-tab", {
           :canBeUnlocked="canBeUnlocked"
           @start="start"
         >
-          <description-display :config="config" slot="top" />
+          <DescriptionDisplay
+            :config="config"
+            slot="top"
+          />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
               <div>
@@ -119,7 +125,7 @@ Vue.component("eternity-challenges-tab", {
             </span>
             <span>
               Reward:
-              <description-display
+              <DescriptionDisplay
                 :config="config.reward"
                 :length="55"
                 name="c-challenge-box__reward-description"

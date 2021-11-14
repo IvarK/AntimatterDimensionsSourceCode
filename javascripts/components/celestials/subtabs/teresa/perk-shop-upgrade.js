@@ -1,9 +1,10 @@
 import "../../../common/effect-display.js";
-import "../../../common/description-display.js";
 import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("perk-shop-upgrade", {
   components: {
+    DescriptionDisplay,
     CostDisplay
   },
   props: {
@@ -33,7 +34,7 @@ Vue.component("perk-shop-upgrade", {
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        <description-display
+        <DescriptionDisplay
           :config="upgrade.config"
           :length="70"
         />

@@ -1,8 +1,9 @@
-import "../../../common/description-display.js";
 import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("effarig-unlock-button", {
   components: {
+    DescriptionDisplay,
     CostDisplay
   },
   props: {
@@ -37,7 +38,7 @@ Vue.component("effarig-unlock-button", {
   },
   template: `
     <button :class="classObject" @click="purchase">
-      <description-display :config="config" />
+      <DescriptionDisplay :config="config"/>
       <CostDisplay
         v-if="!isBought"
         :config="config"

@@ -1,9 +1,10 @@
 import "../../common/effect-display.js";
-import "../../common/description-display.js";
 import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("dilation-upgrade", {
   components: {
+    DescriptionDisplay,
     CostDisplay
   },
   props: {
@@ -70,7 +71,7 @@ Vue.component("dilation-upgrade", {
   template: `
     <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
-        <description-display
+        <DescriptionDisplay
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"

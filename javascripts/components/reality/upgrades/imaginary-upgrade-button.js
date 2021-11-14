@@ -1,10 +1,11 @@
 import "../../common/hint-text.js";
 import "../../common/effect-display.js";
-import "../../common/description-display.js";
 import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("imaginary-upgrade-button", {
   components: {
+    DescriptionDisplay,
     CostDisplay
   },
   props: {
@@ -69,11 +70,11 @@ Vue.component("imaginary-upgrade-button", {
         >
           {{ config.name }}
         </hint-text>
-        <description-display :config="config"/>
-        <description-display
+        <DescriptionDisplay :config="config"/>
+        <DescriptionDisplay
           v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
           :config="requirementConfig"
-          title="Requirement:"
+          label="Requirement:"
           class="c-reality-upgrade-btn__requirement"
         />
         <template v-else>

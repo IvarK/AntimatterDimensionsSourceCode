@@ -1,9 +1,10 @@
 import "../../common/effect-display.js";
-import "../../common/description-display.js";
 import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("black-hole-upgrade-button", {
   components: {
+    DescriptionDisplay,
     CostDisplay
   },
   props: {
@@ -59,7 +60,7 @@ Vue.component("black-hole-upgrade-button", {
         class="l-reality-upgrade-btn c-reality-upgrade-btn"
         @click="config.upgrade.purchase()"
       >
-        <description-display :config="config" />
+        <DescriptionDisplay :config="config" />
         <effect-display :config="effectConfig" :title="config.effectTitle" />
         <CostDisplay
           v-if="!isCapped"

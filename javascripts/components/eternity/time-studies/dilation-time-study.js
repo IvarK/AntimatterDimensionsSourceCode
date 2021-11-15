@@ -46,7 +46,7 @@ Vue.component("dilation-time-study", {
   },
   template: `
     <time-study :setup="setup">
-      <DescriptionDisplay :config="study.config"/>
+      <DescriptionDisplay :config="study.config" />
       <template v-if="showRequirement">
         <br>
         <span>{{ requirement }}</span>

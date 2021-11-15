@@ -36,7 +36,7 @@ Vue.component("eternity-upgrade-button", {
   },
   template: `
     <button :class="classObject" @click="upgrade.purchase()">
-      <DescriptionDisplay :config="upgrade.config"/>
+      <DescriptionDisplay :config="upgrade.config" />
       <EffectDisplay
         br
         :config="upgrade.config"

@@ -50,7 +50,7 @@ Vue.component("infinity-challenges-tab", {
           @start="challenge.requestStart()"
         >
           <template slot="top">
-            <DescriptionDisplay :config="config"/>
+            <DescriptionDisplay :config="config" />
             <EffectDisplay
               v-if="isRunning"
               :config="config"

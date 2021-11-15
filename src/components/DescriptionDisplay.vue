@@ -1,12 +1,3 @@
-<template>
-  <span
-    v-if="isVisible"
-    :class="classes"
-  >
-    {{ title }} {{ description }}
-  </span>
-</template>
-
 <script>
 import { isFunction, isString } from "@/utility";
 
@@ -91,3 +82,12 @@ export default {
   },
 }
 </script>
+
+<template>
+  <span
+    v-if="isVisible"
+    :class="classes"
+  >
+    {{ title }} {{ description }}
+  </span>
+</template>

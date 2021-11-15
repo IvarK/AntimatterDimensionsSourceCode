@@ -1,10 +1,3 @@
-<template>
-  <span v-if="isVisible">
-    <br v-if="br">
-    {{ label }} {{ quantify(name, cost, 0, 0, formatCost) }}
-  </span>
-</template>
-
 <script>
 import { isDecimal, isFunction, isNumber } from "@/utility";
 
@@ -88,3 +81,10 @@ export default {
   }
 }
 </script>
+
+<template>
+  <span v-if="isVisible">
+    <br v-if="br">
+    {{ label }} {{ quantify(name, cost, 0, 0, formatCost) }}
+  </span>
+</template>

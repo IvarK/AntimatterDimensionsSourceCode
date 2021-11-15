@@ -40,7 +40,7 @@ Vue.component("perk-shop-upgrade", {
           :length="70"
         />
         <br>
-        <EffectDisplay :config="upgrade.config"/>
+        <EffectDisplay :config="upgrade.config" />
         <br>
         <CostDisplay
           v-if="!isCapped"

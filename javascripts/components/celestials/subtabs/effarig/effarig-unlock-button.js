@@ -38,7 +38,7 @@ Vue.component("effarig-unlock-button", {
   },
   template: `
     <button :class="classObject" @click="purchase">
-      <DescriptionDisplay :config="config"/>
+      <DescriptionDisplay :config="config" />
       <CostDisplay
         v-if="!isBought"
         :config="config"

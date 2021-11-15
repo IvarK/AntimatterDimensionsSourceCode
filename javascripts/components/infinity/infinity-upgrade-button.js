@@ -73,7 +73,7 @@ Vue.component("infinity-upgrade-button", {
       @mouseleave="showingCharged = false"
       @click="upgrade.purchase()"
     >
-      <DescriptionDisplay :config="config"/>
+      <DescriptionDisplay :config="config" />
       <EffectDisplay
         br
         v-if="!isDisabled"

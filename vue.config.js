@@ -5,6 +5,6 @@ module.exports = {
   publicPath: "./",
   lintOnSave: false,
   configureWebpack: {
-    devtool: "source-map",
+    devtool: "eval-source-map",
   },
 };

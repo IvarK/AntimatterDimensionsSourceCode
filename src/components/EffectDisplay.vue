@@ -1,10 +1,3 @@
-<template>
-  <span v-if="isVisible && effectDisplay !== undefined">
-    <br v-if="br">
-    {{ labelDisplay }}{{ effectDisplay }}
-  </span>
-</template>
-
 <script>
 import { isDecimal, isFunction, isNumber } from "@/utility";
 
@@ -142,3 +135,10 @@ export default {
   }
 }
 </script>
+
+<template>
+  <span v-if="isVisible && effectDisplay !== undefined">
+    <br v-if="br">
+    {{ labelDisplay }}{{ effectDisplay }}
+  </span>
+</template>

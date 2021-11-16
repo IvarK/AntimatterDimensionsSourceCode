@@ -1,11 +1,14 @@
 <script>
+
 import { isDecimal, isFunction, isNumber } from "@/utility";
 
+/* eslint-disable no-empty-function */
 export default {
   props: {
     config: {
       type: Object,
-      required: false
+      required: false,
+      default: undefined
     },
     br: {
       type: Boolean,
@@ -48,7 +51,7 @@ export default {
         }
 
         if (!isFunction(cost)) {
-          throw new Error(`CostDisplay config.cost has unsupported type \"${typeof cost}\"`);
+          throw new Error(`CostDisplay config.cost has unsupported type "${typeof cost}"`);
         }
 
         const value = cost();
@@ -65,8 +68,8 @@ export default {
           return;
         }
 
-        throw new Error(`CostDisplay config.cost is a function which returns`
-          + ` unsupported type \"${typeof value}\"`);
+        throw new Error(`CostDisplay config.cost is a function which returns` +
+          ` unsupported type "${typeof value}"`);
       }
     }
   },
@@ -79,7 +82,7 @@ export default {
     },
     quantify
   }
-}
+};
 </script>
 
 <template>

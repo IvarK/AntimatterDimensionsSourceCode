@@ -1,19 +1,23 @@
 <script>
 import { isFunction, isString } from "@/utility";
 
+/* eslint-disable no-empty-function */
 export default {
   props: {
     config: {
       type: Object,
-      required: false
+      required: false,
+      default: undefined
     },
     name: {
       type: String,
-      required: false
+      required: false,
+      default: undefined
     },
     length: {
       type: Number,
-      required: false
+      required: false,
+      default: undefined
     },
     title: {
       type: String,
@@ -55,8 +59,8 @@ export default {
         }
 
         if (!isFunction(description)) {
-          throw new Error(`CostDisplay config.description has `
-            + ` unsupported type \"${typeof description}\"`);
+          throw new Error(`CostDisplay config.description has ` +
+            ` unsupported type "${typeof description}"`);
         }
 
         const value = description();
@@ -67,8 +71,8 @@ export default {
           return;
         }
 
-        throw new Error(`CostDisplay config.description is a function `
-          + `which returns unsupported type \"${typeof value}\"`);
+        throw new Error(`CostDisplay config.description is a function ` +
+          `which returns unsupported type "${typeof value}"`);
       }
     }
   },
@@ -80,7 +84,7 @@ export default {
       this.updateFunction();
     }
   },
-}
+};
 </script>
 
 <template>

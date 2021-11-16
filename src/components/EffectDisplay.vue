@@ -1,11 +1,13 @@
 <script>
 import { isDecimal, isFunction, isNumber } from "@/utility";
 
+/* eslint-disable no-empty-function */
 export default {
   props: {
     config: {
       type: Object,
-      required: false
+      required: false,
+      default: undefined
     },
     br: {
       type: Boolean,
@@ -26,6 +28,20 @@ export default {
       cap: Number.MAX_VALUE,
       hasCap: false
     };
+  },
+  computed: {
+    reachedCap() {
+      return this.reachedCapFunction();
+    },
+    labelDisplay() {
+      if (this.config.noLabel) {
+        return "";
+      }
+      return `${this.hasCap && this.reachedCap ? "Capped" : this.label}: `;
+    },
+    effectDisplay() {
+      return this.formatEffect(this.hasCap && this.reachedCap ? this.cap : this.effectValue);
+    }
   },
   watch: {
     config: {
@@ -50,8 +66,8 @@ export default {
         }
 
         if (!isFunction(effect)) {
-          throw new Error(`EffectDisplay config.effect has `
-            + ` unsupported type \"${typeof effect}\"`);
+          throw new Error(`EffectDisplay config.effect has ` +
+            ` unsupported type "${typeof effect}"`);
         }
 
         const value = effect();
@@ -63,8 +79,8 @@ export default {
           this.effectValue = Decimal.fromDecimal(effect);
           this.updateEffect = () => this.effectValue.copyFrom(effect());
         } else {
-          throw new Error(`EffectDisplay config.effect is a function which returns`
-            + ` unsupported type \"${typeof effect}\"`);
+          throw new Error(`EffectDisplay config.effect is a function which returns` +
+            ` unsupported type "${typeof effect}"`);
         }
 
         let cap = config.cap;
@@ -103,24 +119,10 @@ export default {
             return;
           }
 
-          throw new Error(`EffectDisplay config.cap is a function which returns`
-            + ` unsupported type \"${typeof effect}\"`);
+          throw new Error(`EffectDisplay config.cap is a function which returns` +
+            ` unsupported type "${typeof effect}"`);
         }
       }
-    }
-  },
-  computed: {
-    reachedCap() {
-      return this.reachedCapFunction();
-    },
-    labelDisplay() {
-      if (this.config.noLabel) {
-        return "";
-      }
-      return `${this.hasCap && this.reachedCap ? "Capped" : this.label}: `;
-    },
-    effectDisplay() {
-      return this.formatEffect(this.hasCap && this.reachedCap ? this.cap : this.effectValue);
     }
   },
   created() {
@@ -133,7 +135,7 @@ export default {
       this.updateCap();
     }
   }
-}
+};
 </script>
 
 <template>

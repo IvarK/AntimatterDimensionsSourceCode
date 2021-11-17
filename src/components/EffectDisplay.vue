@@ -31,16 +31,16 @@ export default {
   },
   computed: {
     reachedCap() {
-      return this.reachedCapFunction();
+      return this.hasCap && this.reachedCapFunction();
     },
     labelDisplay() {
       if (this.config.noLabel) {
         return "";
       }
-      return `${this.hasCap && this.reachedCap ? "Capped" : this.label}: `;
+      return `${this.reachedCap ? "Capped" : this.label}: `;
     },
     effectDisplay() {
-      return this.formatEffect(this.hasCap && this.reachedCap ? this.cap : this.effectValue);
+      return this.formatEffect(this.reachedCap ? this.cap : this.effectValue);
     }
   },
   watch: {

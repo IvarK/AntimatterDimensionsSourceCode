@@ -298,6 +298,12 @@ window.TIME_STUDY_PATH = {
   DARK: 8
 };
 
+window.TS_REQUIREMENT_TYPE = {
+  AT_LEAST_ONE: 0,
+  ALL: 1,
+  DIMENSION_PATH: 2,
+};
+
 window.ALCHEMY_RESOURCE = {
   POWER: 0,
   INFINITY: 1,

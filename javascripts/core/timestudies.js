@@ -240,6 +240,16 @@ class TimeStudyState extends GameMechanicState {
   }
 }
 
+function currPathCount() {
+  return [71, 72, 73].countWhere(x => TimeStudy(x).isBought);
+}
+
+function allowedPathCount() {
+  if (DilationUpgrade.timeStudySplit.isBought) return 3;
+  if (TimeStudy(201).isBought) return 2;
+  return 1;
+}
+
 export class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.NORMAL);
@@ -251,18 +261,26 @@ export class NormalTimeStudyState extends TimeStudyState {
     return GameCache.timeStudies.value[this.id];
   }
 
-  // The gameDB entries have a check for if a study requires ST to be purchased or not; since eventually all studies
-  // are simultaneously purchasable, the only "universal" requirement to purchase is having the previous study
-  // in the tree. The requiresST prop, if it exists, is a check which returns true if having certain other studies
-  // causes a lock-out (eg. true for all active path studies if idle is already purchased). If it doesn't exist
-  // in the gameDB entry, it's assumed to be false and therefore there's no lockout.
+  // The requiresST prop is an array containing IDs indicating other studies which, if ANY in the array are purchased,
+  // will cause the study to also cost space theorems. This array is effectively assumed to be empty if not present.
   costsST() {
-    return this.config.requiresST && this.config.requiresST();
+    return this.config.requiresST && this.config.requiresST.some(s => TimeStudy(s).isBought);
   }
 
   checkRequirement() {
-    const req = this.config.requirement;
-    return typeof req === "number" ? TimeStudy(req).isBought : req();
+    const check = req => (typeof req === "number"
+      ? TimeStudy(req).isBought
+      : req());
+    switch (this.config.reqType) {
+      case TS_REQUIREMENT_TYPE.AT_LEAST_ONE:
+        return this.config.requirement.some(r => check(r));
+      case TS_REQUIREMENT_TYPE.ALL:
+        return this.config.requirement.every(r => check(r));
+      case TS_REQUIREMENT_TYPE.DIMENSION_PATH:
+        return this.config.requirement.every(r => check(r)) && currPathCount() < allowedPathCount();
+      default:
+        throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
+    }
   }
 
   // This checks for and forbids buying studies due to being part of a set which can't normally be bought
@@ -309,7 +327,7 @@ NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefi
 /**
  * @returns {NormalTimeStudyState}
  */
- export function TimeStudy(id) {
+export function TimeStudy(id) {
   if (/^T[1-4]$/u.test(id)) return TriadStudy(id.slice(1));
   return NormalTimeStudyState.studies[id];
 }

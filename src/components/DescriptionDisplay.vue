@@ -38,7 +38,7 @@ export default {
         return undefined;
       }
       const classes = [name];
-      if (this.length !== undefined && this.description.length >= this.length) {
+      if (this.description.length >= this.length) {
         classes.push(`${name}--small-text`);
       }
       return classes;
@@ -59,7 +59,7 @@ export default {
         }
 
         if (!isFunction(description)) {
-          throw new Error(`CostDisplay config.description has ` +
+          throw new Error(`DescriptionDisplay config.description has ` +
             ` unsupported type "${typeof description}"`);
         }
 
@@ -71,7 +71,7 @@ export default {
           return;
         }
 
-        throw new Error(`CostDisplay config.description is a function ` +
+        throw new Error(`DescriptionDisplay config.description is a function ` +
           `which returns unsupported type "${typeof value}"`);
       }
     }

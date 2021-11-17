@@ -32,6 +32,10 @@
         "allowElseIf": false
       }
     ],
+    "vue/component-definition-name-casing": "off",
+    "vue/order-in-components": "off",
+    "vue/require-prop-type-constructor": "off",
+    "vue/require-default-prop": "off",
     "no-empty-function": "error",
     "no-eval": "error",
     "no-extra-bind": "error",

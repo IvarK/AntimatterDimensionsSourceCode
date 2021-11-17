@@ -76,7 +76,7 @@ export default {
           this.effectValue = value;
           this.updateEffect = () => this.effectValue = effect();
         } else if (isDecimal(value)) {
-          this.effectValue = Decimal.fromDecimal(effect);
+          this.effectValue = Decimal.fromDecimal(value);
           this.updateEffect = () => this.effectValue.copyFrom(effect());
         } else {
           throw new Error(`EffectDisplay config.effect is a function which returns` +

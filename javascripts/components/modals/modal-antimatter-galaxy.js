@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-antimatter-galaxy", {
   props: { modalConfig: Object },
   data() {
@@ -23,14 +21,14 @@ Vue.component("modal-antimatter-galaxy", {
       let message = "";
       if (this.perkANRBought) message = `This will reset nothing, and you will receive a small
          boost to Tickspeed upgrades.`;
-      else if (this.achievement111Unlocked) message = `This will reset all of your Antimatter Dimensions, 
-        your Dimension Boosts, and Tickspeed. However, you will receive a small boost 
+      else if (this.achievement111Unlocked) message = `This will reset all of your Antimatter Dimensions,
+        your Dimension Boosts, and Tickspeed. However, you will receive a small boost
         to Tickspeed upgrades.`;
-      else message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts, 
+      else message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts,
         Tickspeed, and Antimatter. However, you will receive a small boost to Tickspeed upgrades.`;
-      if (this.bulk) return `Are you sure you want to purchase 
+      if (this.bulk) return `Are you sure you want to purchase
       ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}? ${message}`;
-      return `Are you sure you want to purchase an Antimatter Galaxy? 
+      return `Are you sure you want to purchase an Antimatter Galaxy?
       ${message}`;
     }
   },

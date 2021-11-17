@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-delete-all-rejected-glyphs", {
   data() {
     return {

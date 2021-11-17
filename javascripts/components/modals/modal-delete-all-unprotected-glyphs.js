@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-delete-all-unprotected-glyphs", {
   data() {
     return {
@@ -17,7 +15,7 @@ Vue.component("modal-delete-all-unprotected-glyphs", {
       return `You are about to ${this.refiningSacrificingOrDeleting} all unprotected Glyphs`;
     },
     message() {
-      return `Are you sure you want to ${this.refiningSacrificingOrDeleting} all unprotected Glyphs 
+      return `Are you sure you want to ${this.refiningSacrificingOrDeleting} all unprotected Glyphs
       in your inventory? This process is irreversible!`;
     }
   },

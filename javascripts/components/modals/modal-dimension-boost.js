@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-dimension-boost", {
   props: { modalConfig: Object },
   data() {

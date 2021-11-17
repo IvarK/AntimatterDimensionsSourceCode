@@ -1,5 +1,3 @@
-"use strict";
-
 class Lazy {
   constructor(getValue) {
     this._getValue = getValue;
@@ -44,8 +42,9 @@ class Lazy {
     return this;
   }
 }
+window.Lazy = Lazy;
 
-const GameCache = {
+export const GameCache = {
   worstChallengeTime: new Lazy(() => player.challenge.normal.bestTimes.max()),
 
   bestRunIPPM: new Lazy(() =>

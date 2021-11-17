@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-ui-choice", {
   computed: {
     modal() {

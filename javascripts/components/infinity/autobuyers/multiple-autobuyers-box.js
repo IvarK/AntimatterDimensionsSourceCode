@@ -1,4 +1,5 @@
-"use strict";
+import "./autobuyer-toggle-label.js";
+import "./autobuyer-interval-label.js";
 
 Vue.component("multiple-autobuyers-box", {
   components: {

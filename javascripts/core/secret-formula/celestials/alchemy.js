@@ -1,4 +1,5 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.celestials.alchemy = {
   resources: {
@@ -156,7 +157,7 @@ GameDatabase.celestials.alchemy = {
       unlockedAt: 12,
       description: "increases the strength of Tachyon Galaxies based on Replicanti",
       formatEffect: value => `Tachyon Galaxies are ${formatPercents(value, 2, 2)} stronger ` +
-        `per ${format("1e1000000")} Replicanti`,
+        `per ${format(DC.E1E6)} Replicanti`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.REPLICATION,

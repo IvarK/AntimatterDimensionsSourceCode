@@ -1,4 +1,4 @@
-"use strict";
+import "../../old-ui/header/game-header-gamespeed-display.js";
 
 Vue.component("new-tickspeed-row", {
   data() {

@@ -1,2 +1,1 @@
-javascripts/lib/*.js
-javascripts/DragDropTouch.js
+public/**/*.js

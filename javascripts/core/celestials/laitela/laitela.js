@@ -1,6 +1,7 @@
-"use strict";
+import { CelestialQuotes } from "../quotes.js";
+import { DC } from "../../constants.js";
 
-const Laitela = {
+export const Laitela = {
   displayName: "Lai'tela",
   get celestial() {
     return player.celestials.laitela;
@@ -81,7 +82,7 @@ const Laitela = {
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
-          amount: new Decimal(1),
+          amount: DC.D0,
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,

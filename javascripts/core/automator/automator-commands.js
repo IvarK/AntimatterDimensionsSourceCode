@@ -1,10 +1,10 @@
-"use strict";
+import { AutomatorLexer } from "./lexer.js";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
  */
 
-const AutomatorCommands = ((() => {
+export const AutomatorCommands = ((() => {
   const T = AutomatorLexer.tokenMap;
   // The splitter tries to get a number 1 through 6, or anything else. Note: eslint complains
   // about lack of u flag here for some reason.

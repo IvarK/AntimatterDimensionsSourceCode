@@ -1,6 +1,13 @@
-"use strict";
+import "../../common/hint-text.js";
+import "./time-study.js";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("normal-time-study", {
+  components: {
+    DescriptionDisplay,
+    EffectDisplay
+  },
   props: {
     setup: Object
   },
@@ -41,7 +48,10 @@ Vue.component("normal-time-study", {
   template: `
     <time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
       <hint-text type="studies" class="l-hint-text--time-study">{{ hintText }}</hint-text>
-      <description-display :config="study.config" />
-      <effect-display br :config="study.config" />
+      <DescriptionDisplay :config="study.config" />
+      <EffectDisplay
+        br
+        :config="study.config"
+      />
     </time-study>`
 });

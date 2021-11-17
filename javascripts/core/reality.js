@@ -1,9 +1,9 @@
-"use strict";
+import { DC } from "./constants.js";
 
 /**
  * Object that manages the selection of glyphs offered to the player
  */
-const GlyphSelection = {
+export const GlyphSelection = {
   glyphs: [],
   realityProps: undefined,
 
@@ -85,13 +85,13 @@ const GlyphSelection = {
   }
 };
 
-function isRealityAvailable() {
+export function isRealityAvailable() {
   return player.records.thisReality.maxEP.exponent >= 4000 && TimeStudy.reality.isBought;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
 // with false for checking and true for actual usage, and only "used" once per reality.
-function simulatedRealityCount(advancePartSimCounters) {
+export function simulatedRealityCount(advancePartSimCounters) {
   const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio - 1 : 0;
   const multiversalSim = AlchemyResource.multiversal.effectValue;
   const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1;
@@ -105,7 +105,7 @@ function simulatedRealityCount(advancePartSimCounters) {
  * Triggered when the user clicks the reality button. This triggers the glyph selection
  * process, if applicable. Auto sacrifice is never triggered.
  */
-function requestManualReality() {
+export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   if (player.options.confirmations.reality || player.options.confirmations.glyphSelection) {
     Modal.reality.show();
@@ -118,7 +118,7 @@ function requestManualReality() {
   processManualReality(false);
 }
 
-function processManualReality(sacrifice, glyphID) {
+export function processManualReality(sacrifice, glyphID) {
   if (!isRealityAvailable()) return;
 
   if (player.realities === 0) {
@@ -174,7 +174,7 @@ function triggerManualReality(realityProps) {
   }
 }
 
-function runRealityAnimation() {
+export function runRealityAnimation() {
   document.getElementById("ui").style.userSelect = "none";
   document.getElementById("ui").style.animation = "realize 10s 1";
   document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
@@ -213,7 +213,7 @@ function processAutoGlyph(gainedLevel, rng) {
   }
 }
 
-function getRealityProps(isReset, alreadyGotGlyph = false) {
+export function getRealityProps(isReset, alreadyGotGlyph = false) {
   const defaults = {
     glyphUndo: false,
     restoreCelestialState: false,
@@ -231,7 +231,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
   });
 }
 
-function autoReality() {
+export function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
 }
@@ -289,13 +289,13 @@ function giveRealityRewards(realityProps) {
       : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier 
       from Teresa did not increase`}.`);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
-      player.celestials.teresa.bestRunAM.copyFrom(Currency.antimatter);
+      player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
 
       // Encode iM values into the RM variable as e10000 * iM in order to only require one prop
       let machineRecord;
       if (Currency.imaginaryMachines.value === 0) machineRecord = Currency.realityMachines.value;
-      else machineRecord = new Decimal("1e10000").times(Currency.imaginaryMachines.value);
+      else machineRecord = DC.E10000.times(Currency.imaginaryMachines.value);
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
@@ -314,7 +314,7 @@ function giveRealityRewards(realityProps) {
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
 // reality, but start an update loop that shows a progress bar.
-function beginProcessReality(realityProps) {
+export function beginProcessReality(realityProps) {
   if (realityProps.reset) {
     finishProcessReality(realityProps);
     return;
@@ -510,7 +510,7 @@ function beginProcessReality(realityProps) {
   Glyphs.processSortingAfterReality();
 }
 
-function finishProcessReality(realityProps) {
+export function finishProcessReality(realityProps) {
   const finalEP = Currency.eternityPoints.value.plus(gainedEternityPoints());
   if (player.records.bestReality.bestEP.lt(finalEP)) {
     player.records.bestReality.bestEP = new Decimal(finalEP);
@@ -532,7 +532,7 @@ function finishProcessReality(realityProps) {
   recalculateAllGlyphs();
   Glyphs.updateMaxGlyphCount(true);
 
-  player.sacrificed = new Decimal(0);
+  player.sacrificed = DC.D0;
 
   lockAchievementsOnReality();
 
@@ -580,7 +580,7 @@ function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) Player.resetRequirements("reality");
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  player.records.thisReality.maxReplicanti = new Decimal(0);
+  player.records.thisReality.maxReplicanti = DC.D0;
   Currency.timeTheorems.reset();
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
@@ -588,7 +588,7 @@ function finishProcessReality(realityProps) {
   player.dilation.active = false;
   Currency.tachyonParticles.reset();
   Currency.dilatedTime.reset();
-  player.dilation.nextThreshold = new Decimal(1000);
+  player.dilation.nextThreshold = DC.E3;
   player.dilation.baseTachyonGalaxies = 0;
   player.dilation.totalTachyonGalaxies = 0;
   player.dilation.upgrades.clear();
@@ -597,10 +597,10 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.records.thisInfinity.maxAM = new Decimal(0);
-  player.records.thisEternity.maxAM = new Decimal(0);
-  player.records.thisReality.maxDT = new Decimal(0);
-  player.dilation.lastEP = new Decimal(-1);
+  player.records.thisInfinity.maxAM = DC.D0;
+  player.records.thisEternity.maxAM = DC.D0;
+  player.records.thisReality.maxDT = DC.D0;
+  player.dilation.lastEP = DC.DM1;
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
@@ -616,13 +616,13 @@ function finishProcessReality(realityProps) {
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();
-  player.records.thisInfinity.bestIPmin = new Decimal(0);
-  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
-  player.records.thisEternity.bestEPmin = new Decimal(0);
-  player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
-  player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
-  player.records.bestEternity.bestEPminReality = new Decimal(0);
-  player.records.thisReality.bestEternitiesPerMs = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = DC.D0;
+  player.records.bestInfinity.bestIPminEternity = DC.D0;
+  player.records.thisEternity.bestEPmin = DC.D0;
+  player.records.thisEternity.bestInfinitiesPerMs = DC.D0;
+  player.records.thisEternity.bestIPMsWithoutMaxAll = DC.D0;
+  player.records.bestEternity.bestEPminReality = DC.D0;
+  player.records.thisReality.bestEternitiesPerMs = DC.D0;
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();
@@ -663,7 +663,7 @@ function restoreCelestialRuns(celestialRunState) {
 
 // This is also called when the upgrade is purchased, be aware of potentially having "default" values overwrite values
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
-function applyRUPG10() {
+export function applyRUPG10() {
   NormalChallenges.completeAll();
 
   player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
@@ -688,7 +688,7 @@ function applyRUPG10() {
   Replicanti.unlock(true);
 }
 
-function clearCelestialRuns() {
+export function clearCelestialRuns() {
   const saved = {
     teresa: player.celestials.teresa.run,
     effarig: player.celestials.effarig.run,
@@ -713,7 +713,7 @@ function clearCelestialRuns() {
   return saved;
 }
 
-function isInCelestialReality() {
+export function isInCelestialReality() {
   return Object.values(player.celestials).some(x => x.run);
 }
 

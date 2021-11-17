@@ -1,6 +1,13 @@
-"use strict";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("dilation-upgrade", {
+  components: {
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay
+  },
   props: {
     isRebuyable: {
       type: Boolean,
@@ -65,17 +72,17 @@ Vue.component("dilation-upgrade", {
   template: `
     <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
-        <description-display
+        <DescriptionDisplay
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"
         />
-        <effect-display
+        <EffectDisplay
           br
           :config="upgrade.config"
           :key="boughtAmount"
         />
-        <cost-display
+        <CostDisplay
           br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"

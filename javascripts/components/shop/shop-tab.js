@@ -1,4 +1,4 @@
-"use strict";
+import "./shop-button.js";
 
 Vue.component("shop-tab", {
   data() {

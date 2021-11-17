@@ -1,4 +1,10 @@
-"use strict";
+import "./game-header-eternity-button.js";
+import "./game-header-new-dim-button.js";
+import "./game-header-big-crunch-button.js";
+import "./game-header-tickspeed-row.js";
+import "./game-header-amounts-line.js";
+import "../../header-challenge-display.js";
+import "../../reality/black-hole/black-hole-header-row.js";
 
 Vue.component("game-header", {
   data() {

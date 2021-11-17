@@ -1,5 +1,3 @@
-"use strict";
-
 class AwayProgress {
   constructor(config) {
     this.name = config.name;
@@ -48,7 +46,7 @@ class AwayProgress {
   }
 }
 
-const AwayProgressTypes = {
+export const AwayProgressTypes = {
   antimatter: new AwayProgress({
     name: "antimatter",
     isUnlocked: () => true,

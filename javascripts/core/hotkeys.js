@@ -1,4 +1,4 @@
-"use strict";
+import { GameKeyboard } from "./keyboard.js";
 
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
@@ -13,7 +13,7 @@
 // i, j, k, l, n, o, p, q, v, w, x, z
 
 
-const shortcuts = [
+export const shortcuts = [
   {
     name: "Toggle Autobuyers",
     keys: ["a"],
@@ -282,7 +282,7 @@ GameKeyboard.bind("enter up up down down left right left right b a", () => {
 
 // Toggle autobuyers
 function toggleAutobuyer(buyer) {
-  if (Laitela.continuumActive && (buyer.name === "Tickspeed" || buyer.hasUnlimitedBulk)) {
+  if (buyer.disabledByContinuum) {
     GameUI.notify.info("Continuum is enabled, you cannot alter this autobuyer");
   } else if (buyer.isUnlocked) {
     buyer.toggle();
@@ -292,7 +292,7 @@ function toggleAutobuyer(buyer) {
 }
 
 function toggleBuySingles(buyer) {
-  if (Laitela.continuumActive && (buyer.name === "Tickspeed" || buyer.hasUnlimitedBulk)) {
+  if (buyer.disabledByContinuum) {
     GameUI.notify.info("Continuum is enabled, you cannot alter this autobuyer");
   } else if (buyer.isUnlocked && buyer.toggleMode !== null) {
     buyer.toggleMode();

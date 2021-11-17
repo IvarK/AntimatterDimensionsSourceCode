@@ -1,4 +1,5 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.reality.upgrades = (function() {
   const rebuyable = props => {
@@ -8,7 +9,7 @@ GameDatabase.reality.upgrades = (function() {
       props.initialCost,
       props.costMult,
       props.costMult / 10,
-      new Decimal("1e309"),
+      DC.E309,
       1e3,
       props.initialCost * props.costMult
     );
@@ -124,7 +125,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Existentially Prolong",
       id: 10,
       cost: 15,
-      requirement: () => `Complete your first Eternity with at least ${format("1e450")} Infinity Points`,
+      requirement: () => `Complete your first Eternity with at least ${format(DC.E450)} Infinity Points`,
       hasFailed: () => !player.requirementChecks.reality.noEternities,
       checkRequirement: () => Currency.infinityPoints.exponent >= 450 &&
         player.requirementChecks.reality.noEternities,
@@ -138,7 +139,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Boundless Flow",
       id: 11,
       cost: 50,
-      requirement: () => `${format(Currency.infinitiesBanked.value, 2)}/${format(1e12)} Banked Infinities`,
+      requirement: () => `${format(Currency.infinitiesBanked.value, 2)}/${format(DC.E12)} Banked Infinities`,
       checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
@@ -151,13 +152,13 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Knowing Existence",
       id: 12,
       cost: 50,
-      requirement: () => `Eternity for ${format(1e70)} Eternity Points without Eternity Challenge 1`,
+      requirement: () => `Eternity for ${format(DC.E70)} Eternity Points without Eternity Challenge 1`,
       hasFailed: () => EternityChallenge(1).completions !== 0,
       checkRequirement: () => Currency.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Eternity Point multiplier based on Reality and Time Theorem count",
       effect: () => Currency.timeTheorems.value
-        .minus(1e3).clampMin(2)
+        .minus(DC.E3).clampMin(2)
         .pow(Math.log2(Math.min(Currency.realities.value, 1e4))).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -165,7 +166,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Telemechanical Process",
       id: 13,
       cost: 50,
-      requirement: () => `Eternity for ${format("1e4000")} Eternity Points without Time Dimensions 5-8`,
+      requirement: () => `Eternity for ${format(DC.E4000)} Eternity Points without Time Dimensions 5-8`,
       hasFailed: () => !Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
@@ -192,7 +193,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
-      requirement: () => `Eternity for ${format(1e10)} Eternity Points without purchasing
+      requirement: () => `Eternity for ${format(DC.E10)} Eternity Points without purchasing
       the ${formatX(5)} Eternity Point upgrade`,
       hasFailed: () => player.epmultUpgrades !== 0,
       checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
@@ -297,7 +298,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Temporal Transcendence",
       id: 22,
       cost: 100000,
-      requirement: () => `${format(Currency.timeShards.value, 1)}/${format("1e28000")} Time Shards`,
+      requirement: () => `${format(Currency.timeShards.value, 1)}/${format(DC.E28000)} Time Shards`,
       checkRequirement: () => Currency.timeShards.exponent >= 28000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Time Dimension multiplier based on days spent in this Reality",
@@ -332,7 +333,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Effortless Existence",
       id: 25,
       cost: 100000,
-      requirement: () => `Reach ${format("1e11111")} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
+      requirement: () => `Reach ${format(DC.E11111)} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
       checkRequirement: () => player.records.bestReality.bestEP.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Unlock the Reality autobuyer and Automator command",

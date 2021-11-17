@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("glyph-protected-row-button-group", {
   data() {
     return {

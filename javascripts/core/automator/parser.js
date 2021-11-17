@@ -1,6 +1,7 @@
-"use strict";
+import { AutomatorCommands } from "./automator-commands.js";
+import { AutomatorLexer } from "./lexer.js";
 
-const AutomatorGrammar = (function() {
+export const AutomatorGrammar = (function() {
   const Parser = chevrotain.Parser;
   const T = AutomatorLexer.tokenMap;
 

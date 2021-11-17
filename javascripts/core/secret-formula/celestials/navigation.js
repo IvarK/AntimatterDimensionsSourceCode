@@ -1,16 +1,17 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
-function emphasizeEnd(fraction) {
+export function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
 }
 
-function vUnlockProgress(index) {
+export function vUnlockProgress(index) {
   if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
   const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
   return db.progress();
 }
 
-function vUnlockLegendLabel(complete, index) {
+export function vUnlockLegendLabel(complete, index) {
   const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
   if (complete >= 1) return `${db.name} condition for V`;
   return [
@@ -19,7 +20,7 @@ function vUnlockLegendLabel(complete, index) {
   ];
 }
 
-const CELESTIAL_NAV_DRAW_ORDER = {
+export const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
   NODE_BG: 0,
@@ -365,7 +366,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Effarig's Reality";
             const ep = Effarig.isRunning ? Currency.eternityPoints.value : 0;
-            const goal = new Decimal("1e4000");
+            const goal = DC.E4000;
             return [
               "Effarig's Reality",
               `Reach ${format(ep, 2)} / ${format(goal, 2)}`,
@@ -532,7 +533,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "The Enslaved Ones' Reality";
             const ep = Enslaved.isRunning ? Currency.eternityPoints.value : 0;
-            const goal = new Decimal("1e4000");
+            const goal = DC.E4000;
             return [
               "The Enslaved Ones' Reality",
               `Reach ${format(ep, 2)} / ${format(goal, 2)}`,
@@ -1313,7 +1314,7 @@ GameDatabase.celestials.navigation = (function() {
             ];
 
             const antimatter = Currency.antimatter.value;
-            const amGoal = Decimal.pow10(1.5e12);
+            const amGoal = DC.E1_5E12;
             return [
               "Lai'tela's Reality",
               `${format(antimatter)} / ${format(amGoal)}`

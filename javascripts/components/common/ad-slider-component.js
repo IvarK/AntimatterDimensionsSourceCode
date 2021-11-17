@@ -1,4 +1,5 @@
-"use strict";
+import "./plus-minus-button.js";
+
 /*
 * This is based on vue-slider-component
 * downloaded from https://github.com/NightCatSama/vue-slider-component
@@ -1116,10 +1117,10 @@ Vue.component("ad-slider-component", {
         </div>
       </template>
       <ul class="ad-slider-piecewise">
-        <li 
-          v-for="(piecewiseObj, index) in piecewiseDotWrap" 
-          class="ad-slider-piecewise-item" 
-          :style="[piecewiseDotStyle, piecewiseObj.style]" 
+        <li
+          v-for="(piecewiseObj, index) in piecewiseDotWrap"
+          class="ad-slider-piecewise-item"
+          :style="[piecewiseDotStyle, piecewiseObj.style]"
           :key="index"
         >
           <slot

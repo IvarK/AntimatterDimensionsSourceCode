@@ -1,6 +1,7 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
-const PERK_FAMILY = {
+export const PERK_FAMILY = {
   ANTIMATTER: "ANTIMATTER",
   INFINITY: "INFINITY",
   ETERNITY: "ETERNITY",
@@ -118,7 +119,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ETERNITY,
     get description() {
       return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
-        Time Study 142 to ${formatX(1e50)} Infinity Points.
+        Time Study 142 to ${formatX(DC.E50)} Infinity Points.
         In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`;
     },
     defaultPosition: new Vector(300, -130)
@@ -178,7 +179,7 @@ GameDatabase.reality.perks = {
     label: "REAL",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `Auto-unlocks Reality once you have ${format("1e4000")} Eternity Points
+      return `Auto-unlocks Reality once you have ${format(DC.E4000)} Eternity Points
         and have unlocked Time Dimension 8.`;
     },
     automatorPoints: 10,

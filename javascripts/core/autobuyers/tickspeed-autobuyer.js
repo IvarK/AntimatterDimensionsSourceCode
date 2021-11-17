@@ -1,4 +1,5 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { DC } from "../constants.js";
 
 Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -17,17 +18,20 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     return Player.defaultStart.auto.tickspeed.interval;
   }
 
-
   get isBought() {
     return this.data.isBought;
   }
 
   get antimatterCost() {
-    return new Decimal(1e140);
+    return DC.E140;
   }
 
   get canBeBought() {
     return true;
+  }
+
+  get disabledByContinuum() {
+    return Laitela.continuumActive;
   }
 
   get mode() {

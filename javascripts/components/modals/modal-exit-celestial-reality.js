@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-exit-celestial-reality", {
   data() {
     return {

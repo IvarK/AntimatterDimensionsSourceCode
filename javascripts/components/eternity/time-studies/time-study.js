@@ -1,7 +1,10 @@
-"use strict";
+import { rem } from "./rem.js";
+import CostDisplay from "@/components/CostDisplay";
 
 Vue.component("time-study", {
-  mixins: [remMixin],
+  components: {
+    CostDisplay
+  },
   data() {
     return {
       isBought: false,
@@ -27,8 +30,8 @@ Vue.component("time-study", {
     },
     styleObject() {
       return {
-        top: this.rem(this.setup.top),
-        left: this.rem(this.setup.left)
+        top: rem(this.setup.top),
+        left: rem(this.setup.left)
       };
     },
     classObject() {
@@ -110,7 +113,7 @@ Vue.component("time-study", {
              @click.exact="handleClick"
              @click.shift.exact="shiftClick">
       <slot />
-      <cost-display
+      <CostDisplay
         br
         v-if="(showCost && !showSTCost) || STCost === 0"
         :config="config"
@@ -125,7 +128,7 @@ Vue.component("time-study", {
     </button>`
 });
 
-class TimeStudySetup {
+export class TimeStudySetup {
   constructor(props) {
     this.study = props.study;
     this.row = props.row;

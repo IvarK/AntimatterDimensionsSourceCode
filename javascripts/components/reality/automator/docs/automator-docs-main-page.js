@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("automator-docs-main-page", {
   computed: {
     commands: () => GameDatabase.reality.automator.commands

@@ -1,6 +1,13 @@
-"use strict";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("infinity-upgrade-button", {
+  components: {
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay,
+  },
   props: {
     upgrade: Object
   },
@@ -66,9 +73,13 @@ Vue.component("infinity-upgrade-button", {
       @mouseleave="showingCharged = false"
       @click="upgrade.purchase()"
     >
-      <description-display :config="config" />
-      <effect-display br v-if="!isDisabled" :config="config" />
-      <cost-display
+      <DescriptionDisplay :config="config" />
+      <EffectDisplay
+        br
+        v-if="!isDisabled"
+        :config="config"
+      />
+      <CostDisplay
         br
         v-if="!isBought"
         :config="config"

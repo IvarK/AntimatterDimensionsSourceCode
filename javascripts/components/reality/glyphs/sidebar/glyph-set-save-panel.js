@@ -1,4 +1,4 @@
-"use strict";
+import "../glyph-set-preview.js";
 
 Vue.component("glyph-set-save-panel", {
   data() {

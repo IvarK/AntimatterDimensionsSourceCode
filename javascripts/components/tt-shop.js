@@ -1,4 +1,4 @@
-"use strict";
+import "./hover-menu.js";
 
 Vue.component("tt-shop", {
   data() {

@@ -17,7 +17,7 @@ TypeScript Project Setup
   * Download and extract the [PlayFab JavaScriptSDK](https://github.com/PlayFab/JavaScriptSDK/archive/master.zip) to a local folder of your choosing {playFabSdkLocation}
 * New Project Setup
   * Open Visual Studio and create a new "Blank Node.js Web Application"
-    * ![TS image](/images/TypeScript/NewProj.png)
+    * ![TS image](/public/images/TypeScript/NewProj.png)
     * This creates a project with several setup files
     * [OPTIONAL] delete app.cs (We won't be using it)
 * In Windows Explorer, navigate to {playFabSdkLocation}/PlayFabSdk and find the "src" folder
@@ -26,7 +26,7 @@ TypeScript Project Setup
 * Close the explorer windows, and return to Visual Studio
 * Toggle the "Show All Files" button a few times, until you can see the PlayFab source files
 * RClick "src" and "Include in Project"
-  * ![TS image](/images/TypeScript/IncludeSdk.png)
+  * ![TS image](/public/images/TypeScript/IncludeSdk.png)
 * At this point, running the project will open a browser, and display the default Microsoft example
 * Project setup complete!
 

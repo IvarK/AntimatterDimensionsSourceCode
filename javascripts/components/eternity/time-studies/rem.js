@@ -1,9 +1,3 @@
-"use strict";
-
-const remMixin = {
-  methods: {
-    rem(value) {
-      return `${value}rem`;
-    }
-  }
-};
+export function rem(value) {
+  return `${value}rem`;
+}

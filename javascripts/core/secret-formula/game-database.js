@@ -1,6 +1,4 @@
-"use strict";
-
-const GameDatabase = {
+export const GameDatabase = {
   achievements: {},
   challenges: {},
   infinity: {},
@@ -16,10 +14,12 @@ const GameDatabase = {
   }
 };
 
-function mapGameData(gameData, mapFn) {
+window.GameDatabase = GameDatabase;
+
+window.mapGameData = function mapGameData(gameData, mapFn) {
   const result = [];
   for (const data of gameData) {
     result[data.id] = mapFn(data);
   }
   return result;
-}
+};

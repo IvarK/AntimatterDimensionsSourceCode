@@ -1,4 +1,5 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { DC } from "../constants.js";
 
 class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   constructor(tier) {
@@ -31,11 +32,15 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get antimatterCost() {
-    return Decimal.pow(1e10, this._tier - 1).times(1e40);
+    return DC.E10.pow(this._tier - 1).times(DC.E40);
   }
 
   get canBeBought() {
     return true;
+  }
+
+  get disabledByContinuum() {
+    return Laitela.continuumActive;
   }
 
   get bulk() {

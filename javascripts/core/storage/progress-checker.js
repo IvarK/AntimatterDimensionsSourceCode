@@ -1,5 +1,3 @@
-"use strict";
-
 // These "progress stages" are roughly defined in a way to separate different parts of the game where different
 // resources are the main indicator of progress. They aren't necessarily equally spaced in time.
 const PROGRESS_STAGE = {
@@ -15,7 +13,7 @@ const PROGRESS_STAGE = {
   IMAGINARY_MACHINES: 9,
 };
 
-const ProgressChecker = {
+export const ProgressChecker = {
   // Returns an enum in an ordered list defined by certain progress breakpoints in the game
   // Note that cloud saves will have Decimal props stored as Strings which need to be converted
   getProgressStage(save) {

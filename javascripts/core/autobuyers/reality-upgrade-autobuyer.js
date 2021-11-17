@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 class RealityUpgradeAutobuyerState extends AutobuyerState {
   constructor(upgrade) {

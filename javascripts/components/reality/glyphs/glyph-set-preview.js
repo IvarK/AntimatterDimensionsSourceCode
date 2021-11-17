@@ -1,4 +1,5 @@
-"use strict";
+import "./glyph-set-name.js";
+import "./glyph-component.js";
 
 Vue.component("glyph-set-preview", {
   props: {

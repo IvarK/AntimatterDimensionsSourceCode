@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("antimatter-dim-boost-row", {
   data() {
     return {

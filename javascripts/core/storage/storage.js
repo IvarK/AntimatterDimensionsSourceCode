@@ -1,6 +1,4 @@
-"use strict";
-
-const GameStorage = {
+export const GameStorage = {
   currentSlot: 0,
   saves: {
     0: undefined,

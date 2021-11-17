@@ -1,8 +1,8 @@
-"use strict";
+import "./pp-label.js";
 
 // Primary is lifted from the study tree (mostly),
 // secondary is primary -15% l in hsl, apart from reality which is -10%
-const perkColors = {
+const perkColors = () => ({
   [PERK_FAMILY.ANTIMATTER]: {
     primary: "#22aa48",
     secondary: "#156a2d"
@@ -31,9 +31,9 @@ const perkColors = {
     primary: "#fdd835",
     secondary: "#e3ba02"
   },
-};
+});
 
-const PerkNetwork = {
+export const PerkNetwork = {
   container: undefined,
   network: undefined,
   nodes: undefined,
@@ -181,11 +181,14 @@ const PerkNetwork = {
     this.network.setOptions(options);
   },
   updatePerkColor() {
+    this.perkColorList = this.perkColorList ?? perkColors();
+    const perkColorList = this.perkColorList;
+
     function nodeColor(perk) {
       const canBeBought = perk.canBeBought;
       const isBought = perk.isBought;
 
-      const perkColor = perkColors[perk.config.family];
+      const perkColor = perkColorList[perk.config.family];
       const primaryColor = perkColor.primary;
       const secondaryColor = perkColor.secondary;
 

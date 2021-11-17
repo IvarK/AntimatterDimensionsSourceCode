@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component('pelle-tab', {
   data() {
     return {

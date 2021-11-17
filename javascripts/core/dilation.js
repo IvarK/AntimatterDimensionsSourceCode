@@ -1,6 +1,7 @@
-"use strict";
+import { SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
-function animateAndDilate() {
+export function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";
   setTimeout(() => {
     document.body.style.animation = "";
@@ -8,7 +9,7 @@ function animateAndDilate() {
   setTimeout(startDilatedEternity, 1000);
 }
 
-function animateAndUndilate() {
+export function animateAndUndilate() {
   document.body.style.animation = "undilate 2s 1 linear";
   setTimeout(() => {
     document.body.style.animation = "";
@@ -18,7 +19,7 @@ function animateAndUndilate() {
   }, 1000);
 }
 
-function startDilatedEternityRequest() {
+export function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
   const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
   if (player.dilation.active) {
@@ -37,7 +38,7 @@ function startDilatedEternityRequest() {
   }
 }
 
-function startDilatedEternity(auto) {
+export function startDilatedEternity(auto) {
   if (!PlayerProgress.dilationUnlocked()) return;
   if (player.dilation.active) {
     eternity(false, auto, { switchingDilation: true });
@@ -53,7 +54,7 @@ const DIL_UPG_NAMES = [
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
 ];
 
-function buyDilationUpgrade(id, bulk = 1) {
+export function buyDilationUpgrade(id, bulk = 1) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3) {
@@ -74,7 +75,7 @@ function buyDilationUpgrade(id, bulk = 1) {
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
       if (!Perk.bypassTGReset.isBought) Currency.dilatedTime.reset();
-      player.dilation.nextThreshold = new Decimal(1000);
+      player.dilation.nextThreshold = DC.E3;
       player.dilation.baseTachyonGalaxies = 0;
       player.dilation.totalTachyonGalaxies = 0;
     }
@@ -96,7 +97,7 @@ function buyDilationUpgrade(id, bulk = 1) {
   return true;
 }
 
-function getTachyonGalaxyMult(thresholdUpgrade) {
+export function getTachyonGalaxyMult(thresholdUpgrade) {
   // This specifically needs to be an undefined check because sometimes thresholdUpgrade is zero
   const upgrade = thresholdUpgrade === undefined ? DilationUpgrade.galaxyThreshold.effectValue : thresholdUpgrade;
   const thresholdMult = 3.65 * upgrade + 0.35;
@@ -105,7 +106,7 @@ function getTachyonGalaxyMult(thresholdUpgrade) {
   return 1 + thresholdMult * glyphReduction;
 }
 
-function getDilationGainPerSecond() {
+export function getDilationGainPerSecond() {
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
@@ -125,7 +126,7 @@ function getDilationGainPerSecond() {
 }
 
 function tachyonGainMultiplier() {
-  return new Decimal(1).timesEffectsOf(
+  return DC.D1.timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
     Achievement(132),
@@ -135,13 +136,13 @@ function tachyonGainMultiplier() {
   );
 }
 
-function rewardTP() {
+export function rewardTP() {
   Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value));
-  player.dilation.lastEP.copyFrom(Currency.eternityPoints);
+  player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
 // Returns the TP that would be gained this run
-function getTP(antimatter) {
+export function getTP(antimatter) {
   let tachyon = Decimal
     .pow(Decimal.log10(antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
@@ -150,12 +151,12 @@ function getTP(antimatter) {
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
-function getTachyonGain() {
+export function getTachyonGain() {
   return getTP(Currency.antimatter.value).minus(Currency.tachyonParticles.value).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
-function getTachyonReq() {
+export function getTachyonReq() {
   let effectiveTP = Currency.tachyonParticles.value;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
@@ -167,7 +168,7 @@ function getTachyonReq() {
   );
 }
 
-function dilatedValueOf(value) {
+export function dilatedValueOf(value) {
   const log10 = value.log10();
   const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
@@ -203,7 +204,7 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 
   get isCapped() {
-    return this.config.reachedCapFn();
+    return this.config.reachedCap();
   }
 
   purchase(bulk) {
@@ -211,7 +212,7 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 }
 
-const DilationUpgrade = (function() {
+export const DilationUpgrade = (function() {
   const db = GameDatabase.eternity.dilation;
   return {
     dtGain: new RebuyableDilationUpgradeState(db.dtGain),
@@ -227,7 +228,7 @@ const DilationUpgrade = (function() {
   };
 }());
 
-const DilationUpgrades = {
+export const DilationUpgrades = {
   rebuyable: [
     DilationUpgrade.dtGain,
     DilationUpgrade.galaxyThreshold,

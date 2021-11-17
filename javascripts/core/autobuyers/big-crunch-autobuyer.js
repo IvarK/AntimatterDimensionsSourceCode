@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 
 Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   get data() {

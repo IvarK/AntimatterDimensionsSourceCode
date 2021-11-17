@@ -1,0 +1,26 @@
+name: Deploy 🚀
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Deploy 🚀
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: JamesIves/github-pages-deploy-action@4.1.3
+        with:
+          branch: gh-pages
+          folder: dist
+          single-commit: true

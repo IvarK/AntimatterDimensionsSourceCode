@@ -1,4 +1,10 @@
-"use strict";
+import "../reality/black-hole/black-hole-header-row.js";
+import "../header-challenge-display.js";
+import "../common/news-ticker.js";
+import "../old-ui/header/game-header-eternity-button.js";
+import "../old-ui/header/game-header-new-dim-button.js";
+import "../old-ui/header/game-header-big-crunch-button.js";
+import "../old-ui/header/game-header-amounts-line.js";
 
 Vue.component("new-ui", {
   data() {

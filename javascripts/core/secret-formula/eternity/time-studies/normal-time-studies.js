@@ -1,11 +1,12 @@
-"use strict";
+import { GameDatabase } from "../../game-database.js";
+import { DC } from "../../../constants.js";
 
 GameDatabase.eternity.timeStudies.normal = (function() {
   const thisInfinityMult = thisInfinity => {
     // All "this inf time" or "best inf time" mults are * 10
     const scaledInfinity = thisInfinity * 10 + 1;
     const cappedInfinity = Math.min(Math.pow(scaledInfinity, 0.125), 500);
-    return Decimal.pow(15, Math.log(scaledInfinity) * cappedInfinity);
+    return DC.D15.pow(Math.log(scaledInfinity) * cappedInfinity);
   };
   const passiveIPMult = () => {
     const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
@@ -26,7 +27,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         const secondPart = tickspeed.pow(0.0003).times(0.05);
         return firstPart.plus(secondPart).reciprocate();
       },
-      cap: new Decimal("1e2500"),
+      cap: DC.E2500,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -69,9 +70,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 41,
       cost: 4,
       requirement: 31,
-      description: () => `All Galaxies give a ${formatX(1.2, 1, 1)} multiplier to Infinity Points gained`,
-      effect: () =>
-        Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
+      description: () => `All Galaxies give a ${formatX(DC.D1_2, 1, 1)} multiplier to Infinity Points gained`,
+      effect: () => DC.D1_2.pow(Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -117,7 +117,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       },
       description: "Dimensional Sacrifice affects all other Antimatter Dimensions with reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.25).clampMin(1),
-      cap: new Decimal("1e210000"),
+      cap: DC.E210000,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -134,7 +134,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       },
       description: "Dimensional Sacrifice affects 4th Infinity Dimension with greatly reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.04).clampMin(1),
-      cap: new Decimal("1e30000"),
+      cap: DC.E30000,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -150,7 +150,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       },
       description: "Dimensional Sacrifice affects 3rd Time Dimension with greatly reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.005).clampMin(1),
-      cap: new Decimal("1e1300"),
+      cap: DC.E1300,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -165,8 +165,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 72,
       description: "Dimension Boosts affect Infinity Dimensions",
-      effect: () => Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)),
-      cap: new Decimal("1e10000000"),
+      effect: () => DC.D1_0000109.pow(Math.pow(DimBoost.totalBoosts, 2)),
+      cap: DC.E1E7,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -174,8 +174,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: 73,
       description: "Dimension Boost multiplier based on tick upgrades gained from TDs",
-      effect: () => Decimal.pow(1.0004, player.totalTickGained),
-      cap: new Decimal(1e30),
+      effect: () => DC.D1_0004.pow(player.totalTickGained),
+      cap: DC.E30,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -184,7 +184,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 81,
       description: "Antimatter Dimension multiplier based on time spent in this Eternity",
       effect: () => Decimal.pow10(Math.min(Time.thisEternity.totalMinutes, 20) * 15),
-      cap: new Decimal("1e300"),
+      cap: DC.E300,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -192,8 +192,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: 82,
       description: "Infinity Dimension multiplier based on fastest Eternity time",
-      effect: () => Decimal.pow(2, 60 / Math.max(Time.bestEternity.totalSeconds, 2)),
-      cap: Decimal.pow(2, 30),
+      effect: () => DC.D2.pow(60 / Math.max(Time.bestEternity.totalSeconds, 2)),
+      cap: DC.C2P30,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -217,7 +217,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 92,
       description: "Replicanti Galaxies boost Replicanti multiplier",
-      effect: () => Decimal.pow(5, player.replicanti.galaxies),
+      effect: () => DC.D5.pow(player.replicanti.galaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -319,11 +319,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(131).isBought,
       requiresST: () => TimeStudy(142).isBought || TimeStudy(143).isBought,
       description: () => (Perk.studyActiveEP.isBought
-        ? `You gain ${formatX(1e45)} more Infinity Points`
+        ? `You gain ${formatX(DC.E45)} more Infinity Points`
         : "Multiplier to Infinity Points, which decays over this Infinity"),
       effect: () => (Perk.studyActiveEP.isBought
-        ? new Decimal(1e45)
-        : Decimal.divide(1e45, thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
+        ? DC.E45
+        : DC.E45.divide(thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
       formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 2, 1))
     },
     {
@@ -362,8 +362,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 161,
       cost: 7,
       requirement: 151,
-      description: () => `${formatX("1e616")} multiplier on all Antimatter Dimensions`,
-      effect: () => new Decimal("1e616")
+      description: () => `${formatX(DC.E616)} multiplier on all Antimatter Dimensions`,
+      effect: () => DC.E616
     },
     {
       id: 162,
@@ -411,8 +411,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 300,
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
       description: "Antimatter Dimension multiplier based on Eternities",
-      effect: () => (Decimal.pow("1e13000", Currency.eternities.value.div(1e6).clampMax(1))),
-      cap: new Decimal("1e13000"),
+      effect: () => (DC.E13000.pow(Currency.eternities.value.div(1e6).clampMax(1))),
+      cap: DC.E13000,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -455,7 +455,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         const secondPart = totalBoost.pow(1.05).clampMaxExponent(120000);
         return firstPart.times(secondPart);
       },
-      cap: new Decimal("1e164000"),
+      cap: DC.E164000,
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -465,7 +465,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(211).isBought,
       requiresST: () => TimeStudy(222).isBought,
       description: "Time Dimension multiplier based on Dimension Boosts",
-      effect: () => Decimal.pow(1 + 0.0025, DimBoost.totalBoosts),
+      effect: () => DC.D1_0025.pow(DimBoost.totalBoosts),
       formatEffect: value => formatX(value, 2, 1)
     },
     {

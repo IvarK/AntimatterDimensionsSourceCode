@@ -1,4 +1,7 @@
-"use strict";
+import "./automator-block-editor.js";
+import "./automator-text-editor.js";
+import "./automator-controls.js";
+import "./automator-button.js";
 
 Vue.component("automator-editor", {
   data() {

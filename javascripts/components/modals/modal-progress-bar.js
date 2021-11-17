@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-progress-bar", {
   components: {
     "offline-speedup-button": {

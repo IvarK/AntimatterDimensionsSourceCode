@@ -1,8 +1,14 @@
-"use strict";
+import "./challenges-header.js";
+import "./challenge-grid.js";
+import "./challenge-box.js";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("normal-challenges-tab", {
   components: {
     "normal-challenge-box": {
+      components: {
+        DescriptionDisplay
+      },
       props: {
         challengeId: Number
       },
@@ -50,7 +56,10 @@ Vue.component("normal-challenges-tab", {
           class="c-challenge-box--normal"
           @start="challenge.requestStart()"
         >
-          <description-display :config="config" slot="top" />
+          <DescriptionDisplay
+            :config="config"
+            slot="top"
+          />
           <span slot="bottom">Reward: {{ challenge.config.reward }}</span>
         </challenge-box>`
     }
@@ -59,7 +68,7 @@ Vue.component("normal-challenges-tab", {
     <div class="l-challenges-tab">
       <challenges-header />
       <div>
-        If you have an active Big Crunch Autobuyer, it will attempt to Crunch 
+        If you have an active Big Crunch Autobuyer, it will attempt to Crunch
         as soon as possible when reaching Infinite antimatter.
       </div>
       <challenge-grid :count="12">

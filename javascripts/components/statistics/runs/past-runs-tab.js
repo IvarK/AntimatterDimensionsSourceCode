@@ -1,4 +1,4 @@
-"use strict";
+import "./past-runs-container.js";
 
 Vue.component("past-runs-tab", {
   data() {

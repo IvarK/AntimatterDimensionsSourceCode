@@ -1,4 +1,4 @@
-"use strict";
+import "./glyph-set-name.js";
 
 Vue.component("current-glyph-effects", {
   components: {
@@ -37,7 +37,7 @@ Vue.component("current-glyph-effects", {
           let glyphColor = glyphName.color;
           if (glyphName.id === "cursed") glyphColor = "#5151ec";
           if (this.effect.value.capped) glyphColor = "";
-          
+
           return {
             color: glyphColor,
             "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
@@ -83,7 +83,7 @@ Vue.component("current-glyph-effects", {
       if (this.hasEffarig) uniqueGlyphs.push(`<span style="color: ${GlyphTypes.effarig.color};">Effarig</span>`);
       if (this.hasReality) uniqueGlyphs.push(
         `<span style="animation: a-reality-glyph-description-cycle 10s infinite;">Reality</span>`);
-      return `You cannot have more than one ${uniqueGlyphs.join(" or ")} 
+      return `You cannot have more than one ${uniqueGlyphs.join(" or ")}
         Glyph equipped${uniqueGlyphs.length > 1 ? " each." : "."}`;
     },
     noEffects() {

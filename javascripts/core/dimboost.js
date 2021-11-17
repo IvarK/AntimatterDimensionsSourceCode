@@ -1,4 +1,4 @@
-"use strict";
+import { DC } from "./constants.js";
 
 class DimBoostRequirement {
   constructor(tier, amount) {
@@ -12,10 +12,10 @@ class DimBoostRequirement {
   }
 }
 
-class DimBoost {
+export class DimBoost {
   static get power() {
     if (NormalChallenge(8).isRunning) {
-      return new Decimal(1);
+      return DC.D1;
     }
 
     let boost = Effects.max(
@@ -162,14 +162,14 @@ class DimBoost {
   }
 }
 
-function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
+export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
   if (Currency.antimatter.gt(Player.infinityLimit)) return;
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
   if (forcedNDReset || !Perk.antimatterNoReset.isBought) {
     AntimatterDimensions.reset();
-    player.sacrificed = new Decimal(0);
+    player.sacrificed = DC.D0;
     resetTickspeed();
   }
   skipResetsIfPossible();
@@ -182,7 +182,7 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
   EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
 
-function skipResetsIfPossible() {
+export function skipResetsIfPossible() {
   if (Player.isInAntimatterChallenge) return;
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
     player.dimensionBoosts = 4;
@@ -192,7 +192,7 @@ function skipResetsIfPossible() {
   else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
 }
 
-function requestDimensionBoost(bulk) {
+export function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
   if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts(true);

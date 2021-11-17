@@ -1,4 +1,5 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {
@@ -76,7 +77,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 1e7,
       costMult: 800,
       description: () => `Multiply Infinity Dimensions by ${format("1e100000")}`,
-      effect: new Decimal("1e100000"),
+      effect: DC.E100000,
       formatEffect: value => `${formatX(value)}`,
       isDecimal: true
     }),

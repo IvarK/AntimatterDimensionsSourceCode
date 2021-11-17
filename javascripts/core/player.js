@@ -1,30 +1,32 @@
-"use strict";
+import { GlyphTypes } from "./glyph-effects.js";
+import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
+import { DC } from "./constants.js";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
-let player = {
-  antimatter: new Decimal(10),
+window.player = {
+  antimatter: DC.E1,
   dimensions: {
     antimatter: Array.range(0, 8).map(() => ({
       bought: 0,
       costBumps: 0,
-      amount: new Decimal(0)
+      amount: DC.D0
     })),
     infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
       bought: 0,
-      amount: new Decimal(0),
-      cost: new Decimal([1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier]),
+      amount: DC.D0,
+      cost: [DC.E8, DC.E9, DC.E10, DC.E20, DC.E140, DC.E200, DC.E250, DC.E280][tier],
       baseAmount: 0
     })),
     time: Array.range(0, 8).map(tier => ({
-      cost: new Decimal([1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"][tier]),
-      amount: new Decimal(0),
+      cost: [DC.D1, DC.D5, DC.E2, DC.E3, DC.E2350, DC.E2650, DC.E3000, DC.E3350][tier],
+      amount: DC.D0,
       bought: 0
     }))
   },
   buyUntil10: true,
-  sacrificed: new Decimal(0),
+  sacrificed: DC.D0,
   achievementBits: Array.repeat(0, 15),
   secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
@@ -54,26 +56,26 @@ let player = {
     disableContinuum: false,
     reality: {
       mode: 0,
-      rm: new Decimal(1),
+      rm: DC.D1,
       glyph: 0,
       isActive: false
     },
     eternity: {
       mode: 0,
-      amount: new Decimal(1),
+      amount: DC.D1,
       increaseWithMult: true,
       time: 1,
-      xHighest: new Decimal(1),
+      xHighest: DC.D1,
       isActive: false
     },
     bigCrunch: {
       cost: 1,
       interval: 150000,
       mode: 0,
-      amount: new Decimal(1),
+      amount: DC.D1,
       increaseWithMult: true,
       time: 1,
-      xHighest: new Decimal(1),
+      xHighest: DC.D1,
       isActive: true,
       lastTick: 0
     },
@@ -108,7 +110,7 @@ let player = {
       isBought: false
     },
     sacrifice: {
-      multiplier: new Decimal(2),
+      multiplier: DC.D2,
       isActive: true
     },
     antimatterDims: Array.range(0, 8).map(tier => ({
@@ -155,9 +157,9 @@ let player = {
     ipMultBuyer: { isActive: false, },
     epMultBuyer: { isActive: false, },
   },
-  infinityPoints: new Decimal(0),
-  infinities: new Decimal(0),
-  infinitiesBanked: new Decimal(0),
+  infinityPoints: DC.D0,
+  infinities: DC.D0,
+  infinitiesBanked: DC.D0,
   dimensionBoosts: 0,
   galaxies: 0,
   news: {
@@ -173,10 +175,10 @@ let player = {
   },
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
-  chall3Pow: new Decimal(0.01),
-  matter: new Decimal(1),
+  chall3Pow: DC.D0_01,
+  matter: DC.D1,
   chall9TickspeedCostBumps: 0,
-  chall8TotalSacrifice: new Decimal(1),
+  chall8TotalSacrifice: DC.D1,
   ic2Count: 0,
   partInfinityPoint: 0,
   partInfinitied: 0,
@@ -210,7 +212,7 @@ let player = {
       noInfinities: true,
       noEternities: true,
       noContinuum: true,
-      maxID1: new Decimal(0),
+      maxID1: DC.D0,
       maxStudies: 0,
       maxGlyphs: 0,
       slowestBH: 1,
@@ -225,59 +227,59 @@ let player = {
     gameCreatedTime: Date.now(),
     totalTimePlayed: 0,
     realTimePlayed: 0,
-    totalAntimatter: new Decimal(0),
+    totalAntimatter: DC.D0,
     lastTenInfinities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
     lastTenEternities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
     lastTenRealities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
+      [Number.MAX_VALUE, DC.D1, 1, Number.MAX_VALUE, 0]),
     thisInfinity: {
       time: 0,
       realTime: 0,
       lastBuyTime: 0,
-      maxAM: new Decimal(0),
-      bestIPmin: new Decimal(0),
+      maxAM: DC.D0,
+      bestIPmin: DC.D0,
     },
     bestInfinity: {
       time: Number.MAX_VALUE,
       realTime: Number.MAX_VALUE,
-      bestIPminEternity: new Decimal(0),
-      bestIPminReality: new Decimal(0),
+      bestIPminEternity: DC.D0,
+      bestIPminReality: DC.D0,
     },
     thisEternity: {
       time: 0,
       realTime: 0,
-      maxAM: new Decimal(0),
-      maxIP: new Decimal(0),
-      bestIPMsWithoutMaxAll: new Decimal(0),
-      bestEPmin: new Decimal(0),
-      bestInfinitiesPerMs: new Decimal(0),
+      maxAM: DC.D0,
+      maxIP: DC.D0,
+      bestIPMsWithoutMaxAll: DC.D0,
+      bestEPmin: DC.D0,
+      bestInfinitiesPerMs: DC.D0,
     },
     bestEternity: {
       time: Number.MAX_VALUE,
       realTime: Number.MAX_VALUE,
-      bestEPminReality: new Decimal(0),
+      bestEPminReality: DC.D0,
     },
     thisReality: {
       time: 0,
       realTime: 0,
-      maxAM: new Decimal(0),
-      maxIP: new Decimal(0),
-      maxEP: new Decimal(0),
-      bestEternitiesPerMs: new Decimal(0),
-      maxReplicanti: new Decimal(0),
-      maxDT: new Decimal(0),
+      maxAM: DC.D0,
+      maxIP: DC.D0,
+      maxEP: DC.D0,
+      bestEternitiesPerMs: DC.D0,
+      maxReplicanti: DC.D0,
+      maxDT: DC.D0,
     },
     bestReality: {
       time: Number.MAX_VALUE,
       realTime: Number.MAX_VALUE,
       glyphStrength: 0,
-      RMmin: new Decimal(0),
+      RMmin: DC.D0,
       RMminSet: [],
       glyphLevel: 0,
       glyphLevelSet: [],
-      bestEP: new Decimal(0),
+      bestEP: DC.D0,
       bestEPSet: [],
       speedSet: [],
       iMCapSet: [],
@@ -286,29 +288,29 @@ let player = {
   },
   infMult: 0,
   version: 13,
-  infinityPower: new Decimal(1),
+  infinityPower: DC.D1,
   postC4Tier: 0,
-  eternityPoints: new Decimal(0),
-  eternities: new Decimal(0),
+  eternityPoints: DC.D0,
+  eternities: DC.D0,
   eternityUpgrades: new Set(),
   epmultUpgrades: 0,
-  timeShards: new Decimal(0),
+  timeShards: DC.D0,
   totalTickGained: 0,
   totalTickBought: 0,
   replicanti: {
     unl: false,
-    amount: new Decimal(0),
+    amount: DC.D0,
     chance: 0.01,
-    chanceCost: new Decimal(1e150),
+    chanceCost: DC.E150,
     interval: 1000,
-    intervalCost: new Decimal(1e140),
+    intervalCost: DC.E140,
     boughtGalaxyCap: 0,
     galaxies: 0,
-    galCost: new Decimal(1e170),
+    galCost: DC.E170,
   },
   timestudy: {
-    theorem: new Decimal(0),
-    maxTheorem: new Decimal(0),
+    theorem: DC.D0,
+    maxTheorem: DC.D0,
     amBought: 0,
     ipBought: 0,
     epBought: 0,
@@ -328,9 +330,9 @@ let player = {
   dilation: {
     studies: [],
     active: false,
-    tachyonParticles: new Decimal(0),
-    dilatedTime: new Decimal(0),
-    nextThreshold: new Decimal(1000),
+    tachyonParticles: DC.D0,
+    dilatedTime: DC.D0,
+    nextThreshold: DC.E3,
     baseTachyonGalaxies: 0,
     totalTachyonGalaxies: 0,
     upgrades: new Set(),
@@ -339,12 +341,12 @@ let player = {
       2: 0,
       3: 0,
     },
-    lastEP: new Decimal(-1),
+    lastEP: DC.DM1,
   },
   realities: 0,
   partSimulatedReality: 0,
   reality: {
-    realityMachines: new Decimal(0),
+    realityMachines: DC.D0,
     imaginaryMachines: 0,
     iMCap: 0,
     glyphs: {
@@ -401,7 +403,7 @@ let player = {
     perkPoints: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: new Decimal(0),
+    partEternitied: DC.D0,
     autoAchieve: true,
     gainedAutoAchievements: true,
     automator: {
@@ -442,10 +444,10 @@ let player = {
       quotes: [],
       unlockBits: 0,
       run: false,
-      bestRunAM: new Decimal(1),
+      bestRunAM: DC.D1,
       bestAMSet: [],
       perkShop: Array.repeat(0, 5),
-      lastRepeatedMachines: new Decimal(0)
+      lastRepeatedMachines: DC.D0
     },
     effarig: {
       relicShards: 0,
@@ -559,13 +561,13 @@ let player = {
       petWithRecollection: ""
     },
     laitela: {
-      darkMatter: new Decimal(0),
-      maxDarkMatter: new Decimal(0),
+      darkMatter: DC.D0,
+      maxDarkMatter: DC.D0,
       run: false,
       quotes: [],
       dimensions: Array.range(0, 4).map(() =>
         ({
-          amount: new Decimal(0),
+          amount: DC.D0,
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,
@@ -728,7 +730,7 @@ let player = {
   devMode: false,
 };
 
-const Player = {
+export const Player = {
   defaultStart: deepmerge.all([{}, player]),
 
   get isInMatterChallenge() {
@@ -813,7 +815,7 @@ const Player = {
           noInfinities: true,
           noEternities: true,
           noContinuum: player.auto.disableContinuum,
-          maxID1: new Decimal(0),
+          maxID1: DC.D0,
           maxStudies: 0,
           // This only gets set to the correct value when Glyphs.updateMaxGlyphCount is called, which always happens
           // before this part of the code is reached in the Reality reset. Nevertheless, we want to keep its old value.
@@ -842,7 +844,7 @@ const Player = {
   }
 };
 
-function guardFromNaNValues(obj) {
+export function guardFromNaNValues(obj) {
   function isObject(ob) {
     return ob !== null && typeof ob === "object" && !(ob instanceof Decimal);
   }

@@ -1,6 +1,7 @@
-"use strict";
+import { GameMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
-function startEternityChallenge() {
+export function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
   resetInfinityRuns();
@@ -11,12 +12,12 @@ function startEternityChallenge() {
   player.replicanti.galaxies = 0;
   Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
-  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
-  player.records.thisEternity.bestEPmin = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity = DC.D0;
+  player.records.thisEternity.bestEPmin = DC.D0;
   resetTimeDimensions();
   resetTickspeed();
-  player.records.thisInfinity.maxAM = new Decimal(0);
-  player.records.thisEternity.maxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = DC.D0;
+  player.records.thisEternity.maxAM = DC.D0;
   Currency.antimatter.reset();
   playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
@@ -241,7 +242,7 @@ class EternityChallengeState extends GameMechanicState {
  * @param id
  * @return {EternityChallengeState}
  */
-const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
+export const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
 
 /**
  * @returns {EternityChallengeState}
@@ -256,7 +257,7 @@ Object.defineProperty(EternityChallenge, "isRunning", {
   get: () => player.challenge.eternity.current !== 0,
 });
 
-const EternityChallenges = {
+export const EternityChallenges = {
   /**
    * @type {EternityChallengeState[]}
    */

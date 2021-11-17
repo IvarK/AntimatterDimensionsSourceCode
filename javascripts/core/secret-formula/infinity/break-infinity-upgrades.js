@@ -1,4 +1,5 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {
@@ -20,7 +21,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
             : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`;
         }),
       formatCost: value => format(value, 2, 0),
-      noTitle: !config.title
+      noLabel: !config.label
     };
   }
 
@@ -66,7 +67,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: () => Decimal.clampMin(50 / Time.worstChallenge.totalMinutes, 1),
       formatEffect: value => formatX(value, 2, 2),
       hasCap: true,
-      cap: new Decimal(3e4)
+      cap: DC.D3E4
     },
     infinitiedGen: {
       id: "infinitiedGeneration",
@@ -75,7 +76,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";
-        let infinities = new Decimal(1);
+        let infinities = DC.D1;
         infinities = infinities.timesEffectsOf(
           RealityUpgrade(5),
           RealityUpgrade(7)
@@ -105,7 +106,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         ? `After EC11: ${formatX(Player.tickSpeedMultDecrease, 2, 2)}`
         : ""
       ),
-      title: false,
+      label: false,
     }),
     dimCostMult: rebuyable({
       id: 1,
@@ -117,7 +118,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         ? `After EC6: ${formatX(Player.dimensionMultDecrease, 2, 2)}`
         : ""
       ),
-      title: false,
+      label: false,
     }),
     ipGen: rebuyable({
       id: 2,
@@ -135,7 +136,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       },
       isDisabled: effect => effect.eq(0),
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
-      title: true
+      label: true
     })
   };
 }());

@@ -1,4 +1,5 @@
-"use strict";
+import "../celestial-quote-history.js";
+import "../../common/ad-slider-component.js";
 
 Vue.component("modal-enslaved-hints", {
   data() {

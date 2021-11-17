@@ -1,4 +1,4 @@
-"use strict";
+import { modalOptionsMixin } from "./modal-options.js";
 
 Vue.component("modal-animation-options", {
   mixins: [modalOptionsMixin],

@@ -1,7 +1,5 @@
-"use strict";
-
 // eslint-disable-next-line prefer-const
-let ui = {
+export const state = {
   view: {
     modal: {
       queue: [],

@@ -1,4 +1,8 @@
-"use strict";
+import "./new-dimension-row.js";
+import "./new-tickspeed-row.js";
+import "./new-dim-boost-row.js";
+import "./new-galaxy-row.js";
+import "../../dimensions/antimatter/antimatter-dim-tab-progress-bar.js";
 
 Vue.component("new-dimensions-tab", {
   data() {

@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("autobuyer-box", {
   components: {
     "interval-label": {

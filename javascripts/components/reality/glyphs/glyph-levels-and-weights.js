@@ -1,4 +1,4 @@
-"use strict";
+import "../../common/ad-slider-component.js";
 
 // The things inside player.celestials.effarig.glyphWeights
 const _GLYPH_WEIGHT_FIELDS = ["ep", "repl", "dt", "eternities"];

@@ -1,4 +1,4 @@
-"use strict";
+import { DC } from "./constants.js";
 
 class BlackHoleUpgradeState {
   constructor(config) {
@@ -10,7 +10,7 @@ class BlackHoleUpgradeState {
       initialCost,
       costMult,
       0.2,
-      new Decimal("1e310"),
+      DC.E310,
       1e5,
       10));
     this.id = config.id;
@@ -234,7 +234,7 @@ class BlackHoleState {
       case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1:
         if (this.id === 1 && willActivateOnUnpause) {
           BlackHoles.togglePause();
-          GameUI.notify.blackHole(`${RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole"} 
+          GameUI.notify.blackHole(`${RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole"}
             automatically paused.`);
           return;
         }
@@ -325,11 +325,11 @@ BlackHoleState.list = Array.range(0, 2).map(id => new BlackHoleState(id));
  * @param {number} id
  * @return {BlackHoleState}
  */
-function BlackHole(id) {
+export function BlackHole(id) {
   return BlackHoleState.list[id - 1];
 }
 
-const BlackHoles = {
+export const BlackHoles = {
   // In seconds
   ACCELERATION_TIME: 5,
   /**

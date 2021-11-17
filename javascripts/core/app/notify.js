@@ -1,6 +1,4 @@
-"use strict";
-
-GameUI.notify = (function() {
+export const notify = (function() {
   const template = document.createElement("div");
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";

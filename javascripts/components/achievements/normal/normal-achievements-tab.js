@@ -1,4 +1,4 @@
-"use strict";
+import "./normal-achievement-row.js";
 
 Vue.component("normal-achievements-tab", {
   components: {

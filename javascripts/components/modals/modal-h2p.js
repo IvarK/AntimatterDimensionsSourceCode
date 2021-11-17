@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-h2p", {
   props: {
     modalConfig: {

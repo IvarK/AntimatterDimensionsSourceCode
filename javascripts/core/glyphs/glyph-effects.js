@@ -1,5 +1,3 @@
-"use strict";
-
 class GlyphEffectState {
   constructor(id, props) {
     this._id = id;
@@ -15,7 +13,7 @@ class GlyphEffectState {
   }
 }
 
-const GlyphEffect = {
+export const GlyphEffect = {
   dimBoostPower: new GlyphEffectState("powerdimboost", {
     adjustApply: value => Math.max(1, value)
   }),
@@ -33,7 +31,7 @@ const GlyphEffect = {
  * @param {string} effectKey
  * @return {number | Decimal}
  */
-function getAdjustedGlyphEffectUncached(effectKey) {
+export function getAdjustedGlyphEffectUncached(effectKey) {
   return getTotalEffect(effectKey).value;
 }
 
@@ -42,7 +40,7 @@ function getAdjustedGlyphEffectUncached(effectKey) {
  * @param {string} effectKey
  * @return {number | Decimal}
  */
-function getAdjustedGlyphEffect(effectKey) {
+export function getAdjustedGlyphEffect(effectKey) {
   return GameCache.glyphEffects.value[effectKey];
 }
 
@@ -52,7 +50,7 @@ function getAdjustedGlyphEffect(effectKey) {
  * @param {string} effectKey
  * @return {number | Decimal}
  */
-function getSecondaryGlyphEffect(effectKey) {
+export function getSecondaryGlyphEffect(effectKey) {
   return GameDatabase.reality.glyphEffects[effectKey].conversion(getAdjustedGlyphEffect(effectKey));
 }
 
@@ -61,7 +59,7 @@ function getSecondaryGlyphEffect(effectKey) {
  * @param {string} effectKey
  * @returns {number[]}
  */
-function getGlyphEffectValues(effectKey) {
+export function getGlyphEffectValues(effectKey) {
   if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
     throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
   }
@@ -80,7 +78,7 @@ function getTotalEffect(effectKey) {
 /**
  * Key is type+effect
  */
-function separateEffectKey(effectKey) {
+export function separateEffectKey(effectKey) {
   let type = "";
   let effect = "";
   for (let i = 0; i < GLYPH_TYPES.length; i++) {
@@ -95,7 +93,7 @@ function separateEffectKey(effectKey) {
 
 // Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
 // since there is some id overlap. Those should be filtered out as needed after calling this function.
-function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
+export function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
   return getGlyphEffectsFromBitmask(bitmask)
     .map(effect => ({
       id: effect.id,
@@ -104,7 +102,7 @@ function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
 }
 
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
-function getSingleGlyphEffectFromBitmask(effectName, glyph) {
+export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   const glyphEffect = GameDatabase.reality.glyphEffects[effectName];
   // eslint-disable-next-line no-bitwise
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
@@ -114,7 +112,7 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
 }
 
 // Note this function is used for glyph bitmasks, news ticker bitmasks, and offline achievements
-function countValuesFromBitmask(bitmask) {
+export function countValuesFromBitmask(bitmask) {
   let numEffects = 0;
   let bits = bitmask;
   while (bits !== 0) {
@@ -127,7 +125,7 @@ function countValuesFromBitmask(bitmask) {
 }
 
 // Returns both effect value and softcap status
-function getActiveGlyphEffects() {
+export function getActiveGlyphEffects() {
   let effectValues = orderedEffectList
     .map(effect => ({ effect, values: getGlyphEffectValues(effect) }))
     .filter(ev => ev.values.length > 0)

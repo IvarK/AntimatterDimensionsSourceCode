@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 
 Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
   get data() {

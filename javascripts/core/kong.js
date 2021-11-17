@@ -1,6 +1,6 @@
-"use strict";
+import { RebuyableMechanicState } from "./game-mechanics/index.js";
 
-const kong = {};
+export const kong = {};
 
 kong.enabled = false;
 
@@ -68,7 +68,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 }
 
-const ShopPurchase = (function() {
+export const ShopPurchase = (function() {
   const db = GameDatabase.shopPurchases;
   return {
     dimPurchases: new ShopPurchaseState(db.dimPurchases),

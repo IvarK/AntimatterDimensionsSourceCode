@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-break-infinity", {
   created() {
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);

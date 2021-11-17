@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("options-saving-tab", {
   components: {
     "options-button": {

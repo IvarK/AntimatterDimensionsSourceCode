@@ -1,8 +1,8 @@
-"use strict";
+import { DC } from "./constants.js";
 
-function getTickSpeedMultiplier() {
-  if (InfinityChallenge(3).isRunning) return new Decimal(1);
-  if (Ra.isRunning) return new Decimal(1 / 1.1245);
+export function getTickSpeedMultiplier() {
+  if (InfinityChallenge(3).isRunning) return DC.D1;
+  if (Ra.isRunning) return DC.C1D1_1245;
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;
   replicantiGalaxies *= (1 + Effects.sum(
@@ -40,7 +40,7 @@ function getTickSpeedMultiplier() {
       Achievement(175),
       InfinityChallenge(5).reward
     );
-    return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
+    return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
   if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;
@@ -58,11 +58,11 @@ function getTickSpeedMultiplier() {
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectValue;
-  const perGalaxy = new Decimal(0.965);
+  const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
 
-function buyTickSpeed() {
+export function buyTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
 
   if (NormalChallenge(9).isRunning) {
@@ -77,7 +77,7 @@ function buyTickSpeed() {
   return true;
 }
 
-function buyMaxTickSpeed() {
+export function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
@@ -107,12 +107,12 @@ function buyMaxTickSpeed() {
   }
 }
 
-function resetTickspeed() {
+export function resetTickspeed() {
   player.totalTickBought = 0;
   player.chall9TickspeedCostBumps = 0;
 }
 
-const Tickspeed = {
+export const Tickspeed = {
 
   get isUnlocked() {
     return AntimatterDimension(2).bought > 0 || EternityMilestone.unlockAllND.isReached ||
@@ -164,13 +164,12 @@ const Tickspeed = {
     let boughtTickspeed;
     if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
     else boughtTickspeed = player.totalTickBought;
-    return new Decimal(1000)
-      .timesEffectsOf(
-        Achievement(36),
-        Achievement(45),
-        Achievement(66),
-        Achievement(83)
-      )
+    return DC.E3.timesEffectsOf(
+      Achievement(36),
+      Achievement(45),
+      Achievement(66),
+      Achievement(83)
+    )
       .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
   },
 
@@ -186,7 +185,7 @@ const Tickspeed = {
 };
 
 
-const FreeTickspeed = {
+export const FreeTickspeed = {
   BASE_SOFTCAP: 300000,
   GROWTH_RATE: 6e-6,
   GROWTH_EXP: 2,

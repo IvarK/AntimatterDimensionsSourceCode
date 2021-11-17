@@ -1,6 +1,4 @@
-"use strict";
-
-function playFabLogin() {
+export function playFabLogin() {
   try {
     var authTicket = kongregate.services.getGameAuthToken();
     var requestData = {
@@ -172,7 +170,7 @@ function getRootFromChunks(chunks) {
 // If both of them are the same, undefined will be returned
 function newestSave(first, second) {
   function getSaveInfo(save) {
-    if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
+    if (!save) return { infinitied: DC.D0, eternities: DC.D0 };
     const deepCopy = { ...save };
     return {
       infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),

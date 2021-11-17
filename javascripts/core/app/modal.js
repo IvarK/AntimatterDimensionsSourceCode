@@ -1,6 +1,4 @@
-"use strict";
-
-class Modal {
+export class Modal {
   constructor(component, bare = false) {
     this._component = component;
     this._bare = bare;

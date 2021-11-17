@@ -1,8 +1,6 @@
-"use strict";
-
 // All news IDs follow the format [letter(s)][number] so we always assume that's the case and make sure to access the
 // relevant props within player.news.seen
-const NewsHandler = {
+export const NewsHandler = {
   // In principle 32 should work but something seems to go wrong with negative numbers in the function that counts
   // the number of bits in a bitmask, so we have to use 31.
   BITS_PER_MASK: 31,

@@ -1,9 +1,9 @@
-"use strict";
+import { GameMechanicState } from "./game-mechanic.js";
 
 /**
  * @abstract
  */
-class PurchasableMechanicState extends GameMechanicState {
+export class PurchasableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */

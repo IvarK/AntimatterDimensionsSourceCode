@@ -1,9 +1,10 @@
-"use strict";
+import { DC } from "./constants.js";
+
 /* eslint-disable no-console */
 // Disabling no-console here seems
 // reasonable, since these are the devtools after all
-const dev = {};
-const specialGlyphSymbols = {
+export const dev = {};
+export const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
   key2606: "☆", key2607: "☇", key2608: "☈", key2609: "☉", key260a: "☊", key260b: "☋",
   key260c: "☌", key260d: "☍", key260e: "☎", key260f: "☏", key2610: "☐", key2611: "☑",
@@ -150,8 +151,8 @@ dev.refundDilStudies = function() {
 };
 
 dev.resetDilation = function() {
-  player.dilation.dilatedTime = new Decimal(0);
-  player.dilation.tachyonParticles = new Decimal(0);
+  player.dilation.dilatedTime = DC.D0;
+  player.dilation.tachyonParticles = DC.D0;
   player.dilation.rebuyables[1] = 0;
   player.dilation.rebuyables[2] = 0;
   player.dilation.rebuyables[3] = 0;
@@ -205,7 +206,7 @@ dev.removeAch = function(name) {
   return "failed to delete achievement";
 };
 
-let nextNewsMessageId = undefined;
+window.nextNewsMessageId = undefined;
 
 dev.setNextNewsMessage = function(id) {
   nextNewsMessageId = id;
@@ -238,18 +239,18 @@ dev.respecPerks = function() {
   GameCache.buyablePerks.invalidate();
 };
 
-function isDevEnvironment() {
+export function isDevEnvironment() {
   const href = window.location.href;
   return href.split("//")[1].length > 20 || isLocalEnvironment();
 }
 
-function isLocalEnvironment() {
+export function isLocalEnvironment() {
   const href = window.location.href;
   return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
-let tempSpeedupToggle = false;
-let tempSpeedupFactor = 500;
+window.tempSpeedupToggle = false;
+window.tempSpeedupFactor = 500;
 // Speeds up game, intentionally doesn't persist between refreshes
 // With no arguments, toggles on/off
 dev.goFast = function(speed) {
@@ -261,8 +262,8 @@ dev.goFast = function(speed) {
   }
 };
 
-let tempAmplifyToggle = false;
-let tempAmplifyFactor = 100;
+window.tempAmplifyToggle = false;
+window.tempAmplifyFactor = 100;
 // Amplifies every reality you do, intentionally doesn't persist between refreshes
 // With no arguments, toggles on/off
 dev.amplify = function(amplification) {
@@ -320,17 +321,17 @@ dev.printResourceTotals = function() {
   console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
   console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
 
-  let ADmults = new Decimal(1);
+  let ADmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
     ADmults = ADmults.times(AntimatterDimension(i).multiplier);
   }
   console.log(`AD mults: e${ADmults.log10().toPrecision(3)}`);
-  let IDmults = new Decimal(1);
+  let IDmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
     IDmults = IDmults.times(InfinityDimension(i).multiplier);
   }
   console.log(`ID mults: e${IDmults.log10().toPrecision(3)}`);
-  let TDmults = new Decimal(1);
+  let TDmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
     TDmults = TDmults.times(TimeDimension(i).multiplier);
   }
@@ -359,7 +360,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const situationLists = [
     [
       function() {
-        player.infinitied = new Decimal(1e12);
+        player.infinitied = DC.E12;
         player.celestials.effarig.unlockBits = 64;
       }
     ],
@@ -467,8 +468,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const runSituation = function(id) {
     Replicanti.galaxies.isPlayerHoldingR = false;
     GameStorage.loadPlayerObject(Player.defaultStart);
-    player.infinitied = new Decimal(1);
-    player.infinityPoints = new Decimal(1e150);
+    player.infinitied = DC.D1;
+    player.infinityPoints = DC.E150;
     Replicanti.unlock();
     player.replicanti.chance = 1;
     for (let i = 0; i < situationLists.length; i++) {
@@ -486,8 +487,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       }
     }
     doReplicantiTicks();
-    player.antimatter = new Decimal("1e309");
-    player.records.thisInfinity.maxAM = new Decimal("1e309");
+    player.antimatter = DC.E309;
+    player.records.thisInfinity.maxAM = DC.E309;
     bigCrunchReset();
     doReplicantiTicks();
   };

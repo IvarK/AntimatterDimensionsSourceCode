@@ -1,6 +1,14 @@
-"use strict";
+import "../../common/hint-text.js";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("reality-upgrade-button", {
+  components: {
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay
+  },
   props: {
     upgrade: Object
   },
@@ -65,16 +73,16 @@ Vue.component("reality-upgrade-button", {
         >
           {{ config.name }}
         </hint-text>
-        <description-display :config="config" />
-        <description-display
+        <DescriptionDisplay :config="config" />
+        <DescriptionDisplay
           v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
           :config="requirementConfig"
-          title="Requirement:"
+          label="Requirement:"
           class="c-reality-upgrade-btn__requirement"
         />
         <template v-else>
-          <effect-display :config="config" />
-          <cost-display
+          <EffectDisplay :config="config" />
+          <CostDisplay
             v-if="!isBought"
             :config="config"
             name="Reality Machine"

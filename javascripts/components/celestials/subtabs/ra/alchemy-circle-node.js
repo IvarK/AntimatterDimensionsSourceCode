@@ -1,4 +1,4 @@
-"use strict";
+import "../../../common/hint-text.js";
 
 Vue.component("alchemy-circle-node", {
   props: {

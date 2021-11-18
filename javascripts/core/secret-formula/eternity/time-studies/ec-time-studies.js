@@ -5,7 +5,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 1,
     cost: 30,
-    requirement: {
+    requirement: [171],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Eternities",
       current: () => Currency.eternities.value,
       required: completions => new Decimal(20000 + completions * 20000),
@@ -15,7 +17,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 2,
     cost: 35,
-    requirement: {
+    requirement: [171],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Tickspeed upgrades from Time Dimensions",
       current: () => player.totalTickGained,
       required: completions => 1300 + completions * 150,
@@ -25,7 +29,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 3,
     cost: 40,
-    requirement: {
+    requirement: [171],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "8th Antimatter Dimensions",
       current: () => AntimatterDimension(8).totalAmount,
       required: completions => new Decimal(17300 + completions * 1250),
@@ -35,7 +41,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 4,
     cost: 70,
-    requirement: {
+    requirement: [143],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Infinities",
       current: () => Currency.infinitiesTotal.value,
       required: completions => new Decimal(1e8 + completions * 5e7),
@@ -45,7 +53,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 5,
     cost: 130,
-    requirement: {
+    requirement: [42],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Antimatter Galaxies",
       current: () => player.galaxies,
       required: completions => 160 + completions * 14,
@@ -55,7 +65,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 6,
     cost: 85,
-    requirement: {
+    requirement: [121],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Replicanti Galaxies",
       current: () => player.replicanti.galaxies,
       required: completions => 40 + completions * 5,
@@ -65,7 +77,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 7,
     cost: 115,
-    requirement: {
+    requirement: [111],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "antimatter",
       current: () => Currency.antimatter.value,
       required: completions => DC.E300000.pow(completions).times(DC.E500000),
@@ -75,7 +89,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 8,
     cost: 115,
-    requirement: {
+    requirement: [123],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Infinity Points",
       current: () => Currency.infinityPoints.value,
       required: completions => DC.E1000.pow(completions).times(DC.E4000),
@@ -85,7 +101,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 9,
     cost: 415,
-    requirement: {
+    requirement: [151],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Infinity Power",
       current: () => Currency.infinityPower.value,
       required: completions => DC.E2000.pow(completions).times(DC.E17500),
@@ -95,7 +113,9 @@ GameDatabase.eternity.timeStudies.ec = [
   {
     id: 10,
     cost: 550,
-    requirement: {
+    requirement: [181],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
       resource: "Eternity Points",
       current: () => Currency.eternityPoints.value,
       required: completions => DC.E20.pow(completions).times(DC.E100),
@@ -104,10 +124,20 @@ GameDatabase.eternity.timeStudies.ec = [
   },
   {
     id: 11,
-    cost: 1
+    cost: 1,
+    requirement: [231, 232],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
+      path: "Antimatter Dimension",
+    }
   },
   {
     id: 12,
-    cost: 1
+    cost: 1,
+    requirement: [233, 234],
+    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
+    secondary: {
+      path: "Time Dimension",
+    }
   }
 ];

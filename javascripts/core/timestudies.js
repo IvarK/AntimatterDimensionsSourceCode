@@ -3,14 +3,14 @@ import { GameMechanicState } from "./game-mechanics/index.js";
 export const NormalTimeStudies = {};
 
 NormalTimeStudies.pathList = [
-  { path: TIME_STUDY_PATH.ANTIMATTER_DIM, studies: [71, 81, 91, 101] },
-  { path: TIME_STUDY_PATH.INFINITY_DIM, studies: [72, 82, 92, 102] },
-  { path: TIME_STUDY_PATH.TIME_DIM, studies: [73, 83, 93, 103] },
-  { path: TIME_STUDY_PATH.ACTIVE, studies: [121, 131, 141] },
-  { path: TIME_STUDY_PATH.PASSIVE, studies: [122, 132, 142] },
-  { path: TIME_STUDY_PATH.IDLE, studies: [123, 133, 143] },
-  { path: TIME_STUDY_PATH.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
-  { path: TIME_STUDY_PATH.DARK, studies: [222, 224, 226, 228, 232, 234] }
+  { path: TIME_STUDY_PATH.ANTIMATTER_DIM, studies: [71, 81, 91, 101], name: "Antimatter Dims" },
+  { path: TIME_STUDY_PATH.INFINITY_DIM, studies: [72, 82, 92, 102], name: "Infinity Dims" },
+  { path: TIME_STUDY_PATH.TIME_DIM, studies: [73, 83, 93, 103], name: "Time Dims" },
+  { path: TIME_STUDY_PATH.ACTIVE, studies: [121, 131, 141], name: "Active" },
+  { path: TIME_STUDY_PATH.PASSIVE, studies: [122, 132, 142], name: "Passive" },
+  { path: TIME_STUDY_PATH.IDLE, studies: [123, 133, 143], name: "Idle" },
+  { path: TIME_STUDY_PATH.LIGHT, studies: [221, 223, 225, 227, 231, 233], name: "Light" },
+  { path: TIME_STUDY_PATH.DARK, studies: [222, 224, 226, 228, 232, 234], name: "Dark" }
 ];
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
@@ -210,10 +210,6 @@ class TimeStudyState extends GameMechanicState {
   constructor(config, type) {
     super(config);
     this.type = type;
-    /**
-     * @type {TimeStudyConnection[]}
-     */
-    this.incomingConnections = [];
   }
 
   get cost() {
@@ -331,36 +327,45 @@ NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefi
  * in any TimeStudyState objects. During parsing, additional info is stored in order to improve user feedback when
  * attempting to import other study trees.
  * 
- * @member {Number} usableTT  Time theorems remaining after attempting import
- * @member {Number} usableST  Space theorems remaining after attempting import
- * @member {Number} totalTT   Total time theorem cost for importing all valid studies
- * @member {Number} totalST   Total space theorem cost for importing all valid studies
+ * @member {Array: Number} initialTheorems      Two-element array containing starting totals of TT/ST before buying
+ * @member {Array: Number} remainingTheorems    Two-element array containing leftover TT/ST totals after buying
+ * @member {Array: Number} runningCost          Two-element array containing the total cost of buying all valid,
+ *  buyable studies whether or not they are actually affordable
  * @member {Array: String} plannedStudies       Array of valid studies to be purchased from the initial import string;
- *  all entries are Strings because both numbers (normal TS) and T# (triads) need to be supported
+ *  all entries are Strings because numbers (normal TS), T# (triads), and EC# (ECs) need to be supported
  * @member {Array: String} invalidStudies       Array of studies from the initial string which are correctly formatted
  *  but don't actually exist; used for informational purposes elsewhere
  * @member {Array: String} purchasedStudies     Array of studies which were actually purchased, using the given amount
  *  of available theorems. Will always be a subset of plannedStudies
- * @member {Array: String} errors   Array of Strings indicating possible reasons the import string is invalid
- * @member {Number} ec              Numerical ID of the EC which is unlocked from the imported tree, zero if none
+ * @member {Number} ec              Numerical ID of the EC which is unlocked from the imported tree. Equal to 0 if no
+ *  EC has been attempted, or the negative of the ID if purchasing was attempted but failed (needed for merging logic)
  */
 export class TimeStudyTree {
-  constructor(importString, usableTT, usableST) {
-    this.usableTT = usableTT;
-    this.usableST = usableST;
-    this.totalTT = 0;
-    this.totalST = 0;
+  // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
+  constructor(studies, initialTT, initialST) {
+    // If we have above e308 TT there's no way buying studies will put a dent in our total anyway
+    this.initialTheorems = [Decimal.min(initialTT, Number.MAX_VALUE).toNumber(), initialST];
+    this.remainingTheorems = [...this.initialTheorems];
+    this.runningCost = [0, 0];
     this.plannedStudies = [];
     this.invalidStudies = [];
-    this.errors = [];
-    if (TimeStudyTree.isValidImportString(importString)) {
-      this.parseValidStudies(importString);
-      this.parseEC(importString);
-      this.attemptBuyAll();
-    } else {
-      this.plannedStudies = [];
-      this.invalidStudies = [];
-      this.ec = 0;
+    this.purchasedStudies = [];
+    this.ec = 0;
+
+    switch (typeof studies) {
+      case "string":
+        // Input parameter is an unparsed study import string
+        if (TimeStudyTree.isValidImportString(studies)) {
+          this.parseStudyImport(studies);
+          this.attemptBuyAll();
+        }
+        break;
+      case "object":
+        // Input parameter is an array of strings assumed to be already formatted as plannedStudies would be after
+        // import parsing.
+        this.plannedStudies = [...studies];
+        this.attemptBuyAll();
+        break;
     }
   }
 
@@ -371,9 +376,21 @@ export class TimeStudyTree {
     return /^(\d+|T\d+)(,(\d+|T\d+))*(\|\d+)?$/u.test(input);
   }
 
+  // Takes this tree and imports the other tree on top of its state, returning a new composite tree with the studies of
+  // both trees together. Note the order of combination matters since one tree may fulfill requirements in the other.
+  // The only information taken from the other tree is studies; TT/ST counts are taken from this tree.
+  createCombinedTree(otherTree) {
+    const thisStudyList = [...this.purchasedStudies];
+    if (this.ec > 0) currentStudies.push(`EC${this.ec}`);
+    const compositeTree = new TimeStudyTree(thisStudyList, this.initialTheorems[0], this.initialTheorems[1]);
+    compositeTree.plannedStudies = compositeTree.plannedStudies.concat(otherTree.plannedStudies);
+    compositeTree.attemptBuyAll();
+    return compositeTree;
+  }
+
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
-  parseValidStudies(input) {
+  parseStudyImport(input) {
     const treeStudies = input.split("|")[0].split(",");
     const normalIDs = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const triadIDs = GameDatabase.celestials.v.triadStudies.map(s => s.id);
@@ -383,45 +400,44 @@ export class TimeStudyTree {
         : normalIDs.includes(parseInt(str, 10))
     );
 
-    let hasInvalidStudies = false;
     for (const study of treeStudies) {
       if (doesStudyExist(study)) this.plannedStudies.push(study);
-      else {
-        hasInvalidStudies = true;
-        this.invalidStudies.push(study);
-      }
+      else this.invalidStudies.push(study);
     }
-    if (hasInvalidStudies) this.errors.push("String has invalid study IDs.");
-  }
 
-  // Parses out the EC from the import string, pushing an error message if it doesn't exist
-  parseEC(input) {
+    // If the string has an EC indicated in it, append that to the end of the study array
     const ecString = input.split("|")[1];
     if (!ecString) {
       // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
-      this.ec = 0;
       return;
     }
     const ecID = parseInt(ecString, 10);
-    if (!GameDatabase.challenges.eternity.map(c => c.id).includes(ecID)) {
-      this.ec = 0;
-      this.errors.push(`Eternity Challenge ${ecID} does not exist.`);
+    const ecDB = GameDatabase.eternity.timeStudies.ec;
+    // Specifically exclude 0 because saved presets will contain it by default
+    if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
+      this.invalidStudies.push(`${ecID}$`);
       return;
     }
-    this.ec = ecID;
+    this.plannedStudies.push(`EC${ecID}`);
   }
 
   // Attempt to purchase all studies specified in the initial import string
   attemptBuyAll() {
     const normalDB = GameDatabase.eternity.timeStudies.normal;
+    const ecDB = GameDatabase.eternity.timeStudies.ec;
     const triadDB = GameDatabase.celestials.v.triadStudies;
-    const getStudyEntry = str => (
-      /^T\d+$/u.test(str)
-        ? triadDB.find(s => s.id === parseInt(str.substr(1), 10))
-        : normalDB.find(s => s.id === parseInt(str, 10))
-    );
+    const getStudyEntry = str => {
+      const id = `${str}`.match(/(T|EC)?(\d+)/u);
+      switch (id[1]) {
+        case "T":
+          return triadDB.find(s => s.id === parseInt(id[2].substr(1), 10));
+        case "EC":
+          return ecDB.find(s => s.id === parseInt(id[2].substr(1), 10));
+        default:
+          return normalDB.find(s => s.id === parseInt(id[2], 10));
+      }
+    };
 
-    this.purchasedStudies = [];
     for (const study of this.plannedStudies) {
       const toBuy = getStudyEntry(study);
       if (this.attemptBuySingle(toBuy)) this.purchasedStudies.push(study);
@@ -432,6 +448,9 @@ export class TimeStudyTree {
   // requirement is satisfied, then the running theorem costs will be updated (always) and the remaining usable
   // theorems will be decremented (only if there are enough left to actually purchase)
   attemptBuySingle(dbEntry) {
+    // Import strings can contain repeated or undefined entries
+    if (!dbEntry || this.purchasedStudies.includes(`${dbEntry.id}`)) return false;
+
     const check = req => (typeof req === "number"
       ? this.purchasedStudies.includes(`${req}`)
       : req());
@@ -454,11 +473,19 @@ export class TimeStudyTree {
     const stNeeded = dbEntry.STCost && dbEntry.requiresST.some(id => this.purchasedStudies.includes(id))
       ? dbEntry.STCost
       : 0;
-    this.totalTT += dbEntry.cost;
-    this.totalST += stNeeded;
-    if (dbEntry.cost > this.usableTT || stNeeded > this.usableST) return false;
-    this.usableTT -= dbEntry.cost;
-    this.usableST -= stNeeded;
+    const canAfford = this.remainingTheorems[0] >= dbEntry.cost && this.remainingTheorems[1] >= stNeeded;
+
+    // We have to handle ECs slightly differently because you can only have one at once and merging trees may attempt
+    // to buy another. To distinguish between successful and failed purchases, we give failed ones a negative sign
+    if (dbEntry.secondary) {
+      if (this.ec !== 0) return false;
+      this.ec = canAfford ? dbEntry.id : -dbEntry.id;
+    }
+    this.runningCost[0] += dbEntry.cost;
+    this.runningCost[1] += stNeeded;
+    if (!canAfford) return false;
+    this.remainingTheorems[0] -= dbEntry.cost;
+    this.remainingTheorems[1] -= stNeeded;
     return true;
   }
 
@@ -470,6 +497,36 @@ export class TimeStudyTree {
     if (DilationUpgrade.timeStudySplit.isBought) return 3;
     if (this.purchasedStudies.includes("201")) return 2;
     return 1;
+  }
+
+  get firstSplitPaths() {
+    const pathSet = new Set();
+    const validPaths = [TIME_STUDY_PATH.ANTIMATTER_DIM, TIME_STUDY_PATH.INFINITY_DIM, TIME_STUDY_PATH.TIME_DIM];
+    for (const path of validPaths) {
+      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
+      for (const study of this.purchasedStudies) {
+        if (pathEntry.studies.includes(parseInt(study, 10))) {
+          pathSet.add(pathEntry.name);
+          break;
+        }
+      }
+    }
+    return Array.from(pathSet);
+  }
+
+  get secondSplitPaths() {
+    const pathSet = new Set();
+    const validPaths = [TIME_STUDY_PATH.ACTIVE, TIME_STUDY_PATH.PASSIVE, TIME_STUDY_PATH.IDLE];
+    for (const path of validPaths) {
+      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
+      for (const study of this.purchasedStudies) {
+        if (pathEntry.studies.includes(parseInt(study, 10))) {
+          pathSet.add(pathEntry.name);
+          break;
+        }
+      }
+    }
+    return Array.from(pathSet);
   }
 }
 
@@ -577,9 +634,9 @@ export class ECTimeStudyState extends TimeStudyState {
     if (player.challenge.eternity.unlocked !== 0) {
       return false;
     }
-    const isConnectionSatisfied = this.incomingConnections
-      .some(connection => connection.isSatisfied);
-    if (!isConnectionSatisfied) {
+    // We'd have a switch case here if we wanted to generalize, but in our case it doesn't matter because all ECs have
+    // the same study restriction of type TS_REQUIREMENT_TYPE.AT_LEAST_ONE - so we just assume that behavior instead
+    if (!this.config.requirement.some(s => TimeStudy(s).isBought)) {
       return false;
     }
     if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {
@@ -599,11 +656,11 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get requirementTotal() {
-    return this.config.requirement.required(this.challenge.completions);
+    return this.config.secondary.required(this.challenge.completions);
   }
 
   get requirementCurrent() {
-    const current = this.config.requirement.current();
+    const current = this.config.secondary.current();
     if (this.cachedCurrentRequirement === undefined) {
       this.cachedCurrentRequirement = current;
     } else if (typeof current === "number") {
@@ -931,8 +988,5 @@ TimeStudy.allConnections = (function() {
     [TimeStudy.timeDimension(8), TimeStudy.reality]
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
-  for (const connection of connections) {
-    connection.to.incomingConnections.push(connection);
-  }
   return connections;
 }());

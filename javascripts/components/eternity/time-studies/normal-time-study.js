@@ -22,17 +22,9 @@ Vue.component("normal-time-study", {
     },
     hintText() {
       const id = this.study.id;
-      switch (this.setup.path) {
-        case TIME_STUDY_PATH.ANTIMATTER_DIM: return `${id} Antimatter Dims`;
-        case TIME_STUDY_PATH.INFINITY_DIM: return `${id} Infinity Dims`;
-        case TIME_STUDY_PATH.TIME_DIM: return `${id} Time Dims`;
-        case TIME_STUDY_PATH.ACTIVE: return `${id} Active`;
-        case TIME_STUDY_PATH.PASSIVE: return `${id} Passive`;
-        case TIME_STUDY_PATH.IDLE: return `${id} Idle`;
-        case TIME_STUDY_PATH.LIGHT: return `${id} Light`;
-        case TIME_STUDY_PATH.DARK: return `${id} Dark`;
-      }
-      return id;
+      if (!this.setup.path) return id;
+      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === this.setup.path);
+      return `${id} ${pathEntry.name}`;
     }
   },
   methods: {

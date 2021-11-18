@@ -1,12 +1,13 @@
-import "../../common/hint-text.js";
 import "./time-study.js";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
+import HintText from "@/components/HintText";
 
 Vue.component("normal-time-study", {
   components: {
     DescriptionDisplay,
-    EffectDisplay
+    EffectDisplay,
+    HintText
   },
   props: {
     setup: Object
@@ -47,7 +48,7 @@ Vue.component("normal-time-study", {
   },
   template: `
     <time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
-      <hint-text type="studies" class="l-hint-text--time-study">{{ hintText }}</hint-text>
+      <HintText type="studies" class="l-hint-text--time-study">{{ hintText }}</HintText>
       <DescriptionDisplay :config="study.config" />
       <EffectDisplay
         br

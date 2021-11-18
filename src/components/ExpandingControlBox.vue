@@ -1,16 +1,26 @@
+<script>
 // This wraps a control box of some sort (like glyph weight adjust) in
 // a dropdown menu like container.
 // You can force it to open programatically by sending it an openrequest event
 
-Vue.component("expanding-control-box", {
+export default {
   props: {
     // Class assigned to visible container; specify border and background here
-    containerClass: [String, Array],
-    label: String,
+    containerClass: {
+      type: String,
+      required: false,
+      default: undefined
+    },
+    label: {
+      type: String,
+      required: false,
+      default: undefined
+    },
     widthSource: {
       // Content sizes the width based on what's in the dropdown.
       // header sizes based on the menu header (container ref)
       type: String,
+      required: false,
       default: "content",
     },
   },
@@ -21,6 +31,33 @@ Vue.component("expanding-control-box", {
       closedHeight: "1em",
       openHeight: "1em",
     };
+  },
+  computed: {
+    states: () => ({
+      CLOSED: { name: "CLOSED", transition: false, visibility: false, height: "closed" },
+      OPEN_REQUESTED: { name: "OPEN_REQUESTED", transition: true, visibility: true, height: "closed" },
+      OPENING: { name: "OPENING", transition: true, visibility: true, height: "open" },
+      OPEN: { name: "OPEN", transition: false, visibility: true, height: null },
+      CLOSE_REQUESTED: { name: "CLOSE_REQUESTED", transition: false, visibility: true, height: "open" },
+      CLOSING: { name: "CLOSING", transition: true, visibility: true, height: "closed" },
+    }),
+    maxHeight() {
+      if (this.state.height === "open") return this.openHeight;
+      return this.state.height === "closed" ? this.closedHeight : null;
+    },
+    containerStyle() {
+      return {
+        maxHeight: this.maxHeight,
+        visibility: this.state.visibility,
+      };
+    },
+    containerClasses() {
+      const classes = [this.containerClass];
+      if (this.state?.transition) {
+        classes.push("l-expanding-control-box__container--transition");
+      }
+      return classes;
+    }
   },
   watch: {
     state(newState) {
@@ -58,26 +95,6 @@ Vue.component("expanding-control-box", {
     this.$refs.root.style.height = this.closedHeight;
     this.updateBaseWidth();
   },
-  computed: {
-    states: () => ({
-      CLOSED: { name: "CLOSED", transition: false, visibility: false, height: "closed" },
-      OPEN_REQUESTED: { name: "OPEN_REQUESTED", transition: true, visibility: true, height: "closed" },
-      OPENING: { name: "OPENING", transition: true, visibility: true, height: "open" },
-      OPEN: { name: "OPEN", transition: false, visibility: true, height: null },
-      CLOSE_REQUESTED: { name: "CLOSE_REQUESTED", transition: false, visibility: true, height: "open" },
-      CLOSING: { name: "CLOSING", transition: true, visibility: true, height: "closed" },
-    }),
-    maxHeight() {
-      if (this.state.height === "open") return this.openHeight;
-      return this.state.height === "closed" ? this.closedHeight : null;
-    },
-    containerStyle() {
-      return {
-        maxHeight: this.maxHeight,
-        visibility: this.state.visibility,
-      };
-    }
-  },
   methods: {
     processRequest(state, request) {
       if (request && (state === this.states.CLOSED || state === this.states.CLOSE_REQUESTED)) {
@@ -108,33 +125,77 @@ Vue.component("expanding-control-box", {
         this.state = this.states.CLOSED;
       }
     },
-  },
-  template: `
-    <!-- The root element is an empty box of fixed size with position relative.
-        On top of that, we have a container element (which has both the label and the control)
-        The container element hides the control via clipping (and visibility). The thing you
-        click to show hide is at the top of the container element. -->
-    <div ref="root" class="l-expanding-control-box">
+  }
+};
+</script>
+
+<template>
+  <!-- The root element is an empty box of fixed size with position relative.
+         On top of that, we have a container element (which has both the label and the control)
+         The container element hides the control via clipping (and visibility). The thing you
+         click to show hide is at the top of the container element. -->
+  <div
+    ref="root"
+    class="l-expanding-control-box"
+  >
+    <div
+      ref="container"
+      class="l-expanding-control-box__container"
+      :class="containerClasses"
+      :style="containerStyle"
+      @transitionend="transitionEnd"
+    >
       <div
-        ref="container"
-        :class="['l-expanding-control-box__container',
-          containerClass,
-          {'l-expanding-control-box__container--transition': state.transition }]"
-        :style="containerStyle"
-        @transitionend="transitionEnd"
+        v-if="!$slots.header"
+        ref="expandButton"
+        class="l-expanding-control-box__button"
+        @click="openRequest=!openRequest"
       >
-        <div
-          v-if="!$slots.header"
-          ref="expandButton"
-          class="l-expanding-control-box__button"
-          @click="openRequest=!openRequest"
-        >
-          {{ label }} ▼
-        </div>
-        <div v-else ref="expandButton" @click="openRequest=!openRequest">
-          <slot name="header" />
-        </div>
-        <div ref="dropdown"><slot name="dropdown" /></div>
+        {{ label }} ▼
       </div>
-    </div>`
-});
+      <div
+        v-else
+        ref="expandButton"
+        @click="openRequest=!openRequest"
+      >
+        <slot name="header" />
+      </div>
+      <div ref="dropdown">
+        <slot name="dropdown" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.l-expanding-control-box {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+}
+
+.l-expanding-control-box__container {
+  position: absolute;
+  display: block;
+  height: auto;
+  overflow: hidden;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+}
+
+.l-expanding-control-box__container--transition {
+  transition: max-height 0.5s;
+  -webkit-transition: max-height 0.5s;
+}
+
+.l-expanding-control-box__button {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  border: none !important;
+  height: 2.5rem;
+}
+</style>

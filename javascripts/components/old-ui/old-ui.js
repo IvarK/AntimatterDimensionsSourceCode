@@ -1,14 +1,15 @@
 import "../common/news-ticker.js";
-import "../common/footer-links.js";
 import "./old-ui-subtab-bar.js";
 import "./old-ui-tab-bar.js";
 import "./header/game-header.js";
+import FooterLinks from "@/components/FooterLinks";
 
 Vue.component("old-ui", {
   components: {
     "big-crunch-button": {
       template: `<button class="o-tab-btn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
-    }
+    },
+    FooterLinks
   },
   data() {
     return {
@@ -52,7 +53,7 @@ Vue.component("old-ui", {
         <div class="l-old-ui-page l-old-ui__page">
           <slot />
         </div>
-        <footer-links class="l-old-ui__footer" />
+        <FooterLinks class="l-old-ui__footer" />
       </template>
     </div>`
 });

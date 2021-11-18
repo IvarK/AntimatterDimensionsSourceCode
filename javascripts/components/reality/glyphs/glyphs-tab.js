@@ -9,9 +9,12 @@ import "./glyph-levels-and-weights.js";
 import "./reset-reality-button.js";
 import "./reality-button.js";
 import "../reality-reminder.js";
-import "../../common/expanding-control-box.js";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 Vue.component("glyphs-tab", {
+  components: {
+    ExpandingControlBox
+  },
   data: () => ({
     enslavedHint: "",
     showInstability: false,
@@ -107,13 +110,13 @@ Vue.component("glyphs-tab", {
             <br>
             This effect is even stronger above level {{ formatInt(hyperInstabilityThreshold) }}.
           </div>
-          <expanding-control-box
+          <ExpandingControlBox
             label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
             style="margin: 2rem;"
           >
             <glyph-levels-and-weights slot="dropdown" />
-          </expanding-control-box>
+          </ExpandingControlBox>
           <glyph-tab-sidebar />
         </div>
         <div class="l-player-glyphs-column">

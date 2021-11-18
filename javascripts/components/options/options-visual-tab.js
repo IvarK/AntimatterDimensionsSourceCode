@@ -1,6 +1,6 @@
 import "./select-theme.js";
 import "./select-notation.js";
-import "../common/expanding-control-box.js";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 Vue.component("options-visual-tab", {
   components: {
@@ -33,6 +33,7 @@ Vue.component("options-visual-tab", {
           />
         </div>`
     },
+    ExpandingControlBox
   },
   data() {
     return {
@@ -99,18 +100,18 @@ Vue.component("options-visual-tab", {
           </options-button>
         </div>
         <div class="l-options-grid__row">
-          <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <ExpandingControlBox width-source="header" class="l-options-grid__button c-options-grid__notations">
             <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
               {{ themeLabel }}
             </div>
             <select-theme slot="dropdown" />
-          </expanding-control-box>
-          <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          </ExpandingControlBox>
+          <ExpandingControlBox width-source="header" class="l-options-grid__button c-options-grid__notations">
             <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
               {{ notationLabel }}
             </div>
             <select-notation slot="dropdown" />
-          </expanding-control-box>
+          </ExpandingControlBox>
           <primary-button-on-off-custom
             v-model="commas"
             class="o-primary-btn--option l-options-grid__button"

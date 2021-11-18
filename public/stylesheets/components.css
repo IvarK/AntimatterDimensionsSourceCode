@@ -4,37 +4,6 @@ This file is for styles that are part of Vue components.
    Things more directly related to the game and its theming should also be separated if possible.
 */
 
-.l-expanding-control-box {
-  position: relative;
-  z-index: 3;
-  width: 100%;
-}
-
-.l-expanding-control-box__container {
-  position: absolute;
-  display: block;
-  height: auto;
-  overflow: hidden;
-  width: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
-}
-
-.l-expanding-control-box__container--transition {
-  transition: max-height 0.5s;
-  -webkit-transition: max-height 0.5s;
-}
-
-.l-expanding-control-box__button {
-  cursor: pointer;
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  border: none !important;
-  height: 2.5rem;
-}
-
 .l-hover-menu__wrapper {
   position: relative;
 }

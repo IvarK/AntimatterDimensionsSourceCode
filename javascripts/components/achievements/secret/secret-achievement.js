@@ -1,6 +1,9 @@
-import "../../common/hint-text.js";
+import HintText from "@/components/HintText";
 
 Vue.component("secret-achievement", {
+  components: {
+    HintText
+  },
   props: {
     /** @type SecretAchievementState */
     achievement: {
@@ -75,9 +78,9 @@ Vue.component("secret-achievement", {
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave"
     >
-      <hint-text type="achievements" class="l-hint-text--achievement">
+      <HintText type="achievements" class="l-hint-text--achievement">
         S{{ id }}
-      </hint-text>
+      </HintText>
       <div class="o-achievement__tooltip">
         <template v-if="isMouseOver">
           <div class="o-achievement__tooltip__name">

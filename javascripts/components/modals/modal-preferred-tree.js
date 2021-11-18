@@ -74,7 +74,7 @@ Vue.component("modal-preferred-tree", {
           @click="select(name)"
           :class="classList(name)"
         >
-          <div v-if="isPreferred(name)" class="l-dim-path-priority o-hint-text">
+          <div v-if="isPreferred(name)" class="l-dim-path-priority o-dim-path-priority">
             {{ isPreferred(name) }}
           </div>
           <div>

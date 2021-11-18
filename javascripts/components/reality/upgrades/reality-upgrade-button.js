@@ -1,13 +1,14 @@
-import "../../common/hint-text.js";
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
+import HintText from "@/components/HintText";
 
 Vue.component("reality-upgrade-button", {
   components: {
     DescriptionDisplay,
     EffectDisplay,
-    CostDisplay
+    CostDisplay,
+    HintText
   },
   props: {
     upgrade: Object
@@ -67,12 +68,12 @@ Vue.component("reality-upgrade-button", {
         class="l-reality-upgrade-btn c-reality-upgrade-btn"
         @click="upgrade.purchase()"
       >
-        <hint-text
+        <HintText
           type="realityUpgrades"
           class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
         >
           {{ config.name }}
-        </hint-text>
+        </HintText>
         <DescriptionDisplay :config="config" />
         <DescriptionDisplay
           v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"

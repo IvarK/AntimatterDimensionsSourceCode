@@ -1,6 +1,9 @@
-import "../../../common/hint-text.js";
+import HintText from "@/components/HintText";
 
 Vue.component("alchemy-circle-node", {
+  components: {
+    HintText
+  },
   props: {
     node: Object,
     isFocused: false
@@ -62,12 +65,12 @@ Vue.component("alchemy-circle-node", {
         :classObject="classObject"
       />
       <span v-if="isUnlocked">
-        <hint-text type="alchemy"
+        <HintText type="alchemy"
           :class="hintClassObject"
           class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
         >
           {{ amount.toFixed(1) }}
-        </hint-text>
+        </HintText>
       </span>
     </div>`
 });

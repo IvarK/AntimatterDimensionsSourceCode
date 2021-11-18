@@ -5670,13 +5670,6 @@ kbd {
 
 /*#endregion o-notification*/
 
-.o-footer {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  font-size: 1.5rem;
-}
-
 /*#region component*/
 /*#endregion component*/
 

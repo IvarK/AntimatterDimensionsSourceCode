@@ -125,7 +125,7 @@ export default {
       }
     }
   },
-  created() {
+  beforeCreate() {
     this.updateEffect = () => { };
     this.updateCap = () => { };
   },

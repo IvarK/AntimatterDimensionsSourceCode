@@ -64,9 +64,7 @@ export default {
 
         if (isDecimal(value)) {
           this.cost = Decimal.fromDecimal(value);
-          this.updateFunction = () => {
-            this.cost.copyFrom(cost());
-          };
+          this.updateFunction = () => this.cost.copyFrom(cost());
           return;
         }
 

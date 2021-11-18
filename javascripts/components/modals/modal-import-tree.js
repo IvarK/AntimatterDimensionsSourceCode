@@ -78,12 +78,7 @@ Vue.component("modal-import-tree", {
       return this.inputIsValidTree || this.inputIsSecret;
     },
     inputIsValidTree() {
-      const formattedInput = this.truncatedInput.split("|")[0].split(",");
-      let isValid = true;
-      for (const study of formattedInput) {
-        if (TimeStudy(study) === undefined) isValid = false;
-      }
-      return isValid;
+      return TimeStudyTree.isValidImportString(this.truncatedInput);
     },
     inputIsSecret() {
       return sha512_256(this.truncatedInput) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";

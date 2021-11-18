@@ -325,6 +325,155 @@ NormalTimeStudyState.studies = mapGameData(
 NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefined);
 
 /**
+ * Abstract representation of a full time study tree object. The intended usage is to supply the constructor with
+ * an import string and a budget of time/space theorems, which it will use together to determine which studies can
+ * actually be purchased in the specified order. All of the complex purchasing logic should be handled here, and not
+ * in any TimeStudyState objects. During parsing, additional info is stored in order to improve user feedback when
+ * attempting to import other study trees.
+ * 
+ * @member {Number} usableTT  Time theorems remaining after attempting import
+ * @member {Number} usableST  Space theorems remaining after attempting import
+ * @member {Number} totalTT   Total time theorem cost for importing all valid studies
+ * @member {Number} totalST   Total space theorem cost for importing all valid studies
+ * @member {Array: String} plannedStudies       Array of valid studies to be purchased from the initial import string;
+ *  all entries are Strings because both numbers (normal TS) and T# (triads) need to be supported
+ * @member {Array: String} invalidStudies       Array of studies from the initial string which are correctly formatted
+ *  but don't actually exist; used for informational purposes elsewhere
+ * @member {Array: String} purchasedStudies     Array of studies which were actually purchased, using the given amount
+ *  of available theorems. Will always be a subset of plannedStudies
+ * @member {Array: String} errors   Array of Strings indicating possible reasons the import string is invalid
+ * @member {Number} ec              Numerical ID of the EC which is unlocked from the imported tree, zero if none
+ */
+export class TimeStudyTree {
+  constructor(importString, usableTT, usableST) {
+    this.usableTT = usableTT;
+    this.usableST = usableST;
+    this.totalTT = 0;
+    this.totalST = 0;
+    this.plannedStudies = [];
+    this.invalidStudies = [];
+    this.errors = [];
+    if (TimeStudyTree.isValidImportString(importString)) {
+      this.parseValidStudies(importString);
+      this.parseEC(importString);
+      this.attemptBuyAll();
+    } else {
+      this.plannedStudies = [];
+      this.invalidStudies = [];
+      this.ec = 0;
+    }
+  }
+
+  // Note that this only checks pure formatting, not whether or not a study/EC actually exists, but verifying correct
+  // formatting separately from verifying existence allows us to produce more useful in-game error messages for
+  // import strings which are formatted correctly but aren't entirely valid
+  static isValidImportString(input) {
+    return /^(\d+|T\d+)(,(\d+|T\d+))*(\|\d+)?$/u.test(input);
+  }
+
+  // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
+  // to invalid studies for additional information to present to the player
+  parseValidStudies(input) {
+    const treeStudies = input.split("|")[0].split(",");
+    const normalIDs = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
+    const triadIDs = GameDatabase.celestials.v.triadStudies.map(s => s.id);
+    const doesStudyExist = str => (
+      /^T\d+$/u.test(str)
+        ? triadIDs.includes(parseInt(str.substr(1), 10))
+        : normalIDs.includes(parseInt(str, 10))
+    );
+
+    let hasInvalidStudies = false;
+    for (const study of treeStudies) {
+      if (doesStudyExist(study)) this.plannedStudies.push(study);
+      else {
+        hasInvalidStudies = true;
+        this.invalidStudies.push(study);
+      }
+    }
+    if (hasInvalidStudies) this.errors.push("String has invalid study IDs.");
+  }
+
+  // Parses out the EC from the import string, pushing an error message if it doesn't exist
+  parseEC(input) {
+    const ecString = input.split("|")[1];
+    if (!ecString) {
+      // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
+      this.ec = 0;
+      return;
+    }
+    const ecID = parseInt(ecString, 10);
+    if (!GameDatabase.challenges.eternity.map(c => c.id).includes(ecID)) {
+      this.ec = 0;
+      this.errors.push(`Eternity Challenge ${ecID} does not exist.`);
+      return;
+    }
+    this.ec = ecID;
+  }
+
+  // Attempt to purchase all studies specified in the initial import string
+  attemptBuyAll() {
+    const normalDB = GameDatabase.eternity.timeStudies.normal;
+    const triadDB = GameDatabase.celestials.v.triadStudies;
+    const getStudyEntry = str => (
+      /^T\d+$/u.test(str)
+        ? triadDB.find(s => s.id === parseInt(str.substr(1), 10))
+        : normalDB.find(s => s.id === parseInt(str, 10))
+    );
+
+    this.purchasedStudies = [];
+    for (const study of this.plannedStudies) {
+      const toBuy = getStudyEntry(study);
+      if (this.attemptBuySingle(toBuy)) this.purchasedStudies.push(study);
+    }
+  }
+
+  // Tries to buy a single study, accounting for all various requirements and locking behavior in the game. If the
+  // requirement is satisfied, then the running theorem costs will be updated (always) and the remaining usable
+  // theorems will be decremented (only if there are enough left to actually purchase)
+  attemptBuySingle(dbEntry) {
+    const check = req => (typeof req === "number"
+      ? this.purchasedStudies.includes(`${req}`)
+      : req());
+    let reqSatisfied;
+    switch (dbEntry.reqType) {
+      case TS_REQUIREMENT_TYPE.AT_LEAST_ONE:
+        reqSatisfied = dbEntry.requirement.some(r => check(r));
+        break;
+      case TS_REQUIREMENT_TYPE.ALL:
+        reqSatisfied = dbEntry.requirement.every(r => check(r));
+        break;
+      case TS_REQUIREMENT_TYPE.DIMENSION_PATH:
+        reqSatisfied = dbEntry.requirement.every(r => check(r)) && this.currDimPathCount < this.allowedDimPathCount;
+        break;
+      default:
+        throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
+    }
+    if (!reqSatisfied) return false;
+
+    const stNeeded = dbEntry.STCost && dbEntry.requiresST.some(id => this.purchasedStudies.includes(id))
+      ? dbEntry.STCost
+      : 0;
+    this.totalTT += dbEntry.cost;
+    this.totalST += stNeeded;
+    if (dbEntry.cost > this.usableTT || stNeeded > this.usableST) return false;
+    this.usableTT -= dbEntry.cost;
+    this.usableST -= stNeeded;
+    return true;
+  }
+
+  get currDimPathCount() {
+    return [71, 72, 73].countWhere(x => this.purchasedStudies.includes(`${x}`));
+  }
+
+  get allowedDimPathCount() {
+    if (DilationUpgrade.timeStudySplit.isBought) return 3;
+    if (this.purchasedStudies.includes("201")) return 2;
+    return 1;
+  }
+}
+
+/**
  * @returns {NormalTimeStudyState}
  */
 export function TimeStudy(id) {

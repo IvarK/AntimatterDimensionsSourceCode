@@ -75,12 +75,7 @@ Vue.component("modal-edit-tree", {
       return this.inputIsValidTree;
     },
     inputIsValidTree() {
-      const formattedInput = this.input.split("|")[0].split(",");
-      let isValid = true;
-      for (const study of formattedInput) {
-        if (TimeStudy(study) === undefined) isValid = false;
-      }
-      return isValid;
+      return TimeStudyTree.isValidImportString(this.input);
     },
     formatWithCommas() {
       return formatWithCommas;

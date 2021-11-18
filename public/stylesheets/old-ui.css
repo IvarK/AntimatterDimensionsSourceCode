@@ -99,38 +99,3 @@
 .s-base--metro .c-subtab-button-container {
   border-width: 0.1rem;
 }
-
-.c-news-ticker {
-  border: 0.2rem solid black;
-  border-radius: 0.4rem;
-  padding: 0.2rem 0;
-  height: 3rem;
-}
-
-.s-base--metro .c-news-ticker,
-.t-s6 .c-news-ticker,
-.t-s10 .c-news-ticker {
-  border-width: 0.1rem;
-}
-
-.t-dark .c-news-ticker {
-  border-color: #546e7a;
-  background-color: #455a64;
-}
-
-.t-dark-metro .c-news-ticker {
-  background-color: #455a64;
-}
-
-.t-s1 .c-news-ticker {
-  background-color: #dbd242
-}
-
-.t-s6 .c-news-ticker,
-.t-s10 .c-news-ticker {
-  background-color: black;
-}
-
-.c-news-line {
-  color: var(--color-text);
-}

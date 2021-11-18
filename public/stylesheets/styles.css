@@ -544,33 +544,6 @@ button:focus {
 
 /*#endregion tab buttons*/
 
-.c-news-ticker {
-  overflow: hidden;
-}
-
-.c-news-ticker__line {
-  padding-left: 100%;
-  transition: transform linear;
-}
-
-.c-disable-ticker-animation > * {
-  animation-play-state: paused !important;
-}
-
-.c-news-line {
-  display: inline-block;
-  font-family: Typewriter, serif;
-  font-size: 1.5rem;
-  white-space: nowrap;
-  font-weight: bold;
-  text-align: left;
-  user-select: none;
-}
-
-.c-news-line a {
-  text-decoration: underline;
-}
-
 #loading {
   height: 100%;
   width: 100%;

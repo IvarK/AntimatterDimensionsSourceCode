@@ -1,7 +1,7 @@
-import "../common/news-ticker.js";
 import "./old-ui-subtab-bar.js";
 import "./old-ui-tab-bar.js";
 import "./header/game-header.js";
+import NewsTicker from "@/components/NewsTicker";
 import FooterLinks from "@/components/FooterLinks";
 
 Vue.component("old-ui", {
@@ -9,6 +9,7 @@ Vue.component("old-ui", {
     "big-crunch-button": {
       template: `<button class="o-tab-btn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
     },
+    NewsTicker,
     FooterLinks
   },
   data() {
@@ -41,7 +42,7 @@ Vue.component("old-ui", {
         </div>
       </template>
       <template v-else>
-        <news-ticker class="l-old-ui__news-bar" v-if="news" />
+        <NewsTicker class="l-old-ui__news-bar" v-if="news" />
         <game-header class="l-old-ui__header" />
         <old-ui-tab-bar />
         <component v-if="tab.config.before" :is="tab.config.before" />

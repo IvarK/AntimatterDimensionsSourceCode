@@ -13,6 +13,9 @@ Vue.component("game-ui", {
     uiLayout() {
       return this.view.newUI ? "new-ui" : "old-ui";
     },
+    containerClass() {
+      return this.view.newUI ? "new-ui" : "old-ui";
+    },
     page() {
       const subtab = Tabs.current[this.$viewModel.subtab];
       const config = subtab.config;
@@ -29,6 +32,7 @@ Vue.component("game-ui", {
     <div
       v-if="view.initialized"
       id="ui-container"
+      :class="containerClass"
       style="display: flex; justify-content: center;"
     >
       <div id="ui" class="c-game-ui">

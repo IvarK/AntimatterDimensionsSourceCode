@@ -249,6 +249,10 @@ Vue.component("time-studies-tab", {
       }
     };
     incrementRenderedCount();
+
+    // Scroll to top because time studies tab is rendered progressively
+    // and we don't want the player to see empty space while it's loading.
+    document.body.scrollTop = 0;
   },
   beforeDestroy() {
     cancelAnimationFrame(this.renderAnimationId);

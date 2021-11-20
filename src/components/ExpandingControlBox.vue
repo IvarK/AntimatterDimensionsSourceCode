@@ -21,7 +21,7 @@ export default {
       // header sizes based on the menu header (container ref)
       type: String,
       required: false,
-      default: "content",
+      default: undefined,
     },
   },
   data() {
@@ -44,6 +44,11 @@ export default {
     maxHeight() {
       if (this.state.height === "open") return this.openHeight;
       return this.state.height === "closed" ? this.closedHeight : null;
+    },
+    rootClass() {
+      return this.widthSource === undefined
+        ? undefined
+        : "l-expanding-control-box--controls-width";
     },
     containerStyle() {
       return {
@@ -137,6 +142,7 @@ export default {
   <div
     ref="root"
     class="l-expanding-control-box"
+    :class="rootClass"
   >
     <div
       ref="container"
@@ -171,6 +177,9 @@ export default {
 .l-expanding-control-box {
   position: relative;
   z-index: 3;
+}
+
+.l-expanding-control-box--controls-width {
   width: 100%;
 }
 

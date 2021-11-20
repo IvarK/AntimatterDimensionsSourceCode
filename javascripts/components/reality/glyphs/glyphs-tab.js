@@ -111,6 +111,7 @@ Vue.component("glyphs-tab", {
             This effect is even stronger above level {{ formatInt(hyperInstabilityThreshold) }}.
           </div>
           <ExpandingControlBox
+            width-source="content"
             label="Glyph Level Factors"
             container-class="c-glyph-level-factors-dropdown-header"
             style="margin: 2rem;"

@@ -100,13 +100,13 @@ Vue.component("options-visual-tab", {
           </options-button>
         </div>
         <div class="l-options-grid__row">
-          <ExpandingControlBox width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <ExpandingControlBox class="l-options-grid__button c-options-grid__notations">
             <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
               {{ themeLabel }}
             </div>
             <select-theme slot="dropdown" />
           </ExpandingControlBox>
-          <ExpandingControlBox width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <ExpandingControlBox class="l-options-grid__button c-options-grid__notations">
             <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
               {{ notationLabel }}
             </div>

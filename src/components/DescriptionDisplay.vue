@@ -32,14 +32,15 @@ export default {
     };
   },
   computed: {
-    classes() {
+    classObject() {
       const name = this.name;
       if (name === undefined) {
         return undefined;
       }
-      const classes = [name];
+      const classes = {};
+      classes[name] = true;
       if (this.description.length >= this.length) {
-        classes.push(`${name}--small-text`);
+        classes[`${name}--small-text`] = true;
       }
       return classes;
     }
@@ -90,7 +91,7 @@ export default {
 <template>
   <span
     v-if="isVisible"
-    :class="classes"
+    :class="classObject"
   >
     {{ title }} {{ description }}
   </span>

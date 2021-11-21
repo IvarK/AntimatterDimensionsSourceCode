@@ -45,10 +45,10 @@ export default {
       if (this.state.height === "open") return this.openHeight;
       return this.state.height === "closed" ? this.closedHeight : null;
     },
-    rootClass() {
-      return this.widthSource === undefined
-        ? undefined
-        : "l-expanding-control-box--controls-width";
+    rootClassObject() {
+      return {
+        "l-expanding-control-box--controls-width": this.widthSource !== undefined
+      };
     },
     containerStyle() {
       return {
@@ -56,11 +56,11 @@ export default {
         visibility: this.state.visibility,
       };
     },
-    containerClasses() {
-      const classes = [this.containerClass];
-      if (this.state?.transition) {
-        classes.push("l-expanding-control-box__container--transition");
-      }
+    containerClassObject() {
+      const classes = {
+        "l-expanding-control-box__container--transition": this.state?.transition === true
+      };
+      classes[this.containerClass] = true;
       return classes;
     }
   },
@@ -142,12 +142,12 @@ export default {
   <div
     ref="root"
     class="l-expanding-control-box"
-    :class="rootClass"
+    :class="rootClassObject"
   >
     <div
       ref="container"
       class="l-expanding-control-box__container"
-      :class="containerClasses"
+      :class="containerClassObject"
       :style="containerStyle"
       @transitionend="transitionEnd"
     >

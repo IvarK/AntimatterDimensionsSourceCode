@@ -1162,17 +1162,9 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      const basicAlchemyTypes = [
-        ALCHEMY_RESOURCE.POWER,
-        ALCHEMY_RESOURCE.INFINITY,
-        ALCHEMY_RESOURCE.TIME,
-        ALCHEMY_RESOURCE.REPLICATION,
-        ALCHEMY_RESOURCE.DILATION,
-        ALCHEMY_RESOURCE.EFFARIG
-      ];
-      for (const resource of basicAlchemyTypes) {
-        player.celestials.ra.alchemy[resource].amount = 
-          Math.clampMax(player.celestials.ra.alchemy[resource].amount, Ra.alchemyResourceCap);
+      for (const resource of player.celestials.ra.alchemy) {
+        // 25000 is Ra.alchemyResourceCap
+        resource.amount = Math.clampMax(resource.amount, 25000);
       }
     },
   ],

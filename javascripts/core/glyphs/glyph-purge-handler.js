@@ -80,7 +80,7 @@ export const GlyphSacrificeHandler = {
     const resource = this.glyphAlchemyResource(glyph);
     const currentCap = resource.cap;
     const capAfterRefinement = this.highestRefinementValue(glyph);
-    return Math.max(currentCap, capAfterRefinement);
+    return Math.clamp(currentCap, capAfterRefinement, Ra.alchemyResourceCap);
   },
   highestRefinementValue(glyph) {
     return this.glyphRawRefinementGain(glyph) / this.glyphRefinementEfficiency;

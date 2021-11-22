@@ -1161,6 +1161,12 @@ GameStorage.devMigrations = {
         player.reality.automator.state.forceRestart = false;
       }
     },
+    player => {
+      for (const resource of player.celestials.ra.alchemy) {
+        // We shouldn't access global variables in migrations so instead of Ra.alchemyResourceCap we use 25000.
+        resource.amount = Math.clampMax(resource.amount, 25000);
+      }
+    },
   ],
 
   patch(player) {

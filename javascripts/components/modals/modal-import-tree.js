@@ -20,15 +20,10 @@ Vue.component("modal-import-tree", {
     },
     combinedTree() {
       if (!this.inputIsValidTree) return false;
-      const currentStudies = player.timestudy.studies.map(s => `${s}`)
-        .concat(player.celestials.v.triadStudies.map(s => `T${s}`));
-      if (player.challenge.eternity.current !== 0) currentStudies.push(`EC${player.challenge.eternity.current}`);
-
       // We know that we have enough for all existing studies because we actually purchased them, so setting initial
       // theorem values to e308 ensures we have enough to actually properly initialize a Tree object with all the
       // current studies. Then we set theorem totals to their proper values immediately AFTER everything is bought
-      const currentStudyTree = new TimeStudyTree(currentStudies, Number.MAX_VALUE, Number.MAX_VALUE);
-      currentStudyTree.remainingTheorems = [Currency.timeTheorems.value, V.spaceTheorems];
+      const currentStudyTree = TimeStudyTree.currentTree();
       const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
       const compositeTree = currentStudyTree.createCombinedTree(importedTree);
       return {

@@ -194,6 +194,7 @@ GameDatabase.celestials.v = {
   triadStudies: [
     {
       id: 1,
+      cost: 0,
       STCost: 12,
       requirement: [221, 222, 231],
       reqType: TS_REQUIREMENT_TYPE.ALL,
@@ -205,6 +206,7 @@ GameDatabase.celestials.v = {
     },
     {
       id: 2,
+      cost: 0,
       STCost: 12,
       requirement: [223, 224, 232],
       reqType: TS_REQUIREMENT_TYPE.ALL,
@@ -215,6 +217,7 @@ GameDatabase.celestials.v = {
     },
     {
       id: 3,
+      cost: 0,
       STCost: 12,
       requirement: [225, 226, 233],
       reqType: TS_REQUIREMENT_TYPE.ALL,
@@ -226,6 +229,7 @@ GameDatabase.celestials.v = {
     },
     {
       id: 4,
+      cost: 0,
       STCost: 12,
       requirement: [227, 228, 234],
       reqType: TS_REQUIREMENT_TYPE.ALL,

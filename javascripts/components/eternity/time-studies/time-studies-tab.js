@@ -309,6 +309,10 @@ Vue.component("time-studies-tab", {
         case TimeStudyType.TRIAD: return "triad-time-study";
       }
       throw "Unknown Time Study type";
+    },
+    exportStudyTree() {
+      copyToClipboard(TimeStudyTree.currentTree().exportString);
+      GameUI.notify.info("Exported current Time Studies to your clipboard");
     }
   },
   template: `
@@ -316,7 +320,7 @@ Vue.component("time-studies-tab", {
       <div class="c-subtab-option-container">
         <primary-button
           class="o-primary-btn--subtab-option"
-          onclick="exportStudyTree()"
+          @click="exportStudyTree"
         >
           Export tree
         </primary-button>

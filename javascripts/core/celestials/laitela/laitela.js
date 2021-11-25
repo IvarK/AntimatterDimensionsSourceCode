@@ -82,7 +82,7 @@ export const Laitela = {
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
-          amount: DC.D0,
+          amount: DC.D1,
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,

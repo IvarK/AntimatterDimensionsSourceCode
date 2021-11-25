@@ -70,7 +70,7 @@ Vue.component("modal-import-tree", {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       Modal.hide();
-      importStudyTree(this.truncatedInput);
+      TimeStudyTree.importIntoCurrentTree(this.truncatedInput);
     },
     formatCost(cost) {
       return formatWithCommas(cost);

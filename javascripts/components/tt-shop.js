@@ -205,7 +205,7 @@ Vue.component("tt-save-load-button", {
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
-        importStudyTree(this.preset.studies);
+        TimeStudyTree.importIntoCurrentTree(this.preset.studies);
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {

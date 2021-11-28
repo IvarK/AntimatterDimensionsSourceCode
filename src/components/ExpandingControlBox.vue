@@ -155,14 +155,14 @@ export default {
         v-if="!$slots.header"
         ref="expandButton"
         class="l-expanding-control-box__button"
-        @click="openRequest=!openRequest"
+        @click="openRequest = !openRequest"
       >
         {{ label }} ▼
       </div>
       <div
         v-else
         ref="expandButton"
-        @click="openRequest=!openRequest"
+        @click="openRequest = !openRequest"
       >
         <slot name="header" />
       </div>

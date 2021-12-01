@@ -13,6 +13,7 @@ import "./infinity/break-infinity-upgrades.js";
 import "./eternity/time-studies/normal-time-studies.js";
 import "./eternity/time-studies/ec-time-studies.js";
 import "./eternity/time-studies/dilation-time-studies.js";
+import "./eternity/time-studies/triad-time-studies.js";
 import "./eternity/eternity-upgrades.js";
 import "./eternity/eternity-milestones.js";
 import "./eternity/dilation-upgrades.js";

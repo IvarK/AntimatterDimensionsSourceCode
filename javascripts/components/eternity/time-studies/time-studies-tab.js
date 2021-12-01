@@ -303,10 +303,10 @@ Vue.component("time-studies-tab", {
     },
     studyComponent(study) {
       switch (study.type) {
-        case TimeStudyType.NORMAL: return "normal-time-study";
-        case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
-        case TimeStudyType.DILATION: return "dilation-time-study";
-        case TimeStudyType.TRIAD: return "triad-time-study";
+        case TIME_STUDY_TYPE.NORMAL: return "normal-time-study";
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return "ec-time-study";
+        case TIME_STUDY_TYPE.DILATION: return "dilation-time-study";
+        case TIME_STUDY_TYPE.TRIAD: return "triad-time-study";
       }
       throw "Unknown Time Study type";
     },

@@ -30,13 +30,13 @@ Vue.component("time-study-connection", {
         }
       }
       switch (to.type) {
-        case TimeStudyType.NORMAL:
+        case TIME_STUDY_TYPE.NORMAL:
           pathClass = pathClassOf(to) || pathClassOf(from);
           break;
-        case TimeStudyType.ETERNITY_CHALLENGE:
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE:
           pathClass = "o-time-study-connection--eternity-challenge";
           break;
-        case TimeStudyType.DILATION:
+        case TIME_STUDY_TYPE.DILATION:
           pathClass = "o-time-study-connection--dilation";
           break;
       }

@@ -298,6 +298,13 @@ window.TIME_STUDY_PATH = {
   DARK: 8
 };
 
+window.TIME_STUDY_TYPE = {
+  NORMAL: 0,
+  ETERNITY_CHALLENGE: 1,
+  DILATION: 2,
+  TRIAD: 3
+};
+
 window.TS_REQUIREMENT_TYPE = {
   AT_LEAST_ONE: 0,
   ALL: 1,

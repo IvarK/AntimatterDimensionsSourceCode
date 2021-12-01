@@ -1,7 +1,7 @@
 <script>
 // This wraps a control box of some sort (like glyph weight adjust) in
 // a dropdown menu like container.
-// You can force it to open programatically by sending it an openrequest event
+// You can force it to open programmatically by sending it an openrequest event
 
 export default {
   props: {
@@ -58,7 +58,7 @@ export default {
     },
     containerClassObject() {
       const classes = {
-        "l-expanding-control-box__container--transition": this.state?.transition === true
+        "l-expanding-control-box__container--transition": this.state?.transition
       };
       classes[this.containerClass] = true;
       return classes;
@@ -135,10 +135,12 @@ export default {
 </script>
 
 <template>
-  <!-- The root element is an empty box of fixed size with position relative.
-         On top of that, we have a container element (which has both the label and the control)
-         The container element hides the control via clipping (and visibility). The thing you
-         click to show hide is at the top of the container element. -->
+  <!--
+    The root element is an empty box of fixed size with position relative.
+    On top of that, we have a container element (which has both the label and the control)
+    The container element hides the control via clipping (and visibility). The thing you
+    click to show hide is at the top of the container element.
+  -->
   <div
     ref="root"
     class="l-expanding-control-box"

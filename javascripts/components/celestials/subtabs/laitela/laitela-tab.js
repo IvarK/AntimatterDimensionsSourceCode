@@ -18,6 +18,7 @@ Vue.component("laitela-tab", {
       singularitiesUnlocked: false,
       singularityCap: 0,
       singularityWaitTime: 0,
+      showAnnihilation: false
     };
   },
   computed: {
@@ -42,7 +43,8 @@ Vue.component("laitela-tab", {
       this.singularitiesUnlocked = Singularity.capIsReached || this.singularityPanelVisible;
       this.singularityCap = Singularity.cap;
       this.singularityWaitTime = TimeSpan.fromSeconds((this.singularityCap - this.darkEnergy) /
-        Laitela.darkEnergyPerSecond).toStringShort();
+        Currency.darkEnergy.productionPerSecond).toStringShort();
+      this.showAnnihilation = Laitela.annihilationUnlocked;
     },
     maxAll() {
       Laitela.maxAllDMDimensions(4);
@@ -88,7 +90,7 @@ Vue.component("laitela-tab", {
         <laitela-run-button />
         <div>
           <dark-matter-dimension-group />
-          <annihilation-button />
+          <annihilation-button v-if="showAnnihilation" />
         </div>
         <singularity-milestone-pane v-if="singularityPanelVisible" />
       </div>

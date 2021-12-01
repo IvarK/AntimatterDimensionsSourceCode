@@ -1,6 +1,10 @@
 import { modalCloudConflictMixin } from "./modal-cloud-conflict-record.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-cloud-load-conflict", {
+  components: {
+    PrimaryButton
+  },
   mixins: [modalCloudConflictMixin],
   template: `
     <div class="c-modal-options l-modal-options" style="width: 50rem">
@@ -24,23 +28,23 @@ Vue.component("modal-cloud-load-conflict", {
         :saveId="conflict.saveId"
         saveType="Local Save"
       />
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn"
         @click="handleClick(false)"
       >
         Keep Local Save
-      </primary-button>
+      </PrimaryButton>
       <br>
       <modal-cloud-conflict-record
         :saveData="conflict.cloud"
         :saveId="conflict.saveId"
         saveType="Cloud Save"
       />
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn"
         @click="handleClick(true)"
       >
         Overwrite Local with Cloud Save
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

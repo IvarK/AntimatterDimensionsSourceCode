@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("ep-multiplier-button", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isAutobuyerActive: false,
@@ -47,12 +52,12 @@ Vue.component("ep-multiplier-button", {
         <br>
         Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
       </button>
-      <primary-button
+      <PrimaryButton
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
         @click="upgrade.buyMax()"
       >
         Max Eternity Point mult
-      </primary-button>
+      </PrimaryButton>
       <primary-button-on-off
         v-if="isAutoUnlocked"
         v-model="isAutobuyerActive"

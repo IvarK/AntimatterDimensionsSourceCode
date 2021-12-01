@@ -1,6 +1,10 @@
 import "../reality/glyphs/glyph-component.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-reality", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       showReality: false,
@@ -144,25 +148,25 @@ Vue.component("modal-reality", {
         based on your Glyph filter settings.
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="cancelModal"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           v-if="canSacrifice"
           @click="confirmModal(true)"
         >
           Sacrifice
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="confirmModal(false)"
         >
           Confirm
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

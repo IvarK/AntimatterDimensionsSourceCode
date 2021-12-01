@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("antimatter-dim-galaxy-row", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       type: GALAXY_TYPE.NORMAL,
@@ -94,7 +99,7 @@ Vue.component("antimatter-dim-galaxy-row", {
         requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
         <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
       </div>
-      <primary-button
+      <PrimaryButton
         :enabled="canBeBought"
         class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
         :class="tutorialClass"
@@ -102,6 +107,6 @@ Vue.component("antimatter-dim-galaxy-row", {
         @click.shift.exact="buyGalaxy(false)"
       >
         {{ buttonText }}
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

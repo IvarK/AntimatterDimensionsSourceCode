@@ -4,8 +4,12 @@ import "./laitela-center-pane.js";
 import "./laitela-autobuyer-pane.js";
 import "./singularity-milestone.js";
 import "../../celestial-quote-history.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("laitela-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       darkMatter: new Decimal(0),
@@ -57,18 +61,18 @@ Vue.component("laitela-tab", {
   template: `
     <div class="l-laitela-celestial-tab">
       <div class="c-subtab-option-container">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
           @click="showLaitelaHowTo()"
         >
           Click for Lai'tela info
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
           @click="maxAll"
         >
           Max all Dark Matter Dimensions
-        </primary-button>
+        </PrimaryButton>
       </div>
       <celestial-quote-history celestial="laitela" />
       <div class="o-laitela-matter-amount">

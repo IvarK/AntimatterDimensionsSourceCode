@@ -1,6 +1,10 @@
 import { modalCloudConflictMixin } from "./modal-cloud-conflict-record.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-cloud-save-conflict", {
+  components: {
+    PrimaryButton
+  },
   mixins: [modalCloudConflictMixin],
   methods: {
     saveClick(accepted) {
@@ -38,18 +42,18 @@ Vue.component("modal-cloud-save-conflict", {
       <br>
       Would you like to overwrite the Cloud Save? Your choice here will apply for every
       time the game automatically attempts to Cloud Save, until the page is reloaded.
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn"
         @click="saveClick(true)"
       >
         Overwrite Cloud Save
-      </primary-button>
+      </PrimaryButton>
       <br>
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn"
         @click="saveClick(false)"
       >
         Do not overwrite
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

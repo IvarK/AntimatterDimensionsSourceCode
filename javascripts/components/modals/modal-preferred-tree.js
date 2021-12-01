@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-preferred-tree", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       dimensionPath: null,
@@ -95,11 +100,11 @@ Vue.component("modal-preferred-tree", {
           </div>
         </button>
       </div>
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="confirmPrefs"
       >
         Confirm
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

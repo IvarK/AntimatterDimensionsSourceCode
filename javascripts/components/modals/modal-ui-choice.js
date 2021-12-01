@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-ui-choice", {
+  components: {
+    PrimaryButton
+  },
   computed: {
     modal() {
       return this.$viewModel.modal.current;
@@ -24,18 +29,18 @@ Vue.component("modal-ui-choice", {
         (you can change this at any time in the options tab)
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           No
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Yes
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

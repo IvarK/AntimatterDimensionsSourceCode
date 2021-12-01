@@ -1,5 +1,6 @@
 import "../celestial-quote-history.js";
 import "../../common/ad-slider-component.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-enslaved-hints", {
   data() {
@@ -136,6 +137,9 @@ Vue.component("modal-enslaved-hints", {
 });
 
 Vue.component("enslaved-tab", {
+  components: {
+    PrimaryButton
+  },
   data: () => ({
     isStoringBlackHole: false,
     isStoringReal: false,
@@ -320,13 +324,13 @@ Vue.component("enslaved-tab", {
         </div>
         <div class="l-enslaved-upgrades-column">
           <celestial-quote-history celestial="enslaved" />
-          <primary-button
+          <PrimaryButton
             v-if="hintsUnlocked"
             class="o-primary-btn"
             onclick="Modal.enslavedHints.show()"
           >
             Examine the Reality more closely...
-          </primary-button>
+          </PrimaryButton>
           <div class="l-enslaved-top-container">
             <div class="l-enslaved-top-container__half">
               While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},

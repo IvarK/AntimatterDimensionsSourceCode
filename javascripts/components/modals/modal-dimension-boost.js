@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-dimension-boost", {
+  components: {
+    PrimaryButton
+  },
   props: { modalConfig: Object },
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
@@ -36,18 +41,18 @@ Vue.component("modal-dimension-boost", {
         {{ message }}
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Confirm
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

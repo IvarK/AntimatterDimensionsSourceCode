@@ -1,13 +1,18 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("options-saving-tab", {
   components: {
     "options-button": {
+      components: {
+        PrimaryButton
+      },
       template: `
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--option l-options-grid__button"
           @click="emitClick"
         >
           <slot />
-        </primary-button>`
+        </PrimaryButton>`
     },
     "autosave-interval-slider": {
       props: {

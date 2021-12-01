@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("challenges-header", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isInChallenge: false,
@@ -64,20 +69,20 @@ Vue.component("challenges-header", {
           class="o-primary-btn--subtab-option"
           text="Auto Eternity Challenges:"
         />
-        <primary-button
+        <PrimaryButton
           v-if="isInChallenge"
           class="o-primary-btn--subtab-option"
           @click="restartChallenge"
         >
           Restart Challenge
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           v-if="isInChallenge"
           class="o-primary-btn--subtab-option"
           @click="exitChallenge"
         >
           Exit Challenge
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div>
         Some Normal Challenges have requirements to be able to run that challenge.

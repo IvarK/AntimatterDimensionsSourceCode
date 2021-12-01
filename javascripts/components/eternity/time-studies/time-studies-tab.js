@@ -6,6 +6,7 @@ import "./dilation-time-study.js";
 import { rem } from "./rem.js";
 import { TimeStudySetup } from "./time-study.js";
 import { TimeStudyConnectionSetup } from "./time-study-connection.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -223,6 +224,9 @@ const STUDY_TREE_LAYOUT_TYPE = {
 };
 
 Vue.component("time-studies-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       respec: player.respec,
@@ -321,24 +325,24 @@ Vue.component("time-studies-tab", {
   template: `
     <div class="l-time-studies-tab">
       <div class="c-subtab-option-container">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
           @click="exportStudyTree"
         >
           Export tree
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           :class="respecClassObject"
           @click="respec = !respec"
         >
           Respec Time Studies on next Eternity
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
           onclick="Modal.studyString.show()"
         >
           Import tree
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
         <component

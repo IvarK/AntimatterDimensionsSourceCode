@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("antimatter-dim-row", {
+  components: {
+    PrimaryButton
+  },
   props: {
     tier: Number
   },
@@ -109,7 +114,7 @@ Vue.component("antimatter-dim-row", {
         {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
         <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
-      <primary-button
+      <PrimaryButton
         v-if="!isContinuumActive"
         :enabled="isAffordable && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
@@ -121,8 +126,8 @@ Vue.component("antimatter-dim-row", {
         <template v-else>
           <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
         </template>
-      </primary-button>
-      <primary-button
+      </PrimaryButton>
+      <PrimaryButton
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
         :ach-tooltip="boughtTooltip"
@@ -135,6 +140,6 @@ Vue.component("antimatter-dim-row", {
           <span v-if="showCostTitle(until10Cost)">Cost: </span>
           {{ format(until10Cost) }}
         </template>
-      </primary-button>
+      </PrimaryButton>
     </div>`,
 });

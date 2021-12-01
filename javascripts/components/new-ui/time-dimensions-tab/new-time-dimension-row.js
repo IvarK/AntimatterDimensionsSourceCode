@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("new-time-dimension-row", {
+  components: {
+    PrimaryButton
+  },
   props: {
     tier: Number,
     areAutobuyersUnlocked: Boolean
@@ -105,27 +110,27 @@ Vue.component("new-time-dimension-row", {
         {{ format(amount, 2, 0) }}
         <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
-      <primary-button
+      <PrimaryButton
         v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyTimeDimension"
       >
         {{ buttonContents }}
-      </primary-button>
+      </PrimaryButton>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
         class="o-primary-btn--td-autobuyer l-dim-row__button"
         text="Auto:"
       />
-      <primary-button
+      <PrimaryButton
         v-else
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
       >
         Buy Max
-      </primary-button>
+      </PrimaryButton>
     </div>`,
 });

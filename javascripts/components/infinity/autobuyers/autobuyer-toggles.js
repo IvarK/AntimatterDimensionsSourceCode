@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("autobuyer-toggles", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       autobuyersOn: false,
@@ -46,12 +51,12 @@ Vue.component("autobuyer-toggles", {
         off="Enable autobuyers"
         class="o-primary-btn--subtab-option"
       />
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn--subtab-option"
         @click="toggleAllAutobuyers()"
       >
         Toggle all autobuyers
-      </primary-button>
+      </PrimaryButton>
       <primary-button-on-off-custom
         v-model="bulkOn"
         on="Disable bulk buy"

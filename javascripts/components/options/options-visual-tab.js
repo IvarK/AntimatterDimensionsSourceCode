@@ -1,17 +1,21 @@
 import "./select-theme.js";
 import "./select-notation.js";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("options-visual-tab", {
   components: {
     "options-button": {
+      components: {
+        PrimaryButton
+      },
       template: `
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--option l-options-grid__button"
           @click="emitClick"
         >
           <slot />
-        </primary-button>`
+        </PrimaryButton>`
     },
     "update-rate-slider": {
       props: {

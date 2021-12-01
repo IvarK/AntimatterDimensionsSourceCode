@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("replicanti-galaxy-button", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isAvailable: false,
@@ -55,7 +60,7 @@ Vue.component("replicanti-galaxy-button", {
   },
   template: `
     <div class="l-spoon-btn-group">
-      <primary-button
+      <PrimaryButton
         :enabled="isAvailable"
         class="o-primary-btn--replicanti-galaxy"
         @click="handleClick"
@@ -63,7 +68,7 @@ Vue.component("replicanti-galaxy-button", {
         {{ resetActionDisplay }} for a Replicanti Galaxy
         <br>
         {{ galaxyCountDisplay }}
-      </primary-button>
+      </PrimaryButton>
       <primary-button-on-off-custom
         v-if="isAutoUnlocked"
         :value="isAutoActive"

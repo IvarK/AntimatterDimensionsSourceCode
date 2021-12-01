@@ -1,6 +1,10 @@
 import "../reality/glyphs/glyph-set-preview.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-set-save-delete", {
+  components: {
+    PrimaryButton
+  },
   props: {
     modalConfig: Object
   },
@@ -37,18 +41,18 @@ Vue.component("modal-set-save-delete", {
         This is permanent and irreversible.
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Delete
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-hard-reset", {
+  components: {
+    PrimaryButton
+  },
   computed: {
     modal() {
       return this.$viewModel.modal.current;
@@ -50,19 +55,19 @@ Vue.component("modal-hard-reset", {
         </div>
         <div v-else>Type in the correct code to hard reset.</div>
       </div>
-      <primary-button
+      <PrimaryButton
         v-if="!willHardReset"
         class="o-primary-btn--width-medium c-modal-hard-reset-btn"
         @click="cancelReset"
       >
         Cancel
-      </primary-button>
-      <primary-button
+      </PrimaryButton>
+      <PrimaryButton
         v-else
         class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
         @click="hardReset"
       >
         HARD RESET
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

@@ -1,8 +1,12 @@
 import "./replicanti-gain-text.js";
 import "./replicanti-galaxy-button.js";
 import { ReplicantiUpgradeButtonSetup } from "./replicanti-upgrade-button.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("replicanti-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isUnlocked: false,
@@ -110,7 +114,7 @@ Vue.component("replicanti-tab", {
   template: `
     <div class="l-replicanti-tab">
       <br>
-      <primary-button
+      <PrimaryButton
         v-if="!isUnlocked"
         :enabled="isUnlockAffordable"
         class="o-primary-btn--replicanti-unlock"
@@ -119,7 +123,7 @@ Vue.component("replicanti-tab", {
         Unlock Replicanti
         <br>
         Cost: {{ format(1e140) }} IP
-      </primary-button>
+      </PrimaryButton>
       <template v-else>
         <div v-if="isInEC8">
           You have {{ quantifyInt("purchase", ec8Purchases) }} left.

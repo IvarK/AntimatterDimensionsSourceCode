@@ -1,3 +1,5 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("black-hole-status-text", {
   props: {
     blackHole: Object
@@ -27,6 +29,9 @@ Vue.component("black-hole-status-text", {
 });
 
 Vue.component("black-hole-header-row", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       hasBlackHoles: false,
@@ -80,14 +85,14 @@ Vue.component("black-hole-header-row", {
   },
   template: `
     <span v-if="hasBlackHoles">
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn--buy-max"
         onclick="BlackHoles.togglePause()"
       >
         {{ pauseText }}
-      </primary-button>
+      </PrimaryButton>
       <span v-if="canCharge">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--buy-max"
           onclick="Enslaved.toggleStoreBlackHole()"
         >
@@ -97,7 +102,7 @@ Vue.component("black-hole-header-row", {
           <span v-else>
             Charge
           </span>
-        </primary-button>
+        </PrimaryButton>
       </span>
       <span v-if="displaySingle">
         🌀:<span v-html="singleState"></span>
@@ -110,12 +115,12 @@ Vue.component("black-hole-header-row", {
         />
       </span>
       <span v-if="canCharge">
-        <primary-button
+        <PrimaryButton
           class="o-enslaved-release-header-button"
           onclick="Enslaved.useStoredTime(false)"
         >
           Discharge: {{ timeDisplayShort(storedTime) }}
-        </primary-button>
+        </PrimaryButton>
       </span>
       <span v-if="canAutoRelease">
         <primary-button-on-off

@@ -3,8 +3,12 @@ import "./new-tickspeed-row.js";
 import "./new-dim-boost-row.js";
 import "./new-galaxy-row.js";
 import "../../dimensions/antimatter/antimatter-dim-tab-progress-bar.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("new-dimensions-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       hasDimensionBoosts: false,
@@ -81,7 +85,7 @@ Vue.component("new-dimensions-tab", {
         <button class="o-primary-btn" @click="changeBuyMode" style="width: 100px; height: 30px; padding: 0;">
           {{ getUntil10Display() }}
         </button>
-        <primary-button
+        <PrimaryButton
           v-show="isSacrificeUnlocked"
           v-tooltip="sacrificeTooltip"
           :enabled="isSacrificeAffordable"
@@ -90,7 +94,7 @@ Vue.component("new-dimensions-tab", {
         >
           <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
           <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
-        </primary-button>
+        </PrimaryButton>
         <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">
           Max All (M)
         </button>
@@ -106,7 +110,7 @@ Vue.component("new-dimensions-tab", {
       </div>
       <div class="resets-container">
         <new-dim-boost-row />
-        <primary-button
+        <PrimaryButton
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
           onclick="softReset(-1, true, true)"
@@ -114,7 +118,7 @@ Vue.component("new-dimensions-tab", {
           Perform a Dimension Boost reset
           <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
           <span v-else> for no gain</span>
-        </primary-button>
+        </PrimaryButton>
         <new-galaxy-row />
       </div>
       <antimatter-dim-tab-progress-bar />

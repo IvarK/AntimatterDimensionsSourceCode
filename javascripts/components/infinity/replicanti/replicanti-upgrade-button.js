@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("replicanti-upgrade-button", {
+  components: {
+    PrimaryButton
+  },
   props: {
     setup: Object
   },
@@ -41,7 +46,7 @@ Vue.component("replicanti-upgrade-button", {
   },
   template: `
     <div class="l-spoon-btn-group l-replicanti-upgrade-button">
-      <primary-button
+      <PrimaryButton
         :enabled="canBeBought"
         class="o-primary-btn--replicanti-upgrade"
         @click="upgrade.purchase()"
@@ -51,7 +56,7 @@ Vue.component("replicanti-upgrade-button", {
           <br>
           <span>{{ costDescription }}</span>
         </template>
-      </primary-button>
+      </PrimaryButton>
       <primary-button-on-off
         v-if="isAutoUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"

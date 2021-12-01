@@ -1,3 +1,5 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-popup", {
   props: {
     modal: {
@@ -18,11 +20,14 @@ Vue.component("modal-popup", {
 });
 
 Vue.component("modal-close-button", {
+  components: {
+    PrimaryButton
+  },
   template: `
-    <primary-button
+    <PrimaryButton
       class="o-primary-btn--modal-close c-modal__close-btn"
       @click="emitClick"
     >
       &times;
-    </primary-button>`
+    </PrimaryButton>`
 });

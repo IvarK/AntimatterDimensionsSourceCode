@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-exit-celestial-reality", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isRestarting: false,
@@ -33,19 +38,19 @@ Vue.component("modal-exit-celestial-reality", {
         </span>
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           <span v-if="isRestarting">Restart</span>
           <span v-else>Exit</span>
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

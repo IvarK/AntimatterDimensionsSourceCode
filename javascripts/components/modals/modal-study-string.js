@@ -1,6 +1,10 @@
 import "../eternity/time-studies/tree-import-info.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-study-string", {
+  components: {
+    PrimaryButton
+  },
   props: {
     modalConfig: {
       type: Object,
@@ -173,12 +177,12 @@ Vue.component("modal-study-string", {
         </template>
         <div v-else-if="hasInput">Not a valid tree</div>
       </div>
-      <primary-button
+      <PrimaryButton
         v-if="inputIsValid"
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="confirm"
       >
         {{ isImporting ? "Import" : "Save" }}
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

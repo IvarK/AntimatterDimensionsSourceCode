@@ -1,6 +1,10 @@
 import "./infinity-dim-row.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("infinity-dim-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       infinityPower: new Decimal(0),
@@ -68,20 +72,20 @@ Vue.component("infinity-dim-tab", {
   template: `
     <div class="l-infinity-dim-tab">
       <div class="c-subtab-option-container">
-        <primary-button
+        <PrimaryButton
           v-if="!isEC8Running"
           class="o-primary-btn--subtab-option"
           @click="maxAll"
         >
           Max all
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           v-if="isAnyAutobuyerUnlocked && !isEC8Running"
           class="o-primary-btn--subtab-option"
           @click="toggleAllAutobuyers"
         >
           Toggle all autobuyers
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div>
         <p>

@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("antimatter-dim-boost-row", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       requirement: {
@@ -58,7 +63,7 @@ Vue.component("antimatter-dim-boost-row", {
         Dimension Boost ({{ boostCountText }}):
         requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
       </div>
-      <primary-button
+      <PrimaryButton
         :enabled="isBuyable"
         class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
         :class=tutorialClass
@@ -66,6 +71,6 @@ Vue.component("antimatter-dim-boost-row", {
         @click.shift.exact="dimensionBoost(false)"
       >
         {{ unlockedByBoost }}
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

@@ -1,7 +1,11 @@
 import "../../reality/glyphs/glyph-set-preview.js";
 import "../celestial-quote-history.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("v-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       mainUnlock: false,
@@ -154,14 +158,14 @@ Vue.component("v-tab", {
       </div>
       <div v-else>
         <div v-if="isFlipped" class="c-v-info-text">
-          <primary-button
+          <PrimaryButton
             class="o-primary-btn--subtab-option"
             @click="toggleFlipped"
           >
             <span v-if="wantsFlipped">Hide</span>
             <span v-else>Show</span>
             Hard V
-          </primary-button>
+          </PrimaryButton>
           <br><br>
           Cursed Glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>

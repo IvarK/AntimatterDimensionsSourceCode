@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-start-infinity-challenge", {
+  components: {
+    PrimaryButton
+  },
   created() {
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
@@ -59,18 +64,18 @@ Vue.component("modal-start-infinity-challenge", {
         {{ reward }}
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Begin
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

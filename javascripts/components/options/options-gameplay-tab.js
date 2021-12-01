@@ -1,11 +1,16 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("options-gameplay-tab", {
   components: {
     "options-button": {
+      components: {
+        PrimaryButton
+      },
       template:
-        `<primary-button
+        `<PrimaryButton
           class="o-primary-btn--option l-options-grid__button"
           @click="emitClick"
-        ><slot /></primary-button>`
+        ><slot /></PrimaryButton>`
     },
   },
   // This puts the slider in the right spot on initialization

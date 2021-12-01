@@ -1,4 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
+
 Vue.component("modal-replicanti-galaxy", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       replicanti: new Decimal(0),
@@ -17,7 +22,7 @@ Vue.component("modal-replicanti-galaxy", {
     message() {
       const reductionString = this.divideReplicanti
         ? `divide your Replicanti by ${format(Number.MAX_VALUE, 2, 2)} for each Replicanti Galaxy purchased
-          (${format(this.replicanti, 2, 2)} to 
+          (${format(this.replicanti, 2, 2)} to
           ${format(this.replicanti.divide(Decimal.NUMBER_MAX_VALUE.pow(this.canBeBought)), 2, 2)})`
         : `reset your Replicanti to ${formatInt(1)}`;
       return `A Replicanti Galaxy boosts Tickspeed the same way an Antimatter Galaxy does. However, it does not
@@ -47,18 +52,18 @@ Vue.component("modal-replicanti-galaxy", {
         {{ message }}
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Confirm
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

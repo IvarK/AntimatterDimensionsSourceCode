@@ -1,6 +1,6 @@
 import { CelestialQuotes } from "../quotes.js";
 import { DC } from "../../constants.js";
-import { DarkMatterDimension, DarkMatterDimensions } from "./matter_dimension.js";
+import { DarkMatterDimension, DarkMatterDimensions } from "./dark-matter-dimension.js";
 
 export const Laitela = {
   displayName: "Lai'tela",

@@ -1,4 +1,4 @@
-import "../matter-dimension-row.js";
+import "../dark-matter-dimension-row.js";
 
 Vue.component("dark-matter-dimension-group", {
   template: `

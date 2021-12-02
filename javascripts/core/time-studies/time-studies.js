@@ -1,11 +1,12 @@
 import { GameMechanicState } from "../game-mechanics/index.js";
 
-export function studiesUntil(id) {
+export function studiesUntil(id, repeatFor201 = true) {
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const study = TimeStudy(id);
   const requestedPath = study.path;
   const currTree = TimeStudyTree.currentTree();
-  const range = (start, end) => [...Array(end - start + 1).keys()].map(i => i + start);
+  // Makes an array [start, start+1, ... , end], empty if end < start
+  const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
 
   // If the player tries to buy a study which is immediately buyable, we try to buy it first in case buying other
   // studies up to that point renders it unaffordable. Effectively the clicked study is higher priority than all others
@@ -78,10 +79,11 @@ export function studiesUntil(id) {
     return;
   }
 
-  // Buy up to 201, then go back and attempt to buy a second preferred path, then attempt to buy from row 21
+  // Buy up to 201, then if applicable we recursively call this function again in order to attempt to buy another path
   TimeStudyTree.purchaseTimeStudyArray(range(151, Math.min(id, 201)));
-  TimeStudyTree.purchaseTimeStudyArray(TimeStudy.preferredPaths.pacePath.studies);
-  if (id > 201) TimeStudyTree.purchaseTimeStudyArray(range(211, Math.min(id, 214)));
+  if (id >= 201 && repeatFor201) studiesUntil(id, false);
+  else if (id < 201) return;
+  TimeStudyTree.purchaseTimeStudyArray(range(211, Math.min(id, 214)));
   study.purchase();
 
   // Don't bother buying any more studies at or below row 22 unless the player has fully finished V,

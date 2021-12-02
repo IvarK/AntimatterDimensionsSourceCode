@@ -12,8 +12,8 @@ Vue.component("modal-import-tree", {
       if (!this.inputIsValidTree) return false;
       const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
       return {
-        totalTT: importedTree.runningCost[0],
-        totalST: importedTree.runningCost[1],
+        totalTT: importedTree.spentTheorems[0],
+        totalST: importedTree.spentTheorems[1],
         newStudies: makeEnumeration(importedTree.purchasedStudies),
         invalidStudies: importedTree.invalidStudies,
       };
@@ -27,8 +27,8 @@ Vue.component("modal-import-tree", {
       const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
       const compositeTree = currentStudyTree.createCombinedTree(importedTree);
       return {
-        missingTT: compositeTree.runningCost[0] - currentStudyTree.runningCost[0],
-        missingST: compositeTree.runningCost[1] - currentStudyTree.runningCost[1],
+        missingTT: compositeTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
+        missingST: compositeTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
         newStudies: makeEnumeration(compositeTree.purchasedStudies
           .filter(s => !currentStudyTree.purchasedStudies.includes(s))),
         firstPaths: makeEnumeration(compositeTree.firstSplitPaths),
@@ -38,12 +38,13 @@ Vue.component("modal-import-tree", {
     },
     invalidMessage() {
       if (!this.inputIsValidTree || this.importedTree.invalidStudies.length === 0) return null;
-      let coloredString = this.truncatedInput;
+      // Pad the input with non-digits which we remove later in order to not cause erroneous extra matches within IDs
+      let coloredString = `.${this.truncatedInput}.`;
       for (const id of this.importedTree.invalidStudies) {
-        coloredString = coloredString.replaceAll(new RegExp(`(,)?(${id})(,)?`, "gu"),
+        coloredString = coloredString.replaceAll(new RegExp(`(\\D)(${id})(\\D)`, "gu"),
           `$1<span style="color: var(--color-bad);">$2</span>$3`);
       }
-      return `Your import string has invalid study IDs: ${coloredString}`;
+      return `Your import string has invalid study IDs: ${coloredString.replaceAll(".", "")}`;
     },
     truncatedInput() {
       // If last character is "," remove it
@@ -98,18 +99,19 @@ Vue.component("modal-import-tree", {
         <template v-else-if="inputIsValidTree">
           <div class="l-modal-import-tree__tree-info-line">
             <div v-if="combinedTree.missingTT === 0">
-              <i>Importing this with your current studies will not purchase anything.</i>
+              <i>Importing this with your current tree will not purchase any new Time Studies.</i>
             </div>
             <div v-else>
-              Importing with your current studies will purchase:
+              Importing with your current tree will also purchase:
               <br>
               {{ combinedTree.newStudies }}
               (Cost: {{ formatTheoremCost(combinedTree.missingTT, combinedTree.missingST) }})
             </div>
           </div>
+          <br>
           <div class="l-modal-import-tree__tree-info-line">
             <div v-if="importedTree.totalTT === 0">
-              <i>Importing this into an empty tree will not purchase anything.</i>
+              <i>Importing this into an empty tree will not purchase any Time Studies.</i>
             </div>
             <div v-else>
               Importing into an empty tree will purchase:
@@ -120,12 +122,14 @@ Vue.component("modal-import-tree", {
           </div>
           <br>
           <div v-if="invalidMessage" class="l-modal-import-tree__tree-info-line" v-html="invalidMessage" />
-          <br>
+          <div v-if="combinedTree.firstPaths || combinedTree.ec > 0">
+            <b>Tree status after importing:</b>
+          </div>
           <div v-if="combinedTree.firstPaths" class="l-modal-import-tree__tree-info-line">
-            First split: {{ combinedTree.firstPaths }}
+            Dimension split: {{ combinedTree.firstPaths }}
           </div>
           <div v-if="combinedTree.secondPaths" class="l-modal-import-tree__tree-info-line">
-            Second split: {{ combinedTree.secondPaths }}
+            Pace split: {{ combinedTree.secondPaths }}
           </div>
           <div v-if="combinedTree.ec > 0" class="l-modal-import-tree__tree-info-line">
             Eternity challenge: {{ combinedTree.ec }}

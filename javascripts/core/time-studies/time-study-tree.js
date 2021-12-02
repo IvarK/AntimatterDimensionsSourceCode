@@ -6,8 +6,8 @@
  * attempting to import other study trees.
  * 
  * @member {Array: Number} initialTheorems      Two-element array containing starting totals of TT/ST before buying
- * @member {Array: Number} remainingTheorems    Two-element array containing leftover TT/ST totals after buying
- * @member {Array: Number} runningCost          Two-element array containing the total cost of buying all valid,
+ * @member {Array: Number} spentTheorems        Two-element array containing TT/ST totals for purchased studies
+ * @member {Array: Number} totalTheorems        Two-element array containing the total cost of buying all valid,
  *  buyable studies whether or not they are actually affordable
  * @member {Array: String} plannedStudies       Array of valid studies to be purchased from the initial import string;
  *  all entries are Strings because numbers (normal TS), T# (triads), and EC# (ECs) need to be supported
@@ -23,8 +23,8 @@ export class TimeStudyTree {
   constructor(studies, initialTT, initialST) {
     // If we have above e308 TT there's no way buying studies will put a dent in our total anyway
     this.initialTheorems = [Decimal.min(initialTT, Number.MAX_VALUE).toNumber(), initialST];
-    this.remainingTheorems = [...this.initialTheorems];
-    this.runningCost = [0, 0];
+    this.spentTheorems = [0, 0];
+    this.totalTheorems = [0, 0];
     this.plannedStudies = [];
     this.invalidStudies = [];
     this.purchasedStudies = [];
@@ -59,14 +59,19 @@ export class TimeStudyTree {
     const currentStudies = player.timestudy.studies.map(s => `${s}`)
       .concat(player.celestials.v.triadStudies.map(s => `T${s}`));
     if (player.challenge.eternity.current !== 0) currentStudies.push(`EC${player.challenge.eternity.current}`);
-    const currentStudyTree = new TimeStudyTree(currentStudies, Number.MAX_VALUE, Number.MAX_VALUE);
-    currentStudyTree.remainingTheorems = [Currency.timeTheorems.value, V.availableST];
-    return currentStudyTree;
+    // We use Number.MAX_VALUE to guarantee all studies end up getting purchased, but set it properly afterward
+    const currTree = new TimeStudyTree(currentStudies, Number.MAX_VALUE, Number.MAX_VALUE);
+    currTree.initialTheorems =
+      [Decimal.min(Currency.timeTheorems.value.add(currTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
+        currTree.spentTheorems[1] + V.spaceTheorems];
+    return currTree;
   }
 
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // Purchases the studies specified by the given ID array, using the requirement locking and logic code in this class.
   static purchaseTimeStudyArray(studyArray) {
+    // An undefined array may get passed in if attempting to buy an unspecified path
+    if (!studyArray) return;
     for (const id of studyArray) {
       const study = TimeStudy(id);
       if (study) study.purchase();
@@ -180,7 +185,8 @@ export class TimeStudyTree {
     const stNeeded = dbEntry.STCost && dbEntry.requiresST.some(s => this.purchasedStudies.includes(`${s}`))
       ? Math.clampMin(dbEntry.STCost - stDiscount, 0)
       : 0;
-    const canAfford = this.remainingTheorems[0] >= dbEntry.cost && this.remainingTheorems[1] >= stNeeded;
+    const canAfford = this.spentTheorems[0] + dbEntry.cost <= this.initialTheorems[0] &&
+      this.spentTheorems[1] + stNeeded <= this.initialTheorems[1];
 
     // We have to handle ECs slightly differently because you can only have one at once and merging trees may attempt
     // to buy another. To distinguish between successful and failed purchases, we give failed ones a negative sign
@@ -188,11 +194,11 @@ export class TimeStudyTree {
       if (this.ec !== 0) return false;
       this.ec = canAfford ? dbEntry.id : -dbEntry.id;
     }
-    this.runningCost[0] += dbEntry.cost;
-    this.runningCost[1] += stNeeded;
+    this.totalTheorems[0] += dbEntry.cost;
+    this.totalTheorems[1] += stNeeded;
     if (!canAfford) return false;
-    this.remainingTheorems[0] -= dbEntry.cost;
-    this.remainingTheorems[1] -= stNeeded;
+    this.spentTheorems[0] += dbEntry.cost;
+    this.spentTheorems[1] += stNeeded;
     return true;
   }
 

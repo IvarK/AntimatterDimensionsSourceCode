@@ -13,8 +13,8 @@ Vue.component("modal-edit-tree", {
       if (!this.inputIsValidTree) return false;
       const importedTree = new TimeStudyTree(this.input, Currency.timeTheorems.value, V.spaceTheorems);
       return {
-        totalTT: importedTree.runningCost[0],
-        totalST: importedTree.runningCost[1],
+        totalTT: importedTree.spentTheorems[0],
+        totalST: importedTree.spentTheorems[1],
         newStudies: makeEnumeration(importedTree.purchasedStudies),
         invalidStudies: importedTree.invalidStudies,
         firstPaths: makeEnumeration(importedTree.firstSplitPaths),
@@ -24,12 +24,13 @@ Vue.component("modal-edit-tree", {
     },
     invalidMessage() {
       if (!this.inputIsValidTree || this.importedTree.invalidStudies.length === 0) return null;
-      let coloredString = this.input;
+      // Pad the input with non-digits which we remove later in order to not cause erroneous extra matches within IDs
+      let coloredString = `.${this.input}.`;
       for (const id of this.importedTree.invalidStudies) {
-        coloredString = coloredString.replaceAll(new RegExp(`(,)?(${id})(,)?`, "gu"),
+        coloredString = coloredString.replaceAll(new RegExp(`(\\D)(${id})(\\D)`, "gu"),
           `$1<span style="color: var(--color-bad);">$2</span>$3`);
       }
-      return `Your import string has invalid study IDs: ${coloredString}`;
+      return `Your import string has invalid study IDs: ${coloredString.replaceAll(".", "")}`;
     },
     editLabel() {
       return `Editing ${this.name}`;
@@ -88,10 +89,10 @@ Vue.component("modal-edit-tree", {
           <div v-if="invalidMessage" class="l-modal-import-tree__tree-info-line" v-html="invalidMessage" />
           <br>
           <div v-if="importedTree.firstPaths" class="l-modal-import-tree__tree-info-line">
-            First split: {{ importedTree.firstPaths }}
+            Dimension split: {{ importedTree.firstPaths }}
           </div>
           <div v-if="importedTree.secondPaths" class="l-modal-import-tree__tree-info-line">
-            Second split: {{ importedTree.secondPaths }}
+            Pace split: {{ importedTree.secondPaths }}
           </div>
           <div v-if="importedTree.ec > 0" class="l-modal-import-tree__tree-info-line">
             Eternity challenge: {{ importedTree.ec }}

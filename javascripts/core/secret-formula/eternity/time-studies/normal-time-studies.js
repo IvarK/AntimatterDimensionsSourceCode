@@ -457,7 +457,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 900,
       requirement: [192],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: "Pick another path from the first split"
+      description: "Pick a second path from the Dimension Split"
     },
     {
       id: 211,

@@ -219,7 +219,7 @@ Vue.component("tt-save-load-button", {
       GameUI.notify.eternity(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
-      Modal.editTree.show({ id: this.saveslot - 1 });
+      Modal.studyString.show({ id: this.saveslot - 1 });
     }
   },
   template: `

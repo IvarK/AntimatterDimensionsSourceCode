@@ -1,13 +1,24 @@
-Vue.component("modal-import-tree", {
+Vue.component("modal-study-string", {
+  props: {
+    modalConfig: Object
+  },
   data() {
     return {
-      input: ""
+      input: "",
+      name: "",
     };
   },
-  mounted() {
-    this.$refs.input.select();
+  // Needs to be assigned in created() or else they will end up being undefined when importing
+  created() {
+    this.input = this.isImporting ? "" : player.timestudy.presets[this.modalConfig.id].studies;
+    this.name = this.isImporting ? "" : player.timestudy.presets[this.modalConfig.id].name;
   },
   computed: {
+    // This modal is used by both study importing and preset editing but only has a prop actually passed in when
+    // editing (which is the preset index). Needs to be an undefined check because index can be zero
+    isImporting() {
+      return this.modalConfig.id === undefined;
+    },
     importedTree() {
       if (!this.inputIsValidTree) return false;
       const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
@@ -16,8 +27,13 @@ Vue.component("modal-import-tree", {
         totalST: importedTree.spentTheorems[1],
         newStudies: makeEnumeration(importedTree.purchasedStudies),
         invalidStudies: importedTree.invalidStudies,
+        firstPaths: makeEnumeration(importedTree.firstSplitPaths),
+        secondPaths: makeEnumeration(importedTree.secondSplitPaths),
+        ec: importedTree.ec,
       };
     },
+    // This is only shown when importing; when modifying a preset we assume that generally the current state of the
+    // tree is irrelevant because if it mattered then the player would simply import instead
     combinedTree() {
       if (!this.inputIsValidTree) return false;
       // We know that we have enough for all existing studies because we actually purchased them, so setting initial
@@ -35,6 +51,19 @@ Vue.component("modal-import-tree", {
         secondPaths: makeEnumeration(compositeTree.secondSplitPaths),
         ec: compositeTree.ec,
       };
+    },
+    // We show information about the after-load tree, but which tree (imported from empty vs combined) info is shown
+    // depends on if we're importing vs editing
+    treeStatus() {
+      const showingTree = this.isImporting ? this.combinedTree : this.importedTree;
+      return {
+        firstPaths: showingTree.firstPaths,
+        secondPaths: showingTree.secondPaths,
+        ec: showingTree.ec,
+      };
+    },
+    modalTitle() {
+      return this.isImporting ? "Input your tree" : `Editing Study Preset "${this.name}"`;
     },
     invalidMessage() {
       if (!this.inputIsValidTree || this.importedTree.invalidStudies.length === 0) return null;
@@ -67,11 +96,22 @@ Vue.component("modal-import-tree", {
     },
   },
   methods: {
+    confirm() {
+      if (this.isImporting) this.importTree();
+      else this.savePreset();
+    },
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       Modal.hide();
       TimeStudyTree.importIntoCurrentTree(this.truncatedInput);
+    },
+    savePreset() {
+      if (this.inputIsValid) {
+        player.timestudy.presets[this.modalConfig.id].studies = this.input;
+        GameUI.notify.eternity(`Study tree ${this.name} successfully edited.`);
+        this.emitClose();
+      }
     },
     formatCost(cost) {
       return formatWithCommas(cost);
@@ -85,7 +125,7 @@ Vue.component("modal-import-tree", {
   template: `
     <div class="c-modal-import-tree l-modal-content--centered">
       <modal-close-button @click="emitClose" />
-      <h3>Input your tree</h3>
+      <h3>{{ modalTitle }}</h3>
       <input
         v-model="input"
         ref="input"
@@ -97,7 +137,7 @@ Vue.component("modal-import-tree", {
       <div class="c-modal-import-tree__tree-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidTree">
-          <div class="l-modal-import-tree__tree-info-line">
+          <div v-if="isImporting" class="l-modal-import-tree__tree-info-line">
             <div v-if="combinedTree.missingTT === 0">
               <i>Importing this with your current tree will not purchase any new Time Studies.</i>
             </div>
@@ -122,17 +162,17 @@ Vue.component("modal-import-tree", {
           </div>
           <br>
           <div v-if="invalidMessage" class="l-modal-import-tree__tree-info-line" v-html="invalidMessage" />
-          <div v-if="combinedTree.firstPaths || combinedTree.ec > 0">
-            <b>Tree status after importing:</b>
+          <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
+            <b>Tree status after loading:</b>
           </div>
-          <div v-if="combinedTree.firstPaths" class="l-modal-import-tree__tree-info-line">
-            Dimension split: {{ combinedTree.firstPaths }}
+          <div v-if="treeStatus.firstPaths" class="l-modal-import-tree__tree-info-line">
+            Dimension split: {{ treeStatus.firstPaths }}
           </div>
-          <div v-if="combinedTree.secondPaths" class="l-modal-import-tree__tree-info-line">
-            Pace split: {{ combinedTree.secondPaths }}
+          <div v-if="treeStatus.secondPaths" class="l-modal-import-tree__tree-info-line">
+            Pace split: {{ treeStatus.secondPaths }}
           </div>
-          <div v-if="combinedTree.ec > 0" class="l-modal-import-tree__tree-info-line">
-            Eternity challenge: {{ combinedTree.ec }}
+          <div v-if="treeStatus.ec > 0" class="l-modal-import-tree__tree-info-line">
+            Eternity challenge: {{ treeStatus.ec }}
           </div>
         </template>
         <div v-else-if="hasInput">Not a valid tree</div>
@@ -140,9 +180,9 @@ Vue.component("modal-import-tree", {
       <primary-button
         v-if="inputIsValid"
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
-        @click="importTree"
+        @click="confirm"
       >
-        Import
+        {{ isImporting ? "Import" : "Save" }}
       </primary-button>
     </div>`
 });

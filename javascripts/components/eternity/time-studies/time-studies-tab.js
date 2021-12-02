@@ -332,7 +332,7 @@ Vue.component("time-studies-tab", {
         </primary-button>
         <primary-button
           class="o-primary-btn--subtab-option"
-          onclick="Modal.importTree.show()"
+          onclick="Modal.studyString.show()"
         >
           Import tree
         </primary-button>

@@ -9,7 +9,7 @@ First, run the following command in your terminal (or command line) while being
 inside the checked out repository:
 
 ```
-npm install
+npm ci
 ```
 
 After all the packages are installed, start up the game:

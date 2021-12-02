@@ -1454,7 +1454,7 @@ GameDatabase.celestials.navigation = (function() {
         const upgrade = DarkMatterDimension(3).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        if (!player.celesials.laitela.automation.singularity) return 0.5;
+        if (!player.celestials.laitela.automation.singularity) return 0.5;
         return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
       },
       node: {
@@ -1484,7 +1484,7 @@ GameDatabase.celestials.navigation = (function() {
               ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
             ];
 
-            if (!player.celesials.laitela.automation.singularity) return [
+            if (!player.celestials.laitela.automation.singularity) return [
               dmdText,
               "Unlock Automatic Singularities",
               `${format(Currency.singularities.value)} / ${format(SingularityMilestone.autoCondense.start)}`
@@ -1516,7 +1516,7 @@ GameDatabase.celestials.navigation = (function() {
         const upgrade = DarkMatterDimension(3).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        if (!player.celesials.laitela.automation.singularity) return 0.5;
+        if (!player.celestials.laitela.automation.singularity) return 0.5;
         return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
       },
       node: {

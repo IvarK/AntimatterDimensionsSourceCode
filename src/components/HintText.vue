@@ -24,26 +24,3 @@ export default {
     <slot />
   </div>
 </template>
-
-<style scoped>
-.o-hint-text {
-  font-size: 1.55rem;
-  color: white;
-  text-shadow:
-    -0.1rem -0.1rem 0 black,
-    -0.1rem -0.1rem 0 black,
-    0.1rem -0.1rem 0 black,
-    0.1rem -0.1rem 0 black,
-    -0.1rem 0.1rem 0 black,
-    -0.1rem 0.1rem 0 black,
-    0.1rem 0.1rem 0 black,
-    0.1rem 0.1rem 0 black;
-  pointer-events: none;
-}
-
-.l-hint-text {
-  position: absolute;
-  top: -1.6rem;
-  left: 0;
-}
-</style>

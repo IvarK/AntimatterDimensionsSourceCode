@@ -42,12 +42,3 @@ export default {
     </FooterLink>
   </div>
 </template>
-
-<style scoped>
-.o-footer {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  font-size: 1.5rem;
-}
-</style>

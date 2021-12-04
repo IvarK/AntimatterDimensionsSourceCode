@@ -4,16 +4,16 @@ class AwayProgress {
   constructor(config) {
     this.name = config.name;
     this.isUnlocked = config.isUnlocked;
-    this.awayOption = config.awayOption === undefined ? this.name : config.awayOption;
-    this.showOption = config.showOption === undefined ? true : config.showOption;
+    this.awayOption = config.awayOption ?? this.name;
+    this.showOption = config.showOption ?? true;
     // This is an array of strings, each one the name of the next entry in the player object to navigate to
     // If there is no reference, it is accessed directly by the name through the player object.
-    this.reference = config.reference === undefined ? [this.name] : config.reference;
+    this.reference = config.reference ?? [this.name];
     // Most of the entries in offline progress are props which can be directly read from the player object, but eg. for
     // achievements the raw data is an array of bitmasks. This structure allows generic support for indirect values.
-    this.applyFn = config.applyFn === undefined ? x => x : config.applyFn;
-    this.classObjectReference = config.classObjectReference === undefined ? this.name : config.classObjectReference;
-    this.appearsInAwayModal = config.appearsInAwayModal === undefined ? true : config.appearsInAwayModal;
+    this.applyFn = config.applyFn ?? (x => x);
+    this.classObjectReference = config.classObjectReference ?? this.name;
+    this.appearsInAwayModal = config.appearsInAwayModal ?? true;
   }
 
   get option() {

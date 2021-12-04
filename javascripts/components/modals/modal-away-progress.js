@@ -2,11 +2,14 @@ Vue.component("modal-away-progress", {
   components: {
     "away-progress-helper": {
       props: {
-        item: Object,
+        name: String,
         playerBefore: Object,
         playerAfter: Object,
       },
       computed: {
+        item() {
+          return AwayProgressTypes.all[this.name];
+        },
         before() {
           return this.item.navigateTo(this.playerBefore);
         },
@@ -22,7 +25,7 @@ Vue.component("modal-away-progress", {
         classObject() {
           return this.item.classObject;
         },
-        name() {
+        formattedName() {
           return this.item.formatName;
         },
         increased() {
@@ -70,10 +73,22 @@ Vue.component("modal-away-progress", {
         },
       },
       template: `
-        <div v-if="show" :class="classObject" class="c-modal-away-progress__resources">
-          <span v-if="isBlackHole">Your <b>{{ name }}</b> activated {{ formatBlackHoleActivations }}</span>
+        <div
+          v-if="show"
+          :class="classObject"
+          class="c-modal-away-progress__resources"
+        >
+          <span v-if="isBlackHole">
+            Your
+            <b>{{ formattedName }}</b>
+            activated
+            {{ formatBlackHoleActivations }}
+          </span>
           <span v-else>
-            <b>{{ name }}</b> <i v-if="isVeryLarge">exponent </i> increased from {{ formatBefore }} to {{ formatAfter }}
+            <b>{{ formattedName }}</b>
+            <i v-if="isVeryLarge"> exponent</i>
+            increased from
+            {{ formatBefore }} to {{ formatAfter }}
           </span>
         </div>`
     },
@@ -97,7 +112,7 @@ Vue.component("modal-away-progress", {
       return this.modalConfig.playerAfter;
     },
     offlineStats() {
-      return AwayProgressTypes.all;
+      return AwayProgressTypes.appearsInAwayModal;
     },
     headerText() {
       const timeDisplay = TimeSpan.fromSeconds(this.modalConfig.seconds).toString();
@@ -119,9 +134,9 @@ Vue.component("modal-away-progress", {
       <div class="c-modal-away-progress__header">{{ headerText }}</div>
       <div v-if="!nothingHappened" class="c-modal-away-progress__resources">
         <away-progress-helper
-          v-for="(stat, index) of offlineStats"
-          :key="index"
-          :item="stat"
+          v-for="name of offlineStats"
+          :key="name"
+          :name="name"
           :playerBefore="before"
           :playerAfter="after"
           v-on:something-happened="somethingHappened = true"

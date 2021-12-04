@@ -6,6 +6,11 @@ Vue.component("modal-away-progress", {
         playerBefore: Object,
         playerAfter: Object,
       },
+      data() {
+        return {
+          removed: false,
+        };
+      },
       computed: {
         item() {
           return AwayProgressTypes.all[this.name];
@@ -23,7 +28,10 @@ Vue.component("modal-away-progress", {
           return this.formatPseudo(this.after);
         },
         classObject() {
-          return this.item.classObject;
+          return {
+            [this.item.classObject]: true,
+            "c-modal-away-progress__strikethrough": this.removed,
+          };
         },
         formattedName() {
           return this.item.formatName;
@@ -71,12 +79,17 @@ Vue.component("modal-away-progress", {
           if (Decimal.lt(number, 1e9)) return formatInt(number);
           return format(number, 2, 2);
         },
+        hideEntry() {
+          this.removed = !this.removed;
+          this.item.option = !this.item.option;
+        }
       },
       template: `
         <div
           v-if="show"
           :class="classObject"
           class="c-modal-away-progress__resources"
+          @click="hideEntry"
         >
           <span v-if="isBlackHole">
             Your
@@ -142,5 +155,6 @@ Vue.component("modal-away-progress", {
           v-on:something-happened="somethingHappened = true"
         />
       </div>
+      <span v-if="!nothingHappened">Note: Click an entry to hide it in the future.</span>
     </div>`
 });

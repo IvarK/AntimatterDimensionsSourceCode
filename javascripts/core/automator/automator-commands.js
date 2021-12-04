@@ -704,7 +704,8 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
         return () => {
-          TimeStudyTree.importIntoCurrentTree(player.timestudy.presets[presetIndex - 1].studies, true);
+          new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies,
+            Currency.timeTheorems.value, V.availableST).commitToGameState(true);
           AutomatorData.logCommandEvent(`Loaded study ${ctx.Preset[0].image}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };

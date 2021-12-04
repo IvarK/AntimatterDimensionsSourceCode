@@ -75,7 +75,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchaseUntil() {
-    studiesUntil(this.id);
+    newTreeFromStudyUntil(this.id).commitToGameState();
   }
 
   get path() {

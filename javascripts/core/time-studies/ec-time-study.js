@@ -48,7 +48,7 @@ export class ECTimeStudyState extends TimeStudyState {
       111, 123, 151,
       181, 212, 214
     ];
-    studiesUntil(studiesToBuy[this.id]);
+    newTreeFromStudyUntil(studiesToBuy[this.id]).commitToGameState();
     // For EC 11 and 12, we can't choose between light and dark, but we can buy the
     // pair of row 21 things
     if (this.id === 11) {

@@ -31,7 +31,7 @@ export class TriadStudyState extends TimeStudyState {
   }
 
   purchaseUntil() {
-    studiesUntil(214);
+    newTreeFromStudyUntil(214).commitToGameState();
     for (const id of this.config.requirement) TimeStudy(id).purchase();
     this.purchase();
   }

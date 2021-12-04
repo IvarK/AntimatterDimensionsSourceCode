@@ -1,22 +1,22 @@
 import { GameMechanicState } from "../game-mechanics/index.js";
 
-export function studiesUntil(id, repeatFor201 = true) {
+export function newTreeFromStudyUntil(id, repeatFor201 = true) {
+  const newTree = new TimeStudyTree(TimeStudyTree.currentStudies, Currency.timeTheorems.value, V.availableST);
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
-  const study = TimeStudy(id);
-  const requestedPath = study.path;
+  const requestedPath = TimeStudy(id).path;
   const currTree = TimeStudyTree.currentTree();
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
 
   // If the player tries to buy a study which is immediately buyable, we try to buy it first in case buying other
   // studies up to that point renders it unaffordable. Effectively the clicked study is higher priority than all others
-  study.purchase();
+  newTree.attemptBuyArray([id]);
 
   // Greddily buy all studies before the dimension split then try again; if the requested study was above the dimension
   // split, then we're done and don't need to attempt to buy any more
-  TimeStudyTree.purchaseTimeStudyArray(range(11, Math.min(lastInPrevRow, 70)));
-  study.purchase();
-  if (id < 71) return;
+  newTree.attemptBuyArray(range(11, Math.min(lastInPrevRow, 70)));
+  newTree.attemptBuyArray([id]);
+  if (id < 71) return newTree;
 
   // Priority for behavior when buying in the Dimension split; we follow only the first applicable entry below:
   // - If we're buying a study within the split, we first buy just the requested path up to the requested study.
@@ -27,28 +27,28 @@ export function studiesUntil(id, repeatFor201 = true) {
   // - If the player has a preferred path, we attempt to buy it (continues onward)
   // - If the player doesn't have a preferred path, we say so and do nothing (stops buying)
   if (id < 111) {
-    TimeStudyTree.purchaseTimeStudyArray(NormalTimeStudies.paths[requestedPath].filter(s => s <= id));
+    newTree.attemptBuyArray(NormalTimeStudies.paths[requestedPath].filter(s => s <= id));
     // The purchasing logic is doing the heavy lifting here; studies can't be double-bought, nor can they be bought
     // if we don't have another available path
     const pathBuyOrder = TimeStudy.preferredPaths.dimensionPath.path
       .concat([TIME_STUDY_PATH.ANTIMATTER_DIM, TIME_STUDY_PATH.INFINITY_DIM, TIME_STUDY_PATH.TIME_DIM]);
     for (const path of pathBuyOrder) {
-      TimeStudyTree.purchaseTimeStudyArray(NormalTimeStudies.paths[path].filter(s => s <= lastInPrevRow));
+      newTree.attemptBuyArray(NormalTimeStudies.paths[path].filter(s => s <= lastInPrevRow));
     }
-    return;
+    return newTree;
   }
   if (currTree.currDimPathCount === currTree.allowedDimPathCount || currTree.allowedDimPathCount === 3) {
-    TimeStudyTree.purchaseTimeStudyArray(range(71, 120));
+    newTree.attemptBuyArray(range(71, 120));
   } else if (TimeStudy.preferredPaths.dimensionPath.path.length > 0) {
-    TimeStudyTree.purchaseTimeStudyArray(TimeStudy.preferredPaths.dimensionPath.studies);
+    newTree.attemptBuyArray(TimeStudy.preferredPaths.dimensionPath.studies);
   } else {
     GameUI.notify.error("You haven't selected a preferred Dimension path!");
-    return;
+    return newTree;
   }
 
   // Explicitly purchase 111 here if it's included and stop if applicable, as it isn't covered by logic in either split.
-  if (id >= 111) TimeStudy(111).purchase();
-  if (id < 121) return;
+  if (id >= 111) newTree.attemptBuyArray([111]);
+  if (id < 121) return newTree;
 
   // Priority for behavior when buying in the Pace split; we follow only the first applicable entry below. In contrast
   // to the Dimension split, here we instead err on the side of not buying extra studies since they will cost ST.
@@ -62,34 +62,35 @@ export function studiesUntil(id, repeatFor201 = true) {
   const pacePaths = currTree.secondSplitPaths
     .map(pathName => NormalTimeStudies.pathList.find(p => p.name === pathName).path);
   if (id < 151) {
-    TimeStudyTree.purchaseTimeStudyArray(NormalTimeStudies.paths[TimeStudy(id).path].filter(s => s <= id));
-    return;
+    newTree.attemptBuyArray(NormalTimeStudies.paths[TimeStudy(id).path].filter(s => s <= id));
+    return newTree;
   }
   if (V.isFullyCompleted) {
     const allPace = NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE]
       .concat(NormalTimeStudies.paths[TIME_STUDY_PATH.PASSIVE])
       .concat(NormalTimeStudies.paths[TIME_STUDY_PATH.IDLE]);
-    TimeStudyTree.purchaseTimeStudyArray(allPace);
+    newTree.attemptBuyArray(allPace);
   } else if (pacePaths.length === 1) {
-    TimeStudyTree.purchaseTimeStudyArray(NormalTimeStudies.paths[pacePaths[0]]);
+    newTree.attemptBuyArray(NormalTimeStudies.paths[pacePaths[0]]);
   } else if (TimeStudy.preferredPaths.pacePath.path !== 0) {
-    TimeStudyTree.purchaseTimeStudyArray(TimeStudy.preferredPaths.pacePath.studies);
+    newTree.attemptBuyArray(TimeStudy.preferredPaths.pacePath.studies);
   } else if (pacePaths.length === 0) {
     GameUI.notify.error("You haven't selected a preferred Pace path!");
-    return;
+    return newTree;
   }
 
   // Buy up to 201, then if applicable we recursively call this function again in order to attempt to buy another path
-  TimeStudyTree.purchaseTimeStudyArray(range(151, Math.min(id, 201)));
-  if (id >= 201 && repeatFor201) studiesUntil(id, false);
-  else if (id < 201) return;
-  TimeStudyTree.purchaseTimeStudyArray(range(211, Math.min(id, 214)));
-  study.purchase();
+  newTree.attemptBuyArray(range(151, Math.min(id, 201)));
+  if (id >= 201 && repeatFor201) newTreeFromStudyUntil(id, false);
+  else if (id < 201) return newTree;
+  newTree.attemptBuyArray(range(211, Math.min(id, 214)));
+  newTree.attemptBuyArray([id]);
 
   // Don't bother buying any more studies at or below row 22 unless the player has fully finished V,
   // in which case just brute-force all of them
-  if (!V.isFullyCompleted) return;
-  TimeStudyTree.purchaseTimeStudyArray(range(221, 234));
+  if (!V.isFullyCompleted) return newTree;
+  newTree.attemptBuyArray(range(221, 234));
+  return newTree;
 }
 
 export function respecTimeStudies(auto) {

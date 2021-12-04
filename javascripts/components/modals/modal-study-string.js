@@ -19,6 +19,7 @@ Vue.component("modal-study-string", {
     isImporting() {
       return this.modalConfig.id === undefined;
     },
+    // This represents the state reached from importing into an empty tree
     importedTree() {
       if (!this.inputIsValidTree) return false;
       const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
@@ -36,20 +37,21 @@ Vue.component("modal-study-string", {
     // tree is irrelevant because if it mattered then the player would simply import instead
     combinedTree() {
       if (!this.inputIsValidTree) return false;
-      // We know that we have enough for all existing studies because we actually purchased them, so setting initial
-      // theorem values to e308 ensures we have enough to actually properly initialize a Tree object with all the
-      // current studies. Then we set theorem totals to their proper values immediately AFTER everything is bought
       const currentStudyTree = TimeStudyTree.currentTree();
-      const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
-      const compositeTree = currentStudyTree.createCombinedTree(importedTree);
+      // The combined tree should effectively "refund" the already-purchased studies and consider the total theorems
+      // available for all its processing
+      const combinedTree = new TimeStudyTree([], Currency.timeTheorems.value.add(currentStudyTree.spentTheorems[0]),
+        V.spaceTheorems);
+      combinedTree.attemptBuyArray(TimeStudyTree.currentStudies);
+      combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput));
       return {
-        missingTT: compositeTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
-        missingST: compositeTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
-        newStudies: makeEnumeration(compositeTree.purchasedStudies
+        missingTT: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
+        missingST: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
+        newStudies: makeEnumeration(combinedTree.purchasedStudies
           .filter(s => !currentStudyTree.purchasedStudies.includes(s))),
-        firstPaths: makeEnumeration(compositeTree.firstSplitPaths),
-        secondPaths: makeEnumeration(compositeTree.secondSplitPaths),
-        ec: compositeTree.ec,
+        firstPaths: makeEnumeration(combinedTree.firstSplitPaths),
+        secondPaths: makeEnumeration(combinedTree.secondSplitPaths),
+        ec: combinedTree.ec,
       };
     },
     // We show information about the after-load tree, but which tree (imported from empty vs combined) info is shown
@@ -104,7 +106,7 @@ Vue.component("modal-study-string", {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       Modal.hide();
-      TimeStudyTree.importIntoCurrentTree(this.truncatedInput);
+      new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.availableST).commitToGameState();
     },
     savePreset() {
       if (this.inputIsValid) {

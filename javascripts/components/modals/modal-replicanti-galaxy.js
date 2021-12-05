@@ -5,6 +5,10 @@ Vue.component("modal-replicanti-galaxy", {
       divideReplicanti: false,
     };
   },
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     message() {
       const reductionString = this.divideReplicanti
@@ -20,6 +24,7 @@ Vue.component("modal-replicanti-galaxy", {
     update() {
       this.replicanti.copyFrom(player.replicanti.amount);
       this.divideReplicanti = Achievement(126).isUnlocked;
+      if (this.replicanti.lt(Number.MAX_VALUE)) this.emitClose();
     },
     handleYesClick() {
       replicantiGalaxy();

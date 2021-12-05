@@ -2,24 +2,31 @@ Vue.component("modal-dimension-boost", {
   props: { modalConfig: Object },
   data() {
     return {
-      unlockedByBoost: String,
       canBuy: Number
     };
+  },
+  created() {
+    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
     bulk() { return this.modalConfig.bulk; },
     topLabel() {
-      if (this.bulk) return `You are about to purchase ${quantifyInt("Dimension Boost", this.canBuy)}`;
-      return `You are about to purchase a Dimension Boost`;
+      return `You are about to do a Dimension Boost Reset`;
     },
     message() {
-      return `This will ${this.unlockedByBoost}. Are you sure you want to do this?`;
+      const areDimensionsReset = Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked
+        ? `not reset anything because you have ${Perk.antimatterNoReset.isBought ? "Perk ANR" : "Achievement 111"}`
+        : `reset your Antimatter Dimensions`;
+
+      return `This will ${areDimensionsReset}. Are you sure you want to do this?`;
     },
   },
   methods: {
     update() {
       // Make sure we make the first character of the string lowercase, as it's a part of a longer string
-      this.unlockedByBoost = DimBoost.unlockedByBoost.charAt(0).toLowerCase() + DimBoost.unlockedByBoost.slice(1);
       this.canBuy = this.getCanBuy();
     },
     handleYesClick() {

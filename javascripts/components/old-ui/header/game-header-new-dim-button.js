@@ -16,6 +16,9 @@ Vue.component("game-header-new-dim-button", {
       this.requirement.copyFrom(requirement);
       this.isAffordable = player.records.thisEternity.maxAM.gte(requirement);
       this.anyInfinityDimensionUnlocked = InfinityDimension(1).isUnlocked;
+    },
+    tryUnlockNextInfinityDimension() {
+      InfinityDimensions.unlockNext(true);
     }
   },
   template: `
@@ -23,7 +26,7 @@ Vue.component("game-header-new-dim-button", {
       v-if="isVisible"
       :enabled="isAffordable"
       class="o-primary-btn--new-dim l-game-header__new-dim-btn"
-      onclick="InfinityDimensions.unlockNext(); Tab.dimensions.infinity.show()"
+      @click="tryUnlockNextInfinityDimension"
     >
       Get {{ format(requirement) }} antimatter
       <br>

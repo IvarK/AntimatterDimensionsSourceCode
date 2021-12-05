@@ -13,13 +13,13 @@ Vue.component("modal-big-crunch", {
     message() {
       return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. You will gain
       ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 2)} on Infinity,
-      and ${quantifyInt("Infinity", this.gainedInfinities)}.`;
+      and ${quantify("Infinity", this.gainedInfinities)}.`;
     },
   },
   methods: {
     update() {
       this.gainedInfinities = gainedInfinities().round();
-      this.gainedInfinityPoints = gainedInfinityPoints();
+      this.gainedInfinityPoints = gainedInfinityPoints().round();
     },
     handleYesClick() {
       this.emitClose();

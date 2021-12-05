@@ -282,11 +282,10 @@ function giveRealityRewards(realityProps) {
     const current = Teresa.runRewardMultiplier;
     const newMultiplier = Teresa.rewardMultiplier(player.antimatter);
     const isHigher = newMultiplier > current;
-    const f = num => format(num, 2, 2);
     Modal.message.show(`You have completed Teresa's Reality! ${isHigher
-      ? `Since you gained more Antimatter, you increased your 
-      Glyph Sacrifice multiplier from ${f(current)} to ${f(newMultiplier)}`
-      : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier 
+      ? `Since you gained more Antimatter, you increased your
+      Glyph Sacrifice multiplier from ${format(current, 2, 2)} to ${format(newMultiplier, 2, 2)}`
+      : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier
       from Teresa did not increase`}.`);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;

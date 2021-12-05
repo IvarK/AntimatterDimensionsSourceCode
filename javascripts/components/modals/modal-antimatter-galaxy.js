@@ -3,13 +3,16 @@ Vue.component("modal-antimatter-galaxy", {
   data() {
     return {
       newGalaxies: 0,
-      achievement111Unlocked: false,
+      keepAntimatter: false,
       perkANRBought: false,
     };
   },
   created() {
-    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
+      (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? this.emitClose() : undefined));
     this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
     bulk() { return this.modalConfig.bulk; },
@@ -21,7 +24,7 @@ Vue.component("modal-antimatter-galaxy", {
       let message = "";
       if (this.perkANRBought) message = `This will reset nothing, and you will receive a small
          boost to Tickspeed upgrades.`;
-      else if (this.achievement111Unlocked) message = `This will reset all of your Antimatter Dimensions,
+      else if (this.keepAntimatter) message = `This will reset all of your Antimatter Dimensions,
         your Dimension Boosts, and Tickspeed. However, you will receive a small boost
         to Tickspeed upgrades.`;
       else message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts,
@@ -42,11 +45,10 @@ Vue.component("modal-antimatter-galaxy", {
           cumulative: false,
         }, player.galaxies);
         if (bulk) {
-          this.newGalaxies = Math.max(this.newGalaxies,
-            Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) - player.galaxies);
+          this.newGalaxies = Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) - player.galaxies;
         }
       }
-      this.achievement111Unlocked = Achievement(111).isUnlocked;
+      this.keepAntimatter = Achievement(111).isUnlocked;
       this.perkANRBought = Perk.antimatterNoReset.isBought;
     },
     handleYesClick() {

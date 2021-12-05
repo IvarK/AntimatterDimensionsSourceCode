@@ -8,7 +8,8 @@ Vue.component("antimatter-dim-boost-row", {
       isBuyable: false,
       purchasedBoosts: 0,
       imaginaryBoosts: 0,
-      lockText: null
+      lockText: null,
+      unlockedByBoost: null
     };
   },
   computed: {
@@ -16,7 +17,7 @@ Vue.component("antimatter-dim-boost-row", {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
-      return DimBoost.unlockedByBoost;
+      return this.unlockedByBoost;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
@@ -42,9 +43,10 @@ Vue.component("antimatter-dim-boost-row", {
       this.purchasedBoosts = DimBoost.purchasedBoosts;
       this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
+      this.unlockedByBoost = DimBoost.unlockedByBoost;
     },
     dimensionBoost(bulk) {
-      if (!DimBoost.requirement.isSatisfied) return;
+      if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
       if (player.options.confirmations.dimensionBoost) {
         Modal.dimensionBoost.show({ bulk });
         return;

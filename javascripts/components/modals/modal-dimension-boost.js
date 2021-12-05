@@ -14,7 +14,7 @@ Vue.component("modal-dimension-boost", {
     message() {
       const areDimensionsReset = Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked
         ? `not reset anything because you have ${Perk.antimatterNoReset.isBought ? "Perk ANR" : "Achievement 111"}`
-        : `reset your Antimatter Dimensions`;
+        : `reset your Antimatter and Antimatter Dimensions`;
 
       return `This will ${areDimensionsReset}. Are you sure you want to do this?`;
     },

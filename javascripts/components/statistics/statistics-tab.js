@@ -248,7 +248,7 @@ const MatterScale = {
         enough to ${scale.verb} ${amount} ${scale.name}`];
     }
     const scale = this.microScale(matter);
-    return [`If every antimatter were ${format(this.proton / scale.amount / matter.toNumber(), 2, 1)} ${scale.name},
+    return [`If every antimatter were ${format(this.proton.div(scale.amount).div(matter), 2, 1)} ${scale.name},
       you would have enough to make a proton.`];
   },
 

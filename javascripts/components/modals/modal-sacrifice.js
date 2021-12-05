@@ -1,8 +1,8 @@
 Vue.component("modal-sacrifice", {
   data() {
     return {
-      currentMultiplier: new Decimal(1),
-      nextMultiplier: new Decimal(1),
+      currentMultiplier: new Decimal(0),
+      nextMultiplier: new Decimal(0),
     };
   },
   created() {

@@ -16,9 +16,6 @@ Vue.component("antimatter-dim-boost-row", {
     dimName() {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
-    buttonText() {
-      return this.unlockedByBoost;
-    },
     boostCountText() {
       const parts = [this.purchasedBoosts];
       if (this.imaginaryBoosts !== 0) {
@@ -68,7 +65,7 @@ Vue.component("antimatter-dim-boost-row", {
         @click.exact="dimensionBoost(true)"
         @click.shift.exact="dimensionBoost(false)"
       >
-        {{ buttonText }}
+        {{ unlockedByBoost }}
       </primary-button>
     </div>`
 });

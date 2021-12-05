@@ -19,6 +19,7 @@ export const AutoGlyphProcessor = {
   // on only the glyph itself and not external factors.
   filterValue(glyph) {
     const typeCfg = this.types[glyph.type];
+    if (glyph.type === "companion") return Infinity;
     if (glyph.type === "cursed") return -Infinity;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:

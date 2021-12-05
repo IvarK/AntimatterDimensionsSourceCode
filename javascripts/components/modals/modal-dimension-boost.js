@@ -1,10 +1,5 @@
 Vue.component("modal-dimension-boost", {
   props: { modalConfig: Object },
-  data() {
-    return {
-      canBuy: Number
-    };
-  },
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
     this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
@@ -25,10 +20,6 @@ Vue.component("modal-dimension-boost", {
     },
   },
   methods: {
-    update() {
-      // Make sure we make the first character of the string lowercase, as it's a part of a longer string
-      this.canBuy = this.getCanBuy();
-    },
     handleYesClick() {
       this.emitClose();
       requestDimensionBoost(this.bulk);
@@ -37,29 +28,6 @@ Vue.component("modal-dimension-boost", {
     handleNoClick() {
       this.emitClose();
     },
-    getCanBuy() {
-      if (DimBoost.purchasedBoosts < 4) return 1;
-      // Code based off of dimboost.js, function maxBuyDimBoosts()
-      const req1 = DimBoost.bulkRequirement(1);
-      const req2 = DimBoost.bulkRequirement(2);
-      const increase = req2.amount - req1.amount;
-      const dim = AntimatterDimension(req1.tier);
-      // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
-      // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
-      let maxBoosts = Math.min(Number.MAX_VALUE,
-        1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
-      if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
-        return maxBoosts;
-      }
-      // But in case of EC5 it's not, so do binary search for appropriate boost amount
-      let minBoosts = 2;
-      while (maxBoosts !== minBoosts + 1) {
-        const middle = Math.floor((maxBoosts + minBoosts) / 2);
-        if (DimBoost.bulkRequirement(middle).isSatisfied) minBoosts = middle;
-        else maxBoosts = middle;
-      }
-      return maxBoosts;
-    }
   },
   template: `
     <div class="c-modal-message l-modal-content--centered">

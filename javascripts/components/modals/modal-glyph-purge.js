@@ -10,6 +10,8 @@ Vue.component("modal-glyph-purge", {
     harsh() { return this.modalConfig.harsh; },
     threshold() { return this.harsh ? 1 : 5; },
     extraMessage() {
+      if (this.glyphsDeleted === 0) return `This will Purge no Glyphs.`;
+      if (this.glyphsDeleted === this.glyphsTotal) return `This will Purge all your Glyphs.`;
       return `${this.harsh ? `Harsh Purging` : `Purging`} will delete ${this.glyphsDeleted}/${this.glyphsTotal}
       of your Glyphs.`;
     },

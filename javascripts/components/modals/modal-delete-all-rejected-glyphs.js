@@ -20,6 +20,8 @@ Vue.component("modal-delete-all-rejected-glyphs", {
       This process is irreversible!`;
     },
     extraMessage() {
+      if (this.glyphsDeleted === 0) return `This will remove no Glyphs.`;
+      if (this.glyphsDeleted === this.glyphsTotal) return `This will remove all your Glyphs.`;
       return `This process will remove ${this.glyphsDeleted}/${this.glyphsTotal} Glyphs.`;
     }
   },

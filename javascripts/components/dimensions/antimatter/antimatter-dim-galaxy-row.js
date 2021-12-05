@@ -77,7 +77,8 @@ Vue.component("antimatter-dim-galaxy-row", {
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
     },
     buyGalaxy(bulk) {
-      if (player.options.confirmations.antimatterGalaxy && this.canBeBought) {
+      if (!this.canBeBought) return;
+      if (player.options.confirmations.antimatterGalaxy) {
         const buyBulk = this.canBulkBuy && bulk;
         Modal.antimatterGalaxy.show({ bulk: buyBulk });
         return;

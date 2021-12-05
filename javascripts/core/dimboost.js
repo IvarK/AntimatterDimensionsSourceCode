@@ -143,8 +143,8 @@ export class DimBoost {
     else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
     else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
-    let areDimensionsReset = "Reset your Dimensions";
-    if (Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) areDimensionsReset = "Reset nothing";
+    const areDimensionsReset = `Reset
+    ${(Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) ? "nothing" : "your Dimensions"}`;
 
     return `${areDimensionsReset}${boostEffects}`;
   }

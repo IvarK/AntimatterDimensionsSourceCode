@@ -7541,7 +7541,7 @@ kbd {
   margin-bottom: 0.5rem;
 }
 
-.c-matter-dimension-container {
+.c-dark-matter-dimension-container {
   color: var(--color-laitela--accent);
   border: 0.2rem solid var(--color-laitela--accent);
   background: var(--color-laitela--base);
@@ -7553,18 +7553,18 @@ kbd {
   height: 15rem;
 }
 
-.s-base--metro .c-matter-dimension-container {
+.s-base--metro .c-dark-matter-dimension-container {
   border-width: 0.1rem;
   border-radius: 0;
 }
 
-.o-matter-dimension-amount {
+.o-dark-matter-dimension-amount {
   font-size: 1.6rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.c-matter-dimension-buttons {
+.c-dark-matter-dimension-buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -7572,7 +7572,7 @@ kbd {
   height: 6rem;
 }
 
-.o-matter-dimension-button {
+.o-dark-matter-dimension-button {
   width: 15rem;
   height: 5rem;
   margin-bottom: 1rem;
@@ -7584,12 +7584,12 @@ kbd {
   transition-duration: 0.15s;
 }
 
-.s-base--metro .o-matter-dimension-button {
+.s-base--metro .o-dark-matter-dimension-button {
   border-width: 0.1rem;
   border-radius: 0;
 }
 
-.o-matter-dimension-button--available {
+.o-dark-matter-dimension-button--available {
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent);
   border-color: var(--color-laitela--accent);
@@ -7598,13 +7598,13 @@ kbd {
   font-weight: bold;
 }
 
-.o-matter-dimension-button--available:hover {
+.o-dark-matter-dimension-button--available:hover {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   box-shadow: none;
 }
 
-.o-matter-dimension-button--ascend {
+.o-dark-matter-dimension-button--ascend {
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent);
   border-color: var(--color-laitela--accent);
@@ -7629,7 +7629,7 @@ kbd {
   }
 }
 
-.o-matter-dimension-button--ascend:hover {
+.o-dark-matter-dimension-button--ascend:hover {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   box-shadow: none;

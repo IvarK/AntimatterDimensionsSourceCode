@@ -1,4 +1,4 @@
-Vue.component("matter-dimension-row", {
+Vue.component("dark-matter-dimension-row", {
   props: {
     tier: Number
   },
@@ -35,8 +35,8 @@ Vue.component("matter-dimension-row", {
     },
     intervalClassObject() {
       return {
-        "o-matter-dimension-button--available": this.canBuyInterval,
-        "o-matter-dimension-button--ascend": this.isIntervalCapped
+        "o-dark-matter-dimension-button--available": this.canBuyInterval,
+        "o-dark-matter-dimension-button--ascend": this.isIntervalCapped
       };
     },
     intervalText() {
@@ -91,14 +91,14 @@ Vue.component("matter-dimension-row", {
     }
   },
   template: `
-    <div class="c-matter-dimension-container" v-if="isUnlocked">
-      <div class="o-matter-dimension-amount">
+    <div class="c-dark-matter-dimension-container" v-if="isUnlocked">
+      <div class="o-dark-matter-dimension-amount">
         {{ name }}<span v-if="hasAscended"> {{ ascensionText }}</span>: {{ format(amount, 2) }}
       </div>
-      <div class="c-matter-dimension-buttons">
+      <div class="c-dark-matter-dimension-buttons">
         <button
           @click="handleIntervalClick"
-          class="o-matter-dimension-button"
+          class="o-dark-matter-dimension-button"
           :class="intervalClassObject"
         >
           {{ intervalText }}
@@ -115,15 +115,15 @@ Vue.component("matter-dimension-row", {
         </button>
         <button
           @click="buyPowerDM"
-          class="o-matter-dimension-button"
-          :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }"
+          class="o-dark-matter-dimension-button"
+          :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDM }"
         >
           DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ formatDMCost(powerDMCost) }}
         </button>
         <button
           @click="buyPowerDE"
-          class="o-matter-dimension-button"
-          :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }"
+          class="o-dark-matter-dimension-button"
+          :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDE }"
         >
           DE +{{ format(powerDE, 2, 4) }}
           <br>

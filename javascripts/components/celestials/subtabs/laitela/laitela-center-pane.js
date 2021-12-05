@@ -3,7 +3,7 @@ import "../dark-matter-dimension-row.js";
 Vue.component("dark-matter-dimension-group", {
   template: `
     <span>
-      <matter-dimension-row
+      <dark-matter-dimension-row
         v-for="tier in 4"
         :key="tier"
         :tier="tier"

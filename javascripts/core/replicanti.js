@@ -24,19 +24,12 @@ function addReplicantiGalaxies(newGalaxies) {
 
 export function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
+  const galaxyGain = Replicanti.galaxies.gain;
+  if (galaxyGain < 1) return;
   player.replicanti.timer = 0;
-  let galaxyGain = 1;
-  if (Achievement(126).isUnlocked) {
-    // Attempt to buy bulk if RG divides by e308 instead of resetting
-    const maxGain = Replicanti.galaxies.max - player.replicanti.galaxies;
-    const logReplicanti = Replicanti.amount.log10();
-    galaxyGain = Math.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
-    // In the unlikely case of different rounding error between canBuyMore and the above
-    if (galaxyGain < 1) return;
-    Replicanti.amount = Decimal.pow10(logReplicanti - LOG10_MAX_VALUE * galaxyGain);
-  } else {
-    Replicanti.amount = DC.D1;
-  }
+  Replicanti.amount = Achievement(126).isUnlocked
+    ? Decimal.pow10(Replicanti.amount.log10() - LOG10_MAX_VALUE * galaxyGain)
+    : DC.D1;
   addReplicantiGalaxies(galaxyGain);
 }
 
@@ -464,5 +457,14 @@ export const Replicanti = {
       const buyer = Autobuyer.replicantiGalaxy;
       return (buyer.canTick && buyer.isEnabled) || this.isPlayerHoldingR;
     },
-  },
+    get gain() {
+      if (!this.canBuyMore) return 0;
+      if (Achievement(126).isUnlocked) {
+        const maxGain = Replicanti.galaxies.max - player.replicanti.galaxies;
+        const logReplicanti = Replicanti.amount.log10();
+        return Math.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
+      }
+      return 1;
+    },
+  }
 };

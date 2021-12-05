@@ -40,12 +40,12 @@ Vue.component("modal-antimatter-galaxy", {
       if (this.bulk) {
         const req = Galaxy.requirement;
         const dim = AntimatterDimension(req.tier);
-        const bulk = bulkBuyBinarySearch(dim.amount, {
+        const bulk = bulkBuyBinarySearch(dim.totalAmount, {
           costFunction: x => Galaxy.requirementAt(x).amount,
           cumulative: false,
         }, player.galaxies);
         if (bulk) {
-          this.newGalaxies = Galaxy.buyableGalaxies(Math.round(dim.amount.toNumber())) - player.galaxies;
+          this.newGalaxies = Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())) - player.galaxies;
         }
       }
       this.keepAntimatter = Achievement(111).isUnlocked;

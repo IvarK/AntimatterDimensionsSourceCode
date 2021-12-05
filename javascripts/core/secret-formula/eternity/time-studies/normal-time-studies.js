@@ -7,13 +7,13 @@ import { DC } from "../../../constants.js";
  *  @property {Number} id                   Numerical ID shown for each time study in code and in-game
  *  @property {Number} cost                 Amount of available time theorems required to purchase
  *  @property {Number} STcost               Amount of available space theorems required to purchase if needed
- *  @property {Array: Object} requirement   Array of Numbers or functions which are checked to determine purchasability
+ *  @property {Object[]} requirement   Array of Numbers or functions which are checked to determine purchasability
  *  @property {Number} reqType              Number specified by enum in TS_REQUIREMENT_TYPE for requirement behavior
- *  @property {Array: Number} requiresST    Array of Numbers indicating which other studies will cause this particular
+ *  @property {Number[]} requiresST    Array of Numbers indicating which other studies will cause this particular
  *    study to also cost space theorems - in all cases this applies if ANY in the array are bought
  *  @property {function: @return String} description  Text to be shown in-game for the time study's effects
  *  @property {function: @return Number} effect       Numerical value for the effects of a study
- *  @property {Array: String} cap     Hard-coded cap for studies which don't scale forever
+ *  @property {String[]} cap     Hard-coded cap for studies which don't scale forever
  *  @property {String} formatEffect   Formatting function for effects, if the default formatting isn't appropriate
  * }
  */

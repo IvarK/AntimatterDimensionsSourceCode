@@ -59,7 +59,7 @@ export function newTreeFromStudyUntil(id, repeatFor201 = true) {
   // - If we have a preferred path, we buy it all (continues onward)
   // - If we don't have any pace paths at this point, there's no way to objectively choose one (stops buying)
   // - Fallback case: we have more than one path and intentionally do nothing here (continues onward)
-  const pacePaths = currTree.secondSplitPaths
+  const pacePaths = currTree.pacePaths
     .map(pathName => NormalTimeStudies.pathList.find(p => p.name === pathName).path);
   if (id < 151) {
     newTree.attemptBuyArray(NormalTimeStudies.paths[TimeStudy(id).path].filter(s => s <= id));

@@ -19,7 +19,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TIME_STUDY_TYPE.NORMAL);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
-    this._path = path === undefined ? TIME_STUDY_PATH.NONE : path.path;
+    this._path = path?.path ?? TIME_STUDY_PATH.NONE;
   }
 
   get isBought() {

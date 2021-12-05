@@ -1,6 +1,9 @@
 Vue.component("modal-study-string", {
   props: {
-    modalConfig: Object
+    modalConfig: {
+      type: Object,
+      required: true,
+    }
   },
   data() {
     return {
@@ -10,8 +13,9 @@ Vue.component("modal-study-string", {
   },
   // Needs to be assigned in created() or else they will end up being undefined when importing
   created() {
-    this.input = this.isImporting ? "" : player.timestudy.presets[this.modalConfig.id].studies;
-    this.name = this.isImporting ? "" : player.timestudy.presets[this.modalConfig.id].name;
+    const preset = player.timestudy.presets[this.modalConfig.id];
+    this.input = preset ? preset.studies : "";
+    this.name = preset ? preset.name : "";
   },
   computed: {
     // This modal is used by both study importing and preset editing but only has a prop actually passed in when
@@ -24,12 +28,12 @@ Vue.component("modal-study-string", {
       if (!this.inputIsValidTree) return false;
       const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
       return {
-        totalTT: importedTree.spentTheorems[0],
-        totalST: importedTree.spentTheorems[1],
+        timeTheorems: importedTree.spentTheorems[0],
+        spaceTheorems: importedTree.spentTheorems[1],
         newStudies: makeEnumeration(importedTree.purchasedStudies),
         invalidStudies: importedTree.invalidStudies,
-        firstPaths: makeEnumeration(importedTree.firstSplitPaths),
-        secondPaths: makeEnumeration(importedTree.secondSplitPaths),
+        firstPaths: makeEnumeration(importedTree.dimensionPaths),
+        secondPaths: makeEnumeration(importedTree.pacePaths),
         ec: importedTree.ec,
       };
     },
@@ -45,12 +49,12 @@ Vue.component("modal-study-string", {
       combinedTree.attemptBuyArray(TimeStudyTree.currentStudies);
       combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput));
       return {
-        missingTT: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
-        missingST: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
+        timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
+        spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
         newStudies: makeEnumeration(combinedTree.purchasedStudies
           .filter(s => !currentStudyTree.purchasedStudies.includes(s))),
-        firstPaths: makeEnumeration(combinedTree.firstSplitPaths),
-        secondPaths: makeEnumeration(combinedTree.secondSplitPaths),
+        firstPaths: makeEnumeration(combinedTree.dimensionPaths),
+        secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
       };
     },
@@ -70,12 +74,15 @@ Vue.component("modal-study-string", {
     invalidMessage() {
       if (!this.inputIsValidTree || this.importedTree.invalidStudies.length === 0) return null;
       // Pad the input with non-digits which we remove later in order to not cause erroneous extra matches within IDs
-      let coloredString = `.${this.truncatedInput}.`;
+      // and limit the string length to stop excessive UI stretch
+      let coloredString = `#${this.truncatedInput}#`;
+      if (coloredString.length > 300) coloredString = `${coloredString.slice(0, 297)}...`;
+
       for (const id of this.importedTree.invalidStudies) {
         coloredString = coloredString.replaceAll(new RegExp(`(\\D)(${id})(\\D)`, "gu"),
           `$1<span style="color: var(--color-bad);">$2</span>$3`);
       }
-      return `Your import string has invalid study IDs: ${coloredString.replaceAll(".", "")}`;
+      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
     },
     truncatedInput() {
       // If last character is "," remove it
@@ -91,10 +98,8 @@ Vue.component("modal-study-string", {
       return TimeStudyTree.isValidImportString(this.truncatedInput);
     },
     inputIsSecret() {
-      return sha512_256(this.truncatedInput) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
-    },
-    formatWithCommas() {
-      return formatWithCommas;
+      return sha512_256(this.truncatedInput.toLowerCase()) ===
+        "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
     },
   },
   methods: {
@@ -105,24 +110,16 @@ Vue.component("modal-study-string", {
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
-      Modal.hide();
+      this.emitClose();
       new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.availableST).commitToGameState();
     },
     savePreset() {
       if (this.inputIsValid) {
         player.timestudy.presets[this.modalConfig.id].studies = this.input;
-        GameUI.notify.eternity(`Study tree ${this.name} successfully edited.`);
+        GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }
     },
-    formatCost(cost) {
-      return formatWithCommas(cost);
-    },
-    formatTheoremCost(tt, st) {
-      const strTT = `${formatWithCommas(tt)} TT`;
-      const strST = `${formatWithCommas(st)} ST`;
-      return st === 0 ? strTT : `${strTT} + ${strST}`;
-    }
   },
   template: `
     <div class="c-modal-import-tree l-modal-content--centered">
@@ -139,31 +136,16 @@ Vue.component("modal-study-string", {
       <div class="c-modal-import-tree__tree-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidTree">
-          <div v-if="isImporting" class="l-modal-import-tree__tree-info-line">
-            <div v-if="combinedTree.missingTT === 0">
-              <i>Importing this with your current tree will not purchase any new Time Studies.</i>
-            </div>
-            <div v-else>
-              Importing with your current tree will also purchase:
-              <br>
-              {{ combinedTree.newStudies }}
-              (Cost: {{ formatTheoremCost(combinedTree.missingTT, combinedTree.missingST) }})
-            </div>
-          </div>
-          <br>
-          <div class="l-modal-import-tree__tree-info-line">
-            <div v-if="importedTree.totalTT === 0">
-              <i>Importing this into an empty tree will not purchase any Time Studies.</i>
-            </div>
-            <div v-else>
-              Importing into an empty tree will purchase:
-              <br>
-              {{ importedTree.newStudies }}
-              (Cost: {{ formatTheoremCost(importedTree.totalTT, importedTree.totalST) }})
-            </div>
-          </div>
-          <br>
           <div v-if="invalidMessage" class="l-modal-import-tree__tree-info-line" v-html="invalidMessage" />
+          <tree-import-info
+            :tree="combinedTree"
+            :intoEmpty="false"
+          />
+          <tree-import-info
+            v-if="isImporting"
+            :tree="importedTree"
+            :intoEmpty="true"
+          />
           <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
             <b>Tree status after loading:</b>
           </div>
@@ -186,5 +168,43 @@ Vue.component("modal-study-string", {
       >
         {{ isImporting ? "Import" : "Save" }}
       </primary-button>
+    </div>`
+});
+
+Vue.component("tree-import-info", {
+  props: {
+    tree: {
+      type: Object,
+      required: true,
+    },
+    intoEmpty: {
+      type: Boolean,
+      required: true,
+    }
+  },
+  computed: {
+    importDestString() {
+      return this.intoEmpty ? "into an empty Tree" : "with your current Tree";
+    }
+  },
+  methods: {
+    formatTheoremCost(tt, st) {
+      const strTT = `${formatWithCommas(tt)} TT`;
+      const strST = `${formatWithCommas(st)} ST`;
+      return st === 0 ? strTT : `${strTT} + ${strST}`;
+    }
+  },
+  template: `
+    <div class="l-modal-import-tree__tree-info-line">
+      <div v-if="tree.timeTheorems === 0">
+        <i>Importing this {{ importDestString }} will not purchase any new Time Studies.</i>
+      </div>
+      <div v-else>
+        Importing {{ importDestString }} will also purchase:
+        <br>
+        {{ tree.newStudies }}
+        (Cost: {{ formatTheoremCost(tree.timeTheorems, tree.spaceTheorems) }})
+      </div>
+      <br>
     </div>`
 });

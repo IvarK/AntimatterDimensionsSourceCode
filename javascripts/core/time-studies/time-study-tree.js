@@ -14,13 +14,13 @@
  *   object itself and should not depend on the actual current game state
  * - All study entries must be Strings because numbers (normal TS), T# (triads), and EC# (ECs) need to be supported
  * 
- * @member {Array: Number} theoremBudget      Two-element array containing the maximum allowed TT/ST to be spent on
+ * @member {Number[]} theoremBudget      Two-element array containing the maximum allowed TT/ST to be spent on
  *  purchasing specified studies
- * @member {Array: Number} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
+ * @member {Number[]} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
  *  purchased after accounting for various conditions which would forbid some being bought (eg. cost or tree structure)
- * @member {Array: String} invalidStudies     Array of studies from the initial string which are correctly formatted
+ * @member {String[]} invalidStudies     Array of studies from the initial string which are correctly formatted
  *  but don't actually exist; used for informational purposes elsewhere
- * @member {Array: String} purchasedStudies   Array of studies which were actually purchased, using the given amount
+ * @member {String[]} purchasedStudies   Array of studies which were actually purchased, using the given amount
  *  of available theorems
  */
 export class TimeStudyTree {
@@ -85,7 +85,7 @@ export class TimeStudyTree {
           if (!TimeStudy.eternityChallenge(num).isBought) TimeStudy.eternityChallenge(num).purchase(true);
           break;
         default:
-          TimeStudy(num).purchase();
+          if (TimeStudy(num)) TimeStudy(num).purchase();
           break;
       }
     }
@@ -119,7 +119,7 @@ export class TimeStudyTree {
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
     if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
-      this.invalidStudies.push(`${ecID}$`);
+      this.invalidStudies.push(`${ecID}`);
       return studyArray;
     }
     studyArray.push(`EC${ecID}`);
@@ -130,7 +130,7 @@ export class TimeStudyTree {
   attemptBuyArray(studyArray) {
     const studyDB = GameDatabase.eternity.timeStudies;
     for (const study of studyArray) {
-      const id = `${study}`.match(/(T|EC)?(\d+)/u);
+      const id = `${study}`.match(/^(T|EC)?(\d+)/u);
       const num = parseInt(id[2], 10);
       let toBuy;
       switch (id[1]) {
@@ -143,16 +143,16 @@ export class TimeStudyTree {
         default:
           toBuy = studyDB.normal.find(s => s.id === num);
       }
-      if (this.attemptBuySingle(toBuy)) this.purchasedStudies.push(`${study}`);
+      if (this.canBuySingle(toBuy, study)) this.purchasedStudies.push(`${study}`);
     }
   }
 
   // Tries to buy a single study, accounting for all various requirements and locking behavior in the game. If the
   // requirement is satisfied, then the running theorem costs will be updated (always) and the remaining usable
   // theorems will be decremented (only if there are enough left to actually purchase)
-  attemptBuySingle(dbEntry) {
+  canBuySingle(dbEntry, studyString) {
     // Import strings can contain repeated or undefined entries
-    if (!dbEntry || this.purchasedStudies.includes(`${dbEntry.id}`)) return false;
+    if (!dbEntry || this.purchasedStudies.includes(studyString)) return false;
 
     const check = req => (typeof req === "number"
       ? this.purchasedStudies.includes(`${req}`)
@@ -196,7 +196,7 @@ export class TimeStudyTree {
     return 1;
   }
 
-  get firstSplitPaths() {
+  get dimensionPaths() {
     const pathSet = new Set();
     const validPaths = [TIME_STUDY_PATH.ANTIMATTER_DIM, TIME_STUDY_PATH.INFINITY_DIM, TIME_STUDY_PATH.TIME_DIM];
     for (const path of validPaths) {
@@ -211,7 +211,7 @@ export class TimeStudyTree {
     return Array.from(pathSet);
   }
 
-  get secondSplitPaths() {
+  get pacePaths() {
     const pathSet = new Set();
     const validPaths = [TIME_STUDY_PATH.ACTIVE, TIME_STUDY_PATH.PASSIVE, TIME_STUDY_PATH.IDLE];
     for (const path of validPaths) {

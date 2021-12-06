@@ -41,7 +41,7 @@ Vue.component("modal-study-string", {
     // tree is irrelevant because if it mattered then the player would simply import instead
     combinedTree() {
       if (!this.inputIsValidTree) return false;
-      const currentStudyTree = TimeStudyTree.currentTree();
+      const currentStudyTree = TimeStudyTree.currentTree;
       // The combined tree should effectively "refund" the already-purchased studies and consider the total theorems
       // available for all its processing
       const combinedTree = new TimeStudyTree([], Currency.timeTheorems.value.add(currentStudyTree.spentTheorems[0]),
@@ -138,11 +138,11 @@ Vue.component("modal-study-string", {
         <template v-else-if="inputIsValidTree">
           <div v-if="invalidMessage" class="l-modal-import-tree__tree-info-line" v-html="invalidMessage" />
           <tree-import-info
+            v-if="isImporting"
             :tree="combinedTree"
             :intoEmpty="false"
           />
           <tree-import-info
-            v-if="isImporting"
             :tree="importedTree"
             :intoEmpty="true"
           />
@@ -200,7 +200,7 @@ Vue.component("tree-import-info", {
         <i>Importing this {{ importDestString }} will not purchase any new Time Studies.</i>
       </div>
       <div v-else>
-        Importing {{ importDestString }} will also purchase:
+        Importing {{ importDestString }} will purchase:
         <br>
         {{ tree.newStudies }}
         (Cost: {{ formatTheoremCost(tree.timeTheorems, tree.spaceTheorems) }})

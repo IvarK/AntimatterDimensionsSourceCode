@@ -311,7 +311,7 @@ Vue.component("time-studies-tab", {
       throw "Unknown Time Study type";
     },
     exportStudyTree() {
-      copyToClipboard(TimeStudyTree.currentTree().exportString);
+      copyToClipboard(TimeStudyTree.currentTree.exportString);
       GameUI.notify.info("Exported current Time Studies to your clipboard");
     }
   },

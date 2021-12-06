@@ -36,7 +36,7 @@ export class NormalTimeStudyState extends TimeStudyState {
     const check = req => (typeof req === "number"
       ? TimeStudy(req).isBought
       : req());
-    const currTree = TimeStudyTree.currentTree();
+    const currTree = TimeStudyTree.currentTree;
     switch (this.config.reqType) {
       case TS_REQUIREMENT_TYPE.AT_LEAST_ONE:
         return this.config.requirement.some(r => check(r));
@@ -71,6 +71,7 @@ export class NormalTimeStudyState extends TimeStudyState {
       player.timestudy.studies.length);
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
+    TimeStudyTree.addStudyToGameState(`${this.id}`);
     return true;
   }
 

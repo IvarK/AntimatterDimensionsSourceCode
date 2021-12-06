@@ -4,7 +4,7 @@ export function newTreeFromStudyUntil(id, repeatFor201 = true) {
   const newTree = new TimeStudyTree(TimeStudyTree.currentStudies, Currency.timeTheorems.value, V.availableST);
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const requestedPath = TimeStudy(id).path;
-  const currTree = TimeStudyTree.currentTree();
+  const currTree = TimeStudyTree.currentTree;
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
 
@@ -112,6 +112,7 @@ export function respecTimeStudies(auto) {
   if (!auto) {
     Tab.eternity.studies.show();
   }
+  TimeStudyTree.addStudyToGameState();
 }
 
 export class TimeStudyState extends GameMechanicState {

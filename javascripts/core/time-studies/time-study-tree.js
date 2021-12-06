@@ -22,6 +22,8 @@
  *  but don't actually exist; used for informational purposes elsewhere
  * @member {String[]} purchasedStudies   Array of studies which were actually purchased, using the given amount
  *  of available theorems
+ * @static {TimeStudyTree} currentTree   A designated TimeStudyTree object which is initialized to the current state
+ *  of the time study tree in the game and then continually updated to be kept in a consistent state
  */
 export class TimeStudyTree {
   // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
@@ -57,21 +59,35 @@ export class TimeStudyTree {
   static get currentStudies() {
     const currentStudies = player.timestudy.studies.map(s => `${s}`)
       .concat(player.celestials.v.triadStudies.map(s => `T${s}`));
-    if (player.challenge.eternity.current !== 0) currentStudies.push(`EC${player.challenge.eternity.current}`);
+    if (player.challenge.eternity.unlocked !== 0) currentStudies.push(`EC${player.challenge.eternity.unlocked}`);
     return currentStudies;
   }
 
-  // Creates and returns a TimeStudyTree object representing the current state of the time study tree
-  static currentTree() {
-    const currentStudies = player.timestudy.studies.map(s => `${s}`)
-      .concat(player.celestials.v.triadStudies.map(s => `T${s}`));
-    if (player.challenge.eternity.current !== 0) currentStudies.push(`EC${player.challenge.eternity.current}`);
-    // We use Number.MAX_VALUE to guarantee all studies end up getting purchased, but set it properly afterward
-    const currTree = new TimeStudyTree(currentStudies, Number.MAX_VALUE, Number.MAX_VALUE);
-    currTree.theoremBudget =
-      [Decimal.min(Currency.timeTheorems.value.add(currTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
-        currTree.spentTheorems[1] + V.availableST];
-    return currTree;
+  // The existence of this is mildly hacky, but basically we need to initialize currentTree to the study tree's state
+  // from the game state on load. This is called within the on-load code because it piggybacks on a lot of existing
+  // logic (to avoid tons of boilerplate) which itself relies on many parts of the code which haven't been properly
+  // loaded in yet at the time of this class being loaded in
+  static initializeCurrentTree() {
+    const onLoadStudies = this.currentStudies;
+    if (player.challenge.eternity.unlocked !== 0) onLoadStudies.push(`EC${player.challenge.eternity.unlocked}`);
+    this.currentTree = new TimeStudyTree(onLoadStudies, Number.MAX_VALUE, Number.MAX_VALUE);
+    this.currentTree.theoremBudget =
+      [Decimal.min(Currency.timeTheorems.value.add(this.currentTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
+        this.currentTree.spentTheorems[1] + V.availableST];
+  }
+
+  // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
+  // Attempts to buy the specified study; if null, assumed to be a study respec and clears state instead
+  static addStudyToGameState(study) {
+    if (study) {
+      this.currentTree.theoremBudget =
+        [Decimal.min(Currency.timeTheorems.value.add(this.currentTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
+          this.currentTree.spentTheorems[1] + V.availableST];
+      this.currentTree.attemptBuyArray([study]);
+      this.currentTree.commitToGameState();
+    } else {
+      this.currentTree = new TimeStudyTree([], Currency.timeTheorems.value, V.availableST);
+    }
   }
 
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
@@ -83,6 +99,9 @@ export class TimeStudyTree {
       switch (id[1]) {
         case "EC":
           if (!TimeStudy.eternityChallenge(num).isBought) TimeStudy.eternityChallenge(num).purchase(true);
+          break;
+        case "T":
+          if (TriadStudy(num)) TriadStudy(num).purchase();
           break;
         default:
           if (TimeStudy(num)) TimeStudy(num).purchase();
@@ -122,7 +141,7 @@ export class TimeStudyTree {
       this.invalidStudies.push(`${ecID}`);
       return studyArray;
     }
-    studyArray.push(`EC${ecID}`);
+    if (ecID !== 0) studyArray.push(`EC${ecID}`);
     return studyArray;
   }
 

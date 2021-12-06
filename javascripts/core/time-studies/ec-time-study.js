@@ -35,6 +35,7 @@ export class ECTimeStudyState extends TimeStudyState {
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
       Currency.timeTheorems.subtract(this.cost);
+      TimeStudyTree.addStudyToGameState(`EC${this.id}`);
       return true;
     }
     return false;

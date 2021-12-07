@@ -301,9 +301,6 @@ export const AutomatorCommands = ((() => {
           if (entry.children.NumberLiteral) {
             // Single study ID or numerical value
             studyList.push(entry.children.NumberLiteral[0].image);
-          } else if (entry.children.TriadStudy && Ra.pets.v.level >= 5) {
-            // Triad study (this also should be prevented by the general "can't convert errored scripts" if locked)
-            studyList.push(`T${entry.children.TriadStudy[0].image}`);
           } else if (entry.children.StudyPath) {
             // Study path (eg. "time")
             studyList.push(entry.children.StudyPath[0].image);

@@ -86,10 +86,10 @@ export function newTreeFromStudyUntil(id, repeatFor201 = true) {
   newTree.attemptBuyArray(range(211, Math.min(id, 214)));
   newTree.attemptBuyArray([id]);
 
-  // Don't bother buying any more studies at or below row 22 unless the player has fully finished V,
-  // in which case just brute-force all of them
+  // Don't bother buying any more studies at or below row 22 unless the player has fully finished V, in which case just
+  // brute-force all of them up to the specified study. This buys all pre-triads, then triads sequentially up to the id
   if (!V.isFullyCompleted) return newTree;
-  newTree.attemptBuyArray(range(221, 234));
+  newTree.attemptBuyArray(range(221, Math.max(id, 234)));
   return newTree;
 }
 
@@ -103,7 +103,6 @@ export function respecTimeStudies(auto) {
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
   player.celestials.v.STSpent = 0;
-  player.celestials.v.triadStudies = [];
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();

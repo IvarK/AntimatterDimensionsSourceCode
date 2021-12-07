@@ -17,9 +17,14 @@ NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e 
 
 export class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
-    super(config, TIME_STUDY_TYPE.NORMAL);
+    const type = config.id > 300 ? TIME_STUDY_TYPE.TRIAD : TIME_STUDY_TYPE.NORMAL;
+    super(config, type);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
     this._path = path?.path ?? TIME_STUDY_PATH.NONE;
+  }
+
+  get isTriad() {
+    return this.id > 300;
   }
 
   get isBought() {
@@ -69,6 +74,7 @@ export class NormalTimeStudyState extends TimeStudyState {
     player.timestudy.studies.push(this.id);
     player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,
       player.timestudy.studies.length);
+    if (this.id > 300) player.requirementChecks.reality.noTriads = false;
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     TimeStudyTree.addStudyToGameState(`${this.id}`);
@@ -95,7 +101,6 @@ NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefi
  * @returns {NormalTimeStudyState}
  */
 export function TimeStudy(id) {
-  if (/^T[1-4]$/u.test(id)) return TriadStudy(id.slice(1));
   return NormalTimeStudyState.studies[id];
 }
 

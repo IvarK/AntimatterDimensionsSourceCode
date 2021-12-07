@@ -448,7 +448,7 @@ export const Replicanti = {
       return Math.floor((Effects.sum(
         TimeStudy(225),
         TimeStudy(226)
-      ) + Effarig.bonusRG) * TriadStudy(3).effectOrDefault(1));
+      ) + Effarig.bonusRG) * TimeStudy(303).effectOrDefault(1));
     },
     get total() {
       return this.bought + this.extra;

@@ -1,3 +1,5 @@
+import "../eternity/time-studies/tree-import-info.js";
+
 Vue.component("modal-study-string", {
   props: {
     modalConfig: {
@@ -30,7 +32,7 @@ Vue.component("modal-study-string", {
       return {
         timeTheorems: importedTree.spentTheorems[0],
         spaceTheorems: importedTree.spentTheorems[1],
-        newStudies: makeEnumeration(importedTree.purchasedStudies),
+        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => s.id)),
         invalidStudies: importedTree.invalidStudies,
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
@@ -52,7 +54,7 @@ Vue.component("modal-study-string", {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
         newStudies: makeEnumeration(combinedTree.purchasedStudies
-          .filter(s => !currentStudyTree.purchasedStudies.includes(s))),
+          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => s.id)),
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
@@ -78,9 +80,19 @@ Vue.component("modal-study-string", {
       let coloredString = `#${this.truncatedInput}#`;
       if (coloredString.length > 300) coloredString = `${coloredString.slice(0, 297)}...`;
 
-      for (const id of this.importedTree.invalidStudies) {
-        coloredString = coloredString.replaceAll(new RegExp(`(\\D)(${id})(\\D)`, "gu"),
-          `$1<span style="color: var(--color-bad);">$2</span>$3`);
+      for (const study of this.importedTree.invalidStudies) {
+        const id = `${study}`.match(/(EC)?(\d+)/u);
+        const num = parseInt(id[2], 10);
+        switch (id[1]) {
+          case "EC":
+            coloredString = coloredString.replaceAll(new RegExp(`\\|(${num})`, "gu"),
+              `|<span style="color: var(--color-bad);">$1</span>`);
+            break;
+          default:
+            coloredString = coloredString.replaceAll(new RegExp(`(\\D)(${num})(\\D)`, "gu"),
+              `$1<span style="color: var(--color-bad);">$2</span>$3`);
+            break;
+        }
       }
       return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
     },
@@ -111,7 +123,7 @@ Vue.component("modal-study-string", {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       this.emitClose();
-      new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.availableST).commitToGameState();
+      new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems).commitToGameState();
     },
     savePreset() {
       if (this.inputIsValid) {
@@ -168,43 +180,5 @@ Vue.component("modal-study-string", {
       >
         {{ isImporting ? "Import" : "Save" }}
       </primary-button>
-    </div>`
-});
-
-Vue.component("tree-import-info", {
-  props: {
-    tree: {
-      type: Object,
-      required: true,
-    },
-    intoEmpty: {
-      type: Boolean,
-      required: true,
-    }
-  },
-  computed: {
-    importDestString() {
-      return this.intoEmpty ? "into an empty Tree" : "with your current Tree";
-    }
-  },
-  methods: {
-    formatTheoremCost(tt, st) {
-      const strTT = `${formatWithCommas(tt)} TT`;
-      const strST = `${formatWithCommas(st)} ST`;
-      return st === 0 ? strTT : `${strTT} + ${strST}`;
-    }
-  },
-  template: `
-    <div class="l-modal-import-tree__tree-info-line">
-      <div v-if="tree.timeTheorems === 0">
-        <i>Importing this {{ importDestString }} will not purchase any new Time Studies.</i>
-      </div>
-      <div v-else>
-        Importing {{ importDestString }} will purchase:
-        <br>
-        {{ tree.newStudies }}
-        (Cost: {{ formatTheoremCost(tree.timeTheorems, tree.spaceTheorems) }})
-      </div>
-      <br>
     </div>`
 });

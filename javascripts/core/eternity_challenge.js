@@ -38,7 +38,7 @@ class EternityChallengeRewardState extends GameMechanicState {
   }
 }
 
-class EternityChallengeState extends GameMechanicState {
+export class EternityChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);
     this._fullId = `eterc${this.id}`;

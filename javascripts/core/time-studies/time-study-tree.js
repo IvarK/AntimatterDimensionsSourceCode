@@ -1,3 +1,5 @@
+import { TimeStudy } from "./normal-time-study";
+
 /**
  * Abstract representation of a full time study tree object. The intended usage is to supply the constructor with
  * an import string and a budget of time/space theorems, which it will use together to determine which studies can
@@ -12,7 +14,7 @@
  * - The general intent is that the logic in this class is meant to pull minimally from the extrenal game state; for
  *   example, how many dimension paths are allowed or which ECs are unlockable depend on only the data in the tree
  *   object itself and should not depend on the actual current game state
- * - All study entries must be Strings because numbers (normal TS), T# (triads), and EC# (ECs) need to be supported
+ * - All study entries must be Strings because numbers (normal TS) and EC# (ECs) need to be supported
  * 
  * @member {Number[]} theoremBudget      Two-element array containing the maximum allowed TT/ST to be spent on
  *  purchasing specified studies
@@ -20,7 +22,7 @@
  *  purchased after accounting for various conditions which would forbid some being bought (eg. cost or tree structure)
  * @member {String[]} invalidStudies     Array of studies from the initial string which are correctly formatted
  *  but don't actually exist; used for informational purposes elsewhere
- * @member {String[]} purchasedStudies   Array of studies which were actually purchased, using the given amount
+ * @member {TimeStudyState[]} purchasedStudies   Array of studies which were actually purchased, using the given amount
  *  of available theorems
  * @static {TimeStudyTree} currentTree   A designated TimeStudyTree object which is initialized to the current state
  *  of the time study tree in the game and then continually updated to be kept in a consistent state
@@ -52,14 +54,15 @@ export class TimeStudyTree {
   // formatting separately from verifying existence allows us to produce more useful in-game error messages for
   // import strings which are formatted correctly but aren't entirely valid
   static isValidImportString(input) {
-    return /^(\d+|T\d+)(,(\d+|T\d+))*(\|\d+)?$/u.test(input);
+    return /^(\d+)(,(\d+))*(\|\d+)?$/u.test(input);
   }
 
   // Getter for all the studies in the current game state
   static get currentStudies() {
-    const currentStudies = player.timestudy.studies.map(s => `${s}`)
-      .concat(player.celestials.v.triadStudies.map(s => `T${s}`));
-    if (player.challenge.eternity.unlocked !== 0) currentStudies.push(`EC${player.challenge.eternity.unlocked}`);
+    const currentStudies = player.timestudy.studies.map(s => TimeStudy(s));
+    if (player.challenge.eternity.unlocked !== 0) {
+      currentStudies.push(TimeStudy.eternityChallenge(player.challenge.eternity.unlocked));
+    }
     return currentStudies;
   }
 
@@ -69,7 +72,6 @@ export class TimeStudyTree {
   // loaded in yet at the time of this class being loaded in
   static initializeCurrentTree() {
     const onLoadStudies = this.currentStudies;
-    if (player.challenge.eternity.unlocked !== 0) onLoadStudies.push(`EC${player.challenge.eternity.unlocked}`);
     this.currentTree = new TimeStudyTree(onLoadStudies, Number.MAX_VALUE, Number.MAX_VALUE);
     this.currentTree.theoremBudget =
       [Decimal.min(Currency.timeTheorems.value.add(this.currentTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
@@ -80,9 +82,6 @@ export class TimeStudyTree {
   // Attempts to buy the specified study; if null, assumed to be a study respec and clears state instead
   static addStudyToGameState(study) {
     if (study) {
-      this.currentTree.theoremBudget =
-        [Decimal.min(Currency.timeTheorems.value.add(this.currentTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
-          this.currentTree.spentTheorems[1] + V.availableST];
       this.currentTree.attemptBuyArray([study]);
       this.currentTree.commitToGameState();
     } else {
@@ -94,19 +93,7 @@ export class TimeStudyTree {
   // Uses the internal state of this TimeStudyTree to actually try to purchase all the listed studies within
   commitToGameState() {
     for (const study of this.purchasedStudies) {
-      const id = `${study}`.match(/(T|EC)?(\d+)/u);
-      const num = parseInt(id[2], 10);
-      switch (id[1]) {
-        case "EC":
-          if (!TimeStudy.eternityChallenge(num).isBought) TimeStudy.eternityChallenge(num).purchase(true);
-          break;
-        case "T":
-          if (TriadStudy(num)) TriadStudy(num).purchase();
-          break;
-        default:
-          if (TimeStudy(num)) TimeStudy(num).purchase();
-          break;
-      }
+      if (!study.isBought) study.purchase(true);
     }
   }
 
@@ -114,17 +101,10 @@ export class TimeStudyTree {
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
     const treeStudies = input.split("|")[0].split(",");
-    const normalIDs = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
-    const triadIDs = GameDatabase.eternity.timeStudies.triad.map(s => s.id);
-    const doesStudyExist = str => (
-      /^T\d+$/u.test(str)
-        ? triadIDs.includes(parseInt(str.substr(1), 10))
-        : normalIDs.includes(parseInt(str, 10))
-    );
-
+    const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const studyArray = [];
     for (const study of treeStudies) {
-      if (doesStudyExist(study)) studyArray.push(study);
+      if (studyDB.includes(parseInt(study, 10))) studyArray.push(TimeStudy(study));
       else this.invalidStudies.push(study);
     }
 
@@ -138,54 +118,44 @@ export class TimeStudyTree {
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
     if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
-      this.invalidStudies.push(`${ecID}`);
+      this.invalidStudies.push(`EC${ecID}`);
       return studyArray;
     }
-    if (ecID !== 0) studyArray.push(`EC${ecID}`);
+    if (ecID !== 0) studyArray.push(TimeStudy.eternityChallenge(ecID));
     return studyArray;
   }
 
-  // Attempt to purchase all studies specified in the initial import string
+  // Attempt to purchase all studies specified in the array which may be either study IDs (which get converted) or
+  // study objects. The method needs to support both because turning it entirely to studies causes circular references
+  // which make the game fail to load
   attemptBuyArray(studyArray) {
-    const studyDB = GameDatabase.eternity.timeStudies;
     for (const study of studyArray) {
-      const id = `${study}`.match(/^(T|EC)?(\d+)/u);
-      const num = parseInt(id[2], 10);
-      let toBuy;
-      switch (id[1]) {
-        case "T":
-          toBuy = studyDB.triad.find(s => s.id === num);
-          break;
-        case "EC":
-          toBuy = studyDB.ec.find(s => s.id === num);
-          break;
-        default:
-          toBuy = studyDB.normal.find(s => s.id === num);
-      }
-      if (this.canBuySingle(toBuy, study)) this.purchasedStudies.push(`${study}`);
+      const toBuy = typeof study === "object" ? study : TimeStudy(study);
+      if (this.canBuySingle(toBuy)) this.purchasedStudies.push(toBuy);
     }
   }
 
   // Tries to buy a single study, accounting for all various requirements and locking behavior in the game. If the
   // requirement is satisfied, then the running theorem costs will be updated (always) and the remaining usable
   // theorems will be decremented (only if there are enough left to actually purchase)
-  canBuySingle(dbEntry, studyString) {
+  canBuySingle(study) {
     // Import strings can contain repeated or undefined entries
-    if (!dbEntry || this.purchasedStudies.includes(studyString)) return false;
+    if (!study || this.purchasedStudies.includes(study)) return false;
 
     const check = req => (typeof req === "number"
-      ? this.purchasedStudies.includes(`${req}`)
+      ? this.purchasedStudies.includes(TimeStudy(req))
       : req());
+    const config = study.config;
     let reqSatisfied;
-    switch (dbEntry.reqType) {
+    switch (config.reqType) {
       case TS_REQUIREMENT_TYPE.AT_LEAST_ONE:
-        reqSatisfied = dbEntry.requirement.some(r => check(r));
+        reqSatisfied = config.requirement.some(r => check(r));
         break;
       case TS_REQUIREMENT_TYPE.ALL:
-        reqSatisfied = dbEntry.requirement.every(r => check(r));
+        reqSatisfied = config.requirement.every(r => check(r));
         break;
       case TS_REQUIREMENT_TYPE.DIMENSION_PATH:
-        reqSatisfied = dbEntry.requirement.every(r => check(r)) && this.currDimPathCount < this.allowedDimPathCount;
+        reqSatisfied = config.requirement.every(r => check(r)) && this.currDimPathCount < this.allowedDimPathCount;
         break;
       default:
         throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
@@ -193,25 +163,25 @@ export class TimeStudyTree {
     if (!reqSatisfied) return false;
 
     const stDiscount = V.has(V_UNLOCKS.RA_UNLOCK) ? 2 : 0;
-    const stNeeded = dbEntry.STCost && dbEntry.requiresST.some(s => this.purchasedStudies.includes(`${s}`))
-      ? Math.clampMin(dbEntry.STCost - stDiscount, 0)
+    const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
+      ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
-    const canAfford = this.spentTheorems[0] + dbEntry.cost <= this.theoremBudget[0] &&
+    const canAfford = this.spentTheorems[0] + config.cost <= this.theoremBudget[0] &&
       this.spentTheorems[1] + stNeeded <= this.theoremBudget[1];
 
     if (!canAfford) return false;
-    this.spentTheorems[0] += dbEntry.cost;
+    this.spentTheorems[0] += config.cost;
     this.spentTheorems[1] += stNeeded;
     return true;
   }
 
   get currDimPathCount() {
-    return [71, 72, 73].countWhere(x => this.purchasedStudies.includes(`${x}`));
+    return [71, 72, 73].countWhere(x => this.purchasedStudies.includes(TimeStudy(x)));
   }
 
   get allowedDimPathCount() {
     if (DilationUpgrade.timeStudySplit.isBought) return 3;
-    if (this.purchasedStudies.includes("201")) return 2;
+    if (this.purchasedStudies.includes(TimeStudy(201))) return 2;
     return 1;
   }
 
@@ -221,7 +191,7 @@ export class TimeStudyTree {
     for (const path of validPaths) {
       const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
       for (const study of this.purchasedStudies) {
-        if (pathEntry.studies.includes(parseInt(study, 10))) {
+        if (pathEntry.studies.includes(study.id)) {
           pathSet.add(pathEntry.name);
           break;
         }
@@ -236,7 +206,7 @@ export class TimeStudyTree {
     for (const path of validPaths) {
       const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
       for (const study of this.purchasedStudies) {
-        if (pathEntry.studies.includes(parseInt(study, 10))) {
+        if (pathEntry.studies.includes(study.id)) {
           pathSet.add(pathEntry.name);
           break;
         }
@@ -247,13 +217,15 @@ export class TimeStudyTree {
 
   get ec() {
     // This technically takes the very first EC entry if there's more than one, but that shouldn't happen in practice
-    const ecStudies = this.purchasedStudies.filter(r => r.match(/EC(\d+)/u));
-    if (ecStudies.length === 0) return 0;
-    return parseInt(ecStudies[0].match(/EC(\d+)/u)[1], 10);
+    const ecStudies = this.purchasedStudies.find(s => s instanceof ECTimeStudyState);
+    return ecStudies ? ecStudies.id : 0;
   }
 
   // Creates an export string based on all currently purchased studies
   get exportString() {
-    return `${this.purchasedStudies.join(",")}|${this.ec}`;
+    return `${this.purchasedStudies
+      .filter(s => s instanceof NormalTimeStudyState)
+      .map(s => s.id)
+      .join(",")}|${this.ec}`;
   }
 }

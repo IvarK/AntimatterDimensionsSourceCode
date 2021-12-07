@@ -165,7 +165,7 @@ import { AutomatorLexer } from "./lexer.js";
 
     checkTimeStudyNumber(token) {
       const tsNumber = parseFloat(token.image);
-      if (!TimeStudy(tsNumber)) {
+      if (!TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)) {
         this.addError(token, `Invalid Time Study identifier ${tsNumber}`,
           `Make sure you copied or typed in your time study IDs correctly`);
         return 0;
@@ -266,8 +266,7 @@ import { AutomatorLexer } from "./lexer.js";
         studies.length > 1 ||
         studies[0].children.studyRange ||
         studies[0].children.StudyPath ||
-        studies[0].children.Comma ||
-        studies[0].children.TriadStudy
+        studies[0].children.Comma
       ) {
         def.type = AUTOMATOR_VAR_TYPES.STUDIES;
         def.value = this.visit(ctx.studyList);
@@ -316,18 +315,6 @@ import { AutomatorLexer } from "./lexer.js";
         const pathId = ctx.StudyPath[0].tokenType.$studyPath;
         const pathStudies = NormalTimeStudies.paths[pathId];
         studiesOut.push(...pathStudies);
-        return;
-      }
-      if (ctx.TriadStudy) {
-        const triadNumber = parseInt(ctx.TriadStudy[0].image.substr(1), 10);
-        if (Ra.pets.v.level < 5) {
-          this.addError(ctx, "Triad Studies not unlocked",
-            "Unlock the triad studies to use them in the Automator");
-        } else if (triadNumber < 1 || triadNumber > 4) {
-          this.addError(ctx, `Invalid Triad Study ID ${triadNumber}`,
-            `Triad Study ${triadNumber} does not exist, use an integer between ${formatInt(1)} and ${formatInt(4)}`);
-        }
-        studiesOut.push(`T${triadNumber}`);
       }
     }
 

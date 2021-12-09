@@ -25,7 +25,7 @@ export * from "./celestials/V.js";
 export * from "./celestials/ra/ra.js";
 export * from "./celestials/ra/alchemy.js";
 export * from "./celestials/laitela/laitela.js";
-export * from "./celestials/laitela/matter_dimension.js";
+export * from "./celestials/laitela/dark-matter-dimension.js";
 export * from "./celestials/laitela/singularity.js";
 export * from "./celestials/celestials.js";
 

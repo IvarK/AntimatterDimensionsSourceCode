@@ -214,7 +214,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "4th Dark Matter Dimension amount boosts Dark Matter and Dark Energy gain",
-    effect: () => Math.clampMin(MatterDimension(4).amount.pow(0.03).toNumber(), 1),
+    effect: () => Math.clampMin(DarkMatterDimension(4).amount.pow(0.03).toNumber(), 1),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },

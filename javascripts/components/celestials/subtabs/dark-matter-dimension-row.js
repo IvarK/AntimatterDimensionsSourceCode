@@ -1,11 +1,13 @@
-Vue.component("matter-dimension-row", {
+Vue.component("dark-matter-dimension-row", {
   props: {
-    dimension: Object
+    tier: Number
   },
   data() {
     return {
-      tier: 0,
+      isUnlocked: false,
       ascension: 0,
+      hasAscended: false,
+      powerDMPerAscension: 0,
       interval: 0,
       powerDM: new Decimal(0),
       powerDE: 0,
@@ -20,33 +22,21 @@ Vue.component("matter-dimension-row", {
       timer: 0,
       timerPecent: 0,
       intervalAscensionBump: 10000,
+      darkEnergyPerSecond: 0,
       portionDE: 0,
     };
   },
   computed: {
     name() {
-      const suffix = " Dark Matter Dimension";
-      switch (this.tier) {
-        case 0:
-          return `First ${suffix}`;
-        case 1:
-          return `Second ${suffix}`;
-        case 2:
-          return `Third ${suffix}`;
-        case 3:
-          return `Fourth ${suffix}`;
-        default:
-          throw new Error("Invalid Dark Matter Dimension index");
-      }
+      return `${DarkMatterDimension(this.tier).displayName} Dark Matter Dimension`;
     },
     ascensionText() {
-      if (this.ascension === 0) return "";
       return `(⯅${formatInt(this.ascension)})`;
     },
     intervalClassObject() {
       return {
-        "o-matter-dimension-button--available": this.canBuyInterval,
-        "o-matter-dimension-button--ascend": this.isIntervalCapped
+        "o-dark-matter-dimension-button--available": this.canBuyInterval,
+        "o-dark-matter-dimension-button--ascend": this.isIntervalCapped
       };
     },
     intervalText() {
@@ -55,33 +45,43 @@ Vue.component("matter-dimension-row", {
     },
     ascensionTooltip() {
       return `Multiply interval by ${formatInt(this.intervalAscensionBump)}, DM by
-        ${formatInt(this.dimension.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.
+        ${formatInt(this.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.
         After ascension you can upgrade interval even further.`;
     }
   },
   methods: {
     update() {
-      this.tier = this.dimension._tier;
-      this.ascension = this.dimension.ascensions;
-      this.interval = this.dimension.interval;
-      this.powerDM.copyFrom(this.dimension.powerDM);
-      this.powerDE = this.dimension.powerDE;
-      this.intervalCost = this.dimension.intervalCost;
-      this.powerDMCost = this.dimension.powerDMCost;
-      this.powerDECost = this.dimension.powerDECost;
-      this.amount.copyFrom(this.dimension.amount);
-      this.canBuyInterval = this.dimension.canBuyInterval;
-      this.canBuyPowerDM = this.dimension.canBuyPowerDM;
-      this.canBuyPowerDE = this.dimension.canBuyPowerDE;
-      this.isIntervalCapped = this.dimension.interval <= this.dimension.intervalPurchaseCap;
-      this.timer = this.dimension.timeSinceLastUpdate;
+      const dim = DarkMatterDimension(this.tier);
+      this.isUnlocked = dim.isUnlocked;
+      this.ascension = dim.ascensions;
+      this.hasAscended = this.ascension > 0;
+      this.powerDMPerAscension = dim.powerDMPerAscension;
+      this.interval = dim.interval;
+      this.powerDM.copyFrom(dim.powerDM);
+      this.powerDE = dim.powerDE;
+      this.intervalCost = dim.intervalCost;
+      this.powerDMCost = dim.powerDMCost;
+      this.powerDECost = dim.powerDECost;
+      this.amount.copyFrom(dim.amount);
+      this.canBuyInterval = dim.canBuyInterval;
+      this.canBuyPowerDM = dim.canBuyPowerDM;
+      this.canBuyPowerDE = dim.canBuyPowerDE;
+      this.isIntervalCapped = dim.interval <= dim.intervalPurchaseCap;
+      this.timer = dim.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
       this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectValue;
-      this.portionDE = (this.powerDE * 1000 / this.interval) / Laitela.darkEnergyPerSecond;
+      this.darkEnergyPerSecond = dim.productionPerSecond;
+      this.portionDE = this.darkEnergyPerSecond / Currency.darkEnergy.productionPerSecond;
     },
     handleIntervalClick() {
-      if (this.isIntervalCapped) this.dimension.ascend();
-      else this.dimension.buyInterval();
+      if (this.isIntervalCapped) DarkMatterDimension(this.tier).ascend();
+      else DarkMatterDimension(this.tier).buyInterval();
+    },
+    buyPowerDM() {
+      DarkMatterDimension(this.tier).buyPowerDM();
+    },
+    buyPowerDE() {
+      DarkMatterDimension(this.tier).buyPowerDE();
     },
     // All the values are internally Decimals and technically allowed to go above Infinity. This is a special case
     // however; it looks better in-game if we just format it as Infinity instead, as the resource used for these costs
@@ -91,14 +91,14 @@ Vue.component("matter-dimension-row", {
     }
   },
   template: `
-    <div class="c-matter-dimension-container">
-      <div class="o-matter-dimension-amount">
-        {{ name }} {{ ascensionText }}: {{ format(amount, 2) }}
+    <div class="c-dark-matter-dimension-container" v-if="isUnlocked">
+      <div class="o-dark-matter-dimension-amount">
+        {{ name }}<span v-if="hasAscended"> {{ ascensionText }}</span>: {{ format(amount, 2) }}
       </div>
-      <div class="c-matter-dimension-buttons">
+      <div class="c-dark-matter-dimension-buttons">
         <button
-          @click="handleIntervalClick()"
-          class="o-matter-dimension-button"
+          @click="handleIntervalClick"
+          class="o-dark-matter-dimension-button"
           :class="intervalClassObject"
         >
           {{ intervalText }}
@@ -114,16 +114,16 @@ Vue.component("matter-dimension-row", {
           </span>
         </button>
         <button
-          @click="dimension.buyPowerDM()"
-          class="o-matter-dimension-button"
-          :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }"
+          @click="buyPowerDM"
+          class="o-dark-matter-dimension-button"
+          :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDM }"
         >
           DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ formatDMCost(powerDMCost) }}
         </button>
         <button
-          @click="dimension.buyPowerDE()"
-          class="o-matter-dimension-button"
-          :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }"
+          @click="buyPowerDE"
+          class="o-dark-matter-dimension-button"
+          :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDE }"
         >
           DE +{{ format(powerDE, 2, 4) }}
           <br>
@@ -137,7 +137,7 @@ Vue.component("matter-dimension-row", {
         {{ format(1000 / interval, 2, 2) }} ticks / sec
       </div>
       <div>
-        Dark Energy: {{ format(powerDE * 1000 / interval, 2, 4) }}/s ({{ formatPercents(portionDE, 1) }} of total)
+        Dark Energy: {{ format(darkEnergyPerSecond, 2, 4) }}/s ({{ formatPercents(portionDE, 1) }} of total)
       </div>
     </div>`
 });

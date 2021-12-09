@@ -409,10 +409,8 @@ Currency.darkEnergy = new class extends NumberCurrency {
   set value(value) { player.celestials.laitela.darkEnergy = value; }
 
   get productionPerSecond() {
-    return Array.range(1, 4)
-      .map(n => MatterDimension(n))
-      .filter(d => d.amount.gt(0))
-      .map(d => d.powerDE * 1000 / d.interval)
+    return DarkMatterDimensions.all
+      .map(d => d.productionPerSecond)
       .sum();
   }
 }();

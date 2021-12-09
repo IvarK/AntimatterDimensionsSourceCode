@@ -301,9 +301,6 @@ export const AutomatorCommands = ((() => {
           if (entry.children.NumberLiteral) {
             // Single study ID or numerical value
             studyList.push(entry.children.NumberLiteral[0].image);
-          } else if (entry.children.TriadStudy && Ra.pets.v.level >= 5) {
-            // Triad study (this also should be prevented by the general "can't convert errored scripts" if locked)
-            studyList.push(`T${entry.children.TriadStudy[0].image}`);
           } else if (entry.children.StudyPath) {
             // Study path (eg. "time")
             studyList.push(entry.children.StudyPath[0].image);
@@ -704,7 +701,8 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
         return () => {
-          importStudyTree(player.timestudy.presets[presetIndex - 1].studies, true);
+          new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies,
+            Currency.timeTheorems.value, V.availableST).commitToGameState(true);
           AutomatorData.logCommandEvent(`Loaded study ${ctx.Preset[0].image}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };

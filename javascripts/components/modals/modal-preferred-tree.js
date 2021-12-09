@@ -83,7 +83,7 @@ Vue.component("modal-preferred-tree", {
         </button>
       </div>
       <br>
-      <h2>Pace split Preference</h2>
+      <h2>Pace Split Preference</h2>
       <div style="display: flex; flex-direction: row; align-items: center;">
         <button
           v-for="(id, name) in paceOptions"

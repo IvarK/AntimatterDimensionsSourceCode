@@ -46,7 +46,7 @@ Vue.component("time-study", {
     },
     pathClass() {
       switch (this.study.type) {
-        case TimeStudyType.NORMAL:
+        case TIME_STUDY_TYPE.NORMAL:
           switch (this.setup.path) {
             case TIME_STUDY_PATH.ANTIMATTER_DIM: return "o-time-study-antimatter-dim";
             case TIME_STUDY_PATH.INFINITY_DIM: return "o-time-study-infinity-dim";
@@ -58,12 +58,12 @@ Vue.component("time-study", {
             case TIME_STUDY_PATH.DARK: return "o-time-study-dark";
             default: return "o-time-study-normal";
           }
-        case TimeStudyType.ETERNITY_CHALLENGE:
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE:
           return "o-time-study-eternity-challenge";
-        case TimeStudyType.DILATION:
+        case TIME_STUDY_TYPE.DILATION:
           if (this.study.id === 6) return "o-time-study-reality";
           return "o-time-study-dilation";
-        case TimeStudyType.TRIAD:
+        case TIME_STUDY_TYPE.TRIAD:
           return "o-time-study-triad";
       }
       return "";
@@ -92,7 +92,7 @@ Vue.component("time-study", {
     update() {
       const study = this.study;
       this.isBought = study.isBought;
-      this.eternityChallengeRunning = study.type === TimeStudyType.ETERNITY_CHALLENGE &&
+      this.eternityChallengeRunning = study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
         EternityChallenge.current?.id === study.id;
       if (!this.isBought) {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;

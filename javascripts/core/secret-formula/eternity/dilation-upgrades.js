@@ -116,7 +116,7 @@ GameDatabase.eternity.dilation = (function() {
     timeStudySplit: {
       id: 8,
       cost: 1e10,
-      description: "You can buy all three Time Study paths from the first split."
+      description: "You can buy all three Time Study paths from the Dimension Split."
     },
     dilationPenalty: {
       id: 9,

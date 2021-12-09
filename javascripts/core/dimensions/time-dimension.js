@@ -89,7 +89,7 @@ export function timeDimensionCommonMultiplier() {
       TimeStudy(103),
       TimeStudy(151),
       TimeStudy(221),
-      TriadStudy(1),
+      TimeStudy(301),
       EternityChallenge(1).reward,
       EternityChallenge(10).reward,
       EternityUpgrade.tdMultAchs,

@@ -27,7 +27,7 @@ Vue.component("triad-time-study", {
   },
   template: `
     <time-study :setup="setup" class="o-time-study--triad" :showSTCost="true">
-      <HintText type="studies" class="l-hint-text--time-study">T{{ id }}</HintText>
+      <HintText type="studies" class="l-hint-text--time-study">{{ id }} Triad</HintText>
       <DescriptionDisplay :config="study.config" />
       <EffectDisplay
         br

@@ -354,6 +354,9 @@ export const Ra = {
   get chargeUnlocked() {
     return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
   },
+  get canBuyTriad() {
+    return this.pets.v.level >= 5;
+  },
   get petWithRecollection() {
     return player.celestials.ra.petWithRecollection;
   },

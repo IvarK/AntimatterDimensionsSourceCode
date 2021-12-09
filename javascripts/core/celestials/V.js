@@ -218,7 +218,6 @@ export const V = {
       run: false,
       quotes: [],
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      triadStudies: [],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],

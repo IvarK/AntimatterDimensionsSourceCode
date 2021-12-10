@@ -73,6 +73,13 @@ export class TimeStudyTree {
   static initializeCurrentTree() {
     const onLoadStudies = this.currentStudies;
     this.currentTree = new TimeStudyTree(onLoadStudies, Number.MAX_VALUE, Number.MAX_VALUE);
+    TimeStudyTree.updateCurrentTheoremBudget();
+  }
+
+  // The theorem budget doesn't update dynamically because generically we want Tree objects to track fixed budgets. For
+  // the current Tree object, we need to set it properly here
+  static updateCurrentTheoremBudget() {
+    if (!this.currentTree) return;
     this.currentTree.theoremBudget =
       [Decimal.min(Currency.timeTheorems.value.add(this.currentTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
         this.currentTree.spentTheorems[1] + V.availableST];
@@ -81,6 +88,7 @@ export class TimeStudyTree {
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // Attempts to buy the specified study; if null, assumed to be a study respec and clears state instead
   static addStudyToGameState(study) {
+    TimeStudyTree.updateCurrentTheoremBudget();
     if (study) {
       this.currentTree.attemptBuyArray([study]);
       this.currentTree.commitToGameState();

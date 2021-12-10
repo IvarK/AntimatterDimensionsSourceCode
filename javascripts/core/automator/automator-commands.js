@@ -625,7 +625,6 @@ export const AutomatorCommands = ((() => {
           for (const tsNumber of studies.normal) {
             if (TimeStudy(tsNumber).isBought) continue;
             if (!TimeStudy(tsNumber).purchase()) {
-              if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
               if (purchasedStudies > 0) {
                 AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)}
                 and stopped at study ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);

@@ -48,7 +48,10 @@ export class NormalTimeStudyState extends TimeStudyState {
       case TS_REQUIREMENT_TYPE.ALL:
         return this.config.requirement.every(r => check(r));
       case TS_REQUIREMENT_TYPE.DIMENSION_PATH:
-        return this.config.requirement.every(r => check(r)) && currTree.currDimPathCount < currTree.allowedDimPathCount;
+        // In some cases of loading, sometimes the current tree might be undefined when this code is executed. The
+        // exact situations seem unclear, but it may be an interaction between the automator and offline progress
+        return this.config.requirement.every(r => check(r)) && currTree &&
+          currTree.currDimPathCount < currTree.allowedDimPathCount;
       default:
         throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
     }
@@ -69,6 +72,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
+    TimeStudyTree.updateCurrentTheoremBudget();
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
     if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
@@ -77,7 +81,7 @@ export class NormalTimeStudyState extends TimeStudyState {
     if (this.id > 300) player.requirementChecks.reality.noTriads = false;
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
-    TimeStudyTree.addStudyToGameState(`${this.id}`);
+    TimeStudyTree.addStudyToGameState(this.id);
     return true;
   }
 

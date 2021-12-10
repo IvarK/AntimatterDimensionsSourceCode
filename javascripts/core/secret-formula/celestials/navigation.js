@@ -1448,7 +1448,7 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-3rd-dim-left": {
+    "laitela-3rd-dim": {
       visible: () => DarkMatterDimension(2).isUnlocked && Currency.singularities.gte(1),
       complete: () => {
         const upgrade = DarkMatterDimension(3).unlockUpgrade;
@@ -1501,41 +1501,24 @@ GameDatabase.celestials.navigation = (function() {
           horizontal: 16,
         },
       },
-      connector: {
-        pathStart: 0.10,
-        pathEnd: 0.89,
-        path: new LinearPath(Positions.laitelaFirstLeft, Positions.laitelaSecondCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    },
-    "laitela-3rd-dim-right": {
-      visible: () => DarkMatterDimension(2).isUnlocked && Currency.singularities.gte(1),
-      complete: () => {
-        const upgrade = DarkMatterDimension(3).unlockUpgrade;
-        if (upgrade.canBeBought || upgrade.isBought) return 1;
-        if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        if (!player.celestials.laitela.automation.singularity) return 0.5;
-        return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
-      },
-      node: {
-        clickAction: () => Tab.celestials.laitela.show(true),
-        fill: "white",
-        position: Positions.laitelaSecondCenter,
-        isStacked: true,
-        ring: {
-          rMajor: 0,
-        }
-      },
-      connector: {
-        pathStart: 0.10,
-        pathEnd: 0.89,
-        path: new LinearPath(Positions.laitelaFirstRight, Positions.laitelaSecondCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
+      connector: [
+        {
+          pathStart: 0.10,
+          pathEnd: 0.89,
+          path: new LinearPath(Positions.laitelaFirstLeft, Positions.laitelaSecondCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
+        }, {
+          pathStart: 0.10,
+          pathEnd: 0.89,
+          path: new LinearPath(Positions.laitelaFirstRight, Positions.laitelaSecondCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
+
+        },
+      ],
     },
     "laitela-4th-dim": {
       visible: () => DarkMatterDimension(3).isUnlocked,
@@ -1630,7 +1613,7 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       },
     },
-    "laitela-destabilization-left": {
+    "laitela-destabilization": {
       visible: () => DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
       complete: () => Laitela.difficultyTier / 8,
       node: {
@@ -1662,34 +1645,23 @@ GameDatabase.celestials.navigation = (function() {
           horizontal: 8,
         },
       },
-      connector: {
-        pathStart: 0.11,
-        pathEnd: 0.83,
-        path: new LinearPath(Positions.laitelaSecondLeft, Positions.laitelaThirdCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    },
-    "laitela-destabilization-right": {
-      visible: () => DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
-      complete: () => Laitela.difficultyTier / 8,
-      node: {
-        fill: "white",
-        position: Positions.laitelaThirdCenter,
-        isStacked: true,
-        ring: {
-          rMajor: 0,
+      connector: [
+        {
+          pathStart: 0.11,
+          pathEnd: 0.83,
+          path: new LinearPath(Positions.laitelaSecondLeft, Positions.laitelaThirdCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
+        }, {
+          pathStart: 0.11,
+          pathEnd: 0.83,
+          path: new LinearPath(Positions.laitelaSecondRight, Positions.laitelaThirdCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
         }
-      },
-      connector: {
-        pathStart: 0.11,
-        pathEnd: 0.83,
-        path: new LinearPath(Positions.laitelaSecondRight, Positions.laitelaThirdCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    }
+      ]
+    },
   };
 }());

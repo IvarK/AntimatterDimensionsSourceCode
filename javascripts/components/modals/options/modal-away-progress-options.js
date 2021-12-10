@@ -30,7 +30,7 @@ Vue.component("modal-away-progress-options", {
         update() {
           const type = this.type;
           this.setting = type.option;
-          this.isVisible = type.isUnlocked;
+          this.isVisible = type.isUnlocked();
         }
       },
       template: `

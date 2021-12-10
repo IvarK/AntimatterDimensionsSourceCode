@@ -1,4 +1,10 @@
 Vue.component("modal-sacrifice", {
+  data() {
+    return {
+      currentMultiplier: new Decimal(0),
+      nextMultiplier: new Decimal(0),
+    };
+  },
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
     this.on$(GAME_EVENT.GALAXY_RESET_AFTER, this.emitClose);
@@ -16,14 +22,18 @@ Vue.component("modal-sacrifice", {
         1st Antmatter Dimensions you had at the time of Sacrificing.`;
     },
     currently() {
-      return `Multiplier is currently ${formatX(Sacrifice.totalBoost, 2, 2)}.`;
+      return `Multiplier is currently ${formatX(this.currentMultiplier, 2, 2)}.`;
     },
     afterSacrifice() {
-      return `Multiplier will increase to ${formatX(Sacrifice.nextBoost.times(Sacrifice.totalBoost), 2, 2)}
+      return `Multiplier will increase to ${formatX(this.nextMultiplier, 2, 2)}
         on Dimensional Sacrifice.`;
     }
   },
   methods: {
+    update() {
+      this.currentMultiplier.copyFrom(Sacrifice.totalBoost);
+      this.nextMultiplier.copyFrom(Sacrifice.nextBoost.times(Sacrifice.totalBoost));
+    },
     handleNoClick() {
       this.emitClose();
     },

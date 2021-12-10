@@ -1,5 +1,5 @@
 Vue.component('pelle-tab', {
-  data: function() {
+  data() {
     return {
 
     };

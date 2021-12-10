@@ -667,12 +667,17 @@ window.player = {
       resetReality: true,
       glyphReplace: true,
       glyphSacrifice: true,
+      autoClean: true,
       glyphSelection: true,
       harshAutoClean: true,
       glyphUndo: true,
       resetCelestial: true,
       deleteGlyphSetSave: true,
       glyphRefine: true,
+      bigCrunch: true,
+      replicantiGalaxy: true,
+      antimatterGalaxy: true,
+      dimensionBoost: true
     },
     awayProgress: {
       antimatter: true,

@@ -8,36 +8,13 @@ Vue.component("antimatter-dim-boost-row", {
       isBuyable: false,
       purchasedBoosts: 0,
       imaginaryBoosts: 0,
-      lockText: null
+      lockText: null,
+      unlockedByBoost: null
     };
   },
   computed: {
     dimName() {
       return AntimatterDimension(this.requirement.tier).displayName;
-    },
-    buttonText() {
-      const boosts = this.purchasedBoosts;
-
-      let newUnlock = "";
-      if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
-        newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
-        newUnlock = "unlock Sacrifice";
-      }
-
-      const formattedMultText = `give a ${formatX(DimBoost.power, 2, 1)} multiplier `;
-      let dimensionRange = `to the 1st Dimension`;
-      if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
-      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
-
-      let boostEffects = "";
-      if (NormalChallenge(8).isRunning) boostEffects = ` to ${newUnlock}`;
-      else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
-      else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
-
-      return this.lockText === null
-        ? `Reset your Dimensions${boostEffects}`
-        : this.lockText;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
@@ -63,8 +40,14 @@ Vue.component("antimatter-dim-boost-row", {
       this.purchasedBoosts = DimBoost.purchasedBoosts;
       this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
+      this.unlockedByBoost = DimBoost.unlockedByBoost;
     },
     dimensionBoost(bulk) {
+      if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
+      if (player.options.confirmations.dimensionBoost) {
+        Modal.dimensionBoost.show({ bulk });
+        return;
+      }
       requestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
@@ -82,7 +65,7 @@ Vue.component("antimatter-dim-boost-row", {
         @click.exact="dimensionBoost(true)"
         @click.shift.exact="dimensionBoost(false)"
       >
-        {{ buttonText }}
+        {{ unlockedByBoost }}
       </primary-button>
     </div>`
 });

@@ -20,7 +20,8 @@ Vue.component("replicanti-tab", {
       distantRG: 0,
       remoteRG: 0,
       effarigInfinityBonusRG: 0,
-      nextEffarigRGThreshold: 0
+      nextEffarigRGThreshold: 0,
+      canSeeGalaxyButton: false,
     };
   },
   computed: {
@@ -103,6 +104,7 @@ Vue.component("replicanti-tab", {
       this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
       this.nextEffarigRGThreshold = Decimal.NUMBER_MAX_VALUE.pow(Effarig.bonusRG + 2);
+      this.canSeeGalaxyButton = Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
     }
   },
   template: `
@@ -150,7 +152,7 @@ Vue.component("replicanti-tab", {
         <br><br>
         <replicanti-gain-text />
         <br>
-        <replicanti-galaxy-button />
+        <replicanti-galaxy-button v-if="canSeeGalaxyButton" />
       </template>
     </div>`
 });

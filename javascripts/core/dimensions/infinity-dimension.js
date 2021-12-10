@@ -280,12 +280,13 @@ export const InfinityDimensions = {
   all: InfinityDimension.index.compact(),
   HARDCAP_PURCHASES: 2000000,
 
-  unlockNext() {
+  unlockNext(switchTab) {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
     if (!Perk.bypassIDAntimatter.isBought && player.records.thisEternity.maxAM.lt(next.requirement)) return;
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
+    if (switchTab) Tab.dimensions.infinity.show();
   },
 
   next() {

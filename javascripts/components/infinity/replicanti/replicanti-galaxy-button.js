@@ -46,6 +46,11 @@ Vue.component("replicanti-galaxy-button", {
     handleAutoToggle(value) {
       Autobuyer.replicantiGalaxy.isActive = value;
       this.update();
+    },
+    handleClick() {
+      if (!this.isAvailable) return;
+      if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+      else replicantiGalaxy();
     }
   },
   template: `
@@ -53,7 +58,7 @@ Vue.component("replicanti-galaxy-button", {
       <primary-button
         :enabled="isAvailable"
         class="o-primary-btn--replicanti-galaxy"
-        onclick="replicantiGalaxy()"
+        @click="handleClick"
       >
         {{ resetActionDisplay }} for a Replicanti Galaxy
         <br>

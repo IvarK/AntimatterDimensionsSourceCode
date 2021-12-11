@@ -1,4 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
 
 Vue.component("options-gameplay-tab", {
   components: {
@@ -12,6 +13,7 @@ Vue.component("options-gameplay-tab", {
           @click="emitClick"
         ><slot /></PrimaryButton>`
     },
+    PrimaryButtonOnOffCustom
   },
   // This puts the slider in the right spot on initialization
   created() {
@@ -88,7 +90,7 @@ Vue.component("options-gameplay-tab", {
             class="o-primary-btn--option l-options-grid__button"
             text="Offline progress:"
           />
-          <primary-button-on-off-custom
+          <PrimaryButtonOnOffCustom
             v-model="hotkeys"
             class="o-primary-btn--option l-options-grid__button"
             on="Hotkeys: Enabled"

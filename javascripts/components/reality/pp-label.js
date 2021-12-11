@@ -1,4 +1,9 @@
+import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
+
 Vue.component("pp-label", {
+  components: {
+    PrimaryButtonOnOffCustom
+  },
   data() {
     return {
       pp: 0,
@@ -31,13 +36,13 @@ Vue.component("pp-label", {
       Diamond-shaped perks also give Automator Points.
       <br>
       <div>
-        <primary-button-on-off-custom
+        <PrimaryButtonOnOffCustom
           v-model="fixedLoadPos"
           class="o-primary-btn"
           on="Starting tree layout: Untangled"
           off="Starting tree layout: Random Positions"
         />
-        <primary-button-on-off-custom
+        <PrimaryButtonOnOffCustom
           v-model="physicsEnabled"
           class="o-primary-btn"
           on="Physics: Enabled"

@@ -1,8 +1,10 @@
 import ButtonOnOff from "@/components/ButtonOnOff";
+import ButtonCycle from "@/components/ButtonCycle";
 
 Vue.component("glyph-autosort-button-group", {
   components: {
-    ButtonOnOff
+    ButtonOnOff,
+    ButtonCycle
   },
   data() {
     return {
@@ -49,7 +51,7 @@ Vue.component("glyph-autosort-button-group", {
         <div class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
         Automatic Glyph Arrangement:
       </div>
-      <button-cycle
+      <ButtonCycle
         v-model="autoSort"
         class="c-glyph-inventory-option"
         text="Auto-sort Mode:"

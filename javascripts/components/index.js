@@ -1,5 +1,3 @@
-import "./common/primary-button.js";
-
 import "./dimensions/antimatter/antimatter-dim-tab.js";
 import "./dimensions/infinity/infinity-dim-tab.js";
 import "./dimensions/time/time-dim-tab.js";

@@ -1,4 +1,9 @@
+import ButtonOnOff from "@/components/ButtonOnOff";
+
 Vue.component("glyph-protected-row-button-group", {
+  components: {
+    ButtonOnOff
+  },
   data() {
     return {
       protectedRows: 0,
@@ -47,7 +52,7 @@ Vue.component("glyph-protected-row-button-group", {
       >
         Remove a protected row
       </button>
-      <button-on-off
+      <ButtonOnOff
         v-model="moveGlyphs"
         class="c-glyph-inventory-option"
         text="Move Glyphs on changing row count:"

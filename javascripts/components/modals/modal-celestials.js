@@ -24,7 +24,7 @@ Vue.component("modal-celestials", {
       },
       template: `
         <span :style="color" v-if="isUnlocked">
-          {{ name }} gains Memories Chunks based on {{ chunkGain }}.
+          {{ name }} gains Memory Chunks based on {{ chunkGain }}.
           <br>
         </span>`
     },

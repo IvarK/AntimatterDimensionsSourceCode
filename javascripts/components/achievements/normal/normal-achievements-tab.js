@@ -1,4 +1,5 @@
 import "./normal-achievement-row.js";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("normal-achievements-tab", {
   components: {
@@ -31,7 +32,8 @@ Vue.component("normal-achievements-tab", {
       },
       template: `
         <span @click="swapImages" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>`
-    }
+    },
+    PrimaryButtonOnOff
   },
   data() {
     return {
@@ -144,12 +146,12 @@ Vue.component("normal-achievements-tab", {
   template: `
     <div class="l-achievements-tab">
       <div class="c-subtab-option-container">
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           v-model="hideCompletedRows"
           class="o-primary-btn--subtab-option"
           text="Hide completed rows:"
         />
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           v-if="showAutoAchieve"
           v-model="isAutoAchieveActive"
           class="o-primary-btn--subtab-option"

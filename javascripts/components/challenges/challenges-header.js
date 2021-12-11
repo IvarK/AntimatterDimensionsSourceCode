@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("challenges-header", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    PrimaryButtonOnOff
   },
   data() {
     return {
@@ -57,13 +59,13 @@ Vue.component("challenges-header", {
   template: `
     <div class="l-challenges-tab__header">
       <div class="c-subtab-option-container" v-if="isShowAllVisible || isAutoECVisible || isInChallenge">
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           v-if="isShowAllVisible"
           v-model="showAllChallenges"
           class="o-primary-btn--subtab-option"
           text="Show all known challenges:"
         />
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           v-if="isAutoECVisible"
           v-model="autoEC"
           class="o-primary-btn--subtab-option"

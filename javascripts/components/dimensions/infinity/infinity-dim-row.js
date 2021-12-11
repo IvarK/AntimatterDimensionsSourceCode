@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("infinity-dim-row", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    PrimaryButtonOnOff
   },
   props: {
     tier: Number
@@ -137,7 +139,7 @@ Vue.component("infinity-dim-row", {
       >
         {{ costDisplay }}
       </PrimaryButton>
-      <primary-button-on-off
+      <PrimaryButtonOnOff
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
         class="o-primary-btn--id-autobuyer l-dim-row__button"

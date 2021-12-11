@@ -1,4 +1,9 @@
+import ButtonOnOff from "@/components/ButtonOnOff";
+
 Vue.component("glyph-autosort-button-group", {
+  components: {
+    ButtonOnOff
+  },
   data() {
     return {
       autoSort: 0,
@@ -50,12 +55,12 @@ Vue.component("glyph-autosort-button-group", {
         text="Auto-sort Mode:"
         :labels="sortModes"
       />
-      <button-on-off
+      <ButtonOnOff
         v-model="autoCollapse"
         class="c-glyph-inventory-option"
         text="Auto-collapse space:"
       />
-      <button-on-off
+      <ButtonOnOff
         v-if="showAutoAutoClean"
         v-model="autoAutoClean"
         class="c-glyph-inventory-option"

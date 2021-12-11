@@ -49,7 +49,7 @@ export class ECTimeStudyState extends TimeStudyState {
       111, 123, 151,
       181, 212, 214
     ];
-    buyStudiesUntil(studiesToBuy[this.id]);
+    TimeStudyTree.commitToGameState(buyStudiesUntil(studiesToBuy[this.id]));
     // For EC 11 and 12, we can't choose between light and dark, but we can buy the
     // pair of row 21 things
     if (this.id === 11) {
@@ -105,11 +105,8 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get isSecondaryRequirementMet() {
-    if (this.id === 11) {
-      return !TimeStudy(72).isBought && !TimeStudy(73).isBought;
-    }
-    if (this.id === 12) {
-      return !TimeStudy(71).isBought && !TimeStudy(72).isBought;
+    if (this.config.secondary.forbiddenStudies) {
+      return !this.config.secondary.forbiddenStudies.some(s => TimeStudy(s).isBought);
     }
     const current = this.requirementCurrent;
     const total = this.requirementTotal;

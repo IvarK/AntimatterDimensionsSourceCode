@@ -31,12 +31,11 @@ Vue.component("modal-study-string", {
     // This represents the state reached from importing into an empty tree
     importedTree() {
       if (!this.inputIsValidTree) return false;
-      const importedTree = new TimeStudyTree(this.truncatedInput, false);
-      const studyMap = study => (study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`);
+      const importedTree = new TimeStudyTree(this.truncatedInput);
       return {
         timeTheorems: importedTree.spentTheorems[0],
         spaceTheorems: importedTree.spentTheorems[1],
-        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => studyMap(s))),
+        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => this.studyString(s))),
         invalidStudies: importedTree.invalidStudies,
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
@@ -48,19 +47,22 @@ Vue.component("modal-study-string", {
     combinedTree() {
       if (!this.inputIsValidTree) return false;
       const currentStudyTree = GameCache.currentStudyTree.value;
-      const combinedTree = new TimeStudyTree([], true);
-      combinedTree.attemptBuyArray(TimeStudyTree.currentStudies);
-      combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput));
-      const studyMap = study => (study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`);
+      const combinedTree = this.combinedTreeObject;
       return {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
         newStudies: makeEnumeration(combinedTree.purchasedStudies
-          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => studyMap(s))),
+          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s))),
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
       };
+    },
+    combinedTreeObject() {
+      const combinedTree = new TimeStudyTree();
+      combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
+      combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput), true);
+      return combinedTree;
     },
     // We show information about the after-load tree, but which tree (imported from empty vs combined) info is shown
     // depends on if we're importing vs editing
@@ -125,8 +127,9 @@ Vue.component("modal-study-string", {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       this.emitClose();
-      const imported = new TimeStudyTree(this.truncatedInput, false);
-      TimeStudyTree.commitToGameState(imported.purchasedStudies);
+      // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
+      // tree are only reachable if the current tree is already bought
+      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies);
     },
     savePreset() {
       if (this.inputIsValid) {
@@ -135,6 +138,9 @@ Vue.component("modal-study-string", {
         this.emitClose();
       }
     },
+    studyString(study) {
+      return study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`;
+    }
   },
   template: `
     <div class="c-modal-import-tree l-modal-content--centered">
@@ -165,13 +171,13 @@ Vue.component("modal-study-string", {
             <b>Tree status after loading:</b>
           </div>
           <div v-if="treeStatus.firstPaths" class="l-modal-import-tree__tree-info-line">
-            Dimension split: {{ treeStatus.firstPaths }}
+            Dimension Split: {{ treeStatus.firstPaths }}
           </div>
           <div v-if="treeStatus.secondPaths" class="l-modal-import-tree__tree-info-line">
-            Pace split: {{ treeStatus.secondPaths }}
+            Pace Split: {{ treeStatus.secondPaths }}
           </div>
           <div v-if="treeStatus.ec > 0" class="l-modal-import-tree__tree-info-line">
-            Eternity challenge: {{ treeStatus.ec }}
+            Eternity Challenge: {{ treeStatus.ec }}
           </div>
         </template>
         <div v-else-if="hasInput">Not a valid tree</div>

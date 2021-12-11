@@ -14,8 +14,6 @@
  *   object itself and should not depend on the actual current game state
  * - All study entries must be Strings because numbers (normal TS) and EC# (ECs) need to be supported
  * 
- * @member {Boolean} checkCosts          Boolean denoting whether or not costs of studies should be checked or not
- *  when attempting to buy studies; if true, uses current total theorem counts to determine affordability
  * @member {Number[]} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
  *  purchased after accounting for various conditions which would forbid some being bought (eg. cost or tree structure)
  * @member {String[]} invalidStudies     Array of studies from the initial string which are correctly formatted
@@ -25,8 +23,7 @@
  */
 export class TimeStudyTree {
   // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
-  constructor(studies, checkCosts) {
-    this.checkCosts = checkCosts;
+  constructor(studies) {
     this.spentTheorems = [0, 0];
     this.invalidStudies = [];
     this.purchasedStudies = [];
@@ -34,14 +31,19 @@ export class TimeStudyTree {
       case "string":
         // Input parameter is an unparsed study import string
         if (TimeStudyTree.isValidImportString(studies)) {
-          this.attemptBuyArray(this.parseStudyImport(studies));
+          this.attemptBuyArray(this.parseStudyImport(studies), false);
         }
         break;
       case "object":
         // Input parameter is an array of Strings assumed to be already formatted as expected in the parsing method.
         // This allows code for combining trees to look simpler and more readable
-        this.attemptBuyArray([...studies]);
+        this.attemptBuyArray([...studies], false);
         break;
+      case "undefined":
+        // If not supplied with anything, we leave everything at default values and don't attempt to buy anything
+        break;
+      default:
+        throw new Error("Unrecognized input parameter for TimeStudyTree constructor");
     }
   }
 
@@ -103,17 +105,17 @@ export class TimeStudyTree {
   // Attempt to purchase all studies specified in the array which may be either study IDs (which get converted) or
   // study objects. The method needs to support both because turning it entirely to studies causes circular references
   // which make the game fail to load
-  attemptBuyArray(studyArray) {
+  attemptBuyArray(studyArray, checkCosts) {
     for (const study of studyArray) {
       const toBuy = typeof study === "object" ? study : TimeStudy(study);
-      if (this.canBuySingle(toBuy)) this.purchasedStudies.push(toBuy);
+      if (this.canBuySingle(toBuy, checkCosts)) this.purchasedStudies.push(toBuy);
     }
   }
 
   // Tries to buy a single study, accounting for all various requirements and locking behavior in the game. If the
   // requirement is satisfied, then the running theorem costs will be updated (always) and the remaining usable
   // theorems will be decremented (only if there are enough left to actually purchase)
-  canBuySingle(study) {
+  canBuySingle(study, checkCosts) {
     // Import strings can contain repeated or undefined entries
     if (!study || this.purchasedStudies.includes(study)) return false;
 
@@ -135,13 +137,21 @@ export class TimeStudyTree {
       default:
         throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
     }
+    if (study instanceof ECTimeStudyState) {
+      if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) return false;
+      const forbiddenStudies = study.config.secondary.forbiddenStudies ?? [];
+      const hasForbiddenStudies = Perk.studyECRequirement.isBought
+        ? false
+        : forbiddenStudies.some(s => this.purchasedStudies.includes(TimeStudy(s)));
+      reqSatisfied = reqSatisfied && study.canBeBought && !hasForbiddenStudies;
+    }
     if (!reqSatisfied) return false;
 
     const stDiscount = V.has(V_UNLOCKS.RA_UNLOCK) ? 2 : 0;
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
-    if (this.checkCosts) {
+    if (checkCosts) {
       const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0])
         .clampMax(Number.MAX_VALUE).toNumber();
       const maxST = V.spaceTheorems;

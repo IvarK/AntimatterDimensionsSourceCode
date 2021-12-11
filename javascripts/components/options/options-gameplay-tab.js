@@ -1,4 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
 
 Vue.component("options-gameplay-tab", {
@@ -13,7 +14,8 @@ Vue.component("options-gameplay-tab", {
           @click="emitClick"
         ><slot /></PrimaryButton>`
     },
-    PrimaryButtonOnOffCustom
+    PrimaryButtonOnOffCustom,
+    PrimaryButtonOnOff
   },
   // This puts the slider in the right spot on initialization
   created() {
@@ -80,12 +82,12 @@ Vue.component("options-gameplay-tab", {
     <div class="l-options-tab">
       <div class="l-options-grid">
         <div class="l-options-grid__row">
-          <primary-button-on-off
+          <PrimaryButtonOnOff
             v-model="retryChallenge"
             class="o-primary-btn--option l-options-grid__button"
             text="Automatically retry challenges:"
           />
-          <primary-button-on-off
+          <PrimaryButtonOnOff
             v-model="offlineProgress"
             class="o-primary-btn--option l-options-grid__button"
             text="Offline progress:"
@@ -122,7 +124,7 @@ Vue.component("options-gameplay-tab", {
               max="54"
             />
           </div>
-          <primary-button-on-off
+          <PrimaryButtonOnOff
             v-model="automaticTabSwitching"
             class="o-primary-btn--option l-options-grid__button"
             style="font-size: 12px;"

@@ -1,6 +1,10 @@
 import "./hover-menu.js";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("tt-shop", {
+  components: {
+    PrimaryButtonOnOff
+  },
   data() {
     return {
       theoremAmount: new Decimal(0),
@@ -156,7 +160,7 @@ Vue.component("tt-shop", {
             >
               Buy max
             </button>
-            <primary-button-on-off
+            <PrimaryButtonOnOff
               v-if="!minimized && hasTTAutobuyer"
               v-model="isAutobuyerOn"
               class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"

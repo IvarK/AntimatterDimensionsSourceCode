@@ -3,6 +3,7 @@ import "./select-notation.js";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("options-visual-tab", {
   components: {
@@ -38,6 +39,7 @@ Vue.component("options-visual-tab", {
           />
         </div>`
     },
+    PrimaryButtonOnOff,
     ExpandingControlBox,
     PrimaryButtonOnOffCustom
   },
@@ -152,7 +154,7 @@ Vue.component("options-visual-tab", {
           >
             Modify Visible Tabs
           </options-button>
-          <primary-button-on-off
+          <PrimaryButtonOnOff
             v-model="headerTextColored"
             class="o-primary-btn--option l-options-grid__button"
             text="Relative prestige gain text coloring:"

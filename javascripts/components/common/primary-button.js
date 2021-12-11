@@ -14,23 +14,6 @@ Vue.component("button-on-off", {
     `<button v-bind="$attrs" @click="emitInput(!value)">{{ displayText }}</button>`
 });
 
-Vue.component("primary-button-on-off", {
-  components: {
-    PrimaryButton
-  },
-  props: {
-    text: String,
-    value: Boolean
-  },
-  computed: {
-    displayText() {
-      return `${this.text} ${this.value ? "ON" : "OFF"}`.trim();
-    }
-  },
-  template:
-    `<PrimaryButton v-bind="$attrs" @click="emitInput(!value)">{{ displayText }}</PrimaryButton>`
-});
-
 Vue.component("button-cycle", {
   props: {
     text: String,

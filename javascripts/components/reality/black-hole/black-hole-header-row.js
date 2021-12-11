@@ -1,4 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("black-hole-status-text", {
   props: {
@@ -30,7 +31,8 @@ Vue.component("black-hole-status-text", {
 
 Vue.component("black-hole-header-row", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    PrimaryButtonOnOff
   },
   data() {
     return {
@@ -123,7 +125,7 @@ Vue.component("black-hole-header-row", {
         </PrimaryButton>
       </span>
       <span v-if="canAutoRelease">
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           v-model="isAutoReleasing"
           class="o-primary-btn--buy-max"
           text="Pulse:"

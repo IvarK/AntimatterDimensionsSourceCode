@@ -1,3 +1,5 @@
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+
 Vue.component("modal-options", {
   template: `
     <div class="c-modal-options l-modal-options">
@@ -30,9 +32,12 @@ export const modalOptionsMixin = {
   },
   components: {
     "on-off-button": {
+      components: {
+        PrimaryButtonOnOff
+      },
       props: ["value", "text"],
       template: `
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           :value="value"
           :text="text"
           @input="emitInput"
@@ -40,9 +45,12 @@ export const modalOptionsMixin = {
         />`
     },
     "wide-on-off-button": {
+      components: {
+        PrimaryButtonOnOff
+      },
       props: ["value", "text"],
       template: `
-        <primary-button-on-off
+        <PrimaryButtonOnOff
           :value="value"
           :text="text"
           @input="emitInput"

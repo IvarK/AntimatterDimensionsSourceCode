@@ -1,4 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
 
 Vue.component("options-saving-tab", {
   components: {
@@ -33,7 +34,8 @@ Vue.component("options-saving-tab", {
             @input="emitInput(parseInt($event.target.value))"
           />
         </div>`
-    }
+    },
+    PrimaryButtonOnOff
   },
   data() {
     return {
@@ -122,7 +124,7 @@ Vue.component("options-saving-tab", {
             <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
             <label for="file">Import save from file</label>
           </options-button>
-          <primary-button-on-off
+          <PrimaryButtonOnOff
             v-model="showTimeSinceSave"
             class="o-primary-btn--option l-options-grid__button"
             text="Display time since save:"
@@ -146,7 +148,7 @@ Vue.component("options-saving-tab", {
           >
             Cloud load
           </options-button>
-          <primary-button-on-off
+          <PrimaryButtonOnOff
             class="o-primary-btn--option l-options-grid__button"
             v-model="cloudEnabled"
             text="Automatic cloud saving/loading:"

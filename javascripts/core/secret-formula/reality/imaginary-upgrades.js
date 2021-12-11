@@ -17,7 +17,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 1,
       initialCost: 3,
       costMult: 60,
-      description: () => `Increase Temporal Amplifier multipler by +${format(0.15, 2, 2)}`,
+      description: () => `Increase Temporal Amplifier multiplier by +${format(0.15, 2, 2)}`,
       effect: 0.15
     }),
     rebuyable({
@@ -25,7 +25,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 2,
       initialCost: 4,
       costMult: 60,
-      description: () => `Increase Replicative Amplifier multipler by +${format(0.15, 2, 2)}`,
+      description: () => `Increase Replicative Amplifier multiplier by +${format(0.15, 2, 2)}`,
       effect: 0.15
     }),
     rebuyable({
@@ -33,7 +33,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 3,
       initialCost: 1,
       costMult: 40,
-      description: () => `Increase Eternal Amplifier multipler by +${format(0.4, 2, 2)}`,
+      description: () => `Increase Eternal Amplifier multiplier by +${format(0.4, 2, 2)}`,
       effect: 0.4
     }),
     rebuyable({
@@ -41,7 +41,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 4,
       initialCost: 5,
       costMult: 80,
-      description: () => `Increase Superluminal Amplifier multipler by +${format(0.15, 2, 2)}`,
+      description: () => `Increase Superluminal Amplifier multiplier by +${format(0.15, 2, 2)}`,
       effect: 0.15
     }),
     rebuyable({
@@ -49,7 +49,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 5,
       initialCost: 1,
       costMult: 30,
-      description: () => `Increase Boundless Amplifier multipler by +${format(0.6, 2, 2)}`,
+      description: () => `Increase Boundless Amplifier multiplier by +${format(0.6, 2, 2)}`,
       effect: 0.6
     }),
     rebuyable({
@@ -57,7 +57,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 6,
       initialCost: 1e4,
       costMult: 500,
-      description: () => `Increase the RM cap by ${formatX(1e100)}`,
+      description: () => `Increase the Reality Machine cap by ${formatX(1e100)}`,
       effect: 1e100,
       formatEffect: value => formatX(value),
       isDecimal: true
@@ -67,7 +67,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 7,
       initialCost: 2e5,
       costMult: 500,
-      description: () => `Delay glyph level instability by +${formatInt(200)}`,
+      description: () => `Delay Glyph Instability by +${formatInt(200)}`,
       effect: 200,
       formatEffect: value => `+${formatInt(value)}`
     }),
@@ -116,12 +116,13 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "Consequences of Illusions",
       id: 12,
       cost: 5e7,
-      requirement: () => `Make a level ${formatInt(9000)} Glyph with a single glyph weight at ${formatInt(100)}`,
+      requirement: () => `Make a level ${formatInt(9000)} Glyph with a single Glyph level factor weight at 
+      ${formatInt(100)}`,
       hasFailed: () => false,
       checkRequirement: () => Object.values(player.celestials.effarig.glyphWeights).some(w => w === 100) &&
         gainedGlyphLevel().actualLevel >= 9000,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Gain free Dimboosts based on iM rebuyable count",
+      description: "Gain free Dimboosts based on Imaginary rebuyable count",
       effect: () => 2e4 * ImaginaryUpgrades.totalRebuyables,
       formatEffect: value => `${format(value, 1)}`,
     },
@@ -129,11 +130,12 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "Transience of Information",
       id: 13,
       cost: 5e7,
-      requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected RM within The Enslaved Ones' Reality`,
+      requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within 
+      The Enslaved Ones' Reality`,
       hasFailed: () => !Enslaved.isRunning,
       checkRequirement: () => Enslaved.isRunning && MachineHandler.uncappedRM.gte(Number.MAX_VALUE),
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Increase iM Cap based on iM upgrades purchased",
+      description: "Increase Imaginary Machine Cap based on Imaginary Upgrades purchased",
       effect: () => 1 + ImaginaryUpgrades.totalRebuyables / 20 + ImaginaryUpgrades.totalSinglePurchase / 2,
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
@@ -145,7 +147,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 7.5e10,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => `Raise all dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
+      description: () => `Raise all Dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
       effect: 1.5
     },
     {
@@ -186,7 +188,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 18,
       cost: 1.5e10,
       formatCost: x => format(x, 1),
-      requirement: () => `Have ${formatInt(80000)} total galaxies`,
+      requirement: () => `Have ${formatInt(80000)} total Galaxies`,
       hasFailed: () => false,
       checkRequirement: () => Replicanti.galaxies.total + player.galaxies +
         player.dilation.totalTachyonGalaxies >= 80000,
@@ -214,7 +216,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => false,
       checkRequirement: () => Laitela.matterExtraPurchaseFactor >= 2,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => `Unlock Autobuyers for repeatable iM upgrades and generate Imaginary Machines
+      description: () => `Unlock Autobuyers for repeatable Imaginary Upgrades and generate Imaginary Machines
         ${formatInt(10)} times faster`,
       effect: 10,
     },
@@ -227,7 +229,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       checkRequirement: () => player.requirementChecks.reality.noContinuum &&
         Currency.antimatter.value.log10() >= 7.4e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Annihilation multiplier gain is improved based on iM",
+      description: "Annihilation multiplier gain is improved based on Imaginary Machines",
       effect: () => Math.clampMin(Math.pow(Math.log10(Currency.imaginaryMachines.value) - 10, 3), 1),
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
@@ -237,21 +239,21 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 1.5e14,
       formatCost: x => format(x, 1),
       requirement: () => `Reach ${format("1e150000000000")} antimatter in Effarig's Reality with
-        at least ${formatInt(4)} cursed glyphs equipped`,
+        at least ${formatInt(4)} Cursed Glyphs equipped`,
       // Note: 4 cursed glyphs is -12 glyph count, but equipping a positive glyph in the last slot is allowed
       hasFailed: () => !Effarig.isRunning || player.requirementChecks.reality.maxGlyphs > -10,
       checkRequirement: () => Effarig.isRunning && player.requirementChecks.reality.maxGlyphs < -10 &&
         Currency.antimatter.value.exponent >= 1.5e11,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => `Glyph Sacrifice totals for basic glyphs are raised to ${format(1e100)}`,
+      description: () => `Glyph Sacrifice totals for basic Glyphs are raised to ${format(1e100)}`,
       effect: 1e100,
     },
     {
       name: "Planar Purification",
       id: 23,
       cost: 6e14,
-      requirement: () => `Reach glyph level ${formatInt(20000)} in Ra's Reality with
-        at most ${formatInt(0)} glyphs equipped`,
+      requirement: () => `Reach Glyph level ${formatInt(20000)} in Ra's Reality with
+        at most ${formatInt(0)} Glyphs equipped`,
       hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.maxGlyphs > 0,
       checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.maxGlyphs <= 0 &&
         gainedGlyphLevel().actualLevel >= 20000,
@@ -281,7 +283,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       cost: 1.6e15,
       formatCost: x => format(x, 1),
       requirement: () => `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
-        at least ${formatInt(4)} empty glyph slots`,
+        at least ${formatInt(4)} empty Glyph slots`,
       hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 || Glyphs.activeList.length > 1,
       checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
         Glyphs.activeList.length <= 1,

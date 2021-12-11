@@ -215,6 +215,7 @@ GameDatabase.tabs = [
     UIClass: "o-tab-btn--infinity",
     before: "infinity-points-header",
     id: 6,
+    condition: () => PlayerProgress.infinityUnlocked(),
     hidable: true,
     subtabs: [
       {

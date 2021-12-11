@@ -1,6 +1,10 @@
 import "../glyph-set-preview.js";
+import ButtonOnOffCustom from "@/components/ButtonOnOffCustom";
 
 Vue.component("glyph-set-save-panel", {
+  components: {
+    ButtonOnOffCustom
+  },
   data() {
     return {
       hasEquipped: true,
@@ -93,19 +97,19 @@ Vue.component("glyph-set-save-panel", {
         <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
           Type: Exact (always)
         </button>
-        <button-on-off-custom
+        <ButtonOnOffCustom
           class="c-glyph-set-save-setting-button"
           v-model="effects"
           on="Effects: Including"
           off="Effects: Exact"
         />
-        <button-on-off-custom
+        <ButtonOnOffCustom
           class="c-glyph-set-save-setting-button"
           v-model="level"
           on="Level: Increased"
           off="Level: Exact"
         />
-        <button-on-off-custom
+        <ButtonOnOffCustom
           class="c-glyph-set-save-setting-button"
           v-model="rarity"
           on="Rarity: Increased"

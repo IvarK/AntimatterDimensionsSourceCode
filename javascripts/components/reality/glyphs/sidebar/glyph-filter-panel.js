@@ -1,5 +1,5 @@
 import "../glyph-component.js";
-import "../../../common/ad-slider-component.js";
+import SliderComponent from "@/components/SliderComponent";
 
 const AutoSacAdvancedTab = {
   props: {
@@ -235,6 +235,7 @@ Vue.component("glyph-filter-panel", {
   components: {
     "auto-sac-effect-tab": AutoSacEffectTab,
     "auto-sac-advanced-tab": AutoSacAdvancedTab,
+    SliderComponent
   },
   data() {
     return {
@@ -448,7 +449,7 @@ Vue.component("glyph-filter-panel", {
           @click="bumpRarity(type.id)"
         >
           <glyph-component :glyph="{type: type.id, strength: strengthThreshold(type.id) }" v-bind="glyphIconProps" />
-          <ad-slider-component
+          <SliderComponent
             v-bind="raritySliderProps"
             :value="rarityThresholds[type.id]"
             :width="'100%'"
@@ -478,7 +479,7 @@ Vue.component("glyph-filter-panel", {
             :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
             v-bind="glyphIconProps"
           />
-          <ad-slider-component
+          <SliderComponent
             v-bind="raritySliderProps"
             :value="rarityThresholds[advancedType]"
             :width="'100%'"

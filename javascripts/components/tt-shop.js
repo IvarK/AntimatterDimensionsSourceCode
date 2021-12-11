@@ -198,14 +198,15 @@ Vue.component("tt-save-load-button", {
     },
     save() {
       this.hideContextMenu();
-      this.preset.studies = TimeStudyTree.currentTree.exportString;
+      this.preset.studies = GameCache.currentStudyTree.value.exportString;
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
       GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
-        new TimeStudyTree(this.preset.studies, true).commitToGameState();
+        const imported = new TimeStudyTree(this.preset.studies, false);
+        TimeStudyTree.commitToGameState(imported.purchasedStudies);
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {

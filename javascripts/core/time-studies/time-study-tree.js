@@ -1,5 +1,3 @@
-import { TimeStudy } from "./normal-time-study";
-
 /**
  * Abstract representation of a full time study tree object. The intended usage is to supply the constructor with
  * an import string and a budget of time/space theorems, which it will use together to determine which studies can
@@ -24,8 +22,6 @@ import { TimeStudy } from "./normal-time-study";
  *  but don't actually exist; used for informational purposes elsewhere
  * @member {TimeStudyState[]} purchasedStudies   Array of studies which were actually purchased, using the given amount
  *  of available theorems
- * @static {TimeStudyTree} currentTree   A designated TimeStudyTree object which is initialized to the current state
- *  of the time study tree in the game and then continually updated to be kept in a consistent state
  */
 export class TimeStudyTree {
   // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
@@ -65,32 +61,15 @@ export class TimeStudyTree {
     return currentStudies;
   }
 
-  // The existence of this is mildly hacky, but basically we need to initialize currentTree to the study tree's state
-  // from the game state on load. This is called within the on-load code because it piggybacks on a lot of existing
-  // logic (to avoid tons of boilerplate) which itself relies on many parts of the code which haven't been properly
-  // loaded in yet at the time of this class being loaded in
-  static initializeCurrentTree() {
-    const onLoadStudies = this.currentStudies;
-    this.currentTree = new TimeStudyTree(onLoadStudies, false);
-  }
-
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
-  // Attempts to buy the specified study; if null, assumed to be a study respec and clears state instead
-  static addStudyToGameState(study) {
-    if (study) {
-      this.currentTree.attemptBuyArray([study]);
-      this.currentTree.commitToGameState();
-    } else {
-      this.currentTree = new TimeStudyTree([], true);
+  // This method attempts to take the parameter array and purchase all the studies specified, using the current game
+  // state to determine if they are affordable. Input array may be either an id array or a TimeStudyState array
+  static commitToGameState(studyArray) {
+    for (const item of studyArray) {
+      const study = typeof item === "number" ? TimeStudy(item) : item;
+      if (study && !study.isBought) study.purchase(true);
     }
-  }
-
-  // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
-  // Uses the internal state of this TimeStudyTree to actually try to purchase all the listed studies within
-  commitToGameState() {
-    for (const study of this.purchasedStudies) {
-      if (!study.isBought) study.purchase(true);
-    }
+    GameCache.currentStudyTree.invalidate();
   }
 
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
@@ -163,7 +142,7 @@ export class TimeStudyTree {
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
     if (this.checkCosts) {
-      const maxTT = Currency.timeTheorems.value.add(TimeStudyTree.currentTree.spentTheorems[0])
+      const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0])
         .clampMax(Number.MAX_VALUE).toNumber();
       const maxST = V.spaceTheorems;
       if (this.spentTheorems[0] + config.cost > maxTT || this.spentTheorems[1] + stNeeded > maxST) {

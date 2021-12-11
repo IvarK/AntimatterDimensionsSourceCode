@@ -19,6 +19,9 @@ Vue.component("modal-study-string", {
     this.input = preset ? preset.studies : "";
     this.name = preset ? preset.name : "";
   },
+  mounted() {
+    this.$refs.input.select();
+  },
   computed: {
     // This modal is used by both study importing and preset editing but only has a prop actually passed in when
     // editing (which is the preset index). Needs to be an undefined check because index can be zero
@@ -29,10 +32,11 @@ Vue.component("modal-study-string", {
     importedTree() {
       if (!this.inputIsValidTree) return false;
       const importedTree = new TimeStudyTree(this.truncatedInput, false);
+      const studyMap = study => (study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`);
       return {
         timeTheorems: importedTree.spentTheorems[0],
         spaceTheorems: importedTree.spentTheorems[1],
-        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => s.id)),
+        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => studyMap(s))),
         invalidStudies: importedTree.invalidStudies,
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
@@ -43,15 +47,16 @@ Vue.component("modal-study-string", {
     // tree is irrelevant because if it mattered then the player would simply import instead
     combinedTree() {
       if (!this.inputIsValidTree) return false;
-      const currentStudyTree = TimeStudyTree.currentTree;
+      const currentStudyTree = GameCache.currentStudyTree.value;
       const combinedTree = new TimeStudyTree([], true);
       combinedTree.attemptBuyArray(TimeStudyTree.currentStudies);
       combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput));
+      const studyMap = study => (study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`);
       return {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
         newStudies: makeEnumeration(combinedTree.purchasedStudies
-          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => s.id)),
+          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => studyMap(s))),
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
@@ -120,7 +125,8 @@ Vue.component("modal-study-string", {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
       this.emitClose();
-      new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems).commitToGameState();
+      const imported = new TimeStudyTree(this.truncatedInput, false);
+      TimeStudyTree.commitToGameState(imported.purchasedStudies);
     },
     savePreset() {
       if (this.inputIsValid) {

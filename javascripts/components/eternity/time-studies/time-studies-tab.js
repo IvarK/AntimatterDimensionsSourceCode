@@ -313,7 +313,7 @@ Vue.component("time-studies-tab", {
       if (player.timestudy.studies.length === 0) {
         GameUI.notify.error("You cannot export an empty Time Study Tree!");
       } else {
-        copyToClipboard(TimeStudyTree.currentTree.exportString);
+        copyToClipboard(GameCache.currentStudyTree.value.exportString);
         GameUI.notify.info("Exported current Time Studies to your clipboard");
       }
     }

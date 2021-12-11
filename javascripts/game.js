@@ -988,7 +988,6 @@ export function init() {
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
-  TimeStudyTree.initializeCurrentTree();
   kong.init();
 }
 

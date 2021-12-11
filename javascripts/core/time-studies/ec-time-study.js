@@ -35,7 +35,7 @@ export class ECTimeStudyState extends TimeStudyState {
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
       Currency.timeTheorems.subtract(this.cost);
-      TimeStudyTree.addStudyToGameState(`EC${this.id}`);
+      TimeStudyTree.commitToGameState([TimeStudy.eternityChallenge(this.id)]);
       return true;
     }
     return false;
@@ -49,7 +49,7 @@ export class ECTimeStudyState extends TimeStudyState {
       111, 123, 151,
       181, 212, 214
     ];
-    newTreeFromStudyUntil(studiesToBuy[this.id]).commitToGameState();
+    buyStudiesUntil(studiesToBuy[this.id]);
     // For EC 11 and 12, we can't choose between light and dark, but we can buy the
     // pair of row 21 things
     if (this.id === 11) {

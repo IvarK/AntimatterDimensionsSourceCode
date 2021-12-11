@@ -700,7 +700,8 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
         return () => {
-          new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies, true).commitToGameState(true);
+          const imported = new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies, false);
+          TimeStudyTree.commitToGameState(imported.purchasedStudies);
           AutomatorData.logCommandEvent(`Loaded study ${ctx.Preset[0].image}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };

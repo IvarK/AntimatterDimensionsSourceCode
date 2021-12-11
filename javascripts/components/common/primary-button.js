@@ -1,28 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("unstyled-button", {
-  props: {
-    enabled: {
-      type: Boolean,
-      default: true
-    }
-  },
-  template: `
-    <button v-on="$listeners">
-      <slot />
-    </button>`
-});
-
-Vue.component("button-on-off-custom", {
-  props: {
-    on: String,
-    off: String,
-    value: Boolean
-  },
-  template:
-    `<unstyled-button v-bind="$attrs" @click="emitInput(!value)">{{ value ? on : off }}</unstyled-button>`
-});
-
 Vue.component("primary-button-on-off-custom", {
   components: {
     PrimaryButton
@@ -47,7 +24,7 @@ Vue.component("button-on-off", {
     }
   },
   template:
-    `<unstyled-button v-bind="$attrs" @click="emitInput(!value)">{{ displayText }}</unstyled-button>`
+    `<button v-bind="$attrs" @click="emitInput(!value)">{{ displayText }}</button>`
 });
 
 Vue.component("primary-button-on-off", {
@@ -79,9 +56,9 @@ Vue.component("button-cycle", {
     }
   },
   template: `
-    <unstyled-button
+    <button
       v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{ displayText }}
-    </unstyled-button>`
+    </button>`
 });
 
 Vue.component("primary-button-cycle", {

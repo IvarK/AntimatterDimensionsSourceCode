@@ -1,7 +1,7 @@
 import { GameMechanicState } from "../game-mechanics/index.js";
 
 export function newTreeFromStudyUntil(id, repeatFor201 = true) {
-  const newTree = new TimeStudyTree(TimeStudyTree.currentStudies, Currency.timeTheorems.value, V.availableST);
+  const newTree = new TimeStudyTree(TimeStudyTree.currentStudies, true);
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const requestedPath = TimeStudy(id).path;
   const currTree = TimeStudyTree.currentTree;

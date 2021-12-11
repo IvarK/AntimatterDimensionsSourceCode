@@ -28,7 +28,7 @@ Vue.component("modal-study-string", {
     // This represents the state reached from importing into an empty tree
     importedTree() {
       if (!this.inputIsValidTree) return false;
-      const importedTree = new TimeStudyTree(this.truncatedInput, Currency.timeTheorems.value, V.spaceTheorems);
+      const importedTree = new TimeStudyTree(this.truncatedInput, false);
       return {
         timeTheorems: importedTree.spentTheorems[0],
         spaceTheorems: importedTree.spentTheorems[1],
@@ -44,10 +44,7 @@ Vue.component("modal-study-string", {
     combinedTree() {
       if (!this.inputIsValidTree) return false;
       const currentStudyTree = TimeStudyTree.currentTree;
-      // The combined tree should effectively "refund" the already-purchased studies and consider the total theorems
-      // available for all its processing
-      const combinedTree = new TimeStudyTree([], Currency.timeTheorems.value.add(currentStudyTree.spentTheorems[0]),
-        V.spaceTheorems);
+      const combinedTree = new TimeStudyTree([], true);
       combinedTree.attemptBuyArray(TimeStudyTree.currentStudies);
       combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput));
       return {

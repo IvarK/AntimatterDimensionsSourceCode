@@ -72,7 +72,6 @@ export class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
-    TimeStudyTree.updateCurrentTheoremBudget();
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
     if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);

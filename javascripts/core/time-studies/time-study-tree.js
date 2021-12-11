@@ -16,8 +16,8 @@ import { TimeStudy } from "./normal-time-study";
  *   object itself and should not depend on the actual current game state
  * - All study entries must be Strings because numbers (normal TS) and EC# (ECs) need to be supported
  * 
- * @member {Number[]} theoremBudget      Two-element array containing the maximum allowed TT/ST to be spent on
- *  purchasing specified studies
+ * @member {Boolean} checkCosts          Boolean denoting whether or not costs of studies should be checked or not
+ *  when attempting to buy studies; if true, uses current total theorem counts to determine affordability
  * @member {Number[]} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
  *  purchased after accounting for various conditions which would forbid some being bought (eg. cost or tree structure)
  * @member {String[]} invalidStudies     Array of studies from the initial string which are correctly formatted
@@ -29,9 +29,8 @@ import { TimeStudy } from "./normal-time-study";
  */
 export class TimeStudyTree {
   // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
-  constructor(studies, initialTT, initialST) {
-    // Total theorems spent will never hit e308 anyway
-    this.theoremBudget = [Decimal.min(initialTT, Number.MAX_VALUE).toNumber(), initialST];
+  constructor(studies, checkCosts) {
+    this.checkCosts = checkCosts;
     this.spentTheorems = [0, 0];
     this.invalidStudies = [];
     this.purchasedStudies = [];
@@ -72,28 +71,17 @@ export class TimeStudyTree {
   // loaded in yet at the time of this class being loaded in
   static initializeCurrentTree() {
     const onLoadStudies = this.currentStudies;
-    this.currentTree = new TimeStudyTree(onLoadStudies, Number.MAX_VALUE, Number.MAX_VALUE);
-    TimeStudyTree.updateCurrentTheoremBudget();
-  }
-
-  // The theorem budget doesn't update dynamically because generically we want Tree objects to track fixed budgets. For
-  // the current Tree object, we need to set it properly here
-  static updateCurrentTheoremBudget() {
-    if (!this.currentTree) return;
-    this.currentTree.theoremBudget =
-      [Decimal.min(Currency.timeTheorems.value.add(this.currentTree.spentTheorems[0]), Number.MAX_VALUE).toNumber(),
-        this.currentTree.spentTheorems[1] + V.availableST];
+    this.currentTree = new TimeStudyTree(onLoadStudies, false);
   }
 
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // Attempts to buy the specified study; if null, assumed to be a study respec and clears state instead
   static addStudyToGameState(study) {
-    TimeStudyTree.updateCurrentTheoremBudget();
     if (study) {
       this.currentTree.attemptBuyArray([study]);
       this.currentTree.commitToGameState();
     } else {
-      this.currentTree = new TimeStudyTree([], Currency.timeTheorems.value, V.availableST);
+      this.currentTree = new TimeStudyTree([], true);
     }
   }
 
@@ -174,10 +162,14 @@ export class TimeStudyTree {
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
-    const canAfford = this.spentTheorems[0] + config.cost <= this.theoremBudget[0] &&
-      this.spentTheorems[1] + stNeeded <= this.theoremBudget[1];
-
-    if (!canAfford) return false;
+    if (this.checkCosts) {
+      const maxTT = Currency.timeTheorems.value.add(TimeStudyTree.currentTree.spentTheorems[0])
+        .clampMax(Number.MAX_VALUE).toNumber();
+      const maxST = V.spaceTheorems;
+      if (this.spentTheorems[0] + config.cost > maxTT || this.spentTheorems[1] + stNeeded > maxST) {
+        return false;
+      }
+    }
     this.spentTheorems[0] += config.cost;
     this.spentTheorems[1] += stNeeded;
     return true;

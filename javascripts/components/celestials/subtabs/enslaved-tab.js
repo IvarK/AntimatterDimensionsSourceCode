@@ -1,7 +1,7 @@
 import "../celestial-quote-history.js";
-import "../../common/ad-slider-component.js";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SliderComponent from "@/components/SliderComponent";
 
 Vue.component("modal-enslaved-hints", {
   data() {
@@ -140,7 +140,8 @@ Vue.component("modal-enslaved-hints", {
 Vue.component("enslaved-tab", {
   components: {
     PrimaryButton,
-    PrimaryToggleButton
+    PrimaryToggleButton,
+    SliderComponent
   },
   data: () => ({
     isStoringBlackHole: false,
@@ -388,7 +389,7 @@ Vue.component("enslaved-tab", {
           <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
             Black Hole charging rate: {{ storedTimeRate }}
             <br><br>
-            <ad-slider-component
+            <SliderComponent
               v-bind="sliderProps"
               :value="storedFraction"
               @input="adjustSlider($event)"

@@ -1,4 +1,5 @@
-import "./plus-minus-button.js";
+<script>
+import PlusMinusButton from "@/components/PlusMinusButton";
 
 /*
 * This is based on vue-slider-component
@@ -34,7 +35,11 @@ const roundToDPR = (function () {
   const r = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
   return value => Math.round(value * r) / r
 })()
-Vue.component("ad-slider-component", {
+
+export default {
+  components: {
+    PlusMinusButton
+  },
   props: {
     width: {
       type: String,
@@ -381,8 +386,8 @@ Vue.component("ad-slider-component", {
       let ret = this.direction === 'vertical' ? {
         height: this.height,
       } : {
-          width: this.width,
-        }
+        width: this.width,
+      }
       if (this.plusMinusButtons) {
         ret[this.direction === "vertical" ? "margin-top" : "margin-right"] = "0.5rem";
         ret[this.direction === "vertical" ? "margin-bottom" : "margin-left"] = "0.5rem";
@@ -439,9 +444,9 @@ Vue.component("ad-slider-component", {
         height: '100%',
         position: "relative"
       } : {
-          height: this.height,
-          position: "relative"
-        }
+        height: this.height,
+        position: "relative"
+      }
     },
     dotStyles() {
       let ret = {
@@ -482,9 +487,9 @@ Vue.component("ad-slider-component", {
           bottom: `${this.gap * i - this.usableSize / 2 }px`,
           left: 0
         } : {
-            left: `${this.gap * i - this.usableSize / 2 }px`,
-            top: 0
-          }
+          left: `${this.gap * i - this.usableSize / 2 }px`,
+          top: 0
+        }
         const index = this.reverse ? (this.total - i) : i
         const label = this.data ? this.data[index] : (this.spacing * index) + this.min
         if (this.piecewiseFilter && !this.piecewiseFilter({ index, label })) {
@@ -1012,142 +1017,145 @@ Vue.component("ad-slider-component", {
   beforeDestroy() {
     this.isComponentExists = false
     this.unbindEvents()
-  },
-  template: `
+  }
+};
+</script>
+
+<template>
   <div :class="['l-ad-slider', flowDirection, disabledClass, { 'l-ad-slider--has-label': piecewiseLabel }]"
        v-show="show">
-       <plus-minus-button v-if="plusMinusButtons" type="minus" size="1.6rem" @click="increment(-1)"/>
+    <PlusMinusButton v-if="plusMinusButtons" type="minus" size="1.6rem" @click="increment(-1)"/>
     <div ref="wrap"
-      :class="['l-ad-slider__wrap', stateClass]"
-      :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
-      @click="wrapClick">
-    <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]" :style="[elemStyles, bgStyle]">
-      <template v-if="isRange">
-        <div
-          ref="dot0"
-          key="dot0"
-          :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
+         :class="['l-ad-slider__wrap', stateClass]"
+         :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
+         @click="wrapClick">
+      <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]" :style="[elemStyles, bgStyle]">
+        <template v-if="isRange">
+          <div
+            ref="dot0"
+            key="dot0"
+            :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
             {
               'l-ad-slider__dot--focus': focusFlag && focusSlider === 0,
               'l-ad-slider__dot--dragging': flag && currentSlider === 0,
               'l-ad-slider__dot--disabled': !boolDisabled && disabledArray[0]
             }
           ]"
-          :style="dotStyles"
-          @mousedown="moveStart($event, 0)"
-          @touchstart="moveStart($event, 0)"
-        >
-          <slot name="dot" :value="val[0]" :index="0" :disabled="disabledArray[0]">
-            <div
-            :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-            :style="[
+            :style="dotStyles"
+            @mousedown="moveStart($event, 0)"
+            @touchstart="moveStart($event, 0)"
+          >
+            <slot name="dot" :value="val[0]" :index="0" :disabled="disabledArray[0]">
+              <div
+                :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+                :style="[
                 (!boolDisabled && disabledArray[0])
                 ? disabledDotStyles[0]
                 : null,
                 sliderStyles[0],
                 focusFlag && focusSlider === 0 ? focusStyles[0]: null
               ]"
-            ></div>
-          </slot>
-          <div ref="tooltip0" :class="['ad-slider-tooltip-' + tooltipDirection[0], 'ad-slider-tooltip-wrap']">
-            <slot name="tooltip" :value="val[0]" :index="0" :disabled="!boolDisabled && disabledArray[0]">
-              <span class="ad-slider-tooltip" :style="tooltipStyles[0]">{{ xformatter ? formatting(val[0]) : val[0] }}</span>
+              ></div>
             </slot>
+            <div ref="tooltip0" :class="['ad-slider-tooltip-' + tooltipDirection[0], 'ad-slider-tooltip-wrap']">
+              <slot name="tooltip" :value="val[0]" :index="0" :disabled="!boolDisabled && disabledArray[0]">
+                <span class="ad-slider-tooltip" :style="tooltipStyles[0]">{{ xformatter ? formatting(val[0]) : val[0] }}</span>
+              </slot>
+            </div>
           </div>
-        </div>
-        <div
-          ref="dot1"
-          key="dot1"
-          :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
+          <div
+            ref="dot1"
+            key="dot1"
+            :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
             {
               'l-ad-slider__dot--focus': focusFlag && focusSlider === 1,
               'l-ad-slider__dot--dragging': flag && currentSlider === 1,
               'l-ad-slider__dot--disabled': !boolDisabled && disabledArray[1]
             }
           ]"
-          :style="dotStyles"
-          @mousedown="moveStart($event, 1)"
-          @touchstart="moveStart($event, 1)"
-        >
-          <slot name="dot" :value="val[1]" :index="1" :disabled="disabledArray[1]">
-            <div
-            :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-            :style="[
+            :style="dotStyles"
+            @mousedown="moveStart($event, 1)"
+            @touchstart="moveStart($event, 1)"
+          >
+            <slot name="dot" :value="val[1]" :index="1" :disabled="disabledArray[1]">
+              <div
+                :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+                :style="[
                 (!boolDisabled && disabledArray[1])
                 ? disabledDotStyles[1]
                 : null,
                 sliderStyles[1],
                 focusFlag && focusSlider === 1 ? focusStyles[1]: null
               ]"
-            ></div>
-          </slot>
-          <div ref="tooltip1" :class="['ad-slider-tooltip-' + tooltipDirection[1], 'ad-slider-tooltip-wrap']">
-            <slot name="tooltip" :value="val[1]" :index="1" :disabled="!boolDisabled && disabledArray[1]">
-              <span class="ad-slider-tooltip" :style="tooltipStyles[1]">{{ xformatter ? formatting(val[1]) : val[1] }}</span>
+              ></div>
             </slot>
+            <div ref="tooltip1" :class="['ad-slider-tooltip-' + tooltipDirection[1], 'ad-slider-tooltip-wrap']">
+              <slot name="tooltip" :value="val[1]" :index="1" :disabled="!boolDisabled && disabledArray[1]">
+                <span class="ad-slider-tooltip" :style="tooltipStyles[1]">{{ xformatter ? formatting(val[1]) : val[1] }}</span>
+              </slot>
+            </div>
           </div>
-        </div>
-      </template>
-      <template v-else>
-        <div
-          ref="dot0"
-          key="dot0"
-          :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
+        </template>
+        <template v-else>
+          <div
+            ref="dot0"
+            key="dot0"
+            :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
             {
               'l-ad-slider__dot--focus': focusFlag && focusSlider === 0,
               'l-ad-slider__dot--dragging': flag && currentSlider === 0
             }
           ]"
-          :style="dotStyles"
-          @mousedown="moveStart"
-          @touchstart="moveStart"
-        >
-          <slot name="dot" :value="val" :disabled="boolDisabled">
-            <div :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-                 :style="[sliderStyles, focusFlag && focusSlider === 0 ? focusStyles : null]">
-              {{dotContents(0)}}
-              <slot name="in-dot"/>
-            </div>
-          </slot>
-          <div :class="['ad-slider-tooltip-' + tooltipDirection, 'ad-slider-tooltip-wrap']">
-            <slot name="tooltip" :value="val">
-              <span class="ad-slider-tooltip" :style="tooltipStyles">{{ xformatter ? formatting(val) : val }}</span>
-            </slot>
-          </div>
-        </div>
-      </template>
-      <ul class="ad-slider-piecewise">
-        <li
-          v-for="(piecewiseObj, index) in piecewiseDotWrap"
-          class="ad-slider-piecewise-item"
-          :style="[piecewiseDotStyle, piecewiseObj.style]"
-          :key="index"
-        >
-          <slot
-            name="piecewise"
-            :value="val"
-            :label="piecewiseObj.label"
-            :index="index"
-            :first="index === 0"
-            :last="index === piecewiseDotWrap.length - 1"
-            :active="isActive(piecewiseObj.index)"
+            :style="dotStyles"
+            @mousedown="moveStart"
+            @touchstart="moveStart"
           >
+            <slot name="dot" :value="val" :disabled="boolDisabled">
+              <div :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+                   :style="[sliderStyles, focusFlag && focusSlider === 0 ? focusStyles : null]">
+                {{dotContents(0)}}
+                <slot name="in-dot"/>
+              </div>
+            </slot>
+            <div :class="['ad-slider-tooltip-' + tooltipDirection, 'ad-slider-tooltip-wrap']">
+              <slot name="tooltip" :value="val">
+                <span class="ad-slider-tooltip" :style="tooltipStyles">{{ xformatter ? formatting(val) : val }}</span>
+              </slot>
+            </div>
+          </div>
+        </template>
+        <ul class="ad-slider-piecewise">
+          <li
+            v-for="(piecewiseObj, index) in piecewiseDotWrap"
+            class="ad-slider-piecewise-item"
+            :style="[piecewiseDotStyle, piecewiseObj.style]"
+            :key="index"
+          >
+            <slot
+              name="piecewise"
+              :value="val"
+              :label="piecewiseObj.label"
+              :index="index"
+              :first="index === 0"
+              :last="index === piecewiseDotWrap.length - 1"
+              :active="isActive(piecewiseObj.index)"
+            >
             <span
               v-if="piecewise"
               class="ad-slider-piecewise-dot"
               :style="[ piecewiseStyle, isActive(piecewiseObj.index) ? piecewiseActiveStyle : null ]"
             ></span>
-          </slot>
+            </slot>
 
-          <slot
-            name="label"
-            :value="val"
-            :label="piecewiseObj.label"
-            :index="index"
-            :first="index === 0"
-            :last="index === piecewiseDotWrap.length - 1"
-            :active="isActive(piecewiseObj.index)"
-          >
+            <slot
+              name="label"
+              :value="val"
+              :label="piecewiseObj.label"
+              :index="index"
+              :first="index === 0"
+              :last="index === piecewiseDotWrap.length - 1"
+              :active="isActive(piecewiseObj.index)"
+            >
             <span
               v-if="piecewiseLabel"
               class="ad-slider-piecewise-label"
@@ -1155,31 +1163,31 @@ Vue.component("ad-slider-component", {
             >
               {{ piecewiseObj.label }}
             </span>
-          </slot>
-        </li>
-      </ul>
-      <div
-        ref="process"
-        :class="['l-ad-slider__process', 'c-ad-slider__process', { 'ad-slider-process-draggable': isRange && processDraggable }, processClass]"
-        :style="processStyle"
-        @click="processClick"
-        @mousedown="moveStart($event, 0, true)"
-        @touchstart="moveStart($event, 0, true)"
-      >
-      <div
-        ref="mergedTooltip"
-        :class="['vue-merged-tooltip', 'ad-slider-tooltip-' + tooltipDirection[0], 'ad-slider-tooltip-wrap']"
-        :style="tooltipMergedPosition"
-      >
-          <slot name="tooltip" :value="val" :merge="true">
+            </slot>
+          </li>
+        </ul>
+        <div
+          ref="process"
+          :class="['l-ad-slider__process', 'c-ad-slider__process', { 'ad-slider-process-draggable': isRange && processDraggable }, processClass]"
+          :style="processStyle"
+          @click="processClick"
+          @mousedown="moveStart($event, 0, true)"
+          @touchstart="moveStart($event, 0, true)"
+        >
+          <div
+            ref="mergedTooltip"
+            :class="['vue-merged-tooltip', 'ad-slider-tooltip-' + tooltipDirection[0], 'ad-slider-tooltip-wrap']"
+            :style="tooltipMergedPosition"
+          >
+            <slot name="tooltip" :value="val" :merge="true">
             <span class="ad-slider-tooltip" :style="tooltipStyles">
               {{ tooltipFormatHelper }}
             </span>
-          </slot>
+            </slot>
+          </div>
+        </div>
       </div>
     </div>
-    </div>
+    <PlusMinusButton v-if="plusMinusButtons" type="plus" size="1.6rem" @click="increment(1)"/>
   </div>
-  <plus-minus-button v-if="plusMinusButtons" type="plus" size="1.6rem" @click="increment(1)"/>
-  </div>`
-});
+</template>

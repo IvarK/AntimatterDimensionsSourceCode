@@ -2,6 +2,7 @@ import "./select-theme.js";
 import "./select-notation.js";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
 
 Vue.component("options-visual-tab", {
   components: {
@@ -37,7 +38,8 @@ Vue.component("options-visual-tab", {
           />
         </div>`
     },
-    ExpandingControlBox
+    ExpandingControlBox,
+    PrimaryButtonOnOffCustom
   },
   data() {
     return {
@@ -116,7 +118,7 @@ Vue.component("options-visual-tab", {
             </div>
             <select-notation slot="dropdown" />
           </ExpandingControlBox>
-          <primary-button-on-off-custom
+          <PrimaryButtonOnOffCustom
             v-model="commas"
             class="o-primary-btn--option l-options-grid__button"
             on="Exponent formatting: Commas"

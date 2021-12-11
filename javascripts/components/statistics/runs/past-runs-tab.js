@@ -1,6 +1,10 @@
 import "./past-runs-container.js";
+import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
 
 Vue.component("past-runs-tab", {
+  components: {
+    PrimaryButtonOnOffCustom
+  },
   data() {
     return {
       layers: {
@@ -51,7 +55,7 @@ Vue.component("past-runs-tab", {
   template: `
     <div class="c-stats-tab">
       <div class="c-subtab-option-container">
-        <primary-button-on-off-custom
+        <PrimaryButtonOnOffCustom
           v-model="showLastTenResourceGain"
           on="Showing resource gain"
           off="Showing prestige count gain"

@@ -1,18 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("primary-button-on-off-custom", {
-  components: {
-    PrimaryButton
-  },
-  props: {
-    on: String,
-    off: String,
-    value: Boolean
-  },
-  template:
-    `<PrimaryButton v-bind="$attrs" @click="emitInput(!value)">{{ value ? on : off }}</PrimaryButton>`
-});
-
 Vue.component("button-on-off", {
   props: {
     text: String,

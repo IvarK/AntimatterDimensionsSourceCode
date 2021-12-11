@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
 
 Vue.component("replicanti-galaxy-button", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    PrimaryButtonOnOffCustom
   },
   data() {
     return {
@@ -69,7 +71,7 @@ Vue.component("replicanti-galaxy-button", {
         <br>
         {{ galaxyCountDisplay }}
       </PrimaryButton>
-      <primary-button-on-off-custom
+      <PrimaryButtonOnOffCustom
         v-if="isAutoUnlocked"
         :value="isAutoActive"
         :on="autobuyerTextDisplay"

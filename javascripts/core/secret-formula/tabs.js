@@ -83,7 +83,7 @@ GameDatabase.tabs = [
         key: "statistics",
         name: "Statistics",
         symbol: "<i class='fas fa-clipboard-list'></i>",
-        component: "statistics-tab",
+        component: "StatisticsTab",
         id: 0,
         hidable: true,
       },

@@ -6,7 +6,6 @@ import "./options/options-saving-tab.js";
 import "./options/options-visual-tab.js";
 import "./options/options-gameplay-tab.js";
 
-import "./statistics/statistics-tab.js";
 import "./statistics/challenges/challenge-records-tab.js";
 import "./statistics/runs/past-runs-tab.js";
 import "./statistics/glyph-sets-tab.js";

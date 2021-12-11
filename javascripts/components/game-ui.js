@@ -4,8 +4,12 @@ import "./save-timer.js";
 import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
+import TabComponents from "@/components/tabs";
 
 Vue.component("game-ui", {
+  components: {
+    ...TabComponents
+  },
   computed: {
     view() {
       return this.$viewModel;

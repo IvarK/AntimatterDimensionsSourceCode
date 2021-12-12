@@ -1,6 +1,10 @@
 import "./singularity-milestone.js";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("singularity-milestones-modal", {
+  components: {
+    ModalCloseButton,
+  },
   data: () => ({
     milestones: []
   }),
@@ -14,7 +18,7 @@ Vue.component("singularity-milestones-modal", {
   },
   template: `
     <div>
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <div class="l-singularity-milestone-modal-container-outer">
         <div class="l-singularity-milestone-modal-container-inner">
           <singularity-milestone v-for="milestone in milestones" :key="milestone.id" :milestone="milestone" />

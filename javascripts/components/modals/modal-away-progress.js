@@ -1,3 +1,5 @@
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
+
 Vue.component("modal-away-progress", {
   components: {
     "away-progress-helper": {
@@ -105,6 +107,7 @@ Vue.component("modal-away-progress", {
           </span>
         </div>`
     },
+    ModalCloseButton,
   },
   props: {
     modalConfig: Object
@@ -143,7 +146,7 @@ Vue.component("modal-away-progress", {
   },
   template: `
     <div class="c-modal-away-progress">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <div class="c-modal-away-progress__header">{{ headerText }}</div>
       <div v-if="!nothingHappened" class="c-modal-away-progress__resources">
         <away-progress-helper

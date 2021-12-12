@@ -2,8 +2,12 @@ import "../celestial-quote-history.js";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SliderComponent from "@/components/SliderComponent";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-enslaved-hints", {
+  components: {
+    ModalCloseButton,
+  },
   data() {
     return {
       currentStored: 0,
@@ -87,7 +91,7 @@ Vue.component("modal-enslaved-hints", {
   },
   template: `
     <div class="c-enslaved-hint-modal">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h2>Cracks in The Enslaved Ones' Reality</h2>
       <div>
         This Reality seems to be resisting your efforts to complete it. So far you have done the following:

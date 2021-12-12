@@ -1,4 +1,9 @@
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
+
 Vue.component("modal-std-store", {
+  components: {
+    ModalCloseButton,
+  },
   computed: {
     modal() {
       return this.$viewModel.modal;
@@ -12,7 +17,7 @@ Vue.component("modal-std-store", {
   },
   template: `
     <div class="l-modal-content--centered">
-      <modal-close-button v-if="modal.closeButton" class="c-modal__close-btn" @click="emitClose" />
+      <ModalCloseButton v-if="modal.closeButton" class="c-modal__close-btn" @click="emitClose" />
       <h2>Support The Developer -coins</h2>
       <div class="l-modal-store-content">
         <img src="images/std_coin.png" />

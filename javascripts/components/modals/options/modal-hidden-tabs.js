@@ -1,4 +1,9 @@
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
+
 Vue.component("modal-hidden-tabs", {
+  components: {
+    ModalCloseButton,
+  },
   data() {
     return {
       tabs: null,
@@ -13,7 +18,7 @@ Vue.component("modal-hidden-tabs", {
   },
   template: `
     <div>
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h2>Modify Visible Tabs</h2>
       Click a button to toggle showing a tab on/off.
       <br>

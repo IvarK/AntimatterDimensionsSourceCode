@@ -1,9 +1,13 @@
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-options", {
+  components: {
+    ModalCloseButton,
+  },
   template: `
     <div class="c-modal-options l-modal-options">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <slot />
     </div>`
 });

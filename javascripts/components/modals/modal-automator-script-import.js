@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-automator-script-import", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   data() {
     return {
@@ -52,7 +54,7 @@ Vue.component("modal-automator-script-import", {
   },
   template: `
     <div class="c-modal-import l-modal-content--centered">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h3>Import Automator Script</h3>
       This will create a new automator script at the end of your list.
       <input

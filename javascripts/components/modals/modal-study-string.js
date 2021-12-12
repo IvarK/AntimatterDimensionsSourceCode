@@ -1,9 +1,11 @@
 import "../eternity/time-studies/tree-import-info.js";
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-study-string", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   props: {
     modalConfig: {
@@ -148,7 +150,7 @@ Vue.component("modal-study-string", {
   },
   template: `
     <div class="c-modal-import-tree l-modal-content--centered">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h3>{{ modalTitle }}</h3>
       <input
         v-model="input"

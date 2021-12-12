@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-preferred-tree", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   data() {
     return {
@@ -70,7 +72,7 @@ Vue.component("modal-preferred-tree", {
   },
   template: `
     <div class="c-modal-message l-modal-content--centered">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <br>
       <h2>Dimension Split Preference</h2>
       <div style="display: flex; flex-direction: row; align-items: center;">

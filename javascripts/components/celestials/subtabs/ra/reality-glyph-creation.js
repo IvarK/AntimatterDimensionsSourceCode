@@ -1,4 +1,9 @@
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
+
 Vue.component("modal-reality-glyph-creation", {
+  components: {
+    ModalCloseButton,
+  },
   data() {
     return {
       realityGlyphLevel: 0,
@@ -37,7 +42,7 @@ Vue.component("modal-reality-glyph-creation", {
   },
   template: `
     <div class="c-reality-glyph-creation">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h2>Reality Glyph Creation</h2>
       <div>
         Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph. Rarity will always be 100% and level

@@ -1,9 +1,11 @@
 import { modalCloudConflictMixin } from "./modal-cloud-conflict-record.js";
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-cloud-save-conflict", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   mixins: [modalCloudConflictMixin],
   methods: {
@@ -15,7 +17,7 @@ Vue.component("modal-cloud-save-conflict", {
   },
   template: `
     <div class="c-modal-options l-modal-options" style="width: 50rem">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h1>Save Game to Cloud</h1>
       <b>
         <span v-if="conflict.saveComparison.older === -1">

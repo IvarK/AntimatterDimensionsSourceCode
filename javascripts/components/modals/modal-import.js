@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-import", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   data() {
     return {
@@ -56,7 +58,7 @@ Vue.component("modal-import", {
   },
   template: `
     <div class="c-modal-import l-modal-content--centered">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h3>Input your save</h3>
       <input
         v-model="input"

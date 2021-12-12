@@ -1,5 +1,6 @@
 import GlyphComponent from "@/components/GlyphComponent";
 import GlyphSetName from "@/components/GlyphSetName";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-glyph-showcase-panel", {
   components: {
@@ -164,7 +165,8 @@ Vue.component("modal-glyph-showcase-panel", {
         </div>
       </div>`
     },
-    GlyphSetName
+    GlyphSetName,
+    ModalCloseButton,
   },
   props: {
     modalConfig: {
@@ -214,7 +216,7 @@ Vue.component("modal-glyph-showcase-panel", {
   },
   template: `
     <div style="background-color: inherit;">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <h3>{{ modalConfig.name }}</h3>
       <div v-if="isGlyphSelection">Projected Glyph Level: {{ formatInt(gainedLevel) }}</div>
       <GlyphSetName

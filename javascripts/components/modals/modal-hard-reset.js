@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-hard-reset", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   computed: {
     modal() {
@@ -31,7 +33,7 @@ Vue.component("modal-hard-reset", {
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-      <modal-close-button @click="cancelReset" />
+      <ModalCloseButton @click="cancelReset" />
       <h3>HARD RESET</h3>
       <div class="c-modal-message__text">
         Please confirm your desire to hard reset this save slot.

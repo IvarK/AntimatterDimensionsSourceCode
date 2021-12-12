@@ -1,4 +1,10 @@
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
+
+
 Vue.component("modal-shortcuts", {
+  components: {
+    ModalCloseButton,
+  },
   data() {
     return {
       shortcuts: []
@@ -18,7 +24,7 @@ Vue.component("modal-shortcuts", {
   },
   template: `
     <div class="c-modal-shortcuts l-modal-shortcuts">
-      <modal-close-button @click="emitClose" />
+      <ModalCloseButton @click="emitClose" />
       <div class="l-modal-shortcuts__column">
         <h2>Hotkey List</h2>
         <div class="l-modal-shortcuts-row">

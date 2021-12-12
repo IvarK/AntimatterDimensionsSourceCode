@@ -1,8 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 Vue.component("modal-message", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ModalCloseButton,
   },
   data: () => ({
     message: ""
@@ -23,7 +25,7 @@ Vue.component("modal-message", {
   },
   template: `
     <div class="c-modal-message l-modal-content--centered">
-      <modal-close-button v-if="modal.closeButton" class="c-modal__close-btn--tiny" @click="emitClose" />
+      <ModalCloseButton v-if="modal.closeButton" class="c-modal__close-btn--tiny" @click="emitClose" />
       <div
         class="c-modal-message__text"
         v-html="message"

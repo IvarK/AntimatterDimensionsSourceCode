@@ -1,11 +1,11 @@
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("dilation-upgrade", {
   components: {
-    PrimaryButtonOnOff,
+    PrimaryToggleButton,
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay
@@ -91,10 +91,10 @@ Vue.component("dilation-upgrade", {
           name="Dilated Time"
         />
       </button>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isRebuyable && isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon o-primary-btn--dilation-upgrade-toggle"
       />
     </div>`

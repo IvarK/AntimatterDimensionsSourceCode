@@ -1,8 +1,8 @@
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("laitela-autobuyer-settings", {
   components: {
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -45,29 +45,29 @@ Vue.component("laitela-autobuyer-settings", {
   },
   template: `
     <div class="c-laitela-singularity-container">
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="hasDimension"
         v-model="dimension"
         class="c-laitela-automation-toggle"
-        text="Auto-buy DM Dimensions:"
+        label="Auto-buy DM Dimensions:"
       />
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="hasAscension"
         v-model="ascension"
         class="c-laitela-automation-toggle"
-        text="Auto-Ascend:"
+        label="Auto-Ascend:"
       />
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="hasSingularity"
         v-model="singularity"
         class="c-laitela-automation-toggle"
-        text="Auto-Singularity:"
+        label="Auto-Singularity:"
       />
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="hasAnnihilated"
         v-model="annihilation"
         class="c-laitela-automation-toggle"
-        text="Auto-Annihilation:"
+        label="Auto-Annihilation:"
       />
     </div>`
 });

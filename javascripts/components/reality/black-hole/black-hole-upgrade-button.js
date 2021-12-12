@@ -1,11 +1,11 @@
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("black-hole-upgrade-button", {
   components: {
-    PrimaryButtonOnOff,
+    PrimaryToggleButton,
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay
@@ -74,10 +74,10 @@ Vue.component("black-hole-upgrade-button", {
           name="Reality Machine"
         />
       </button>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
     </div>`

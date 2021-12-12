@@ -1,10 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("new-inf-dimension-row", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   props: {
     tier: Number
@@ -135,11 +135,11 @@ Vue.component("new-inf-dimension-row", {
       >
         {{ costDisplay }}
       </PrimaryButton>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
         class="o-primary-btn--id-autobuyer l-dim-row__button"
-        text="Auto:"
+        label="Auto:"
       />
       <PrimaryButton
         v-else

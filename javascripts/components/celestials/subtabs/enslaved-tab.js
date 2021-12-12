@@ -1,7 +1,7 @@
 import "../celestial-quote-history.js";
 import "../../common/ad-slider-component.js";
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("modal-enslaved-hints", {
   data() {
@@ -140,7 +140,7 @@ Vue.component("modal-enslaved-hints", {
 Vue.component("enslaved-tab", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data: () => ({
     isStoringBlackHole: false,
@@ -295,10 +295,10 @@ Vue.component("enslaved-tab", {
   template: `
     <div class="l-enslaved-celestial-tab">
       <div class="c-subtab-option-container" v-if="canAdjustStoredTime">
-        <PrimaryButtonOnOff
+        <PrimaryToggleButton
           v-model="autoRelease"
           class="o-primary-btn--subtab-option"
-          text="Pulse Black Hole:"
+          label="Pulse Black Hole:"
         />
       </div>
       <div class="l-enslaved-celestial-tab--inner">

@@ -1,10 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("replicanti-upgrade-button", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   props: {
     setup: Object
@@ -59,10 +59,10 @@ Vue.component("replicanti-upgrade-button", {
           <span>{{ costDescription }}</span>
         </template>
       </PrimaryButton>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isAutoUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-upgrade-toggle"
       />
     </div>`

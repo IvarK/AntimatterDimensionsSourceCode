@@ -1,10 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("ep-multiplier-button", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -60,10 +60,10 @@ Vue.component("ep-multiplier-button", {
       >
         Max Eternity Point mult
       </PrimaryButton>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         v-model="isAutobuyerActive"
-        text="Autobuy EP mult"
+        label="Autobuy EP mult"
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
       />
     </div>`

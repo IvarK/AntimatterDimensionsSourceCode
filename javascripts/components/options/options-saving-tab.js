@@ -1,5 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("options-saving-tab", {
   components: {
@@ -35,7 +35,7 @@ Vue.component("options-saving-tab", {
           />
         </div>`
     },
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -124,10 +124,10 @@ Vue.component("options-saving-tab", {
             <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
             <label for="file">Import save from file</label>
           </options-button>
-          <PrimaryButtonOnOff
+          <PrimaryToggleButton
             v-model="showTimeSinceSave"
             class="o-primary-btn--option l-options-grid__button"
-            text="Display time since save:"
+            label="Display time since save:"
           />
         </div>
         <open-modal-shortcuts />
@@ -148,10 +148,10 @@ Vue.component("options-saving-tab", {
           >
             Cloud load
           </options-button>
-          <PrimaryButtonOnOff
+          <PrimaryToggleButton
             class="o-primary-btn--option l-options-grid__button"
             v-model="cloudEnabled"
-            text="Automatic cloud saving/loading:"
+            label="Automatic cloud saving/loading:"
           />
         </div>
         <div class="l-options-grid__row">

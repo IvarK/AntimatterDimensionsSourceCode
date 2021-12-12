@@ -1,6 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
-import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("options-gameplay-tab", {
   components: {
@@ -14,8 +13,7 @@ Vue.component("options-gameplay-tab", {
           @click="emitClick"
         ><slot /></PrimaryButton>`
     },
-    PrimaryButtonOnOffCustom,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   // This puts the slider in the right spot on initialization
   created() {
@@ -82,21 +80,22 @@ Vue.component("options-gameplay-tab", {
     <div class="l-options-tab">
       <div class="l-options-grid">
         <div class="l-options-grid__row">
-          <PrimaryButtonOnOff
+          <PrimaryToggleButton
             v-model="retryChallenge"
             class="o-primary-btn--option l-options-grid__button"
-            text="Automatically retry challenges:"
+            label="Automatically retry challenges:"
           />
-          <PrimaryButtonOnOff
+          <PrimaryToggleButton
             v-model="offlineProgress"
             class="o-primary-btn--option l-options-grid__button"
-            text="Offline progress:"
+            label="Offline progress:"
           />
-          <PrimaryButtonOnOffCustom
+          <PrimaryToggleButton
             v-model="hotkeys"
             class="o-primary-btn--option l-options-grid__button"
-            on="Hotkeys: Enabled"
-            off="Hotkeys: Disabled"
+            label="Hotkeys:"
+            on="Enabled"
+            off="Disabled"
           />
         </div>
         <div class="l-options-grid__row">
@@ -124,11 +123,11 @@ Vue.component("options-gameplay-tab", {
               max="54"
             />
           </div>
-          <PrimaryButtonOnOff
+          <PrimaryToggleButton
             v-model="automaticTabSwitching"
             class="o-primary-btn--option l-options-grid__button"
             style="font-size: 12px;"
-            text="Switch tabs on some events (e.g. entering challenges):"
+            label="Switch tabs on some events (e.g. entering challenges):"
           />
         </div>
         <div class="l-options-grid__row">

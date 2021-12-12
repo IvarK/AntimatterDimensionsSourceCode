@@ -2,11 +2,11 @@ import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 import HintText from "@/components/HintText";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("reality-upgrade-button", {
   components: {
-    PrimaryButtonOnOff,
+    PrimaryToggleButton,
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
@@ -95,10 +95,10 @@ Vue.component("reality-upgrade-button", {
           (+{{ formatInt(automatorPoints) }} AP)
         </b>
       </button>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isRebuyable && isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
     </div>`

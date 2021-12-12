@@ -1,10 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("new-time-dimension-row", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   props: {
     tier: Number,
@@ -120,11 +120,11 @@ Vue.component("new-time-dimension-row", {
       >
         {{ buttonContents }}
       </PrimaryButton>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
         class="o-primary-btn--td-autobuyer l-dim-row__button"
-        text="Auto:"
+        label="Auto:"
       />
       <PrimaryButton
         v-else

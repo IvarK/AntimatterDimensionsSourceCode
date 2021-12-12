@@ -103,7 +103,7 @@ GameDatabase.tabs = [
         key: "prestige runs",
         name: "Past Prestige Runs",
         symbol: "<i class='fas fa-list-ol'></i>",
-        component: "past-runs-tab",
+        component: "PastPrestigeRunsTab",
         condition: () => PlayerProgress.infinityUnlocked(),
         id: 2,
         hidable: true,

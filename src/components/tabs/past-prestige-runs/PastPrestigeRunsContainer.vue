@@ -1,6 +1,10 @@
-Vue.component("past-runs-container", {
+<script>
+export default {
   props: {
-    layer: Object,
+    layer: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -15,8 +19,8 @@ Vue.component("past-runs-container", {
     averageRun() {
       return averageRun(this.runs, this.layer.name);
     },
-    dropDown() {
-      return this.shown ? `<i class="far fa-minus-square"></i>` : `<i class="far fa-plus-square"></i>`;
+    dropDownIconClass() {
+      return this.shown ? "far fa-minus-square" : "far fa-plus-square";
     },
     points() {
       return this.layer.currency;
@@ -75,52 +79,63 @@ Vue.component("past-runs-container", {
       const realTimeString = this.isRealityUnlocked ? ` (${this.realRunTime(run)} real time)` : "";
       return `${gameTimeString}${realTimeString}`;
     }
-  },
-  template: `
-    <div v-if="condition">
-      <br>
+  }
+};
+</script>
+
+<template>
+  <div v-if="condition">
+    <br>
+    <div
+      class="c-past-runs-header"
+      @click="toggleShown"
+    >
+      <span class="o-run-drop-down-icon">
+        <i :class="dropDownIconClass" />
+      </span>
+      <span>
+        <h3>Last {{ formatInt(10) }} {{ plural }}:</h3>
+      </span>
+    </div>
+    <div v-show="shown">
       <div
-        class="c-past-runs-header"
-        v-on:click="toggleShown"
+        v-for="(run, index) in runs"
+        :key="index"
       >
-        <span class="o-run-drop-down-icon" v-html="dropDown" />
-        <span>
-          <h3>Last {{ formatInt(10) }} {{ plural }}:</h3>
+        <span v-if="run[0] === Number.MAX_VALUE">
+          <span>
+            You have not done {{ formatInt(index + 1) }}
+            {{ index === 0 ? singular : plural }} yet.
+          </span>
         </span>
-      </div>
-      <div v-show="shown">
-        <div v-for="(run, index) in runs" :key="index">
-          <span v-if="run[0] === Number.MAX_VALUE">
-            <span>
-              You have not done {{ formatInt(index + 1) }}
-              {{ index === 0 ? singular : plural }} yet.
-            </span>
+        <span v-else>
+          <span>
+            {{ formatInt(index + 1) }}: {{ runLengthString(run) }},
+          </span>
+          <span v-if="showResources">
+            {{ reward(runGain(run), run, false) }}, {{ averageRunGain(run, 1, points) }}
           </span>
           <span v-else>
-            <span>
-              {{ formatInt(index + 1) }}: {{ runLengthString(run) }},
-            </span>
-            <span v-if="showResources">
-              {{ reward(runGain(run), run, false) }}, {{ averageRunGain(run, 1, points) }}
-            </span>
-            <span v-else>
-              {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }},
-              {{ averageRunGain(run, 2, plural) }}
-            </span>
+            {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }},
+            {{ averageRunGain(run, 2, plural) }}
           </span>
-        </div>
-        <br>
+        </span>
       </div>
-      <div v-if="!hasEmptyRecord">
-        Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}
-        <span v-if="isRealityUnlocked">({{ realRunTime(averageRun) }} real time)</span>
-        <br>
-        Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}
-        <br>
-        Average {{ plural }} gain: {{ averageRunGain(averageRun, 2, plural) }}
-      </div>
-      <div v-else style="height: 5.4rem;">
-        You have no records for {{ plural }} yet.
-      </div>
-    </div>`
-});
+      <br>
+    </div>
+    <div v-if="!hasEmptyRecord">
+      Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}
+      <span v-if="isRealityUnlocked">({{ realRunTime(averageRun) }} real time)</span>
+      <br>
+      Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}
+      <br>
+      Average {{ plural }} gain: {{ averageRunGain(averageRun, 2, plural) }}
+    </div>
+    <div
+      v-else
+      style="height: 5.4rem;"
+    >
+      You have no records for {{ plural }} yet.
+    </div>
+  </div>
+</template>

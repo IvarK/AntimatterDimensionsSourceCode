@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     timeSum() {
-      return this.times.reduce((acc, prev) => acc + prev);
+      return this.times.sum();
     },
     completedAllChallenges() {
       return this.timeSum < Number.MAX_VALUE;

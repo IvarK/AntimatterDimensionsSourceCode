@@ -240,7 +240,7 @@ export default {
       <div class="c-stats-tab-general c-stats-tab-reality">
         Reality
       </div>
-      <div>You have {{ quantify("Reality", reality.count, 0, 0, formatInt) }}.</div>
+      <div>You have {{ quantifyInt("Reality", reality.count) }}.</div>
       <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
       <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
       <div>

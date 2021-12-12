@@ -91,7 +91,7 @@ GameDatabase.tabs = [
         key: "challenges",
         name: "Challenge records",
         symbol: "<i class='fas fa-stopwatch'></i>",
-        component: "challenge-records-tab",
+        component: "ChallengeRecordsTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||

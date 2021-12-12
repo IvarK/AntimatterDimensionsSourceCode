@@ -10,11 +10,6 @@ export default {
       type: String,
       required: true
     },
-    color: {
-      type: String,
-      required: false,
-      default: ""
-    },
     strength: {
       type: Number,
       required: true
@@ -86,15 +81,7 @@ export default {
       return getRarity(this.strength);
     },
     descriptionStyle() {
-      let color;
-      // Avoid pink tooltips for music glyphs
-      if (this.color === "#FF80AB") {
-        color = this.rarityInfo.color;
-      } else if (this.type === "cursed") {
-        color = "black";
-      } else {
-        color = this.color || this.rarityInfo.color;
-      }
+      const color = this.type === "cursed" ? "black" : this.rarityInfo.color;
       return {
         color,
         "text-shadow": this.type === "cursed"
@@ -115,9 +102,7 @@ export default {
         case "reality":
           return `Pure Glyph of ${glyphName}`;
         default:
-          return `${this.rarityInfo.name} Glyph of ${glyphName}${this.color === "#FF80AB"
-            ? "<span style='color: #FF80AB'>(♫)</span>"
-            : ""}`;
+          return `${this.rarityInfo.name} Glyph of ${glyphName}`;
       }
     },
     isLevelCapped() {
@@ -165,15 +150,7 @@ export default {
       };
     },
     glyphHeaderStyle() {
-      let color;
-      // Music glyphs and cursed glyphs
-      if (this.color === "#FF80AB") {
-        color = this.rarityInfo.color;
-      } else if (this.type === "cursed") {
-        color = "black";
-      } else {
-        color = this.color || this.rarityInfo.color;
-      }
+      const color = this.type === "cursed" ? "black" : this.rarityInfo.color;
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,

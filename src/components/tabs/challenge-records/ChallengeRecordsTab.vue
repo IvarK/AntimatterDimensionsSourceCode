@@ -8,8 +8,8 @@ export default {
   data() {
     return {
       infinityChallengesUnlocked: false,
-      normalChallenges: player.challenge.normal.bestTimes.slice(0),
-      infinityChallenges: player.challenge.infinity.bestTimes.slice(0),
+      normalChallenges: [],
+      infinityChallenges: []
     };
   },
   methods: {

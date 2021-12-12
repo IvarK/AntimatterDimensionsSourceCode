@@ -1,9 +1,9 @@
-import ButtonOnOff from "@/components/ButtonOnOff";
+import ToggleButton from "@/components/ToggleButton";
 import ButtonCycle from "@/components/ButtonCycle";
 
 Vue.component("glyph-autosort-button-group", {
   components: {
-    ButtonOnOff,
+    ToggleButton,
     ButtonCycle
   },
   data() {
@@ -57,16 +57,16 @@ Vue.component("glyph-autosort-button-group", {
         text="Auto-sort Mode:"
         :labels="sortModes"
       />
-      <ButtonOnOff
+      <ToggleButton
         v-model="autoCollapse"
         class="c-glyph-inventory-option"
-        text="Auto-collapse space:"
+        label="Auto-collapse space:"
       />
-      <ButtonOnOff
+      <ToggleButton
         v-if="showAutoAutoClean"
         v-model="autoAutoClean"
         class="c-glyph-inventory-option"
-        text="Auto Purge on Realities:"
+        label="Auto Purge on Realities:"
       />
     </div>`
 });

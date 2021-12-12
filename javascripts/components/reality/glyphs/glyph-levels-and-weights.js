@@ -1,12 +1,12 @@
 import "../../common/ad-slider-component.js";
-import ButtonOnOff from "@/components/ButtonOnOff";
+import ToggleButton from "@/components/ToggleButton";
 
 // The things inside player.celestials.effarig.glyphWeights
 const _GLYPH_WEIGHT_FIELDS = ["ep", "repl", "dt", "eternities"];
 
 Vue.component("glyph-levels-and-weights", {
   components: {
-    ButtonOnOff
+    ToggleButton
   },
   data() {
     return {
@@ -323,11 +323,11 @@ Vue.component("glyph-levels-and-weights", {
           </div>
         </div>
         <div class="l-glyph-levels-and-weights__adjust-auto">
-          <ButtonOnOff
+          <ToggleButton
             v-if="showAutoAdjustWeights"
             v-model="isAutoAdjustWeightsOn"
             class="c-glyph-levels-and-weights__auto-btn"
-            text="Auto adjustment:"
+            label="Auto adjustment:"
           />
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('ep')">

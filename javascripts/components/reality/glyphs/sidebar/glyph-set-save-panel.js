@@ -1,9 +1,9 @@
 import "../glyph-set-preview.js";
-import ButtonOnOffCustom from "@/components/ButtonOnOffCustom";
+import ToggleButton from "@/components/ToggleButton";
 
 Vue.component("glyph-set-save-panel", {
   components: {
-    ButtonOnOffCustom
+    ToggleButton
   },
   data() {
     return {
@@ -97,23 +97,26 @@ Vue.component("glyph-set-save-panel", {
         <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
           Type: Exact (always)
         </button>
-        <ButtonOnOffCustom
+        <ToggleButton
           class="c-glyph-set-save-setting-button"
           v-model="effects"
-          on="Effects: Including"
-          off="Effects: Exact"
+          label="Effects:"
+          on="Including"
+          off="Exact"
         />
-        <ButtonOnOffCustom
+        <ToggleButton
           class="c-glyph-set-save-setting-button"
           v-model="level"
-          on="Level: Increased"
-          off="Level: Exact"
+          label="Level:"
+          on="Increased"
+          off="Exact"
         />
-        <ButtonOnOffCustom
+        <ToggleButton
           class="c-glyph-set-save-setting-button"
           v-model="rarity"
-          on="Rarity: Increased"
-          off="Rarity: Exact"
+          label="Rarity:"
+          on="Increased"
+          off="Exact"
         />
       </div>
       Your saved Glyph sets:

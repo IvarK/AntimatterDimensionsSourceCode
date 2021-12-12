@@ -1,9 +1,20 @@
 <script>
 export default {
   props: {
-    text: {
+    label: {
       type: String,
-      required: true
+      required: false,
+      default: ""
+    },
+    on: {
+      type: String,
+      required: false,
+      default: "ON"
+    },
+    off: {
+      type: String,
+      required: false,
+      default: "OFF"
     },
     value: {
       type: Boolean,
@@ -12,7 +23,7 @@ export default {
   },
   computed: {
     displayText() {
-      return `${this.text} ${this.value ? "ON" : "OFF"}`.trim();
+      return `${this.label} ${this.value ? this.on : this.off}`.trim();
     }
   },
 };

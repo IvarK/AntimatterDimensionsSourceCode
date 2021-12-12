@@ -1,8 +1,10 @@
-import "./past-runs-container.js";
+<script>
+import PastPrestigeRunsContainer from "./PastPrestigeRunsContainer";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
-Vue.component("past-runs-tab", {
+export default {
   components: {
+    PastPrestigeRunsContainer,
     PrimaryToggleButton
   },
   data() {
@@ -51,21 +53,24 @@ Vue.component("past-runs-tab", {
     update() {
       this.showLastTenResourceGain = player.options.showLastTenResourceGain;
     }
-  },
-  template: `
-    <div class="c-stats-tab">
-      <div class="c-subtab-option-container">
-        <PrimaryToggleButton
-          v-model="showLastTenResourceGain"
-          on="Showing resource gain"
-          off="Showing prestige count gain"
-          class="o-primary-btn--subtab-option"
-        />
-      </div>
-      <past-runs-container
-        v-for="layer in layers"
-        :key="layer.name"
-        :layer="layer"
+  }
+};
+</script>
+
+<template>
+  <div class="c-stats-tab">
+    <div class="c-subtab-option-container">
+      <PrimaryToggleButton
+        v-model="showLastTenResourceGain"
+        on="Showing resource gain"
+        off="Showing prestige count gain"
+        class="o-primary-btn--subtab-option"
       />
-    </div>`
-});
+    </div>
+    <PastPrestigeRunsContainer
+      v-for="layer in layers"
+      :key="layer.name"
+      :layer="layer"
+    />
+  </div>
+</template>

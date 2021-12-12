@@ -1,9 +1,10 @@
-import "../reality/glyphs/glyph-set-preview.js";
 import PrimaryButton from "@/components/PrimaryButton";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("modal-set-save-delete", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    GlyphSetPreview
   },
   props: {
     modalConfig: Object
@@ -31,8 +32,7 @@ Vue.component("modal-set-save-delete", {
       <h2>Delete this Glyph Set</h2>
       <div class="c-modal-message__text">
         Please confirm your desire to delete this Glyph Set:
-        <glyph-set-preview
-          :show=true
+        <GlyphSetPreview
           :isInModal="true"
           :glyphs="glyphSet"
         />

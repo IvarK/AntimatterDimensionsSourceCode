@@ -1,9 +1,10 @@
-import "../glyph-set-preview.js";
 import ToggleButton from "@/components/ToggleButton";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("glyph-set-save-panel", {
   components: {
-    ToggleButton
+    ToggleButton,
+    GlyphSetPreview
   },
   data() {
     return {
@@ -122,10 +123,9 @@ Vue.component("glyph-set-save-panel", {
       Your saved Glyph sets:
       <div class="c-glyph-single-set-save" v-for="(set, id) in glyphSets">
         <div style="width: 16rem">
-          <glyph-set-preview
+          <GlyphSetPreview
             :text="setName(id)"
             :textHidden=true
-            :show=true
             :glyphs="set"
             :flipTooltip=true
             :noneText=noSet

@@ -1045,22 +1045,18 @@ export default {
             @mousedown="moveStart($event, 0)"
             @touchstart="moveStart($event, 0)"
           >
-            <slot name="dot" :value="val[0]" :index="0" :disabled="disabledArray[0]">
-              <div
-                :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-                :style="[
-                (!boolDisabled && disabledArray[0])
-                ? disabledDotStyles[0]
-                : null,
-                sliderStyles[0],
-                focusFlag && focusSlider === 0 ? focusStyles[0]: null
-              ]"
-              ></div>
-            </slot>
+            <div
+              :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+              :style="[
+              (!boolDisabled && disabledArray[0])
+              ? disabledDotStyles[0]
+              : null,
+              sliderStyles[0],
+              focusFlag && focusSlider === 0 ? focusStyles[0]: null
+            ]"
+            ></div>
             <div ref="tooltip0" :class="['ad-slider-tooltip-' + tooltipDirection[0], 'ad-slider-tooltip-wrap']">
-              <slot name="tooltip" :value="val[0]" :index="0" :disabled="!boolDisabled && disabledArray[0]">
-                <span class="ad-slider-tooltip" :style="tooltipStyles[0]">{{ xformatter ? formatting(val[0]) : val[0] }}</span>
-              </slot>
+              <span class="ad-slider-tooltip" :style="tooltipStyles[0]">{{ xformatter ? formatting(val[0]) : val[0] }}</span>
             </div>
           </div>
           <div
@@ -1077,22 +1073,18 @@ export default {
             @mousedown="moveStart($event, 1)"
             @touchstart="moveStart($event, 1)"
           >
-            <slot name="dot" :value="val[1]" :index="1" :disabled="disabledArray[1]">
-              <div
-                :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-                :style="[
-                (!boolDisabled && disabledArray[1])
-                ? disabledDotStyles[1]
-                : null,
-                sliderStyles[1],
-                focusFlag && focusSlider === 1 ? focusStyles[1]: null
-              ]"
-              ></div>
-            </slot>
+            <div
+              :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+              :style="[
+              (!boolDisabled && disabledArray[1])
+              ? disabledDotStyles[1]
+              : null,
+              sliderStyles[1],
+              focusFlag && focusSlider === 1 ? focusStyles[1]: null
+            ]"
+            ></div>
             <div ref="tooltip1" :class="['ad-slider-tooltip-' + tooltipDirection[1], 'ad-slider-tooltip-wrap']">
-              <slot name="tooltip" :value="val[1]" :index="1" :disabled="!boolDisabled && disabledArray[1]">
-                <span class="ad-slider-tooltip" :style="tooltipStyles[1]">{{ xformatter ? formatting(val[1]) : val[1] }}</span>
-              </slot>
+              <span class="ad-slider-tooltip" :style="tooltipStyles[1]">{{ xformatter ? formatting(val[1]) : val[1] }}</span>
             </div>
           </div>
         </template>
@@ -1110,17 +1102,12 @@ export default {
             @mousedown="moveStart"
             @touchstart="moveStart"
           >
-            <slot name="dot" :value="val" :disabled="boolDisabled">
-              <div :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-                   :style="[sliderStyles, focusFlag && focusSlider === 0 ? focusStyles : null]">
-                {{dotContents(0)}}
-                <slot name="in-dot"/>
-              </div>
-            </slot>
+            <div :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+                 :style="[sliderStyles, focusFlag && focusSlider === 0 ? focusStyles : null]">
+              {{dotContents(0)}}
+            </div>
             <div :class="['ad-slider-tooltip-' + tooltipDirection, 'ad-slider-tooltip-wrap']">
-              <slot name="tooltip" :value="val">
-                <span class="ad-slider-tooltip" :style="tooltipStyles">{{ xformatter ? formatting(val) : val }}</span>
-              </slot>
+              <span class="ad-slider-tooltip" :style="tooltipStyles">{{ xformatter ? formatting(val) : val }}</span>
             </div>
           </div>
         </template>
@@ -1131,31 +1118,12 @@ export default {
             :style="[piecewiseDotStyle, piecewiseObj.style]"
             :key="index"
           >
-            <slot
-              name="piecewise"
-              :value="val"
-              :label="piecewiseObj.label"
-              :index="index"
-              :first="index === 0"
-              :last="index === piecewiseDotWrap.length - 1"
-              :active="isActive(piecewiseObj.index)"
-            >
             <span
               v-if="piecewise"
               class="ad-slider-piecewise-dot"
               :style="[ piecewiseStyle, isActive(piecewiseObj.index) ? piecewiseActiveStyle : null ]"
             ></span>
-            </slot>
 
-            <slot
-              name="label"
-              :value="val"
-              :label="piecewiseObj.label"
-              :index="index"
-              :first="index === 0"
-              :last="index === piecewiseDotWrap.length - 1"
-              :active="isActive(piecewiseObj.index)"
-            >
             <span
               v-if="piecewiseLabel"
               class="ad-slider-piecewise-label"
@@ -1163,7 +1131,6 @@ export default {
             >
               {{ piecewiseObj.label }}
             </span>
-            </slot>
           </li>
         </ul>
         <div
@@ -1179,11 +1146,9 @@ export default {
             :class="['vue-merged-tooltip', 'ad-slider-tooltip-' + tooltipDirection[0], 'ad-slider-tooltip-wrap']"
             :style="tooltipMergedPosition"
           >
-            <slot name="tooltip" :value="val" :merge="true">
             <span class="ad-slider-tooltip" :style="tooltipStyles">
               {{ tooltipFormatHelper }}
             </span>
-            </slot>
           </div>
         </div>
       </div>

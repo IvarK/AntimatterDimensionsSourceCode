@@ -1,9 +1,12 @@
 import "../reality/glyphs/glyph-set-name.js";
-import "../reality/glyphs/glyph-component.js";
+import GlyphComponent from "@/components/GlyphComponent";
 
 Vue.component("modal-glyph-showcase-panel", {
   components: {
     "glyph-box-helper": {
+      components: {
+        GlyphComponent
+      },
       props: {
         idx: Number,
         glyph: Object,
@@ -131,7 +134,7 @@ Vue.component("modal-glyph-showcase-panel", {
           <div class="c-glyph-choice-icon">
             <span :style="typeStyle">{{ typeCapitalized }}</span>
             <div v-html="levelText" v-if="showLevel"></div>
-            <glyph-component
+            <GlyphComponent
               :key="idx"
               style="margin: 0.1rem;"
               :glyph="glyph"

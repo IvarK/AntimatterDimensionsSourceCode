@@ -1,4 +1,4 @@
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("modal-options", {
   template: `
@@ -33,26 +33,26 @@ export const modalOptionsMixin = {
   components: {
     "on-off-button": {
       components: {
-        PrimaryButtonOnOff
+        PrimaryToggleButton
       },
       props: ["value", "text"],
       template: `
-        <PrimaryButtonOnOff
+        <PrimaryToggleButton
           :value="value"
-          :text="text"
+          :label="text"
           @input="emitInput"
           class="o-primary-btn--option"
         />`
     },
     "wide-on-off-button": {
       components: {
-        PrimaryButtonOnOff
+        PrimaryToggleButton
       },
       props: ["value", "text"],
       template: `
-        <PrimaryButtonOnOff
+        <PrimaryToggleButton
           :value="value"
-          :text="text"
+          :label="text"
           @input="emitInput"
           class="o-primary-btn--option-wide"
         />`

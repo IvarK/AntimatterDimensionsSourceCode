@@ -1,8 +1,8 @@
-import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("pp-label", {
   components: {
-    PrimaryButtonOnOffCustom
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -36,17 +36,19 @@ Vue.component("pp-label", {
       Diamond-shaped perks also give Automator Points.
       <br>
       <div>
-        <PrimaryButtonOnOffCustom
+        <PrimaryToggleButton
           v-model="fixedLoadPos"
           class="o-primary-btn"
-          on="Starting tree layout: Untangled"
-          off="Starting tree layout: Random Positions"
+          label="Starting tree layout:"
+          on="Untangled"
+          off="Random Positions"
         />
-        <PrimaryButtonOnOffCustom
+        <PrimaryToggleButton
           v-model="physicsEnabled"
           class="o-primary-btn"
-          on="Physics: Enabled"
-          off="Physics: Disabled"
+          label="Physics:"
+          on="Enabled"
+          off="Disabled"
         />
       </div>
     </div>`

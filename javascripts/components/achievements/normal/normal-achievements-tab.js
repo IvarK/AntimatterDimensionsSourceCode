@@ -1,5 +1,5 @@
 import "./normal-achievement-row.js";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("normal-achievements-tab", {
   components: {
@@ -33,7 +33,7 @@ Vue.component("normal-achievements-tab", {
       template: `
         <span @click="swapImages" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>`
     },
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -146,16 +146,16 @@ Vue.component("normal-achievements-tab", {
   template: `
     <div class="l-achievements-tab">
       <div class="c-subtab-option-container">
-        <PrimaryButtonOnOff
+        <PrimaryToggleButton
           v-model="hideCompletedRows"
           class="o-primary-btn--subtab-option"
-          text="Hide completed rows:"
+          label="Hide completed rows:"
         />
-        <PrimaryButtonOnOff
+        <PrimaryToggleButton
           v-if="showAutoAchieve"
           v-model="isAutoAchieveActive"
           class="o-primary-btn--subtab-option"
-          text="Auto Achievements:"
+          label="Auto Achievements:"
         />
       </div>
       <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">

@@ -1,9 +1,9 @@
 import "./hover-menu.js";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("tt-shop", {
   components: {
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -160,11 +160,11 @@ Vue.component("tt-shop", {
             >
               Buy max
             </button>
-            <PrimaryButtonOnOff
+            <PrimaryToggleButton
               v-if="!minimized && hasTTAutobuyer"
               v-model="isAutobuyerOn"
               class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
-              text="Auto:"
+              label="Auto:"
             />
           </div>
         </div>

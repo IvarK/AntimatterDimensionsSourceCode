@@ -1,10 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("replicanti-galaxy-button", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOffCustom
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -71,7 +71,7 @@ Vue.component("replicanti-galaxy-button", {
         <br>
         {{ galaxyCountDisplay }}
       </PrimaryButton>
-      <PrimaryButtonOnOffCustom
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         :value="isAutoActive"
         :on="autobuyerTextDisplay"

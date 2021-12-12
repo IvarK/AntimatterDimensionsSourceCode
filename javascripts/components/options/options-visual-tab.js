@@ -2,8 +2,7 @@ import "./select-theme.js";
 import "./select-notation.js";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("options-visual-tab", {
   components: {
@@ -39,9 +38,8 @@ Vue.component("options-visual-tab", {
           />
         </div>`
     },
-    PrimaryButtonOnOff,
-    ExpandingControlBox,
-    PrimaryButtonOnOffCustom
+    PrimaryToggleButton,
+    ExpandingControlBox
   },
   data() {
     return {
@@ -120,11 +118,12 @@ Vue.component("options-visual-tab", {
             </div>
             <select-notation slot="dropdown" />
           </ExpandingControlBox>
-          <PrimaryButtonOnOffCustom
+          <PrimaryToggleButton
             v-model="commas"
             class="o-primary-btn--option l-options-grid__button"
-            on="Exponent formatting: Commas"
-            off="Exponent formatting: Notation"
+            label="Exponent formatting:"
+            on="Commas"
+            off="Notation"
           />
         </div>
         <div class="l-options-grid__row">
@@ -154,10 +153,10 @@ Vue.component("options-visual-tab", {
           >
             Modify Visible Tabs
           </options-button>
-          <PrimaryButtonOnOff
+          <PrimaryToggleButton
             v-model="headerTextColored"
             class="o-primary-btn--option l-options-grid__button"
-            text="Relative prestige gain text coloring:"
+            label="Relative prestige gain text coloring:"
           />
         </div>
         <open-modal-shortcuts />

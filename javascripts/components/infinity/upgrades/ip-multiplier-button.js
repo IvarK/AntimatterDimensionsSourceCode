@@ -1,11 +1,11 @@
 import "../infinity-upgrade-button.js";
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOff from "@/components/PrimaryButtonOnOff";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("ip-multiplier-button", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOff
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -51,10 +51,10 @@ Vue.component("ip-multiplier-button", {
       >
         Max Infinity Point mult
       </PrimaryButton>
-      <PrimaryButtonOnOff
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         v-model="isAutobuyerActive"
-        text="Autobuy IP mult"
+        label="Autobuy IP mult"
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
       />
     </div>`

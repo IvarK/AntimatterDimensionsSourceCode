@@ -1,10 +1,10 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryButtonOnOffCustom from "@/components/PrimaryButtonOnOffCustom";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("autobuyer-toggles", {
   components: {
     PrimaryButton,
-    PrimaryButtonOnOffCustom
+    PrimaryToggleButton
   },
   data() {
     return {
@@ -47,7 +47,7 @@ Vue.component("autobuyer-toggles", {
   },
   template: `
     <div class="c-subtab-option-container">
-      <PrimaryButtonOnOffCustom
+      <PrimaryToggleButton
         v-model="autobuyersOn"
         on="Disable autobuyers"
         off="Enable autobuyers"
@@ -59,13 +59,13 @@ Vue.component("autobuyer-toggles", {
       >
         Toggle all autobuyers
       </PrimaryButton>
-      <PrimaryButtonOnOffCustom
+      <PrimaryToggleButton
         v-model="bulkOn"
         on="Disable bulk buy"
         off="Enable bulk buy"
         class="o-primary-btn--subtab-option"
       />
-      <PrimaryButtonOnOffCustom
+      <PrimaryToggleButton
         v-if="showContinuum"
         v-model="disableContinuum"
         on="Enable Continuum"

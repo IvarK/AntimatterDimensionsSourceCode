@@ -67,7 +67,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 7,
       initialCost: 2e5,
       costMult: 500,
-      description: () => `Delay Glyph Instability by +${formatInt(200)}`,
+      description: () => `Delay Glyph Instability starting level by ${formatInt(200)} levels`,
       effect: 200,
       formatEffect: value => `+${formatInt(value)}`
     }),

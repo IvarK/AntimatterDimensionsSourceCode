@@ -67,9 +67,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 7,
       initialCost: 2e5,
       costMult: 500,
-      description: () => `Delay Glyph Instability starting level by ${formatInt(200)} levels`,
+      description: () => `Delay Glyph Instability starting level by ${formatInt(200)}`,
       effect: 200,
-      formatEffect: value => `+${formatInt(value)}`
+      formatEffect: value => `+${formatInt(value)} levels`
     }),
     rebuyable({
       name: "Hyperbolic Apeirogon",

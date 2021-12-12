@@ -129,6 +129,7 @@ GameDatabase.eternity.timeStudies.ec = [
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       path: "Antimatter Dimension",
+      forbiddenStudies: [72, 73],
     }
   },
   {
@@ -138,6 +139,7 @@ GameDatabase.eternity.timeStudies.ec = [
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       path: "Time Dimension",
+      forbiddenStudies: [71, 72],
     }
   }
 ];

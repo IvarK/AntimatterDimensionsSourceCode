@@ -43,6 +43,7 @@
     "vue/block-tag-newline": "warn",
     "vue/no-multiple-objects-in-class": "warn",
     "vue/no-static-inline-styles": "warn",
+    "vue/no-v-html": "warn",
     "no-empty-function": "error",
     "no-eval": "error",
     "no-extra-bind": "error",

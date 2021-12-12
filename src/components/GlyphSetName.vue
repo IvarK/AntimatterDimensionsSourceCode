@@ -1,3 +1,4 @@
+<script>
 // If you change this, try to keep the syntaxes and tenses the same to avoid solecisms
 const GLYPH_NAMES = {
   companion: { name: "Huggable" },
@@ -12,10 +13,17 @@ const GLYPH_NAMES = {
   dilation: { major: "Dilation", middling: "Attenuated", minor: "Diluted" },
 };
 
-Vue.component("glyph-set-name", {
+export default {
   props: {
-    glyphSet: Array,
-    forceColor: Boolean,
+    glyphSet: {
+      type: Array,
+      required: true
+    },
+    forceColor: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
   data() {
     return {
@@ -29,10 +37,6 @@ Vue.component("glyph-set-name", {
         { type: "dilation", perc: 0 }
       ],
     };
-  },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
-    this.sortGlyphList();
   },
   computed: {
     setName() {
@@ -136,7 +140,7 @@ Vue.component("glyph-set-name", {
       if (thr.perc) {
         // This means we have 3 different Glyphs, with only one Glyph of each.
         if (!(this.calculateGlyphPercent("reality") || this.calculateGlyphPercent("effarig") ||
-              this.calculateGlyphPercent("cursed"))) {
+          this.calculateGlyphPercent("cursed"))) {
           // If it doesn't have Reality, Effarig, or Cursed Glyphs, call it Irregular Jumble, otherwise call it Jumble.
           return "Irregular Jumble";
         }
@@ -183,6 +187,10 @@ Vue.component("glyph-set-name", {
       };
     }
   },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
+    this.sortGlyphList();
+  },
   methods: {
     update() {
       this.isColored = player.options.glyphTextColors;
@@ -208,9 +216,17 @@ Vue.component("glyph-set-name", {
       if (!position.perc) return ``;
       return `${GLYPH_NAMES[position.type][type]} `;
     },
-  },
-  template: `
-    <div>
-      <span :style="textStyle" class="c-current-glyph-effects__header">{{ setName }}</span>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div>
+    <span
+      :style="textStyle"
+      class="c-current-glyph-effects__header"
+    >
+      {{ setName }}
+    </span>
+  </div>
+</template>

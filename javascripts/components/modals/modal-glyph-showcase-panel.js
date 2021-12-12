@@ -1,5 +1,5 @@
-import "../reality/glyphs/glyph-set-name.js";
 import GlyphComponent from "@/components/GlyphComponent";
+import GlyphSetName from "@/components/GlyphSetName";
 
 Vue.component("modal-glyph-showcase-panel", {
   components: {
@@ -163,7 +163,8 @@ Vue.component("modal-glyph-showcase-panel", {
           </div>
         </div>
       </div>`
-    }
+    },
+    GlyphSetName
   },
   props: {
     modalConfig: {
@@ -216,7 +217,7 @@ Vue.component("modal-glyph-showcase-panel", {
       <modal-close-button @click="emitClose" />
       <h3>{{ modalConfig.name }}</h3>
       <div v-if="isGlyphSelection">Projected Glyph Level: {{ formatInt(gainedLevel) }}</div>
-      <glyph-set-name
+      <GlyphSetName
         v-if="modalConfig.showSetName"
         :glyphSet="glyphs"
         :forceColor="true"

@@ -1,4 +1,4 @@
-import "./glyph-set-name.js";
+import GlyphSetName from "@/components/GlyphSetName";
 
 Vue.component("current-glyph-effects", {
   components: {
@@ -59,7 +59,8 @@ Vue.component("current-glyph-effects", {
         <div>
           <span :style="textColor" :class="valueClass">{{ formatValue }}</span>
         </div>`
-    }
+    },
+    GlyphSetName
   },
   data() {
     return {
@@ -115,7 +116,7 @@ Vue.component("current-glyph-effects", {
       <div class="c-current-glyph-effects__header">
         Currently active glyph effects:
       </div>
-      <glyph-set-name :glyphSet="glyphSet" />
+      <GlyphSetName :glyphSet="glyphSet" />
       <br v-if="isSoftcapActive || hasEffarig || hasReality">
       <span v-html="uniqueGlyphText" />
       <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">

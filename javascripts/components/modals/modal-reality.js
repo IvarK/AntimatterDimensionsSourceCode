@@ -1,9 +1,10 @@
-import "../reality/glyphs/glyph-component.js";
 import PrimaryButton from "@/components/PrimaryButton";
+import GlyphComponent from "@/components/GlyphComponent";
 
 Vue.component("modal-reality", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    GlyphComponent
   },
   data() {
     return {
@@ -124,7 +125,7 @@ Vue.component("modal-reality", {
         </div>
       </span>
       <div class="l-glyph-selection__row" v-if="firstPerk && showGlyphSelection">
-        <glyph-component
+        <GlyphComponent
           v-for="(glyph, index) in glyphs"
           :class="glyphClass(index)"
           :key="index"

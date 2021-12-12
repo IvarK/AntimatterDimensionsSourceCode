@@ -1,7 +1,10 @@
 import "./glyph-set-name.js";
-import "./glyph-component.js";
+import GlyphComponent from "@/components/GlyphComponent";
 
 Vue.component("glyph-set-preview", {
+  components: {
+    GlyphComponent
+  },
   props: {
     show: Boolean,
     text: String,
@@ -64,7 +67,7 @@ Vue.component("glyph-set-preview", {
           :glyphSet="glyphs"
           :forceColor="forceNameColor"
         />
-        <glyph-component
+        <GlyphComponent
           v-for="(g, idx) in glyphs"
           :key="idx"
           style="margin: 0.2rem;"

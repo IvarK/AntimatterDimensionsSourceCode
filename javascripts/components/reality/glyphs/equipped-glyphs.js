@@ -1,6 +1,9 @@
-import "./glyph-component.js";
+import GlyphComponent from "@/components/GlyphComponent";
 
 Vue.component("equipped-glyphs", {
+  components: {
+    GlyphComponent
+  },
   data() {
     return {
       glyphs: [],
@@ -141,7 +144,7 @@ Vue.component("equipped-glyphs", {
             class="l-equipped-glyphs__dropzone"
             v-on="dragEvents(idx)"
           />
-          <glyph-component
+          <GlyphComponent
             v-if="glyph"
             :key="idx"
             :glyph="glyph"

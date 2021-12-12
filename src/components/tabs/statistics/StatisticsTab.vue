@@ -233,7 +233,10 @@ export default {
       </div>
       <br>
     </div>
-    <div v-if="reality.isUnlocked" class="c-stats-tab-subheader">
+    <div
+      v-if="reality.isUnlocked"
+      class="c-stats-tab-subheader"
+    >
       <div class="c-stats-tab-general c-stats-tab-reality">
         Reality
       </div>

@@ -7,7 +7,6 @@ import "./options/options-visual-tab.js";
 import "./options/options-gameplay-tab.js";
 
 import "./statistics/runs/past-runs-tab.js";
-import "./statistics/glyph-sets-tab.js";
 
 import "./achievements/normal/normal-achievements-tab.js";
 import "./achievements/secret/secret-achievements-tab.js";

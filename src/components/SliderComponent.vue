@@ -1024,7 +1024,7 @@ export default {
 <template>
   <div :class="['l-ad-slider', flowDirection, disabledClass, { 'l-ad-slider--has-label': piecewiseLabel }]"
        v-show="show">
-    <PlusMinusButton v-if="plusMinusButtons" type="minus" size="1.6rem" @click="increment(-1)"/>
+    <PlusMinusButton v-if="plusMinusButtons" type="minus" @click="increment(-1)"/>
     <div ref="wrap"
          :class="['l-ad-slider__wrap', stateClass]"
          :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
@@ -1153,6 +1153,6 @@ export default {
         </div>
       </div>
     </div>
-    <PlusMinusButton v-if="plusMinusButtons" type="plus" size="1.6rem" @click="increment(1)"/>
+    <PlusMinusButton v-if="plusMinusButtons" type="plus" @click="increment(1)"/>
   </div>
 </template>

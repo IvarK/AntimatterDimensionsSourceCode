@@ -4,26 +4,12 @@ export default {
     type: {
       type: String,
       required: true
-    },
-    size: {
-      type: String,
-      required: true
     }
-  },
-  data() {
-    return {
-      color: "white",
-      computedSize: 0,
-    };
   },
   computed: {
     iconClass() {
       return `fas fa-${this.type}`;
     }
-  },
-  mounted() {
-    this.color = getComputedStyle(this.$el).color;
-    this.computedSize = this.$el.offsetWidth;
   }
 };
 </script>

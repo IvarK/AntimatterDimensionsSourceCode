@@ -1,6 +1,9 @@
-import "../reality/glyphs/glyph-set-preview.js";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("glyph-sets-tab", {
+  components: {
+    GlyphSetPreview
+  },
   data() {
     return {
       recordGlyphInfo: [],
@@ -33,9 +36,9 @@ Vue.component("glyph-sets-tab", {
         v-for="(set, idx) in recordGlyphInfo"
         :key="idx"
       >
-        <glyph-set-preview
+        <GlyphSetPreview
           :key="idx"
-          :show="set[0]"
+          v-if="set[0]"
           :glyphs="set[1]"
           :text="set[2]"
         />

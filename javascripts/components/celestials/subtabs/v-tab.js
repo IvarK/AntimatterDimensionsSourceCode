@@ -1,10 +1,11 @@
-import "../../reality/glyphs/glyph-set-preview.js";
 import "../celestial-quote-history.js";
 import PrimaryButton from "@/components/PrimaryButton";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("v-tab", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    GlyphSetPreview
   },
   data() {
     return {
@@ -196,8 +197,7 @@ Vue.component("v-tab", {
                   Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
                 </p>
                 <p>
-                  <glyph-set-preview
-                    :show=true
+                  <GlyphSetPreview
                     :glyphs="runGlyphs[hex.id]"
                     :text="hex.config.name"
                     :textHidden="true"

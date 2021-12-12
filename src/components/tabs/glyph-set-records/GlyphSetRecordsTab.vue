@@ -1,6 +1,7 @@
+<script>
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 
-Vue.component("glyph-sets-tab", {
+export default {
   components: {
     GlyphSetPreview
   },
@@ -29,20 +30,23 @@ Vue.component("glyph-sets-tab", {
           `Lai'tela DM Multiplier: ${formatX(Laitela.realityReward, 2, 2)}`],
       ];
     },
-  },
-  template: `
-    <div class="c-stats-tab">
-      <div
-        v-for="(set, idx) in recordGlyphInfo"
+  }
+};
+</script>
+
+<template>
+  <div class="c-stats-tab">
+    <div
+      v-for="(set, idx) in recordGlyphInfo"
+      :key="idx"
+    >
+      <GlyphSetPreview
+        v-if="set[0]"
         :key="idx"
-      >
-        <GlyphSetPreview
-          :key="idx"
-          v-if="set[0]"
-          :glyphs="set[1]"
-          :text="set[2]"
-        />
-        <br>
-      </div>
-    </div>`
-});
+        :glyphs="set[1]"
+        :text="set[2]"
+      />
+      <br>
+    </div>
+  </div>
+</template>

@@ -1,9 +1,10 @@
-import "./glyph-set-name.js";
 import GlyphComponent from "@/components/GlyphComponent";
+import GlyphSetName from "@/components/GlyphSetName";
 
 Vue.component("glyph-set-preview", {
   components: {
-    GlyphComponent
+    GlyphComponent,
+    GlyphSetName
   },
   props: {
     show: Boolean,
@@ -62,7 +63,7 @@ Vue.component("glyph-set-preview", {
         <br>
       </span>
       <span v-if="glyphs.length !== 0" @click="showModal">
-        <glyph-set-name
+        <GlyphSetName
           v-if="showName"
           :glyphSet="glyphs"
           :forceColor="forceNameColor"

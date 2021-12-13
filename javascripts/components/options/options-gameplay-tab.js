@@ -1,5 +1,6 @@
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
 
 Vue.component("options-gameplay-tab", {
   components: {
@@ -13,7 +14,8 @@ Vue.component("options-gameplay-tab", {
           @click="emitClick"
         ><slot /></PrimaryButton>`
     },
-    PrimaryToggleButton
+    PrimaryToggleButton,
+    OpenModalShortcutsButton
   },
   // This puts the slider in the right spot on initialization
   created() {
@@ -146,7 +148,7 @@ Vue.component("options-gameplay-tab", {
             />
           </div>
         </div>
-        <open-modal-shortcuts />
+        <OpenModalShortcutsButton />
       </div>
     </div>`
 });

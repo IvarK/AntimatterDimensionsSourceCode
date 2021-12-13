@@ -1,11 +1,12 @@
+<script>
 import HintText from "@/components/HintText";
 
-Vue.component("secret-achievement", {
+export default {
+  name: "SecretAchievement",
   components: {
     HintText
   },
   props: {
-    /** @type SecretAchievementState */
     achievement: {
       type: Object,
       required: true
@@ -49,6 +50,9 @@ Vue.component("secret-achievement", {
       };
     },
   },
+  beforeDestroy() {
+    clearTimeout(this.mouseOverInterval);
+  },
   methods: {
     update() {
       this.isUnlocked = this.achievement.isUnlocked;
@@ -66,33 +70,42 @@ Vue.component("secret-achievement", {
         SecretAchievement(11).unlock();
       }
     }
-  },
-  beforeDestroy() {
-    clearTimeout(this.mouseOverInterval);
-  },
-  template: `
-    <div
-      :class="classObject"
-      :style="styleObject"
-      @click="onClick"
-      @mouseenter="onMouseEnter"
-      @mouseleave="onMouseLeave"
+  }
+};
+</script>
+
+<template>
+  <div
+    :class="classObject"
+    :style="styleObject"
+    @click="onClick"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
+    <HintText
+      type="achievements"
+      class="l-hint-text--achievement"
     >
-      <HintText type="achievements" class="l-hint-text--achievement">
-        S{{ id }}
-      </HintText>
-      <div class="o-achievement__tooltip">
-        <template v-if="isMouseOver">
-          <div class="o-achievement__tooltip__name">
-            {{ config.name }} (S{{ id }})
-          </div>
-          <div v-if="isUnlocked" class="o-achievement__tooltip__description">
-            {{ config.description }}
-          </div>
-        </template>
-      </div>
-      <div v-if="showUnlockState" :class="indicatorClassObject">
-        <i :class="indicatorIconClass" />
-      </div>
-    </div>`
-});
+      S{{ id }}
+    </HintText>
+    <div class="o-achievement__tooltip">
+      <template v-if="isMouseOver">
+        <div class="o-achievement__tooltip__name">
+          {{ config.name }} (S{{ id }})
+        </div>
+        <div
+          v-if="isUnlocked"
+          class="o-achievement__tooltip__description"
+        >
+          {{ config.description }}
+        </div>
+      </template>
+    </div>
+    <div
+      v-if="showUnlockState"
+      :class="indicatorClassObject"
+    >
+      <i :class="indicatorIconClass" />
+    </div>
+  </div>
+</template>

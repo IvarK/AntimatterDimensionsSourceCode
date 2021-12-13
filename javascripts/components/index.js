@@ -3,7 +3,6 @@ import "./dimensions/infinity/infinity-dim-tab.js";
 import "./dimensions/time/time-dim-tab.js";
 
 import "./options/options-saving-tab.js";
-import "./options/options-visual-tab.js";
 import "./options/options-gameplay-tab.js";
 
 import "./challenges/normal-challenges-tab.js";

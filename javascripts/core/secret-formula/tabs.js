@@ -59,7 +59,7 @@ GameDatabase.tabs = [
         key: "visual",
         name: "Visual",
         symbol: "<i class='fas fa-palette'></i>",
-        component: "options-visual-tab",
+        component: "OptionsVisualTab",
         id: 1,
         hidable: false,
       },

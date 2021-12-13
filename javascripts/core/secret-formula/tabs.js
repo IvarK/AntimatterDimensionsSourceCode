@@ -137,7 +137,7 @@ GameDatabase.tabs = [
         key: "secret",
         name: "Secret Achievements",
         symbol: "<i class='fas fa-question'></i>",
-        component: "secret-achievements-tab",
+        component: "SecretAchievementTab",
         id: 1,
         hidable: true,
       }

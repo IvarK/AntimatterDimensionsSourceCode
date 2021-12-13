@@ -1,8 +1,12 @@
-import "./secret-achievement.js";
+<script>
+import SecretAchievement from "./SecretAchievement";
 
-Vue.component("secret-achievement-row", {
+export default {
+  name: "SecretAchievementRow",
+  components: {
+    SecretAchievement
+  },
   props: {
-    /** @type SecretAchievementState[] */
     row: {
       type: Array,
       required: true
@@ -25,14 +29,17 @@ Vue.component("secret-achievement-row", {
     update() {
       this.isCompleted = this.row.every(a => a.isUnlocked);
     }
-  },
-  template: `
-    <div :class="classObject">
-      <secret-achievement
-        v-for="(achievement, i) in row"
-        :key="i"
-        :achievement="achievement"
-        class="l-achievement-grid__cell"
-      />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div :class="classObject">
+    <SecretAchievement
+      v-for="(achievement, i) in row"
+      :key="i"
+      :achievement="achievement"
+      class="l-achievement-grid__cell"
+    />
+  </div>
+</template>

@@ -1,5 +1,6 @@
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
 
 Vue.component("options-saving-tab", {
   components: {
@@ -35,7 +36,8 @@ Vue.component("options-saving-tab", {
           />
         </div>`
     },
-    PrimaryToggleButton
+    PrimaryToggleButton,
+    OpenModalShortcutsButton
   },
   data() {
     return {
@@ -130,7 +132,7 @@ Vue.component("options-saving-tab", {
             label="Display time since save:"
           />
         </div>
-        <open-modal-shortcuts />
+        <OpenModalShortcutsButton />
       </div>
       <h2 class="c-cloud-options-header">
         <span v-if="loggedIn">Logged in as {{ userName }}</span>

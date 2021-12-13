@@ -3,6 +3,7 @@ import "./select-notation.js";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
 
 Vue.component("options-visual-tab", {
   components: {
@@ -39,7 +40,8 @@ Vue.component("options-visual-tab", {
         </div>`
     },
     PrimaryToggleButton,
-    ExpandingControlBox
+    ExpandingControlBox,
+    OpenModalShortcutsButton
   },
   data() {
     return {
@@ -159,7 +161,7 @@ Vue.component("options-visual-tab", {
             label="Relative prestige gain text coloring:"
           />
         </div>
-        <open-modal-shortcuts />
+        <OpenModalShortcutsButton />
       </div>
     </div>`
 });

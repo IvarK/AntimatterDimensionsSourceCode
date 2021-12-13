@@ -51,7 +51,7 @@ GameDatabase.tabs = [
         key: "saving",
         name: "Saving",
         symbol: "<i class='fas fa-save'></i>",
-        component: "options-saving-tab",
+        component: "OptionsSavingTab",
         id: 0,
         hidable: false,
       },

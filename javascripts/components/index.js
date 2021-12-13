@@ -2,8 +2,6 @@ import "./dimensions/antimatter/antimatter-dim-tab.js";
 import "./dimensions/infinity/infinity-dim-tab.js";
 import "./dimensions/time/time-dim-tab.js";
 
-import "./options/options-gameplay-tab.js";
-
 import "./challenges/normal-challenges-tab.js";
 import "./challenges/infinity-challenges-tab.js";
 import "./challenges/eternity-challenges-tab.js";

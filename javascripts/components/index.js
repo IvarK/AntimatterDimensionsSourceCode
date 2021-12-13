@@ -6,7 +6,6 @@ import "./options/options-saving-tab.js";
 import "./options/options-visual-tab.js";
 import "./options/options-gameplay-tab.js";
 
-import "./achievements/normal/normal-achievements-tab.js";
 import "./achievements/secret/secret-achievements-tab.js";
 
 import "./challenges/normal-challenges-tab.js";

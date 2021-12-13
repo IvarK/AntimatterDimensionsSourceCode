@@ -89,7 +89,7 @@
       "error",
       {
         "vars": "local",
-        "args": "all"
+        "args": "after-used"
       }
     ],
     "no-use-before-define": [

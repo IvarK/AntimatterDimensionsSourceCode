@@ -59,7 +59,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       costMult: 500,
       description: () => `Increase the Reality Machine cap by ${formatX(1e100)}`,
       effect: 1e100,
-      formatEffect: value => formatX(value),
+      formatEffect: value => `${formatX(value)}`,
       isDecimal: true
     }),
     rebuyable({
@@ -116,7 +116,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "Consequences of Illusions",
       id: 12,
       cost: 5e7,
-      requirement: () => `Make a level ${formatInt(9000)} Glyph with a single Glyph level factor weight at 
+      requirement: () => `Make a level ${formatInt(9000)} Glyph with a single Glyph level factor weight at
       ${formatInt(100)}`,
       hasFailed: () => false,
       checkRequirement: () => Object.values(player.celestials.effarig.glyphWeights).some(w => w === 100) &&

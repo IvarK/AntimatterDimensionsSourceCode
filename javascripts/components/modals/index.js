@@ -1,5 +1,4 @@
 import "./modal-shortcuts.js";
-import "./modal-message.js";
 import "./modal-ui-choice.js";
 import "./modal-import.js";
 import "./modal-study-string.js";

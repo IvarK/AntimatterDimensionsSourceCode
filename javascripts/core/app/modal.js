@@ -1,3 +1,6 @@
+import ModalMessage from "@/components/modals/ModalMessage";
+
+
 export class Modal {
   constructor(component, bare = false) {
     this._component = component;
@@ -191,4 +194,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}("modal-message");
+}(ModalMessage);

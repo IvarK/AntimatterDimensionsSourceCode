@@ -1,4 +1,5 @@
 // Temporarily aggregate tab components here until GameUI is migrated to SFC
+import OptionsVisualTab from "./options-visual/OptionsVisualTab";
 import StatisticsTab from "./statistics/StatisticsTab";
 import ChallengeRecordsTab from "./challenge-records/ChallengeRecordsTab";
 import PastPrestigeRunsTab from "./past-prestige-runs/PastPrestigeRunsTab";
@@ -7,6 +8,7 @@ import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 
 const TabComponents = {
+  OptionsVisualTab,
   StatisticsTab,
   ChallengeRecordsTab,
   PastPrestigeRunsTab,

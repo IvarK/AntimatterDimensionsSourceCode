@@ -3,12 +3,14 @@ import StatisticsTab from "./statistics/StatisticsTab";
 import ChallengeRecordsTab from "./challenge-records/ChallengeRecordsTab";
 import PastPrestigeRunsTab from "./past-prestige-runs/PastPrestigeRunsTab";
 import GlyphSetRecordsTab from "./glyph-set-records/GlyphSetRecordsTab";
+import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 
 const TabComponents = {
   StatisticsTab,
   ChallengeRecordsTab,
   PastPrestigeRunsTab,
-  GlyphSetRecordsTab
+  GlyphSetRecordsTab,
+  NormalAchievementsTab
 };
 
 export default TabComponents;

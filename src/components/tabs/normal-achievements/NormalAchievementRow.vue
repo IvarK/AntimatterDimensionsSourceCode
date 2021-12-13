@@ -1,8 +1,12 @@
-import "./normal-achievement.js";
+<script>
+import NormalAchievement from "./NormalAchievement";
 
-Vue.component("normal-achievement-row", {
+export default {
+  name: "NormalAchievementRow",
+  components: {
+    NormalAchievement
+  },
   props: {
-    /** @type AchievementState[] */
     row: {
       type: Array,
       required: true
@@ -27,14 +31,20 @@ Vue.component("normal-achievement-row", {
       this.isCompleted = this.row.every(a => a.isUnlocked);
       this.isHidden = this.isCompleted && player.options.hideCompletedAchievementRows;
     }
-  },
-  template: `
-    <div v-if="!isHidden" :class="classObject">
-      <normal-achievement
-        v-for="(achievement, i) in row"
-        :key="i"
-        :achievement="achievement"
-        class="l-achievement-grid__cell"
-      />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div
+    v-if="!isHidden"
+    :class="classObject"
+  >
+    <normal-achievement
+      v-for="(achievement, i) in row"
+      :key="i"
+      :achievement="achievement"
+      class="l-achievement-grid__cell"
+    />
+  </div>
+</template>

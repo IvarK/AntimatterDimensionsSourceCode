@@ -1,13 +1,14 @@
+<script>
 import EffectDisplay from "@/components/EffectDisplay";
 import HintText from "@/components/HintText";
 
-Vue.component("normal-achievement", {
+export default {
+  name: "NormalAchievement",
   components: {
     EffectDisplay,
     HintText
   },
   props: {
-    /** @type AchievementState */
     achievement: {
       type: Object,
       required: true
@@ -61,6 +62,9 @@ Vue.component("normal-achievement", {
       return this.realityUnlocked && this.achievement.row <= 13;
     }
   },
+  beforeDestroy() {
+    clearTimeout(this.mouseOverInterval);
+  },
   methods: {
     update() {
       this.isUnlocked = this.achievement.isUnlocked;
@@ -75,40 +79,49 @@ Vue.component("normal-achievement", {
     onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
     }
-  },
-  beforeDestroy() {
-    clearTimeout(this.mouseOverInterval);
-  },
-  template: `
-    <div
-      :class="classObject"
-      :style="styleObject"
-      @mouseenter="onMouseEnter"
-      @mouseleave="onMouseLeave"
+  }
+};
+</script>
+
+<template>
+  <div
+    :class="classObject"
+    :style="styleObject"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
+    <HintText
+      type="achievements"
+      class="l-hint-text--achievement"
     >
-      <HintText type="achievements" class="l-hint-text--achievement">
-        {{ id }}
-      </HintText>
-      <div class="o-achievement__tooltip">
-        <template v-if="isMouseOver">
-          <div class="o-achievement__tooltip__name">
-            {{ config.name }} ({{ id }})
-          </div>
-          <div class="o-achievement__tooltip__description">
-            {{ config.description }}
-          </div>
-          <div v-if="config.reward" class="o-achievement__tooltip__reward">
-            Reward: {{ config.reward }}
-            <EffectDisplay
-              br
-              v-if="config.formatEffect"
-              :config="config"
-            />
-          </div>
-        </template>
-      </div>
-      <div v-if="showUnlockState" :class="indicatorClassObject">
-        <i :class="indicatorIconClass" />
-      </div>
-    </div>`
-});
+      {{ id }}
+    </HintText>
+    <div class="o-achievement__tooltip">
+      <template v-if="isMouseOver">
+        <div class="o-achievement__tooltip__name">
+          {{ config.name }} ({{ id }})
+        </div>
+        <div class="o-achievement__tooltip__description">
+          {{ config.description }}
+        </div>
+        <div
+          v-if="config.reward"
+          class="o-achievement__tooltip__reward"
+        >
+          Reward: {{ config.reward }}
+          <EffectDisplay
+            v-if="config.formatEffect"
+            br
+            :config="config"
+          />
+        </div>
+      </template>
+    </div>
+    <div
+      v-if="showUnlockState"
+      :class="indicatorClassObject"
+    >
+      <i :class="indicatorIconClass" />
+    </div>
+  </div>
+</template>

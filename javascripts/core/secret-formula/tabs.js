@@ -129,7 +129,7 @@ GameDatabase.tabs = [
         key: "normal",
         name: "Achievements",
         symbol: "<i class='fas fa-trophy'></i>",
-        component: "normal-achievements-tab",
+        component: "NormalAchievementsTab",
         id: 0,
         hidable: true,
       },

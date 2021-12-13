@@ -67,7 +67,7 @@ GameDatabase.tabs = [
         key: "gameplay",
         name: "Gameplay",
         symbol: "<i class='fas fa-wrench'></i>",
-        component: "options-gameplay-tab",
+        component: "OptionsGameplayTab",
         id: 2,
         hidable: false,
       }

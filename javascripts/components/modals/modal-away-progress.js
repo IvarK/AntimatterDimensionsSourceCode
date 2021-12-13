@@ -30,7 +30,7 @@ Vue.component("modal-away-progress", {
         classObject() {
           return {
             [this.item.classObject]: true,
-            "c-modal-away-progress__strikethrough": this.removed,
+            "c-modal-away-progress__disabled": this.removed,
           };
         },
         formattedName() {

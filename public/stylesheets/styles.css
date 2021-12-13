@@ -5184,10 +5184,13 @@ screen and (max-width: 480px) {
   0 0 0.3rem #e67919;
 }
 
-.c-modal-away-progress__strikethrough {
+.c-modal-away-progress__disabled b,
+.c-modal-away-progress__disabled {
   text-decoration: line-through;
   color: #303030;
   font-style: italic;
+  text-shadow: 0 0 0.3rem #303030;
+  animation: none;
 }
 
 /*#endregion c-modal-away-progress*/

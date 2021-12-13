@@ -2,6 +2,7 @@
 import ChallengeRecordsList from "./ChallengeRecordsList";
 
 export default {
+  name: "ChallengeRecordsTab",
   components: {
     ChallengeRecordsList
   },

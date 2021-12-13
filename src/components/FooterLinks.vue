@@ -2,6 +2,7 @@
 import FooterLink from "@/components/FooterLink";
 
 export default {
+  name: "FooterLinks",
   components: {
     FooterLink
   },

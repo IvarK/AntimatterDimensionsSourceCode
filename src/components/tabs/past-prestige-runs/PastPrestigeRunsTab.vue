@@ -3,6 +3,7 @@ import PastPrestigeRunsContainer from "./PastPrestigeRunsContainer";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
+  name: "PastPrestigeRunsTab",
   components: {
     PastPrestigeRunsContainer,
     PrimaryToggleButton

@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "ToggleButton",
   props: {
     label: {
       type: String,

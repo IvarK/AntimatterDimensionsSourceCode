@@ -14,6 +14,7 @@ const GLYPH_NAMES = {
 };
 
 export default {
+  name: "GlyphSetName",
   props: {
     glyphSet: {
       type: Array,

@@ -4,6 +4,7 @@ import { isDecimal, isFunction, isNumber } from "@/utility";
 
 /* eslint-disable no-empty-function */
 export default {
+  name: "CostDisplay",
   props: {
     config: {
       type: Object,

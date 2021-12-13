@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "HintText",
   props: {
     type: {
       type: String,

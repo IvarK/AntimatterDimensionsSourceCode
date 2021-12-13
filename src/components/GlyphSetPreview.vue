@@ -3,6 +3,7 @@ import GlyphComponent from "@/components/GlyphComponent";
 import GlyphSetName from "@/components/GlyphSetName";
 
 export default {
+  name: "GlyphSetPreview",
   components: {
     GlyphComponent,
     GlyphSetName

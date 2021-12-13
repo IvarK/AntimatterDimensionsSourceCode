@@ -3,6 +3,7 @@ import { isFunction, isString } from "@/utility";
 
 /* eslint-disable no-empty-function */
 export default {
+  name: "DescriptionDisplay",
   props: {
     config: {
       type: Object,

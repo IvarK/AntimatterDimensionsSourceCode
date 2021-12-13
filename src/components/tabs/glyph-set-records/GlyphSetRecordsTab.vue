@@ -2,6 +2,7 @@
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 export default {
+  name: "GlyphSetRecordsTab",
   components: {
     GlyphSetPreview
   },

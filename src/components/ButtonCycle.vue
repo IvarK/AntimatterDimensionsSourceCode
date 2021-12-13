@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "ButtonCycle",
   props: {
     text: {
       type: String,

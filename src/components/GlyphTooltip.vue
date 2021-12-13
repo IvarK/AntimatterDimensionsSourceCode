@@ -2,6 +2,7 @@
 import GlyphTooltipEffect from "@/components/GlyphTooltipEffect";
 
 export default {
+  name: "GlyphTooltip",
   components: {
     GlyphTooltipEffect
   },

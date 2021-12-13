@@ -37,6 +37,7 @@ const roundToDPR = (function () {
 })()
 
 export default {
+  name: "SliderComponent",
   components: {
     PlusMinusButton
   },

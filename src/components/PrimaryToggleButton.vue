@@ -2,6 +2,7 @@
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
+  name: "PrimaryToggleButton",
   components: {
     PrimaryButton
   },

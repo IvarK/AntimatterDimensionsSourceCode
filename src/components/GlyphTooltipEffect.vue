@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "GlyphTooltipEffect",
   props: {
     effect: {
       type: String,

@@ -4,6 +4,7 @@
 // You can force it to open programmatically by sending it an openrequest event
 
 export default {
+  name: "ExpandingControlBox",
   props: {
     // Class assigned to visible container; specify border and background here
     containerClass: {

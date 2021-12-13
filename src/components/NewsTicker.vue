@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "NewsTicker",
   data() {
     return {
       enableAnimation: false,

@@ -2,6 +2,7 @@
 import { MatterScale } from "./matter-scale";
 
 export default {
+  name: "StatisticsTab",
   data() {
     return {
       totalAntimatter: new Decimal(0),

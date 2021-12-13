@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "PrimaryButton",
   props: {
     enabled: {
       type: Boolean,

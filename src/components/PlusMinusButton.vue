@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "PlusMinusButton",
   props: {
     type: {
       type: String,

@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "ChallengeRecordsList",
   props: {
     name: {
       type: String,

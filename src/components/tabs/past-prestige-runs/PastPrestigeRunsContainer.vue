@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "PastPrestigeRunsContainer",
   props: {
     layer: {
       type: Object,

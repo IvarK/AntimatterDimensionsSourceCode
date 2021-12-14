@@ -1,4 +1,3 @@
-import "./dimensions/antimatter/antimatter-dim-tab.js";
 import "./dimensions/infinity/infinity-dim-tab.js";
 import "./dimensions/time/time-dim-tab.js";
 
@@ -38,7 +37,6 @@ import "./celestials/subtabs/pelle-tab.js";
 
 import "./shop/shop-tab.js";
 
-import "./new-ui/dimensions-tab/new-dimensions-tab.js";
 import "./new-ui/infinity-dimensions-tab/new-inf-dimensions-tab.js";
 import "./new-ui/time-dimensions-tab/new-time-dimensions-tab.js";
 

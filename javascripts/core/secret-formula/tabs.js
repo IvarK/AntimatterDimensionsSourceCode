@@ -19,8 +19,7 @@ GameDatabase.tabs = [
         key: "infinity",
         name: "Infinity Dimensions",
         symbol: "∞",
-        component: "infinity-dim-tab",
-        newUIComponent: "new-inf-dimensions-tab",
+        component: "InfinityDimensionsTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||

@@ -1,9 +1,10 @@
-import "./game-header-gamespeed-display.js";
 import PrimaryButton from "@/components/PrimaryButton";
+import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 
 Vue.component("game-header-tickspeed-row", {
   components: {
-    PrimaryButton
+    PrimaryButton,
+    GameSpeedDisplay
   },
   data() {
     return {
@@ -91,7 +92,7 @@ Vue.component("game-header-tickspeed-row", {
       </div>
       <div>
         {{ tickspeedDisplay }}
-        <game-header-gamespeed-display v-if="!isGameSpeedNormal" />
+        <GameSpeedDisplay v-if="!isGameSpeedNormal" />
       </div>
     </div>`
 });

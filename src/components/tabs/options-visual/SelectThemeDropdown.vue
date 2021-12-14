@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "SelectThemeComboBox",
+  name: "SelectThemeDropdown",
   data() {
     return {
       availableThemeNames: []

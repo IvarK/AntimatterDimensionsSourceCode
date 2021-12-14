@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "SelectNotationComboBox",
+  name: "SelectNotationDropdown",
   computed: {
     notations: () => Notations.all,
   }

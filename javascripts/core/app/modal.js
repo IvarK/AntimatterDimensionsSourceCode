@@ -2,6 +2,10 @@ import ModalMessage from "@/components/modals/ModalMessage";
 import ModalCelestialQuote from "@/components/modals/ModalCelestialQuote";
 import ModalCloudSaveConflict from "@/components/modals/cloud/ModalCloudSaveConflict";
 import ModalCloudLoadConflict from "@/components/modals/cloud/ModalCloudLoadConflict";
+import ModalStartEternityChallenge from "@/components/modals/challenges/ModalStartEternityChallenge";
+import ModalStartInfinityChallenge from "@/components/modals/challenges/ModalStartInfinityChallenge";
+import ModalStartNormalChallenge from "@/components/modals/challenges/ModalStartNormalChallenge";
+
 
 export class Modal {
   constructor(component, bare = false) {
@@ -93,9 +97,9 @@ Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.enterDilation = new Modal("modal-enter-dilation");
 Modal.preferredTree = new Modal("modal-preferred-tree");
 Modal.hiddenTabs = new Modal("modal-hidden-tabs");
-Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
-Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
-Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
+Modal.startEternityChallenge = new ChallengeConfirmationModal(ModalStartEternityChallenge);
+Modal.startInfinityChallenge = new ChallengeConfirmationModal(ModalStartInfinityChallenge);
+Modal.startNormalChallenge = new ChallengeConfirmationModal(ModalStartNormalChallenge);
 Modal.bigCrunch = new Modal("modal-big-crunch");
 Modal.sacrifice = new Modal("modal-sacrifice");
 Modal.dimensionBoost = new Modal("modal-dimension-boost");

@@ -1,11 +1,9 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-enter-dilation", {
+export default {
   components: {
     PrimaryButton
-  },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
     modal() {
@@ -26,6 +24,9 @@ Vue.component("modal-enter-dilation", {
       return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points`;
     }
   },
+  created() {
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   methods: {
     handleYesClick() {
       if (player.dilation.active) return;
@@ -40,27 +41,30 @@ Vue.component("modal-enter-dilation", {
       this.emitClose();
     },
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <h2>{{ entranceLabel }}</h2>
-      <h3>{{ EPSinceLabel }}</h3>
-      <div class="c-modal-message__text">
-        {{ message }}
-      </div>
-      <br>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Enter
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>{{ entranceLabel }}</h2>
+    <h3>{{ EPSinceLabel }}</h3>
+    <div class="c-modal-message__text">
+      {{ message }}
+    </div>
+    <br>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Enter
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

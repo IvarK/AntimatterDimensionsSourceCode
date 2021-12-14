@@ -1,19 +1,16 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-replicanti-galaxy", {
+export default {
   components: {
     PrimaryButton
   },
   data() {
     return {
-      replicanti: new Decimal(0),
+      replicanti: new Decimal(),
       divideReplicanti: false,
       canBeBought: 0,
     };
-  },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
     topLabel() {
@@ -30,6 +27,10 @@ Vue.component("modal-replicanti-galaxy", {
         It will ${reductionString}.`;
     }
   },
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   methods: {
     update() {
       this.replicanti.copyFrom(player.replicanti.amount);
@@ -45,25 +46,28 @@ Vue.component("modal-replicanti-galaxy", {
       this.emitClose();
     }
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <h2>{{ topLabel }}</h2>
-      <div class="c-modal-message__text">
-        {{ message }}
-      </div>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Confirm
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>{{ topLabel }}</h2>
+    <div class="c-modal-message__text">
+      {{ message }}
+    </div>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Confirm
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

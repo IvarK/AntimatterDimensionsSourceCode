@@ -6,6 +6,18 @@ import ModalStartEternityChallenge from "@/components/modals/challenges/ModalSta
 import ModalStartInfinityChallenge from "@/components/modals/challenges/ModalStartInfinityChallenge";
 import ModalStartNormalChallenge from "@/components/modals/challenges/ModalStartNormalChallenge";
 
+import ModalDimensionBoost from "@/components/modals/prestige/ModalDimensionBoost";
+import ModalAntimatterGalaxy from "@/components/modals/prestige/ModalAntimatterGalaxy";
+import ModalBigCrunch from "@/components/modals/prestige/ModalBigCrunch";
+import ModalReplicantiGalaxy from "@/components/modals/prestige/ModalReplicantiGalaxy";
+import ModalEternity from "@/components/modals/prestige/ModalEternity";
+import ModalEnterDilation from "@/components/modals/prestige/ModalEnterDilation";
+import ModalReality from "@/components/modals/prestige/ModalReality";
+import ModalResetReality from "@/components/modals/prestige/ModalResetReality";
+import ModalExitCelestialReality from "@/components/modals/prestige/ModalExitCelestialReality";
+import ModalCelestials from "@/components/modals/prestige/ModalCelestials";
+import ModalHardReset from "@/components/modals/prestige/ModalHardReset";
+
 
 export class Modal {
   constructor(component, bare = false) {
@@ -63,8 +75,19 @@ class ChallengeConfirmationModal extends Modal {
     super.show();
   }
 }
+Modal.dimensionBoost = new Modal(ModalDimensionBoost);
+Modal.antimatterGalaxy = new Modal(ModalAntimatterGalaxy);
+Modal.bigCrunch = new Modal(ModalBigCrunch);
+Modal.replicantiGalaxy = new Modal(ModalReplicantiGalaxy);
+Modal.eternity = new Modal(ModalEternity);
+Modal.enterDilation = new Modal(ModalEnterDilation);
+Modal.reality = new Modal(ModalReality);
+Modal.resetReality = new Modal(ModalResetReality);
+Modal.exitCelestialReality = new Modal(ModalExitCelestialReality);
+Modal.celestials = new Modal(ModalCelestials);
+Modal.hardReset = new Modal(ModalHardReset);
 
-Modal.hardReset = new Modal("modal-hard-reset");
+
 Modal.h2p = new Modal("modal-h2p");
 Modal.awayProgress = new Modal("modal-away-progress");
 Modal.shortcuts = new Modal("modal-shortcuts");
@@ -94,23 +117,13 @@ Modal.deleteAllRejectedGlyphs = new Modal("modal-delete-all-rejected-glyphs");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
-Modal.enterDilation = new Modal("modal-enter-dilation");
 Modal.preferredTree = new Modal("modal-preferred-tree");
 Modal.hiddenTabs = new Modal("modal-hidden-tabs");
 Modal.startEternityChallenge = new ChallengeConfirmationModal(ModalStartEternityChallenge);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(ModalStartInfinityChallenge);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(ModalStartNormalChallenge);
-Modal.bigCrunch = new Modal("modal-big-crunch");
 Modal.sacrifice = new Modal("modal-sacrifice");
-Modal.dimensionBoost = new Modal("modal-dimension-boost");
-Modal.antimatterGalaxy = new Modal("modal-antimatter-galaxy");
 Modal.breakInfinity = new Modal("modal-break-infinity");
-Modal.replicantiGalaxy = new Modal("modal-replicanti-galaxy");
-Modal.eternity = new Modal("modal-eternity");
-Modal.reality = new Modal("modal-reality");
-Modal.resetReality = new Modal("modal-reset-reality");
-Modal.exitCelestialReality = new Modal("modal-exit-celestial-reality");
-Modal.celestials = new Modal("modal-celestials");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

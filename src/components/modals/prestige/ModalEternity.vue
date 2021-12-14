@@ -1,19 +1,16 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-eternity", {
+export default {
   components: {
     PrimaryButton
   },
   data() {
     return {
       exitingEC: false,
-      startingIP: new Decimal(0),
-      gainedEternityPoints: new Decimal(0),
+      startingIP: new Decimal(),
+      gainedEternityPoints: new Decimal(),
     };
-  },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
     message() {
@@ -43,6 +40,10 @@ Vue.component("modal-eternity", {
       return `You will gain ${quantifyInt("completion", gainedCompletions)} for Eternity Challenge ${ec.id}.`;
     }
   },
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   methods: {
     update() {
       this.exitingEC = EternityChallenge.isRunning;
@@ -66,43 +67,46 @@ Vue.component("modal-eternity", {
       this.emitClose();
     }
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <div v-if="!exitingEC">
-        <h2>You are about to Eternity</h2>
-        <div class="c-modal-message__text">
-          {{ message }}
-          <!-- TODO: DILATION EXIT MODAL HI GAMER -->
-          <br>
-        </div>
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <div v-if="!exitingEC">
+      <h2>You are about to Eternity</h2>
+      <div class="c-modal-message__text">
+        {{ message }}
+        <!-- TODO: DILATION EXIT MODAL HI GAMER -->
         <br>
-        <div class="c-modal-message__text">
-          {{ gainedEPOnEternity }}
-        </div>
-        <br>
-        <div class="c-modal-message__text">
-          {{ startWithIP }}
-        </div>
       </div>
-      <div v-else>
-        <h2>Complete Eternity Challenge</h2>
-        <div class="c-modal-message__text">
-          {{ eternityChallenge }}
-        </div>
+      <br>
+      <div class="c-modal-message__text">
+        {{ gainedEPOnEternity }}
       </div>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Confirm
-        </PrimaryButton>
+      <br>
+      <div class="c-modal-message__text">
+        {{ startWithIP }}
       </div>
-    </div>`
-});
+    </div>
+    <div v-else>
+      <h2>Complete Eternity Challenge</h2>
+      <div class="c-modal-message__text">
+        {{ eternityChallenge }}
+      </div>
+    </div>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Confirm
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

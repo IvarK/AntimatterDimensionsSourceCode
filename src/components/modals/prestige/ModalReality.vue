@@ -1,10 +1,11 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import GlyphComponent from "@/components/GlyphComponent";
 
-Vue.component("modal-reality", {
+export default {
   components: {
     PrimaryButton,
-    GlyphComponent
+    GlyphComponent,
   },
   data() {
     return {
@@ -12,31 +13,15 @@ Vue.component("modal-reality", {
       showGlyphSelection: false,
       firstPerk: false,
       hasFilter: false,
-      glyphs: GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false }),
+      glyphs: [],
       bestLevel: 0,
       levelDifference: 0,
       selectedGlyph: undefined,
       canRefresh: false,
       level: 0,
       simRealities: 0,
-      realityMachines: new Decimal(0),
+      realityMachines: new Decimal(),
     };
-  },
-  created() {
-    // This refreshes the glyphs shown after every reality, and also doesn't
-    // allow it to refresh if you're choosing glyphs (at that point,
-    // your choices are your choices). This is technically incorrect since
-    // while you're choosing glyphs the level might increase, and this code
-    // stops it from increasing in the glyphs shown here, but with
-    // the glyph choice popup open, you can't see the tooltips, so there's
-    // no way for the player to notice that.
-    this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
-      this.canRefresh = false;
-    });
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-    this.getGlyphs();
-    GlyphSelection.realityProps = getRealityProps(false, false);
-
   },
   computed: {
     firstReality() {
@@ -67,6 +52,21 @@ Vue.component("modal-reality", {
         ${quantifyInt("level", this.levelDifference)}
         ${this.level > this.bestLevel ? "higher" : "lower"} than`} your best.`;
     },
+  },
+  created() {
+    // This refreshes the glyphs shown after every reality, and also doesn't
+    // allow it to refresh if you're choosing glyphs (at that point,
+    // your choices are your choices). This is technically incorrect since
+    // while you're choosing glyphs the level might increase, and this code
+    // stops it from increasing in the glyphs shown here, but with
+    // the glyph choice popup open, you can't see the tooltips, so there's
+    // no way for the player to notice that.
+    this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
+      this.canRefresh = false;
+    });
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.getGlyphs();
+    GlyphSelection.realityProps = getRealityProps(false, false);
   },
   methods: {
     update() {
@@ -113,61 +113,71 @@ Vue.component("modal-reality", {
       this.emitClose();
     },
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <h2>You are about to Reality</h2>
-      <span v-if="showReality">
-        <div class="c-modal-message__text" v-if="!firstPerk">
-          {{ firstReality }}
-        </div>
-        <div class="c-modal-message__text">
-          {{ gained }}
-        </div>
-      </span>
-      <div class="l-glyph-selection__row" v-if="firstPerk && showGlyphSelection">
-        <GlyphComponent
-          v-for="(glyph, index) in glyphs"
-          :class="glyphClass(index)"
-          :key="index"
-          :glyph="glyph"
-          :isInModal="true"
-          :ignoreModifiedLevel="true"
-          :showSacrifice="canSacrifice"
-          @click.native="select(index)"
-        />
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>You are about to Reality</h2>
+    <span v-if="showReality">
+      <div
+        v-if="!firstPerk"
+        class="c-modal-message__text"
+      >
+        {{ firstReality }}
       </div>
-      <div v-if="firstPerk">
-        {{ levelStats }}
-        <br>
-        <span v-if="showGlyphSelection">{{ selectInfo }}</span>
+
+      <div class="c-modal-message__text">
+        {{ gained }}
       </div>
-      <div v-if="simRealities > 1">
-        <br>
-        After choosing this glyph the game will simulate the rest of your Realities,
-        <br>
-        automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
-        based on your Glyph filter settings.
-      </div>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="cancelModal"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          v-if="canSacrifice"
-          @click="confirmModal(true)"
-        >
-          Sacrifice
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="confirmModal(false)"
-        >
-          Confirm
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+    </span>
+    <div
+      v-if="firstPerk && showGlyphSelection"
+      class="l-glyph-selection__row"
+    >
+      <GlyphComponent
+        v-for="(glyph, index) in glyphs"
+        :key="index"
+        :class="glyphClass(index)"
+        :glyph="glyph"
+        :is-in-modal="true"
+        :ignore-modified-level="true"
+        :show-sacrifice="canSacrifice"
+        @click.native="select(index)"
+      />
+    </div>
+    <div v-if="firstPerk">
+      {{ levelStats }}
+      <br>
+      <span v-if="showGlyphSelection">{{ selectInfo }}</span>
+    </div>
+    <div v-if="simRealities > 1">
+      <br>
+      After choosing this glyph the game will simulate the rest of your Realities,
+      <br>
+      automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
+      based on your Glyph filter settings.
+    </div>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="cancelModal"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        v-if="canSacrifice"
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="confirmModal(true)"
+      >
+        Sacrifice
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="confirmModal(false)"
+      >
+        Confirm
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

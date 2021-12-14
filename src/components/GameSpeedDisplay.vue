@@ -1,4 +1,6 @@
-Vue.component("game-header-gamespeed-display", {
+<script>
+export default {
+  name: "GameSpeedDisplay",
   data() {
     return {
       baseSpeed: 0,
@@ -7,6 +9,21 @@ Vue.component("game-header-gamespeed-display", {
       isEC12: false,
       isPulsing: false,
     };
+  },
+  computed: {
+    baseSpeedText() {
+      if (this.isStopped) {
+        return "Stopped (storing real time)";
+      }
+      const speed = this.formatNumber(this.baseSpeed);
+      if (this.isEC12) {
+        return `${speed} (fixed)`;
+      }
+      return `${speed}`;
+    },
+    pulseSpeedText() {
+      return `${this.formatNumber(this.pulsedSpeed)}`;
+    }
   },
   methods: {
     update() {
@@ -25,25 +42,13 @@ Vue.component("game-header-gamespeed-display", {
       }
       return `${format(num, 2)}`;
     }
-  },
-  computed: {
-    baseSpeedText() {
-      if (this.isStopped) {
-        return "Stopped (storing real time)";
-      }
-      const speed = this.formatNumber(this.baseSpeed);
-      if (this.isEC12) {
-        return `${speed} (fixed)`;
-      }
-      return `${speed}`;
-    },
-    pulseSpeedText() {
-      return `${this.formatNumber(this.pulsedSpeed)}`;
-    }
-  },
-  template: `
-    <span>
-      | Game speed: {{ baseSpeedText }}
-      <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding"></i> {{ pulseSpeedText }})</span>
-    </span>`
-});
+  }
+};
+</script>
+
+<template>
+  <span>
+    | Game speed: {{ baseSpeedText }}
+    <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding" /> {{ pulseSpeedText }})</span>
+  </span>
+</template>

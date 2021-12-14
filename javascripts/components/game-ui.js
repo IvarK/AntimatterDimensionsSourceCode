@@ -22,11 +22,7 @@ Vue.component("game-ui", {
     },
     page() {
       const subtab = Tabs.current[this.$viewModel.subtab];
-      const config = subtab.config;
-      if (this.view.newUI && config.newUIComponent !== undefined) {
-        return config.newUIComponent;
-      }
-      return config.component;
+      return subtab.config.component;
     },
     themeCss() {
       return `stylesheets/theme-${this.view.theme}.css`;

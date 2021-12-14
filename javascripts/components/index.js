@@ -1,5 +1,3 @@
-import "./dimensions/time/time-dim-tab.js";
-
 import "./challenges/normal-challenges-tab.js";
 import "./challenges/infinity-challenges-tab.js";
 import "./challenges/eternity-challenges-tab.js";
@@ -35,8 +33,6 @@ import "./celestials/subtabs/laitela/laitela-tab.js";
 import "./celestials/subtabs/pelle-tab.js";
 
 import "./shop/shop-tab.js";
-
-import "./new-ui/time-dimensions-tab/new-time-dimensions-tab.js";
 
 import "./modals/index.js";
 import "./game-ui.js";

@@ -1,8 +1,18 @@
-Vue.component("modal-cloud-conflict-record", {
+<script>
+export default {
   props: {
-    saveId: Number,
-    saveData: Object,
-    saveType: String
+    saveId: {
+      type: Number,
+      required: true,
+    },
+    saveData: {
+      type: Object,
+      required: true,
+    },
+    saveType: {
+      type: String,
+      required: true,
+    }
   },
   computed: {
     timePlayed() {
@@ -43,34 +53,21 @@ Vue.component("modal-cloud-conflict-record", {
       return formatInt(number);
     }
   },
-  template: `
-    <div class="l-modal-options__save-record">
-      <h3>{{ saveType }} (Slot #{{ saveId + 1 }}):</h3>
-      {{ timePlayed }}
-      <br>
-      {{ antimatter }}
-      <br>
-      {{ prestigeCount }}
-      <br>
-      {{ prestigeResource }}
-      <br>
-      {{ extraProgressIndicator }}
-      <slot />
-    </div>`
-});
-
-export const modalCloudConflictMixin = {
-  computed: {
-    conflict() {
-      return this.$viewModel.modal.cloudConflict;
-    }
-  },
-  methods: {
-    handleClick(accepted) {
-      if (accepted) {
-        safeCall(this.conflict.onAccept);
-      }
-      Modal.hide();
-    }
-  }
 };
+</script>
+
+<template>
+  <div class="l-modal-options__save-record">
+    <h3>{{ saveType }} (Slot #{{ saveId + 1 }}):</h3>
+    {{ timePlayed }}
+    <br>
+    {{ antimatter }}
+    <br>
+    {{ prestigeCount }}
+    <br>
+    {{ prestigeResource }}
+    <br>
+    {{ extraProgressIndicator }}
+    <slot />
+  </div>
+</template>

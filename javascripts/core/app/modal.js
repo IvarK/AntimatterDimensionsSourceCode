@@ -1,5 +1,7 @@
 import ModalMessage from "@/components/modals/ModalMessage";
 import ModalCelestialQuote from "@/components/modals/ModalCelestialQuote";
+import ModalCloudSaveConflict from "@/components/modals/cloud/ModalCloudSaveConflict";
+import ModalCloudLoadConflict from "@/components/modals/cloud/ModalCloudLoadConflict";
 
 export class Modal {
   constructor(component, bare = false) {
@@ -124,8 +126,8 @@ Modal.celestialQuote = new class extends Modal {
   }
 }(ModalCelestialQuote, true);
 
-Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
-Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
+Modal.cloudSaveConflict = new Modal(ModalCloudSaveConflict);
+Modal.cloudLoadConflict = new Modal(ModalCloudLoadConflict);
 // eslint-disable-next-line max-params
 Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
   Modal.hide();

@@ -5255,6 +5255,10 @@ screen and (max-width: 480px) {
   width: 30rem;
 }
 
+.c-modal-options__large {
+  width: 50rem;
+}
+
 .c-modal-options .o-primary-btn--option, .o-primary-btn--option-wide {
   padding: 0.5rem;
   margin: 0.5rem;

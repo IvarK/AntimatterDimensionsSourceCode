@@ -1,5 +1,5 @@
 import ModalMessage from "@/components/modals/ModalMessage";
-
+import ModalCelestialQuote from "@/components/modals/ModalCelestialQuote";
 
 export class Modal {
   constructor(component, bare = false) {
@@ -122,7 +122,7 @@ Modal.celestialQuote = new class extends Modal {
     super.show();
     this.lines = newLines;
   }
-}("modal-celestial-quote", true);
+}(ModalCelestialQuote, true);
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");

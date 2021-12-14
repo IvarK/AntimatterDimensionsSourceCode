@@ -48,6 +48,5 @@ import "./cloud/modal-cloud-conflict-record.js";
 import "./cloud/modal-cloud-load-conflict.js";
 import "./cloud/modal-cloud-save-conflict.js";
 
-import "../celestials/modal-celestial-quote.js";
 import "../celestials/subtabs/ra/reality-glyph-creation.js";
 import "../celestials/subtabs/laitela/singularity-milestones-modal.js";

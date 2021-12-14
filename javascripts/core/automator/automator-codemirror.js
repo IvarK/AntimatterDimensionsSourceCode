@@ -56,7 +56,7 @@ import { AutomatorLexer } from "./lexer.js";
     // The start state contains the rules that are intially used
     start: [
       commentRule,
-      { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
+      { regex: /studies\s+/ui, token: "keyword", next: "studiesNoWait" },
       { regex: /blob\s\s/ui, token: "blob" },
       {
         // eslint-disable-next-line max-len
@@ -79,6 +79,11 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: /pause|restart/ui, token: "keyword", next: "commandDone" },
       { regex: /\}/ui, dedent: true },
       { regex: /\S+\s/ui, token: "error", next: "commandDone" },
+    ],
+    studiesNoWait: [
+      commentRule,
+      { sol: true, next: "studiesArgs" },
+      { regex: /nowait(\s+|$)/ui, token: "property", next: "studiesArgs" },
     ],
     studiesArgs: [
       commentRule,

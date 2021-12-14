@@ -330,12 +330,18 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "studies load preset",
       name: "<b>studies load preset</b> - Load a saved Time Study preset",
-      syntax: `<b>studies load preset [name | number]</b>`,
-      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time
-        Study tab. Number is 1 to 6 (corresponding to slot). The given name can also be used.`,
+      syntax: `<b>studies [nowait] load preset [name | number]</b>`,
+      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time Study tab.
+        Number is 1 to 6 (corresponding to slot), but the given name can also be used.
+        If <b>nowait</b> is present, then the Automator will purchase as many Time Studies as
+        possible from the preset before moving on to the next command, even if some cannot be bought.<br>
+        If <b>nowait</b> is <i>not</i> present, then the Automator will repeatedly attempt to buy the studies in order.
+        It will repeat this line indefinitely until all of the studies in the preset are bought; the automator may get
+        stuck indefinitely if the preset contains studies in a configuration which cannot be bought simultaneously,
+        for example 71, 72, and 73 before the Dimension Split Dilation upgrade is purchased.`,
       examples: [
         `studies load preset 2`,
-        `studies load preset dil`,
+        `studies nowait load preset dil`,
       ]
     },
     {
@@ -344,16 +350,17 @@ GameDatabase.reality.automator = {
       keyword: "studies",
       name: "<b>studies</b> - Purchase Time Studies",
       syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
-      description: `Purchase Time Studies specified. If <b>nowait</b> is present, then
-        the Automator will purchase as many Time Studies as possible at the moment, and move on
-        to the next command.<br>
-        If <b>nowait</b> is <i>not</i> present, then the Automator will buy the studies in order,
-        waiting for them to become available/affordable if necessary.<br>
-        The Time Study list can consist of Time Study numbers, separated by spaces or commas, ranges of
-        studies (for example, <i>11-62</i>) and the following aliases:<br>
+      description: `Purchase Time Studies specified from a list formatted like a Tree export.
+        If <b>nowait</b> is present, then the Automator will purchase as many Time Studies as
+        possible from the text string before moving on to the next command, even if some cannot be bought.<br>
+        If <b>nowait</b> is <i>not</i> present, then the Automator will repeatedly attempt to buy the studies in order.
+        It will repeat this line indefinitely until all of the studies in the preset are bought; the automator may get
+        stuck indefinitely if the preset contains studies in a configuration which cannot be bought simultaneously,
+        for example 71, 72, and 73 before the Dimension Split Dilation upgrade is purchased.<br>
+        The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
+        spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
         <blockquote><b>antimatter, infinity, time, active, passive, idle</b></blockquote>
-        A variable name may be used in place of Time Study list, see <b>define</b>
-        The string produced by "export" in the Time Study tab can be used with this command.`,
+        A variable name may be used in place of Time Study list, see <b>define</b>.`,
       examples: [
         "studies nowait 11,21,31",
         "studies 11-62, antimatter, 111, idle",

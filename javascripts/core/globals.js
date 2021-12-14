@@ -78,3 +78,5 @@ export * from "./news-ticker.js";
 export * from "./kong.js";
 export * from "./ui/tabs.js";
 export * from "./ui/tab-notifications.js";
+
+export * from "./automator/script-templates.js";

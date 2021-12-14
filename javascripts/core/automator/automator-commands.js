@@ -663,6 +663,7 @@ export const AutomatorCommands = ((() => {
       id: "studiesLoad",
       rule: $ => () => {
         $.CONSUME(T.Studies);
+        $.OPTION(() => $.CONSUME(T.Nowait));
         $.CONSUME(T.Load);
         $.CONSUME(T.Preset);
       },
@@ -701,9 +702,22 @@ export const AutomatorCommands = ((() => {
         const presetIndex = ctx.$presetIndex;
         return () => {
           const imported = new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies);
+          const beforeCount = GameCache.currentStudyTree.value.purchasedStudies.length;
           TimeStudyTree.commitToGameState(imported.purchasedStudies);
-          AutomatorData.logCommandEvent(`Loaded study ${ctx.Preset[0].image}`, ctx.startLine);
-          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+          const afterCount = GameCache.currentStudyTree.value.purchasedStudies.length;
+          // Check if there are still any unbought studies from the preset after attempting to commit it all;
+          // if there are then we keep trying on this line until there aren't, unless we are given nowait
+          const missingStudyCount = imported.purchasedStudies
+            .filter(s => !GameCache.currentStudyTree.value.purchasedStudies.includes(s)).length;
+          if (missingStudyCount === 0) {
+            AutomatorData.logCommandEvent(`Fully loaded study preset ${ctx.Preset[0].image}`, ctx.startLine);
+          } else if (afterCount > beforeCount) {
+            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image} 
+              (missing ${quantifyInt("study", missingStudyCount)})`, ctx.startLine);
+          }
+          return ctx.Nowait !== undefined || missingStudyCount === 0
+            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
       blockify: ctx => ({

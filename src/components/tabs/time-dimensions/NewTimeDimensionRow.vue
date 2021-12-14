@@ -115,7 +115,12 @@ export default {
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
       {{ format(amount, 2, 0) }}
-      <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
+      <span
+        v-if="rateOfChange.neq(0)"
+        class="c-dim-row__label--small"
+      >
+        {{ rateOfChangeDisplay }}
+      </span>
     </div>
     <PrimaryButton
       v-tooltip="tooltipContents"

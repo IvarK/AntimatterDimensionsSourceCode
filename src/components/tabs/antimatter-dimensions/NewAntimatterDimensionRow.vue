@@ -1,6 +1,11 @@
-Vue.component("new-dimension-row", {
+<script>
+export default {
+  name: "NewAntimatterDimensionRow",
   props: {
-    tier: Number
+    tier: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
@@ -99,49 +104,65 @@ Vue.component("new-dimension-row", {
 
       return {};
     }
-  },
-  template: `
-    <div
-      v-show="showRow"
-      class="c-antimatter-dim-row"
-      :class="{ 'c-dim-row--not-reached': !isUnlocked }"
+  }
+};
+</script>
+
+<template>
+  <div
+    v-show="showRow"
+    class="c-antimatter-dim-row"
+    :class="{ 'c-dim-row--not-reached': !isUnlocked }"
+  >
+    <div class="c-dim-row__label c-dim-row__name">
+      {{ name }} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{ formatX(multiplier, 1, 1) }}</span>
+    </div>
+    <div class="c-dim-row__label c-dim-row__label--growable">
+      {{ amountDisplay }}
+      <span
+        v-if="rateOfChange.neq(0)"
+        class="c-dim-row__label--small"
+      >
+        {{ rateOfChangeDisplay }}
+      </span>
+    </div>
+    <button
+      class="o-primary-btn o-primary-btn--new"
+      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isCapped}"
+      @click="buy"
     >
-      <div class="c-dim-row__label c-dim-row__name">
-        {{ name }} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{ formatX(multiplier, 1, 1) }}</span>
+      <div
+        v-tooltip="boughtTooltip"
+        class="button-content"
+        :class="tutorialClass()"
+      >
+        <span v-if="isCapped">
+          Shattered by Enslaved
+        </span>
+        <span v-else-if="isContinuumActive">
+          Continuum:
+          <br>
+          {{ continuumString }}
+        </span>
+        <span v-else>
+          Buy {{ howManyCanBuy }}
+          <br>
+          Cost: {{ costDisplay }}
+        </span>
       </div>
-      <div class="c-dim-row__label c-dim-row__label--growable">
-        {{ amountDisplay }}
-        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
-      </div>
-      <button
-        class="o-primary-btn o-primary-btn--new"
-        :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isCapped}"
-        @click="buy"
+      <div
+        v-if="!isContinuumActive && isUnlocked && !isCapped"
+        class="fill"
       >
         <div
-          v-tooltip="boughtTooltip"
-          class="button-content"
-          :enabled="isAffordable || isContinuumActive"
-          :class="tutorialClass()"
-        >
-          <span v-if="isCapped">
-            Shattered by Enslaved
-          </span>
-          <span v-else-if="isContinuumActive">
-            Continuum:
-            <br>
-            {{ continuumString }}
-          </span>
-          <span v-else>
-            Buy {{ howManyCanBuy }}
-            <br>
-            Cost: {{ costDisplay }}
-          </span>
-        </div>
-        <div class="fill" v-if="!isContinuumActive && isUnlocked && !isCapped">
-          <div class="fill-purchased" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
-          <div class="fill-possible" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
-        </div>
-      </button>
-    </div>`
-});
+          class="fill-purchased"
+          :style="{ 'width': boughtBefore10*10 + '%' }"
+        />
+        <div
+          class="fill-possible"
+          :style="{ 'width': howManyCanBuy*10 + '%' }"
+        />
+      </div>
+    </button>
+  </div>
+</template>

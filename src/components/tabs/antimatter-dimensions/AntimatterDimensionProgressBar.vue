@@ -1,7 +1,8 @@
-import { DC } from "../../../core/constants.js";
+<script>
+import { DC } from "../../../../javascripts/core/constants";
 
-
-Vue.component("antimatter-dim-tab-progress-bar", {
+export default {
+  name: "AntimatterDimensionProgressBar",
   data() {
     return {
       fill: 0,
@@ -76,11 +77,22 @@ Vue.component("antimatter-dim-tab-progress-bar", {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       }
     }
-  },
-  template: `
-    <div class="c-progress-bar">
-      <div :style="progressBarStyle" class="c-progress-bar__fill">
-        <span v-tooltip="tooltip" class="c-progress-bar__percents">{{ displayPercents }}</span>
-      </div>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="c-progress-bar">
+    <div
+      :style="progressBarStyle"
+      class="c-progress-bar__fill"
+    >
+      <span
+        v-tooltip="tooltip"
+        class="c-progress-bar__percents"
+      >
+        {{ displayPercents }}
+      </span>
+    </div>
+  </div>
+</template>

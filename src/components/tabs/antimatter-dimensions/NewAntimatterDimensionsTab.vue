@@ -1,13 +1,20 @@
-import "./new-dimension-row.js";
-import "./new-tickspeed-row.js";
-import "./new-dim-boost-row.js";
-import "./new-galaxy-row.js";
-import "../../dimensions/antimatter/antimatter-dim-tab-progress-bar.js";
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
+import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
+import AntimatterDimensionRow from "@/components/tabs/antimatter-dimensions/NewAntimatterDimensionRow";
+import AntimatterGalaxyRow from "@/components/tabs/antimatter-dimensions/NewAntimatterGalaxyRow";
+import DimensionBoostRow from "@/components/tabs/antimatter-dimensions/NewDimensionBoostRow";
+import TickspeedRow from "@/components/tabs/antimatter-dimensions/TickspeedRow";
 
-Vue.component("new-dimensions-tab", {
+export default {
+  name: "NewAntimatterDimensionsTab",
   components: {
-    PrimaryButton
+    PrimaryButton,
+    AntimatterDimensionProgressBar,
+    AntimatterDimensionRow,
+    AntimatterGalaxyRow,
+    DimensionBoostRow,
+    TickspeedRow
   },
   data() {
     return {
@@ -77,50 +84,61 @@ Vue.component("new-dimensions-tab", {
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
       if (this.isSacrificeUnlocked) this.multiplierText +=
         ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
-    },
-  },
-  template: `
-    <div class="l-antimatter-dim-tab">
-      <div class="modes-container">
-        <button class="o-primary-btn" @click="changeBuyMode" style="width: 100px; height: 30px; padding: 0;">
-          {{ getUntil10Display() }}
-        </button>
-        <PrimaryButton
-          v-show="isSacrificeUnlocked"
-          v-tooltip="sacrificeTooltip"
-          :enabled="isSacrificeAffordable"
-          class="o-primary-btn--sacrifice"
-          @click="sacrifice"
-        >
-          <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-          <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
-        </PrimaryButton>
-        <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">
-          Max All (M)
-        </button>
-      </div>
-      <span>{{ multiplierText }}</span>
-      <new-tickspeed-row />
-      <div class="l-dimensions-container">
-        <new-dimension-row
-          v-for="tier in 8"
-          :key="tier"
-          :tier="tier"
-        />
-      </div>
-      <div class="resets-container">
-        <new-dim-boost-row />
-        <PrimaryButton
-          v-if="isQuickResetAvailable"
-          class="o-primary-btn--quick-reset"
-          onclick="softReset(-1, true, true)"
-        >
-          Perform a Dimension Boost reset
-          <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
-          <span v-else> for no gain</span>
-        </PrimaryButton>
-        <new-galaxy-row />
-      </div>
-      <antimatter-dim-tab-progress-bar />
-    </div>`
-});
+    }
+  }
+};
+</script>
+
+<template>
+  <div class="l-antimatter-dim-tab">
+    <div class="modes-container">
+      <button
+        class="o-primary-btn"
+        style="width: 100px; height: 30px; padding: 0;"
+        @click="changeBuyMode"
+      >
+        {{ getUntil10Display() }}
+      </button>
+      <PrimaryButton
+        v-show="isSacrificeUnlocked"
+        v-tooltip="sacrificeTooltip"
+        :enabled="isSacrificeAffordable"
+        class="o-primary-btn--sacrifice"
+        @click="sacrifice"
+      >
+        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
+        <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
+      </PrimaryButton>
+      <button
+        class="o-primary-btn"
+        style="width: 100px; height: 30px; padding: 0;"
+        @click="maxAll"
+      >
+        Max All (M)
+      </button>
+    </div>
+    <span>{{ multiplierText }}</span>
+    <TickspeedRow />
+    <div class="l-dimensions-container">
+      <AntimatterDimensionRow
+        v-for="tier in 8"
+        :key="tier"
+        :tier="tier"
+      />
+    </div>
+    <div class="resets-container">
+      <DimensionBoostRow />
+      <PrimaryButton
+        v-if="isQuickResetAvailable"
+        class="o-primary-btn--quick-reset"
+        onclick="softReset(-1, true, true)"
+      >
+        Perform a Dimension Boost reset
+        <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
+        <span v-else> for no gain</span>
+      </PrimaryButton>
+      <AntimatterGalaxyRow />
+    </div>
+    <AntimatterDimensionProgressBar />
+  </div>
+</template>

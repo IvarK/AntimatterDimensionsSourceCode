@@ -1,6 +1,8 @@
+<script>
 import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 
-Vue.component("new-tickspeed-row", {
+export default {
+  name: "TickspeedRow",
   components: {
     GameSpeedDisplay
   },
@@ -64,38 +66,39 @@ Vue.component("new-tickspeed-row", {
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
-  },
-  template: `
-    <div :class="classObject">
-      <div class="tickspeed-labels">
-        <span>
-          {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-          <GameSpeedDisplay v-if="!isGameSpeedNormal" />
+  }
+};
+</script>
+
+<template>
+  <div :class="classObject">
+    <div class="tickspeed-labels">
+      <span>
+        {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
+        <GameSpeedDisplay v-if="!isGameSpeedNormal" />
+      </span>
+    </div>
+    <div class="tickspeed-buttons">
+      <button
+        class="o-primary-btn tickspeed-btn"
+        :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
+        onclick="buyTickSpeed()"
+      >
+        <span v-if="isContinuumActive">
+          {{ continuumString }} (cont.)
         </span>
-      </div>
-      <div class="tickspeed-buttons">
-        <button
-          class="o-primary-btn tickspeed-btn"
-          :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
-          :enabled="isAffordable"
-          onclick="buyTickSpeed()"
-        >
-          <span v-if="isContinuumActive">
-            {{ continuumString }} (cont.)
-          </span>
-          <span v-else>
-            Cost: {{ format(cost) }}
-          </span>
-        </button>
-        <button
-          v-if="!isContinuumActive"
-          class="o-primary-btn tickspeed-max-btn"
-          :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
-          :enabled="isAffordable"
-          onclick="buyMaxTickSpeed()"
-        >
-          Buy Max
-        </button>
-      </div>
-    </div>`
-});
+        <span v-else>
+          Cost: {{ format(cost) }}
+        </span>
+      </button>
+      <button
+        v-if="!isContinuumActive"
+        class="o-primary-btn tickspeed-max-btn"
+        :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
+        onclick="buyMaxTickSpeed()"
+      >
+        Buy Max
+      </button>
+    </div>
+  </div>
+</template>

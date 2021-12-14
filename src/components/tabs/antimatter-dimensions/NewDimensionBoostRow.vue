@@ -1,9 +1,6 @@
-import PrimaryButton from "@/components/PrimaryButton";
-
-Vue.component("antimatter-dim-boost-row", {
-  components: {
-    PrimaryButton
-  },
+<script>
+export default {
+  name: "NewDimensionBoostRow",
   data() {
     return {
       requirement: {
@@ -14,12 +11,12 @@ Vue.component("antimatter-dim-boost-row", {
       purchasedBoosts: 0,
       imaginaryBoosts: 0,
       lockText: null,
-      unlockedByBoost: null
+      unlockedByBoost: null,
     };
   },
   computed: {
     dimName() {
-      return AntimatterDimension(this.requirement.tier).displayName;
+      return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
@@ -56,21 +53,21 @@ Vue.component("antimatter-dim-boost-row", {
       requestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
-  },
-  template: `
-    <div class="c-antimatter-dim-row">
-      <div class="c-dim-row__label c-dim-row__label--growable">
-        Dimension Boost ({{ boostCountText }}):
-        requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
-      </div>
-      <PrimaryButton
-        :enabled="isBuyable"
-        class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
-        :class=tutorialClass
-        @click.exact="dimensionBoost(true)"
-        @click.shift.exact="dimensionBoost(false)"
-      >
-        {{ unlockedByBoost }}
-      </PrimaryButton>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="reset-container dimboost">
+    <h4>Dimension Boost ({{ boostCountText }})</h4>
+    <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
+    <button
+      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
+      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
+      @click.exact="dimensionBoost(true)"
+      @click.shift.exact="dimensionBoost(false)"
+    >
+      {{ unlockedByBoost }}
+    </button>
+  </div>
+</template>

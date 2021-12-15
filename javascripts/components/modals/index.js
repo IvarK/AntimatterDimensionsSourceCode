@@ -3,7 +3,6 @@ import "./modal-import.js";
 import "./modal-study-string.js";
 import "./modal-load-game.js";
 import "./modal-std-store.js";
-import "./modal-h2p.js";
 import "./modal-progress-bar.js";
 import "./modal-away-progress.js";
 import "./modal-sacrifice.js";

@@ -35,6 +35,8 @@ import ModalGlyphRefine from "@/components/modals/glyph-management/ModalGlyphRef
 import ModalDeleteAllUnprotectedGlyphs from "@/components/modals/glyph-management/ModalDeleteAllUnprotectedGlyphs";
 import ModalDeleteAllRejectedGlyphs from "@/components/modals/glyph-management/ModalDeleteAllRejectedGlyphs";
 
+import ModalH2P from "@/components/modals/ModalH2P";
+
 export class Modal {
   constructor(component, bare = false) {
     this._component = component;
@@ -133,7 +135,7 @@ Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.uiChoice = new Modal("modal-ui-choice");
-Modal.h2p = new Modal("modal-h2p");
+Modal.h2p = new Modal(ModalH2P);
 Modal.awayProgress = new Modal("modal-away-progress");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");

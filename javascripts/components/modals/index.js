@@ -1,4 +1,3 @@
-import "./modal-shortcuts.js";
 import "./modal-ui-choice.js";
 import "./modal-import.js";
 import "./modal-study-string.js";
@@ -14,7 +13,6 @@ import "./modal-break-infinity.js";
 import "./modal-automator-script-delete.js";
 import "./modal-automator-script-import.js";
 import "./modal-set-save-delete.js";
-import "./modal-preferred-tree.js";
 import "./modal-glyph-undo.js";
 import "./modal-glyph-sacrifice.js";
 import "./modal-glyph-delete.js";
@@ -23,13 +21,6 @@ import "./modal-glyph-refine.js";
 import "./modal-glyph-showcase-panel.js";
 import "./modal-delete-all-unprotected-glyphs.js";
 import "./modal-delete-all-rejected-glyphs.js";
-import "./options/modal-options.js";
-import "./options/modal-news-options.js";
-import "./options/modal-animation-options.js";
-import "./options/modal-confirmation-options.js";
-import "./options/modal-info-display-options.js";
-import "./options/modal-away-progress-options.js";
-import "./options/modal-hidden-tabs.js";
 
 import "../celestials/subtabs/ra/reality-glyph-creation.js";
 import "../celestials/subtabs/laitela/singularity-milestones-modal.js";

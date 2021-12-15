@@ -18,6 +18,15 @@ import ModalExitCelestialReality from "@/components/modals/prestige/ModalExitCel
 import ModalCelestials from "@/components/modals/prestige/ModalCelestials";
 import ModalHardReset from "@/components/modals/prestige/ModalHardReset";
 
+import ModalConfirmationOptions from "@/components/modals/options/ModalConfirmationOptions";
+import ModalInfoDisplayOptions from "@/components/modals/options/ModalInfoDisplayOptions";
+import ModalAwayProgressOptions from "@/components/modals/options/ModalAwayProgressOptions";
+import ModalShortcuts from "@/components/modals/options/ModalShortcuts";
+import ModalNewsOptions from "@/components/modals/options/ModalNewsOptions";
+import ModalAnimationOptions from "@/components/modals/options/ModalAnimationOptions";
+import ModalPreferredTree from "@/components/modals/options/ModalPreferredTree";
+import ModalHiddenTabs from "@/components/modals/options/hidden-tabs/ModalHiddenTabs";
+
 
 export class Modal {
   constructor(component, bare = false) {
@@ -75,6 +84,11 @@ class ChallengeConfirmationModal extends Modal {
     super.show();
   }
 }
+
+Modal.startEternityChallenge = new ChallengeConfirmationModal(ModalStartEternityChallenge);
+Modal.startInfinityChallenge = new ChallengeConfirmationModal(ModalStartInfinityChallenge);
+Modal.startNormalChallenge = new ChallengeConfirmationModal(ModalStartNormalChallenge);
+
 Modal.dimensionBoost = new Modal(ModalDimensionBoost);
 Modal.antimatterGalaxy = new Modal(ModalAntimatterGalaxy);
 Modal.bigCrunch = new Modal(ModalBigCrunch);
@@ -87,23 +101,15 @@ Modal.exitCelestialReality = new Modal(ModalExitCelestialReality);
 Modal.celestials = new Modal(ModalCelestials);
 Modal.hardReset = new Modal(ModalHardReset);
 
+Modal.confirmationOptions = new Modal(ModalConfirmationOptions);
+Modal.infoDisplayOptions = new Modal(ModalInfoDisplayOptions);
+Modal.awayProgressOptions = new Modal(ModalAwayProgressOptions);
+Modal.shortcuts = new Modal(ModalShortcuts);
+Modal.newsOptions = new Modal(ModalNewsOptions);
+Modal.animationOptions = new Modal(ModalAnimationOptions);
+Modal.hiddenTabs = new Modal(ModalHiddenTabs);
+Modal.preferredTree = new Modal(ModalPreferredTree);
 
-Modal.h2p = new Modal("modal-h2p");
-Modal.awayProgress = new Modal("modal-away-progress");
-Modal.shortcuts = new Modal("modal-shortcuts");
-Modal.newsOptions = new Modal("modal-news-options");
-Modal.animationOptions = new Modal("modal-animation-options");
-Modal.confirmationOptions = new Modal("modal-confirmation-options");
-Modal.infoDisplayOptions = new Modal("modal-info-display-options");
-Modal.awayProgressOptions = new Modal("modal-away-progress-options");
-Modal.loadGame = new Modal("modal-load-game");
-Modal.uiChoice = new Modal("modal-ui-choice");
-Modal.import = new Modal("modal-import");
-Modal.importScript = new Modal("modal-automator-script-import");
-Modal.shop = new Modal("modal-std-store");
-Modal.studyString = new Modal("modal-study-string");
-Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
-Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.glyphPurge = new Modal("modal-glyph-purge");
 Modal.glyphShowcasePanel = new Modal("modal-glyph-showcase-panel");
@@ -116,12 +122,17 @@ Modal.deleteAllUnprotectedGlyphs = new Modal("modal-delete-all-unprotected-glyph
 Modal.deleteAllRejectedGlyphs = new Modal("modal-delete-all-rejected-glyphs");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
+Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
+Modal.uiChoice = new Modal("modal-ui-choice");
+Modal.h2p = new Modal("modal-h2p");
+Modal.awayProgress = new Modal("modal-away-progress");
+Modal.loadGame = new Modal("modal-load-game");
+Modal.import = new Modal("modal-import");
+Modal.importScript = new Modal("modal-automator-script-import");
+Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
+Modal.shop = new Modal("modal-std-store");
+Modal.studyString = new Modal("modal-study-string");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
-Modal.preferredTree = new Modal("modal-preferred-tree");
-Modal.hiddenTabs = new Modal("modal-hidden-tabs");
-Modal.startEternityChallenge = new ChallengeConfirmationModal(ModalStartEternityChallenge);
-Modal.startInfinityChallenge = new ChallengeConfirmationModal(ModalStartInfinityChallenge);
-Modal.startNormalChallenge = new ChallengeConfirmationModal(ModalStartNormalChallenge);
 Modal.sacrifice = new Modal("modal-sacrifice");
 Modal.breakInfinity = new Modal("modal-break-infinity");
 Modal.celestialQuote = new class extends Modal {

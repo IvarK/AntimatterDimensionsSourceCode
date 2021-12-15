@@ -1,7 +1,12 @@
-import { modalOptionsMixin } from "./modal-options.js";
+<script>
+import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
+import ModalOptions from "@/components/modals/options/ModalOptions";
 
-Vue.component("modal-confirmation-options", {
-  mixins: [modalOptionsMixin],
+export default {
+  components: {
+    ModalOptionsToggleButton,
+    ModalOptions,
+  },
   data() {
     return {
       sacrifice: false,
@@ -117,6 +122,12 @@ Vue.component("modal-confirmation-options", {
       this.dimensionBoost = options.dimensionBoost;
       this.replicantiGalaxy = options.replicantiGalaxy;
 
+
+      const progress = PlayerProgress.current;
+      this.infinityUnlocked = progress.isInfinityUnlocked;
+      this.eternityUnlocked = progress.isEternityUnlocked;
+      this.realityUnlocked = progress.isRealityUnlocked;
+      this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
       this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.sacrificeUnlocked = Sacrifice.isVisible;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
@@ -128,27 +139,105 @@ Vue.component("modal-confirmation-options", {
       this.replicantiUnlocked = PlayerProgress.eternityUnlocked() || player.replicanti.unl;
     }
   },
-  template: `
-    <modal-options @close="emitClose" style="width: 50rem">
-      <div class="c-modal-options__button-container">
-        <wide-on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:" />
-        <wide-on-off-button v-if="sacrificeUnlocked" v-model="dimensionBoost" text="Dimension Boost:" />
-        <wide-on-off-button v-if="infinityUnlocked" v-model="antimatterGalaxy" text="Antimatter Galaxy:" />
-        <wide-on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:" />
-        <wide-on-off-button v-if="infinityBroken" v-model="bigCrunch" text="Big Crunch:" />
-        <wide-on-off-button v-if="replicantiUnlocked" v-model="replicantiGalaxy" text="Replicanti Galaxy:" />
-        <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:" />
-        <wide-on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:" />
-        <wide-on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:" />
-        <wide-on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:" />
-        <wide-on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:" />
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:" />
-        <wide-on-off-button v-if="glyphSacrificeUnlocked" v-model="autoClean" text="Glyph Purge:" />
-        <wide-on-off-button v-if="realityAutobuyerUnlocked" v-model="glyphSelection" text="Glyph Selection:" />
-        <wide-on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:" />
-        <wide-on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:" />
-        <wide-on-off-button v-if="glyphSetSaveUnlocked" v-model="deleteGlyphSetSave" text="Delete Glyph Set Save:" />
-        <wide-on-off-button v-if="glyphRefineUnlocked" v-model="glyphRefine" text="Glyph refine:" />
-      </div>
-    </modal-options>`
-});
+};
+</script>
+
+<template>
+  <ModalOptions
+    class="c-modal-options__large"
+    @close="emitClose"
+  >
+    <div class="c-modal-options__button-container">
+      <ModalOptionsToggleButton
+        v-if="sacrificeUnlocked"
+        v-model="sacrifice"
+        text="Sacrifice:"
+      />
+      <ModalOptionsToggleButton
+        v-if="sacrificeUnlocked"
+        v-model="dimensionBoost"
+        text="Dimension Boost:"
+      />
+      <ModalOptionsToggleButton
+        v-if="infinityUnlocked"
+        v-model="antimatterGalaxy"
+        text="Antimatter Galaxy:"
+      />
+      <ModalOptionsToggleButton
+        v-if="infinityUnlocked"
+        v-model="challenges"
+        text="Challenges:"
+      />
+      <ModalOptionsToggleButton
+        v-if="infinityBroken"
+        v-model="bigCrunch"
+        text="Big Crunch:"
+      />
+      <ModalOptionsToggleButton
+        v-if="replicantiUnlocked"
+        v-model="replicantiGalaxy"
+        text="Replicanti Galaxy:"
+      />
+      <ModalOptionsToggleButton
+        v-if="eternityUnlocked"
+        v-model="eternity"
+        text="Eternity:"
+      />
+      <ModalOptionsToggleButton
+        v-if="dilationUnlocked"
+        v-model="dilation"
+        text="Dilation:"
+      />
+      <ModalOptionsToggleButton
+        v-if="realityUnlocked"
+        v-model="reality"
+        text="Reality:"
+      />
+      <ModalOptionsToggleButton
+        v-if="realityUnlocked"
+        v-model="resetReality"
+        text="Reset Reality:"
+      />
+      <ModalOptionsToggleButton
+        v-if="realityUnlocked"
+        v-model="glyphReplace"
+        text="Glyph replace:"
+      />
+      <ModalOptionsToggleButton
+        v-if="glyphSacrificeUnlocked"
+        v-model="glyphSacrifice"
+        text="Glyph Sacrifice:"
+      />
+      <ModalOptionsToggleButton
+        v-if="glyphSacrificeUnlocked"
+        v-model="autoClean"
+        text="Glyph Purge:"
+      />
+      <ModalOptionsToggleButton
+        v-if="realityAutobuyerUnlocked"
+        v-model="glyphSelection"
+        text="Glyph Selection:"
+      />
+      <ModalOptionsToggleButton
+        v-if="glyphUndoUnlocked"
+        v-model="glyphUndo"
+        text="Glyph undo:"
+      />
+      <ModalOptionsToggleButton
+        v-if="resetCelestialUnlocked"
+        v-model="resetCelestial"
+        text="Reset Celestial:"
+      />
+      <ModalOptionsToggleButton
+        v-if="glyphSetSaveUnlocked"
+        v-model="deleteGlyphSetSave"
+        text="Delete Glyph Set Save:"
+      />
+      <ModalOptionsToggleButton
+        v-if="glyphRefineUnlocked"
+        v-model="glyphRefine"
+        text="Glyph refine:"
+      />
+    </div>
+  </ModalOptions>
+</template>

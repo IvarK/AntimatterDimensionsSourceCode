@@ -1,7 +1,8 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
-Vue.component("modal-preferred-tree", {
+export default {
   components: {
     PrimaryButton,
     ModalCloseButton,
@@ -11,10 +12,6 @@ Vue.component("modal-preferred-tree", {
       dimensionPath: null,
       pacePath: null
     };
-  },
-  created() {
-    this.dimensionPath = [...TimeStudy.preferredPaths.dimensionPath.path];
-    this.pacePath = TimeStudy.preferredPaths.pacePath.path;
   },
   computed: {
     dimensionOptions() {
@@ -35,6 +32,10 @@ Vue.component("modal-preferred-tree", {
       return TimeStudy(201).isBought || this.dimensionPath.length === 2 ||
         DilationUpgrade.timeStudySplit.isBought || PlayerProgress.realityUnlocked();
     }
+  },
+  created() {
+    this.dimensionPath = [...TimeStudy.preferredPaths.dimensionPath.path];
+    this.pacePath = TimeStudy.preferredPaths.pacePath.path;
   },
   methods: {
     isPreferred(name) {
@@ -70,43 +71,51 @@ Vue.component("modal-preferred-tree", {
       ];
     },
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <ModalCloseButton @click="emitClose" />
-      <br>
-      <h2>Dimension Split Preference</h2>
-      <div style="display: flex; flex-direction: row; align-items: center;">
-        <button
-          v-for="(id, name) in dimensionOptions"
-          @click="select(name)"
-          :class="classList(name)"
-        >
-          <div v-if="isPreferred(name)" class="l-dim-path-priority o-dim-path-priority">
-            {{ isPreferred(name) }}
-          </div>
-          <div>
-            {{ name }}
-          </div>
-        </button>
-      </div>
-      <br>
-      <h2>Pace Split Preference</h2>
-      <div style="display: flex; flex-direction: row; align-items: center;">
-        <button
-          v-for="(id, name) in paceOptions"
-          @click="select(name)"
-          :class="classList(name)"
-        >
-          <div>
-            {{ name }}
-          </div>
-        </button>
-      </div>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
-        @click="confirmPrefs"
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <ModalCloseButton @click="emitClose" />
+    <br>
+    <h2>Dimension Split Preference</h2>
+    <div class="l-modal-split-preferences">
+      <button
+        v-for="(id, name) in dimensionOptions"
+        :key="name"
+        :class="classList(name)"
+        @click="select(name)"
       >
-        Confirm
-      </PrimaryButton>
-    </div>`
-});
+        <div
+          v-if="isPreferred(name)"
+          class="l-dim-path-priority o-dim-path-priority"
+        >
+          {{ isPreferred(name) }}
+        </div>
+        <div>
+          {{ name }}
+        </div>
+      </button>
+    </div>
+    <br>
+    <h2>Pace Split Preference</h2>
+    <div class="l-modal-split-preferences">
+      <button
+        v-for="(id, name) in paceOptions"
+        :key="name"
+        :class="classList(name)"
+        @click="select(name)"
+      >
+        <div>
+          {{ name }}
+        </div>
+      </button>
+    </div>
+    <PrimaryButton
+      class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
+      @click="confirmPrefs"
+    >
+      Confirm
+    </PrimaryButton>
+  </div>
+</template>

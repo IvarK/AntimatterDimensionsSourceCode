@@ -5429,6 +5429,12 @@ kbd {
   justify-content: space-between;
 }
 
+.l-modal-split-preferences {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .c-modal-progress-bar__label {
   font-size: large;
   padding-bottom: 0.5rem;

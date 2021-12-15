@@ -12,7 +12,6 @@ import "./modal-automator-script-import.js";
 import "./modal-set-save-delete.js";
 import "./modal-glyph-undo.js";
 import "./modal-glyph-replace.js";
-import "./modal-glyph-showcase-panel.js";
 
 import "../celestials/subtabs/ra/reality-glyph-creation.js";
 import "../celestials/subtabs/laitela/singularity-milestones-modal.js";

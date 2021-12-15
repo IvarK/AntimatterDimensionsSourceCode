@@ -1,14 +1,15 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-delete-all-rejected-glyphs", {
+export default {
   components: {
     PrimaryButton
   },
   data() {
     return {
-      glyphsTotal: Number,
-      glyphsDeleted: Number,
-      isRefining: Boolean,
+      glyphsTotal: 0,
+      glyphsDeleted: 0,
+      isRefining: false,
     };
   },
   computed: {
@@ -44,7 +45,10 @@ Vue.component("modal-delete-all-rejected-glyphs", {
       this.emitClose();
     }
   },
-  template: `
+};
+</script>
+
+<template>
   <div class="c-modal-message l-modal-content--centered">
     <h2>{{ topLabel }}</h2>
     <div class="c-modal-message__text">
@@ -54,18 +58,18 @@ Vue.component("modal-delete-all-rejected-glyphs", {
       {{ extraMessage }}
     </div>
     <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Confirm
-        </PrimaryButton>
-      </div>
-  </div>`
-});
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Confirm
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

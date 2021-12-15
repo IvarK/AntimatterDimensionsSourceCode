@@ -1,6 +1,7 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-delete-companion", {
+export default {
   components: {
     PrimaryButton
   },
@@ -54,32 +55,35 @@ Vue.component("modal-delete-companion", {
       Glyphs.removeFromInventory(toDelete);
     }
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <div class="c-modal-message__text">
-        {{ message }}
-      </div>
-      <div v-if="messageIndex < 3">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleLeftButtonClick"
-        >
-          {{ messageIndex < 2 ? "Delete" : "Cancel" }}
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleRightButtonClick"
-        >
-          {{ messageIndex >= 2 ? "Delete" : "Cancel" }}
-        </PrimaryButton>
-      </div>
-      <div v-else>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Thank you
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <div class="c-modal-message__text">
+      {{ message }}
+    </div>
+    <div v-if="messageIndex < 3">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleLeftButtonClick"
+      >
+        {{ messageIndex < 2 ? "Delete" : "Cancel" }}
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleRightButtonClick"
+      >
+        {{ messageIndex >= 2 ? "Delete" : "Cancel" }}
+      </PrimaryButton>
+    </div>
+    <div v-else>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Thank you
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

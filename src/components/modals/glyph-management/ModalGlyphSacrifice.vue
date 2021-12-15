@@ -1,11 +1,15 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-glyph-sacrifice", {
+export default {
   components: {
     PrimaryButton
   },
   props: {
-    modalConfig: Object
+    modalConfig: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -42,25 +46,29 @@ Vue.component("modal-glyph-sacrifice", {
       this.emitClose();
     }
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <h2>You are about to delete a Glyph</h2>
-      <div class="c-modal-message__text">
-        {{ message }}
-      </div>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Confirm
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>You are about to sacrifice a Glyph</h2>
+    <div class="c-modal-message__text">
+      {{ message }}
+    </div>
+
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Confirm
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

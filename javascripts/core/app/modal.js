@@ -27,6 +27,13 @@ import ModalAnimationOptions from "@/components/modals/options/ModalAnimationOpt
 import ModalPreferredTree from "@/components/modals/options/ModalPreferredTree";
 import ModalHiddenTabs from "@/components/modals/options/hidden-tabs/ModalHiddenTabs";
 
+import ModalDeleteCompanion from "@/components/modals/glyph-management/ModalDeleteCompanion";
+import ModalGlyphDelete from "@/components/modals/glyph-management/ModalGlyphDelete";
+import ModalGlyphPurge from "@/components/modals/glyph-management/ModalGlyphPurge";
+import ModalGlyphSacrifice from "@/components/modals/glyph-management/ModalGlyphSacrifice";
+import ModalGlyphRefine from "@/components/modals/glyph-management/ModalGlyphRefine";
+import ModalDeleteAllUnprotectedGlyphs from "@/components/modals/glyph-management/ModalDeleteAllUnprotectedGlyphs";
+import ModalDeleteAllRejectedGlyphs from "@/components/modals/glyph-management/ModalDeleteAllRejectedGlyphs";
 
 export class Modal {
   constructor(component, bare = false) {
@@ -110,16 +117,18 @@ Modal.animationOptions = new Modal(ModalAnimationOptions);
 Modal.hiddenTabs = new Modal(ModalHiddenTabs);
 Modal.preferredTree = new Modal(ModalPreferredTree);
 
-Modal.deleteCompanion = new Modal("modal-delete-companion");
-Modal.glyphPurge = new Modal("modal-glyph-purge");
+Modal.deleteCompanion = new Modal(ModalDeleteCompanion);
+Modal.glyphDelete = new Modal(ModalGlyphDelete);
+Modal.glyphPurge = new Modal(ModalGlyphPurge);
+Modal.glyphSacrifice = new Modal(ModalGlyphSacrifice);
+Modal.glyphRefine = new Modal(ModalGlyphRefine);
+Modal.deleteAllUnprotectedGlyphs = new Modal(ModalDeleteAllUnprotectedGlyphs);
+Modal.deleteAllRejectedGlyphs = new Modal(ModalDeleteAllRejectedGlyphs);
+
+
 Modal.glyphShowcasePanel = new Modal("modal-glyph-showcase-panel");
 Modal.glyphUndo = new Modal("modal-glyph-undo");
 Modal.glyphReplace = new Modal("modal-glyph-replace");
-Modal.glyphSacrifice = new Modal("modal-glyph-sacrifice");
-Modal.glyphDelete = new Modal("modal-glyph-delete");
-Modal.glyphRefine = new Modal("modal-glyph-refine");
-Modal.deleteAllUnprotectedGlyphs = new Modal("modal-delete-all-unprotected-glyphs");
-Modal.deleteAllRejectedGlyphs = new Modal("modal-delete-all-rejected-glyphs");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");

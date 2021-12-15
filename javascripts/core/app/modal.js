@@ -38,6 +38,7 @@ import ModalDeleteAllRejectedGlyphs from "@/components/modals/glyph-management/M
 import ModalH2P from "@/components/modals/ModalH2P";
 import ModalGlyphShowcasePanel from "@/components/modals/ModalGlyphShowcasePanel";
 import ModalGlyphUndo from "@/components/modals/ModalGlyphUndo";
+import ModalGlyphReplace from "@/components/modals/ModalGlyphReplace";
 
 
 export class Modal {
@@ -133,7 +134,7 @@ Modal.deleteAllRejectedGlyphs = new Modal(ModalDeleteAllRejectedGlyphs);
 
 Modal.glyphShowcasePanel = new Modal(ModalGlyphShowcasePanel);
 Modal.glyphUndo = new Modal(ModalGlyphUndo);
-Modal.glyphReplace = new Modal("modal-glyph-replace");
+Modal.glyphReplace = new Modal(ModalGlyphReplace);
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");

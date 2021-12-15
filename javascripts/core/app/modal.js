@@ -39,6 +39,7 @@ import ModalH2P from "@/components/modals/ModalH2P";
 import ModalGlyphShowcasePanel from "@/components/modals/ModalGlyphShowcasePanel";
 import ModalGlyphUndo from "@/components/modals/ModalGlyphUndo";
 import ModalGlyphReplace from "@/components/modals/ModalGlyphReplace";
+import ModalUiChoice from "@/components/modals/ModalUiChoice";
 
 
 export class Modal {
@@ -138,7 +139,7 @@ Modal.glyphReplace = new Modal(ModalGlyphReplace);
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
-Modal.uiChoice = new Modal("modal-ui-choice");
+Modal.uiChoice = new Modal(ModalUiChoice);
 Modal.h2p = new Modal(ModalH2P);
 Modal.awayProgress = new Modal("modal-away-progress");
 Modal.loadGame = new Modal("modal-load-game");

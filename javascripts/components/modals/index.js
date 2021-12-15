@@ -1,4 +1,3 @@
-import "./modal-ui-choice.js";
 import "./modal-import.js";
 import "./modal-study-string.js";
 import "./modal-load-game.js";

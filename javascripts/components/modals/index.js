@@ -10,7 +10,6 @@ import "./modal-break-infinity.js";
 import "./modal-automator-script-delete.js";
 import "./modal-automator-script-import.js";
 import "./modal-set-save-delete.js";
-import "./modal-glyph-undo.js";
 import "./modal-glyph-replace.js";
 
 import "../celestials/subtabs/ra/reality-glyph-creation.js";

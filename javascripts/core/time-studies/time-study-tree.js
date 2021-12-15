@@ -4,7 +4,7 @@
  * actually be purchased in the specified order. All of the complex purchasing logic should be handled here, and not
  * in any TimeStudyState objects. During parsing, some minor additional info is stored in order to improve user
  * feedback when attempting to import other study trees.
- * 
+ *
  * Usage notes:
  * - Unless commitToGameState() is called, this only ever creates a "virtual" tree object which does not change the
  *   overall game state. This class serves the purpose of having all the purchasing and locking logic in one place.
@@ -13,12 +13,14 @@
  *   example, how many dimension paths are allowed or which ECs are unlockable depend on only the data in the tree
  *   object itself and should not depend on the actual current game state
  * - All study entries must be Strings because numbers (normal TS) and EC# (ECs) need to be supported
- * 
+ *
  * @member {Number[]} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
  *  purchased after accounting for various conditions which would forbid some being bought (eg. cost or tree structure)
  * @member {String[]} invalidStudies     Array of studies from the initial string which are correctly formatted
  *  but don't actually exist; used for informational purposes elsewhere
- * @member {TimeStudyState[]} purchasedStudies   Array of studies which were actually purchased, using the given amount
+ * @member {TimeStudyState[]} selectedStudies   Array of all given valid studies, whether or not they are actually
+ *  accessible or purchasable in the given order
+ * @member {TimeStudyState[]} purchasedStudies  Array of studies which were actually purchased, using the given amount
  *  of available theorems
  */
 export class TimeStudyTree {
@@ -27,6 +29,7 @@ export class TimeStudyTree {
     this.spentTheorems = [0, 0];
     this.invalidStudies = [];
     this.purchasedStudies = [];
+    this.selectedStudies = [];
     switch (typeof studies) {
       case "string":
         // Input parameter is an unparsed study import string
@@ -35,9 +38,9 @@ export class TimeStudyTree {
         }
         break;
       case "object":
-        // Input parameter is an array of Strings assumed to be already formatted as expected in the parsing method.
-        // This allows code for combining trees to look simpler and more readable
+        // Input parameter is an array of time study objects
         this.attemptBuyArray([...studies], false);
+        this.selectedStudies = [...studies];
         break;
       case "undefined":
         // If not supplied with anything, we leave everything at default values and don't attempt to buy anything
@@ -81,8 +84,11 @@ export class TimeStudyTree {
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const studyArray = [];
     for (const study of treeStudies) {
-      if (studyDB.includes(parseInt(study, 10))) studyArray.push(TimeStudy(study));
-      else this.invalidStudies.push(study);
+      if (studyDB.includes(parseInt(study, 10))) {
+        const tsObject = TimeStudy(study);
+        this.selectedStudies.push(tsObject);
+        studyArray.push(tsObject);
+      } else this.invalidStudies.push(study);
     }
 
     // If the string has an EC indicated in it, append that to the end of the study array

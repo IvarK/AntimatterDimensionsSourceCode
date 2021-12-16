@@ -49,6 +49,7 @@ import ModalStdStore from "@/components/modals/ModalStdStore";
 import ModalStudyString from "@/components/modals/ModalStudyString";
 import ModalSacrifice from "@/components/modals/ModalSacrifice";
 import ModalBreakInfinity from "@/components/modals/ModalBreakInfinity";
+import ModalSetSaveDelete from "@/components/modals/ModalSetSaveDelete";
 
 
 export class Modal {
@@ -147,7 +148,7 @@ Modal.glyphUndo = new Modal(ModalGlyphUndo);
 Modal.glyphReplace = new Modal(ModalGlyphReplace);
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
-Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
+Modal.glyphSetSaveDelete = new Modal(ModalSetSaveDelete);
 Modal.uiChoice = new Modal(ModalUiChoice);
 Modal.h2p = new Modal(ModalH2P);
 Modal.awayProgress = new Modal(ModalAwayProgress);

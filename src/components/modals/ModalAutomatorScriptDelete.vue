@@ -1,11 +1,15 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-automator-script-delete", {
+export default {
   components: {
     PrimaryButton
   },
   props: {
-    modalConfig: Object
+    modalConfig: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     modal() {
@@ -14,7 +18,6 @@ Vue.component("modal-automator-script-delete", {
   },
   methods: {
     handleNoClick() {
-      safeCall(this.modal.callback);
       this.emitClose();
     },
     handleYesClick() {
@@ -48,26 +51,29 @@ Vue.component("modal-automator-script-delete", {
       this.emitClose();
     },
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <h2>Delete this script</h2>
-      <div class="c-modal-message__text">
-        Please confirm your desire to delete this Automator script.
-        This is permanent and irreversible. There is no gain from doing this.
-      </div>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
-          @click="handleNoClick"
-        >
-          Cancel
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Delete
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>Delete this script</h2>
+    <div class="c-modal-message__text">
+      Please confirm your desire to delete this Automator script.
+      This is permanent and irreversible. There is no gain from doing this.
+    </div>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        @click="handleNoClick"
+      >
+        Cancel
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Delete
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

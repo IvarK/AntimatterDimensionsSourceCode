@@ -44,6 +44,7 @@ import ModalAwayProgress from "@/components/modals/ModalAwayProgress";
 import ModalLoadGame from "@/components/modals/ModalLoadGame";
 import ModalImport from "@/components/modals/ModalImport";
 import ModalAutomatorScriptImport from "@/components/modals/ModalAutomatorScriptImport";
+import ModalAutomatorScriptDelete from "@/components/modals/ModalAutomatorScriptDelete";
 
 
 export class Modal {
@@ -149,7 +150,7 @@ Modal.awayProgress = new Modal(ModalAwayProgress);
 Modal.loadGame = new Modal(ModalLoadGame);
 Modal.import = new Modal(ModalImport);
 Modal.importScript = new Modal(ModalAutomatorScriptImport);
-Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
+Modal.automatorScriptDelete = new Modal(ModalAutomatorScriptDelete);
 Modal.shop = new Modal("modal-std-store");
 Modal.studyString = new Modal("modal-study-string");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");

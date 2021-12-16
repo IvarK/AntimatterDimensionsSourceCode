@@ -1,4 +1,3 @@
-import "./modal-import.js";
 import "./modal-study-string.js";
 import "./modal-std-store.js";
 import "./modal-progress-bar.js";

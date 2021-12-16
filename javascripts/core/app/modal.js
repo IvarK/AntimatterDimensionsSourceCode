@@ -42,6 +42,7 @@ import ModalGlyphReplace from "@/components/modals/ModalGlyphReplace";
 import ModalUiChoice from "@/components/modals/ModalUiChoice";
 import ModalAwayProgress from "@/components/modals/ModalAwayProgress";
 import ModalLoadGame from "@/components/modals/ModalLoadGame";
+import ModalImport from "@/components/modals/ModalImport";
 
 
 export class Modal {
@@ -145,7 +146,7 @@ Modal.uiChoice = new Modal(ModalUiChoice);
 Modal.h2p = new Modal(ModalH2P);
 Modal.awayProgress = new Modal(ModalAwayProgress);
 Modal.loadGame = new Modal(ModalLoadGame);
-Modal.import = new Modal("modal-import");
+Modal.import = new Modal(ModalImport);
 Modal.importScript = new Modal("modal-automator-script-import");
 Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
 Modal.shop = new Modal("modal-std-store");

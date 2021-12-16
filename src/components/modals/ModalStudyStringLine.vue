@@ -1,4 +1,5 @@
-Vue.component("tree-import-info", {
+<script>
+export default {
   props: {
     tree: {
       type: Object,
@@ -21,17 +22,20 @@ Vue.component("tree-import-info", {
       return st === 0 ? strTT : `${strTT} + ${strST}`;
     }
   },
-  template: `
-    <div class="l-modal-import-tree__tree-info-line">
-      <div v-if="tree.timeTheorems === 0">
-        <i>Importing this {{ importDestString }} will not purchase any new Time Studies.</i>
-      </div>
-      <div v-else>
-        Importing {{ importDestString }} will purchase:
-        <br>
-        {{ tree.newStudies }}
-        (Cost: {{ formatTheoremCost(tree.timeTheorems, tree.spaceTheorems) }})
-      </div>
+};
+</script>
+
+<template>
+  <div class="l-modal-import-tree__tree-info-line">
+    <div v-if="tree.timeTheorems === 0">
+      <i>Importing this {{ importDestString }} will not purchase any new Time Studies.</i>
+    </div>
+    <div v-else>
+      Importing {{ importDestString }} will purchase:
       <br>
-    </div>`
-});
+      {{ tree.newStudies }}
+      (Cost: {{ formatTheoremCost(tree.timeTheorems, tree.spaceTheorems) }})
+    </div>
+    <br>
+  </div>
+</template>

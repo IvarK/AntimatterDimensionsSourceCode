@@ -1,11 +1,13 @@
-import "../eternity/time-studies/tree-import-info.js";
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalStudyStringLine from "@/components/modals/ModalStudyStringLine";
 
-Vue.component("modal-study-string", {
+export default {
   components: {
     PrimaryButton,
     ModalCloseButton,
+    ModalStudyStringLine
   },
   props: {
     modalConfig: {
@@ -18,15 +20,6 @@ Vue.component("modal-study-string", {
       input: "",
       name: "",
     };
-  },
-  // Needs to be assigned in created() or else they will end up being undefined when importing
-  created() {
-    const preset = player.timestudy.presets[this.modalConfig.id];
-    this.input = preset ? preset.studies : "";
-    this.name = preset ? preset.name : "";
-  },
-  mounted() {
-    this.$refs.input.select();
   },
   computed: {
     // This modal is used by both study importing and preset editing but only has a prop actually passed in when
@@ -124,6 +117,15 @@ Vue.component("modal-study-string", {
         "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
     },
   },
+  // Needs to be assigned in created() or else they will end up being undefined when importing
+  created() {
+    const preset = player.timestudy.presets[this.modalConfig.id];
+    this.input = preset ? preset.studies : "";
+    this.name = preset ? preset.name : "";
+  },
+  mounted() {
+    this.$refs.input.select();
+  },
   methods: {
     confirm() {
       if (this.isImporting) this.importTree();
@@ -148,52 +150,72 @@ Vue.component("modal-study-string", {
       return study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`;
     }
   },
-  template: `
-    <div class="c-modal-import-tree l-modal-content--centered">
-      <ModalCloseButton @click="emitClose" />
-      <h3>{{ modalTitle }}</h3>
-      <input
-        v-model="input"
-        ref="input"
-        type="text"
-        class="c-modal-input c-modal-import-tree__input"
-        @keyup.enter="importTree"
-        @keyup.esc="emitClose"
-      />
-      <div class="c-modal-import-tree__tree-info">
-        <div v-if="inputIsSecret">???</div>
-        <template v-else-if="inputIsValidTree">
-          <div v-if="invalidMessage" class="l-modal-import-tree__tree-info-line" v-html="invalidMessage" />
-          <tree-import-info
-            v-if="isImporting"
-            :tree="combinedTree"
-            :intoEmpty="false"
-          />
-          <tree-import-info
-            :tree="importedTree"
-            :intoEmpty="true"
-          />
-          <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
-            <b>Tree status after loading:</b>
-          </div>
-          <div v-if="treeStatus.firstPaths" class="l-modal-import-tree__tree-info-line">
-            Dimension Split: {{ treeStatus.firstPaths }}
-          </div>
-          <div v-if="treeStatus.secondPaths" class="l-modal-import-tree__tree-info-line">
-            Pace Split: {{ treeStatus.secondPaths }}
-          </div>
-          <div v-if="treeStatus.ec > 0" class="l-modal-import-tree__tree-info-line">
-            Eternity Challenge: {{ treeStatus.ec }}
-          </div>
-        </template>
-        <div v-else-if="hasInput">Not a valid tree</div>
+};
+</script>
+
+<template>
+  <div class="c-modal-import-tree l-modal-content--centered">
+    <ModalCloseButton @click="emitClose" />
+    <h3>{{ modalTitle }}</h3>
+    <input
+      ref="input"
+      v-model="input"
+      type="text"
+      class="c-modal-input c-modal-import-tree__input"
+      @keyup.enter="importTree"
+      @keyup.esc="emitClose"
+    >
+    <div class="c-modal-import-tree__tree-info">
+      <div v-if="inputIsSecret">
+        ???
       </div>
-      <PrimaryButton
-        v-if="inputIsValid"
-        class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
-        @click="confirm"
-      >
-        {{ isImporting ? "Import" : "Save" }}
-      </PrimaryButton>
-    </div>`
-});
+      <template v-else-if="inputIsValidTree">
+        <div
+          v-if="invalidMessage"
+          class="l-modal-import-tree__tree-info-line"
+          v-html="invalidMessage"
+        />
+        <ModalStudyStringLine
+          v-if="isImporting"
+          :tree="combinedTree"
+          :into-empty="false"
+        />
+        <ModalStudyStringLine
+          :tree="importedTree"
+          :into-empty="true"
+        />
+        <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
+          <b>Tree status after loading:</b>
+        </div>
+        <div
+          v-if="treeStatus.firstPaths"
+          class="l-modal-import-tree__tree-info-line"
+        >
+          Dimension Split: {{ treeStatus.firstPaths }}
+        </div>
+        <div
+          v-if="treeStatus.secondPaths"
+          class="l-modal-import-tree__tree-info-line"
+        >
+          Pace Split: {{ treeStatus.secondPaths }}
+        </div>
+        <div
+          v-if="treeStatus.ec > 0"
+          class="l-modal-import-tree__tree-info-line"
+        >
+          Eternity Challenge: {{ treeStatus.ec }}
+        </div>
+      </template>
+      <div v-else-if="hasInput">
+        Not a valid tree
+      </div>
+    </div>
+    <PrimaryButton
+      v-if="inputIsValid"
+      class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
+      @click="confirm"
+    >
+      {{ isImporting ? "Import" : "Save" }}
+    </PrimaryButton>
+  </div>
+</template>

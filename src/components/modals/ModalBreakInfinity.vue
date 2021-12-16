@@ -1,12 +1,9 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("modal-break-infinity", {
+export default {
   components: {
     PrimaryButton
-  },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
     message() {
@@ -19,27 +16,37 @@ Vue.component("modal-break-infinity", {
         all Normal Challenge Autobuyers.`}`.split("\n");
     },
   },
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   methods: {
     handleYesClick() {
       breakInfinity();
       this.emitClose();
     }
   },
-  template: `
-    <div class="c-modal-message l-modal-content--centered">
-      <h2>You are Breaking Infinity</h2>
-      <div class="c-modal-message__text">
-        <span v-for="line in message">
-          {{ line }} <br>
-        </span>
-      </div>
-      <div class="l-options-grid__row">
-        <PrimaryButton
-          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click="handleYesClick"
-        >
-          Break
-        </PrimaryButton>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>You are Breaking Infinity</h2>
+    <div class="c-modal-message__text">
+      <span
+        v-for="(line, index) in message"
+        :key="index"
+      >
+        {{ line }} <br>
+      </span>
+    </div>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Break
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

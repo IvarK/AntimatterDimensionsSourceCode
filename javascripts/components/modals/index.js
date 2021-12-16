@@ -1,5 +1,4 @@
 import "./modal-progress-bar.js";
-import "./modal-break-infinity.js";
 import "./modal-set-save-delete.js";
 
 import "../celestials/subtabs/ra/reality-glyph-creation.js";

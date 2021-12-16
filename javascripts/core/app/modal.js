@@ -48,6 +48,7 @@ import ModalAutomatorScriptDelete from "@/components/modals/ModalAutomatorScript
 import ModalStdStore from "@/components/modals/ModalStdStore";
 import ModalStudyString from "@/components/modals/ModalStudyString";
 import ModalSacrifice from "@/components/modals/ModalSacrifice";
+import ModalBreakInfinity from "@/components/modals/ModalBreakInfinity";
 
 
 export class Modal {
@@ -158,7 +159,7 @@ Modal.shop = new Modal(ModalStdStore);
 Modal.studyString = new Modal(ModalStudyString);
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.sacrifice = new Modal(ModalSacrifice);
-Modal.breakInfinity = new Modal("modal-break-infinity");
+Modal.breakInfinity = new Modal(ModalBreakInfinity);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

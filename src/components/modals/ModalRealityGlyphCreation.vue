@@ -1,6 +1,7 @@
+<script>
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
-Vue.component("modal-reality-glyph-creation", {
+export default {
   components: {
     ModalCloseButton,
   },
@@ -40,35 +41,41 @@ Vue.component("modal-reality-glyph-creation", {
       return effectTemplate.replace("{value}", config.formatEffect(value));
     }
   },
-  template: `
-    <div class="c-reality-glyph-creation">
-      <ModalCloseButton @click="emitClose" />
-      <h2>Reality Glyph Creation</h2>
-      <div>
-        Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph. Rarity will always be 100% and level
-        scales on your current reality resource amount (which is all consumed). All other alchemy resources will be
-        unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
-        Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
-        you cannot equip more than one at the same time.
-      </div>
-      <div>
-        Available Effects:
-      </div>
-      <div v-for="effect in possibleEffects">
-        {{ formatGlyphEffect(effect) }}
-      </div><br>
-      <button
-        class="o-primary-btn"
-        v-on:click="createRealityGlyph()"
-        v-if="realityGlyphLevel !== 0"
-      >
-        Create a Reality Glyph!
-      </button>
-      <button
-        class="o-primary-btn o-primary-btn--disabled"
-        v-else
-      >
-        Reality Glyph level must be higher than {{ formatInt(0) }}
-      </button>
-    </div>`,
-});
+};
+</script>
+
+<template>
+  <div class="c-reality-glyph-creation">
+    <ModalCloseButton @click="emitClose" />
+    <h2>Reality Glyph Creation</h2>
+    <div>
+      Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph. Rarity will always be {{ formatPercents(1) }}
+      and level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
+      be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
+      Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
+      you cannot equip more than one at the same time.
+    </div>
+    <div>
+      Available Effects:
+    </div>
+    <div
+      v-for="(effect, index) in possibleEffects"
+      :key="index"
+    >
+      {{ formatGlyphEffect(effect) }}
+    </div><br>
+    <button
+      v-if="realityGlyphLevel !== 0"
+      class="o-primary-btn"
+      @click="createRealityGlyph()"
+    >
+      Create a Reality Glyph!
+    </button>
+    <button
+      v-else
+      class="o-primary-btn o-primary-btn--disabled"
+    >
+      Reality Glyph level must be higher than {{ formatInt(0) }}
+    </button>
+  </div>
+</template>

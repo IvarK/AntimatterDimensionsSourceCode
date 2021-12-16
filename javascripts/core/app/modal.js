@@ -52,6 +52,7 @@ import ModalBreakInfinity from "@/components/modals/ModalBreakInfinity";
 import ModalSetSaveDelete from "@/components/modals/ModalSetSaveDelete";
 import ModalRealityGlyphCreation from "@/components/modals/ModalRealityGlyphCreation";
 import ModalEnslavedHints from "@/components/modals/ModalEnslavedHints";
+import ModalSingularityMilestones from "@/components/modals/ModalSingularityMilestones";
 
 
 export class Modal {
@@ -160,7 +161,7 @@ Modal.importScript = new Modal(ModalAutomatorScriptImport);
 Modal.automatorScriptDelete = new Modal(ModalAutomatorScriptDelete);
 Modal.shop = new Modal(ModalStdStore);
 Modal.studyString = new Modal(ModalStudyString);
-Modal.singularityMilestones = new Modal("singularity-milestones-modal");
+Modal.singularityMilestones = new Modal(ModalSingularityMilestones);
 Modal.sacrifice = new Modal(ModalSacrifice);
 Modal.breakInfinity = new Modal(ModalBreakInfinity);
 Modal.celestialQuote = new class extends Modal {

@@ -40,6 +40,7 @@ import ModalGlyphShowcasePanel from "@/components/modals/ModalGlyphShowcasePanel
 import ModalGlyphUndo from "@/components/modals/ModalGlyphUndo";
 import ModalGlyphReplace from "@/components/modals/ModalGlyphReplace";
 import ModalUiChoice from "@/components/modals/ModalUiChoice";
+import ModalAwayProgress from "@/components/modals/ModalAwayProgress";
 
 
 export class Modal {
@@ -141,7 +142,7 @@ Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.glyphSetSaveDelete = new Modal("modal-set-save-delete");
 Modal.uiChoice = new Modal(ModalUiChoice);
 Modal.h2p = new Modal(ModalH2P);
-Modal.awayProgress = new Modal("modal-away-progress");
+Modal.awayProgress = new Modal(ModalAwayProgress);
 Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");
 Modal.importScript = new Modal("modal-automator-script-import");

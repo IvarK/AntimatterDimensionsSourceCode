@@ -23,7 +23,6 @@ Vue.component("shop-tab", {
     showStore() {
       if (!this.kongEnabled) return;
       Modal.shop.show();
-      this.$viewModel.modal.closeButton = true;
     },
     buyTimeSkip() {
       kong.purchaseTimeSkip(10);

@@ -45,6 +45,7 @@ import ModalLoadGame from "@/components/modals/ModalLoadGame";
 import ModalImport from "@/components/modals/ModalImport";
 import ModalAutomatorScriptImport from "@/components/modals/ModalAutomatorScriptImport";
 import ModalAutomatorScriptDelete from "@/components/modals/ModalAutomatorScriptDelete";
+import ModalStdStore from "@/components/modals/ModalStdStore";
 
 
 export class Modal {
@@ -151,7 +152,7 @@ Modal.loadGame = new Modal(ModalLoadGame);
 Modal.import = new Modal(ModalImport);
 Modal.importScript = new Modal(ModalAutomatorScriptImport);
 Modal.automatorScriptDelete = new Modal(ModalAutomatorScriptDelete);
-Modal.shop = new Modal("modal-std-store");
+Modal.shop = new Modal(ModalStdStore);
 Modal.studyString = new Modal("modal-study-string");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.sacrifice = new Modal("modal-sacrifice");

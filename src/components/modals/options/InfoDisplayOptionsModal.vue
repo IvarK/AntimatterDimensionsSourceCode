@@ -10,6 +10,11 @@ export default {
   },
   data() {
     return {
+      infinityUnlocked: false,
+      eternityUnlocked: false,
+      realityUnlocked: false,
+      alchemyUnlocked: false,
+
       achievements: false,
       achievementUnlockStates: false,
       challenges: false,

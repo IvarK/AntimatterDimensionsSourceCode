@@ -30,6 +30,10 @@ export default {
       dimensionBoost: false,
       replicantiGalaxy: false,
 
+      infinityUnlocked: false,
+      eternityUnlocked: false,
+      realityUnlocked: false,
+      dilationUnlocked: false,
       realityAutobuyerUnlocked: false,
       sacrificeUnlocked: false,
       glyphSacrificeUnlocked: false,

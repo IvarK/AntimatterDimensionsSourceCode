@@ -10,6 +10,11 @@ export default {
   },
   data() {
     return {
+      infinityUnlocked: false,
+      eternityUnlocked: false,
+      dilationUnlocked: false,
+      realityUnlocked: false,
+      animatedThemeUnlocked: false,
       bigCrunch: false,
       eternity: false,
       dilation: false,

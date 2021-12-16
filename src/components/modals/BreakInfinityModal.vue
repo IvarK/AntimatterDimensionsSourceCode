@@ -1,0 +1,53 @@
+<script>
+import PrimaryButton from "@/components/PrimaryButton";
+
+export default {
+  name: "BreakInfinityModal",
+  components: {
+    PrimaryButton
+  },
+  computed: {
+    message() {
+      const infinity = formatPostBreak(Number.MAX_VALUE, 2);
+      return `Breaking Infinity will allow you to gain antimatter past ${infinity}${PlayerProgress.eternityUnlocked()
+        ? "." : `, and allow you to read numbers past ${infinity}.`}
+        Dimensions and Tickspeed Upgrades will scale in cost faster after ${infinity} antimatter.
+        You will gain additional Infinity Points on Big Crunch based on antimatter produced over ${infinity}.\
+        ${EternityMilestone.keepAutobuyers.isReached ? "" : `\nIt will also unlock Break Infinity Upgrades and max\
+        all Normal Challenge Autobuyers.`}`.split("\n");
+    },
+  },
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
+  methods: {
+    handleYesClick() {
+      breakInfinity();
+      this.emitClose();
+    }
+  },
+};
+</script>
+
+<template>
+  <div class="c-modal-message l-modal-content--centered">
+    <h2>You are Breaking Infinity</h2>
+    <div class="c-modal-message__text">
+      <span
+        v-for="(line, index) in message"
+        :key="index"
+      >
+        {{ line }} <br>
+      </span>
+    </div>
+    <div class="l-options-grid__row">
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >
+        Break
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

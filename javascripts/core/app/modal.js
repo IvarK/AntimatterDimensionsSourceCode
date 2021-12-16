@@ -1,58 +1,58 @@
-import ModalMessage from "@/components/modals/ModalMessage";
-import ModalCelestialQuote from "@/components/modals/ModalCelestialQuote";
-import ModalCloudSaveConflict from "@/components/modals/cloud/ModalCloudSaveConflict";
-import ModalCloudLoadConflict from "@/components/modals/cloud/ModalCloudLoadConflict";
-import ModalStartEternityChallenge from "@/components/modals/challenges/ModalStartEternityChallenge";
-import ModalStartInfinityChallenge from "@/components/modals/challenges/ModalStartInfinityChallenge";
-import ModalStartNormalChallenge from "@/components/modals/challenges/ModalStartNormalChallenge";
+import MessageModal from "@/components/modals/MessageModal";
+import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
+import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
+import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
+import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
+import InfinityChallengeStartModal from "@/components/modals/challenges/InfinityChallengeStartModal";
+import NormalChallengeStartModal from "@/components/modals/challenges/NormalChallengeStartModal";
 
-import ModalDimensionBoost from "@/components/modals/prestige/ModalDimensionBoost";
-import ModalAntimatterGalaxy from "@/components/modals/prestige/ModalAntimatterGalaxy";
-import ModalBigCrunch from "@/components/modals/prestige/ModalBigCrunch";
-import ModalReplicantiGalaxy from "@/components/modals/prestige/ModalReplicantiGalaxy";
-import ModalEternity from "@/components/modals/prestige/ModalEternity";
-import ModalEnterDilation from "@/components/modals/prestige/ModalEnterDilation";
-import ModalReality from "@/components/modals/prestige/ModalReality";
-import ModalResetReality from "@/components/modals/prestige/ModalResetReality";
-import ModalExitCelestialReality from "@/components/modals/prestige/ModalExitCelestialReality";
-import ModalCelestials from "@/components/modals/prestige/ModalCelestials";
-import ModalHardReset from "@/components/modals/prestige/ModalHardReset";
+import DimensionBoostModal from "@/components/modals/prestige/DimensionBoostModal";
+import AntimatterGalaxyModal from "@/components/modals/prestige/AntimatterGalaxyModal";
+import BigCrunchModal from "@/components/modals/prestige/BigCrunchModal";
+import ReplicantiGalaxyModal from "@/components/modals/prestige/ReplicantiGalaxyModal";
+import EternityModal from "@/components/modals/prestige/EternityModal";
+import EnterDilationModal from "@/components/modals/prestige/EnterDilationModal";
+import RealityModal from "@/components/modals/prestige/RealityModal";
+import ResetRealityModal from "@/components/modals/prestige/ResetRealityModal";
+import ExitCelestialModal from "@/components/modals/prestige/ExitCelestialModal";
+import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal";
+import HardResetModal from "@/components/modals/prestige/HardResetModal";
 
-import ModalConfirmationOptions from "@/components/modals/options/ModalConfirmationOptions";
-import ModalInfoDisplayOptions from "@/components/modals/options/ModalInfoDisplayOptions";
-import ModalAwayProgressOptions from "@/components/modals/options/ModalAwayProgressOptions";
-import ModalShortcuts from "@/components/modals/options/ModalShortcuts";
-import ModalNewsOptions from "@/components/modals/options/ModalNewsOptions";
-import ModalAnimationOptions from "@/components/modals/options/ModalAnimationOptions";
-import ModalPreferredTree from "@/components/modals/options/ModalPreferredTree";
-import ModalHiddenTabs from "@/components/modals/options/hidden-tabs/ModalHiddenTabs";
+import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
+import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
+import AwayProgressOptionsModal from "@/components/modals/options/AwayProgressOptionsModal";
+import ShortcutsModal from "@/components/modals/options/ShortcutsModal";
+import NewsOptionsModal from "@/components/modals/options/NewsOptionsModal";
+import AnimationOptionsModal from "@/components/modals/options/AnimationOptionsModal";
+import PreferredTreeModal from "@/components/modals/options/PreferredTreeModal";
+import HiddenTabsModal from "@/components/modals/options/hidden-tabs/HiddenTabsModal";
 
-import ModalDeleteCompanion from "@/components/modals/glyph-management/ModalDeleteCompanion";
-import ModalGlyphDelete from "@/components/modals/glyph-management/ModalGlyphDelete";
-import ModalGlyphPurge from "@/components/modals/glyph-management/ModalGlyphPurge";
-import ModalGlyphSacrifice from "@/components/modals/glyph-management/ModalGlyphSacrifice";
-import ModalGlyphRefine from "@/components/modals/glyph-management/ModalGlyphRefine";
-import ModalDeleteAllUnprotectedGlyphs from "@/components/modals/glyph-management/ModalDeleteAllUnprotectedGlyphs";
-import ModalDeleteAllRejectedGlyphs from "@/components/modals/glyph-management/ModalDeleteAllRejectedGlyphs";
+import DeleteCompanionGlyphModal from "@/components/modals/glyph-management/DeleteCompanionGlyphModal";
+import DeleteGlyphModal from "@/components/modals/glyph-management/DeleteGlyphModal";
+import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModal";
+import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
+import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
+import PurgeAllUnprotectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllUnprotectedGlyphsModal";
+import PurgeAllRejectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllRejectedGlyphsModal";
 
-import ModalH2P from "@/components/modals/ModalH2P";
-import ModalGlyphShowcasePanel from "@/components/modals/ModalGlyphShowcasePanel";
-import ModalGlyphUndo from "@/components/modals/ModalGlyphUndo";
-import ModalGlyphReplace from "@/components/modals/ModalGlyphReplace";
-import ModalUiChoice from "@/components/modals/ModalUiChoice";
-import ModalAwayProgress from "@/components/modals/ModalAwayProgress";
-import ModalLoadGame from "@/components/modals/ModalLoadGame";
-import ModalImport from "@/components/modals/ModalImport";
-import ModalAutomatorScriptImport from "@/components/modals/ModalAutomatorScriptImport";
-import ModalAutomatorScriptDelete from "@/components/modals/ModalAutomatorScriptDelete";
-import ModalStdStore from "@/components/modals/ModalStdStore";
-import ModalStudyString from "@/components/modals/ModalStudyString";
-import ModalSacrifice from "@/components/modals/ModalSacrifice";
-import ModalBreakInfinity from "@/components/modals/ModalBreakInfinity";
-import ModalSetSaveDelete from "@/components/modals/ModalSetSaveDelete";
-import ModalRealityGlyphCreation from "@/components/modals/ModalRealityGlyphCreation";
-import ModalEnslavedHints from "@/components/modals/ModalEnslavedHints";
-import ModalSingularityMilestones from "@/components/modals/ModalSingularityMilestones";
+import H2PModal from "@/components/modals/H2PModal";
+import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
+import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
+import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal";
+import UiChoiceModal from "@/components/modals/UiChoiceModal";
+import AwayProgressModal from "@/components/modals/AwayProgressModal";
+import LoadGameModal from "@/components/modals/LoadGameModal";
+import ImportSaveModal from "@/components/modals/ImportSaveModal";
+import ImportAutomatorScriptModal from "@/components/modals/ImportAutomatorScriptModal";
+import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
+import StdStoreModal from "@/components/modals/StdStoreModal";
+import StudyStringModal from "@/components/modals/StudyStringModal";
+import SacrificeModal from "@/components/modals/SacrificeModal";
+import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
+import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationModal";
+import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
+import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
 
 
 export class Modal {
@@ -112,58 +112,58 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
-Modal.startEternityChallenge = new ChallengeConfirmationModal(ModalStartEternityChallenge);
-Modal.startInfinityChallenge = new ChallengeConfirmationModal(ModalStartInfinityChallenge);
-Modal.startNormalChallenge = new ChallengeConfirmationModal(ModalStartNormalChallenge);
+Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
+Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
+Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
 
-Modal.dimensionBoost = new Modal(ModalDimensionBoost);
-Modal.antimatterGalaxy = new Modal(ModalAntimatterGalaxy);
-Modal.bigCrunch = new Modal(ModalBigCrunch);
-Modal.replicantiGalaxy = new Modal(ModalReplicantiGalaxy);
-Modal.eternity = new Modal(ModalEternity);
-Modal.enterDilation = new Modal(ModalEnterDilation);
-Modal.reality = new Modal(ModalReality);
-Modal.resetReality = new Modal(ModalResetReality);
-Modal.exitCelestialReality = new Modal(ModalExitCelestialReality);
-Modal.celestials = new Modal(ModalCelestials);
-Modal.hardReset = new Modal(ModalHardReset);
+Modal.dimensionBoost = new Modal(DimensionBoostModal);
+Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal);
+Modal.bigCrunch = new Modal(BigCrunchModal);
+Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal);
+Modal.eternity = new Modal(EternityModal);
+Modal.enterDilation = new Modal(EnterDilationModal);
+Modal.reality = new Modal(RealityModal);
+Modal.resetReality = new Modal(ResetRealityModal);
+Modal.exitCelestialReality = new Modal(ExitCelestialModal);
+Modal.celestials = new Modal(EnterCelestialsModal);
+Modal.hardReset = new Modal(HardResetModal);
 
-Modal.confirmationOptions = new Modal(ModalConfirmationOptions);
-Modal.infoDisplayOptions = new Modal(ModalInfoDisplayOptions);
-Modal.awayProgressOptions = new Modal(ModalAwayProgressOptions);
-Modal.shortcuts = new Modal(ModalShortcuts);
-Modal.newsOptions = new Modal(ModalNewsOptions);
-Modal.animationOptions = new Modal(ModalAnimationOptions);
-Modal.hiddenTabs = new Modal(ModalHiddenTabs);
-Modal.preferredTree = new Modal(ModalPreferredTree);
+Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
+Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
+Modal.awayProgressOptions = new Modal(AwayProgressOptionsModal);
+Modal.shortcuts = new Modal(ShortcutsModal);
+Modal.newsOptions = new Modal(NewsOptionsModal);
+Modal.animationOptions = new Modal(AnimationOptionsModal);
+Modal.hiddenTabs = new Modal(HiddenTabsModal);
+Modal.preferredTree = new Modal(PreferredTreeModal);
 
-Modal.deleteCompanion = new Modal(ModalDeleteCompanion);
-Modal.glyphDelete = new Modal(ModalGlyphDelete);
-Modal.glyphPurge = new Modal(ModalGlyphPurge);
-Modal.glyphSacrifice = new Modal(ModalGlyphSacrifice);
-Modal.glyphRefine = new Modal(ModalGlyphRefine);
-Modal.deleteAllUnprotectedGlyphs = new Modal(ModalDeleteAllUnprotectedGlyphs);
-Modal.deleteAllRejectedGlyphs = new Modal(ModalDeleteAllRejectedGlyphs);
+Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal);
+Modal.glyphDelete = new Modal(DeleteGlyphModal);
+Modal.glyphPurge = new Modal(PurgeGlyphModal);
+Modal.glyphSacrifice = new Modal(SacrificeGlyphModal);
+Modal.glyphRefine = new Modal(RefineGlyphModal);
+Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal);
+Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal);
 
 
-Modal.glyphShowcasePanel = new Modal(ModalGlyphShowcasePanel);
-Modal.glyphUndo = new Modal(ModalGlyphUndo);
-Modal.glyphReplace = new Modal(ModalGlyphReplace);
-Modal.enslavedHints = new Modal(ModalEnslavedHints);
-Modal.realityGlyph = new Modal(ModalRealityGlyphCreation);
-Modal.glyphSetSaveDelete = new Modal(ModalSetSaveDelete);
-Modal.uiChoice = new Modal(ModalUiChoice);
-Modal.h2p = new Modal(ModalH2P);
-Modal.awayProgress = new Modal(ModalAwayProgress);
-Modal.loadGame = new Modal(ModalLoadGame);
-Modal.import = new Modal(ModalImport);
-Modal.importScript = new Modal(ModalAutomatorScriptImport);
-Modal.automatorScriptDelete = new Modal(ModalAutomatorScriptDelete);
-Modal.shop = new Modal(ModalStdStore);
-Modal.studyString = new Modal(ModalStudyString);
-Modal.singularityMilestones = new Modal(ModalSingularityMilestones);
-Modal.sacrifice = new Modal(ModalSacrifice);
-Modal.breakInfinity = new Modal(ModalBreakInfinity);
+Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
+Modal.glyphUndo = new Modal(UndoGlyphModal);
+Modal.glyphReplace = new Modal(ReplaceGlyphModal);
+Modal.enslavedHints = new Modal(EnslavedHintsModal);
+Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
+Modal.glyphSetSaveDelete = new Modal(GlyphSetSaveDeleteModal);
+Modal.uiChoice = new Modal(UiChoiceModal);
+Modal.h2p = new Modal(H2PModal);
+Modal.awayProgress = new Modal(AwayProgressModal);
+Modal.loadGame = new Modal(LoadGameModal);
+Modal.import = new Modal(ImportSaveModal);
+Modal.importScript = new Modal(ImportAutomatorScriptModal);
+Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
+Modal.shop = new Modal(StdStoreModal);
+Modal.studyString = new Modal(StudyStringModal);
+Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
+Modal.sacrifice = new Modal(SacrificeModal);
+Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;
@@ -181,10 +181,10 @@ Modal.celestialQuote = new class extends Modal {
     super.show();
     this.lines = newLines;
   }
-}(ModalCelestialQuote, true);
+}(CelestialQuoteModal, true);
 
-Modal.cloudSaveConflict = new Modal(ModalCloudSaveConflict);
-Modal.cloudLoadConflict = new Modal(ModalCloudLoadConflict);
+Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
+Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
 // eslint-disable-next-line max-params
 Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
   Modal.hide();
@@ -253,4 +253,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(ModalMessage);
+}(MessageModal);

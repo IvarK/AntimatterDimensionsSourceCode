@@ -1,7 +1,8 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
-Vue.component("modal-automator-script-import", {
+export default {
   components: {
     PrimaryButton,
     ModalCloseButton,
@@ -52,38 +53,41 @@ Vue.component("modal-automator-script-import", {
       this.emitClose();
     },
   },
-  template: `
-    <div class="c-modal-import l-modal-content--centered">
-      <ModalCloseButton @click="emitClose" />
-      <h3>Import Automator Script</h3>
-      This will create a new automator script at the end of your list.
-      <input
-        v-model="input"
-        ref="input"
-        type="text"
-        class="c-modal-input c-modal-import__input"
-        @keyup.enter="importSave"
-        @keyup.esc="emitClose"
-      />
-      <div v-if="isValid">
-        Script name: {{ scriptName }}
-        <br>
-        Line count: {{ lineCount }}
-        <div
-          v-if="hasErrors"
-          style="color: red;"
-        >
-          Warning: This script has errors which need to be fixed before it can be run!
-        </div>
-      </div>
-      <div v-else-if="input.length !== 0">
-        Invalid Automator script string
-      </div>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
-        @click="importSave"
+};
+</script>
+
+<template>
+  <div class="c-modal-import l-modal-content--centered">
+    <ModalCloseButton @click="emitClose" />
+    <h3>Import Automator Script</h3>
+    This will create a new automator script at the end of your list.
+    <input
+      ref="input"
+      v-model="input"
+      type="text"
+      class="c-modal-input c-modal-import__input"
+      @keyup.enter="importSave"
+      @keyup.esc="emitClose"
+    >
+    <div v-if="isValid">
+      Script name: {{ scriptName }}
+      <br>
+      Line count: {{ lineCount }}
+      <div
+        v-if="hasErrors"
+        style="color: red;"
       >
-        Import
-      </PrimaryButton>
-    </div>`
-});
+        Warning: This script has errors which need to be fixed before it can be run!
+      </div>
+    </div>
+    <div v-else-if="input.length !== 0">
+      Invalid Automator script string
+    </div>
+    <PrimaryButton
+      class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
+      @click="importSave"
+    >
+      Import
+    </PrimaryButton>
+  </div>
+</template>

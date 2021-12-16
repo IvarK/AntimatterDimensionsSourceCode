@@ -60,6 +60,13 @@ export class ECTimeStudyState extends TimeStudyState {
     this.purchase();
   }
 
+  // For TimeStudyTree purposes, we want to be able to check structure without secondary requirements
+  get isAccessible() {
+    // We'd have a switch case here if we wanted to generalize, but in our case it doesn't matter because all ECs have
+    // the same study restriction of type TS_REQUIREMENT_TYPE.AT_LEAST_ONE - so we just assume that behavior instead
+    return this.config.requirement.some(s => TimeStudy(s).isBought);
+  }
+
   get canBeBought() {
     if (!this.isAffordable) {
       return false;
@@ -67,9 +74,7 @@ export class ECTimeStudyState extends TimeStudyState {
     if (player.challenge.eternity.unlocked !== 0) {
       return false;
     }
-    // We'd have a switch case here if we wanted to generalize, but in our case it doesn't matter because all ECs have
-    // the same study restriction of type TS_REQUIREMENT_TYPE.AT_LEAST_ONE - so we just assume that behavior instead
-    if (!this.config.requirement.some(s => TimeStudy(s).isBought)) {
+    if (!this.isAccessible) {
       return false;
     }
     if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {

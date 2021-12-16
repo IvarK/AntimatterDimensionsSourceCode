@@ -51,6 +51,7 @@ import ModalSacrifice from "@/components/modals/ModalSacrifice";
 import ModalBreakInfinity from "@/components/modals/ModalBreakInfinity";
 import ModalSetSaveDelete from "@/components/modals/ModalSetSaveDelete";
 import ModalRealityGlyphCreation from "@/components/modals/ModalRealityGlyphCreation";
+import ModalEnslavedHints from "@/components/modals/ModalEnslavedHints";
 
 
 export class Modal {
@@ -147,7 +148,7 @@ Modal.deleteAllRejectedGlyphs = new Modal(ModalDeleteAllRejectedGlyphs);
 Modal.glyphShowcasePanel = new Modal(ModalGlyphShowcasePanel);
 Modal.glyphUndo = new Modal(ModalGlyphUndo);
 Modal.glyphReplace = new Modal(ModalGlyphReplace);
-Modal.enslavedHints = new Modal("modal-enslaved-hints");
+Modal.enslavedHints = new Modal(ModalEnslavedHints);
 Modal.realityGlyph = new Modal(ModalRealityGlyphCreation);
 Modal.glyphSetSaveDelete = new Modal(ModalSetSaveDelete);
 Modal.uiChoice = new Modal(ModalUiChoice);

@@ -82,7 +82,9 @@ export default {
       return getRarity(this.strength);
     },
     descriptionStyle() {
-      const color = this.type === "cursed" ? "black" : this.rarityInfo.color;
+      let color = this.rarityInfo.color;
+      if (this.type === "cursed") color = "black";
+      if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         color,
         "text-shadow": this.type === "cursed"
@@ -151,13 +153,18 @@ export default {
       };
     },
     glyphHeaderStyle() {
-      const color = this.type === "cursed" ? "black" : this.rarityInfo.color;
+      const isCursed = this.type === "cursed";
+      const isReality = this.type === "reality";
+
+      let color = this.rarityInfo.color;
+      if (isCursed) color = "black";
+      if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
-        animation: this.type === "reality" ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
-        color: this.type === "cursed" ? "black" : undefined,
-        background: this.type === "cursed" ? "white" : undefined
+        animation: isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
+        color: isCursed ? "black" : undefined,
+        background: isCursed ? "white" : undefined
       };
     }
   },

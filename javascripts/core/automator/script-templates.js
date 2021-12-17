@@ -17,19 +17,19 @@ export class ScriptTemplate {
     this.lines = [];
     this.warnings = [];
     switch (templateName) {
-      case "climb EP":
+      case "Climb EP":
         this.templateClimbEP(params);
         break;
-      case "grind eternities":
+      case "Grind Eternities":
         this.templateGrindEternities(params);
         break;
-      case "grind infinities":
+      case "Grind Infinities":
         this.templateGrindInfinities(params);
         break;
-      case "do EC":
+      case "Complete Eternity Challenge":
         this.templateDoEC(params);
         break;
-      case "unlock dilation":
+      case "Unlock Dilation":
         this.templateUnlockDilation(params);
         break;
       default:
@@ -96,6 +96,19 @@ export class ScriptTemplate {
   }
 
   /**
+   * Surrounds the whole script template with a conditional check, also indenting the rest of the script for proper
+   * appearance. Relevant props of object passed in:
+   * @param {String} params.resource              Name of resource to check against
+   * @param {String} params.compare               Comparison operator string ("<", ">", "<=", or ">=")
+   * @param {Number | Decimal} params.threshold   Threshold number to check against
+   */
+  wrapWithConditional(params) {
+    for (let index = 0; index < this.lines.length; index++) this.lines[index] = ` ${this.lines[index]}`;
+    this.lines.unshift(`if ${params.resource} ${params.compare} ${this.format(params.threshold)} {`);
+    this.lines.push("}");
+  }
+
+  /**
    * Parses the parameter object into a script that sets the infinity and eternity autobuyers and then repeatedly loops
    * buying a tree and eternitying until a target EP is reached. Relevant props of object passed in:
    * @param {Object} params.tree          Attributes of a study tree to repeatedly buy during grinding. Must be
@@ -105,6 +118,8 @@ export class ScriptTemplate {
    * @param {Object} params.autoEternity  Object containing props for the eternity autobuyer
    */
   templateClimbEP(params) {
+    this.lines.push("// Template: Climb EP");
+    this.lines.push(`notify "Running Template Climb EP (to ${format(params.finalEP)})"`);
     this.storeTreeData(params);
     this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfinity)}`);
     this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEternity)}`);
@@ -123,6 +138,8 @@ export class ScriptTemplate {
    * @param {Decimal} params.eternities           Eternity count at which to stop grinding and move on
    */
   templateGrindEternities(params) {
+    this.lines.push("// Template: Grind Eternities");
+    this.lines.push(`notify "Running Template Grind Eternities (to ${format(params.eternities)})"`);
     this.storeTreeData(params);
     this.lines.push(this.storedTreeStr);
     this.lines.push("auto eternity 0 ep");
@@ -147,6 +164,8 @@ export class ScriptTemplate {
    *  slower due to some resources needing to be rebuilt every eternity
    */
   templateGrindInfinities(params) {
+    this.lines.push("// Template: Grind Infinities");
+    this.lines.push(`notify "Running Template Grind Infinities (to ${format(params.infinities)})"`);
     this.storeTreeData(params);
     this.lines.push(this.storedTreeStr);
     this.lines.push("auto eternity off");
@@ -164,14 +183,20 @@ export class ScriptTemplate {
   }
 
   /**
-   * Parses the parameter object into a script that ________________________________________. Relevant props
-   * of object passed in:
+   * Parses the parameter object into a script that respecs into a specified tree, unlocks a specified EC, changes
+   * autobuyer settings, and then waits until the EC can be completed before triggering an eternity through the
+   * automator. Relevant props of object passed in:
    * @param {Object} params.tree          A study tree to buy repeatedly
    * @param {Number} params.ec            Numerical value denoting the EC to attempt
    * @param {Number} params.completions   Minimum number of completions to wait for before moving onward
    * @param {Object} params.autoInfinity  Autobuyer settings for within the EC
    */
   templateDoEC(params) {
+    this.lines.push("// Template: Complete Eternity Challenge");
+    this.lines.push(`notify "Running Template Complete Eternity Challenge (EC${params.ec})"`);
+    // Force an eternity in order to buy the study tree first
+    this.lines.push("eternity respec");
+
     // Import the tree and the EC study, supplying errors as appropriate
     this.storeTreeData(params);
     this.lines.push(this.storedTreeStr);
@@ -203,6 +228,8 @@ export class ScriptTemplate {
    * @param {Object} params.autoEternity  Object containing props for the eternity autobuyer
    */
   templateUnlockDilation(params) {
+    this.lines.push("// Template: Unlock Dilation");
+    this.lines.push(`notify "Running Template Unlock Dilation"`);
     this.storeTreeData(params);
     if (![231, 232, 233, 234].some(s => this.storedTreeObj.purchasedStudies.includes(TimeStudy(s)))) {
       this.warnings.push("Specified Study Tree cannot reach dilation");
@@ -219,5 +246,9 @@ export class ScriptTemplate {
 
   get script() {
     return this.lines.join("\n");
+  }
+
+  get scriptWithoutInfo() {
+    return this.lines.filter(s => !(s.startsWith("//") || s.startsWith("notify"))).join("\n");
   }
 }

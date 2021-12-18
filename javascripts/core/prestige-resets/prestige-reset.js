@@ -1,7 +1,7 @@
-"use strict";
-
 /* eslint-disable no-empty-function */
-class PrestigeMechanic {
+import { DC } from "../constants.js";
+
+export class PrestigeMechanic {
   // TODO: Fix wasReached and wasReachedEver to actually be abstract once setup is finished.
   /**
    * @abstract
@@ -19,13 +19,13 @@ class PrestigeMechanic {
    * @abstract
    * @returns {Currency|Decimal|number}
    */
-  get goal() { return new Decimal(0); }
+  get goal() { return DC.D0; }
 
   /**
    * @abstract
    * @returns {Currency|Decimal}
    */
-  get currencyRequired() { return new Decimal(0); }
+  get currencyRequired() { return DC.D0; }
 
   /**
    * @abstract
@@ -119,4 +119,4 @@ class PrestigeMechanic {
   }
 }
 
-const Reset = {};
+window.Reset = {};

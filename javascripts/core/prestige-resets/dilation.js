@@ -1,4 +1,4 @@
-"use strict";
+import { BaseEternityReset } from "./eternity.js";
 
 class EnterDilationReset extends BaseEternityReset {
   get confirmationOption() {

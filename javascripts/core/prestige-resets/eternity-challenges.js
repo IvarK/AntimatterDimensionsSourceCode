@@ -1,4 +1,4 @@
-"use strict";
+import { BaseEternityReset } from "./eternity.js";
 
 class EternityChallengeReset extends BaseEternityReset {
   get goal() {

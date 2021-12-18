@@ -1,4 +1,5 @@
-"use strict";
+import { PrestigeMechanic } from "./prestige-reset.js";
+import { DC } from "../constants.js";
 
 class BigCrunchReset extends PrestigeMechanic {
   get goal() {
@@ -43,7 +44,7 @@ class BigCrunchReset extends PrestigeMechanic {
   statistics() {
     player.records.bestInfinity.bestIPminEternity =
       player.records.bestInfinity.bestIPminEternity.clampMin(player.records.thisInfinity.bestIPmin);
-    player.records.thisInfinity.bestIPmin = new Decimal(0);
+    player.records.thisInfinity.bestIPmin = DC.D0;
 
     player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
       gainedInfinities().round().dividedBy(Math.clampMin(33, player.records.thisInfinity.realTime))
@@ -107,11 +108,11 @@ class BigCrunchReset extends PrestigeMechanic {
   reset() {
     Currency.dimensionBoosts.reset();
     Currency.antimatterGalaxies.reset();
-    player.records.thisInfinity.maxAM = new Decimal(0);
+    player.records.thisInfinity.maxAM = DC.D0;
     Currency.antimatter.reset();
     Reset.dimensionBoost.reset(true);
     AntimatterDimensions.reset();
-    player.sacrificed = new Decimal(0);
+    player.sacrificed = DC.D0;
     resetTickspeed();
     InfinityDimensions.resetAmount();
     player.records.thisInfinity.time = 0;
@@ -124,7 +125,7 @@ class BigCrunchReset extends PrestigeMechanic {
     if (Achievement(95).isUnlocked) {
       remainingGalaxies = Math.min(player.replicanti.galaxies, 1);
     } else {
-      Replicanti.amount = new Decimal(0);
+      Replicanti.amount = DC.D0;
     }
     if (TimeStudy(33).isBought) {
       remainingGalaxies = Math.floor(player.replicanti.galaxies / 2);

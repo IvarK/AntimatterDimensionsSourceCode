@@ -1,4 +1,5 @@
-"use strict";
+import { PrestigeMechanic } from "./prestige-reset.js";
+import { DC } from "../constants.js";
 
 class DimensionBoostReset extends PrestigeMechanic {
   get eventBefore() {
@@ -20,7 +21,7 @@ class DimensionBoostReset extends PrestigeMechanic {
     const resetDimBoostPerk = Perk.antimatterNoReset.isBought;
     if (!resetDimBoostPerk && !force) {
       AntimatterDimensions.reset();
-      player.sacrificed = new Decimal(0);
+      player.sacrificed = DC.D0;
       resetTickspeed();
     }
     resetChallengeStuff();

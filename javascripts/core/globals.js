@@ -14,6 +14,8 @@ export * from "./away-progress.js";
 export * from "./autobuyers/index.js";
 export * from "./storage/index.js";
 
+export * from "./prestige-resets/index.js";
+
 export * from "./notations.js";
 export * from "./tutorial.js";
 

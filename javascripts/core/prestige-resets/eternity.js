@@ -1,6 +1,7 @@
-"use strict";
+import { PrestigeMechanic } from "./prestige-reset.js";
+import { DC } from "../constants.js";
 
-class BaseEternityReset extends PrestigeMechanic {
+export class BaseEternityReset extends PrestigeMechanic {
   get goal() {
     return Decimal.NUMBER_MAX_VALUE;
   }
@@ -101,7 +102,7 @@ class BaseEternityReset extends PrestigeMechanic {
     if (!EternityMilestone.keepAutobuyers.isReached) player.break = false;
 
 
-    player.sacrificed = new Decimal(0);
+    player.sacrificed = DC.D0;
     Currency.infinities.reset();
     player.records.bestInfinity.time = 999999999999;
     player.records.bestInfinity.realTime = 999999999999;
@@ -126,16 +127,16 @@ class BaseEternityReset extends PrestigeMechanic {
 
     Currency.infinityPoints.reset();
     InfinityDimensions.resetAmount();
-    player.records.thisInfinity.bestIPmin = new Decimal(0);
-    player.records.bestInfinity.bestIPminEternity = new Decimal(0);
-    player.records.thisEternity.bestEPmin = new Decimal(0);
-    player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
-    player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
+    player.records.thisInfinity.bestIPmin = DC.D0;
+    player.records.bestInfinity.bestIPminEternity = DC.D0;
+    player.records.thisEternity.bestEPmin = DC.D0;
+    player.records.thisEternity.bestInfinitiesPerMs = DC.D0;
+    player.records.thisEternity.bestIPMsWithoutMaxAll = DC.D0;
     resetTimeDimensions();
     resetTickspeed();
     AchievementTimers.marathon2.reset();
-    player.records.thisInfinity.maxAM = new Decimal(0);
-    player.records.thisEternity.maxAM = new Decimal(0);
+    player.records.thisInfinity.maxAM = DC.D0;
+    player.records.thisEternity.maxAM = DC.D0;
     Currency.antimatter.reset();
     ECTimeStudyState.invalidateCachedRequirements();
 

@@ -1,4 +1,5 @@
-"use strict";
+import { GameDatabase } from "./game-database.js";
+import { DC } from "../constants.js";
 
 GameDatabase.h2p = {
   /**
@@ -489,7 +490,7 @@ amount of antimatter before you can attempt them.
     }, {
       name: "Replicanti",
       info: () => `
-Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
+Replicanti are another resource you unlock at ${format(DC.E140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
 ${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by Tickspeed upgrades.
 Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
@@ -507,14 +508,14 @@ Replicanti give a multiplier to all Infinity Dimensions, which will reach a maxi
 ${formatX(Math.pow(2, 20), 2, 2)} at ${formatPostBreak(Number.MAX_VALUE, 2)} Replicanti.
 <br>
 <br>
-<b>Chance upgrade cost:</b> Base ${format(1e140)} IP, cost increment ${formatX(1e15)} IP
+<b>Chance upgrade cost:</b> Base ${format(DC.E140)} IP, cost increment ${formatX(DC.E15)} IP
 <br>
-<b>Speed upgrade cost:</b> Base ${format(1e150)} IP, cost increment ${formatX(1e10)} IP
+<b>Speed upgrade cost:</b> Base ${format(DC.E150)} IP, cost increment ${formatX(DC.E10)} IP
 <br>
-<b>Galaxy upgrade cost:</b> Base ${format(1e170)} IP, cost increment ${formatX(1e25)} IP and an additional
-${formatX(1e5)} IP per upgrade, scaling similarly to distant Antimatter Galaxies. Above ${formatInt(100)} Replicanti
-Galaxies, this ${formatX(1e5)} per upgrade changes to ${formatX(1e55)}. Above ${formatInt(1000)}, the scaling switches
-from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing by ${formatX(1e5)} per upgrade.
+<b>Galaxy upgrade cost:</b> Base ${format(DC.E170)} IP, cost increment ${formatX(DC.E25)} IP and an additional
+${formatX(DC.E5)} IP per upgrade, scaling similarly to distant Antimatter Galaxies. Above ${formatInt(100)} Replicanti
+Galaxies, this ${formatX(DC.E5)} per upgrade changes to ${formatX(1e55)}. Above ${formatInt(1000)}, the scaling switches
+from quadratic to cubic, with the ${formatX(DC.E55)} multiplier itself increasing by ${formatX(DC.E5)} per upgrade.
 `,
       isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
       tags: ["interval", "chance", "infinity", "galaxy", "midgame"],
@@ -536,7 +537,7 @@ Eternity Point gain scales similarly to Infinity Point gain, but scaling off of 
 The base amount of EP gained at ${formatPostBreak(Number.MAX_VALUE, 2)} IP is ~${format(1.62, 2, 2)} EP, multiplied by
 ${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded
 down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
-${formatInt(2)} EP until ${formatPostBreak("1e349")}.
+${formatInt(2)} EP until ${formatPostBreak(DC.E349)}.
 <b>Hotkey: E</b> will Eternity.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
@@ -645,9 +646,9 @@ the middle of an Eternity.
 <br>
 <b>Costs multipliers per purchase:</b>
 <br>
-<b>Antimatter:</b> ${formatPostBreak("1e20000")}
+<b>Antimatter:</b> ${formatPostBreak(DC.E20000)}
 <br>
-<b>Infinity Points:</b> ${format(1e100)}
+<b>Infinity Points:</b> ${format(DC.E100)}
 <br>
 <b>Eternity Points:</b> ${formatInt(2)}
 `,
@@ -657,7 +658,7 @@ the middle of an Eternity.
     }, {
       name: "Eternity Challenges",
       info: () => `
-Eternity Challenges are another set of challenges which are unlocked by the Time Study tree. They require a certain
+Eternity Challenges are another set of challenges which are unlocked by the Time Study Tree. They require a certain
 amount of Time Theorems to enter, plus a secondary requirement which you must meet when you unlock the challenge.
 <br>
 <br>
@@ -710,7 +711,7 @@ can be repeatedly purchased as many times as you can afford them.
     }, {
       name: "Reality",
       info: () => `
-When you reach ${formatPostBreak("1e4000")} EP and have completed the first
+When you reach ${formatPostBreak(DC.E4000)} EP and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset almost the entire game up to this point, but in exchange gives
@@ -736,7 +737,7 @@ currency that can be spent in the Perks subtab on different Perks.
 <br>
 Reality Machines scale purely off of EP, and the Reality button will tell you how much EP you need in order to gain
 the next one. The first ${formatInt(10)} RM scale linearly in the exponent between
-${formatPostBreak("1e4000")} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
+${formatPostBreak(DC.E4000)} EP and ${formatPostBreak(DC.C10P16000D3)} EP, and then past that
 RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>.
 <br>
 <br>
@@ -1072,7 +1073,7 @@ amplify a Reality in the Glyphs tab. When you complete the Reality, this uses al
 in order to attempt to repeat that
 exact Reality over and over, giving you all the rewards you would normally get from the repetitions. For example, if
 you have ${formatInt(50)} minutes stored and amplify a Reality which has lasted ${formatInt(10)} minutes and would
-give ${format(1e30)} RM and ${format(1e12)} Relic Shards, the amplified Reality will give you ${format(5e30)} RM,
+give ${format(DC.E30)} RM and ${format(DC.E12)} Relic Shards, the amplified Reality will give you ${format(5e30)} RM,
 ${format(5e12)} Relic Shards, ${formatInt(5)} Glyphs (subject to your filtering settings),
 and ${formatInt(5)} Perk Points.
 <br>

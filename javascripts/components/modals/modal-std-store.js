@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-std-store", {
   computed: {
     modal() {

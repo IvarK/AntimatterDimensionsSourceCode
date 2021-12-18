@@ -1,6 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("modal-set-save-delete", {
+  components: {
+    PrimaryButton,
+    GlyphSetPreview
+  },
   props: {
     modalConfig: Object
   },
@@ -27,28 +32,27 @@ Vue.component("modal-set-save-delete", {
       <h2>Delete this Glyph Set</h2>
       <div class="c-modal-message__text">
         Please confirm your desire to delete this Glyph Set:
-        <glyph-set-preview
-          :show=true
+        <GlyphSetPreview
           :isInModal="true"
           :glyphs="glyphSet"
         />
         This will not affect your actual glyphs, only the saved preset.
         <br>
-        This is permanent and irreversible. 
+        This is permanent and irreversible.
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Delete
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

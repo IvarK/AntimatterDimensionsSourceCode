@@ -1,4 +1,4 @@
-"use strict";
+import "./imaginary-upgrade-button.js";
 
 Vue.component("imaginary-upgrades-tab", {
   data() {
@@ -31,7 +31,7 @@ Vue.component("imaginary-upgrades-tab", {
       Machines gained in excess of {{ format(baseRMCap) }} will raise the maximum amount of Imaginary Machines
       you can have. (Currently capped at {{ format(capIM, 2, 2) }} Imaginary Machines)
       <br>
-      Imaginary machines are gained passively over time up to the cap, but the rate of gain slows down exponentially
+      Imaginary Machines are gained passively over time up to the cap, but the rate of gain slows down exponentially
       as you approach the cap.
       The amount of iM below the cap will be cut in half every {{ formatInt(scaleTime) }} seconds.
       <br>

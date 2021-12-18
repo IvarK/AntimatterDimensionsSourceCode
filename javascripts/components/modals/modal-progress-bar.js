@@ -1,8 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-progress-bar", {
   components: {
     "offline-speedup-button": {
+      components: {
+        PrimaryButton
+      },
       props: {
         button: Object,
         progress: Object,
@@ -25,13 +28,13 @@ Vue.component("modal-progress-bar", {
         }
       },
       template: `
-        <primary-button
+        <PrimaryButton
           :class="buttonClass"
           @click="buttonClicked"
         >
           {{ button.text }}
-        </primary-button>`
-    },
+        </PrimaryButton>`
+    }
   },
   computed: {
     progress() {

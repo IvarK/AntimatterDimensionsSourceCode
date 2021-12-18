@@ -1,5 +1,3 @@
-"use strict";
-
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
     if (typeof start !== 'number') {
@@ -134,11 +132,11 @@ if (!Array.prototype.includes) {
     Array.max = function( array ){
       return Math.max.apply( Math, array );
   };
-  
+
   Array.min = function( array ){
       return Math.min.apply( Math, array );
   };
-  
+
   Object.invert = function(obj) {
       var result = {};
       var keys = Object.keys(obj);

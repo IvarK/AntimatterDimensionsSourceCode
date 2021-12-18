@@ -1,6 +1,9 @@
-"use strict";
+import HintText from "@/components/HintText";
 
 Vue.component("challenge-box", {
+  components: {
+    HintText
+  },
   props: {
     name: String,
     isUnlocked: false,
@@ -47,9 +50,9 @@ Vue.component("challenge-box", {
   },
   template: `
     <div class="c-challenge-box l-challenge-box">
-      <hint-text type="challenges" class="l-hint-text--challenge">
+      <HintText type="challenges" class="l-hint-text--challenge">
         {{ name }}
-      </hint-text>
+      </HintText>
       <slot name="top" />
       <div class="l-challenge-box__fill" />
       <button

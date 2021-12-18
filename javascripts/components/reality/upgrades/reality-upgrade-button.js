@@ -1,6 +1,17 @@
-"use strict";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
+import HintText from "@/components/HintText";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("reality-upgrade-button", {
+  components: {
+    PrimaryToggleButton,
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay,
+    HintText
+  },
   props: {
     upgrade: Object
   },
@@ -59,22 +70,22 @@ Vue.component("reality-upgrade-button", {
         class="l-reality-upgrade-btn c-reality-upgrade-btn"
         @click="upgrade.purchase()"
       >
-        <hint-text
+        <HintText
           type="realityUpgrades"
           class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
         >
           {{ config.name }}
-        </hint-text>
-        <description-display :config="config" />
-        <description-display
+        </HintText>
+        <DescriptionDisplay :config="config" />
+        <DescriptionDisplay
           v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
           :config="requirementConfig"
-          title="Requirement:"
+          label="Requirement:"
           class="c-reality-upgrade-btn__requirement"
         />
         <template v-else>
-          <effect-display :config="config" />
-          <cost-display
+          <EffectDisplay :config="config" />
+          <CostDisplay
             v-if="!isBought"
             :config="config"
             name="Reality Machine"
@@ -84,10 +95,10 @@ Vue.component("reality-upgrade-button", {
           (+{{ formatInt(automatorPoints) }} AP)
         </b>
       </button>
-      <primary-button-on-off
+      <PrimaryToggleButton
         v-if="isRebuyable && isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
     </div>`

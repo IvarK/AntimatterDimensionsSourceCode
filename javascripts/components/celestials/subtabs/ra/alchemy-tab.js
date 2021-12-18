@@ -1,4 +1,6 @@
-"use strict";
+import "./alchemy-circle-node.js";
+import "./alchemy-resource-info.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 class AlchemyOrbitLayout {
   constructor(tier, radius, angleOffset = 0) {
@@ -71,6 +73,9 @@ class AlchemyCircleLayout {
 }
 
 Vue.component("alchemy-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       infoResourceId: 0,
@@ -219,19 +224,19 @@ Vue.component("alchemy-tab", {
   template: `
     <div class="l-ra-alchemy-tab">
       <div class="c-subtab-option-container">
-        <primary-button class="o-primary-btn--subtab-option" @click="showAlchemyHowTo()">
+        <PrimaryButton class="o-primary-btn--subtab-option" @click="showAlchemyHowTo()">
           Click for alchemy info
-        </primary-button>
-        <primary-button class="o-primary-btn--subtab-option" @click="toggleAllReactions()">
+        </PrimaryButton>
+        <PrimaryButton class="o-primary-btn--subtab-option" @click="toggleAllReactions()">
           Toggle all reactions
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           v-if="realityCreationVisible"
           class="o-primary-btn--subtab-option"
           onclick="Modal.realityGlyph.show()"
         >
           View Reality Glyph creation
-        </primary-button>
+        </PrimaryButton>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
       Glyphs can now be refined using your Glyph filter in the Glyphs tab.

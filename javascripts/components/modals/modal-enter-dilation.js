@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-enter-dilation", {
+  components: {
+    PrimaryButton
+  },
   props: {
     modalConfig: Object,
   },
@@ -44,18 +47,18 @@ Vue.component("modal-enter-dilation", {
       </div>
       <br>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Enter
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

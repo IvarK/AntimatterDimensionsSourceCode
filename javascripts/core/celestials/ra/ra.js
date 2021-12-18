@@ -1,4 +1,4 @@
-"use strict";
+import { CelestialQuotes } from "../quotes.js";
 
 class RaPetState {
   /**
@@ -165,7 +165,7 @@ class RaPetState {
   }
 }
 
-const Ra = {
+export const Ra = {
   displayName: "Ra",
   pets: {
     teresa: new class TeresaRaPetState extends RaPetState {
@@ -353,6 +353,9 @@ const Ra = {
   get chargeUnlocked() {
     return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
   },
+  get canBuyTriad() {
+    return this.pets.v.level >= 5;
+  },
   get petWithRecollection() {
     return player.celestials.ra.petWithRecollection;
   },
@@ -516,7 +519,7 @@ const Ra = {
   symbol: "<i class='fas fa-sun'></i>"
 };
 
-const GlyphAlteration = {
+export const GlyphAlteration = {
   // Adding a secondary effect to some effects
   get additionThreshold() {
     return 1e36;
@@ -573,7 +576,7 @@ const GlyphAlteration = {
  */
 Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
 
-const RA_UNLOCKS = {
+export const RA_UNLOCKS = {
   AUTO_TP: {
     id: 0,
     description: "Unlock Teresa",

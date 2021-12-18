@@ -1,6 +1,4 @@
-"use strict";
-
-class GameOptions {
+export class GameOptions {
 
   static toggleNews() {
     player.options.news.enabled = !player.options.news.enabled;
@@ -55,11 +53,11 @@ function secretImportIndex(data) {
   return secretImports.indexOf(sha);
 }
 
-function isSecretImport(data) {
+export function isSecretImport(data) {
   return secretImportIndex(data) !== -1;
 }
 
-function tryImportSecret(data) {
+export function tryImportSecret(data) {
   const index = secretImportIndex(data);
   if (index === 0 && document.body.style.animation === "") {
     document.body.style.animation = "barrelRoll 5s 1";

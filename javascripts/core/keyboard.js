@@ -1,5 +1,3 @@
-"use strict";
-
 class KeySpin {
   constructor(key, action) {
     this.key = key;
@@ -28,7 +26,7 @@ class KeySpin {
   }
 }
 
-class GameKeyboard {
+export class GameKeyboard {
   static stopSpins() {
     for (const spin of GameKeyboard.spins) {
       spin.stop();

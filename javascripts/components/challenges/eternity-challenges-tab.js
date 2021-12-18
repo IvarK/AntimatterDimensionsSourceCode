@@ -1,8 +1,16 @@
-"use strict";
+import "./challenges-header.js";
+import "./challenge-grid.js";
+import "./eternity-challenge-box.js";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("eternity-challenges-tab", {
   components: {
     "eternity-challenge-box": {
+      components: {
+        DescriptionDisplay,
+        EffectDisplay
+      },
       props: {
         challengeId: Number
       },
@@ -102,7 +110,10 @@ Vue.component("eternity-challenges-tab", {
           :canBeUnlocked="canBeUnlocked"
           @start="start"
         >
-          <description-display :config="config" slot="top" />
+          <DescriptionDisplay
+            :config="config"
+            slot="top"
+          />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
               <div>
@@ -115,16 +126,23 @@ Vue.component("eternity-challenges-tab", {
             </span>
             <span>
               Reward:
-              <description-display
+              <DescriptionDisplay
                 :config="config.reward"
                 :length="55"
                 name="c-challenge-box__reward-description"
               />
             </span>
             <span>
-              <effect-display v-if="completions > 0" :config="currentRewardConfig" />
+              <EffectDisplay
+                v-if="completions > 0"
+                :config="currentRewardConfig"
+              />
               <span v-if="completions > 0 && completions < 5">|</span>
-              <effect-display v-if="completions < 5" :config="nextRewardConfig" title="Next" />
+              <EffectDisplay
+                v-if="completions < 5"
+                :config="nextRewardConfig"
+                label="Next"
+              />
             </span>
           </template>
         </eternity-challenge-box>`

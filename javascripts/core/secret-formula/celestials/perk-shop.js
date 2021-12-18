@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.celestials.perkShop = (function() {
   function rebuyableCost(initialCost, increment, id) {

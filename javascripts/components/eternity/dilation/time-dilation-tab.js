@@ -1,4 +1,6 @@
-"use strict";
+import "./tachyon-particles.js";
+import "./dilation-upgrade.js";
+import "./dilation-button.js";
 
 Vue.component("time-dilation-tab", {
   data() {

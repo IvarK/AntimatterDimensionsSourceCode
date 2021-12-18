@@ -1,6 +1,15 @@
-"use strict";
+import "../reality/black-hole/black-hole-header-row.js";
+import "../header-challenge-display.js";
+import "../old-ui/header/game-header-eternity-button.js";
+import "../old-ui/header/game-header-new-dim-button.js";
+import "../old-ui/header/game-header-big-crunch-button.js";
+import "../old-ui/header/game-header-amounts-line.js";
+import NewsTicker from "@/components/NewsTicker";
 
 Vue.component("new-ui", {
+  components: {
+    NewsTicker
+  },
   data() {
     return {
       view: ui.view,
@@ -91,7 +100,7 @@ Vue.component("new-ui", {
     <div id="page">
       <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
       <div class="game-container" :style="topMargin">
-        <news-ticker v-if="news" />
+        <NewsTicker v-if="news" />
         <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
           <h3>The world has collapsed due to excess antimatter.</h3>
           <button class="btn-big-crunch" onclick="Reset.bigCrunch.request()">Big Crunch</button>

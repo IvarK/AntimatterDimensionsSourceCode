@@ -1,9 +1,10 @@
 // Note: chevrotain doesn't play well with unicode regex
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
-"use strict";
+import { DC } from "../constants.js";
 
-const AutomatorLexer = (() => {
+
+export const AutomatorLexer = (() => {
   const createToken = chevrotain.createToken;
   const Lexer = chevrotain.Lexer;
 
@@ -133,19 +134,19 @@ const AutomatorLexer = (() => {
 
   createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
-    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
+    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingEP", /pending[ \t]+ep/i, {
     $autocomplete: "pending EP",
-    $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
+    $getter: () => (Player.canEternity ? gainedEternityPoints() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
     $autocomplete: "pending TP",
-    $getter: () => (player.dilation.active ? getTachyonGain() : new Decimal(0)),
+    $getter: () => (player.dilation.active ? getTachyonGain() : DC.D0),
   });
   createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",
-    $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))
+    $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
     $autocomplete: "pending glyph level",
@@ -321,14 +322,6 @@ const AutomatorLexer = (() => {
     longer_alt: Identifier,
   });
 
-  // We allow TriadStudy to consume lots of digits because that makes error reporting more
-  // clear (it's nice to say T123 is an invalid triad study)
-  const TriadStudy = createToken({
-    name: "TriadStudy",
-    pattern: /t[1-9][0-9]*/i,
-    longer_alt: Identifier,
-  });
-
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
@@ -342,7 +335,7 @@ const AutomatorLexer = (() => {
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
     AutomatorCurrency, ...tokenLists.AutomatorCurrency,
-    ECLiteral, TriadStudy,
+    ECLiteral,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
@@ -370,9 +363,9 @@ const AutomatorLexer = (() => {
 
   // We use this while building up the grammar
   const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
-  
+
   const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
-  
+
   const standardizeAutomatorCurrencyName = function(x) {
     // This first line exists for this function to usually return quickly;
     // otherwise it's called enough to cause lag.
@@ -386,7 +379,7 @@ const AutomatorLexer = (() => {
     // If we get to this point something has gone wrong, a currency name didn't match any of the currency regexps.
     throw new Error(`${x} does not seem to be an automator currency`);
   };
-  
+
   return {
     lexer,
     tokens: automatorTokens,
@@ -396,4 +389,4 @@ const AutomatorLexer = (() => {
   };
 })();
 
-const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;
+export const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;

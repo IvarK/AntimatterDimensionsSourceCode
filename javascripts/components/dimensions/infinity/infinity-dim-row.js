@@ -1,6 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("infinity-dim-row", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton
+  },
   props: {
     tier: Number
   },
@@ -126,27 +131,27 @@ Vue.component("infinity-dim-row", {
         {{ format(amount, 2, 0) }}
         <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
-      <primary-button
+      <PrimaryButton
         v-tooltip="capTooltip"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-id l-dim-row__button"
         @click="buyManyInfinityDimension"
       >
         {{ costDisplay }}
-      </primary-button>
-      <primary-button-on-off
+      </PrimaryButton>
+      <PrimaryToggleButton
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
         class="o-primary-btn--id-autobuyer l-dim-row__button"
-        text="Auto:"
+        label="Auto:"
       />
-      <primary-button
+      <PrimaryButton
         v-else
         :enabled="isAvailableForPurchase && isUnlocked"
         class="o-primary-btn--buy-id-max l-dim-row__button"
         @click="buyMaxInfinityDimension"
       >
         Buy Max
-      </primary-button>
+      </PrimaryButton>
     </div>`,
 });

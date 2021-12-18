@@ -1,4 +1,4 @@
-"use strict";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("modal-options", {
   template: `
@@ -8,7 +8,7 @@ Vue.component("modal-options", {
     </div>`
 });
 
-const modalOptionsMixin = {
+export const modalOptionsMixin = {
   data() {
     return {
       infinityUnlocked: false,
@@ -32,21 +32,27 @@ const modalOptionsMixin = {
   },
   components: {
     "on-off-button": {
+      components: {
+        PrimaryToggleButton
+      },
       props: ["value", "text"],
       template: `
-        <primary-button-on-off
+        <PrimaryToggleButton
           :value="value"
-          :text="text"
+          :label="text"
           @input="emitInput"
           class="o-primary-btn--option"
         />`
     },
     "wide-on-off-button": {
+      components: {
+        PrimaryToggleButton
+      },
       props: ["value", "text"],
       template: `
-        <primary-button-on-off
+        <PrimaryToggleButton
           :value="value"
-          :text="text"
+          :label="text"
           @input="emitInput"
           class="o-primary-btn--option-wide"
         />`

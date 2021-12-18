@@ -1,6 +1,4 @@
-"use strict";
-
-class EventHub {
+window.EventHub = class EventHub {
   constructor() {
     this._handlers = {};
   }
@@ -46,12 +44,12 @@ class EventHub {
     return `UI(UPDATE/Total): ${EventHub.ui._handlers[GAME_EVENT.UPDATE].length}/${countHandlers(EventHub.ui)}; ` +
       `Logic(Total): ${countHandlers(EventHub.logic)}`;
   }
-}
+};
 
 EventHub.logic = new EventHub();
 EventHub.ui = new EventHub();
 
-const GAME_EVENT = {
+window.GAME_EVENT = {
   // Ticks
   GAME_TICK_BEFORE: "GAME_TICK_BEFORE",
   GAME_TICK_AFTER: "GAME_TICK_AFTER",

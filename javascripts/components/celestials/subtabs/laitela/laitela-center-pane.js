@@ -1,59 +1,13 @@
-"use strict";
+import "../dark-matter-dimension-row.js";
 
 Vue.component("dark-matter-dimension-group", {
-  data() {
-    return {
-      activeDimensions: [],
-      nextDimensionThreshold: 0,
-      unlockedAnnihilation: false,
-      minAnnihilationDM: 0,
-      hasAnnihilationDM: false,
-    };
-  },
-  computed: {
-    dimensions: () => MatterDimensionState.list,
-  },
-  methods: {
-    update() {
-      this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
-      this.nextDimensionThreshold = Array.range(0, 4)
-        .filter(i => MatterDimension(i + 1).amount.eq(0))
-        .map(i => MatterDimension(i + 1).adjustedStartingCost)
-        .min();
-      this.unlockedAnnihilation = ImaginaryUpgrade(19).isBought;
-      this.minAnnihilationDM = Laitela.annihilationDMRequirement;
-      this.hasAnnihilationDM = Currency.darkMatter.gte(this.minAnnihilationDM);
-    },
-  },
   template: `
     <span>
-      <matter-dimension-row
-        v-for="i in activeDimensions"
-        :key="i"
-        :dimension="dimensions[i]"
+      <dark-matter-dimension-row
+        v-for="tier in 4"
+        :key="tier"
+        :tier="tier"
       />
-      <div v-if="nextDimensionThreshold === 0 && !unlockedAnnihilation">
-        <b>
-          Unlock Dark Matter Annihilation from an Imaginary Upgrade.
-          <br>
-          (Also requires {{ format(minAnnihilationDM, 2) }} Dark Matter)
-        </b>
-        <br><br>
-      </div>
-      <div v-else-if="nextDimensionThreshold === 0 && !hasAnnihilationDM">
-        <b>
-          Annihilation requires {{ format(minAnnihilationDM, 2) }} Dark Matter.
-        </b>
-        <br><br>
-      </div>
-      <div v-else-if="nextDimensionThreshold !== 0">
-        <b>
-          Unlock the next Dark Matter Dimension from an Imaginary Upgrade.
-          <br>
-          (Starting cost: {{ format(nextDimensionThreshold, 2) }} Dark Matter)
-        </b>
-        <br><br>
-      </div>
     </span>`
 });
 
@@ -65,7 +19,7 @@ Vue.component("annihilation-button", {
       darkMatterMult: 0,
       darkMatterMultGain: 0,
       hasAnnihilated: false,
-      showAnnihilation: false,
+      annihilationButtonVisible: false,
       matterRequirement: 0,
       darkMatterMultRatio: 0,
       autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
@@ -87,8 +41,7 @@ Vue.component("annihilation-button", {
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
-      this.showAnnihilation = Laitela.canAnnihilate &&
-        (this.hasAnnihilated || !MatterDimensionState.list.some(d => d.amount.eq(0)));
+      this.annihilationButtonVisible = Laitela.canAnnihilate || this.hasAnnihilated;
       this.matterRequirement = Laitela.annihilationDMRequirement;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
       this.isEnabled = player.celestials.laitela.automation.annihilation;
@@ -108,9 +61,9 @@ Vue.component("annihilation-button", {
   },
   template: `
     <button
-      class="c-laitela-annihilation-button"
+      class="l-laitela-annihilation-button c-laitela-annihilation-button"
       @click="annihilate()"
-      v-if="showAnnihilation"
+      v-if="annihilationButtonVisible"
     >
       <h2>Annihilation</h2>
       <span v-if="hasAnnihilated">
@@ -149,5 +102,12 @@ Vue.component("annihilation-button", {
         />
         to the multiplier.
       </div>
+    </button>
+
+    <button
+      v-else
+      class="l-laitela-annihilation-button"
+    >
+      Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter.
     </button>`
 });

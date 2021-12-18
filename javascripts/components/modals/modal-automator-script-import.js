@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-automator-script-import", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       input: "",
@@ -74,11 +77,11 @@ Vue.component("modal-automator-script-import", {
       <div v-else-if="input.length !== 0">
         Invalid Automator script string
       </div>
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
         @click="importSave"
       >
         Import
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

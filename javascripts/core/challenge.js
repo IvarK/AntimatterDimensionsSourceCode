@@ -1,13 +1,14 @@
-"use strict";
+import { GameMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
-function tryCompleteInfinityChallenges() {
+export function tryCompleteInfinityChallenges() {
   if (EternityMilestone.autoIC.isReached) {
     const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
     for (const challenge of toComplete) challenge.complete();
   }
 }
 
-function updateNormalAndInfinityChallenges(diff) {
+export function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
       Currency.matter.bumpTo(1);
@@ -25,7 +26,7 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
+    player.chall3Pow = player.chall3Pow.times(DC.D1_00038.pow(diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
   }
 
   if (NormalChallenge(2).isRunning) {
@@ -108,7 +109,7 @@ class NormalChallengeState extends GameMechanicState {
 
   get goal() {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.id)) {
-      return Decimal.pow10(1e15);
+      return DC.E1E15;
     }
     return Decimal.NUMBER_MAX_VALUE;
   }
@@ -135,7 +136,7 @@ class NormalChallengeState extends GameMechanicState {
  * @param {number} id
  * @return {NormalChallengeState}
  */
-const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
+export const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
 
 /**
  * @returns {NormalChallengeState}
@@ -150,7 +151,7 @@ Object.defineProperty(NormalChallenge, "isRunning", {
   get: () => player.challenge.normal.current !== 0,
 });
 
-const NormalChallenges = {
+export const NormalChallenges = {
   /**
    * @type {NormalChallengeState[]}
    */
@@ -270,7 +271,7 @@ class InfinityChallengeState extends GameMechanicState {
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
+export const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
 
 /**
  * @returns {InfinityChallengeState}
@@ -285,7 +286,7 @@ Object.defineProperty(InfinityChallenge, "isRunning", {
   get: () => InfinityChallenge.current !== undefined,
 });
 
-const InfinityChallenges = {
+export const InfinityChallenges = {
   /**
    * @type {InfinityChallengeState[]}
    */

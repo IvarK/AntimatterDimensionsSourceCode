@@ -1,6 +1,10 @@
-"use strict";
+import { modalOptionsMixin } from "./modal-options.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-news-options", {
+  components: {
+    PrimaryButton
+  },
   mixins: [modalOptionsMixin],
   data() {
     return {
@@ -45,12 +49,12 @@ Vue.component("modal-news-options", {
   },
   template: `
     <modal-options @close="emitClose">
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn o-primary-btn--option-wide"
         onclick="GameOptions.toggleNews()"
       >
         {{ newsOnOffLabel }}
-      </primary-button>
+      </PrimaryButton>
       <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
         <b>{{ formatInt(parseInt(repeatBuffer)) }} message repeat buffer</b>
         <input

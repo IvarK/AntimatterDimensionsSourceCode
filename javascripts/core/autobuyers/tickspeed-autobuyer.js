@@ -1,4 +1,5 @@
-"use strict";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { DC } from "../constants.js";
 
 Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -22,7 +23,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
   }
 
   get antimatterCost() {
-    return new Decimal(1e140);
+    return DC.E140;
   }
 
   get canBeBought() {

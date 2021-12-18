@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-delete-companion", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       messageIndex: 0,
@@ -57,26 +60,26 @@ Vue.component("modal-delete-companion", {
         {{ message }}
       </div>
       <div v-if="messageIndex < 3">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleLeftButtonClick"
         >
           {{ messageIndex < 2 ? "Delete" : "Cancel" }}
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleRightButtonClick"
         >
           {{ messageIndex >= 2 ? "Delete" : "Cancel" }}
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div v-else>
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Thank you
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

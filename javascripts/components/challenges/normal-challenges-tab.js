@@ -1,8 +1,14 @@
-"use strict";
+import "./challenges-header.js";
+import "./challenge-grid.js";
+import "./challenge-box.js";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("normal-challenges-tab", {
   components: {
     "normal-challenge-box": {
+      components: {
+        DescriptionDisplay
+      },
       props: {
         challengeId: Number
       },
@@ -50,7 +56,10 @@ Vue.component("normal-challenges-tab", {
           class="c-challenge-box--normal"
           @start="challenge.requestStart()"
         >
-          <description-display :config="config" slot="top" />
+          <DescriptionDisplay
+            :config="config"
+            slot="top"
+          />
           <span slot="bottom">Reward: {{ challenge.config.reward }}</span>
         </challenge-box>`
     }

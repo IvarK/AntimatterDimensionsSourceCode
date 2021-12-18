@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-preferred-tree", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       dimensionPath: null,
@@ -76,7 +79,7 @@ Vue.component("modal-preferred-tree", {
           @click="select(name)"
           :class="classList(name)"
         >
-          <div v-if="isPreferred(name)" class="l-dim-path-priority o-hint-text">
+          <div v-if="isPreferred(name)" class="l-dim-path-priority o-dim-path-priority">
             {{ isPreferred(name) }}
           </div>
           <div>
@@ -85,7 +88,7 @@ Vue.component("modal-preferred-tree", {
         </button>
       </div>
       <br>
-      <h2>Pace split Preference</h2>
+      <h2>Pace Split Preference</h2>
       <div style="display: flex; flex-direction: row; align-items: center;">
         <button
           v-for="(id, name) in paceOptions"
@@ -97,11 +100,11 @@ Vue.component("modal-preferred-tree", {
           </div>
         </button>
       </div>
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="confirmPrefs"
       >
         Confirm
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

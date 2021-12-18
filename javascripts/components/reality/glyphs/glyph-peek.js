@@ -1,6 +1,9 @@
-"use strict";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("glyph-peek", {
+  components: {
+    GlyphSetPreview
+  },
   data() {
     return {
       glyphs: [],
@@ -59,8 +62,7 @@ Vue.component("glyph-peek", {
         v-if="isVisible"
         @click="showModal"
       >
-        <glyph-set-preview
-          :show="isVisible"
+        <GlyphSetPreview
           :showName="false"
           :text="'Upcoming glyph selection:'"
           :glyphs="glyphs"

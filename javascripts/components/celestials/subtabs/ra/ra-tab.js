@@ -1,4 +1,6 @@
-"use strict";
+import "./ra-pet.js";
+import "./ra-pet-recollection-button.js";
+import "../../celestial-quote-history.js";
 
 Vue.component("ra-tab", {
   data() {

@@ -1,4 +1,4 @@
-"use strict";
+import { DC } from "./constants.js";
 
 class DimBoostRequirement {
   constructor(tier, amount) {
@@ -12,10 +12,10 @@ class DimBoostRequirement {
   }
 }
 
-class DimBoost {
+export class DimBoost {
   static get power() {
     if (NormalChallenge(8).isRunning) {
-      return new Decimal(1);
+      return DC.D1;
     }
 
     let boost = Effects.max(
@@ -123,6 +123,33 @@ class DimBoost {
     return new DimBoostRequirement(tier, amount);
   }
 
+  static get unlockedByBoost() {
+    if (DimBoost.lockText !== null) return DimBoost.lockText;
+    const boosts = DimBoost.purchasedBoosts;
+
+    let newUnlock = "";
+    if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
+      newUnlock = `unlock the ${boosts + 5}th Dimension`;
+    } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+      newUnlock = "unlock Sacrifice";
+    }
+
+    const formattedMultText = `give a ${formatX(DimBoost.power, 2, 1)} multiplier `;
+    let dimensionRange = `to the 1st Dimension`;
+    if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
+    if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
+
+    let boostEffects = "";
+    if (NormalChallenge(8).isRunning) boostEffects = ` to ${newUnlock}`;
+    else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
+    else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+
+    const areDimensionsReset = `Reset
+    ${(Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) ? "nothing" : "your Dimensions"}`;
+
+    return `${areDimensionsReset}${boostEffects}`;
+  }
+
   static get purchasedBoosts() {
     return Math.floor(Currency.dimensionBoosts.value);
   }
@@ -146,13 +173,13 @@ class DimBoost {
   }
 }
 
-function loseDimensionBoost() {
+export function loseDimensionBoost() {
   Currency.dimensionBoosts.subtract(1);
   Reset.dimensionBoost.reset({ force: true });
   Currency.antimatter.reset();
 }
 
-function purchasableDimensionBoostAmount() {
+export function purchasableDimensionBoostAmount() {
   // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
   if (DimBoost.canUnlockNewDimension && DimBoost.requirement.isSatisfied) return 1;
   const req1 = DimBoost.bulkRequirement(1);

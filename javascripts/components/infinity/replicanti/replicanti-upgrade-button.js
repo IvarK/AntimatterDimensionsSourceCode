@@ -1,6 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("replicanti-upgrade-button", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton
+  },
   props: {
     setup: Object
   },
@@ -43,7 +48,7 @@ Vue.component("replicanti-upgrade-button", {
   },
   template: `
     <div class="l-spoon-btn-group l-replicanti-upgrade-button">
-      <primary-button
+      <PrimaryButton
         :enabled="canBeBought"
         class="o-primary-btn--replicanti-upgrade"
         @click="upgrade.purchase()"
@@ -53,17 +58,17 @@ Vue.component("replicanti-upgrade-button", {
           <br>
           <span>{{ costDescription }}</span>
         </template>
-      </primary-button>
-      <primary-button-on-off
+      </PrimaryButton>
+      <PrimaryToggleButton
         v-if="isAutoUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-upgrade-toggle"
       />
     </div>`
 });
 
-class ReplicantiUpgradeButtonSetup {
+export class ReplicantiUpgradeButtonSetup {
   constructor(upgrade, formatDescription, formatCost) {
     this.upgrade = upgrade;
     this.formatDescription = formatDescription;

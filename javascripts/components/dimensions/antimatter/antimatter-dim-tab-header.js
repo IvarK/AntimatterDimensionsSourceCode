@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("antimatter-dim-tab-header", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isSacrificeUnlocked: false,
@@ -34,7 +37,7 @@ Vue.component("antimatter-dim-tab-header", {
   },
   template: `
     <div class="l-antimatter-dim-tab__header">
-      <primary-button
+      <PrimaryButton
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
         :enabled="isSacrificeAffordable"
@@ -47,12 +50,12 @@ Vue.component("antimatter-dim-tab-header", {
         <span v-else>
           Dimensional Sacrifice Disabled ({{ disabledCondition }})
         </span>
-      </primary-button>
-      <primary-button
+      </PrimaryButton>
+      <PrimaryButton
         class="o-primary-btn--buy-max"
         @click="maxAll"
       >
         Max all (M)
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

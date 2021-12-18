@@ -1,6 +1,11 @@
-"use strict";
+import { Teresa } from "./teresa.js";
+import { Effarig } from "./effarig.js";
+import { Enslaved } from "./enslaved.js";
+import { V } from "./V.js";
+import { Ra } from "./ra/ra.js";
+import { Laitela } from "./laitela/laitela.js";
 
-const Celestials = {
+export const Celestials = {
   teresa: Teresa,
   effarig: Effarig,
   enslaved: Enslaved,
@@ -21,7 +26,7 @@ GameDatabase.celestials.descriptions = [
     name: "Effarig",
     description() {
       return `all Dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
-      Infinity power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
+      Infinity Power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
       Glyph levels are temporarily capped${Effarig.isRunning ? ` to ${Effarig.glyphLevelCap}` : ``},
       rarity is unaffected. You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
     }

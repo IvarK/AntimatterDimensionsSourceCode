@@ -1,6 +1,10 @@
-"use strict";
+import "./time-study.js";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("dilation-time-study", {
+  components: {
+    DescriptionDisplay
+  },
   props: {
     setup: Object
   },
@@ -42,7 +46,7 @@ Vue.component("dilation-time-study", {
   },
   template: `
     <time-study :setup="setup">
-      <description-display :config="study.config" />
+      <DescriptionDisplay :config="study.config" />
       <template v-if="showRequirement">
         <br>
         <span>{{ requirement }}</span>

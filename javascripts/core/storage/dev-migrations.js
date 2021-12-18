@@ -1,4 +1,4 @@
-"use strict";
+import { GameStorage } from "./storage.js";
 
 function arrayToBits(array) {
   let bits = 0;
@@ -1023,7 +1023,7 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      player.records.thisEternity.maxIP.copyFrom(player.infinityPoints);
+      player.records.thisEternity.maxIP = new Decimal(player.infinityPoints);
       player.auto.bigCrunch.xHighest = player.auto.bigCrunch.xCurrent;
       player.auto.eternity.xHighest = player.auto.eternity.xCurrent;
       delete player.auto.bigCrunch.xCurrent;
@@ -1160,6 +1160,24 @@ GameStorage.devMigrations = {
         player.reality.automator.state.repeat = false;
         player.reality.automator.state.forceRestart = false;
       }
+    },
+    player => {
+      for (const resource of player.celestials.ra.alchemy) {
+        // We shouldn't access global variables in migrations so instead of Ra.alchemyResourceCap we use 25000.
+        resource.amount = Math.clampMax(resource.amount, 25000);
+      }
+    },
+    player => {
+      const triadRegex = new RegExp(`T(\\d)`, "gu");
+      player.timestudy.presets.forEach(p => p.studies = p.studies.replaceAll(triadRegex, "30$1"));
+      // This may also potentially change variable or preset names in scripts, breaking them, but the likelihood of
+      // this being a widespread issue is low enough that this is probably a better option than a really obtuse regex
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.content = script.content.replaceAll(triadRegex, "30$1");
+      }
+
+      player.timestudy.studies = player.timestudy.studies.concat(player.celestials.v.triadStudies.map(id => id + 300));
+      delete player.celestials.v.triadStudies;
     },
   ],
 

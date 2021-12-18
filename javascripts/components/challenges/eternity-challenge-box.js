@@ -1,6 +1,9 @@
-"use strict";
+import HintText from "@/components/HintText";
 
 Vue.component("eternity-challenge-box", {
+  components: {
+    HintText
+  },
   props: {
     name: String,
     isUnlocked: false,
@@ -51,9 +54,9 @@ Vue.component("eternity-challenge-box", {
   },
   template: `
     <div class="c-challenge-box l-challenge-box c-challenge-box--eternity">
-      <hint-text type="challenges" class="l-hint-text--challenge">
+      <HintText type="challenges" class="l-hint-text--challenge">
         {{ name }}
-      </hint-text>
+      </HintText>
       <slot name="top" />
       <div class="l-challenge-box__fill" />
       <button

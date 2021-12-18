@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "./game-database.js";
 
 GameDatabase.tabs = [
   {
@@ -51,7 +51,7 @@ GameDatabase.tabs = [
         key: "saving",
         name: "Saving",
         symbol: "<i class='fas fa-save'></i>",
-        component: "options-saving-tab",
+        component: "OptionsSavingTab",
         id: 0,
         hidable: false,
       },
@@ -59,7 +59,7 @@ GameDatabase.tabs = [
         key: "visual",
         name: "Visual",
         symbol: "<i class='fas fa-palette'></i>",
-        component: "options-visual-tab",
+        component: "OptionsVisualTab",
         id: 1,
         hidable: false,
       },
@@ -67,7 +67,7 @@ GameDatabase.tabs = [
         key: "gameplay",
         name: "Gameplay",
         symbol: "<i class='fas fa-wrench'></i>",
-        component: "options-gameplay-tab",
+        component: "OptionsGameplayTab",
         id: 2,
         hidable: false,
       }
@@ -83,7 +83,7 @@ GameDatabase.tabs = [
         key: "statistics",
         name: "Statistics",
         symbol: "<i class='fas fa-clipboard-list'></i>",
-        component: "statistics-tab",
+        component: "StatisticsTab",
         id: 0,
         hidable: true,
       },
@@ -91,7 +91,7 @@ GameDatabase.tabs = [
         key: "challenges",
         name: "Challenge records",
         symbol: "<i class='fas fa-stopwatch'></i>",
-        component: "challenge-records-tab",
+        component: "ChallengeRecordsTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
@@ -103,7 +103,7 @@ GameDatabase.tabs = [
         key: "prestige runs",
         name: "Past Prestige Runs",
         symbol: "<i class='fas fa-list-ol'></i>",
-        component: "past-runs-tab",
+        component: "PastPrestigeRunsTab",
         condition: () => PlayerProgress.infinityUnlocked(),
         id: 2,
         hidable: true,
@@ -112,7 +112,7 @@ GameDatabase.tabs = [
         key: "glyph sets",
         name: "Glyph Set Records",
         symbol: "<i class='fas fa-ellipsis-h'></i>",
-        component: "glyph-sets-tab",
+        component: "GlyphSetRecordsTab",
         condition: () => PlayerProgress.realityUnlocked(),
         id: 3,
         hidable: true,
@@ -129,7 +129,7 @@ GameDatabase.tabs = [
         key: "normal",
         name: "Achievements",
         symbol: "<i class='fas fa-trophy'></i>",
-        component: "normal-achievements-tab",
+        component: "NormalAchievementsTab",
         id: 0,
         hidable: true,
       },
@@ -137,7 +137,7 @@ GameDatabase.tabs = [
         key: "secret",
         name: "Secret Achievements",
         symbol: "<i class='fas fa-question'></i>",
-        component: "secret-achievements-tab",
+        component: "SecretAchievementTab",
         id: 1,
         hidable: true,
       }
@@ -215,6 +215,7 @@ GameDatabase.tabs = [
     UIClass: "o-tab-btn--infinity",
     before: "infinity-points-header",
     id: 6,
+    condition: () => PlayerProgress.infinityUnlocked(),
     hidable: true,
     subtabs: [
       {

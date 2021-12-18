@@ -1,6 +1,13 @@
-"use strict";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
 
 Vue.component("perk-shop-upgrade", {
+  components: {
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay
+  },
   props: {
     upgrade: Object
   },
@@ -28,14 +35,14 @@ Vue.component("perk-shop-upgrade", {
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        <description-display
+        <DescriptionDisplay
           :config="upgrade.config"
           :length="70"
         />
         <br>
-        <effect-display :config="upgrade.config" />
+        <EffectDisplay :config="upgrade.config" />
         <br>
-        <cost-display
+        <CostDisplay
           v-if="!isCapped"
           :config="upgrade.config"
           name="Perk Point"

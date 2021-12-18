@@ -1,17 +1,18 @@
 {
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:vue/recommended"
   ],
   "env": {
-    "es2021": true,
-    "browser": true,
-    "jquery": true
+    "es6": true,
+    "node": true,
+    "browser": true
   },
+  "parser": "vue-eslint-parser",
   "parserOptions": {
     "ecmaVersion": 2021,
-    "ecmaFeatures": {
-      "impliedStrict": false
-    }
+    "sourceType": "module",
+    "parser": "@babel/eslint-parser"
   },
   "rules": {
     "no-console": "warn",
@@ -31,6 +32,18 @@
         "allowElseIf": false
       }
     ],
+    "vue/component-definition-name-casing": "off",
+    "vue/order-in-components": "off",
+    "vue/require-prop-type-constructor": "off",
+    "vue/require-default-prop": "off",
+    "vue/html-comment-content-newline": "warn",
+    "vue/html-comment-content-spacing": "warn",
+    "vue/html-comment-indent": "warn",
+    "vue/padding-line-between-blocks": "warn",
+    "vue/block-tag-newline": "warn",
+    "vue/no-multiple-objects-in-class": "warn",
+    "vue/no-static-inline-styles": "warn",
+    "vue/no-v-html": "off",
     "no-empty-function": "error",
     "no-eval": "error",
     "no-extra-bind": "error",
@@ -76,7 +89,7 @@
       "error",
       {
         "vars": "local",
-        "args": "all"
+        "args": "after-used"
       }
     ],
     "no-use-before-define": [
@@ -151,6 +164,7 @@
     "no-nested-ternary": "error",
     "no-new-object": "error",
     "no-tabs": "error",
+    "no-trailing-spaces": "warn",
     "no-unneeded-ternary": "error",
     "no-whitespace-before-property": "error",
     "object-curly-spacing": [

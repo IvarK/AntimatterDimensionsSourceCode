@@ -1,8 +1,12 @@
-"use strict";
+import GlyphComponent from "@/components/GlyphComponent";
+import GlyphSetName from "@/components/GlyphSetName";
 
 Vue.component("modal-glyph-showcase-panel", {
   components: {
     "glyph-box-helper": {
+      components: {
+        GlyphComponent
+      },
       props: {
         idx: Number,
         glyph: Object,
@@ -130,7 +134,7 @@ Vue.component("modal-glyph-showcase-panel", {
           <div class="c-glyph-choice-icon">
             <span :style="typeStyle">{{ typeCapitalized }}</span>
             <div v-html="levelText" v-if="showLevel"></div>
-            <glyph-component
+            <GlyphComponent
               :key="idx"
               style="margin: 0.1rem;"
               :glyph="glyph"
@@ -159,7 +163,8 @@ Vue.component("modal-glyph-showcase-panel", {
           </div>
         </div>
       </div>`
-    }
+    },
+    GlyphSetName
   },
   props: {
     modalConfig: {
@@ -212,7 +217,7 @@ Vue.component("modal-glyph-showcase-panel", {
       <modal-close-button @click="emitClose" />
       <h3>{{ modalConfig.name }}</h3>
       <div v-if="isGlyphSelection">Projected Glyph Level: {{ formatInt(gainedLevel) }}</div>
-      <glyph-set-name
+      <GlyphSetName
         v-if="modalConfig.showSetName"
         :glyphSet="glyphs"
         :forceColor="true"

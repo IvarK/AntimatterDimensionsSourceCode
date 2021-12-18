@@ -1,4 +1,5 @@
-"use strict";
+import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
 class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {
@@ -41,7 +42,7 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   onPurchased() {
     EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
     if (this.id >= 15 && this.id <= 18) {
-      MatterDimension(this.id - 14).amount = new Decimal(1);
+      DarkMatterDimension(this.id - 14).amount = DC.D1;
       Tab.celestials.laitela.show();
     }
     if (this.id === 19) {
@@ -74,9 +75,9 @@ ImaginaryUpgradeState.index = mapGameData(
     : new ImaginaryUpgradeState(config))
 );
 
-const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
+export const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
 
-const ImaginaryUpgrades = {
+export const ImaginaryUpgrades = {
   all: ImaginaryUpgradeState.index.compact(),
   get totalRebuyables() {
     const rebuyables = player.reality.imaginaryRebuyables;

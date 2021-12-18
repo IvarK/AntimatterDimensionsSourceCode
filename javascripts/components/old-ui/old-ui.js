@@ -1,10 +1,16 @@
-"use strict";
+import "./old-ui-subtab-bar.js";
+import "./old-ui-tab-bar.js";
+import "./header/game-header.js";
+import NewsTicker from "@/components/NewsTicker";
+import FooterLinks from "@/components/FooterLinks";
 
 Vue.component("old-ui", {
   components: {
     "big-crunch-button": {
       template: `<button class="o-tab-btn o-big-crunch-btn" onclick="Reset.bigCrunch.request()">Big Crunch</button>`
-    }
+    },
+    NewsTicker,
+    FooterLinks
   },
   data() {
     return {
@@ -36,7 +42,7 @@ Vue.component("old-ui", {
         </div>
       </template>
       <template v-else>
-        <news-ticker class="l-old-ui__news-bar" v-if="news" />
+        <NewsTicker class="l-old-ui__news-bar" v-if="news" />
         <game-header class="l-old-ui__header" />
         <old-ui-tab-bar />
         <component v-if="tab.config.before" :is="tab.config.before" />
@@ -48,7 +54,7 @@ Vue.component("old-ui", {
         <div class="l-old-ui-page l-old-ui__page">
           <slot />
         </div>
-        <footer-links class="l-old-ui__footer" />
+        <FooterLinks class="l-old-ui__footer" />
       </template>
     </div>`
 });

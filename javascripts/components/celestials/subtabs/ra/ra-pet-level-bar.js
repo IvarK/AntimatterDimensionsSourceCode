@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("ra-pet-level-bar", {
   props: {
     petConfig: Object

@@ -1,56 +1,58 @@
-"use strict";
+import { modalOptionsMixin } from "./modal-options.js";
 
 Vue.component("modal-away-progress-options", {
   components: {
     "away-progress-options-helper": {
       mixins: [modalOptionsMixin],
       props: {
-        option: String,
+        name: String,
       },
       data() {
         return {
           setting: false,
+          isVisible: false,
         };
       },
       watch: {
         setting(newValue) {
-          AwayProgressTypes[this.option].option = newValue;
+          this.type.option = newValue;
         },
       },
       computed: {
+        type() {
+          return AwayProgressTypes.all[this.name];
+        },
         text() {
-          return `${AwayProgressTypes[this.option].formatName}:`;
+          return `${this.type.formatName}:`;
         }
       },
       methods: {
         update() {
-          this.setting = AwayProgressTypes[this.option].option;
+          const type = this.type;
+          this.setting = type.option;
+          this.isVisible = type.isUnlocked();
         }
       },
       template: `
         <wide-on-off-button
+          v-if="isVisible"
           v-model="setting"
           :text="text"
         />`
     }
   },
-  data() {
-    return {
-      all: Array,
-    };
-  },
-  methods: {
-    update() {
-      this.all = AwayProgressTypes.all.filter(type => type.showOption && type.isUnlocked());
+  computed: {
+    all() {
+      return AwayProgressTypes.showOption;
     }
   },
   template: `
-    <modal-options @close="emitClose" style="width: 50rem">
+    <modal-options @close="emitClose" style="width: 75rem">
       <div class="c-modal-options__button-container">
         <away-progress-options-helper
-          v-for="(entry, id) of all"
-          :key="id"
-          :option="entry.name"
+          v-for="name of all"
+          :key="name"
+          :name="name"
         />
       </div>
       Note: Selected resources will only show if they've increased.

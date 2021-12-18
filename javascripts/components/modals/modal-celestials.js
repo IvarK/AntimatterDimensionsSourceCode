@@ -1,4 +1,4 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-celestials", {
   components: {
@@ -26,10 +26,11 @@ Vue.component("modal-celestials", {
       },
       template: `
         <span :style="color" v-if="isUnlocked">
-          {{ name }} gains Memories Chunks based on {{ chunkGain }}.
+          {{ name }} gains Memory Chunks based on {{ chunkGain }}.
           <br>
         </span>`
     },
+    PrimaryButton
   },
   props: {
     modalConfig: Object,
@@ -104,18 +105,18 @@ Vue.component("modal-celestials", {
         <modal-ra-pet-display v-if="modalConfig.number === 4" v-for="id in 4" :key="id" :petId="id - 1" />
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Begin
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

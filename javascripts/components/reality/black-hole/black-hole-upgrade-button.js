@@ -1,6 +1,15 @@
-"use strict";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("black-hole-upgrade-button", {
+  components: {
+    PrimaryToggleButton,
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay
+  },
   props: {
     config: Object
   },
@@ -54,18 +63,21 @@ Vue.component("black-hole-upgrade-button", {
         class="l-reality-upgrade-btn c-reality-upgrade-btn"
         @click="config.upgrade.purchase()"
       >
-        <description-display :config="config" />
-        <effect-display :config="effectConfig" :title="config.effectTitle" />
-        <cost-display
+        <DescriptionDisplay :config="config" />
+        <EffectDisplay
+          :config="effectConfig"
+          :label="config.effectTitle"
+        />
+        <CostDisplay
           v-if="!isCapped"
           :config="costConfig"
           name="Reality Machine"
         />
       </button>
-      <primary-button-on-off
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
     </div>`

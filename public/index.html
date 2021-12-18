@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Antimatter Dimensions</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." >
+  <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
+  <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/show-hint.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/lint.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/panda-syntax.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/liquibyte.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/vue-sfc-classes.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+  <link rel="stylesheet" type="text/css" href="stylesheets/automator.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/vis-network.css">
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-77268961-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+<body>
+  <div id="loading"></div>
+  <div id="ui"></div>
+  <div id="background-animations">
+    <div class="videocontainer videocontainer--background">
+      <video autoplay muted loop id="stars">
+        <source src="images/stars-bg.webm" type="video/webm">
+      </video>
+    </div>
+    <div id="snow" style="display: none;"></div>
+  </div>
+  <div class="videocontainer">
+    <video preload muted id="realityanimbg" style="opacity: 0; display: none;">
+      <source src="images/realityanimbg.webm" type="video/webm">
+    </video>
+  </div>
+  <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
+
+  <!-- Here's some firebase stuff -->
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+
+  <script type="text/javascript" src="lib/vue.js"></script>
+  <script type="text/javascript" src="lib/v-tooltip.min.js"></script>
+  <script type="text/javascript" src="lib/mousetrap.min.js"></script>
+  <script type="text/javascript" src="lib/break_infinity.min.js"></script>
+  <script type="text/javascript" src="lib/lz-string.min.js"></script>
+  <script type="text/javascript" src="lib/vis-network.min.js"></script>
+  <script type="text/javascript" src="lib/sha512.min.js"></script>
+  <script type="text/javascript" src="lib/deepmerge.js"></script>
+  <script type="text/javascript" src="lib/Sortable.min.js"></script>
+  <script type="text/javascript" src="lib/vuedraggable.umd.min.js"></script>
+  <script type="text/javascript" src="lib/Tween.min.js"></script>
+  <script type="text/javascript" src="lib/gamma.js"></script>
+  <script type="text/javascript" src="lib/vue-split-pane.min.js"></script>
+  <script type="text/javascript" src="lib/chevrotain.min.js"></script>
+  <script type="text/javascript" src="lib/codemirror.js"></script>
+  <script type="text/javascript" src="lib/simple.js"></script>
+  <script type="text/javascript" src="lib/show-hint.js"></script>
+  <script type="text/javascript" src="lib/lint.js"></script>
+  <script type="text/javascript" src="lib/active-line.js"></script>
+  <script type="text/javascript" src="lib/closebrackets.js"></script>
+  <script type="text/javascript" src="lib/ad-notations.min.js"></script>
+  <script type="text/javascript" src="lib/svg-pan-zoom.min.js"></script>
+  <script type="text/javascript" src="lib/pako.min.js"></script>
+  <script type="text/javascript" src="lib/base64-binary.js"></script>
+  <script type="text/javascript" src="lib/DragDropTouch.js"></script>
+  <script type="text/javascript" src="lib/longpress.js"></script>
+
+  <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
+</body>
+</html>

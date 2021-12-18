@@ -1,2 +1,2 @@
-javascripts/lib/*.js
-javascripts/DragDropTouch.js
+public/**/*.js
+src/components/SliderComponent.vue

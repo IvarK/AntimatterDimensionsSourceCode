@@ -1,6 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("ep-multiplier-button", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton
+  },
   data() {
     return {
       isAutobuyerActive: false,
@@ -49,16 +54,16 @@ Vue.component("ep-multiplier-button", {
         <br>
         Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
       </button>
-      <primary-button
+      <PrimaryButton
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
         @click="upgrade.buyMax()"
       >
         Max Eternity Point mult
-      </primary-button>
-      <primary-button-on-off
+      </PrimaryButton>
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         v-model="isAutobuyerActive"
-        text="Autobuy EP mult"
+        label="Autobuy EP mult"
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
       />
     </div>`

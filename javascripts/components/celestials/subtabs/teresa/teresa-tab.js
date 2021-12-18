@@ -1,6 +1,12 @@
-"use strict";
+import "./perk-shop-upgrade.js";
+import "../../celestial-quote-history.js";
+import { DC } from "../../../../core/constants.js";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("teresa-tab", {
+  components: {
+    GlyphSetPreview
+  },
   data() {
     return {
       pour: false,
@@ -55,9 +61,9 @@ Vue.component("teresa-tab", {
       return GameDatabase.celestials.descriptions[0].description();
     },
     lastMachinesString() {
-      return this.lastMachines.lt(new Decimal("1e10000"))
+      return this.lastMachines.lt(DC.E10000)
         ? `${quantify("Reality Machine", this.lastMachines, 2)}`
-        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(new Decimal("1e10000")), 2)}`;
+        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(DC.E10000), 2)}`;
     }
   },
   methods: {
@@ -116,8 +122,7 @@ Vue.component("teresa-tab", {
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
               Glyph Set used:
-              <glyph-set-preview
-                :show=true
+              <GlyphSetPreview
                 text="Teresa's Best Glyph Set"
                 :textHidden="true"
                 :forceNameColor=false

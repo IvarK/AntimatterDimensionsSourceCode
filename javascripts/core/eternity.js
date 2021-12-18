@@ -1,6 +1,7 @@
-"use strict";
+import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
+import { DC } from "./constants.js";
 
-function eternityResetRequest(auto) {
+export function eternityResetRequest(auto) {
   if (!Reset.eternity.canBePerformed) return;
   if (EternityChallenge.isRunning) {
     Reset.exitEternityChallenge.request({ auto });
@@ -14,7 +15,7 @@ function eternityResetRequest(auto) {
   Reset.eternity.request({ auto });
 }
 
-class EternityMilestoneState {
+export class EternityMilestoneState {
   constructor(config) {
     this.config = config;
   }
@@ -24,7 +25,7 @@ class EternityMilestoneState {
   }
 }
 
-const EternityMilestone = (function() {
+export const EternityMilestone = (function() {
   const db = GameDatabase.eternity.milestones;
   const infinityDims = Array.dimensionTiers
     .map(tier => new EternityMilestoneState(db[`autobuyerID${tier}`]));
@@ -52,7 +53,7 @@ const EternityMilestone = (function() {
   };
 }());
 
-const EternityMilestones = {
+export const EternityMilestones = {
   // This is a bit of a hack because autobuyerID is a function that returns EternityMilestoneState objects instead of a
   // EternityMilestoneState object itself
   all: Object.values(EternityMilestone)
@@ -76,7 +77,7 @@ class EPMultiplierState extends GameMechanicState {
   constructor() {
     super({});
     this.cachedCost = new Lazy(() => this.costAfterCount(player.epmultUpgrades));
-    this.cachedEffectValue = new Lazy(() => Decimal.pow(5, player.epmultUpgrades));
+    this.cachedEffectValue = new Lazy(() => DC.D5.pow(player.epmultUpgrades));
   }
 
   get isAffordable() {
@@ -98,7 +99,7 @@ class EPMultiplierState extends GameMechanicState {
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
-    Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
+    Autobuyer.eternity.bumpAmount(DC.D5.pow(diff));
   }
 
   get isCustomEffect() {
@@ -133,7 +134,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get costIncreaseThresholds() {
-    return [1e100, Decimal.NUMBER_MAX_VALUE, "1e1300", "1e4000"];
+    return [DC.E100, Decimal.NUMBER_MAX_VALUE, DC.E1300, DC.E4000];
   }
 
   costAfterCount(count) {
@@ -143,12 +144,12 @@ class EPMultiplierState extends GameMechanicState {
       const cost = Decimal.pow(multPerUpgrade[i], count).times(500);
       if (cost.lt(costThresholds[i])) return cost;
     }
-    return Decimal.pow(1000, count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(500);
+    return DC.E3.pow(count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(500);
   }
 }
 
 
-const EternityUpgrade = (function() {
+export const EternityUpgrade = (function() {
   const db = GameDatabase.eternity.upgrades;
   return {
     idMultEP: new EternityUpgradeState(db.idMultEP),

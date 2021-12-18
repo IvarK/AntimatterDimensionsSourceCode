@@ -1,11 +1,23 @@
-"use strict";
+import "./old-ui/old-ui.js";
+import "./new-ui/new-ui.js";
+import "./save-timer.js";
+import "./help-me.js";
+import "./tt-shop.js";
+import "./new-ui/sidebar.js";
+import TabComponents from "@/components/tabs";
 
 Vue.component("game-ui", {
+  components: {
+    ...TabComponents
+  },
   computed: {
     view() {
       return this.$viewModel;
     },
     uiLayout() {
+      return this.view.newUI ? "new-ui" : "old-ui";
+    },
+    containerClass() {
       return this.view.newUI ? "new-ui" : "old-ui";
     },
     page() {
@@ -24,6 +36,7 @@ Vue.component("game-ui", {
     <div
       v-if="view.initialized"
       id="ui-container"
+      :class="containerClass"
       style="display: flex; justify-content: center;"
     >
       <div id="ui" class="c-game-ui">

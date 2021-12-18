@@ -1,6 +1,4 @@
-"use strict";
-
-const Notation = (function() {
+export const Notation = (function() {
   const N = ADNotations;
   const notation = type => {
     const n = new type();
@@ -45,7 +43,7 @@ Notation.cancer.setAsCurrent = (silent = false) => {
   if (!silent) GameUI.notify.success("😂😂😂");
 };
 
-const Notations = {
+export const Notations = {
   // Defined as a list here for exact order in options tab.
   all: [
     Notation.scientific,

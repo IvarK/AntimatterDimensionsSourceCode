@@ -1,6 +1,10 @@
-"use strict";
+import "./game-header-gamespeed-display.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("game-header-tickspeed-row", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isVisible: false,
@@ -66,7 +70,7 @@ Vue.component("game-header-tickspeed-row", {
     <div :class="classObject">
       <div>{{ multiplierDisplay }}</div>
       <div>
-        <primary-button
+        <PrimaryButton
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
           :style="{ width: isContinuumActive ? '25rem' : ''}"
@@ -75,15 +79,15 @@ Vue.component("game-header-tickspeed-row", {
           <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
           <span v-else-if="showCostTitle">Cost: {{ format(cost) }}</span>
           <span v-else>{{ format(cost) }}<br></span>
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           v-if="!isContinuumActive"
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"
           onclick="buyMaxTickSpeed()"
         >
           Buy Max
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div>
         {{ tickspeedDisplay }}

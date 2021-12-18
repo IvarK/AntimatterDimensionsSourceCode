@@ -1,6 +1,4 @@
-"use strict";
-
-class TimeSpan {
+window.TimeSpan = class TimeSpan {
   /**
    * @param {Number} value
    * @returns {TimeSpan}
@@ -291,7 +289,7 @@ class TimeSpan {
   static get minValue() {
     return new TimeSpan(Number.MIN_VALUE);
   }
-}
+};
 
 const Guard = {
   isDefined(value, message) {

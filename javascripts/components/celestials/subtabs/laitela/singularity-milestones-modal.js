@@ -1,4 +1,4 @@
-"use strict";
+import "./singularity-milestone.js";
 
 Vue.component("singularity-milestones-modal", {
   data: () => ({

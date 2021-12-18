@@ -1,13 +1,3 @@
-"use strict";
-
-Vue.component("open-modal-shortcuts", {
-  template: `
-    <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
-      Press <kbd>?</kbd> to open shortcut list.
-    </p>`
-});
-
-
 Vue.component("modal-shortcuts", {
   data() {
     return {
@@ -59,7 +49,7 @@ Vue.component("modal-shortcuts", {
           and adjusts the function of certain buttons.
           <br>
           You can hold shift while buying Time Studies to buy all up until that point,
-          save Time Study trees, and delete Glyphs.
+          save Time Study Trees, and delete Glyphs.
         </span>
         <br><br>
         <div class="l-modal-shortcuts-row">

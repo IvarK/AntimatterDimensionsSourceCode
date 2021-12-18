@@ -1,13 +1,17 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-eternity", {
+  components: {
+    PrimaryButton
+  },
   props: {
     modalConfig: Object,
   },
   data() {
     return {
       exitingEC: false,
-      startingIP: new Decimal(0)
+      startingIP: new Decimal(0),
+      gainedEternityPoints: new Decimal(0),
     };
   },
   created() {
@@ -23,7 +27,7 @@ Vue.component("modal-eternity", {
           on the Statistics tab. You will also gain an Eternity Point and unlock various upgrades.`;
     },
     gainedEPOnEternity() {
-      return `You will gain ${quantify("Eternity Point", gainedEternityPoints(), 2)} on Eternity.`;
+      return `You will gain ${quantify("Eternity Point", this.gainedEternityPoints, 2)} on Eternity.`;
     },
     startWithIP() {
       return this.startingIP.gt(0)
@@ -46,6 +50,7 @@ Vue.component("modal-eternity", {
     update() {
       this.exitingEC = EternityChallenge.isRunning;
       this.startingIP = Currency.infinityPoints.startingValue;
+      this.gainedEternityPoints = gainedEternityPoints();
     },
     handleNoClick() {
       this.emitClose();
@@ -83,18 +88,18 @@ Vue.component("modal-eternity", {
         </div>
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Confirm
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

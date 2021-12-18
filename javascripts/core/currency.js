@@ -1,4 +1,5 @@
-"use strict";
+import { DC } from "./constants.js";
+
 
 /**
  * @abstract
@@ -102,7 +103,7 @@ MathOperations.decimal = new class DecimalMathOperations extends MathOperations 
 /**
  * @abstract
  */
-class Currency {
+export class Currency {
   /**
    * @abstract
    */
@@ -201,9 +202,10 @@ class DecimalCurrency extends Currency {
   get operations() { return MathOperations.decimal; }
   get mantissa() { return this.value.mantissa; }
   get exponent() { return this.value.exponent; }
-  get startingValue() { return new Decimal(0); }
+  get startingValue() { return DC.D0; }
 //  get gainedCurrency() { return new Decimal(0); }
 }
+window.DecimalCurrency = DecimalCurrency;
 
 Currency.antimatter = new class extends DecimalCurrency {
   get value() { return player.antimatter; }
@@ -392,7 +394,7 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     player.eternityPoints = value;
     player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
     if (player.records.bestReality.bestEP.lt(value)) {
-      player.records.bestReality.bestEP.copyFrom(Currency.eternityPoints);
+      player.records.bestReality.bestEP = value;
       player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
   }
@@ -551,10 +553,8 @@ Currency.darkEnergy = new class extends NumberCurrency {
   set value(value) { player.celestials.laitela.darkEnergy = value; }
 
   get productionPerSecond() {
-    return Array.range(1, 4)
-      .map(n => MatterDimension(n))
-      .filter(d => d.amount.gt(0))
-      .map(d => d.powerDE * 1000 / d.interval)
+    return DarkMatterDimensions.all
+      .map(d => d.productionPerSecond)
       .sum();
   }
 }();

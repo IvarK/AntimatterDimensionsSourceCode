@@ -1,6 +1,21 @@
-"use strict";
+import "./autobuyer-toggles.js";
+import "./multiple-autobuyers-box.js";
+import "./single-autobuyer-box.js";
+import "./big-crunch-autobuyer-box.js";
+import "./sacrifice-autobuyer-box.js";
+import "./tickspeed-autobuyer-box.js";
+import "./dimension-autobuyer-box.js";
+import "./galaxy-autobuyer-box.js";
+import "./dimboost-autobuyer-box.js";
+import "./eternity-autobuyer-box.js";
+import "./reality-autobuyer-box.js";
+import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
+
 
 Vue.component("autobuyers-tab", {
+  components: {
+    OpenModalShortcutsButton
+  },
   data: () => ({
     hasContinuum: false,
     displayADAutobuyersInOneRow: false,
@@ -18,7 +33,7 @@ Vue.component("autobuyers-tab", {
   template: `
     <div class="l-autobuyers-tab">
       <autobuyer-toggles />
-      <open-modal-shortcuts />
+      <OpenModalShortcutsButton />
       <reality-autobuyer-box />
       <eternity-autobuyer-box />
       <big-crunch-autobuyer-box />

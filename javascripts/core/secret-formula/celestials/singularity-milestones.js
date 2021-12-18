@@ -1,7 +1,7 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 // Used for UI purposes to give different theming for different kinds of upgrades
-const LAITELA_UPGRADE_DIRECTION = {
+export const LAITELA_UPGRADE_DIRECTION = {
   SELF_BOOST: 0,
   BOOSTS_MAIN: 1,
   BOOSTS_LAITELA: 2
@@ -214,7 +214,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "4th Dark Matter Dimension amount boosts Dark Matter and Dark Energy gain",
-    effect: () => Math.clampMin(MatterDimension(4).amount.pow(0.03).toNumber(), 1),
+    effect: () => Math.clampMin(DarkMatterDimension(4).amount.pow(0.03).toNumber(), 1),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },

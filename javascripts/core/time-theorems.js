@@ -1,9 +1,9 @@
-"use strict";
+import { DC } from "./constants.js";
 
 /**
  * @abstract
  */
-class TimeTheoremPurchaseType {
+export class TimeTheoremPurchaseType {
   /**
   * @abstract
   */
@@ -50,7 +50,7 @@ class TimeTheoremPurchaseType {
     if (this.currency.lt(this.cost)) return false;
     let purchased = false;
     const amount = this.bulkPossible;
-    const buyFn = cost => (Perk.ttFree.isBought ? this.currency.gt(cost) : this.currency.purchase(cost));
+    const buyFn = cost => (Perk.ttFree.isBought ? this.currency.gte(cost) : this.currency.purchase(cost));
     // This will sometimes buy one too few for EP, so we just have to buy 1 after.
     if (bulk && buyFn(this.bulkCost(amount))) {
       Currency.timeTheorems.add(amount);
@@ -76,8 +76,8 @@ TimeTheoremPurchaseType.am = new class extends TimeTheoremPurchaseType {
   set amount(value) { player.timestudy.amBought = value; }
 
   get currency() { return Currency.antimatter; }
-  get costBase() { return new Decimal("1e20000"); }
-  get costIncrement() { return new Decimal("1e20000"); }
+  get costBase() { return DC.E20000; }
+  get costIncrement() { return DC.E20000; }
 }();
 
 TimeTheoremPurchaseType.ip = new class extends TimeTheoremPurchaseType {
@@ -85,8 +85,8 @@ TimeTheoremPurchaseType.ip = new class extends TimeTheoremPurchaseType {
   set amount(value) { player.timestudy.ipBought = value; }
 
   get currency() { return Currency.infinityPoints; }
-  get costBase() { return new Decimal(1); }
-  get costIncrement() { return new Decimal(1e100); }
+  get costBase() { return DC.D1; }
+  get costIncrement() { return DC.E100; }
 }();
 
 TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
@@ -94,8 +94,8 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   set amount(value) { player.timestudy.epBought = value; }
 
   get currency() { return Currency.eternityPoints; }
-  get costBase() { return new Decimal(1); }
-  get costIncrement() { return new Decimal(2); }
+  get costBase() { return DC.D1; }
+  get costIncrement() { return DC.D2; }
 
   bulkCost(amount) {
     if (Perk.ttFree.isBought) return this.cost.times(this.costIncrement.pow(amount - 1));
@@ -103,7 +103,7 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   }
 }();
 
-const TimeTheorems = {
+export const TimeTheorems = {
   checkForBuying(auto) {
     if (PlayerProgress.realityUnlocked() || TimeDimension(1).bought) return true;
     if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");

@@ -1,6 +1,9 @@
-"use strict";
+import GlyphComponent from "@/components/GlyphComponent";
 
 Vue.component("glyph-inventory", {
+  components: {
+    GlyphComponent
+  },
   data() {
     return {
       inventory: [],
@@ -87,7 +90,7 @@ Vue.component("glyph-inventory", {
           @dragover="allowDrag"
           @drop="drop(toIndex(row, col), $event)"
         >
-          <glyph-component
+          <GlyphComponent
             v-if="inventory[toIndex(row, col)]"
             :glyph="inventory[toIndex(row, col)]"
             :isNew="isNew(toIndex(row, col))"

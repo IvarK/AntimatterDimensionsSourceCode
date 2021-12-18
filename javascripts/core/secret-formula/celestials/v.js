@@ -1,6 +1,7 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
 
-const V_REDUCTION_MODE = {
+export const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
   DIVISION: 2
 };
@@ -36,7 +37,7 @@ GameDatabase.celestials.v = {
       id: 4,
       name: "Dilated Time",
       resource: () => player.records.thisReality.maxDT,
-      requirement: new Decimal("1e320"),
+      requirement: DC.E320,
       format: x => format(x, 2),
       progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10() / 320),
     },
@@ -44,7 +45,7 @@ GameDatabase.celestials.v = {
       id: 5,
       name: "Replicanti",
       resource: () => player.records.thisReality.maxReplicanti,
-      requirement: new Decimal("1e320000"),
+      requirement: DC.E320000,
       format: x => format(x, 2),
       progress: () => emphasizeEnd(player.records.thisReality.maxReplicanti.pLog10() / 320000),
     },
@@ -95,7 +96,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 1.2e5 * tiers,
       maxShardReduction: goal => goal - 6e5,
-      perReductionStep: Decimal.pow10(1200),
+      perReductionStep: DC.E1200,
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -109,7 +110,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => format(Decimal.pow10(x)),
       shardReduction: tiers => 50e6 * tiers,
       maxShardReduction: goal => goal - 400e6,
-      perReductionStep: Decimal.pow10(5e5),
+      perReductionStep: DC.E500000,
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -191,40 +192,4 @@ GameDatabase.celestials.v = {
       isHard: true
     }
   ],
-  triadStudies: [
-    {
-      id: 1,
-      STCost: 12,
-      requirement: [221, 222, 231],
-      description: "Time Study 231 powers up the effect of Time Study 221",
-      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
-      formatEffect: value => formatX(value, 2, 1),
-      unlocked: () => Ra.pets.v.level >= 5
-    },
-    {
-      id: 2,
-      STCost: 12,
-      requirement: [223, 224, 232],
-      description: () => `Distant Galaxy scaling threshold starts another ${formatInt(3000)} Antimatter Galaxies later`,
-      effect: 3000,
-      unlocked: () => Ra.pets.v.level >= 10
-    },
-    {
-      id: 3,
-      STCost: 12,
-      requirement: [225, 226, 233],
-      description: () => `Gain ${formatPercents(0.5)} more extra Replicanti Galaxies from Time Studies 225 and 226,
-        and from Effarig's Infinity`,
-      effect: 1.5,
-      unlocked: () => Ra.pets.v.level >= 15
-    },
-    {
-      id: 4,
-      STCost: 12,
-      requirement: [227, 228, 234],
-      description: "Dimensional Sacrifice multiplier is squared",
-      effect: 2,
-      unlocked: () => Ra.pets.v.level >= 20
-    }
-  ]
 };

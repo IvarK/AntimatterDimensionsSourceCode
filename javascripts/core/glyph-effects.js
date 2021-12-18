@@ -1,18 +1,19 @@
-"use strict";
+import { GameDatabase } from "./secret-formula/game-database.js";
+import { DC } from "./constants.js";
 
 // There is a little too much stuff about glyph effects to put in constants.
 
 // The last glyph type you can only get if you got effarig reality
-const GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig",
+export const GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig",
   "reality", "cursed", "companion"];
-const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation"];
-const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
-const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
+export const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation"];
+export const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
+export const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
-const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎",
+export const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎",
   effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
-const GlyphCombiner = Object.freeze({
+export const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
   multiply: x => x.reduce(Number.prodReducer, 1),
   // For exponents, the base value is 1, so when we add two exponents a and b we want to get a + b - 1,
@@ -20,7 +21,7 @@ const GlyphCombiner = Object.freeze({
   // we have to add 1 - x.length to the actual sum, so that if all the exponents are close to 1 the result
   // is also close to 1 rather than close to x.length.
   addExponents: x => x.reduce(Number.sumReducer, 1 - x.length),
-  multiplyDecimal: x => x.reduce(Decimal.prodReducer, new Decimal(1))
+  multiplyDecimal: x => x.reduce(Decimal.prodReducer, DC.D1)
 });
 
 /**
@@ -186,13 +187,13 @@ class GlyphEffectConfig {
   }
 }
 
-const ALTERATION_TYPE = {
+export const ALTERATION_TYPE = {
   ADDITION: 1,
   EMPOWER: 2,
   BOOST: 3
 };
 
-const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
+export const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
 
 GameDatabase.reality.glyphEffects = [
   {
@@ -271,7 +272,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Dilated Time gain ×{value}",
     shortDesc: "DT ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
-      ? Decimal.pow(1.005, level).times(15)
+      ? DC.D1_005.pow(level).times(15)
       : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
@@ -345,7 +346,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Replication speed multiplier",
     shortDesc: "Replication speed ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("replication")
-      ? Decimal.pow(1.007, level).times(10)
+      ? DC.D1_007.pow(level).times(10)
       : Decimal.times(level, strength).times(3)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
@@ -484,7 +485,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Infinity gain multiplier",
     shortDesc: "Infinities ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
-      ? Decimal.pow(1.02, level)
+      ? DC.D1_02.pow(level)
       : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
@@ -523,7 +524,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Antimatter Dimension multipliers ×{value}",
     shortDesc: "AD ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
-      ? Decimal.pow(11111, level * 220)
+      ? DC.D11111.pow(level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),
     formatEffect: x => formatPostBreak(x, 2, 0),
     combine: GlyphCombiner.multiplyDecimal,
@@ -796,27 +797,27 @@ GameDatabase.reality.glyphEffects = [
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 
-function findGlyphTypeEffects(glyphType) {
+export function findGlyphTypeEffects(glyphType) {
   return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
 }
 
-function makeGlyphEffectBitmask(effectList) {
+export function makeGlyphEffectBitmask(effectList) {
   // eslint-disable-next-line no-bitwise
   return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
 }
 
-function getGlyphEffectsFromBitmask(bitmask) {
+export function getGlyphEffectsFromBitmask(bitmask) {
   return orderedEffectList
     .map(effectName => GameDatabase.reality.glyphEffects[effectName])
     // eslint-disable-next-line no-bitwise
     .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0);
 }
 
-function getGlyphIDsFromBitmask(bitmask) {
+export function getGlyphIDsFromBitmask(bitmask) {
   return getGlyphEffectsFromBitmask(bitmask).map(x => x.id);
 }
 
-function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
+export function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
   const needle = getGlyphIDsFromBitmask(needleBitmask);
   const haystack = getGlyphIDsFromBitmask(haystackBitmask);
   return haystack.every(x => needle.includes(x));
@@ -887,7 +888,7 @@ class GlyphType {
   }
 }
 
-const GlyphTypes = {
+export const GlyphTypes = {
   time: new GlyphType({
     id: "time",
     symbol: GLYPH_SYMBOLS.time,

@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-glyph-undo", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       showStoredGameTime: false,
@@ -49,18 +52,18 @@ Vue.component("modal-glyph-undo", {
         need to complete the conditions in a single Reality without using undo.
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Confirm
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

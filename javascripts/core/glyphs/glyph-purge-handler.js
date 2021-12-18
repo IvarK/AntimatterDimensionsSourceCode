@@ -1,7 +1,5 @@
-"use strict";
-
 // This actually deals with both sacrifice and refining, but I wasn't 100% sure what to call it
-const GlyphSacrificeHandler = {
+export const GlyphSacrificeHandler = {
   get canSacrifice() {
     return RealityUpgrade(19).isBought;
   },
@@ -82,7 +80,8 @@ const GlyphSacrificeHandler = {
     const resource = this.glyphAlchemyResource(glyph);
     const currentCap = resource.cap;
     const capAfterRefinement = this.highestRefinementValue(glyph);
-    return Math.max(currentCap, capAfterRefinement);
+    const higherCap = Math.clampMin(currentCap, capAfterRefinement);
+    return Math.clampMax(higherCap, Ra.alchemyResourceCap);
   },
   highestRefinementValue(glyph) {
     return this.glyphRawRefinementGain(glyph) / this.glyphRefinementEfficiency;

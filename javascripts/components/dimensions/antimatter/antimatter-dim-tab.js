@@ -1,6 +1,14 @@
-"use strict";
+import "./antimatter-dim-tab-header.js";
+import "./antimatter-dim-row.js";
+import "./antimatter-dim-boost-row.js";
+import "./antimatter-dim-galaxy-row.js";
+import "./antimatter-dim-tab-progress-bar.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("antimatter-dim-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isInMatterChallenge: false,
@@ -66,7 +74,7 @@ Vue.component("antimatter-dim-tab", {
         <antimatter-dim-boost-row />
         <antimatter-dim-galaxy-row />
       </div>
-      <primary-button
+      <PrimaryButton
         v-if="isQuickResetAvailable"
         class="o-primary-btn--quick-reset"
         @click="quickReset"
@@ -74,7 +82,7 @@ Vue.component("antimatter-dim-tab", {
         Perform a Dimension Boost reset
         <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
         <span v-else> for no gain</span>
-      </primary-button>
+      </PrimaryButton>
       <div style="flex: 1 0" />
       <antimatter-dim-tab-progress-bar class="l-antimatter-dim-tab__progress_bar" />
     </div>`

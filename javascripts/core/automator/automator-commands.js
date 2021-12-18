@@ -1,10 +1,10 @@
-"use strict";
+import { AutomatorLexer } from "./lexer.js";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
  */
 
-const AutomatorCommands = ((() => {
+export const AutomatorCommands = ((() => {
   const T = AutomatorLexer.tokenMap;
   // The splitter tries to get a number 1 through 6, or anything else. Note: eslint complains
   // about lack of u flag here for some reason.
@@ -301,9 +301,6 @@ const AutomatorCommands = ((() => {
           if (entry.children.NumberLiteral) {
             // Single study ID or numerical value
             studyList.push(entry.children.NumberLiteral[0].image);
-          } else if (entry.children.TriadStudy && Ra.pets.v.level >= 5) {
-            // Triad study (this also should be prevented by the general "can't convert errored scripts" if locked)
-            studyList.push(`T${entry.children.TriadStudy[0].image}`);
           } else if (entry.children.StudyPath) {
             // Study path (eg. "time")
             studyList.push(entry.children.StudyPath[0].image);
@@ -628,7 +625,6 @@ const AutomatorCommands = ((() => {
           for (const tsNumber of studies.normal) {
             if (TimeStudy(tsNumber).isBought) continue;
             if (!TimeStudy(tsNumber).purchase()) {
-              if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
               if (purchasedStudies > 0) {
                 AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)}
                 and stopped at study ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
@@ -704,7 +700,8 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
         return () => {
-          importStudyTree(player.timestudy.presets[presetIndex - 1].studies, true);
+          const imported = new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies);
+          TimeStudyTree.commitToGameState(imported.purchasedStudies);
           AutomatorData.logCommandEvent(`Loaded study ${ctx.Preset[0].image}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };

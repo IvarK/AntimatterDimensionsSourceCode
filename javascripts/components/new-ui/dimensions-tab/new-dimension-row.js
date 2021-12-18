@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("new-dimension-row", {
   props: {
     tier: Number
@@ -18,7 +16,6 @@ Vue.component("new-dimension-row", {
       isAffordable: false,
       buyUntil10: true,
       howManyCanBuy: 0,
-      isPrevented: false,
       isContinuumActive: false,
       continuumValue: 0,
       isShown: false
@@ -58,7 +55,7 @@ Vue.component("new-dimension-row", {
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       const buyUntil10 = player.buyUntil10;
-      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
+      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
       this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
       this.bought = dimension.bought;
@@ -71,7 +68,6 @@ Vue.component("new-dimension-row", {
       }
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
-      this.isPrevented = this.tier === 8 && Enslaved.isRunning && AntimatterDimension(8).bought >= 1;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
@@ -119,7 +115,7 @@ Vue.component("new-dimension-row", {
       </div>
       <button
         class="o-primary-btn o-primary-btn--new"
-        :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isPrevented}"
+        :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isCapped}"
         @click="buy"
       >
         <div
@@ -128,7 +124,7 @@ Vue.component("new-dimension-row", {
           :enabled="isAffordable || isContinuumActive"
           :class="tutorialClass()"
         >
-          <span v-if="isPrevented">
+          <span v-if="isCapped">
             Shattered by Enslaved
           </span>
           <span v-else-if="isContinuumActive">
@@ -142,7 +138,7 @@ Vue.component("new-dimension-row", {
             Cost: {{ costDisplay }}
           </span>
         </div>
-        <div class="fill" v-if="!isContinuumActive && isUnlocked && !isPrevented">
+        <div class="fill" v-if="!isContinuumActive && isUnlocked && !isCapped">
           <div class="fill-purchased" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
           <div class="fill-possible" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
         </div>

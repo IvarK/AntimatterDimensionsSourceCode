@@ -1,4 +1,9 @@
-"use strict";
+import "../automator-blocks.js";
+import "../automator-event-log.js";
+import "../automator-error-page.js";
+import "../automator-button.js";
+import "./automator-man-page.js";
+import "./automator-docs-main-page.js";
 
 Vue.component("automator-docs", {
   data() {

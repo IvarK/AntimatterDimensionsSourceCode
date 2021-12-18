@@ -1,4 +1,4 @@
-"use strict";
+import { GameKeyboard } from "./keyboard.js";
 
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
@@ -13,7 +13,7 @@
 // i, j, k, l, n, o, p, q, v, w, x, z
 
 
-const shortcuts = [
+export const shortcuts = [
   {
     name: "Toggle Autobuyers",
     keys: ["a"],

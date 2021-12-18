@@ -1,5 +1,3 @@
-"use strict";
-
 class Lazy {
   constructor(getValue) {
     this._getValue = getValue;
@@ -44,8 +42,9 @@ class Lazy {
     return this;
   }
 }
+window.Lazy = Lazy;
 
-const GameCache = {
+export const GameCache = {
   worstChallengeTime: new Lazy(() => player.challenge.normal.bestTimes.max()),
 
   bestRunIPPM: new Lazy(() =>
@@ -70,6 +69,8 @@ const GameCache = {
 
   timeStudies: new Lazy(() => NormalTimeStudyState.studies
     .map(s => player.timestudy.studies.includes(s.id))),
+
+  currentStudyTree: new Lazy(() => new TimeStudyTree(TimeStudyTree.currentStudies)),
 
   achievementPeriod: new Lazy(() => TimeSpan.fromMinutes(30 - Effects.sum(
     Perk.achievementGroup1,

@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.eternity.milestones = {
   autobuyerIPMult: {
@@ -31,7 +31,7 @@ GameDatabase.eternity.milestones = {
         Eternities. (Currently ${format(EPmin, 2, 2)} EP/min)`;
     },
     activeCondition: () => (player.options.offlineProgress
-      ? `Active as long as neither of the other offline milestones 
+      ? `Active as long as neither of the other offline milestones
         (${formatInt(200)} or ${formatInt(1000)}) are also active.`
       : ""),
   },
@@ -93,7 +93,7 @@ GameDatabase.eternity.milestones = {
   },
   replicantiNoReset: {
     eternities: 40,
-    reward: `Replicanti Galaxies no longer reset Antimatter, Antimatter Dimensions, 
+    reward: `Replicanti Galaxies no longer reset Antimatter, Antimatter Dimensions,
       Tickspeed, Dimensional Sacrifice, or Dimension Boosts`
   },
   autobuyerReplicantiChance: {

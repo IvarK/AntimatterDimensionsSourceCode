@@ -1,6 +1,15 @@
-"use strict";
+import CostDisplay from "@/components/CostDisplay";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
+import EffectDisplay from "@/components/EffectDisplay";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("dilation-upgrade", {
+  components: {
+    PrimaryToggleButton,
+    DescriptionDisplay,
+    EffectDisplay,
+    CostDisplay
+  },
   props: {
     isRebuyable: {
       type: Boolean,
@@ -65,27 +74,27 @@ Vue.component("dilation-upgrade", {
   template: `
     <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
-        <description-display
+        <DescriptionDisplay
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"
         />
-        <effect-display
+        <EffectDisplay
           br
           :config="upgrade.config"
           :key="boughtAmount"
         />
-        <cost-display
+        <CostDisplay
           br
           v-if="!isBought && !isCapped"
           :config="upgrade.config"
           name="Dilated Time"
         />
       </button>
-      <primary-button-on-off
+      <PrimaryToggleButton
         v-if="isRebuyable && isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon o-primary-btn--dilation-upgrade-toggle"
       />
     </div>`

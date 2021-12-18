@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("shop-button", {
   props: {
     purchase: Object,

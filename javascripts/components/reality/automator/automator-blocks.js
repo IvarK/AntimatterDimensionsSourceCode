@@ -1,5 +1,3 @@
-"use strict";
-
 const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<=", "!="];
 const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
   "AM", "IP", "EP", "RM", "INFINITIES", "BANKED INFINITIES", "ETERNITIES", "REALITIES",
@@ -12,7 +10,7 @@ const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
 
 const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
-const automatorBlocks = [
+export const automatorBlocks = [
   {
     cmd: "WAIT",
     targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
@@ -93,11 +91,7 @@ const automatorBlocks = [
 ];
 const AUTOMATOR_BLOCKS_BLACKLIST = ["DEFINE", "BLOB"];
 
-const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
-
-function findAutomatorBlockByName(name) {
-  return automatorBlocks.find(b => b.cmd === name);
-}
+export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 
 Vue.component("automator-blocks", {
   data() {

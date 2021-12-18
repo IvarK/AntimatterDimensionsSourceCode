@@ -1,4 +1,4 @@
-"use strict";
+import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 class BlackHolePowerAutobuyerState extends AutobuyerState {
   constructor(blackHole) {

@@ -1,6 +1,10 @@
-"use strict";
+import "./failable-ec-text.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("header-challenge-display", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       activityTokens: [],
@@ -125,11 +129,11 @@ Vue.component("header-challenge-display", {
       </span>
       <failable-ec-text v-if="isInFailableEC" />
       <span style="padding: 0.3rem;" />
-      <primary-button
+      <PrimaryButton
         v-if="showExit"
         @click="exitButtonClicked"
       >
         {{ exitText }}
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

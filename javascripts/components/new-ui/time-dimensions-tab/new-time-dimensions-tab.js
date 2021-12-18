@@ -1,6 +1,10 @@
-"use strict";
+import "./new-time-dimension-row.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("new-time-dimensions-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       totalUpgrades: 0,
@@ -38,19 +42,19 @@ Vue.component("new-time-dimensions-tab", {
   template: `
     <div class="l-time-dim-tab l-centered-vertical-tab">
       <div class="c-subtab-option-container">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
           @click="maxAll"
         >
           Max all
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           v-if="areAutobuyersUnlocked"
           class="o-primary-btn--subtab-option"
           @click="toggleAllAutobuyers"
         >
           Toggle all autobuyers
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div>
         <p>

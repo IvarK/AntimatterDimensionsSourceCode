@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("antimatter-dim-galaxy-row", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       type: GALAXY_TYPE.NORMAL,
@@ -15,7 +18,8 @@ Vue.component("antimatter-dim-galaxy-row", {
       },
       canBeBought: false,
       distantStart: 0,
-      lockText: null
+      lockText: null,
+      canBulkBuy: false,
     };
   },
   computed: {
@@ -75,8 +79,15 @@ Vue.component("antimatter-dim-galaxy-row", {
       this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.lockText = Galaxy.lockText;
+      this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
     },
     buyGalaxy(bulk) {
+      if (!this.canBeBought) return;
+      if (player.options.confirmations.antimatterGalaxy) {
+        const buyBulk = this.canBulkBuy && bulk;
+        Modal.antimatterGalaxy.show({ bulk: buyBulk });
+        return;
+      }
       requestGalaxyReset(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
@@ -88,7 +99,7 @@ Vue.component("antimatter-dim-galaxy-row", {
         requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
         <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
       </div>
-      <primary-button
+      <PrimaryButton
         :enabled="canBeBought"
         class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
         :class="tutorialClass"
@@ -96,6 +107,6 @@ Vue.component("antimatter-dim-galaxy-row", {
         @click.shift.exact="buyGalaxy(false)"
       >
         {{ buttonText }}
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

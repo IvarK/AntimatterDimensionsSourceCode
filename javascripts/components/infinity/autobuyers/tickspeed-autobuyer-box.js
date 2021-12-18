@@ -1,4 +1,5 @@
-"use strict";
+import "./autobuyer-interval-button.js";
+import "./autobuyer-box.js";
 
 Vue.component("tickspeed-autobuyer-box", {
   data() {

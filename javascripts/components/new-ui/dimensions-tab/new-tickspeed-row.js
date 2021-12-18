@@ -1,4 +1,4 @@
-"use strict";
+import "../../old-ui/header/game-header-gamespeed-display.js";
 
 Vue.component("new-tickspeed-row", {
   data() {
@@ -65,8 +65,10 @@ Vue.component("new-tickspeed-row", {
   template: `
     <div :class="classObject">
       <div class="tickspeed-labels">
-        <span>{{ tickspeedDisplay }} <game-header-gamespeed-display v-if="!isGameSpeedNormal" /></span>
-        <span>{{ multiplierDisplay }}</span>
+        <span>
+          {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
+          <game-header-gamespeed-display v-if="!isGameSpeedNormal" />
+        </span>
       </div>
       <div class="tickspeed-buttons">
         <button

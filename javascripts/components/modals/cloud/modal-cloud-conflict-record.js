@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("modal-cloud-conflict-record", {
   props: {
     saveId: Number,
@@ -61,7 +59,7 @@ Vue.component("modal-cloud-conflict-record", {
     </div>`
 });
 
-const modalCloudConflictMixin = {
+export const modalCloudConflictMixin = {
   computed: {
     conflict() {
       return this.$viewModel.modal.cloudConflict;

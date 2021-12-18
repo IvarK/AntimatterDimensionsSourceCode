@@ -1,4 +1,7 @@
-"use strict";
+import "../celestial-quote-history.js";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SliderComponent from "@/components/SliderComponent";
 
 Vue.component("modal-enslaved-hints", {
   data() {
@@ -135,6 +138,11 @@ Vue.component("modal-enslaved-hints", {
 });
 
 Vue.component("enslaved-tab", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton,
+    SliderComponent
+  },
   data: () => ({
     isStoringBlackHole: false,
     isStoringReal: false,
@@ -288,10 +296,10 @@ Vue.component("enslaved-tab", {
   template: `
     <div class="l-enslaved-celestial-tab">
       <div class="c-subtab-option-container" v-if="canAdjustStoredTime">
-        <primary-button-on-off
+        <PrimaryToggleButton
           v-model="autoRelease"
           class="o-primary-btn--subtab-option"
-          text="Pulse Black Hole:"
+          label="Pulse Black Hole:"
         />
       </div>
       <div class="l-enslaved-celestial-tab--inner">
@@ -319,13 +327,13 @@ Vue.component("enslaved-tab", {
         </div>
         <div class="l-enslaved-upgrades-column">
           <celestial-quote-history celestial="enslaved" />
-          <primary-button
+          <PrimaryButton
             v-if="hintsUnlocked"
             class="o-primary-btn"
             onclick="Modal.enslavedHints.show()"
           >
             Examine the Reality more closely...
-          </primary-button>
+          </PrimaryButton>
           <div class="l-enslaved-top-container">
             <div class="l-enslaved-top-container__half">
               While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
@@ -381,7 +389,7 @@ Vue.component("enslaved-tab", {
           <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
             Black Hole charging rate: {{ storedTimeRate }}
             <br><br>
-            <ad-slider-component
+            <SliderComponent
               v-bind="sliderProps"
               :value="storedFraction"
               @input="adjustSlider($event)"

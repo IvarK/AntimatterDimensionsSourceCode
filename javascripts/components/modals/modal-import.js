@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-import", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       input: ""
@@ -78,12 +81,12 @@ Vue.component("modal-import", {
           {{ saveCheckString }}
         </div>
       </div>
-      <primary-button
+      <PrimaryButton
         v-if="inputIsValid"
         class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
         @click="importSave"
       >
         Import
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

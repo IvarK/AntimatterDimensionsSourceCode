@@ -1,6 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("time-dim-row", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton
+  },
   props: {
     tier: Number,
     areAutobuyersUnlocked: Boolean
@@ -105,27 +110,27 @@ Vue.component("time-dim-row", {
         {{ format(amount, 2, 0) }}
         <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
-      <primary-button
+      <PrimaryButton
         v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button"
         @click="buyTimeDimension"
       >
         {{ buttonContents }}
-      </primary-button>
-      <primary-button-on-off
+      </PrimaryButton>
+      <PrimaryToggleButton
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
         class="o-primary-btn--td-autobuyer l-dim-row__button"
-        text="Auto:"
+        label="Auto:"
       />
-      <primary-button
+      <PrimaryButton
         v-else
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
       >
         Buy Max
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

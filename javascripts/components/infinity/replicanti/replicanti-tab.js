@@ -1,6 +1,12 @@
-"use strict";
+import "./replicanti-gain-text.js";
+import "./replicanti-galaxy-button.js";
+import { ReplicantiUpgradeButtonSetup } from "./replicanti-upgrade-button.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("replicanti-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isUnlocked: false,
@@ -18,7 +24,8 @@ Vue.component("replicanti-tab", {
       distantRG: 0,
       remoteRG: 0,
       effarigInfinityBonusRG: 0,
-      nextEffarigRGThreshold: 0
+      nextEffarigRGThreshold: 0,
+      canSeeGalaxyButton: false,
     };
   },
   computed: {
@@ -101,12 +108,13 @@ Vue.component("replicanti-tab", {
       this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
       this.nextEffarigRGThreshold = Decimal.NUMBER_MAX_VALUE.pow(Effarig.bonusRG + 2);
+      this.canSeeGalaxyButton = Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
     }
   },
   template: `
     <div class="l-replicanti-tab">
       <br>
-      <primary-button
+      <PrimaryButton
         v-if="!isUnlocked"
         :enabled="isUnlockAffordable"
         class="o-primary-btn--replicanti-unlock"
@@ -115,7 +123,7 @@ Vue.component("replicanti-tab", {
         Unlock Replicanti
         <br>
         Cost: {{ format(1e140) }} IP
-      </primary-button>
+      </PrimaryButton>
       <template v-else>
         <div v-if="isInEC8">
           You have {{ quantifyInt("purchase", ec8Purchases) }} left.
@@ -148,7 +156,7 @@ Vue.component("replicanti-tab", {
         <br><br>
         <replicanti-gain-text />
         <br>
-        <replicanti-galaxy-button />
+        <replicanti-galaxy-button v-if="canSeeGalaxyButton" />
       </template>
     </div>`
 });

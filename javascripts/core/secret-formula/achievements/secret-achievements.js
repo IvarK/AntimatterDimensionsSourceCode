@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.achievements.secret = [
   {
@@ -125,7 +125,7 @@ GameDatabase.achievements.secret = [
   {
     id: 34,
     name: "You do know how these work, right?",
-    description: "Respec with an empty Time Study tree."
+    description: "Respec with an empty Time Study Tree."
   },
   {
     id: 35,

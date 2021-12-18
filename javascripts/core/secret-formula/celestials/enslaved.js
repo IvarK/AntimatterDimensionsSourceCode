@@ -1,4 +1,4 @@
-"use strict";
+import { GameDatabase } from "../game-database.js";
 
 GameDatabase.celestials.enslaved = {
   // Note that "condition" isn't displayed in-game. These are meant to be indicators here of

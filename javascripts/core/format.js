@@ -1,24 +1,22 @@
-"use strict";
-
-function format(value, places, placesUnder1000) {
+window.format = function format(value, places, placesUnder1000) {
   return Notations.current.format(value, places, placesUnder1000);
-}
+};
 
-function formatInt(value) {
+window.formatInt = function formatInt(value) {
   if (Notations.current.isPainful) {
     return format(value, 2, 0);
   }
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
-}
+};
 
-function formatFloat(value, digits) {
+window.formatFloat = function formatFloat(value, digits) {
   if (Notations.current.isPainful) {
     return format(value, Math.max(2, digits), digits);
   }
   return formatWithCommas(value.toFixed(digits));
-}
+};
 
-function formatPostBreak(value, places, placesUnder1000) {
+window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000) {
   const notation = Notations.current;
   // This is basically just a copy of the format method from notations library,
   // with the pre-break case removed.
@@ -44,56 +42,56 @@ function formatPostBreak(value, places, placesUnder1000) {
   return decimal.sign() < 0
     ? notation.formatNegativeDecimal(decimal.abs(), places)
     : notation.formatDecimal(decimal, places);
-}
+};
 
-function formatX(value, places, placesUnder1000) {
+window.formatX = function formatX(value, places, placesUnder1000) {
   return `×${format(value, places, placesUnder1000)}`;
-}
+};
 
-function formatPow(value, places, placesUnder1000) {
+window.formatPow = function formatPow(value, places, placesUnder1000) {
   return `^${format(value, places, placesUnder1000)}`;
-}
+};
 
-function formatPercents(value, places) {
+window.formatPercents = function formatPercents(value, places) {
   return `${format(value * 100, 2, places)}%`;
-}
+};
 
-function formatRarity(value) {
+window.formatRarity = function formatRarity(value) {
   // We can, annoyingly, have rounding error here, so even though only rarities
   // are passed in, we can't trust our input to always be some integer divided by 10.
   const places = value.toFixed(1).endsWith(".0") ? 0 : 1;
   return `${format(value, 2, places)}%`;
-}
+};
 
-function timeDisplay(ms) {
+window.timeDisplay = function timeDisplay(ms) {
   return TimeSpan.fromMilliseconds(ms).toString();
-}
+};
 
-function timeDisplayNoDecimals(ms) {
+window.timeDisplayNoDecimals = function timeDisplayNoDecimals(ms) {
   return TimeSpan.fromMilliseconds(ms).toStringNoDecimals();
-}
+};
 
-function timeDisplayShort(ms) {
+window.timeDisplayShort = function timeDisplayShort(ms) {
   return TimeSpan.fromMilliseconds(ms).toStringShort();
-}
+};
 
 const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;
-function formatWithCommas(value) {
+window.formatWithCommas = function formatWithCommas(value) {
   const decimalPointSplit = value.toString().split(".");
   decimalPointSplit[0] = decimalPointSplit[0].replace(commaRegexp, ",");
   return decimalPointSplit.join(".");
-}
+};
 
 /**
  * Check if a number or Decimal is equal to 1.
  * @param  {number|Decimal} amount
  * @return {Boolean} - if the {amount} was equal to 1.
  */
-function isSingular(amount) {
+window.isSingular = function isSingular(amount) {
   if (typeof amount === "number") return amount === 1;
   if (amount instanceof Decimal) return amount.eq(1);
   throw `Amount must be either a number or Decimal. Instead, amount was ${amount}`;
-}
+};
 
 // Some letters in the english language pluralize in a different manner than simply adding an 's' to the end.
 // As such, the regex match should be placed in the first location, followed by the desired string it
@@ -120,7 +118,7 @@ const pluralDatabase = new Map([
  * @return {string} - if the {amount} is anything other than one, return the {plural} provided or the
  *                    plural form of the input {word}. If the {amount} is singular, return {word}
  */
-function pluralize(word, amount, plural) {
+window.pluralize = function pluralize(word, amount, plural) {
   if (word === undefined || amount === undefined) throw "Arguments must be defined";
 
   if (isSingular(amount)) return word;
@@ -130,20 +128,20 @@ function pluralize(word, amount, plural) {
   const newWord = generatePlural(word);
   pluralDatabase.set(word, newWord);
   return newWord;
-}
+};
 
 /**
  * Creates a new plural based on PLURAL_HELPER and adds it to pluralDatabase
  * @param  {string} word - a word to be pluralized using the regex in PLURAL_HELPER
  * @return {string} - returns the pluralized word. if no pluralized word is found, simply returns the word itself.
  */
-function generatePlural(word) {
+window.generatePlural = function generatePlural(word) {
   for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
     const newWord = word.replace(match, replaceWith);
     if (word !== newWord) return newWord;
   }
   return word;
-}
+};
 
 /**
  * Returns the formatted value followed by a name, pluralized based on the value input.
@@ -155,13 +153,13 @@ function generatePlural(word) {
  * @return {string} - the formatted {value} followed by the {name} after having been pluralized based on the {value}
  */
 // eslint-disable-next-line max-params
-function quantify(name, value, places, placesUnder1000, formatType = format) {
+window.quantify = function quantify(name, value, places, placesUnder1000, formatType = format) {
   if (name === undefined || value === undefined) throw "Arguments must be defined";
 
   const number = formatType(value, places, placesUnder1000);
   const plural = pluralize(name, value);
   return `${number} ${plural}`;
-}
+};
 
 /**
  * Returns the value formatted to formatInt followed by a name, pluralized based on the value input.
@@ -169,24 +167,24 @@ function quantify(name, value, places, placesUnder1000, formatType = format) {
  * @param  {number|Decimal} value         - number to format
  * @return {string} - the formatted {value} followed by the {name} after having been pluralized based on the {value}
  */
-function quantifyInt(name, value) {
+window.quantifyInt = function quantifyInt(name, value) {
   if (name === undefined || value === undefined) throw "Arguments must be defined";
 
   const number = formatInt(value);
   const plural = pluralize(name, value);
   return `${number} ${plural}`;
-}
+};
 
 /**
  * Creates an enumated string, using the oxford comma, such that "a"; "a and b"; "a, b, and c"
  * @param  {string[]} items - an array of items to enumerate
  * @return {string} - a string of {items}, separated by commas and/or and as needed.
  */
-function makeEnumeration(items) {
+window.makeEnumeration = function makeEnumeration(items) {
   if (items.length === 0) return "";
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
   const commaSeparated = items.slice(0, items.length - 1).join(", ");
   const last = items[items.length - 1];
   return `${commaSeparated}, and ${last}`;
-}
+};

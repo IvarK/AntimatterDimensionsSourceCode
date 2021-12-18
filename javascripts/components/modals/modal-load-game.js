@@ -1,8 +1,11 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-load-game", {
   components: {
     "save-game-record": {
+      components: {
+        PrimaryButton
+      },
       props: {
         saveId: Number
       },
@@ -35,12 +38,12 @@ Vue.component("modal-load-game", {
         <div class="l-modal-options__save-record">
           <h3>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></h3>
           <span>Antimatter: {{ formatAntimatter(antimatter) }}</span>
-          <primary-button
+          <PrimaryButton
             class="o-primary-btn--width-medium"
             @click="load"
           >
             Load
-          </primary-button>
+          </PrimaryButton>
         </div>`
     }
   },

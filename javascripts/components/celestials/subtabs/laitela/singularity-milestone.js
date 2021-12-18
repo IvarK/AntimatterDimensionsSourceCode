@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("singularity-milestone", {
   props: ["milestone", "suppressGlow"],
   data: () => ({

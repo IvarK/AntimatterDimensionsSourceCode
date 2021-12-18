@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-reset-reality", {
+  components: {
+    PrimaryButton
+  },
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
@@ -24,18 +27,18 @@ Vue.component("modal-reset-reality", {
         Are you sure you want to do this?
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
         >
           Cancel
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Reset
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

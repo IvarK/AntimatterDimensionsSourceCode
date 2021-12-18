@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-message", {
+  components: {
+    PrimaryButton
+  },
   data: () => ({
     message: ""
   }),
@@ -25,11 +28,11 @@ Vue.component("modal-message", {
         class="c-modal-message__text"
         v-html="message"
       />
-      <primary-button
+      <PrimaryButton
         class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
         @click="handleClick"
       >
         Okay
-      </primary-button>
+      </PrimaryButton>
     </div>`
 });

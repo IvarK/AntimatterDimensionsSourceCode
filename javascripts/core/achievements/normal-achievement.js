@@ -1,4 +1,4 @@
-"use strict";
+import { GameMechanicState } from "../game-mechanics/index.js";
 
 class AchievementState extends GameMechanicState {
   constructor(config) {
@@ -55,6 +55,11 @@ class AchievementState extends GameMechanicState {
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
+    if (this.id === 55 && !PlayerProgress.realityUnlocked()) {
+      Modal.message.show(`Since you just Infinitied in under a minute, the UI changed on the screen. 
+      Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them. 
+      This is purely visual, and is there to prevent flickering.`);
+    }
     if (auto) {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
@@ -69,9 +74,9 @@ class AchievementState extends GameMechanicState {
  * @param {number} id
  * @returns {AchievementState}
  */
-const Achievement = AchievementState.createAccessor(GameDatabase.achievements.normal);
+export const Achievement = AchievementState.createAccessor(GameDatabase.achievements.normal);
 
-const Achievements = {
+export const Achievements = {
   /**
    * @type {AchievementState[]}
    */

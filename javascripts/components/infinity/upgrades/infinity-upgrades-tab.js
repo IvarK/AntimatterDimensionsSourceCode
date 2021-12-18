@@ -1,6 +1,11 @@
-"use strict";
+import "../infinity-upgrade-button.js";
+import "./ip-multiplier-button.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("infinity-upgrades-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       chargeUnlocked: false,
@@ -80,12 +85,12 @@ Vue.component("infinity-upgrades-tab", {
   template: `
     <div class="l-infinity-upgrades-tab">
       <div class="c-subtab-option-container" v-if="chargeUnlocked">
-        <primary-button
+        <PrimaryButton
           :class="disChargeClassObject"
           @click="disCharge = !disCharge"
         >
           Respec Charged Infinity Upgrades on next Reality
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div v-if="chargeUnlocked">
         You have charged {{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} Infinity Upgrades.

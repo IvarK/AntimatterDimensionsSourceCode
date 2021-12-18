@@ -1,11 +1,9 @@
-"use strict";
-
 /**
  * Async is used for making a big pile of computation into a manageable
  * set of batches that don't lock up the UI.
  * run() is the nominal entry point.
  */
-const Async = {
+window.Async = {
   _enabled: true,
   get enabled() {
     return this._enabled;

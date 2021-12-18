@@ -1,4 +1,5 @@
-"use strict";
+import { DC } from "../../../core/constants.js";
+
 
 Vue.component("antimatter-dim-tab-progress-bar", {
   data() {
@@ -60,7 +61,7 @@ Vue.component("antimatter-dim-tab-progress-bar", {
         // Show all other goals from the top down, starting at features in the highest prestige layer
         setProgress(Currency.infinityPoints.value, Tesseracts.nextCost, "Percentage to next Tesseract");
       } else if (PlayerProgress.dilationUnlocked()) {
-        setProgress(Currency.eternityPoints.value, new Decimal("1e4000"), "Percentage to Reality");
+        setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to Reality");
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity");
       } else if (InfinityDimension(1).isUnlocked) {

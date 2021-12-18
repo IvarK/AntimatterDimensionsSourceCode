@@ -1,6 +1,9 @@
-"use strict";
+import PrimaryButton from "@/components/PrimaryButton";
 
 Vue.component("modal-break-infinity", {
+  components: {
+    PrimaryButton
+  },
   created() {
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
@@ -31,12 +34,12 @@ Vue.component("modal-break-infinity", {
         </span>
       </div>
       <div class="l-options-grid__row">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >
           Break
-        </primary-button>
+        </PrimaryButton>
       </div>
     </div>`
 });

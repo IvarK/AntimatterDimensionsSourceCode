@@ -1,4 +1,6 @@
-"use strict";
+import "./automator-editor.js";
+import "./automator-points-list.js";
+import "./docs/automator-docs.js";
 
 Vue.component("automator-tab", {
   data() {
@@ -23,7 +25,7 @@ Vue.component("automator-tab", {
         ${formatInt(1000)} per second.`;
       return this.interval === 1
         ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
-        : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second. 
+        : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second.
           ${speedupText}`;
     }
   },

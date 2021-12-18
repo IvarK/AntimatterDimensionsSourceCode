@@ -1,5 +1,3 @@
-"use strict";
-
 Vue.component("reality-reminder", {
   data() {
     return {
@@ -78,8 +76,7 @@ Vue.component("reality-reminder", {
       this.currLog10EP = player.eternityPoints.log10();
       this.cheapestLog10TD = Math.min(...TimeDimensions.all.map(x => x.cost.log10()));
       this.multEPLog10Cost = EternityUpgrade.epMult.cost.log10();
-      this.purchasableTS = NormalTimeStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought) +
-        TriadStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought);
+      this.purchasableTS = NormalTimeStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought);
       this.hasDilated = player.dilation.lastEP.gt(0);
       this.availableCharges = Ra.chargesLeft;
     },

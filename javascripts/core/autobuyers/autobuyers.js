@@ -1,9 +1,9 @@
 import { Autobuyer } from "./autobuyer.js";
 
 export const Autobuyers = (function() {
-  const antimatterDimensions = Autobuyer.antimatterDimension.index;
-  const infinityDimensions = Autobuyer.infinityDimension.index;
-  const timeDimensions = Autobuyer.timeDimension.index;
+  const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
+  const infinityDimensions = Autobuyer.infinityDimension.zeroIndexed;
+  const timeDimensions = Autobuyer.timeDimension.zeroIndexed;
 
   const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions];
 
@@ -28,26 +28,33 @@ export const Autobuyers = (function() {
   ].concat(singleBinary);
 
   const arrays = [
-    Autobuyer.replicantiUpgrade.array,
-    Autobuyer.dilationUpgrade.array,
-    Autobuyer.blackHolePower.array,
-    Autobuyer.realityUpgrade.array,
-    Autobuyer.imaginaryUpgrade.array,
+    Autobuyer.replicantiUpgrade.zeroIndexed,
+    Autobuyer.dilationUpgrade.zeroIndexed,
+    Autobuyer.blackHolePower.zeroIndexed,
+    Autobuyer.realityUpgrade.zeroIndexed,
+    Autobuyer.imaginaryUpgrade.zeroIndexed,
   ];
   const all = dimensions.concat(prestige, single, arrays);
+  const multiple = [
+    Autobuyer.antimatterDimension,
+    Autobuyer.infinityDimension,
+    Autobuyer.timeDimension,
+    Autobuyer.replicantiUpgrade,
+    Autobuyer.dilationUpgrade,
+    Autobuyer.blackHolePower,
+    Autobuyer.realityUpgrade,
+    Autobuyer.imaginaryUpgrade,
+  ];
 
   return {
     all: all.flat(),
-    display: [dimensions.concat(arrays), singleBinary],
-    antimatterDimensions,
-    infinityDimensions,
-    timeDimensions,
-    dimensions,
-    prestige,
-    single,
-    arrays,
+    display: [multiple, singleBinary],
     upgradeable: antimatterDimensions.concat(
-      Autobuyer.tickspeed, Autobuyer.dimboost, Autobuyer.galaxy, Autobuyer.bigCrunch),
+      Autobuyer.tickspeed,
+      Autobuyer.dimboost,
+      Autobuyer.galaxy,
+      Autobuyer.bigCrunch,
+    ),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);

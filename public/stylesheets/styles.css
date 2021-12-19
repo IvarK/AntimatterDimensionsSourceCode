@@ -4118,8 +4118,8 @@ screen and (max-width: 480px) {
   width: 25%;
 }
 
-.l-autobuyer-box__header--new {
-  width: 20%
+.l-autobuyer-box__title {
+  width: 20%;
 }
 
 .l-autobuyer-box__content {

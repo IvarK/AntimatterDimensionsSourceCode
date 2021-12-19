@@ -82,47 +82,52 @@ Vue.component("multiple-autobuyers-box", {
     }
   },
   props: {
-    autobuyers: Array,
+    type: {
+      type: Function,
+      required: true,
+    },
   },
   data() {
     return {
       continuumActive: false,
       anyUnlocked: false,
-      sameInterval: false,
-      sameBulk: false,
+      allMaxedInterval: false,
+      allUnlimitedBulk: false,
     };
   },
   computed: {
+    autobuyers() {
+      return this.type.zeroIndexed;
+    },
     name() {
-      return this.autobuyers.name;
+      return this.type.groupName;
     },
     boxSize() {
       // The width of the name panel is 20% - the other 80% is divvied up between the multiple autobuyers.
-      return `width: ${80 / this.autobuyers.length}%`;
+      return `width: ${80 / this.type.entryCount}%`;
     },
     isADBox() {
-      return this.name === Autobuyers.antimatterDimensions.name;
+      return this.name === Autobuyer.antimatterDimension.groupName;
     },
     showAutobuyers() {
       // Only display the Antimatter Dimension Autobuyers if the bulk is the same and there are any of them unlocked
-      if (this.isADBox) return this.anyUnlocked && this.sameBulk && this.sameInterval;
+      if (this.isADBox) return this.anyUnlocked && !this.displayBulkAsGroup && this.displayIntervalAsGroup;
       return this.anyUnlocked;
-    }
+    },
+    displayIntervalAsGroup() {
+      return this.allMaxedInterval ?? true;
+    },
+    displayBulkAsGroup() {
+      return this.allUnlimitedBulk ?? true;
+    },
   },
   methods: {
     update() {
       this.continuumActive = Laitela.continuumActive;
-      // If any of the autobuyers are unlocked, we should display the whole thing.
-      this.anyUnlocked = this.autobuyers.some(x => x.isUnlocked);
-      // If the first autobuyer's interval isn't undefined, check if all the intervals are the same - if they are
-      // we should show the interval on the main autobuyer instead of on each of the sub autobuyers.
-      const sameIntervalSet = new Set(this.autobuyers.map(x => x.interval));
-      this.sameInterval = !sameIntervalSet.has(undefined) && sameIntervalSet.size === 1;
-      // If the first autobuyer's bulk is unlimited, the bulks are the same. Otherwise, we have to check if all the
-      // other bulks are the same.
-      // If they are the same, we should show it on the main instead of on each of the sub autobuyers.
-      const sameBulkSet = new Set(this.autobuyers.map(x => x.bulk));
-      this.sameBulk = this.autobuyers[0].hasUnlimitedBulk || sameBulkSet.size === 1;
+      const type = this.type;
+      this.anyUnlocked = type.anyUnlocked();
+      this.allMaxedInterval = type.allMaxedInterval?.();
+      this.allUnlimitedBulk = type.allUnlimitedBulk?.();
     },
   },
   template: `
@@ -130,12 +135,12 @@ Vue.component("multiple-autobuyers-box", {
       v-if="showAutobuyers && !(isADBox && continuumActive)"
       class="c-autobuyer-box-row"
     >
-      <div class="l-autobuyer-box__header--new">
+      <div class="l-autobuyer-box__title">
         {{ name }}<br>Autobuyers
         <autobuyer-interval-label
           :autobuyer="autobuyers[0]"
-          :showInterval="sameInterval"
-          :showBulk="sameBulk"
+          :showInterval="displayIntervalAsGroup"
+          :showBulk="displayBulkAsGroup"
         />
       </div>
       <single-autobuyer-in-row
@@ -143,8 +148,8 @@ Vue.component("multiple-autobuyers-box", {
         :key="id"
         :autobuyer="autobuyer"
         :style="boxSize"
-        :showInterval="!sameInterval"
-        :showBulk="!sameBulk"
+        :showInterval="!displayIntervalAsGroup"
+        :showBulk="!displayBulkAsGroup"
       />
     </span>
     <span

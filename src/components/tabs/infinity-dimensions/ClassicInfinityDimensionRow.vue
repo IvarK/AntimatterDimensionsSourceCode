@@ -3,7 +3,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
-  name: "NewInfinityDimensionRow",
+  name: "ClassicInfinityDimensionRow",
   components: {
     PrimaryButton,
     PrimaryToggleButton
@@ -60,6 +60,9 @@ export default {
 
       return `Reach ${formatPostBreak(requirement)} AM`;
     },
+    hardcapPurchases() {
+      return format(this.hardcap, 1, 1);
+    },
     capTooltip() {
       if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
       if (this.isCapped) return `Cap reached at ${format(this.capIP)} IP`;
@@ -80,13 +83,14 @@ export default {
       const tier = this.tier;
       const dimension = InfinityDimension(tier);
       this.hasPrevTier = tier === 1 || InfinityDimension(tier - 1).isUnlocked;
+      const autobuyer = Autobuyer.infinityDimension(tier);
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);
       this.baseAmount = dimension.baseAmount;
       this.purchases = dimension.purchases;
       this.amount.copyFrom(dimension.amount);
       this.rateOfChange.copyFrom(dimension.rateOfChange);
-      this.isAutobuyerUnlocked = Autobuyer.infinityDimension(tier).isUnlocked;
+      this.isAutobuyerUnlocked = autobuyer.isUnlocked;
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;
       if (!this.isUnlocked) {
@@ -98,7 +102,7 @@ export default {
         this.hardcap = dimension.purchaseCap;
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
-      this.isAutobuyerOn = Autobuyer.infinityDimension(tier).isActive;
+      this.isAutobuyerOn = autobuyer.isActive;
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
       this.showCostTitle = this.cost.exponent < 1000000;
@@ -129,7 +133,7 @@ export default {
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
   >
     <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Infinity D <span class="c-infinity-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
+      {{ name }} Infinity Dimension {{ formatX(multiplier, 2, 1) }}
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
       {{ format(amount, 2, 0) }}
@@ -143,7 +147,7 @@ export default {
     <PrimaryButton
       v-tooltip="capTooltip"
       :enabled="isAvailableForPurchase && !isCapped"
-      class="o-primary-btn--buy-id l-dim-row__button o-primary-btn o-primary-btn--new"
+      class="o-primary-btn--buy-id l-dim-row__button"
       @click="buyManyInfinityDimension"
     >
       {{ costDisplay }}
@@ -156,7 +160,7 @@ export default {
     />
     <PrimaryButton
       v-else
-      :enabled="isAvailableForPurchase"
+      :enabled="isAvailableForPurchase && isUnlocked"
       class="o-primary-btn--buy-id-max l-dim-row__button"
       @click="buyMaxInfinityDimension"
     >

@@ -1,12 +1,12 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import NewInfinityDimensionRow from "./NewInfinityDimensionRow";
+import InfinityDimensionRow from "./ModernInfinityDimensionRow";
 
 export default {
-  name: "NewInfinityDimensionsTab",
+  name: "ModernInfinityDimensionsTab",
   components: {
     PrimaryButton,
-    NewInfinityDimensionRow
+    InfinityDimensionRow
   },
   data() {
     return {
@@ -144,7 +144,7 @@ export default {
     </div>
     <div>You are getting {{ format(powerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
     <div class="l-dimensions-container">
-      <NewInfinityDimensionRow
+      <InfinityDimensionRow
         v-for="tier in 8"
         :key="tier"
         :tier="tier"

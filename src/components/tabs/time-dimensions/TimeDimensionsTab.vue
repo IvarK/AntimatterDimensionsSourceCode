@@ -1,16 +1,18 @@
 <script>
-import OldTimeDimensionsTab from "./OldTimeDimensionsTab";
-import NewTimeDimensionsTab from "./NewTimeDimensionsTab";
+import ClassicTimeDimensionsTab from "./ClassicTimeDimensionsTab";
+import ModernTimeDimensionsTab from "./ModernTimeDimensionsTab";
 
 export default {
   name: "TimeDimensionsTab",
   components: {
-    OldTimeDimensionsTab,
-    NewTimeDimensionsTab
+    ClassicTimeDimensionsTab,
+    ModernTimeDimensionsTab
   },
   computed: {
     activeComponent() {
-      return this.$viewModel.newUI ? "NewTimeDimensionsTab" : "OldTimeDimensionsTab";
+      return this.$viewModel.newUI
+        ? "ModernTimeDimensionsTab"
+        : "ClassicTimeDimensionsTab";
     }
   }
 };

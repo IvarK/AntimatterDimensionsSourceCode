@@ -1,16 +1,18 @@
 <script>
-import OldAntimatterDimensionsTab from "./OldAntimatterDimensionsTab";
-import NewAntimatterDimensionsTab from "./NewAntimatterDimensionsTab";
+import ClassicAntimatterDimensionsTab from "./ClassicAntimatterDimensionsTab";
+import ModernAntimatterDimensionsTab from "./ModernAntimatterDimensionsTab";
 
 export default {
   name: "AntimatterDimensionsTab",
   components: {
-    OldAntimatterDimensionsTab,
-    NewAntimatterDimensionsTab
+    ClassicAntimatterDimensionsTab,
+    ModernAntimatterDimensionsTab
   },
   computed: {
     activeComponent() {
-      return this.$viewModel.newUI ? "NewAntimatterDimensionsTab" : "OldAntimatterDimensionsTab";
+      return this.$viewModel.newUI
+        ? "ModernAntimatterDimensionsTab"
+        : "ClassicAntimatterDimensionsTab";
     }
   }
 };

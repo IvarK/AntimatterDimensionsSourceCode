@@ -1,13 +1,13 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import AntimatterDimensionRow from "./OldAntimatterDimensionRow";
-import AntimatterDimensionsTabHeader from "./OldAntimatterDimensionsTabHeader";
-import AntimatterGalaxyRow from "./OldAntimatterGalaxyRow";
+import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
+import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
+import AntimatterGalaxyRow from "./ClassicAntimatterGalaxyRow";
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
-import DimensionBoostRow from "./OldDimensionBoostRow";
+import DimensionBoostRow from "./ClassicDimensionBoostRow";
 
 export default {
-  name: "OldAntimatterDimensionsTab",
+  name: "ClassicAntimatterDimensionsTab",
   components: {
     PrimaryButton,
     AntimatterDimensionRow,

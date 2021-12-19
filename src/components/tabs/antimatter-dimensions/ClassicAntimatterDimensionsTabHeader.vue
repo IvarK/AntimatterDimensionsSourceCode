@@ -2,7 +2,7 @@
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
-  name: "OldAntimatterDimensionsTabHeader",
+  name: "ClassicAntimatterDimensionsTabHeader",
   components: {
     PrimaryButton
   },

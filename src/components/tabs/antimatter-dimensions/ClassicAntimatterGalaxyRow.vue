@@ -1,6 +1,11 @@
 <script>
+import PrimaryButton from "@/components/PrimaryButton";
+
 export default {
-  name: "NewAntimatterGalaxyRow",
+  name: "ClassicAntimatterGalaxyRow",
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       type: GALAXY_TYPE.NORMAL,
@@ -21,7 +26,7 @@ export default {
   },
   computed: {
     dimName() {
-      return AntimatterDimension(this.requirement.tier).shortDisplayName;
+      return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
       return this.lockText === null
@@ -55,8 +60,8 @@ export default {
           return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.distantStart)}`;
         case GALAXY_TYPE.REMOTE:
           return "Increased Galaxy cost scaling: " +
-            `Quadratic past ${formatInt(this.distantStart)} (distant), ` +
-            `exponential past ${formatInt(Galaxy.remoteStart)} (remote)`;
+            `Quadratic past ${formatInt(this.distantStart)} (distant),
+              exponential past ${formatInt(Galaxy.remoteStart)} (remote)`;
       }
       return undefined;
     },
@@ -93,17 +98,25 @@ export default {
 </script>
 
 <template>
-  <div class="reset-container galaxy">
-    <h4>{{ typeName }} ({{ sumText }})</h4>
-    <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
-    <span v-if="hasIncreasedScaling">{{ costScalingText }}</span>
-    <button
-      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"
+  <div class="c-antimatter-dim-row">
+    <div
+      class="c-dim-row__label c-dim-row__label--growable"
+      style="height: 6rem;"
+    >
+      {{ typeName }} ({{ sumText }}):
+      requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
+      <div style="height: 2rem;">
+        {{ hasIncreasedScaling ? costScalingText : "" }}
+      </div>
+    </div>
+    <PrimaryButton
+      :enabled="canBeBought"
+      class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
+      :class="tutorialClass"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
     >
       {{ buttonText }}
-    </button>
+    </PrimaryButton>
   </div>
 </template>

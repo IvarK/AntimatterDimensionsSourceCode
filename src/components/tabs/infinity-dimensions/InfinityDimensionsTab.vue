@@ -1,16 +1,18 @@
 <script>
-import OldInfinityDimensionsTab from "./OldInfinityDimensionsTab";
-import NewInfinityDimensionsTab from "./NewInfinityDimensionsTab";
+import ClassicInfinityDimensionsTab from "./ClassicInfinityDimensionsTab";
+import ModernInfinityDimensionsTab from "./ModernInfinityDimensionsTab";
 
 export default {
   name: "InfinityDimensionsTab",
   components: {
-    OldInfinityDimensionsTab,
-    NewInfinityDimensionsTab
+    ClassicInfinityDimensionsTab,
+    ModernInfinityDimensionsTab
   },
   computed: {
     activeComponent() {
-      return this.$viewModel.newUI ? "NewInfinityDimensionsTab" : "OldInfinityDimensionsTab";
+      return this.$viewModel.newUI
+        ? "ModernInfinityDimensionsTab"
+        : "ClassicInfinityDimensionsTab";
     }
   }
 };

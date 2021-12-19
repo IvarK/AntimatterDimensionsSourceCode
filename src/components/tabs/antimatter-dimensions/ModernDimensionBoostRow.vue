@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "NewDimensionBoostRow",
+  name: "ModernDimensionBoostRow",
   data() {
     return {
       requirement: {

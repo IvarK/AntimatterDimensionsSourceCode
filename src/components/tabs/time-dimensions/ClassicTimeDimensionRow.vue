@@ -3,14 +3,20 @@ import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
-  name: "NewTimeDimensionRow",
+  name: "ClassicTimeDimensionRow",
   components: {
     PrimaryButton,
     PrimaryToggleButton
   },
   props: {
-    tier: Number,
-    areAutobuyersUnlocked: Boolean
+    tier: {
+      type: Number,
+      required: true
+    },
+    areAutobuyersUnlocked: {
+      type: Boolean,
+      required: true
+    }
   },
   data() {
     return {
@@ -26,13 +32,8 @@ export default {
       requirementReached: false,
       realityUnlocked: false,
       showTTCost: false,
-      ttCost: 0
+      ttCost: 0,
     };
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.timeDimension(this.tier).isActive = newValue;
-    }
   },
   computed: {
     shiftDown() {
@@ -43,13 +44,11 @@ export default {
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s}/s)`
         : "";
     },
     buttonContents() {
-      if (this.showTTCost) {
-        return this.formattedTTCost;
-      }
+      if (this.showTTCost) return this.formattedTTCost;
       return this.formattedEPCost;
     },
     tooltipContents() {
@@ -65,6 +64,11 @@ export default {
     },
     formattedEPCost() {
       return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
+    }
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeDimension(this.tier).isActive = newValue;
     }
   },
   methods: {
@@ -111,7 +115,7 @@ export default {
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
   >
     <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Time D <span class="c-time-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
+      {{ name }} Time Dimension {{ formatX(multiplier, 2, 1) }}
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
       {{ format(amount, 2, 0) }}
@@ -125,7 +129,7 @@ export default {
     <PrimaryButton
       v-tooltip="tooltipContents"
       :enabled="isAvailableForPurchase && !isCapped"
-      class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
+      class="o-primary-btn--buy-td l-dim-row__button"
       @click="buyTimeDimension"
     >
       {{ buttonContents }}

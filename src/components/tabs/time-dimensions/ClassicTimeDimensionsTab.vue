@@ -1,12 +1,12 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import NewTimeDimensionRow from "./NewTimeDimensionRow";
+import TimeDimensionRow from "./ClassicTimeDimensionRow";
 
 export default {
-  name: "NewTimeDimensionsTab",
+  name: "ClassicTimeDimensionsTab",
   components: {
     PrimaryButton,
-    NewTimeDimensionRow
+    TimeDimensionRow
   },
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
       this.tickspeedSoftcap = FreeTickspeed.softcap;
       this.timeShards.copyFrom(Currency.timeShards);
       this.upgradeThreshold.copyFrom(FreeTickspeed.fromShards(Currency.timeShards.value).nextShards);
-      this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
+      this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerRealSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "Time Shards";
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
@@ -79,9 +79,11 @@ export default {
       The amount each additional upgrade requires will start
       increasing above {{ formatInt(tickspeedSoftcap) }} Tickspeed upgrades.
     </div>
-    <div>You are getting {{ format(shardsPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
+    <div>
+      You are getting {{ format(shardsPerSecond, 2, 0) }} {{ incomeType }} per second.
+    </div>
     <div class="l-dimensions-container">
-      <NewTimeDimensionRow
+      <TimeDimensionRow
         v-for="tier in 8"
         :key="tier"
         :tier="tier"
@@ -95,6 +97,8 @@ export default {
       and costs increase much faster after {{ format(costIncreases[2]) }} Eternity Points.
       <br>
       Hold shift to see the Eternity Point cost for locked Time Dimensions.
+      <br>
+      Any 8th Time Dimensions purchased above {{ format(1e8) }} will not further increase the multiplier.
     </div>
   </div>
 </template>

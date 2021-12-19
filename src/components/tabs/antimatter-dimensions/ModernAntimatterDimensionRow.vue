@@ -1,11 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-
 export default {
-  name: "OldAntimatterDimensionRow",
-  components: {
-    PrimaryButton
-  },
+  name: "ModernAntimatterDimensionRow",
   props: {
     tier: {
       type: Number,
@@ -24,7 +19,8 @@ export default {
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
       isAffordable: false,
-      isAffordableUntil10: false,
+      buyUntil10: true,
+      howManyCanBuy: 0,
       isContinuumActive: false,
       continuumValue: 0,
       isShown: false
@@ -33,6 +29,9 @@ export default {
   computed: {
     name() {
       return AntimatterDimension(this.tier).shortDisplayName;
+    },
+    costDisplay() {
+      return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
@@ -60,34 +59,33 @@ export default {
       if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
+      const buyUntil10 = player.buyUntil10;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
-      this.multiplier.copyFrom(dimension.multiplier);
+      this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
-      this.totalAmount = dimension.totalAmount;
       this.bought = dimension.bought;
       this.boughtBefore10 = dimension.boughtBefore10;
+      this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
       this.singleCost.copyFrom(dimension.cost);
-      this.until10Cost.copyFrom(dimension.costUntil10);
+      this.until10Cost.copyFrom(dimension.cost.times(Math.max(dimension.howManyCanBuy, 1)));
       if (tier < 8) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
       this.isAffordable = dimension.isAffordable;
-      this.isAffordableUntil10 = dimension.isAffordableUntil10;
+      this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
     },
-    buySingle() {
+    buy() {
       if (this.isContinuumActive) return;
-      buyOneDimension(this.tier);
-      if (this.tier === 2) {
-        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
+      if (this.howManyCanBuy === 1) {
+        buyOneDimension(this.tier);
+      } else {
+        buyAsManyAsYouCanBuy(this.tier);
       }
-    },
-    buyUntil10() {
-      if (this.isContinuumActive) return;
-      buyManyDimension(this.tier);
+
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       }
@@ -117,10 +115,10 @@ export default {
     :class="{ 'c-dim-row--not-reached': !isUnlocked }"
   >
     <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Antimatter Dimension {{ formatX(multiplier, 1, 1) }}
+      {{ name }} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{ formatX(multiplier, 1, 1) }}</span>
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
-      {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
+      {{ amountDisplay }}
       <span
         v-if="rateOfChange.neq(0)"
         class="c-dim-row__label--small"
@@ -128,32 +126,43 @@ export default {
         {{ rateOfChangeDisplay }}
       </span>
     </div>
-    <PrimaryButton
-      v-if="!isContinuumActive"
-      :enabled="isAffordable && !isCapped && isUnlocked"
-      class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
-      :class="tutorialClass()"
-      :ach-tooltip="boughtTooltip"
-      @click="buySingle"
+    <button
+      class="o-primary-btn o-primary-btn--new"
+      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isCapped}"
+      @click="buy"
     >
-      <span v-if="isCapped">Capped</span>
-      <template v-else>
-        <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
-      </template>
-    </PrimaryButton>
-    <PrimaryButton
-      :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
-      class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
-      :ach-tooltip="boughtTooltip"
-      @click="buyUntil10"
-    >
-      <span v-if="isCapped">Capped</span>
-      <span v-else-if="isContinuumActive">Continuum: {{ continuumString }}</span>
-      <template v-else>
-        Until {{ formatInt(10) }},
-        <span v-if="showCostTitle(until10Cost)">Cost: </span>
-        {{ format(until10Cost) }}
-      </template>
-    </PrimaryButton>
+      <div
+        v-tooltip="boughtTooltip"
+        class="button-content"
+        :class="tutorialClass()"
+      >
+        <span v-if="isCapped">
+          Shattered by Enslaved
+        </span>
+        <span v-else-if="isContinuumActive">
+          Continuum:
+          <br>
+          {{ continuumString }}
+        </span>
+        <span v-else>
+          Buy {{ howManyCanBuy }}
+          <br>
+          Cost: {{ costDisplay }}
+        </span>
+      </div>
+      <div
+        v-if="!isContinuumActive && isUnlocked && !isCapped"
+        class="fill"
+      >
+        <div
+          class="fill-purchased"
+          :style="{ 'width': boughtBefore10*10 + '%' }"
+        />
+        <div
+          class="fill-possible"
+          :style="{ 'width': howManyCanBuy*10 + '%' }"
+        />
+      </div>
+    </button>
   </div>
 </template>

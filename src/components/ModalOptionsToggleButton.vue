@@ -1,4 +1,3 @@
-
 <script>
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 

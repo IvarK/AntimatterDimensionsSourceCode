@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      hidden: Boolean,
+      hidden: false,
     };
   },
   computed: {

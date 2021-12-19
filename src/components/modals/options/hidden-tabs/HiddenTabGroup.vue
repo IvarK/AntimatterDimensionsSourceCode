@@ -14,9 +14,9 @@ export default {
   },
   data() {
     return {
-      tabName: String,
-      subtabs: Object,
-      hidden: Boolean,
+      tabName: "",
+      subtabs: {},
+      hidden: false,
     };
   },
   computed: {

@@ -9,24 +9,26 @@ export default {
   },
   data() {
     return {
-      pet: Ra.pets.all[this.petId],
-      isUnlocked: Boolean,
-      chunkGain: String,
+      isUnlocked: false,
     };
   },
   computed: {
+    pet() {
+      return Ra.pets.all[this.petId];
+    },
     name() {
       return this.pet.name;
     },
     color() {
       return `color: ${this.pet.color}`;
-    }
+    },
+    chunkGain() {
+      return this.pet.chunkGain;
+    },
   },
   methods: {
     update() {
-      const pet = this.pet;
-      this.isUnlocked = pet.isUnlocked;
-      this.chunkGain = pet.chunkGain;
+      this.isUnlocked = this.pet.isUnlocked;
     }
   },
 };

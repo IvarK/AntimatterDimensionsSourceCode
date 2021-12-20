@@ -102,9 +102,18 @@ Vue.component("multiple-autobuyers-box", {
     name() {
       return this.type.groupName;
     },
+    entryCount() {
+      return this.type.entryCount;
+    },
+    rowCount() {
+      return Math.ceil(this.entryCount / 8);
+    },
+    entryCountPerRow() {
+      return this.rowCount === 1 ? this.entryCount : 5;
+    },
     boxSize() {
       // The width of the name panel is 20% - the other 80% is divvied up between the multiple autobuyers.
-      return `width: ${80 / this.type.entryCount}%`;
+      return `width: ${80 / this.entryCountPerRow}%`;
     },
     isADBox() {
       return this.name === Autobuyer.antimatterDimension.groupName;
@@ -143,14 +152,21 @@ Vue.component("multiple-autobuyers-box", {
           :showBulk="displayBulkAsGroup"
         />
       </div>
-      <single-autobuyer-in-row
-        v-for="(autobuyer, id) in autobuyers"
-        :key="id"
-        :autobuyer="autobuyer"
-        :style="boxSize"
-        :showInterval="!displayIntervalAsGroup"
-        :showBulk="!displayBulkAsGroup"
-      />
+      <div class="l-autobuyer-box__autobuyers">
+        <span
+          v-for="(autobuyer, id) in autobuyers"
+          :key="id"
+        >
+          <single-autobuyer-in-row
+            class="l-autobuyer-box__autobuyers-internal"
+            :style="boxSize"
+            :autobuyer="autobuyer"
+            :showInterval="!displayIntervalAsGroup"
+            :showBulk="!displayBulkAsGroup"
+          />
+          <br v-if="id % entryCountPerRow === entryCountPerRow" />
+        </span>
+      </div>
     </span>
     <span
       v-else-if="isADBox && continuumActive"

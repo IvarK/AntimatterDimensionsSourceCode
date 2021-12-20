@@ -4119,7 +4119,17 @@ screen and (max-width: 480px) {
 }
 
 .l-autobuyer-box__title {
-  width: 20%;
+  width: 20rem;
+}
+
+.l-autobuyer-box__autobuyers {
+  display: inline-block;
+  flex-grow: 1;
+  width: 80rem;
+}
+
+.l-autobuyer-box__autobuyers-internal {
+  display: inline-block;
 }
 
 .l-autobuyer-box__content {

@@ -5,10 +5,12 @@ import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
 import TabComponents from "@/components/tabs";
+import PopupModal from "@/components/modals/PopupModal";
 
 Vue.component("game-ui", {
   components: {
-    ...TabComponents
+    ...TabComponents,
+    PopupModal,
   },
   computed: {
     view() {
@@ -39,7 +41,7 @@ Vue.component("game-ui", {
         <component :is="uiLayout">
           <component :is="page" />
         </component>
-        <modal-popup v-if="view.modal.current" :modal="view.modal.current" />
+        <PopupModal v-if="view.modal.current" :modal="view.modal.current" />
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
         <help-me />

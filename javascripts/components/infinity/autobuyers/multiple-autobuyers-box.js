@@ -120,7 +120,7 @@ Vue.component("multiple-autobuyers-box", {
     },
     showAutobuyers() {
       // Only display the Antimatter Dimension Autobuyers if the bulk is the same and there are any of them unlocked
-      if (this.isADBox) return this.anyUnlocked && !this.displayBulkAsGroup && this.displayIntervalAsGroup;
+      if (this.isADBox) return this.anyUnlocked && this.displayBulkAsGroup && this.displayIntervalAsGroup;
       return this.anyUnlocked;
     },
     displayIntervalAsGroup() {

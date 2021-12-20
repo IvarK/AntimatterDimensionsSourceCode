@@ -30,6 +30,10 @@ export class AutobuyerState {
     this.data.isActive = value;
   }
 
+  get bulk() {
+    return 1;
+  }
+
   toggle() {
     this.isActive = !this.isActive;
   }

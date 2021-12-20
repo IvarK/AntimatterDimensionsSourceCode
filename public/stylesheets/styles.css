@@ -4123,13 +4123,16 @@ screen and (max-width: 480px) {
 }
 
 .l-autobuyer-box__autobuyers {
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
   flex-grow: 1;
   width: 80rem;
 }
 
 .l-autobuyer-box__autobuyers-internal {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .l-autobuyer-box__content {

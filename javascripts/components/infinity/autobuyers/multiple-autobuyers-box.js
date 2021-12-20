@@ -112,8 +112,8 @@ Vue.component("multiple-autobuyers-box", {
       return this.rowCount === 1 ? this.entryCount : 5;
     },
     boxSize() {
-      // The width of the name panel is 20% - the other 80% is divvied up between the multiple autobuyers.
-      return `width: ${80 / this.entryCountPerRow}%`;
+      // The 1% reduced flex-basis is used to prevent wrapping due to the margins.
+      return `flex: 1 0 ${100 / this.entryCountPerRow - 1}%`;
     },
     isADBox() {
       return this.name === Autobuyer.antimatterDimension.groupName;
@@ -153,9 +153,8 @@ Vue.component("multiple-autobuyers-box", {
         />
       </div>
       <div class="l-autobuyer-box__autobuyers">
-        <span
+        <template
           v-for="(autobuyer, id) in autobuyers"
-          :key="id"
         >
           <single-autobuyer-in-row
             class="l-autobuyer-box__autobuyers-internal"
@@ -165,7 +164,7 @@ Vue.component("multiple-autobuyers-box", {
             :showBulk="!displayBulkAsGroup"
           />
           <br v-if="id % entryCountPerRow === entryCountPerRow" />
-        </span>
+        </template>
       </div>
     </span>
     <span

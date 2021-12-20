@@ -15,10 +15,10 @@ export default {
       return this.$viewModel.modal.cloudConflict;
     },
     older() {
-      return conflict.saveComparison.older === -1;
+      return this.conflict.saveComparison.older === -1;
     },
     farther() {
-      return conflict.saveComparison.farther === -1;
+      return this.conflict.saveComparison.farther === -1;
     }
   },
   methods: {

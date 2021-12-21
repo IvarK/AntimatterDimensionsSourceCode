@@ -31,7 +31,7 @@ Vue.component("ec-time-study", {
       return typeof this.study.requirementCurrent === "number";
     },
     formatValue() {
-      return this.config.requirement.formatValue;
+      return this.config.secondary.formatValue;
     },
     // Linebreaks added to avoid twitching in scientific notation
     needsFirstLinebreak() {
@@ -69,12 +69,11 @@ Vue.component("ec-time-study", {
         <br>
         Requirement:
         <br v-if="needsFirstLinebreak">
-        <span v-if="id === 12">Use only the Time Dimension path</span>
-        <span v-else-if="id === 11">Use only the Antimatter Dimension path</span>
+        <span v-if="config.secondary.path">Use only the {{ config.secondary.path }} path</span>
         <span v-else>
           {{ formatValue(requirement.current) }}/{{ formatValue(requirement.total) }}
           <br v-if="needsSecondLinebreak">
-          {{ config.requirement.resource }}
+          {{ config.secondary.resource }}
         </span>
       </template>
       <span v-if="isUnlocked && !isRunning"><br>Double click to start</span>

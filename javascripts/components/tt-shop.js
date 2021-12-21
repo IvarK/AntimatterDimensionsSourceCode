@@ -1,6 +1,10 @@
 import "./hover-menu.js";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("tt-shop", {
+  components: {
+    PrimaryToggleButton
+  },
   data() {
     return {
       theoremAmount: new Decimal(0),
@@ -156,11 +160,11 @@ Vue.component("tt-shop", {
             >
               Buy max
             </button>
-            <primary-button-on-off
+            <PrimaryToggleButton
               v-if="!minimized && hasTTAutobuyer"
               v-model="isAutobuyerOn"
               class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
-              text="Auto:"
+              label="Auto:"
             />
           </div>
         </div>
@@ -198,14 +202,15 @@ Vue.component("tt-save-load-button", {
     },
     save() {
       this.hideContextMenu();
-      this.preset.studies = studyTreeExportString();
+      this.preset.studies = GameCache.currentStudyTree.value.exportString;
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
       GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
-        importStudyTree(this.preset.studies);
+        const imported = new TimeStudyTree(this.preset.studies);
+        TimeStudyTree.commitToGameState(imported.purchasedStudies);
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
@@ -219,7 +224,7 @@ Vue.component("tt-save-load-button", {
       GameUI.notify.eternity(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
-      Modal.editTree.show({ id: this.saveslot - 1 });
+      Modal.studyString.show({ id: this.saveslot - 1 });
     }
   },
   template: `

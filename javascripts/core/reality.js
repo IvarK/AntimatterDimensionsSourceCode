@@ -279,6 +279,14 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Teresa.isRunning) {
+    const current = Teresa.runRewardMultiplier;
+    const newMultiplier = Teresa.rewardMultiplier(player.antimatter);
+    const isHigher = newMultiplier > current;
+    Modal.message.show(`You have completed Teresa's Reality! ${isHigher
+      ? `Since you gained more Antimatter, you increased your
+      Glyph Sacrifice multiplier from ${format(current, 2, 2)} to ${format(newMultiplier, 2, 2)}`
+      : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier
+      from Teresa did not increase`}.`);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -573,7 +581,6 @@ export function finishProcessReality(realityProps) {
   player.records.thisReality.realTime = 0;
   player.records.thisReality.maxReplicanti = DC.D0;
   Currency.timeTheorems.reset();
-  player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
   player.dilation.studies = [];
   player.dilation.active = false;

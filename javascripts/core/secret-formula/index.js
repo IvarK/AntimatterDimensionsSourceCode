@@ -1,6 +1,7 @@
 import "./game-database.js";
 
 import "./tabs.js";
+import "./away-progress-types.js";
 import "./tab-notifications.js";
 import "./news.js";
 import "./achievements/normal-achievements.js";

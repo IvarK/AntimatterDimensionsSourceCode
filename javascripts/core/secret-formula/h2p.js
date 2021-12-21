@@ -658,7 +658,7 @@ the middle of an Eternity.
     }, {
       name: "Eternity Challenges",
       info: () => `
-Eternity Challenges are another set of challenges which are unlocked by the Time Study tree. They require a certain
+Eternity Challenges are another set of challenges which are unlocked by the Time Study Tree. They require a certain
 amount of Time Theorems to enter, plus a secondary requirement which you must meet when you unlock the challenge.
 <br>
 <br>

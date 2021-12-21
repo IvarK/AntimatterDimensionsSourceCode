@@ -1,4 +1,11 @@
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+
 Vue.component("replicanti-galaxy-button", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton
+  },
   data() {
     return {
       isAvailable: false,
@@ -46,20 +53,25 @@ Vue.component("replicanti-galaxy-button", {
     handleAutoToggle(value) {
       Autobuyer.replicantiGalaxy.isActive = value;
       this.update();
+    },
+    handleClick() {
+      if (!this.isAvailable) return;
+      if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+      else replicantiGalaxy();
     }
   },
   template: `
     <div class="l-spoon-btn-group">
-      <primary-button
+      <PrimaryButton
         :enabled="isAvailable"
         class="o-primary-btn--replicanti-galaxy"
-        onclick="replicantiGalaxy()"
+        @click="handleClick"
       >
         {{ resetActionDisplay }} for a Replicanti Galaxy
         <br>
         {{ galaxyCountDisplay }}
-      </primary-button>
-      <primary-button-on-off-custom
+      </PrimaryButton>
+      <PrimaryToggleButton
         v-if="isAutoUnlocked"
         :value="isAutoActive"
         :on="autobuyerTextDisplay"

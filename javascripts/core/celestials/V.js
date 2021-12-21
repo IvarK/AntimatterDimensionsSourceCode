@@ -156,7 +156,10 @@ export const V_UNLOCKS = {
   },
   RA_UNLOCK: {
     id: 6,
-    reward: "Reduce the Space Theorem cost of Time Studies by 2. Unlock Ra, Celestial of the Forgotten.",
+    get reward() {
+      return `Reduce the Space Theorem cost of Time Studies by ${formatInt(2)}. 
+              Unlock Ra, Celestial of the Forgotten.`;
+    },
     get description() { return `Have ${formatInt(36)} V-Achievements`; },
     requirement: () => V.spaceTheorems >= 36
   }
@@ -218,7 +221,6 @@ export const V = {
       run: false,
       quotes: [],
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      triadStudies: [],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],

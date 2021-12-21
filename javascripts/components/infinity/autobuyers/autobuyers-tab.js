@@ -9,8 +9,13 @@ import "./galaxy-autobuyer-box.js";
 import "./dimboost-autobuyer-box.js";
 import "./eternity-autobuyer-box.js";
 import "./reality-autobuyer-box.js";
+import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
+
 
 Vue.component("autobuyers-tab", {
+  components: {
+    OpenModalShortcutsButton
+  },
   data() {
     return {
       hasContinuum: false,
@@ -33,7 +38,7 @@ Vue.component("autobuyers-tab", {
   template: `
     <div class="l-autobuyers-tab">
       <autobuyer-toggles />
-      <open-modal-shortcuts />
+      <OpenModalShortcutsButton />
       <reality-autobuyer-box />
       <eternity-autobuyer-box />
       <big-crunch-autobuyer-box />

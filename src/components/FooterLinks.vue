@@ -2,6 +2,7 @@
 import FooterLink from "@/components/FooterLink";
 
 export default {
+  name: "FooterLinks",
   components: {
     FooterLink
   },
@@ -42,12 +43,3 @@ export default {
     </FooterLink>
   </div>
 </template>
-
-<style scoped>
-.o-footer {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  font-size: 1.5rem;
-}
-</style>

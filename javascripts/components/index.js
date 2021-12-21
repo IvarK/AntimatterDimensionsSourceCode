@@ -1,21 +1,3 @@
-import "./common/primary-button.js";
-
-import "./dimensions/antimatter/antimatter-dim-tab.js";
-import "./dimensions/infinity/infinity-dim-tab.js";
-import "./dimensions/time/time-dim-tab.js";
-
-import "./options/options-saving-tab.js";
-import "./options/options-visual-tab.js";
-import "./options/options-gameplay-tab.js";
-
-import "./statistics/statistics-tab.js";
-import "./statistics/challenges/challenge-records-tab.js";
-import "./statistics/runs/past-runs-tab.js";
-import "./statistics/glyph-sets-tab.js";
-
-import "./achievements/normal/normal-achievements-tab.js";
-import "./achievements/secret/secret-achievements-tab.js";
-
 import "./challenges/normal-challenges-tab.js";
 import "./challenges/infinity-challenges-tab.js";
 import "./challenges/eternity-challenges-tab.js";
@@ -51,10 +33,6 @@ import "./celestials/subtabs/laitela/laitela-tab.js";
 import "./celestials/subtabs/pelle-tab.js";
 
 import "./shop/shop-tab.js";
-
-import "./new-ui/dimensions-tab/new-dimensions-tab.js";
-import "./new-ui/infinity-dimensions-tab/new-inf-dimensions-tab.js";
-import "./new-ui/time-dimensions-tab/new-time-dimensions-tab.js";
 
 import "./modals/index.js";
 import "./game-ui.js";

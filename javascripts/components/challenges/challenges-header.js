@@ -1,4 +1,11 @@
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+
 Vue.component("challenges-header", {
+  components: {
+    PrimaryButton,
+    PrimaryToggleButton
+  },
   data() {
     return {
       isInChallenge: false,
@@ -52,32 +59,32 @@ Vue.component("challenges-header", {
   template: `
     <div class="l-challenges-tab__header">
       <div class="c-subtab-option-container" v-if="isShowAllVisible || isAutoECVisible || isInChallenge">
-        <primary-button-on-off
+        <PrimaryToggleButton
           v-if="isShowAllVisible"
           v-model="showAllChallenges"
           class="o-primary-btn--subtab-option"
-          text="Show all known challenges:"
+          label="Show all known challenges:"
         />
-        <primary-button-on-off
+        <PrimaryToggleButton
           v-if="isAutoECVisible"
           v-model="autoEC"
           class="o-primary-btn--subtab-option"
-          text="Auto Eternity Challenges:"
+          label="Auto Eternity Challenges:"
         />
-        <primary-button
+        <PrimaryButton
           v-if="isInChallenge"
           class="o-primary-btn--subtab-option"
           @click="restartChallenge"
         >
           Restart Challenge
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           v-if="isInChallenge"
           class="o-primary-btn--subtab-option"
           @click="exitChallenge"
         >
           Exit Challenge
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div>
         Some Normal Challenges have requirements to be able to run that challenge.

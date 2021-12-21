@@ -970,7 +970,7 @@ GameDatabase.celestials.navigation = (function() {
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
-          angle: 135,
+          angle: 100,
           diagonal: 16,
           horizontal: 16,
         },
@@ -1286,9 +1286,14 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-unlock": {
       visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
-      complete: () => (MatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked
-        ? 1
-        : Math.clampMax(0.999, player.antimatter.exponent / 1.5e12)),
+      complete: () => {
+        if (DarkMatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked) return 1;
+        if (MachineHandler.isIMUnlocked) {
+          if (player.requirementChecks.reality.maxID1.neq(0)) return 0.5;
+          return Math.clampMax(0.999, player.antimatter.exponent / 1.5e12);
+        }
+        return Math.clampMax(0.25, Currency.realityMachines.value.pLog10() / MachineHandler.baseRMCap.exponent);
+      },
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1303,12 +1308,23 @@ GameDatabase.celestials.navigation = (function() {
         },
         alwaysShowLegend: true,
         legend: {
-          text: () => {
-            if (Laitela.isUnlocked) return ["Lai'tela's Reality"];
+          text: complete => {
+            const realityName = "Lai'tela's Reality";
+            if (complete >= 1) return [realityName];
+
+            if (!MachineHandler.isIMUnlocked) {
+              const realityMachines = Currency.realityMachines.value;
+              const realityMachineCap = MachineHandler.baseRMCap;
+              return [
+                realityName,
+                "The limits of Reality Machines bind you",
+                `${format(realityMachines)} / ${format(realityMachineCap)}`
+              ];
+            }
 
             const hasIDs = player.requirementChecks.reality.maxID1.neq(0);
             if (hasIDs) return [
-              "Lai'tela's Reality",
+              realityName,
               "The Power of Infinity Dimensions",
               "blocks your path."
             ];
@@ -1316,7 +1332,7 @@ GameDatabase.celestials.navigation = (function() {
             const antimatter = Currency.antimatter.value;
             const amGoal = DC.E1_5E12;
             return [
-              "Lai'tela's Reality",
+              realityName,
               `${format(antimatter)} / ${format(amGoal)}`
             ];
           },
@@ -1337,7 +1353,7 @@ GameDatabase.celestials.navigation = (function() {
     "laitela-2nd-dim": {
       visible: () => Laitela.isUnlocked,
       complete: () => {
-        const upgrade = MatterDimension(2).unlockUpgrade;
+        const upgrade = DarkMatterDimension(2).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
         return Laitela.difficultyTier < 1
@@ -1355,16 +1371,16 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const dmdText = "2nd Dark Matter Dimension";
-            const dim = MatterDimension(2);
-            if (dim.amount.gte(1)) return [dmdText];
+            const dim = DarkMatterDimension(2);
+            if (dim.isUnlocked) return [dmdText];
 
             const goal = dim.adjustedStartingCost;
             if (complete >= 1) return [
               dmdText,
-              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.amount.gte(1) ? 0 : 2)} / ${format(goal)}`
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.isUnlocked ? 0 : 2)} / ${format(goal)}`
             ];
 
-            const upgrade = MatterDimension(2).unlockUpgrade;
+            const upgrade = dim.unlockUpgrade;
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
@@ -1408,10 +1424,16 @@ GameDatabase.celestials.navigation = (function() {
           rMajor: 8,
         },
         legend: {
-          text: [
-            "Condense your Dark Energy",
-            "Into a Singularity"
-          ],
+          text: complete => {
+            if (complete >= 1) return ["Obtain a Singularity"];
+            const darkEnergy = Currency.darkEnergy.value;
+            const singularityGoal = Singularity.cap;
+            return [
+              "Condense your Dark Energy",
+              "Into a Singularity",
+              `${format(darkEnergy)} / ${format(singularityGoal)}`
+            ];
+          },
           angle: 45,
           diagonal: 65,
           horizontal: 16,
@@ -1426,12 +1448,13 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-3rd-dim-left": {
-      visible: () => MatterDimension(2).isUnlocked && Currency.singularities.gte(1),
+    "laitela-3rd-dim": {
+      visible: () => DarkMatterDimension(2).isUnlocked && Currency.singularities.gte(1),
       complete: () => {
-        const upgrade = MatterDimension(3).unlockUpgrade;
+        const upgrade = DarkMatterDimension(3).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
+        if (!player.celestials.laitela.automation.singularity) return 0.5;
         return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
       },
       node: {
@@ -1445,20 +1468,26 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const dmdText = "3rd Dark Matter Dimension";
-            const dim = MatterDimension(3);
-            if (dim.amount.gte(1)) return [dmdText];
+            const dim = DarkMatterDimension(3);
+            if (dim.isUnlocked) return [dmdText];
 
             const goal = dim.adjustedStartingCost;
             if (complete >= 1) return [
               dmdText,
-              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.amount.gte(1) ? 0 : 2)} / ${format(goal)}`
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.isUnlocked ? 0 : 2)} / ${format(goal)}`
             ];
 
-            const upgrade = MatterDimension(3).unlockUpgrade;
+            const upgrade = dim.unlockUpgrade;
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
               ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+            ];
+
+            if (!player.celestials.laitela.automation.singularity) return [
+              dmdText,
+              "Unlock Automatic Singularities",
+              `${format(Currency.singularities.value)} / ${format(SingularityMilestone.autoCondense.start)}`
             ];
 
             return [
@@ -1472,45 +1501,29 @@ GameDatabase.celestials.navigation = (function() {
           horizontal: 16,
         },
       },
-      connector: {
-        pathStart: 0.10,
-        pathEnd: 0.89,
-        path: new LinearPath(Positions.laitelaFirstLeft, Positions.laitelaSecondCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    },
-    "laitela-3rd-dim-right": {
-      visible: () => MatterDimension(2).isUnlocked && Currency.singularities.gte(1),
-      complete: () => {
-        const upgrade = MatterDimension(3).unlockUpgrade;
-        if (upgrade.canBeBought || upgrade.isBought) return 1;
-        if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
-      },
-      node: {
-        clickAction: () => Tab.celestials.laitela.show(true),
-        fill: "white",
-        position: Positions.laitelaSecondCenter,
-        isStacked: true,
-        ring: {
-          rMajor: 0,
-        }
-      },
-      connector: {
-        pathStart: 0.10,
-        pathEnd: 0.89,
-        path: new LinearPath(Positions.laitelaFirstRight, Positions.laitelaSecondCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
+      connector: [
+        {
+          pathStart: 0.10,
+          pathEnd: 0.89,
+          path: new LinearPath(Positions.laitelaFirstLeft, Positions.laitelaSecondCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
+        }, {
+          pathStart: 0.10,
+          pathEnd: 0.89,
+          path: new LinearPath(Positions.laitelaFirstRight, Positions.laitelaSecondCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
+
+        },
+      ],
     },
     "laitela-4th-dim": {
-      visible: () => MatterDimension(3).isUnlocked,
+      visible: () => DarkMatterDimension(3).isUnlocked,
       complete: () => {
-        const upgrade = MatterDimension(4).unlockUpgrade;
+        const upgrade = DarkMatterDimension(4).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
         return (Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies) / 80000;
@@ -1526,16 +1539,16 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const dmdText = "4th Dark Matter Dimension";
-            const dim = MatterDimension(4);
-            if (dim.amount.gte(1)) return [dmdText];
+            const dim = DarkMatterDimension(4);
+            if (dim.isUnlocked) return [dmdText];
 
             const goal = dim.adjustedStartingCost;
             if (complete >= 1) return [
               dmdText,
-              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.amount.gte(1) ? 0 : 2)} / ${format(goal)}`
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.isUnlocked ? 0 : 2)} / ${format(goal)}`
             ];
 
-            const upgrade = MatterDimension(4).unlockUpgrade;
+            const upgrade = dim.unlockUpgrade;
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
@@ -1564,7 +1577,7 @@ GameDatabase.celestials.navigation = (function() {
       },
     },
     "laitela-annihilation": {
-      visible: () => MatterDimension(4).isUnlocked,
+      visible: () => DarkMatterDimension(4).isUnlocked,
       complete: () => {
         const upgrade = ImaginaryUpgrade(19);
         if (upgrade.canBeBought || upgrade.isBought) return 1;
@@ -1586,7 +1599,7 @@ GameDatabase.celestials.navigation = (function() {
             "Annihilate your",
             "Dark Matter Dimensions"
           ],
-          angle: 45,
+          angle: 315,
           diagonal: 30,
           horizontal: 16,
         },
@@ -1600,8 +1613,8 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       },
     },
-    "laitela-destabilization-left": {
-      visible: () => MatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
+    "laitela-destabilization": {
+      visible: () => DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
       complete: () => Laitela.difficultyTier / 8,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1632,34 +1645,23 @@ GameDatabase.celestials.navigation = (function() {
           horizontal: 8,
         },
       },
-      connector: {
-        pathStart: 0.11,
-        pathEnd: 0.83,
-        path: new LinearPath(Positions.laitelaSecondLeft, Positions.laitelaThirdCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    },
-    "laitela-destabilization-right": {
-      visible: () => MatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
-      complete: () => Laitela.difficultyTier / 8,
-      node: {
-        fill: "white",
-        position: Positions.laitelaThirdCenter,
-        isStacked: true,
-        ring: {
-          rMajor: 0,
+      connector: [
+        {
+          pathStart: 0.11,
+          pathEnd: 0.83,
+          path: new LinearPath(Positions.laitelaSecondLeft, Positions.laitelaThirdCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
+        }, {
+          pathStart: 0.11,
+          pathEnd: 0.83,
+          path: new LinearPath(Positions.laitelaSecondRight, Positions.laitelaThirdCenter),
+          fill: "white",
+          completeWidth: 6,
+          incompleteWidth: 4,
         }
-      },
-      connector: {
-        pathStart: 0.11,
-        pathEnd: 0.83,
-        path: new LinearPath(Positions.laitelaSecondRight, Positions.laitelaThirdCenter),
-        fill: "white",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    }
+      ]
+    },
   };
 }());

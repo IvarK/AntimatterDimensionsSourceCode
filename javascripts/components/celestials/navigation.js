@@ -1,4 +1,6 @@
-const BezTestData = {
+import { CELESTIAL_NAV_DRAW_ORDER } from "../../core/secret-formula/celestials/navigation";
+
+export const BezTestData = {
   P0: new Vector(300, 300),
   scale: 100,
   rate: Math.log(2) / (2 * Math.PI),
@@ -7,7 +9,7 @@ const BezTestData = {
   offset: 10,
 };
 
-function cubicBezierArrayToPath(a, initialCommand = "M") {
+export function cubicBezierArrayToPath(a, initialCommand = "M") {
   const prefix = `${initialCommand} ${a[0].p0.x} ${a[0].p0.y}\n`;
   const parts = a.map(b => `C ${b.p1.x} ${b.p1.y} ${b.p2.x} ${b.p2.y} ${b.p3.x} ${b.p3.y}\n`);
   return prefix + parts.join("");
@@ -446,7 +448,16 @@ Vue.component("celestial-navigation", {
       const order = [];
       for (const nodeId of Object.keys(db)) {
         const node = db[nodeId];
-        if (node.connector) {
+        if (node.connector instanceof Array) {
+          for (const config of node.connector) {
+            order.push({
+              nodeId,
+              is: "progress-connector",
+              config,
+              drawOrder: config.drawOrder || CELESTIAL_NAV_DRAW_ORDER.CONNECTORS,
+            });
+          }
+        } else if (node.connector) {
           order.push({
             nodeId,
             is: "progress-connector",

@@ -96,7 +96,7 @@ export const GlyphSacrificeHandler = {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ||
         (this.glyphRefinementGain(glyph) === 0 && !decoherence) ||
         (decoherence && AlchemyResources.base.every(x => x.data.amount >= Ra.alchemyResourceCap))) {
-      this.sacrificeGlyph(glyph, true);
+      this.sacrificeGlyph(glyph, force);
       return;
     }
 

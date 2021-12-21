@@ -43,6 +43,7 @@
     "vue/block-tag-newline": "warn",
     "vue/no-multiple-objects-in-class": "warn",
     "vue/no-static-inline-styles": "warn",
+    "vue/no-v-html": "off",
     "no-empty-function": "error",
     "no-eval": "error",
     "no-extra-bind": "error",
@@ -88,7 +89,7 @@
       "error",
       {
         "vars": "local",
-        "args": "all"
+        "args": "after-used"
       }
     ],
     "no-use-before-define": [
@@ -163,6 +164,7 @@
     "no-nested-ternary": "error",
     "no-new-object": "error",
     "no-tabs": "error",
+    "no-trailing-spaces": "warn",
     "no-unneeded-ternary": "error",
     "no-whitespace-before-property": "error",
     "object-curly-spacing": [

@@ -6,6 +6,7 @@ Vue.component("glyph-clean-button-group", {
       hasFilter: false,
       inventory: [],
       isRefining: false,
+      removeCount: 0,
     };
   },
   computed: {
@@ -23,12 +24,9 @@ Vue.component("glyph-clean-button-group", {
         ANY other glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
-      const removeCount = this.inventory
-        .filter(g => g !== null && g.idx >= Glyphs.protectedSlots && !AutoGlyphProcessor.wouldKeep(g))
-        .length;
-      return removeCount === 0
+      return this.removeCount === 0
         ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
-        : `This will remove ${quantifyInt("Glyph", removeCount)}!`;
+        : `This will remove ${quantifyInt("Glyph", this.removeCount)}!`;
     }
   },
   methods: {
@@ -39,18 +37,29 @@ Vue.component("glyph-clean-button-group", {
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
       this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE ||
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP;
+      this.removeCount = this.inventory
+        .filter(g => g !== null && g.idx >= Glyphs.protectedSlots && !AutoGlyphProcessor.wouldKeep(g))
+        .length;
     },
     autoClean() {
-      Glyphs.autoClean();
+      if (player.options.confirmations.autoClean) {
+        Modal.glyphPurge.show({ harsh: false });
+      } else {
+        Glyphs.autoClean(5);
+      }
     },
     harshAutoClean() {
-      Glyphs.harshAutoClean();
+      if (player.options.confirmations.autoClean) {
+        Modal.glyphPurge.show({ harsh: true });
+      } else {
+        Glyphs.autoClean(1);
+      }
     },
     deleteAllUnprotected() {
-      Glyphs.deleteAllUnprotected();
+      Modal.deleteAllUnprotectedGlyphs.show();
     },
     deleteAllRejected() {
-      Glyphs.deleteAllRejected();
+      Modal.deleteAllRejectedGlyphs.show();
     },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";

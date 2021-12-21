@@ -439,31 +439,27 @@ export const Glyphs = {
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean(threshold = 5) {
+  autoClean(threshold = 5, deleteGlyphs = true) {
     const isHarsh = threshold < 5;
+    let toBeDeleted = 0;
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
-    if (!GlyphSacrificeHandler.canSacrifice) return;
-    // If auto clean could remove useful glyphs, we warn them.
-    if (isHarsh && player.options.confirmations.harshAutoClean &&
-      // eslint-disable-next-line prefer-template
-      !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
-        "later. Are you sure you want to do this?")) {
-      return;
-    }
+    if (!GlyphSacrificeHandler.canSacrifice) return toBeDeleted;
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
-      if (glyph === null) continue;
+      if (glyph === null || glyph.type === "companion") continue;
       // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
       const isCustomGlyph = glyph.color !== undefined || glyph.symbol !== undefined;
       if (isCustomGlyph && !isHarsh) continue;
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
       if (threshold === 0 || this.isObjectivelyUseless(glyph, threshold)) {
-        AutoGlyphProcessor.getRidOfGlyph(glyph);
+        if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
+        toBeDeleted++;
       }
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
+    return toBeDeleted;
   },
   harshAutoClean() {
     this.autoClean(1);
@@ -471,13 +467,16 @@ export const Glyphs = {
   deleteAllUnprotected() {
     this.autoClean(0);
   },
-  deleteAllRejected() {
+  deleteAllRejected(deleteGlyphs = true) {
+    let toBeDeleted = 0;
     for (const glyph of Glyphs.inventory) {
       if (glyph !== null && glyph.idx >= this.protectedSlots && !AutoGlyphProcessor.wouldKeep(glyph)) {
-        AutoGlyphProcessor.getRidOfGlyph(glyph);
+        if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
+        toBeDeleted++;
       }
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
+    return toBeDeleted;
   },
   collapseEmptySlots() {
     const unprotectedGlyphs = player.reality.glyphs.inventory

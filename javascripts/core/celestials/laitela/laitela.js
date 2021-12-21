@@ -1,17 +1,11 @@
 import { CelestialQuotes } from "../quotes.js";
 import { DC } from "../../constants.js";
+import { DarkMatterDimension, DarkMatterDimensions } from "./dark-matter-dimension.js";
 
 export const Laitela = {
   displayName: "Lai'tela",
   get celestial() {
     return player.celestials.laitela;
-  },
-  get darkEnergyPerSecond() {
-    return Array.range(1, 4)
-      .map(n => MatterDimension(n))
-      .filter(d => d.amount.gt(0))
-      .map(d => d.powerDE * 1000 / d.interval)
-      .sum();
   },
   get isUnlocked() {
     return ImaginaryUpgrade(15).isBought;
@@ -70,61 +64,28 @@ export const Laitela = {
   get darkMatterMultRatio() {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
-  get canAnnihilate() {
-    return ImaginaryUpgrade(19).isBought && Currency.darkMatter.gte(this.annihilationDMRequirement);
+  get annihilationUnlocked() {
+    return ImaginaryUpgrade(19).isBought;
   },
   get annihilationDMRequirement() {
     return 1e60;
   },
+  get canAnnihilate() {
+    return Laitela.annihilationUnlocked && Currency.darkMatter.gte(this.annihilationDMRequirement);
+  },
   annihilate(force) {
     if (!force && !this.canAnnihilate) return false;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
-    this.celestial.dimensions = this.celestial.dimensions.map(
-      () => (
-        {
-          amount: DC.D1,
-          intervalUpgrades: 0,
-          powerDMUpgrades: 0,
-          powerDEUpgrades: 0,
-          timeSinceLastUpdate: 0,
-          ascensionCount: 0
-        }
-      )
-    );
-    Currency.darkMatter.reset();
+    DarkMatterDimensions.reset();
+    Currency.darkEnergy.reset();
     Laitela.quotes.show(Laitela.quotes.ANNIHILATION);
     return true;
   },
-  tickDarkMatter(realDiff) {
-    if (!this.isUnlocked) return;
-    for (let i = 1; i <= 4; i++) {
-      const d = MatterDimension(i);
-      d.timeSinceLastUpdate += realDiff;
-      if (d.interval < d.timeSinceLastUpdate) {
-        const ticks = Math.floor(d.timeSinceLastUpdate / d.interval);
-        const productionDM = d.amount.times(ticks).times(d.powerDM);
-        if (i === 1) {
-          Currency.darkMatter.add(productionDM);
-        } else {
-          MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(productionDM);
-        }
-        if (MatterDimension(i).amount.gt(0)) {
-          Currency.darkEnergy.value =
-            Math.clampMax(Currency.darkEnergy.value + ticks * d.powerDE, Number.MAX_VALUE);
-        }
-        d.timeSinceLastUpdate -= d.interval * ticks;
-      }
-    }
-    if (SingularityMilestone.dim4Generation.isUnlocked && Laitela.canAnnihilate) {
-      MatterDimension(4).amount = MatterDimension(4).amount
-        .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
-    }
-  },
   // Greedily buys the cheapest available upgrade until none are affordable
   maxAllDMDimensions(maxTier) {
-    // Note that _tier is 0-indexed, so calling with maxTier = 3 will buy up to and including DM3 for example
-    const unlockedDimensions = MatterDimensionState.list
-      .filter(d => d.isUnlocked && d.amount.gt(0) && d._tier < maxTier);
+    // Note that tier is 1-indexed
+    const unlockedDimensions = DarkMatterDimensions.all
+      .filter(d => d.isUnlocked && d.tier <= maxTier);
     const upgradeInfo = unlockedDimensions
       .map(d => [
         [d.rawIntervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],
@@ -159,7 +120,7 @@ export const Laitela = {
       }
       if (laitela.automation.ascension) {
         for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
-          MatterDimension(i).ascend();
+          DarkMatterDimension(i).ascend();
         }
       }
     }
@@ -178,9 +139,12 @@ export const Laitela = {
   reset() {
     this.annihilate(true);
     this.celestial.darkMatterMult = 1;
-    Currency.darkMatter.max = 0;
+    Currency.darkMatter.max = DC.D1;
+    Currency.darkMatter.reset();
+    Currency.singularities.reset();
     this.celestial.fastestCompletion = 3600;
     this.celestial.difficultyTier = 0;
+    this.celestial.singularityCapIncreases = 0;
   },
   quotes: new CelestialQuotes("laitela", {
     UNLOCK: {

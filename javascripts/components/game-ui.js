@@ -4,8 +4,14 @@ import "./save-timer.js";
 import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
+import TabComponents from "@/components/tabs";
+import PopupModal from "@/components/modals/PopupModal";
 
 Vue.component("game-ui", {
+  components: {
+    ...TabComponents,
+    PopupModal,
+  },
   computed: {
     view() {
       return this.$viewModel;
@@ -18,11 +24,7 @@ Vue.component("game-ui", {
     },
     page() {
       const subtab = Tabs.current[this.$viewModel.subtab];
-      const config = subtab.config;
-      if (this.view.newUI && config.newUIComponent !== undefined) {
-        return config.newUIComponent;
-      }
-      return config.component;
+      return subtab.config.component;
     },
     themeCss() {
       return `stylesheets/theme-${this.view.theme}.css`;
@@ -39,7 +41,7 @@ Vue.component("game-ui", {
         <component :is="uiLayout">
           <component :is="page" />
         </component>
-        <modal-popup v-if="view.modal.current" :modal="view.modal.current" />
+        <PopupModal v-if="view.modal.current" :modal="view.modal.current" />
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
         <help-me />

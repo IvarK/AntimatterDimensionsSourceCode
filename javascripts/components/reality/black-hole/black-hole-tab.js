@@ -1,10 +1,13 @@
 import "./black-hole-unlock-button.js";
 import "./black-hole-upgrade-row.js";
 import "./black-hole-state-row.js";
-import "../../common/ad-slider-component.js";
 import { BlackHoleAnimation } from "./black-hole-animation.js";
+import SliderComponent from "@/components/SliderComponent";
 
 Vue.component("black-hole-tab", {
+  components: {
+    SliderComponent
+  },
   data() {
     return {
       isUnlocked: false,
@@ -223,7 +226,7 @@ Vue.component("black-hole-tab", {
           </div>
           <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
             Black Hole charging rate: {{ storedTimeRate }}
-            <ad-slider-component
+            <SliderComponent
               v-bind="sliderPropsStoring"
               :value="storedFraction"
               @input="adjustSliderStoring($event)"
@@ -232,7 +235,7 @@ Vue.component("black-hole-tab", {
           <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
             Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
             This requires both Black Holes to be permanent and only works when paused.
-            <ad-slider-component
+            <SliderComponent
               v-bind="sliderPropsNegative"
               :value="negativeSlider"
               @input="adjustSliderNegative($event)"

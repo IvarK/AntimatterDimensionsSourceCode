@@ -1,9 +1,14 @@
-import "../../common/ad-slider-component.js";
+import ToggleButton from "@/components/ToggleButton";
+import SliderComponent from "@/components/SliderComponent";
 
 // The things inside player.celestials.effarig.glyphWeights
 const _GLYPH_WEIGHT_FIELDS = ["ep", "repl", "dt", "eternities"];
 
 Vue.component("glyph-levels-and-weights", {
+  components: {
+    ToggleButton,
+    SliderComponent
+  },
   data() {
     return {
       adjustVisible: false,
@@ -319,15 +324,15 @@ Vue.component("glyph-levels-and-weights", {
           </div>
         </div>
         <div class="l-glyph-levels-and-weights__adjust-auto">
-          <button-on-off
+          <ToggleButton
             v-if="showAutoAdjustWeights"
             v-model="isAutoAdjustWeightsOn"
             class="c-glyph-levels-and-weights__auto-btn"
-            text="Auto adjustment:"
+            label="Auto adjustment:"
           />
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('ep')">
-          <ad-slider-component
+          <SliderComponent
             v-bind="sliderProps"
             :value="weights.ep"
             :width="'100%'"
@@ -335,7 +340,7 @@ Vue.component("glyph-levels-and-weights", {
           />
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('replicanti')">
-          <ad-slider-component
+          <SliderComponent
             v-bind="sliderProps"
             :value="weights.repl"
             :width="'100%'"
@@ -343,7 +348,7 @@ Vue.component("glyph-levels-and-weights", {
           />
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('dt')">
-          <ad-slider-component
+          <SliderComponent
             v-bind="sliderProps"
             :value="weights.dt"
             :width="'100%'"
@@ -351,7 +356,7 @@ Vue.component("glyph-levels-and-weights", {
           />
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyle('eternities')">
-          <ad-slider-component
+          <SliderComponent
             v-bind="sliderProps"
             :value="weights.eternities"
             :width="'100%'"

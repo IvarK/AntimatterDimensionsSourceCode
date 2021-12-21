@@ -6,6 +6,7 @@ import "./dilation-time-study.js";
 import { rem } from "./rem.js";
 import { TimeStudySetup } from "./time-study.js";
 import { TimeStudyConnectionSetup } from "./time-study-connection.js";
+import PrimaryButton from "@/components/PrimaryButton";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -56,7 +57,6 @@ class TimeStudyTreeLayout {
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
-    const TrS = id => TriadStudy(id);
 
     /**
      * @type {TimeStudyRow[]}
@@ -121,10 +121,10 @@ class TimeStudyTreeLayout {
       const vLevel = Ra.pets.v.level;
       this.rows.push(
         normalRow(
-          vLevel >= 5 ? TrS(1) : null,
-          vLevel >= 10 ? TrS(2) : null,
-          vLevel >= 15 ? TrS(3) : null,
-          vLevel >= 20 ? TrS(4) : null
+          vLevel >= 5 ? TS(301) : null,
+          vLevel >= 10 ? TS(302) : null,
+          vLevel >= 15 ? TS(303) : null,
+          vLevel >= 20 ? TS(304) : null
         )
       );
     }
@@ -215,7 +215,7 @@ const STUDY_TREE_LAYOUT_TYPE = {
   get current() {
     const alt62 = Perk.bypassEC5Lock.isBought;
     const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought && Perk.bypassEC3Lock.isBought;
-    if (Ra.pets.v.level >= 5) return this.ALTERNATIVE_TRIAD_STUDIES;
+    if (Ra.canBuyTriad) return this.ALTERNATIVE_TRIAD_STUDIES;
     if (alt62 && alt181) return this.ALTERNATIVE_62_181;
     if (alt62) return this.ALTERNATIVE_62;
     if (alt181) return this.ALTERNATIVE_181;
@@ -224,13 +224,16 @@ const STUDY_TREE_LAYOUT_TYPE = {
 };
 
 Vue.component("time-studies-tab", {
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       respec: player.respec,
       layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
       vLevel: 0,
       renderedStudyCount: 0,
-      renderedConnectionCount: 0
+      renderedConnectionCount: 0,
     };
   },
   created() {
@@ -303,35 +306,43 @@ Vue.component("time-studies-tab", {
     },
     studyComponent(study) {
       switch (study.type) {
-        case TimeStudyType.NORMAL: return "normal-time-study";
-        case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
-        case TimeStudyType.DILATION: return "dilation-time-study";
-        case TimeStudyType.TRIAD: return "triad-time-study";
+        case TIME_STUDY_TYPE.NORMAL: return "normal-time-study";
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return "ec-time-study";
+        case TIME_STUDY_TYPE.DILATION: return "dilation-time-study";
+        case TIME_STUDY_TYPE.TRIAD: return "triad-time-study";
       }
       throw "Unknown Time Study type";
+    },
+    exportStudyTree() {
+      if (player.timestudy.studies.length === 0) {
+        GameUI.notify.error("You cannot export an empty Time Study Tree!");
+      } else {
+        copyToClipboard(GameCache.currentStudyTree.value.exportString);
+        GameUI.notify.info("Exported current Time Studies to your clipboard");
+      }
     }
   },
   template: `
     <div class="l-time-studies-tab">
       <div class="c-subtab-option-container">
-        <primary-button
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
-          onclick="exportStudyTree()"
+          @click="exportStudyTree"
         >
           Export tree
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           :class="respecClassObject"
           @click="respec = !respec"
         >
           Respec Time Studies on next Eternity
-        </primary-button>
-        <primary-button
+        </PrimaryButton>
+        <PrimaryButton
           class="o-primary-btn--subtab-option"
-          onclick="Modal.importTree.show()"
+          onclick="Modal.studyString.show()"
         >
           Import tree
-        </primary-button>
+        </PrimaryButton>
       </div>
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
         <component

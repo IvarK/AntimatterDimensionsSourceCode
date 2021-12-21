@@ -25,7 +25,7 @@ export * from "./celestials/V.js";
 export * from "./celestials/ra/ra.js";
 export * from "./celestials/ra/alchemy.js";
 export * from "./celestials/laitela/laitela.js";
-export * from "./celestials/laitela/matter_dimension.js";
+export * from "./celestials/laitela/dark-matter-dimension.js";
 export * from "./celestials/laitela/singularity.js";
 export * from "./celestials/celestials.js";
 
@@ -55,6 +55,8 @@ export * from "./dimensions/antimatter-dimension.js";
 export * from "./dimensions/infinity-dimension.js";
 export * from "./dimensions/time-dimension.js";
 
+export * from "./time-studies/index.js";
+
 export * from "./dimboost.js";
 export * from "./sacrifice.js";
 export * from "./big_crunch.js";
@@ -64,7 +66,6 @@ export * from "./eternity_challenge.js";
 export * from "./reality.js";
 export * from "./replicanti.js";
 export * from "./time-theorems.js";
-export * from "./timestudies.js";
 export * from "./reality-upgrades.js";
 export * from "./imaginary-upgrades.js";
 export * from "./perks.js";

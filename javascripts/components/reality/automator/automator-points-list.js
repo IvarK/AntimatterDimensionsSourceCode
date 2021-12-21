@@ -82,7 +82,7 @@ Vue.component("automator-points-list", {
       <br>
       <div>
         The automator uses a custom scripting language which allows (amongst other things) buying full
-        Time Study trees, entering Eternity Challenges, or starting Dilation. It can also force prestige
+        Time Study Trees, entering Eternity Challenges, or starting Dilation. It can also force prestige
         events on certain conditions independently from your Autobuyers or modify some of your Autobuyer settings.
         <br>
         The speed of the Automator gradually speeds up as you get more Realities. If unlocked right now,

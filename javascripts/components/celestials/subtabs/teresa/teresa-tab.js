@@ -1,9 +1,12 @@
 import "./perk-shop-upgrade.js";
 import "../../celestial-quote-history.js";
-import "../../../reality/glyphs/glyph-set-preview.js";
 import { DC } from "../../../../core/constants.js";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 Vue.component("teresa-tab", {
+  components: {
+    GlyphSetPreview
+  },
   data() {
     return {
       pour: false,
@@ -119,8 +122,7 @@ Vue.component("teresa-tab", {
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
               Glyph Set used:
-              <glyph-set-preview
-                :show=true
+              <GlyphSetPreview
                 text="Teresa's Best Glyph Set"
                 :textHidden="true"
                 :forceNameColor=false

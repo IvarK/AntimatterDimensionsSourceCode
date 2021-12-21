@@ -2,9 +2,11 @@ import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 import HintText from "@/components/HintText";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("imaginary-upgrade-button", {
   components: {
+    PrimaryToggleButton,
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
@@ -88,10 +90,10 @@ Vue.component("imaginary-upgrade-button", {
           />
         </template>
       </button>
-      <primary-button-on-off
+      <PrimaryToggleButton
         v-if="isRebuyable && isAutoUnlocked"
         v-model="isAutobuyerOn"
-        text="Auto:"
+        label="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
     </div>`

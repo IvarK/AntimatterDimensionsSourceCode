@@ -1,6 +1,10 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
+  get tier() {
+    return this.id;
+  }
+
   get name() {
     return InfinityDimension(this.tier).displayName;
   }

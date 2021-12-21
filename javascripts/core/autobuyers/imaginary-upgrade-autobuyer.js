@@ -2,11 +2,11 @@ import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   get name() {
-    return ImaginaryUpgrade(this.tier).config.name;
+    return ImaginaryUpgrade(this.id).config.name;
   }
 
   get data() {
-    return player.auto.imaginaryUpgrades[this.tier - 1];
+    return player.auto.imaginaryUpgrades[this.id - 1];
   }
 
   get isUnlocked() {
@@ -14,7 +14,7 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    ImaginaryUpgrade(this.tier).purchase();
+    ImaginaryUpgrade(this.id).purchase();
   }
 
   static get entryCount() { return 10; }

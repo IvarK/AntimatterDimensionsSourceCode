@@ -2,6 +2,10 @@ import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 import { DC } from "../constants.js";
 
 class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
+  get tier() {
+    return this.id;
+  }
+
   get name() {
     return AntimatterDimension(this.tier).displayName;
   }

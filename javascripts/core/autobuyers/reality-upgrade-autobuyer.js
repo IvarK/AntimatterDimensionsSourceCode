@@ -2,11 +2,11 @@ import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 class RealityUpgradeAutobuyerState extends AutobuyerState {
   get name() {
-    return RealityUpgrade(this.tier).config.name;
+    return RealityUpgrade(this.id).config.name;
   }
 
   get data() {
-    return player.auto.realityUpgrades[this.tier - 1];
+    return player.auto.realityUpgrades[this.id - 1];
   }
 
   get isUnlocked() {
@@ -14,7 +14,7 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    RealityUpgrade(this.tier).purchase();
+    RealityUpgrade(this.id).purchase();
   }
 
   static get entryCount() { return 5; }

@@ -1,14 +1,14 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
-  get _upgradeName() { return ["dtGain", "galaxyThreshold", "tachyonGain"][this.tier - 1]; }
+  get _upgradeName() { return ["dtGain", "galaxyThreshold", "tachyonGain"][this.id - 1]; }
 
   get data() {
-    return player.auto.dilationUpgrades[this.tier - 1];
+    return player.auto.dilationUpgrades[this.id - 1];
   }
 
   get name() {
-    return [`Dilated Time Multiplier`, `Tachyon Galaxy Threshold`, "Tachyon Particle Multiplier"][this.tier - 1];
+    return [`Dilated Time Multiplier`, `Tachyon Galaxy Threshold`, "Tachyon Particle Multiplier"][this.id - 1];
   }
 
   get interval() {

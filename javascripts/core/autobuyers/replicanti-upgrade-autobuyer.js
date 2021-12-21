@@ -1,14 +1,14 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
-  get _upgradeName() { return ["chance", "interval", "galaxies"][this.tier - 1]; }
+  get _upgradeName() { return ["chance", "interval", "galaxies"][this.id - 1]; }
 
   get name() {
-    return `Replicanti ${[`Chance`, `Interval`, `Max Galaxies`][this.tier - 1]}`;
+    return `Replicanti ${[`Chance`, `Interval`, `Max Galaxies`][this.id - 1]}`;
   }
 
   get data() {
-    return player.auto.replicantiUpgrades[this.tier - 1];
+    return player.auto.replicantiUpgrades[this.id - 1];
   }
 
   get interval() {

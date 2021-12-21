@@ -91,8 +91,8 @@ Vue.component("multiple-autobuyers-box", {
     return {
       continuumActive: false,
       anyUnlocked: false,
-      allMaxedInterval: false,
-      allUnlimitedBulk: false,
+      displayIntervalAsGroup: false,
+      displayBulkAsGroup: false,
     };
   },
   computed: {
@@ -123,20 +123,14 @@ Vue.component("multiple-autobuyers-box", {
       if (this.isADBox) return this.anyUnlocked && this.displayBulkAsGroup && this.displayIntervalAsGroup;
       return this.anyUnlocked;
     },
-    displayIntervalAsGroup() {
-      return this.allMaxedInterval ?? true;
-    },
-    displayBulkAsGroup() {
-      return this.allUnlimitedBulk ?? true;
-    },
   },
   methods: {
     update() {
       this.continuumActive = Laitela.continuumActive;
       const type = this.type;
       this.anyUnlocked = type.anyUnlocked();
-      this.allMaxedInterval = type.allMaxedInterval?.();
-      this.allUnlimitedBulk = type.allUnlimitedBulk?.();
+      this.displayIntervalAsGroup = type.allMaxedInterval?.() ?? true;
+      this.displayBulkAsGroup = type.allUnlimitedBulk?.() ?? true;
     },
   },
   template: `

@@ -2,8 +2,8 @@
  * @abstract
  */
 export class AutobuyerState {
-  constructor(tier) {
-    this._tier = tier ?? null;
+  constructor(id) {
+    this._id = id ?? null;
   }
 
   /**
@@ -16,7 +16,7 @@ export class AutobuyerState {
    */
   get isUnlocked() { throw new NotImplementedError(); }
 
-  get tier() { return this._tier; }
+  get id() { return this._id; }
 
   get canTick() {
     return this.isActive && player.auto.autobuyersOn && (this.isUnlocked || this.isBought);
@@ -54,15 +54,14 @@ export class AutobuyerState {
    * @returns {string}
    */
   static get autobuyerGroupName() { throw new NotImplementedError(); }
-  static get autobuyerClass() { throw new NotImplementedError(); }
 
   static createAccessor() {
     const entryCount = this.entryCount;
     /** @type {object[]} */
-    const zeroIndexed = Array.range(1, entryCount).map(tier => new this(tier));
+    const zeroIndexed = Array.range(1, entryCount).map(id => new this(id));
     const oneIndexed = [null, ...zeroIndexed];
-    /** @param {number} tier */
-    const accessor = tier => oneIndexed[tier];
+    /** @param {number} id */
+    const accessor = id => oneIndexed[id];
     accessor.oneIndexed = oneIndexed;
     accessor.zeroIndexed = zeroIndexed;
     accessor.entryCount = entryCount;

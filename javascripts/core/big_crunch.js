@@ -51,7 +51,7 @@ export function bigCrunchReset() {
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
   if (firstInfinity) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
   Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that
-  you can find in the Infinity tab. You will also gain an Infinitied stat, which is the stat shown in the Statistics 
+  you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics 
   tab.`);
 }
 

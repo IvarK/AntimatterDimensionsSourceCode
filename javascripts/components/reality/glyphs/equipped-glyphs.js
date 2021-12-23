@@ -135,6 +135,7 @@ Vue.component("equipped-glyphs", {
       <div class="l-equipped-glyphs__slots">
         <div
           v-for="(glyph, idx) in glyphs"
+          style="cursor: zoom-in"
           :style="glyphPositionStyle(idx)"
           v-on="dragEvents(idx)"
           @click="showModal"

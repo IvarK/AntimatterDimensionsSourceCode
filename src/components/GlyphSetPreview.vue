@@ -95,6 +95,7 @@ export default {
     </span>
     <span
       v-if="glyphs.length !== 0"
+      style="cursor: zoom-in"
       @click="showModal"
     >
       <GlyphSetName

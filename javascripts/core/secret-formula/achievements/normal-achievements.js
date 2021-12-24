@@ -376,7 +376,8 @@ GameDatabase.achievements.normal = [
     id: 61,
     name: "Bulked Up",
     get description() {
-      return `Get all of your Antimatter Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`;
+      return `Get all of your Antimatter Dimension Autobuyer bulk amounts to
+      ${formatInt(Autobuyer.antimatterDimension.bulkCap)} or higher.`;
     },
     checkRequirement: () => Autobuyer.antimatterDimension.zeroIndexed.every(x => x.hasMaxedBulk),
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],

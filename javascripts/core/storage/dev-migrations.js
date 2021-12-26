@@ -1179,6 +1179,9 @@ GameStorage.devMigrations = {
       player.timestudy.studies = player.timestudy.studies.concat(player.celestials.v.triadStudies.map(id => id + 300));
       delete player.celestials.v.triadStudies;
     },
+    player => {
+      delete player.options.confirmations.harshAutoClean;
+    },
   ],
 
   patch(player) {

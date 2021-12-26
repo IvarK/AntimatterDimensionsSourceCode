@@ -36,6 +36,8 @@ export default {
       dilationUnlocked: false,
       realityAutobuyerUnlocked: false,
       sacrificeUnlocked: false,
+      dimensionBoostUnlocked: false,
+      antimatterGalaxyUnlocked: false,
       glyphSacrificeUnlocked: false,
       glyphUndoUnlocked: false,
       resetCelestialUnlocked: false,
@@ -135,6 +137,8 @@ export default {
       this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
       this.realityAutobuyerUnlocked = Autobuyer.reality.isUnlocked;
       this.sacrificeUnlocked = Sacrifice.isVisible;
+      this.antimatterGalaxyUnlocked = player.galaxies > 0 || this.infinityUnlocked;
+      this.dimensionBoostUnlocked = player.dimensionBoosts > 0 || this.antimatterGalaxyUnlocked;
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
@@ -153,20 +157,24 @@ export default {
     @close="emitClose"
   >
     <div class="c-modal-options__button-container">
+      <span v-if="!dimensionBoostUnlocked">
+        You do not have anything that requires confirmation,
+        but if you did it would appear here.
+      </span>
       <ModalOptionsToggleButton
-        v-if="sacrificeUnlocked"
-        v-model="sacrifice"
-        text="Sacrifice:"
-      />
-      <ModalOptionsToggleButton
-        v-if="sacrificeUnlocked"
+        v-if="dimensionBoostUnlocked"
         v-model="dimensionBoost"
         text="Dimension Boost:"
       />
       <ModalOptionsToggleButton
-        v-if="infinityUnlocked"
+        v-if="antimatterGalaxyUnlocked"
         v-model="antimatterGalaxy"
         text="Antimatter Galaxy:"
+      />
+      <ModalOptionsToggleButton
+        v-if="sacrificeUnlocked"
+        v-model="sacrifice"
+        text="Sacrifice:"
       />
       <ModalOptionsToggleButton
         v-if="infinityUnlocked"

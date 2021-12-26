@@ -2,6 +2,7 @@
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
+  name: "ModalOptionsToggleButton",
   components: {
     PrimaryToggleButton
   },

@@ -355,7 +355,7 @@ function keyboardPressEscape() {
   if (ui.view.modal.queue.length === 0) {
     Tab.options.show(true);
   } else {
-    Modal.hide();
+    Modal.hideAll();
   }
 }
 

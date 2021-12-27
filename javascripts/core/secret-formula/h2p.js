@@ -69,8 +69,8 @@ irreversible and gives you no permanent benefits, secret or otherwise.</b>
     {
       name: "Customization",
       info: () => `
-The game has two different UI layouts - the "old" UI maintains the style of Antimatter Dimensions from before the
-Reality update, while the "new" UI is a redesign based on more modern dark theme styles. Additionally, there are
+The game has two different UI layouts - the Classic UI maintains the style of Antimatter Dimensions from before the
+Reality update, while the Modern UI is a redesign based on more modern dark theme styles. Additionally, there are
 various themes which can be applied to modify the appearance of everything in the game. There are a few secret themes
 which can be unlocked through importing certain phrases. Both UI layouts support all the different possible themes.
 <br>
@@ -90,7 +90,7 @@ at least once.
 `,
       isUnlocked: () => true,
       tags: ["UI", "update", "news", "theme", "notation", "comma", "exponent", "animation", "retry", "confirmation",
-        "offline", "hotkey"],
+        "offline", "hotkey", "classic", "modern"],
       tab: "options/visual"
     },
     {

@@ -106,14 +106,14 @@ export default {
     },
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {
-        InfinityDimension(this.tier).tryUnlock(true);
+        InfinityDimension(this.tier).tryUnlock();
         return;
       }
       buyManyInfinityDimension(this.tier);
     },
     buyMaxInfinityDimension() {
       if (!this.isUnlocked) {
-        InfinityDimension(this.tier).tryUnlock(true);
+        InfinityDimension(this.tier).tryUnlock();
         return;
       }
       buyMaxInfDims(this.tier);

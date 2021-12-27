@@ -254,15 +254,11 @@ class InfinityDimensionState extends DimensionState {
     this.isUnlocked = false;
   }
 
-  tryUnlock(manual) {
+  tryUnlock() {
     if (!Perk.bypassIDAntimatter.isBought && !this.requirementReached) return;
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
-    if (Autobuyer.infinityDimension(this.tier).isActive && !manual &&
-      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
-      buyMaxInfDims(this.tier);
-    }
   }
 }
 

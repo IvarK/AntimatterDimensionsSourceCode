@@ -342,6 +342,9 @@ export default {
       this.isDragging = false;
       this.suppressTooltip = false;
       this.$viewModel.scrollWindow = 0;
+      const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
+      dragInfo.id = -1;
+      dragInfo.type = "";
       if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
     },
     drag(ev) {

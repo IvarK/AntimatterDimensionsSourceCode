@@ -36,7 +36,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
 
   tick() {
     const tier = this._tier;
-    if (!InfinityDimension(tier).isAvailableForPurchase || EternityChallenge(8).isRunning) return;
+    if (!canBuyInfinityDimension(tier) || EternityChallenge(8).isRunning) return;
     super.tick();
     buyManyInfinityDimension(tier);
     buyMaxInfDims(tier);

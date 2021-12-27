@@ -65,11 +65,17 @@ export class DimBoost {
       // (they unlock new dimensions).
       // There's no actual problem with bulk letting the player get
       // more boosts than this; it's just that boosts beyond this are pointless.
+
+      // If we have all Antimatter Dimensions unlocked by default, we should set the max to 0.
+      if (EternityMilestone.unlockAllND.isReached) return 0;
       return 2;
     }
     if (NormalChallenge(8).isRunning) {
       // See above. It's important we check for this after checking for IC1 since otherwise
       // this case would trigger when we're in IC1.
+
+      // If we have all Antimatter Dimensions unlocked by default, we should set the max to 0.
+      if (EternityMilestone.unlockAllND.isReached) return 0;
       return 5;
     }
     return Infinity;

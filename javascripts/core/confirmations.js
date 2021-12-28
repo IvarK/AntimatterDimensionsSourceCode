@@ -16,8 +16,4 @@ class ConfirmationState {
   }
 }
 
-export const ConfirmationTypes = [];
-
-for (const entry of GameDatabase.confirmationTypes) {
-  ConfirmationTypes.push(new ConfirmationState(entry));
-}
+export const ConfirmationTypes = GameDatabase.confirmationTypes.map(entry => new ConfirmationState(entry));

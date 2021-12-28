@@ -195,7 +195,7 @@ Vue.component("black-hole-tab", {
           </button>
           <button
             class="o-primary-btn o-primary-btn--subtab-option"
-            style="width: 25rem;"
+            style="width: 30rem"
             @click="changePauseMode"
             v-if="!isPermanent"
           >

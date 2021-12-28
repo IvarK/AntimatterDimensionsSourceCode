@@ -21,8 +21,8 @@ export default {
 <template>
   <div class="c-modal-message l-modal-content--centered">
     <div class="c-modal-message__text">
-      We noticed that you've loaded an old save, would you like to swap to the new UI?
-      (you can change this at any time in the options tab)
+      We noticed that you've loaded an old save, would you like to swap to the Modern UI?
+      (you can change back to Classic at any time in the Visual Options tab)
     </div>
     <div class="l-options-grid__row">
       <PrimaryButton

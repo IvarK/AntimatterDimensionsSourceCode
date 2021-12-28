@@ -117,7 +117,7 @@ Theme.create = function(name, settings) {
 export const Themes = {
   all: [
     /* eslint-disable no-multi-spaces */
-    // Note that "Normal" is a special case where dark is overridden elsewhere with whether or not the UI is New
+    // Note that "Normal" is a special case where dark is overridden elsewhere with whether or not the UI is Modern
     Theme.create("Normal",          {                                                         }),
     Theme.create("Metro",           {              metro: true,                               }),
     Theme.create("Dark",            { dark: true,                                             }),

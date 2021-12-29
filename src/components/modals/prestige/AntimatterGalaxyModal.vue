@@ -27,21 +27,19 @@ export default {
       return `You are about to purchase an Antimatter Galaxy`;
     },
     message() {
-      let message = "";
-      if (this.perkANRBought && this.keepDimBoost) message = `This will reset nothing, and you will receive a small
-        boost to Tickspeed upgrades.`;
-      else if (this.perkANRBought) message = `This will reset your Dimension Boosts.
-        However, you will receive a small boost to Tickspeed upgrades.`;
-      else if (this.keepDimBoost) message = `This will reset all of your Antimatter Dimensions, and Tickspeed.
-        However, you will receive a small boost to Tickspeed upgrades.`;
-      else if (this.keepAntimatter) message = `This will reset all of your Antimatter Dimensions, Dimension Boosts,
-        and Tickspeed. However, you will receive a small boost to Tickspeed upgrades.`;
-      else message = `This will reset all of your Antimatter Dimensions, Dimension Boosts, Tickspeed, and Antimatter.
-        However, you will receive a small boost to Tickspeed upgrades.`;
+      const resetResouces = [];
+      if (!this.perkANRBought) resetResouces.push("Antimatter Dimensions", "Tickspeed");
+      if (!this.keepDimBoost) resetResouces.push("Dimension Boosts");
+      if (!this.keepAntimatter && !this.perkANRBought) resetResouces.push("Antimatter");
+      const resetList = makeEnumeration(resetResouces);
+      const tickspeedInfo = "you will receive a small boost to Tickspeed upgrades.";
+      const message = (resetList === "")
+        ? `This will reset nothing, and ${tickspeedInfo}`
+        : `This will reset your ${resetList}. However, ${tickspeedInfo}`;
+
       if (this.bulk) return `Are you sure you want to purchase
       ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}? ${message}`;
-      return `Are you sure you want to purchase an Antimatter Galaxy?
-      ${message}`;
+      return `Are you sure you want to purchase an Antimatter Galaxy? ${message}`;
     }
   },
   created() {

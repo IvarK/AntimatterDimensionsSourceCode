@@ -30,7 +30,7 @@ export default {
       let message = "";
       if (this.perkANRBought && this.keepDimBoost) message = `This will reset nothing, and you will receive a small
         boost to Tickspeed upgrades.`;
-      else if (this.perkANRBought) message = `This will reset all of your Dimension Boosts.
+      else if (this.perkANRBought) message = `This will reset your Dimension Boosts.
         However, you will receive a small boost to Tickspeed upgrades.`;
       else if (this.keepDimBoost) message = `This will reset all of your Antimatter Dimensions, and Tickspeed.
         However, you will receive a small boost to Tickspeed upgrades.`;

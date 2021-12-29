@@ -45,6 +45,7 @@ import LoadGameModal from "@/components/modals/LoadGameModal";
 import ImportSaveModal from "@/components/modals/ImportSaveModal";
 import ImportAutomatorScriptModal from "@/components/modals/ImportAutomatorScriptModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
+import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import StdStoreModal from "@/components/modals/StdStoreModal";
 import StudyStringModal from "@/components/modals/StudyStringModal";
 import SacrificeModal from "@/components/modals/SacrificeModal";
@@ -145,7 +146,6 @@ Modal.glyphRefine = new Modal(RefineGlyphModal);
 Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal);
 Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal);
 
-
 Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
 Modal.glyphUndo = new Modal(UndoGlyphModal);
 Modal.glyphReplace = new Modal(ReplaceGlyphModal);
@@ -159,6 +159,7 @@ Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
+Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);

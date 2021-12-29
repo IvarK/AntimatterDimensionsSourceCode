@@ -164,7 +164,7 @@ export class AutomatorScript {
 
 export const AutomatorData = {
   // -1 is the ID for the documentation page
-  currentInfoPane: -1,
+  currentInfoPane: 1,
   // Used for getting the correct EC count in event log
   lastECCompletionCount: 0,
   // Used as a flag to make sure that wait commands only add one entry to the log instead of every execution attempt

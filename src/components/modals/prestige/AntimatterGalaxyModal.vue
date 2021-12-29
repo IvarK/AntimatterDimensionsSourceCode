@@ -17,6 +17,7 @@ export default {
       newGalaxies: 0,
       keepAntimatter: false,
       perkANRBought: false,
+      keepDimBoost: false,
     };
   },
   computed: {
@@ -27,13 +28,16 @@ export default {
     },
     message() {
       let message = "";
-      if (this.perkANRBought) message = `This will reset nothing, and you will receive a small
-         boost to Tickspeed upgrades.`;
-      else if (this.keepAntimatter) message = `This will reset all of your Antimatter Dimensions,
-        your Dimension Boosts, and Tickspeed. However, you will receive a small boost
-        to Tickspeed upgrades.`;
-      else message = `This will reset all of your Antimatter Dimensions, your Dimension Boosts,
-        Tickspeed, and Antimatter. However, you will receive a small boost to Tickspeed upgrades.`;
+      if (this.perkANRBought && this.keepDimBoost) message = `This will reset nothing, and you will receive a small
+        boost to Tickspeed upgrades.`;
+      else if (this.perkANRBought) message = `This will reset all of your Dimension Boosts.
+        However, you will receive a small boost to Tickspeed upgrades.`;
+      else if (this.keepDimBoost) message = `This will reset all of your Antimatter Dimensions, and Tickspeed.
+        However, you will receive a small boost to Tickspeed upgrades.`;
+      else if (this.keepAntimatter) message = `This will reset all of your Antimatter Dimensions, Dimension Boosts,
+        and Tickspeed. However, you will receive a small boost to Tickspeed upgrades.`;
+      else message = `This will reset all of your Antimatter Dimensions, Dimension Boosts, Tickspeed, and Antimatter.
+        However, you will receive a small boost to Tickspeed upgrades.`;
       if (this.bulk) return `Are you sure you want to purchase
       ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}? ${message}`;
       return `Are you sure you want to purchase an Antimatter Galaxy?
@@ -62,6 +66,7 @@ export default {
       }
       this.keepAntimatter = Achievement(111).isUnlocked;
       this.perkANRBought = Perk.antimatterNoReset.isBought;
+      this.keepDimBoost = Achievement(143).isUnlocked;
     },
     handleYesClick() {
       this.emitClose();

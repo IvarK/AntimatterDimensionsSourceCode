@@ -1,5 +1,6 @@
 export const Notation = (function() {
   const N = ADNotations;
+  const CN = ADCommunityNotations;
   const notation = type => {
     const n = new type();
     n.setAsCurrent = () => {
@@ -33,6 +34,7 @@ export const Notation = (function() {
     bar: painful(notation(N.BarNotation)),
     shi: painful(notation(N.ShiNotation)),
     blind: painful(notation(N.BlindNotation)),
+    blob: painful(notation(CN.BlobsGlyphNotation)),
     all: painful(notation(N.AllNotation))
   };
 }());
@@ -66,6 +68,7 @@ export const Notations = {
     Notation.bar,
     Notation.shi,
     Notation.blind,
+    Notation.blob,
     Notation.all,
   ],
   find: name => {
@@ -78,6 +81,7 @@ export const Notations = {
 };
 
 ADNotations.Settings.isInfinite = decimal => ui.formatPreBreak && decimal.gte(Decimal.NUMBER_MAX_VALUE);
+ADCommunityNotations.Settings.isInfinite = decimal => ui.formatPreBreak && decimal.gte(Decimal.NUMBER_MAX_VALUE);
 
 EventHub.logic.on(GAME_EVENT.GAME_TICK_AFTER, () => {
   ui.formatPreBreak = !PlayerProgress.hasBroken() || (NormalChallenge.isRunning && !Enslaved.isRunning);

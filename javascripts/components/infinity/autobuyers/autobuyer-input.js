@@ -84,7 +84,7 @@ Vue.component("autobuyer-input", {
     />`
 });
 
-const AutobuyerInputFunctions = {
+export const AutobuyerInputFunctions = {
   decimal: {
     areEqual: (value, other) => Decimal.eq(value, other),
     formatValue: value => Notation.scientific.format(value, 2, 2),
@@ -95,9 +95,13 @@ const AutobuyerInputFunctions = {
         if (/^e\d*[.]?\d+$/u.test(input.replace(",", ""))) {
           // Logarithm Notation
           decimal = Decimal.pow10(parseFloat(input.replace(",", "").slice(1)));
-        } else {
-          // Scientific notation
+        } else if (/^\d*[.]?\d+(e\d*[.]?\d+)?$/u.test(input.replace(",", ""))) {
+          // Scientific notation; internals of break-infinity will gladly strip extraneous letters before parsing, but
+          // since this is largely uncommunicated to the user, we instead explicitly check for formatting and reject
+          // anything that doesn't fit as invalid
           decimal = Decimal.fromString(input.replace(",", ""));
+        } else {
+          return undefined;
         }
         return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
       } catch (e) {
@@ -119,6 +123,10 @@ const AutobuyerInputFunctions = {
     formatValue: value => value.toString(),
     copyValue: value => value,
     tryParse: input => {
+      if (!input) return undefined;
+      // We explicitly check formatting here instead of letting parseInt handle the whole thing because otherwise the
+      // fact that parseInt removes extraneous letters means junk like "361ebqv3" registers as valid and parses as 361
+      if (!/^\d+$/u.test(input.replace(",", ""))) return undefined;
       const int = parseInt(input, 10);
       return isNaN(int) || !Number.isInteger(int) ? undefined : int;
     }

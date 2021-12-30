@@ -54,75 +54,57 @@ export class ScriptTemplate {
   /**
    * Parses tree data out of the parameter object and stores within the storedTree fields. Relevant props of object
    * passed in:
-   * @param {boolean} params.tree.nowait            Whether or not the automator should pause at this line and repeat
+   * @param {Boolean} params.treeNowait     Whether or not the automator should pause at this line and repeat
    *  until the whole tree is bought
-   * @param {string | object} params.tree.studies   A study import string or preset object to buy. Preset object has
-   *  the same formatting as a study preset; "name" and "studies" props which contain preset name and an import string
-   *  respectively
+   * @param {String} params.treeStudies     A study import string to buy
    */
   storeTreeData(params) {
-    if (!params.tree) return;
-    const nowaitStr = params.tree.nowait ? " nowait" : "";
-    if (typeof params.tree.studies === "string") {
-      this.storedTreeStr = `studies${nowaitStr} ${params.tree.studies}`;
-    } else {
-      this.storedTreeStr = `studies${nowaitStr} load preset ${params.tree.name}`;
-    }
+    const nowaitStr = params.treeNowait ? " nowait" : "";
+    this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;
 
-    this.storedTreeObj = new TimeStudyTree(params.tree.studies);
+    this.storedTreeObj = new TimeStudyTree(params.treeStudies);
     if (this.storedTreeObj.invalidStudies.length > 0) this.warnings.push("Tree contains invalid Study IDs");
     if (this.storedTreeObj.purchasedStudies.length < this.storedTreeObj.selectedStudies.length) {
       this.warnings.push("Tree structure results in some unbought studies when imported with an empty tree");
-      if (!params.tree.nowait) this.warnings.push("Automator may possibly get stuck without nowait parameter");
+      if (!params.treeNowait) this.warnings.push(`Automator may possibly get stuck with "Keep buying Studies" setting`);
     }
   }
 
   /**
    * Parses automator data out of a two-prop object storing autobuyer settings, into a suffix of automator code which
    * sets the autobuyer to those settings. Relevant props of object passed in:
-   * @param {String} autoSettings.mode    "mult" or "time" for times highest and time modes, respectively
-   * @param {Decimal} autoSettings.value  Numerical value for autobuyer settings (assumed to be seconds in time)
+   * @param {String} mode     "mult" or "time" for times highest and time modes, respectively
+   * @param {Decimal} value   Numerical value for autobuyer settings (assumed to be seconds in time)
    * @returns String suffix to feed into an automator script, should be prefixed by "auto [prestige] "
    */
-  parseAutobuyerProp(autoSettings) {
-    switch (autoSettings.mode) {
+  parseAutobuyerProp(mode, value) {
+    switch (mode) {
       case "mult":
-        return `${this.format(autoSettings.value)} x highest`;
+        return `${this.format(value)} x highest`;
       case "time":
-        return `${this.format(autoSettings.value)} seconds`;
+        return `${this.format(value)} seconds`;
       default:
         throw new Error("Unrecognized autobuyer mode in automator script templates");
     }
   }
 
   /**
-   * Surrounds the whole script template with a conditional check, also indenting the rest of the script for proper
-   * appearance. Relevant props of object passed in:
-   * @param {String} params.resource              Name of resource to check against
-   * @param {String} params.compare               Comparison operator string ("<", ">", "<=", or ">=")
-   * @param {Number | Decimal} params.threshold   Threshold number to check against
-   */
-  wrapWithConditional(params) {
-    for (let index = 0; index < this.lines.length; index++) this.lines[index] = ` ${this.lines[index]}`;
-    this.lines.unshift(`if ${params.resource} ${params.compare} ${this.format(params.threshold)} {`);
-    this.lines.push("}");
-  }
-
-  /**
    * Parses the parameter object into a script that sets the infinity and eternity autobuyers and then repeatedly loops
    * buying a tree and eternitying until a target EP is reached. Relevant props of object passed in:
-   * @param {Object} params.tree          Attributes of a study tree to repeatedly buy during grinding. Must be
-   *  specified for this method, and nowait must be true for proper behavior.
-   * @param {Decimal} params.finalEP      EP value at which to stop looping the script and continue onward
-   * @param {Object} params.autoInfinity  Object containing props for the infinity autobuyer
-   * @param {Object} params.autoEternity  Object containing props for the eternity autobuyer
+   * @param {Boolean} params.treeNowait     Nowait param to be passed into storeTreeData()
+   * @param {String} params.treeStudies     Study import param to be passed into storeTreeData()
+   * @param {Decimal} params.finalEP        EP value at which to stop looping the script and continue onward
+   * @param {Object} params.autoInfMode     Multiplier or time-based mode for infinity autobuyer
+   * @param {Object} params.autoInfValue    Multiplier threshold or time for infinity autobuyer
+   * @param {Object} params.autoEterMode    Multiplier or time-based mode for eternity autobuyer
+   * @param {Object} params.autoEterValue   Multiplier threshold or time for eternity autobuyer
    */
   templateClimbEP(params) {
     this.lines.push("// Template: Climb EP");
     this.lines.push(`notify "Running Template Climb EP (to ${format(params.finalEP)})"`);
     this.storeTreeData(params);
-    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfinity)}`);
-    this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEternity)}`);
+    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
+    this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
     this.lines.push(`while ep < ${this.format(params.finalEP)} {`);
     this.lines.push(` ${this.storedTreeStr}`);
     this.lines.push(" studies respec");
@@ -133,7 +115,8 @@ export class ScriptTemplate {
   /**
    * Parses the parameter object into a script that sets autobuyer settings and then repeatedly eternities until a
    * target total eternity count is reached. Relevant props of object passed in:
-   * @param {Object} params.tree                  Attributes of a study tree to buy before grinding
+   * @param {Boolean} params.treeNowait           Nowait param to be passed into storeTreeData()
+   * @param {String} params.treeStudies           Study import param to be passed into storeTreeData()
    * @param {Number} params.crunchesPerEternity   Number of crunches per eternity
    * @param {Decimal} params.eternities           Eternity count at which to stop grinding and move on
    */
@@ -157,7 +140,8 @@ export class ScriptTemplate {
    * Parses the parameter object into a script that sets autobuyer settings and then repeatedly infinities until a
    * target total infinity or banked infinity count is reached. If threshold is banked infinities, assumes that the
    * player also has the achievement that lets them bank. Relevant props of object passed in:
-   * @param {Object} params.tree          Attributes of a study tree to buy before grinding
+   * @param {Boolean} params.treeNowait   Nowait param to be passed into storeTreeData()
+   * @param {String} params.treeStudies   Study import param to be passed into storeTreeData()
    * @param {Decimal} params.infinities   Infinity count at which to stop grinding and move on
    * @param {Boolean} params.isBanked     If the script should check for banked infinities instead of normal
    *  infinities, calculating a modified threshold appropriately - we don't eternity repeatedly because this is
@@ -172,7 +156,8 @@ export class ScriptTemplate {
     this.lines.push(`auto infinity 5s`);
     if (params.isBanked) {
       const has191 = new TimeStudyTree(params.tree).purchasedStudies.includes(TimeStudy(191));
-      if (!has191) this.warnings.push("Tree does not contain TS191; banking anything will require Achievement 131");
+      if (!has191) this.warnings.push(`Tree does not contain TS191; banking anything will require
+        Achievement "${Achievement(131).name}"`);
       const bankRate = has191 ? 0.1 : 0.05;
       this.lines.push("// Note: This template attempts to get all the Banked Infinities within a single Eternity");
       this.lines.push(`wait infinities > ${this.format(params.infinities.dividedBy(bankRate), 2)}`);
@@ -186,10 +171,12 @@ export class ScriptTemplate {
    * Parses the parameter object into a script that respecs into a specified tree, unlocks a specified EC, changes
    * autobuyer settings, and then waits until the EC can be completed before triggering an eternity through the
    * automator. Relevant props of object passed in:
-   * @param {Object} params.tree          A study tree to buy repeatedly
-   * @param {Number} params.ec            Numerical value denoting the EC to attempt
-   * @param {Number} params.completions   Minimum number of completions to wait for before moving onward
-   * @param {Object} params.autoInfinity  Autobuyer settings for within the EC
+   * @param {Boolean} params.treeNowait     Nowait param to be passed into storeTreeData()
+   * @param {String} params.treeStudies     Study import param to be passed into storeTreeData()
+   * @param {Number} params.ec              Numerical value denoting the EC to attempt
+   * @param {Number} params.completions     Minimum number of completions to wait for before moving onward
+   * @param {Object} params.autoInfMode     Multiplier or time-based mode for infinity autobuyer
+   * @param {Object} params.autoInfValue    Multiplier threshold or time for infinity autobuyer
    */
   templateDoEC(params) {
     this.lines.push("// Template: Complete Eternity Challenge");
@@ -211,7 +198,7 @@ export class ScriptTemplate {
 
     // Apply autobuyer settings; we specifically want to turn auto-eternity off so that we can manually trigger the
     // prestige - otherwise, the autobuyer may end up preempting multiple completions
-    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfinity)}`);
+    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
     this.lines.push(`auto eternity off`);
     this.lines.push(`start ec ${params.ec}`);
 
@@ -223,19 +210,22 @@ export class ScriptTemplate {
    * Parses the parameter object into a script that sets autobuyer settings and then repeatedly infinities until a
    * target total infinity or banked infinity count is reached. Makes some assumptions on bank rate. Relevant props
    * of object passed in:
-   * @param {Object} params.tree          A study tree to buy repeatedly, which is passed to buyStudyTree()
-   * @param {Object} params.autoInfinity  Object containing props for the infinity autobuyer
-   * @param {Object} params.autoEternity  Object containing props for the eternity autobuyer
+   * @param {Boolean} params.treeNowait     Nowait param to be passed into storeTreeData()
+   * @param {String} params.treeStudies     Study import param to be passed into storeTreeData()
+   * @param {Object} params.autoInfMode     Multiplier or time-based mode for infinity autobuyer
+   * @param {Object} params.autoInfValue    Multiplier threshold or time for infinity autobuyer
+   * @param {Object} params.autoEterMode    Multiplier or time-based mode for eternity autobuyer
+   * @param {Object} params.autoEterValue   Multiplier threshold or time for eternity autobuyer
    */
   templateUnlockDilation(params) {
     this.lines.push("// Template: Unlock Dilation");
     this.lines.push(`notify "Running Template Unlock Dilation"`);
     this.storeTreeData(params);
     if (![231, 232, 233, 234].some(s => this.storedTreeObj.purchasedStudies.includes(TimeStudy(s)))) {
-      this.warnings.push("Specified Study Tree cannot reach dilation");
+      this.warnings.push("Specified Study Tree cannot reach Dilation");
     }
-    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfinity)}`);
-    this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEternity)}`);
+    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
+    this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
     this.lines.push(`while tt < ${this.format(13000)} {`);
     this.lines.push(` ${this.storedTreeStr}`);
     this.lines.push(" studies respec");
@@ -246,9 +236,5 @@ export class ScriptTemplate {
 
   get script() {
     return this.lines.join("\n");
-  }
-
-  get scriptWithoutInfo() {
-    return this.lines.filter(s => !(s.startsWith("//") || s.startsWith("notify"))).join("\n");
   }
 }

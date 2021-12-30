@@ -1,16 +1,14 @@
 import { GameDatabase } from "./game-database.js";
+import { AutobuyerInputFunctions } from "../../components/infinity/autobuyers/autobuyer-input.js";
 
 GameDatabase.reality.automator.templates = {
   /**
-    * List of possible data types to dynamically generate in script templates
+    * List of possible data types to dynamically generate in script templates, assumed to be only string or boolean
     * {
     *  @property {String} name              String to be used as a key for entries in this object
-    *  @property {String[]} inputNames      For compound parameter types (ie. params which return an object),
-    *   an array of Strings meant to indicate which input corresponds to which field in the UI
-    *  @property {Type | Type[]} inputType  Type or array of Types indicating how the inputs should be
-    *   formatted within the UI input fields
-    *  @property {String[]} targets         For object parameters, specifies which fields of the object
-    *   the inputs should be stored into
+    *  @property {String[]} boolDisplay     Strings to be displayed for true/false states for boolean inputs. If
+    *   undefined, assumed to be a non-boolean input
+    *  @property {Function} isValidString   A function used to test if an input string is formatted properly or not
     *  @property {Function} map             A function to be used to map the inputs to their actual values
     *   which are stored in the param object. If undefined, assumed to be no mapping
     * }
@@ -18,51 +16,43 @@ GameDatabase.reality.automator.templates = {
   paramTypes: [
     {
       name: "tree",
-      inputNames: ["Keep going if some studies are missed?", "Exported Study Tree:"],
-      inputType: [Boolean, String],
-      targets: ["nowait", "studies"],
-    },
-    {
-      name: "autobuyer",
-      inputNames: ["Autobuyer Mode:", ""],
-      inputType: [Boolean, String],
-      targets: ["nowait", "studies"],
-      map: x => {
-        if (typeof x === "string") return x;
-        return x ? "mult" : "time";
-      }
-    },
-    {
-      name: "boolean",
-      inputType: Boolean,
-    },
-    {
-      name: "string",
-      inputType: String,
+      isValidString: str => TimeStudyTree.isValidImportString(str),
     },
     {
       name: "integer",
-      inputType: String,
+      isValidString: str => AutobuyerInputFunctions.int.tryParse(str),
       map: x => Math.round(parseInt(x, 10)),
     },
     {
       name: "decimal",
-      inputType: String,
+      isValidString: str => AutobuyerInputFunctions.decimal.tryParse(str),
       map: x => new Decimal(x),
+    },
+    {
+      name: "boolean",
+      boolDisplay: [true, false],
+    },
+    {
+      name: "nowait",
+      boolDisplay: ["Continue onward", "Keep buying Studies"],
+    },
+    {
+      name: "mode",
+      boolDisplay: ["X times highest", "Seconds since last"],
+      map: x => (x ? "mult" : "time"),
     },
   ],
   /**
-    * List automator script templates
+    * List automator script templates, primarily used here for formatting the player UI prompts appropriately
+    * so that all of the required fields show up in the proper input formats. Actual script formatting requires
+    * additionally writing a method to be called in the constructor of the ScriptTemplate class
     * {
     *  @property {String} name          Name of script template, also used as a key within the constructor for
     *   ScriptTemplate objects
     *  @property {String} description   Text description of what the template does when used in the automator
-    *  @property {String[]} paramTypes  Array of inputs to be used for the template; elements must be keys from
-    *   paramTypes GameDB entry above
-    *  @property {String[]} paramNames  Array of strings to be displayed in the UI next to the input fields in
-    *   order to explain to the player what they correspond to
-    *  @property {String[]} targets     Fields of the param object which the inputs from paramTypes should be
-    *   mapped to
+    *  @property {Object[]} inputs      Fields of the param object which need to be filled for the template to
+    *   have all the information it needs. Contains the name of the field, the type (drawn from paramTypes above),
+    *   and a prompt to be shown in the UI end
     *  @property {Function} warnings    Function which checks the current game state and potentially provides
     *   warnings based on some possibly common cases which may lead to undesired behavior
     * }
@@ -73,9 +63,15 @@ GameDatabase.reality.automator.templates = {
       description: `This script performs repeated Eternities, attempting to re-purchase a Time Study Tree every
         Eternity. Autobuyer settings must be supplied for the Infinity and Eternity Autobuyers. The script will
         repeat until a final Eternity Point value is reached.`,
-      paramTypes: ["tree", "decimal", "autobuyer", "autobuyer"],
-      paramNames: ["Study Tree to buy", "Target EP", "Infinity Autobuyer", "Eternity Autobuyer"],
-      targets: ["tree", "finalEP", "autoInfinity", "autoEternity"],
+      inputs: [
+        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
+        { name: "finalEP", type: "decimal", prompt: "Target EP" },
+        { name: "autoInfMode", type: "mode", prompt: "Infinity Autobuyer Mode" },
+        { name: "autoInfValue", type: "decimal", prompt: "Infinity Autobuyer Threshold" },
+        { name: "autoEterMode", type: "mode", prompt: "Eternity Autobuyer Mode" },
+        { name: "autoEterValue", type: "decimal", prompt: "Eternity Autobuyer Threshold" },
+      ],
       warnings: () => {
         const list = [];
         if (!RealityUpgrade(10).isBought) {
@@ -83,6 +79,7 @@ GameDatabase.reality.automator.templates = {
             Eternities. Consider getting Reality Upgrade "${RealityUpgrade(10).name}" before using this at the start
             of a Reality.`);
         }
+        // Telemechanical Process (TD/5xEP autobuyers)
         if (!RealityUpgrade(13).isBought) {
           list.push(`This template may perform poorly without Reality Upgrade "${RealityUpgrade(13).name}"`);
         }
@@ -98,11 +95,15 @@ GameDatabase.reality.automator.templates = {
       description: `This script performs repeated fast Eternities after buying a specified Time Study Tree.
         Auto-Infinity will be set to "Times Highest" with a specified number of crunches and Auto-Eternity will
         trigger as soon as possible. The script will repeat until a final Eternity count is reached.`,
-      paramTypes: ["tree", "integer", "decimal"],
-      paramNames: ["Study Tree to buy", "Crunches per Eternity", "Target Eternity Count"],
-      targets: ["tree", "crunchesPerEternity", "eternities"],
+      inputs: [
+        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
+        { name: "crunchesPerEternity", type: "integer", prompt: "Crunches per Eternity" },
+        { name: "eternities", type: "decimal", prompt: "Target Eternity Count" },
+      ],
       warnings: () => {
         const list = [];
+        // Eternal flow (eternity generation)
         if (RealityUpgrade(14).isBought) {
           list.push(`You probably do not need to use this due to Reality Upgrade "${RealityUpgrade(14).name}"`);
         }
@@ -114,11 +115,19 @@ GameDatabase.reality.automator.templates = {
       description: `This script buys a specified Time Study Tree and then configures your Autobuyers for gaining
         Infinities. It will repeat until a final Infinity count is reached; the count can be for banked Infinities,
         in which case it will get all Infinities before performing a single Eternity.`,
-      paramTypes: ["tree", "decimal", "boolean"],
-      paramNames: ["Study Tree to buy", "Target Infinity Count", "Use Banked for Target?"],
-      targets: ["tree", "infinities", "isBanked"],
+      inputs: [
+        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
+        { name: "infinities", type: "decimal", prompt: "Target Infinity Count" },
+        { name: "isBanked", type: "boolean", prompt: "Use Banked for Target?" },
+      ],
       warnings: () => {
         const list = [];
+        if (!Perk.achievementGroup5.isBought) {
+          list.push(`You will not start this Reality with Achievement "${Achievement(131).name}" and thus grinding
+            Infinities may be less useful than expected since they cannot be banked until later on`);
+        }
+        // Boundless flow (infinity generation)
         if (RealityUpgrade(11).isBought) {
           list.push(`You probably do not need to use this due to Reality Upgrade "${RealityUpgrade(11).name}"`);
         }
@@ -131,9 +140,14 @@ GameDatabase.reality.automator.templates = {
         Then it will set your Infinity Autobuyer to your specified settings and enter the Eternity Challenge.
         Finally, it will wait until at least the desired number of completions before triggering an Eternity to
         complete the challenge.`,
-      paramTypes: ["tree", "integer", "integer", "autobuyer"],
-      paramNames: ["Study Tree to buy", "Eternity Challenge ID", "Target Completion Count", "Infinity Autobuyer"],
-      targets: ["tree", "ec", "completions", "autoInfinity"],
+      inputs: [
+        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
+        { name: "ec", type: "integer", prompt: "Eternity Challenge ID" },
+        { name: "completions", type: "integer", prompt: "Target Completion Count" },
+        { name: "autoInfMode", type: "mode", prompt: "Infinity Autobuyer Mode" },
+        { name: "autoInfValue", type: "decimal", prompt: "Infinity Autobuyer Threshold" },
+      ],
       warnings: () => {
         const list = [];
         if (!Perk.studyECRequirement.isBought) {
@@ -155,9 +169,16 @@ GameDatabase.reality.automator.templates = {
         similarly to the "Climb EP" script, except that it instead loops until you have the total Time Theorem
         requirement to unlock Dilation instead of until a target EP amount. After reaching the target, it will
         unlock Dilation.`,
-      paramTypes: ["tree", "decimal", "autobuyer", "autobuyer"],
-      paramNames: ["Study Tree to buy", "Target EP", "Infinity Autobuyer", "Eternity Autobuyer"],
-      targets: ["tree", "finalEP", "autoInfinity", "autoEternity"],
+      inputs: [
+        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
+        { name: "finalEP", type: "decimal", prompt: "Target EP" },
+        { name: "autoInfMode", type: "mode", prompt: "Infinity Autobuyer Mode" },
+        { name: "autoInfValue", type: "decimal", prompt: "Infinity Autobuyer Threshold" },
+        { name: "autoEterMode", type: "mode", prompt: "Eternity Autobuyer Mode" },
+        { name: "autoEterValue", type: "decimal", prompt: "Eternity Autobuyer Threshold" },
+      ],
+      warnings: () => [],
     },
   ]
 };

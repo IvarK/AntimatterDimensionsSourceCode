@@ -1174,6 +1174,10 @@
   color: var(--color-text);
 }
 
+.l-glyph-set-preview {
+  cursor: zoom-in;
+}
+
 @keyframes a-reality-glyph-outer-cycle {
   0% {
     background-color: #b67f33;

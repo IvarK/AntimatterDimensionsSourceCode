@@ -17,17 +17,20 @@ export default {
       templateInputs: [],
       buttonTextStrings: [],
       invalidInputCount: 0,
-      templateScript: null,
+      templateProps: null,
     };
   },
   computed: {
     params: () => GameDatabase.reality.automator.templates.paramTypes,
-    templates: () => GameDatabase.reality.automator.templates.scripts,
     warnings() {
       return this.invalidInputCount === 0
-        ? this.modalConfig.warnings().concat(this.templateScript.warnings)
+        ? this.modalConfig.warnings().concat(this.templateScript?.warnings)
         : this.modalConfig.warnings();
     },
+    templateScript() {
+      if (this.invalidInputCount !== 0) return null;
+      return new ScriptTemplate(this.templateProps, this.modalConfig.name);
+    }
   },
   // Many props in this component are generated dynamically from a GameDB entry, but Vue can only give reactive
   // behavior to props that exist on declaration. We need all the dynamically generated inputs to be reactive, so we
@@ -35,20 +38,17 @@ export default {
   // calls don't error out from undefined inputs.
   created() {
     for (const input of this.modalConfig.inputs) {
-      if (this.paramTypeObject(input.type).boolDisplay) this.$set(this.templateInputs, input.name, false);
-      else this.$set(this.templateInputs, input.name, "");
+      const boolProp = this.paramTypeObject(input.type).boolDisplay;
+      if (boolProp) {
+        this.$set(this.templateInputs, input.name, false);
+        this.buttonTextStrings[input.name] = boolProp[1];
+      } else {
+        this.$set(this.templateInputs, input.name, "");
+        this.invalidInputCount++;
+      }
     }
   },
   methods: {
-    update() {
-      this.invalidInputCount = 0;
-      for (const input of this.modalConfig.inputs) {
-        const boolProp = this.paramTypeObject(input.type).boolDisplay;
-        if (boolProp) this.buttonTextStrings[input.name] = boolProp[this.templateInputs[input.name] ? 0 : 1];
-        if (!this.isValid(input)) this.invalidInputCount++;
-      }
-      if (this.invalidInputCount === 0) this.makeTemplate();
-    },
     paramTypeObject(name) {
       return this.params.find(p => p.name === name);
     },
@@ -61,14 +61,21 @@ export default {
         ? undefined
         : "c-automator-template-textbox--invalid";
     },
-    makeTemplate() {
-      const templateProps = {};
+    updateTemplateProps() {
+      this.templateProps = {};
+      this.invalidInputCount = 0;
       for (const input of this.modalConfig.inputs) {
         const typeObj = this.paramTypeObject(input.type);
         const mapFn = x => (typeObj.map ? typeObj.map(x) : x);
-        templateProps[input.name] = mapFn(this.templateInputs[input.name]);
+        this.templateProps[input.name] = mapFn(this.templateInputs[input.name]);
+        if (!this.isValid(input)) this.invalidInputCount++;
       }
-      this.templateScript = new ScriptTemplate(templateProps, this.modalConfig.name);
+    },
+    updateButton(input) {
+      this.templateInputs[input.name] = !this.templateInputs[input.name];
+      const boolProp = this.paramTypeObject(input.type).boolDisplay;
+      this.buttonTextStrings[input.name] = boolProp[this.templateInputs[input.name] ? 0 : 1];
+      this.updateTemplateProps();
     },
     copyAndClose() {
       copyToClipboard(this.templateScript.script);
@@ -82,38 +89,40 @@ export default {
 <template>
   <div class="c-automator-template-container">
     <ModalCloseButton @click="emitClose" />
-    <b>Template "{{ modalConfig.name }}"</b>
-    {{ modalConfig.description }}
-    <br>
-    <br>
-    <b>Required Information:</b>
-    <div
-      v-for="input in modalConfig.inputs"
-      :key="input.name"
-      class="c-automator-template-entry"
-    >
-      {{ input.prompt }}:
-      <span v-if="paramTypeObject(input.type).boolDisplay">
-        <button
-          class="o-primary-btn"
-          @click="templateInputs[input.name] = !templateInputs[input.name]"
-        >
-          {{ buttonTextStrings[input.name] }}
-        </button>
-      </span>
-      <span v-else>
-        <input
-          ref="templateInputs[input.name]"
-          v-model="templateInputs[input.name]"
-          type="text"
-          class="c-automator-template-textbox"
-          :class="validityClass(input)"
-        >
-      </span>
+    <div class="c-automator-template-description">
+      <b>"{{ modalConfig.name }}" Template</b>
+      <br>
+      {{ modalConfig.description }}
     </div>
-    <br>
-    <br>
-    <div>
+    <div class="c-automator-template-inputs">
+      <b>Required Information:</b>
+      <div
+        v-for="input in modalConfig.inputs"
+        :key="input.name"
+        class="c-automator-template-entry"
+      >
+        {{ input.prompt }}:
+        <span v-if="paramTypeObject(input.type).boolDisplay">
+          <button
+            class="o-primary-btn"
+            @click="updateButton(input)"
+          >
+            {{ buttonTextStrings[input.name] }}
+          </button>
+        </span>
+        <span v-else>
+          <input
+            ref="templateInputs[input.name]"
+            v-model="templateInputs[input.name]"
+            type="text"
+            class="c-automator-template-textbox"
+            :class="validityClass(input)"
+            @input="updateTemplateProps"
+          >
+        </span>
+      </div>
+    </div>
+    <div class="c-automator-template-warnings">
       <b>Possible things to consider:</b>
       <div v-if="warnings.length !== 0">
         <div

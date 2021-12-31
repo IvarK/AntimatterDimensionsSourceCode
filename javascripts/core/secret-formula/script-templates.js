@@ -26,7 +26,7 @@ GameDatabase.reality.automator.templates = {
     {
       name: "decimal",
       isValidString: str => AutobuyerInputFunctions.decimal.tryParse(str),
-      map: x => new Decimal(x),
+      map: x => AutobuyerInputFunctions.decimal.tryParse(x),
     },
     {
       name: "boolean",
@@ -124,8 +124,8 @@ GameDatabase.reality.automator.templates = {
       warnings: () => {
         const list = [];
         if (!Perk.achievementGroup5.isBought) {
-          list.push(`You will not start this Reality with Achievement "${Achievement(131).name}" and thus grinding
-            Infinities may be less useful than expected since they cannot be banked until later on`);
+          list.push(`You will not start this Reality with Achievement "${Achievement(131).name}" - grinding
+            Infinities may be less useful than expected since they cannot be banked until later`);
         }
         // Boundless flow (infinity generation)
         if (RealityUpgrade(11).isBought) {
@@ -166,7 +166,7 @@ GameDatabase.reality.automator.templates = {
       name: "Unlock Dilation",
       description: `This script performs repeated Eternities, attempting to re-purchase a Time Study Tree every
         Eternity. Autobuyer settings must be supplied for the Infinity and Eternity Autobuyers. The script acts
-        similarly to the "Climb EP" script, except that it instead loops until you have the total Time Theorem
+        similarly to the "Climb EP" script, except it loops until you have the total Time Theorem
         requirement to unlock Dilation instead of until a target EP amount. After reaching the target, it will
         unlock Dilation.`,
       inputs: [

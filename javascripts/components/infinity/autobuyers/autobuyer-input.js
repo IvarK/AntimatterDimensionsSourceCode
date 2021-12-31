@@ -93,14 +93,14 @@ export const AutobuyerInputFunctions = {
       if (!input) return undefined;
       try {
         let decimal;
-        if (/^e\d*[.]?\d+$/u.test(input.replace(",", ""))) {
+        if (/^e\d*[.]?\d+$/u.test(input.replace(/,/gu, ""))) {
           // Logarithm Notation
-          decimal = Decimal.pow10(parseFloat(input.replace(",", "").slice(1)));
-        } else if (/^\d*[.]?\d+(e\d*[.]?\d+)?$/u.test(input.replace(",", ""))) {
+          decimal = Decimal.pow10(parseFloat(input.replace(/,/gu, "").slice(1)));
+        } else if (/^\d*[.]?\d+(e\d*[.]?\d+)?$/u.test(input.replace(/,/gu, ""))) {
           // Scientific notation; internals of break-infinity will gladly strip extraneous letters before parsing, but
           // since this is largely uncommunicated to the user, we instead explicitly check for formatting and reject
           // anything that doesn't fit as invalid
-          decimal = Decimal.fromString(input.replace(",", ""));
+          decimal = Decimal.fromString(input.replace(/,/gu, ""));
         } else {
           return undefined;
         }
@@ -127,7 +127,7 @@ export const AutobuyerInputFunctions = {
       if (!input) return undefined;
       // We explicitly check formatting here instead of letting parseInt handle the whole thing because otherwise the
       // fact that parseInt removes extraneous letters means junk like "361ebqv3" registers as valid and parses as 361
-      if (!/^\d+$/u.test(input.replace(",", ""))) return undefined;
+      if (!/^\d+$/u.test(input.replace(/,/gu, ""))) return undefined;
       const int = parseInt(input, 10);
       return isNaN(int) || !Number.isInteger(int) ? undefined : int;
     }

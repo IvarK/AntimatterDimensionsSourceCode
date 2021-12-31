@@ -167,7 +167,9 @@ export class TimeStudyTree {
       const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0])
         .clampMax(Number.MAX_VALUE).toNumber();
       const maxST = V.spaceTheorems;
-      if (this.spentTheorems[0] + config.cost > maxTT || this.spentTheorems[1] + stNeeded > maxST) return;
+      const hasTT = this.spentTheorems[0] + config.cost <= maxTT;
+      const hasST = this.spentTheorems[1] + stNeeded <= maxST;
+      if (!hasTT || !hasST) return;
     }
     this.spentTheorems[0] += config.cost;
     this.spentTheorems[1] += stNeeded;

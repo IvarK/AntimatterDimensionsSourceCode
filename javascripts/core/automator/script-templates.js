@@ -33,17 +33,17 @@ export class ScriptTemplate {
         this.templateUnlockDilation(params);
         break;
       default:
-        throw new Error("Unrecognized template name in ScriptTemplate");
+        throw new Error(`Unrecognized template name ${tempalateName} in ScriptTemplate`);
     }
   }
 
   /**
    * Special formatting for numbers in templates; we can't use format() here because that will change based on the
-   * player's cuttent notation. This is generally desirable in the rest of the game, but in most notations will
+   * player's current notation. This is generally desirable in the rest of the game, but in most notations will
    * result in unparseable garbage here. Numbers are formatted assuming they're integers, and Decimals are formatted
    * with 2 decimal places (in scientific notation if above 1000)
    * @param {Number | Decimal} num  Number to format, disregarding current notation settings
-   * @returns String representation of the properly-formatted number
+   * @returns {String}  The properly-formatted number, in a reasonable-looking format valid for the automator
    */
   format(num) {
     if (typeof num === "number") return Math.round(num);
@@ -75,7 +75,7 @@ export class ScriptTemplate {
    * sets the autobuyer to those settings. Relevant props of object passed in:
    * @param {String} mode     "mult" or "time" for times highest and time modes, respectively
    * @param {Decimal} value   Numerical value for autobuyer settings (assumed to be seconds in time)
-   * @returns String suffix to feed into an automator script, should be prefixed by "auto [prestige] "
+   * @returns {String}        String suffix to feed into an automator script, should be prefixed by "auto [prestige] "
    */
   parseAutobuyerProp(mode, value) {
     switch (mode) {
@@ -84,7 +84,7 @@ export class ScriptTemplate {
       case "time":
         return `${this.format(value)} seconds`;
       default:
-        throw new Error("Unrecognized autobuyer mode in automator script templates");
+        throw new Error(`Unrecognized autobuyer mode ${mode} in automator script templates`);
     }
   }
 
@@ -155,9 +155,9 @@ export class ScriptTemplate {
     this.lines.push("auto eternity off");
     this.lines.push(`auto infinity 5s`);
     if (params.isBanked) {
-      const has191 = new TimeStudyTree(params.tree).purchasedStudies.includes(TimeStudy(191));
-      if (!has191) this.warnings.push(`Tree does not contain TS191; banking anything will require
-        Achievement "${Achievement(131).name}"`);
+      const has191 = this.storedTreeObj.purchasedStudies.includes(TimeStudy(191));
+      if (!has191) this.warnings.push(`TS191 is not reachable from an empty tree; banking anything in this template
+        will require Achievement "${Achievement(131).name}"`);
       const bankRate = has191 ? 0.1 : 0.05;
       this.lines.push("// Note: This template attempts to get all the Banked Infinities within a single Eternity");
       this.lines.push(`wait infinities > ${this.format(params.infinities.dividedBy(bankRate), 2)}`);
@@ -194,7 +194,7 @@ export class ScriptTemplate {
       if (!tree.hasRequirements(TimeStudy.eternityChallenge(params.ec), false, true)) {
         this.warnings.push("Specified Study Tree cannot reach specified EC");
       }
-    } else this.warnings.push("Specified Study Tree already has a different EC unlocked");
+    } else if (tree.ec !== params.ec) this.warnings.push("Specified Study Tree already has a different EC unlocked");
 
     // Apply autobuyer settings; we specifically want to turn auto-eternity off so that we can manually trigger the
     // prestige - otherwise, the autobuyer may end up preempting multiple completions

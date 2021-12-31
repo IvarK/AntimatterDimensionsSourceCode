@@ -338,7 +338,7 @@ dev.printResourceTotals = function() {
   console.log(`TD mults: e${TDmults.log10().toPrecision(3)}`);
   console.log(`Tickspeed from TD: ${formatWithCommas(1000 * Math.floor(player.totalTickGained / 1000 + 0.5))}`);
 
-  console.log(`Infinities: e${Math.round(player.infinitied.log10())}`);
+  console.log(`Infinities: e${Math.round(player.infinities.log10())}`);
   console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
   console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(Replicanti.amount.log10() / 1e5 + 0.5))}`);
 
@@ -360,7 +360,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const situationLists = [
     [
       function() {
-        player.infinitied = DC.E12;
+        player.infinities = DC.E12;
         player.celestials.effarig.unlockBits = 64;
       }
     ],
@@ -468,7 +468,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const runSituation = function(id) {
     Replicanti.galaxies.isPlayerHoldingR = false;
     GameStorage.loadPlayerObject(Player.defaultStart);
-    player.infinitied = DC.D1;
+    player.infinities = DC.D1;
     player.infinityPoints = DC.E150;
     Replicanti.unlock();
     player.replicanti.chance = 1;

@@ -56,8 +56,8 @@ Vue.component("automator-docs-main-page", {
         documentation pages. This will be similarly formatted to reference pages for programming.
         <br>
         <br>
-        If you have minimal or no prior coding experience, you can instead use some premade templates which generate
-        text that can put directly into the Automator text field.
+        If you have minimal or no prior coding experience, or do not feel like writing your own code, you can
+        instead use some premade templates which generate text that can put directly into the Automator text field.
       </div>
       <div v-else-if="listState === 1">
         <automator-man-page

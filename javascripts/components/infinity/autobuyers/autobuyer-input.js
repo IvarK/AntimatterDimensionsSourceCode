@@ -90,6 +90,7 @@ export const AutobuyerInputFunctions = {
     formatValue: value => Notation.scientific.format(value, 2, 2),
     copyValue: value => new Decimal(value),
     tryParse: input => {
+      if (!input) return undefined;
       try {
         let decimal;
         if (/^e\d*[.]?\d+$/u.test(input.replace(",", ""))) {

@@ -131,8 +131,8 @@ export class ScriptTemplate {
     // this can be a significant time save that we want to actually give the player if they have the e130 perk
     const gapToEternity = Number.MAX_VALUE / Currency.infinityPoints.startingValue.toNumber() * 5;
     this.lines.push(`auto infinity ${this.format(
-      Math.pow(gapToEternity, 1 / params.crunchesPerEternity), 2)} x highest`);
-    this.lines.push(`wait eternities > ${this.format(params.eternities, 2)}`);
+      Decimal.pow(gapToEternity, 1 / params.crunchesPerEternity))} x highest`);
+    this.lines.push(`wait eternities > ${this.format(params.eternities)}`);
     this.lines.push("auto eternity off");
   }
 
@@ -200,8 +200,10 @@ export class ScriptTemplate {
     // prestige - otherwise, the autobuyer may end up preempting multiple completions
     this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
     this.lines.push(`auto eternity off`);
+    if (!TimeStudy.eternityChallenge(params.ec)) this.warnings.push(`Specified template EC does not exist`);
     this.lines.push(`start ec ${params.ec}`);
 
+    if (params.completions > 5) this.warnings.push(`ECs cannot be completed more than ${formatInt(5)} times`);
     this.lines.push(`wait pending completions >= ${params.completions}`);
     this.lines.push("eternity");
   }

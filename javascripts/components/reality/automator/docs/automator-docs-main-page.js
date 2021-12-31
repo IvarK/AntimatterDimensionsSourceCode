@@ -27,7 +27,7 @@ Vue.component("automator-docs-main-page", {
         :style="buttonStyle(listState === 0)"
         class="fas fa-info-circle"
         @click="listState = 0"
-        v-tooltip="'Information'"
+        v-tooltip="'Page Information'"
       />
       <button
         :style="buttonStyle(listState === 1)"

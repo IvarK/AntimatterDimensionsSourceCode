@@ -16,7 +16,7 @@ export default {
     return {
       templateInputs: [],
       buttonTextStrings: [],
-      missingInputCount: 0,
+      invalidInputCount: 0,
       templateScript: null,
     };
   },
@@ -24,46 +24,42 @@ export default {
     params: () => GameDatabase.reality.automator.templates.paramTypes,
     templates: () => GameDatabase.reality.automator.templates.scripts,
     warnings() {
-      return this.missingInputCount === 0
+      return this.invalidInputCount === 0
         ? this.modalConfig.warnings().concat(this.templateScript.warnings)
         : this.modalConfig.warnings();
     },
   },
-  // PrimaryToggleButton gives console errors if the bound value is undefined, so we initialize all the boolean
-  // input props as false
+  // Many props in this component are generated dynamically from a GameDB entry, but Vue can only give reactive
+  // behavior to props that exist on declaration. We need all the dynamically generated inputs to be reactive, so we
+  // specifically $set them here on initialization; additionally we give them a default value so that later function
+  // calls don't error out from undefined inputs.
   created() {
     for (const input of this.modalConfig.inputs) {
-      if (this.paramTypeObject(input.type).boolDisplay) this.templateInputs[input.name] = false;
+      if (this.paramTypeObject(input.type).boolDisplay) this.$set(this.templateInputs, input.name, false);
+      else this.$set(this.templateInputs, input.name, "");
     }
   },
   methods: {
-    // Many props in this component are generated dynamically from a GameDB entry, but Vue can only give reactive
-    // behavior to props that exist on initialization. Values in templateInputs don't need to be reactive, but values
-    // buttonTextStrings need to be in order for the button text to change on click.
     update() {
-      this.missingInputCount = 0;
+      this.invalidInputCount = 0;
       for (const input of this.modalConfig.inputs) {
         const boolProp = this.paramTypeObject(input.type).boolDisplay;
-        if (boolProp) {
-          const propValue = this.templateInputs[input.name];
-          this.$set(this.buttonTextStrings, input.name, boolProp[propValue ? 0 : 1]);
-        }
-        if (this.templateInputs[input.name] === undefined) this.missingInputCount++;
+        if (boolProp) this.buttonTextStrings[input.name] = boolProp[this.templateInputs[input.name] ? 0 : 1];
+        if (!this.isValid(input)) this.invalidInputCount++;
       }
-
-      if (this.missingInputCount === 0) this.makeTemplate();
+      if (this.invalidInputCount === 0) this.makeTemplate();
     },
     paramTypeObject(name) {
       return this.params.find(p => p.name === name);
     },
-    buttonText(input) {
-      const propValue = this.templateInputs[input.name];
-      return this.paramTypeObject(input.type).boolDisplay[propValue ? 0 : 1];
+    isValid(input) {
+      const typeObject = this.paramTypeObject(input.type);
+      return typeObject.isValidString ? typeObject.isValidString(this.templateInputs[input.name]) : true;
     },
     validityClass(input) {
-      return this.paramTypeObject(input.type).isValidString(this.templateInputs[input.name])
+      return this.isValid(input)
         ? undefined
-        : "o-autobuyer-input--invalid";
+        : "c-automator-template-textbox--invalid";
     },
     makeTemplate() {
       const templateProps = {};
@@ -84,10 +80,9 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="c-automator-template-container">
     <ModalCloseButton @click="emitClose" />
     <b>Template "{{ modalConfig.name }}"</b>
-    <br>
     {{ modalConfig.description }}
     <br>
     <br>
@@ -95,6 +90,7 @@ export default {
     <div
       v-for="input in modalConfig.inputs"
       :key="input.name"
+      class="c-automator-template-entry"
     >
       {{ input.prompt }}:
       <span v-if="paramTypeObject(input.type).boolDisplay">
@@ -110,26 +106,32 @@ export default {
           ref="templateInputs[input.name]"
           v-model="templateInputs[input.name]"
           type="text"
-          class="c-modal-input"
+          class="c-automator-template-textbox"
           :class="validityClass(input)"
         >
       </span>
     </div>
     <br>
     <br>
-    <div v-if="warnings.length !== 0">
-      <b>Possible advice to consider:</b>
-      <div
-        v-for="warning in warnings"
-        :key="warning"
-      >
-        {{ warning }}
+    <div>
+      <b>Possible things to consider:</b>
+      <div v-if="warnings.length !== 0">
+        <div
+          v-for="warning in warnings"
+          :key="warning"
+          class="c-automator-template-entry"
+        >
+          {{ warning }}
+        </div>
+      </div>
+      <div v-else>
+        (If something seems wrong with the template inputs, it will show up here)
       </div>
       <br>
       <br>
     </div>
     <button
-      v-if="missingInputCount === 0"
+      v-if="invalidInputCount === 0"
       class="o-primary-btn"
       @click="copyAndClose"
     >
@@ -139,7 +141,7 @@ export default {
       v-else
       class="o-primary-btn o-primary-btn--disabled"
     >
-      Cannot generate template (You have {{ quantifyInt("invalid input", missingInputCount) }})
+      Cannot generate template (You have {{ quantifyInt("invalid input", invalidInputCount) }})
     </button>
   </div>
 </template>

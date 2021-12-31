@@ -60,8 +60,8 @@ Vue.component("glyph-peek", {
     <div class="c-glyph-peek">
       <div
         v-if="isVisible"
-        style="cursor: zoom-in"
         @click="showModal"
+        class="l-glyph-set-preview"
       >
         <GlyphSetPreview
           :showName="false"

@@ -194,7 +194,7 @@ body {
 
 @font-face {
   font-family: Typewriter;
-  src: url('blob_font_regular_2.ttf'), url('MonospaceTypewriter.ttf');
+  src: url('blob_font_bold.ttf'), url('MonospaceTypewriter.ttf');
 }
 
 @font-face {

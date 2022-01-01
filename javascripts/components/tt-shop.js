@@ -209,8 +209,13 @@ Vue.component("tt-save-load-button", {
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
-        const imported = new TimeStudyTree(this.preset.studies);
-        TimeStudyTree.commitToGameState(imported.purchasedStudies);
+        // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
+        // tree are only reachable if the current tree is already bought
+        const combinedTree = new TimeStudyTree();
+        combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
+        combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.preset.studies), true);
+        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies);
+
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {

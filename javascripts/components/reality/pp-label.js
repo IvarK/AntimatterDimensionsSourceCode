@@ -1,7 +1,9 @@
+import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 Vue.component("pp-label", {
   components: {
+    PrimaryButton,
     PrimaryToggleButton
   },
   data() {
@@ -25,6 +27,9 @@ Vue.component("pp-label", {
       this.pp = Math.floor(Currency.perkPoints.value);
       this.fixedLoadPos = player.options.fixedPerkStartingPos;
       this.physicsEnabled = player.options.perkPhysicsEnabled;
+    },
+    centerTree() {
+      PerkNetwork.resetPosition();
     }
   },
   template: `
@@ -50,6 +55,12 @@ Vue.component("pp-label", {
           on="Enabled"
           off="Disabled"
         />
+        <PrimaryButton
+          class="o-primary-btn"
+          @click="centerTree"
+        >
+          Bring Tree to center
+        </PrimaryButton>
       </div>
     </div>`
 });

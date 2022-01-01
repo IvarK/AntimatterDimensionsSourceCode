@@ -172,6 +172,9 @@ function triggerManualReality(realityProps) {
   } else {
     beginProcessReality(realityProps);
   }
+  // Should be here so that the perk graphics update even when we're on the perk subtab, while also keeping its
+  // relatively expensive operations off of the reality reset hot path for when realities are significantly faster
+  PerkNetwork.updatePerkColor();
 }
 
 export function runRealityAnimation() {

@@ -80,10 +80,14 @@ export function buyStudiesUntil(id, repeatFor201 = true) {
     return studyArray;
   }
 
-  // Buy up to 201, then if applicable we recursively call this function again in order to attempt to buy another path
+  // Buy up to 201, then if applicable we commit what we have to the game state and recursively call this function
+  // again in order to attempt to buy another path
   studyArray.push(...range(151, Math.min(id, 201)));
-  if (id >= 201 && repeatFor201) TimeStudyTree.commitToGameState(buyStudiesUntil(id, false));
-  else if (id < 201) return studyArray;
+  if (id >= 201 && repeatFor201) {
+    TimeStudyTree.commitToGameState(studyArray);
+    return buyStudiesUntil(id, false);
+  }
+  if (id < 201) return studyArray;
   studyArray.push(...range(211, Math.min(id, 214)));
   studyArray.push(id);
 

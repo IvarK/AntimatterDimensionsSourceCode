@@ -258,5 +258,6 @@ export const DarkMatterDimensions = {
     for (const dimension of DarkMatterDimensions.all) {
       dimension.reset();
     }
+    Currency.darkMatter.reset();
   },
 };

@@ -43,6 +43,7 @@ Vue.component("glyph-peek", {
       this.canRefresh = true;
       this.glyphs = GlyphSelection.glyphList(
         GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
+      for (const glyph of this.glyphs) Glyphs.applyGamespeed(glyph);
       this.level = gainedGlyphLevel().actualLevel;
     },
     showModal() {

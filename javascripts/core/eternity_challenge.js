@@ -105,7 +105,7 @@ export class EternityChallengeState extends GameMechanicState {
       return status;
     }
 
-    let totalCompletions = this.completionsAtIP(Currency.infinityPoints.value);
+    let totalCompletions = this.completionsAtIP(player.records.thisEternity.maxIP);
     const maxValidCompletions = this.maxValidCompletions;
     if (totalCompletions > maxValidCompletions) {
       totalCompletions = maxValidCompletions;

@@ -245,7 +245,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       checkRequirement: () => Effarig.isRunning && player.requirementChecks.reality.maxGlyphs < -10 &&
         Currency.antimatter.value.exponent >= 1.5e11,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => `Glyph Sacrifice totals for basic Glyphs are raised to ${format(1e100)}`,
+      description: () => `Glyph Sacrifice totals for basic Glyphs are increased to ${format(1e100)}`,
       effect: 1e100,
     },
     {

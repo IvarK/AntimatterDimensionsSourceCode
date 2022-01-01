@@ -1,13 +1,12 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
-  constructor(tier) {
-    super();
-    this._tier = tier;
+  get tier() {
+    return this.id;
   }
 
   get name() {
-    return InfinityDimension(this._tier).displayName;
+    return InfinityDimension(this.tier).displayName;
   }
 
   get fullName() {
@@ -15,7 +14,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.infinityDims[this._tier - 1];
+    return player.auto.infinityDims[this.tier - 1];
   }
 
   get interval() {
@@ -23,7 +22,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerID(this._tier).isReached;
+    return EternityMilestone.autobuyerID(this.tier).isReached;
   }
 
   get resetTickOn() {
@@ -35,16 +34,15 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   tick() {
-    const tier = this._tier;
+    const tier = this.tier;
     if (!InfinityDimension(tier).isAvailableForPurchase || EternityChallenge(8).isRunning) return;
     super.tick();
     buyManyInfinityDimension(tier);
     buyMaxInfDims(tier);
   }
+
+  static get entryCount() { return 8; }
+  static get autobuyerGroupName() { return "Infinity Dimension"; }
 }
 
-InfinityDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new InfinityDimensionAutobuyerState(tier));
-
-Autobuyer.infinityDimension = tier => InfinityDimensionAutobuyerState.index[tier - 1];
-Autobuyer.infinityDimension.index = InfinityDimensionAutobuyerState.index;
-Autobuyer.infinityDimension.index.name = "Infinity Dimension";
+Autobuyer.infinityDimension = InfinityDimensionAutobuyerState.createAccessor();

@@ -298,8 +298,8 @@ GameDatabase.achievements.normal = [
     id: 52,
     name: "Age of Automation",
     description: "Max the interval for Antimatter Dimension and Tickspeed upgrade autobuyers.",
-    checkRequirement: () => Autobuyers.antimatterDimensions.concat(Autobuyer.tickspeed)
-      .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
+    checkRequirement: () => Autobuyer.antimatterDimension.zeroIndexed.concat(Autobuyer.tickspeed)
+      .every(a => a.isUnlocked && a.hasMaxedInterval),
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
   {
@@ -310,7 +310,7 @@ GameDatabase.achievements.normal = [
     // galaxy, and big crunch (the ones you get from normal challenges).
     // We don't count autobuyers which can be upgraded via e.g. perks as upgradeable.
     checkRequirement: () => Autobuyers.upgradeable
-      .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 12,
+      .every(a => a.isUnlocked && a.hasMaxedInterval),
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
   {
@@ -376,9 +376,10 @@ GameDatabase.achievements.normal = [
     id: 61,
     name: "Bulked Up",
     get description() {
-      return `Get all of your Antimatter Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`;
+      return `Get all of your Antimatter Dimension Autobuyer bulk amounts to
+      ${formatInt(Autobuyer.antimatterDimension.bulkCap)} or higher.`;
     },
-    checkRequirement: () => Autobuyers.antimatterDimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
+    checkRequirement: () => Autobuyer.antimatterDimension.zeroIndexed.every(x => x.hasMaxedBulk),
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     reward: "Dimension Autobuyer bulks are unlimited."
   },

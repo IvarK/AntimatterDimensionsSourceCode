@@ -16,7 +16,6 @@ Vue.component("autobuyer-interval-label", {
       bulk: 0,
       bulkUnlimited: false,
       displayInterval: false,
-      displayBulk: false,
     };
   },
   computed: {
@@ -37,17 +36,14 @@ Vue.component("autobuyer-interval-label", {
       this.bulkUnlimited = buyer.hasUnlimitedBulk;
       // We should only be displaying the interval if the interval is greater than 0 and we are told to show it
       this.displayInterval = this.showInterval && this.interval > 0;
-      // We should only show the bulk if it is unlimited (to show "Unlimited"), or has a bulk amount, to show the bulk
-      // amount. Additionally, it should only be shown if we are told to do so.
-      this.displayBulk = this.showBulk && (this.bulkUnlimited || this.bulk > 0);
     }
   },
   template: `
-    <div class="c-autobuyer-box__small-text" v-if="displayInterval || displayBulk">
+    <div class="c-autobuyer-box__small-text" v-if="displayInterval || showBulk">
       <span v-if="displayInterval">
         Current interval: {{ intervalDisplay }} seconds
       </span>
-      <span v-if="displayBulk">
+      <span v-if="showBulk">
         <br v-if="displayInterval">
         {{ bulkText }}
       </span>

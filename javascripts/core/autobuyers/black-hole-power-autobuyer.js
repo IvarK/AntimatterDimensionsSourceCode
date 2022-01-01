@@ -1,17 +1,12 @@
 import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 class BlackHolePowerAutobuyerState extends AutobuyerState {
-  constructor(blackHole) {
-    super();
-    this._blackHole = blackHole;
-  }
-
   get data() {
-    return player.auto.blackHolePower[this._blackHole - 1];
+    return player.auto.blackHolePower[this.id - 1];
   }
 
   get name() {
-    return `Black Hole ${this._blackHole} Power`;
+    return `Black Hole ${this.id} Power`;
   }
 
   get isUnlocked() {
@@ -19,13 +14,11 @@ class BlackHolePowerAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    const blackHole = this._blackHole;
-    BlackHole(blackHole).powerUpgrade.purchase();
+    BlackHole(this.id).powerUpgrade.purchase();
   }
+
+  static get entryCount() { return 2; }
+  static get autobuyerGroupName() { return "Black Hole Power"; }
 }
 
-BlackHolePowerAutobuyerState.index = Array.range(1, 2).map(blackHole => new BlackHolePowerAutobuyerState(blackHole));
-
-Autobuyer.blackHolePower = blackHole => BlackHolePowerAutobuyerState.index[blackHole - 1];
-Autobuyer.blackHolePower.array = BlackHolePowerAutobuyerState.index;
-Autobuyer.blackHolePower.array.name = "Black Hole Power";
+Autobuyer.blackHolePower = BlackHolePowerAutobuyerState.createAccessor();

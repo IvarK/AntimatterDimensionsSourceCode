@@ -2,13 +2,12 @@ import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
 import { DC } from "../constants.js";
 
 class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
-  constructor(tier) {
-    super();
-    this._tier = tier;
+  get tier() {
+    return this.id;
   }
 
   get name() {
-    return AntimatterDimension(this._tier).displayName;
+    return AntimatterDimension(this.tier).displayName;
   }
 
   get fullName() {
@@ -16,15 +15,15 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get data() {
-    return player.auto.antimatterDims[this._tier - 1];
+    return player.auto.antimatterDims[this.tier - 1];
   }
 
   get baseInterval() {
-    return Player.defaultStart.auto.antimatterDims[this._tier - 1].interval;
+    return Player.defaultStart.auto.antimatterDims[this.tier - 1].interval;
   }
 
   get isUnlocked() {
-    return NormalChallenge(this._tier).isCompleted;
+    return NormalChallenge(this.tier).isCompleted;
   }
 
   get isBought() {
@@ -32,7 +31,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get antimatterCost() {
-    return DC.E10.pow(this._tier - 1).times(DC.E40);
+    return DC.E10.pow(this.tier - 1).times(DC.E40);
   }
 
   get canBeBought() {
@@ -81,13 +80,13 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get canTick() {
-    const dim = AntimatterDimension(this._tier);
+    const dim = AntimatterDimension(this.tier);
     return dim.isAvailableForPurchase && dim.isAffordable && super.canTick;
   }
 
   tick() {
     super.tick();
-    const tier = this._tier;
+    const tier = this.tier;
     switch (this.mode) {
       case AUTOBUYER_MODE.BUY_SINGLE:
         buyOneDimension(tier);
@@ -123,10 +122,18 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     this.data.isBought = false;
     this.data.bulk = 1;
   }
+
+  static get entryCount() { return 8; }
+  static get autobuyerGroupName() { return "Antimatter Dimension"; }
+  static createAccessor() {
+    const accessor = super.createAccessor();
+    /** @returns {boolean} */
+    accessor.allBought = () => accessor.zeroIndexed.some(x => x.isBought);
+    /** @returns {boolean} */
+    accessor.allUnlimitedBulk = () => accessor.zeroIndexed.some(x => x.hasUnlimitedBulk);
+    accessor.bulkCap = accessor.zeroIndexed[0].bulkCap;
+    return accessor;
+  }
 }
 
-AntimatterDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new AntimatterDimensionAutobuyerState(tier));
-
-Autobuyer.antimatterDimension = tier => AntimatterDimensionAutobuyerState.index[tier - 1];
-Autobuyer.antimatterDimension.index = AntimatterDimensionAutobuyerState.index;
-Autobuyer.antimatterDimension.index.name = "Antimatter Dimension";
+Autobuyer.antimatterDimension = AntimatterDimensionAutobuyerState.createAccessor();

@@ -2,6 +2,10 @@
  * @abstract
  */
 export class AutobuyerState {
+  constructor(id) {
+    this._id = id ?? null;
+  }
+
   /**
    * @abstract
    */
@@ -11,6 +15,8 @@ export class AutobuyerState {
    * @abstract
    */
   get isUnlocked() { throw new NotImplementedError(); }
+
+  get id() { return this._id; }
 
   get canTick() {
     return this.isActive && player.auto.autobuyersOn && (this.isUnlocked || this.isBought);
@@ -24,6 +30,10 @@ export class AutobuyerState {
     this.data.isActive = value;
   }
 
+  get bulk() {
+    return 1;
+  }
+
   toggle() {
     this.isActive = !this.isActive;
   }
@@ -35,6 +45,35 @@ export class AutobuyerState {
 
   // eslint-disable-next-line no-empty-function
   reset() { }
+
+  /** @returns {number} */
+  static get entryCount() { return 1; }
+
+  /**
+   * @abstract
+   * @returns {string}
+   */
+  static get autobuyerGroupName() { throw new NotImplementedError(); }
+
+  static createAccessor() {
+    const entryCount = this.entryCount;
+    /** @type {object[]} */
+    const zeroIndexed = Array.range(1, entryCount).map(id => new this(id));
+    const oneIndexed = [null, ...zeroIndexed];
+    /** @param {number} id */
+    const accessor = id => oneIndexed[id];
+    accessor.oneIndexed = oneIndexed;
+    accessor.zeroIndexed = zeroIndexed;
+    accessor.entryCount = entryCount;
+    accessor.groupName = this.autobuyerGroupName;
+    /** @returns {boolean} */
+    accessor.anyUnlocked = () => zeroIndexed.some(x => x.isUnlocked);
+    /** @returns {boolean} */
+    accessor.allUnlocked = () => zeroIndexed.every(x => x.isUnlocked);
+    /** @returns {boolean} */
+    accessor.allActive = () => zeroIndexed.every(x => x.isActive);
+    return accessor;
+  }
 }
 
 
@@ -114,6 +153,13 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
     if (EternityMilestone.keepAutobuyers.isReached) return;
     this.data.interval = this.baseInterval;
     this.data.cost = 1;
+  }
+
+  static createAccessor() {
+    const accessor = super.createAccessor();
+    /** @returns {boolean} */
+    accessor.allMaxedInterval = () => accessor.zeroIndexed.every(x => x.hasMaxedInterval);
+    return accessor;
   }
 }
 

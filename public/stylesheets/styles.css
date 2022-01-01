@@ -4118,8 +4118,22 @@ screen and (max-width: 480px) {
   width: 25%;
 }
 
-.l-autobuyer-box__header--new {
-  width: 20%
+.l-autobuyer-box__title {
+  width: 20rem;
+}
+
+.l-autobuyer-box__autobuyers {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  width: 80rem;
+}
+
+.l-autobuyer-box__autobuyers-internal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .l-autobuyer-box__content {

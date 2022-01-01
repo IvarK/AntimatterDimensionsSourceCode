@@ -51,7 +51,7 @@ export default {
     boughtTooltip() {
       if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
-      return `Purchased ${quantify("time", this.bought, 2, 2)}`;
+      return `Purchased ${quantifyInt("time", this.bought)}`;
     },
   },
   methods: {

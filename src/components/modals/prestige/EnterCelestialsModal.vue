@@ -53,7 +53,7 @@ export default {
           : ""
         }`;
         case 4: return `Inside of Ra's Reality, some resources will generate Memory Chunks
-          for a specific Pet based on their amount.`;
+          for a specific Celestial based on their amount.`;
         case 5: return `${laitelaFastest >= 300
           ? "You have not completed Lai'tela at this tier"
           : `Your fastest completion on this tier is ${laitalaTime}`

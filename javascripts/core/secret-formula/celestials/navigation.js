@@ -1073,7 +1073,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.teresa.level;
             const level = Ra.pets.effarig.level;
-            if (complete !== 1 && level === 1) return `Ra's Teresa Memory level ${unlocked} / ${formatInt(8)}`;
+            if (complete < 1) return `Ra's Teresa Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's Effarig Memories have all been returned`;
             return [
               "Ra's Effarig Memory level",
@@ -1124,7 +1124,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.effarig.level;
             const level = Ra.pets.enslaved.level;
-            if (complete !== 1 && level === 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(8)}`;
+            if (complete < 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's Enslaved Memories have all been returned`;
             return [
               "Ra's Enslaved Memory level",
@@ -1175,7 +1175,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const unlocked = Ra.pets.enslaved.level;
             const level = Ra.pets.v.level;
-            if (complete !== 1 && level === 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(8)}`;
+            if (complete < 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(8)}`;
             if (level === 25) return `Ra's V Memories have all been returned`;
             return [
               "Ra's V Memory level",

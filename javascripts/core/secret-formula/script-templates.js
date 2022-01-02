@@ -16,7 +16,12 @@ GameDatabase.reality.automator.templates = {
   paramTypes: [
     {
       name: "tree",
-      isValidString: str => TimeStudyTree.isValidImportString(str),
+      isValidString: str => {
+        const validImport = TimeStudyTree.isValidImportString(str);
+        const presetName = str.match(/^PRESET (.{1,4})$/u);
+        const validPreset = presetName ? player.timestudy.presets.map(p => p.name).includes(presetName[1]) : false;
+        return validImport || validPreset;
+      },
     },
     {
       name: "integer",
@@ -64,7 +69,7 @@ GameDatabase.reality.automator.templates = {
         Eternity. Autobuyer settings must be supplied for the Infinity and Eternity Autobuyers. The script will
         repeat until a final Eternity Point value is reached.`,
       inputs: [
-        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
         { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
         { name: "finalEP", type: "decimal", prompt: "Target EP" },
         { name: "autoInfMode", type: "mode", prompt: "Infinity Autobuyer Mode" },
@@ -96,7 +101,7 @@ GameDatabase.reality.automator.templates = {
         Auto-Infinity will be set to "Times Highest" with a specified number of crunches and Auto-Eternity will
         trigger as soon as possible. The script will repeat until a final Eternity count is reached.`,
       inputs: [
-        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
         { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
         { name: "crunchesPerEternity", type: "integer", prompt: "Crunches per Eternity" },
         { name: "eternities", type: "decimal", prompt: "Target Eternity Count" },
@@ -116,7 +121,7 @@ GameDatabase.reality.automator.templates = {
         Infinities. It will repeat until a final Infinity count is reached; the count can be for banked Infinities,
         in which case it will get all Infinities before performing a single Eternity.`,
       inputs: [
-        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
         { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
         { name: "infinities", type: "decimal", prompt: "Target Infinity Count" },
         { name: "isBanked", type: "boolean", prompt: "Use Banked for Target?" },
@@ -141,7 +146,7 @@ GameDatabase.reality.automator.templates = {
         Finally, it will wait until at least the desired number of completions before triggering an Eternity to
         complete the challenge.`,
       inputs: [
-        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
         { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
         { name: "ec", type: "integer", prompt: "Eternity Challenge ID" },
         { name: "completions", type: "integer", prompt: "Target Completion Count" },
@@ -165,20 +170,28 @@ GameDatabase.reality.automator.templates = {
     {
       name: "Unlock Dilation",
       description: `This script performs repeated Eternities, attempting to re-purchase a Time Study Tree every
-        Eternity. Autobuyer settings must be supplied for the Infinity and Eternity Autobuyers. The script acts
-        similarly to the "Climb EP" script, except it loops until you have the total Time Theorem
-        requirement to unlock Dilation instead of until a target EP amount. After reaching the target, it will
-        unlock Dilation.`,
+        Eternity. Settings must be supplied for the Eternity Autobuyer; your Infinity Autobuyer will be
+        turned off. The script loops until you have the total Time Theorem requirement to unlock Dilation, and then
+        it will unlock Dilation once it does.`,
       inputs: [
-        { name: "treeStudies", type: "tree", prompt: "Study Tree to buy" },
+        { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
         { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
         { name: "finalEP", type: "decimal", prompt: "Target EP" },
-        { name: "autoInfMode", type: "mode", prompt: "Infinity Autobuyer Mode" },
-        { name: "autoInfValue", type: "decimal", prompt: "Infinity Autobuyer Threshold" },
         { name: "autoEterMode", type: "mode", prompt: "Eternity Autobuyer Mode" },
         { name: "autoEterValue", type: "decimal", prompt: "Eternity Autobuyer Threshold" },
       ],
-      warnings: () => [],
+      warnings: () => {
+        const list = [];
+        // Telemechanical Process (TD/5xEP autobuyers)
+        if (!RealityUpgrade(13).isBought) {
+          list.push(`This template may perform poorly without Reality Upgrade "${RealityUpgrade(13).name}"`);
+        }
+        if (!Perk.ttBuySingle.isBought) {
+          list.push(`This template may perform poorly without Perk "${Perk.ttBuySingle.label}" unless you have a Glyph
+            which generates Time Theorems`);
+        }
+        return list;
+      },
     },
   ]
 };

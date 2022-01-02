@@ -33,7 +33,7 @@ export class ScriptTemplate {
         this.templateUnlockDilation(params);
         break;
       default:
-        throw new Error(`Unrecognized template name ${tempalateName} in ScriptTemplate`);
+        throw new Error(`Unrecognized template name ${templateName} in ScriptTemplate`);
     }
   }
 
@@ -54,15 +54,22 @@ export class ScriptTemplate {
   /**
    * Parses tree data out of the parameter object and stores within the storedTree fields. Relevant props of object
    * passed in:
+   * @param {String} params.treePreset      Name of a preset to load instead of a study tree, will override treeStudies
+   *  if present
    * @param {Boolean} params.treeNowait     Whether or not the automator should pause at this line and repeat
    *  until the whole tree is bought
    * @param {String} params.treeStudies     A study import string to buy
    */
   storeTreeData(params) {
     const nowaitStr = params.treeNowait ? " nowait" : "";
-    this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;
-
-    this.storedTreeObj = new TimeStudyTree(params.treeStudies);
+    if (params.treePreset) {
+      const presetObj = player.timestudy.presets.find(p => p.name === params.treePreset);
+      this.storedTreeStr = `studies${nowaitStr} load preset ${presetObj.name}`;
+      this.storedTreeObj = new TimeStudyTree(presetObj.studies);
+    } else {
+      this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;
+      this.storedTreeObj = new TimeStudyTree(params.treeStudies);
+    }
     if (this.storedTreeObj.invalidStudies.length > 0) this.warnings.push("Tree contains invalid Study IDs");
     if (this.storedTreeObj.purchasedStudies.length < this.storedTreeObj.selectedStudies.length) {
       this.warnings.push("Tree structure results in some unbought studies when imported with an empty tree");
@@ -214,8 +221,6 @@ export class ScriptTemplate {
    * of object passed in:
    * @param {Boolean} params.treeNowait     Nowait param to be passed into storeTreeData()
    * @param {String} params.treeStudies     Study import param to be passed into storeTreeData()
-   * @param {Object} params.autoInfMode     Multiplier or time-based mode for infinity autobuyer
-   * @param {Object} params.autoInfValue    Multiplier threshold or time for infinity autobuyer
    * @param {Object} params.autoEterMode    Multiplier or time-based mode for eternity autobuyer
    * @param {Object} params.autoEterValue   Multiplier threshold or time for eternity autobuyer
    */
@@ -226,7 +231,7 @@ export class ScriptTemplate {
     if (![231, 232, 233, 234].some(s => this.storedTreeObj.purchasedStudies.includes(TimeStudy(s)))) {
       this.warnings.push("Specified Study Tree cannot reach Dilation");
     }
-    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
+    this.lines.push(`auto infinity off`);
     this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
     this.lines.push(`while tt < ${this.format(13000)} {`);
     this.lines.push(` ${this.storedTreeStr}`);

@@ -14,13 +14,15 @@ export default {
   },
   data() {
     return {
-      templateInputs: [],
+      templateInputs: {},
       buttonTextStrings: [],
       invalidInputCount: 0,
       templateProps: null,
+      currentPreset: "",
     };
   },
   computed: {
+    presets: () => player.timestudy.presets,
     params: () => GameDatabase.reality.automator.templates.paramTypes,
     warnings() {
       return this.invalidInputCount === 0
@@ -57,9 +59,20 @@ export default {
       return typeObject.isValidString ? typeObject.isValidString(this.templateInputs[input.name]) : true;
     },
     validityClass(input) {
+      if (input.name === "treeStudies" && this.currentPreset !== "") {
+        return "c-automator-template-textbox--preset";
+      }
       return this.isValid(input)
         ? undefined
         : "c-automator-template-textbox--invalid";
+    },
+    loadPreset(name) {
+      this.templateInputs.treeStudies = `PRESET ${name}`;
+      this.updateTemplateProps();
+    },
+    loadCurrent() {
+      this.templateInputs.treeStudies = GameCache.currentStudyTree.value.exportString;
+      this.updateTemplateProps();
     },
     updateTemplateProps() {
       this.templateProps = {};
@@ -70,6 +83,12 @@ export default {
         this.templateProps[input.name] = mapFn(this.templateInputs[input.name]);
         if (!this.isValid(input)) this.invalidInputCount++;
       }
+
+      // We treat treeStudies as a special prop which will set treePreset iff it matches the format "PRESET [name]"
+      const presetMatch = this.templateProps.treeStudies.match(/^PRESET (.{1,4})$/u);
+      const presetStr = presetMatch ? presetMatch[1] : "";
+      this.currentPreset = this.presets.some(p => p.name === presetStr) ? presetStr : "";
+      this.templateProps.treePreset = this.currentPreset === "" ? null : this.currentPreset;
     },
     updateButton(input) {
       this.templateInputs[input.name] = !this.templateInputs[input.name];
@@ -96,6 +115,22 @@ export default {
     </div>
     <div class="c-automator-template-inputs">
       <b>Required Information:</b>
+      <br>
+      Use a preset Study Tree:
+      <button
+        v-for="preset in presets"
+        :key="preset.name"
+        class="o-primary-btn"
+        @click="loadPreset(preset.name)"
+      >
+        {{ preset.name }}
+      </button>
+      <button
+        class="o-primary-btn"
+        @click="loadCurrent"
+      >
+        <i>Current Tree</i>
+      </button>
       <div
         v-for="input in modalConfig.inputs"
         :key="input.name"

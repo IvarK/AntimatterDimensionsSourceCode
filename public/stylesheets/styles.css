@@ -1303,6 +1303,8 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--buy-ad {
   font-size: 1rem;
+  vertical-align: middle;
+  line-height: 9px;
 }
 
 .o-primary-btn--buy-single-ad {

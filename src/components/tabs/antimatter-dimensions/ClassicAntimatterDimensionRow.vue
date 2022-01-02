@@ -27,7 +27,8 @@ export default {
       isAffordableUntil10: false,
       isContinuumActive: false,
       continuumValue: 0,
-      isShown: false
+      isShown: false,
+      isCostsAD: false,
     };
   },
   computed: {
@@ -53,6 +54,9 @@ export default {
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
       return `Purchased ${quantify("time", this.bought, 2, 2)}`;
     },
+    costUnit() {
+      return `${AntimatterDimension(this.tier - 2).shortDisplayName} Dimensions`;
+    },
   },
   methods: {
     update() {
@@ -77,6 +81,11 @@ export default {
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
+      if (NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive) {
+        this.isCostsAD = true;
+      } else {
+        this.isCostsAD = false;
+      }
     },
     buySingle() {
       if (this.isContinuumActive) return;
@@ -139,6 +148,7 @@ export default {
       <span v-if="isCapped">Capped</span>
       <template v-else>
         <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
+        <span v-if="isCostsAD">{{ costUnit }} </span>
       </template>
     </PrimaryButton>
     <PrimaryButton
@@ -153,6 +163,7 @@ export default {
         Until {{ formatInt(10) }},
         <span v-if="showCostTitle(until10Cost)">Cost: </span>
         {{ format(until10Cost) }}
+        <span v-if="isCostsAD">{{ costUnit }} </span>
       </template>
     </PrimaryButton>
   </div>

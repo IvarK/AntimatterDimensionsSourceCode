@@ -23,7 +23,8 @@ export default {
       howManyCanBuy: 0,
       isContinuumActive: false,
       continuumValue: 0,
-      isShown: false
+      isShown: false,
+      isCostsAD: false,
     };
   },
   computed: {
@@ -52,6 +53,9 @@ export default {
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
       return `Purchased ${quantify("time", this.bought, 2, 2)}`;
     },
+    costUnit() {
+      return `${AntimatterDimension(this.tier - 2).shortDisplayName} Dimensions`;
+    },
   },
   methods: {
     update() {
@@ -77,6 +81,11 @@ export default {
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
+      if (NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive) {
+        this.isCostsAD = true;
+      } else {
+        this.isCostsAD = false;
+      }
     },
     buy() {
       if (this.isContinuumActive) return;
@@ -143,6 +152,10 @@ export default {
           Continuum:
           <br>
           {{ continuumString }}
+        </span>
+        <span v-else-if="isCostsAD">
+          Buy {{ howManyCanBuy }}
+          Cost: {{ costDisplay }} {{ costUnit }}
         </span>
         <span v-else>
           Buy {{ howManyCanBuy }}

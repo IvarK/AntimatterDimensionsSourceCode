@@ -32,7 +32,9 @@ html {
   --color-accent: #4980CC;
   --color-good: #5AC467;
   --color-good-dark: #127A20;
+  --color-good-paused: #e3e638;
   --color-bad: #B84B5F;
+  --color-gh-purple: #8957E5;
 
   --color-antimatter: #2196f3;
   --color-infinity: #B67F33;
@@ -3825,7 +3827,7 @@ screen and (max-width: 480px) {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-bad);
+  background: var(--color-gh-purple);
   font-size: 1rem;
   height: 2rem;
   width: 2rem;
@@ -3874,9 +3876,17 @@ screen and (max-width: 480px) {
   background: var(--color-good);
 }
 
+.o-autobuyer-toggle-checkbox__label--active-paused {
+  background: var(--color-good-paused);
+}
+
 .o-autobuyer-toggle-checkbox__label--disabled {
   opacity: 0.6;
   filter: grayscale(0.1);
+}
+
+.o-autobuyer-toggle-checkbox__label--deactive-paused {
+  background: var(--color-bad);
 }
 
 /*#endregion o-autobuyer-toggle-checkbox*/

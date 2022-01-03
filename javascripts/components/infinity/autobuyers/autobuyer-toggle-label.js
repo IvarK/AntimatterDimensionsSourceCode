@@ -13,6 +13,9 @@ Vue.component("autobuyer-toggle-label", {
       return this.autobuyer.name;
     },
     autobuyerToggleClass() {
+      if (!this.globalToggle) {
+        return this.isActive ? "fas fa-plus" : "fas fa-minus";
+      }
       return this.isActive ? "fas fa-check" : "fas fa-times";
     },
     autobuyerStateClass() {

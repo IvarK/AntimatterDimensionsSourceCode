@@ -1,13 +1,12 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
-  constructor(tier) {
-    super();
-    this._tier = tier;
+  get tier() {
+    return this.id;
   }
 
   get name() {
-    return TimeDimension(this._tier).displayName;
+    return TimeDimension(this.tier).displayName;
   }
 
   get fullName() {
@@ -15,7 +14,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.timeDims[this._tier - 1];
+    return player.auto.timeDims[this.tier - 1];
   }
 
   get interval() {
@@ -35,7 +34,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   tick() {
-    const tier = this._tier;
+    const tier = this.tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
     super.tick();
     if (Currency.eternityPoints.exponent >= 10) {
@@ -44,10 +43,9 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
       buySingleTimeDimension(tier);
     }
   }
+
+  static get entryCount() { return 8; }
+  static get autobuyerGroupName() { return "Time Dimension"; }
 }
 
-TimeDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new TimeDimensionAutobuyerState(tier));
-
-Autobuyer.timeDimension = tier => TimeDimensionAutobuyerState.index[tier - 1];
-Autobuyer.timeDimension.index = TimeDimensionAutobuyerState.index;
-Autobuyer.timeDimension.index.name = "Time Dimension";
+Autobuyer.timeDimension = TimeDimensionAutobuyerState.createAccessor();

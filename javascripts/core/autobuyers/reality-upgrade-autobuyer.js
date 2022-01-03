@@ -1,18 +1,12 @@
 import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
 class RealityUpgradeAutobuyerState extends AutobuyerState {
-  constructor(upgrade) {
-    super();
-    this._upgrade = upgrade;
-  }
-
   get name() {
-    const upgrade = this._upgrade;
-    return RealityUpgrade(upgrade).config.name;
+    return RealityUpgrade(this.id).config.name;
   }
 
   get data() {
-    return player.auto.realityUpgrades[this._upgrade - 1];
+    return player.auto.realityUpgrades[this.id - 1];
   }
 
   get isUnlocked() {
@@ -20,13 +14,11 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    const upgrade = this._upgrade;
-    RealityUpgrade(upgrade).purchase();
+    RealityUpgrade(this.id).purchase();
   }
+
+  static get entryCount() { return 5; }
+  static get autobuyerGroupName() { return "Reality Upgrade"; }
 }
 
-RealityUpgradeAutobuyerState.index = Array.range(1, 5).map(upgrade => new RealityUpgradeAutobuyerState(upgrade));
-
-Autobuyer.realityUpgrade = upgrade => RealityUpgradeAutobuyerState.index[upgrade - 1];
-Autobuyer.realityUpgrade.array = RealityUpgradeAutobuyerState.index;
-Autobuyer.realityUpgrade.array.name = "Reality Upgrade";
+Autobuyer.realityUpgrade = RealityUpgradeAutobuyerState.createAccessor();

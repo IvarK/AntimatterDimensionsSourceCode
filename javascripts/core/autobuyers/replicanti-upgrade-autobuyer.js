@@ -1,18 +1,14 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
-  constructor(upgrade) {
-    super();
-    this._upgrade = upgrade;
-    this._upgradeName = ["chance", "interval", "galaxies"][this._upgrade - 1];
-  }
+  get _upgradeName() { return ["chance", "interval", "galaxies"][this.id - 1]; }
 
   get name() {
-    return `Replicanti ${[`Chance`, `Interval`, `Max Galaxies`][this._upgrade - 1]}`;
+    return `Replicanti ${[`Chance`, `Interval`, `Max Galaxies`][this.id - 1]}`;
   }
 
   get data() {
-    return player.auto.replicantiUpgrades[this._upgrade - 1];
+    return player.auto.replicantiUpgrades[this.id - 1];
   }
 
   get interval() {
@@ -32,15 +28,13 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   tick() {
-    const upgradeName = this._upgradeName;
     if (EternityChallenge(8).isRunning) return;
     super.tick();
-    ReplicantiUpgrade[upgradeName].autobuyerTick();
+    ReplicantiUpgrade[this._upgradeName].autobuyerTick();
   }
+
+  static get entryCount() { return 3; }
+  static get autobuyerGroupName() { return "Replicanti Upgrade"; }
 }
 
-ReplicantiUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new ReplicantiUpgradeAutobuyerState(upgrade));
-
-Autobuyer.replicantiUpgrade = upgrade => ReplicantiUpgradeAutobuyerState.index[upgrade - 1];
-Autobuyer.replicantiUpgrade.array = ReplicantiUpgradeAutobuyerState.index;
-Autobuyer.replicantiUpgrade.array.name = "Replicanti Upgrade";
+Autobuyer.replicantiUpgrade = ReplicantiUpgradeAutobuyerState.createAccessor();

@@ -19,7 +19,6 @@ export default {
       offlineTicks: 0,
       automaticTabSwitching: false,
       infinityUnlocked: false,
-      sacrificeUnlocked: false,
       automatorUnlocked: false,
       automatorLogSize: 0,
     };
@@ -60,7 +59,6 @@ export default {
       this.offlineTicks = player.options.offlineTicks;
       this.automaticTabSwitching = options.automaticTabSwitching;
       this.infinityUnlocked = PlayerProgress.current.isInfinityUnlocked;
-      this.sacrificeUnlocked = Sacrifice.isVisible;
       this.automatorUnlocked = Player.automatorUnlocked;
       this.automatorLogSize = options.automatorEvents.maxEntries;
     },
@@ -98,17 +96,10 @@ export default {
       </div>
       <div class="l-options-grid__row">
         <OptionsButton
-          v-if="sacrificeUnlocked"
           class="o-primary-btn--option"
           onclick="Modal.confirmationOptions.show()"
         >
           Open Confirmation Options
-        </OptionsButton>
-        <OptionsButton
-          v-else
-          class="o-primary-btn--options"
-        >
-          You do not have anything that requires confirmation
         </OptionsButton>
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
           <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>

@@ -10,6 +10,7 @@ export * from "./keyboard.js";
 export * from "./hotkeys.js";
 export * from "./galaxy.js";
 export * from "./away-progress.js";
+export * from "./confirmations.js";
 
 export * from "./autobuyers/index.js";
 export * from "./storage/index.js";

@@ -1,18 +1,14 @@
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
-  constructor(upgrade) {
-    super();
-    this._upgrade = upgrade;
-    this._upgradeName = ["dtGain", "galaxyThreshold", "tachyonGain"][this._upgrade - 1];
-  }
+  get _upgradeName() { return ["dtGain", "galaxyThreshold", "tachyonGain"][this.id - 1]; }
 
   get data() {
-    return player.auto.dilationUpgrades[this._upgrade - 1];
+    return player.auto.dilationUpgrades[this.id - 1];
   }
 
   get name() {
-    return [`Dilated Time Multiplier`, `Tachyon Galaxy Threshold`, "Tachyon Particle Multiplier"][this._upgrade - 1];
+    return [`Dilated Time Multiplier`, `Tachyon Galaxy Threshold`, "Tachyon Particle Multiplier"][this.id - 1];
   }
 
   get interval() {
@@ -36,10 +32,9 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
     const upgradeName = this._upgradeName;
     DilationUpgrade[upgradeName].purchase(this.bulk);
   }
+
+  static get entryCount() { return 3; }
+  static get autobuyerGroupName() { return "Dilation Upgrade"; }
 }
 
-DilationUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new DilationUpgradeAutobuyerState(upgrade));
-
-Autobuyer.dilationUpgrade = upgrade => DilationUpgradeAutobuyerState.index[upgrade - 1];
-Autobuyer.dilationUpgrade.array = DilationUpgradeAutobuyerState.index;
-Autobuyer.dilationUpgrade.array.name = "Dilation Upgrade";
+Autobuyer.dilationUpgrade = DilationUpgradeAutobuyerState.createAccessor();

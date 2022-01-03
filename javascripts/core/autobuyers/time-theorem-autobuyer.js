@@ -13,7 +13,12 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerSta
     return Perk.ttBuySingle.isBought;
   }
 
+  get hasUnlimitedBulk() {
+    return Perk.ttBuyMax.isBought;
+  }
+
   tick() {
-    return Perk.ttBuyMax.isBought ? TimeTheorems.buyMax(true) : TimeTheorems.buyOneOfEach();
+    if (this.hasUnlimitedBulk) TimeTheorems.buyMax(true);
+    else TimeTheorems.buyOneOfEach();
   }
 }();

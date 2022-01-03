@@ -42,6 +42,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     this.data.mode = value;
   }
 
+  get hasUnlimitedBulk() {
+    return this.mode === AUTOBUYER_MODE.BUY_MAX;
+  }
+
   get canUnlockSlowVersion() {
     return player.records.thisEternity.maxAM.gte(this.antimatterCost);
   }

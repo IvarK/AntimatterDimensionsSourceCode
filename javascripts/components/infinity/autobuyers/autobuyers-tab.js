@@ -31,7 +31,7 @@ Vue.component("autobuyers-tab", {
       const ad = Autobuyer.antimatterDimension;
       const allMaxedInterval = ad.allMaxedInterval();
       const allUnlocked = ad.allUnlocked();
-      const allUnlimitedBulk = ad.allUnlocked();
+      const allUnlimitedBulk = ad.allUnlimitedBulk();
       this.displayADAutobuyersIndividually = !(allMaxedInterval && allUnlocked && allUnlimitedBulk);
     },
   },

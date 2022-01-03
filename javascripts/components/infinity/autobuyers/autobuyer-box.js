@@ -80,6 +80,9 @@ Vue.component("autobuyer-box", {
       };
     },
     autobuyerToggleClass() {
+      if (!this.globalToggle) {
+        return this.isActive ? "fas fa-plus" : "fas fa-minus";
+      }
       return this.isActive ? "fas fa-check" : "fas fa-times";
     },
     autobuyerStateClass() {

@@ -3876,6 +3876,7 @@ screen and (max-width: 480px) {
 
 .o-autobuyer-toggle-checkbox__label--disabled {
   opacity: 0.6;
+  filter: grayscale(0.1);
 }
 
 /*#endregion o-autobuyer-toggle-checkbox*/

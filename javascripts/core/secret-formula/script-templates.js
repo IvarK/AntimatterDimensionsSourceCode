@@ -89,8 +89,8 @@ GameDatabase.reality.automator.templates = {
           list.push(`This template may perform poorly without Reality Upgrade "${RealityUpgrade(13).name}"`);
         }
         if (!Perk.ttBuySingle.isBought) {
-          list.push(`This template may perform poorly without Perk "${Perk.ttBuySingle.label}" unless you have a Glyph
-            which generates Time Theorems`);
+          list.push(`This template may perform poorly without Perk "${Perk.ttBuySingle.label}" unless you can generate
+            Time Theorems without purchsing them`);
         }
         return list;
       },
@@ -118,7 +118,7 @@ GameDatabase.reality.automator.templates = {
     {
       name: "Grind Infinities",
       description: `This script buys a specified Time Study Tree and then configures your Autobuyers for gaining
-        Infinities. It will repeat until a final Infinity count is reached; the count can be for banked Infinities,
+        Infinities. It will repeat until a final Infinity count is reached; the count can be for Banked Infinities,
         in which case it will get all Infinities before performing a single Eternity.`,
       inputs: [
         { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
@@ -130,7 +130,7 @@ GameDatabase.reality.automator.templates = {
         const list = [];
         if (!Perk.achievementGroup5.isBought) {
           list.push(`You will not start this Reality with Achievement "${Achievement(131).name}" - grinding
-            Infinities may be less useful than expected since they cannot be banked until later`);
+            Infinities may be less useful than expected since they cannot be Banked until later`);
         }
         // Boundless flow (infinity generation)
         if (RealityUpgrade(11).isBought) {
@@ -144,7 +144,7 @@ GameDatabase.reality.automator.templates = {
       description: `This script buys a specified Time Study Tree and then unlocks a specified Eternity Challenge.
         Then it will set your Infinity Autobuyer to your specified settings and enter the Eternity Challenge.
         Finally, it will wait until at least the desired number of completions before triggering an Eternity to
-        complete the challenge.`,
+        complete the Challenge.`,
       inputs: [
         { name: "treeStudies", type: "tree", prompt: "Or directly enter your time studies" },
         { name: "treeNowait", type: "nowait", prompt: "Missing Study behavior" },
@@ -187,8 +187,8 @@ GameDatabase.reality.automator.templates = {
           list.push(`This template may perform poorly without Reality Upgrade "${RealityUpgrade(13).name}"`);
         }
         if (!Perk.ttBuySingle.isBought) {
-          list.push(`This template may perform poorly without Perk "${Perk.ttBuySingle.label}" unless you have a Glyph
-            which generates Time Theorems`);
+          list.push(`This template may perform poorly without Perk "${Perk.ttBuySingle.label}" unless you can generate
+            Time Theorems without purchsing them`);
         }
         return list;
       },

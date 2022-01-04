@@ -109,7 +109,7 @@ export default {
   <div class="c-automator-template-container">
     <ModalCloseButton @click="emitClose" />
     <div class="c-automator-template-description">
-      <b>"{{ modalConfig.name }}" Template</b>
+      <b>{{ modalConfig.name }} Template</b>
       <br>
       {{ modalConfig.description }}
     </div>

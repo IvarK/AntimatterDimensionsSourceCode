@@ -130,9 +130,9 @@ export const GameStorage = {
 
   save(silent = false, manual = false) {
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
-    this.lastSaveTime = Date.now();
     const root = {
       current: this.currentSlot,
       saves: this.saves

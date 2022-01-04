@@ -51,7 +51,9 @@ export const GameIntervals = (function() {
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
-    save: interval(() => GameStorage.save(), () => player.options.autosaveInterval),
+    save: interval(() => GameStorage.save(), () =>
+      (player.options.autosaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastSaveTime))
+    ),
     checkCloudSave: interval(() => {
       if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
     }, 300000),

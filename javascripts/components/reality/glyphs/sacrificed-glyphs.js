@@ -97,6 +97,7 @@ Vue.component("sacrificed-glyphs", {
       addThreshold: 0,
       empowerThreshold: 0,
       boostThreshold: 0,
+      maxSacrifice: 0,
       teresaMult: 0,
       lastMachinesTeresa: new Decimal(0),
     };
@@ -116,6 +117,7 @@ Vue.component("sacrificed-glyphs", {
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;
       this.boostThreshold = GlyphAlteration.boostingThreshold;
+      this.maxSacrifice = GlyphSacrificeHandler.maxSacrificeForEffects;
       this.teresaMult = Teresa.runRewardMultiplier;
       this.lastMachinesTeresa.copyFrom(player.celestials.teresa.lastRepeatedMachines);
     },
@@ -167,6 +169,8 @@ Vue.component("sacrificed-glyphs", {
         {{ format(addThreshold) }} - an additional secondary effect<br>
         {{ format(empowerThreshold) }} - formula drastically improved<br>
         {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
+        <br><br>
+        All effects from Glyph Sacrifice can no longer be increased once they reach {{ format(maxSacrifice) }}.
         <br><br>
       </div>
       <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>

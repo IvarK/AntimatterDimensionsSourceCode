@@ -1,6 +1,7 @@
 import "./old-ui/old-ui.js";
 import "./new-ui/new-ui.js";
 import "./save-timer.js";
+import "./speedrun-status.js";
 import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
@@ -50,5 +51,6 @@ Vue.component("game-ui", {
       <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
       <sidebar v-if="view.newUI" />
       <save-timer />
+      <speedrun-status />
     </div>`
 });

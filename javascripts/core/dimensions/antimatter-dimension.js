@@ -173,6 +173,8 @@ function onBuyDimension(tier) {
   Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();
 
+  if (player.speedrun.isActive && !player.speedrun.hasStarted) Speedrun.startRun();
+
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) {
     AntimatterDimensions.resetAmountUpToTier(tier - 1);

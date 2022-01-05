@@ -601,3 +601,13 @@ dev.devMode = function() {
 dev.unlockAutomator = function() {
   player.reality.automator.forceUnlock = true;
 };
+
+dev.startSpeedrun = function(name) {
+  GameStorage.hardReset();
+  player.speedrun.isActive = true;
+  // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead
+  if (name) player.speedrun.name = name;
+  else player.speedrun.name = `AD Player #${Math.floor(1e7 * Math.random())}`;
+  // "Fake News" Achievement, given for free to partially mitigate promoting weird strategies at the beginning of runs
+  Achievement(22).unlock();
+};

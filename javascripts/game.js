@@ -360,6 +360,13 @@ export function gameLoop(passDiff, options = {}) {
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
 
+  // We want to allow for a speedrunner to be able to adjust their visual settings before actually starting the run,
+  // which means that we need to effectively halt the game loop until the official start
+  if (Speedrun.isPausedAtStart()) {
+    GameUI.update();
+    return;
+  }
+
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);

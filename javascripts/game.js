@@ -652,6 +652,7 @@ function laitelaRealityTick(realDiff) {
       completionText += ` You need to destabilize in faster than
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
+    if (Laitela.isFullyDestabilized) SpeedrunMilestone(24).tryComplete();
     Modal.message.show(completionText);
   }
 }

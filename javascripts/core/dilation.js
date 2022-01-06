@@ -184,9 +184,8 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
   }
 
   onPurchased() {
-    if (this.id === 4) {
-      player.dilation.totalTachyonGalaxies *= 2;
-    }
+    if (this.id === 4) player.dilation.totalTachyonGalaxies *= 2;
+    if (this.id === 10) SpeedrunMilestone(15).tryComplete();
   }
 }
 

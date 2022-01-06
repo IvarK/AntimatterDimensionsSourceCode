@@ -351,6 +351,7 @@ export const BlackHoles = {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
     Currency.realityMachines.purchase(100);
+    SpeedrunMilestone(17).tryComplete();
     Achievement(144).unlock();
   },
 

@@ -40,11 +40,15 @@ Vue.component("speedrun-status", {
       this.startDate = speedrun.startDate;
       this.saveName = speedrun.name;
 
-      this.timePlayedStr = Time.totalTimePlayed.toStringShort();
+      this.timePlayedStr = Time.realTimePlayed.toStringShort();
       this.offlineProgress = player.options.offlineProgress;
-      this.offlineFraction = speedrun.offlineTimeUsed / Math.clampMin(player.records.totalTimePlayed, 1);
-      this.mostRecent = speedrun.mostRecentMilestone;
+      this.offlineFraction = speedrun.offlineTimeUsed / Math.clampMin(player.records.realTimePlayed, 1);
+      this.mostRecent = speedrun.mostRecentMilestoneID;
     },
+    milestoneName(id) {
+      const db = GameDatabase.speedrunMilestones;
+      return id === 0 ? "None" : db.find(m => m.id === id).name;
+    }
   },
   template: `
     <div v-if="isActive" class="o-speedrun-status">
@@ -54,10 +58,10 @@ Vue.component("speedrun-status", {
       <br>
       <i>{{ segmentText }}</i>
       <br>
-      Time since start: {{ timePlayedStr }}
+      Total real playtime since start: {{ timePlayedStr }}
       <br>
       Offline Progress: <span v-html="offlineText" />
       <br>
-      Most Recent Milestone: {{ mostRecent }}
+      Most Recent Milestone: {{ milestoneName(mostRecent) }}
     </div>`
 });

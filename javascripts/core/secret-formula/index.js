@@ -32,5 +32,6 @@ import "./shop-purchases.js";
 export * from "./celestials/navigation.js";
 export * from "./celestials/singularity-milestones.js";
 import "./script-templates.js";
+import "./speedrun-milestones.js";
 
 import "./h2p.js";

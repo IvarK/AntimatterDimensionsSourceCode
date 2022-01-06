@@ -389,6 +389,10 @@ export class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   get set() {
     return player.infinityUpgrades;
   }
+
+  onPurchased() {
+    if (this.id === "postGalaxy") SpeedrunMilestone(7).tryComplete();
+  }
 }
 
 (function() {

@@ -183,6 +183,7 @@ export const V = {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
+      if (this.spaceTheorems >= 36) SpeedrunMilestone(22).tryComplete();
     }
 
     if (V.has(V_UNLOCKS.RA_UNLOCK) && !Ra.has(RA_UNLOCKS.AUTO_TP)) {

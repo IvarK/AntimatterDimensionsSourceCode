@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Typewriter;
+  src: url('blob_font_bold.ttf'), url('MonospaceTypewriter.ttf');
+}
+
 .c-old-ui {
   padding: 0.9rem 1.5rem 0;
   box-sizing: border-box;

@@ -1,6 +1,6 @@
 @font-face {
   font-family: Typewriter;
-  src: url('MonospaceTypewriter.ttf');
+  src: url('blob_font_bold.ttf'), url('MonospaceTypewriter.ttf');
 }
 
 *:focus {

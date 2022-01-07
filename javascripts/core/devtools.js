@@ -605,6 +605,7 @@ dev.unlockAutomator = function() {
 dev.startSpeedrun = function(name) {
   GameStorage.hardReset();
   player.speedrun.isActive = true;
+  player.reality.seed = Date.now();
 
   // We make a few assumptions on settings which are likely to be changed for all speedrunners
   for (const key of Object.keys(player.options.confirmations)) player.options.confirmations[key] = false;

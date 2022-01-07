@@ -117,7 +117,7 @@ GameDatabase.speedrunMilestones = [
     id: 15,
     key: "upgradeTTgen",
     name: "Time Theorem Generation",
-    description: "Purchase the Dilation Upgrade which generates Time Theorems",
+    description: "Purchase the Time Theorem Generation Dilation Upgrade",
     checkRequirement: () => true,
     // This is checked within DilationUpgradeState.onPurchased
   },

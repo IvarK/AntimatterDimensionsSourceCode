@@ -2582,6 +2582,31 @@ screen and (max-width: 480px) {
 
 /*#endregion Challenge Records*/
 
+/*#region Speedrun Stats*/
+
+.l-speedrun-milestone-tab {
+  margin: auto;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.l-speedrun-milestone-entry {
+  color: var(--color-text);
+  width: calc(50% - 0.8rem);
+  margin: 0.2rem;
+  border: 0.2rem solid var(--color-text);
+}
+
+.l-speedrun-milestone-entry--completed {
+  background-color: var(--color-good);
+}
+
+/*#endregion Speedrun Stats*/
+
 /*#region Achievements*/
 
 /*#region o-achievement*/

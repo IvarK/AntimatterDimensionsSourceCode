@@ -9,6 +9,7 @@ import StatisticsTab from "./statistics/StatisticsTab";
 import ChallengeRecordsTab from "./challenge-records/ChallengeRecordsTab";
 import PastPrestigeRunsTab from "./past-prestige-runs/PastPrestigeRunsTab";
 import GlyphSetRecordsTab from "./glyph-set-records/GlyphSetRecordsTab";
+import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 
@@ -23,6 +24,7 @@ const TabComponents = {
   ChallengeRecordsTab,
   PastPrestigeRunsTab,
   GlyphSetRecordsTab,
+  SpeedrunMilestonesTab,
   NormalAchievementsTab,
   SecretAchievementTab
 };

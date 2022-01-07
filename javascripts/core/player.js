@@ -320,7 +320,7 @@ window.player = {
       completeFullDestabilize: 0,
       completeFullGame: 0,
     },
-    mostRecentMilestoneID: 0,
+    milestones: [],
   },
   infMult: 0,
   version: 13,

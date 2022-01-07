@@ -43,7 +43,9 @@ Vue.component("speedrun-status", {
       this.timePlayedStr = Time.realTimePlayed.toStringShort();
       this.offlineProgress = player.options.offlineProgress;
       this.offlineFraction = speedrun.offlineTimeUsed / Math.clampMin(player.records.realTimePlayed, 1);
-      this.mostRecent = speedrun.mostRecentMilestoneID;
+      this.mostRecent = speedrun.milestones.length === 0
+        ? 0
+        : speedrun.milestones[speedrun.milestones.length - 1];
     },
     milestoneName(id) {
       const db = GameDatabase.speedrunMilestones;

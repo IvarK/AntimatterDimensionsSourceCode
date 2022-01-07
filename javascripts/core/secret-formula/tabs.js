@@ -114,6 +114,15 @@ GameDatabase.tabs = [
         id: 3,
         hidable: true,
       },
+      {
+        key: "speedrun milestones",
+        name: "Speedrun Milestones",
+        symbol: "<i class='fas fa-flag-checkered'></i>",
+        component: "SpeedrunMilestonesTab",
+        condition: () => player.speedrun.isActive,
+        id: 4,
+        hidable: true,
+      },
     ]
   },
   {

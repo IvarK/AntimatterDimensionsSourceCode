@@ -85,7 +85,7 @@
     -ms-user-select: none;
     user-select:none; cursor:default;
     -webkit-animation-name: snowflakes-fall, snowflakes-shake;
-    -webkit-animation-duration: 10s, 3s;
+    -webkit-animation-duration: 15s, 5s;
     -webkit-animation-timing-function: linear, ease-in-out;
     -webkit-animation-iteration-count: infinite, infinite;
     -webkit-animation-play-state: running, running;

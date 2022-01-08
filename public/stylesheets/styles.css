@@ -161,6 +161,21 @@ html {
   --color-laitela--accent: white;
 }
 
+.t-s11 #ui-container /* csslint allow: empty-rules */
+ {
+  --color-text: #E0E0E0;
+  --color-text-inverted: black;
+  --color-base: black;
+  --color-accent: #fbc21b;
+
+  --color-prestige--accent: black;
+
+  --color-teresa--accent: black;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
+}
+
 /* end css vars */
 
 body {
@@ -2007,6 +2022,17 @@ screen and (max-width: 480px) {
   100% {color: #2196f3;}
 }
 
+.t-s11 .c-game-header__antimatter {
+  animation: a-game-header__antimatter--glow-blob 25s infinite;
+}
+
+@keyframes a-game-header__antimatter--glow-blob {
+  0%   {color: #fbc21b;}
+  33%  {color: #caa32c;}
+  66%  {color: #fba11b;}
+  100% {color: #fbc21b;}
+}
+
 .t-dark-metro .c-game-header__antimatter {
   color: #e0e0e0;
 }
@@ -2305,7 +2331,8 @@ screen and (max-width: 480px) {
 
 .t-dark .c-infinity-dim-description__accent,
 .t-s6 .c-infinity-dim-description__accent,
-.t-s10 .c-infinity-dim-description__accent {
+.t-s10 .c-infinity-dim-description__accent,
+.t-s11 .c-infinity-dim-description__accent {
   color: white;
   text-shadow: 0 0 0.7rem #fff;
 }
@@ -2358,7 +2385,8 @@ screen and (max-width: 480px) {
 
 .t-dark .c-time-dim-description__accent,
 .t-s6 .c-time-dim-description__accent,
-.t-s10 .c-time-dim-description__accent {
+.t-s10 .c-time-dim-description__accent,
+.t-s11 .c-time-dim-description__accent {
   color: var(--color-dilation);
   text-shadow: 0 0 0.7rem var(--color-dilation);
 }
@@ -3190,7 +3218,9 @@ screen and (max-width: 480px) {
 .t-s6 .c-challenge-box--normal,
 .t-s6 .c-challenge-box--infinity,
 .t-s10 .c-challenge-box--normal,
-.t-s10 .c-challenge-box--infinity {
+.t-s10 .c-challenge-box--infinity,
+.t-s11 .c-challenge-box--normal,
+.t-s11 .c-challenge-box--infinity {
   background-color: black;
   border: 0.1rem solid;
 }
@@ -4258,6 +4288,10 @@ screen and (max-width: 480px) {
   color: #03a9f4;
 }
 
+.t-s11 .c-replicanti-description__accent {
+  color: #fbc21b;
+}
+
 .t-metro .c-replicanti-description__accent,
 .t-s8 .c-replicanti-description__accent {
   text-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.5), -0.1rem 0.1rem 0.1rem black;
@@ -4267,6 +4301,10 @@ screen and (max-width: 480px) {
 .t-s6 .c-replicanti-description__accent,
 .t-s10 .c-replicanti-description__accent {
   text-shadow: 0 0 0.7rem #03a9f4;
+}
+
+.t-s11 .c-replicanti-description__accent {
+  text-shadow: 0 0 0.7rem #fbc21b;
 }
 
 /*#endregion c-replicanti-description*/

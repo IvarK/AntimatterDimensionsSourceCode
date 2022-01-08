@@ -114,6 +114,10 @@ body.t-s9 {
   animation: a-game-header__antimatter--glow 25s infinite;
 }
 
+.t-s11 .o-sidebar-currency--antimatter {
+  animation: a-game-header__antimatter--glow-blob 25s infinite;
+}
+
 .t-dark-metro .o-sidebar-currency--antimatter {
   color: #e0e0e0;
 }

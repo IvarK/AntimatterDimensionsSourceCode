@@ -5,6 +5,7 @@ import "./speedrun-status.js";
 import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
+import "./blob-snow.js";
 import TabComponents from "@/components/tabs";
 import PopupModal from "@/components/modals/PopupModal";
 
@@ -46,6 +47,7 @@ Vue.component("game-ui", {
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
         <help-me />
+        <blob-snow />
       </div>
       <div id="notification-container" class="l-notification-container" />
       <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />

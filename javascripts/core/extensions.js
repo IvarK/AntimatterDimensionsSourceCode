@@ -246,6 +246,13 @@ Set.prototype.find = function(predicate) {
   return undefined;
 };
 
+Set.prototype.some = function(predicate) {
+  for (const item of this) {
+    if (predicate(item)) return true;
+  }
+  return false;
+};
+
 Set.prototype.every = function(predicate) {
   for (const item of this) {
     if (!predicate(item)) return false;

@@ -4949,6 +4949,33 @@ screen and (max-width: 480px) {
   fill: white;
 }
 
+.c-blob-particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  overflow: visible;
+  pointer-events: none;
+  user-select:none; cursor:default;
+}
+
+.o-blob-particle {
+  fill: #fbc21b;
+  text-shadow: 0 0 10px #fff,
+               0 0 20px #fff,
+               0 0 30px #fbc21b,
+               0 0 40px #fbc21b,
+               0 0 50px #fbc21b,
+               0 0 60px #fbc21b,
+               0 0 70px #fbc21b;
+  opacity: 0.7;
+  overflow: visible;
+  pointer-events: none;
+  user-select:none; cursor:default;
+}
+
 /*#endregion Dilation*/
 
 /*#region Modals*/

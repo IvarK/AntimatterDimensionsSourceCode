@@ -19,13 +19,14 @@ export const Theme = function Theme(name, config) {
 
   this.isAvailable = function() {
     if (!this.isSecret) return true;
-    return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
+    // Note: match[0] gets the full string of a match, here the initial S and number in a theme name.
+    return player.secretUnlocks.themes.some(theme => theme.match(/^S[0-9]*/u)[0] === name);
   };
 
   this.displayName = function() {
     if (!this.isSecret || !this.isAvailable()) return name;
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
-    return player.secretUnlocks.themes.find(theme => theme.includes(name)).replace(/\S[0-9]*/u, "");
+    return player.secretUnlocks.themes.find(theme => theme.match(/^S[0-9]*/u)[0] === name).replace(/^S[0-9]*/u, "");
   };
 
   this.set = function() {

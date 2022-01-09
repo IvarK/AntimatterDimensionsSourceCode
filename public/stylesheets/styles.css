@@ -4230,6 +4230,7 @@ screen and (max-width: 480px) {
 
 .t-s11 .c-replicanti-description__accent {
   color: #fbc21b;
+  text-shadow: 0 0 0.7rem #fbc21b;
 }
 
 .t-metro .c-replicanti-description__accent,
@@ -4241,10 +4242,6 @@ screen and (max-width: 480px) {
 .t-s6 .c-replicanti-description__accent,
 .t-s10 .c-replicanti-description__accent {
   text-shadow: 0 0 0.7rem #03a9f4;
-}
-
-.t-s11 .c-replicanti-description__accent {
-  text-shadow: 0 0 0.7rem #fbc21b;
 }
 
 /*#endregion c-replicanti-description*/

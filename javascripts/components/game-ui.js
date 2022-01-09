@@ -6,10 +6,21 @@ import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
 import "./blob-snow.js";
+import "./blob-particles";
 import TabComponents from "@/components/tabs";
 import PopupModal from "@/components/modals/PopupModal";
 
 Vue.component("game-ui", {
+  data() {
+    return {
+      animateBlobBackground: false,
+    };
+  },
+  methods: {
+    update() {
+      this.animateBlobBackground = player.options.animations.background && player.options.theme === "S11";
+    }
+  },
   components: {
     ...TabComponents,
     PopupModal,
@@ -47,7 +58,7 @@ Vue.component("game-ui", {
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
         <help-me />
-        <blob-snow />
+        <blob-particles v-if="animateBlobBackground" />
       </div>
       <div id="notification-container" class="l-notification-container" />
       <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />

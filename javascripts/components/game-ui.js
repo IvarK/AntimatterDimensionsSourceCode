@@ -5,7 +5,6 @@ import "./speedrun-status.js";
 import "./help-me.js";
 import "./tt-shop.js";
 import "./new-ui/sidebar.js";
-import "./blob-snow.js";
 import "./blob-particles";
 import TabComponents from "@/components/tabs";
 import PopupModal from "@/components/modals/PopupModal";

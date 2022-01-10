@@ -1,6 +1,6 @@
-import "./blob-particle";
+import "./blob-snowflake";
 
-Vue.component("blob-particles", {
+Vue.component("blob-snowflakes", {
   data() {
     return {
       count: 0,
@@ -21,7 +21,7 @@ Vue.component("blob-particles", {
   },
   methods: {
     update() {
-      this.count = 8;
+      this.count = 16;
     },
     updateSize() {
       this.bounds.x = this.$el.clientWidth;
@@ -29,8 +29,8 @@ Vue.component("blob-particles", {
     }
   },
   template:
-      `<svg class="c-blob-particle-container">
-        <blob-particle
+      `<svg class="c-blob-snowflake-container">
+        <blob-snowflake
           v-for="i in count"
           v-if="initialized"
           :key="i"

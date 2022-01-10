@@ -4946,7 +4946,7 @@ screen and (max-width: 480px) {
   fill: white;
 }
 
-.c-blob-particle-container {
+.c-blob-snowflake-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -4958,16 +4958,12 @@ screen and (max-width: 480px) {
   user-select:none; cursor:default;
 }
 
-.o-blob-particle {
+.o-blob-snowflake {
   fill: #fbc21b;
-  text-shadow: 0 0 10px #fff,
-               0 0 20px #fff,
-               0 0 30px #fbc21b,
-               0 0 40px #fbc21b,
-               0 0 50px #fbc21b,
-               0 0 60px #fbc21b,
-               0 0 70px #fbc21b;
-  opacity: 0.7;
+  text-shadow: 0 0 5px #000,
+               0 0 5px #000,
+               0 0 5px #000;
+  opacity: 0.9;
   overflow: visible;
   pointer-events: none;
   user-select:none; cursor:default;

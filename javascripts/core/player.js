@@ -287,6 +287,7 @@ window.player = {
     },
   },
   speedrun: {
+    isUnlocked: false,
     isActive: false,
     isImported: false,
     hasStarted: false,

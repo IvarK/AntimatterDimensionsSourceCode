@@ -601,23 +601,3 @@ dev.devMode = function() {
 dev.unlockAutomator = function() {
   player.reality.automator.forceUnlock = true;
 };
-
-dev.startSpeedrun = function(name) {
-  GameStorage.hardReset();
-  player.speedrun.isActive = true;
-  player.reality.seed = Date.now();
-
-  // We make a few assumptions on settings which are likely to be changed for all speedrunners
-  for (const key of Object.keys(player.options.confirmations)) player.options.confirmations[key] = false;
-  for (const key of Object.keys(player.options.animations)) player.options.animations[key] = false;
-
-  // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead
-  if (name) player.speedrun.name = name;
-  else player.speedrun.name = `AD Player #${Math.floor(1e7 * Math.random())}`;
-
-  // "Fake News" Achievement, given for free to partially mitigate promoting weird strategies at the beginning of runs
-  Achievement(22).unlock();
-
-  // Some time elapses after the reset and before the UI is actually ready, which ends up getting "counted" as offline
-  player.speedrun.offlineTimeUsed = 0;
-};

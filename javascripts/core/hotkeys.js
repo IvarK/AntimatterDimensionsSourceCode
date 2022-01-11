@@ -277,7 +277,7 @@ GameKeyboard.bind(
 GameKeyboard.bind("enter up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
   Currency.antimatter.bumpTo(30);
-  Speedrun.startRun();
+  Speedrun.startTimer();
 });
 
 

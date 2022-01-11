@@ -96,8 +96,7 @@ Vue.component("automator-event-log", {
           if (entry.timegap === entry.timestamp) return `, first logged event`;
           return `, ${TimeSpan.fromMilliseconds(entry.timegap).toStringShort()} after previous event`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.DATE_TIME:
-          // By default this also gives day of the week and time zone, so remove those
-          return `, ${new Date(entry.timestamp).toString().replace(/^.{4}(.*:..:..).*$/u, "$1")}`;
+          return `, ${Time.toDateTimeString(entry.timestamp)}`;
         default:
           throw Error("Unrecognized timestamp mode in Automator event log");
       }

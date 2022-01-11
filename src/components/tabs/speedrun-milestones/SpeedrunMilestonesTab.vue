@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       milestones: [],
+      startTimeStr: "",
     };
   },
   methods: {
@@ -16,8 +17,6 @@ export default {
       const db = GameDatabase.speedrunMilestones;
       const idList = db.map(m => m.id);
       this.milestones = [];
-
-      // Push completed ones in the order of completion, then the rest in numerical order
       for (const completed of idList) {
         const milestone = db.find(m => m.id === completed);
         const time = player.speedrun.records[milestone.key];
@@ -26,6 +25,9 @@ export default {
           time,
         });
       }
+      this.startTimeStr = player.speedrun.startDate === 0
+        ? "Speedrun not started yet."
+        : `Speedrun started at ${Time.toDateTimeString(player.speedrun.startDate)}`;
     },
   },
 };
@@ -33,7 +35,7 @@ export default {
 
 <template>
   <div>
-    Milestones will be <i>displayed</i> in a "standard" order, but may be completed in any order.
+    <b>{{ startTimeStr }}</b>
     <br>
     <div class="l-speedrun-milestone-tab">
       <SpeedrunMilestoneSingle

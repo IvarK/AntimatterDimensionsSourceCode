@@ -64,6 +64,7 @@ export const GameStorage = {
     }
     Modal.hideAll();
     this.loadPlayerObject(player, overrideLastUpdate);
+    if (player.speedrun.isActive) Speedrun.setImported(true);
     this.save(true);
     GameUI.notify.info("Game imported");
   },

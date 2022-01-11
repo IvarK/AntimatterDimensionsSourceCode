@@ -17,7 +17,8 @@ export default {
       cloudEnabled: false,
       showTimeSinceSave: false,
       loggedIn: false,
-      userName: ""
+      userName: "",
+      canSpeedrun: false,
     };
   },
   watch: {
@@ -34,6 +35,7 @@ export default {
       this.cloudEnabled = options.cloudEnabled;
       this.showTimeSinceSave = options.showTimeSinceSave;
       this.loggedIn = Cloud.loggedIn;
+      this.canSpeedrun = player.speedrun.isUnlocked;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
     },
@@ -104,6 +106,17 @@ export default {
           class="o-primary-btn--option l-options-grid__button"
           label="Display time since save:"
         />
+      </div>
+      <div
+        v-if="canSpeedrun"
+        class="l-options-grid__row"
+      >
+        <OptionsButton
+          class="o-primary-btn--option_font-x-large"
+          onclick="Modal.enterSpeedrun.show()"
+        >
+          Start Speedrun
+        </OptionsButton>
       </div>
       <OpenModalShortcutsButton />
     </div>

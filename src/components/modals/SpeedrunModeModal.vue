@@ -10,6 +10,7 @@ export default {
   },
   data() {
     return {
+      onInfoPage: true,
       name: "",
       confirmPhrase: "",
     };
@@ -20,10 +21,13 @@ export default {
     },
   },
   methods: {
+    nextPage() {
+      this.onInfoPage = false;
+    },
     cancel() {
       this.emitClose();
     },
-    hardReset() {
+    startRun() {
       if (!this.willStartRun) return;
       this.emitClose();
       Speedrun.prepareSave(this.name);
@@ -36,26 +40,17 @@ export default {
   <div class="c-modal-message l-modal-content--centered">
     <ModalCloseButton @click="cancel" />
     <h3>Entering Speedrun Mode</h3>
-    <div class="c-modal-message__text">
-      Confirming this modal will start a save with additional statistics tracking for when you reach certain points of
+    <div
+      v-if="onInfoPage"
+      class="c-modal-message__text"
+    >
+      This will start a save with additional statistics tracking for when you reach certain points of
       the game. These will be visible in the bottom-right of the screen and on a dedicated subtab of Statistics.
       <br>
       <br>
       All animations and confirmations are disabled by default. When you start the run, the game remains paused until
       your antimatter changes, allowing you to configure all your settings before starting the run. Because of this,
       "Fake News" is given immediately instead of forcing you to wait.
-      <br>
-      <br>
-      You can type in a name below to earmark your speedrun save, if desired. This will have no effects on
-      gameplay and only serves to identify this particular save as yours. If no name is given, your save will
-      be given a random name instead.
-      <input
-        ref="name"
-        v-model="name"
-        type="text"
-        class="c-modal-input c-modal-hard-reset__input"
-        @keyup.esc="cancel"
-      >
       <br>
       <br>
       <i>
@@ -65,32 +60,60 @@ export default {
       </i>
       <br>
       <br>
+      <PrimaryButton
+        class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
+        @click="nextPage"
+      >
+        Continue
+      </PrimaryButton>
+    </div>
+    <div
+      v-else 
+      class="c-modal-message__text"
+    >
+      You can type in text below to name your speedrun save, if desired. This will have no effects on
+      gameplay and only serves to identify this particular save as yours. If no name is given, the game will
+      generate a random name instead.
+      <input
+        ref="name"
+        v-model="name"
+        type="text"
+        class="c-modal-input c-modal-hard-reset__input"
+        @keyup.esc="cancel"
+      >
+      <br>
+      <br>
+      Speedrun saves can be freely imported and exported, but importing a speedrun save will cause it to be marked as
+      a Segmented run due to the fact that importing a save allows for parts of the game to be repeated to get better
+      times. Otherwise, saves will remain as Single-segment runs.
+      <br>
+      <br>
       <div class="c-modal-hard-reset-danger">
         Starting a speedrun will overwrite your current save, replacing the data in the save slot with the new
         speedrun save. Export this save first if you want to keep a save with a beaten game. Type in "Gotta Go Fast!"
-        to confirm.
+        below to confirm and start the run.
       </div>
+      <input
+        ref="confirmPhrase"
+        v-model="confirmPhrase"
+        type="text"
+        class="c-modal-input c-modal-hard-reset__input"
+        @keyup.esc="cancel"
+      >
+      <PrimaryButton
+        v-if="willStartRun"
+        class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
+        @click="startRun"
+      >
+        Start Run!
+      </PrimaryButton>
+      <PrimaryButton
+        v-else
+        class="o-primary-btn--width-medium c-modal-hard-reset-btn"
+        @click="cancel"
+      >
+        Cancel
+      </PrimaryButton>
     </div>
-    <input
-      ref="confirmPhrase"
-      v-model="confirmPhrase"
-      type="text"
-      class="c-modal-input c-modal-hard-reset__input"
-      @keyup.esc="cancel"
-    >
-    <PrimaryButton
-      v-if="!willStartRun"
-      class="o-primary-btn--width-medium c-modal-hard-reset-btn"
-      @click="cancel"
-    >
-      Cancel
-    </PrimaryButton>
-    <PrimaryButton
-      v-else
-      class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
-      @click="hardReset"
-    >
-      Start Run!
-    </PrimaryButton>
   </div>
 </template>

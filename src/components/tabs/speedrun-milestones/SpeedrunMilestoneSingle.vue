@@ -43,7 +43,7 @@ export default {
 
 <template>
   <div :class="classObject">
-    ({{ milestone.id }}) <b>{{ milestone.name }}</b>
+    <b>{{ milestone.name }}</b>
     <br>
     <i>{{ description }}</i>
     <br>

@@ -69,7 +69,7 @@ class SpeedrunMilestone extends GameMechanicState {
   }
 
   complete() {
-    if (this.isReached) return;
+    if (this.isReached || !player.speedrun.isActive) return;
     player.speedrun.records[this.config.key] = player.records.realTimePlayed;
     player.speedrun.milestones.push(this.config.id);
     GameUI.notify.success(`Speedrun Milestone Reached: ${this.name}`);

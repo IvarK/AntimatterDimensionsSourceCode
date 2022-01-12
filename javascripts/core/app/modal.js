@@ -18,6 +18,7 @@ import ExitCelestialModal from "@/components/modals/prestige/ExitCelestialModal"
 import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal";
 import HardResetModal from "@/components/modals/prestige/HardResetModal";
 import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
+import ChangeNameModal from "@/components/modals/ChangeNameModal";
 
 import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
 import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
@@ -130,6 +131,7 @@ Modal.exitCelestialReality = new Modal(ExitCelestialModal);
 Modal.celestials = new Modal(EnterCelestialsModal);
 Modal.hardReset = new Modal(HardResetModal);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
+Modal.changeName = new Modal(ChangeNameModal);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);

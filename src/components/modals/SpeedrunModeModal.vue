@@ -30,7 +30,7 @@ export default {
     startRun() {
       if (!this.willStartRun) return;
       this.emitClose();
-      Speedrun.prepareSave(this.name);
+      Speedrun.prepareSave(Speedrun.generateName(this.name));
     },
   },
 };
@@ -54,9 +54,7 @@ export default {
       <br>
       <br>
       <i>
-        There is no additional content in Speedrun Mode which cannot be seen by playing through the
-        game normally. This is not a special prestige layer; there are no upgrades or penalties which will
-        significantly change the game pace.
+        There is no additional content in Speedrun Mode.
       </i>
       <br>
       <br>
@@ -68,12 +66,12 @@ export default {
       </PrimaryButton>
     </div>
     <div
-      v-else 
+      v-else
       class="c-modal-message__text"
     >
-      You can type in text below to name your speedrun save, if desired. This will have no effects on
-      gameplay and only serves to identify this particular save as yours. If no name is given, the game will
-      generate a random name instead.
+      You can type in text below to name your speedrun save. This will have no effects on gameplay and only identifies
+      this particular save as yours. If no name is given, a random name will be generated instead. This name can be
+      changed by clicking your name in the speedrun info box, as long as the timer has not started yet.
       <input
         ref="name"
         v-model="name"
@@ -83,15 +81,15 @@ export default {
       >
       <br>
       <br>
-      Speedrun saves can be freely imported and exported, but importing a speedrun save will cause it to be marked as
-      a Segmented run due to the fact that importing a save allows for parts of the game to be repeated to get better
-      times. Otherwise, saves will remain as Single-segment runs.
+      Speedrun saves can be imported and exported like regular saves. Importing a speedrun save will mark it as a
+      Segmented run, as importing and exporting allows for optimization of individual segments of the game.
+      Without importing, saves will remain as Single-segment runs.
       <br>
       <br>
       <div class="c-modal-hard-reset-danger">
-        Starting a speedrun will overwrite your current save, replacing the data in the save slot with the new
-        speedrun save. Export this save first if you want to keep a save with a beaten game. Type in "Gotta Go Fast!"
-        below to confirm and start the run.
+        Starting a speedrun will overwrite your current save, replacing this save with the new speedrun save. Export
+        this save first if you want to keep a save with a beaten game. Type in "Gotta Go Fast!" below to confirm and
+        start the run.
       </div>
       <input
         ref="confirmPhrase"

@@ -585,6 +585,11 @@ button:focus {
   z-index: 5;
 }
 
+.o-speedrun-collapse {
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
 .l-reality-button {
   display: block;
   width: 50%;
@@ -2585,9 +2590,9 @@ screen and (max-width: 480px) {
 /*#region Speedrun Stats*/
 
 .l-speedrun-milestone-tab {
-  margin: auto;
-  width: 50%;
   display: flex;
+  margin: auto;
+  width: 100%;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
@@ -2595,9 +2600,14 @@ screen and (max-width: 480px) {
 }
 
 .l-speedrun-milestone-entry {
+  display: flex;
+  flex-direction: column;
   color: var(--color-text);
-  width: calc(50% - 0.8rem);
+  width: 25rem;
+  height: 8rem;
+  justify-content: space-between;
   margin: 0.2rem;
+  padding: 0.2rem;
   border: 0.2rem solid var(--color-text);
 }
 

@@ -64,7 +64,7 @@ export const GameStorage = {
     }
     Modal.hideAll();
     this.loadPlayerObject(player, overrideLastUpdate);
-    if (player.speedrun.isActive) Speedrun.setImported(true);
+    if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
     GameUI.notify.info("Game imported");
   },
@@ -143,7 +143,10 @@ export const GameStorage = {
   },
 
   export() {
+    const segmented = player.speedrun.isSegmented;
+    Speedrun.setSegmented(true);
     const save = GameSaveSerializer.serialize(player);
+    Speedrun.setSegmented(segmented);
     copyToClipboard(save);
     GameUI.notify.info("Exported current savefile to your clipboard");
   },
@@ -155,8 +158,11 @@ export const GameStorage = {
     const y = dateObj.getFullYear();
     const m = dateObj.getMonth() + 1;
     const d = dateObj.getDate();
+    const segmented = player.speedrun.isSegmented;
+    Speedrun.setSegmented(true);
     download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
       GameSaveSerializer.serialize(player));
+    Speedrun.setSegmented(segmented);
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
@@ -236,7 +242,7 @@ export const GameStorage = {
       // Try to unlock "Don't you dare sleep" (usually this check only happens
       // during a game tick, which makes the achievement impossible to get
       // with offline progress off)
-      Achievement(35).tryUnlock();
+      if (!Speedrun.isPausedAtStart()) Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();
       this.postLoadStuff();
     }

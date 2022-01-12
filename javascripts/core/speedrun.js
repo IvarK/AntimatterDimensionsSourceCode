@@ -11,20 +11,26 @@ export const Speedrun = {
       will provide you with another modal with more in-depth information.`);
     player.speedrun.isUnlocked = true;
   },
+  // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead
+  generateName(name) {
+    if (name.trim() === "") {
+      const id = Math.floor((1e7 - 1) * Math.random()) + 1;
+      return `AD Player #${"0".repeat(6 - Math.floor(Math.log10(id)))}${id}`;
+    }
+    if (name.length > 40) return `${name.slice(0, 37)}...`;
+    return name;
+  },
   // Hard-resets the current save and puts it in a state ready to be "unpaused" once resources start being generated
   prepareSave(name) {
     GameStorage.hardReset();
     player.speedrun.isUnlocked = true;
     player.speedrun.isActive = true;
     player.reality.seed = Date.now();
+    player.speedrun.name = name;
 
     // We make a few assumptions on settings which are likely to be changed for all speedrunners
     for (const key of Object.keys(player.options.confirmations)) player.options.confirmations[key] = false;
     for (const key of Object.keys(player.options.animations)) player.options.animations[key] = false;
-
-    // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead
-    if (name === "") player.speedrun.name = `AD Player #${Math.floor(1e7 * Math.random())}`;
-    else player.speedrun.name = name;
 
     // "Fake News" Achievement, given for free to partially mitigate promoting weird strategies at the beginning of runs
     Achievement(22).unlock();
@@ -43,9 +49,12 @@ export const Speedrun = {
   isPausedAtStart() {
     return player.speedrun.isActive && !player.speedrun.hasStarted;
   },
-  // This needs to be here due to JS applying "function scope" to the player object within importing in storage.js
-  setImported(state) {
-    player.speedrun.isImported = state;
+  // This needs to be here due to JS applying "function scope" to the player object within importing in storage.js,
+  // which causes any direct changes done in storage.js to fall out of scope afterwards. We also don't want to change
+  // this state at the beginning in case people want to share identical single-segment saves before starting the timer.
+  setSegmented(state) {
+    if (this.isPausedAtStart()) return;
+    player.speedrun.isSegmented = state;
   }
 };
 

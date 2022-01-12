@@ -44,9 +44,7 @@ export default {
 <template>
   <div :class="classObject">
     <b>{{ milestone.name }}</b>
-    <br>
     <i>{{ description }}</i>
-    <br>
     {{ timeDisplay }} {{ gapDisplay }}
   </div>
 </template>

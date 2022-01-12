@@ -289,8 +289,9 @@ window.player = {
   speedrun: {
     isUnlocked: false,
     isActive: false,
-    isImported: false,
+    isSegmented: false,
     hasStarted: false,
+    hideInfo: false,
     startDate: 0,
     name: "",
     offlineTimeUsed: 0,

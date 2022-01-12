@@ -32,7 +32,15 @@ export default {
       if (!this.keepDimBoost) resetResouces.push("Dimension Boosts");
       if (!this.keepAntimatter && !this.perkANRBought) resetResouces.push("Antimatter");
       const resetList = makeEnumeration(resetResouces);
-      const tickspeedInfo = "you will receive a small boost to Tickspeed upgrades.";
+      let tickspeedFixed = "";
+      if (InfinityChallenge(3).isRunning) {
+        tickspeedFixed = `Infinity Challenge ${InfinityChallenge(3).id}`;
+      } else if (Ra.isRunning) {
+        tickspeedFixed = `${Ra.displayName}'s Reality`;
+      }
+      const tickspeedInfo = (tickspeedFixed === "")
+        ? "you will receive a small boost to Tickspeed upgrades."
+        : `you will not receive a boost to Tickspeed upgrades, because you are in ${tickspeedFixed}.`;
       const message = (resetList === "")
         ? `This will reset nothing, and ${tickspeedInfo}`
         : `This will reset your ${resetList}. However, ${tickspeedInfo}`;

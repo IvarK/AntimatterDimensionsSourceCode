@@ -8,12 +8,30 @@ export default {
   },
   data() {
     return {
-      shortcuts: []
+      shortcuts: [],
+      timeStudyUnlocked: false,
+      glyphUnlocked: false,
+      glyphSacUnlocked: false
     };
   },
   computed: {
     visibleShortcuts() {
       return this.shortcuts.filter(x => x.visible());
+    },
+    moreShiftKeyInfo() {
+      const shiftKeyFunctions = [];
+      if (this.timeStudyUnlocked) {
+        shiftKeyFunctions.push("while buying Time Studies to buy all up until that point");
+        shiftKeyFunctions.push("to save Time Study Trees");
+      }
+      if (this.glyphUnlocked) {
+        shiftKeyFunctions.push(`to ${(this.glyphSacUnlocked) ? "sacrifice" : "delete"} Glyphs`);
+      }
+      const shiftKeyInfo = makeEnumeration(shiftKeyFunctions);
+      const message = (shiftKeyInfo === "")
+        ? ""
+        : `You can hold shift ${shiftKeyInfo}.`;
+      return message;
     }
   },
   methods: {
@@ -26,6 +44,10 @@ export default {
         here.keys = there.keys;
         here.visible = there.visible;
       }
+      const progress = PlayerProgress.current;
+      this.timeStudyUnlocked = progress.isEternityUnlocked;
+      this.glyphUnlocked = progress.isRealityUnlocked;
+      this.glyphSacUnlocked = RealityUpgrade(19).isBought;
     }
   },
 };
@@ -68,8 +90,7 @@ export default {
         Shift is a modifier key that shows additional information on certain things
         and adjusts the function of certain buttons.
         <br>
-        You can hold shift while buying Time Studies to buy all up until that point,
-        save Time Study Trees, and delete Glyphs.
+        {{ moreShiftKeyInfo }}
       </span>
       <br>
       <br>

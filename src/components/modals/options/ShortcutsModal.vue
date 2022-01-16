@@ -10,7 +10,6 @@ export default {
     return {
       shortcuts: [],
       timeStudyUnlocked: false,
-      glyphUnlocked: false,
       glyphSacUnlocked: false
     };
   },
@@ -24,14 +23,13 @@ export default {
         shiftKeyFunctions.push("while buying Time Studies to buy all up until that point");
         shiftKeyFunctions.push("to save Time Study Trees");
       }
-      if (this.glyphUnlocked) {
-        shiftKeyFunctions.push(`to ${(this.glyphSacUnlocked) ? "sacrifice" : "delete"} Glyphs`);
+      if (this.glyphSacUnlocked) {
+        shiftKeyFunctions.push("to purge Glyphs");
       }
       const shiftKeyInfo = makeEnumeration(shiftKeyFunctions);
-      const message = (shiftKeyInfo === "")
+      return (shiftKeyInfo === "")
         ? ""
-        : `You can hold shift ${shiftKeyInfo}.`;
-      return message;
+        : `You can hold Shift ${shiftKeyInfo}.`;
     }
   },
   methods: {
@@ -46,7 +44,6 @@ export default {
       }
       const progress = PlayerProgress.current;
       this.timeStudyUnlocked = progress.isEternityUnlocked;
-      this.glyphUnlocked = progress.isRealityUnlocked;
       this.glyphSacUnlocked = RealityUpgrade(19).isBought;
     }
   },

@@ -6,7 +6,7 @@ Vue.component("blob-snowflake", {
     this.fly();
   },
   beforeDestroy() {
-    TWEEN.removeAll();
+    TWEEN.remove(this.tween);
   },
   methods: {
     fly() {
@@ -67,15 +67,15 @@ Vue.component("blob-snowflake", {
       tweenDropReset.start(snowDelay);
 
       function snowText() {
-        LEN = 23;
-        START = "\uE010";
-        START_HEX = START.codePointAt(0) || 65;
+        const LEN = 23;
+        const START = "\uE010";
+        const START_HEX = START.codePointAt(0) || 65;
         const SNOW = [];
+        // eslint-disable-next-line no-unmodified-loop-condition
         for (i = 0; i < LEN; i++) {
-          char = String.fromCharCode(START_HEX + i);
-          SNOW.push(char);
+          SNOW.push(String.fromCharCode(START_HEX + i));
         }
-        return `${SNOW[Math.floor(Math.random() * SNOW.length)]}`;
+        return SNOW[Math.floor(Math.random() * SNOW.length)];
       }
     },
   },

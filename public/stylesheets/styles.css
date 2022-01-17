@@ -159,8 +159,7 @@ html {
   --color-laitela--accent: white;
 }
 
-.t-s11 #ui-container /* csslint allow: empty-rules */
- {
+.t-s11 #ui-container { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;
@@ -2006,10 +2005,10 @@ screen and (max-width: 480px) {
 }
 
 @keyframes a-game-header__antimatter--glow-blob {
-  0%   {color: #fbc21b;}
-  33%  {color: #caa32c;}
-  66%  {color: #fba11b;}
-  100% {color: #fbc21b;}
+  0%   { color: #fbc21b }
+  33%  { color: #caa32c }
+  66%  { color: #fba11b }
+  100% { color: #fbc21b }
 }
 
 .t-dark-metro .c-game-header__antimatter {
@@ -4955,7 +4954,8 @@ screen and (max-width: 480px) {
   z-index: 9999;
   overflow: visible;
   pointer-events: none;
-  user-select:none; cursor:default;
+  user-select: none;
+  cursor: default;
 }
 
 .o-blob-snowflake {
@@ -4966,7 +4966,8 @@ screen and (max-width: 480px) {
   opacity: 0.9;
   overflow: visible;
   pointer-events: none;
-  user-select:none; cursor:default;
+  user-select: none;
+  cursor: default;
 }
 
 /*#endregion Dilation*/

@@ -15,12 +15,14 @@ export default {
       dilationUnlocked: false,
       realityUnlocked: false,
       animatedThemeUnlocked: false,
+      blobThemeUnlocked: false,
       bigCrunch: false,
       eternity: false,
       dilation: false,
       tachyonParticles: false,
       reality: false,
-      background: false
+      background: false,
+      blobSnowFlakes: 16
     };
   },
   watch: {
@@ -41,6 +43,9 @@ export default {
     },
     background(newValue) {
       player.options.animations.background = newValue;
+    },
+    blobSnowFlakes(newValue) {
+      player.options.animations.blobSnowFlakes = parseInt(newValue, 10);
     }
   },
   methods: {
@@ -51,6 +56,7 @@ export default {
       this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
+      this.blobThemeUnlocked = Themes.find("S11").isAvailable();
 
       const options = player.options.animations;
       this.bigCrunch = options.bigCrunch;
@@ -59,6 +65,7 @@ export default {
       this.tachyonParticles = options.tachyonParticles;
       this.reality = options.reality;
       this.background = options.background;
+      this.blobSnowFlakes = options.blobSnowFlakes;
     }
   },
 };
@@ -101,6 +108,20 @@ export default {
         onclick="Themes.find(player.options.theme).set();"
         text="Background:"
       />
+      <div
+        v-if="blobThemeUnlocked"
+        class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"
+      >
+        <b>{{ quantifyInt("Blobflake", parseInt(blobSnowFlakes)) }}</b>
+        <input
+          v-model="blobSnowFlakes"
+          class="o-primary-btn--slider__slider"
+          type="range"
+          min="1"
+          step="1"
+          max="100"
+        >
+      </div>
     </div>
   </OptionsWrapperModal>
 </template>

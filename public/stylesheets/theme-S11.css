@@ -1,47 +1,47 @@
 @font-face {
-    font-family: Typewriter;
-    src: url('blob_font_bold.ttf'), url('MonospaceTypewriter.ttf');
-  }
+  font-family: Typewriter;
+  src: url('BlobEmoji-Bold.ttf'), url('MonospaceTypewriter.ttf');
+}
 
-  body.t-s11 {
-    color: #999;
-    background: black;
-    background-size: 100%;
-    background-position: center;
-  }
-  
-  .t-s11 .c-tt-amount {
-    color: #64DD17;
-    text-shadow: 0 0 7px #64DD17;
-  }
-  
-  .t-s11 .c-tt-buy-button--unlocked {
-    color: #3AACD6;
-    background: black;
-    border: 0.1rem solid #3AACD6;
-  }
-  
-  .t-s11 .c-tt-buy-button--unlocked:hover {
-    color: black;
-    background: #3AACD6;
-  }
-  
-  .t-s11 .c-tt-buy-button--locked {
-    color: grey;
-    background: black;
-    border: 0.1rem solid grey;
-  }
-  
-  .t-s11 .c-tt-buy-button--locked:hover {
-    color: black;
-    background: var(--color-bad);
-    border: 0.1rem solid var(--color-bad);
-  }
-  
-  .t-s11 .c-rm-amount__desc {
-    color: #999;
-  }
-  
-  .t-s11 #realityanimbg {
-    filter: invert(1);
-  }
+body.t-s11 {
+  color: #999;
+  background: black;
+  background-size: 100%;
+  background-position: center;
+}
+
+.t-s11 .c-tt-amount {
+  color: #64DD17;
+  text-shadow: 0 0 7px #64DD17;
+}
+
+.t-s11 .c-tt-buy-button--unlocked {
+  color: #3AACD6;
+  background: black;
+  border: 0.1rem solid #3AACD6;
+}
+
+.t-s11 .c-tt-buy-button--unlocked:hover {
+  color: black;
+  background: #3AACD6;
+}
+
+.t-s11 .c-tt-buy-button--locked {
+  color: grey;
+  background: black;
+  border: 0.1rem solid grey;
+}
+
+.t-s11 .c-tt-buy-button--locked:hover {
+  color: black;
+  background: var(--color-bad);
+  border: 0.1rem solid var(--color-bad);
+}
+
+.t-s11 .c-rm-amount__desc {
+  color: #999;
+}
+
+.t-s11 #realityanimbg {
+  filter: invert(1);
+}

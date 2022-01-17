@@ -1386,6 +1386,8 @@ GameDatabase.news = [
   {
     id: "a245",
     get text() {
+      // :blob:
+      BLOB = String.fromCharCode("\uE010".codePointAt(0) || 65);
       const theme = Theme.current().displayName();
       const reasons = {
         Normal:
@@ -1421,6 +1423,13 @@ GameDatabase.news = [
         S10:
           `it has a crisp and soothing design that really appeals, and its background is complex and enthralling.
           It gives you the feeling of standing at the helm of a futuristic interstellar ship.`,
+        S11:
+          `the Blob is an iconic character in the Antimatter Dimensions official Discord server. And it is widely
+          used to express emotions in a lovely way. And it is a fact that the Blobs are evolving. ${BLOB} always
+          seek to be more expressive. Then someday, a new ${BLOB} is born in the server, to express further emotions.
+          But usually, ${BLOB} are just blobbling and hopping around. They are sometimes merging and sometimes
+          dividing. Only ${BLOB} know where they are from. Where they are going to go. But still, ${BLOB} are there,
+          always with me. You love ${BLOB}, so ${BLOB} loves you too.`,
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.

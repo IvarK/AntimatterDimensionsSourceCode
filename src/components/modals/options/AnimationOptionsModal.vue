@@ -119,7 +119,7 @@ export default {
           type="range"
           min="1"
           step="1"
-          max="100"
+          max="500"
         >
       </div>
     </div>

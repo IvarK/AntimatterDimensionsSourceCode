@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "NormalChallengeStartModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   computed: {
     challenge() {
@@ -43,18 +43,19 @@ export default {
   methods: {
     handleYesClick() {
       this.challenge.start();
-      this.emitClose();
-    },
-    handleNoClick() {
-      this.emitClose();
     },
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>{{ entranceLabel }}</h2>
+  <ModalWrapperChoice
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      {{ entranceLabel }}
+    </template>
     <div class="c-modal-message__text">
       {{ message }}
     </div>
@@ -69,19 +70,8 @@ export default {
       <br>
       {{ reward }}
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Begin
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      Begin
+    </template>
+  </ModalWrapperChoice>
 </template>

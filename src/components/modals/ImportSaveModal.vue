@@ -1,12 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "ImportSaveModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice
   },
   data() {
     return {
@@ -54,7 +52,7 @@ export default {
   methods: {
     importSave() {
       if (!this.inputIsValid) return;
-      Modal.hide();
+      this.emitClose();
       GameStorage.import(this.input);
     },
   },
@@ -62,9 +60,15 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-import l-modal-content--centered">
-    <ModalCloseButton @click="emitClose" />
-    <h3>Input your save</h3>
+  <ModalWrapperChoice
+    :show-cancel="!inputIsValid"
+    :show-confirm="inputIsValid"
+    @close="emitClose"
+    @confirm="importSave"
+  >
+    <template #header>
+      Input your save
+    </template>
     <input
       ref="input"
       v-model="input"
@@ -98,12 +102,8 @@ export default {
         {{ saveCheckString }}
       </div>
     </div>
-    <PrimaryButton
-      v-if="inputIsValid"
-      class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
-      @click="importSave"
-    >
+    <template #confirm-text>
       Import
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

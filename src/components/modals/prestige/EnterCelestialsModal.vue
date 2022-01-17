@@ -1,11 +1,11 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import EnterCelestialsRaPet from "@/components/modals/prestige/EnterCelestialsRaPet";
 
 export default {
   name: "EnterCelestialsModal",
   components: {
-    PrimaryButton,
+    ModalWrapperChoice,
     EnterCelestialsRaPet,
   },
   props: {
@@ -63,7 +63,6 @@ export default {
       }
     },
     handleYesClick() {
-      this.emitClose();
       beginProcessReality(getRealityProps(true));
       switch (this.modalConfig.number) {
         case 0: return Teresa.initializeRun();
@@ -76,16 +75,18 @@ export default {
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
     },
-    handleNoClick() {
-      this.emitClose();
-    },
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>{{ topLabel }}</h2>
+  <ModalWrapperChoice
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      {{ topLabel }}
+    </template>
     <div class="c-modal-message__text">
       {{ message }}
       <span
@@ -105,19 +106,8 @@ export default {
         />
       </span>
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Begin
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      Begin
+    </template>
+  </ModalWrapperChoice>
 </template>

@@ -1,12 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "PreferredTreeModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
   },
   data() {
     return {
@@ -53,7 +51,6 @@ export default {
     confirmPrefs() {
       TimeStudy.preferredPaths.dimensionPath = this.dimensionPath;
       TimeStudy.preferredPaths.pacePath = this.pacePath;
-      this.emitClose();
     },
     classList(name) {
       const pref = this.isPreferred(name);
@@ -76,9 +73,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <ModalCloseButton @click="emitClose" />
-    <br>
+  <ModalWrapperChoice
+    @confirm="confirmPrefs"
+    @close="emitClose"
+  >
     <h2>Dimension Split Preference</h2>
     <div class="l-modal-split-preferences">
       <button
@@ -112,11 +110,5 @@ export default {
         </div>
       </button>
     </div>
-    <PrimaryButton
-      class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
-      @click="confirmPrefs"
-    >
-      Confirm
-    </PrimaryButton>
-  </div>
+  </ModalWrapperChoice>
 </template>

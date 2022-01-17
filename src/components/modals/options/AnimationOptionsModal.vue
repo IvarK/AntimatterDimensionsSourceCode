@@ -1,12 +1,12 @@
 <script>
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
-import OptionsWrapperModal from "@/components/modals/options/OptionsWrapperModal";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "AnimationOptionsModal",
   components: {
     ModalOptionsToggleButton,
-    OptionsWrapperModal,
+    ModalWrapperOptions,
   },
   data() {
     return {
@@ -72,10 +72,13 @@ export default {
 </script>
 
 <template>
-  <OptionsWrapperModal
+  <ModalWrapperOptions
     class="c-modal-options__large"
     @close="emitClose"
   >
+    <template #header>
+      Animation Options Modal
+    </template>
     <div class="c-modal-options__button-container">
       <ModalOptionsToggleButton
         v-if="infinityUnlocked"
@@ -123,5 +126,5 @@ export default {
         >
       </div>
     </div>
-  </OptionsWrapperModal>
+  </ModalWrapperOptions>
 </template>

@@ -1,12 +1,12 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "SpeedrunModeModal",
   components: {
     PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
   },
   data() {
     return {
@@ -24,9 +24,6 @@ export default {
     nextPage() {
       this.onInfoPage = false;
     },
-    cancel() {
-      this.emitClose();
-    },
     startRun() {
       if (!this.willStartRun) return;
       this.emitClose();
@@ -37,9 +34,16 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <ModalCloseButton @click="cancel" />
-    <h3>Entering Speedrun Mode</h3>
+  <ModalWrapperChoice
+    :show-cancel="!onInfoPage && !willStartRun"
+    :show-confirm="!onInfoPage && willStartRun"
+    confirm-class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
+    @close="emitClose"
+    @confirm="startRun"
+  >
+    <template #header>
+      Entering Speedrun Mode
+    </template>
     <div
       v-if="onInfoPage"
       class="c-modal-message__text"
@@ -77,7 +81,7 @@ export default {
         v-model="name"
         type="text"
         class="c-modal-input c-modal-hard-reset__input"
-        @keyup.esc="cancel"
+        @keyup.esc="emitClose"
       >
       <br>
       <br>
@@ -96,22 +100,14 @@ export default {
         v-model="confirmPhrase"
         type="text"
         class="c-modal-input c-modal-hard-reset__input"
-        @keyup.esc="cancel"
+        @keyup.esc="emitClose"
       >
-      <PrimaryButton
-        v-if="willStartRun"
-        class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
-        @click="startRun"
-      >
-        Start Run!
-      </PrimaryButton>
-      <PrimaryButton
-        v-else
-        class="o-primary-btn--width-medium c-modal-hard-reset-btn"
-        @click="cancel"
-      >
-        Cancel
-      </PrimaryButton>
     </div>
-  </div>
+    <template #confirm>
+      Start Run!
+    </template>
+    <template #cancel>
+      Cancel
+    </template>
+  </ModalWrapperChoice>
 </template>

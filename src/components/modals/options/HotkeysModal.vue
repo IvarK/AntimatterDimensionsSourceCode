@@ -1,10 +1,10 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "HotkeysModal",
   components: {
-    ModalCloseButton,
+    ModalWrapper
   },
   data() {
     return {
@@ -63,8 +63,7 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-hotkeys l-modal-hotkeys">
-    <ModalCloseButton @click="emitClose" />
+  <ModalWrapper class="c-modal-hotkeys l-modal-hotkeys">
     <div class="l-modal-hotkeys__column">
       <h2>Hotkey List</h2>
       <div class="l-modal-hotkeys-row">
@@ -132,5 +131,5 @@ export default {
         and the Left and Right arrows cycle you through that tab's subtabs.
       </span>
     </div>
-  </div>
+  </ModalWrapper>
 </template>

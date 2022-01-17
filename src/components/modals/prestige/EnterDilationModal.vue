@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "EnterDilationModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   computed: {
     modal() {
@@ -22,7 +22,7 @@ export default {
       if (player.dilation.lastEP.eq(-1)) {
         return "This is your first Dilation";
       }
-      return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points`;
+      return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points.`;
     }
   },
   created() {
@@ -36,36 +36,26 @@ export default {
       } else {
         startDilatedEternity();
       }
-      this.emitClose();
-    },
-    handleNoClick() {
-      this.emitClose();
     },
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>{{ entranceLabel }}</h2>
-    <h3>{{ EPSinceLabel }}</h3>
+  <ModalWrapperChoice
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      {{ entranceLabel }}
+    </template>
     <div class="c-modal-message__text">
+      {{ EPSinceLabel }}
+      <br>
       {{ message }}
     </div>
-    <br>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Enter
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      Enter
+    </template>
+  </ModalWrapperChoice>
 </template>

@@ -1,29 +1,30 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "ResetRealityModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
-    handleNoClick() {
-      this.emitClose();
-    },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-      this.emitClose();
     },
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>You are about to reset your Reality</h2>
+  <ModalWrapperChoice
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      You are about to reset your Reality
+    </template>
     <div class="c-modal-message__text">
       This will put you at the start of your Reality and reset your progress in this Reality,
       giving you no rewards from your progress in your current Reality.
@@ -31,19 +32,8 @@ export default {
       <br>
       Are you sure you want to do this?
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Reset
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      Reset
+    </template>
+  </ModalWrapperChoice>
 </template>

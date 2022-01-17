@@ -1,11 +1,13 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 import GlyphComponent from "@/components/GlyphComponent";
 
 export default {
   name: "RealityModal",
   components: {
     PrimaryButton,
+    ModalWrapper,
     GlyphComponent,
   },
   data() {
@@ -116,18 +118,19 @@ export default {
     },
     confirmModal(sacrifice) {
       processManualReality(sacrifice, this.selectedGlyph);
-      this.emitClose();
-    },
-    cancelModal() {
-      this.emitClose();
     },
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>You are about to Reality</h2>
+  <ModalWrapper
+    class="c-modal-message l-modal-content--centered"
+    @close="emitClose"
+  >
+    <template #header>
+      You are about to Reality
+    </template>
     <span v-if="showReality">
       <div
         v-if="!firstPerk"
@@ -170,7 +173,7 @@ export default {
     <div class="l-options-grid__row">
       <PrimaryButton
         class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="cancelModal"
+        @click="emitClose"
       >
         Cancel
       </PrimaryButton>
@@ -188,5 +191,5 @@ export default {
         Confirm
       </PrimaryButton>
     </div>
-  </div>
+  </ModalWrapper>
 </template>

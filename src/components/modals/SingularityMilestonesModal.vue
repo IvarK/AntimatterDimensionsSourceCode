@@ -1,11 +1,11 @@
 <script>
 import "../../../javascripts/components/celestials/subtabs/laitela/singularity-milestone.js";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "SingularityMilestonesModal",
   components: {
-    ModalCloseButton,
+    ModalWrapperChoice,
   },
   data() {
     return {
@@ -24,8 +24,14 @@ export default {
 </script>
 
 <template>
-  <div>
-    <ModalCloseButton @click="emitClose" />
+  <ModalWrapperChoice
+    :show-cancel="false"
+    :show-confirm="false"
+    @close="emitClose"
+  >
+    <template #header>
+      Singularity Milestones
+    </template>
     <div class="l-singularity-milestone-modal-container-outer">
       <div class="l-singularity-milestone-modal-container-inner">
         <singularity-milestone
@@ -35,5 +41,5 @@ export default {
         />
       </div>
     </div>
-  </div>
+  </ModalWrapperChoice>
 </template>

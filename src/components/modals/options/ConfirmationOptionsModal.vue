@@ -1,11 +1,11 @@
 <script>
-import OptionsWrapperModal from "@/components/modals/options/OptionsWrapperModal";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import ConfirmationOptionsEntry from "@/components/modals/options/ConfirmationOptionsEntry";
 
 export default {
   name: "ConfirmationOptionsModal",
   components: {
-    OptionsWrapperModal,
+    ModalWrapperOptions,
     ConfirmationOptionsEntry,
   },
   computed: {
@@ -20,10 +20,13 @@ export default {
 </script>
 
 <template>
-  <OptionsWrapperModal
+  <ModalWrapperOptions
     class="c-modal-options__large"
     @close="emitClose"
   >
+    <template #header>
+      Confirmation Options Modal
+    </template>
     <div class="c-modal-options__button-container">
       <span v-if="noConfirmations">
         You do not have anything that requires confirmation,
@@ -35,5 +38,5 @@ export default {
         :index="entryNumber - 1"
       />
     </div>
-  </OptionsWrapperModal>
+  </ModalWrapperOptions>
 </template>

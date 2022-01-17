@@ -1,12 +1,12 @@
 <script>
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
-import OptionsWrapperModal from "@/components/modals/options/OptionsWrapperModal";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "InfoDisplayOptionsModal",
   components: {
     ModalOptionsToggleButton,
-    OptionsWrapperModal,
+    ModalWrapperOptions,
   },
   data() {
     return {
@@ -79,10 +79,13 @@ export default {
 </script>
 
 <template>
-  <OptionsWrapperModal
+  <ModalWrapperOptions
     class="c-modal-options__large"
     @close="emitClose"
   >
+    <template #header>
+      Info Display Options Modal
+    </template>
     <div class="c-modal-options__button-container">
       <ModalOptionsToggleButton
         v-model="achievements"
@@ -129,5 +132,5 @@ export default {
       />
     </div>
     Note: All types of additional info above will always display when holding shift.
-  </OptionsWrapperModal>
+  </ModalWrapperOptions>
 </template>

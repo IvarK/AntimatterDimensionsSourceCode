@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "BreakInfinityModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   computed: {
     message() {
@@ -24,15 +24,20 @@ export default {
   methods: {
     handleYesClick() {
       breakInfinity();
-      this.emitClose();
     }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>You are Breaking Infinity</h2>
+  <ModalWrapperChoice
+    :show-cancel="false"
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      You are Breaking Infinity
+    </template>
     <div class="c-modal-message__text">
       <span
         v-for="(line, index) in message"
@@ -41,13 +46,8 @@ export default {
         {{ line }} <br>
       </span>
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Break
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      Break
+    </template>
+  </ModalWrapperChoice>
 </template>

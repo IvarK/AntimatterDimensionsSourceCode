@@ -1,13 +1,11 @@
 <script>
 import CloudConflictRecordModal from "@/components/modals/cloud/CloudConflictRecordModal";
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "CloudLoadConflictModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
     CloudConflictRecordModal,
   },
   computed: {
@@ -22,22 +20,24 @@ export default {
     }
   },
   methods: {
-    handleClick(accepted) {
-      if (accepted) {
-        this.conflict.onAccept?.();
-      }
-      this.emitClose();
+    confirm() {
+      this.conflict.onAccept?.();
     }
   }
 };
 </script>
 
 <template>
-  <div
-    class="c-modal-options c-modal-options__large l-modal-options"
+  <ModalWrapperChoice
+    class="c-modal-options__large"
+    :cancel-class="'c-modal-message__okay-btn'"
+    :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
+    @confirm="confirm"
+    @close="emitClose"
   >
-    <ModalCloseButton @click="emitClose" />
-    <h1>Load Game from Cloud</h1>
+    <template #header>
+      Load Game from Cloud
+    </template>
     <b>
       <span v-if="older">
         Your Local Save appears to be older than your Cloud Save.
@@ -56,23 +56,17 @@ export default {
       :save-id="conflict.saveId"
       save-type="Local Save"
     />
-    <PrimaryButton
-      class="o-primary-btn"
-      @click="handleClick(false)"
-    >
-      Keep Local Save
-    </PrimaryButton>
     <br>
     <CloudConflictRecordModal
       :save-data="conflict.cloud"
       :save-id="conflict.saveId"
       save-type="Cloud Save"
     />
-    <PrimaryButton
-      class="o-primary-btn"
-      @click="handleClick(true)"
-    >
+    <template #cancel-text>
+      Keep Local Save
+    </template>
+    <template #confirm-text>
       Overwrite Local with Cloud Save
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

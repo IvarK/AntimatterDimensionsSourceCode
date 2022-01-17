@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "DeleteAutomatorScriptModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   props: {
     modalConfig: {
@@ -18,9 +18,6 @@ export default {
     },
   },
   methods: {
-    handleNoClick() {
-      this.emitClose();
-    },
     handleYesClick() {
       const script = this.modalConfig.scriptID;
       const runningScriptID = AutomatorBackend.state.topLevelScript;
@@ -49,32 +46,25 @@ export default {
       player.reality.automator.scripts = shiftedScripts;
 
       EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
-      this.emitClose();
     },
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>Delete this script</h2>
+  <ModalWrapperChoice
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      Delete this script
+    </template>
     <div class="c-modal-message__text">
       Please confirm your desire to delete this Automator script.
       This is permanent and irreversible. There is no gain from doing this.
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Delete
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      Delete
+    </template>
+  </ModalWrapperChoice>
 </template>

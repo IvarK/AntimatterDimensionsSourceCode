@@ -2,7 +2,7 @@
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 export default {
-  name: "OptionsWrapperModal",
+  name: "ModalWrapper",
   components: {
     ModalCloseButton,
   },
@@ -10,8 +10,9 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-options l-modal-options">
+  <div>
     <ModalCloseButton @click="emitClose" />
+    <h3><slot name="header" /></h3>
     <slot />
   </div>
 </template>

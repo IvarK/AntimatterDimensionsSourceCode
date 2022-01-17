@@ -1,10 +1,10 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "AutomatorScriptTemplate",
   components: {
-    ModalCloseButton,
+    ModalWrapper,
   },
   props: {
     modalConfig: {
@@ -106,11 +106,14 @@ export default {
 </script>
 
 <template>
-  <div class="c-automator-template-container">
-    <ModalCloseButton @click="emitClose" />
+  <ModalWrapper
+    class="c-automator-template-container"
+    @close="emitClose"
+  >
+    <template #header>
+      {{ modalConfig.name }} Template
+    </template>
     <div class="c-automator-template-description">
-      <b>{{ modalConfig.name }} Template</b>
-      <br>
       {{ modalConfig.description }}
     </div>
     <div class="c-automator-template-inputs">
@@ -187,5 +190,5 @@ export default {
     >
       Cannot generate template (You have {{ quantifyInt("invalid input", invalidInputCount) }})
     </button>
-  </div>
+  </ModalWrapper>
 </template>

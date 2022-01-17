@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "ExitCelestialModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   data() {
     return {
@@ -20,18 +20,20 @@ export default {
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-      this.emitClose();
     },
-    handleNoClick() {
-      this.emitClose();
-    }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>You are about to exit a Celestial Reality</h2>
+  <ModalWrapperChoice
+    @close="emitClose"
+    @confirm="handleYesClick"
+  >
+    <template #header>
+      You are about to exit a Celestial Reality
+    </template>
+
     <div class="c-modal-message__text">
       <span v-if="isRestarting">
         Restarting a Celestial's Reality will reset your Reality and
@@ -42,20 +44,8 @@ export default {
         exit the Celestial without the benefits of completing the Celestial.
       </span>
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        <span v-if="isRestarting">Restart</span>
-        <span v-else>Exit</span>
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #confirm-text>
+      {{ isRestarting ? "Restart" : "Exit" }}
+    </template>
+  </ModalWrapperChoice>
 </template>

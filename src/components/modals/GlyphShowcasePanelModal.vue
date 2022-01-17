@@ -1,13 +1,13 @@
 <script>
 import GlyphSetName from "@/components/GlyphSetName";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 import GlyphShowcasePanelEntry from "@/components/modals/GlyphShowcasePanelEntry";
 
 export default {
   name: "GlyphShowcasePanelModal",
   components: {
     GlyphSetName,
-    ModalCloseButton,
+    ModalWrapper,
     GlyphShowcasePanelEntry,
   },
   props: {
@@ -62,9 +62,12 @@ export default {
 </script>
 
 <template>
-  <div>
-    <ModalCloseButton @click="emitClose" />
-    <h3>{{ modalConfig.name }}</h3>
+  <ModalWrapper
+    @close="emitClose"
+  >
+    <template #header>
+      {{ modalConfig.name }}
+    </template>
     <div v-if="isGlyphSelection">
       Projected Glyph Level: {{ formatInt(gainedLevel) }}
     </div>
@@ -86,5 +89,5 @@ export default {
         :show-sacrifice="modalConfig.displaySacrifice"
       />
     </div>
-  </div>
+  </ModalWrapper>
 </template>

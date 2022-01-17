@@ -1,12 +1,12 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 import AwayProgressEntry from "@/components/modals/AwayProgressEntry";
 
 export default {
   name: "AwayProgressModal",
   components: {
     AwayProgressEntry,
-    ModalCloseButton,
+    ModalWrapper,
   },
   props: {
     modalConfig: {
@@ -50,8 +50,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-away-progress">
-    <ModalCloseButton @click="emitClose" />
+  <ModalWrapper
+    class="c-modal-away-progress"
+    @close="emitClose"
+  >
     <div class="c-modal-away-progress__header">
       {{ headerText }}
     </div>
@@ -69,5 +71,5 @@ export default {
       />
     </div>
     <span v-if="!nothingHappened">Note: Click an entry to hide it in the future.</span>
-  </div>
+  </ModalWrapper>
 </template>

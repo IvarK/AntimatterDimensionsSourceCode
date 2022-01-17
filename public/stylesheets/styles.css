@@ -5344,10 +5344,6 @@ screen and (max-width: 480px) {
 
 /*#region c-modal-import*/
 
-.c-modal-import {
-  width: 48rem;
-}
-
 .c-modal-import__save-info > div {
   margin-top: 0.2rem;
 }
@@ -5358,10 +5354,6 @@ screen and (max-width: 480px) {
 
 .c-modal-import__input {
   width: 45rem;
-}
-
-.c-modal-import__import-btn {
-  margin-top: 0.3rem;
 }
 
 /*#endregion c-modal-import*/
@@ -8621,7 +8613,7 @@ input.o-automator-block-input {
 }
 
 .c-automator-template-description {
-  height: 13rem;
+  height: 9rem;
 }
 
 .c-automator-template-inputs {

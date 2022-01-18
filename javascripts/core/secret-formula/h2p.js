@@ -116,7 +116,7 @@ autobuyers - in this situation autobuyers will effectively only trigger once eve
 may have a strong impact depending on the part of the game.
 <br>
 <br>
-Offline tick count can be adjusted between ${formatInt(100)} and ${formatInt(10000)} ticks. Smaller counts will result
+Offline tick count can be adjusted between ${formatInt(500)} and ${formatInt(1e6)} ticks. Smaller counts will result
 in faster but less accurate simulations, while larger counts will result in more accurate simulations which take longer
 to complete.
 <br>
@@ -323,7 +323,7 @@ the number of times you have crunched.
 <br>
 The "Multiply Infinity Points from all sources by ${formatInt(2)}" upgrade can be bought multiple times,
 but each purchase requires ${formatInt(10)} times as much IP.
-You must buy all ${formatInt(16)} previous Infinity Upgrades to start purchasing this particular upgrade.
+You must complete the Achievement "No DLC required" to start purchasing this particular upgrade.
 <br>
 <br>
 <b>Hotkey: C</b> Big Crunches.
@@ -356,12 +356,10 @@ The rightmost column of Infinity Upgrades does not work in challenges.
     }, {
       name: "Autobuyers",
       info: () => `
-<b>Autobuyers:</b>
-<br>
 Autobuyers (awarded by completing challenges) allow the
-automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies,
-Tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
-They are located under the Infinity tab in "Autobuyers".
+automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies, Tickspeed upgrades, and Big Crunches.
+All autobuyers have controls located under the Automation tab in "Autobuyers",
+including any additional autobuyers unlocked later in the game.
 <br>
 <br>
 <b>Autobuyer Interval:</b> The cooldown period before the autobuyer attempts to make another puchase.
@@ -461,8 +459,8 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
     .join(", ")}
 <br>
 <br>
-Instead of antimatter, the First Infinity Dimension produces Infinity Power, which translates to a multiplier applied
-to all Antimatter Dimensions. This multiplier is equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
+Instead of antimatter, the First Infinity Dimension produces Infinity Power, which gives a multiplier applied
+to all Antimatter Dimensions equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
 affected by Tickspeed upgrades.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
@@ -490,7 +488,7 @@ amount of antimatter before you can attempt them.
     }, {
       name: "Replicanti",
       info: () => `
-Replicanti are another resource you unlock at ${format(DC.E140)} IP. Rather
+Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
 ${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by Tickspeed upgrades.
 Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
@@ -508,14 +506,14 @@ Replicanti give a multiplier to all Infinity Dimensions, which will reach a maxi
 ${formatX(Math.pow(2, 20), 2, 2)} at ${formatPostBreak(Number.MAX_VALUE, 2)} Replicanti.
 <br>
 <br>
-<b>Chance upgrade cost:</b> Base ${format(DC.E140)} IP, cost increment ${formatX(DC.E15)} IP
+<b>Chance upgrade cost:</b> Base ${format(1e140)} IP, cost increment ${formatX(1e15)} IP
 <br>
-<b>Speed upgrade cost:</b> Base ${format(DC.E150)} IP, cost increment ${formatX(DC.E10)} IP
+<b>Speed upgrade cost:</b> Base ${format(1e150)} IP, cost increment ${formatX(1e10)} IP
 <br>
-<b>Galaxy upgrade cost:</b> Base ${format(DC.E170)} IP, cost increment ${formatX(DC.E25)} IP and an additional
-${formatX(DC.E5)} IP per upgrade, scaling similarly to distant Antimatter Galaxies. Above ${formatInt(100)} Replicanti
-Galaxies, this ${formatX(DC.E5)} per upgrade changes to ${formatX(1e55)}. Above ${formatInt(1000)}, the scaling switches
-from quadratic to cubic, with the ${formatX(DC.E55)} multiplier itself increasing by ${formatX(DC.E5)} per upgrade.
+<b>Galaxy upgrade cost:</b> Base ${format(1e170)} IP, cost increment ${formatX(1e25)} IP and an additional
+${formatX(1e5)} IP per upgrade, scaling similarly to distant Antimatter Galaxies. Above ${formatInt(100)} Replicanti
+Galaxies, this ${formatX(1e5)} per upgrade changes to ${formatX(1e55)}. Above ${formatInt(1000)}, the scaling switches
+from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing by ${formatX(1e5)} per upgrade.
 `,
       isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
       tags: ["interval", "chance", "infinity", "galaxy", "midgame"],
@@ -556,8 +554,9 @@ the Eternity, effectively letting you have them permanently.
 <br>
 <br>
 All of the new autobuyers will have toggles next to their respective manual buttons (for example, Infinity Dimension
-autobuyers can be found on the Infinity Dimension tab). The exceptions are the improvements to the Dimboost, Galaxy,
-and Crunch autobuyers, as well as the new Eternity autobuyer, which will be on the autobuyers page.
+autobuyers can be found on the Infinity Dimension tab) in addition to their entries on the autobuyers tab.
+The exceptions are the improvements to the Dimboost, Galaxy, and Crunch autobuyers, which simply change their
+already existing entries on the autobuyer tab.
 <br>
 <br>
 The passive generation milestones only work offline by design and may need certain autobuyer settings to work
@@ -639,18 +638,24 @@ letting you quickly buy that particular set of studies again with a single click
 use the tooltip to load/save a slot, or click to load and shift-click to save.
 <br>
 <br>
+<b>Preferences:</b> Clicking the gear icon will open up a dialog which lets you select "default" paths to pick in the
+three-way branches. Choosing a default will change the shift-click behavior mentioned above so that it will attempt
+to buy your preferred path and continue on instead of stopping completely at the tree splits. You can choose two paths
+for the Dimension split in this dialog if you have purchased the relevant Time Study.
+<br>
+<br>
 <b>Respecs:</b> A Respec allows you to reset the upgrades you have in the tree to retreive all of the Time Theorems
 spent on them. It can be done for free, but only triggers on finishing an Eternity; you can't respec Time Studies in
 the middle of an Eternity.
 <br>
 <br>
-<b>Costs multipliers per purchase:</b>
+<b>Costs for Time Theorems:</b>
 <br>
-<b>Antimatter:</b> ${formatPostBreak(DC.E20000)}
+<b>Antimatter:</b> Initially ${format(DC.E20000)}, ${formatX(DC.E20000)} per theorem
 <br>
-<b>Infinity Points:</b> ${format(DC.E100)}
+<b>Infinity Points:</b> Initially ${formatInt(1)}, ${formatX(DC.E100)} per theorem
 <br>
-<b>Eternity Points:</b> ${formatInt(2)}
+<b>Eternity Points:</b> Initially ${formatInt(1)}, ${formatX(2)} per theorem
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["eternity", "ts", "theorems", "tree", "study", "midgame"],
@@ -681,19 +686,22 @@ having to complete the secondary requirement again.
       tab: "challenges/eternity"
     }, {
       name: "Time Dilation",
-      // This could use a rewrite the sentence structure and grammer is kind rough
       info: () => `
-Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
-beating both EC11 and EC12 five times, and after acquiring a total of ${formatInt(13000)} TT.
+Time Dilation is unlocked when you purchase the Time Study to unlock it below the EC11 and EC12 studies.
+In order to purchase this Time Study, you need ${formatInt(5000)} unspent TT with a tree that can reach
+the study, a <i>total</i> of ${formatInt(13000)} TT, and must have completed both EC11 and EC12 five times each.
+<br>
+<br>
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
 Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will be raised to the power of
-${format(0.75, 2, 2)}, significantly reducing them.
+${format(0.75, 2, 2)}, significantly reducing them. If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP
+to complete this Dilated Eternity, you will be rewarded with a new resource called Tachyon Particles.
 <br>
 <br>
-If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP and then complete the Eternity while Dilated, you will be
-rewarded with Tachyon Particles. You can dilate as many times as you want, but Tachyon Particles cannot be "farmed" like
-other resources. Instead, you can only gain more Tachyon Particles by passing your previous highest antimatter within
-Time Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
+You can dilate as many times as you want, but Tachyon Particles cannot be "farmed" like other resources.
+Your current Tachyon Particles are based progress in your "Best Dilated Run", which is judged on your
+antimatter and any multipliers to TP gain you may have. As a result, you generally cannot increase your TP unless
+you have gained a TP multiplier or an upgrade that significantly increases your antimatter in Dilation.
 <br>
 <br>
 Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
@@ -702,8 +710,9 @@ Replicanti Galaxies in that they affect Tickspeed as if they were Antimatter Gal
 of your next Antimatter Galaxy.
 <br>
 <br>
-Unlocking Time Dilation also unlocks upgrades you can purchase using Dilated Time. The first row of Dilation upgrades
-can be repeatedly purchased as many times as you can afford them.
+Unlocking Time Dilation also unlocks upgrades you can purchase using Dilated Time. The first and third upgrades in the
+first row of Dilation upgrades can be repeatedly purchased as many times as you can afford them. The second upgrade can
+also be repeatedly bought, but eventually reaches a cap.
 `,
       isUnlocked: () => DilationTimeStudyState.studies[1].isBought || PlayerProgress.realityUnlocked(),
       tags: ["dial", "dt", "dilated", "tachyon", "particle", "study", "free", "galaxy", "midgame"],
@@ -738,11 +747,12 @@ currency that can be spent in the Perks subtab on different Perks.
 Reality Machines scale purely off of EP, and the Reality button will tell you how much EP you need in order to gain
 the next one. The first ${formatInt(10)} RM scale linearly in the exponent between
 ${formatPostBreak(DC.E4000)} EP and ${formatPostBreak(DC.C10P16000D3)} EP, and then past that
-RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>.
+RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>. This formula
+is higher RM gain than linear above ${formatPostBreak(DC.C10P16000D3)} EP.
 <br>
 <br>
-Glyph level scales off of a combination of Eternity Points, Replicanti, and Dilated Time.
-The minimum level is ${formatInt(1)}.
+Glyph level scales off of a combination of Eternity Points, Replicanti, and Dilated Time, with a minimum level of
+${formatInt(1)}. All other attributes of Glyphs are randomized.
 <br>
 <br>
 You get exactly ${formatInt(1)} Perk Point per Reality.
@@ -772,10 +782,17 @@ Glyphs will generally have more effects than weaker Glyphs.
 any Reality content. Once you receive a Glyph, its attributes can't be changed.</b>
 <br>
 <br>
-To equip a Glyph, drag the icon from your inventory into one of the active circles in the middle of the screen. If
-you equipped the glyph properly, the effect list to the right should change and the Glyph icon should now be circular.
-Active Glyphs can't be unequipped or swapped with other Glyphs without restarting your current Reality, but you can
-equip Glyphs into <i>empty</i> active slots at any time during a Reality.
+To equip a Glyph, double-click or drag the icon from your inventory into one of the active circles in the middle
+of the screen. When equipped, Glyph icons become circular and add their effects to the list on the right.
+<br>
+<br>
+Equipping multiple Glyphs with the same effect will combine their effects; effects with "+" will generally add
+their values together and effects with "×" will generally multiply their values together.
+<br>
+<br>
+You can equip Glyphs into <i>empty</i> active slots at any time during a Reality, which will immediately apply the
+effects of the new Glyph. You can also drag Glyphs into already-occupied slots to switch which ones you have equipped,
+but this will restart your current Reality.
 <br>
 <br>
 The slots in the first rows of your inventory are "protected" slots. New glyphs will never be placed into them (even if
@@ -804,9 +821,14 @@ improvements which you can choose your own path through. All Perks only require 
 <br>
 <br>
 Each Reality you gain ${formatInt(1)} Perk Point which can be spent on an upgrade on the tree, starting with
-"You can now choose from ${formatInt(Perk.firstPerk.config.effect)} glyphs on Reality". You can only unlock Perks
+"You can now choose from ${formatInt(Perk.firstPerk.config.effect)} Glyphs on Reality". You can only unlock Perks
 which are directly adjacent
 to Perks you already have, although there are loops in the tree which you can go through in either direction.
+<br>
+<br>
+The Perk nodes can have two different shapes - circular or diamond. The only difference between the two is that
+diamond-shaped perks also additionally give Automator Points. Different nodes also have different colors, roughly
+indicating which part of the game they affect the most.
 `,
       isUnlocked: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
       tags: ["pp", "reality", "tree", "endgame", "lategame"],
@@ -906,6 +928,7 @@ The Black Holes can be paused, completely halting their interval/duration cycle.
 take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to reach maximum speed if they were paused while their
 speed boost was active. Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently.
 <br>
+<br>
 <b>Hotkey: B</b> pauses and unpauses the Black Holes.
 `,
       isUnlocked: () => BlackHole(1).isUnlocked,
@@ -948,6 +971,12 @@ ${Teresa.runCompleted
     : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see the reward)</div>"}.
 Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
+<br>
+<br>
+${Teresa.runCompleted
+    ? "Teresa's Reality can be entered again after completing it, and its reward will become stronger if you " +
+      "reach a higher amount of antimatter on this repeat run."
+    : "(More information available - complete Teresa's Reality)"}
 `,
       isUnlocked: () => Teresa.isUnlocked,
       tags: ["rm", "endgame", "lategame", "perks", "sacrifice", "boo", "ghost"],
@@ -1129,8 +1158,7 @@ If affordable, the Infinity button itself will visually change and bring you to 
       alias: "V",
       info: () => `
 V is a special Celestial in the sense that they are not unlocked by another Celestial,
-but are instead unlocked by completing a certain Achievement.
-They are unlocked by completing Achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
+but is instead unlocked by completing Achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
 "You really didn't need it anyway"), which requires you to get ${formatInt(800)} Antimatter Galaxies
 without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
@@ -1141,7 +1169,7 @@ ${format(GameDatabase.celestials.v.mainUnlock.realityMachines.requirement)} unsp
 Additionally you need to reach ${format(GameDatabase.celestials.v.mainUnlock.eternities.requirement)} Eternities,
 ${format(GameDatabase.celestials.v.mainUnlock.infinities.requirement)} Infinities,
 ${format(GameDatabase.celestials.v.mainUnlock.dilatedTime.requirement)} Dilated Time, and
-${format(GameDatabase.celestials.v.mainUnlock.replicanti.requirement)} Replicanti, all in the same reality.
+${format(GameDatabase.celestials.v.mainUnlock.replicanti.requirement)} Replicanti, all in the same Reality.
 <br>
 <br>
 When you meet all of those requirements, you will be able to access V's Reality. However, completing the
@@ -1158,6 +1186,11 @@ Completed V-Achievements do two things:
 to spend any resources.
 <br>
 - Each V-Achievement also gives you one Space Theorem.
+<br>
+<br>
+The goal reduction unlocked by having ${formatInt(2)} V-Achievements allows you to make V-Achievement requirements
+easier to complete, down to a limit of whatever the easiest tier requires. The cost of reducing a goal does not
+increase as it is used, and will also reduce future tiers as well.
 <br>
 <br>
 Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
@@ -1295,30 +1328,6 @@ Imaginary Machine upgrades will unlock the final two Celestials.
       tags: ["imaginary", "machines", "reality", "lategame", "endgame"],
       tab: "reality/imag_upgrades"
     }, {
-      name: "Continuum",
-      info: () => `
-When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
-called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
-Tickspeed upgrades. These fractional purchases are given for free without spending your antimatter and will provide
-an appropriate portion of their multiplier.
-<br>
-<br>
-The purchase buttons for Antimatter Dimensions and Tickspeed become modified to display the number of upgrades
-you would be able to purchase if Continuum was inactive, and the purchase count is scaled smoothly with antimatter.
-For example, having ${format(2e7)} antimatter will give you a continuum value of ${format(5.3, 0, 1)} for Tickspeed,
-which has an initial cost of ${format(1e3)} and increase of ${formatX(10)}. Tickspeed Continuum in this case will then
-give a production boost equal to (upgrade multiplier)<sup>${format(5.3, 0, 1)}</sup>.
-<br>
-<br>
-Some upgrades will multiply Continuum value directly, which gives a production boost without affecting the cost
-scaling. However, these upgrades will not function if Continuum is disabled on the Autobuyers page, which may result
-in a loss of production if disabled. Continuum makes your autobuyers for Antimatter Dimensions obsolete, so all the
-autobuyer settings for Antimatter Dimension autobuyers are now hidden on that tab as long as Continuum is active.
-`,
-      isUnlocked: () => Laitela.continuumUnlocked,
-      tags: ["continuum", "purchase", "reality", "lategame", "endgame"],
-      tab: ""
-    }, {
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
@@ -1326,8 +1335,8 @@ Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginar
 ${format(ImaginaryUpgrade(15).cost)} iM.
 <br>
 <br>
-Lai'tela gives a new resource called Dark Matter, which gives a multiplier to all Continuum values based on the
-highest amount of Dark Matter you have ever had. Dark Matter is produced by Dark Matter Dimensions, in a similar
+Lai'tela gives a new resource called Dark Matter, which improves your Antimatter Dimensions (via Continuum) based on
+the highest amount of Dark Matter you have ever had. Dark Matter is produced by Dark Matter Dimensions, in a similar
 cascading way to all other types of dimensions in the game. Unlike other dimensions, there are only four Dark Matter
 Dimensions rather than eight. You start with the first one unlocked immediately and the higher ones are unlocked
 via Imaginary Upgrades. When unlocking dimensions, you are given ${formatInt(1)} of the dimension and cannot gain
@@ -1365,6 +1374,31 @@ to Dark Energy gain.
       tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
       tab: "celestials/laitela"
     }, {
+      name: "Continuum",
+      info: () => `
+When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
+called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
+Tickspeed upgrades. These fractional purchases are given for free without spending your antimatter and will provide
+an appropriate portion of their multiplier.
+<br>
+<br>
+The purchase buttons for Antimatter Dimensions and Tickspeed become modified to display the number of upgrades
+you would be able to purchase if Continuum was inactive, and the purchase count is scaled smoothly with antimatter.
+For example, having ${format(2e7)} antimatter will give you a continuum value of ${format(5.3, 0, 1)} for Tickspeed
+(initial cost of ${format(1e3)} and increase of ${formatX(10)}) since you can purchase it ${formatInt(5)} times and
+are roughly ${formatPercents(0.3)} of the way to the next. Tickspeed Continuum in this case will then
+give a production boost equal to (upgrade multiplier)<sup>${format(5.3, 0, 1)}</sup>.
+<br>
+<br>
+Some upgrades will multiply Continuum value directly, which gives a production boost without affecting the cost
+scaling. However, these upgrades will not function if Continuum is disabled on the Autobuyers page, which may result
+in a loss of production if disabled. Continuum makes your autobuyers for Antimatter Dimensions obsolete, so all the
+autobuyer settings for Antimatter Dimension autobuyers are now hidden on that tab as long as Continuum is active.
+`,
+      isUnlocked: () => Laitela.continuumUnlocked,
+      tags: ["continuum", "purchase", "reality", "lategame", "endgame"],
+      tab: ""
+    }, {
       name: "Singularities",
       info: () => `
 Singularities are a new resource which you can obtain using features within Lai'tela.
@@ -1385,8 +1419,10 @@ higher caps worth more if you are willing to wait.
 The purpose of Singularities is to unlock Singularity milestones, which act similarly to Eternity milestones. Unlocking
 these milestones simply requires you to reach the total number of Singularities specified; Singularities are not spent.
 There are three types of milestones - one-time milestones, milestones repeatable a limited number of times, and
-milestones which can be repeated indefinitely. Additionally, milestones also have an icon indicating what kind of
-upgrade they generally give:
+milestones which can be repeated indefinitely.
+<br>
+<br>
+Independently of the milestone type, milestones also have an icon indicating what kind of upgrade they generally give:
 <br>
 <b>ᛝ</b> These milestones help mechanics specific to Lai'tela
 <br>

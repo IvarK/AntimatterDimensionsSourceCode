@@ -42,6 +42,7 @@ export default {
   methods: {
     setActiveTab(tab) {
       this.activeTab = tab;
+      document.getElementById("h2p-body").scrollTop = 0;
     }
   },
 };
@@ -79,6 +80,7 @@ export default {
           {{ activeTab.name }}
         </div>
         <div
+          id="h2p-body"
           class="l-h2p-body c-h2p-body"
           v-html="activeTab.info()"
         />

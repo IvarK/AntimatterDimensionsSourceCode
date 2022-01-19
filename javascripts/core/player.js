@@ -667,6 +667,7 @@ window.player = {
     glyphTextColors: true,
     headerTextColored: false,
     showNewGlyphIcon: true,
+    hideAlterationEffects: false,
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,

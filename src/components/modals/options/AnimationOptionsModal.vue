@@ -22,7 +22,7 @@ export default {
       tachyonParticles: false,
       reality: false,
       background: false,
-      blobSnowFlakes: 16
+      blobSnowflakes: 16
     };
   },
   watch: {
@@ -44,8 +44,8 @@ export default {
     background(newValue) {
       player.options.animations.background = newValue;
     },
-    blobSnowFlakes(newValue) {
-      player.options.animations.blobSnowFlakes = parseInt(newValue, 10);
+    blobSnowflakes(newValue) {
+      player.options.animations.blobSnowflakes = parseInt(newValue, 10);
     }
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
       this.tachyonParticles = options.tachyonParticles;
       this.reality = options.reality;
       this.background = options.background;
-      this.blobSnowFlakes = options.blobSnowFlakes;
+      this.blobSnowflakes = options.blobSnowflakes;
     }
   },
 };
@@ -112,9 +112,9 @@ export default {
         v-if="blobThemeUnlocked"
         class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"
       >
-        <b>{{ quantifyInt("Blobflake", parseInt(blobSnowFlakes)) }}</b>
+        <b>{{ quantifyInt("Blobflake", parseInt(blobSnowflakes)) }}</b>
         <input
-          v-model="blobSnowFlakes"
+          v-model="blobSnowflakes"
           class="o-primary-btn--slider__slider"
           type="range"
           min="1"

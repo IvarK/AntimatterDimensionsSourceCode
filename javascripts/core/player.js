@@ -695,7 +695,7 @@ window.player = {
       tachyonParticles: true,
       reality: true,
       background: true,
-      blobSnowFlakes: 16
+      blobSnowflakes: 16
     },
     confirmations: {
       sacrifice: true,

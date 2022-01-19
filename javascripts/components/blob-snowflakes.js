@@ -21,7 +21,7 @@ Vue.component("blob-snowflakes", {
   },
   methods: {
     update() {
-      this.count = player.options.animations.blobSnowFlakes;
+      this.count = player.options.animations.blobSnowflakes;
     },
     updateSize() {
       this.bounds.x = this.$el.clientWidth;

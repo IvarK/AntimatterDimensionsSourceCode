@@ -256,11 +256,13 @@ export default {
     hideTooltip() {
       this.tooltipLoaded = false;
       this.$viewModel.tabs.reality.mouseoverGlyphInfo.type = "";
+      this.$viewModel.tabs.reality.mouseoverGlyphInfo.inInventory = false;
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
       Glyphs.removeNewFlag(this.glyph);
       this.tooltipLoaded = true;
+      this.$viewModel.tabs.reality.mouseoverGlyphInfo.inInventory = !this.circular;
       const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
       glyphInfo.type = this.glyph.type;
       glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);

@@ -23,6 +23,7 @@ export const state = {
           type: "",
           sacrificeValue: 0,
           refineValue: 0,
+          inInventory: false,
         },
         automator: {
           fullScreen: false,

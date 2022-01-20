@@ -17,10 +17,9 @@ export default {
       return this.$viewModel.modal.current;
     },
     message() {
-      return `You will Big Crunch, if possible, and will start a new Infinity within the challenge,
-        with all the restrictions and modifiers that entails. Upon reaching Infinity,
-        you can complete the Challenge, which grants you the reward.
-        You do not start with any dimensions or galaxies, regardless of upgrades.`;
+      return `You will Big Crunch (if possible) and start a new Infinity within the Challenge, with all the
+        Challenge-specific restrictions and modifiers active. To complete the Challenge and receive its reward,
+        you must reach Infinity again. You do not start with any Dimensions or Galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
       return `You are about to enter Challenge ${this.modal.id}`;
@@ -33,7 +32,7 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Challenge, the condition is: ${conditionOfChallenge}`;
+      return `Inside this Challenge, ${conditionOfChallenge.charAt(0).toLowerCase() + conditionOfChallenge.slice(1)}`;
     }
   },
   created() {

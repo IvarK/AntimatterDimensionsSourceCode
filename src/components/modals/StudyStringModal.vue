@@ -100,7 +100,7 @@ export default {
     },
     truncatedInput() {
       // If last character is "," remove it
-      return this.input.replace(/,$/u, "");
+      return this.input.replace(/,$/u, "").trim();
     },
     hasInput() {
       return this.truncatedInput !== "";

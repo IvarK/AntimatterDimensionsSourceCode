@@ -23,7 +23,7 @@ export default {
       You are about to reset your Reality
     </template>
     <div class="c-modal-message__text">
-      This will put you at the start of your Reality and reset your progress in this Reality,
+      This will put you at the start of your Reality,
       giving you no rewards from your progress in your current Reality.
       <br>
       <br>

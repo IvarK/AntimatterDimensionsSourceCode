@@ -45,8 +45,6 @@ export default {
         :glyphs="glyphSet"
       />
       This will not affect your actual glyphs, only the saved preset.
-      <br>
-      This is permanent and irreversible.
     </div>
     <div class="l-options-grid__row">
       <PrimaryButton

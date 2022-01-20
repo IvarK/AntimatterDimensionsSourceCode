@@ -32,10 +32,7 @@ export default {
     prestigeResource() {
       const data = this.saveData;
       if (data.realityMachines.gt(0)) {
-        const imString = data.imaginaryMachines > 0
-          ? ` + ${format(data.imaginaryMachines, 2, 2)}i`
-          : "";
-        return `Reality Machines: ${format(data.realityMachines, 2)}${imString}`;
+        return `Reality Machines: ${formatComplex(data.realityMachines, data.imaginaryMachines)}`;
       }
       if (data.eternityPoints.gt(0)) return `Eternity Points: ${format(data.eternityPoints, 2)}`;
       if (data.infinityPoints.gt(0)) return `Infinity Points: ${format(data.infinityPoints, 2)}`;

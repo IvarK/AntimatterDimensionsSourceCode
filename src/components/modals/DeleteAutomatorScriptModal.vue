@@ -60,7 +60,6 @@ export default {
     <h2>Delete this script</h2>
     <div class="c-modal-message__text">
       Please confirm your desire to delete this Automator script.
-      This is permanent and irreversible. There is no gain from doing this.
     </div>
     <div class="l-options-grid__row">
       <PrimaryButton

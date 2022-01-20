@@ -2,31 +2,28 @@ Vue.component("reality-machines-header", {
   data() {
     return {
       realityMachines: new Decimal(0),
-      imaginaryMachines: 0,
       unlockedIM: false,
-      capRM: new Decimal(0),
-      capIM: 0,
+      machineStr: "",
+      capStr: "",
     };
   },
   methods: {
     update() {
       this.realityMachines.copyFrom(Currency.realityMachines.value);
-      this.imaginaryMachines = Currency.imaginaryMachines.value;
       this.unlockedIM = MachineHandler.isIMUnlocked;
-      this.capRM.copyFrom(MachineHandler.hardcapRM);
-      this.capIM = MachineHandler.currentIMCap;
+      this.machineStr = formatComplex(this.realityMachines, Currency.imaginaryMachines.value);
+      this.capStr = formatComplex(MachineHandler.hardcapRM, MachineHandler.currentIMCap);
     }
   },
   template: `
     <div class="c-reality-tab__header">
       You have
       <span class="c-reality-tab__reality-machines">
-        {{ format(realityMachines, 2) }}
-        <span v-if="unlockedIM">+ {{ format(imaginaryMachines, 2, 2) }}i</span>
+        {{ machineStr }}
       </span>
       {{ pluralize("Reality Machine", realityMachines) }}.
       <span v-if="unlockedIM">
-        (Cap: {{ format(capRM, 2, 2) }} + {{ format(capIM, 2, 2) }}i)
+        (Cap: {{ capStr }})
       </span>
     </div>`
 });

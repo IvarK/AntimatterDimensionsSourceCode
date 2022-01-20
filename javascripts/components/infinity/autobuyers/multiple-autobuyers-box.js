@@ -165,8 +165,8 @@ Vue.component("multiple-autobuyers-box", {
       v-else-if="isADBox && continuumActive"
       class="c-autobuyer-box-row"
     >
-      Continuum makes Antimatter Dimension and Tickspeed Autobuyers obsolete, as you now automatically have a
+      Continuum replaces your Antimatter Dimension and Tickspeed Autobuyers, as your production multipliers
       <br>
-      certain amount of simulated Antimatter Dimension and Tickspeed purchases based on your antimatter.
+      now automatically and continuously scale to how many purchases you would have had otherwise.
     </span>`
 });

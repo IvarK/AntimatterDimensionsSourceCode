@@ -34,7 +34,5 @@ export default {
   <span
     :style="imageSwapperStyleObject"
     @click="swapImages"
-  >
-    {{ swapImagesButton }}
-  </span>
+  >{{ swapImagesButton }}</span>
 </template>

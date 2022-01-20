@@ -38,9 +38,9 @@ export default {
       You are about to delete a Glyph
     </template>
     <div class="c-modal-message__text">
-      Deleting a Glyph will remove the Glyph from your inventory, and you will not be able to recover it!
+      Deleting a Glyph will remove the Glyph from your inventory!
       <div class="c-modal-hard-reset-danger">
-        There is no benefit in deleting a Glyph!
+        There is no benefit in deleting a Glyph before you have unlocked Glyph Sacrifice!
       </div>
     </div>
   </ModalWrapperChoice>

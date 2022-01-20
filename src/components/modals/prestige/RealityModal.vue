@@ -33,7 +33,7 @@ export default {
       return `Reality will reset everything except Challenge records and anything under the General header on the
         Statistics tab. Your Achievements are also reset, but you will automatically get one back every
         ${timeDisplayNoDecimals(30 * 60000)}. You will also gain Reality Machines based on your Eternity Points, a
-        Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
+        Glyph with a level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
         on quality of life upgrades, and unlock various upgrades.`;
     },
     canSacrifice() {

@@ -15,7 +15,7 @@ export default {
   computed: {
     message() {
       return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. You will gain
-      ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 2)} on Infinity,
+      ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 2)}
       and ${quantify("Infinity", this.gainedInfinities)}.`;
     },
   },

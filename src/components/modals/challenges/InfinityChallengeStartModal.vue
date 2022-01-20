@@ -17,11 +17,11 @@ export default {
       return this.$viewModel.modal.current;
     },
     message() {
-      return `You will Big Crunch, if possible, and will start a new Infinity within the challenge,
-        with all the restrictions and modifiers that entails. Upon reaching the goal
-        (${format(InfinityChallenge(this.modal.id).goal)} Antimatter for this challenge), you can Big Crunch
-        ${this.challengeIsCompleted ? "to complete the challenge" : "to complete the challenge and gain the reward"}.
-        You do not start with any dimensions or galaxies, regardless of upgrades.`;
+      return `You will Big Crunch (if possible) and start a new Infinity within the Challenge, with all the
+        Challenge-specific restrictions and modifiers active. To complete the Challenge 
+        ${this.challengeIsCompleted ? "" : "and gain its reward"}, you must reach the Challenge goal of
+        ${format(InfinityChallenge(this.modal.id).goal)} Antimatter.
+        You do not start with any Dimensions or Galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
       return `You are about to enter Infinity Challenge ${this.modal.id}`;
@@ -38,7 +38,8 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Infinity Challenge, the condition is: ${conditionOfChallenge}`;
+      return `Inside this Infinity Challenge,
+        ${conditionOfChallenge.charAt(0).toLowerCase() + conditionOfChallenge.slice(1)}`;
     }
   },
   created() {

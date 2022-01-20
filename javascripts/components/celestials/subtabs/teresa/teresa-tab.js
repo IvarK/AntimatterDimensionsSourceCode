@@ -117,9 +117,10 @@ Vue.component("teresa-tab", {
             {{ runDescription }}
             <br><br>
             <div v-if="bestAM.gt(0)">
-              You last did Teresa's Reality at {{ lastMachinesString }}.
+              This Reality can be repeated for a stronger reward if you can get more antimatter within it.
               <br><br>
-              Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
+              You last did Teresa's Reality at {{ lastMachinesString }}, reaching a record of {{ format(bestAM, 2) }}
+              antimatter.
               <br><br>
               Glyph Set used:
               <GlyphSetPreview

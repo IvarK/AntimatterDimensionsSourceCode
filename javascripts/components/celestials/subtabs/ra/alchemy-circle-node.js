@@ -69,7 +69,7 @@ Vue.component("alchemy-circle-node", {
           :class="hintClassObject"
           class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
         >
-          {{ amount.toFixed(1) }}
+          {{ formatInt(amount) }}
         </HintText>
       </span>
     </div>`

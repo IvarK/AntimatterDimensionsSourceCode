@@ -80,13 +80,13 @@ export default {
       <template v-else-if="inputIsValidSave">
         <div>Antimatter: {{ formatPostBreak(antimatter, 2, 1) }}</div>
         <div v-if="progress.isInfinityUnlocked">
-          Infinities: {{ formatPostBreak(infinities, 2, 0) }}
+          Infinities: {{ formatPostBreak(infinities, 2) }}
         </div>
         <div v-if="progress.isEternityUnlocked">
-          Eternities: {{ formatPostBreak(player.eternities, 2, 0) }}
+          Eternities: {{ formatPostBreak(player.eternities, 2) }}
         </div>
         <div v-if="progress.isRealityUnlocked">
-          Realities: {{ formatPostBreak(player.realities, 2, 0) }}
+          Realities: {{ formatPostBreak(player.realities, 2) }}
         </div>
         <div class="c-modal-import__warning">
           (your current save file will be overwritten!)

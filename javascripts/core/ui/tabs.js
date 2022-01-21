@@ -60,6 +60,10 @@ class SubtabState {
   }
 }
 
+function findLastOpenSubtab(tabId, subtabs) {
+  return subtabs.find(s => s.id === player.options.lastOpenSubtab[tabId]) ?? subtabs[0];
+}
+
 class TabState {
   constructor(config) {
     this.config = config;
@@ -71,7 +75,7 @@ class TabState {
       subtabs.push(subtab);
     }
     this.subtabs = subtabs;
-    this._currentSubtab = subtabs.find(s => s.id === player.options.lastOpenSubtab[this.id]);
+    this._currentSubtab = findLastOpenSubtab(this.id, subtabs);
   }
 
   get name() {
@@ -113,7 +117,7 @@ class TabState {
     if (!manual && !player.options.automaticTabSwitching) return;
     ui.view.tab = this.key;
     if (subtab === undefined) {
-      this._currentSubtab = this.subtabs.find(s => s.id === player.options.lastOpenSubtab[this.id]);
+      this._currentSubtab = findLastOpenSubtab(this.id, this.subtabs);
     } else {
       if (!Enslaved.isRunning) subtab.unhideTab();
       this._currentSubtab = subtab;

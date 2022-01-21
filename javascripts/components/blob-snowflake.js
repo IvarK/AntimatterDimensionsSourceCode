@@ -6,7 +6,9 @@ Vue.component("blob-snowflake", {
     this.fly();
   },
   beforeDestroy() {
-    TWEEN.remove(this.tween);
+    for (const tween of this.tweens) {
+      TWEEN.remove(tween);
+    }
   },
   methods: {
     fly() {
@@ -65,6 +67,7 @@ Vue.component("blob-snowflake", {
 
       tweenZigZagReset.start(snowDelay);
       tweenDropReset.start(snowDelay);
+      this.tweens = [tweenZig, tweenZag, tweenDrop, tweenZigZagReset, tweenDropReset];
 
       function snowText() {
         const LEN = 23;

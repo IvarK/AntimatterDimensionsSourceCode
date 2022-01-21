@@ -163,16 +163,21 @@ export class TimeStudyTree {
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
+    // Took these out of the checkCosts check as these aren't available early game
+    const maxST = V.spaceTheorems;
+    const hasST = this.spentTheorems[1] + stNeeded <= maxST;
     if (checkCosts) {
       const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0])
         .clampMax(Number.MAX_VALUE).toNumber();
-      const maxST = V.spaceTheorems;
       const hasTT = this.spentTheorems[0] + config.cost <= maxTT;
-      const hasST = this.spentTheorems[1] + stNeeded <= maxST;
       if (!hasTT || !hasST) return;
     }
-    this.spentTheorems[0] += config.cost;
-    this.spentTheorems[1] += stNeeded;
+    this.spentTheorems[0] += stNeeded ? 0 : config.cost;
+    if (hasST) {
+      this.spentTheorems[1] += stNeeded;
+    } else {
+      return;
+    }
     this.purchasedStudies.push(study);
   }
 

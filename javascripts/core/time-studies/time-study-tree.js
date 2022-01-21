@@ -172,12 +172,12 @@ export class TimeStudyTree {
       const hasTT = this.spentTheorems[0] + config.cost <= maxTT;
       if (!hasTT || !hasST) return;
     }
-    this.spentTheorems[0] += stNeeded ? 0 : config.cost;
-    if (hasST) {
-      this.spentTheorems[1] += stNeeded;
-    } else {
-      return;
-    }
+
+    // Don't add the costs nor add the study if it is one using ST and there are none
+    if (maxST === 0 && stNeeded > 0) return;
+    this.spentTheorems[0] += config.cost;
+    this.spentTheorems[1] += stNeeded;
+
     this.purchasedStudies.push(study);
   }
 

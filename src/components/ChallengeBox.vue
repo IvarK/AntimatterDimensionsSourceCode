@@ -1,22 +1,36 @@
+<script>
 import HintText from "@/components/HintText";
 
-Vue.component("challenge-box", {
+export default {
+  name: "ChallengeBox",
   components: {
     HintText
   },
   props: {
-    name: String,
-    isUnlocked: false,
-    isRunning: false,
-    isCompleted: false,
+    name: {
+      type: String,
+      required: true
+    },
+    isUnlocked: {
+      type: Boolean,
+      required: true
+    },
+    isRunning: {
+      type: Boolean,
+      required: true
+    },
+    isCompleted: {
+      type: Boolean,
+      required: true
+    },
     overrideLabel: {
       type: String,
+      required: false,
       default: "",
     },
   },
   data() {
     return {
-      challengeId: Number,
       inC1: Boolean,
     };
   },
@@ -36,7 +50,7 @@ Vue.component("challenge-box", {
       };
     },
     buttonText() {
-      if (this.overrideLabel.length) return this.overrideLabel;
+      if (this.overrideLabel.length > 0) return this.overrideLabel;
       if (this.isRunning || this.inC1) return "Running";
       if (this.isCompleted) return "Completed";
       if (this.isUnlocked) return "Start";
@@ -47,20 +61,30 @@ Vue.component("challenge-box", {
     update() {
       this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
     },
-  },
-  template: `
-    <div class="c-challenge-box l-challenge-box">
-      <HintText type="challenges" class="l-hint-text--challenge">
-        {{ name }}
-      </HintText>
-      <slot name="top" />
-      <div class="l-challenge-box__fill" />
-      <button
-        :class="buttonClassObject"
-        @click="$emit('start')"
-      >
-        {{ buttonText }}
-      </button>
-      <slot name="bottom" />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="c-challenge-box l-challenge-box">
+    <HintText
+      type="challenges"
+      class="l-hint-text--challenge"
+    >
+      {{ name }}
+    </HintText>
+    <slot name="top" />
+    <div class="l-challenge-box__fill" />
+    <button
+      :class="buttonClassObject"
+      @click="$emit('start')"
+    >
+      {{ buttonText }}
+    </button>
+    <slot name="bottom" />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

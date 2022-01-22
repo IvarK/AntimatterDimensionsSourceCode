@@ -1,12 +1,13 @@
 import "./challenges-header.js";
 import "./challenge-grid.js";
-import "./challenge-box.js";
+import ChallengeBox from "@/components/ChallengeBox";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 Vue.component("normal-challenges-tab", {
   components: {
     "normal-challenge-box": {
       components: {
+        ChallengeBox,
         DescriptionDisplay
       },
       props: {
@@ -47,7 +48,7 @@ Vue.component("normal-challenges-tab", {
         }
       },
       template:
-        `<challenge-box
+        `<ChallengeBox
           :name="name"
           :isUnlocked="isUnlocked"
           :isRunning="isRunning"
@@ -61,7 +62,7 @@ Vue.component("normal-challenges-tab", {
             slot="top"
           />
           <span slot="bottom">Reward: {{ challenge.config.reward }}</span>
-        </challenge-box>`
+        </ChallengeBox>`
     }
   },
   template: `

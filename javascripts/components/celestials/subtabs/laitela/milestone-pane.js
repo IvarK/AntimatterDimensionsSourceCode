@@ -5,7 +5,8 @@ Vue.component("singularity-milestone-pane", {
     return {
       milestones: [],
       hasNew: false,
-      showingCondense: false,
+      milestoneMode: false,
+      hasAutoSingularity: false,
     };
   },
   computed: {
@@ -13,18 +14,33 @@ Vue.component("singularity-milestone-pane", {
       if (this.hasNew) return { "box-shadow": "inset 0 0 1rem 0.5rem var(--color-celestials)" };
       return {};
     },
-    milestoneMode() {
-      return this.showingCondense ? "Condense Count" : "Singularities";
+    milestoneText() {
+      switch (this.milestoneMode) {
+        case SINGULARITY_MILESTONE_RESOURCE.SINGULARITIES:
+          return "Singularity Count";
+        case SINGULARITY_MILESTONE_RESOURCE.CONDENSE_COUNT:
+          return "Condense Count";
+        case SINGULARITY_MILESTONE_RESOURCE.MANUAL_TIME:
+          return "Manual Time";
+        case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
+          return "Auto Time";
+        default:
+          throw new Error("Unrecognized Singularity Milestone mode");
+      }
     }
   },
   methods: {
     update() {
       this.milestones = SingularityMilestones.nextMilestoneGroup;
       this.hasNew = SingularityMilestones.unseenMilestones.length !== 0;
-      this.showingCondense = player.options.showCondenseToMilestone;
+      this.milestoneMode = player.options.singularityMilestoneResource;
+      this.hasAutoSingularity = Number.isFinite(SingularityMilestone.autoCondense.effectValue);
     },
-    toggleMilestoneMode() {
-      player.options.showCondenseToMilestone = !this.showingCondense;
+    cycleMilestoneMode() {
+      const modeCount = Object.keys(SINGULARITY_MILESTONE_RESOURCE).length;
+      player.options.singularityMilestoneResource = (player.options.singularityMilestoneResource + 1) % modeCount;
+      const isAutoTime = player.options.singularityMilestoneResource === SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME;
+      if (!this.hasAutoSingularity && isAutoTime) this.cycleMilestoneMode();
     }
   },
   template: `
@@ -38,9 +54,9 @@ Vue.component("singularity-milestone-pane", {
       </div>
       <div
         class="o-laitela-singularity-modal-button"
-        @click="toggleMilestoneMode"
+        @click="cycleMilestoneMode"
       >
-        To Milestones: {{ milestoneMode }}
+        To Milestone: {{ milestoneText }}
       </div>
       <singularity-milestone
         v-for="milestone in milestones"

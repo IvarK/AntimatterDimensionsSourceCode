@@ -182,6 +182,21 @@ export const Singularity = {
       (1 + ImaginaryUpgrade(10).effectValue));
   },
 
+  // Time (in seconds) to go from 0 DE to the condensing requirement
+  get timePerCondense() {
+    return this.cap / Currency.darkEnergy.productionPerSecond;
+  },
+
+  // Time (in seconds) to reach the condensing requirement from *current* DE
+  get timeUntilCap() {
+    return (this.cap - Currency.darkEnergy.value) / Currency.darkEnergy.productionPerSecond;
+  },
+
+  // Total additional time auto-condense will wait after reaching the condensing requirement
+  get timeDelayFromAuto() {
+    return this.timePerCondense * (SingularityMilestone.autoCondense.effectValue - 1);
+  },
+
   get capIsReached() {
     return Currency.darkEnergy.gte(this.cap);
   },

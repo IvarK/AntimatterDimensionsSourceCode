@@ -11,8 +11,11 @@ Vue.component("singularity-milestone", {
     start: 0,
     completions: 0,
     limit: 0,
-    showingCondense: false,
+    milestoneMode: false,
     singularitiesPerCondense: 0,
+    baseCondenseTime: 0,
+    currentCondenseTime: 0,
+    autoCondenseDelay: 0,
   }),
   computed: {
     barProgressStyle() {
@@ -58,18 +61,29 @@ Vue.component("singularity-milestone", {
       }
     },
     completionsDisplay() {
-      if (!Number.isFinite(this.limit)) {
-        return quantifyInt("completion", this.completions);
-      }
-      if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
-      return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
+      const maxCompletions = this.isUnique ? 1 : this.limit;
+      const maxStr = Number.isFinite(this.limit) ? formatInt(maxCompletions) : "∞";
+      return `${formatInt(this.completions)}/${maxStr} ${pluralize("completion", this.completions)}`;
     },
     progressDisplay() {
-      if (this.showingCondense) {
-        const remaningCondenses = this.remainingSingularities / this.singularitiesPerCondense;
-        return `Condense ${quantify("time", remaningCondenses, 2, 2)}`;
+      const condenseCount = this.remainingSingularities / this.singularitiesPerCondense;
+      let thisSingularityTime, extraTime;
+      switch (this.milestoneMode) {
+        case SINGULARITY_MILESTONE_RESOURCE.SINGULARITIES:
+          return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
+        case SINGULARITY_MILESTONE_RESOURCE.CONDENSE_COUNT:
+          return `Condense ${quantify("time", condenseCount, 2, 2)}`;
+        case SINGULARITY_MILESTONE_RESOURCE.MANUAL_TIME:
+          thisSingularityTime = Math.clampMin(0, this.currentCondenseTime);
+          extraTime = Math.ceil(condenseCount - 1) * this.baseCondenseTime;
+          return `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} (manual)`;
+        case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
+          thisSingularityTime = Math.clampMin(0, this.currentCondenseTime + this.autoCondenseDelay);
+          extraTime = Math.ceil(condenseCount - 1) * (this.baseCondenseTime + this.autoCondenseDelay);
+          return `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} (auto)`;
+        default:
+          throw new Error("Unrecognized Singularity Milestone mode");
       }
-      return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
     }
   },
   methods: {
@@ -83,8 +97,11 @@ Vue.component("singularity-milestone", {
       if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
       this.completions = this.milestone.completions;
       this.limit = this.milestone.limit;
-      this.showingCondense = player.options.showCondenseToMilestone;
+      this.milestoneMode = player.options.singularityMilestoneResource;
       this.singularitiesPerCondense = Singularity.singularitiesGained;
+      this.baseCondenseTime = Singularity.timePerCondense;
+      this.currentCondenseTime = Singularity.timeUntilCap;
+      this.autoCondenseDelay = Singularity.timeDelayFromAuto;
     },
   },
   template: `

@@ -7987,7 +7987,7 @@ kbd {
   100% {background-position-y: 24rem}
 }
 
-.l-laitela-annihilation-button {
+.l-laitela-annihilation-container {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   padding: 1rem;
@@ -7996,7 +7996,17 @@ kbd {
   border: 0.2rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   font-family: Typewriter, serif;
-  display: block;
+  font-size: 1.2rem;
+}
+
+.l-laitela-annihilation-button {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  padding: 0.5rem;
+  width: 35rem;
+  height: 3rem;
+  border: 0.2rem solid var(--color-laitela--accent);
+  font-family: Typewriter, serif;
 }
 
 .c-laitela-annihilation-button {

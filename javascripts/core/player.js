@@ -671,7 +671,7 @@ window.player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
-    showCondenseToMilestone: false,
+    singularityMilestoneResource: 0,
     showHintText: {
       achievements: true,
       achievementUnlockStates: true,

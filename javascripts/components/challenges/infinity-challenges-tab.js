@@ -1,6 +1,6 @@
 import "./challenges-header.js";
 import "./challenge-grid.js";
-import "./challenge-box.js";
+import ChallengeBox from "@/components/ChallengeBox";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 
@@ -8,6 +8,7 @@ Vue.component("infinity-challenges-tab", {
   components: {
     "infinity-challenge-box": {
       components: {
+        ChallengeBox,
         DescriptionDisplay,
         EffectDisplay
       },
@@ -41,7 +42,7 @@ Vue.component("infinity-challenges-tab", {
         }
       },
       template:
-        `<challenge-box
+        `<ChallengeBox
           :name="name"
           :isUnlocked="isUnlocked"
           :isRunning="isRunning"
@@ -67,7 +68,7 @@ Vue.component("infinity-challenges-tab", {
               :config="config.reward"
             />
           </div>
-        </challenge-box>`
+        </ChallengeBox>`
     }
   },
   data() {

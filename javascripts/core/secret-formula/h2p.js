@@ -683,8 +683,8 @@ having to complete the secondary requirement again.
       name: "Time Dilation",
       // This could use a rewrite the sentence structure and grammer is kind rough
       info: () => `
-Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
-beating both EC11 and EC12 five times, and after acquiring a total of ${formatInt(13000)} TT.
+Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after beating both
+EC11 and EC12 five times, and after acquiring a total of ${formatInt(TimeStudy.dilation.timeTheoremRequirement)} TT.
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
 Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will be raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them.

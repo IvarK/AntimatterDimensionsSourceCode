@@ -24,7 +24,7 @@ Vue.component("dilation-time-study", {
     requirement() {
       if (this.id === 1) {
         return `Requirement: ${formatInt(5)} EC11 and EC12 completions
-          and ${formatInt(this.maxTT)}/${formatInt(13000)} total Time Theorems`;
+          and ${formatInt(this.maxTT)}/${formatInt(TimeStudy.dilation.timeTheoremRequirement)} total Time Theorems`;
       }
       if (this.id === 6) {
         const achRows = Perk.firstPerk.isBought ? "" : ` and ${formatInt(13)} rows of Achievements`;

@@ -771,8 +771,8 @@ export const RA_UNLOCKS = {
   AUTO_DILATION_UNLOCK: {
     id: 22,
     description: "Get V to level 2",
-    reward: () => `Time Dilation is unlocked automatically for free at ${formatInt(13000)} Time Theorems outside of
-      Celestial Realities`,
+    reward: () => `Time Dilation is unlocked automatically for free at
+      ${formatInt(TimeStudy.dilation.timeTheoremRequirement)} Time Theorems outside of Celestial Realities`,
     pet: Ra.pets.v,
     level: 2,
     displayIcon: `<span class="fas fa-fast-forward"></span>`

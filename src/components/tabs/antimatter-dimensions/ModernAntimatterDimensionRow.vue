@@ -81,11 +81,7 @@ export default {
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
-      if (NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive) {
-        this.isCostsAD = true;
-      } else {
-        this.isCostsAD = false;
-      }
+      this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
     },
     buy() {
       if (this.isContinuumActive) return;

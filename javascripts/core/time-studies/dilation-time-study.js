@@ -22,6 +22,10 @@ export class DilationTimeStudyState extends TimeStudyState {
     return typeof this.config.cost === "function" ? this.config.cost() : this.config.cost;
   }
 
+  get timeTheoremRequirement() {
+    return this.id === 1 ? 12900 : 0;
+  }
+
   purchase(quiet = false) {
     if (this.isBought || !this.canBeBought) return false;
     if (this.id === 1) {

@@ -1182,6 +1182,11 @@ GameStorage.devMigrations = {
     player => {
       delete player.options.confirmations.harshAutoClean;
     },
+    player => {
+      // Added support for time in singularity milestone list, uses enum SINGULARITY_MILESTONE_RESOURCE in constants.js
+      player.options.singularityMilestoneResource = player.options.showCondenseToMilestone ? 1 : 0;
+      delete player.options.showCondenseToMilestone;
+    },
   ],
 
   patch(player) {

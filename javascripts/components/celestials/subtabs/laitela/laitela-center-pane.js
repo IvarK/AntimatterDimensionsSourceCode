@@ -24,7 +24,6 @@ Vue.component("annihilation-button", {
       darkMatterMultRatio: 0,
       autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
       isEnabled: true,
-      isMouseoverDisabled: false
     };
   },
   computed: {
@@ -47,7 +46,6 @@ Vue.component("annihilation-button", {
       this.isEnabled = player.celestials.laitela.automation.annihilation;
     },
     annihilate() {
-      if (this.isMouseoverDisabled) return;
       Laitela.annihilate();
     },
     handleAutoAnnihilationInputChange() {
@@ -60,54 +58,39 @@ Vue.component("annihilation-button", {
     }
   },
   template: `
-    <button
-      class="l-laitela-annihilation-button c-laitela-annihilation-button"
-      @click="annihilate()"
-      v-if="annihilationButtonVisible"
-    >
-      <h2>Annihilation</h2>
+    <div class="l-laitela-annihilation-container">
+      <button
+        @click="annihilate"
+        class="l-laitela-annihilation-button c-laitela-annihilation-button"
+      >
+        <span v-if="darkMatter.lt(matterRequirement)">
+          Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter
+        </span>
+        <b v-else>Annihilate your Dark Matter Dimensions</b>
+      </button>
+      <br>
+      <br>
       <span v-if="hasAnnihilated">
         Current multiplier to all Dark Matter multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
-        <br><br>
-      </span>
-      <span>
-        Resets your Dark Matter and Dark Matter Dimension amounts,
-      </span>
-      <span v-if="!hasAnnihilated">
-        unlocking Auto-Annihilation, and
-      </span>
-      <span v-if="hasAnnihilated && darkMatter.gte(matterRequirement)">
-        but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
+        <br>
+        <br>
+        Annihilation resets your Dark Matter and Dark Matter Dimension amounts, but adds
+        <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
         (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
-      </span>
-      <span v-else-if="hasAnnihilated">
-        adding to your current Annihilation multiplier (requires {{ format(matterRequirement) }} Dark Matter).
-      </span>
-      <span v-else-if="darkMatter.gte(matterRequirement)">
-        multiplying Dark Matter multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
-      </span>
-      <span v-else>
-        giving a multiplier to all Dark Matter multipliers (requires {{ format(matterRequirement) }} Dark Matter).
-      </span>
-      <div v-if="hasAnnihilated">
+        <br>
         <br>
         Auto-Annihilate when adding
         <input
           type="text"
           v-model="autoAnnihilationInput"
           @change="handleAutoAnnihilationInputChange()"
-          @mouseover="isMouseoverDisabled = true"
-          @mouseleave="isMouseoverDisabled = false"
           :style="annihilationInputStyle"
         />
         to the multiplier.
-      </div>
-    </button>
-
-    <button
-      v-else
-      class="l-laitela-annihilation-button"
-    >
-      Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter.
-    </button>`
+      </span>
+      <span v-else>
+        Annihilation resets your Dark Matter and Dark Matter Dimension amounts, unlocking Auto-Annihilation
+        and multiplying all Dark Matter multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
+      </span>
+    </div>`
 });

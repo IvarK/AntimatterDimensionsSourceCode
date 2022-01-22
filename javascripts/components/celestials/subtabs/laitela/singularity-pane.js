@@ -9,6 +9,8 @@ Vue.component("singularity-container", {
       unlockedBulkSingularity: false,
       singularityCap: 0,
       baseTimeToSingularity: 0,
+      currentTimeToSingularity: 0,
+      extraTimeAfterSingularity: 0,
       singularitiesGained: 0,
       autoSingularityFactor: 0,
       perStepFactor: 0,
@@ -21,7 +23,7 @@ Vue.component("singularity-container", {
   computed: {
     singularityFormText() {
       const formText = this.singularitiesGained === 1 ? "condense all Dark Energy into a Singularity"
-        : `condense all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2, 0)}`;
+        : `condense all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2)}`;
       if (this.canPerformSingularity) {
         // Capitalize the string
         return `${formText.capitalize()}`;
@@ -29,9 +31,9 @@ Vue.component("singularity-container", {
       return `Reach ${format(this.singularityCap)} Dark Energy to ${formText}`;
     },
     singularityWaitText() {
-      let singularityTime = (this.singularityCap - this.darkEnergy) / this.darkEnergyGainPerSecond;
+      let singularityTime = this.currentTimeToSingularity;
       if (this.canPerformSingularity) {
-        singularityTime += this.singularityCap * (this.autoSingularityFactor - 1) / this.darkEnergyGainPerSecond;
+        singularityTime += this.extraTimeAfterSingularity;
         return this.isAutoEnabled
           ? `(auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`
           : "";
@@ -42,15 +44,14 @@ Vue.component("singularity-container", {
       return TimeSpan.fromSeconds(this.baseTimeToSingularity).toStringShort();
     },
     additionalSingularityTime() {
-      return TimeSpan.fromSeconds(this.baseTimeToSingularity * (this.autoSingularityFactor - 1))
-        .toStringShort();
+      return TimeSpan.fromSeconds(this.extraTimeAfterSingularity).toStringShort();
     },
     manualSingularityRate() {
-      const totalTime = this.singularityCap / this.darkEnergyGainPerSecond;
+      const totalTime = this.baseTimeToSingularity;
       return this.formatRate(this.singularitiesGained / totalTime);
     },
     autoSingularityRate() {
-      const totalTime = this.singularityCap / this.darkEnergyGainPerSecond * this.autoSingularityFactor;
+      const totalTime = this.baseTimeToSingularity + this.extraTimeAfterSingularity;
       return this.formatRate(this.singularitiesGained / totalTime);
     },
     decreaseTooltip() {
@@ -77,7 +78,9 @@ Vue.component("singularity-container", {
       this.canPerformSingularity = Singularity.capIsReached;
       this.unlockedBulkSingularity = Currency.singularities.gte(10);
       this.singularityCap = Singularity.cap;
-      this.baseTimeToSingularity = Currency.singularities.timeUntil;
+      this.baseTimeToSingularity = Singularity.timePerCondense;
+      this.currentTimeToSingularity = Singularity.timeUntilCap;
+      this.extraTimeAfterSingularity = Singularity.timeDelayFromAuto;
       this.singularitiesGained = Singularity.singularitiesGained;
       this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
       this.perStepFactor = Singularity.gainPerCapIncrease;

@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "OpenModalShortcutsButton",
+  name: "OpenModalHotkeysButton",
   methods: {
     handleClick() {
       Modal.hotkeys.show();
@@ -11,9 +11,9 @@ export default {
 
 <template>
   <p
-    class="c-options-tab__shortcuts-link"
+    class="c-options-tab__hotkeys-link"
     @click="handleClick"
   >
-    Press <kbd>?</kbd> to open shortcut list.
+    Press <kbd>?</kbd> to open the hotkey list.
   </p>
 </template>

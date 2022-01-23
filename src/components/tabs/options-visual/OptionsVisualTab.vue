@@ -3,7 +3,7 @@ import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 import OptionsButton from "@/components/OptionsButton";
 import UpdateRateSlider from "./UpdateRateSlider";
-import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
+import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import SelectThemeDropdown from "@/components/tabs/options-visual/SelectThemeDropdown";
 import SelectNotationDropdown from "@/components/tabs/options-visual/SelectNotationDropdown";
 import * as ADNotations from "@antimatter-dimensions/notations";
@@ -15,7 +15,7 @@ export default {
     PrimaryToggleButton,
     ExpandingControlBox,
     OptionsButton,
-    OpenModalShortcutsButton,
+    OpenModalHotkeysButton,
     SelectThemeDropdown,
     SelectNotationDropdown
   },
@@ -138,7 +138,7 @@ export default {
           label="Relative prestige gain text coloring:"
         />
       </div>
-      <OpenModalShortcutsButton />
+      <OpenModalHotkeysButton />
     </div>
   </div>
 </template>

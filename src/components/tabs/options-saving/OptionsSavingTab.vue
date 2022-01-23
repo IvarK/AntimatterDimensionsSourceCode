@@ -1,6 +1,6 @@
 <script>
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
+import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
 import AutosaveIntervalSlider from "./AutosaveIntervalSlider";
 
@@ -8,7 +8,7 @@ export default {
   name: "OptionsSavingTab",
   components: {
     PrimaryToggleButton,
-    OpenModalShortcutsButton,
+    OpenModalHotkeysButton,
     OptionsButton,
     AutosaveIntervalSlider
   },
@@ -118,7 +118,7 @@ export default {
           Start Speedrun
         </OptionsButton>
       </div>
-      <OpenModalShortcutsButton />
+      <OpenModalHotkeysButton />
     </div>
     <h2 class="c-cloud-options-header">
       <span v-if="loggedIn">Logged in as {{ userName }}</span>

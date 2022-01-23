@@ -34,11 +34,11 @@ export class GameKeyboard {
   }
 
   static bind(key, callback, type) {
-    Mousetrap.bind(key, callback, type);
+    Mousetrap.bind(key, () => executeKey(callback), type);
   }
 
   static bindRepeatable(key, callback) {
-    this._bindSpin(key, new KeySpin(key, callback));
+    this._bindSpin(key, new KeySpin(key, () => executeKey(callback)));
   }
 
   static bindHotkey(key, callback, type) {
@@ -74,11 +74,18 @@ export class GameKeyboard {
 
 GameKeyboard.spins = [];
 
+function executeKey(action) {
+  if (ui.$viewModel.modal.progressBar !== undefined) {
+    return undefined;
+  }
+  return action();
+}
+
 function executeHotkey(action) {
   if (!player.options.hotkeys ||
     document.activeElement.type === "text" ||
     document.activeElement.type === "textarea") {
     return undefined;
   }
-  return action();
+  return executeKey(action);
 }

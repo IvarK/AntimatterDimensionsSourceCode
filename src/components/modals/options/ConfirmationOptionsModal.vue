@@ -26,7 +26,7 @@ export default {
   >
     <div class="c-modal-options__button-container">
       <span v-if="noConfirmations">
-        You do not have anything that requires confirmation,
+        You do not have anything that requires confirmation,<br>
         but if you did it would appear here.
       </span>
       <ConfirmationOptionsEntry

@@ -22,61 +22,61 @@ export const shortcuts = [
     keys: ["a"],
     type: "bindHotkey",
     function: () => keyboardToggleAutobuyers(),
-    visible: () => true
+    visible: true
   }, {
     name: "Buy one Tickspeed",
     keys: ["shift", "t"],
     type: "bindRepeatableHotkey",
     function: () => buyTickSpeed(),
-    visible: () => true
+    visible: true
   }, {
     name: "Buy max Tickspeed",
     keys: ["t"],
     type: "bindRepeatableHotkey",
     function: () => buyMaxTickSpeed(),
-    visible: () => true
+    visible: true
   }, {
     name: "Max all",
     keys: ["m"],
     type: "bindRepeatableHotkey",
     function: () => maxAll(),
-    visible: () => true
+    visible: true
   }, {
     name: "Dimensional Sacrifice",
     keys: ["s"],
     type: "bindRepeatableHotkey",
     function: () => sacrificeBtnClick(),
-    visible: () => true
+    visible: true
   }, {
     name: "Dimension Boost",
     keys: ["d"],
     type: "bindRepeatableHotkey",
     function: () => requestDimensionBoost(true),
-    visible: () => true
+    visible: true
   }, {
     name: "Single Dimension Boost",
     keys: ["shift", "d"],
     type: "bindRepeatableHotkey",
     function: () => requestDimensionBoost(false),
-    visible: () => false
+    visible: false
   }, {
     name: "Antimatter Galaxy",
     keys: ["g"],
     type: "bindRepeatableHotkey",
     function: () => requestGalaxyReset(true),
-    visible: () => true
+    visible: true
   }, {
     name: "Single Antimatter Galaxy",
     keys: ["shift", "g"],
     type: "bindRepeatableHotkey",
     function: () => requestGalaxyReset(false),
-    visible: () => false
+    visible: false
   }, {
     name: "Big Crunch",
     keys: ["c"],
     type: "bindRepeatableHotkey",
     function: () => bigCrunchResetRequest(),
-    visible: () => true
+    visible: true
   }, {
     name: "Replicanti Galaxy",
     keys: ["r"],
@@ -139,7 +139,7 @@ export const shortcuts = [
       GameStorage.save(false, true);
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Export game",
     keys: ["mod", "e"],
@@ -148,7 +148,7 @@ export const shortcuts = [
       GameStorage.export();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Open the shortcut list",
     keys: ["?"],
@@ -157,7 +157,7 @@ export const shortcuts = [
       keyboardPressQuestionMark();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Open \"How to Play\" pop-up",
     keys: ["h"],
@@ -166,7 +166,7 @@ export const shortcuts = [
       keyboardH2PToggle();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Modify visible tabs",
     keys: ["tab"],
@@ -175,7 +175,7 @@ export const shortcuts = [
       keyboardVisibleTabsToggle();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Close pop-up or open options",
     keys: ["esc"],
@@ -184,7 +184,7 @@ export const shortcuts = [
       keyboardPressEscape();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Paying respects",
     keys: ["f"],
@@ -193,37 +193,37 @@ export const shortcuts = [
       GameUI.notify.info("Paying respects");
       SecretAchievement(13).unlock();
     },
-    visible: () => false
+    visible: false
   }, {
     name: "Change Tab",
     keys: ["up"],
     type: "bind",
     function: () => keyboardTabChange("up"),
-    visible: () => false
+    visible: false
   }, {
     name: "Change Tab",
     keys: ["down"],
     type: "bind",
     function: () => keyboardTabChange("down"),
-    visible: () => false
+    visible: false
   }, {
     name: "Change Subtab",
     keys: ["left"],
     type: "bind",
     function: () => keyboardTabChange("left"),
-    visible: () => false
+    visible: false
   }, {
     name: "Change Subtab",
     keys: ["right"],
     type: "bind",
     function: () => keyboardTabChange("right"),
-    visible: () => false
+    visible: false
   }, {
     name: "Doesn't exist",
     keys: ["9"],
     type: "bind",
     function: () => SecretAchievement(41).unlock(),
-    visible: () => false
+    visible: false
   }
 ];
 

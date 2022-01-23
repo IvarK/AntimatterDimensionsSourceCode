@@ -274,14 +274,6 @@ GameKeyboard.bind(
   () => SecretAchievement(23).unlock()
 );
 
-// TODO: Change this so that it works correctly, this is just a stopgap
-GameKeyboard.bind("enter up up down down left right left right b a", () => {
-  SecretAchievement(17).unlock();
-  Currency.antimatter.bumpTo(30);
-  Speedrun.startTimer();
-});
-
-
 // Toggle autobuyers
 function toggleAutobuyer(buyer) {
   if (buyer.disabledByContinuum) {
@@ -388,7 +380,20 @@ function keyboardVisibleTabsToggle() {
   Modal.hiddenTabs.show();
 }
 
+const recentDirections = [];
+const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right"];
+
 function keyboardTabChange(direction) {
+  // Becuase Mousetweaks become confused when the starting key of a sequence and another key are the same,
+  // to allow both the up keybind and the konami code to work, we have to do this
+  recentDirections.push(direction);
+  if (recentDirections.length > 8) recentDirections.pop();
+  if (konamiCode.every((correct, index) => correct === recentDirections[index])) {
+    // Bind the final sequence of the konami code, will be unbound when no longer valid
+    GameKeyboard.bind("b a enter", () => doKonamiCode());
+  } else {
+    GameKeyboard.unbind("b a enter");
+  }
   // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
   if (direction === "up" || direction === "down") {
@@ -420,4 +425,11 @@ function keyboardTabChange(direction) {
   }
   // Return false so the arrow keys don't do anything else
   return false;
+}
+
+function doKonamiCode() {
+  GameKeyboard.unbind("b a enter");
+  SecretAchievement(17).unlock();
+  Currency.antimatter.bumpTo(30);
+  Speedrun.startTimer();
 }

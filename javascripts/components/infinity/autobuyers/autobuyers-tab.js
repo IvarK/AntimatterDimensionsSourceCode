@@ -62,23 +62,46 @@ Vue.component("simple-autobuyers-multi-box", {
     mutliple() {
       return Autobuyers.display[0];
     },
+  },
+  template: `
+    <span class="l-autobuyers-tab">
+      <multiple-autobuyers-box
+        v-for="(type, id) in mutliple"
+        :type="type"
+        :key="id"
+      />
+      <multiple-single-autobuyers-group />
+    </span>`
+});
+
+
+Vue.component("multiple-single-autobuyers-group", {
+  computed: {
     singles() {
       return Autobuyers.display[1];
+    },
+    entryCount() {
+      return this.singles.length;
+    },
+    rowCount() {
+      return Math.ceil(this.entryCount / 4);
+    },
+    entryCountPerRow() {
+      return this.rowCount === 1 ? this.entryCount : 4;
+    },
+    boxSize() {
+      // The 2% reduced flex-basis is used to prevent wrapping due to the margins.
+      // It would be 1%, but apparently the margins are larger here.
+      return `flex: 1 0 ${100 / this.entryCountPerRow - 2}%`;
     }
   },
   template: `
-    <span>
-      <span class="l-autobuyers-tab">
-        <multiple-autobuyers-box
-          v-for="(type, id) in mutliple"
-          :type="type"
-          :key="1+id"
-        />
-        <single-autobuyer-box
-          v-for="(type, id) in singles"
-          :autobuyer="type"
-          :key="-id"
-        />
-      </span>
+    <span class="l-autobuyer-singlet-group">
+      <template
+        v-for="(type, id) in singles"
+      >
+        <single-autobuyer-box :autobuyer="type" :style="boxSize" />
+        <br v-if="id % entryCountPerRow === entryCountPerRow" />
+      </template>
     </span>`
 });

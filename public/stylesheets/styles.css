@@ -4170,6 +4170,13 @@ screen and (max-width: 480px) {
   background: white;
 }
 
+.l-autobuyer-singlet-group {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  width: 91rem;
+}
+
 .c-autobuyer-box-slot {
   position: relative;
   border: .2rem solid #383232;

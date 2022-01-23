@@ -58,6 +58,14 @@ export class GameKeyboard {
     Mousetrap.bind(key, () => spin.stop(), "keyup");
   }
 
+  static unbind(key) {
+    Mousetrap.unbind(key);
+    Mousetrap.unbind(key, "keypress");
+    Mousetrap.unbind(key, "keydown");
+    Mousetrap.unbind(key, "keyup");
+    GameKeyboard.spins = GameKeyboard.spins.filter(x => x.key !== key);
+  }
+
   static disable() {
     this.stopSpins();
     Mousetrap.reset();

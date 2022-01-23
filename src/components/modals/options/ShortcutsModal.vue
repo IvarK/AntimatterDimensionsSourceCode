@@ -8,15 +8,13 @@ export default {
   },
   data() {
     return {
-      shortcuts: [],
+      updateIndicies: [],
+      visible: [],
       timeStudyUnlocked: false,
       glyphSacUnlocked: false
     };
   },
   computed: {
-    visibleShortcuts() {
-      return this.shortcuts.filter(x => x.visible());
-    },
     moreShiftKeyInfo() {
       const shiftKeyFunctions = [];
       if (this.timeStudyUnlocked) {
@@ -30,17 +28,31 @@ export default {
       return (shiftKeyInfo === "")
         ? ""
         : `You can hold Shift ${shiftKeyInfo}.`;
+    },
+    shortcutCount() {
+      return shortcuts.length;
+    },
+    shortcutNames() {
+      return shortcuts.map(x => x.name);
+    },
+    shortcutkeys() {
+      return shortcuts.map(x => x.keys);
+    }
+  },
+  created() {
+    for (let i = 0; i < this.shortcutCount; i++) {
+      const visible = shortcuts[i].visible;
+      if (typeof visible === "function") {
+        this.updateIndicies.push(i);
+      } else {
+        this.visible[i] = visible;
+      }
     }
   },
   methods: {
     update() {
-      for (const x in shortcuts) {
-        this.shortcuts[x] = [];
-        const here = this.shortcuts[x];
-        const there = shortcuts[x];
-        here.name = there.name;
-        here.keys = there.keys;
-        here.visible = there.visible;
+      for (const index of this.updateIndicies) {
+        this.$set(this.visible, index, shortcuts[index].visible());
       }
       const progress = PlayerProgress.current;
       this.timeStudyUnlocked = progress.isEternityUnlocked;
@@ -64,17 +76,21 @@ export default {
         <kbd>1</kbd>-<kbd>8</kbd>
       </div>
       <div
-        v-for="(shortcut, index) in visibleShortcuts"
+        v-for="index in shortcutCount"
         :key="index"
-        class="l-modal-shortcuts-row"
       >
-        <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">{{ shortcut.name }}</span>
-        <kbd
-          v-for="(entry, i) in shortcut.keys"
-          :key="i"
+        <span
+          v-if="visible[index]"
+          class="l-modal-shortcuts-row"
         >
-          {{ entry }}
-        </kbd>
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">{{ shortcutNames[index] }}</span>
+          <kbd
+            v-for="(key, i) in shortcutkeys[index]"
+            :key="i"
+          >
+            {{ key }}
+          </kbd>
+        </span>
       </div>
     </div>
     <div class="l-modal-shortcuts__column l-modal-shortcuts__column--right">

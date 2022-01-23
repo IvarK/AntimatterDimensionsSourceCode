@@ -30,6 +30,9 @@ export default {
       default: true
     },
   },
+  created() {
+    this.on$(GAME_EVENT.ENTER_PRESSED, this.doConfirm);
+  },
   methods: {
     doConfirm() {
       this.$emit("confirm");

@@ -63,6 +63,7 @@ export default {
     },
   },
   created() {
+    this.on$(GAME_EVENT.ENTER_PRESSED, () => this.confirmModal(false));
     // This refreshes the glyphs shown after every reality, and also doesn't
     // allow it to refresh if you're choosing glyphs (at that point,
     // your choices are your choices). This is technically incorrect since

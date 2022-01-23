@@ -177,6 +177,15 @@ export const shortcuts = [
     },
     visible: true
   }, {
+    name: "Confirm Modal",
+    keys: ["enter"],
+    type: "bind",
+    function: () => {
+      EventHub.dispatch(GAME_EVENT.ENTER_PRESSED);
+      return true;
+    },
+    visible: true
+  }, {
     name: "Close pop-up or open options",
     keys: ["esc"],
     type: "bind",

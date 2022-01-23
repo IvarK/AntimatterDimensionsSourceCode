@@ -568,7 +568,7 @@ export function gameLoop(passDiff, options = {}) {
   // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
   // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
   if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
-    Currency.timeTheorems.max.gte(TimeStudy.dilation.timeTheoremRequirement) &&
+    Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
     !isInCelestialReality()) {
     Currency.timeTheorems.add(TimeStudy.dilation.cost);
     TimeStudy.dilation.purchase(true);

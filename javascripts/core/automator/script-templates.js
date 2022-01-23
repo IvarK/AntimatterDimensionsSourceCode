@@ -233,7 +233,7 @@ export class ScriptTemplate {
     }
     this.lines.push(`auto infinity off`);
     this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
-    this.lines.push(`while tt < ${this.format(TimeStudy.dilation.timeTheoremRequirement)} {`);
+    this.lines.push(`while tt < ${this.format(TimeStudy.dilation.totalTimeTheoremRequirement)} {`);
     this.lines.push(` ${this.storedTreeStr}`);
     this.lines.push(" studies respec");
     this.lines.push(" wait eternity");

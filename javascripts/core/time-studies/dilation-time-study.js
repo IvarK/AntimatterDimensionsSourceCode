@@ -22,7 +22,7 @@ export class DilationTimeStudyState extends TimeStudyState {
     return typeof this.config.cost === "function" ? this.config.cost() : this.config.cost;
   }
 
-  get timeTheoremRequirement() {
+  get totalTimeTheoremRequirement() {
     return this.id === 1 ? 12900 : 0;
   }
 

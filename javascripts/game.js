@@ -742,14 +742,13 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerBefore, hotkeySetting) {
+function afterSimulation(seconds, playerBefore) {
   if (seconds > 600) {
     const playerAfter = deepmerge.all([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
   GameUI.notify.showBlackHoles = true;
-  player.options.hotkeys = hotkeySetting;
 }
 
 const OFFLINE_BH_PAUSE_STATE = {
@@ -759,8 +758,6 @@ const OFFLINE_BH_PAUSE_STATE = {
 };
 
 export function simulateTime(seconds, real, fast) {
-  const playerHotkeySetting = player.options.hotkeys;
-  player.options.hotkeys = false;
   // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
@@ -897,7 +894,7 @@ export function simulateTime(seconds, real, fast) {
       loopFn(remaining);
     }
     GameStorage.postLoadStuff();
-    afterSimulation(seconds, playerStart, playerHotkeySetting);
+    afterSimulation(seconds, playerStart);
   } else {
     const progress = {};
     ui.view.modal.progressBar = {};
@@ -956,7 +953,7 @@ export function simulateTime(seconds, real, fast) {
           GameStorage.postLoadStuff();
         },
         then: () => {
-          afterSimulation(seconds, playerStart, playerHotkeySetting);
+          afterSimulation(seconds, playerStart);
         },
         progress
       });

@@ -3,11 +3,14 @@ import { GameKeyboard } from "./keyboard.js";
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
 // GameKeyboard.bindRepeatable for repeatable combinations
-// Hotkeys obey player.options.hotkeys option
+// Hotkeys obey player.options.hotkeys option, and should be everying relating to the functionality of the game itself
 // GameKeyboard.bindHotkey for single press hotkeys
 // GameKeyboard.bindRepeatableHotkey for repeatable hotkeys
 // GameKeyboard class uses Mousetrap under the hood, so for more details visit
 // https://craig.is/killing/mice
+
+// Note: mod is a function key helper by Mousetap for both ctrl and command,
+// and should be used to provide support for both Windows and Max
 
 // Free keys:
 // i, j, k, l, n, o, p, q, v, w, x, z
@@ -130,8 +133,8 @@ export const shortcuts = [
     visible: () => Laitela.continuumUnlocked
   }, {
     name: "Save game",
-    keys: ["ctrl", "s"],
-    type: "bindHotkey",
+    keys: ["mod", "s"],
+    type: "bind",
     function: () => {
       GameStorage.save(false, true);
       return false;
@@ -139,8 +142,8 @@ export const shortcuts = [
     visible: () => true
   }, {
     name: "Export game",
-    keys: ["ctrl", "e"],
-    type: "bindHotkey",
+    keys: ["mod", "e"],
+    type: "bind",
     function: () => {
       GameStorage.export();
       return false;
@@ -149,7 +152,7 @@ export const shortcuts = [
   }, {
     name: "Open the shortcut list",
     keys: ["?"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardPressQuestionMark();
       return false;
@@ -158,7 +161,7 @@ export const shortcuts = [
   }, {
     name: "Open \"How to Play\" pop-up",
     keys: ["h"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardH2PToggle();
       return false;
@@ -167,7 +170,7 @@ export const shortcuts = [
   }, {
     name: "Modify visible tabs",
     keys: ["tab"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardVisibleTabsToggle();
       return false;
@@ -176,7 +179,7 @@ export const shortcuts = [
   }, {
     name: "Close pop-up or open options",
     keys: ["esc"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardPressEscape();
       return false;
@@ -194,25 +197,25 @@ export const shortcuts = [
   }, {
     name: "Change Tab",
     keys: ["up"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("up"),
     visible: () => false
   }, {
     name: "Change Tab",
     keys: ["down"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("down"),
     visible: () => false
   }, {
     name: "Change Subtab",
     keys: ["left"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("left"),
     visible: () => false
   }, {
     name: "Change Subtab",
     keys: ["right"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("right"),
     visible: () => false
   }, {
@@ -231,8 +234,6 @@ for (const hotkey of shortcuts) {
     if (keys === "") keys += key;
     else keys += `+${key}`;
   }
-  // If the keybind starts with ctrl, also add an alternative that uses meta
-  if (keys.startsWith("ctrl")) keys = [keys, `meta${keys.substring(4)}`];
   GameKeyboard[hotkey.type](keys, hotkey.function);
 }
 
@@ -269,7 +270,7 @@ GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(Autobuyer.reality));
 
 // A few special GameKeyboards
 GameKeyboard.bind(
-  ["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"],
+  ["mod+shift+c", "mod+shift+i", "mod+shift+j", "f12"],
   () => SecretAchievement(23).unlock()
 );
 

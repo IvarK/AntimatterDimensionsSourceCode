@@ -3,7 +3,7 @@ export default {
   name: "OpenModalShortcutsButton",
   methods: {
     handleClick() {
-      Modal.shortcuts.show();
+      Modal.hotkeys.show();
     }
   }
 };

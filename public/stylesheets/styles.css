@@ -2423,7 +2423,7 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.c-options-tab__shortcuts-link {
+.c-options-tab__hotkeys-link {
   cursor: pointer;
   width: 21rem;
   align-self: center;
@@ -5480,43 +5480,43 @@ screen and (max-width: 480px) {
   margin-left: 1rem;
 }
 
-/*#region c-modal-shortcuts*/
+/*#region c-modal-hotkeys*/
 
-.c-modal-shortcuts {
+.c-modal-hotkeys {
   font-size: 1.25rem;
 }
 
-.l-modal-shortcuts {
+.l-modal-hotkeys {
   display: flex;
   flex-direction: row;
 }
 
-.l-modal-shortcuts__column {
+.l-modal-hotkeys__column {
   width: 25rem;
   display: flex;
   flex-direction: column;
 }
 
-.l-modal-shortcuts__column--right {
+.l-modal-hotkeys__column--right {
   margin-left: 1rem;
 }
 
-.l-modal-shortcuts-row {
+.l-modal-hotkeys-row {
   display: flex;
   flex-direction: row;
   line-height: 1.6rem;
   padding-bottom: 0.3rem;
 }
 
-.c-modal-shortcuts-row__name {
+.c-modal-hotkeys-row__name {
   text-align: left;
 }
 
-.l-modal-shortcuts-row__name {
+.l-modal-hotkeys-row__name {
   flex: 1 1 auto;
 }
 
-.c-modal-shortcuts__shift-description {
+.c-modal-hotkeys__shift-description {
   text-align: left;
   font-size: 1rem;
 }
@@ -5543,7 +5543,7 @@ kbd {
   color: #a9b3bc;
 }
 
-/*#endregion c-modal-shortcuts*/
+/*#endregion c-modal-hotkeys*/
 
 .l-modal-progress-bar {
   position: fixed;

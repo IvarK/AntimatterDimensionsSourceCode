@@ -1,13 +1,13 @@
 <script>
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
+import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
 
 export default {
   name: "OptionsGameplayTab",
   components: {
     PrimaryToggleButton,
-    OpenModalShortcutsButton,
+    OpenModalHotkeysButton,
     OptionsButton
   },
   data() {
@@ -135,7 +135,7 @@ export default {
           >
         </div>
       </div>
-      <OpenModalShortcutsButton />
+      <OpenModalHotkeysButton />
     </div>
   </div>
 </template>

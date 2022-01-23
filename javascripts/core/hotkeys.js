@@ -354,12 +354,12 @@ function keyboardPressEscape() {
 }
 
 function keyboardPressQuestionMark() {
-  if (Modal.shortcuts.isOpen) {
+  if (Modal.hotkeys.isOpen) {
     Modal.hide();
     return;
   }
   if (Modal.isOpen) return;
-  Modal.shortcuts.show();
+  Modal.hotkeys.show();
 }
 
 function keyboardH2PToggle() {

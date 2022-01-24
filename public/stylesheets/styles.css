@@ -5020,12 +5020,37 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.c-blob-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -9999;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+
 .o-blob-snowflake {
   fill: #fbc21b;
   text-shadow: 0 0 5px #000,
                0 0 5px #000,
                0 0 5px #000;
   opacity: 0.9;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+
+.o-blob-background {
+  fill: #fbc21b;
+  text-shadow: 0 0 5px #000,
+               0 0 5px #000,
+               0 0 5px #000;
+  opacity: 0.3;
   overflow: visible;
   pointer-events: none;
   user-select: none;

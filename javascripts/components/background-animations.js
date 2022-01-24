@@ -14,7 +14,5 @@ Vue.component("background-animations", {
     }
   },
   template: `
-    <span v-if="animateBackground">
-      <blob-snowflakes v-if="blob" />
-    </span>`
+    <blob-snowflakes v-if="blob" />`
 });

@@ -1,8 +1,10 @@
 import "./blob-snowflake";
+import "./blob-background";
 
 Vue.component("blob-snowflakes", {
   data() {
     return {
+      animateBackground: false,
       count: 0,
       initialized: false,
       bounds: {
@@ -21,6 +23,7 @@ Vue.component("blob-snowflakes", {
   },
   methods: {
     update() {
+      this.animateBackground = player.options.animations.background;
       this.count = player.options.animations.blobSnowflakes;
     },
     updateSize() {
@@ -28,14 +31,22 @@ Vue.component("blob-snowflakes", {
       this.bounds.y = this.$el.clientHeight;
     }
   },
-  template:
-      `<svg class="c-blob-snowflake-container">
-        <blob-snowflake
-          v-for="i in count"
-          v-if="initialized"
-          :key="i"
-          :bounds="bounds"
-        />
-      </svg>`
+  template: `
+    <svg v-if="animateBackground" class="c-blob-snowflake-container">
+      <blob-snowflake
+        v-for="i in count"
+        v-if="initialized"
+        :key="i"
+        :bounds="bounds"
+      />
+    </svg>
+    <svg v-else class="c-blob-background-container">
+      <blob-background
+        v-for="i in count"
+        v-if="initialized"
+        :key="i"
+        :bounds="bounds"
+      />
+    </svg>`
 });
 

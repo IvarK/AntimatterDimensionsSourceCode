@@ -95,7 +95,6 @@ export const BlackHoleAnimation = (function() {
       super();
       this.size = PARTICLE_SIZE;
       this.respawn();
-      this.blob = blobs[Math.floor(Math.random() * blobs.length)];
     }
 
     respawn() {
@@ -107,6 +106,8 @@ export const BlackHoleAnimation = (function() {
       this.preLastAngle = this.angle;
       this.respawnTick = true;
       this.isInside = false;
+      this.blob = blobs[Math.floor(Math.random() * blobs.length)];
+      this.isBlob = Theme.current().name === "S11";
     }
 
     static randomDistance() {
@@ -177,7 +178,7 @@ export const BlackHoleAnimation = (function() {
       const { x: lastX, y: lastY } = Dot.calculatePosition(this.preLastDistance, angle);
       context.lineCap = "round";
 
-      if (Theme.current().name === "S11") {
+      if (this.isBlob) {
         const FONT_SIZE = 18;
         context.textAlign = "center";
         context.fillStyle = "orange";

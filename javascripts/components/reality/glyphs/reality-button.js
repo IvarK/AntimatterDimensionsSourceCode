@@ -11,6 +11,7 @@ Vue.component("reality-button", {
       nextGlyphPercent: 0,
       nextMachineEP: 0,
       shardsGained: 0,
+      currentShardsRate: 0,
       celestialRunText: ["", "", "", "", ""]
     };
   },
@@ -40,6 +41,11 @@ Vue.component("reality-button", {
     formatGlyphLevel() {
       if (this.glyphLevel >= 10000) return `Glyph level: ${formatInt(this.glyphLevel)}`;
       return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
+    },
+
+    rateThreshold: () => 1e13,
+    showShardsRate() {
+      return this.currentShardsRate <= this.rateThreshole;
     },
     shardsGainedText() {
       return quantify("Relic Shard", this.shardsGained, 2);
@@ -72,6 +78,7 @@ Vue.component("reality-button", {
         }
         return result;
       }
+
       const multiplier = simulatedRealityCount(false) + 1;
       this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
       this.newIMCap = MachineHandler.projectedIMCap;
@@ -82,6 +89,7 @@ Vue.component("reality-button", {
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
+      this.currentShardsRate = (this.shardsGained / this.realityTime);
 
       const teresaReward = this.formatScalingMultiplierText(
         "Glyph Sacrifice",
@@ -149,6 +157,7 @@ Vue.component("reality-button", {
             <div>Other resources gained:</div>
             <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
             <div v-if="shardsGained !== 0">{{ shardsGainedText }}</div>
+            <div v-if="showShardsRate !== 0">{{ format(currentShardsRate, 2) }} Relic Shards/min</div>
             <div v-for="celestialInfo in celestialRunText">
               <span v-if="celestialInfo[0]">
                 {{ celestialInfo[1] }}

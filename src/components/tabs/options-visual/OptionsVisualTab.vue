@@ -6,6 +6,7 @@ import UpdateRateSlider from "./UpdateRateSlider";
 import OpenModalShortcutsButton from "@/components/OpenModalShortcutsButton";
 import SelectThemeDropdown from "@/components/tabs/options-visual/SelectThemeDropdown";
 import SelectNotationDropdown from "@/components/tabs/options-visual/SelectNotationDropdown";
+import * as ADNotations from "@antimatter-dimensions/notations";
 
 export default {
   name: "OptionsVisualTab",

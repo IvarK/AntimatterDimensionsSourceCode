@@ -1,3 +1,5 @@
+import * as ADNotations from "@antimatter-dimensions/notations";
+
 export const GameStorage = {
   currentSlot: 0,
   saves: {

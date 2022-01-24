@@ -1,3 +1,6 @@
+import Decimal from "break_infinity.js";
+window.Decimal = Decimal;
+
 Array.prototype.distinct = function() {
     return this.filter(function (value, index, self) {
         return self.indexOf(value) === index;

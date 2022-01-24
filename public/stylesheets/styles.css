@@ -234,6 +234,11 @@ body {
   src: url('fa-solid-900.ttf');
 }
 
+@font-face {
+  font-family: Typewriter;
+  src: url('blob_font_bold.ttf'), url('MonospaceTypewriter.ttf');
+}
+
 /* Background for s6 and s10 is not displayed by default */
 #stars {
   display: none;

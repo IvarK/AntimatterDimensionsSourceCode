@@ -89,11 +89,13 @@ export const BlackHoleAnimation = (function() {
     }
   }
 
+  const blobs = "";
   class Particle extends Dot {
     constructor() {
       super();
       this.size = PARTICLE_SIZE;
       this.respawn();
+      this.blob = blobs[Math.floor(Math.random() * blobs.length)];
     }
 
     respawn() {
@@ -174,9 +176,33 @@ export const BlackHoleAnimation = (function() {
       const angle = this.isInside ? this.angle : this.preLastAngle;
       const { x: lastX, y: lastY } = Dot.calculatePosition(this.preLastDistance, angle);
       context.lineCap = "round";
-      context.lineWidth *= 1;
-      context.moveTo(x + 200, y + 200);
-      context.lineTo(lastX + 200, lastY + 200);
+
+      if (Theme.current().name === "S11") {
+        const FONT_SIZE = 18;
+        context.textAlign = "center";
+        context.fillStyle = "orange";
+
+        if (this.distance <= holeSize) {
+          const scale = this.distance / holeSize;
+          const px = FONT_SIZE * Math.sqrt(scale);
+          const green = 165 * scale ** 2;
+
+          context.fillStyle = `rgba(255, ${green}, 0, ${scale * 2})`;
+          context.font = `${px}px Typewriter`;
+        } else {
+          context.font = `${FONT_SIZE}px Typewriter`;
+        }
+
+        context.save();
+        context.translate(x + 200, y + 200);
+        context.rotate(-this.angle * Math.PI * 2 + Math.PI);
+        context.fillText(this.blob, 0, 0);
+        context.restore();
+      } else {
+        context.lineWidth *= 1;
+        context.moveTo(x + 200, y + 200);
+        context.lineTo(lastX + 200, lastY + 200);
+      }
     }
   }
 

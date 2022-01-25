@@ -22,6 +22,8 @@ export default {
       level: 0,
       simRealities: 0,
       realityMachines: new Decimal(),
+      shardsGained: 0,
+      effarigUnlocked: false,
     };
   },
   computed: {
@@ -41,10 +43,14 @@ export default {
         ${this.hasFilter ? "choose a Glyph based on your filter settings" : "randomly select a Glyph"}.`;
     },
     gained() {
-      return `You will gain
-        ${quantifyInt("Reality", this.simRealities)},
-        ${quantifyInt("Perk Point", this.simRealities)} and
-        ${quantify("Reality Machine", this.realityMachines, 2)} on Reality.`;
+      const gainedResources = [];
+      gainedResources.push(`${quantifyInt("Reality", this.simRealities)}`);
+      gainedResources.push(`${quantifyInt("Perk Point", this.simRealities)}`);
+      gainedResources.push(`${quantify("Reality Machine", this.realityMachines, 2)}`);
+      if (this.effarigUnlocked) {
+        gainedResources.push(`${quantify("Relic Shard", this.shardsGained, 2)}`);
+      }
+      return `You will gain ${makeEnumeration(gainedResources)}`;
     },
     levelStats() {
       // Bit annoying to read due to needing >, <, and =, with = needing a different format.
@@ -74,11 +80,13 @@ export default {
       this.showReality = player.options.confirmations.reality;
       this.showGlyphSelection = player.options.confirmations.glyphSelection;
       this.firstPerk = Perk.firstPerk.isEffectActive;
+      this.effarigUnlocked = Teresa.has(TERESA_UNLOCKS.EFFARIG);
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
       this.simRealities = 1 + simulatedRealityCount(false);
       const simRMGained = MachineHandler.gainedRealityMachines.times(this.simRealities);
       this.realityMachines.copyFrom(simRMGained.clampMax(MachineHandler.distanceToRMCap));
+      this.shardsGained = Effarig.shardsGained * (simulatedRealityCount(false) + 1);
       if (!this.firstPerk) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];

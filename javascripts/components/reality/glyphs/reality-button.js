@@ -42,7 +42,6 @@ Vue.component("reality-button", {
       if (this.glyphLevel >= 10000) return `Glyph level: ${formatInt(this.glyphLevel)}`;
       return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
-
     showShardsRate() {
       return this.currentShardsRate;
     },

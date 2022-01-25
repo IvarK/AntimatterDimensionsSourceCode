@@ -72,7 +72,6 @@ Vue.component("effarig-tab", {
     runDescription() {
       return GameDatabase.celestials.descriptions[1].description();
     },
-
     showShardsRate() {
       return this.currentShardsRate;
     }

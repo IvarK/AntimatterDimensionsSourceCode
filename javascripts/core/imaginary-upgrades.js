@@ -32,6 +32,10 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     return this.config.hasFailed ? !this.config.hasFailed() : true;
   }
 
+  get canBeApplied() {
+    return super.canBeApplied && !Pelle.isDisabled("imaginaryUpgrades");
+  }
+
   tryUnlock() {
     if (!MachineHandler.isIMUnlocked || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     // eslint-disable-next-line no-bitwise
@@ -61,6 +65,10 @@ class RebuyableImaginaryUpgradeState extends RebuyableMechanicState {
 
   get boughtAmount() {
     return player.reality.imaginaryRebuyables[this.id];
+  }
+
+  get canBeApplied() {
+    return super.canBeApplied && !Pelle.isDisabled("imaginaryUpgrades");
   }
 
   set boughtAmount(value) {

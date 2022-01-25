@@ -630,6 +630,17 @@ window.player = {
         annihilation: false
       },
       lastCheckedMilestones: 0
+    },
+    pelle: {
+      doomed: false,
+      upgrades: new Set(),
+      remnants: new Decimal(0),
+      // For recording which ones you permanently have
+      armageddonDuration: 0,
+      maxAMThisArmageddon: new Decimal(0),
+      rebuyables: {
+      },
+      progressBits: 0
     }
   },
   tabNotifications: new Set(),

@@ -33,7 +33,7 @@ export const Laitela = {
     return ImaginaryUpgrade(15).isBought;
   },
   get continuumActive() {
-    return this.continuumUnlocked && !player.auto.disableContinuum;
+    return this.continuumUnlocked && !player.auto.disableContinuum && !Pelle.isDisabled("continuum");
   },
   setContinuum(x) {
     player.auto.disableContinuum = !x;

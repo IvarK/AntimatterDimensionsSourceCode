@@ -30,7 +30,6 @@ import "./celestials/subtabs/enslaved-tab.js";
 import "./celestials/subtabs/ra/ra-tab.js";
 import "./celestials/subtabs/ra/alchemy-tab.js";
 import "./celestials/subtabs/laitela/laitela-tab.js";
-import "./celestials/subtabs/pelle-tab.js";
 
 import "./shop/shop-tab.js";
 

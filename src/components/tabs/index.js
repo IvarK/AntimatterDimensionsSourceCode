@@ -12,6 +12,7 @@ import GlyphSetRecordsTab from "./glyph-set-records/GlyphSetRecordsTab";
 import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
+import PelleTab from "./celestial-pelle/PelleTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -26,7 +27,8 @@ const TabComponents = {
   GlyphSetRecordsTab,
   SpeedrunMilestonesTab,
   NormalAchievementsTab,
-  SecretAchievementTab
+  SecretAchievementTab,
+  PelleTab
 };
 
 export default TabComponents;

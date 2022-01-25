@@ -5,8 +5,9 @@ function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
   Currency.eternityPoints.add(gainedEternityPoints());
 
-  const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
+  let newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
+  if (Pelle.isDisabled("eternityMults")) newEternities = new Decimal(1);
   if (Currency.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
@@ -133,7 +134,7 @@ export function initializeChallengeCompletions(isReality) {
   if (!isReality && EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
-  if (Achievement(133).isUnlocked) InfinityChallenges.completeAll();
+  if (Achievement(133).isUnlocked && !Pelle.isDoomed) InfinityChallenges.completeAll();
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
 }
@@ -162,6 +163,7 @@ export function initializeResourcesAfterEternity() {
 }
 
 function applyRealityUpgradesAfterEternity() {
+  if (Pelle.isDoomed) return;
   if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
   }

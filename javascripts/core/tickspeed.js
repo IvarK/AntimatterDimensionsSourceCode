@@ -57,7 +57,7 @@ export function getTickSpeedMultiplier() {
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
-  galaxies *= 1 + ImaginaryUpgrade(9).effectValue;
+  galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
   const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
@@ -81,7 +81,7 @@ export function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
-  if (NormalChallenge(9).isRunning) {
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     const goal = Player.infinityGoal;
     let cost = Tickspeed.cost;
     while (Currency.antimatter.gt(cost) && cost.lt(goal)) {

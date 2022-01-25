@@ -215,7 +215,11 @@ export class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get canCharge() {
-    return this.isBought && this.hasChargeEffect && !this.isCharged && Ra.chargesLeft !== 0;
+    return this.isBought &&
+      this.hasChargeEffect &&
+      !this.isCharged &&
+      Ra.chargesLeft !== 0 &&
+      Pelle.isDisabled("chargedInfinityUpgrades");
   }
 
   charge() {

@@ -87,7 +87,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get canBeApplied() {
-    return this.isUnlocked;
+    return this.isUnlocked && !Pelle.isDisabled("singularity");
   }
 }
 
@@ -179,7 +179,7 @@ export const Singularity = {
   get singularitiesGained() {
     return Math.floor(Math.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases) *
       SingularityMilestone.singularityMult.effectOrDefault(1) *
-      (1 + ImaginaryUpgrade(10).effectValue));
+      (1 + ImaginaryUpgrade(10).effectOrDefault(0)));
   },
 
   get capIsReached() {

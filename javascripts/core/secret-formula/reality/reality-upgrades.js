@@ -14,8 +14,9 @@ GameDatabase.reality.upgrades = (function() {
       props.initialCost * props.costMult
     );
     const { effect } = props;
-    props.effect = () => Math.pow(effect + ImaginaryUpgrade(props.id).effectValue, player.reality.rebuyables[props.id] *
-      getAdjustedGlyphEffect("realityrow1pow"));
+    props.effect = () => Math.pow(
+      effect + ImaginaryUpgrade(props.id).effectOrDefault(0),
+      player.reality.rebuyables[props.id] * getAdjustedGlyphEffect("realityrow1pow"));
     props.description = () => props.textTemplate.replace("{value}",
       ImaginaryUpgrade(props.id).effectValue === 0
         ? formatInt(effect)
@@ -253,7 +254,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Eternity count boosts Glyph level",
-      effect: () => Math.max(Math.sqrt(Currency.eternities.value.log10()) * 0.45, 1),
+      effect: () => Math.max(Math.sqrt(Currency.eternities.value.plus(1).log10()) * 0.45, 1),
       formatCost: value => format(value, 1, 0)
     },
     {

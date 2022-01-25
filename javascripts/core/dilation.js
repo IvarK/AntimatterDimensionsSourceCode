@@ -80,7 +80,7 @@ export function buyDilationUpgrade(id, bulk = 1) {
       player.dilation.totalTachyonGalaxies = 0;
     }
 
-    if (id === 3) {
+    if (id === 3 && !Pelle.isDisabled("tpMults")) {
       let retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,
@@ -107,6 +107,9 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 }
 
 export function getDilationGainPerSecond() {
+  if (Pelle.isDisabled("dtMults")) {
+    return new Decimal(Currency.tachyonParticles.value).timesEffectsOf(DilationUpgrade.dtGain);
+  }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
@@ -126,6 +129,7 @@ export function getDilationGainPerSecond() {
 }
 
 function tachyonGainMultiplier() {
+  if (Pelle.isDisabled("tpMults")) return new Decimal(1);
   return DC.D1.timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,

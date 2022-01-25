@@ -201,6 +201,13 @@ export const Glyphs = {
     return this.active[activeIndex];
   },
   equip(glyph, targetSlot) {
+    const pelleMaxGlyphs = 1;
+    const glyphsEquipped = Glyphs.active.filter(Boolean).length;
+    if (
+      Pelle.isDoomed &&
+      (glyphsEquipped >= pelleMaxGlyphs || glyph.type === "effarig" || glyph.type === "reality")
+    ) return;
+
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");
@@ -508,7 +515,7 @@ export const Glyphs = {
     return 1000000;
   },
   get instabilityThreshold() {
-    return 1000 + getAdjustedGlyphEffect("effarigglyph") + ImaginaryUpgrade(7).effectValue;
+    return 1000 + getAdjustedGlyphEffect("effarigglyph") + ImaginaryUpgrade(7).effectOrDefault(0);
   },
   get hyperInstabilityThreshold() {
     return 3000 + this.instabilityThreshold;
@@ -673,6 +680,7 @@ export function getRarity(x) {
 
 export function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
+  if (Pelle.isDoomed) return Math.min(level, Pelle.glyphMaxLevel);
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
   if (BASIC_GLYPH_TYPES.includes(glyph.type)) return level + Glyphs.levelBoost;

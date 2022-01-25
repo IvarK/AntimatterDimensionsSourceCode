@@ -288,7 +288,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
         Glyphs.activeList.length <= 1,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Unlock Pelle, Celestial of Antimatter (not implemented yet)",
+      description: "Unlock Pelle, Celestial of Antimatter",
     },
   ];
 }());

@@ -554,8 +554,10 @@ export function finishProcessReality(realityProps) {
   player.galaxies = 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = false;
-  player.infMult = 0;
+  if (!Pelle.isDoomed) {
+    player.break = false;
+    player.infMult = 0;
+  }
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -681,11 +683,13 @@ export function applyRUPG10() {
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
-  player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
-  player.galaxies = Math.max(1, player.galaxies);
-  player.break = true;
-  Currency.eternities.bumpTo(100);
-  Replicanti.amount = Replicanti.amount.clampMin(1);
+  if (!Pelle.isDisabled("rupg10")) {
+    player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
+    player.galaxies = Math.max(1, player.galaxies);
+    player.break = true;
+    Currency.eternities.bumpTo(100);
+    Replicanti.amount = Replicanti.amount.clampMin(1);
+  }
   Replicanti.unlock(true);
 }
 

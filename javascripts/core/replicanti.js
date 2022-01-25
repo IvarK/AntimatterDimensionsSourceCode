@@ -74,6 +74,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
 // the overCapOverride parameter, to tell us which case we are in.
 export function getReplicantiInterval(overCapOverride, intervalIn) {
   let interval = intervalIn || player.replicanti.interval;
+  if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
   const amount = Replicanti.amount;
   const overCap = overCapOverride === undefined ? amount.gt(replicantiCap()) : overCapOverride;
   const preCelestialEffects = Effects.product(
@@ -110,7 +111,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
 }
 
 export function replicantiCap() {
-  return EffarigUnlock.infinity.isUnlocked
+  return EffarigUnlock.infinity.canBeApplied
     ? Currency.infinitiesTotal.value
       .pow(TimeStudy(31).isBought ? 120 : 30)
       .clampMin(1)

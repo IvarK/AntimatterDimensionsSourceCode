@@ -219,6 +219,7 @@ Currency.antimatter = new class extends DecimalCurrency {
   }
 
   get startingValue() {
+    if (Pelle.isDisabled()) return new Decimal(100);
     return Effects.max(
       10,
       Perk.startAM,
@@ -262,6 +263,7 @@ Currency.infinityPoints = new class extends DecimalCurrency {
   }
 
   get startingValue() {
+    if (Pelle.isDisabled()) return new Decimal(0);
     return Effects.max(
       0,
       Perk.startIP1,
@@ -286,6 +288,7 @@ Currency.eternities = new class extends DecimalCurrency {
   set value(value) { player.eternities = value; }
 
   get startingValue() {
+    if (Pelle.isDoomed) return new Decimal(0);
     return Effects.max(
       0,
       RealityUpgrade(10)
@@ -305,6 +308,7 @@ Currency.eternityPoints = new class extends DecimalCurrency {
   }
 
   get startingValue() {
+    if (Pelle.isDisabled()) return new Decimal(0);
     return Effects.max(
       0,
       Perk.startEP1,
@@ -420,4 +424,9 @@ Currency.singularities = new class extends NumberCurrency {
   set value(value) { player.celestials.laitela.singularities = value; }
 
   get timeUntil() { return Singularity.cap / Currency.darkEnergy.productionPerSecond; }
+}();
+
+Currency.remnants = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.remnants; }
+  set value(value) { player.celestials.pelle.remnants = value; }
 }();

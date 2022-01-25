@@ -120,7 +120,7 @@ class BlackHoleState {
   }
 
   get isUnlocked() {
-    return this._data.unlocked && !Enslaved.isRunning;
+    return this._data.unlocked && !Enslaved.isRunning && !Pelle.isDisabled("blackhole");
   }
 
   get isCharged() {
@@ -164,6 +164,7 @@ class BlackHoleState {
 
   // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
   get displayState() {
+    if (Pelle.isDisabled("blackhole")) return `<i class="fas fa-ban"></i> Disabled`;
     if (Enslaved.isAutoReleasing) {
       if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt u-fa-padding"></i> Pulsing`;
       return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
@@ -188,7 +189,7 @@ class BlackHoleState {
   }
 
   get isActive() {
-    return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive);
+    return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive) && !Pelle.isDisabled("blackhole");
   }
 
   get isPermanent() {

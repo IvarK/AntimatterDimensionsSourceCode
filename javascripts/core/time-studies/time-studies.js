@@ -2,6 +2,7 @@ import { GameMechanicState } from "../game-mechanics/index.js";
 
 // This is only ever called from manual player actions, which means we can immediately commit them to the game state
 export function buyStudiesUntil(id, repeatFor201 = true) {
+  if (Pelle.isDisabled("studies")) return [];
   const studyArray = [];
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const requestedPath = TimeStudy(id).path;

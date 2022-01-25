@@ -22,7 +22,8 @@ export default {
       tachyonParticles: false,
       reality: false,
       background: false,
-      blobSnowflakes: 16
+      blobSnowflakes: 16,
+      isS11Active: false
     };
   },
   watch: {
@@ -57,6 +58,7 @@ export default {
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.blobThemeUnlocked = Themes.find("S11").isAvailable();
+      this.isS11Active = player.options.theme === "S11";
 
       const options = player.options.animations;
       this.bigCrunch = options.bigCrunch;
@@ -102,12 +104,22 @@ export default {
         v-model="reality"
         text="Reality:"
       />
-      <ModalOptionsToggleButton
-        v-if="animatedThemeUnlocked"
-        v-model="background"
-        onclick="Themes.find(player.options.theme).set();"
-        text="Background:"
-      />
+      <div v-if="!isS11Active">
+        <ModalOptionsToggleButton
+          v-if="animatedThemeUnlocked"
+          v-model="background"
+          onclick="Themes.find(player.options.theme).set();"
+          text="Background:"
+        />
+      </div>
+      <div v-else>
+        <ModalOptionsToggleButton
+          v-if="animatedThemeUnlocked"
+          v-model="background"
+          onclick="Themes.find(player.options.theme).set();"
+          text="Blobsnow:"
+        />
+      </div>
       <div
         v-if="blobThemeUnlocked"
         class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"

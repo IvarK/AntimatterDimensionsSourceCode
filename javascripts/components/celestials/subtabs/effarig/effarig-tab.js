@@ -40,6 +40,7 @@ Vue.component("effarig-tab", {
       relicShards: 0,
       shardRarityBoost: 0,
       shardsGained: 0,
+      currentShardsRate: 0,
       amplification: 0,
       amplifiedShards: 0,
       runUnlocked: false,
@@ -70,6 +71,10 @@ Vue.component("effarig-tab", {
     },
     runDescription() {
       return GameDatabase.celestials.descriptions[1].description();
+    },
+
+    showShardsRate() {
+      return this.currentShardsRate;
     }
   },
   methods: {
@@ -77,6 +82,7 @@ Vue.component("effarig-tab", {
       this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost / 100;
       this.shardsGained = Effarig.shardsGained;
+      this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalSeconds);
       this.amplification = simulatedRealityCount(false);
       this.amplifiedShards = this.shardsGained * (1 + this.amplification);
       this.quote = Effarig.quote;
@@ -118,7 +124,8 @@ Vue.component("effarig-tab", {
             +{{ formatPercents(shardRarityBoost, 2) }}.
           </div>
           <div class="c-effarig-relic-description">
-            You will gain {{ quantify("Relic Shard", shardsGained, 2) }} next Reality.
+            You will gain {{ quantify("Relic Shard", shardsGained, 2) }} next Reality
+            ({{ format(currentShardsRate, 2) }}/s).
             <span v-if="amplification !== 0">
               <br>
               Due to amplification of your current Reality,

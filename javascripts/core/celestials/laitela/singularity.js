@@ -42,6 +42,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get previousGoal() {
+    if (this.isUnique) return 1;
     if (!this.isUnlocked) return 0;
     return this.start * Math.pow(this.repeat, this.unnerfCompletions(this.completions) - 1);
   }
@@ -66,7 +67,8 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get progressToNext() {
-    return formatPercents((Currency.singularities.value - this.previousGoal) / this.nextGoal);
+    const prog = (Currency.singularities.value - this.previousGoal) / this.nextGoal;
+    return formatPercents(Math.clampMax(prog, 1));
   }
 
   get isMaxed() {
@@ -133,15 +135,73 @@ export const SingularityMilestones = {
     return this.all.sort((a, b) => a.remainingSingularities - b.remainingSingularities);
   },
 
-  get sortedForCompletions() {
-    return this.sorted.sort((a, b) => {
-      if (a.isMaxed === b.isMaxed) return 0;
-      return a.isMaxed ? 1 : -1;
-    });
+  sortedForCompletions(moveNewToTop) {
+    const options = player.celestials.laitela.singularitySorting;
+
+    // Sorting functions for singularity milestones, values are generally around 0 to 2ish
+    let sortFn;
+    switch (options.sortResource) {
+      case SINGULARITY_MILESTONE_SORT.SINGULARITIES_TO_NEXT:
+        sortFn = m => Math.log10(Math.clampMin(m.remainingSingularities, 1)) / 50;
+        break;
+      case SINGULARITY_MILESTONE_SORT.CURRENT_COMPLETIONS:
+        // Also counts partial completion on the current step
+        sortFn = m => {
+          const currComp = Math.log(Currency.singularities.value / m.previousGoal) /
+            Math.log(m.nextGoal / m.previousGoal);
+          return m.completions + currComp;
+        };
+        break;
+      case SINGULARITY_MILESTONE_SORT.PERCENT_COMPLETIONS:
+        // Orders infinite milestones based on completion count, putting them after all limited ones even if
+        // they're completed
+        sortFn = m => {
+          const limit = Number.isFinite(m.limit) ? m.limit : 100;
+          const currComp = Math.log(Currency.singularities.value / m.previousGoal) /
+            Math.log(m.nextGoal / m.previousGoal);
+          return Math.clampMax((m.completions + currComp) / limit, 1) + (Number.isFinite(m.limit) ? 0 : 1);
+        };
+        break;
+      case SINGULARITY_MILESTONE_SORT.FINAL_COMPLETION:
+        // Sorts infinite milestones as if they end at 50 steps; for any given number of completions, this
+        // treats infinite milestones with larger steps as if they complete at a higher value
+        sortFn = m => {
+          const limit = Number.isFinite(m.limit) ? m.limit : 50;
+          return Math.log10(m.config.start * Math.pow(m.config.repeat, limit - 1)) / 50;
+        };
+        break;
+      case SINGULARITY_MILESTONE_SORT.MOST_RECENT:
+        sortFn = m => Math.log10(m.previousGoal) / 50;
+        break;
+      default:
+        throw new Error("Unrecognized Singularity Milestone sorting option (order)");
+    }
+
+    // Shift the fully completed milestones to the front or back with a constant offset which should be larger
+    // than the value that the sort function should ever evaluate to
+    let completedVal;
+    switch (options.showCompleted) {
+      case COMPLETED_MILESTONES.FIRST:
+        completedVal = 10;
+        break;
+      case COMPLETED_MILESTONES.LAST:
+        completedVal = -10;
+        break;
+      case COMPLETED_MILESTONES.IGNORED:
+        completedVal = 0;
+        break;
+      default:
+        throw new Error("Unrecognized Singularity Milestone sorting option (completed milestones)");
+    }
+
+    // Compose the functions together; possibly reverse the final order and bring new milestones to the top
+    const isNew = m => ((m.previousGoal > player.celestials.laitela.lastCheckedMilestones && moveNewToTop) ? 20 : 0);
+    const compFn = m => (m.isMaxed ? completedVal : 0) + (options.sortOrder ? sortFn(m) : -sortFn(m)) + isNew(m);
+    return this.sorted.sort((a, b) => compFn(b) - compFn(a));
   },
 
   get nextMilestoneGroup() {
-    return this.sortedForCompletions.slice(0, 6);
+    return this.sortedForCompletions(false).filter(m => !m.isMaxed).slice(0, 6);
   },
 
   get unseenMilestones() {

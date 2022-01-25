@@ -107,7 +107,7 @@ export const BlackHoleAnimation = (function() {
       this.respawnTick = true;
       this.isInside = false;
       this.blob = blobs[Math.floor(Math.random() * blobs.length)];
-      this.isBlob = Theme.current().name === "S11";
+      this.isBlob = player.options.theme === "S11";
     }
 
     static randomDistance() {

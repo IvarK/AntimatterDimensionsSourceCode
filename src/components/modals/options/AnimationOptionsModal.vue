@@ -15,7 +15,6 @@ export default {
       dilationUnlocked: false,
       realityUnlocked: false,
       animatedThemeUnlocked: false,
-      blobThemeUnlocked: false,
       bigCrunch: false,
       eternity: false,
       dilation: false,
@@ -57,7 +56,6 @@ export default {
       this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
-      this.blobThemeUnlocked = Themes.find("S11").isAvailable();
       this.isS11Active = player.options.theme === "S11";
 
       const options = player.options.animations;
@@ -121,7 +119,7 @@ export default {
         />
       </div>
       <div
-        v-if="blobThemeUnlocked"
+        v-if="isS11Active"
         class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"
       >
         <b>{{ quantifyInt("Blobflake", parseInt(blobSnowflakes)) }}</b>

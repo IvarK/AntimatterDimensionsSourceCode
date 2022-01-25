@@ -18,7 +18,8 @@ export default {
     },
     message() {
       return `You will Big Crunch (if possible) and start a new Infinity within the Challenge, with all the
-        Challenge-specific restrictions and modifiers active. To complete the Challenge and receive its reward,
+        Challenge-specific restrictions and modifiers active.
+        To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
         you must reach Infinity again. You do not start with any Dimensions or Galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
@@ -32,7 +33,7 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Challenge, ${conditionOfChallenge.charAt(0).toLowerCase() + conditionOfChallenge.slice(1)}`;
+      return `Inside this Challenge, ${conditionOfChallenge}`;
     }
   },
   created() {

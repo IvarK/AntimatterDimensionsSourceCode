@@ -58,19 +58,5 @@ export default {
       {{ multiplierText }}
       <br>
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
   </ModalWrapperChoice>
 </template>

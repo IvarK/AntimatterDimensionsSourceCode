@@ -506,9 +506,9 @@ Replicanti give a multiplier to all Infinity Dimensions, which will reach a maxi
 ${formatX(Math.pow(2, 20), 2, 2)} at ${formatPostBreak(Number.MAX_VALUE, 2)} Replicanti.
 <br>
 <br>
-<b>Chance upgrade cost:</b> Base ${format(1e140)} IP, cost increment ${formatX(1e15)} IP
+<b>Chance upgrade cost:</b> Base ${format(1e150)} IP, cost increment ${formatX(1e15)} IP
 <br>
-<b>Speed upgrade cost:</b> Base ${format(1e150)} IP, cost increment ${formatX(1e10)} IP
+<b>Interval upgrade cost:</b> Base ${format(1e140)} IP, cost increment ${formatX(1e10)} IP
 <br>
 <b>Galaxy upgrade cost:</b> Base ${format(1e170)} IP, cost increment ${formatX(1e25)} IP and an additional
 ${formatX(1e5)} IP per upgrade, scaling similarly to distant Antimatter Galaxies. Above ${formatInt(100)} Replicanti

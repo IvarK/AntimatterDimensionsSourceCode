@@ -17,11 +17,12 @@ export default {
       return this.$viewModel.modal.current;
     },
     message() {
-      return `You will Eternity (if possible) and will start a new Eternity within the challenge, with all the
-        Challenge-specific restrictions and modifiers active. To complete the Challenge 
-        ${this.challengeIsCompleted ? "" : "and gain its reward"}, you must reach the Challenge goal of
+      return `You will Eternity (if possible) and start a new Eternity within the Challenge, with all the
+        Challenge-specific restrictions and modifiers active.
+        To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
+        you must reach the Challenge goal of
         ${format(this.challenge.currentGoal)} Infinity Points. You can complete Eternity Challenges up to
-        ${formatInt(5)} times, with increasing goals, to get higher bonuses.`;
+        ${formatInt(5)} times, with increasing goals and bonuses.`;
     },
     entranceLabel() {
       return `You are about to enter Eternity Challenge ${this.modal.id}`;
@@ -38,8 +39,7 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Eternity Challenge,
-        ${conditionOfChallenge.charAt(0).toLowerCase() + conditionOfChallenge.slice(1)}`;
+      return `Inside this Eternity Challenge, ${conditionOfChallenge}`;
     }
   },
   created() {

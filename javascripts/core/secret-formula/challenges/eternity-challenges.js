@@ -39,7 +39,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 4,
-    description: `All Infinity multipliers and generators are disabled. The goal must be reached within a certain
+    description: `all Infinity multipliers and generators are disabled. The goal must be reached within a certain
       number of Infinities or else you will fail the Challenge.`,
     goal: DC.E2750,
     goalIncrease: DC.E550,
@@ -73,12 +73,12 @@ GameDatabase.challenges.eternity = [
     description: () => {
       if (Enslaved.isRunning) {
         return Notations.current === Notation.shi
-          ? "Y̶o̶u̶ ̶c̶a̶n̶'̶t̶ ̶g̶a̶i̶n̶ ̶A̶n̶t̶i̶m̶a̶t̶t̶e̶r̶ ̶G̶a̶l̶a̶x̶i̶e̶s̶ ̶n̶o̶r̶m̶a̶l̶l̶y̶,̶ ̶b̶u̶t̶ ̶the " +
+          ? "yo̶u̶ ̶c̶a̶n̶'̶t̶ ̶g̶a̶i̶n̶ ̶A̶n̶t̶i̶m̶a̶t̶t̶e̶r̶ ̶G̶a̶l̶a̶x̶i̶e̶s̶ ̶n̶o̶r̶m̶a̶l̶l̶y̶,̶ ̶b̶u̶t̶ ̶the " +
             " cost of upgrading your max Replicanti Galaxies is massively reduced."
-          : "You c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
+          : "you c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
             " Galaxies is massively reduced";
       }
-      return "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
+      return "you can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
               " Galaxies is massively reduced.";
     },
     goal: DC.E850,
@@ -108,7 +108,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 8,
-    description: () => `You can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
+    description: () => `you can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
       upgrades ${formatInt(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
     goal: DC.E1300,
     goalIncrease: DC.E900,
@@ -124,7 +124,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 9,
     description:
-      `You can't buy Tickspeed upgrades. Infinity Power instead multiplies
+      `you can't buy Tickspeed upgrades. Infinity Power instead multiplies
       Time Dimensions with greatly reduced effect.`,
     goal: DC.E1750,
     goalIncrease: DC.E250,
@@ -158,7 +158,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 11,
     description:
-      `All dimension multipliers and powers are disabled except for the multipliers from
+      `all dimension multipliers and powers are disabled except for the multipliers from
       Infinity Power and Dimension Boosts (to Antimatter Dimensions).`,
     goal: DC.E500,
     goalIncrease: DC.E200,
@@ -174,9 +174,9 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => (PlayerProgress.realityUnlocked()
-      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
+      ? `the game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`
-      : `The game runs ×${formatInt(1000)} slower. The goal must be reached
+      : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),
     goal: DC.E110000,
     goalIncrease: DC.E12000,

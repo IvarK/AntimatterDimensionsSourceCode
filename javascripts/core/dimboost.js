@@ -140,7 +140,7 @@ export class DimBoost {
     if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
 
     let boostEffects;
-    if (NormalChallenge(8).isRunning) boostEffects = allNDUnlocked ? "" : ` to ${newUnlock}`;
+    if (NormalChallenge(8).isRunning) boostEffects = newUnlock === "" ? "" : ` to ${newUnlock}`;
     else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
     else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 

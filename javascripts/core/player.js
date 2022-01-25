@@ -619,6 +619,12 @@ window.player = {
       upgrades: {},
       darkMatterMult: 1,
       darkEnergy: 0,
+      singularitySorting: {
+        displayResource: 0,
+        sortResource: 0,
+        showCompleted: 0,
+        sortOrder: 0,
+      },
       singularities: 0,
       singularityCapIncreases: 0,
       autoAnnihilationSetting: 5,
@@ -671,7 +677,6 @@ window.player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
-    singularityMilestoneResource: 0,
     showHintText: {
       achievements: true,
       achievementUnlockStates: true,

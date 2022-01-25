@@ -7752,7 +7752,6 @@ kbd {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   box-shadow: none;
-  animation: none;
 }
 
 @keyframes a-laitela-flash {
@@ -7777,6 +7776,9 @@ kbd {
 }
 
 .c-laitela-milestone {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 16%;
   width: 22rem;
   background: var(--color-laitela--base);
@@ -7893,6 +7895,15 @@ kbd {
   overflow-x: hidden;
 }
 
+.l-singularity-milestone-modal-container-outer::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.l-singularity-milestone-modal-container-outer::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 0.5rem;
+}
+
 .l-singularity-milestone-modal-container-inner {
   display: flex;
   flex-wrap: wrap;
@@ -7900,6 +7911,19 @@ kbd {
   width: 93rem;
   justify-content: space-evenly;
   padding-bottom: 2rem;
+}
+
+.l-singularity-milestone-modal-sort-button {
+  height: 6rem;
+  width: 22.5rem;
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: var(--color-laitela--accent);
+  background-color: var(--color-laitela--base);
+  border: 0.1rem solid var(--color-laitela--accent);
+  cursor: pointer;
+  margin: 0.5rem;
 }
 
 .o-laitela-singularity-modal-button {

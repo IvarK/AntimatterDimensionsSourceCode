@@ -32,7 +32,8 @@ Vue.component("imaginary-upgrades-tab", {
       Imaginary Machines are gained passively over time up to the cap, but gain slows down exponentially
       as you approach the cap.
       <br>
-      The amount of iM below the cap will be cut in half every {{ formatInt(scaleTime) }} seconds.
+      Every {{ formatInt(scaleTime) }} seconds the difference in iM between your current amount and the cap
+      will be cut in half.
       <br>
       <br>
       The first two rows of upgrades can be purchased endlessly and the rest of the upgrades are one-time upgrades

@@ -4,7 +4,7 @@ import { DC } from "../../constants.js";
 GameDatabase.challenges.infinity = [
   {
     id: 1,
-    description: `All Normal Challenges, with the exception of
+    description: `all Normal Challenges, with the exception of
     Tickspeed (C9) and Big Crunch (C11) Challenges, are active at the same time.`,
     goal: DC.E650,
     isQuickResettable: true,
@@ -17,7 +17,7 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically Dimensional Sacrifice every ${formatInt(400)} milliseconds once you have
+    description: () => `automatically Dimensional Sacrifice every ${formatInt(400)} milliseconds once you have
       an 8th Antimatter Dimension.`,
     goal: DC.E10500,
     isQuickResettable: false,
@@ -50,7 +50,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 4,
     description: () =>
-      `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions
+      `only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions
       produce less (${formatPow(0.25, 2, 2)}).`,
     goal: DC.E13000,
     isQuickResettable: true,
@@ -64,7 +64,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `Buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase,
+      `buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase,
       and buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
     goal: DC.E16500,
     isQuickResettable: true,
@@ -79,7 +79,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 6,
     description: () =>
-      `Once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
+      `once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
       divides the multiplier on all of your Antimatter Dimensions.`,
     goal: DC.D2E22222,
     isQuickResettable: true,
@@ -95,7 +95,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 7,
     description: () =>
-      `You can't get Antimatter Galaxies, but Dimension Boost multiplier
+      `you can't get Antimatter Galaxies, but Dimension Boost multiplier
       ${formatX(2.5, 1, 1)} ➜ ${formatX(10)}`,
     goal: DC.E10000,
     isQuickResettable: false,
@@ -109,7 +109,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 8,
     description: () =>
-      `Your production is at ${formatPercents(1)} after
+      `your production is at ${formatPercents(1)} after
       purchasing anything, after that it rapidly drops down.`,
     goal: DC.E27000,
     isQuickResettable: true,

@@ -52,11 +52,14 @@ export default {
       handler(config) {
         this.updateFunction = () => { };
         const description = config?.description;
+        // Descriptions in config entries are occasionally used both as standalone statements and mid-sentence,
+        // so we explicitly capitalize them here because this only shows up in standalone places
+        const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
         this.isVisible = description !== undefined;
         if (!this.isVisible) return;
 
         if (isString(description)) {
-          this.description = description;
+          this.description = capitalize(description);
           return;
         }
 
@@ -68,8 +71,8 @@ export default {
         const value = description();
 
         if (isString(value)) {
-          this.description = value;
-          this.updateFunction = () => this.description = description();
+          this.description = capitalize(value);
+          this.updateFunction = () => this.description = capitalize(description());
           return;
         }
 

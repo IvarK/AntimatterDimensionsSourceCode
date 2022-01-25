@@ -3,7 +3,7 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "InfinityChallengeStartModal",
-  componentsn: {
+  components: {
     ModalWrapperChoice
   },
   computed: {
@@ -18,8 +18,9 @@ export default {
     },
     message() {
       return `You will Big Crunch (if possible) and start a new Infinity within the Challenge, with all the
-        Challenge-specific restrictions and modifiers active. To complete the Challenge 
-        ${this.challengeIsCompleted ? "" : "and gain its reward"}, you must reach the Challenge goal of
+        Challenge-specific restrictions and modifiers active.
+        To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
+        you must reach the Challenge goal of
         ${format(InfinityChallenge(this.modal.id).goal)} Antimatter.
         You do not start with any Dimensions or Galaxies, regardless of upgrades.`;
     },
@@ -38,8 +39,7 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Infinity Challenge,
-        ${conditionOfChallenge.charAt(0).toLowerCase() + conditionOfChallenge.slice(1)}`;
+      return `Inside this Infinity Challenge, ${conditionOfChallenge}`;
     }
   },
   created() {

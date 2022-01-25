@@ -201,7 +201,8 @@ Vue.component("sacrificed-glyphs", {
       <br>
       <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
       <div v-if="teresaMult > 1">
-        Glyph values are multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa was last done at {{ lastMachines }}.
+        Glyph sacrifice values are multiplied by {{ formatX(teresaMult, 2, 2) }};
+        Teresa was last done at {{ lastMachines }}.
       </div>
       <div v-if="anySacrifices">
         <template v-for="type in types">

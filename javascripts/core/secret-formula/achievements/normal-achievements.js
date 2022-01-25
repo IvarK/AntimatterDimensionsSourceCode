@@ -479,7 +479,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Get ${formatPostBreak(DC.D9_9999E9999, 4)} antimatter.`; },
     checkRequirement: () => Currency.antimatter.gte(DC.D9_9999E9999),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Antimatter Dimensions are stronger the more unspent antimatter you have.",
+    reward: "Antimatter Dimensions gain a multiplier based on current antimatter.",
     effect: () => Currency.antimatter.value.pow(0.00002).plus(1),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },

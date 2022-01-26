@@ -38,7 +38,8 @@ export function antimatterDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
-    AlchemyResource.dimensionality
+    AlchemyResource.dimensionality,
+    PelleRebuyableUpgrade.antimatterDimensionMult
   );
 
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
@@ -166,6 +167,10 @@ function applyNDPowers(mult, tier) {
 
   if (V.has(V_UNLOCKS.ND_POW)) {
     multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
+  }
+
+  if (PelleStrikes.infinity.hasStrike) {
+    multiplier = multiplier.pow(0.5);
   }
 
   return multiplier;

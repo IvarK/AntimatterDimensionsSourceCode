@@ -336,6 +336,9 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     }
   }
 
+
+  factor *= PelleRebuyableUpgrade.timeSpeedMult.effectValue.toNumber();
+
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
   factor = Math.clamp(factor, 1e-300, 1e300);

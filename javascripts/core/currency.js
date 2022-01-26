@@ -205,6 +205,10 @@ Currency.antimatter = new class extends DecimalCurrency {
     player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
     player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
     player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);
+
+    if (Pelle.isDoomed) {
+      player.celestials.pelle.records.totalAntimatter = player.celestials.pelle.records.totalAntimatter.max(value);
+    }
   }
 
   add(amount) {
@@ -260,6 +264,11 @@ Currency.infinityPoints = new class extends DecimalCurrency {
     player.infinityPoints = value;
     player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.max(value);
     player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(value);
+
+    if (Pelle.isDoomed) {
+      player.celestials.pelle.records.totalInfinityPoints =
+        player.celestials.pelle.records.totalInfinityPoints.max(value);
+    }
   }
 
   get startingValue() {
@@ -304,6 +313,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     if (player.records.bestReality.bestEP.lt(value)) {
       player.records.bestReality.bestEP = value;
       player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    }
+
+    if (Pelle.isDoomed) {
+      player.celestials.pelle.records.totalEternityPoints =
+        player.celestials.pelle.records.totalEternityPoints.max(value);
     }
   }
 
@@ -429,4 +443,9 @@ Currency.singularities = new class extends NumberCurrency {
 Currency.remnants = new class extends DecimalCurrency {
   get value() { return player.celestials.pelle.remnants; }
   set value(value) { player.celestials.pelle.remnants = value; }
+}();
+
+Currency.realityShards = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.realityShards; }
+  set value(value) { player.celestials.pelle.realityShards = value; }
 }();

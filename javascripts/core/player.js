@@ -634,11 +634,22 @@ window.player = {
     pelle: {
       doomed: false,
       upgrades: new Set(),
-      remnants: new Decimal(0),
+      remnants: 0,
+      realityShards: DC.D0,
       // For recording which ones you permanently have
       armageddonDuration: 0,
-      maxAMThisArmageddon: new Decimal(0),
+      records: {
+        totalAntimatter: DC.D0,
+        totalInfinityPoints: DC.D0,
+        totalEternityPoints: DC.D0,
+      },
+      maxAMThisArmageddon: DC.D0,
       rebuyables: {
+        antimatterDimensionMult: 0,
+        timeSpeedMult: 0,
+        glyphLevels: 0,
+        infConversion: 0,
+        galaxyPower: 0
       },
       progressBits: 0
     }

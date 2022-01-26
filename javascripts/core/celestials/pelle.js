@@ -1,3 +1,4 @@
+import { Currency } from "../currency";
 import { RebuyableMechanicState } from "../game-mechanics/rebuyable";
 import { GameMechanicState, SetPurchasableMechanicState } from "../utils";
 
@@ -25,21 +26,22 @@ const disabledMechanicUnlocks = {
   effarig: () => ({}),
   imaginaryUpgrades: () => ({}),
   glyphsac: () => ({}),
-  antimatterDimAutobuyer1: () => ({}),
-  antimatterDimAutobuyer2: () => ({}),
-  antimatterDimAutobuyer3: () => ({}),
-  antimatterDimAutobuyer4: () => ({}),
-  antimatterDimAutobuyer5: () => ({}),
-  antimatterDimAutobuyer6: () => ({}),
-  antimatterDimAutobuyer7: () => ({}),
-  antimatterDimAutobuyer8: () => ({}),
+  antimatterDimAutobuyer1: () => PelleUpgrade.antimatterDimAutobuyers1,
+  antimatterDimAutobuyer2: () => PelleUpgrade.antimatterDimAutobuyers1,
+  antimatterDimAutobuyer3: () => PelleUpgrade.antimatterDimAutobuyers1,
+  antimatterDimAutobuyer4: () => PelleUpgrade.antimatterDimAutobuyers1,
+  antimatterDimAutobuyer5: () => PelleUpgrade.antimatterDimAutobuyers2,
+  antimatterDimAutobuyer6: () => PelleUpgrade.antimatterDimAutobuyers2,
+  antimatterDimAutobuyer7: () => PelleUpgrade.antimatterDimAutobuyers2,
+  antimatterDimAutobuyer8: () => PelleUpgrade.antimatterDimAutobuyers2,
   tickspeedAutobuyer: () => ({}),
-  dimBoostAutobuyer: () => ({}),
+  dimBoostAutobuyer: () => PelleUpgrade.dimBoostAutobuyer,
   galaxyAutobuyer: () => ({}),
   timeTheoremAutobuyer: () => ({}),
   rupg10: () => ({}),
   dtMults: () => ({}),
-  chargedInfinityUpgrades: () => ({})
+  chargedInfinityUpgrades: () => ({}),
+  alteration: () => ({}),
 };
 
 export const Pelle = {
@@ -62,22 +64,24 @@ export const Pelle = {
     return Boolean(!upgrade.canBeApplied);
   },
 
+  get canArmageddon() {
+    return this.remnantsGain >= 1;
+  },
+
   armageddon(gainStuff) {
+    if (!this.canArmageddon && gainStuff) return;
     if (gainStuff) {
-      this.cel.remnants = this.cel.remnants.plus(this.remnantsGain).min(this.remnantsLimit);
+      this.cel.remnants += this.remnantsGain;
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.armageddonDuration = 0;
-
-    this.cel.maxAMThisArmageddon = new Decimal(0);
   },
 
   gameLoop(diff) {
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff;
-      this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
-      PelleStrikes.all.forEach(strike => strike.tryUnlockStrike());
+      Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
     }
   },
 
@@ -94,29 +98,46 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [142, 141, 125, 117, 92, 91, 76];
+    return [142, 141, 125, 118, 117, 111, 92, 91, 76];
   },
 
   get remnantsGain() {
-    let gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
+    const am = this.cel.records.totalAntimatter.plus(1).log10();
+    const ip = this.cel.records.totalInfinityPoints.plus(1).log10();
+    const ep = this.cel.records.totalEternityPoints.plus(1).log10();
+    const gain = (
+      (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 1.64
+    ) ** 7.5;
 
-    gain = new Decimal(gain).timesEffectsOf(
-      PelleUpgrade.remnantsBasedOnArmageddon,
-      PelleUpgrade.starterRemnantMult
-    );
-    return gain;
+    return gain < 1 ? gain : Math.floor(gain - this.cel.remnants);
+  },
+
+  realityShardGain(remnants) {
+    return Decimal.pow(10, remnants ** (1 / 7.5) * 4).minus(1).div(1e3);
+  },
+
+  get realityShardGainPerSecond() {
+    return this.realityShardGain(this.cel.remnants);
+  },
+
+  get nextRealityShardGain() {
+    return this.realityShardGain(this.remnantsGain + this.cel.remnants);
   },
 
   get glyphMaxLevel() {
-    return 10;
+    return 1;
+  },
+
+  antimatterDimensionMult(x) {
+    return Decimal.pow(10, Math.log10(x + 1) + x ** 5.3 / 1e3 + 4 ** x / 1e19);
   }
 
 };
 
-class RebuyablePelleUpgradeState extends RebuyableMechanicState {
+export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   get currency() {
-    return Currency[this.config.currency];
+    return Currency.realityShards;
   }
 
   get boughtAmount() {
@@ -131,25 +152,21 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
     return this.config.cost();
   }
 
-  get currencyDisplay() {
-    switch (this.config.currency) {
-      case "remnants":
-        return "Remnants";
+  get isCustomEffect() { return true; }
 
-      default:
-        return "";
-    }
+  get effectValue() {
+    return this.config.effect(this.boughtAmount);
   }
 }
 
-class PelleUpgradeState extends SetPurchasableMechanicState {
+export class PelleUpgradeState extends SetPurchasableMechanicState {
 
   get set() {
     return player.celestials.pelle.upgrades;
   }
 
   get currency() {
-    return Currency[this.config.currency];
+    return Currency.realityShards;
   }
 
   get description() {
@@ -164,27 +181,6 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
     return Pelle.isDoomed;
   }
 
-  get currencyDisplay() {
-    switch (this.config.currency) {
-      case "remnants":
-        return "Remnants";
-
-      case "infinityPoints":
-        return "Infinity Points";
-
-      case "eternityPoints":
-        return "Eternity Points";
-
-      case "antimatter":
-        return "Antimatter";
-
-      case "dilatedTime":
-        return "Dilated Time";
-
-      default:
-        return "";
-    }
-  }
 }
 
 export const PelleUpgrade = (function() {
@@ -222,8 +218,24 @@ class PelleStrikeState extends GameMechanicState {
     return Boolean(player.celestials.pelle.progressBits & (1 << this.id));
   }
 
+  get requirement() {
+    return this._config.requirementDescription;
+  }
+
+  get penalty() {
+    return this._config.penaltyDescription;
+  }
+
+  get reward() {
+    return this._config.rewardDescription;
+  }
+
+  trigger() {
+    this.tryUnlockStrike();
+  }
+
   tryUnlockStrike() {
-    if (!this.hasProgress && this._config.requirement()) {
+    if (!this.hasStrike) {
       GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
       // eslint-disable-next-line no-bitwise
       player.celestials.pelle.progressBits |= (1 << this.id);

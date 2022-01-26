@@ -124,7 +124,7 @@ export default {
             ` unsupported type "${typeof effect}"`);
         }
       }
-    }
+    },
   },
   beforeCreate() {
     this.updateEffect = () => { };

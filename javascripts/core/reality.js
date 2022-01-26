@@ -554,10 +554,8 @@ export function finishProcessReality(realityProps) {
   player.galaxies = 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  if (!Pelle.isDoomed) {
-    player.break = false;
-    player.infMult = 0;
-  }
+  player.break = false;
+  player.infMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);

@@ -1,5 +1,6 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
+import { Pelle, PelleStrikes } from "./globals.js";
 
 export function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
@@ -48,8 +49,10 @@ export function bigCrunchReset() {
   bigCrunchResetValues();
   bigCrunchCheckUnlocks();
 
+  if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
+
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-  if (firstInfinity) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
+  if (firstInfinity && !Pelle.isDoomed) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
   Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that
   you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics 
   tab.`);
@@ -219,7 +222,7 @@ export class InfinityUpgrade extends SetPurchasableMechanicState {
       this.hasChargeEffect &&
       !this.isCharged &&
       Ra.chargesLeft !== 0 &&
-      Pelle.isDisabled("chargedInfinityUpgrades");
+      !Pelle.isDisabled("chargedInfinityUpgrades");
   }
 
   charge() {

@@ -49,7 +49,11 @@ export class RebuyableMechanicState extends GameMechanicState {
 
   purchase() {
     if (!this.canBeBought) return false;
+    console.log(this.currency);
+    console.log(this.cost);
     this.currency.subtract(this.cost);
+    console.log(this.currency);
+    console.log(this.cost);
     this.boughtAmount++;
     this.onPurchased();
     GameUI.update();

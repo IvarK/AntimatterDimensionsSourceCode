@@ -43,6 +43,7 @@ Vue.component("effarig-tab", {
       currentShardsRate: 0,
       amplification: 0,
       amplifiedShards: 0,
+      amplifiedShardsRate: 0,
       runUnlocked: false,
       quote: "",
       isRunning: false,
@@ -84,6 +85,7 @@ Vue.component("effarig-tab", {
       this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalSeconds);
       this.amplification = simulatedRealityCount(false);
       this.amplifiedShards = this.shardsGained * (1 + this.amplification);
+      this.amplifiedShardsRate = (this.amplifiedShards / Time.thisRealityRealTime.totalSeconds);
       this.quote = Effarig.quote;
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
@@ -130,7 +132,7 @@ Vue.component("effarig-tab", {
               Due to amplification of your current Reality,
               <br>
               you will actually gain a total of
-              {{ quantify("Relic Shard", amplifiedShards, 2) }}.
+              {{ quantify("Relic Shard", amplifiedShards, 2) }} ({{ format(amplifiedShardsRate, 2) }}/s).
             </span>
           </div>
           <div class="c-effarig-relic-description">

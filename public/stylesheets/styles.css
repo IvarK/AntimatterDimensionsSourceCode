@@ -7661,12 +7661,14 @@ kbd {
 }
 
 .c-dark-matter-dimension-container {
+  display: flex;
+  flex-direction: column;
   color: var(--color-laitela--accent);
   border: 0.2rem solid var(--color-laitela--accent);
   background: var(--color-laitela--base);
   width: 50rem;
   margin: auto;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   height: 15rem;
@@ -7680,7 +7682,6 @@ kbd {
 .o-dark-matter-dimension-amount {
   font-size: 1.6rem;
   font-weight: bold;
-  margin-bottom: 1rem;
 }
 
 .c-dark-matter-dimension-buttons {

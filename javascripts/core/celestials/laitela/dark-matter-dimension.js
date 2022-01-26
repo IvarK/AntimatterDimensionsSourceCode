@@ -100,10 +100,8 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   get intervalAfterAscension() {
-    // Technically only considers the cost of the last one; this may end up overshooting by one upgrade, but that will
-    // generally only happen rarely (series term ratio is ~4) and can't affect actual purchases anyway
-    const purchases = Math.floor(Math.log(Currency.darkMatter.value.toNumber() / this.intervalCost.toNumber()) /
-      Math.log(this.intervalCostIncrease)) + 1;
+    const purchases = Decimal.affordGeometricSeries(Currency.darkMatter.value, this.intervalCost,
+      this.intervalCostIncrease, 0).toNumber();
     return Math.clampMin(this.intervalPurchaseCap, SingularityMilestone.ascensionIntervalScaling.effectValue *
       this.rawInterval * Math.pow(INTERVAL_PER_UPGRADE, purchases));
   }

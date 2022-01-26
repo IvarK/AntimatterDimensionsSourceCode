@@ -19,38 +19,25 @@ Vue.component("singularity-milestone", {
     lastCheckedMilestones: 0,
   }),
   computed: {
-    // This is a mask that inverts colors for any element with a lower z-index,
-    // also adds Lai'tela icon and dims a bit when fully completed
-    barProgressStyle() {
-      if (this.completions === this.maxCompletions) {
-        return {
-          background: "inherit",
-          filter: "brightness(90%) invert(100%)",
-          "mix-blend-mode": "difference",
-          left: "1.5rem",
-          top: "-1.5rem",
-          height: "21.8rem",
-          width: "18.8rem",
-          transform: "rotate(90deg)",
-          "background-image": "url(../images/laitela-icon.svg)",
-          "background-position": "center",
-          "background-repeat": "repeat-y",
-          "z-index": 1
-        };
-      }
+    // The bar is a mask that inverts colors for any element with a lower z-index (including text).
+    // When maxed, the visual appearance is instead determined by a class with its own explicit width
+    barStyle() {
       return {
-        background: "inherit",
-        filter: "invert(100%)",
-        "mix-blend-mode": "difference",
-        width: this.progressToNext,
-        "z-index": 1
+        width: this.isMaxed ? undefined : this.progressToNext,
       };
     },
-    classObject() {
-      if (this.suppressGlow) return {};
+    barClass() {
       return {
-        "c-laitela-milestone--completed": this.isUnique && this.isMaxed,
-        "o-dark-matter-dimension-button--ascend": this.milestone.previousGoal > this.lastCheckedMilestones
+        "c-laitela-milestone__progress": true,
+        "c-laitela-milestone-mask": true,
+        "c-laitela-milestone--completed": this.isMaxed
+      };
+    },
+    containerClass() {
+      return {
+        "c-laitela-milestone": true,
+        "o-dark-matter-dimension-button--ascend": !this.suppressGlow &&
+          this.milestone.previousGoal > this.lastCheckedMilestones
       };
     },
     upgradeDirectionIcon() {
@@ -109,10 +96,11 @@ Vue.component("singularity-milestone", {
     },
   },
   template: `
-    <div class="c-laitela-milestone"
-      :class="classObject"
-    >
-      <div class="c-laitela-milestone__progress" :style="barProgressStyle" />
+    <div :class="containerClass">
+      <div
+        :class="barClass"
+        :style="barStyle"
+      />
       <b v-if="!isMaxed">
         {{ progressDisplay }}
       </b>

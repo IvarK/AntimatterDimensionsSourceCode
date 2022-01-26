@@ -7734,6 +7734,10 @@ kbd {
   animation: 3s a-laitela-flash infinite;
 }
 
+.o-dark-matter-dimension-button--accent {
+  box-shadow: 0 0 0.5rem 0.5rem inset, 0 0 0.3rem 0;
+}
+
 @keyframes a-laitela-flash {
   0% {
     color: var(--color-laitela--base);
@@ -7809,8 +7813,27 @@ kbd {
   z-index: -1;
 }
 
-.l-singularity-milestone-modal-container .c-laitela-milestone--completed {
+.l-singularity-milestone-modal-container {
   box-shadow: none;
+}
+
+.c-laitela-milestone-mask {
+  background: inherit;
+  filter: invert(100%);
+  mix-blend-mode: difference;
+  z-index: 1
+}
+
+.c-laitela-milestone--completed {
+  filter: brightness(90%) invert(100%);
+  left: 1.5rem;
+  top: -1.5rem;
+  height: 21.8rem;
+  width: 18.8rem;
+  transform: rotate(90deg);
+  background-image: url(../images/laitela-icon.svg);
+  background-position: center;
+  background-repeat: repeat-y;
 }
 
 .c-laitela-singularity-container {

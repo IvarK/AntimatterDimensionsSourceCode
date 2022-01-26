@@ -39,6 +39,7 @@ export function buyStudiesUntil(id, repeatFor201 = true) {
     return studyArray;
   }
   if (currTree.currDimPathCount === currTree.allowedDimPathCount || currTree.allowedDimPathCount === 3) {
+    studyArray.push(...TimeStudy.preferredPaths.dimensionPath.studies);
     studyArray.push(...range(71, 120));
   } else if (TimeStudy.preferredPaths.dimensionPath.path.length > 0) {
     studyArray.push(...TimeStudy.preferredPaths.dimensionPath.studies);

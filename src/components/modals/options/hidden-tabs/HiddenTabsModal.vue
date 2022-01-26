@@ -27,7 +27,6 @@ export default {
 <template>
   <ModalWrapperOptions
     style="width: auto"
-    @close="emitClose"
   >
     <template #header>
       Modify Visible Tabs

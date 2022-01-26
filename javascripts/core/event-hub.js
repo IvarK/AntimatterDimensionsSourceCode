@@ -108,4 +108,5 @@ window.GAME_EVENT = {
   // UI Events
   UPDATE: "UPDATE",
   TAB_CHANGED: "TAB_CHANGED",
+  CLOSE_MODAL: "CLOSE_MODAL",
 };

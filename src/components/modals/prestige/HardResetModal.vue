@@ -30,7 +30,6 @@ export default {
     :show-cancel="!willHardReset"
     :show-confirm="willHardReset"
     confirm-class="o-primary-btn--width-medium c-modal__confirm-btn c-modal-hard-reset-btn"
-    @close="emitClose"
     @confirm="hardReset"
   >
     <template #header>

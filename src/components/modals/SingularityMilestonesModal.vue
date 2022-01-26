@@ -27,7 +27,6 @@ export default {
   <ModalWrapperChoice
     :show-cancel="false"
     :show-confirm="false"
-    @close="emitClose"
   >
     <template #header>
       Singularity Milestones

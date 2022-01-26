@@ -52,7 +52,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-modal-away-progress"
-    @close="emitClose"
   >
     <div class="c-modal-away-progress__header">
       {{ headerText }}

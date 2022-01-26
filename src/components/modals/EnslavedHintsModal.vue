@@ -96,7 +96,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-enslaved-hint-modal"
-    @close="emitClose"
   >
     <template #header>
       Cracks in The Enslaved Ones' Reality

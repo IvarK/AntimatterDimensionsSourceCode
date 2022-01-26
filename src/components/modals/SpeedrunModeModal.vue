@@ -38,7 +38,6 @@ export default {
     :show-cancel="!onInfoPage && !willStartRun"
     :show-confirm="!onInfoPage && willStartRun"
     confirm-class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
-    @close="emitClose"
     @confirm="startRun"
   >
     <template #header>

@@ -12,7 +12,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-modal-options l-modal-options"
-    @close="emitClose"
   >
     <template #header>
       <slot name="header" />

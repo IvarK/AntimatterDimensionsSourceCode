@@ -33,7 +33,6 @@ export default {
     :cancel-class="'c-modal-message__okay-btn'"
     :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
     @confirm="confirm"
-    @close="emitClose"
   >
     <template #header>
       Load Game from Cloud

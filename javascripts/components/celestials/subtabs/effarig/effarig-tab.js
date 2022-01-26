@@ -110,7 +110,6 @@ Vue.component("effarig-tab", {
         Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
         GameUI.notify.error("Created a Cursed Glyph");
       }
-      this.emitClose();
     }
   },
   template: `

@@ -127,7 +127,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-modal-message l-modal-content--centered"
-    @close="emitClose"
   >
     <template #header>
       You are about to Reality

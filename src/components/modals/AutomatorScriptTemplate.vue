@@ -108,7 +108,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-automator-template-container"
-    @close="emitClose"
   >
     <template #header>
       {{ modalConfig.name }} Template

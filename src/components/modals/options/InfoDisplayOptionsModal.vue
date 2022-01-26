@@ -81,7 +81,6 @@ export default {
 <template>
   <ModalWrapperOptions
     class="c-modal-options__large"
-    @close="emitClose"
   >
     <template #header>
       Info Display Options Modal

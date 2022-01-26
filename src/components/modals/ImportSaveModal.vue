@@ -63,7 +63,6 @@ export default {
   <ModalWrapperChoice
     :show-cancel="!inputIsValid"
     :show-confirm="inputIsValid"
-    @close="emitClose"
     @confirm="importSave"
   >
     <template #header>

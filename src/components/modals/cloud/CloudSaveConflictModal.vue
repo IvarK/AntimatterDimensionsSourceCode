@@ -38,7 +38,6 @@ export default {
     :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
     @cancel="saveClick(true)"
     @confirm="saveClick(false)"
-    @close="emitClose"
   >
     <template #header>
       Save Game to Cloud

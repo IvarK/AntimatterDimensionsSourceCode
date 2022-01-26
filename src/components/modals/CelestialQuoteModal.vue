@@ -47,7 +47,7 @@ export default {
       this.index = Math.max(this.index - 1, 0);
     },
     close() {
-      Modal.hide();
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     }
   },
 };

@@ -19,7 +19,6 @@ export default {
 <template>
   <ModalWrapperOptions
     style="width: 75rem"
-    @close="emitClose"
   >
     <template #header>
       Away Progress Options Modal

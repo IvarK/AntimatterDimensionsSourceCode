@@ -50,7 +50,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-reality-glyph-creation"
-    @close="emitClose"
   >
     <template #header>
       Reality Glyph Creation

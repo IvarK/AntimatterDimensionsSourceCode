@@ -33,7 +33,6 @@ export default {
 
 <template>
   <ModalWrapperChoice
-    @close="emitClose"
     @confirm="handleYesClick"
   >
     <template #header>

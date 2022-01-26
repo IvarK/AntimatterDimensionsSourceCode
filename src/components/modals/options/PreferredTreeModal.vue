@@ -75,7 +75,6 @@ export default {
 <template>
   <ModalWrapperChoice
     @confirm="confirmPrefs"
-    @close="emitClose"
   >
     <h2>Dimension Split Preference</h2>
     <div class="l-modal-split-preferences">

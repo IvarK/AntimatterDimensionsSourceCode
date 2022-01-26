@@ -36,11 +36,11 @@ export default {
   methods: {
     doConfirm() {
       this.$emit("confirm");
-      this.emitClose();
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     doCancel() {
       this.$emit("cancel");
-      this.emitClose();
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
   }
 };
@@ -49,7 +49,6 @@ export default {
 <template>
   <ModalWrapper
     class="c-modal-message l-modal-content--centered"
-    @close="emitClose"
   >
     <template #header>
       <slot name="header" />

@@ -55,9 +55,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions
-    @close="emitClose"
-  >
+  <ModalWrapperOptions>
     <template #header>
       News Options Modal
     </template>

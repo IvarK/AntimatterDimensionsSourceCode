@@ -364,7 +364,7 @@ function keyboardPressEscape() {
 
 function keyboardPressQuestionMark() {
   if (Modal.hotkeys.isOpen) {
-    Modal.hide();
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
   if (Modal.isOpen) return;
@@ -373,7 +373,7 @@ function keyboardPressQuestionMark() {
 
 function keyboardH2PToggle() {
   if (Modal.h2p.isOpen) {
-    Modal.hide();
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
   if (Modal.isOpen) return;
@@ -382,7 +382,7 @@ function keyboardH2PToggle() {
 
 function keyboardVisibleTabsToggle() {
   if (Modal.hiddenTabs.isOpen) {
-    Modal.hide();
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
   if (Modal.isOpen) return;

@@ -157,7 +157,6 @@ export default {
     :show-cancel="!inputIsValid"
     :show-confirm="inputIsValid"
     class="c-modal-import-tree"
-    @close="emitClose"
     @confirm="confirm"
   >
     <template #header>

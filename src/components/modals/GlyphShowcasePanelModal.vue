@@ -62,9 +62,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper
-    @close="emitClose"
-  >
+  <ModalWrapper>
     <template #header>
       {{ modalConfig.name }}
     </template>

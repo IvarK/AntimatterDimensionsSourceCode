@@ -32,7 +32,6 @@ export default {
 <template>
   <ModalWrapperChoice
     :show-cancel="false"
-    @close="emitClose"
     @confirm="handleYesClick"
   >
     <template #header>

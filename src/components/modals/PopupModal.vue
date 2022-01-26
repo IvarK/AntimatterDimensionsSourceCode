@@ -7,6 +7,9 @@ export default {
       required: true,
     }
   },
+  created() {
+    this.on$(GAME_EVENT.CLOSE_MODAL, this.hide);
+  },
   methods: {
     hide() {
       if (this.modal.hide) this.modal.hide();

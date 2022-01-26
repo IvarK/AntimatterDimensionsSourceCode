@@ -22,8 +22,12 @@ Vue.component("dark-matter-dimension-row", {
       timer: 0,
       timerPecent: 0,
       intervalAscensionBump: 10000,
+      intervalAfterAscension: 0,
       darkEnergyPerSecond: 0,
       portionDE: 0,
+      productionPerSecond: new Decimal(0),
+      percentPerSecond: 0,
+      hoverOverAscension: false,
     };
   },
   computed: {
@@ -40,13 +44,37 @@ Vue.component("dark-matter-dimension-row", {
       };
     },
     intervalText() {
-      if (this.interval > 1000) return `${format(this.interval / 1000, 2, 2)}s`;
-      return `${format(this.interval, 2, 2)}ms`;
+      const interval = this.hoverOverAscension ? this.intervalAfterAscension : this.interval;
+      const str = interval > 1000 ? `${format(interval / 1000, 2, 2)}s` : `${format(interval, 2, 2)}ms`;
+      const line1 = this.hoverOverAscension ? `<b>${str}</b>` : str;
+      const line2 = this.isIntervalCapped ? "Ascend!" : `Cost: ${this.formatDMCost(this.intervalCost)}`;
+      return `${line1}<br>${line2}`;
+    },
+    darkMatterText() {
+      const dm = this.powerDM.times(this.hoverOverAscension ? this.powerDMPerAscension : 1);
+      const str = `DM ${formatX(dm, 2, 2)}`;
+      const line1 = this.hoverOverAscension ? `<b>${str}</b>` : str;
+
+      const ascMult = this.powerDMPerAscension * this.interval / this.intervalAfterAscension;
+      const line2 = this.hoverOverAscension
+        ? `${formatX(ascMult, 2, 2)} / sec`
+        : `Cost: ${this.formatDMCost(this.powerDMCost)}`;
+      return `${line1}<br>${line2}`;
+    },
+    darkEnergyText() {
+      const de = this.powerDE * (this.hoverOverAscension ? POWER_DE_PER_ASCENSION : 1);
+      const str = `DE +${format(de, 2, 4)}`;
+      const line1 = this.hoverOverAscension ? `<b>${str}</b>` : str;
+      const ascMult = POWER_DE_PER_ASCENSION * this.interval / this.intervalAfterAscension;
+      const line2 = this.hoverOverAscension
+        ? `${formatX(ascMult, 2, 2)} / sec`
+        : `Cost: ${this.formatDMCost(this.powerDECost)}`;
+      return `${line1}<br>${line2}`;
     },
     ascensionTooltip() {
-      return `Multiply interval by ${formatInt(this.intervalAscensionBump)}, DM by
-        ${formatInt(this.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.
-        After ascension you can upgrade interval even further.`;
+      return `Interval is capped at ${formatInt(DarkMatterDimension(this.tier).intervalPurchaseCap)}ms.
+        Ascension multiplies interval by ${formatInt(this.intervalAscensionBump)},
+        DM by ${formatInt(this.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.`;
     }
   },
   methods: {
@@ -70,12 +98,16 @@ Vue.component("dark-matter-dimension-row", {
       this.timer = dim.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
       this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectValue;
+      this.intervalAfterAscension = dim.intervalAfterAscension;
       this.darkEnergyPerSecond = dim.productionPerSecond;
       this.portionDE = this.darkEnergyPerSecond / Currency.darkEnergy.productionPerSecond;
+      this.productionPerSecond = this.dimensionProduction(this.tier);
+      this.percentPerSecond = Decimal.divide(this.productionPerSecond, this.amount).toNumber();
     },
     handleIntervalClick() {
       if (this.isIntervalCapped) DarkMatterDimension(this.tier).ascend();
       else DarkMatterDimension(this.tier).buyInterval();
+      this.hoverOverAscension = false;
     },
     buyPowerDM() {
       DarkMatterDimension(this.tier).buyPowerDM();
@@ -88,6 +120,15 @@ Vue.component("dark-matter-dimension-row", {
     // is itself hardcapped at e308 and we specifically want to format here (and nowhere else) as Infinity.
     formatDMCost(cost) {
       return cost.gt(Number.MAX_VALUE) ? Notations.current.infinite : format(cost, 2);
+    },
+    dimensionProduction(tier) {
+      if (tier === 4) return SingularityMilestone.dim4Generation.effectOrDefault(0);
+      const prodDim = DarkMatterDimension(tier + 1);
+      return prodDim.amount.times(prodDim.powerDM).divide(prodDim.interval).times(1000);
+    },
+    hoverState(state) {
+      if (!this.isIntervalCapped) return;
+      this.hoverOverAscension = state;
     }
   },
   template: `
@@ -95,39 +136,39 @@ Vue.component("dark-matter-dimension-row", {
       <div class="o-dark-matter-dimension-amount">
         {{ name }}<span v-if="hasAscended"> {{ ascensionText }}</span>: {{ format(amount, 2) }}
       </div>
+      <div>
+        Average gain: {{ format(productionPerSecond, 2, 2) }}/s
+        (+{{ formatPercents(percentPerSecond, 2, 2) }}/s)
+      </div>
       <div class="c-dark-matter-dimension-buttons">
         <button
           @click="handleIntervalClick"
           class="o-dark-matter-dimension-button"
           :class="intervalClassObject"
+          @mouseover="hoverState(true)"
+          @mouseleave="hoverState(false)"
         >
-          {{ intervalText }}
-          <span v-if="isIntervalCapped">
-            <br>
-            Ascend!
-            <span :ach-tooltip="ascensionTooltip">
-              <i class="fas fa-question-circle"></i>
-            </span>
+          <span
+            v-if="isIntervalCapped"
+            :ach-tooltip="ascensionTooltip"
+          >
+            <i class="fas fa-question-circle"></i>
           </span>
-          <span v-else>
-            <br>Cost: {{ formatDMCost(intervalCost) }}
-          </span>
+          <span v-html="intervalText" />
         </button>
         <button
           @click="buyPowerDM"
           class="o-dark-matter-dimension-button"
           :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDM }"
         >
-          DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ formatDMCost(powerDMCost) }}
+          <span v-html="darkMatterText" />
         </button>
         <button
           @click="buyPowerDE"
           class="o-dark-matter-dimension-button"
           :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDE }"
         >
-          DE +{{ format(powerDE, 2, 4) }}
-          <br>
-          Cost: {{ formatDMCost(powerDECost) }}
+          <span v-html="darkEnergyText" />
         </button>
       </div>
       <div v-if="interval > 200">

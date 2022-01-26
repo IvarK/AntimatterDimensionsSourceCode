@@ -149,7 +149,7 @@ export const SingularityMilestones = {
         sortFn = m => {
           const currComp = Math.log(Currency.singularities.value / m.previousGoal) /
             Math.log(m.nextGoal / m.previousGoal);
-          return m.completions + currComp;
+          return (m.completions + currComp) / 20;
         };
         break;
       case SINGULARITY_MILESTONE_SORT.PERCENT_COMPLETIONS:

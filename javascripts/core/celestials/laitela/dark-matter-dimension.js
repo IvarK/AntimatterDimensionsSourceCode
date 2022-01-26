@@ -13,6 +13,8 @@ const INTERVAL_START_COST = 10;
 const POWER_DM_START_COST = 10;
 const POWER_DE_START_COST = 10;
 
+const INTERVAL_PER_UPGRADE = 0.92;
+
 // No constant for interval since it's tied to a milestone
 export const POWER_DM_PER_ASCENSION = 500;
 export const POWER_DE_PER_ASCENSION = 500;
@@ -44,13 +46,16 @@ export class DarkMatterDimensionState extends DimensionState {
     return 10;
   }
 
-  get interval() {
-    const perUpgrade = 0.92;
+  get rawInterval() {
+    const perUpgrade = INTERVAL_PER_UPGRADE;
     const tierFactor = Math.pow(4, this.tier - 1);
-    return Math.clampMin(this.intervalPurchaseCap, 1000 * tierFactor *
-      Math.pow(perUpgrade, this.data.intervalUpgrades) *
+    return 1000 * tierFactor * Math.pow(perUpgrade, this.data.intervalUpgrades) *
       Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.ascensions) *
-      SingularityMilestone.darkDimensionIntervalReduction.effectValue);
+      SingularityMilestone.darkDimensionIntervalReduction.effectValue;
+  }
+
+  get interval() {
+    return Math.clampMin(this.intervalPurchaseCap, this.rawInterval);
   }
 
   get commonDarkMult() {
@@ -92,6 +97,15 @@ export class DarkMatterDimensionState extends DimensionState {
         SingularityMilestone.realityDEMultiplier,
         SingularityMilestone.multFromInfinitied
       ).toNumber() * destabilizeBoost;
+  }
+
+  get intervalAfterAscension() {
+    // Technically only considers the cost of the last one; this may end up overshooting by one upgrade, but that will
+    // generally only happen rarely (series term ratio is ~4) and can't affect actual purchases anyway
+    const purchases = Math.floor(Math.log(Currency.darkMatter.value.toNumber() / this.intervalCost.toNumber()) /
+      Math.log(this.intervalCostIncrease)) + 1;
+    return Math.clampMin(this.intervalPurchaseCap, SingularityMilestone.ascensionIntervalScaling.effectValue *
+      this.rawInterval * Math.pow(INTERVAL_PER_UPGRADE, purchases));
   }
 
   get adjustedStartingCost() {
@@ -160,7 +174,7 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   get maxIntervalPurchases() {
-    return Math.ceil(Math.log(this.intervalPurchaseCap / this.interval) / Math.log(0.92));
+    return Math.ceil(Math.log(this.intervalPurchaseCap / this.interval) / Math.log(INTERVAL_PER_UPGRADE));
   }
 
   buyManyInterval(x) {
@@ -203,6 +217,9 @@ export class DarkMatterDimensionState extends DimensionState {
   ascend() {
     if (this.interval > this.intervalPurchaseCap) return;
     this.data.ascensionCount++;
+
+    // Immediately buy as many interval upgrades as possible
+    while (this.buyInterval());
   }
 
   static get dimensionCount() { return 4; }

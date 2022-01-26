@@ -39,15 +39,33 @@ Vue.component("dark-matter-dimension-row", {
     },
     intervalClassObject() {
       return {
+        "o-dark-matter-dimension-button": true,
         "o-dark-matter-dimension-button--available": this.canBuyInterval,
         "o-dark-matter-dimension-button--ascend": this.isIntervalCapped
+      };
+    },
+    darkMatterClassObject() {
+      return {
+        "o-dark-matter-dimension-button": true,
+        "o-dark-matter-dimension-button--available": this.canBuyPowerDM,
+        "o-dark-matter-dimension-button--accent": this.hoverOverAscension
+      };
+    },
+    darkEnergyClassObject() {
+      return {
+        "o-dark-matter-dimension-button": true,
+        "o-dark-matter-dimension-button--available": this.canBuyPowerDE,
+        "o-dark-matter-dimension-button--accent": this.hoverOverAscension
       };
     },
     intervalText() {
       const interval = this.hoverOverAscension ? this.intervalAfterAscension : this.interval;
       const str = interval > 1000 ? `${format(interval / 1000, 2, 2)}s` : `${format(interval, 2, 2)}ms`;
       const line1 = this.hoverOverAscension ? `<b>${str}</b>` : str;
-      const line2 = this.isIntervalCapped ? "Ascend!" : `Cost: ${this.formatDMCost(this.intervalCost)}`;
+
+      let line2;
+      if (this.isIntervalCapped) line2 = this.hoverOverAscension ? "On ascend ➜" : "Ascend!";
+      else line2 = `Cost: ${this.formatDMCost(this.intervalCost)}`;
       return `${line1}<br>${line2}`;
     },
     darkMatterText() {
@@ -103,11 +121,11 @@ Vue.component("dark-matter-dimension-row", {
       this.portionDE = this.darkEnergyPerSecond / Currency.darkEnergy.productionPerSecond;
       this.productionPerSecond = this.dimensionProduction(this.tier);
       this.percentPerSecond = Decimal.divide(this.productionPerSecond, this.amount).toNumber();
+      if (!this.isIntervalCapped) this.hoverOverAscension = false;
     },
     handleIntervalClick() {
       if (this.isIntervalCapped) DarkMatterDimension(this.tier).ascend();
       else DarkMatterDimension(this.tier).buyInterval();
-      this.hoverOverAscension = false;
     },
     buyPowerDM() {
       DarkMatterDimension(this.tier).buyPowerDM();
@@ -143,7 +161,6 @@ Vue.component("dark-matter-dimension-row", {
       <div class="c-dark-matter-dimension-buttons">
         <button
           @click="handleIntervalClick"
-          class="o-dark-matter-dimension-button"
           :class="intervalClassObject"
           @mouseover="hoverState(true)"
           @mouseleave="hoverState(false)"
@@ -158,15 +175,13 @@ Vue.component("dark-matter-dimension-row", {
         </button>
         <button
           @click="buyPowerDM"
-          class="o-dark-matter-dimension-button"
-          :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDM }"
+          :class="darkMatterClassObject"
         >
           <span v-html="darkMatterText" />
         </button>
         <button
           @click="buyPowerDE"
-          class="o-dark-matter-dimension-button"
-          :class="{ 'o-dark-matter-dimension-button--available': canBuyPowerDE }"
+          :class="darkEnergyClassObject"
         >
           <span v-html="darkEnergyText" />
         </button>

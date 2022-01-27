@@ -115,7 +115,26 @@ GameDatabase.celestials.pelle = (function() {
         id: 2,
         key: "pestilence",
         name: "Pestilence",
-        strike: () => PelleStrikes.breakInfinity
+        description: "When active, spends 3% of your X per second to increase Famine.",
+        effectDescription: x => `Does something pretty cool ig`,
+        strike: () => PelleStrikes.breakInfinity,
+        percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
+        effect: totalFill => totalFill.pow(0.3),
+        currency: () => false,
+        milestones: [
+          {
+            requirement: 0.25,
+            description: "You can go out"
+          },
+          {
+            requirement: 0.6,
+            description: "You can play"
+          },
+          {
+            requirement: 0.85,
+            description: "You can live your life"
+          },
+        ]
       }
     }
   };

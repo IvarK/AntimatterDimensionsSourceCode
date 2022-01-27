@@ -51,6 +51,7 @@ export function breakInfinity() {
   }
   player.break = !player.break;
   TabNotification.ICUnlock.tryTrigger();
+  PelleStrikes.breakInfinity.trigger();
   EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
   GameUI.update();
 }

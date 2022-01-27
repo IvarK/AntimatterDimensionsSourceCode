@@ -150,7 +150,7 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   }
 
   reset() {
-    if (EternityMilestone.keepAutobuyers.isReached) return;
+    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) return;
     this.data.interval = this.baseInterval;
     this.data.cost = 1;
   }

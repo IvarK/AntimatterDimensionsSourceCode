@@ -118,7 +118,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   reset() {
     super.reset();
-    if (EternityMilestone.keepAutobuyers.isReached) return;
+    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) return;
     this.data.isUnlocked = false;
     this.data.isBought = false;
     this.data.bulk = 1;

@@ -86,7 +86,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
 
   reset() {
     super.reset();
-    if (EternityMilestone.keepAutobuyers.isReached) return;
+    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) return;
     this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;
     this.data.isUnlocked = false;
     this.data.isBought = false;

@@ -63,9 +63,19 @@ GameDatabase.celestials.pelle = (function() {
         description: "Gain back autobuyer for Dimension Boosts",
         cost: 1e5,
       },
-      antimatterDimAutobuyers2: {
+      keepAutobuyers: {
         id: 3,
+        description: "Keep your autobuyer upgrades on Armageddon",
+        cost: 1e6,
+      },
+      antimatterDimAutobuyers2: {
+        id: 4,
         description: "Gain back autobuyers for Antimatter Dimensions 5-8",
+        cost: 1e7,
+      },
+      galaxyAutobuyer: {
+        id: 5,
+        description: "Gain back autobuyer for Antimatter Galaxies",
         cost: 1e8,
       },
     },
@@ -94,7 +104,7 @@ GameDatabase.celestials.pelle = (function() {
         effectDescription: x => `Multiplies Infinity Point gain by ${formatX(x, 2, 2)}`,
         strike: () => PelleStrikes.infinity,
         percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
-        effect: totalFill => totalFill.pow(0.3),
+        effect: totalFill => totalFill.plus(1).pow(0.3),
         currency: () => Currency.infinityPoints,
         milestones: [
           {

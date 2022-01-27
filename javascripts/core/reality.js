@@ -645,6 +645,10 @@ export function finishProcessReality(realityProps) {
   player.reality.gainedAutoAchievements = false;
 
   if (realityProps.restoreCelestialState || player.options.retryCelestial) restoreCelestialRuns(celestialRunState);
+
+  if (Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied && Autobuyer.bigCrunch.hasMaxedInterval) {
+    player.break = true;
+  }
 }
 
 function restoreCelestialRuns(celestialRunState) {

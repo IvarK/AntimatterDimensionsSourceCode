@@ -29,7 +29,7 @@ export default {
         ? ""
         : `You can hold Shift ${shiftKeyInfo}.`;
     },
-    shortcutCount() {
+    hotkeyCount() {
       return shortcuts.length;
     },
     shortcutNames() {
@@ -40,7 +40,7 @@ export default {
     }
   },
   created() {
-    for (let i = 0; i < this.shortcutCount; i++) {
+    for (let i = 0; i < this.hotkeyCount; i++) {
       const visible = shortcuts[i].visible;
       if (typeof visible === "function") {
         this.updateIndicies.push(i);
@@ -76,7 +76,7 @@ export default {
         <kbd>1</kbd>-<kbd>8</kbd>
       </div>
       <div
-        v-for="index in shortcutCount"
+        v-for="index in hotkeyCount"
         :key="index"
       >
         <span

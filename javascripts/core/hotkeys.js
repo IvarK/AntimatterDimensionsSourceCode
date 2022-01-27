@@ -380,20 +380,7 @@ function keyboardVisibleTabsToggle() {
   Modal.hiddenTabs.show();
 }
 
-const recentDirections = [];
-const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right"];
-
 function keyboardTabChange(direction) {
-  // Becuase Mousetweaks become confused when the starting key of a sequence and another key are the same,
-  // to allow both the up keybind and the konami code to work, we have to do this
-  recentDirections.push(direction);
-  if (recentDirections.length > 8) recentDirections.pop();
-  if (konamiCode.every((correct, index) => correct === recentDirections[index])) {
-    // Bind the final sequence of the konami code, will be unbound when no longer valid
-    GameKeyboard.bind("b a enter", () => doKonamiCode());
-  } else {
-    GameKeyboard.unbind("b a enter");
-  }
   // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
   if (direction === "up" || direction === "down") {
@@ -427,9 +414,25 @@ function keyboardTabChange(direction) {
   return false;
 }
 
-function doKonamiCode() {
-  GameKeyboard.unbind("b a enter");
-  SecretAchievement(17).unlock();
-  Currency.antimatter.bumpTo(30);
-  Speedrun.startTimer();
+const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a", "enter"];
+let konamiStep = 0;
+
+function testKonami(character) {
+  if (konamiCode[konamiStep] === character) konamiStep++;
+  else konamiStep = 0;
+  if (konamiCode.length <= konamiStep) {
+    SecretAchievement(17).unlock();
+    Currency.antimatter.bumpTo(30);
+    Speedrun.startTimer();
+  }
 }
+
+// Remember that Mousetrap handles the backend for GameKeyboard
+// Without this, Mousetrap become confused when the "up" key is pressed, as it is the starting key of a sequence
+// and an individual key. To allow both the up keybind and the konami code to work, we will change how Mousetrap handles
+// all keys so the konami code functions entirely separately from the normal handling.
+const originalHandleKey = Mousetrap.prototype.handleKey;
+Mousetrap.prototype.handleKey = function(character, modifiers, e) {
+  if (e.type === "keydown") testKonami(character);
+  return originalHandleKey.apply(this, [character, modifiers, e]);
+};

@@ -1,5 +1,6 @@
 import { playFabLogin } from "./core/playfab.js";
 import { DC } from "./core/constants.js";
+import { SpeedrunMilestones } from "./core/speedrun.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -654,7 +655,7 @@ function laitelaRealityTick(realDiff) {
       completionText += ` You need to destabilize in faster than
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
-    if (Laitela.isFullyDestabilized) SpeedrunMilestone(24).tryComplete();
+    if (Laitela.isFullyDestabilized) SpeedrunMilestones(24).tryComplete();
     Modal.message.show(completionText);
   }
 }

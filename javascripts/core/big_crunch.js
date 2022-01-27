@@ -1,5 +1,6 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
+import { SpeedrunMilestones } from "./speedrun.js";
 
 export function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
@@ -391,7 +392,7 @@ export class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   onPurchased() {
-    if (this.id === "postGalaxy") SpeedrunMilestone(7).tryComplete();
+    if (this.id === "postGalaxy") SpeedrunMilestones(7).tryComplete();
   }
 }
 

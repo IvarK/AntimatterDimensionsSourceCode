@@ -129,6 +129,7 @@ Vue.component("v-tab", {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
+      V.checkForUnlocks();
     },
     reductionTooltip(hex) {
       return `Spend ${quantify("Perk Point", hex.reductionCost, 2, 0)}

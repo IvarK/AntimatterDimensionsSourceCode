@@ -1,6 +1,7 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
 import { GameMechanicState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
+import { SpeedrunMilestones } from "../speedrun.js";
 
 /**
  * Information about how to format runUnlocks:
@@ -183,7 +184,7 @@ export const V = {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
-      if (this.spaceTheorems >= 36) SpeedrunMilestone(22).tryComplete();
+      if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
     }
 
     if (V.has(V_UNLOCKS.RA_UNLOCK) && !Ra.has(RA_UNLOCKS.AUTO_TP)) {

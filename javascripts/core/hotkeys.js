@@ -418,6 +418,7 @@ const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right"
 let konamiStep = 0;
 
 function testKonami(character) {
+  if (SecretAchievement(17).isUnlocked) return;
   if (konamiCode[konamiStep] === character) konamiStep++;
   else konamiStep = 0;
   if (konamiCode.length <= konamiStep) {

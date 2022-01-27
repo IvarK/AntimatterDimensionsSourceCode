@@ -204,11 +204,12 @@ export const Glyphs = {
     const pelleMaxGlyphs = 1;
     const glyphsEquipped = Glyphs.active.filter(Boolean).length;
     if (
-      Pelle.isDisabled("glyphs") ||
-      glyphsEquipped >= pelleMaxGlyphs ||
-        glyph.type === "effarig" ||
-        glyph.type === "reality" ||
-        glyph.type === "cursed"
+      Pelle.isDoomed &&
+      (
+        Pelle.isDisabled("glyphs") ||
+        glyphsEquipped >= pelleMaxGlyphs ||
+        ["effarig", "reality", "cursed"].includes(glyph.type)
+      )
     ) return;
 
     this.validate();

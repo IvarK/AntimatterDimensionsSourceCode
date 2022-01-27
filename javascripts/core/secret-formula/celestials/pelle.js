@@ -94,7 +94,7 @@ GameDatabase.celestials.pelle = (function() {
         effectDescription: x => `Multiplies Infinity Point gain by ${formatX(x, 2, 2)}`,
         strike: () => PelleStrikes.infinity,
         percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
-        effect: totalFill => totalFill.pow(0.2),
+        effect: totalFill => totalFill.pow(0.3),
         currency: () => Currency.infinityPoints,
         milestones: [
           {

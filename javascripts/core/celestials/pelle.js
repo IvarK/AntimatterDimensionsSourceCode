@@ -105,7 +105,7 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [142, 141, 125, 118, 117, 111, 92, 91, 76];
+    return [143, 142, 141, 125, 118, 117, 111, 92, 91, 76];
   },
 
   get remnantsGain() {

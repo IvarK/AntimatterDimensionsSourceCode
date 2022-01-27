@@ -57,7 +57,8 @@ export function breakInfinity() {
 
 export function gainedInfinityPoints() {
   if (Pelle.isDisabled("IPMults")) {
-    return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / 308 - 0.75).floor();
+    return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / 308 - 0.75)
+      .timesEffectsOf(PelleRifts.famine).floor();
   }
   const div = Effects.min(
     308,

@@ -651,8 +651,19 @@ window.player = {
         infConversion: 0,
         galaxyPower: 0
       },
+      rifts: {
+        famine: {
+          fill: DC.D0,
+          active: false
+        },
+        pestilence: {
+          fill: DC.D0,
+          active: false
+        }
+      },
       progressBits: 0
-    }
+    },
+    compact: false
   },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,

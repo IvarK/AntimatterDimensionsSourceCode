@@ -1,11 +1,18 @@
 <template>
   <div class="l-pelle-celestial-tab">
     <div v-if="isDoomed">
+      <button
+        class="o-pelle-button"
+        @click="toggleCompact"
+      >
+        {{ compact ? "Show all Strikes and Rifts" : "Condense Strikes and Rifts" }}
+      </button>
       <div class="c-pelle-upgrade-container">
         <PelleStrike
           v-for="strike in strikes"
           :key="strike.config.id"
           :strike="strike"
+          :compact="compact"
         />
       </div>
       You have <span class="c-remnants-amount">{{ format(remnants, 2, 0) }}</span> remnants <br>
@@ -50,7 +57,8 @@ export default {
     return {
       isDoomed: false,
       remnants: 0,
-      realityShards: new Decimal(0)
+      realityShards: new Decimal(0),
+      compact: false
     };
   },
   methods: {
@@ -58,6 +66,10 @@ export default {
       this.isDoomed = Pelle.isDoomed;
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
+      this.compact = Pelle.cel.compact;
+    },
+    toggleCompact() {
+      Pelle.cel.compact = !Pelle.cel.compact;
     },
     getDoomedScrub() {
       player.celestials.pelle.doomed = true;
@@ -79,6 +91,21 @@ export default {
 </script>
 
 <style scoped>
+  .o-pelle-button {
+    background: black;
+    color: white;
+    border: 1px solid var(--color-pelle--base);
+    border-radius: 5px;
+    padding: 1rem;
+    font-family: Typewriter;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition-duration: 0.12s;
+  }
+
+  .o-pelle-button:hover {
+    box-shadow: 1px 1px 3px var(--color-pelle--base);
+  }
   .c-remnants-amount {
     font-weight: bold;
     font-size: 2rem;

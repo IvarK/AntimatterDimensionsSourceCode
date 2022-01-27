@@ -16,7 +16,7 @@ const disabledMechanicUnlocks = {
   autoec: () => ({}),
   replicantiIntervalMult: () => ({}),
   tpMults: () => ({}),
-  equipGlyphs: () => ({}),
+  glyphs: () => !PelleRifts.famine.hasMilestone(0),
   V: () => ({}),
   singularity: () => ({}),
   continuum: () => ({}),
@@ -60,7 +60,13 @@ export const Pelle = {
       console.error(`Mechanic ${mechanic} isn't present in the disabledMechanicUnlocks!`);
       return true;
     }
+
     const upgrade = disabledMechanicUnlocks[mechanic]();
+
+    if (typeof upgrade === "boolean") {
+      return upgrade;
+    }
+
     return Boolean(!upgrade.canBeApplied);
   },
 
@@ -82,6 +88,7 @@ export const Pelle = {
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
+      PelleRifts.all.forEach(r => r.fill(diff));
     }
   },
 
@@ -125,7 +132,7 @@ export const Pelle = {
   },
 
   get glyphMaxLevel() {
-    return 1;
+    return PelleRebuyableUpgrade.glyphLevels.effectValue;
   },
 
   antimatterDimensionMult(x) {
@@ -230,6 +237,10 @@ class PelleStrikeState extends GameMechanicState {
     return this._config.rewardDescription;
   }
 
+  get rift() {
+    return this._config.rift();
+  }
+
   trigger() {
     this.tryUnlockStrike();
   }
@@ -247,6 +258,87 @@ export const PelleStrikes = (function() {
   const db = GameDatabase.celestials.pelle.strikes;
   return {
     infinity: new PelleStrikeState(db.infinity),
+    breakInfinity: new PelleStrikeState(db.breakInfinity),
     all: Object.keys(db).map(key => new PelleStrikeState(db[key]))
+  };
+}());
+
+class RiftState extends GameMechanicState {
+  get fillCurrency() {
+    return this.config.currency();
+  }
+
+  get strike() {
+    return this.config.strike();
+  }
+
+  get canBeApplied() {
+    return this.strike.hasStrike;
+  }
+
+  get name() {
+    return this.config.name;
+  }
+
+  get rift() {
+    return player.celestials.pelle.rifts[this.config.key];
+  }
+
+  get totalFill() {
+    return this.rift.fill;
+  }
+
+  set totalFill(value) {
+    this.rift.fill = value;
+  }
+
+  get isActive() {
+    return this.rift.active;
+  }
+
+  get percentage() {
+    return this.config.percentage(this.totalFill);
+  }
+
+  get milestones() {
+    return this.config.milestones;
+  }
+
+  get description() {
+    return this.config.description;
+  }
+
+  get effectDescription() {
+    return this.config.effectDescription(this.effectValue);
+  }
+
+  get isCustomEffect() { return true; }
+
+  get effectValue() {
+    return this.config.effect(this.totalFill);
+  }
+
+  hasMilestone(idx) {
+    return this.milestones[idx].requirement <= this.percentage;
+  }
+
+  toggle() {
+    this.rift.active = !this.rift.active;
+  }
+
+  fill(diff) {
+    if (!this.isActive) return;
+    const spent = this.fillCurrency.value.times(0.03).times(diff / 1000);
+    this.fillCurrency.subtract(spent);
+    this.totalFill = this.totalFill.plus(spent);
+  }
+}
+
+export const PelleRifts = (function() {
+  const db = GameDatabase.celestials.pelle.rifts;
+  return {
+    famine: new RiftState(db.famine),
+    pestilence: new RiftState(db.pestilence),
+    all: Object.keys(db).map(key => new RiftState(db[key]))
   };
 }());

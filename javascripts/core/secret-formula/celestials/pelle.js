@@ -30,7 +30,7 @@ GameDatabase.celestials.pelle = (function() {
       glyphLevels: rebuyable({
         id: "glyphLevels",
         description: `Increase the glyph level allowed in Pelle`,
-        _cost: x => Decimal.pow(30, x).times(1e10),
+        _cost: x => Decimal.pow(30, x).times(1e15),
         _effect: x => Math.max(x * 5, 1),
         _formatEffect: x => `${format(Math.max(x * 5, 1), 2)} ➜ ` +
           `${format(Math.max((x + 1) * 5, 1), 2)}`
@@ -74,7 +74,48 @@ GameDatabase.celestials.pelle = (function() {
         id: 1,
         requirementDescription: "Reach Infinity",
         penaltyDescription: "Antimatter Dimensions are raised to power of 0.5",
-        rewardDescription: "Unlock Famine"
+        rewardDescription: "Unlock Famine",
+        rift: () => PelleRifts.famine
+      },
+      breakInfinity: {
+        id: 2,
+        requirementDescription: "Break Infinity",
+        penaltyDescription: "Antimatter Galaxies are only 30% as effective",
+        rewardDescription: "Unlock Pestilence",
+        rift: () => PelleRifts.pestilence
+      }
+    },
+    rifts: {
+      famine: {
+        id: 1,
+        key: "famine",
+        name: "Famine",
+        description: "When active, spends 3% of your IP per second to increase Famine.",
+        effectDescription: x => `Multiplies Infinity Point gain by ${formatX(x, 2, 2)}`,
+        strike: () => PelleStrikes.infinity,
+        percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
+        effect: totalFill => totalFill.pow(0.2),
+        currency: () => Currency.infinityPoints,
+        milestones: [
+          {
+            requirement: 0.1,
+            description: "You can equip a single glyph with decreased level and rarity"
+          },
+          {
+            requirement: 0.4,
+            description: "You can Eat Ass"
+          },
+          {
+            requirement: 1,
+            description: "You can code IE11 compliant code"
+          },
+        ]
+      },
+      pestilence: {
+        id: 2,
+        key: "pestilence",
+        name: "Pestilence",
+        strike: () => PelleStrikes.breakInfinity
       }
     }
   };

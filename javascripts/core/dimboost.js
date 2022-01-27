@@ -167,13 +167,13 @@ export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
-  if (forcedNDReset || !Perk.antimatterNoReset.isBought) {
+  if (forcedNDReset || !Perk.antimatterNoReset.isBought || Pelle.isDoomed) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
     resetTickspeed();
   }
   skipResetsIfPossible();
-  const canKeepAntimatter = Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought;
+  const canKeepAntimatter = (Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought) && !Pelle.isDoomed;
   if (!forcedAMReset && canKeepAntimatter) {
     Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
   } else {

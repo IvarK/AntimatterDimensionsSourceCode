@@ -59,7 +59,7 @@ export default {
     padding: 2rem;
     color: white;
     background: black;
-    border: 1px solid var(--color-celestials);
+    border: 1px solid var(--color-pelle-secondary);
     border-radius: .5rem;
     font-family: Typewriter;
     cursor: pointer;
@@ -70,7 +70,7 @@ export default {
   }
 
   .c-pelle-upgrade:hover {
-    box-shadow: 1px 1px 5px var(--color-celestials);
+    box-shadow: 1px 1px 5px var(--color-pelle-secondary);
     transition-duration: 0.12s;
   }
 
@@ -80,7 +80,7 @@ export default {
   }
 
   .c-pelle-upgrade--bought {
-    background: var(--color-celestials);
+    background: var(--color-pelle-secondary);
     cursor: default;
     color: black;
   }

@@ -15,9 +15,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    @confirm="handleYesClick"
-  >
+  <ModalWrapperChoice @confirm="handleYesClick">
     <template #header>
       Swap to Modern UI
     </template>

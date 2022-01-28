@@ -25,9 +25,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions
-    style="width: auto"
-  >
+  <ModalWrapperOptions style="width: auto">
     <template #header>
       Modify Visible Tabs
     </template>

@@ -73,9 +73,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    @confirm="confirmPrefs"
-  >
+  <ModalWrapperChoice @confirm="confirmPrefs">
     <h2>Dimension Split Preference</h2>
     <div class="l-modal-split-preferences">
       <button

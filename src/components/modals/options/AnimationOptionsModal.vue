@@ -72,11 +72,9 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions
-    class="c-modal-options__large"
-  >
+  <ModalWrapperOptions class="c-modal-options__large">
     <template #header>
-      Animation Options Modal
+      Animation Options
     </template>
     <div class="c-modal-options__button-container">
       <ModalOptionsToggleButton

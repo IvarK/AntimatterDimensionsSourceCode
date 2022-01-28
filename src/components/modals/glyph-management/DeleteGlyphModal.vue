@@ -33,9 +33,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    @confirm="handleYesClick"
-  >
+  <ModalWrapperChoice @confirm="handleYesClick">
     <template #header>
       You are about to delete a Glyph
     </template>

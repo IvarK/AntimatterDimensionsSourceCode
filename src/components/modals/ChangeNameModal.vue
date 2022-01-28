@@ -32,9 +32,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    @confirm="confirmChange"
-  >
+  <ModalWrapperChoice @confirm="confirmChange">
     <template #header>
       Change your Speedrun Player Name
     </template>

@@ -52,9 +52,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    @confirm="handleYesClick"
-  >
+  <ModalWrapperChoice @confirm="handleYesClick">
     <template #header>
       Delete this script
     </template>

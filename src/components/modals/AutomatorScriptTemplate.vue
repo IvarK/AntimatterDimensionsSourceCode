@@ -106,9 +106,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper
-    class="c-automator-template-container"
-  >
+  <ModalWrapper class="c-automator-template-container">
     <template #header>
       {{ modalConfig.name }} Template
     </template>

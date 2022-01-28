@@ -10,9 +10,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper
-    class="c-modal-options l-modal-options"
-  >
+  <ModalWrapper class="c-modal-options l-modal-options">
     <template #header>
       <slot name="header" />
     </template>

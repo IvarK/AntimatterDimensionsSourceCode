@@ -79,11 +79,9 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions
-    class="c-modal-options__large"
-  >
+  <ModalWrapperOptions class="c-modal-options__large">
     <template #header>
-      Info Display Options Modal
+      Info Display Options
     </template>
     <div class="c-modal-options__button-container">
       <ModalOptionsToggleButton

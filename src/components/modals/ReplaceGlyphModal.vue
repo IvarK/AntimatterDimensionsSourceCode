@@ -32,9 +32,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    @confirm="handleYesClick"
-  >
+  <ModalWrapperChoice @confirm="handleYesClick">
     <template #header>
       You are about to replace a Glyph
     </template>

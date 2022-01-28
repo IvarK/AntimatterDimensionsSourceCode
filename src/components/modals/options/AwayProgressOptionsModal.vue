@@ -17,11 +17,9 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions
-    style="width: 75rem"
-  >
+  <ModalWrapperOptions style="width: 75rem">
     <template #header>
-      Away Progress Options Modal
+      Away Progress Options
     </template>
     <div class="c-modal-options__button-container">
       <AwayProgressOptionsEntry

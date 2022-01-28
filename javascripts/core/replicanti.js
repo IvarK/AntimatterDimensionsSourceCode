@@ -125,7 +125,7 @@ export function replicantiLoop(diff) {
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   // This gets the pre-cap interval (above the cap we recalculate the interval).
   const interval = getReplicantiInterval(false);
-  const isUncapped = TimeStudy(192).isBought;
+  const isUncapped = TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1);
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
   if (diff > 500 || interval.lessThan(diff) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
@@ -240,7 +240,9 @@ export const ReplicantiUpgrade = {
       return this.nearestPercent(this.value + 0.01);
     }
 
-    get cost() { return player.replicanti.chanceCost; }
+    get cost() {
+      return player.replicanti.chanceCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+    }
 
     get baseCost() { return this.cost; }
     set baseCost(value) { player.replicanti.chanceCost = value; }
@@ -289,7 +291,9 @@ export const ReplicantiUpgrade = {
       return Math.max(this.value * 0.9, this.cap);
     }
 
-    get cost() { return player.replicanti.intervalCost; }
+    get cost() {
+      return player.replicanti.intervalCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+    }
 
     get baseCost() { return this.cost; }
     set baseCost(value) { player.replicanti.intervalCost = value; }
@@ -322,7 +326,9 @@ export const ReplicantiUpgrade = {
       return this.value + 1;
     }
 
-    get cost() { return this.baseCost.dividedByEffectOf(TimeStudy(233)); }
+    get cost() {
+      return this.baseCost.dividedByEffectOf(TimeStudy(233)).div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+    }
 
     get baseCost() { return player.replicanti.galCost; }
     set baseCost(value) { player.replicanti.galCost = value; }
@@ -416,9 +422,10 @@ export const Replicanti = {
     };
   },
   unlock(freeUnlock = false) {
+    const cost = PelleRifts.famine.hasMilestone(1) ? DC.E10 : DC.E140;
     if (player.replicanti.unl) return;
-    if (freeUnlock || Currency.infinityPoints.gte(DC.E140)) {
-      if (!freeUnlock) Currency.infinityPoints.subtract(DC.E140);
+    if (freeUnlock || Currency.infinityPoints.gte(cost)) {
+      if (!freeUnlock) Currency.infinityPoints.subtract(cost);
       player.replicanti.unl = true;
       player.replicanti.timer = 0;
       Replicanti.amount = DC.D1;

@@ -398,7 +398,10 @@ export class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   onPurchased() {
-    if (this.id === "postGalaxy") SpeedrunMilestone(7).tryComplete();
+    if (this.id === "postGalaxy") {
+      SpeedrunMilestone(7).tryComplete();
+      PelleStrikes.powerGalaxies.trigger();
+    }
   }
 }
 

@@ -78,6 +78,16 @@ GameDatabase.celestials.pelle = (function() {
         description: "Gain back autobuyer for Antimatter Galaxies",
         cost: 1e8,
       },
+      tickspeedAutobuyer: {
+        id: 6,
+        description: "Gain back autobuyer for Tickspeed",
+        cost: 1e9,
+      },
+      keepInfinityUpgrades: {
+        id: 7,
+        description: "Keep Infinity Upgrades on Armageddon",
+        cost: 1e10,
+      },
     },
     strikes: {
       infinity: {
@@ -87,10 +97,10 @@ GameDatabase.celestials.pelle = (function() {
         rewardDescription: "Unlock Famine",
         rift: () => PelleRifts.famine
       },
-      breakInfinity: {
+      powerGalaxies: {
         id: 2,
-        requirementDescription: "Break Infinity",
-        penaltyDescription: "Antimatter Galaxies are only 30% as effective",
+        requirementDescription: "Power-up Galaxies",
+        penaltyDescription: "Infinity Dimensions are raised to power of 0.5",
         rewardDescription: "Unlock Pestilence",
         rift: () => PelleRifts.pestilence
       }
@@ -104,16 +114,16 @@ GameDatabase.celestials.pelle = (function() {
         effectDescription: x => `Multiplies Infinity Point gain by ${formatX(x, 2, 2)}`,
         strike: () => PelleStrikes.infinity,
         percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
-        effect: totalFill => totalFill.plus(1).pow(0.3),
+        effect: totalFill => totalFill.plus(1).pow(0.33),
         currency: () => Currency.infinityPoints,
         milestones: [
           {
-            requirement: 0.1,
+            requirement: 0.04,
             description: "You can equip a single glyph with decreased level and rarity"
           },
           {
-            requirement: 0.4,
-            description: "You can Eat Ass"
+            requirement: 0.06,
+            description: "Make replicanti and its upgrades 1e130x cheaper, and it's uncapped"
           },
           {
             requirement: 1,
@@ -127,7 +137,7 @@ GameDatabase.celestials.pelle = (function() {
         name: "Pestilence",
         description: "When active, spends 3% of your X per second to increase Famine.",
         effectDescription: x => `Does something pretty cool ig`,
-        strike: () => PelleStrikes.breakInfinity,
+        strike: () => PelleStrikes.powerGalaxies,
         percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
         effect: totalFill => totalFill.pow(0.3),
         currency: () => false,

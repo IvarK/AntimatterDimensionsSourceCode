@@ -2,6 +2,7 @@
   <div class="l-pelle-celestial-tab">
     <div v-if="isDoomed">
       <button
+        v-if="strikes.length"
         class="o-pelle-button"
         @click="toggleCompact"
       >

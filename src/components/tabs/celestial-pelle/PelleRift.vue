@@ -61,10 +61,10 @@ export default {
       {{ active ? "Filling" : "Idle" }}
     </button>
     <div
-      v-if="!compact"
       class="c-pelle-rift-description"
+      :class="{ 'c-pelle-rift-description--compact': compact }"
     >
-      {{ rift.description }}<br><br>
+      <span v-if="!compact">{{ rift.description }}<br><br></span>
       <span class="highlight">{{ rift.effectDescription }}</span>
     </div>
     <div v-if="!compact">

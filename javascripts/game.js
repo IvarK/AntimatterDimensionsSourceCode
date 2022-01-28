@@ -7,6 +7,23 @@ if (GlobalErrorHandler.handled) {
 GlobalErrorHandler.cleanStart = true;
 
 export function playerInfinityUpgradesOnReset() {
+
+  const infinityUpgrades = new Set(
+    ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
+      "resetBoost", "galaxyBoost", "skipResetGalaxy",
+      "ipOffline"]
+  );
+
+  if (PelleUpgrade.keepInfinityUpgrades.canBeApplied) {
+    player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => infinityUpgrades.has(u)));
+    GameCache.tickSpeedMultDecrease.invalidate();
+    GameCache.dimensionMultDecrease.invalidate();
+    return;
+  }
+
   if (RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityUpgrades = new Set(
       ["timeMult", "dimMult", "timeMult2",
@@ -21,14 +38,7 @@ export function playerInfinityUpgradesOnReset() {
     );
     player.infinityRebuyables = [8, 7, 10];
   } else if (EternityMilestone.keepInfinityUpgrades.isReached) {
-    player.infinityUpgrades = new Set(
-      ["timeMult", "dimMult", "timeMult2",
-        "skipReset1", "skipReset2", "unspentBonus",
-        "27Mult", "18Mult", "36Mult", "resetMult",
-        "skipReset3", "passiveGen", "45Mult",
-        "resetBoost", "galaxyBoost", "skipResetGalaxy",
-        "ipOffline"]
-    );
+    player.infinityUpgrades = infinityUpgrades;
     player.infinityRebuyables = [0, 0, 0];
   } else {
     player.infinityUpgrades.clear();
@@ -39,6 +49,7 @@ export function playerInfinityUpgradesOnReset() {
     player.infinityUpgrades.clear();
     player.infinityRebuyables = [0, 0, 0];
   }
+
   GameCache.tickSpeedMultDecrease.invalidate();
   GameCache.dimensionMultDecrease.invalidate();
 }
@@ -51,7 +62,6 @@ export function breakInfinity() {
   }
   player.break = !player.break;
   TabNotification.ICUnlock.tryTrigger();
-  PelleStrikes.breakInfinity.trigger();
   EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
   GameUI.update();
 }

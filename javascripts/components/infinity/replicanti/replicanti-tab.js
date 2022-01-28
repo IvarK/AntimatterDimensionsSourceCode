@@ -26,6 +26,7 @@ Vue.component("replicanti-tab", {
       effarigInfinityBonusRG: 0,
       nextEffarigRGThreshold: 0,
       canSeeGalaxyButton: false,
+      unlockCost: new Decimal()
     };
   },
   computed: {
@@ -88,8 +89,9 @@ Vue.component("replicanti-tab", {
   methods: {
     update() {
       this.isUnlocked = Replicanti.areUnlocked;
+      this.unlockCost = PelleRifts.famine.hasMilestone(1) ? 1e10 : 1e140;
       if (!this.isUnlocked) {
-        this.isUnlockAffordable = Currency.infinityPoints.gte(1e140);
+        this.isUnlockAffordable = Currency.infinityPoints.gte(this.unlockCost);
         return;
       }
       this.isInEC8 = EternityChallenge(8).isRunning;
@@ -122,7 +124,7 @@ Vue.component("replicanti-tab", {
       >
         Unlock Replicanti
         <br>
-        Cost: {{ format(1e140) }} IP
+        Cost: {{ format(this.unlockCost) }} IP
       </PrimaryButton>
       <template v-else>
         <div v-if="isInEC8">

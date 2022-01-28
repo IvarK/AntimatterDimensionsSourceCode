@@ -40,7 +40,7 @@ export function getTickSpeedMultiplier() {
       Achievement(175),
       InfinityChallenge(5).reward
     );
-    if (PelleStrikes.breakInfinity.hasStrike) galaxies *= 0.3;
+    if (Pelle.isDoomed) galaxies *= 0.5;
     return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
@@ -59,7 +59,7 @@ export function getTickSpeedMultiplier() {
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
-  if (PelleStrikes.breakInfinity.hasStrike) galaxies *= 0.3;
+  if (Pelle.isDoomed) galaxies *= 0.5;
   const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }

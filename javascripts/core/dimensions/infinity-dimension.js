@@ -255,7 +255,10 @@ class InfinityDimensionState extends DimensionState {
   }
 
   tryUnlock() {
-    if (!Perk.bypassIDAntimatter.isBought && !this.requirementReached) return;
+    if (
+      (!Perk.bypassIDAntimatter.isBought || Pelle.isDoomed) &&
+      !this.requirementReached
+    ) return;
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
@@ -279,7 +282,10 @@ export const InfinityDimensions = {
   unlockNext(switchTab) {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.records.thisEternity.maxAM.lt(next.requirement)) return;
+    if (
+      (!Perk.bypassIDAntimatter.isBought || Pelle.isDoomed) &&
+      player.records.thisEternity.maxAM.lt(next.requirement)
+    ) return;
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
     if (switchTab) Tab.dimensions.infinity.show();

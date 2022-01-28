@@ -34,7 +34,7 @@ const disabledMechanicUnlocks = {
   antimatterDimAutobuyer6: () => PelleUpgrade.antimatterDimAutobuyers2,
   antimatterDimAutobuyer7: () => PelleUpgrade.antimatterDimAutobuyers2,
   antimatterDimAutobuyer8: () => PelleUpgrade.antimatterDimAutobuyers2,
-  tickspeedAutobuyer: () => ({}),
+  tickspeedAutobuyer: () => PelleUpgrade.tickspeedAutobuyer,
   dimBoostAutobuyer: () => PelleUpgrade.dimBoostAutobuyer,
   galaxyAutobuyer: () => PelleUpgrade.galaxyAutobuyer,
   timeTheoremAutobuyer: () => ({}),
@@ -258,7 +258,7 @@ export const PelleStrikes = (function() {
   const db = GameDatabase.celestials.pelle.strikes;
   return {
     infinity: new PelleStrikeState(db.infinity),
-    breakInfinity: new PelleStrikeState(db.breakInfinity),
+    powerGalaxies: new PelleStrikeState(db.powerGalaxies),
     all: Object.keys(db).map(key => new PelleStrikeState(db[key]))
   };
 }());

@@ -636,7 +636,7 @@ export function finishProcessReality(realityProps) {
   ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
-  if (Teresa.has(TERESA_UNLOCKS.START_EU)) {
+  if (Teresa.has(TERESA_UNLOCKS.START_EU) && !Pelle.isDoomed) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   }
 
@@ -691,8 +691,8 @@ export function applyRUPG10() {
     player.break = true;
     Currency.eternities.bumpTo(100);
     Replicanti.amount = Replicanti.amount.clampMin(1);
+    Replicanti.unlock(true);
   }
-  Replicanti.unlock(true);
 }
 
 export function clearCelestialRuns() {

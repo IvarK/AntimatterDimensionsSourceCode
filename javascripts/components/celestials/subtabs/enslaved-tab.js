@@ -1,4 +1,5 @@
 import "../celestial-quote-history.js";
+import "../../reality/black-hole/black-hole-charging-sliders.js";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SliderComponent from "@/components/SliderComponent";
@@ -15,7 +16,6 @@ Vue.component("enslaved-tab", {
     autoStoreReal: false,
     offlineEnabled: false,
     canAdjustStoredTime: false,
-    storedFraction: 0,
     isRunning: false,
     completed: false,
     storedBlackHole: 0,
@@ -53,19 +53,6 @@ Vue.component("enslaved-tab", {
         ? "You're inside Enslaved Ones' Reality"
         : "Start Enslaved One's Reality";
     },
-    storedTimeRate() {
-      return formatPercents(this.storedFraction / 1000, 1);
-    },
-    sliderProps() {
-      return {
-        min: 0,
-        max: 990,
-        interval: 1,
-        show: true,
-        width: "60rem",
-        tooltip: false
-      };
-    },
     runButtonClassObject() {
       return {
         "c-enslaved-run-button__icon": true,
@@ -97,7 +84,6 @@ Vue.component("enslaved-tab", {
       this.unlocks = Array.from(player.celestials.enslaved.unlocks);
       this.buyableUnlocks = Object.values(ENSLAVED_UNLOCKS).map(x => Enslaved.canBuy(x));
       this.quote = Enslaved.quote;
-      this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
       this.currentSpeedUp = Enslaved.currentBlackHoleStoreAmountPerMs;
@@ -142,10 +128,6 @@ Vue.component("enslaved-tab", {
         "o-enslaved-shop-button--bought": this.hasUnlock(info),
         "o-enslaved-shop-button--available": this.canBuyUnlock(info)
       };
-    },
-    adjustSlider(value) {
-      this.storedFraction = value;
-      player.celestials.enslaved.storedFraction = value / 1000;
     },
     glitchStyle(x) {
       const xScale = 15 / 27;
@@ -252,15 +234,7 @@ Vue.component("enslaved-tab", {
               </div>
             </div>
           </div>
-          <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
-            Black Hole charging rate: {{ storedTimeRate }}
-            <br><br>
-            <SliderComponent
-              v-bind="sliderProps"
-              :value="storedFraction"
-              @input="adjustSlider($event)"
-            />
-          </div>
+          <black-hole-charging-sliders />
           <br>
           <div class="l-enslaved-shop-container">
             <button

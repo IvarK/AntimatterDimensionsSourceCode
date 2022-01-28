@@ -8456,6 +8456,11 @@ kbd {
   border-radius: 50%;
 }
 
+.l-black-hole-sliders {
+  width: 65rem;
+  margin: 1rem auto;
+}
+
 .c-perk-tab__header {
   font-size: 1.5rem;
   margin-bottom: 1rem;

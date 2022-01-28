@@ -38,6 +38,7 @@ export default {
     border-radius: 0.5rem;
     font-weight: bold;
     width: 25rem;
+    margin: 0 0.5rem;
     margin-bottom: 2rem;
   }
 

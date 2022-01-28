@@ -7,6 +7,7 @@ export const ReplicantiGrowth = {
     return Math.log10(Number.MAX_VALUE);
   },
   get scaleFactor() {
+    if (Pelle.isDoomed) return 2;
     return AlchemyResource.cardinality.effectValue;
   }
 };
@@ -74,9 +75,21 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
 // the overCapOverride parameter, to tell us which case we are in.
 export function getReplicantiInterval(overCapOverride, intervalIn) {
   let interval = intervalIn || player.replicanti.interval;
-  if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
   const amount = Replicanti.amount;
   const overCap = overCapOverride === undefined ? amount.gt(replicantiCap()) : overCapOverride;
+  interval = new Decimal(interval);
+  if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || overCap) {
+    interval = interval.times(10);
+  }
+
+  if (overCap) {
+    const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
+    interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
+  }
+
+  interval = interval.div(PelleRifts.pestilence.effectValue);
+  if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
+
   const preCelestialEffects = Effects.product(
     TimeStudy(62),
     TimeStudy(213),
@@ -88,13 +101,8 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
     interval = interval.divide(3);
   }
-  if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || overCap) {
-    interval = interval.times(10);
-  }
-  if (overCap) {
-    const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
-    interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
-  } else if (Achievement(134).isUnlocked) {
+
+  if (!overCap && Achievement(134).isUnlocked) {
     interval = interval.divide(2);
   }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
@@ -360,7 +368,7 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      return Effects.max(0, TimeStudy(131));
+      return Effects.max(0, TimeStudy(131)) + PelleRifts.pestilence.milestones[0].effect();
     }
 
     autobuyerTick() {

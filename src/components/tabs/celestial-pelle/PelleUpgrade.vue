@@ -3,9 +3,10 @@
     class="c-pelle-upgrade"
     :class="{
       'c-pelle-upgrade--unavailable': !canBuy,
-      'c-pelle-upgrade--bought': isBought
+      'c-pelle-upgrade--bought': isBought,
+      'c-pelle-upgrade--faded': faded
     }"
-    @click="upgrade.purchase()"
+    @click="!faded && upgrade.purchase()"
   >
     <DescriptionDisplay :config="config" /><br><br>
     <span v-if="effect">Currently: {{ effect }}<br></span>
@@ -26,7 +27,8 @@ export default {
     CostDisplay
   },
   props: {
-    upgrade: Object
+    upgrade: Object,
+    faded: Boolean,
   },
   data() {
     return {
@@ -37,7 +39,7 @@ export default {
   },
   methods: {
     update() {
-      this.canBuy = this.upgrade.canBeBought;
+      this.canBuy = this.upgrade.canBeBought && !faded;
       this.isBought = this.upgrade.isBought;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
     },
@@ -76,6 +78,11 @@ export default {
 
   .c-pelle-upgrade--unavailable {
     background: #565656;
+    cursor: default;
+  }
+
+  .c-pelle-upgrade--faded {
+    opacity: 0.3;
     cursor: default;
   }
 

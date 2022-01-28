@@ -670,6 +670,7 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 export function applyRUPG10() {
   NormalChallenges.completeAll();
+  if (Pelle.isDisabled("rupg10")) return;
 
   player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
     isUnlocked: true,
@@ -682,17 +683,17 @@ export function applyRUPG10() {
     isActive: current.isActive,
     lastTick: player.records.realTimePlayed
   }));
+
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
-  if (!Pelle.isDisabled("rupg10")) {
-    player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
-    player.galaxies = Math.max(1, player.galaxies);
-    player.break = true;
-    Currency.eternities.bumpTo(100);
-    Replicanti.amount = Replicanti.amount.clampMin(1);
-    Replicanti.unlock(true);
-  }
+
+  player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
+  player.galaxies = Math.max(1, player.galaxies);
+  player.break = true;
+  Currency.eternities.bumpTo(100);
+  Replicanti.amount = Replicanti.amount.clampMin(1);
+  Replicanti.unlock(true);
 }
 
 export function clearCelestialRuns() {

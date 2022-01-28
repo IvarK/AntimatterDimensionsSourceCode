@@ -26,11 +26,23 @@
           :upgrade="upgrade"
         />
       </div>
+      <button
+        class="o-pelle-button"
+        @click="toggleBought"
+      >
+        {{ !showBought ? "Show bought upgrades" : "Hide bought upgrades" }}
+      </button>
       <div class="c-pelle-upgrade-container">
         <PelleUpgradeVue
-          v-for="upgrade in upgrades"
+          v-for="upgrade in allUpgrades"
           :key="upgrade.config.id"
           :upgrade="upgrade"
+        />
+        <PelleUpgradeVue
+          v-for="upgrade in fadedUpgrades"
+          :key="upgrade.config.id"
+          :upgrade="upgrade"
+          faded
         />
       </div>
     </div>
@@ -59,7 +71,8 @@ export default {
       isDoomed: false,
       remnants: 0,
       realityShards: new Decimal(0),
-      compact: false
+      compact: false,
+      showBought: false
     };
   },
   methods: {
@@ -68,9 +81,13 @@ export default {
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.compact = Pelle.cel.compact;
+      this.showBought = Pelle.cel.showBought;
     },
     toggleCompact() {
       Pelle.cel.compact = !Pelle.cel.compact;
+    },
+    toggleBought() {
+      Pelle.cel.showBought = !Pelle.cel.showBought;
     },
     getDoomedScrub() {
       player.celestials.pelle.doomed = true;
@@ -85,7 +102,16 @@ export default {
   },
   computed: {
     rebuyables: () => PelleRebuyableUpgrade.all,
-    upgrades: () => PelleUpgrade.all,
+    upgrades() { return PelleUpgrade.all.filter(u => !u.isBought); },
+    boughtUpgrades() { return PelleUpgrade.all.filter(u => u.isBought); },
+    visibleUpgrades() { return this.upgrades.slice(0, 5); },
+    fadedUpgrades() { return this.upgrades.slice(5, 10); },
+    allUpgrades() {
+      let upgrades = [];
+      if (this.showBought) upgrades = this.boughtUpgrades;
+      upgrades = upgrades.concat(this.visibleUpgrades);
+      return upgrades;
+    },
     strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
   }
 };

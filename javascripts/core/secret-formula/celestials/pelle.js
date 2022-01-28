@@ -6,6 +6,7 @@ GameDatabase.celestials.pelle = (function() {
     props.formatEffect = () => props._formatEffect(player.celestials.pelle.rebuyables[props.id]);
     props.cost = () => props._cost(player.celestials.pelle.rebuyables[props.id]);
     props.effect = () => props._effect(player.celestials.pelle.rebuyables[props.id]);
+    props.formatCost = c => format(c, 2);
 
     return props;
   };
@@ -56,37 +57,62 @@ GameDatabase.celestials.pelle = (function() {
       antimatterDimAutobuyers1: {
         id: 1,
         description: "Gain back autobuyers for Antimatter Dimensions 1-4",
-        cost: 1000,
+        cost: 1e5,
+        formatCost: c => format(c, 2),
       },
       dimBoostAutobuyer: {
         id: 2,
         description: "Gain back autobuyer for Dimension Boosts",
-        cost: 1e5,
+        cost: 5e5,
+        formatCost: c => format(c, 2),
       },
       keepAutobuyers: {
         id: 3,
         description: "Keep your autobuyer upgrades on Armageddon",
-        cost: 1e6,
+        cost: 5e6,
+        formatCost: c => format(c, 2),
       },
       antimatterDimAutobuyers2: {
         id: 4,
         description: "Gain back autobuyers for Antimatter Dimensions 5-8",
-        cost: 1e7,
+        cost: 2.5e7,
+        formatCost: c => format(c, 2),
       },
       galaxyAutobuyer: {
         id: 5,
         description: "Gain back autobuyer for Antimatter Galaxies",
         cost: 1e8,
+        formatCost: c => format(c, 2),
       },
       tickspeedAutobuyer: {
         id: 6,
         description: "Gain back autobuyer for Tickspeed",
         cost: 1e9,
+        formatCost: c => format(c, 2),
       },
       keepInfinityUpgrades: {
         id: 7,
         description: "Keep Infinity Upgrades on Armageddon",
         cost: 1e10,
+        formatCost: c => format(c, 2),
+      },
+      keepBreakInfinityUpgrades: {
+        id: 8,
+        description: "Keep Break Infinity Upgrades on Armageddon",
+        cost: 1e12,
+        formatCost: c => format(c, 2),
+      },
+      IDAutobuyers: {
+        id: 9,
+        description: "Gain Back Infinity Dimension Autobuyers",
+        cost: 1e14,
+        formatCost: c => format(c, 2),
+      },
+      keepInfinityChallenges: {
+        id: 10,
+        description: "You keep your Infinity Challenge completions",
+        cost: 1e16,
+        formatCost: c => format(c, 2),
       },
     },
     strikes: {
@@ -119,7 +145,7 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.04,
-            description: "You can equip a single glyph with decreased level and rarity"
+            description: "You can equip a single basic glyph with decreased level and rarity"
           },
           {
             requirement: 0.06,
@@ -135,16 +161,21 @@ GameDatabase.celestials.pelle = (function() {
         id: 2,
         key: "pestilence",
         name: "Pestilence",
-        description: "When active, spends 3% of your X per second to increase Famine.",
-        effectDescription: x => `Does something pretty cool ig`,
+        description: "When active, spends 3% of your replicanti per second to increase Pestilence.",
+        effectDescription: x => `You gain replicanti ${formatX(x, 2, 2)} faster`,
         strike: () => PelleStrikes.powerGalaxies,
-        percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
-        effect: totalFill => totalFill.pow(0.3),
-        currency: () => false,
+        percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,
+        effect: totalFill => Decimal.sqrt(totalFill.plus(1).log10() + 1),
+        currency: () => Currency.replicanti,
         milestones: [
           {
-            requirement: 0.25,
-            description: "You can go out"
+            requirement: 0.175,
+            description: "Increase max Replicanti Galaxies based on Rift Milestones",
+            effect: () => {
+              const x = PelleRifts.totalMilestones();
+              return Math.max(x ** 2 - 2 * x, 0);
+            },
+            formatEffect: x => `+${format(x, 2)}`
           },
           {
             requirement: 0.6,

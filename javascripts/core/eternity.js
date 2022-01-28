@@ -130,7 +130,7 @@ export function eternity(force, auto, specialConditions = {}) {
 
 export function initializeChallengeCompletions(isReality) {
   NormalChallenges.clearCompletions();
-  InfinityChallenges.clearCompletions();
+  if (!PelleUpgrade.keepInfinityChallenges.canBeApplied) InfinityChallenges.clearCompletions();
   if (!isReality && EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }

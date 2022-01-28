@@ -663,7 +663,8 @@ window.player = {
       },
       progressBits: 0
     },
-    compact: false
+    compact: false,
+    showBought: false,
   },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,

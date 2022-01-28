@@ -1,5 +1,6 @@
 import { playFabLogin } from "./core/playfab.js";
 import { DC } from "./core/constants.js";
+import { PelleUpgrade } from "./core/globals.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -17,25 +18,35 @@ export function playerInfinityUpgradesOnReset() {
       "ipOffline"]
   );
 
+  const breakInfinityUpgrades = new Set(
+    ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
+      "resetBoost", "galaxyBoost", "skipResetGalaxy",
+      "totalMult", "currentMult", "postGalaxy",
+      "challengeMult", "achievementMult", "infinitiedMult",
+      "infinitiedGeneration", "autoBuyerUpgrade", "autobuyMaxDimboosts",
+      "ipOffline"]
+  );
+
+  if (PelleUpgrade.keepBreakInfinityUpgrades.canBeApplied) {
+    player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => breakInfinityUpgrades.has(u)));
+    GameCache.tickSpeedMultDecrease.invalidate();
+    GameCache.dimensionMultDecrease.invalidate();
+    return;
+  }
+
   if (PelleUpgrade.keepInfinityUpgrades.canBeApplied) {
     player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => infinityUpgrades.has(u)));
+    player.infinityRebuyables = [0, 0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
     return;
   }
 
   if (RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityUpgrades = new Set(
-      ["timeMult", "dimMult", "timeMult2",
-        "skipReset1", "skipReset2", "unspentBonus",
-        "27Mult", "18Mult", "36Mult", "resetMult",
-        "skipReset3", "passiveGen", "45Mult",
-        "resetBoost", "galaxyBoost", "skipResetGalaxy",
-        "totalMult", "currentMult", "postGalaxy",
-        "challengeMult", "achievementMult", "infinitiedMult",
-        "infinitiedGeneration", "autoBuyerUpgrade", "autobuyMaxDimboosts",
-        "ipOffline"]
-    );
+    player.infinityUpgrades = breakInfinityUpgrades;
     player.infinityRebuyables = [8, 7, 10];
   } else if (EternityMilestone.keepInfinityUpgrades.isReached) {
     player.infinityUpgrades = infinityUpgrades;

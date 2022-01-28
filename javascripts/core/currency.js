@@ -440,7 +440,7 @@ Currency.singularities = new class extends NumberCurrency {
   get timeUntil() { return Singularity.cap / Currency.darkEnergy.productionPerSecond; }
 }();
 
-Currency.remnants = new class extends DecimalCurrency {
+Currency.remnants = new class extends NumberCurrency {
   get value() { return player.celestials.pelle.remnants; }
   set value(value) { player.celestials.pelle.remnants = value; }
 }();
@@ -449,3 +449,9 @@ Currency.realityShards = new class extends DecimalCurrency {
   get value() { return player.celestials.pelle.realityShards; }
   set value(value) { player.celestials.pelle.realityShards = value; }
 }();
+
+Currency.replicanti = new class extends DecimalCurrency {
+  get value() { return player.replicanti.amount; }
+  set value(value) { player.replicanti.amount = value; }
+}();
+

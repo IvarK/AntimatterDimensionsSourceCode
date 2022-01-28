@@ -22,7 +22,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerID(this.tier).isReached;
+    return EternityMilestone.autobuyerID(this.tier).isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
   }
 
   get resetTickOn() {

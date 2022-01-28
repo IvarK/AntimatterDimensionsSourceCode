@@ -336,9 +336,12 @@ class RiftState extends GameMechanicState {
 
 export const PelleRifts = (function() {
   const db = GameDatabase.celestials.pelle.rifts;
+
+  const all = Object.keys(db).map(key => new RiftState(db[key]));
   return {
     famine: new RiftState(db.famine),
     pestilence: new RiftState(db.pestilence),
-    all: Object.keys(db).map(key => new RiftState(db[key]))
+    all,
+    totalMilestones: () => all.flatMap(r => r.milestones.filter((m, idx) => r.hasMilestone(idx))).length
   };
 }());

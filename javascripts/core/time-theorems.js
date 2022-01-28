@@ -47,7 +47,7 @@ export class TimeTheoremPurchaseType {
   }
 
   purchase(bulk) {
-    if (this.currency.lt(this.cost)) return false;
+    if (this.currency.lt(this.cost) || Pelle.isDisabled("timeTheorems")) return false;
     let purchased = false;
     const amount = this.bulkPossible;
     const buyFn = cost => (Perk.ttFree.isBought ? this.currency.gte(cost) : this.currency.purchase(cost));

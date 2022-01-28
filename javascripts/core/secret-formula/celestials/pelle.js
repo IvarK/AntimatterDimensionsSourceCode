@@ -32,9 +32,9 @@ GameDatabase.celestials.pelle = (function() {
         id: "glyphLevels",
         description: `Increase the glyph level allowed in Pelle`,
         _cost: x => Decimal.pow(30, x).times(1e15),
-        _effect: x => Math.max(x * 5, 1),
-        _formatEffect: x => `${format(Math.max(x * 5, 1), 2)} ➜ ` +
-          `${format(Math.max((x + 1) * 5, 1), 2)}`
+        _effect: x => Math.floor(((3 * (x + 1)) - 2) ** 1.6),
+        _formatEffect: x => `${format(Math.floor(((3 * (x + 1)) - 2) ** 1.6), 2)} ➜ ` +
+          `${format(Math.floor(((3 * (x + 2)) - 2) ** 1.6), 2)}`
       }),
       infConversion: rebuyable({
         id: "infConversion",
@@ -110,8 +110,8 @@ GameDatabase.celestials.pelle = (function() {
       },
       keepInfinityChallenges: {
         id: 10,
-        description: "You keep your Infinity Challenge completions",
-        cost: 1e16,
+        description: "You keep your Infinity Challenge completions through Armageddons",
+        cost: 1e15,
         formatCost: c => format(c, 2),
       },
     },
@@ -170,16 +170,16 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.2,
-            description: "Increase max Replicanti Galaxies based on Rift Milestones",
+            description: "First rebuyable upgrade also powers the first Infinity Dimension",
             effect: () => {
-              const x = PelleRifts.totalMilestones();
-              return Math.max(x ** 2 - 2 * x, 0);
+              const x = player.celestials.pelle.rebuyables.antimatterDimensionMult;
+              return Decimal.pow(1e50, x - 9);
             },
-            formatEffect: x => `+${format(x, 2)}`
+            formatEffect: x => formatX(x, 2)
           },
           {
             requirement: 0.6,
-            description: "You can play"
+            description: "When replicanti amount exceeds 1e1300, your galaxies are 10% more effective"
           },
           {
             requirement: 0.85,

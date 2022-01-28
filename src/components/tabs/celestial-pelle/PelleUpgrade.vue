@@ -6,6 +6,7 @@
       'c-pelle-upgrade--bought': isBought,
       'c-pelle-upgrade--faded': faded
     }"
+    :ach-tooltip="timeEstimate"
     @click="!faded && upgrade.purchase()"
   >
     <DescriptionDisplay :config="config" /><br><br>
@@ -34,7 +35,8 @@ export default {
     return {
       canBuy: false,
       isBought: false,
-      purchases: 0
+      purchases: 0,
+      timeUntilCost: new Decimal(0),
     };
   },
   methods: {
@@ -42,6 +44,8 @@ export default {
       this.canBuy = this.upgrade.canBeBought && !this.faded;
       this.isBought = this.upgrade.isBought;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
+      this.timeUntilCost = Decimal.sub(this.upgrade.cost, Currency.realityShards.value)
+        .div(Pelle.realityShardGainPerSecond);
     },
   },
   computed: {
@@ -51,6 +55,12 @@ export default {
     effect() {
       if (!this.config.formatEffect) return false;
       return this.config.formatEffect(this.purchases);
+    },
+    timeEstimate() {
+      if (this.canBuy || this.isBought || Pelle.realityShardGainPerSecond.eq(0)) return null;
+      if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
+      if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
+      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
     }
   }
 };

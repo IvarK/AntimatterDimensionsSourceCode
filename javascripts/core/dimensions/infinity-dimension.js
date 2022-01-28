@@ -185,6 +185,11 @@ class InfinityDimensionState extends DimensionState {
       );
     mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
+
+    if (tier === 1 && PelleRifts.pestilence.hasMilestone(0)) {
+      mult = mult.times(PelleRifts.pestilence.milestones[0].effect());
+    }
+
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));

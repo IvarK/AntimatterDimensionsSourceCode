@@ -42,6 +42,7 @@ const disabledMechanicUnlocks = {
   dtMults: () => ({}),
   chargedInfinityUpgrades: () => ({}),
   alteration: () => ({}),
+  timeTheorems: () => ({})
 };
 
 export const Pelle = {
@@ -163,6 +164,11 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   get effectValue() {
     return this.config.effect(this.boughtAmount);
+  }
+
+  purchase() {
+    if (!super.purchase() || this.id !== "glyphLevels") return;
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   }
 }
 

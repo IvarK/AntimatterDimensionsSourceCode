@@ -169,7 +169,7 @@ GameDatabase.celestials.pelle = (function() {
         currency: () => Currency.replicanti,
         milestones: [
           {
-            requirement: 0.175,
+            requirement: 0.2,
             description: "Increase max Replicanti Galaxies based on Rift Milestones",
             effect: () => {
               const x = PelleRifts.totalMilestones();

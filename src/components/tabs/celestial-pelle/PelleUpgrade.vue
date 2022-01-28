@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     update() {
-      this.canBuy = this.upgrade.canBeBought && !faded;
+      this.canBuy = this.upgrade.canBeBought && !this.faded;
       this.isBought = this.upgrade.isBought;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
     },

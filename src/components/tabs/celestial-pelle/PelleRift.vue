@@ -32,7 +32,7 @@ export default {
       :class="{'c-pelle-rift-bar--compact': compact }"
     >
       <div class="o-pelle-rift-bar-percentage">
-        {{ formatPercents(percentage, 2) }}
+        {{ formatPercents(percentage, 3) }}
       </div>
       <div
         class="o-pelle-rift-bar-fill"

@@ -244,7 +244,7 @@ export const ReplicantiUpgrade = {
       return player.replicanti.chanceCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
     }
 
-    get baseCost() { return this.cost; }
+    get baseCost() { return player.replicanti.chanceCost; }
     set baseCost(value) { player.replicanti.chanceCost = value; }
 
     get costIncrease() { return 1e15; }
@@ -295,7 +295,7 @@ export const ReplicantiUpgrade = {
       return player.replicanti.intervalCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
     }
 
-    get baseCost() { return this.cost; }
+    get baseCost() { return player.replicanti.intervalCost; }
     set baseCost(value) { player.replicanti.intervalCost = value; }
 
     get costIncrease() { return 1e10; }

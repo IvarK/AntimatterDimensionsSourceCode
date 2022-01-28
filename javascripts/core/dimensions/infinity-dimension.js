@@ -201,6 +201,10 @@ class InfinityDimensionState extends DimensionState {
       mult = mult.pow(0.5);
     }
 
+    if (PelleStrikes.powerGalaxies.hasStrike) {
+      mult = mult.pow(0.5);
+    }
+
     return mult;
   }
 

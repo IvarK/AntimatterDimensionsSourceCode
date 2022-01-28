@@ -48,9 +48,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper
-    class="c-reality-glyph-creation"
-  >
+  <ModalWrapper class="c-reality-glyph-creation">
     <template #header>
       Reality Glyph Creation
     </template>

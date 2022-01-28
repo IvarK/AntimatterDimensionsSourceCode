@@ -57,7 +57,7 @@ export default {
 <template>
   <ModalWrapperOptions>
     <template #header>
-      News Options Modal
+      News Options
     </template>
     <PrimaryButton
       class="o-primary-btn o-primary-btn--option-wide"

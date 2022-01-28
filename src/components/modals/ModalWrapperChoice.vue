@@ -47,9 +47,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper
-    class="c-modal-message l-modal-content--centered"
-  >
+  <ModalWrapper class="c-modal-message l-modal-content--centered">
     <template #header>
       <slot name="header" />
     </template>

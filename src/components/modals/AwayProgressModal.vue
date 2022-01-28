@@ -50,9 +50,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper
-    class="c-modal-away-progress"
-  >
+  <ModalWrapper class="c-modal-away-progress">
     <div class="c-modal-away-progress__header">
       {{ headerText }}
     </div>

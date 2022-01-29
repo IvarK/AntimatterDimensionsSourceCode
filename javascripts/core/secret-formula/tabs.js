@@ -188,7 +188,7 @@ GameDatabase.tabs = [
         key: "normal",
         name: "Challenges",
         symbol: "Ω",
-        component: "normal-challenges-tab",
+        component: "NormalChallengesTab",
         id: 0,
         hidable: true
       },

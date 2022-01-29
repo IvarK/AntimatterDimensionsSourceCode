@@ -303,8 +303,17 @@ class RiftState extends GameMechanicState {
     return this.rift.active;
   }
 
-  get percentage() {
+  get realPercentage() {
     return this.config.percentage(this.totalFill);
+  }
+
+  get spentPercentage() {
+    return this.rift.percentageSpent || 0;
+  }
+
+  get percentage() {
+    if (!this.config.spendable) return this.realPercentage;
+    return this.config.percentage(this.totalFill) - this.spentPercentage;
   }
 
   get milestones() {
@@ -322,30 +331,40 @@ class RiftState extends GameMechanicState {
   get isCustomEffect() { return true; }
 
   get effectValue() {
-    return this.config.effect(this.totalFill);
+    return this.config.effect(this.config.percentageToFill(this.percentage));
   }
 
   get maxValue() {
-    return this.config.percentageToFill(1);
+    return this.config.percentageToFill(1 + this.spentPercentage);
   }
 
   get isMaxed() {
-    return this.totalFill.gte(this.maxValue);
+    return this.percentage >= 1;
   }
 
   hasMilestone(idx) {
+    if (this.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0)) return true;
     return this.milestones[idx].requirement <= this.percentage;
   }
 
   toggle() {
-    this.rift.active = !this.rift.active;
+    const active = PelleRifts.all.filter(r => r.isActive).length;
+    if (!this.isActive && active === 2) GameUI.notify.error(`You can only have 2 rifts active at the same time!`);
+    else this.rift.active = !this.rift.active;
   }
 
   fill(diff) {
     if (!this.isActive || this.isMaxed) return;
-    const spent = this.fillCurrency.value.times(0.03).times(diff / 1000);
-    this.fillCurrency.subtract(spent);
-    this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
+
+    if (this.fillCurrency.value instanceof Decimal) {
+      const spent = this.fillCurrency.value.times(0.03).times(diff / 1000);
+      this.fillCurrency.value = this.fillCurrency.value.minus(spent);
+      this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
+    } else {
+      const spent = this.fillCurrency.value * 0.03 * diff / 1000;
+      this.fillCurrency.value -= spent;
+      this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
+    }
   }
 }
 

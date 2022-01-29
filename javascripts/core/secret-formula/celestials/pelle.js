@@ -145,7 +145,7 @@ GameDatabase.celestials.pelle = (function() {
       eternity: {
         id: 3,
         requirementDescription: "Reach Eternity",
-        penaltyDescription: "Time Dimensions are raised to power of 0.5",
+        penaltyDescription: "Replicanti speed scales harsher after 1e2000",
         rewardDescription: "Unlock Chaos",
         rift: () => PelleRifts.chaos
       }
@@ -183,6 +183,7 @@ GameDatabase.celestials.pelle = (function() {
         id: 2,
         key: "pestilence",
         name: "Pestilence",
+        spendable: true,
         description: "When active, spends 3% of your replicanti per second to increase Pestilence.",
         effectDescription: x => `You gain replicanti ${formatX(x, 2, 2)} faster`,
         strike: () => PelleStrikes.powerGalaxies,
@@ -190,7 +191,8 @@ GameDatabase.celestials.pelle = (function() {
         percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,
         // 0 - 1
         percentageToFill: percentage => Decimal.pow(10, 20 * percentage * 100).minus(1),
-        effect: totalFill => Decimal.sqrt(totalFill.plus(1).log10() + 1),
+        effect: totalFill => (PelleRifts.chaos.hasMilestone(0)
+          ? Decimal.sqrt(2000 + 1) : Decimal.sqrt(totalFill.plus(1).log10() + 1)),
         currency: () => Currency.replicanti,
         milestones: [
           {
@@ -222,16 +224,27 @@ GameDatabase.celestials.pelle = (function() {
         key: "chaos",
         name: "Chaos",
         description: "When active, spends 3% of your Pestilence per second to increase Chaos.",
-        effectDescription: x => `You gain more of something i guess`,
+        effectDescription: x => `Multiplies Time Dimensions by ${formatX(x, 2, 2)}`,
         strike: () => PelleStrikes.eternity,
-        percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,
-        percentageToFill: percentage => Decimal.pow(10, 20 * percentage * 100).minus(1),
-        effect: totalFill => Decimal.sqrt(totalFill.plus(1).log10() + 1),
-        currency: () => null,
+        percentage: totalFill => totalFill.div(10).toNumber(),
+        percentageToFill: percentage => new Decimal(percentage).times(10),
+        effect: totalFill => Decimal.pow(6, Decimal.pow(6, Decimal.pow(6, totalFill.div(10).plus(0.1))).minus(6))
+          .div(1e5)
+          .plus(Decimal.pow(10, totalFill.div(10).plus(0.1))),
+        currency: () => ({
+          get value() {
+            return PelleRifts.pestilence.percentage;
+          },
+          set value(val) {
+            const spent = PelleRifts.pestilence.percentage - val;
+            player.celestials.pelle.rifts.pestilence.percentageSpent += spent;
+          }
+        }),
         milestones: [
+          // It's just a tad under 20% because 20% takes a crapton of time
           {
-            requirement: 0.420,
-            description: "420 blaze it"
+            requirement: 0.0999,
+            description: "Pestilence effect is always maxed and milestones always active"
           },
           {
             requirement: 0.666,

@@ -22,7 +22,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return RealityUpgrade(13).isBought;
+    return RealityUpgrade(13).isBought && !Pelle.isDoomed;
   }
 
   get resetTickOn() {

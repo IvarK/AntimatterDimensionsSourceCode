@@ -97,8 +97,9 @@ export function timeDimensionCommonMultiplier() {
       EternityUpgrade.tdMultTheorems,
       EternityUpgrade.tdMultRealTime,
       Replicanti.areUnlocked && Replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
-      RealityUpgrade(22),
-      AlchemyResource.dimensionality
+      Pelle.isDoomed ? null : RealityUpgrade(22),
+      AlchemyResource.dimensionality,
+      PelleRifts.chaos
     );
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(
@@ -106,10 +107,6 @@ export function timeDimensionCommonMultiplier() {
         Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7).log2(), 1),
         4)
         .clampMin(1));
-  }
-
-  if (Pelle.isDoomed) {
-    mult = mult.div(500);
   }
   return mult;
 }

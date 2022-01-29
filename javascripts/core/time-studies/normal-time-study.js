@@ -64,7 +64,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    return !Pelle.isDisabled("studies") && this.checkRequirement() && this.checkSetRequirement();
+    return this.checkRequirement() && this.checkSetRequirement();
   }
 
   get isEffectActive() {
@@ -72,7 +72,6 @@ export class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
-    if (Pelle.isDisabled("studies")) return false;
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
     if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);

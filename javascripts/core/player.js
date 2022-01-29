@@ -658,7 +658,8 @@ window.player = {
         },
         pestilence: {
           fill: DC.D0,
-          active: false
+          active: false,
+          percentageSpent: 0
         },
         chaos: {
           fill: DC.D0,

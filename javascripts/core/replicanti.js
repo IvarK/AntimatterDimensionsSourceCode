@@ -85,6 +85,10 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   if (overCap) {
     const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
+    if (PelleStrikes.eternity.hasStrike && amount.e > 2000) {
+      const pelleIncreases = (amount.log10() - 2000) / ReplicantiGrowth.scaleLog10;
+      interval = interval.times(Decimal.pow(5, pelleIncreases));
+    }
   }
 
   interval = interval.div(PelleRifts.pestilence.effectValue);

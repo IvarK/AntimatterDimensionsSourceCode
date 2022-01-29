@@ -1,7 +1,3 @@
-import "./challenges/normal-challenges-tab.js";
-import "./challenges/infinity-challenges-tab.js";
-import "./challenges/eternity-challenges-tab.js";
-
 import "./infinity/infinity-points-header.js";
 import "./infinity/upgrades/infinity-upgrades-tab.js";
 import "./infinity/autobuyers/autobuyers-tab.js";

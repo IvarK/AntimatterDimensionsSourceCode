@@ -31,7 +31,7 @@ Vue.component("challenges-header", {
       this.showAllChallenges = player.options.showAllChallenges;
       this.isInChallenge = Player.isInAnyChallenge;
       this.isShowAllVisible = PlayerProgress.eternityUnlocked();
-      this.isAutoECVisible = Perk.autocompleteEC1.isBought;
+      this.isAutoECVisible = Perk.autocompleteEC1.isBought && !Pelle.isDoomed;
       this.autoEC = player.reality.autoEC;
       const remainingCompletions = EternityChallenges.remainingCompletions;
       this.remainingECTiers = remainingCompletions;
@@ -85,9 +85,6 @@ Vue.component("challenges-header", {
         >
           Exit Challenge
         </PrimaryButton>
-      </div>
-      <div>
-        Some Normal Challenges have requirements to be able to run that challenge.
       </div>
       <div v-if="autoEC && isAutoECVisible">
         Eternity Challenges are automatically completed sequentially, requiring all previous

@@ -70,6 +70,8 @@ Vue.component("normal-challenges-tab", {
       <div>
         If you have an active Big Crunch Autobuyer, it will attempt to Crunch
         as soon as possible when reaching Infinite antimatter.
+        <br>
+        Some Normal Challenges have requirements to be able to run that challenge.
       </div>
       <challenge-grid :count="12">
         <normal-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

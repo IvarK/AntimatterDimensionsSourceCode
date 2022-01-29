@@ -72,10 +72,13 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate Infinities based on your fastest Infinity",
+      description: () => (Pelle.isDoomed
+        ? "This upgrade has no effect while in Doomed"
+        : "Passively generate Infinities based on your fastest Infinity"),
       effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
-        if (value === Number.MAX_VALUE) return "No Infinity generation";
+        if (Pelle.isDoomed) return "Disabled";
+        if (value === Number.MAX_VALUE && !Pelle.isDoomed) return "No Infinity generation";
         let infinities = DC.D1;
         infinities = infinities.timesEffectsOf(
           RealityUpgrade(5),

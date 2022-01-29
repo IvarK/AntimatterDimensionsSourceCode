@@ -149,11 +149,14 @@ GameDatabase.infinity.upgrades = (function() {
     ipGen: {
       id: "passiveGen",
       cost: 10,
-      description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
+      description: () => (Pelle.isDoomed
+        ? "This upgrade has no effect while in Doomed"
+        : `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`),
       // Cutting corners: this is not actual effect, but it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning || Pelle.isDoomed ? DC.D0 : GameCache.totalIPMult.value),
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
+        if (Pelle.isDoomed) return "Disabled";
         const income = format(value, 2, 0);
         const period = player.records.bestInfinity.time >= 999999999999
           ? "∞"

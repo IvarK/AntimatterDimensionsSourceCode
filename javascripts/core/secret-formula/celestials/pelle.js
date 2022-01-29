@@ -126,6 +126,12 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e19,
         formatCost: c => format(c, 2),
       },
+      eternitiesNoReset: {
+        id: 13,
+        description: "Eternities do not reset on Armageddon",
+        cost: 1e20,
+        formatCost: c => format(c, 2),
+      },
     },
     strikes: {
       infinity: {

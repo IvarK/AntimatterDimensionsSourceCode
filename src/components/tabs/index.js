@@ -13,6 +13,7 @@ import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
+import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -28,7 +29,8 @@ const TabComponents = {
   SpeedrunMilestonesTab,
   NormalAchievementsTab,
   SecretAchievementTab,
-  NormalChallengesTab
+  NormalChallengesTab,
+  InfinityChallengesTab
 };
 
 export default TabComponents;

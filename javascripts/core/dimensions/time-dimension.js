@@ -1,5 +1,6 @@
 import { DimensionState } from "./dimension.js";
 import { DC } from "../constants.js";
+import { Pelle } from "../globals.js";
 
 export function buySingleTimeDimension(tier) {
   const dim = TimeDimension(tier);
@@ -105,6 +106,10 @@ export function timeDimensionCommonMultiplier() {
         Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7).log2(), 1),
         4)
         .clampMin(1));
+  }
+
+  if (Pelle.isDoomed) {
+    mult = mult.div(500);
   }
   return mult;
 }

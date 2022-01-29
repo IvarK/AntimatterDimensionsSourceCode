@@ -659,6 +659,10 @@ window.player = {
         pestilence: {
           fill: DC.D0,
           active: false
+        },
+        chaos: {
+          fill: DC.D0,
+          active: false
         }
       },
       progressBits: 0

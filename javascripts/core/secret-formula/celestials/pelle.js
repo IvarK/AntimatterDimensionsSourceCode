@@ -141,6 +141,13 @@ GameDatabase.celestials.pelle = (function() {
         penaltyDescription: "Infinity Dimensions are raised to power of 0.5",
         rewardDescription: "Unlock Pestilence",
         rift: () => PelleRifts.pestilence
+      },
+      eternity: {
+        id: 3,
+        requirementDescription: "Reach Eternity",
+        penaltyDescription: "Time Dimensions are raised to power of 0.5",
+        rewardDescription: "Unlock Chaos",
+        rift: () => PelleRifts.chaos
       }
     },
     rifts: {
@@ -207,6 +214,32 @@ GameDatabase.celestials.pelle = (function() {
               return x ** 2 - 2 * x;
             },
             formatEffect: x => `+${format(x, 2)}`
+          },
+        ]
+      },
+      chaos: {
+        id: 3,
+        key: "chaos",
+        name: "Chaos",
+        description: "When active, spends 3% of your Pestilence per second to increase Chaos.",
+        effectDescription: x => `You gain more of something i guess`,
+        strike: () => PelleStrikes.eternity,
+        percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,
+        percentageToFill: percentage => Decimal.pow(10, 20 * percentage * 100).minus(1),
+        effect: totalFill => Decimal.sqrt(totalFill.plus(1).log10() + 1),
+        currency: () => null,
+        milestones: [
+          {
+            requirement: 0.420,
+            description: "420 blaze it"
+          },
+          {
+            requirement: 0.666,
+            description: "hail satan 666"
+          },
+          {
+            requirement: 0.69,
+            description: "nice",
           },
         ]
       }

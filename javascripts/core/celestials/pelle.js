@@ -265,6 +265,7 @@ export const PelleStrikes = (function() {
   return {
     infinity: new PelleStrikeState(db.infinity),
     powerGalaxies: new PelleStrikeState(db.powerGalaxies),
+    eternity: new PelleStrikeState(db.eternity),
     all: Object.keys(db).map(key => new PelleStrikeState(db[key]))
   };
 }());
@@ -355,6 +356,7 @@ export const PelleRifts = (function() {
   return {
     famine: new RiftState(db.famine),
     pestilence: new RiftState(db.pestilence),
+    chaos: new RiftState(db.chaos),
     all,
     totalMilestones: () => all.flatMap(r => r.milestones.filter((m, idx) => r.hasMilestone(idx))).length
   };

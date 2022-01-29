@@ -124,6 +124,8 @@ export function eternity(force, auto, specialConditions = {}) {
   Currency.antimatter.reset();
   ECTimeStudyState.invalidateCachedRequirements();
 
+  PelleStrikes.eternity.trigger();
+
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
 }

@@ -277,7 +277,7 @@ GameDatabase.celestials.pelle = (function() {
             effect: () => {
               switch (Pelle.activeGlyphType) {
                 case "infinity": return Currency.infinityPoints.value.pow(0.2);
-                case "time": return Currency.eternityPoints.value.plus(1).pow(0.35);
+                case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
                 case "replication": return 1e4 ** PelleRifts.famine.percentage;
                 case "dilation": return 1e6 ** PelleRifts.famine.percentage;
                 case "power": return 1.02;

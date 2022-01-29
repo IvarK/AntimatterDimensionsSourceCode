@@ -108,7 +108,10 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 
 export function getDilationGainPerSecond() {
   if (Pelle.isDisabled("dtMults")) {
-    return new Decimal(Currency.tachyonParticles.value).timesEffectsOf(DilationUpgrade.dtGain);
+    const pelleMults = Pelle.activeGlyphType === "dilation" && PelleRifts.chaos.hasMilestone(1)
+      ? PelleRifts.chaos.milestones[1].effect() : 1;
+
+    return new Decimal(Currency.tachyonParticles.value).timesEffectsOf(DilationUpgrade.dtGain).times(pelleMults);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(

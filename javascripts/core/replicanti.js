@@ -92,6 +92,11 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   }
 
   interval = interval.div(PelleRifts.pestilence.effectValue);
+
+  if (Pelle.activeGlyphType === "replication" && PelleRifts.chaos.hasMilestone(1)) {
+    interval = interval.div(PelleRifts.chaos.milestones[1].effect());
+  }
+
   if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
 
   const preCelestialEffects = Effects.product(

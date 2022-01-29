@@ -177,7 +177,7 @@ class EffarigUnlockState extends GameMechanicState {
   }
 
   get canBeApplied() {
-    return super.canBeApplied && !Pelle.isDisabled("effarig");
+    return this.isUnlocked && !Pelle.isDisabled("effarig");
   }
 
   unlock() {

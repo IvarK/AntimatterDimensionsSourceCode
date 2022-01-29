@@ -44,6 +44,10 @@ export function getTickSpeedMultiplier() {
     if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(new Decimal("1e1300"))) {
       galaxies *= 1.1;
     }
+
+    if (Pelle.activeGlyphType === "power" && PelleRifts.chaos.hasMilestone(1)) {
+      galaxies *= PelleRifts.chaos.milestones[1].effect();
+    }
     return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
@@ -65,6 +69,10 @@ export function getTickSpeedMultiplier() {
   if (Pelle.isDoomed) galaxies *= 0.5;
   if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(new Decimal("1e1300"))) {
     galaxies *= 1.1;
+  }
+
+  if (Pelle.activeGlyphType === "power" && PelleRifts.chaos.hasMilestone(1)) {
+    galaxies *= PelleRifts.chaos.milestones[1].effect();
   }
   const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);

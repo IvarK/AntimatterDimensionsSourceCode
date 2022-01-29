@@ -132,6 +132,12 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e20,
         formatCost: c => format(c, 2),
       },
+      timeStudiesNoReset: {
+        id: 14,
+        description: "Time studies and Theorems do not reset on Armageddon",
+        cost: 1e21,
+        formatCost: c => format(c, 2),
+      },
     },
     strikes: {
       infinity: {
@@ -253,8 +259,34 @@ GameDatabase.celestials.pelle = (function() {
             description: "Pestilence effect is always maxed and milestones always active"
           },
           {
-            requirement: 0.666,
-            description: "hail satan 666"
+            requirement: 0.15,
+            description: () => {
+              const base = "Gain a bonus based on glyph equipped:";
+
+              switch (Pelle.activeGlyphType) {
+                case "infinity": return `${base} IP multiplier based on IP`;
+                case "time": return `${base} EP multiplier based on EP`;
+                case "replication": return `${base} Replicanti speed multiplier based on Famine`;
+                case "dilation": return `${base} Dilated Time gain multiplier based on Famine`;
+                case "power": return `${base} Galaxies are 2% stronger`;
+                case "companion": return `${base} You feel 34% better`;
+
+                default: return `${base} no glyph equipped!`;
+              }
+            },
+            effect: () => {
+              switch (Pelle.activeGlyphType) {
+                case "infinity": return Currency.infinityPoints.value.pow(0.2);
+                case "time": return Currency.eternityPoints.value.plus(1).pow(0.35);
+                case "replication": return 1e4 ** PelleRifts.famine.percentage;
+                case "dilation": return 1e6 ** PelleRifts.famine.percentage;
+                case "power": return 1.02;
+                case "companion": return 1.34;
+
+                default: return 1;
+              }
+            },
+            formatEffect: x => formatX(x, 2, 2)
           },
           {
             requirement: 0.69,

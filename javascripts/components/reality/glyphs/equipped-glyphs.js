@@ -29,9 +29,10 @@ Vue.component("equipped-glyphs", {
       return [0, 0, 0, 4, 5, 6][this.slotCount];
     },
     respecTooltip() {
+      const reset = Pelle.isDoomed ? "Armageddon" : "Reality";
       return this.respec
-        ? "Respec is active and will place your currently - equipped Glyphs into your inventory after reality."
-        : "Your currently-equipped Glyphs will stay equipped on Reality.";
+        ? `Respec is active and will place your currently - equipped Glyphs into your inventory after ${reset}.`
+        : `Your currently-equipped Glyphs will stay equipped on ${reset}.`;
     },
     undoTooltip() {
       if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
@@ -40,6 +41,10 @@ Vue.component("equipped-glyphs", {
           " (Most resources will be fully reset)")
         : "Undo is only available for Glyphs equipped during this Reality";
     },
+    unequipText() {
+      if (Pelle.isDoomed) return "Unequip Glyphs on Armageddon";
+      return "Unequip Glyphs on Reality";
+    }
   },
   methods: {
     update() {
@@ -168,7 +173,7 @@ Vue.component("equipped-glyphs", {
           :ach-tooltip="respecTooltip"
           @click="toggleRespec"
         >
-          Unequip Glyphs on Reality
+          {{ unequipText }}
         </button>
         <button
           v-if="undoVisible"

@@ -76,7 +76,8 @@ export default {
         class="o-pelle-rift-milestone"
         :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
       >
-        {{ formatPercents(milestone.requirement) }}: {{ milestone.description }}
+        {{ formatPercents(milestone.requirement) }}:
+        {{ typeof milestone.description === "function" ? milestone.description() : milestone.description }}<br>
         <EffectDisplay :config="milestone" />
       </div>
     </div>

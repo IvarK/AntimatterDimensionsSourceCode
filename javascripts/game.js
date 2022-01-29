@@ -79,8 +79,10 @@ export function breakInfinity() {
 
 export function gainedInfinityPoints() {
   if (Pelle.isDisabled("IPMults")) {
+    const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
+      ? PelleRifts.chaos.milestones[1].effect() : 1;
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / 308 - 0.75)
-      .timesEffectsOf(PelleRifts.famine).floor();
+      .timesEffectsOf(PelleRifts.famine).times(pelleMults).floor();
   }
   const div = Effects.min(
     308,
@@ -125,7 +127,10 @@ export function gainedEternityPoints() {
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
-  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).floor();
+  const pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
+    ? PelleRifts.chaos.milestones[1].effect() : 1;
+
+  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).floor();
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);

@@ -1,6 +1,5 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
-import { Pelle, PelleStrikes } from "./globals.js";
 
 export function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
@@ -117,6 +116,10 @@ export function bigCrunchResetValues() {
   }
   if (TimeStudy(33).isBought) {
     remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
+  }
+
+  if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) {
+    remainingGalaxies = currentReplicantiGalaxies;
   }
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.

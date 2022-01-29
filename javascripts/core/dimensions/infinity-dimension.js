@@ -345,7 +345,7 @@ export const InfinityDimensions = {
   },
 
   get powerConversionRate() {
-    return 7 + getAdjustedGlyphEffect("infinityrate");
+    return 7 + getAdjustedGlyphEffect("infinityrate") + PelleRebuyableUpgrade.infConversion.effectValue;
   }
 };
 

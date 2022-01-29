@@ -368,7 +368,9 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      return Effects.max(0, TimeStudy(131));
+      let extra = 0;
+      if (PelleRifts.pestilence.hasMilestone(2)) extra += PelleRifts.pestilence.milestones[2].effect();
+      return Effects.max(0, TimeStudy(131)) + extra;
     }
 
     autobuyerTick() {

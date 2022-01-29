@@ -39,10 +39,10 @@ GameDatabase.celestials.pelle = (function() {
       infConversion: rebuyable({
         id: "infConversion",
         description: `Increase infinity power conversion rate`,
-        _cost: x => Decimal.pow(40, x).times(1e20),
-        _effect: x => Math.sqrt(x),
-        _formatEffect: x => `+${format(Math.sqrt(x), 2, 2)} ➜ ` +
-          `+${format(Math.sqrt(x + 1), 2, 2)}`
+        _cost: x => Decimal.pow(40, x).times(1e18),
+        _effect: x => (x * 3.5) ** 0.37,
+        _formatEffect: x => `+${format((x * 3.5) ** 0.37, 2, 2)} ➜ ` +
+          `+${format(((x + 1) * 3.5) ** 0.37, 2, 2)}`
       }),
       galaxyPower: rebuyable({
         id: "galaxyPower",
@@ -114,6 +114,18 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e15,
         formatCost: c => format(c, 2),
       },
+      replicantiAutobuyers: {
+        id: 11,
+        description: "Gain back Replicanti autobuyers",
+        cost: 1e17,
+        formatCost: c => format(c, 2),
+      },
+      replicantiGalaxyNoReset: {
+        id: 12,
+        description: "Replicanti Galaxies don't reset on Infinity",
+        cost: 1e19,
+        formatCost: c => format(c, 2),
+      },
     },
     strikes: {
       infinity: {
@@ -140,6 +152,9 @@ GameDatabase.celestials.pelle = (function() {
         effectDescription: x => `Multiplies Infinity Point gain by ${formatX(x, 2, 2)}`,
         strike: () => PelleStrikes.infinity,
         percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
+        percentageToFill: percentage => Decimal.pow(10,
+          Decimal.pow(10, (percentage * 100) ** (1 / 2.5)).div(10).minus(0.1)
+        ).minus(1),
         effect: totalFill => totalFill.plus(1).pow(0.33),
         currency: () => Currency.infinityPoints,
         milestones: [
@@ -164,7 +179,10 @@ GameDatabase.celestials.pelle = (function() {
         description: "When active, spends 3% of your replicanti per second to increase Pestilence.",
         effectDescription: x => `You gain replicanti ${formatX(x, 2, 2)} faster`,
         strike: () => PelleStrikes.powerGalaxies,
+        // 0 - 1
         percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,
+        // 0 - 1
+        percentageToFill: percentage => Decimal.pow(10, 20 * percentage * 100).minus(1),
         effect: totalFill => Decimal.sqrt(totalFill.plus(1).log10() + 1),
         currency: () => Currency.replicanti,
         milestones: [
@@ -182,8 +200,13 @@ GameDatabase.celestials.pelle = (function() {
             description: "When replicanti amount exceeds 1e1300, your galaxies are 10% more effective"
           },
           {
-            requirement: 0.85,
-            description: "You can live your life"
+            requirement: 1,
+            description: "Increase max Replicanti Galaxies based on total Rift milestones",
+            effect: () => {
+              const x = PelleRifts.totalMilestones();
+              return x ** 2 - 2 * x;
+            },
+            formatEffect: x => `+${format(x, 2)}`
           },
         ]
       }

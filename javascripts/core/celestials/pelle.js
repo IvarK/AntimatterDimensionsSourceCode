@@ -324,6 +324,14 @@ class RiftState extends GameMechanicState {
     return this.config.effect(this.totalFill);
   }
 
+  get maxValue() {
+    return this.config.percentageToFill(1);
+  }
+
+  get isMaxed() {
+    return this.totalFill.gte(this.maxValue);
+  }
+
   hasMilestone(idx) {
     return this.milestones[idx].requirement <= this.percentage;
   }
@@ -333,10 +341,10 @@ class RiftState extends GameMechanicState {
   }
 
   fill(diff) {
-    if (!this.isActive) return;
+    if (!this.isActive || this.isMaxed) return;
     const spent = this.fillCurrency.value.times(0.03).times(diff / 1000);
     this.fillCurrency.subtract(spent);
-    this.totalFill = this.totalFill.plus(spent);
+    this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
   }
 }
 

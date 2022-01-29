@@ -14,6 +14,7 @@ import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
 import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
+import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -30,7 +31,8 @@ const TabComponents = {
   NormalAchievementsTab,
   SecretAchievementTab,
   NormalChallengesTab,
-  InfinityChallengesTab
+  InfinityChallengesTab,
+  EternityChallengesTab
 };
 
 export default TabComponents;

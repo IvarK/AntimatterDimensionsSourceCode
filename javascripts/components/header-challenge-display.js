@@ -85,7 +85,8 @@ Vue.component("header-challenge-display", {
       return this.activeChallengeNames.some(str => str.match(/Eternity Challenge (4|12)/gu));
     },
     challengeDisplay() {
-      if (this.activeChallengeNames.length === 0) {
+      if (Pelle.isDoomed) return "a Doomed Reality. Good luck. . .";
+      if (this.activeChallengeNames.length === 0 && !Pelle.isDoomed) {
         return "the Antimatter Universe (no active challenges)";
       }
       return this.activeChallengeNames.join(" + ");

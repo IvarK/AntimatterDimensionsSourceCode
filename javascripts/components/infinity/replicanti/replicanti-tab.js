@@ -24,6 +24,7 @@ Vue.component("replicanti-tab", {
       distantRG: 0,
       remoteRG: 0,
       effarigInfinityBonusRG: 0,
+      isUncapped: false,
       nextEffarigRGThreshold: 0,
       canSeeGalaxyButton: false,
       unlockCost: new Decimal()
@@ -104,7 +105,8 @@ Vue.component("replicanti-tab", {
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
       this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0;
       this.multDT = Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1);
-      this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
+      this.isUncapped = PelleRifts.pestilence.hasMilestone(2);
+      this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
       this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
@@ -129,6 +131,11 @@ Vue.component("replicanti-tab", {
       <template v-else>
         <div v-if="isInEC8">
           You have {{ quantifyInt("purchase", ec8Purchases) }} left.
+        </div>
+        <div v-if="isUncapped">
+          Your Replicanti cap has been removed due to the second Famine milestone.
+          <br>
+          Any rewards from Effarig's Infinity have been disabled.
         </div>
         <div v-if="hasRaisedCap">
           Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}

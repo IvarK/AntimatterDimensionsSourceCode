@@ -8,6 +8,7 @@ Vue.component("infinity-upgrades-tab", {
   },
   data() {
     return {
+      isUseless: false,
       chargeUnlocked: false,
       totalCharges: 0,
       chargesUsed: 0,
@@ -62,7 +63,8 @@ Vue.component("infinity-upgrades-tab", {
   },
   methods: {
     update() {
-      this.chargeUnlocked = Ra.chargeUnlocked;
+      this.isUseless = Pelle.isDoomed;
+      this.chargeUnlocked = Ra.chargeUnlocked && !Pelle.isDoomed;
       this.totalCharges = Ra.totalCharges;
       this.chargesUsed = Ra.totalCharges - Ra.chargesLeft;
       this.disCharge = player.celestials.ra.disCharge;
@@ -97,6 +99,9 @@ Vue.component("infinity-upgrades-tab", {
         Charged Infinity Upgrades have their effect altered.
         <br>
         Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
+      </div>
+      <div v-if="isUseless">
+       You cannot get any Charged Infinity Upgrades while in Doomed.
       </div>
       <br>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">

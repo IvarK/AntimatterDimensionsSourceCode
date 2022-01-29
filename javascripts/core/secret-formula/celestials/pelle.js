@@ -22,7 +22,7 @@ GameDatabase.celestials.pelle = (function() {
       }),
       timeSpeedMult: rebuyable({
         id: "timeSpeedMult",
-        description: `Gain a multiplier to time speed`,
+        description: `Gain a multiplier to game speed`,
         _cost: x => Decimal.pow(20, x).times(1e5),
         _effect: x => Decimal.pow(1.3, x),
         _formatEffect: x => `${formatX(Decimal.pow(1.3, x), 2, 2)} ➜ ` +
@@ -171,7 +171,7 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.06,
-            description: "Make replicanti and its upgrades 1e130x cheaper, and it's uncapped"
+            description: "Make replicanti unlock and its upgrades 1e130x cheaper, and it's uncapped"
           },
           {
             requirement: 1,

@@ -30,8 +30,8 @@ export default {
       <b>Your script has the following {{ quantify("error", errors.length) }}:</b>
       <br>
       <span
-        v-for="error in errors"
-        :key="error"
+        v-for="(error, i) in errors"
+        :key="i"
       >
         <b>On line {{ error.startLine }}:</b>
         <button

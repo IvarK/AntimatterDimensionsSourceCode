@@ -1,6 +1,11 @@
-Vue.component("autobuyer-toggle-label", {
+<script>
+export default {
+  name: "AutobuyerToggleLabel",
   props: {
-    autobuyer: Object,
+    autobuyer: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -42,20 +47,27 @@ Vue.component("autobuyer-toggle-label", {
     toggle() {
       this.autobuyer.toggle();
     },
-  },
-  template: `
-    <div class="l-autobuyer-box__footer" @click="toggle">
-      <label
-        :for="name"
-        :class="autobuyerStateClass"
-      >
-        <span :class="autobuyerToggleClass"></span>
-      </label>
-      <input
-        :checked="isActive && globalToggle"
-        :disabled="!globalToggle"
-        :name="name"
-        type="checkbox"
-      />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div
+    class="l-autobuyer-box__footer"
+    @click="toggle"
+  >
+    <label :class="autobuyerStateClass">
+      <span :class="autobuyerToggleClass" />
+    </label>
+    <input
+      :checked="isActive && globalToggle"
+      :disabled="!globalToggle"
+      :name="name"
+      type="checkbox"
+    >
+  </div>
+</template>
+
+<style scoped>
+
+</style>

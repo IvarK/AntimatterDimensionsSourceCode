@@ -17,6 +17,9 @@ export default {
     };
   },
   computed: {
+    challenges() {
+      return InfinityChallenges.all;
+    },
     nextAtDisplay() {
       const first = this.nextIC?.id === 1;
       const next = InfinityChallenges.nextICUnlockAM;
@@ -32,8 +35,8 @@ export default {
       this.nextIC = InfinityChallenges.nextIC;
       this.showAllChallenges = player.options.showAllChallenges;
     },
-    isChallengeVisible(id) {
-      return InfinityChallenge(id).isUnlocked || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
+    isChallengeVisible(challenge) {
+      return challenge.isUnlocked || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
     }
   }
 };
@@ -48,11 +51,11 @@ export default {
     </div>
     <div>{{ nextAtDisplay }}</div>
     <ChallengeGrid
-      v-slot="slotProps"
-      :count="8"
+      v-slot="{ challenge }"
+      :challenges="challenges"
       :is-challenge-visible="isChallengeVisible"
     >
-      <InfinityChallengeBox :challenge-id="slotProps.challengeId" />
+      <InfinityChallengeBox :challenge="challenge" />
     </ChallengeGrid>
   </div>
 </template>

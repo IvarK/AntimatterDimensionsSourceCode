@@ -2,8 +2,8 @@
 export default {
   name: "ChallengeGridCell",
   props: {
-    id: {
-      type: Number,
+    challenge: {
+      type: Object,
       required: true
     },
     isChallengeVisible: {
@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = this.isChallengeVisible(this.id);
+      this.isVisible = this.isChallengeVisible(this.challenge);
     }
   }
 };

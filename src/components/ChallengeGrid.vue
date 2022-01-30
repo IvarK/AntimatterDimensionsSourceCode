@@ -7,8 +7,8 @@ export default {
     ChallengeGridCell
   },
   props: {
-    count: {
-      type: Number,
+    challenges: {
+      type: Array,
       required: true
     },
     isChallengeVisible: {
@@ -23,12 +23,12 @@ export default {
 <template>
   <div class="l-challenge-grid">
     <ChallengeGridCell
-      v-for="id in count"
-      :id="id"
-      :key="id"
+      v-for="challenge in challenges"
+      :key="challenge.id"
+      :challenge="challenge"
       :is-challenge-visible="isChallengeVisible"
     >
-      <slot :challengeId="id" />
+      <slot :challenge="challenge" />
     </ChallengeGridCell>
   </div>
 </template>

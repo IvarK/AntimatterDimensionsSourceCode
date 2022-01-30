@@ -21,6 +21,11 @@ export default {
       untilAllEC: TimeSpan.zero,
     };
   },
+  computed: {
+    challenges() {
+      return EternityChallenges.all;
+    }
+  },
   methods: {
     update() {
       this.showAllChallenges = player.options.showAllChallenges;
@@ -37,9 +42,6 @@ export default {
         this.untilNextEC.setFrom(untilNextEC);
         this.untilAllEC.setFrom(untilNextEC + (autoECInterval * (remainingCompletions - 1)));
       }
-    },
-    isChallengeVisibleById(id) {
-      return this.isChallengeVisible(EternityChallenge(id));
     },
     isChallengeVisible(challenge) {
       return challenge.completions > 0 ||
@@ -78,11 +80,11 @@ export default {
       You have seen all {{ formatInt(12) }} Eternity Challenges.
     </div>
     <ChallengeGrid
-      v-slot="slotProps"
-      :count="12"
-      :is-challenge-visible="isChallengeVisibleById"
+      v-slot="{ challenge }"
+      :challenges="challenges"
+      :is-challenge-visible="isChallengeVisible"
     >
-      <EternityChallengeBox :challenge-id="slotProps.challengeId" />
+      <EternityChallengeBox :challenge="challenge" />
     </ChallengeGrid>
   </div>
 </template>

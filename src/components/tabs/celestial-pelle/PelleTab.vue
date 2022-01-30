@@ -88,6 +88,7 @@ export default {
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
+      this.$recompute("upgrades");
     },
     getDoomedScrub() {
       player.celestials.pelle.doomed = true;

@@ -569,7 +569,7 @@ export function finishProcessReality(realityProps) {
   player.records.thisEternity.realTime = 0;
   player.records.bestEternity.time = 999999999999;
   player.records.bestEternity.realTime = 999999999999;
-  player.eternityUpgrades.clear();
+  if (!PelleUpgrade.keepEternityUpgrades.canBeApplied) player.eternityUpgrades.clear();
   player.totalTickGained = 0;
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
@@ -670,6 +670,10 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 export function applyRUPG10() {
   NormalChallenges.completeAll();
+  if (PelleUpgrade.replicantiStayUnlocked.canBeApplied) {
+    Replicanti.amount = Replicanti.amount.clampMin(1);
+    Replicanti.unlock(true);
+  }
   if (Pelle.isDisabled("rupg10")) return;
 
   player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({

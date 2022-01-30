@@ -138,6 +138,18 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e21,
         formatCost: c => format(c, 2),
       },
+      replicantiStayUnlocked: {
+        id: 15,
+        description: "Replicanti stays unlocked on Armageddon",
+        cost: 1e22,
+        formatCost: c => format(c, 2),
+      },
+      keepEternityUpgrades: {
+        id: 16,
+        description: "Keep Eternity Upgrades on Armageddon",
+        cost: 1e24,
+        formatCost: c => format(c, 2),
+      },
     },
     strikes: {
       infinity: {
@@ -186,8 +198,10 @@ GameDatabase.celestials.pelle = (function() {
             description: "Make replicanti unlock and its upgrades 1e130x cheaper, and it's uncapped"
           },
           {
-            requirement: 1,
-            description: "You can code IE11 compliant code"
+            requirement: 0.4,
+            description: "Famine also affects EP gain",
+            effect: () => Decimal.pow(4, PelleRifts.famine.totalFill.log10() / 4 / 308 + 1),
+            formatEffect: x => formatX(x, 2, 2)
           },
         ]
       },
@@ -278,12 +292,12 @@ GameDatabase.celestials.pelle = (function() {
               switch (Pelle.activeGlyphType) {
                 case "infinity": return Currency.infinityPoints.value.pow(0.2);
                 case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
-                case "replication": return 1e4 ** PelleRifts.famine.percentage;
+                case "replication": return 10 ** 50 ** (PelleRifts.famine.percentage);
                 case "dilation": return 1e6 ** PelleRifts.famine.percentage;
                 case "power": return 1.02;
                 case "companion": return 1.34;
 
-                default: return 1;
+                default: return new Decimal();
               }
             },
             formatEffect: x => formatX(x, 2, 2)

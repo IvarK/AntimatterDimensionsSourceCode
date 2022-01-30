@@ -78,17 +78,17 @@ export function breakInfinity() {
 }
 
 export function gainedInfinityPoints() {
-  if (Pelle.isDisabled("IPMults")) {
-    const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
-      ? PelleRifts.chaos.milestones[1].effect() : 1;
-    return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / 308 - 0.75)
-      .timesEffectsOf(PelleRifts.famine).times(pelleMults).floor();
-  }
   const div = Effects.min(
     308,
     Achievement(103),
     TimeStudy(111)
   );
+  if (Pelle.isDisabled("IPMults")) {
+    const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
+      ? PelleRifts.chaos.milestones[1].effect() : 1;
+    return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
+      .timesEffectsOf(PelleRifts.famine).times(pelleMults).floor();
+  }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
@@ -127,8 +127,10 @@ export function gainedEternityPoints() {
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
-  const pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
-    ? PelleRifts.chaos.milestones[1].effect() : 1;
+  let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
+    ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);
+
+  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
 
   if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).floor();
 

@@ -11,6 +11,7 @@ export default {
       active: false,
       percentage: 0,
       effect: new Decimal(),
+      totalFill: new Decimal()
     };
   },
   methods: {
@@ -18,6 +19,7 @@ export default {
       this.active = this.rift.isActive;
       this.percentage = this.rift.percentage;
       this.effect.copyFrom(this.rift.effectValue);
+      this.totalFill.copyFrom(this.rift.totalFill);
     },
     hasMilestone(idx) {
       return this.rift.hasMilestone(idx);
@@ -67,6 +69,7 @@ export default {
       :class="{ 'c-pelle-rift-description--compact': compact }"
     >
       <span v-if="!compact">{{ rift.description }}<br><br></span>
+      <span v-if="!compact">Reach {{ format(rift.totalFill, 2, 2) }} to gain more<br><br></span>
       <span class="highlight">{{ rift.effectDescription }}</span>
     </div>
     <div v-if="!compact">

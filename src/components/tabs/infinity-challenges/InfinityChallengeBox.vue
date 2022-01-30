@@ -28,7 +28,7 @@ export default {
       return this.challenge.config;
     },
     name() {
-      return `IC${this.challengeId}`;
+      return `IC${this.challenge.id}`;
     }
   },
   methods: {

@@ -32,7 +32,7 @@ export default {
       };
     },
     name() {
-      return `C${this.challengeId}`;
+      return `C${this.challenge.id}`;
     },
     overrideLabel() {
       return this.isBroken ? "Broken" : "";

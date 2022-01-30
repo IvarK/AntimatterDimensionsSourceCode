@@ -74,7 +74,7 @@ export default {
       };
     },
     name() {
-      return `EC${this.challengeId}`;
+      return `EC${this.challenge.id}`;
     }
   },
   methods: {

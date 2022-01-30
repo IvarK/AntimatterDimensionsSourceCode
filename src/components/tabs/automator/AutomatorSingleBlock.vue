@@ -153,8 +153,8 @@ export default {
         @keyup="validateInput(b.inputValue)"
       >
       <div
-        @click="deleteBlock(b.id)"
         class="o-automator-block-delete"
+        @click="deleteBlock(b.id)"
       >
         X
       </div>

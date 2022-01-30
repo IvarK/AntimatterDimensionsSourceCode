@@ -15,9 +15,6 @@ export default {
       isAutoECVisible: false,
       showAllChallenges: false,
       autoEC: false,
-      remainingECTiers: 0,
-      untilNextEC: TimeSpan.zero,
-      untilAllEC: TimeSpan.zero,
     };
   },
   watch: {
@@ -35,14 +32,6 @@ export default {
       this.isShowAllVisible = PlayerProgress.eternityUnlocked();
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
-      const remainingCompletions = EternityChallenges.remainingCompletions;
-      this.remainingECTiers = remainingCompletions;
-      if (remainingCompletions !== 0) {
-        const autoECInterval = EternityChallenges.autoComplete.interval;
-        const untilNextEC = Math.max(autoECInterval - player.reality.lastAutoEC, 0);
-        this.untilNextEC.setFrom(untilNextEC);
-        this.untilAllEC.setFrom(untilNextEC + (autoECInterval * (remainingCompletions - 1)));
-      }
     },
     restartChallenge() {
       const current = Player.anyChallenge;
@@ -93,26 +82,6 @@ export default {
       >
         Exit Challenge
       </PrimaryButton>
-    </div>
-    <div>
-      Some Normal Challenges have requirements to be able to run that challenge.
-    </div>
-    <div v-if="autoEC && isAutoECVisible">
-      Eternity Challenges are automatically completed sequentially, requiring all previous
-      Eternity Challenges to be fully completed before any progress is made.
-    </div>
-    <div
-      v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
-      class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
-    >
-      <div class="l-challenges-tab__auto-ec-timers">
-        <span v-if="remainingECTiers > 1">
-          Next Auto Eternity Challenge completion in: {{ untilNextEC }} (real time)
-        </span>
-        <span>
-          All Auto Eternity Challenge completions in: {{ untilAllEC }} (real time)
-        </span>
-      </div>
     </div>
   </div>
 </template>

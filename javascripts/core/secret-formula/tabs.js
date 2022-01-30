@@ -159,7 +159,7 @@ GameDatabase.tabs = [
         key: "autobuyers",
         name: "Autobuyers",
         symbol: "<i class='fas fa-cog'></i>",
-        component: "autobuyers-tab",
+        component: "AutobuyersTab",
         id: 0,
         hidable: true,
       },

@@ -1,8 +1,19 @@
-Vue.component("autobuyer-input", {
+<script>
+export default {
+  name: "AutobuyerInput",
   props: {
-    autobuyer: Object,
-    property: String,
-    type: String
+    autobuyer: {
+      type: Object,
+      required: true
+    },
+    property: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
@@ -10,6 +21,21 @@ Vue.component("autobuyer-input", {
       isFocused: false,
       displayValue: "0"
     };
+  },
+  computed: {
+    inputType() {
+      return this.type === "int" ? "number" : "text";
+    },
+    typeFunctions() {
+      const functions = AutobuyerInputFunctions[this.type];
+      if (functions === undefined) {
+        throw new Error("Unknown autobuyer input type");
+      }
+      return functions;
+    },
+    validityClass() {
+      return this.isValid ? undefined : "o-autobuyer-input--invalid";
+    }
   },
   methods: {
     update() {
@@ -48,6 +74,7 @@ Vue.component("autobuyer-input", {
         SecretAchievement(28).unlock();
       }
       if (this.isValid) {
+        // eslint-disable-next-line vue/no-mutating-props
         this.autobuyer[this.property] = this.typeFunctions.copyValue(this.actualValue);
       } else {
         this.updateActualValue();
@@ -56,33 +83,8 @@ Vue.component("autobuyer-input", {
       this.isValid = true;
       this.isFocused = false;
     }
-  },
-  computed: {
-    inputType() {
-      return this.type === "int" ? "number" : "text";
-    },
-    typeFunctions() {
-      const functions = AutobuyerInputFunctions[this.type];
-      if (functions === undefined) {
-        throw new Error("Unknown autobuyer input type");
-      }
-      return functions;
-    },
-    validityClass() {
-      return this.isValid ? undefined : "o-autobuyer-input--invalid";
-    }
-  },
-  template: `
-    <input
-      :value="displayValue"
-      :class="validityClass"
-      :type="inputType"
-      class="o-autobuyer-input"
-      @blur="handleBlur"
-      @focus="handleFocus"
-      @input="handleInput"
-    />`
-});
+  }
+};
 
 export const AutobuyerInputFunctions = {
   decimal: {
@@ -133,3 +135,20 @@ export const AutobuyerInputFunctions = {
     }
   }
 };
+</script>
+
+<template>
+  <input
+    :value="displayValue"
+    :class="validityClass"
+    :type="inputType"
+    class="o-autobuyer-input"
+    @blur="handleBlur"
+    @focus="handleFocus"
+    @input="handleInput"
+  >
+</template>
+
+<style scoped>
+
+</style>

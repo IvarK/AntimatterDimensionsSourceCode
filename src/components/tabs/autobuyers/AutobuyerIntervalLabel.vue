@@ -1,13 +1,20 @@
-Vue.component("autobuyer-interval-label", {
+<script>
+export default {
+  name: "AutobuyerIntervalLabel",
   props: {
-    autobuyer: Object,
+    autobuyer: {
+      type: Object,
+      required: true
+    },
     showInterval: {
       type: Boolean,
-      default: true,
+      required: false,
+      default: true
     },
     showBulk: {
       type: Boolean,
-      default: true,
+      required: false,
+      default: true
     }
   },
   data() {
@@ -37,15 +44,25 @@ Vue.component("autobuyer-interval-label", {
       // We should only be displaying the interval if the interval is greater than 0 and we are told to show it
       this.displayInterval = this.showInterval && this.interval > 0;
     }
-  },
-  template: `
-    <div class="c-autobuyer-box__small-text" v-if="displayInterval || showBulk">
-      <span v-if="displayInterval">
-        Current interval: {{ intervalDisplay }} seconds
-      </span>
-      <span v-if="showBulk">
-        <br v-if="displayInterval">
-        {{ bulkText }}
-      </span>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div
+    v-if="displayInterval || showBulk"
+    class="c-autobuyer-box__small-text"
+  >
+    <span v-if="displayInterval">
+      Current interval: {{ intervalDisplay }} seconds
+    </span>
+    <span v-if="showBulk">
+      <br v-if="displayInterval">
+      {{ bulkText }}
+    </span>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

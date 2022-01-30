@@ -1,6 +1,5 @@
 import "./infinity/infinity-points-header.js";
 import "./infinity/upgrades/infinity-upgrades-tab.js";
-import "./infinity/autobuyers/autobuyers-tab.js";
 import "./infinity/break-infinity/break-infinity-tab.js";
 import "./infinity/replicanti/replicanti-tab.js";
 

@@ -54,27 +54,26 @@ export default {
     class="c-challenge-box--infinity"
     @start="challenge.requestStart()"
   >
-    <template slot="top">
+    <template #top>
       <DescriptionDisplay :config="config" />
       <EffectDisplay
         v-if="isRunning"
         :config="config"
       />
     </template>
-    <div
-      slot="bottom"
-      class="l-challenge-box__bottom--infinity"
-    >
-      <span>Goal: {{ format(config.goal) }} antimatter</span>
-      <DescriptionDisplay
-        :config="config.reward"
-        label="Reward:"
-      />
-      <EffectDisplay
-        v-if="isCompleted"
-        :config="config.reward"
-      />
-    </div>
+    <template #bottom>
+      <div class="l-challenge-box__bottom--infinity">
+        <span>Goal: {{ format(config.goal) }} antimatter</span>
+        <DescriptionDisplay
+          :config="config.reward"
+          label="Reward:"
+        />
+        <EffectDisplay
+          v-if="isCompleted"
+          :config="config.reward"
+        />
+      </div>
+    </template>
   </ChallengeBox>
 </template>
 

@@ -44,13 +44,11 @@ export default {
       You have seen all {{ formatInt(12) }} Eternity Challenges.
     </div>
     <ChallengeGrid
+      v-slot="slotProps"
       :count="12"
       :is-challenge-visible="isChallengeVisible"
     >
-      <EternityChallengeBox
-        slot-scope="slotProps"
-        :challenge-id="slotProps.challengeId"
-      />
+      <EternityChallengeBox :challenge-id="slotProps.challengeId" />
     </ChallengeGrid>
   </div>
 </template>

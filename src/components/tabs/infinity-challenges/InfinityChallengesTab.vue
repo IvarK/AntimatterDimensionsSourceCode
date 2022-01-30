@@ -48,13 +48,11 @@ export default {
     </div>
     <div>{{ nextAtDisplay }}</div>
     <ChallengeGrid
+      v-slot="slotProps"
       :count="8"
       :is-challenge-visible="isChallengeVisible"
     >
-      <InfinityChallengeBox
-        slot-scope="slotProps"
-        :challenge-id="slotProps.challengeId"
-      />
+      <InfinityChallengeBox :challenge-id="slotProps.challengeId" />
     </ChallengeGrid>
   </div>
 </template>

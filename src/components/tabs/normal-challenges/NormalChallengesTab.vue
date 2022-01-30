@@ -20,11 +20,11 @@ export default {
       If you have an active Big Crunch Autobuyer, it will attempt to Crunch
       as soon as possible when reaching Infinite antimatter.
     </div>
-    <ChallengeGrid :count="12">
-      <NormalChallengeBox
-        slot-scope="slotProps"
-        :challenge-id="slotProps.challengeId"
-      />
+    <ChallengeGrid
+      v-slot="slotProps"
+      :count="12"
+    >
+      <NormalChallengeBox :challenge-id="slotProps.challengeId" />
     </ChallengeGrid>
   </div>
 </template>

@@ -115,11 +115,10 @@ export default {
     :can-be-unlocked="canBeUnlocked"
     @start="start"
   >
-    <DescriptionDisplay
-      slot="top"
-      :config="config"
-    />
-    <template slot="bottom">
+    <template #top>
+      <DescriptionDisplay :config="config" />
+    </template>
+    <template #bottom>
       <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
         <div>
           Completed {{ quantifyInt("time", completions) }}

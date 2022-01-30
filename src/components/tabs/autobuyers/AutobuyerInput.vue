@@ -74,7 +74,6 @@ export default {
         SecretAchievement(28).unlock();
       }
       if (this.isValid) {
-        // eslint-disable-next-line vue/no-mutating-props
         this.autobuyer[this.property] = this.typeFunctions.copyValue(this.actualValue);
       } else {
         this.updateActualValue();

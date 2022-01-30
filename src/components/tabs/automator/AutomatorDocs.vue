@@ -185,7 +185,7 @@ export default {
 
 <template>
   <div class="l-automator-pane">
-    <div class="c-automator__controls l-automator__controls l-automator-pane__controls" >
+    <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <AutomatorButton
         v-tooltip="'Scripting Information'"
         :style="docStyle"
@@ -193,8 +193,8 @@ export default {
         @click="infoPaneID = 1"
       />
       <AutomatorButton
-        v-tooltip="'Command menu for Block editor mode'"
         v-if="isBlockAutomator"
+        v-tooltip="'Command menu for Block editor mode'"
         class="fa-cubes"
         @click="infoPaneID = 4"
       />

@@ -186,9 +186,9 @@ const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
     >
       <b>Line {{ event.line }}{{ timestamp(event) }}:</b>
       <button
+        v-tooltip="'Jump to line'"
         class="fas fa-arrow-circle-right"
         @click="scrollToLine(event.line)"
-        v-tooltip="'Jump to line'"
       />
       <div class="c-automator-docs-page__indented">
         <i>{{ event.message }}</i>

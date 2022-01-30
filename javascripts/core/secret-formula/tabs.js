@@ -167,7 +167,7 @@ GameDatabase.tabs = [
         key: "automator",
         name: "Automator",
         symbol: "<i class='fas fa-code'></i>",
-        component: "automator-tab",
+        component: "AutomatorTab",
         condition: () => PlayerProgress.realityUnlocked(),
         id: 1,
         hidable: true,

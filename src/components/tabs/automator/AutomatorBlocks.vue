@@ -1,3 +1,27 @@
+<script>
+export default {
+  name: "AutomatorBlocks",
+  data() {
+    return {
+      blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))
+    };
+  },
+  methods: {
+    clone(block) {
+      const b = {
+        ...block,
+        id: UIID.next()
+      };
+
+      if (block.nested && !block.nest) b.nest = [];
+      if (block.targets) b.target = "";
+      if (block.hasInput) b.inputValue = "";
+      if (block.secondaryTargets) b.secondaryTarget = "";
+      return b;
+    }
+  }
+};
+
 const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<=", "!="];
 const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
   "AM", "IP", "EP", "RM", "INFINITIES", "BANKED INFINITIES", "ETERNITIES", "REALITIES",
@@ -92,42 +116,26 @@ export const automatorBlocks = [
 const AUTOMATOR_BLOCKS_BLACKLIST = ["DEFINE", "BLOB"];
 
 export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
+</script>
 
-Vue.component("automator-blocks", {
-  data() {
-    return {
-      blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))
-    };
-  },
-  methods: {
-    clone(block) {
-      const b = {
-        ...block,
-        id: UIID.next()
-      };
-
-      if (block.nested && !block.nest) b.nest = [];
-      if (block.targets) b.target = "";
-      if (block.hasInput) b.inputValue = "";
-      if (block.secondaryTargets) b.secondaryTarget = "";
-      return b;
-    }
-  },
-  template: `
-    <draggable
-      :list="blocks"
-      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
-      :sort="false"
-      :clone="clone"
-      style="display: flex; align-items: center; flex-wrap: wrap;"
+<template>
+  <draggable
+    :list="blocks"
+    :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+    :sort="false"
+    :clone="clone"
+    style="display: flex; align-items: center; flex-wrap: wrap;"
+  >
+    <div
+      v-for="block in blocks"
+      :key="block.id"
+      class="o-automator-command o-automator-block-list"
     >
-      <div
-        v-for="block in blocks"
-        :key="block.id"
-        class="o-automator-command o-automator-block-list"
-      >
-        {{ block.cmd }}
-      </div>
-    </draggable>
-    `
-});
+      {{ block.cmd }}
+    </div>
+  </draggable>
+</template>
+
+<style scoped>
+
+</style>

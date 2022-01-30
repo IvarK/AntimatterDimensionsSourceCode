@@ -13,6 +13,7 @@ import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
+import AutomatorTab from "./automator/AutomatorTab";
 import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
 import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
 import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
@@ -32,6 +33,7 @@ const TabComponents = {
   NormalAchievementsTab,
   SecretAchievementTab,
   AutobuyersTab,
+  AutomatorTab,
   NormalChallengesTab,
   InfinityChallengesTab,
   EternityChallengesTab

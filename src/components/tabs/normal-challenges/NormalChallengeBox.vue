@@ -62,11 +62,12 @@ export default {
     class="c-challenge-box--normal"
     @start="challenge.requestStart()"
   >
-    <DescriptionDisplay
-      slot="top"
-      :config="descriptionDisplayConfig"
-    />
-    <span slot="bottom">Reward: {{ challenge.config.reward }}</span>
+    <template #top>
+      <DescriptionDisplay :config="descriptionDisplayConfig" />
+    </template>
+    <template #bottom>
+      <span>Reward: {{ challenge.config.reward }}</span>
+    </template>
   </ChallengeBox>
 </template>
 

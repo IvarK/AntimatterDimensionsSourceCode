@@ -9,6 +9,11 @@ export default {
     ChallengeGrid,
     ChallengeTabHeader,
     NormalChallengeBox
+  },
+  computed: {
+    challenges() {
+      return NormalChallenges.all;
+    }
   }
 };
 </script>
@@ -24,10 +29,10 @@ export default {
       as soon as possible when reaching Infinite antimatter.
     </div>
     <ChallengeGrid
-      v-slot="slotProps"
-      :count="12"
+      v-slot="{ challenge }"
+      :challenges="challenges"
     >
-      <NormalChallengeBox :challenge-id="slotProps.challengeId" />
+      <NormalChallengeBox :challenge="challenge" />
     </ChallengeGrid>
   </div>
 </template>

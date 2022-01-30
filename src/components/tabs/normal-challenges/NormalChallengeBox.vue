@@ -9,8 +9,8 @@ export default {
     DescriptionDisplay
   },
   props: {
-    challengeId: {
-      type: Number,
+    challenge: {
+      type: Object,
       required: true
     }
   },
@@ -23,9 +23,6 @@ export default {
     };
   },
   computed: {
-    challenge() {
-      return NormalChallenge(this.challengeId);
-    },
     descriptionDisplayConfig() {
       if (this.challenge.isUnlocked) {
         return this.challenge.config;

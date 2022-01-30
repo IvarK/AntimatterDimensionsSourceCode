@@ -11,8 +11,8 @@ export default {
     EffectDisplay
   },
   props: {
-    challengeId: {
-      type: Number,
+    challenge: {
+      type: Object,
       required: true
     }
   },
@@ -28,14 +28,8 @@ export default {
     };
   },
   computed: {
-    challenge() {
-      return EternityChallenge(this.challengeId);
-    },
     config() {
       return this.challenge.config;
-    },
-    rewardConfig() {
-      return this.config.reward;
     },
     goalDisplay() {
       const config = this.config;

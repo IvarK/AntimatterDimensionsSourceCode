@@ -11,8 +11,8 @@ export default {
     EffectDisplay
   },
   props: {
-    challengeId: {
-      type: Number,
+    challenge: {
+      type: Object,
       required: true
     }
   },
@@ -24,9 +24,6 @@ export default {
     };
   },
   computed: {
-    challenge() {
-      return InfinityChallenge(this.challengeId);
-    },
     config() {
       return this.challenge.config;
     },

@@ -1,4 +1,11 @@
-Vue.component("automator-controls", {
+<script>
+import AutomatorButton from "./AutomatorButton";
+
+export default {
+  name: "AutomatorControls",
+  components: {
+    AutomatorButton
+  },
   data() {
     return {
       isRunning: false,
@@ -51,46 +58,53 @@ Vue.component("automator-controls", {
     repeat: () => AutomatorBackend.toggleRepeat(),
     restart: () => AutomatorBackend.toggleForceRestart(),
     follow: () => AutomatorBackend.toggleFollowExecution(),
-  },
-  template: `
-    <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-      <automator-button
-        class="fa-fast-backward"
-        @click="rewind"
-        v-tooltip="'Rewind Automator to the first command'"
-      />
-      <automator-button
-        :class="playPauseClass"
-        @click="play"
-        v-tooltip="playTooltip"
-      />
-      <automator-button
-        class="fa-stop"
-        @click="stop"
-        v-tooltip="'Stop Automator and reset position'"
-      />
-      <automator-button
-        class="fa-step-forward"
-        @click="step"
-        v-tooltip="'Step forward one line'"
-      />
-      <automator-button
-        class="fa-sync-alt"
-        :class="{ 'c-automator__button--active' : repeatOn }"
-        @click="repeat"
-        v-tooltip="'Restart script automatically when it completes'"
-      />
-      <automator-button
-        class="fa-reply"
-        :class="{ 'c-automator__button--active' : forceRestartOn }"
-        @click="restart"
-        v-tooltip="'Restart script when finishing or restarting a Reality'"
-      />
-      <automator-button
-        class="fa-indent"
-        :class="{ 'c-automator__button--active' : followExecution }"
-        @click="follow"
-        v-tooltip="'Scroll Automator to follow current line'"
-      />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
+    <AutomatorButton
+      v-tooltip="'Rewind Automator to the first command'"
+      class="fa-fast-backward"
+      @click="rewind"
+    />
+    <AutomatorButton
+      v-tooltip="playTooltip"
+      :class="playPauseClass"
+      @click="play"
+    />
+    <AutomatorButton
+      v-tooltip="'Stop Automator and reset position'"
+      class="fa-stop"
+      @click="stop"
+    />
+    <AutomatorButton
+      v-tooltip="'Step forward one line'"
+      class="fa-step-forward"
+      @click="step"
+    />
+    <AutomatorButton
+      v-tooltip="'Restart script automatically when it completes'"
+      class="fa-sync-alt"
+      :class="{ 'c-automator__button--active' : repeatOn }"
+      @click="repeat"
+    />
+    <AutomatorButton
+      v-tooltip="'Restart script when finishing or restarting a Reality'"
+      class="fa-reply"
+      :class="{ 'c-automator__button--active' : forceRestartOn }"
+      @click="restart"
+    />
+    <AutomatorButton
+      v-tooltip="'Scroll Automator to follow current line'"
+      class="fa-indent"
+      :class="{ 'c-automator__button--active' : followExecution }"
+      @click="follow"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

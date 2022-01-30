@@ -1,9 +1,17 @@
-import "./automator-block-editor.js";
-import "./automator-text-editor.js";
-import "./automator-controls.js";
-import "./automator-button.js";
+<script>
+import AutomatorBlockEditor from "./AutomatorBlockEditor";
+import AutomatorTextEditor from "./AutomatorTextEditor";
+import AutomatorControls from "./AutomatorControls";
+import AutomatorButton from "./AutomatorButton";
 
-Vue.component("automator-editor", {
+export default {
+  name: "AutomatorEditor",
+  components: {
+    AutomatorBlockEditor,
+    AutomatorTextEditor,
+    AutomatorControls,
+    AutomatorButton
+  },
   data() {
     return {
       activeLineRaw: 0,
@@ -14,14 +22,6 @@ Vue.component("automator-editor", {
         scriptID: 0,
       },
     };
-  },
-  created() {
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
-    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
-    this.updateCurrentScriptID();
-  },
-  beforeDestroy() {
-    EventHub.ui.offAll(this);
   },
   computed: {
     fullScreen() {
@@ -57,6 +57,14 @@ Vue.component("automator-editor", {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) return "Switch to the text editor";
       return "Switch to the block editor";
     },
+  },
+  created() {
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.updateCurrentScriptID();
+  },
+  beforeDestroy() {
+    EventHub.ui.offAll(this);
   },
   methods: {
     update() {
@@ -107,23 +115,28 @@ Vue.component("automator-editor", {
       }
       this.$recompute("currentScriptContent");
     }
-  },
-  template: `
-    <div class="l-automator-pane">
-      <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-controls />
-        <automator-button
-          :class="modeIconClass"
-          @click="toggleAutomatorMode()"
-          v-tooltip="automatorModeTooltip"
-        />
-      </div>
-      <automator-text-editor
-        :currentScriptID="currentScriptID"
-        :activeLineInfo="activeLineInfo"
-        :runningScriptID="runningScriptID"
-        v-if="isTextAutomator"
+  }
+};
+</script>
+
+<template>
+  <div class="l-automator-pane">
+    <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
+      <AutomatorControls />
+      <AutomatorButton
+        v-tooltip="automatorModeTooltip"
+        :class="modeIconClass"
+        @click="toggleAutomatorMode()"
       />
-      <automator-block-editor v-if="isBlockAutomator" />
-    </div>`
-});
+    </div>
+    <AutomatorTextEditor
+      v-if="isTextAutomator"
+      :current-script-id="currentScriptID"
+    />
+    <AutomatorBlockEditor v-if="isBlockAutomator" />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

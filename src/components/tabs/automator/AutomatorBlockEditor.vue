@@ -1,4 +1,39 @@
-import "./automator-single-block.js";
+<script>
+import AutomatorSingleBlock from "./AutomatorSingleBlock";
+
+export default {
+  name: "AutomatorBlockEditor",
+  components: {
+    AutomatorSingleBlock
+  },
+  computed: {
+    lineNumbersCount() {
+      return Math.max(this.lines.length, 1);
+    },
+    lines: {
+      get() {
+        return this.$viewModel.tabs.reality.automator.lines;
+      },
+      set(value) {
+        this.$viewModel.tabs.reality.automator.lines = value;
+      }
+    }
+  },
+  methods: {
+    parseRequest() {
+      BlockAutomator.parseTextFromBlocks();
+    },
+    updateBlock(block, id) {
+      this.lines[this.lines.findIndex(x => x.id === id)] = block;
+      this.parseRequest();
+    },
+    deleteBlock(id) {
+      const idx = this.lines.findIndex(x => x.id === id);
+      this.lines.splice(idx, 1);
+      this.parseRequest();
+    },
+  }
+};
 
 export const BlockAutomator = {
   _idArray: [],
@@ -75,52 +110,29 @@ export const BlockAutomator = {
     this._idArray = this.blockIdArray(this.lines);
   }
 };
+</script>
 
-Vue.component("automator-block-editor", {
-  computed: {
-    lineNumbersCount() {
-      return Math.max(this.lines.length, 1);
-    },
-    lines: {
-      get() {
-        return this.$viewModel.tabs.reality.automator.lines;
-      },
-      set(value) {
-        this.$viewModel.tabs.reality.automator.lines = value;
-      }
-    }
-  },
-  methods: {
-    parseRequest() {
-      BlockAutomator.parseTextFromBlocks();
-    },
-    updateBlock(block, id) {
-      this.lines[this.lines.findIndex(x => x.id === id)] = block;
-      this.parseRequest();
-    },
-    deleteBlock(id) {
-      const idx = this.lines.findIndex(x => x.id === id);
-      this.lines.splice(idx, 1);
-      this.parseRequest();
-    },
-  },
-  template: `
-    <div class="c-automator-block-editor">
-      <draggable
-        v-on:end="parseRequest"
-        v-model="lines"
-        group="code-blocks"
-        class="c-automator-blocks"
-        ghost-class="c-automator-block-row-ghost"
-      >
-        <automator-single-block
-          v-for="(block, index) in lines"
-          :key="block.id"
-          :lineNumber="index"
-          :block="block"
-          :updateBlock="updateBlock"
-          :deleteBlock="deleteBlock"
-        />
-      </draggable>
-    </div>`
-});
+<template>
+  <div class="c-automator-block-editor">
+    <draggable
+      v-model="lines"
+      group="code-blocks"
+      class="c-automator-blocks"
+      ghost-class="c-automator-block-row-ghost"
+      @end="parseRequest"
+    >
+      <AutomatorSingleBlock
+        v-for="(block, index) in lines"
+        :key="block.id"
+        :line-number="index"
+        :block="block"
+        :update-block="updateBlock"
+        :delete-block="deleteBlock"
+      />
+    </draggable>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

@@ -172,6 +172,13 @@ GameDatabase.celestials.pelle = (function() {
         penaltyDescription: "Replicanti speed scales harsher after 1e2000",
         rewardDescription: "Unlock Chaos",
         rift: () => PelleRifts.chaos
+      },
+      ECs: {
+        id: 4,
+        requirementDescription: "Reach 115 total Time Theorems",
+        penaltyDescription: "Famine IP multiplier is reduced in Eternity Challenges",
+        rewardDescription: "Unlock War",
+        rift: () => PelleRifts.war
       }
     },
     rifts: {
@@ -305,6 +312,32 @@ GameDatabase.celestials.pelle = (function() {
           {
             requirement: 0.69,
             description: "nice",
+          },
+        ]
+      },
+      war: {
+        id: 4,
+        key: "war",
+        name: "War",
+        description: "When active, spends 3% of your EP per second to increase War.",
+        effectDescription: x => `Increases EP formula base by +${format(x, 2, 2)}`,
+        strike: () => PelleStrikes.ECs,
+        percentage: totalFill => totalFill.plus(1).log10() ** 0.4 / 4000 ** 0.4,
+        percentageToFill: percentage => Decimal.pow(10, percentage ** 2.5 * 4000).minus(1),
+        effect: totalFill => 58 * totalFill.plus(1).log10() ** 0.2 / 4000 ** 0.2,
+        currency: () => Currency.eternityPoints,
+        milestones: [
+          {
+            requirement: 0.25,
+            description: "Never gonna give you up"
+          },
+          {
+            requirement: 0.50,
+            description: "Never gonna let you down"
+          },
+          {
+            requirement: 0.75,
+            description: "Never gonna run around, and desert you",
           },
         ]
       }

@@ -664,6 +664,10 @@ window.player = {
         chaos: {
           fill: DC.D0,
           active: false
+        },
+        war: {
+          fill: DC.D0,
+          active: false
         }
       },
       progressBits: 0

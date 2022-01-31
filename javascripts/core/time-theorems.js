@@ -47,7 +47,8 @@ export class TimeTheoremPurchaseType {
   }
 
   purchase(bulk) {
-    if (this.currency.lt(this.cost) || (Pelle.isDoomed && !PelleStrikes.eternity.hasStrike)) return false;
+    if (this.currency.lt(this.cost) ||
+      (Pelle.isDoomed && player.eternities.eq(0))) return false;
     let purchased = false;
     const amount = this.bulkPossible;
     const buyFn = cost => (Perk.ttFree.isBought ? this.currency.gte(cost) : this.currency.purchase(cost));
@@ -63,6 +64,7 @@ export class TimeTheoremPurchaseType {
       purchased = true;
     }
     if (purchased) player.requirementChecks.reality.noPurchasedTT = false;
+    if (TimeTheorems.totalPurchased() > 115) PelleStrikes.ECs.trigger();
     return purchased;
   }
 

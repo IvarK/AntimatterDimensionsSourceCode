@@ -65,7 +65,7 @@ export default {
   methods: {
     update() {
       this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
-      this.infinities.copyFrom(Currency.infinities.value);
+      this.infinities.copyFrom(Currency.infinities);
     },
   }
 };

@@ -28,10 +28,7 @@ Vue.component("annihilation-button", {
   },
   computed: {
     annihilationInputStyle() {
-      return {
-        width: "6rem",
-        "background-color": this.isEnabled ? "" : "var(--color-disabled)",
-      };
+      return { "background-color": this.isEnabled ? "" : "var(--color-bad)" };
     }
   },
   methods: {
@@ -85,6 +82,7 @@ Vue.component("annihilation-button", {
           v-model="autoAnnihilationInput"
           @change="handleAutoAnnihilationInputChange()"
           :style="annihilationInputStyle"
+          class="c-laitela-annihilation-input"
         />
         to the multiplier.
       </span>

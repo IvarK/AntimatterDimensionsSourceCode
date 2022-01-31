@@ -93,10 +93,12 @@ Vue.component("singularity-milestone", {
       this.currentCondenseTime = Singularity.timeUntilCap;
       this.autoCondenseDelay = Singularity.timeDelayFromAuto;
       this.lastCheckedMilestones = player.celestials.laitela.lastCheckedMilestones;
+      this.isMetro = Theme.current().isMetro;
     },
   },
   template: `
     <div :class="containerClass">
+      <div v-if="!isMetro && !isMaxed" class="c-laitela-milestone--bar-border-fix"></div>
       <div
         :class="barClass"
         :style="barStyle"

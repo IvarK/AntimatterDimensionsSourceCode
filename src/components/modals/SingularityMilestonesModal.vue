@@ -107,7 +107,7 @@ export default {
       </div>
     </div>
     <button
-      class="l-singularity-milestone-modal-sort-button"
+      class="c-singularity-milestone-modal-sort-button"
       @click="cycleButton(0)"
     >
       To Milestone:
@@ -115,7 +115,7 @@ export default {
       {{ resourceStr }}
     </button>
     <button
-      class="l-singularity-milestone-modal-sort-button"
+      class="c-singularity-milestone-modal-sort-button"
       @click="cycleButton(1)"
     >
       Sort by:
@@ -123,7 +123,7 @@ export default {
       {{ sortStr }}
     </button>
     <button
-      class="l-singularity-milestone-modal-sort-button"
+      class="c-singularity-milestone-modal-sort-button"
       @click="cycleButton(2)"
     >
       Completed Milestones:
@@ -131,7 +131,7 @@ export default {
       {{ completedStr }}
     </button>
     <button
-      class="l-singularity-milestone-modal-sort-button"
+      class="c-singularity-milestone-modal-sort-button"
       @click="cycleButton(3)"
     >
       Sort Order:

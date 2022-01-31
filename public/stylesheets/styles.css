@@ -7790,19 +7790,14 @@ kbd {
   padding: 0.6rem;
   margin: 1rem 0 0;
   border-radius: 0.5rem;
-  border: 0.2rem solid;
+  border: 0.1rem solid;
   position: relative;
   z-index: 0;
   color: var(--color-laitela--accent);
 }
 
 .s-base--metro .c-laitela-milestone {
-  border-width: 0.1rem;
   border-radius: 0;
-}
-
-.l-singularity-milestone-modal-container-inner .c-laitela-milestone {
-  box-shadow: 0.1rem 0.1rem 0.3rem black;
 }
 
 .c-laitela-milestone__progress {
@@ -7813,19 +7808,29 @@ kbd {
   z-index: -1;
 }
 
+.c-laitela-milestone--bar-border-fix {
+  position: absolute;
+  height: calc(100% + 0.2rem);
+  width: calc(100% + 0.2rem);
+  border-radius: 0.5rem;
+  border: 0.2rem solid;
+  z-index: 1;
+  color: var(--color-laitela--accent);
+  margin: -0.7rem;
+}
+
 .l-singularity-milestone-modal-container {
   box-shadow: none;
 }
 
 .c-laitela-milestone-mask {
-  background: inherit;
-  filter: invert(100%);
+  background-color: white;
   mix-blend-mode: difference;
-  z-index: 1
+  z-index: 0;
 }
 
 .c-laitela-milestone--completed {
-  filter: brightness(90%) invert(100%);
+  filter: brightness(10%);
   left: 1.5rem;
   top: -1.5rem;
   height: 21.8rem;
@@ -7834,6 +7839,7 @@ kbd {
   background-image: url(../images/laitela-icon.svg);
   background-position: center;
   background-repeat: repeat-y;
+  background-color: transparent;
 }
 
 .c-laitela-singularity-container {
@@ -7913,6 +7919,10 @@ kbd {
   background: var(--color-laitela--accent);
 }
 
+.l-singularity-milestone-modal {
+  height: 60rem;
+}
+
 .l-singularity-milestone-modal-container-outer {
   height: 50rem;
   overflow-y: scroll;
@@ -7937,7 +7947,11 @@ kbd {
   padding-bottom: 2rem;
 }
 
-.l-singularity-milestone-modal-sort-button {
+.l-singularity-milestone-modal-container-inner .c-laitela-milestone {
+  height: 19rem;
+}
+
+.c-singularity-milestone-modal-sort-button {
   height: 6rem;
   width: 22.5rem;
   font-family: Typewriter, serif;
@@ -7946,8 +7960,20 @@ kbd {
   color: var(--color-laitela--accent);
   background-color: var(--color-laitela--base);
   border: 0.1rem solid var(--color-laitela--accent);
+  border-radius: 0.5rem;
   cursor: pointer;
   margin: 0.5rem;
+  transition-duration: 0.15s;
+}
+
+.s-base--metro .c-singularity-milestone-modal-sort-button {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.c-singularity-milestone-modal-sort-button:hover {
+  color: var(--color-laitela--base);
+  background-color: var(--color-laitela--accent);
 }
 
 .o-laitela-singularity-modal-button {
@@ -8047,6 +8073,11 @@ kbd {
   font-size: 1.2rem;
 }
 
+.s-base--metro .l-laitela-annihilation-container {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 .l-laitela-annihilation-button {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
@@ -8054,6 +8085,7 @@ kbd {
   width: 35rem;
   height: 3rem;
   border: 0.2rem solid var(--color-laitela--accent);
+  border-radius: 0.5rem;
   font-family: Typewriter, serif;
 }
 
@@ -8078,6 +8110,17 @@ kbd {
 .c-laitela-annihilation-button:hover {
   background: var(--color-laitela--accent);
   color: var(--color-laitela--base) !important; /* h2 color overrides this */
+}
+
+.c-laitela-annihilation-input {
+  width: 6rem;
+  border-color: var(--color-laitela--accent);
+  border-radius: 0.5rem;
+}
+
+.s-base--metro .c-laitela-annihilation-input {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-laitela-automation-toggle {

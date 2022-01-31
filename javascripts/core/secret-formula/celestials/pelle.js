@@ -153,6 +153,12 @@ GameDatabase.celestials.pelle = (function() {
       TDAutobuyers: {
         id: 17,
         description: "Gain Back Time Dimension Autobuyers",
+        cost: 1e25,
+        formatCost: c => format(c, 2),
+      },
+      keepEternityChallenges: {
+        id: 18,
+        description: "You keep your Infinity Challenge completions through Armageddons",
         cost: 1e26,
         formatCost: c => format(c, 2),
       },
@@ -181,7 +187,7 @@ GameDatabase.celestials.pelle = (function() {
       },
       ECs: {
         id: 4,
-        requirementDescription: "Reach 115 total Time Theorems",
+        requirementDescription: "Reach 115 Time Theorems",
         penaltyDescription: "Famine IP multiplier is reduced in Eternity Challenges",
         rewardDescription: "Unlock War",
         rift: () => PelleRifts.war
@@ -199,7 +205,10 @@ GameDatabase.celestials.pelle = (function() {
         percentageToFill: percentage => Decimal.pow(10,
           Decimal.pow(10, (percentage * 100) ** (1 / 2.5)).div(10).minus(0.1)
         ).minus(1),
-        effect: totalFill => totalFill.plus(1).pow(0.33),
+        effect: totalFill => {
+          if (player.challenge.eternity.current !== 0) return totalFill.plus(1).pow(0.1);
+          return totalFill.plus(1).pow(0.33);
+        },
         currency: () => Currency.infinityPoints,
         milestones: [
           {
@@ -330,12 +339,14 @@ GameDatabase.celestials.pelle = (function() {
         strike: () => PelleStrikes.ECs,
         percentage: totalFill => totalFill.plus(1).log10() ** 0.4 / 4000 ** 0.4,
         percentageToFill: percentage => Decimal.pow(10, percentage ** 2.5 * 4000).minus(1),
-        effect: totalFill => 58 * totalFill.plus(1).log10() ** 0.2 / 4000 ** 0.2,
+        effect: totalFill => new Decimal(58 * totalFill.plus(1).log10() ** 0.2 / 4000 ** 0.2),
         currency: () => Currency.eternityPoints,
         milestones: [
           {
-            requirement: 0.25,
-            description: "Never gonna give you up"
+            requirement: 0.10,
+            description: "Dimensional Boosts are more powerful based on EC completions",
+            effect: () => Math.max(100 * EternityChallenges.completions ** 2, 1),
+            formatEffect: x => formatX(x, 2, 2)
           },
           {
             requirement: 0.50,

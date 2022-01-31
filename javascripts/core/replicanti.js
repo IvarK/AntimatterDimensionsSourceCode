@@ -138,6 +138,7 @@ export function replicantiCap() {
 
 export function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
+  const replicantiBeforeLoop = Replicanti.amount;
   PerformanceStats.start("Replicanti");
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   // This gets the pre-cap interval (above the cap we recalculate the interval).
@@ -176,6 +177,10 @@ export function replicantiLoop(diff) {
     player.replicanti.timer += diff - interval.toNumber();
   } else {
     player.replicanti.timer += diff;
+  }
+
+  if (Pelle.isDoomed && Replicanti.amount.log10() - replicantiBeforeLoop.log10() > 308) {
+    Replicanti.amount = replicantiBeforeLoop.times(1e308);
   }
 
   if (areRGsBeingBought && Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {

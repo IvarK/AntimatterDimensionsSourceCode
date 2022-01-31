@@ -32,7 +32,7 @@ export default {
       this.upgradeThreshold.copyFrom(FreeTickspeed.fromShards(Currency.timeShards.value).nextShards);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerRealSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "Time Shards";
-      this.areAutobuyersUnlocked = RealityUpgrade(13).isBought && !Pelle.isDoomed;
+      this.areAutobuyersUnlocked = Autobuyer.timeDimension(1).isUnlocked;
     },
     maxAll() {
       tryUnlockTimeDimensions();

@@ -125,7 +125,7 @@ function totalEPMult() {
 
 export function gainedEternityPoints() {
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
     ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);

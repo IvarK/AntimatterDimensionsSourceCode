@@ -571,7 +571,7 @@ export function finishProcessReality(realityProps) {
   player.records.bestEternity.realTime = 999999999999;
   if (!PelleUpgrade.keepEternityUpgrades.canBeApplied) player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  player.eternityChalls = {};
+  if (!PelleUpgrade.keepEternityChallenges.canBeApplied) player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;

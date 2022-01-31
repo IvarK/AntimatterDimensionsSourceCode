@@ -7951,6 +7951,16 @@ kbd {
   height: 19rem;
 }
 
+.l-singularity-milestone-sort-container {
+  position: relative;
+  left: -0.5rem;
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5rem;
+  border: 0.1rem solid var(--color-laitela--accent);
+  padding: 1rem 0.5rem;
+}
+
 .c-singularity-milestone-modal-sort-button {
   height: 6rem;
   width: 22rem;
@@ -7962,7 +7972,7 @@ kbd {
   border: 0.1rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   cursor: pointer;
-  margin: 0.5rem 1rem 0 0;
+  margin: 0 0.5rem;
   transition-duration: 0.15s;
 }
 

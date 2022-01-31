@@ -106,37 +106,39 @@ export default {
         />
       </div>
     </div>
-    <button
-      class="c-singularity-milestone-modal-sort-button"
-      @click="cycleButton(0)"
-    >
-      To Milestone:
-      <br>
-      {{ resourceStr }}
-    </button>
-    <button
-      class="c-singularity-milestone-modal-sort-button"
-      @click="cycleButton(1)"
-    >
-      Sort by:
-      <br>
-      {{ sortStr }}
-    </button>
-    <button
-      class="c-singularity-milestone-modal-sort-button"
-      @click="cycleButton(2)"
-    >
-      Completed Milestones:
-      <br>
-      {{ completedStr }}
-    </button>
-    <button
-      class="c-singularity-milestone-modal-sort-button"
-      @click="cycleButton(3)"
-    >
-      Sort Order:
-      <br>
-      {{ orderStr }}
-    </button>
+    <div class="l-singularity-milestone-sort-container">
+      <button
+        class="c-singularity-milestone-modal-sort-button"
+        @click="cycleButton(0)"
+      >
+        To Milestone:
+        <br>
+        {{ resourceStr }}
+      </button>
+      <button
+        class="c-singularity-milestone-modal-sort-button"
+        @click="cycleButton(1)"
+      >
+        Sort by:
+        <br>
+        {{ sortStr }}
+      </button>
+      <button
+        class="c-singularity-milestone-modal-sort-button"
+        @click="cycleButton(2)"
+      >
+        Completed Milestones:
+        <br>
+        {{ completedStr }}
+      </button>
+      <button
+        class="c-singularity-milestone-modal-sort-button"
+        @click="cycleButton(3)"
+      >
+        Sort Order:
+        <br>
+        {{ orderStr }}
+      </button>
+    </div>
   </ModalWrapperChoice>
 </template>

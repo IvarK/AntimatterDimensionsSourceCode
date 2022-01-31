@@ -138,17 +138,22 @@ export const SingularityMilestones = {
   sortedForCompletions(moveNewToTop) {
     const options = player.celestials.laitela.singularitySorting;
 
-    // Sorting functions for singularity milestones, values are generally around 0 to 2ish
+    // Sorting functions for singularity milestones, values are generally around 0 to 2ish. Should generally attempt
+    // to return unique values for all milestones for the sake of stable sorting
     let sortFn;
     switch (options.sortResource) {
       case SINGULARITY_MILESTONE_SORT.SINGULARITIES_TO_NEXT:
-        sortFn = m => Math.log10(Math.clampMin(m.remainingSingularities, 1)) / 50;
+        sortFn = m => {
+          // If it's maxed, we order based on the final goal value - higher goals are sorted later
+          if (m.isMaxed) return 1 + Math.log10(m.isUnique ? m.nextGoal : m.previousGoal) / 1000;
+          return Math.log10(m.remainingSingularities) / 100;
+        };
         break;
       case SINGULARITY_MILESTONE_SORT.CURRENT_COMPLETIONS:
         // Also counts partial completion on the current step
         sortFn = m => {
-          const currComp = Math.log(Currency.singularities.value / m.previousGoal) /
-            Math.log(m.nextGoal / m.previousGoal);
+          const currComp = Math.clampMax(Math.log(Currency.singularities.value / m.previousGoal) /
+            Math.log(m.nextGoal / m.previousGoal), 1);
           return (m.completions + currComp) / 20;
         };
         break;
@@ -167,11 +172,15 @@ export const SingularityMilestones = {
         // treats infinite milestones with larger steps as if they complete at a higher value
         sortFn = m => {
           const limit = Number.isFinite(m.limit) ? m.limit : 50;
-          return Math.log10(m.config.start * Math.pow(m.config.repeat, limit - 1)) / 50;
+          return Math.log10(m.config.start * Math.pow(m.config.repeat, limit - 1)) / 100;
         };
         break;
       case SINGULARITY_MILESTONE_SORT.MOST_RECENT:
-        sortFn = m => Math.log10(m.previousGoal) / 50;
+        sortFn = m => {
+          if (!m.isUnlocked) return 1 + Math.log10(m.start) / 1000;
+          // For unique milestones, previousGoal is actually 1 and nextGoal contains the completion amount
+          return Math.log10(m.isUnique ? m.nextGoal : m.previousGoal) / 100;
+        };
         break;
       default:
         throw new Error("Unrecognized Singularity Milestone sorting option (order)");

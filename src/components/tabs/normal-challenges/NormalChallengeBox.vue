@@ -20,6 +20,7 @@ export default {
       isCompleted: false,
       isBroken: false,
       isUnlocked: false,
+      lockedAt: new Decimal()
     };
   },
   computed: {
@@ -42,6 +43,7 @@ export default {
     update() {
       this.isUnlocked = this.challenge.isUnlocked;
       this.isRunning = this.challenge.isRunning;
+      this.lockedAt = this.challenge.config.lockedAt;
       this.isBroken = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.challengeId);
       this.isCompleted = this.challenge.isCompleted && !this.isBroken;
     }
@@ -56,6 +58,7 @@ export default {
     :is-running="isRunning"
     :is-completed="isCompleted"
     :override-label="overrideLabel"
+    :locked-at="lockedAt"
     class="c-challenge-box--normal"
     @start="challenge.requestStart()"
   >

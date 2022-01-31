@@ -23,6 +23,10 @@ export default {
       type: Boolean,
       required: true
     },
+    lockedAt: {
+      type: Decimal,
+      required: true
+    },
     overrideLabel: {
       type: String,
       required: false,
@@ -32,6 +36,7 @@ export default {
   data() {
     return {
       inC1: Boolean,
+      infinities: new Decimal(0),
     };
   },
   computed: {
@@ -54,12 +59,13 @@ export default {
       if (this.isRunning || this.inC1) return "Running";
       if (this.isCompleted) return "Completed";
       if (this.isUnlocked) return "Start";
-      return "Locked";
+      return `Locked (${formatInt(this.infinities)}/${formatInt(this.lockedAt)})`;
     }
   },
   methods: {
     update() {
       this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
+      this.infinities.copyFrom(Currency.infinities.value);
     },
   }
 };

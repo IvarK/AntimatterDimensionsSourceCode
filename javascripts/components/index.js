@@ -1,10 +1,5 @@
-import "./challenges/normal-challenges-tab.js";
-import "./challenges/infinity-challenges-tab.js";
-import "./challenges/eternity-challenges-tab.js";
-
 import "./infinity/infinity-points-header.js";
 import "./infinity/upgrades/infinity-upgrades-tab.js";
-import "./infinity/autobuyers/autobuyers-tab.js";
 import "./infinity/break-infinity/break-infinity-tab.js";
 import "./infinity/replicanti/replicanti-tab.js";
 
@@ -20,7 +15,6 @@ import "./reality/upgrades/reality-upgrades-tab.js";
 import "./reality/upgrades/imaginary-upgrades-tab.js";
 import "./reality/perks-tab.js";
 import "./reality/black-hole/black-hole-tab.js";
-import "./reality/automator/automator-tab.js";
 
 import "./celestials/navigation.js";
 import "./celestials/subtabs/teresa/teresa-tab.js";

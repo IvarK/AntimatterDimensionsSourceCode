@@ -1,13 +1,11 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import StudyStringLine from "@/components/modals/StudyStringLine";
 
 export default {
   name: "StudyStringModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
     StudyStringLine
   },
   props: {
@@ -155,18 +153,24 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-import-tree l-modal-content--centered">
-    <ModalCloseButton @click="emitClose" />
-    <h3>{{ modalTitle }}</h3>
+  <ModalWrapperChoice
+    :show-cancel="!inputIsValid"
+    :show-confirm="inputIsValid"
+    class="c-modal-import-tree"
+    @confirm="confirm"
+  >
+    <template #header>
+      {{ modalTitle }}
+    </template>
     <input
       ref="input"
       v-model="input"
       type="text"
       class="c-modal-input c-modal-import-tree__input"
-      @keyup.enter="importTree"
+      @keyup.enter="confirm"
       @keyup.esc="emitClose"
     >
-    <div class="c-modal-import-tree__tree-info">
+    <div class="l-modal-import-tree__tree-info">
       <div v-if="inputIsSecret">
         ???
       </div>
@@ -211,12 +215,8 @@ export default {
         Not a valid tree
       </div>
     </div>
-    <PrimaryButton
-      v-if="inputIsValid"
-      class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
-      @click="confirm"
-    >
+    <template #confirm-text>
       {{ isImporting ? "Import" : "Save" }}
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

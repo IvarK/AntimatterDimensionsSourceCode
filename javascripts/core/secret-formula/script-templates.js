@@ -1,5 +1,5 @@
 import { GameDatabase } from "./game-database.js";
-import { AutobuyerInputFunctions } from "../../components/infinity/autobuyers/autobuyer-input.js";
+import { AutobuyerInputFunctions } from "@/components/tabs/autobuyers/AutobuyerInput";
 
 GameDatabase.reality.automator.templates = {
   /**

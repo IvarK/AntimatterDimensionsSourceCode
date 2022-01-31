@@ -1,12 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "ImportAutomatorScriptModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
   },
   data() {
     return {
@@ -58,9 +56,14 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-import l-modal-content--centered">
-    <ModalCloseButton @click="emitClose" />
-    <h3>Import Automator Script</h3>
+  <ModalWrapperChoice
+    :show-cancel="!isValid"
+    :show-confirm="isValid"
+    @confirm="importSave"
+  >
+    <template #header>
+      Import Automator Script
+    </template>
     This will create a new automator script at the end of your list.
     <input
       ref="input"
@@ -84,11 +87,8 @@ export default {
     <div v-else-if="input.length !== 0">
       Invalid Automator script string
     </div>
-    <PrimaryButton
-      class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
-      @click="importSave"
-    >
+    <template #confirm-text>
       Import
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

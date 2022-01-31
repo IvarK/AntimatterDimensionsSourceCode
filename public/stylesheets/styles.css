@@ -237,6 +237,11 @@ body {
   src: url('fa-solid-900.ttf');
 }
 
+@font-face {
+  font-family: Typewriter;
+  src: url('BlobEmoji-Bold.ttf'), url('MonospaceTypewriter.ttf');
+}
+
 /* Background for s6 and s10 is not displayed by default */
 #stars {
   display: none;
@@ -2426,7 +2431,7 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.c-options-tab__shortcuts-link {
+.c-options-tab__hotkeys-link {
   cursor: pointer;
   width: 21rem;
   align-self: center;
@@ -4168,6 +4173,13 @@ screen and (max-width: 480px) {
   background: white;
 }
 
+.l-autobuyer-singlet-group {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  width: 91rem;
+}
+
 .c-autobuyer-box-slot {
   position: relative;
   border: .2rem solid #383232;
@@ -5335,10 +5347,6 @@ screen and (max-width: 480px) {
 
 /*#region c-modal-import*/
 
-.c-modal-import {
-  width: 48rem;
-}
-
 .c-modal-import__save-info > div {
   margin-top: 0.2rem;
 }
@@ -5349,10 +5357,6 @@ screen and (max-width: 480px) {
 
 .c-modal-import__input {
   width: 45rem;
-}
-
-.c-modal-import__import-btn {
-  margin-top: 0.3rem;
 }
 
 /*#endregion c-modal-import*/
@@ -5483,43 +5487,43 @@ screen and (max-width: 480px) {
   margin-left: 1rem;
 }
 
-/*#region c-modal-shortcuts*/
+/*#region c-modal-hotkeys*/
 
-.c-modal-shortcuts {
+.c-modal-hotkeys {
   font-size: 1.25rem;
 }
 
-.l-modal-shortcuts {
+.l-modal-hotkeys {
   display: flex;
   flex-direction: row;
 }
 
-.l-modal-shortcuts__column {
+.l-modal-hotkeys__column {
   width: 25rem;
   display: flex;
   flex-direction: column;
 }
 
-.l-modal-shortcuts__column--right {
+.l-modal-hotkeys__column--right {
   margin-left: 1rem;
 }
 
-.l-modal-shortcuts-row {
+.l-modal-hotkeys-row {
   display: flex;
   flex-direction: row;
   line-height: 1.6rem;
   padding-bottom: 0.3rem;
 }
 
-.c-modal-shortcuts-row__name {
+.c-modal-hotkeys-row__name {
   text-align: left;
 }
 
-.l-modal-shortcuts-row__name {
+.l-modal-hotkeys-row__name {
   flex: 1 1 auto;
 }
 
-.c-modal-shortcuts__shift-description {
+.c-modal-hotkeys__shift-description {
   text-align: left;
   font-size: 1rem;
 }
@@ -5546,7 +5550,7 @@ kbd {
   color: #a9b3bc;
 }
 
-/*#endregion c-modal-shortcuts*/
+/*#endregion c-modal-hotkeys*/
 
 .l-modal-progress-bar {
   position: fixed;
@@ -8455,6 +8459,11 @@ kbd {
   border-radius: 50%;
 }
 
+.l-black-hole-sliders {
+  width: 65rem;
+  margin: 1rem auto;
+}
+
 .c-perk-tab__header {
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -8612,7 +8621,7 @@ input.o-automator-block-input {
 }
 
 .c-automator-template-description {
-  height: 13rem;
+  height: 9rem;
 }
 
 .c-automator-template-inputs {

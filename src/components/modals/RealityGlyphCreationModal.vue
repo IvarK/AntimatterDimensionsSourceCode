@@ -1,10 +1,12 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "RealityGlyphCreationModal",
   components: {
-    ModalCloseButton,
+    ModalWrapper,
+    PrimaryButton
   },
   data() {
     return {
@@ -46,9 +48,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-reality-glyph-creation">
-    <ModalCloseButton @click="emitClose" />
-    <h2>Reality Glyph Creation</h2>
+  <ModalWrapper class="c-reality-glyph-creation">
+    <template #header>
+      Reality Glyph Creation
+    </template>
     <div>
       Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph. Rarity will always be {{ formatPercents(1) }}
       and level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
@@ -65,18 +68,17 @@ export default {
     >
       {{ formatGlyphEffect(effect) }}
     </div><br>
-    <button
+    <PrimaryButton
       v-if="realityGlyphLevel !== 0"
-      class="o-primary-btn"
-      @click="createRealityGlyph()"
+      @click="createRealityGlyph"
     >
       Create a Reality Glyph!
-    </button>
-    <button
+    </PrimaryButton>
+    <PrimaryButton
       v-else
-      class="o-primary-btn o-primary-btn--disabled"
+      :enabled="false"
     >
       Reality Glyph level must be higher than {{ formatInt(0) }}
-    </button>
-  </div>
+    </PrimaryButton>
+  </ModalWrapper>
 </template>

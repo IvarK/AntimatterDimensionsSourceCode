@@ -26,7 +26,6 @@ export default {
   methods: {
     load() {
       GameStorage.loadSlot(this.saveId);
-      this.emitClose();
     },
     formatAntimatter(antimatter) {
       return formatPostBreak(antimatter, 2, 1);

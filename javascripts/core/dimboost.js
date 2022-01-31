@@ -125,9 +125,10 @@ export class DimBoost {
   static get unlockedByBoost() {
     if (DimBoost.lockText !== null) return DimBoost.lockText;
     const boosts = DimBoost.purchasedBoosts;
+    const allNDUnlocked = EternityMilestone.unlockAllND.isReached;
 
     let newUnlock = "";
-    if (!EternityMilestone.unlockAllND.isReached && boosts < DimBoost.maxDimensionsUnlockable - 4) {
+    if (!allNDUnlocked && boosts < DimBoost.maxDimensionsUnlockable - 4) {
       newUnlock = `unlock the ${boosts + 5}th Dimension`;
     } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
       newUnlock = "unlock Sacrifice";
@@ -138,8 +139,8 @@ export class DimBoost {
     if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
     if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
 
-    let boostEffects = "";
-    if (NormalChallenge(8).isRunning) boostEffects = ` to ${newUnlock}`;
+    let boostEffects;
+    if (NormalChallenge(8).isRunning) boostEffects = newUnlock === "" ? "" : ` to ${newUnlock}`;
     else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
     else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 

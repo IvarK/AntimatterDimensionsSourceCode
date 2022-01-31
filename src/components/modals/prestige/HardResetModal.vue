@@ -1,12 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "HardResetModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
   },
   data() {
     return {
@@ -19,12 +17,8 @@ export default {
     },
   },
   methods: {
-    cancelReset() {
-      this.emitClose();
-    },
     hardReset() {
       if (!this.willHardReset) return;
-      this.emitClose();
       GameStorage.hardReset();
     },
   },
@@ -32,9 +26,15 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <ModalCloseButton @click="cancelReset" />
-    <h3>HARD RESET</h3>
+  <ModalWrapperChoice
+    :show-cancel="!willHardReset"
+    :show-confirm="willHardReset"
+    confirm-class="o-primary-btn--width-medium c-modal__confirm-btn c-modal-hard-reset-btn"
+    @confirm="hardReset"
+  >
+    <template #header>
+      HARD RESET
+    </template>
     <div class="c-modal-message__text">
       Please confirm your desire to hard reset this save slot.
       <span class="c-modal-hard-reset-danger">This is irreversible and you will get no benefit.</span>
@@ -48,7 +48,7 @@ export default {
       v-model="input"
       type="text"
       class="c-modal-input c-modal-hard-reset__input"
-      @keyup.esc="cancelReset"
+      @keyup.esc="emitClose"
     >
     <div class="c-modal-hard-reset-info">
       <div
@@ -61,19 +61,8 @@ export default {
         Type in the correct code to hard reset.
       </div>
     </div>
-    <PrimaryButton
-      v-if="!willHardReset"
-      class="o-primary-btn--width-medium c-modal-hard-reset-btn"
-      @click="cancelReset"
-    >
-      Cancel
-    </PrimaryButton>
-    <PrimaryButton
-      v-else
-      class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
-      @click="hardReset"
-    >
+    <template #confirm-text>
       HARD RESET
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

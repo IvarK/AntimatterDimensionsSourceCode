@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "RefineGlyphModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   props: {
     modalConfig: {
@@ -49,19 +49,17 @@ export default {
       }
     },
     handleYesClick() {
-      this.emitClose();
       GlyphSacrificeHandler.refineGlyph(this.glyph);
     },
-    handleNoClick() {
-      this.emitClose();
-    }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>You are about to refine a Glyph</h2>
+  <ModalWrapperChoice @confirm="handleYesClick">
+    <template #header>
+      You are about to refine a Glyph
+    </template>
     <div
       v-if="resourceUnlocked"
       class="c-modal-message__text"
@@ -79,19 +77,5 @@ export default {
       unlocked this Glyph's resource yet. You can still refine it anyway, but nothing
       will happen. Consider sacrificing the Glyph instead.
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
-  </div>
+  </ModalWrapperChoice>
 </template>

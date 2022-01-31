@@ -3,11 +3,14 @@ import { GameKeyboard } from "./keyboard.js";
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
 // GameKeyboard.bindRepeatable for repeatable combinations
-// Hotkeys obey player.options.hotkeys option
+// Hotkeys obey player.options.hotkeys option, and should be everying relating to the functionality of the game itself
 // GameKeyboard.bindHotkey for single press hotkeys
 // GameKeyboard.bindRepeatableHotkey for repeatable hotkeys
 // GameKeyboard class uses Mousetrap under the hood, so for more details visit
 // https://craig.is/killing/mice
+
+// Note: mod is a function key helper by Mousetap for both ctrl and command,
+// and should be used to provide support for both Windows and Max
 
 // Free keys:
 // i, j, k, l, n, o, p, q, v, w, x, z
@@ -19,61 +22,61 @@ export const shortcuts = [
     keys: ["a"],
     type: "bindHotkey",
     function: () => keyboardToggleAutobuyers(),
-    visible: () => true
+    visible: true
   }, {
     name: "Buy one Tickspeed",
     keys: ["shift", "t"],
     type: "bindRepeatableHotkey",
     function: () => buyTickSpeed(),
-    visible: () => true
+    visible: true
   }, {
     name: "Buy max Tickspeed",
     keys: ["t"],
     type: "bindRepeatableHotkey",
     function: () => buyMaxTickSpeed(),
-    visible: () => true
+    visible: true
   }, {
     name: "Max all",
     keys: ["m"],
     type: "bindRepeatableHotkey",
     function: () => maxAll(),
-    visible: () => true
+    visible: true
   }, {
     name: "Dimensional Sacrifice",
     keys: ["s"],
     type: "bindRepeatableHotkey",
     function: () => sacrificeBtnClick(),
-    visible: () => true
+    visible: true
   }, {
     name: "Dimension Boost",
     keys: ["d"],
     type: "bindRepeatableHotkey",
     function: () => requestDimensionBoost(true),
-    visible: () => true
+    visible: true
   }, {
     name: "Single Dimension Boost",
     keys: ["shift", "d"],
     type: "bindRepeatableHotkey",
     function: () => requestDimensionBoost(false),
-    visible: () => false
+    visible: false
   }, {
     name: "Antimatter Galaxy",
     keys: ["g"],
     type: "bindRepeatableHotkey",
     function: () => requestGalaxyReset(true),
-    visible: () => true
+    visible: true
   }, {
     name: "Single Antimatter Galaxy",
     keys: ["shift", "g"],
     type: "bindRepeatableHotkey",
     function: () => requestGalaxyReset(false),
-    visible: () => false
+    visible: false
   }, {
     name: "Big Crunch",
     keys: ["c"],
     type: "bindRepeatableHotkey",
     function: () => bigCrunchResetRequest(),
-    visible: () => true
+    visible: true
   }, {
     name: "Replicanti Galaxy",
     keys: ["r"],
@@ -130,58 +133,67 @@ export const shortcuts = [
     visible: () => Laitela.continuumUnlocked
   }, {
     name: "Save game",
-    keys: ["ctrl", "s"],
-    type: "bindHotkey",
+    keys: ["mod", "s"],
+    type: "bind",
     function: () => {
       GameStorage.save(false, true);
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Export game",
-    keys: ["ctrl", "e"],
-    type: "bindHotkey",
+    keys: ["mod", "e"],
+    type: "bind",
     function: () => {
       GameStorage.export();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Open the shortcut list",
     keys: ["?"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardPressQuestionMark();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Open \"How to Play\" pop-up",
     keys: ["h"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardH2PToggle();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Modify visible tabs",
     keys: ["tab"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardVisibleTabsToggle();
       return false;
     },
-    visible: () => true
+    visible: true
+  }, {
+    name: "Confirm Modal",
+    keys: ["enter"],
+    type: "bind",
+    function: () => {
+      EventHub.dispatch(GAME_EVENT.ENTER_PRESSED);
+      return true;
+    },
+    visible: true
   }, {
     name: "Close pop-up or open options",
     keys: ["esc"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => {
       keyboardPressEscape();
       return false;
     },
-    visible: () => true
+    visible: true
   }, {
     name: "Paying respects",
     keys: ["f"],
@@ -190,37 +202,37 @@ export const shortcuts = [
       GameUI.notify.info("Paying respects");
       SecretAchievement(13).unlock();
     },
-    visible: () => false
+    visible: false
   }, {
     name: "Change Tab",
     keys: ["up"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("up"),
-    visible: () => false
+    visible: false
   }, {
     name: "Change Tab",
     keys: ["down"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("down"),
-    visible: () => false
+    visible: false
   }, {
     name: "Change Subtab",
     keys: ["left"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("left"),
-    visible: () => false
+    visible: false
   }, {
     name: "Change Subtab",
     keys: ["right"],
-    type: "bindHotkey",
+    type: "bind",
     function: () => keyboardTabChange("right"),
-    visible: () => false
+    visible: false
   }, {
     name: "Doesn't exist",
     keys: ["9"],
     type: "bind",
     function: () => SecretAchievement(41).unlock(),
-    visible: () => false
+    visible: false
   }
 ];
 
@@ -231,8 +243,6 @@ for (const hotkey of shortcuts) {
     if (keys === "") keys += key;
     else keys += `+${key}`;
   }
-  // If the keybind starts with ctrl, also add an alternative that uses meta
-  if (keys.startsWith("ctrl")) keys = [keys, `meta${keys.substring(4)}`];
   GameKeyboard[hotkey.type](keys, hotkey.function);
 }
 
@@ -269,17 +279,9 @@ GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(Autobuyer.reality));
 
 // A few special GameKeyboards
 GameKeyboard.bind(
-  ["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"],
+  ["mod+shift+c", "mod+shift+i", "mod+shift+j", "f12"],
   () => SecretAchievement(23).unlock()
 );
-
-// TODO: Change this so that it works correctly, this is just a stopgap
-GameKeyboard.bind("enter up up down down left right left right b a", () => {
-  SecretAchievement(17).unlock();
-  Currency.antimatter.bumpTo(30);
-  Speedrun.startTimer();
-});
-
 
 // Toggle autobuyers
 function toggleAutobuyer(buyer) {
@@ -361,17 +363,17 @@ function keyboardPressEscape() {
 }
 
 function keyboardPressQuestionMark() {
-  if (Modal.shortcuts.isOpen) {
-    Modal.hide();
+  if (Modal.hotkeys.isOpen) {
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
   if (Modal.isOpen) return;
-  Modal.shortcuts.show();
+  Modal.hotkeys.show();
 }
 
 function keyboardH2PToggle() {
   if (Modal.h2p.isOpen) {
-    Modal.hide();
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
   if (Modal.isOpen) return;
@@ -380,7 +382,7 @@ function keyboardH2PToggle() {
 
 function keyboardVisibleTabsToggle() {
   if (Modal.hiddenTabs.isOpen) {
-    Modal.hide();
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
   if (Modal.isOpen) return;
@@ -420,3 +422,27 @@ function keyboardTabChange(direction) {
   // Return false so the arrow keys don't do anything else
   return false;
 }
+
+const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a", "enter"];
+let konamiStep = 0;
+
+function testKonami(character) {
+  if (SecretAchievement(17).isUnlocked) return;
+  if (konamiCode[konamiStep] === character) konamiStep++;
+  else konamiStep = 0;
+  if (konamiCode.length <= konamiStep) {
+    SecretAchievement(17).unlock();
+    Currency.antimatter.bumpTo(30);
+    Speedrun.startTimer();
+  }
+}
+
+// Remember that Mousetrap handles the backend for GameKeyboard
+// Without this, Mousetrap become confused when the "up" key is pressed, as it is the starting key of a sequence
+// and an individual key. To allow both the up keybind and the konami code to work, we will change how Mousetrap handles
+// all keys so the konami code functions entirely separately from the normal handling.
+const originalHandleKey = Mousetrap.prototype.handleKey;
+Mousetrap.prototype.handleKey = function(character, modifiers, e) {
+  if (e.type === "keydown") testKonami(character);
+  return originalHandleKey.apply(this, [character, modifiers, e]);
+};

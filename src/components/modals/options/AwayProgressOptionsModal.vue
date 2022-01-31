@@ -1,12 +1,12 @@
 <script>
 import AwayProgressOptionsEntry from "@/components/modals/options/AwayProgressOptionsEntry";
-import OptionsWrapperModal from "@/components/modals/options/OptionsWrapperModal";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "AwayProgressOptionsModal",
   components: {
     AwayProgressOptionsEntry,
-    OptionsWrapperModal,
+    ModalWrapperOptions,
   },
   computed: {
     all() {
@@ -17,10 +17,10 @@ export default {
 </script>
 
 <template>
-  <OptionsWrapperModal
-    style="width: 75rem"
-    @close="emitClose"
-  >
+  <ModalWrapperOptions style="width: 75rem">
+    <template #header>
+      Away Progress Options
+    </template>
     <div class="c-modal-options__button-container">
       <AwayProgressOptionsEntry
         v-for="name of all"
@@ -29,5 +29,5 @@ export default {
       />
     </div>
     Note: Selected resources will only show if they've increased.
-  </OptionsWrapperModal>
+  </ModalWrapperOptions>
 </template>

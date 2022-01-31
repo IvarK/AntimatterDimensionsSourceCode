@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "PurgeAllRejectedGlyphsModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   data() {
     return {
@@ -39,38 +39,22 @@ export default {
       this.isRefining = GlyphSacrificeHandler.isRefining;
     },
     handleYesClick() {
-      this.emitClose();
       Glyphs.deleteAllRejected(true);
     },
-    handleNoClick() {
-      this.emitClose();
-    }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>{{ topLabel }}</h2>
+  <ModalWrapperChoice @confirm="handleYesClick">
+    <template #header>
+      {{ topLabel }}
+    </template>
     <div class="c-modal-message__text">
       {{ message }}
     </div>
     <div class="c-modal-hard-reset-danger">
       {{ extraMessage }}
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
-  </div>
+  </ModalWrapperChoice>
 </template>

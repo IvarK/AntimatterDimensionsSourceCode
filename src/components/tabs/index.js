@@ -13,6 +13,11 @@ import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 import PelleTab from "./celestial-pelle/PelleTab";
+import AutobuyersTab from "./autobuyers/AutobuyersTab";
+import AutomatorTab from "./automator/AutomatorTab";
+import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
+import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
+import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -28,7 +33,12 @@ const TabComponents = {
   SpeedrunMilestonesTab,
   NormalAchievementsTab,
   SecretAchievementTab,
-  PelleTab
+  PelleTab,
+  AutobuyersTab,
+  AutomatorTab,
+  NormalChallengesTab,
+  InfinityChallengesTab,
+  EternityChallengesTab
 };
 
 export default TabComponents;

@@ -1,10 +1,12 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "EnslavedHintsModal",
   components: {
-    ModalCloseButton,
+    ModalWrapper,
+    PrimaryButton
   },
   data() {
     return {
@@ -92,9 +94,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-enslaved-hint-modal">
-    <ModalCloseButton @click="emitClose" />
-    <h2>Cracks in The Enslaved Ones' Reality</h2>
+  <ModalWrapper class="c-enslaved-hint-modal">
+    <template #header>
+      Cracks in The Enslaved Ones' Reality
+    </template>
     <div>
       This Reality seems to be resisting your efforts to complete it. So far you have done the following:
     </div>
@@ -124,24 +127,22 @@ export default {
         You will reach this if you charge your Black Hole for {{ timeEstimate }}.
       </span>
       <br><br>
-      <button
-        class="o-primary-btn"
-        :class="{ 'o-primary-btn--disabled': realityHintsLeft <= 0 || !canGetHint }"
+      <PrimaryButton
+        :enabled="realityHintsLeft > 0 && canGetHint"
         @click="giveRealityHint(realityHintsLeft)"
       >
         Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
-      </button>
+      </PrimaryButton>
       <br>
-      <button
-        class="o-primary-btn"
-        :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
+      <PrimaryButton
+        :enabled="glyphHintsLeft > 0 && canGetHint"
         @click="giveGlyphHint(glyphHintsLeft)"
       >
         Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
-      </button>
+      </PrimaryButton>
     </div>
     <div v-else>
       There are no more hints left!
     </div>
-  </div>
+  </ModalWrapper>
 </template>

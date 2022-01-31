@@ -1,42 +1,33 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "UiChoiceModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   methods: {
     handleYesClick() {
-      this.emitClose();
       GameOptions.toggleUI();
     },
-    handleNoClick() {
-      this.emitClose();
-    }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
+  <ModalWrapperChoice @confirm="handleYesClick">
+    <template #header>
+      Swap to Modern UI
+    </template>
     <div class="c-modal-message__text">
       We noticed that you've loaded an old save, would you like to swap to the Modern UI?
       (you can change back to Classic at any time in the Visual Options tab)
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Remain
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Swap
-      </PrimaryButton>
-    </div>
-  </div>
+    <template #cancel-text>
+      Remain
+    </template>
+    <template #confirm-text>
+      Swap
+    </template>
+  </ModalWrapperChoice>
 </template>

@@ -1,14 +1,14 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
-import OptionsWrapperModal from "@/components/modals/options/OptionsWrapperModal";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "NewsOptionsModal",
   components: {
     ModalOptionsToggleButton,
     PrimaryButton,
-    OptionsWrapperModal,
+    ModalWrapperOptions,
   },
   data() {
     return {
@@ -55,7 +55,10 @@ export default {
 </script>
 
 <template>
-  <OptionsWrapperModal @close="emitClose">
+  <ModalWrapperOptions>
+    <template #header>
+      News Options
+    </template>
     <PrimaryButton
       class="o-primary-btn o-primary-btn--option-wide"
       onclick="GameOptions.toggleNews()"
@@ -100,5 +103,5 @@ export default {
       class="o-primary-btn o-primary-btn--option-wide"
       text="Animation Effects:"
     />
-  </OptionsWrapperModal>
+  </ModalWrapperOptions>
 </template>

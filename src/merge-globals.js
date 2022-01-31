@@ -1,5 +1,9 @@
 function mergeIntoGlobal(object) {
   for (const key in object) {
+    if (key === "default") {
+      // Skip default exports
+      continue;
+    }
     const value = object[key];
     const existingValue = window[key];
     if (existingValue !== undefined) {
@@ -21,15 +25,15 @@ mergeIntoGlobal(GameDB);
 // Start of bullshit
 
 // Hevi, why
-import * as AutomatorBlockEditor from "../javascripts/components/reality/automator/automator-block-editor";
+import * as AutomatorBlockEditor from "@/components/tabs/automator/AutomatorBlockEditor";
 mergeIntoGlobal(AutomatorBlockEditor);
 
 // Hevi, whyy
-import * as AutomatorBlocks from "../javascripts/components/reality/automator/automator-blocks";
+import * as AutomatorBlocks from "@/components/tabs/automator/AutomatorBlocks";
 mergeIntoGlobal(AutomatorBlocks);
 
 // Garnet, nooo
-import * as AutomatorTextEditor from "../javascripts/components/reality/automator/automator-text-editor";
+import * as AutomatorTextEditor from "@/components/tabs/automator/AutomatorTextEditor";
 mergeIntoGlobal(AutomatorTextEditor);
 
 // Spec, reeee

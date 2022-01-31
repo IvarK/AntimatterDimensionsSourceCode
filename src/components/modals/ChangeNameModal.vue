@@ -1,12 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "ChangeNameModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
   },
   data() {
     return {
@@ -34,9 +32,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-import l-modal-content--centered">
-    <ModalCloseButton @click="emitClose" />
-    <h3>Change your Speedrun Player Name</h3>
+  <ModalWrapperChoice @confirm="confirmChange">
+    <template #header>
+      Change your Speedrun Player Name
+    </template>
     <input
       ref="input"
       v-model="input"
@@ -52,11 +51,8 @@ export default {
     <div>
       Your new name will be {{ actualName }}
     </div>
-    <PrimaryButton
-      class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
-      @click="confirmChange"
-    >
+    <template #confirm-text>
       Change Name
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "SacrificeModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   data() {
     return {
@@ -41,43 +41,24 @@ export default {
       this.currentMultiplier.copyFrom(Sacrifice.totalBoost);
       this.nextMultiplier.copyFrom(Sacrifice.nextBoost.times(Sacrifice.totalBoost));
     },
-    handleNoClick() {
-      this.emitClose();
-    },
     handleYesClick() {
       sacrificeReset();
-      this.emitClose();
     }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>Dimensional Sacrifice</h2>
+  <ModalWrapperChoice @confirm="handleYesClick">
+    <template #header>
+      Dimensional Sacrifice
+    </template>
     <div class="c-modal-message__text">
       {{ message }}
-    </div>
-    <br>
-    <div class="c-modal-message__text">
+      <br>
       {{ currently }}
       <br>
       {{ afterSacrifice }}
-      <br>
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
-  </div>
+  </ModalWrapperChoice>
 </template>

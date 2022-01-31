@@ -2,24 +2,16 @@ import "./black-hole-unlock-button.js";
 import "./black-hole-upgrade-row.js";
 import "./black-hole-state-row.js";
 import { BlackHoleAnimation } from "./black-hole-animation.js";
-import SliderComponent from "@/components/SliderComponent";
+import "./black-hole-charging-sliders.js";
 
 Vue.component("black-hole-tab", {
-  components: {
-    SliderComponent
-  },
   data() {
     return {
       isUnlocked: false,
       isPaused: false,
       isEnslaved: false,
-      isNegativeBHUnlocked: false,
       pauseMode: 0,
-      negativeSlider: 0,
-      negativeBHDivisor: 1,
-      maxNegativeBlackHole: 300,
       detailedBH2: "",
-      storedFraction: 0,
       isPermanent: false,
       hasBH2: false,
       blackHoleUptime: [],
@@ -33,29 +25,6 @@ Vue.component("black-hole-tab", {
   },
   computed: {
     blackHoles: () => BlackHoles.list,
-    sliderPropsNegative() {
-      return {
-        min: 0,
-        max: this.maxNegativeBlackHole,
-        interval: 1,
-        show: true,
-        width: "60rem",
-        tooltip: false
-      };
-    },
-    storedTimeRate() {
-      return formatPercents(this.storedFraction / 1000, 1);
-    },
-    sliderPropsStoring() {
-      return {
-        min: 0,
-        max: 990,
-        interval: 1,
-        show: true,
-        width: "60rem",
-        tooltip: false
-      };
-    },
     pauseModeString() {
       switch (this.pauseMode) {
         case BLACK_HOLE_PAUSE_MODE.NO_PAUSE:
@@ -75,12 +44,8 @@ Vue.component("black-hole-tab", {
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
       this.isPermanent = BlackHoles.arePermanent;
-      this.isNegativeBHUnlocked = V.isFlipped && this.isPermanent;
       this.pauseMode = player.blackHoleAutoPauseMode;
-      this.negativeSlider = -Math.log10(player.blackHoleNegative);
-      this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
-      this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.hasBH2 = BlackHole(2).isUnlocked;
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];
@@ -148,24 +113,12 @@ Vue.component("black-hole-tab", {
       }
       player.blackHoleAutoPauseMode = (this.pauseMode + steps) % Object.values(BLACK_HOLE_PAUSE_MODE).length;
     },
-    adjustSliderNegative(value) {
-      this.negativeSlider = value;
-      player.blackHoleNegative = Math.pow(10, -this.negativeSlider);
-      player.requirementChecks.reality.slowestBH = Math.max(
-        player.requirementChecks.reality.slowestBH,
-        player.blackHoleNegative
-      );
-    },
     startAnimation() {
       setTimeout(() => {
         if (this.$refs.canvas) {
           this.animation = new BlackHoleAnimation(this.$refs.canvas.getContext("2d"));
         }
       }, 1);
-    },
-    adjustSliderStoring(value) {
-      this.storedFraction = value;
-      player.celestials.enslaved.storedFraction = value / 1000;
     },
     gridStyle() {
       return this.isPermanent ? "l-black-hole-upgrade-permanent" : "l-black-hole-upgrade-grid";
@@ -224,23 +177,7 @@ Vue.component("black-hole-tab", {
             Active time percent: {{ formatPercents(blackHoleUptime[0], 3) }}
             <span v-if="hasBH2">and {{ formatPercents(blackHoleUptime[1], 3) }}</span>
           </div>
-          <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
-            Black Hole charging rate: {{ storedTimeRate }}
-            <SliderComponent
-              v-bind="sliderPropsStoring"
-              :value="storedFraction"
-              @input="adjustSliderStoring($event)"
-            />
-          </div>
-          <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
-            Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-            This requires both Black Holes to be permanent and only works when paused.
-            <SliderComponent
-              v-bind="sliderPropsNegative"
-              :value="negativeSlider"
-              @input="adjustSliderNegative($event)"
-            />
-          </div>
+          <black-hole-charging-sliders class="l-enslaved-shop-container" />
         </div>
         <div :class="gridStyle()">
           <black-hole-upgrade-row

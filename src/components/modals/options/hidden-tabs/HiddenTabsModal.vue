@@ -1,12 +1,12 @@
 <script>
 import HiddenTabGroup from "@/components/modals/options/hidden-tabs/HiddenTabGroup";
-import OptionsWrapperModal from "@/components/modals/options/OptionsWrapperModal";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "HiddenTabsModal",
   components: {
     HiddenTabGroup,
-    OptionsWrapperModal,
+    ModalWrapperOptions,
   },
   data() {
     return {
@@ -25,11 +25,10 @@ export default {
 </script>
 
 <template>
-  <OptionsWrapperModal
-    style="width: auto"
-    @close="emitClose"
-  >
-    <h2>Modify Visible Tabs</h2>
+  <ModalWrapperOptions style="width: auto">
+    <template #header>
+      Modify Visible Tabs
+    </template>
     Click a button to toggle showing a tab on/off.
     <br>
     Some tabs cannot be hidden, and you cannot hide your current tab.
@@ -47,5 +46,5 @@ export default {
     >
       <HiddenTabGroup :tab="tab" />
     </div>
-  </OptionsWrapperModal>
+  </ModalWrapperOptions>
 </template>

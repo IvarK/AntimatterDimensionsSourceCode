@@ -1,23 +1,21 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 import StdStoreRow from "@/components/modals/StdStoreRow";
 
 export default {
   name: "StdStoreModal",
   components: {
-    ModalCloseButton,
+    ModalWrapper,
     StdStoreRow
   },
 };
 </script>
 
 <template>
-  <div class="l-modal-content--centered">
-    <ModalCloseButton
-      class="c-modal__close-btn"
-      @click="emitClose"
-    />
-    <h2>Support The Developer -coins</h2>
+  <ModalWrapper>
+    <template #header>
+      Support The Developer -coins
+    </template>
     <div class="l-modal-store-content">
       <img src="images/std_coin.png">
       <div class="c-modal-store-buttons">
@@ -43,5 +41,5 @@ export default {
         />
       </div>
     </div>
-  </div>
+  </ModalWrapper>
 </template>

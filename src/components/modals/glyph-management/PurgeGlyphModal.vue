@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "PurgeGlyphModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   props: {
     modalConfig: {
@@ -47,19 +47,17 @@ export default {
       this.glyphsDeleted = Glyphs.autoClean(this.threshold, false);
     },
     handleYesClick() {
-      this.emitClose();
       Glyphs.autoClean(this.threshold, true);
     },
-    handleNoClick() {
-      this.emitClose();
-    }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
-    <h2>{{ topLabel }}</h2>
+  <ModalWrapperChoice @confirm="handleYesClick">
+    <template #header>
+      {{ topLabel }}
+    </template>
     <div class="c-modal-message__text">
       This could delete Glyphs in your inventory that are good enough that you might want to use them
       later. Are you sure you want to do this? This process is irreversible! Purging will Purge Glyphs based on your
@@ -72,19 +70,5 @@ export default {
     <div class="c-modal-hard-reset-danger">
       {{ extraMessage }}
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
-  </div>
+  </ModalWrapperChoice>
 </template>

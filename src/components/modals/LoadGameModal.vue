@@ -1,23 +1,25 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import LoadGameEntry from "@/components/modals/LoadGameEntry";
 
 export default {
   name: "LoadGameModal",
   components: {
-    ModalCloseButton,
+    ModalWrapperOptions,
     LoadGameEntry
   }
 };
 </script>
 
 <template>
-  <div class="c-modal-options l-modal-options">
-    <ModalCloseButton @click="emitClose" />
+  <ModalWrapperOptions>
+    <template #header>
+      Save Selection
+    </template>
     <LoadGameEntry
       v-for="id in 3"
       :key="id"
       :save-id="id - 1"
     />
-  </div>
+  </ModalWrapperOptions>
 </template>

@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "EternityModal",
   components: {
-    PrimaryButton
+    ModalWrapperChoice
   },
   data() {
     return {
@@ -51,9 +51,6 @@ export default {
       this.startingIP = Currency.infinityPoints.startingValue;
       this.gainedEternityPoints = gainedEternityPoints();
     },
-    handleNoClick() {
-      this.emitClose();
-    },
     handleYesClick() {
       if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
         animateAndUndilate();
@@ -65,16 +62,17 @@ export default {
       } else {
         eternity();
       }
-      this.emitClose();
     }
   },
 };
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
+  <ModalWrapperChoice @confirm="handleYesClick">
+    <template #header>
+      {{ exitingEC ? "Complete Eternity Challenge" :"You are about to Eternity" }}
+    </template>
     <div v-if="!exitingEC">
-      <h2>You are about to Eternity</h2>
       <div class="c-modal-message__text">
         {{ message }}
         <!-- TODO: DILATION EXIT MODAL HI GAMER -->
@@ -90,24 +88,9 @@ export default {
       </div>
     </div>
     <div v-else>
-      <h2>Complete Eternity Challenge</h2>
       <div class="c-modal-message__text">
         {{ eternityChallenge }}
       </div>
     </div>
-    <div class="l-options-grid__row">
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
-  </div>
+  </ModalWrapperChoice>
 </template>

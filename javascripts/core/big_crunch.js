@@ -1,5 +1,6 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
+import { SpeedrunMilestones } from "./speedrun.js";
 
 export function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";

@@ -1,13 +1,11 @@
 <script>
 import CloudConflictRecordModal from "@/components/modals/cloud/CloudConflictRecordModal";
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "CloudSaveConflictModal",
   components: {
-    PrimaryButton,
-    ModalCloseButton,
+    ModalWrapperChoice,
     CloudConflictRecordModal,
   },
   computed: {
@@ -28,18 +26,22 @@ export default {
       if (accepted) {
         this.conflict.onAccept?.();
       }
-      this.emitClose();
     }
   },
 };
 </script>
 
 <template>
-  <div
-    class="c-modal-options c-modal-options__large l-modal-options"
+  <ModalWrapperChoice
+    class="c-modal-options__large"
+    :cancel-class="'c-modal-message__okay-btn'"
+    :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
+    @cancel="saveClick(true)"
+    @confirm="saveClick(false)"
   >
-    <ModalCloseButton @click="emitClose" />
-    <h1>Save Game to Cloud</h1>
+    <template #header>
+      Save Game to Cloud
+    </template>
     <b>
       <span v-if="older">
         Your Cloud Save appears to be older than your Local Save.
@@ -65,18 +67,11 @@ export default {
     <br>
     Would you like to overwrite the Cloud Save? Your choice here will apply for every
     time the game automatically attempts to Cloud Save, until the page is reloaded.
-    <PrimaryButton
-      class="o-primary-btn"
-      @click="saveClick(true)"
-    >
+    <template #cancel-text>
       Overwrite Cloud Save
-    </PrimaryButton>
-    <br>
-    <PrimaryButton
-      class="o-primary-btn"
-      @click="saveClick(false)"
-    >
+    </template>
+    <template #confirm-text>
       Do not overwrite
-    </PrimaryButton>
-  </div>
+    </template>
+  </ModalWrapperChoice>
 </template>

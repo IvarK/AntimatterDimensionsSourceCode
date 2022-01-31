@@ -103,7 +103,10 @@ window.GAME_EVENT = {
   // event, not handled by the event hub
   ACHIEVEMENT_EVENT_OTHER: "ACHIEVEMENT_EVENT_OTHER",
 
+  ENTER_PRESSED: "ENTER_PRESSED",
+
   // UI Events
   UPDATE: "UPDATE",
   TAB_CHANGED: "TAB_CHANGED",
+  CLOSE_MODAL: "CLOSE_MODAL",
 };

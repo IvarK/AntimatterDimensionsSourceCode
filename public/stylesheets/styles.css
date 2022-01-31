@@ -7953,7 +7953,7 @@ kbd {
 
 .c-singularity-milestone-modal-sort-button {
   height: 6rem;
-  width: 22.5rem;
+  width: 22rem;
   font-family: Typewriter, serif;
   font-weight: bold;
   font-size: 1.3rem;
@@ -7962,12 +7962,11 @@ kbd {
   border: 0.1rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   cursor: pointer;
-  margin: 0.5rem;
+  margin: 0.5rem 1rem 0 0;
   transition-duration: 0.15s;
 }
 
 .s-base--metro .c-singularity-milestone-modal-sort-button {
-  border-width: 0.1rem;
   border-radius: 0;
 }
 
@@ -8141,6 +8140,10 @@ kbd {
 .c-laitela-automation-toggle:hover {
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent) !important;
+}
+
+.s-base--metro .c-laitela-automation-toggle {
+  box-shadow: none;
 }
 
 /* #endregion laitela tab*/

@@ -776,7 +776,7 @@ export function getTTPerSecond() {
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning || Enslaved.isRunning
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning || Pelle.isDoomed
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 

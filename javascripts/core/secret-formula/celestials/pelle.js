@@ -150,6 +150,12 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e24,
         formatCost: c => format(c, 2),
       },
+      TDAutobuyers: {
+        id: 17,
+        description: "Gain Back Time Dimension Autobuyers",
+        cost: 1e26,
+        formatCost: c => format(c, 2),
+      },
     },
     strikes: {
       infinity: {
@@ -200,7 +206,7 @@ GameDatabase.celestials.pelle = (function() {
           {
             requirement: 0.4,
             description: "Famine also affects EP gain",
-            effect: () => Decimal.pow(4, PelleRifts.famine.totalFill.log10() / 4 / 308 + 1),
+            effect: () => Decimal.pow(4, PelleRifts.famine.totalFill.log10() / 2 / 308 + 3),
             formatEffect: x => formatX(x, 2, 2)
           },
         ]

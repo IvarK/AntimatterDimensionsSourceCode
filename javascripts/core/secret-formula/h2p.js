@@ -81,7 +81,7 @@ options in the drop-down menu. Many of these notations are intended as jokes and
 in a way that causes text to spill over into other parts of the screen - this is not a bug. "Exponent formatting" is
 a setting affecting some notations which lets you toggle between showing the number in an exponent itself (with commas
 every three digits) or also applying the notation formatting to the exponent. Note that notation formatting is forced
-when exponents are larger than ${format(1e9)}.
+when exponents are larger than ${format(DC.E9)}.
 <br>
 <br>
 Many events in the game trigger full-screen animations or pop-up modals which require you to confirm that you want to
@@ -117,7 +117,7 @@ autobuyers - in this situation autobuyers will effectively only trigger once eve
 may have a strong impact depending on the part of the game.
 <br>
 <br>
-Offline tick count can be adjusted between ${formatInt(500)} and ${formatInt(1e6)} ticks. Smaller counts will result
+Offline tick count can be adjusted between ${formatInt(500)} and ${formatInt(DC.E6)} ticks. Smaller counts will result
 in faster but less accurate simulations, while larger counts will result in more accurate simulations which take longer
 to complete.
 <br>
@@ -489,7 +489,7 @@ amount of antimatter before you can attempt them.
     }, {
       name: "Replicanti",
       info: () => `
-Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
+Replicanti are another resource you unlock at ${format(DC.E140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
 ${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by Tickspeed Upgrades.
 Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
@@ -507,14 +507,14 @@ Replicanti give a multiplier to all Infinity Dimensions, which will reach a maxi
 ${formatX(Math.pow(2, 20), 2, 2)} at ${formatPostBreak(Number.MAX_VALUE, 2)} Replicanti.
 <br>
 <br>
-<b>Chance upgrade cost:</b> Base ${format(1e150)} IP, cost increment ${formatX(1e15)} IP
+<b>Chance upgrade cost:</b> Base ${format(DC.E150)} IP, cost increment ${formatX(DC.E15)} IP
 <br>
-<b>Interval upgrade cost:</b> Base ${format(1e140)} IP, cost increment ${formatX(1e10)} IP
+<b>Interval upgrade cost:</b> Base ${format(DC.E140)} IP, cost increment ${formatX(DC.E10)} IP
 <br>
-<b>Galaxy upgrade cost:</b> Base ${format(1e170)} IP, cost increment ${formatX(1e25)} IP and an additional
+<b>Galaxy upgrade cost:</b> Base ${format(DC.E170)} IP, cost increment ${formatX(DC.E25)} IP and an additional
 ${formatX(1e5)} IP per upgrade, scaling similarly to distant Antimatter Galaxies. Above ${formatInt(100)} Replicanti
-Galaxies, this ${formatX(1e5)} per upgrade changes to ${formatX(1e55)}. Above ${formatInt(1000)}, the scaling switches
-from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing by ${formatX(1e5)} per upgrade.
+Galaxies, this ${formatX(1e5)} per upgrade changes to ${formatX(DC.E55)}. Above ${formatInt(1000)}, the scaling switches
+from quadratic to cubic, with the ${formatX(DC.E55)} multiplier itself increasing by ${formatX(DC.E5)} per upgrade.
 `,
       isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
       tags: ["interval", "chance", "infinity", "galaxy", "galaxies", "midgame"],
@@ -661,11 +661,11 @@ the middle of an Eternity.
 <br>
 <b>Costs for Time Theorems:</b>
 <br>
-<b>Antimatter:</b> Initially ${format(DC.E20000)}, ${formatX(DC.E20000)} per theorem
+<b>Antimatter:</b> Initially ${format(DC.E20000)}, ${formatX(DC.E20000)} per Theorem
 <br>
-<b>Infinity Points:</b> Initially ${formatInt(1)}, ${formatX(DC.E100)} per theorem
+<b>Infinity Points:</b> Initially ${formatInt(1)}, ${formatX(DC.E100)} per Theorem
 <br>
-<b>Eternity Points:</b> Initially ${formatInt(1)}, ${formatX(2)} per theorem
+<b>Eternity Points:</b> Initially ${formatInt(1)}, ${formatX(2)} per Theorem
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["eternity", "ts", "theorems", "tree", "study", "midgame"],
@@ -678,9 +678,9 @@ amount of Time Theorems to enter, plus a secondary requirement which you must me
 <br>
 <br>
 When you enter an Eternity Challenge, your goal becomes reaching a certain target IP. After completing the challenge,
-you don't need to have the Eternity Challenge's study unlocked for the reward to take effect. The rewards for these
-challenges are similar to Time Studies, but often even stronger and permanent since they don'tt require you to spend
-theorems to have their effects.
+you do not need to have the Eternity Challenge's study unlocked for the reward to take effect. The rewards for these
+challenges are similar to Time Studies, but often even stronger and permanent since they don't require you to spend
+Time Theorems to have their effects.
 <br>
 <br>
 You can complete each Eternity Challenge up to five times. After each completion, the rewards grow stronger but the
@@ -704,15 +704,15 @@ completed both EC11 and EC12 five times each.
 <br>
 <br>
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
-Dimension multipliers' <i>exponents</i> and the tickspeed multipliers' <i>exponent</i> will be raised to the power of
-${format(0.75, 2, 2)}, significantly reducing them. If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP
-to complete this Dilated Eternity, you'll be rewarded with a new resource called Tachyon Particles.
+Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>exponent</i> will be raised to
+${formatPow(0.75, 2, 2)}, significantly reducing them. If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP
+to complete this Dilated Eternity, you will be rewarded with a new resource called Tachyon Particles.
 <br>
 <br>
-You can dilate as many times as you want, but Tachyon Particles can't be "farmed" like other resources.
-Your current Tachyon Particles are based progress in your "Best Dilated Run", which is judged on your
-antimatter and any multipliers to TP gain you may have. As a result, you generally can't increase your TP unless
-you have gained a TP multiplier or an upgrade that significantly increases your antimatter in Dilation.
+You can Dilate as many times as you want, but Tachyon Particles cannot be "farmed" like other resources. Tachyon
+Particles are never reduced, only increased, and they are increased up to a cap based on your TP multipliers and
+antimatter earned in the current Dilation. As a result, you generally cannot increase your TP unless
+you have gained a TP multiplier or are able to significantly increase your antimatter in Dilation.
 <br>
 <br>
 Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
@@ -763,7 +763,7 @@ is higher RM gain than linear above ${formatPostBreak(DC.C10P16000D3)} EP.
 <br>
 <br>
 Glyph level scales off of a combination of Eternity Points, Replicanti, and Dilated Time, with a minimum level of
-${formatInt(1)}. All other attributes of Glyphs are randomized.
+${formatInt(1)}. The type, effects, and rarity of Glyphs are randomized.
 <br>
 <br>
 You get exactly ${formatInt(1)} Perk Point per Reality.
@@ -841,8 +841,8 @@ to Perks you already have, although there are loops in the tree which you can go
 <br>
 <br>
 The Perk nodes can have two different shapes - circular or diamond. The only difference between the two is that
-diamond-shaped perks also additionally give Automator Points. Different nodes also have different colors, roughly
-indicating which part of the game they affect the most.
+diamond-shaped perks give Automator Points in addition to their normal effect. Different nodes also have
+different colors, roughly indicating which part of the game they affect the most.
 `,
       isUnlocked: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
       tags: ["pp", "reality", "tree", "endgame", "lategame"],
@@ -1205,9 +1205,9 @@ to spend any resources.
 - Each V-Achievement also gives you one Space Theorem.
 <br>
 <br>
-The goal reduction unlocked by having ${formatInt(2)} V-Achievements allows you to make V-Achievement requirements
-easier to complete, down to a limit of whatever the easiest tier requires. The cost of reducing a goal doesn't
-increase as it is used, and will also reduce future tiers as well.
+The goal reduction unlocked by having ${formatInt(2)} V-Achievements allows you to make some V-Achievement requirements
+easier to complete by spending Perk Points, down to a limit of whatever the easiest tier requires.
+The cost of reducing a goal does not increase as it is used, and will also reduce future tiers as well.
 <br>
 <br>
 Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
@@ -1352,12 +1352,12 @@ Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginar
 ${format(ImaginaryUpgrade(15).cost)} iM.
 <br>
 <br>
-Lai'tela gives a new resource called Dark Matter, which improves your Antimatter Dimensions (via Continuum) based on
-the highest amount of Dark Matter you have ever had. Dark Matter is produced by Dark Matter Dimensions, in a similar
-cascading way to all other types of dimensions in the game. Unlike other dimensions, there are only four Dark Matter
-Dimensions rather than eight. You start with the first one unlocked immediately and the higher ones are unlocked
-via Imaginary Upgrades. When unlocking dimensions, you are given ${formatInt(1)} of the dimension and can't gain
-more without having it produced from the next tier up.
+Lai'tela gives a new resource called Dark Matter, which improves your Antimatter Dimensions and Tickspeed
+(via Continuum) based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by
+Dark Matter Dimensions, in a similar cascading way to all other types of dimensions in the game. Unlike other
+dimensions, there are only four Dark Matter Dimensions rather than eight. You start with the first one unlocked
+immediately and the higher ones are unlocked via Imaginary Upgrades. When unlocking dimensions, you are given
+${formatInt(1)} of the dimension and cannot gain more without having it produced from the next tier up.
 <br>
 <br>
 Each Dark Matter Dimension, after a certain interval of time, generates two things: Dark Matter or the next lower
@@ -1404,7 +1404,7 @@ an appropriate portion of their multiplier.
 <br>
 The purchase buttons for Antimatter Dimensions and Tickspeed Upgrades become modified to display the number of upgrades
 you would be able to purchase if Continuum was inactive, and the purchase count is scaled smoothly with antimatter.
-For example, having ${format(2e7)} antimatter will give you a continuum value of ${format(5.3, 0, 1)} for Tickspeed
+For example, having ${format(2e7)} antimatter will give you a Continuum value of ${format(5.3, 0, 1)} for Tickspeed
 (initial cost of ${format(1e3)} and increase of ${formatX(10)}) since you can purchase it ${formatInt(5)} times and
 are roughly ${formatPercents(0.3)} of the way to the next. Tickspeed Continuum in this case will then
 give a production boost equal to (upgrade multiplier)<sup>${format(5.3, 0, 1)}</sup>.

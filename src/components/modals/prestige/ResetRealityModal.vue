@@ -34,7 +34,7 @@ export default {
       You are about to reset your {{ resetTerm }}
     </template>
     <div class="c-modal-message__text">
-      This will put you at the start of your {{ resetTerm }},
+      This will reset you to the start of your {{ resetTerm }},
       giving you no rewards from your progress in your current {{ resetTerm }}.
       <br>
       <br>

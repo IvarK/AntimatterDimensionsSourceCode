@@ -13,8 +13,8 @@ export default {
     update() {
       this.realityMachines.copyFrom(Currency.realityMachines.value);
       this.unlockedIM = MachineHandler.isIMUnlocked;
-      this.machineStr = formatComplex(this.realityMachines, Currency.imaginaryMachines.value);
-      this.capStr = formatComplex(MachineHandler.hardcapRM, MachineHandler.currentIMCap);
+      this.machineStr = formatMachines(this.realityMachines, Currency.imaginaryMachines.value);
+      this.capStr = formatMachines(MachineHandler.hardcapRM, MachineHandler.currentIMCap);
     }
   }
 };

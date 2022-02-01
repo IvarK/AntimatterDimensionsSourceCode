@@ -158,7 +158,7 @@ GameDatabase.celestials.pelle = (function() {
       },
       keepEternityChallenges: {
         id: 18,
-        description: "You keep your Infinity Challenge completions through Armageddons",
+        description: "You keep your Eternity Challenge completions through Armageddons",
         cost: 1e26,
         formatCost: c => format(c, 2),
       },

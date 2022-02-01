@@ -363,11 +363,11 @@ class RiftState extends GameMechanicState {
 
     if (this.fillCurrency.value instanceof Decimal) {
       const spent = this.fillCurrency.value.times(0.03).times(diff / 1000);
-      this.fillCurrency.value = this.fillCurrency.value.minus(spent);
+      this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(0);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     } else {
       const spent = this.fillCurrency.value * 0.03 * diff / 1000;
-      this.fillCurrency.value -= spent;
+      this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     }
   }

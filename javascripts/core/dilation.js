@@ -21,7 +21,7 @@ export function animateAndUndilate() {
 }
 
 export function startDilatedEternityRequest() {
-  if (!PlayerProgress.dilationUnlocked()) return;
+  if (!PlayerProgress.dilationUnlocked() || Pelle.cel.remnants < 3.8e7) return;
   const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
   if (player.dilation.active) {
     // TODO Dilation modal
@@ -37,6 +37,8 @@ export function startDilatedEternityRequest() {
   } else {
     startDilatedEternity();
   }
+
+  PelleStrikes.dilation.trigger();
 }
 
 export function startDilatedEternity(auto) {
@@ -114,7 +116,7 @@ export function getDilationGainPerSecond() {
 
     return new Decimal(Currency.tachyonParticles.value)
       .timesEffectsOf(DilationUpgrade.dtGain)
-      .times(pelleMults).div(1e6);
+      .times(pelleMults).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(

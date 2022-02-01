@@ -125,7 +125,13 @@ class TimeDimensionState extends DimensionState {
   }
 
   /** @returns {Decimal} */
-  get cost() { return this.data.cost; }
+  get cost() {
+    if (PelleRifts.death.hasMilestone(0) && this._tier > 4) {
+      return this.data.cost.div("1e2250").pow(0.5);
+    }
+    return this.data.cost;
+  }
+
   /** @param {Decimal} value */
   set cost(value) { this.data.cost = value; }
 
@@ -184,8 +190,9 @@ class TimeDimensionState extends DimensionState {
     mult = mult.powEffectOf(AlchemyResource.time);
     mult = mult.pow(Ra.momentumValue);
     mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
+    mult = mult.powEffectOf(PelleRifts.death);
 
-    if (player.dilation.active) {
+    if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
     }
 

@@ -588,7 +588,7 @@ export function gameLoop(passDiff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
+  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP) && !Pelle.isDoomed) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
@@ -657,12 +657,13 @@ function passivePrestigeGen() {
 
 // Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
 function applyAutoUnlockPerks() {
+  if (Pelle.isDoomed) return;
   if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.isBought) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
   if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought && !Pelle.isDoomed) {
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
     const secondRow = Object.values(EternityUpgrade).filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
@@ -787,12 +788,12 @@ export function getTTPerSecond() {
 
   // Dilation TT generation
   const dilationTT = DilationUpgrade.ttGenerator.isBought
-    ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
+    ? DilationUpgrade.ttGenerator.effectValue.times(Pelle.isDoomed ? 1 : ttMult)
     : DC.D0;
 
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
-  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1)) {
+  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1) && !Pelle.isDoomed) {
     finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
   }
 

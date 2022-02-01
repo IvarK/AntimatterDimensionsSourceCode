@@ -585,19 +585,21 @@ export function finishProcessReality(realityProps) {
   player.records.thisReality.maxReplicanti = DC.D0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) Currency.timeTheorems.reset();
   player.celestials.v.STSpent = 0;
-  player.dilation.studies = [];
-  player.dilation.active = false;
-  Currency.tachyonParticles.reset();
-  Currency.dilatedTime.reset();
-  player.dilation.nextThreshold = DC.E3;
-  player.dilation.baseTachyonGalaxies = 0;
-  player.dilation.totalTachyonGalaxies = 0;
-  player.dilation.upgrades.clear();
-  player.dilation.rebuyables = {
-    1: 0,
-    2: 0,
-    3: 0
-  };
+  if (!Pelle.isDoomed) {
+    player.dilation.studies = [];
+    player.dilation.active = false;
+    Currency.tachyonParticles.reset();
+    Currency.dilatedTime.reset();
+    player.dilation.nextThreshold = DC.E3;
+    player.dilation.baseTachyonGalaxies = 0;
+    player.dilation.totalTachyonGalaxies = 0;
+    player.dilation.upgrades.clear();
+    player.dilation.rebuyables = {
+      1: 0,
+      2: 0,
+      3: 0
+    };
+  }
   player.records.thisInfinity.maxAM = DC.D0;
   player.records.thisEternity.maxAM = DC.D0;
   player.records.thisReality.maxDT = DC.D0;

@@ -668,6 +668,10 @@ window.player = {
         war: {
           fill: DC.D0,
           active: false
+        },
+        death: {
+          fill: DC.D0,
+          active: false
         }
       },
       progressBits: 0

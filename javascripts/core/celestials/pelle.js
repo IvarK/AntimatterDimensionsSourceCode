@@ -110,9 +110,16 @@ export const Pelle = {
   },
 
   get remnantsGain() {
-    const am = this.cel.records.totalAntimatter.plus(1).log10();
-    const ip = this.cel.records.totalInfinityPoints.plus(1).log10();
-    const ep = this.cel.records.totalEternityPoints.plus(1).log10();
+    let am = this.cel.records.totalAntimatter.plus(1).log10();
+    let ip = this.cel.records.totalInfinityPoints.plus(1).log10();
+    let ep = this.cel.records.totalEternityPoints.plus(1).log10();
+
+    if (PelleStrikes.dilation.hasStrike) {
+      am *= 500;
+      ip *= 10;
+      ep *= 5;
+    }
+
     const gain = (
       (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 1.64
     ) ** 7.5;
@@ -252,16 +259,21 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   trigger() {
-    if (!Pelle.isDoomed) return;
-    this.tryUnlockStrike();
+    if (!Pelle.isDoomed || this.hasStrike) return;
+    this.unlockStrike();
+
+    // If it's death, reset the records
+    if (this.id === 5) {
+      Pelle.cel.records.totalAntimatter = new Decimal("1e180000");
+      Pelle.cel.records.totalInfinityPoints = new Decimal("1e60000");
+      Pelle.cel.records.totalEternityPoints = new Decimal("1e400");
+    }
   }
 
-  tryUnlockStrike() {
-    if (!this.hasStrike) {
-      GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
-      // eslint-disable-next-line no-bitwise
-      player.celestials.pelle.progressBits |= (1 << this.id);
-    }
+  unlockStrike() {
+    GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
+    // eslint-disable-next-line no-bitwise
+    player.celestials.pelle.progressBits |= (1 << this.id);
   }
 }
 
@@ -272,6 +284,7 @@ export const PelleStrikes = (function() {
     powerGalaxies: new PelleStrikeState(db.powerGalaxies),
     eternity: new PelleStrikeState(db.eternity),
     ECs: new PelleStrikeState(db.ECs),
+    dilation: new PelleStrikeState(db.dilation),
     all: Object.keys(db).map(key => new PelleStrikeState(db[key]))
   };
 }());
@@ -385,6 +398,7 @@ export const PelleRifts = (function() {
     pestilence: new RiftState(db.pestilence),
     chaos: new RiftState(db.chaos),
     war: new RiftState(db.war),
+    death: new RiftState(db.death),
     all,
     totalMilestones: () => all.flatMap(r => r.milestones.filter((m, idx) => r.hasMilestone(idx))).length
   };

@@ -67,7 +67,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   multiplier = applyNDPowers(multiplier, tier);
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
-  if (player.dilation.active) {
+  if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
@@ -160,7 +160,8 @@ function applyNDPowers(mult, tier) {
       AntimatterDimension(tier).infinityUpgrade.chargedEffect,
       InfinityUpgrade.totalTimeMult.chargedEffect,
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
-      AlchemyResource.power
+      AlchemyResource.power,
+      PelleRifts.death
     );
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));

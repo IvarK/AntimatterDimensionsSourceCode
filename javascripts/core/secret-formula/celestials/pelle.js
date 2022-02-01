@@ -47,10 +47,10 @@ GameDatabase.celestials.pelle = (function() {
       galaxyPower: rebuyable({
         id: "galaxyPower",
         description: `Multiply galaxy power`,
-        _cost: x => Decimal.pow(50, x).times(1e30),
-        _effect: x => 1 + x / 10,
-        _formatEffect: x => `${formatX(1 + x / 10, 2, 2)} ➜ ` +
-          `${formatX(1 + (x + 1) / 10, 2, 2)}`
+        _cost: x => Decimal.pow(1000, x).times(1e30),
+        _effect: x => 1 + x / 50,
+        _formatEffect: x => `${formatX(1 + x / 50, 2, 2)} ➜ ` +
+          `${formatX(1 + (x + 1) / 50, 2, 2)}`
       }),
     },
     upgrades: {
@@ -206,7 +206,11 @@ GameDatabase.celestials.pelle = (function() {
           Decimal.pow(10, (percentage * 100) ** (1 / 2.5)).div(10).minus(0.1)
         ).minus(1),
         effect: totalFill => {
-          if (player.challenge.eternity.current !== 0) return totalFill.plus(1).pow(0.1);
+          if (player.challenge.eternity.current !== 0) {
+            const chall = EternityChallenge.current;
+            const goal = chall.goalAtCompletions(chall.gainedCompletionStatus.totalCompletions);
+            return totalFill.plus(1).pow(0.1).min(goal.pow(0.3));
+          }
           return totalFill.plus(1).pow(0.33);
         },
         currency: () => Currency.infinityPoints,
@@ -276,9 +280,13 @@ GameDatabase.celestials.pelle = (function() {
         strike: () => PelleStrikes.eternity,
         percentage: totalFill => totalFill.div(10).toNumber(),
         percentageToFill: percentage => new Decimal(percentage).times(10),
-        effect: totalFill => Decimal.pow(6, Decimal.pow(6, Decimal.pow(6, totalFill.div(10).plus(0.1))).minus(6))
-          .div(1e5)
-          .plus(Decimal.pow(10, totalFill.div(10).plus(0.1))),
+        effect: totalFill => {
+          let fill = totalFill.toNumber();
+          if (totalFill.gt(6.5)) fill = (totalFill.toNumber() - 6.5) / 7 + 6.5;
+          return Decimal.pow(6, Decimal.pow(6, Decimal.pow(6, fill / 10 + 0.1)).minus(6))
+            .div(1e5)
+            .plus(Decimal.pow(10, fill / 10 + 0.1));
+        },
         currency: () => ({
           get value() {
             return PelleRifts.pestilence.percentage;
@@ -312,9 +320,10 @@ GameDatabase.celestials.pelle = (function() {
             },
             effect: () => {
               switch (Pelle.activeGlyphType) {
-                case "infinity": return Currency.infinityPoints.value.pow(0.2);
+                case "infinity": return player.challenge.eternity.current > 8
+                  ? 1 : Currency.infinityPoints.value.pow(0.2);
                 case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
-                case "replication": return 10 ** 50 ** (PelleRifts.famine.percentage);
+                case "replication": return 10 ** 53 ** (PelleRifts.famine.percentage);
                 case "dilation": return 1e6 ** PelleRifts.famine.percentage;
                 case "power": return 1.02;
                 case "companion": return 1.34;
@@ -325,8 +334,8 @@ GameDatabase.celestials.pelle = (function() {
             formatEffect: x => formatX(x, 2, 2)
           },
           {
-            requirement: 0.69,
-            description: "nice",
+            requirement: 1,
+            description: "You gain 1% of your EP gained on Eternity per second",
           },
         ]
       },
@@ -345,7 +354,8 @@ GameDatabase.celestials.pelle = (function() {
           {
             requirement: 0.10,
             description: "Dimensional Boosts are more powerful based on EC completions",
-            effect: () => Math.max(100 * EternityChallenges.completions ** 2, 1),
+            effect: () => Math.max(100 * EternityChallenges.completions ** 2, 1) *
+              Math.max(1e4 ** (EternityChallenges.completions - 40), 1),
             formatEffect: x => formatX(x, 2, 2)
           },
           {

@@ -38,7 +38,8 @@ export function getTickSpeedMultiplier() {
       TimeStudy(232),
       Achievement(86),
       Achievement(175),
-      InfinityChallenge(5).reward
+      InfinityChallenge(5).reward,
+      PelleRebuyableUpgrade.galaxyPower
     );
     if (Pelle.isDoomed) galaxies *= 0.5;
     if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(new Decimal("1e1300"))) {
@@ -61,7 +62,8 @@ export function getTickSpeedMultiplier() {
     TimeStudy(232),
     Achievement(86),
     Achievement(175),
-    InfinityChallenge(5).reward
+    InfinityChallenge(5).reward,
+    PelleRebuyableUpgrade.galaxyPower
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");

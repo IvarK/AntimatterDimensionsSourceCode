@@ -112,7 +112,9 @@ export function getDilationGainPerSecond() {
     const pelleMults = Pelle.activeGlyphType === "dilation" && PelleRifts.chaos.hasMilestone(1)
       ? PelleRifts.chaos.milestones[1].effect() : 1;
 
-    return new Decimal(Currency.tachyonParticles.value).timesEffectsOf(DilationUpgrade.dtGain).times(pelleMults);
+    return new Decimal(Currency.tachyonParticles.value)
+      .timesEffectsOf(DilationUpgrade.dtGain)
+      .times(pelleMults).div(1e6);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(

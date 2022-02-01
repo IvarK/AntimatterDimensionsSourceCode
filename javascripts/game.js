@@ -579,7 +579,8 @@ export function gameLoop(passDiff, options = {}) {
   // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
   if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
     Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
-    !isInCelestialReality()) {
+    !isInCelestialReality() &&
+    !Pelle.isDoomed) {
     Currency.timeTheorems.add(TimeStudy.dilation.cost);
     TimeStudy.dilation.purchase(true);
   }
@@ -747,6 +748,10 @@ function applyAutoprestige(diff) {
       .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
       .times(diff / 1000);
     Currency.realityMachines.add(addedRM);
+  }
+
+  if (PelleRifts.chaos.hasMilestone(2)) {
+    Currency.eternityPoints.add(gainedEternityPoints().times(DC.D0_1).times(diff / 1000));
   }
 }
 

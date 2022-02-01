@@ -38,7 +38,7 @@ Vue.component("dilation-time-study", {
     update() {
       if (this.id === 1) {
         this.maxTT.copyFrom(Currency.timeTheorems.max);
-        this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
+        this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought || Pelle.isDoomed;
       }
       if (this.id === 6) {
         this.showRequirement = true;

@@ -22,6 +22,10 @@ export function infinityDimensionCommonMultiplier() {
   if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
+
+  if (PelleRifts.war.hasMilestone(1)) {
+    mult = mult.times(PelleRifts.war.milestones[1].effect());
+  }
   return mult;
 }
 

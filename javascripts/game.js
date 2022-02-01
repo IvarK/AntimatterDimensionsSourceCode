@@ -661,7 +661,7 @@ function applyAutoUnlockPerks() {
   }
   if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought && !Pelle.isDoomed) {
     const secondRow = Object.values(EternityUpgrade).filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);

@@ -53,8 +53,11 @@ GameDatabase.eternity.upgrades = {
   tdMultRealTime: {
     id: 6,
     cost: 1e50,
-    description: "Time Dimensions are multiplied by days played",
-    effect: () => Time.totalTimePlayed.totalDays,
+    description: () => (Pelle.isDoomed
+      ? "Time Dimensions are multiplied by days played in this Armageddon"
+      : "Time Dimensions are multiplied by days played"
+    ),
+    effect: () => (Pelle.isDoomed ? Math.max(Time.thisReality.totalDays, 1) : Time.totalTimePlayed.totalDays),
     formatEffect: value => formatX(value, 2, 1)
   }
 };

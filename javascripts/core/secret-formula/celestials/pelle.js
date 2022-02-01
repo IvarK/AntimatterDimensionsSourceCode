@@ -335,7 +335,7 @@ GameDatabase.celestials.pelle = (function() {
         key: "war",
         name: "War",
         description: "When active, spends 3% of your EP per second to increase War.",
-        effectDescription: x => `Increases EP formula base by +${format(x, 2, 2)}`,
+        effectDescription: x => `Decrease EP formula exponent divider -${format(x, 2, 2)}`,
         strike: () => PelleStrikes.ECs,
         percentage: totalFill => totalFill.plus(1).log10() ** 0.4 / 4000 ** 0.4,
         percentageToFill: percentage => Decimal.pow(10, percentage ** 2.5 * 4000).minus(1),
@@ -349,8 +349,10 @@ GameDatabase.celestials.pelle = (function() {
             formatEffect: x => formatX(x, 2, 2)
           },
           {
-            requirement: 0.50,
-            description: "Never gonna let you down"
+            requirement: 0.15,
+            description: "Infinity Dimensions are stronger",
+            effect: () => new Decimal("1e1500"),
+            formatEffect: x => formatX(x)
           },
           {
             requirement: 0.75,

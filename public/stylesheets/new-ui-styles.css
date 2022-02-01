@@ -23,6 +23,7 @@
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
+  --color-pelle: crimson;
 }
 
 body.t-normal,
@@ -132,6 +133,10 @@ body.t-s9 {
 
 .o-sidebar-currency--reality {
   color: var(--color-reality)
+}
+
+.o-sidebar-currency--pelle {
+  color: var(--color-pelle)
 }
 
 .resource-infinity-canreset,

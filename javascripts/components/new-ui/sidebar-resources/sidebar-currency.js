@@ -6,9 +6,11 @@ Vue.component("sidebar-currency", {
       EP: new Decimal(0),
       RM: new Decimal(0),
       IM: 0,
+      RS: new Decimal(0),
       showIP: false,
       showEP: false,
       showRM: false,
+      showRS: false,
     };
   },
   methods: {
@@ -18,14 +20,22 @@ Vue.component("sidebar-currency", {
       this.EP.copyFrom(Currency.eternityPoints.value);
       this.RM.copyFrom(Currency.realityMachines);
       this.IM = Currency.imaginaryMachines.value;
+      this.RS.copyFrom(Currency.realityShards.value);
       this.showIP = PlayerProgress.infinityUnlocked();
       this.showEP = PlayerProgress.eternityUnlocked();
       this.showRM = PlayerProgress.realityUnlocked();
+      this.showRS = Pelle.isDoomed;
     }
   },
   template: `
     <div class="resource">
-      <template v-if="showRM">
+      <template v-if="showRS">
+      <h2 class="o-sidebar-currency--pelle">{{ format(RS, 2) }}</h2>
+      <div class="resource-information">
+        <span class="resource-name">{{ pluralize("Reality Shard", RS ) }}</span>
+      </div>
+      </template>
+      <template v-else-if="showRM">
         <template v-if="IM === 0">
           <h2 class="o-sidebar-currency--reality">{{ format(RM, 2) }}</h2>
           <div class="resource-information">

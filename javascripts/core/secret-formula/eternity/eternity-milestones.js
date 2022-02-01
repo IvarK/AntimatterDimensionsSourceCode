@@ -15,7 +15,9 @@ GameDatabase.eternity.milestones = {
   },
   keepInfinityUpgrades: {
     eternities: 4,
-    reward: "You start Eternity with all Infinity Upgrades"
+    reward: () => (PelleUpgrade.keepInfinityUpgrades.isBought
+      ? "You start Eternity with all Infinity Upgrades (This is already granted by Pelle)"
+      : "You start Eternity with all Infinity Upgrades"),
   },
   bigCrunchModes: {
     eternities: 5,
@@ -37,11 +39,16 @@ GameDatabase.eternity.milestones = {
   },
   autoIC: {
     eternities: 7,
-    reward: "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer)"
+    reward: () => (PelleUpgrade.keepInfinityChallenges.isBought
+      // eslint-disable-next-line max-len
+      ? "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer) (This is already granted by Pelle)"
+      : "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer)"),
   },
   keepBreakUpgrades: {
     eternities: 8,
-    reward: "You start Eternity with all Break Infinity Upgrades"
+    reward: () => (PelleUpgrade.keepBreakInfinityUpgrades.isBought
+      ? "You start Eternity with all Break Infinity Upgrades (This is already granted by Pelle)"
+      : "You start Eternity with all Break Infinity Upgrades"),
   },
   autobuyMaxGalaxies: {
     eternities: 9,
@@ -49,39 +56,57 @@ GameDatabase.eternity.milestones = {
   },
   unlockReplicanti: {
     eternities: 10,
-    reward: "You start with Replicanti unlocked"
+    reward: () => (PelleUpgrade.replicantiStayUnlocked.isBought
+      ? "You start with Replicanti unlocked (This is already granted by Pelle)"
+      : "You start with Replicanti unlocked"),
   },
   autobuyerID1: {
     eternities: 11,
-    reward: "Unlock the 1st Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 1st Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 1st Infinity Dimension Autobuyer"),
   },
   autobuyerID2: {
     eternities: 12,
-    reward: "Unlock the 2nd Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 2nd Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 2nd Infinity Dimension Autobuyer"),
   },
   autobuyerID3: {
     eternities: 13,
-    reward: "Unlock the 3rd Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 3rd Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 3rd Infinity Dimension Autobuyer"),
   },
   autobuyerID4: {
     eternities: 14,
-    reward: "Unlock the 4th Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 4th Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 4th Infinity Dimension Autobuyer"),
   },
   autobuyerID5: {
     eternities: 15,
-    reward: "Unlock the 5th Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 5th Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 5th Infinity Dimension Autobuyer"),
   },
   autobuyerID6: {
     eternities: 16,
-    reward: "Unlock the 6th Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 6th Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 6th Infinity Dimension Autobuyer"),
   },
   autobuyerID7: {
     eternities: 17,
-    reward: "Unlock the 7th Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 7th Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 7th Infinity Dimension Autobuyer"),
   },
   autobuyerID8: {
     eternities: 18,
-    reward: "Unlock the 8th Infinity Dimension Autobuyer"
+    reward: () => (PelleUpgrade.IDAutobuyers.isBought
+      ? "Unlock the 8th Infinity Dimension Autobuyer (This is already granted by Pelle)"
+      : "Unlock the 8th Infinity Dimension Autobuyer"),
   },
   autoUnlockID: {
     eternities: 25,
@@ -98,15 +123,21 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerReplicantiChance: {
     eternities: 50,
-    reward: "Unlock the Replicanti Chance Upgrade Autobuyer"
+    reward: () => (PelleUpgrade.replicantiAutobuyers.isBought
+      ? "Unlock the Replicanti Chance Upgrade Autobuyer (This is already granted by Pelle)"
+      : "Unlock the Replicanti Chance Upgrade Autobuyer"),
   },
   autobuyerReplicantiInterval: {
     eternities: 60,
-    reward: "Unlock the Replicanti Interval Upgrade Autobuyer"
+    reward: () => (PelleUpgrade.replicantiAutobuyers.isBought
+      ? "Unlock the Replicanti Interval Upgrade Autobuyer (This is already granted by Pelle)"
+      : "Unlock the Replicanti Interval Upgrade Autobuyer"),
   },
   autobuyerReplicantiMaxGalaxies: {
     eternities: 80,
-    reward: "Unlock the Max Replicanti Galaxy Upgrade Autobuyer"
+    reward: () => (PelleUpgrade.replicantiAutobuyers.isBought
+      ? "Unlock the Max Replicanti Galaxy Upgrade Autobuyer (This is already granted by Pelle)"
+      : "Unlock the Max Replicanti Galaxy Upgrade Autobuyer"),
   },
   autobuyerEternity: {
     eternities: 100,

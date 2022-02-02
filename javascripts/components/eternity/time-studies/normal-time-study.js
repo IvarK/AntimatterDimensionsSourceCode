@@ -43,17 +43,19 @@ Vue.component("normal-time-study", {
   template: `
     <time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
       <HintText type="studies" class="l-hint-text--time-study">{{ hintText }}</HintText>
-      <DescriptionDisplay
-        v-if="!isUseless"
-        :config="study.config"
-      />
       <span v-if="isUseless">
         This Time Study has no effect while in Doomed
       </span>
-      <EffectDisplay
-        v-if="!isUseless"
-        br
-        :config="study.config"
-      />
+      <span v-else>
+        <DescriptionDisplay
+          v-if="!isUseless"
+          :config="study.config"
+        />
+        <EffectDisplay
+          v-if="!isUseless"
+          br
+          :config="study.config"
+        />
+      </span>
     </time-study>`
 });

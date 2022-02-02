@@ -13,6 +13,7 @@ Vue.component("normal-time-study", {
     setup: Object
   },
   data: () => ({
+    isUseless: false,
     showCost: true,
     showSTCost: false
   }),
@@ -29,6 +30,7 @@ Vue.component("normal-time-study", {
   },
   methods: {
     update() {
+      this.isUseless = (Pelle.uselessTimeStudies.includes(this.study.id));
       this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
       // We don't show ST cost if purchased because the first 1-2 of each "set" won't actually cost ST. There's no
       // particularly sensible way to accurately display the actual ST spent other than tracing through buy order
@@ -43,6 +45,7 @@ Vue.component("normal-time-study", {
       <HintText type="studies" class="l-hint-text--time-study">{{ hintText }}</HintText>
       <DescriptionDisplay :config="study.config" />
       <EffectDisplay
+        v-if="!isUseless"
         br
         :config="study.config"
       />

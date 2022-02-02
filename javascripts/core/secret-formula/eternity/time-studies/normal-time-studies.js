@@ -78,7 +78,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: [22],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `You gain more Infinities based on Dimension Boosts`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `You gain more Infinities based on Dimension Boosts`),
       effect: () => Math.max(DimBoost.totalBoosts, 1),
       formatEffect: value => formatX(value)
     },
@@ -87,14 +89,18 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: [21],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: "You keep half of your Replicanti Galaxies on Infinity"
+      description: () => (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied
+        ? "This Time Study has no effect while in Doomed"
+        : "You keep half of your Replicanti Galaxies on Infinity")
     },
     {
       id: 41,
       cost: 4,
       requirement: [31],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `All Galaxies give a ${formatX(DC.D1_2, 1, 1)} multiplier to Infinity Points gained`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `All Galaxies give a ${formatX(DC.D1_2, 1, 1)} multiplier to Infinity Points gained`),
       effect: () => DC.D1_2.pow(Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -112,7 +118,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: [41, 42],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `You gain ${formatX(1e15)} more Infinity Points`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `You gain ${formatX(1e15)} more Infinity Points`),
       effect: 1e15
     },
     {
@@ -120,7 +128,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: [51],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `You gain ${formatX(15)} more Eternity Points`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `You gain ${formatX(15)} more Eternity Points`),
       effect: 15
     },
     {
@@ -128,7 +138,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: [42, () => Perk.bypassEC5Lock.isBought || EternityChallenge(5).completions > 0],
       reqType: TS_REQUIREMENT_TYPE.ALL,
-      description: () => `You gain Replicanti ${formatInt(3)} times faster`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `You gain Replicanti ${formatInt(3)} times faster`),
       effect: 3
     },
     {
@@ -264,10 +276,12 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [111],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [122, 123],
-      description: () => (Perk.studyActiveEP.isBought
-        ? `You gain ${formatX(50)} more Eternity Points`
-        : `You gain more EP based on how fast your last ten
-        Eternities were${PlayerProgress.realityUnlocked() ? " (real time)" : ""}`),
+      description: () => {
+        if (Perk.studyActiveEP.isBought && !Pelle.isDoomed) return `You gain ${formatX(50)} more Eternity Points`;
+        if (Pelle.isDoomed) return "This Time Study has no effect while in Doomed";
+        return `You gain more EP based on how fast your last ten
+        Eternities were${PlayerProgress.realityUnlocked() ? " (real time)" : ""}`;
+      },
       effect: () => (Perk.studyActiveEP.isBought
         ? 50
         : Math.clamp(250 / Player.averageRealTimePerEternity, 1, 50)),
@@ -281,9 +295,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [111],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [121, 123],
-      description: () => (Perk.studyPassive.isBought
-        ? `You gain ${formatX(50)} more Eternity Points`
-        : `You gain ${formatX(35)} more Eternity Points`),
+      description: () => {
+        if (Perk.studyPassive.isBought && !Pelle.isDoomed) return `You gain ${formatX(50)} more Eternity Points`;
+        if (Pelle.isDoomed) return "This Time Study has no effect while in Doomed";
+        return `You gain ${formatX(35)} more Eternity Points`;
+      },
       effect: () => (Perk.studyPassive.isBought ? 50 : 35)
     },
     {
@@ -293,7 +309,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [111],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [121, 122],
-      description: "You gain more Eternity Points based on time spent this Eternity",
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : "You gain more Eternity Points based on time spent this Eternity"),
       effect: () => {
         const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
         const totalSeconds = Time.thisEternity.plus(perkEffect).totalSeconds;
@@ -320,9 +338,12 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [122],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [131, 133],
-      description: () => (Perk.studyPassive.isBought
-        ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${format(3)} times faster`
-        : `Replicanti Galaxies are ${formatPercents(0.4)} stronger`),
+      description: () => {
+        if (Perk.studyPassive.isBought && !Pelle.isDoomed) return `Replicanti Galaxies are
+        ${formatPercents(0.4)} stronger and Replicanti are ${format(3)} times faster`;
+        if (Pelle.isDoomed) return `Replicanti Galaxies are ${formatPercents(0.4)} stronger`;
+        return `Replicanti Galaxies are ${formatPercents(0.4)} stronger`;
+      },
       effect: 0.4
     },
     {
@@ -345,9 +366,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [131],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [142, 143],
-      description: () => (Perk.studyActiveEP.isBought
-        ? `You gain ${formatX(DC.E45)} more Infinity Points`
-        : "Multiplier to Infinity Points, which decays over this Infinity"),
+      description: () => {
+        if (Perk.studyActiveEP.isBought && !Pelle.isDoomed) return `You gain ${formatX(DC.E45)} more Infinity Points`;
+        if (Pelle.isDoomed) return "This Time Study has no effect while in Doomed";
+        return "Multiplier to Infinity Points, which decays over this Infinity";
+      },
       effect: () => (Perk.studyActiveEP.isBought
         ? DC.E45
         : DC.E45.divide(thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
@@ -360,7 +383,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [132],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [141, 143],
-      description: () => `You gain ${formatX(passiveIPMult())} more Infinity Points`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `You gain ${formatX(passiveIPMult())} more Infinity Points`),
       effect: passiveIPMult,
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
@@ -371,7 +396,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [133],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [141, 142],
-      description: "Multiplier to Infinity Points, which increases over this Infinity",
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : "Multiplier to Infinity Points, which increases over this Infinity"),
       effect: () => {
         const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
         const totalSeconds = Time.thisInfinity.plus(perkEffect).totalSeconds;
@@ -438,9 +465,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 730,
       requirement: [181, () => EternityChallenge(10).completions > 0, () => !Enslaved.isRunning],
       reqType: TS_REQUIREMENT_TYPE.ALL,
-      description: () => (Enslaved.isRunning
-        ? "There is not enough space in this Reality"
-        : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts`)
+      description: () => {
+        if (Enslaved.isRunning && !Pelle.isDoomed) return "There is not enough space in this Reality";
+        if (Pelle.isDoomed) return "This Time Study has no effect while in Doomed";
+        return `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts`;
+      }
     },
     {
       id: 193,
@@ -482,7 +511,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 200,
       requirement: [193],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `You gain Replicanti ${formatInt(20)} times faster`,
+      description: () => (Pelle.isDoomed
+        ? "This Time Study has no effect while in Doomed"
+        : `You gain Replicanti ${formatInt(20)} times faster`),
       effect: 20
     },
     {

@@ -30,7 +30,7 @@ Vue.component("normal-time-study", {
   },
   methods: {
     update() {
-      this.isUseless = (Pelle.uselessTimeStudies.includes(this.study.id));
+      this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id);
       this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
       // We don't show ST cost if purchased because the first 1-2 of each "set" won't actually cost ST. There's no
       // particularly sensible way to accurately display the actual ST spent other than tracing through buy order
@@ -43,7 +43,13 @@ Vue.component("normal-time-study", {
   template: `
     <time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
       <HintText type="studies" class="l-hint-text--time-study">{{ hintText }}</HintText>
-      <DescriptionDisplay :config="study.config" />
+      <DescriptionDisplay
+        v-if="!isUseless"
+        :config="study.config"
+      />
+      <span v-if="isUseless">
+        This Time Study has no effect while in Doomed
+      </span>
       <EffectDisplay
         v-if="!isUseless"
         br

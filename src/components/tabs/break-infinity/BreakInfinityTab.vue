@@ -1,7 +1,13 @@
-import "../infinity-upgrade-button.js";
-import "./break-infinity-button.js";
+<script>
+import BreakInfinityButton from "./BreakInfinityButton";
+import InfinityUpgradeButton from "@/components/InfinityUpgradeButton";
 
-Vue.component("break-infinity-tab", {
+export default {
+  name: "BreakInfinityTab",
+  components: {
+    BreakInfinityButton,
+    InfinityUpgradeButton
+  },
   data() {
     return {
       isUnlocked: false
@@ -46,23 +52,37 @@ Vue.component("break-infinity-tab", {
     timeDisplayShort(time) {
       return timeDisplayShort(time);
     }
-  },
-  template: `
-    <div class="l-break-infinity-tab">
-      <div v-if="!isUnlocked">
-        Reduce the interval of Automatic Big Crunch Autobuyer to
-        {{ format(0.1, 1, 1) }} seconds to unlock Break Infinity.
+  }
+};
+</script>
+
+<template>
+  <div class="l-break-infinity-tab">
+    <div v-if="!isUnlocked">
+      Reduce the interval of Automatic Big Crunch Autobuyer to
+      {{ format(0.1, 1, 1) }} seconds to unlock Break Infinity.
+    </div>
+    <BreakInfinityButton class="l-break-infinity-tab__break-btn" />
+    <div
+      v-if="isUnlocked"
+      class="l-break-infinity-upgrade-grid l-break-infinity-tab__grid"
+    >
+      <div
+        v-for="(column, columnId) in grid"
+        :key="columnId"
+        class="l-break-infinity-upgrade-grid__row"
+      >
+        <InfinityUpgradeButton
+          v-for="upgrade in column"
+          :key="upgrade.id"
+          :upgrade="upgrade"
+          :class="btnClassObject(columnId)"
+        />
       </div>
-      <break-infinity-button class="l-break-infinity-tab__break-btn" />
-      <div v-if="isUnlocked" class="l-break-infinity-upgrade-grid l-break-infinity-tab__grid">
-        <div v-for="(column, columnId) in grid" class="l-break-infinity-upgrade-grid__row">
-          <infinity-upgrade-button
-            v-for="upgrade in column"
-            :key="upgrade.id"
-            :upgrade="upgrade"
-            :class="btnClassObject(columnId)"
-          />
-        </div>
-      </div>
-    </div>`
-});
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

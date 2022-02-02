@@ -1,4 +1,6 @@
-Vue.component("break-infinity-button", {
+<script>
+export default {
+  name: "BreakInfinityButton",
   data() {
     return {
       isBroken: false,
@@ -35,13 +37,20 @@ Vue.component("break-infinity-button", {
       if (this.isEnslaved) Enslaved.feelEternity();
       else if (!this.isBroken && this.isUnlocked) Modal.breakInfinity.show();
     }
-  },
-  template: `
-    <button
-      v-tooltip="tooltip"
-      :class="classObject"
-      @click="clicked"
-    >
-      {{ text }}
-    </button>`
-});
+  }
+};
+</script>
+
+<template>
+  <button
+    v-tooltip="tooltip"
+    :class="classObject"
+    @click="clicked"
+  >
+    {{ text }}
+  </button>
+</template>
+
+<style scoped>
+
+</style>

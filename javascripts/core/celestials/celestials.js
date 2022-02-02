@@ -4,7 +4,7 @@ import { Enslaved } from "./enslaved.js";
 import { V } from "./V.js";
 import { Ra } from "./ra/ra.js";
 import { Laitela } from "./laitela/laitela.js";
-import { Pelle } from "./pelle";
+import { Pelle } from "./pelle/pelle";
 
 export const Celestials = {
   teresa: Teresa,

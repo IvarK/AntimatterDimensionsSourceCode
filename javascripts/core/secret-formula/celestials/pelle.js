@@ -331,7 +331,7 @@ GameDatabase.celestials.pelle = (function() {
                   ? 1 : Currency.infinityPoints.value.pow(0.2);
                 case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
                 case "replication": return 10 ** 53 ** (PelleRifts.famine.percentage);
-                case "dilation": return Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5);
+                case "dilation": return Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1);
                 case "power": return 1.02;
                 case "companion": return 1.34;
 
@@ -391,7 +391,7 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.15,
-            description: "Time Dimensions 5-8 are much cheaper",
+            description: "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades"
           },
           {
             requirement: 0.95,

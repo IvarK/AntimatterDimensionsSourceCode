@@ -4,6 +4,7 @@ GameDatabase.tabs = [
   {
     key: "dimensions",
     name: "Dimensions",
+    endName: "End",
     id: 0,
     hidable: true,
     subtabs: [
@@ -41,6 +42,7 @@ GameDatabase.tabs = [
   {
     key: "options",
     name: "Options",
+    endName: "Is",
     id: 1,
     hidable: false,
     subtabs: [
@@ -73,6 +75,7 @@ GameDatabase.tabs = [
   {
     key: "statistics",
     name: "Statistics",
+    endName: "Nigh",
     id: 2,
     hidable: true,
     subtabs: [
@@ -128,6 +131,7 @@ GameDatabase.tabs = [
   {
     key: "achievements",
     name: "Achievements",
+    endName: "Destruction",
     id: 3,
     hidable: true,
     subtabs: [
@@ -152,6 +156,7 @@ GameDatabase.tabs = [
   {
     key: "automation",
     name: "Automation",
+    endName: "Is",
     id: 4,
     hidable: true,
     subtabs: [
@@ -177,6 +182,7 @@ GameDatabase.tabs = [
   {
     key: "challenges",
     name: "Challenges",
+    endName: "Imminent",
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked() ||
@@ -218,6 +224,7 @@ GameDatabase.tabs = [
   {
     key: "infinity",
     name: "Infinity",
+    endName: "Help",
     UIClass: "o-tab-btn--infinity",
     before: "infinity-points-header",
     id: 6,
@@ -265,6 +272,7 @@ GameDatabase.tabs = [
   {
     key: "eternity",
     name: "Eternity",
+    endName: "Us",
     UIClass: "o-tab-btn--eternity",
     condition: () =>
       PlayerProgress.realityUnlocked() ||
@@ -311,6 +319,7 @@ GameDatabase.tabs = [
   {
     key: "reality",
     name: "Reality",
+    endName: "Good",
     before: "reality-machines-header",
     UIClass: "o-tab-btn--reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
@@ -373,6 +382,7 @@ GameDatabase.tabs = [
   {
     key: "celestials",
     name: "Celestials",
+    endName: "Bye",
     UIClass: "o-tab-btn--celestial",
     condition: () => Teresa.isUnlocked,
     id: 9,

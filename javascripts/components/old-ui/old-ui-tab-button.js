@@ -5,13 +5,23 @@ Vue.component("old-ui-tab-button", {
   data() {
     return {
       isAvailable: false,
-      hasNotification: false
+      hasNotification: false,
+      tabName: ""
     };
   },
   methods: {
     update() {
       this.isAvailable = this.tab.isAvailable;
       this.hasNotification = this.tab.hasNotification;
+      if (this.tab.config.endName) {
+        this.tabName = Pelle.transitionText(
+          this.tab.name,
+          this.tab.config.endName,
+          Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
+        );
+      } else {
+        this.tabName = this.tab.name;
+      }
     }
   },
   template: `
@@ -22,6 +32,6 @@ Vue.component("old-ui-tab-button", {
       style="margin: 0.2rem"
       @click="tab.show(true)"
     >
-      {{ tab.name }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
+      {{ tabName }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
     </button>`
 });

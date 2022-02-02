@@ -1,6 +1,7 @@
-import { Currency } from "../currency";
-import { RebuyableMechanicState } from "../game-mechanics/rebuyable";
-import { GameMechanicState, SetPurchasableMechanicState } from "../utils";
+import { Currency } from "../../currency";
+import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
+import { GameMechanicState, SetPurchasableMechanicState } from "../../utils";
+import zalgo from "./zalgo";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -46,6 +47,8 @@ const disabledMechanicUnlocks = {
 };
 
 export const Pelle = {
+
+  endState: 0,
 
   get isUnlocked() {
     return ImaginaryUpgrade(25).isBought;
@@ -149,7 +152,27 @@ export const Pelle = {
 
   get activeGlyphType() {
     return Glyphs.active.filter(Boolean)[0]?.type;
-  }
+  },
+
+  // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
+  // Also adds more zalgo the bigger the stage
+  transitionText(from, to, stage = 0) {
+    const len = (from.length * (1 - stage) + to.length * stage);
+    const toInterval = len * (1 - stage);
+    let req = toInterval;
+    let str = "";
+    for (let i = 0; i < len; i++) {
+      if (i >= req) {
+        const idx = Math.floor(i * (to.length / len));
+        str += to[idx];
+        req += toInterval;
+      } else {
+        const idx = Math.floor(i * (from.length / len));
+        str += from[idx];
+      }
+    }
+    return zalgo(str, Math.floor(stage ** 2 * 7));
+  },
 
 };
 

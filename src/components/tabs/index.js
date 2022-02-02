@@ -17,6 +17,7 @@ import AutomatorTab from "./automator/AutomatorTab";
 import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
 import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
 import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
+import InfinityUpgradesTab from "./infinity-upgrades/InfinityUpgradesTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -36,7 +37,8 @@ const TabComponents = {
   AutomatorTab,
   NormalChallengesTab,
   InfinityChallengesTab,
-  EternityChallengesTab
+  EternityChallengesTab,
+  InfinityUpgradesTab
 };
 
 export default TabComponents;

@@ -1,10 +1,14 @@
-import "../infinity-upgrade-button.js";
-import "./ip-multiplier-button.js";
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
+import InfinityUpgradeButton from "@/components/InfinityUpgradeButton";
+import IpMultiplierButton from "./IpMultiplierButton";
 
-Vue.component("infinity-upgrades-tab", {
+export default {
+  name: "InfinityUpgradesTab",
   components: {
-    PrimaryButton
+    PrimaryButton,
+    InfinityUpgradeButton,
+    IpMultiplierButton
   },
   data() {
     return {
@@ -17,11 +21,6 @@ Vue.component("infinity-upgrades-tab", {
       eternityUnlocked: false,
       bottomRowUnlocked: false
     };
-  },
-  watch: {
-    disCharge(newValue) {
-      player.celestials.ra.disCharge = newValue;
-    }
   },
   computed: {
     grid() {
@@ -60,6 +59,11 @@ Vue.component("infinity-upgrades-tab", {
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
+  watch: {
+    disCharge(newValue) {
+      player.celestials.ra.disCharge = newValue;
+    }
+  },
   methods: {
     update() {
       this.chargeUnlocked = Ra.chargeUnlocked;
@@ -81,46 +85,63 @@ Vue.component("infinity-upgrades-tab", {
       }
       return classObject;
     }
-  },
-  template: `
-    <div class="l-infinity-upgrades-tab">
-      <div class="c-subtab-option-container" v-if="chargeUnlocked">
-        <PrimaryButton
-          :class="disChargeClassObject"
-          @click="disCharge = !disCharge"
-        >
-          Respec Charged Infinity Upgrades on next Reality
-        </PrimaryButton>
-      </div>
-      <div v-if="chargeUnlocked">
-        You have charged {{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} Infinity Upgrades.
-        Charged Infinity Upgrades have their effect altered.
-        <br>
-        Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
-      </div>
+  }
+};
+</script>
+
+<template>
+  <div class="l-infinity-upgrades-tab">
+    <div
+      v-if="chargeUnlocked"
+      class="c-subtab-option-container"
+    >
+      <PrimaryButton
+        :class="disChargeClassObject"
+        @click="disCharge = !disCharge"
+      >
+        Respec Charged Infinity Upgrades on next Reality
+      </PrimaryButton>
+    </div>
+    <div v-if="chargeUnlocked">
+      You have charged {{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} Infinity Upgrades.
+      Charged Infinity Upgrades have their effect altered.
       <br>
-      <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
-        <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
-          <infinity-upgrade-button
-            v-for="upgrade in column"
-            :key="upgrade.id"
-            :upgrade="upgrade"
-            :class="btnClassObject(columnId)"
-          />
-        </div>
-      </div>
-      <div class="l-infinity-upgrades-bottom-row" v-if="bottomRowUnlocked">
-        <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
-        <infinity-upgrade-button
-          :upgrade="offlineIpUpgrade"
-          :class="btnClassObject(1)"
+      Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
+    </div>
+    <br>
+    <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
+      <div
+        v-for="(column, columnId) in grid"
+        :key="columnId"
+        class="l-infinity-upgrade-grid__column"
+      >
+        <InfinityUpgradeButton
+          v-for="upgrade in column"
+          :key="upgrade.id"
+          :upgrade="upgrade"
+          :class="btnClassObject(columnId)"
         />
       </div>
-      <div v-if="eternityUnlocked && bottomRowUnlocked">
-        The Infinity Point multiplier becomes more expensive
-        <br>
-        above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points, and cannot be purchased past
-        {{ formatPostBreak(ipMultHardCap) }} Infinity Points.
-      </div>
-    </div>`
-});
+    </div>
+    <div
+      v-if="bottomRowUnlocked"
+      class="l-infinity-upgrades-bottom-row"
+    >
+      <IpMultiplierButton class="l-infinity-upgrades-tab__mult-btn" />
+      <InfinityUpgradeButton
+        :upgrade="offlineIpUpgrade"
+        :class="btnClassObject(1)"
+      />
+    </div>
+    <div v-if="eternityUnlocked && bottomRowUnlocked">
+      The Infinity Point multiplier becomes more expensive
+      <br>
+      above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points, and cannot be purchased past
+      {{ formatPostBreak(ipMultHardCap) }} Infinity Points.
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

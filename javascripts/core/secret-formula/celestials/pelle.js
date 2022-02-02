@@ -372,7 +372,7 @@ GameDatabase.celestials.pelle = (function() {
             formatEffect: x => formatX(x)
           },
           {
-            requirement: 0.75,
+            requirement: 0.95,
             description: "Never gonna run around, and desert you",
           },
         ]

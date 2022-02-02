@@ -128,12 +128,16 @@ export class EternityChallengeState extends GameMechanicState {
         case 7: return new Decimal("1e2700");
         case 8: return new Decimal("1e2800");
         case 9: return new Decimal("1e2900");
+        case 10: return new Decimal("1e3200");
+        case 11: return new Decimal("1e11200");
+        case 12: return new Decimal("1e208000");
       }
     }
     return this.config.goal;
   }
 
   get goalIncrease() {
+    if (Pelle.isDoomed && this.id === 11) return new Decimal("1e1400");
     return this.config.goalIncrease;
   }
 

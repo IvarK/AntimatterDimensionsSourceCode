@@ -1,5 +1,3 @@
-import "./infinity/infinity-points-header.js";
-
 import "./eternity/eternity-points-header.js";
 import "./eternity/time-studies/time-studies-tab.js";
 import "./eternity/upgrades/eternity-upgrades-tab.js";

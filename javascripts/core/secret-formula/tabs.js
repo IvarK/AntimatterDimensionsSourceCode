@@ -219,7 +219,7 @@ GameDatabase.tabs = [
     key: "infinity",
     name: "Infinity",
     UIClass: "o-tab-btn--infinity",
-    before: "infinity-points-header",
+    before: "InfinityPointsHeader",
     id: 6,
     condition: () => PlayerProgress.infinityUnlocked(),
     hidable: true,

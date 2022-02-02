@@ -18,6 +18,7 @@ import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
 import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
 import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
 import InfinityUpgradesTab from "./infinity-upgrades/InfinityUpgradesTab";
+import BreakInfinityTab from "./break-infinity/BreakInfinityTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -38,7 +39,8 @@ const TabComponents = {
   NormalChallengesTab,
   InfinityChallengesTab,
   EternityChallengesTab,
-  InfinityUpgradesTab
+  InfinityUpgradesTab,
+  BreakInfinityTab
 };
 
 export default TabComponents;

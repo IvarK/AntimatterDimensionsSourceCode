@@ -8,7 +8,8 @@ Vue.component("tachyon-particles", {
       bounds: {
         x: 0,
         y: 0
-      }
+      },
+      isBlob: false,
     };
   },
   mounted() {
@@ -24,6 +25,7 @@ Vue.component("tachyon-particles", {
       this.count = Currency.tachyonParticles.gte(1)
         ? Math.clampMin(Math.floor(20 * Math.log10(Currency.tachyonParticles.exponent)), 1)
         : 0;
+      this.isBlob = player.options.theme === "S11";
     },
     updateSize() {
       this.bounds.x = this.$el.clientWidth;
@@ -37,6 +39,7 @@ Vue.component("tachyon-particles", {
         v-if="initialized"
         :key="i"
         :bounds="bounds"
+        :isBlob="isBlob"
       />
     </svg>`
 });

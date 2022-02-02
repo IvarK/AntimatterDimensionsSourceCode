@@ -172,6 +172,7 @@ export const BlackHoleAnimation = (function() {
       const { x, y } = Dot.calculatePosition(this.distance, this.angle);
       if (this.respawnTick || !BlackHole(1).isActive) {
         context.arc(x + 200, y + 200, this.size, 0, 2 * Math.PI);
+        if (this.isBlob) this.drawAndRotateBlob(context, x, y);
         return;
       }
       const angle = this.isInside ? this.angle : this.preLastAngle;
@@ -179,31 +180,35 @@ export const BlackHoleAnimation = (function() {
       context.lineCap = "round";
 
       if (this.isBlob) {
-        const FONT_SIZE = 18;
-        context.textAlign = "center";
-        context.fillStyle = "orange";
-
-        if (this.distance <= holeSize) {
-          const scale = this.distance / holeSize;
-          const px = FONT_SIZE * Math.sqrt(scale);
-          const green = 165 * scale ** 2;
-
-          context.fillStyle = `rgba(255, ${green}, 0, ${scale * 2})`;
-          context.font = `${px}px Typewriter`;
-        } else {
-          context.font = `${FONT_SIZE}px Typewriter`;
-        }
-
-        context.save();
-        context.translate(x + 200, y + 200);
-        context.rotate(-this.angle * Math.PI * 2 + Math.PI);
-        context.fillText(this.blob, 0, 0);
-        context.restore();
+        this.drawAndRotateBlob(context, x, y);
       } else {
         context.lineWidth *= 1;
         context.moveTo(x + 200, y + 200);
         context.lineTo(lastX + 200, lastY + 200);
       }
+    }
+
+    drawAndRotateBlob(context, x, y) {
+      const FONT_SIZE = 18;
+      context.textAlign = "center";
+      context.fillStyle = "orange";
+
+      if (this.distance <= holeSize) {
+        const scale = this.distance / holeSize;
+        const px = FONT_SIZE * Math.sqrt(scale);
+        const green = 165 * scale ** 2;
+
+        context.fillStyle = `rgba(255, ${green}, 0, ${scale * 2})`;
+        context.font = `${px}px Typewriter`;
+      } else {
+        context.font = `${FONT_SIZE}px Typewriter`;
+      }
+
+      context.save();
+      context.translate(x + 200, y + 200);
+      context.rotate(-this.angle * Math.PI * 2 + Math.PI);
+      context.fillText(this.blob, 0, 0);
+      context.restore();
     }
   }
 

@@ -3,12 +3,15 @@ Vue.component("tachyon-particle", {
     bounds: {
       type: Object,
       required: true
+    },
+    isBlob: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
       blob: "",
-      isBlob: false,
     };
   },
   mounted() {
@@ -20,9 +23,6 @@ Vue.component("tachyon-particle", {
     TWEEN.remove(this.tween);
   },
   methods: {
-    update() {
-      this.isBlob = player.options.theme === "S11";
-    },
     fly() {
       const bounds = this.bounds;
       const start = {

@@ -1,5 +1,4 @@
 import "./infinity/infinity-points-header.js";
-import "./infinity/replicanti/replicanti-tab.js";
 
 import "./eternity/eternity-points-header.js";
 import "./eternity/time-studies/time-studies-tab.js";

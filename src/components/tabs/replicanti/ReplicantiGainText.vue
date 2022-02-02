@@ -1,4 +1,6 @@
-Vue.component("replicanti-gain-text", {
+<script>
+export default {
+  name: "ReplicantiGainText",
   data() {
     return {
       remainingTimeText: "",
@@ -84,6 +86,14 @@ Vue.component("replicanti-gain-text", {
         this.galaxyText = ``;
       }
     }
-  },
-  template: `<p>{{ remainingTimeText }}<br>{{ galaxyText }}</p>`
-});
+  }
+};
+</script>
+
+<template>
+  <p>{{ remainingTimeText }}<br>{{ galaxyText }}</p>
+</template>
+
+<style scoped>
+
+</style>

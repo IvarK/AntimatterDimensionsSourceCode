@@ -19,6 +19,7 @@ import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
 import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
 import InfinityUpgradesTab from "./infinity-upgrades/InfinityUpgradesTab";
 import BreakInfinityTab from "./break-infinity/BreakInfinityTab";
+import ReplicantiTab from "./replicanti/ReplicantiTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -40,7 +41,8 @@ const TabComponents = {
   InfinityChallengesTab,
   EternityChallengesTab,
   InfinityUpgradesTab,
-  BreakInfinityTab
+  BreakInfinityTab,
+  ReplicantiTab
 };
 
 export default TabComponents;

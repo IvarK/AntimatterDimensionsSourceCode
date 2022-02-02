@@ -1,11 +1,16 @@
-import "./replicanti-gain-text.js";
-import "./replicanti-galaxy-button.js";
-import { ReplicantiUpgradeButtonSetup } from "./replicanti-upgrade-button.js";
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
+import ReplicantiGainText from "./ReplicantiGainText";
+import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
+import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton";
 
-Vue.component("replicanti-tab", {
+export default {
+  name: "ReplicantiTab",
   components: {
-    PrimaryButton
+    PrimaryButton,
+    ReplicantiGainText,
+    ReplicantiUpgradeButton,
+    ReplicantiGalaxyButton
   },
   data() {
     return {
@@ -110,53 +115,60 @@ Vue.component("replicanti-tab", {
       this.nextEffarigRGThreshold = Decimal.NUMBER_MAX_VALUE.pow(Effarig.bonusRG + 2);
       this.canSeeGalaxyButton = Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
     }
-  },
-  template: `
-    <div class="l-replicanti-tab">
+  }
+};
+</script>
+
+<template>
+  <div class="l-replicanti-tab">
+    <br>
+    <PrimaryButton
+      v-if="!isUnlocked"
+      :enabled="isUnlockAffordable"
+      class="o-primary-btn--replicanti-unlock"
+      onclick="Replicanti.unlock();"
+    >
+      Unlock Replicanti
       <br>
-      <PrimaryButton
-        v-if="!isUnlocked"
-        :enabled="isUnlockAffordable"
-        class="o-primary-btn--replicanti-unlock"
-        onclick="Replicanti.unlock();"
-      >
-        Unlock Replicanti
+      Cost: {{ format(1e140) }} IP
+    </PrimaryButton>
+    <template v-else>
+      <div v-if="isInEC8">
+        You have {{ quantifyInt("purchase", ec8Purchases) }} left.
+      </div>
+      <div v-if="hasRaisedCap">
+        Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
+        and is giving you {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
         <br>
-        Cost: {{ format(1e140) }} IP
-      </PrimaryButton>
-      <template v-else>
-        <div v-if="isInEC8">
-          You have {{ quantifyInt("purchase", ec8Purchases) }} left.
-        </div>
-        <div v-if="hasRaisedCap">
-          Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
-          and is giving you {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
-          <br>
-          due to the reward from Effarig's Infinity. (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }})
-        </div>
-        <p class="c-replicanti-description">
-          You have
-          <span class="c-replicanti-description__accent">{{ format(amount, 2, 0) }}</span>
-          Replicanti, translated to
-          <br>
-          <span v-html="boostText" />
-        </p>
+        due to the reward from Effarig's Infinity. (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }})
+      </div>
+      <p class="c-replicanti-description">
+        You have
+        <span class="c-replicanti-description__accent">{{ format(amount, 2, 0) }}</span>
+        Replicanti, translated to
         <br>
-        <div class="l-replicanti-upgrade-row">
-          <replicanti-upgrade-button :setup="replicantiChanceSetup" />
-          <replicanti-upgrade-button :setup="replicantiIntervalSetup" />
-          <replicanti-upgrade-button :setup="maxGalaxySetup" />
-        </div>
-        <div>
-          The Max Replicanti Galaxy upgrade can be purchased endlessly, but costs increase
-          <br>
-          more rapidly above {{ formatInt(distantRG) }} Replicanti Galaxies
-          and even more so above {{ formatInt(remoteRG) }} Replicanti Galaxies.
-        </div>
-        <br><br>
-        <replicanti-gain-text />
+        <span v-html="boostText" />
+      </p>
+      <br>
+      <div class="l-replicanti-upgrade-row">
+        <ReplicantiUpgradeButton :setup="replicantiChanceSetup" />
+        <ReplicantiUpgradeButton :setup="replicantiIntervalSetup" />
+        <ReplicantiUpgradeButton :setup="maxGalaxySetup" />
+      </div>
+      <div>
+        The Max Replicanti Galaxy upgrade can be purchased endlessly, but costs increase
         <br>
-        <replicanti-galaxy-button v-if="canSeeGalaxyButton" />
-      </template>
-    </div>`
-});
+        more rapidly above {{ formatInt(distantRG) }} Replicanti Galaxies
+        and even more so above {{ formatInt(remoteRG) }} Replicanti Galaxies.
+      </div>
+      <br><br>
+      <ReplicantiGainText />
+      <br>
+      <ReplicantiGalaxyButton v-if="canSeeGalaxyButton" />
+    </template>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

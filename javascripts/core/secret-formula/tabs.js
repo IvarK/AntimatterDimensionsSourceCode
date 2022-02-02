@@ -228,7 +228,7 @@ GameDatabase.tabs = [
         key: "upgrades",
         name: "Infinity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "infinity-upgrades-tab",
+        component: "InfinityUpgradesTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||

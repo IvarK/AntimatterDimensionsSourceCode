@@ -252,7 +252,7 @@ GameDatabase.tabs = [
         key: "replicanti",
         name: "Replicanti",
         symbol: "Ξ",
-        component: "replicanti-tab",
+        component: "ReplicantiTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||

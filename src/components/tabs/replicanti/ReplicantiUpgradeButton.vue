@@ -1,13 +1,18 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
-Vue.component("replicanti-upgrade-button", {
+export default {
+  name: "ReplicantiUpgradeButton",
   components: {
     PrimaryButton,
     PrimaryToggleButton
   },
   props: {
-    setup: Object
+    setup: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -20,14 +25,14 @@ Vue.component("replicanti-upgrade-button", {
       isEC8Running: false
     };
   },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.replicantiUpgrade(this.upgrade.id).isActive = newValue;
-    }
-  },
   computed: {
     upgrade() {
       return this.setup.upgrade;
+    }
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.replicantiUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   methods: {
@@ -45,28 +50,8 @@ Vue.component("replicanti-upgrade-button", {
       this.isAutobuyerOn = autobuyer.isActive;
       this.isEC8Running = EternityChallenge(8).isRunning;
     }
-  },
-  template: `
-    <div class="l-spoon-btn-group l-replicanti-upgrade-button">
-      <PrimaryButton
-        :enabled="canBeBought"
-        class="o-primary-btn--replicanti-upgrade"
-        @click="upgrade.purchase()"
-      >
-        <span>{{ description }}</span>
-        <template v-if="!isCapped">
-          <br>
-          <span>{{ costDescription }}</span>
-        </template>
-      </PrimaryButton>
-      <PrimaryToggleButton
-        v-if="isAutoUnlocked && !isEC8Running"
-        v-model="isAutobuyerOn"
-        label="Auto:"
-        class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-upgrade-toggle"
-      />
-    </div>`
-});
+  }
+};
 
 export class ReplicantiUpgradeButtonSetup {
   constructor(upgrade, formatDescription, formatCost) {
@@ -75,3 +60,30 @@ export class ReplicantiUpgradeButtonSetup {
     this.formatCost = formatCost;
   }
 }
+</script>
+
+<template>
+  <div class="l-spoon-btn-group l-replicanti-upgrade-button">
+    <PrimaryButton
+      :enabled="canBeBought"
+      class="o-primary-btn--replicanti-upgrade"
+      @click="upgrade.purchase()"
+    >
+      <span>{{ description }}</span>
+      <template v-if="!isCapped">
+        <br>
+        <span>{{ costDescription }}</span>
+      </template>
+    </PrimaryButton>
+    <PrimaryToggleButton
+      v-if="isAutoUnlocked && !isEC8Running"
+      v-model="isAutobuyerOn"
+      label="Auto:"
+      class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-upgrade-toggle"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

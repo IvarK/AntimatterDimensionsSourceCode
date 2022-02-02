@@ -119,6 +119,17 @@ export class EternityChallengeState extends GameMechanicState {
   }
 
   get initialGoal() {
+    if (Pelle.isDoomed) {
+      switch (this.id) {
+        case 2: return new Decimal("1e1750");
+        case 3: return new Decimal("1e925");
+        case 5: return new Decimal("1e1400");
+        case 6: return new Decimal("1e1500");
+        case 7: return new Decimal("1e2700");
+        case 8: return new Decimal("1e2800");
+        case 9: return new Decimal("1e2900");
+      }
+    }
     return this.config.goal;
   }
 

@@ -216,7 +216,7 @@ GameDatabase.celestials.pelle = (function() {
           if (player.challenge.eternity.current !== 0) {
             const chall = EternityChallenge.current;
             const goal = chall.goalAtCompletions(chall.gainedCompletionStatus.totalCompletions);
-            return totalFill.plus(1).pow(0.1).min(goal.pow(0.3));
+            return totalFill.plus(1).pow(0.1).min(goal.pow(0.15));
           }
           return totalFill.plus(1).pow(0.33);
         },
@@ -367,8 +367,8 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.15,
-            description: "Infinity Dimensions are stronger",
-            effect: () => new Decimal("1e1500"),
+            description: "Infinity Dimensions are stronger based on EC completions",
+            effect: () => Decimal.pow("1e1500", ((EternityChallenges.completions - 25) / 20) ** 1.7).max(1),
             formatEffect: x => formatX(x)
           },
           {

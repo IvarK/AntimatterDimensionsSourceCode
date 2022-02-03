@@ -48,11 +48,9 @@ Vue.component("normal-time-study", {
       </span>
       <span v-else>
         <DescriptionDisplay
-          v-if="!isUseless"
           :config="study.config"
         />
         <EffectDisplay
-          v-if="!isUseless"
           br
           :config="study.config"
         />

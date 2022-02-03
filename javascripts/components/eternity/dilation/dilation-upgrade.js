@@ -60,9 +60,10 @@ Vue.component("dilation-upgrade", {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
+        this.boughtAmount = upgrade.boughtAmount;
+        if (!autobuyer) return;
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
-        this.boughtAmount = upgrade.boughtAmount;
         return;
       }
       this.isBought = upgrade.isBought;

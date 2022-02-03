@@ -15,7 +15,7 @@ GameDatabase.celestials.pelle = (function() {
       antimatterDimensionMult: rebuyable({
         id: "antimatterDimensionMult",
         description: `Gain a multiplier to Antimatter Dimensions`,
-        _cost: x => Decimal.pow(10, x).times(Decimal.pow(1e4, x - 41).max(1)).times(100),
+        _cost: x => Decimal.pow(10, x).times(Decimal.pow(1e3, x - 41).max(1)).times(100),
         _effect: x => Pelle.antimatterDimensionMult(x),
         _formatEffect: x => `${formatX(Pelle.antimatterDimensionMult(x), 2)} ➜ ` +
           `${formatX(Pelle.antimatterDimensionMult(x + 1), 2)}`
@@ -23,7 +23,7 @@ GameDatabase.celestials.pelle = (function() {
       timeSpeedMult: rebuyable({
         id: "timeSpeedMult",
         description: `Gain a multiplier to game speed`,
-        _cost: x => Decimal.pow(20, x).times(Decimal.pow(1e4, x - 30).max(1)).times(1e5),
+        _cost: x => Decimal.pow(20, x).times(Decimal.pow(1e3, x - 30).max(1)).times(1e5),
         _effect: x => Decimal.pow(1.3, x),
         _formatEffect: x => `${formatX(Decimal.pow(1.3, x), 2, 2)} ➜ ` +
           `${formatX(Decimal.pow(1.3, x + 1), 2, 2)}`
@@ -31,7 +31,7 @@ GameDatabase.celestials.pelle = (function() {
       glyphLevels: rebuyable({
         id: "glyphLevels",
         description: `Increase the glyph level allowed in Pelle`,
-        _cost: x => Decimal.pow(30, x).times(Decimal.pow(1e4, x - 25).max(1)).times(1e15),
+        _cost: x => Decimal.pow(30, x).times(Decimal.pow(1e3, x - 25).max(1)).times(1e15),
         _effect: x => Math.floor(((3 * (x + 1)) - 2) ** 1.6),
         _formatEffect: x => `${format(Math.floor(((3 * (x + 1)) - 2) ** 1.6), 2)} ➜ ` +
           `${format(Math.floor(((3 * (x + 2)) - 2) ** 1.6), 2)}`
@@ -39,7 +39,7 @@ GameDatabase.celestials.pelle = (function() {
       infConversion: rebuyable({
         id: "infConversion",
         description: `Increase infinity power conversion rate`,
-        _cost: x => Decimal.pow(40, x).times(Decimal.pow(1e4, x - 20).max(1)).times(1e18),
+        _cost: x => Decimal.pow(40, x).times(Decimal.pow(1e3, x - 20).max(1)).times(1e18),
         _effect: x => (x * 3.5) ** 0.37,
         _formatEffect: x => `+${format((x * 3.5) ** 0.37, 2, 2)} ➜ ` +
           `+${format(((x + 1) * 3.5) ** 0.37, 2, 2)}`
@@ -47,7 +47,7 @@ GameDatabase.celestials.pelle = (function() {
       galaxyPower: rebuyable({
         id: "galaxyPower",
         description: `Multiply galaxy power`,
-        _cost: x => Decimal.pow(1000, x).times(Decimal.pow(1e4, x - 10).max(1)).times(1e30),
+        _cost: x => Decimal.pow(1000, x).times(Decimal.pow(1e3, x - 10).max(1)).times(1e30),
         _effect: x => 1 + x / 50,
         _formatEffect: x => `${formatX(1 + x / 50, 2, 2)} ➜ ` +
           `${formatX(1 + (x + 1) / 50, 2, 2)}`
@@ -216,7 +216,7 @@ GameDatabase.celestials.pelle = (function() {
           if (player.challenge.eternity.current !== 0) {
             const chall = EternityChallenge.current;
             const goal = chall.goalAtCompletions(chall.gainedCompletionStatus.totalCompletions);
-            return totalFill.plus(1).pow(0.1).min(goal.pow(0.3));
+            return totalFill.plus(1).pow(0.1).min(goal.pow(0.15));
           }
           return totalFill.plus(1).pow(0.33);
         },
@@ -331,7 +331,7 @@ GameDatabase.celestials.pelle = (function() {
                   ? 1 : Currency.infinityPoints.value.pow(0.2);
                 case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
                 case "replication": return 10 ** 53 ** (PelleRifts.famine.percentage);
-                case "dilation": return Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5);
+                case "dilation": return Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1);
                 case "power": return 1.02;
                 case "companion": return 1.34;
 
@@ -367,12 +367,12 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.15,
-            description: "Infinity Dimensions are stronger",
-            effect: () => new Decimal("1e1500"),
+            description: "Infinity Dimensions are stronger based on EC completions",
+            effect: () => Decimal.pow("1e1500", ((EternityChallenges.completions - 25) / 20) ** 1.7).max(1),
             formatEffect: x => formatX(x)
           },
           {
-            requirement: 0.75,
+            requirement: 0.95,
             description: "Never gonna run around, and desert you",
           },
         ]
@@ -391,7 +391,7 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.15,
-            description: "Time Dimensions 5-8 are much cheaper",
+            description: "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades"
           },
           {
             requirement: 0.95,

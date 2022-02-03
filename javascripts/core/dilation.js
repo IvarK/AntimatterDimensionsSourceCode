@@ -54,13 +54,14 @@ export function startDilatedEternity(auto) {
 
 const DIL_UPG_NAMES = [
   null, "dtGain", "galaxyThreshold", "tachyonGain", "doubleGalaxies", "tdMultReplicanti",
-  "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
+  "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator",
+  "dtGainPelle", "galaxyMultiplier", "tickspeedPower"
 ];
 
 export function buyDilationUpgrade(id, bulk = 1) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
-  if (id > 3) {
+  if (id > 3 && id < 11) {
     if (player.dilation.upgrades.has(id)) return false;
     if (!Currency.dilatedTime.purchase(upgrade.cost)) return false;
     player.dilation.upgrades.add(id);
@@ -115,7 +116,7 @@ export function getDilationGainPerSecond() {
       ? PelleRifts.chaos.milestones[1].effect() : 1;
 
     return new Decimal(Currency.tachyonParticles.value)
-      .timesEffectsOf(DilationUpgrade.dtGain)
+      .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle)
       .times(pelleMults).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
@@ -236,6 +237,9 @@ export const DilationUpgrade = (function() {
     timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
     dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
     ttGenerator: new DilationUpgradeState(db.ttGenerator),
+    dtGainPelle: new RebuyableDilationUpgradeState(db.dtGainPelle),
+    galaxyMultiplier: new RebuyableDilationUpgradeState(db.galaxyMultiplier),
+    tickspeedPower: new RebuyableDilationUpgradeState(db.tickspeedPower),
   };
 }());
 

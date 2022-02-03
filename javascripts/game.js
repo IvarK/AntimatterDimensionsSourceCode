@@ -772,6 +772,8 @@ function updateTachyonGalaxies() {
   player.dilation.totalTachyonGalaxies =
     Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
     Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult;
+
+  player.dilation.totalTachyonGalaxies *= DilationUpgrade.galaxyMultiplier.effectValue;
 }
 
 export function getTTPerSecond() {

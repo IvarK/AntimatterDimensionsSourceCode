@@ -130,6 +130,39 @@ GameDatabase.eternity.dilation = (function() {
       description: "Generate Time Theorems based on Tachyon Particles.",
       effect: () => Currency.tachyonParticles.value.div(20000),
       formatEffect: value => `${format(value, 2, 1)}/sec`
-    }
+    },
+    dtGainPelle: rebuyable({
+      id: 11,
+      initialCost: 1e14,
+      increment: 100,
+      pelleOnly: true,
+      description: () => `Multiply Dilated Time gain by ${format(5)}.`,
+      effect: bought => Decimal.pow(5, bought),
+      formatEffect: value => formatX(value, 2),
+      formatCost: value => format(value, 2),
+      purchaseCap: Number.MAX_VALUE
+    }),
+    galaxyMultiplier: rebuyable({
+      id: 12,
+      initialCost: 1e15,
+      increment: 1000,
+      pelleOnly: true,
+      description: () => "Multiply Tachyon Galaxies gained.",
+      effect: bought => bought + 1,
+      formatEffect: value => `${formatX(value, 2)} ➜ ${formatX(value + 1, 2)}`,
+      formatCost: value => format(value, 2),
+      purchaseCap: Number.MAX_VALUE
+    }),
+    tickspeedPower: rebuyable({
+      id: 13,
+      initialCost: 1e16,
+      increment: 1e4,
+      pelleOnly: true,
+      description: () => `Gain a power to tickspeed effect.`,
+      effect: bought => 1 + bought * 0.02,
+      formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.02, 2, 2)}`,
+      formatCost: value => format(value, 2),
+      purchaseCap: Number.MAX_VALUE
+    }),
   };
 }());

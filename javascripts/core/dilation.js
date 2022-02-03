@@ -55,7 +55,7 @@ export function startDilatedEternity(auto) {
 const DIL_UPG_NAMES = [
   null, "dtGain", "galaxyThreshold", "tachyonGain", "doubleGalaxies", "tdMultReplicanti",
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator",
-  "dtGainPelle", "galaxyMultiplier", "tickspeedPower"
+  "dtGainPelle", "galaxyMultiplier", "tickspeedPower", "galaxyThresholdPelle", "antimatterDimPow"
 ];
 
 export function buyDilationUpgrade(id, bulk = 1) {
@@ -107,15 +107,19 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
   const thresholdMult = 3.65 * upgrade + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
-  return 1 + thresholdMult * glyphReduction;
+  const power = DilationUpgrade.galaxyThresholdPelle.canBeApplied
+    ? DilationUpgrade.galaxyThresholdPelle.effectValue : 1;
+  return (1 + thresholdMult * glyphReduction) ** power;
 }
 
 export function getDilationGainPerSecond() {
-  if (Pelle.isDisabled("dtMults")) {
+  if (Pelle.isDoomed) {
     const pelleMults = Pelle.activeGlyphType === "dilation" && PelleRifts.chaos.hasMilestone(1)
       ? PelleRifts.chaos.milestones[1].effect() : 1;
 
-    return new Decimal(Currency.tachyonParticles.value)
+    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.death.hasMilestone(1) ? 1.4 : 1);
+
+    return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle)
       .times(pelleMults).div(3e4);
   }
@@ -240,6 +244,9 @@ export const DilationUpgrade = (function() {
     dtGainPelle: new RebuyableDilationUpgradeState(db.dtGainPelle),
     galaxyMultiplier: new RebuyableDilationUpgradeState(db.galaxyMultiplier),
     tickspeedPower: new RebuyableDilationUpgradeState(db.tickspeedPower),
+    galaxyThresholdPelle: new DilationUpgradeState(db.galaxyThresholdPelle),
+    antimatterDimPow: new DilationUpgradeState(db.antimatterDimPow),
+    placeholder2: new DilationUpgradeState(db.placeholder2),
   };
 }());
 

@@ -159,10 +159,27 @@ GameDatabase.eternity.dilation = (function() {
       increment: 1e4,
       pelleOnly: true,
       description: () => `Gain a power to tickspeed effect.`,
-      effect: bought => 1 + bought * 0.02,
-      formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.02, 2, 2)}`,
+      effect: bought => 1 + bought * 0.03,
+      formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.03, 2, 2)}`,
       formatCost: value => format(value, 2),
       purchaseCap: Number.MAX_VALUE
     }),
+    galaxyThresholdPelle: {
+      id: 14,
+      cost: 1e45,
+      description: "Cubic root Tachyon Galaxy threshold.",
+      effect: 1 / 3
+    },
+    antimatterDimPow: {
+      id: 15,
+      cost: 1e50,
+      description: "Raise Antimatter Dimensions powet to ^2 outside Dilation.",
+      effect: 2
+    },
+    placeholder2: {
+      id: 16,
+      cost: 1e69,
+      description: "placeholder.",
+    },
   };
 }());

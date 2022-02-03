@@ -394,8 +394,8 @@ GameDatabase.celestials.pelle = (function() {
             description: "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades"
           },
           {
-            requirement: 0.95,
-            description: "dfg",
+            requirement: 0.25,
+            description: "Raise tachyon particle effect to Dilated Time gain to ^1.4",
           },
           {
             requirement: 1,

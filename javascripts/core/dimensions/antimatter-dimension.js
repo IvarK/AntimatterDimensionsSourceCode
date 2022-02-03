@@ -174,6 +174,10 @@ function applyNDPowers(mult, tier) {
     multiplier = multiplier.pow(0.5);
   }
 
+  if (DilationUpgrade.antimatterDimPow.canBeApplied && !player.dilation.active) {
+    multiplier = multiplier.pow(2);
+  }
+
   return multiplier;
 }
 

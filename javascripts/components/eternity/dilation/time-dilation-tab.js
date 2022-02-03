@@ -37,11 +37,18 @@ Vue.component("time-dilation-tab", {
         ],
       ];
     },
-    pelleUpgrades() {
+    pelleRebuyables() {
       return [
         DilationUpgrade.dtGainPelle,
         DilationUpgrade.galaxyMultiplier,
         DilationUpgrade.tickspeedPower
+      ];
+    },
+    pelleUpgrades() {
+      return [
+        DilationUpgrade.galaxyThresholdPelle,
+        DilationUpgrade.antimatterDimPow,
+        DilationUpgrade.placeholder2
       ];
     },
     ttGenerator() {
@@ -99,10 +106,18 @@ Vue.component("time-dilation-tab", {
         </div>
         <div class="l-dilation-upgrades-grid__row" v-if="hasPelleDilationUpgrades">
           <dilation-upgrade
-            v-for="upgrade in pelleUpgrades"
+            v-for="upgrade in pelleRebuyables"
             :key="upgrade.id"
             :upgrade="upgrade"
             :isRebuyable="true"
+            class="l-dilation-upgrades-grid__cell"
+          />
+        </div>
+        <div class="l-dilation-upgrades-grid__row" v-if="hasPelleDilationUpgrades">
+          <dilation-upgrade
+            v-for="upgrade in pelleUpgrades"
+            :key="upgrade.id"
+            :upgrade="upgrade"
             class="l-dilation-upgrades-grid__cell"
           />
         </div>

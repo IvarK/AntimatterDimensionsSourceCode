@@ -55,4 +55,7 @@ body.t-s11 {
   font-family: Typewriter;
   font-size: 20px;
   fill: orange !important;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
 }

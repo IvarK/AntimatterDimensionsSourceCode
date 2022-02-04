@@ -14,6 +14,7 @@ export default {
     return {
       isDoomed: false,
       postBreak: false,
+      hasMaxedInterval: false,
       mode: AUTO_CRUNCH_MODE.AMOUNT,
       hasAdditionalModes: false,
       increaseWithMult: true,
@@ -36,6 +37,7 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.postBreak = player.break;
+      this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
       this.increaseWithMult = this.autobuyer.increaseWithMult;
@@ -81,49 +83,58 @@ export default {
     :show-interval="!postBreak"
     name="Automatic Big Crunch"
   >
-    <AutobuyerIntervalButton
-      slot="intervalSlot"
-      :autobuyer="autobuyer"
-    />
-    <template v-if="postBreak">
-      <template slot="intervalSlot">
-        <select
-          v-if="hasAdditionalModes"
-          class="c-autobuyer-box__mode-select"
-          @change="changeMode"
+    <template
+      v-if="!hasMaxedInterval"
+      #intervalSlot
+    >
+      <AutobuyerIntervalButton :autobuyer="autobuyer" />
+    </template>
+    <template
+      v-else
+      #intervalSlot
+    >
+      <select
+        v-if="hasAdditionalModes"
+        class="c-autobuyer-box__mode-select"
+        @change="changeMode"
+      >
+        <option
+          v-for="optionMode in modes"
+          :key="optionMode"
+          :value="optionMode"
+          :selected="mode === optionMode"
         >
-          <option
-            v-for="optionMode in modes"
-            :key="optionMode"
-            :value="optionMode"
-            :selected="mode === optionMode"
-          >
-            {{ modeProps(optionMode).title }}
-          </option>
-        </select>
-        <span v-else>
-          {{ modeProps(mode).title }}:
-        </span>
-      </template>
-      <template slot="toggleSlot">
-        <AutobuyerInput
-          :key="mode"
-          :autobuyer="autobuyer"
-          v-bind="modeProps(mode).input"
-        />
-      </template>
-      <template slot="checkboxSlot">
-        <span>Dynamic amount:</span>
-        <div
-          class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-          @click="increaseWithMult = !increaseWithMult"
+          {{ modeProps(optionMode).title }}
+        </option>
+      </select>
+      <span v-else>
+        {{ modeProps(mode).title }}:
+      </span>
+    </template>
+    <template
+      v-if="postBreak"
+      #toggleSlot
+    >
+      <AutobuyerInput
+        :key="mode"
+        :autobuyer="autobuyer"
+        v-bind="modeProps(mode).input"
+      />
+    </template>
+    <template
+      v-if="postBreak"
+      #checkboxSlot
+    >
+      <span>Dynamic amount:</span>
+      <div
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+        @click="increaseWithMult = !increaseWithMult"
+      >
+        <input
+          type="checkbox"
+          :checked="increaseWithMult"
         >
-          <input
-            type="checkbox"
-            :checked="increaseWithMult"
-          >
-        </div>
-      </template>
+      </div>
     </template>
   </AutobuyerBox>
 </template>

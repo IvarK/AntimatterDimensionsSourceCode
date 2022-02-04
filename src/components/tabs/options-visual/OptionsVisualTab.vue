@@ -80,22 +80,24 @@ export default {
       </div>
       <div class="l-options-grid__row">
         <ExpandingControlBox class="l-options-grid__button c-options-grid__notations">
-          <div
-            slot="header"
-            class="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
-          >
-            {{ themeLabel }}
-          </div>
-          <SelectThemeDropdown slot="dropdown" />
+          <template #header>
+            <div class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+              {{ themeLabel }}
+            </div>
+          </template>
+          <template #dropdown>
+            <SelectThemeDropdown />
+          </template>
         </ExpandingControlBox>
         <ExpandingControlBox class="l-options-grid__button c-options-grid__notations">
-          <div
-            slot="header"
-            class="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
-          >
-            {{ notationLabel }}
-          </div>
-          <SelectNotationDropdown slot="dropdown" />
+          <template #header>
+            <div class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+              {{ notationLabel }}
+            </div>
+          </template>
+          <template #dropdown>
+            <SelectNotationDropdown />
+          </template>
         </ExpandingControlBox>
         <PrimaryToggleButton
           v-model="commas"

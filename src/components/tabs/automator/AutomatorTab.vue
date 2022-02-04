@@ -67,8 +67,12 @@ export default {
         split="vertical"
         class="_-automator-split-pane-fix"
       >
-        <AutomatorEditor slot="paneL" />
-        <AutomatorDocs slot="paneR" />
+        <template #paneL>
+          <AutomatorEditor />
+        </template>
+        <template #paneR>
+          <AutomatorDocs />
+        </template>
       </SplitPane>
     </div>
     <AutomatorPointsList v-else />

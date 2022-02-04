@@ -76,7 +76,7 @@ export default {
     :autobuyer="autobuyer"
     name="Automatic Eternity"
   >
-    <template slot="intervalSlot">
+    <template #intervalSlot>
       <select
         v-if="hasAdditionalModes"
         class="c-autobuyer-box__mode-select"
@@ -93,14 +93,14 @@ export default {
       </select>
       <span v-else>{{ modeProps(mode).title }}:</span>
     </template>
-    <template slot="toggleSlot">
+    <template #toggleSlot>
       <AutobuyerInput
         :key="mode"
         :autobuyer="autobuyer"
         v-bind="modeProps(mode).input"
       />
     </template>
-    <template slot="checkboxSlot">
+    <template #checkboxSlot>
       <span>Dynamic amount:</span>
       <div
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"

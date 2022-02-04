@@ -53,7 +53,7 @@ export default {
     :autobuyer="autobuyer"
     name="Automatic Reality"
   >
-    <template slot="intervalSlot">
+    <template #intervalSlot>
       <div class="c-autobuyer-box__small-text" />
       <select
         class="c-autobuyer-box__mode-select"
@@ -69,7 +69,7 @@ export default {
         </option>
       </select>
     </template>
-    <template slot="toggleSlot">
+    <template #toggleSlot>
       <div>Target Reality Machines:</div>
       <AutobuyerInput
         :autobuyer="autobuyer"
@@ -77,7 +77,7 @@ export default {
         property="rm"
       />
     </template>
-    <template slot="checkboxSlot">
+    <template #checkboxSlot>
       <div>Target glyph level:</div>
       <AutobuyerInput
         :autobuyer="autobuyer"

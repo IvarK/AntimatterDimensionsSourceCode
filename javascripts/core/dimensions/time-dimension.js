@@ -101,6 +101,10 @@ export function timeDimensionCommonMultiplier() {
       AlchemyResource.dimensionality,
       PelleRifts.chaos
     );
+
+
+  mult = mult.times(NG.multiplier);
+
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(
       Decimal.pow(
@@ -191,6 +195,8 @@ class TimeDimensionState extends DimensionState {
     mult = mult.pow(Ra.momentumValue);
     mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
     mult = mult.powEffectOf(PelleRifts.death);
+
+    mult = mult.pow(NG.power);
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);

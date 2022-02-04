@@ -83,11 +83,13 @@ export function gainedInfinityPoints() {
     Achievement(103),
     TimeStudy(111)
   );
+  const mult = NG.multiplier;
+  const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
     const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
       ? PelleRifts.chaos.milestones[1].effect() : 1;
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine).times(pelleMults).floor();
+      .timesEffectsOf(PelleRifts.famine).times(pelleMults).times(mult).pow(pow).floor();
   }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
@@ -95,6 +97,7 @@ export function gainedInfinityPoints() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
+  ip = ip.times(mult);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -106,6 +109,8 @@ export function gainedInfinityPoints() {
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
+
+  ip = ip.pow(pow);
   return ip.floor();
 }
 

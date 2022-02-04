@@ -19,6 +19,9 @@ export function infinityDimensionCommonMultiplier() {
       ImaginaryUpgrade(8)
     );
 
+
+  mult = mult.times(NG.multiplier);
+
   if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
@@ -193,6 +196,9 @@ class InfinityDimensionState extends DimensionState {
     if (tier === 1 && PelleRifts.pestilence.hasMilestone(0)) {
       mult = mult.times(PelleRifts.pestilence.milestones[0].effect());
     }
+
+
+    mult = mult.pow(NG.power);
 
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));

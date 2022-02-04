@@ -698,6 +698,11 @@ window.player = {
     compact: false,
     showBought: false,
   },
+  newGame: {
+    current: 0,
+    bestPlus: 0,
+    bestMinus: 0,
+  },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,
   tutorialState: 0,

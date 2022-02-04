@@ -30,6 +30,7 @@ export * from "./celestials/laitela/dark-matter-dimension.js";
 export * from "./celestials/laitela/singularity.js";
 export * from "./celestials/pelle/pelle.js";
 export * from "./celestials/pelle/galaxyGenerator.js";
+export * from "./celestials/pelle/new-game.js";
 export * from "./celestials/celestials.js";
 
 export * from "./automator/index.js";

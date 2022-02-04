@@ -15,7 +15,7 @@ Vue.component("dilation-button", {
     update() {
       this.isUnlocked = PlayerProgress.dilationUnlocked();
       this.isRunning = player.dilation.active;
-      this.isDoomed = Pelle.isDoomed;
+      this.isDoomed = Pelle.isDoomed && Pelle.cel.remnants < 3.8e7;
       if (!this.isRunning) return;
       this.canEternity = Player.canEternity;
       this.hasGain = getTachyonGain().gt(0);

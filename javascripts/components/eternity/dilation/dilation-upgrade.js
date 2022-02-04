@@ -19,6 +19,7 @@ Vue.component("dilation-upgrade", {
   },
   data() {
     return {
+      isUseless: false,
       isBought: false,
       isCapped: false,
       isAffordable: false,
@@ -70,21 +71,27 @@ Vue.component("dilation-upgrade", {
       if (!this.isBought) {
         this.isAffordable = upgrade.isAffordable;
       }
+      this.isUseless = (upgrade.id === 7) && Pelle.isDoomed;
     }
   },
   template: `
     <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
-        <DescriptionDisplay
-          :config="upgrade.config"
-          :length="70"
-          name="o-dilation-upgrade__description"
-        />
-        <EffectDisplay
-          br
-          :config="upgrade.config"
-          :key="boughtAmount"
-        />
+        <span v-if="isUseless">
+          This upgrade has no effect while in Doomed
+        </span>
+        <span v-else>
+          <DescriptionDisplay
+            :config="upgrade.config"
+            :length="70"
+            name="o-dilation-upgrade__description"
+          />
+          <EffectDisplay
+            br
+            :config="upgrade.config"
+            :key="boughtAmount"
+          />
+        </span>
         <CostDisplay
           br
           v-if="!isBought && !isCapped"

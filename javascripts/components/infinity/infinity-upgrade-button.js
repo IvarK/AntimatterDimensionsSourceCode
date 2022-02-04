@@ -13,6 +13,7 @@ Vue.component("infinity-upgrade-button", {
   },
   data() {
     return {
+      isUseless: false,
       canBeBought: false,
       chargePossible: false,
       canBeCharged: false,
@@ -51,7 +52,7 @@ Vue.component("infinity-upgrade-button", {
       // seems more likely to be read).
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
-      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect;
+      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect && !Pelle.isDoomed;
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;
@@ -64,6 +65,7 @@ Vue.component("infinity-upgrade-button", {
       // in this case doesn't feel too bad. Other upgrades, including the cost scaling
       // rebuyables, should never hide their effect.
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
+      this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
     }
   },
   template: `
@@ -73,12 +75,19 @@ Vue.component("infinity-upgrade-button", {
       @mouseleave="showingCharged = false"
       @click="upgrade.purchase()"
     >
-      <DescriptionDisplay :config="config" />
-      <EffectDisplay
-        br
-        v-if="!isDisabled"
+    <span v-if="isUseless">
+      This upgrade has no effect while in Doomed
+    </span>
+    <span v-else>
+      <DescriptionDisplay
         :config="config"
       />
+      <EffectDisplay
+        br
+        v-if="!isDisabled && !isUseless"
+        :config="config"
+     />
+    </span>  
       <CostDisplay
         br
         v-if="!isBought"

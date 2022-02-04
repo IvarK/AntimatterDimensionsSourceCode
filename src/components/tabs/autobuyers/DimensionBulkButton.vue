@@ -22,8 +22,7 @@ export default {
       if (this.hasMaxedBulk) {
         return `${formatX(this.bulk, 2, 0)} bulk buy (capped)`;
       }
-      let newBulk = this.bulk;
-      newBulk = Math.min(newBulk * 2, this.autobuyer.bulkCap);
+      const newBulk = Math.min(this.bulk * 2, this.autobuyer.bulkCap);
       return `${formatX(this.bulk, 2, 0)} ➜ ${formatX(newBulk, 2, 0)} bulk buy`;
     }
   },

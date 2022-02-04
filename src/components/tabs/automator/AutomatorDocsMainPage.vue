@@ -15,7 +15,15 @@ export default {
       listState: 0,
     };
   },
+  watch: {
+    listState(newValue) {
+      AutomatorData.documentationSubpage = newValue;
+    }
+  },
   methods: {
+    update() {
+      this.listState = AutomatorData.documentationSubpage;
+    },
     buttonStyle(id) {
       return {
         "color": this.listState === id ? "green" : ""

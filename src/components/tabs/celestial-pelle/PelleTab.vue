@@ -16,6 +16,7 @@
           :compact="compact"
         />
       </div>
+      <GalaxyGeneratorVue v-if="hasGalaxyGenerator" />
       You have <span class="c-remnants-amount">{{ format(remnants, 2, 0) }}</span> remnants <br>
       You have <span class="c-remnants-amount">{{ format(realityShards, 2, 0) }}</span> Reality Shards
       <ArmageddonButton />
@@ -60,11 +61,13 @@
 import ArmageddonButton from "./ArmageddonButton";
 import PelleStrike from "./PelleStrike.vue";
 import PelleUpgradeVue from "./PelleUpgrade.vue";
+import GalaxyGeneratorVue from "./GalaxyGenerator.vue";
 export default {
   components: {
     ArmageddonButton,
     PelleUpgradeVue,
-    PelleStrike
+    PelleStrike,
+    GalaxyGeneratorVue
   },
   data() {
     return {
@@ -72,7 +75,8 @@ export default {
       remnants: 0,
       realityShards: new Decimal(0),
       compact: false,
-      showBought: false
+      showBought: false,
+      hasGalaxyGenerator: false,
     };
   },
   methods: {
@@ -82,6 +86,7 @@ export default {
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.compact = Pelle.cel.compact;
       this.showBought = Pelle.cel.showBought;
+      this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
     },
     toggleCompact() {
       Pelle.cel.compact = !Pelle.cel.compact;

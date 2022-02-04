@@ -18,7 +18,8 @@ GameDatabase.celestials.pelle = (function() {
         _cost: x => Decimal.pow(10, x).times(Decimal.pow(1e3, x - 41).max(1)).times(100),
         _effect: x => Pelle.antimatterDimensionMult(x),
         _formatEffect: x => `${formatX(Pelle.antimatterDimensionMult(x), 2)} ➜ ` +
-          `${formatX(Pelle.antimatterDimensionMult(x + 1), 2)}`
+          `${formatX(Pelle.antimatterDimensionMult(x + 1), 2)}`,
+        cap: 44
       }),
       timeSpeedMult: rebuyable({
         id: "timeSpeedMult",
@@ -26,7 +27,8 @@ GameDatabase.celestials.pelle = (function() {
         _cost: x => Decimal.pow(20, x).times(Decimal.pow(1e3, x - 30).max(1)).times(1e5),
         _effect: x => Decimal.pow(1.3, x),
         _formatEffect: x => `${formatX(Decimal.pow(1.3, x), 2, 2)} ➜ ` +
-          `${formatX(Decimal.pow(1.3, x + 1), 2, 2)}`
+          `${formatX(Decimal.pow(1.3, x + 1), 2, 2)}`,
+        cap: 35
       }),
       glyphLevels: rebuyable({
         id: "glyphLevels",
@@ -34,7 +36,8 @@ GameDatabase.celestials.pelle = (function() {
         _cost: x => Decimal.pow(30, x).times(Decimal.pow(1e3, x - 25).max(1)).times(1e15),
         _effect: x => Math.floor(((3 * (x + 1)) - 2) ** 1.6),
         _formatEffect: x => `${format(Math.floor(((3 * (x + 1)) - 2) ** 1.6), 2)} ➜ ` +
-          `${format(Math.floor(((3 * (x + 2)) - 2) ** 1.6), 2)}`
+          `${format(Math.floor(((3 * (x + 2)) - 2) ** 1.6), 2)}`,
+        cap: 26
       }),
       infConversion: rebuyable({
         id: "infConversion",
@@ -42,7 +45,8 @@ GameDatabase.celestials.pelle = (function() {
         _cost: x => Decimal.pow(40, x).times(Decimal.pow(1e3, x - 20).max(1)).times(1e18),
         _effect: x => (x * 3.5) ** 0.37,
         _formatEffect: x => `+${format((x * 3.5) ** 0.37, 2, 2)} ➜ ` +
-          `+${format(((x + 1) * 3.5) ** 0.37, 2, 2)}`
+          `+${format(((x + 1) * 3.5) ** 0.37, 2, 2)}`,
+        cap: 21
       }),
       galaxyPower: rebuyable({
         id: "galaxyPower",
@@ -50,7 +54,8 @@ GameDatabase.celestials.pelle = (function() {
         _cost: x => Decimal.pow(1000, x).times(Decimal.pow(1e3, x - 10).max(1)).times(1e30),
         _effect: x => 1 + x / 50,
         _formatEffect: x => `${formatX(1 + x / 50, 2, 2)} ➜ ` +
-          `${formatX(1 + (x + 1) / 50, 2, 2)}`
+          `${formatX(1 + (x + 1) / 50, 2, 2)}`,
+        cap: 9
       }),
     },
     upgrades: {
@@ -372,8 +377,8 @@ GameDatabase.celestials.pelle = (function() {
             formatEffect: x => formatX(x)
           },
           {
-            requirement: 0.95,
-            description: "Never gonna run around, and desert you",
+            requirement: 1,
+            description: "Unlock the Galaxy Generator",
           },
         ]
       },
@@ -398,11 +403,79 @@ GameDatabase.celestials.pelle = (function() {
             description: "Raise tachyon particle effect to Dilated Time gain to ^1.4",
           },
           {
-            requirement: 1,
-            description: "Never gonna run around, and desert you",
+            requirement: 0.5,
+            description: "Dilation rebuyables multiply Infinity Power conversion rate",
+            effect: () => Math.min(
+              1.1 ** (Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90),
+              712
+            ),
+            formatEffect: x => formatX(x, 2, 2)
           },
         ]
       }
+    },
+    galaxyGeneratorUpgrades: {
+      additive: rebuyable({
+        id: "galaxyGeneratorAdditive",
+        description: `Increase base galaxy generation by 1`,
+        _cost: x => Decimal.pow(3, x),
+        _effect: x => x,
+        _formatEffect: x => `${format(x, 2, 2)}/s`,
+        currency: () => ({
+          get value() {
+            return player.galaxies + GalaxyGenerator.galaxies;
+          },
+          set value(val) {
+            const spent = player.galaxies + GalaxyGenerator.galaxies - val;
+            player.celestials.pelle.galaxyGenerator.spentGalaxies += spent;
+          }
+        }),
+        currencyLabel: "Galaxy"
+      }),
+      multiplicative: rebuyable({
+        id: "galaxyGeneratorMultiplicative",
+        description: `Multiply galaxy generation`,
+        _cost: x => Decimal.pow(10, x),
+        _effect: x => Decimal.pow(2.5, x),
+        _formatEffect: x => `${formatX(Decimal.pow(2.5, x), 2, 1)} ➜ ${formatX(Decimal.pow(2.5, x + 1), 2, 1)}`,
+        currency: () => ({
+          get value() {
+            return player.galaxies + GalaxyGenerator.galaxies;
+          },
+          set value(val) {
+            const spent = player.galaxies + GalaxyGenerator.galaxies - val;
+            player.celestials.pelle.galaxyGenerator.spentGalaxies += spent;
+          }
+        }),
+        currencyLabel: "Galaxy"
+      }),
+      antimatterMult: rebuyable({
+        id: "galaxyGeneratorAntimatterMult",
+        description: `Multiply galaxy generation`,
+        _cost: x => Decimal.pow("1e100000000", 4 ** x),
+        _effect: x => Decimal.pow(2, x),
+        _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
+        currency: () => Currency.antimatter,
+        currencyLabel: "Antimatter"
+      }),
+      IPMult: rebuyable({
+        id: "galaxyGeneratorIPMult",
+        description: `Multiply galaxy generation`,
+        _cost: x => Decimal.pow("1e1000000", 100 ** x),
+        _effect: x => Decimal.pow(2, x),
+        _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
+        currency: () => Currency.infinityPoints,
+        currencyLabel: "Infinity Point"
+      }),
+      EPMult: rebuyable({
+        id: "galaxyGeneratorEPMult",
+        description: `Multiply galaxy generation`,
+        _cost: x => Decimal.pow("1e10000", 1000 ** x),
+        _effect: x => Decimal.pow(2, x),
+        _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
+        currency: () => Currency.eternityPoints,
+        currencyLabel: "Eternity Point"
+      }),
     }
   };
 }());

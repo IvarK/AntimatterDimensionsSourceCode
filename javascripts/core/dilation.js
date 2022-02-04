@@ -55,7 +55,7 @@ export function startDilatedEternity(auto) {
 const DIL_UPG_NAMES = [
   null, "dtGain", "galaxyThreshold", "tachyonGain", "doubleGalaxies", "tdMultReplicanti",
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator",
-  "dtGainPelle", "galaxyMultiplier", "tickspeedPower", "galaxyThresholdPelle", "antimatterDimPow"
+  "dtGainPelle", "galaxyMultiplier", "tickspeedPower", "galaxyThresholdPelle", "flatDilationMult"
 ];
 
 export function buyDilationUpgrade(id, bulk = 1) {
@@ -120,7 +120,7 @@ export function getDilationGainPerSecond() {
     const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.death.hasMilestone(1) ? 1.4 : 1);
 
     return new Decimal(tachyonEffect)
-      .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle)
+      .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
       .times(pelleMults).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
@@ -245,8 +245,7 @@ export const DilationUpgrade = (function() {
     galaxyMultiplier: new RebuyableDilationUpgradeState(db.galaxyMultiplier),
     tickspeedPower: new RebuyableDilationUpgradeState(db.tickspeedPower),
     galaxyThresholdPelle: new DilationUpgradeState(db.galaxyThresholdPelle),
-    antimatterDimPow: new DilationUpgradeState(db.antimatterDimPow),
-    placeholder2: new DilationUpgradeState(db.placeholder2),
+    flatDilationMult: new DilationUpgradeState(db.flatDilationMult),
   };
 }());
 

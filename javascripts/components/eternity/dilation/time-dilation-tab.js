@@ -47,8 +47,7 @@ Vue.component("time-dilation-tab", {
     pelleUpgrades() {
       return [
         DilationUpgrade.galaxyThresholdPelle,
-        DilationUpgrade.antimatterDimPow,
-        DilationUpgrade.placeholder2
+        DilationUpgrade.flatDilationMult
       ];
     },
     ttGenerator() {

@@ -170,16 +170,11 @@ GameDatabase.eternity.dilation = (function() {
       description: "Cubic root Tachyon Galaxy threshold.",
       effect: 1 / 3
     },
-    antimatterDimPow: {
+    flatDilationMult: {
       id: 15,
-      cost: 1e50,
-      description: "Raise Antimatter Dimensions powet to ^2 outside Dilation.",
-      effect: 2
-    },
-    placeholder2: {
-      id: 16,
-      cost: 1e69,
-      description: "placeholder.",
+      cost: 1e55,
+      description: () => `Gain ${formatX(1e10)} more Dilated Time.`,
+      effect: 1e8
     },
   };
 }());

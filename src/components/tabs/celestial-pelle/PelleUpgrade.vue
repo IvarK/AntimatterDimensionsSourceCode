@@ -3,8 +3,9 @@
     class="c-pelle-upgrade"
     :class="{
       'c-pelle-upgrade--unavailable': !canBuy,
-      'c-pelle-upgrade--bought': isBought,
-      'c-pelle-upgrade--faded': faded
+      'c-pelle-upgrade--bought': isBought || isCapped,
+      'c-pelle-upgrade--faded': faded,
+      'c-pelle-upgrade--galaxyGenerator': galaxyGenerator
     }"
     :ach-tooltip="timeEstimate"
     @click="!faded && upgrade.purchase()"
@@ -12,8 +13,9 @@
     <DescriptionDisplay :config="config" /><br><br>
     <span v-if="effect">Currently: {{ effect }}<br></span>
     <CostDisplay
+      v-if="!isCapped"
       :config="config"
-      name="Reality Shard"
+      :name="galaxyGenerator ? config.currencyLabel : 'Reality Shard'"
       br
     />
   </button>
@@ -30,6 +32,7 @@ export default {
   props: {
     upgrade: Object,
     faded: Boolean,
+    galaxyGenerator: Boolean
   },
   data() {
     return {
@@ -37,12 +40,14 @@ export default {
       isBought: false,
       purchases: 0,
       timeUntilCost: new Decimal(0),
+      isCapped: false
     };
   },
   methods: {
     update() {
       this.canBuy = this.upgrade.canBeBought && !this.faded;
       this.isBought = this.upgrade.isBought;
+      this.isCapped = this.upgrade.isCapped;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
       this.timeUntilCost = Decimal.sub(this.upgrade.cost, Currency.realityShards.value)
         .div(Pelle.realityShardGainPerSecond);
@@ -57,7 +62,7 @@ export default {
       return this.config.formatEffect(this.purchases);
     },
     timeEstimate() {
-      if (this.canBuy || this.isBought || Pelle.realityShardGainPerSecond.eq(0)) return null;
+      if (this.canBuy || this.isBought || Pelle.realityShardGainPerSecond.eq(0) || this.isCapped) return null;
       if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
       if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
       return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
@@ -86,6 +91,13 @@ export default {
     transition-duration: 0.12s;
   }
 
+
+  .c-pelle-upgrade--galaxyGenerator {
+    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+    color: black;
+    font-weight: bold;
+  }
+
   .c-pelle-upgrade--unavailable {
     background: #565656;
     cursor: default;
@@ -101,4 +113,5 @@ export default {
     cursor: default;
     color: black;
   }
+
 </style>

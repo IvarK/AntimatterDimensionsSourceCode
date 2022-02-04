@@ -350,7 +350,8 @@ export const InfinityDimensions = {
   },
 
   get powerConversionRate() {
-    return 7 + getAdjustedGlyphEffect("infinityrate") + PelleRebuyableUpgrade.infConversion.effectValue;
+    const multiplier = PelleRifts.death.hasMilestone(2) ? PelleRifts.death.milestones[2].effect() : 1;
+    return (7 + getAdjustedGlyphEffect("infinityrate") + PelleRebuyableUpgrade.infConversion.effectValue) * multiplier;
   }
 };
 

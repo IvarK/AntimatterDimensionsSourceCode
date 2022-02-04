@@ -48,7 +48,12 @@ const disabledMechanicUnlocks = {
 
 export const Pelle = {
 
-  endState: 0,
+  additionalEnd: 0,
+
+  get endState() {
+    return (Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
+      (Math.log10(9e15) - 8.7) + this.additionalEnd;
+  },
 
   get isUnlocked() {
     return ImaginaryUpgrade(25).isBought;
@@ -93,6 +98,7 @@ export const Pelle = {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
+      if (this.endState >= 1) this.additionalEnd += diff / 1000 / 20;
     }
   },
 
@@ -183,8 +189,12 @@ export const Pelle = {
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
+  get hasCustomCurrency() {
+    return Boolean(this.config.currency);
+  }
+
   get currency() {
-    return Currency.realityShards;
+    return this.hasCustomCurrency ? this.config.currency() : Currency.realityShards;
   }
 
   get boughtAmount() {
@@ -199,6 +209,16 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
     return this.config.cost();
   }
 
+  get isCapped() {
+    return this.config.cap ? this.boughtAmount >= this.config.cap : false;
+  }
+
+  get isAffordable() {
+    if (!this.hasCustomCurrency) return this.currency.gte(this.cost);
+
+    return this.cost.lte(this.currency.value);
+  }
+
   get isCustomEffect() { return true; }
 
   get effectValue() {
@@ -206,8 +226,22 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
   }
 
   purchase() {
-    if (!super.purchase() || this.id !== "glyphLevels") return;
-    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    if (this.hasCustomCurrency) {
+      if (!this.canBeBought) return false;
+      if (this.currency.value instanceof Decimal) {
+        this.currency.value = this.currency.value.minus(this.cost);
+      } else {
+        this.currency.value -= this.cost.toNumber();
+      }
+      this.boughtAmount++;
+      this.onPurchased();
+      GameUI.update();
+      return true;
+    }
+
+    const purchaseReturnValue = super.purchase();
+    if (this.id === "glyphLevels") EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    return purchaseReturnValue;
   }
 }
 
@@ -248,14 +282,23 @@ export const PelleUpgrade = (function() {
 }());
 
 export const PelleRebuyableUpgrade = (function() {
-  const db = GameDatabase.celestials.pelle.rebuyables;
-  const obj = {};
-  Object.keys(db).forEach(key => {
-    obj[key] = new RebuyablePelleUpgradeState(db[key]);
+  const upgradeDb = GameDatabase.celestials.pelle.rebuyables;
+  const galaxyGeneratorDb = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
+  const upgrades = {}, galaxyGenerator = {};
+
+  Object.keys(upgradeDb).forEach(key => {
+    upgrades[key] = new RebuyablePelleUpgradeState(upgradeDb[key]);
   });
+
+  Object.keys(galaxyGeneratorDb).forEach(key => {
+    galaxyGenerator[key] = new RebuyablePelleUpgradeState(galaxyGeneratorDb[key]);
+  });
+
   return {
-    all: Object.values(obj),
-    ...obj
+    all: Object.values(upgrades),
+    galaxyGenerator: Object.values(galaxyGenerator),
+    ...upgrades,
+    ...galaxyGenerator
   };
 }());
 
@@ -334,6 +377,14 @@ class RiftState extends GameMechanicState {
     return this.config.name;
   }
 
+  get reducedTo() {
+    return this.rift.reducedTo;
+  }
+
+  set reducedTo(value) {
+    this.rift.reducedTo = value;
+  }
+
   get rift() {
     return player.celestials.pelle.rifts[this.config.key];
   }
@@ -359,8 +410,9 @@ class RiftState extends GameMechanicState {
   }
 
   get percentage() {
-    if (!this.config.spendable) return this.realPercentage;
-    return this.config.percentage(this.totalFill) - this.spentPercentage;
+    if (this.reducedTo > 1) return this.reducedTo;
+    if (!this.config.spendable) return Math.min(this.realPercentage, this.reducedTo);
+    return Math.min(this.config.percentage(this.totalFill) - this.spentPercentage, this.reducedTo);
   }
 
   get milestones() {

@@ -652,32 +652,48 @@ window.player = {
         timeSpeedMult: 0,
         glyphLevels: 0,
         infConversion: 0,
-        galaxyPower: 0
+        galaxyPower: 0,
+        galaxyGeneratorAdditive: 0,
+        galaxyGeneratorMultiplicative: 0,
+        galaxyGeneratorAntimatterMult: 0,
+        galaxyGeneratorIPMult: 0,
+        galaxyGeneratorEPMult: 0,
       },
       rifts: {
         famine: {
           fill: DC.D0,
-          active: false
+          active: false,
+          reducedTo: 1
         },
         pestilence: {
           fill: DC.D0,
           active: false,
-          percentageSpent: 0
+          percentageSpent: 0,
+          reducedTo: 1
         },
         chaos: {
           fill: DC.D0,
-          active: false
+          active: false,
+          reducedTo: 1
         },
         war: {
           fill: DC.D0,
-          active: false
+          active: false,
+          reducedTo: 1
         },
         death: {
           fill: DC.D0,
-          active: false
+          active: false,
+          reducedTo: 1
         }
       },
-      progressBits: 0
+      progressBits: 0,
+      galaxyGenerator: {
+        spentGalaxies: 0,
+        generatedGalaxies: 0,
+        phase: 0,
+        sacrificeActive: false
+      }
     },
     compact: false,
     showBought: false,

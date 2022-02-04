@@ -603,6 +603,17 @@ export function gameLoop(passDiff, options = {}) {
   V.checkForUnlocks();
   AutomatorBackend.update(realDiff);
   Pelle.gameLoop(realDiff);
+  GalaxyGenerator.loop(realDiff);
+
+  if (Tabs.current.isPermanentlyHidden) {
+    const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
+    if (tab) tab.show(true);
+    else [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+  }
+
+  if (Tabs.current.subtabs.find(t => t.isOpen).isPermanentlyHidden) {
+    [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+  }
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();

@@ -585,7 +585,7 @@ export function finishProcessReality(realityProps) {
   player.records.thisReality.maxReplicanti = DC.D0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) Currency.timeTheorems.reset();
   player.celestials.v.STSpent = 0;
-  if (!Pelle.isDoomed) {
+  if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) {
     player.dilation.studies = [];
     player.dilation.active = false;
     Currency.tachyonParticles.reset();

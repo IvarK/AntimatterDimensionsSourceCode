@@ -167,6 +167,12 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e26,
         formatCost: c => format(c, 2),
       },
+      dimBoostResetsNothing: {
+        id: 19,
+        description: "Dimension boosts no longer reset anything",
+        cost: 1e50,
+        formatCost: c => format(c, 2),
+      },
     },
     strikes: {
       infinity: {
@@ -417,10 +423,10 @@ GameDatabase.celestials.pelle = (function() {
     galaxyGeneratorUpgrades: {
       additive: rebuyable({
         id: "galaxyGeneratorAdditive",
-        description: `Increase base galaxy generation by 1`,
+        description: `Increase base galaxy generation by 2`,
         _cost: x => Decimal.pow(3, x),
-        _effect: x => x,
-        _formatEffect: x => `${format(x, 2, 2)}/s`,
+        _effect: x => x * 2,
+        _formatEffect: x => `${format(x * 2, 2, 2)}/s`,
         currency: () => ({
           get value() {
             return player.galaxies + GalaxyGenerator.galaxies;
@@ -452,7 +458,7 @@ GameDatabase.celestials.pelle = (function() {
       antimatterMult: rebuyable({
         id: "galaxyGeneratorAntimatterMult",
         description: `Multiply galaxy generation`,
-        _cost: x => Decimal.pow("1e100000000", 4 ** x),
+        _cost: x => Decimal.pow("1e100000000", 10 ** x),
         _effect: x => Decimal.pow(2, x),
         _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
         currency: () => Currency.antimatter,
@@ -461,7 +467,7 @@ GameDatabase.celestials.pelle = (function() {
       IPMult: rebuyable({
         id: "galaxyGeneratorIPMult",
         description: `Multiply galaxy generation`,
-        _cost: x => Decimal.pow("1e1000000", 100 ** x),
+        _cost: x => Decimal.pow("1e2000000", 100 ** x),
         _effect: x => Decimal.pow(2, x),
         _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
         currency: () => Currency.infinityPoints,

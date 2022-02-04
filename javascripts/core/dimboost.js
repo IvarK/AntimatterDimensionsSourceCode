@@ -169,7 +169,11 @@ export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
-  if (forcedNDReset || !Perk.antimatterNoReset.isBought || Pelle.isDoomed) {
+  if (
+    forcedNDReset ||
+    !Perk.antimatterNoReset.isBought ||
+    (Pelle.isDoomed && !PelleUpgrade.dimBoostResetsNothing.canBeApplied)
+  ) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
     resetTickspeed();

@@ -62,7 +62,12 @@ export default {
       return this.config.formatEffect(this.purchases);
     },
     timeEstimate() {
-      if (this.canBuy || this.isBought || Pelle.realityShardGainPerSecond.eq(0) || this.isCapped) return null;
+      if (this.canBuy ||
+        this.isBought ||
+        Pelle.realityShardGainPerSecond.eq(0) ||
+        this.isCapped ||
+        this.galaxyGenerator
+      ) return null;
       if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
       if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
       return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();

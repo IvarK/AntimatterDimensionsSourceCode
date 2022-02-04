@@ -173,8 +173,9 @@ GameDatabase.eternity.dilation = (function() {
     flatDilationMult: {
       id: 15,
       cost: 1e55,
-      description: () => `Gain ${formatX(1e10)} more Dilated Time.`,
-      effect: 1e8
+      description: () => `Gain more Dilated Time based on EP.`,
+      effect: () => 1e9 ** Math.min(((player.eternityPoints.log10() - 1500) / 2500) ** 1.2, 1),
+      formatEffect: value => formatX(value, 2, 2)
     },
   };
 }());

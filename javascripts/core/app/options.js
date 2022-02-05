@@ -1,3 +1,5 @@
+import { sha512_256 } from "js-sha512";
+
 export class GameOptions {
 
   static toggleNews() {

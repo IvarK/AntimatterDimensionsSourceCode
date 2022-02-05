@@ -1,4 +1,5 @@
 import { DC } from "./constants.js";
+import { sha512_256 } from "js-sha512";
 
 /* eslint-disable no-console */
 // Disabling no-console here seems

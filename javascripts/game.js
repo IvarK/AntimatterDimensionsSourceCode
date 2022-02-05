@@ -1,6 +1,7 @@
 import { playFabLogin } from "./core/playfab.js";
 import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
+import TWEEN from "tween.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");

@@ -1,8 +1,11 @@
-import { rem } from "./rem.js";
-
-Vue.component("secret-time-study", {
+<script>
+export default {
+  name: "SecretTimeStudy",
   props: {
-    setup: Object
+    setup: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -25,8 +28,8 @@ Vue.component("secret-time-study", {
     },
     styleObject() {
       return {
-        top: rem(this.setup.top),
-        left: rem(this.setup.left)
+        top: `${this.setup.top}rem`,
+        left: `${this.setup.left}rem`
       };
     },
     classObject() {
@@ -75,54 +78,29 @@ Vue.component("secret-time-study", {
         }
       }
     },
-  },
-  template: `
-    <button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
-      <span>
-        {{ description }}
-        <br>
-        {{ hide }}
-        <br>
-        <span v-if="cost !== 0">
-          Cost: {{ format(cost) }} Time Theorems
-        </span>
-      </span>
-    </button>`
-});
+  }
+};
+</script>
 
-Vue.component("secret-time-study-connection", {
-  props: {
-    setup: Object
-  },
-  data() {
-    return {
-      isVisible: player.secretUnlocks.viewSecretTS,
-    };
-  },
-  computed: {
-    classObject() {
-      return {
-        "o-time-study-connection": true,
-        "o-time-study-connection--bought": true,
-        "o-time-study-connection--secret": true,
-        "o-time-study-connection--secret-unlocked": this.isVisible
-      };
-    }
-  },
-  methods: {
-    update() {
-      this.isVisible = player.secretUnlocks.viewSecretTS;
-    },
-    percents(value) {
-      return `${value * 100}%`;
-    }
-  },
-  template:
-    `<line
-      :x1="percents(setup.x1)"
-      :y1="percents(setup.y1)"
-      :x2="percents(setup.x2)"
-      :y2="percents(setup.y2)"
-      :class="classObject"
-    />`
-});
+<template>
+  <button
+    ref="study"
+    :class="classObject"
+    :style="styleObject"
+    @click="handleClick"
+  >
+    <span>
+      {{ description }}
+      <br>
+      {{ hide }}
+      <br>
+      <span v-if="cost !== 0">
+        Cost: {{ format(cost) }} Time Theorems
+      </span>
+    </span>
+  </button>
+</template>
+
+<style scoped>
+
+</style>

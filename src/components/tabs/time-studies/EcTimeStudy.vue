@@ -1,15 +1,23 @@
-import "./time-study.js";
+<script>
+import TimeStudyButton from "./TimeStudyButton";
 
-Vue.component("ec-time-study", {
+export default {
+  name: "EcTimeStudy",
+  components: {
+    TimeStudyButton
+  },
   props: {
-    setup: Object
+    setup: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
       hasRequirement: false,
       requirement: {
-        current: new Decimal(0),
-        total: new Decimal(0)
+        current: new Decimal(),
+        total: new Decimal()
       },
       completions: 0,
       showTotalCompletions: false,
@@ -60,23 +68,30 @@ Vue.component("ec-time-study", {
         requirement.current.copyFrom(study.requirementCurrent.min(requirement.total));
       }
     }
-  },
-  template: `
-    <time-study :setup="setup">
-      Eternity Challenge {{ id }}
-      ({{ formatInt(completions) }}<span v-if="showTotalCompletions">/{{ formatInt(5) }}</span>)
-      <template v-if="hasRequirement">
-        <br>
-        Requirement:
-        <br v-if="needsFirstLinebreak">
-        <span v-if="config.secondary.path">Use only the {{ config.secondary.path }} path</span>
-        <span v-else>
-          {{ formatValue(requirement.current) }}/{{ formatValue(requirement.total) }}
-          <br v-if="needsSecondLinebreak">
-          {{ config.secondary.resource }}
-        </span>
-      </template>
-      <span v-if="isUnlocked && !isRunning"><br>Double click to start</span>
-      <span v-else-if="isRunning"><br>Currently Running</span>
-    </time-study>`
-});
+  }
+};
+</script>
+
+<template>
+  <TimeStudyButton :setup="setup">
+    Eternity Challenge {{ id }}
+    ({{ formatInt(completions) }}<span v-if="showTotalCompletions">/{{ formatInt(5) }}</span>)
+    <template v-if="hasRequirement">
+      <br>
+      Requirement:
+      <br v-if="needsFirstLinebreak">
+      <span v-if="config.secondary.path">Use only the {{ config.secondary.path }} path</span>
+      <span v-else>
+        {{ formatValue(requirement.current) }}/{{ formatValue(requirement.total) }}
+        <br v-if="needsSecondLinebreak">
+        {{ config.secondary.resource }}
+      </span>
+    </template>
+    <span v-if="isUnlocked && !isRunning"><br>Double click to start</span>
+    <span v-else-if="isRunning"><br>Currently Running</span>
+  </TimeStudyButton>
+</template>
+
+<style scoped>
+
+</style>

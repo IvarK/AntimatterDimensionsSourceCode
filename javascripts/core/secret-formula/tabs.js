@@ -295,7 +295,7 @@ GameDatabase.tabs = [
         key: "studies",
         name: "Time Studies",
         symbol: "<i class='fas fa-book'></i>",
-        component: "time-studies-tab",
+        component: "TimeStudiesTab",
         id: 0,
         hidable: true,
       },

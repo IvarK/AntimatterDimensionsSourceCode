@@ -1,10 +1,12 @@
-import CostDisplay from "@/components/CostDisplay";
+<script>
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
+import CostDisplay from "@/components/CostDisplay";
 import HintText from "@/components/HintText";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
-Vue.component("imaginary-upgrade-button", {
+export default {
+  name: "ImaginaryUpgradeButton",
   components: {
     PrimaryToggleButton,
     DescriptionDisplay,
@@ -13,7 +15,10 @@ Vue.component("imaginary-upgrade-button", {
     HintText
   },
   props: {
-    upgrade: Object
+    upgrade: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -60,41 +65,48 @@ Vue.component("imaginary-upgrade-button", {
       this.isAutoUnlocked = ImaginaryUpgrade(20).isBought;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
     }
-  },
-  template: `
-    <div class="l-spoon-btn-group">
-      <button
-        :class="classObject"
-        class="l-reality-upgrade-btn c-reality-upgrade-btn"
-        @click="upgrade.purchase()"
+  }
+};
+</script>
+
+<template>
+  <div class="l-spoon-btn-group">
+    <button
+      :class="classObject"
+      class="l-reality-upgrade-btn c-reality-upgrade-btn"
+      @click="upgrade.purchase()"
+    >
+      <HintText
+        type="realityUpgrades"
+        class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
       >
-        <HintText
-          type="realityUpgrades"
-          class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
-        >
-          {{ config.name }}
-        </HintText>
-        <DescriptionDisplay :config="config" />
-        <DescriptionDisplay
-          v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
-          :config="requirementConfig"
-          label="Requirement:"
-          class="c-reality-upgrade-btn__requirement"
-        />
-        <template v-else>
-          <EffectDisplay :config="config" />
-          <CostDisplay
-            v-if="!isBought"
-            :config="config"
-            name="Imaginary Machine"
-          />
-        </template>
-      </button>
-      <PrimaryToggleButton
-        v-if="isRebuyable && isAutoUnlocked"
-        v-model="isAutobuyerOn"
-        label="Auto:"
-        class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
+        {{ config.name }}
+      </HintText>
+      <DescriptionDisplay :config="config" />
+      <DescriptionDisplay
+        v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
+        :config="requirementConfig"
+        label="Requirement:"
+        class="c-reality-upgrade-btn__requirement"
       />
-    </div>`
-});
+      <template v-else>
+        <EffectDisplay :config="config" />
+        <CostDisplay
+          v-if="!isBought"
+          :config="config"
+          name="Imaginary Machine"
+        />
+      </template>
+    </button>
+    <PrimaryToggleButton
+      v-if="isRebuyable && isAutoUnlocked"
+      v-model="isAutobuyerOn"
+      label="Auto:"
+      class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

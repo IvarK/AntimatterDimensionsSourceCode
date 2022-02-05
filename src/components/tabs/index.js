@@ -27,6 +27,7 @@ import EternityMilestonesTab from "./eternity-milestones/EternityMilestonesTab";
 import TimeDilationTab from "./time-dilation/TimeDilationTab";
 import GlyphsTab from "./glyphs/GlyphsTab";
 import RealityUpgradesTab from "./reality-upgrades/RealityUpgradesTab";
+import ImaginaryUpgradesTab from "./imaginary-upgrades/ImaginaryUpgradesTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -56,7 +57,8 @@ const TabComponents = {
   EternityMilestonesTab,
   TimeDilationTab,
   GlyphsTab,
-  RealityUpgradesTab
+  RealityUpgradesTab,
+  ImaginaryUpgradesTab
 };
 
 export default TabComponents;

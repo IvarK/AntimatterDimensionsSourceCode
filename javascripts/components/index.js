@@ -1,5 +1,4 @@
 import "./reality/reality-machines-header.js";
-import "./reality/black-hole/black-hole-tab.js";
 
 import "./celestials/navigation.js";
 import "./celestials/subtabs/teresa/teresa-tab.js";

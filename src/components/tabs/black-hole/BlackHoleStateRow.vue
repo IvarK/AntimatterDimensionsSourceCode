@@ -1,6 +1,11 @@
-Vue.component("black-hole-state-row", {
+<script>
+export default {
+  name: "BlackHoleStateRow",
   props: {
-    blackHole: Object
+    blackHole: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -31,21 +36,28 @@ Vue.component("black-hole-state-row", {
       this.nextChange = TimeSpan.fromSeconds(blackHole.timeWithPreviousActiveToNextStateChange).toStringShort();
       this.state = blackHole.displayState;
     }
-  },
-  template: `
-    <h3 v-if="isUnlocked">
-      {{ description }} State:
-      <template v-if="isPermanent">
-        Permanently Active
-      </template>
-      <template v-else-if="isActive">
-        Active ({{ nextChange }} remaining)
-      </template>
-      <template v-else-if="id === 2 && isCharged">
-        Charged (Activates with Black Hole 1, {{ nextChange }} remaining)
-      </template>
-      <template v-else>
-        Inactive (Activation in {{ nextChange }})
-      </template>
-    </h3>`
-});
+  }
+};
+</script>
+
+<template>
+  <h3 v-if="isUnlocked">
+    {{ description }} State:
+    <template v-if="isPermanent">
+      Permanently Active
+    </template>
+    <template v-else-if="isActive">
+      Active ({{ nextChange }} remaining)
+    </template>
+    <template v-else-if="id === 2 && isCharged">
+      Charged (Activates with Black Hole 1, {{ nextChange }} remaining)
+    </template>
+    <template v-else>
+      Inactive (Activation in {{ nextChange }})
+    </template>
+  </h3>
+</template>
+
+<style scoped>
+
+</style>

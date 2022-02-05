@@ -1,9 +1,11 @@
-import CostDisplay from "@/components/CostDisplay";
+<script>
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import CostDisplay from "@/components/CostDisplay";
 
-Vue.component("black-hole-upgrade-button", {
+export default {
+  name: "BlackHoleUpgradeButton",
   components: {
     PrimaryToggleButton,
     DescriptionDisplay,
@@ -11,7 +13,10 @@ Vue.component("black-hole-upgrade-button", {
     CostDisplay
   },
   props: {
-    config: Object
+    config: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -20,11 +25,6 @@ Vue.component("black-hole-upgrade-button", {
       isAutoUnlocked: false,
       isAutobuyerOn: false
     };
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.blackHolePower(this.config.upgrade.id).isActive = newValue;
-    }
   },
   computed: {
     effectConfig() {
@@ -47,6 +47,11 @@ Vue.component("black-hole-upgrade-button", {
       };
     }
   },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.blackHolePower(this.config.upgrade.id).isActive = newValue;
+    }
+  },
   methods: {
     update() {
       this.isCapped = this.config.upgrade.value === 0;
@@ -55,30 +60,37 @@ Vue.component("black-hole-upgrade-button", {
       this.isAutoUnlocked = hasAutobuyer && Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER);
       this.isAutobuyerOn = hasAutobuyer && Autobuyer.blackHolePower(this.config.upgrade.id).isActive;
     }
-  },
-  template: `
-    <div class="l-spoon-btn-group">
-      <button
-        :class="classObject"
-        class="l-reality-upgrade-btn c-reality-upgrade-btn"
-        @click="config.upgrade.purchase()"
-      >
-        <DescriptionDisplay :config="config" />
-        <EffectDisplay
-          :config="effectConfig"
-          :label="config.effectTitle"
-        />
-        <CostDisplay
-          v-if="!isCapped"
-          :config="costConfig"
-          name="Reality Machine"
-        />
-      </button>
-      <PrimaryToggleButton
-        v-if="isAutoUnlocked"
-        v-model="isAutobuyerOn"
-        label="Auto:"
-        class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
+  }
+};
+</script>
+
+<template>
+  <div class="l-spoon-btn-group">
+    <button
+      :class="classObject"
+      class="l-reality-upgrade-btn c-reality-upgrade-btn"
+      @click="config.upgrade.purchase()"
+    >
+      <DescriptionDisplay :config="config" />
+      <EffectDisplay
+        :config="effectConfig"
+        :label="config.effectTitle"
       />
-    </div>`
-});
+      <CostDisplay
+        v-if="!isCapped"
+        :config="costConfig"
+        name="Reality Machine"
+      />
+    </button>
+    <PrimaryToggleButton
+      v-if="isAutoUnlocked"
+      v-model="isAutobuyerOn"
+      label="Auto:"
+      class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

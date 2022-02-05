@@ -374,7 +374,7 @@ GameDatabase.tabs = [
         key: "hole",
         name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
-        component: "black-hole-tab",
+        component: "BlackHoleTab",
         condition: () => PlayerProgress.realityUnlocked(),
         id: 4,
         hidable: true,

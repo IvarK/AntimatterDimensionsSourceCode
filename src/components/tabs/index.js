@@ -29,6 +29,7 @@ import GlyphsTab from "./glyphs/GlyphsTab";
 import RealityUpgradesTab from "./reality-upgrades/RealityUpgradesTab";
 import ImaginaryUpgradesTab from "./imaginary-upgrades/ImaginaryUpgradesTab";
 import PerksTab from "./perks/PerksTab";
+import BlackHoleTab from "./black-hole/BlackHoleTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -60,7 +61,8 @@ const TabComponents = {
   GlyphsTab,
   RealityUpgradesTab,
   ImaginaryUpgradesTab,
-  PerksTab
+  PerksTab,
+  BlackHoleTab
 };
 
 export default TabComponents;

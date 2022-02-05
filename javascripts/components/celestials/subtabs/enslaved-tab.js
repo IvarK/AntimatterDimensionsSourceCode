@@ -1,14 +1,15 @@
 import "../celestial-quote-history.js";
-import "../../reality/black-hole/black-hole-charging-sliders.js";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SliderComponent from "@/components/SliderComponent";
+import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 
 Vue.component("enslaved-tab", {
   components: {
     PrimaryButton,
     PrimaryToggleButton,
-    SliderComponent
+    SliderComponent,
+    BlackHoleChargingSliders
   },
   data: () => ({
     isDoomed: false,
@@ -238,7 +239,7 @@ Vue.component("enslaved-tab", {
               </div>
             </div>
           </div>
-          <black-hole-charging-sliders />
+          <BlackHoleChargingSliders />
           <br>
           <div class="l-enslaved-shop-container">
             <button

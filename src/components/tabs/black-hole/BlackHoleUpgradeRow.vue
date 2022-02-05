@@ -1,8 +1,16 @@
-import "./black-hole-upgrade-button.js";
+<script>
+import BlackHoleUpgradeButton from "@/components/tabs/black-hole/BlackHoleUpgradeButton";
 
-Vue.component("black-hole-upgrade-row", {
+export default {
+  name: "BlackHoleUpgradeRow",
+  components: {
+    BlackHoleUpgradeButton
+  },
   props: {
-    blackHole: Object
+    blackHole: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -44,11 +52,27 @@ Vue.component("black-hole-upgrade-row", {
       this.isUnlocked = this.blackHole.isUnlocked;
       this.isPermanent = this.blackHole.isPermanent;
     }
-  },
-  template: `
-    <div v-if="isUnlocked" class="l-black-hole-upgrade-grid__row">
-      <black-hole-upgrade-button v-if="!isPermanent" :config="intervalConfig" />
-      <black-hole-upgrade-button :config="powerConfig" />
-      <black-hole-upgrade-button v-if="!isPermanent" :config="durationConfig" />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div
+    v-if="isUnlocked"
+    class="l-black-hole-upgrade-grid__row"
+  >
+    <BlackHoleUpgradeButton
+      v-if="!isPermanent"
+      :config="intervalConfig"
+    />
+    <BlackHoleUpgradeButton :config="powerConfig" />
+    <BlackHoleUpgradeButton
+      v-if="!isPermanent"
+      :config="durationConfig"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

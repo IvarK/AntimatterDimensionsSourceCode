@@ -1,6 +1,8 @@
+<script>
 import SliderComponent from "@/components/SliderComponent";
 
-Vue.component("black-hole-charging-sliders", {
+export default {
+  name: "BlackHoleChargingSliders",
   components: {
     SliderComponent
   },
@@ -48,25 +50,35 @@ Vue.component("black-hole-charging-sliders", {
         tooltip: false
       };
     },
-  },
-  template: `
-    <div>
-      <div v-if="canAdjustStoredTime" class="l-black-hole-sliders">
-        Black Hole charging rate: {{ storedTimeRate }}
-        <SliderComponent
-          v-bind="sliderProps(false)"
-          :value="storedFraction"
-          @input="adjustSliderStoring($event)"
-        />
-      </div>
-      <div v-if="isNegativeBHUnlocked" class="l-black-hole-sliders">
-        Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-        This requires both Black Holes to be permanent and only works when paused.
-        <SliderComponent
-          v-bind="sliderProps(true)"
-          :value="negativeSlider"
-          @input="adjustSliderNegative($event)"
-        />
-      </div>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div>
+    <div class="l-black-hole-sliders">
+      Black Hole charging rate: {{ storedTimeRate }}
+      <SliderComponent
+        v-bind="sliderProps(false)"
+        :value="storedFraction"
+        @input="adjustSliderStoring($event)"
+      />
+    </div>
+    <div
+      v-if="isNegativeBHUnlocked"
+      class="l-black-hole-sliders"
+    >
+      Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
+      This requires both Black Holes to be permanent and only works when paused.
+      <SliderComponent
+        v-bind="sliderProps(true)"
+        :value="negativeSlider"
+        @input="adjustSliderNegative($event)"
+      />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

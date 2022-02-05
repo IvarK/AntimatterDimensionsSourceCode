@@ -1,10 +1,18 @@
-import "./black-hole-unlock-button.js";
-import "./black-hole-upgrade-row.js";
-import "./black-hole-state-row.js";
+<script>
 import { BlackHoleAnimation } from "./black-hole-animation.js";
-import "./black-hole-charging-sliders.js";
+import BlackHoleUnlockButton from "./BlackHoleUnlockButton";
+import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
+import BlackHoleStateRow from "./BlackHoleStateRow";
+import BlackHoleChargingSliders from "./BlackHoleChargingSliders";
 
-Vue.component("black-hole-tab", {
+export default {
+  name: "BlackHoleTab",
+  components: {
+    BlackHoleUnlockButton,
+    BlackHoleUpgradeRow,
+    BlackHoleStateRow,
+    BlackHoleChargingSliders
+  },
   data() {
     return {
       isUnlocked: false,
@@ -16,12 +24,6 @@ Vue.component("black-hole-tab", {
       hasBH2: false,
       blackHoleUptime: [],
     };
-  },
-  mounted() {
-    this.startAnimation();
-  },
-  destroyed() {
-    if (this.animation) this.animation.unmount();
   },
   computed: {
     blackHoles: () => BlackHoles.list,
@@ -37,6 +39,12 @@ Vue.component("black-hole-tab", {
           throw new Error("Unrecognized BH offline pausing mode");
       }
     },
+  },
+  mounted() {
+    this.startAnimation();
+  },
+  destroyed() {
+    if (this.animation) this.animation.unmount();
   },
   methods: {
     update() {
@@ -123,69 +131,84 @@ Vue.component("black-hole-tab", {
     gridStyle() {
       return this.isPermanent ? "l-black-hole-upgrade-permanent" : "l-black-hole-upgrade-grid";
     },
-  },
-  template: `
-    <div class="l-black-hole-tab">
-      <div v-if="isEnslaved">
-        The physics of this Reality do not allow the existence of Black Holes.
+  }
+};
+</script>
+
+<template>
+  <div class="l-black-hole-tab">
+    <div v-if="isEnslaved">
+      The physics of this Reality do not allow the existence of Black Holes.
+    </div>
+    <div
+      v-else-if="!isUnlocked"
+      style="display: flex; flex-direction: column; align-items: center;"
+    >
+      <BlackHoleUnlockButton @blackholeunlock="startAnimation" />
+      The Black Hole makes the entire game run significantly faster for a short period of time.
+      <br>
+      Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
+      <br>
+      <br>
+      Unlocking the Black Hole also gives {{ formatInt(10) }} Automator Points.
+    </div>
+    <template v-else>
+      <div class="c-subtab-option-container">
+        <button
+          class="o-primary-btn o-primary-btn--subtab-option"
+          @click="togglePause"
+        >
+          {{ isPaused ? "Resume" : "Pause" }} Black Hole
+        </button>
+        <button
+          v-if="!isPermanent"
+          class="o-primary-btn o-primary-btn--subtab-option"
+          style="width: 30rem"
+          @click="changePauseMode"
+        >
+          Auto-pause: {{ pauseModeString }}
+        </button>
       </div>
-      <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
-        <black-hole-unlock-button @blackholeunlock="startAnimation" />
-        The Black Hole makes the entire game run significantly faster for a short period of time.
-        <br>
-        Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
-        <br>
-        <br>
-        Unlocking the Black Hole also gives {{ formatInt(10) }} Automator Points.
-      </div>
-      <template v-else>
-        <div class="c-subtab-option-container">
-          <button
-            class="o-primary-btn o-primary-btn--subtab-option"
-            @click="togglePause"
-          >
-            {{ isPaused ? "Resume" : "Pause" }} Black Hole
-          </button>
-          <button
-            class="o-primary-btn o-primary-btn--subtab-option"
-            style="width: 30rem"
-            @click="changePauseMode"
-            v-if="!isPermanent"
-          >
-            Auto-pause: {{ pauseModeString }}
-          </button>
-        </div>
-        <canvas class="c-black-hole-canvas" ref="canvas" width="400" height="400" />
-        <div class="l-black-hole-upgrade-grid">
-          <black-hole-state-row
-            v-for="(blackHole, i) in blackHoles"
-            :key="'state' + i"
-            :blackHole="blackHole"
-          />
-          <span v-if="hasBH2 && !isPermanent">
-            <b>{{ detailedBH2 }}</b>
-            <br>
-            The timer for Black Hole 2 only advances while Black Hole 1 is active.
-            <br>
-            Upgrades affect the internal timer; the header shows real time until next activation.
-          </span>
+      <canvas
+        ref="canvas"
+        class="c-black-hole-canvas"
+        width="400"
+        height="400"
+      />
+      <div class="l-black-hole-upgrade-grid">
+        <BlackHoleStateRow
+          v-for="(blackHole, i) in blackHoles"
+          :key="'state' + i"
+          :black-hole="blackHole"
+        />
+        <span v-if="hasBH2 && !isPermanent">
+          <b>{{ detailedBH2 }}</b>
           <br>
-          <div v-if="!isPermanent">
-            Black holes become permanently active when they are active for more than {{ formatPercents(0.9999, 2) }}
-            of the time.
-            <br>
-            Active time percent: {{ formatPercents(blackHoleUptime[0], 3) }}
-            <span v-if="hasBH2">and {{ formatPercents(blackHoleUptime[1], 3) }}</span>
-          </div>
-          <black-hole-charging-sliders class="l-enslaved-shop-container" />
+          The timer for Black Hole 2 only advances while Black Hole 1 is active.
+          <br>
+          Upgrades affect the internal timer; the header shows real time until next activation.
+        </span>
+        <br>
+        <div v-if="!isPermanent">
+          Black holes become permanently active when they are active for more than {{ formatPercents(0.9999, 2) }}
+          of the time.
+          <br>
+          Active time percent: {{ formatPercents(blackHoleUptime[0], 3) }}
+          <span v-if="hasBH2">and {{ formatPercents(blackHoleUptime[1], 3) }}</span>
         </div>
-        <div :class="gridStyle()">
-          <black-hole-upgrade-row
-            v-for="(blackHole, i) in blackHoles"
-            :key="'upgrades' + i"
-            :blackHole="blackHole"
-          />
-        </div>
-      </template>
-    </div>`
-});
+        <BlackHoleChargingSliders class="l-enslaved-shop-container" />
+      </div>
+      <div :class="gridStyle()">
+        <BlackHoleUpgradeRow
+          v-for="(blackHole, i) in blackHoles"
+          :key="'upgrades' + i"
+          :black-hole="blackHole"
+        />
+      </div>
+    </template>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

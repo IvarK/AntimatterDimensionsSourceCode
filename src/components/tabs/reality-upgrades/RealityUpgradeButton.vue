@@ -1,10 +1,12 @@
-import CostDisplay from "@/components/CostDisplay";
+<script>
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
+import CostDisplay from "@/components/CostDisplay";
 import HintText from "@/components/HintText";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
-Vue.component("reality-upgrade-button", {
+export default {
+  name: "RealityUpgradeButton",
   components: {
     PrimaryToggleButton,
     DescriptionDisplay,
@@ -13,7 +15,10 @@ Vue.component("reality-upgrade-button", {
     HintText
   },
   props: {
-    upgrade: Object
+    upgrade: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -26,11 +31,6 @@ Vue.component("reality-upgrade-button", {
       isAutoUnlocked: false,
       isAutobuyerOn: false
     };
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
-    }
   },
   computed: {
     config() {
@@ -50,6 +50,11 @@ Vue.component("reality-upgrade-button", {
       };
     }
   },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
+    }
+  },
   methods: {
     update() {
       const upgrade = this.upgrade;
@@ -62,44 +67,51 @@ Vue.component("reality-upgrade-button", {
       this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC);
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
     }
-  },
-  template: `
-    <div class="l-spoon-btn-group">
-      <button
-        :class="classObject"
-        class="l-reality-upgrade-btn c-reality-upgrade-btn"
-        @click="upgrade.purchase()"
+  }
+};
+</script>
+
+<template>
+  <div class="l-spoon-btn-group">
+    <button
+      :class="classObject"
+      class="l-reality-upgrade-btn c-reality-upgrade-btn"
+      @click="upgrade.purchase()"
+    >
+      <HintText
+        type="realityUpgrades"
+        class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
       >
-        <HintText
-          type="realityUpgrades"
-          class="l-hint-text--reality-upgrade c-hint-text--reality-upgrade"
-        >
-          {{ config.name }}
-        </HintText>
-        <DescriptionDisplay :config="config" />
-        <DescriptionDisplay
-          v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
-          :config="requirementConfig"
-          label="Requirement:"
-          class="c-reality-upgrade-btn__requirement"
-        />
-        <template v-else>
-          <EffectDisplay :config="config" />
-          <CostDisplay
-            v-if="!isBought"
-            :config="config"
-            name="Reality Machine"
-          />
-        </template>
-        <b v-if="automatorPoints && !isBought">
-          (+{{ formatInt(automatorPoints) }} AP)
-        </b>
-      </button>
-      <PrimaryToggleButton
-        v-if="isRebuyable && isAutoUnlocked"
-        v-model="isAutobuyerOn"
-        label="Auto:"
-        class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
+        {{ config.name }}
+      </HintText>
+      <DescriptionDisplay :config="config" />
+      <DescriptionDisplay
+        v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
+        :config="requirementConfig"
+        label="Requirement:"
+        class="c-reality-upgrade-btn__requirement"
       />
-    </div>`
-});
+      <template v-else>
+        <EffectDisplay :config="config" />
+        <CostDisplay
+          v-if="!isBought"
+          :config="config"
+          name="Reality Machine"
+        />
+      </template>
+      <b v-if="automatorPoints && !isBought">
+        (+{{ formatInt(automatorPoints) }} AP)
+      </b>
+    </button>
+    <PrimaryToggleButton
+      v-if="isRebuyable && isAutoUnlocked"
+      v-model="isAutobuyerOn"
+      label="Auto:"
+      class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

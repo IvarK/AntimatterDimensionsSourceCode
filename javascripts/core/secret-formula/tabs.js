@@ -349,7 +349,7 @@ GameDatabase.tabs = [
         key: "upgrades",
         name: "Reality Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "reality-upgrades-tab",
+        component: "RealityUpgradesTab",
         id: 1,
         hidable: true,
       },

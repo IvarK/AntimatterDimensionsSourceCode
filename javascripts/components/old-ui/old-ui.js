@@ -4,6 +4,7 @@ import "./header/game-header.js";
 import NewsTicker from "@/components/NewsTicker";
 import FooterLinks from "@/components/FooterLinks";
 import InfinityPointsHeader from "@/components/InfinityPointsHeader";
+import EternityPointsHeader from "@/components/EternityPointsHeader";
 
 Vue.component("old-ui", {
   components: {
@@ -12,7 +13,8 @@ Vue.component("old-ui", {
     },
     NewsTicker,
     FooterLinks,
-    InfinityPointsHeader
+    InfinityPointsHeader,
+    EternityPointsHeader
   },
   data() {
     return {

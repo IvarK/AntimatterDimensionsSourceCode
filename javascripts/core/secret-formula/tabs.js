@@ -287,7 +287,7 @@ GameDatabase.tabs = [
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked(),
-    before: "eternity-points-header",
+    before: "EternityPointsHeader",
     id: 7,
     hidable: true,
     subtabs: [

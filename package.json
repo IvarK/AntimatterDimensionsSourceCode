@@ -14,6 +14,7 @@
     "lz-string": "^1.4.4",
     "mousetrap": "^1.6.5",
     "pako": "^2.0.4",
+    "svg-pan-zoom": "^3.6.1",
     "tween.js": "^16.6.0",
     "vue": "^2.6.11",
     "vuedraggable": "^2.24.3"

@@ -1,5 +1,4 @@
 import "./reality/reality-machines-header.js";
-import "./reality/glyphs/glyphs-tab.js";
 import "./reality/upgrades/reality-upgrades-tab.js";
 import "./reality/upgrades/imaginary-upgrades-tab.js";
 import "./reality/perks-tab.js";

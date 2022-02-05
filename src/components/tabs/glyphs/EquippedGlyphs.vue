@@ -1,6 +1,8 @@
+<script>
 import GlyphComponent from "@/components/GlyphComponent";
 
-Vue.component("equipped-glyphs", {
+export default {
+  name: "EquippedGlyphs",
   components: {
     GlyphComponent
   },
@@ -15,10 +17,6 @@ Vue.component("equipped-glyphs", {
       undoAvailable: false,
       undoVisible: false,
     };
-  },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
-    this.glyphsChanged();
   },
   computed: {
     // Empty slots are bigger due to the enlarged drop zone
@@ -47,6 +45,10 @@ Vue.component("equipped-glyphs", {
       if (Pelle.isDoomed) return "Unequip Glyphs on Armageddon";
       return "Unequip Glyphs on Reality";
     }
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
   },
   methods: {
     update() {
@@ -141,65 +143,74 @@ Vue.component("equipped-glyphs", {
         new Audio(`audio/note${sound}.mp3`).play();
       }
     }
-  },
-  template: `
-    <div class="l-equipped-glyphs">
-      <div class="l-equipped-glyphs__slots">
+  }
+};
+</script>
+
+<template>
+  <div class="l-equipped-glyphs">
+    <div class="l-equipped-glyphs__slots">
+      <div
+        v-for="(glyph, idx) in glyphs"
+        :key="idx"
+        class="l-glyph-set-preview"
+        :style="glyphPositionStyle(idx)"
+        v-on="dragEvents(idx)"
+        @click="showModal"
+      >
+        <!-- the drop zone is a bit larger than the glyph itself. -->
         <div
-          v-for="(glyph, idx) in glyphs"
-          class="l-glyph-set-preview"
-          :style="glyphPositionStyle(idx)"
-          v-on="dragEvents(idx)"
-          @click="showModal"
-        >
-          <!-- the drop zone is a bit larger than the glyph itself. -->
-          <div
-            class="l-equipped-glyphs__dropzone"
-          />
-          <GlyphComponent
-            v-if="glyph"
-            :key="idx"
-            :glyph="glyph"
-            :circular="true"
-            :isActiveGlyph="true"
-            style="-webkit-user-drag: none;"
-            @clicked="clickGlyph(glyph, idx)"
-          />
-          <div
-            v-else
-            :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
-              {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
-          />
-        </div>
+          class="l-equipped-glyphs__dropzone"
+
+        />
+        <GlyphComponent
+          v-if="glyph"
+          :key="idx"
+          :glyph="glyph"
+          :circular="true"
+          :is-active-glyph="true"
+          style="-webkit-user-drag: none;"
+          @clicked="clickGlyph(glyph, idx)"
+        />
+        <div
+          v-else
+          :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
+                   {'c-equipped-glyphs__empty--dragover': dragoverIndex === idx}]"
+        />
       </div>
-      <div class="l-equipped-glyphs__buttons">
-        <button
-          class="l-glyph-equip-button c-reality-upgrade-btn"
-          :class="{'c-reality-upgrade-btn--bought': respec}"
-          :ach-tooltip="respecTooltip"
-          @click="toggleRespec"
-        >
-          {{ unequipText }}
-        </button>
-        <button
-          v-if="undoVisible"
-          class="l-glyph-equip-button c-reality-upgrade-btn"
-          :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
-          :ach-tooltip="undoTooltip"
-          @click="undo"
-        >
-          <span v-if="!isDoomed">Rewind to <b>undo</b> the last equipped Glyph</span>
-          <span v-if="isDoomed">You can't <b>undo</b> Armageddon</span>
-        </button>
-        <button
-          class="l-glyph-equip-button c-reality-upgrade-btn"
-          @click="toggleRespecIntoProtected"
-        >
-          Unequip Glyphs to:
-          <br>
-          <span v-if="respecIntoProtected">Protected slots</span>
-          <span v-else>Main inventory</span>
-        </button>
-      </div>
-    </div>`
-});
+    </div>
+    <div class="l-equipped-glyphs__buttons">
+      <button
+        class="l-glyph-equip-button c-reality-upgrade-btn"
+        :class="{'c-reality-upgrade-btn--bought': respec}"
+        :ach-tooltip="respecTooltip"
+        @click="toggleRespec"
+      >
+        {{ unequipText }}
+      </button>
+      <button
+        v-if="undoVisible"
+        class="l-glyph-equip-button c-reality-upgrade-btn"
+        :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
+        :ach-tooltip="undoTooltip"
+        @click="undo"
+      >
+        <span v-if="!isDoomed">Rewind to <b>undo</b> the last equipped Glyph</span>
+        <span v-if="isDoomed">You can't <b>undo</b> Armageddon</span>
+      </button>
+      <button
+        class="l-glyph-equip-button c-reality-upgrade-btn"
+        @click="toggleRespecIntoProtected"
+      >
+        Unequip Glyphs to:
+        <br>
+        <span v-if="respecIntoProtected">Protected slots</span>
+        <span v-else>Main inventory</span>
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

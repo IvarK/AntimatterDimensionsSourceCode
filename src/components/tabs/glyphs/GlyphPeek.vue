@@ -1,6 +1,8 @@
+<script>
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 
-Vue.component("glyph-peek", {
+export default {
+  name: "GlyphPeek",
   components: {
     GlyphSetPreview
   },
@@ -56,30 +58,37 @@ Vue.component("glyph-peek", {
         displaySacrifice: true,
       });
     }
-  },
-  template: `
-    <div class="c-glyph-peek">
-      <div
-        v-if="isVisible"
-        @click="showModal"
-        class="l-glyph-set-preview"
-      >
-        <GlyphSetPreview
-          :showName="false"
-          :text="'Upcoming glyph selection:'"
-          :glyphs="glyphs"
-          :ignoreModifiedLevel="true"
-          :showSacrifice="canSacrifice"
-          :flipTooltip="true"
-        />
-        (Click to bring up details)
-      </div>
-      <div
-        v-else-if="canPeek"
-      >
-        Purchase the Reality study to see
-        <br>
-        this Reality's glyph choices
-      </div>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="c-glyph-peek">
+    <div
+      v-if="isVisible"
+      class="l-glyph-set-preview"
+      @click="showModal"
+    >
+      <GlyphSetPreview
+        :show-name="false"
+        :text="'Upcoming glyph selection:'"
+        :glyphs="glyphs"
+        :ignore-modified-level="true"
+        :show-sacrifice="canSacrifice"
+        :flip-tooltip="true"
+      />
+      (Click to bring up details)
+    </div>
+    <div
+      v-else-if="canPeek"
+    >
+      Purchase the Reality study to see
+      <br>
+      this Reality's glyph choices
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

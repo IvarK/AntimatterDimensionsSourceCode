@@ -25,6 +25,7 @@ import TimeStudiesTab from "./time-studies/TimeStudiesTab";
 import EternityUpgradesTab from "./eternity-upgrades/EternityUpgradesTab";
 import EternityMilestonesTab from "./eternity-milestones/EternityMilestonesTab";
 import TimeDilationTab from "./time-dilation/TimeDilationTab";
+import GlyphsTab from "./glyphs/GlyphsTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -52,7 +53,8 @@ const TabComponents = {
   TimeStudiesTab,
   EternityUpgradesTab,
   EternityMilestonesTab,
-  TimeDilationTab
+  TimeDilationTab,
+  GlyphsTab
 };
 
 export default TabComponents;

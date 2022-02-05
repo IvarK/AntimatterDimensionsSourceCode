@@ -1,10 +1,12 @@
-Vue.component("reality-button", {
+<script>
+export default {
+  name: "RealityButton",
   data() {
     return {
       canReality: false,
       hasRealityStudy: false,
-      machinesGained: new Decimal(0),
-      projectedRM: new Decimal(0),
+      machinesGained: new Decimal(),
+      projectedRM: new Decimal(),
       newIMCap: 0,
       realityTime: 0,
       glyphLevel: 0,
@@ -12,6 +14,7 @@ Vue.component("reality-button", {
       nextMachineEP: 0,
       shardsGained: 0,
       currentShardsRate: 0,
+      ppGained: 0,
       celestialRunText: ["", "", "", "", ""]
     };
   },
@@ -120,8 +123,7 @@ Vue.component("reality-button", {
       if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked && Currency.eternityPoints.value.exponent > 4000) {
         return true;
       }
-      if (Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000) return true;
-      return false;
+      return Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000;
     },
     classObject() {
       return {
@@ -130,40 +132,57 @@ Vue.component("reality-button", {
         "c-reality-button--special": this.hasSpecialReward(),
       };
     }
-  },
-  template: `
-    <div class="l-reality-button l-reality-button-group-half">
-      <button
-        class="c-reality-button infotooltip"
-        :class="classObject()"
-        @click="handleClick"
-      >
-        <div class="l-reality-button__contents">
-          <template v-if="canReality">
-            <div class="c-reality-button__header">Make a new Reality</div>
-            <div>{{ formatMachinesGained }}</div>
-            <div>{{ formatMachineStats }}</div>
-            <div>{{ formatGlyphLevel }}</div>
-          </template>
-          <template v-else-if="hasRealityStudy">
-            <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
-          </template>
-          <template v-else>
-            <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
-          </template>
-          <div class="infotooltiptext" v-if="canReality">
-            <div>Other resources gained:</div>
-            <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
-            <div v-if="shardsGained !== 0">{{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/s)</div>
-            <div v-for="celestialInfo in celestialRunText">
-              <span v-if="celestialInfo[0]">
-                {{ celestialInfo[1] }}
-                <br>
-                {{ celestialInfo[2] }}
-              </span>
-            </div>
+  }
+};
+</script>
+
+<template>
+  <div class="l-reality-button l-reality-button-group-half">
+    <button
+      class="c-reality-button infotooltip"
+      :class="classObject()"
+      @click="handleClick"
+    >
+      <div class="l-reality-button__contents">
+        <template v-if="canReality">
+          <div class="c-reality-button__header">
+            Make a new Reality
+          </div>
+          <div>{{ formatMachinesGained }}</div>
+          <div>{{ formatMachineStats }}</div>
+          <div>{{ formatGlyphLevel }}</div>
+        </template>
+        <template v-else-if="hasRealityStudy">
+          <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
+        </template>
+        <template v-else>
+          <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
+        </template>
+        <div
+          v-if="canReality"
+          class="infotooltiptext"
+        >
+          <div>Other resources gained:</div>
+          <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
+          <div v-if="shardsGained !== 0">
+            {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/s)
+          </div>
+          <div
+            v-for="(celestialInfo, i) in celestialRunText"
+            :key="i"
+          >
+            <span v-if="celestialInfo[0]">
+              {{ celestialInfo[1] }}
+              <br>
+              {{ celestialInfo[2] }}
+            </span>
           </div>
         </div>
-      </button>
-    </div>`
-});
+      </div>
+    </button>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

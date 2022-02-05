@@ -1,4 +1,6 @@
-Vue.component("reset-reality-button", {
+<script>
+export default {
+  name: "ResetRealityButton",
   data() {
     return {
       canReality: false,
@@ -26,13 +28,23 @@ Vue.component("reset-reality-button", {
       if (this.isInCelestialReality && this.resetCelestial) return "Restart this Celestial";
       return "Start this Reality over";
     },
-  },
-  template: `
-    <button
-      :class="['l-reset-reality-button', 'c-reset-reality-button',
-        {'c-reset-reality-button-celestial': isInCelestialReality}]"
-      @click="resetReality"
-    >
-      <div class="l-reality-button__contents">{{ resetText() }}</div>
-    </button>`
-});
+  }
+};
+</script>
+
+<template>
+  <button
+    :class="['l-reset-reality-button',
+             'c-reset-reality-button',
+             {'c-reset-reality-button-celestial': isInCelestialReality}]"
+    @click="resetReality"
+  >
+    <div class="l-reality-button__contents">
+      {{ resetText() }}
+    </div>
+  </button>
+</template>
+
+<style scoped>
+
+</style>

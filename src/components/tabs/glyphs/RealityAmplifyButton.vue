@@ -1,4 +1,6 @@
-Vue.component("reality-amplify-button", {
+<script>
+export default {
+  name: "RealityAmplifyButton",
   data: () => ({
     isVisible: false,
     isDisabled: false,
@@ -27,26 +29,31 @@ Vue.component("reality-amplify-button", {
       if (!this.canAmplify) return;
       Enslaved.boostReality = !Enslaved.boostReality;
     }
-  },
-  template: `
-    <div
-      v-if="isVisible"
+  }
+};
+</script>
+
+<template>
+  <div v-if="isVisible">
+    <button
+      :class="['l-reality-amplify-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
+      style="width: 100%"
+      :ach-tooltip="tooltip"
+      @click="toggleActive"
     >
-      <button
-        :class="['l-reality-amplify-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
-        style="width: 100%"
-        @click="toggleActive"
-        :ach-tooltip="tooltip"
-      >
-        <div v-if="canAmplify">
-          <span v-if="isActive">Will be amplified:</span>
-          <span v-else>Amplify this Reality:</span>
-          <br>
-          All rewards ×{{ formatInt(ratio) }}
-        </div>
-        <div v-else>
-          Not enough stored real time to amplify.
-        </div>
-      </button>
-    </div>`
-});
+      <div v-if="canAmplify">
+        <span v-if="isActive">Will be amplified:</span>
+        <span v-else>Amplify this Reality:</span>
+        <br>
+        All rewards ×{{ formatInt(ratio) }}
+      </div>
+      <div v-else>
+        Not enough stored real time to amplify.
+      </div>
+    </button>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

@@ -1,6 +1,8 @@
+<script>
 import GlyphComponent from "@/components/GlyphComponent";
 
-Vue.component("glyph-inventory", {
+export default {
+  name: "GlyphInventory",
   components: {
     GlyphComponent
   },
@@ -14,13 +16,13 @@ Vue.component("glyph-inventory", {
       protectedRows: 0,
     };
   },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
-    this.glyphsChanged();
-  },
   computed: {
     rowCount: () => Glyphs.totalSlots / 10,
     colCount: () => 10,
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
   },
   methods: {
     update() {
@@ -57,7 +59,7 @@ Vue.component("glyph-inventory", {
         if (glyph.symbol === "key266b") {
           new Audio(`audio/note${col}.mp3`).play();
         }
-      // Else it's double click, so equip a glyph
+        // Else it's double click, so equip a glyph
       } else if (this.clickedGlyphId === id) {
         clearTimeout(this.doubleClickTimeOut);
         this.doubleClickTimeOut = null;
@@ -74,33 +76,41 @@ Vue.component("glyph-inventory", {
     isNew(index) {
       return player.options.showNewGlyphIcon && this.newGlyphs.includes(this.inventory[index].id);
     }
-  },
-  template: `
-    <div class="l-glyph-inventory">
-      Click and drag or double-click to equip Glyphs.
+  }
+};
+</script>
+
+<template>
+  <div class="l-glyph-inventory">
+    Click and drag or double-click to equip Glyphs.
+    <div
+      v-for="row in rowCount"
+      :key="protectedRows + row"
+      class="l-glyph-inventory__row"
+    >
       <div
-        v-for="row in rowCount"
-        class="l-glyph-inventory__row"
-        :key="protectedRows + row"
+        v-for="col in colCount"
+        :key="col"
+        class="l-glyph-inventory__slot"
+        :class="slotClass(toIndex(row, col))"
+        @dragover="allowDrag"
+        @drop="drop(toIndex(row, col), $event)"
       >
-        <div
-          v-for="col in colCount"
-          class="l-glyph-inventory__slot"
-          :class="slotClass(toIndex(row, col))"
-          @dragover="allowDrag"
-          @drop="drop(toIndex(row, col), $event)"
-        >
-          <GlyphComponent
-            v-if="inventory[toIndex(row, col)]"
-            :glyph="inventory[toIndex(row, col)]"
-            :isNew="isNew(toIndex(row, col))"
-            :showSacrifice="glyphSacrificeUnlocked"
-            :draggable="true"
-            @shiftClicked="removeGlyph($event, false)"
-            @ctrlShiftClicked="removeGlyph($event, true)"
-            @clicked="clickGlyph(col, $event)"
-          />
-        </div>
+        <GlyphComponent
+          v-if="inventory[toIndex(row, col)]"
+          :glyph="inventory[toIndex(row, col)]"
+          :is-new="isNew(toIndex(row, col))"
+          :show-sacrifice="glyphSacrificeUnlocked"
+          :draggable="true"
+          @shiftClicked="removeGlyph($event, false)"
+          @ctrlShiftClicked="removeGlyph($event, true)"
+          @clicked="clickGlyph(col, $event)"
+        />
       </div>
-    </div>`
-});
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

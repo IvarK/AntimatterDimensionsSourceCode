@@ -1,7 +1,9 @@
+<script>
 import ToggleButton from "@/components/ToggleButton";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 
-Vue.component("glyph-set-save-panel", {
+export default {
+  name: "GlyphSetSavePanel",
   components: {
     ToggleButton,
     GlyphSetPreview
@@ -14,6 +16,16 @@ Vue.component("glyph-set-save-panel", {
       rarity: false,
       level: false,
     };
+  },
+  computed: {
+    questionmarkTooltip() {
+      return `Save copies your current Glyphs. Delete clears the set for a new save. Load searches through your
+      inventory, and equips the best Glyph matching its search.
+      You can only load a set when you have no Glyphs equipped.`;
+    },
+    noSet() {
+      return `No Glyph Set saved in this slot`;
+    },
   },
   watch: {
     effects(newValue) {
@@ -29,16 +41,6 @@ Vue.component("glyph-set-save-panel", {
   created() {
     this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
     this.refreshGlyphSets();
-  },
-  computed: {
-    questionmarkTooltip() {
-      return `Save copies your current Glyphs. Delete clears the set for a new save. Load searches through your
-      inventory, and equips the best Glyph matching its search.
-      You can only load a set when you have no Glyphs equipped.`;
-    },
-    noSet() {
-      return `No Glyph Set saved in this slot`;
-    },
   },
   methods: {
     update() {
@@ -82,76 +84,92 @@ Vue.component("glyph-set-save-panel", {
         EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
       }
     },
-  },
-  template: `
-    <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
-      <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
-        <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
+  }
+};
+</script>
+
+<template>
+  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
+    <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
+      <div
+        v-tooltip="questionmarkTooltip"
+        class="o-questionmark"
+      >
+        ?
       </div>
-      <div class="l-glyph-set-save__header">
+    </div>
+    <div class="l-glyph-set-save__header">
       When searching for Glyphs to load, try to match the following. "Exact" will only count Glyphs
       with identical properties to be part of the set. The other settings will, loosely speaking, allow
       for "better" Glyphs to match as well.
-      </div>
-      <div class="c-glyph-set-save-container">
-        <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
-        <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
-          Type: Exact (always)
-        </button>
-        <ToggleButton
-          class="c-glyph-set-save-setting-button"
-          v-model="effects"
-          label="Effects:"
-          on="Including"
-          off="Exact"
+    </div>
+    <div class="c-glyph-set-save-container">
+      <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
+      <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
+        Type: Exact (always)
+      </button>
+      <ToggleButton
+        v-model="effects"
+        class="c-glyph-set-save-setting-button"
+        label="Effects:"
+        on="Including"
+        off="Exact"
+      />
+      <ToggleButton
+        v-model="level"
+        class="c-glyph-set-save-setting-button"
+        label="Level:"
+        on="Increased"
+        off="Exact"
+      />
+      <ToggleButton
+        v-model="rarity"
+        class="c-glyph-set-save-setting-button"
+        label="Rarity:"
+        on="Increased"
+        off="Exact"
+      />
+    </div>
+    Your saved Glyph sets:
+    <div
+      v-for="(set, id) in glyphSets"
+      :key="id"
+      class="c-glyph-single-set-save"
+    >
+      <div style="width: 16rem">
+        <GlyphSetPreview
+          :text="setName(id)"
+          :text-hidden="true"
+          :glyphs="set"
+          :flip-tooltip="true"
+          :none-text="noSet"
         />
-        <ToggleButton
-          class="c-glyph-set-save-setting-button"
-          v-model="level"
-          label="Level:"
-          on="Increased"
-          off="Exact"
-        />
-        <ToggleButton
-          class="c-glyph-set-save-setting-button"
-          v-model="rarity"
-          label="Rarity:"
-          on="Increased"
-          off="Exact"
-        />
       </div>
-      Your saved Glyph sets:
-      <div class="c-glyph-single-set-save" v-for="(set, id) in glyphSets">
-        <div style="width: 16rem">
-          <GlyphSetPreview
-            :text="setName(id)"
-            :textHidden=true
-            :glyphs="set"
-            :flipTooltip=true
-            :noneText=noSet
-          />
-        </div>
-        <button
-          class="c-glyph-set-save-button"
-          :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
-          @click="saveGlyphSet(id)"
-        >
-          Save
-        </button>
-        <button
-          class="c-glyph-set-save-button"
-          :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
-          @click="loadGlyphSet(set)"
-        >
-          Load
-        </button>
-        <button
-          class="c-glyph-set-save-button"
-          :class="{'c-glyph-set-save-button--unavailable': !set.length}"
-          @click="deleteGlyphSet(id)"
-        >
-          Delete
-        </button>
-      </div>
-    </div>`
-});
+      <button
+        class="c-glyph-set-save-button"
+        :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
+        @click="saveGlyphSet(id)"
+      >
+        Save
+      </button>
+      <button
+        class="c-glyph-set-save-button"
+        :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
+        @click="loadGlyphSet(set)"
+      >
+        Load
+      </button>
+      <button
+        class="c-glyph-set-save-button"
+        :class="{'c-glyph-set-save-button--unavailable': !set.length}"
+        @click="deleteGlyphSet(id)"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

@@ -319,7 +319,7 @@ GameDatabase.tabs = [
         key: "dilation",
         name: "Time Dilation",
         symbol: "Ψ",
-        component: "time-dilation-tab",
+        component: "TimeDilationTab",
         condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
         id: 3,
         hidable: true,

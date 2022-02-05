@@ -1,6 +1,8 @@
+<script>
 import TWEEN from "tween.js";
 
-Vue.component("tachyon-particle", {
+export default {
+  name: "TachyonParticle",
   props: {
     bounds: {
       type: Object,
@@ -74,17 +76,24 @@ Vue.component("tachyon-particle", {
         return Math.min(Math.max(t1, t2), Math.max(t3, t4));
       }
     }
-  },
-  template: `
-    <text
-      v-if="isBlob"
-      class="o-tachyon-particle"
-    >
-      {{ blob }}
-    </text>
-    <circle
-      v-else
-      r="2"
-      class="o-tachyon-particle"
-    />`
-});
+  }
+};
+</script>
+
+<template>
+  <text
+    v-if="isBlob"
+    class="o-tachyon-particle"
+  >
+    {{ blob }}
+  </text>
+  <circle
+    v-else
+    r="2"
+    class="o-tachyon-particle"
+  />
+</template>
+
+<style scoped>
+
+</style>

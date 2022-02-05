@@ -1,9 +1,11 @@
-import CostDisplay from "@/components/CostDisplay";
+<script>
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import CostDisplay from "@/components/CostDisplay";
 
-Vue.component("dilation-upgrade", {
+export default {
+  name: "DilationUpgradeButton",
   components: {
     PrimaryToggleButton,
     DescriptionDisplay,
@@ -11,11 +13,15 @@ Vue.component("dilation-upgrade", {
     CostDisplay
   },
   props: {
+    upgrade: {
+      type: Object,
+      required: true
+    },
     isRebuyable: {
       type: Boolean,
+      required: false,
       default: false
-    },
-    upgrade: Object
+    }
   },
   data() {
     return {
@@ -28,11 +34,6 @@ Vue.component("dilation-upgrade", {
       boughtAmount: 0,
       timeUntilCost: new Decimal(0),
     };
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.dilationUpgrade(this.upgrade.id).isActive = newValue;
-    }
   },
   computed: {
     classObject() {
@@ -48,6 +49,11 @@ Vue.component("dilation-upgrade", {
     timeEstimate() {
       if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
       return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toTimeEstimate();
+    }
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.dilationUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   methods: {
@@ -71,37 +77,48 @@ Vue.component("dilation-upgrade", {
       }
       this.isUseless = (upgrade.id === 7) && Pelle.isDoomed;
     }
-  },
-  template: `
-    <div class="l-spoon-btn-group">
-      <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
-        <span v-if="isUseless">
-          This upgrade has no effect while in Doomed
-        </span>
-        <span v-else>
-          <DescriptionDisplay
-            :config="upgrade.config"
-            :length="70"
-            name="o-dilation-upgrade__description"
-          />
-          <EffectDisplay
-            br
-            :config="upgrade.config"
-            :key="boughtAmount"
-          />
-        </span>
-        <CostDisplay
-          br
-          v-if="!isBought && !isCapped"
+  }
+};
+</script>
+
+<template>
+  <div class="l-spoon-btn-group">
+    <button
+      :ach-tooltip="timeEstimate"
+      :class="classObject"
+      @click="upgrade.purchase()"
+    >
+      <span v-if="isUseless">
+        This upgrade has no effect while in Doomed
+      </span>
+      <span v-else>
+        <DescriptionDisplay
           :config="upgrade.config"
-          name="Dilated Time"
+          :length="70"
+          name="o-dilation-upgrade__description"
         />
-      </button>
-      <PrimaryToggleButton
-        v-if="isRebuyable && isAutoUnlocked"
-        v-model="isAutobuyerOn"
-        label="Auto:"
-        class="l--spoon-btn-group__little-spoon o-primary-btn--dilation-upgrade-toggle"
+        <EffectDisplay
+          :key="boughtAmount"
+          br
+          :config="upgrade.config"
+        />
+      </span>
+      <CostDisplay
+        v-if="!isBought && !isCapped"
+        br
+        :config="upgrade.config"
+        name="Dilated Time"
       />
-    </div>`
-});
+    </button>
+    <PrimaryToggleButton
+      v-if="isRebuyable && isAutoUnlocked"
+      v-model="isAutobuyerOn"
+      label="Auto:"
+      class="l--spoon-btn-group__little-spoon o-primary-btn--dilation-upgrade-toggle"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

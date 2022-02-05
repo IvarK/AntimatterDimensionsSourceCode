@@ -1,15 +1,20 @@
-import CostDisplay from "@/components/CostDisplay";
+<script>
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
+import CostDisplay from "@/components/CostDisplay";
 
-Vue.component("eternity-upgrade-button", {
+export default {
+  name: "EternityUpgradeButton",
   components: {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay
   },
   props: {
-    upgrade: Object
+    upgrade: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -33,19 +38,29 @@ Vue.component("eternity-upgrade-button", {
       this.isBought = upgrade.isBought;
       this.isAffordable = upgrade.isAffordable;
     }
-  },
-  template: `
-    <button :class="classObject" @click="upgrade.purchase()">
-      <DescriptionDisplay :config="upgrade.config" />
-      <EffectDisplay
-        br
-        :config="upgrade.config"
-      />
-      <CostDisplay
-        br
-        v-if="!isBought"
-        :config="upgrade.config"
-        name="Eternity Point"
-      />
-    </button>`
-});
+  }
+};
+</script>
+
+<template>
+  <button
+    :class="classObject"
+    @click="upgrade.purchase()"
+  >
+    <DescriptionDisplay :config="upgrade.config" />
+    <EffectDisplay
+      br
+      :config="upgrade.config"
+    />
+    <CostDisplay
+      v-if="!isBought"
+      br
+      :config="upgrade.config"
+      name="Eternity Point"
+    />
+  </button>
+</template>
+
+<style scoped>
+
+</style>

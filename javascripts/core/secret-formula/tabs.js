@@ -303,7 +303,7 @@ GameDatabase.tabs = [
         key: "upgrades",
         name: "Eternity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "eternity-upgrades-tab",
+        component: "EternityUpgradesTab",
         id: 1,
         hidable: true,
       },

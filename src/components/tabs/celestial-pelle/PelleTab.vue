@@ -49,10 +49,13 @@
     </div>
     <button
       v-else
-      class="c-pelle-doom-button"
+      class="pelle-doom-button"
       @click="getDoomedScrub"
     >
-      Doom your Reality
+      Doom<br>Your<br>Reality
+      <div class="pelle-icon-container">
+        <span class="pelle-icon">♅</span>
+      </div>
     </button>
   </div>
 </template>
@@ -149,5 +152,51 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .pelle-doom-button {
+    font-family: Typewriter;
+    padding: 1rem;
+    background: black;
+    color: var(--color-pelle--base);
+    font-size: 3rem;
+    border: 2px solid var(--color-pelle--base);
+    border-radius: 5px;
+    width: 20rem;
+    cursor: pointer;
+    transition-duration: 0.4s;
+  }
+
+  .pelle-doom-button:hover {
+    box-shadow: 0px 0px 20px var(--color-pelle--base);
+  }
+
+
+  .pelle-icon-container {
+    background: white;
+    border-radius: 50%;
+    height: 15rem;
+    width: 15rem;
+    margin: auto;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid var(--color-pelle--base);
+    font-size: 10rem;
+    transition-duration: 0.4s;
+  }
+
+  .pelle-doom-button:hover .pelle-icon-container {
+    background: black;
+    color: var(--color-pelle--base);
+  }
+
+  @keyframes roll {
+    100% { transform: rotateY(360deg) }
+  }
+
+  .pelle-icon {
+    animation: roll infinite 8s linear;
   }
 </style>

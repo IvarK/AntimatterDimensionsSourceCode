@@ -47,9 +47,7 @@ Vue.component("dilation-upgrade", {
     },
     timeEstimate() {
       if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
-      if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
-      if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
-      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
+      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toTimeEstimate();
     }
   },
   methods: {

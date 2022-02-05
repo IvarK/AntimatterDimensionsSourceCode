@@ -278,6 +278,13 @@ window.TimeSpan = class TimeSpan {
     }
   }
 
+  toTimeEstimate() {
+    const seconds = this.totalSeconds;
+    if (seconds < 1) return `< ${formatInt(1)} second`;
+    if (seconds > 86400 * 365.25) return `> ${formatInt(1)} year`;
+    return this.toStringShort();
+  }
+
   static get zero() {
     return new TimeSpan(0);
   }

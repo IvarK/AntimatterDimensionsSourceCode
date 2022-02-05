@@ -8998,46 +8998,46 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-tab-button--infinity {
-  color: var(--color-infinity);
+  color: var(--color-infinity) !important;
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-infinity) !important;
 }
 
 .c-hide-modal-tab-button--infinity:hover {
-  color: var(--color-prestige--accent);
+  color: var(--color-prestige--accent) !important;
   background: var(--color-infinity) !important;
 }
 
 .c-hide-modal-tab-button--eternity {
-  color: var(--color-eternity);
+  color: var(--color-eternity) !important;
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-eternity) !important;
 }
 
 .c-hide-modal-tab-button--eternity:hover {
-  color: var(--color-prestige--accent);
+  color: var(--color-prestige--accent) !important;
   background: var(--color-eternity) !important;
 }
 
 .c-hide-modal-tab-button--reality {
-  color: var(--color-reality);
+  color: var(--color-reality) !important;
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-reality) !important;
 }
 
 .c-hide-modal-tab-button--reality:hover {
-  color: var(--color-prestige--accent);
+  color: var(--color-prestige--accent) !important;
   background: var(--color-reality) !important;
 }
 
 .c-hide-modal-tab-button--celestials {
-  color: var(--color-celestials);
+  color: var(--color-celestials) !important;
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-celestials) !important;
 }
 
 .c-hide-modal-tab-button--celestials:hover {
-  color: var(--color-prestige--accent);
+  color: var(--color-prestige--accent) !important;
   background: var(--color-celestials) !important;
 }
 

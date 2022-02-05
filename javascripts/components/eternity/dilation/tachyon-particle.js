@@ -1,3 +1,5 @@
+import TWEEN from "tween.js";
+
 Vue.component("tachyon-particle", {
   props: {
     bounds: {

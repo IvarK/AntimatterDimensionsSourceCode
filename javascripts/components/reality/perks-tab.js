@@ -1,3 +1,4 @@
+import { DataSet, Network } from "vis-network";
 import "./pp-label.js";
 
 // Primary is lifted from the study tree (mostly),
@@ -90,7 +91,7 @@ export const PerkNetwork = {
   makeNetwork() {
     // Just for a bit of fun, tangle it up a bit unless the player specifically chooses not to
     const defaultPos = player.options.fixedPerkStartingPos;
-    this.nodes = new vis.DataSet(Perks.all.map(perk => ({
+    this.nodes = new DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
       shape: perk.config.automatorPoints ? "diamond" : "dot",
@@ -153,7 +154,7 @@ export const PerkNetwork = {
     container.appendChild(canvas);
     this.container = container;
 
-    const network = new vis.Network(container, nodeData, nodeOptions);
+    const network = new Network(container, nodeData, nodeOptions);
     this.network = network;
   },
   setPhysics(state) {

@@ -1,5 +1,4 @@
 import "./eternity/eternity-points-header.js";
-import "./eternity/dilation/time-dilation-tab.js";
 
 import "./reality/reality-machines-header.js";
 import "./reality/glyphs/glyphs-tab.js";

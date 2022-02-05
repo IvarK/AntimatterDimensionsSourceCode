@@ -1,6 +1,11 @@
 <script>
+import draggable from "vuedraggable";
+
 export default {
   name: "AutomatorBlocks",
+  components: {
+    draggable
+  },
   data() {
     return {
       blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))

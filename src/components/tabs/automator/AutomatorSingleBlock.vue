@@ -1,6 +1,11 @@
 <script>
+import draggable from "vuedraggable";
+
 export default {
   name: "AutomatorSingleBlock",
+  components: {
+    draggable
+  },
   props: {
     block: {
       type: Object,

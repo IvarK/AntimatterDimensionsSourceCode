@@ -1,10 +1,12 @@
 <script>
 import AutomatorSingleBlock from "./AutomatorSingleBlock";
+import draggable from "vuedraggable";
 
 export default {
   name: "AutomatorBlockEditor",
   components: {
-    AutomatorSingleBlock
+    AutomatorSingleBlock,
+    draggable
   },
   computed: {
     lineNumbersCount() {

@@ -41,7 +41,15 @@ Vue.component("infinity-upgrade-button", {
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,
+        "c-pelle-useless": this.isDisabledInDoomed,
       };
+    },
+    isDisabledInDoomed() {
+      const description = this.config.description;
+      if (typeof description === "function") {
+        return description().includes("has no effect");
+      }
+      return description.includes("has no effect");
     }
   },
   methods: {

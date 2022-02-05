@@ -115,7 +115,7 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [143, 142, 141, 125, 118, 117, 111, 103, 92, 91, 76];
+    return [143, 142, 141, 125, 118, 117, 111, 103, 92, 91, 76, 74, 65];
   },
 
   // TS33 only gets useless with PelleUpgrade.replicantiGalaxyNoReset

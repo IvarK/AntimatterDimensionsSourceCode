@@ -32,7 +32,8 @@ Vue.component("ep-multiplier-button", {
       return {
         "o-eternity-upgrade": true,
         "o-eternity-upgrade--available": this.isAffordable,
-        "o-eternity-upgrade--unavailable": !this.isAffordable
+        "o-eternity-upgrade--unavailable": !this.isAffordable,
+        "c-pelle-useless": this.inDoomed
       };
     }
   },

@@ -41,7 +41,12 @@ Vue.component("normal-time-study", {
     },
   },
   template: `
-    <time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
+    <time-study
+      :setup="setup"
+      :showCost="showCost"
+      :showSTCost="showSTCost"
+      :class="{ 'c-pelle-useless': isUseless }"
+    >
       <HintText type="studies" class="l-hint-text--time-study">{{ hintText }}</HintText>
       <span v-if="isUseless">
         This Time Study has no effect while in Doomed

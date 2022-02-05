@@ -9140,3 +9140,8 @@ input.o-automator-block-input {
 .t-s10 .c-autobuyer-buy-box {
   height: 6.2rem;
 }
+
+.c-pelle-useless {
+  background-color:  var(--color-pelle--base) !important;
+  filter: grayscale(50%);
+}

@@ -1,8 +1,3 @@
-import "./infinity/infinity-points-header.js";
-import "./infinity/upgrades/infinity-upgrades-tab.js";
-import "./infinity/break-infinity/break-infinity-tab.js";
-import "./infinity/replicanti/replicanti-tab.js";
-
 import "./eternity/eternity-points-header.js";
 import "./eternity/time-studies/time-studies-tab.js";
 import "./eternity/upgrades/eternity-upgrades-tab.js";

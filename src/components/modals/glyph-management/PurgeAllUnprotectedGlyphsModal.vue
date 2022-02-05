@@ -23,7 +23,7 @@ export default {
     },
     message() {
       return `Are you sure you want to ${this.refiningSacrificingOrDeleting} all unprotected Glyphs
-      in your inventory? This process is irreversible!`;
+        in your inventory?`;
     }
   },
   methods: {

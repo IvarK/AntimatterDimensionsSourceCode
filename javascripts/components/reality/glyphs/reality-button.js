@@ -31,7 +31,7 @@ Vue.component("reality-button", {
         return `Projected: ${format(this.projectedRM, 2)} RM`;
       }
       if (this.newIMCap !== 0) {
-        return `iM Cap: ${format(this.newIMCap, 2, 2)}i`;
+        return `iM Cap: ${formatComplex(0, this.newIMCap)}`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;

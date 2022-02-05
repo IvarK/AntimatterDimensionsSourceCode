@@ -37,7 +37,7 @@ export default {
     </template>
     <div class="c-modal-message__text">
       Please confirm your desire to hard reset this save slot.
-      <span class="c-modal-hard-reset-danger">This is irreversible and you will get no benefit.</span>
+      <span class="c-modal-hard-reset-danger">Deleting your save will not unlock anything secret.</span>
       Type in "Shrek is love, Shrek is life" to confirm.
       <div class="c-modal-hard-reset-danger">
         THIS WILL WIPE YOUR SAVE.
@@ -55,10 +55,10 @@ export default {
         v-if="willHardReset"
         class="c-modal-hard-reset-danger"
       >
-        You do not get anything from hard resetting your save.
+        Phrase confirmed - continuing will irreversibly delete your save!
       </div>
       <div v-else>
-        Type in the correct code to hard reset.
+        Type in the correct phrase to hard reset.
       </div>
     </div>
     <template #confirm-text>

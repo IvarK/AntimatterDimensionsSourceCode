@@ -7,6 +7,7 @@ Vue.component("sidebar-currency", {
       RM: new Decimal(0),
       IM: 0,
       RS: new Decimal(0),
+      machineStr: "",
       showIP: false,
       showEP: false,
       showRM: false,
@@ -21,6 +22,7 @@ Vue.component("sidebar-currency", {
       this.RM.copyFrom(Currency.realityMachines);
       this.IM = Currency.imaginaryMachines.value;
       this.RS.copyFrom(Currency.realityShards.value);
+      this.machineStr = formatComplex(this.RM, this.IM);
       this.showIP = PlayerProgress.infinityUnlocked();
       this.showEP = PlayerProgress.eternityUnlocked();
       this.showRM = PlayerProgress.realityUnlocked();
@@ -44,7 +46,7 @@ Vue.component("sidebar-currency", {
         </template>
         <template v-else>
           <h3 class="o-sidebar-currency--reality">
-            {{ format(RM, 2) }}<br> + {{ format(IM, 2) }}i
+            {{ machineStr }}
           </h3>
           <div class="resource-information">
             <span class="resource-name">Machines</span>

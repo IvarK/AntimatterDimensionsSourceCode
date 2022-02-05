@@ -1182,6 +1182,16 @@ GameStorage.devMigrations = {
     player => {
       delete player.options.confirmations.harshAutoClean;
     },
+    player => {
+      player.celestials.laitela.singularitySorting = {
+        // Added more support in singularity milestone list, uses enum SINGULARITY_MILESTONE_RESOURCE in constants.js
+        displayResource: player.options.showCondenseToMilestone ? 1 : 0,
+        sortResource: 0,
+        showCompleted: 0,
+        sortOrder: 0,
+      };
+      delete player.options.showCondenseToMilestone;
+    },
   ],
 
   patch(player) {

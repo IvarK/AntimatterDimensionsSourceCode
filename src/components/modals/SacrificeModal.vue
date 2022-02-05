@@ -22,13 +22,10 @@ export default {
         (with the cost and multiplier unchanged), for a boost to the 8th Antimatter Dimension based on the total
         amount of 1st Antimatter Dimensions sacrificed. It will take time to regain production.`;
     },
-    currently() {
-      return `Multiplier is currently ${formatX(this.currentMultiplier, 2, 2)}.`;
+    multiplierText() {
+      return `Multiplier is currently ${formatX(this.currentMultiplier, 2, 2)} and will increase to
+        ${formatX(this.nextMultiplier, 2, 2)} on Dimensional Sacrifice.`;
     },
-    afterSacrifice() {
-      return `Multiplier will increase to ${formatX(this.nextMultiplier, 2, 2)}
-        on Dimensional Sacrifice.`;
-    }
   },
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
@@ -55,10 +52,11 @@ export default {
     </template>
     <div class="c-modal-message__text">
       {{ message }}
+    </div>
+    <br>
+    <div class="c-modal-message__text">
+      {{ multiplierText }}
       <br>
-      {{ currently }}
-      <br>
-      {{ afterSacrifice }}
     </div>
   </ModalWrapperChoice>
 </template>

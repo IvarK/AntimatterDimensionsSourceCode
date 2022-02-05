@@ -1,15 +1,20 @@
-import CostDisplay from "@/components/CostDisplay";
+<script>
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
+import CostDisplay from "@/components/CostDisplay";
 
-Vue.component("infinity-upgrade-button", {
+export default {
+  name: "InfinityUpgradeButton",
   components: {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
   },
   props: {
-    upgrade: Object
+    upgrade: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -75,14 +80,17 @@ Vue.component("infinity-upgrade-button", {
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
     }
-  },
-  template: `
-    <button
-      :class="classObject"
-      @mouseenter="showingCharged = canBeCharged"
-      @mouseleave="showingCharged = false"
-      @click="upgrade.purchase()"
-    >
+  }
+};
+</script>
+
+<template>
+  <button
+    :class="classObject"
+    @mouseenter="showingCharged = canBeCharged"
+    @mouseleave="showingCharged = false"
+    @click="upgrade.purchase()"
+  >
     <span v-if="isUseless">
       This upgrade has no effect while in Doomed
     </span>
@@ -91,17 +99,21 @@ Vue.component("infinity-upgrade-button", {
         :config="config"
       />
       <EffectDisplay
-        br
         v-if="!isDisabled"
-        :config="config"
-     />
-    </span>  
-      <CostDisplay
         br
-        v-if="!isBought"
         :config="config"
-        name="Infinity Point"
       />
-      <slot />
-    </button>`
-});
+    </span>
+    <CostDisplay
+      v-if="!isBought"
+      br
+      :config="config"
+      name="Infinity Point"
+    />
+    <slot />
+  </button>
+</template>
+
+<style scoped>
+
+</style>

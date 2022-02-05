@@ -235,7 +235,7 @@ GameDatabase.tabs = [
     endName: "Help",
     hideAt: 2.2,
     UIClass: "o-tab-btn--infinity",
-    before: "infinity-points-header",
+    before: "InfinityPointsHeader",
     id: 6,
     condition: () => PlayerProgress.infinityUnlocked(),
     hidable: true,
@@ -244,7 +244,7 @@ GameDatabase.tabs = [
         key: "upgrades",
         name: "Infinity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "infinity-upgrades-tab",
+        component: "InfinityUpgradesTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
@@ -256,7 +256,7 @@ GameDatabase.tabs = [
         key: "break",
         name: "Break Infinity",
         symbol: "<i class='fab fa-skyatlas'></i>",
-        component: "break-infinity-tab",
+        component: "BreakInfinityTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
@@ -268,7 +268,7 @@ GameDatabase.tabs = [
         key: "replicanti",
         name: "Replicanti",
         symbol: "Ξ",
-        component: "replicanti-tab",
+        component: "ReplicantiTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||

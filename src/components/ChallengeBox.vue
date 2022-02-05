@@ -25,7 +25,8 @@ export default {
     },
     lockedAt: {
       type: Decimal,
-      required: true
+      required: false,
+      default: undefined
     },
     overrideLabel: {
       type: String,
@@ -59,7 +60,10 @@ export default {
       if (this.isRunning || this.inC1) return "Running";
       if (this.isCompleted) return "Completed";
       if (this.isUnlocked) return "Start";
-      return `Locked (${formatInt(this.infinities)}/${formatInt(this.lockedAt)})`;
+      const lockedText = this.lockedAt === undefined
+        ? ""
+        : ` (${formatInt(this.infinities)}/${formatInt(this.lockedAt)})`;
+      return `Locked${lockedText}`;
     }
   },
   methods: {

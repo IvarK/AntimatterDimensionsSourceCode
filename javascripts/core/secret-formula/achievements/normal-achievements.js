@@ -476,10 +476,10 @@ GameDatabase.achievements.normal = [
   {
     id: 73,
     name: "THIS ACHIEVEMENT DOESN'T EXIST",
-    get description() { return `Get ${formatPostBreak(DC.D9_9999E9999, 4, 0)} antimatter.`; },
+    get description() { return `Get ${formatPostBreak(DC.D9_9999E9999, 4)} antimatter.`; },
     checkRequirement: () => Currency.antimatter.gte(DC.D9_9999E9999),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Antimatter Dimensions are stronger the more unspent antimatter you have.",
+    reward: "Antimatter Dimensions gain a multiplier based on current antimatter.",
     effect: () => Currency.antimatter.value.pow(0.00002).plus(1),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
@@ -1160,7 +1160,7 @@ GameDatabase.achievements.normal = [
   {
     id: 161,
     name: "that's where you're wrong kiddo",
-    get description() { return `Get ${format(DC.E1E8)} antimatter while Dilated.`; },
+    get description() { return `Get ${formatPostBreak(DC.E1E8)} antimatter while Dilated.`; },
     checkRequirement: () => Currency.antimatter.exponent >= 100000000 && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -1185,7 +1185,7 @@ GameDatabase.achievements.normal = [
   {
     id: 164,
     name: "Infinity times two",
-    get description() { return `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`; },
+    get description() { return `Get ${format(Decimal.NUMBER_MAX_VALUE, 1)} Infinities.`; },
     checkRequirement: () => Currency.infinitiesTotal.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Gain ×${formatInt(1024)} more Infinities.`; },
@@ -1242,7 +1242,7 @@ GameDatabase.achievements.normal = [
     id: 172,
     name: "Hitchhiker's Guide to Reality",
     get description() {
-      return `Reality for ${formatPostBreak(Decimal.NUMBER_MAX_VALUE, 1, 0)} Reality Machines without having
+      return `Reality for ${format(Decimal.NUMBER_MAX_VALUE, 1)} Reality Machines without having
       any Charged Infinity Upgrades, having any equipped Glyphs, or buying any Triad Studies.`;
     },
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(Decimal.NUMBER_MAX_VALUE) &&

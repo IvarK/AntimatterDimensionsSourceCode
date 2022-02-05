@@ -50,3 +50,12 @@ body.t-s11 {
   border-color: #e1ae18;
   box-shadow: 0 0 1.5rem 0 black;
 }
+
+.o-tachyon-particle {
+  font-family: Typewriter;
+  font-size: 20px;
+  fill: orange !important;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}

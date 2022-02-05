@@ -5035,12 +5035,37 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.c-blob-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -9999;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+
 .o-blob-snowflake {
   fill: #fbc21b;
   text-shadow: 0 0 5px #000,
                0 0 5px #000,
                0 0 5px #000;
   opacity: 0.9;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+
+.o-blob-background {
+  fill: #fbc21b;
+  text-shadow: 0 0 5px #000,
+               0 0 5px #000,
+               0 0 5px #000;
+  opacity: 0.3;
   overflow: visible;
   pointer-events: none;
   user-select: none;
@@ -7664,12 +7689,14 @@ kbd {
 }
 
 .c-dark-matter-dimension-container {
+  display: flex;
+  flex-direction: column;
   color: var(--color-laitela--accent);
   border: 0.2rem solid var(--color-laitela--accent);
   background: var(--color-laitela--base);
   width: 50rem;
   margin: auto;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   height: 15rem;
@@ -7683,7 +7710,6 @@ kbd {
 .o-dark-matter-dimension-amount {
   font-size: 1.6rem;
   font-weight: bold;
-  margin-bottom: 1rem;
 }
 
 .c-dark-matter-dimension-buttons {
@@ -7736,6 +7762,10 @@ kbd {
   animation: 3s a-laitela-flash infinite;
 }
 
+.o-dark-matter-dimension-button--accent {
+  box-shadow: 0 0 0.5rem 0.5rem inset, 0 0 0.3rem 0;
+}
+
 @keyframes a-laitela-flash {
   0% {
     color: var(--color-laitela--base);
@@ -7755,7 +7785,6 @@ kbd {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   box-shadow: none;
-  animation: none;
 }
 
 @keyframes a-laitela-flash {
@@ -7780,25 +7809,30 @@ kbd {
 }
 
 .c-laitela-milestone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 16%;
   width: 22rem;
   background: var(--color-laitela--base);
   padding: 0.6rem;
   margin: 1rem 0 0;
   border-radius: 0.5rem;
-  border: 0.2rem solid;
+  border: 0.1rem solid;
   position: relative;
   z-index: 0;
   color: var(--color-laitela--accent);
 }
 
-.s-base--metro .c-laitela-milestone {
-  border-width: 0.1rem;
-  border-radius: 0;
+.c-laitela-milestone > span {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
-.l-singularity-milestone-modal-container-inner .c-laitela-milestone {
-  box-shadow: 0.1rem 0.1rem 0.3rem black;
+.s-base--metro .c-laitela-milestone {
+  border-radius: 0;
 }
 
 .c-laitela-milestone__progress {
@@ -7809,8 +7843,38 @@ kbd {
   z-index: -1;
 }
 
-.l-singularity-milestone-modal-container .c-laitela-milestone--completed {
+.c-laitela-milestone--bar-border-fix {
+  position: absolute;
+  height: calc(100% + 0.2rem);
+  width: calc(100% + 0.2rem);
+  border-radius: 0.5rem;
+  border: 0.2rem solid;
+  z-index: 1;
+  color: var(--color-laitela--accent);
+  margin: -0.7rem;
+}
+
+.l-singularity-milestone-modal-container {
   box-shadow: none;
+}
+
+.c-laitela-milestone-mask {
+  background-color: white;
+  mix-blend-mode: difference;
+  z-index: 0;
+}
+
+.c-laitela-milestone--completed {
+  filter: brightness(10%);
+  left: 1.5rem;
+  top: -1.5rem;
+  height: 21.8rem;
+  width: 18.8rem;
+  transform: rotate(90deg);
+  background-image: url(../images/laitela-icon.svg);
+  background-position: center;
+  background-repeat: repeat-y;
+  background-color: transparent;
 }
 
 .c-laitela-singularity-container {
@@ -7890,10 +7954,23 @@ kbd {
   background: var(--color-laitela--accent);
 }
 
+.l-singularity-milestone-modal {
+  height: 60rem;
+}
+
 .l-singularity-milestone-modal-container-outer {
   height: 50rem;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.l-singularity-milestone-modal-container-outer::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.l-singularity-milestone-modal-container-outer::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 0.5rem;
 }
 
 .l-singularity-milestone-modal-container-inner {
@@ -7903,6 +7980,44 @@ kbd {
   width: 93rem;
   justify-content: space-evenly;
   padding-bottom: 2rem;
+}
+
+.l-singularity-milestone-modal-container-inner .c-laitela-milestone {
+  height: 19rem;
+}
+
+.l-singularity-milestone-sort-container {
+  position: relative;
+  left: -0.5rem;
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5rem;
+  border: 0.1rem solid var(--color-laitela--accent);
+  padding: 1rem 0.5rem;
+}
+
+.c-singularity-milestone-modal-sort-button {
+  height: 6rem;
+  width: 22rem;
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: var(--color-laitela--accent);
+  background-color: var(--color-laitela--base);
+  border: 0.1rem solid var(--color-laitela--accent);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin: 0 0.5rem;
+  transition-duration: 0.15s;
+}
+
+.s-base--metro .c-singularity-milestone-modal-sort-button {
+  border-radius: 0;
+}
+
+.c-singularity-milestone-modal-sort-button:hover {
+  color: var(--color-laitela--base);
+  background-color: var(--color-laitela--accent);
 }
 
 .o-laitela-singularity-modal-button {
@@ -7990,7 +8105,7 @@ kbd {
   100% {background-position-y: 24rem}
 }
 
-.l-laitela-annihilation-button {
+.l-laitela-annihilation-container {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   padding: 1rem;
@@ -7999,7 +8114,23 @@ kbd {
   border: 0.2rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   font-family: Typewriter, serif;
-  display: block;
+  font-size: 1.2rem;
+}
+
+.s-base--metro .l-laitela-annihilation-container {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.l-laitela-annihilation-button {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  padding: 0.5rem;
+  width: 35rem;
+  height: 3rem;
+  border: 0.2rem solid var(--color-laitela--accent);
+  border-radius: 0.5rem;
+  font-family: Typewriter, serif;
 }
 
 .c-laitela-annihilation-button {
@@ -8025,6 +8156,17 @@ kbd {
   color: var(--color-laitela--base) !important; /* h2 color overrides this */
 }
 
+.c-laitela-annihilation-input {
+  width: 6rem;
+  border-color: var(--color-laitela--accent);
+  border-radius: 0.5rem;
+}
+
+.s-base--metro .c-laitela-annihilation-input {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 .c-laitela-automation-toggle {
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
@@ -8043,6 +8185,10 @@ kbd {
 .c-laitela-automation-toggle:hover {
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent) !important;
+}
+
+.s-base--metro .c-laitela-automation-toggle {
+  box-shadow: none;
 }
 
 /* #endregion laitela tab*/

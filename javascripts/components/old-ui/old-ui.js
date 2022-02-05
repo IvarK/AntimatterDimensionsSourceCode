@@ -3,6 +3,7 @@ import "./old-ui-tab-bar.js";
 import "./header/game-header.js";
 import NewsTicker from "@/components/NewsTicker";
 import FooterLinks from "@/components/FooterLinks";
+import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 
 Vue.component("old-ui", {
   components: {
@@ -10,7 +11,8 @@ Vue.component("old-ui", {
       template: `<button class="o-tab-btn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
     },
     NewsTicker,
-    FooterLinks
+    FooterLinks,
+    InfinityPointsHeader
   },
   data() {
     return {

@@ -23,8 +23,7 @@ export default {
     },
     message() {
       return `Are you sure you want to ${this.refiningOrSacrificing} all rejected Glyphs? This will remove
-      all Glyphs that would be rejected by your new Glyph Filter settings that were previously not removed.
-      This process is irreversible!`;
+        all Glyphs that would be rejected by your current Glyph Filter settings.`;
     },
     extraMessage() {
       if (this.glyphsDeleted === 0) return `This will remove no Glyphs.`;

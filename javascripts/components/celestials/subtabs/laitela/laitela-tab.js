@@ -14,6 +14,7 @@ Vue.component("laitela-tab", {
     return {
       isDoomed: false,
       darkMatter: new Decimal(0),
+      darkMatterGain: new Decimal(0),
       isDMCapped: false,
       maxDarkMatter: new Decimal(0),
       darkEnergy: 0,
@@ -51,6 +52,9 @@ Vue.component("laitela-tab", {
       this.singularityWaitTime = TimeSpan.fromSeconds((this.singularityCap - this.darkEnergy) /
         Currency.darkEnergy.productionPerSecond).toStringShort();
       this.showAnnihilation = Laitela.annihilationUnlocked;
+
+      const d1 = DarkMatterDimension(1);
+      this.darkMatterGain = d1.amount.times(d1.powerDM).divide(d1.interval).times(1000);
     },
     maxAll() {
       Laitela.maxAllDMDimensions(4);
@@ -81,6 +85,7 @@ Vue.component("laitela-tab", {
         You have
         <span :style="styleObject">{{ format(darkMatter, 2) }}</span>
         Dark Matter<span v-if="isDMCapped"> (capped)</span>.
+        <span v-if="!isDMCapped">(Average: {{ format(darkMatterGain, 2, 2) }}/s)</span>
       </div>
       <div class="o-laitela-matter-amount">
         Your maximum Dark Matter ever is

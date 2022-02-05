@@ -436,8 +436,6 @@ Currency.darkEnergy = new class extends NumberCurrency {
 Currency.singularities = new class extends NumberCurrency {
   get value() { return player.celestials.laitela.singularities; }
   set value(value) { player.celestials.laitela.singularities = value; }
-
-  get timeUntil() { return Singularity.cap / Currency.darkEnergy.productionPerSecond; }
 }();
 
 Currency.remnants = new class extends NumberCurrency {

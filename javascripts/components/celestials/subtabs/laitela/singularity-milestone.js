@@ -12,43 +12,34 @@ Vue.component("singularity-milestone", {
     start: 0,
     completions: 0,
     limit: 0,
-    showingCondense: false,
+    milestoneMode: false,
     singularitiesPerCondense: 0,
+    baseCondenseTime: 0,
+    currentCondenseTime: 0,
+    autoCondenseDelay: 0,
+    lastCheckedMilestones: 0,
   }),
   computed: {
-    barProgressStyle() {
-      let color;
-      if (this.isMaxed) color = "";
-      else if (this.isUnique) color = "var(--color-accent)";
-      else if (Number.isFinite(this.limit)) color = "var(--color-good-dark)";
-      else color = "var(--color-good)";
+    // The bar is a mask that inverts colors for any element with a lower z-index (including text).
+    // When maxed, the visual appearance is instead determined by a class with its own explicit width
+    barStyle() {
       return {
-        background: color,
-        width: this.progressToNext
+        width: this.isMaxed ? undefined : this.progressToNext,
       };
     },
-    backgroundStyle() {
-      let color;
-      if (this.isUnique && this.isMaxed) color = "var(--color-accent)";
-      else if (Number.isFinite(this.limit) && this.completions >= 1) {
-        if (this.isMaxed) color = "var(--color-good-dark)";
-        else color = "var(--color-good)";
-      } else {
-        color = "";
-      }
+    barClass() {
       return {
-        "background-color": color
+        "c-laitela-milestone__progress": true,
+        "c-laitela-milestone-mask": true,
+        "c-laitela-milestone--completed": this.isMaxed
       };
     },
-    newGlowStyle() {
-      if (this.suppressGlow) return {};
-      const newMilestones = SingularityMilestones.unseenMilestones;
-      for (let rep = 0; this.completions === 0 || rep < this.completions; rep++) {
-        const thisLevel = this.milestone.start * Math.pow(this.milestone.repeat, rep);
-        if (newMilestones.includes(thisLevel)) return { "box-shadow": "0 0 0.3rem 0.3rem var(--color-celestials)" };
-        if (Currency.singularities.lt(thisLevel)) break;
-      }
-      return {};
+    containerClass() {
+      return {
+        "c-laitela-milestone": true,
+        "o-dark-matter-dimension-button--ascend": !this.suppressGlow &&
+          this.milestone.previousGoal > this.lastCheckedMilestones
+      };
     },
     upgradeDirectionIcon() {
       switch (this.milestone.config.upgradeDirection) {
@@ -58,19 +49,32 @@ Vue.component("singularity-milestone", {
         default: throw new Error("Unspecified Lai'tela upgrade direction in singularity milestone");
       }
     },
+    maxCompletions() {
+      return this.isUnique ? 1 : this.limit;
+    },
     completionsDisplay() {
-      if (!Number.isFinite(this.limit)) {
-        return quantifyInt("completion", this.completions);
-      }
-      if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
-      return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
+      const maxStr = Number.isFinite(this.limit) ? formatInt(this.maxCompletions) : "∞";
+      return `${formatInt(this.completions)}/${maxStr} ${pluralize("completion", this.completions)}`;
     },
     progressDisplay() {
-      if (this.showingCondense) {
-        const remaningCondenses = this.remainingSingularities / this.singularitiesPerCondense;
-        return `Condense ${quantify("time", remaningCondenses, 2, 2)}`;
+      const condenseCount = this.remainingSingularities / this.singularitiesPerCondense;
+      let thisSingularityTime, extraTime;
+      switch (this.milestoneMode) {
+        case SINGULARITY_MILESTONE_RESOURCE.SINGULARITIES:
+          return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
+        case SINGULARITY_MILESTONE_RESOURCE.CONDENSE_COUNT:
+          return `Condense ${quantify("time", condenseCount, 2, 2)}`;
+        case SINGULARITY_MILESTONE_RESOURCE.MANUAL_TIME:
+          thisSingularityTime = Math.clampMin(0, this.currentCondenseTime);
+          extraTime = Math.ceil(condenseCount - 1) * this.baseCondenseTime;
+          return `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} (manual)`;
+        case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
+          thisSingularityTime = Math.clampMin(0, this.currentCondenseTime + this.autoCondenseDelay);
+          extraTime = Math.ceil(condenseCount - 1) * (this.baseCondenseTime + this.autoCondenseDelay);
+          return `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} (auto)`;
+        default:
+          throw new Error("Unrecognized Singularity Milestone mode");
       }
-      return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
     }
   },
   methods: {
@@ -85,16 +89,22 @@ Vue.component("singularity-milestone", {
       if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
       this.completions = this.milestone.completions;
       this.limit = this.milestone.limit;
-      this.showingCondense = player.options.showCondenseToMilestone;
+      this.milestoneMode = player.celestials.laitela.singularitySorting.displayResource;
       this.singularitiesPerCondense = Singularity.singularitiesGained;
+      this.baseCondenseTime = Singularity.timePerCondense;
+      this.currentCondenseTime = Singularity.timeUntilCap;
+      this.autoCondenseDelay = Singularity.timeDelayFromAuto;
+      this.lastCheckedMilestones = player.celestials.laitela.lastCheckedMilestones;
+      this.isMetro = Theme.current().isMetro;
     },
   },
   template: `
-    <div class="c-laitela-milestone"
-      :class="{ 'c-laitela-milestone--completed': isUnique && isMaxed }"
-      :style="[backgroundStyle, newGlowStyle]"
-    >
-      <div class="c-laitela-milestone__progress" :style="barProgressStyle" />
+    <div :class="containerClass">
+      <div v-if="!isMetro && !isMaxed" class="c-laitela-milestone--bar-border-fix"></div>
+      <div
+        :class="barClass"
+        :style="barStyle"
+      />
       <span v-if="isDoomed">
         This singularity milestones has no effect while in Doomed
       </span>
@@ -105,14 +115,13 @@ Vue.component("singularity-milestone", {
         <p>
           <span v-html="upgradeDirectionIcon" /> {{ description }}
         </p>
-        <br>
         <b>
           {{ effectDisplay }}
           <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
         </b>
         <div class="c-laitela-milestone__completions">
           {{ completionsDisplay }}
-        </span>
-      </div>
+        </div>
+      </span>
     </div>`
 });

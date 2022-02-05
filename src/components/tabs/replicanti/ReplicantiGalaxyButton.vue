@@ -1,7 +1,9 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
-Vue.component("replicanti-galaxy-button", {
+export default {
+  name: "ReplicantiGalaxyButton",
   components: {
     PrimaryButton,
     PrimaryToggleButton
@@ -59,25 +61,32 @@ Vue.component("replicanti-galaxy-button", {
       if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
       else replicantiGalaxy();
     }
-  },
-  template: `
-    <div class="l-spoon-btn-group">
-      <PrimaryButton
-        :enabled="isAvailable"
-        class="o-primary-btn--replicanti-galaxy"
-        @click="handleClick"
-      >
-        {{ resetActionDisplay }} for a Replicanti Galaxy
-        <br>
-        {{ galaxyCountDisplay }}
-      </PrimaryButton>
-      <PrimaryToggleButton
-        v-if="isAutoUnlocked"
-        :value="isAutoActive"
-        :on="autobuyerTextDisplay"
-        :off="autobuyerTextDisplay"
-        class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-galaxy-toggle"
-        @input="handleAutoToggle"
-      />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="l-spoon-btn-group">
+    <PrimaryButton
+      :enabled="isAvailable"
+      class="o-primary-btn--replicanti-galaxy"
+      @click="handleClick"
+    >
+      {{ resetActionDisplay }} for a Replicanti Galaxy
+      <br>
+      {{ galaxyCountDisplay }}
+    </PrimaryButton>
+    <PrimaryToggleButton
+      v-if="isAutoUnlocked"
+      :value="isAutoActive"
+      :on="autobuyerTextDisplay"
+      :off="autobuyerTextDisplay"
+      class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-galaxy-toggle"
+      @input="handleAutoToggle"
+    />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

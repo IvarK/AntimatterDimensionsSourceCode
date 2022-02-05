@@ -251,9 +251,11 @@ for (const hotkey of shortcuts) {
 GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
-// Same thing with Shift
+// Same thing with Shift; we need to double-up on ctrl-shift as well since they're technically different keybinds
 GameKeyboard.bind("shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("shift", () => setShiftKey(false), "keyup");
+GameKeyboard.bind("ctrl+shift", () => setShiftKey(true), "keydown");
+GameKeyboard.bind("ctrl+shift", () => setShiftKey(false), "keyup");
 
 
 GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(Autobuyer.tickspeed));

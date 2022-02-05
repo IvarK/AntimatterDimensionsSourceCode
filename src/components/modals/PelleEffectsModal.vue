@@ -16,7 +16,6 @@ export default {
         "All infinity multipliers and infinity generation are disabled",
         "All eternity multipliers and eternity generation are disabled",
         "Black Hole is disabled",
-        "Charged Infinity Upgrades are disabled",
         "All \"Start with X currency\" rewards are disabled",
         "All pre-doomed Dilated Time multipliers are disabled except the 2x buyable",
         "All Tachyon Particle multipliers are disabled",
@@ -34,6 +33,7 @@ export default {
         "Tickspeed Autobuyer is disabled until reacquired",
         "Time Theorem Autobuyer is disabled",
         "All Effarig effects are disabled",
+        "Charged Infinity Upgrades are disabled",
         "Continumm is disabled",
         "Singularity rewards are disabled",
         "Glyph Alchemy effects are disabled",
@@ -78,13 +78,21 @@ export default {
 </script>
 
 <template>
-  <div class="c-modal-message l-modal-content--centered">
+  <div class="l-modal-content--centered">
     <ModalCloseButton
       v-if="modal.closeButton"
       class="c-modal__close-btn--tiny"
       @click="emitClose"
     />
     <h1>List of disabled effects in Doomed</h1>
+    <div class="pelle-effects-container">
+      <p
+        v-for="(nerf, idx) in nerfs"
+        :key="idx"
+      >
+        {{ nerf }}
+      </p>
+    </div>
     <PrimaryButton
       class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
       @click="handleClick"
@@ -93,3 +101,14 @@ export default {
     </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+  .pelle-effects-container {
+    height: 40rem;
+    overflow-y: scroll;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+</style>

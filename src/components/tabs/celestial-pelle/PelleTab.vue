@@ -1,13 +1,21 @@
 <template>
   <div class="l-pelle-celestial-tab">
     <div v-if="isDoomed">
-      <button
-        v-if="strikes.length"
-        class="o-pelle-button"
-        @click="toggleCompact"
-      >
-        {{ compact ? "Show all Strikes and Rifts" : "Condense Strikes and Rifts" }}
-      </button>
+      <div class="button-container">
+        <button
+          v-if="strikes.length"
+          class="o-pelle-button"
+          @click="toggleCompact"
+        >
+          {{ compact ? "Show all Strikes and Rifts" : "Condense Strikes and Rifts" }}
+        </button>
+        <button
+          class="o-pelle-button"
+          @click="showModal"
+        >
+          Show effects in Doomed Reality
+        </button>
+      </div>
       <div class="c-pelle-upgrade-container">
         <PelleStrike
           v-for="strike in strikes"
@@ -108,6 +116,9 @@ export default {
       Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
       disChargeAll();
     },
+    showModal() {
+      Modal.pelleEffects.show();
+    }
   },
   computed: {
     rebuyables: () => PelleRebuyableUpgrade.all,
@@ -134,6 +145,7 @@ export default {
     border-radius: 5px;
     padding: 1rem;
     font-family: Typewriter;
+    margin: 0 1rem;
     margin-bottom: 1rem;
     cursor: pointer;
     transition-duration: 0.12s;

@@ -17,7 +17,6 @@ export default {
   },
   watch: {
     rolling(newVal, oldVal) {
-      console.log({ oldVal, newVal });
       if (!oldVal && newVal && this.audio === null) {
         this.audio = new Audio(`audio/credits.mp3`);
         this.audio.play();

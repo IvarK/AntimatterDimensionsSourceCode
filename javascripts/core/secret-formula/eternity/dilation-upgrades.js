@@ -180,7 +180,7 @@ GameDatabase.eternity.dilation = (function() {
       id: 15,
       cost: 1e55,
       description: () => `Gain more Dilated Time based on EP`,
-      effect: () => 1e9 ** Math.min(((player.eternityPoints.log10() - 1500) / 2500) ** 1.2, 1),
+      effect: () => 1e9 ** Math.min((Math.max(player.eternityPoints.log10() - 1500, 0) / 2500) ** 1.2, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
   };

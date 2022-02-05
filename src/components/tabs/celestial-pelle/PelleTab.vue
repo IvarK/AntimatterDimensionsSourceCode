@@ -185,6 +185,8 @@ export default {
     border: 4px solid var(--color-pelle--base);
     font-size: 10rem;
     transition-duration: 0.4s;
+    text-shadow: 0px 0px 15px #9b0101;
+    box-shadow: 0px 0px 15px #9b0101;
   }
 
   .pelle-doom-button:hover .pelle-icon-container {

@@ -1,3 +1,5 @@
+import pako from "pako/dist/pako.esm.mjs";
+
 export const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);

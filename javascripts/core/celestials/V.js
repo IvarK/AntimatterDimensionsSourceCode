@@ -136,9 +136,11 @@ export const V_UNLOCKS = {
     get description() { return `Have ${formatInt(10)} V-Achievements`; },
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each
-    format: x => (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)
-      ? "Instant (Ra upgrade)"
-      : `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`),
+    format: x => {
+      if (Pelle.isDoomed) return "Disabled while in Doomed";
+      if (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)) return "Instant (Ra upgrade)";
+      return `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`;
+    },
     requirement: () => V.spaceTheorems >= 10
   },
   AUTO_AUTOCLEAN: {

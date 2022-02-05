@@ -1,6 +1,7 @@
 Vue.component("singularity-milestone", {
   props: ["milestone", "suppressGlow"],
   data: () => ({
+    isDoomed: false,
     isMaxed: false,
     progressToNext: "",
     remainingSingularities: 0,
@@ -74,6 +75,7 @@ Vue.component("singularity-milestone", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isMaxed = this.milestone.isMaxed;
       this.progressToNext = this.milestone.progressToNext;
       this.remainingSingularities = this.milestone.remainingSingularities;
@@ -93,19 +95,24 @@ Vue.component("singularity-milestone", {
       :style="[backgroundStyle, newGlowStyle]"
     >
       <div class="c-laitela-milestone__progress" :style="barProgressStyle" />
-      <b v-if="!isMaxed">
-        {{ progressDisplay }}
-      </b>
-      <p>
-        <span v-html="upgradeDirectionIcon" /> {{ description }}
-      </p>
-      <br>
-      <b>
-        {{ effectDisplay }}
-        <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
-      </b>
-      <div class="c-laitela-milestone__completions">
-        {{ completionsDisplay }}
+      <span v-if="isDoomed">
+        This singularity milestones has no effect while in Doomed
+      </span>
+      <span v-else>
+        <b v-if="!isMaxed">
+          {{ progressDisplay }}
+        </b>
+        <p>
+          <span v-html="upgradeDirectionIcon" /> {{ description }}
+        </p>
+        <br>
+        <b>
+          {{ effectDisplay }}
+          <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
+        </b>
+        <div class="c-laitela-milestone__completions">
+          {{ completionsDisplay }}
+        </span>
       </div>
     </div>`
 });

@@ -118,9 +118,17 @@ export const Pelle = {
     return [143, 142, 141, 125, 118, 117, 111, 103, 92, 91, 76, 74, 65];
   },
 
+  get uselessInfinityUpgrades() {
+    return ["passiveGen", "ipMult", "infinitiedGeneration"];
+  },
+
   // TS33 only gets useless with PelleUpgrade.replicantiGalaxyNoReset
   get uselessTimeStudies() {
     return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+  },
+
+  get uselessRaMilestones() {
+    return [0, 1, 15, 18, 19, 21];
   },
 
   get remnantsGain() {

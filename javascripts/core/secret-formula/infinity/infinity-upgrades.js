@@ -149,9 +149,7 @@ GameDatabase.infinity.upgrades = (function() {
     ipGen: {
       id: "passiveGen",
       cost: 10,
-      description: () => (Pelle.isDoomed
-        ? "This upgrade has no effect while in Doomed"
-        : `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`),
+      description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
       // Cutting corners: this is not actual effect, but it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning || Pelle.isDoomed ? DC.D0 : GameCache.totalIPMult.value),
       formatEffect: value => {
@@ -209,12 +207,11 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
     },
     ipMult: {
+      id: "ipMult",
       cost: () => InfinityUpgrade.ipMult.cost,
       costCap: DC.E6E6,
       costIncreaseThreshold: DC.E3E6,
-      description: () => (Pelle.isDoomed
-        ? "This multiplier has no effect while in Doomed."
-        : `Multiply Infinity Points from all sources by ${formatX(2)}`),
+      description: () => `Multiply Infinity Points from all sources by ${formatX(2)}`,
       // Normally the multiplier caps at e993k or so with 3299999 purchases, but if the cost is capped then we just give
       // an extra e7k to make the multiplier look nice
       effect: () => (player.infMult === 3299999 ? DC.E1E6 : DC.D2.pow(player.infMult)),

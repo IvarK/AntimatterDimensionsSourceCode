@@ -6,6 +6,7 @@ Vue.component("equipped-glyphs", {
   },
   data() {
     return {
+      isDoomed: false,
       glyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
@@ -35,6 +36,7 @@ Vue.component("equipped-glyphs", {
         : `Your currently-equipped Glyphs will stay equipped on ${reset}.`;
     },
     undoTooltip() {
+      if (Pelle.isDoomed) return "Undo is not available while in Doomed";
       if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
       return this.undoAvailable
         ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
@@ -48,11 +50,13 @@ Vue.component("equipped-glyphs", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.respec = player.reality.respec;
       this.respecIntoProtected = player.options.respecIntoProtected;
       this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
-      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
+      // eslint-disable-next-line max-len
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0 && !this.isDoomed;
     },
     glyphPositionStyle(idx) {
       return {
@@ -103,7 +107,7 @@ Vue.component("equipped-glyphs", {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
     },
     undo() {
-      if (!this.undoAvailable) return;
+      if (!this.undoAvailable || Pelle.isDoomed) return;
       if (player.options.confirmations.glyphUndo) Modal.glyphUndo.show();
       else Glyphs.undo();
     },
@@ -182,7 +186,8 @@ Vue.component("equipped-glyphs", {
           :ach-tooltip="undoTooltip"
           @click="undo"
         >
-          Rewind to <b>undo</b> the last equipped Glyph
+          <span v-if="!isDoomed">Rewind to <b>undo</b> the last equipped Glyph</span>
+          <span v-if="isDoomed">You can't <b>undo</b> Armageddon</span>
         </button>
         <button
           class="l-glyph-equip-button c-reality-upgrade-btn"

@@ -1,9 +1,26 @@
-import { rem } from "./rem.js";
+<script>
 import CostDisplay from "@/components/CostDisplay";
 
-Vue.component("time-study", {
+export default {
+  name: "TimeStudyButton",
   components: {
     CostDisplay
+  },
+  props: {
+    setup: {
+      type: Object,
+      required: true
+    },
+    showCost: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    showStCost: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
   data() {
     return {
@@ -13,25 +30,14 @@ Vue.component("time-study", {
       eternityChallengeRunning: false,
     };
   },
-  props: {
-    setup: Object,
-    showCost: {
-      type: Boolean,
-      default: true
-    },
-    showSTCost: {
-      type: Boolean,
-      default: false
-    }
-  },
   computed: {
     study() {
       return this.setup.study;
     },
     styleObject() {
       return {
-        top: rem(this.setup.top),
-        left: rem(this.setup.left)
+        top: `${this.setup.top}rem`,
+        left: `${this.setup.left}rem`
       };
     },
     classObject() {
@@ -106,27 +112,8 @@ Vue.component("time-study", {
     shiftClick() {
       if (this.study.purchaseUntil) this.study.purchaseUntil();
     }
-  },
-  template:
-    `<button :class="[classObject, studyClass, eternityChallengeAnim]"
-             :style="styleObject"
-             @click.exact="handleClick"
-             @click.shift.exact="shiftClick">
-      <slot />
-      <CostDisplay
-        br
-        v-if="(showCost && !showSTCost) || STCost === 0"
-        :config="config"
-        name="Time Theorem"
-      />
-      <div v-else-if="showSTCost">
-        Cost: <span v-if="config.cost">
-          {{ quantifyInt("Time Theorem", config.cost) }} and
-        </span>
-        {{ quantifyInt("Space Theorem", STCost) }}
-      </div>
-    </button>`
-});
+  }
+};
 
 export class TimeStudySetup {
   constructor(props) {
@@ -147,3 +134,32 @@ export class TimeStudySetup {
     return this.study.path;
   }
 }
+</script>
+
+<template>
+  <button
+    :class="[classObject, studyClass, eternityChallengeAnim]"
+    :style="styleObject"
+    @click.exact="handleClick"
+    @click.shift.exact="shiftClick"
+  >
+    <slot />
+    <CostDisplay
+      v-if="(showCost && !showStCost) || STCost === 0"
+      br
+      :config="config"
+      name="Time Theorem"
+    />
+    <div v-else-if="showStCost">
+      Cost:
+      <span v-if="config.cost">
+        {{ quantifyInt("Time Theorem", config.cost) }} and
+      </span>
+      {{ quantifyInt("Space Theorem", STCost) }}
+    </div>
+  </button>
+</template>
+
+<style scoped>
+
+</style>

@@ -1,12 +1,5 @@
-import "./normal-time-study.js";
-import "./secret-time-study.js";
-import "./triad-time-study.js";
-import "./ec-time-study.js";
-import "./dilation-time-study.js";
-import { rem } from "./rem.js";
-import { TimeStudySetup } from "./time-study.js";
-import { TimeStudyConnectionSetup } from "./time-study-connection.js";
-import PrimaryButton from "@/components/PrimaryButton";
+import { TimeStudySetup } from "./TimeStudyButton";
+import { TimeStudyConnectionSetup } from "./TimeStudyConnection";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -37,7 +30,7 @@ class TimeStudyRowLayout {
   }
 }
 
-class TimeStudyTreeLayout {
+export class TimeStudyTreeLayout {
   constructor(type) {
     this.spacing = 4;
 
@@ -96,7 +89,7 @@ class TimeStudyTreeLayout {
     );
 
     if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_181 || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
-        type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
+      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                         null, TS(171),  EC(2)                        ),
         normalRow(                        EC(1), TS(181),  EC(3)                        )
@@ -206,7 +199,7 @@ class TimeStudyTreeLayout {
   }
 }
 
-const STUDY_TREE_LAYOUT_TYPE = {
+export const STUDY_TREE_LAYOUT_TYPE = {
   NORMAL: 0,
   ALTERNATIVE_62: 1,
   ALTERNATIVE_181: 2,
@@ -222,144 +215,3 @@ const STUDY_TREE_LAYOUT_TYPE = {
     return this.NORMAL;
   }
 };
-
-Vue.component("time-studies-tab", {
-  components: {
-    PrimaryButton
-  },
-  data() {
-    return {
-      respec: player.respec,
-      layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
-      vLevel: 0,
-      renderedStudyCount: 0,
-      renderedConnectionCount: 0,
-    };
-  },
-  created() {
-    const incrementRenderedCount = () => {
-      let shouldRequestNextFrame = false;
-      if (this.renderedStudyCount < this.allStudies.length) {
-        this.renderedStudyCount += 2;
-        shouldRequestNextFrame = true;
-      }
-      if (this.renderedConnectionCount < this.allConnections.length) {
-        this.renderedConnectionCount += 2;
-        shouldRequestNextFrame = true;
-      }
-      if (shouldRequestNextFrame) {
-        this.renderAnimationId = requestAnimationFrame(incrementRenderedCount);
-      }
-    };
-    incrementRenderedCount();
-
-    // Scroll to top because time studies tab is rendered progressively
-    // and we don't want the player to see empty space while it's loading.
-    document.body.scrollTop = 0;
-  },
-  beforeDestroy() {
-    cancelAnimationFrame(this.renderAnimationId);
-  },
-  watch: {
-    respec(newValue) {
-      player.respec = newValue;
-    },
-    vLevel() {
-      // When vLevel changes, we recompute the study tree because of triad studies
-      this.$recompute("layout");
-    }
-  },
-  computed: {
-    layout() {
-      return TimeStudyTreeLayout.create(this.layoutType);
-    },
-    allStudies() {
-      return this.layout.studies;
-    },
-    studies() {
-      return this.allStudies.slice(0, this.renderedStudyCount);
-    },
-    allConnections() {
-      return this.layout.connections;
-    },
-    connections() {
-      return this.allConnections.slice(0, this.renderedConnectionCount);
-    },
-    treeStyleObject() {
-      return {
-        width: rem(this.layout.width),
-        height: rem(this.layout.height)
-      };
-    },
-    respecClassObject() {
-      return {
-        "o-primary-btn--subtab-option": true,
-        "o-primary-btn--respec-active": this.respec
-      };
-    }
-  },
-  methods: {
-    update() {
-      this.respec = player.respec;
-      this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
-      this.vLevel = Ra.pets.v.level;
-    },
-    studyComponent(study) {
-      switch (study.type) {
-        case TIME_STUDY_TYPE.NORMAL: return "normal-time-study";
-        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return "ec-time-study";
-        case TIME_STUDY_TYPE.DILATION: return "dilation-time-study";
-        case TIME_STUDY_TYPE.TRIAD: return "triad-time-study";
-      }
-      throw "Unknown Time Study type";
-    },
-    exportStudyTree() {
-      if (player.timestudy.studies.length === 0) {
-        GameUI.notify.error("You cannot export an empty Time Study Tree!");
-      } else {
-        copyToClipboard(GameCache.currentStudyTree.value.exportString);
-        GameUI.notify.info("Exported current Time Studies to your clipboard");
-      }
-    }
-  },
-  template: `
-    <div class="l-time-studies-tab">
-      <div class="c-subtab-option-container">
-        <PrimaryButton
-          class="o-primary-btn--subtab-option"
-          @click="exportStudyTree"
-        >
-          Export tree
-        </PrimaryButton>
-        <PrimaryButton
-          :class="respecClassObject"
-          @click="respec = !respec"
-        >
-          Respec Time Studies on next Eternity
-        </PrimaryButton>
-        <PrimaryButton
-          class="o-primary-btn--subtab-option"
-          onclick="Modal.studyString.show()"
-        >
-          Import tree
-        </PrimaryButton>
-      </div>
-      <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
-        <component
-          v-for="(setup, index) in studies"
-          :key="setup.study.type.toString() + setup.study.id.toString()"
-          :setup="setup"
-          :is="studyComponent(setup.study)"
-        />
-        <secret-time-study :setup="layout.secretStudy" />
-        <svg :style="treeStyleObject" class="l-time-study-connection">
-          <time-study-connection
-            v-for="(setup, index) in connections"
-            :key="'connection' + index"
-            :setup="setup"
-          />
-          <secret-time-study-connection :setup="layout.secretStudyConnection" />
-        </svg>
-      </div>
-    </div>`
-});

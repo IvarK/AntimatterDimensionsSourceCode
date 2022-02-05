@@ -1,12 +1,17 @@
-Vue.component("time-study-connection", {
+<script>
+export default {
+  name: "TimeStudyConnection",
+  props: {
+    setup: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       isOverridden: false,
       isBought: false
     };
-  },
-  props: {
-    setup: Object
   },
   computed: {
     classObject() {
@@ -55,17 +60,8 @@ Vue.component("time-study-connection", {
     percents(value) {
       return `${value * 100}%`;
     }
-  },
-  template:
-    `<line
-      v-if="!isOverridden"
-      :x1="percents(setup.x1)"
-      :y1="percents(setup.y1)"
-      :x2="percents(setup.x2)"
-      :y2="percents(setup.y2)"
-      :class="classObject"
-    />`
-});
+  }
+};
 
 export class TimeStudyConnectionSetup {
   constructor(connection) {
@@ -96,3 +92,19 @@ export class TimeStudyConnectionSetup {
     return this.from.isBought && this.to.isBought;
   }
 }
+</script>
+
+<template>
+  <line
+    v-if="!isOverridden"
+    :x1="percents(setup.x1)"
+    :y1="percents(setup.y1)"
+    :x2="percents(setup.x2)"
+    :y2="percents(setup.y2)"
+    :class="classObject"
+  />
+</template>
+
+<style scoped>
+
+</style>

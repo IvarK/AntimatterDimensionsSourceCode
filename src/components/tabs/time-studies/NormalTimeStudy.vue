@@ -1,16 +1,22 @@
-import "./time-study.js";
+<script>
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 import HintText from "@/components/HintText";
+import TimeStudyButton from "./TimeStudyButton";
 
-Vue.component("normal-time-study", {
+export default {
+  name: "NormalTimeStudy",
   components: {
     DescriptionDisplay,
     EffectDisplay,
-    HintText
+    HintText,
+    TimeStudyButton
   },
   props: {
-    setup: Object
+    setup: {
+      type: Object,
+      required: true
+    }
   },
   data: () => ({
     isUseless: false,
@@ -39,26 +45,38 @@ Vue.component("normal-time-study", {
       this.showSTCost = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && !TimeStudy(this.study.id).isBought &&
         TimeStudy(this.study.id).costsST() && !Pelle.isDoomed;
     },
-  },
-  template: `
-    <time-study
-      :setup="setup"
-      :showCost="showCost"
-      :showSTCost="showSTCost"
-      :class="{ 'c-pelle-useless': isUseless }"
+  }
+};
+</script>
+
+<template>
+  <TimeStudyButton
+    :setup="setup"
+    :show-cost="showCost"
+    :show-st-cost="showSTCost"
+    :class="{ 'c-pelle-useless': isUseless }"
+  >
+    <HintText
+      type="studies"
+      class="l-hint-text--time-study"
     >
-      <HintText type="studies" class="l-hint-text--time-study">{{ hintText }}</HintText>
-      <span v-if="isUseless">
-        This Time Study has no effect while in Doomed
-      </span>
-      <span v-else>
-        <DescriptionDisplay
-          :config="study.config"
-        />
-        <EffectDisplay
-          br
-          :config="study.config"
-        />
-      </span>
-    </time-study>`
-});
+      {{ hintText }}
+    </HintText>
+    <span v-if="isUseless">
+      This Time Study has no effect while in Doomed
+    </span>
+    <span v-else>
+      <DescriptionDisplay
+        :config="study.config"
+      />
+      <EffectDisplay
+        br
+        :config="study.config"
+      />
+    </span>
+  </TimeStudyButton>
+</template>
+
+<style scoped>
+
+</style>

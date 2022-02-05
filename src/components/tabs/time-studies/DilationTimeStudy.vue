@@ -1,17 +1,23 @@
-import "./time-study.js";
+<script>
+import TimeStudyButton from "./TimeStudyButton";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 
-Vue.component("dilation-time-study", {
+export default {
+  name: "DilationTimeStudy",
   components: {
-    DescriptionDisplay
+    DescriptionDisplay,
+    TimeStudyButton
   },
   props: {
-    setup: Object
+    setup: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
       showRequirement: false,
-      maxTT: new Decimal(0),
+      maxTT: new Decimal(),
     };
   },
   computed: {
@@ -44,13 +50,20 @@ Vue.component("dilation-time-study", {
         this.showRequirement = true;
       }
     }
-  },
-  template: `
-    <time-study :setup="setup">
-      <DescriptionDisplay :config="study.config" />
-      <template v-if="showRequirement">
-        <br>
-        <span>{{ requirement }}</span>
-      </template>
-    </time-study>`
-});
+  }
+};
+</script>
+
+<template>
+  <TimeStudyButton :setup="setup">
+    <DescriptionDisplay :config="study.config" />
+    <template v-if="showRequirement">
+      <br>
+      <span>{{ requirement }}</span>
+    </template>
+  </TimeStudyButton>
+</template>
+
+<style scoped>
+
+</style>

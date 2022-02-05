@@ -19,12 +19,18 @@
       <GalaxyGeneratorVue v-if="hasGalaxyGenerator" />
       You have <span class="c-remnants-amount">{{ format(remnants, 2, 0) }}</span> remnants <br>
       You have <span class="c-remnants-amount">{{ format(realityShards, 2, 0) }}</span> Reality Shards
-      <ArmageddonButton />
+      <span
+        @mouseover="isHovering = true"
+        @mouseleave="isHovering = false"
+      >
+        <ArmageddonButton />
+      </span>
       <div class="c-pelle-upgrade-container">
         <PelleUpgradeVue
           v-for="upgrade in rebuyables"
           :key="upgrade.config.id"
           :upgrade="upgrade"
+          :show-improved-estimate="isHovering"
         />
       </div>
       <button
@@ -38,6 +44,7 @@
           v-for="upgrade in allUpgrades"
           :key="upgrade.config.id"
           :upgrade="upgrade"
+          :show-improved-estimate="isHovering"
         />
         <PelleUpgradeVue
           v-for="upgrade in fadedUpgrades"
@@ -77,6 +84,7 @@ export default {
       compact: false,
       showBought: false,
       hasGalaxyGenerator: false,
+      isHovering: false,
     };
   },
   methods: {

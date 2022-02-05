@@ -10,6 +10,12 @@
     :ach-tooltip="timeEstimate"
     @click="!faded && upgrade.purchase()"
   >
+    <div
+      v-if="showImprovedEstimate"
+      class="c-pelle-upgrade-time-tooltip"
+    >
+      {{ estimateImprovement }}
+    </div>
     <DescriptionDisplay :config="config" /><br><br>
     <span v-if="effect">Currently: {{ effect }}<br></span>
     <CostDisplay
@@ -32,14 +38,16 @@ export default {
   props: {
     upgrade: Object,
     faded: Boolean,
-    galaxyGenerator: Boolean
+    galaxyGenerator: Boolean,
+    showImprovedEstimate: Boolean,
   },
   data() {
     return {
       canBuy: false,
       isBought: false,
       purchases: 0,
-      timeUntilCost: new Decimal(0),
+      currentTimeEstimate: new Decimal(0),
+      projectedTimeEstimate: new Decimal(0),
       isCapped: false
     };
   },
@@ -49,8 +57,15 @@ export default {
       this.isBought = this.upgrade.isBought;
       this.isCapped = this.upgrade.isCapped;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
-      this.timeUntilCost = Decimal.sub(this.upgrade.cost, Currency.realityShards.value)
-        .div(Pelle.realityShardGainPerSecond);
+      this.currentTimeEstimate = TimeSpan
+        .fromSeconds(this.secondsUntilCost(Pelle.realityShardGainPerSecond).toNumber())
+        .toTimeEstimate();
+      this.projectedTimeEstimate = TimeSpan
+        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
+        .toTimeEstimate();
+    },
+    secondsUntilCost(rate) {
+      return Decimal.sub(this.upgrade.cost, Currency.realityShards.value).div(rate);
     },
   },
   computed: {
@@ -68,9 +83,12 @@ export default {
         this.isCapped ||
         this.galaxyGenerator
       ) return null;
-      if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
-      if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
-      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
+      return this.currentTimeEstimate;
+    },
+    estimateImprovement() {
+      // If the improved value is still "> 1 year" then we only show it once
+      if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
+      return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
     }
   }
 };
@@ -119,4 +137,23 @@ export default {
     color: black;
   }
 
+  .c-pelle-upgrade-time-tooltip {
+    position: absolute;
+    visibility: visible;
+    bottom: 100%;
+    left: 50%;
+    margin-bottom: 0.5rem;
+    margin-left: -8.5rem;
+    padding: 0.7rem;
+    width: 16rem;
+    border-radius: 0.3rem;
+    background-color: hsla(0, 0%, 5%, 0.9);
+    color: #fff;
+    content: attr(ach-tooltip);
+    text-align: center;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    transition-duration: 0.4s;
+    z-index: 3;
+  }
 </style>

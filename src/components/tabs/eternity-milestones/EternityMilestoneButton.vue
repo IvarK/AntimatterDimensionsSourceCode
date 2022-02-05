@@ -1,6 +1,11 @@
-Vue.component("eternity-milestone", {
+<script>
+export default {
+  name: "EternityMilestoneButton",
   props: {
-    getMilestone: Function
+    getMilestone: {
+      type: Function,
+      required: true
+    }
   },
   data() {
     return {
@@ -39,17 +44,27 @@ Vue.component("eternity-milestone", {
       this.isReached = this.milestone.isReached;
       this.isObsoleteWithPelle = this.config.pelleObsolete?.();
     }
-  },
-  template: `
-    <div class="l-eternity-milestone" v-if="!this.config.invisible">
-      <span class="o-eternity-milestone__goal">
-        {{ quantifyInt("Eternity", eternities) }}:
-      </span>
-      <button
-        :class="rewardClassObject"
-        v-tooltip="activeCondition"
-      >
-        {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : ""}}
-      </button>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div
+    v-if="!config.invisible"
+    class="l-eternity-milestone"
+  >
+    <span class="o-eternity-milestone__goal">
+      {{ quantifyInt("Eternity", eternities) }}:
+    </span>
+    <button
+      v-tooltip="activeCondition"
+      :class="rewardClassObject"
+    >
+      {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : ""}}
+    </button>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

@@ -22,6 +22,7 @@ import InfinityUpgradesTab from "./infinity-upgrades/InfinityUpgradesTab";
 import BreakInfinityTab from "./break-infinity/BreakInfinityTab";
 import ReplicantiTab from "./replicanti/ReplicantiTab";
 import TimeStudiesTab from "./time-studies/TimeStudiesTab";
+import EternityMilestonesTab from "./eternity-milestones/EternityMilestonesTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -46,7 +47,8 @@ const TabComponents = {
   InfinityUpgradesTab,
   BreakInfinityTab,
   ReplicantiTab,
-  TimeStudiesTab
+  TimeStudiesTab,
+  EternityMilestonesTab
 };
 
 export default TabComponents;

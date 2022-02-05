@@ -143,7 +143,6 @@ Vue.component("equipped-glyphs", {
           <!-- the drop zone is a bit larger than the glyph itself. -->
           <div
             class="l-equipped-glyphs__dropzone"
-            v-on="dragEvents(idx)"
           />
           <GlyphComponent
             v-if="glyph"

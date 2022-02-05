@@ -9,6 +9,7 @@ Vue.component("teresa-tab", {
   },
   data() {
     return {
+      isDoomed: false,
       pour: false,
       time: new Date().getTime(),
       pouredAmount: 0,
@@ -68,6 +69,7 @@ Vue.component("teresa-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       const now = new Date().getTime();
       if (this.pour) {
         const diff = (now - this.time) / 1000;
@@ -93,6 +95,7 @@ Vue.component("teresa-tab", {
         .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
     },
     startRun() {
+      if (this.isDoomed) return;
       Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
     unlockDescriptionStyle(unlockInfo) {
@@ -113,7 +116,8 @@ Vue.component("teresa-tab", {
         <div class="l-teresa-mechanic-container" v-if="hasReality">
           <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
-            Start Teresa's Reality.
+            <span v-if="!isDoomed">Start Teresa's Reality.</span>
+            <span v-else>You can't start Teresa's Reality while in Doomed.<br></span>
             {{ runDescription }}
             <br><br>
             <div v-if="bestAM.gt(0)">
@@ -137,7 +141,12 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
+            <span v-if="isDoomed">
+              This has no effect while in Doomed
+            </span>
+            <span v-else>
+              Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
+            </span>
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">

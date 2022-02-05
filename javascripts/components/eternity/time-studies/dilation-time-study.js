@@ -22,7 +22,7 @@ Vue.component("dilation-time-study", {
       return this.study.id;
     },
     requirement() {
-      if (this.id === 1) {
+      if (this.id === 1 && (Pelle.isDoomed && !PlayerProgress.dilationUnlocked())) {
         return `Requirement: ${formatInt(5)} EC11 and EC12 completions
           and ${formatInt(this.maxTT)}/${formatInt(TimeStudy.dilation.totalTimeTheoremRequirement)}
           total Time Theorems`;

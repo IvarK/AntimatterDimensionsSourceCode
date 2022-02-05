@@ -4,6 +4,7 @@ Vue.component("ra-upgrade-icon", {
   },
   data() {
     return {
+      isUseless: false,
       isUnlocked: false,
       level: 0,
       icon: "",
@@ -13,6 +14,7 @@ Vue.component("ra-upgrade-icon", {
   },
   computed: {
     update() {
+      this.isUseless = Pelle.uselessRaMilestones.includes(this.unlock.id) && Pelle.isDoomed;
       this.isUnlocked = Ra.has(this.unlock);
       this.level = this.unlock.level;
       this.icon = this.unlock.displayIcon;
@@ -41,7 +43,12 @@ Vue.component("ra-upgrade-icon", {
           {{ petName }} Level {{ formatInt(level) }}
         </div>
         <div class="c-ra-pet-upgrade__tooltip__description">
-          {{ description }}
+          <span v-if="isUseless">
+            This has no effect while in Doomed
+          </span>
+          <span v-else>
+            {{ description }}
+          </span>
         </div>
       </div>
     </div>`

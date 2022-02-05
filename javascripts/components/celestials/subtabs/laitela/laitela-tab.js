@@ -12,6 +12,7 @@ Vue.component("laitela-tab", {
   },
   data() {
     return {
+      isDoomed: false,
       darkMatter: new Decimal(0),
       isDMCapped: false,
       maxDarkMatter: new Decimal(0),
@@ -34,6 +35,7 @@ Vue.component("laitela-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.darkMatter.copyFrom(Currency.darkMatter);
       this.isDMCapped = this.darkMatter.eq(Number.MAX_VALUE);
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
@@ -82,8 +84,8 @@ Vue.component("laitela-tab", {
       </div>
       <div class="o-laitela-matter-amount">
         Your maximum Dark Matter ever is
-        <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span>,
-        giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum.
+        <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span>
+        <span v-if="!isDoomed">, giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum</span>.
       </div>
       <h2 class="c-laitela-singularity-container" v-if="!singularitiesUnlocked">
         Unlock singularities in {{ singularityWaitTime }}.
@@ -105,6 +107,7 @@ Vue.component("laitela-tab", {
 Vue.component("laitela-run-button", {
   data() {
     return {
+      isDoomed: false,
       realityTime: 0,
       maxDimTier: 0,
       isRunning: false,
@@ -122,6 +125,7 @@ Vue.component("laitela-run-button", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.realityTime = player.celestials.laitela.fastestCompletion;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
@@ -129,6 +133,7 @@ Vue.component("laitela-run-button", {
       this.singularitiesUnlocked = Currency.singularities.gt(0);
     },
     startRun() {
+      if (this.isDoomed) return;
       Modal.celestials.show({ name: "Lai'tela's", number: 5 });
     },
     classObject() {
@@ -146,7 +151,8 @@ Vue.component("laitela-run-button", {
   },
   template: `
     <button :class="classObject()">
-      <b>Start Lai'tela's Reality</b>
+      <span v-if="isDoomed"><b>You can't start Lai'tela's Reality</b></span>
+      <span v-else><b>Start Lai'tela's Reality</b></span>
       <div :class="runButtonClassObject()" @click="startRun"></div>
       <div v-if="realityReward > 1">
         <b>

@@ -27,8 +27,8 @@ GameDatabase.eternity.dilation = (function() {
       increment: 10,
       description: () =>
         (SingularityMilestone.dilatedTimeFromSingularities.isUnlocked
-          ? `${formatX(2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue, 2, 2)} Dilated Time gain.`
-          : "Double Dilated Time gain."),
+          ? `${formatX(2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue, 2, 2)} Dilated Time gain`
+          : "Double Dilated Time gain"),
       effect: bought => {
         const base = SingularityMilestone.dilatedTimeFromSingularities.isUnlocked
           ? 2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue
@@ -62,10 +62,16 @@ GameDatabase.eternity.dilation = (function() {
       id: 3,
       initialCost: 1e7,
       increment: 20,
-      description: () => (Enslaved.isRunning
-        ? `Multiply the amount of Tachyon Particles gained by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`
-        : "Triple the amount of Tachyon Particles gained."),
-      effect: bought => DC.D3.pow(bought),
+      description: () => {
+        if (Pelle.isDoomed) return `Multiply the amount of Tachyon Particles gained by ${formatInt(1)}`;
+        if (Enslaved.isRunning) return `Multiply the amount of Tachyon Particles gained
+        by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`;
+        return "Triple the amount of Tachyon Particles gained";
+      },
+      effect: bought => {
+        if (Pelle.isDoomed) return DC.D1.pow(bought);
+        return DC.D3.pow(bought);
+      },
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
       purchaseCap: Number.MAX_VALUE
@@ -73,7 +79,7 @@ GameDatabase.eternity.dilation = (function() {
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(1000)}.`,
+      description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(1000)}`,
       effect: 2
     },
     tdMultReplicanti: {
@@ -101,14 +107,14 @@ GameDatabase.eternity.dilation = (function() {
     ndMultDT: {
       id: 6,
       cost: 5e7,
-      description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
+      description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",
       effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },
     ipMultDT: {
       id: 7,
       cost: 2e12,
-      description: "Gain a multiplier to Infinity Points based on Dilated Time.",
+      description: "Gain a multiplier to Infinity Points based on Dilated Time",
       effect: () => Currency.dilatedTime.value.pow(1000).clampMin(1),
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap
@@ -116,18 +122,18 @@ GameDatabase.eternity.dilation = (function() {
     timeStudySplit: {
       id: 8,
       cost: 1e10,
-      description: "You can buy all three Time Study paths from the Dimension Split."
+      description: "You can buy all three Time Study paths from the Dimension Split"
     },
     dilationPenalty: {
       id: 9,
       cost: 1e11,
-      description: () => `Reduce the Dilation penalty. (${formatPow(1.05, 2, 2)} after reduction)`,
+      description: () => `Reduce the Dilation penalty (${formatPow(1.05, 2, 2)} after reduction)`,
       effect: 1.05,
     },
     ttGenerator: {
       id: 10,
       cost: 1e15,
-      description: "Generate Time Theorems based on Tachyon Particles.",
+      description: "Generate Time Theorems based on Tachyon Particles",
       effect: () => Currency.tachyonParticles.value.div(20000),
       formatEffect: value => `${format(value, 2, 1)}/sec`
     },
@@ -136,7 +142,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e14,
       increment: 100,
       pelleOnly: true,
-      description: () => `Multiply Dilated Time gain by ${format(5)}.`,
+      description: () => `Multiply Dilated Time gain by ${format(5)}`,
       effect: bought => Decimal.pow(5, bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
@@ -147,7 +153,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e15,
       increment: 1000,
       pelleOnly: true,
-      description: () => "Multiply Tachyon Galaxies gained.",
+      description: () => "Multiply Tachyon Galaxies gained",
       effect: bought => bought + 1,
       formatEffect: value => `${formatX(value, 2)} ➜ ${formatX(value + 1, 2)}`,
       formatCost: value => format(value, 2),
@@ -158,7 +164,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e16,
       increment: 1e4,
       pelleOnly: true,
-      description: () => `Gain a power to tickspeed effect.`,
+      description: () => `Gain a power to tickspeed effect`,
       effect: bought => 1 + bought * 0.03,
       formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.03, 2, 2)}`,
       formatCost: value => format(value, 2),
@@ -167,13 +173,13 @@ GameDatabase.eternity.dilation = (function() {
     galaxyThresholdPelle: {
       id: 14,
       cost: 1e45,
-      description: "Cubic root Tachyon Galaxy threshold.",
+      description: "Cubic root Tachyon Galaxy threshold",
       effect: 1 / 3
     },
     flatDilationMult: {
       id: 15,
       cost: 1e55,
-      description: () => `Gain more Dilated Time based on EP.`,
+      description: () => `Gain more Dilated Time based on EP`,
       effect: () => 1e9 ** Math.min((Math.max(player.eternityPoints.log10() - 1500, 0) / 2500) ** 1.2, 1),
       formatEffect: value => formatX(value, 2, 2)
     },

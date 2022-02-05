@@ -9,6 +9,7 @@ Vue.component("v-tab", {
   },
   data() {
     return {
+      isDoomed: false,
       mainUnlock: false,
       canUnlockCelestial: false,
       mainUnlockDB: [],
@@ -84,6 +85,7 @@ Vue.component("v-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.canUnlockCelestial = V.canUnlockCelestial;
       this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
@@ -101,6 +103,7 @@ Vue.component("v-tab", {
       if (V.canUnlockCelestial) V.unlockCelestial();
     },
     startRun() {
+      if (this.isDoomed) return;
       Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
@@ -169,7 +172,8 @@ Vue.component("v-tab", {
             Hard V
           </PrimaryButton>
           <br><br>
-          Cursed Glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
+          Cursed Glyphs can be created in the Effarig tab<span v-if="!isDoomed">, and the
+          Black Hole can now be used to slow down time</span>.
           <br>
           Each Hard V-Achievement counts as two V-achievements and will award {{ formatInt(2) }} Space Theorems
           instead of {{ formatInt(1) }}.
@@ -219,7 +223,8 @@ Vue.component("v-tab", {
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
               <b style="font-size: 1.5rem">
-                <span v-if="isRunning">You are in </span>
+                <span v-if="isDoomed">You can't start<br></span>
+                <span v-else-if="isRunning">You are in </span>
                 <span v-else>Start </span>
                 V's Reality.
               </b>

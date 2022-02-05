@@ -84,7 +84,7 @@ Vue.component("infinity-upgrade-button", {
       />
       <EffectDisplay
         br
-        v-if="!isDisabled && !isUseless"
+        v-if="!isDisabled"
         :config="config"
      />
     </span>  

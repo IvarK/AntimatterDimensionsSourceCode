@@ -118,8 +118,8 @@ Vue.component("ra-tab", {
       <div class="l-ra-non-pets">
         <button class="c-ra-run-button">
           <h2>
-            <span v-if="isRunning">You are in </span>
             <span v-if="isDoomed">You can't start<br></span>
+            <span v-else-if="isRunning">You are in </span>
             <span v-else>Start </span>
             Ra's Reality
           </h2>

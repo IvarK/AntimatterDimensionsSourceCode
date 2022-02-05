@@ -84,8 +84,8 @@ Vue.component("laitela-tab", {
       </div>
       <div class="o-laitela-matter-amount">
         Your maximum Dark Matter ever is
-        <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span><span v-if="!isDoomed">,
-        giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum</span>.
+        <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span>
+        <span v-if="!isDoomed">, giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum</span>.
       </div>
       <h2 class="c-laitela-singularity-container" v-if="!singularitiesUnlocked">
         Unlock singularities in {{ singularityWaitTime }}.

@@ -29,7 +29,7 @@ export const TERESA_UNLOCKS = {
   UNDO: {
     id: 4,
     price: 1e10,
-    description: "This has no effect while in Doomed.",
+    description: "Unlock \"Undo\" of equipping a glyph.",
   },
   START_EU: {
     id: 5,

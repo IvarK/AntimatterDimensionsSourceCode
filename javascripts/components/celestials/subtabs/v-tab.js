@@ -223,8 +223,8 @@ Vue.component("v-tab", {
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
               <b style="font-size: 1.5rem">
-                <span v-if="isRunning">You are in </span>
                 <span v-if="isDoomed">You can't start<br></span>
+                <span v-else-if="isRunning">You are in </span>
                 <span v-else>Start </span>
                 V's Reality.
               </b>

@@ -1,4 +1,5 @@
 import { ProgressChecker } from "./progress-checker.js";
+import pako from "pako/dist/pako.esm.mjs";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",

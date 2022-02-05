@@ -1,4 +1,5 @@
 import { DC } from "./constants.js";
+import { log as lngamma } from "gamma";
 
 /* eslint-disable no-use-before-define */
 /* eslint-disable max-params */

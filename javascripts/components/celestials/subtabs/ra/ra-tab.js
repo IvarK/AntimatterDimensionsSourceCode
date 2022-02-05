@@ -46,7 +46,7 @@ Vue.component("ra-tab", {
         scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
         scalingUpgradeText: level => {
           const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${quantifyInt("Triad Study", triadCount)}.`;
+          return `You have unlocked ${formatInt(triadCount)}/${formatInt(4)} Triad Studies.`;
         },
       }
     ],

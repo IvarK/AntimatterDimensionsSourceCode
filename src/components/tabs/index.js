@@ -28,6 +28,7 @@ import TimeDilationTab from "./time-dilation/TimeDilationTab";
 import GlyphsTab from "./glyphs/GlyphsTab";
 import RealityUpgradesTab from "./reality-upgrades/RealityUpgradesTab";
 import ImaginaryUpgradesTab from "./imaginary-upgrades/ImaginaryUpgradesTab";
+import PerksTab from "./perks/PerksTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -58,7 +59,8 @@ const TabComponents = {
   TimeDilationTab,
   GlyphsTab,
   RealityUpgradesTab,
-  ImaginaryUpgradesTab
+  ImaginaryUpgradesTab,
+  PerksTab
 };
 
 export default TabComponents;

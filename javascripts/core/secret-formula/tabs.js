@@ -366,7 +366,7 @@ GameDatabase.tabs = [
         key: "perks",
         name: "Perks",
         symbol: "<i class='fas fa-project-diagram'></i>",
-        component: "perks-tab",
+        component: "PerksTab",
         id: 3,
         hidable: true,
       },

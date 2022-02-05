@@ -1,5 +1,36 @@
+<script>
 import { DataSet, Network } from "vis-network";
-import "./pp-label.js";
+import PpLabel from "./PpLabel";
+
+export default {
+  name: "PerksTab",
+  components: {
+    PpLabel
+  },
+  computed: {
+    showHintText() {
+      return ui.view.shiftDown || player.options.showHintText.perks;
+    }
+  },
+  watch: {
+    showHintText(newValue) {
+      if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+      else PerkNetwork.setLabelVisibility(newValue);
+    }
+  },
+  created() {
+    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColor());
+  },
+  mounted() {
+    PerkNetwork.initialStabilization = false;
+    PerkNetwork.initializeIfNeeded();
+    if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+    else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
+    PerkNetwork.updatePerkColor();
+    PerkNetwork.updatePerkSize();
+    this.$refs.tab.appendChild(PerkNetwork.container);
+  }
+};
 
 // Primary is lifted from the study tree (mostly),
 // secondary is primary -15% l in hsl, apart from reality which is -10%
@@ -154,8 +185,7 @@ export const PerkNetwork = {
     container.appendChild(canvas);
     this.container = container;
 
-    const network = new Network(container, nodeData, nodeOptions);
-    this.network = network;
+    this.network = new Network(container, nodeData, nodeOptions);
   },
   setPhysics(state) {
     this.network.physics.physicsEnabled = state;
@@ -240,33 +270,17 @@ export const PerkNetwork = {
     this.nodes.update(data);
   }
 };
+</script>
 
-Vue.component("perks-tab", {
-  watch: {
-    showHintText(newValue) {
-      if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
-      else PerkNetwork.setLabelVisibility(newValue);
-    }
-  },
-  created() {
-    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColor());
-  },
-  mounted() {
-    PerkNetwork.initialStabilization = false;
-    PerkNetwork.initializeIfNeeded();
-    if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
-    else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
-    PerkNetwork.updatePerkColor();
-    PerkNetwork.updatePerkSize();
-    this.$refs.tab.appendChild(PerkNetwork.container);
-  },
-  computed: {
-    showHintText() {
-      return ui.view.shiftDown || player.options.showHintText.perks;
-    }
-  },
-  template: `
-    <div ref="tab" class="c-perk-tab">
-      <pp-label />
-    </div>`
-});
+<template>
+  <div
+    ref="tab"
+    class="c-perk-tab"
+  >
+    <pp-label />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

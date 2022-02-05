@@ -1,3 +1,5 @@
+import Mousetrap from "mousetrap";
+
 class KeySpin {
   constructor(key, action) {
     this.key = key;

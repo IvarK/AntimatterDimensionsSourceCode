@@ -15,7 +15,8 @@
     "mousetrap": "^1.6.5",
     "pako": "^2.0.4",
     "tween.js": "^16.6.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

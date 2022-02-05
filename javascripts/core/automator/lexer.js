@@ -1,13 +1,10 @@
 // Note: chevrotain doesn't play well with unicode regex
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
+import { createToken, Lexer } from "chevrotain";
 import { DC } from "../constants.js";
 
-
 export const AutomatorLexer = (() => {
-  const createToken = chevrotain.createToken;
-  const Lexer = chevrotain.Lexer;
-
   const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
 
   // Shorthand for creating tokens and adding them to a list

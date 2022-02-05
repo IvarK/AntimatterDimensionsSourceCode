@@ -35,6 +35,7 @@ export const Enslaved = {
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
+    if (Pelle.isDoomed) return;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
     if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
@@ -42,10 +43,12 @@ export const Enslaved = {
     }
   },
   toggleStoreReal() {
+    if (Pelle.isDoomed) return;
     player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;
     player.celestials.enslaved.isStoring = false;
   },
   toggleAutoStoreReal() {
+    if (Pelle.isDoomed) return;
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get isStoringGameTime() {
@@ -68,6 +71,7 @@ export const Enslaved = {
     return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");
   },
   storeRealTime() {
+    if (Pelle.isDoomed) return;
     const thisUpdate = Date.now();
     const diff = Math.max(thisUpdate - player.lastUpdate, 0);
     const efficiency = this.storedRealTimeEfficiency;
@@ -88,10 +92,11 @@ export const Enslaved = {
   },
   canRelease(auto) {
     return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&
-      !(Enslaved.isRunning && auto);
+      !(Enslaved.isRunning && auto) && !Pelle.isDoomed;
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
+    if (Pelle.isDoomed) return;
     if (!this.canRelease(autoRelease)) return;
     if (EternityChallenge(12).isRunning) return;
     player.requirementChecks.reality.slowestBH = 1;

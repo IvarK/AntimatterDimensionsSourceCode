@@ -127,6 +127,10 @@ export const Pelle = {
     return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
   },
 
+  get uselessRaMilestones() {
+    return [0, 1, 15, 18, 19, 21];
+  },
+
   get remnantsGain() {
     let am = this.cel.records.totalAntimatter.plus(1).log10();
     let ip = this.cel.records.totalInfinityPoints.plus(1).log10();

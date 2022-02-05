@@ -1,11 +1,16 @@
+<script>
 import EffectDisplay from "@/components/EffectDisplay";
 
-Vue.component("alchemy-resource-info", {
+export default {
+  name: "AlchemyResourceInfo",
   components: {
     EffectDisplay
   },
   props: {
-    resource: Object
+    resource: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -80,26 +85,39 @@ Vue.component("alchemy-resource-info", {
         this.reactionProduction = this.reaction.production;
       }
     }
-  },
-  template: `
-    <div :class="classObject" v-if="isUnlocked">
-      <span class="c-alchemy-resource-info__title">
-        {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
-      </span>
-      <span>
-        {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
-        (Recent change: <span v-html="formattedFlow" />)
-      </span>
-      <span v-if="isBaseResource">Base Resource</span>
-      <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-      <span>
-        <EffectDisplay
-          label="Effect"
-          :config="effectConfig"
-        />
-      </span>
-    </div>
-    <div :class="classObject" v-else>
-      Unlock requirement: {{ unlockRequirement }}
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div
+    v-if="isUnlocked"
+    :class="classObject"
+  >
+    <span class="c-alchemy-resource-info__title">
+      {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
+    </span>
+    <span>
+      {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
+      (Recent change: <span v-html="formattedFlow" />)
+    </span>
+    <span v-if="isBaseResource">Base Resource</span>
+    <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
+    <span>
+      <EffectDisplay
+        label="Effect"
+        :config="effectConfig"
+      />
+    </span>
+  </div>
+  <div
+    v-else
+    :class="classObject"
+  >
+    Unlock requirement: {{ unlockRequirement }}
+  </div>
+</template>
+
+<style scoped>
+
+</style>

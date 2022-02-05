@@ -30,6 +30,7 @@ import RealityUpgradesTab from "./reality-upgrades/RealityUpgradesTab";
 import ImaginaryUpgradesTab from "./imaginary-upgrades/ImaginaryUpgradesTab";
 import PerksTab from "./perks/PerksTab";
 import BlackHoleTab from "./black-hole/BlackHoleTab";
+import AlchemyTab from "./alchemy/AlchemyTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -62,7 +63,8 @@ const TabComponents = {
   RealityUpgradesTab,
   ImaginaryUpgradesTab,
   PerksTab,
-  BlackHoleTab
+  BlackHoleTab,
+  AlchemyTab
 };
 
 export default TabComponents;

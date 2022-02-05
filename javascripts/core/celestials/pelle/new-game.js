@@ -3,12 +3,12 @@ export const NG = {
     return player.newGame.current;
   },
 
-  get bestPositive() {
-    return player.newGame.bestPlus;
+  get plusRecord() {
+    return player.newGame.plusRecord;
   },
 
-  get bestNegative() {
-    return player.newGame.bestMinus;
+  get minusRecord() {
+    return player.newGame.minusRecord;
   },
 
   get isNegative() {
@@ -23,5 +23,20 @@ export const NG = {
   get power() {
     if (!this.isNegative) return 1 + this.current * 0.02;
     return 0.99 ** Math.abs(this.current);
+  },
+
+  startNewGame(i) {
+    const backUpOptions = JSON.stringify(player.options);
+    const newGameBackup = JSON.stringify(player.newGame);
+    GameStorage.hardReset();
+    player.newGame = JSON.parse(newGameBackup);
+    player.newGame.current = i;
+    player.newGame.plusRecord = Math.max(player.newGame.plusRecord, i);
+    player.newGame.minusRecord = Math.min(player.newGame.minusRecord, i);
+    Pelle.additionalEnd = 0;
+    player.options = JSON.parse(backUpOptions);
+    ui.view.newUI = player.options.newUI;
+    Themes.find(player.options.theme).set();
+    Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
   }
 };

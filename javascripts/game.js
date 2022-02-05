@@ -129,15 +129,17 @@ function totalEPMult() {
 }
 
 export function gainedEternityPoints() {
+  const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
+  ep = ep.times(NG.multiplier);
   let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
     ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);
 
   if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
 
-  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).floor();
+  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -149,6 +151,8 @@ export function gainedEternityPoints() {
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
+
+  ep = ep.pow(pow);
   return ep.floor();
 }
 

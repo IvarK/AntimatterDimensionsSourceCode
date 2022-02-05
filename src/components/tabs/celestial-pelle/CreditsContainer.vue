@@ -9,6 +9,7 @@ export default {
   },
   methods: {
     update() {
+      if (!Pelle.isDoomed) return;
       this.rolling = Pelle.endState > 4.5;
       this.scroll = (Pelle.endState - 4.5) / 2 * 100;
       if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
@@ -29,7 +30,10 @@ export default {
 <template>
   <div
     class="credits-container"
-    :style="{ top: `${100 - scroll}vh`}"
+    :style="{
+      top: `${100 - scroll}vh`,
+      display: rolling ? 'block' : 'none'
+    }"
   >
     <h1>Antimatter Dimensions</h1>
     <h2>These credits and the song are a WIP</h2>

@@ -700,8 +700,8 @@ window.player = {
   },
   newGame: {
     current: 0,
-    bestPlus: 0,
-    bestMinus: 0,
+    plusRecord: 0,
+    minusRecord: 0,
   },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,

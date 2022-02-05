@@ -224,7 +224,7 @@ export const Glyphs = {
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
-        Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped`);
         return;
       }
       if (!player.options.confirmations.glyphReplace) {

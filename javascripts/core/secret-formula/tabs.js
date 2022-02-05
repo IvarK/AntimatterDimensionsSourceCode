@@ -311,7 +311,7 @@ GameDatabase.tabs = [
         key: "milestones",
         name: "Eternity Milestones",
         symbol: "<i class='fas fa-star'></i>",
-        component: "eternity-milestones-tab",
+        component: "EternityMilestonesTab",
         id: 2,
         hidable: true,
       },

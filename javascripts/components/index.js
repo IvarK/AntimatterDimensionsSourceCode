@@ -1,6 +1,5 @@
 import "./eternity/eternity-points-header.js";
 import "./eternity/upgrades/eternity-upgrades-tab.js";
-import "./eternity/milestones/eternity-milestones-tab.js";
 import "./eternity/dilation/time-dilation-tab.js";
 
 import "./reality/reality-machines-header.js";

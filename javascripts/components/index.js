@@ -1,5 +1,3 @@
-import "./reality/reality-machines-header.js";
-
 import "./celestials/navigation.js";
 import "./celestials/subtabs/teresa/teresa-tab.js";
 import "./celestials/subtabs/effarig/effarig-tab.js";

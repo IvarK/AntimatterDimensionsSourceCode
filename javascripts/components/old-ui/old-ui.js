@@ -5,6 +5,7 @@ import NewsTicker from "@/components/NewsTicker";
 import FooterLinks from "@/components/FooterLinks";
 import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
+import RealityMachinesHeader from "@/components/RealityMachinesHeader";
 
 Vue.component("old-ui", {
   components: {
@@ -14,7 +15,8 @@ Vue.component("old-ui", {
     NewsTicker,
     FooterLinks,
     InfinityPointsHeader,
-    EternityPointsHeader
+    EternityPointsHeader,
+    RealityMachinesHeader
   },
   data() {
     return {

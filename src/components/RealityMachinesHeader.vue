@@ -1,7 +1,9 @@
-Vue.component("reality-machines-header", {
+<script>
+export default {
+  name: "RealityMachinesHeader",
   data() {
     return {
-      realityMachines: new Decimal(0),
+      realityMachines: new Decimal(),
       unlockedIM: false,
       machineStr: "",
       capStr: "",
@@ -14,16 +16,23 @@ Vue.component("reality-machines-header", {
       this.machineStr = formatComplex(this.realityMachines, Currency.imaginaryMachines.value);
       this.capStr = formatComplex(MachineHandler.hardcapRM, MachineHandler.currentIMCap);
     }
-  },
-  template: `
-    <div class="c-reality-tab__header">
-      You have
-      <span class="c-reality-tab__reality-machines">
-        {{ machineStr }}
-      </span>
-      {{ pluralize("Reality Machine", realityMachines) }}.
-      <span v-if="unlockedIM">
-        (Cap: {{ capStr }})
-      </span>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="c-reality-tab__header">
+    You have
+    <span class="c-reality-tab__reality-machines">
+      {{ machineStr }}
+    </span>
+    {{ pluralize("Reality Machine", realityMachines) }}.
+    <span v-if="unlockedIM">
+      (Cap: {{ capStr }})
+    </span>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

@@ -9,12 +9,16 @@ import "./background-animations";
 import TabComponents from "@/components/tabs";
 import PopupModal from "@/components/modals/PopupModal";
 import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
+import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
+import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 
 Vue.component("game-ui", {
   components: {
     ...TabComponents,
     PopupModal,
-    FadeToBlack
+    FadeToBlack,
+    CreditsContainer,
+    NewGame
   },
   computed: {
     view() {
@@ -57,5 +61,7 @@ Vue.component("game-ui", {
       <save-timer />
       <speedrun-status />
       <FadeToBlack />
+      <CreditsContainer />
+      <NewGame />
     </div>`
 });

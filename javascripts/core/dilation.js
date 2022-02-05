@@ -113,6 +113,7 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 }
 
 export function getDilationGainPerSecond() {
+  const mult = NG.multiplier;
   if (Pelle.isDoomed) {
     const pelleMults = Pelle.activeGlyphType === "dilation" && PelleRifts.chaos.hasMilestone(1)
       ? PelleRifts.chaos.milestones[1].effect() : 1;
@@ -121,7 +122,7 @@ export function getDilationGainPerSecond() {
 
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
-      .times(pelleMults).div(3e4);
+      .times(pelleMults).div(3e4).times(mult);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
@@ -137,6 +138,7 @@ export function getDilationGainPerSecond() {
   dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
+  dtRate = dtRate.times(mult);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }

@@ -29,5 +29,6 @@ export default {
     height: 100%;
     pointer-events: none;
     background: black;
+    z-index: 6;
   }
 </style>

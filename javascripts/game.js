@@ -83,11 +83,13 @@ export function gainedInfinityPoints() {
     Achievement(103),
     TimeStudy(111)
   );
+  const mult = NG.multiplier;
+  const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
     const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
       ? PelleRifts.chaos.milestones[1].effect() : 1;
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine).times(pelleMults).floor();
+      .timesEffectsOf(PelleRifts.famine).times(pelleMults).times(mult).pow(pow).floor();
   }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
@@ -95,6 +97,7 @@ export function gainedInfinityPoints() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
+  ip = ip.times(mult);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -106,6 +109,8 @@ export function gainedInfinityPoints() {
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
+
+  ip = ip.pow(pow);
   return ip.floor();
 }
 
@@ -124,15 +129,17 @@ function totalEPMult() {
 }
 
 export function gainedEternityPoints() {
+  const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
+  ep = ep.times(NG.multiplier);
   let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
     ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);
 
   if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
 
-  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).floor();
+  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -144,6 +151,8 @@ export function gainedEternityPoints() {
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
+
+  ep = ep.pow(pow);
   return ep.floor();
 }
 

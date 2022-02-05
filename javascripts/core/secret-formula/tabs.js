@@ -464,7 +464,7 @@ GameDatabase.tabs = [
       {
         key: "pelle",
         name: "The Pelle",
-        symbol: "Ϛ",
+        symbol: "♅",
         component: "PelleTab",
         condition: () => Pelle.isUnlocked,
         id: 7,

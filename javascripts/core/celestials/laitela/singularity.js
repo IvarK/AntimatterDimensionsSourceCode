@@ -1,9 +1,10 @@
 import { GameMechanicState } from "../../game-mechanics/index.js";
+import { deepmergeAll } from "@/utility/deepmerge";
 
 class SingularityMilestoneState extends GameMechanicState {
   constructor(config) {
     const effect = config.effect;
-    const configCopy = deepmerge.all([{}, config]);
+    const configCopy = deepmergeAll([{}, config]);
     configCopy.effect = () => effect(this.completions);
     super(configCopy);
     this._rawEffect = effect;

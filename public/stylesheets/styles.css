@@ -8984,7 +8984,7 @@ input.o-automator-block-input {
   border: 0.1rem solid black;
   border-color: black;
   border-radius: 0.4rem;
-  box-shadow: none !important;
+  box-shadow: none;
   white-space: normal;
   font-weight: bold;
   cursor: pointer;
@@ -9002,7 +9002,7 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-button--always-visible {
-  background-color: var(--color-disabled)
+  background-color: var(--color-disabled);
   pointer-events: none;
 }
 

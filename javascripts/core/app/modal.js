@@ -183,7 +183,7 @@ Modal.celestialQuote = new class extends Modal {
       line: l,
       showName: !l.startsWith("*")
     }));
-    if (ui.view.modal.current === this) {
+    if (ui.view.modal.queue.includes(this)) {
       // This shouldn't come up often, but in case we do have a pile of quotes
       // being shown in a row:
       this.lines = this.lines.concat(newLines);

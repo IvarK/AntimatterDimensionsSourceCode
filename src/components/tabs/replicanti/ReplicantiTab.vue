@@ -194,8 +194,6 @@ export default {
         <span v-html="boostText" />
       </p>
       <br>
-      <span v-html="boostText" />
-      <br>
       <div class="l-replicanti-upgrade-row">
         <ReplicantiUpgradeButton :setup="replicantiChanceSetup" />
         <ReplicantiUpgradeButton :setup="replicantiIntervalSetup" />

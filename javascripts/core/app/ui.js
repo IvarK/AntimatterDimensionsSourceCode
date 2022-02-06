@@ -2,6 +2,7 @@ import { notify } from "./notify.js";
 import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
 import { useLongPress, useRepeatingClick } from "./longpress";
+import VueGtag from "vue-gtag";
 
 Vue.mixin({
   computed: {
@@ -178,6 +179,9 @@ Vue.use(VTooltip);
 
 useLongPress(Vue);
 useRepeatingClick(Vue);
+Vue.use(VueGtag, {
+  config: { id: "UA-77268961-1" }
+});
 
 export const ui = new Vue({
   el: "#ui",

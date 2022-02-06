@@ -18,6 +18,7 @@ GameDatabase.challenges.eternity = [
     id: 2,
     description: "Infinity Dimensions are disabled.",
     goal: DC.E975,
+    pelleGoal: DC.E1750,
     goalIncrease: DC.E175,
     reward: {
       description: "1st Infinity Dimension multiplier based on Infinity Power",
@@ -30,6 +31,7 @@ GameDatabase.challenges.eternity = [
     id: 3,
     description: "Antimatter Dimensions 5-8 don't produce anything. Dimensional Sacrifice is disabled.",
     goal: DC.E600,
+    pelleGoal: DC.E925,
     goalIncrease: DC.E75,
     reward: {
       description: () => `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions`,
@@ -61,6 +63,7 @@ GameDatabase.challenges.eternity = [
     description: () => `Antimatter Galaxy cost increase scaling starts immediately (normally at ${formatInt(100)}
       Galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: DC.E750,
+    pelleGoal: DC.E1400,
     goalIncrease: DC.E400,
     reward: {
       description: "Distant Galaxy cost scaling starts later",
@@ -82,6 +85,7 @@ GameDatabase.challenges.eternity = [
               " Galaxies is massively reduced.";
     },
     goal: DC.E850,
+    pelleGoal: DC.E1500,
     goalIncrease: DC.E250,
     reward: {
       description: "Further reduce Antimatter Dimension cost multiplier growth",
@@ -98,6 +102,7 @@ GameDatabase.challenges.eternity = [
       "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: DC.E2000,
+    pelleGoal: DC.E2700,
     goalIncrease: DC.E530,
     effect: () => TimeDimension(1).productionPerSecond,
     reward: {
@@ -111,6 +116,7 @@ GameDatabase.challenges.eternity = [
     description: () => `you can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
       upgrades ${formatInt(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
     goal: DC.E1300,
+    pelleGoal: DC.E2800,
     goalIncrease: DC.E900,
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
@@ -127,6 +133,7 @@ GameDatabase.challenges.eternity = [
       `you can't buy Tickspeed upgrades. Infinity Power instead multiplies
       Time Dimensions with greatly reduced effect.`,
     goal: DC.E1750,
+    pelleGoal: DC.E2900,
     goalIncrease: DC.E250,
     reward: {
       description: "Infinity Dimension multiplier based on Time Shards",
@@ -144,6 +151,7 @@ GameDatabase.challenges.eternity = [
       return description;
     },
     goal: DC.E3000,
+    pelleGoal: DC.E3200,
     goalIncrease: DC.E300,
     effect: () => Decimal.pow(Currency.infinitiesTotal.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
@@ -161,7 +169,9 @@ GameDatabase.challenges.eternity = [
       `all dimension multipliers and powers are disabled except for the multipliers from
       Infinity Power and Dimension Boosts (to Antimatter Dimensions).`,
     goal: DC.E500,
+    pelleGoal: DC.E11200,
     goalIncrease: DC.E200,
+    pelleGoalIncrease: DC.E1400,
     reward: {
       description: "Further reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
@@ -179,6 +189,7 @@ GameDatabase.challenges.eternity = [
       : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),
     goal: DC.E110000,
+    pelleGoal: DC.E208000,
     goalIncrease: DC.E12000,
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,

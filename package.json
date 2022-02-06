@@ -18,6 +18,7 @@
     "svg-pan-zoom": "^3.6.1",
     "tween.js": "^16.6.0",
     "uuid": "^8.0.0",
+    "v-tooltip": "^2.1.3",
     "vis-network": "^5.1.1",
     "vis-util": "^4.0.0",
     "vue": "^2.6.11",

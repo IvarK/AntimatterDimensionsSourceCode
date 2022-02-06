@@ -125,7 +125,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Existentially Prolong",
       id: 10,
       cost: 15,
-      requirement: () => `Complete your first Eternity with at least ${format(DC.E450)} Infinity Points`,
+      requirement: () => `Complete your first Eternity with at least ${formatPostBreak(DC.E450)} Infinity Points`,
       hasFailed: () => !player.requirementChecks.reality.noEternities,
       checkRequirement: () => Currency.infinityPoints.exponent >= 450 &&
         player.requirementChecks.reality.noEternities,

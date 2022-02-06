@@ -2,6 +2,7 @@ import { playFabLogin } from "./core/playfab.js";
 import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
+import { deepmergeAll } from "@/utility/deepmerge";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -829,7 +830,7 @@ function recursiveTimeOut(fn, iterations, endFn) {
 
 function afterSimulation(seconds, playerBefore) {
   if (seconds > 600) {
-    const playerAfter = deepmerge.all([{}, player]);
+    const playerAfter = deepmergeAll([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
@@ -858,7 +859,7 @@ export function simulateTime(seconds, real, fast) {
     ticks = 50;
   }
 
-  const playerStart = deepmerge.all([{}, player]);
+  const playerStart = deepmergeAll([{}, player]);
 
   let totalGameTime;
 

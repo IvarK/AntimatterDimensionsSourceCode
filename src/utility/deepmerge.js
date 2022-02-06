@@ -1,4 +1,4 @@
-// deepmerge library modified for Antimatter Dimensions usage (mainly Decimal integration)
+// Deepmerge library modified for Antimatter Dimensions usage (mainly Decimal integration)
 // Source: https://github.com/TehShrike/deepmerge
 
 function emptyTarget(val) {
@@ -12,25 +12,23 @@ function cloneUnlessOtherwiseSpecified(value, options) {
   if (value instanceof Set) {
     return new Set(value);
   }
-  return (options.clone !== false && options.isMergeableObject(value)) ?
-    deepmerge(emptyTarget(value), value, options) :
-    value;
+  return (options.clone !== false && options.isMergeableObject(value))
+    ? deepmerge(emptyTarget(value), value, options)
+    : value;
 }
 
 function defaultArrayMerge(target, source, options) {
-  return target.concat(source).map(function(element) {
-    return cloneUnlessOtherwiseSpecified(element, options);
-  });
+  return target.concat(source).map(element => cloneUnlessOtherwiseSpecified(element, options));
 }
 
 function mergeObject(target, source, options) {
   const destination = {};
   if (options.isMergeableObject(target)) {
-    Object.keys(target).forEach(function(key) {
+    Object.keys(target).forEach(key => {
       destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
     });
   }
-  Object.keys(source).forEach(function(key) {
+  Object.keys(source).forEach(key => {
     if (target[key] && target[key] instanceof Decimal) {
       destination[key] = new Decimal(source[key]);
     } else if (target[key] && target[key] instanceof Set) {
@@ -44,8 +42,7 @@ function mergeObject(target, source, options) {
   return destination;
 }
 
-function deepmerge(target, source, options) {
-  options = options || {};
+export function deepmerge(target, source, options = {}) {
   options.arrayMerge = options.arrayMerge || defaultArrayMerge;
   options.isMergeableObject = options.isMergeableObject || isMergeableObject;
 
@@ -63,51 +60,55 @@ function deepmerge(target, source, options) {
 
   if (!sourceAndTargetTypesMatch) {
     return cloneUnlessOtherwiseSpecified(source, options);
-  } else if (sourceIsArray) {
-    return options.arrayMerge(target, source, options);
-  } else {
-    return mergeObject(target, source, options);
   }
+
+  if (sourceIsArray) {
+    return options.arrayMerge(target, source, options);
+  }
+
+  return mergeObject(target, source, options);
 }
 
-deepmerge.all = function deepmergeAll(array, options) {
+export function deepmergeAll(array, options) {
   if (!Array.isArray(array)) {
-    throw new Error('first argument should be an array');
+    throw new Error("first argument should be an array");
   }
 
   if (!options) {
-    const deepCloneMerge = (destinationArray, sourceArray, options) => {
-      return sourceArray.map(function(element, index) {
-        if (destinationArray[index] && destinationArray[index] instanceof Decimal) {
-          return new Decimal(element);
-        } else if (destinationArray[index] && destinationArray[index] instanceof Set) {
-          return new Set(element);
-        } else if (!options.isMergeableObject(element) || !destinationArray[index]) {
-          return cloneUnlessOtherwiseSpecified(element, options);
-        } else {
-          return deepmerge(destinationArray[index], element, options);
-        }
-      });
-    };
+    // eslint-disable-next-line no-shadow
+    const deepCloneMerge = (destinationArray, sourceArray, options) => sourceArray.map((element, index) => {
+      if (destinationArray[index] && destinationArray[index] instanceof Decimal) {
+        return new Decimal(element);
+      }
+
+      if (destinationArray[index] && destinationArray[index] instanceof Set) {
+        return new Set(element);
+      }
+
+      if (!options.isMergeableObject(element) || !destinationArray[index]) {
+        return cloneUnlessOtherwiseSpecified(element, options);
+      }
+      return deepmerge(destinationArray[index], element, options);
+
+    });
+    // eslint-disable-next-line no-param-reassign
     options = {
       arrayMerge: deepCloneMerge
     };
   }
 
-  return array.reduce(function(prev, next) {
-    return deepmerge(prev, next, options);
-  }, {});
-};
+  return array.reduce((prev, next) => deepmerge(prev, next, options), {});
+}
 
 function isMergeableObject(value) {
   return isNonNullObject(value) && !isSpecial(value);
 }
 
 function isNonNullObject(value) {
-  return !!value && typeof value === 'object';
+  return Boolean(value) && typeof value === "object";
 }
 
 function isSpecial(value) {
   const stringValue = Object.prototype.toString.call(value);
-  return stringValue === '[object RegExp]' || stringValue === '[object Date]';
+  return stringValue === "[object RegExp]" || stringValue === "[object Date]";
 }

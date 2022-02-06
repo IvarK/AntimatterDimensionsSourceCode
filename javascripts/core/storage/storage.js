@@ -1,4 +1,5 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
+import { deepmergeAll } from "@/utility/deepmerge";
 
 export const GameStorage = {
   currentSlot: 0,
@@ -184,7 +185,7 @@ export const GameStorage = {
         // eslint-disable-next-line no-console
         console.log(`Savefile was invalid and has been reset - ${checkString}`);
       }
-      player = deepmerge.all([{}, Player.defaultStart]);
+      player = deepmergeAll([{}, Player.defaultStart]);
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);

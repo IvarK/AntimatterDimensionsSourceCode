@@ -1,4 +1,5 @@
 <script>
+import SplitPane from "vue-splitpane";
 import AutomatorEditor from "./AutomatorEditor";
 import AutomatorPointsList from "./AutomatorPointsList";
 import AutomatorDocs from "./AutomatorDocs";
@@ -6,6 +7,7 @@ import AutomatorDocs from "./AutomatorDocs";
 export default {
   name: "AutomatorTab",
   components: {
+    SplitPane,
     AutomatorEditor,
     AutomatorPointsList,
     AutomatorDocs
@@ -59,7 +61,7 @@ export default {
       in which case the next command will be immediately processed after the slower command is run.
       <br>
       The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
-      <split-pane
+      <SplitPane
         :min-percent="40"
         :default-percent="50"
         split="vertical"
@@ -67,7 +69,7 @@ export default {
       >
         <AutomatorEditor slot="paneL" />
         <AutomatorDocs slot="paneR" />
-      </split-pane>
+      </SplitPane>
     </div>
     <AutomatorPointsList v-else />
   </div>

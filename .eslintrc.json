@@ -108,7 +108,12 @@
         "allowSingleLine": true
       }
     ],
-    "camelcase": "error",
+    "camelcase": [
+      "error",
+      {
+        "allow": ["sha512_256"]
+      }
+    ],
     "capitalized-comments": [
       "error",
       "always",

@@ -4,7 +4,8 @@ Vue.component("eternity-milestone", {
   },
   data() {
     return {
-      isReached: false
+      isReached: false,
+      isObsoleteWithPelle: false
     };
   },
   computed: {
@@ -36,6 +37,7 @@ Vue.component("eternity-milestone", {
   methods: {
     update() {
       this.isReached = this.milestone.isReached;
+      this.isObsoleteWithPelle = this.config.pelleObsolete?.();
     }
   },
   template: `
@@ -47,7 +49,7 @@ Vue.component("eternity-milestone", {
         :class="rewardClassObject"
         v-tooltip="activeCondition"
       >
-        {{ reward }}
+        {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : ""}}
       </button>
     </div>`
 });

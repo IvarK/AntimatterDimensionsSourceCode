@@ -9002,7 +9002,7 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-button--always-visible {
-  background-color: var(--color-disabled) !important;
+  background-color: var(--color-disabled)
   pointer-events: none;
 }
 
@@ -9012,46 +9012,46 @@ input.o-automator-block-input {
 
 .c-hide-modal-tab-button--infinity {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-infinity) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--infinity:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-infinity) !important;
+  background: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--eternity {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-eternity) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-eternity)
 }
 
 .c-hide-modal-tab-button--eternity:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-eternity) !important;
+  background: var(--color-eternity);
 }
 
 .c-hide-modal-tab-button--reality {
   color: var(--color-reality);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-reality) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--reality:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-reality) !important;
+  background: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--celestials {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-celestials) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-celestials);
 }
 
 .c-hide-modal-tab-button--celestials:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-celestials) !important;
+  background: var(--color-celestials);
 }
 
 /* Prevent any themes overriding font awesome */

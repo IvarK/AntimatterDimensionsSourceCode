@@ -781,7 +781,7 @@ export const RA_UNLOCKS = {
     id: 23,
     description: "Get V to level 5",
     reward: () => `All Memory Chunks produce more Memories based on total Celestial levels,
-      and unlock a Triad Study every ${formatInt(5)} levels.
+      and unlock a Triad Study every ${formatInt(5)} levels (to a maximum of ${formatInt(4)} Triad Studies).
       Triad Studies are located at the bottom of the Time Studies page`,
     pet: Ra.pets.v,
     level: 5,

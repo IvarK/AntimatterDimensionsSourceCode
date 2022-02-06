@@ -40,6 +40,7 @@ export default {
       }
     },
     handleYesClick() {
+      Modal.hide();
       GlyphSacrificeHandler.sacrificeGlyph(this.glyph, true);
     },
   },

@@ -1,3 +1,21 @@
+<script>
+import PelleRift from "./PelleRift.vue";
+
+export default {
+  name: "PelleStrike",
+  components: {
+    PelleRift
+  },
+  props: {
+    strike: {
+      type: Object,
+      required: true
+    },
+    compact: Boolean
+  },
+};
+</script>
+
 <template>
   <div>
     <div
@@ -14,19 +32,6 @@
     />
   </div>
 </template>
-
-<script>
-import PelleRift from "./PelleRift.vue";
-export default {
-  components: {
-    PelleRift
-  },
-  props: {
-    strike: Object,
-    compact: Boolean
-  },
-};
-</script>
 
 <style>
   .c-pelle-strike {

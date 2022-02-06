@@ -1,20 +1,6 @@
-<template>
-  <button
-    class="c-armageddon-button"
-    :class="{ 'c-armageddon-button--unavailable': !canArmageddon }"
-    @click="armageddon"
-  >
-    Armageddon for
-    <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
-    remnants<br>
-    Reality shard gain
-    <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ->
-    <span class="c-reality-shard-gain">{{ format(nextRealityShardGain, 2, 2) }}</span>/s
-  </button>
-</template>
-
 <script>
 export default {
+  name: "ArmageddonButton",
   data() {
     return {
       remnantsGain: 0,
@@ -37,6 +23,21 @@ export default {
 };
 </script>
 
+<template>
+  <button
+    class="c-armageddon-button"
+    :class="{ 'c-armageddon-button--unavailable': !canArmageddon }"
+    @click="armageddon"
+  >
+    Armageddon for
+    <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
+    remnants<br>
+    Reality shard gain
+    <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ->
+    <span class="c-reality-shard-gain">{{ format(nextRealityShardGain, 2, 2) }}</span>/s
+  </button>
+</template>
+
 <style scoped>
   .c-armageddon-button {
     padding: 2rem;
@@ -47,7 +48,6 @@ export default {
     border: 1px solid var(--color-pelle--base);
     color: white;
     border-radius: 5px;
-
   }
 
   .c-armageddon-button:hover {

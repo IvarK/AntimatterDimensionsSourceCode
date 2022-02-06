@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "CreditsContainer",
   data() {
     return {
       rolling: false,
@@ -7,20 +8,20 @@ export default {
       audio: null,
     };
   },
-  methods: {
-    update() {
-      if (!Pelle.isDoomed) return;
-      this.rolling = Pelle.endState > 4.5;
-      this.scroll = (Pelle.endState - 4.5) / 2 * 100;
-      if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
-    }
-  },
   watch: {
     rolling(newVal, oldVal) {
       if (!oldVal && newVal && this.audio === null) {
         this.audio = new Audio(`audio/credits.mp3`);
         this.audio.play();
       }
+    }
+  },
+  methods: {
+    update() {
+      if (!Pelle.isDoomed) return;
+      this.rolling = Pelle.endState > 4.5;
+      this.scroll = (Pelle.endState - 4.5) / 2 * 100;
+      if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
     }
   }
 };
@@ -80,7 +81,7 @@ export default {
     <p>tester here</p>
     <p>tester here</p>
     <p>tester here</p>
-    <h2></h2>
+    <h2 />
     <h1>Thank you so much for playing!</h1>
   </div>
 </template>

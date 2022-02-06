@@ -1,3 +1,84 @@
+<script>
+import CostDisplay from "../../CostDisplay.vue";
+import DescriptionDisplay from "../../DescriptionDisplay.vue";
+
+export default {
+  name: "PelleUpgrade",
+  components: {
+    DescriptionDisplay,
+    CostDisplay
+  },
+  props: {
+    upgrade: {
+      type: Object,
+      required: true
+    },
+    faded: {
+      type: Boolean,
+      required: false
+    },
+    galaxyGenerator: {
+      type: Boolean,
+      required: false,
+    },
+    showImprovedEstimate: {
+      type: Boolean,
+      required: false,
+    },
+  },
+  data() {
+    return {
+      canBuy: false,
+      isBought: false,
+      purchases: 0,
+      currentTimeEstimate: new Decimal(0),
+      projectedTimeEstimate: new Decimal(0),
+      isCapped: false
+    };
+  },
+  computed: {
+    config() {
+      return this.upgrade.config;
+    },
+    effect() {
+      if (!this.config.formatEffect) return false;
+      return this.config.formatEffect(this.purchases);
+    },
+    timeEstimate() {
+      if (this.canBuy ||
+        this.isBought ||
+        Pelle.realityShardGainPerSecond.eq(0) ||
+        this.isCapped ||
+        this.galaxyGenerator
+      ) return null;
+      return this.currentTimeEstimate;
+    },
+    estimateImprovement() {
+      // If the improved value is still "> 1 year" then we only show it once
+      if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
+      return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
+    }
+  },
+  methods: {
+    update() {
+      this.canBuy = this.upgrade.canBeBought && !this.faded;
+      this.isBought = this.upgrade.isBought;
+      this.isCapped = this.upgrade.isCapped;
+      this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
+      this.currentTimeEstimate = TimeSpan
+        .fromSeconds(this.secondsUntilCost(Pelle.realityShardGainPerSecond).toNumber())
+        .toTimeEstimate();
+      this.projectedTimeEstimate = TimeSpan
+        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
+        .toTimeEstimate();
+    },
+    secondsUntilCost(rate) {
+      return Decimal.sub(this.upgrade.cost, Currency.realityShards.value).div(rate);
+    },
+  }
+};
+</script>
+
 <template>
   <button
     class="c-pelle-upgrade"
@@ -26,73 +107,6 @@
     />
   </button>
 </template>
-
-<script>
-import CostDisplay from "../../CostDisplay.vue";
-import DescriptionDisplay from "../../DescriptionDisplay.vue";
-export default {
-  components: {
-    DescriptionDisplay,
-    CostDisplay
-  },
-  props: {
-    upgrade: Object,
-    faded: Boolean,
-    galaxyGenerator: Boolean,
-    showImprovedEstimate: Boolean,
-  },
-  data() {
-    return {
-      canBuy: false,
-      isBought: false,
-      purchases: 0,
-      currentTimeEstimate: new Decimal(0),
-      projectedTimeEstimate: new Decimal(0),
-      isCapped: false
-    };
-  },
-  methods: {
-    update() {
-      this.canBuy = this.upgrade.canBeBought && !this.faded;
-      this.isBought = this.upgrade.isBought;
-      this.isCapped = this.upgrade.isCapped;
-      this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
-      this.currentTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(Pelle.realityShardGainPerSecond).toNumber())
-        .toTimeEstimate();
-      this.projectedTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
-        .toTimeEstimate();
-    },
-    secondsUntilCost(rate) {
-      return Decimal.sub(this.upgrade.cost, Currency.realityShards.value).div(rate);
-    },
-  },
-  computed: {
-    config() {
-      return this.upgrade.config;
-    },
-    effect() {
-      if (!this.config.formatEffect) return false;
-      return this.config.formatEffect(this.purchases);
-    },
-    timeEstimate() {
-      if (this.canBuy ||
-        this.isBought ||
-        Pelle.realityShardGainPerSecond.eq(0) ||
-        this.isCapped ||
-        this.galaxyGenerator
-      ) return null;
-      return this.currentTimeEstimate;
-    },
-    estimateImprovement() {
-      // If the improved value is still "> 1 year" then we only show it once
-      if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
-      return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
-    }
-  }
-};
-</script>
 
 <style scoped>
   .c-pelle-upgrade {

@@ -1,12 +1,12 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "PelleEffectsModal",
   components: {
     PrimaryButton,
-    ModalCloseButton,
+    ModalWrapper,
   },
   data() {
     return {
@@ -60,31 +60,14 @@ export default {
       ]
     };
   },
-  computed: {
-    modal() {
-      return this.$viewModel.modal.current;
-    },
-  },
-  methods: {
-    update() {
-      this.message = this.modal.message;
-    },
-    handleClick() {
-      this.modal.callback?.();
-      this.emitClose();
-    }
-  },
 };
 </script>
 
 <template>
-  <div class="l-modal-content--centered">
-    <ModalCloseButton
-      v-if="modal.closeButton"
-      class="c-modal__close-btn--tiny"
-      @click="emitClose"
-    />
-    <h1>List of disabled effects in Doomed</h1>
+  <ModalWrapper>
+    <template #header>
+      List of disabled effects in Doomed
+    </template>
     <div class="pelle-effects-container">
       <p
         v-for="(nerf, idx) in nerfs"
@@ -95,11 +78,11 @@ export default {
     </div>
     <PrimaryButton
       class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-      @click="handleClick"
+      @click="emitClose"
     >
       Okay
     </PrimaryButton>
-  </div>
+  </ModalWrapper>
 </template>
 
 <style scoped>

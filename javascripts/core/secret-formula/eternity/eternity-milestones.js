@@ -15,9 +15,9 @@ GameDatabase.eternity.milestones = {
   },
   keepInfinityUpgrades: {
     eternities: 4,
-    reward: () => (PelleUpgrade.keepInfinityUpgrades.isBought
-      ? "You start Eternity with all Infinity Upgrades (This is already granted by Pelle)"
-      : "You start Eternity with all Infinity Upgrades"),
+    reward: () => `You start Eternity with all Infinity Upgrades${
+      PelleUpgrade.keepInfinityUpgrades.isBought ? " (This is already granted by Pelle)" : ""
+    }`,
   },
   bigCrunchModes: {
     eternities: 5,
@@ -41,7 +41,8 @@ GameDatabase.eternity.milestones = {
     eternities: 7,
     reward: () => (PelleUpgrade.keepInfinityChallenges.isBought
       // eslint-disable-next-line max-len
-      ? "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer) (This is already granted by Pelle)"
+      ? "You complete Infinity Challenges as soon as you unlock them " +
+        "(and keep the Dimensional Sacrifice Autobuyer) (This is already granted by Pelle)"
       : "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer)"),
   },
   keepBreakUpgrades: {

@@ -23,7 +23,7 @@ export default {
         "Imaginary Upgrades are disabled",
         "Reality Upgrade \"Existentially Prolong\" is disabled",
         "Replicanti Interval multipliers are disabled except the interval upgrade",
-        "The following achievement rewards are disabled: 143, 142, 141, 125, 118, 117, 111, 103, 92, 91, 76, 74, 65",
+        "The following achievement rewards are disabled: 65, 74, 76, 91, 92, 103, 111, 117, 118, 125, 141, 142, 143",
         "Achievement multiplier is disabled",
         "Antimatter Dimension Autobuyers are disabled until reacquired",
         "Infinity Dimension Autobuyers are disabled until reacquired",

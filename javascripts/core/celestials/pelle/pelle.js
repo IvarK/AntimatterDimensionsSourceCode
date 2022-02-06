@@ -131,6 +131,10 @@ export const Pelle = {
     return [0, 1, 15, 18, 19, 21];
   },
 
+  get remnantRequirementForDilation() {
+    return 3.8e7;
+  },
+
   get remnantsGain() {
     let am = this.cel.records.totalAntimatter.plus(1).log10();
     let ip = this.cel.records.totalInfinityPoints.plus(1).log10();

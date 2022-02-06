@@ -53,16 +53,14 @@ Vue.component("ep-multiplier-button", {
       <button :class="classObject" @click="upgrade.purchase()">
         <div v-if="inDoomed">
           This multiplier has no effect while in Doomed
-          <br>
-          Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
         </div>
         <div v-else>
           Multiply Eternity Points from all sources by {{ formatX(5) }}
           <br>
           Currently: {{ formatX(multiplier, 2, 0) }}
-          <br>
-          Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
         </div>
+        <br>
+        Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
       </button>
       <PrimaryButton
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"

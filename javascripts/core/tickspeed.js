@@ -42,7 +42,7 @@ export function getTickSpeedMultiplier() {
       PelleRebuyableUpgrade.galaxyPower
     );
     if (Pelle.isDoomed) galaxies *= 0.5;
-    if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(new Decimal("1e1300"))) {
+    if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(DC.E1300)) {
       galaxies *= 1.1;
     }
 
@@ -69,7 +69,7 @@ export function getTickSpeedMultiplier() {
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
   if (Pelle.isDoomed) galaxies *= 0.5;
-  if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(new Decimal("1e1300"))) {
+  if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(DC.E1300)) {
     galaxies *= 1.1;
   }
 

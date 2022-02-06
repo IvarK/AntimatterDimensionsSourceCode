@@ -17,6 +17,7 @@ GameDatabase.eternity.dilation = (function() {
       formatCost: config.formatCost,
       purchaseCap: config.purchaseCap,
       reachedCap: () => player.dilation.rebuyables[config.id] >= config.purchaseCap,
+      pelleOnly: Boolean(config.pelleOnly),
       rebuyable: true
     };
   }
@@ -173,12 +174,14 @@ GameDatabase.eternity.dilation = (function() {
     galaxyThresholdPelle: {
       id: 14,
       cost: 1e45,
+      pelleOnly: true,
       description: "Cubic root Tachyon Galaxy threshold",
       effect: 1 / 3
     },
     flatDilationMult: {
       id: 15,
       cost: 1e55,
+      pelleOnly: true,
       description: () => `Gain more Dilated Time based on EP`,
       effect: () => 1e9 ** Math.min((Math.max(player.eternityPoints.log10() - 1500, 0) / 2500) ** 1.2, 1),
       formatEffect: value => formatX(value, 2, 2)

@@ -96,12 +96,10 @@ export function separateEffectKey(effectKey) {
 // Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
 // since there is some id overlap. Those should be filtered out as needed after calling this function.
 export function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
-  let str = strength;
-  if (Pelle.isDoomed) str = 1;
   return getGlyphEffectsFromBitmask(bitmask)
     .map(effect => ({
       id: effect.id,
-      value: effect.effect(level, str)
+      value: effect.effect(level, Pelle.isDoomed ? 1 : strength)
     }));
 }
 
@@ -113,10 +111,7 @@ export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
     return undefined;
   }
 
-  let str = glyph.strength;
-  if (Pelle.isDoomed) str = 1;
-
-  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), str);
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), Pelle.isDoomed ? 1 : strength);
 }
 
 // Note this function is used for glyph bitmasks, news ticker bitmasks, and offline achievements

@@ -72,7 +72,7 @@ Vue.component("reality-reminder", {
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
       // Repeatable dilation upgrades don't have isBought, but do have boughtAmount
       this.unpurchasedDilationUpgrades = Object.values(DilationUpgrade)
-        .countWhere(u => (u.isBought === undefined ? u.boughtAmount === 0 : !u.isBought));
+        .countWhere(u => (u.isBought === undefined ? u.boughtAmount === 0 : !u.isBought) && !u.config.pelleOnly);
       this.currLog10EP = player.eternityPoints.log10();
       this.cheapestLog10TD = Math.min(...TimeDimensions.all.map(x => x.cost.log10()));
       this.multEPLog10Cost = EternityUpgrade.epMult.cost.log10();

@@ -56,7 +56,10 @@ Vue.component("equipped-glyphs", {
       this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
       // eslint-disable-next-line max-len
-      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0 && !this.isDoomed;
+      this.undoAvailable = this.undoVisible &&
+        this.undoSlotsAvailable &&
+        player.reality.glyphs.undo.length > 0 &&
+        !this.isDoomed;
     },
     glyphPositionStyle(idx) {
       return {

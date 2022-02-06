@@ -32,8 +32,6 @@ export function playerInfinityUpgradesOnReset() {
 
   if (PelleUpgrade.keepBreakInfinityUpgrades.canBeApplied) {
     player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => breakInfinityUpgrades.has(u)));
-    GameCache.tickSpeedMultDecrease.invalidate();
-    GameCache.dimensionMultDecrease.invalidate();
     return;
   }
 
@@ -534,7 +532,7 @@ export function gameLoop(passDiff, options = {}) {
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
 
-  if (!Pelle.isDisabled("infinitiedGen")) {
+  if (!Pelle.isDoomed) {
     passivePrestigeGen();
   }
 

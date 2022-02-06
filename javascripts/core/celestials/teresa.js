@@ -9,7 +9,7 @@ export const TERESA_UNLOCKS = {
     description: "Unlock Teresa's Reality.",
   },
   EPGEN: {
-    id: "EPGEN",
+    id: 1,
     price: 1e18,
     get description() {
       if (Pelle.isDoomed) return "This has no effect while in Doomed.";

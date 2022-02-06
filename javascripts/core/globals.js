@@ -18,6 +18,8 @@ export * from "./storage/index.js";
 export * from "./notations.js";
 export * from "./tutorial.js";
 
+export * from "./new-game.js";
+
 export * from "./celestials/quotes.js";
 export * from "./celestials/teresa.js";
 export * from "./celestials/effarig.js";
@@ -30,7 +32,6 @@ export * from "./celestials/laitela/dark-matter-dimension.js";
 export * from "./celestials/laitela/singularity.js";
 export * from "./celestials/pelle/pelle.js";
 export * from "./celestials/pelle/galaxyGenerator.js";
-export * from "./celestials/pelle/new-game.js";
 export * from "./celestials/celestials.js";
 
 export * from "./automator/index.js";

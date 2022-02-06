@@ -87,7 +87,7 @@ Vue.component("header-challenge-display", {
     },
     challengeDisplay() {
       if (this.inPelle) return "a Doomed Reality. Good luck.";
-      if (this.activeChallengeNames.length === 0 && !Pelle.isDoomed) {
+      if (this.activeChallengeNames.length === 0) {
         return "the Antimatter Universe (no active challenges)";
       }
       return this.activeChallengeNames.join(" + ");

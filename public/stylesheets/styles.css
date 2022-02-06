@@ -8982,7 +8982,6 @@ input.o-automator-block-input {
   width: 12rem;
   margin: 0.2rem;
   border: 0.1rem solid black;
-  border-color: black;
   border-radius: 0.4rem;
   box-shadow: none;
   white-space: normal;
@@ -8992,6 +8991,10 @@ input.o-automator-block-input {
   padding: 0.3rem 1rem;
 }
 
+.c-hide-modal-tab-button:hover {
+  color: var(--color-text-inverted);
+  background-color: var(--color-good);
+}
 
 .c-hide-modal-button--active {
   opacity: 1;

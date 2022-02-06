@@ -359,8 +359,8 @@ export default {
       const boundary = 100;
       if (ev.clientY < boundary) {
         this.$viewModel.scrollWindow = -1 + 0.9 * ev.clientY / boundary;
-      } else if (ev.clientY > $(window).height() - boundary) {
-        this.$viewModel.scrollWindow = 1 - 0.9 * ($(window).height() - ev.clientY) / boundary;
+      } else if (ev.clientY > window.innerHeight - boundary) {
+        this.$viewModel.scrollWindow = 1 - 0.9 * (window.innerHeight - ev.clientY) / boundary;
       } else {
         this.$viewModel.scrollWindow = 0;
       }

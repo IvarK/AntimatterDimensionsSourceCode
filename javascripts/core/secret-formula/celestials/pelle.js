@@ -267,7 +267,7 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.2,
-            description: "First rebuyable upgrade also powers the first Infinity Dimension",
+            description: "First rebuyable Pelle upgrade also powers the first Infinity Dimension",
             effect: () => {
               const x = player.celestials.pelle.rebuyables.antimatterDimensionMult;
               return Decimal.pow(1e50, x - 9);

@@ -20,7 +20,7 @@ Vue.component("sidebar-currency", {
       this.IP.copyFrom(Currency.infinityPoints);
       this.EP.copyFrom(Currency.eternityPoints);
       this.RM.copyFrom(Currency.realityMachines);
-      this.IM = Currency.imaginaryMachines;
+      this.IM = Currency.imaginaryMachines.value;
       this.RS.copyFrom(Currency.realityShards);
       this.machineStr = formatComplex(this.RM, this.IM);
       this.showIP = PlayerProgress.infinityUnlocked();

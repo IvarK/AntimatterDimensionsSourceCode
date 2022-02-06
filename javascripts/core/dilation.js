@@ -21,7 +21,7 @@ export function animateAndUndilate() {
 }
 
 export function startDilatedEternityRequest() {
-  if (!PlayerProgress.dilationUnlocked() || Pelle.cel.remnants < 3.8e7) return;
+  if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) return;
   const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
   if (player.dilation.active) {
     // TODO Dilation modal

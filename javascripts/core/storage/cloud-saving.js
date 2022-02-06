@@ -1,5 +1,6 @@
-import { ProgressChecker } from "./progress-checker.js";
 import pako from "pako/dist/pako.esm.mjs";
+import { decodeBase64Binary } from "./base64-binary";
+import { ProgressChecker } from "./progress-checker.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
@@ -34,7 +35,7 @@ export const Cloud = {
     const snapshot = await this.db.ref(`users/${this.user.id}/player`).get();
     if (snapshot.exists) {
       const encoded = snapshot.val();
-      const uintArray = Base64Binary.decode(encoded.replace(/-/gu, "+").replace(/_/gu, "/"));
+      const uintArray = decodeBase64Binary(encoded.replace(/-/gu, "+").replace(/_/gu, "/"));
       const save = pako.ungzip(uintArray, { to: "string" });
       // TODO: do something with this.
       JSON.parse(save);

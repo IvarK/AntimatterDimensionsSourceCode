@@ -8966,9 +8966,14 @@ input.o-automator-block-input {
   border-radius: 0;
 }
 
+.s-base--metro .c-hide-modal-tab-button { 
+  border-radius: 0; 
+}
+
 .c-hide-modal-tab-button {
   color: var(--color-text);
   background-color: var(--color-base);
+  font: Typewriter, serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8976,12 +8981,17 @@ input.o-automator-block-input {
   height: 4rem;
   width: 12rem;
   margin: 0.2rem;
+  border: 0.1rem solid black;
   border-color: black;
+  border-radius: 0.4rem;
   box-shadow: none !important;
   white-space: normal;
   font-weight: bold;
   cursor: pointer;
+  transition-duration: 0.2s;
+  padding: 0.3rem 1rem;
 }
+
 
 .c-hide-modal-button--active {
   opacity: 1;

@@ -63,6 +63,7 @@ export class Modal {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
+    this.canRepeat = false;
   }
 
   show(modalConfig) {
@@ -70,7 +71,7 @@ export class Modal {
     this._props = Object.assign({}, modalConfig || {});
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
-    if (!ui.view.modal.queue.includes(this)) ui.view.modal.queue.push(this);
+    if (!ui.view.modal.queue.includes(this) || this.canRepeat) ui.view.modal.queue.push(this);
   }
 
   get isOpen() {
@@ -87,6 +88,11 @@ export class Modal {
 
   get props() {
     return this._props;
+  }
+
+  setAsRepeatable() {
+    this.canRepeat = true;
+    return this;
   }
 
   static hide() {
@@ -258,4 +264,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal);
+}(MessageModal).setAsRepeatable();

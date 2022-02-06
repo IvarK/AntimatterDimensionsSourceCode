@@ -16,6 +16,8 @@ export default {
   },
   data() {
     return {
+      isDisabled: false,
+      isDoomed: false,
       isUnlocked: false,
       isMouseOver: false,
       isCancer: false,
@@ -38,9 +40,10 @@ export default {
     classObject() {
       return {
         "o-achievement": true,
-        "o-achievement--locked": !this.isUnlocked,
+        "o-achievement--disabled": this.isDisabled,
+        "o-achievement--locked": !this.isUnlocked && !this.isDisabled,
         "o-achievement--unlocked": this.isUnlocked,
-        "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement,
+        "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
         "o-achievement--blink": !this.isUnlocked && this.id === 78,
         "o-achievement--normal": !this.isCancer,
         "o-achievement--cancer": this.isCancer
@@ -48,14 +51,15 @@ export default {
     },
     indicatorIconClass() {
       if (this.isUnlocked) return "fas fa-check";
-      if (this.isPreRealityAchievement) return "far fa-clock";
+      if (this.isPreRealityAchievement && !this.isDisabled) return "far fa-clock";
       return "fas fa-times";
     },
     indicatorClassObject() {
       return {
         "o-achievement__indicator": true,
-        "o-achievement__indicator--locked": !this.isUnlocked && !this.isPreRealityAchievement,
-        "o-achievement__indicator--waiting": !this.isUnlocked && this.isPreRealityAchievement,
+        "o-achievement__indicator--disabled": this.isDisabled,
+        "o-achievement__indicator--locked": !this.isUnlocked && !this.isPreRealityAchievement && !this.isDisabled,
+        "o-achievement__indicator--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
       };
     },
     isPreRealityAchievement() {
@@ -67,7 +71,9 @@ export default {
   },
   methods: {
     update() {
-      this.isUnlocked = this.achievement.isUnlocked;
+      this.isDoomed = Pelle.isDoomed;
+      this.isDisabled = Pelle.disabledAchievements.includes(this.id) && this.isDoomed;
+      this.isUnlocked = this.achievement.isUnlocked && !this.isDisabled;
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
@@ -108,12 +114,17 @@ export default {
           v-if="config.reward"
           class="o-achievement__tooltip__reward"
         >
-          Reward: {{ config.reward }}
-          <EffectDisplay
-            v-if="config.formatEffect"
-            br
-            :config="config"
-          />
+          <span v-if="isDoomed">
+            This achievement reward is disabled while in Doomed
+          </span>
+          <span v-else>
+            Reward: {{ config.reward }}
+            <EffectDisplay
+              v-if="config.formatEffect"
+              br
+              :config="config"
+            />
+          </span>
         </div>
       </template>
     </div>

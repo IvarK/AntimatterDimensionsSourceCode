@@ -2686,6 +2686,11 @@ screen and (max-width: 480px) {
   background-image: url("../images/secret achievements.png");
 }
 
+.o-achievement--disabled {
+  background-color: crimson;
+  border-color: crimson;
+}
+
 .o-achievement--locked {
   background-color: #a3a3a3;
   border-color: var(--color-bad);
@@ -2828,6 +2833,11 @@ screen and (max-width: 480px) {
 .t-dark-metro .o-achievement__indicator {
   background: #4caf50;
   border-color: #388e3c;
+}
+
+.o-achievement__indicator--disabled {
+  background: crimson;
+  border-color: var(--color-bad);
 }
 
 .o-achievement__indicator--locked {

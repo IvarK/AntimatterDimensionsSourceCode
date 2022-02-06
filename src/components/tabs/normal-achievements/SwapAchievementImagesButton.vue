@@ -9,6 +9,7 @@ export default {
   },
   computed: {
     swapImagesButton() {
+      if (Pelle.isDoomed) return this.isCancerImages ? "😂" : "d";
       return this.isCancerImages ? "😂" : ":";
     },
     imageSwapperStyleObject() {

@@ -28,6 +28,7 @@ Vue.component("dilation-time-study", {
           total Time Theorems`;
       }
       if (this.id === 6) {
+        if (Pelle.isDoomed) return "";
         const achRows = Perk.firstPerk.isBought ? "" : ` and ${formatInt(13)} rows of Achievements`;
         return `Requirement: ${format("1e4000")} Eternity Points${achRows}`;
       }

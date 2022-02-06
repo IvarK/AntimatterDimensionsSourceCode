@@ -11,7 +11,10 @@ export const TERESA_UNLOCKS = {
   EPGEN: {
     id: 1,
     price: 1e18,
-    description: "Unlock passive Eternity Point generation.",
+    get description() {
+      if (Pelle.isDoomed) return "This has no effect while in Doomed.";
+      return "Unlock passive Eternity Point generation.";
+    },
   },
   EFFARIG: {
     id: 2,

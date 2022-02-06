@@ -8,7 +8,8 @@ Vue.component("tab-button", {
       isHidden: false,
       subtabVisibilities: [],
       showSubtabs: false,
-      hasNotification: false
+      hasNotification: false,
+      tabName: ""
     };
   },
   computed: {
@@ -26,6 +27,15 @@ Vue.component("tab-button", {
       this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
       this.showSubtabs = this.isAvailable && this.subtabVisibilities.length >= 1;
       this.hasNotification = this.tab.hasNotification;
+      if (this.tab.config.endName) {
+        this.tabName = Pelle.transitionText(
+          this.tab.name,
+          this.tab.config.endName,
+          Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
+        );
+      } else {
+        this.tabName = this.tab.name;
+      }
     }
   },
   template: `
@@ -34,7 +44,7 @@ Vue.component("tab-button", {
         class="l-tab-btn-inner"
         @click="tab.show(true)"
       >
-        {{ tab.name }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
+        {{ tabName }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
       </div>
       <div class="subtabs" v-if="showSubtabs">
         <div

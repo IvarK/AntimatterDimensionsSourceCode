@@ -12,8 +12,12 @@ class SubtabState {
     return this.config.symbol;
   }
 
+  get isPermanentlyHidden() {
+    return this.config.hideAt <= Pelle.endState;
+  }
+
   get isHidden() {
-    if (Enslaved.isRunning) return false;
+    if (Enslaved.isRunning || Pelle.isDoomed) return false;
     // eslint-disable-next-line no-bitwise
     return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
       this.config.hidable;
@@ -24,7 +28,7 @@ class SubtabState {
   }
 
   get isAvailable() {
-    return this.isOpen || !this.isHidden && this.isUnlocked;
+    return !this.isPermanentlyHidden && (this.isOpen || !this.isHidden && this.isUnlocked);
   }
 
   get hasNotification() {
@@ -90,8 +94,12 @@ class TabState {
     return this.config.id;
   }
 
+  get isPermanentlyHidden() {
+    return this.config.hideAt <= Pelle.endState;
+  }
+
   get isHidden() {
-    if (Enslaved.isRunning) return false;
+    if (Enslaved.isRunning || Pelle.isDoomed) return false;
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
     return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
@@ -102,7 +110,7 @@ class TabState {
   }
 
   get isAvailable() {
-    return this.isOpen || !this.isHidden && this.isUnlocked;
+    return !this.isPermanentlyHidden && (this.isOpen || !this.isHidden && this.isUnlocked);
   }
 
   get isOpen() {

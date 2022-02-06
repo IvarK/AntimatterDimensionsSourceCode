@@ -33,14 +33,14 @@ export class DilationTimeStudyState extends TimeStudyState {
       if (!quiet) {
         Tab.eternity.dilation.show();
       }
-      if (Perk.autounlockDilation1.isBought) {
+      if (Perk.autounlockDilation1.isBought && !Pelle.isDoomed) {
         for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
       }
-      if (Perk.autounlockDilation2.isBought) {
+      if (Perk.autounlockDilation2.isBought && !Pelle.isDoomed) {
         for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
       }
-      Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
-      if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
+      if (!Pelle.isDoomed) Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
+      if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality() && !Pelle.isDoomed) {
         Currency.tachyonParticles.bumpTo(getTP(RA_UNLOCKS.START_TP.effect()));
       }
       TabNotification.dilationAfterUnlock.tryTrigger();

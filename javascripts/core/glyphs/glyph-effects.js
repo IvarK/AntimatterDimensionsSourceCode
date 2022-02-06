@@ -1,3 +1,5 @@
+import { Pelle } from "../globals";
+
 class GlyphEffectState {
   constructor(id, props) {
     this._id = id;
@@ -97,7 +99,7 @@ export function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
   return getGlyphEffectsFromBitmask(bitmask)
     .map(effect => ({
       id: effect.id,
-      value: effect.effect(level, strength)
+      value: effect.effect(level, Pelle.isDoomed ? 1 : strength)
     }));
 }
 
@@ -108,7 +110,8 @@ export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
-  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), glyph.strength);
+
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), Pelle.isDoomed ? 1 : glyph.strength);
 }
 
 // Note this function is used for glyph bitmasks, news ticker bitmasks, and offline achievements

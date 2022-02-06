@@ -8,12 +8,12 @@ GameDatabase.eternity.timeStudies.dilation = [
     requirement: () => {
       if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
           Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
-          !isInCelestialReality()
+          !isInCelestialReality() && !Pelle.isDoomed
       ) {
         return true;
       }
       const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
-      if (Perk.bypassECDilation.isBought) return tsRequirement;
+      if (Perk.bypassECDilation.isBought && !Pelle.isDoomed) return tsRequirement;
       const ecRequirement = EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted;
       const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
       return tsRequirement && ecRequirement && ttRequirement;

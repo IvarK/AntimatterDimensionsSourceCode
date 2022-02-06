@@ -10,6 +10,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
   }
 
   get isUnlocked() {
+    if (Pelle.isDisabled("dimBoostAutobuyer")) return false;
     return NormalChallenge(10).isCompleted;
   }
 

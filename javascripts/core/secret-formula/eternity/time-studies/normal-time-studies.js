@@ -78,7 +78,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: [22],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `You gain more Infinities based on Dimension Boosts`,
+      description: `You gain more Infinities based on Dimension Boosts`,
       effect: () => Math.max(DimBoost.totalBoosts, 1),
       formatEffect: value => formatX(value)
     },
@@ -87,7 +87,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: [21],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: "You keep half of your Replicanti Galaxies on Infinity"
+      description: () => (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied
+        ? "This Time Study has no effect while in Doomed"
+        : "You keep half of your Replicanti Galaxies on Infinity")
     },
     {
       id: 41,
@@ -266,8 +268,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requiresST: [122, 123],
       description: () => (Perk.studyActiveEP.isBought
         ? `You gain ${formatX(50)} more Eternity Points`
-        : `You gain more EP based on how fast your last ten
-        Eternities were${PlayerProgress.realityUnlocked() ? " (real time)" : ""}`),
+        : `You gain more EP based on how fast your last ten Eternities
+        were${PlayerProgress.realityUnlocked() ? " (real time)" : ""}`),
       effect: () => (Perk.studyActiveEP.isBought
         ? 50
         : Math.clamp(250 / Player.averageRealTimePerEternity, 1, 50)),
@@ -320,7 +322,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: [122],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
       requiresST: [131, 133],
-      description: () => (Perk.studyPassive.isBought
+      description: () => (Perk.studyPassive.isBought && !Pelle.isDoomed
         ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${format(3)} times faster`
         : `Replicanti Galaxies are ${formatPercents(0.4)} stronger`),
       effect: 0.4

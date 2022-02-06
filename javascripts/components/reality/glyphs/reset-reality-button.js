@@ -21,6 +21,7 @@ Vue.component("reset-reality-button", {
       else beginProcessReality(getRealityProps(true));
     },
     resetText() {
+      if (Pelle.isDoomed) return "Start this Armageddon over";
       if (this.isInCelestialReality && !this.resetCelestial) return "Exit this Celestial early";
       if (this.isInCelestialReality && this.resetCelestial) return "Restart this Celestial";
       return "Start this Reality over";

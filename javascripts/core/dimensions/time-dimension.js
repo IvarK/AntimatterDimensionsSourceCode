@@ -1,5 +1,6 @@
 import { DimensionState } from "./dimension.js";
 import { DC } from "../constants.js";
+import { Pelle } from "../globals.js";
 
 export function buySingleTimeDimension(tier) {
   const dim = TimeDimension(tier);
@@ -96,9 +97,14 @@ export function timeDimensionCommonMultiplier() {
       EternityUpgrade.tdMultTheorems,
       EternityUpgrade.tdMultRealTime,
       Replicanti.areUnlocked && Replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
-      RealityUpgrade(22),
-      AlchemyResource.dimensionality
+      Pelle.isDoomed ? null : RealityUpgrade(22),
+      AlchemyResource.dimensionality,
+      PelleRifts.chaos
     );
+
+
+  mult = mult.times(NG.multiplier);
+
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(
       Decimal.pow(
@@ -123,7 +129,13 @@ class TimeDimensionState extends DimensionState {
   }
 
   /** @returns {Decimal} */
-  get cost() { return this.data.cost; }
+  get cost() {
+    if (PelleRifts.death.hasMilestone(0) && this._tier > 4) {
+      return this.data.cost.div("1e2250").pow(0.5);
+    }
+    return this.data.cost;
+  }
+
   /** @param {Decimal} value */
   set cost(value) { this.data.cost = value; }
 
@@ -182,8 +194,11 @@ class TimeDimensionState extends DimensionState {
     mult = mult.powEffectOf(AlchemyResource.time);
     mult = mult.pow(Ra.momentumValue);
     mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
+    mult = mult.powEffectOf(PelleRifts.death);
 
-    if (player.dilation.active) {
+    mult = mult.pow(NG.power);
+
+    if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
     }
 

@@ -8,6 +8,7 @@ Vue.component("ep-multiplier-button", {
   },
   data() {
     return {
+      inDoomed: false,
       isAutobuyerActive: false,
       isAutoUnlocked: false,
       isAffordable: false,
@@ -31,12 +32,14 @@ Vue.component("ep-multiplier-button", {
       return {
         "o-eternity-upgrade": true,
         "o-eternity-upgrade--available": this.isAffordable,
-        "o-eternity-upgrade--unavailable": !this.isAffordable
+        "o-eternity-upgrade--unavailable": !this.isAffordable,
+        "c-pelle-useless": this.inDoomed
       };
     }
   },
   methods: {
     update() {
+      this.inDoomed = Pelle.isDoomed;
       const upgrade = this.upgrade;
       this.isAutoUnlocked = this.autobuyer.isUnlocked;
       this.isAutobuyerActive = this.autobuyer.isActive;
@@ -48,9 +51,14 @@ Vue.component("ep-multiplier-button", {
   template: `
     <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        Multiply Eternity Points from all sources by {{ formatX(5) }}
-        <br>
-        Currently: {{ formatX(multiplier, 2, 0) }}
+        <div v-if="inDoomed">
+          This multiplier has no effect while in Doomed
+        </div>
+        <div v-else>
+          Multiply Eternity Points from all sources by {{ formatX(5) }}
+          <br>
+          Currently: {{ formatX(multiplier, 2, 0) }}
+        </div>
         <br>
         Cost: {{ quantify("Eternity Point", cost, 2, 0) }}
       </button>

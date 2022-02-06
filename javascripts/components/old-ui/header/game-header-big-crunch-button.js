@@ -49,6 +49,7 @@ Vue.component("game-header-big-crunch-button", {
   methods: {
     update() {
       this.isVisible = player.break;
+      this.tesseractAffordable = Tesseracts.canBuyTesseract;
       if (!this.isVisible) return;
       this.canCrunch = Player.canCrunch;
       this.infinityGoal.copyFrom(Player.infinityGoal);
@@ -62,7 +63,6 @@ Vue.component("game-header-big-crunch-button", {
         this.currentIPRate.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
         this.peakIPRate.copyFrom(player.records.thisInfinity.bestIPmin);
       }
-      this.tesseractAffordable = Tesseracts.canBuyTesseract;
     },
     switchToInfinity() {
       Tab.dimensions.infinity.show(true);

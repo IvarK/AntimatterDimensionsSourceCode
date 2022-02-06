@@ -534,6 +534,7 @@ export const GlyphAlteration = {
     return 1e60;
   },
   getSacrificePower(type) {
+    if (Pelle.isDisabled("alteration")) return 0;
     const sacPower = player.reality.glyphs.sac[type];
     if (sacPower === undefined) {
       throw new Error("Unknown sacrifice type");
@@ -541,6 +542,7 @@ export const GlyphAlteration = {
     return sacPower;
   },
   get isUnlocked() {
+    if (Pelle.isDisabled("alteration")) return false;
     return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
   },
   isAdded(type) {

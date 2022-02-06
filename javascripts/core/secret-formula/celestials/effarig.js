@@ -27,6 +27,7 @@ GameDatabase.celestials.effarig = {
       id: 4,
       label: "Infinity",
       get description() {
+        if (Pelle.isDoomed) return "Any rewards from Effarig's Infinity have been disabled.";
         return ` Infinities raise the Replicanti cap
         Infinities increase your max Replicanti Galaxies
         Base Infinity Point gain is capped at ${format(DC.E200)} in Effarig's Reality
@@ -37,6 +38,7 @@ GameDatabase.celestials.effarig = {
       id: 5,
       label: "Eternity",
       get description() {
+        if (Pelle.isDoomed) return "Any rewards from Effarig's Eternity have been disabled.";
         return ` Eternities generates Infinities
           Infinity Points are no longer limited in any way in Effarig's Reality
           You have unlocked The Enslaved Ones`;
@@ -45,7 +47,10 @@ GameDatabase.celestials.effarig = {
     reality: {
       id: 6,
       label: "Reality",
-      description: " You have unlocked Effarig Glyphs (You may equip at most one)"
+      get description() {
+        if (Pelle.isDoomed) return "Any rewards from Effarig's Reality have been disabled.";
+        return " You have unlocked Effarig Glyphs (You may equip at most one)";
+      },
     }
   }
 };

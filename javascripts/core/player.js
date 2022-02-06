@@ -378,6 +378,9 @@ window.player = {
       1: 0,
       2: 0,
       3: 0,
+      11: 0,
+      12: 0,
+      13: 0,
     },
     lastEP: DC.DM1,
   },
@@ -636,7 +639,75 @@ window.player = {
         annihilation: false
       },
       lastCheckedMilestones: 0
-    }
+    },
+    pelle: {
+      doomed: false,
+      upgrades: new Set(),
+      remnants: 0,
+      realityShards: DC.D0,
+      // For recording which ones you permanently have
+      armageddonDuration: 0,
+      records: {
+        totalAntimatter: DC.D0,
+        totalInfinityPoints: DC.D0,
+        totalEternityPoints: DC.D0,
+      },
+      maxAMThisArmageddon: DC.D0,
+      rebuyables: {
+        antimatterDimensionMult: 0,
+        timeSpeedMult: 0,
+        glyphLevels: 0,
+        infConversion: 0,
+        galaxyPower: 0,
+        galaxyGeneratorAdditive: 0,
+        galaxyGeneratorMultiplicative: 0,
+        galaxyGeneratorAntimatterMult: 0,
+        galaxyGeneratorIPMult: 0,
+        galaxyGeneratorEPMult: 0,
+      },
+      rifts: {
+        famine: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        pestilence: {
+          fill: DC.D0,
+          active: false,
+          percentageSpent: 0,
+          reducedTo: 1
+        },
+        chaos: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        war: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        death: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        }
+      },
+      progressBits: 0,
+      galaxyGenerator: {
+        spentGalaxies: 0,
+        generatedGalaxies: 0,
+        phase: 0,
+        sacrificeActive: false
+      }
+    },
+    compact: false,
+    showBought: false,
+  },
+  newGame: {
+    current: 0,
+    plusRecord: 0,
+    minusRecord: 0,
   },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,

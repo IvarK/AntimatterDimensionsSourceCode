@@ -11,6 +11,7 @@ Vue.component("enslaved-tab", {
     SliderComponent
   },
   data: () => ({
+    isDoomed: false,
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
@@ -49,9 +50,9 @@ Vue.component("enslaved-tab", {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      return this.isRunning
-        ? "You're inside Enslaved Ones' Reality"
-        : "Start Enslaved One's Reality";
+      if (this.isDoomed) return "You can't start Enslaved Ones' Reality while in Doomed";
+      if (this.isRunning) return "You're inside Enslaved Ones' Reality";
+      return "Start Enslaved One's Reality";
     },
     runButtonClassObject() {
       return {
@@ -70,6 +71,7 @@ Vue.component("enslaved-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isStoringBlackHole = Enslaved.isStoringGameTime;
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
@@ -77,7 +79,7 @@ Vue.component("enslaved-tab", {
       this.offlineEnabled = player.options.offlineProgress;
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.isRunning = Enslaved.isRunning;
-      this.completed = Enslaved.isCompleted;
+      this.completed = Enslaved.isCompleted && !this.isDoomed;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
@@ -112,6 +114,7 @@ Vue.component("enslaved-tab", {
       Enslaved.buyUnlock(info);
     },
     startRun() {
+      if (this.isDoomed) return;
       Modal.celestials.show({ name: "The Enslaved Ones'", number: 2 });
     },
     hasUnlock(info) {
@@ -200,7 +203,8 @@ Vue.component("enslaved-tab", {
                 </div>
               </button>
               <button class="o-enslaved-mechanic-button" @click="useStored">
-                Discharge Black Hole
+                <span v-if="isDoomed">You can't discharge Black Hole while in Doomed</span>
+                <span v-else>Discharge Black Hole</span>
                 <p v-if="isRunning">{{ timeDisplayShort(nerfedBlackHoleTime) }} in this Reality</p>
               </button>
             </div>

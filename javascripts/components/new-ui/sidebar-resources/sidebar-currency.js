@@ -6,28 +6,38 @@ Vue.component("sidebar-currency", {
       EP: new Decimal(0),
       RM: new Decimal(0),
       IM: 0,
+      RS: new Decimal(0),
       machineStr: "",
       showIP: false,
       showEP: false,
       showRM: false,
+      showRS: false,
     };
   },
   methods: {
     update() {
-      this.AM.copyFrom(Currency.antimatter.value);
-      this.IP.copyFrom(Currency.infinityPoints.value);
-      this.EP.copyFrom(Currency.eternityPoints.value);
+      this.AM.copyFrom(Currency.antimatter);
+      this.IP.copyFrom(Currency.infinityPoints);
+      this.EP.copyFrom(Currency.eternityPoints);
       this.RM.copyFrom(Currency.realityMachines);
       this.IM = Currency.imaginaryMachines.value;
+      this.RS.copyFrom(Currency.realityShards);
       this.machineStr = formatComplex(this.RM, this.IM);
       this.showIP = PlayerProgress.infinityUnlocked();
       this.showEP = PlayerProgress.eternityUnlocked();
       this.showRM = PlayerProgress.realityUnlocked();
+      this.showRS = Pelle.isDoomed;
     }
   },
   template: `
     <div class="resource">
-      <template v-if="showRM">
+      <template v-if="showRS">
+        <h2 class="o-sidebar-currency--pelle">{{ format(RS, 2) }}</h2>
+        <div class="resource-information">
+          <span class="resource-name">{{ pluralize("Reality Shard", RS) }}</span>
+        </div>
+      </template>
+      <template v-else-if="showRM">
         <template v-if="IM === 0">
           <h2 class="o-sidebar-currency--reality">{{ format(RM, 2) }}</h2>
           <div class="resource-information">

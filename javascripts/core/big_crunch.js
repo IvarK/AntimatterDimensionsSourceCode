@@ -49,8 +49,10 @@ export function bigCrunchReset() {
   bigCrunchResetValues();
   bigCrunchCheckUnlocks();
 
+  if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
+
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-  if (firstInfinity) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
+  if (firstInfinity && !Pelle.isDoomed) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
   Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that
   you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics 
   tab.`);
@@ -115,6 +117,10 @@ export function bigCrunchResetValues() {
   }
   if (TimeStudy(33).isBought) {
     remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
+  }
+
+  if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) {
+    remainingGalaxies = currentReplicantiGalaxies;
   }
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.
@@ -216,7 +222,11 @@ export class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get canCharge() {
-    return this.isBought && this.hasChargeEffect && !this.isCharged && Ra.chargesLeft !== 0;
+    return this.isBought &&
+      this.hasChargeEffect &&
+      !this.isCharged &&
+      Ra.chargesLeft !== 0 &&
+      !Pelle.isDisabled("chargedInfinityUpgrades");
   }
 
   charge() {
@@ -392,7 +402,10 @@ export class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   onPurchased() {
-    if (this.id === "postGalaxy") SpeedrunMilestones(7).tryComplete();
+    if (this.id === "postGalaxy") {
+      SpeedrunMilestones(7).tryComplete();
+      PelleStrikes.powerGalaxies.trigger();
+    }
   }
 }
 

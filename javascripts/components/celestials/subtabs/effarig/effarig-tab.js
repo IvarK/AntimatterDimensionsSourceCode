@@ -37,6 +37,7 @@ Vue.component("effarig-tab", {
   },
   data() {
     return {
+      isDoomed: false,
       relicShards: 0,
       shardRarityBoost: 0,
       shardsGained: 0,
@@ -79,6 +80,7 @@ Vue.component("effarig-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost / 100;
       this.shardsGained = Effarig.shardsGained;
@@ -93,6 +95,7 @@ Vue.component("effarig-tab", {
       this.relicShardRarityAlwaysMax = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX);
     },
     startRun() {
+      if (this.isDoomed) return;
       Modal.celestials.show({ name: "Effarig's", number: 1 });
     },
     createCursedGlyph() {
@@ -165,7 +168,12 @@ Vue.component("effarig-tab", {
               You are in Effarig's Reality - give up?
             </div>
             <br>
-            Enter Effarig's Reality, in which {{ runDescription }}
+            <span v-if="!isDoomed">
+              Enter Effarig's Reality, in which {{ runDescription }}
+            </span>
+            <span v-else>
+              You can't start Effarig's Reality, in which {{ runDescription }}
+            </span>
           </div>
           <div
             :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"

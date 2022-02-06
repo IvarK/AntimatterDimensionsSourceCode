@@ -5,6 +5,7 @@ import "../../celestial-quote-history.js";
 Vue.component("ra-tab", {
   data() {
     return {
+      isDoomed: false,
       memoriesPerChunk: 0,
       showReality: false,
       isRaCapped: false,
@@ -69,6 +70,7 @@ Vue.component("ra-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
@@ -81,6 +83,7 @@ Vue.component("ra-tab", {
       this.memoryBoosts = Ra.memoryBoostResources;
     },
     startRun() {
+      if (this.isDoomed) return;
       Modal.celestials.show({ name: "Ra's", number: 4 });
     },
     toggleMode() {
@@ -115,7 +118,8 @@ Vue.component("ra-tab", {
       <div class="l-ra-non-pets">
         <button class="c-ra-run-button">
           <h2>
-            <span v-if="isRunning">You are in </span>
+            <span v-if="isDoomed">You can't start<br></span>
+            <span v-else-if="isRunning">You are in </span>
             <span v-else>Start </span>
             Ra's Reality
           </h2>

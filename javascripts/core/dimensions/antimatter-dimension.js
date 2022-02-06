@@ -9,6 +9,7 @@ export function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.times(ShopPurchase.dimPurchases.currentMult);
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
+  multiplier = multiplier.times(NG.multiplier);
 
   if (!EternityChallenge(9).isRunning) {
     multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1));
@@ -38,12 +39,15 @@ export function antimatterDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
-    AlchemyResource.dimensionality
+    AlchemyResource.dimensionality,
+    PelleRebuyableUpgrade.antimatterDimensionMult
   );
 
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
   multiplier = multiplier.times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
+
+  if (Pelle.isDoomed) multiplier = multiplier.dividedBy(10);
 
   return multiplier;
 }
@@ -64,7 +68,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   multiplier = applyNDPowers(multiplier, tier);
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
-  if (player.dilation.active) {
+  if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
@@ -143,6 +147,8 @@ function applyNDPowers(mult, tier) {
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
 
+  multiplier = multiplier.pow(NG.power);
+
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
   }
@@ -157,7 +163,8 @@ function applyNDPowers(mult, tier) {
       AntimatterDimension(tier).infinityUpgrade.chargedEffect,
       InfinityUpgrade.totalTimeMult.chargedEffect,
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
-      AlchemyResource.power
+      AlchemyResource.power,
+      PelleRifts.death
     );
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
@@ -165,6 +172,11 @@ function applyNDPowers(mult, tier) {
   if (V.has(V_UNLOCKS.ND_POW)) {
     multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
+
+  if (PelleStrikes.infinity.hasStrike) {
+    multiplier = multiplier.pow(0.5);
+  }
+
 
   return multiplier;
 }

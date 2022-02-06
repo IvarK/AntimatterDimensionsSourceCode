@@ -32,7 +32,8 @@ export class DimBoost {
         Achievement(117),
         Achievement(142),
         GlyphEffect.dimBoostPower
-      ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
+      ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect)
+      .times(PelleRifts.war.milestones[0].effect());
     if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
     return boost;
   }
@@ -168,13 +169,17 @@ export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
-  if (forcedNDReset || !Perk.antimatterNoReset.isBought) {
+  if (
+    forcedNDReset ||
+    !Perk.antimatterNoReset.isBought ||
+    (Pelle.isDoomed && !PelleUpgrade.dimBoostResetsNothing.canBeApplied)
+  ) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
     resetTickspeed();
   }
   skipResetsIfPossible();
-  const canKeepAntimatter = Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought;
+  const canKeepAntimatter = (Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought) && !Pelle.isDoomed;
   if (!forcedAMReset && canKeepAntimatter) {
     Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
   } else {

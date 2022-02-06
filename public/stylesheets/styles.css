@@ -54,6 +54,9 @@ html {
 
   --color-v--base: #ead584;
 
+  --color-pelle--base: crimson;
+  --color-pelle-secondary: #00bcd4;
+
   --color-ra-pet-teresa: #8596ea;
   --color-ra-pet-effarig: #ea8585;
   --color-ra-pet-enslaved: #f1aa7f;
@@ -7808,7 +7811,7 @@ kbd {
 .c-laitela-milestone {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   height: 16%;
   width: 22rem;
   background: var(--color-laitela--base);
@@ -7819,6 +7822,13 @@ kbd {
   position: relative;
   z-index: 0;
   color: var(--color-laitela--accent);
+}
+
+.c-laitela-milestone > span {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .s-base--metro .c-laitela-milestone {
@@ -9275,4 +9285,9 @@ input.o-automator-block-input {
 .t-s6 .c-autobuyer-buy-box,
 .t-s10 .c-autobuyer-buy-box {
   height: 6.2rem;
+}
+
+.c-pelle-useless {
+  background-color:  var(--color-pelle--base) !important;
+  filter: grayscale(50%);
 }

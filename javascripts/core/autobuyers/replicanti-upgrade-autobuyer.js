@@ -16,7 +16,8 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return ReplicantiUpgrade[this._upgradeName].autobuyerMilestone.isReached;
+    return ReplicantiUpgrade[this._upgradeName].autobuyerMilestone.isReached ||
+      PelleUpgrade.replicantiAutobuyers.canBeApplied;
   }
 
   get resetTickOn() {

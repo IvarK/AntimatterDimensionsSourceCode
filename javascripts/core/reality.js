@@ -564,17 +564,17 @@ export function finishProcessReality(realityProps) {
 
   // This has to be reset before Currency.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
-  Currency.eternities.reset();
+  if (!PelleUpgrade.eternitiesNoReset.canBeApplied) Currency.eternities.reset();
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.records.bestEternity.time = 999999999999;
   player.records.bestEternity.realTime = 999999999999;
-  player.eternityUpgrades.clear();
+  if (!PelleUpgrade.keepEternityUpgrades.canBeApplied) player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  player.eternityChalls = {};
+  if (!PelleUpgrade.keepEternityChallenges.canBeApplied) player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
-  player.challenge.eternity.unlocked = 0;
+  if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
   player.respec = false;
   player.eterc8ids = 50;
@@ -583,21 +583,26 @@ export function finishProcessReality(realityProps) {
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   player.records.thisReality.maxReplicanti = DC.D0;
-  Currency.timeTheorems.reset();
+  if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) Currency.timeTheorems.reset();
   player.celestials.v.STSpent = 0;
-  player.dilation.studies = [];
-  player.dilation.active = false;
-  Currency.tachyonParticles.reset();
-  Currency.dilatedTime.reset();
-  player.dilation.nextThreshold = DC.E3;
-  player.dilation.baseTachyonGalaxies = 0;
-  player.dilation.totalTachyonGalaxies = 0;
-  player.dilation.upgrades.clear();
-  player.dilation.rebuyables = {
-    1: 0,
-    2: 0,
-    3: 0
-  };
+  if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) {
+    player.dilation.studies = [];
+    player.dilation.active = false;
+    Currency.tachyonParticles.reset();
+    Currency.dilatedTime.reset();
+    player.dilation.nextThreshold = DC.E3;
+    player.dilation.baseTachyonGalaxies = 0;
+    player.dilation.totalTachyonGalaxies = 0;
+    player.dilation.upgrades.clear();
+    player.dilation.rebuyables = {
+      1: 0,
+      2: 0,
+      3: 0,
+      11: 0,
+      12: 0,
+      13: 0
+    };
+  }
   player.records.thisInfinity.maxAM = DC.D0;
   player.records.thisEternity.maxAM = DC.D0;
   player.records.thisReality.maxDT = DC.D0;
@@ -636,7 +641,7 @@ export function finishProcessReality(realityProps) {
   ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
-  if (Teresa.has(TERESA_UNLOCKS.START_EU)) {
+  if (Teresa.has(TERESA_UNLOCKS.START_EU) && !Pelle.isDoomed) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   }
 
@@ -645,6 +650,10 @@ export function finishProcessReality(realityProps) {
   player.reality.gainedAutoAchievements = false;
 
   if (realityProps.restoreCelestialState || player.options.retryCelestial) restoreCelestialRuns(celestialRunState);
+
+  if (Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied && Autobuyer.bigCrunch.hasMaxedInterval) {
+    player.break = true;
+  }
 }
 
 function restoreCelestialRuns(celestialRunState) {
@@ -666,6 +675,11 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 export function applyRUPG10() {
   NormalChallenges.completeAll();
+  if (PelleUpgrade.replicantiStayUnlocked.canBeApplied) {
+    Replicanti.amount = Replicanti.amount.clampMin(1);
+    Replicanti.unlock(true);
+  }
+  if (Pelle.isDisabled("rupg10")) return;
 
   player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
     isUnlocked: true,
@@ -678,9 +692,11 @@ export function applyRUPG10() {
     isActive: current.isActive,
     lastTick: player.records.realTimePlayed
   }));
+
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
+
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;

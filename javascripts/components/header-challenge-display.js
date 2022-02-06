@@ -12,6 +12,7 @@ Vue.component("header-challenge-display", {
       showExit: false,
       exitText: "",
       resetCelestial: false,
+      inPelle: false,
     };
   },
   computed: {
@@ -85,6 +86,7 @@ Vue.component("header-challenge-display", {
       return this.activeChallengeNames.some(str => str.match(/Eternity Challenge (4|12)/gu));
     },
     challengeDisplay() {
+      if (this.inPelle) return "a Doomed Reality. Good luck.";
       if (this.activeChallengeNames.length === 0) {
         return "the Antimatter Universe (no active challenges)";
       }
@@ -98,6 +100,7 @@ Vue.component("header-challenge-display", {
       this.showExit = this.activeChallengeNames.length !== 0;
       this.exitText = this.exitDisplay();
       this.resetCelestial = player.options.retryCelestial;
+      this.inPelle = Pelle.isDoomed;
     },
     // Process exit requests from the inside out; exit any Challenges first, then dilation, then Celestial Reality
     exitButtonClicked() {

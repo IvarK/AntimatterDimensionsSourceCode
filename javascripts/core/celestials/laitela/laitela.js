@@ -30,10 +30,10 @@ export const Laitela = {
     return Laitela.maxAllowedDimension === 0;
   },
   get continuumUnlocked() {
-    return ImaginaryUpgrade(15).isBought;
+    return ImaginaryUpgrade(15).isBought && !Pelle.isDisabled("continuum");
   },
   get continuumActive() {
-    return this.continuumUnlocked && !player.auto.disableContinuum;
+    return this.continuumUnlocked && !player.auto.disableContinuum && !Pelle.isDisabled("continuum");
   },
   setContinuum(x) {
     player.auto.disableContinuum = !x;

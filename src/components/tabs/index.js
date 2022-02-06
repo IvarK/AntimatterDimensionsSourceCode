@@ -12,6 +12,7 @@ import GlyphSetRecordsTab from "./glyph-set-records/GlyphSetRecordsTab";
 import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
+import PelleTab from "./celestial-pelle/PelleTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
 import AutomatorTab from "./automator/AutomatorTab";
 import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
@@ -35,6 +36,7 @@ const TabComponents = {
   SpeedrunMilestonesTab,
   NormalAchievementsTab,
   SecretAchievementTab,
+  PelleTab,
   AutobuyersTab,
   AutomatorTab,
   NormalChallengesTab,

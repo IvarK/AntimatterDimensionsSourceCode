@@ -7,13 +7,15 @@ Vue.component("dilation-button", {
       requiredForGain: new Decimal(0),
       canEternity: false,
       eternityGoal: new Decimal(0),
-      tachyonGain: new Decimal(0)
+      tachyonGain: new Decimal(0),
+      showRequirement: false
     };
   },
   methods: {
     update() {
       this.isUnlocked = PlayerProgress.dilationUnlocked();
       this.isRunning = player.dilation.active;
+      this.showRequirement = Pelle.isDoomed && Pelle.cel.remnants < Pelle.remnantRequirementForDilation;
       if (!this.isRunning) return;
       this.canEternity = Player.canEternity;
       this.hasGain = getTachyonGain().gt(0);
@@ -33,7 +35,9 @@ Vue.component("dilation-button", {
       onclick="startDilatedEternityRequest()"
     >
       <span v-if="!isUnlocked">Purchase the Dilation Study to unlock.</span>
-      <span v-else-if="!isRunning">Dilate time.</span>
+      <span v-else-if="!isRunning">Dilate time. 
+        <span v-if="showRequirement"><br><br>Requires {{ format(3.8e7, 2) }} Remnants</span>
+      </span>
       <span v-else-if="canEternity && hasGain">
         Disable Dilation.
         <br>

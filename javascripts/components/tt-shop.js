@@ -111,7 +111,7 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(TimeTheoremPurchaseType.am.cost);
       costs.ip.copyFrom(TimeTheoremPurchaseType.ip.cost);
       costs.ep.copyFrom(TimeTheoremPurchaseType.ep.cost);
-      this.showST = V.spaceTheorems > 0;
+      this.showST = V.spaceTheorems > 0 && !Pelle.isDoomed;
       this.STamount = V.availableST;
       this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
     },

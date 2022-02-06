@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      isUseless: false,
       canBeBought: false,
       chargePossible: false,
       canBeCharged: false,
@@ -46,7 +47,15 @@ export default {
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,
+        "c-pelle-useless": this.isDisabledInDoomed,
       };
+    },
+    isDisabledInDoomed() {
+      const description = this.config.description;
+      if (typeof description === "function") {
+        return description().includes("has no effect");
+      }
+      return description.includes("has no effect");
     }
   },
   methods: {
@@ -56,7 +65,7 @@ export default {
       // seems more likely to be read).
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
-      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect;
+      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect && !Pelle.isDoomed;
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;
@@ -69,6 +78,7 @@ export default {
       // in this case doesn't feel too bad. Other upgrades, including the cost scaling
       // rebuyables, should never hide their effect.
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
+      this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
     }
   }
 };
@@ -81,12 +91,19 @@ export default {
     @mouseleave="showingCharged = false"
     @click="upgrade.purchase()"
   >
-    <DescriptionDisplay :config="config" />
-    <EffectDisplay
-      v-if="!isDisabled"
-      br
-      :config="config"
-    />
+    <span v-if="isUseless">
+      This upgrade has no effect while in Doomed
+    </span>
+    <span v-else>
+      <DescriptionDisplay
+        :config="config"
+      />
+      <EffectDisplay
+        v-if="!isDisabled"
+        br
+        :config="config"
+      />
+    </span>
     <CostDisplay
       v-if="!isBought"
       br

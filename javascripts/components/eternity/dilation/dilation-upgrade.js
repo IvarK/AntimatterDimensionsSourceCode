@@ -19,6 +19,7 @@ Vue.component("dilation-upgrade", {
   },
   data() {
     return {
+      isUseless: false,
       isBought: false,
       isCapped: false,
       isAffordable: false,
@@ -46,9 +47,7 @@ Vue.component("dilation-upgrade", {
     },
     timeEstimate() {
       if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
-      if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
-      if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
-      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
+      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toTimeEstimate();
     }
   },
   methods: {
@@ -60,30 +59,37 @@ Vue.component("dilation-upgrade", {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
+        this.boughtAmount = upgrade.boughtAmount;
+        if (!autobuyer) return;
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
-        this.boughtAmount = upgrade.boughtAmount;
         return;
       }
       this.isBought = upgrade.isBought;
       if (!this.isBought) {
         this.isAffordable = upgrade.isAffordable;
       }
+      this.isUseless = (upgrade.id === 7) && Pelle.isDoomed;
     }
   },
   template: `
     <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
-        <DescriptionDisplay
-          :config="upgrade.config"
-          :length="70"
-          name="o-dilation-upgrade__description"
-        />
-        <EffectDisplay
-          br
-          :config="upgrade.config"
-          :key="boughtAmount"
-        />
+        <span v-if="isUseless">
+          This upgrade has no effect while in Doomed
+        </span>
+        <span v-else>
+          <DescriptionDisplay
+            :config="upgrade.config"
+            :length="70"
+            name="o-dilation-upgrade__description"
+          />
+          <EffectDisplay
+            br
+            :config="upgrade.config"
+            :key="boughtAmount"
+          />
+        </span>
         <CostDisplay
           br
           v-if="!isBought && !isCapped"

@@ -19,8 +19,15 @@ export function infinityDimensionCommonMultiplier() {
       ImaginaryUpgrade(8)
     );
 
+
+  mult = mult.times(NG.multiplier);
+
   if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
+  }
+
+  if (PelleRifts.war.hasMilestone(1)) {
+    mult = mult.times(PelleRifts.war.milestones[1].effect());
   }
   return mult;
 }
@@ -185,19 +192,32 @@ class InfinityDimensionState extends DimensionState {
       );
     mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
+
+    if (tier === 1 && PelleRifts.pestilence.hasMilestone(0)) {
+      mult = mult.times(PelleRifts.pestilence.milestones[0].effect());
+    }
+
+
+    mult = mult.pow(NG.power);
+
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.infinity);
     mult = mult.pow(Ra.momentumValue);
+    mult = mult.powEffectOf(PelleRifts.death);
 
-    if (player.dilation.active) {
+    if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
     }
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
+      mult = mult.pow(0.5);
+    }
+
+    if (PelleStrikes.powerGalaxies.hasStrike) {
       mult = mult.pow(0.5);
     }
 
@@ -255,7 +275,10 @@ class InfinityDimensionState extends DimensionState {
   }
 
   tryUnlock() {
-    if (!Perk.bypassIDAntimatter.isBought && !this.requirementReached) return;
+    if (
+      (!Perk.bypassIDAntimatter.isBought || Pelle.isDoomed) &&
+      !this.requirementReached
+    ) return;
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
@@ -279,7 +302,10 @@ export const InfinityDimensions = {
   unlockNext(switchTab) {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.records.thisEternity.maxAM.lt(next.requirement)) return;
+    if (
+      (!Perk.bypassIDAntimatter.isBought || Pelle.isDoomed) &&
+      player.records.thisEternity.maxAM.lt(next.requirement)
+    ) return;
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
     if (switchTab) Tab.dimensions.infinity.show();
@@ -330,7 +356,8 @@ export const InfinityDimensions = {
   },
 
   get powerConversionRate() {
-    return 7 + getAdjustedGlyphEffect("infinityrate");
+    const multiplier = PelleRifts.death.hasMilestone(2) ? PelleRifts.death.milestones[2].effect() : 1;
+    return (7 + getAdjustedGlyphEffect("infinityrate") + PelleRebuyableUpgrade.infConversion.effectValue) * multiplier;
   }
 };
 

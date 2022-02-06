@@ -25,6 +25,7 @@ import "./reality/automator.js";
 import "./reality/glyph-sacrifices.js";
 import "./celestials/perk-shop.js";
 import "./celestials/effarig.js";
+import "./celestials/pelle.js";
 import "./celestials/enslaved.js";
 export * from "./celestials/v.js";
 import "./celestials/alchemy.js";

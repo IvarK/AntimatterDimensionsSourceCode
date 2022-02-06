@@ -18,7 +18,7 @@ export function getTickSpeedMultiplier() {
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies *= 1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
+  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies + GalaxyGenerator.galaxies;
   if (galaxies < 3) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages
@@ -38,8 +38,17 @@ export function getTickSpeedMultiplier() {
       TimeStudy(232),
       Achievement(86),
       Achievement(175),
-      InfinityChallenge(5).reward
+      InfinityChallenge(5).reward,
+      PelleRebuyableUpgrade.galaxyPower
     );
+    if (Pelle.isDoomed) galaxies *= 0.5;
+    if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(DC.E1300)) {
+      galaxies *= 1.1;
+    }
+
+    if (Pelle.activeGlyphType === "power" && PelleRifts.chaos.hasMilestone(1)) {
+      galaxies *= PelleRifts.chaos.milestones[1].effect();
+    }
     return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
@@ -53,11 +62,20 @@ export function getTickSpeedMultiplier() {
     TimeStudy(232),
     Achievement(86),
     Achievement(175),
-    InfinityChallenge(5).reward
+    InfinityChallenge(5).reward,
+    PelleRebuyableUpgrade.galaxyPower
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
-  galaxies *= 1 + ImaginaryUpgrade(9).effectValue;
+  galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
+  if (Pelle.isDoomed) galaxies *= 0.5;
+  if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(DC.E1300)) {
+    galaxies *= 1.1;
+  }
+
+  if (Pelle.activeGlyphType === "power" && PelleRifts.chaos.hasMilestone(1)) {
+    galaxies *= PelleRifts.chaos.milestones[1].effect();
+  }
   const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
@@ -81,7 +99,7 @@ export function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
-  if (NormalChallenge(9).isRunning) {
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     const goal = Player.infinityGoal;
     let cost = Tickspeed.cost;
     while (Currency.antimatter.gt(cost) && cost.lt(goal)) {
@@ -138,8 +156,8 @@ export const Tickspeed = {
   get current() {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
-      : this.baseValue;
-    return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
+      : this.baseValue.powEffectOf(DilationUpgrade.tickspeedPower);
+    return player.dilation.active || PelleStrikes.dilation.hasStrike ? dilatedValueOf(tickspeed) : tickspeed;
   },
 
   get cost() {

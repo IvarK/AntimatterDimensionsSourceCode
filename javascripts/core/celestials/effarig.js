@@ -176,6 +176,10 @@ class EffarigUnlockState extends GameMechanicState {
     return Boolean(player.celestials.effarig.unlockBits & (1 << this.id));
   }
 
+  get canBeApplied() {
+    return this.isUnlocked && !Pelle.isDisabled("effarig");
+  }
+
   unlock() {
     // eslint-disable-next-line no-bitwise
     player.celestials.effarig.unlockBits |= (1 << this.id);

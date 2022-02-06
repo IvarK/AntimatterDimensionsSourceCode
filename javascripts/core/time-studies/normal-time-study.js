@@ -60,7 +60,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   // This checks for and forbids buying studies due to being part of a set which can't normally be bought
   // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
   checkSetRequirement() {
-    return this.costsST() ? V.availableST >= this.STCost : true;
+    return this.costsST() ? !Pelle.isDisabled("V") && (V.availableST >= this.STCost) : true;
   }
 
   get canBeBought() {

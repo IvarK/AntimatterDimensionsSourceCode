@@ -12,6 +12,7 @@ Vue.component("time-dilation-tab", {
       galaxies: 0,
       animateTachyons: true,
       tachyonGalaxyGain: 1,
+      hasPelleDilationUpgrades: false
     };
   },
   computed: {
@@ -36,6 +37,19 @@ Vue.component("time-dilation-tab", {
         ],
       ];
     },
+    pelleRebuyables() {
+      return [
+        DilationUpgrade.dtGainPelle,
+        DilationUpgrade.galaxyMultiplier,
+        DilationUpgrade.tickspeedPower
+      ];
+    },
+    pelleUpgrades() {
+      return [
+        DilationUpgrade.galaxyThresholdPelle,
+        DilationUpgrade.flatDilationMult
+      ];
+    },
     ttGenerator() {
       return DilationUpgrade.ttGenerator;
     }
@@ -48,6 +62,7 @@ Vue.component("time-dilation-tab", {
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;
+      this.hasPelleDilationUpgrades = PelleRifts.death.hasMilestone(0);
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {
@@ -85,6 +100,23 @@ Vue.component("time-dilation-tab", {
             :key="upgrade.id"
             :upgrade="upgrade"
             :isRebuyable="true"
+            class="l-dilation-upgrades-grid__cell"
+          />
+        </div>
+        <div class="l-dilation-upgrades-grid__row" v-if="hasPelleDilationUpgrades">
+          <dilation-upgrade
+            v-for="upgrade in pelleRebuyables"
+            :key="upgrade.id"
+            :upgrade="upgrade"
+            :isRebuyable="true"
+            class="l-dilation-upgrades-grid__cell"
+          />
+        </div>
+        <div class="l-dilation-upgrades-grid__row" v-if="hasPelleDilationUpgrades">
+          <dilation-upgrade
+            v-for="upgrade in pelleUpgrades"
+            :key="upgrade.id"
+            :upgrade="upgrade"
             class="l-dilation-upgrades-grid__cell"
           />
         </div>

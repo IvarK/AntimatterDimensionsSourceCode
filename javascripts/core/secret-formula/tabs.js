@@ -4,6 +4,8 @@ GameDatabase.tabs = [
   {
     key: "dimensions",
     name: "Dimensions",
+    endName: "End",
+    hideAt: 2.9,
     id: 0,
     hidable: true,
     subtabs: [
@@ -18,6 +20,7 @@ GameDatabase.tabs = [
       {
         key: "infinity",
         name: "Infinity Dimensions",
+        hideAt: 2.7,
         symbol: "∞",
         component: "InfinityDimensionsTab",
         condition: () =>
@@ -30,6 +33,7 @@ GameDatabase.tabs = [
       {
         key: "time",
         name: "Time Dimensions",
+        hideAt: 2.6,
         symbol: "Δ",
         component: "TimeDimensionsTab",
         condition: () => PlayerProgress.eternityUnlocked(),
@@ -41,6 +45,8 @@ GameDatabase.tabs = [
   {
     key: "options",
     name: "Options",
+    endName: "Is",
+    hideAt: 1.6,
     id: 1,
     hidable: false,
     subtabs: [
@@ -73,6 +79,8 @@ GameDatabase.tabs = [
   {
     key: "statistics",
     name: "Statistics",
+    endName: "Nigh",
+    hideAt: 1.7,
     id: 2,
     hidable: true,
     subtabs: [
@@ -128,6 +136,8 @@ GameDatabase.tabs = [
   {
     key: "achievements",
     name: "Achievements",
+    endName: "Destruction",
+    hideAt: 1.9,
     id: 3,
     hidable: true,
     subtabs: [
@@ -152,7 +162,9 @@ GameDatabase.tabs = [
   {
     key: "automation",
     name: "Automation",
+    endName: "Is",
     id: 4,
+    hideAt: 2.1,
     hidable: true,
     subtabs: [
       {
@@ -177,6 +189,8 @@ GameDatabase.tabs = [
   {
     key: "challenges",
     name: "Challenges",
+    endName: "Imminent",
+    hideAt: 2,
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked() ||
@@ -218,6 +232,8 @@ GameDatabase.tabs = [
   {
     key: "infinity",
     name: "Infinity",
+    endName: "Help",
+    hideAt: 2.2,
     UIClass: "o-tab-btn--infinity",
     before: "InfinityPointsHeader",
     id: 6,
@@ -265,6 +281,8 @@ GameDatabase.tabs = [
   {
     key: "eternity",
     name: "Eternity",
+    endName: "Us",
+    hideAt: 1.8,
     UIClass: "o-tab-btn--eternity",
     condition: () =>
       PlayerProgress.realityUnlocked() ||
@@ -311,6 +329,8 @@ GameDatabase.tabs = [
   {
     key: "reality",
     name: "Reality",
+    endName: "Good",
+    hideAt: 2.3,
     before: "reality-machines-header",
     UIClass: "o-tab-btn--reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
@@ -373,6 +393,8 @@ GameDatabase.tabs = [
   {
     key: "celestials",
     name: "Celestials",
+    endName: "Bye",
+    hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
     condition: () => Teresa.isUnlocked,
     id: 9,
@@ -442,9 +464,9 @@ GameDatabase.tabs = [
       {
         key: "pelle",
         name: "The Pelle",
-        symbol: "Ϛ",
-        component: "pelle-tab",
-        condition: () => false,
+        symbol: "♅",
+        component: "PelleTab",
+        condition: () => Pelle.isUnlocked,
         id: 7,
         hidable: true,
       }
@@ -454,6 +476,7 @@ GameDatabase.tabs = [
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
+    hideAt: 2.4,
     condition: () => kong.enabled || player.IAP.totalSTD > 0,
     id: 10,
     hidable: true,

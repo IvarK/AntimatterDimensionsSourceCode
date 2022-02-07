@@ -15,7 +15,8 @@ export default {
   data() {
     return {
       currentGlyphSacrifice: 0,
-      gain: 0
+      gain: 0,
+      confirmedSacrifice: false
     };
   },
   computed: {
@@ -34,13 +35,19 @@ export default {
       this.gain = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
 
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
-      if (this.glyph !== newGlyph) {
+      if (this.glyph !== newGlyph && !this.confirmedSacrifice) {
+        /*
+           confirmedSacrifice is here because when you sac a glyph with confirmation it
+           displays this modal message even though the glyph was sacced successfully.
+           I have no idea how the eventhub thing works so this is the best solution
+           I could find.
+        */ 
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }
     },
     handleYesClick() {
-      Modal.hide();
+      this.confirmedSacrifice = true;
       GlyphSacrificeHandler.sacrificeGlyph(this.glyph, true);
     },
   },

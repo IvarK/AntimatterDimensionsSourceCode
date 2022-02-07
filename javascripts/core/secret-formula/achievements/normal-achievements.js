@@ -947,7 +947,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
-      player.infMult === 0 &&
+      player.infinityMultPurchases === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {

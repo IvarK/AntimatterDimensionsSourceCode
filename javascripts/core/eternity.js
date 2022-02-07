@@ -154,7 +154,7 @@ export function initializeResourcesAfterEternity() {
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.infMult = 0;
+  player.infinityMultPurchases = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   player.records.thisEternity.time = 0;

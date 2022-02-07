@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "FadeToBlack",
   data() {
     return {
       opacity: 0

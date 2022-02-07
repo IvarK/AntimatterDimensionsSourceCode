@@ -1,7 +1,11 @@
 <script>
 import PelleUpgrade from "./PelleUpgrade.vue";
+
 export default {
-  components: { PelleUpgrade },
+  name: "GalaxyGenerator",
+  components: {
+    PelleUpgrade
+  },
   data() {
     return {
       galaxies: 0,
@@ -11,6 +15,11 @@ export default {
       capRift: null,
       sacrificeActive: false,
     };
+  },
+  computed: {
+    upgrades() {
+      return PelleRebuyableUpgrade.galaxyGenerator;
+    }
   },
   methods: {
     update() {
@@ -23,11 +32,6 @@ export default {
     },
     increaseCap() {
       GalaxyGenerator.startSacrifice();
-    }
-  },
-  computed: {
-    upgrades() {
-      return PelleRebuyableUpgrade.galaxyGenerator;
     }
   },
 };

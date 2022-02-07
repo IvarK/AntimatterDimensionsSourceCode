@@ -1,9 +1,16 @@
 <script>
 import EffectDisplay from "../../EffectDisplay.vue";
+
 export default {
-  components: { EffectDisplay },
+  name: "PelleRift",
+  components: {
+    EffectDisplay
+  },
   props: {
-    rift: Object,
+    rift: {
+      type: Object,
+      required: true
+    },
     compact: Boolean,
   },
   data() {

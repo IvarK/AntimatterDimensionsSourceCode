@@ -143,7 +143,7 @@ export default {
     </div>
     <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">
       <span v-if="isDoomed">
-        Any achievement multiplier have been disabled while in Doome<SwapAchievementImagesButton />
+        All Achievement multipliers have been disabled<SwapAchievementImagesButton />
       </span>
       <span v-else>
         Achievements provide a multiplier to<SwapAchievementImagesButton />

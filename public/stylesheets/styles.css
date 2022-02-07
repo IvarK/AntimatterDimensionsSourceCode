@@ -2688,7 +2688,7 @@ screen and (max-width: 480px) {
 
 .o-achievement--disabled {
   background-color: crimson;
-  border-color: crimson;
+  border-color: var(--color-bad);
 }
 
 .o-achievement--locked {

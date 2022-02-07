@@ -28,7 +28,6 @@ Vue.component("dilation-time-study", {
           total Time Theorems`;
       }
       if (this.id === 6) {
-        if (Pelle.isDoomed) return "";
         const achRows = Perk.firstPerk.isBought ? "" : ` and ${formatInt(13)} rows of Achievements`;
         return `Requirement: ${format("1e4000")} Eternity Points${achRows}`;
       }
@@ -41,7 +40,7 @@ Vue.component("dilation-time-study", {
         this.maxTT.copyFrom(Currency.timeTheorems.max);
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought || Pelle.isDoomed;
       }
-      if (this.id === 6) {
+      if (this.id === 6 && !Pelle.isDoomed) {
         this.showRequirement = true;
       }
     }

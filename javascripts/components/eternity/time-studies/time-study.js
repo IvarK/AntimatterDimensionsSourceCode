@@ -7,6 +7,7 @@ Vue.component("time-study", {
   },
   data() {
     return {
+      DoomedRealityStudy: false,
       isBought: false,
       isAvailableForPurchase: false,
       STCost: 0,
@@ -97,6 +98,7 @@ Vue.component("time-study", {
       if (!this.isBought) {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
+      this.DoomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;
 
       this.STCost = this.study.STCost;
     },
@@ -113,18 +115,20 @@ Vue.component("time-study", {
              @click.exact="handleClick"
              @click.shift.exact="shiftClick">
       <slot />
-      <CostDisplay
-        br
-        v-if="(showCost && !showSTCost) || STCost === 0"
-        :config="config"
-        name="Time Theorem"
-      />
-      <div v-else-if="showSTCost">
-        Cost: <span v-if="config.cost">
-          {{ quantifyInt("Time Theorem", config.cost) }} and
-        </span>
-        {{ quantifyInt("Space Theorem", STCost) }}
-      </div>
+      <span v-if="!DoomedRealityStudy">
+        <CostDisplay
+          br
+          v-if="(showCost && !showSTCost) || STCost === 0"
+          :config="config"
+          name="Time Theorem"
+        />
+        <div v-else-if="showSTCost">
+          Cost: <span v-if="config.cost">
+            {{ quantifyInt("Time Theorem", config.cost) }} and
+          </span>
+          {{ quantifyInt("Space Theorem", STCost) }}
+        </div>
+      </span>
     </button>`
 });
 

@@ -17,7 +17,6 @@ export default {
   data() {
     return {
       isDisabled: false,
-      isDoomed: false,
       isUnlocked: false,
       isMouseOver: false,
       isCancer: false,
@@ -71,8 +70,7 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
-      this.isDisabled = Pelle.disabledAchievements.includes(this.id) && this.isDoomed;
+      this.isDisabled = Pelle.disabledAchievements.includes(this.id) && Pelle.isDoomed;
       this.isUnlocked = this.achievement.isUnlocked && !this.isDisabled;
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
@@ -114,7 +112,7 @@ export default {
           v-if="config.reward"
           class="o-achievement__tooltip__reward"
         >
-          <span v-if="isDoomed">
+          <span v-if="isDisabled">
             This achievement reward is disabled while in Doomed
           </span>
           <span v-else>

@@ -897,7 +897,7 @@ GameStorage.migrations = {
   },
 
   infMultNameConversion(player) {
-    player.infinityMultPurchases = player.infMult;
+    player.IPMultPurchases = player.infMult;
     delete player.infMult;
   },
 

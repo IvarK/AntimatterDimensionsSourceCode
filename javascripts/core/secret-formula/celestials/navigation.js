@@ -1384,7 +1384,8 @@ GameDatabase.celestials.navigation = (function() {
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
-              ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+              ${format(upgrade.currency.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+              / ${format(upgrade.cost)}`
             ];
 
             if (player.celestials.laitela.fastestCompletion > 30 && Laitela.difficultyTier < 0) return [
@@ -1481,7 +1482,8 @@ GameDatabase.celestials.navigation = (function() {
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
-              ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+              ${format(upgrade.currency.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+              / ${format(upgrade.cost)}`
             ];
 
             if (!player.celestials.laitela.automation.singularity) return [
@@ -1552,7 +1554,8 @@ GameDatabase.celestials.navigation = (function() {
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
-              ${format(upgrade.curreny.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)} / ${format(upgrade.cost)}`
+              ${format(upgrade.currency.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+              / ${format(upgrade.cost)}`
             ];
 
             const allGalaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;

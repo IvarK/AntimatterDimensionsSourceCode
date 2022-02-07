@@ -12,6 +12,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      confirmedDelete: false
+    }
+  },
   computed: {
     glyph() {
       return Glyphs.findByInventoryIndex(this.modalConfig.idx);
@@ -20,12 +25,16 @@ export default {
   methods: {
     update() {
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
-      if (this.glyph !== newGlyph) {
+      if (this.glyph !== newGlyph && this.confirmedDelete) {
+        
+        // Why is confirmedDelete here: refer to SacrificeGlyphModal.vue
+
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }
     },
     handleYesClick() {
+      this.confirmedDelete = true;
       Glyphs.removeFromInventory(this.glyph);
     },
   },

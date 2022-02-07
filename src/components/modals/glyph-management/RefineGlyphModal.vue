@@ -19,6 +19,7 @@ export default {
       gain: 0,
       after: 0,
       cap: 0,
+      confirmedRefine: false
     };
   },
   computed: {
@@ -43,12 +44,16 @@ export default {
       this.after = this.resourceAmount + this.gain;
 
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
-      if (this.glyph !== newGlyph) {
+      if (this.glyph !== newGlyph && !this.confirmedRefine) {
+        
+        // Why is confirmedRefine here: refer to SacrificeGlyphModal.vue
+        
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }
     },
     handleYesClick() {
+      this.confirmedRefine = true;
       GlyphSacrificeHandler.refineGlyph(this.glyph);
     },
   },

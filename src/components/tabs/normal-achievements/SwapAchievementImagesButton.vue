@@ -9,8 +9,8 @@ export default {
   },
   computed: {
     swapImagesButton() {
-      if (Pelle.isDoomed) return this.isCancerImages ? "😂" : ".";
-      return this.isCancerImages ? "😂" : ":";
+      const symbol = Pelle.isDoomed ? "." : ":";
+      return this.isCancerImages ? "😂" : symbol;
     },
     imageSwapperStyleObject() {
       return this.canSwapImages ? { "cursor": "pointer" } : {};

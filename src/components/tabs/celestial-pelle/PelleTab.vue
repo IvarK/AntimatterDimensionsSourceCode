@@ -54,9 +54,21 @@ export default {
       this.$recompute("upgrades");
     },
     getDoomedScrub() {
+      Glyphs.harshAutoClean();
+      if (Glyphs.freeInventorySpace === 0) {
+        Modal.message.show(`Entering Doomed will unequip your glyphs. Some of your
+        glyphs could not be unequipped due to lack of inventory space.`);
+        return;
+      }
+      Glyphs.unequipAll();
+      Glyphs.harshAutoClean();
+      Glyphs.addToInventory(GlyphGenerator.powerDoomed());
+      Glyphs.addToInventory(GlyphGenerator.infinityDoomed());
+      Glyphs.addToInventory(GlyphGenerator.replicationDoomed());
+      Glyphs.addToInventory(GlyphGenerator.timeDoomed());
+      Glyphs.addToInventory(GlyphGenerator.dilationDoomed());
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
-      Glyphs.unequipAll();
       respecTimeStudies(true);
       Currency.infinityPoints.reset();
       player.infMult = 0;

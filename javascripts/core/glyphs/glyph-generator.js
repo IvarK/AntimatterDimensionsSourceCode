@@ -148,6 +148,68 @@ export const GlyphGenerator = {
     };
   },
 
+  // These Glyphs are given on entering Doomed to prevent the player
+  // from having non of each basic glyphs which are requied to beat pelle
+  dilationDoomed() {
+    return {
+      id: undefined,
+      idx: null,
+      type: "dilation",
+      strength: 3.5,
+      level: 69420,
+      rawLevel: 69420,
+      effects: 242,
+    };
+  },
+
+  replicationDoomed() {
+    return {
+      id: undefined,
+      idx: null,
+      type: "replication",
+      strength: 3.5,
+      level: 69420,
+      rawLevel: 69420,
+      effects: 3842,
+    };
+  },
+
+  infinityDoomed() {
+    return {
+      id: undefined,
+      idx: null,
+      type: "infinity",
+      strength: 3.5,
+      level: 69420,
+      rawLevel: 69420,
+      effects: 61442,
+    };
+  },
+
+  powerDoomed() {
+    return {
+      id: undefined,
+      idx: null,
+      type: "power",
+      strength: 3.5,
+      level: 69420,
+      rawLevel: 69420,
+      effects: 983042,
+    };
+  },
+
+  timeDoomed() {
+    return {
+      id: undefined,
+      idx: null,
+      type: "time",
+      strength: 3.5,
+      level: 69420,
+      rawLevel: 69420,
+      effects: 134217743,
+    };
+  },
+
   companionGlyph(eternityPoints) {
     // Store the pre-Reality EP value in the glyph's rarity
     const str = rarityToStrength(eternityPoints.log10() / 1e6);

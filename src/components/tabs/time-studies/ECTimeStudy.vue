@@ -2,7 +2,7 @@
 import TimeStudyButton from "./TimeStudyButton";
 
 export default {
-  name: "EcTimeStudy",
+  name: "ECTimeStudy",
   components: {
     TimeStudyButton
   },

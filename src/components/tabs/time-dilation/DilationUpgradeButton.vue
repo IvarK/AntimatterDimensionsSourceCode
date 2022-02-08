@@ -98,11 +98,9 @@ export default {
           name="o-dilation-upgrade__description"
         />
         <EffectDisplay
-          :key="boughtAmount"
           br
-          :config="upgrade.config"
-        />
-      </span>
+        :config="upgrade.config"
+      /></span>
       <CostDisplay
         v-if="!isBought && !isCapped"
         br

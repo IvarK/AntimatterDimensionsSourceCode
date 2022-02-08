@@ -2,7 +2,7 @@
 import PrimaryButton from "@/components/PrimaryButton";
 import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout";
 import NormalTimeStudy from "./NormalTimeStudy";
-import EcTimeStudy from "./EcTimeStudy";
+import ECTimeStudy from "./ECTimeStudy";
 import DilationTimeStudy from "./DilationTimeStudy";
 import TriadTimeStudy from "./TriadTimeStudy";
 import SecretTimeStudy from "./SecretTimeStudy";
@@ -14,7 +14,7 @@ export default {
   components: {
     PrimaryButton,
     NormalTimeStudy,
-    EcTimeStudy,
+    ECTimeStudy,
     DilationTimeStudy,
     TriadTimeStudy,
     SecretTimeStudy,
@@ -101,7 +101,7 @@ export default {
     studyComponent(study) {
       switch (study.type) {
         case TIME_STUDY_TYPE.NORMAL: return NormalTimeStudy;
-        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return EcTimeStudy;
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return ECTimeStudy;
         case TIME_STUDY_TYPE.DILATION: return DilationTimeStudy;
         case TIME_STUDY_TYPE.TRIAD: return TriadTimeStudy;
       }
@@ -151,17 +151,17 @@ export default {
         :key="setup.study.type.toString() + setup.study.id.toString()"
         :setup="setup"
       />
-      <secret-time-study :setup="layout.secretStudy" />
+      <SecretTimeStudy :setup="layout.secretStudy" />
       <svg
         :style="treeStyleObject"
         class="l-time-study-connection"
       >
-        <time-study-connection
+        <TimeStudyConnection
           v-for="(setup, index) in connections"
           :key="'connection' + index"
           :setup="setup"
         />
-        <secret-time-study-connection :setup="layout.secretStudyConnection" />
+        <SecretTimeStudyConnection :setup="layout.secretStudyConnection" />
       </svg>
     </div>
   </div>

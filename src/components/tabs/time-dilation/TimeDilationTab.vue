@@ -87,7 +87,7 @@ export default {
       <span class="c-dilation-tab__tachyons">{{ format(tachyons, 2, 1) }}</span>
       {{ pluralize("Tachyon Particle", tachyons) }}.
     </span>
-    <dilation-button />
+    <DilationButton />
     <span>
       You have
       <span class="c-dilation-tab__dilated-time">{{ format(dilatedTime, 2, 1) }}</span>

@@ -60,7 +60,7 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : ""}}
+      {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
     </button>
   </div>
 </template>

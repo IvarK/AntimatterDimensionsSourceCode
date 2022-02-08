@@ -99,8 +99,9 @@ export default {
         />
         <EffectDisplay
           br
-        :config="upgrade.config"
-      /></span>
+          :config="upgrade.config"
+        />
+      </span>
       <CostDisplay
         v-if="!isBought && !isCapped"
         br

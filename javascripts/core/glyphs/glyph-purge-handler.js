@@ -31,8 +31,7 @@ export const GlyphSacrificeHandler = {
     else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
-    if (Pelle.isDoomed) return 0;
-    if (!this.canSacrifice) return 0;
+    if (!this.canSacrifice || Pelle.isDoomed) return 0;
     if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;

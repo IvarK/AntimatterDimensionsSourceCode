@@ -14,7 +14,7 @@ export default {
       this.errors = AutomatorData.currentErrors();
     },
     scrollToLine(line) {
-      AutomatorTextUI.scrollToLine(line);
+      AutomatorTextUI.scrollToLine(line - 1);
       AutomatorTextUI.updateHighlightedLine(line, "Error");
     }
   }

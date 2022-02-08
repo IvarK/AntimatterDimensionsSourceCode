@@ -1,8 +1,8 @@
+import { Parser, EOF } from "chevrotain";
 import { AutomatorCommands } from "./automator-commands.js";
 import { AutomatorLexer } from "./lexer.js";
 
 export const AutomatorGrammar = (function() {
-  const Parser = chevrotain.Parser;
   const T = AutomatorLexer.tokenMap;
 
   // ----------------- parser -----------------
@@ -37,7 +37,7 @@ export const AutomatorGrammar = (function() {
 
       const commandAlts = [
         "$.SUBRULE($.badCommand)",
-        "$.CONSUME(chevrotain.EOF)",
+        "$.CONSUME(EOF)",
       ];
 
       for (const cmd of AutomatorCommands) {
@@ -45,12 +45,12 @@ export const AutomatorGrammar = (function() {
         commandAlts.push(`$.SUBRULE($.${cmd.id})`);
       }
 
-      const commandOr = window.Function("$", `
+      const commandOr = window.Function("$", "EOF", `
         return () => $.OR($.c1 || ($.c1 = [
           ${commandAlts.map(e => `{ ALT: () => ${e} },`).join("\n")}]));
       `);
 
-      $.RULE("command", commandOr($));
+      $.RULE("command", commandOr($, EOF));
 
       $.RULE("badCommand", () => $.AT_LEAST_ONE(() => $.SUBRULE($.badCommandToken)),
         { resyncEnabled: false, }

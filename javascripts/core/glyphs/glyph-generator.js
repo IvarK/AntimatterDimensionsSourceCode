@@ -5,6 +5,8 @@
  * So, this interface is implemented by a real and fake RNG class; after creating one and
  * using it, call finalize on it to write the seed out.
  */
+import { deepmerge } from "@/utility/deepmerge";
+
 class GlyphRNG {
   static get SECOND_GAUSSIAN_DEFAULT_VALUE() {
     return 1e6;

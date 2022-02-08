@@ -1,6 +1,7 @@
 import { GlyphTypes } from "./glyph-effects.js";
 import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
 import { DC } from "./constants.js";
+import { deepmergeAll } from "@/utility/deepmerge";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
@@ -845,7 +846,7 @@ window.player = {
 };
 
 export const Player = {
-  defaultStart: deepmerge.all([{}, player]),
+  defaultStart: deepmergeAll([{}, player]),
 
   get isInMatterChallenge() {
     return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;

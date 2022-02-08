@@ -1,4 +1,5 @@
 import { GameStorage } from "./storage.js";
+import { deepmergeAll } from "@/utility/deepmerge";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {
@@ -906,7 +907,7 @@ GameStorage.migrations = {
   patch(saveData) {
     this.prePatch(saveData);
     // This adds all the undefined properties to the save which are in player.js
-    const player = deepmerge.all([Player.defaultStart, saveData]);
+    const player = deepmergeAll([Player.defaultStart, saveData]);
     const versions = Object.keys(this.patches)
       .map(parseFloat)
       .sort();

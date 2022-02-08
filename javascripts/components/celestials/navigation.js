@@ -1,4 +1,5 @@
 import { CELESTIAL_NAV_DRAW_ORDER } from "../../core/secret-formula/celestials/navigation";
+import svgPanZoom from "svg-pan-zoom";
 
 export const BezTestData = {
   P0: new Vector(300, 300),

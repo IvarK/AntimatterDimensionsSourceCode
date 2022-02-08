@@ -1,11 +1,19 @@
 <script>
 export default {
+  name: "NewGame",
   data() {
     return {
       plusRecord: 0,
       minusRecord: 0,
       visible: false
     };
+  },
+  computed: {
+    ngRange() {
+      return [...Array(3 + this.plusRecord - this.minusRecord).keys()]
+        .map(x => x - 1 + this.minusRecord)
+        .filter(Boolean);
+    },
   },
   methods: {
     update() {
@@ -20,13 +28,6 @@ export default {
     startNewGame(i) {
       NG.startNewGame(i);
     }
-  },
-  computed: {
-    ngRange() {
-      return [...Array(3 + this.plusRecord - this.minusRecord).keys()]
-        .map(x => x - 1 + this.minusRecord)
-        .filter(Boolean);
-    },
   }
 };
 </script>

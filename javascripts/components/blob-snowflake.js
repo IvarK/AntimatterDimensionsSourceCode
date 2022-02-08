@@ -1,3 +1,5 @@
+import TWEEN from "tween.js";
+
 Vue.component("blob-snowflake", {
   props: {
     bounds: Object

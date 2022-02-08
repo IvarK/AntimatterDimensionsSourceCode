@@ -1,5 +1,8 @@
 import { notify } from "./notify.js";
 import { state } from "./ui.init.js";
+import VTooltip from "v-tooltip";
+import { useLongPress, useRepeatingClick } from "./longpress";
+import VueGtag from "vue-gtag";
 
 Vue.mixin({
   computed: {
@@ -153,13 +156,11 @@ export const UIID = (function() {
   return { next: () => id++ };
 }());
 
-(function() {
-  const vTooltip = VTooltip.VTooltip.options;
-  vTooltip.defaultClass = "general-tooltip";
-  vTooltip.popover.defaultBaseClass = "general-tooltip";
-  vTooltip.defaultTemplate =
-    '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
-}());
+VTooltip.options.defaultClass = "general-tooltip";
+VTooltip.options.popover.defaultBaseClass = "general-tooltip";
+VTooltip.options.defaultTemplate =
+  '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
+Vue.use(VTooltip);
 
 (function() {
   const methodStrategy = Vue.config.optionMergeStrategies.methods;
@@ -175,6 +176,12 @@ export const UIID = (function() {
     return result;
   };
 }());
+
+useLongPress(Vue);
+useRepeatingClick(Vue);
+Vue.use(VueGtag, {
+  config: { id: "UA-77268961-1" }
+});
 
 export const ui = new Vue({
   el: "#ui",

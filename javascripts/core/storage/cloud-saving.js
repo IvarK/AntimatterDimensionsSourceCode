@@ -1,4 +1,9 @@
+import pako from "pako/dist/pako.esm.mjs";
+import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker.js";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
+import { getDatabase, ref, get, set } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
@@ -10,12 +15,12 @@ const firebaseConfig = {
   appId: "1:904798020003:web:d1448dcb2dedd8b5",
 };
 
-firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 export const Cloud = {
-  provider: new firebase.auth.GoogleAuthProvider(),
-  auth: firebase.auth(),
-  db: firebase.database(),
+  provider: new GoogleAuthProvider(),
+  auth: getAuth(),
+  db: getDatabase(),
   user: null,
   hasSeenSavingConflict: false,
   shouldOverwriteCloudSave: true,
@@ -25,15 +30,15 @@ export const Cloud = {
   },
 
   async login() {
-    await this.auth.signInWithPopup(this.provider);
+    await signInWithPopup(this.auth, this.provider);
   },
 
   async loadMobile() {
     if (!this.user) return;
-    const snapshot = await this.db.ref(`users/${this.user.id}/player`).get();
+    const snapshot = await get(ref(this.db, `users/${this.user.id}/player`));
     if (snapshot.exists) {
       const encoded = snapshot.val();
-      const uintArray = Base64Binary.decode(encoded.replace(/-/gu, "+").replace(/_/gu, "/"));
+      const uintArray = decodeBase64Binary(encoded.replace(/-/gu, "+").replace(/_/gu, "/"));
       const save = pako.ungzip(uintArray, { to: "string" });
       // TODO: do something with this.
       JSON.parse(save);
@@ -81,7 +86,7 @@ export const Cloud = {
       saves: GameStorage.saves,
     };
 
-    this.db.ref(`users/${this.user.id}/web`).set(GameSaveSerializer.serialize(root));
+    set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 
@@ -117,18 +122,18 @@ export const Cloud = {
   },
 
   async load() {
-    const snapshot = await this.db.ref(`users/${this.user.id}/web`).get();
+    const snapshot = await get(ref(this.db, `users/${this.user.id}/web`));
     if (snapshot.exists) return snapshot.val();
 
     return null;
   },
 
   logout() {
-    this.auth.signOut();
+    signOut(this.auth);
   },
 
   init() {
-    firebase.auth().onAuthStateChanged(user => {
+    getAuth().onAuthStateChanged(user => {
       if (user) {
         this.user = {
           id: user.uid,

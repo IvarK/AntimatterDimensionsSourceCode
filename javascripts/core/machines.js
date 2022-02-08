@@ -4,7 +4,7 @@ export const MachineHandler = {
   get baseRMCap() { return DC.E1000; },
 
   get hardcapRM() {
-    return this.baseRMCap.times(ImaginaryUpgrade(6).effectOrDefault(0));
+    return this.baseRMCap.times(ImaginaryUpgrade(6).effectOrDefault(1));
   },
 
   get distanceToRMCap() {

@@ -1,3 +1,75 @@
+<script>
+import ArmageddonButton from "./ArmageddonButton";
+import PelleStrike from "./PelleStrike.vue";
+import PelleUpgradeVue from "./PelleUpgrade.vue";
+import GalaxyGeneratorVue from "./GalaxyGenerator.vue";
+
+export default {
+  name: "PelleTab",
+  components: {
+    ArmageddonButton,
+    PelleStrike,
+    PelleUpgradeVue,
+    GalaxyGeneratorVue
+  },
+  data() {
+    return {
+      isDoomed: false,
+      remnants: 0,
+      realityShards: new Decimal(0),
+      compact: false,
+      showBought: false,
+      hasGalaxyGenerator: false,
+      isHovering: false,
+    };
+  },
+  computed: {
+    rebuyables: () => PelleRebuyableUpgrade.all,
+    upgrades() { return PelleUpgrade.all.filter(u => !u.isBought); },
+    boughtUpgrades() { return PelleUpgrade.all.filter(u => u.isBought); },
+    visibleUpgrades() { return this.upgrades.slice(0, 5); },
+    fadedUpgrades() { return this.upgrades.slice(5, 10); },
+    allUpgrades() {
+      let upgrades = [];
+      if (this.showBought) upgrades = this.boughtUpgrades;
+      upgrades = upgrades.concat(this.visibleUpgrades);
+      return upgrades;
+    },
+    strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
+  },
+  methods: {
+    update() {
+      this.isDoomed = Pelle.isDoomed;
+      this.remnants = Pelle.cel.remnants;
+      this.realityShards.copyFrom(Pelle.cel.realityShards);
+      this.compact = Pelle.cel.compact;
+      this.showBought = Pelle.cel.showBought;
+      this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
+    },
+    toggleCompact() {
+      Pelle.cel.compact = !Pelle.cel.compact;
+    },
+    toggleBought() {
+      Pelle.cel.showBought = !Pelle.cel.showBought;
+      this.$recompute("upgrades");
+    },
+    getDoomedScrub() {
+      player.celestials.pelle.doomed = true;
+      Pelle.armageddon(false);
+      Glyphs.unequipAll();
+      respecTimeStudies(true);
+      Currency.infinityPoints.reset();
+      player.infMult = 0;
+      Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
+      disChargeAll();
+    },
+    showModal() {
+      Modal.pelleEffects.show();
+    }
+  }
+};
+</script>
+
 <template>
   <div class="l-pelle-celestial-tab">
     <div v-if="isDoomed">
@@ -74,76 +146,6 @@
     </button>
   </div>
 </template>
-
-<script>
-import ArmageddonButton from "./ArmageddonButton";
-import PelleStrike from "./PelleStrike.vue";
-import PelleUpgradeVue from "./PelleUpgrade.vue";
-import GalaxyGeneratorVue from "./GalaxyGenerator.vue";
-export default {
-  components: {
-    ArmageddonButton,
-    PelleUpgradeVue,
-    PelleStrike,
-    GalaxyGeneratorVue
-  },
-  data() {
-    return {
-      isDoomed: false,
-      remnants: 0,
-      realityShards: new Decimal(0),
-      compact: false,
-      showBought: false,
-      hasGalaxyGenerator: false,
-      isHovering: false,
-    };
-  },
-  methods: {
-    update() {
-      this.isDoomed = Pelle.isDoomed;
-      this.remnants = Pelle.cel.remnants;
-      this.realityShards.copyFrom(Pelle.cel.realityShards);
-      this.compact = Pelle.cel.compact;
-      this.showBought = Pelle.cel.showBought;
-      this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
-    },
-    toggleCompact() {
-      Pelle.cel.compact = !Pelle.cel.compact;
-    },
-    toggleBought() {
-      Pelle.cel.showBought = !Pelle.cel.showBought;
-      this.$recompute("upgrades");
-    },
-    getDoomedScrub() {
-      player.celestials.pelle.doomed = true;
-      Pelle.armageddon(false);
-      Glyphs.unequipAll();
-      respecTimeStudies(true);
-      Currency.infinityPoints.reset();
-      player.infMult = 0;
-      Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
-      disChargeAll();
-    },
-    showModal() {
-      Modal.pelleEffects.show();
-    }
-  },
-  computed: {
-    rebuyables: () => PelleRebuyableUpgrade.all,
-    upgrades() { return PelleUpgrade.all.filter(u => !u.isBought); },
-    boughtUpgrades() { return PelleUpgrade.all.filter(u => u.isBought); },
-    visibleUpgrades() { return this.upgrades.slice(0, 5); },
-    fadedUpgrades() { return this.upgrades.slice(5, 10); },
-    allUpgrades() {
-      let upgrades = [];
-      if (this.showBought) upgrades = this.boughtUpgrades;
-      upgrades = upgrades.concat(this.visibleUpgrades);
-      return upgrades;
-    },
-    strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
-  }
-};
-</script>
 
 <style scoped>
   .o-pelle-button {

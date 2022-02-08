@@ -1,9 +1,3 @@
-import "./eternity/eternity-points-header.js";
-import "./eternity/time-studies/time-studies-tab.js";
-import "./eternity/upgrades/eternity-upgrades-tab.js";
-import "./eternity/milestones/eternity-milestones-tab.js";
-import "./eternity/dilation/time-dilation-tab.js";
-
 import "./reality/reality-machines-header.js";
 import "./reality/glyphs/glyphs-tab.js";
 import "./reality/upgrades/reality-upgrades-tab.js";

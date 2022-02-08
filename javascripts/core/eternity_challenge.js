@@ -1,5 +1,6 @@
 import { GameMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
+import { deepmergeAll } from "@/utility/deepmerge";
 
 export function startEternityChallenge() {
   initializeChallengeCompletions();
@@ -27,7 +28,7 @@ export function startEternityChallenge() {
 class EternityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
     const effect = config.effect;
-    const configCopy = deepmerge.all([{}, config]);
+    const configCopy = deepmergeAll([{}, config]);
     configCopy.effect = () => effect(challenge.completions);
     super(configCopy);
     this._challenge = challenge;

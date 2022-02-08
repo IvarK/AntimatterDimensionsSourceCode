@@ -31,8 +31,7 @@ class LongPress {
   }
 
   static addTo(obj, timeout, handlers) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (!handlers.hasOwnProperty("longPress")) {
+    if (!Object.prototype.hasOwnProperty.call(handlers, "longPress")) {
       throw "Need to specify a longPress handler";
     }
     const begin = e => LongPress._pressBegin(timeout, handlers.longPress, handlers.cancel, handlers.repeat, e);

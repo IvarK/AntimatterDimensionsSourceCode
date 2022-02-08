@@ -36,7 +36,7 @@
 
 const keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-/* Will return a  Uint8Array type */
+/* Will return a Uint8Array type */
 export function decodeArrayBuffer(input) {
   const bytes = (input.length / 4) * 3;
   const ab = new ArrayBuffer(bytes);

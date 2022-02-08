@@ -1,12 +1,12 @@
 <script>
 import EternityUpgradeButton from "./EternityUpgradeButton";
-import EpMultiplierButton from "./EpMultiplierButton";
+import EPMultiplierButton from "./EPMultiplierButton";
 
 export default {
   name: "EternityUpgradesTab",
   components: {
     EternityUpgradeButton,
-    EpMultiplierButton
+    EPMultiplierButton
   },
   computed: {
     grid() {
@@ -26,9 +26,7 @@ export default {
     costIncreases: () => EternityUpgrade.epMult.costIncreaseThresholds.map(x => new Decimal(x))
   },
   methods: {
-    formatPostBreak(number, places) {
-      return formatPostBreak(number, places);
-    }
+    formatPostBreak
   }
 };
 </script>
@@ -40,14 +38,14 @@ export default {
       :key="i"
       class="l-eternity-upgrades-grid__row"
     >
-      <eternity-upgrade-button
+      <EternityUpgradeButton
         v-for="upgrade in row"
         :key="upgrade.id"
         :upgrade="upgrade"
         class="l-eternity-upgrades-grid__cell"
       />
     </div>
-    <ep-multiplier-button />
+    <EPMultiplierButton />
     <div>
       The cost for the {{ formatX(5) }} multiplier jumps at {{ format(costIncreases[0]) }},
       {{ formatPostBreak(costIncreases[1], 2) }}, and {{ formatPostBreak(costIncreases[2]) }} Eternity Points.

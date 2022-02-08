@@ -3,7 +3,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
-  name: "EpMultiplierButton",
+  name: "EPMultiplierButton",
   components: {
     PrimaryButton,
     PrimaryToggleButton

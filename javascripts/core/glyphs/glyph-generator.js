@@ -150,63 +150,20 @@ export const GlyphGenerator = {
 
   // These Glyphs are given on entering Doomed to prevent the player
   // from having non of each basic glyphs which are requied to beat pelle
-  dilationDoomed() {
+  doomedGlyph(type) {
+    const effectList = Object.values(GameDatabase.reality.glyphEffects).filter(e => e.id.startsWith(type));
+    effectList.push(GameDatabase.reality.glyphEffects.timespeed);
+    let bitmask = 0;
+    // eslint-disable-next-line no-bitwise
+    for (const effect of effectList) bitmask |= 1 << effect.bitmaskIndex;
     return {
       id: undefined,
       idx: null,
-      type: "dilation",
+      type,
       strength: 3.5,
       level: 69420,
       rawLevel: 69420,
-      effects: 242,
-    };
-  },
-
-  replicationDoomed() {
-    return {
-      id: undefined,
-      idx: null,
-      type: "replication",
-      strength: 3.5,
-      level: 69420,
-      rawLevel: 69420,
-      effects: 3842,
-    };
-  },
-
-  infinityDoomed() {
-    return {
-      id: undefined,
-      idx: null,
-      type: "infinity",
-      strength: 3.5,
-      level: 69420,
-      rawLevel: 69420,
-      effects: 61442,
-    };
-  },
-
-  powerDoomed() {
-    return {
-      id: undefined,
-      idx: null,
-      type: "power",
-      strength: 3.5,
-      level: 69420,
-      rawLevel: 69420,
-      effects: 983042,
-    };
-  },
-
-  timeDoomed() {
-    return {
-      id: undefined,
-      idx: null,
-      type: "time",
-      strength: 3.5,
-      level: 69420,
-      rawLevel: 69420,
-      effects: 134217743,
+      effects: bitmask,
     };
   },
 

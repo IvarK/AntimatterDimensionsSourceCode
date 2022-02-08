@@ -62,11 +62,7 @@ export default {
       }
       Glyphs.unequipAll();
       Glyphs.harshAutoClean();
-      Glyphs.addToInventory(GlyphGenerator.powerDoomed());
-      Glyphs.addToInventory(GlyphGenerator.infinityDoomed());
-      Glyphs.addToInventory(GlyphGenerator.replicationDoomed());
-      Glyphs.addToInventory(GlyphGenerator.timeDoomed());
-      Glyphs.addToInventory(GlyphGenerator.dilationDoomed());
+      for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
       respecTimeStudies(true);

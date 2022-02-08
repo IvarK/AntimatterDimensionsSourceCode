@@ -26,7 +26,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="resetCelestial"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to exit a Celestial Reality
     </template>

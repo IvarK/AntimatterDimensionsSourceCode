@@ -10,10 +10,10 @@ export default {
   },
   computed: {
     count() {
-      return ConfirmationTypes.length;
+      return ConfirmationTypes.index.length;
     },
     noConfirmations() {
-      return ConfirmationTypes.every(x => !x.isUnlocked());
+      return ConfirmationTypes.index.every(x => !x.isUnlocked());
     }
   }
 };

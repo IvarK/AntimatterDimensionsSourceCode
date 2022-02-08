@@ -31,7 +31,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="glyphUndo"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to undo equipping a Glyph
     </template>

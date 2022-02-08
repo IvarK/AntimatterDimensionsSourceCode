@@ -1293,6 +1293,9 @@ GameStorage.devMigrations = {
       delete player.celestials.laitela.autoAnnihilationSetting;
     },
     GameStorage.migrations.etercreqConversion,
+    player => {
+      delete player.options.confirmations.reality;
+    },
   ],
 
   patch(player) {

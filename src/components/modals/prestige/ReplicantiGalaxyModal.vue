@@ -47,7 +47,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="replicantiGalaxy"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

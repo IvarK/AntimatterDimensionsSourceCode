@@ -3,17 +3,22 @@ import { GameDatabase } from "./secret-formula/game-database";
 class ConfirmationState {
   constructor(config) {
     this.name = config.name;
-    this.confirmationSetting = config.option;
+    this._confirmationSetting = config.option;
     this.isUnlocked = config.isUnlocked;
   }
 
   get option() {
-    return player.options.confirmations[this.confirmationSetting];
+    return player.options.confirmations[this._confirmationSetting];
   }
 
   set option(value) {
-    player.options.confirmations[this.confirmationSetting] = value;
+    player.options.confirmations[this._confirmationSetting] = value;
   }
 }
 
-export const ConfirmationTypes = GameDatabase.confirmationTypes.map(entry => new ConfirmationState(entry));
+export const ConfirmationTypes = GameDatabase.confirmationTypes.mapToObject(
+  config => config.option,
+  config => new ConfirmationState(config)
+);
+
+ConfirmationTypes.index = Object.values(ConfirmationTypes);

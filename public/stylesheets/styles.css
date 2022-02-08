@@ -5249,6 +5249,12 @@ screen and (max-width: 480px) {
   overflow: hidden;
 }
 
+.c-modal__title {
+  width: 50rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
 .c-modal__close-btn {
   position: absolute;
   top: 0.5rem;
@@ -5259,6 +5265,18 @@ screen and (max-width: 480px) {
   transform: scale(0.5);
   top: -0.5rem;
   right: -0.5rem;
+}
+
+.l-modal-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.c-modal__confirmation-check {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 1rem 0.5rem 0;
 }
 
 .c-modal__confirm-btn {

@@ -42,7 +42,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="dimensionBoost"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

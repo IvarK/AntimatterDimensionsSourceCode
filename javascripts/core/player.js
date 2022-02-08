@@ -799,7 +799,6 @@ window.player = {
       challenges: true,
       eternity: true,
       dilation: true,
-      reality: true,
       resetReality: true,
       glyphReplace: true,
       glyphSacrifice: true,

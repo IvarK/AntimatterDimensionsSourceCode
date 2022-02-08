@@ -28,18 +28,20 @@ export default {
     RealityButton,
     RealityReminder
   },
-  data: () => ({
-    enslavedHint: "",
-    showInstability: false,
-    instabilityThreshold: 0,
-    hyperInstabilityThreshold: 0,
-    isInCelestialReality: false,
-    glyphTextColors: true,
-    autoRestartCelestialRuns: false,
-    sacrificeUnlocked: false,
-    sacrificeDisplayed: false,
-    resetRealityDisplayed: false,
-  }),
+  data() {
+    return {
+      enslavedHint: "",
+      showInstability: false,
+      instabilityThreshold: 0,
+      hyperInstabilityThreshold: 0,
+      isInCelestialReality: false,
+      glyphTextColors: true,
+      autoRestartCelestialRuns: false,
+      sacrificeUnlocked: false,
+      sacrificeDisplayed: false,
+      resetRealityDisplayed: false,
+    };
+  },
   computed: {
     showEnslavedHint() {
       return this.enslavedHint !== "";

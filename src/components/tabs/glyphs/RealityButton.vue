@@ -120,10 +120,8 @@ export default {
       if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier) {
         return true;
       }
-      if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked && Currency.eternityPoints.value.exponent > 4000) {
-        return true;
-      }
-      return Enslaved.isRunning && !Enslaved.isCompleted && Currency.eternityPoints.value.exponent > 4000;
+      return Currency.eternityPoints.value.exponent > 4000 &&
+        ((Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) || (Enslaved.isRunning && !Enslaved.isCompleted));
     },
     classObject() {
       return {

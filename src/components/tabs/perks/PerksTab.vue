@@ -1,11 +1,11 @@
 <script>
 import { DataSet, Network } from "vis-network";
-import PpLabel from "./PpLabel";
+import PerkPointLabel from "./PerkPointLabel";
 
 export default {
   name: "PerksTab",
   components: {
-    PpLabel
+    PerkPointLabel
   },
   computed: {
     showHintText() {
@@ -277,7 +277,7 @@ export const PerkNetwork = {
     ref="tab"
     class="c-perk-tab"
   >
-    <pp-label />
+    <PerkPointLabel />
   </div>
 </template>
 

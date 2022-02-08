@@ -10,7 +10,7 @@ export default {
   data() {
     return {
       scoreThreshold: 0,
-      effectScores: Object.assign({}, AutoGlyphProcessor.types[this.glyphType].effectScores),
+      effectScores: {},
     };
   },
   computed: {
@@ -39,6 +39,9 @@ export default {
     questionmarkTooltip() {
       return "The score of a glyph is its rarity % plus the specified amount for each effect it has";
     }
+  },
+  created() {
+    this.effectScores = Object.assign({}, AutoGlyphProcessor.types[this.glyphType].effectScores);
   },
   methods: {
     update() {

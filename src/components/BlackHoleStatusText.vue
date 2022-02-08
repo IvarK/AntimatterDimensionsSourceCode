@@ -20,9 +20,8 @@ export default {
   },
   methods: {
     update() {
-      const { blackHole } = this;
-      this.isUnlocked = blackHole.isUnlocked;
-      this.state = blackHole.displayState;
+      this.isUnlocked = this.blackHole.isUnlocked;
+      this.state = this.blackHole.displayState;
     }
   }
 };

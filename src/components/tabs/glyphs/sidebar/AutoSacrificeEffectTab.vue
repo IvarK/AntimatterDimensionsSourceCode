@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       effectCount: 0,
-      effectChoices: Object.assign({}, AutoGlyphProcessor.types[this.glyphType].effectChoices),
+      effectChoices: {},
     };
   },
   computed: {
@@ -38,6 +38,9 @@ export default {
       return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect.
         Glyphs with less than the specified rarity are sacrificed.`;
     }
+  },
+  created() {
+    this.effectChoices = Object.assign({}, AutoGlyphProcessor.types[this.glyphType].effectChoices);
   },
   methods: {
     update() {

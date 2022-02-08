@@ -213,8 +213,7 @@ export default {
   }
 };
 
-// The things inside player.celestials.effarig.glyphWeights
-const _GLYPH_WEIGHT_FIELDS = ["ep", "repl", "dt", "eternities"];
+const _GLYPH_WEIGHT_FIELDS = Object.keys(player.celestials.effarig.glyphWeights);
 
 // This function takes an array of data (3 elements), which add up to an integer, but
 // may not be whole numbers themselves, and tries to round them so that the sum is the same

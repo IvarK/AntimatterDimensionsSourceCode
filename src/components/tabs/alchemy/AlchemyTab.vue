@@ -164,13 +164,13 @@ export default {
     <div class="c-subtab-option-container">
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        @click="showAlchemyHowTo()"
+        @click="showAlchemyHowTo"
       >
         Click for alchemy info
       </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        @click="toggleAllReactions()"
+        @click="toggleAllReactions"
       >
         Toggle all reactions
       </PrimaryButton>

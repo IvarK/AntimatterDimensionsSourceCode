@@ -79,9 +79,7 @@ export default {
       />
       (Click to bring up details)
     </div>
-    <div
-      v-else-if="canPeek"
-    >
+    <div v-else-if="canPeek">
       Purchase the Reality study to see
       <br>
       this Reality's glyph choices

@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       confirmedDelete: false
-    }
+    };
   },
   computed: {
     glyph() {
@@ -26,7 +26,7 @@ export default {
     update() {
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
       if (this.glyph !== newGlyph && this.confirmedDelete) {
-        
+
         // Why is confirmedDelete here: refer to SacrificeGlyphModal.vue
 
         this.emitClose();

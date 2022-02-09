@@ -45,9 +45,9 @@ export default {
 
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
       if (this.glyph !== newGlyph && !this.confirmedRefine) {
-        
+
         // Why is confirmedRefine here: refer to SacrificeGlyphModal.vue
-        
+
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }

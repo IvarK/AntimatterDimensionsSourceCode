@@ -36,12 +36,12 @@ export default {
 
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
       if (this.glyph !== newGlyph && !this.confirmedSacrifice) {
-        
+
         // ConfirmedSacrifice is here because when you sac a glyph with confirmation it
         // Displays this modal message even though the glyph was sacced successfully.
         // I have no idea how the eventHub thing works or if moving the UI update before
         // the sac will break things so this is the best I could do. - Scar
-        
+
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }

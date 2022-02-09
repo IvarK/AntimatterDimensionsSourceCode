@@ -85,6 +85,7 @@ export default {
     }
   },
   created() {
+    this.glyphWeightFields = Object.keys(player.celestials.effarig.glyphWeights);
     // Private data to deal with weight allocation
     this.resetSavedWeights();
     // Used to debounce this row disappearing
@@ -104,6 +105,9 @@ export default {
   },
   methods: {
     update() {
+      if (this.glyphWeightFields === undefined) {
+        return;
+      }
       this.adjustVisible = EffarigUnlock.adjuster.isUnlocked;
       this.eternityVisible = RealityUpgrade(18).isBought;
       const glyphFactors = getGlyphLevelInputs();
@@ -125,7 +129,7 @@ export default {
       }
       this.factors = glyphFactors;
       let same = true;
-      _GLYPH_WEIGHT_FIELDS.forEach(e => {
+      this.glyphWeightFields.forEach(e => {
         if (this.weights[e] !== player.celestials.effarig.glyphWeights[e]) same = false;
         this.weights[e] = player.celestials.effarig.glyphWeights[e];
       });
@@ -162,7 +166,7 @@ export default {
       };
     },
     resetWeights() {
-      _GLYPH_WEIGHT_FIELDS.forEach(e => player.celestials.effarig.glyphWeights[e] = 25);
+      this.glyphWeightFields.forEach(e => player.celestials.effarig.glyphWeights[e] = 25);
       this.resetSavedWeights();
     },
     adjustSlider(which, value) {
@@ -188,13 +192,13 @@ export default {
           this.savedWeights.eternities;
         const reduceRatio = (100 - value) / savedRestSum;
         const newWeights = [];
-        _GLYPH_WEIGHT_FIELDS.forEach(x => {
+        this.glyphWeightFields.forEach(x => {
           if (x !== which) {
             newWeights.push(this.savedWeights[x] * reduceRatio);
           }
         });
         roundPreservingSum(newWeights);
-        _GLYPH_WEIGHT_FIELDS.forEach(x => {
+        this.glyphWeightFields.forEach(x => {
           if (x !== which) {
             player.celestials.effarig.glyphWeights[x] = newWeights.shift();
           }
@@ -212,8 +216,6 @@ export default {
     }
   }
 };
-
-const _GLYPH_WEIGHT_FIELDS = Object.keys(player.celestials.effarig.glyphWeights);
 
 // This function takes an array of data (3 elements), which add up to an integer, but
 // may not be whole numbers themselves, and tries to round them so that the sum is the same

@@ -31,7 +31,7 @@ export const GlyphSacrificeHandler = {
     else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
-    if (!this.canSacrifice) return 0;
+    if (!this.canSacrifice || Pelle.isDoomed) return 0;
     if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
@@ -40,6 +40,7 @@ export const GlyphSacrificeHandler = {
       Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1), power);
   },
   sacrificeGlyph(glyph, force = false) {
+    if (Pelle.isDoomed) return;
     // This also needs to be here because this method is called directly from drag-and-drop sacrificing
     if (this.handleSpecialGlyphTypes(glyph)) return;
     const toGain = this.glyphSacrificeGain(glyph);
@@ -117,6 +118,7 @@ export const GlyphSacrificeHandler = {
 
   },
   refineGlyph(glyph) {
+    if (Pelle.isDoomed) return;
     const resource = this.glyphAlchemyResource(glyph);
     // This technically completely trashes the glyph for no rewards if not unlocked, but this will only happen ever
     // if the player specificially tries to do so (in which case they're made aware that it's useless) or if the

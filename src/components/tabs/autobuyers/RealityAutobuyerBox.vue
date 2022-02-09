@@ -85,7 +85,7 @@ export default {
         property="glyph"
       />
       <div v-if="isOverCap">
-        Autobuyer will trigger at the glyph level cap of {{ formatInt(levelCap) }}.
+        Autobuyer will trigger at the Glyph level cap of {{ formatInt(levelCap) }}.
       </div>
     </template>
   </AutobuyerBox>

@@ -225,7 +225,10 @@ export const Glyphs = {
       sameSpecialTypeIndex = this.active.findIndex(x => x && x.type === glyph.type);
     }
     if (this.active[targetSlot] === null) {
-      if (sameSpecialTypeIndex >= 0) return;
+      if (sameSpecialTypeIndex >= 0) {
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped`);
+        return;
+      }
       this.removeFromInventory(glyph);
       this.saveUndo(targetSlot);
       player.reality.glyphs.active.push(glyph);
@@ -239,7 +242,7 @@ export const Glyphs = {
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
-        Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped`);
         return;
       }
       if (!player.options.confirmations.glyphReplace) {
@@ -260,7 +263,7 @@ export const Glyphs = {
       this.addToInventory(glyph, freeIndex);
     }
     if (player.reality.glyphs.active.length) {
-      Modal.message.show("Some of your glyphs could not be unequipped due to lack of inventory space.");
+      Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();

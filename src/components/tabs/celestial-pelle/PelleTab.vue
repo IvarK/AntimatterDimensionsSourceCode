@@ -66,7 +66,6 @@ export default {
       Glyphs.refreshActive();
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
-      Glyphs.unequipAll();
       respecTimeStudies(true);
       Currency.infinityPoints.reset();
       player.infMult = 0;

@@ -255,7 +255,7 @@ GameDatabase.celestials.pelle = (function() {
         name: "Pestilence",
         spendable: true,
         description: "When active, spends 3% of your Replicanti per second to increase Pestilence.",
-        effectDescription: x => `You gain replicanti ${formatX(x, 2, 2)} faster`,
+        effectDescription: x => `You gain Replicanti ${formatX(x, 2, 2)} faster`,
         strike: () => PelleStrikes.powerGalaxies,
         // 0 - 1
         percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,

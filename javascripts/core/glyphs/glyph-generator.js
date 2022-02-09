@@ -149,7 +149,7 @@ export const GlyphGenerator = {
   },
 
   // These Glyphs are given on entering Doomed to prevent the player
-  // from having non of each basic glyphs which are requied to beat pelle
+  // from having none of each basic glyphs which are requied to beat pelle
   doomedGlyph(type) {
     const effectList = Object.values(GameDatabase.reality.glyphEffects).filter(e => e.id.startsWith(type));
     effectList.push(GameDatabase.reality.glyphEffects.timespeed);

@@ -148,6 +148,26 @@ export const GlyphGenerator = {
     };
   },
 
+  // These Glyphs are given on entering Doomed to prevent the player
+  // from having none of each basic glyphs which are requied to beat pelle
+  doomedGlyph(type) {
+    const effectList = Object.values(GameDatabase.reality.glyphEffects).filter(e => e.id.startsWith(type));
+    effectList.push(GameDatabase.reality.glyphEffects.timespeed);
+    let bitmask = 0;
+    // eslint-disable-next-line no-bitwise
+    for (const effect of effectList) bitmask |= 1 << effect.bitmaskIndex;
+    const glyphLevel = Math.max(player.records.bestReality.glyphLevel, 5000);
+    return {
+      id: undefined,
+      idx: null,
+      type,
+      strength: 3.5,
+      level: glyphLevel,
+      rawLevel: glyphLevel,
+      effects: bitmask,
+    };
+  },
+
   companionGlyph(eternityPoints) {
     // Store the pre-Reality EP value in the glyph's rarity
     const str = rarityToStrength(eternityPoints.log10() / 1e6);

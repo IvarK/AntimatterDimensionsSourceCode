@@ -5,11 +5,12 @@ export default {
     return {
       canSwapImages: false,
       isCancerImages: false,
+      isDoomed: false,
     };
   },
   computed: {
     swapImagesButton() {
-      const symbol = Pelle.isDoomed ? "." : ":";
+      const symbol = this.isDoomed ? "." : ":";
       return this.isCancerImages ? "😂" : symbol;
     },
     imageSwapperStyleObject() {
@@ -18,6 +19,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       const isCancerTheme = Theme.current().name === "S4";
       this.canSwapImages = !isCancerTheme && Themes.find("S4").isAvailable();
       this.isCancerImages = isCancerTheme || player.secretUnlocks.cancerAchievements;

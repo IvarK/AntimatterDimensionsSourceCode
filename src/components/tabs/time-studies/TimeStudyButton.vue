@@ -146,21 +146,19 @@ export class TimeStudySetup {
     @click.shift.exact="shiftClick"
   >
     <slot />
-    <template v-if="!doomedRealityStudy">
-      <CostDisplay
-        v-if="(showCost && !showStCost) || STCost === 0"
-        br
-        :config="config"
-        name="Time Theorem"
-      />
-      <div v-else-if="showStCost">
-        Cost:
-        <span v-if="config.cost">
-          {{ quantifyInt("Time Theorem", config.cost) }} and
-        </span>
-        {{ quantifyInt("Space Theorem", STCost) }}
-      </div>
-    </template>
+    <CostDisplay
+      v-if="!doomedRealityStudy && ((showCost && !showStCost) || STCost === 0)"
+      br
+      :config="config"
+      name="Time Theorem"
+    />
+    <div v-else-if="showStCost">
+      Cost:
+      <span v-if="config.cost">
+        {{ quantifyInt("Time Theorem", config.cost) }} and
+      </span>
+      {{ quantifyInt("Space Theorem", STCost) }}
+    </div>
   </button>
 </template>
 

@@ -156,13 +156,14 @@ export const GlyphGenerator = {
     let bitmask = 0;
     // eslint-disable-next-line no-bitwise
     for (const effect of effectList) bitmask |= 1 << effect.bitmaskIndex;
+    const glyphLevel = Math.max(player.records.bestReality.glyphLevel, 5000);
     return {
       id: undefined,
       idx: null,
       type,
       strength: 3.5,
-      level: 69420,
-      rawLevel: 69420,
+      level: glyphLevel,
+      rawLevel: glyphLevel,
       effects: bitmask,
     };
   },

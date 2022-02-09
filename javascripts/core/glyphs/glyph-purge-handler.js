@@ -118,6 +118,7 @@ export const GlyphSacrificeHandler = {
 
   },
   refineGlyph(glyph) {
+    if (Pelle.isDoomed) return;
     const resource = this.glyphAlchemyResource(glyph);
     // This technically completely trashes the glyph for no rewards if not unlocked, but this will only happen ever
     // if the player specificially tries to do so (in which case they're made aware that it's useless) or if the

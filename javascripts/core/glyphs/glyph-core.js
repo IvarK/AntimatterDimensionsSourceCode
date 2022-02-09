@@ -256,7 +256,7 @@ export const Glyphs = {
       this.addToInventory(glyph, freeIndex);
     }
     if (player.reality.glyphs.active.length) {
-      Modal.message.show("Some of your glyphs could not be unequipped due to lack of inventory space.");
+      Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();

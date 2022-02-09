@@ -56,8 +56,8 @@ export default {
     getDoomedScrub() {
       Glyphs.harshAutoClean();
       if (Glyphs.freeInventorySpace === 0) {
-        Modal.message.show(`Entering Doomed will unequip your glyphs. Some of your
-        glyphs could not be unequipped due to lack of inventory space.`);
+        Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
+        Glyphs could not be unequipped due to lack of inventory space.`);
         return;
       }
       Glyphs.unequipAll();

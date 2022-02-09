@@ -276,7 +276,7 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.6,
-            description: "When replicanti amount exceeds 1e1300, your Galaxies are 10% more effective"
+            description: "When Replicanti amount exceeds 1e1300, your Galaxies are 10% more effective"
           },
           {
             requirement: 1,

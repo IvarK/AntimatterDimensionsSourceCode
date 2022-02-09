@@ -159,10 +159,7 @@ export default {
         @click="showModal"
       >
         <!-- the drop zone is a bit larger than the glyph itself. -->
-        <div
-          class="l-equipped-glyphs__dropzone"
-
-        />
+        <div class="l-equipped-glyphs__dropzone" />
         <GlyphComponent
           v-if="glyph"
           :key="idx"

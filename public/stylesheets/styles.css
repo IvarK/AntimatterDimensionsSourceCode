@@ -8508,6 +8508,17 @@ kbd {
   color: var(--color-reality-light);
 }
 
+.c-reality-upgrade-btn--useless {
+  background-color: var(--color-pelle--base);
+  border-color: #4a110b;
+  cursor: default;
+}
+
+.c-reality-upgrade-btn--useless:hover {
+  color: var(--color-reality-light);
+  background-color: var(--color-pelle--base);
+}
+
 .c-reality-upgrade-btn--bought {
   background-color: var(--color-reality);
   border-color: #094E0B;

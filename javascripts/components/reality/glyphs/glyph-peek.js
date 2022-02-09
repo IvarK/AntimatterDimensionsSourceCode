@@ -8,6 +8,7 @@ Vue.component("glyph-peek", {
     return {
       glyphs: [],
       level: 0,
+      isDoomed: false,
       canPeek: false,
       isVisible: false,
       canRefresh: false,
@@ -30,11 +31,12 @@ Vue.component("glyph-peek", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
       // Hide this before first reality since then it'll confuse the player,
       // and due to pre-selected first glyph might well be incorrect anyway.
-      this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought;
-      this.canPeek = PlayerProgress.realityUnlocked();
+      this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought && this.isDoomed;
+      this.canPeek = PlayerProgress.realityUnlocked() && !this.isDoomed;
       if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }
@@ -80,6 +82,11 @@ Vue.component("glyph-peek", {
         Purchase the Reality study to see
         <br>
         this Reality's glyph choices
+      </div>
+      <div v-else>
+        You will not gain any Glyphs
+        <br>
+        from Doomed Realities
       </div>
     </div>`
 });

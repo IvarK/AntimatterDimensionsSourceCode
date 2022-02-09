@@ -56,6 +56,10 @@ export const Glyphs = {
     return this.inventory.filter((e, idx) => e === null && idx >= this.protectedSlots).length;
   },
   get activeSlotCount() {
+    if (Pelle.isDoomed) {
+      if (PelleRifts.famine.hasMilestone(0)) return 1;
+      return 0;
+    }
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
   },
   get protectedSlots() {

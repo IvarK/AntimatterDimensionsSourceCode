@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      inDoomed: false,
+      isDoomed: false,
       isAutobuyerActive: false,
       isAutoUnlocked: false,
       isAffordable: false,
@@ -30,7 +30,7 @@ export default {
         "o-eternity-upgrade": true,
         "o-eternity-upgrade--available": this.isAffordable,
         "o-eternity-upgrade--unavailable": !this.isAffordable,
-        "c-pelle-useless": this.inDoomed
+        "c-pelle-useless": this.isDoomed
       };
     }
   },
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     update() {
-      this.inDoomed = Pelle.isDoomed;
+      this.isDoomed = Pelle.isDoomed;
       const upgrade = this.upgrade;
       this.isAutoUnlocked = this.autobuyer.isUnlocked;
       this.isAutobuyerActive = this.autobuyer.isActive;
@@ -59,7 +59,7 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <div v-if="inDoomed">
+      <div v-if="isDoomed">
         This multiplier has no effect while in Doomed
       </div>
       <div v-else>

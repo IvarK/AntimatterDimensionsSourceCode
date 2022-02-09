@@ -54,6 +54,16 @@ export default {
       this.$recompute("upgrades");
     },
     getDoomedScrub() {
+      Glyphs.harshAutoClean();
+      if (Glyphs.freeInventorySpace === 0) {
+        Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
+        Glyphs could not be unequipped due to lack of inventory space.`);
+        return;
+      }
+      Glyphs.unequipAll();
+      Glyphs.harshAutoClean();
+      for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+      Glyphs.refreshActive();
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
       Glyphs.unequipAll();

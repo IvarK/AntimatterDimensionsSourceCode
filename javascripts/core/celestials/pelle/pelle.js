@@ -127,6 +127,19 @@ export const Pelle = {
     return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
   },
 
+  get disabledRUPGs() {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 20, 22, 23, 24];
+  },
+
+  get disablediUPGs() {
+    return [8, 9, 11, 12, 14, 23, 24];
+  },
+
+  get uselessPerks() {
+    return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204, 205];
+  },
+
   get uselessRaMilestones() {
     return [0, 1, 15, 18, 19, 21];
   },
@@ -482,6 +495,7 @@ class RiftState extends GameMechanicState {
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     }
+    if (PelleRifts.famine.hasMilestone(0)) Glyphs.refreshActive();
   }
 }
 

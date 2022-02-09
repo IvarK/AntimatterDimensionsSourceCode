@@ -1,5 +1,6 @@
 Vue.component("reality-amplify-button", {
   data: () => ({
+    isDoomed: false,
     isVisible: false,
     isDisabled: false,
     isActive: false,
@@ -8,6 +9,7 @@ Vue.component("reality-amplify-button", {
   }),
   computed: {
     tooltip() {
+      if (this.isDoomed) return "You cannot amplify a Doomed Reality";
       if (this.isDisabled) return "You cannot amplify Celestial Realities";
       if (!this.canAmplify) {
         return "Store more or complete the Reality faster to amplify";
@@ -17,11 +19,12 @@ Vue.component("reality-amplify-button", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isVisible = Enslaved.isUnlocked;
       this.isDisabled = isInCelestialReality();
       this.isActive = Enslaved.boostReality;
       this.ratio = Enslaved.realityBoostRatio;
-      this.canAmplify = !this.isDisabled && this.ratio > 1;
+      this.canAmplify = !this.isDisabled && this.ratio > 1 && !isDoomed;
     },
     toggleActive() {
       if (!this.canAmplify) return;
@@ -44,8 +47,11 @@ Vue.component("reality-amplify-button", {
           <br>
           All rewards ×{{ formatInt(ratio) }}
         </div>
-        <div v-else>
+        <div v-else-if="!isDoomed">
           Not enough stored real time to amplify.
+        </div>
+        <div v-else>
+          You cannot amplify a Doomed Reality
         </div>
       </button>
     </div>`

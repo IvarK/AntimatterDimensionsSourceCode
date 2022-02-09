@@ -52,7 +52,7 @@ GameDatabase.speedrunMilestones = [
   {
     id: 7,
     key: "upgrade5e11IP",
-    name: "5e11 IP Upgrade",
+    get name() { return `${format(5e11)} IP Upgrade`; },
     description: () => `Purchase the ${formatPercents(0.5)} stronger Galaxies upgrade`,
     checkRequirement: () => true,
     // This is checked within BreakInfinityUpgrade.onPurchased

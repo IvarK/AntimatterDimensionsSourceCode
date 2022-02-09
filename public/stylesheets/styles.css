@@ -8976,7 +8976,14 @@ input.o-automator-block-input {
   border-radius: 0;
 }
 
+.s-base--metro .c-hide-modal-tab-button { 
+  border-radius: 0; 
+}
+
 .c-hide-modal-tab-button {
+  color: var(--color-text);
+  background-color: var(--color-base);
+  font: Typewriter, serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8984,10 +8991,19 @@ input.o-automator-block-input {
   height: 4rem;
   width: 12rem;
   margin: 0.2rem;
-  border-color: black !important;
-  box-shadow: none !important;
+  border: 0.1rem solid black;
+  border-radius: 0.4rem;
+  box-shadow: none;
   white-space: normal;
   font-weight: bold;
+  cursor: pointer;
+  transition-duration: 0.2s;
+  padding: 0.3rem 1rem;
+}
+
+.c-hide-modal-tab-button:hover {
+  color: var(--color-text-inverted);
+  background-color: var(--color-good);
 }
 
 .c-hide-modal-button--active {
@@ -8999,7 +9015,7 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-button--always-visible {
-  background-color: var(--color-disabled) !important;
+  background-color: var(--color-disabled);
   pointer-events: none;
 }
 
@@ -9009,46 +9025,46 @@ input.o-automator-block-input {
 
 .c-hide-modal-tab-button--infinity {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-infinity) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--infinity:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-infinity) !important;
+  background: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--eternity {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-eternity) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-eternity)
 }
 
 .c-hide-modal-tab-button--eternity:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-eternity) !important;
+  background: var(--color-eternity);
 }
 
 .c-hide-modal-tab-button--reality {
   color: var(--color-reality);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-reality) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--reality:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-reality) !important;
+  background: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--celestials {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent) !important;
-  border-color: var(--color-celestials) !important;
+  background: var(--color-prestige--accent);
+  border-color: var(--color-celestials);
 }
 
 .c-hide-modal-tab-button--celestials:hover {
   color: var(--color-prestige--accent);
-  background: var(--color-celestials) !important;
+  background: var(--color-celestials);
 }
 
 /* Prevent any themes overriding font awesome */

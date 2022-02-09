@@ -30,7 +30,6 @@ export default {
     },
     classObjectButton() {
       return {
-        "o-primary-btn": true,
         "c-hide-modal-tab-button": true,
         "c-hide-modal-button--active": !this.hidden,
         "c-hide-modal-button--inactive": this.hidden,

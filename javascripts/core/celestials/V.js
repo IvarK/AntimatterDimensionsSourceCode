@@ -124,7 +124,7 @@ export const V_UNLOCKS = {
   },
   ND_POW: {
     id: 2,
-    reward: "Antimatter Dimension power based on Space Theorems.",
+    reward: "Antimatter Dimension power based on total Space Theorems.",
     get description() { return `Have ${formatInt(5)} V-Achievements`; },
     effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
     format: x => formatPow(x, 3, 3),

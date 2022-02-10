@@ -9,6 +9,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       cost: 0,
       isMaxed: false,
       isUnlocked: false
@@ -16,6 +17,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.cost = this.autobuyer.cost;
       this.isMaxed = this.autobuyer.hasMaxedInterval;
       this.isUnlocked = this.autobuyer.isUnlocked;
@@ -41,7 +43,8 @@ export default {
     v-else-if="!isMaxed"
     class="o-autobuyer-btn l-autobuyer-box__button"
   >
-    Complete the challenge to upgrade interval
+    <span v-if="isDoomed">You cannot upgrade this Autobuyers interval yet</span>
+    <span v-else>Complete the challenge to upgrade interval</span>
   </button>
 </template>
 

@@ -150,11 +150,11 @@ Vue.component("reality-button", {
           <template v-else-if="hasRealityStudy">
             <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
           </template>
-          <template v-else-if="!isDoomed">
-            <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
+          <template v-else-if="isDoomed">
+            <div>You cannot escape a Doomed Reality</div>
           </template>
           <template v-else>
-            <div>You cannot escape a Doomed Reality</div>
+            <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
           </template>
           <div class="infotooltiptext" v-if="canReality">
             <div>Other resources gained:</div>

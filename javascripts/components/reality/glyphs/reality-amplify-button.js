@@ -41,17 +41,17 @@ Vue.component("reality-amplify-button", {
         @click="toggleActive"
         :ach-tooltip="tooltip"
       >
-        <div v-if="canAmplify">
+        <div v-if="isDoomed">
+          You cannot amplify Doomed Realities.
+        </div>
+        <div v-else-if="canAmplify">
           <span v-if="isActive">Will be amplified:</span>
           <span v-else>Amplify this Reality:</span>
           <br>
           All rewards ×{{ formatInt(ratio) }}
         </div>
-        <div v-else-if="!isDoomed">
-          Not enough stored real time to amplify.
-        </div>
         <div v-else>
-          You cannot amplify a Doomed Reality
+          Not enough stored real time to amplify.
         </div>
       </button>
     </div>`

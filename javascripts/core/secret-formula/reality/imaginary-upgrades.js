@@ -159,9 +159,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
       checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: () => (Pelle.isDoomed
-        ? "Unlock Lai'tela, Celestial of Dimensions"
-        : "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions"),
+      description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
     },
     {
       name: "Massless Momentum",

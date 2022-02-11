@@ -1285,7 +1285,7 @@ GameDatabase.achievements.normal = [
   {
     id: 177,
     name: "One last time",
-    description: "Reach Time Study 181 in Doomed.",
+    description: "Purchase Time Study 181 in Doomed.",
   },
   {
     id: 178,

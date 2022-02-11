@@ -2687,7 +2687,7 @@ screen and (max-width: 480px) {
 }
 
 .o-achievement--disabled {
-  background-color: crimson;
+  background-color: var(--color-pelle--base);
   border-color: var(--color-bad);
 }
 
@@ -2836,7 +2836,7 @@ screen and (max-width: 480px) {
 }
 
 .o-achievement__indicator--disabled {
-  background: crimson;
+  background: var(--color-pelle--base);
   border-color: var(--color-bad);
 }
 
@@ -3670,6 +3670,11 @@ screen and (max-width: 480px) {
 
 /*#region o-infinity-upgrade-btn--multiplier*/
 
+
+.o-infinity-upgrade-btn--multiplier.c-pelle-useless--available {
+  filter: grayscale(25%)
+}
+
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
   color: #c93a3a;
   border-color: #17b3b5;
@@ -4451,6 +4456,27 @@ screen and (max-width: 480px) {
   cursor: pointer;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;
+}
+
+.o-eternity-upgrade--useless-available {
+  background-color: var(--color-pelle--base);
+  color: black grayscale(25%);
+  border-color: black;
+}
+
+.o-eternity-upgrade--useless-available:hover {
+  background-color: var(--color-pelle-secondary);
+  color:black;
+}
+
+.o-eternity-upgrade--useless-unavailable {
+  background-color: var(--color-pelle--base);
+  filter: grayscale(75%);
+  border-color: black;
+}
+
+.o-eternity-upgrade--useless-unavailable:hover {
+  filter: grayscale(60%);
 }
 
 .o-eternity-upgrade--available {
@@ -8512,11 +8538,13 @@ kbd {
   background-color: var(--color-pelle--base);
   border-color: #4a110b;
   cursor: default;
+  filter: grayscale(50%);
 }
 
 .c-reality-upgrade-btn--useless:hover {
   color: var(--color-reality-light);
   background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
 }
 
 .c-reality-upgrade-btn--bought {
@@ -9324,7 +9352,15 @@ input.o-automator-block-input {
   height: 6.2rem;
 }
 
-.c-pelle-useless {
-  background-color:  var(--color-pelle--base) !important;
+.c-pelle-useless--available {
+  color: var(--color-pelle-secondary);
+}
+
+.c-pelle-useless--available:hover {
+  filter: grayscale(50%);
+}
+
+.c-pelle-useless--bought {
+  background-color: var(--color-pelle--base);
   filter: grayscale(50%);
 }

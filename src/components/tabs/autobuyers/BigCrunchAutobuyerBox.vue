@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       postBreak: false,
       mode: AUTO_CRUNCH_MODE.AMOUNT,
       hasAdditionalModes: false,
@@ -33,6 +34,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.postBreak = player.break;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
@@ -110,7 +112,14 @@ export default {
           v-bind="modeProps(mode).input"
         />
       </template>
-      <template slot="checkboxSlot">
+      <template v-if="isDoomed" slot="checkboxSlot">
+        <span>
+          Dynamic amount has no use
+          <br>
+          while in Doomed
+        </span>
+      </template>
+      <template v-else slot="checkboxSlot">
         <span>Dynamic amount:</span>
         <div
           class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"

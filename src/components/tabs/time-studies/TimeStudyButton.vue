@@ -24,6 +24,7 @@ export default {
   },
   data() {
     return {
+      isUseless: false,
       doomedRealityStudy: false,
       isBought: false,
       isAvailableForPurchase: false,
@@ -43,12 +44,15 @@ export default {
     },
     classObject() {
       return {
-        "o-time-study": true,
+        "o-time-study": !this.isUseless,
         "l-time-study": true,
+        "c-pelle-useless": this.isUseless,
+        "c-pelle-useless--bought": this.isUseless && this.isBought,
+        "c-pelle-useless--unavailable": this.isUseless && !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--small": this.setup.isSmall,
-        "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought,
+        "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought && !this.isUseless,
         "o-time-study--available": this.isAvailableForPurchase && !this.isBought,
-        "o-time-study--bought": this.isBought,
+        "o-time-study--bought": this.isBought && !this.isUseless,
       };
     },
     pathClass() {
@@ -77,13 +81,13 @@ export default {
     },
     studyClass() {
       let pathClasses = "";
-      if (!this.isAvailableForPurchase && !this.isBought) {
+      if (!this.isAvailableForPurchase && !this.isBought && !this.isUseless) {
         pathClasses += `${this.pathClass}--unavailable`;
       }
-      if (this.isAvailableForPurchase && !this.isBought) {
+      if (this.isAvailableForPurchase && !this.isBought && !this.isUseless) {
         pathClasses += `${this.pathClass}--available`;
       }
-      if (this.isBought) {
+      if (this.isBought && !this.isUseless) {
         pathClasses += `${this.pathClass}--bought`;
       }
       return pathClasses;
@@ -98,6 +102,7 @@ export default {
   methods: {
     update() {
       const study = this.study;
+      this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
       this.isBought = study.isBought;
       this.eternityChallengeRunning = study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
         EternityChallenge.current?.id === study.id;

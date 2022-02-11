@@ -28,9 +28,10 @@ export default {
     classObject() {
       return {
         "o-eternity-upgrade": true,
-        "o-eternity-upgrade--available": this.isAffordable,
-        "o-eternity-upgrade--unavailable": !this.isAffordable,
-        "c-pelle-useless": this.isDoomed
+        "o-eternity-upgrade--useless-available": this.isDoomed && this.isAffordable,
+        "o-eternity-upgrade--useless-unavailable": this.isDoomed && !this.isAffordable,
+        "o-eternity-upgrade--available": !this.isDoomed && this.isAffordable,
+        "o-eternity-upgrade--unavailable": !this.isDoomed && !this.isAffordable,
       };
     }
   },

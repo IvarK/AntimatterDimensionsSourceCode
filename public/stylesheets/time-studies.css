@@ -37,6 +37,33 @@
 
 /*#region o-time-study*/
 
+.c-pelle-useless {
+  border: 0.1rem solid;
+  background-color: crimson;
+  font-weight: bold;
+  font-family: Typewriter, serif;
+  width: 18rem;
+  height: 10rem;
+  transition-duration: 0.2s;
+  border-radius: 0.4rem;
+  font-size: 1.0rem;
+}
+
+.c-pelle-useless--unavailable {
+  color: black;
+  filter: grayscale(75%);
+}
+
+.c-pelle-useless--unavailable:hover {
+  background-color: var(--color-bad);
+  filter: grayscale(0%);
+}
+
+.c-pelle-useless--bought {
+  background-color: crimson;
+  filter: grayscale(50%);
+}
+
 .o-time-study {
   border: 0.1rem solid;
   background-color: black;

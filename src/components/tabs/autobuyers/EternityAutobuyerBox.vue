@@ -10,6 +10,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       mode: AUTO_ETERNITY_MODE.AMOUNT,
       hasAdditionalModes: false,
       increaseWithMult: true,
@@ -30,6 +31,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
       this.increaseWithMult = this.autobuyer.increaseWithMult;
@@ -98,7 +100,14 @@ export default {
         v-bind="modeProps(mode).input"
       />
     </template>
-    <template slot="checkboxSlot">
+    <template v-if="isDoomed" slot="checkboxSlot">
+      <span>
+        Dynamic amount has no use
+        <br>
+        while in Doomed
+      </span>
+    </template>
+    <template v-else slot="checkboxSlot">
       <span>Dynamic amount:</span>
       <div
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"

@@ -20,6 +20,7 @@ export default {
     }
   },
   methods: {
+    // eslint-disable-next-line complexity
     update() {
       const setProgress = (current, goal, tooltip) => {
         this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
@@ -57,6 +58,26 @@ export default {
         } else {
           // Lai'tela destabilization; since the progress bar is logarithmically-scaled, we need to pow10 the arguments
           setProgress(Decimal.pow10(player.celestials.laitela.entropy), 10, "Percentage to Destabilized Reality");
+        }
+      } else if (Pelle.isDoomed) {
+        if (PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0) {
+          setProgress(Currency.infinityPoints.value, Tesseracts.nextCost, "Percentage to next Tesseract");
+        } else if (PelleStrikes.dilation.hasStrike) {
+          setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to galaxy generator");
+        } else if (PelleStrikes.ECs.hasStrike) {
+          setProgress(Currency.eternityPoints.value, DC.E1000000, "Missing");
+        } else if (PelleStrikes.eternity.hasStrike) {
+          setProgress(Currency.eternityPoints.value, DC.E1000000, "Missing");
+        } else if (PelleStrikes.powerGalaxies.hasStrike) {
+          setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to third strike");
+        } else if (PelleStrikes.infinity.hasStrike) {
+          if (player.break) {
+            setProgress(Currency.infinityPoints.value, 5e11, "Percentage to second strike");
+          } else {
+            setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
+          }
+        } else {
+          setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to first strike");
         }
       } else if (Enslaved.isCompleted) {
         // Show all other goals from the top down, starting at features in the highest prestige layer

@@ -16,7 +16,7 @@ export default {
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10);
       const replicantiAmount = Replicanti.amount;
 
-      if (TimeStudy(192).isBought && replicantiAmount.log10() > 308) {
+      if ((TimeStudy(192).isBought || Pelle.isDoomed) && replicantiAmount.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
         const gainFactorPerSecond = logGainFactorPerTick
           .times(postScale)
@@ -70,7 +70,7 @@ export default {
         this.remainingTimeText += ` (${TimeSpan.fromSeconds(totalTime)} total)`;
       }
 
-      if (Replicanti.galaxies.max > 0) {
+      if (Replicanti.galaxies.max > 0 && !Pelle.isDoomed) {
         this.galaxyText = `You are gaining a Replicanti Galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
           this.galaxyText = `You are gaining ${quantify("Replicanti Galaxy", galaxiesPerSecond, 2, 1)} per second`;

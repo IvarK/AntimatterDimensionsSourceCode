@@ -54,7 +54,6 @@ export default {
     :setup="setup"
     :show-cost="showCost"
     :show-st-cost="showSTCost"
-    :class="{ 'c-pelle-useless': isUseless }"
   >
     <HintText
       type="studies"

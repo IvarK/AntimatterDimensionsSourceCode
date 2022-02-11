@@ -692,12 +692,12 @@ challenges are similar to Time Studies, but often even stronger and permanent si
 Time Theorems to have their effects.
 <br>
 <br>
+You can only have one Eternity Challenge unlocked at a time.
+<br>
+<br>
 You can complete each Eternity Challenge up to five times. After each completion, the rewards grow stronger but the
 goal to the next completion also increases. Additionally, the secondary requirement to unlock the challenge again will
 also increase. The Time Theorem cost does not increase.
-<br>
-<br>
-You can only have one Eternity Challenge unlocked at a time.
 <br>
 <br>
 After you have unlocked an Eternity Challenge, you can unlock it without meeting its secondary requirements until you

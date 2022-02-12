@@ -41,6 +41,7 @@ export default {
         "o-dilation-upgrade": true,
         "o-dilation-upgrade--rebuyable": this.isRebuyable,
         "o-dilation-upgrade--useless-available": this.isUseless && !this.isBought && this.isAffordable,
+        "o-dilation-upgrade--useless-unavailable": this.isUseless && !this.isBought && !this.isAffordable,
         "o-dilation-upgrade--useless-bought": this.isUseless && this.isBought,
         "o-dilation-upgrade--available": !this.isUseless && !this.isBought && !this.isCapped && this.isAffordable,
         "o-dilation-upgrade--unavailable": !this.isUseless && !this.isBought && !this.isCapped && !this.isAffordable,

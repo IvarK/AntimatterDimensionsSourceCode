@@ -4507,12 +4507,15 @@ screen and (max-width: 480px) {
 
 .o-eternity-upgrade--useless-unavailable {
   background-color: var(--color-pelle--base);
-  filter: grayscale(50%);
+  color: black;
+  filter: grayscale(90%);
   border-color: black;
 }
 
 .o-eternity-upgrade--useless-unavailable:hover {
-  filter: grayscale(60%);
+  background-color: var(--color-bad);
+  filter: grayscale(0%);
+  cursor:default
 }
 
 .o-eternity-upgrade--available {
@@ -4999,6 +5002,19 @@ screen and (max-width: 480px) {
   color: black;
   background-color: var(--color-dilation);
   border-color: black;
+}
+
+.o-dilation-upgrade--useless-unavailable {
+  background-color: var(--color-pelle--base);
+  color: black;
+  filter: grayscale(90%);
+  border-color: black;
+}
+
+.o-dilation-upgrade--useless-unavailable:hover {
+  background-color: var(--color-bad);
+  filter: grayscale(0%);
+  cursor:default
 }
 
 .o-dilation-upgrade--unavailable {

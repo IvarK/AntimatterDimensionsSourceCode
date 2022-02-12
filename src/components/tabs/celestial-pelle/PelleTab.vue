@@ -71,6 +71,7 @@ export default {
       player.infMult = 0;
       Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
       disChargeAll();
+      player.buyUntil10 = true;
     },
     showModal() {
       Modal.pelleEffects.show();

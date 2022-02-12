@@ -476,7 +476,6 @@ class RiftState extends GameMechanicState {
 
   hasMilestone(idx) {
     if (this.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0)) return true;
-    Tab.celestials.pelle.show();
     return this.milestones[idx].requirement <= this.percentage;
   }
 

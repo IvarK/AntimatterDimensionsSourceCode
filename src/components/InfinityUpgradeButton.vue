@@ -40,12 +40,13 @@ export default {
     },
     classObject() {
       return {
-        "c-pelle-useless--bought": this.isDisabledInDoomed && this.isBought,
-        "c-pelle-useless--available": this.isDisabledInDoomed && this.canBeBought,
         "o-infinity-upgrade-btn": true,
-        "o-infinity-upgrade-btn--bought": this.isBought,
-        "o-infinity-upgrade-btn--available": !this.isBought && this.canBeBought,
-        "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought,
+        "o-infinity-upgrade-btn--bought": !this.isDisabledInDoomed && this.isBought,
+        "o-infinity-upgrade-btn--available": !this.isDisabledInDoomed && !this.isBought && this.canBeBought,
+        "o-infinity-upgrade-btn--unavailable": !this.isDisabledInDoomed && !this.isBought && !this.canBeBought,
+        "o-infinity-upgrade-btn--useless-bought": this.isDisabledInDoomed && this.isBought,
+        "o-infinity-upgrade-btn--useless-available": this.isDisabledInDoomed && !this.isBought && this.canBeBought,
+        "o-infinity-upgrade-btn--useless-unavailable": this.isDisabledInDoomed && !this.isBought && !this.canBeBought,
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,

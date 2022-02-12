@@ -40,9 +40,11 @@ export default {
       return {
         "o-dilation-upgrade": true,
         "o-dilation-upgrade--rebuyable": this.isRebuyable,
-        "o-dilation-upgrade--available": !this.isBought && !this.isCapped && this.isAffordable,
-        "o-dilation-upgrade--unavailable": !this.isBought && !this.isCapped && !this.isAffordable,
-        "o-dilation-upgrade--bought": this.isBought,
+        "o-dilation-upgrade--useless-available": this.isUseless && !this.isBought && this.isAffordable,
+        "o-dilation-upgrade--useless-bought": this.isUseless && this.isBought,
+        "o-dilation-upgrade--available": !this.isUseless && !this.isBought && !this.isCapped && this.isAffordable,
+        "o-dilation-upgrade--unavailable": !this.isUseless && !this.isBought && !this.isCapped && !this.isAffordable,
+        "o-dilation-upgrade--bought": !this.isUseless && this.isBought,
         "o-dilation-upgrade--capped": this.isCapped,
       };
     },

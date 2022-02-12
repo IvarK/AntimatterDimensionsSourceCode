@@ -49,12 +49,24 @@
   font-size: 1.0rem;
 }
 
+.c-pelle-useless-available {
+  animation: a-time-study 7s infinite;
+  cursor: pointer;
+}
+
+.o-time-study--available:hover {
+  animation: none;
+  background-color: #00bcd4;
+}
+
 .c-pelle-useless--unavailable {
+  animation: none;
   color: black;
-  filter: grayscale(75%);
+  filter: grayscale(90%);
 }
 
 .c-pelle-useless--unavailable:hover {
+  cursor: default;
   background-color: var(--color-bad);
   filter: grayscale(0%);
 }

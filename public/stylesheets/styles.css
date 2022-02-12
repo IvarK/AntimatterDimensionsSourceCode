@@ -3602,6 +3602,11 @@ screen and (max-width: 480px) {
   background-color: #a53b98;
 }
 
+.o-infinity-upgrade-btn--useless-available:hover {
+  background-color: var(--color-pelle-secondary);
+  color: black;
+}
+
 .t-dark .o-infinity-upgrade-btn--available:hover,
 .t-s6 .o-infinity-upgrade-btn--available:hover,
 .t-s10 .o-infinity-upgrade-btn--available:hover {
@@ -3675,6 +3680,16 @@ screen and (max-width: 480px) {
   filter: grayscale(25%)
 }
 
+.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available {
+  background-color: var(--color-pelle--base);
+  color: black;
+}
+
+.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available:hover {
+  color: black;
+  background-color: var(--color-pelle-secondary);
+}
+
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
   color: #c93a3a;
   border-color: #17b3b5;
@@ -3722,6 +3737,16 @@ screen and (max-width: 480px) {
 /*#endregion o-infinity-upgrade-btn--multiplier*/
 
 /*#region o-infinity-upgrade-btn--unavailable*/
+
+.o-infinity-upgrade-btn--useless-unavailable {
+  color: #f7f7f7;
+  background-color: var(--color-pelle--base);
+  filter: grayscale(90%);
+}
+
+.o-infinity-upgrade-btn--useless-unavailable:hover {
+  cursor: default;
+}
 
 .o-infinity-upgrade-btn--unavailable {
   color: black;
@@ -3785,6 +3810,17 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--bought:hover {
+  color: black;
+}
+
+.o-infinity-upgrade-btn--useless-bought {
+  color: black;
+  background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
+  cursor: default;
+}
+
+.o-infinity-upgrade-btn--useless-bought:hover {
   color: black;
 }
 
@@ -4460,7 +4496,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-upgrade--useless-available {
   background-color: var(--color-pelle--base);
-  color: black grayscale(25%);
+  color: black;
   border-color: black;
 }
 
@@ -4471,7 +4507,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-upgrade--useless-unavailable {
   background-color: var(--color-pelle--base);
-  filter: grayscale(75%);
+  filter: grayscale(50%);
   border-color: black;
 }
 
@@ -4923,6 +4959,24 @@ screen and (max-width: 480px) {
   transition-duration: 0.2s;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;
+}
+
+.o-dilation-upgrade--useless-available {
+  color: var(--color-pelle--base);
+  border-color: var(--color-dilation);
+  animation: a-dilation-btn-glow 10s infinite;
+  cursor: pointer;
+}
+
+.o-dilation-upgrade--useless-available:hover {
+  color: var(--color-pelle-secondary);;
+}
+
+.o-dilation-upgrade--useless-bought{
+  color: black;
+  background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
+  border-color: black;
 }
 
 .o-dilation-upgrade--available {

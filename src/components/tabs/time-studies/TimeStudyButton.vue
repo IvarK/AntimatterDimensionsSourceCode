@@ -49,6 +49,7 @@ export default {
         "c-pelle-useless": this.isUseless,
         "c-pelle-useless--bought": this.isUseless && this.isBought,
         "c-pelle-useless--unavailable": this.isUseless && !this.isAvailableForPurchase && !this.isBought,
+        "c-pelle-useless-available": this.isUseless && !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--small": this.setup.isSmall,
         "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought && !this.isUseless,
         "o-time-study--available": this.isAvailableForPurchase && !this.isBought,

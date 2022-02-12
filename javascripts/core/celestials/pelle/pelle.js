@@ -124,7 +124,9 @@ export const Pelle = {
 
   // TS33 only gets useless with PelleUpgrade.replicantiGalaxyNoReset
   get uselessTimeStudies() {
-    return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    const uselessTimeStudies = [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) uselessTimeStudies.push(33);
+    return uselessTimeStudies;
   },
 
   get disabledRUPGs() {
@@ -373,6 +375,7 @@ class PelleStrikeState extends GameMechanicState {
 
   unlockStrike() {
     GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
+    Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);
   }
@@ -473,6 +476,7 @@ class RiftState extends GameMechanicState {
 
   hasMilestone(idx) {
     if (this.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0)) return true;
+    Tab.celestials.pelle.show();
     return this.milestones[idx].requirement <= this.percentage;
   }
 

@@ -36,6 +36,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get canBeBought() {
+    if (Pelle.isDisabled(`antimatterDimAutobuyer${this.tier}`)) return false;
     return true;
   }
 

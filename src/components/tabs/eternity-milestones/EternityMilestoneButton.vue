@@ -30,8 +30,8 @@ export default {
     rewardClassObject() {
       return {
         "o-eternity-milestone__reward": true,
-        "o-eternity-milestone__reward--locked": !this.isReached,
-        "o-eternity-milestone__reward--reached": this.isReached,
+        "o-eternity-milestone__reward--locked": !this.isReached && !this.isObsoleteWithPelle,
+        "o-eternity-milestone__reward--reached": this.isReached || this.isObsoleteWithPelle,
         "o-eternity-milestone__reward--small-font": this.reward.length > 80
       };
     },

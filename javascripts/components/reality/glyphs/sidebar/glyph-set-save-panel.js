@@ -13,6 +13,13 @@ Vue.component("glyph-set-save-panel", {
       effects: false,
       rarity: false,
       level: false,
+      name: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+      },
     };
   },
   watch: {
@@ -46,6 +53,13 @@ Vue.component("glyph-set-save-panel", {
       this.effects = player.options.ignoreGlyphEffects;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
+
+      // Beauty of the code
+      this.name[0] = player.reality.glyphs.setsName[0];
+      this.name[1] = player.reality.glyphs.setsName[1];
+      this.name[2] = player.reality.glyphs.setsName[2];
+      this.name[3] = player.reality.glyphs.setsName[3];
+      this.name[4] = player.reality.glyphs.setsName[4];
     },
     refreshGlyphSets() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
@@ -81,6 +95,10 @@ Vue.component("glyph-set-save-panel", {
         player.reality.glyphs.sets[id] = [];
         EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
       }
+    },
+    nicknameBlur(event) {
+      this.name[event.target.id] = event.target.value.slice(0, 4);
+      player.reality.glyphs.setsName[event.target.id] = this.name[event.target.id];
     },
   },
   template: `
@@ -131,6 +149,16 @@ Vue.component("glyph-set-save-panel", {
             :noneText=noSet
           />
         </div>
+        <input
+          type="text"
+          size="4"
+          maxlength="4"
+          class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+          :value="name[id]"
+          :id="id"
+          ach-tooltip="Set a custom name (up to 4 characters)"
+          @blur="nicknameBlur"
+        />
         <button
           class="c-glyph-set-save-button"
           :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"

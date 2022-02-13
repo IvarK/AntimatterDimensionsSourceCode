@@ -405,6 +405,13 @@ window.player = {
       },
       undo: [],
       sets: [[], [], [], [], []],
+      setsName: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+      },
       protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),

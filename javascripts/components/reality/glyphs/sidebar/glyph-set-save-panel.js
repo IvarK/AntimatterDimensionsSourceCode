@@ -53,8 +53,6 @@ Vue.component("glyph-set-save-panel", {
       this.effects = player.options.ignoreGlyphEffects;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
-
-      // Beauty of the code
       this.name[0] = player.reality.glyphs.setsName[0];
       this.name[1] = player.reality.glyphs.setsName[1];
       this.name[2] = player.reality.glyphs.setsName[2];
@@ -149,37 +147,44 @@ Vue.component("glyph-set-save-panel", {
             :noneText=noSet
           />
         </div>
-        <input
-          type="text"
-          size="4"
-          maxlength="4"
-          class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
-          :value="name[id]"
-          :id="id"
-          ach-tooltip="Set a custom name (up to 4 characters)"
-          @blur="nicknameBlur"
-        />
-        <button
-          class="c-glyph-set-save-button"
-          :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
-          @click="saveGlyphSet(id)"
-        >
-          Save
-        </button>
-        <button
-          class="c-glyph-set-save-button"
-          :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
-          @click="loadGlyphSet(set)"
-        >
-          Load
-        </button>
-        <button
-          class="c-glyph-set-save-button"
-          :class="{'c-glyph-set-save-button--unavailable': !set.length}"
-          @click="deleteGlyphSet(id)"
-        >
-          Delete
-        </button>
+        <div class="c-glyph-single-set-save-flexbox" style="width: 20rem">
+          <div>
+            Glyph sets name:
+            <input
+              type="text"
+              size="4"
+              maxlength="4"
+              class="c-glyph-sets-save-name__input"
+              :value="name[id]"
+              :id="id"
+              ach-tooltip="Set a custom name (up to 4 characters)"
+              @blur="nicknameBlur"
+            />
+          </div>
+          <div class="c-glyph-single-set-save-flexbox-buttons">
+            <button
+              class="c-glyph-set-save-button"
+              :class="{'c-glyph-set-save-button--unavailable': !hasEquipped || set.length}"
+              @click="saveGlyphSet(id)"
+            >
+              Save
+            </button>
+            <button
+              class="c-glyph-set-save-button"
+              :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
+              @click="loadGlyphSet(set)"
+            >
+              Load
+            </button>
+            <button
+              class="c-glyph-set-save-button"
+              :class="{'c-glyph-set-save-button--unavailable': !set.length}"
+              @click="deleteGlyphSet(id)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       </div>
     </div>`
 });

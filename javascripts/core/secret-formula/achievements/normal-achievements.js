@@ -1284,12 +1284,12 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 177,
-    name: "One last time",
+    name: "An old friend",
     description: "Purchase Time Study 181 in Doomed.",
   },
   {
     id: 178,
-    name: "The end",
+    name: "The End",
     description: "Beat the game.",
     checkRequirement: () => Pelle.endState > 1,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER

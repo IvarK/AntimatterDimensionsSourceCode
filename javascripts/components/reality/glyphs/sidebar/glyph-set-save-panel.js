@@ -130,7 +130,7 @@ Vue.component("glyph-set-save-panel", {
       </div>
       Your saved Glyph sets:
       <div class="c-glyph-single-set-save" v-for="(set, id) in glyphSets">
-        <div style="width: 16rem">
+        <div style="width: 18rem">
           <GlyphSetPreview
             :text="setName(id)"
             :textHidden=true

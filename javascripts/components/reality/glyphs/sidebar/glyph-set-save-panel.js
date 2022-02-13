@@ -149,7 +149,7 @@ Vue.component("glyph-set-save-panel", {
         </div>
         <div class="c-glyph-single-set-save-flexbox" style="width: 20rem">
           <div>
-            Glyph sets name:
+            Glyph set name:
             <input
               type="text"
               size="4"

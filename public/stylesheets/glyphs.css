@@ -610,13 +610,14 @@
 }
 
 .c-glyph-sets-save-name__input {
-  width: 15.8em;
+  width: 20rem;
   height: 1.5em;
-  font-size: 1.2rem;
-  background-color: #333;
+  font-size: 1.35rem;
+  background-color: black;
   color: var(--color-reality-light);
   border-radius: 0.2rem;
-  border: solid 0.1rem;
+  border: none;
+  border-bottom: 0.1rem solid;
   text-align: center;
   margin-bottom: 0.5rem;
   -webkit-appearance: none;

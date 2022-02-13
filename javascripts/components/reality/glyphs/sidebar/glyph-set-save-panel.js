@@ -13,13 +13,7 @@ Vue.component("glyph-set-save-panel", {
       effects: false,
       rarity: false,
       level: false,
-      name: {
-        0: "",
-        1: "",
-        2: "",
-        3: "",
-        4: "",
-      },
+      name: ["", "", "", "", ""],
     };
   },
   watch: {
@@ -152,7 +146,7 @@ Vue.component("glyph-set-save-panel", {
                 type="text"
                 size="15"
                 maxlength="15"
-                placeholder="Custsom set name"
+                placeholder="Custom set name"
                 class="c-glyph-sets-save-name__input"
                 :value="name[id]"
                 :id="id"

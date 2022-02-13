@@ -1193,10 +1193,10 @@ GameStorage.devMigrations = {
       delete player.options.showCondenseToMilestone;
     },
     player => {
-      /* eslint-disable no-bitwise */
+      // eslint-disable-next-line no-bitwise
       if (player.celestials.pelle.doomed) player.achievementBits[16] |= 32;
+      // eslint-disable-next-line no-bitwise
       if (player.timestudy.studies.compact().includes(181)) player.achievementBits[16] |= 64;
-      /* eslint-enable no-bitwise */
     }
   ],
 

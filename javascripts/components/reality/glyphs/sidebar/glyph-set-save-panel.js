@@ -53,11 +53,9 @@ Vue.component("glyph-set-save-panel", {
       this.effects = player.options.ignoreGlyphEffects;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
-      this.name[0] = player.reality.glyphs.setsName[0];
-      this.name[1] = player.reality.glyphs.setsName[1];
-      this.name[2] = player.reality.glyphs.setsName[2];
-      this.name[3] = player.reality.glyphs.setsName[3];
-      this.name[4] = player.reality.glyphs.setsName[4];
+      
+      for (let i in this.name)
+        this.name[i] = player.reality.glyphs.setsName[i];
     },
     refreshGlyphSets() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));

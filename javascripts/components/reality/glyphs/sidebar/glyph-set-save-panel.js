@@ -53,7 +53,7 @@ Vue.component("glyph-set-save-panel", {
       this.effects = player.options.ignoreGlyphEffects;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
-      
+
       for (let i in this.name)
         this.name[i] = player.reality.glyphs.setsName[i];
     },
@@ -148,16 +148,17 @@ Vue.component("glyph-set-save-panel", {
         <div class="c-glyph-single-set-save-flexbox" style="width: 20rem">
           <div>
             Glyph set name:
-            <input
-              type="text"
-              size="4"
-              maxlength="4"
-              class="c-glyph-sets-save-name__input"
-              :value="name[id]"
-              :id="id"
-              ach-tooltip="Set a custom name (up to 4 characters)"
-              @blur="nicknameBlur"
-            />
+            <span ach-tooltip="Set a custom name (up to 4 characters)">
+              <input
+                type="text"
+                size="4"
+                maxlength="4"
+                class="c-glyph-sets-save-name__input"
+                :value="name[id]"
+                :id="id"
+                @blur="nicknameBlur"
+              />
+            </span>
           </div>
           <div class="c-glyph-single-set-save-flexbox-buttons">
             <button

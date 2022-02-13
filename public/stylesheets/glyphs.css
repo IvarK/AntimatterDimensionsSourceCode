@@ -597,6 +597,32 @@
   height: 7.5rem;
 }
 
+.c-glyph-single-set-save-flexbox {
+  display: flex;
+  flex-direction: column;
+}
+
+.c-glyph-single-set-save-flexbox-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.c-glyph-sets-save-name__input {
+  width: 5.5em;
+  height: 1.5em;
+  font-size: 1.2rem;
+  background-color: #333;
+  color: var(--color-reality-light);
+  border-radius: 0.2rem;
+  border: solid 0.1rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
 .c-glyph-set-save-setting-button {
   width: 12.5rem;
   height: 2.5rem;

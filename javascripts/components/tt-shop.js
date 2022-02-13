@@ -271,7 +271,13 @@ Vue.component("tt-buy-button", {
       return this.budget.gte(this.cost);
     },
     enabledClass() {
-      return this.isEnabled ? "c-tt-buy-button--unlocked" : "c-tt-buy-button--locked";
+      if (!this.isEnabled || this.isLimitedByPelle)
+        return "c-tt-buy-button--locked";
+
+      return "c-tt-buy-button--unlocked";
+    },
+    isLimitedByPelle() {
+      return Pelle.isDoomed && player.eternities.eq(0)
     }
   },
   template: `
@@ -280,6 +286,6 @@ Vue.component("tt-buy-button", {
       :class="enabledClass"
       @click="action"
     >
-      {{ formatCost(cost) }}
+      {{ isLimitedByPelle ? "Locked in Doomed before Eternity" : formatCost(cost) }}
     </button>`
 });

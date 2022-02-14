@@ -14,9 +14,14 @@ export default {
       const logGainFactorPerTick = Decimal.divide(getGameSpeedupForDisplay() * updateRateMs *
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10);
+
+      // The uncapped factor is needed for galaxy speed calculations
+      const log10GainFactorPerTickUncapped = Decimal.divide(getGameSpeedupForDisplay() * updateRateMs *
+        (Math.log(player.replicanti.chance + 1)), getReplicantiInterval(false)).dividedBy(Math.LN10);
+
       const replicantiAmount = Replicanti.amount;
 
-      if ((TimeStudy(192).isBought || Pelle.isDoomed) && replicantiAmount.log10() > 308) {
+      if (Replicanti.isUncapped && replicantiAmount.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
         const gainFactorPerSecond = logGainFactorPerTick
           .times(postScale)
@@ -33,7 +38,6 @@ export default {
           : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
         this.remainingTimeText = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
           ` (${timeEstimateText} until ${format(nextThousandOOM)})`;
-        return;
       }
 
       const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick.toNumber());
@@ -44,10 +48,10 @@ export default {
         remainingTime = 0;
       }
 
-      const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / LOG10_MAX_VALUE);
+      const galaxiesPerSecond = log10GainFactorPerTickUncapped.times(ticksPerSecond / LOG10_MAX_VALUE);
       const timeFromZeroRG = galaxies => 50 * Math.log((galaxies + 49.5) / 49.5);
       let baseGalaxiesPerSecond, effectiveMaxRG, effectiveCurrentRG;
-      if (RealityUpgrade(6).isBought) {
+      if (RealityUpgrade(6).isBought && !Pelle.isDoomed) {
         baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
         effectiveMaxRG = timeFromZeroRG(Replicanti.galaxies.max + Replicanti.galaxies.extra) -
           timeFromZeroRG(Replicanti.galaxies.extra);
@@ -58,6 +62,7 @@ export default {
         effectiveMaxRG = Replicanti.galaxies.max;
         effectiveCurrentRG = Replicanti.galaxies.bought;
       }
+      const secondsPerGalaxy = baseGalaxiesPerSecond.reciprocal();
 
       if (remainingTime === 0) {
         this.remainingTimeText = "At Infinite Replicanti";
@@ -70,18 +75,39 @@ export default {
         this.remainingTimeText += ` (${TimeSpan.fromSeconds(totalTime)} total)`;
       }
 
-      if (Replicanti.galaxies.max > 0 && !Pelle.isDoomed) {
-        this.galaxyText = `You are gaining a Replicanti Galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
-        if (galaxiesPerSecond.gte(1)) {
-          this.galaxyText = `You are gaining ${quantify("Replicanti Galaxy", galaxiesPerSecond, 2, 1)} per second`;
+
+      if (Replicanti.galaxies.max > 0) {
+        // If the player has max RGs, don't display the "You are gaining blah" text
+        if (player.replicanti.galaxies == Replicanti.galaxies.max) {
+          this.galaxyText = "You have reached the maximum amount of Replicanti Galaxies";
+
+        } else {
+          this.galaxyText = `You are gaining a Replicanti Galaxy every ${TimeSpan.fromSeconds(secondsPerGalaxy.toNumber())}`;
+          if (galaxiesPerSecond.gte(1)) {
+            this.galaxyText = `You are gaining ${quantify("Replicanti Galaxy", galaxiesPerSecond, 2, 1)} per second`;
+          }
+          // Take the total time from zero replicanti to max RG + e308 replicanti and then subtract away the time which
+          // has already elapsed. The time elapsed is calculated from your current RG total (including the current one)
+          // and then subtracts away the time spent in the current RG so far.
+          const allGalaxyTime = Decimal.divide(effectiveMaxRG - effectiveCurrentRG, baseGalaxiesPerSecond).toNumber();
+
+          // Pending galaxy gain is here because the growth slows down significantly after
+          // 1e308 normally. However, the seconds per galaxy code is calculated as if
+          // uncapped since nobody would wait for 1e52345325 replicanti to buy an RG.
+          // To solve this problem, after 1e308, it uses the pending value as the basis of
+          // how ""close"" you are to the next galaxy instead of replicanti amount,
+          // which is a good enough best case approximation in my opinion.
+          const pending = Replicanti.galaxies.gain;
+          let pendingTime = pending*secondsPerGalaxy.toNumber();
+          // If popular music is unlocked add the divide amount
+          if (Achievement(126).isUnlocked) {
+            let leftPercentAfterGalaxy = replicantiAmount.log10()/LOG10_MAX_VALUE - pending;
+            pendingTime += leftPercentAfterGalaxy/log10GainFactorPerTickUncapped.toNumber();
+          }
+          const thisGalaxyTime = pending > 0 ? pendingTime : secondsPerGalaxy.toNumber() - remainingTime;
+          this.galaxyText += ` (all Replicanti Galaxies within
+            ${TimeSpan.fromSeconds(Math.clampMin(allGalaxyTime - thisGalaxyTime, 0))})`;
         }
-        // Take the total time from zero replicanti to max RG + e308 replicanti and then subtract away the time which
-        // has already elapsed. The time elapsed is calculated from your current RG total (including the current one)
-        // and then subtracts away the time spent in the current RG so far.
-        const allGalaxyTime = Decimal.divide(effectiveMaxRG - effectiveCurrentRG, baseGalaxiesPerSecond).toNumber();
-        const thisGalaxyTime = baseGalaxiesPerSecond.reciprocal().toNumber() - remainingTime;
-        this.galaxyText += ` (all Replicanti Galaxies within
-          ${TimeSpan.fromSeconds(Math.clampMin(allGalaxyTime - thisGalaxyTime, 0))})`;
       } else {
         this.galaxyText = ``;
       }

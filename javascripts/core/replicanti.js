@@ -143,7 +143,7 @@ export function replicantiLoop(diff) {
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   // This gets the pre-cap interval (above the cap we recalculate the interval).
   const interval = getReplicantiInterval(false);
-  const isUncapped = TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1);
+  const isUncapped = Replicanti.isUncapped;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
   if (diff > 500 || interval.lessThan(diff) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
@@ -498,5 +498,8 @@ export const Replicanti = {
       }
       return 1;
     },
+  },
+  get isUncapped() {
+    return TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1)
   }
 };

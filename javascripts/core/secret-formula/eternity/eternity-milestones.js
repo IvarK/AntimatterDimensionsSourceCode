@@ -54,6 +54,7 @@ GameDatabase.eternity.milestones = {
   unlockReplicanti: {
     eternities: 10,
     reward: "You start with Replicanti unlocked",
+    pelleObsolete: () => PelleUpgrade.replicantiStayUnlocked.isBought,
   },
   autobuyerID1: {
     eternities: 11,

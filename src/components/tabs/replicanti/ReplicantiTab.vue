@@ -144,7 +144,7 @@ export default {
         1
       );
       this.isDoomed = Pelle.isDoomed;
-      this.isUncapped = PelleRifts.pestilence.hasMilestone(2);
+      this.isUncapped = PelleRifts.famine.hasMilestone(1);
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;

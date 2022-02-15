@@ -325,34 +325,7 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.15,
-            description: () => {
-              const base = "Gain a bonus based on Glyph equipped:";
-
-              switch (Pelle.activeGlyphType) {
-                case "infinity": return `${base} IP multiplier based on IP`;
-                case "time": return `${base} EP multiplier based on EP`;
-                case "replication": return `${base} Replicanti speed multiplier based on Famine`;
-                case "dilation": return `${base} Dilated Time gain multiplier based on Tachyon Galaxies`;
-                case "power": return `${base} Galaxies are 2% stronger`;
-                case "companion": return `${base} You feel 34% better`;
-
-                default: return `${base} no Glyph equipped!`;
-              }
-            },
-            effect: () => {
-              switch (Pelle.activeGlyphType) {
-                case "infinity": return player.challenge.eternity.current > 8
-                  ? 1 : Currency.infinityPoints.value.pow(0.2);
-                case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
-                case "replication": return 10 ** 53 ** (PelleRifts.famine.percentage);
-                case "dilation": return Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1);
-                case "power": return 1.02;
-                case "companion": return 1.34;
-
-                default: return new Decimal();
-              }
-            },
-            formatEffect: x => formatX(x, 2, 2)
+            description: () => "Glyphs gain a new Pelle-specific effect",
           },
           {
             requirement: 1,

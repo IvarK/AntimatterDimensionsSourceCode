@@ -1,3 +1,4 @@
+import { DC } from "../../constants";
 import { Currency } from "../../currency";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { GameMechanicState, SetPurchasableMechanicState } from "../../utils";
@@ -143,6 +144,70 @@ export const Pelle = {
       60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204, 205];
   },
 
+  // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
+  // that this field is NEGATED, describing an effect whitelist instead of a blacklist, as most of the effects are
+  // already disabled by virtue of the glyph type being unequippable and many of the remaining ones are also disabled.
+  get enabledGlyphEffects() {
+    return ["timepow", "timespeed", "timeshardpow",
+      "dilationpow", "dilationgalaxyThreshold",
+      "replicationpow",
+      "powerpow", "powermult", "powerdimboost", "powerbuy10",
+      "infinitypow", "infinityrate",
+      "companiondescription", "companionEP"];
+  },
+
+  get specialGlyphEffect() {
+    const isUnlocked = this.isDoomed && PelleRifts.chaos.hasMilestone(1);
+    let description;
+    switch (Pelle.activeGlyphType) {
+      case "infinity":
+        description = "Infinity Point gain {value} (based on current IP)";
+        break;
+      case "time":
+        description = "Eternity Point gain {value} (based on current EP)";
+        break;
+      case "replication":
+        description = "Replication speed {value} (based on Famine)";
+        break;
+      case "dilation":
+        description = "Dilated Time gain {value} (based on Tachyon Galaxies)";
+        break;
+      case "power":
+        description = `Galaxies are ${formatPercents(0.02)} stronger`;
+        break;
+      case "companion":
+        description = `You feel ${formatPercents(0.34)} better`;
+        break;
+      default:
+        description = "No glyph equipped!";
+        break;
+    }
+    const isActive = type => isUnlocked && this.activeGlyphType === type;
+    return {
+      isUnlocked,
+      description,
+      infinity: (isActive("infinity") && player.challenge.eternity.current <= 8)
+        ? Currency.infinityPoints.value.pow(0.2)
+        : DC.D1,
+      time: isActive("time")
+        ? Currency.eternityPoints.value.plus(1).pow(0.3)
+        : DC.D1,
+      replication: isActive("replication")
+        ? 10 ** 53 ** (PelleRifts.famine.percentage)
+        : 1,
+      dilation: isActive("dilation")
+        ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
+        : DC.D1,
+      power: isActive("power")
+        ? 1.02
+        : 1,
+      companion: isActive("companion")
+        ? 1.34
+        : 1,
+      isScaling: () => ["infinity", "time", "replication", "dilation"].includes(this.activeGlyphType),
+    };
+  },
+
   get uselessRaMilestones() {
     return [0, 1, 15, 18, 19, 21];
   },
@@ -187,6 +252,10 @@ export const Pelle = {
 
   get glyphMaxLevel() {
     return PelleRebuyableUpgrade.glyphLevels.effectValue;
+  },
+
+  get glyphStrength() {
+    return 1;
   },
 
   antimatterDimensionMult(x) {

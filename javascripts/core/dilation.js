@@ -115,14 +115,10 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 export function getDilationGainPerSecond() {
   const mult = NG.multiplier;
   if (Pelle.isDoomed) {
-    const pelleMults = Pelle.activeGlyphType === "dilation" && PelleRifts.chaos.hasMilestone(1)
-      ? PelleRifts.chaos.milestones[1].effect() : 1;
-
     const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.death.hasMilestone(1) ? 1.4 : 1);
-
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
-      .times(pelleMults).div(3e4).times(mult);
+      .times(Pelle.specialGlyphEffect.dilation).div(3e4).times(mult);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(

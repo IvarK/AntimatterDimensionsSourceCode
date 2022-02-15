@@ -98,11 +98,11 @@ export default {
           // how ""close"" you are to the next galaxy instead of replicanti amount,
           // which is a good enough best case approximation in my opinion.
           const pending = Replicanti.galaxies.gain;
-          let pendingTime = pending*secondsPerGalaxy.toNumber();
+          let pendingTime = pending * secondsPerGalaxy.toNumber();
           // If popular music is unlocked add the divide amount
           if (Achievement(126).isUnlocked) {
-            let leftPercentAfterGalaxy = replicantiAmount.log10()/LOG10_MAX_VALUE - pending;
-            pendingTime += leftPercentAfterGalaxy/log10GainFactorPerTickUncapped.toNumber();
+            const leftPercentAfterGalaxy = replicantiAmount.log10() / LOG10_MAX_VALUE - pending;
+            pendingTime += leftPercentAfterGalaxy / log10GainFactorPerTickUncapped.toNumber();
           }
           const thisGalaxyTime = pending > 0 ? pendingTime : secondsPerGalaxy.toNumber() - remainingTime;
           this.galaxyText += ` (all Replicanti Galaxies within

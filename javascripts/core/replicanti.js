@@ -500,6 +500,6 @@ export const Replicanti = {
     },
   },
   get isUncapped() {
-    return TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1)
+    return TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1);
   }
 };

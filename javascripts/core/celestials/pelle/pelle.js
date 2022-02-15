@@ -250,6 +250,11 @@ export const Pelle = {
     return this.realityShardGain(this.remnantsGain + this.cel.remnants);
   },
 
+  // Calculations assume this is in units of proportion per second (eg. 0.03 is 3% drain per second)
+  get riftDrainPercent() {
+    return 0.03;
+  },
+
   get glyphMaxLevel() {
     return PelleRebuyableUpgrade.glyphLevels.effectValue;
   },
@@ -562,12 +567,12 @@ class RiftState extends GameMechanicState {
     if (!this.isActive || this.isMaxed) return;
 
     if (this.fillCurrency.value instanceof Decimal) {
-      const afterTickAmount = this.fillCurrency.value.times(0.97 ** (diff / 1000));
+      const afterTickAmount = this.fillCurrency.value.times((1 - Pelle.riftDrainPercent) ** (diff / 1000));
       const spent = this.fillCurrency.value.minus(afterTickAmount);
       this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(0);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     } else {
-      const afterTickAmount = this.fillCurrency.value * 0.97 ** (diff / 1000);
+      const afterTickAmount = this.fillCurrency.value * (1 - Pelle.riftDrainPercent) ** (diff / 1000);
       const spent = this.fillCurrency.value - afterTickAmount;
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
       this.totalFill = Math.clampMax(this.totalFill + spent, this.maxValue);

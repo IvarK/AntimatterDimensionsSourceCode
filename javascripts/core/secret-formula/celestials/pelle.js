@@ -383,7 +383,7 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.25,
-            description: () => `Raise Tachyon Particle effect to Dilated Time gain to ${formatPow(1.4)}`,
+            description: () => `Raise Tachyon Particle effect to Dilated Time gain to ${formatPow(1.4, 1, 1)}`,
           },
           {
             requirement: 0.5,

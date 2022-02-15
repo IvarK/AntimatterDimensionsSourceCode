@@ -703,6 +703,11 @@ window.player = {
       }
     },
     compact: false,
+    collapsed: {
+      upgrades: false,
+      rifts: false,
+      galaxies: false
+    },
     showBought: false,
   },
   newGame: {

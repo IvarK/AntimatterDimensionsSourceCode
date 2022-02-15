@@ -346,11 +346,11 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   get requirement() {
-    return this._config.requirementDescription;
+    return this._config.requirementDescription();
   }
 
   get penalty() {
-    return this._config.penaltyDescription;
+    return this._config.penaltyDescription();
   }
 
   get reward() {
@@ -374,7 +374,7 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   unlockStrike() {
-    GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
+    GameUI.notify.success(`You encountered a Pelle Strike: ${this.requirement}`);
     Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);
@@ -456,6 +456,10 @@ class RiftState extends GameMechanicState {
     return this.config.description;
   }
 
+  get drainResource() {
+    return this.config.drainResource;
+  }
+
   get effectDescription() {
     return this.config.effectDescription(this.effectValue);
   }
@@ -497,7 +501,7 @@ class RiftState extends GameMechanicState {
       const afterTickAmount = this.fillCurrency.value * 0.97 ** (diff / 1000);
       const spent = this.fillCurrency.value - afterTickAmount;
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
-      this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
+      this.totalFill = Math.clampMax(this.totalFill + spent, this.maxValue);
     }
     if (PelleRifts.famine.hasMilestone(0)) Glyphs.refreshActive();
   }

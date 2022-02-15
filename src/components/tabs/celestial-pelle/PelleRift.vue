@@ -18,19 +18,36 @@ export default {
       active: false,
       percentage: 0,
       effect: new Decimal(),
-      totalFill: new Decimal()
+      totalFill: new Decimal(),
+      resource: new Decimal(),
+      hasEffectiveFill: false,
     };
   },
   methods: {
     update() {
-      this.active = this.rift.isActive;
-      this.percentage = this.rift.percentage;
-      this.effect.copyFrom(this.rift.effectValue);
-      this.totalFill.copyFrom(this.rift.totalFill);
+      const rift = this.rift;
+      this.active = rift.isActive;
+      this.percentage = rift.percentage;
+      this.effect.copyFrom(rift.effectValue);
+      this.setValue("totalFill", rift.totalFill);
+      this.setValue("resource", rift.fillCurrency.value);
+      this.hasEffectiveFill = rift.name === "Pestilence" && PelleRifts.chaos.hasMilestone(0);
+    },
+    // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
+    setValue(key, value) {
+      if (typeof value === "number") this[key] = value;
+      else this[key].copyFrom(value);
     },
     hasMilestone(idx) {
       return this.rift.hasMilestone(idx);
     },
+    milestoneResourceText(rift, milestone) {
+      return `${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource}`;
+    },
+    // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
+    formatRift(value) {
+      return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+    }
   },
 };
 </script>
@@ -53,17 +70,36 @@ export default {
         }"
       />
       <div
+        v-if="hasEffectiveFill"
+        class="o-pelle-rift-bar-fill o-pelle-rift-bar-permanent"
+      />
+      <div
         v-for="(milestone, idx) in rift.milestones"
         :key="'milestone-line-' + idx"
+        v-tooltip="milestoneResourceText(rift, milestone)"
         class="o-pelle-rift-bar-milestone-line"
         :class="{ 'o-pelle-rift-bar-milestone-line--compact': compact }"
         :style="{
           bottom: !compact ? `${milestone.requirement * 100}%` : 0,
-          left: compact ? `${milestone.requirement * 100}%` : 0,
-          display: milestone.requirement === 1 ? 'none' : 'block',
+          left: compact ? `calc(${milestone.requirement * 100}% - 0.1rem)` : 0,
         }"
       />
     </div>
+    <div
+      v-if="compact"
+      class="o-pelle-rift-milestone-compact-container"
+    >
+      <div
+        v-for="(milestone, idx) in rift.milestones"
+        :key="'milestone-' + idx"
+        v-tooltip="milestone.description()"
+        class="o-pelle-rift-milestone--compact"
+        :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
+      >
+        {{ formatPercents(milestone.requirement) }}
+      </div>
+    </div>
+    <br>
     <button
       class="o-pelle-rift-toggle"
       :class="{ 'o-pelle-rift-toggle--active': active }"
@@ -75,8 +111,12 @@ export default {
       class="c-pelle-rift-description"
       :class="{ 'c-pelle-rift-description--compact': compact }"
     >
-      <span v-if="!compact">{{ rift.description }}<br><br></span>
-      <span v-if="!compact">Reach {{ format(rift.totalFill, 2, 2) }} to gain more<br><br></span>
+      Drains {{ rift.drainResource }} to fill.
+      <br>
+      Current: {{ formatRift(resource) }}
+      <br>
+      Total Filled: {{ formatRift(rift.totalFill) }}
+      <br>
       <span class="highlight">{{ rift.effectDescription }}</span>
     </div>
     <div v-if="!compact">
@@ -87,7 +127,7 @@ export default {
         :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
       >
         {{ formatPercents(milestone.requirement) }}:
-        {{ typeof milestone.description === "function" ? milestone.description() : milestone.description }}<br>
+        {{ milestone.description() }}<br>
         <EffectDisplay :config="milestone" />
       </div>
     </div>
@@ -104,7 +144,7 @@ export default {
 .c-pelle-rift-bar {
   height: 20rem;
   border: 2px solid var(--color-pelle-secondary);
-  width: 15rem;
+  width: 18rem;
   border-radius: 5px;
   position: relative;
   margin-bottom: 1rem;
@@ -122,7 +162,7 @@ export default {
   font-size: 1.5rem;
   color: white;
   text-shadow: 1px 1px 2px var(--color-pelle--base);
-  z-index: 3;
+  z-index: 2;
 }
 
 .o-pelle-rift-bar-fill {
@@ -130,19 +170,26 @@ export default {
   bottom: 0;
   left: 0;
   background: var(--color-pelle-secondary);
-  z-index: 2;
+  z-index: 1;
+}
+
+.o-pelle-rift-bar-permanent {
+  height: 100%;
+  width: 100%;
+  filter: brightness(50%);
+  z-index: 0;
 }
 
 .o-pelle-rift-bar-milestone-line {
   position: absolute;
   width: 100%;
-  height: 2px;
+  height: 0.2rem;
   background: var(--color-pelle--base);
   z-index: 1;
 }
 
 .o-pelle-rift-bar-milestone-line--compact {
-  width: 2px;
+  width: 0.2rem;
   height: 100%;
 }
 
@@ -173,11 +220,26 @@ export default {
   color: black;
 }
 
+.o-pelle-rift-milestone-compact-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
+}
+
 .o-pelle-rift-milestone {
   padding: 1rem;
   background: black;
   width: 20rem;
   margin-bottom: 1rem;
+  color: white;
+  border: 1px solid var(--color-pelle-secondary);
+  border-radius: 5px;
+}
+
+.o-pelle-rift-milestone--compact {
+  background: black;
+  width: 5rem;
   color: white;
   border: 1px solid var(--color-pelle-secondary);
   border-radius: 5px;

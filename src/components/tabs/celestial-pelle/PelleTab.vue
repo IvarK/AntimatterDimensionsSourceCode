@@ -98,6 +98,11 @@ export default {
           Show effects in Doomed Reality
         </button>
       </div>
+      <div v-if="strikes.length">
+        When active, Rifts consume {{ formatPercents(0.03) }} of another resource per second.
+        <br>
+        Rift effects are based on the total amount of resource drained.
+      </div>
       <div class="c-pelle-upgrade-container">
         <PelleStrike
           v-for="strike in strikes"
@@ -107,8 +112,8 @@ export default {
         />
       </div>
       <GalaxyGeneratorVue v-if="hasGalaxyGenerator" />
-      You have <span class="c-remnants-amount">{{ format(remnants, 2, 0) }}</span> remnants <br>
-      You have <span class="c-remnants-amount">{{ format(realityShards, 2, 0) }}</span> Reality Shards
+      You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> remnants <br>
+      You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards
       <span
         @mouseover="isHovering = true"
         @mouseleave="isHovering = false"
@@ -158,6 +163,12 @@ export default {
 </template>
 
 <style scoped>
+  .l-pelle-celestial-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .o-pelle-button {
     background: black;
     color: white;
@@ -184,6 +195,9 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    border: 2px solid var(--color-pelle--base);
+    border-radius: 5px;
+    width: 140rem;
   }
 
   .pelle-doom-button {

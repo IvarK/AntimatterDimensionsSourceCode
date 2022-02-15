@@ -679,7 +679,7 @@ window.player = {
           reducedTo: 1
         },
         chaos: {
-          fill: DC.D0,
+          fill: 0,
           active: false,
           reducedTo: 1
         },

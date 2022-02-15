@@ -1192,6 +1192,11 @@ GameStorage.devMigrations = {
       };
       delete player.options.showCondenseToMilestone;
     },
+    player => {
+      // For saves before cel7 existed, it will first add this prop (as a number) and then run this migration code. For
+      // saves which are already in cel7, this prop will already exist as a Decimal. This workaround handles both cases
+      player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
+    }
   ],
 
   patch(player) {

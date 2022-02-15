@@ -1,10 +1,12 @@
 <script>
 import PelleRift from "./PelleRift.vue";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export default {
   name: "PelleStrike",
   components: {
-    PelleRift
+    PelleRift,
+    ExpandingControlBox
   },
   props: {
     strike: {
@@ -18,13 +20,26 @@ export default {
 
 <template>
   <div>
-    <div
-      class="c-pelle-strike"
-      :class="{'c-pelle-strike--compact': compact }"
-    >
-      {{ strike.requirement }}<br><br>
-      Penalty: {{ strike.penalty }}<br><br>
-      Reward: {{ strike.reward }}
+    <div class="c-pelle-strike-container">
+      <ExpandingControlBox
+        container-class="c-pelle-strike"
+      >
+        <div
+          slot="header"
+          class="c-pelle-strike-text-padding"
+        >
+          ▼ {{ strike.requirement }} ▼
+        </div>
+        <div
+          slot="dropdown"
+          class="c-pelle-strike-text-padding"
+        >
+          Penalty: {{ strike.penalty }}
+          <br><br>
+          Reward: {{ strike.reward }}
+          <br>
+        </div>
+      </ExpandingControlBox>
     </div>
     <PelleRift
       :rift="strike.rift"
@@ -37,19 +52,18 @@ export default {
   .c-pelle-strike {
     background: var(--color-pelle--base);
     color: black;
-    padding: 2rem;
     font-size: 1.3rem;
     border: 2px solid black;
     border-radius: 0.5rem;
     font-weight: bold;
-    width: 25rem;
-    margin: 0 0.5rem;
-    margin-bottom: 2rem;
-    height: 18rem;
+    min-height: 3.8rem;
   }
 
-  .c-pelle-strike--compact {
-    overflow: hidden;
-    height: 6rem;
+  .c-pelle-strike-container {
+    padding: 0.5rem 0.5rem 2rem;
+  }
+
+  .c-pelle-strike-text-padding {
+    padding: 0.7rem;
   }
 </style>

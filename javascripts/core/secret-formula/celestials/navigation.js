@@ -443,11 +443,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Broken the chain with glyph level";
+            if (complete >= 1) return "Broken the chain with Glyph level";
             const goal = 5000;
             return [
               "Break a chain",
-              `Reach glyph level ${formatInt(Math.min(player.records.bestReality.glyphLevel, goal))}/${formatInt(goal)}`
+              `Reach Glyph level ${formatInt(Math.min(player.records.bestReality.glyphLevel, goal))}/${formatInt(goal)}`
             ];
           },
           angle: -45,
@@ -488,11 +488,11 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Broken the chain with glyph rarity";
+            if (complete >= 1) return "Broken the chain with Glyph rarity";
             const goal = 100;
             return [
               "Break a chain",
-              `Reach glyph rarity ${formatPercents(complete * goal / 100, 1)}/${formatPercents(goal / 100, 1)}`
+              `Reach Glyph rarity ${formatPercents(complete * goal / 100, 1)}/${formatPercents(goal / 100, 1)}`
             ];
           },
           angle: 135,

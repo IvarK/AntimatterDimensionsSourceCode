@@ -53,7 +53,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: [11],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `Improve replicanti multiplier formula to
+      description: () => `Improve Replicanti multiplier formula to
       (log2(x)${formatPow(2)})+x${formatPow(0.032, 3, 3)}`,
       effect: () => Replicanti.amount.pow(0.032)
     },

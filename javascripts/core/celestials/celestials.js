@@ -27,8 +27,8 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Effarig",
     description() {
-      return `all Dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
-      Infinity Power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
+      return `all Dimension multipliers, gamespeed, and Tickspeed are severely lowered, like Dilation.
+      Infinity Power reduces the production and gamespeed penalties and Time Shards reduce the Tickspeed penalty.
       Glyph levels are temporarily capped${Effarig.isRunning ? ` to ${Effarig.glyphLevelCap}` : ``},
       rarity is unaffected. You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
     }
@@ -38,7 +38,7 @@ GameDatabase.celestials.descriptions = [
     description() {
       return `\nGlyph levels will be boosted to a minimum of ${formatInt(5000)}
       Infinity, Time, and 8th Antimatter Dimension purchases are limited to ${formatInt(1)} each
-      Antimatter Dimension multipliers are always Dilated (the glyph effect still only applies in actual Dilation)
+      Antimatter Dimension multipliers are always Dilated (the Glyph effect still only applies in actual Dilation)
       Time Study 192 (uncapped Replicanti) is locked
       The Black Hole is disabled
       Tachyon Particle production and Dilated Time production are severely reduced

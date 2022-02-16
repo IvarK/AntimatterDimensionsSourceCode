@@ -163,7 +163,7 @@ export default {
     </div>
     <div v-if="simRealities > 1">
       <br>
-      After choosing this glyph the game will simulate the rest of your Realities,
+      After choosing this Glyph the game will simulate the rest of your Realities,
       <br>
       automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
       based on your Glyph filter settings.

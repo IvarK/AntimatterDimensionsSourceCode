@@ -570,12 +570,19 @@ class RiftState extends GameMechanicState {
   }
 
   fill(diff) {
+    // The UI removes the fill button after 100%, so we need to turn it off here
+    if (this.isActive && this.isMaxed) {
+      this.rift.active = false;
+      return;
+    }
     if (!this.isActive || this.isMaxed) return;
 
     if (this.fillCurrency.value instanceof Decimal) {
       const afterTickAmount = this.fillCurrency.value.times((1 - Pelle.riftDrainPercent) ** (diff / 1000));
       const spent = this.fillCurrency.value.minus(afterTickAmount);
-      this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(0);
+      // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline
+      // time can cause it to drain to 0, where it gets stuck unless you reset it with some prestige
+      this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(1);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     } else {
       const afterTickAmount = this.fillCurrency.value * (1 - Pelle.riftDrainPercent) ** (diff / 1000);

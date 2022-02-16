@@ -21,7 +21,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Gain a multiplier to Antimatter Dimensions`,
         _cost: x => expWithIncreasedScale(10, 1e3, 41, 100, x),
         _effect: x => Pelle.antimatterDimensionMult(x),
-        _formatEffect: x => formatX(x, 2),
+        _formatEffect: x => formatX(x, 2, 2),
         cap: 44
       }),
       timeSpeedMult: rebuyable({
@@ -37,7 +37,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Increase the Glyph level allowed in Pelle`,
         _cost: x => expWithIncreasedScale(30, 1e3, 25, 1e15, x),
         _effect: x => Math.floor(((3 * (x + 1)) - 2) ** 1.6),
-        _formatEffect: x => format(x, 2),
+        _formatEffect: x => formatInt(x),
         cap: 26
       }),
       infConversion: rebuyable({
@@ -286,8 +286,8 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.6,
-            description: () => `When Replicanti amount exceeds ${format(DC.E1300)},
-              your galaxies are ${formatPercents(0.1)} more effective`
+            description: () => `When Replicanti exceeds ${format(DC.E1300)},
+              Galaxies are ${formatPercents(0.1)} more effective`
           },
           {
             requirement: 1,
@@ -405,7 +405,7 @@ GameDatabase.celestials.pelle = (function() {
           },
           {
             requirement: 0.5,
-            description: () => "Dilation rebuyables multiply Infinity Power conversion rate",
+            description: () => "Dilation rebuyable purchase count improves Infinity Power conversion rate",
             effect: () => Math.min(
               1.1 ** (Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90),
               712

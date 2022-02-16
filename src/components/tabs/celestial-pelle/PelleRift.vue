@@ -48,10 +48,10 @@ export default {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
     },
     barOverlay() {
+      const overfill = this.percentage > 1;
       return {
-        "o-pelle-rift-bar-permanent": this.hasEffectiveFill,
-        "o-pelle-rift-bar-active-fill": this.isActive && !this.isMaxed,
-        "o-pelle-rift-bar-overfilled": this.percentage > 1,
+        "o-pelle-rift-bar-permanent": !overfill && this.hasEffectiveFill,
+        "o-pelle-rift-bar-overfilled": overfill,
       };
     },
   },
@@ -71,7 +71,12 @@ export default {
           width: `${Math.clampMax(percentage * 100, 100)}%`,
         }"
       />
+      <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
       <div :class="barOverlay()" />
+      <div
+        v-if="isActive && !isMaxed"
+        class="o-pelle-rift-bar-active-fill"
+      />
       <div
         v-for="(milestone, idx) in rift.milestones"
         :key="'milestone-line-' + idx"
@@ -148,7 +153,7 @@ export default {
   font-size: 1.5rem;
   color: white;
   text-shadow: 1px 1px 2px var(--color-pelle--base);
-  z-index: 3;
+  z-index: 2;
 }
 
 .o-pelle-rift-bar-fill {

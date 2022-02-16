@@ -131,6 +131,9 @@ export default {
   left: 0;
   background: var(--color-pelle-secondary);
   z-index: 2;
+  box-shadow: inset 0 0 3px 1px #1e1e1e;
+  /* If you're looking to remove this box shadow, you should probably find a solution to there
+  being a gap between the rift-bar-fill and the rift-bar first. -Scar */
 }
 
 .o-pelle-rift-bar-milestone-line {
@@ -192,6 +195,8 @@ export default {
 h2,
 .highlight {
   color: var(--color-pelle--base);
-  text-shadow: 1px 1px 2px black;
+  /* text-shadow: 1px 1px 2px black; */
+  /* Why was text-shadow even added? It doesn't make a difference on Dark themes
+  and just makes it harder to see on Bright themes. */
 }
 </style>

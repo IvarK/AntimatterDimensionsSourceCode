@@ -8,6 +8,7 @@ export default {
   },
   data() {
     return {
+      isUnlocked: false,
       galaxies: 0,
       galaxiesPerSecond: 0,
       cap: 0,
@@ -24,6 +25,7 @@ export default {
   },
   methods: {
     update() {
+      this.isUnlocked = Pelle.hasGalaxyGenerator;
       this.galaxies = player.galaxies + GalaxyGenerator.galaxies;
       this.galaxiesPerSecond = GalaxyGenerator.gainPerSecond;
       this.cap = GalaxyGenerator.generationCap;
@@ -42,6 +44,9 @@ export default {
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.galaxies = !this.isCollapsed;
+    },
+    unlock() {
+      player.celestials.pelle.galaxyGenerator.unlocked = true;
     }
   },
 };
@@ -60,37 +65,46 @@ export default {
       v-if="!isCollapsed"
       class="l-pelle-content-container"
     >
-      You have <span class="galaxies-amount">{{ format(galaxies, 2) }}</span> Galaxies.
-      <span class="galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}</span>/s
-      <br>
-      You can generate a maximum of {{ format(cap) }} Galaxies.
-      <div
-        v-if="isCapped && capRift"
-      >
-        You have reached the generated Galaxy cap.<br>
-        <button
-          class="increase-cap"
-          @click="increaseCap"
+      <div v-if="isUnlocked">
+        <div>
+          You have a total of <span class="galaxies-amount">{{ format(galaxies, 2) }}</span> Galaxies.
+          <span class="galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
+        </div>
+        You can generate a maximum of {{ format(cap) }} Galaxies.
+        <div
+          v-if="isCapped && capRift"
         >
-          To increase the cap, you need to get rid of all that {{ capRift.name }}. <br><br>
-          <span
-            v-if="!sacrificeActive"
-            class="big-text"
-          >Sacrifice your {{ capRift.name }}</span>
-          <span
-            v-else
-            class="big-text"
-          >Getting rid of all that {{ capRift.name }}...</span>
-        </button>
+          <button
+            class="increase-cap"
+            @click="increaseCap"
+          >
+            To generate more Galaxies, you need to get rid of all that {{ capRift.name }}. <br><br>
+            <span
+              v-if="!sacrificeActive"
+              class="big-text"
+            >Sacrifice your {{ capRift.name }}</span>
+            <span
+              v-else
+              class="big-text"
+            >Getting rid of all that {{ capRift.name }}...</span>
+          </button>
+        </div>
+        <div class="galaxy-generator-upgrades-container">
+          <PelleUpgrade
+            v-for="upgrade in upgrades"
+            :key="upgrade.config.id"
+            :upgrade="upgrade"
+            :galaxy-generator="true"
+          />
+        </div>
       </div>
-      <div class="galaxy-generator-upgrades-container">
-        <PelleUpgrade
-          v-for="upgrade in upgrades"
-          :key="upgrade.config.id"
-          :upgrade="upgrade"
-          :galaxy-generator="true"
-        />
-      </div>
+      <button
+        v-else
+        class="generator-unlock-button"
+        @click="unlock"
+      >
+        Unlock the Galaxy Generator
+      </button>
     </div>
   </div>
 </template>
@@ -115,6 +129,19 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .generator-unlock-button {
+    padding: 2rem;
+    border-radius: .5rem;
+    font-family: Typewriter;
+    cursor: pointer;
+    width: 25rem;
+    height: 10rem;
+    font-size: 2rem;
+    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+    color: black;
+    font-weight: bold;
   }
 
   .galaxy-generator-upgrades-container {

@@ -1,14 +1,16 @@
 <script>
 import PelleStrike from "./PelleStrike.vue";
+import PelleRift from "./PelleRift.vue";
 
 export default {
   name: "PelleBarPanel",
   components: {
     PelleStrike,
+    PelleRift
   },
   data() {
     return {
-      compact: false,
+      decayRate: 0,
       isCollapsed: false,
     };
   },
@@ -17,7 +19,7 @@ export default {
   },
   methods: {
     update() {
-      this.compact = Pelle.cel.compact;
+      this.decayRate = Pelle.riftDrainPercent;
       this.isCollapsed = player.celestials.pelle.collapsed.rifts;
     },
     collapseIcon() {
@@ -45,16 +47,18 @@ export default {
       v-if="!isCollapsed"
       class="l-pelle-content-container"
     >
-      When active, Rifts consume {{ formatPercents(0.03) }} of another resource per second.
+      When active, Rifts consume {{ formatPercents(decayRate) }} of another resource per second.
       <br>
       Rift effects are based on the total amount of resource drained.
       <div class="c-pelle-bar-container">
-        <PelleStrike
+        <div
           v-for="strike in strikes"
           :key="strike.config.id"
-          :strike="strike"
-          :compact="compact"
-        />
+          class="c-pelle-single-bar"
+        >
+          <PelleStrike :strike="strike" />
+          <PelleRift :rift="strike.rift" />
+        </div>
       </div>
     </div>
   </div>
@@ -84,8 +88,13 @@ export default {
 
   .c-pelle-bar-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 125rem;
+    flex-direction: row;
+  }
+
+  .c-pelle-single-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 27rem;
   }
 </style>

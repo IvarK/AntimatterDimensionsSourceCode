@@ -1,11 +1,9 @@
 <script>
-import PelleRift from "./PelleRift.vue";
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export default {
   name: "PelleStrike",
   components: {
-    PelleRift,
     ExpandingControlBox
   },
   props: {
@@ -13,38 +11,31 @@ export default {
       type: Object,
       required: true
     },
-    compact: Boolean
   },
 };
 </script>
 
 <template>
-  <div>
-    <div class="c-pelle-strike-container">
-      <ExpandingControlBox
-        container-class="c-pelle-strike"
+  <div class="c-pelle-strike-container">
+    <ExpandingControlBox
+      container-class="c-pelle-strike"
+    >
+      <div
+        slot="header"
+        class="c-pelle-strike-text-padding"
       >
-        <div
-          slot="header"
-          class="c-pelle-strike-text-padding"
-        >
-          ▼ {{ strike.requirement }} ▼
-        </div>
-        <div
-          slot="dropdown"
-          class="c-pelle-strike-text-padding"
-        >
-          Penalty: {{ strike.penalty }}
-          <br><br>
-          Reward: {{ strike.reward }}
-          <br>
-        </div>
-      </ExpandingControlBox>
-    </div>
-    <PelleRift
-      :rift="strike.rift"
-      :compact="compact"
-    />
+        ▼ {{ strike.requirement }} ▼
+      </div>
+      <div
+        slot="dropdown"
+        class="c-pelle-strike-text-padding"
+      >
+        Penalty: {{ strike.penalty }}
+        <br><br>
+        Reward: {{ strike.reward }}
+        <br>
+      </div>
+    </ExpandingControlBox>
   </div>
 </template>
 
@@ -61,6 +52,7 @@ export default {
 
   .c-pelle-strike-container {
     padding: 0.5rem 0.5rem 2rem;
+    height: 5rem;
   }
 
   .c-pelle-strike-text-padding {

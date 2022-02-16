@@ -14,7 +14,6 @@ export default {
     return {
       isDoomed: false,
       hasStrike: false,
-      compact: false,
       hasGalaxyGenerator: false,
     };
   },
@@ -22,11 +21,7 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
-      this.compact = Pelle.cel.compact;
       this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
-    },
-    toggleCompact() {
-      Pelle.cel.compact = !Pelle.cel.compact;
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -63,12 +58,6 @@ export default {
   <div class="l-pelle-celestial-tab">
     <div v-if="isDoomed">
       <div class="button-container">
-        <button
-          class="o-pelle-button"
-          @click="toggleCompact"
-        >
-          {{ compact ? "Showing compact view" : "Showing detailed view" }}
-        </button>
         <button
           class="o-pelle-button"
           @click="showModal"

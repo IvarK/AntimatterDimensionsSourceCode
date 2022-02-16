@@ -1197,11 +1197,13 @@ GameStorage.devMigrations = {
       // saves which are already in cel7, this prop will already exist as a Decimal. This workaround handles both cases
       player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
 
+      delete player.celestials.pelle.compact;
       player.celestials.pelle.collapsed = {
         upgrades: false,
         rifts: false,
         galaxies: false
       };
+      player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
     }
   ],
 

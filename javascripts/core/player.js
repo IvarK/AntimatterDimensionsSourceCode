@@ -696,13 +696,13 @@ window.player = {
       },
       progressBits: 0,
       galaxyGenerator: {
+        unlocked: false,
         spentGalaxies: 0,
         generatedGalaxies: 0,
         phase: 0,
         sacrificeActive: false
       }
     },
-    compact: false,
     collapsed: {
       upgrades: false,
       rifts: false,

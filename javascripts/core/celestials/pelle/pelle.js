@@ -271,6 +271,10 @@ export const Pelle = {
     return Glyphs.active.filter(Boolean)[0]?.type;
   },
 
+  get hasGalaxyGenerator() {
+    return player.celestials.pelle.galaxyGenerator.unlocked;
+  },
+
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
   // Also adds more zalgo the bigger the stage
   transitionText(from, to, stage = 0) {
@@ -534,8 +538,10 @@ class RiftState extends GameMechanicState {
     return this.config.drainResource;
   }
 
-  get effectDescription() {
-    return this.config.effectDescription(this.effectValue);
+  get effects() {
+    let effects = [this.config.baseEffect(this.effectValue)];
+    effects = effects.concat(this.config.additionalEffects());
+    return effects;
   }
 
   get isCustomEffect() { return true; }

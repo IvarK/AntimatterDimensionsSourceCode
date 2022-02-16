@@ -40,9 +40,13 @@ export default {
     config() {
       return this.upgrade.config;
     },
-    effect() {
-      if (!this.config.formatEffect) return false;
-      return this.config.formatEffect(this.purchases);
+    effectText() {
+      if (!this.config.formatEffect) return "";
+      const prefix = this.isCapped ? "Capped:" : "Currently:";
+      const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
+      let value = formattedEffect(this.purchases);
+      if (!this.isCapped) value += ` ➜ ${formattedEffect(this.purchases + 1)}`;
+      return `${prefix} ${value}`;
     },
     timeEstimate() {
       if (this.canBuy ||
@@ -98,7 +102,7 @@ export default {
       {{ estimateImprovement }}
     </div>
     <DescriptionDisplay :config="config" /><br><br>
-    <span v-if="effect">Currently: {{ effect }}<br></span>
+    {{ effectText }}<br>
     <CostDisplay
       v-if="!isCapped"
       :config="config"

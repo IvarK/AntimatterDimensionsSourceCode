@@ -13,7 +13,6 @@ export default {
       remnants: 0,
       realityShards: new Decimal(0),
       shardRate: new Decimal(0),
-      compact: false,
       showBought: false,
       isHovering: false,
       isCollapsed: false,
@@ -37,7 +36,6 @@ export default {
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
-      this.compact = Pelle.cel.compact;
       this.showBought = Pelle.cel.showBought;
       this.isCollapsed = player.celestials.pelle.collapsed.upgrades;
     },
@@ -177,6 +175,6 @@ export default {
 
   .c-armageddon-container {
     width: 32rem;
-    margin: 2rem;
+    margin: 2rem 2rem 5rem;
   }
 </style>

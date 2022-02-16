@@ -71,6 +71,9 @@ export default {
           width: `${Math.clampMax(percentage * 100, 100)}%`,
         }"
       />
+      <div
+        class="o-pelle-rift-bar-overlay"
+      />
       <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
       <div :class="barOverlay()" />
       <div
@@ -86,7 +89,8 @@ export default {
           left: `calc(${milestone.requirement * 100}% - 0.6rem)`,
         }"
       >
-        <div class="o-pelle-rift-bar-milestone-line" />
+        <div class="o-pelle-rift-bar-milestone-line"
+        :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }" />
       </div>
     </div>
     <div class="o-pelle-rift-milestone-container">
@@ -138,7 +142,7 @@ export default {
 
 .c-pelle-rift-bar {
   height: 5rem;
-  border: 2px solid var(--color-pelle-secondary);
+  border: 0.2rem solid var(--color-pelle-secondary);
   width: 20rem;
   border-radius: 5px;
   position: relative;
@@ -153,7 +157,7 @@ export default {
   font-size: 1.5rem;
   color: white;
   text-shadow: 1px 1px 2px var(--color-pelle--base);
-  z-index: 2;
+  z-index: 4;
 }
 
 .o-pelle-rift-bar-fill {
@@ -163,6 +167,15 @@ export default {
   height: 100%;
   background: var(--color-pelle-secondary);
   z-index: 1;
+}
+.o-pelle-rift-bar-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  box-shadow: inset 0 0 3px 1px #1e1e1e;
 }
 
 .o-pelle-rift-bar-permanent {
@@ -212,16 +225,20 @@ export default {
   width: 1rem;
   height: 100%;
   opacity: 1;
-  z-index: 2;
+  z-index: 3;
 }
 
 .o-pelle-rift-bar-milestone-line {
   position: relative;
-  left: 50%;
+  left: calc(50% - 0.1rem);
   width: 0.2rem;
   height: 100%;
   background: var(--color-pelle--base);
   z-index: 2;
+  opacity: 0.5;
+}
+.o-pelle-rift-bar-milestone-line--unlocked {
+  opacity: 1;
 }
 
 .o-pelle-rift-toggle {

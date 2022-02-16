@@ -19,6 +19,7 @@ export default {
   <div class="c-pelle-strike-container">
     <ExpandingControlBox
       container-class="c-pelle-strike"
+      style="z-index: 5;"
     >
       <div
         slot="header"

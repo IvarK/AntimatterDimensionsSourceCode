@@ -52,6 +52,9 @@ export default {
     hasSecondaryValue() {
       return this.textSplits[2] !== undefined;
     },
+    isPelleDisabled() {
+      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect);
+    },
     convertedParts() {
       const parts = [];
       for (const text of this.textSplits) parts.push(this.convertToHTML(text));
@@ -78,7 +81,12 @@ export default {
 </script>
 
 <template>
-  <div class="c-glyph-tooltip__effect">
+  <div
+    class="c-glyph-tooltip__effect"
+    :style="{
+      textDecoration: isPelleDisabled ? 'line-through' : null,
+    }"
+  >
     <span v-html="convertedParts[0]" />
     <span
       v-if="hasValue"

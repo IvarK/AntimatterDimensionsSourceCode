@@ -55,6 +55,9 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     if (this.id === 22) {
       BASIC_GLYPH_TYPES.forEach(x => player.reality.glyphs.sac[x] = ImaginaryUpgrade(22).effectValue);
     }
+    if (this.id === 25) {
+      Tab.celestials.pelle.show();
+    }
   }
 }
 

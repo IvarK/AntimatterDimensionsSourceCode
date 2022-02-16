@@ -103,7 +103,7 @@ export default {
     },
     glyphEffectList() {
       const db = GameDatabase.reality.glyphEffects;
-      const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength)
+      const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength, this.type)
         .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));
       const effectStrings = effects
         .map(e => this.formatEffectString(db[e.id], e.value));

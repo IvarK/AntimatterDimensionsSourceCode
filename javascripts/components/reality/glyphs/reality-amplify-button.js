@@ -24,7 +24,7 @@ Vue.component("reality-amplify-button", {
       this.isDisabled = isInCelestialReality();
       this.isActive = Enslaved.boostReality;
       this.ratio = Enslaved.realityBoostRatio;
-      this.canAmplify = !this.isDisabled && this.ratio > 1 && !isDoomed;
+      this.canAmplify = !this.isDisabled && this.ratio > 1 && !this.isDoomed;
     },
     toggleActive() {
       if (!this.canAmplify) return;

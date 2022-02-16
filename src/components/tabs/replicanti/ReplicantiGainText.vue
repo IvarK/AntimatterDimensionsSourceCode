@@ -82,7 +82,8 @@ export default {
           this.galaxyText = "You have reached the maximum amount of Replicanti Galaxies";
 
         } else {
-          this.galaxyText = `You are gaining a Replicanti Galaxy every ${TimeSpan.fromSeconds(secondsPerGalaxy.toNumber())}`;
+          this.galaxyText = `You are gaining a Replicanti Galaxy every
+            ${TimeSpan.fromSeconds(secondsPerGalaxy.toNumber())}`;
           if (galaxiesPerSecond.gte(1)) {
             this.galaxyText = `You are gaining ${quantify("Replicanti Galaxy", galaxiesPerSecond, 2, 1)} per second`;
           }

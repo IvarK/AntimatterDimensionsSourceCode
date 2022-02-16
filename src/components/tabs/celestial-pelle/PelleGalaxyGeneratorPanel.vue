@@ -70,7 +70,7 @@ export default {
           You have a total of <span class="galaxies-amount">{{ format(galaxies, 2) }}</span> Galaxies.
           <span class="galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
         </div>
-        You can generate a maximum of {{ format(cap) }} Galaxies.
+        <span v-if="!isCapped">You can generate a maximum of {{ format(cap) }} Galaxies.</span>
         <div
           v-if="isCapped && capRift"
         >

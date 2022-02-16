@@ -122,7 +122,7 @@ export default {
       </button>
       Drains {{ rift.drainResource }} to fill.
       <br>
-      Current: {{ formatRift(resource) }}
+      Current Amount: {{ formatRift(resource) }}
       <br>
       Total Filled: {{ formatRift(rift.totalFill) }}
     </div>

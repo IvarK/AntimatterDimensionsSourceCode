@@ -32,7 +32,7 @@ export default {
     Armageddon for
     <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
     remnants<br>
-    Reality shards
+    Reality Shards
     <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ➜
     <span class="c-reality-shard-gain">{{ format(nextRealityShardGain, 2, 2) }}</span>/s
   </button>

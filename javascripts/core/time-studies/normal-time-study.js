@@ -81,6 +81,7 @@ export class NormalTimeStudyState extends TimeStudyState {
     Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     TimeStudyTree.commitToGameState([TimeStudy(this.id)]);
+    if (this.id === 181 && Pelle.isDoomed) Achievement(177).unlock();
     return true;
   }
 

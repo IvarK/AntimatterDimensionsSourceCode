@@ -1277,17 +1277,15 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 176,
-    name: "dummy achievement 1",
-    description: "This one isn't implemented yet.",
-    checkRequirement: () => false,
-    checkEvent: []
+    name: "Antimatter Dimensions Eternal",
+    description: "Doom your Reality.",
+    checkRequirement: () => Pelle.isDoomed,
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 177,
-    name: "dummy achievement 2",
-    description: "Neither is this one.",
-    checkRequirement: () => false,
-    checkEvent: []
+    name: "An old friend",
+    description: "Purchase Time Study 181 in Doomed.",
   },
   {
     id: 178,

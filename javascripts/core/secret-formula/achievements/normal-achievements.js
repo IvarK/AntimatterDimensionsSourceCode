@@ -1321,7 +1321,7 @@ GameDatabase.achievements.normal = [
   {
     id: 184,
     name: "You're out!",
-    description: "Reach Eternity in the Doomed Reality.",
+    description: "Reach the third Pelle Strike.",
     checkRequirement: () => PelleStrikes.eternity.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
@@ -1336,7 +1336,7 @@ GameDatabase.achievements.normal = [
     id: 186,
     displayId: 181,
     name: "An old friend",
-    description: "Purchase Time Study 181 in Doomed.",
+    get description() { return `Purchase Time Study ${formatInt(181)} in Doomed.`; },
   },
   {
     id: 187,

@@ -54,11 +54,6 @@
   cursor: pointer;
 }
 
-.o-time-study--available:hover {
-  animation: none;
-  background-color: #00bcd4;
-}
-
 .c-pelle-useless--unavailable {
   animation: none;
   color: black;
@@ -95,6 +90,7 @@
 
 .o-time-study--available:hover {
   animation: none;
+  background-color: #00bcd4;
 }
 
 .o-time-study--unavailable {

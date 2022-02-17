@@ -4977,7 +4977,7 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-upgrade--useless-available:hover {
-  color: var(--color-pelle-secondary);;
+  color: var(--color-pelle-secondary);
 }
 
 .o-dilation-upgrade--useless-bought{

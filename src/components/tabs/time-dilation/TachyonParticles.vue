@@ -41,10 +41,10 @@ export default {
 </script>
 
 <template>
-  <svg class="c-tachyon-particle-container">
+  <svg class="c-tachyon-particle-container"
+  v-if="initialized">
     <TachyonParticle
       v-for="i in count"
-      v-if="initialized"
       :key="i"
       :bounds="bounds"
       :is-blob="isBlob"

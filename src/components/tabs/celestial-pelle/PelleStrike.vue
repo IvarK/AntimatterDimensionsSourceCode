@@ -19,7 +19,6 @@ export default {
   <div class="c-pelle-strike-container">
     <ExpandingControlBox
       container-class="c-pelle-strike"
-      style="z-index: 5;"
     >
       <div
         slot="header"
@@ -54,6 +53,7 @@ export default {
   .c-pelle-strike-container {
     padding: 0.5rem 0.5rem 2rem;
     height: 5rem;
+    z-index: 6;
   }
 
   .c-pelle-strike-text-padding {

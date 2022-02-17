@@ -205,7 +205,7 @@ GameDatabase.celestials.pelle = (function() {
       dilation: {
         id: 5,
         requirementDescription: () => "Dilate Time",
-        penaltyDescription: () => "Time Dilation is always active",
+        penaltyDescription: () => "Time Dilation nerfs are always active",
         rewardDescription: "Unlock Death",
         rift: () => PelleRifts.death
       }

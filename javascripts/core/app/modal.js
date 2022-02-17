@@ -107,10 +107,11 @@ export class Modal {
   static hideAll() {
     if (!GameUI.initialized) return;
     while (ui.view.modal.queue.length) {
-      if (ui.view.modal.queue.length[0].hide)
+      if (ui.view.modal.queue.length[0].hide) {
         ui.view.modal.queue.length[0].hide();
-      else
+      } else {
         Modal.hide();
+      }
     }
     ui.view.modal.current = undefined;
   }

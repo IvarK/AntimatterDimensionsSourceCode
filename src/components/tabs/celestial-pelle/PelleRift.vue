@@ -17,17 +17,14 @@ export default {
       hasEffectiveFill: false,
       selectedHoverMilestone: 0,
       // Converts 1 rem to number of px
-      remToPx: parseInt(getComputedStyle(document.documentElement).fontSize)
+      remToPx: parseInt(getComputedStyle(document.documentElement).fontSize),
+      effects: []
     };
-  },
-  computed: {
-    effects() {
-      return this.rift.effects;
-    },
   },
   methods: {
     update() {
       const rift = this.rift;
+      this.effects = this.rift.effects;
       this.isActive = rift.isActive;
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.percentage = rift.percentage;

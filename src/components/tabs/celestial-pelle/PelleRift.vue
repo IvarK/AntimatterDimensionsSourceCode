@@ -15,6 +15,9 @@ export default {
       totalFill: new Decimal(),
       resource: new Decimal(),
       hasEffectiveFill: false,
+      selectedHoverMilestone: 0,
+      // Converts 1 rem to number of px
+      remToPx: parseInt(getComputedStyle(document.documentElement).fontSize)
     };
   },
   computed: {
@@ -54,6 +57,27 @@ export default {
         "o-pelle-rift-bar-overfilled": overfill,
       };
     },
+    handleMilestoneRequirementTooltipDisplay(event) {
+      const mouseX = event.clientX - this.$refs.pelleRiftBar.getBoundingClientRect().x;
+
+      const milestonesCloseTo = this.rift.milestones.filter(m => {
+        // Gets distance from the milestone bar in terms of rem
+        // 19.6: the width of the bar is 20 rem, but adjusted to a border with 0.2rem on both sides
+        let dist = Math.abs((m.requirement*19.6) - mouseX/this.remToPx);
+        if (dist < 1) m.dist = dist;
+        return dist < 1;
+      }).map(m => {
+        let dist = m.dist;
+        delete m.dist;
+        // Temporarily store the distance without recalculation to sort the list by distance
+        // and get the closest item
+        return {dist, m};
+      });
+
+      if (!milestonesCloseTo.length)
+        return;
+      this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
+    }
   },
 };
 </script>
@@ -61,7 +85,7 @@ export default {
 <template>
   <div class="c-pelle-rift">
     <h2>{{ rift.name }}</h2>
-    <div class="c-pelle-rift-bar">
+    <div class="c-pelle-rift-bar" ref="pelleRiftBar" @mousemove="handleMilestoneRequirementTooltipDisplay">
       <div class="o-pelle-rift-bar-percentage">
         {{ formatPercents(percentage, 3) }}
       </div>
@@ -81,17 +105,21 @@ export default {
         class="o-pelle-rift-bar-active-fill"
       />
       <div
-        v-for="(milestone, idx) in rift.milestones"
-        :key="'milestone-line-' + idx"
-        v-tooltip="milestoneResourceText(rift, milestone)"
+        v-tooltip="milestoneResourceText(rift, selectedHoverMilestone)"
         class="o-pelle-rift-bar-milestone-hover-area"
         :style="{
-          left: `calc(${milestone.requirement * 100}% - 0.6rem)`,
+          left: `calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`
         }"
       >
-        <div class="o-pelle-rift-bar-milestone-line"
-        :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }" />
       </div>
+      <div
+        v-for="(milestone, idx) in rift.milestones"
+        :key="'milestone-line-' + idx" class="o-pelle-rift-bar-milestone-line"
+        :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }"
+        :style="{
+          left: `calc(${milestone.requirement * 100}% - 0.2rem)`,
+        }"
+      />
     </div>
     <div class="o-pelle-rift-milestone-container">
       <div
@@ -222,19 +250,19 @@ export default {
 
 .o-pelle-rift-bar-milestone-hover-area {
   position: absolute;
-  width: 1rem;
+  width: 2rem;
   height: 100%;
-  opacity: 1;
-  z-index: 3;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 5;
 }
 
 .o-pelle-rift-bar-milestone-line {
-  position: relative;
-  left: calc(50% - 0.1rem);
+  position: absolute;
   width: 0.2rem;
   height: 100%;
   background: var(--color-pelle--base);
-  z-index: 2;
+  z-index: 3;
   opacity: 0.5;
 }
 .o-pelle-rift-bar-milestone-line--unlocked {

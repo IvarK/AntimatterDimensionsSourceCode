@@ -60,15 +60,15 @@ export default {
       const milestonesCloseTo = this.rift.milestones.filter(m => {
         // Gets distance from the milestone bar in terms of rem
         // 19.6: the width of the bar is 20 rem, but adjusted to a border with 0.2rem on both sides
-        let dist = Math.abs((m.requirement*19.6) - mouseX/this.remToPx);
+        const dist = Math.abs((m.requirement * 19.6) - mouseX / this.remToPx);
         if (dist < 1) m.dist = dist;
         return dist < 1;
       }).map(m => {
-        let dist = m.dist;
+        const dist = m.dist;
         delete m.dist;
         // Temporarily store the distance without recalculation to sort the list by distance
         // and get the closest item
-        return {dist, m};
+        return { dist, m };
       });
 
       if (!milestonesCloseTo.length)
@@ -82,7 +82,11 @@ export default {
 <template>
   <div class="c-pelle-rift">
     <h2>{{ rift.name }}</h2>
-    <div class="c-pelle-rift-bar" ref="pelleRiftBar" @mousemove="handleMilestoneRequirementTooltipDisplay">
+    <div
+      ref="pelleRiftBar"
+      class="c-pelle-rift-bar"
+      @mousemove="handleMilestoneRequirementTooltipDisplay"
+    >
       <div class="o-pelle-rift-bar-percentage">
         {{ formatPercents(percentage, 3) }}
       </div>
@@ -107,11 +111,11 @@ export default {
         :style="{
           left: `calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`
         }"
-      >
-      </div>
+      />
       <div
         v-for="(milestone, idx) in rift.milestones"
-        :key="'milestone-line-' + idx" class="o-pelle-rift-bar-milestone-line"
+        :key="'milestone-line-' + idx"
+        class="o-pelle-rift-bar-milestone-line"
         :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }"
         :style="{
           left: `calc(${milestone.requirement * 100}% - 0.2rem)`,

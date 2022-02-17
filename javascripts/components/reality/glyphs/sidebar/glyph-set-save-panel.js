@@ -30,6 +30,9 @@ Vue.component("glyph-set-save-panel", {
   created() {
     this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
     this.refreshGlyphSets();
+    for (const i in this.name) {
+      this.name[i] = player.reality.glyphs.setsName[i];
+    }
   },
   computed: {
     questionmarkTooltip() {
@@ -47,9 +50,6 @@ Vue.component("glyph-set-save-panel", {
       this.effects = player.options.ignoreGlyphEffects;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
-
-      for (const i in this.name)
-        this.name[i] = player.reality.glyphs.setsName[i];
     },
     refreshGlyphSets() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
@@ -87,7 +87,7 @@ Vue.component("glyph-set-save-panel", {
       }
     },
     nicknameBlur(event) {
-      this.name[event.target.id] = event.target.value.slice(0, 15);
+      this.name[event.target.id] = event.target.value.slice(0, 20);
       player.reality.glyphs.setsName[event.target.id] = this.name[event.target.id];
     },
   },
@@ -140,19 +140,17 @@ Vue.component("glyph-set-save-panel", {
           />
         </div>
         <div class="c-glyph-single-set-save-flexbox" style="width: 22rem">
-          <div>
-            <span ach-tooltip="Set a custom name (up to 15 characters)">
-              <input
-                type="text"
-                size="15"
-                maxlength="15"
-                placeholder="Custom set name"
-                class="c-glyph-sets-save-name__input"
-                :value="name[id]"
-                :id="id"
-                @blur="nicknameBlur"
-              />
-            </span>
+          <div ach-tooltip="Set a custom name (up to 20 characters)">
+            <input
+              type="text"
+              size="20"
+              maxlength="20"
+              placeholder="Custom set name"
+              class="c-glyph-sets-save-name__input"
+              :value="name[id]"
+              :id="id"
+              @blur="nicknameBlur"
+            />
           </div>
           <div class="c-glyph-single-set-save-flexbox-buttons">
             <button

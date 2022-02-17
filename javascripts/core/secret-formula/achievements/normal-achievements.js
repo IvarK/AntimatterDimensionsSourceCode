@@ -1306,31 +1306,31 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 182,
-    name: "age of the age of automation",
-    description: "Gain back all of your Antimatter Dimension autobuyers.",
+    name: "Age of the age of automation",
+    description: "Gain back all Antimatter Dimension autobuyers.",
     checkRequirement: () => player.celestials.pelle.upgrades.has(4),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 183,
-    name: "Anti-anti-challenged 2 (the second)",
-    description: "Complete all ICs while inside the Doomed Reality.",
+    name: "Anti-anti-challenged 2",
+    description: "Complete all Infinity Challenges while inside the Doomed Reality.",
     checkRequirement: () => Pelle.isDoomed && InfinityChallenges.completed.length === 8,
     checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED
   },
   {
     id: 184,
-    name: "Antimatter Dimensions Eternal 2 Electric Boogaloo",
+    name: "You're out!",
     description: "Reach Eternity in the Doomed Reality.",
     checkRequirement: () => PelleStrikes.eternity.hasStrike,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 185,
-    name: "Four strikes and you're out",
+    name: "Four score and seven years ago",
     description: "Reach the fourth Pelle Strike.",
     checkRequirement: () => PelleStrikes.ECs.hasStrike,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 186,
@@ -1340,8 +1340,8 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 187,
-    name: "the one with the dilation",
-    description: "Dilate while in the Doomed Reality.",
+    name: "The One with Dilated Time",
+    description: "Dilate time while in the Doomed Reality.",
     checkRequirement: () => Pelle.isDoomed && player.dilation.active,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
   },

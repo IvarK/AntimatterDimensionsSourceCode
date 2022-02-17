@@ -361,6 +361,7 @@ class PelleStrikeState extends GameMechanicState {
     GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);
+    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
 }
 

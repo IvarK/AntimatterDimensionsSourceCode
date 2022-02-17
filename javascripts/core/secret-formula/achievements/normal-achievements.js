@@ -1277,18 +1277,76 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 176,
+    name: "dummy achievement 1",
+    description: "This one isn't implemented yet.",
+    checkRequirement: () => false,
+    checkEvent: []
+  },
+  {
+    id: 177,
+    name: "dummy achievement 2",
+    description: "Neither is this one.",
+    checkRequirement: () => false,
+    checkEvent: []
+  },
+  {
+    id: 178,
+    name: "dummy achievement 3",
+    description: "you bet by god this one isn't either",
+    checkRequirement: () => false,
+    checkEvent: []
+  },
+  {
+    id: 181,
+    displayId: 666,
     name: "Antimatter Dimensions Eternal",
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
-    id: 177,
+    id: 182,
+    name: "age of the age of automation",
+    description: "Gain back all of your Antimatter Dimension autobuyers.",
+    checkRequirement: () => player.celestials.pelle.upgrades.has(4),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 183,
+    name: "Anti-anti-challenged 2 (the second)",
+    description: "Complete all ICs while inside the Doomed Reality.",
+    checkRequirement: () => Pelle.isDoomed && InfinityChallenges.completed.length === 8,
+    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED
+  },
+  {
+    id: 184,
+    name: "Antimatter Dimensions Eternal 2 Electric Boogaloo",
+    description: "Reach Eternity in the Doomed Reality.",
+    checkRequirement: () => PelleStrikes.eternity.hasStrike,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+  },
+  {
+    id: 185,
+    name: "Four strikes and you're out",
+    description: "Reach the fourth Pelle Strike.",
+    checkRequirement: () => PelleStrikes.ECs.hasStrike,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 186,
+    displayId: 181,
     name: "An old friend",
     description: "Purchase Time Study 181 in Doomed.",
   },
   {
-    id: 178,
+    id: 187,
+    name: "the one with the dilation",
+    description: "Dilate while in the Doomed Reality.",
+    checkRequirement: () => Pelle.isDoomed && player.dilation.active,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+  },
+  {
+    id: 188,
     name: "The End",
     description: "Beat the game.",
     checkRequirement: () => Pelle.endState > 1,

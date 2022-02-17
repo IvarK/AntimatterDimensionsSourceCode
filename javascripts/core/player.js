@@ -28,7 +28,7 @@ window.player = {
   },
   buyUntil10: true,
   sacrificed: DC.D0,
-  achievementBits: Array.repeat(0, 15),
+  achievementBits: Array.repeat(0, 17),
   secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
   infinityRebuyables: [0, 0, 0],

@@ -27,6 +27,9 @@ export default {
     id() {
       return this.achievement.id;
     },
+    displayId() {
+      return this.config.displayId ?? this.id;
+    },
     config() {
       return this.achievement.config;
     },
@@ -94,12 +97,12 @@ export default {
       type="achievements"
       class="l-hint-text--achievement"
     >
-      {{ id }}
+      {{ displayId }}
     </HintText>
     <div class="o-achievement__tooltip">
       <template v-if="isMouseOver">
         <div class="o-achievement__tooltip__name">
-          {{ config.name }} ({{ id }})
+          {{ config.name }} ({{ displayId }})
         </div>
         <div class="o-achievement__tooltip__description">
           {{ config.description }}

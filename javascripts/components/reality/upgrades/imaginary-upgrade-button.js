@@ -61,7 +61,7 @@ Vue.component("imaginary-upgrade-button", {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = ImaginaryUpgrade(20).isBought;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
-      this.isUseless = Pelle.disablediUPGs.includes(upgrade.id) && Pelle.isDoomed;
+      this.isUseless = Pelle.isDoomed;
     }
   },
   template: `

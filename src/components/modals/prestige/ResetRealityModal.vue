@@ -9,6 +9,21 @@ export default {
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
+  computed: {
+    message() {
+      const doomed = Pelle.isDoomed
+        ? `Armageddon`
+        : `Reality`;
+      return `This will put you at the start of your ${doomed},
+      giving you no rewards from your progress in your current ${doomed}.`;
+    },
+    header() {
+      const doomed = Pelle.isDoomed
+        ? `Armageddon`
+        : `Reality`;
+      return `You are about to reset your ${doomed},`;
+    }
+  },
   methods: {
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
@@ -20,11 +35,10 @@ export default {
 <template>
   <ModalWrapperChoice @confirm="handleYesClick">
     <template #header>
-      You are about to reset your Reality
+      {{ header }}
     </template>
     <div class="c-modal-message__text">
-      This will put you at the start of your Reality,
-      giving you no rewards from your progress in your current Reality.
+      {{ message }}
       <br>
       <br>
       Are you sure you want to do this?

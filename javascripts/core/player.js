@@ -404,8 +404,10 @@ window.player = {
         reality: 0
       },
       undo: [],
-      sets: [[], [], [], [], []],
-      setsName: [[], [], [], [], []],
+      sets: new Array(5).fill({
+        name: "",
+        glyphs: [],
+      }),
       protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),

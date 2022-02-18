@@ -10,10 +10,10 @@ Vue.component("glyph-set-save-panel", {
     return {
       hasEquipped: true,
       glyphSets: [],
+      names: [],
       effects: false,
       rarity: false,
       level: false,
-      name: ["", "", "", "", ""],
     };
   },
   watch: {
@@ -30,8 +30,8 @@ Vue.component("glyph-set-save-panel", {
   created() {
     this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
     this.refreshGlyphSets();
-    for (const i in this.name) {
-      this.name[i] = player.reality.glyphs.setsName[i];
+    for (let i = 0; i < player.reality.glyphs.sets.length; i++) {
+      this.names[i] = player.reality.glyphs.sets[i].name;
     }
   },
   computed: {
@@ -52,14 +52,14 @@ Vue.component("glyph-set-save-panel", {
       this.level = player.options.ignoreGlyphLevel;
     },
     refreshGlyphSets() {
-      this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
+      this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g.glyphs));
     },
     setName(id) {
       return `Glyph Set Save #${id + 1}`;
     },
     saveGlyphSet(id) {
-      if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
-      player.reality.glyphs.sets[id] = Glyphs.active.filter(g => g !== null);
+      if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length) return;
+      player.reality.glyphs.sets[id].glyphs = Glyphs.active.compact();
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     loadGlyphSet(set) {
@@ -79,16 +79,16 @@ Vue.component("glyph-set-save-panel", {
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     deleteGlyphSet(id) {
-      if (!player.reality.glyphs.sets[id].length) return;
+      if (!player.reality.glyphs.sets[id].glyphs.length) return;
       if (player.options.confirmations.deleteGlyphSetSave) Modal.glyphSetSaveDelete.show({ glyphSetId: id });
       else {
-        player.reality.glyphs.sets[id] = [];
+        player.reality.glyphs.sets[id].glyphs = [];
         EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
       }
     },
     nicknameBlur(event) {
-      this.name[event.target.id] = event.target.value.slice(0, 20);
-      player.reality.glyphs.setsName[event.target.id] = this.name[event.target.id];
+      player.reality.glyphs.sets[event.target.id].name = event.target.value.slice(0, 20);
+      this.names[event.target.id] = player.reality.glyphs.sets[event.target.id].name;
     },
   },
   template: `
@@ -147,7 +147,7 @@ Vue.component("glyph-set-save-panel", {
               maxlength="20"
               placeholder="Custom set name"
               class="c-glyph-sets-save-name__input"
-              :value="name[id]"
+              :value="names[id]"
               :id="id"
               @blur="nicknameBlur"
             />

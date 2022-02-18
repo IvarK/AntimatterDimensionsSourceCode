@@ -129,7 +129,6 @@ export default {
   }
 
   .l-pelle-panel-container {
-    width: 140rem;
     padding: 1rem;
     margin: 1rem;
     border: 2px solid var(--color-pelle--base);
@@ -170,7 +169,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 140rem;
   }
 
   .c-armageddon-container {

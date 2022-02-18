@@ -87,6 +87,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-items: stretch;
   }
 
   .o-pelle-button {

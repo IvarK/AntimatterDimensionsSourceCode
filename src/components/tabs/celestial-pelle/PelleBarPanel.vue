@@ -72,7 +72,6 @@ export default {
   }
 
   .l-pelle-panel-container {
-    width: 140rem;
     padding: 1rem;
     margin: 1rem;
     border: 2px solid var(--color-pelle--base);
@@ -89,6 +88,8 @@ export default {
   .c-pelle-bar-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .c-pelle-single-bar {

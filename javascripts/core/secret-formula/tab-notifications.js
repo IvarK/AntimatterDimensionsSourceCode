@@ -50,7 +50,7 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() || !Pelle.isDoomed
+      !PlayerProgress.eternityUnlocked()
   },
   replicanti: {
     id: 4,

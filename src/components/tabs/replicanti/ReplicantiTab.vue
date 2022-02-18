@@ -178,10 +178,9 @@ export default {
         You have {{ quantifyInt("purchase", ec8Purchases) }} left.
       </div>
       <div v-if="isDoomed">
-        <span v-if="isUncapped">
+        <div v-if="isUncapped">
           Your Replicanti cap has been removed due to the second Famine milestone.
-          <br>
-        </span>
+        </div>
         Any rewards from Effarig's Infinity have been disabled.
       </div>
       <div v-else-if="hasRaisedCap">

@@ -1,7 +1,7 @@
 <script>
-import PelleBarPanel from "./PelleBarPanel.vue";
-import PelleUpgradePanel from "./PelleUpgradePanel.vue";
-import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel.vue";
+import PelleBarPanel from "./PelleBarPanel";
+import PelleUpgradePanel from "./PelleUpgradePanel";
+import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
 
 export default {
   name: "PelleTab",

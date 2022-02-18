@@ -26,12 +26,17 @@ export default {
       return Autobuyer.epMult;
     },
     classObject() {
+      if (this.isDoomed) {
+        return {
+          "o-eternity-upgrade": true,
+          "o-eternity-upgrade--useless-available": this.isAffordable,
+          "o-eternity-upgrade--useless-unavailable": !this.isAffordable
+        };
+      }
       return {
         "o-eternity-upgrade": true,
-        "o-eternity-upgrade--useless-available": this.isDoomed && this.isAffordable,
-        "o-eternity-upgrade--useless-unavailable": this.isDoomed && !this.isAffordable,
-        "o-eternity-upgrade--available": !this.isDoomed && this.isAffordable,
-        "o-eternity-upgrade--unavailable": !this.isDoomed && !this.isAffordable,
+        "o-eternity-upgrade--available": this.isAffordable,
+        "o-eternity-upgrade--unavailable": !this.isAffordable
       };
     }
   },

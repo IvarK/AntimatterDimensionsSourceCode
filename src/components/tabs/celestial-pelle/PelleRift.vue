@@ -30,7 +30,7 @@ export default {
       this.percentage = rift.percentage;
       this.setValue("totalFill", rift.totalFill);
       this.setValue("resource", rift.fillCurrency.value);
-      this.hasEffectiveFill = rift.name === "Pestilence" && PelleRifts.chaos.hasMilestone(0);
+      this.hasEffectiveFill = rift.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {
@@ -71,9 +71,9 @@ export default {
         return { dist, m };
       });
 
-      if (!milestonesCloseTo.length)
-        return;
-      this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
+      if (milestonesCloseTo.length) {
+        this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
+      }
     }
   },
 };

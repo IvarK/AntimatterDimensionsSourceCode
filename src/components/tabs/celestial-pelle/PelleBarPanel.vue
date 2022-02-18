@@ -1,6 +1,6 @@
 <script>
-import PelleStrike from "./PelleStrike.vue";
-import PelleRift from "./PelleRift.vue";
+import PelleStrike from "./PelleStrike";
+import PelleRift from "./PelleRift";
 
 export default {
   name: "PelleBarPanel",
@@ -15,17 +15,17 @@ export default {
     };
   },
   computed: {
+    collapseIcon() {
+      return this.isCollapsed
+        ? "fas fa-expand-arrows-alt"
+        : "fas fa-compress-arrows-alt";
+    },
     strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
   },
   methods: {
     update() {
       this.decayRate = Pelle.riftDrainPercent;
       this.isCollapsed = player.celestials.pelle.collapsed.rifts;
-    },
-    collapseIcon() {
-      return this.isCollapsed
-        ? "fas fa-expand-arrows-alt"
-        : "fas fa-compress-arrows-alt";
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.rifts = !this.isCollapsed;
@@ -38,7 +38,7 @@ export default {
   <div class="l-pelle-panel-container">
     <div class="c-pelle-panel-title">
       <i
-        :class="collapseIcon()"
+        :class="collapseIcon"
         @click="toggleCollapse"
       />
       Pelle Strikes and Rifts

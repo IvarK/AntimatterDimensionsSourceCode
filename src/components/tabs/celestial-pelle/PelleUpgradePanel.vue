@@ -1,6 +1,6 @@
 <script>
 import ArmageddonButton from "./ArmageddonButton";
-import PelleUpgradeVue from "./PelleUpgrade.vue";
+import PelleUpgradeVue from "./PelleUpgrade";
 
 export default {
   name: "PelleUpgradePanel",
@@ -19,6 +19,11 @@ export default {
     };
   },
   computed: {
+    collapseIcon() {
+      return this.isCollapsed
+        ? "fas fa-expand-arrows-alt"
+        : "fas fa-compress-arrows-alt";
+    },
     rebuyables: () => PelleRebuyableUpgrade.all,
     upgrades() { return PelleUpgrade.all.filter(u => !u.isBought); },
     boughtUpgrades() { return PelleUpgrade.all.filter(u => u.isBought); },
@@ -43,11 +48,6 @@ export default {
       Pelle.cel.showBought = !Pelle.cel.showBought;
       this.$recompute("upgrades");
     },
-    collapseIcon() {
-      return this.isCollapsed
-        ? "fas fa-expand-arrows-alt"
-        : "fas fa-compress-arrows-alt";
-    },
     toggleCollapse() {
       player.celestials.pelle.collapsed.upgrades = !this.isCollapsed;
     }
@@ -59,7 +59,7 @@ export default {
   <div class="l-pelle-panel-container">
     <div class="c-pelle-panel-title">
       <i
-        :class="collapseIcon()"
+        :class="collapseIcon"
         @click="toggleCollapse"
       />
       Pelle Upgrades
@@ -70,7 +70,7 @@ export default {
     >
       <br>
       <div>
-        You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> remnants.
+        You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.
       </div>
       <div>
         You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.

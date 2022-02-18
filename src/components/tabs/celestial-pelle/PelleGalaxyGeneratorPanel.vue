@@ -1,5 +1,5 @@
 <script>
-import PelleUpgrade from "./PelleUpgrade.vue";
+import PelleUpgrade from "./PelleUpgrade";
 
 export default {
   name: "GalaxyGeneratorPanel",
@@ -19,6 +19,11 @@ export default {
     };
   },
   computed: {
+    collapseIcon() {
+      return this.isCollapsed
+        ? "fas fa-expand-arrows-alt"
+        : "fas fa-compress-arrows-alt";
+    },
     upgrades() {
       return PelleRebuyableUpgrade.galaxyGenerator;
     }
@@ -37,11 +42,6 @@ export default {
     increaseCap() {
       GalaxyGenerator.startSacrifice();
     },
-    collapseIcon() {
-      return this.isCollapsed
-        ? "fas fa-expand-arrows-alt"
-        : "fas fa-compress-arrows-alt";
-    },
     toggleCollapse() {
       player.celestials.pelle.collapsed.galaxies = !this.isCollapsed;
     },
@@ -56,7 +56,7 @@ export default {
   <div class="l-pelle-panel-container">
     <div class="c-pelle-panel-title">
       <i
-        :class="collapseIcon()"
+        :class="collapseIcon"
         @click="toggleCollapse"
       />
       Galaxy Generator

@@ -14,14 +14,14 @@ export default {
         // Numerical nerfs and disabled boosts
         "Anything unlocked through a Pelle upgrade cannot be unlocked normally",
         "All pre-Doomed IP and EP multipliers are disabled",
-        "All pre-Doomed replicanti speed multipliers are disabled",
+        "All pre-Doomed Replicanti speed multipliers are disabled",
         "Most Eternity Challenges are harder",
-        "Galaxies are only 50% as effective",
+        "All Galaxies are only 50% as effective",
         "Antimatter Dimension multiplier is divided by 10",
         "Achievement multiplier and many achievement rewards are disabled",
         "All Infinity and Eternity multipliers and generation are disabled",
-        "Black Hole is disabled",
-        "Reality Upgrade \"Temporal Transcendence\" is disabled",
+        "Black Holes are disabled",
+        `Reality Upgrade "Temporal Transcendence" is disabled`,
 
         // Initial QoL and automation
         "All rewards which increase your starting resources are disabled",
@@ -29,14 +29,14 @@ export default {
         "Perk rewards which reduce unlock costs have been disabled",
         "Automatic Infinity and Eternity Challenges are disabled",
         "All Dimension and pre-Infinity Autobuyers are disabled until reacquired through Pelle",
-        "Time Theorem Autobuyer is disabled",
+        "The Time Theorem Autobuyer is disabled",
         "All Automation related to Time Dilation or later are disabled",
 
         // Time studies + Dilation
         "Eternity Upgrade to Time Dimensions based on days played is based on this Armageddon time",
         "All pre-Doomed Dilated Time multipliers are disabled except the 2x buyable",
         "All Tachyon Particle multipliers are disabled",
-        "All Time Theorem generation effects are disabled except for the Dilation upgrade",
+        "All pre-Doomed Time Theorem generation effects are disabled except the Dilation upgrade",
 
         // Glyphs
         "Glyph equipping is disabled until reacquired",

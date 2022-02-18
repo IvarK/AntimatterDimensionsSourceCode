@@ -40,8 +40,6 @@ export default {
       this.hasContinuum = Laitela.continuumActive;
       this.checkADAutoStatus();
       this.tickDoomed = Pelle.isDoomed && !PelleUpgrade.tickspeedAutobuyer.canBeApplied;
-      this.galaxyAutobuyer = Pelle.isDoomed && !PelleUpgrade.galaxyAutobuyer.canBeApplied;
-      this.dimBoostAutobuyer = Pelle.isDoomed && !PelleUpgrade.dimBoostAutobuyer.canBeApplied;
     },
     checkADAutoStatus() {
       const ad = Autobuyer.antimatterDimension;
@@ -61,8 +59,8 @@ export default {
     <RealityAutobuyerBox />
     <EternityAutobuyerBox />
     <BigCrunchAutobuyerBox />
-    <GalaxyAutobuyerBox v-if="!galaxyAutobuyer" />
-    <DimensionBoostAutobuyerBox v-if="!dimBoostAutobuyer" />
+    <GalaxyAutobuyerBox />
+    <DimensionBoostAutobuyerBox />
     <SacrificeAutobuyerBox />
     <TickspeedAutobuyerBox v-if="!hasContinuum && !tickDoomed" />
     <DimensionAutobuyerBox

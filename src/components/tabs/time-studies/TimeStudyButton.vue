@@ -82,13 +82,14 @@ export default {
     },
     studyClass() {
       let pathClasses = "";
-      if (!this.isAvailableForPurchase && !this.isBought && !this.isUseless) {
+      if (this.isUseless) return "";
+      if (!this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--unavailable`;
       }
-      if (this.isAvailableForPurchase && !this.isBought && !this.isUseless) {
+      if (this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--available`;
       }
-      if (this.isBought && !this.isUseless) {
+      if (this.isBought) {
         pathClasses += `${this.pathClass}--bought`;
       }
       return pathClasses;

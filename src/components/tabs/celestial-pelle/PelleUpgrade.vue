@@ -1,6 +1,6 @@
 <script>
-import CostDisplay from "../../CostDisplay.vue";
-import DescriptionDisplay from "../../DescriptionDisplay.vue";
+import CostDisplay from "../../CostDisplay";
+import DescriptionDisplay from "../../DescriptionDisplay";
 
 export default {
   name: "PelleUpgrade",

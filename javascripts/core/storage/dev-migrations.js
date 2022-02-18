@@ -1192,6 +1192,9 @@ GameStorage.devMigrations = {
       };
       delete player.options.showCondenseToMilestone;
     },
+    player => {
+      player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => ({ glyphs, name: "" }));
+    }
   ],
 
   patch(player) {

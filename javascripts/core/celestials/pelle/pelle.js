@@ -140,7 +140,7 @@ export const Pelle = {
   },
 
   // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
-  // that this field is NEGATED, describing an effect whitelist instead of a blacklist, as most of the effects are
+  // that this field is NEGATED, describing an effect allowlist instead of a blocklist, as most of the effects are
   // already disabled by virtue of the glyph type being unequippable and many of the remaining ones are also disabled.
   get enabledGlyphEffects() {
     return ["timepow", "timespeed", "timeshardpow",

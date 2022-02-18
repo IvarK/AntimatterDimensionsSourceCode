@@ -120,7 +120,7 @@ Vue.component("current-glyph-effects", {
       <br v-if="isSoftcapActive || hasEffarig || hasReality">
       <span v-html="uniqueGlyphText" />
       <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
-        <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
+        <span class="c-current-glyph-effects__effect--capped">Italic</span> effects have been slightly reduced
         due to a softcap
       </div>
       <br>

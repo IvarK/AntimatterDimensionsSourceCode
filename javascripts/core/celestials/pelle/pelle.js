@@ -435,6 +435,10 @@ class PelleStrikeState extends GameMechanicState {
     return this._config.rift();
   }
 
+  get notify() {
+    return this._config.notify;
+  }
+
   trigger() {
     if (!Pelle.isDoomed || this.hasStrike) return;
     this.unlockStrike();
@@ -448,7 +452,7 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   unlockStrike() {
-    GameUI.notify.success(`You encountered a Pelle Strike: ${this.requirement}`);
+    GameUI.notify.success(`You encountered a Pelle Strike. ${this.notify}`);
     Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);

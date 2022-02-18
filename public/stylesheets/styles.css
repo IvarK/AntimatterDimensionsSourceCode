@@ -57,6 +57,7 @@ html {
   --color-pelle--base: crimson;
   --color-pelle-secondary: #00bcd4;
 
+  --color-ra-base: #9575cd;
   --color-ra-pet-teresa: #8596ea;
   --color-ra-pet-effarig: #ea8585;
   --color-ra-pet-enslaved: #f1aa7f;
@@ -5802,10 +5803,10 @@ kbd {
 }
 
 .c-modal-celestial-quote--ra {
-  color: #9575cd;
+  color: var(--color-ra-base);
   background-color: black;
-  border-color: #9575cd;
-  box-shadow: 0 0 1rem #9575cd, 0 0 1rem #9575cd inset;
+  border-color: var(--color-ra-base);
+  box-shadow: 0 0 1rem var(--color-ra-base), 0 0 1rem var(--color-ra-base) inset;
 }
 
 .c-modal-celestial-quote--laitela {
@@ -5813,6 +5814,13 @@ kbd {
   background-color: var(--color-laitela--base);
   border-color: var(--color-laitela--accent);
   box-shadow: 0 0 1rem var(--color-laitela--accent), 0 0 1rem var(--color-laitela--accent) inset;
+}
+
+.c-modal-celestial-quote--pelle {
+  color: var(--color-pelle--base);
+  background-color: black;
+  border-color: var(--color-pelle--base);
+  box-shadow: 0 0 1rem var(--color-pelle--base), 0 0 1rem var(--color-pelle--base) inset;
 }
 
 .c-modal-celestial-quote__arrow {

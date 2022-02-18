@@ -295,6 +295,7 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
+  symbol: "♅"
 };
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {

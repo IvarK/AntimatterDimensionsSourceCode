@@ -27,7 +27,10 @@ export const NG = {
 
   startNewGame(i) {
     const backUpOptions = JSON.stringify(player.options);
+    // This can't be JSONed as it contains functions
+    const secretUnlocks = player.secretUnlocks;
     const newGameBackup = JSON.stringify(player.newGame);
+    const secretAchievements = JSON.stringify(player.secretAchievementBits);
     GameStorage.hardReset();
     player.newGame = JSON.parse(newGameBackup);
     player.newGame.current = i;
@@ -35,8 +38,11 @@ export const NG = {
     player.newGame.minusRecord = Math.min(player.newGame.minusRecord, i);
     Pelle.additionalEnd = 0;
     player.options = JSON.parse(backUpOptions);
+    player.secretUnlocks = secretUnlocks;
+    player.secretAchievementBits = JSON.parse(secretAchievements);
     ui.view.newUI = player.options.newUI;
     Themes.find(player.options.theme).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
+    GameStorage.save();
   }
 };

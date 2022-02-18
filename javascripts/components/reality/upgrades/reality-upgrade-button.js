@@ -93,12 +93,12 @@ Vue.component("reality-upgrade-button", {
           <template v-else>
             <EffectDisplay
               :config="config"
-              :br="true"
+              br
             />
             <CostDisplay
               v-if="!isBought"
               :config="config"
-              :br="true"
+              br
               name="Reality Machine"
             />
           </template>

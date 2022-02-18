@@ -102,7 +102,7 @@ export default {
       {{ estimateImprovement }}
     </div>
     <DescriptionDisplay :config="config" /><br><br>
-    {{ effectText }}<br>
+    <span v-if="effectText">{{ effectText }}<br></span>
     <CostDisplay
       v-if="!isCapped"
       :config="config"
@@ -121,10 +121,10 @@ export default {
     border-radius: .5rem;
     font-family: Typewriter;
     cursor: pointer;
-    width: 25rem;
-    height: 15rem;
+    width: 23rem;
+    height: 14rem;
     margin: 1rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .c-pelle-upgrade:hover {

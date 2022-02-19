@@ -58,7 +58,12 @@ export default {
       return this.currentTimeEstimate;
     },
     estimateImprovement() {
-      if (this.canBuy || this.isCapped || this.isBought) return "";
+      if (this.canBuy ||
+        this.isBought ||
+        Pelle.realityShardGainPerSecond.eq(0) ||
+        this.isCapped ||
+        this.galaxyGenerator
+      ) return "";
       // If the improved value is still "> 1 year" then we only show it once
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;

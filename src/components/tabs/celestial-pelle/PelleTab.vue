@@ -118,6 +118,7 @@ export default {
     width: 20rem;
     cursor: pointer;
     transition-duration: 0.4s;
+    align-self: center;
   }
 
   .pelle-doom-button:hover {

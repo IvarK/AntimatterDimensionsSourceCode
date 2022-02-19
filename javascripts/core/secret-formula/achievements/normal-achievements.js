@@ -1336,7 +1336,7 @@ GameDatabase.achievements.normal = [
     id: 186,
     displayId: 181,
     name: "An old friend",
-    get description() { return `Purchase Time Study ${formatInt(181)} in Doomed.`; },
+    description: `Purchase Time Study 181 in Doomed.`,
   },
   {
     id: 187,

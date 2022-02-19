@@ -36,7 +36,6 @@ Vue.component("current-glyph-effects", {
 
           let glyphColor = glyphName.color;
           if (glyphName.id === "cursed") glyphColor = "#5151ec";
-          if (this.effect.value.capped) glyphColor = "";
 
           return {
             color: glyphColor,

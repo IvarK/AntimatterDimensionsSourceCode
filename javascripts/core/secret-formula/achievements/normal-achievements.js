@@ -261,7 +261,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Get more than ${format(DC.E29)} ticks per second.`; },
     checkRequirement: () => Tickspeed.current.exponent <= -26,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    get reward() { return `Multiply starting Tickspeed by ${formatX(1.02, 0, 2)}.`; },
+    get reward() { return `Multiply starting tickspeed by ${formatX(1.02, 0, 2)}.`; },
     effect: 0.98
   },
   {
@@ -426,7 +426,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Get more than ${format(DC.E58)} ticks per second.`; },
     checkRequirement: () => Tickspeed.current.exponent <= -55,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    get reward() { return `Multiply starting Tickspeed by ${formatX(1.02, 0, 2)}.`; },
+    get reward() { return `Multiply starting tickspeed by ${formatX(1.02, 0, 2)}.`; },
     effect: 0.98
   },
   {
@@ -731,7 +731,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Have ${formatInt(308)} Tickspeed upgrades from Time Dimensions.`; },
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Time Dimensions gain a multiplier based on Tickspeed.",
+    reward: "Time Dimensions gain a multiplier based on tickspeed.",
     effect: () => Tickspeed.perSecond.pow(0.000005),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },

@@ -211,7 +211,7 @@ with your current amount of antimatter.
 <br>
 <br>
 <b>Hotkeys: T</b> will purchase as many Tickspeed upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
-Note that the actual Tickspeed time is simulated and the game always runs calculations at the update rate you've chosen
+Note that the actual tickspeed time is simulated and the game always runs calculations at the update rate you've chosen
 in the Options tab.
 `,
       isUnlocked: () => Tickspeed.isUnlocked,
@@ -694,7 +694,7 @@ completed both EC11 and EC12 five times each.
 <br>
 <br>
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
-Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will be raised to the power of
+Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>exponent</i> will be raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them. If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP
 to complete this Dilated Eternity, you will be rewarded with a new resource called Tachyon Particles.
 <br>
@@ -885,7 +885,7 @@ The game will run at normal speed for some amount of time, then have a burst of 
 period of time before going back to normal speed and repeating the cycle.
 <br>
 <br>
-Increased game speed from Black Holes is much stronger than Tickspeed because unlike Tickspeed, it affects
+Increased game speed from Black Holes is much stronger than tickspeed because unlike tickspeed, it affects
 <i>everything equally</i>, including things which are only partially affected (eg. Infinity/Time Dimensions), things
 which are normally completely unaffected (eg. DT/TT generation), and effects which are boosted purely on time spent
 (eg. idle path IP/EP multipliers).

@@ -45,6 +45,7 @@ export default {
 
         // Celestial features
         "All rewards from Effarig are disabled",
+        "All rewards from V are disabled",
         "Infinity Upgrades cannot be charged",
         "Triad Studies and Space Theorems are disabled",
         "Imaginary Upgrades are disabled",

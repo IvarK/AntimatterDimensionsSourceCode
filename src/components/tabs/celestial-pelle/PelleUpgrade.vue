@@ -58,7 +58,7 @@ export default {
       return this.currentTimeEstimate;
     },
     estimateImprovement() {
-      if (this.canBuy || this.isCapped) return "";
+      if (this.canBuy || this.isCapped || this.isBought) return "";
       // If the improved value is still "> 1 year" then we only show it once
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
@@ -103,7 +103,9 @@ export default {
       {{ estimateImprovement }}
     </div>
     <DescriptionDisplay :config="config" /><br><br>
-    <span v-if="effectText">{{ effectText }}<br></span>
+    <div v-if="effectText">
+      {{ effectText }}
+    </div>
     <CostDisplay
       v-if="!isCapped"
       :config="config"

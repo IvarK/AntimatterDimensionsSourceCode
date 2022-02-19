@@ -28,9 +28,6 @@ export default {
   },
   data() {
     return {
-      dimBoostAutobuyer: false,
-      galaxyAutobuyer: false,
-      tickDoomed: false,
       hasContinuum: false,
       displayADAutobuyersIndividually: false,
     };
@@ -39,7 +36,6 @@ export default {
     update() {
       this.hasContinuum = Laitela.continuumActive;
       this.checkADAutoStatus();
-      this.tickDoomed = Pelle.isDoomed && !PelleUpgrade.tickspeedAutobuyer.canBeApplied;
     },
     checkADAutoStatus() {
       const ad = Autobuyer.antimatterDimension;
@@ -62,7 +58,7 @@ export default {
     <GalaxyAutobuyerBox />
     <DimensionBoostAutobuyerBox />
     <SacrificeAutobuyerBox />
-    <TickspeedAutobuyerBox v-if="!hasContinuum && !tickDoomed" />
+    <TickspeedAutobuyerBox v-if="!hasContinuum" />
     <DimensionAutobuyerBox
       v-for="tier in 8"
       v-if="displayADAutobuyersIndividually"

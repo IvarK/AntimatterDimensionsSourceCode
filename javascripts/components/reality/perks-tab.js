@@ -95,11 +95,10 @@ export const PerkNetwork = {
       id: perk.id,
       label: perk.config.label,
       shape: perk.config.automatorPoints ? "diamond" : "dot",
-      title: Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id)
-        ? `This perk has no effect while in Doomed
-        ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`
-        : `${perk.config.description}
-        ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`,
+      title: `${Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id)
+        ? "This perk has no effect while in Doomed"
+        : perk.config.description}
+      ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`,
       x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
       y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));

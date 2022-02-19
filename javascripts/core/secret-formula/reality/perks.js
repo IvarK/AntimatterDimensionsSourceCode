@@ -118,11 +118,9 @@ GameDatabase.reality.perks = {
     label: "PASS",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      if (Pelle.isDoomed) return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
-      Time Study 142 to ${formatX(DC.E50)} Infinity Points.`;
       return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
         Time Study 142 to ${formatX(DC.E50)} Infinity Points.
-        In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`;
+        ${Pelle.isDoomed ? "" : `In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`}`;
     },
     defaultPosition: new Vector(300, -130)
   },

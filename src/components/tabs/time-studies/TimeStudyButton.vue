@@ -81,8 +81,8 @@ export default {
       return "";
     },
     studyClass() {
-      let pathClasses = "";
       if (this.isUseless) return "";
+      let pathClasses = "";
       if (!this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--unavailable`;
       }

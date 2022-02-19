@@ -5905,6 +5905,11 @@ kbd {
   border-color: var(--color-reality);
 }
 
+.o-notification--strike {
+  background-color: var(--color-pelle--base);
+  border-color: var(--color-pelle--base);
+}
+
 .o-notification--black-hole {
   background-color: #b341e0;
   border-color: black;

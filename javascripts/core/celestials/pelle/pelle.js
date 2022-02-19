@@ -420,7 +420,8 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   get requirement() {
-    return this._config.requirementDescription();
+    const x = this._config.requirementDescription;
+    return typeof x === "function" ? x() : x;
   }
 
   get penalty() {
@@ -452,7 +453,7 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   unlockStrike() {
-    GameUI.notify.success(`You encountered a Pelle Strike. ${this.notify}`);
+    GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
     Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);

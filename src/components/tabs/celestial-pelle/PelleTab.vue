@@ -86,7 +86,6 @@ export default {
   .l-pelle-celestial-tab {
     display: flex;
     flex-direction: column;
-    align-items: center;
     align-items: stretch;
   }
 

@@ -117,7 +117,6 @@ export default {
   }
 
   .l-pelle-panel-container {
-    width: 100%;
     padding: 1rem;
     margin: 1rem;
     border: 2px solid var(--color-pelle--base);

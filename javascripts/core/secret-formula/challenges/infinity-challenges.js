@@ -86,7 +86,7 @@ GameDatabase.challenges.infinity = [
     effect: () => Currency.matter.value.clampMin(1),
     formatEffect: value => `/${format(value, 1, 2)}`,
     reward: {
-      description: "Infinity Dimension multiplier based on Tickspeed",
+      description: "Infinity Dimension multiplier based on tickspeed",
       effect: () => Tickspeed.perSecond.pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },

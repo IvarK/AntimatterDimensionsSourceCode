@@ -107,8 +107,8 @@ export class Modal {
   static hideAll() {
     if (!GameUI.initialized) return;
     while (ui.view.modal.queue.length) {
-      if (ui.view.modal.queue.length[0].hide) {
-        ui.view.modal.queue.length[0].hide();
+      if (ui.view.modal.queue[0].hide) {
+        ui.view.modal.queue[0].hide();
       } else {
         Modal.hide();
       }
@@ -263,7 +263,8 @@ Modal.message = new class extends Modal {
   }
 
   hide() {
-    Modal.hide();
+    if (this.queue.length <= 1)
+      Modal.hide();
     this.queue.shift();
     if (this.queue && this.queue.length === 0) this.message = undefined;
     else {
@@ -272,4 +273,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal).setAsRepeatable();
+}(MessageModal);

@@ -32,7 +32,7 @@ export default {
     <span class="c-remnant-gain-display">
       Armageddon for
       <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
-      remnants
+      Remnants
     </span>
     <div
       class="o-questionmark"

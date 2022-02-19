@@ -67,6 +67,12 @@ export default {
       // If the improved value is still "> 1 year" then we only show it once
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
+    },
+    estimateImprovementTooltipStyle() {
+      return {
+        visibility: this.showImprovedEstimate ? 'visible' : 'hidden',
+        opacity: this.showImprovedEstimate ? 1 : 0
+      }
     }
   },
   methods: {
@@ -102,7 +108,7 @@ export default {
     @click="!faded && upgrade.purchase()"
   >
     <div
-      v-if="showImprovedEstimate"
+      :style="estimateImprovementTooltipStyle"
       class="c-pelle-upgrade-time-tooltip"
     >
       {{ estimateImprovement }}

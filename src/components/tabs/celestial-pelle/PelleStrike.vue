@@ -22,7 +22,7 @@ export default {
     >
       <div
         slot="header"
-        class="c-pelle-strike-text-padding"
+        class="c-pelle-strike-text-padding c-pelle-strike-requirement-header"
       >
         ▼ {{ strike.requirement }} ▼
       </div>
@@ -58,5 +58,9 @@ export default {
 
   .c-pelle-strike-text-padding {
     padding: 0.7rem;
+  }
+
+  .c-pelle-strike-requirement-header {
+    cursor: pointer;
   }
 </style>

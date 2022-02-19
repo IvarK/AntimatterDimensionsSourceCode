@@ -16,6 +16,7 @@ export default {
       showBought: false,
       isHovering: false,
       isCollapsed: false,
+      canArmageddon: false
     };
   },
   computed: {
@@ -43,6 +44,7 @@ export default {
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
       this.showBought = Pelle.cel.showBought;
       this.isCollapsed = player.celestials.pelle.collapsed.upgrades;
+      this.canArmageddon = Pelle.canArmageddon;
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -90,7 +92,7 @@ export default {
           v-for="upgrade in rebuyables"
           :key="upgrade.config.id"
           :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
+          :show-improved-estimate="isHovering && canArmageddon"
         />
       </div>
       <button
@@ -107,7 +109,7 @@ export default {
           v-for="upgrade in allUpgrades"
           :key="upgrade.config.id"
           :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
+          :show-improved-estimate="isHovering && canArmageddon"
         />
         <PelleUpgradeVue
           v-for="upgrade in fadedUpgrades"

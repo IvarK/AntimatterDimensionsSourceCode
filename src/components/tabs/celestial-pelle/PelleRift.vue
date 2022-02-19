@@ -59,8 +59,8 @@ export default {
 
       const milestonesCloseTo = this.rift.milestones.filter(m => {
         // Gets distance from the milestone bar in terms of rem
-        // 19.6: the width of the bar is 20 rem, but adjusted to a border with 0.2rem on both sides
-        const dist = Math.abs((m.requirement * 19.6) - mouseX / this.remToPx);
+        // 24.6: the width of the bar is 25 rem, but adjusted to a border with 0.2rem on both sides
+        const dist = Math.abs((m.requirement * 24.6) - mouseX / this.remToPx);
         if (dist < 1) m.dist = dist;
         return dist < 1;
       }).map(m => {
@@ -118,7 +118,7 @@ export default {
         class="o-pelle-rift-bar-milestone-line"
         :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }"
         :style="{
-          left: `calc(${milestone.requirement * 100}% - 0.2rem)`,
+          left: `calc(${milestone.requirement * 100}% - 0.25rem)`,
         }"
       />
     </div>
@@ -172,7 +172,7 @@ export default {
 .c-pelle-rift-bar {
   height: 5rem;
   border: 0.2rem solid var(--color-pelle-secondary);
-  width: 20rem;
+  width: 25rem;
   border-radius: 5px;
   position: relative;
   margin-bottom: 1rem;
@@ -196,6 +196,7 @@ export default {
   height: 100%;
   background: var(--color-pelle-secondary);
   z-index: 1;
+  opacity: 0.7;
 }
 .o-pelle-rift-bar-overlay {
   position: absolute;
@@ -260,14 +261,21 @@ export default {
 
 .o-pelle-rift-bar-milestone-line {
   position: absolute;
-  width: 0.2rem;
+  width: 0.25rem;
   height: 100%;
   background: var(--color-pelle--base);
   z-index: 3;
-  opacity: 0.5;
+  animation: flash infinite 1s linear;
 }
 .o-pelle-rift-bar-milestone-line--unlocked {
-  opacity: 1;
+  animation: none;
+}
+@keyframes flash {
+  0% { opacity: 1 }
+  25% { opacity: 1 }
+  50% { opacity: 0.3 }
+  75% { opacity: 1 }
+  100% { opacity: 1 }
 }
 
 .o-pelle-rift-toggle {

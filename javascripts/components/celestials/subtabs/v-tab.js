@@ -1,4 +1,3 @@
-/* eslint-disable vue/one-component-per-file */
 import "../celestial-quote-history.js";
 import PrimaryButton from "@/components/PrimaryButton";
 import GlyphSetPreview from "@/components/GlyphSetPreview";

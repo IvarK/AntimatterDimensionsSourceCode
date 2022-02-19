@@ -425,7 +425,8 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   get penalty() {
-    return this._config.penaltyDescription();
+    const x = this._config.penaltyDescription;
+    return typeof x === "function" ? x() : x;
   }
 
   get reward() {
@@ -434,10 +435,6 @@ class PelleStrikeState extends GameMechanicState {
 
   get rift() {
     return this._config.rift();
-  }
-
-  get notify() {
-    return this._config.notify;
   }
 
   trigger() {

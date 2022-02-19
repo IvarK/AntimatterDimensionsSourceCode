@@ -112,20 +112,7 @@ export default {
           v-bind="modeProps(mode).input"
         />
       </template>
-      <template
-        v-if="isDoomed"
-        slot="checkboxSlot"
-      >
-        <span>
-          Dynamic amount has no use
-          <br>
-          while in Doomed
-        </span>
-      </template>
-      <template
-        v-else
-        slot="checkboxSlot"
-      >
+      <template slot="checkboxSlot">
         <span>Dynamic amount:</span>
         <div
           class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"

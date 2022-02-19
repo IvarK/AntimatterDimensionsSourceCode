@@ -28,8 +28,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
   }
 
   get canBeBought() {
-    if (Pelle.isDoomed) return false;
-    return true;
+    return !Pelle.isDoomed;
   }
 
   get disabledByContinuum() {

@@ -198,14 +198,14 @@ GameDatabase.celestials.pelle = (function() {
       ECs: {
         id: 4,
         requirementDescription: () => `Reach ${formatInt(115)} Time Theorems`,
-        penaltyDescription: () => "Famine IP multiplier is reduced in Eternity Challenges",
+        penaltyDescription: "Famine IP multiplier is reduced in Eternity Challenges",
         rewardDescription: "Unlock War",
         rift: () => PelleRifts.war
       },
       dilation: {
         id: 5,
         requirementDescription: "Dilate Time",
-        penaltyDescription: () => "Time Dilation nerfs are always active",
+        penaltyDescription: "Time Dilation nerfs are always active",
         rewardDescription: "Unlock Death",
         rift: () => PelleRifts.death
       }

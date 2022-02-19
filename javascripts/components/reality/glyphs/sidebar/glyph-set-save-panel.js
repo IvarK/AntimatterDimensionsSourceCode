@@ -55,7 +55,7 @@ Vue.component("glyph-set-save-panel", {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g.glyphs));
     },
     setName(id) {
-      return `Glyph Set Save #${id + 1}`;
+      return `Glyph Set Save #${id + 1} "${this.names[id] === "" ? "" : this.names[id]}"`;
     },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length) return;
@@ -89,6 +89,7 @@ Vue.component("glyph-set-save-panel", {
     nicknameBlur(event) {
       player.reality.glyphs.sets[event.target.id].name = event.target.value.slice(0, 20);
       this.names[event.target.id] = player.reality.glyphs.sets[event.target.id].name;
+      this.refreshGlyphSets();
     },
   },
   template: `

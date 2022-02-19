@@ -1,3 +1,4 @@
+/* eslint-disable vue/one-component-per-file */
 import "../celestial-quote-history.js";
 import PrimaryButton from "@/components/PrimaryButton";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
@@ -250,8 +251,10 @@ Vue.component("v-tab", {
         </div>
         <div class="c-v-info-text">
           You have {{ formatInt(totalUnlocks) }} V-Achievements done.
-          You gain {{ formatInt(1) }} Space Theorem for each completion,
-          allowing you to purchase Time Studies which are normally locked.
+          <span v-if="!isDoomed">
+            You gain {{ formatInt(1) }} Space Theorem for each completion,
+            allowing you to purchase Time Studies which are normally locked.
+          </span>
         </div>
         <br>
         <div class="l-v-milestones-grid">
@@ -261,9 +264,14 @@ Vue.component("v-tab", {
               :class="{'o-v-milestone--unlocked':
               has(milestone)}"
             >
-              <p>{{ milestone.description }}</p>
-              <p>Reward: {{ rewardText(milestone) }}</p>
-              <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+              <div v-if="isDoomed">
+                Disabled while in Doomed
+              </div>
+              <div v-else>
+                <p>{{ milestone.description }}</p>
+                <p>Reward: {{ rewardText(milestone) }}</p>
+                <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+              </div>
             </div>
           </div>
         </div>

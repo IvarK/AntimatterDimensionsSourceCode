@@ -26,6 +26,10 @@ export default {
         this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
         this.tooltip = tooltip;
       };
+      const setLinearProgress = (current, goal, tooltip) => {
+        this.fill = Math.clampMax(new Decimal(current).toNumber() / new Decimal(goal).toNumber(), 1);
+        this.tooltip = tooltip;
+      };
 
       // Goals for challenges and challenge-like runs should come first because numbers will always be much smaller
       // than normal and therefore default filling won't be meaningful. Since challenges get completed or abandoned from
@@ -65,9 +69,13 @@ export default {
         } else if (PelleStrikes.dilation.hasStrike) {
           setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to galaxy generator");
         } else if (PelleStrikes.ECs.hasStrike) {
-          setProgress(Currency.eternityPoints.value, DC.E1000000, "Missing");
+          setLinearProgress(Math.min(
+            Currency.timeTheorems.max.toNumber() / 12900,
+            Currency.timeTheorems.value.toNumber() / 5000,
+            (EternityChallenge(11).completions + EternityChallenge(12).completions) / 10
+          ), 1, "Percentage to fifth strike");
         } else if (PelleStrikes.eternity.hasStrike) {
-          setProgress(Currency.eternityPoints.value, DC.E1000000, "Missing");
+          setLinearProgress(Currency.timeTheorems.max, 115, "Percentage to fourth strike");
         } else if (PelleStrikes.powerGalaxies.hasStrike) {
           setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to third strike");
         } else if (PelleStrikes.infinity.hasStrike) {

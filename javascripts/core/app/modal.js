@@ -91,6 +91,7 @@ export class Modal {
     return this._props;
   }
 
+  // This isn't used anywhere as of now but could be useful later
   setAsRepeatable() {
     this.canRepeat = true;
     return this;
@@ -263,8 +264,9 @@ Modal.message = new class extends Modal {
   }
 
   hide() {
-    if (this.queue.length <= 1)
+    if (this.queue.length <= 1) {
       Modal.hide();
+    }
     this.queue.shift();
     if (this.queue && this.queue.length === 0) this.message = undefined;
     else {

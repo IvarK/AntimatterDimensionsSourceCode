@@ -430,7 +430,8 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   get reward() {
-    return this._config.rewardDescription;
+    const x = this._config.rewardDescription;
+    return typeof x === "function" ? x() : x;
   }
 
   get rift() {

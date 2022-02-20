@@ -36,7 +36,7 @@ export default {
     </span>
     <div
       class="o-questionmark"
-      v-tooltip="'Remnants gain is based on best AM, IP, and EP this Armageddon.'"
+      v-tooltip="'Remnants gain is based on best AM, IP, and EP throughout all Armageddons.'"
     >?</div>
     <br>
     Reality Shards

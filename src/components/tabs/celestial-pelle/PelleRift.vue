@@ -15,7 +15,7 @@ export default {
       totalFill: new Decimal(),
       resource: new Decimal(),
       hasEffectiveFill: false,
-      selectedHoverMilestone: {},
+      selectedHoverMilestone: this.rift.milestones[0],
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize),
       effects: []

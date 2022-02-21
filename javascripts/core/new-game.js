@@ -41,8 +41,10 @@ export const NG = {
     player.secretUnlocks = secretUnlocks;
     player.secretAchievementBits = JSON.parse(secretAchievements);
     ui.view.newUI = player.options.newUI;
+    ui.view.news = player.options.news.enabled;
     Themes.find(player.options.theme).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
+    ADNotations.Settings.exponentCommas.show = player.options.commas;
     GameStorage.save();
   }
 };

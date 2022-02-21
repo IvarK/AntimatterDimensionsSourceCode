@@ -128,7 +128,7 @@ Vue.component("current-glyph-effects", {
   },
   template: `
     <div class="c-current-glyph-effects l-current-glyph-effects">
-      <div :style="{ color: 'var(--color-pelle--base)' }">
+      <div class="pelle-current-glyph-effects">
         {{ pelleGlyphText }}
       </div>
       <div class="c-current-glyph-effects__header">
@@ -148,7 +148,7 @@ Vue.component("current-glyph-effects", {
       <current-effect v-for="effect in effects" :key="effect.id + logGlyphSacrifice" :effect="effect" />
       <div
         v-if="showChaosText"
-        :style="{ color: 'var(--color-pelle--base)' }"
+        class="pelle-current-glyph-effects"
       >
         {{ chaosEffect }}
       </div>

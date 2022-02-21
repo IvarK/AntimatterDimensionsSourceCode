@@ -37,7 +37,7 @@ export function getTickSpeedMultiplier() {
       TimeStudy(212),
       TimeStudy(232),
       Achievement(86),
-      Achievement(175),
+      Achievement(178),
       InfinityChallenge(5).reward,
       PelleRebuyableUpgrade.galaxyPower
     );
@@ -61,7 +61,7 @@ export function getTickSpeedMultiplier() {
     TimeStudy(212),
     TimeStudy(232),
     Achievement(86),
-    Achievement(175),
+    Achievement(178),
     InfinityChallenge(5).reward,
     PelleRebuyableUpgrade.galaxyPower
   );

@@ -1252,12 +1252,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 173,
-    name: "The First Antihistorian",
-    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
-    effect: 10,
+    name: "Cet accomplissement n'existe pas III",
+    get description() { return `Reach ${formatPostBreak(DC.D9_99999E999, 5, 0)} Reality Machines.`; },
+    checkRequirement: () => player.reality.realityMachines.gte(DC.D9_99999E999),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 174,
@@ -1268,33 +1266,31 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 175,
+    name: "The First Antihistorian",
+    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
+    effect: 10,
+  },
+  {
+    id: 176,
+    name: "Mom counted to 3",
+    description: "Annihilate your Dark Matter Dimensions.",
+  },
+  {
+    id: 177,
+    name: "This mile took a celestial",
+    description: "Complete all Singularity Milestones at least once.",
+  },
+  {
+    id: 178,
     name: "Destroyer of Worlds",
     get description() { return `Get ${formatInt(100000)} Antimatter Galaxies.`; },
     checkRequirement: () => player.galaxies >= 100000,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     get reward() { return `All Galaxies are ${formatPercents(0.01)} stronger.`; },
     effect: 1.01
-  },
-  {
-    id: 176,
-    name: "dummy achievement 1",
-    description: "this achievement isn't implemented yet",
-    checkRequirement: () => false,
-    checkEvent: []
-  },
-  {
-    id: 177,
-    name: "dummy achievement 2",
-    description: "neither is this one",
-    checkRequirement: () => false,
-    checkEvent: []
-  },
-  {
-    id: 178,
-    name: "dummy achievement 3",
-    description: "you bet by god this one isn't either",
-    checkRequirement: () => false,
-    checkEvent: []
   },
   {
     id: 181,

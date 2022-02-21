@@ -27,7 +27,7 @@ export const NG = {
 
   startNewGame(i) {
     const backUpOptions = JSON.stringify(player.options);
-    // This can't be JSONed as it contains functions
+    // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;
     const newGameBackup = JSON.stringify(player.newGame);
     const secretAchievements = JSON.stringify(player.secretAchievementBits);

@@ -1,3 +1,5 @@
+import * as ADNotations from "@antimatter-dimensions/notations";
+
 export const NG = {
   get current() {
     return player.newGame.current;

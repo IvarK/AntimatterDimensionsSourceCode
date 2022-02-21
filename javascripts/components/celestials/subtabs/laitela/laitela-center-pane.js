@@ -71,7 +71,7 @@ Vue.component("annihilation-button", {
         Current multiplier to all Dark Matter multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
         <br>
         <br>
-        Annihilation resets your Dark Matter and Dark Matter Dimension amounts, but adds
+        Annihilation resets your Dark Matter, Dark Energy, and Dark Matter Dimension amounts, but adds
         <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
         (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
         <br>

@@ -92,14 +92,30 @@ kong.purchaseLongerTimeSkip = function(cost) {
   simulateTime(3600 * 24);
 };
 
-kong.buyMoreSTD = function(STD, kreds) {
-  if (!kong.enabled) return;
-  kongregate.mtx.purchaseItems([`${kreds}worthofstd`], result => {
-      if (result.success) {
-        player.IAP.totalSTD += STD;
-      }
+kong.buyMoreSTD = async STD => {
+  const res = await fetch("http://localhost:3000/purchase", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ amount: STD })
   });
+  const data = await res.json();
+  const windowReference = window.open(
+    data.url,
+    "antimatterDimensionsPurchase",
+    "popup"
+  );
+
+  const polling = setInterval(() => {
+    console.log(windowReference.location);
+    if (windowReference.closed) {
+      clearInterval(polling);
+    }
+  }, 1000);
+
 };
+
 
 kong.updatePurchases = function() {
   if (!kong.enabled) return;

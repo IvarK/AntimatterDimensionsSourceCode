@@ -29,7 +29,7 @@ export default {
       class="o-modal-store-btn"
       @click="purchase"
     >
-      <span>{{ cost }}</span><img src="images/kred_single.png">
+      <span>{{ cost }}</span> $
     </button>
   </div>
 </template>

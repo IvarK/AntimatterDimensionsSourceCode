@@ -20,24 +20,24 @@ export default {
       <img src="images/std_coin.png">
       <div class="c-modal-store-buttons">
         <StdStoreRow
-          :amount="20"
-          :cost="20"
+          :amount="30"
+          :cost="2.99"
         />
         <StdStoreRow
           :amount="60"
-          :cost="50"
+          :cost="4.99"
         />
         <StdStoreRow
           :amount="140"
-          :cost="100"
+          :cost="9.99"
         />
         <StdStoreRow
           :amount="300"
-          :cost="200"
+          :cost="19.99"
         />
         <StdStoreRow
           :amount="1000"
-          :cost="500"
+          :cost="49.99"
         />
       </div>
     </div>

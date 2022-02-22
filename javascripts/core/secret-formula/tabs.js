@@ -477,7 +477,7 @@ GameDatabase.tabs = [
     name: "Shop",
     newUIClass: "shop",
     hideAt: 2.4,
-    condition: () => kong.enabled || player.IAP.totalSTD > 0,
+    condition: () => true || player.IAP.totalSTD > 0,
     id: 10,
     hidable: true,
     subtabs: [

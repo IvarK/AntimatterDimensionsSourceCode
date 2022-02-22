@@ -53,7 +53,7 @@ export default {
   .c-pelle-strike-container {
     padding: 0.5rem 0.5rem 2rem;
     height: 5rem;
-    z-index: 6;
+    z-index: 3;
   }
 
   .c-pelle-strike-text-padding {

@@ -30,7 +30,7 @@ export default {
       this.percentage = rift.percentage;
       this.setValue("totalFill", rift.totalFill);
       this.setValue("resource", rift.fillCurrency.value);
-      this.hasEffectiveFill = rift.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
+      this.hasEffectiveFill = rift._config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {
@@ -96,11 +96,12 @@ export default {
           width: `${Math.clampMax(percentage * 100, 100)}%`,
         }"
       />
+      <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
+      <div :class="barOverlay()" />
+      <!-- This bar overlay adds the shadow within the bar so the ugly edges don't show -->
       <div
         class="o-pelle-rift-bar-overlay"
       />
-      <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
-      <div :class="barOverlay()" />
       <div
         v-if="isActive && !isMaxed"
         class="o-pelle-rift-bar-active-fill"
@@ -186,7 +187,11 @@ export default {
   font-size: 1.5rem;
   color: white;
   text-shadow: 1px 1px 2px var(--color-pelle--base);
-  z-index: 4;
+  z-index: 2;
+  /* This keeps the percentage from blocking the hover area */
+  height: 0;
+  display: flex;
+  align-items: center;
 }
 
 .o-pelle-rift-bar-fill {
@@ -195,7 +200,7 @@ export default {
   left: 0;
   height: 100%;
   background: var(--color-pelle-secondary);
-  z-index: 1;
+  z-index: 0;
   opacity: 0.7;
 }
 .o-pelle-rift-bar-overlay {
@@ -204,7 +209,7 @@ export default {
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 2;
+  z-index: 0;
   box-shadow: inset 0 0 3px 1px #1e1e1e;
 }
 
@@ -256,7 +261,7 @@ export default {
   height: 100%;
   top: 0;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 2;
 }
 
 .o-pelle-rift-bar-milestone-line {
@@ -264,7 +269,7 @@ export default {
   width: 0.25rem;
   height: 100%;
   background: var(--color-pelle--base);
-  z-index: 3;
+  z-index: 1;
   animation: flash infinite 1s linear;
 }
 .o-pelle-rift-bar-milestone-line--unlocked {

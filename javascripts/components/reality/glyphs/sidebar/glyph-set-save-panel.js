@@ -55,7 +55,8 @@ Vue.component("glyph-set-save-panel", {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g.glyphs));
     },
     setName(id) {
-      return `Glyph Set Save #${id + 1} "${this.names[id] === "" ? "" : this.names[id]}"`;
+      const name = this.names[id] === "" ? "" : `: ${this.names[id]}`;
+      return `Glyph Set Save #${id + 1}${name}`;
     },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length) return;

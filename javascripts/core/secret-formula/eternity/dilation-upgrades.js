@@ -165,7 +165,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e16,
       increment: 1e4,
       pelleOnly: true,
-      description: () => `Gain a power to Tickspeed effect`,
+      description: () => `Gain a power to tickspeed effect`,
       effect: bought => 1 + bought * 0.03,
       formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.03, 2, 2)}`,
       formatCost: value => format(value, 2),

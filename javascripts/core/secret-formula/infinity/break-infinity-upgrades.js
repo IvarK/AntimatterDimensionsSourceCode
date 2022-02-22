@@ -104,7 +104,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 1e6,
       costIncrease: 5,
       maxUpgrades: 8,
-      description: "Reduce post-infinity tickspeed cost multiplier scaling",
+      description: "Reduce post-infinity Tickspeed Upgrade cost multiplier scaling",
       afterEC: () => (EternityChallenge(11).completions > 0
         ? `After EC11: ${formatX(Player.tickSpeedMultDecrease, 2, 2)}`
         : ""

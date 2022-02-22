@@ -731,7 +731,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Have ${formatInt(308)} Tickspeed upgrades from Time Dimensions.`; },
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Time Dimensions gain a multiplier based on Tickspeed.",
+    reward: "Time Dimensions gain a multiplier based on tickspeed.",
     effect: () => Tickspeed.perSecond.pow(0.000005),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },

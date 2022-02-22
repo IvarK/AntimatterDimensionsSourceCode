@@ -1204,6 +1204,9 @@ GameStorage.devMigrations = {
         galaxies: false
       };
       player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
+    },
+    player => {
+      player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => ({ glyphs, name: "" }));
     }
   ],
 

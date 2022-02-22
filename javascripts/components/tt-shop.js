@@ -246,16 +246,17 @@ Vue.component("tt-save-load-button", {
         slot="menu"
         class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu"
       >
-        <input
-          type="text"
-          size="4"
-          maxlength="4"
-          class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
-          :value="name"
-          ach-tooltip="Set a custom name (up to 4 characters)"
-          @keyup.esc="hideContextMenu"
-          @blur="nicknameBlur"
-        />
+        <span ach-tooltip="Set a custom name (up to 4 characters)">
+          <input
+            type="text"
+            size="4"
+            maxlength="4"
+            class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+            :value="name"
+            @keyup.esc="hideContextMenu"
+            @blur="nicknameBlur"
+          />
+        </span>
         <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
         <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
         <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>

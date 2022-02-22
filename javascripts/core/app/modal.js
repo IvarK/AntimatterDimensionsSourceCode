@@ -64,7 +64,6 @@ export class Modal {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
-    this.canRepeat = false;
   }
 
   show(modalConfig) {
@@ -72,7 +71,7 @@ export class Modal {
     this._props = Object.assign({}, modalConfig || {});
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
-    if (!ui.view.modal.queue.includes(this) || this.canRepeat) ui.view.modal.queue.push(this);
+    if (!ui.view.modal.queue.includes(this)) ui.view.modal.queue.push(this);
   }
 
   get isOpen() {
@@ -89,12 +88,6 @@ export class Modal {
 
   get props() {
     return this._props;
-  }
-
-  // This isn't used anywhere as of now but could be useful later
-  setAsRepeatable() {
-    this.canRepeat = true;
-    return this;
   }
 
   static hide() {
@@ -128,6 +121,9 @@ class ChallengeConfirmationModal extends Modal {
     super.show();
   }
 }
+
+// If a new modal which can be shown in the same queue multiple times needs to be added
+// Additional code needs to be written to account for that
 
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);

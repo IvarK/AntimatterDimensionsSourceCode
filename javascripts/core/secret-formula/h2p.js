@@ -357,8 +357,8 @@ The rightmost column of Infinity Upgrades doesn't work in challenges.
     }, {
       name: "Autobuyers",
       info: () => `
-Autobuyers alllow you to automatically purchase dimensions, upgrades, or prestiges. All autobuyer
-contorls are located under the "Autobuyers" subtab of the "Automation" tab, including any additional autobuyers
+Autobuyers allow you to automatically purchase dimensions, upgrades, or prestiges. All autobuyer
+controls are located under the "Autobuyers" subtab of the "Automation" tab, including any additional autobuyers
 unlocked later in the game.
 <br>
 <br>
@@ -367,7 +367,7 @@ but most other autobuyers require upgrades to be purchased or challenges to be b
 <br>
 <br>
 Most Autobuyers have similar stats:
-<b>Autobuyer Interval:</b> The cooldown period before te autobuyer attempts to make another purchase.
+<b>Autobuyer Interval:</b> The cooldown period before the autobuyer attempts to make another purchase.
 Antimatter Dimension Autobuyers and the Tickspeed Upgrade Autobuyer require their respective challenges to be beaten
 before their interval can be upgraded.
 <br>
@@ -1382,7 +1382,7 @@ Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginar
 ${format(ImaginaryUpgrade(15).cost)} iM.
 <br>
 <br>
-Lai'tela gives a new resource called Dark Matter, which improves the Continuum multiplier to your Antimatter
+Lai'tela gives a new resource called Dark Matter, which improves Continuum's effect to your Antimatter
 Dimensions and Tickspeed based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by
 Dark Matter Dimensions, in a similar cascading way to all other types of dimensions in the game. Unlike other
 dimensions, there are only four Dark Matter Dimensions rather than eight. You start with the first one unlocked

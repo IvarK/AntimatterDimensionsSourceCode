@@ -337,7 +337,7 @@ export default {
 h2,
 .highlight {
   color: var(--color-pelle--base);
-  text-shadow: 1px 1px 2px black;
+  font-weight: bold;
   padding: 0.2rem;
 }
 </style>

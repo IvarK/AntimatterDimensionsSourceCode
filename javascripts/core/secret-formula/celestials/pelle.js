@@ -281,7 +281,7 @@ GameDatabase.celestials.pelle = (function() {
             description: () => "First rebuyable Pelle upgrade also affects 1st Infinity Dimension",
             effect: () => {
               const x = player.celestials.pelle.rebuyables.antimatterDimensionMult;
-              return Decimal.pow(1e50, x - 9);
+              return Decimal.pow(1e50, Math.max(x - 9, 0));
             },
           },
           {
@@ -407,7 +407,7 @@ GameDatabase.celestials.pelle = (function() {
             requirement: 0.5,
             description: () => "Dilation rebuyable purchase count improves Infinity Power conversion rate",
             effect: () => Math.min(
-              1.1 ** (Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90),
+              1.1 ** Math.max(Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90, 0),
               712
             ),
           },

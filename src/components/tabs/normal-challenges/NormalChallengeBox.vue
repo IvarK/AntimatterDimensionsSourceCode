@@ -16,6 +16,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       isRunning: false,
       isCompleted: false,
       isBroken: false,
@@ -41,6 +42,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isUnlocked = this.challenge.isUnlocked;
       this.isRunning = this.challenge.isRunning;
       this.lockedAt = this.challenge.config.lockedAt;
@@ -66,7 +68,8 @@ export default {
       <DescriptionDisplay :config="descriptionDisplayConfig" />
     </template>
     <template #bottom>
-      <span>Reward: {{ challenge.config.reward }}</span>
+      <span v-if="isDoomed">There is no reward for completing this challenge</span>
+      <span v-else>Reward: {{ challenge.config.reward }}</span>
     </template>
   </ChallengeBox>
 </template>

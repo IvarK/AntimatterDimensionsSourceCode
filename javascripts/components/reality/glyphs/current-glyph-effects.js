@@ -16,6 +16,7 @@ Vue.component("current-glyph-effects", {
           return GameDatabase.reality.glyphEffects[this.effect.id];
         },
         formatValue() {
+          if (Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect.id)) return "";
           const baseValue = this.effect.value.value;
           const value1 = this.effectConfig.formatEffect(baseValue);
           const value2 = this.effectConfig.conversion === undefined
@@ -68,6 +69,7 @@ Vue.component("current-glyph-effects", {
       hasEffarig: false,
       hasReality: false,
       logGlyphSacrifice: 0,
+      pelleChaosEffect: {},
     };
   },
   created() {
@@ -92,7 +94,20 @@ Vue.component("current-glyph-effects", {
     },
     glyphSet() {
       return Glyphs.activeList;
-    }
+    },
+    pelleGlyphText() {
+      return Pelle.isDoomed
+        ? `Glyph Rarity is set to ${formatPercents(strengthToRarity(Pelle.glyphStrength))}
+          and Level is capped at ${formatInt(Pelle.glyphMaxLevel)}`
+        : "";
+    },
+    showChaosText() {
+      return this.pelleChaosEffect.isUnlocked && !this.noEffects;
+    },
+    chaosEffect() {
+      return `${this.pelleChaosEffect.description
+        .replace("{value}", formatX(this.pelleChaosEffect[Pelle.activeGlyphType], 2))}`;
+    },
   },
   watch: {
     logGlyphSacrifice() {
@@ -103,9 +118,9 @@ Vue.component("current-glyph-effects", {
     update() {
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
-
       this.logGlyphSacrifice = BASIC_GLYPH_TYPES
         .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+      this.pelleChaosEffect = Pelle.specialGlyphEffect;
     },
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
@@ -113,6 +128,9 @@ Vue.component("current-glyph-effects", {
   },
   template: `
     <div class="c-current-glyph-effects l-current-glyph-effects">
+      <div class="pelle-current-glyph-effects">
+        {{ pelleGlyphText }}
+      </div>
       <div class="c-current-glyph-effects__header">
         Currently active glyph effects:
       </div>
@@ -128,5 +146,11 @@ Vue.component("current-glyph-effects", {
         None (equip Glyphs to get their effects)
       </div>
       <current-effect v-for="effect in effects" :key="effect.id + logGlyphSacrifice" :effect="effect" />
+      <div
+        v-if="showChaosText"
+        class="pelle-current-glyph-effects"
+      >
+        {{ chaosEffect }}
+      </div>
     </div>`
 });

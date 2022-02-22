@@ -682,7 +682,7 @@ window.player = {
           reducedTo: 1
         },
         chaos: {
-          fill: DC.D0,
+          fill: 0,
           active: false,
           reducedTo: 1
         },
@@ -699,13 +699,18 @@ window.player = {
       },
       progressBits: 0,
       galaxyGenerator: {
+        unlocked: false,
         spentGalaxies: 0,
         generatedGalaxies: 0,
         phase: 0,
         sacrificeActive: false
       }
     },
-    compact: false,
+    collapsed: {
+      upgrades: false,
+      rifts: false,
+      galaxies: false
+    },
     showBought: false,
   },
   newGame: {

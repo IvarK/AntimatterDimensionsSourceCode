@@ -87,9 +87,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: [21],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied
-        ? "This Time Study has no effect while in Doomed"
-        : "You keep half of your Replicanti Galaxies on Infinity")
+      description: "You keep half of your Replicanti Galaxies on Infinity"
     },
     {
       id: 41,

@@ -269,6 +269,7 @@ Vue.component("tt-buy-button", {
   props: ["budget", "cost", "formatCost", "action"],
   computed: {
     isEnabled() {
+      if (Pelle.isDoomed && player.eternities.eq(0)) return false;
       return this.budget.gte(this.cost);
     },
     enabledClass() {

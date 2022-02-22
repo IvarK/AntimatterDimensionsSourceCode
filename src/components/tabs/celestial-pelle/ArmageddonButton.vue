@@ -32,17 +32,16 @@ export default {
     Armageddon for
     <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
     remnants<br>
-    Reality shard gain
-    <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ->
+    Reality Shards
+    <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ➜
     <span class="c-reality-shard-gain">{{ format(nextRealityShardGain, 2, 2) }}</span>/s
   </button>
 </template>
 
 <style scoped>
   .c-armageddon-button {
-    padding: 2rem;
+    padding: 1.5rem;
     display: block;
-    margin: 2rem auto;
     font-family: Typewriter;
     background: black;
     border: 1px solid var(--color-pelle--base);

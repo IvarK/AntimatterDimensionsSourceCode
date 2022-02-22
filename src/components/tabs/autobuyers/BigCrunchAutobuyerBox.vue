@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       postBreak: false,
       mode: AUTO_CRUNCH_MODE.AMOUNT,
       hasAdditionalModes: false,
@@ -33,6 +34,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.postBreak = player.break;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;

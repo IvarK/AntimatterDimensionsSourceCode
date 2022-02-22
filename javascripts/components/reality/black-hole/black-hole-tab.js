@@ -7,6 +7,7 @@ import "./black-hole-charging-sliders.js";
 Vue.component("black-hole-tab", {
   data() {
     return {
+      isDoomed: false,
       isUnlocked: false,
       isPaused: false,
       isEnslaved: false,
@@ -40,6 +41,7 @@ Vue.component("black-hole-tab", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
@@ -126,7 +128,7 @@ Vue.component("black-hole-tab", {
   },
   template: `
     <div class="l-black-hole-tab">
-      <div v-if="isEnslaved">
+      <div v-if="isEnslaved || isDoomed">
         The physics of this Reality do not allow the existence of Black Holes.
       </div>
       <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">

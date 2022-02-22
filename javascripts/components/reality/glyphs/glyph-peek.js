@@ -8,6 +8,7 @@ Vue.component("glyph-peek", {
     return {
       glyphs: [],
       level: 0,
+      isDoomed: false,
       canPeek: false,
       isVisible: false,
       canRefresh: false,
@@ -30,6 +31,7 @@ Vue.component("glyph-peek", {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
       // Hide this before first reality since then it'll confuse the player,
       // and due to pre-selected first glyph might well be incorrect anyway.
@@ -59,8 +61,13 @@ Vue.component("glyph-peek", {
   },
   template: `
     <div class="c-glyph-peek">
+      <div v-if="isDoomed">
+        You will not gain any Glyphs
+        <br>
+        from Doomed Realities
+      </div>
       <div
-        v-if="isVisible"
+        v-else-if="isVisible"
         @click="showModal"
         class="l-glyph-set-preview"
       >

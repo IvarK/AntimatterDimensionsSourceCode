@@ -1,6 +1,6 @@
 <script>
-import CostDisplay from "../../CostDisplay.vue";
-import DescriptionDisplay from "../../DescriptionDisplay.vue";
+import CostDisplay from "../../CostDisplay";
+import DescriptionDisplay from "../../DescriptionDisplay";
 
 export default {
   name: "PelleUpgrade",
@@ -40,9 +40,13 @@ export default {
     config() {
       return this.upgrade.config;
     },
-    effect() {
-      if (!this.config.formatEffect) return false;
-      return this.config.formatEffect(this.purchases);
+    effectText() {
+      if (!this.config.formatEffect) return "";
+      const prefix = this.isCapped ? "Capped:" : "Currently:";
+      const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
+      let value = formattedEffect(this.purchases);
+      if (!this.isCapped) value += ` ➜ ${formattedEffect(this.purchases + 1)}`;
+      return `${prefix} ${value}`;
     },
     timeEstimate() {
       if (this.canBuy ||
@@ -54,6 +58,12 @@ export default {
       return this.currentTimeEstimate;
     },
     estimateImprovement() {
+      if (this.canBuy ||
+        this.isBought ||
+        Pelle.realityShardGainPerSecond.eq(0) ||
+        this.isCapped ||
+        this.galaxyGenerator
+      ) return "";
       // If the improved value is still "> 1 year" then we only show it once
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
@@ -98,7 +108,9 @@ export default {
       {{ estimateImprovement }}
     </div>
     <DescriptionDisplay :config="config" /><br><br>
-    <span v-if="effect">Currently: {{ effect }}<br></span>
+    <div v-if="effectText">
+      {{ effectText }}
+    </div>
     <CostDisplay
       v-if="!isCapped"
       :config="config"
@@ -117,10 +129,10 @@ export default {
     border-radius: .5rem;
     font-family: Typewriter;
     cursor: pointer;
-    width: 25rem;
-    height: 15rem;
+    width: 23rem;
+    height: 14rem;
     margin: 1rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .c-pelle-upgrade:hover {

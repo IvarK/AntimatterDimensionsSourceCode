@@ -32,7 +32,7 @@ Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return RealityUpgrade(13).isBought;
+    return RealityUpgrade(13).isBought && !Pelle.isDoomed;
   }
 
   get hasUnlimitedBulk() {

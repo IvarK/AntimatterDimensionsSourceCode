@@ -1,6 +1,7 @@
 Vue.component("reality-button", {
   data() {
     return {
+      isDoomed: false,
       canReality: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(0),
@@ -60,6 +61,7 @@ Vue.component("reality-button", {
         : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
     },
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.hasRealityStudy = TimeStudy.reality.isBought;
       this.canReality = isRealityAvailable();
       if (!this.canReality) {
@@ -147,6 +149,9 @@ Vue.component("reality-button", {
           </template>
           <template v-else-if="hasRealityStudy">
             <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
+          </template>
+          <template v-else-if="isDoomed">
+            <div>You cannot escape a Doomed Reality</div>
           </template>
           <template v-else>
             <div>Purchase the study in the Eternity tab to unlock a new Reality</div>

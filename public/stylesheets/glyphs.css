@@ -741,6 +741,10 @@
   overflow: auto;
 }
 
+.pelle-current-glyph-effects {
+  color: var(--color-pelle--base);
+}
+
 .s-base--metro .c-current-glyph-effects {
   border-radius: 0;
 }

@@ -38,6 +38,9 @@ export default {
     activeCondition() {
       return this.config.activeCondition ? this.config.activeCondition() : null;
     },
+    disabledInDoomed() {
+      return Pelle.isDoomed && this.config.pelleUseless;
+    }
   },
   methods: {
     update() {
@@ -60,7 +63,10 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
+      <span v-if="!disabledInDoomed">
+        {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
+      </span>
+      <span v-else> This milestone has no effect while in Doomed </span>
     </button>
   </div>
 </template>

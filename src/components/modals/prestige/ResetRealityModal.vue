@@ -10,7 +10,7 @@ export default {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   computed: {
-    resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
+    resetTerm() { return Pelle.isDoomed ? "Armageddon" : "Reality"; },
   },
   methods: {
     handleYesClick() {

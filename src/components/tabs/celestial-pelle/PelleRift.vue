@@ -181,6 +181,7 @@ export default {
   justify-content: center;
   align-items: center;
   background: #1e1e1e;
+  overflow: hidden;
 }
 
 .o-pelle-rift-bar-percentage {

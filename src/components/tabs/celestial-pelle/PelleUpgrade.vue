@@ -139,11 +139,12 @@ export default {
     height: 14rem;
     margin: 1rem;
     font-size: 1rem;
+    box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
   }
 
   .c-pelle-upgrade:hover {
-    box-shadow: 1px 1px 5px var(--color-pelle-secondary);
-    transition-duration: 0.12s;
+    box-shadow: inset 0px 0px 20px 1px var(--color-pelle-secondary);
+    transition-duration: 0.3s;
   }
 
 
@@ -151,16 +152,19 @@ export default {
     background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
     color: black;
     font-weight: bold;
+    box-shadow: none;
   }
 
   .c-pelle-upgrade--unavailable {
     background: #565656;
     cursor: default;
+    box-shadow: none;
   }
 
   .c-pelle-upgrade--faded {
     opacity: 0.3;
     cursor: default;
+    box-shadow: none;
   }
 
   .c-pelle-upgrade--bought {
@@ -168,6 +172,11 @@ export default {
     cursor: default;
     color: black;
   }
+  .c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover, 
+  .c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
+    box-shadow: 1px 1px 5px var(--color-pelle-secondary);
+    transition-duration: 0.3s;
+  } 
 
   .c-pelle-upgrade-time-tooltip {
     position: absolute;

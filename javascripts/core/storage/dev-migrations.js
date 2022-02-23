@@ -1200,8 +1200,8 @@ GameStorage.devMigrations = {
     },
     player => {
       // Remove any accidental recursion that may have been introduced by the above patch
-      while (!Array.isArray(player.reality.glyphs.sets.glyphs)) {
-        player.reality.glyphs.sets = player.reality.glyphs.sets.glyphs;
+      while (!Array.isArray(player.reality.glyphs.sets[0].glyphs)) {
+        player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => (glyphs.glyphs));
       }
     },
     player => {

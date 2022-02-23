@@ -68,7 +68,7 @@ export default {
       <DescriptionDisplay :config="descriptionDisplayConfig" />
     </template>
     <template #bottom>
-      <span v-if="isDoomed">There is no reward for completing this challenge</span>
+      <span v-if="isDoomed">There is no special reward for completing this challenge</span>
       <span v-else>Reward: {{ challenge.config.reward }}</span>
     </template>
   </ChallengeBox>

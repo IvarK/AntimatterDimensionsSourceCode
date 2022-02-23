@@ -14,7 +14,7 @@ import Mousetrap from "mousetrap";
 // and should be used to provide support for both Windows and Max
 
 // Free keys:
-// i, j, k, l, n, o, p, q, v, w, x, z
+// i, j, k, l, n, o, p, q, v, w, x
 
 
 export const shortcuts = [
@@ -132,6 +132,12 @@ export const shortcuts = [
     type: "bindHotkey",
     function: () => keyboardToggleContinuum(),
     visible: () => Laitela.continuumUnlocked
+  }, {
+    name: "Armageddon",
+    keys: ["z"],
+    type: "bindRepeatableHotkey",
+    function: () => armageddonRequest(),
+    visible: () => Pelle.isDoomed
   }, {
     name: "Save game",
     keys: ["mod", "s"],
@@ -355,6 +361,11 @@ function keyboardAutomatorRestart() {
     AutomatorBackend.restart();
     AutomatorBackend.start();
   }
+}
+
+function armageddonRequest() {
+  if (!Pelle.canArmageddon) return;
+  Pelle.armageddon(true);
 }
 
 function keyboardPressEscape() {

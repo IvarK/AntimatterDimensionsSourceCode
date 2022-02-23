@@ -38,6 +38,7 @@ export default {
         ? config.charged
         : config;
     },
+    kindOfUpgrade() { return this.upgrade.id === "ipMult" ? "multiplier" : "upgrade"; },
     classObject() {
       return {
         "o-infinity-upgrade-btn": true,
@@ -94,7 +95,7 @@ export default {
     @click="upgrade.purchase()"
   >
     <span v-if="isUseless">
-      This upgrade has no effect while in Doomed
+      This {{ kindOfUpgrade }} has no effect while in Doomed
     </span>
     <span v-else>
       <DescriptionDisplay

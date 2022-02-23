@@ -124,7 +124,9 @@ export const Pelle = {
   },
 
   get uselessTimeStudies() {
-    return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    const uselessTimeStudies = [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) uselessTimeStudies.push(33);
+    return uselessTimeStudies;
   },
 
   get disabledRUPGs() {

@@ -1199,10 +1199,20 @@ GameStorage.devMigrations = {
       if (player.celestials.pelle.upgrades.has(4)) player.achievementBits[17] |= 2;
       if (player.celestials.pelle.doomed && player.challenge.infinity.completedBits === 510) {
         // eslint-disable-next-line no-bitwise
-        player.achievementBits[17] |= 4;
+        player.achievementBits[17] |= (1 << 2);
       }
       // eslint-disable-next-line no-bitwise
-      if (player.timestudy.studies.compact().includes(181)) player.achievementBits[17] |= 32;
+      if (player.timestudy.studies.compact().includes(181)) player.achievementBits[17] |= (1 << 5);
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] |= (player.achievementBits[16] & (1 << 4)) << 3;
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] &= ~(1 << 4);
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] |= (player.achievementBits[16] & (1 << 2)) << 2;
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] &= ~(1 << 2);
     }
   ],
 

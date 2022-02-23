@@ -90,14 +90,14 @@ export default {
       <div class="o-pelle-rift-bar-percentage">
         {{ formatPercents(percentage, 3) }}
       </div>
+      <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
+      <div :class="barOverlay()" />
       <div
         class="o-pelle-rift-bar-fill"
         :style="{
           width: `${Math.clampMax(percentage * 100, 100)}%`,
         }"
       />
-      <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
-      <div :class="barOverlay()" />
       <!-- This bar overlay adds the shadow within the bar so the ugly edges don't show -->
       <div
         class="o-pelle-rift-bar-overlay"

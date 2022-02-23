@@ -35,9 +35,11 @@ export default {
       Remnants
     </span>
     <div
-      class="o-questionmark"
       v-tooltip="'Remnants gain is based on best AM, IP, and EP throughout all Armageddons.'"
-    >?</div>
+      class="o-questionmark"
+    >
+      ?
+    </div>
     <br>
     Reality Shards
     <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ➜

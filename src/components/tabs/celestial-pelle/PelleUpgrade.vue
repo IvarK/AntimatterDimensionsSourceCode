@@ -72,7 +72,7 @@ export default {
       return {
         visibility: this.showImprovedEstimate ? 'visible' : 'hidden',
         opacity: this.showImprovedEstimate ? 1 : 0
-      }
+      };
     }
   },
   methods: {
@@ -172,11 +172,11 @@ export default {
     cursor: default;
     color: black;
   }
-  .c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover, 
+  .c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover,
   .c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
     box-shadow: 1px 1px 5px var(--color-pelle-secondary);
     transition-duration: 0.3s;
-  } 
+  }
 
   .c-pelle-upgrade-time-tooltip {
     position: absolute;

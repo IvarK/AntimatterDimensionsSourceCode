@@ -85,6 +85,7 @@ export default {
     <div
       ref="pelleRiftBar"
       class="c-pelle-rift-bar"
+      :class="{ 'c-pelle-rift-bar-overfill-container': percentage > 1 }"
       @mousemove="handleMilestoneRequirementTooltipDisplay"
     >
       <div class="o-pelle-rift-bar-percentage">
@@ -184,6 +185,17 @@ export default {
   overflow: hidden;
 }
 
+@keyframes pulse {
+  /* #ed143d66 is the base pelle colour except transparent. */
+  0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+  50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
+  100% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+}
+
+.c-pelle-rift-bar-overfill-container {
+  animation: pulse 1s infinite linear;
+}
+
 .o-pelle-rift-bar-percentage {
   font-size: 1.5rem;
   color: white;
@@ -241,19 +253,13 @@ export default {
   animation: sweep infinite 2s linear;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 0.7rem 1rem var(--color-pelle--base); }
-  50% { box-shadow: 0 0 1.5rem 0 var(--color-pelle--base); }
-  100% { box-shadow: 0 0 0.7rem 1rem var(--color-pelle--base); }
-}
-
 .o-pelle-rift-bar-overfilled {
   position: absolute;
   width: 100%;
   height: 100%;
   background: var(--color-pelle--base);
-  opacity: 0.3;
-  animation: pulse infinite 1s linear;
+  opacity: 0.5;
+  z-index: 1;
 }
 
 .o-pelle-rift-bar-milestone-hover-area {

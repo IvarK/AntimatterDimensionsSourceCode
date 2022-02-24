@@ -188,6 +188,24 @@ export const PerkNetwork = {
     const perkColorList = this.perkColorList;
 
     function nodeColor(perk) {
+      const pelleUseless = Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
+      if (pelleUseless) {
+        const backgroundColor = "crimson";
+        const hoverColor = "#00bcd4";
+        const borderColor = "#830c24";
+        return {
+          background: backgroundColor,
+          border: borderColor,
+          hover: {
+            background: hoverColor,
+            border: borderColor
+          },
+          highlight: {
+            background: backgroundColor,
+            border: borderColor
+          }
+        }
+      }
       const canBeBought = perk.canBeBought;
       const isBought = perk.isBought;
 

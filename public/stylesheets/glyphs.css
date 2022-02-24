@@ -712,6 +712,10 @@
   overflow-x: hidden;
   overflow-y: scroll;
   height: initial;
+
+  /* Moz styling for scrolbar */
+  scrollbar-color: #08450b #00000000;
+  scrollbar-width: thin;
 }
 
 .l-current-glyph-effects::-webkit-scrollbar {

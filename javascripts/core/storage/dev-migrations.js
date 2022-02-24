@@ -1207,7 +1207,11 @@ GameStorage.devMigrations = {
     player => {
       // For saves before cel7 existed, it will first add this prop (as a number) and then run this migration code. For
       // saves which are already in cel7, this prop will already exist as a Decimal. This workaround handles both cases
-      player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
+      try {
+        player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
+      } catch {
+        player.celestials.pelle.rifts.chaos.fill = player.celestials.pelle.rifts.pestilence.percentageSpent;
+      }
 
       delete player.celestials.pelle.compact;
       player.celestials.pelle.collapsed = {
@@ -1217,6 +1221,9 @@ GameStorage.devMigrations = {
       };
       player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
     },
+    player => {
+        player.celestials.pelle.rifts.chaos.fill = player.celestials.pelle.rifts.pestilence.percentageSpent;
+    }
   ],
 
   patch(player) {

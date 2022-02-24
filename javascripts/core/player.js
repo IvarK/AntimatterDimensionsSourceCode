@@ -704,7 +704,8 @@ window.player = {
         generatedGalaxies: 0,
         phase: 0,
         sacrificeActive: false
-      }
+      },
+      quotes: []
     },
     collapsed: {
       upgrades: false,

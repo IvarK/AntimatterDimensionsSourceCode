@@ -3,6 +3,7 @@ import { Currency } from "../../currency";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { GameMechanicState, SetPurchasableMechanicState } from "../../utils";
 import zalgo from "./zalgo";
+import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -290,7 +291,18 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
-  symbol: "♅"
+  symbol: "♅",
+
+  quotes: new CelestialQuotes("pelle", {
+    INITIAL: {
+      id: 1,
+      lines: [
+        "Hi.",
+        "You're here.",
+        "You're trapped here."
+      ]
+    }
+  })
 };
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {

@@ -46,6 +46,7 @@ export default {
       Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
       disChargeAll();
       player.buyUntil10 = true;
+      Pelle.quotes.show(Pelle.quotes.INITIAL);
     },
     showModal() {
       Modal.pelleEffects.show();
@@ -56,7 +57,8 @@ export default {
 
 <template>
   <div class="l-pelle-celestial-tab">
-    <div v-if="isDoomed">
+    <div v-if="isDoomed" class="l-pelle-all-content-container">
+      <celestial-quote-history celestial="pelle" />
       <div class="button-container">
         <button
           class="o-pelle-button"
@@ -87,6 +89,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+  }
+  .l-pelle-all-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .o-pelle-button {

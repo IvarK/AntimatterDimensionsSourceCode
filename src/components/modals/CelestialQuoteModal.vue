@@ -57,7 +57,7 @@ export default {
         this.line = "";
         return;
       }
-      if (typeof this.currentQuote.line == "function") {
+      if (typeof this.currentQuote.line === "function") {
         this.line = this.currentQuote.line().replace("*", "");
       } else {
         this.line = this.currentQuote.line.replace("*", "");

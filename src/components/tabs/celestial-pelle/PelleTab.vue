@@ -30,9 +30,6 @@ export default {
     showModal() {
       Modal.pelleEffects.show();
     },
-    showQuotesModal() {
-      Modal.pelleQuotes.show();
-    },
     enterDoomModal() {
       Modal.armageddon.show();
     }
@@ -51,12 +48,7 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <button
-        class="o-pelle-button o-pelle-quotes-button"
-        @click="showQuotesModal"
-      >
-        {{ symbol }}
-      </button>
+      <celestial-quote-history celestial="pelle" />
       <div class="button-container">
         <button
           class="o-pelle-button"

@@ -58,7 +58,6 @@ import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationM
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
 import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
 import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
-import PelleQuotesModal from "@/components/modals/PelleQuotesModal";
 
 
 export class Modal {
@@ -181,7 +180,6 @@ Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
-Modal.pelleQuotes = new Modal(PelleQuotesModal);
 Modal.sacrifice = new Modal(SacrificeModal);
 Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {

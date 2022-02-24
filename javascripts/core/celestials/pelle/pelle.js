@@ -385,7 +385,7 @@ export const Pelle = {
           () => `Incorrectly recollecting your exacting ${wc("Missing-Unseen-Erased")} of memories.`,
           () => `“Fabrication” of your own “ideology” just to fulfil your ${wc("Destiny-Mandate-Goals")}.`,
           () => `${wc("Amusing-Confusing-Laughter")}.`,
-          () => `And keep in mind I have no reason to ${wc("misconstrue-deceive,-trick")} you.`,
+          () => `And keep in mind I have no reason to ${wc("misconstrue-deceive-trick")} you.`,
           "After all, I’ve already won."
         ],
         isArmageddonShow: true,

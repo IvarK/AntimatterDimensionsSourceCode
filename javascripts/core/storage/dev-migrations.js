@@ -1213,7 +1213,8 @@ GameStorage.devMigrations = {
       player.achievementBits[16] |= (player.achievementBits[16] & (1 << 2)) << 2;
       // eslint-disable-next-line no-bitwise
       player.achievementBits[16] &= ~(1 << 2);
-    }
+    },
+    player => {
       // This is just an empty patch because some orders got really messed up. Sorry -Scar
     },
     player => {

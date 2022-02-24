@@ -27,26 +27,6 @@ export default {
       Pelle.cel.showBought = !Pelle.cel.showBought;
       this.$recompute("upgrades");
     },
-    getDoomedScrub() {
-      Glyphs.harshAutoClean();
-      if (Glyphs.freeInventorySpace === 0) {
-        Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
-        Glyphs could not be unequipped due to lack of inventory space.`);
-        return;
-      }
-      Glyphs.unequipAll();
-      Glyphs.harshAutoClean();
-      for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
-      Glyphs.refreshActive();
-      player.celestials.pelle.doomed = true;
-      Pelle.armageddon(false);
-      respecTimeStudies(true);
-      Currency.infinityPoints.reset();
-      player.infMult = 0;
-      Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
-      disChargeAll();
-      player.buyUntil10 = true;
-    },
     showModal() {
       Modal.pelleEffects.show();
     },

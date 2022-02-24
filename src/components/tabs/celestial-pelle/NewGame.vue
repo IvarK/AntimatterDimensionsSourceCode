@@ -56,15 +56,16 @@ export default {
 <style scoped>
   .new-game-container {
     position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 7;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: black;
+    box-shadow: 0 0 20px 1px black;
   }
 
   button {

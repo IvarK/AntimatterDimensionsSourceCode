@@ -99,6 +99,13 @@ export default {
           width: `${Math.clampMax(percentage * 100, 100)}%`,
         }"
       />
+      <div
+        v-if="rift.reducedTo < 1"
+        class="o-pelle-rift-bar-reducedto"
+        :style="{
+          width: `${Math.clampMax(100 - rift.reducedTo * 100, 100)}%`,
+        }"
+      />
       <!-- This bar overlay adds the shadow within the bar so the ugly edges don't show -->
       <div
         class="o-pelle-rift-bar-overlay"
@@ -215,6 +222,16 @@ export default {
   background: var(--color-pelle-secondary);
   z-index: 0;
   opacity: 0.7;
+}
+.o-pelle-rift-bar-reducedto {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  background: var(--color-pelle--base);
+  z-index: 0;
+  filter: brightness(0.5);
+  z-index: 0;
 }
 .o-pelle-rift-bar-overlay {
   position: absolute;

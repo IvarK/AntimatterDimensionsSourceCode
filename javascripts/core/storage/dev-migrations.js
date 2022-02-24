@@ -1242,7 +1242,7 @@ GameStorage.devMigrations = {
     player => {
       // eslint-disable-next-line no-bitwise
       player.achievementBits[17] &= ~(1 << 5);
-      if (player.timestudy.studies.compact().includes(181) && player.celestials.pelle.isDoomed) {
+      if (player.timestudy.studies.compact().includes(181) && player.celestials.pelle.doomed) {
         // eslint-disable-next-line no-bitwise
         player.achievementBits[17] |= (1 << 5);
       }

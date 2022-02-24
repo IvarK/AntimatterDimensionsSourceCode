@@ -295,6 +295,52 @@ export const Pelle = {
 
   symbol: "♅",
 
+  sumerian: {
+    wordCycle(a, b, c) {
+      if (c == undefined) {
+        [a, b, c] = a.split(", ");
+      }
+      switch (Math.floor(Date.now() / 500)%9) {
+        case 0:
+          return this.randomCrossWords(a);
+        case 1:
+          return a;
+        case 2:
+          return this.randomCrossWords(a);
+        case 3:
+          return this.randomCrossWords(b);
+        case 4:
+          return b;
+        case 5:
+          return this.randomCrossWords(b);
+        case 6:
+          return this.randomCrossWords(c);
+        case 7:
+          return c;
+        case 8:
+          return this.randomCrossWords(c);
+      }
+    },
+    randomCrossWords(x) {
+      x = x.split("");
+      for (let i = 0; i < x.length/1.7; i++) {
+        let randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500)*10 + i*2)*x.length);
+        // .splice should return the deleted index.
+        x[randomIndex] = "#";
+      }
+      return x.join("");
+    },
+    predictableRandom(x) {
+      let start = Math.pow(x%97, 4.3)*232344573;
+      let a = 15485863;
+      let b = 521791;
+      start = (start*a)%b;
+      for (let i = 0; i < (x*x)%90 + 90; i++) {
+        start = (start*a)%b;
+      }
+      return start/b;
+    }
+  },
   quotes: new CelestialQuotes("pelle", {
     INITIAL: {
       id: 1,
@@ -302,7 +348,7 @@ export const Pelle = {
         "Hi.",
         "You're here.",
         "You're trapped here.",
-        "[[Infinite-Forever-Eternal]]."
+        () => Pelle.sumerian.wordCycle("Infinite", "Forever", "Eternal")
       ]
     },
     ARM_1: {
@@ -315,16 +361,17 @@ export const Pelle = {
     ARM_2: {
       id: 3,
       lines: [
-        "How long have we done this [[Song-Dance-Charade]]?",
+        () => `How long have we done this ${Pelle.sumerian.wordCycle("Song, Dance, Charade")}?`,
         "How many times have we been here before?",
-        "How many plans have you, the [[False-Deity-Destroyer]], operated?",
-        "All to try and fulfil your [[Destiny-Mandate-Goals]]?",
-        "And how many times have you fallen before the [[Eternal-Deity-Monarch]]?",
+        () => `How many plans have you, the ${Pelle.sumerian.wordCycle("False, Deity, Destroyer")}, operated?`,
+        () => `All to try and fulfil your ${Pelle.sumerian.wordCycle("Destiny, Mandate, Goals")}?`,
+        () => `And how many times have you fallen before the ${Pelle.sumerian.wordCycle("Eternal, Deity, Monarch")}?`,
         "Count them, if you remember.",
-        "Not even the [[Lesser-Deity-Monarch]]s, the 6 named and the innumerable unnamed.",
-        "The complex, the irrational, those that go [[Missing-Unseen-Erased]].",
-        "Of course, the great [[False-Deity-Destroyer]] doesn’t remember this.",
-        "All those [[Conflicts-Battles-Ends]] that you hide every time."
+        () => `Not even the ${Pelle.sumerian.wordCycle("Lesser, Deity, Monarch")}s,
+        the 6 named and the innumerable unnamed.`,
+        () => `The complex, the irrational, those that go ${Pelle.sumerian.wordCycle("Missing, Unseen, Erased")}.`,
+        () => `Of course, the great ${Pelle.sumerian.wordCycle("False, Deity, Destroyer")} doesn’t remember this.`,
+        () => `All those ${Pelle.sumerian.wordCycle("Conflicts, Battles, Ends")} that you hide every time.`
       ]
     },
     ARM_3_REM_35: {
@@ -334,10 +381,11 @@ export const Pelle = {
         "The imaginary machines, your own creations.",
         "Things made of the remnants of your own thoughts, hinted at this.",
         "But, you never imagined that would be you, right?",
-        "Incorrectly recollecting your exacting [[Missing-Unseen-Erased]] of memories.",
-        "“Fabrication” of your own “ideology” just to fulfil your [[Destiny-Mandate-Goals]].",
-        "[[Amusing-Confusing-Laughter?]].",
-        "And keep in mind I have no reason to [[misconstrue-deceive-trick]] you.",
+        () => `Incorrectly recollecting your exacting ${Pelle.sumerian.wordCycle("Missing, Unseen, Erased")} of memories.`,
+        () => `“Fabrication” of your own “ideology” just to fulfil your
+        ${Pelle.sumerian.wordCycle("Destiny, Mandate, Goals")}.`,
+        () => `${Pelle.sumerian.wordCycle("Amusing, Confusing, Laughter")}.`,
+        () => `And keep in mind I have no reason to ${Pelle.sumerian.wordCycle("misconstrue, deceive, trick")} you.`,
         "After all, I’ve already won."
       ],
       isArmageddonShow: true,
@@ -346,7 +394,7 @@ export const Pelle = {
   }),
   hasQuote(x) {
     return player.celestials.pelle.quotes.includes(x);
-  }
+  },
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, function() {
@@ -361,7 +409,9 @@ EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, function() {
   if (Pelle.hasQuote(2)) {
     Pelle.quotes.show(Pelle.quotes.ARM_2);
   }
-  Pelle.quotes.show(Pelle.quotes.ARM_1);
+  if (Currency.remnants.gte(1)) {
+    Pelle.quotes.show(Pelle.quotes.ARM_1);
+  }
 });
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {

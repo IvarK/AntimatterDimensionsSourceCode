@@ -190,7 +190,7 @@ Modal.celestialQuote = new class extends Modal {
     const newLines = lines.map(l => ({
       celestial,
       line: l,
-      showName: !l.startsWith("*")
+      showName: l[0] !== "*"
     }));
     if (ui.view.modal.queue.includes(this)) {
       // This shouldn't come up often, but in case we do have a pile of quotes

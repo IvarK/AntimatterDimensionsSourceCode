@@ -26,7 +26,9 @@ Vue.component("celestial-quote-history", {
       return Math.max(0, this.lastVisibleIndex - this.visibleLines + 1);
     },
     visibleQuotes() {
-      return this.quotes.slice(this.firstVisibleIndex, this.lastVisibleIndex + 1);
+      return this.quotes.slice(this.firstVisibleIndex, this.lastVisibleIndex + 1).map(
+        x => typeof x == "function" ? x() : x
+      );
     },
     upButtonClass() {
       return this.buttonClass(this.upButtonEnabled);

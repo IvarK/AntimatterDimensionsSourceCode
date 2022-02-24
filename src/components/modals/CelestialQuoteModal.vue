@@ -4,6 +4,7 @@ export default {
   data() {
     return {
       index: 0,
+      line: ""
     };
   },
   computed: {
@@ -37,6 +38,8 @@ export default {
         "c-modal",
         `c-modal-celestial-quote--${this.currentQuote.celestial}`
       ];
+    },
+    line() {
     }
   },
   methods: {
@@ -48,6 +51,13 @@ export default {
     },
     close() {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+    },
+    update() {
+      if (typeof this.currentQuote.line == "function") {
+        this.line = this.currentQuote.line().replace("*", "");
+      } else {
+        this.line = this.currentQuote.line.replace("*", "");
+      }
     }
   },
 };
@@ -69,7 +79,7 @@ export default {
         <div v-if="currentQuote.showName">
           <b>{{ currentCelestialName }}</b>
         </div>
-        {{ currentQuote.line.replace("*", "") }}
+        {{ line }}
       </div>
       <i
         :style="nextStyle"

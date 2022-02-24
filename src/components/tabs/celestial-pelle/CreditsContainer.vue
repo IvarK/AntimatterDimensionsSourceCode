@@ -23,12 +23,18 @@ export default {
       this.scroll = (Pelle.endState - 4.5) / 2 * 100;
       if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
     }
+  },
+  computed: {
+    doomed() {
+      return Pelle.isDoomed;
+    }
   }
 };
 </script>
 
 <template>
   <div
+    v-if="doomed"
     class="credits-container"
     :style="{
       top: `${100 - scroll}vh`,

@@ -190,9 +190,9 @@ export const PerkNetwork = {
     function nodeColor(perk) {
       const pelleUseless = Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
       if (pelleUseless) {
-        const backgroundColor = "crimson";
-        const hoverColor = "#00bcd4";
-        const borderColor = "#830c24";
+        const backgroundColor = "#00bcd4";
+        const hoverColor = "crimson";
+        const borderColor = "#007a90";
         return {
           background: backgroundColor,
           border: borderColor,

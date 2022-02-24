@@ -326,6 +326,22 @@ export const Pelle = {
         "Of course, the great [[False-Deity-Destroyer]] doesn’t remember this.",
         "All those [[Conflicts-Battles-Ends]] that you hide every time."
       ]
+    },
+    ARM_3_REM_35: {
+      id: 4,
+      lines: [
+        "You probably caught on earlier this time.",
+        "The imaginary machines, your own creations.",
+        "Things made of the remnants of your own thoughts, hinted at this.",
+        "But, you never imagined that would be you, right?",
+        "Incorrectly recollecting your exacting [[Missing-Unseen-Erased]] of memories.",
+        "“Fabrication” of your own “ideology” just to fulfil your [[Destiny-Mandate-Goals]].",
+        "[[Amusing-Confusing-Laughter?]].",
+        "And keep in mind I have no reason to [[misconstrue-deceive-trick]] you.",
+        "After all, I’ve already won."
+      ],
+      isArmageddonShow: true,
+      remnantsRequirement: 35
     }
   }),
   hasQuote(x) {
@@ -334,7 +350,15 @@ export const Pelle = {
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, function() {
-  if (Pelle.hasQuote(1)) {
+  if (Pelle.hasQuote(3)) {
+    for (let quote of Pelle.quotes.quotesById) {
+      if (!quote) continue;
+      if (quote.isArmageddonShow && Currency.remnants.gte(quote.remnantsRequirement)) {
+        Pelle.quotes.show(quote);
+      }
+    }
+  }
+  if (Pelle.hasQuote(2)) {
     Pelle.quotes.show(Pelle.quotes.ARM_2);
   }
   Pelle.quotes.show(Pelle.quotes.ARM_1);

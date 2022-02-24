@@ -88,12 +88,14 @@ export const Pelle = {
 
   armageddon(gainStuff) {
     if (!this.canArmageddon && gainStuff) return;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_BEFORE, gainStuff);
     if (gainStuff) {
       this.cel.remnants += this.remnantsGain;
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.armageddonDuration = 0;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 
   gameLoop(diff) {
@@ -301,9 +303,42 @@ export const Pelle = {
         "You're here.",
         "You're trapped here."
       ]
+    },
+    ARM_1: {
+      id: 2,
+      lines: [
+        "[[Infinite-Forever-Eternal]].",
+        "I’ve already won.",
+        "And since that is the case, I can monologue, or reminisce."
+      ]
+    },
+    ARM_2: {
+      id: 3,
+      lines: [
+        "How long have we done this [[Song-Dance-Charade]]?",
+        "How many times have we been here before?",
+        "How many plans have you, the [[False-Deity-Destroyer]], operated?",
+        "All to try and fulfil your [[Destiny-Mandate-Goals]]?",
+        "And how many times have you fallen before the [[Eternal-Deity-Monarch]]?",
+        "Count them, if you remember.",
+        "Not even the [Lesser-Deity-Monarch]s, the 6 named and the innumerable unnamed.",
+        "The complex, the irrational, those that go [[Missing-Unseen-Erased]].",
+        "Of course, the great [[False-Deity-Destroyer]] doesn’t remember this.",
+        "All those [[Conflicts-Battles-Ends]] that you hide every time."
+      ]
     }
-  })
+  }),
+  hasQuote(x) {
+    return player.celestials.pelle.quotes.includes(x);
+  }
 };
+
+EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, function() {
+  if (Pelle.hasQuote(1)) {
+    Pelle.quotes.show(Pelle.quotes.ARM_2);
+  }
+  Pelle.quotes.show(Pelle.quotes.ARM_1);
+});
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 

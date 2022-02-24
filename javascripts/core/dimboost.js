@@ -146,7 +146,8 @@ export class DimBoost {
     else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
     const areDimensionsReset = `Reset
-    ${(Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) ? "nothing" : "your Dimensions"}`;
+    ${((Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
+      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought)) ? "nothing" : "your Dimensions"}`;
 
     return `${areDimensionsReset}${boostEffects}`;
   }

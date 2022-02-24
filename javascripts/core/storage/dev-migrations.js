@@ -1214,6 +1214,30 @@ GameStorage.devMigrations = {
       // eslint-disable-next-line no-bitwise
       player.achievementBits[16] &= ~(1 << 2);
     }
+      // This is just an empty patch because some orders got really messed up. Sorry -Scar
+    },
+    player => {
+      player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => ({ glyphs, name: "" }));
+    },
+    player => {
+      // Remove any accidental recursion that may have been introduced by the above patch
+      while (!Array.isArray(player.reality.glyphs.sets[0].glyphs)) {
+        player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => (glyphs.glyphs));
+      }
+    },
+    player => {
+      // For saves before cel7 existed, it will first add this prop (as a number) and then run this migration code. For
+      // saves which are already in cel7, this prop will already exist as a Decimal. This workaround handles both cases
+      player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
+
+      delete player.celestials.pelle.compact;
+      player.celestials.pelle.collapsed = {
+        upgrades: false,
+        rifts: false,
+        galaxies: false
+      };
+      player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
+    },
   ],
 
   patch(player) {

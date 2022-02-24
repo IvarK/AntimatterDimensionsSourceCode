@@ -61,6 +61,7 @@ export const GlyphSelection = {
   },
 
   update(level) {
+    if (this.realityProps === undefined) return;
     if (level.rawLevel > this.realityProps.gainedGlyphLevel.rawLevel) {
       this.realityProps.gainedGlyphLevel.rawLevel = level.rawLevel;
       for (const glyph of this.glyphs) glyph.rawLevel = level.rawLevel;

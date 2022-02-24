@@ -404,7 +404,10 @@ window.player = {
         reality: 0
       },
       undo: [],
-      sets: [[], [], [], [], []],
+      sets: new Array(5).fill({
+        name: "",
+        glyphs: [],
+      }),
       protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
@@ -679,7 +682,7 @@ window.player = {
           reducedTo: 1
         },
         chaos: {
-          fill: DC.D0,
+          fill: 0,
           active: false,
           reducedTo: 1
         },
@@ -696,13 +699,18 @@ window.player = {
       },
       progressBits: 0,
       galaxyGenerator: {
+        unlocked: false,
         spentGalaxies: 0,
         generatedGalaxies: 0,
         phase: 0,
         sacrificeActive: false
       }
     },
-    compact: false,
+    collapsed: {
+      upgrades: false,
+      rifts: false,
+      galaxies: false
+    },
     showBought: false,
   },
   newGame: {

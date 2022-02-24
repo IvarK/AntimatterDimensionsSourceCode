@@ -32,7 +32,7 @@ export default {
       isAutoUnlocked: false,
       isAutobuyerOn: false,
       boughtAmount: 0,
-      timeUntilCost: new Decimal(0),
+      currentDT: new Decimal(0),
     };
   },
   computed: {
@@ -40,15 +40,35 @@ export default {
       return {
         "o-dilation-upgrade": true,
         "o-dilation-upgrade--rebuyable": this.isRebuyable,
-        "o-dilation-upgrade--available": !this.isBought && !this.isCapped && this.isAffordable,
-        "o-dilation-upgrade--unavailable": !this.isBought && !this.isCapped && !this.isAffordable,
-        "o-dilation-upgrade--bought": this.isBought,
+        "o-dilation-upgrade--useless-available": this.isUseless && !this.isBought && this.isAffordable,
+        "o-dilation-upgrade--useless-unavailable": this.isUseless && !this.isBought && !this.isAffordable,
+        "o-dilation-upgrade--useless-bought": this.isUseless && this.isBought,
+        "o-dilation-upgrade--available": !this.isUseless && !this.isBought && !this.isCapped && this.isAffordable,
+        "o-dilation-upgrade--unavailable": !this.isUseless && !this.isBought && !this.isCapped && !this.isAffordable,
+        "o-dilation-upgrade--bought": !this.isUseless && this.isBought,
         "o-dilation-upgrade--capped": this.isCapped,
       };
     },
     timeEstimate() {
       if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
-      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toTimeEstimate();
+      if (PelleRifts.death.isActive) {
+        const drain = Pelle.riftDrainPercent;
+        const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
+        const goalNetRate = rawDTGain.minus(Decimal.multiply(this.upgrade.cost, drain));
+        const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
+        if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
+        return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
+      }
+      return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
+        .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+    },
+    effectText() {
+      if (!this.config.formatEffect) return "";
+      const prefix = this.isCapped ? "Capped:" : "Currently:";
+      const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
+      let value = formattedEffect(this.purchases);
+      if (!this.isCapped) value += ` ➜ ${formattedEffect(this.purchases + 1)}`;
+      return `${prefix} ${value}`;
     }
   },
   watch: {
@@ -59,8 +79,7 @@ export default {
   methods: {
     update() {
       const upgrade = this.upgrade;
-      this.timeUntilCost = Decimal.sub(upgrade.cost, Currency.dilatedTime.value)
-        .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
+      this.currentDT.copyFrom(Currency.dilatedTime.value);
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;

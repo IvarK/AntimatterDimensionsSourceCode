@@ -211,7 +211,7 @@ with your current amount of antimatter.
 <br>
 <br>
 <b>Hotkeys: T</b> will purchase as many Tickspeed upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
-Note that the actual Tickspeed time is simulated and the game always runs calculations at the update rate you've chosen
+Note that the actual tickspeed time is simulated and the game always runs calculations at the update rate you've chosen
 in the Options tab.
 `,
       isUnlocked: () => Tickspeed.isUnlocked,
@@ -496,7 +496,7 @@ every Replicanti tick (initially every second), and both of these can be upgrade
 <br>
 <br>
 If you have purchased a Replicanti Galaxy upgrade, then you can get a "free" Replicanti Galaxy in exchange for
-resetting your replicanti count back to ${formatInt(1)}. This Galaxy is free in that it will act as if it was an
+resetting your Replicanti count back to ${formatInt(1)}. This Galaxy is free in that it will act as if it was an
 Antimatter Galaxy, but it will not make your next Antimatter Galaxy more expensive.
 <br>
 <br>
@@ -694,7 +694,7 @@ completed both EC11 and EC12 five times each.
 <br>
 <br>
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
-Dimension multipliers’ <i>exponents</i> and the Tickspeed multipliers’ <i>exponent</i> will be raised to the power of
+Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>exponent</i> will be raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them. If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP
 to complete this Dilated Eternity, you will be rewarded with a new resource called Tachyon Particles.
 <br>
@@ -1031,7 +1031,7 @@ level of Glyphs gained on Reality.
 <br>
 <br>
 Automatic Glyph Filtering is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
-Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
+Relic Shards. This system uses one of many methods to assign a score to your Glyph choices, and then picks the choice
 with the highest score. After picking this Glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. There are three basic modes:
 <br>
@@ -1044,7 +1044,7 @@ glyphs have the same effect count, glyphs with higher rarity will be picked. The
 compared to is specified by your input in the text box.
 <br>
 <b>Rarity Threshold Mode</b> - Glyphs are given a score equal to their rarity percent. The comparison threshold
-can be set individually per glyph type.
+can be set individually per Glyph type.
 <br>
 <br>
 Additionally, there are two more advanced modes with some additional flexibility:
@@ -1052,7 +1052,7 @@ Additionally, there are two more advanced modes with some additional flexibility
 <b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
 you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
 number of effects and having all of the effects you choose, and its score is lowered by ${formatInt(200)} for every
-missing effect. This guarantees that any glyph that doesn't have the effects you want will be below the threshold.
+missing effect. This guarantees that any Glyph that doesn't have the effects you want will be below the threshold.
 <br>
 <b>Effect Score Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
 your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
@@ -1235,7 +1235,7 @@ improve your Glyph effects once you reach certain thresholds in Glyph sacrifice 
 At level ${formatInt(2)}, Effarig unlocks
 ${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
     ? "a new mechanic called Glyph Alchemy and later on also makes Effarig Glyphs stronger while gradually removing " +
-      "almost all random elements of glyph generation. Glyph Alchemy also has its own How To Play entry."
+      "almost all random elements of Glyph generation. Glyph Alchemy also has its own How To Play entry."
     : "<span style='color: var(--color-bad);'>(unlock Effarig within Ra to see unlock details)</span>"}
 <br>
 <br>

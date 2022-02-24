@@ -201,7 +201,8 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.antimatter = value;
-    player.records.totalAntimatter = player.records.totalAntimatter.max(value);
+    // Total antimatter should always be increased, while maxAM should only be increased to value if greater
+    player.records.totalAntimatter = player.records.totalAntimatter.add(value);
     player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
     player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
     player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);

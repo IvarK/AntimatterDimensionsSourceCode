@@ -31,6 +31,7 @@ export default {
       distantRG: 0,
       remoteRG: 0,
       effarigInfinityBonusRG: 0,
+      isDoomed: false,
       isUncapped: false,
       nextEffarigRGThreshold: 0,
       canSeeGalaxyButton: false,
@@ -142,7 +143,8 @@ export default {
           getAdjustedGlyphEffect("replicationdtgain"),
         1
       );
-      this.isUncapped = PelleRifts.pestilence.hasMilestone(2);
+      this.isDoomed = Pelle.isDoomed;
+      this.isUncapped = PelleRifts.famine.hasMilestone(1);
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
@@ -175,12 +177,13 @@ export default {
       <div v-if="isInEC8">
         You have {{ quantifyInt("purchase", ec8Purchases) }} left.
       </div>
-      <div v-if="isUncapped">
-        Your Replicanti cap has been removed due to the second Famine milestone.
-        <br>
+      <div v-if="isDoomed">
+        <div v-if="isUncapped">
+          Your Replicanti cap has been removed due to the second Famine milestone.
+        </div>
         Any rewards from Effarig's Infinity have been disabled.
       </div>
-      <div v-if="hasRaisedCap">
+      <div v-else-if="hasRaisedCap">
         Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
         and is giving you {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
         <br>

@@ -21,7 +21,7 @@ export default {
       if (!Pelle.isDoomed) return;
       this.rolling = Pelle.endState > 4.5;
       this.scroll = (Pelle.endState - 4.5) / 2 * 100;
-      if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
+      if (this.audio) this.audio.volume = Math.clamp(Pelle.endState - 4.5, 0, 0.3);
     }
   },
   computed: {

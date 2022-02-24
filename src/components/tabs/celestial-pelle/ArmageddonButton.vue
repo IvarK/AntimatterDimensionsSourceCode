@@ -9,6 +9,12 @@ export default {
       canArmageddon: false,
     };
   },
+  computed: {
+    remnants() {
+      if (this.remnantsGain <= 1) return format(this.remnantsGain, 2, 2);
+      return format(this.remnantsGain, 2, 0);
+    }
+  },
   methods: {
     update() {
       this.remnantsGain = Pelle.remnantsGain;
@@ -16,8 +22,9 @@ export default {
       this.nextRealityShardGain.copyFrom(Pelle.nextRealityShardGain);
       this.canArmageddon = Pelle.canArmageddon;
     },
-    armageddon() {
-      Pelle.armageddon(true);
+    manualArmageddon() {
+      if (player.options.confirmations.armageddon) Modal.armageddon.show();
+      else Pelle.armageddon(true);
     }
   }
 };
@@ -27,11 +34,11 @@ export default {
   <button
     class="c-armageddon-button"
     :class="{ 'c-armageddon-button--unavailable': !canArmageddon }"
-    @click="armageddon"
+    @click="manualArmageddon"
   >
     <span class="c-remnant-gain-display">
       Armageddon for
-      <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
+      <span class="c-remnant-gain">{{ remnants }}</span>
       Remnants
     </span>
     <div

@@ -785,6 +785,7 @@ window.player = {
       blobSnowflakes: 16
     },
     confirmations: {
+      armageddon: true,
       sacrifice: true,
       challenges: true,
       eternity: true,

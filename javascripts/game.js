@@ -972,7 +972,7 @@ export function simulateTime(seconds, real, fast) {
     Pelle.addAdditionalEnd = false;
     oldLoopFn(i);
     Pelle.addAdditionalEnd = true;
-  }
+  };
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {

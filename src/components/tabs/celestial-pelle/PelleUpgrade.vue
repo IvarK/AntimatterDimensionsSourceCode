@@ -64,13 +64,14 @@ export default {
         this.isCapped ||
         this.galaxyGenerator
       ) return "";
+      if (!Pelle.canArmageddon) return `${this.currentTimeEstimate}`;
       // If the improved value is still "> 1 year" then we only show it once
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
     },
     estimateImprovementTooltipStyle() {
       return {
-        visibility: this.showImprovedEstimate ? 'visible' : 'hidden',
+        visibility: this.showImprovedEstimate ? "visible" : "hidden",
         opacity: this.showImprovedEstimate ? 1 : 0
       };
     }

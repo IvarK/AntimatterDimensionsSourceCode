@@ -21,7 +21,7 @@ export default {
       this.plusRecord = NG.plusRecord;
       this.minusRecord = NG.minusRecord;
       this.visible = Pelle.endState > 14.5;
-      this.opacity = (Pelle.endState - 14.5)*2;
+      this.opacity = (Pelle.endState - 14.5) * 2;
     },
     ngString(i) {
       if (!i) return "";

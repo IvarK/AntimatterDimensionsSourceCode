@@ -204,7 +204,7 @@ export const PerkNetwork = {
             background: backgroundColor,
             border: borderColor
           }
-        }
+        };
       }
       const canBeBought = perk.canBeBought;
       const isBought = perk.isBought;

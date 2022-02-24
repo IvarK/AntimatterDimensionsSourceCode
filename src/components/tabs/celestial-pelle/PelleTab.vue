@@ -46,10 +46,12 @@ export default {
       Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
       disChargeAll();
       player.buyUntil10 = true;
-      Pelle.quotes.show(Pelle.quotes.INITIAL);
     },
     showModal() {
       Modal.pelleEffects.show();
+    },
+    enterDoomModal() {
+      Modal.armageddon.show();
     }
   }
 };
@@ -57,7 +59,10 @@ export default {
 
 <template>
   <div class="l-pelle-celestial-tab">
-    <div v-if="isDoomed" class="l-pelle-all-content-container">
+    <div
+      v-if="isDoomed"
+      class="l-pelle-all-content-container"
+    >
       <celestial-quote-history celestial="pelle" />
       <div class="button-container">
         <button
@@ -74,7 +79,7 @@ export default {
     <button
       v-else
       class="pelle-doom-button"
-      @click="getDoomedScrub"
+      @click="enterDoomModal"
     >
       Doom<br>Your<br>Reality
       <div class="pelle-icon-container">

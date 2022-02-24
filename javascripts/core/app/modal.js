@@ -19,6 +19,7 @@ import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsMo
 import HardResetModal from "@/components/modals/prestige/HardResetModal";
 import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
 import ChangeNameModal from "@/components/modals/ChangeNameModal";
+import ArmageddonModal from "@/components/modals/prestige/ArmageddonModal";
 
 import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
 import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
@@ -142,6 +143,7 @@ Modal.celestials = new Modal(EnterCelestialsModal);
 Modal.hardReset = new Modal(HardResetModal);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
+Modal.armageddon = new Modal(ArmageddonModal);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);

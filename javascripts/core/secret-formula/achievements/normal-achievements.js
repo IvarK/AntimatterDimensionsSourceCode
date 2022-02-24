@@ -1255,12 +1255,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 173,
-    name: "The First Antihistorian",
-    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
-    effect: 10,
+    name: "Cet accomplissement n'existe pas III",
+    get description() { return `Reach ${formatPostBreak(DC.D9_99999E999, 5, 0)} Reality Machines.`; },
+    checkRequirement: () => player.reality.realityMachines.gte(DC.D9_99999E999),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 174,
@@ -1271,6 +1269,25 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 175,
+    name: "The First Antihistorian",
+    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
+    effect: 10,
+  },
+  {
+    id: 176,
+    name: "Mom counted to 3",
+    description: "Annihilate your Dark Matter Dimensions.",
+  },
+  {
+    id: 177,
+    name: "This mile took a celestial",
+    description: "Complete all Singularity Milestones at least once.",
+  },
+  {
+    id: 178,
     name: "Destroyer of Worlds",
     get description() { return `Get ${formatInt(100000)} Antimatter Galaxies.`; },
     checkRequirement: () => player.galaxies >= 100000,
@@ -1279,19 +1296,56 @@ GameDatabase.achievements.normal = [
     effect: 1.01
   },
   {
-    id: 176,
+    id: 181,
+    displayId: 666,
     name: "Antimatter Dimensions Eternal",
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
-    id: 177,
-    name: "An old friend",
-    description: "Purchase Time Study 181 in Doomed.",
+    id: 182,
+    name: "Age of the age of automation",
+    description: "Gain back all Antimatter Dimension autobuyers.",
+    checkRequirement: () => player.celestials.pelle.upgrades.has(4),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
-    id: 178,
+    id: 183,
+    name: "Anti-anti-challenged 2",
+    description: "Complete all Infinity Challenges while inside the Doomed Reality.",
+    checkRequirement: () => Pelle.isDoomed && InfinityChallenges.completed.length === 8,
+    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED
+  },
+  {
+    id: 184,
+    name: "You're out!",
+    description: "Reach the third Pelle Strike.",
+    checkRequirement: () => PelleStrikes.eternity.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 185,
+    name: "Four score and seven years ago",
+    description: "Reach the fourth Pelle Strike.",
+    checkRequirement: () => PelleStrikes.ECs.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 186,
+    displayId: 181,
+    name: "An old friend",
+    description: `Purchase Time Study 181 in Doomed.`,
+  },
+  {
+    id: 187,
+    name: "The One with Dilated Time",
+    description: "Dilate time while in the Doomed Reality.",
+    checkRequirement: () => Pelle.isDoomed && player.dilation.active,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+  },
+  {
+    id: 188,
     name: "The End",
     description: "Beat the game.",
     checkRequirement: () => Pelle.endState > 1,

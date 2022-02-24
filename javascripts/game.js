@@ -429,7 +429,7 @@ export function gameLoop(passDiff, options = {}) {
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
   if (AlchemyResource.momentum.isUnlocked) {
-    player.celestials.ra.momentumTime += realDiff * Achievement(173).effectOrDefault(1);
+    player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
   }
 
   // Lai'tela mechanics should bypass stored real time entirely

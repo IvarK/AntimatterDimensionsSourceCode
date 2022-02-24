@@ -79,6 +79,7 @@ export const Laitela = {
     DarkMatterDimensions.reset();
     Currency.darkEnergy.reset();
     Laitela.quotes.show(Laitela.quotes.ANNIHILATION);
+    Achievement(176).unlock();
     return true;
   },
   // Greedily buys the cheapest available upgrade until none are affordable

@@ -452,6 +452,7 @@ class PelleStrikeState extends GameMechanicState {
     Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);
+    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
 }
 

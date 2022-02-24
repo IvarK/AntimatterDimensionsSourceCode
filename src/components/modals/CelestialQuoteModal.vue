@@ -9,9 +9,11 @@ export default {
   },
   computed: {
     quotes() {
+      if (!this.$viewModel.modal.current) return false;
       return this.$viewModel.modal.current.lines;
     },
     currentQuote() {
+      if (!this.quotes) return false;
       return this.quotes[this.index];
     },
     celestial() {
@@ -38,8 +40,6 @@ export default {
         "c-modal",
         `c-modal-celestial-quote--${this.currentQuote.celestial}`
       ];
-    },
-    line() {
     }
   },
   methods: {
@@ -53,6 +53,10 @@ export default {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     update() {
+      if (!this.currentQuote) {
+        this.line = "";
+        return;
+      }
       if (typeof this.currentQuote.line == "function") {
         this.line = this.currentQuote.line().replace("*", "");
       } else {

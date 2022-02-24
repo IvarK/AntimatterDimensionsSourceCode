@@ -321,7 +321,7 @@ export const Pelle = {
         "All to try and fulfil your [[Destiny-Mandate-Goals]]?",
         "And how many times have you fallen before the [[Eternal-Deity-Monarch]]?",
         "Count them, if you remember.",
-        "Not even the [Lesser-Deity-Monarch]s, the 6 named and the innumerable unnamed.",
+        "Not even the [[Lesser-Deity-Monarch]]s, the 6 named and the innumerable unnamed.",
         "The complex, the irrational, those that go [[Missing-Unseen-Erased]].",
         "Of course, the great [[False-Deity-Destroyer]] doesn’t remember this.",
         "All those [[Conflicts-Battles-Ends]] that you hide every time."

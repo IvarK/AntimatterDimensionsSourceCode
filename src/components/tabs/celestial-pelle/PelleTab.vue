@@ -30,8 +30,16 @@ export default {
     showModal() {
       Modal.pelleEffects.show();
     },
+    showQuotesModal() {
+      Modal.pelleQuotes.show();
+    },
     enterDoomModal() {
       Modal.armageddon.show();
+    }
+  },
+  computed: {
+    symbol() {
+      return Pelle.symbol;
     }
   }
 };
@@ -43,7 +51,12 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <celestial-quote-history celestial="pelle" />
+      <button
+        class="o-pelle-button o-pelle-quotes-button"
+        @click="showQuotesModal"
+      >
+        {{symbol}}
+      </button>
       <div class="button-container">
         <button
           class="o-pelle-button"
@@ -63,7 +76,7 @@ export default {
     >
       Doom<br>Your<br>Reality
       <div class="pelle-icon-container">
-        <span class="pelle-icon">♅</span>
+        <span class="pelle-icon">{{symbol}}</span>
       </div>
     </button>
   </div>
@@ -96,6 +109,17 @@ export default {
 
   .o-pelle-button:hover {
     box-shadow: 1px 1px 3px var(--color-pelle--base);
+  }
+
+  .o-pelle-quotes-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-pelle--base);
+    font-size: 5rem;
+    height: 7rem;
+    width: 7rem;
+    font-weight: 900;
   }
 
   .pelle-doom-button {

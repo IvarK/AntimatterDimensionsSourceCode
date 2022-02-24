@@ -4,6 +4,10 @@ Vue.component("celestial-quote-history", {
     visibleLines: {
       type: Number,
       default: 3,
+    },
+    lineHeight: {
+      type: String,
+      default: "auto"
     }
   },
   data: () => ({
@@ -44,7 +48,8 @@ Vue.component("celestial-quote-history", {
     lineStyle(idx) {
       const idxDiff = Math.abs(idx - (this.visibleQuotes.length - 1));
       return {
-        opacity: 0.3 + 0.7 / (idxDiff + 1)
+        opacity: 0.3 + 0.7 / (idxDiff + 1),
+        height: this.lineHeight
       };
     },
     buttonClass(enabled) {

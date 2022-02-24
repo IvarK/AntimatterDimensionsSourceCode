@@ -296,10 +296,8 @@ export const Pelle = {
   symbol: "♅",
 
   sumerian: {
-    wordCycle(a, b, c) {
-      if (c == undefined) {
-        [a, b, c] = a.split(", ");
-      }
+    wordCycle(x) {
+      let [a, b, c] = x.split("-");
       switch (Math.floor(Date.now() / 500)%9) {
         case 0:
           return this.randomCrossWords(a);
@@ -341,57 +339,60 @@ export const Pelle = {
       return start/b;
     }
   },
-  quotes: new CelestialQuotes("pelle", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "Hi.",
-        "You're here.",
-        "You're trapped here.",
-        () => Pelle.sumerian.wordCycle("Infinite", "Forever", "Eternal")
-      ]
-    },
-    ARM_1: {
-      id: 2,
-      lines: [
-        "I’ve already won.",
-        "And since that is the case, I can monologue, or reminisce."
-      ]
-    },
-    ARM_2: {
-      id: 3,
-      lines: [
-        () => `How long have we done this ${Pelle.sumerian.wordCycle("Song, Dance, Charade")}?`,
-        "How many times have we been here before?",
-        () => `How many plans have you, the ${Pelle.sumerian.wordCycle("False, Deity, Destroyer")}, operated?`,
-        () => `All to try and fulfil your ${Pelle.sumerian.wordCycle("Destiny, Mandate, Goals")}?`,
-        () => `And how many times have you fallen before the ${Pelle.sumerian.wordCycle("Eternal, Deity, Monarch")}?`,
-        "Count them, if you remember.",
-        () => `Not even the ${Pelle.sumerian.wordCycle("Lesser, Deity, Monarch")}s,
-        the 6 named and the innumerable unnamed.`,
-        () => `The complex, the irrational, those that go ${Pelle.sumerian.wordCycle("Missing, Unseen, Erased")}.`,
-        () => `Of course, the great ${Pelle.sumerian.wordCycle("False, Deity, Destroyer")} doesn’t remember this.`,
-        () => `All those ${Pelle.sumerian.wordCycle("Conflicts, Battles, Ends")} that you hide every time.`
-      ]
-    },
-    ARM_3_REM_35: {
-      id: 4,
-      lines: [
-        "You probably caught on earlier this time.",
-        "The imaginary machines, your own creations.",
-        "Things made of the remnants of your own thoughts, hinted at this.",
-        "But, you never imagined that would be you, right?",
-        () => `Incorrectly recollecting your exacting ${Pelle.sumerian.wordCycle("Missing, Unseen, Erased")} of memories.`,
-        () => `“Fabrication” of your own “ideology” just to fulfil your
-        ${Pelle.sumerian.wordCycle("Destiny, Mandate, Goals")}.`,
-        () => `${Pelle.sumerian.wordCycle("Amusing, Confusing, Laughter")}.`,
-        () => `And keep in mind I have no reason to ${Pelle.sumerian.wordCycle("misconstrue, deceive, trick")} you.`,
-        "After all, I’ve already won."
-      ],
-      isArmageddonShow: true,
-      remnantsRequirement: 35
-    }
-  }),
+  quotes: new CelestialQuotes("pelle", (function() {
+    const wc = function(x) {
+      return Pelle.sumerian.wordCycle.bind(Pelle.sumerian)(x);
+    };
+    return {
+      INITIAL: {
+        id: 1,
+        lines: [
+          "Hi.",
+          "You're here.",
+          "You're trapped here.",
+          () => wc("Infinite-Forever-Eternal")
+        ]
+      },
+      ARM_1: {
+        id: 2,
+        lines: [
+          "I’ve already won.",
+          "And since that is the case, I can monologue, or reminisce."
+        ]
+      },
+      ARM_2: {
+        id: 3,
+        lines: [
+          () => `How long have we done this ${wc("Song-Dance-Charade")}?`,
+          "How many times have we been here before?",
+          () => `How many plans have you, the ${wc("False-Deity-Destroyer")}, operated?`,
+          () => `All to try and fulfil your ${wc("Destiny-Mandate-Goals")}?`,
+          () => `And how many times have you fallen before the ${wc("Eternal-Deity-Monarch")}?`,
+          "Count them, if you remember.",
+          () => `Not even the ${wc("Lesser-Deity-Monarch")}s, the 6 named and the innumerable unnamed.`,
+          () => `The complex, the irrational, those that go ${wc("Missing-Unseen-Erased")}.`,
+          () => `Of course, the great ${wc("False-Deity-Destroyer")} doesn’t remember this.`,
+          () => `All those ${wc("Conflicts-Battles-Ends")} that you hide every time.`
+        ]
+      },
+      ARM_3_REM_35: {
+        id: 4,
+        lines: [
+          "You probably caught on earlier this time.",
+          "The imaginary machines, your own creations.",
+          "Things made of the remnants of your own thoughts, hinted at this.",
+          "But, you never imagined that would be you, right?",
+          () => `Incorrectly recollecting your exacting ${wc("Missing-Unseen-Erased")} of memories.`,
+          () => `“Fabrication” of your own “ideology” just to fulfil your ${wc("Destiny-Mandate-Goals")}.`,
+          () => `${wc("Amusing-Confusing-Laughter")}.`,
+          () => `And keep in mind I have no reason to ${wc("misconstrue-deceive,-trick")} you.`,
+          "After all, I’ve already won."
+        ],
+        isArmageddonShow: true,
+        remnantsRequirement: 35
+      }
+    };
+  })()),
   hasQuote(x) {
     return player.celestials.pelle.quotes.includes(x);
   },

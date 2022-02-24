@@ -301,13 +301,13 @@ export const Pelle = {
       lines: [
         "Hi.",
         "You're here.",
-        "You're trapped here."
+        "You're trapped here.",
+        "[[Infinite-Forever-Eternal]]."
       ]
     },
     ARM_1: {
       id: 2,
       lines: [
-        "[[Infinite-Forever-Eternal]].",
         "I’ve already won.",
         "And since that is the case, I can monologue, or reminisce."
       ]

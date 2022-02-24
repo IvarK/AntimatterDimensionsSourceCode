@@ -55,7 +55,7 @@ export default {
         class="o-pelle-button o-pelle-quotes-button"
         @click="showQuotesModal"
       >
-        {{symbol}}
+        {{ symbol }}
       </button>
       <div class="button-container">
         <button
@@ -76,7 +76,7 @@ export default {
     >
       Doom<br>Your<br>Reality
       <div class="pelle-icon-container">
-        <span class="pelle-icon">{{symbol}}</span>
+        <span class="pelle-icon">{{ symbol }}</span>
       </div>
     </button>
   </div>

@@ -1320,14 +1320,14 @@ GameDatabase.achievements.normal = [
   {
     id: 184,
     name: "You're out!",
-    description: "Reach the third Pelle Strike.",
+    description: "Encounter the third Pelle Strike.",
     checkRequirement: () => PelleStrikes.eternity.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 185,
     name: "Four score and seven years ago",
-    description: "Reach the fourth Pelle Strike.",
+    description: "Encounter the fourth Pelle Strike.",
     checkRequirement: () => PelleStrikes.ECs.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },

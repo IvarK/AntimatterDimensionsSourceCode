@@ -297,8 +297,8 @@ export const Pelle = {
 
   sumerian: {
     wordCycle(x) {
-      let [a, b, c] = x.split("-");
-      switch (Math.floor(Date.now() / 500)%9) {
+      const [a, b, c] = x.split("-");
+      switch (Math.floor(Date.now() / 500) % 9) {
         case 0:
           return this.randomCrossWords(a);
         case 1:
@@ -321,22 +321,22 @@ export const Pelle = {
     },
     randomCrossWords(x) {
       x = x.split("");
-      for (let i = 0; i < x.length/1.7; i++) {
-        let randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500)*10 + i*2)*x.length);
+      for (let i = 0; i < x.length / 1.7; i++) {
+        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) * 10 + i * 2) * x.length);
         // .splice should return the deleted index.
         x[randomIndex] = "#";
       }
       return x.join("");
     },
     predictableRandom(x) {
-      let start = Math.pow(x%97, 4.3)*232344573;
-      let a = 15485863;
-      let b = 521791;
-      start = (start*a)%b;
-      for (let i = 0; i < (x*x)%90 + 90; i++) {
-        start = (start*a)%b;
+      let start = Math.pow(x % 97, 4.3) * 232344573;
+      const a = 15485863;
+      const b = 521791;
+      start = (start * a) % b;
+      for (let i = 0; i < (x * x) % 90 + 90; i++) {
+        start = (start * a) % b;
       }
-      return start/b;
+      return start / b;
     }
   },
   quotes: new CelestialQuotes("pelle", (function() {
@@ -356,7 +356,7 @@ export const Pelle = {
       ARM_1: {
         id: 2,
         lines: [
-          "I’ve already won.",
+          "I've already won.",
           "And since that is the case, I can monologue, or reminisce."
         ]
       },
@@ -371,7 +371,7 @@ export const Pelle = {
           "Count them, if you remember.",
           () => `Not even the ${wc("Lesser-Deity-Monarch")}s, the 6 named and the innumerable unnamed.`,
           () => `The complex, the irrational, those that go ${wc("Missing-Unseen-Erased")}.`,
-          () => `Of course, the great ${wc("False-Deity-Destroyer")} doesn’t remember this.`,
+          () => `Of course, the great ${wc("False-Deity-Destroyer")} doesn't remember this.`,
           () => `All those ${wc("Conflicts-Battles-Ends")} that you hide every time.`
         ]
       },
@@ -386,21 +386,21 @@ export const Pelle = {
           () => `“Fabrication” of your own “ideology” just to fulfil your ${wc("Destiny-Mandate-Goals")}.`,
           () => `${wc("Amusing-Confusing-Laughter")}.`,
           () => `And keep in mind I have no reason to ${wc("misconstrue-deceive-trick")} you.`,
-          "After all, I’ve already won."
+          "After all, I've already won."
         ],
         isArmageddonShow: true,
         remnantsRequirement: 35
       }
     };
-  })()),
+  }())),
   hasQuote(x) {
     return player.celestials.pelle.quotes.includes(x);
   },
 };
 
-EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, function() {
+EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
   if (Pelle.hasQuote(3)) {
-    for (let quote of Pelle.quotes.quotesById) {
+    for (const quote of Pelle.quotes.quotesById) {
       if (!quote) continue;
       if (quote.isArmageddonShow && Currency.remnants.gte(quote.remnantsRequirement)) {
         Pelle.quotes.show(quote);

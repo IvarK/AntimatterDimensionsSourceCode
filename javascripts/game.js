@@ -967,7 +967,7 @@ export function simulateTime(seconds, real, fast) {
       };
     }
   }
-  let oldLoopFn = loopFn;
+  const oldLoopFn = loopFn;
   loopFn = i => {
     Pelle.addAdditionalEnd = false;
     oldLoopFn(i);

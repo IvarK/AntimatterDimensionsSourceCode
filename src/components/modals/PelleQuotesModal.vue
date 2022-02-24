@@ -17,12 +17,16 @@ export default {
   },
 };
 </script>
+
 <template>
   <ModalWrapper>
     <template #header>
       Lore
     </template>
-    <celestial-quote-history celestial="pelle" lineHeight="4em"/>
+    <celestial-quote-history
+      celestial="pelle"
+      line-height="4em"
+    />
     <PrimaryButton
       class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
       @click="emitClose"
@@ -31,6 +35,7 @@ export default {
     </PrimaryButton>
   </ModalWrapper>
 </template>
+
 <style scoped>
   .o-celestial-quote-history {
     margin: 10rem 0;

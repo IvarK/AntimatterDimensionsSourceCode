@@ -6,7 +6,19 @@ export default {
   name: "PelleUpgrade",
   components: {
     DescriptionDisplay,
-    CostDisplay
+    CostDisplay,
+    Gap: {
+      props: {
+        height: {
+          type: String,
+          default: "0.7rem"
+        }
+      },
+      template: `<div :style="{
+        height,
+        flexShrink: 0
+      }" />`
+    }
   },
   props: {
     upgrade: {
@@ -33,7 +45,8 @@ export default {
       purchases: 0,
       currentTimeEstimate: new Decimal(0),
       projectedTimeEstimate: new Decimal(0),
-      isCapped: false
+      isCapped: false,
+      hovering: false
     };
   },
   computed: {
@@ -45,7 +58,9 @@ export default {
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
       let value = formattedEffect(this.purchases);
-      if (!this.isCapped) value += ` ➜ ${formattedEffect(this.purchases + 1)}`;
+      if (!this.isCapped && this.hovering && this.canBuy) {
+        value = `<b><i style="color: #2f4;">${formattedEffect(this.purchases + 1)}</i></b>`;
+      }
       return `${prefix} ${value}`;
     },
     timeEstimate() {
@@ -107,22 +122,24 @@ export default {
     }"
     :ach-tooltip="timeEstimate"
     @click="!faded && upgrade.purchase()"
+    @mouseover="hovering = true"
+    @mouseleave="hovering = false"
   >
     <div
       :style="estimateImprovementTooltipStyle"
       class="c-pelle-upgrade-time-tooltip"
     >
-      {{ estimateImprovement }}
     </div>
-    <DescriptionDisplay :config="config" /><br><br>
+    <DescriptionDisplay :config="config" />
+    <Gap />
     <div v-if="effectText">
-      {{ effectText }}
+      <span v-html="effectText" />
+      <Gap />
     </div>
     <CostDisplay
       v-if="!isCapped"
       :config="config"
       :name="galaxyGenerator ? config.currencyLabel : 'Reality Shard'"
-      br
     />
   </button>
 </template>
@@ -136,11 +153,15 @@ export default {
     border-radius: .5rem;
     font-family: Typewriter;
     cursor: pointer;
-    width: 23rem;
-    height: 14rem;
+    width: 20rem;
+    height: 12rem;
     margin: 1rem;
     font-size: 1rem;
     box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .c-pelle-upgrade:hover {

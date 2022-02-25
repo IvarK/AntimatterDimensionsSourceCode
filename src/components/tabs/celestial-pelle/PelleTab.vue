@@ -48,7 +48,12 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <celestial-quote-history celestial="pelle" />
+      <celestial-quote-history
+        celestial="pelle"
+        :visibleLines="4"
+        fontSize="1.6rem"
+        lineHeight="2.56rem"
+      />
       <div class="button-container">
         <button
           class="o-pelle-button"
@@ -78,12 +83,13 @@ export default {
   .l-pelle-celestial-tab {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
   .l-pelle-all-content-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    width: 100%;
   }
 
   .o-pelle-button {
@@ -160,5 +166,9 @@ export default {
 
   .pelle-icon {
     animation: roll infinite 8s linear;
+  }
+
+  .o-celestial-quote-history {
+    align-self: center;
   }
 </style>

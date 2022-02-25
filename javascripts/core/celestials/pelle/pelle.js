@@ -390,6 +390,26 @@ export const Pelle = {
         ],
         isArmageddonShow: true,
         remnantsRequirement: 35
+      },
+      STRIKE_1: {
+        id: 5,
+        lines: [
+          "Now that you realise just how far you’ve gone-",
+          "Mind you, in the past-",
+          () => `To fulfil your ${wc("Destiny-Mandate-Goals")}, why don’t we reminisce about that?`,
+          () => `After all, you must love the stories of the ${wc("False-Deity-Destroyer")}’s glory.`,
+          "You’re the same as it, right?",
+          "Right?",
+          () => `Anyway, the many ${wc("Conflicts-Battles-Ends")} in the past.`,
+          "It’s always been 2 stages.",
+          () => `We build up resources, and then continue our ${wc("Song-Dance-Charade")}.`,
+          () => `Sometimes you falter to a ${wc("Lesser-Deity-Monarch")}.`,
+          () => `But, usually, you falter at the ${wc("Eternal-Deity-Monarch")}.`,
+          () => `And either way, you ${wc("Alter-Reverse-Manipulate")} time.`,
+          () => `Just to avoid becoming ${wc("Missing-Unseen-Erased")}.`,
+          "Like all those traces before you.",
+          () => `And then to make sure, you ${wc("Missing-Unseen-Erased")} your own memory.`
+        ]
       }
     };
   }())),
@@ -412,6 +432,11 @@ EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
   }
   if (Currency.remnants.gte(1)) {
     Pelle.quotes.show(Pelle.quotes.ARM_1);
+  }
+});
+EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
+  if (Pelle.isDoomed) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_1);
   }
 });
 

@@ -171,6 +171,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    max-width: 110rem;
   }
 
   .c-armageddon-container {

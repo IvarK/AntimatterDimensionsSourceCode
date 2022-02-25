@@ -317,10 +317,12 @@ export const Pelle = {
           return c;
         case 8:
           return this.randomCrossWords(c);
+        default:
+          return "wordCycle borked lol";
       }
     },
-    randomCrossWords(x) {
-      x = x.split("");
+    randomCrossWords(str) {
+      let x = str.split("");
       for (let i = 0; i < x.length / 1.7; i++) {
         const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) * 10 + i * 2) * x.length);
         // .splice should return the deleted index.

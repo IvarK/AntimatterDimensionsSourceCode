@@ -158,6 +158,13 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
+  let pelleMults = Pelle.specialGlyphEffect.time;
+
+  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
+
+  if (Pelle.isDoomed) return Decimal.pow10(308 * (Decimal.log(pelleMults.dividedBy(epAmount).reciprocal(), 5) + 0.7))
+    .clampMin(Number.MAX_VALUE);
+
   return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }

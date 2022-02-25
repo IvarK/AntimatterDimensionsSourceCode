@@ -589,6 +589,8 @@ export function finishProcessReality(realityProps) {
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) {
     player.dilation.studies = [];
     player.dilation.active = false;
+  }
+  if (!PelleUpgrade.keepDilation.canBeApplied || !PelleUpgrade.timeStudiesNoReset.canBeApplied) {
     Currency.tachyonParticles.reset();
     Currency.dilatedTime.reset();
     player.dilation.nextThreshold = DC.E3;

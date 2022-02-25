@@ -59,7 +59,8 @@ export default {
       const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
       let value = formattedEffect(this.purchases);
       if (!this.isCapped && this.hovering && this.canBuy) {
-        value = `<b><i style="color: #2f4;">${formattedEffect(this.purchases + 1)}</i></b>`;
+        value = `<b><i style="color: #2f4;">${formattedEffect(this.purchases)}
+        ➜ ${formattedEffect(this.purchases + 1)}</i></b>`;
       }
       return `${prefix} ${value}`;
     },
@@ -129,6 +130,7 @@ export default {
       :style="estimateImprovementTooltipStyle"
       class="c-pelle-upgrade-time-tooltip"
     >
+      {{ estimateImprovement }}
     </div>
     <DescriptionDisplay :config="config" />
     <Gap />

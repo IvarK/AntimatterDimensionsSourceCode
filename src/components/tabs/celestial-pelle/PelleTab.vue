@@ -50,9 +50,9 @@ export default {
     >
       <celestial-quote-history
         celestial="pelle"
-        :visibleLines="4"
-        fontSize="1.6rem"
-        lineHeight="2.56rem"
+        :visible-lines="4"
+        font-size="1.6rem"
+        line-height="2.56rem"
       />
       <div class="button-container">
         <button

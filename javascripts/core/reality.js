@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { DC } from "./constants.js";
 
 /**
@@ -590,12 +591,7 @@ export function finishProcessReality(realityProps) {
     player.dilation.studies = [];
     player.dilation.active = false;
   }
-  if (!PelleUpgrade.keepDilation.canBeApplied || !PelleUpgrade.timeStudiesNoReset.canBeApplied) {
-    Currency.tachyonParticles.reset();
-    Currency.dilatedTime.reset();
-    player.dilation.nextThreshold = DC.E3;
-    player.dilation.baseTachyonGalaxies = 0;
-    player.dilation.totalTachyonGalaxies = 0;
+  if (!PelleUpgrade.dilationUpgradesNoReset.canBeApplied) {
     player.dilation.upgrades.clear();
     player.dilation.rebuyables = {
       1: 0,
@@ -606,6 +602,13 @@ export function finishProcessReality(realityProps) {
       13: 0
     };
   }
+  if (!PelleUpgrade.tachyonParticlesNoReset.canBeApplied) {
+    Currency.tachyonParticles.reset();
+  }
+  player.dilation.nextThreshold = DC.E3;
+  player.dilation.baseTachyonGalaxies = 0;
+  player.dilation.totalTachyonGalaxies = 0;
+  Currency.dilatedTime.reset();
   player.records.thisInfinity.maxAM = DC.D0;
   player.records.thisEternity.maxAM = DC.D0;
   player.records.thisReality.maxDT = DC.D0;

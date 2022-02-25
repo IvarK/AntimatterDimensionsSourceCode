@@ -124,28 +124,28 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e17,
         formatCost: c => format(c, 2),
       },
-      replicantiGalaxyNoReset: {
+      replicantiStayUnlocked: {
         id: 12,
+        description: "Replicanti stays unlocked on Armageddon",
+        cost: 1e17,
+        formatCost: c => format(c, 2),
+      },
+      replicantiGalaxyNoReset: {
+        id: 13,
         description: "Replicanti Galaxies don't reset on Infinity",
         cost: 1e19,
         formatCost: c => format(c, 2),
       },
       eternitiesNoReset: {
-        id: 13,
+        id: 14,
         description: "Eternities do not reset on Armageddon",
         cost: 1e20,
         formatCost: c => format(c, 2),
       },
       timeStudiesNoReset: {
-        id: 14,
+        id: 15,
         description: "Time Studies and Theorems do not reset on Armageddon",
         cost: 1e21,
-        formatCost: c => format(c, 2),
-      },
-      replicantiStayUnlocked: {
-        id: 15,
-        description: "Replicanti stays unlocked on Armageddon",
-        cost: 1e22,
         formatCost: c => format(c, 2),
       },
       keepEternityUpgrades: {
@@ -172,9 +172,15 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e30,
         formatCost: c => format(c, 2),
       },
-      keepDilation: {
+      dilationUpgradesNoReset: {
         id: 20,
-        description: "You keep Dilation content through Armageddons",
+        description: "Keep Dilation Upgrades on Armageddon",
+        cost: 1e45,
+        formatCost: c => format(c, 2),
+      },
+      tachyonParticlesNoReset: {
+        id: 21,
+        description: "Keep Tachyon Particles on Armageddon",
         cost: 1e50,
         formatCost: c => format(c, 2),
       }

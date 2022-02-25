@@ -67,6 +67,7 @@ export const GalaxyGenerator = {
   },
 
   startSacrifice() {
+    player.celestials.pelle.collapsed.rifts = false;
     player.celestials.pelle.galaxyGenerator.sacrificeActive = true;
   },
 

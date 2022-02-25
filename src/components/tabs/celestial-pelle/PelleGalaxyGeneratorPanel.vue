@@ -37,7 +37,7 @@ export default {
       this.isCapped = GalaxyGenerator.isCapped;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
-      this.isCollapsed = player.celestials.pelle.collapsed.galaxies;
+      this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
     },
     increaseCap() {
       GalaxyGenerator.startSacrifice();

@@ -169,7 +169,7 @@ GameDatabase.celestials.pelle = (function() {
       dimBoostResetsNothing: {
         id: 19,
         description: "Dimension Boosts no longer reset anything",
-        cost: 1e30,
+        cost: 1e40,
         formatCost: c => format(c, 2),
       },
       dilationUpgradesNoReset: {

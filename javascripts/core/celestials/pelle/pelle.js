@@ -585,6 +585,7 @@ class PelleStrikeState extends GameMechanicState {
 
   unlockStrike() {
     GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
+    player.celestials.pelle.collapsed.rifts = false;
     Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);

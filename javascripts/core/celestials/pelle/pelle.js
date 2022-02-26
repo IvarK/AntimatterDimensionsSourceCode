@@ -296,37 +296,28 @@ export const Pelle = {
   symbol: "♅",
 
   modalTools: {
+    bracketOrder: ["()", "[]", "{}", "<>", "||"],
     wordCycle(x) {
-      const [a, b, c] = x.split("-");
-      switch (Math.floor(Date.now() / 500) % 9) {
-        case 0:
-          return this.randomCrossWords(a);
-        case 1:
-          return a;
-        case 2:
-          return this.randomCrossWords(a);
-        case 3:
-          return this.randomCrossWords(b);
-        case 4:
-          return b;
-        case 5:
-          return this.randomCrossWords(b);
-        case 6:
-          return this.randomCrossWords(c);
-        case 7:
-          return c;
-        case 8:
-          return this.randomCrossWords(c);
-        default:
-          return "wordCycle borked lol";
+      const list = x.split("-");
+      const len = list.length;
+      const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
+      const tick = Math.floor(Date.now() / 500) % (len*3);
+      const largeTick = Math.floor(tick / 3);
+      const bP = this.bracketOrder[largeTick];
+      let v = list[largeTick];
+      if (tick % 3 != 1) {
+        v = this.randomCrossWords(v);
       }
+      // Stands for Bracket Pair.
+      const space = (maxWordLen - v.length) / 2;
+      return bP[0] + ".".repeat(Math.floor(space)) + v + ".".repeat(Math.ceil(space)) + bP[1];
     },
     randomCrossWords(str) {
       const x = str.split("");
       for (let i = 0; i < x.length / 1.7; i++) {
         const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) * 10 + i * 2) * x.length);
         // .splice should return the deleted index.
-        x[randomIndex] = "#";
+        x[randomIndex] = this.randomSymbol;
       }
       return x.join("");
     },
@@ -342,6 +333,9 @@ export const Pelle = {
     },
     celCycle(x) {
       return `<!${(Date.now()%4000 < 1500) ? "pelle" : x}!>`;
+    },
+    get randomSymbol() {
+      return String.fromCharCode(Math.floor(Math.random()*50) + 192);
     }
   },
   quotes: new CelestialQuotes("pelle", (function() {
@@ -391,6 +385,7 @@ EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
   if (PelleStrikes.infinity.hasStrike) {
     Pelle.quotes.show(Pelle.quotes.STRIKE_1);
   }
+  console.log(PelleStrikes.powerGalaxies.hasStrike);
   if (PelleStrikes.powerGalaxies.hasStrike) {
     Pelle.quotes.show(Pelle.quotes.STRIKE_2);
   }

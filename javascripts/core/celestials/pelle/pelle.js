@@ -301,11 +301,11 @@ export const Pelle = {
       const list = x.split("-");
       const len = list.length;
       const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
-      const tick = Math.floor(Date.now() / 500) % (len * 3);
-      const largeTick = Math.floor(tick / 3);
+      const tick = Math.floor(Date.now() / 200) % (len * 5);
+      const largeTick = Math.floor(tick / 5);
       const bP = this.bracketOrder[largeTick];
       let v = list[largeTick];
-      if (tick % 3 != 1) {
+      if (tick % 5 < 1 || tick % 5 > 3) {
         v = this.randomCrossWords(v);
       }
       // Stands for Bracket Pair.
@@ -315,7 +315,7 @@ export const Pelle = {
     randomCrossWords(str) {
       const x = str.split("");
       for (let i = 0; i < x.length / 1.7; i++) {
-        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) * 10 + i * 2) * x.length);
+        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 200) * 10 + i * 2) * x.length);
         // .splice should return the deleted index.
         x[randomIndex] = this.randomSymbol;
       }
@@ -346,7 +346,7 @@ export const Pelle = {
       return Pelle.modalTools.celCycle.bind(Pelle.modalTools)(x);
     };
     const p = function(line) {
-      if (!line.includes("[") && !line.includes("<!")) return line;
+      if (!line.includes("[") && !line.includes("<")) return line;
 
       const sep = "  ---TEMPSEPERATOR---  ";
       const ops = [];

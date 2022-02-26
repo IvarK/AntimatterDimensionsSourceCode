@@ -55,7 +55,7 @@ Vue.component("celestial-quote-history", {
       const idxDiff = Math.abs(idx - (this.visibleQuotes.length - 1));
       return {
         opacity: 0.3 + 0.7 / (idxDiff + 1),
-        height: this.lineHeight,
+        lineHeight: this.lineHeight,
         fontSize: this.fontSize
       };
     },

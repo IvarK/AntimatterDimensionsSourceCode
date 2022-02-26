@@ -42,16 +42,18 @@ export default {
       return [
         "l-modal-celestial-quote",
         "c-modal",
-        `c-modal-celestial-quote--${this.currentQuote.celestial}`
+        `c-modal-celestial-quote--${this.overrideCelestial || this.currentQuote.celestial}`
       ];
     }
   },
   methods: {
     nextClick() {
       this.index = Math.min(this.index + 1, this.length);
+      this.update();
     },
     prevQuote() {
       this.index = Math.max(this.index - 1, 0);
+      this.update();
     },
     close() {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
@@ -62,11 +64,13 @@ export default {
         return;
       }
       if (typeof this.currentQuote.line === "function") {
+        let currentQuoteLine = this.currentQuote.line();
+        this.currentQuote.showName = (currentQuoteLine[0] !== "*");
         this.line = this.currentQuote.line().replace("*", "");
         if (this.line.includes("<!")) {
           const start = this.line.indexOf("<!"), end = this.line.indexOf("!>");
-          this.overrideCelestial = line.substring(start + 2, end);
-          this.line = Modal.celestialQuotes.removeOverrideCel(this.line);
+          this.overrideCelestial = this.line.substring(start + 2, end);
+          this.line = Modal.celestialQuote.removeOverrideCel(this.line);
         } else {
           this.overrideCelestial = "";
         }

@@ -691,6 +691,9 @@ class RiftState extends GameMechanicState {
     if (!this.isActive || this.isMaxed) return;
 
     if (this.fillCurrency.value instanceof Decimal) {
+      // Don't drain resources if you only have 1 of it.
+      // This is in place due to the fix to replicanti below.
+      if (this.fillCurrency.value.lte(1)) return;
       const afterTickAmount = this.fillCurrency.value.times((1 - Pelle.riftDrainPercent) ** (diff / 1000));
       const spent = this.fillCurrency.value.minus(afterTickAmount);
       // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline

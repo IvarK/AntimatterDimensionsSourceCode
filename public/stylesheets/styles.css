@@ -4986,9 +4986,9 @@ screen and (max-width: 480px) {
   color: var(--color-pelle-secondary);
 }
 
-.o-dilation-upgrade--useless-bought{
+.o-dilation-upgrade--useless-bought {
   color: black;
-  background-color: var(--color-pelle--base);
+  background-color: var(--color-pelle--base) !important;
   filter: grayscale(50%);
   border-color: black;
 }
@@ -5016,7 +5016,7 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-upgrade--useless-unavailable {
-  background-color: var(--color-pelle--base);
+  background-color: var(--color-pelle--base) !important;
   color: black;
   filter: grayscale(90%);
   border-color: black;

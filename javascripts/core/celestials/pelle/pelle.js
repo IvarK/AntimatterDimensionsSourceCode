@@ -301,7 +301,7 @@ export const Pelle = {
       const list = x.split("-");
       const len = list.length;
       const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
-      const tick = Math.floor(Date.now() / 500) % (len*3);
+      const tick = Math.floor(Date.now() / 500) % (len * 3);
       const largeTick = Math.floor(tick / 3);
       const bP = this.bracketOrder[largeTick];
       let v = list[largeTick];
@@ -332,10 +332,10 @@ export const Pelle = {
       return start / b;
     },
     celCycle(x) {
-      return `<!${(Date.now()%4000 < 1500) ? "pelle" : x}!>`;
+      return `<!${(Date.now() % 4000 < 1500) ? "pelle" : x}!>`;
     },
     get randomSymbol() {
-      return String.fromCharCode(Math.floor(Math.random()*50) + 192);
+      return String.fromCharCode(Math.floor(Math.random() * 50) + 192);
     }
   },
   quotes: new CelestialQuotes("pelle", (function() {
@@ -347,20 +347,19 @@ export const Pelle = {
     };
     const p = function(line) {
       if (!line.includes("[") && !line.includes("<!")) return line;
-      else {
-        const sep = "  ---TEMPSEPERATOR---  ";
-        const ops = [];
-        for (let i = 0; i < line.length; i++) {
-          if (line[i] == "[") ops.push(wc);
-          else if (line[i] == "<") ops.push(cc);
-        }
-        let l = line.replace("[", sep).replace("]", sep);
-        l = l.replace("<", sep).replace(">", sep).split(sep);
-        return () => l.map((v, x) => (x%2) ? ops[x / 2 - 0.5](v) : v).join("");
+
+      const sep = "  ---TEMPSEPERATOR---  ";
+      const ops = [];
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === "[") ops.push(wc);
+        else if (line[i] === "<") ops.push(cc);
       }
+      let l = line.replace("[", sep).replace("]", sep);
+      l = l.replace("<", sep).replace(">", sep).split(sep);
+      return () => l.map((v, x) => ((x % 2) ? ops[x / 2 - 0.5](v) : v)).join("");
     }
 
-    let quotesObject = {};
+    const quotesObject = {};
     let iterator = 0;
     for (const i in GameDatabase.celestials.pelle.quotes) {
       iterator++;
@@ -385,7 +384,6 @@ EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
   if (PelleStrikes.infinity.hasStrike) {
     Pelle.quotes.show(Pelle.quotes.STRIKE_1);
   }
-  console.log(PelleStrikes.powerGalaxies.hasStrike);
   if (PelleStrikes.powerGalaxies.hasStrike) {
     Pelle.quotes.show(Pelle.quotes.STRIKE_2);
   }

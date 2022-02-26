@@ -349,22 +349,11 @@ export const Pelle = {
       INITIAL: {
         id: 1,
         lines: [
-          "Hi.",
-          "You're here.",
+          "Hi, you're here.",
           "You're trapped here.",
-          () => wc("Infinite-Forever-Eternal")
-        ]
-      },
-      ARM_1: {
-        id: 2,
-        lines: [
+          () => wc("Infinite-Forever-Eternal"),
           "I've already won.",
-          "And since that is the case, I can monologue, or reminisce."
-        ]
-      },
-      ARM_2: {
-        id: 3,
-        lines: [
+          "And since that is the case, I can monologue, or reminisce.",
           () => `How long have we done this ${wc("Song-Dance-Charade")}?`,
           "How many times have we been here before?",
           () => `How many plans have you, the ${wc("False-Deity-Destroyer")}, operated?`,
@@ -377,8 +366,8 @@ export const Pelle = {
           () => `All those ${wc("Conflicts-Battles-Ends")} that you hide every time.`
         ]
       },
-      ARM_3_REM_35: {
-        id: 4,
+      ARM_1: {
+        id: 2,
         lines: [
           "You probably caught on earlier this time.",
           "The imaginary machines, your own creations.",
@@ -389,12 +378,10 @@ export const Pelle = {
           () => `${wc("Amusing-Confusing-Laughter")}.`,
           () => `And keep in mind I have no reason to ${wc("misconstrue-deceive-trick")} you.`,
           "After all, I've already won."
-        ],
-        isArmageddonShow: true,
-        remnantsRequirement: 35
+        ]
       },
       STRIKE_1: {
-        id: 5,
+        id: 3,
         lines: [
           "Now that you realise just how far you’ve gone-",
           "Mind you, in the past-",
@@ -421,17 +408,14 @@ export const Pelle = {
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
-  if (Pelle.hasQuote(3)) {
-    for (const quote of Pelle.quotes.quotesById) {
-      if (!quote) continue;
-      if (quote.isArmageddonShow && Currency.remnants.gte(quote.remnantsRequirement)) {
-        Pelle.quotes.show(quote);
-      }
-    }
-  }
-  if (Pelle.hasQuote(2)) {
-    Pelle.quotes.show(Pelle.quotes.ARM_2);
-  }
+  // if (Pelle.hasQuote(3)) {
+  //   for (const quote of Pelle.quotes.quotesById) {
+  //     if (!quote) continue;
+  //     if (quote.isArmageddonShow && Currency.remnants.gte(quote.remnantsRequirement)) {
+  //       Pelle.quotes.show(quote);
+  //     }
+  //   }
+  // }
   if (Currency.remnants.gte(1)) {
     Pelle.quotes.show(Pelle.quotes.ARM_1);
   }

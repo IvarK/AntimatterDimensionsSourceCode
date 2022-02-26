@@ -383,21 +383,25 @@ export const Pelle = {
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
-  // if (Pelle.hasQuote(3)) {
-  //   for (const quote of Pelle.quotes.quotesById) {
-  //     if (!quote) continue;
-  //     if (quote.isArmageddonShow && Currency.remnants.gte(quote.remnantsRequirement)) {
-  //       Pelle.quotes.show(quote);
-  //     }
-  //   }
-  // }
   if (Currency.remnants.gte(1)) {
     Pelle.quotes.show(Pelle.quotes.ARM);
   }
 });
-EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
-  if (Pelle.isDoomed) {
+EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
+  if (PelleStrikes.infinity.hasStrike) {
     Pelle.quotes.show(Pelle.quotes.STRIKE_1);
+  }
+  if (PelleStrikes.powerGalaxies.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_2);
+  }
+  if (PelleStrikes.eternity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_3);
+  }
+  if (PelleStrikes.ECs.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_4);
+  }
+  if (PelleStrikes.dilation.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_5);
   }
 });
 

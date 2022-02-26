@@ -19,7 +19,7 @@ export default {
     update() {
       this.plusRecord = NG.plusRecord;
       this.minusRecord = NG.minusRecord;
-      this.visible = Pelle.endState > 13;
+      this.visible = Pelle.endState > 14.9;
     },
     ngString(i) {
       if (!i) return "";

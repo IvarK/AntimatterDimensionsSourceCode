@@ -64,7 +64,6 @@ export class Modal {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
-    this.canRepeat = false;
   }
 
   show(modalConfig) {
@@ -72,7 +71,7 @@ export class Modal {
     this._props = Object.assign({}, modalConfig || {});
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
-    if (!ui.view.modal.queue.includes(this) || this.canRepeat) ui.view.modal.queue.push(this);
+    if (!ui.view.modal.queue.includes(this)) ui.view.modal.queue.push(this);
   }
 
   get isOpen() {
@@ -91,11 +90,6 @@ export class Modal {
     return this._props;
   }
 
-  setAsRepeatable() {
-    this.canRepeat = true;
-    return this;
-  }
-
   static hide() {
     if (!GameUI.initialized) return;
     ui.view.modal.queue.shift();
@@ -106,7 +100,13 @@ export class Modal {
 
   static hideAll() {
     if (!GameUI.initialized) return;
-    ui.view.modal.queue = [];
+    while (ui.view.modal.queue.length) {
+      if (ui.view.modal.queue[0].hide) {
+        ui.view.modal.queue[0].hide();
+      } else {
+        Modal.hide();
+      }
+    }
     ui.view.modal.current = undefined;
   }
 
@@ -121,6 +121,9 @@ class ChallengeConfirmationModal extends Modal {
     super.show();
   }
 }
+
+// If a new modal which can be shown in the same queue multiple times needs to be added
+// Additional code needs to be written to account for that
 
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
@@ -257,7 +260,9 @@ Modal.message = new class extends Modal {
   }
 
   hide() {
-    Modal.hide();
+    if (this.queue.length <= 1) {
+      Modal.hide();
+    }
     this.queue.shift();
     if (this.queue && this.queue.length === 0) this.message = undefined;
     else {
@@ -266,4 +271,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal).setAsRepeatable();
+}(MessageModal);

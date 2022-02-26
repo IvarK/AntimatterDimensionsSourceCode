@@ -185,11 +185,7 @@ Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;
-    const newLines = lines.map(l => ({
-      celestial,
-      line: l,
-      showName: l[0] !== "*"
-    }));
+    const newLines = lines.map(l => Modal.celestialQuote.getLineMapping(celestial, l));
     if (ui.view.modal.queue.includes(this)) {
       // This shouldn't come up often, but in case we do have a pile of quotes
       // being shown in a row:
@@ -198,6 +194,32 @@ Modal.celestialQuote = new class extends Modal {
     }
     super.show();
     this.lines = newLines;
+  }
+
+  getLineMapping(defaultCel, defaultLine) {
+    let celestial = defaultCel;
+    let l = defaultLine;
+    let celNotDefaultCel = 0;
+    if (typeof l == "string") {
+      if (l.includes("<!")) {
+        const start = l.indexOf("<!"), end = l.indexOf("!>");
+        celestial = l.substring(start + 2, end);
+        l = this.removeOverrideCel(l);
+      }
+    }
+    return {
+      celestial,
+      line: l,
+      showName: l[0] !== "*"
+    };
+  }
+
+  removeOverrideCel(x) {
+    if (x.includes("<!")) {
+      const start = x.indexOf("<!"), end = x.indexOf("!>");
+      return x.substring(0, start) + x.substring(end + 2);
+    }
+    return x;
   }
 }(CelestialQuoteModal, true);
 

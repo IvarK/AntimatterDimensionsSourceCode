@@ -295,7 +295,7 @@ export const Pelle = {
 
   symbol: "♅",
 
-  sumerian: {
+  modalTools: {
     wordCycle(x) {
       const [a, b, c] = x.split("-");
       switch (Math.floor(Date.now() / 500) % 9) {
@@ -339,68 +339,43 @@ export const Pelle = {
         start = (start * a) % b;
       }
       return start / b;
+    },
+    celCycle(x) {
+      return `<!${(Date.now()%4000 < 1500) ? "pelle" : x}!>`;
     }
   },
   quotes: new CelestialQuotes("pelle", (function() {
     const wc = function(x) {
-      return Pelle.sumerian.wordCycle.bind(Pelle.sumerian)(x);
+      return Pelle.modalTools.wordCycle.bind(Pelle.modalTools)(x);
     };
-    return {
-      INITIAL: {
-        id: 1,
-        lines: [
-          "Hi, you're here.",
-          "You're trapped here.",
-          () => wc("Infinite-Forever-Eternal"),
-          "I've already won.",
-          "And since that is the case, I can monologue, or reminisce.",
-          () => `How long have we done this ${wc("Song-Dance-Charade")}?`,
-          "How many times have we been here before?",
-          () => `How many plans have you, the ${wc("False-Deity-Destroyer")}, operated?`,
-          () => `All to try and fulfil your ${wc("Destiny-Mandate-Goals")}?`,
-          () => `And how many times have you fallen before the ${wc("Eternal-Deity-Monarch")}?`,
-          "Count them, if you remember.",
-          () => `Not even the ${wc("Lesser-Deity-Monarch")}s, the 6 named and the innumerable unnamed.`,
-          () => `The complex, the irrational, those that go ${wc("Missing-Unseen-Erased")}.`,
-          () => `Of course, the great ${wc("False-Deity-Destroyer")} doesn't remember this.`,
-          () => `All those ${wc("Conflicts-Battles-Ends")} that you hide every time.`
-        ]
-      },
-      ARM_1: {
-        id: 2,
-        lines: [
-          "You probably caught on earlier this time.",
-          "The imaginary machines, your own creations.",
-          "Things made of the remnants of your own thoughts, hinted at this.",
-          "But, you never imagined that would be you, right?",
-          () => `Incorrectly recollecting your exacting ${wc("Missing-Unseen-Erased")} of memories.`,
-          () => `“Fabrication” of your own “ideology” just to fulfil your ${wc("Destiny-Mandate-Goals")}.`,
-          () => `${wc("Amusing-Confusing-Laughter")}.`,
-          () => `And keep in mind I have no reason to ${wc("misconstrue-deceive-trick")} you.`,
-          "After all, I've already won."
-        ]
-      },
-      STRIKE_1: {
-        id: 3,
-        lines: [
-          "Now that you realise just how far you’ve gone-",
-          "Mind you, in the past-",
-          () => `To fulfil your ${wc("Destiny-Mandate-Goals")}, why don’t we reminisce about that?`,
-          () => `After all, you must love the stories of the ${wc("False-Deity-Destroyer")}’s glory.`,
-          "You’re the same as it, right?",
-          "Right?",
-          () => `Anyway, the many ${wc("Conflicts-Battles-Ends")} in the past.`,
-          "It’s always been 2 stages.",
-          () => `We build up resources, and then continue our ${wc("Song-Dance-Charade")}.`,
-          () => `Sometimes you falter to a ${wc("Lesser-Deity-Monarch")}.`,
-          () => `But, usually, you falter at the ${wc("Eternal-Deity-Monarch")}.`,
-          () => `And either way, you ${wc("Alter-Reverse-Manipulate")} time.`,
-          () => `Just to avoid becoming ${wc("Missing-Unseen-Erased")}.`,
-          "Like all those traces before you.",
-          () => `And then to make sure, you ${wc("Missing-Unseen-Erased")} your own memory.`
-        ]
+    const cc = function(x) {
+      return Pelle.modalTools.celCycle.bind(Pelle.modalTools)(x);
+    };
+    const p = function(line) {
+      if (!line.includes("[") && !line.includes("<!")) return line;
+      else {
+        const sep = "  ---TEMPSEPERATOR---  ";
+        const ops = [];
+        for (let i = 0; i < line.length; i++) {
+          if (line[i] == "[") ops.push(wc);
+          else if (line[i] == "<") ops.push(cc);
+        }
+        let l = line.replace("[", sep).replace("]", sep);
+        l = l.replace("<", sep).replace(">", sep).split(sep);
+        return () => l.map((v, x) => (x%2) ? ops[x / 2 - 0.5](v) : v).join("");
       }
-    };
+    }
+
+    let quotesObject = {};
+    let iterator = 0;
+    for (const i in GameDatabase.celestials.pelle.quotes) {
+      iterator++;
+      quotesObject[i] = {
+        id: iterator,
+        lines: GameDatabase.celestials.pelle.quotes[i].map(x => p(x))
+      };
+    }
+    return quotesObject;
   }())),
   hasQuote(x) {
     return player.celestials.pelle.quotes.includes(x);
@@ -417,7 +392,7 @@ EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
   //   }
   // }
   if (Currency.remnants.gte(1)) {
-    Pelle.quotes.show(Pelle.quotes.ARM_1);
+    Pelle.quotes.show(Pelle.quotes.ARM);
   }
 });
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {

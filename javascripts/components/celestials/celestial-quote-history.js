@@ -70,6 +70,9 @@ Vue.component("celestial-quote-history", {
     downButtonClick() {
       if (this.downButtonEnabled) this.lastVisibleIndex++;
     },
+    removeQuoteSyntax(x) {
+      return Modal.celestialQuote.removeOverrideCel(x).replace("*", "");
+    }
   },
   template: `
     <div class="o-celestial-quote-history">
@@ -80,7 +83,7 @@ Vue.component("celestial-quote-history", {
           class="c-celestial-quote-history__line"
           :style="lineStyle(idx)"
         >
-          {{ quote }}
+          {{ removeQuoteSyntax(quote) }}
         </div>
       </div>
       <div class="l-celestial-quote-history__buttons">

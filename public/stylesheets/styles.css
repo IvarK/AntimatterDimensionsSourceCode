@@ -5204,7 +5204,7 @@ screen and (max-width: 480px) {
   top: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 5;
+  z-index: 6;
   animation-name: a-modal-overlay-fadein;
   animation-duration: 2s;
   animation-fill-mode: forwards;

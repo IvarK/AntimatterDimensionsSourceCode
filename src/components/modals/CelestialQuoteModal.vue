@@ -4,7 +4,8 @@ export default {
   data() {
     return {
       index: 0,
-      line: ""
+      line: "",
+      overrideCelestial: ""
     };
   },
   computed: {
@@ -17,6 +18,9 @@ export default {
       return this.quotes[this.index];
     },
     celestial() {
+      if (this.overrideCelestial) {
+        return Celestials[this.overrideCelestial];
+      }
       return Celestials[this.currentQuote.celestial];
     },
     currentCelestialName() {
@@ -59,6 +63,13 @@ export default {
       }
       if (typeof this.currentQuote.line === "function") {
         this.line = this.currentQuote.line().replace("*", "");
+        if (this.line.includes("<!")) {
+          const start = this.line.indexOf("<!"), end = this.line.indexOf("!>");
+          this.overrideCelestial = line.substring(start + 2, end);
+          this.line = Modal.celestialQuotes.removeOverrideCel(this.line);
+        } else {
+          this.overrideCelestial = "";
+        }
       } else {
         this.line = this.currentQuote.line.replace("*", "");
       }

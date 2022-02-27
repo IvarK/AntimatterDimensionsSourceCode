@@ -76,6 +76,7 @@ export default {
         }
       } else {
         this.line = this.currentQuote.line.replace("*", "");
+        this.overrideCelestial = "";
       }
     }
   },

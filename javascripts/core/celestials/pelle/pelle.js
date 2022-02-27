@@ -315,7 +315,7 @@ export const Pelle = {
     randomCrossWords(str) {
       const x = str.split("");
       for (let i = 0; i < x.length / 1.7; i++) {
-        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 200) * 10 + i * 2) * x.length);
+        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) % 964372 + i) * x.length);
         // .splice should return the deleted index.
         x[randomIndex] = this.randomSymbol;
       }
@@ -332,7 +332,16 @@ export const Pelle = {
       return start / b;
     },
     celCycle(x) {
-      return `<!${(Date.now() % 4000 < 1500) ? "pelle" : x}!>`;
+      //                                   Gets trailing number and removes it
+      const cels = x.split("-").map(cel => [parseInt(cel), cel.replace(/\d+/, "")]);
+      const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
+      let tick = (Date.now() / 100) % totalTime;
+      let index = -1;
+      while (tick > 0) {
+        index++;
+        tick -= cels[index][0];
+      }
+      return `<!${cels[index][1]}!>`;
     },
     get randomSymbol() {
       return String.fromCharCode(Math.floor(Math.random() * 50) + 192);

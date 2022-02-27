@@ -72,7 +72,7 @@ export default {
     <p>Acamaeda</p>
 
     <h2>Web Tester</h2>
-    <div class="left">
+    <div class="l-credits--left">
       <p>Aesis</p>
       <p>Alexitato</p>
       <p>Birb (Kelsey Black)</p>
@@ -93,7 +93,7 @@ export default {
       <p>Xemadus (Jonathan Gibson)</p>
       <p>Zipi</p>
     </div>
-    <div class="right">
+    <div class="l-credits--right">
       <p>Acamaeda</p>
       <p>AFYINEE (Gabriel HADDAG)</p>
       <p>Archa (Myresa)</p>
@@ -116,7 +116,7 @@ export default {
     </div>
 
     <h2>Android Tester:</h2>
-    <div class="left">
+    <div class="l-credits--left">
       <p>Archa (Myresa)</p>
       <p>ChaoticHans</p>
       <p>Vnge (Ben Parrish)</p>
@@ -137,7 +137,7 @@ export default {
       <p>Epsilon (Coolguystorm)</p>
       <p>Razvan Cercel</p>
     </div>
-    <div class="right">
+    <div class="l-credits--right">
       <p>Hira</p>
       <p>Hellbach (Asher Günther)</p>
       <p>Buck</p>
@@ -185,12 +185,12 @@ export default {
     text-shadow: 1px 1px 2px turquoise;
   }
 
-  .left {
+  .l-credits--left {
     width: 50%;
     float: left;
   }
 
-  .right {
+  .l-credits--right {
     width: 50%;
     overflow: hidden;
   }

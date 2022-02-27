@@ -16,7 +16,7 @@ Vue.component("old-ui-tab-button", {
       if (this.tab.config.endName) {
         this.tabName = Pelle.transitionText(
           this.tab.name,
-          this.tab.config.endName,
+          this.tab.config.endName.old,
           Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
         );
       } else {

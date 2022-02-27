@@ -4,7 +4,10 @@ GameDatabase.tabs = [
   {
     key: "dimensions",
     name: "Dimensions",
-    endName: "End",
+    endName: {
+      old: "End",
+      new: "End"
+    },
     hideAt: 2.9,
     id: 0,
     hidable: true,
@@ -45,7 +48,10 @@ GameDatabase.tabs = [
   {
     key: "options",
     name: "Options",
-    endName: "Is",
+    endName: {
+      old: "Is",
+      new: "Bye"
+    },
     hideAt: 1.6,
     id: 1,
     hidable: false,
@@ -79,7 +85,10 @@ GameDatabase.tabs = [
   {
     key: "statistics",
     name: "Statistics",
-    endName: "Nigh",
+    endName: {
+      old: "Nigh",
+      new: "Good"
+    },
     hideAt: 1.7,
     id: 2,
     hidable: true,
@@ -136,7 +145,10 @@ GameDatabase.tabs = [
   {
     key: "achievements",
     name: "Achievements",
-    endName: "Destruction",
+    endName: {
+      old: "Destruction",
+      new: "Us"
+    },
     hideAt: 1.9,
     id: 3,
     hidable: true,
@@ -162,7 +174,10 @@ GameDatabase.tabs = [
   {
     key: "automation",
     name: "Automation",
-    endName: "Is",
+    endName: {
+      old: "Is",
+      new: "Is"
+    },
     id: 4,
     hideAt: 2.1,
     hidable: true,
@@ -189,7 +204,10 @@ GameDatabase.tabs = [
   {
     key: "challenges",
     name: "Challenges",
-    endName: "Imminent",
+    endName: {
+      old: "Imminent",
+      new: "Nigh"
+    },
     hideAt: 2,
     condition: () =>
       PlayerProgress.realityUnlocked() ||
@@ -232,7 +250,10 @@ GameDatabase.tabs = [
   {
     key: "infinity",
     name: "Infinity",
-    endName: "Help",
+    endName: {
+      old: "Help",
+      new: "Destruction"
+    },
     hideAt: 2.2,
     UIClass: "o-tab-btn--infinity",
     before: "InfinityPointsHeader",
@@ -281,7 +302,10 @@ GameDatabase.tabs = [
   {
     key: "eternity",
     name: "Eternity",
-    endName: "Us",
+    endName: {
+      old: "Us",
+      new: "Is"
+    },
     hideAt: 1.8,
     UIClass: "o-tab-btn--eternity",
     condition: () =>
@@ -329,7 +353,10 @@ GameDatabase.tabs = [
   {
     key: "reality",
     name: "Reality",
-    endName: "Good",
+    endName: {
+      old: "Good",
+      new: "Imminent"
+    },
     hideAt: 2.3,
     before: "reality-machines-header",
     UIClass: "o-tab-btn--reality",
@@ -393,7 +420,10 @@ GameDatabase.tabs = [
   {
     key: "celestials",
     name: "Celestials",
-    endName: "Bye",
+    endName: {
+      old: "Bye",
+      new: "Help"
+    },
     hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
     condition: () => Teresa.isUnlocked,

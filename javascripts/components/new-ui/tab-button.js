@@ -30,7 +30,7 @@ Vue.component("tab-button", {
       if (this.tab.config.endName) {
         this.tabName = Pelle.transitionText(
           this.tab.name,
-          this.tab.config.endName,
+          player.options.newUI ? this.tab.config.endName.new : this.tab.config.endName.old,
           Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
         );
       } else {

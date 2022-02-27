@@ -63,7 +63,7 @@ Vue.component("reality-button", {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.hasRealityStudy = TimeStudy.reality.isBought;
-      this.canReality = isRealityAvailable();
+      this.canReality = isRealityAvailable() && !this.isDoomed;
       if (!this.canReality) {
         this.shardsGained = 0;
         return;

@@ -188,11 +188,15 @@ export const PerkNetwork = {
     const perkColorList = this.perkColorList;
 
     function nodeColor(perk) {
+      const perkColor = perkColorList[perk.config.family];
+      const primaryColor = perkColor.primary;
+      const secondaryColor = perkColor.secondary;
+
       const pelleUseless = Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
       if (pelleUseless) {
         const backgroundColor = "#00bcd4";
         const hoverColor = "crimson";
-        const borderColor = "#007a90";
+        const borderColor = `${secondaryColor}`;
         return {
           background: backgroundColor,
           border: borderColor,
@@ -208,10 +212,6 @@ export const PerkNetwork = {
       }
       const canBeBought = perk.canBeBought;
       const isBought = perk.isBought;
-
-      const perkColor = perkColorList[perk.config.family];
-      const primaryColor = perkColor.primary;
-      const secondaryColor = perkColor.secondary;
 
       let backgroundColor;
       if (canBeBought) {

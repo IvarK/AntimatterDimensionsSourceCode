@@ -21,7 +21,7 @@ GameDatabase.h2p = {
 Your game's save data is stored on your computer's browser data, which means that clearing your browser's cache and
 cookies will also delete your save file. Similarly, if you are playing in a private or incognito window, your save
 will not be there the next time you open up your browser. The saves are browser-specific as well, so for example
-if you play the game on Chrome, you won't find your save on Firefox.
+if you play the game on Chrome, you will not find your save on Firefox.
 <br>
 <br>
 You can transfer your save between places by using the export function, which will copy a <i>very</i> long string of
@@ -171,7 +171,7 @@ Alternatively, if the Until ${formatInt(10)} button is highlighted,
 you can buy whatever quantity gets you to that Dimension's next Dimension multiplier.
 <br>
 <br>
-<b>Max all:</b> Max all will buy until ${formatInt(10)} of the first Antimatter Dimension until it can't anymore,
+<b>Max all:</b> Max all will buy until ${formatInt(10)} of the first Antimatter Dimension until it cannot anymore,
 then second, and so on until the 8th Antimatter Dimension, and then buy max Tickspeed upgrades.
 <br>
 <br>
@@ -233,7 +233,7 @@ For example, with ${formatInt(3)} Boosts, the 1st Dimension will gain ${formatX(
 the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <br>
 <br>
-<b>Hotkey: D</b>
+<b>Hotkey: D</b> will try to purchase Dimension Boost.
 `,
       isUnlocked: () => true,
       tags: ["dimboost", "reset", "earlygame"],
@@ -247,7 +247,7 @@ galaxies. As you get more galaxies, the multiplier will continue becoming strong
 <br>
 <br>
 Though it will have very little impact for the first few purchases,
-the increase is multiplicative and won’t take long to be visible.
+the increase is multiplicative and will not take long to be visible.
 <br>
 <br>
 Your first Antimatter Galaxy requires ${formatInt(80)} Eighth dimensions, and each additional Galaxy will cost
@@ -260,10 +260,10 @@ Remote Galaxy scaling: Above ${formatInt(Galaxy.remoteStart)} Antimatter Galaxie
 increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
-<b>Hotkey: G</b>
+<b>Hotkey: G</b> will try to purchase Galaxy.
 `,
       isUnlocked: () => true,
-      tags: ["8th", "reset", "earlygame"],
+      tags: ["8th", "reset", "galaxy", "earlygame"],
       tab: "dimensions/antimatter"
     }, {
       name: "Dimensional Sacrifice",
@@ -282,7 +282,7 @@ sacrifices, meaning that sacrificing once at ${formatX(10)} and then once at ${f
 ${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sacrifice multiplier of ${formatX(40)}.
 <br>
 <br>
-<b>Hotkey: S</b>
+<b>Hotkey: S</b> will try to sacrifice.
 `,
       isUnlocked: () => Sacrifice.isVisible,
       tags: ["8th", "reset", "earlygame", "gods", "earlygame"],
@@ -307,7 +307,7 @@ own rewards.
       info: () => `
 Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
 or about ${formatPostBreak(Number.MAX_VALUE, 6)},
-sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your Antimatter, Antimatter
+sometimes called "Infinity"), you will be forced to do a “Big Crunch”. This will reset your Antimatter, Antimatter
 Dimensions, Dimension Boosts, and your Antimatter Galaxies. Doing a Big Crunch is also sometimes referred to as
 "Infinitying".
 <br>
@@ -326,7 +326,7 @@ but each purchase requires ${formatInt(10)} times as much IP.
 You must complete the Achievement "No DLC required" to start purchasing this particular upgrade.
 <br>
 <br>
-<b>Hotkey: C</b> Big Crunches.
+<b>Hotkey: C</b> will try to perform a Big Crunches.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["crunch", "big", "upgrades", "ip", "reset", "prestige", "earlygame"],
@@ -439,7 +439,7 @@ next highest Infinity Dimension.
 <br>
 <br>
 Every crunch, your produced Infinity Dimensions are reset to the amount you purchased. While the production
-of Infinity Dimensions doesn't carry between crunches, all the multipliers you got from purchasing them do.
+of Infinity Dimensions does not carry between crunches, all the multipliers you got from purchasing them do.
 <br>
 <br>
 <b>Infinity Dimension unlock thresholds (antimatter):</b> ${Array.range(1, 8)
@@ -516,7 +516,7 @@ Galaxies, this ${formatX(1e5)} per upgrade changes to ${formatX(1e55)}. Above ${
 from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing by ${formatX(1e5)} per upgrade.
 `,
       isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
-      tags: ["interval", "chance", "infinity", "galaxy", "midgame"],
+      tags: ["interval", "chance", "infinity", "galaxy", "galaxies", "midgame"],
       tab: "infinity/replicanti"
     }, {
       name: "Eternity",
@@ -536,7 +536,9 @@ The base amount of EP gained at ${formatPostBreak(Number.MAX_VALUE, 2)} IP is ~$
 ${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded
 down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
 ${formatInt(2)} EP until ${formatPostBreak(DC.E349)}.
-<b>Hotkey: E</b> will Eternity.
+<br>
+<br>
+<b>Hotkey: E</b> will try to perform a Eternity reset.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["eternal", "ep", "reset", "prestige", "midgame"],
@@ -569,7 +571,7 @@ properly, as noted on the milestone page itself.
       name: "Time Dimensions",
       info: () => `
 After your first Eternity, you unlock Time Dimensions. You buy them with Eternity Points and they provide Time Shards,
-which generate Tickspeed upgrades. These Tickspeed upgrades function like normal Tickspeed upgrades but don't increase
+which generate Tickspeed upgrades. These Tickspeed upgrades function like normal Tickspeed upgrades but do not increase
 their cost. These Tickspeed upgrades are kept on Infinity, but reset every Eternity.
 <br>
 <br>
@@ -612,7 +614,7 @@ boost the production of anything you have seen so far in the game, or even chang
 <br>
 Time Theorems are a limited resource which costs more for each one you buy. They can be bought with antimatter,
 Infinity Points, or Eternity Points. Their cost increases by a set factor per purchase. Time Theorems are permanent
-and don't reset after Eternity.
+and do not reset after Eternity.
 <br>
 <br>
 Studies are laid out in a tree-like fashion, where you must buy prerequisites before continuing. The only study you
@@ -622,14 +624,14 @@ afford. However, there are three exceptions:
 Where the lines between studies have a color, you can only choose one of the three paths at a time.
 <br>
 When a study for an Eternity Challenge is in the way, you need to complete all challenges connected to it at least
-once in order to access the study. You don't need to have the challenge study purchased in order to access it.
+once in order to access the study. You do not need to have the challenge study purchased in order to access it.
 <br>
 Near the bottom, where all the edges join together again, you can only pick one study out of each pair.
 <br>
 <br>
 You are able to hold down shift and then click on a time study to buy all studies until that point. This might not buy
 the studies you want if you shift-click a study in a position where you would have to choose between two or more
-different options which you can't get together (see above), or you can't afford all the studies needed to reach that
+different options which you cannot get together (see above), or you cannot afford all the studies needed to reach that
 point. Shift-click will buy studies greedily, getting as many as possible per row before moving farther downward.
 <br>
 <br>
@@ -645,7 +647,7 @@ for the Dimension split in this dialog if you have purchased the relevant Time S
 <br>
 <br>
 <b>Respecs:</b> A Respec allows you to reset the upgrades you have in the tree to retreive all of the Time Theorems
-spent on them. It can be done for free, but only triggers on finishing an Eternity; you can't respec Time Studies in
+spent on them. It can be done for free, but only triggers on finishing an Eternity; you cannot respec Time Studies in
 the middle of an Eternity.
 <br>
 <br>
@@ -669,7 +671,7 @@ amount of Time Theorems to enter, plus a secondary requirement which you must me
 <br>
 When you enter an Eternity Challenge, your goal becomes reaching a certain target IP. After completing the challenge,
 you do not need to have the Eternity Challenge's study unlocked for the reward to take effect. The rewards for these
-challenges are similar to Time Studies, but often even stronger and permanent since they don't require you to spend
+challenges are similar to Time Studies, but often even stronger and permanent since they do not require you to spend
 theorems to have their effects.
 <br>
 <br>
@@ -694,7 +696,7 @@ completed both EC11 and EC12 five times each.
 <br>
 <br>
 Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
-Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>exponent</i> will be raised to the power of
+Dimension multipliers' <i>exponents</i> and the tickspeed multipliers' <i>exponent</i> will be raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them. If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP
 to complete this Dilated Eternity, you will be rewarded with a new resource called Tachyon Particles.
 <br>
@@ -707,7 +709,7 @@ you have gained a TP multiplier or an upgrade that significantly increases your 
 <br>
 Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
 reaching thresholds similarly to the Tickspeed upgrades gained from Time Dimensions. These Tachyon Galaxies are like
-Replicanti Galaxies in that they affect Tickspeed as if they were Antimatter Galaxies but they don't increase the cost
+Replicanti Galaxies in that they affect Tickspeed as if they were Antimatter Galaxies but they do not increase the cost
 of your next Antimatter Galaxy.
 <br>
 <br>
@@ -716,7 +718,7 @@ first row of Dilation upgrades can be repeatedly purchased as many times as you 
 also be repeatedly bought, but eventually reaches a cap.
 `,
       isUnlocked: () => DilationTimeStudyState.studies[1].isBought || PlayerProgress.realityUnlocked(),
-      tags: ["dial", "dt", "dilated", "tachyon", "particle", "study", "free", "galaxy", "midgame"],
+      tags: ["dial", "dt", "dilated", "tachyon", "particle", "study", "free", "galaxy", "galaxies", "midgame"],
       tab: "eternity/dilation"
     }, {
       name: "Reality",
@@ -735,7 +737,7 @@ header in the Statistics tab and all of your best Challenge times.
 <br>
 You need to redo the requirements for each Achievement in order to get their rewards again, but you will also passively
 unlock the next incomplete Achievement every ${timeDisplayNoDecimals(30 * 60000)} without any effort even if you
-otherwise don't have the requirements to do so. This automatic completion can be disabled, in which case the timer will
+otherwise do not have the requirements to do so. This automatic completion can be disabled, in which case the timer will
 count down to zero and pause, immediately completing another Achievement immediately when unpaused. The timer still
 progresses at the same rate while offline.
 <br>
@@ -757,6 +759,9 @@ ${formatInt(1)}. All other attributes of Glyphs are randomized.
 <br>
 <br>
 You get exactly ${formatInt(1)} Perk Point per Reality.
+<br>
+<br>
+<b>Hotkey: Y</b> will try to perform a Reality reset.
 `,
       isUnlocked: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
       tags: ["rm", "machines", "glyph", "perk", "reset", "prestige", "endgame", "lategame"],
@@ -780,7 +785,7 @@ Effects - These are the boosts that equipping the Glyph will give you, and can c
 Glyphs will generally have more effects than weaker Glyphs.
 <br>
 <b>Note: Your first Glyph will have a fixed effect and rarity, but its level will scale based on your progress before
-any Reality content. Once you receive a Glyph, its attributes can't be changed.</b>
+any Reality content. Once you receive a Glyph, its attributes cannot be changed.</b>
 <br>
 <br>
 To equip a Glyph, double-click or drag the icon from your inventory into one of the active circles in the middle
@@ -873,6 +878,9 @@ Properly-formatted script strings will begin with <b>${GameSaveSerializer.starti
 end with <b>${GameSaveSerializer.endingString["automator script"]}</b>. If this is not the case then part of your script
 was lost in the process of copy-pasting. The import function will load the script into a new slot; your current script
 will not be lost or overwritten.
+<br>
+<br>
+<b>Hotkey: U</b> will pause/unpause the Automator.
 `,
       isUnlocked: () => Player.automatorUnlocked,
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
@@ -927,7 +935,7 @@ the first Black Hole active needed for the second Black Hole to activate.
 <br>
 The Black Holes can be paused, completely halting their interval/duration cycle. However, when unpausing them, it will
 take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to reach maximum speed if they were paused while their
-speed boost was active. Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently.
+speed boost was active. Pausing and unpausing affects both Black Holes; they cannot be paused or unpaused independently.
 <br>
 <br>
 <b>Hotkey: B</b> pauses and unpauses the Black Holes.
@@ -962,7 +970,7 @@ Teresa is the first Celestial. They are unlocked by obtaining all of the Reality
 <br>
 <br>
 On the main screen, there is a bar with a button above it that says "Pour RM". This allows you to put your RM into the
-container for a Reality Machine multiplier. RM which has been poured into the container can't be retrieved.
+container for a Reality Machine multiplier. RM which has been poured into the container cannot be retrieved.
 When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, you unlock Teresa's Reality.
 <br>
 <br>
@@ -1037,7 +1045,7 @@ score is above the threshold, or sacrifices it instead. There are three basic mo
 <br>
 <b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
 particular Glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
-This mode doesn't have a threshold and always sacrifices your glyphs.
+This mode does not have a threshold and always sacrifices your glyphs.
 <br>
 <b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
 glyphs have the same effect count, glyphs with higher rarity will be picked. The threshold they are
@@ -1052,7 +1060,7 @@ Additionally, there are two more advanced modes with some additional flexibility
 <b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
 you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
 number of effects and having all of the effects you choose, and its score is lowered by ${formatInt(200)} for every
-missing effect. This guarantees that any Glyph that doesn't have the effects you want will be below the threshold.
+missing effect. This guarantees that any Glyph that does not have the effects you want will be below the threshold.
 <br>
 <b>Effect Score Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
 your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
@@ -1138,12 +1146,12 @@ Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reali
 <br>
 <br>
 Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases,
-which limits how large their multipliers can grow since eventually you can't upgrade them any more.
+which limits how large their multipliers can grow since eventually you cannot upgrade them any more.
 Tesseracts allow you to raise this cap by spending Infinity Points.
 <br>
 <br>
 The cost of Tesseracts increases super-exponentially, but each successive Tesseract is significantly stronger than
-the last in order to make up for that. Tesseract count is never reset, meaning that once purchased, you don't need
+the last in order to make up for that. Tesseract count is never reset, meaning that once purchased, you do not need
 to reach the IP cost again in order to take advantage of the raised cap in later realities.
 <br>
 <br>
@@ -1290,7 +1298,7 @@ compound resources is equal to the lowest cap amongst all of its reagents.
 <br>
 To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can
 be applied, moving lines will be shown from all reagents to the product. If a connection is a solid line, that means
-that the reaction can't proceed due to not having enough of that reagent to get more of the product due to its cap.
+that the reaction cannot proceed due to not having enough of that reagent to get more of the product due to its cap.
 `,
       isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
       // Oh god I'm so sorry this is so many words
@@ -1370,6 +1378,9 @@ do in the Reality. Whenever you complete the Reality in under ${formatInt(30)} s
 Dimension will be permanently disabled during further attempts of the Reality. Disabling all of your dimensions by
 completing the Reality in under ${formatInt(30)} seconds eight times will also give you a ${formatX(8)} multiplier
 to Dark Energy gain.
+<br>
+<br>
+Lai'tela will not directly unlock the next Celestial.
 `,
       isUnlocked: () => Laitela.isUnlocked,
       tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
@@ -1438,10 +1449,63 @@ Independently of the milestone type, milestones also have an icon indicating wha
       name: "Pelle, Celestial of Antimatter",
       alias: "Pelle",
       info: () => `
-<h1>Work in Progress</h1>
+When you purchase the last imaginary Upgrade and unlock Pelle, you unlock their tab, where you can find a button to
+"Doom your Reality". Dooming your Reality will start a new <b>Doomed Reality</b>, resetting almost the entire game up to
+Reality, not giving you any rewards from your progress in your current Reality.
+<br>
+When you enter the Doomed Reality, you will keep all values under the General- and Reality header in the Statistics
+tab and all of your best Challenge times. Inside Doomed Realities multiple upgrades, Time Studies and game mechanics are
+disabled or grant no reward. You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
+<br>
+<br>
+Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity-
+and Eternity Points across all Doomed Realities. Remnants produce Reality Shards which can be spent on Pelle Upgrades.
+<br>
+<br>
+Pelle Upgrades can be divided into two categories. The five upgrades in the first row can be repeatedly bought, but
+eventually reach a cap. They grant boosts to different aspects of the game, making progression within Doomed Realities
+easier.
+<br>
+The other upgrades in the bottom rows offer automation and QoL (quality of life) improvements. Everything unlocked from
+these upgrades, cannot be unlocked by anything else in the game. So for example completing a Normal Challenge will not
+give you the corresponding Antimatter Dimension autobuyer back as these are locked behind Pelle upgrades.
+You can toggle a button above upgrade to hide bought upgrades or click the
+<i class="fas fa-compress-arrows-alt"></i>-icon to collapse and hide the entire panel.
+<br>
+<br>
+Pelle Strikes
+${PelleStrikes.infinity.hasStrike
+    ? `are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
+      reaching Infinity the first time within a Doomed Reality. More Strikes eventually occur by further progression.
+      Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.s
+      Each Pelle Strike also unlocks a Rift bar.
+      <br>
+      Rift bars can be filled by setting the button underneath them from "Idle" to "Filling". When active Rifts consume
+      ${formatInt(3)}% of a Rift specific resource per second. Each Rift offers a Rift specific effect which are based
+      on the total amount filled.
+      ${PelleStrikes.eternity.hasStrike
+    ? `An exception for this is Pestilence, which effect gets capped once you have drained a total of
+      ${formatPostBreak(DC.E2000)} replicanti.`
+    : ""}
+    In addition each Rift offers three rewards for filling them up to a certain percentage.`
+    : "(encounter the first Pelle Strike to see details)"}
+${Pelle.hasGalaxyGenerator
+    ? `<br>
+    <br>
+    When you reach ${formatInt(100)}% War, you unlock the <b>Galaxy Generator</b>, which can passively generate
+    Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect Tickspeed as if
+    they were Antimatter Galaxies but they do not increase the cost of your next Antimatter Galaxy. You also unlock five
+    new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades then give
+    a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter- and Generated
+    Galaxies. Replicanti- or Tachyon Galaxies cannot be spent for purchasing those upgrades.`
+    : ""}
+<br>
+<br>
+<b>Hotkey: Z</b> will try to perfrom an Armageddon reset.
 `,
-      isUnlocked: () => false,
-      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle"],
+      isUnlocked: () => Pelle.isDoomed,
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle", "strike", "rift", "galaxy",
+        "galaxies", "generator"],
       tab: "celestials/pelle"
     }
   ]

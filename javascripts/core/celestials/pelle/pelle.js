@@ -142,7 +142,7 @@ export const Pelle = {
 
   get uselessPerks() {
     return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
-      60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204, 205];
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106];
   },
 
   // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note

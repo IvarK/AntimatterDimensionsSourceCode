@@ -20,17 +20,14 @@ export default {
       if (!Pelle.isDoomed) return `You are about to Doom your Reality`;
       return `You are about to perform an Armageddon reset`;
     },
-    enterDoom() {
-      return `Proceeding will reset everything except Challenge records, Achievements and anything under the
-      General header on the Statistics tab. Are you sure you want to proceed? :-)`;
-    },
     message() {
       const isFirstReset = (Currency.remnants.eq(0))
         ? `which will produce ${format(this.nextRealityShardGain, 2, 2)} Reality Shards/s`
-        : `which will increase your Reality Shard gain from ${format(this.realityShardGain, 2, 2)}/s
+        : `which will increase your Reality Shards gain from ${format(this.realityShardGain, 2, 2)}/s
           to ${format(this.nextRealityShardGain, 2, 2)}/s`;
 
-      return `You will gain ${quantify("Remnant", this.remnantsGain, 2, 0)} ${isFirstReset}`;
+      return `Armageddon will start a new Doomed Reality. You will gain
+      ${quantify("Remnant", this.remnantsGain, 2, 0)} ${isFirstReset}`;
     },
   },
   methods: {
@@ -80,7 +77,12 @@ export default {
       v-if="!isDoomed"
       class="c-modal-message__text"
     >
-      {{ enterDoom }}
+      On entering the Doomed Reality everything except Challenge records, Celestial progress and anything under the
+      General and Reality header on the Statistics tab will be reset. You will not gain any rewards from your progress
+      in your current reality. Entering Doomed will also disable certain game mechanics.
+      <br>
+      <br>
+      Are you sure you want to do this?
     </div>
     <div
       v-else

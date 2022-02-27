@@ -66,7 +66,7 @@ export default {
       }
       this.currentCelestialName = this.defaultCelestial.displayName;
       if (typeof this.currentQuote.line === "function") {
-        let currentQuoteLine = this.currentQuote.line();
+        const currentQuoteLine = this.currentQuote.line();
         this.currentQuote.showName = (currentQuoteLine[0] !== "*");
         this.line = this.currentQuote.line().replace("*", "");
         if (this.line.includes("<!")) {

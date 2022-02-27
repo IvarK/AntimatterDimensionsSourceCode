@@ -336,7 +336,7 @@ export const Pelle = {
     },
     celCycle(x) {
       //                                   Gets trailing number and removes it
-      const cels = x.split("-").map(cel => [parseInt(cel), cel.replace(/\d+/, "")]);
+      const cels = x.split("-").map(cel => [parseInt(cel, 10), cel.replace(/\d+/u, "")]);
       const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
       let tick = (Date.now() / 100) % totalTime;
       let index = -1;
@@ -369,7 +369,7 @@ export const Pelle = {
       let l = line.replace("[", sep).replace("]", sep);
       l = l.replace("<", sep).replace(">", sep).split(sep);
       return () => l.map((v, x) => ((x % 2) ? ops[x / 2 - 0.5](v) : v)).join("");
-    }
+    };
 
     const quotesObject = {};
     let iterator = 0;

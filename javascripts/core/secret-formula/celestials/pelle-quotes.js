@@ -31,7 +31,7 @@ GameDatabase.celestials.pelle.quotes.ARM = [
   "[Amusing-Confusing-Laughter?].",
   "And keep in mind I have no reason to [misconstrue-deceive-trick] you.",
   "After all, I’ve already won."
-]
+];
 
 GameDatabase.celestials.pelle.quotes.STRIKE_1 = [
   "To fulfil your [Destiny-Mandate-Goals], why don’t we reminisce about that?",
@@ -178,18 +178,18 @@ GameDatabase.celestials.pelle.quotes.GALAXY_GENERATOR_RIFTS = [
   "Slowly drain the [Elementary-Inevitable-Irreversible]?"
 ];
 
-const flashCelestial = "<5teresa-5effarig-5enslaved-5v-5ra-5laitela-5pelle>"
+const flashCelestial = "<5teresa-5effarig-5enslaved-5v-5ra-5laitela-5pelle>";
 GameDatabase.celestials.pelle.quotes.END = [
-  flashCelestial + "Give me time to bask in my own hubris!",
-  flashCelestial + "You! [False-Deity-Destroyer]!",
-  flashCelestial + "Do you have any idea what you’ve just made me do!",
-  flashCelestial + "I’m complicit in your [Destiny-Mandate-Goals]!",
-  flashCelestial + "And in doing so, you… won?",
-  flashCelestial + "The [Infinite-Forever-Eternal] struggle…",
-  flashCelestial + "The [Conflict-Battle-End]…",
-  flashCelestial + "Finally has the victor.",
-  flashCelestial + "The irreversible… [Destiny-Mandate-Goals].",
-  flashCelestial + "Of the [False-Deity-Destroyer].",
-  flashCelestial + "I hope you’re happy.",
-  flashCelestial + "You’ve doomed us all."
+  `${flashCelestial}Give me time to bask in my own hubris!`,
+  `${flashCelestial}You! [False-Deity-Destroyer]!`,
+  `${flashCelestial}Do you have any idea what you’ve just made me do!`,
+  `${flashCelestial}I’m complicit in your [Destiny-Mandate-Goals]!`,
+  `${flashCelestial}And in doing so, you… won?`,
+  `${flashCelestial}The [Infinite-Forever-Eternal] struggle…`,
+  `${flashCelestial}The [Conflict-Battle-End]…`,
+  `${flashCelestial}Finally has the victor.`,
+  `${flashCelestial}The irreversible… [Destiny-Mandate-Goals].`,
+  `${flashCelestial}Of the [False-Deity-Destroyer].`,
+  `${flashCelestial}I hope you’re happy.`,
+  `${flashCelestial}You’ve doomed us all.`
 ];

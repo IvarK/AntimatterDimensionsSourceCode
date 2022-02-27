@@ -197,17 +197,18 @@ Modal.celestialQuote = new class extends Modal {
   }
 
   getLineMapping(defaultCel, defaultLine) {
-    let celestial = defaultCel;
+    let overrideCelestial = "";
     let l = defaultLine;
     if (typeof l === "string") {
       if (l.includes("<!")) {
         const start = l.indexOf("<!"), end = l.indexOf("!>");
-        celestial = l.substring(start + 2, end);
+        overrideCelestial = l.substring(start + 2, end);
         l = this.removeOverrideCel(l);
       }
     }
     return {
-      celestial,
+      celestial: defaultCel,
+      overrideCelestial,
       line: l,
       showName: l[0] !== "*"
     };

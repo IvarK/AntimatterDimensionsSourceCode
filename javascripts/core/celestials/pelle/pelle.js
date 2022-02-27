@@ -49,6 +49,9 @@ const disabledMechanicUnlocks = {
 };
 
 export const Pelle = {
+  get displayName() {
+    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
+  },
 
   additionalEnd: 0,
   addAdditionalEnd: true,
@@ -337,7 +340,7 @@ export const Pelle = {
       const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
       let tick = (Date.now() / 100) % totalTime;
       let index = -1;
-      while (tick > 0) {
+      while (tick > 0 && index < cels.length) {
         index++;
         tick -= cels[index][0];
       }

@@ -5,7 +5,8 @@ export default {
     return {
       index: 0,
       line: "",
-      overrideCelestial: ""
+      overrideCelestial: "",
+      currentCelestialName: ""
     };
   },
   computed: {
@@ -23,8 +24,8 @@ export default {
       }
       return Celestials[this.currentQuote.celestial];
     },
-    currentCelestialName() {
-      return this.celestial.displayName;
+    defaultCelestial() {
+      return Celestials[this.currentQuote.celestial];
     },
     currentCelestialSymbol() {
       return this.celestial.symbol;
@@ -63,6 +64,7 @@ export default {
         this.line = "";
         return;
       }
+      this.currentCelestialName = this.defaultCelestial.displayName;
       if (typeof this.currentQuote.line === "function") {
         let currentQuoteLine = this.currentQuote.line();
         this.currentQuote.showName = (currentQuoteLine[0] !== "*");
@@ -76,7 +78,7 @@ export default {
         }
       } else {
         this.line = this.currentQuote.line.replace("*", "");
-        this.overrideCelestial = "";
+        this.overrideCelestial = this.currentQuote.overrideCelestial;
       }
     }
   },

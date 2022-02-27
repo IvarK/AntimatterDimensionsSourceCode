@@ -23,18 +23,13 @@ export default {
       this.scroll = (Pelle.endState - 4.5) / 2 * 100;
       if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
     }
-  },
-  computed: {
-    doomed() {
-      return Pelle.isDoomed;
-    }
   }
 };
 </script>
 
 <template>
   <div
-    v-if="doomed"
+    v-if="rolling"
     class="credits-container"
     :style="{
       top: `${100 - scroll}vh`,
@@ -44,7 +39,7 @@ export default {
     <h1>Antimatter Dimensions</h1>
 
     <h2>Created by</h2>
-    <p>Ivar "Hevipelle" Kerajärvi</p>
+    <p>Hevipelle (Ivar Kerajärvi)</p>
 
     <h2>Technical Architect</h2>
     <p>Razenpok (Andrei Andreev)</p>
@@ -77,6 +72,7 @@ export default {
     <p>Pichusuperlover</p>
     <p>Acamaeda</p>
 
+    If we end up with an uneven amount of name, I'll throw myself on the list too
     <h2>Web Tester</h2>
     <div class="l-credits--left">
       <p>Aesis</p>
@@ -92,12 +88,12 @@ export default {
       <p>Phoenix</p>
       <p>Phillip Marshall</p>
       <p>Reda Kotob</p>
-      <p>sirusi (Vinícius Oliveira Martins)</p>
-      <p>SpicyCrusader13</p>
-      <p>SzyszakS</p>
-      <p>Typh</p>
-      <p>Xemadus (Jonathan Gibson)</p>
-      <p>Zipi</p>
+      <p>Scarlet</p>
+      <p>Spanosa (Jared K)</p>
+      <p>Storm</p>
+      <p>Tacitus</p>
+      <p>Vnge (Ben Parrish)</p>
+      <p>Young Woo Joo</p>
     </div>
     <div class="l-credits--right">
       <p>Acamaeda</p>
@@ -114,55 +110,57 @@ export default {
       <p>philipebreaker (Philipe)</p>
       <p>Pichusuperlover</p>
       <p>Saturnus</p>
-      <p>Spanosa (Jared K)</p>
-      <p>Storm</p>
-      <p>Tacitus</p>
-      <p>Vnge (Ben Parrish)</p>
-      <p>Young Woo Joo</p>
+      <p>sirusi (Vinícius Oliveira Martins)</p>
+      <p>SpicyCrusader13</p>
+      <p>SzyszakS</p>
+      <p>Typh</p>
+      <p>Xemadus (Jonathan Gibson)</p>
+      <p>Zipi</p>
     </div>
 
     <h2>Android Tester:</h2>
     <div class="l-credits--left">
-      <p>Archa (Myresa)</p>
-      <p>ChaoticHans</p>
-      <p>Vnge (Ben Parrish)</p>
-      <p>Rukimix</p>
-      <p>Anjinho01</p>
-      <p>HarrisL2</p>
-      <p>hen-ben (Henry Ellenberg)</p>
-      <p>Gaunter</p>
-      <p>Socks (Hannah Pocks)</p>
-      <p>Johanniklas (Jan-Niklas Petersen)</p>
-      <p>Razor</p>
-      <p>Barrin84</p>
-      <p>DarthDie (Briar Bowser)</p>
-      <p>Monoma (ARoman Ruiz)</p>
-      <p>Nani</p>
-      <p>Kirin Nijinski (Arthur)</p>
       <p>about:blank</p>
+      <p>Anjinho01</p>
+      <p>Buck</p>
+      <p>Circle</p>
       <p>Epsilon (Coolguystorm)</p>
-      <p>Razvan Cercel</p>
+      <p>Gaunter</p>
+      <p>Hellbach (Asher Günther)</p>
+      <p>hen-ben (Henry Ellenberg)</p>
+      <p>Johanniklas (Jan-Niklas Petersen)</p>
+      <p>Kirku (Fabian Makowski)</p>
+      <p>Monoma (ARoman Ruiz)</p>
+      <p>opdollar (Zane Coole)</p>
+      <p>Porygon-Z</p>
+      <p>Razor</p>
+      <p>Rukimix</p>
+      <p>Skunky (Lukas)</p>
+      <p>Socks (Hannah Pocks)</p>
+      <p>tragedt (Ethan Manninen)</p>
+      <p>vanadium_void</p>
+      <p>ZylaKat (Katherine Goforth-Harbin)</p>
     </div>
     <div class="l-credits--right">
-      <p>Hira</p>
-      <p>Hellbach (Asher Günther)</p>
-      <p>Buck</p>
-      <p>Valentine Clarissa Alanis Star Z</p>
-      <p>Porygon-Z</p>
-      <p>tragedt (Ethan Manninen)</p>
-      <p>SpicyCrusader13</p>
+      <p>Archa (Myresa)</p>
+      <p>Barrin84</p>
+      <p>ChaoticHans</p>
+      <p>DarthDie (Briar Bowser)</p>
       <p>Firecracker</p>
-      <p>opdollar (Zane Coole)</p>
+      <p>HarrisL2</p>
+      <p>Hira</p>
       <p>ImpossibleSalsa</p>
       <p>kaislash (Lily)</p>
-      <p>Skunky (Lukas)</p>
-      <p>ZylaKat (Katherine Goforth-Harbin)</p>
-      <p>vanadium_void</p>
-      <p>Circle</p>
-      <p>PotatoTIAB</p>
+      <p>Kirin Nijinski (Arthur)</p>
+      <p>Nani</p>
       <p>Pavlxiiv</p>
-      <p>Kirku (Fabian Makowski)</p>
+      <p>PotatoTIAB</p>
+      <p>Razvan Cercel</p>
+      <p>Scarlet</p>
+      <p>SpicyCrusader13</p>
       <p>Tim Wong</p>
+      <p>Valentine Clarissa Alanis Star Z</p>
+      <p>Vnge (Ben Parrish)</p>
     </div>
 
     <br><br><br>

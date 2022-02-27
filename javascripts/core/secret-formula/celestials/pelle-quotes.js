@@ -177,17 +177,19 @@ GameDatabase.celestials.pelle.quotes.GALAXY_GENERATOR_RIFTS = [
   "Was this the actual plan?",
   "Slowly drain the [Elementary-Inevitable-Irreversible]?"
 ];
+
+const flashCelestial = "*<5teresa-5effarig-5enslaved-5v-5ra-5laitela-5pelle>"
 GameDatabase.celestials.pelle.quotes.END = [
-  "Give me time to bask in my own hubris!",
-  "You! [False-Deity-Destroyer]!",
-  "Do you have any idea what you’ve just made me do!",
-  "I’m complicit in your [Destiny-Mandate-Goals]!",
-  "And in doing so, you… won?",
-  "The [Infinite-Forever-Eternal] struggle…",
-  "The [Conflict-Battle-End]…",
-  "Finally has the victor.",
-  "The irreversible… [Destiny-Mandate-Goals].",
-  "Of the [False-Deity-Destroyer].",
-  "I hope you’re happy.",
-  "You’ve doomed us all."
+  flashCelestial + "Give me time to bask in my own hubris!",
+  flashCelestial + "You! [False-Deity-Destroyer]!",
+  flashCelestial + "Do you have any idea what you’ve just made me do!",
+  flashCelestial + "I’m complicit in your [Destiny-Mandate-Goals]!",
+  flashCelestial + "And in doing so, you… won?",
+  flashCelestial + "The [Infinite-Forever-Eternal] struggle…",
+  flashCelestial + "The [Conflict-Battle-End]…",
+  flashCelestial + "Finally has the victor.",
+  flashCelestial + "The irreversible… [Destiny-Mandate-Goals].",
+  flashCelestial + "Of the [False-Deity-Destroyer].",
+  flashCelestial + "I hope you’re happy.",
+  flashCelestial + "You’ve doomed us all."
 ];

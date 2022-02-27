@@ -1339,10 +1339,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 187,
-    name: "Doomed Time",
-    description: "Dilate time while Doomed.",
-    checkRequirement: () => Pelle.isDoomed && player.dilation.active,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+    name: "The One with Dilated Time",
+    description: "Unlock dilation in Doomed.",
+    checkRequirement: () => PelleStrikes.dilation.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 188,

@@ -164,6 +164,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
 
   .c-pelle-upgrade:hover {

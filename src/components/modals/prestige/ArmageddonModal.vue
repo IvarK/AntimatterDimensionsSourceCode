@@ -26,7 +26,7 @@ export default {
     },
     message() {
       const isFirstReset = (Currency.remnants.eq(0))
-        ? `which produce ${format(this.nextRealityShardGain, 2, 2)} Reality Shards/s`
+        ? `which will produce ${format(this.nextRealityShardGain, 2, 2)} Reality Shards/s`
         : `which will increase your Reality Shard gain from ${format(this.realityShardGain, 2, 2)}/s
           to ${format(this.nextRealityShardGain, 2, 2)}/s`;
 

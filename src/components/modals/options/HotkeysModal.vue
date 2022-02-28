@@ -67,10 +67,6 @@ export default {
     <div class="l-modal-hotkeys__column">
       <h2>Hotkey List</h2>
       <div class="l-modal-hotkeys-row">
-        <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Enable/Disable all Autobuyer</span>
-        <kbd>a</kbd>
-      </div>
-      <div class="l-modal-hotkeys-row">
         <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Buy 1 Dimension</span>
         <kbd>shift</kbd><kbd>1</kbd>-<kbd>shift</kbd><kbd>8</kbd>
       </div>

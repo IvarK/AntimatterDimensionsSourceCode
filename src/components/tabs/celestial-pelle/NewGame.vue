@@ -15,10 +15,12 @@ export default {
         .map(x => x - 1 + this.minusRecord)
         .filter(Boolean);
     },
-    style() { return {
-      opacity: this.opacity,
-      visibility: this.visible ? "visible" : "hidden"
-    };}
+    style() {
+      return {
+        opacity: this.opacity,
+        visibility: this.visible ? "visible" : "hidden"
+      };
+    }
   },
   methods: {
     update() {

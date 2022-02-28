@@ -172,7 +172,7 @@ you can buy whatever quantity gets you to that Dimension's next Dimension multip
 <br>
 <br>
 <b>Max all:</b> Max all will buy until ${formatInt(10)} of the first Antimatter Dimension until it cannot anymore,
-then second, and so on until the 8th Antimatter Dimension, and then buy max Tickspeed upgrades.
+then second, and so on until the 8th Antimatter Dimension, and then buy max Tickspeed Upgrades.
 <br>
 <br>
 <b>Dimension base prices:</b> ${Array.range(1, 8)
@@ -185,7 +185,7 @@ then second, and so on until the 8th Antimatter Dimension, and then buy max Tick
 <br>
 <br>
 <b>Hotkeys: 1, 2, 3, 4, 5, 6, 7, 8</b> for buy until ${formatInt(10)} Xth Dimension
-(you can also hold down shift while buying Dimensions, which will only buy
+(you can also hold down Shift while buying Dimensions, which will only buy
 ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
 `,
       isUnlocked: () => true,
@@ -194,7 +194,7 @@ ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
     }, {
       name: "Tickspeed",
       info: () => `
-Production in the game happens on each "tick" which initially occurs once per second. By buying Tickspeed upgrades,
+Production in the game happens on each "tick" which initially occurs once per second. By buying Tickspeed Upgrades,
 you can make your Dimensions produce faster, as if multiple ticks occur in each second.
 <br>
 <br>
@@ -206,11 +206,11 @@ boosting production as if part of a game tick has passed.
 (without any Galaxies, this is ${formatX(1.1245, 0, 3)} per purchase)
 <br>
 <br>
-<b>Buy Max:</b> This will buy the maximum amount of Tickspeed upgrades available
+<b>Buy Max:</b> This will buy the maximum amount of Tickspeed Upgrades available
 with your current amount of antimatter.
 <br>
 <br>
-<b>Hotkeys: T</b> will purchase as many Tickspeed upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
+<b>Hotkeys: T</b> will purchase as many Tickspeed Upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
 Note that the actual tickspeed time is simulated and the game always runs calculations at the update rate you've chosen
 in the Options tab.
 `,
@@ -233,7 +233,7 @@ For example, with ${formatInt(3)} Boosts, the 1st Dimension will gain ${formatX(
 the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <br>
 <br>
-<b>Hotkey: D</b> will try to purchase Dimension Boost.
+<b>Hotkey: D</b> will try to purchase a Dimension Boost.
 `,
       isUnlocked: () => true,
       tags: ["dimboost", "reset", "earlygame"],
@@ -242,7 +242,7 @@ the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
       name: "Antimatter Galaxies",
       info: () => `
 Purchasing an Antimatter Galaxy will reset your game back to the point where only ${formatInt(4)} Dimensions are
-available, but will increase the effect of your Tickspeed upgrades by +${format(0.02, 0, 2)} for your first two
+available, but will increase the effect of your Tickspeed Upgrades by +${format(0.02, 0, 2)} for your first two
 galaxies. As you get more galaxies, the multiplier will continue becoming stronger and stronger.
 <br>
 <br>
@@ -260,7 +260,7 @@ Remote Galaxy scaling: Above ${formatInt(Galaxy.remoteStart)} Antimatter Galaxie
 increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
-<b>Hotkey: G</b> will try to purchase Galaxy.
+<b>Hotkey: G</b> will try to purchase an Antimatter Galaxy.
 `,
       isUnlocked: () => true,
       tags: ["8th", "reset", "galaxy", "earlygame"],
@@ -326,7 +326,7 @@ but each purchase requires ${formatInt(10)} times as much IP.
 You must complete the Achievement "No DLC required" to start purchasing this particular upgrade.
 <br>
 <br>
-<b>Hotkey: C</b> will try to perform a Big Crunches.
+<b>Hotkey: C</b> will try to perform a Big Crunch.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["crunch", "big", "upgrades", "ip", "reset", "prestige", "earlygame"],
@@ -357,7 +357,7 @@ The rightmost column of Infinity Upgrades does not work in challenges.
       name: "Autobuyers",
       info: () => `
 Autobuyers (awarded by completing challenges) allow the
-automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies, Tickspeed upgrades, and Big Crunches.
+automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies, Tickspeed Upgrades, and Big Crunches.
 All autobuyers have controls located under the Automation tab in "Autobuyers",
 including any additional autobuyers unlocked later in the game.
 <br>
@@ -397,7 +397,7 @@ will ignore your max Boost limit.
 individual autobuyer settings.
 <br>
 <br>
-<b>Hotkey: A</b> (for toggle all autobuyers).
+<b>Hotkey: A</b> will disable/enable the autobuyers.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],
@@ -418,7 +418,7 @@ nearest integer <i>after</i> all multipliers are applied.
 The antimatter costs of all Dimensions begin to increase faster after they pass
 ${formatPostBreak(Number.MAX_VALUE, 2)}. The cost <i>between</i> upgrades will increase by ${formatX(10)}
 <i>per upgrade</i> above ${formatPostBreak(Number.MAX_VALUE, 2)}, and a similar scaling happens to
-Tickspeed upgrade costs as well.
+Tickspeed Upgrade costs as well.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["limit", "crunch", "upgrades", "midgame"],
@@ -461,7 +461,7 @@ of Infinity Dimensions does not carry between crunches, all the multipliers you 
 <br>
 Instead of antimatter, the First Infinity Dimension produces Infinity Power, which gives a multiplier applied
 to all Antimatter Dimensions equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
-affected by Tickspeed upgrades.
+affected by Tickspeed Upgrades.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["id", "power", "new", "dims", "unlock", "break", "midgame"],
@@ -490,7 +490,7 @@ amount of antimatter before you can attempt them.
       info: () => `
 Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
-${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by Tickspeed upgrades.
+${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by Tickspeed Upgrades.
 Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
 every Replicanti tick (initially every second), and both of these can be upgraded by spending IP.
 <br>
@@ -500,7 +500,7 @@ resetting your Replicanti count back to ${formatInt(1)}. This Galaxy is free in 
 Antimatter Galaxy, but it will not make your next Antimatter Galaxy more expensive.
 <br>
 <br>
-<b>Hotkey: R</b> will buy a Replicanti Galaxy.
+<b>Hotkey: R</b> will try to purchase a Replicanti Galaxy.
 <br>
 Replicanti give a multiplier to all Infinity Dimensions, which will reach a maximum of
 ${formatX(Math.pow(2, 20), 2, 2)} at ${formatPostBreak(Number.MAX_VALUE, 2)} Replicanti.
@@ -538,7 +538,7 @@ down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Numb
 ${formatInt(2)} EP until ${formatPostBreak(DC.E349)}.
 <br>
 <br>
-<b>Hotkey: E</b> will try to perform a Eternity reset.
+<b>Hotkey: E</b> will try to perform an Eternity reset.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["eternal", "ep", "reset", "prestige", "midgame"],
@@ -571,8 +571,8 @@ properly, as noted on the milestone page itself.
       name: "Time Dimensions",
       info: () => `
 After your first Eternity, you unlock Time Dimensions. You buy them with Eternity Points and they provide Time Shards,
-which generate Tickspeed upgrades. These Tickspeed upgrades function like normal Tickspeed upgrades but do not increase
-their cost. These Tickspeed upgrades are kept on Infinity, but reset every Eternity.
+which generate Tickspeed Upgrades. These Tickspeed Upgrades function like normal Tickspeed Upgrades but do not increase
+their cost. These Tickspeed Upgrades are kept on Infinity, but reset every Eternity.
 <br>
 <br>
 Similarly to the other dimensions, Second Time Dimensions produce First Time Dimensions and so on. Similarly to Infinity
@@ -597,9 +597,9 @@ purpose of cost increases, causing the price to rise much more steeply.
     .join(", ")}
 <br>
 <br>
-Each threshold to gain another Tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
+Each threshold to gain another Tickspeed Upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
 or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(FreeTickspeed.softcap)} upgrades, the
-multiplier between each successive free Tickspeed upgrade will gradually increase at a rate of ~${formatX(1.35, 0, 2)}
+multiplier between each successive free Tickspeed Upgrade will gradually increase at a rate of ~${formatX(1.35, 0, 2)}
 per ${formatInt(50000)} upgrades (${formatX(1.000006, 0, 6)} per upgrade).
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
@@ -708,8 +708,8 @@ you have gained a TP multiplier or an upgrade that significantly increases your 
 <br>
 <br>
 Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
-reaching thresholds similarly to the Tickspeed upgrades gained from Time Dimensions. These Tachyon Galaxies are like
-Replicanti Galaxies in that they affect Tickspeed as if they were Antimatter Galaxies but they do not increase the cost
+reaching thresholds similarly to the Tickspeed Upgrades gained from Time Dimensions. These Tachyon Galaxies are like
+Replicanti Galaxies in that they affect tickspeed as if they were Antimatter Galaxies but they do not increase the cost
 of your next Antimatter Galaxy.
 <br>
 <br>
@@ -938,7 +938,7 @@ take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to reach maximum
 speed boost was active. Pausing and unpausing affects both Black Holes; they cannot be paused or unpaused independently.
 <br>
 <br>
-<b>Hotkey: B</b> pauses and unpauses the Black Holes.
+<b>Hotkey: B</b> will pause/unpause the Black Holes.
 `,
       isUnlocked: () => BlackHole(1).isUnlocked,
       tags: ["reality", "time", "speed", "duration", "interval", "rm", "endgame", "lategame"],
@@ -1120,9 +1120,9 @@ You can toggle a setting to automatically store offline time as stored real time
 <br>
 <br>
 Their first unlock costs ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP.price).totalYears)}
-years of stored time. It increases the softcap to Tickspeed upgrades gained from Time Dimensions
+years of stored time. It increases the softcap to Tickspeed Upgrades gained from Time Dimensions
 (the point at which their cost starts increasing faster)
-by ${format(1e5)} Tickspeed upgrades.
+by ${format(1e5)} Tickspeed Upgrades.
 <br>
 <br>
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored time, you are able to
@@ -1388,13 +1388,13 @@ Lai'tela will not directly unlock the next Celestial.
     }, {
       name: "Continuum",
       info: () => `
-When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
+When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed Upgrades switch to a new mode of production
 called Continuum, which gives the same effect as previously but allows for buying partial Dimension or
-Tickspeed upgrades. These fractional purchases are given for free without spending your antimatter and will provide
+Tickspeed Upgrades. These fractional purchases are given for free without spending your antimatter and will provide
 an appropriate portion of their multiplier.
 <br>
 <br>
-The purchase buttons for Antimatter Dimensions and Tickspeed become modified to display the number of upgrades
+The purchase buttons for Antimatter Dimensions and Tickspeed Upgrades become modified to display the number of upgrades
 you would be able to purchase if Continuum was inactive, and the purchase count is scaled smoothly with antimatter.
 For example, having ${format(2e7)} antimatter will give you a continuum value of ${format(5.3, 0, 1)} for Tickspeed
 (initial cost of ${format(1e3)} and increase of ${formatX(10)}) since you can purchase it ${formatInt(5)} times and
@@ -1449,13 +1449,13 @@ Independently of the milestone type, milestones also have an icon indicating wha
       name: "Pelle, Celestial of Antimatter",
       alias: "Pelle",
       info: () => `
-When you purchase the last imaginary Upgrade and unlock Pelle, you unlock their tab, where you can find a button to
+When you purchase the last Imaginary Upgrade and unlock Pelle, you unlock their tab, where you can find a button to
 "Doom your Reality". Dooming your Reality will start a new <b>Doomed Reality</b>, resetting almost the entire game up to
 Reality, not giving you any rewards from your progress in your current Reality.
 <br>
 When you enter the Doomed Reality, you will keep all values under the General- and Reality header in the Statistics
-tab and all of your best Challenge times. Inside Doomed Realities multiple upgrades, Time Studies and game mechanics are
-disabled or grant no reward. You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
+tab and all of your best Challenge times. Inside Doomed Realities, multiple upgrades, Time Studies and game mechanics
+are disabled or grant no reward. You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
 <br>
 <br>
 Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity-
@@ -1468,7 +1468,7 @@ easier.
 <br>
 The other upgrades in the bottom rows offer automation and QoL (quality of life) improvements. Everything unlocked from
 these upgrades, cannot be unlocked by anything else in the game. So for example completing a Normal Challenge will not
-give you the corresponding Antimatter Dimension autobuyer back as these are locked behind Pelle upgrades.
+give you the corresponding Antimatter Dimension autobuyer back as these are locked behind Pelle Upgrades.
 You can toggle a button above upgrade to hide bought upgrades or click the
 <i class="fas fa-compress-arrows-alt"></i>-icon to collapse and hide the entire panel.
 <br>
@@ -1477,7 +1477,7 @@ Pelle Strikes
 ${PelleStrikes.infinity.hasStrike
     ? `are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
       reaching Infinity the first time within a Doomed Reality. More Strikes eventually occur by further progression.
-      Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.s
+      Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
       Each Pelle Strike also unlocks a Rift bar.
       <br>
       Rift bars can be filled by setting the button underneath them from "Idle" to "Filling". When active Rifts consume

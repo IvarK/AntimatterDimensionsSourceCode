@@ -133,7 +133,7 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
-    if (Pelle.endState >= 4.5) return;
+    if (Pelle.endState >= 4.5 && !Pelle.removeAdditionalEnd) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
@@ -170,9 +170,9 @@ export const GameStorage = {
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
-  hardReset() {
+  hardReset(config = {}) {
     this.loadPlayerObject(Player.defaultStart);
-    this.save();
+    if (!config.noSave) this.save();
     Tab.dimensions.antimatter.show();
   },
 

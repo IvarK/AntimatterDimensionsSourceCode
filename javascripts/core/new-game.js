@@ -33,12 +33,15 @@ export const NG = {
     const secretUnlocks = player.secretUnlocks;
     const newGameBackup = JSON.stringify(player.newGame);
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
-    GameStorage.hardReset();
+    Pelle.removeAdditionalEnd = true;
+    Modal.hideAll();
+    GameStorage.hardReset({
+      noSave: true
+    });
     player.newGame = JSON.parse(newGameBackup);
     player.newGame.current = i;
     player.newGame.plusRecord = Math.max(player.newGame.plusRecord, i);
     player.newGame.minusRecord = Math.min(player.newGame.minusRecord, i);
-    Pelle.additionalEnd = 0;
     player.options = JSON.parse(backUpOptions);
     player.secretUnlocks = secretUnlocks;
     player.secretAchievementBits = JSON.parse(secretAchievements);
@@ -48,5 +51,7 @@ export const NG = {
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;
     GameStorage.save();
+    player.lastUpdate = Date.now();
+    Pelle.additionalEnd = Math.min(Pelle.additionalEnd, 14) + 1;
   }
 };

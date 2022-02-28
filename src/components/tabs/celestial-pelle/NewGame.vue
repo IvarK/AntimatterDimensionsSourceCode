@@ -6,7 +6,7 @@ export default {
       plusRecord: 0,
       minusRecord: 0,
       opacity: 0,
-      visible: false
+      visible: false,
     };
   },
   computed: {
@@ -14,14 +14,14 @@ export default {
       return [...Array(3 + this.plusRecord - this.minusRecord).keys()]
         .map(x => x - 1 + this.minusRecord)
         .filter(Boolean);
-    },
+    }
   },
   methods: {
     update() {
       this.plusRecord = NG.plusRecord;
       this.minusRecord = NG.minusRecord;
-      this.visible = Pelle.endState > 14.9;
-      this.opacity = (Pelle.endState - 14.9) * 2;
+      this.visible = Pelle.endState > 13.6 && !Pelle.removeAdditionalEnd;
+      this.opacity = (Pelle.endState - 13.6) * 2;
     },
     ngString(i) {
       if (!i) return "";

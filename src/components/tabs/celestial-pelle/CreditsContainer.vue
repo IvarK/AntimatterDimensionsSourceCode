@@ -18,10 +18,10 @@ export default {
   },
   methods: {
     update() {
-      if (!Pelle.isDoomed) return;
+      if (!Pelle.endState > 1) return;
       this.rolling = Pelle.endState > 4.5;
       this.scroll = (Pelle.endState - 4.5) / 2 * 100;
-      if (this.audio) this.audio.volume = Math.min((Pelle.endState - 4.5), 0.3);
+      if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
     }
   }
 };
@@ -183,7 +183,7 @@ export default {
   }
 
   h2 {
-    margin-top: 20rem;
+    margin-top: 10rem;
     margin-bottom: 2rem;
     color: white;
     text-shadow: 1px 1px 2px turquoise;

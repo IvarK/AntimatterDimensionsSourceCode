@@ -6,7 +6,8 @@ export default {
       index: 0,
       line: "",
       overrideCelestial: "",
-      currentCelestialName: ""
+      currentCelestialName: "",
+      length: 0
     };
   },
   computed: {
@@ -30,14 +31,17 @@ export default {
     currentCelestialSymbol() {
       return this.celestial.symbol;
     },
-    prevStyle() {
-      return this.index > 0 ? {} : { visibility: "hidden" };
+    isQuoteStart() {
+      return this.index === 0 || this.quotes[this.index - 1].isEndQuote;
     },
-    length() {
-      return this.quotes.length;
+    isQuoteEnd() {
+      return this.index >= this.length - 1 || this.currentQuote.isEndQuote;
+    },
+    prevStyle() {
+      return this.isQuoteStart ? { visibility: "hidden" } : {};
     },
     nextStyle() {
-      return this.index >= this.length - 1 ? { visibility: "hidden" } : {};
+      return this.isQuoteEnd ? { visibility: "hidden" } : {};
     },
     modalClass() {
       return [
@@ -57,13 +61,18 @@ export default {
       this.update();
     },
     close() {
-      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      if (this.index >= this.length - 1) {
+        EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      } else {
+        this.nextClick();
+      }
     },
     update() {
       if (!this.currentQuote) {
         this.line = "";
         return;
       }
+      this.length = this.quotes.length;
       this.currentCelestialName = this.defaultCelestial.displayName;
       if (typeof this.currentQuote.line === "function") {
         const currentQuoteLine = this.currentQuote.line();
@@ -109,7 +118,7 @@ export default {
         @click="nextClick"
       />
       <i
-        v-if="index === length - 1"
+        v-if="isQuoteEnd"
         class="c-modal-celestial-quote__end fas fa-check-circle"
         @click="close"
       />

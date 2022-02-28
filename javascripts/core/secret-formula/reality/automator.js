@@ -114,9 +114,9 @@ GameDatabase.reality.automator = {
               `
             },
             {
-              header: "<i>max</i>",
+              header: "<i>all</i>",
               description: `
-                Buys the maximum number of time theorems from all resources.
+                Buys one of each time theorem from all resources.
               `
             },
           ]
@@ -287,7 +287,7 @@ GameDatabase.reality.automator = {
       examples: [
         `until ep > 1e500 {<br>
           <blockquote>
-          tt max<br>
+          tt all<br>
           studies nowait 11-62</blockquote>
         }`,
       ]
@@ -309,7 +309,7 @@ GameDatabase.reality.automator = {
       examples: [
         `while ep < 1e500 {<br>
           <blockquote>
-          tt max<br>
+          tt all<br>
           studies nowait 11-62</blockquote>
         }`,
         `while myThreshold > am { ...`,

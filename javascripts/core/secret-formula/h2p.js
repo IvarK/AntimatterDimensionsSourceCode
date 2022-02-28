@@ -397,7 +397,7 @@ will ignore your max Boost limit.
 individual autobuyer settings.
 <br>
 <br>
-<b>Hotkey: A</b> will disable/enable the autobuyers.
+<b>Hotkey: A</b> will disable/enable all autobuyers.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],

@@ -44,11 +44,11 @@ export default {
     <h2>Technical Architect</h2>
     <p>Razenpok (Andrei Andreev)</p>
 
-    <h2>Head Developer</h2>
+    <h2>Lead Developers</h2>
     <p>SpectralFlame (Christopher Yip)</p>
     <p>Omsi</p>
 
-    <h2>Developer</h2>
+    <h2>Developers</h2>
     <p>Dan</p>
     <p>realrapidjazz</p>
     <p>earth</p>
@@ -68,12 +68,12 @@ export default {
     <h2>Library Developer</h2>
     <p>Patashu</p>
 
-    <h2>Design Consoltant</h2>
+    <h2>Design Consoltants</h2>
     <p>Pichusuperlover</p>
     <p>Acamaeda</p>
 
-    If we end up with an uneven amount of name, I'll throw myself on the list too
-    <h2>Web Tester</h2>
+    <!--If we end up with an uneven amount of name, I'll throw myself on the list too-->
+    <h2>Web Testers</h2>
     <div class="l-credits--left">
       <p>Aesis</p>
       <p>Alexitato</p>
@@ -118,7 +118,7 @@ export default {
       <p>Zipi</p>
     </div>
 
-    <h2>Android Tester:</h2>
+    <h2>Android Testers:</h2>
     <div class="l-credits--left">
       <p>about:blank</p>
       <p>Anjinho01</p>

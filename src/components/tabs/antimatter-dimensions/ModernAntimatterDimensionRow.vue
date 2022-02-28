@@ -26,22 +26,14 @@ export default {
       continuumValue: 0,
       isShown: false,
       isCostsAD: false,
+      amountDisplay: "0",
+      costDisplay: "10",
+      rateOfChangeDisplay: ""
     };
   },
   computed: {
     name() {
       return AntimatterDimension(this.tier).shortDisplayName;
-    },
-    costDisplay() {
-      return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
-    },
-    amountDisplay() {
-      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
-    },
-    rateOfChangeDisplay() {
-      return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
@@ -65,6 +57,10 @@ export default {
       const tier = this.tier;
       if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
+      this.amountDisplay = this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
+      this.costDisplay = this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
+      this.rateOfChangeDisplay = this.tier < 8 ? ` (+${format(this.rateOfChange, 2, 2)}%/s)` : "";
+
       this.isUnlocked = dimension.isAvailableForPurchase;
       const buyUntil10 = player.buyUntil10;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;

@@ -74,16 +74,16 @@ export default {
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
 
+      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
-      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
-
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
-      if (this.isSacrificeUnlocked) this.multiplierText +=
-        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
+      this.multiplierText +=
+        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
     }
   }
 };

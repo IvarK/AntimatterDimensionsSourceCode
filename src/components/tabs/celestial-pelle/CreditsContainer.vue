@@ -72,7 +72,7 @@ export default {
     <p>Pichusuperlover</p>
     <p>Acamaeda</p>
 
-    <!--If we end up with an uneven amount of name, I'll throw myself on the list too-->
+    <!-- If we end up with an uneven amount of name, I'll throw myself on the list too -->
     <h2>Web Testers</h2>
     <div class="l-credits--left">
       <p>Aesis</p>

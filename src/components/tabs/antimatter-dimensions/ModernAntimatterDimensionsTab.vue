@@ -83,7 +83,7 @@ export default {
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
       this.multiplierText +=
-        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     }
   }
 };

@@ -99,7 +99,7 @@ GameDatabase.reality.automator = {
       id: 3,
       isUnlocked: () => true,
       keyword: "tt",
-      name: "<b>tt</b> - purchases Time Theorems with a resource or buys the maximum possible",
+      name: "<b>tt</b> - purchases Time Theorems with a resource or buys one of each resource",
       syntax:
         "<b>tt</b> action",
       sections: [

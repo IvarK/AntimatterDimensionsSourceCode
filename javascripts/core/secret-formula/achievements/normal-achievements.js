@@ -1301,7 +1301,10 @@ GameDatabase.achievements.normal = [
     name: "Antimatter Dimensions Eternal",
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    // This is V achievement 10's reward value when it is maxxed.
+    // We forgot to remove it and we won't bother with rebalancing pelle.
+    get reward() { return `All antimatter dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
   },
   {
     id: 182,

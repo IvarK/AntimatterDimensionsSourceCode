@@ -14,7 +14,11 @@ export default {
       return [...Array(3 + this.plusRecord - this.minusRecord).keys()]
         .map(x => x - 1 + this.minusRecord)
         .filter(Boolean);
-    }
+    },
+    style() { return {
+      opacity: this.opacity,
+      visibility: this.visible ? "visible" : "hidden"
+    };}
   },
   methods: {
     update() {
@@ -37,7 +41,7 @@ export default {
 <template>
   <div
     class="new-game-container"
-    :style="{ display: visible ? 'flex' : 'none', opacity }"
+    :style="style"
   >
     <h1>Wanna start over?</h1>
     Highest NG+: {{ plusRecord }}<br>

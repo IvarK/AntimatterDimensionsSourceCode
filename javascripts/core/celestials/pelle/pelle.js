@@ -100,7 +100,7 @@ export const Pelle = {
   gameLoop(diff) {
     if (this.removeAdditionalEnd) {
       if (this.additionalEnd > 0) {
-        this.additionalEnd -= diff / 1000;
+        this.additionalEnd -= Math.min(diff, 50) / 1000;
         if (this.additionalEnd < 0) {
           this.additionalEnd = 0;
           this.removeAdditionalEnd = false;

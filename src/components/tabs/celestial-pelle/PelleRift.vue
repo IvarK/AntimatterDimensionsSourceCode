@@ -116,9 +116,12 @@ export default {
           v-for="(milestone, idx) in rift.milestones"
           :key="'milestone-line-' + idx"
           class="o-pelle-rift-bar-milestone-line"
-          :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }"
+          :class="{
+            'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx),
+            'o-pelle-rift-bar-milestone-line--disabled': rift.reducedTo < milestone.requirement
+          }"
           :style="{
-            left: `calc(${milestone.requirement * 100}% - 0.25rem)`,
+            left: `calc(${milestone.requirement * 100}% - 0.25rem)`
           }"
         />
       </div>
@@ -194,11 +197,13 @@ export default {
 }
 .l-overflow-hidden {
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  border: 0.2rem solid #0000;
+  width: 25rem;
+  height: 5rem;
+  border-radius: 5px;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -0.2rem;
+  left: -0.2rem;
   z-index: 0;
 }
 
@@ -308,6 +313,10 @@ export default {
 }
 .o-pelle-rift-bar-milestone-line--unlocked {
   animation: none;
+}
+.o-pelle-rift-bar-milestone-line--disabled {
+  animation: none;
+  filter: brightness(0.25);
 }
 @keyframes flash {
   0% { opacity: 1 }

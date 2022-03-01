@@ -16,6 +16,14 @@ export default {
       }
     }
   },
+  computed: {
+    creditStyles() {
+      return {
+        top: `${100 - this.scroll}vh`,
+        display: this.rolling ? "block" : "none"
+      };
+    }
+  },
   methods: {
     update() {
       if (!Pelle.endState > 1) return;
@@ -31,10 +39,7 @@ export default {
   <div
     v-if="rolling"
     class="credits-container"
-    :style="{
-      top: `${100 - scroll}vh`,
-      display: rolling ? 'block' : 'none'
-    }"
+    :style="creditStyles"
   >
     <h1>Antimatter Dimensions</h1>
 
@@ -176,6 +181,7 @@ export default {
     width: 100%;
     z-index: 7;
     color: rgb(185, 185, 185);
+    pointer-events: none;
   }
 
   h1 {

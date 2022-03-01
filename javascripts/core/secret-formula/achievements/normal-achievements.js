@@ -1305,16 +1305,16 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 182,
-    name: "Age of the age of automation",
+    name: "One more time",
     description: "Gain back all Antimatter Dimension autobuyers.",
     checkRequirement: () => player.celestials.pelle.upgrades.has(4),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 183,
-    name: "Anti-anti-challenged 2",
-    description: "Complete all Infinity Challenges while inside the Doomed Reality.",
-    checkRequirement: () => Pelle.isDoomed && InfinityChallenges.completed.length === 8,
+    name: "Déjà vOoM",
+    description: "Complete Infinity Challenge 5 while Doomed.",
+    checkRequirement: () => Pelle.isDoomed && InfinityChallenge(5).isCompleted,
     checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED
   },
   {
@@ -1334,13 +1334,13 @@ GameDatabase.achievements.normal = [
   {
     id: 186,
     displayId: 181,
-    name: "An old friend",
-    description: `Purchase Time Study 181 in Doomed.`,
+    name: "An unhealthy obsession",
+    description: `Purchase Time Study 181 while Doomed.`,
   },
   {
     id: 187,
-    name: "The One with Dilated Time",
-    description: "Dilate time while in the Doomed Reality.",
+    name: "Doomed Time",
+    description: "Dilate time while Doomed.",
     checkRequirement: () => Pelle.isDoomed && player.dilation.active,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
   },

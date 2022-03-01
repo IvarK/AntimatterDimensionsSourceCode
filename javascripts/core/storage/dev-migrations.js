@@ -1247,6 +1247,16 @@ GameStorage.devMigrations = {
         player.achievementBits[17] |= (1 << 5);
       }
     },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      if (player.celestials.pelle.doomed && (player.challenge.infinity.completedBits & (1 << 5)) !== 0) {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] |= (1 << 2);
+      } else {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] &= ~(1 << 2);
+      }
+    },
   ],
 
   patch(player) {

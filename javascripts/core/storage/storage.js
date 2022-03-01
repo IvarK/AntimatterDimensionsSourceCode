@@ -170,9 +170,9 @@ export const GameStorage = {
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
-  hardReset(config = {}) {
+  hardReset() {
     this.loadPlayerObject(Player.defaultStart);
-    if (!config.noSave) this.save();
+    this.save(true);
     Tab.dimensions.antimatter.show();
   },
 

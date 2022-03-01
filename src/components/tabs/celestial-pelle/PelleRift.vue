@@ -88,46 +88,48 @@ export default {
       :class="{ 'c-pelle-rift-bar-overfill-container': percentage > 1 }"
       @mousemove="handleMilestoneRequirementTooltipDisplay"
     >
+      <div class="l-overflow-hidden">
+        <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
+        <div :class="barOverlay()" />
+        <div
+          class="o-pelle-rift-bar-fill"
+          :style="{
+            width: `${Math.clampMax(percentage * 100, 100)}%`,
+          }"
+        />
+        <div
+          v-if="rift.reducedTo < 1"
+          class="o-pelle-rift-bar-reducedto"
+          :style="{
+            width: `${Math.clampMax(100 - rift.reducedTo * 100, 100)}%`,
+          }"
+        />
+        <!-- This bar overlay adds the shadow within the bar so the ugly edges don't show -->
+        <div
+          class="o-pelle-rift-bar-overlay"
+        />
+        <div
+          v-if="isActive && !isMaxed"
+          class="o-pelle-rift-bar-active-fill"
+        />
+        <div
+          v-for="(milestone, idx) in rift.milestones"
+          :key="'milestone-line-' + idx"
+          class="o-pelle-rift-bar-milestone-line"
+          :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }"
+          :style="{
+            left: `calc(${milestone.requirement * 100}% - 0.25rem)`,
+          }"
+        />
+      </div>
       <div class="o-pelle-rift-bar-percentage">
         {{ formatPercents(percentage, 3) }}
       </div>
-      <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
-      <div :class="barOverlay()" />
       <div
-        class="o-pelle-rift-bar-fill"
-        :style="{
-          width: `${Math.clampMax(percentage * 100, 100)}%`,
-        }"
-      />
-      <div
-        v-if="rift.reducedTo < 1"
-        class="o-pelle-rift-bar-reducedto"
-        :style="{
-          width: `${Math.clampMax(100 - rift.reducedTo * 100, 100)}%`,
-        }"
-      />
-      <!-- This bar overlay adds the shadow within the bar so the ugly edges don't show -->
-      <div
-        class="o-pelle-rift-bar-overlay"
-      />
-      <div
-        v-if="isActive && !isMaxed"
-        class="o-pelle-rift-bar-active-fill"
-      />
-      <div
-        v-tooltip="milestoneResourceText(rift, selectedHoverMilestone)"
+        :ach-tooltip="milestoneResourceText(rift, selectedHoverMilestone)"
         class="o-pelle-rift-bar-milestone-hover-area"
         :style="{
           left: `calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`
-        }"
-      />
-      <div
-        v-for="(milestone, idx) in rift.milestones"
-        :key="'milestone-line-' + idx"
-        class="o-pelle-rift-bar-milestone-line"
-        :class="{ 'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx) }"
-        :style="{
-          left: `calc(${milestone.requirement * 100}% - 0.25rem)`,
         }"
       />
     </div>
@@ -135,7 +137,7 @@ export default {
       <div
         v-for="(milestone, idx) in rift.milestones"
         :key="'milestone-' + idx"
-        v-tooltip="milestone.description()"
+        :ach-tooltip="milestone.description()"
         class="o-pelle-rift-milestone"
         :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
       >
@@ -189,7 +191,15 @@ export default {
   justify-content: center;
   align-items: center;
   background: #1e1e1e;
+}
+.l-overflow-hidden {
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 
 @keyframes pulse {
@@ -368,5 +378,15 @@ h2,
   color: var(--color-pelle--base);
   font-weight: bold;
   padding: 0.2rem;
+}
+
+[ach-tooltip]:before {
+  width: 14rem;
+  border: 0.1rem solid var(--color-pelle-secondary);
+  z-index: 4;
+}
+
+[ach-tooltip]:after {
+  border-top: 0.5rem solid var(--color-pelle-secondary);
 }
 </style>

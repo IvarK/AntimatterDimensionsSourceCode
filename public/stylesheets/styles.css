@@ -805,7 +805,7 @@ button:focus {
   bottom: 100%;
   left: 50%;
   margin-bottom: 0.5rem;
-  margin-left: -8.5rem;
+  transform: translateX(-50%);
   padding: 0.7rem;
   width: 16rem;
   border-radius: 0.3rem;

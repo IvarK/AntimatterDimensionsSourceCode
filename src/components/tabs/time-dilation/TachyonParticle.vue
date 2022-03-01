@@ -43,7 +43,7 @@ export default {
         x: start.x + direction.x * intersectionLength,
         y: start.y + direction.y * intersectionLength
       };
-      const duration = Math.max(intersectionLength / speed, 0.1);
+      const duration = Math.max(intersectionLength / speed, 1);
 
       const position = start;
       this.tween = new TWEEN.Tween(position)

@@ -209,7 +209,7 @@ export default {
     bottom: 100%;
     left: 50%;
     margin-bottom: 0.5rem;
-    margin-left: -8.5rem;
+    margin-left: -8.35rem;
     padding: 0.7rem;
     width: 16rem;
     border-radius: 0.3rem;
@@ -221,5 +221,20 @@ export default {
     line-height: 1.2;
     transition-duration: 0.4s;
     z-index: 3;
+  }
+
+  .c-pelle-upgrade-time-tooltip:after {
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    margin-left: -0.5rem;
+    width: 0;
+    border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+    border-right: 0.5rem solid transparent;
+    border-left: 0.5rem solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+    transition-duration: 0.4s;
   }
 </style>

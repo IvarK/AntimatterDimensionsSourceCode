@@ -25,7 +25,6 @@ export default {
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
-      multiplierText: "",
       disabledCondition: "",
       isQuickResetAvailable: false,
       hasContinuum: false,
@@ -35,6 +34,12 @@ export default {
   computed: {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
+    },
+    multiplierText() {
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      return `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     },
   },
   methods: {
@@ -75,15 +80,12 @@ export default {
       this.isSacrificeUnlocked = isSacrificeUnlocked;
 
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
 
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
-      this.multiplierText +=
-        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     }
   }
 };

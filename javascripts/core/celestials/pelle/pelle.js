@@ -110,7 +110,7 @@ export const Pelle = {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1 && ui.$viewModel.modal.progressBar !== undefined) {
+      if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {
         this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
       }
     }

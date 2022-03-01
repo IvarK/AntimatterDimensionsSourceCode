@@ -128,7 +128,9 @@ export default {
 </template>
 
 <style scoped>
+/* CONTAINER STYLES */
 .c-pelle-rift-bar {
+  --color-bar-bg: #1e1e1e;
   height: 5rem;
   border: 0.2rem solid var(--color-pelle-secondary);
   width: 25rem;
@@ -138,11 +140,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #1e1e1e;
+  background: var(--color-bar-bg);
 }
 .l-overflow-hidden {
   overflow: hidden;
-  border: 0.2rem solid #0000;
+  border: 0.2rem solid transparent;
   width: 25rem;
   height: 5rem;
   border-radius: 5px;
@@ -151,29 +153,17 @@ export default {
   left: -0.2rem;
   z-index: 0;
 }
-
-@keyframes pulse {
-  /* #ed143d66 is the base pelle colour except transparent. */
-  0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
-  50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
-  100% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+.o-pelle-rift-bar-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  box-shadow: inset 0 0 3px 1px var(--color-bar-bg);
 }
 
-.c-pelle-rift-bar-overfill-container {
-  animation: pulse 1s infinite linear;
-}
-
-.o-pelle-rift-bar-percentage {
-  font-size: 1.5rem;
-  color: white;
-  text-shadow: 1px 1px 2px var(--color-pelle--base);
-  z-index: 2;
-  /* This keeps the percentage from blocking the hover area */
-  height: 0;
-  display: flex;
-  align-items: center;
-}
-
+/* FILLING STYLES */
 .o-pelle-rift-bar-fill {
   position: absolute;
   bottom: 0;
@@ -193,16 +183,8 @@ export default {
   filter: brightness(0.5);
   z-index: 0;
 }
-.o-pelle-rift-bar-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 0;
-  box-shadow: inset 0 0 3px 1px #1e1e1e;
-}
 
+/* SPECIAL BAR OVERLAY STYLES */
 .o-pelle-rift-bar-permanent {
   position: absolute;
   bottom: 0;
@@ -213,7 +195,25 @@ export default {
   background: var(--color-pelle-secondary);
   z-index: 0;
 }
+.o-pelle-rift-bar-overfilled {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--color-pelle--base);
+  opacity: 0.5;
+  z-index: 1;
+}
+@keyframes pulse {
+  /* #ed143d66 is the base pelle colour except transparent. */
+  0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+  50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
+  100% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+}
+.c-pelle-rift-bar-overfill-container {
+  animation: pulse 1s infinite linear;
+}
 
+/* ACTIVE RIFT FILLING STYLES */
 @keyframes sweep {
   0% { left: 0; width: 0; }
   10% { left: 0; width: 2rem; }
@@ -230,15 +230,17 @@ export default {
   animation: sweep infinite 2s linear;
 }
 
-.o-pelle-rift-bar-overfilled {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: var(--color-pelle--base);
-  opacity: 0.5;
-  z-index: 1;
+/* PERCENTAGE STYLES */
+.o-pelle-rift-bar-percentage {
+  font-size: 1.5rem;
+  color: white;
+  text-shadow: 1px 1px 2px var(--color-pelle--base);
+  z-index: 2;
+  /* This keeps the percentage from blocking the hover area */
+  pointer-events: none;
 }
 
+/* MILESTONE STYLES */
 .o-pelle-rift-bar-milestone-hover-area {
   position: absolute;
   width: 2rem;
@@ -248,6 +250,13 @@ export default {
   z-index: 2;
 }
 
+@keyframes flash {
+  0% { opacity: 1 }
+  25% { opacity: 1 }
+  50% { opacity: 0.3 }
+  75% { opacity: 1 }
+  100% { opacity: 1 }
+}
 .o-pelle-rift-bar-milestone-line {
   position: absolute;
   width: 0.25rem;
@@ -263,14 +272,8 @@ export default {
   animation: none;
   filter: brightness(0.25);
 }
-@keyframes flash {
-  0% { opacity: 1 }
-  25% { opacity: 1 }
-  50% { opacity: 0.3 }
-  75% { opacity: 1 }
-  100% { opacity: 1 }
-}
 
+/* TOOLTIP STYLES */
 [ach-tooltip]:before {
   width: 14rem;
   border: 0.1rem solid var(--color-pelle--base);

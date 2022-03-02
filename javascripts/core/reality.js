@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { DC } from "./constants.js";
 
 /**
@@ -514,6 +513,7 @@ export function beginProcessReality(realityProps) {
   Glyphs.processSortingAfterReality();
 }
 
+// eslint-disable-next-line complexity
 export function finishProcessReality(realityProps) {
   const finalEP = Currency.eternityPoints.value.plus(gainedEternityPoints());
   if (player.records.bestReality.bestEP.lt(finalEP)) {

@@ -10,7 +10,8 @@ export default {
   data() {
     return {
       isReached: false,
-      isObsoleteWithPelle: false
+      isObsoleteWithPelle: false,
+      isDoomed: false
     };
   },
   computed: {
@@ -39,13 +40,14 @@ export default {
       return this.config.activeCondition ? this.config.activeCondition() : null;
     },
     disabledInDoomed() {
-      return Pelle.isDoomed && this.config.pelleUseless;
+      return this.isDoomed && this.config.pelleUseless;
     }
   },
   methods: {
     update() {
       this.isReached = this.milestone.isReached;
       this.isObsoleteWithPelle = this.config.pelleObsolete?.();
+      this.isDoomed = Pelle.isDoomed;
     }
   }
 };

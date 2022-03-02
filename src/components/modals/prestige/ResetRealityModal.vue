@@ -9,13 +9,21 @@ export default {
   created() {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
+  data() {
+    return {
+      isDoomed: false,
+    };
+  },
   computed: {
-    resetTerm() { return Pelle.isDoomed ? "Armageddon" : "Reality"; },
+    resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
   },
   methods: {
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
     },
+    update() {
+      this.isDoomed = Pelle.isDoomed;
+    }
   },
 };
 </script>

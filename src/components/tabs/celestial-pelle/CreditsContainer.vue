@@ -6,6 +6,7 @@ export default {
       rolling: false,
       scroll: 0,
       audio: null,
+      doomed: false
     };
   },
   watch: {
@@ -18,15 +19,11 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       if (!Pelle.isDoomed) return;
       this.rolling = Pelle.endState > 4.5;
       this.scroll = (Pelle.endState - 4.5) / 2 * 100;
       if (this.audio) this.audio.volume = Math.clamp(Pelle.endState - 4.5, 0, 0.3);
-    }
-  },
-  computed: {
-    doomed() {
-      return Pelle.isDoomed;
     }
   }
 };

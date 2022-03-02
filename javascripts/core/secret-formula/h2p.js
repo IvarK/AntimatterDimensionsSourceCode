@@ -397,7 +397,7 @@ will ignore your max Boost limit.
 individual autobuyer settings.
 <br>
 <br>
-<b>Hotkey: A</b> will disable/enable all autobuyers.
+<b>Hotkey: A</b> will toggle all autobuyers.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],
@@ -1501,7 +1501,7 @@ ${Pelle.hasGalaxyGenerator
     : ""}
 <br>
 <br>
-<b>Hotkey: Z</b> will try to perfrom an Armageddon reset.
+<b>Hotkey: Z</b> will try to perform an Armageddon reset.
 `,
       isUnlocked: () => Pelle.isDoomed,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle", "strike", "rift", "galaxy",

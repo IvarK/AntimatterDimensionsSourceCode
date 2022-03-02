@@ -16,7 +16,7 @@ GameDatabase.confirmationTypes = [
   }, {
     name: "Big Crunch",
     option: "bigCrunch",
-    isUnlocked: () => player.break || PlayerProgress.realityUnlocked(),
+    isUnlocked: () => player.break || PlayerProgress.eternityUnlocked(),
   }, {
     name: "Challenges",
     option: "challenges",

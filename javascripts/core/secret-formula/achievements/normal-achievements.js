@@ -1304,7 +1304,7 @@ GameDatabase.achievements.normal = [
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
     // This is V achievement 10's reward value when it is maxxed.
     // We forgot to remove it and we won't bother with rebalancing pelle.
-    get reward() { return `All antimatter dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
   },
   {
     id: 182,
@@ -1343,7 +1343,7 @@ GameDatabase.achievements.normal = [
   {
     id: 187,
     name: "The One with Dilated Time",
-    description: "Unlock dilation in Doomed.",
+    description: "Unlock Dilation in Doomed.",
     checkRequirement: () => PelleStrikes.dilation.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },

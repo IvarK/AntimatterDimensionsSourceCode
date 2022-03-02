@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     topLabel() {
-      if (!Pelle.isDoomed) return `You are about to Doom your Reality`;
+      if (!this.isDoomed) return `You are about to Doom your Reality`;
       return `You are about to perform an Armageddon reset`;
     },
     message() {
@@ -39,30 +39,29 @@ export default {
       this.canArmageddon = Pelle.canArmageddon;
     },
     handleYesClick() {
-      if (!Pelle.isDoomed) {
-        Glyphs.harshAutoClean();
-        if (!Glyphs.unequipAll({
-          modalOnFail: `Entering Doomed will unequip your Glyphs. Some of your
-          Glyphs could not be unequipped due to lack of inventory space.`
-        })) {
-          return;
-        }
-        Glyphs.harshAutoClean();
-        for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
-        Glyphs.refreshActive();
-        player.celestials.pelle.doomed = true;
-        Pelle.armageddon(false);
-        respecTimeStudies(true);
-        Currency.infinityPoints.reset();
-        player.infMult = 0;
-        Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
-        disChargeAll();
-        player.buyUntil10 = true;
-        player.records.realTimeDoomed = 0;
-        Pelle.quotes.show(Pelle.quotes.INITIAL);
+      if (this.isDoomed) {
+        Pelle.armageddon(true);
+        return;
       }
 
-      Pelle.armageddon(true);
+      Glyphs.harshAutoClean();
+      if (!Glyphs.unequipAll(`Entering Doomed will unequip your Glyphs. Some of your
+        Glyphs could not be unequipped due to lack of inventory space.`)) {
+        return;
+      }
+      Glyphs.harshAutoClean();
+      for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+      Glyphs.refreshActive();
+      player.celestials.pelle.doomed = true;
+      Pelle.armageddon(false);
+      respecTimeStudies(true);
+      Currency.infinityPoints.reset();
+      player.infMult = 0;
+      Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
+      disChargeAll();
+      player.buyUntil10 = true;
+      player.records.realTimeDoomed = 0;
+      Pelle.quotes.show(Pelle.quotes.INITIAL);
     },
   },
 };

@@ -29,14 +29,16 @@ export default {
 <template>
   <ModalWrapperOptions style="width: auto">
     <template #header>
-      <span v-if="isDoomed">You cannot hide your tabs within Doomed.</span>
-      <span v-else>Modify Visible Tabs</span>
+      <span>Modify Visible Tabs</span>
     </template>
-    <div v-if="!isDoomed">
+    <div>
       Click a button to toggle showing a tab on/off.
       <br>
       Some tabs cannot be hidden, and you cannot hide your current tab.
       <br>
+    </div>
+    <div v-if="isDoomed">
+      You cannot hide your tabs within Doomed.
     </div>
     <div v-if="isEnslaved">
       <br>

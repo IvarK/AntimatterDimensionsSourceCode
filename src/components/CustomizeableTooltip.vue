@@ -12,6 +12,16 @@ export default {
     tooltipArrowStyle: {
       type: Object,
       required: true
+    },
+    left: {
+      type: String,
+      required: false,
+      default: "0"
+    }
+  },
+  watch: {
+    left(newVal) {
+      this.updateLeft(newVal);
     }
   },
   mounted() {
@@ -21,31 +31,27 @@ export default {
     }
     this.mainContent.addEventListener("mouseenter", () => {
       this.hovering = true;
-      this.update();
     });
     this.mainContent.addEventListener("mouseleave", () => {
       this.hovering = false;
-      this.update();
     });
+    this.updateLeft();
   },
   data() {
     return {
       hovering: false,
-      mainContent: null,
-      left: 0
+      mainContent: null
     };
   },
   methods: {
-    update() {
-      if (!this.mainContent) return;
-      this.left = getComputedStyle(this.mainContent).left;
+    updateLeft(newVal = this.left) {
+      this.mainContent.style.left = newVal;
     }
   },
   computed: {
     tooltipGenStyle() {
-      return {
-        left: this.left
-      };
+      const styles = { left: this.left };
+      return styles;
     }
   }
 };

@@ -134,14 +134,12 @@ export default {
       class="o-pelle-rift-bar-milestone-hover-container"
       :tooltip-content-style="tooltipContentStyle"
       :tooltip-arrow-style="tooltipArrowStyle"
+      :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
     >
       <div
         id="mainContent"
         slot="mainContent"
         class="o-pelle-rift-bar-milestone-hover-area"
-        :style="{
-          left: `calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`
-        }"
       />
       <div slot="tooltipContent">
         {{ milestoneResourceText(rift, selectedHoverMilestone) }}

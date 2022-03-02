@@ -11,21 +11,6 @@ export default {
       type: Object,
       required: true
     },
-  },
-  data() {
-    return {
-      opened: false
-    };
-  },
-  methods: {
-    handleOpenClose(opened) {
-      this.opened = opened;
-    }
-  },
-  computed: {
-    zIndex() {
-      return this.opened ? 3 : 1;
-    }
   }
 };
 </script>
@@ -33,11 +18,9 @@ export default {
 <template>
   <div
     class="c-pelle-strike-container"
-    :style="{ zIndex }"
   >
     <ExpandingControlBox
       container-class="c-pelle-strike"
-      @openclose="handleOpenClose"
     >
       <div
         slot="header"
@@ -67,12 +50,13 @@ export default {
     border-radius: 0.5rem;
     font-weight: bold;
     min-height: 3.8rem;
+    z-index: 3;
   }
 
   .c-pelle-strike-container {
     padding: 0.5rem 0.5rem 2rem;
     height: 5rem;
-    z-index: 2;
+    z-index: 3;
   }
 
   .c-pelle-strike-text-padding {

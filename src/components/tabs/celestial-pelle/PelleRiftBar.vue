@@ -1,6 +1,10 @@
 <script>
+import CustomizeableTooltip from "@/components/CustomizeableTooltip.vue";
 export default {
   name: "PelleRiftBar",
+  components: {
+    CustomizeableTooltip
+  },
   props: {
     rift: {
       type: Object,
@@ -16,7 +20,16 @@ export default {
       selectedHoverMilestone: this.rift.milestones[0],
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
-      effects: []
+      effects: [],
+      tooltipContentStyle: {
+        width: "14rem",
+        border: "0.1rem solid var(--color-pelle--base)",
+        backgroundColor: "hsl(0, 0%, 5%)",
+        zIndex: 4
+      },
+      tooltipArrowStyle: {
+        borderTop: "0.5rem solid var(--color-pelle--base)"
+      }
     };
   },
   methods: {
@@ -117,13 +130,23 @@ export default {
     <div class="o-pelle-rift-bar-percentage">
       {{ formatPercents(percentage, 3) }}
     </div>
-    <div
-      :ach-tooltip="milestoneResourceText(rift, selectedHoverMilestone)"
-      class="o-pelle-rift-bar-milestone-hover-area"
-      :style="{
-        left: `calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`
-      }"
-    />
+    <CustomizeableTooltip
+      class="o-pelle-rift-bar-milestone-hover-container"
+      :tooltip-content-style="tooltipContentStyle"
+      :tooltip-arrow-style="tooltipArrowStyle"
+    >
+      <div
+        id="mainContent"
+        slot="mainContent"
+        class="o-pelle-rift-bar-milestone-hover-area"
+        :style="{
+          left: `calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`
+        }"
+      />
+      <div slot="tooltipContent">
+        {{ milestoneResourceText(rift, selectedHoverMilestone) }}
+      </div>
+    </CustomizeableTooltip>
   </div>
 </template>
 
@@ -247,7 +270,9 @@ export default {
   height: 100%;
   top: 0;
   transform: translateX(-50%);
-  z-index: 2;
+}
+.o-pelle-rift-bar-milestone-hover-container {
+  height: 100%;
 }
 
 @keyframes flash {
@@ -271,17 +296,5 @@ export default {
 .o-pelle-rift-bar-milestone-line--disabled {
   animation: none;
   filter: brightness(0.25);
-}
-
-/* TOOLTIP STYLES */
-[ach-tooltip]:before {
-  width: 14rem;
-  border: 0.1rem solid var(--color-pelle--base);
-  background-color: hsl(0, 0%, 5%);
-  z-index: 4;
-}
-
-[ach-tooltip]:after {
-  border-top: 0.5rem solid var(--color-pelle--base);
 }
 </style>

@@ -1,5 +1,5 @@
 <script>
-import EffarigUnlockButton from "./EffarigUnlockButton.vue";
+import EffarigUnlockButton from "./EffarigUnlockButton";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
 export default {

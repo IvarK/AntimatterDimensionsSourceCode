@@ -1,7 +1,7 @@
 <script>
 import { DC } from "../../../../javascripts/core/constants";
-import PerkShopUpgradeButton from "./PerkShopUpgradeButton.vue";
-import CelestialQuoteHistory from "@/components/CelestialQuoteHistory.vue";
+import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 
 export default {

@@ -23,6 +23,8 @@ export default {
       this.canArmageddon = Pelle.canArmageddon;
     },
     manualArmageddon() {
+      if (!this.canArmageddon) return;
+
       if (player.options.confirmations.armageddon) Modal.armageddon.show();
       else Pelle.armageddon(true);
     }

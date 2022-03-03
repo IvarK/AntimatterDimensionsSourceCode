@@ -116,6 +116,8 @@ export default {
       const pet = this.pet;
       return {
         "c-ra-pet-upgrade": true,
+        "c-ra-pet-upgrade-memory": type === "memory",
+        "c-ra-pet-upgrade-chunk": type === "chunk",
         "c-ra-pet-btn--available": available,
         "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
         "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
@@ -305,9 +307,14 @@ export default {
   display: flex;
   justify-content: center;
 }
-.c-ra-pet-upgrade {
+.c-ra-pet-upgrade-memory {
   border-top-right-radius: 0;
   border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.c-ra-pet-upgrade-chunk {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 

@@ -412,7 +412,7 @@ GameDatabase.tabs = [
         key: "teresa",
         name: "Teresa",
         symbol: "Ϟ",
-        component: "TeresaTab",
+        component: "teresa-tab",
         id: 1,
         hidable: true,
       },

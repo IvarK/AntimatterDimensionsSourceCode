@@ -6,7 +6,6 @@ import "./reality/perks-tab.js";
 import "./reality/black-hole/black-hole-tab.js";
 
 import "./celestials/navigation.js";
-import "./celestials/subtabs/teresa/teresa-tab.js";
 import "./celestials/subtabs/effarig/effarig-tab.js";
 import "./celestials/subtabs/v-tab.js";
 import "./celestials/subtabs/enslaved-tab.js";

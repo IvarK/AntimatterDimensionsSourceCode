@@ -441,7 +441,7 @@ GameDatabase.reality.perks = {
     },
     effect: 10,
     automatorPoints: 5,
-    shortDescription: () => `Faster Achievements: every ${formatInt(10)} minutes`,
+    shortDescription: () => `Faster Achievements: every ${formatInt(20)} minutes`,
     defaultPosition: new Vector(-45, -135)
   },
   achievementGroup2: {

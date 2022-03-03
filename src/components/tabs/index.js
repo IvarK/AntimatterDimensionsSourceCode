@@ -13,6 +13,7 @@ import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 import TeresaTab from "./celestial-teresa/TeresaTab";
+import EffarigTab from "./celestial-effarig/EffarigTab";
 import PelleTab from "./celestial-pelle/PelleTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
 import AutomatorTab from "./automator/AutomatorTab";
@@ -42,6 +43,7 @@ const TabComponents = {
   NormalAchievementsTab,
   SecretAchievementTab,
   TeresaTab,
+  EffarigTab,
   PelleTab,
   AutobuyersTab,
   AutomatorTab,

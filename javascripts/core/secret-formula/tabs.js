@@ -410,7 +410,7 @@ GameDatabase.tabs = [
         key: "effarig",
         name: "Effarig",
         symbol: "Ϙ",
-        component: "effarig-tab",
+        component: "EffarigTab",
         condition: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
         id: 2,
         hidable: true,

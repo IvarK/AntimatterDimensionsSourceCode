@@ -15,6 +15,7 @@ import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
 import TeresaTab from "./celestial-teresa/TeresaTab";
 import EffarigTab from "./celestial-effarig/EffarigTab";
 import EnslavedTab from "./celestial-enslaved/EnslavedTab";
+import VTab from "./celestial-v/VTab";
 import PelleTab from "./celestial-pelle/PelleTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
 import AutomatorTab from "./automator/AutomatorTab";
@@ -46,6 +47,7 @@ const TabComponents = {
   TeresaTab,
   EffarigTab,
   EnslavedTab,
+  VTab,
   PelleTab,
   AutobuyersTab,
   AutomatorTab,

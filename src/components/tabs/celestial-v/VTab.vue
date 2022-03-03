@@ -152,7 +152,7 @@ export default {
 
 <template>
   <div class="l-v-celestial-tab">
-    <celestial-quote-history celestial="v" />
+    <CelestialQuoteHistory celestial="v" />
     <div
       v-if="!mainUnlock"
       class="c-v-info-text"

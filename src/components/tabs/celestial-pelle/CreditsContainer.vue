@@ -32,9 +32,9 @@ export default {
       // this.scroll = (Pelle.endState - 4.5) / 2 * 100;
       // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
 
-      this.rolling = player.records.thisInfinity.realTime > 2e4;
-      this.scroll = (player.records.thisInfinity.realTime - 2e4) / 500;
-      if (this.audio) this.audio.volume = Math.clamp((player.records.thisInfinity.realTime - 1e4), 0, 0.3);
+      this.rolling = player.records.thisReality.realTime > 1.5e4;
+      this.scroll = (player.records.thisReality.realTime - 1.5e4) / 500;
+      if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
     }
   }
 };

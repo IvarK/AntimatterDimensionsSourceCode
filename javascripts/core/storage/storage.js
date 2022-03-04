@@ -135,7 +135,7 @@ export const GameStorage = {
   save(silent = false, manual = false) {
     // Original code:
     // if (Pelle.endState >= 4.5 && !Pelle.removeAdditionalEnd) return;
-    if (player.records.thisInfinity.realTime >= 1) return;
+    if (player.records.thisReality.realTime >= 1e3) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();

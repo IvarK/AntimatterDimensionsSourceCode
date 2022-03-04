@@ -10,7 +10,7 @@ export default {
     update() {
       // Original code
       // this.opacity = (Pelle.endState - 2.5) / 2;
-      this.opacity = (player.records.thisInfinity.realTime - 1e4) / 2000;
+      this.opacity = (player.records.thisReality.realTime - 1e4) / 4000;
     }
   }
 };

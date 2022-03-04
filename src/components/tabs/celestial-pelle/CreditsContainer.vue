@@ -100,7 +100,7 @@ export default {
       // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
 
       this.rolling = player.records.thisReality.realTime > 1.5e4;
-      this.scroll = (player.records.thisReality.realTime - 1.5e4) / 500;
+      this.scroll = (player.records.thisReality.realTime - 1.5e4) / 250;
       if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
     },
     animName(x, duration = 10, type = "ease-in-out") {
@@ -132,18 +132,18 @@ export default {
     <p>Razenpok (Andrei Andreev)</p>
 
     <h2>Lead Developers</h2>
-    <p>SpectralFlame (Christopher Yip)</p>
     <p>Omsi</p>
+    <p>SpectralFlame (Christopher Yip)</p>
 
     <h2>Developers</h2>
     <p>Dan</p>
-    <p>realrapidjazz</p>
     <p>earth</p>
-    <p>IkerStream</p>
-    <p>Pichusuperlover</p>
-    <p>Patashu</p>
-    <p>L4R5 (Lars Wolf)</p>
     <p>Hira</p>
+    <p>IkerStream</p>
+    <p>L4R5 (Lars Wolf)</p>
+    <p>realrapidjazz</p>
+    <p>Patashu</p>
+    <p>Pichusuperlover</p>
     <p>Sparticle999</p>
 
     <h2>Modal Maker, Lady Taker, Pie Baker</h2>
@@ -230,6 +230,7 @@ export default {
     </div>
     <div class="l-credits--right">
       <p>Archa (Myresa)</p>
+      <p>Auti (Alice Tolle)</p>)
       <p>Barrin84</p>
       <p>ChaoticHans</p>
       <p>DarthDie (Briar Bowser)</p>

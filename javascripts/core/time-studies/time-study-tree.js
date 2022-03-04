@@ -54,7 +54,8 @@ export class TimeStudyTree {
   // formatting separately from verifying existence allows us to produce more useful in-game error messages for
   // import strings which are formatted correctly but aren't entirely valid
   static isValidImportString(input) {
-    return /^(\d+)(,(\d+))*(\|\d+)?$/u.test(input);
+    // eslint-disable-next-line max-len
+    return /^(\d+|antimatter|infinity|time|active|passive|idle)(,(\d+|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
   }
 
   // Getter for all the studies in the current game state
@@ -80,7 +81,8 @@ export class TimeStudyTree {
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
-    const treeStudies = input.split("|")[0].split(",");
+    const truncatedString = this.truncatedInput(input);
+    const treeStudies = truncatedString.split("|")[0].split(",");
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const studyArray = [];
     for (const study of treeStudies) {
@@ -106,6 +108,20 @@ export class TimeStudyTree {
     }
     if (ecID !== 0) studyArray.push(TimeStudy.eternityChallenge(ecID));
     return studyArray;
+  }
+
+  truncatedInput(input) {
+    let truncatedString = input;
+    // If last character is "," remove it
+    truncatedString = truncatedString.replace(/,$/u, "").trim();
+    // If study id name is included replace with id number
+    truncatedString = truncatedString.replace(/antimatter/giu, "71,81,91,101");
+    truncatedString = truncatedString.replace(/infinity/giu, "72,82,92,102");
+    truncatedString = truncatedString.replace(/time/giu, "73,83,93,103");
+    truncatedString = truncatedString.replace(/active/giu, "121,131,141");
+    truncatedString = truncatedString.replace(/passive/giu, "122,132,142");
+    truncatedString = truncatedString.replace(/idle/giu, "123,133,143");
+    return truncatedString;
   }
 
   // Attempt to purchase all studies specified in the array which may be either study IDs (which get converted) or

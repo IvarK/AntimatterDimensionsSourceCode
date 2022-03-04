@@ -5,7 +5,7 @@ export default {
     return {
       rolling: false,
       scroll: 0,
-      audio: null,
+      audio: null
     };
   },
   watch: {
@@ -22,6 +22,73 @@ export default {
         top: `${100 - this.scroll}vh`,
         display: this.rolling ? "block" : "none"
       };
+    },
+    celestialDisplays() {
+      return {
+        teresa: {
+          symbol: "Ϟ",
+          style: {
+            left: "65%",
+            top: "97rem",
+            color: "var(--color-teresa--base)",
+            animation: this.animName("teresa")
+          }
+        },
+        effarig: {
+          symbol: "Ϙ",
+          style: {
+            left: "80%",
+            top: "35rem",
+            color: "var(--color-effarig--base)",
+            animation: this.animName("effarig")
+          }
+        },
+        enslaved: {
+          symbol: "<i class='fas fa-link'></i>",
+          style: {
+            left: "52%",
+            top: "170rem",
+            color: "var(--color-enslaved-base)",
+            animation: this.animName("enslaved", 10, "linear")
+          }
+        },
+        v: {
+          symbol: "⌬",
+          style: {
+            left: "20%",
+            top: "128rem",
+            color: "var(--color-v--base)",
+            animation: this.animName("v", 5)
+          }
+        },
+        ra: {
+          symbol: "<i class='fas fa-sun'></i>",
+          style: {
+            left: "44%",
+            top: "240rem",
+            color: "var(--color-ra-base)",
+            animation: this.animName("ra")
+          }
+        },
+        laitela: {
+          symbol: "ᛝ",
+          style: {
+            left: "13%",
+            top: "60rem",
+            color: "#ffffff",
+            animation: this.animName("laitela", 5)
+          }
+        },
+        pelle: {
+          symbol: "♅",
+          style: {
+            left: "30%",
+            top: "5rem",
+            color: "var(--color-pelle--base)",
+            animation: this.animName("pelle", 5, "linear")
+          }
+        }
+      };
     }
   },
   methods: {
@@ -35,6 +102,9 @@ export default {
       this.rolling = player.records.thisReality.realTime > 1.5e4;
       this.scroll = (player.records.thisReality.realTime - 1.5e4) / 500;
       if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
+    },
+    animName(x, duration = 10, type = "ease-in-out") {
+      return `a-${x}-credits ${duration}s ${type} infinite`;
     }
   }
 };
@@ -46,6 +116,13 @@ export default {
     class="credits-container"
     :style="creditStyles"
   >
+    <div
+      v-for="cel in celestialDisplays"
+      :key="cel.symbol + '-end-credit-symbol-disp'"
+      class="c-credits-cel-symbol"
+      :style="cel.style"
+      v-html="cel.symbol"
+    />
     <h1>Antimatter Dimensions</h1>
 
     <h2>Created by</h2>
@@ -213,4 +290,54 @@ export default {
   p {
     margin-top: 1rem;
   }
+
+
+  .c-credits-cel-symbol {
+    position: absolute;
+    font-size: 14rem;
+    text-shadow: 0 0 3rem;
+    transform: translateX(-50%);
+  }
+</style>
+
+<style>
+@keyframes a-teresa-credits {
+  0% {transform: rotate(61deg);}
+  10% {transform: rotate(322deg);}
+  20% {transform: rotate(235deg);}
+  30% {transform: rotate(222deg);}
+  40% {transform: rotate(105deg);}
+  50% {transform: rotate(33deg);}
+  60% {transform: rotate(103deg);}
+  70% {transform: rotate(158deg);}
+  80% {transform: rotate(41deg);}
+  90% {transform: rotate(73deg);}
+  100% {transform: rotate(61deg);}
+}
+@keyframes a-enslaved-credits {
+  0% { transform: translateX(-50%) rotate(0); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+@keyframes a-v-credits {
+  0% { transform: translateX(-50%) rotate(0) scale(0.8); }
+  50% { transform: translateX(-50%) rotate(60deg) scale(1.2); }
+  100% { transform: translateX(-50%) rotate(0) scale(0.8); }
+}
+@keyframes a-ra-credits {
+  0% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
+  50% { opacity: 0.4; transform: translateX(-50%) scale(0.9); }
+  100% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
+}
+@keyframes a-laitela-credits {
+  0% { transform: translate(-50%, -20%); }
+  50% { transform: translate(-50%, 20%); }
+  100% { transform: translate(-50%, -20%); }
+}
+@keyframes a-pelle-credits {
+  0% { transform: translateX(-50%) rotate3d(0, 1, 0, 0) scaleY(1); }
+  25% { transform: translateX(-50%) rotate3d(0, 1, 0, 90deg) scaleY(1.3); }
+  50% { transform: translateX(-50%) rotate3d(0, 1, 0, 180deg) scaleY(1); }
+  75% { transform: translateX(-50%) rotate3d(0, 1, 0, 270deg) scaleY(1.3); }
+  100% { transform: translateX(-50%) rotate3d(0, 1, 0, 360deg) scaleY(1); }
+}
 </style>

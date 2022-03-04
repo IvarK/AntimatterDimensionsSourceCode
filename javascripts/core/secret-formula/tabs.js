@@ -446,7 +446,7 @@ GameDatabase.tabs = [
         key: "laitela",
         name: "Lai'tela",
         symbol: "ᛝ",
-        component: "laitela-tab",
+        component: "LaitelaTab",
         condition: () => Laitela.isUnlocked,
         id: 6,
         hidable: true,

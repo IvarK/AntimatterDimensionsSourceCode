@@ -17,6 +17,7 @@ import EffarigTab from "./celestial-effarig/EffarigTab";
 import EnslavedTab from "./celestial-enslaved/EnslavedTab";
 import VTab from "./celestial-v/VTab";
 import RaTab from "./celestial-ra/RaTab";
+import LaitelaTab from "./celestial-laitela/LaitelaTab";
 import PelleTab from "./celestial-pelle/PelleTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
 import AutomatorTab from "./automator/AutomatorTab";
@@ -50,6 +51,7 @@ const TabComponents = {
   EnslavedTab,
   VTab,
   RaTab,
+  LaitelaTab,
   PelleTab,
   AutobuyersTab,
   AutomatorTab,

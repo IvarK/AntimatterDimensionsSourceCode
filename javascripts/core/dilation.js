@@ -32,13 +32,13 @@ export function startDilatedEternityRequest() {
     }
   } else if (player.options.confirmations.dilation) {
     Modal.enterDilation.show();
+  } else if (playAnimation) {
+    animateAndDilate();
   } else {
+    startDilatedEternity();
+  }
+  if (Pelle.isDoomed && !player.options.confirmations.dilation) {
     PelleStrikes.dilation.trigger();
-    if (playAnimation) {
-      animateAndDilate();
-    } else {
-      startDilatedEternity();
-    }
   }
 }
 

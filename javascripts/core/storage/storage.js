@@ -133,7 +133,9 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
-    if (Pelle.endState >= 4.5 && !Pelle.removeAdditionalEnd) return;
+    // Original code:
+    // if (Pelle.endState >= 4.5 && !Pelle.removeAdditionalEnd) return;
+    if (player.records.thisInfinity.realTime >= 1) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
@@ -227,7 +229,9 @@ export const GameStorage = {
     if (overrideLastUpdate) {
       player.lastUpdate = overrideLastUpdate;
     }
-    if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
+    // Original code:
+    // if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
+    if (Speedrun.isPausedAtStart()) {
       let diff = Date.now() - player.lastUpdate;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {

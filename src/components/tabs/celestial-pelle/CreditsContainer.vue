@@ -26,10 +26,15 @@ export default {
   },
   methods: {
     update() {
-      if (!Pelle.endState > 1) return;
-      this.rolling = Pelle.endState > 4.5;
-      this.scroll = (Pelle.endState - 4.5) / 2 * 100;
-      if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
+      // Original code:
+      // if (!Pelle.endState > 1) return;
+      // this.rolling = Pelle.endState > 4.5;
+      // this.scroll = (Pelle.endState - 4.5) / 2 * 100;
+      // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
+
+      this.rolling = player.records.thisInfinity.realTime > 2e4;
+      this.scroll = (player.records.thisInfinity.realTime - 2e4) / 500;
+      if (this.audio) this.audio.volume = Math.clamp((player.records.thisInfinity.realTime - 1e4), 0, 0.3);
     }
   }
 };
@@ -77,7 +82,7 @@ export default {
     <p>Pichusuperlover</p>
     <p>Acamaeda</p>
 
-    <!-- If we end up with an uneven amount of name, I'll throw myself on the list too -->
+    <!-- If we end up with an uneven amount of name, I'll throw myself (Lars) on the list -->
     <h2>Web Testers</h2>
     <div class="l-credits--left">
       <p>Aesis</p>
@@ -123,7 +128,7 @@ export default {
       <p>Zipi</p>
     </div>
 
-    <h2>Android Testers:</h2>
+    <h2>Android Testers</h2>
     <div class="l-credits--left">
       <p>about:blank</p>
       <p>Anjinho01</p>

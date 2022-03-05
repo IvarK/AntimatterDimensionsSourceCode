@@ -79,8 +79,8 @@ export default {
       <br><br>
     </div>
     <div
-      v-for="(line, lineID) in runDescription"
-      :key="lineID + '-laitela-run-desc'"
+      v-for="(line, lineId) in runDescription"
+      :key="lineId + '-laitela-run-desc'"
     >
       {{ line }} <br>
     </div>

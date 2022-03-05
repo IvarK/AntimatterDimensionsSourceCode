@@ -144,8 +144,8 @@ export default {
           <span class="c-ra-run-button__icon__sigil fas fa-sun" />
         </div>
         <span
-          v-for="(line, lineID) in runDescription"
-          :key="lineID + '-ra-run-desc'"
+          v-for="(line, lineId) in runDescription"
+          :key="lineId + '-ra-run-desc'"
         >
           {{ line }}
         </span>

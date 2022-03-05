@@ -7,7 +7,6 @@ import "./reality/black-hole/black-hole-tab.js";
 
 import "./celestials/navigation.js";
 import "./celestials/subtabs/ra/alchemy-tab.js";
-import "./celestials/subtabs/laitela/laitela-tab.js";
 
 import "./shop/shop-tab.js";
 

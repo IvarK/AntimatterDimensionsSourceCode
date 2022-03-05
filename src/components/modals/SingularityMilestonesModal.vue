@@ -1,10 +1,11 @@
 <script>
-import "../../../javascripts/components/celestials/subtabs/laitela/singularity-milestone.js";
+import SingularityMilestoneComponent from "../tabs/celestial-laitela/SingularityMilestoneComponent";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "SingularityMilestonesModal",
   components: {
+    SingularityMilestoneComponent,
     ModalWrapperChoice,
   },
   data() {
@@ -99,7 +100,7 @@ export default {
     </template>
     <div class="l-singularity-milestone-modal-container-outer">
       <div class="l-singularity-milestone-modal-container-inner">
-        <singularity-milestone
+        <SingularityMilestoneComponent
           v-for="milestone in milestones"
           :key="milestone.id"
           :milestone="milestone"

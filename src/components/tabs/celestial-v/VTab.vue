@@ -202,8 +202,8 @@ export default {
       </div>
       <div class="l-v-unlocks-container">
         <li
-          v-for="(hex, hexID) in hexGrid"
-          :key="hexID + '-v-hex'"
+          v-for="(hex, hexId) in hexGrid"
+          :key="hexId + '-v-hex'"
           :style="[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]"
         >
           <div
@@ -292,13 +292,13 @@ export default {
       <br>
       <div class="l-v-milestones-grid">
         <div
-          v-for="(row, rowID) in runMilestones"
-          :key="rowID + '-v-ms-row'"
+          v-for="(row, rowId) in runMilestones"
+          :key="rowId + '-v-ms-row'"
           class="l-v-milestones-grid__row"
         >
           <div
-            v-for="(milestone, colID) in row"
-            :key="colID + rowID*10 + '-v-ms'"
+            v-for="(milestone, colId) in row"
+            :key="colId + rowId*10 + '-v-ms'"
             class="o-v-milestone"
             :class="{'o-v-milestone--unlocked':
               has(milestone)}"

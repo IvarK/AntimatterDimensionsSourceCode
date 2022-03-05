@@ -54,8 +54,10 @@ export class TimeStudyTree {
   // formatting separately from verifying existence allows us to produce more useful in-game error messages for
   // import strings which are formatted correctly but aren't entirely valid
   static isValidImportString(input) {
-    // eslint-disable-next-line max-len
-    return /^(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle)(,(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
+    if (input.trim() === "") {
+      return false;
+    }
+    return /^(,?(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
   }
 
   // Getter for all the studies in the current game state
@@ -81,19 +83,20 @@ export class TimeStudyTree {
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
-    const tree = this.truncatedInput(input);
-    const treeStudies = tree.split("|")[0].split(",");
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const studyArray = [];
-    for (const study of treeStudies) {
+    const studyCluster = this.truncatedInput(input).split("|")[0].split(",");
+    for (const study of studyCluster) {
       const range = study.split("-");
-      const rangeSplit = this.studyRange(range[0], range[1]);
+      const rangeSplit = range[1] ? this.studyRange(range[0], range[1]) : range;
       for (const study2 of rangeSplit) {
         if (studyDB.includes(parseInt(study2, 10))) {
           const tsObject = TimeStudy(study2);
           this.selectedStudies.push(tsObject);
           studyArray.push(tsObject);
-        } else this.invalidStudies.push(study2);
+        } else {
+          this.invalidStudies.push(study2);
+        }
       }
     }
 
@@ -115,28 +118,26 @@ export class TimeStudyTree {
   }
 
   truncatedInput(input) {
-    let truncatedString = input;
-    // If last character is "," remove it
-    truncatedString = truncatedString.replace(/,$/u, "").trim();
-    // If study id name is included replace with id number
-    truncatedString = truncatedString.replace(/antimatter/giu, "71,81,91,101");
-    truncatedString = truncatedString.replace(/infinity/giu, "72,82,92,102");
-    truncatedString = truncatedString.replace(/time/giu, "73,83,93,103");
-    truncatedString = truncatedString.replace(/active/giu, "121,131,141");
-    truncatedString = truncatedString.replace(/passive/giu, "122,132,142");
-    truncatedString = truncatedString.replace(/idle/giu, "123,133,143");
-    return truncatedString;
+    return input
+      .toLowerCase()
+      .replaceAll("antimatter", "71,81,91,101")
+      .replaceAll("infinity", "72,82,92,102")
+      .replaceAll("time", "73,83,93,103")
+      .replaceAll("active", "121,131,141")
+      .replaceAll("passive", "122,132,142")
+      .replaceAll("idle", "123,133,143")
+      .replace(/,$/u, "").trim();
   }
 
-  studyRange(firstID, lastID) {
+  studyRange(firstNumber, lastNumber) {
     const studiesArray = [];
-    const first = this.checkTimeStudyNumber(firstID);
-    if (lastID === undefined) {
-      studiesArray.push(firstID);
-    } else {
-      const last = this.checkTimeStudyNumber(lastID);
-      for (let id = first; id <= last; ++id) {
-        if (TimeStudy(id)) studiesArray.push(id);
+    const first = this.checkTimeStudyNumber(firstNumber);
+    const last = this.checkTimeStudyNumber(lastNumber);
+    if ((first !== 0) && (last !== 0)) {
+      for (let id = first; id <= last; id++) {
+        if (TimeStudy(id)) {
+          studiesArray.push(id);
+        }
       }
     }
     return studiesArray;

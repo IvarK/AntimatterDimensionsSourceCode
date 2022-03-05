@@ -55,7 +55,7 @@ export class TimeStudyTree {
   // import strings which are formatted correctly but aren't entirely valid
   static isValidImportString(input) {
     // eslint-disable-next-line max-len
-    return /^(\d+|antimatter|infinity|time|active|passive|idle)(,(\d+|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
+    return /^(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle)(,(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
   }
 
   // Getter for all the studies in the current game state
@@ -81,16 +81,20 @@ export class TimeStudyTree {
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
-    const truncatedString = this.truncatedInput(input);
-    const treeStudies = truncatedString.split("|")[0].split(",");
+    const tree = this.truncatedInput(input);
+    const treeStudies = tree.split("|")[0].split(",");
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const studyArray = [];
     for (const study of treeStudies) {
-      if (studyDB.includes(parseInt(study, 10))) {
-        const tsObject = TimeStudy(study);
-        this.selectedStudies.push(tsObject);
-        studyArray.push(tsObject);
-      } else this.invalidStudies.push(study);
+      const range = study.split("-");
+      const rangeSplit = this.studyRange(range[0], range[1]);
+      for (const study2 of rangeSplit) {
+        if (studyDB.includes(parseInt(study2, 10))) {
+          const tsObject = TimeStudy(study2);
+          this.selectedStudies.push(tsObject);
+          studyArray.push(tsObject);
+        } else this.invalidStudies.push(study2);
+      }
     }
 
     // If the string has an EC indicated in it, append that to the end of the study array
@@ -122,6 +126,28 @@ export class TimeStudyTree {
     truncatedString = truncatedString.replace(/passive/giu, "122,132,142");
     truncatedString = truncatedString.replace(/idle/giu, "123,133,143");
     return truncatedString;
+  }
+
+  studyRange(firstID, lastID) {
+    const studiesArray = [];
+    const first = this.checkTimeStudyNumber(firstID);
+    if (lastID === undefined) {
+      studiesArray.push(firstID);
+    } else {
+      const last = this.checkTimeStudyNumber(lastID);
+      for (let id = first; id <= last; ++id) {
+        if (TimeStudy(id)) studiesArray.push(id);
+      }
+    }
+    return studiesArray;
+  }
+
+  checkTimeStudyNumber(token) {
+    const tsNumber = parseFloat(token);
+    if (!TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)) {
+      return 0;
+    }
+    return tsNumber;
   }
 
   // Attempt to purchase all studies specified in the array which may be either study IDs (which get converted) or

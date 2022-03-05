@@ -1454,8 +1454,9 @@ When you purchase the last Imaginary Upgrade and unlock Pelle, you unlock their 
 Reality, not giving you any rewards from your progress in your current Reality.
 <br>
 When you enter the Doomed Reality, you will keep all values under the General- and Reality header in the Statistics
-tab and all of your best Challenge times. Inside Doomed Realities, multiple upgrades, Time Studies and game mechanics
-are disabled or grant no reward. You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
+tab and all of your best Challenge times. Inside Doomed Realities, multiple upgrades, Time Studies, Challenge and
+Celestial rewards, Perks, and other game mechanics are disabled or grant no reward.
+You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
 <br>
 <br>
 Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity-

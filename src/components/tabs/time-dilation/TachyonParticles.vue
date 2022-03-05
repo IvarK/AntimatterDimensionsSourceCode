@@ -18,7 +18,7 @@ export default {
     };
   },
   mounted() {
-    this.updateSize();
+    this.$nextTick(this.updateSize);
     window.addEventListener("resize", this.updateSize);
     this.initialized = true;
   },

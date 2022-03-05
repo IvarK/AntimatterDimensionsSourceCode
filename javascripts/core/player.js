@@ -706,14 +706,14 @@ window.player = {
         phase: 0,
         sacrificeActive: false
       },
-      quotes: []
-    },
-    collapsed: {
-      upgrades: false,
-      rifts: false,
-      galaxies: false
-    },
-    showBought: false,
+      quotes: [],
+      collapsed: {
+        upgrades: false,
+        rifts: false,
+        galaxies: false
+      },
+      showBought: false,
+    }
   },
   newGame: {
     current: 0,

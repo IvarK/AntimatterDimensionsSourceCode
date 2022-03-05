@@ -39,8 +39,8 @@ export default {
           style: {
             left: "80%",
             top: "35rem",
-            color: "var(--color-effarig--base)",
-            animation: this.animName("effarig")
+            color: "#f40",
+            animation: this.animName("effarig", 4)
           }
         },
         enslaved: {
@@ -314,6 +314,11 @@ export default {
   80% {transform: rotate(41deg);}
   90% {transform: rotate(73deg);}
   100% {transform: rotate(61deg);}
+}
+@keyframes a-effarig-credits {
+  0% { opacity: 0.8; text-shadow: 0 0 3rem; }
+  50% { opacity: 1; text-shadow: 0 0 4rem, 0 0 4rem; }
+  100% { opacity: 0.8; text-shadow: 0 0 3rem; }
 }
 @keyframes a-enslaved-credits {
   0% { transform: translateX(-50%) rotate(0); }

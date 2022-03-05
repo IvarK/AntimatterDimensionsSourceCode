@@ -262,7 +262,7 @@ export default {
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 7;
+    z-index: 9;
     color: rgb(185, 185, 185);
     pointer-events: none;
   }

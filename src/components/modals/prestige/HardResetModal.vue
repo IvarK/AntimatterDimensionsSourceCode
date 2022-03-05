@@ -1,14 +1,17 @@
 <script>
+import ModalWrapper from "@/components/modals/ModalWrapper";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "HardResetModal",
   components: {
-    ModalWrapperChoice,
+    ModalWrapper,
+    ModalWrapperChoice
   },
   data() {
     return {
       input: "",
+      isEnd: false
     };
   },
   computed: {
@@ -17,6 +20,9 @@ export default {
     },
   },
   methods: {
+    update() {
+      this.isEnd = Pelle.endState >= 1;
+    },
     hardReset() {
       if (!this.willHardReset) return;
       GameStorage.hardReset();
@@ -26,7 +32,11 @@ export default {
 </script>
 
 <template>
+  <ModalWrapper v-if="isEnd">
+    You cannot reset your save while the game is ending!
+  </ModalWrapper>
   <ModalWrapperChoice
+    v-else
     :show-cancel="!willHardReset"
     :show-confirm="willHardReset"
     confirm-class="o-primary-btn--width-medium c-modal__confirm-btn c-modal-hard-reset-btn"

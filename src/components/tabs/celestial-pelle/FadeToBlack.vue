@@ -34,6 +34,6 @@ export default {
     width: 100%;
     height: 100%;
     background: black;
-    z-index: 6;
+    z-index: 8;
   }
 </style>

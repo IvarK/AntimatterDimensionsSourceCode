@@ -230,7 +230,7 @@ export default {
     </div>
     <div class="l-credits--right">
       <p>Archa (Myresa)</p>
-      <p>Auti (Alice Tolle)</p>)
+      <p>Auti (Alice Tolle)</p>
       <p>Barrin84</p>
       <p>ChaoticHans</p>
       <p>DarthDie (Briar Bowser)</p>

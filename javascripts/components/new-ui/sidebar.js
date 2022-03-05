@@ -19,10 +19,10 @@ Vue.component("sidebar", {
     <div class="sidebar" v-if="!isHidden">
       <sidebar-currency />
       <tab-button
-        v-for="(tab, tabID) in tabs"
+        v-for="(tab, tabPosition) in tabs"
         :key="tab.name"
         :tab="tab"
-        :tabID="tabID"
+        :tabPosition="tabPosition"
       />
     </div>`
 });

@@ -44,7 +44,7 @@ export default {
       Remnants
     </span>
     <div
-      v-tooltip="'Remnants gain is based on best AM, IP, and EP throughout all Armageddons.'"
+      v-tooltip="'Remnant gain is based on best AM, IP, and EP throughout all Armageddons'"
       class="o-questionmark"
     >
       ?

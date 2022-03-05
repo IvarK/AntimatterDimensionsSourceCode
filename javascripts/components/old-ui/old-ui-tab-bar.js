@@ -6,6 +6,6 @@ Vue.component("old-ui-tab-bar", {
   },
   template: `
     <div>
-      <old-ui-tab-button v-for="(tab, i) in tabs" :key="i" :tabID="i" :tab="tab" />
+      <old-ui-tab-button v-for="(tab, i) in tabs" :key="i" :tabPosition="i" :tab="tab" />
     </div>`
 });

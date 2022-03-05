@@ -65,10 +65,10 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      <span v-if="!disabledInDoomed">
+      <span v-if="disabledInDoomed"> This milestone has no effect while in Doomed </span>
+      <span v-else>
         {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
       </span>
-      <span v-else> This milestone has no effect while in Doomed </span>
     </button>
   </div>
 </template>

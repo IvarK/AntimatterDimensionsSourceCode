@@ -6,19 +6,7 @@ export default {
   name: "PelleUpgrade",
   components: {
     DescriptionDisplay,
-    CostDisplay,
-    Gap: {
-      props: {
-        height: {
-          type: String,
-          default: "0.7rem"
-        }
-      },
-      template: `<div :style="{
-        height,
-        flexShrink: 0
-      }" />`
-    }
+    CostDisplay
   },
   props: {
     upgrade: {
@@ -133,10 +121,10 @@ export default {
       {{ estimateImprovement }}
     </div>
     <DescriptionDisplay :config="config" />
-    <Gap />
+    <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">
       <span v-html="effectText" />
-      <Gap />
+      <div class="l-pelle-upgrade-gap" />
     </div>
     <CostDisplay
       v-if="!isCapped"
@@ -236,5 +224,10 @@ export default {
     font-size: 0;
     line-height: 0;
     transition-duration: 0.4s;
+  }
+
+  .l-pelle-upgrade-gap {
+    height: 0.7em;
+    flex-shrink: 0;
   }
 </style>

@@ -16,12 +16,8 @@ export default {
 </script>
 
 <template>
-  <div
-    class="c-pelle-strike-container"
-  >
-    <ExpandingControlBox
-      container-class="c-pelle-strike"
-    >
+  <div class="c-pelle-strike-container">
+    <ExpandingControlBox container-class="c-pelle-strike">
       <div
         slot="header"
         class="c-pelle-strike-text-padding c-pelle-strike-requirement-header"

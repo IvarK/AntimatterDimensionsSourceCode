@@ -29,7 +29,7 @@ export default {
 <template>
   <ModalWrapperOptions style="width: auto">
     <template #header>
-      <span>Modify Visible Tabs</span>
+      Modify Visible Tabs
     </template>
     <div>
       Click a button to toggle showing a tab on/off.

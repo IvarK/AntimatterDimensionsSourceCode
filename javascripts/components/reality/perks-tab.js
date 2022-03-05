@@ -196,7 +196,7 @@ export const PerkNetwork = {
       if (pelleUseless) {
         const backgroundColor = "#00bcd4";
         const hoverColor = "crimson";
-        const borderColor = `${secondaryColor}`;
+        const borderColor = secondaryColor;
         return {
           background: backgroundColor,
           border: borderColor,
@@ -222,7 +222,7 @@ export const PerkNetwork = {
       else backgroundColor = "#CCCCCC";
 
       const hoverColor = canBeBought || isBought ? primaryColor : "#656565";
-      const borderColor = `${secondaryColor}`;
+      const borderColor = secondaryColor;
 
       return {
         background: backgroundColor,

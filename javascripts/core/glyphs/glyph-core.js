@@ -255,7 +255,6 @@ export const Glyphs = {
     this.removeNewFlag(glyph);
   },
   unequipAll(modalOnFail) {
-    let canUnequipAll = true;
     while (player.reality.glyphs.active.length) {
       const freeIndex = this.findFreeIndex(player.options.respecIntoProtected);
       if (freeIndex < 0) break;
@@ -266,13 +265,13 @@ export const Glyphs = {
     if (player.reality.glyphs.active.length) {
       Modal.message.show(modalOnFail || `Some of your Glyphs could not be unequipped
       due to lack of inventory space.`);
-      canUnequipAll = false;
+      return false;
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-    return canUnequipAll;
+    return true;
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;

@@ -298,6 +298,11 @@ export default {
     font-size: 14rem;
     text-shadow: 0 0 3rem;
     transform: translateX(-50%);
+    height: 14rem;
+    width: 14rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
 
@@ -335,9 +340,11 @@ export default {
   100% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
 }
 @keyframes a-laitela-credits {
-  0% { transform: translate(-50%, -20%); }
-  50% { transform: translate(-50%, 20%); }
-  100% { transform: translate(-50%, -20%); }
+  0% { transform: translate(-50%, 30%); }
+  25% { transform: translate(-50%, -20%); }
+  50% { transform: translate(-50%, 30%); }
+  75% { transform: translate(0%, 30%); }
+  100% { transform: translate(-50%, 30%); }
 }
 @keyframes a-pelle-credits {
   0% { transform: translateX(-50%) rotate3d(0, 1, 0, 0) scaleY(1); }

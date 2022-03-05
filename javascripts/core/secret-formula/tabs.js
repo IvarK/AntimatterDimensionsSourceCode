@@ -1,4 +1,5 @@
 import { GameDatabase } from "./game-database.js";
+
 GameDatabase.tabs = [
   {
     key: "dimensions",

@@ -1,5 +1,6 @@
 <script>
 import PelleRiftBar from "./PelleRiftBar.vue";
+
 export default {
   name: "PelleRift",
   components: {

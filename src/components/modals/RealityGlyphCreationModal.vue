@@ -55,7 +55,7 @@ export default {
       Reality Glyph Creation
     </template>
     <div>
-      <span v-if="!isDoomed">Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.</span>
+      Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.
       Rarity will always be {{ formatPercents(1) }}
       and level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
       be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.

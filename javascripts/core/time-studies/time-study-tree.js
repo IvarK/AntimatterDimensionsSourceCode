@@ -85,7 +85,7 @@ export class TimeStudyTree {
   parseStudyImport(input) {
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const studyArray = [];
-    const studyCluster = this.truncatedInput(input).split("|")[0].split(",");
+    const studyCluster = TimeStudyTree.truncateInput(input).split("|")[0].split(",");
     for (const study of studyCluster) {
       const range = study.split("-");
       const rangeSplit = range[1] ? this.studyRange(range[0], range[1]) : range;
@@ -115,10 +115,6 @@ export class TimeStudyTree {
     }
     if (ecID !== 0) studyArray.push(TimeStudy.eternityChallenge(ecID));
     return studyArray;
-  }
-
-  truncatedInput(input) {
-    return TimeStudyTree.truncateInput(input);
   }
 
   static truncateInput(input) {

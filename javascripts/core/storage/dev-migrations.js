@@ -1258,8 +1258,8 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      player.celstials.pelle.collapsed = player.celestials.collapsed;
-      player.celstials.pelle.showBought = player.celestials.showBought;
+      player.celestials.pelle.collapsed = player.celestials.collapsed;
+      player.celestials.pelle.showBought = player.celestials.showBought;
       delete player.celestials.collapsed;
       delete player.celestials.showBought;
     }

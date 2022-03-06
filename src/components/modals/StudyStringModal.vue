@@ -101,15 +101,7 @@ export default {
     },
     truncatedInput() {
       let truncatedString = this.input;
-      // If last character is "," remove it
-      truncatedString = truncatedString.replace(/,$/u, "").trim();
-      // If study id name is included replace with id number
-      truncatedString = truncatedString.replace(/antimatter/giu, "71,81,91,101");
-      truncatedString = truncatedString.replace(/infinity/giu, "72,82,92,102");
-      truncatedString = truncatedString.replace(/time/giu, "73,83,93,103");
-      truncatedString = truncatedString.replace(/active/giu, "121,131,141");
-      truncatedString = truncatedString.replace(/passive/giu, "122,132,142");
-      truncatedString = truncatedString.replace(/idle/giu, "123,133,143");
+      truncatedString = TimeStudyTree.truncateInput(truncatedString);
       return truncatedString;
     },
     hasInput() {
@@ -150,7 +142,7 @@ export default {
     },
     savePreset() {
       if (this.inputIsValid) {
-        player.timestudy.presets[this.modalConfig.id].studies = this.input;
+        player.timestudy.presets[this.modalConfig.id].studies = TimeStudyTree.formatStudyList(this.input);
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }

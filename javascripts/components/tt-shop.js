@@ -202,7 +202,7 @@ Vue.component("tt-save-load-button", {
     },
     save() {
       this.hideContextMenu();
-      this.preset.studies = GameCache.currentStudyTree.value.exportString;
+      this.preset.studies = TimeStudyTree.formatStudyList(GameCache.currentStudyTree.value.exportString);
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
       GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },

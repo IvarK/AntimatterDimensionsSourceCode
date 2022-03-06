@@ -118,6 +118,10 @@ export class TimeStudyTree {
   }
 
   truncatedInput(input) {
+    return TimeStudyTree.truncateInput(input);
+  }
+
+  static truncateInput(input) {
     return input
       .toLowerCase()
       .replaceAll("antimatter", "71,81,91,101")
@@ -126,7 +130,20 @@ export class TimeStudyTree {
       .replaceAll("active", "121,131,141")
       .replaceAll("passive", "122,132,142")
       .replaceAll("idle", "123,133,143")
-      .replace(/,$/u, "").trim();
+      .replace(/,$/u, "")
+      .replaceAll(" ", "").trim();
+  }
+
+  static formatStudyList(input) {
+    return input
+      .toLowerCase()
+      .replaceAll("71,81,91,101", "antimatter")
+      .replaceAll("72,82,92,102", "infinity")
+      .replaceAll("73,83,93,103", "time")
+      .replaceAll("121,131,141", "active")
+      .replaceAll("122,132,142", "passive")
+      .replaceAll("123,133,143", "idle")
+      .replaceAll(",", ", ").replace(/ +/gu, " ");
   }
 
   studyRange(firstNumber, lastNumber) {

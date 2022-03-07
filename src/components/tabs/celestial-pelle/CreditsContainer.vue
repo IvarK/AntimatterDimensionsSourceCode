@@ -100,8 +100,6 @@ export default {
       // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
 
       this.rolling = player.records.thisReality.realTime > 1.5e4;
-      // eslint-disable-next-line max-len, no-console
-      if (this.rolling && player.records.thisReality.realTime > 120000) console.log("time", player.records.thisReality.realTime);
       this.scroll = (player.records.thisReality.realTime - 1.5e4) / 250;
       if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
     },

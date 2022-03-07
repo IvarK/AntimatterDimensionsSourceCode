@@ -61,22 +61,26 @@ export default {
       ) return null;
       return this.currentTimeEstimate;
     },
-    estimateImprovement() {
-      if (this.canBuy ||
+    shouldEstimateImprovement() {
+      return !(this.canBuy ||
         this.isBought ||
         Pelle.realityShardGainPerSecond.eq(0) ||
         this.isCapped ||
         this.galaxyGenerator
-      ) return "";
+      );
+    },
+    estimateImprovement() {
+      if (!this.shouldEstimateImprovement) return "";
       if (!Pelle.canArmageddon) return `${this.currentTimeEstimate}`;
       // If the improved value is still "> 1 year" then we only show it once
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
     },
     estimateImprovementTooltipStyle() {
+      const show = this.showImprovedEstimate && this.shouldEstimateImprovement;
       return {
-        visibility: this.showImprovedEstimate ? "visible" : "hidden",
-        opacity: this.showImprovedEstimate ? 1 : 0
+        visibility: show ? "visible" : "hidden",
+        opacity: show ? 1 : 0
       };
     }
   },

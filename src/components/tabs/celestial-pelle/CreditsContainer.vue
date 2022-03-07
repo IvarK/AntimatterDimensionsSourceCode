@@ -29,7 +29,7 @@ export default {
           symbol: "Ϟ",
           style: {
             left: "65%",
-            top: "97rem",
+            top: "112rem",
             color: "var(--color-teresa--base)",
             animation: this.animName("teresa")
           }
@@ -38,7 +38,7 @@ export default {
           symbol: "Ϙ",
           style: {
             left: "80%",
-            top: "35rem",
+            top: "40rem",
             color: "#f40",
             animation: this.animName("effarig", 4)
           }
@@ -47,7 +47,7 @@ export default {
           symbol: "<i class='fas fa-link'></i>",
           style: {
             left: "52%",
-            top: "170rem",
+            top: "190rem",
             color: "var(--color-enslaved-base)",
             animation: this.animName("enslaved", 10, "linear")
           }
@@ -56,7 +56,7 @@ export default {
           symbol: "⌬",
           style: {
             left: "20%",
-            top: "128rem",
+            top: "143rem",
             color: "var(--color-v--base)",
             animation: this.animName("v", 5)
           }
@@ -65,7 +65,7 @@ export default {
           symbol: "<i class='fas fa-sun'></i>",
           style: {
             left: "44%",
-            top: "240rem",
+            top: "280rem",
             color: "var(--color-ra-base)",
             animation: this.animName("ra")
           }
@@ -83,7 +83,7 @@ export default {
           symbol: "♅",
           style: {
             left: "30%",
-            top: "5rem",
+            top: "8rem",
             color: "var(--color-pelle--base)",
             animation: this.animName("pelle", 5, "linear")
           }
@@ -100,6 +100,8 @@ export default {
       // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
 
       this.rolling = player.records.thisReality.realTime > 1.5e4;
+      // eslint-disable-next-line max-len, no-console
+      if (this.rolling && player.records.thisReality.realTime > 120000) console.log("time", player.records.thisReality.realTime);
       this.scroll = (player.records.thisReality.realTime - 1.5e4) / 250;
       if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
     },
@@ -141,10 +143,11 @@ export default {
     <p>Hira</p>
     <p>IkerStream</p>
     <p>L4R5 (Lars Wolf)</p>
-    <p>realrapidjazz</p>
     <p>Patashu</p>
     <p>Pichusuperlover</p>
+    <p>slabdrill</p>
     <p>Sparticle999</p>
+    <p>WaitingIdly</p>
 
     <h2>Modal Maker, Lady Taker, Pie Baker</h2>
     <p>earth</p>
@@ -155,103 +158,214 @@ export default {
     <h2>Library Developer</h2>
     <p>Patashu</p>
 
+    <h2>Lead Design Consoltants</h2>
+    <p>realrapidjazz</p>
+
     <h2>Design Consoltants</h2>
     <p>Pichusuperlover</p>
     <p>Acamaeda</p>
 
-    <!-- If we end up with an uneven amount of name, I'll throw myself (Lars) on the list -->
     <h2>Web Testers</h2>
-    <div class="l-credits--left">
+    <!--
+      This list will be removed once everything is done. Alphabetizing people is when one gets added is just mildy
+      annoying and this makes it more pleasant.
+
+      <p>Acamaeda</p>
       <p>Aesis</p>
+      <p>AFYINEE (Gabriel HADDAG)</p>
       <p>Alexitato</p>
+      <p>Anno</p>
+      <p>Archa (Myresa)</p>
+      <p>Birb (Kelsey Black)</p>
+      <p>Boo (Jean-Christophe Bourgault)</p>
+      <p>CaptainGalaxy (Ovidijus Točelis)</p>
+      <p>ChaoticHans</p>
+      <p>cubic frog</p>
+      <p>Dan</p>
+      <p>dankesehr</p>
+      <p>Davixx (Davide Fedele)</p>
+      <p>earth</p>
+      <p>Empireus</p>
+      <p>GirixK (Nikola Jelinčić)</p>
+      <p>GoldenTritium</p>
+      <p>Hira</p>
+      <p>IkerStream (Iker de Aguirre)</p>
+      <p>Kael</p>
+      <p>L4R5 (Lars Wolf)</p>
+      <p>Lynn</p>
+      <p>Merp</p>
+      <p>Patashu</p>
+      <p>philipebreaker (Philipe)</p>
+      <p>Phillip Marshall</p>
+      <p>Phoenix</p>
+      <p>Pichusuperlover</p>
+      <p>Reda Kotob</p>
+      <p>Saturnus</p>
+      <p>Scarlet</p>
+      <p>sirusi (Vinícius Oliveira Martins)</p>
+      <p>Spanosa (Jared K)</p>
+      <p>SpicyCrusader13</p>
+      <p>Storm</p>
+      <p>SzyszakS</p>
+      <p>Tacitus</p>
+      <p>Typh</p>
+      <p>Vnge (Ben Parrish)</p>
+      <p>WaitingIdly</p>
+      <p>Xemadus (Jonathan Gibson)</p>
+      <p>Young Woo Joo</p>
+      <p>Zipi</p>
+    -->
+    <div class="l-credits--left">
+      <p>Acamaeda</p>
+      <p>AFYINEE (Gabriel HADDAG)</p>
+      <p>Anno</p>
       <p>Birb (Kelsey Black)</p>
       <p>CaptainGalaxy (Ovidijus Točelis)</p>
       <p>cubic frog</p>
       <p>dankesehr</p>
       <p>earth</p>
+      <p>GirixK (Nikola Jelinčić)</p>
       <p>Hira</p>
       <p>Kael</p>
-      <p>Merp</p>
-      <p>Phoenix</p>
-      <p>Phillip Marshall</p>
-      <p>Reda Kotob</p>
-      <p>Scarlet</p>
-      <p>Spanosa (Jared K)</p>
-      <p>Storm</p>
-      <p>Tacitus</p>
-      <p>Vnge (Ben Parrish)</p>
-      <p>Young Woo Joo</p>
-    </div>
-    <div class="l-credits--right">
-      <p>Acamaeda</p>
-      <p>AFYINEE (Gabriel HADDAG)</p>
-      <p>Archa (Myresa)</p>
-      <p>Boo (Jean-Christophe Bourgault)</p>
-      <p>ChaoticHans</p>
-      <p>Dan</p>
-      <p>Davixx (Davide Fedele)</p>
-      <p>Empireus</p>
-      <p>IkerStream (Iker de Aguirre)</p>
       <p>Lynn</p>
       <p>Patashu</p>
-      <p>philipebreaker (Philipe)</p>
+      <p>Phillip Marshall</p>
       <p>Pichusuperlover</p>
       <p>Saturnus</p>
       <p>sirusi (Vinícius Oliveira Martins)</p>
       <p>SpicyCrusader13</p>
       <p>SzyszakS</p>
       <p>Typh</p>
+      <p>WaitingIdly</p>
+      <p>Young Woo Joo</p>
+    </div>
+    <div class="l-credits--right">
+      <p>Aesis</p>
+      <p>Alexitato</p>
+      <p>Archa (Myresa)</p>
+      <p>Boo (Jean-Christophe Bourgault)</p>
+      <p>ChaoticHans</p>
+      <p>Dan</p>
+      <p>Davixx (Davide Fedele)</p>
+      <p>Empireus</p>
+      <p>GoldenTritium</p>
+      <p>IkerStream (Iker de Aguirre)</p>
+      <p>L4R5 (Lars Wolf)</p>
+      <p>Merp</p>
+      <p>philipebreaker (Philipe)</p>
+      <p>Phoenix</p>
+      <p>Reda Kotob</p>
+      <p>Scarlet</p>
+      <p>Spanosa (Jared K)</p>
+      <p>Storm</p>
+      <p>Tacitus</p>
+      <p>Vnge (Ben Parrish)</p>
       <p>Xemadus (Jonathan Gibson)</p>
       <p>Zipi</p>
     </div>
 
+    <h2>Lurker Tester</h2>
+    <p>Dravitar (Alex Henderson)</p>
+
     <h2>Android Testers</h2>
+    <!--
+      Same for this mobile tester
+
+      <p>about:blank</p>
+      <p>Archa (Myresa)</p>
+      <p>Anjinho01</p>
+      <p>Auti (Alice Tolle)</p>
+      <p>Buck</p>
+      <p>Barrin84</p>
+      <p>ChaoticHans</p>
+      <p>Circle</p>
+      <p>DarthDie (Briar Bowser)</p>
+      <p>Epsilon (Coolguystorm)</p>
+      <p>Firecracker</p>
+      <p>Gaunter</p>
+      <p>GirixK (Nikola Jelinčić)</p>
+      <p>GoldenTritium</p>
+      <p>HarrisL2</p>
+      <p>Hellbach (Asher Günther)</p>
+      <p>Hira</p>
+      <p>hen-ben (Henry Ellenberg)</p>
+      <p>ImpossibleSalsa</p>
+      <p>Johanniklas (Jan-Niklas Petersen)</p>
+      <p>kaislash (Lily)</p>
+      <p>Kirku (Fabian Makowski)</p>
+      <p>Kirin Nijinski (Arthur)</p>
+      <p>L4R5 (Lars Wolf)</p>
+      <p>Monoma (ARoman Ruiz)</p>
+      <p>Nani</p>
+      <p>opdollar (Zane Coole)</p>
+      <p>Pavlxiiv</p>
+      <p>Porygon-Z</p>
+      <p>PotatoTIAB</p>
+      <p>Razor</p>
+      <p>Razvan Cercel</p>
+      <p>Rukimix</p>
+      <p>Scarlet</p>
+      <p>Skunky (Lukas)</p>
+      <p>Socks (Hannah Pocks)</p>
+      <p>SpicyCrusader13</p>
+      <p>Tim Wong</p>
+      <p>tragedt (Ethan Manninen)</p>
+      <p>Valentine Clarissa Alanis Star Z</p>
+      <p>vanadium_void</p>
+      <p>Vnge (Ben Parrish)</p>
+      <p>WaitingIdly</p>
+      <p>ZylaKat (Katherine Goforth-Harbin)</p>
+    -->
     <div class="l-credits--left">
       <p>about:blank</p>
       <p>Anjinho01</p>
       <p>Buck</p>
-      <p>Circle</p>
-      <p>Epsilon (Coolguystorm)</p>
-      <p>Gaunter</p>
-      <p>Hellbach (Asher Günther)</p>
-      <p>hen-ben (Henry Ellenberg)</p>
-      <p>Johanniklas (Jan-Niklas Petersen)</p>
-      <p>Kirku (Fabian Makowski)</p>
+      <p>ChaoticHans</p>
+      <p>DarthDie (Briar Bowser)</p>
+      <p>Firecracker</p>
+      <p>GirixK (Nikola Jelinčić)</p>
+      <p>HarrisL2</p>
+      <p>Hira</p>
+      <p>ImpossibleSalsa</p>
+      <p>kaislash (Lily)</p>
+      <p>Kirin Nijinski (Arthur)</p>
       <p>Monoma (ARoman Ruiz)</p>
       <p>opdollar (Zane Coole)</p>
       <p>Porygon-Z</p>
       <p>Razor</p>
       <p>Rukimix</p>
       <p>Skunky (Lukas)</p>
-      <p>Socks (Hannah Pocks)</p>
+      <p>SpicyCrusader13</p>
       <p>tragedt (Ethan Manninen)</p>
       <p>vanadium_void</p>
-      <p>ZylaKat (Katherine Goforth-Harbin)</p>
+      <p>WaitingIdly</p>
     </div>
     <div class="l-credits--right">
       <p>Archa (Myresa)</p>
       <p>Auti (Alice Tolle)</p>
       <p>Barrin84</p>
-      <p>ChaoticHans</p>
-      <p>DarthDie (Briar Bowser)</p>
-      <p>Firecracker</p>
-      <p>HarrisL2</p>
-      <p>Hira</p>
-      <p>ImpossibleSalsa</p>
-      <p>kaislash (Lily)</p>
-      <p>Kirin Nijinski (Arthur)</p>
+      <p>Circle</p>
+      <p>Epsilon (Coolguystorm)</p>
+      <p>Gaunter</p>
+      <p>GoldenTritium</p>
+      <p>Hellbach (Asher Günther)</p>
+      <p>hen-ben (Henry Ellenberg)</p>
+      <p>Johanniklas (Jan-Niklas Petersen)</p>
+      <p>Kirku (Fabian Makowski)</p>
+      <p>L4R5 (Lars Wolf)</p>
       <p>Nani</p>
       <p>Pavlxiiv</p>
       <p>PotatoTIAB</p>
       <p>Razvan Cercel</p>
       <p>Scarlet</p>
-      <p>SpicyCrusader13</p>
+      <p>Socks (Hannah Pocks)</p>
       <p>Tim Wong</p>
       <p>Valentine Clarissa Alanis Star Z</p>
       <p>Vnge (Ben Parrish)</p>
+      <p>ZylaKat (Katherine Goforth-Harbin)</p>
     </div>
 
-    <br><br><br>
+    <br><br><br><br><br><br><br><br><br>
     <h1>Thank you so much for playing!</h1>
   </div>
 </template>

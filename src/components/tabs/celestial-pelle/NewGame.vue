@@ -26,8 +26,11 @@ export default {
     update() {
       this.plusRecord = NG.plusRecord;
       this.minusRecord = NG.minusRecord;
-      this.visible = Pelle.endState > 13.6 && !Pelle.removeAdditionalEnd;
-      this.opacity = (Pelle.endState - 13.6) * 2;
+      // Original code
+      // this.visible = Pelle.endState > 13.6 && !Pelle.removeAdditionalEnd;
+      // this.opacity = (Pelle.endState - 13.6) * 2;
+      this.visible = player.records.thisReality.realTime > 124000;
+      this.opacity = (player.records.thisReality.realTime - 124000) / 10000;
     },
     ngString(i) {
       if (!i) return "";

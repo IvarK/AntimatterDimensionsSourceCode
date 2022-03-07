@@ -2245,7 +2245,7 @@ GameDatabase.news = [
     id: "a350",
     text:
       `Alexander wept, for he had just watched a pop-culture lecture on quantum mechanics by Anaxarchus and
-      realised that there are infinite worlds to conquer, and that he couldn’t even be the lord of one without
+      realised that there are infinite worlds to conquer, and that he couldn't even be the lord of one without
       a mutiny or 6 stopping him.`
   },
   {
@@ -2334,11 +2334,11 @@ GameDatabase.news = [
   {
     id: "a363",
     text:
-      `The most expensive thing about a dragon isn’t the gold you need to fill the nest, the magic you sacrifice
+      `The most expensive thing about a dragon isn't the gold you need to fill the nest, the magic you sacrifice
       entire empires for, or the billions of wars you need to supply the decillions of adamantium. No, it is the
-      dirt. It’s always the dirt. Don’t ask the royal treasurers why we have more creatures on the plane than
+      dirt. It's always the dirt. Don't ask the royal treasurers why we have more creatures on the plane than
       molecules of dirt. Just keep summoning bulldozers through arcane rituals and keep looking through the
-      earth’s core for more scraps of dirt.`
+      earth's core for more scraps of dirt.`
   },
   {
     id: "a364",
@@ -2379,23 +2379,23 @@ GameDatabase.news = [
       into 2 types - gentle, simplistic utilitarian tricks and grand spectacles involving the flashy machinery and
       beautiful assistants - originating from the popularisation of a single trick involving sawing a person in
       half. Much more interesting than watching some TV psychic pretending to pull a lottery ticket out from a news
-      ticker, at any rate. Speaking of which, tonight’s lottery numbers are 23, 10, 81, 106.4, 3 + 2i, and e.`
+      ticker, at any rate. Speaking of which, tonight's lottery numbers are 23, 10, 81, 106.4, 3 + 2i, and e.`
   },
   {
     id: "a367",
     text:
       `Snakes look scary, and they absolutely are and you should run, calmly, from every snake you see. But, luckily
-      for you, snakes don’t often take the initiative to bite - excluding the really mean ones. If they've gone out
+      for you, snakes don't often take the initiative to bite - excluding the really mean ones. If they've gone out
       of their way to bite you, there's generally 4 reasons. 1- The Snake is Mean. 2- You scared the snake. Snakes
       are scary to you, but you are scary to snakes. Be the bigger lizard when you meet a snake. 3- You entered the
       territory of the snake. Often, a snake will warn you if you do this - this is why rattle snakes rattle. If you
-      don’t listen to the warning, they’ll bite you. And the most important reason, 4- the snake finds you ugly.
-      This is the fault of the snake’s ocular system, but is the most common form of bites in at least 2
+      don't listen to the warning, they'll bite you. And the most important reason, 4- the snake finds you ugly.
+      This is the fault of the snake's ocular system, but is the most common form of bites in at least 2
       jurisdictions. And if you get bitten by a snake, by virtue of being a scarily ugly lizard who keeps stumbling
-      into the wrong bushes, there’s 3 main things you can do. First, calm down, again, and stay calm. Secondly,
+      into the wrong bushes, there's 3 main things you can do. First, calm down, again, and stay calm. Secondly,
       immobilise the area around site that was bitten, and try using a compression bandage. Snake venom vision is
-      entirely based on movement of the object it’s currently in. And third, calmly, call for help from other
-      lizards. Excluding the snake. The snake’s too mean to help you.`
+      entirely based on movement of the object it's currently in. And third, calmly, call for help from other
+      lizards. Excluding the snake. The snake's too mean to help you.`
   },
   {
     id: "a368",
@@ -2407,25 +2407,25 @@ GameDatabase.news = [
       progression. Hooks and traps and disasters and low rolls for a chance see progression, which entirely consists
       of putting the state of the game further from anything deemed reasonable. A situation where the character is
       broken just to tell you to leave… but the damage is already done, if it is even possible to turn back. And…
-      from there, a hard reset probably isn’t enough. It would have to be… harder. Not just a hard reset, but a
+      from there, a hard reset probably isn't enough. It would have to be… harder. Not just a hard reset, but a
       cookie, something in local storage designed specifically to make it impossible to actually start a new game.
       Or, something more malicious? And despite this, people would still throw themselves into this nightmare, for
       humanity knows no bounds in its endless curiosity. No amount of warnings will stop everyone. They will find
-      a way to proceed, given it exists, and may even complain when it isn’t as punishing as expected. So, do you
-      want to push the button, and experience the depths of despair, willingly? Hopefully not, because it isn’t here.`
+      a way to proceed, given it exists, and may even complain when it isn't as punishing as expected. So, do you
+      want to push the button, and experience the depths of despair, willingly? Hopefully not, because it isn't here.`
   },
   {
     id: "a369",
     text:
       `An empire-building project is one of the most difficult things to implement. Thousands of hours of time,
       planning, effort, consultation, and political manoeuvring to create truly airbreaking endeavours. Take the
-      Realmway Revitalisation Roadmap, a revolutionary program referred to by the 3 R’s, which is known as the
-      pinnacle of the most famous of the empire’s bureaucratic infrastructure committees - the EMIF (empire magic
+      Realmway Revitalisation Roadmap, a revolutionary program referred to by the 3 R's, which is known as the
+      pinnacle of the most famous of the empire's bureaucratic infrastructure committees - the EMIF (empire magic
       infrastructure foundation) - not to be confused with the EAIF (Electric airship investment fund) or the
-      NMIC (National Magical Infrrastructure Coalition). The goal of the three R’s, set out by the EMIF, was to
+      NMIC (National Magical Infrrastructure Coalition). The goal of the three R's, set out by the EMIF, was to
       reinstate a mana trade corridor for SMSS (Small-Medium Steam Shuttles), a vital part of the burgeoning
       consolidated states after their unfortunate pillaging during the NELC (ninth empire liberation crusade).
-      The three R’s was a multi stage project - stage 1 was a survey glyph in the air - all big things start with
+      The three R's was a multi stage project - stage 1 was a survey glyph in the air - all big things start with
       a small step. Stage 2, the unveiling of the EMOF (Empire Mechanical Obliteration Forcefield) had over 50
       dignitaries - multiple emperors (from federated states to organisational leaders), foreign rulers, EMDF
       (Effluent Manifested Destiny Families) who currently own the land, and even some of the forecast witches,
@@ -3033,7 +3033,7 @@ GameDatabase.news = [
       pay for the arbiters who represent you. Of course, any [PLAYER REFERENCE NOT FOUND] worth their RM knows that
       the real way to hide illegal profits of crime is  in personalised pocket dimensions, hyperspliced waveform
       banks and nanoshells, which requires extensive R&D to implement. As such, reporting illegal AM gain is only
-      recommended if you’re too rich to hide your gains, but too poor to hide your gains.`,
+      recommended if you're too rich to hide your gains, but too poor to hide your gains.`,
     get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {

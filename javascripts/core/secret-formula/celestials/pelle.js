@@ -1,5 +1,6 @@
 import { GameDatabase } from "../game-database.js";
 import { DC } from "../../constants.js";
+import { updateTimeDimensionCosts } from "../../dimensions/time-dimension.js";
 
 GameDatabase.celestials.pelle = (function() {
   const rebuyable = props => {
@@ -409,7 +410,13 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.15,
-            description: () => "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades"
+            description: () => "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades",
+            onComplete: () => {
+              updateTimeDimensionCosts();
+            },
+            onUncomplete: () => {
+              updateTimeDimensionCosts();
+            }
           },
           {
             requirement: 0.25,

@@ -105,7 +105,16 @@ export const Pelle = {
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
+      const milestoneStates =
+        PelleRifts.all.mapToObject(x => x._config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       PelleRifts.all.forEach(r => r.fill(diff));
+      for (const riftKey in milestoneStates) {
+        const rift = PelleRifts[riftKey];
+        for (const milestoneIdx in rift.milestones) {
+          const previousMilestoneState = milestoneStates[riftKey][milestoneIdx];
+          rift.updateMilestones(milestoneIdx, previousMilestoneState);
+        }
+      }
       if (this.endState >= 1 && Pelle.addAdditionalEnd) this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   },
@@ -681,6 +690,15 @@ class RiftState extends GameMechanicState {
   hasMilestone(idx) {
     if (this.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0)) return true;
     return this.milestones[idx].requirement <= this.percentage;
+  }
+
+  updateMilestones(idx, previousState) {
+    const currentState = this.hasMilestone(idx);
+    if (previousState && !currentState) {
+      this.milestones[idx].onUncomplete?.();
+    } else if (currentState && !previousState) {
+      this.milestones[idx].onComplete?.();
+    }
   }
 
   toggle() {

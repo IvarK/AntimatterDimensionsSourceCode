@@ -1207,6 +1207,11 @@ screen and (max-width: 480px) {
   100% {opacity: 1;}
 }
 
+@keyframes disappear {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
 @keyframes text-stretch {
   0% {letter-spacing: 0;}
   100% {letter-spacing: 30rem;}

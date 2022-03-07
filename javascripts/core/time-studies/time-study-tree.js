@@ -84,18 +84,20 @@ export class TimeStudyTree {
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
-    const studyArray = [];
+    const output = [];
     const studyCluster = TimeStudyTree.truncateInput(input).split("|")[0].split(",");
-    for (const study of studyCluster) {
-      const range = study.split("-");
-      const rangeSplit = range[1] ? this.studyRange(range[0], range[1]) : range;
-      for (const study2 of rangeSplit) {
-        if (studyDB.includes(parseInt(study2, 10))) {
-          const tsObject = TimeStudy(study2);
+    for (const studyRange of studyCluster) {
+      const studyRangeSplit = studyRange.split("-");
+      const studyArray = studyRangeSplit[1]
+        ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
+        : studyRangeSplit;
+      for (const study of studyArray) {
+        if (studyDB.includes(parseInt(study, 10))) {
+          const tsObject = TimeStudy(study);
           this.selectedStudies.push(tsObject);
-          studyArray.push(tsObject);
+          output.push(tsObject);
         } else {
-          this.invalidStudies.push(study2);
+          this.invalidStudies.push(study);
         }
       }
     }
@@ -104,17 +106,17 @@ export class TimeStudyTree {
     const ecString = input.split("|")[1];
     if (!ecString) {
       // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
-      return studyArray;
+      return output;
     }
     const ecID = parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
     if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
       this.invalidStudies.push(`EC${ecID}`);
-      return studyArray;
+      return output;
     }
-    if (ecID !== 0) studyArray.push(TimeStudy.eternityChallenge(ecID));
-    return studyArray;
+    if (ecID !== 0) output.push(TimeStudy.eternityChallenge(ecID));
+    return output;
   }
 
   static truncateInput(input) {
@@ -126,8 +128,9 @@ export class TimeStudyTree {
       .replaceAll("active", "121,131,141")
       .replaceAll("passive", "122,132,142")
       .replaceAll("idle", "123,133,143")
-      .replace(/,$/u, "")
-      .replaceAll(" ", "").trim();
+      .replace(/[|,]$/u, "")
+      .replaceAll(" ", "")
+      .trim();
   }
 
   static formatStudyList(input) {
@@ -139,10 +142,11 @@ export class TimeStudyTree {
       .replaceAll("121,131,141", "active")
       .replaceAll("122,132,142", "passive")
       .replaceAll("123,133,143", "idle")
-      .replaceAll(",", ", ").replace(/ +/gu, " ");
+      .replaceAll(",", ", ")
+      .replace(/ +/gu, " ");
   }
 
-  studyRange(firstNumber, lastNumber) {
+  studyRangeToArray(firstNumber, lastNumber) {
     const studiesArray = [];
     const first = this.checkTimeStudyNumber(firstNumber);
     const last = this.checkTimeStudyNumber(lastNumber);

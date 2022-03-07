@@ -100,9 +100,7 @@ export default {
       return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
     },
     truncatedInput() {
-      let truncatedString = this.input;
-      truncatedString = TimeStudyTree.truncateInput(truncatedString);
-      return truncatedString;
+      return TimeStudyTree.truncateInput(this.input);
     },
     hasInput() {
       return this.truncatedInput !== "";

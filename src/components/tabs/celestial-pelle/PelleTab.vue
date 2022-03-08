@@ -1,4 +1,5 @@
 <script>
+import ArmageddonButton from "./ArmageddonButton";
 import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
 import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
@@ -6,6 +7,7 @@ import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
 export default {
   name: "PelleTab",
   components: {
+    ArmageddonButton,
     PelleBarPanel,
     PelleUpgradePanel,
     GalaxyGeneratorPanel
@@ -13,13 +15,27 @@ export default {
   data() {
     return {
       isDoomed: false,
+      remnants: 0,
+      realityShards: new Decimal(0),
+      shardRate: new Decimal(0),
       hasStrike: false,
       hasGalaxyGenerator: false,
+      remnantsGain: 0,
+      realityShardGain: new Decimal(0),
+      isHovering: false
     };
+  },
+  computed: {
+    symbol() {
+      return Pelle.symbol;
+    }
   },
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
+      this.remnants = Pelle.cel.remnants;
+      this.realityShards.copyFrom(Pelle.cel.realityShards);
+      this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
       this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
     },
@@ -32,11 +48,6 @@ export default {
     },
     enterDoomModal() {
       Modal.armageddon.show();
-    }
-  },
-  computed: {
-    symbol() {
-      return Pelle.symbol;
     }
   }
 };
@@ -62,7 +73,24 @@ export default {
           Show effects in Doomed Reality
         </button>
       </div>
-      <PelleUpgradePanel />
+      <br>
+      <div>
+        You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants,
+        producing
+        <span class="c-remnants-amount">{{ format(shardRate, 2, 2) }}</span>
+        Reality Shards per second.
+      </div>
+      <div>
+        You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.
+      </div>
+      <div
+        class="c-armageddon-container"
+        @mouseover="isHovering = true"
+        @mouseleave="isHovering = false"
+      >
+        <ArmageddonButton />
+      </div>
+      <PelleUpgradePanel :is-hovering="isHovering" />
       <PelleBarPanel v-if="hasStrike" />
       <GalaxyGeneratorPanel v-if="hasGalaxyGenerator" />
     </div>
@@ -170,5 +198,16 @@ export default {
 
   .o-celestial-quote-history {
     align-self: center;
+  }
+
+  .c-armageddon-container {
+    width: 32rem;
+    margin: 2rem;
+    align-self: center;
+  }
+  .c-remnants-amount {
+    font-weight: bold;
+    font-size: 2rem;
+    color: var(--color-pelle--base);
   }
 </style>

@@ -1,5 +1,6 @@
 import { GameDatabase } from "./game-database.js";
 import { DC } from "../constants.js";
+import { Pelle, PelleStrikes } from "../globals.js";
 
 GameDatabase.h2p = {
   /**
@@ -1474,38 +1475,42 @@ You can toggle a button above upgrade to hide bought upgrades or click the
 <i class="fas fa-compress-arrows-alt"></i>-icon to collapse and hide the entire panel.
 <br>
 <br>
-Pelle Strikes
-${PelleStrikes.infinity.hasStrike
-    ? `are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
-      reaching Infinity the first time within a Doomed Reality. More Strikes eventually occur by further progression.
-      Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
-      Each Pelle Strike also unlocks a Rift bar.
-      <br>
-      Rift bars can be filled by setting the button underneath them from "Idle" to "Filling". When active Rifts consume
-      ${formatInt(3)}% of a Rift specific resource per second. Each Rift offers a Rift specific effect which are based
-      on the total amount filled.
-      ${PelleStrikes.eternity.hasStrike
-    ? `An exception for this is Pestilence, which effect gets capped once you have drained a total of
-      ${formatPostBreak(DC.E2000)} replicanti.`
-    : ""}
-    In addition each Rift offers three rewards for filling them up to a certain percentage.`
-    : "(encounter the first Pelle Strike to see details)"}
-${Pelle.hasGalaxyGenerator
-    ? `<br>
-    <br>
-    When you reach ${formatInt(100)}% War, you unlock the <b>Galaxy Generator</b>, which can passively generate
-    Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect Tickspeed as if
-    they were Antimatter Galaxies but they do not increase the cost of your next Antimatter Galaxy. You also unlock five
-    new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades then give
-    a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter- and Generated
-    Galaxies. Replicanti- or Tachyon Galaxies cannot be spent for purchasing those upgrades.`
-    : ""}
-<br>
-<br>
 <b>Hotkey: Z</b> will try to perform an Armageddon reset.
 `,
       isUnlocked: () => Pelle.isDoomed,
-      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle", "strike", "rift", "galaxy",
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle"],
+      tab: "celestials/pelle"
+    }, {
+      name: "Pelle Strikes",
+      info: () => `
+Pelle Strikes are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
+reaching Infinity the first time within a Doomed Reality. More Strikes eventually occur by further progression.
+Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
+Each Pelle Strike also unlocks a Rift bar.
+<br>
+Rift bars can be filled by setting the button underneath them from "Idle" to "Filling". When active Rifts consume
+${formatInt(3)}% of a Rift specific resource per second. Each Rift offers a Rift specific effect which are based
+on the total amount filled.
+${PelleStrikes.eternity.hasStrike
+    ? `An exception for this is Pestilence, which effect gets capped once you have drained a total of
+    ${formatPostBreak(DC.E2000)} replicanti.`
+    : ""}
+In addition each Rift offers three rewards for filling them up to a certain percentage.
+`,
+      isUnlocked: () => PelleStrikes.infinity.hasStrike,
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "strike", "rift"],
+      tab: "celestials/pelle"
+    }, {
+      name: "The Galaxy Generator",
+      info: () => `
+When you reach ${formatInt(100)}% War, you unlock the <b>Galaxy Generator</b>, which can passively generate
+Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect Tickspeed as if
+they were Antimatter Galaxies but they do not increase the cost of your next Antimatter Galaxy. You also unlock five
+new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades then give
+a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter- and Generated
+Galaxies. Replicanti- or Tachyon Galaxies cannot be spent for purchasing those upgrades.`,
+      isUnlocked: () => Pelle.hasGalaxyGenerator,
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
         "galaxies", "generator"],
       tab: "celestials/pelle"
     }

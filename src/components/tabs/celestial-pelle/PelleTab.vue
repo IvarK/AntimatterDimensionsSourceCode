@@ -22,7 +22,12 @@ export default {
       hasGalaxyGenerator: false,
       remnantsGain: 0,
       realityShardGain: new Decimal(0),
-      isHovering: false
+      isHovering: false,
+      best: {
+        am: new Decimal(0),
+        ip: new Decimal(0),
+        ep: new Decimal(0)
+      }
     };
   },
   computed: {
@@ -34,6 +39,9 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.remnants = Pelle.cel.remnants;
+      this.best.am.copyFrom(player.celestials.pelle.records.totalAntimatter);
+      this.best.ip.copyFrom(player.celestials.pelle.records.totalInfinityPoints);
+      this.best.ep.copyFrom(player.celestials.pelle.records.totalEternityPoints);
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
@@ -74,21 +82,34 @@ export default {
         </button>
       </div>
       <br>
-      <div>
-        You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants,
-        producing
-        <span class="c-remnants-amount">{{ format(shardRate, 2, 2) }}</span>
-        Reality Shards per second.
-      </div>
-      <div>
-        You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.
-      </div>
-      <div
-        class="c-armageddon-container"
-        @mouseover="isHovering = true"
-        @mouseleave="isHovering = false"
-      >
-        <ArmageddonButton />
+      <div class="c-armageddon-container">
+        <div>
+          <div
+            class="c-armageddon-button-container"
+            @mouseover="isHovering = true"
+            @mouseleave="isHovering = false"
+          >
+            <ArmageddonButton />
+          </div>
+          Best AM: {{ format(best.am, 2, 2) }}<br>
+          Best IP: {{ format(best.ip, 2, 2) }}<br>
+          Best EP: {{ format(best.ep, 2, 2) }}
+        </div>
+        <div class="c-armageddon-resources-container">
+          <div>
+            You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.
+            <div
+              v-tooltip="'Remnants produce Reality Shards'"
+              class="o-questionmark"
+            >
+              ?
+            </div>
+          </div>
+          <div>
+            You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.
+            <span class="c-remnants-amount">(+{{ format(shardRate, 2, 2) }}/s)</span>
+          </div>
+        </div>
       </div>
       <PelleUpgradePanel :is-hovering="isHovering" />
       <PelleBarPanel v-if="hasStrike" />
@@ -201,9 +222,20 @@ export default {
   }
 
   .c-armageddon-container {
-    width: 32rem;
-    margin: 2rem;
     align-self: center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border-radius: 5px;
+    border: 0.2rem solid var(--color-pelle--base);
+    padding: 2rem;
+  }
+  .c-armageddon-button-container {
+    width: 32rem;
+    margin: 0 2rem 0.5rem 0;
+  }
+  .c-armageddon-resources-container {
+    width: 50rem;
   }
   .c-remnants-amount {
     font-weight: bold;

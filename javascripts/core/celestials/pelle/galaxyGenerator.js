@@ -88,7 +88,7 @@ export const GalaxyGenerator = {
       }
       for (const riftKey in milestoneStates) {
         const rift = PelleRifts[riftKey];
-        for (const milestoneIdx in rift) {
+        for (const milestoneIdx in rift.milestones) {
           const previousMilestoneState = milestoneStates[riftKey][milestoneIdx];
           rift.updateMilestones(milestoneIdx, previousMilestoneState);
         }

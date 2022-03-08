@@ -1,27 +1,10 @@
+import { DC } from "../../constants";
+import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
+import { PelleRifts } from "./rifts";
+
 export const GalaxyGenerator = {
   get generationCaps() {
-    return [
-      {
-        cap: 1000,
-        rift: PelleRifts.famine
-      },
-      {
-        cap: 1e5,
-        rift: PelleRifts.death
-      },
-      {
-        cap: 1e7,
-        rift: PelleRifts.pestilence
-      },
-      {
-        cap: 1e9,
-        rift: PelleRifts.chaos
-      },
-      {
-        cap: 1e10,
-        rift: PelleRifts.war
-      }
-    ];
+    return PelleRifts.all.map(x => ({ rift: x.config.key, cap: x.config.galaxyGeneratorThreshold }));
   },
 
   get spentGalaxies() {
@@ -37,13 +20,14 @@ export const GalaxyGenerator = {
   },
 
   get gainPerSecond() {
-    if (!PelleRifts.war.hasMilestone(2)) return 0;
-    let base = PelleRebuyableUpgrade.additive.effectValue;
-    base *= PelleRebuyableUpgrade.multiplicative.effectValue.toNumber();
-    base *= PelleRebuyableUpgrade.antimatterMult.effectValue.toNumber();
-    base *= PelleRebuyableUpgrade.IPMult.effectValue.toNumber();
-    base *= PelleRebuyableUpgrade.EPMult.effectValue.toNumber();
-    return base;
+    if (!PelleRifts.war.milestones[2].canBeApplied) return 0;
+    return DC.D1.timesEffectsOf(
+      GalaxyGeneratorUpgrades.additive,
+      GalaxyGeneratorUpgrades.multiplicative,
+      GalaxyGeneratorUpgrades.antimatterMult,
+      GalaxyGeneratorUpgrades.IPMult,
+      GalaxyGeneratorUpgrades.EPMult,
+    ).toNumber();
   },
 
   get capObj() {
@@ -55,7 +39,7 @@ export const GalaxyGenerator = {
   },
 
   get capRift() {
-    return this.capObj?.rift;
+    return PelleRifts[this.capObj?.rift];
   },
 
   get isCapped() {
@@ -76,8 +60,6 @@ export const GalaxyGenerator = {
       Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_RIFTS);
     }
     if (this.sacrificeActive) {
-      const milestoneStates =
-        PelleRifts.all.mapToObject(x => x.config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       this.capRift.reducedTo = Math.max(this.capRift.reducedTo - 0.03 * diff / 1000, 0);
       if (this.capRift.reducedTo === 0) {
         player.celestials.pelle.galaxyGenerator.sacrificeActive = false;
@@ -86,13 +68,7 @@ export const GalaxyGenerator = {
           Pelle.quotes.show(Pelle.quotes.END);
         }
       }
-      for (const riftKey in milestoneStates) {
-        const rift = PelleRifts[riftKey];
-        for (const milestoneIdx in rift.milestones) {
-          const previousMilestoneState = milestoneStates[riftKey][milestoneIdx];
-          rift.updateMilestones(milestoneIdx, previousMilestoneState);
-        }
-      }
+      PelleRifts.all.forEach(x => x.checkMilestoneStates());
     }
     player.celestials.pelle.galaxyGenerator.generatedGalaxies += this.gainPerSecond * diff / 1000;
     player.celestials.pelle.galaxyGenerator.generatedGalaxies = Math.min(
@@ -105,3 +81,30 @@ export const GalaxyGenerator = {
     }
   }
 };
+
+export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
+  get currency() {
+    return this.config.currency();
+  }
+
+  get boughtAmount() {
+    return player.celestials.pelle.rebuyables[this.id];
+  }
+
+  set boughtAmount(value) {
+    player.celestials.pelle.rebuyables[this.id] = value;
+  }
+
+  get isCustomEffect() { return true; }
+
+  get effectValue() {
+    return this.config.effect(this.boughtAmount);
+  }
+}
+
+export const GalaxyGeneratorUpgrades = (function() {
+  return mapGameDataToObject(
+    GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
+    config => new GalaxyGeneratorUpgrade(config)
+  );
+}());

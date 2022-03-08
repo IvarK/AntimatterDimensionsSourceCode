@@ -25,7 +25,7 @@ export default {
         : "fas fa-compress-arrows-alt";
     },
     upgrades() {
-      return PelleRebuyableUpgrade.galaxyGenerator;
+      return GalaxyGeneratorUpgrades.all;
     },
     galaxyText() {
       let text = format(Math.max(this.galaxies, 0), 2);

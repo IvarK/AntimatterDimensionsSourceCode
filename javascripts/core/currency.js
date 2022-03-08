@@ -456,3 +456,14 @@ Currency.replicanti = new class extends DecimalCurrency {
   get value() { return player.replicanti.amount; }
   set value(value) { player.replicanti.amount = value; }
 }();
+
+Currency.galaxyGeneratorGalaxies = new class extends NumberCurrency {
+  get value() {
+    return player.galaxies + GalaxyGenerator.galaxies;
+  }
+
+  set value(value) {
+    const spent = player.galaxies + GalaxyGenerator.galaxies - value;
+    player.celestials.pelle.galaxyGenerator.spentGalaxies += spent;
+  }
+}();

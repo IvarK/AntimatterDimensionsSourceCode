@@ -86,7 +86,7 @@ export default {
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;
-      this.hasPelleDilationUpgrades = PelleRifts.death.hasMilestone(0);
+      this.hasPelleDilationUpgrades = PelleRifts.death.milestones[0].canBeApplied;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {

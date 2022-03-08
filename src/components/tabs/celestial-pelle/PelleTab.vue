@@ -228,14 +228,14 @@ export default {
     justify-content: center;
     border-radius: 5px;
     border: 0.2rem solid var(--color-pelle--base);
-    padding: 2rem;
+    padding: 1rem;
   }
   .c-armageddon-button-container {
     width: 32rem;
     margin: 0 2rem 0.5rem 0;
   }
   .c-armageddon-resources-container {
-    width: 50rem;
+    width: 41.5rem;
   }
   .c-remnants-amount {
     font-weight: bold;

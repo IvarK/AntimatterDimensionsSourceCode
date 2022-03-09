@@ -85,9 +85,7 @@ export default {
           >
             <ArmageddonButton />
           </div>
-          <div class="c-pelle-remnant-factors-container">
-            <RemnantGainFactor />
-          </div>
+          <RemnantGainFactor />
         </div>
         <span>&nbsp;&nbsp;</span>
         <div class="c-armageddon-resources-container">

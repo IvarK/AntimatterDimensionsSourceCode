@@ -14,7 +14,8 @@ export default {
         ep: new Decimal(0)
       },
       dilationMult: [1, 1, 1],
-      remnants: 0
+      remnants: 0,
+      remnantsGain: 0
     };
   },
   methods: {
@@ -23,7 +24,8 @@ export default {
       this.best.ip.copyFrom(player.celestials.pelle.records.totalInfinityPoints);
       this.best.ep.copyFrom(player.celestials.pelle.records.totalEternityPoints);
       this.dilationMult = PelleStrikes.dilation.hasStrike ? [500, 10, 5] : [1, 1, 1];
-      this.remnants = Pelle.remnantsGain + Pelle.cel.remnants;
+      this.remnants = Pelle.cel.remnants;
+      this.remnantsGain = Pelle.remnantsGain;
     }
   }
 };
@@ -53,10 +55,13 @@ export default {
             log10(log10(ep + 1){{ dilationMult[2] > 1 ? `*${dilationMult[2]}` : "" }} + 2)
           </div>
           <div class="l-remnant-factors-item">
-            Divisor
+            Static divisor
           </div>
           <div class="l-remnant-factors-item">
-            Power
+            Static power
+          </div>
+          <div class="l-remnant-factors-item">
+            Existing Remnants
           </div>
           <div class="l-remnant-factors-item">
             Final amount
@@ -76,6 +81,9 @@ export default {
           <div class="l-remnant-factors-item">
             ^
           </div>
+          <div class="l-remnant-factors-item">
+            -
+          </div>
         </div>
         <div class="l-remnant-factors-col">
           <div class="l-remnant-factors-item">
@@ -88,13 +96,16 @@ export default {
             {{ format(Math.log10(best.ep.add(1).log10()*dilationMult[0] + 2), 2, 2) }}
           </div>
           <div class="l-remnant-factors-item">
-            1.64
+            {{ format(1.64, 2, 2) }}
           </div>
           <div class="l-remnant-factors-item">
-            7.5
+            {{ format(7.5, 2, 2) }}
           </div>
           <div class="l-remnant-factors-item">
             {{ format(remnants, 2, 0) }}
+          </div>
+          <div class="l-remnant-factors-item">
+            {{ format(remnantsGain, 2, 0) }}
           </div>
         </div>
       </div>

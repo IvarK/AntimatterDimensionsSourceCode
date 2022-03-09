@@ -1,0 +1,137 @@
+<script>
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+
+export default {
+  name: "RemnantGainFactor",
+  components: {
+    ExpandingControlBox
+  },
+  data() {
+    return {
+      best: {
+        am: new Decimal(0),
+        ip: new Decimal(0),
+        ep: new Decimal(0)
+      },
+      dilationMult: [1, 1, 1],
+      remnants: 0
+    };
+  },
+  methods: {
+    update() {
+      this.best.am.copyFrom(player.celestials.pelle.records.totalAntimatter);
+      this.best.ip.copyFrom(player.celestials.pelle.records.totalInfinityPoints);
+      this.best.ep.copyFrom(player.celestials.pelle.records.totalEternityPoints);
+      this.dilationMult = PelleStrikes.dilation.hasStrike ? [500, 10, 5] : [1, 1, 1];
+      this.remnants = Pelle.remnantsGain + Pelle.cel.remnants;
+    }
+  }
+};
+</script>
+
+<template>
+  <ExpandingControlBox
+    container-class="c-remnant-factors"
+    label="Remnant Gain Factors"
+  >
+    <div
+      slot="dropdown"
+      class="c-remnant-factors-text"
+    >
+      Best AM: {{ format(best.am, 2, 2) }}<br>
+      Best IP: {{ format(best.ip, 2, 2) }}<br>
+      Best EP: {{ format(best.ep, 2, 2) }}<br><br>
+      <div class="l-remnant-factors-row">
+        <div class="l-remnant-factors-col l-remnant-factors-col--first">
+          <div class="l-remnant-factors-item">
+            log10(log10(am + 1){{ dilationMult[0] > 1 ? `*${dilationMult[0]}` : "" }} + 2)
+          </div>
+          <div class="l-remnant-factors-item">
+            log10(log10(ip + 1){{ dilationMult[1] > 1 ? `*${dilationMult[1]}` : "" }} + 2)
+          </div>
+          <div class="l-remnant-factors-item">
+            log10(log10(ep + 1){{ dilationMult[2] > 1 ? `*${dilationMult[2]}` : "" }} + 2)
+          </div>
+          <div class="l-remnant-factors-item">
+            Divisor
+          </div>
+          <div class="l-remnant-factors-item">
+            Power
+          </div>
+          <div class="l-remnant-factors-item">
+            Final amount
+          </div>
+        </div>
+        <div class="l-remnant-factors-col">
+          <div class="l-remnant-factors-item" />
+          <div class="l-remnant-factors-item">
+            +
+          </div>
+          <div class="l-remnant-factors-item">
+            +
+          </div>
+          <div class="l-remnant-factors-item">
+            /
+          </div>
+          <div class="l-remnant-factors-item">
+            ^
+          </div>
+        </div>
+        <div class="l-remnant-factors-col">
+          <div class="l-remnant-factors-item">
+            {{ format(Math.log10(best.am.add(1).log10()*dilationMult[0] + 2), 2, 2) }}
+          </div>
+          <div class="l-remnant-factors-item">
+            {{ format(Math.log10(best.ip.add(1).log10()*dilationMult[0] + 2), 2, 2) }}
+          </div>
+          <div class="l-remnant-factors-item">
+            {{ format(Math.log10(best.ep.add(1).log10()*dilationMult[0] + 2), 2, 2) }}
+          </div>
+          <div class="l-remnant-factors-item">
+            1.64
+          </div>
+          <div class="l-remnant-factors-item">
+            7.5
+          </div>
+          <div class="l-remnant-factors-item">
+            {{ format(remnants, 2, 0) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ExpandingControlBox>
+</template>
+
+<style>
+  .c-remnant-factors {
+    background-color: #000;
+    color: #fbd0d8;
+    border: 0.2rem solid var(--color-pelle--base);
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    font-weight: bold;
+  }
+  .c-remnant-factors-text {
+    padding: 0.3rem;
+  }
+
+  .l-remnant-factors-row {
+    display: flex;
+    width: 100%
+  }
+  .l-remnant-factors-col {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2rem;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+  .l-remnant-factors-col--first {
+    flex-grow: 1;
+    margin-left: 0;
+  }
+  .l-remnant-factors-item {
+    height: 2rem;
+    text-align: left;
+  }
+</style>

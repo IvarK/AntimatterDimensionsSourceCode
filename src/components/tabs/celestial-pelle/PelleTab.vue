@@ -3,6 +3,7 @@ import ArmageddonButton from "./ArmageddonButton";
 import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
 import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
+import RemnantGainFactor from "./RemnantGainFactor";
 
 export default {
   name: "PelleTab",
@@ -10,7 +11,8 @@ export default {
     ArmageddonButton,
     PelleBarPanel,
     PelleUpgradePanel,
-    GalaxyGeneratorPanel
+    GalaxyGeneratorPanel,
+    RemnantGainFactor
   },
   data() {
     return {
@@ -22,12 +24,7 @@ export default {
       hasGalaxyGenerator: false,
       remnantsGain: 0,
       realityShardGain: new Decimal(0),
-      isHovering: false,
-      best: {
-        am: new Decimal(0),
-        ip: new Decimal(0),
-        ep: new Decimal(0)
-      }
+      isHovering: false
     };
   },
   computed: {
@@ -39,9 +36,6 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.remnants = Pelle.cel.remnants;
-      this.best.am.copyFrom(player.celestials.pelle.records.totalAntimatter);
-      this.best.ip.copyFrom(player.celestials.pelle.records.totalInfinityPoints);
-      this.best.ep.copyFrom(player.celestials.pelle.records.totalEternityPoints);
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
@@ -91,10 +85,11 @@ export default {
           >
             <ArmageddonButton />
           </div>
-          Best AM: {{ format(best.am, 2, 2) }}<br>
-          Best IP: {{ format(best.ip, 2, 2) }}<br>
-          Best EP: {{ format(best.ep, 2, 2) }}
+          <div class="c-pelle-remnant-factors-container">
+            <RemnantGainFactor />
+          </div>
         </div>
+        <span>&nbsp;&nbsp;</span>
         <div class="c-armageddon-resources-container">
           <div>
             You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.
@@ -111,9 +106,9 @@ export default {
           </div>
         </div>
       </div>
-      <PelleUpgradePanel :is-hovering="isHovering" />
-      <PelleBarPanel v-if="hasStrike" />
       <GalaxyGeneratorPanel v-if="hasGalaxyGenerator" />
+      <PelleBarPanel v-if="hasStrike" />
+      <PelleUpgradePanel :is-hovering="isHovering" />
     </div>
     <button
       v-else
@@ -226,13 +221,13 @@ export default {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     border: 0.2rem solid var(--color-pelle--base);
     padding: 1rem;
   }
   .c-armageddon-button-container {
     width: 32rem;
-    margin: 0 2rem 0.5rem 0;
+    margin-bottom: 0.5rem;
   }
   .c-armageddon-resources-container {
     width: 41.5rem;

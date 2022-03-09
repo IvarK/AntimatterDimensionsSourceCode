@@ -46,13 +46,13 @@ export default {
       <div class="l-remnant-factors-row">
         <div class="l-remnant-factors-col l-remnant-factors-col--first">
           <div class="l-remnant-factors-item">
-            log10(log10(am + 1){{ dilationMult[0] > 1 ? `*${dilationMult[0]}` : "" }} + 2)
+            log10(log10(am){{ dilationMult[0] > 1 ? `*${dilationMult[0]}` : "" }} + 2)
           </div>
           <div class="l-remnant-factors-item">
-            log10(log10(ip + 1){{ dilationMult[1] > 1 ? `*${dilationMult[1]}` : "" }} + 2)
+            log10(log10(ip){{ dilationMult[1] > 1 ? `*${dilationMult[1]}` : "" }} + 2)
           </div>
           <div class="l-remnant-factors-item">
-            log10(log10(ep + 1){{ dilationMult[2] > 1 ? `*${dilationMult[2]}` : "" }} + 2)
+            log10(log10(ep){{ dilationMult[2] > 1 ? `*${dilationMult[2]}` : "" }} + 2)
           </div>
           <div class="l-remnant-factors-item">
             Static divisor

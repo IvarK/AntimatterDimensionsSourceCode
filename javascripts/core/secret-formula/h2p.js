@@ -638,6 +638,13 @@ letting you quickly buy that particular set of studies again with a single click
 use the tooltip to load/save a slot, or click to load and shift-click to save.
 <br>
 <br>
+<b>Import Tree/Edit Preset:</b> When editing a preset or importing a Time Study Tree, the modal will display what
+Time Studies will be bought when it is loaded, along with any errors.
+For the split paths, you can use the name as a shorthand for the collection of studies.
+For instance, you can replace "71, 81, 91, 101" to represent fully purchasing the antimatter split with
+just "antimatter".
+<br>
+<br>
 <b>Preferences:</b> Clicking the gear icon will open up a dialog which lets you select "default" paths to pick in the
 three-way branches. Choosing a default will change the shift-click behavior mentioned above so that it will attempt
 to buy your preferred path and continue on instead of stopping completely at the tree splits. You can choose two paths

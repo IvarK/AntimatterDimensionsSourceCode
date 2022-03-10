@@ -1,6 +1,5 @@
 import { GameDatabase } from "../game-database.js";
 import { DC } from "../../constants.js";
-import { updateTimeDimensionCosts } from "../../dimensions/time-dimension.js";
 
 GameDatabase.celestials.pelle = (function() {
   const rebuyable = props => {
@@ -125,28 +124,28 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e17,
         formatCost: c => format(c, 2),
       },
-      replicantiStayUnlocked: {
-        id: 12,
-        description: "Replicanti stays unlocked on Armageddon",
-        cost: 1e17,
-        formatCost: c => format(c, 2),
-      },
       replicantiGalaxyNoReset: {
-        id: 13,
+        id: 12,
         description: "Replicanti Galaxies don't reset on Infinity",
         cost: 1e19,
         formatCost: c => format(c, 2),
       },
       eternitiesNoReset: {
-        id: 14,
+        id: 13,
         description: "Eternities do not reset on Armageddon",
         cost: 1e20,
         formatCost: c => format(c, 2),
       },
       timeStudiesNoReset: {
-        id: 15,
+        id: 14,
         description: "Time Studies and Theorems do not reset on Armageddon",
         cost: 1e21,
+        formatCost: c => format(c, 2),
+      },
+      replicantiStayUnlocked: {
+        id: 15,
+        description: "Replicanti stays unlocked on Armageddon",
+        cost: 1e22,
         formatCost: c => format(c, 2),
       },
       keepEternityUpgrades: {
@@ -170,21 +169,9 @@ GameDatabase.celestials.pelle = (function() {
       dimBoostResetsNothing: {
         id: 19,
         description: "Dimension Boosts no longer reset anything",
-        cost: 1e40,
-        formatCost: c => format(c, 2),
-      },
-      dilationUpgradesNoReset: {
-        id: 20,
-        description: "Keep Dilation Upgrades on Armageddon",
-        cost: 1e45,
-        formatCost: c => format(c, 2),
-      },
-      tachyonParticlesNoReset: {
-        id: 21,
-        description: "Keep Tachyon Particles on Armageddon",
         cost: 1e50,
         formatCost: c => format(c, 2),
-      }
+      },
     },
     strikes: {
       infinity: {
@@ -294,7 +281,7 @@ GameDatabase.celestials.pelle = (function() {
             description: () => "First rebuyable Pelle upgrade also affects 1st Infinity Dimension",
             effect: () => {
               const x = player.celestials.pelle.rebuyables.antimatterDimensionMult;
-              return Decimal.pow(1e50, Math.max(x - 9, 0));
+              return Decimal.pow(1e50, x - 9);
             },
           },
           {
@@ -410,13 +397,7 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.15,
-            description: () => "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades",
-            onComplete: () => {
-              updateTimeDimensionCosts();
-            },
-            onUncomplete: () => {
-              updateTimeDimensionCosts();
-            }
+            description: () => "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades"
           },
           {
             requirement: 0.25,
@@ -426,7 +407,7 @@ GameDatabase.celestials.pelle = (function() {
             requirement: 0.5,
             description: () => "Dilation rebuyable purchase count improves Infinity Power conversion rate",
             effect: () => Math.min(
-              1.1 ** Math.max(Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90, 0),
+              1.1 ** (Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90),
               712
             ),
           },

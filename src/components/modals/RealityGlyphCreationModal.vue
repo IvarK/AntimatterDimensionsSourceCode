@@ -10,7 +10,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       realityGlyphLevel: 0,
       // This contains an array where each entry is an array looking like [4000, "realitygalaxies"]
       possibleEffects: [],
@@ -18,7 +17,6 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
       const realityEffectConfigs = Object.values(GameDatabase.reality.glyphEffects)
         .filter(eff => eff.id.match("reality*"))
@@ -55,8 +53,7 @@ export default {
       Reality Glyph Creation
     </template>
     <div>
-      Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.
-      Rarity will always be {{ formatPercents(1) }}
+      Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph. Rarity will always be {{ formatPercents(1) }}
       and level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
       be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
       Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
@@ -72,13 +69,7 @@ export default {
       {{ formatGlyphEffect(effect) }}
     </div><br>
     <PrimaryButton
-      v-if="isDoomed"
-      :enabled="false"
-    >
-      You cannot create Reality Glyphs while in Doomed
-    </PrimaryButton>
-    <PrimaryButton
-      v-else-if="realityGlyphLevel !== 0"
+      v-if="realityGlyphLevel !== 0"
       @click="createRealityGlyph"
     >
       Create a Reality Glyph!

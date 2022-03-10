@@ -10,8 +10,7 @@ export default {
   data() {
     return {
       isReached: false,
-      isObsoleteWithPelle: false,
-      isDoomed: false
+      isObsoleteWithPelle: false
     };
   },
   computed: {
@@ -39,15 +38,11 @@ export default {
     activeCondition() {
       return this.config.activeCondition ? this.config.activeCondition() : null;
     },
-    disabledInDoomed() {
-      return this.isDoomed && this.config.pelleUseless;
-    }
   },
   methods: {
     update() {
       this.isReached = this.milestone.isReached;
       this.isObsoleteWithPelle = this.config.pelleObsolete?.();
-      this.isDoomed = Pelle.isDoomed;
     }
   }
 };
@@ -65,10 +60,7 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      <span v-if="disabledInDoomed"> This milestone has no effect while in Doomed </span>
-      <span v-else>
-        {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
-      </span>
+      {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
     </button>
   </div>
 </template>

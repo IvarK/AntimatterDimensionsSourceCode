@@ -1,7 +1,6 @@
 Vue.component("old-ui-tab-button", {
   props: {
-    tab: Object,
-    tabPosition: Number
+    tab: Object
   },
   data() {
     return {
@@ -14,10 +13,10 @@ Vue.component("old-ui-tab-button", {
     update() {
       this.isAvailable = this.tab.isAvailable;
       this.hasNotification = this.tab.hasNotification;
-      if (this.tabPosition < Pelle.endTabNames.length) {
+      if (this.tab.config.endName) {
         this.tabName = Pelle.transitionText(
           this.tab.name,
-          Pelle.endTabNames[this.tabPosition],
+          this.tab.config.endName,
           Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
         );
       } else {

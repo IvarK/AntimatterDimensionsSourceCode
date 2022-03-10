@@ -1301,10 +1301,7 @@ GameDatabase.achievements.normal = [
     name: "Antimatter Dimensions Eternal",
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    // This is V achievement 10's reward value when it is maxxed.
-    // We forgot to remove it and we won't bother with rebalancing pelle.
-    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 182,
@@ -1323,14 +1320,14 @@ GameDatabase.achievements.normal = [
   {
     id: 184,
     name: "You're out!",
-    description: "Encounter the third Pelle Strike.",
+    description: "Reach the third Pelle Strike.",
     checkRequirement: () => PelleStrikes.eternity.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 185,
     name: "Four score and seven years ago",
-    description: "Encounter the fourth Pelle Strike.",
+    description: "Reach the fourth Pelle Strike.",
     checkRequirement: () => PelleStrikes.ECs.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
@@ -1342,10 +1339,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 187,
-    name: "The One with Dilated Time",
-    description: "Unlock Dilation in Doomed.",
-    checkRequirement: () => PelleStrikes.dilation.hasStrike,
-    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+    name: "Doomed Time",
+    description: "Dilate time while Doomed.",
+    checkRequirement: () => Pelle.isDoomed && player.dilation.active,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
   },
   {
     id: 188,

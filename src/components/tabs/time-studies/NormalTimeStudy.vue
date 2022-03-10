@@ -27,11 +27,6 @@ export default {
     study() {
       return this.setup.study;
     },
-    doomedDescription() {
-      return this.study.id === 33
-        ? "This Time Study became useless due to a Pelle upgrade"
-        : "This Time Study has no effect while in Doomed";
-    },
     hintText() {
       const id = this.study.id;
       if (!this.setup.path) return id;
@@ -67,7 +62,7 @@ export default {
       {{ hintText }}
     </HintText>
     <span v-if="isUseless">
-      {{ doomedDescription }}
+      This Time Study has no effect while in Doomed
     </span>
     <span v-else>
       <DescriptionDisplay

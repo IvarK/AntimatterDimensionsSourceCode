@@ -4,14 +4,6 @@ Vue.component("celestial-quote-history", {
     visibleLines: {
       type: Number,
       default: 3,
-    },
-    lineHeight: {
-      type: String,
-      default: "auto"
-    },
-    fontSize: {
-      type: String,
-      default: ""
     }
   },
   data: () => ({
@@ -30,9 +22,7 @@ Vue.component("celestial-quote-history", {
       return Math.max(0, this.lastVisibleIndex - this.visibleLines + 1);
     },
     visibleQuotes() {
-      return this.quotes.slice(this.firstVisibleIndex, this.lastVisibleIndex + 1).map(
-        x => (typeof x === "function" ? x() : x)
-      );
+      return this.quotes.slice(this.firstVisibleIndex, this.lastVisibleIndex + 1);
     },
     upButtonClass() {
       return this.buttonClass(this.upButtonEnabled);
@@ -54,9 +44,7 @@ Vue.component("celestial-quote-history", {
     lineStyle(idx) {
       const idxDiff = Math.abs(idx - (this.visibleQuotes.length - 1));
       return {
-        opacity: 0.3 + 0.7 / (idxDiff + 1),
-        lineHeight: this.lineHeight,
-        fontSize: this.fontSize
+        opacity: 0.3 + 0.7 / (idxDiff + 1)
       };
     },
     buttonClass(enabled) {
@@ -70,9 +58,6 @@ Vue.component("celestial-quote-history", {
     downButtonClick() {
       if (this.downButtonEnabled) this.lastVisibleIndex++;
     },
-    removeQuoteSyntax(x) {
-      return Modal.celestialQuote.removeOverrideCel(x).replace("*", "");
-    }
   },
   template: `
     <div class="o-celestial-quote-history">
@@ -83,7 +68,7 @@ Vue.component("celestial-quote-history", {
           class="c-celestial-quote-history__line"
           :style="lineStyle(idx)"
         >
-          {{ removeQuoteSyntax(quote) }}
+          {{ quote }}
         </div>
       </div>
       <div class="l-celestial-quote-history__buttons">

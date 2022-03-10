@@ -1,43 +1,25 @@
 <script>
-import ArmageddonButton from "./ArmageddonButton";
 import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
 import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
-import RemnantGainFactor from "./RemnantGainFactor";
 
 export default {
   name: "PelleTab",
   components: {
-    ArmageddonButton,
     PelleBarPanel,
     PelleUpgradePanel,
-    GalaxyGeneratorPanel,
-    RemnantGainFactor
+    GalaxyGeneratorPanel
   },
   data() {
     return {
       isDoomed: false,
-      remnants: 0,
-      realityShards: new Decimal(0),
-      shardRate: new Decimal(0),
       hasStrike: false,
       hasGalaxyGenerator: false,
-      remnantsGain: 0,
-      realityShardGain: new Decimal(0),
-      isHovering: false
     };
-  },
-  computed: {
-    symbol() {
-      return Pelle.symbol;
-    }
   },
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
-      this.remnants = Pelle.cel.remnants;
-      this.realityShards.copyFrom(Pelle.cel.realityShards);
-      this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
       this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
     },
@@ -45,11 +27,28 @@ export default {
       Pelle.cel.showBought = !Pelle.cel.showBought;
       this.$recompute("upgrades");
     },
+    getDoomedScrub() {
+      Glyphs.harshAutoClean();
+      if (Glyphs.freeInventorySpace === 0) {
+        Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
+        Glyphs could not be unequipped due to lack of inventory space.`);
+        return;
+      }
+      Glyphs.unequipAll();
+      Glyphs.harshAutoClean();
+      for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+      Glyphs.refreshActive();
+      player.celestials.pelle.doomed = true;
+      Pelle.armageddon(false);
+      respecTimeStudies(true);
+      Currency.infinityPoints.reset();
+      player.infMult = 0;
+      Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
+      disChargeAll();
+      player.buyUntil10 = true;
+    },
     showModal() {
       Modal.pelleEffects.show();
-    },
-    enterDoomModal() {
-      Modal.armageddon.show();
     }
   }
 };
@@ -57,16 +56,7 @@ export default {
 
 <template>
   <div class="l-pelle-celestial-tab">
-    <div
-      v-if="isDoomed"
-      class="l-pelle-all-content-container"
-    >
-      <celestial-quote-history
-        celestial="pelle"
-        :visible-lines="4"
-        font-size="1.6rem"
-        line-height="2.56rem"
-      />
+    <div v-if="isDoomed">
       <div class="button-container">
         <button
           class="o-pelle-button"
@@ -75,41 +65,18 @@ export default {
           Show effects in Doomed Reality
         </button>
       </div>
-      <br>
-      <div class="c-armageddon-container">
-        <div>
-          <div
-            class="c-armageddon-button-container"
-            @mouseover="isHovering = true"
-            @mouseleave="isHovering = false"
-          >
-            <ArmageddonButton />
-          </div>
-          <RemnantGainFactor />
-        </div>
-        <span>&nbsp;&nbsp;</span>
-        <div class="c-armageddon-resources-container">
-          <div>
-            You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.
-          </div>
-          <div>
-            You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.
-            <span class="c-remnants-amount">(+{{ format(shardRate, 2, 2) }}/s)</span>
-          </div>
-        </div>
-      </div>
-      <GalaxyGeneratorPanel v-if="hasGalaxyGenerator" />
+      <PelleUpgradePanel />
       <PelleBarPanel v-if="hasStrike" />
-      <PelleUpgradePanel :is-hovering="isHovering" />
+      <GalaxyGeneratorPanel v-if="hasGalaxyGenerator" />
     </div>
     <button
       v-else
       class="pelle-doom-button"
-      @click="enterDoomModal"
+      @click="getDoomedScrub"
     >
       Doom<br>Your<br>Reality
       <div class="pelle-icon-container">
-        <span class="pelle-icon">{{ symbol }}</span>
+        <span class="pelle-icon">♅</span>
       </div>
     </button>
   </div>
@@ -119,13 +86,7 @@ export default {
   .l-pelle-celestial-tab {
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
-  .l-pelle-all-content-container {
-    display: flex;
-    flex-direction: column;
     align-items: stretch;
-    width: 100%;
   }
 
   .o-pelle-button {
@@ -143,17 +104,6 @@ export default {
 
   .o-pelle-button:hover {
     box-shadow: 1px 1px 3px var(--color-pelle--base);
-  }
-
-  .o-pelle-quotes-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-pelle--base);
-    font-size: 5rem;
-    height: 7rem;
-    width: 7rem;
-    font-weight: 900;
   }
 
   .pelle-doom-button {
@@ -202,31 +152,5 @@ export default {
 
   .pelle-icon {
     animation: roll infinite 8s linear;
-  }
-
-  .o-celestial-quote-history {
-    align-self: center;
-  }
-
-  .c-armageddon-container {
-    align-self: center;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    border-radius: 0.5rem;
-    border: 0.2rem solid var(--color-pelle--base);
-    padding: 1rem;
-  }
-  .c-armageddon-button-container {
-    width: 32rem;
-    margin-bottom: 0.5rem;
-  }
-  .c-armageddon-resources-container {
-    width: 41.5rem;
-  }
-  .c-remnants-amount {
-    font-weight: bold;
-    font-size: 2rem;
-    color: var(--color-pelle--base);
   }
 </style>

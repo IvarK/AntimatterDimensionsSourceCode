@@ -71,25 +71,19 @@ export default {
       this.updateHeightInfo();
       switch (this.state) {
         case this.states.CLOSED:
-          this.$emit("openclose", false);
           break;
         case this.states.OPEN_REQUESTED:
           this.$nextTick(() => this.state = this.states.OPENING);
-          this.$emit("openclose", false);
           break;
         case this.states.OPENING:
-          this.$emit("openclose", true);
           break;
         case this.states.OPEN:
-          this.$emit("openclose", true);
           break;
         case this.states.CLOSE_REQUESTED:
           // Need to have DOM update with CLOSE_REQUESTED state to re-enable transitions
           this.$nextTick(() => this.state = this.states.CLOSING);
-          this.$emit("openclose", true);
           break;
         case this.CLOSING:
-          this.$emit("openclose", true);
           break;
       }
     },

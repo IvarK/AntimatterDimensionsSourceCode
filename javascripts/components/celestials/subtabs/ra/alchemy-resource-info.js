@@ -9,7 +9,6 @@ Vue.component("alchemy-resource-info", {
   },
   data() {
     return {
-      isDoomed: false,
       amount: 0,
       cap: 0,
       capped: false,
@@ -69,7 +68,6 @@ Vue.component("alchemy-resource-info", {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const resource = this.resource;
       this.amount = resource.amount;
       this.cap = resource.cap;
@@ -94,8 +92,7 @@ Vue.component("alchemy-resource-info", {
       </span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-      <span v-if="isDoomed">Alchemy effects are disabled while in Doomed</span>
-      <span v-else>
+      <span>
         <EffectDisplay
           label="Effect"
           :config="effectConfig"

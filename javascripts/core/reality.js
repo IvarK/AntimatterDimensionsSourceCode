@@ -513,7 +513,6 @@ export function beginProcessReality(realityProps) {
   Glyphs.processSortingAfterReality();
 }
 
-// eslint-disable-next-line complexity
 export function finishProcessReality(realityProps) {
   const finalEP = Currency.eternityPoints.value.plus(gainedEternityPoints());
   if (player.records.bestReality.bestEP.lt(finalEP)) {
@@ -590,8 +589,11 @@ export function finishProcessReality(realityProps) {
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) {
     player.dilation.studies = [];
     player.dilation.active = false;
-  }
-  if (!PelleUpgrade.dilationUpgradesNoReset.canBeApplied) {
+    Currency.tachyonParticles.reset();
+    Currency.dilatedTime.reset();
+    player.dilation.nextThreshold = DC.E3;
+    player.dilation.baseTachyonGalaxies = 0;
+    player.dilation.totalTachyonGalaxies = 0;
     player.dilation.upgrades.clear();
     player.dilation.rebuyables = {
       1: 0,
@@ -602,13 +604,6 @@ export function finishProcessReality(realityProps) {
       13: 0
     };
   }
-  if (!PelleUpgrade.tachyonParticlesNoReset.canBeApplied) {
-    Currency.tachyonParticles.reset();
-  }
-  player.dilation.nextThreshold = DC.E3;
-  player.dilation.baseTachyonGalaxies = 0;
-  player.dilation.totalTachyonGalaxies = 0;
-  Currency.dilatedTime.reset();
   player.records.thisInfinity.maxAM = DC.D0;
   player.records.thisEternity.maxAM = DC.D0;
   player.records.thisReality.maxDT = DC.D0;

@@ -5,7 +5,6 @@ export default {
     return {
       plusRecord: 0,
       minusRecord: 0,
-      opacity: 0,
       visible: false
     };
   },
@@ -20,8 +19,7 @@ export default {
     update() {
       this.plusRecord = NG.plusRecord;
       this.minusRecord = NG.minusRecord;
-      this.visible = Pelle.endState > 14.9;
-      this.opacity = (Pelle.endState - 14.9) * 2;
+      this.visible = Pelle.endState > 13;
     },
     ngString(i) {
       if (!i) return "";
@@ -37,7 +35,7 @@ export default {
 <template>
   <div
     class="new-game-container"
-    :style="{ display: visible ? 'flex' : 'none', opacity }"
+    :style="{ display: visible ? 'flex' : 'none' }"
   >
     <h1>Wanna start over?</h1>
     Highest NG+: {{ plusRecord }}<br>

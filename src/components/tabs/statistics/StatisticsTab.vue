@@ -5,8 +5,6 @@ export default {
   name: "StatisticsTab",
   data() {
     return {
-      isDoomed: false,
-      realTimeDoomed: TimeSpan.zero,
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
       uniqueNews: 0,
@@ -123,9 +121,6 @@ export default {
         reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
-
-      this.isDoomed = Pelle.isDoomed;
-      this.realTimeDoomed.setFrom(player.records.realTimeDoomed);
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
@@ -144,9 +139,6 @@ export default {
       <div>You have played for {{ realTimePlayed }}. (real time)</div>
       <div v-if="reality.isUnlocked">
         Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
-      </div>
-      <div v-if="isDoomed">
-        You have been doomed for {{ realTimeDoomed }}. (real time)
       </div>
       <div>
         You have seen {{ quantifyInt("news message", totalNews) }} in total.

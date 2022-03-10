@@ -1,7 +1,6 @@
 Vue.component("tab-button", {
   props: {
-    tab: Object,
-    tabPosition: Number
+    tab: Object
   },
   data() {
     return {
@@ -28,10 +27,10 @@ Vue.component("tab-button", {
       this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
       this.showSubtabs = this.isAvailable && this.subtabVisibilities.length >= 1;
       this.hasNotification = this.tab.hasNotification;
-      if (this.tabPosition < Pelle.endTabNames.length) {
+      if (this.tab.config.endName) {
         this.tabName = Pelle.transitionText(
           this.tab.name,
-          Pelle.endTabNames[this.tabPosition],
+          this.tab.config.endName,
           Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
         );
       } else {

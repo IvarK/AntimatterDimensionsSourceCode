@@ -10,7 +10,7 @@ Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerIPMult.isReached && !Pelle.isDoomed;
+    return EternityMilestone.autobuyerIPMult.isReached;
   }
 
   get hasUnlimitedBulk() {

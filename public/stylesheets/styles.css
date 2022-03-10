@@ -805,7 +805,7 @@ button:focus {
   bottom: 100%;
   left: 50%;
   margin-bottom: 0.5rem;
-  transform: translateX(-50%);
+  margin-left: -8.5rem;
   padding: 0.7rem;
   width: 16rem;
   border-radius: 0.3rem;
@@ -4986,9 +4986,9 @@ screen and (max-width: 480px) {
   color: var(--color-pelle-secondary);
 }
 
-.o-dilation-upgrade--useless-bought {
+.o-dilation-upgrade--useless-bought{
   color: black;
-  background-color: var(--color-pelle--base) !important;
+  background-color: var(--color-pelle--base);
   filter: grayscale(50%);
   border-color: black;
 }
@@ -5016,7 +5016,7 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-upgrade--useless-unavailable {
-  background-color: var(--color-pelle--base) !important;
+  background-color: var(--color-pelle--base);
   color: black;
   filter: grayscale(90%);
   border-color: black;
@@ -5204,7 +5204,7 @@ screen and (max-width: 480px) {
   top: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 6;
+  z-index: 5;
   animation-name: a-modal-overlay-fadein;
   animation-duration: 2s;
   animation-fill-mode: forwards;
@@ -5826,10 +5826,6 @@ kbd {
   background-color: black;
   border-color: var(--color-pelle--base);
   box-shadow: 0 0 1rem var(--color-pelle--base), 0 0 1rem var(--color-pelle--base) inset;
-}
-.c-modal-celestial-quote--pelle > .l-modal-celestial-quote__text {
-  color: #ea6e83;
-  /* Pelle colour, but light */
 }
 
 .c-modal-celestial-quote__arrow {
@@ -9129,12 +9125,12 @@ input.o-automator-block-input {
 .c-hide-modal-tab-button {
   color: var(--color-text);
   background-color: var(--color-base);
-  font: 1rem Typewriter, serif;
+  font: Typewriter, serif;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.1rem;
-  height: 3.4rem;
+  height: 4rem;
   width: 12rem;
   margin: 0.2rem;
   border: 0.1rem solid black;

@@ -5,7 +5,6 @@ export default {
   name: "AntimatterDimensionProgressBar",
   data() {
     return {
-      isVisible: true,
       fill: 0,
       tooltip: ""
     };
@@ -23,7 +22,6 @@ export default {
   methods: {
     // eslint-disable-next-line complexity
     update() {
-      this.isVisible = !Pelle.endState >= 4.5;
       const setProgress = (current, goal, tooltip) => {
         this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
         this.tooltip = tooltip;
@@ -69,24 +67,25 @@ export default {
         if (PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0) {
           setProgress(Currency.infinityPoints.value, Tesseracts.nextCost, "Percentage to next Tesseract");
         } else if (PelleStrikes.dilation.hasStrike) {
-          setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to Galaxy Generator");
+          setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to galaxy generator");
         } else if (PelleStrikes.ECs.hasStrike) {
-          setLinearProgress(
-            (Math.min(Currency.timeTheorems.max.toNumber() / 12900, 1) +
-            Math.min(EternityChallenges.completions / 60, 1)) / 2,
-            1, "Percentage to fifth Strike");
+          setLinearProgress(Math.min(
+            Currency.timeTheorems.max.toNumber() / 12900,
+            Currency.timeTheorems.value.toNumber() / 5000,
+            (EternityChallenge(11).completions + EternityChallenge(12).completions) / 10
+          ), 1, "Percentage to fifth strike");
         } else if (PelleStrikes.eternity.hasStrike) {
-          setLinearProgress(Currency.timeTheorems.max, 115, "Percentage to fourth Strike");
+          setLinearProgress(Currency.timeTheorems.max, 115, "Percentage to fourth strike");
         } else if (PelleStrikes.powerGalaxies.hasStrike) {
-          setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to third Strike");
+          setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to third strike");
         } else if (PelleStrikes.infinity.hasStrike) {
           if (player.break) {
-            setProgress(Currency.infinityPoints.value, 5e11, "Percentage to second Strike");
+            setProgress(Currency.infinityPoints.value, 5e11, "Percentage to second strike");
           } else {
             setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
           }
         } else {
-          setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to first Strike");
+          setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to first strike");
         }
       } else if (Enslaved.isCompleted) {
         // Show all other goals from the top down, starting at features in the highest prestige layer
@@ -118,7 +117,6 @@ export default {
       class="c-progress-bar__fill"
     >
       <span
-        v-if="isVisible"
         v-tooltip="tooltip"
         class="c-progress-bar__percents"
       >

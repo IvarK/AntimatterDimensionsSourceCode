@@ -9,12 +9,6 @@ export default {
       canArmageddon: false,
     };
   },
-  computed: {
-    remnants() {
-      if (this.remnantsGain <= 1) return format(this.remnantsGain, 2, 2);
-      return format(this.remnantsGain, 2, 0);
-    }
-  },
   methods: {
     update() {
       this.remnantsGain = Pelle.remnantsGain;
@@ -22,11 +16,8 @@ export default {
       this.nextRealityShardGain.copyFrom(Pelle.nextRealityShardGain);
       this.canArmageddon = Pelle.canArmageddon;
     },
-    manualArmageddon() {
-      if (!this.canArmageddon) return;
-
-      if (player.options.confirmations.armageddon) Modal.armageddon.show();
-      else Pelle.armageddon(true);
+    armageddon() {
+      Pelle.armageddon(true);
     }
   }
 };
@@ -36,14 +27,11 @@ export default {
   <button
     class="c-armageddon-button"
     :class="{ 'c-armageddon-button--unavailable': !canArmageddon }"
-    @click="manualArmageddon"
+    @click="armageddon"
   >
-    <span class="c-remnant-gain-display">
-      Armageddon for
-      <span class="c-remnant-gain">{{ remnants }}</span>
-      Remnants
-    </span>
-    <br>
+    Armageddon for
+    <span class="c-remnant-gain">{{ format(remnantsGain, 2, remnantsGain < 1 ? 2 : 0) }}</span>
+    remnants<br>
     Reality Shards
     <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ➜
     <span class="c-reality-shard-gain">{{ format(nextRealityShardGain, 2, 2) }}</span>/s
@@ -55,9 +43,9 @@ export default {
     padding: 1.5rem;
     display: block;
     font-family: Typewriter;
-    background: var(--color-prestige--accent);
+    background: black;
     border: 1px solid var(--color-pelle--base);
-    color: var(--color-text);
+    color: white;
     border-radius: 5px;
   }
 
@@ -76,10 +64,6 @@ export default {
     font-weight: bold;
     font-size: 1.5rem;
     color: var(--color-pelle--base);
-  }
-
-  .c-remnant-gain-display {
-    vertical-align: middle;
   }
 
   .c-reality-shard-gain {

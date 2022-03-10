@@ -228,7 +228,6 @@ window.player = {
     gameCreatedTime: Date.now(),
     totalTimePlayed: 0,
     realTimePlayed: 0,
-    realTimeDoomed: 0,
     totalAntimatter: DC.D0,
     lastTenInfinities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
@@ -705,15 +704,14 @@ window.player = {
         generatedGalaxies: 0,
         phase: 0,
         sacrificeActive: false
-      },
-      quotes: [],
-      collapsed: {
-        upgrades: false,
-        rifts: false,
-        galaxies: false
-      },
-      showBought: false,
-    }
+      }
+    },
+    collapsed: {
+      upgrades: false,
+      rifts: false,
+      galaxies: false
+    },
+    showBought: false,
   },
   newGame: {
     current: 0,
@@ -786,7 +784,6 @@ window.player = {
       blobSnowflakes: 16
     },
     confirmations: {
-      armageddon: true,
       sacrifice: true,
       challenges: true,
       eternity: true,

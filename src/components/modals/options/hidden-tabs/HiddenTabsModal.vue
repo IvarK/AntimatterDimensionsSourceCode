@@ -12,7 +12,6 @@ export default {
     return {
       tabs: null,
       isEnslaved: false,
-      isDoomed: false,
     };
   },
   methods: {
@@ -20,7 +19,6 @@ export default {
       // TODO: This makes the entire Tab structure reactive. Fix this.
       this.tabs = Tab;
       this.isEnslaved = Enslaved.isRunning;
-      this.isDoomed = Pelle.isDoomed;
     },
   },
 };
@@ -31,15 +29,10 @@ export default {
     <template #header>
       Modify Visible Tabs
     </template>
-    <div>
-      Click a button to toggle showing a tab on/off.
-      <br>
-      Some tabs cannot be hidden, and you cannot hide your current tab.
-      <br>
-    </div>
-    <div v-if="isDoomed">
-      You cannot hide your tabs within Doomed.
-    </div>
+    Click a button to toggle showing a tab on/off.
+    <br>
+    Some tabs cannot be hidden, and you cannot hide your current tab.
+    <br>
     <div v-if="isEnslaved">
       <br>
       <i>You must... see everywhere...</i>

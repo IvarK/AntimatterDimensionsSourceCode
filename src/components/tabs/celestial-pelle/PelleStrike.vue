@@ -11,18 +11,16 @@ export default {
       type: Object,
       required: true
     },
-  },
+  }
 };
 </script>
 
 <template>
   <div class="c-pelle-strike-container">
-    <ExpandingControlBox
-      container-class="c-pelle-strike"
-    >
+    <ExpandingControlBox container-class="c-pelle-strike">
       <div
         slot="header"
-        class="c-pelle-strike-text-padding"
+        class="c-pelle-strike-text-padding c-pelle-strike-requirement-header"
       >
         ▼ {{ strike.requirement }} ▼
       </div>
@@ -48,15 +46,20 @@ export default {
     border-radius: 0.5rem;
     font-weight: bold;
     min-height: 3.8rem;
+    z-index: 3;
   }
 
   .c-pelle-strike-container {
     padding: 0.5rem 0.5rem 2rem;
     height: 5rem;
-    z-index: 6;
+    z-index: 3;
   }
 
   .c-pelle-strike-text-padding {
     padding: 0.7rem;
+  }
+
+  .c-pelle-strike-requirement-header {
+    cursor: pointer;
   }
 </style>

@@ -37,8 +37,9 @@ export function startDilatedEternityRequest() {
   } else {
     startDilatedEternity();
   }
-
-  PelleStrikes.dilation.trigger();
+  if (Pelle.isDoomed && !player.options.confirmations.dilation) {
+    PelleStrikes.dilation.trigger();
+  }
 }
 
 export function startDilatedEternity(auto) {

@@ -3,6 +3,7 @@ import { Currency } from "../../currency";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { GameMechanicState, SetPurchasableMechanicState } from "../../utils";
 import zalgo from "./zalgo";
+import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -48,8 +49,12 @@ const disabledMechanicUnlocks = {
 };
 
 export const Pelle = {
+  get displayName() {
+    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
+  },
 
   additionalEnd: 0,
+  addAdditionalEnd: true,
 
   get endState() {
     return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
@@ -86,20 +91,31 @@ export const Pelle = {
 
   armageddon(gainStuff) {
     if (!this.canArmageddon && gainStuff) return;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_BEFORE, gainStuff);
     if (gainStuff) {
       this.cel.remnants += this.remnantsGain;
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.armageddonDuration = 0;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 
   gameLoop(diff) {
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
+      const milestoneStates =
+        PelleRifts.all.mapToObject(x => x._config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1) this.additionalEnd += diff / 1000 / 20;
+      for (const riftKey in milestoneStates) {
+        const rift = PelleRifts[riftKey];
+        for (const milestoneIdx in rift.milestones) {
+          const previousMilestoneState = milestoneStates[riftKey][milestoneIdx];
+          rift.updateMilestones(milestoneIdx, previousMilestoneState);
+        }
+      }
+      if (this.endState >= 1 && Pelle.addAdditionalEnd) this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   },
 
@@ -124,7 +140,9 @@ export const Pelle = {
   },
 
   get uselessTimeStudies() {
-    return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    const uselessTimeStudies = [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) uselessTimeStudies.push(33);
+    return uselessTimeStudies;
   },
 
   get disabledRUPGs() {
@@ -133,7 +151,7 @@ export const Pelle = {
 
   get uselessPerks() {
     return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
-      60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204, 205];
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106];
   },
 
   // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
@@ -287,8 +305,121 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
-  symbol: "♅"
+  endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye".split(" "),
+
+  symbol: "♅",
+
+  modalTools: {
+    bracketOrder: ["()", "[]", "{}", "<>", "||"],
+    wordCycle(x) {
+      const list = x.split("-");
+      const len = list.length;
+      const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
+      const tick = Math.floor(Date.now() / 200) % (len * 5);
+      const largeTick = Math.floor(tick / 5);
+      const bP = this.bracketOrder[largeTick];
+      let v = list[largeTick];
+      if (tick % 5 < 1 || tick % 5 > 3) {
+        v = this.randomCrossWords(v);
+      }
+      // Stands for Bracket Pair.
+      const space = (maxWordLen - v.length) / 2;
+      return bP[0] + ".".repeat(Math.floor(space)) + v + ".".repeat(Math.ceil(space)) + bP[1];
+    },
+    randomCrossWords(str) {
+      const x = str.split("");
+      for (let i = 0; i < x.length / 1.7; i++) {
+        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) % 964372 + i) * x.length);
+        // .splice should return the deleted index.
+        x[randomIndex] = this.randomSymbol;
+      }
+      return x.join("");
+    },
+    predictableRandom(x) {
+      let start = Math.pow(x % 97, 4.3) * 232344573;
+      const a = 15485863;
+      const b = 521791;
+      start = (start * a) % b;
+      for (let i = 0; i < (x * x) % 90 + 90; i++) {
+        start = (start * a) % b;
+      }
+      return start / b;
+    },
+    celCycle(x) {
+      //                                   Gets trailing number and removes it
+      const cels = x.split("-").map(cel => [parseInt(cel, 10), cel.replace(/\d+/u, "")]);
+      const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
+      let tick = (Date.now() / 100) % totalTime;
+      let index = -1;
+      while (tick >= 0 && index < cels.length - 1) {
+        index++;
+        tick -= cels[index][0];
+      }
+      return `<!${cels[index][1]}!>`;
+    },
+    get randomSymbol() {
+      return String.fromCharCode(Math.floor(Math.random() * 50) + 192);
+    }
+  },
+  quotes: new CelestialQuotes("pelle", (function() {
+    const wc = function(x) {
+      return Pelle.modalTools.wordCycle.bind(Pelle.modalTools)(x);
+    };
+    const cc = function(x) {
+      return Pelle.modalTools.celCycle.bind(Pelle.modalTools)(x);
+    };
+    const p = function(line) {
+      if (!line.includes("[") && !line.includes("<")) return line;
+
+      const sep = "  ---TEMPSEPERATOR---  ";
+      const ops = [];
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === "[") ops.push(wc);
+        else if (line[i] === "<") ops.push(cc);
+      }
+      let l = line.replace("[", sep).replace("]", sep);
+      l = l.replace("<", sep).replace(">", sep).split(sep);
+      return () => l.map((v, x) => ((x % 2) ? ops[x / 2 - 0.5](v) : v)).join("");
+    };
+
+    const quotesObject = {};
+    let iterator = 0;
+    for (const i in GameDatabase.celestials.pelle.quotes) {
+      iterator++;
+      quotesObject[i] = {
+        id: iterator,
+        lines: GameDatabase.celestials.pelle.quotes[i].map(x => p(x))
+      };
+    }
+    return quotesObject;
+  }())),
+  hasQuote(x) {
+    return player.celestials.pelle.quotes.includes(x);
+  },
 };
+
+EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
+  if (Currency.remnants.gte(1)) {
+    Pelle.quotes.show(Pelle.quotes.ARM);
+  }
+});
+EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
+  if (PelleStrikes.infinity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_1);
+  }
+  if (PelleStrikes.powerGalaxies.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_2);
+  }
+  if (PelleStrikes.eternity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_3);
+  }
+  if (PelleStrikes.ECs.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_4);
+  }
+  if (PelleStrikes.dilation.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_5);
+  }
+});
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
@@ -449,6 +580,7 @@ class PelleStrikeState extends GameMechanicState {
 
   unlockStrike() {
     GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
+    player.celestials.pelle.collapsed.rifts = false;
     Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);
@@ -560,6 +692,15 @@ class RiftState extends GameMechanicState {
     return this.milestones[idx].requirement <= this.percentage;
   }
 
+  updateMilestones(idx, previousState) {
+    const currentState = this.hasMilestone(idx);
+    if (previousState && !currentState) {
+      this.milestones[idx].onUncomplete?.();
+    } else if (currentState && !previousState) {
+      this.milestones[idx].onComplete?.();
+    }
+  }
+
   toggle() {
     const active = PelleRifts.all.filter(r => r.isActive).length;
     if (!this.isActive && active === 2) GameUI.notify.error(`You can only have 2 rifts active at the same time!`);
@@ -575,6 +716,9 @@ class RiftState extends GameMechanicState {
     if (!this.isActive || this.isMaxed) return;
 
     if (this.fillCurrency.value instanceof Decimal) {
+      // Don't drain resources if you only have 1 of it.
+      // This is in place due to the fix to replicanti below.
+      if (this.fillCurrency.value.lte(1)) return;
       const afterTickAmount = this.fillCurrency.value.times((1 - Pelle.riftDrainPercent) ** (diff / 1000));
       const spent = this.fillCurrency.value.minus(afterTickAmount);
       // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline

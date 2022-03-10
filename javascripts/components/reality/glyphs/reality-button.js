@@ -63,7 +63,7 @@ Vue.component("reality-button", {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.hasRealityStudy = TimeStudy.reality.isBought;
-      this.canReality = isRealityAvailable();
+      this.canReality = isRealityAvailable() && !this.isDoomed;
       if (!this.canReality) {
         this.shardsGained = 0;
         return;
@@ -141,7 +141,10 @@ Vue.component("reality-button", {
         @click="handleClick"
       >
         <div class="l-reality-button__contents">
-          <template v-if="canReality">
+          <template v-if="isDoomed">
+            <div>You cannot escape a Doomed Reality</div>
+          </template>
+          <template v-else-if="canReality">
             <div class="c-reality-button__header">Make a new Reality</div>
             <div>{{ formatMachinesGained }}</div>
             <div>{{ formatMachineStats }}</div>
@@ -149,9 +152,6 @@ Vue.component("reality-button", {
           </template>
           <template v-else-if="hasRealityStudy">
             <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
-          </template>
-          <template v-else-if="isDoomed">
-            <div>You cannot escape a Doomed Reality</div>
           </template>
           <template v-else>
             <div>Purchase the study in the Eternity tab to unlock a new Reality</div>

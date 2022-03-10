@@ -37,6 +37,7 @@ export default {
       } else {
         startDilatedEternity();
       }
+      if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
     },
   },
 };

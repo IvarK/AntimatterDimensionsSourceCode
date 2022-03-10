@@ -150,6 +150,7 @@ export default {
 
 <style scoped>
 /* CONTAINER STYLES */
+
 .c-pelle-rift-bar {
   --color-bar-bg: #1e1e1e;
   height: 5rem;
@@ -163,6 +164,7 @@ export default {
   align-items: center;
   background: var(--color-bar-bg);
 }
+
 .l-overflow-hidden {
   overflow: hidden;
   border: 0.2rem solid transparent;
@@ -174,6 +176,7 @@ export default {
   left: -0.2rem;
   z-index: 0;
 }
+
 .o-pelle-rift-bar-overlay {
   position: absolute;
   bottom: 0;
@@ -183,6 +186,7 @@ export default {
   z-index: 0;
   box-shadow: inset 0 0 3px 1px var(--color-bar-bg);
 }
+
 
 /* FILLING STYLES */
 .o-pelle-rift-bar-fill {
@@ -194,6 +198,7 @@ export default {
   z-index: 0;
   opacity: 0.7;
 }
+
 .o-pelle-rift-bar-reducedto {
   position: absolute;
   bottom: 0;
@@ -204,6 +209,7 @@ export default {
   filter: brightness(0.5);
   z-index: 0;
 }
+
 
 /* SPECIAL BAR OVERLAY STYLES */
 .o-pelle-rift-bar-permanent {
@@ -216,6 +222,7 @@ export default {
   background: var(--color-pelle-secondary);
   z-index: 0;
 }
+
 .o-pelle-rift-bar-overfilled {
   position: absolute;
   width: 100%;
@@ -224,15 +231,18 @@ export default {
   opacity: 0.5;
   z-index: 1;
 }
+
 @keyframes pulse {
   /* #ed143d66 is the base pelle colour except transparent. */
   0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
   50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
   100% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
 }
+
 .c-pelle-rift-bar-overfill-container {
   animation: pulse 1s infinite linear;
 }
+
 
 /* ACTIVE RIFT FILLING STYLES */
 @keyframes sweep {
@@ -269,6 +279,7 @@ export default {
   top: 0;
   transform: translateX(-50%);
 }
+
 .o-pelle-rift-bar-milestone-hover-container {
   height: 100%;
 }
@@ -280,6 +291,7 @@ export default {
   75% { opacity: 1 }
   100% { opacity: 1 }
 }
+
 .o-pelle-rift-bar-milestone-line {
   position: absolute;
   width: 0.25rem;
@@ -288,9 +300,11 @@ export default {
   z-index: 1;
   animation: flash infinite 1s linear;
 }
+
 .o-pelle-rift-bar-milestone-line--unlocked {
   animation: none;
 }
+
 .o-pelle-rift-bar-milestone-line--disabled {
   animation: none;
   filter: brightness(0.25);

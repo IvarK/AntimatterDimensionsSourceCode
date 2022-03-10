@@ -189,6 +189,7 @@ export default {
   cursor: default;
   color: black;
 }
+
 .c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover,
 .c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
   box-shadow: 1px 1px 5px var(--color-pelle-secondary);

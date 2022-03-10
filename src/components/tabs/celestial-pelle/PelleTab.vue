@@ -121,6 +121,7 @@ export default {
   flex-direction: column;
   align-items: center;
 }
+
 .l-pelle-all-content-container {
   display: flex;
   flex-direction: column;
@@ -217,13 +218,16 @@ export default {
   border: 0.2rem solid var(--color-pelle--base);
   padding: 1rem;
 }
+
 .c-armageddon-button-container {
   width: 32rem;
   margin-bottom: 0.5rem;
 }
+
 .c-armageddon-resources-container {
   width: 41.5rem;
 }
+
 .c-remnants-amount {
   font-weight: bold;
   font-size: 2rem;

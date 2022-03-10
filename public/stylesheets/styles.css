@@ -5827,10 +5827,6 @@ kbd {
   border-color: var(--color-pelle--base);
   box-shadow: 0 0 1rem var(--color-pelle--base), 0 0 1rem var(--color-pelle--base) inset;
 }
-.c-modal-celestial-quote--pelle > .l-modal-celestial-quote__text {
-  color: #ea6e83;
-  /* Pelle colour, but light */
-}
 
 .c-modal-celestial-quote__arrow {
   font-size: 150%;

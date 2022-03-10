@@ -9456,9 +9456,3 @@ input.o-automator-block-input {
   background-color: var(--color-pelle--base);
   filter: grayscale(50%);
 }
-
-.c-improved-effect {
-  color: #2f4;
-  font-weight: bold;
-  font-style: italic;
-}

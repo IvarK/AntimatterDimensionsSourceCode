@@ -66,7 +66,7 @@ export default {
       @click="upgrade.purchase()"
     >
       <div v-if="isDoomed">
-        This multiplier has no effect while in Doomed
+        This upgrade has no effect while in Doomed
       </div>
       <div v-else>
         Multiply Eternity Points from all sources by {{ formatX(5) }}

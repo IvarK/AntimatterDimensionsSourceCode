@@ -236,3 +236,11 @@ export default {
   flex-shrink: 0;
 }
 </style>
+
+<style>
+.c-improved-effect {
+  color: #2f4;
+  font-weight: bold;
+  font-style: italic;
+}
+</style>

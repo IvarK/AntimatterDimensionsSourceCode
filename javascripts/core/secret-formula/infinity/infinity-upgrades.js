@@ -214,7 +214,7 @@ GameDatabase.infinity.upgrades = (function() {
       costCap: DC.E6E6,
       costIncreaseThreshold: DC.E3E6,
       description: () => (Pelle.isDoomed
-        ? "This multiplier has no effect while in Doomed"
+        ? "This upgrade has no effect while in Doomed"
         : `Multiply Infinity Points from all sources by ${formatX(2)}`),
       // Normally the multiplier caps at e993k or so with 3299999 purchases, but if the cost is capped then we just give
       // an extra e7k to make the multiplier look nice

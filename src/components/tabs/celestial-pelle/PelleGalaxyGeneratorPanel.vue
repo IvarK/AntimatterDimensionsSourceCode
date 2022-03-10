@@ -26,6 +26,11 @@ export default {
     },
     upgrades() {
       return PelleRebuyableUpgrade.galaxyGenerator;
+    },
+    galaxyText() {
+      let text = format(Math.max(this.galaxies, 0), 2);
+      if (this.galaxies < 0) text += ` [${format(this.galaxies, 2)}]`;
+      return text;
     }
   },
   methods: {
@@ -37,7 +42,7 @@ export default {
       this.isCapped = GalaxyGenerator.isCapped;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
-      this.isCollapsed = player.celestials.pelle.collapsed.galaxies;
+      this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
     },
     increaseCap() {
       GalaxyGenerator.startSacrifice();
@@ -47,6 +52,7 @@ export default {
     },
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
+      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_UNLOCK);
     }
   },
 };
@@ -67,7 +73,9 @@ export default {
     >
       <div v-if="isUnlocked">
         <div>
-          You have a total of <span class="galaxies-amount">{{ format(galaxies, 2) }}</span> Galaxies.
+          You have a total of
+          <span class="galaxies-amount">{{ galaxyText }}</span>
+          Galaxies.
           <span class="galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
         </div>
         <span v-if="!isCapped">You can generate a maximum of {{ format(cap) }} Galaxies.</span>

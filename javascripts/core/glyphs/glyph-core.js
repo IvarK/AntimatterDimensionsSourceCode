@@ -254,7 +254,7 @@ export const Glyphs = {
     // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
     this.removeNewFlag(glyph);
   },
-  unequipAll() {
+  unequipAll(modalOnFail) {
     while (player.reality.glyphs.active.length) {
       const freeIndex = this.findFreeIndex(player.options.respecIntoProtected);
       if (freeIndex < 0) break;
@@ -263,12 +263,15 @@ export const Glyphs = {
       this.addToInventory(glyph, freeIndex);
     }
     if (player.reality.glyphs.active.length) {
-      Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
+      Modal.message.show(modalOnFail || `Some of your Glyphs could not be unequipped
+      due to lack of inventory space.`);
+      return false;
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    return true;
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;

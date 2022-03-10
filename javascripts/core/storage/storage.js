@@ -133,6 +133,7 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
+    if (Pelle.endState >= 4.5) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();

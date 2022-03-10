@@ -23,13 +23,13 @@ export default {
   methods: {
     // eslint-disable-next-line complexity
     update() {
-      this.isVisible = !Pelle.endState >= 4.5;
+      this.isVisible = Pelle.endState < 4.5;
       const setProgress = (current, goal, tooltip) => {
         this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
         this.tooltip = tooltip;
       };
       const setLinearProgress = (current, goal, tooltip) => {
-        this.fill = Math.clampMax(new Decimal(current).toNumber() / new Decimal(goal).toNumber(), 1);
+        this.fill = Math.clampMax(current / goal, 1);
         this.tooltip = tooltip;
       };
 
@@ -76,7 +76,7 @@ export default {
             Math.min(EternityChallenges.completions / 60, 1)) / 2,
             1, "Percentage to fifth Strike");
         } else if (PelleStrikes.eternity.hasStrike) {
-          setLinearProgress(Currency.timeTheorems.max, 115, "Percentage to fourth Strike");
+          setLinearProgress(Currency.timeTheorems.max.toNumber(), 115, "Percentage to fourth Strike");
         } else if (PelleStrikes.powerGalaxies.hasStrike) {
           setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to third Strike");
         } else if (PelleStrikes.infinity.hasStrike) {

@@ -135,12 +135,9 @@ export default {
       :tooltip-content-style="tooltipContentStyle"
       :tooltip-arrow-style="tooltipArrowStyle"
       :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
+      content-class="o-pelle-rift-bar-milestone-hover-area"
     >
-      <div
-        id="mainContent"
-        slot="mainContent"
-        class="o-pelle-rift-bar-milestone-hover-area"
-      />
+      <div slot="mainContent" />
       <div slot="tooltipContent">
         {{ milestoneResourceText(rift, selectedHoverMilestone) }}
       </div>
@@ -148,7 +145,7 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style>
 /* CONTAINER STYLES */
 
 .c-pelle-rift-bar {
@@ -277,7 +274,6 @@ export default {
   width: 2rem;
   height: 100%;
   top: 0;
-  transform: translateX(-50%);
 }
 
 .o-pelle-rift-bar-milestone-hover-container {

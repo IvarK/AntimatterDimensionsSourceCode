@@ -17,36 +17,17 @@ export default {
       type: String,
       required: false,
       default: "0"
+    },
+    contentClass: {
+      type: String,
+      required: true
     }
-  },
-  watch: {
-    left(newVal) {
-      this.updateLeft(newVal);
-    }
-  },
-  mounted() {
-    this.mainContent = this.$el.querySelector("#mainContent");
-    if (!this.mainContent) {
-      throw new Error("CustomizeableTooltip has no element with id mainContent inserted.");
-    }
-    this.mainContent.addEventListener("mouseenter", () => {
-      this.hovering = true;
-    });
-    this.mainContent.addEventListener("mouseleave", () => {
-      this.hovering = false;
-    });
-    this.updateLeft();
   },
   data() {
     return {
       hovering: false,
       mainContent: null
     };
-  },
-  methods: {
-    updateLeft(newVal = this.left) {
-      this.mainContent.style.left = newVal;
-    }
   },
   computed: {
     tooltipGenStyle() {
@@ -58,7 +39,15 @@ export default {
 
 <template>
   <div class="l-custom-tooltip">
-    <slot name="mainContent" />
+    <div
+      class="c-main-content"
+      :class="contentClass"
+      :style="{ left }"
+      @mouseenter="hovering = true"
+      @mouseleave="hovering = false"
+    >
+      <slot name="mainContent" />
+    </div>
     <div
       class="c-tooltip-content"
       :class=" {'c-tooltip-show': hovering } "
@@ -80,6 +69,9 @@ export default {
   position: static;
 }
 
+.c-main-content {
+  transform: translateX(-50%);
+}
 .c-tooltip-content,
 .c-tooltip-arrow {
   visibility: hidden;

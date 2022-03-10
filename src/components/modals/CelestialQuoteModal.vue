@@ -77,14 +77,9 @@ export default {
       if (typeof this.currentQuote.line === "function") {
         const currentQuoteLine = this.currentQuote.line();
         this.currentQuote.showName = (currentQuoteLine[0] !== "*");
-        this.line = this.currentQuote.line().replace("*", "");
-        if (this.line.includes("<!")) {
-          const start = this.line.indexOf("<!"), end = this.line.indexOf("!>");
-          this.overrideCelestial = this.line.substring(start + 2, end);
-          this.line = Modal.celestialQuote.removeOverrideCel(this.line);
-        } else {
-          this.overrideCelestial = "";
-        }
+        this.line = currentQuoteLine.replace("*", "");
+        this.overrideCelestial = Modal.celestialQuote.getOverrideCel(this.line);
+        this.line = Modal.celestialQuote.removeOverrideCel(this.line);
       } else {
         this.line = this.currentQuote.line.replace("*", "");
         this.overrideCelestial = this.currentQuote.overrideCelestial;

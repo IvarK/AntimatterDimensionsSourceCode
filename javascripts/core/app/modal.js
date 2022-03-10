@@ -202,8 +202,7 @@ Modal.celestialQuote = new class extends Modal {
     let l = defaultLine;
     if (typeof l === "string") {
       if (l.includes("<!")) {
-        const start = l.indexOf("<!"), end = l.indexOf("!>");
-        overrideCelestial = l.substring(start + 2, end);
+        overrideCelestial = this.getOverrideCel(l);
         l = this.removeOverrideCel(l);
       }
     }
@@ -214,6 +213,14 @@ Modal.celestialQuote = new class extends Modal {
       showName: l[0] !== "*",
       isEndQuote: false
     };
+  }
+
+  getOverrideCel(x) {
+    if (x.includes("<!")) {
+      const start = x.indexOf("<!"), end = x.indexOf("!>");
+      return x.substring(start + 2, end);
+    }
+    return "";
   }
 
   removeOverrideCel(x) {

@@ -87,7 +87,6 @@ export default {
           </div>
           <RemnantGainFactor />
         </div>
-        <span>&nbsp;&nbsp;</span>
         <div class="c-armageddon-resources-container">
           <div>
             You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.

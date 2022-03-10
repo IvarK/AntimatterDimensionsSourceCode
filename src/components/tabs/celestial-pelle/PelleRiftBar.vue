@@ -269,10 +269,8 @@ export default {
 
 /* MILESTONE STYLES */
 .o-pelle-rift-bar-milestone-hover-area {
-  position: absolute;
   width: 2rem;
   height: 100%;
-  top: 0;
 }
 
 .o-pelle-rift-bar-milestone-hover-container {

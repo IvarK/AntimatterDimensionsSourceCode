@@ -18,6 +18,11 @@ export default {
       required: false,
       default: "0"
     },
+    top: {
+      type: String,
+      required: false,
+      default: "0"
+    },
     contentClass: {
       type: String,
       required: false,
@@ -32,7 +37,7 @@ export default {
   },
   computed: {
     tooltipGenStyle() {
-      return { left: this.left };
+      return { left: this.left, top: this.top };
     }
   }
 };
@@ -43,7 +48,7 @@ export default {
     <div
       class="c-main-content"
       :class="contentClass"
-      :style="{ left }"
+      :style="{ left, top }"
       @mouseenter="hovering = true"
       @mouseleave="hovering = false"
     >
@@ -71,6 +76,7 @@ export default {
 }
 
 .c-main-content {
+  position: absolute;
   transform: translateX(-50%);
 }
 .c-tooltip-content,
@@ -84,9 +90,7 @@ export default {
 
 .c-tooltip-content {
   position: absolute;
-  bottom: 100%;
-  margin-bottom: 0.5rem;
-  transform: translateX(-50%);
+  transform: translate(-50%, calc(-100% - 0.5rem));
   padding: 0.7rem;
   width: 16rem;
   border-radius: 0.3rem;
@@ -105,8 +109,7 @@ export default {
 
 .c-tooltip-arrow {
   position: absolute;
-  bottom: 100%;
-  margin-left: -0.5rem;
+  transform: translate(-50%, -100%);
   width: 0;
   border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
   border-right: 0.5rem solid transparent;

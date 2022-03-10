@@ -116,44 +116,44 @@ export default {
 </template>
 
 <style>
-  .c-remnant-factors-container {
-    z-index: 4;
-  }
-  /* I'm not sure why this bit is needed, but z-index on c-remnant-factors-container
-  and c-remnant-factors both didn't work. If anyone can fix this it would be great. */
-  .c-remnant-factors-container > .l-expanding-control-box {
-    z-index: 4;
-  }
-  .c-remnant-factors {
-    background-color: #000;
-    color: #fbd0d8;
-    border: 0.2rem solid var(--color-pelle--base);
-    border-radius: 0.5rem;
-    padding: 0.3rem;
-    font-weight: bold;
-    z-index: 4;
-  }
-  .c-remnant-factors-text {
-    padding: 0.3rem;
-  }
+.c-remnant-factors-container {
+  z-index: 4;
+}
+/* I'm not sure why this bit is needed, but z-index on c-remnant-factors-container
+and c-remnant-factors both didn't work. If anyone can fix this it would be great. */
+.c-remnant-factors-container > .l-expanding-control-box {
+  z-index: 4;
+}
+.c-remnant-factors {
+  background-color: #000;
+  color: #fbd0d8;
+  border: 0.2rem solid var(--color-pelle--base);
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+  font-weight: bold;
+  z-index: 4;
+}
+.c-remnant-factors-text {
+  padding: 0.3rem;
+}
 
-  .l-remnant-factors-row {
-    display: flex;
-    width: 100%
-  }
-  .l-remnant-factors-col {
-    display: flex;
-    flex-direction: column;
-    margin-left: 2rem;
-    flex-shrink: 0;
-    flex-grow: 0;
-  }
-  .l-remnant-factors-col--first {
-    flex-grow: 1;
-    margin-left: 0;
-  }
-  .l-remnant-factors-item {
-    height: 2rem;
-    text-align: left;
-  }
+.l-remnant-factors-row {
+  display: flex;
+  width: 100%
+}
+.l-remnant-factors-col {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.l-remnant-factors-col--first {
+  flex-grow: 1;
+  margin-left: 0;
+}
+.l-remnant-factors-item {
+  height: 2rem;
+  text-align: left;
+}
 </style>

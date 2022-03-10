@@ -118,79 +118,79 @@ export default {
 </template>
 
 <style scoped>
-  .c-pelle-panel-title {
-    font-weight: bold;
-    font-size: 3rem;
-    color: var(--color-pelle--base);
-  }
+.c-pelle-panel-title {
+  font-weight: bold;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+}
 
-  .l-pelle-panel-container {
-    padding: 1rem;
-    margin: 1rem;
-    border: 2px solid var(--color-pelle--base);
-    border-radius: 5px;
-    user-select: none;
-  }
+.l-pelle-panel-container {
+  padding: 1rem;
+  margin: 1rem;
+  border: 2px solid var(--color-pelle--base);
+  border-radius: 5px;
+  user-select: none;
+}
 
-  .l-pelle-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.l-pelle-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .generator-unlock-button {
-    padding: 2rem;
-    border-radius: .5rem;
-    font-family: Typewriter;
-    cursor: pointer;
-    width: 25rem;
-    height: 10rem;
-    font-size: 2rem;
-    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
-    color: black;
-    font-weight: bold;
-  }
+.generator-unlock-button {
+  padding: 2rem;
+  border-radius: .5rem;
+  font-family: Typewriter;
+  cursor: pointer;
+  width: 25rem;
+  height: 10rem;
+  font-size: 2rem;
+  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  color: black;
+  font-weight: bold;
+}
 
-  .galaxy-generator-upgrades-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.galaxy-generator-upgrades-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-  .galaxies-amount {
-    font-weight: bold;
-    font-size: 2.5rem;
-    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+.galaxies-amount {
+  font-weight: bold;
+  font-size: 2.5rem;
+  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  .highlight {
-    font-weight: bold;
-    font-size: 2rem;
-    color: var(--color-pelle--base);
-  }
+.highlight {
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-pelle--base);
+}
 
-  .increase-cap {
-    padding: 2rem;
-    color: white;
-    background: linear-gradient(black, var(--color-pelle--base));;
-    border: 1px solid var(--color-pelle--base);
-    border-radius: .5rem;
-    font-family: Typewriter;
-    cursor: pointer;
-    margin: 1rem;
-    font-size: 1.1rem;
-  }
+.increase-cap {
+  padding: 2rem;
+  color: white;
+  background: linear-gradient(black, var(--color-pelle--base));;
+  border: 1px solid var(--color-pelle--base);
+  border-radius: .5rem;
+  font-family: Typewriter;
+  cursor: pointer;
+  margin: 1rem;
+  font-size: 1.1rem;
+}
 
-  .increase-cap:hover {
-    box-shadow: 1px 1px 5px var(--color-pelle--base);
-    transition-duration: 0.12s;
-  }
+.increase-cap:hover {
+  box-shadow: 1px 1px 5px var(--color-pelle--base);
+  transition-duration: 0.12s;
+}
 
-  .big-text {
-    font-size: 3rem;
-    text-shadow: 2px 2px 2px black;
-  }
+.big-text {
+  font-size: 3rem;
+  text-shadow: 2px 2px 2px black;
+}
 </style>

@@ -139,99 +139,99 @@ export default {
 </template>
 
 <style scoped>
-  .c-pelle-upgrade {
-    padding: 2rem;
-    color: white;
-    background: black;
-    border: 1px solid var(--color-pelle-secondary);
-    border-radius: .5rem;
-    font-family: Typewriter;
-    cursor: pointer;
-    width: 20rem;
-    height: 12rem;
-    margin: 1rem;
-    font-size: 1rem;
-    box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
+.c-pelle-upgrade {
+  padding: 2rem;
+  color: white;
+  background: black;
+  border: 1px solid var(--color-pelle-secondary);
+  border-radius: .5rem;
+  font-family: Typewriter;
+  cursor: pointer;
+  width: 20rem;
+  height: 12rem;
+  margin: 1rem;
+  font-size: 1rem;
+  box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 
-  .c-pelle-upgrade:hover {
-    box-shadow: inset 0px 0px 20px 1px var(--color-pelle-secondary);
-    transition-duration: 0.3s;
-  }
+.c-pelle-upgrade:hover {
+  box-shadow: inset 0px 0px 20px 1px var(--color-pelle-secondary);
+  transition-duration: 0.3s;
+}
 
 
-  .c-pelle-upgrade--galaxyGenerator {
-    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
-    color: black;
-    font-weight: bold;
-    box-shadow: none;
-  }
+.c-pelle-upgrade--galaxyGenerator {
+  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  color: black;
+  font-weight: bold;
+  box-shadow: none;
+}
 
-  .c-pelle-upgrade--unavailable {
-    background: #565656;
-    cursor: default;
-    box-shadow: none;
-  }
+.c-pelle-upgrade--unavailable {
+  background: #565656;
+  cursor: default;
+  box-shadow: none;
+}
 
-  .c-pelle-upgrade--faded {
-    opacity: 0.3;
-    cursor: default;
-    box-shadow: none;
-  }
+.c-pelle-upgrade--faded {
+  opacity: 0.3;
+  cursor: default;
+  box-shadow: none;
+}
 
-  .c-pelle-upgrade--bought {
-    background: var(--color-pelle-secondary);
-    cursor: default;
-    color: black;
-  }
-  .c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover,
-  .c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
-    box-shadow: 1px 1px 5px var(--color-pelle-secondary);
-    transition-duration: 0.3s;
-  }
+.c-pelle-upgrade--bought {
+  background: var(--color-pelle-secondary);
+  cursor: default;
+  color: black;
+}
+.c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover,
+.c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
+  box-shadow: 1px 1px 5px var(--color-pelle-secondary);
+  transition-duration: 0.3s;
+}
 
-  .c-pelle-upgrade-time-tooltip {
-    position: absolute;
-    visibility: visible;
-    bottom: 100%;
-    left: 50%;
-    margin-bottom: 0.5rem;
-    margin-left: -8.35rem;
-    padding: 0.7rem;
-    width: 16rem;
-    border-radius: 0.3rem;
-    background-color: hsla(0, 0%, 5%, 0.9);
-    color: #fff;
-    content: attr(ach-tooltip);
-    text-align: center;
-    font-size: 1.4rem;
-    line-height: 1.2;
-    transition-duration: 0.4s;
-    z-index: 3;
-  }
+.c-pelle-upgrade-time-tooltip {
+  position: absolute;
+  visibility: visible;
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 0.5rem;
+  margin-left: -8.35rem;
+  padding: 0.7rem;
+  width: 16rem;
+  border-radius: 0.3rem;
+  background-color: hsla(0, 0%, 5%, 0.9);
+  color: #fff;
+  content: attr(ach-tooltip);
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  transition-duration: 0.4s;
+  z-index: 3;
+}
 
-  .c-pelle-upgrade-time-tooltip:after {
-    position: absolute;
-    bottom: -0.5rem;
-    left: 50%;
-    margin-left: -0.5rem;
-    width: 0;
-    border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
-    border-right: 0.5rem solid transparent;
-    border-left: 0.5rem solid transparent;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-    transition-duration: 0.4s;
-  }
+.c-pelle-upgrade-time-tooltip:after {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  margin-left: -0.5rem;
+  width: 0;
+  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0.5rem solid transparent;
+  border-left: 0.5rem solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+  transition-duration: 0.4s;
+}
 
-  .l-pelle-upgrade-gap {
-    height: 0.7em;
-    flex-shrink: 0;
-  }
+.l-pelle-upgrade-gap {
+  height: 0.7em;
+  flex-shrink: 0;
+}
 </style>

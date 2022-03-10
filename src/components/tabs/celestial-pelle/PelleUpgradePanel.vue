@@ -104,47 +104,47 @@ export default {
 </template>
 
 <style scoped>
-  .c-pelle-panel-title {
-    font-weight: bold;
-    font-size: 3rem;
-    color: var(--color-pelle--base);
-  }
+.c-pelle-panel-title {
+  font-weight: bold;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+}
 
-  .l-pelle-panel-container {
-    padding: 1rem;
-    margin: 1rem;
-    border: 2px solid var(--color-pelle--base);
-    border-radius: 5px;
-    user-select: none;
-  }
+.l-pelle-panel-container {
+  padding: 1rem;
+  margin: 1rem;
+  border: 2px solid var(--color-pelle--base);
+  border-radius: 5px;
+  user-select: none;
+}
 
-  .l-pelle-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.l-pelle-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .o-pelle-button {
-    background: black;
-    color: white;
-    border: 1px solid var(--color-pelle--base);
-    border-radius: 5px;
-    padding: 1rem;
-    font-family: Typewriter;
-    margin: 0 1rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition-duration: 0.12s;
-  }
+.o-pelle-button {
+  background: black;
+  color: white;
+  border: 1px solid var(--color-pelle--base);
+  border-radius: 5px;
+  padding: 1rem;
+  font-family: Typewriter;
+  margin: 0 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
 
-  .o-pelle-button:hover {
-    box-shadow: 1px 1px 3px var(--color-pelle--base);
-  }
+.o-pelle-button:hover {
+  box-shadow: 1px 1px 3px var(--color-pelle--base);
+}
 
-  .c-pelle-upgrade-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 110rem;
-  }
+.c-pelle-upgrade-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 110rem;
+}
 </style>

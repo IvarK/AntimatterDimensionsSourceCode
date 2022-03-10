@@ -51,39 +51,39 @@ export default {
 </template>
 
 <style scoped>
-  .c-armageddon-button {
-    padding: 1.5rem;
-    display: block;
-    font-family: Typewriter;
-    background: var(--color-prestige--accent);
-    border: 1px solid var(--color-pelle--base);
-    color: var(--color-text);
-    border-radius: 5px;
-  }
+.c-armageddon-button {
+  padding: 1.5rem;
+  display: block;
+  font-family: Typewriter;
+  background: var(--color-prestige--accent);
+  border: 1px solid var(--color-pelle--base);
+  color: var(--color-text);
+  border-radius: 5px;
+}
 
-  .c-armageddon-button:hover {
-    cursor: pointer;
-    box-shadow: 1px 1px 5px var(--color-pelle--base);
-    transition-duration: 0.12s;
-  }
+.c-armageddon-button:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 5px var(--color-pelle--base);
+  transition-duration: 0.12s;
+}
 
-  .c-armageddon-button--unavailable {
-    cursor: default;
-    opacity: 0.5;
-  }
+.c-armageddon-button--unavailable {
+  cursor: default;
+  opacity: 0.5;
+}
 
-  .c-remnant-gain {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: var(--color-pelle--base);
-  }
+.c-remnant-gain {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--color-pelle--base);
+}
 
-  .c-remnant-gain-display {
-    vertical-align: middle;
-  }
+.c-remnant-gain-display {
+  vertical-align: middle;
+}
 
-  .c-reality-shard-gain {
-    font-weight: bold;
-    color: var(--color-pelle--base);
-  }
+.c-reality-shard-gain {
+  font-weight: bold;
+  color: var(--color-pelle--base);
+}
 </style>

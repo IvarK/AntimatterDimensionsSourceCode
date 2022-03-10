@@ -79,12 +79,12 @@ export default {
 </template>
 
 <style scoped>
-  .pelle-effects-container {
-    height: 40rem;
-    overflow-y: scroll;
-  }
+.pelle-effects-container {
+  height: 40rem;
+  overflow-y: scroll;
+}
 
-  p {
-    margin-bottom: 1rem;
-  }
+p {
+  margin-bottom: 1rem;
+}
 </style>

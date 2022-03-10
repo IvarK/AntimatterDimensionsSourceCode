@@ -116,117 +116,117 @@ export default {
 </template>
 
 <style scoped>
-  .l-pelle-celestial-tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .l-pelle-all-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-  }
+.l-pelle-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.l-pelle-all-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
 
-  .o-pelle-button {
-    background: black;
-    color: white;
-    border: 1px solid var(--color-pelle--base);
-    border-radius: 5px;
-    padding: 1rem;
-    font-family: Typewriter;
-    margin: 0 1rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition-duration: 0.12s;
-  }
+.o-pelle-button {
+  background: black;
+  color: white;
+  border: 1px solid var(--color-pelle--base);
+  border-radius: 5px;
+  padding: 1rem;
+  font-family: Typewriter;
+  margin: 0 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
 
-  .o-pelle-button:hover {
-    box-shadow: 1px 1px 3px var(--color-pelle--base);
-  }
+.o-pelle-button:hover {
+  box-shadow: 1px 1px 3px var(--color-pelle--base);
+}
 
-  .o-pelle-quotes-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-pelle--base);
-    font-size: 5rem;
-    height: 7rem;
-    width: 7rem;
-    font-weight: 900;
-  }
+.o-pelle-quotes-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-pelle--base);
+  font-size: 5rem;
+  height: 7rem;
+  width: 7rem;
+  font-weight: 900;
+}
 
-  .pelle-doom-button {
-    font-family: Typewriter;
-    padding: 1rem;
-    background: black;
-    color: var(--color-pelle--base);
-    font-size: 3rem;
-    border: 2px solid var(--color-pelle--base);
-    border-radius: 5px;
-    width: 20rem;
-    cursor: pointer;
-    transition-duration: 0.4s;
-    align-self: center;
-  }
+.pelle-doom-button {
+  font-family: Typewriter;
+  padding: 1rem;
+  background: black;
+  color: var(--color-pelle--base);
+  font-size: 3rem;
+  border: 2px solid var(--color-pelle--base);
+  border-radius: 5px;
+  width: 20rem;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  align-self: center;
+}
 
-  .pelle-doom-button:hover {
-    box-shadow: 0px 0px 20px var(--color-pelle--base);
-  }
+.pelle-doom-button:hover {
+  box-shadow: 0px 0px 20px var(--color-pelle--base);
+}
 
-  .pelle-icon-container {
-    background: white;
-    border-radius: 50%;
-    height: 15rem;
-    width: 15rem;
-    margin: auto;
-    margin-top: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 4px solid var(--color-pelle--base);
-    font-size: 10rem;
-    transition-duration: 0.4s;
-    text-shadow: 0px 0px 15px #9b0101;
-    box-shadow: 0px 0px 15px #9b0101;
-  }
+.pelle-icon-container {
+  background: white;
+  border-radius: 50%;
+  height: 15rem;
+  width: 15rem;
+  margin: auto;
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 4px solid var(--color-pelle--base);
+  font-size: 10rem;
+  transition-duration: 0.4s;
+  text-shadow: 0px 0px 15px #9b0101;
+  box-shadow: 0px 0px 15px #9b0101;
+}
 
-  .pelle-doom-button:hover .pelle-icon-container {
-    background: black;
-    color: var(--color-pelle--base);
-  }
+.pelle-doom-button:hover .pelle-icon-container {
+  background: black;
+  color: var(--color-pelle--base);
+}
 
-  @keyframes roll {
-    100% { transform: rotateY(360deg) }
-  }
+@keyframes roll {
+  100% { transform: rotateY(360deg) }
+}
 
-  .pelle-icon {
-    animation: roll infinite 8s linear;
-  }
+.pelle-icon {
+  animation: roll infinite 8s linear;
+}
 
-  .o-celestial-quote-history {
-    align-self: center;
-  }
+.o-celestial-quote-history {
+  align-self: center;
+}
 
-  .c-armageddon-container {
-    align-self: center;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    border-radius: 0.5rem;
-    border: 0.2rem solid var(--color-pelle--base);
-    padding: 1rem;
-  }
-  .c-armageddon-button-container {
-    width: 32rem;
-    margin-bottom: 0.5rem;
-  }
-  .c-armageddon-resources-container {
-    width: 41.5rem;
-  }
-  .c-remnants-amount {
-    font-weight: bold;
-    font-size: 2rem;
-    color: var(--color-pelle--base);
-  }
+.c-armageddon-container {
+  align-self: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 0.2rem solid var(--color-pelle--base);
+  padding: 1rem;
+}
+.c-armageddon-button-container {
+  width: 32rem;
+  margin-bottom: 0.5rem;
+}
+.c-armageddon-resources-container {
+  width: 41.5rem;
+}
+.c-remnants-amount {
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-pelle--base);
+}
 </style>

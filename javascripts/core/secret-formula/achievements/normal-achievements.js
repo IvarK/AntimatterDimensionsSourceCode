@@ -1302,9 +1302,6 @@ GameDatabase.achievements.normal = [
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    // This is V achievement 10's reward value when it is maxxed.
-    // We forgot to remove it and we won't bother with rebalancing pelle.
-    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
   },
   {
     id: 182,
@@ -1318,7 +1315,11 @@ GameDatabase.achievements.normal = [
     name: "Déjà vOoM",
     description: "Complete Infinity Challenge 5 while Doomed.",
     checkRequirement: () => Pelle.isDoomed && InfinityChallenge(5).isCompleted,
-    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED
+    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED,
+    // Weirdly specific reward? Yes, its V's ST bonus because we forgot to disable it
+    // when balacing Pelle and only realised too late.
+    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    effect: 1.0812403840463596
   },
   {
     id: 184,

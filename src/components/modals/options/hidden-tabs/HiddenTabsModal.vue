@@ -31,12 +31,10 @@ export default {
     <template #header>
       Modify Visible Tabs
     </template>
-    <div>
-      Click a button to toggle showing a tab on/off.
-      <br>
-      Some tabs cannot be hidden, and you cannot hide your current tab.
-      <br>
-    </div>
+    Click a button to toggle showing a tab on/off.
+    <br>
+    Some tabs cannot be hidden, and you cannot hide your current tab.
+    <br>
     <div v-if="isDoomed">
       You cannot hide your tabs within Doomed.
     </div>

@@ -50,20 +50,15 @@ export default {
   },
   computed: {
     tooltipGenStyle() {
-      const styles = { left: this.left };
-      return styles;
+      return { left: this.left };
     }
   }
 };
 </script>
 
 <template>
-  <div
-    class="l-custom-tooltip"
-  >
-    <slot
-      name="mainContent"
-    />
+  <div class="l-custom-tooltip">
+    <slot name="mainContent" />
     <div
       class="c-tooltip-content"
       :class=" {'c-tooltip-show': hovering } "

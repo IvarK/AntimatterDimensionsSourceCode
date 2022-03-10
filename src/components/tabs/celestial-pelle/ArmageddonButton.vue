@@ -11,8 +11,7 @@ export default {
   },
   computed: {
     remnants() {
-      if (this.remnantsGain <= 1) return format(this.remnantsGain, 2, 2);
-      return format(this.remnantsGain, 2, 0);
+      return format(this.remnantsGain, this.remnantsGain > 1 ? 0 : 2, 2);
     }
   },
   methods: {

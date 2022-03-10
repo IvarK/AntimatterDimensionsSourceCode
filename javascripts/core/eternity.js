@@ -249,7 +249,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get isAffordable() {
-    return Currency.eternityPoints.gte(this.cost);
+    return !Pelle.isDoomed && Currency.eternityPoints.gte(this.cost);
   }
 
   get cost() {
@@ -286,6 +286,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   buyMax() {
+    if (!this.isAffordable) return false;
     const bulk = bulkBuyBinarySearch(Currency.eternityPoints.value, {
       costFunction: this.costAfterCount,
       cumulative: true,

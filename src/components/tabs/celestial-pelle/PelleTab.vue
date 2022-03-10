@@ -91,12 +91,6 @@ export default {
         <div class="c-armageddon-resources-container">
           <div>
             You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.
-            <div
-              v-tooltip="'Remnants produce Reality Shards'"
-              class="o-questionmark"
-            >
-              ?
-            </div>
           </div>
           <div>
             You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.

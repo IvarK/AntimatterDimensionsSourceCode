@@ -43,12 +43,6 @@ export default {
       <span class="c-remnant-gain">{{ remnants }}</span>
       Remnants
     </span>
-    <div
-      v-tooltip="'Remnant gain is based on best AM, IP, and EP throughout all Armageddons'"
-      class="o-questionmark"
-    >
-      ?
-    </div>
     <br>
     Reality Shards
     <span class="c-reality-shard-gain">{{ format(realityShardGain, 2, 2) }}</span>/s ➜
@@ -91,10 +85,5 @@ export default {
   .c-reality-shard-gain {
     font-weight: bold;
     color: var(--color-pelle--base);
-  }
-
-  .o-questionmark {
-    color: var(--color-pelle--base);
-    vertical-align: center;
   }
 </style>

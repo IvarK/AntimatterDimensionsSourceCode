@@ -30,7 +30,7 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.setValue("totalFill", rift.totalFill);
       this.setValue("resource", rift.fillCurrency.value);
-      this.hasEffectiveFill = rift._config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
+      this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {

@@ -106,7 +106,7 @@ export const Pelle = {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       const milestoneStates =
-        PelleRifts.all.mapToObject(x => x._config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
+        PelleRifts.all.mapToObject(x => x.config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       PelleRifts.all.forEach(r => r.fill(diff));
       for (const riftKey in milestoneStates) {
         const rift = PelleRifts[riftKey];

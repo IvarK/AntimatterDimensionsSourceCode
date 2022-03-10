@@ -77,7 +77,7 @@ export const GalaxyGenerator = {
     }
     if (this.sacrificeActive) {
       const milestoneStates =
-        PelleRifts.all.mapToObject(x => x._config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
+        PelleRifts.all.mapToObject(x => x.config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       this.capRift.reducedTo = Math.max(this.capRift.reducedTo - 0.03 * diff / 1000, 0);
       if (this.capRift.reducedTo === 0) {
         player.celestials.pelle.galaxyGenerator.sacrificeActive = false;

@@ -20,7 +20,8 @@ export default {
     },
     contentClass: {
       type: String,
-      required: true
+      required: false,
+      default: ""
     }
   },
   data() {

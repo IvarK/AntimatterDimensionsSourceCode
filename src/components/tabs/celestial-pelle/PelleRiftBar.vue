@@ -137,7 +137,6 @@ export default {
       :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
       content-class="o-pelle-rift-bar-milestone-hover-area"
     >
-      <div slot="mainContent" />
       <div slot="tooltipContent">
         {{ milestoneResourceText(rift, selectedHoverMilestone) }}
       </div>

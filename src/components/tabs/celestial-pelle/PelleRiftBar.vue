@@ -20,16 +20,7 @@ export default {
       selectedHoverMilestone: this.rift.milestones[0],
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
-      effects: [],
-      tooltipContentStyle: {
-        width: "14rem",
-        border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: "hsl(0, 0%, 5%)",
-        zIndex: 4
-      },
-      tooltipArrowStyle: {
-        borderTop: "0.5rem solid var(--color-pelle--base)"
-      }
+      effects: []
     };
   },
   methods: {
@@ -80,6 +71,21 @@ export default {
       }
     }
   },
+  computed: {
+    tooltipContentStyle() {
+      return {
+        width: "14rem",
+        border: "0.1rem solid var(--color-pelle--base)",
+        backgroundColor: "hsl(0, 0%, 5%)",
+        zIndex: 4
+      };
+    },
+    tooltipArrowStyle() {
+      return {
+        borderTop: "0.5rem solid var(--color-pelle--base)"
+      };
+    }
+  }
 };
 </script>
 

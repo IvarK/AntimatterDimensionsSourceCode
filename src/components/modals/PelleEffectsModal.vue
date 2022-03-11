@@ -59,7 +59,7 @@ export default {
 <template>
   <ModalWrapper>
     <template #header>
-      List of disabled effects in Doomed
+      List of disabled and nerfed effects in Doomed
     </template>
     <div class="pelle-effects-container">
       <p

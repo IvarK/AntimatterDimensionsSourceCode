@@ -47,6 +47,10 @@ export default {
   z-index: 3;
 }
 
+.s-base--metro .c-pelle-strike {
+  border-radius: 0;
+}
+
 .c-pelle-strike-container {
   padding: 0.5rem 0.5rem 2rem;
   height: 5rem;

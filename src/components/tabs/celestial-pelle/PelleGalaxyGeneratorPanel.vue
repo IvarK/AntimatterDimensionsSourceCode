@@ -201,3 +201,9 @@ export default {
   cursor: pointer;
 }
 </style>
+
+<style>
+.s-base--metro .increase-cap {
+  border-radius: 0;
+}
+</style>

@@ -135,6 +135,11 @@ and c-remnant-factors both didn't work. If anyone can fix this it would be great
   z-index: 4;
 }
 
+.s-base--metro .c-remnant-factors {
+  border-width: 0.1rem;
+  border-radius: 0px;
+}
+
 .c-remnant-factors-text {
   padding: 0.3rem;
 }

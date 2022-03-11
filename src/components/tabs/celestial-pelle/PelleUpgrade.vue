@@ -243,4 +243,8 @@ export default {
   font-weight: bold;
   font-style: italic;
 }
+
+.s-base--metro .c-pelle-upgrade {
+  border-radius: 0;
+}
 </style>

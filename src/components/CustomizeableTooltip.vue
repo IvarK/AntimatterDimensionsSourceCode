@@ -79,6 +79,7 @@ export default {
   position: absolute;
   transform: translateX(-50%);
 }
+
 .c-tooltip-content,
 .c-tooltip-arrow {
   visibility: hidden;

@@ -144,7 +144,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 /* CONTAINER STYLES */
 
 .c-pelle-rift-bar {
@@ -268,11 +268,6 @@ export default {
 }
 
 /* MILESTONE STYLES */
-.o-pelle-rift-bar-milestone-hover-area {
-  width: 2rem;
-  height: 100%;
-}
-
 .o-pelle-rift-bar-milestone-hover-container {
   height: 100%;
 }
@@ -301,5 +296,12 @@ export default {
 .o-pelle-rift-bar-milestone-line--disabled {
   animation: none;
   filter: brightness(0.25);
+}
+</style>
+
+<style>
+.o-pelle-rift-bar-milestone-hover-area {
+  width: 2rem;
+  height: 100%;
 }
 </style>

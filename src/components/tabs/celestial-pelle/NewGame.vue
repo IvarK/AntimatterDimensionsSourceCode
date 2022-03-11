@@ -34,7 +34,7 @@ export default {
     },
     ngString(i) {
       if (!i) return "";
-      return `NewGame${i > 0 ? "+" : "-"}${Math.abs(i) > 1 ? Math.abs(i - 1) : ""}`;
+      return `NewGame${i > 0 ? "+" : "-"}${Math.abs(i) > 1 ? Math.abs(i) : ""}`;
     },
     startNewGame(i) {
       NG.startNewGame(i);

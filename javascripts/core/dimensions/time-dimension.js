@@ -1,6 +1,5 @@
 import { DimensionState } from "./dimension.js";
 import { DC } from "../constants.js";
-import { Pelle } from "../globals.js";
 
 export function buySingleTimeDimension(tier) {
   const dim = TimeDimension(tier);
@@ -17,6 +16,7 @@ export function buySingleTimeDimension(tier) {
 
 export function resetTimeDimensions() {
   for (const dim of TimeDimensions.all) dim.amount = new Decimal(dim.bought);
+  updateTimeDimensionCosts();
 }
 
 export function fullResetTimeDimensions() {
@@ -115,6 +115,13 @@ export function timeDimensionCommonMultiplier() {
   return mult;
 }
 
+export function updateTimeDimensionCosts() {
+  for (let i = 1; i <= 8; i++) {
+    const dim = TimeDimension(i);
+    dim.cost = dim.nextCost(dim.bought);
+  }
+}
+
 class TimeDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.time, tier);
@@ -130,9 +137,6 @@ class TimeDimensionState extends DimensionState {
 
   /** @returns {Decimal} */
   get cost() {
-    if (PelleRifts.death.hasMilestone(0) && this._tier > 4) {
-      return this.data.cost.div("1e2250").pow(0.5);
-    }
     return this.data.cost;
   }
 
@@ -141,7 +145,11 @@ class TimeDimensionState extends DimensionState {
 
   nextCost(bought) {
     if (this._tier > 4 && bought < this.e6000ScalingAmount) {
-      return Decimal.pow(this.costMultiplier, bought).times(this.baseCost);
+      const cost = Decimal.pow(this.costMultiplier, bought).times(this.baseCost);
+      if (PelleRifts.death.hasMilestone(0)) {
+        return cost.div("1e2250").pow(0.5);
+      }
+      return cost;
     }
 
     const costMultIncreases = [1, 1.5, 2.2];
@@ -153,7 +161,12 @@ class TimeDimensionState extends DimensionState {
     let base = this.costMultiplier;
     if (this._tier <= 4) base *= 2.2;
     const exponent = this.e6000ScalingAmount + (bought - this.e6000ScalingAmount) * TimeDimensions.scalingPast1e6000;
-    return Decimal.pow(base, exponent).times(this.baseCost);
+    const cost = Decimal.pow(base, exponent).times(this.baseCost);
+
+    if (PelleRifts.death.hasMilestone(0) && this._tier > 4) {
+      return cost.div("1e2250").pow(0.5);
+    }
+    return cost;
   }
 
   get isUnlocked() {

@@ -262,13 +262,11 @@ export const Glyphs = {
       this.active[glyph.idx] = null;
       this.addToInventory(glyph, freeIndex);
     }
-    if (player.reality.glyphs.active.length) {
-      Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
-    }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    return !player.reality.glyphs.active.length;
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;
@@ -699,6 +697,8 @@ export function getAdjustedGlyphLevel(glyph) {
 }
 
 export function respecGlyphs() {
-  Glyphs.unequipAll();
+  if (!Glyphs.unequipAll()) {
+    Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
+  }
   player.reality.respec = false;
 }

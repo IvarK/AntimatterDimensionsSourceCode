@@ -5277,6 +5277,9 @@ screen and (max-width: 480px) {
   width: 2.5rem;
   height: 2.5rem;
   margin: 1rem 0.5rem 0;
+  font-size: 2rem;
+  line-height: 2rem;
+  padding: 0;
 }
 
 .c-modal__confirm-btn {

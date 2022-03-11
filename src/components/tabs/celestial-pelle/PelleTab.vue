@@ -233,3 +233,13 @@ export default {
   color: var(--color-pelle--base);
 }
 </style>
+
+<style>
+.s-base--metro .l-pelle-panel-container, .s-base--metro .c-armageddon-container {
+  border-radius: 0;
+}
+
+.s-base--metro .o-pelle-button {
+  border-radius: 0;
+}
+</style>

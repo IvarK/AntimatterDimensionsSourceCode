@@ -310,4 +310,8 @@ export default {
   width: 2rem;
   height: 100%;
 }
+
+.s-base--metro .c-pelle-rift-bar, .s-base--metro .l-overflow-hidden {
+  border-radius: 0;
+}
 </style>

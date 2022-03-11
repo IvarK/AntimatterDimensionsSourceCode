@@ -194,3 +194,9 @@ export default {
   text-shadow: 2px 2px 2px black;
 }
 </style>
+
+<style>
+.s-base--metro .increase-cap {
+  border-radius: 0;
+}
+</style>

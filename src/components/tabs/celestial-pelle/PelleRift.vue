@@ -102,11 +102,11 @@ export default {
 .o-pelle-rift-toggle {
   padding: 0.5rem;
   background: black;
-  border: 1px solid var(--color-pelle-secondary);
+  border: 0.1rem solid var(--color-pelle-secondary);
   font-family: Typewriter;
   color: white;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   width: 8rem;
   margin-bottom: 1rem;
 }
@@ -146,8 +146,8 @@ export default {
   width: 5rem;
   margin-bottom: 1rem;
   color: white;
-  border: 1px solid var(--color-pelle-secondary);
-  border-radius: 5px;
+  border: 0.1rem solid var(--color-pelle-secondary);
+  border-radius: 0.5rem;
 }
 
 .o-pelle-rift-milestone--unlocked {
@@ -171,5 +171,11 @@ h2,
 
 [ach-tooltip]:after {
   border-top: 0.5rem solid var(--color-pelle-secondary);
+}
+</style>
+
+<style>
+.s-base--metro .o-pelle-rift-milestone, .s-base--metro .o-pelle-rift-toggle {
+  border-radius: 0;
 }
 </style>

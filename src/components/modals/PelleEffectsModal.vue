@@ -16,7 +16,7 @@ export default {
         "All pre-Doomed IP and EP multipliers are disabled",
         "All pre-Doomed Replicanti speed multipliers are disabled",
         "Most Eternity Challenges are harder",
-        `All Galaxies are only ${formatInt(50)}% as effective`,
+        `All Galaxies are only ${formatPercents(0.5)} as effective`,
         `Antimatter Dimension multiplier is divided by ${formatInt(10)}`,
         "Achievement multiplier and many achievement rewards are disabled",
         "All Infinity and Eternity multipliers and generation are disabled",
@@ -34,13 +34,13 @@ export default {
 
         // Time studies + Dilation
         "Eternity Upgrade to Time Dimensions based on days played is based on this Armageddon time",
-        `All pre-Doomed Dilated Time multipliers are disabled except the ${formatInt(2)}x buyable`,
+        `All pre-Doomed Dilated Time multipliers are disabled except the ${formatX(2)} buyable`,
         "All Tachyon Particle multipliers are disabled",
         "All pre-Doomed Time Theorem generation effects are disabled except the Dilation upgrade",
 
         // Glyphs
         "Glyph equipping is disabled until reacquired",
-        `Glyph levels are lowered and rarity is set to ${formatInt(0)}%`,
+        `Glyph levels are lowered and rarity is set to ${formatPercents(0)}`,
         "Effects from Glyph Sacrifice, Alteration, and Alchemy are all disabled",
 
         // Celestial features

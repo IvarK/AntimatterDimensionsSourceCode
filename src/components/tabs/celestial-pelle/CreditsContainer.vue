@@ -117,8 +117,8 @@ export default {
     :style="creditStyles"
   >
     <div
-      v-for="cel in celestialDisplays"
-      :key="cel.symbol + '-end-credit-symbol-disp'"
+      v-for="(cel, celIndex) in celestialDisplays"
+      :key="celIndex + '-end-credit-symbol-disp'"
       class="c-credits-cel-symbol"
       :style="cel.style"
       v-html="cel.symbol"

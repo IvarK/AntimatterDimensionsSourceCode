@@ -23,6 +23,21 @@ export default {
       effects: []
     };
   },
+  computed: {
+    tooltipContentStyle() {
+      return {
+        width: "14rem",
+        border: "0.1rem solid var(--color-pelle--base)",
+        backgroundColor: "hsl(0, 0%, 5%)",
+        zIndex: 4
+      };
+    },
+    tooltipArrowStyle() {
+      return {
+        borderTop: "0.5rem solid var(--color-pelle--base)"
+      };
+    }
+  },
   methods: {
     update() {
       const rift = this.rift;
@@ -69,21 +84,6 @@ export default {
       if (milestonesCloseTo.length) {
         this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
       }
-    }
-  },
-  computed: {
-    tooltipContentStyle() {
-      return {
-        width: "14rem",
-        border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: "hsl(0, 0%, 5%)",
-        zIndex: 4
-      };
-    },
-    tooltipArrowStyle() {
-      return {
-        borderTop: "0.5rem solid var(--color-pelle--base)"
-      };
     }
   }
 };

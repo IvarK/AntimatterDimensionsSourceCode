@@ -73,9 +73,7 @@ export default {
       if (this.downButtonEnabled) this.lastVisibleIndex++;
     },
     removeQuoteSyntax(x) {
-      return x.replace("*", "");
-      // Original code: return Modal.celestialQuote.removeOverrideCel(x).replace("*", "");
-      // This should be restored once cel7-ui is merged back into master.
+      return Modal.celestialQuote.removeOverrideCel(x).replace("*", "");
     }
   }
 };

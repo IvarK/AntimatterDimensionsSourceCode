@@ -164,10 +164,7 @@ export default {
     <p>Acamaeda</p>
 
     <h2>Web Testers</h2>
-    <!--
-      This list will be removed once everything is done. Alphabetizing people is when one gets added is just mildy
-      annoying and this makes it more pleasant.
-
+    <div class="l-double-credits-container">
       <p>Acamaeda</p>
       <p>Aesis</p>
       <p>AFYINEE (Gabriel HADDAG)</p>
@@ -211,54 +208,6 @@ export default {
       <p>WaitingIdly</p>
       <p>Xemadus (Jonathan Gibson)</p>
       <p>Young Woo Joo</p>
-      <p>Zipi</p>
-    -->
-    <div class="l-credits--left">
-      <p>Acamaeda</p>
-      <p>AFYINEE (Gabriel HADDAG)</p>
-      <p>Anno</p>
-      <p>Birb (Kelsey Black)</p>
-      <p>CaptainGalaxy (Ovidijus Točelis)</p>
-      <p>cubic frog</p>
-      <p>dankesehr</p>
-      <p>earth</p>
-      <p>GirixK (Nikola Jelinčić)</p>
-      <p>Hira</p>
-      <p>Kael</p>
-      <p>Lynn</p>
-      <p>Patashu</p>
-      <p>Phillip Marshall</p>
-      <p>Pichusuperlover</p>
-      <p>Saturnus</p>
-      <p>sirusi (Vinícius Oliveira Martins)</p>
-      <p>SpicyCrusader13</p>
-      <p>SzyszakS</p>
-      <p>Typh</p>
-      <p>WaitingIdly</p>
-      <p>Young Woo Joo</p>
-    </div>
-    <div class="l-credits--right">
-      <p>Aesis</p>
-      <p>Alexitato</p>
-      <p>Archa (Myresa)</p>
-      <p>Boo (Jean-Christophe Bourgault)</p>
-      <p>ChaoticHans</p>
-      <p>Dan</p>
-      <p>Davixx (Davide Fedele)</p>
-      <p>Empireus</p>
-      <p>GoldenTritium</p>
-      <p>IkerStream (Iker de Aguirre)</p>
-      <p>L4R5 (Lars Wolf)</p>
-      <p>Merp</p>
-      <p>philipebreaker (Philipe)</p>
-      <p>Phoenix</p>
-      <p>Reda Kotob</p>
-      <p>Scarlet</p>
-      <p>Spanosa (Jared K)</p>
-      <p>Storm</p>
-      <p>Tacitus</p>
-      <p>Vnge (Ben Parrish)</p>
-      <p>Xemadus (Jonathan Gibson)</p>
       <p>Zipi</p>
     </div>
 
@@ -266,9 +215,7 @@ export default {
     <p>Dravitar (Alex Henderson)</p>
 
     <h2>Android Testers</h2>
-    <!--
-      Same for this mobile tester
-
+    <div class="l-double-credits-container">
       <p>about:blank</p>
       <p>Archa (Myresa)</p>
       <p>Anjinho01</p>
@@ -312,54 +259,6 @@ export default {
       <p>vanadium_void</p>
       <p>Vnge (Ben Parrish)</p>
       <p>WaitingIdly</p>
-      <p>ZylaKat (Katherine Goforth-Harbin)</p>
-    -->
-    <div class="l-credits--left">
-      <p>about:blank</p>
-      <p>Anjinho01</p>
-      <p>Buck</p>
-      <p>ChaoticHans</p>
-      <p>DarthDie (Briar Bowser)</p>
-      <p>Firecracker</p>
-      <p>GirixK (Nikola Jelinčić)</p>
-      <p>HarrisL2</p>
-      <p>Hira</p>
-      <p>ImpossibleSalsa</p>
-      <p>kaislash (Lily)</p>
-      <p>Kirin Nijinski (Arthur)</p>
-      <p>Monoma (ARoman Ruiz)</p>
-      <p>opdollar (Zane Coole)</p>
-      <p>Porygon-Z</p>
-      <p>Razor</p>
-      <p>Rukimix</p>
-      <p>Skunky (Lukas)</p>
-      <p>SpicyCrusader13</p>
-      <p>tragedt (Ethan Manninen)</p>
-      <p>vanadium_void</p>
-      <p>WaitingIdly</p>
-    </div>
-    <div class="l-credits--right">
-      <p>Archa (Myresa)</p>
-      <p>Auti (Alice Tolle)</p>
-      <p>Barrin84</p>
-      <p>Circle</p>
-      <p>Epsilon (Coolguystorm)</p>
-      <p>Gaunter</p>
-      <p>GoldenTritium</p>
-      <p>Hellbach (Asher Günther)</p>
-      <p>hen-ben (Henry Ellenberg)</p>
-      <p>Johanniklas (Jan-Niklas Petersen)</p>
-      <p>Kirku (Fabian Makowski)</p>
-      <p>L4R5 (Lars Wolf)</p>
-      <p>Nani</p>
-      <p>Pavlxiiv</p>
-      <p>PotatoTIAB</p>
-      <p>Razvan Cercel</p>
-      <p>Scarlet</p>
-      <p>Socks (Hannah Pocks)</p>
-      <p>Tim Wong</p>
-      <p>Valentine Clarissa Alanis Star Z</p>
-      <p>Vnge (Ben Parrish)</p>
       <p>ZylaKat (Katherine Goforth-Harbin)</p>
     </div>
 
@@ -369,68 +268,63 @@ export default {
 </template>
 
 <style scoped>
-  .credits-container {
-    position: absolute;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 9;
-    color: rgb(185, 185, 185);
-    pointer-events: none;
-  }
+.credits-container {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 9;
+  color: rgb(185, 185, 185);
+  pointer-events: none;
+}
 
-  h1 {
-    color: yellow;
-  }
+h1 {
+  color: yellow;
+}
 
-  h2 {
-    margin-top: 10rem;
-    margin-bottom: 2rem;
-    color: white;
-    text-shadow: 1px 1px 2px turquoise;
-  }
+h2 {
+  margin-top: 10rem;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 1px 1px 2px turquoise;
+}
 
-  .l-credits--left {
-    width: 50%;
-    float: left;
-  }
+.l-double-credits-container p {
+  width: 50%;
+  display: inline-block;
+}
 
-  .l-credits--right {
-    width: 50%;
-    overflow: hidden;
-  }
-
-  p {
-    margin-top: 1rem;
-  }
+p {
+  margin-top: 1rem;
+}
 
 
-  .c-credits-cel-symbol {
-    position: absolute;
-    font-size: 14rem;
-    text-shadow: 0 0 3rem;
-    transform: translateX(-50%);
-    height: 14rem;
-    width: 14rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.c-credits-cel-symbol {
+  position: absolute;
+  font-size: 14rem;
+  text-shadow: 0 0 3rem;
+  transform: translateX(-50%);
+  height: 14rem;
+  width: 14rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 
 <style>
 @keyframes a-teresa-credits {
-  0% {transform: rotate(61deg);}
-  10% {transform: rotate(322deg);}
-  20% {transform: rotate(235deg);}
-  30% {transform: rotate(222deg);}
-  40% {transform: rotate(105deg);}
-  50% {transform: rotate(33deg);}
-  60% {transform: rotate(103deg);}
-  70% {transform: rotate(158deg);}
-  80% {transform: rotate(41deg);}
-  90% {transform: rotate(73deg);}
-  100% {transform: rotate(61deg);}
+  0% { transform: rotate(61deg); }
+  10% { transform: rotate(322deg); }
+  20% { transform: rotate(235deg); }
+  30% { transform: rotate(222deg); }
+  40% { transform: rotate(105deg); }
+  50% { transform: rotate(33deg); }
+  60% { transform: rotate(103deg); }
+  70% { transform: rotate(158deg); }
+  80% { transform: rotate(41deg); }
+  90% { transform: rotate(73deg); }
+  100% { transform: rotate(61deg); }
 }
 @keyframes a-effarig-credits {
   0% { opacity: 0.8; text-shadow: 0 0 3rem; }

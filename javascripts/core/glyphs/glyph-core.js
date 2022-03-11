@@ -266,10 +266,7 @@ export const Glyphs = {
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-    if (player.reality.glyphs.active.length) {
-      return false;
-    }
-    return true;
+    return !player.reality.glyphs.active.length;
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;

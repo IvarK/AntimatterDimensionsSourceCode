@@ -6,6 +6,7 @@ import "./reality/perks-tab.js";
 import "./reality/black-hole/black-hole-tab.js";
 
 import "./celestials/navigation.js";
+import "./celestials/subtabs/ra/alchemy-tab.js";
 
 import "./shop/shop-tab.js";
 

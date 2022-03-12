@@ -1,6 +1,5 @@
-<script>
-import AlchemyCircleNode from "./AlchemyCircleNode";
-import AlchemyResourceInfo from "./AlchemyResourceInfo";
+import "./alchemy-circle-node.js";
+import "./alchemy-resource-info.js";
 import PrimaryButton from "@/components/PrimaryButton";
 
 class AlchemyOrbitLayout {
@@ -73,12 +72,9 @@ class AlchemyCircleLayout {
   }
 }
 
-export default {
-  name: "AlchemyTab",
+Vue.component("alchemy-tab", {
   components: {
-    PrimaryButton,
-    AlchemyCircleNode,
-    AlchemyResourceInfo
+    PrimaryButton
   },
   data() {
     return {
@@ -224,82 +220,64 @@ export default {
         }
       }
     }
-  }
-};
-</script>
-
-<template>
-  <div class="l-ra-alchemy-tab">
-    <div class="c-subtab-option-container">
-      <PrimaryButton
-        class="o-primary-btn--subtab-option"
-        @click="showAlchemyHowTo()"
-      >
-        Click for alchemy info
-      </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--subtab-option"
-        @click="toggleAllReactions()"
-      >
-        Toggle all reactions
-      </PrimaryButton>
-      <PrimaryButton
-        v-if="realityCreationVisible"
-        class="o-primary-btn--subtab-option"
-        onclick="Modal.realityGlyph.show()"
-      >
-        View Reality Glyph creation
-      </PrimaryButton>
-    </div>
-    <AlchemyResourceInfo
-      :key="infoResourceId"
-      :resource="infoResource"
-    />
-    Glyphs can now be refined using your Glyph filter in the Glyphs tab.
-    <br>
-    When refining a Glyph, it will only give you resources up to a cap
-    of {{ formatX(capFactor) }} its highest refinement value.
-    <span v-if="reactionsAvailable">
-      Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
-    </span>
-    <div
-      class="l-alchemy-circle"
-      :style="circleStyle"
-    >
-      <svg class="l-alchemy-orbit-canvas">
-        <circle
-          v-for="(orbit, orbitKey) in layout.orbits"
-          :key="orbitKey + '-alchemy-orbit'"
-          cx="50%"
-          cy="50%"
-          class="o-alchemy-orbit"
-          :r="orbitSize(orbit)"
-          :class="orbitClass"
+  },
+  template: `
+    <div class="l-ra-alchemy-tab">
+      <div class="c-subtab-option-container">
+        <PrimaryButton class="o-primary-btn--subtab-option" @click="showAlchemyHowTo()">
+          Click for alchemy info
+        </PrimaryButton>
+        <PrimaryButton class="o-primary-btn--subtab-option" @click="toggleAllReactions()">
+          Toggle all reactions
+        </PrimaryButton>
+        <PrimaryButton
+          v-if="realityCreationVisible"
+          class="o-primary-btn--subtab-option"
+          onclick="Modal.realityGlyph.show()"
+        >
+          View Reality Glyph creation
+        </PrimaryButton>
+      </div>
+      <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
+      Glyphs can now be refined using your Glyph filter in the Glyphs tab.
+      <br>
+      When refining a Glyph, it will only give you resources up to a cap
+      of {{ formatX(capFactor) }} its highest refinement value.
+      <span v-if="reactionsAvailable">
+        Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
+      </span>
+      <div class="l-alchemy-circle" :style="circleStyle">
+        <svg class="l-alchemy-orbit-canvas">
+          <circle
+            v-for="orbit in layout.orbits"
+            cx="50%"
+            cy="50%"
+            class="o-alchemy-orbit"
+            :r="orbitSize(orbit)"
+            :class="orbitClass"
+          />
+        </svg>
+        <alchemy-circle-node
+          v-for="(node, i) in layout.nodes"
+          :key="i"
+          :node="node"
+          :isFocused="isFocusedNode(node)"
+          @mouseenter="handleMouseEnter(node)"
+          @mouseleave="handleMouseLeave"
+          @click="handleClick(node)"
         />
-      </svg>
-      <AlchemyCircleNode
-        v-for="(node, i) in layout.nodes"
-        :key="i"
-        :node="node"
-        :is-focused="isFocusedNode(node)"
-        @mouseenter="handleMouseEnter(node)"
-        @mouseleave="handleMouseLeave"
-        @click="handleClick(node)"
-      />
-      <svg class="l-alchemy-arrow-canvas">
-        <line
-          v-for="(reactionArrow, reactionArrowKey) in layout.reactionArrows"
-          :key="reactionArrowKey + '-alchemy-reaction-path'"
-          v-bind="reactionArrowPaths(reactionArrow)"
-          :class="reactionPathClass(reactionArrow)"
-        />
-        <line
-          v-for="(reactionArrow, reactionArrowKey) in layout.reactionArrows"
-          :key="reactionArrowKey + '-alchemy-reaction-arrow'"
-          v-bind="reactionArrowPositions(reactionArrow)"
-          :class="reactionArrowClass(reactionArrow)"
-        />
-      </svg>
-    </div>
-  </div>
-</template>
+        <svg class="l-alchemy-arrow-canvas">
+          <line
+            v-for="reactionArrow in layout.reactionArrows"
+            v-bind="reactionArrowPaths(reactionArrow)"
+            :class="reactionPathClass(reactionArrow)"
+          />
+          <line
+            v-for="reactionArrow in layout.reactionArrows"
+            v-bind="reactionArrowPositions(reactionArrow)"
+            :class="reactionArrowClass(reactionArrow)"
+          />
+        </svg>
+      </div>
+    </div>`
+});

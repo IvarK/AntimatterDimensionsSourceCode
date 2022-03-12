@@ -1,16 +1,11 @@
-<script>
 import EffectDisplay from "@/components/EffectDisplay";
 
-export default {
-  name: "AlchemyResourceInfo",
+Vue.component("alchemy-resource-info", {
   components: {
     EffectDisplay
   },
   props: {
-    resource: {
-      type: Object,
-      required: true
-    }
+    resource: Object
   },
   data() {
     return {
@@ -87,36 +82,27 @@ export default {
         this.reactionProduction = this.reaction.production;
       }
     }
-  }
-};
-</script>
-
-<template>
-  <div
-    v-if="isUnlocked"
-    :class="classObject"
-  >
-    <span class="c-alchemy-resource-info__title">
-      {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
-    </span>
-    <span>
-      {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
-      (Recent change: <span v-html="formattedFlow" />)
-    </span>
-    <span v-if="isBaseResource">Base Resource</span>
-    <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-    <span v-if="isDoomed">Alchemy effects are disabled while in Doomed</span>
-    <span v-else>
-      <EffectDisplay
-        label="Effect"
-        :config="effectConfig"
-      />
-    </span>
-  </div>
-  <div
-    v-else
-    :class="classObject"
-  >
-    Unlock requirement: {{ unlockRequirement }}
-  </div>
-</template>
+  },
+  template: `
+    <div :class="classObject" v-if="isUnlocked">
+      <span class="c-alchemy-resource-info__title">
+        {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
+      </span>
+      <span>
+        {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
+        (Recent change: <span v-html="formattedFlow" />)
+      </span>
+      <span v-if="isBaseResource">Base Resource</span>
+      <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
+      <span v-if="isDoomed">Alchemy effects are disabled while in Doomed</span>
+      <span v-else>
+        <EffectDisplay
+          label="Effect"
+          :config="effectConfig"
+        />
+      </span>
+    </div>
+    <div :class="classObject" v-else>
+      Unlock requirement: {{ unlockRequirement }}
+    </div>`
+});

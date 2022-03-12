@@ -276,9 +276,10 @@ export const AutomatorLexer = (() => {
   createKeyword("Define", /define/i);
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
-  createKeyword("Max", /max/i, {
+  createKeyword("Max", /max/i);
+  createKeyword("All", /all/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyMax(true),
+    $buyTT: () => TimeTheorems.buyOneOfEach(),
   });
   createKeyword("Notify", /notify/i);
   createKeyword("Nowait", /nowait/i);

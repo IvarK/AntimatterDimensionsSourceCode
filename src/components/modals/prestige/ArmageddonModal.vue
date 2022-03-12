@@ -79,7 +79,7 @@ export default {
     >
       On entering the Doomed Reality everything except Challenge records, Celestial progress and anything under the
       General and Reality header on the Statistics tab will be reset. You will not gain any rewards from your progress
-      in your current reality. Entering Doomed will also disable certain game mechanics.
+      in your current Reality. Entering Doomed will also disable certain game mechanics.
       <br>
       <br>
       Are you sure you want to do this?

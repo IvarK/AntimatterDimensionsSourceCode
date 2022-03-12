@@ -17,9 +17,6 @@ export default {
       orderVal: 0
     };
   },
-  beforeDestroy() {
-    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
-  },
   watch: {
     resourceVal(newValue) {
       player.celestials.laitela.singularitySorting.displayResource = newValue;
@@ -33,6 +30,9 @@ export default {
     orderVal(newValue) {
       player.celestials.laitela.singularitySorting.sortOrder = newValue;
     },
+  },
+  beforeDestroy() {
+    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   computed: {
     resourceStr() {

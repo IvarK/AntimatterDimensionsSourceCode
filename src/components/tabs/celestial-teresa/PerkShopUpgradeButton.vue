@@ -11,7 +11,10 @@ export default {
     CostDisplay
   },
   props: {
-    upgrade: Object
+    upgrade: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

@@ -2,7 +2,10 @@
 export default {
   name: "CelestialQuoteHistory",
   props: {
-    celestial: String,
+    celestial: {
+      type: String,
+      required: true
+    },
     visibleLines: {
       type: Number,
       default: 3,
@@ -20,9 +23,6 @@ export default {
     seenIds: [],
     lastVisibleIndex: 4,
   }),
-  mounted() {
-    this.lastVisibleIndex = this.quotes.length - 1;
-  },
   computed: {
     quotes() {
       const quoteLists = this.seenIds.map(id => Celestials[this.celestial].quotes.fromID(id).lines);
@@ -48,6 +48,9 @@ export default {
     downButtonEnabled() {
       return this.lastVisibleIndex < this.quotes.length - 1;
     }
+  },
+  mounted() {
+    this.lastVisibleIndex = this.quotes.length - 1;
   },
   methods: {
     update() {

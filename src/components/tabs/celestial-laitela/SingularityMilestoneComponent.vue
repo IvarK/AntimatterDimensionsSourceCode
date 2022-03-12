@@ -7,7 +7,8 @@ export default {
       required: true
     },
     suppressGlow: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({

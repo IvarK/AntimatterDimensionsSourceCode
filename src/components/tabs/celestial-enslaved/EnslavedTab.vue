@@ -31,11 +31,6 @@ export default {
     currentSpeedUp: 0,
     hintsUnlocked: false,
   }),
-  watch: {
-    autoRelease(newValue) {
-      player.celestials.enslaved.isAutoReleasing = newValue;
-    }
-  },
   computed: {
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
@@ -67,6 +62,11 @@ export default {
       if (!this.offlineEnabled) return "Offline Progress is disabled";
       if (this.autoStoreReal) return "Offline time stored";
       return "Offline time used for production";
+    }
+  },
+  watch: {
+    autoRelease(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
     }
   },
   methods: {

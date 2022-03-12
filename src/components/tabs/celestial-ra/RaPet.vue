@@ -4,12 +4,15 @@ import RaPetLevelBar from "./RaPetLevelBar";
 
 export default {
   name: "RaPet",
-  props: {
-    petConfig: Object,
-  },
   components: {
     RaUpgradeIcon,
     RaPetLevelBar
+  },
+  props: {
+    petConfig: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

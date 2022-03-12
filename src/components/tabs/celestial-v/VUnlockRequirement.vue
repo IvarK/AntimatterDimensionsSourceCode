@@ -2,7 +2,10 @@
 export default {
   name: "VUnlockRequirement",
   props: {
-    dbEntry: Object,
+    dbEntry: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

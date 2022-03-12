@@ -9,7 +9,10 @@ export default {
     CostDisplay
   },
   props: {
-    unlock: Object
+    unlock: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

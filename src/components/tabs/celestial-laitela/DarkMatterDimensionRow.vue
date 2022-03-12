@@ -2,7 +2,10 @@
 export default {
   name: "DarkMatterDimensionRow",
   props: {
-    tier: Number
+    tier: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {

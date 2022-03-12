@@ -2,7 +2,10 @@
 export default {
   name: "RaPetLevelBar",
   props: {
-    petConfig: Object
+    petConfig: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

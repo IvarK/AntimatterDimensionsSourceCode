@@ -2,7 +2,10 @@
 export default {
   name: "RaUpgradeIcon",
   props: {
-    unlock: Object,
+    unlock: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -13,6 +16,18 @@ export default {
       description: "",
       petName: ""
     };
+  },
+  computed: {
+    classObject() {
+      return {
+        "c-ra-upgrade-icon": true,
+        "c-ra-upgrade-icon--inactive": !this.isUnlocked,
+        "c-ra-upgrade-icon--teresa": this.petName === "Teresa",
+        "c-ra-upgrade-icon--effarig": this.petName === "Effarig",
+        "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
+        "c-ra-upgrade-icon--v": this.petName === "V"
+      };
+    }
   },
   methods: {
     update() {
@@ -25,18 +40,6 @@ export default {
         : this.unlock.reward;
       this.description = rewardText;
       this.petName = this.unlock.pet.name;
-    }
-  },
-  computed: {
-    classObject() {
-      return {
-        "c-ra-upgrade-icon": true,
-        "c-ra-upgrade-icon--inactive": !this.isUnlocked,
-        "c-ra-upgrade-icon--teresa": this.petName === "Teresa",
-        "c-ra-upgrade-icon--effarig": this.petName === "Effarig",
-        "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
-        "c-ra-upgrade-icon--v": this.petName === "V"
-      };
     }
   }
 };

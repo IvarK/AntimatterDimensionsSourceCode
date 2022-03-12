@@ -328,7 +328,7 @@ window.player = {
     },
     milestones: [],
   },
-  infMult: 0,
+  IPMultPurchases: 0,
   version: 13,
   infinityPower: DC.D1,
   postC4Tier: 0,

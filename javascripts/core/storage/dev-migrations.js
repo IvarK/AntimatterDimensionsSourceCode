@@ -1262,7 +1262,8 @@ GameStorage.devMigrations = {
       player.celestials.pelle.showBought = player.celestials.showBought;
       delete player.celestials.collapsed;
       delete player.celestials.showBought;
-    }
+    },
+    GameStorage.migrations.infMultNameConversion,
   ],
 
   patch(player) {

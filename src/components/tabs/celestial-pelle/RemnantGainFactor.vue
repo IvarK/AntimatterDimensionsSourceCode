@@ -126,8 +126,8 @@ and c-remnant-factors both didn't work. If anyone can fix this it would be great
 }
 
 .c-remnant-factors {
-  background-color: #000;
-  color: #fbd0d8;
+  background-color: var(--color-prestige--accent);
+  color: var(--color-text);
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;
   padding: 0.3rem;

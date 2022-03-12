@@ -128,8 +128,8 @@ export default {
 }
 
 .o-pelle-button {
-  background: black;
-  color: white;
+  background: var(--color-prestige--accent);
+  color: var(--color-text);
   border: 1px solid var(--color-pelle--base);
   border-radius: 5px;
   padding: 1rem;

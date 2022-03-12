@@ -14,6 +14,7 @@ export default {
       hasEffarig: false,
       hasReality: false,
       logGlyphSacrifice: 0,
+      pelleChaosEffect: {},
     };
   },
   computed: {
@@ -34,7 +35,20 @@ export default {
     },
     glyphSet() {
       return Glyphs.activeList;
-    }
+    },
+    pelleGlyphText() {
+      return Pelle.isDoomed
+        ? `Glyph Rarity is set to ${formatPercents(strengthToRarity(Pelle.glyphStrength))}
+          and Level is capped at ${formatInt(Pelle.glyphMaxLevel)}`
+        : "";
+    },
+    showChaosText() {
+      return this.pelleChaosEffect.isUnlocked && !this.noEffects;
+    },
+    chaosEffect() {
+      return `${this.pelleChaosEffect.description
+        .replace("{value}", formatX(this.pelleChaosEffect[Pelle.activeGlyphType], 2))}`;
+    },
   },
   watch: {
     logGlyphSacrifice() {
@@ -52,6 +66,8 @@ export default {
 
       this.logGlyphSacrifice = BASIC_GLYPH_TYPES
         .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+
+      this.pelleChaosEffect = Pelle.specialGlyphEffect;
     },
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
@@ -62,6 +78,9 @@ export default {
 
 <template>
   <div class="c-current-glyph-effects l-current-glyph-effects">
+    <div class="pelle-current-glyph-effects">
+      {{ pelleGlyphText }}
+    </div>
     <div class="c-current-glyph-effects__header">
       Currently active glyph effects:
     </div>
@@ -84,6 +103,12 @@ export default {
       :key="effect.id + logGlyphSacrifice"
       :effect="effect"
     />
+    <div
+      v-if="showChaosText"
+      class="pelle-current-glyph-effects"
+    >
+      {{ chaosEffect }}
+    </div>
   </div>
 </template>
 

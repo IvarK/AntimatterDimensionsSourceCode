@@ -22,6 +22,7 @@ export default {
   },
   data() {
     return {
+      isUseless: false,
       isAvailableForPurchase: false,
       canBeBought: false,
       isRebuyable: false,
@@ -37,7 +38,8 @@ export default {
     },
     classObject() {
       return {
-        "c-reality-upgrade-btn--bought": this.isBought,
+        "c-reality-upgrade-btn--useless": this.isUseless,
+        "c-reality-upgrade-btn--bought": this.isBought && !this.isUseless,
         "c-reality-upgrade-btn--unavailable": !this.isBought && !this.canBeBought && this.isAvailableForPurchase,
         "c-reality-upgrade-btn--possible": !this.isAvailableForPurchase && this.isPossible,
         "c-reality-upgrade-btn--locked": !this.isAvailableForPurchase && !this.isPossible,
@@ -64,6 +66,7 @@ export default {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = ImaginaryUpgrade(20).isBought;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
+      this.isUseless = Pelle.isDoomed;
     }
   }
 };
@@ -82,21 +85,30 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <DescriptionDisplay :config="config" />
-      <DescriptionDisplay
-        v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
-        :config="requirementConfig"
-        label="Requirement:"
-        class="c-reality-upgrade-btn__requirement"
-      />
-      <template v-else>
-        <EffectDisplay :config="config" />
-        <CostDisplay
-          v-if="!isBought"
-          :config="config"
-          name="Imaginary Machine"
+      <span v-if="isUseless">
+        This upgrade has no effect while in Doomed
+      </span>
+      <span v-else>
+        <DescriptionDisplay :config="config" />
+        <DescriptionDisplay
+          v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
+          :config="requirementConfig"
+          label="Requirement:"
+          class="c-reality-upgrade-btn__requirement"
         />
-      </template>
+        <template v-else>
+          <EffectDisplay
+            :config="config"
+            br
+          />
+          <CostDisplay
+            v-if="!isBought"
+            :config="config"
+            br
+            name="Imaginary Machine"
+          />
+        </template>
+      </span>
     </button>
     <PrimaryToggleButton
       v-if="isRebuyable && isAutoUnlocked"

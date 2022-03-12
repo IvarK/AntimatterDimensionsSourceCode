@@ -53,7 +53,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: [11],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => `Improve replicanti multiplier formula to
+      description: () => `Improve Replicanti multiplier formula to
       (log2(x)${formatPow(2)})+x${formatPow(0.032, 3, 3)}`,
       effect: () => Replicanti.amount.pow(0.032)
     },
@@ -87,9 +87,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: [21],
       reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-      description: () => (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied
-        ? "This Time Study has no effect while in Doomed"
-        : "You keep half of your Replicanti Galaxies on Infinity")
+      description: "You keep half of your Replicanti Galaxies on Infinity"
     },
     {
       id: 41,

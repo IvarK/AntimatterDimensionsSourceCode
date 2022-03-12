@@ -90,7 +90,7 @@ export const automatorBlocks = [
     targets: ["ON", "OFF", "USE"],
   }, {
     cmd: "TT",
-    targets: ["AM", "IP", "EP", "MAX"],
+    targets: ["AM", "IP", "EP", "ALL"],
   }, {
     cmd: "PAUSE",
     hasInput: true

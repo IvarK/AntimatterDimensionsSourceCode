@@ -1,4 +1,6 @@
 import { GameDatabase } from "../game-database.js";
+import { DC } from "../../constants.js";
+import { updateTimeDimensionCosts } from "../../dimensions/time-dimension.js";
 
 GameDatabase.celestials.pelle = (function() {
   const rebuyable = props => {
@@ -10,51 +12,49 @@ GameDatabase.celestials.pelle = (function() {
 
     return props;
   };
+  // eslint-disable-next-line max-params
+  const expWithIncreasedScale = (base1, base2, incScale, coeff, x) =>
+    Decimal.pow(base1, x).times(Decimal.pow(base2, x - incScale).max(1)).times(coeff);
   return {
     rebuyables: {
       antimatterDimensionMult: rebuyable({
         id: "antimatterDimensionMult",
         description: `Gain a multiplier to Antimatter Dimensions`,
-        _cost: x => Decimal.pow(10, x).times(Decimal.pow(1e3, x - 41).max(1)).times(100),
+        _cost: x => expWithIncreasedScale(10, 1e3, 41, 100, x),
         _effect: x => Pelle.antimatterDimensionMult(x),
-        _formatEffect: x => `${formatX(Pelle.antimatterDimensionMult(x), 2)} ➜ ` +
-          `${formatX(Pelle.antimatterDimensionMult(x + 1), 2)}`,
+        _formatEffect: x => formatX(x, 2, 2),
         cap: 44
       }),
       timeSpeedMult: rebuyable({
         id: "timeSpeedMult",
         description: `Gain a multiplier to game speed`,
-        _cost: x => Decimal.pow(20, x).times(Decimal.pow(1e3, x - 30).max(1)).times(1e5),
+        _cost: x => expWithIncreasedScale(20, 1e3, 30, 1e5, x),
         _effect: x => Decimal.pow(1.3, x),
-        _formatEffect: x => `${formatX(Decimal.pow(1.3, x), 2, 2)} ➜ ` +
-          `${formatX(Decimal.pow(1.3, x + 1), 2, 2)}`,
+        _formatEffect: x => formatX(x, 2, 2),
         cap: 35
       }),
       glyphLevels: rebuyable({
         id: "glyphLevels",
         description: `Increase the Glyph level allowed in Pelle`,
-        _cost: x => Decimal.pow(30, x).times(Decimal.pow(1e3, x - 25).max(1)).times(1e15),
+        _cost: x => expWithIncreasedScale(30, 1e3, 25, 1e15, x),
         _effect: x => Math.floor(((3 * (x + 1)) - 2) ** 1.6),
-        _formatEffect: x => `${format(Math.floor(((3 * (x + 1)) - 2) ** 1.6), 2)} ➜ ` +
-          `${format(Math.floor(((3 * (x + 2)) - 2) ** 1.6), 2)}`,
+        _formatEffect: x => formatInt(x),
         cap: 26
       }),
       infConversion: rebuyable({
         id: "infConversion",
         description: `Increase Infinity Power conversion rate`,
-        _cost: x => Decimal.pow(40, x).times(Decimal.pow(1e3, x - 20).max(1)).times(1e18),
+        _cost: x => expWithIncreasedScale(40, 1e3, 20, 1e18, x),
         _effect: x => (x * 3.5) ** 0.37,
-        _formatEffect: x => `+${format((x * 3.5) ** 0.37, 2, 2)} ➜ ` +
-          `+${format(((x + 1) * 3.5) ** 0.37, 2, 2)}`,
+        _formatEffect: x => `+${format(x, 2, 2)}`,
         cap: 21
       }),
       galaxyPower: rebuyable({
         id: "galaxyPower",
         description: `Multiply Galaxy power`,
-        _cost: x => Decimal.pow(1000, x).times(Decimal.pow(1e3, x - 10).max(1)).times(1e30),
+        _cost: x => expWithIncreasedScale(1000, 1e3, 10, 1e30, x),
         _effect: x => 1 + x / 50,
-        _formatEffect: x => `${formatX(1 + x / 50, 2, 2)} ➜ ` +
-          `${formatX(1 + (x + 1) / 50, 2, 2)}`,
+        _formatEffect: x => formatX(x, 2, 2),
         cap: 9
       }),
     },
@@ -125,28 +125,28 @@ GameDatabase.celestials.pelle = (function() {
         cost: 1e17,
         formatCost: c => format(c, 2),
       },
-      replicantiGalaxyNoReset: {
+      replicantiStayUnlocked: {
         id: 12,
+        description: "Replicanti stays unlocked on Armageddon",
+        cost: 1e17,
+        formatCost: c => format(c, 2),
+      },
+      replicantiGalaxyNoReset: {
+        id: 13,
         description: "Replicanti Galaxies don't reset on Infinity",
         cost: 1e19,
         formatCost: c => format(c, 2),
       },
       eternitiesNoReset: {
-        id: 13,
+        id: 14,
         description: "Eternities do not reset on Armageddon",
         cost: 1e20,
         formatCost: c => format(c, 2),
       },
       timeStudiesNoReset: {
-        id: 14,
+        id: 15,
         description: "Time Studies and Theorems do not reset on Armageddon",
         cost: 1e21,
-        formatCost: c => format(c, 2),
-      },
-      replicantiStayUnlocked: {
-        id: 15,
-        description: "Replicanti stays unlocked on Armageddon",
-        cost: 1e22,
         formatCost: c => format(c, 2),
       },
       keepEternityUpgrades: {
@@ -170,35 +170,47 @@ GameDatabase.celestials.pelle = (function() {
       dimBoostResetsNothing: {
         id: 19,
         description: "Dimension Boosts no longer reset anything",
-        cost: 1e50,
+        cost: 1e40,
         formatCost: c => format(c, 2),
       },
+      dilationUpgradesNoReset: {
+        id: 20,
+        description: "Keep Dilation Upgrades on Armageddon",
+        cost: 1e45,
+        formatCost: c => format(c, 2),
+      },
+      tachyonParticlesNoReset: {
+        id: 21,
+        description: "Keep Tachyon Particles on Armageddon",
+        cost: 1e50,
+        formatCost: c => format(c, 2),
+      }
     },
     strikes: {
       infinity: {
         id: 1,
         requirementDescription: "Reach Infinity",
-        penaltyDescription: "Antimatter Dimensions are raised to power of 0.5",
+        penaltyDescription: () => `Antimatter Dimensions are raised to ${formatPow(0.5, 1, 1)}`,
         rewardDescription: "Unlock Famine",
         rift: () => PelleRifts.famine
       },
       powerGalaxies: {
         id: 2,
         requirementDescription: "Power-up Galaxies",
-        penaltyDescription: "Infinity Dimensions are raised to power of 0.5",
+        penaltyDescription: () => `Infinity Dimensions are raised to ${formatPow(0.5, 1, 1)}`,
         rewardDescription: "Unlock Pestilence",
         rift: () => PelleRifts.pestilence
       },
       eternity: {
         id: 3,
         requirementDescription: "Reach Eternity",
-        penaltyDescription: "Replicanti speed scales harsher after 1e2000",
+        penaltyDescription: () => `Replicanti speed scales harsher after ${format(DC.E2000)}`,
         rewardDescription: "Unlock Chaos",
         rift: () => PelleRifts.chaos
       },
       ECs: {
         id: 4,
-        requirementDescription: "Reach 115 Time Theorems",
+        requirementDescription: () => `Reach ${formatInt(115)} Time Theorems`,
         penaltyDescription: "Famine IP multiplier is reduced in Eternity Challenges",
         rewardDescription: "Unlock War",
         rift: () => PelleRifts.war
@@ -206,7 +218,7 @@ GameDatabase.celestials.pelle = (function() {
       dilation: {
         id: 5,
         requirementDescription: "Dilate Time",
-        penaltyDescription: "Time Dilation is always active",
+        penaltyDescription: "Time Dilation nerfs are always active",
         rewardDescription: "Unlock Death",
         rift: () => PelleRifts.death
       }
@@ -216,8 +228,11 @@ GameDatabase.celestials.pelle = (function() {
         id: 1,
         key: "famine",
         name: "Famine",
-        description: "When active, spends 3% of your IP per second to increase Famine.",
-        effectDescription: x => `Multiplies Infinity Point gain by ${formatX(x, 2, 2)}`,
+        drainResource: "IP",
+        baseEffect: x => `IP gain ${formatX(x, 2, 2)}`,
+        additionalEffects: () => (PelleRifts.famine.hasMilestone(2)
+          ? [`EP gain ${formatX(PelleRifts.famine.milestones[2].effect(), 2, 2)}`]
+          : []),
         strike: () => PelleStrikes.infinity,
         percentage: totalFill => Math.log10(totalFill.plus(1).log10() * 10 + 1) ** 2.5 / 100,
         percentageToFill: percentage => Decimal.pow(10,
@@ -235,17 +250,16 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.04,
-            description: "You can equip a single basic Glyph with decreased level and rarity"
+            description: () => "You can equip a single basic Glyph with decreased level and rarity"
           },
           {
             requirement: 0.06,
-            description: "Make Replicanti unlock and its upgrades 1e130x cheaper, and it's uncapped"
+            description: () => `Uncap Replicanti and make its unlock and upgrades ${formatX(1e130)} cheaper`
           },
           {
             requirement: 0.4,
-            description: "Famine also affects EP gain",
+            description: () => "Famine also affects EP gain",
             effect: () => Decimal.pow(4, PelleRifts.famine.totalFill.log10() / 2 / 308 + 3),
-            formatEffect: x => formatX(x, 2, 2)
           },
         ]
       },
@@ -253,9 +267,19 @@ GameDatabase.celestials.pelle = (function() {
         id: 2,
         key: "pestilence",
         name: "Pestilence",
+        drainResource: "Replicanti",
         spendable: true,
-        description: "When active, spends 3% of your Replicanti per second to increase Pestilence.",
-        effectDescription: x => `You gain Replicanti ${formatX(x, 2, 2)} faster`,
+        baseEffect: x => `Replicanti speed ${formatX(x, 2, 2)}`,
+        additionalEffects: () => {
+          const effects = [];
+          if (PelleRifts.pestilence.hasMilestone(0)) {
+            effects.push(`1st Infinity Dimension ${formatX(PelleRifts.pestilence.milestones[0].effect(), 2, 2)}`);
+          }
+          if (PelleRifts.pestilence.hasMilestone(2)) {
+            effects.push(`Max RG count +${formatInt(PelleRifts.pestilence.milestones[2].effect())}`);
+          }
+          return effects;
+        },
         strike: () => PelleStrikes.powerGalaxies,
         // 0 - 1
         percentage: totalFill => totalFill.plus(1).log10() * 0.05 / 100,
@@ -267,25 +291,24 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.2,
-            description: "First rebuyable Pelle upgrade also powers the first Infinity Dimension",
+            description: () => "First rebuyable Pelle upgrade also affects 1st Infinity Dimension",
             effect: () => {
               const x = player.celestials.pelle.rebuyables.antimatterDimensionMult;
-              return Decimal.pow(1e50, x - 9);
+              return Decimal.pow(1e50, Math.max(x - 9, 0));
             },
-            formatEffect: x => formatX(x, 2)
           },
           {
             requirement: 0.6,
-            description: "When Replicanti amount exceeds 1e1300, your Galaxies are 10% more effective"
+            description: () => `When Replicanti exceeds ${format(DC.E1300)},
+              Galaxies are ${formatPercents(0.1)} more effective`
           },
           {
             requirement: 1,
-            description: "Increase max Replicanti Galaxies based on total Rift milestones",
+            description: () => "Increase max Replicanti Galaxies based on total Rift milestones",
             effect: () => {
               const x = PelleRifts.totalMilestones();
               return x ** 2 - 2 * x;
             },
-            formatEffect: x => `+${format(x, 2)}`
           },
         ]
       },
@@ -293,14 +316,16 @@ GameDatabase.celestials.pelle = (function() {
         id: 3,
         key: "chaos",
         name: "Chaos",
-        description: "When active, spends 3% of your Pestilence per second to increase Chaos.",
-        effectDescription: x => `Multiplies Time Dimensions by ${formatX(x, 2, 2)}`,
+        drainResource: "Pestilence",
+        baseEffect: x => `Time Dimensions ${formatX(x, 2, 2)}`,
+        additionalEffects: () => [],
         strike: () => PelleStrikes.eternity,
-        percentage: totalFill => totalFill.div(10).toNumber(),
-        percentageToFill: percentage => new Decimal(percentage).times(10),
+        percentage: totalFill => totalFill / 10,
+        percentageToFill: percentage => 10 * percentage,
         effect: totalFill => {
-          let fill = totalFill.toNumber();
-          if (totalFill.gt(6.5)) fill = (totalFill.toNumber() - 6.5) / 7 + 6.5;
+          const fill = totalFill > 6.5
+            ? (totalFill - 6.5) / 7 + 6.5
+            : totalFill;
           return Decimal.pow(6, Decimal.pow(6, Decimal.pow(6, fill / 10 + 0.1)).minus(6))
             .div(1e5)
             .plus(Decimal.pow(10, fill / 10 + 0.1));
@@ -315,45 +340,17 @@ GameDatabase.celestials.pelle = (function() {
           }
         }),
         milestones: [
-          // It's just a tad under 10% because 10% takes a crapton of time
           {
-            requirement: 0.0999,
-            description: "Pestilence effect is always maxed and milestones always active"
+            requirement: 0.09,
+            description: () => "Pestilence effect is always maxed and milestones always active"
           },
           {
             requirement: 0.15,
-            description: () => {
-              const base = "Gain a bonus based on Glyph equipped:";
-
-              switch (Pelle.activeGlyphType) {
-                case "infinity": return `${base} IP multiplier based on IP`;
-                case "time": return `${base} EP multiplier based on EP`;
-                case "replication": return `${base} Replicanti speed multiplier based on Famine`;
-                case "dilation": return `${base} Dilated Time gain multiplier based on Tachyon Galaxies`;
-                case "power": return `${base} Galaxies are 2% stronger`;
-                case "companion": return `${base} You feel 34% better`;
-
-                default: return `${base} no Glyph equipped!`;
-              }
-            },
-            effect: () => {
-              switch (Pelle.activeGlyphType) {
-                case "infinity": return player.challenge.eternity.current > 8
-                  ? 1 : Currency.infinityPoints.value.pow(0.2);
-                case "time": return Currency.eternityPoints.value.plus(1).pow(0.3);
-                case "replication": return 10 ** 53 ** (PelleRifts.famine.percentage);
-                case "dilation": return Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1);
-                case "power": return 1.02;
-                case "companion": return 1.34;
-
-                default: return new Decimal();
-              }
-            },
-            formatEffect: x => formatX(x, 2, 2)
+            description: () => "Glyphs gain a new Pelle-specific effect",
           },
           {
             requirement: 1,
-            description: "You gain 1% of your EP gained on Eternity per second",
+            description: () => `You gain ${formatPercents(0.01)} of your EP gained on Eternity per second`,
           },
         ]
       },
@@ -361,8 +358,18 @@ GameDatabase.celestials.pelle = (function() {
         id: 4,
         key: "war",
         name: "War",
-        description: "When active, spends 3% of your EP per second to increase War.",
-        effectDescription: x => `Decrease EP formula exponent divider -${format(x, 2, 2)}`,
+        drainResource: "EP",
+        baseEffect: x => `EP formula: log(x/${formatInt(308)}) ➜ log(x/${formatFloat(308 - x.toNumber(), 2)})`,
+        additionalEffects: () => {
+          const effects = [];
+          if (PelleRifts.war.hasMilestone(0)) {
+            effects.push(`Dimension Boost power ${formatX(PelleRifts.war.milestones[0].effect(), 2, 2)}`);
+          }
+          if (PelleRifts.war.hasMilestone(1)) {
+            effects.push(`Infinity Dimensions ${formatX(PelleRifts.war.milestones[1].effect())}`);
+          }
+          return effects;
+        },
         strike: () => PelleStrikes.ECs,
         percentage: totalFill => totalFill.plus(1).log10() ** 0.4 / 4000 ** 0.4,
         percentageToFill: percentage => Decimal.pow(10, percentage ** 2.5 * 4000).minus(1),
@@ -371,20 +378,18 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.10,
-            description: "Dimensional Boosts are more powerful based on EC completions",
+            description: () => "Dimensional Boosts are more powerful based on EC completions",
             effect: () => Math.max(100 * EternityChallenges.completions ** 2, 1) *
               Math.max(1e4 ** (EternityChallenges.completions - 40), 1),
-            formatEffect: x => formatX(x, 2, 2)
           },
           {
             requirement: 0.15,
-            description: "Infinity Dimensions are stronger based on EC completions",
+            description: () => "Infinity Dimensions are stronger based on EC completions",
             effect: () => Decimal.pow("1e1500", ((EternityChallenges.completions - 25) / 20) ** 1.7).max(1),
-            formatEffect: x => formatX(x)
           },
           {
             requirement: 1,
-            description: "Unlock the Galaxy Generator",
+            description: () => "Unlock the Galaxy Generator",
           },
         ]
       },
@@ -392,8 +397,11 @@ GameDatabase.celestials.pelle = (function() {
         id: 5,
         key: "death",
         name: "Death",
-        description: "When active, spends 3% of your Dilated Time per second to increase Death.",
-        effectDescription: x => `All Dimensions are raised to ${formatPow(x, 2, 3)}`,
+        drainResource: "Dilated Time",
+        baseEffect: x => `All Dimensions ${formatPow(x, 2, 3)}`,
+        additionalEffects: () => (PelleRifts.death.hasMilestone(2)
+          ? [`Infinity Power Conversion ${formatX(PelleRifts.death.milestones[2].effect(), 2, 2)}`]
+          : []),
         strike: () => PelleStrikes.dilation,
         percentage: totalFill => totalFill.plus(1).log10() / 100,
         percentageToFill: percentage => Decimal.pow10(percentage * 100).minus(1),
@@ -402,20 +410,25 @@ GameDatabase.celestials.pelle = (function() {
         milestones: [
           {
             requirement: 0.15,
-            description: "Time Dimensions 5-8 are much cheaper, unlock more Dilation upgrades"
+            description: () => "Time Dimensions 5-8 are much cheaper, unlock more dilation upgrades",
+            onComplete: () => {
+              updateTimeDimensionCosts();
+            },
+            onUncomplete: () => {
+              updateTimeDimensionCosts();
+            }
           },
           {
             requirement: 0.25,
-            description: "Raise Tachyon Particle effect to Dilated Time gain to ^1.4",
+            description: () => `Raise Tachyon Particle effect to Dilated Time gain to ${formatPow(1.4, 1, 1)}`,
           },
           {
             requirement: 0.5,
-            description: "Dilation rebuyables multiply Infinity Power conversion rate",
+            description: () => "Dilation rebuyable purchase count improves Infinity Power conversion rate",
             effect: () => Math.min(
-              1.1 ** (Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90),
+              1.1 ** Math.max(Object.values(player.dilation.rebuyables).reduce((a, b) => a + b, 0) - 90, 0),
               712
             ),
-            formatEffect: x => formatX(x, 2, 2)
           },
         ]
       }
@@ -426,7 +439,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Increase base Galaxy generation by 2`,
         _cost: x => Decimal.pow(3, x),
         _effect: x => x * 2,
-        _formatEffect: x => `${format(x * 2, 2, 2)}/s`,
+        _formatEffect: x => `${format(x, 2, 2)}/s`,
         currency: () => ({
           get value() {
             return player.galaxies + GalaxyGenerator.galaxies;
@@ -443,7 +456,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Multiply Galaxy generation`,
         _cost: x => Decimal.pow(10, x),
         _effect: x => Decimal.pow(2.5, x),
-        _formatEffect: x => `${formatX(Decimal.pow(2.5, x), 2, 1)} ➜ ${formatX(Decimal.pow(2.5, x + 1), 2, 1)}`,
+        _formatEffect: x => formatX(x, 2, 1),
         currency: () => ({
           get value() {
             return player.galaxies + GalaxyGenerator.galaxies;
@@ -460,7 +473,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Multiply Galaxy generation`,
         _cost: x => Decimal.pow("1e100000000", 10 ** x),
         _effect: x => Decimal.pow(2, x),
-        _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
+        _formatEffect: x => formatX(x, 2),
         currency: () => Currency.antimatter,
         currencyLabel: "Antimatter"
       }),
@@ -469,7 +482,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Multiply Galaxy generation`,
         _cost: x => Decimal.pow("1e2000000", 100 ** x),
         _effect: x => Decimal.pow(2, x),
-        _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
+        _formatEffect: x => formatX(x, 2),
         currency: () => Currency.infinityPoints,
         currencyLabel: "Infinity Point"
       }),
@@ -478,7 +491,7 @@ GameDatabase.celestials.pelle = (function() {
         description: `Multiply Galaxy generation`,
         _cost: x => Decimal.pow("1e10000", 1000 ** x),
         _effect: x => Decimal.pow(2, x),
-        _formatEffect: x => `${formatX(Decimal.pow(2, x), 2)} ➜ ${formatX(Decimal.pow(2, x + 1), 2)}`,
+        _formatEffect: x => formatX(x, 2),
         currency: () => Currency.eternityPoints,
         currencyLabel: "Eternity Point"
       }),

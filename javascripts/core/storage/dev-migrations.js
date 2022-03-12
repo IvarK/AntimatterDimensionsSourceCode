@@ -1192,6 +1192,78 @@ GameStorage.devMigrations = {
       };
       delete player.options.showCondenseToMilestone;
     },
+    player => {
+      // This is just an empty patch because some orders got really messed up. Sorry -Scar
+    },
+    player => {
+      player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => ({ glyphs, name: "" }));
+    },
+    player => {
+      // Remove any accidental recursion that may have been introduced by the above patch
+      while (!Array.isArray(player.reality.glyphs.sets[0].glyphs)) {
+        player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => (glyphs.glyphs));
+      }
+    },
+    player => {
+      // For saves before cel7 existed, it will first add this prop (as a number) and then run this migration code. For
+      // saves which are already in cel7, this prop will already exist as a Decimal. This workaround handles both cases
+      player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
+
+      delete player.celestials.pelle.compact;
+      player.celestials.pelle.collapsed = {
+        upgrades: false,
+        rifts: false,
+        galaxies: false
+      };
+      player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      if (player.celestials.pelle.doomed) player.achievementBits[17] |= 1;
+      // eslint-disable-next-line no-bitwise
+      if (player.celestials.pelle.upgrades.has(4)) player.achievementBits[17] |= 2;
+      if (player.celestials.pelle.doomed && player.challenge.infinity.completedBits === 510) {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] |= (1 << 2);
+      }
+      // eslint-disable-next-line no-bitwise
+      if (player.timestudy.studies.compact().includes(181)) player.achievementBits[17] |= (1 << 5);
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] |= (player.achievementBits[16] & (1 << 4)) << 3;
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] &= ~(1 << 4);
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] |= (player.achievementBits[16] & (1 << 2)) << 2;
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[16] &= ~(1 << 2);
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      player.achievementBits[17] &= ~(1 << 5);
+      if (player.timestudy.studies.compact().includes(181) && player.celestials.pelle.doomed) {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] |= (1 << 5);
+      }
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      if (player.celestials.pelle.doomed && (player.challenge.infinity.completedBits & (1 << 5)) !== 0) {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] |= (1 << 2);
+      } else {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] &= ~(1 << 2);
+      }
+    },
+    player => {
+      player.celestials.pelle.collapsed = player.celestials.collapsed;
+      player.celestials.pelle.showBought = player.celestials.showBought;
+      delete player.celestials.collapsed;
+      delete player.celestials.showBought;
+    },
+    GameStorage.migrations.infMultNameConversion,
   ],
 
   patch(player) {

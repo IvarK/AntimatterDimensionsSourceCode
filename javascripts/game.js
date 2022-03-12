@@ -86,10 +86,12 @@ export function gainedInfinityPoints() {
   const mult = NG.multiplier;
   const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
-    const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
-      ? PelleRifts.chaos.milestones[1].effect() : 1;
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine).times(pelleMults).times(mult).pow(pow).floor();
+      .timesEffectsOf(PelleRifts.famine)
+      .times(Pelle.specialGlyphEffect.infinity)
+      .times(mult)
+      .pow(pow)
+      .floor();
   }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
@@ -134,8 +136,7 @@ export function gainedEternityPoints() {
     gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   ep = ep.times(NG.multiplier);
-  let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
-    ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);
+  let pelleMults = Pelle.specialGlyphEffect.time;
 
   if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
 
@@ -157,6 +158,13 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
+  let pelleMults = Pelle.specialGlyphEffect.time;
+
+  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
+
+  if (Pelle.isDoomed) return Decimal.pow10(308 * (Decimal.log(pelleMults.dividedBy(epAmount).reciprocal(), 5) + 0.7))
+    .clampMin(Number.MAX_VALUE);
+
   return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
@@ -428,7 +436,7 @@ export function gameLoop(passDiff, options = {}) {
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
   if (AlchemyResource.momentum.isUnlocked) {
-    player.celestials.ra.momentumTime += realDiff * Achievement(173).effectOrDefault(1);
+    player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
   }
 
   // Lai'tela mechanics should bypass stored real time entirely
@@ -513,6 +521,7 @@ export function gameLoop(passDiff, options = {}) {
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
+  player.records.realTimeDoomed += realDiff;
   player.records.realTimePlayed += realDiff;
   player.records.totalTimePlayed += diff;
   player.records.thisInfinity.realTime += realDiff;
@@ -966,6 +975,12 @@ export function simulateTime(seconds, real, fast) {
       };
     }
   }
+  const oldLoopFn = loopFn;
+  loopFn = i => {
+    Pelle.addAdditionalEnd = false;
+    oldLoopFn(i);
+    Pelle.addAdditionalEnd = true;
+  };
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {

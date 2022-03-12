@@ -22,6 +22,7 @@ export default {
   },
   data() {
     return {
+      isUseless: false,
       isAvailableForPurchase: false,
       automatorPoints: false,
       canBeBought: false,
@@ -38,7 +39,8 @@ export default {
     },
     classObject() {
       return {
-        "c-reality-upgrade-btn--bought": this.isBought,
+        "c-reality-upgrade-btn--useless": this.isUseless,
+        "c-reality-upgrade-btn--bought": this.isBought && !this.isUseless,
         "c-reality-upgrade-btn--unavailable": !this.isBought && !this.canBeBought && this.isAvailableForPurchase,
         "c-reality-upgrade-btn--possible": !this.isAvailableForPurchase && this.isPossible,
         "c-reality-upgrade-btn--locked": !this.isAvailableForPurchase && !this.isPossible,
@@ -66,6 +68,7 @@ export default {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC);
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
+      this.isUseless = Pelle.disabledRUPGs.includes(upgrade.id) && Pelle.isDoomed;
     }
   }
 };
@@ -84,24 +87,33 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <DescriptionDisplay :config="config" />
-      <DescriptionDisplay
-        v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
-        :config="requirementConfig"
-        label="Requirement:"
-        class="c-reality-upgrade-btn__requirement"
-      />
-      <template v-else>
-        <EffectDisplay :config="config" />
-        <CostDisplay
-          v-if="!isBought"
-          :config="config"
-          name="Reality Machine"
+      <span v-if="isUseless">
+        This upgrade has no effect while in Doomed
+      </span>
+      <span v-else>
+        <DescriptionDisplay :config="config" />
+        <DescriptionDisplay
+          v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
+          :config="requirementConfig"
+          label="Requirement:"
+          class="c-reality-upgrade-btn__requirement"
         />
-      </template>
-      <b v-if="automatorPoints && !isBought">
-        (+{{ formatInt(automatorPoints) }} AP)
-      </b>
+        <template v-else>
+          <EffectDisplay
+            :config="config"
+            br
+          />
+          <CostDisplay
+            v-if="!isBought"
+            :config="config"
+            br
+            name="Reality Machine"
+          />
+        </template>
+        <b v-if="automatorPoints && !isBought">
+          (+{{ formatInt(automatorPoints) }} AP)
+        </b>
+      </span>
     </button>
     <PrimaryToggleButton
       v-if="isRebuyable && isAutoUnlocked"

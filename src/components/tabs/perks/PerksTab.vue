@@ -126,8 +126,10 @@ export const PerkNetwork = {
       id: perk.id,
       label: perk.config.label,
       shape: perk.config.automatorPoints ? "diamond" : "dot",
-      title: `${perk.config.description}
-        ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`,
+      title: `${Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id)
+        ? "This perk has no effect while in Doomed"
+        : perk.config.description}
+      ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`,
       x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
       y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));
@@ -216,12 +218,30 @@ export const PerkNetwork = {
     const perkColorList = this.perkColorList;
 
     function nodeColor(perk) {
-      const canBeBought = perk.canBeBought;
-      const isBought = perk.isBought;
-
       const perkColor = perkColorList[perk.config.family];
       const primaryColor = perkColor.primary;
       const secondaryColor = perkColor.secondary;
+
+      const pelleUseless = Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
+      if (pelleUseless) {
+        const backgroundColor = "#00bcd4";
+        const hoverColor = "crimson";
+        const borderColor = secondaryColor;
+        return {
+          background: backgroundColor,
+          border: borderColor,
+          hover: {
+            background: hoverColor,
+            border: borderColor
+          },
+          highlight: {
+            background: backgroundColor,
+            border: borderColor
+          }
+        };
+      }
+      const canBeBought = perk.canBeBought;
+      const isBought = perk.isBought;
 
       let backgroundColor;
       if (canBeBought) {
@@ -232,7 +252,7 @@ export const PerkNetwork = {
       else backgroundColor = "#CCCCCC";
 
       const hoverColor = canBeBought || isBought ? primaryColor : "#656565";
-      const borderColor = `${secondaryColor}`;
+      const borderColor = secondaryColor;
 
       return {
         background: backgroundColor,

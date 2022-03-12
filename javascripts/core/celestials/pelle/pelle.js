@@ -1,7 +1,9 @@
+import { DC } from "../../constants";
 import { Currency } from "../../currency";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { GameMechanicState, SetPurchasableMechanicState } from "../../utils";
 import zalgo from "./zalgo";
+import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -47,8 +49,12 @@ const disabledMechanicUnlocks = {
 };
 
 export const Pelle = {
+  get displayName() {
+    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
+  },
 
   additionalEnd: 0,
+  addAdditionalEnd: true,
 
   get endState() {
     return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
@@ -85,20 +91,31 @@ export const Pelle = {
 
   armageddon(gainStuff) {
     if (!this.canArmageddon && gainStuff) return;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_BEFORE, gainStuff);
     if (gainStuff) {
       this.cel.remnants += this.remnantsGain;
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.armageddonDuration = 0;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 
   gameLoop(diff) {
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
+      const milestoneStates =
+        PelleRifts.all.mapToObject(x => x.config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1) this.additionalEnd += diff / 1000 / 20;
+      for (const riftKey in milestoneStates) {
+        const rift = PelleRifts[riftKey];
+        for (const milestoneIdx in rift.milestones) {
+          const previousMilestoneState = milestoneStates[riftKey][milestoneIdx];
+          rift.updateMilestones(milestoneIdx, previousMilestoneState);
+        }
+      }
+      if (this.endState >= 1 && Pelle.addAdditionalEnd) this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   },
 
@@ -122,9 +139,83 @@ export const Pelle = {
     return ["passiveGen", "ipMult", "infinitiedGeneration"];
   },
 
-  // TS33 only gets useless with PelleUpgrade.replicantiGalaxyNoReset
   get uselessTimeStudies() {
-    return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    const uselessTimeStudies = [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) uselessTimeStudies.push(33);
+    return uselessTimeStudies;
+  },
+
+  get disabledRUPGs() {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 20, 22, 23, 24];
+  },
+
+  get uselessPerks() {
+    return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106];
+  },
+
+  // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
+  // that this field is NEGATED, describing an effect allowlist instead of a blocklist, as most of the effects are
+  // already disabled by virtue of the glyph type being unequippable and many of the remaining ones are also disabled.
+  get enabledGlyphEffects() {
+    return ["timepow", "timespeed", "timeshardpow",
+      "dilationpow", "dilationgalaxyThreshold",
+      "replicationpow",
+      "powerpow", "powermult", "powerdimboost", "powerbuy10",
+      "infinitypow", "infinityrate",
+      "companiondescription", "companionEP"];
+  },
+
+  get specialGlyphEffect() {
+    const isUnlocked = this.isDoomed && PelleRifts.chaos.hasMilestone(1);
+    let description;
+    switch (Pelle.activeGlyphType) {
+      case "infinity":
+        description = "Infinity Point gain {value} (based on current IP)";
+        break;
+      case "time":
+        description = "Eternity Point gain {value} (based on current EP)";
+        break;
+      case "replication":
+        description = "Replication speed {value} (based on Famine)";
+        break;
+      case "dilation":
+        description = "Dilated Time gain {value} (based on Tachyon Galaxies)";
+        break;
+      case "power":
+        description = `Galaxies are ${formatPercents(0.02)} stronger`;
+        break;
+      case "companion":
+        description = `You feel ${formatPercents(0.34)} better`;
+        break;
+      default:
+        description = "No glyph equipped!";
+        break;
+    }
+    const isActive = type => isUnlocked && this.activeGlyphType === type;
+    return {
+      isUnlocked,
+      description,
+      infinity: (isActive("infinity") && player.challenge.eternity.current <= 8)
+        ? Currency.infinityPoints.value.pow(0.2)
+        : DC.D1,
+      time: isActive("time")
+        ? Currency.eternityPoints.value.plus(1).pow(0.3)
+        : DC.D1,
+      replication: isActive("replication")
+        ? 10 ** 53 ** (PelleRifts.famine.percentage)
+        : 1,
+      dilation: isActive("dilation")
+        ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
+        : DC.D1,
+      power: isActive("power")
+        ? 1.02
+        : 1,
+      companion: isActive("companion")
+        ? 1.34
+        : 1,
+      isScaling: () => ["infinity", "time", "replication", "dilation"].includes(this.activeGlyphType),
+    };
   },
 
   get uselessRaMilestones() {
@@ -169,8 +260,17 @@ export const Pelle = {
     return this.realityShardGain(this.remnantsGain + this.cel.remnants);
   },
 
+  // Calculations assume this is in units of proportion per second (eg. 0.03 is 3% drain per second)
+  get riftDrainPercent() {
+    return 0.03;
+  },
+
   get glyphMaxLevel() {
     return PelleRebuyableUpgrade.glyphLevels.effectValue;
+  },
+
+  get glyphStrength() {
+    return 1;
   },
 
   antimatterDimensionMult(x) {
@@ -179,6 +279,10 @@ export const Pelle = {
 
   get activeGlyphType() {
     return Glyphs.active.filter(Boolean)[0]?.type;
+  },
+
+  get hasGalaxyGenerator() {
+    return player.celestials.pelle.galaxyGenerator.unlocked;
   },
 
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
@@ -201,7 +305,121 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
+  endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye".split(" "),
+
+  symbol: "♅",
+
+  modalTools: {
+    bracketOrder: ["()", "[]", "{}", "<>", "||"],
+    wordCycle(x) {
+      const list = x.split("-");
+      const len = list.length;
+      const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
+      const tick = Math.floor(Date.now() / 200) % (len * 5);
+      const largeTick = Math.floor(tick / 5);
+      const bP = this.bracketOrder[largeTick];
+      let v = list[largeTick];
+      if (tick % 5 < 1 || tick % 5 > 3) {
+        v = this.randomCrossWords(v);
+      }
+      // Stands for Bracket Pair.
+      const space = (maxWordLen - v.length) / 2;
+      return bP[0] + ".".repeat(Math.floor(space)) + v + ".".repeat(Math.ceil(space)) + bP[1];
+    },
+    randomCrossWords(str) {
+      const x = str.split("");
+      for (let i = 0; i < x.length / 1.7; i++) {
+        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) % 964372 + i) * x.length);
+        // .splice should return the deleted index.
+        x[randomIndex] = this.randomSymbol;
+      }
+      return x.join("");
+    },
+    predictableRandom(x) {
+      let start = Math.pow(x % 97, 4.3) * 232344573;
+      const a = 15485863;
+      const b = 521791;
+      start = (start * a) % b;
+      for (let i = 0; i < (x * x) % 90 + 90; i++) {
+        start = (start * a) % b;
+      }
+      return start / b;
+    },
+    celCycle(x) {
+      //                                   Gets trailing number and removes it
+      const cels = x.split("-").map(cel => [parseInt(cel, 10), cel.replace(/\d+/u, "")]);
+      const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
+      let tick = (Date.now() / 100) % totalTime;
+      let index = -1;
+      while (tick >= 0 && index < cels.length - 1) {
+        index++;
+        tick -= cels[index][0];
+      }
+      return `<!${cels[index][1]}!>`;
+    },
+    get randomSymbol() {
+      return String.fromCharCode(Math.floor(Math.random() * 50) + 192);
+    }
+  },
+  quotes: new CelestialQuotes("pelle", (function() {
+    const wc = function(x) {
+      return Pelle.modalTools.wordCycle.bind(Pelle.modalTools)(x);
+    };
+    const cc = function(x) {
+      return Pelle.modalTools.celCycle.bind(Pelle.modalTools)(x);
+    };
+    const p = function(line) {
+      if (!line.includes("[") && !line.includes("<")) return line;
+
+      const sep = "  ---TEMPSEPERATOR---  ";
+      const ops = [];
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === "[") ops.push(wc);
+        else if (line[i] === "<") ops.push(cc);
+      }
+      let l = line.replace("[", sep).replace("]", sep);
+      l = l.replace("<", sep).replace(">", sep).split(sep);
+      return () => l.map((v, x) => ((x % 2) ? ops[x / 2 - 0.5](v) : v)).join("");
+    };
+
+    const quotesObject = {};
+    let iterator = 0;
+    for (const i in GameDatabase.celestials.pelle.quotes) {
+      iterator++;
+      quotesObject[i] = {
+        id: iterator,
+        lines: GameDatabase.celestials.pelle.quotes[i].map(x => p(x))
+      };
+    }
+    return quotesObject;
+  }())),
+  hasQuote(x) {
+    return player.celestials.pelle.quotes.includes(x);
+  },
 };
+
+EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
+  if (Currency.remnants.gte(1)) {
+    Pelle.quotes.show(Pelle.quotes.ARM);
+  }
+});
+EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
+  if (PelleStrikes.infinity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_1);
+  }
+  if (PelleStrikes.powerGalaxies.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_2);
+  }
+  if (PelleStrikes.eternity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_3);
+  }
+  if (PelleStrikes.ECs.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_4);
+  }
+  if (PelleStrikes.dilation.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_5);
+  }
+});
 
 export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
@@ -330,15 +548,18 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   get requirement() {
-    return this._config.requirementDescription;
+    const x = this._config.requirementDescription;
+    return typeof x === "function" ? x() : x;
   }
 
   get penalty() {
-    return this._config.penaltyDescription;
+    const x = this._config.penaltyDescription;
+    return typeof x === "function" ? x() : x;
   }
 
   get reward() {
-    return this._config.rewardDescription;
+    const x = this._config.rewardDescription;
+    return typeof x === "function" ? x() : x;
   }
 
   get rift() {
@@ -358,9 +579,12 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   unlockStrike() {
-    GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
+    GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
+    player.celestials.pelle.collapsed.rifts = false;
+    Tab.celestials.pelle.show();
     // eslint-disable-next-line no-bitwise
     player.celestials.pelle.progressBits |= (1 << this.id);
+    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
 }
 
@@ -439,8 +663,14 @@ class RiftState extends GameMechanicState {
     return this.config.description;
   }
 
-  get effectDescription() {
-    return this.config.effectDescription(this.effectValue);
+  get drainResource() {
+    return this.config.drainResource;
+  }
+
+  get effects() {
+    let effects = [this.config.baseEffect(this.effectValue)];
+    effects = effects.concat(this.config.additionalEffects());
+    return effects;
   }
 
   get isCustomEffect() { return true; }
@@ -462,6 +692,15 @@ class RiftState extends GameMechanicState {
     return this.milestones[idx].requirement <= this.percentage;
   }
 
+  updateMilestones(idx, previousState) {
+    const currentState = this.hasMilestone(idx);
+    if (previousState && !currentState) {
+      this.milestones[idx].onUncomplete?.();
+    } else if (currentState && !previousState) {
+      this.milestones[idx].onComplete?.();
+    }
+  }
+
   toggle() {
     const active = PelleRifts.all.filter(r => r.isActive).length;
     if (!this.isActive && active === 2) GameUI.notify.error(`You can only have 2 rifts active at the same time!`);
@@ -469,19 +708,30 @@ class RiftState extends GameMechanicState {
   }
 
   fill(diff) {
+    // The UI removes the fill button after 100%, so we need to turn it off here
+    if (this.isActive && this.isMaxed) {
+      this.rift.active = false;
+      return;
+    }
     if (!this.isActive || this.isMaxed) return;
 
     if (this.fillCurrency.value instanceof Decimal) {
-      const afterTickAmount = this.fillCurrency.value.times(0.97 ** (diff / 1000));
+      // Don't drain resources if you only have 1 of it.
+      // This is in place due to the fix to replicanti below.
+      if (this.fillCurrency.value.lte(1)) return;
+      const afterTickAmount = this.fillCurrency.value.times((1 - Pelle.riftDrainPercent) ** (diff / 1000));
       const spent = this.fillCurrency.value.minus(afterTickAmount);
-      this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(0);
+      // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline
+      // time can cause it to drain to 0, where it gets stuck unless you reset it with some prestige
+      this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(1);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     } else {
-      const afterTickAmount = this.fillCurrency.value * 0.97 ** (diff / 1000);
+      const afterTickAmount = this.fillCurrency.value * (1 - Pelle.riftDrainPercent) ** (diff / 1000);
       const spent = this.fillCurrency.value - afterTickAmount;
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
-      this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
+      this.totalFill = Math.clampMax(this.totalFill + spent, this.maxValue);
     }
+    if (PelleRifts.famine.hasMilestone(0)) Glyphs.refreshActive();
   }
 }
 

@@ -45,7 +45,7 @@ export default {
     <br>
     Diamond-shaped perks also give Automator Points.
     <br>
-    <div>
+    <div class="perk-settings">
       <PrimaryToggleButton
         v-model="fixedLoadPos"
         class="o-primary-btn"
@@ -71,5 +71,7 @@ export default {
 </template>
 
 <style scoped>
-
+  .perk-settings > button {
+    margin-right: 1rem;
+  }
 </style>

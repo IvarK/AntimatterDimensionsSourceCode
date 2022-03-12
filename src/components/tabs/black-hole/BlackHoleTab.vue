@@ -1,6 +1,5 @@
 <script>
 import { BlackHoleAnimation } from "./black-hole-animation.js";
-import BlackHoleUnlockButton from "./BlackHoleUnlockButton";
 import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
 import BlackHoleStateRow from "./BlackHoleStateRow";
 import BlackHoleChargingSliders from "./BlackHoleChargingSliders";
@@ -8,13 +7,13 @@ import BlackHoleChargingSliders from "./BlackHoleChargingSliders";
 export default {
   name: "BlackHoleTab",
   components: {
-    BlackHoleUnlockButton,
     BlackHoleUpgradeRow,
     BlackHoleStateRow,
-    BlackHoleChargingSliders
+    BlackHoleChargingSliders,
   },
   data() {
     return {
+      isDoomed: false,
       isUnlocked: false,
       isPaused: false,
       isEnslaved: false,
@@ -48,6 +47,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
@@ -131,20 +131,17 @@ export default {
     gridStyle() {
       return this.isPermanent ? "l-black-hole-upgrade-permanent" : "l-black-hole-upgrade-grid";
     },
-  }
+  },
 };
 </script>
 
 <template>
   <div class="l-black-hole-tab">
-    <div v-if="isEnslaved">
+    <div v-if="isEnslaved || isDoomed">
       The physics of this Reality do not allow the existence of Black Holes.
     </div>
-    <div
-      v-else-if="!isUnlocked"
-      style="display: flex; flex-direction: column; align-items: center;"
-    >
-      <BlackHoleUnlockButton @blackholeunlock="startAnimation" />
+    <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
+      <black-hole-unlock-button @blackholeunlock="startAnimation" />
       The Black Hole makes the entire game run significantly faster for a short period of time.
       <br>
       Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.

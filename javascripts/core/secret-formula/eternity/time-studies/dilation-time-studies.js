@@ -45,7 +45,9 @@ GameDatabase.eternity.timeStudies.dilation = [
   },
   {
     id: 6,
-    description: "Unlock Reality",
+    description: () => (Pelle.isDoomed
+      ? "You cannot escape a Doomed Reality"
+      : "Unlock Reality"),
     cost: () => 1,
     requirement: () => TimeStudy.timeDimension(8).isBought &&
       player.records.thisReality.maxEP.exponent >= 4000 &&

@@ -18,7 +18,7 @@ export function getTickSpeedMultiplier() {
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies *= 1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies + GalaxyGenerator.galaxies;
+  let galaxies = Math.max(player.galaxies + replicantiGalaxies + freeGalaxies + GalaxyGenerator.galaxies, 0);
   if (galaxies < 3) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages
@@ -37,7 +37,7 @@ export function getTickSpeedMultiplier() {
       TimeStudy(212),
       TimeStudy(232),
       Achievement(86),
-      Achievement(175),
+      Achievement(178),
       InfinityChallenge(5).reward,
       PelleRebuyableUpgrade.galaxyPower
     );
@@ -46,9 +46,7 @@ export function getTickSpeedMultiplier() {
       galaxies *= 1.1;
     }
 
-    if (Pelle.activeGlyphType === "power" && PelleRifts.chaos.hasMilestone(1)) {
-      galaxies *= PelleRifts.chaos.milestones[1].effect();
-    }
+    galaxies *= Pelle.specialGlyphEffect.power;
     return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
   }
   let baseMultiplier = 0.8;
@@ -61,7 +59,7 @@ export function getTickSpeedMultiplier() {
     TimeStudy(212),
     TimeStudy(232),
     Achievement(86),
-    Achievement(175),
+    Achievement(178),
     InfinityChallenge(5).reward,
     PelleRebuyableUpgrade.galaxyPower
   );
@@ -73,9 +71,7 @@ export function getTickSpeedMultiplier() {
     galaxies *= 1.1;
   }
 
-  if (Pelle.activeGlyphType === "power" && PelleRifts.chaos.hasMilestone(1)) {
-    galaxies *= PelleRifts.chaos.milestones[1].effect();
-  }
+  galaxies *= Pelle.specialGlyphEffect.power;
   const perGalaxy = DC.D0_965;
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }

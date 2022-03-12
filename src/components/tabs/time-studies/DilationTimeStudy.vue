@@ -46,7 +46,7 @@ export default {
         this.maxTT.copyFrom(Currency.timeTheorems.max);
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought || Pelle.isDoomed;
       }
-      if (this.id === 6) {
+      if (this.id === 6 && !Pelle.isDoomed) {
         this.showRequirement = true;
       }
     }

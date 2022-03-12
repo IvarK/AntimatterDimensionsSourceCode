@@ -21,10 +21,10 @@ export default {
   },
   methods: {
     update() {
-      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.modalConfig.glyphSetId]);
+      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.modalConfig.glyphSetId].glyphs);
     },
     handleYesClick() {
-      player.reality.glyphs.sets[this.modalConfig.glyphSetId] = [];
+      player.reality.glyphs.sets[this.modalConfig.glyphSetId].glyphs = [];
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
   },

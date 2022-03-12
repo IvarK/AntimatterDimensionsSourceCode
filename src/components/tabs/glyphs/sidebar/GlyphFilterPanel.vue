@@ -238,12 +238,13 @@ export default {
         v-for="type in glyphTypes"
         :key="type.id"
         class="l-glyph-sacrifice-options__rarity-slider-div"
-        @click="bumpRarity(type.id)"
       >
-        <GlyphComponent
-          :glyph="{type: type.id, strength: strengthThreshold(type.id) }"
-          v-bind="glyphIconProps"
-        />
+        <span @click="bumpRarity(type.id)">
+          <GlyphComponent
+            :glyph="{type: type.id, strength: strengthThreshold(type.id) }"
+            v-bind="glyphIconProps"
+          />
+        </span>
         <SliderComponent
           v-bind="raritySliderProps"
           :value="rarityThresholds[type.id]"

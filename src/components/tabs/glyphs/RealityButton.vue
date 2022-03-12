@@ -3,6 +3,7 @@ export default {
   name: "RealityButton",
   data() {
     return {
+      isDoomed: false,
       canReality: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(),
@@ -63,8 +64,9 @@ export default {
         : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
     },
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.hasRealityStudy = TimeStudy.reality.isBought;
-      this.canReality = isRealityAvailable();
+      this.canReality = isRealityAvailable() && !this.isDoomed;
       if (!this.canReality) {
         this.shardsGained = 0;
         return;
@@ -142,7 +144,10 @@ export default {
       @click="handleClick"
     >
       <div class="l-reality-button__contents">
-        <template v-if="canReality">
+        <template v-if="isDoomed">
+          <div>You cannot escape a Doomed Reality</div>
+        </template>
+        <template v-else-if="canReality">
           <div class="c-reality-button__header">
             Make a new Reality
           </div>
@@ -166,8 +171,8 @@ export default {
             {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/s)
           </div>
           <div
-            v-for="(celestialInfo, i) in celestialRunText"
-            :key="i"
+            v-for="celestialInfo in celestialRunText"
+            :key="celestialInfo"
           >
             <span v-if="celestialInfo[0]">
               {{ celestialInfo[1] }}

@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       achievementPower: 0,
       achTPEffect: 0,
       achCountdown: 0,
@@ -69,6 +70,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       const gameSpeedupFactor = getGameSpeedupFactor();
       this.achievementPower = Achievements.power;
       this.achTPEffect = RealityUpgrade(8).config.effect();
@@ -140,8 +142,13 @@ export default {
       />
     </div>
     <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">
-      Your Achievements provide a multiplier to<SwapAchievementImagesButton />
-      <div v-html="boostText" />
+      <span v-if="isDoomed">
+        All Achievement multipliers have been disabled<SwapAchievementImagesButton />
+      </span>
+      <span v-else>
+        Achievements provide a multiplier to<SwapAchievementImagesButton />
+        <div v-html="boostText" />
+      </span>
     </div>
     <div
       v-if="showAutoAchieve"

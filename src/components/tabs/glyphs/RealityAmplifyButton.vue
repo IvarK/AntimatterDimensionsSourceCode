@@ -2,6 +2,7 @@
 export default {
   name: "RealityAmplifyButton",
   data: () => ({
+    isDoomed: false,
     isVisible: false,
     isDisabled: false,
     isActive: false,
@@ -10,6 +11,7 @@ export default {
   }),
   computed: {
     tooltip() {
+      if (this.isDoomed) return "You cannot amplify a Doomed Reality";
       if (this.isDisabled) return "You cannot amplify Celestial Realities";
       if (!this.canAmplify) {
         return "Store more or complete the Reality faster to amplify";
@@ -19,11 +21,12 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.isVisible = Enslaved.isUnlocked;
       this.isDisabled = isInCelestialReality();
       this.isActive = Enslaved.boostReality;
       this.ratio = Enslaved.realityBoostRatio;
-      this.canAmplify = !this.isDisabled && this.ratio > 1;
+      this.canAmplify = !this.isDisabled && this.ratio > 1 && !this.isDoomed;
     },
     toggleActive() {
       if (!this.canAmplify) return;
@@ -41,7 +44,10 @@ export default {
       :ach-tooltip="tooltip"
       @click="toggleActive"
     >
-      <div v-if="canAmplify">
+      <div v-if="isDoomed">
+        You cannot amplify Doomed Realities.
+      </div>
+      <div v-else-if="canAmplify">
         <span v-if="isActive">Will be amplified:</span>
         <span v-else>Amplify this Reality:</span>
         <br>

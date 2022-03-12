@@ -9,6 +9,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       anySacrifices: false,
       hasDragover: false,
       hasAlteration: false,
@@ -34,6 +35,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] && player.reality.glyphs.sac[e] !== 0);
       this.hasAlteration = Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
       this.hideAlteration = player.options.hideAlterationEffects;
@@ -86,8 +88,11 @@ export default {
     @drop="drop"
   >
     <div class="l-sacrificed-glyphs__help">
-      <div>Drag Glyphs here or shift-click to Sacrifice.</div>
-      <div>The confirmation can be disabled in Options or by holding Ctrl.</div>
+      <span v-if="isDoomed">You cannot sacrifice Glyphs while in Doomed.</span>
+      <span v-else>
+        <div>Drag Glyphs here or shift-click to Sacrifice.</div>
+        <div>The confirmation can be disabled in Options or by holding Ctrl.</div>
+      </span>
     </div>
     <div v-if="hasAlteration">
       <span @click="toggleAlteration">

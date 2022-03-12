@@ -154,7 +154,7 @@ export function initializeResourcesAfterEternity() {
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.infMult = 0;
+  player.IPMultPurchases = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   player.records.thisEternity.time = 0;
@@ -249,7 +249,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get isAffordable() {
-    return Currency.eternityPoints.gte(this.cost);
+    return !Pelle.isDoomed && Currency.eternityPoints.gte(this.cost);
   }
 
   get cost() {
@@ -286,6 +286,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   buyMax() {
+    if (!this.isAffordable) return false;
     const bulk = bulkBuyBinarySearch(Currency.eternityPoints.value, {
       costFunction: this.costAfterCount,
       cumulative: true,

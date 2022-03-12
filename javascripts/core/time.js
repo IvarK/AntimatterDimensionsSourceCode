@@ -78,6 +78,19 @@ export const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get realTimeDoomed() {
+    return this.fromMilliseconds(() => player.records.realTimeDoomed);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set realTimeDoomed(timespan) {
+    this.toMilliseconds(timespan, value => player.records.realTimeDoomed = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get realTimePlayed() {
     return this.fromMilliseconds(() => player.records.realTimePlayed);
   },

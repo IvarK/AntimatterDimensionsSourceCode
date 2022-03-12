@@ -201,7 +201,8 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.antimatter = value;
-    player.records.totalAntimatter = player.records.totalAntimatter.max(value);
+    // Total antimatter should always be increased, while maxAM should only be increased to value if greater
+    player.records.totalAntimatter = player.records.totalAntimatter.add(value);
     player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
     player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
     player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);
@@ -386,10 +387,13 @@ Currency.realities = new class extends NumberCurrency {
 
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
-  set value(value) { player.reality.realityMachines = value; }
-  add(amount) {
-    super.add(amount);
-    player.reality.realityMachines = player.reality.realityMachines.clampMax(MachineHandler.hardcapRM);
+  set value(value) {
+    const cappedValue = Decimal.max(value, MachineHandler.hardcapRM);
+    player.reality.realityMachines = cappedValue;
+    if (player.records.bestReality.RM.lt(cappedValue)) {
+      player.records.bestReality.RM = cappedValue;
+      player.records.bestReality.RMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    }
   }
 }();
 
@@ -452,4 +456,3 @@ Currency.replicanti = new class extends DecimalCurrency {
   get value() { return player.replicanti.amount; }
   set value(value) { player.replicanti.amount = value; }
 }();
-

@@ -12,7 +12,7 @@ export default {
     },
     message() {
       return `Dilating time will start a new Eternity, and all Dimension multiplier's exponents and
-        Tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
+        tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
         your Tachyon Particles will be set to a value based on your highest antimatter while Dilated and any
         Tachyon Particle multipliers you have. Your Tachyon Particle count will never decrease.`;
     },
@@ -37,6 +37,7 @@ export default {
       } else {
         startDilatedEternity();
       }
+      if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
     },
   },
 };

@@ -3,7 +3,8 @@ import { GameDatabase } from "../game-database.js";
 GameDatabase.eternity.milestones = {
   autobuyerIPMult: {
     eternities: 1,
-    reward: "Unlock the Infinity Point multiplier autobuyer"
+    reward: "Unlock the Infinity Point multiplier autobuyer",
+    pelleUseless: true
   },
   keepAutobuyers: {
     eternities: 2,
@@ -54,6 +55,7 @@ GameDatabase.eternity.milestones = {
   unlockReplicanti: {
     eternities: 10,
     reward: "You start with Replicanti unlocked",
+    pelleObsolete: () => PelleUpgrade.replicantiStayUnlocked.isBought,
   },
   autobuyerID1: {
     eternities: 11,

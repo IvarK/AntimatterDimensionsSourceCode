@@ -51,13 +51,14 @@ export default {
 
 <style scoped>
 .c-armageddon-button {
+  width: 100%;
   padding: 1.5rem;
   display: block;
   font-family: Typewriter;
   background: var(--color-prestige--accent);
   border: 1px solid var(--color-pelle--base);
   color: var(--color-text);
-  border-radius: 5px;
+  border-radius: 0.5rem;
 }
 
 .c-armageddon-button:hover {

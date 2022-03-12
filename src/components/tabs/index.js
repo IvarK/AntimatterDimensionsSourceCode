@@ -17,6 +17,7 @@ import EffarigTab from "./celestial-effarig/EffarigTab";
 import EnslavedTab from "./celestial-enslaved/EnslavedTab";
 import VTab from "./celestial-v/VTab";
 import RaTab from "./celestial-ra/RaTab";
+import AlchemyTab from "./glyph-alchemy/AlchemyTab";
 import LaitelaTab from "./celestial-laitela/LaitelaTab";
 import PelleTab from "./celestial-pelle/PelleTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
@@ -51,6 +52,7 @@ const TabComponents = {
   EnslavedTab,
   VTab,
   RaTab,
+  AlchemyTab,
   LaitelaTab,
   PelleTab,
   AutobuyersTab,

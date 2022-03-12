@@ -35,7 +35,7 @@ export default {
     shortcutNames() {
       return shortcuts.map(x => x.name);
     },
-    shortcutkeys() {
+    shortcutKeys() {
       return shortcuts.map(x => x.keys);
     }
   },
@@ -79,12 +79,12 @@ export default {
         :key="index"
       >
         <span
-          v-if="visible[index]"
+          v-if="visible[index - 1]"
           class="l-modal-hotkeys-row"
         >
-          <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">{{ shortcutNames[index] }}</span>
+          <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">{{ shortcutNames[index - 1] }}</span>
           <kbd
-            v-for="(key, i) in shortcutkeys[index]"
+            v-for="(key, i) in shortcutKeys[index - 1]"
             :key="i"
           >
             {{ key }}

@@ -277,6 +277,8 @@ window.player = {
       time: Number.MAX_VALUE,
       realTime: Number.MAX_VALUE,
       glyphStrength: 0,
+      RM: DC.D0,
+      RMSet: [],
       RMmin: DC.D0,
       RMminSet: [],
       glyphLevel: 0,

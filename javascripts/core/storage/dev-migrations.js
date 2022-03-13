@@ -1265,7 +1265,7 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.infMultNameConversion,
     player => {
-      if (typeof player.celestials.pelle.collapsed !== "object") {
+      if (player.celestials.pelle.collapsed === undefined) {
         player.celestials.pelle.collapsed = {
           upgrades: false,
           rifts: false,

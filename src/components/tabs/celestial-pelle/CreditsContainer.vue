@@ -47,7 +47,7 @@ export default {
           symbol: "<i class='fas fa-link'></i>",
           style: {
             left: "52%",
-            top: "190rem",
+            top: "200rem",
             color: "var(--color-enslaved-base)",
             animation: this.animName("enslaved", 10, "linear")
           }
@@ -65,7 +65,7 @@ export default {
           symbol: "<i class='fas fa-sun'></i>",
           style: {
             left: "44%",
-            top: "280rem",
+            top: "300rem",
             color: "var(--color-ra-base)",
             animation: this.animName("ra")
           }

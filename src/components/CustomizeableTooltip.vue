@@ -16,17 +16,36 @@ export default {
     left: {
       type: String,
       required: false,
-      default: "0"
+      default: ""
     },
     top: {
       type: String,
       required: false,
-      default: "0"
+      default: ""
+    },
+    right: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    bottom: {
+      type: String,
+      required: false,
+      default: ""
     },
     contentClass: {
       type: String,
       required: false,
       default: ""
+    },
+    mode: {
+      type: String,
+      required: false,
+      default: "top"
+    },
+    show: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -36,8 +55,14 @@ export default {
     };
   },
   computed: {
-    tooltipGenStyle() {
-      return { left: this.left, top: this.top };
+    positionStyle() {
+      return { left: this.left, top: this.top, right: this.right, bottom: this.bottom };
+    },
+    tooltipType() {
+      return `c-tooltip--${this.mode}`;
+    },
+    showTooltip() {
+      return this.show === undefined ? this.hovering : this.show;
     }
   }
 };
@@ -48,7 +73,7 @@ export default {
     <div
       class="c-main-content"
       :class="contentClass"
-      :style="{ left, top }"
+      :style="positionStyle"
       @mouseenter="hovering = true"
       @mouseleave="hovering = false"
     >
@@ -56,15 +81,15 @@ export default {
     </div>
     <div
       class="c-tooltip-content"
-      :class=" {'c-tooltip-show': hovering } "
-      :style="[tooltipContentStyle, tooltipGenStyle]"
+      :class=" {'c-tooltip-show': hovering, [tooltipType]: true } "
+      :style="[tooltipContentStyle, positionStyle]"
     >
       <slot name="tooltipContent" />
     </div>
     <div
       class="c-tooltip-arrow"
-      :class=" {'c-tooltip-show': hovering } "
-      :style="[tooltipArrowStyle, tooltipGenStyle]"
+      :class=" {'c-tooltip-show': hovering, [tooltipType]: true } "
+      :style="[tooltipArrowStyle, positionStyle]"
     />
   </div>
 </template>
@@ -91,7 +116,6 @@ export default {
 
 .c-tooltip-content {
   position: absolute;
-  transform: translate(-50%, calc(-100% - 0.5rem));
   padding: 0.7rem;
   width: 16rem;
   border-radius: 0.3rem;
@@ -112,14 +136,59 @@ export default {
   position: absolute;
   transform: translate(-50%, -100%);
   width: 0;
-  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-top: 0.5rem solid transparent;
   border-right: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid transparent;
   border-left: 0.5rem solid transparent;
   content: " ";
   font-size: 0;
   line-height: 0;
   transition-duration: 0.4s;
   z-index: 4;
+}
+
+.c-tooltip--top.c-tooltip-content {
+  transform: translate(-50%, -100%);
+  margin-top: -0.5rem;
+}
+
+.c-tooltip--top.c-tooltip-arrow {
+  transform: translate(-50%, -100%);
+  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-bottom: 0;
+}
+
+.c-tooltip--bottom.c-tooltip-content {
+  transform: translate(-50%, 100%);
+  margin-bottom: -0.5rem;
+}
+
+.c-tooltip--bottom.c-tooltip-arrow {
+  transform: translate(-50%, 100%);
+  border-bottom: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-top: 0;
+}
+
+.c-tooltip--right.c-tooltip-content {
+  transform: translate(100%, -50%);
+  margin-right: -0.5rem;
+}
+
+.c-tooltip--right.c-tooltip-arrow {
+  transform: translate(100%, -50%);
+  border-right: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-left: 0;
+}
+
+.c-tooltip--left.c-tooltip-content {
+  transform: translate(-100%, -50%);
+  margin-left: -0.5rem;
+}
+
+.c-tooltip--left.c-tooltip-arrow {
+  transform: translate(-100%, -50%);
+  border-left: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0;
 }
 
 .c-tooltip-show {

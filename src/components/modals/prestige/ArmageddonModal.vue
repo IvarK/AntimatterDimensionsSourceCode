@@ -57,7 +57,7 @@ export default {
       Pelle.armageddon(false);
       respecTimeStudies(true);
       Currency.infinityPoints.reset();
-      player.infMult = 0;
+      player.IPMultPurchases = 0;
       Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
       disChargeAll();
       player.buyUntil10 = true;

@@ -2,13 +2,17 @@
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SliderComponent from "@/components/SliderComponent";
+import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 
 export default {
   name: "EnslavedTab",
   components: {
     CelestialQuoteHistory,
     PrimaryButton,
-    PrimaryToggleButton
+    PrimaryToggleButton,
+    SliderComponent,
+    BlackHoleChargingSliders
   },
   data: () => ({
     isDoomed: false,
@@ -259,7 +263,7 @@ export default {
             </div>
           </div>
         </div>
-        <black-hole-charging-sliders />
+        <BlackHoleChargingSliders />
         <br>
         <div class="l-enslaved-shop-container">
           <button

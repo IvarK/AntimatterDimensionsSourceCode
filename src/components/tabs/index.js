@@ -25,6 +25,12 @@ import TimeStudiesTab from "./time-studies/TimeStudiesTab";
 import EternityUpgradesTab from "./eternity-upgrades/EternityUpgradesTab";
 import EternityMilestonesTab from "./eternity-milestones/EternityMilestonesTab";
 import TimeDilationTab from "./time-dilation/TimeDilationTab";
+import GlyphsTab from "./glyphs/GlyphsTab";
+import RealityUpgradesTab from "./reality-upgrades/RealityUpgradesTab";
+import ImaginaryUpgradesTab from "./imaginary-upgrades/ImaginaryUpgradesTab";
+import PerksTab from "./perks/PerksTab";
+import BlackHoleTab from "./black-hole/BlackHoleTab";
+import AlchemyTab from "./alchemy/AlchemyTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -52,7 +58,13 @@ const TabComponents = {
   TimeStudiesTab,
   EternityUpgradesTab,
   EternityMilestonesTab,
-  TimeDilationTab
+  TimeDilationTab,
+  GlyphsTab,
+  RealityUpgradesTab,
+  ImaginaryUpgradesTab,
+  PerksTab,
+  BlackHoleTab,
+  AlchemyTab
 };
 
 export default TabComponents;

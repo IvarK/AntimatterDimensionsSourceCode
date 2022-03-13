@@ -1264,6 +1264,15 @@ GameStorage.devMigrations = {
       delete player.celestials.showBought;
     },
     GameStorage.migrations.infMultNameConversion,
+    player => {
+      if (typeof player.celestials.pelle.collapsed !== "object") {
+        player.celestials.pelle.collapsed = {
+          upgrades: false,
+          rifts: false,
+          galaxies: false
+        };
+      }
+    }
   ],
 
   patch(player) {

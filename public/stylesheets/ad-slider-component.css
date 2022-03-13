@@ -87,7 +87,6 @@ SOFTWARE.
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
 }
 
 .l-ad-slider__process {
@@ -140,7 +139,7 @@ SOFTWARE.
   position: absolute;
   transition: all 0s;
   will-change: transform;
-  z-index: 3;
+  z-index: 2;
 }
 
 .c-ad-slider__dot {

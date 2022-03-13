@@ -82,7 +82,7 @@ export default {
       }
     },
     showTooltip() {
-      return this.show === undefined ? this.hovering : this.show;
+      return this.show || this.hovering;
     }
   },
   methods: {
@@ -109,14 +109,14 @@ export default {
     </div>
     <div
       class="c-tooltip-content"
-      :class=" {'c-tooltip-show': hovering, [tooltipType]: true } "
+      :class=" {'c-tooltip-show': showTooltip, [tooltipType]: true } "
       :style="[tooltipContentStyle, positionStyle, { transform: tooltipTransform }]"
     >
       <slot name="tooltipContent" />
     </div>
     <div
       class="c-tooltip-arrow"
-      :class=" {'c-tooltip-show': hovering, [tooltipType]: true } "
+      :class=" {'c-tooltip-show': showTooltip, [tooltipType]: true } "
       :style="[tooltipArrowStyle, positionStyle, { transform: tooltipTransform }]"
     />
   </div>

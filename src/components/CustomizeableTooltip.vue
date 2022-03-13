@@ -7,11 +7,13 @@ export default {
   props: {
     tooltipContentStyle: {
       type: Object,
-      required: true
+      required: false,
+      default: () => ({})
     },
     tooltipArrowStyle: {
       type: Object,
-      required: true
+      required: false,
+      default: () => ({})
     },
     left: {
       type: String,
@@ -61,9 +63,35 @@ export default {
     tooltipType() {
       return `c-tooltip--${this.mode}`;
     },
+    contentTransform() {
+      const axis = this.mode === "top" || this.mode === "bottom" ? "X" : "Y";
+      return `translate${axis}(${this.showNegativeSign(axis)}50%)`;
+    },
+    tooltipTransform() {
+      switch (this.mode) {
+        case "top":
+          return `translate(${this.showNegativeSign("X")}50%, -100%)`;
+        case "bottom":
+          return `translate(${this.showNegativeSign("X")}50%, 100%)`;
+        case "right":
+          return `translate(100%, ${this.showNegativeSign("Y")}50%)`;
+        case "left":
+          return `translate(-100%, ${this.showNegativeSign("Y")}50%)`;
+        default:
+          return "";
+      }
+    },
     showTooltip() {
       return this.show === undefined ? this.hovering : this.show;
     }
+  },
+  methods: {
+    showNegativeSign(axis) {
+      if (axis === "X") {
+        return this.left ? "-" : "";
+      }
+      return this.top ? "-" : "";
+    },
   }
 };
 </script>
@@ -73,7 +101,7 @@ export default {
     <div
       class="c-main-content"
       :class="contentClass"
-      :style="positionStyle"
+      :style="{ ...positionStyle, transform: contentTransform }"
       @mouseenter="hovering = true"
       @mouseleave="hovering = false"
     >
@@ -82,14 +110,14 @@ export default {
     <div
       class="c-tooltip-content"
       :class=" {'c-tooltip-show': hovering, [tooltipType]: true } "
-      :style="[tooltipContentStyle, positionStyle]"
+      :style="[tooltipContentStyle, positionStyle, { transform: tooltipTransform }]"
     >
       <slot name="tooltipContent" />
     </div>
     <div
       class="c-tooltip-arrow"
       :class=" {'c-tooltip-show': hovering, [tooltipType]: true } "
-      :style="[tooltipArrowStyle, positionStyle]"
+      :style="[tooltipArrowStyle, positionStyle, { transform: tooltipTransform }]"
     />
   </div>
 </template>
@@ -102,7 +130,6 @@ export default {
 
 .c-main-content {
   position: absolute;
-  transform: translateX(-50%);
 }
 
 .c-tooltip-content,
@@ -148,45 +175,37 @@ export default {
 }
 
 .c-tooltip--top.c-tooltip-content {
-  transform: translate(-50%, -100%);
   margin-top: -0.5rem;
 }
 
 .c-tooltip--top.c-tooltip-arrow {
-  transform: translate(-50%, -100%);
   border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
   border-bottom: 0;
 }
 
 .c-tooltip--bottom.c-tooltip-content {
-  transform: translate(-50%, 100%);
   margin-bottom: -0.5rem;
 }
 
 .c-tooltip--bottom.c-tooltip-arrow {
-  transform: translate(-50%, 100%);
   border-bottom: 0.5rem solid hsla(0, 0%, 5%, 0.9);
   border-top: 0;
 }
 
 .c-tooltip--right.c-tooltip-content {
-  transform: translate(100%, -50%);
   margin-right: -0.5rem;
 }
 
 .c-tooltip--right.c-tooltip-arrow {
-  transform: translate(100%, -50%);
   border-right: 0.5rem solid hsla(0, 0%, 5%, 0.9);
   border-left: 0;
 }
 
 .c-tooltip--left.c-tooltip-content {
-  transform: translate(-100%, -50%);
   margin-left: -0.5rem;
 }
 
 .c-tooltip--left.c-tooltip-arrow {
-  transform: translate(-100%, -50%);
   border-left: 0.5rem solid hsla(0, 0%, 5%, 0.9);
   border-right: 0;
 }

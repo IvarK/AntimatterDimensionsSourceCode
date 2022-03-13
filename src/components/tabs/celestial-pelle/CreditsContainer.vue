@@ -26,7 +26,7 @@ export default {
     celestialDisplays() {
       return {
         teresa: {
-          symbol: "Ϟ",
+          symbol: Teresa.symbol,
           style: {
             left: "65%",
             top: "112rem",
@@ -35,7 +35,7 @@ export default {
           }
         },
         effarig: {
-          symbol: "Ϙ",
+          symbol: Effarig.symbol,
           style: {
             left: "80%",
             top: "40rem",
@@ -44,7 +44,7 @@ export default {
           }
         },
         enslaved: {
-          symbol: "<i class='fas fa-link'></i>",
+          symbol: Enslaved.symbol,
           style: {
             left: "52%",
             top: "200rem",
@@ -53,16 +53,16 @@ export default {
           }
         },
         v: {
-          symbol: "⌬",
+          symbol: V.symbol,
           style: {
             left: "20%",
             top: "143rem",
             color: "var(--color-v--base)",
-            animation: this.animName("v", 5)
+            animation: this.animName("v", 15)
           }
         },
         ra: {
-          symbol: "<i class='fas fa-sun'></i>",
+          symbol: Ra.symbol,
           style: {
             left: "44%",
             top: "300rem",
@@ -71,7 +71,7 @@ export default {
           }
         },
         laitela: {
-          symbol: "ᛝ",
+          symbol: Laitela.symbol,
           style: {
             left: "13%",
             top: "60rem",
@@ -80,7 +80,7 @@ export default {
           }
         },
         pelle: {
-          symbol: "♅",
+          symbol: Pelle.symbol,
           style: {
             left: "30%",
             top: "8rem",
@@ -337,10 +337,16 @@ p {
   0% { transform: translateX(-50%) rotate(0); }
   100% { transform: translateX(-50%) rotate(360deg); }
 }
+/* We unfortunately have to do it this way, because due to how the benzene unicode symbol works, 0 and 120deg aren't
+perfectly the same. */
 @keyframes a-v-credits {
   0% { transform: translateX(-50%) rotate(0) scale(0.8); }
-  50% { transform: translateX(-50%) rotate(60deg) scale(1.2); }
-  100% { transform: translateX(-50%) rotate(0) scale(0.8); }
+  16.67% { transform: translateX(-50%) rotate(60deg) scale(1.2); }
+  33.33% { transform: translateX(-50%) rotate(120deg) scale(0.8); }
+  50% { transform: translateX(-50%) rotate(180deg) scale(1.2); }
+  66.67% { transform: translateX(-50%) rotate(240deg) scale(0.8); }
+  83.33% { transform: translateX(-50%) rotate(300deg) scale(1.2); }
+  100% { transform: translateX(-50%) rotate(360deg) scale(0.8); }
 }
 @keyframes a-ra-credits {
   0% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }

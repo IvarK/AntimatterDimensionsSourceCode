@@ -19,6 +19,7 @@ import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsMo
 import HardResetModal from "@/components/modals/prestige/HardResetModal";
 import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
 import ChangeNameModal from "@/components/modals/ChangeNameModal";
+import ArmageddonModal from "@/components/modals/prestige/ArmageddonModal";
 
 import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
 import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
@@ -142,6 +143,7 @@ Modal.celestials = new Modal(EnterCelestialsModal);
 Modal.hardReset = new Modal(HardResetModal);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
+Modal.armageddon = new Modal(ArmageddonModal);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
@@ -183,19 +185,50 @@ Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;
-    const newLines = lines.map(l => ({
-      celestial,
-      line: l,
-      showName: !l.startsWith("*")
-    }));
+    const newLines = lines.map(l => Modal.celestialQuote.getLineMapping(celestial, l));
     if (ui.view.modal.queue.includes(this)) {
       // This shouldn't come up often, but in case we do have a pile of quotes
       // being shown in a row:
-      this.lines = this.lines.concat(newLines);
+      this.lines[this.lines.length - 1].isEndQuote = true;
+      this.lines.push(...newLines);
       return;
     }
     super.show();
     this.lines = newLines;
+  }
+
+  getLineMapping(defaultCel, defaultLine) {
+    let overrideCelestial = "";
+    let l = defaultLine;
+    if (typeof l === "string") {
+      if (l.includes("<!")) {
+        overrideCelestial = this.getOverrideCel(l);
+        l = this.removeOverrideCel(l);
+      }
+    }
+    return {
+      celestial: defaultCel,
+      overrideCelestial,
+      line: l,
+      showName: l[0] !== "*",
+      isEndQuote: false
+    };
+  }
+
+  getOverrideCel(x) {
+    if (x.includes("<!")) {
+      const start = x.indexOf("<!"), end = x.indexOf("!>");
+      return x.substring(start + 2, end);
+    }
+    return "";
+  }
+
+  removeOverrideCel(x) {
+    if (x.includes("<!")) {
+      const start = x.indexOf("<!"), end = x.indexOf("!>");
+      return x.substring(0, start) + x.substring(end + 2);
+    }
+    return x;
   }
 }(CelestialQuoteModal, true);
 

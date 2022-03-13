@@ -947,7 +947,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
-      player.infMult === 0 &&
+      player.IPMultPurchases === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
@@ -1301,48 +1301,52 @@ GameDatabase.achievements.normal = [
     name: "Antimatter Dimensions Eternal",
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
   },
   {
     id: 182,
-    name: "Age of the age of automation",
+    name: "One more time",
     description: "Gain back all Antimatter Dimension autobuyers.",
     checkRequirement: () => player.celestials.pelle.upgrades.has(4),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 183,
-    name: "Anti-anti-challenged 2",
-    description: "Complete all Infinity Challenges while inside the Doomed Reality.",
-    checkRequirement: () => Pelle.isDoomed && InfinityChallenges.completed.length === 8,
-    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED
+    name: "Déjà vOoM",
+    description: "Complete Infinity Challenge 5 while Doomed.",
+    checkRequirement: () => Pelle.isDoomed && InfinityChallenge(5).isCompleted,
+    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED,
+    // Weirdly specific reward? Yes, its V's ST bonus because we forgot to disable it
+    // when balancing Pelle and only realised too late.
+    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    effect: 1.0812403840463596
   },
   {
     id: 184,
     name: "You're out!",
-    description: "Reach the third Pelle Strike.",
+    description: "Encounter the third Pelle Strike.",
     checkRequirement: () => PelleStrikes.eternity.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 185,
     name: "Four score and seven years ago",
-    description: "Reach the fourth Pelle Strike.",
+    description: "Encounter the fourth Pelle Strike.",
     checkRequirement: () => PelleStrikes.ECs.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 186,
     displayId: 181,
-    name: "An old friend",
-    description: `Purchase Time Study 181 in Doomed.`,
+    name: "An unhealthy obsession",
+    description: `Purchase Time Study 181 while Doomed.`,
   },
   {
     id: 187,
     name: "The One with Dilated Time",
-    description: "Dilate time while in the Doomed Reality.",
-    checkRequirement: () => Pelle.isDoomed && player.dilation.active,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+    description: "Unlock Dilation in Doomed.",
+    checkRequirement: () => PelleStrikes.dilation.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
   },
   {
     id: 188,

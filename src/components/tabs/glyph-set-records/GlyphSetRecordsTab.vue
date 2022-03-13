@@ -15,6 +15,8 @@ export default {
     update() {
       const bestReality = player.records.bestReality;
       this.recordGlyphInfo = [
+        [true, Glyphs.copyForRecords(bestReality.RMSet),
+          `Best Reality Machines gained: ${format(bestReality.RM, 2, 2)} RM`],
         [true, Glyphs.copyForRecords(bestReality.RMminSet),
           `Best Reality Machines per minute: ${format(bestReality.RMmin, 2, 2)} RM/min`],
         [true, Glyphs.copyForRecords(bestReality.glyphLevelSet),

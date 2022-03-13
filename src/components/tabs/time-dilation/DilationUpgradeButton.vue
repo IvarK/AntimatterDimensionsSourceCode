@@ -61,14 +61,6 @@ export default {
       }
       return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
         .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
-    },
-    effectText() {
-      if (!this.config.formatEffect) return "";
-      const prefix = this.isCapped ? "Capped:" : "Currently:";
-      const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
-      let value = formattedEffect(this.purchases);
-      if (!this.isCapped) value += ` ➜ ${formattedEffect(this.purchases + 1)}`;
-      return `${prefix} ${value}`;
     }
   },
   watch: {

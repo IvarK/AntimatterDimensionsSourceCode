@@ -100,8 +100,7 @@ export default {
       return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
     },
     truncatedInput() {
-      // If last character is "," remove it
-      return this.input.replace(/,$/u, "").trim();
+      return TimeStudyTree.truncateInput(this.input);
     },
     hasInput() {
       return this.truncatedInput !== "";
@@ -141,7 +140,7 @@ export default {
     },
     savePreset() {
       if (this.inputIsValid) {
-        player.timestudy.presets[this.modalConfig.id].studies = this.input;
+        player.timestudy.presets[this.modalConfig.id].studies = TimeStudyTree.formatStudyList(this.input);
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }

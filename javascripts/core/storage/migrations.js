@@ -896,6 +896,11 @@ GameStorage.migrations = {
     delete player.postChallUnlocked;
   },
 
+  infMultNameConversion(player) {
+    player.IPMultPurchases = player.infMult;
+    delete player.infMult;
+  },
+
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge

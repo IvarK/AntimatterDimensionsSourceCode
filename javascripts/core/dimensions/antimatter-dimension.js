@@ -164,12 +164,13 @@ function applyNDPowers(mult, tier) {
       InfinityUpgrade.totalTimeMult.chargedEffect,
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
       AlchemyResource.power,
+      Achievement(183),
       PelleRifts.death
     );
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 
-  if (V.has(V_UNLOCKS.ND_POW)) {
+  if (V.has(V_UNLOCKS.ND_POW) && !Pelle.isDoomed) {
     multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
 

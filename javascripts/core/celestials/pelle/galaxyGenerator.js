@@ -67,15 +67,31 @@ export const GalaxyGenerator = {
   },
 
   startSacrifice() {
+    player.celestials.pelle.collapsed.rifts = false;
     player.celestials.pelle.galaxyGenerator.sacrificeActive = true;
   },
 
   loop(diff) {
+    if (this.isCapped) {
+      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_RIFTS);
+    }
     if (this.sacrificeActive) {
+      const milestoneStates =
+        PelleRifts.all.mapToObject(x => x.config.key, x => x.milestones.map((m, mId) => x.hasMilestone(mId)));
       this.capRift.reducedTo = Math.max(this.capRift.reducedTo - 0.03 * diff / 1000, 0);
       if (this.capRift.reducedTo === 0) {
         player.celestials.pelle.galaxyGenerator.sacrificeActive = false;
         player.celestials.pelle.galaxyGenerator.phase++;
+        if (!this.capObj) {
+          Pelle.quotes.show(Pelle.quotes.END);
+        }
+      }
+      for (const riftKey in milestoneStates) {
+        const rift = PelleRifts[riftKey];
+        for (const milestoneIdx in rift.milestones) {
+          const previousMilestoneState = milestoneStates[riftKey][milestoneIdx];
+          rift.updateMilestones(milestoneIdx, previousMilestoneState);
+        }
       }
     }
     player.celestials.pelle.galaxyGenerator.generatedGalaxies += this.gainPerSecond * diff / 1000;

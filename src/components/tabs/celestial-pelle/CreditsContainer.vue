@@ -142,6 +142,8 @@ export default {
     <p>IkerStream</p>
     <p>L4R5 (Lars Wolf)</p>
     <p>Patashu</p>
+
+    <h2>Design Consoltant</h2>
     <p>Pichusuperlover</p>
     <p>slabdrill</p>
     <p>Sparticle999</p>

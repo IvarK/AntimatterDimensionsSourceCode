@@ -65,37 +65,37 @@ export default {
 </template>
 
 <style scoped>
-  .c-pelle-panel-title {
-    font-weight: bold;
-    font-size: 3rem;
-    color: var(--color-pelle--base);
-  }
+.c-pelle-panel-title {
+  font-weight: bold;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+}
 
-  .l-pelle-panel-container {
-    padding: 1rem;
-    margin: 1rem;
-    border: 2px solid var(--color-pelle--base);
-    border-radius: 5px;
-    user-select: none;
-  }
+.l-pelle-panel-container {
+  padding: 1rem;
+  margin: 1rem;
+  border: 2px solid var(--color-pelle--base);
+  border-radius: 5px;
+  user-select: none;
+}
 
-  .l-pelle-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.l-pelle-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .c-pelle-bar-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.c-pelle-bar-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-  .c-pelle-single-bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 27rem;
-  }
+.c-pelle-single-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 27rem;
+}
 </style>

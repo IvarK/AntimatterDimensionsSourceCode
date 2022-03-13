@@ -54,7 +54,10 @@ export class TimeStudyTree {
   // formatting separately from verifying existence allows us to produce more useful in-game error messages for
   // import strings which are formatted correctly but aren't entirely valid
   static isValidImportString(input) {
-    return /^(\d+)(,(\d+))*(\|\d+)?$/u.test(input);
+    if (input.trim() === "") {
+      return false;
+    }
+    return /^(,?(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
   }
 
   // Getter for all the studies in the current game state
@@ -80,32 +83,89 @@ export class TimeStudyTree {
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
-    const treeStudies = input.split("|")[0].split(",");
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
-    const studyArray = [];
-    for (const study of treeStudies) {
-      if (studyDB.includes(parseInt(study, 10))) {
-        const tsObject = TimeStudy(study);
-        this.selectedStudies.push(tsObject);
-        studyArray.push(tsObject);
-      } else this.invalidStudies.push(study);
+    const output = [];
+    const studyCluster = TimeStudyTree.truncateInput(input).split("|")[0].split(",");
+    for (const studyRange of studyCluster) {
+      const studyRangeSplit = studyRange.split("-");
+      const studyArray = studyRangeSplit[1]
+        ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
+        : studyRangeSplit;
+      for (const study of studyArray) {
+        if (studyDB.includes(parseInt(study, 10))) {
+          const tsObject = TimeStudy(study);
+          this.selectedStudies.push(tsObject);
+          output.push(tsObject);
+        } else {
+          this.invalidStudies.push(study);
+        }
+      }
     }
 
     // If the string has an EC indicated in it, append that to the end of the study array
     const ecString = input.split("|")[1];
     if (!ecString) {
       // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
-      return studyArray;
+      return output;
     }
     const ecID = parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
     if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
       this.invalidStudies.push(`EC${ecID}`);
-      return studyArray;
+      return output;
     }
-    if (ecID !== 0) studyArray.push(TimeStudy.eternityChallenge(ecID));
-    return studyArray;
+    if (ecID !== 0) output.push(TimeStudy.eternityChallenge(ecID));
+    return output;
+  }
+
+  static truncateInput(input) {
+    return input
+      .toLowerCase()
+      .replaceAll("antimatter", "71,81,91,101")
+      .replaceAll("infinity", "72,82,92,102")
+      .replaceAll("time", "73,83,93,103")
+      .replaceAll("active", "121,131,141")
+      .replaceAll("passive", "122,132,142")
+      .replaceAll("idle", "123,133,143")
+      .replace(/[|,]$/u, "")
+      .replaceAll(" ", "")
+      .trim();
+  }
+
+  static formatStudyList(input) {
+    return input
+      .toLowerCase()
+      .replaceAll("71,81,91,101", "antimatter")
+      .replaceAll("72,82,92,102", "infinity")
+      .replaceAll("73,83,93,103", "time")
+      .replaceAll("121,131,141", "active")
+      .replaceAll("122,132,142", "passive")
+      .replaceAll("123,133,143", "idle")
+      .replaceAll(",", ", ")
+      .replace(/ +/gu, " ");
+  }
+
+  studyRangeToArray(firstNumber, lastNumber) {
+    const studiesArray = [];
+    const first = this.checkTimeStudyNumber(firstNumber);
+    const last = this.checkTimeStudyNumber(lastNumber);
+    if ((first !== 0) && (last !== 0)) {
+      for (let id = first; id <= last; id++) {
+        if (TimeStudy(id)) {
+          studiesArray.push(id);
+        }
+      }
+    }
+    return studiesArray;
+  }
+
+  checkTimeStudyNumber(token) {
+    const tsNumber = parseFloat(token);
+    if (!TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)) {
+      return 0;
+    }
+    return tsNumber;
   }
 
   // Attempt to purchase all studies specified in the array which may be either study IDs (which get converted) or

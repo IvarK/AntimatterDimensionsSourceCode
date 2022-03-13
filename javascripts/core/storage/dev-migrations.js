@@ -1247,6 +1247,32 @@ GameStorage.devMigrations = {
         player.achievementBits[17] |= (1 << 5);
       }
     },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      if (player.celestials.pelle.doomed && (player.challenge.infinity.completedBits & (1 << 5)) !== 0) {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] |= (1 << 2);
+      } else {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[17] &= ~(1 << 2);
+      }
+    },
+    player => {
+      player.celestials.pelle.collapsed = player.celestials.collapsed;
+      player.celestials.pelle.showBought = player.celestials.showBought;
+      delete player.celestials.collapsed;
+      delete player.celestials.showBought;
+    },
+    GameStorage.migrations.infMultNameConversion,
+    player => {
+      if (player.celestials.pelle.collapsed === undefined) {
+        player.celestials.pelle.collapsed = {
+          upgrades: false,
+          rifts: false,
+          galaxies: false
+        };
+      }
+    }
   ],
 
   patch(player) {

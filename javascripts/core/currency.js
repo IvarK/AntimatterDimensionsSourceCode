@@ -388,7 +388,7 @@ Currency.realities = new class extends NumberCurrency {
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) {
-    const cappedValue = Decimal.max(value, MachineHandler.hardcapRM);
+    const cappedValue = Decimal.clampMax(value, MachineHandler.hardcapRM);
     player.reality.realityMachines = cappedValue;
     if (player.records.bestReality.RM.lt(cappedValue)) {
       player.records.bestReality.RM = cappedValue;

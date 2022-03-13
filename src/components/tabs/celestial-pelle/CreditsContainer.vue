@@ -113,7 +113,7 @@ export default {
 <template>
   <div
     v-if="rolling"
-    class="credits-container"
+    class="c-credits-container"
     :style="creditStyles"
   >
     <div
@@ -270,7 +270,7 @@ export default {
 </template>
 
 <style scoped>
-.credits-container {
+.c-credits-container {
   position: absolute;
   left: 0;
   height: 100%;

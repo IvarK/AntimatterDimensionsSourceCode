@@ -45,17 +45,17 @@ export default {
 
 <template>
   <div
-    class="new-game-container"
+    class="c-new-game-container"
     :style="style"
   >
     <h1>Wanna start over?</h1>
     Highest NG+: {{ plusRecord }}<br>
     Highest NG-: {{ minusRecord }}<br>
-    <div class="new-game-button-container">
+    <div class="c-new-game-button-container">
       <button
         v-for="i in ngRange"
         :key="i"
-        class="new-game-button"
+        class="c-new-game-button"
         @click="startNewGame(i)"
       >
         Start a {{ ngString(i) }}
@@ -65,7 +65,7 @@ export default {
 </template>
 
 <style scoped>
-  .new-game-container {
+  .c-new-game-container {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -78,7 +78,7 @@ export default {
     background-color: black;
     box-shadow: 0 0 20px 1px black;
   }
-  .new-game-button-container {
+  .c-new-game-button-container {
     display: flex;
     align-items: stretch;
     flex-direction: column;

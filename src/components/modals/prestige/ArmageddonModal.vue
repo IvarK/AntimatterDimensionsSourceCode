@@ -77,8 +77,8 @@ export default {
       v-if="!isDoomed"
       class="c-modal-message__text"
     >
-      On entering the Doomed Reality everything except Challenge records, Celestial progress and anything under the
-      General and Reality header on the Statistics tab will be reset. You will not gain any rewards from your progress
+      Entering Doomed will reset everything except Challenge records, Celestial progress and anything under
+      the General and Reality header on the Statistics tab. You will not gain any rewards from your progress
       in your current Reality. Entering Doomed will also disable certain game mechanics.
       <br>
       <br>

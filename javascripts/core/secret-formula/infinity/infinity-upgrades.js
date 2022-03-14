@@ -216,10 +216,10 @@ GameDatabase.infinity.upgrades = (function() {
       description: () => (Pelle.isDoomed
         ? "This upgrade has no effect while in Doomed"
         : `Multiply Infinity Points from all sources by ${formatX(2)}`),
-      // Normally the multiplier caps at e993k or so with 3299999 purchases, but if the cost is capped then we just give
+      // Normally the multiplier caps at e993k or so with 3300000 purchases, but if the cost is capped then we just give
       // an extra e7k to make the multiplier look nice
-      effect: () => (player.infMult === 3299999 ? DC.E1E6 : DC.D2.pow(player.infMult)),
-      cap: () => Effarig.eternityCap || DC.E1E6,
+      effect: () => (player.IPMultPurchases >= 3300000 ? DC.E1E6 : DC.D2.pow(player.IPMultPurchases)),
+      cap: () => Effarig.eternityCap ?? DC.E1E6,
       formatEffect: value => formatX(value, 2, 2),
     }
   };

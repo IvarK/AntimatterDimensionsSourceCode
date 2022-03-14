@@ -4,7 +4,6 @@ GameDatabase.tabs = [
   {
     key: "dimensions",
     name: "Dimensions",
-    endName: "End",
     hideAt: 2.9,
     id: 0,
     hidable: true,
@@ -45,7 +44,6 @@ GameDatabase.tabs = [
   {
     key: "options",
     name: "Options",
-    endName: "Is",
     hideAt: 1.6,
     id: 1,
     hidable: false,
@@ -79,7 +77,6 @@ GameDatabase.tabs = [
   {
     key: "statistics",
     name: "Statistics",
-    endName: "Nigh",
     hideAt: 1.7,
     id: 2,
     hidable: true,
@@ -136,7 +133,6 @@ GameDatabase.tabs = [
   {
     key: "achievements",
     name: "Achievements",
-    endName: "Destruction",
     hideAt: 1.9,
     id: 3,
     hidable: true,
@@ -162,7 +158,6 @@ GameDatabase.tabs = [
   {
     key: "automation",
     name: "Automation",
-    endName: "Is",
     id: 4,
     hideAt: 2.1,
     hidable: true,
@@ -189,7 +184,6 @@ GameDatabase.tabs = [
   {
     key: "challenges",
     name: "Challenges",
-    endName: "Imminent",
     hideAt: 2,
     condition: () =>
       PlayerProgress.realityUnlocked() ||
@@ -232,7 +226,6 @@ GameDatabase.tabs = [
   {
     key: "infinity",
     name: "Infinity",
-    endName: "Help",
     hideAt: 2.2,
     UIClass: "o-tab-btn--infinity",
     before: "InfinityPointsHeader",
@@ -281,7 +274,6 @@ GameDatabase.tabs = [
   {
     key: "eternity",
     name: "Eternity",
-    endName: "Us",
     hideAt: 1.8,
     UIClass: "o-tab-btn--eternity",
     condition: () =>
@@ -329,9 +321,8 @@ GameDatabase.tabs = [
   {
     key: "reality",
     name: "Reality",
-    endName: "Good",
     hideAt: 2.3,
-    before: "reality-machines-header",
+    before: "RealityMachinesHeader",
     UIClass: "o-tab-btn--reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
     id: 8,
@@ -341,7 +332,7 @@ GameDatabase.tabs = [
         key: "glyphs",
         name: "Glyphs",
         symbol: "<i class='fas fa-clone'></i>",
-        component: "glyphs-tab",
+        component: "GlyphsTab",
         id: 0,
         hidable: true,
       },
@@ -349,7 +340,7 @@ GameDatabase.tabs = [
         key: "upgrades",
         name: "Reality Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "reality-upgrades-tab",
+        component: "RealityUpgradesTab",
         id: 1,
         hidable: true,
       },
@@ -357,7 +348,7 @@ GameDatabase.tabs = [
         key: "imag_upgrades",
         name: "Imaginary Upgrades",
         symbol: "<i class='fas fa-level-up-alt'></i>",
-        component: "imaginary-upgrades-tab",
+        component: "ImaginaryUpgradesTab",
         condition: () => MachineHandler.isIMUnlocked,
         id: 2,
         hidable: true,
@@ -366,7 +357,7 @@ GameDatabase.tabs = [
         key: "perks",
         name: "Perks",
         symbol: "<i class='fas fa-project-diagram'></i>",
-        component: "perks-tab",
+        component: "PerksTab",
         id: 3,
         hidable: true,
       },
@@ -374,7 +365,7 @@ GameDatabase.tabs = [
         key: "hole",
         name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
-        component: "black-hole-tab",
+        component: "BlackHoleTab",
         condition: () => PlayerProgress.realityUnlocked(),
         id: 4,
         hidable: true,
@@ -383,7 +374,7 @@ GameDatabase.tabs = [
         key: "alchemy",
         name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
-        component: "alchemy-tab",
+        component: "AlchemyTab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
         id: 5,
         hidable: true,
@@ -393,7 +384,6 @@ GameDatabase.tabs = [
   {
     key: "celestials",
     name: "Celestials",
-    endName: "Bye",
     hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
     condition: () => Teresa.isUnlocked,

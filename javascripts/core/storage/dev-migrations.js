@@ -1257,6 +1257,22 @@ GameStorage.devMigrations = {
         player.achievementBits[17] &= ~(1 << 2);
       }
     },
+    player => {
+      player.celestials.pelle.collapsed = player.celestials.collapsed;
+      player.celestials.pelle.showBought = player.celestials.showBought;
+      delete player.celestials.collapsed;
+      delete player.celestials.showBought;
+    },
+    GameStorage.migrations.infMultNameConversion,
+    player => {
+      if (player.celestials.pelle.collapsed === undefined) {
+        player.celestials.pelle.collapsed = {
+          upgrades: false,
+          rifts: false,
+          galaxies: false
+        };
+      }
+    }
   ],
 
   patch(player) {

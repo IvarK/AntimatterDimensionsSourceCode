@@ -26,6 +26,11 @@ export default {
     },
     upgrades() {
       return PelleRebuyableUpgrade.galaxyGenerator;
+    },
+    galaxyText() {
+      let text = format(Math.max(this.galaxies, 0), 2);
+      if (this.galaxies < 0) text += ` [${format(this.galaxies, 2)}]`;
+      return text;
     }
   },
   methods: {
@@ -37,7 +42,7 @@ export default {
       this.isCapped = GalaxyGenerator.isCapped;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
-      this.isCollapsed = player.celestials.pelle.collapsed.galaxies;
+      this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
     },
     increaseCap() {
       GalaxyGenerator.startSacrifice();
@@ -47,6 +52,7 @@ export default {
     },
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
+      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_UNLOCK);
     }
   },
 };
@@ -67,7 +73,9 @@ export default {
     >
       <div v-if="isUnlocked">
         <div>
-          You have a total of <span class="galaxies-amount">{{ format(galaxies, 2) }}</span> Galaxies.
+          You have a total of
+          <span class="galaxies-amount">{{ galaxyText }}</span>
+          Galaxies.
           <span class="galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
         </div>
         <span v-if="!isCapped">You can generate a maximum of {{ format(cap) }} Galaxies.</span>
@@ -110,79 +118,79 @@ export default {
 </template>
 
 <style scoped>
-  .c-pelle-panel-title {
-    font-weight: bold;
-    font-size: 3rem;
-    color: var(--color-pelle--base);
-  }
+.c-pelle-panel-title {
+  font-weight: bold;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+}
 
-  .l-pelle-panel-container {
-    padding: 1rem;
-    margin: 1rem;
-    border: 2px solid var(--color-pelle--base);
-    border-radius: 5px;
-    user-select: none;
-  }
+.l-pelle-panel-container {
+  padding: 1rem;
+  margin: 1rem;
+  border: 2px solid var(--color-pelle--base);
+  border-radius: 5px;
+  user-select: none;
+}
 
-  .l-pelle-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.l-pelle-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .generator-unlock-button {
-    padding: 2rem;
-    border-radius: .5rem;
-    font-family: Typewriter;
-    cursor: pointer;
-    width: 25rem;
-    height: 10rem;
-    font-size: 2rem;
-    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
-    color: black;
-    font-weight: bold;
-  }
+.generator-unlock-button {
+  padding: 2rem;
+  border-radius: .5rem;
+  font-family: Typewriter;
+  cursor: pointer;
+  width: 25rem;
+  height: 10rem;
+  font-size: 2rem;
+  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  color: black;
+  font-weight: bold;
+}
 
-  .galaxy-generator-upgrades-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.galaxy-generator-upgrades-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-  .galaxies-amount {
-    font-weight: bold;
-    font-size: 2.5rem;
-    background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+.galaxies-amount {
+  font-weight: bold;
+  font-size: 2.5rem;
+  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  .highlight {
-    font-weight: bold;
-    font-size: 2rem;
-    color: var(--color-pelle--base);
-  }
+.highlight {
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-pelle--base);
+}
 
-  .increase-cap {
-    padding: 2rem;
-    color: white;
-    background: linear-gradient(black, var(--color-pelle--base));;
-    border: 1px solid var(--color-pelle--base);
-    border-radius: .5rem;
-    font-family: Typewriter;
-    cursor: pointer;
-    margin: 1rem;
-    font-size: 1.1rem;
-  }
+.increase-cap {
+  padding: 2rem;
+  color: white;
+  background: linear-gradient(black, var(--color-pelle--base));;
+  border: 1px solid var(--color-pelle--base);
+  border-radius: .5rem;
+  font-family: Typewriter;
+  cursor: pointer;
+  margin: 1rem;
+  font-size: 1.1rem;
+}
 
-  .increase-cap:hover {
-    box-shadow: 1px 1px 5px var(--color-pelle--base);
-    transition-duration: 0.12s;
-  }
+.increase-cap:hover {
+  box-shadow: 1px 1px 5px var(--color-pelle--base);
+  transition-duration: 0.12s;
+}
 
-  .big-text {
-    font-size: 3rem;
-    text-shadow: 2px 2px 2px black;
-  }
+.big-text {
+  font-size: 3rem;
+  text-shadow: 2px 2px 2px black;
+}
 </style>

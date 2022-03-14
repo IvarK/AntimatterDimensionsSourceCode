@@ -22,8 +22,13 @@ export default {
     },
     title: {
       type: String,
-      default: "",
-      required: false
+      required: false,
+      default: ""
+    },
+    br: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -97,6 +102,7 @@ export default {
     v-if="isVisible"
     :class="classObject"
   >
+    <br v-if="br">
     {{ title }} {{ description }}
   </span>
 </template>

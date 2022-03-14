@@ -1569,21 +1569,94 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     addPhrase(tab.alias, tab);
   }
 
-  GameDatabase.h2p.search = query => {
-    if (query === "") return GameDatabase.h2p.tabs;
-    const words = query.toLowerCase().split(" ").filter(str => str !== "");
-    /* eslint-disable-next-line no-unused-vars*/
-    const searchTerms = words.map((_word, i, arr) => arr.slice(0, arr.length - i).join(" "));
-    const result = new Set();
-    for (const searchWord of searchTerms) {
-      const matches = searchIndex[searchWord];
-      if (matches === undefined) continue;
-      for (const match of matches) {
-        result.add(match);
+  // Very suboptimal code coming up. If anybody has a better solution, PLEASE, implement it.
+  const keyboardify = keybrd => keybrd.split(",").map(str => str.split(""))
+    .map2dToObject(key => key, (_key, x, y) => ({ x, y }));
+
+  const qwerty = keyboardify(`1234567890,qwertyuiop,asdfghjkl,zxcvbnm`);
+  const qwertz = keyboardify(`1234567890,qwertzuiop,asdfghjkl,yxcvbnm`);
+  const qzerty = keyboardify(`1234567890,qzertyuiop,asdfghjklm,wxcvbn`);
+  const azerty = keyboardify(`1234567890,azertyuiop,qsdfghjklm,wxcvbn`);
+  const dvorak = keyboardify(`1234567890,'<>pyfgcrl,aoeuidhtns,;qjkxbmwvz`);
+  const colemak = keyboardify(`1234567890,qwfpgjluy,arstdhneio,zxcvbkm`);
+  const workman = keyboardify(`1234567890,qdrwbjfup,ashtgyneoi,zxmcvkl`);
+  const qwprf = keyboardify(`1234567890,qwprfyukl,asdtghnioe,zxcvbjm`);
+
+  const keyboards = [qwerty, qwertz, qzerty, azerty, dvorak, colemak, workman, qwprf];
+
+  const keyboardDist = function(a, b, keyboard) {
+    const aPos = keyboard[a], bPos = keyboard[b];
+    if (!aPos || !bPos) return 100;
+    return Math.max(Math.abs(aPos.x - bPos.x), Math.abs(aPos.y - bPos.y));
+  };
+  // I copied this code off wikipedia. I have no idea how it works but as long as it does
+  // don't touch it.
+  const howBadlyTypoedWithKeyboard = function(a, b, keyboard) {
+    if (a === b) return 0;
+    const aLen = a.length, bLen = b.length;
+    // 2d Array with dimensions aLen + 1 x bLen + 1
+    const d = new Array(aLen + 1).fill(0).map(() => new Array(bLen + 1).fill(0));
+
+    for (let i = 0; i <= aLen; i++) {
+      d[i][0] = i;
+    }
+    for (let i = 0; i <= bLen; i++) {
+      d[0][i] = i;
+    }
+
+    for (let i = 1; i <= aLen; i++) {
+      for (let j = 1; j <= bLen; j++) {
+        const distance = keyboardDist(a[i - 1], b[j - 1], keyboard);
+        const cost = distance === 0 ? 0 : 0.3 + distance * distance * 0.2;
+        d[i][j] = Math.min(d[i - 1][j] + 0.5, d[i][j - 1] + 0.5, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 0.5);
+        }
       }
     }
-    const results = Array.from(result);
-    results.sort((a, b) => a.id - b.id);
+    return d[aLen][bLen];
+  };
+
+  const howBadlyTypoed = function(a, b) {
+    // Arbitrarily large number
+    let minTypoed = 1e10;
+    for (const keyboard of keyboards) {
+      minTypoed = Math.min(minTypoed, howBadlyTypoedWithKeyboard(a, b, keyboard));
+    }
+    return minTypoed;
+  };
+
+  const specialChars = ["'", "\"", ",", "-", "."];
+
+  const replaceSpecialChars = function(str) {
+    let result = str;
+    for (const i of specialChars) {
+      result = result.replaceAll(i, "");
+    }
+    return result;
+  };
+
+  GameDatabase.h2p.search = query => {
+    const truncatedQuery = replaceSpecialChars(query.replaceAll("_", " "));
+    if (truncatedQuery === "") return GameDatabase.h2p.tabs;
+    const words = truncatedQuery.toLowerCase().split(" ").filter(str => str !== "");
+    /* eslint-disable-next-line no-unused-vars*/
+    const searchTerms = words.map((_word, i, arr) => arr.slice(0, arr.length - i).join(" "));
+    const relevances = GameDatabase.h2p.tabs.map(() => 10000);
+    for (const searchWord of searchTerms) {
+      for (const searchIndexStr in searchIndex) {
+        const typoThreshold = howBadlyTypoed(replaceSpecialChars(searchIndexStr), searchWord);
+        if (typoThreshold < 1.5) {
+          for (const tab of searchIndex[searchIndexStr]) {
+            relevances[tab.id] = Math.min(relevances[tab.id], typoThreshold);
+          }
+        }
+      }
+    }
+    const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 1.5);
+
+    // Sort by id first, then push more relevant results to top.
+    results.sort((a, b) => a.id - b.id).sort((a, b) => Math.floor(relevances[a.id] * 3 - relevances[b.id] * 3));
     return results;
   };
 }());

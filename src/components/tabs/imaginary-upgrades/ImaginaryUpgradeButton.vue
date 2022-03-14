@@ -93,11 +93,9 @@ export default {
         <template v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable">
           <br>
           <DescriptionDisplay
-            v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
             :config="requirementConfig"
             label="Requirement:"
             class="c-reality-upgrade-btn__requirement"
-            br
           />
         </template>
         <template v-else>

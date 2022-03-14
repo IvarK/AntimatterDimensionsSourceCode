@@ -143,23 +143,23 @@ export default {
         />
       </div>
       <div
-        v-if="hasPelleDilationUpgrades"
-        class="l-dilation-upgrades-grid__row"
-      >
-        <DilationUpgradeButton
-          v-for="upgrade in pelleUpgrades"
-          :key="upgrade.id"
-          :upgrade="upgrade"
-          class="l-dilation-upgrades-grid__cell"
-        />
-      </div>
-      <div
         v-for="(row, i) in upgrades"
         :key="i"
         class="l-dilation-upgrades-grid__row"
       >
         <DilationUpgradeButton
           v-for="upgrade in row"
+          :key="upgrade.id"
+          :upgrade="upgrade"
+          class="l-dilation-upgrades-grid__cell"
+        />
+      </div>
+      <div
+        v-if="hasPelleDilationUpgrades"
+        class="l-dilation-upgrades-grid__row"
+      >
+        <DilationUpgradeButton
+          v-for="upgrade in pelleUpgrades"
           :key="upgrade.id"
           :upgrade="upgrade"
           class="l-dilation-upgrades-grid__cell"

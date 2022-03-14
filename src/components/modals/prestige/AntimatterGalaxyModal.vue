@@ -40,8 +40,8 @@ export default {
         tickspeedFixed = `${Ra.displayName}'s Reality`;
       }
       const tickspeedInfo = (tickspeedFixed === "")
-        ? "you will receive a small boost to Tickspeed upgrades."
-        : `you will not receive a boost to Tickspeed upgrades, because you are in ${tickspeedFixed}.`;
+        ? "you will receive a small boost to Tickspeed Upgrades."
+        : `you will not receive a boost to Tickspeed Upgrades, because you are in ${tickspeedFixed}.`;
       const message = (resetList === "")
         ? `This will reset nothing, and ${tickspeedInfo}`
         : `This will reset your ${resetList}. However, ${tickspeedInfo}`;

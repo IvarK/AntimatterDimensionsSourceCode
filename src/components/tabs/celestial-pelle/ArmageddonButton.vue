@@ -54,9 +54,9 @@ export default {
   padding: 1.5rem;
   display: block;
   font-family: Typewriter;
-  background: var(--color-prestige--accent);
+  background: black;
   border: 1px solid var(--color-pelle--base);
-  color: var(--color-text);
+  color: white;
   border-radius: 5px;
 }
 

@@ -216,6 +216,8 @@ export default {
   border-radius: 0.5rem;
   border: 0.2rem solid var(--color-pelle--base);
   padding: 1rem;
+  background-color: #1a1a1a;
+  color: #888888;
 }
 
 .c-armageddon-button-container {

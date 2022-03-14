@@ -70,7 +70,7 @@ export default {
     <h2>Library Developer</h2>
     <p>Patashu</p>
 
-    <h2>Design Consultant</h2>
+    <h2>Design Consoltant</h2>
     <p>Pichusuperlover</p>
     <p>Acamaeda</p>
 

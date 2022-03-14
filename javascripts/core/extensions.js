@@ -175,7 +175,7 @@ Array.prototype.map2dToObject = function(keyFun, valueFun) {
     }
   }
   return out;
-}
+};
 
 /**
  * @type {number[]}

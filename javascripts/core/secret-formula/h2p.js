@@ -1589,8 +1589,12 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     if (!aPos || !bPos) return 100;
     return Math.max(Math.abs(aPos.x - bPos.x), Math.abs(aPos.y - bPos.y));
   };
-  // I copied this code off wikipedia. I have no idea how it works but as long as it does
-  // don't touch it.
+
+  // I copied this code based on OSA distance off wikipedia, with a few added changes.
+  // The cost for "substitution" (third item of the first Math.min) is replaced from a static value
+  // to a function which roughly estimates how likely the user is to mispress the key based on its
+  // minimum distance from several common keyboard layouts.
+  // I have no idea how the actual "distance" calculation works but as long as it does don't touch it.
   const howBadlyTypoedWithKeyboard = function(a, b, keyboard) {
     if (a === b) return 0;
     const aLen = a.length, bLen = b.length;
@@ -1608,9 +1612,16 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
       for (let j = 1; j <= bLen; j++) {
         const distance = keyboardDist(a[i - 1], b[j - 1], keyboard);
         const cost = distance === 0 ? 0 : 0.3 + distance * distance * 0.2;
-        d[i][j] = Math.min(d[i - 1][j] + 0.5, d[i][j - 1] + 0.5, d[i - 1][j - 1] + cost);
+        d[i][j] = Math.min(
+          d[i - 1][j] + 0.5,
+          d[i][j - 1] + 0.5,
+          d[i - 1][j - 1] + cost
+        );
         if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
-          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 0.5);
+          d[i][j] = Math.min(
+            d[i][j],
+            d[i - 2][j - 2] + 0.5
+          );
         }
       }
     }

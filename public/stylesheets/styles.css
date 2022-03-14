@@ -7729,7 +7729,6 @@ kbd {
   opacity: 0.1;
   z-index: 4;
 }
-
 .o-alchemy-node--base {
   background-color: #81d4fa;
 }
@@ -7737,6 +7736,11 @@ kbd {
 .o-alchemy-node--active {
   background-color: #9ccc65;
 }
+
+.o-alchemy-node--doomed {
+  background-color: crimson;
+}
+
 
 .c-ra-unlock-unlocked {
   background: lightgreen;

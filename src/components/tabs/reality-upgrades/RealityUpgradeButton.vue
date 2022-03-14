@@ -92,13 +92,14 @@ export default {
       </span>
       <span v-else>
         <DescriptionDisplay :config="config" />
-        <DescriptionDisplay
-          v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
-          :config="requirementConfig"
-          label="Requirement:"
-          class="c-reality-upgrade-btn__requirement"
-          br
-        />
+        <template v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable">
+          <br>
+          <DescriptionDisplay
+            :config="requirementConfig"
+            label="Requirement:"
+            class="c-reality-upgrade-btn__requirement"
+          />
+        </template>
         <template v-else>
           <EffectDisplay
             :config="config"

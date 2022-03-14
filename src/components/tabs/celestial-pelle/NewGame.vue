@@ -29,8 +29,8 @@ export default {
       // Original code
       // this.visible = Pelle.endState > 13.6 && !Pelle.removeAdditionalEnd;
       // this.opacity = (Pelle.endState - 13.6) * 2;
-      this.visible = player.records.thisReality.realTime > 1.55e5;
-      this.opacity = (player.records.thisReality.realTime - 1.55e5) / 10000;
+      this.visible = player.records.thisReality.realTime > 2e5;
+      this.opacity = (player.records.thisReality.realTime - 2e5) / 10000;
     },
     ngString(i) {
       if (!i) return "";

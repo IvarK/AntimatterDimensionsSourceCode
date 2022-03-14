@@ -19,7 +19,7 @@ export default {
   computed: {
     creditStyles() {
       return {
-        top: `${100 - this.scroll}vh`,
+        bottom: `${this.scroll}rem`,
         display: this.rolling ? "block" : "none"
       };
     },
@@ -100,7 +100,7 @@ export default {
       // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
 
       this.rolling = player.records.thisReality.realTime > 1.5e4;
-      this.scroll = (player.records.thisReality.realTime - 1.5e4) / 250;
+      this.scroll = (player.records.thisReality.realTime - 1.5e4) / 1000 * 2.4;
       if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
     },
     animName(x, duration = 10, type = "ease-in-out") {
@@ -278,6 +278,7 @@ export default {
   z-index: 9;
   color: rgb(185, 185, 185);
   pointer-events: none;
+  transform: translateY(100%);
 }
 
 h1 {

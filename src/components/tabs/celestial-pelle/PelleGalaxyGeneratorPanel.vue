@@ -87,7 +87,10 @@ export default {
         <div>
           <button
             class="c-increase-cap"
-            :class="{ 'c-increase-cap-available': isCapped && capRift }"
+            :class="{
+              'c-increase-cap-available': isCapped && capRift,
+              'tutorial--glow': cap === Infinity
+            }"
             @click="increaseCap"
           >
             <div
@@ -200,7 +203,7 @@ export default {
 .c-increase-cap {
   padding: 2rem;
   color: white;
-  background-color: #333;
+  background-color: #004b55;
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: .5rem;
   font-family: Typewriter;
@@ -236,6 +239,7 @@ export default {
   height: 100%;
   position: absolute;
   z-index: 0;
+  transition: width 0.1s;
 }
 
 .c-big-text {

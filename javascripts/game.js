@@ -136,9 +136,10 @@ export function gainedEternityPoints() {
     gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   ep = ep.times(NG.multiplier);
-  let pelleMults = Pelle.specialGlyphEffect.time;
 
-  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
+  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(
+    PelleRifts.famine.milestones[2]
+  );
 
   if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
 
@@ -158,9 +159,7 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
-  let pelleMults = Pelle.specialGlyphEffect.time;
-
-  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
+  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
 
   if (Pelle.isDoomed) return Decimal.pow10(308 * (Decimal.log(pelleMults.dividedBy(epAmount).reciprocal(), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
@@ -384,7 +383,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
 
-  factor *= PelleRebuyableUpgrade.timeSpeedMult.effectValue.toNumber();
+  factor *= PelleUpgrade.timeSpeedMult.effectValue.toNumber();
 
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
@@ -780,7 +779,7 @@ function applyAutoprestige(diff) {
     Currency.realityMachines.add(addedRM);
   }
 
-  if (PelleRifts.chaos.hasMilestone(2)) {
+  if (PelleRifts.chaos.milestones[2].canBeApplied) {
     Currency.eternityPoints.add(gainedEternityPoints().times(DC.D0_1).times(diff / 1000));
   }
 }

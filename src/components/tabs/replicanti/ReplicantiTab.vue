@@ -124,7 +124,7 @@ export default {
   methods: {
     update() {
       this.isUnlocked = Replicanti.areUnlocked;
-      this.unlockCost = PelleRifts.famine.hasMilestone(1) ? 1e10 : 1e140;
+      this.unlockCost = new Decimal(1e140).dividedByEffectOf(PelleRifts.famine.milestones[1]);
       if (!this.isUnlocked) {
         this.isUnlockAffordable = Currency.infinityPoints.gte(this.unlockCost);
         return;
@@ -144,7 +144,7 @@ export default {
         1
       );
       this.isDoomed = Pelle.isDoomed;
-      this.isUncapped = PelleRifts.famine.hasMilestone(1);
+      this.isUncapped = PelleRifts.famine.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;

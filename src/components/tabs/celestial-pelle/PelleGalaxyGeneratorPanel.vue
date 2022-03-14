@@ -10,12 +10,14 @@ export default {
     return {
       isUnlocked: false,
       galaxies: 0,
+      generatedGalaxies: 0,
       galaxiesPerSecond: 0,
       cap: 0,
       isCapped: false,
       capRift: null,
       sacrificeActive: false,
       isCollapsed: false,
+      barWidth: 0
     };
   },
   computed: {
@@ -36,13 +38,16 @@ export default {
   methods: {
     update() {
       this.isUnlocked = Pelle.hasGalaxyGenerator;
+      this.isCapped = GalaxyGenerator.isCapped;
+      this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
+      if (this.isCollapsed || !this.isUnlocked) return;
       this.galaxies = player.galaxies + GalaxyGenerator.galaxies;
+      this.generatedGalaxies = GalaxyGenerator.generatedGalaxies;
       this.galaxiesPerSecond = GalaxyGenerator.gainPerSecond;
       this.cap = GalaxyGenerator.generationCap;
-      this.isCapped = GalaxyGenerator.isCapped;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
-      this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
+      this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.generatedGalaxies / this.cap);
     },
     increaseCap() {
       GalaxyGenerator.startSacrifice();
@@ -75,30 +80,47 @@ export default {
       <div v-if="isUnlocked">
         <div>
           You have a total of
-          <span class="galaxies-amount">{{ galaxyText }}</span>
+          <span class="c-galaxies-amount">{{ galaxyText }}</span>
           Galaxies.
-          <span class="galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
+          <span class="c-galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
         </div>
-        <span v-if="!isCapped">You can generate a maximum of {{ format(cap) }} Galaxies.</span>
-        <div
-          v-if="isCapped && capRift"
-        >
+        <div>
           <button
-            class="increase-cap"
+            class="c-increase-cap"
+            :class="{ 'c-increase-cap-available': isCapped && capRift }"
             @click="increaseCap"
           >
-            To generate more Galaxies, you need to get rid of all that {{ capRift.name }}. <br><br>
-            <span
-              v-if="!sacrificeActive"
-              class="big-text"
-            >Sacrifice your {{ capRift.name }}</span>
-            <span
+            <div
+              class="c-increase-cap-background"
+              :style="{ 'width': `${barWidth * 100}%` }"
+            />
+            <div
+              v-if="isCapped && capRift"
+              class="c-increase-cap-text"
+            >
+              To generate more Galaxies, you need to get rid of all that {{ capRift.name }}. <br><br>
+              <span
+                v-if="!sacrificeActive"
+                class="c-big-text"
+              >
+                Sacrifice your {{ capRift.name }}
+              </span>
+              <span
+                v-else
+                class="c-big-text"
+              >
+                Getting rid of all that {{ capRift.name }}...
+              </span>
+            </div>
+            <div
               v-else
-              class="big-text"
-            >Getting rid of all that {{ capRift.name }}...</span>
+              class="c-increase-cap-text c-medium-text"
+            >
+              {{ format(generatedGalaxies, 2) }} / {{ format(cap, 2) }} Galaxies generated
+            </div>
           </button>
         </div>
-        <div class="galaxy-generator-upgrades-container">
+        <div class="l-galaxy-generator-upgrades-container">
           <PelleUpgrade
             v-for="upgrade in upgrades"
             :key="upgrade.config.id"
@@ -109,7 +131,7 @@ export default {
       </div>
       <button
         v-else
-        class="generator-unlock-button"
+        class="c-generator-unlock-button"
         @click="unlock"
       >
         Unlock the Galaxy Generator
@@ -141,7 +163,7 @@ export default {
   align-items: center;
 }
 
-.generator-unlock-button {
+.c-generator-unlock-button {
   padding: 2rem;
   border-radius: .5rem;
   font-family: Typewriter;
@@ -154,13 +176,13 @@ export default {
   font-weight: bold;
 }
 
-.galaxy-generator-upgrades-container {
+.l-galaxy-generator-upgrades-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.galaxies-amount {
+.c-galaxies-amount {
   font-weight: bold;
   font-size: 2.5rem;
   background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
@@ -175,25 +197,54 @@ export default {
   color: var(--color-pelle--base);
 }
 
-.increase-cap {
+.c-increase-cap {
   padding: 2rem;
   color: white;
-  background: linear-gradient(black, var(--color-pelle--base));;
-  border: 1px solid var(--color-pelle--base);
+  background-color: #333;
+  border: 0.2rem solid var(--color-pelle--base);
   border-radius: .5rem;
   font-family: Typewriter;
-  cursor: pointer;
   margin: 1rem;
   font-size: 1.1rem;
+  position: relative;
+  width: 100%;
+  max-width: 70rem;
+  height: 11.4rem;
+  overflow: hidden;
+  box-shadow: inset 0 0 1px 1px var(--color-pelle--base);
+  /* box-shadow is here to prevent a weird grey border forming around the background */
 }
 
-.increase-cap:hover {
-  box-shadow: 1px 1px 5px var(--color-pelle--base);
+.c-increase-cap:hover {
+  box-shadow: inset 0 0 1px 1px var(--color-pelle--base), 1px 1px 5px var(--color-pelle--base);
   transition-duration: 0.12s;
 }
 
-.big-text {
+.c-increase-cap-available {
+  cursor: pointer;
+}
+
+.c-increase-cap-text {
+  position: relative;
+  z-index: 1;
+}
+
+.c-increase-cap-background {
+  background: linear-gradient(black, var(--color-pelle--base));
+  left: 0;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+}
+
+.c-big-text {
   font-size: 3rem;
+  text-shadow: 2px 2px 2px black;
+}
+
+.c-medium-text {
+  font-size: 2rem;
   text-shadow: 2px 2px 2px black;
 }
 
@@ -203,7 +254,7 @@ export default {
 </style>
 
 <style>
-.s-base--metro .increase-cap {
+.s-base--metro .c-increase-cap {
   border-radius: 0;
 }
 </style>

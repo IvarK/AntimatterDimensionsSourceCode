@@ -10,6 +10,7 @@ export const GameDatabase = {
     glyphSacrifice: {},
   },
   celestials: {
+    pelle: {},
     descriptions: {},
   }
 };
@@ -22,4 +23,16 @@ window.mapGameData = function mapGameData(gameData, mapFn) {
     result[data.id] = mapFn(data);
   }
   return result;
+};
+
+window.mapGameDataToObject = function mapGameDataToObject(gameData, mapFun) {
+  const array = Object.entries(gameData);
+  const out = {};
+  for (let idx = 0; idx < array.length; idx++) {
+    out[array[idx][0]] = mapFun(array[idx][1]);
+  }
+  return {
+    all: Object.values(out),
+    ...out
+  };
 };

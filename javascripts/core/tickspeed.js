@@ -39,12 +39,10 @@ export function getTickSpeedMultiplier() {
       Achievement(86),
       Achievement(178),
       InfinityChallenge(5).reward,
-      PelleRebuyableUpgrade.galaxyPower
+      PelleUpgrade.galaxyPower,
+      PelleRifts.pestilence.milestones[1]
     );
     if (Pelle.isDoomed) galaxies *= 0.5;
-    if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(DC.E1300)) {
-      galaxies *= 1.1;
-    }
 
     galaxies *= Pelle.specialGlyphEffect.power;
     return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
@@ -61,15 +59,13 @@ export function getTickSpeedMultiplier() {
     Achievement(86),
     Achievement(178),
     InfinityChallenge(5).reward,
-    PelleRebuyableUpgrade.galaxyPower
+    PelleUpgrade.galaxyPower,
+    PelleRifts.pestilence.milestones[1]
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
   if (Pelle.isDoomed) galaxies *= 0.5;
-  if (PelleRifts.pestilence.hasMilestone(1) && Replicanti.amount.gt(DC.E1300)) {
-    galaxies *= 1.1;
-  }
 
   galaxies *= Pelle.specialGlyphEffect.power;
   const perGalaxy = DC.D0_965;

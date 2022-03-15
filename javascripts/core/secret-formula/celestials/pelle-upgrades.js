@@ -168,17 +168,17 @@ GameDatabase.celestials.pelle.upgrades = (function() {
       cost: 1e26,
       formatCost,
     },
-    dimBoostResetsNothing: {
-      id: 18,
-      description: "Dimension Boosts no longer reset anything",
-      cost: 1e50,
-      formatCost,
-    },
     dilationUpgradesNoReset: {
-      id: 19,
+      id: 18,
       description: "Keep Dilation Upgrades on Armageddon",
       cost: 1e45,
       formatCost: c => format(c, 2),
+    },
+    dimBoostResetsNothing: {
+      id: 19,
+      description: "Dimension Boosts no longer reset anything",
+      cost: 1e50,
+      formatCost,
     },
     tachyonParticlesNoReset: {
       id: 20,

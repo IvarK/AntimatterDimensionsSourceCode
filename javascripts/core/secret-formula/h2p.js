@@ -1529,10 +1529,11 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     const tab = GameDatabase.h2p.tabs[i];
     tab.id = i;
     if (tab.alias === undefined) tab.alias = tab.name;
+
+    tab.searchTermsRelevance = {};
   }
 
   const searchIndex = {};
-  const searchIndexFullName = {};
 
   const addTerm = (term, tab) => {
     let entry = searchIndex[term];
@@ -1547,15 +1548,14 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
   const addWord = (word, tab) => {
     const lowerCase = word.toLowerCase();
     for (let i = 0; i < lowerCase.length; i++) {
+      const term = lowerCase.slice(0, i + 1);
       addTerm(lowerCase.slice(0, i + 1), tab);
+      if (tab.searchTermsRelevance[term] === undefined) {
+        tab.searchTermsRelevance[term] = (i + 1) / lowerCase.length;
+      } else {
+        tab.searchTermsRelevance[term] = Math.max(tab.searchTermsRelevance[term], (i + 1) / lowerCase.length);
+      }
     }
-    let entry = searchIndexFullName[lowerCase];
-    if (entry === undefined) {
-      entry = [];
-      searchIndexFullName[lowerCase] = entry;
-    }
-    if (entry.includes(tab.id)) return;
-    entry.push(tab.id);
   };
 
   const addPhrase = (phrase, tab) => {
@@ -1667,28 +1667,37 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     return result;
   };
 
+  // There are a LOT of magic numbers in this code, mostly from arbitrary choices for "What number is large enough to
+  // act as a placeholder for 'basically not found'?"
+  // This will need some cleanup if possible.
   GameDatabase.h2p.search = query => {
     const truncatedQuery = replaceSpecialChars(query.replaceAll("_", " "));
-    if (truncatedQuery === "") return GameDatabase.h2p.tabs;
+    if (truncatedQuery === "") return GameDatabase.h2p.tabs.map(x => ({ tab: x, relevance: 1.5 }));
     const words = truncatedQuery.toLowerCase().split(" ").filter(str => str !== "");
     /* eslint-disable-next-line no-unused-vars*/
     const searchTerms = words.map((_word, i, arr) => arr.slice(0, arr.length - i).join(" "));
+
+    // A higher "Relevance" value actually means that has lower relevance.
     const relevances = GameDatabase.h2p.tabs.map(() => 10000);
     for (const searchWord of searchTerms) {
       for (const searchIndexStr in searchIndex) {
         const typoThreshold = howBadlyTypoed(replaceSpecialChars(searchIndexStr), searchWord);
         if (typoThreshold < 1.5) {
           for (const tab of searchIndex[searchIndexStr]) {
-            const isFullTermDecrease = searchIndexFullName[searchIndexStr]?.includes(tab.id) ? 0.8 : 0;
-            relevances[tab.id] = Math.min(relevances[tab.id], typoThreshold - isFullTermDecrease);
+            const maxRelevance = tab.searchTermsRelevance[searchIndexStr];
+            const decrease = maxRelevance === 1 ? 0.8 : 0;
+            relevances[tab.id] = Math.min(relevances[tab.id], Math.max(typoThreshold, 1 - maxRelevance) - decrease);
           }
         }
       }
     }
-    const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 1.5);
+    const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 1.5)
+      .map(x => ({ tab: x, relevance: relevances[x.id] }));
+    // Provide both the relevance and the tab itself
 
     // Sort by id first, then push more relevant results to top.
-    results.sort((a, b) => a.id - b.id).sort((a, b) => relevances[a.id] - relevances[b.id]);
+    results.sort((a, b) => a.tab.id - b.tab.id).sort((a, b) => a.relevance - b.relevance);
+    // Provide both the relevance and the tab itself
     return results;
   };
 }());

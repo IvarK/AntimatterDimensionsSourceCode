@@ -28,7 +28,7 @@ export default {
       }
     },
     matchingTabs() {
-      return GameDatabase.h2p.search(this.searchValue).filter(tab => tab.isUnlocked());
+      return GameDatabase.h2p.search(this.searchValue).filter(searchObj => searchObj.tab.isUnlocked());
     }
   },
   created() {
@@ -65,13 +65,16 @@ export default {
         >
         <div class="l-h2p-tab-list">
           <div
-            v-for="tab in matchingTabs"
-            :key="tab.name"
+            v-for="searchObj in matchingTabs"
+            :key="searchObj.tab.name"
             class="o-h2p-tab-button"
-            :class="tab === activeTab ? 'o-h2p-tab-button--selected' : ''"
-            @click="setActiveTab(tab)"
+            :class="{
+              'o-h2p-tab-button--selected': searchObj.tab === activeTab,
+              'o-h2p-tab-button--relevant': searchObj.relevance < 0.2
+            }"
+            @click="setActiveTab(searchObj.tab)"
           >
-            {{ tab.alias }}
+            {{ searchObj.tab.alias }}
           </div>
         </div>
       </div>
@@ -88,3 +91,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.o-h2p-tab-button--relevant {
+  background-color: #df505055;
+}
+</style>

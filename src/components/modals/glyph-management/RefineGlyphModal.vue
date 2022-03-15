@@ -78,7 +78,7 @@ export default {
       v-else
       class="c-modal-message__text"
     >
-      You cannot gain any {{ resourceName }} Alchemy resource because you have not
+      You cannot gain any {{ resourceName }} alchemy resource because you have not
       unlocked this Glyph's resource yet. You can still refine it anyway, but nothing
       will happen. Consider sacrificing the Glyph instead.
     </div>

@@ -171,8 +171,8 @@ export default {
             {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/s)
           </div>
           <div
-            v-for="celestialInfo in celestialRunText"
-            :key="celestialInfo"
+            v-for="(celestialInfo, i) in celestialRunText"
+            :key="i"
           >
             <span v-if="celestialInfo[0]">
               {{ celestialInfo[1] }}

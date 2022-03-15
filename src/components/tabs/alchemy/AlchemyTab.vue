@@ -81,7 +81,7 @@ export default {
         reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
-      return reactionArrow.reaction.isActive;
+      return reactionArrow.reaction.isActive && !Pelle.isDoomed;
     },
     isFocusedReaction(reactionArrow) {
       return this.isUnlocked(reactionArrow) && reactionArrow.reaction.product.id === this.focusedResourceId;
@@ -219,12 +219,14 @@ export default {
       />
       <svg class="l-alchemy-arrow-canvas">
         <line
-          v-for="reactionArrow in layout.reactionArrows"
+          v-for="(reactionArrow, idx) in layout.reactionArrows"
+          :key="'arrow-' + idx"
           v-bind="reactionArrowPaths(reactionArrow)"
           :class="reactionPathClass(reactionArrow)"
         />
         <line
-          v-for="reactionArrow in layout.reactionArrows"
+          v-for="(reactionArrow, idx) in layout.reactionArrows"
+          :key="'arrow2-' + idx"
           v-bind="reactionArrowPositions(reactionArrow)"
           :class="reactionArrowClass(reactionArrow)"
         />

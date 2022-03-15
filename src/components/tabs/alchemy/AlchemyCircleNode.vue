@@ -49,6 +49,7 @@ export default {
         "o-alchemy-node--active": this.isReactionActive,
         "o-alchemy-node--unfocused": !this.isFocused,
         "o-alchemy-node--locked": !this.isUnlocked,
+        "o-alchemy-node--doomed": Pelle.isDoomed,
       };
     },
     hintClassObject() {

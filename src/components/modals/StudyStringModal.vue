@@ -66,7 +66,7 @@ export default {
     // We show information about the after-load tree, but which tree (imported from empty vs combined) info is shown
     // depends on if we're importing vs editing
     treeStatus() {
-      const showingTree = this.isImporting ? this.combinedTree : this.importedTree;
+      const showingTree = this.isImporting ? this.importedTree : this.combinedTree;
       return {
         firstPaths: showingTree.firstPaths,
         secondPaths: showingTree.secondPaths,
@@ -190,7 +190,7 @@ export default {
           :into-empty="true"
         />
         <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
-          <b>Tree status after loading:</b>
+          <b>Tree status after {{ isImporting ? "importing" : "loading" }}:</b>
         </div>
         <div
           v-if="treeStatus.firstPaths"

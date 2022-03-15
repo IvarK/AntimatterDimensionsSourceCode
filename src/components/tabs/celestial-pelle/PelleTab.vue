@@ -41,7 +41,7 @@ export default {
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
-      this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
+      this.hasGalaxyGenerator = PelleRifts.war.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -218,6 +218,8 @@ export default {
   border-radius: 0.5rem;
   border: 0.2rem solid var(--color-pelle--base);
   padding: 1rem;
+  background-color: #1a1a1a;
+  color: #888888;
 }
 
 .c-armageddon-button-container {

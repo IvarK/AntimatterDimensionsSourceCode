@@ -31,7 +31,6 @@ import ImaginaryUpgradesTab from "./imaginary-upgrades/ImaginaryUpgradesTab";
 import PerksTab from "./perks/PerksTab";
 import BlackHoleTab from "./black-hole/BlackHoleTab";
 import AlchemyTab from "./alchemy/AlchemyTab";
-import CelestialNavigationTab from "./celestial-navigation/CelestialNavigationTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -65,8 +64,7 @@ const TabComponents = {
   ImaginaryUpgradesTab,
   PerksTab,
   BlackHoleTab,
-  AlchemyTab,
-  CelestialNavigationTab
+  AlchemyTab
 };
 
 export default TabComponents;

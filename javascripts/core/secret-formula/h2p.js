@@ -1551,9 +1551,9 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
       const term = lowerCase.slice(0, i + 1);
       addTerm(lowerCase.slice(0, i + 1), tab);
       if (tab.searchTermsRelevance[term] === undefined) {
-        tab.searchTermsRelevance[term] = (i + 1) / lowerCase.length;
+        tab.searchTermsRelevance[term] = ((i + 1) / lowerCase.length) ** 0.65;
       } else {
-        tab.searchTermsRelevance[term] = Math.max(tab.searchTermsRelevance[term], (i + 1) / lowerCase.length);
+        tab.searchTermsRelevance[term] = Math.max(tab.searchTermsRelevance[term], ((i + 1) / lowerCase.length) ** 0.65);
       }
     }
   };
@@ -1685,7 +1685,7 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
         if (typoThreshold < 1.5) {
           for (const tab of searchIndex[searchIndexStr]) {
             const maxRelevance = tab.searchTermsRelevance[searchIndexStr];
-            const decrease = maxRelevance === 1 ? 0.8 : 0;
+            const decrease = Math.max(maxRelevance * 2.3 - 1.5, 0);
             relevances[tab.id] = Math.min(relevances[tab.id], Math.max(typoThreshold, 1 - maxRelevance) - decrease);
           }
         }

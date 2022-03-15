@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     update() {
-      this.isEnd = Pelle.endState >= 1;
+      this.isEnd = GameEnd.endState >= 1;
     },
     hardReset() {
       if (!this.willHardReset) return;

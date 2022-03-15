@@ -51,10 +51,6 @@ const disabledMechanicUnlocks = {
 export const Pelle = {
   symbol: "♅",
 
-  get endState() {
-    return GameEnd.endState;
-  },
-
   get displayName() {
     return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
   },

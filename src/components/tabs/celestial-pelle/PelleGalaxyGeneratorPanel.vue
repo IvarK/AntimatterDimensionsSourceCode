@@ -147,6 +147,14 @@ export default {
   font-weight: bold;
   font-size: 3rem;
   color: var(--color-pelle--base);
+  position: relative;
+}
+
+.fa-expand-arrows-alt, .fa-compress-arrows-alt {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .l-pelle-panel-container {

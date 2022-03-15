@@ -55,7 +55,7 @@ export default {
   padding: 1.5rem;
   display: block;
   font-family: Typewriter;
-  background: black;
+  background: var(--color-prestige--accent);
   border: 1px solid var(--color-pelle--base);
   color: var(--color-text);
   border-radius: 0.5rem;

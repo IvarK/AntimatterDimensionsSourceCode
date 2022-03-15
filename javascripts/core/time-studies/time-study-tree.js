@@ -185,6 +185,8 @@ export class TimeStudyTree {
     // Import strings can contain repeated or undefined entries
     if (!study || this.purchasedStudies.includes(study)) return false;
 
+    // Because the player data may not reflect the state of the TimeStudyTree object's purchasedStudies,
+    // we have to do all the checks here with purchasedStudies. study.isBought and similar functions cannot be used.
     const check = req => (typeof req === "number"
       ? this.purchasedStudies.includes(TimeStudy(req))
       : req());
@@ -205,15 +207,16 @@ export class TimeStudyTree {
     }
     if (study instanceof ECTimeStudyState) {
       if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) return false;
-      const forbiddenStudies = study.config.secondary.forbiddenStudies ?? [];
-      const buyCheck = checkOnlyStructure ? study.isAccessible : study.canBeBought;
-      const hasForbiddenStudies = Perk.studyECRequirement.isBought
-        ? false
-        : forbiddenStudies.some(s => this.purchasedStudies.includes(TimeStudy(s)));
-      reqSatisfied = reqSatisfied && buyCheck && !hasForbiddenStudies;
+      const hasForbiddenStudies = !Perk.studyECRequirement.isBought &&
+        study.config.secondary.forbiddenStudies?.some(s => check(s));
+      // We want to only check the structure for script template error instructions
+      if (checkOnlyStructure) {
+        return reqSatisfied && !hasForbiddenStudies;
+      }
+      const hasEnoughTT = Currency.timeTheorems.value.subtract(this.spentTheorems[0]).gte(study.cost);
+      return reqSatisfied && !hasForbiddenStudies && (study.isBought || (study.isEntryGoalMet && hasEnoughTT));
     }
-    if (!reqSatisfied) return false;
-    return true;
+    return reqSatisfied;
   }
 
   // Buys the specified study; no requirement verification beyond cost, use hasRequirements() to verify proper structure

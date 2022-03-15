@@ -1,6 +1,10 @@
 import { GameDatabase } from "../game-database.js";
 import { DC } from "../../constants.js";
 
+const specialInfinityGlyphDisabledEffectText = () => (PelleRifts.chaos.milestones[1].canBeApplied
+  ? "The Pelle-Specific effect from Infinity Glyphs is also disabled."
+  : "");
+
 GameDatabase.challenges.eternity = [
   {
     id: 1,
@@ -130,8 +134,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 9,
     description: () => `you can't buy Tickspeed upgrades. Infinity Power instead multiplies
-      Time Dimensions with greatly reduced effect.
-      ${PelleRifts.chaos.hasMilestone(1) ? "The Pelle-Specific effect from Infinity Glyphs is also disabled." : ""}`,
+      Time Dimensions with greatly reduced effect. ${specialInfinityGlyphDisabledEffectText()}`,
     goal: DC.E1750,
     pelleGoal: DC.E2900,
     goalIncrease: DC.E250,
@@ -146,8 +149,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinities to Antimatter Dimensions (Infinities${formatPow(950)}).
-        ${PelleRifts.chaos.hasMilestone(1) ? "The Pelle-Specific effect from Infinity Glyphs is also disabled." : ""}`;
+        Infinities to Antimatter Dimensions (Infinities${formatPow(950)}). ${specialInfinityGlyphDisabledEffectText()}`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -167,8 +169,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 11,
     description: () => `all dimension multipliers and powers are disabled except for the multipliers from
-      Infinity Power and Dimension Boosts (to Antimatter Dimensions).
-      ${PelleRifts.chaos.hasMilestone(1) ? "The Pelle-Specific effect from Infinity Glyphs is also disabled." : ""}`,
+      Infinity Power and Dimension Boosts (to Antimatter Dimensions). ${specialInfinityGlyphDisabledEffectText()}`,
     goal: DC.E500,
     pelleGoal: DC.E11200,
     goalIncrease: DC.E200,
@@ -186,8 +187,7 @@ GameDatabase.challenges.eternity = [
     id: 12,
     description: () => (PlayerProgress.realityUnlocked()
       ? `the game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
-        within a certain amount of time or you will fail the Challenge.
-        ${PelleRifts.chaos.hasMilestone(1) ? "The Pelle-Specific effect from Infinity Glyphs is also disabled." : ""}`
+        within a certain amount of time or you will fail the Challenge. ${specialInfinityGlyphDisabledEffectText()}`
       : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),
     goal: DC.E110000,

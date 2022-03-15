@@ -33,7 +33,7 @@ export class ECTimeStudyState extends TimeStudyState {
       if (!auto) {
         Tab.challenges.eternity.show();
       }
-      if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
+      player.etercreq = this.id;
       Currency.timeTheorems.subtract(this.cost);
       TimeStudyTree.commitToGameState([TimeStudy.eternityChallenge(this.id)]);
       return true;
@@ -60,13 +60,6 @@ export class ECTimeStudyState extends TimeStudyState {
     this.purchase();
   }
 
-  // For TimeStudyTree purposes, we want to be able to check structure without secondary requirements
-  get isAccessible() {
-    // We'd have a switch case here if we wanted to generalize, but in our case it doesn't matter because all ECs have
-    // the same study restriction of type TS_REQUIREMENT_TYPE.AT_LEAST_ONE - so we just assume that behavior instead
-    return this.config.requirement.some(s => TimeStudy(s).isBought);
-  }
-
   get canBeBought() {
     if (!this.isAffordable) {
       return false;
@@ -74,16 +67,10 @@ export class ECTimeStudyState extends TimeStudyState {
     if (player.challenge.eternity.unlocked !== 0) {
       return false;
     }
-    if (!this.isAccessible) {
+    if (!this.config.requirement.some(s => TimeStudy(s).isBought)) {
       return false;
     }
-    if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {
-      return true;
-    }
-    if (!Perk.studyECRequirement.isBought) {
-      return this.isSecondaryRequirementMet;
-    }
-    return true;
+    return this.allSecondaryRequirementsMet;
   }
 
   /**
@@ -109,10 +96,17 @@ export class ECTimeStudyState extends TimeStudyState {
     return this.cachedCurrentRequirement;
   }
 
-  get isSecondaryRequirementMet() {
-    if (this.config.secondary.forbiddenStudies) {
-      return !this.config.secondary.forbiddenStudies.some(s => TimeStudy(s).isBought);
-    }
+  get allSecondaryRequirementsMet() {
+    return Perk.studyECRequirement.isBought || !this.hasForbiddenStudies && this.isEntryGoalMet;
+  }
+
+  get hasForbiddenStudies() {
+    return this.config.secondary.forbiddenStudies?.some(s => TimeStudy(s).isBought);
+  }
+
+  get isEntryGoalMet() {
+    if (player.etercreq === this.id) return true;
+    if (this.config.secondary.forbiddenStudies) return true;
     const current = this.requirementCurrent;
     const total = this.requirementTotal;
     return typeof current === "number" ? current >= total : current.gte(total);

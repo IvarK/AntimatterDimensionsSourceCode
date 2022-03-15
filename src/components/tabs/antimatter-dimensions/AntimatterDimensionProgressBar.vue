@@ -66,7 +66,7 @@ export default {
           setProgress(Decimal.pow10(player.celestials.laitela.entropy), 10, "Percentage to Destabilized Reality");
         }
       } else if (Pelle.isDoomed) {
-        if (PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0) {
+        if (PelleRifts.war.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0) {
           setProgress(Currency.infinityPoints.value, Tesseracts.nextCost, "Percentage to next Tesseract");
         } else if (PelleStrikes.dilation.hasStrike) {
           setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to Galaxy Generator");

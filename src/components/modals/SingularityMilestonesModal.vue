@@ -1,10 +1,11 @@
 <script>
-import "../../../javascripts/components/celestials/subtabs/laitela/singularity-milestone.js";
+import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "SingularityMilestonesModal",
   components: {
+    SingularityMilestoneComponent,
     ModalWrapperChoice,
   },
   data() {
@@ -15,9 +16,6 @@ export default {
       completedVal: 0,
       orderVal: 0
     };
-  },
-  beforeDestroy() {
-    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   watch: {
     resourceVal(newValue) {
@@ -32,6 +30,9 @@ export default {
     orderVal(newValue) {
       player.celestials.laitela.singularitySorting.sortOrder = newValue;
     },
+  },
+  beforeDestroy() {
+    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   computed: {
     resourceStr() {
@@ -99,7 +100,7 @@ export default {
     </template>
     <div class="l-singularity-milestone-modal-container-outer">
       <div class="l-singularity-milestone-modal-container-inner">
-        <singularity-milestone
+        <SingularityMilestoneComponent
           v-for="milestone in milestones"
           :key="milestone.id"
           :milestone="milestone"

@@ -172,7 +172,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
       id: 18,
       description: "Keep Dilation Upgrades on Armageddon",
       cost: 1e45,
-      formatCost: c => format(c, 2),
+      formatCost,
     },
     dimBoostResetsNothing: {
       id: 19,
@@ -184,7 +184,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
       id: 20,
       description: "Keep Tachyon Particles on Armageddon",
       cost: 1e50,
-      formatCost: c => format(c, 2),
+      formatCost,
     }
   };
 }());

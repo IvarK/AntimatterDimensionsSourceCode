@@ -394,7 +394,7 @@ GameDatabase.tabs = [
         key: "celestial-navigation",
         name: "Celestial Navigation",
         symbol: "<i class='fas fa-map-marked-alt'></i>",
-        component: "CelestialNavigationTab",
+        component: "celestial-navigation",
         id: 0,
         hidable: true,
       },

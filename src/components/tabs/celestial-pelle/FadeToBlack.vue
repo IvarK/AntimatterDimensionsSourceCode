@@ -8,9 +8,7 @@ export default {
   },
   methods: {
     update() {
-      // Original code
-      // this.opacity = (Pelle.endState - 2.5) / 2;
-      this.opacity = (player.records.thisReality.realTime - 1e4) / 4000;
+      this.opacity = (GameEnd.endState - 2.5) / 2;
     }
   }
 };

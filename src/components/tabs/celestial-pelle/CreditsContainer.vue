@@ -93,15 +93,9 @@ export default {
   },
   methods: {
     update() {
-      // Original code:
-      // if (!Pelle.endState > 1) return;
-      // this.rolling = Pelle.endState > 4.5;
-      // this.scroll = (Pelle.endState - 4.5) / 2 * 100;
-      // if (this.audio) this.audio.volume = Math.clamp((Pelle.endState - 4.5), 0, 0.3);
-
-      this.rolling = player.records.thisReality.realTime > 1.5e4;
-      this.scroll = (player.records.thisReality.realTime - 1.5e4) / 1000 * 2.4;
-      if (this.audio) this.audio.volume = Math.clamp((player.records.thisReality.realTime - 1.5e4), 0, 0.3);
+      this.rolling = GameEnd.endState > 4.5;
+      this.scroll = (GameEnd.endState - 4.5) * 48;
+      if (this.audio) this.audio.volume = Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
     },
     animName(x, duration = 10, type = "ease-in-out") {
       return `a-${x}-credits ${duration}s ${type} infinite`;

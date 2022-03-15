@@ -1667,7 +1667,7 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 1.5);
 
     // Sort by id first, then push more relevant results to top.
-    results.sort((a, b) => a.id - b.id).sort((a, b) => Math.floor(relevances[a.id] * 3 - relevances[b.id] * 3));
+    results.sort((a, b) => a.id - b.id).sort((a, b) => relevances[a.id] - relevances[b.id]);
     return results;
   };
 }());

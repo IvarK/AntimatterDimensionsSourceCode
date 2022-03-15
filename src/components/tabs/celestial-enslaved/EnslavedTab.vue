@@ -2,7 +2,6 @@
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import SliderComponent from "@/components/SliderComponent";
 import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 
 export default {
@@ -11,7 +10,6 @@ export default {
     CelestialQuoteHistory,
     PrimaryButton,
     PrimaryToggleButton,
-    SliderComponent,
     BlackHoleChargingSliders
   },
   data: () => ({

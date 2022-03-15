@@ -1,5 +1,5 @@
 <script>
-import SingularityMilestoneComponent from "../tabs/celestial-laitela/SingularityMilestoneComponent";
+import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {

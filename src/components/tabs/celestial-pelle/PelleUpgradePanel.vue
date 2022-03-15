@@ -69,7 +69,7 @@ export default {
       <div class="c-pelle-upgrade-container">
         <PelleUpgradeVue
           v-for="upgrade in rebuyables"
-          :key="upgrade.config.id"
+          :key="upgrade.config.id + '-pelle-rebuyable-upgrade'"
           :upgrade="upgrade"
           :show-improved-estimate="isHovering"
         />
@@ -86,13 +86,13 @@ export default {
       >
         <PelleUpgradeVue
           v-for="upgrade in allUpgrades"
-          :key="upgrade.config.id"
+          :key="upgrade.config.id + '-pelle-qol-upgrade'"
           :upgrade="upgrade"
           :show-improved-estimate="isHovering"
         />
         <PelleUpgradeVue
           v-for="upgrade in fadedUpgrades"
-          :key="upgrade.config.id"
+          :key="upgrade.config.id + '-pelle-qol-upgrade'"
           :upgrade="upgrade"
           faded
         />

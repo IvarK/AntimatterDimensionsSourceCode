@@ -17,6 +17,8 @@ export default {
     }
   },
   computed: {
+    people() { return people; },
+    roles() { return roles; },
     creditStyles() {
       return {
         bottom: `${this.scroll}rem`,
@@ -99,9 +101,327 @@ export default {
     },
     animName(x, duration = 10, type = "ease-in-out") {
       return `a-${x}-credits ${duration}s ${type} infinite`;
+    },
+    relevantPeople(role) {
+      return people
+        .filter(x => (typeof x.roles === "number" ? x.roles === role : x.roles.includes(role)))
+        .sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase());
     }
   }
 };
+
+// Must be placed in the order it is desired they appear in the credits
+const roles = {
+  1: "Creator",
+  2: "Technical Architect",
+  3: "Lead Developer",
+  4: "Android Developer",
+  5: "Library Developer",
+  6: "Developer",
+  7: "Design Consoltant",
+  8: "Design Consultant",
+  9: "Modal Maker, Lady Taker, Pie Baker",
+  10: "Lurker Tester",
+  11: "Web Tester",
+  12: "Android Tester"
+};
+
+roles.count = Object.keys(roles).length;
+
+// Each person must have a name and at least one role (the index of the desired role in roles). They can also have a
+// second name, which will appear in parentheses besides their first.
+const people = [
+  {
+    name: "Hevipelle",
+    name2: "Ivar Kerajärvi",
+    roles: 1
+  }, {
+    name: "Razenpok",
+    name2: "Andrei Andreev",
+    roles: 2
+  }, {
+    name: "Omsi",
+    roles: 4
+  }, {
+    name: "SpectralFlame",
+    name2: "Christopher Yip",
+    roles: 3
+  }, {
+    name: "kajfik",
+    name2: "Jakub Kajfosz",
+    roles: 4
+  }, {
+    name: "Patashu",
+    roles: [5, 6, 11]
+  }, {
+    name: "Dan",
+    roles: [6, 11]
+  }, {
+    name: "earth",
+    roles: [6, 9, 11]
+  }, {
+    name: "Hira",
+    roles: [6, 11, 12]
+  }, {
+    name: "IkerStream",
+    name2: "Iker de Aguirre",
+    roles: [6, 11]
+  }, {
+    name: "L4R5",
+    name2: "Lars Wolf",
+    roles: [6, 11, 12]
+  }, {
+    name: "Pichusuperlover",
+    roles: [7, 11]
+  }, {
+    name: "slabdrill",
+    roles: 8
+  }, {
+    name: "Sparticle999",
+    roles: 8
+  }, {
+    name: "WaitingIdly",
+    roles: [8, 11, 12]
+  }, {
+    name: "Acamaeda",
+    roles: [8, 11]
+  }, {
+    name: "Dravitar",
+    name2: "Alex Henderson",
+    roles: 10
+  }, {
+    name: "Aesis",
+    roles: 11
+  }, {
+    name: "AFYINEE",
+    name2: "Gabriel HADDAG",
+    roles: 11
+  }, {
+    name: "Alexitato",
+    roles: 11
+  }, {
+    name: "Anno",
+    roles: 11
+  }, {
+    name: "Archa",
+    name2: "Myresa",
+    roles: [11, 12]
+  }, {
+    name: "Birb",
+    name2: "Kelsey Black",
+    roles: 11
+  }, {
+    name: "Boo",
+    name2: "Jean-Christophe Bourgault",
+    roles: 11
+  }, {
+    name: "CaptainGalaxy",
+    name2: "Ovidijus Točelis",
+    roles: 11
+  }, {
+    name: "ChaoticHans",
+    roles: [11, 12]
+  }, {
+    name: "cubic frog",
+    roles: 11
+  }, {
+    name: "dankesehr",
+    roles: 11
+  }, {
+    name: "Davixx",
+    name2: "Davide Fedele",
+    roles: 11
+  }, {
+    name: "Empireus",
+    roles: 11
+  }, {
+    name: "GirixK",
+    name2: "Nikola Jelinčić",
+    roles: [11, 12]
+  }, {
+    name: "GoldenTritium",
+    roles: [11, 12]
+  }, {
+    name: "Kael",
+    roles: 11
+  }, {
+    name: "Lynn",
+    roles: 11
+  }, {
+    name: "Merp",
+    roles: 11
+  }, {
+    name: "philipebreaker",
+    name2: "Philipe",
+    roles: 11
+  }, {
+    name: "Phillip",
+    roles: 11
+  }, {
+    name: "Phoenix",
+    roles: 11
+  }, {
+    name: "Reda",
+    roles: 11
+  }, {
+    name: "Saturnus",
+    roles: 11
+  }, {
+    name: "Scarlet",
+    roles: [11, 12]
+  }, {
+    name: "sirusi",
+    name2: "Vinícius Oliveira Martins",
+    roles: 11
+  }, {
+    name: "Spanosa",
+    name2: "Jared K",
+    roles: 11
+  }, {
+    name: "SpicyCrusader13",
+    roles: [11, 12]
+  }, {
+    name: "Storm",
+    roles: 11
+  }, {
+    name: "SzyszakS",
+    roles: 11
+  }, {
+    name: "Tacitus",
+    roles: 11
+  }, {
+    name: "Typh",
+    roles: 11
+  }, {
+    name: "Vnge",
+    name2: "Ben Parrish",
+    roles: [11, 12]
+  }, {
+    name: "Xemadus",
+    name2: "Jonathan Gibson",
+    roles: 11
+  }, {
+    name: "Young Woo Joo",
+    roles: 11
+  }, {
+    name: "Zipi",
+    roles: 11
+  }, {
+    name: "Anjinho01",
+    roles: 12
+  }, {
+    name: "Auti",
+    name2: "Alice Tolle",
+    roles: 12
+  }, {
+    name: "Buck",
+    roles: 12
+  }, {
+    name: "Barrin84",
+    roles: 12
+  }, {
+    name: "Circle",
+    roles: 12
+  }, {
+    name: "DarthDie",
+    name2: "Briar Bowser",
+    roles: 12
+  }, {
+    name: "Epsilon",
+    name2: "Coolguystorm",
+    roles: 12
+  }, {
+    name: "Firecracker",
+    roles: 12
+  }, {
+    name: "Gaunter",
+    roles: 12
+  }, {
+    name: "HarrisL2",
+    roles: 12
+  }, {
+    name: "Hellbach",
+    name2: "Asher Günther",
+    roles: 12
+  }, {
+    name: "hen-ben",
+    name2: "Henry Ellenberg",
+    roles: 12
+  }, {
+    name: "ImpossibleSalsa",
+    roles: 12
+  }, {
+    name: "Johanniklas",
+    name2: "Jan-Niklas Petersen",
+    roles: 12
+  }, {
+    name: "kaislash",
+    name2: "Lily",
+    roles: 12
+  }, {
+    name: "Kirku",
+    name2: "Fabian Makowski",
+    roles: 12
+  }, {
+    name: "Kirin",
+    name2: "Arthur",
+    roles: 12
+  }, {
+    name: "Monoma",
+    name2: "ARoman Ruiz",
+    roles: 12
+  }, {
+    name: "Nani",
+    roles: 12
+  }, {
+    name: "opdollar",
+    name2: "Zane Coole",
+    roles: 12
+  }, {
+    name: "Pavlxiiv",
+    roles: 12
+  }, {
+    name: "Porygon-Z",
+    roles: 12
+  }, {
+    name: "PotatoTIAB",
+    roles: 12
+  }, {
+    name: "Razor",
+    roles: 12
+  }, {
+    name: "Razvan Cercel",
+    roles: 12
+  }, {
+    name: "Rukimix",
+    roles: 12
+  }, {
+    name: "Skunky",
+    name2: "Lukas",
+    roles: 12
+  }, {
+    name: "Socks",
+    name2: "Hannah Pocks",
+    roles: 12
+  }, {
+    name: "Tim Wong",
+    roles: 12
+  }, {
+    name: "tragedt",
+    name2: "Ethan Manninen",
+    roles: 12
+  }, {
+    name: "Valentine Clarissa Alanis Star Z",
+    roles: 12
+  }, {
+    name: "vanadium_void",
+    roles: 12
+  }, {
+    name: "ZylaKat",
+    name2: "Katherine Goforth-Harbin",
+    roles: 12
+  }
+];
 </script>
 
 <template>
@@ -119,143 +439,25 @@ export default {
     />
     <h1>Antimatter Dimensions</h1>
 
-    <h2>Created by</h2>
-    <p>Hevipelle (Ivar Kerajärvi)</p>
-
-    <h2>Technical Architect</h2>
-    <p>Razenpok (Andrei Andreev)</p>
-
-    <h2>Lead Developers</h2>
-    <p>Omsi</p>
-    <p>SpectralFlame (Christopher Yip)</p>
-
-    <h2>Developers</h2>
-    <p>Dan</p>
-    <p>earth</p>
-    <p>Hira</p>
-    <p>IkerStream</p>
-    <p>L4R5 (Lars Wolf)</p>
-    <p>Patashu</p>
-
-    <h2>Design Consoltant</h2>
-    <p>Pichusuperlover</p>
-    <p>slabdrill</p>
-    <p>Sparticle999</p>
-    <p>WaitingIdly</p>
-
-    <h2>Modal Maker, Lady Taker, Pie Baker</h2>
-    <p>earth</p>
-
-    <h2>Android Developer</h2>
-    <p>kajfik (Jakub Kajfosz)</p>
-
-    <h2>Library Developer</h2>
-    <p>Patashu</p>
-
-    <h2>Lead Design Consoltants</h2>
-    <p>realrapidjazz</p>
-
-    <h2>Design Consoltants</h2>
-    <p>Pichusuperlover</p>
-    <p>Acamaeda</p>
-
-    <h2>Web Testers</h2>
-    <div class="l-double-credits-container">
-      <p>Acamaeda</p>
-      <p>Aesis</p>
-      <p>AFYINEE (Gabriel HADDAG)</p>
-      <p>Alexitato</p>
-      <p>Anno</p>
-      <p>Archa (Myresa)</p>
-      <p>Birb (Kelsey Black)</p>
-      <p>Boo (Jean-Christophe Bourgault)</p>
-      <p>CaptainGalaxy (Ovidijus Točelis)</p>
-      <p>ChaoticHans</p>
-      <p>cubic frog</p>
-      <p>Dan</p>
-      <p>dankesehr</p>
-      <p>Davixx (Davide Fedele)</p>
-      <p>earth</p>
-      <p>Empireus</p>
-      <p>GirixK (Nikola Jelinčić)</p>
-      <p>GoldenTritium</p>
-      <p>Hira</p>
-      <p>IkerStream (Iker de Aguirre)</p>
-      <p>Kael</p>
-      <p>L4R5 (Lars Wolf)</p>
-      <p>Lynn</p>
-      <p>Merp</p>
-      <p>Patashu</p>
-      <p>philipebreaker (Philipe)</p>
-      <p>Phillip Marshall</p>
-      <p>Phoenix</p>
-      <p>Pichusuperlover</p>
-      <p>Reda Kotob</p>
-      <p>Saturnus</p>
-      <p>Scarlet</p>
-      <p>sirusi (Vinícius Oliveira Martins)</p>
-      <p>Spanosa (Jared K)</p>
-      <p>SpicyCrusader13</p>
-      <p>Storm</p>
-      <p>SzyszakS</p>
-      <p>Tacitus</p>
-      <p>Typh</p>
-      <p>Vnge (Ben Parrish)</p>
-      <p>WaitingIdly</p>
-      <p>Xemadus (Jonathan Gibson)</p>
-      <p>Young Woo Joo</p>
-      <p>Zipi</p>
-    </div>
-
-    <h2>Lurker Tester</h2>
-    <p>Dravitar (Alex Henderson)</p>
-
-    <h2>Android Testers</h2>
-    <div class="l-double-credits-container">
-      <p>about:blank</p>
-      <p>Archa (Myresa)</p>
-      <p>Anjinho01</p>
-      <p>Auti (Alice Tolle)</p>
-      <p>Buck</p>
-      <p>Barrin84</p>
-      <p>ChaoticHans</p>
-      <p>Circle</p>
-      <p>DarthDie (Briar Bowser)</p>
-      <p>Epsilon (Coolguystorm)</p>
-      <p>Firecracker</p>
-      <p>Gaunter</p>
-      <p>GirixK (Nikola Jelinčić)</p>
-      <p>GoldenTritium</p>
-      <p>HarrisL2</p>
-      <p>Hellbach (Asher Günther)</p>
-      <p>Hira</p>
-      <p>hen-ben (Henry Ellenberg)</p>
-      <p>ImpossibleSalsa</p>
-      <p>Johanniklas (Jan-Niklas Petersen)</p>
-      <p>kaislash (Lily)</p>
-      <p>Kirku (Fabian Makowski)</p>
-      <p>Kirin Nijinski (Arthur)</p>
-      <p>L4R5 (Lars Wolf)</p>
-      <p>Monoma (ARoman Ruiz)</p>
-      <p>Nani</p>
-      <p>opdollar (Zane Coole)</p>
-      <p>Pavlxiiv</p>
-      <p>Porygon-Z</p>
-      <p>PotatoTIAB</p>
-      <p>Razor</p>
-      <p>Razvan Cercel</p>
-      <p>Rukimix</p>
-      <p>Scarlet</p>
-      <p>Skunky (Lukas)</p>
-      <p>Socks (Hannah Pocks)</p>
-      <p>SpicyCrusader13</p>
-      <p>Tim Wong</p>
-      <p>tragedt (Ethan Manninen)</p>
-      <p>Valentine Clarissa Alanis Star Z</p>
-      <p>vanadium_void</p>
-      <p>Vnge (Ben Parrish)</p>
-      <p>WaitingIdly</p>
-      <p>ZylaKat (Katherine Goforth-Harbin)</p>
+    <div
+      v-for="role in roles.count"
+      :key="role"
+    >
+      <h2>
+        {{ pluralize(roles[role], relevantPeople(role).length) }}
+      </h2>
+      <div :class="{ 'l-credits--bulk': relevantPeople(role).length > 10}">
+        <div
+          v-for="person in relevantPeople(role)"
+          :key="person.name"
+          class="c-credit-entry"
+        >
+          {{ person.name }}
+          <span v-if="person.name2">
+            ({{ person.name2 }})
+          </span>
+        </div>
+      </div>
     </div>
 
     <br><br><br><br><br><br><br><br><br>
@@ -286,13 +488,14 @@ h2 {
   text-shadow: 1px 1px 2px turquoise;
 }
 
-.l-double-credits-container p {
-  width: 50%;
-  display: inline-block;
+.l-credits--bulk {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-p {
+.c-credit-entry {
   margin-top: 1rem;
+  font-size: 1.3rem;
 }
 
 

@@ -143,6 +143,15 @@ export default {
       return `Spend ${quantify("Perk Point", hex.reductionCost, 2, 0)}
         to reduce goal by ${format(hex.config.perReductionStep)}`;
     },
+    hexColor(hex) {
+      const completions = hex.completions;
+      const maxed = hex.config.values.length;
+      if (completions === maxed) return "var(--color-v--base)";
+      const r = 255 - 5 * completions;
+      const g = 255 - 10 * completions;
+      const b = 255 - 20 * completions;
+      return `rgb(${r},${g},${b})`;
+    },
     toggleFlipped() {
       player.celestials.v.wantsFlipped = !this.wantsFlipped;
     }
@@ -209,7 +218,7 @@ export default {
           <div
             v-if="hex.config"
             class="l-v-hexagon c-v-unlock"
-            :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }"
+            :style="'background-color: ' + hexColor(hex)"
           >
             <p class="o-v-unlock-name">
               <br v-if="hex.canBeReduced && showReduction">{{ hex.config.name }}

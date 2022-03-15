@@ -6065,9 +6065,15 @@ kbd {
 }
 
 .c-teresa-milestone-line {
-  border-bottom: 0.2rem solid var(--color-text);
-  border-top: 0.2rem solid transparent;
+  height: 0.2rem;
+  background-color: var(--color-text);
   width: 100%;
+  opacity: 0.5;
+}
+.c-teresa-milestone-line--attained {
+  background-color: var(--color-reality);
+  filter: brightness(0.5);
+  opacity: 1;
 }
 
 .o-teresa-quotes {

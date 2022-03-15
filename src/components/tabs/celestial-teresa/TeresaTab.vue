@@ -116,12 +116,10 @@ export default {
       if (this.isDoomed) return;
       Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
-    unlockDescriptionStyle(unlockInfo) {
+    unlockDescriptionHeight(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
-      return {
-        bottom: `${(100 * pos).toFixed(2)}%`,
-      };
+      return `calc(${(100 * pos).toFixed(2)}% - 0.1rem)`;
     },
   }
 };
@@ -213,7 +211,7 @@ export default {
             :id="unlockInfo.id"
             :key="unlockInfo.id + '-teresa-unlock-tooltip'"
             content-class="c-teresa-unlock-description"
-            :bottom="unlockDescriptionStyle(unlockInfo).bottom"
+            :bottom="unlockDescriptionHeight(unlockInfo)"
             right="0"
             mode="right"
             :show="true"
@@ -221,7 +219,10 @@ export default {
             :tooltip-content-style="unlockInfoTooltipStyles.content"
           >
             <template #mainContent>
-              <div class="c-teresa-milestone-line" />
+              <div
+                class="c-teresa-milestone-line"
+                :class="{ 'c-teresa-milestone-line--attained': pouredAmount >= unlockInfo.price }"
+              />
             </template>
             <template #tooltipContent>
               {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}

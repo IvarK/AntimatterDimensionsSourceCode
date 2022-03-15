@@ -227,9 +227,7 @@ export const GameStorage = {
     if (overrideLastUpdate) {
       player.lastUpdate = overrideLastUpdate;
     }
-    // Original code:
-    // if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
-    if (Speedrun.isPausedAtStart()) {
+    if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
       let diff = Date.now() - player.lastUpdate;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {

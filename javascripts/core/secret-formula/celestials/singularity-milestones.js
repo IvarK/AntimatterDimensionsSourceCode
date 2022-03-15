@@ -177,7 +177,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 3e6,
     repeat: 0,
     limit: 1,
-    description: "Boost Dark Matter and Dark Energy production based on highest glyph level",
+    description: "Boost Dark Matter and Dark Energy production based on highest Glyph level",
     effect: () => Math.pow(Math.clampMin((player.records.bestReality.glyphLevel - 15000) / 2000, 1), 0.5),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,

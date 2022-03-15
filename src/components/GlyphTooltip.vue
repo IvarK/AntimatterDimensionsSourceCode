@@ -74,7 +74,7 @@ export default {
       return this.displayLevel ? this.displayLevel : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
+      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength, this.type)
         .filter(effect =>
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
@@ -116,8 +116,9 @@ export default {
     },
     rarityText() {
       if (!GlyphTypes[this.type].hasRarity) return "";
+      const strength = Pelle.isDoomed ? Pelle.glyphStrength : this.strength;
       return `| Rarity:
-        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
+        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(strength))}</span>`;
     },
     levelText() {
       if (this.type === "companion") return "";

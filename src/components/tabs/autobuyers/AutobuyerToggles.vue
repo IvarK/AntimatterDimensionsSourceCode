@@ -10,6 +10,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       autobuyersOn: false,
       bulkOn: false,
       showContinuum: false,
@@ -29,6 +30,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.autobuyersOn = player.auto.autobuyersOn;
       this.bulkOn = player.auto.bulkOn;
       this.showContinuum = Laitela.isUnlocked;
@@ -70,13 +72,22 @@ export default {
       off="Enable bulk buy"
       class="o-primary-btn--subtab-option"
     />
-    <PrimaryToggleButton
-      v-if="showContinuum"
-      v-model="disableContinuum"
-      on="Enable Continuum"
-      off="Disable Continuum"
-      class="o-primary-btn--subtab-option"
-    />
+    <span v-if="isDoomed">
+      <PrimaryButton
+        v-if="showContinuum"
+      >
+        Continuum is disabled
+      </PrimaryButton>
+    </span>
+    <span v-else>
+      <PrimaryToggleButton
+        v-if="showContinuum"
+        v-model="disableContinuum"
+        on="Enable Continuum"
+        off="Disable Continuum"
+        class="o-primary-btn--subtab-option"
+      />
+    </span>
   </div>
 </template>
 

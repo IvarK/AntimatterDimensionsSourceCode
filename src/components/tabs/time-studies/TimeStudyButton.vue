@@ -24,6 +24,8 @@ export default {
   },
   data() {
     return {
+      isUseless: false,
+      doomedRealityStudy: false,
       isBought: false,
       isAvailableForPurchase: false,
       STCost: 0,
@@ -42,12 +44,16 @@ export default {
     },
     classObject() {
       return {
-        "o-time-study": true,
+        "o-time-study": !this.isUseless,
         "l-time-study": true,
+        "c-pelle-useless": this.isUseless,
+        "c-pelle-useless--bought": this.isUseless && this.isBought,
+        "c-pelle-useless--unavailable": this.isUseless && !this.isAvailableForPurchase && !this.isBought,
+        "c-pelle-useless-available": this.isUseless && !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--small": this.setup.isSmall,
-        "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought,
+        "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought && !this.isUseless,
         "o-time-study--available": this.isAvailableForPurchase && !this.isBought,
-        "o-time-study--bought": this.isBought,
+        "o-time-study--bought": this.isBought && !this.isUseless,
       };
     },
     pathClass() {
@@ -75,6 +81,7 @@ export default {
       return "";
     },
     studyClass() {
+      if (this.isUseless) return "";
       let pathClasses = "";
       if (!this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--unavailable`;
@@ -97,12 +104,14 @@ export default {
   methods: {
     update() {
       const study = this.study;
+      this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
       this.isBought = study.isBought;
       this.eternityChallengeRunning = study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
         EternityChallenge.current?.id === study.id;
       if (!this.isBought) {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
+      this.doomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;
 
       this.STCost = this.study.STCost;
     },
@@ -145,7 +154,7 @@ export class TimeStudySetup {
   >
     <slot />
     <CostDisplay
-      v-if="(showCost && !showStCost) || STCost === 0"
+      v-if="!doomedRealityStudy && ((showCost && !showStCost) || STCost === 0)"
       br
       :config="config"
       name="Time Theorem"

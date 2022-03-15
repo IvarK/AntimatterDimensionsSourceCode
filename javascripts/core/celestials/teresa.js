@@ -29,12 +29,15 @@ export const TERESA_UNLOCKS = {
   UNDO: {
     id: 4,
     price: 1e10,
-    description: "Unlock \"Undo\" of equipping a glyph.",
+    description: "Unlock \"Undo\" of equipping a Glyph.",
   },
   START_EU: {
     id: 5,
     price: 1e6,
-    description: "You start Reality with all Eternity Upgrades unlocked.",
+    get description() {
+      if (Pelle.isDoomed) return "This has no effect while in Doomed.";
+      return "You start Reality with all Eternity Upgrades unlocked.";
+    },
   }
 };
 

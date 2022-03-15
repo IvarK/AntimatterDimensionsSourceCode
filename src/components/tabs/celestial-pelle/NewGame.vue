@@ -26,8 +26,8 @@ export default {
     update() {
       this.plusRecord = NG.plusRecord;
       this.minusRecord = NG.minusRecord;
-      this.visible = GameEnd.endState > 23 && !GameEnd.removeAdditionalEnd;
-      this.opacity = (GameEnd.endState - 23) * 2;
+      this.visible = GameEnd.endState > 13.75 && !GameEnd.removeAdditionalEnd;
+      this.opacity = (GameEnd.endState - 13.75) * 2;
     },
     ngString(i) {
       if (!i) return "";

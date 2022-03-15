@@ -95,5 +95,6 @@ export default {
 <style scoped>
 .o-h2p-tab-button--relevant {
   background-color: #df505055;
+  text-shadow: 0 0 5px;
 }
 </style>

@@ -33,7 +33,7 @@ export const NG = {
     const secretUnlocks = player.secretUnlocks;
     const newGameBackup = JSON.stringify(player.newGame);
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
-    Pelle.removeAdditionalEnd = true;
+    GameEnd.removeAdditionalEnd = true;
     Modal.hideAll();
     GameStorage.hardReset({
       noSave: true
@@ -52,6 +52,6 @@ export const NG = {
     ADNotations.Settings.exponentCommas.show = player.options.commas;
     GameStorage.save();
     player.lastUpdate = Date.now();
-    Pelle.additionalEnd = Math.min(Pelle.additionalEnd, 14) + 1;
+    GameEnd.additionalEnd = Math.min(GameEnd.additionalEnd, 14) + 1;
   }
 };

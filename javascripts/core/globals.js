@@ -34,6 +34,7 @@ export * from "./celestials/pelle/pelle.js";
 export * from "./celestials/pelle/strikes.js";
 export * from "./celestials/pelle/rifts.js";
 export * from "./celestials/pelle/galaxy-generator.js";
+export * from "./celestials/pelle/game-end.js";
 export * from "./celestials/celestials.js";
 
 export * from "./automator/index.js";

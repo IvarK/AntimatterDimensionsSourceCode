@@ -51,16 +51,12 @@ const disabledMechanicUnlocks = {
 export const Pelle = {
   symbol: "♅",
 
-  get displayName() {
-    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
+  get endState() {
+    return GameEnd.endState;
   },
 
-  additionalEnd: 0,
-  removeAdditionalEnd: false,
-  get endState() {
-    if (this.removeAdditionalEnd) return this.additionalEnd;
-    return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
-      (Math.log10(9e15) - 8.7) + this.additionalEnd, 0);
+  get displayName() {
+    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
   },
 
   get isUnlocked() {
@@ -104,22 +100,10 @@ export const Pelle = {
   },
 
   gameLoop(diff) {
-    if (this.removeAdditionalEnd) {
-      if (this.additionalEnd > 0) {
-        this.additionalEnd -= Math.min(diff, 50) / 500;
-        if (this.additionalEnd < 0) {
-          this.additionalEnd = 0;
-          this.removeAdditionalEnd = false;
-        }
-      }
-    }
     if (this.isDoomed) {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {
-        this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
-      }
     }
   },
 

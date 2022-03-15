@@ -17,7 +17,7 @@ class SubtabState {
   }
 
   get isHidden() {
-    if (Enslaved.isRunning || Pelle.isDoomed) return false;
+    if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
     // eslint-disable-next-line no-bitwise
     return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
       this.config.hidable;

@@ -45,10 +45,10 @@ export default {
       this.isActive = rift.isActive;
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.percentage = rift.percentage;
-      this.hasEffectiveFill = rift._config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
+      this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
     hasMilestone(idx) {
-      return this.rift.hasMilestone(idx);
+      return this.rift.milestones[idx].canBeApplied;
     },
     milestoneResourceText(rift, milestone) {
       return `${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource}`;

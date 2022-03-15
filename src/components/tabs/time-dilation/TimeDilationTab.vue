@@ -86,7 +86,7 @@ export default {
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;
-      this.hasPelleDilationUpgrades = PelleRifts.death.hasMilestone(0);
+      this.hasPelleDilationUpgrades = PelleRifts.death.milestones[0].canBeApplied;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {
@@ -143,23 +143,23 @@ export default {
         />
       </div>
       <div
-        v-if="hasPelleDilationUpgrades"
-        class="l-dilation-upgrades-grid__row"
-      >
-        <DilationUpgradeButton
-          v-for="upgrade in pelleUpgrades"
-          :key="upgrade.id"
-          :upgrade="upgrade"
-          class="l-dilation-upgrades-grid__cell"
-        />
-      </div>
-      <div
         v-for="(row, i) in upgrades"
         :key="i"
         class="l-dilation-upgrades-grid__row"
       >
         <DilationUpgradeButton
           v-for="upgrade in row"
+          :key="upgrade.id"
+          :upgrade="upgrade"
+          class="l-dilation-upgrades-grid__cell"
+        />
+      </div>
+      <div
+        v-if="hasPelleDilationUpgrades"
+        class="l-dilation-upgrades-grid__row"
+      >
+        <DilationUpgradeButton
+          v-for="upgrade in pelleUpgrades"
           :key="upgrade.id"
           :upgrade="upgrade"
           class="l-dilation-upgrades-grid__cell"

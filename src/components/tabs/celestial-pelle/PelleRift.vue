@@ -30,7 +30,7 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.setValue("totalFill", rift.totalFill);
       this.setValue("resource", rift.fillCurrency.value);
-      this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0);
+      this.hasEffectiveFill = rift.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {
@@ -38,7 +38,7 @@ export default {
       else this[key].copyFrom(value);
     },
     hasMilestone(idx) {
-      return this.rift.hasMilestone(idx);
+      return this.rift.milestones[idx].canBeApplied;
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
@@ -56,7 +56,7 @@ export default {
       <div
         v-for="(milestone, idx) in rift.milestones"
         :key="'milestone-' + idx"
-        :ach-tooltip="milestone.description()"
+        :ach-tooltip="milestone.description"
         class="o-pelle-rift-milestone"
         :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
       >

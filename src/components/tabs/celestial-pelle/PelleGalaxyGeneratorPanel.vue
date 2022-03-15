@@ -27,7 +27,7 @@ export default {
         : "fas fa-compress-arrows-alt";
     },
     upgrades() {
-      return PelleRebuyableUpgrade.galaxyGenerator;
+      return GalaxyGeneratorUpgrades.all;
     },
     galaxyText() {
       let text = format(Math.max(this.galaxies, 0), 2);
@@ -155,6 +155,8 @@ export default {
   border: 2px solid var(--color-pelle--base);
   border-radius: 5px;
   user-select: none;
+  background-color: #1a1a1a;
+  color: #888888;
 }
 
 .l-pelle-content-container {

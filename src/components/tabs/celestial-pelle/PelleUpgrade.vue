@@ -44,7 +44,7 @@ export default {
     effectText() {
       if (!this.config.formatEffect) return "";
       const prefix = this.isCapped ? "Capped:" : "Currently:";
-      const formattedEffect = x => this.config._formatEffect(this.config._effect(x));
+      const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
       let value = formattedEffect(this.purchases);
       if (!this.isCapped && this.hovering && this.canBuy) {
         value = `${formattedEffect(this.purchases)}

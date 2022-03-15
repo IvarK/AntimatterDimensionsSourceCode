@@ -260,7 +260,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.chanceCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return player.replicanti.chanceCost.dividedByEffectOf(PelleRifts.famine.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.chanceCost; }
@@ -311,7 +311,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.intervalCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return player.replicanti.intervalCost.dividedByEffectOf(PelleRifts.famine.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.intervalCost; }
@@ -346,7 +346,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return this.baseCost.dividedByEffectOf(TimeStudy(233)).div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return this.baseCost.dividedByEffectsOf(TimeStudy(233), PelleRifts.famine.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.galCost; }
@@ -379,9 +379,7 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      let extra = 0;
-      if (PelleRifts.pestilence.hasMilestone(2)) extra += PelleRifts.pestilence.milestones[2].effect();
-      return Effects.max(0, TimeStudy(131)) + extra;
+      return Effects.max(0, TimeStudy(131)) + PelleRifts.pestilence.milestones[2].effectOrDefault(0);
     }
 
     autobuyerTick() {
@@ -443,7 +441,7 @@ export const Replicanti = {
     };
   },
   unlock(freeUnlock = false) {
-    const cost = PelleRifts.famine.hasMilestone(1) ? DC.E10 : DC.E140;
+    const cost = DC.E140.dividedByEffectOf(PelleRifts.famine.milestones[1]);
     if (player.replicanti.unl) return;
     if (freeUnlock || Currency.infinityPoints.gte(cost)) {
       if (!freeUnlock) Currency.infinityPoints.subtract(cost);
@@ -497,6 +495,6 @@ export const Replicanti = {
     },
   },
   get isUncapped() {
-    return TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1);
+    return TimeStudy(192).isBought || PelleRifts.famine.milestones[1].canBeApplied;
   }
 };

@@ -168,23 +168,23 @@ GameDatabase.celestials.pelle.upgrades = (function() {
       cost: 1e26,
       formatCost,
     },
-    dimBoostResetsNothing: {
+    dilationUpgradesNoReset: {
       id: 18,
+      description: "Keep Dilation Upgrades on Armageddon",
+      cost: 1e45,
+      formatCost,
+    },
+    dimBoostResetsNothing: {
+      id: 19,
       description: "Dimension Boosts no longer reset anything",
       cost: 1e50,
       formatCost,
-    },
-    dilationUpgradesNoReset: {
-      id: 19,
-      description: "Keep Dilation Upgrades on Armageddon",
-      cost: 1e45,
-      formatCost: c => format(c, 2),
     },
     tachyonParticlesNoReset: {
       id: 20,
       description: "Keep Tachyon Particles on Armageddon",
       cost: 1e50,
-      formatCost: c => format(c, 2),
+      formatCost,
     }
   };
 }());

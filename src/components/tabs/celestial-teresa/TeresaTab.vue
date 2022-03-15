@@ -3,13 +3,15 @@ import { DC } from "../../../../javascripts/core/constants";
 import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
   name: "TeresaTab",
   components: {
     GlyphSetPreview,
     PerkShopUpgradeButton,
-    CelestialQuoteHistory
+    CelestialQuoteHistory,
+    CustomizeableTooltip
   },
   data() {
     return {
@@ -69,6 +71,18 @@ export default {
       return this.lastMachines.lt(DC.E10000)
         ? `${quantify("Reality Machine", this.lastMachines, 2)}`
         : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(DC.E10000), 2)}`;
+    },
+    unlockInfoTooltipStyles() {
+      return {
+        arrow: {
+          borderRight: "0.5rem solid var(--color-teresa--base)"
+        },
+        content: {
+          border: "0.1rem solid var(--color-teresa--base)",
+          backgroundColor: "hsl(0, 0%, 5%)",
+          fontSize: "1.1rem"
+        }
+      };
     }
   },
   methods: {
@@ -194,15 +208,25 @@ export default {
               {{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
             </div>
           </div>
-          <div
+          <CustomizeableTooltip
             v-for="unlockInfo in unlockInfos"
             :id="unlockInfo.id"
-            :key="unlockInfo.id"
-            class="c-teresa-unlock-description"
-            :style="unlockDescriptionStyle(unlockInfo)"
+            :key="unlockInfo.id + '-teresa-unlock-tooltip'"
+            content-class="c-teresa-unlock-description"
+            :bottom="unlockDescriptionStyle(unlockInfo).bottom"
+            right="0"
+            mode="right"
+            :show="true"
+            :tooltip-arrow-style="unlockInfoTooltipStyles.arrow"
+            :tooltip-content-style="unlockInfoTooltipStyles.content"
           >
-            {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
-          </div>
+            <template #mainContent>
+              <div class="c-teresa-milestone-line" />
+            </template>
+            <template #tooltipContent>
+              {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
+            </template>
+          </CustomizeableTooltip>
         </div>
       </div>
       <div class="l-rm-container-labels l-teresa-mechanic-container" />

@@ -6059,10 +6059,15 @@ kbd {
 
 .c-teresa-unlock-description {
   color: var(--color-text);
-  border-bottom: 0.1rem solid var(--color-text);
   position: absolute;
-  left: 12.9rem;
-  width: 20rem;
+  width: 100%;
+  z-index: 2;
+}
+
+.c-teresa-milestone-line {
+  border-bottom: 0.2rem solid var(--color-text);
+  border-top: 0.2rem solid transparent;
+  width: 100%;
 }
 
 .o-teresa-quotes {

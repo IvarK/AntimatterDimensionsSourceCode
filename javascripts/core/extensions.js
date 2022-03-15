@@ -165,18 +165,6 @@ Array.prototype.mapToObject = function(keyFun, valueFun) {
   return out;
 }
 
-Array.prototype.map2dToObject = function(keyFun, valueFun) {
-  if (typeof keyFun !== "function" || typeof valueFun !== "function")
-    throw "keyFun and valueFun must be functions";
-  const out = {};
-  for (let idx1 = 0; idx1 < this.length; ++idx1) {
-    for (let idx2 = 0; idx2 < this[idx1].length; ++idx2) {
-      out[keyFun(this[idx1][idx2], idx1, idx2)] = valueFun(this[idx1][idx2], idx1, idx2);
-    }
-  }
-  return out;
-};
-
 /**
  * @type {number[]}
  */

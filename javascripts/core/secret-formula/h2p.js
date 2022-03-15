@@ -1532,6 +1532,7 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
   }
 
   const searchIndex = {};
+  const searchIndexFullName = {};
 
   const addTerm = (term, tab) => {
     let entry = searchIndex[term];
@@ -1548,6 +1549,13 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     for (let i = 0; i < lowerCase.length; i++) {
       addTerm(lowerCase.slice(0, i + 1), tab);
     }
+    let entry = searchIndexFullName[lowerCase];
+    if (entry === undefined) {
+      entry = [];
+      searchIndexFullName[lowerCase] = entry;
+    }
+    if (entry.includes(tab.id)) return;
+    entry.push(tab.id);
   };
 
   const addPhrase = (phrase, tab) => {
@@ -1569,20 +1577,29 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     addPhrase(tab.alias, tab);
   }
 
+  const map2dToObject = function(arr, keyFun, valueFun) {
+    const out = {};
+    for (let idx1 = 0; idx1 < arr.length; ++idx1) {
+      for (let idx2 = 0; idx2 < arr[idx1].length; ++idx2) {
+        out[keyFun(arr[idx1][idx2], idx1, idx2)] = valueFun(arr[idx1][idx2], idx1, idx2);
+      }
+    }
+    return out;
+  };
+
   // Very suboptimal code coming up. If anybody has a better solution, PLEASE, implement it.
-  const keyboardify = keybrd => keybrd.split(",").map(str => str.split(""))
-    .map2dToObject(key => key, (_key, x, y) => ({ x, y }));
+  const keyboardify = keybrd => map2dToObject(keybrd.split(",").map(str => str.split("")),
+    key => key, (_key, x, y) => ({ x, y }));
 
   const qwerty = keyboardify(`1234567890,qwertyuiop,asdfghjkl,zxcvbnm`);
   const qwertz = keyboardify(`1234567890,qwertzuiop,asdfghjkl,yxcvbnm`);
-  const qzerty = keyboardify(`1234567890,qzertyuiop,asdfghjklm,wxcvbn`);
   const azerty = keyboardify(`1234567890,azertyuiop,qsdfghjklm,wxcvbn`);
   const dvorak = keyboardify(`1234567890,'<>pyfgcrl,aoeuidhtns,;qjkxbmwvz`);
   const colemak = keyboardify(`1234567890,qwfpgjluy,arstdhneio,zxcvbkm`);
   const workman = keyboardify(`1234567890,qdrwbjfup,ashtgyneoi,zxmcvkl`);
   const qwprf = keyboardify(`1234567890,qwprfyukl,asdtghnioe,zxcvbjm`);
 
-  const keyboards = [qwerty, qwertz, qzerty, azerty, dvorak, colemak, workman, qwprf];
+  const keyboards = [qwerty, qwertz, azerty, dvorak, colemak, workman, qwprf];
 
   const keyboardDist = function(a, b, keyboard) {
     const aPos = keyboard[a], bPos = keyboard[b];
@@ -1596,8 +1613,11 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
   // minimum distance from several common keyboard layouts.
   // I have no idea how the actual "distance" calculation works but as long as it does don't touch it.
   const howBadlyTypoedWithKeyboard = function(a, b, keyboard) {
+    // If they're the same, skip all calculations
     if (a === b) return 0;
     const aLen = a.length, bLen = b.length;
+    // If they're way too different, don't bother
+    if (Math.abs(aLen - bLen) > 3) return 100;
     // 2d Array with dimensions aLen + 1 x bLen + 1
     const d = new Array(aLen + 1).fill(0).map(() => new Array(bLen + 1).fill(0));
 
@@ -1659,7 +1679,8 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
         const typoThreshold = howBadlyTypoed(replaceSpecialChars(searchIndexStr), searchWord);
         if (typoThreshold < 1.5) {
           for (const tab of searchIndex[searchIndexStr]) {
-            relevances[tab.id] = Math.min(relevances[tab.id], typoThreshold);
+            const isFullTermDecrease = searchIndexFullName[searchIndexStr]?.includes(tab.id) ? 0.8 : 0;
+            relevances[tab.id] = Math.min(relevances[tab.id], typoThreshold - isFullTermDecrease);
           }
         }
       }

@@ -1382,8 +1382,8 @@ Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginar
 ${format(ImaginaryUpgrade(15).cost)} iM.
 <br>
 <br>
-Lai'tela gives a new resource called Dark Matter, which improves Continuum's effect to your Antimatter
-Dimensions and Tickspeed based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by
+Lai'tela gives a new currency called Dark Matter, which provides a multiplier to Continuum's effect
+based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by
 Dark Matter Dimensions, in a similar cascading way to all other types of dimensions in the game. Unlike other
 dimensions, there are only four Dark Matter Dimensions rather than eight. You start with the first one unlocked
 immediately and the higher ones are unlocked via Imaginary Upgrades. When unlocking dimensions, you are given

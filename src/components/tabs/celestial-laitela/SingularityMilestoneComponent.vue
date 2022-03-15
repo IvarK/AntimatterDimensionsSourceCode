@@ -1,5 +1,16 @@
-Vue.component("singularity-milestone", {
-  props: ["milestone", "suppressGlow"],
+<script>
+export default {
+  name: "SingularityMilestoneComponent",
+  props: {
+    milestone: {
+      type: Object,
+      required: true
+    },
+    suppressGlow: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: () => ({
     isDoomed: false,
     isMaxed: false,
@@ -97,31 +108,37 @@ Vue.component("singularity-milestone", {
       this.lastCheckedMilestones = player.celestials.laitela.lastCheckedMilestones;
       this.isMetro = Theme.current().isMetro;
     },
-  },
-  template: `
-    <div :class="containerClass">
-      <div v-if="!isMetro && !isMaxed" class="c-laitela-milestone--bar-border-fix"></div>
-      <div
-        :class="barClass"
-        :style="barStyle"
-      />
-      <span v-if="isDoomed">
-        This singularity milestones has no effect while in Doomed
-      </span>
-      <span v-else>
-        <b v-if="!isMaxed">
-          {{ progressDisplay }}
-        </b>
-        <p>
-          <span v-html="upgradeDirectionIcon" /> {{ description }}
-        </p>
-        <b>
-          {{ effectDisplay }}
-          <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
-        </b>
-        <div class="c-laitela-milestone__completions">
-          {{ completionsDisplay }}
-        </div>
-      </span>
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div :class="containerClass">
+    <div
+      v-if="!isMetro && !isMaxed"
+      class="c-laitela-milestone--bar-border-fix"
+    />
+    <div
+      :class="barClass"
+      :style="barStyle"
+    />
+    <span v-if="isDoomed">
+      This singularity milestones has no effect while in Doomed
+    </span>
+    <span v-else>
+      <b v-if="!isMaxed">
+        {{ progressDisplay }}
+      </b>
+      <p>
+        <span v-html="upgradeDirectionIcon" /> {{ description }}
+      </p>
+      <b>
+        {{ effectDisplay }}
+        <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
+      </b>
+      <div class="c-laitela-milestone__completions">
+        {{ completionsDisplay }}
+      </div>
+    </span>
+  </div>
+</template>

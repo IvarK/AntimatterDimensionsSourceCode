@@ -1,6 +1,11 @@
-Vue.component("ra-pet-level-bar", {
+<script>
+export default {
+  name: "RaPetLevelBar",
   props: {
-    petConfig: Object
+    petConfig: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -124,31 +129,40 @@ Vue.component("ra-pet-level-bar", {
       return "";
     },
   },
-  template: `
-    <div class="l-ra-bar-container">
-      <div class="c-ra-exp-bar">
-        <div class="c-ra-exp-bar-inner" :style="barStyle"></div>
-      </div>
+};
+</script>
+
+<template>
+  <div class="l-ra-bar-container">
+    <div class="c-ra-exp-bar">
       <div
-        :class="classObject"
-        @click="pet.levelUp()"
-      >
-        <span class="fas fa-arrow-up"></span>
-        <div class="c-ra-pet-upgrade__tooltip">
-          <div class="c-ra-pet-upgrade__tooltip__name">
-            Level {{ pet.name }} to {{ formatInt(this.level + 1) }}
-          </div>
-          <div class="c-ra-pet-upgrade__tooltip__description">
-            {{ reward }}
-            <div v-if="showNextScalingUpgrade" :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }">
-              {{ nextScalingUpgrade }}
-            </div>
-          </div>
-          <div class="c-ra-pet-upgrade__tooltip__footer">
-            Cost: {{ quantify("Memory", requiredMemories, 2, 2) }}
-            <span v-if="memories <= requiredMemories">{{ nextLevelEstimate }}</span>
+        class="c-ra-exp-bar-inner"
+        :style="barStyle"
+      />
+    </div>
+    <div
+      :class="classObject"
+      @click="pet.levelUp()"
+    >
+      <span class="fas fa-arrow-up" />
+      <div class="c-ra-pet-upgrade__tooltip">
+        <div class="c-ra-pet-upgrade__tooltip__name">
+          Level {{ pet.name }} to {{ formatInt(level + 1) }}
+        </div>
+        <div class="c-ra-pet-upgrade__tooltip__description">
+          {{ reward }}
+          <div
+            v-if="showNextScalingUpgrade"
+            :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }"
+          >
+            {{ nextScalingUpgrade }}
           </div>
         </div>
+        <div class="c-ra-pet-upgrade__tooltip__footer">
+          Cost: {{ quantify("Memory", requiredMemories, 2, 2) }}
+          <span v-if="memories <= requiredMemories">{{ nextLevelEstimate }}</span>
+        </div>
       </div>
-    </div>`
-});
+    </div>
+  </div>
+</template>

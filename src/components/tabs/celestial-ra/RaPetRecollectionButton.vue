@@ -1,6 +1,11 @@
-Vue.component("ra-pet-recollection-button", {
+<script>
+export default {
+  name: "RaPetRecollectionButton",
   props: {
-    petConfig: Object,
+    petConfig: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -32,19 +37,21 @@ Vue.component("ra-pet-recollection-button", {
       Ra.petWithRecollection = this.petConfig.pet.name;
     }
   },
-  template: `
-    <button
-      class="c-ra-pet-recollection-button"
-      v-if="isUnlocked"
-      :style="petStyle"
-      @click="turnOnRecollection"
-    >
-      <span v-if="hasRecollection">
-        Recollection given to {{ name }}
-      </span>
-      <span v-else>
-        Give Recollection to {{ name }}
-      </span>
-    </button>
-  `
-});
+};
+</script>
+
+<template>
+  <button
+    v-if="isUnlocked"
+    class="c-ra-pet-recollection-button"
+    :style="petStyle"
+    @click="turnOnRecollection"
+  >
+    <span v-if="hasRecollection">
+      Recollection given to {{ name }}
+    </span>
+    <span v-else>
+      Give Recollection to {{ name }}
+    </span>
+  </button>
+</template>

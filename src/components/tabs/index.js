@@ -12,6 +12,12 @@ import GlyphSetRecordsTab from "./glyph-set-records/GlyphSetRecordsTab";
 import SpeedrunMilestonesTab from "./speedrun-milestones/SpeedrunMilestonesTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import SecretAchievementTab from "./secret-achievements/SecretAchievementTab";
+import TeresaTab from "./celestial-teresa/TeresaTab";
+import EffarigTab from "./celestial-effarig/EffarigTab";
+import EnslavedTab from "./celestial-enslaved/EnslavedTab";
+import VTab from "./celestial-v/VTab";
+import RaTab from "./celestial-ra/RaTab";
+import LaitelaTab from "./celestial-laitela/LaitelaTab";
 import PelleTab from "./celestial-pelle/PelleTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";
 import AutomatorTab from "./automator/AutomatorTab";
@@ -47,6 +53,12 @@ const TabComponents = {
   SpeedrunMilestonesTab,
   NormalAchievementsTab,
   SecretAchievementTab,
+  TeresaTab,
+  EffarigTab,
+  EnslavedTab,
+  VTab,
+  RaTab,
+  LaitelaTab,
   PelleTab,
   AutobuyersTab,
   AutomatorTab,

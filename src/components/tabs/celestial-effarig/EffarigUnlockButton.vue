@@ -1,13 +1,18 @@
+<script>
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 
-Vue.component("effarig-unlock-button", {
+export default {
+  name: "EffarigUnlockButton",
   components: {
     DescriptionDisplay,
     CostDisplay
   },
   props: {
-    unlock: Object
+    unlock: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
@@ -35,18 +40,24 @@ Vue.component("effarig-unlock-button", {
     purchase() {
       this.unlock.purchase();
     }
-  },
-  template: `
-    <button :class="classObject" @click="purchase">
-      <DescriptionDisplay :config="config" />
-      <CostDisplay
-        v-if="!isBought"
-        :config="config"
-        name="Relic Shard"
-        label=""
-      />
-      <div v-else>
-        (Unlocked)
-      </div>
-    </button>`
-});
+  }
+};
+</script>
+
+<template>
+  <button
+    :class="classObject"
+    @click="purchase"
+  >
+    <DescriptionDisplay :config="config" />
+    <CostDisplay
+      v-if="!isBought"
+      :config="config"
+      name="Relic Shard"
+      label=""
+    />
+    <div v-else>
+      (Unlocked)
+    </div>
+  </button>
+</template>

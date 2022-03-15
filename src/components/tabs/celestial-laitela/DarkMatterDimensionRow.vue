@@ -1,6 +1,11 @@
-Vue.component("dark-matter-dimension-row", {
+<script>
+export default {
+  name: "DarkMatterDimensionRow",
   props: {
-    tier: Number
+    tier: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
@@ -148,52 +153,58 @@ Vue.component("dark-matter-dimension-row", {
       if (!this.isIntervalCapped) return;
       this.hoverOverAscension = state;
     }
-  },
-  template: `
-    <div class="c-dark-matter-dimension-container" v-if="isUnlocked">
-      <div class="o-dark-matter-dimension-amount">
-        {{ name }}<span v-if="hasAscended"> {{ ascensionText }}</span>: {{ format(amount, 2) }}
-      </div>
-      <div>
-        Average gain: {{ format(productionPerSecond, 2, 2) }}/s
-        (+{{ formatPercents(percentPerSecond, 2, 2) }}/s)
-      </div>
-      <div class="c-dark-matter-dimension-buttons">
-        <button
-          @click="handleIntervalClick"
-          :class="intervalClassObject"
-          @mouseover="hoverState(true)"
-          @mouseleave="hoverState(false)"
+  }
+};
+</script>
+
+<template>
+  <div
+    v-if="isUnlocked"
+    class="c-dark-matter-dimension-container"
+  >
+    <div class="o-dark-matter-dimension-amount">
+      {{ name }}<span v-if="hasAscended"> {{ ascensionText }}</span>: {{ format(amount, 2) }}
+    </div>
+    <div>
+      Average gain: {{ format(productionPerSecond, 2, 2) }}/s
+      (+{{ formatPercents(percentPerSecond, 2, 2) }}/s)
+    </div>
+    <div class="c-dark-matter-dimension-buttons">
+      <button
+        :class="intervalClassObject"
+        @click="handleIntervalClick"
+        @mouseover="hoverState(true)"
+        @mouseleave="hoverState(false)"
+      >
+        <span
+          v-if="isIntervalCapped"
+          :ach-tooltip="ascensionTooltip"
         >
-          <span
-            v-if="isIntervalCapped"
-            :ach-tooltip="ascensionTooltip"
-          >
-            <i class="fas fa-question-circle"></i>
-          </span>
-          <span v-html="intervalText" />
-        </button>
-        <button
-          @click="buyPowerDM"
-          :class="darkMatterClassObject"
-        >
-          <span v-html="darkMatterText" />
-        </button>
-        <button
-          @click="buyPowerDE"
-          :class="darkEnergyClassObject"
-        >
-          <span v-html="darkEnergyText" />
-        </button>
-      </div>
-      <div v-if="interval > 200">
-        Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})
-      </div>
-      <div v-else>
-        {{ format(1000 / interval, 2, 2) }} ticks / sec
-      </div>
-      <div>
-        Dark Energy: {{ format(darkEnergyPerSecond, 2, 4) }}/s ({{ formatPercents(portionDE, 1) }} of total)
-      </div>
-    </div>`
-});
+          <i class="fas fa-question-circle" />
+        </span>
+        <span v-html="intervalText" />
+      </button>
+      <button
+        :class="darkMatterClassObject"
+        @click="buyPowerDM"
+      >
+        <span v-html="darkMatterText" />
+      </button>
+      <button
+        :class="darkEnergyClassObject"
+        @click="buyPowerDE"
+      >
+        <span v-html="darkEnergyText" />
+      </button>
+    </div>
+    <div v-if="interval > 200">
+      Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})
+    </div>
+    <div v-else>
+      {{ format(1000 / interval, 2, 2) }} ticks / sec
+    </div>
+    <div>
+      Dark Energy: {{ format(darkEnergyPerSecond, 2, 4) }}/s ({{ formatPercents(portionDE, 1) }} of total)
+    </div>
+  </div>
+</template>

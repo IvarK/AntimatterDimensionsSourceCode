@@ -22,7 +22,9 @@ export const GalaxyGenerator = {
   },
 
   get gainPerSecond() {
-    if (!PelleRifts.war.milestones[2].canBeApplied) return 0;
+    //                                    TODO: This fix is really stupid and doesn't look great
+    // Can someone come up with a better fix which plays nicely with timesEffectsOf
+    if (!PelleRifts.hasGalaxyGenerator || !GalaxyGeneratorUpgrades.additive.canBeApplied) return 0;
     return DC.D1.timesEffectsOf(
       GalaxyGeneratorUpgrades.additive,
       GalaxyGeneratorUpgrades.multiplicative,

@@ -35,9 +35,7 @@ export const NG = {
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
     GameEnd.removeAdditionalEnd = true;
     Modal.hideAll();
-    GameStorage.hardReset({
-      noSave: true
-    });
+    GameStorage.hardReset();
     player.newGame = JSON.parse(newGameBackup);
     player.newGame.current = i;
     player.newGame.plusRecord = Math.max(player.newGame.plusRecord, i);

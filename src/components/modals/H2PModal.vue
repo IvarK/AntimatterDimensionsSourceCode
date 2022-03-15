@@ -31,7 +31,7 @@ export default {
       return GameDatabase.h2p.search(this.searchValue).filter(searchObj => searchObj.tab.isUnlocked());
     },
     top5Threshold() {
-      return Math.min(this.matchingTabs[Math.min(this.matchingTabs.length, 5)].relevance + 0.01, 0.5);
+      return Math.min(this.matchingTabs[Math.min(this.matchingTabs.length - 1, 4)].relevance + 0.01, 0.5);
     }
   },
   created() {

@@ -1680,9 +1680,10 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     // A higher "Relevance" value actually means that has lower relevance.
     const relevances = GameDatabase.h2p.tabs.map(() => 10000);
     for (const searchWord of searchTerms) {
+      const minimumRequirement = Math.min(searchWord.length - 0.9, 3) * 0.5;
       for (const searchIndexStr in searchIndex) {
         const typoThreshold = howBadlyTypoed(replaceSpecialChars(searchIndexStr), searchWord);
-        if (typoThreshold < 1.5) {
+        if (typoThreshold < minimumRequirement) {
           for (const tab of searchIndex[searchIndexStr]) {
             const maxRelevance = tab.searchTermsRelevance[searchIndexStr];
             const decrease = Math.max(maxRelevance * 2.3 - 1.5, 0);

@@ -29,6 +29,9 @@ export default {
     },
     matchingTabs() {
       return GameDatabase.h2p.search(this.searchValue).filter(searchObj => searchObj.tab.isUnlocked());
+    },
+    top5Threshold() {
+      return Math.min(this.matchingTabs[Math.min(this.matchingTabs.length, 5)].relevance + 0.01, 0.5);
     }
   },
   created() {
@@ -70,7 +73,7 @@ export default {
             class="o-h2p-tab-button"
             :class="{
               'o-h2p-tab-button--selected': searchObj.tab === activeTab,
-              'o-h2p-tab-button--relevant': searchObj.relevance < 0.2
+              'o-h2p-tab-button--relevant': searchObj.relevance < top5Threshold
             }"
             @click="setActiveTab(searchObj.tab)"
           >

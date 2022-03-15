@@ -34,7 +34,6 @@ import "./celestials/enslaved.js";
 export * from "./celestials/v.js";
 import "./celestials/alchemy.js";
 import "./shop-purchases.js";
-export * from "./celestials/navigation.js";
 export * from "./celestials/singularity-milestones.js";
 import "./script-templates.js";
 import "./speedrun-milestones.js";

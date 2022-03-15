@@ -6062,17 +6062,19 @@ kbd {
   position: absolute;
   width: 100%;
   z-index: 2;
+  height: 3rem;
+  display: flex;
+  align-items: center;
 }
 
 .c-teresa-milestone-line {
   height: 0.2rem;
-  background-color: var(--color-text);
+  background-color: var(--color-teresa--base);
   width: 100%;
-  opacity: 0.5;
+  opacity: 0.8;
 }
 .c-teresa-milestone-line--attained {
-  background-color: var(--color-reality);
-  filter: brightness(0.5);
+  background-color: #0008;
   opacity: 1;
 }
 
@@ -6096,14 +6098,13 @@ kbd {
   width: 20rem;
   border-radius: 0.5rem;
   padding: 1rem;
-  margin: auto;
+  margin: 0 15rem 1rem 5rem;
   transition-duration: 0.15s;
   user-select: none;
   background-color: var(--color-teresa--base);
   font-weight: bold;
   border: none;
   color: var(--color-teresa--accent);
-  margin-bottom: 1rem;
 }
 
 .c-teresa-run-button {
@@ -6172,6 +6173,8 @@ kbd {
   display: flex;
   flex-direction: column;
   width: 20rem;
+  margin-left: 15rem;
+  margin-right: 5rem;
 }
 
 .o-teresa-shop-button {

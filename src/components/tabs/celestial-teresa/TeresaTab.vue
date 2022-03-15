@@ -72,16 +72,9 @@ export default {
         ? `${quantify("Reality Machine", this.lastMachines, 2)}`
         : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(DC.E10000), 2)}`;
     },
-    unlockInfoTooltipStyles() {
+    unlockInfoTooltipArrowStyle() {
       return {
-        arrow: {
-          borderRight: "0.5rem solid var(--color-teresa--base)"
-        },
-        content: {
-          border: "0.1rem solid var(--color-teresa--base)",
-          backgroundColor: "hsl(0, 0%, 5%)",
-          fontSize: "1.1rem"
-        }
+        borderRight: "0.5rem solid var(--color-teresa--base)"
       };
     }
   },
@@ -121,6 +114,19 @@ export default {
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return `calc(${(100 * pos).toFixed(2)}% - 0.1rem)`;
     },
+    hasUnlock(unlockInfo) {
+      return this.pouredAmount >= unlockInfo.price;
+    },
+    unlockInfoTooltipContentStyle(unlockInfo) {
+      const hasInfo = this.hasUnlock(unlockInfo);
+      return {
+        border: "0.1rem solid var(--color-teresa--base)",
+        backgroundColor: hasInfo ? "var(--color-teresa--base)" : "var(--color-teresa--accent)",
+        fontSize: "1rem",
+        color: hasInfo ? "black" : "var(--color-teresa--base)",
+        width: "14rem"
+      };
+    }
   }
 };
 </script>
@@ -215,13 +221,13 @@ export default {
             right="0"
             mode="right"
             :show="true"
-            :tooltip-arrow-style="unlockInfoTooltipStyles.arrow"
-            :tooltip-content-style="unlockInfoTooltipStyles.content"
+            :tooltip-arrow-style="unlockInfoTooltipArrowStyle"
+            :tooltip-content-style="unlockInfoTooltipContentStyle(unlockInfo)"
           >
             <template #mainContent>
               <div
                 class="c-teresa-milestone-line"
-                :class="{ 'c-teresa-milestone-line--attained': pouredAmount >= unlockInfo.price }"
+                :class="{ 'c-teresa-milestone-line--attained': hasUnlock(unlockInfo) }"
               />
             </template>
             <template #tooltipContent>
@@ -230,7 +236,10 @@ export default {
           </CustomizeableTooltip>
         </div>
       </div>
-      <div class="l-rm-container-labels l-teresa-mechanic-container" />
+      <div
+        v-if="pouredAmount < pouredAmountCap"
+        class="l-rm-container-labels l-teresa-mechanic-container"
+      />
       <div
         v-if="hasPerkShop"
         class="c-teresa-shop"

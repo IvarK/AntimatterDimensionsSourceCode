@@ -464,8 +464,9 @@ window.player = {
       scripts: {
       },
       execTimer: 0,
-      type: AUTOMATOR_TYPE.TEXT,
+      type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,
+      currentInfoPane: 4
     },
     achTimer: 0,
   },

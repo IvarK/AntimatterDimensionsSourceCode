@@ -3,13 +3,15 @@ import { DC } from "../../../../javascripts/core/constants";
 import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
   name: "TeresaTab",
   components: {
     GlyphSetPreview,
     PerkShopUpgradeButton,
-    CelestialQuoteHistory
+    CelestialQuoteHistory,
+    CustomizeableTooltip
   },
   data() {
     return {
@@ -69,6 +71,11 @@ export default {
       return this.lastMachines.lt(DC.E10000)
         ? `${quantify("Reality Machine", this.lastMachines, 2)}`
         : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(DC.E10000), 2)}`;
+    },
+    unlockInfoTooltipArrowStyle() {
+      return {
+        borderRight: "0.5rem solid var(--color-teresa--base)"
+      };
     }
   },
   methods: {
@@ -102,13 +109,24 @@ export default {
       if (this.isDoomed) return;
       Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
-    unlockDescriptionStyle(unlockInfo) {
+    unlockDescriptionHeight(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
-      return {
-        bottom: `${(100 * pos).toFixed(2)}%`,
-      };
+      return `calc(${(100 * pos).toFixed(2)}% - 0.1rem)`;
     },
+    hasUnlock(unlockInfo) {
+      return this.pouredAmount >= unlockInfo.price;
+    },
+    unlockInfoTooltipContentStyle(unlockInfo) {
+      const hasInfo = this.hasUnlock(unlockInfo);
+      return {
+        border: "0.1rem solid var(--color-teresa--base)",
+        backgroundColor: hasInfo ? "var(--color-teresa--base)" : "var(--color-teresa--accent)",
+        fontSize: "1rem",
+        color: hasInfo ? "black" : "var(--color-teresa--base)",
+        width: "14rem"
+      };
+    }
   }
 };
 </script>
@@ -194,18 +212,34 @@ export default {
               {{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
             </div>
           </div>
-          <div
+          <CustomizeableTooltip
             v-for="unlockInfo in unlockInfos"
             :id="unlockInfo.id"
             :key="unlockInfo.id"
-            class="c-teresa-unlock-description"
-            :style="unlockDescriptionStyle(unlockInfo)"
+            content-class="c-teresa-unlock-description"
+            :bottom="unlockDescriptionHeight(unlockInfo)"
+            right="0"
+            mode="right"
+            :show="true"
+            :tooltip-arrow-style="unlockInfoTooltipArrowStyle"
+            :tooltip-content-style="unlockInfoTooltipContentStyle(unlockInfo)"
           >
-            {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
-          </div>
+            <template #mainContent>
+              <div
+                class="c-teresa-milestone-line"
+                :class="{ 'c-teresa-milestone-line--attained': hasUnlock(unlockInfo) }"
+              />
+            </template>
+            <template #tooltipContent>
+              <b>{{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}</b>
+            </template>
+          </CustomizeableTooltip>
         </div>
       </div>
-      <div class="l-rm-container-labels l-teresa-mechanic-container" />
+      <div
+        v-if="pouredAmount < pouredAmountCap"
+        class="l-rm-container-labels l-teresa-mechanic-container"
+      />
       <div
         v-if="hasPerkShop"
         class="c-teresa-shop"

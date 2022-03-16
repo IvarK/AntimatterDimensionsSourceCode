@@ -100,6 +100,9 @@ export default {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       }
     },
+    showCostTitle(value) {
+      return value.exponent < 1000000;
+    },
     tutorialClass() {
       if (this.tier === 1) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
@@ -143,7 +146,7 @@ export default {
     >
       <span v-if="isCapped">Capped</span>
       <template v-else>
-        Cost: {{ format(singleCost) }}
+        <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
         <span v-if="isCostsAD">{{ costUnit }} </span>
         <span v-else> AM </span>
       </template>
@@ -158,7 +161,8 @@ export default {
       <span v-else-if="isContinuumActive">Continuum: {{ continuumString }}</span>
       <template v-else>
         Until {{ formatInt(10) }},
-        Cost: {{ format(until10Cost) }}
+        <span v-if="showCostTitle(until10Cost)">Cost: </span>
+        {{ format(until10Cost) }}
         <span v-if="isCostsAD">{{ costUnit }} </span>
         <span v-else> AM </span>
       </template>

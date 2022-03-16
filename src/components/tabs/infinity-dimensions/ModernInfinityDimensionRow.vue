@@ -33,6 +33,7 @@ export default {
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
       requirementReached: false,
       eternityReached: false,
+      showCostTitle: false,
       enslavedRunning: false,
     };
   },
@@ -50,7 +51,7 @@ export default {
       const requirement = InfinityDimension(this.tier).requirement;
       if (this.isUnlocked || this.shiftDown) {
         if (this.isCapped) return "Capped";
-        return `Cost: ${format(this.cost)} IP`;
+        return this.showCostTitle ? `Cost: ${format(this.cost)} IP` : `${format(this.cost)} IP`;
       }
 
       if (this.requirementReached) {
@@ -100,6 +101,7 @@ export default {
       this.isAutobuyerOn = Autobuyer.infinityDimension(tier).isActive;
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
+      this.showCostTitle = this.cost.exponent < 1000000;
       this.enslavedRunning = Enslaved.isRunning;
     },
     buyManyInfinityDimension() {

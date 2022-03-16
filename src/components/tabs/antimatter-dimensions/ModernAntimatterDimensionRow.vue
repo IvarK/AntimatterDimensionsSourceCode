@@ -153,13 +153,18 @@ export default {
           {{ continuumString }}
         </span>
         <span v-else-if="isCostsAD">
-          Buy {{ howManyCanBuy }}<br>
-          Cost: {{ costDisplay }} {{ costUnit }}
+          Buy {{ howManyCanBuy }}
+          <br>
+          <span v-if="showCostTitle(buyUntil10 ? until10Cost : singleCost)">
+            Cost:
+          </span>{{ costDisplay }} {{ costUnit }}
         </span>
         <span v-else>
           Buy {{ howManyCanBuy }}
           <br>
-          Cost: {{ costDisplay }} AM
+          <span v-if="showCostTitle(buyUntil10 ? until10Cost : singleCost)">
+            Cost:
+          </span>{{ costDisplay }} AM
         </span>
       </div>
       <div

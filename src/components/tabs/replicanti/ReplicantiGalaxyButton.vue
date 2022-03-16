@@ -1,6 +1,7 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import { replicantiGalaxyRequest } from '../../../../javascripts/core/replicanti';
 
 export default {
   name: "ReplicantiGalaxyButton",
@@ -57,9 +58,7 @@ export default {
       this.update();
     },
     handleClick() {
-      if (!this.isAvailable) return;
-      if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
-      else replicantiGalaxy();
+      replicantiGalaxyRequest();
     }
   }
 };

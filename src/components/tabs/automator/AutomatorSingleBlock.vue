@@ -90,15 +90,15 @@ export default {
     },
     validateInput(value) {
       let validator, lines;
-
+      const defines = BlockAutomator.lines.filter(line => line.cmd === "DEFINE");
       if (this.b.nest) {
         const clone = Object.assign({}, this.b);
         clone.nest = [];
-        lines = BlockAutomator.parseLines([clone]);
+        lines = BlockAutomator.parseLines([...defines, clone]);
         validator = AutomatorGrammar.validateLine(lines.join("\n"));
       } else {
-        lines = BlockAutomator.parseLines([this.b]);
-        validator = AutomatorGrammar.validateLine(lines[0]);
+        lines = BlockAutomator.parseLines([...defines, this.b]);
+        validator = AutomatorGrammar.validateLine(lines.join("\n"));
       }
 
       this.idxOffset = lines[0].indexOf(value);
@@ -121,6 +121,28 @@ export default {
       <div class="o-automator-command">
         {{ b.cmd }}
       </div>
+      <select
+        v-if="b.canWait"
+        v-model="b.wait"
+        class="o-automator-block-input"
+        @change="updateBlock(block, b.id)"
+      >
+        <option :value="true" />
+        <option :value="false">
+          NOWAIT
+        </option>
+      </select>
+      <select
+        v-if="b.canRespec"
+        v-model="b.respec"
+        class="o-automator-block-input"
+        @change="updateBlock(block, b.id)"
+      >
+        <option :value="false" />
+        <option :value="true">
+          RESPEC
+        </option>
+      </select>
       <select
         v-if="b.targets"
         v-model="b.target"

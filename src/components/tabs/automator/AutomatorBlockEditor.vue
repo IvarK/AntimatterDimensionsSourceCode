@@ -77,6 +77,13 @@ export const BlockAutomator = {
       .replace("COMMENT", "//")
       .replace("BLOB", "blob  ");
 
+    if (block.canWait && block.wait === false) {
+      if (block.cmd === "LOAD") {
+        parsed = parsed
+          .replace("STUDIES LOAD PRESET", "STUDIES NOWAIT LOAD PRESET");
+      } else parsed += ` NOWAIT`;
+    }
+    if (block.respec) parsed += ` RESPEC`;
     if (block.target) parsed += ` ${block.target}`;
     if (block.secondaryTarget) parsed += ` ${block.secondaryTarget}`;
     if (block.inputValue) parsed += ` ${block.inputValue}`;

@@ -147,9 +147,9 @@ export default {
   border-radius: .5rem;
   font-family: Typewriter;
   cursor: pointer;
-  width: 20rem;
+  width: 18.5rem;
   height: 12rem;
-  margin: 1rem;
+  margin: 0.6rem 0.3rem;
   font-size: 1rem;
   box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
   display: flex;
@@ -232,7 +232,7 @@ export default {
 }
 
 .l-pelle-upgrade-gap {
-  height: 0.7em;
+  height: 0.5em;
   flex-shrink: 0;
 }
 </style>

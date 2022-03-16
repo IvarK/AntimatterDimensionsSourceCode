@@ -2,6 +2,18 @@
 import GlyphSetName from "@/components/GlyphSetName";
 import CurrentGlyphEffect from "./CurrentGlyphEffect";
 
+const glyphEffectsOrder =
+  ["powerpow", "powermult", "powerdimboost", "powerbuy10",
+    "infinitypow", "infinityinfmult", "infinityIP", "infinityrate",
+    "replicationpow", "replicationdtgain", "replicationspeed", "replicationglyphlevel",
+    "timepow", "timeshardpow", "timeEP", "timespeed", "timeetermult",
+    "dilationpow", "dilationTTgen", "dilationDT", "dilationgalaxyThreshold",
+    "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
+    "effarigforgotten", "effarigdimensions", "effarigantimatter",
+    "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
+    "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",
+    "companiondescription", "companionEP"];
+
 export default {
   name: "CurrentGlyphEffects",
   components: {
@@ -71,6 +83,7 @@ export default {
     },
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
+      this.effects.sort((a, b) => glyphEffectsOrder.indexOf(a.id) - glyphEffectsOrder.indexOf(b.id));
     },
   }
 };

@@ -1,11 +1,10 @@
 import { GameMechanicState } from "../game-mechanics/index.js";
 
-export const orderedEffectList =
-  ["powerpow", "powermult", "powerdimboost", "powerbuy10",
-  "infinitypow", "infinityinfmult", "infinityIP", "infinityrate",
-  "replicationpow", "replicationdtgain", "replicationspeed", "replicationglyphlevel",
-  "timepow", "timeshardpow", "timeEP", "timespeed", "timeetermult",
-  "dilationpow", "dilationTTgen", "dilationDT", "dilationgalaxyThreshold",
+export const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
+  "dilationpow", "timeshardpow", "powermult", "powerdimboost", "powerbuy10",
+  "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
+  "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
+  "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",

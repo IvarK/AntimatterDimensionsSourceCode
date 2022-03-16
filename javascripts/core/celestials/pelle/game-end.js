@@ -5,7 +5,14 @@ export const GameEnd = {
       (Math.log10(9e15) - 8.7) + this.additionalEnd, 0);
   },
 
-  additionalEnd: 0,
+  actualAdditionalEnd: 0,
+  get additionalEnd() {
+    return player.gameEnd.isGameEnd || this.removeAdditionalEnd ? this.actualAdditionalEnd : 0;
+  },
+  set additionalEnd(x) {
+    this.actualAdditionalEnd = player.gameEnd.isGameEnd || this.removeAdditionalEnd ? x : 0;
+  },
+
   removeAdditionalEnd: false,
 
   gameLoop(diff) {
@@ -19,6 +26,7 @@ export const GameEnd = {
       }
     }
     if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {
+      player.gameEnd.isGameEnd = true;
       this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   }

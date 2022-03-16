@@ -69,6 +69,12 @@ export const GameStorage = {
     this.loadPlayerObject(player, overrideLastUpdate);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
+
+    // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
+    // The options tab is the first one of those, which makes the player redirect to the Pelle tab
+    // You can doom your reality even if you haven't unlocked infinity yet if you import while the Pelle tab
+    // is showing
+    Tab.options.subtabs[0].show();
     GameUI.notify.info("Game imported");
   },
 

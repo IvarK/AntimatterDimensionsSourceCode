@@ -273,8 +273,7 @@ Vue.component("tt-buy-button", {
       return this.budget.gte(this.cost);
     },
     enabledClass() {
-      if (!this.isEnabled || this.isLimitedByPelle)
-        return "c-tt-buy-button--locked";
+      if (!this.isEnabled || this.isLimitedByPelle) return "c-tt-buy-button--locked";
 
       return "c-tt-buy-button--unlocked";
     },

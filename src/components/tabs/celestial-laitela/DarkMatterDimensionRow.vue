@@ -70,7 +70,7 @@ export default {
 
       let line2;
       if (this.isIntervalCapped) line2 = this.hoverOverAscension ? "On ascend ➜" : "Ascend!";
-      else line2 = `Cost: ${this.formatDMCost(this.intervalCost)}`;
+      else line2 = `Cost: ${this.formatDMCost(this.intervalCost)} DM`;
       return `${line1}<br>${line2}`;
     },
     darkMatterText() {
@@ -81,7 +81,7 @@ export default {
       const ascMult = this.powerDMPerAscension * this.interval / this.intervalAfterAscension;
       const line2 = this.hoverOverAscension
         ? `${formatX(ascMult, 2, 2)} / sec`
-        : `Cost: ${this.formatDMCost(this.powerDMCost)}`;
+        : `Cost: ${this.formatDMCost(this.powerDMCost)} DM`;
       return `${line1}<br>${line2}`;
     },
     darkEnergyText() {
@@ -91,7 +91,7 @@ export default {
       const ascMult = POWER_DE_PER_ASCENSION * this.interval / this.intervalAfterAscension;
       const line2 = this.hoverOverAscension
         ? `${formatX(ascMult, 2, 2)} / sec`
-        : `Cost: ${this.formatDMCost(this.powerDECost)}`;
+        : `Cost: ${this.formatDMCost(this.powerDECost)} DM`;
       return `${line1}<br>${line2}`;
     },
     ascensionTooltip() {

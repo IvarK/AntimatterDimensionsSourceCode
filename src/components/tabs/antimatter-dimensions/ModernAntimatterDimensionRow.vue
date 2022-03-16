@@ -153,13 +153,13 @@ export default {
           {{ continuumString }}
         </span>
         <span v-else-if="isCostsAD">
-          Buy {{ howManyCanBuy }}
+          Buy {{ howManyCanBuy }}<br>
           Cost: {{ costDisplay }} {{ costUnit }}
         </span>
         <span v-else>
           Buy {{ howManyCanBuy }}
           <br>
-          Cost: {{ costDisplay }}
+          Cost: {{ costDisplay }} AM
         </span>
       </div>
       <div

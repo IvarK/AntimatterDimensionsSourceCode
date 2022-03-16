@@ -67,12 +67,14 @@ export const automatorBlocks = [
     nested: true
   }, {
     cmd: "STUDIES",
-    hasInput: true
+    hasInput: true,
+    canWait: true
   }, {
     cmd: "UNLOCK",
     targets: ["EC", "DILATION"],
     hasInput: true,
-    targetsWithoutInput: ["DILATION"]
+    targetsWithoutInput: ["DILATION"],
+    canWait: true
   }, {
     cmd: "START",
     targets: ["EC", "DILATION"],
@@ -97,14 +99,21 @@ export const automatorBlocks = [
   }, {
     cmd: "RESPEC"
   }, {
-    cmd: "INFINITY"
+    cmd: "INFINITY",
+    canRespec: true,
+    canWait: true
   }, {
-    cmd: "ETERNITY"
+    cmd: "ETERNITY",
+    canRespec: true,
+    canWait: true
   }, {
-    cmd: "REALITY"
+    cmd: "REALITY",
+    canRespec: true,
+    canWait: true
   }, {
     cmd: "LOAD",
-    hasInput: true
+    hasInput: true,
+    canWait: true
   }, {
     cmd: "NOTIFY",
     hasInput: true

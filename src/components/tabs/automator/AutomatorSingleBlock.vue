@@ -122,6 +122,28 @@ export default {
         {{ b.cmd }}
       </div>
       <select
+        v-if="b.canWait"
+        v-model="b.wait"
+        class="o-automator-block-input"
+        @change="updateBlock(block, b.id)"
+      >
+        <option :value="true" />
+        <option :value="false">
+          NOWAIT
+        </option>
+      </select>
+      <select
+        v-if="b.canRespec"
+        v-model="b.respec"
+        class="o-automator-block-input"
+        @change="updateBlock(block, b.id)"
+      >
+        <option :value="false" />
+        <option :value="true">
+          RESPEC
+        </option>
+      </select>
+      <select
         v-if="b.targets"
         v-model="b.target"
         class="o-automator-block-input"

@@ -34,6 +34,12 @@ export function replicantiGalaxy() {
   addReplicantiGalaxies(galaxyGain);
 }
 
+export function replicantiGalaxyRequest() {
+  if (!Replicanti.galaxies.canBuyMore) return;
+  if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+  else replicantiGalaxy();
+}
+
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
 // Returns the remaining unused gain factor
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {

@@ -82,7 +82,7 @@ export const shortcuts = [
     name: "Replicanti Galaxy",
     keys: ["r"],
     type: "bindRepeatableHotkey",
-    function: () => replicantiGalaxy(),
+    function: () => replicantiGalaxyRequest(),
     visible: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked()
   }, {
     name: "Eternity",

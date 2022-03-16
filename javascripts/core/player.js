@@ -229,7 +229,7 @@ window.player = {
     totalTimePlayed: 0,
     realTimePlayed: 0,
     realTimeDoomed: 0,
-    totalAntimatter: DC.D0,
+    totalAntimatter: DC.E1,
     lastTenInfinities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
     lastTenEternities: Array.range(0, 10).map(() =>

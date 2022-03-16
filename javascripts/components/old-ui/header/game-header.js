@@ -4,9 +4,12 @@ import "./game-header-big-crunch-button.js";
 import "./game-header-tickspeed-row.js";
 import "./game-header-amounts-line.js";
 import "../../header-challenge-display.js";
-import "../../reality/black-hole/black-hole-header-row.js";
+import BlackHoleHeaderRow from "@/components/BlackHoleHeaderRow";
 
 Vue.component("game-header", {
+  components: {
+    BlackHoleHeaderRow
+  },
   data() {
     return {
       isInEffarig: false,
@@ -64,6 +67,6 @@ Vue.component("game-header", {
       </div>
       <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
       <game-header-tickspeed-row />
-      <black-hole-header-row />
+      <BlackHoleHeaderRow />
     </div>`
 });

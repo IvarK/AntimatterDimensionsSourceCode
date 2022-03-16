@@ -49,8 +49,8 @@ GameStorage.migrations = {
     10: player => {
       if (player.timestudy.studies.includes(72)) {
         for (let i = 4; i < 8; i++) {
-          player[`infinityDimension${i}`].amount = player[`infinityDimension${i}`].amount
-            .div(Sacrifice.totalBoost.pow(0.02));
+          player[`infinityDimension${i}`].amount = Decimal.div(player[`infinityDimension${i}`].amount,
+            Sacrifice.totalBoost.pow(0.02));
         }
       }
     },
@@ -894,6 +894,11 @@ GameStorage.migrations = {
 
   deletePostChallUnlocked(player) {
     delete player.postChallUnlocked;
+  },
+
+  infMultNameConversion(player) {
+    player.IPMultPurchases = player.infMult;
+    delete player.infMult;
   },
 
   prePatch(saveData) {

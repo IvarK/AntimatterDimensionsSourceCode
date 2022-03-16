@@ -85,7 +85,7 @@ GameDatabase.reality.glyphSacrifice = [
     },
     description: amount => {
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
-      return `+${formatPercents(amount / 100, 2)} additional glyph rarity`;
+      return `+${formatPercents(amount / 100, 2)} additional Glyph rarity`;
     }
   }, {
     id: "reality",

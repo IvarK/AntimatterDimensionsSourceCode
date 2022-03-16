@@ -18,7 +18,8 @@ export default {
       return `You are about to do a Dimension Boost Reset`;
     },
     message() {
-      const areDimensionsReset = Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked
+      const areDimensionsReset = (Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
+      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought)
         ? `not reset anything because you have ${Perk.antimatterNoReset.isBought ? "Perk ANR" : "Achievement 111"}`
         : `reset your Antimatter and Antimatter Dimensions`;
 

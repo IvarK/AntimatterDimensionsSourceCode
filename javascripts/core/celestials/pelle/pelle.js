@@ -1,7 +1,9 @@
+import { DC } from "../../constants";
 import { Currency } from "../../currency";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
-import { GameMechanicState, SetPurchasableMechanicState } from "../../utils";
+import { SetPurchasableMechanicState } from "../../utils";
 import zalgo from "./zalgo";
+import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -17,7 +19,7 @@ const disabledMechanicUnlocks = {
   autoec: () => ({}),
   replicantiIntervalMult: () => ({}),
   tpMults: () => ({}),
-  glyphs: () => !PelleRifts.famine.hasMilestone(0),
+  glyphs: () => !PelleRifts.famine.milestones[0].canBeApplied,
   V: () => ({}),
   singularity: () => ({}),
   continuum: () => ({}),
@@ -47,8 +49,14 @@ const disabledMechanicUnlocks = {
 };
 
 export const Pelle = {
+  symbol: "♅",
+
+  get displayName() {
+    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
+  },
 
   additionalEnd: 0,
+  addAdditionalEnd: true,
 
   get endState() {
     return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
@@ -85,12 +93,14 @@ export const Pelle = {
 
   armageddon(gainStuff) {
     if (!this.canArmageddon && gainStuff) return;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_BEFORE, gainStuff);
     if (gainStuff) {
       this.cel.remnants += this.remnantsGain;
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.armageddonDuration = 0;
+    EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 
   gameLoop(diff) {
@@ -98,7 +108,7 @@ export const Pelle = {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1) this.additionalEnd += diff / 1000 / 20;
+      if (this.endState >= 1 && Pelle.addAdditionalEnd) this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   },
 
@@ -122,9 +132,83 @@ export const Pelle = {
     return ["passiveGen", "ipMult", "infinitiedGeneration"];
   },
 
-  // TS33 only gets useless with PelleUpgrade.replicantiGalaxyNoReset
   get uselessTimeStudies() {
-    return [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    const uselessTimeStudies = [32, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) uselessTimeStudies.push(33);
+    return uselessTimeStudies;
+  },
+
+  get disabledRUPGs() {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 20, 22, 23, 24];
+  },
+
+  get uselessPerks() {
+    return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106];
+  },
+
+  // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
+  // that this field is NEGATED, describing an effect allowlist instead of a blocklist, as most of the effects are
+  // already disabled by virtue of the glyph type being unequippable and many of the remaining ones are also disabled.
+  get enabledGlyphEffects() {
+    return ["timepow", "timespeed", "timeshardpow",
+      "dilationpow", "dilationgalaxyThreshold",
+      "replicationpow",
+      "powerpow", "powermult", "powerdimboost", "powerbuy10",
+      "infinitypow", "infinityrate",
+      "companiondescription", "companionEP"];
+  },
+
+  get specialGlyphEffect() {
+    const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
+    let description;
+    switch (Pelle.activeGlyphType) {
+      case "infinity":
+        description = "Infinity Point gain {value} (based on current IP)";
+        break;
+      case "time":
+        description = "Eternity Point gain {value} (based on current EP)";
+        break;
+      case "replication":
+        description = "Replication speed {value} (based on Famine)";
+        break;
+      case "dilation":
+        description = "Dilated Time gain {value} (based on Tachyon Galaxies)";
+        break;
+      case "power":
+        description = `Galaxies are ${formatPercents(0.02)} stronger`;
+        break;
+      case "companion":
+        description = `You feel ${formatPercents(0.34)} better`;
+        break;
+      default:
+        description = "No glyph equipped!";
+        break;
+    }
+    const isActive = type => isUnlocked && this.activeGlyphType === type;
+    return {
+      isUnlocked,
+      description,
+      infinity: (isActive("infinity") && player.challenge.eternity.current <= 8)
+        ? Currency.infinityPoints.value.pow(0.2)
+        : DC.D1,
+      time: isActive("time")
+        ? Currency.eternityPoints.value.plus(1).pow(0.3)
+        : DC.D1,
+      replication: isActive("replication")
+        ? 10 ** 53 ** (PelleRifts.famine.percentage)
+        : 1,
+      dilation: isActive("dilation")
+        ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
+        : DC.D1,
+      power: isActive("power")
+        ? 1.02
+        : 1,
+      companion: isActive("companion")
+        ? 1.34
+        : 1,
+      isScaling: () => ["infinity", "time", "replication", "dilation"].includes(this.activeGlyphType),
+    };
   },
 
   get uselessRaMilestones() {
@@ -169,8 +253,17 @@ export const Pelle = {
     return this.realityShardGain(this.remnantsGain + this.cel.remnants);
   },
 
+  // Calculations assume this is in units of proportion per second (eg. 0.03 is 3% drain per second)
+  get riftDrainPercent() {
+    return 0.03;
+  },
+
   get glyphMaxLevel() {
-    return PelleRebuyableUpgrade.glyphLevels.effectValue;
+    return PelleUpgrade.glyphLevels.effectValue;
+  },
+
+  get glyphStrength() {
+    return 1;
   },
 
   antimatterDimensionMult(x) {
@@ -179,6 +272,10 @@ export const Pelle = {
 
   get activeGlyphType() {
     return Glyphs.active.filter(Boolean)[0]?.type;
+  },
+
+  get hasGalaxyGenerator() {
+    return player.celestials.pelle.galaxyGenerator.unlocked;
   },
 
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
@@ -201,16 +298,123 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
+  endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye".split(" "),
+
+  modalTools: {
+    bracketOrder: ["()", "[]", "{}", "<>", "||"],
+    wordCycle(x) {
+      const list = x.split("-");
+      const len = list.length;
+      const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
+      const tick = Math.floor(Date.now() / 200) % (len * 5);
+      const largeTick = Math.floor(tick / 5);
+      const bP = this.bracketOrder[largeTick];
+      let v = list[largeTick];
+      if (tick % 5 < 1 || tick % 5 > 3) {
+        v = this.randomCrossWords(v);
+      }
+      // Stands for Bracket Pair.
+      const space = (maxWordLen - v.length) / 2;
+      return bP[0] + ".".repeat(Math.floor(space)) + v + ".".repeat(Math.ceil(space)) + bP[1];
+    },
+    randomCrossWords(str) {
+      const x = str.split("");
+      for (let i = 0; i < x.length / 1.7; i++) {
+        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) % 964372 + i) * x.length);
+        // .splice should return the deleted index.
+        x[randomIndex] = this.randomSymbol;
+      }
+      return x.join("");
+    },
+    predictableRandom(x) {
+      let start = Math.pow(x % 97, 4.3) * 232344573;
+      const a = 15485863;
+      const b = 521791;
+      start = (start * a) % b;
+      for (let i = 0; i < (x * x) % 90 + 90; i++) {
+        start = (start * a) % b;
+      }
+      return start / b;
+    },
+    celCycle(x) {
+      //                                   Gets trailing number and removes it
+      const cels = x.split("-").map(cel => [parseInt(cel, 10), cel.replace(/\d+/u, "")]);
+      const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
+      let tick = (Date.now() / 100) % totalTime;
+      let index = -1;
+      while (tick >= 0 && index < cels.length - 1) {
+        index++;
+        tick -= cels[index][0];
+      }
+      return `<!${cels[index][1]}!>`;
+    },
+    get randomSymbol() {
+      return String.fromCharCode(Math.floor(Math.random() * 50) + 192);
+    }
+  },
+  quotes: new CelestialQuotes("pelle", (function() {
+    const wc = function(x) {
+      return Pelle.modalTools.wordCycle.bind(Pelle.modalTools)(x);
+    };
+    const cc = function(x) {
+      return Pelle.modalTools.celCycle.bind(Pelle.modalTools)(x);
+    };
+    const p = function(line) {
+      if (!line.includes("[") && !line.includes("<")) return line;
+
+      const sep = "  ---TEMPSEPERATOR---  ";
+      const ops = [];
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === "[") ops.push(wc);
+        else if (line[i] === "<") ops.push(cc);
+      }
+      let l = line.replace("[", sep).replace("]", sep);
+      l = l.replace("<", sep).replace(">", sep).split(sep);
+      return () => l.map((v, x) => ((x % 2) ? ops[x / 2 - 0.5](v) : v)).join("");
+    };
+
+    const quotesObject = {};
+    let iterator = 0;
+    for (const i in GameDatabase.celestials.pelle.quotes) {
+      iterator++;
+      quotesObject[i] = {
+        id: iterator,
+        lines: GameDatabase.celestials.pelle.quotes[i].map(x => p(x))
+      };
+    }
+    return quotesObject;
+  }())),
+  hasQuote(x) {
+    return player.celestials.pelle.quotes.includes(x);
+  },
 };
 
-export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
-
-  get hasCustomCurrency() {
-    return Boolean(this.config.currency);
+EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
+  if (Currency.remnants.gte(1)) {
+    Pelle.quotes.show(Pelle.quotes.ARM);
   }
+});
+EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
+  if (PelleStrikes.infinity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_1);
+  }
+  if (PelleStrikes.powerGalaxies.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_2);
+  }
+  if (PelleStrikes.eternity.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_3);
+  }
+  if (PelleStrikes.ECs.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_4);
+  }
+  if (PelleStrikes.dilation.hasStrike) {
+    Pelle.quotes.show(Pelle.quotes.STRIKE_5);
+  }
+});
 
+export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
   get currency() {
-    return this.hasCustomCurrency ? this.config.currency() : Currency.realityShards;
+    return Currency.realityShards;
   }
 
   get boughtAmount() {
@@ -221,18 +425,8 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
     player.celestials.pelle.rebuyables[this.id] = value;
   }
 
-  get cost() {
-    return this.config.cost();
-  }
-
   get isCapped() {
-    return this.config.cap ? this.boughtAmount >= this.config.cap : false;
-  }
-
-  get isAffordable() {
-    if (!this.hasCustomCurrency) return this.currency.gte(this.cost);
-
-    return this.cost.lte(this.currency.value);
+    return this.boughtAmount >= this.config.cap;
   }
 
   get isCustomEffect() { return true; }
@@ -241,23 +435,8 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
     return this.config.effect(this.boughtAmount);
   }
 
-  purchase() {
-    if (this.hasCustomCurrency) {
-      if (!this.canBeBought) return false;
-      if (this.currency.value instanceof Decimal) {
-        this.currency.value = this.currency.value.minus(this.cost);
-      } else {
-        this.currency.value -= this.cost.toNumber();
-      }
-      this.boughtAmount++;
-      this.onPurchased();
-      GameUI.update();
-      return true;
-    }
-
-    const purchaseReturnValue = super.purchase();
+  onPurchased() {
     if (this.id === "glyphLevels") EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
-    return purchaseReturnValue;
   }
 }
 
@@ -286,216 +465,14 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
 }
 
 export const PelleUpgrade = (function() {
-  const db = GameDatabase.celestials.pelle.upgrades;
-  const obj = {};
-  Object.keys(db).forEach(key => {
-    obj[key] = new PelleUpgradeState(db[key]);
-  });
-  return {
-    all: Object.values(obj),
-    ...obj
-  };
+  return mapGameDataToObject(
+    GameDatabase.celestials.pelle.upgrades,
+    config => (config.rebuyable
+      ? new RebuyablePelleUpgradeState(config)
+      : new PelleUpgradeState(config)
+    )
+  );
 }());
 
-export const PelleRebuyableUpgrade = (function() {
-  const upgradeDb = GameDatabase.celestials.pelle.rebuyables;
-  const galaxyGeneratorDb = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
-  const upgrades = {}, galaxyGenerator = {};
-
-  Object.keys(upgradeDb).forEach(key => {
-    upgrades[key] = new RebuyablePelleUpgradeState(upgradeDb[key]);
-  });
-
-  Object.keys(galaxyGeneratorDb).forEach(key => {
-    galaxyGenerator[key] = new RebuyablePelleUpgradeState(galaxyGeneratorDb[key]);
-  });
-
-  return {
-    all: Object.values(upgrades),
-    galaxyGenerator: Object.values(galaxyGenerator),
-    ...upgrades,
-    ...galaxyGenerator
-  };
-}());
-
-class PelleStrikeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
-
-  get hasStrike() {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.pelle.progressBits & (1 << this.id));
-  }
-
-  get requirement() {
-    return this._config.requirementDescription;
-  }
-
-  get penalty() {
-    return this._config.penaltyDescription;
-  }
-
-  get reward() {
-    return this._config.rewardDescription;
-  }
-
-  get rift() {
-    return this._config.rift();
-  }
-
-  trigger() {
-    if (!Pelle.isDoomed || this.hasStrike) return;
-    this.unlockStrike();
-
-    // If it's death, reset the records
-    if (this.id === 5) {
-      Pelle.cel.records.totalAntimatter = new Decimal("1e180000");
-      Pelle.cel.records.totalInfinityPoints = new Decimal("1e60000");
-      Pelle.cel.records.totalEternityPoints = new Decimal("1e400");
-    }
-  }
-
-  unlockStrike() {
-    GameUI.notify.success(`You encountered a Pelle Strike: ${this._config.requirementDescription}`);
-    // eslint-disable-next-line no-bitwise
-    player.celestials.pelle.progressBits |= (1 << this.id);
-  }
-}
-
-export const PelleStrikes = (function() {
-  const db = GameDatabase.celestials.pelle.strikes;
-  return {
-    infinity: new PelleStrikeState(db.infinity),
-    powerGalaxies: new PelleStrikeState(db.powerGalaxies),
-    eternity: new PelleStrikeState(db.eternity),
-    ECs: new PelleStrikeState(db.ECs),
-    dilation: new PelleStrikeState(db.dilation),
-    all: Object.keys(db).map(key => new PelleStrikeState(db[key]))
-  };
-}());
-
-class RiftState extends GameMechanicState {
-  get fillCurrency() {
-    return this.config.currency();
-  }
-
-  get strike() {
-    return this.config.strike();
-  }
-
-  get canBeApplied() {
-    return this.strike.hasStrike;
-  }
-
-  get name() {
-    return this.config.name;
-  }
-
-  get reducedTo() {
-    return this.rift.reducedTo;
-  }
-
-  set reducedTo(value) {
-    this.rift.reducedTo = value;
-  }
-
-  get rift() {
-    return player.celestials.pelle.rifts[this.config.key];
-  }
-
-  get totalFill() {
-    return this.rift.fill;
-  }
-
-  set totalFill(value) {
-    this.rift.fill = value;
-  }
-
-  get isActive() {
-    return this.rift.active;
-  }
-
-  get realPercentage() {
-    return this.config.percentage(this.totalFill);
-  }
-
-  get spentPercentage() {
-    return this.rift.percentageSpent || 0;
-  }
-
-  get percentage() {
-    if (this.reducedTo > 1) return this.reducedTo;
-    if (!this.config.spendable) return Math.min(this.realPercentage, this.reducedTo);
-    return Math.min(this.config.percentage(this.totalFill) - this.spentPercentage, this.reducedTo);
-  }
-
-  get milestones() {
-    return this.config.milestones;
-  }
-
-  get description() {
-    return this.config.description;
-  }
-
-  get effectDescription() {
-    return this.config.effectDescription(this.effectValue);
-  }
-
-  get isCustomEffect() { return true; }
-
-  get effectValue() {
-    return this.config.effect(this.config.percentageToFill(this.percentage));
-  }
-
-  get maxValue() {
-    return this.config.percentageToFill(1 + this.spentPercentage);
-  }
-
-  get isMaxed() {
-    return this.percentage >= 1;
-  }
-
-  hasMilestone(idx) {
-    if (this.config.key === "pestilence" && PelleRifts.chaos.hasMilestone(0)) return true;
-    return this.milestones[idx].requirement <= this.percentage;
-  }
-
-  toggle() {
-    const active = PelleRifts.all.filter(r => r.isActive).length;
-    if (!this.isActive && active === 2) GameUI.notify.error(`You can only have 2 rifts active at the same time!`);
-    else this.rift.active = !this.rift.active;
-  }
-
-  fill(diff) {
-    if (!this.isActive || this.isMaxed) return;
-
-    if (this.fillCurrency.value instanceof Decimal) {
-      const afterTickAmount = this.fillCurrency.value.times(0.97 ** (diff / 1000));
-      const spent = this.fillCurrency.value.minus(afterTickAmount);
-      this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(0);
-      this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
-    } else {
-      const afterTickAmount = this.fillCurrency.value * 0.97 ** (diff / 1000);
-      const spent = this.fillCurrency.value - afterTickAmount;
-      this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
-      this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
-    }
-  }
-}
-
-export const PelleRifts = (function() {
-  const db = GameDatabase.celestials.pelle.rifts;
-
-  const all = Object.keys(db).map(key => new RiftState(db[key]));
-  return {
-    famine: new RiftState(db.famine),
-    pestilence: new RiftState(db.pestilence),
-    chaos: new RiftState(db.chaos),
-    war: new RiftState(db.war),
-    death: new RiftState(db.death),
-    all,
-    totalMilestones: () => all.flatMap(r => r.milestones.filter((m, idx) => r.hasMilestone(idx))).length
-  };
-}());
+PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
+PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable);

@@ -1,14 +1,15 @@
-import "../reality/black-hole/black-hole-header-row.js";
 import "../header-challenge-display.js";
 import "../old-ui/header/game-header-eternity-button.js";
 import "../old-ui/header/game-header-new-dim-button.js";
 import "../old-ui/header/game-header-big-crunch-button.js";
 import "../old-ui/header/game-header-amounts-line.js";
 import NewsTicker from "@/components/NewsTicker";
+import BlackHoleHeaderRow from "@/components/BlackHoleHeaderRow";
 
 Vue.component("new-ui", {
   components: {
-    NewsTicker
+    NewsTicker,
+    BlackHoleHeaderRow
   },
   data() {
     return {
@@ -129,7 +130,7 @@ Vue.component("new-ui", {
             <br>
             <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
             <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
-            <black-hole-header-row />
+            <BlackHoleHeaderRow />
           </div>
           <button
             class="btn-big-crunch btn-big-crunch--small"

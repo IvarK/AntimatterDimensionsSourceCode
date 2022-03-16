@@ -116,6 +116,7 @@ export const AutomatorTextUI = {
       "Shift-Tab": cm => cm.execCommand("indentLess"),
     },
     autoCloseBrackets: true,
+    lineWrapping: true
   },
   documents: {},
   initialize() {

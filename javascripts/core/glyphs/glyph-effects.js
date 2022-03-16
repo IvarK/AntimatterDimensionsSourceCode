@@ -62,8 +62,8 @@ export function getSecondaryGlyphEffect(effectKey) {
  * @returns {number[]}
  */
 export function getGlyphEffectValues(effectKey) {
-  if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
-    throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
+  if (!orderedEffectList.includes(effectKey)) {
+    throw new Error(`Unknown Glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise
@@ -95,11 +95,15 @@ export function separateEffectKey(effectKey) {
 
 // Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
 // since there is some id overlap. Those should be filtered out as needed after calling this function.
-export function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
+// eslint-disable-next-line max-params
+export function getGlyphEffectValuesFromBitmask(bitmask, level, baseStrength, type) {
+  // If we don't specifically exclude companion glyphs, the first-reality EP record is wrong within Doomed since its
+  // value is encoded in the rarity field
+  const strength = (Pelle.isDoomed && type !== "companion") ? Pelle.glyphStrength : baseStrength;
   return getGlyphEffectsFromBitmask(bitmask)
     .map(effect => ({
       id: effect.id,
-      value: effect.effect(level, Pelle.isDoomed ? 1 : strength)
+      value: effect.effect(level, strength)
     }));
 }
 
@@ -110,8 +114,7 @@ export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
-
-  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), Pelle.isDoomed ? 1 : glyph.strength);
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), Pelle.isDoomed ? Pelle.glyphStrength : glyph.strength);
 }
 
 // Note this function is used for glyph bitmasks, news ticker bitmasks, and offline achievements

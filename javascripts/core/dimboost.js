@@ -31,9 +31,9 @@ export class DimBoost {
         TimeStudy(231),
         Achievement(117),
         Achievement(142),
-        GlyphEffect.dimBoostPower
-      ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect)
-      .times(PelleRifts.war.milestones[0].effect());
+        GlyphEffect.dimBoostPower,
+        PelleRifts.war.milestones[0]
+      ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
     if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
     return boost;
   }
@@ -146,7 +146,8 @@ export class DimBoost {
     else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
     const areDimensionsReset = `Reset
-    ${(Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) ? "nothing" : "your Dimensions"}`;
+    ${((Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
+      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought)) ? "nothing" : "your Dimensions"}`;
 
     return `${areDimensionsReset}${boostEffects}`;
   }

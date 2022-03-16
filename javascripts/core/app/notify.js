@@ -38,6 +38,7 @@ export const notify = (function() {
     eternity: (text, duration) => showNotification(text, "o-notification--eternity", duration),
     reality: (text, duration) => showNotification(text, "o-notification--reality", duration),
     blackHole: (text, duration) => showNotification(text, "o-notification--black-hole", duration),
+    strike: (text, duration) => showNotification(text, "o-notification--strike", duration),
     showBlackHoles: true
   };
 }());

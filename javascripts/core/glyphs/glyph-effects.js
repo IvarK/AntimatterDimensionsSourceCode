@@ -63,7 +63,7 @@ export function getSecondaryGlyphEffect(effectKey) {
  */
 export function getGlyphEffectValues(effectKey) {
   if (!orderedEffectList.includes(effectKey)) {
-    throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
+    throw new Error(`Unknown Glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise

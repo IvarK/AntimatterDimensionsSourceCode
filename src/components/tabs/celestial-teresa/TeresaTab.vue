@@ -215,7 +215,7 @@ export default {
           <CustomizeableTooltip
             v-for="unlockInfo in unlockInfos"
             :id="unlockInfo.id"
-            :key="unlockInfo.id + '-teresa-unlock-tooltip'"
+            :key="unlockInfo.id"
             content-class="c-teresa-unlock-description"
             :bottom="unlockDescriptionHeight(unlockInfo)"
             right="0"

@@ -6061,7 +6061,6 @@ kbd {
   color: var(--color-text);
   position: absolute;
   width: 100%;
-  z-index: 2;
   height: 3rem;
   display: flex;
   align-items: center;
@@ -6071,11 +6070,10 @@ kbd {
   height: 0.2rem;
   background-color: var(--color-teresa--base);
   width: 100%;
-  opacity: 0.8;
 }
+
 .c-teresa-milestone-line--attained {
-  background-color: #0008;
-  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .o-teresa-quotes {

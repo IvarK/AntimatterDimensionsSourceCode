@@ -58,7 +58,12 @@ export default {
   },
   computed: {
     positionStyle() {
-      return { left: this.left, top: this.top, right: this.right, bottom: this.bottom };
+      return {
+        left: this.left,
+        top: this.top,
+        right: this.right,
+        bottom: this.bottom
+      };
     },
     tooltipType() {
       return `c-tooltip--${this.mode}`;

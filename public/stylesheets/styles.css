@@ -6755,10 +6755,6 @@ kbd {
   background: whitesmoke;
 }
 
-.c-v-unlock-completed {
-  background: var(--color-v--base);
-}
-
 .o-v-unlock-name {
   font-weight: bold;
   font-size: 1.8rem;

@@ -109,34 +109,6 @@ export const Laitela = {
       buy(cheapestUpgrade, 1);
     }
   },
-  autobuyerLoop(realDiff) {
-    if (!this.isUnlocked) return;
-    const laitela = player.celestials.laitela;
-
-    const interval = SingularityMilestone.darkAutobuyerSpeed.effectValue;
-    laitela.darkAutobuyerTimer += realDiff / 1000;
-    if (laitela.darkAutobuyerTimer >= interval) {
-      if (laitela.automation.dimensions) {
-        this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
-      }
-      if (laitela.automation.ascension) {
-        for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
-          DarkMatterDimension(i).ascend();
-        }
-      }
-    }
-    if (interval !== 0) laitela.darkAutobuyerTimer %= interval;
-
-    if (this.darkMatterMultGain >= laitela.autoAnnihilationSetting && this.darkMatterMult > 1 &&
-      laitela.automation.annihilation) {
-      this.annihilate();
-    }
-
-    if (Singularity.capIsReached && laitela.automation.singularity &&
-      Currency.darkEnergy.value / Singularity.cap >= SingularityMilestone.autoCondense.effectValue) {
-      Singularity.perform();
-    }
-  },
   reset() {
     this.annihilate(true);
     this.celestial.darkMatterMult = 1;

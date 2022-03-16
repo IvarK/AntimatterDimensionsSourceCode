@@ -10,7 +10,7 @@ export default {
       annihilationButtonVisible: false,
       matterRequirement: 0,
       darkMatterMultRatio: 0,
-      autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
+      autoAnnihilationInput: player.auto.annihilation.multiplier,
       isEnabled: true,
     };
   },
@@ -28,7 +28,7 @@ export default {
       this.annihilationButtonVisible = Laitela.canAnnihilate || this.hasAnnihilated;
       this.matterRequirement = Laitela.annihilationDMRequirement;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
-      this.isEnabled = player.celestials.laitela.automation.annihilation;
+      this.isEnabled = player.auto.annihilation.isActive;
     },
     annihilate() {
       Laitela.annihilate();
@@ -36,9 +36,9 @@ export default {
     handleAutoAnnihilationInputChange() {
       const float = parseFloat(this.autoAnnihilationInput);
       if (isNaN(float)) {
-        this.autoAnnihilationInput = player.celestials.laitela.autoAnnihilationSetting;
+        this.autoAnnihilationInput = player.auto.annihilation.multiplier;
       } else {
-        player.celestials.laitela.autoAnnihilationSetting = float;
+        player.auto.annihilation.multiplier = float;
       }
     }
   }

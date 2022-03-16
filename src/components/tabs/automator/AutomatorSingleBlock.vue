@@ -90,15 +90,15 @@ export default {
     },
     validateInput(value) {
       let validator, lines;
-
+      const defines = BlockAutomator.lines.filter(line => line.cmd === "DEFINE");
       if (this.b.nest) {
         const clone = Object.assign({}, this.b);
         clone.nest = [];
-        lines = BlockAutomator.parseLines([clone]);
+        lines = BlockAutomator.parseLines([...defines, clone]);
         validator = AutomatorGrammar.validateLine(lines.join("\n"));
       } else {
-        lines = BlockAutomator.parseLines([this.b]);
-        validator = AutomatorGrammar.validateLine(lines[0]);
+        lines = BlockAutomator.parseLines([...defines, this.b]);
+        validator = AutomatorGrammar.validateLine(lines.join("\n"));
       }
 
       this.idxOffset = lines[0].indexOf(value);

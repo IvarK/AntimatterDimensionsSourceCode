@@ -1,8 +1,15 @@
-import "./ra-pet.js";
-import "./ra-pet-recollection-button.js";
-import "../../celestial-quote-history.js";
+<script>
+import RaPet from "./RaPet";
+import RaPetRecollectionButton from "./RaPetRecollectionButton";
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
-Vue.component("ra-tab", {
+export default {
+  name: "RaTab",
+  components: {
+    RaPet,
+    RaPetRecollectionButton,
+    CelestialQuoteHistory
+  },
   data() {
     return {
       isDoomed: false,
@@ -90,63 +97,87 @@ Vue.component("ra-tab", {
       Ra.toggleMode();
     }
   },
-  template: `
-    <div class="l-ra-celestial-tab">
-      <div class="c-ra-memory-header">
-        <celestial-quote-history celestial="ra" />
-        <div v-if="!isRaCapped">
-          Each Memory Chunk generates a base of one Memory per second, which has been increased to
-          {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
-          per second.
-          <span v-if="memoriesPerChunk > 1">
-            <br>
-            This is being increased due to {{ memoryBoosts }}.
-          </span>
+};
+</script>
+
+<template>
+  <div class="l-ra-celestial-tab">
+    <div class="c-ra-memory-header">
+      <CelestialQuoteHistory celestial="ra" />
+      <div v-if="!isRaCapped">
+        Each Memory Chunk generates a base of one Memory per second, which has been increased to
+        {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
+        per second.
+        <span v-if="memoriesPerChunk > 1">
+          <br>
+          This is being increased due to {{ memoryBoosts }}.
+        </span>
+      </div>
+      <div v-else>
+        All Memories have been returned.
+      </div>
+    </div>
+    <div>
+      Mouse-over the icons below the bar to see descriptions of upgrades,
+      <br>
+      and mouse-over <i class="fas fa-question-circle" /> icons for specific resource information.
+    </div>
+    <div class="l-ra-all-pets-container">
+      <RaPet
+        v-for="(pet, i) in pets"
+        :key="i"
+        :pet-config="pet"
+      />
+    </div>
+    <div class="l-ra-non-pets">
+      <button class="c-ra-run-button">
+        <h2>
+          <span v-if="isDoomed">You can't start<br></span>
+          <span v-else-if="isRunning">You are in </span>
+          <span v-else>Start </span>
+          Ra's Reality
+        </h2>
+        <div
+          :class="runButtonClassObject"
+          @click="startRun"
+        >
+          <span class="c-ra-run-button__icon__sigil fas fa-sun" />
         </div>
-        <div v-else>
-          All Memories have been returned.
+        <span
+          v-for="(line, lineId) in runDescription"
+          :key="lineId + '-ra-run-desc'"
+        >
+          {{ line }}
+        </span>
+      </button>
+      <div
+        v-if="showRecollection && !isRaCapped"
+        class="c-ra-recollection-unlock"
+      >
+        <h1 :style="petStyle">
+          Recollection
+        </h1>
+        <span :style="petStyle">
+          Whichever Celestial has Recollection will get {{ formatX(recollectionMult) }} Memory Chunk gain.
+        </span>
+        <div
+          v-if="hasRecollection"
+          class="c-ra-recollection-unlock-inner"
+        >
+          <RaPetRecollectionButton
+            v-for="(pet, i) in pets"
+            :key="i"
+            :pet-config="pet"
+          />
+        </div>
+        <div
+          v-else
+          class="c-ra-recollection-unlock-inner"
+        >
+          Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
+          (you need {{ formatInt(recollectionReq - totalLevels) }} more)
         </div>
       </div>
-      <div>
-        Mouse-over the icons below the bar to see descriptions of upgrades,
-        <br>
-        and mouse-over <i class="fas fa-question-circle"></i> icons for specific resource information.
-      </div>
-      <div class="l-ra-all-pets-container">
-        <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
-      </div>
-      <div class="l-ra-non-pets">
-        <button class="c-ra-run-button">
-          <h2>
-            <span v-if="isDoomed">You can't start<br></span>
-            <span v-else-if="isRunning">You are in </span>
-            <span v-else>Start </span>
-            Ra's Reality
-          </h2>
-          <div :class="runButtonClassObject" @click="startRun">
-            <span class="c-ra-run-button__icon__sigil fas fa-sun"></span>
-          </div>
-          <span v-for="line in runDescription">
-            {{ line }}
-          </span>
-        </button>
-        <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
-          <h1 :style="petStyle">Recollection</h1>
-          <span :style="petStyle">
-            Whichever Celestial has Recollection will get {{ formatX(recollectionMult) }} Memory Chunk gain.
-          </span>
-          <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
-            <ra-pet-recollection-button
-              v-for="(pet, i) in pets"
-              :key="i"
-              :petConfig="pet"
-            />
-          </div>
-          <div v-else class="c-ra-recollection-unlock-inner">
-            Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
-            (you need {{ formatInt(recollectionReq - totalLevels) }} more)
-          </div>
-        </div>
-      </div>
-    </div>`
-});
+    </div>
+  </div>
+</template>

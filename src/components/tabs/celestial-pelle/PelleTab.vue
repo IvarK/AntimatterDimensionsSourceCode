@@ -4,6 +4,7 @@ import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
 import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
 import RemnantGainFactor from "./RemnantGainFactor";
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
 export default {
   name: "PelleTab",
@@ -12,7 +13,8 @@ export default {
     PelleBarPanel,
     PelleUpgradePanel,
     GalaxyGeneratorPanel,
-    RemnantGainFactor
+    RemnantGainFactor,
+    CelestialQuoteHistory
   },
   data() {
     return {
@@ -61,7 +63,7 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <celestial-quote-history
+      <CelestialQuoteHistory
         celestial="pelle"
         :visible-lines="4"
         font-size="1.6rem"

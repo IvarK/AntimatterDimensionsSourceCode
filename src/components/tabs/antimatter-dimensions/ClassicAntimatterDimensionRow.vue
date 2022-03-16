@@ -138,10 +138,10 @@ export default {
     </div>
     <PrimaryButton
       v-if="!isContinuumActive"
+      v-tooltip="boughtTooltip"
       :enabled="isAffordable && !isCapped && isUnlocked"
       class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
       :class="tutorialClass()"
-      :ach-tooltip="boughtTooltip"
       @click="buySingle"
     >
       <span v-if="isCapped">Capped</span>

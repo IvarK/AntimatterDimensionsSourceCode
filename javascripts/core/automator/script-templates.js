@@ -198,7 +198,7 @@ export class ScriptTemplate {
     if (tree.ec === 0) {
       this.lines.push(`unlock ec ${params.ec}`);
       // Attempt to buy it, supplying an error if we can't actually reach it
-      if (!tree.hasRequirements(TimeStudy.eternityChallenge(params.ec), false, true)) {
+      if (!tree.hasRequirements(TimeStudy.eternityChallenge(params.ec), true)) {
         this.warnings.push("Specified Study Tree cannot reach specified EC");
       }
     } else if (tree.ec !== params.ec) this.warnings.push("Specified Study Tree already has a different EC unlocked");

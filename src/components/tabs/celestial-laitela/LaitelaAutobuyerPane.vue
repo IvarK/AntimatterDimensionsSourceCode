@@ -1,6 +1,8 @@
+<script>
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
-Vue.component("laitela-autobuyer-settings", {
+export default {
+  name: "LaitelaAutobuyerPane",
   components: {
     PrimaryToggleButton
   },
@@ -42,32 +44,35 @@ Vue.component("laitela-autobuyer-settings", {
       this.singularity = auto.singularity;
       this.annihilation = auto.annihilation;
     },
-  },
-  template: `
-    <div class="c-laitela-singularity-container">
-      <PrimaryToggleButton
-        v-if="hasDimension"
-        v-model="dimension"
-        class="c-laitela-automation-toggle"
-        label="Auto-buy DM Dimensions:"
-      />
-      <PrimaryToggleButton
-        v-if="hasAscension"
-        v-model="ascension"
-        class="c-laitela-automation-toggle"
-        label="Auto-Ascend:"
-      />
-      <PrimaryToggleButton
-        v-if="hasSingularity"
-        v-model="singularity"
-        class="c-laitela-automation-toggle"
-        label="Auto-Singularity:"
-      />
-      <PrimaryToggleButton
-        v-if="hasAnnihilated"
-        v-model="annihilation"
-        class="c-laitela-automation-toggle"
-        label="Auto-Annihilation:"
-      />
-    </div>`
-});
+  }
+};
+</script>
+
+<template>
+  <div class="c-laitela-singularity-container">
+    <PrimaryToggleButton
+      v-if="hasDimension"
+      v-model="dimension"
+      class="c-laitela-automation-toggle"
+      label="Auto-buy DM Dimensions:"
+    />
+    <PrimaryToggleButton
+      v-if="hasAscension"
+      v-model="ascension"
+      class="c-laitela-automation-toggle"
+      label="Auto-Ascend:"
+    />
+    <PrimaryToggleButton
+      v-if="hasSingularity"
+      v-model="singularity"
+      class="c-laitela-automation-toggle"
+      label="Auto-Singularity:"
+    />
+    <PrimaryToggleButton
+      v-if="hasAnnihilated"
+      v-model="annihilation"
+      class="c-laitela-automation-toggle"
+      label="Auto-Annihilation:"
+    />
+  </div>
+</template>

@@ -49,9 +49,6 @@ GameStorage.migrations = {
     10: player => {
       if (player.timestudy.studies.includes(72)) {
         for (let i = 4; i < 8; i++) {
-          // Decimal.div is used here instead of normal div because these values don't get decimalised properly
-          // This is very likely due to player.infinityDimensionX not existing as a property on player anymore
-          // If someone has a better solution to this implement it
           player[`infinityDimension${i}`].amount = Decimal.div(player[`infinityDimension${i}`].amount,
             Sacrifice.totalBoost.pow(0.02));
         }

@@ -6096,7 +6096,7 @@ kbd {
   width: 20rem;
   border-radius: 0.5rem;
   padding: 1rem;
-  margin: 0 15rem 1rem 5rem;
+  margin: 0 10rem 1rem 10rem;
   transition-duration: 0.15s;
   user-select: none;
   background-color: var(--color-teresa--base);
@@ -6171,8 +6171,8 @@ kbd {
   display: flex;
   flex-direction: column;
   width: 20rem;
-  margin-left: 15rem;
-  margin-right: 5rem;
+  margin-left: 18rem;
+  margin-right: 2rem;
 }
 
 .o-teresa-shop-button {

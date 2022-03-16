@@ -231,7 +231,7 @@ export default {
               />
             </template>
             <template #tooltipContent>
-              {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
+              <b>{{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}</b>
             </template>
           </CustomizeableTooltip>
         </div>

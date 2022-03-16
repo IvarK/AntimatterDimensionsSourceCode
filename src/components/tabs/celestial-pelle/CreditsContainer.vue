@@ -118,7 +118,7 @@ const roles = {
   4: "Android Developer",
   5: "Library Developer",
   6: "Developer",
-  7: "Design Consoltant",
+  7: "Lead Design Consultant",
   8: "Design Consultant",
   9: "Modal Maker, Lady Taker, Pie Baker",
   10: "Lurker Tester",
@@ -141,11 +141,14 @@ const people = [
     roles: 2
   }, {
     name: "Omsi",
-    roles: 4
+    roles: 3
   }, {
     name: "SpectralFlame",
     name2: "Christopher Yip",
     roles: 3
+  }, {
+    name: "WaitingIdly",
+    roles: [3, 6, 8, 11, 12]
   }, {
     name: "kajfik",
     name2: "Jakub Kajfosz",
@@ -172,16 +175,13 @@ const people = [
     roles: [6, 11, 12]
   }, {
     name: "Pichusuperlover",
-    roles: [7, 11]
+    roles: [6, 8, 11]
+  }, {
+    name: "realrapidjazz",
+    roles: [6, 7]
   }, {
     name: "slabdrill",
-    roles: 8
-  }, {
-    name: "Sparticle999",
-    roles: 8
-  }, {
-    name: "WaitingIdly",
-    roles: [8, 11, 12]
+    roles: 6
   }, {
     name: "Acamaeda",
     roles: [8, 11]
@@ -206,6 +206,10 @@ const people = [
     name: "Archa",
     name2: "Myresa",
     roles: [11, 12]
+  }, {
+    name: "ArrowBounce",
+    name2: "Timothy Su",
+    roles: 11
   }, {
     name: "Birb",
     name2: "Kelsey Black",
@@ -255,13 +259,13 @@ const people = [
     name2: "Philipe",
     roles: 11
   }, {
-    name: "Phillip",
+    name: "Phillip Marshall",
     roles: 11
   }, {
     name: "Phoenix",
     roles: 11
   }, {
-    name: "Reda",
+    name: "Reda Kotob",
     roles: 11
   }, {
     name: "Saturnus",
@@ -276,6 +280,9 @@ const people = [
   }, {
     name: "Spanosa",
     name2: "Jared K",
+    roles: 11
+  }, {
+    name: "Sparticle999",
     roles: 11
   }, {
     name: "SpicyCrusader13",
@@ -306,6 +313,9 @@ const people = [
   }, {
     name: "Zipi",
     roles: 11
+  }, {
+    name: "about:blank",
+    roles: 12
   }, {
     name: "Anjinho01",
     roles: 12

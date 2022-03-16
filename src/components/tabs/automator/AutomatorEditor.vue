@@ -151,15 +151,15 @@ export default {
 </template>
 
 <style scoped>
-  .not-selected {
-    opacity: 0.3;
-  }
+.not-selected {
+  opacity: 0.3;
+}
 
-  .remove-margin-left {
-    margin-left: -0.2rem; /* negate the border */
-  }
+.remove-margin-left {
+  margin-left: -0.2rem; /* negate the border */
+}
 
-  .remove-margin-right {
-    margin-right: -0.2rem; /* negate the border */
-  }
+.remove-margin-right {
+  margin-right: -0.2rem; /* negate the border */
+}
 </style>

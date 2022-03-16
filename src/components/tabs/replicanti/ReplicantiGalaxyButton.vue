@@ -1,7 +1,6 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import { replicantiGalaxyRequest } from '../../../../javascripts/core/replicanti';
 
 export default {
   name: "ReplicantiGalaxyButton",

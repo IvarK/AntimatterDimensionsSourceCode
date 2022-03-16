@@ -57,6 +57,9 @@ export default {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) return "Switch to the text editor";
       return "Switch to the block editor";
     },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.AUTOMATOR);
+    }
   },
   created() {
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
@@ -103,6 +106,7 @@ export default {
     },
     toggleAutomatorMode() {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
+      Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         // This saves the script after converting it.
         BlockAutomator.parseTextFromBlocks();
@@ -128,13 +132,13 @@ export default {
       <AutomatorButton
         v-tooltip="automatorModeTooltip"
         class="fa-cubes remove-margin-right"
-        :class="{ 'not-selected': !blockSelected}"
+        :class="{ 'not-selected': !blockSelected, ...tutorialClass }"
         @click="toggleAutomatorMode()"
       />
       <AutomatorButton
         v-tooltip="automatorModeTooltip"
         class="fa-code remove-margin-left"
-        :class="{ 'not-selected': blockSelected}"
+        :class="{ 'not-selected': blockSelected, ...tutorialClass }"
         @click="toggleAutomatorMode()"
       />
     </div>

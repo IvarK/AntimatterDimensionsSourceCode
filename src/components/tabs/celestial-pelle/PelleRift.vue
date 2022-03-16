@@ -69,7 +69,7 @@ export default {
         :key="'effect-' + idx"
         class="highlight"
       >
-        {{ effect }}
+        {{ effect || "" }}
       </div>
     </div>
     <div

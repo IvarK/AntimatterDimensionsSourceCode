@@ -150,7 +150,7 @@ export default {
   width: 18.5rem;
   height: 12rem;
   margin: 0.6rem 0.3rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
   box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
   display: flex;
   flex-direction: column;

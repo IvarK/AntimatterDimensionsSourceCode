@@ -128,6 +128,17 @@ export const Cloud = {
     return null;
   },
 
+  async getCloudAntimatters() {
+    const save = await this.load();
+    if (save === null) {
+      GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
+      return [10, 10, 10];
+    }
+
+    const root = GameSaveSerializer.deserialize(save);
+    return [0, 1, 2].map(id => root.saves[id]?.antimatter || 10);
+  },
+
   logout() {
     signOut(this.auth);
   },

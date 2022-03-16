@@ -3,6 +3,7 @@ import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { Modal } from "./core/globals.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1067,7 +1068,7 @@ window.onload = function() {
     if (kong.enabled) {
       playFabLogin();
     }
-    document.getElementById("loading").style.display = "none";
+    Modal.titleScreenModal.show();
     document.body.style.overflowY = "auto";
   }, 500);
 };

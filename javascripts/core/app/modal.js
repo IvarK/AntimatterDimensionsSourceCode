@@ -1,4 +1,5 @@
 import MessageModal from "@/components/modals/MessageModal";
+import TitleScreenModal from "@/components/modals/TitleScreenModal";
 import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
@@ -145,6 +146,7 @@ Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
 Modal.armageddon = new Modal(ArmageddonModal);
 
+Modal.titleScreenModal = new Modal(TitleScreenModal, true);
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
 Modal.awayProgressOptions = new Modal(AwayProgressOptionsModal);

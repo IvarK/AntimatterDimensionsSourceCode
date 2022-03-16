@@ -77,8 +77,6 @@ export default {
   border: 2px solid var(--color-pelle--base);
   border-radius: 5px;
   user-select: none;
-  background-color: #1a1a1a;
-  color: #888888;
 }
 
 .l-pelle-content-container {

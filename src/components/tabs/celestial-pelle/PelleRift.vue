@@ -160,6 +160,7 @@ h2,
   color: var(--color-pelle--base);
   font-weight: bold;
   padding: 0.2rem;
+  text-shadow: 1px 1px 5px black;
 }
 
 [ach-tooltip]:before {

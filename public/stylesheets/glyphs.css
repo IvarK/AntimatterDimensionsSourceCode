@@ -701,7 +701,7 @@
 }
 
 .c-current-glyph-effects__effect--capped {
-  color: #ff8000;
+  font-style: italic;
 }
 
 .l-current-glyph-effects__capped-header {

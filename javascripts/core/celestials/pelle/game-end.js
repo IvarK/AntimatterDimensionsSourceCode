@@ -5,12 +5,12 @@ export const GameEnd = {
       (Math.log10(9e15) - 8.7) + this.additionalEnd, 0);
   },
 
-  actualAdditionalEnd: 0,
+  _additionalEnd: 0,
   get additionalEnd() {
-    return player.gameEnd.isGameEnd || this.removeAdditionalEnd ? this.actualAdditionalEnd : 0;
+    return player.gameEnd.isGameEnd || this.removeAdditionalEnd ? this._additionalEnd : 0;
   },
   set additionalEnd(x) {
-    this.actualAdditionalEnd = player.gameEnd.isGameEnd || this.removeAdditionalEnd ? x : 0;
+    this._additionalEnd = player.gameEnd.isGameEnd || this.removeAdditionalEnd ? x : 0;
   },
 
   removeAdditionalEnd: false,

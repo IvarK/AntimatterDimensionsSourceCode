@@ -1678,6 +1678,8 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: row;
   padding-bottom: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .s-base--metro .c-subtab-option-container {

@@ -191,7 +191,7 @@ export const AutomatorCommands = ((() => {
         const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
           ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}` +
-            ` ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
+            ` ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image.toUpperCase()}`
           : undefined;
         const on = Boolean(ctx.On);
         let input = "";

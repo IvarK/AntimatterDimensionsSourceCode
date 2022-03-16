@@ -134,6 +134,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
 
 <template>
   <div>
+    <p>Drag and drop these blocks to the area on the left!</p>
     <draggable
       class="block-container"
       :list="blocks"
@@ -149,15 +150,14 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
         {{ block.cmd }}
       </div>
     </draggable>
-    <p>Drag and drop these blocks to the area on the left!</p>
   </div>
 </template>
 
 <style scoped>
-  .block-container {
-    margin: 1rem 0;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-  }
+.block-container {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
 </style>

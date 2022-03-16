@@ -80,7 +80,7 @@ export function buyStudiesUntil(id, ec = -1) {
 
   const pacePaths = currTree.pacePaths
     .map(pathName => NormalTimeStudies.pathList.find(p => p.name === pathName).path);
-  if (V.isFullyCompleted) {
+  if (V.isFullyCompleted && !Pelle.isDoomed) {
     const allPace = NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE]
       .concat(NormalTimeStudies.paths[TIME_STUDY_PATH.PASSIVE])
       .concat(NormalTimeStudies.paths[TIME_STUDY_PATH.IDLE]);

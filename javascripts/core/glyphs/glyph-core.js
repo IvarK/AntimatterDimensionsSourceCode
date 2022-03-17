@@ -56,6 +56,10 @@ export const Glyphs = {
     return this.inventory.filter((e, idx) => e === null && idx >= this.protectedSlots).length;
   },
   get activeSlotCount() {
+    if (Pelle.isDoomed) {
+      if (PelleRifts.famine.milestones[0].canBeApplied) return 1;
+      return 0;
+    }
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
   },
   get protectedSlots() {
@@ -256,15 +260,13 @@ export const Glyphs = {
       if (freeIndex < 0) break;
       const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
-      this.addToInventory(glyph, freeIndex);
-    }
-    if (player.reality.glyphs.active.length) {
-      Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
+      this.addToInventory(glyph, freeIndex, true);
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    return !player.reality.glyphs.active.length;
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;
@@ -272,7 +274,7 @@ export const Glyphs = {
     if (storedIndex < 0) return;
     const glyph = player.reality.glyphs.active.splice(storedIndex, 1)[0];
     this.active[activeIndex] = null;
-    this.addToInventory(glyph, requestedInventoryIndex);
+    this.addToInventory(glyph, requestedInventoryIndex, true);
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
@@ -319,7 +321,7 @@ export const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  addToInventory(glyph, requestedInventoryIndex) {
+  addToInventory(glyph, requestedInventoryIndex, isExistingGlyph = false) {
     this.validate();
     glyph.id = GlyphGenerator.makeID();
     const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
@@ -342,7 +344,7 @@ export const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
-    if (requestedInventoryIndex === undefined) this.addNewFlag(glyph);
+    if (requestedInventoryIndex === undefined && !isExistingGlyph) this.addNewFlag(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -695,6 +697,8 @@ export function getAdjustedGlyphLevel(glyph) {
 }
 
 export function respecGlyphs() {
-  Glyphs.unequipAll();
+  if (!Glyphs.unequipAll()) {
+    Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
+  }
   player.reality.respec = false;
 }

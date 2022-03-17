@@ -19,6 +19,7 @@ export default {
       gain: 0,
       after: 0,
       cap: 0,
+      confirmedRefine: false
     };
   },
   computed: {
@@ -43,12 +44,16 @@ export default {
       this.after = this.resourceAmount + this.gain;
 
       const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
-      if (this.glyph !== newGlyph) {
+      if (this.glyph !== newGlyph && !this.confirmedRefine) {
+
+        // Why is confirmedRefine here: refer to SacrificeGlyphModal.vue
+
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }
     },
     handleYesClick() {
+      this.confirmedRefine = true;
       GlyphSacrificeHandler.refineGlyph(this.glyph);
     },
   },
@@ -73,7 +78,7 @@ export default {
       v-else
       class="c-modal-message__text"
     >
-      You cannot gain any {{ resourceName }} Alchemy resource because you have not
+      You cannot gain any {{ resourceName }} alchemy resource because you have not
       unlocked this Glyph's resource yet. You can still refine it anyway, but nothing
       will happen. Consider sacrificing the Glyph instead.
     </div>

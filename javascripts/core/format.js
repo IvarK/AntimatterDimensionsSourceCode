@@ -118,6 +118,7 @@ const PLURAL_HELPER = new Map([
 // Some terms require specific (or no) handling when plural. These terms should be added, in Word Case, to this Map.
 // Words will be added to this Map when a valid plural for it is found on being run through the pluralize function.
 const pluralDatabase = new Map([
+  ["Antimatter", "Antimatter"],
   ["Dilated Time", "Dilated Time"],
 ]);
 

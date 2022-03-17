@@ -201,7 +201,6 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.antimatter = value;
-    player.records.totalAntimatter = player.records.totalAntimatter.max(value);
     player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
     player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
     player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);
@@ -213,7 +212,10 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   add(amount) {
     super.add(amount);
-    if (amount.gt(0)) player.requirementChecks.reality.noAM = false;
+    if (amount.gt(0)) {
+      player.records.totalAntimatter = player.records.totalAntimatter.add(amount);
+      player.requirementChecks.reality.noAM = false;
+    }
   }
 
   get productionPerSecond() {
@@ -386,10 +388,13 @@ Currency.realities = new class extends NumberCurrency {
 
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
-  set value(value) { player.reality.realityMachines = value; }
-  add(amount) {
-    super.add(amount);
-    player.reality.realityMachines = player.reality.realityMachines.clampMax(MachineHandler.hardcapRM);
+  set value(value) {
+    const cappedValue = Decimal.min(value, MachineHandler.hardcapRM);
+    player.reality.realityMachines = cappedValue;
+    if (player.records.bestReality.RM.lt(cappedValue)) {
+      player.records.bestReality.RM = cappedValue;
+      player.records.bestReality.RMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    }
   }
 }();
 
@@ -453,3 +458,13 @@ Currency.replicanti = new class extends DecimalCurrency {
   set value(value) { player.replicanti.amount = value; }
 }();
 
+Currency.galaxyGeneratorGalaxies = new class extends NumberCurrency {
+  get value() {
+    return player.galaxies + GalaxyGenerator.galaxies;
+  }
+
+  set value(value) {
+    const spent = player.galaxies + GalaxyGenerator.galaxies - value;
+    player.celestials.pelle.galaxyGenerator.spentGalaxies += spent;
+  }
+}();

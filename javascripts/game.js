@@ -86,10 +86,12 @@ export function gainedInfinityPoints() {
   const mult = NG.multiplier;
   const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
-    const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
-      ? PelleRifts.chaos.milestones[1].effect() : 1;
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine).times(pelleMults).times(mult).pow(pow).floor();
+      .timesEffectsOf(PelleRifts.famine)
+      .times(Pelle.specialGlyphEffect.infinity)
+      .times(mult)
+      .pow(pow)
+      .floor();
   }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
@@ -134,10 +136,10 @@ export function gainedEternityPoints() {
     gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   ep = ep.times(NG.multiplier);
-  let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
-    ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);
 
-  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
+  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(
+    PelleRifts.famine.milestones[2]
+  );
 
   if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
 
@@ -157,6 +159,11 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
+  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
+
+  if (Pelle.isDoomed) return Decimal.pow10(308 * (Decimal.log(pelleMults.dividedBy(epAmount).reciprocal(), 5) + 0.7))
+    .clampMin(Number.MAX_VALUE);
+
   return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
@@ -376,7 +383,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
 
-  factor *= PelleRebuyableUpgrade.timeSpeedMult.effectValue.toNumber();
+  factor *= PelleUpgrade.timeSpeedMult.effectValue.toNumber();
 
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
@@ -428,7 +435,7 @@ export function gameLoop(passDiff, options = {}) {
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
   if (AlchemyResource.momentum.isUnlocked) {
-    player.celestials.ra.momentumTime += realDiff * Achievement(173).effectOrDefault(1);
+    player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
   }
 
   // Lai'tela mechanics should bypass stored real time entirely
@@ -513,6 +520,7 @@ export function gameLoop(passDiff, options = {}) {
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
+  player.records.realTimeDoomed += realDiff;
   player.records.realTimePlayed += realDiff;
   player.records.totalTimePlayed += diff;
   player.records.thisInfinity.realTime += realDiff;
@@ -771,7 +779,7 @@ function applyAutoprestige(diff) {
     Currency.realityMachines.add(addedRM);
   }
 
-  if (PelleRifts.chaos.hasMilestone(2)) {
+  if (PelleRifts.chaos.milestones[2].canBeApplied) {
     Currency.eternityPoints.add(gainedEternityPoints().times(DC.D0_1).times(diff / 1000));
   }
 }
@@ -966,6 +974,12 @@ export function simulateTime(seconds, real, fast) {
       };
     }
   }
+  const oldLoopFn = loopFn;
+  loopFn = i => {
+    Pelle.addAdditionalEnd = false;
+    oldLoopFn(i);
+    Pelle.addAdditionalEnd = true;
+  };
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {

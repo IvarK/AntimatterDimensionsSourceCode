@@ -54,7 +54,7 @@ export function bigCrunchReset() {
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
   if (firstInfinity && !Pelle.isDoomed) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
   Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that
-  you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics 
+  you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics
   tab.`);
 }
 
@@ -326,7 +326,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get purchaseCount() {
-    return player.infMult;
+    return player.IPMultPurchases;
   }
 
   get purchasesAtIncrease() {
@@ -354,7 +354,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get canBeBought() {
-    return !this.isCapped && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+    return !Pelle.isDoomed && !this.isCapped && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
   // This is only ever called with amount = 1 or within buyMax under conditions that ensure the scaling doesn't
@@ -365,7 +365,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       Autobuyer.bigCrunch.bumpAmount(DC.D2.pow(amount));
     }
     Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
-    player.infMult += amount;
+    player.IPMultPurchases += amount;
     GameUI.update();
   }
 

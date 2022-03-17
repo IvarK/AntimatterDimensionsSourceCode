@@ -66,7 +66,7 @@ export default {
     // We show information about the after-load tree, but which tree (imported from empty vs combined) info is shown
     // depends on if we're importing vs editing
     treeStatus() {
-      const showingTree = this.isImporting ? this.combinedTree : this.importedTree;
+      const showingTree = this.isImporting ? this.importedTree : this.combinedTree;
       return {
         firstPaths: showingTree.firstPaths,
         secondPaths: showingTree.secondPaths,
@@ -100,8 +100,7 @@ export default {
       return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
     },
     truncatedInput() {
-      // If last character is "," remove it
-      return this.input.replace(/,$/u, "").trim();
+      return TimeStudyTree.truncateInput(this.input);
     },
     hasInput() {
       return this.truncatedInput !== "";
@@ -141,7 +140,7 @@ export default {
     },
     savePreset() {
       if (this.inputIsValid) {
-        player.timestudy.presets[this.modalConfig.id].studies = this.input;
+        player.timestudy.presets[this.modalConfig.id].studies = TimeStudyTree.formatStudyList(this.input);
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }
@@ -191,7 +190,7 @@ export default {
           :into-empty="true"
         />
         <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
-          <b>Tree status after loading:</b>
+          <b>Tree status after {{ isImporting ? "importing" : "loading" }}:</b>
         </div>
         <div
           v-if="treeStatus.firstPaths"

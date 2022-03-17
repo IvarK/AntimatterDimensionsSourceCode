@@ -16,7 +16,7 @@ GameDatabase.confirmationTypes = [
   }, {
     name: "Big Crunch",
     option: "bigCrunch",
-    isUnlocked: () => player.break,
+    isUnlocked: () => player.break || PlayerProgress.eternityUnlocked(),
   }, {
     name: "Challenges",
     option: "challenges",
@@ -73,5 +73,9 @@ GameDatabase.confirmationTypes = [
     name: "Glyph Refine",
     option: "glyphRefine",
     isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+  }, {
+    name: "Armageddon",
+    option: "armageddon",
+    isUnlocked: () => Pelle.isDoomed,
   },
 ];

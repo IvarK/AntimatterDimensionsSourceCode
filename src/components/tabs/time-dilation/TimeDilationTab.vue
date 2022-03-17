@@ -44,6 +44,12 @@ export default {
         ],
       ];
     },
+    // This might be negative due to rift drain, so we need to add "+" iff the value is positive. The actual
+    // addition of a negative sign (or not) is assumed to be handled in a notation-specific way
+    dilatedTimeGainText() {
+      const sign = this.dilatedTimeIncome.gte(0) ? "+" : "";
+      return `${sign}${format(this.dilatedTimeIncome, 2, 1)}`;
+    },
     pelleRebuyables() {
       return [
         DilationUpgrade.dtGainPelle,
@@ -65,11 +71,22 @@ export default {
     update() {
       this.tachyons.copyFrom(Currency.tachyonParticles);
       this.dilatedTime.copyFrom(Currency.dilatedTime);
-      this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
+      const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
+      if (PelleRifts.death.isActive) {
+        // The number can be small and either positive or negative with the rift active, which means that extra care
+        // needs to be taken to get the calculation as close to correct as possible. This relies on some details
+        // related to tick microstructure to make things accurate, and it seems to be to roughly 1 part in 5e6
+        const tickProp = player.options.updateRate / 1000;
+        const drainFactorPerTick = 1 - (1 - Pelle.riftDrainPercent) ** tickProp;
+        const drainPerSecond = this.dilatedTime.add(rawDTGain.times(tickProp)).times(drainFactorPerTick / tickProp);
+        this.dilatedTimeIncome = rawDTGain.minus(drainPerSecond);
+      } else {
+        this.dilatedTimeIncome = rawDTGain;
+      }
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;
-      this.hasPelleDilationUpgrades = PelleRifts.death.hasMilestone(0);
+      this.hasPelleDilationUpgrades = PelleRifts.death.milestones[0].canBeApplied;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {
@@ -92,7 +109,7 @@ export default {
       You have
       <span class="c-dilation-tab__dilated-time">{{ format(dilatedTime, 2, 1) }}</span>
       Dilated Time.
-      <span class="c-dilation-tab__dilated-time-income">+{{ format(dilatedTimeIncome, 2, 1) }}/s</span>
+      <span class="c-dilation-tab__dilated-time-income">{{ dilatedTimeGainText }}/s</span>
     </span>
     <span>
       Next <span v-if="tachyonGalaxyGain === 2"> pair of </span>
@@ -126,23 +143,23 @@ export default {
         />
       </div>
       <div
-        v-if="hasPelleDilationUpgrades"
-        class="l-dilation-upgrades-grid__row"
-      >
-        <DilationUpgradeButton
-          v-for="upgrade in pelleUpgrades"
-          :key="upgrade.id"
-          :upgrade="upgrade"
-          class="l-dilation-upgrades-grid__cell"
-        />
-      </div>
-      <div
         v-for="(row, i) in upgrades"
         :key="i"
         class="l-dilation-upgrades-grid__row"
       >
         <DilationUpgradeButton
           v-for="upgrade in row"
+          :key="upgrade.id"
+          :upgrade="upgrade"
+          class="l-dilation-upgrades-grid__cell"
+        />
+      </div>
+      <div
+        v-if="hasPelleDilationUpgrades"
+        class="l-dilation-upgrades-grid__row"
+      >
+        <DilationUpgradeButton
+          v-for="upgrade in pelleUpgrades"
           :key="upgrade.id"
           :upgrade="upgrade"
           class="l-dilation-upgrades-grid__cell"

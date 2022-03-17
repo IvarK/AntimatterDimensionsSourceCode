@@ -8,6 +8,7 @@ export default {
   },
   data() {
     return {
+      end: false,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
       currentSacrifice: new Decimal(0),
@@ -17,11 +18,13 @@ export default {
   },
   computed: {
     sacrificeTooltip() {
+      if (this.end) return "";
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
   },
   methods: {
     update() {
+      this.end = Pelle.endState >= 4.5;
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;

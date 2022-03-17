@@ -4,50 +4,86 @@ export default {
   data() {
     return {
       index: 0,
+      line: "",
+      overrideCelestial: "",
+      currentCelestialName: "",
+      length: 0
     };
   },
   computed: {
     quotes() {
+      if (!this.$viewModel.modal.current) return false;
       return this.$viewModel.modal.current.lines;
     },
     currentQuote() {
+      if (!this.quotes) return false;
       return this.quotes[this.index];
     },
     celestial() {
+      if (this.overrideCelestial) {
+        return Celestials[this.overrideCelestial];
+      }
       return Celestials[this.currentQuote.celestial];
     },
-    currentCelestialName() {
-      return this.celestial.displayName;
+    defaultCelestial() {
+      return Celestials[this.currentQuote.celestial];
     },
     currentCelestialSymbol() {
       return this.celestial.symbol;
     },
-    prevStyle() {
-      return this.index > 0 ? {} : { visibility: "hidden" };
+    isQuoteStart() {
+      return this.index === 0 || this.quotes[this.index - 1].isEndQuote;
     },
-    length() {
-      return this.quotes.length;
+    isQuoteEnd() {
+      return this.index >= this.length - 1 || this.currentQuote.isEndQuote;
+    },
+    prevStyle() {
+      return this.isQuoteStart ? { visibility: "hidden" } : {};
     },
     nextStyle() {
-      return this.index >= this.length - 1 ? { visibility: "hidden" } : {};
+      return this.isQuoteEnd ? { visibility: "hidden" } : {};
     },
     modalClass() {
       return [
         "l-modal-celestial-quote",
         "c-modal",
-        `c-modal-celestial-quote--${this.currentQuote.celestial}`
+        `c-modal-celestial-quote--${this.overrideCelestial || this.currentQuote.celestial}`
       ];
     }
   },
   methods: {
     nextClick() {
       this.index = Math.min(this.index + 1, this.length);
+      this.update();
     },
     prevQuote() {
       this.index = Math.max(this.index - 1, 0);
+      this.update();
     },
     close() {
-      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      if (this.index >= this.length - 1) {
+        EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      } else {
+        this.nextClick();
+      }
+    },
+    update() {
+      if (!this.currentQuote) {
+        this.line = "";
+        return;
+      }
+      this.length = this.quotes.length;
+      this.currentCelestialName = this.defaultCelestial.displayName;
+      if (typeof this.currentQuote.line === "function") {
+        const currentQuoteLine = this.currentQuote.line();
+        this.currentQuote.showName = (currentQuoteLine[0] !== "*");
+        this.line = currentQuoteLine.replace("*", "");
+        this.overrideCelestial = Modal.celestialQuote.getOverrideCel(this.line);
+        this.line = Modal.celestialQuote.removeOverrideCel(this.line);
+      } else {
+        this.line = this.currentQuote.line.replace("*", "");
+        this.overrideCelestial = this.currentQuote.overrideCelestial;
+      }
     }
   },
 };
@@ -69,7 +105,7 @@ export default {
         <div v-if="currentQuote.showName">
           <b>{{ currentCelestialName }}</b>
         </div>
-        {{ currentQuote.line.replace("*", "") }}
+        {{ line }}
       </div>
       <i
         :style="nextStyle"
@@ -77,7 +113,7 @@ export default {
         @click="nextClick"
       />
       <i
-        v-if="index === length - 1"
+        v-if="isQuoteEnd"
         class="c-modal-celestial-quote__end fas fa-check-circle"
         @click="close"
       />

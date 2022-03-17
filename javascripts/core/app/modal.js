@@ -19,6 +19,7 @@ import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsMo
 import HardResetModal from "@/components/modals/prestige/HardResetModal";
 import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
 import ChangeNameModal from "@/components/modals/ChangeNameModal";
+import ArmageddonModal from "@/components/modals/prestige/ArmageddonModal";
 
 import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
 import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
@@ -100,7 +101,13 @@ export class Modal {
 
   static hideAll() {
     if (!GameUI.initialized) return;
-    ui.view.modal.queue = [];
+    while (ui.view.modal.queue.length) {
+      if (ui.view.modal.queue[0].hide) {
+        ui.view.modal.queue[0].hide();
+      } else {
+        Modal.hide();
+      }
+    }
     ui.view.modal.current = undefined;
   }
 
@@ -115,6 +122,9 @@ class ChallengeConfirmationModal extends Modal {
     super.show();
   }
 }
+
+// If a new modal which can be shown in the same queue multiple times needs to be added
+// Additional code needs to be written to account for that
 
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
@@ -133,6 +143,7 @@ Modal.celestials = new Modal(EnterCelestialsModal);
 Modal.hardReset = new Modal(HardResetModal);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
+Modal.armageddon = new Modal(ArmageddonModal);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
@@ -174,19 +185,50 @@ Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;
-    const newLines = lines.map(l => ({
-      celestial,
-      line: l,
-      showName: !l.startsWith("*")
-    }));
-    if (ui.view.modal.current === this) {
+    const newLines = lines.map(l => Modal.celestialQuote.getLineMapping(celestial, l));
+    if (ui.view.modal.queue.includes(this)) {
       // This shouldn't come up often, but in case we do have a pile of quotes
       // being shown in a row:
-      this.lines = this.lines.concat(newLines);
+      this.lines[this.lines.length - 1].isEndQuote = true;
+      this.lines.push(...newLines);
       return;
     }
     super.show();
     this.lines = newLines;
+  }
+
+  getLineMapping(defaultCel, defaultLine) {
+    let overrideCelestial = "";
+    let l = defaultLine;
+    if (typeof l === "string") {
+      if (l.includes("<!")) {
+        overrideCelestial = this.getOverrideCel(l);
+        l = this.removeOverrideCel(l);
+      }
+    }
+    return {
+      celestial: defaultCel,
+      overrideCelestial,
+      line: l,
+      showName: l[0] !== "*",
+      isEndQuote: false
+    };
+  }
+
+  getOverrideCel(x) {
+    if (x.includes("<!")) {
+      const start = x.indexOf("<!"), end = x.indexOf("!>");
+      return x.substring(start + 2, end);
+    }
+    return "";
+  }
+
+  removeOverrideCel(x) {
+    if (x.includes("<!")) {
+      const start = x.indexOf("<!"), end = x.indexOf("!>");
+      return x.substring(0, start) + x.substring(end + 2);
+    }
+    return x;
   }
 }(CelestialQuoteModal, true);
 
@@ -251,7 +293,9 @@ Modal.message = new class extends Modal {
   }
 
   hide() {
-    Modal.hide();
+    if (this.queue.length <= 1) {
+      Modal.hide();
+    }
     this.queue.shift();
     if (this.queue && this.queue.length === 0) this.message = undefined;
     else {

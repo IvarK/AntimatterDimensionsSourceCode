@@ -28,7 +28,7 @@ window.player = {
   },
   buyUntil10: true,
   sacrificed: DC.D0,
-  achievementBits: Array.repeat(0, 15),
+  achievementBits: Array.repeat(0, 17),
   secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
   infinityRebuyables: [0, 0, 0],
@@ -228,7 +228,8 @@ window.player = {
     gameCreatedTime: Date.now(),
     totalTimePlayed: 0,
     realTimePlayed: 0,
-    totalAntimatter: DC.D0,
+    realTimeDoomed: 0,
+    totalAntimatter: DC.E1,
     lastTenInfinities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
     lastTenEternities: Array.range(0, 10).map(() =>
@@ -276,6 +277,8 @@ window.player = {
       time: Number.MAX_VALUE,
       realTime: Number.MAX_VALUE,
       glyphStrength: 0,
+      RM: DC.D0,
+      RMSet: [],
       RMmin: DC.D0,
       RMminSet: [],
       glyphLevel: 0,
@@ -325,7 +328,7 @@ window.player = {
     },
     milestones: [],
   },
-  infMult: 0,
+  IPMultPurchases: 0,
   version: 13,
   infinityPower: DC.D1,
   postC4Tier: 0,
@@ -404,7 +407,10 @@ window.player = {
         reality: 0
       },
       undo: [],
-      sets: [[], [], [], [], []],
+      sets: new Array(5).fill({
+        name: "",
+        glyphs: [],
+      }),
       protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
@@ -461,8 +467,9 @@ window.player = {
       scripts: {
       },
       execTimer: 0,
-      type: AUTOMATOR_TYPE.TEXT,
+      type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,
+      currentInfoPane: 4
     },
     achTimer: 0,
   },
@@ -679,7 +686,7 @@ window.player = {
           reducedTo: 1
         },
         chaos: {
-          fill: DC.D0,
+          fill: 0,
           active: false,
           reducedTo: 1
         },
@@ -696,14 +703,20 @@ window.player = {
       },
       progressBits: 0,
       galaxyGenerator: {
+        unlocked: false,
         spentGalaxies: 0,
         generatedGalaxies: 0,
         phase: 0,
         sacrificeActive: false
-      }
-    },
-    compact: false,
-    showBought: false,
+      },
+      quotes: [],
+      collapsed: {
+        upgrades: false,
+        rifts: false,
+        galaxies: false
+      },
+      showBought: false,
+    }
   },
   newGame: {
     current: 0,
@@ -776,6 +789,7 @@ window.player = {
       blobSnowflakes: 16
     },
     confirmations: {
+      armageddon: true,
       sacrifice: true,
       challenges: true,
       eternity: true,

@@ -10,6 +10,7 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       mode: AUTO_ETERNITY_MODE.AMOUNT,
       hasAdditionalModes: false,
       increaseWithMult: true,
@@ -30,6 +31,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
       this.increaseWithMult = this.autobuyer.increaseWithMult;

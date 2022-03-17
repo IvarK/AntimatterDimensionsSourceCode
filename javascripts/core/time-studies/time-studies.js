@@ -67,7 +67,7 @@ export function buyStudiesUntil(id, repeatFor201 = true) {
     studyArray.push(...NormalTimeStudies.paths[TimeStudy(id).path].filter(s => s <= id));
     return studyArray;
   }
-  if (V.isFullyCompleted) {
+  if (V.isFullyCompleted && !Pelle.isDoomed) {
     const allPace = NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE]
       .concat(NormalTimeStudies.paths[TIME_STUDY_PATH.PASSIVE])
       .concat(NormalTimeStudies.paths[TIME_STUDY_PATH.IDLE]);

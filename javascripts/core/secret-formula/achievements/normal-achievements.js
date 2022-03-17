@@ -731,7 +731,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Have ${formatInt(308)} Tickspeed upgrades from Time Dimensions.`; },
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Time Dimensions gain a multiplier based on Tickspeed.",
+    reward: "Time Dimensions gain a multiplier based on tickspeed.",
     effect: () => Tickspeed.perSecond.pow(0.000005),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
@@ -947,10 +947,13 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
-      player.infMult === 0 &&
+      player.IPMultPurchases === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "You start Eternities with all Infinity Challenges unlocked and completed."
+    get reward() {
+      if (Pelle.isDoomed) return "You start Eternities with all Infinity Challenges unlocked.";
+      return "You start Eternities with all Infinity Challenges unlocked and completed.";
+    }
   },
   {
     id: 134,
@@ -1252,12 +1255,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 173,
-    name: "The First Antihistorian",
-    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
-    effect: 10,
+    name: "Cet accomplissement n'existe pas III",
+    get description() { return `Reach ${formatPostBreak(DC.D9_99999E999, 5, 0)} Reality Machines.`; },
+    checkRequirement: () => player.reality.realityMachines.gte(DC.D9_99999E999),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 174,
@@ -1268,6 +1269,25 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 175,
+    name: "The First Antihistorian",
+    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
+    effect: 10,
+  },
+  {
+    id: 176,
+    name: "Mom counted to 3",
+    description: "Annihilate your Dark Matter Dimensions.",
+  },
+  {
+    id: 177,
+    name: "This mile took a celestial",
+    description: "Complete all Singularity Milestones at least once.",
+  },
+  {
+    id: 178,
     name: "Destroyer of Worlds",
     get description() { return `Get ${formatInt(100000)} Antimatter Galaxies.`; },
     checkRequirement: () => player.galaxies >= 100000,
@@ -1276,19 +1296,60 @@ GameDatabase.achievements.normal = [
     effect: 1.01
   },
   {
-    id: 176,
+    id: 181,
+    displayId: 666,
     name: "Antimatter Dimensions Eternal",
     description: "Doom your Reality.",
     checkRequirement: () => Pelle.isDoomed,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
   },
   {
-    id: 177,
-    name: "An old friend",
-    description: "Purchase Time Study 181 in Doomed.",
+    id: 182,
+    name: "One more time",
+    description: "Gain back all Antimatter Dimension autobuyers.",
+    checkRequirement: () => player.celestials.pelle.upgrades.has(4),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
-    id: 178,
+    id: 183,
+    name: "Déjà vOoM",
+    description: "Complete Infinity Challenge 5 while Doomed.",
+    checkRequirement: () => Pelle.isDoomed && InfinityChallenge(5).isCompleted,
+    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED,
+    // Weirdly specific reward? Yes, its V's ST bonus because we forgot to disable it
+    // when balancing Pelle and only realised too late.
+    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    effect: 1.0812403840463596
+  },
+  {
+    id: 184,
+    name: "You're out!",
+    description: "Encounter the third Pelle Strike.",
+    checkRequirement: () => PelleStrikes.eternity.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 185,
+    name: "Four score and seven years ago",
+    description: "Encounter the fourth Pelle Strike.",
+    checkRequirement: () => PelleStrikes.ECs.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 186,
+    displayId: 181,
+    name: "An unhealthy obsession",
+    description: `Purchase Time Study 181 while Doomed.`,
+  },
+  {
+    id: 187,
+    name: "The One with Dilated Time",
+    description: "Unlock Dilation in Doomed.",
+    checkRequirement: () => PelleStrikes.dilation.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 188,
     name: "The End",
     description: "Beat the game.",
     checkRequirement: () => Pelle.endState > 1,

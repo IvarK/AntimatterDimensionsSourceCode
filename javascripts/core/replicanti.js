@@ -34,6 +34,12 @@ export function replicantiGalaxy() {
   addReplicantiGalaxies(galaxyGain);
 }
 
+export function replicantiGalaxyRequest() {
+  if (!Replicanti.galaxies.canBuyMore) return;
+  if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+  else replicantiGalaxy();
+}
+
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
 // Returns the remaining unused gain factor
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
@@ -92,10 +98,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   }
 
   interval = interval.div(PelleRifts.pestilence.effectValue);
-
-  if (Pelle.activeGlyphType === "replication" && PelleRifts.chaos.hasMilestone(1)) {
-    interval = interval.div(PelleRifts.chaos.milestones[1].effect());
-  }
+  interval = interval.div(Pelle.specialGlyphEffect.replication);
 
   if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
 
@@ -143,7 +146,7 @@ export function replicantiLoop(diff) {
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   // This gets the pre-cap interval (above the cap we recalculate the interval).
   const interval = getReplicantiInterval(false);
-  const isUncapped = TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1);
+  const isUncapped = Replicanti.isUncapped;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
   if (diff > 500 || interval.lessThan(diff) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
@@ -263,7 +266,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.chanceCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return player.replicanti.chanceCost.dividedByEffectOf(PelleRifts.famine.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.chanceCost; }
@@ -314,7 +317,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.intervalCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return player.replicanti.intervalCost.dividedByEffectOf(PelleRifts.famine.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.intervalCost; }
@@ -349,7 +352,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return this.baseCost.dividedByEffectOf(TimeStudy(233)).div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return this.baseCost.dividedByEffectsOf(TimeStudy(233), PelleRifts.famine.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.galCost; }
@@ -382,9 +385,7 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      let extra = 0;
-      if (PelleRifts.pestilence.hasMilestone(2)) extra += PelleRifts.pestilence.milestones[2].effect();
-      return Effects.max(0, TimeStudy(131)) + extra;
+      return Effects.max(0, TimeStudy(131)) + PelleRifts.pestilence.milestones[2].effectOrDefault(0);
     }
 
     autobuyerTick() {
@@ -446,7 +447,7 @@ export const Replicanti = {
     };
   },
   unlock(freeUnlock = false) {
-    const cost = PelleRifts.famine.hasMilestone(1) ? DC.E10 : DC.E140;
+    const cost = DC.E140.dividedByEffectOf(PelleRifts.famine.milestones[1]);
     if (player.replicanti.unl) return;
     if (freeUnlock || Currency.infinityPoints.gte(cost)) {
       if (!freeUnlock) Currency.infinityPoints.subtract(cost);
@@ -498,5 +499,8 @@ export const Replicanti = {
       }
       return 1;
     },
+  },
+  get isUncapped() {
+    return TimeStudy(192).isBought || PelleRifts.famine.milestones[1].canBeApplied;
   }
 };

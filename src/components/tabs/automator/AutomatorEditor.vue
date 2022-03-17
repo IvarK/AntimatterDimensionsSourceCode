@@ -41,8 +41,8 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    modeIconClass() {
-      return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code";
+    blockSelected() {
+      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
     },
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
@@ -57,6 +57,9 @@ export default {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) return "Switch to the text editor";
       return "Switch to the block editor";
     },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.AUTOMATOR);
+    }
   },
   created() {
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
@@ -103,13 +106,16 @@ export default {
     },
     toggleAutomatorMode() {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
+      Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         // This saves the script after converting it.
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+        if (player.reality.automator.currentInfoPane === 4) player.reality.automator.currentInfoPane = 1;
       } else if (BlockAutomator.fromText(this.currentScriptContent)) {
         AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
+        player.reality.automator.currentInfoPane = 4;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
@@ -125,7 +131,14 @@ export default {
       <AutomatorControls />
       <AutomatorButton
         v-tooltip="automatorModeTooltip"
-        :class="modeIconClass"
+        class="fa-cubes remove-margin-right"
+        :class="{ 'not-selected': !blockSelected, ...tutorialClass }"
+        @click="toggleAutomatorMode()"
+      />
+      <AutomatorButton
+        v-tooltip="automatorModeTooltip"
+        class="fa-code remove-margin-left"
+        :class="{ 'not-selected': blockSelected, ...tutorialClass }"
         @click="toggleAutomatorMode()"
       />
     </div>
@@ -138,5 +151,15 @@ export default {
 </template>
 
 <style scoped>
+.not-selected {
+  opacity: 0.3;
+}
 
+.remove-margin-left {
+  margin-left: -0.2rem; /* negate the border */
+}
+
+.remove-margin-right {
+  margin-right: -0.2rem; /* negate the border */
+}
 </style>

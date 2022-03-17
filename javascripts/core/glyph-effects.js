@@ -249,7 +249,7 @@ GameDatabase.reality.glyphEffects = [
       : "Multiply Eternity Point gain by {value}"),
     totalDesc: () => (GlyphAlteration.isAdded("time")
       ? "Eternity Point gain ×{value} and ^{value2}"
-      : "Eterinty Point gain ×{value}"),
+      : "Eternity Point gain ×{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("time")
       ? "Eternity Point gain multiplier and power"
       : "Eternity Point gain multiplier"),

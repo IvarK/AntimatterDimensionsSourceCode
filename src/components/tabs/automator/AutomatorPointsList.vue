@@ -38,6 +38,7 @@ export default {
     </div>
     <div class="l-automator-points-list-container">
       <div class="l-automator-points-list-side-col c-automator-points-list-col">
+        <span class="c-automator-points-list-symbol fas fa-project-diagram" />
         <span class="c-automator-points-list-ap--large">{{ formatInt(fromPerks) }} AP</span>
         <span style="font-size: 1.8rem;">
           Perks
@@ -75,6 +76,7 @@ export default {
         </div>
       </div>
       <div class="l-automator-points-list-side-col c-automator-points-list-col">
+        <span class="c-automator-points-list-symbol fas fa-arrow-up" />
         <span class="c-automator-points-list-ap--large">{{ formatInt(fromUpgrades) }} AP</span>
         <span style="font-size: 1.8rem;">
           Reality Upgrades

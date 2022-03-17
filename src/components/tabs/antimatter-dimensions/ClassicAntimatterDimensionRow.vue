@@ -14,6 +14,7 @@ export default {
   },
   data() {
     return {
+      end: false,
       isUnlocked: false,
       isCapped: false,
       multiplier: new Decimal(0),
@@ -50,6 +51,7 @@ export default {
       return this.isShown || this.isUnlocked || this.amount.gt(0);
     },
     boughtTooltip() {
+      if (this.end) return "";
       if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
       return `Purchased ${quantifyInt("time", this.bought)}`;
@@ -60,6 +62,7 @@ export default {
   },
   methods: {
     update() {
+      this.end = Pelle.endState >= 4.5;
       const tier = this.tier;
       if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
@@ -135,16 +138,17 @@ export default {
     </div>
     <PrimaryButton
       v-if="!isContinuumActive"
+      v-tooltip="boughtTooltip"
       :enabled="isAffordable && !isCapped && isUnlocked"
       class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
       :class="tutorialClass()"
-      :ach-tooltip="boughtTooltip"
       @click="buySingle"
     >
       <span v-if="isCapped">Capped</span>
       <template v-else>
         <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
         <span v-if="isCostsAD">{{ costUnit }} </span>
+        <span v-else> AM </span>
       </template>
     </PrimaryButton>
     <PrimaryButton
@@ -160,6 +164,7 @@ export default {
         <span v-if="showCostTitle(until10Cost)">Cost: </span>
         {{ format(until10Cost) }}
         <span v-if="isCostsAD">{{ costUnit }} </span>
+        <span v-else> AM </span>
       </template>
     </PrimaryButton>
   </div>

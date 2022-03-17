@@ -117,12 +117,10 @@ export function gainedInfinityPoints() {
 }
 
 function totalEPMult() {
-  let totalMult = new Decimal(NG.multiplier);
-  if (Pelle.isDisabled("EPMults")) {
-    const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
-    totalMult = totalMult.times(pelleMults);
-  } else {
-    totalMult = totalMult.times(getAdjustedGlyphEffect("cursedEP"))
+  const totalMult = new Decimal(NG.multiplier);
+  return Pelle.isDisabled("EPMults")
+    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]))
+    : totalMult.times(getAdjustedGlyphEffect("cursedEP"))
       .times(ShopPurchase.EPPurchases.currentMult)
       .timesEffectsOf(
         EternityUpgrade.epMult,
@@ -133,8 +131,6 @@ function totalEPMult() {
         RealityUpgrade(12),
         GlyphEffect.epMult
       );
-  }
-  return totalMult;
 }
 
 export function gainedEternityPoints() {

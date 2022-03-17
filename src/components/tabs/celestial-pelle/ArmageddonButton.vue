@@ -86,9 +86,7 @@ export default {
   font-weight: bold;
   color: var(--color-pelle--base);
 }
-</style>
 
-<style>
 .s-base--metro .c-armageddon-button {
   border-radius: 0;
 }

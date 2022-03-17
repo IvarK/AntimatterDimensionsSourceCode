@@ -235,6 +235,11 @@ export default {
   height: 0.5em;
   flex-shrink: 0;
 }
+
+
+.s-base--metro .c-pelle-upgrade {
+  border-radius: 0;
+}
 </style>
 
 <style>
@@ -242,9 +247,5 @@ export default {
   color: #2f4;
   font-weight: bold;
   font-style: italic;
-}
-
-.s-base--metro .c-pelle-upgrade {
-  border-radius: 0;
 }
 </style>

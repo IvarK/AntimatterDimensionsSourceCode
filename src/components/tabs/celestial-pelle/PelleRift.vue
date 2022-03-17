@@ -173,9 +173,8 @@ h2,
 [ach-tooltip]:after {
   border-top: 0.5rem solid var(--color-pelle-secondary);
 }
-</style>
 
-<style>
+
 .s-base--metro .o-pelle-rift-milestone, .s-base--metro .o-pelle-rift-toggle {
   border-radius: 0;
 }

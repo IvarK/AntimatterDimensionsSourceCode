@@ -253,13 +253,13 @@ export default {
   font-size: 3rem;
   text-shadow: 2px 2px 2px black;
 }
+
 .c-medium-text {
   font-size: 2rem;
   text-shadow: 2px 2px 2px black;
 }
-</style>
 
-<style>
+
 .s-base--metro .c-increase-cap {
   border-radius: 0;
 }

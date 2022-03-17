@@ -1,12 +1,14 @@
 <script>
 import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
+import AutobuyerGroupToggleLabel from "./AutobuyerGroupToggleLabel";
 
 export default {
   name: "MultipleAutobuyersBox",
   components: {
     SingleAutobuyerInRow,
     AutobuyerIntervalLabel,
+    AutobuyerGroupToggleLabel
   },
   props: {
     type: {
@@ -94,6 +96,7 @@ export default {
         >
       </template>
     </div>
+    <AutobuyerGroupToggleLabel :type="type" />
   </span>
   <span
     v-else-if="isADBox && continuumActive"
@@ -106,5 +109,7 @@ export default {
 </template>
 
 <style scoped>
-
+.l-autobuyer-box__autobuyers {
+  margin-right: 1rem;
+}
 </style>

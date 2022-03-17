@@ -57,8 +57,9 @@ export class TimeStudyTree {
     if (input.trim() === "") {
       return false;
     }
-    return /^(,? ?((\d{2,3}(-\d{2,3})?)|antimatter|infinity|time|active|passive|idle|light|dark)\b)*(\|\d{0,2})?$/iu
-      .test(input);
+    let test;
+    TimeStudyTree.sets.forEach((_, x) => test = input.replaceAll(new RegExp(` ?${x},?`, "gu"), ""));
+    return /^,?((\d{2,3}(-\d{2,3})?), ?\b)*(\|\d{0,2})?$/iu.test(test);
   }
 
   // Getter for all the studies in the current game state

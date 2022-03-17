@@ -22,9 +22,9 @@ export const GalaxyGenerator = {
   },
 
   get gainPerSecond() {
-    //                                    TODO: This fix is really stupid and doesn't look great
-    // Can someone come up with a better fix which plays nicely with timesEffectsOf
-    if (!PelleRifts.hasGalaxyGenerator || !GalaxyGeneratorUpgrades.additive.canBeApplied) return 0;
+    if (!Pelle.hasGalaxyGenerator) return 0;
+    // Pretend it's here to avoid softlocks and not because the bottom code returns 1 when you don't have this upg
+    if (!GalaxyGeneratorUpgrades.additive.canBeApplied) return 0.5;
     return DC.D1.timesEffectsOf(
       GalaxyGeneratorUpgrades.additive,
       GalaxyGeneratorUpgrades.multiplicative,

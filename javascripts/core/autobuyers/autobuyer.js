@@ -100,7 +100,7 @@ export class IntervaledAutobuyerState extends AutobuyerState {
   /**
    * @abstract
    */
-  get resetTickOn() { throw new NotImplementedError(); }
+  get resetTickOn() { return undefined; }
 
   resetTick(prestigeEvent) {
     if (prestigeEvent >= this.resetTickOn) this.data.lastTick = 0;

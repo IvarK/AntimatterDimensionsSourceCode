@@ -1678,6 +1678,8 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: row;
   padding-bottom: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .s-base--metro .c-subtab-option-container {
@@ -2439,7 +2441,7 @@ screen and (max-width: 480px) {
 
 .c-options-tab__hotkeys-link {
   cursor: pointer;
-  width: 21rem;
+  width: 22rem;
   align-self: center;
 }
 
@@ -4240,6 +4242,19 @@ screen and (max-width: 480px) {
   flex-wrap: wrap;
   flex-grow: 1;
   width: 91rem;
+}
+
+.c-small-autobuyer-input {
+  width: 10rem;
+  height: 2rem;
+  margin: 0.2rem 0;
+  border-color: var(--color-laitela--accent);
+  border-radius: 0.5rem;
+}
+
+.s-base--metro .c-small-autobuyer-input {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-autobuyer-box-slot {
@@ -6059,10 +6074,21 @@ kbd {
 
 .c-teresa-unlock-description {
   color: var(--color-text);
-  border-bottom: 0.1rem solid var(--color-text);
   position: absolute;
-  left: 12.9rem;
-  width: 20rem;
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.c-teresa-milestone-line {
+  height: 0.2rem;
+  background-color: var(--color-teresa--base);
+  width: 100%;
+}
+
+.c-teresa-milestone-line--attained {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .o-teresa-quotes {
@@ -6085,14 +6111,13 @@ kbd {
   width: 20rem;
   border-radius: 0.5rem;
   padding: 1rem;
-  margin: auto;
+  margin: 0 10rem 1rem 10rem;
   transition-duration: 0.15s;
   user-select: none;
   background-color: var(--color-teresa--base);
   font-weight: bold;
   border: none;
   color: var(--color-teresa--accent);
-  margin-bottom: 1rem;
 }
 
 .c-teresa-run-button {
@@ -6161,6 +6186,8 @@ kbd {
   display: flex;
   flex-direction: column;
   width: 20rem;
+  margin-left: 18rem;
+  margin-right: 2rem;
 }
 
 .o-teresa-shop-button {
@@ -6753,10 +6780,6 @@ kbd {
 .c-v-unlock {
   color: black;
   background: whitesmoke;
-}
-
-.c-v-unlock-completed {
-  background: var(--color-v--base);
 }
 
 .o-v-unlock-name {
@@ -7803,7 +7826,6 @@ kbd {
   background: var(--color-laitela--base);
   font-family: Typewriter;
   font-size: 1.2rem;
-  cursor: pointer;
   height: 84rem;
   margin-right: 1rem;
 }
@@ -8223,6 +8245,7 @@ kbd {
   border: 0.4rem solid var(--color-laitela--accent);
   animation: a-laitela-run-button__icon--scroll 15s infinite linear;
   transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .o-laitela-run-button__icon:hover {
@@ -8291,14 +8314,7 @@ kbd {
 }
 
 .c-laitela-annihilation-input {
-  width: 6rem;
   border-color: var(--color-laitela--accent);
-  border-radius: 0.5rem;
-}
-
-.s-base--metro .c-laitela-annihilation-input {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-laitela-automation-toggle {
@@ -8597,7 +8613,7 @@ kbd {
   align-items: center;
   flex-direction: column;
   position: relative;
-  width: 20rem;
+  width: 20.5rem;
   margin: 1.2rem;
 }
 
@@ -9123,8 +9139,8 @@ input.o-automator-block-input {
   border-radius: 0;
 }
 
-.s-base--metro .c-hide-modal-tab-button { 
-  border-radius: 0; 
+.s-base--metro .c-hide-modal-tab-button {
+  border-radius: 0;
 }
 
 .c-hide-modal-tab-button {

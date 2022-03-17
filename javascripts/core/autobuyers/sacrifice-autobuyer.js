@@ -21,6 +21,22 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
     this.data.multiplier = value;
   }
 
+  get bulk() {
+    return 0;
+  }
+
+  get hasInput() {
+    return true;
+  }
+
+  get inputType() {
+    return "decimal";
+  }
+
+  get inputEntry() {
+    return "multiplier";
+  }
+
   tick() {
     if (Sacrifice.nextBoost.lt(Decimal.max(this.multiplier, 1.01))) return;
     sacrificeReset();

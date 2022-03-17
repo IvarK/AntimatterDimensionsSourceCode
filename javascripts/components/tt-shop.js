@@ -234,34 +234,34 @@ Vue.component("tt-save-load-button", {
   },
   template: `
     <hover-menu class="l-tt-save-load-btn__wrapper">
-      <button
-        slot="object"
-        class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
-        @click.shift.exact="save"
-        @click.exact="load"
-      >
-        {{ displayName }}
-      </button>
-      <div
-        slot="menu"
-        class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu"
-      >
-        <span ach-tooltip="Set a custom name (up to 4 characters)">
-          <input
-            type="text"
-            size="4"
-            maxlength="4"
-            class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
-            :value="name"
-            @keyup.esc="hideContextMenu"
-            @blur="nicknameBlur"
-          />
-        </span>
-        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
-        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
-        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
-        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
-      </div>
+      <template #object>
+        <button
+          class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+          @click.shift.exact="save"
+          @click.exact="load"
+        >
+          {{ displayName }}
+        </button>
+      </template>
+      <template #menu>
+        <div class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
+          <span ach-tooltip="Set a custom name (up to 4 characters)">
+            <input
+              type="text"
+              size="4"
+              maxlength="4"
+              class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+              :value="name"
+              @keyup.esc="hideContextMenu"
+              @blur="nicknameBlur"
+            />
+          </span>
+          <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
+          <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
+          <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
+          <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
+        </div>
+      </template>
     </hover-menu>`
 });
 
@@ -273,7 +273,12 @@ Vue.component("tt-buy-button", {
       return this.budget.gte(this.cost);
     },
     enabledClass() {
-      return this.isEnabled ? "c-tt-buy-button--unlocked" : "c-tt-buy-button--locked";
+      if (!this.isEnabled || this.isLimitedByPelle) return "c-tt-buy-button--locked";
+
+      return "c-tt-buy-button--unlocked";
+    },
+    isLimitedByPelle() {
+      return Pelle.isDoomed && player.eternities.eq(0)
     }
   },
   template: `
@@ -282,6 +287,6 @@ Vue.component("tt-buy-button", {
       :class="enabledClass"
       @click="action"
     >
-      {{ formatCost(cost) }}
+      {{ isLimitedByPelle ? "Locked in Doomed before Eternity" : formatCost(cost) }}
     </button>`
 });

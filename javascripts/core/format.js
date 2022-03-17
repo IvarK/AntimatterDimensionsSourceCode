@@ -67,7 +67,7 @@ window.formatRarity = function formatRarity(value) {
 };
 
 // We assume 2/2 decimal places to keep parameter count sensible; this is used very rarely
-window.formatComplex = function formatComplex(realPart, imagPart) {
+window.formatMachines = function formatMachines(realPart, imagPart) {
   const parts = [];
   if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2, 2));
   if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);

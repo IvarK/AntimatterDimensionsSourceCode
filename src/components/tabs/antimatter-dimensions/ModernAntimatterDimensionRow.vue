@@ -151,12 +151,17 @@ export default {
         </span>
         <span v-else-if="isCostsAD">
           Buy {{ howManyCanBuy }}
-          Cost: {{ costDisplay }} {{ costUnit }}
+          <br>
+          <span v-if="showCostTitle(buyUntil10 ? until10Cost : singleCost)">
+            Cost:
+          </span>{{ costDisplay }} {{ costUnit }}
         </span>
         <span v-else>
           Buy {{ howManyCanBuy }}
           <br>
-          Cost: {{ costDisplay }}
+          <span v-if="showCostTitle(buyUntil10 ? until10Cost : singleCost)">
+            Cost:
+          </span>{{ costDisplay }} AM
         </span>
       </div>
       <div

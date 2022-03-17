@@ -4,6 +4,7 @@ import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
 import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
 import RemnantGainFactor from "./RemnantGainFactor";
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
 export default {
   name: "PelleTab",
@@ -12,11 +13,14 @@ export default {
     PelleBarPanel,
     PelleUpgradePanel,
     GalaxyGeneratorPanel,
-    RemnantGainFactor
+    RemnantGainFactor,
+    CelestialQuoteHistory
   },
   data() {
     return {
       isDoomed: false,
+      canEnterPelle: false,
+      completedRows: 0,
       remnants: 0,
       realityShards: new Decimal(0),
       shardRate: new Decimal(0),
@@ -35,6 +39,10 @@ export default {
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
+      if (!this.isDoomed) {
+        this.canEnterPelle = Achievements.prePelle.every(a => a.isUnlocked);
+        this.completedRows = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked));
+      }
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
@@ -61,7 +69,7 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <celestial-quote-history
+      <CelestialQuoteHistory
         celestial="pelle"
         :visible-lines="4"
         font-size="1.6rem"
@@ -102,7 +110,7 @@ export default {
       <PelleUpgradePanel :is-hovering="isHovering" />
     </div>
     <button
-      v-else
+      v-else-if="canEnterPelle"
       class="pelle-doom-button"
       @click="enterDoomModal"
     >
@@ -111,6 +119,14 @@ export default {
         <span class="pelle-icon">{{ symbol }}</span>
       </div>
     </button>
+    <div
+      v-else
+      class="pelle-unlock-requirements"
+    >
+      You must have 17 rows of achievements to unlock Doomed.
+      <br>
+      {{ completedRows }} / 17
+    </div>
   </div>
 </template>
 
@@ -154,6 +170,15 @@ export default {
   height: 7rem;
   width: 7rem;
   font-weight: 900;
+}
+
+.pelle-unlock-requirements {
+  font-size: 3rem;
+  background: black;
+  color: var(--color-pelle--base);
+  border: 0.2rem solid var(--color-pelle--base);
+  border-radius: 0.5rem;
+  width: 40rem;
 }
 
 .pelle-doom-button {

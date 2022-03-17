@@ -80,7 +80,7 @@ export default {
   },
   watch: {
     infoPaneID(newValue) {
-      AutomatorData.currentInfoPane = newValue;
+      player.reality.automator.currentInfoPane = newValue;
     }
   },
   created() {
@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     update() {
-      this.infoPaneID = AutomatorData.currentInfoPane;
+      this.infoPaneID = player.reality.automator.currentInfoPane;
       this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       this.errorCount = AutomatorData.currentErrors().length;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;

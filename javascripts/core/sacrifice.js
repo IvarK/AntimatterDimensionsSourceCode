@@ -8,14 +8,15 @@ export class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.totalBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
-      AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit);
+    return DimBoost.purchasedBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
+      AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit) &&
+      !Enslaved.isRunning;
   }
 
   static get disabledCondition() {
     if (NormalChallenge(10).isRunning) return "8th Dimensions are disabled";
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.totalBoosts < 5) return `Requires ${formatInt(5)} Dimension Boosts`;
+    if (DimBoost.purchasedBoosts < 5) return `Requires ${formatInt(5)} Dimension Boosts`;
     if (AntimatterDimension(8).totalAmount.eq(0)) return "No 8th Antimatter Dimensions";
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     if (Player.isInAntimatterChallenge) return "Challenge goal reached";
@@ -112,9 +113,8 @@ export class Sacrifice {
 export function sacrificeReset() {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
+    Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
   if (
-    !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
     (Sacrifice.totalBoost.gte(Decimal.NUMBER_MAX_VALUE))
   ) {

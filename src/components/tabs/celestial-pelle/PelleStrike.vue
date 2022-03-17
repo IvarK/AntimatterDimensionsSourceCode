@@ -18,21 +18,19 @@ export default {
 <template>
   <div class="c-pelle-strike-container">
     <ExpandingControlBox container-class="c-pelle-strike">
-      <div
-        slot="header"
-        class="c-pelle-strike-text-padding c-pelle-strike-requirement-header"
-      >
-        ▼ {{ strike.requirement }} ▼
-      </div>
-      <div
-        slot="dropdown"
-        class="c-pelle-strike-text-padding"
-      >
-        Penalty: {{ strike.penalty }}
-        <br><br>
-        Reward: {{ strike.reward }}
-        <br>
-      </div>
+      <template #header>
+        <div class="c-pelle-strike-text-padding c-pelle-strike-requirement-header">
+          ▼ {{ strike.requirement }} ▼
+        </div>
+      </template>
+      <template #dropdown>
+        <div class="c-pelle-strike-text-padding">
+          Penalty: {{ strike.penalty }}
+          <br><br>
+          Reward: {{ strike.reward }}
+          <br>
+        </div>
+      </template>
     </ExpandingControlBox>
   </div>
 </template>

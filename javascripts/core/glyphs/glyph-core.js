@@ -260,7 +260,7 @@ export const Glyphs = {
       if (freeIndex < 0) break;
       const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
-      this.addToInventory(glyph, freeIndex);
+      this.addToInventory(glyph, freeIndex, true);
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
@@ -274,7 +274,7 @@ export const Glyphs = {
     if (storedIndex < 0) return;
     const glyph = player.reality.glyphs.active.splice(storedIndex, 1)[0];
     this.active[activeIndex] = null;
-    this.addToInventory(glyph, requestedInventoryIndex);
+    this.addToInventory(glyph, requestedInventoryIndex, true);
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount();
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
@@ -321,7 +321,7 @@ export const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  addToInventory(glyph, requestedInventoryIndex) {
+  addToInventory(glyph, requestedInventoryIndex, isExistingGlyph = false) {
     this.validate();
     glyph.id = GlyphGenerator.makeID();
     const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
@@ -344,7 +344,7 @@ export const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
-    if (requestedInventoryIndex === undefined) this.addNewFlag(glyph);
+    if (requestedInventoryIndex === undefined && !isExistingGlyph) this.addNewFlag(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },

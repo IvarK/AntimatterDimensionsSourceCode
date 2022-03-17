@@ -155,6 +155,19 @@ window.player = {
     imaginaryUpgrades: Array.range(0, 10).map(() => ({
       isActive: false,
     })),
+    darkMatterDims: {
+      isActive: false,
+      lastTick: 0,
+    },
+    ascension: {
+      isActive: false,
+      lastTick: 0,
+    },
+    annihilation: {
+      isActive: false,
+      multiplier: 5
+    },
+    singularity: { isActive: false },
     ipMultBuyer: { isActive: false, },
     epMultBuyer: { isActive: false, },
   },
@@ -229,7 +242,7 @@ window.player = {
     totalTimePlayed: 0,
     realTimePlayed: 0,
     realTimeDoomed: 0,
-    totalAntimatter: DC.D0,
+    totalAntimatter: DC.E1,
     lastTenInfinities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
     lastTenEternities: Array.range(0, 10).map(() =>
@@ -467,8 +480,9 @@ window.player = {
       scripts: {
       },
       execTimer: 0,
-      type: AUTOMATOR_TYPE.TEXT,
+      type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,
+      currentInfoPane: 4
     },
     achTimer: 0,
   },
@@ -621,7 +635,6 @@ window.player = {
           timeSinceLastUpdate: 0,
           ascensionCount: 0
         })),
-      darkAutobuyerTimer: 0,
       entropy: 0,
       thisCompletion: 3600,
       fastestCompletion: 3600,
@@ -637,14 +650,6 @@ window.player = {
       },
       singularities: 0,
       singularityCapIncreases: 0,
-      autoAnnihilationSetting: 5,
-      // These have inconsistent starting values because default-on isn't necessarily the best behavior for all
-      automation: {
-        dimensions: true,
-        ascension: false,
-        singularity: true,
-        annihilation: false
-      },
       lastCheckedMilestones: 0
     },
     pelle: {

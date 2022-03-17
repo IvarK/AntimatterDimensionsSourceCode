@@ -13,19 +13,23 @@ export const Autobuyers = (function() {
     Autobuyer.reality,
   ];
 
-  const singleBinary = [
+  const single = [
+    Autobuyer.sacrifice,
     Autobuyer.replicantiGalaxy,
     Autobuyer.timeTheorem,
     Autobuyer.ipMult,
     Autobuyer.epMult,
+    Autobuyer.darkMatterDims,
+    Autobuyer.darkMatterDimsAscension,
+    Autobuyer.singularity,
+    Autobuyer.annihilation,
   ];
 
-  const single = [
+  const singleComplex = [
     Autobuyer.tickspeed,
-    Autobuyer.sacrifice,
     Autobuyer.galaxy,
     Autobuyer.dimboost,
-  ].concat(singleBinary);
+  ].concat(single);
 
   const arrays = [
     Autobuyer.replicantiUpgrade.zeroIndexed,
@@ -34,7 +38,7 @@ export const Autobuyers = (function() {
     Autobuyer.realityUpgrade.zeroIndexed,
     Autobuyer.imaginaryUpgrade.zeroIndexed,
   ];
-  const all = dimensions.concat(prestige, single, arrays);
+  const all = dimensions.concat(prestige, singleComplex, arrays);
   const multiple = [
     Autobuyer.antimatterDimension,
     Autobuyer.infinityDimension,
@@ -48,7 +52,7 @@ export const Autobuyers = (function() {
 
   return {
     all: all.flat(),
-    display: [multiple, singleBinary],
+    display: [multiple, single],
     upgradeable: antimatterDimensions.concat(
       Autobuyer.tickspeed,
       Autobuyer.dimboost,

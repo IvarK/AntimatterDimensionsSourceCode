@@ -190,8 +190,8 @@ export const AutomatorCommands = ((() => {
           : undefined;
         const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
-          ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}
-            ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
+          ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}` +
+            ` ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image.toUpperCase()}`
           : undefined;
         const on = Boolean(ctx.On);
         let input = "";
@@ -489,9 +489,13 @@ export const AutomatorCommands = ((() => {
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
       },
-      blockify: ctx => automatorBlocksMap[
-        ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
-      ]
+      blockify: ctx => ({
+        ...automatorBlocksMap[
+          ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
+        ],
+        wait: ctx.Nowait === undefined,
+        respec: ctx.Respec !== undefined
+      })
     },
     {
       id: "startDilation",
@@ -656,6 +660,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         inputValue: ctx.$studies.image,
+        wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.STUDIES
       })
     },
@@ -722,6 +727,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         inputValue: ctx.$presetIndex,
+        wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.LOAD
       })
     },
@@ -803,8 +809,9 @@ export const AutomatorCommands = ((() => {
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
-      blockify: () => ({
+      blockify: ctx => ({
         target: "DILATION",
+        wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.UNLOCK
       })
     },
@@ -842,6 +849,7 @@ export const AutomatorCommands = ((() => {
       blockify: ctx => ({
         target: "EC",
         inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+        wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.UNLOCK
       })
     },

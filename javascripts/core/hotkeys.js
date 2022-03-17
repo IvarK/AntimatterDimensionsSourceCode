@@ -82,7 +82,7 @@ export const shortcuts = [
     name: "Replicanti Galaxy",
     keys: ["r"],
     type: "bindRepeatableHotkey",
-    function: () => replicantiGalaxy(),
+    function: () => replicantiGalaxyRequest(),
     visible: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked()
   }, {
     name: "Eternity",
@@ -264,6 +264,8 @@ GameKeyboard.bind("shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("shift", () => setShiftKey(false), "keyup");
 GameKeyboard.bind("ctrl+shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("ctrl+shift", () => setShiftKey(false), "keyup");
+GameKeyboard.bind("alt+shift", () => setShiftKey(true), "keydown");
+GameKeyboard.bind("alt+shift", () => setShiftKey(false), "keyup");
 
 
 GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(Autobuyer.tickspeed));

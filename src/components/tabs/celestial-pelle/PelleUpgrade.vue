@@ -141,8 +141,8 @@ export default {
 <style scoped>
 .c-pelle-upgrade {
   padding: 2rem;
-  color: white;
-  background: black;
+  color: var(--color-text);
+  background: var(--color-prestige--accent);
   border: 1px solid var(--color-pelle-secondary);
   border-radius: .5rem;
   font-family: Typewriter;
@@ -151,6 +151,7 @@ export default {
   height: 12rem;
   margin: 0.6rem 0.3rem;
   font-size: 0.95rem;
+  font-weight: bold;
   box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
   display: flex;
   flex-direction: column;
@@ -244,7 +245,7 @@ export default {
 
 <style>
 .c-improved-effect {
-  color: #2f4;
+  color: #0b0;
   font-weight: bold;
   font-style: italic;
 }

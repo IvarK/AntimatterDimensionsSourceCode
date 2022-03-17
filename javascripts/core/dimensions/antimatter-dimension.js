@@ -464,8 +464,8 @@ class AntimatterDimensionState extends DimensionState {
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) return 0;
-    // #2039: You can unlock Sacrifice in Enslaved with the larger continuum value
-    // This should prevent that
+    // Enslaved limits dim 8 purchases to 1 only
+    // Continuum should be no different
     if (this.tier === 8 && Enslaved.isRunning) return 1;
     return this.costScale.getContinuumValue(Currency.antimatter.value, 10) * Laitela.matterExtraPurchaseFactor;
   }

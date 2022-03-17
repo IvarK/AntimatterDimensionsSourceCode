@@ -6,7 +6,6 @@ import EternityAutobuyerBox from "./EternityAutobuyerBox";
 import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox";
 import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
 import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox";
-import SacrificeAutobuyerBox from "./SacrificeAutobuyerBox";
 import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
 import DimensionAutobuyerBox from "./DimensionAutobuyerBox";
 import SimpleAutobuyersMultiBox from "./SimpleAutobuyersMultiBox";
@@ -21,7 +20,6 @@ export default {
     BigCrunchAutobuyerBox,
     GalaxyAutobuyerBox,
     DimensionBoostAutobuyerBox,
-    SacrificeAutobuyerBox,
     TickspeedAutobuyerBox,
     DimensionAutobuyerBox,
     SimpleAutobuyersMultiBox
@@ -57,7 +55,6 @@ export default {
     <BigCrunchAutobuyerBox />
     <GalaxyAutobuyerBox />
     <DimensionBoostAutobuyerBox />
-    <SacrificeAutobuyerBox />
     <TickspeedAutobuyerBox v-if="!hasContinuum" />
     <DimensionAutobuyerBox
       v-for="tier in 8"

@@ -1,6 +1,6 @@
 import { CelestialQuotes } from "../quotes.js";
 import { DC } from "../../constants.js";
-import { DarkMatterDimension, DarkMatterDimensions } from "./dark-matter-dimension.js";
+import { DarkMatterDimensions } from "./dark-matter-dimension.js";
 
 export const Laitela = {
   displayName: "Lai'tela",
@@ -107,34 +107,6 @@ export const Laitela = {
     while (upgradeInfo.some(upgrade => upgrade[0].lte(darkMatter) && upgrade[2] > 0)) {
       const cheapestUpgrade = upgradeInfo.filter(upgrade => upgrade[2] > 0).sort((a, b) => a[0].minus(b[0]).sign())[0];
       buy(cheapestUpgrade, 1);
-    }
-  },
-  autobuyerLoop(realDiff) {
-    if (!this.isUnlocked) return;
-    const laitela = player.celestials.laitela;
-
-    const interval = SingularityMilestone.darkAutobuyerSpeed.effectValue;
-    laitela.darkAutobuyerTimer += realDiff / 1000;
-    if (laitela.darkAutobuyerTimer >= interval) {
-      if (laitela.automation.dimensions) {
-        this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
-      }
-      if (laitela.automation.ascension) {
-        for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
-          DarkMatterDimension(i).ascend();
-        }
-      }
-    }
-    if (interval !== 0) laitela.darkAutobuyerTimer %= interval;
-
-    if (this.darkMatterMultGain >= laitela.autoAnnihilationSetting && this.darkMatterMult > 1 &&
-      laitela.automation.annihilation) {
-      this.annihilate();
-    }
-
-    if (Singularity.capIsReached && laitela.automation.singularity &&
-      Currency.darkEnergy.value / Singularity.cap >= SingularityMilestone.autoCondense.effectValue) {
-      Singularity.perform();
     }
   },
   reset() {

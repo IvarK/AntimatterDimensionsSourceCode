@@ -4244,6 +4244,19 @@ screen and (max-width: 480px) {
   width: 91rem;
 }
 
+.c-small-autobuyer-input {
+  width: 10rem;
+  height: 2rem;
+  margin: 0.2rem 0;
+  border-color: var(--color-laitela--accent);
+  border-radius: 0.5rem;
+}
+
+.s-base--metro .c-small-autobuyer-input {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 .c-autobuyer-box-slot {
   position: relative;
   border: .2rem solid #383232;
@@ -8301,14 +8314,7 @@ kbd {
 }
 
 .c-laitela-annihilation-input {
-  width: 6rem;
   border-color: var(--color-laitela--accent);
-  border-radius: 0.5rem;
-}
-
-.s-base--metro .c-laitela-annihilation-input {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-laitela-automation-toggle {
@@ -9133,8 +9139,8 @@ input.o-automator-block-input {
   border-radius: 0;
 }
 
-.s-base--metro .c-hide-modal-tab-button { 
-  border-radius: 0; 
+.s-base--metro .c-hide-modal-tab-button {
+  border-radius: 0;
 }
 
 .c-hide-modal-tab-button {

@@ -32,8 +32,7 @@ export default {
       requirementReached: false,
       realityUnlocked: false,
       showTTCost: false,
-      ttCost: 0,
-      showCostTitle: true
+      ttCost: 0
     };
   },
   watch: {
@@ -72,6 +71,9 @@ export default {
     },
     formattedEPCost() {
       return this.isCapped ? "Capped" : `${this.showCostTitle ? "Cost: " : ""}${format(this.cost, 2)} EP`;
+    },
+    showCostTitle() {
+      return this.cost.exponent < 1e6;
     }
   },
   methods: {
@@ -93,7 +95,6 @@ export default {
       }
       this.requirementReached = dimension.requirementReached;
       this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
-      this.showCostTitle = this.cost.exponent < 1000000;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
       this.showTTCost = !this.isUnlocked && !this.shiftDown;
       if (this.tier > 4) this.ttCost = TimeStudy.timeDimension(this.tier).cost;

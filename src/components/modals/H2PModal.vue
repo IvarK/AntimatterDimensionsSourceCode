@@ -30,7 +30,7 @@ export default {
     matchingTabs() {
       return GameDatabase.h2p.search(this.searchValue).filter(searchObj => searchObj.tab.isUnlocked());
     },
-    top5Threshold() {
+    topThreshold() {
       return Math.min(this.matchingTabs[Math.min(this.matchingTabs.length - 1, 4)].relevance + 0.01, 0.5);
     }
   },
@@ -46,6 +46,14 @@ export default {
     setActiveTab(tab) {
       this.activeTab = tab;
       document.getElementById("h2p-body").scrollTop = 0;
+    },
+    isFirstIrrelevant(idx) {
+      const matches = this.matchingTabs;
+      const searchObjThis = matches[idx], searchObjOther = matches[idx - 1];
+
+      return idx > 0 &&
+      searchObjThis.relevance >= this.topThreshold &&
+      searchObjOther.relevance < this.topThreshold;
     }
   },
 };
@@ -68,12 +76,13 @@ export default {
         >
         <div class="l-h2p-tab-list">
           <div
-            v-for="searchObj in matchingTabs"
+            v-for="(searchObj, searchObjId) in matchingTabs"
             :key="searchObj.tab.name"
             class="o-h2p-tab-button"
             :class="{
               'o-h2p-tab-button--selected': searchObj.tab === activeTab,
-              'o-h2p-tab-button--relevant': searchObj.relevance < top5Threshold
+              'o-h2p-tab-button--relevant': searchObj.relevance < topThreshold,
+              'o-h2p-tab-button--first-irrelevant': isFirstIrrelevant(searchObjId)
             }"
             @click="setActiveTab(searchObj.tab)"
           >
@@ -99,5 +108,24 @@ export default {
 .o-h2p-tab-button--relevant {
   background-color: #df505055;
   text-shadow: 0 0 5px;
+}
+
+.o-h2p-tab-button--relevant:hover, .o-h2p-tab-button--relevant.o-h2p-tab-button--selected {
+  text-shadow: 0 0 5px,
+    0.1rem 0.1rem 0.1rem black,
+    -0.1rem -0.1rem 0.1rem black,
+    -0.1rem 0.1rem 0.1rem black,
+    0.1rem -0.1rem 0.1rem black;
+}
+
+.o-h2p-tab-button--first-irrelevant {
+  border-top: 0.1rem solid black;
+  margin-top: 0.3rem;
+}
+</style>
+
+<style>
+.s-base--dark .o-h2p-tab-button--first-irrelevant {
+  border-top-color: white;
 }
 </style>

@@ -21,9 +21,16 @@ export default {
     class="c-ad-slider__button"
     @firstclick="$emit('click')"
     @repeatclick="$emit('click')"
-    style="width: 1.4rem; height: 1.4rem; flex-grow: 1; flex-shrink: 0;"
   >
     <div :class="iconClass" />
   </div>
 </template>
 
+<style scoped>
+.c-ad-slider__button {
+  width: 1.4rem;
+  height: 1.4rem;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+</style>

@@ -157,4 +157,9 @@ export default {
   justify-content: center;
   max-width: 110rem;
 }
+
+
+.s-base--metro .o-pelle-button {
+  border-radius: 0;
+}
 </style>

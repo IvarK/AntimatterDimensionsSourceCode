@@ -996,7 +996,7 @@ ${Teresa.runCompleted
     : "(More information available - complete Teresa's Reality)"}
 `,
       isUnlocked: () => Teresa.isUnlocked,
-      tags: ["rm", "endgame", "lategame", "perks", "sacrifice", "boo", "ghost"],
+      tags: ["rm", "endgame", "lategame", "perks", "sacrifice", "boo", "ghost", "celestial"],
       tab: "celestials/teresa"
     }, {
       name: "Effarig, Celestial of Ancient Relics",
@@ -1036,7 +1036,7 @@ ${EffarigUnlock.reality.isUnlocked
     : "<span style='color: var(--color-effarig--base);'>(complete Effarig's Reality to see reward details)</span>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
-      tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
+      tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame", "celestial"],
       tab: "celestials/effarig"
     }, {
       name: "Advanced Glyph Mechanics",
@@ -1144,7 +1144,7 @@ The Enslaved Ones won't directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
       // TODO Add the rest of the testers here too before release; this is all only pre wave 1
-      tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers",
+      tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers", "celestial",
         "ikerstream", "realrapidjazz", "saturnus", "earth", "garnet", "pichusuperlover"],
       tab: "celestials/enslaved"
     }, {
@@ -1168,7 +1168,7 @@ Dimensions tab. Additionally, your current Infinity Points will now also show a 
 If affordable, the Infinity button itself will visually change and bring you to the Infinity Dimension tab when clicked.
 `,
       isUnlocked: () => Enslaved.isCompleted,
-      tags: ["reality", "lategame", "endgame", "tesseract", "id"],
+      tags: ["reality", "lategame", "endgame", "tesseract", "id", "celestial"],
       tab: "celestials/tesseract"
     }, {
       name: "V, Celestial of Achievements",
@@ -1220,7 +1220,7 @@ Reaching ${formatInt(36)} V-Achievements (and therefore completing all of V's Ac
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
       tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",
-        "study", "triad"],
+        "study", "triad", "celestial"],
       tab: "celestials/v"
     }, {
       name: "Ra, Celestial of the Forgotten",
@@ -1272,7 +1272,7 @@ ${Ra.has(RA_UNLOCKS.V_UNLOCK)
 Ra won't directly unlock the next Celestial.`,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
-        "effarig", "teresa", "enslaved", "v"],
+        "effarig", "teresa", "enslaved", "v", "celestial"],
       tab: "celestials/ra"
     }, {
       name: "Glyph Alchemy",
@@ -1391,7 +1391,7 @@ to Dark Energy gain.
 Lai'tela won't directly unlock the next Celestial.
 `,
       isUnlocked: () => Laitela.isUnlocked,
-      tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
+      tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend", "celestial"],
       tab: "celestials/laitela"
     }, {
       name: "Continuum",
@@ -1485,7 +1485,7 @@ You can toggle a button above upgrade to hide bought upgrades or click the
 <b>Hotkey: Z</b> will try to perform an Armageddon reset.
 `,
       isUnlocked: () => Pelle.isDoomed,
-      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle"],
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle", "celestial"],
       tab: "celestials/pelle"
     }, {
       name: "Pelle Strikes",
@@ -1505,7 +1505,7 @@ ${PelleStrikes.eternity.hasStrike
 In addition each Rift offers three rewards for filling them up to a certain percentage.
 `,
       isUnlocked: () => PelleStrikes.infinity.hasStrike,
-      tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "strike", "rift"],
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "strike", "rift", "celestial"],
       tab: "celestials/pelle"
     }, {
       name: "The Galaxy Generator",
@@ -1518,7 +1518,7 @@ a multiplier to this base amount. The first two upgrades can be bought by spendi
 Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
       isUnlocked: () => Pelle.hasGalaxyGenerator,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
-        "galaxies", "generator"],
+        "galaxies", "generator", "celestial"],
       tab: "celestials/pelle"
     }
   ]

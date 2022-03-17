@@ -2,7 +2,8 @@ export const TUTORIAL_STATE = {
   DIM1: 0,
   DIM2: 1,
   DIMBOOST: 2,
-  GALAXY: 3
+  GALAXY: 3,
+  AUTOMATOR: 4
 };
 
 // Tutorial has two ways of moving on, either by Tutorial.moveOn() or by having it's condition be true
@@ -24,6 +25,10 @@ const tutorialStates = [
   {
     id: TUTORIAL_STATE.GALAXY,
     condition: () => AntimatterDimension(8).amount.gte(80)
+  },
+  {
+    id: TUTORIAL_STATE.AUTOMATOR,
+    condition: () => Player.automatorUnlocked
   }
 ];
 

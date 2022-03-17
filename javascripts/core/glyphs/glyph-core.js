@@ -344,7 +344,6 @@ export const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
-    console.log(requestedInventoryIndex === undefined && !isExistingGlyph);
     if (requestedInventoryIndex === undefined && !isExistingGlyph) this.addNewFlag(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();

@@ -255,7 +255,7 @@ export const GameStorage = {
     // This is called from simulateTime, if that's called; otherwise, it gets called
     // manually above
     GameIntervals.restart();
-    Enslaved.nextTickDiff = player.options.updateRate;
+    Enslaved.nextTickDiff = GameIntervals.gameLoopUpdateRate;
     GameUI.update();
 
     for (const resource of AlchemyResources.all) {

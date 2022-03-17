@@ -110,10 +110,10 @@ export const Enslaved = {
     if (autoRelease) release *= 0.01;
     this.nextTickDiff = Math.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
-    // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
-    const effectiveGamespeed = release / 50;
+    // Effective gamespeed from stored time assumes a "default" 25 ms update rate for consistency
+    const effectiveGamespeed = release / 25;
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
-    this.autoReleaseSpeed = release / player.options.updateRate / 5;
+    this.autoReleaseSpeed = release / GameIntervals.gameLoopUpdateRate / 5;
     player.celestials.enslaved.stored *= autoRelease ? 0.99 : 0;
   },
   has(info) {

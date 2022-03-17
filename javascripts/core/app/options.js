@@ -32,11 +32,11 @@ export class GameOptions {
     Cloud.logout();
   }
 
-  static refreshUpdateRate() {
+  static refreshUIUpdateRate() {
     if (player.options.updateRate === 200) {
       SecretAchievement(31).unlock();
     }
-    GameIntervals.gameLoop.restart();
+    GameIntervals.uiUpdate.restart();
   }
 
   static refreshAutosaveInterval() {

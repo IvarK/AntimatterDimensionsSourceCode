@@ -50,7 +50,12 @@ export const GameIntervals = (function() {
         interval.restart();
       }
     },
-    gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
+    gameLoopUpdateRate: 25,
+    gameLoop: interval(() => gameLoop(), () => GameUI.gameLoopUpdateRate),
+    uiUpdate: interval(() => {
+      PerformanceStats.start("Frame Time");
+      GameUI.update();
+    }, () => player.options.updateRate),
     save: interval(() => GameStorage.save(), () =>
       (player.options.autosaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastSaveTime))
     ),

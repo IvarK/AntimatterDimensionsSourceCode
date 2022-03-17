@@ -13,7 +13,7 @@ export default {
     handleInput(event) {
       this.updateRate = parseInt(event.target.value, 10);
       player.options.updateRate = this.updateRate;
-      GameOptions.refreshUpdateRate();
+      GameOptions.refreshUIUpdateRate();
     }
   }
 };
@@ -21,7 +21,7 @@ export default {
 
 <template>
   <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
-    <b>Update rate: {{ formatInt(updateRate) }} ms</b>
+    <b>UI update rate: {{ formatInt(updateRate) }} ms</b>
     <input
       v-model="updateRate"
       class="o-primary-btn--slider__slider"

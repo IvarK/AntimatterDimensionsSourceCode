@@ -416,7 +416,6 @@ export function getGameSpeedupForDisplay() {
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
   let diff = passDiff;
-  PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
   const thisUpdate = Date.now();
@@ -449,7 +448,6 @@ export function gameLoop(passDiff, options = {}) {
     player.records.thisEternity.realTime += realDiff;
     player.records.thisReality.realTime += realDiff;
     Enslaved.storeRealTime();
-    GameUI.update();
     return;
   }
 
@@ -633,7 +631,6 @@ export function gameLoop(passDiff, options = {}) {
   }
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
-  GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
 }

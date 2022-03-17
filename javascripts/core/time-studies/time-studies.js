@@ -6,7 +6,7 @@ export function buyStudiesUntil(id, ec = -1) {
   let studyArray = [];
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const requestedPath = TimeStudy(id).path;
-  const currTree = GameCache.currentStudyTree.value;
+  let currTree = GameCache.currentStudyTree.value;
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
   const ecHasRequirement = !Perk.studyECRequirement.isBought;
@@ -34,7 +34,7 @@ export function buyStudiesUntil(id, ec = -1) {
   // - If the player has a preferred path, we attempt to buy it (continues onward)
   // - If the player doesn't have a preferred path, we say so and do nothing (stops buying)
   if (id < 111) {
-    studyArray.push(...NormalTimeStudies.paths[requestedPath].filter(s => s <= id));
+    studyArray.push(...NormalTimeStudies.paths[requestedPath].filter(s => (s <= id)));
     // The purchasing logic is doing the heavy lifting here; studies can't be double-bought, nor can they be bought
     // if we don't have another available path
     const pathBuyOrder = TimeStudy.preferredPaths.dimension.path
@@ -46,9 +46,9 @@ export function buyStudiesUntil(id, ec = -1) {
   }
 
   if (ec === 11 && ecHasRequirement) {
-    studyArray.push(...NormalTimeStudies.paths[TIME_STUDY_PATH.ANTIMATTER_DIM].filter(s => s <= id));
+    studyArray.push(...NormalTimeStudies.paths[TIME_STUDY_PATH.ANTIMATTER_DIM].filter(s => (s <= id)));
   } else if (ec === 12 && ecHasRequirement) {
-    studyArray.push(...NormalTimeStudies.paths[TIME_STUDY_PATH.TIME_DIM].filter(s => s <= id));
+    studyArray.push(...NormalTimeStudies.paths[TIME_STUDY_PATH.TIME_DIM].filter(s => (s <= id)));
   } else if (currTree.currDimPathCount === currTree.allowedDimPathCount || currTree.allowedDimPathCount === 3) {
     studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
     studyArray.push(...range(71, 103));
@@ -74,7 +74,7 @@ export function buyStudiesUntil(id, ec = -1) {
   // - Fallback case: we have more than one path and intentionally do nothing here (continues onward)
 
   if (id < 151) {
-    studyArray.push(...NormalTimeStudies.paths[TimeStudy(id).path].filter(s => s <= id));
+    studyArray.push(...NormalTimeStudies.paths[TimeStudy(id).path].filter(s => (s <= id)));
     return studyArray;
   }
 
@@ -103,13 +103,14 @@ export function buyStudiesUntil(id, ec = -1) {
     // We need to commit what we have to the game state, because the check for priorityRequirement
     // requires us knowing if we have actually purchased 201.
     TimeStudyTree.commitToGameState(studyArray);
+    currTree = GameCache.currentStudyTree.value;
     studyArray = [];
 
     // Buy the second preferred dimension path if we have one, otherwise show a warning if
     // the player can choose the second preferred dimension path and hasn't yet done so.
     if (TimeStudy.preferredPaths.dimension.path.length > 1) {
-      studyArray.push(...TimeStudy.preferredPaths.dimension.studies.filter(s => s <= id));
-    } else if (TimeStudy.preferredPaths.dimension.priorityRequirement) {
+      studyArray.push(...TimeStudy.preferredPaths.dimension.studies.filter(s => (s <= id)));
+    } else if (currTree.allowedDimPathCount === 2) {
       GameUI.notify.error("You haven't selected a second preferred Dimension path.");
     }
 

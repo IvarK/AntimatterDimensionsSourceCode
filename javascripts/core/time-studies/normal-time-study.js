@@ -125,17 +125,13 @@ TimeStudy.preferredPaths = {
       player.timestudy.preferredPaths[0] = value.filter(id => options.includes(id));
     },
     get studies() {
-      return player.timestudy.preferredPaths[0].reduce((acc, path) =>
-        acc.concat(NormalTimeStudies.paths[path]), []);
-    },
-    get priorityRequirement() {
-      return TimeStudy(201).isBought ||
-        DilationUpgrade.timeStudySplit.isBought ||
-        PlayerProgress.realityUnlocked();
+      return player.timestudy.preferredPaths[0].flatMap(path => NormalTimeStudies.paths[path]);
     },
     get usePriority() {
-      return TimeStudy.preferredPaths.dimension.path.length > 1 ||
-        TimeStudy.preferredPaths.dimension.priorityRequirement;
+      return this.path.length > 1 ||
+        TimeStudy(201).isBought ||
+        DilationUpgrade.timeStudySplit.isBought ||
+        PlayerProgress.realityUnlocked();
     }
   },
   pace: {

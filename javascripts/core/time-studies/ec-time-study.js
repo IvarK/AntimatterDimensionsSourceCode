@@ -49,7 +49,7 @@ export class ECTimeStudyState extends TimeStudyState {
       111, 123, 151,
       181, 181, 181
     ];
-    // If the player long clicks an EC study that is immediately buyable, we try to
+    // If the player shift clicks an EC study that is immediately buyable, we try to
     // buy it first - in case buying studies up to that point renders it unaffordable.
     this.purchase();
     TimeStudyTree.commitToGameState(buyStudiesUntil(studiesToBuy[this.id], this.id));

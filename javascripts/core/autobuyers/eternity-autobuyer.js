@@ -76,7 +76,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     if (!proc) {
       switch (this.mode) {
         case AUTO_ETERNITY_MODE.AMOUNT:
-          proc = EternityChallenge.isRunning || gainedEternityPoints().gte(this.amount);
+          proc = gainedEternityPoints().gte(this.amount);
           break;
         case AUTO_ETERNITY_MODE.TIME:
           proc = Time.thisEternityRealTime.totalSeconds > this.time;

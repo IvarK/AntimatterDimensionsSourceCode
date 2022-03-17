@@ -122,9 +122,7 @@ export default {
   border-top: 0.1rem solid black;
   margin-top: 0.3rem;
 }
-</style>
 
-<style>
 .s-base--dark .o-h2p-tab-button--first-irrelevant {
   border-top-color: white;
 }

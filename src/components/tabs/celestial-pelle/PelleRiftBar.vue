@@ -28,7 +28,8 @@ export default {
       return {
         width: "14rem",
         border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: "hsl(0, 0%, 5%)",
+        backgroundColor: "var(--color-base)",
+        color: "var(--color-text)",
         zIndex: 4
       };
     },

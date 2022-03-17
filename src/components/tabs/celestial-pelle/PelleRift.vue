@@ -165,7 +165,8 @@ h2,
 [ach-tooltip]:before {
   width: 14rem;
   border: 0.1rem solid var(--color-pelle-secondary);
-  background-color: hsl(0, 0%, 5%);
+  background-color: var(--color-base);
+  color: var(--color-text);
   z-index: 4;
 }
 

@@ -163,3 +163,9 @@ export default {
   cursor: pointer;
 }
 </style>
+
+<style>
+.s-base--metro .o-pelle-button {
+  border-radius: 0;
+}
+</style>

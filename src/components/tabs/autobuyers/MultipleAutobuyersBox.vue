@@ -101,7 +101,7 @@ export default {
   >
     Continuum replaces your Antimatter Dimension and Tickspeed Autobuyers, as your production multipliers
     <br>
-    now automatically and continuously scale to how many purchases you would have had otherwise.
+    now automatically and continuously scale based on how many purchases you would have had otherwise.
   </span>
 </template>
 

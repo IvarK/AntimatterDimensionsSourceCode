@@ -19,7 +19,7 @@ export default {
     :autobuyer="autobuyer"
     name="Automatic Sacrifice"
   >
-    <template slot="intervalSlot">
+    <template #intervalSlot>
       <span>Dimensional Sacrifice at X multiplier:</span>
       <AutobuyerInput
         :autobuyer="autobuyer"

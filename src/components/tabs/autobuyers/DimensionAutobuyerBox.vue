@@ -54,11 +54,11 @@ export default {
     :name="name"
     show-interval
   >
-    <template slot="intervalSlot">
+    <template #intervalSlot>
       <DimensionBulkButton :autobuyer="autobuyer" />
       <AutobuyerIntervalButton :autobuyer="autobuyer" />
     </template>
-    <template slot="toggleSlot">
+    <template #toggleSlot>
       <button
         class="o-autobuyer-btn"
         @click="toggleMode"

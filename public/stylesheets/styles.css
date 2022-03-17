@@ -2441,7 +2441,7 @@ screen and (max-width: 480px) {
 
 .c-options-tab__hotkeys-link {
   cursor: pointer;
-  width: 21rem;
+  width: 22rem;
   align-self: center;
 }
 
@@ -7813,7 +7813,6 @@ kbd {
   background: var(--color-laitela--base);
   font-family: Typewriter;
   font-size: 1.2rem;
-  cursor: pointer;
   height: 84rem;
   margin-right: 1rem;
 }
@@ -8233,6 +8232,7 @@ kbd {
   border: 0.4rem solid var(--color-laitela--accent);
   animation: a-laitela-run-button__icon--scroll 15s infinite linear;
   transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .o-laitela-run-button__icon:hover {

@@ -6,9 +6,6 @@ export default {
       errors: [],
     };
   },
-  computed: {
-    commands: () => GameDatabase.reality.automator.commands
-  },
   methods: {
     update() {
       this.errors = AutomatorData.currentErrors();

@@ -97,7 +97,7 @@ export default {
     </div>
     <br>
     <div>
-      The automator uses a custom scripting language which allows (amongst other things) buying full
+      The Automator uses a custom scripting language which allows (amongst other things) buying full
       Time Study Trees, entering Eternity Challenges, or starting Dilation. It can also force prestige
       events on certain conditions independently from your Autobuyers or modify some of your Autobuyer settings.
       <br>

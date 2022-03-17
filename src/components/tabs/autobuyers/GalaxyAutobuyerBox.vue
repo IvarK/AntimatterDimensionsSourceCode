@@ -12,13 +12,17 @@ export default {
   },
   data() {
     return {
+      hasMaxedInterval: false,
       limitGalaxies: false,
       isBuyMaxUnlocked: false,
       buyMax: false
     };
   },
   computed: {
-    autobuyer: () => Autobuyer.galaxy
+    autobuyer: () => Autobuyer.galaxy,
+    limitGalaxiesSlot() {
+      return this.isBuyMaxUnlocked ? "toggleSlot" : "intervalSlot";
+    }
   },
   watch: {
     limitGalaxies(newValue) {
@@ -27,6 +31,7 @@ export default {
   },
   methods: {
     update() {
+      this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
       this.isBuyMaxUnlocked = this.autobuyer.isBuyMaxUnlocked;
       this.limitGalaxies = this.autobuyer.limitGalaxies;
     }
@@ -40,13 +45,15 @@ export default {
     name="Automatic Antimatter Galaxies"
     :show-interval="!isBuyMaxUnlocked"
   >
-    <AutobuyerIntervalButton
-      slot="intervalSlot"
-      :autobuyer="autobuyer"
-    />
     <template
-      v-if="isBuyMaxUnlocked"
-      slot="intervalSlot"
+      v-if="!hasMaxedInterval"
+      #intervalSlot
+    >
+      <AutobuyerIntervalButton :autobuyer="autobuyer" />
+    </template>
+    <template
+      v-else-if="isBuyMaxUnlocked"
+      #intervalSlot
     >
       <div class="c-autobuyer-box__small-text">
         Activates every X seconds:
@@ -57,7 +64,7 @@ export default {
         property="buyMaxInterval"
       />
     </template>
-    <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
+    <template #[limitGalaxiesSlot]>
       <div
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
         @click="limitGalaxies = !limitGalaxies"

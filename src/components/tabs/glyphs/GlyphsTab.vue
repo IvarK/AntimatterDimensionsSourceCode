@@ -133,7 +133,9 @@ export default {
           container-class="c-glyph-level-factors-dropdown-header"
           style="margin: 2rem;"
         >
-          <GlyphLevelsAndWeights slot="dropdown" />
+          <template #dropdown>
+            <GlyphLevelsAndWeights />
+          </template>
         </ExpandingControlBox>
         <GlyphTabSidebar />
       </div>

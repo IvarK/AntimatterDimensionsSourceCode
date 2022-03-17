@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      hasMaxedInterval: false,
       limitDimBoosts: false,
       limitUntilGalaxies: false,
       isBuyMaxUnlocked: false
@@ -31,6 +32,7 @@ export default {
   methods: {
     update() {
       const autobuyer = this.autobuyer;
+      this.hasMaxedInterval = autobuyer.hasMaxedInterval;
       this.isBuyMaxUnlocked = autobuyer.isBuyMaxUnlocked;
       this.limitDimBoosts = autobuyer.limitDimBoosts;
       this.limitUntilGalaxies = autobuyer.limitUntilGalaxies;
@@ -45,13 +47,15 @@ export default {
     :show-interval="!isBuyMaxUnlocked"
     name="Automatic Dimension Boosts"
   >
-    <AutobuyerIntervalButton
-      slot="intervalSlot"
-      :autobuyer="autobuyer"
-    />
     <template
-      v-if="isBuyMaxUnlocked"
-      slot="checkboxSlot"
+      v-if="!hasMaxedInterval"
+      #intervalSlot
+    >
+      <AutobuyerIntervalButton :autobuyer="autobuyer" />
+    </template>
+    <template
+      v-else-if="isBuyMaxUnlocked"
+      #intervalSlot
     >
       <div
         class="c-autobuyer-box__small-text"
@@ -67,7 +71,7 @@ export default {
     </template>
     <template
       v-else
-      slot="checkboxSlot"
+      #checkboxSlot
     >
       <div
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
@@ -86,7 +90,7 @@ export default {
         property="maxDimBoosts"
       />
     </template>
-    <template slot="toggleSlot">
+    <template #toggleSlot>
       <div
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
         style="height: 3rem;"

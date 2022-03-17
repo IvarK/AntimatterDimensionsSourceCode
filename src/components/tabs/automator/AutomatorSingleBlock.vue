@@ -193,10 +193,10 @@ export default {
       group="code-blocks"
     >
       <automator-single-block
-        v-for="(block, index) in block.nest"
-        :key="block.id"
+        v-for="(subblock, index) in block.nest"
+        :key="subblock.id"
         :line-number="index"
-        :block="block"
+        :block="subblock"
         :update-block="updateBlockFromNest"
         :delete-block="deleteBlockFromNest"
       />

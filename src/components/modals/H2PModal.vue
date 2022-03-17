@@ -52,8 +52,8 @@ export default {
       const searchObjThis = matches[idx], searchObjOther = matches[idx - 1];
 
       return idx > 0 &&
-      searchObjThis.relevance >= this.topThreshold &&
-      searchObjOther.relevance < this.topThreshold;
+        searchObjThis.relevance >= this.topThreshold &&
+        searchObjOther.relevance < this.topThreshold;
     }
   },
 };

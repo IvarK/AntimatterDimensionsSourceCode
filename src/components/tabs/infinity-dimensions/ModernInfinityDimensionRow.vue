@@ -33,7 +33,6 @@ export default {
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
       requirementReached: false,
       eternityReached: false,
-      showCostTitle: false,
       enslavedRunning: false,
     };
   },
@@ -68,6 +67,9 @@ export default {
     showRow() {
       return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0) ||
         this.hasPrevTier;
+    },
+    showCostTitle() {
+      return this.cost.exponent < 1e6;
     }
   },
   watch: {
@@ -101,7 +103,6 @@ export default {
       this.isAutobuyerOn = Autobuyer.infinityDimension(tier).isActive;
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
-      this.showCostTitle = this.cost.exponent < 1000000;
       this.enslavedRunning = Enslaved.isRunning;
     },
     buyManyInfinityDimension() {

@@ -3,7 +3,6 @@ import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
 import { deepmergeAll } from "@/utility/deepmerge";
-import { NG } from "./core/new-game.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -118,30 +117,30 @@ export function gainedInfinityPoints() {
 }
 
 function totalEPMult() {
-  return new Decimal(getAdjustedGlyphEffect("cursedEP"))
-    .times(ShopPurchase.EPPurchases.currentMult)
-    .timesEffectsOf(
-      EternityUpgrade.epMult,
-      TimeStudy(61),
-      TimeStudy(122),
-      TimeStudy(121),
-      TimeStudy(123),
-      RealityUpgrade(12),
-      GlyphEffect.epMult
-    );
+  let totalMult = new Decimal(NG.multiplier);
+  if (Pelle.isDisabled("EPMults")) {
+    const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
+    totalMult = totalMult.times(pelleMults);
+  } else {
+    totalMult = totalMult.times(getAdjustedGlyphEffect("cursedEP"))
+      .times(ShopPurchase.EPPurchases.currentMult)
+      .timesEffectsOf(
+        EternityUpgrade.epMult,
+        TimeStudy(61),
+        TimeStudy(122),
+        TimeStudy(121),
+        TimeStudy(123),
+        RealityUpgrade(12),
+        GlyphEffect.epMult
+      );
+  }
+  return totalMult;
 }
 
 export function gainedEternityPoints() {
   const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(NG.multiplier);
-
-  if (Pelle.isDisabled("EPMults")) {
-    const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
-    return ep.times(pelleMults).pow(pow).floor();
-  }
-
-  ep = ep.times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -154,19 +153,11 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
-  ep = ep.pow(pow);
-  return ep.floor();
+  return ep.pow(pow).floor();
 }
 
 export function requiredIPForEP(epAmount) {
-  let totalMult = new Decimal(NG.multiplier);
-  if (Pelle.isDisabled("EPMults")) {
-    const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
-    totalMult = totalMult.times(pelleMults);
-  } else {
-    totalMult = totalMult.times(totalEPMult());
-  }
-  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalMult), 5) + 0.7))
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalEPMult()), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 

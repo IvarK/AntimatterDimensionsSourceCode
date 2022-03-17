@@ -44,12 +44,18 @@ export default {
       {{ name }}
       <AutobuyerIntervalLabel :autobuyer="autobuyer" />
 
-      <AutobuyerInput
+      <span
         v-if="autobuyer.hasInput"
-        :autobuyer="autobuyer"
-        :type="autobuyer.inputType"
-        :property="autobuyer.inputEntry"
-      />
+        class="c-autobuyer-box__small-text"
+      >
+        Multiplier:
+        <AutobuyerInput
+          class="c-small-autobuyer-input"
+          :autobuyer="autobuyer"
+          :type="autobuyer.inputType"
+          :property="autobuyer.inputEntry"
+        />
+      </span>
     </div>
   </span>
 </template>

@@ -72,7 +72,7 @@ export default {
         v-model="autoAnnihilationInput"
         type="text"
         :style="annihilationInputStyle"
-        class="c-laitela-annihilation-input"
+        class="c-small-autobuyer-input c-laitela-annihilation-input"
         @change="handleAutoAnnihilationInputChange()"
       >
       to the multiplier.

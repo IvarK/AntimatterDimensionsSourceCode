@@ -138,16 +138,17 @@ export default {
     </div>
     <PrimaryButton
       v-if="!isContinuumActive"
+      v-tooltip="boughtTooltip"
       :enabled="isAffordable && !isCapped && isUnlocked"
       class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
       :class="tutorialClass()"
-      :ach-tooltip="boughtTooltip"
       @click="buySingle"
     >
       <span v-if="isCapped">Capped</span>
       <template v-else>
         <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
         <span v-if="isCostsAD">{{ costUnit }} </span>
+        <span v-else> AM </span>
       </template>
     </PrimaryButton>
     <PrimaryButton
@@ -163,6 +164,7 @@ export default {
         <span v-if="showCostTitle(until10Cost)">Cost: </span>
         {{ format(until10Cost) }}
         <span v-if="isCostsAD">{{ costUnit }} </span>
+        <span v-else> AM </span>
       </template>
     </PrimaryButton>
   </div>

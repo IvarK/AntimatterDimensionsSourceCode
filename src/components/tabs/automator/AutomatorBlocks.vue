@@ -67,12 +67,14 @@ export const automatorBlocks = [
     nested: true
   }, {
     cmd: "STUDIES",
-    hasInput: true
+    hasInput: true,
+    canWait: true
   }, {
     cmd: "UNLOCK",
     targets: ["EC", "DILATION"],
     hasInput: true,
-    targetsWithoutInput: ["DILATION"]
+    targetsWithoutInput: ["DILATION"],
+    canWait: true
   }, {
     cmd: "START",
     targets: ["EC", "DILATION"],
@@ -97,14 +99,21 @@ export const automatorBlocks = [
   }, {
     cmd: "RESPEC"
   }, {
-    cmd: "INFINITY"
+    cmd: "INFINITY",
+    canRespec: true,
+    canWait: true
   }, {
-    cmd: "ETERNITY"
+    cmd: "ETERNITY",
+    canRespec: true,
+    canWait: true
   }, {
-    cmd: "REALITY"
+    cmd: "REALITY",
+    canRespec: true,
+    canWait: true
   }, {
     cmd: "LOAD",
-    hasInput: true
+    hasInput: true,
+    canWait: true
   }, {
     cmd: "NOTIFY",
     hasInput: true
@@ -124,23 +133,31 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
 </script>
 
 <template>
-  <draggable
-    :list="blocks"
-    :group="{ name: 'code-blocks', pull: 'clone', put: false }"
-    :sort="false"
-    :clone="clone"
-    style="display: flex; align-items: center; flex-wrap: wrap;"
-  >
-    <div
-      v-for="block in blocks"
-      :key="block.id"
-      class="o-automator-command o-automator-block-list"
+  <div>
+    <p>Drag and drop these blocks to the area on the left!</p>
+    <draggable
+      class="block-container"
+      :list="blocks"
+      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+      :sort="false"
+      :clone="clone"
     >
-      {{ block.cmd }}
-    </div>
-  </draggable>
+      <div
+        v-for="block in blocks"
+        :key="block.id"
+        class="o-automator-command o-automator-block-list"
+      >
+        {{ block.cmd }}
+      </div>
+    </draggable>
+  </div>
 </template>
 
 <style scoped>
-
+.block-container {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
 </style>

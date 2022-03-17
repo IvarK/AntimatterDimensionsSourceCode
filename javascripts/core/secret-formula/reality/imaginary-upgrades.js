@@ -200,8 +200,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       id: 19,
       cost: 2.8e10,
       formatCost: x => format(x, 1),
-      requirement: () => `Reach ${formatInt(3.85e6)} Tickspeed Continuum without having more than
-        ${formatInt(8)} Time Studies`,
+      requirement: () => `Reach ${formatInt(3.85e6)} Tickspeed Continuum without ever having more than
+        ${formatInt(8)} Time Studies in this Reality`,
       hasFailed: () => player.requirementChecks.reality.maxStudies > 8,
       checkRequirement: () => player.requirementChecks.reality.maxStudies <= 8 &&
         Tickspeed.continuumValue >= 3.85e6,
@@ -277,7 +277,6 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
-      // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet
       name: "Omnipresent Obliteration",
       id: 25,
       cost: 1.6e15,

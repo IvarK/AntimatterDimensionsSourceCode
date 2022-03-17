@@ -1,5 +1,9 @@
 import { GameDatabase } from "../game-database.js";
 import { DC } from "../../constants.js";
+// This is supposed to be in ./navigation.js but importing doesn't work for some stupid reason
+function emphasizeEnd(fraction) {
+  return Math.pow(fraction, 10);
+}
 
 export const V_REDUCTION_MODE = {
   SUBTRACTION: 1,

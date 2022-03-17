@@ -24,9 +24,9 @@ export default {
         ? "fas fa-expand-arrows-alt"
         : "fas fa-compress-arrows-alt";
     },
-    rebuyables: () => PelleRebuyableUpgrade.all,
-    upgrades() { return PelleUpgrade.all.filter(u => !u.isBought); },
-    boughtUpgrades() { return PelleUpgrade.all.filter(u => u.isBought); },
+    rebuyables: () => PelleUpgrade.rebuyables,
+    upgrades() { return PelleUpgrade.singles.filter(u => !u.isBought); },
+    boughtUpgrades() { return PelleUpgrade.singles.filter(u => u.isBought); },
     visibleUpgrades() { return this.upgrades.slice(0, 5); },
     fadedUpgrades() { return this.upgrades.slice(5, 10); },
     allUpgrades() {
@@ -116,6 +116,8 @@ export default {
   border: 2px solid var(--color-pelle--base);
   border-radius: 5px;
   user-select: none;
+  background-color: #1a1a1a;
+  color: #888888;
 }
 
 .l-pelle-content-container {

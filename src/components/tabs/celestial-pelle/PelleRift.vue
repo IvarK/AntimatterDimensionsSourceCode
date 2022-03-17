@@ -101,10 +101,10 @@ export default {
 
 .o-pelle-rift-toggle {
   padding: 0.5rem;
-  background: black;
+  background-color: var(--color-prestige--accent);
   border: 0.1rem solid var(--color-pelle-secondary);
   font-family: Typewriter;
-  color: white;
+  color: var(--color-text);
   cursor: pointer;
   border-radius: 0.5rem;
   width: 8rem;
@@ -141,11 +141,11 @@ export default {
 }
 
 .o-pelle-rift-milestone {
-  background: black;
+  background: var(--color-prestige--accent);
   padding: 1rem;
   width: 5rem;
   margin-bottom: 1rem;
-  color: white;
+  color: var(--color-text);
   border: 0.1rem solid var(--color-pelle-secondary);
   border-radius: 0.5rem;
 }

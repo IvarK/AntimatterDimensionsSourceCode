@@ -39,6 +39,9 @@ export default {
       const buyer = this.autobuyer;
       this.isVisible = buyer.isUnlocked || buyer.isBought;
     },
+    toggle() {
+      if (!this.hasMode) this.autobuyer.toggle();
+    }
   }
 };
 </script>
@@ -47,8 +50,14 @@ export default {
   <span
     v-if="isVisible"
     class="c-autobuyer-box-slot"
+    :is-toggle="!hasMode"
+    @click="toggle"
   >
-    <AutobuyerToggleLabel :autobuyer="autobuyer" />
+    <AutobuyerToggleLabel
+      :autobuyer="autobuyer"
+      :read-only="!hasMode"
+    />
+    <!-- Readonly here is needed because otherwise it gets toggled twice, i.e. unchanged -->
     {{ name }}
     <AutobuyerIntervalLabel
       :autobuyer="autobuyer"
@@ -63,5 +72,8 @@ export default {
 </template>
 
 <style scoped>
-
+.c-autobuyer-box-slot[is-toggle] {
+  user-select: none;
+  cursor: pointer;
+}
 </style>

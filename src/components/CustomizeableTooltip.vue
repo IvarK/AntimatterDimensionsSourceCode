@@ -7,26 +7,47 @@ export default {
   props: {
     tooltipContentStyle: {
       type: Object,
-      required: true
+      required: false,
+      default: () => ({})
     },
     tooltipArrowStyle: {
       type: Object,
-      required: true
+      required: false,
+      default: () => ({})
     },
     left: {
       type: String,
       required: false,
-      default: "0"
+      default: ""
     },
     top: {
       type: String,
       required: false,
-      default: "0"
+      default: ""
+    },
+    right: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    bottom: {
+      type: String,
+      required: false,
+      default: ""
     },
     contentClass: {
       type: String,
       required: false,
       default: ""
+    },
+    mode: {
+      type: String,
+      required: false,
+      default: "top"
+    },
+    show: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -36,9 +57,46 @@ export default {
     };
   },
   computed: {
-    tooltipGenStyle() {
-      return { left: this.left, top: this.top };
+    positionStyle() {
+      return {
+        left: this.left,
+        top: this.top,
+        right: this.right,
+        bottom: this.bottom
+      };
+    },
+    tooltipType() {
+      return `c-tooltip--${this.mode}`;
+    },
+    contentTransform() {
+      const axis = this.mode === "top" || this.mode === "bottom" ? "X" : "Y";
+      return `translate${axis}(${this.showNegativeSign(axis)}50%)`;
+    },
+    tooltipTransform() {
+      switch (this.mode) {
+        case "top":
+          return `translate(${this.showNegativeSign("X")}50%, -100%)`;
+        case "bottom":
+          return `translate(${this.showNegativeSign("X")}50%, 100%)`;
+        case "right":
+          return `translate(100%, ${this.showNegativeSign("Y")}50%)`;
+        case "left":
+          return `translate(-100%, ${this.showNegativeSign("Y")}50%)`;
+        default:
+          return "";
+      }
+    },
+    showTooltip() {
+      return this.show || this.hovering;
     }
+  },
+  methods: {
+    showNegativeSign(axis) {
+      if (axis === "X") {
+        return this.left ? "-" : "";
+      }
+      return this.top ? "-" : "";
+    },
   }
 };
 </script>
@@ -48,7 +106,7 @@ export default {
     <div
       class="c-main-content"
       :class="contentClass"
-      :style="{ left, top }"
+      :style="{ ...positionStyle, transform: contentTransform }"
       @mouseenter="hovering = true"
       @mouseleave="hovering = false"
     >
@@ -56,15 +114,15 @@ export default {
     </div>
     <div
       class="c-tooltip-content"
-      :class=" {'c-tooltip-show': hovering } "
-      :style="[tooltipContentStyle, tooltipGenStyle]"
+      :class=" {'c-tooltip-show': showTooltip, [tooltipType]: true } "
+      :style="[tooltipContentStyle, positionStyle, { transform: tooltipTransform }]"
     >
       <slot name="tooltipContent" />
     </div>
     <div
       class="c-tooltip-arrow"
-      :class=" {'c-tooltip-show': hovering } "
-      :style="[tooltipArrowStyle, tooltipGenStyle]"
+      :class=" {'c-tooltip-show': showTooltip, [tooltipType]: true } "
+      :style="[tooltipArrowStyle, positionStyle, { transform: tooltipTransform }]"
     />
   </div>
 </template>
@@ -77,7 +135,6 @@ export default {
 
 .c-main-content {
   position: absolute;
-  transform: translateX(-50%);
 }
 
 .c-tooltip-content,
@@ -91,7 +148,6 @@ export default {
 
 .c-tooltip-content {
   position: absolute;
-  transform: translate(-50%, calc(-100% - 0.5rem));
   padding: 0.7rem;
   width: 16rem;
   border-radius: 0.3rem;
@@ -112,14 +168,51 @@ export default {
   position: absolute;
   transform: translate(-50%, -100%);
   width: 0;
-  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-top: 0.5rem solid transparent;
   border-right: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid transparent;
   border-left: 0.5rem solid transparent;
   content: " ";
   font-size: 0;
   line-height: 0;
   transition-duration: 0.4s;
   z-index: 4;
+}
+
+.c-tooltip--top.c-tooltip-content {
+  margin-top: -0.5rem;
+}
+
+.c-tooltip--top.c-tooltip-arrow {
+  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-bottom: 0;
+}
+
+.c-tooltip--bottom.c-tooltip-content {
+  margin-bottom: -0.5rem;
+}
+
+.c-tooltip--bottom.c-tooltip-arrow {
+  border-bottom: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-top: 0;
+}
+
+.c-tooltip--right.c-tooltip-content {
+  margin-right: -0.5rem;
+}
+
+.c-tooltip--right.c-tooltip-arrow {
+  border-right: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-left: 0;
+}
+
+.c-tooltip--left.c-tooltip-content {
+  margin-left: -0.5rem;
+}
+
+.c-tooltip--left.c-tooltip-arrow {
+  border-left: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0;
 }
 
 .c-tooltip-show {

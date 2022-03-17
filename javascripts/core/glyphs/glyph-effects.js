@@ -62,7 +62,7 @@ export function getSecondaryGlyphEffect(effectKey) {
  * @returns {number[]}
  */
 export function getGlyphEffectValues(effectKey) {
-  if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
+  if (!orderedEffectList.includes(effectKey)) {
     throw new Error(`Unknown Glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active

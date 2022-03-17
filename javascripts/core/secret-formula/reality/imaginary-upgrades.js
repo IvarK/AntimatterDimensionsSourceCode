@@ -277,7 +277,6 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       formatEffect: value => `${formatX(value, 2, 1)}`,
     },
     {
-      // TODO Functionality for this needs to be implemented later as Pelle doesn't exist on this branch yet
       name: "Omnipresent Obliteration",
       id: 25,
       cost: 1.6e15,

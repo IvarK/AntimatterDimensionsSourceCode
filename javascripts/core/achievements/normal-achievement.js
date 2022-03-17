@@ -28,6 +28,10 @@ class AchievementState extends GameMechanicState {
     return this.row < 14;
   }
 
+  get isPrePelle() {
+    return this.row < 18;
+  }
+
   get isUnlocked() {
     // eslint-disable-next-line no-bitwise
     return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
@@ -93,6 +97,13 @@ export const Achievements = {
     return Achievements.all.filter(ach => ach.isPreReality);
   },
 
+  /**
+   * @type {AchievementState[]}
+   */
+  get prePelle() {
+    return Achievements.all.filter(ach => ach.isPrePelle);
+  },
+
   get allRows() {
     const count = Achievements.all.map(a => a.row).max();
     return Achievements.rows(1, count);
@@ -100,6 +111,11 @@ export const Achievements = {
 
   get preRealityRows() {
     const count = Achievements.preReality.map(a => a.row).max();
+    return Achievements.rows(1, count);
+  },
+
+  get prePelleRows() {
+    const count = Achievements.prePelle.map(a => a.row).max();
     return Achievements.rows(1, count);
   },
 

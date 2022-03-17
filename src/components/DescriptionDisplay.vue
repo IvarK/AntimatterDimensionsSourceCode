@@ -22,8 +22,8 @@ export default {
     },
     title: {
       type: String,
-      default: "",
-      required: false
+      required: false,
+      default: ""
     }
   },
   data() {

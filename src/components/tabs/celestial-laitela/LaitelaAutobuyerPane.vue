@@ -20,16 +20,16 @@ export default {
   },
   watch: {
     dimension(newValue) {
-      player.celestials.laitela.automation.dimensions = newValue;
+      player.auto.darkMatterDims.isActive = newValue;
     },
     ascension(newValue) {
-      player.celestials.laitela.automation.ascension = newValue;
+      player.auto.ascension.isActive = newValue;
     },
     singularity(newValue) {
-      player.celestials.laitela.automation.singularity = newValue;
+      player.auto.singularity.isActive = newValue;
     },
     annihilation(newValue) {
-      player.celestials.laitela.automation.annihilation = newValue;
+      player.auto.annihilation.isActive = newValue;
     },
   },
   methods: {
@@ -38,11 +38,11 @@ export default {
       this.hasAscension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
       this.hasSingularity = SingularityMilestone.autoCondense.isUnlocked;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
-      const auto = player.celestials.laitela.automation;
-      this.dimension = auto.dimensions;
-      this.ascension = auto.ascension;
-      this.singularity = auto.singularity;
-      this.annihilation = auto.annihilation;
+      const auto = player.auto;
+      this.dimension = auto.darkMatterDims.isActive;
+      this.ascension = auto.ascension.isActive;
+      this.singularity = auto.singularity.isActive;
+      this.annihilation = auto.annihilation.isActive;
     },
   }
 };

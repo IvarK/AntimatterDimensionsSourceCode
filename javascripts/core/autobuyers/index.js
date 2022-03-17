@@ -19,5 +19,9 @@ import "./replicanti-upgrade-autobuyer.js";
 import "./dilation-upgrade-autobuyer.js";
 import "./prestige-currency-multiplier-autobuyer.js";
 import "./replicanti-galaxy-autobuyer.js";
+import "./dark-matter-dimension-autobuyer.js";
+import "./dark-matter-dimension-ascension-autobuyer.js";
+import "./singularity-autobuyer.js";
+import "./annihilation-autobuyer.js";
 
 export * from "./autobuyers.js";

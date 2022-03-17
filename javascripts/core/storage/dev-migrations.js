@@ -1272,7 +1272,26 @@ GameStorage.devMigrations = {
           galaxies: false
         };
       }
-    }
+    },
+    player => {
+      const from = player.celestials.laitela;
+      player.auto.darkMatterDims.isActive = from.automation.dimensions;
+      player.auto.ascension.isActive = from.automation.ascension;
+      player.auto.annihilation.isActive = from.automation.singularity;
+      player.auto.singularity.isActive = from.automation.annihilation;
+
+      player.auto.darkMatterDims.lastTick = from.darkAutobuyerTimer;
+      player.auto.ascension.lastTick = from.darkAutobuyerTimer;
+      player.auto.annihilation.multiplier = from.autoAnnihilationSetting;
+
+      delete player.celestials.laitela.automation.dimensions;
+      delete player.celestials.laitela.automation.ascension;
+      delete player.celestials.laitela.automation.singularity;
+      delete player.celestials.laitela.automation.annihilation;
+      delete player.celestials.laitela.darkAutobuyerTimer;
+      delete player.celestials.laitela.darkAutobuyerTimer;
+      delete player.celestials.laitela.autoAnnihilationSetting;
+    },
   ],
 
   patch(player) {

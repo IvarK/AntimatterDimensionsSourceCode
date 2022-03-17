@@ -32,6 +32,7 @@ export default {
       return format(Math.ceil(100 * sec) / 100, 2, 2);
     },
     bulkText() {
+      if (!this.bulkUnlimited && this.bulk === 0) return "";
       return `Current bulk: ${this.bulkUnlimited ? "Unlimited" : formatX(this.bulk, 2)}`;
     },
   },

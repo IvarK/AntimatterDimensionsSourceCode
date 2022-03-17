@@ -32,6 +32,8 @@
         "allowElseIf": false
       }
     ],
+
+    "vue/one-component-per-file": "off",
     "vue/component-definition-name-casing": "off",
     "vue/order-in-components": "off",
     "vue/require-prop-type-constructor": "off",

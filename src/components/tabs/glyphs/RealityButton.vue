@@ -35,7 +35,7 @@ export default {
         return `Projected: ${format(this.projectedRM, 2)} RM`;
       }
       if (this.newIMCap !== 0) {
-        return `iM Cap: ${formatComplex(0, this.newIMCap)}`;
+        return `iM Cap: ${formatMachines(0, this.newIMCap)}`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;

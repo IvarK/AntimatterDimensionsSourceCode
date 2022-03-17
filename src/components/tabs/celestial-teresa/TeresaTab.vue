@@ -154,7 +154,7 @@ export default {
           {{ runDescription }}
           <br><br>
           <div v-if="bestAM.gt(0)">
-            This Reality can be repeated for a stronger reward if you can get more antimatter within it.
+            This Reality can be repeated for a stronger reward based on the antimatter gained within it.
             <br><br>
             Your record antimatter in Teresa's Reality is {{ format(bestAM, 2) }},
             achieved with {{ lastMachinesString }}.

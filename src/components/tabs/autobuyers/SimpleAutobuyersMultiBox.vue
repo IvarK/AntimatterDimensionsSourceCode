@@ -8,7 +8,6 @@ export default {
     MultipleAutobuyersBox,
     MultipleSingleAutobuyersGroup
   },
-  // There are two types of display: multiple and single. They must be treated differently.
   computed: {
     multiple() {
       return Autobuyers.display[0];

@@ -440,7 +440,6 @@ export function gameLoop(passDiff, options = {}) {
 
   // Lai'tela mechanics should bypass stored real time entirely
   DarkMatterDimensions.tick(realDiff);
-  Laitela.autobuyerLoop(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {

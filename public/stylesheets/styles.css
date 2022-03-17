@@ -2441,7 +2441,7 @@ screen and (max-width: 480px) {
 
 .c-options-tab__hotkeys-link {
   cursor: pointer;
-  width: 21rem;
+  width: 22rem;
   align-self: center;
 }
 
@@ -4242,6 +4242,19 @@ screen and (max-width: 480px) {
   flex-wrap: wrap;
   flex-grow: 1;
   width: 91rem;
+}
+
+.c-small-autobuyer-input {
+  width: 10rem;
+  height: 2rem;
+  margin: 0.2rem 0;
+  border-color: var(--color-laitela--accent);
+  border-radius: 0.5rem;
+}
+
+.s-base--metro .c-small-autobuyer-input {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-autobuyer-box-slot {
@@ -7813,7 +7826,6 @@ kbd {
   background: var(--color-laitela--base);
   font-family: Typewriter;
   font-size: 1.2rem;
-  cursor: pointer;
   height: 84rem;
   margin-right: 1rem;
 }
@@ -8233,6 +8245,7 @@ kbd {
   border: 0.4rem solid var(--color-laitela--accent);
   animation: a-laitela-run-button__icon--scroll 15s infinite linear;
   transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .o-laitela-run-button__icon:hover {
@@ -8301,14 +8314,7 @@ kbd {
 }
 
 .c-laitela-annihilation-input {
-  width: 6rem;
   border-color: var(--color-laitela--accent);
-  border-radius: 0.5rem;
-}
-
-.s-base--metro .c-laitela-annihilation-input {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-laitela-automation-toggle {
@@ -8607,7 +8613,7 @@ kbd {
   align-items: center;
   flex-direction: column;
   position: relative;
-  width: 20rem;
+  width: 20.5rem;
   margin: 1.2rem;
 }
 
@@ -9133,8 +9139,8 @@ input.o-automator-block-input {
   border-radius: 0;
 }
 
-.s-base--metro .c-hide-modal-tab-button { 
-  border-radius: 0; 
+.s-base--metro .c-hide-modal-tab-button {
+  border-radius: 0;
 }
 
 .c-hide-modal-tab-button {

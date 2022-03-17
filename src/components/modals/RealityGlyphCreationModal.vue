@@ -29,7 +29,7 @@ export default {
     },
     createRealityGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
-        Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice some Glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Purge some Glyphs.");
         return;
       }
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(this.realityGlyphLevel));

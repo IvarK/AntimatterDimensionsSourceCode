@@ -1,16 +1,16 @@
 import { Autobuyer, AutobuyerState } from "./autobuyer.js";
 
-Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
+Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerState {
   get data() {
-    return player.auto.sacrifice;
+    return player.auto.annihilation;
   }
 
   get name() {
-    return `Dimensional Sacrifice`;
+    return `Annihilation`;
   }
 
   get isUnlocked() {
-    return EternityMilestone.autoIC.isReached || InfinityChallenge(2).isCompleted;
+    return Laitela.darkMatterMult > 1;
   }
 
   get multiplier() {
@@ -30,7 +30,7 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
   }
 
   get inputType() {
-    return "decimal";
+    return "float";
   }
 
   get inputEntry() {
@@ -38,7 +38,8 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (Sacrifice.nextBoost.lt(Decimal.max(this.multiplier, 1.01))) return;
-    sacrificeReset();
+    if (Laitela.darkMatterMultGain >= this.multiplier) {
+      Laitela.annihilate();
+    }
   }
 }();

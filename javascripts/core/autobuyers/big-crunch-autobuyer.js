@@ -88,25 +88,23 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     return PRESTIGE_EVENT.ETERNITY;
   }
 
+  get willInfinity() {
+    if (!player.break || Player.isInAntimatterChallenge) return true;
+
+    switch (this.mode) {
+      case AUTO_CRUNCH_MODE.AMOUNT:
+        return gainedInfinityPoints().gte(this.amount);
+      case AUTO_CRUNCH_MODE.TIME:
+        return Time.thisInfinityRealTime.totalSeconds > this.time;
+      case AUTO_CRUNCH_MODE.X_HIGHEST:
+      default:
+        return gainedInfinityPoints().gte(player.records.thisEternity.maxIP.times(this.xHighest));
+    }
+  }
+
   tick() {
     super.tick();
-    let proc = !player.break || Player.isInAntimatterChallenge;
-    if (!proc) {
-      switch (this.mode) {
-        case AUTO_CRUNCH_MODE.AMOUNT:
-          proc = gainedInfinityPoints().gte(this.amount);
-          break;
-        case AUTO_CRUNCH_MODE.TIME:
-          proc = Time.thisInfinityRealTime.totalSeconds > this.time;
-          break;
-        case AUTO_CRUNCH_MODE.X_HIGHEST:
-          proc = gainedInfinityPoints().gte(player.records.thisEternity.maxIP.times(this.xHighest));
-          break;
-      }
-    }
-    if (proc) {
-      bigCrunchResetRequest(true);
-    }
+    if (willInfinity) bigCrunchResetRequest(true);
   }
 
   reset() {

@@ -5,11 +5,6 @@ export default {
     autobuyer: {
       type: Object,
       required: true
-    },
-    readOnly: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   data() {
@@ -50,7 +45,7 @@ export default {
       this.globalToggle = player.auto.autobuyersOn;
     },
     toggle() {
-      if (!this.readOnly) this.autobuyer.toggle();
+      this.autobuyer.toggle();
     },
   }
 };

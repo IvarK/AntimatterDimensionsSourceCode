@@ -259,9 +259,8 @@ export default {
   font-size: 2rem;
   color: var(--color-pelle--base);
 }
-</style>
 
-<style>
+
 .s-base--metro .l-pelle-panel-container, .s-base--metro .c-armageddon-container {
   border-radius: 0;
 }

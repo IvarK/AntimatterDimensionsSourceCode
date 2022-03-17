@@ -23,6 +23,7 @@ export default {
       Modal.message.show("Glyph Undo can only undo with a Reality!");
     },
     handleYesClick() {
+      this.emitClose();
       Glyphs.undo();
     },
   },

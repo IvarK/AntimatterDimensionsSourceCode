@@ -3,6 +3,7 @@ import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { NG } from "./core/new-game.js";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -133,15 +134,14 @@ function totalEPMult() {
 export function gainedEternityPoints() {
   const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(NG.multiplier);
 
-  ep = ep.times(NG.multiplier);
+  if (Pelle.isDisabled("EPMults")) {
+    const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
+    return ep.times(pelleMults).pow(pow).floor();
+  }
 
-  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(
-    PelleRifts.famine.milestones[2]
-  );
-
-  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
+  ep = ep.times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -159,12 +159,14 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
-  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
-
-  if (Pelle.isDoomed) return Decimal.pow10(308 * (Decimal.log(pelleMults.dividedBy(epAmount).reciprocal(), 5) + 0.7))
-    .clampMin(Number.MAX_VALUE);
-
-  return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
+  let totalMult = new Decimal(NG.multiplier);
+  if (Pelle.isDisabled("EPMults")) {
+    const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
+    totalMult = totalMult.times(pelleMults);
+  } else {
+    totalMult = totalMult.times(totalEPMult());
+  }
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalMult), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 

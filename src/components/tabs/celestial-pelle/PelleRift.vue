@@ -57,11 +57,10 @@ export default {
     <div class="c-pelle-rift-row">
       <div class="c-pelle-rift-column c-pelle-rift-status">
         <h2>{{ rift.name }}</h2>
-        <div class="c-pelle-rift-effect-container">
+        <div class="c-pelle-rift-rift-info-container">
           <div
             v-for="(effect, idx) in effects"
             :key="'effect-' + idx"
-            class="highlight"
           >
             {{ effect || "" }}
           </div>
@@ -73,13 +72,16 @@ export default {
       </div>
       <div class="c-pelle-rift-status">
         <div class="c-pelle-rift-fill-status">
-          Drains {{ rift.drainResource }} to fill.
-          <template v-if="!isMaxed">
+          <h2>{{ rift.name }}</h2>
+          <div class="c-pelle-rift-rift-info-container">
+            Drains {{ rift.drainResource }} to fill.
             <br>
-            Current Amount: {{ formatRift(resource) }}
-          </template>
-          <br>
-          Total Filled: {{ formatRift(rift.totalFill) }}
+            <template v-if="!isMaxed">
+              Current Amount: {{ formatRift(resource) }}
+            </template>
+            <br>
+            Total Filled: {{ formatRift(rift.totalFill) }}
+          </div>
         </div>
       </div>
     </div>
@@ -92,7 +94,10 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  
+  border: 0.2rem solid var(--color-pelle--base);
+  border-radius: 0.5rem;
+  /* transparent crimson */
+  background-color: #ed143d15;
 }
 
 .c-pelle-rift-row {
@@ -107,8 +112,12 @@ export default {
   align-items: center;
 }
 
-.c-pelle-rift-effect-container {
+.c-pelle-rift-rift-info-container {
   height: 6rem;
+  /* Maybe-sort-of-hacky css fix which tints the text with color pelle base */
+  color: #ed143d60;
+  text-shadow: 0 0 0 var(--color-text);
+  font-weight: 400;
 }
 
 .c-pelle-rift-status {
@@ -117,13 +126,8 @@ export default {
   align-items: center;
   width: 25.5rem;
 }
-.c-pelle-rift-fill-status {
-  align-self: flex-start;
-  width: 20rem;
-}
 
-h2,
-.highlight {
+h2 {
   color: var(--color-pelle--base);
   font-weight: bold;
   padding: 0.2rem;
@@ -131,6 +135,10 @@ h2,
 
 
 .s-base--metro .o-pelle-rift-milestone, .s-base--metro .o-pelle-rift-toggle {
+  border-radius: 0;
+}
+
+.s-base--metro .c-pelle-rift {
   border-radius: 0;
 }
 </style>

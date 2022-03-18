@@ -78,8 +78,8 @@ export default {
 
       const milestonesCloseTo = this.rift.milestones.filter(m => {
         // Gets distance from the milestone bar in terms of rem
-        // 24.6: the width of the bar is 25 rem, but adjusted to a border with 0.2rem on both sides
-        const dist = Math.abs((m.requirement * 24.6) - mouseX / this.remToPx);
+        // 31.6: the width of the bar is 32 rem, but adjusted to a border with 0.2rem on both sides
+        const dist = Math.abs((m.requirement * 31.6) - mouseX / this.remToPx);
         if (dist < 1) m.dist = dist;
         return dist < 1;
       }).map(m => {
@@ -172,7 +172,7 @@ export default {
   --color-bar-bg: #1e1e1e;
   height: 5rem;
   border: 0.2rem solid var(--color-pelle-secondary);
-  width: 25rem;
+  width: 32rem;
   border-radius: 5px;
   position: relative;
   margin-bottom: 1rem;
@@ -192,7 +192,7 @@ export default {
 .l-overflow-hidden {
   overflow: hidden;
   border: 0.2rem solid transparent;
-  width: 25rem;
+  width: 32rem;
   height: 5rem;
   border-radius: 5px;
   position: absolute;

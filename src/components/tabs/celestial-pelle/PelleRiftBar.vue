@@ -63,6 +63,9 @@ export default {
     formatRift(value) {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
     },
+    toggle() {
+      if (!this.isMaxed) this.rift.toggle();
+    },
     barOverlay() {
       const overfill = this.percentage > 1;
       return {
@@ -99,8 +102,13 @@ export default {
   <div
     ref="pelleRiftBar"
     class="c-pelle-rift-bar"
-    :class="{ 'c-pelle-rift-bar-overfill-container': percentage > 1 }"
+    :class="{
+      'c-pelle-rift-bar-overfill-container': percentage > 1,
+      'c-pelle-rift-bar--idle': !isActive && !isMaxed,
+      'c-pelle-rift-bar--filling': isActive
+    }"
     @mousemove="handleMilestoneRequirementTooltipDisplay"
+    @click="toggle"
   >
     <div class="l-overflow-hidden">
       <!-- Note: These are separate because permanent and animated fill both use the same positional attributes -->
@@ -141,6 +149,7 @@ export default {
     </div>
     <div class="o-pelle-rift-bar-percentage">
       {{ formatPercents(percentage, 3) }}
+      <span v-if="!isMaxed">({{ isActive ? "Filling" : "Idle" }})</span>
     </div>
     <CustomizeableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
@@ -173,6 +182,10 @@ export default {
   background: var(--color-bar-bg);
 }
 
+.c-pelle-rift-bar--idle .l-overflow-hidden, .c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
+  opacity: 0.6;
+}
+
 .l-overflow-hidden {
   overflow: hidden;
   border: 0.2rem solid transparent;
@@ -193,6 +206,10 @@ export default {
   width: 100%;
   z-index: 0;
   box-shadow: inset 0 0 3px 1px var(--color-bar-bg);
+}
+
+.c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
+  box-shadow: inset 0 0 3px 1px var(--color-pelle-secondary);
 }
 
 

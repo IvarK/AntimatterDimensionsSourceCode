@@ -24,7 +24,7 @@ export default {
         </div>
       </template>
       <template #dropdown>
-        <div class="c-pelle-strike-text-padding">
+        <div class="c-pelle-strike-text-padding c-pelle-strike-description">
           Penalty: {{ strike.penalty }}
           <br><br>
           Reward: {{ strike.reward }}
@@ -56,6 +56,10 @@ export default {
   height: 5rem;
   z-index: 3;
   width: 26rem;
+}
+
+.c-pelle-strike-description {
+  font-size: 1.1rem;
 }
 
 .c-pelle-strike-text-padding {

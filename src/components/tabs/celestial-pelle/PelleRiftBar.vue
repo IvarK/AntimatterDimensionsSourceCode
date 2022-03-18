@@ -181,6 +181,9 @@ export default {
   align-items: center;
   background: var(--color-bar-bg);
 }
+.c-pelle-rift-bar--filling, .c-pelle-rift-bar--idle {
+  cursor: pointer;
+}
 
 .c-pelle-rift-bar--idle .l-overflow-hidden, .c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
   opacity: 0.6;

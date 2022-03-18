@@ -55,6 +55,7 @@ export default {
   padding: 0.5rem 0.5rem 2rem;
   height: 5rem;
   z-index: 3;
+  width: 26rem;
 }
 
 .c-pelle-strike-text-padding {

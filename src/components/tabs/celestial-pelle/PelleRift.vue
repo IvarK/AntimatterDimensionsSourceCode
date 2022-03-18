@@ -1,13 +1,15 @@
 <script>
+import PelleStrike from "./PelleStrike.vue";
 import PelleRiftBar from "./PelleRiftBar.vue";
 
 export default {
   name: "PelleRift",
   components: {
+    PelleStrike,
     PelleRiftBar
   },
   props: {
-    rift: {
+    strike: {
       type: Object,
       required: true
     },
@@ -21,6 +23,11 @@ export default {
       hasEffectiveFill: false,
       effects: []
     };
+  },
+  computed: {
+    rift() {
+      return this.strike.rift;
+    }
   },
   methods: {
     update() {
@@ -43,6 +50,9 @@ export default {
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+    },
+    toggle() {
+      if (!this.isMaxed) this.rift.toggle();
     }
   },
 };
@@ -50,44 +60,39 @@ export default {
 
 <template>
   <div class="c-pelle-rift">
-    <h2>{{ rift.name }}</h2>
-    <PelleRiftBar :rift="rift" />
-    <div class="o-pelle-rift-milestone-container">
-      <div
-        v-for="(milestone, idx) in rift.milestones"
-        :key="'milestone-' + idx"
-        :ach-tooltip="milestone.description"
-        class="o-pelle-rift-milestone"
-        :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
-      >
-        {{ formatPercents(milestone.requirement) }}
+    <div class="c-pelle-rift-row">
+      <div class="c-pelle-rift-column c-pelle-rift-status">
+        <h2>{{ rift.name }}</h2>
+        <div class="c-pelle-rift-effect-container">
+          <div
+            v-for="(effect, idx) in effects"
+            :key="'effect-' + idx"
+            class="highlight"
+          >
+            {{ effect || "" }}
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="c-pelle-rift-effect-container">
-      <div
-        v-for="(effect, idx) in effects"
-        :key="'effect-' + idx"
-        class="highlight"
-      >
-        {{ effect || "" }}
+      <div class="c-pelle-rift-column">
+        <PelleStrike :strike="strike" />
+        <PelleRiftBar :rift="rift" />
+        <button
+          class="o-pelle-rift-toggle"
+          :class="{ 'o-pelle-rift-toggle--active': isActive || isMaxed }"
+          @click="toggle"
+        >
+          {{ isMaxed ? "Filled" : (isActive ? "Filling" : "Idle") }}
+        </button>
       </div>
-    </div>
-    <div
-      v-if="!isMaxed"
-      class="c-pelle-rift-status"
-    >
-      <button
-        class="o-pelle-rift-toggle"
-        :class="{ 'o-pelle-rift-toggle--active': isActive }"
-        @click="rift.toggle()"
-      >
-        {{ isActive ? "Filling" : "Idle" }}
-      </button>
-      Drains {{ rift.drainResource }} to fill.
-      <br>
-      Current Amount: {{ formatRift(resource) }}
-      <br>
-      Total Filled: {{ formatRift(rift.totalFill) }}
+      <div class="c-pelle-rift-status">
+        Drains {{ rift.drainResource }} to fill.
+        <template v-if="!isMaxed">
+          <br>
+          Current Amount: {{ formatRift(resource) }}
+        </template>
+        <br>
+        Total Filled: {{ formatRift(rift.totalFill) }}
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +102,18 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
+.c-pelle-rift-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.c-pelle-rift-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 1rem;
 }
 
 .o-pelle-rift-toggle {
@@ -120,7 +137,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  width: 25rem;
+  width: 26rem;
 }
 
 .o-pelle-rift-toggle:hover {
@@ -134,10 +151,7 @@ export default {
 }
 
 .o-pelle-rift-milestone-container {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  width: 70%;
 }
 
 .o-pelle-rift-milestone {

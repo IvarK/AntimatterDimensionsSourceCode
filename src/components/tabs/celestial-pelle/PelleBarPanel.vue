@@ -1,11 +1,9 @@
 <script>
-import PelleStrike from "./PelleStrike";
 import PelleRift from "./PelleRift";
 
 export default {
   name: "PelleBarPanel",
   components: {
-    PelleStrike,
     PelleRift
   },
   data() {
@@ -57,8 +55,7 @@ export default {
           :key="strike.config.id"
           class="c-pelle-single-bar"
         >
-          <PelleStrike :strike="strike" />
-          <PelleRift :rift="strike.rift" />
+          <PelleRift :strike="strike" />
         </div>
       </div>
     </div>
@@ -107,7 +104,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 27rem;
+  width: 100%;
 }
 
 .c-collapse-icon-clickable {

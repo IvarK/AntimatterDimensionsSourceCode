@@ -26,10 +26,12 @@ export default {
   computed: {
     tooltipContentStyle() {
       return {
-        width: "14rem",
+        width: "18rem",
         border: "0.1rem solid var(--color-pelle--base)",
         backgroundColor: "var(--color-base)",
         color: "var(--color-text)",
+        fontSize: "1.1rem",
+        fontWeight: "bold",
         zIndex: 4
       };
     },
@@ -51,8 +53,11 @@ export default {
     hasMilestone(idx) {
       return this.rift.milestones[idx].canBeApplied;
     },
-    milestoneResourceText(rift, milestone) {
-      return `${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource}`;
+    milestoneText(rift, milestone) {
+      return `${formatPercents(milestone.requirement)}
+      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource})
+      <br><br>
+      ${milestone.description}`;
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
@@ -145,7 +150,7 @@ export default {
       content-class="o-pelle-rift-bar-milestone-hover-area"
     >
       <template #tooltipContent>
-        {{ milestoneResourceText(rift, selectedHoverMilestone) }}
+        <span v-html="milestoneText(rift, selectedHoverMilestone)" />
       </template>
     </CustomizeableTooltip>
   </div>

@@ -73,25 +73,20 @@ export default {
           </div>
         </div>
       </div>
-      <div class="c-pelle-rift-column">
-        <PelleStrike :strike="strike" />
+      <div class="c-pelle-rift-reverse-column">
         <PelleRiftBar :rift="rift" />
-        <button
-          class="o-pelle-rift-toggle"
-          :class="{ 'o-pelle-rift-toggle--active': isActive || isMaxed }"
-          @click="toggle"
-        >
-          {{ isMaxed ? "Filled" : (isActive ? "Filling" : "Idle") }}
-        </button>
+        <PelleStrike :strike="strike" />
       </div>
       <div class="c-pelle-rift-status">
-        Drains {{ rift.drainResource }} to fill.
-        <template v-if="!isMaxed">
+        <div class="c-pelle-rift-fill-status">
+          Drains {{ rift.drainResource }} to fill.
+          <template v-if="!isMaxed">
+            <br>
+            Current Amount: {{ formatRift(resource) }}
+          </template>
           <br>
-          Current Amount: {{ formatRift(resource) }}
-        </template>
-        <br>
-        Total Filled: {{ formatRift(rift.totalFill) }}
+          Total Filled: {{ formatRift(rift.totalFill) }}
+        </div>
       </div>
     </div>
   </div>
@@ -102,6 +97,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 1rem;
   width: 100%;
 }
 .c-pelle-rift-row {
@@ -113,7 +109,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 1rem;
+}
+.c-pelle-rift-reverse-column {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
 }
 
 .o-pelle-rift-toggle {
@@ -136,8 +136,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1rem;
-  width: 26rem;
+  width: 25.5rem;
+}
+.c-pelle-rift-fill-status {
+  align-self: flex-start;
+  width: 20rem;
 }
 
 .o-pelle-rift-toggle:hover {

@@ -67,9 +67,9 @@ export default {
           </div>
         </div>
       </div>
-      <div class="c-pelle-rift-reverse-column">
-        <PelleRiftBar :rift="rift" />
+      <div class="c-pelle-rift-column">
         <PelleStrike :strike="strike" />
+        <PelleRiftBar :rift="rift" />
       </div>
       <div class="c-pelle-rift-status">
         <div class="c-pelle-rift-fill-status">
@@ -94,19 +94,16 @@ export default {
   margin-top: 1rem;
   width: 100%;
 }
+
 .c-pelle-rift-row {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .c-pelle-rift-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-.c-pelle-rift-reverse-column {
-  display: flex;
-  flex-direction: column-reverse;
   align-items: center;
 }
 
@@ -125,42 +122,11 @@ export default {
   width: 20rem;
 }
 
-.o-pelle-rift-milestone-container {
-  justify-content: space-between;
-}
-
-.o-pelle-rift-milestone {
-  background: var(--color-prestige--accent);
-  padding: 1rem;
-  width: 5rem;
-  margin-bottom: 1rem;
-  color: var(--color-text);
-  border: 0.1rem solid var(--color-pelle-secondary);
-  border-radius: 0.5rem;
-}
-
-.o-pelle-rift-milestone--unlocked {
-  background: var(--color-pelle-secondary);
-  color: black;
-}
-
 h2,
 .highlight {
   color: var(--color-pelle--base);
   font-weight: bold;
   padding: 0.2rem;
-}
-
-[ach-tooltip]:before {
-  width: 14rem;
-  border: 0.1rem solid var(--color-pelle-secondary);
-  background-color: var(--color-base);
-  color: var(--color-text);
-  z-index: 4;
-}
-
-[ach-tooltip]:after {
-  border-top: 0.5rem solid var(--color-pelle-secondary);
 }
 
 

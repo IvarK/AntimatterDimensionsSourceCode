@@ -113,7 +113,7 @@ export default {
 }
 
 .c-pelle-rift-rift-info-container {
-  height: 6rem;
+  height: 5rem;
   /* Maybe-sort-of-hacky css fix which tints the text with color pelle base */
   color: #ed143d60;
   text-shadow: 0 0 0 var(--color-text);
@@ -124,7 +124,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 25.5rem;
+  width: 26rem;
 }
 
 h2 {

@@ -5494,11 +5494,7 @@ screen and (max-width: 480px) {
 .c-modal-away-progress__disabled b,
 .c-modal-away-progress__disabled {
   text-decoration: line-through;
-  /* !important here is specifically to fix antimatter gains on the away progress modal
-  not properly displaying as #303030 on dark theme. I honestly have no idea why it's specifically antimatter
-  or why specifically dark theme but this is the only fix that worked
-  Putting color: #303030 as a scoped style within AwayProgressModal.vue doesn't work if that's what you're thinking */
-  color: #303030 !important;
+  color: #303030;
   font-style: italic;
   text-shadow: 0 0 0.3rem #303030;
   animation: none;

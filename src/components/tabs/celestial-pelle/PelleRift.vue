@@ -44,15 +44,9 @@ export default {
       if (typeof value === "number") this[key] = value;
       else this[key].copyFrom(value);
     },
-    hasMilestone(idx) {
-      return this.rift.milestones[idx].canBeApplied;
-    },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
-    },
-    toggle() {
-      if (!this.isMaxed) this.rift.toggle();
     }
   },
 };
@@ -116,18 +110,6 @@ export default {
   align-items: center;
 }
 
-.o-pelle-rift-toggle {
-  padding: 0.5rem;
-  background-color: var(--color-prestige--accent);
-  border: 0.1rem solid var(--color-pelle-secondary);
-  font-family: Typewriter;
-  color: var(--color-text);
-  cursor: pointer;
-  border-radius: 0.5rem;
-  width: 8rem;
-  margin-bottom: 1rem;
-}
-
 .c-pelle-rift-effect-container {
   height: 6rem;
 }
@@ -141,16 +123,6 @@ export default {
 .c-pelle-rift-fill-status {
   align-self: flex-start;
   width: 20rem;
-}
-
-.o-pelle-rift-toggle:hover {
-  box-shadow: 1px 1px 3px var(--color-pelle-secondary);
-  transition-duration: 0.12s;
-}
-
-.o-pelle-rift-toggle--active {
-  background: var(--color-pelle-secondary);
-  color: black;
 }
 
 .o-pelle-rift-milestone-container {

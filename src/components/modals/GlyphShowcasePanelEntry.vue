@@ -47,18 +47,14 @@ export default {
     level() {
       return this.glyph.level;
     },
-    displayLevel() {
-      if (BASIC_GLYPH_TYPES.includes(this.type)) return this.level + this.realityGlyphBoost;
-      return this.level;
-    },
     effectiveLevel() {
-      return this.displayLevel ? this.displayLevel : this.level;
+      return getAdjustedGlyphLevel(this.glyph);
     },
     isLevelCapped() {
-      return this.displayLevel && this.displayLevel < this.level;
+      return this.effectiveLevel && this.effectiveLevel < this.level;
     },
     isLevelBoosted() {
-      return this.displayLevel && this.displayLevel > this.level;
+      return this.effectiveLevel && this.effectiveLevel > this.level;
     },
     levelText() {
       if (this.type === "companion") return "";
@@ -103,7 +99,8 @@ export default {
     },
     glyphEffectList() {
       const db = GameDatabase.reality.glyphEffects;
-      const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength, this.type)
+      const effects =
+      getGlyphEffectValuesFromBitmask(this.glyph.effects, this.effectiveLevel, this.glyph.strength, this.type)
         .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));
       const effectStrings = effects
         .map(e => this.formatEffectString(db[e.id], e.value));

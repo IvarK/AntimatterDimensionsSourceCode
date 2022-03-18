@@ -94,15 +94,13 @@ export default {
 
 .c-pelle-bar-container {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .c-pelle-single-bar {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 100%;
 }
 </style>

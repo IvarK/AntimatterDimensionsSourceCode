@@ -92,7 +92,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  width: 100%;
+  
 }
 
 .c-pelle-rift-row {

@@ -86,7 +86,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (willEternity) eternity(false, true);
+    if (this.willEternity) eternity(false, true);
   }
 
   reset() {

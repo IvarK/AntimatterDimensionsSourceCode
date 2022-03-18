@@ -104,7 +104,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
 
   tick() {
     super.tick();
-    if (willInfinity) bigCrunchResetRequest(true);
+    if (this.willInfinity) bigCrunchResetRequest(true);
   }
 
   reset() {

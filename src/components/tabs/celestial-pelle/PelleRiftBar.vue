@@ -25,19 +25,21 @@ export default {
   },
   computed: {
     tooltipContentStyle() {
+      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
       return {
         width: "18rem",
         border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: "var(--color-base)",
-        color: "var(--color-text)",
+        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : "var(--color-base)",
+        color: hasMilestone ? "black" : "var(--color-text)",
         fontSize: "1.1rem",
         fontWeight: "bold",
-        zIndex: 4
+        zIndex: 4,
+        boxShadow: hasMilestone ? " 0 0 1px 1px black" : ""
       };
     },
     tooltipArrowStyle() {
       return {
-        borderTop: "0.5rem solid var(--color-pelle--base)"
+        borderTop: "0.55rem solid var(--color-pelle--base)"
       };
     }
   },
@@ -50,8 +52,8 @@ export default {
       this.percentage = rift.percentage;
       this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
-    hasMilestone(idx) {
-      return this.rift.milestones[idx].canBeApplied;
+    hasMilestone(ms) {
+      return ms.canBeApplied;
     },
     milestoneText(rift, milestone) {
       return `${formatPercents(milestone.requirement)}
@@ -139,7 +141,7 @@ export default {
         :key="'milestone-line-' + idx"
         class="o-pelle-rift-bar-milestone-line"
         :class="{
-          'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(idx),
+          'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(milestone),
           'o-pelle-rift-bar-milestone-line--disabled': rift.reducedTo < milestone.requirement
         }"
         :style="{

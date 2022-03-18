@@ -135,10 +135,16 @@ export default {
       const alteredValue = dbEntry.conversion
         ? dbEntry.formatSecondaryEffect(dbEntry.conversion(value))
         : "";
-      return `${rawDesc}`
-        .replace("{value}", singleValue)
-        .replace("{value2}", alteredValue);
+      return {
+        text: `${rawDesc}`
+          .replace("{value}", singleValue)
+          .replace("{value2}", alteredValue),
+        isPelleDisabled: this.isPelleDisabled(dbEntry.id)
+      };
     },
+    isPelleDisabled(effect) {
+      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(effect);
+    }
   },
 };
 </script>
@@ -175,10 +181,13 @@ export default {
       :style="effectStyle"
     >
       <div
-        v-for="(effectText, index) in glyphEffectList"
+        v-for="(effectObj, index) in glyphEffectList"
         :key="index"
+        :style="{
+          textDecoration: effectObj.isPelleDisabled ? 'line-through' : null
+        }"
       >
-        {{ effectText }}
+        {{ effectObj.text }}
       </div>
     </div>
   </div>

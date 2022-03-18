@@ -143,7 +143,7 @@ GameDatabase.celestials.pelle.rifts = {
     key: "war",
     name: "War",
     drainResource: "EP",
-    baseEffect: x => `EP formula: log(x/${formatInt(308)}) ➜ log(x/${formatFloat(308 - x.toNumber(), 2)})`,
+    baseEffect: x => `EP formula: log(x)/${formatInt(308)} ➜ log(x)/${formatFloat(308 - x.toNumber(), 2)}`,
     additionalEffects: () => [PelleRifts.war.milestones[0], PelleRifts.war.milestones[1]],
     strike: () => PelleStrikes.ECs,
     percentage: totalFill => totalFill.plus(1).log10() ** 0.4 / 4000 ** 0.4,

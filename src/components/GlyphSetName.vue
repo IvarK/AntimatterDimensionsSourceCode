@@ -196,13 +196,18 @@ export default {
     update() {
       this.isColored = player.options.glyphTextColors;
     },
+    percentPerGlyph() {
+      // We need to max glyphset length here because Doomed alters the active glyph slots to 0, which breaks stuff
+      // in the calculation because we're dividing by 0
+      return 100 / Math.max(Glyphs.activeSlotCount, this.glyphSet.length);
+    },
     calculateGlyphPercent(name) {
       // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %
-      return (this.glyphSet.filter(i => i.type === name).length / Glyphs.activeSlotCount) * 100;
+      return this.glyphSet.filter(i => i.type === name).length * this.percentPerGlyph();
     },
     musicGlyphPercent() {
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
-      return (this.glyphSet.filter(i => i.symbol === "key266b").length / Glyphs.activeSlotCount) * 100;
+      return this.glyphSet.filter(i => i.symbol === "key266b").length * this.percentPerGlyph();
     },
     sortGlyphList() {
       // Get the percent for each type, then sort it based on type and then default order, to make it consistent

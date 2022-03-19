@@ -56,7 +56,7 @@ export default {
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     costUnit() {
-      return `${AntimatterDimension(this.tier - 2).shortDisplayName} Dimensions`;
+      return `${AntimatterDimension(this.tier - 2).shortDisplayName} D`;
     },
   },
   methods: {

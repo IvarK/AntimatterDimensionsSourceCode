@@ -6,7 +6,7 @@ export const GalaxyGenerator = {
   get generationCaps() {
     return PelleRifts.all
       .map(x => ({ rift: x.config.key, cap: x.config.galaxyGeneratorThreshold }))
-      .sort((a, b) => a.cap > b.cap);
+      .sort((a, b) => a.cap - b.cap);
   },
 
   get spentGalaxies() {

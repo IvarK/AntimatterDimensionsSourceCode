@@ -37,6 +37,7 @@ export default {
         { type: "time", perc: 0 },
         { type: "dilation", perc: 0 }
       ],
+      activeSlotCount: 0
     };
   },
   computed: {
@@ -160,6 +161,11 @@ export default {
       if (this.calculateGlyphPercent("effarig")) return GlyphTypes.effarig;
       return GlyphTypes[this.multipleGlyphList[0].type];
     },
+    percentPerGlyph() {
+      // We need to max glyphset length here because Doomed alters the active glyph slots to 0, which breaks stuff
+      // in the calculation because we're dividing by 0
+      return 100 / Math.max(this.activeSlotCount, this.glyphSet.length);
+    },
     textColor() {
       // If its cursed, we want its color to be #5151EC, because by default its black, which can be unreadable.
       // If we have greater than or equal to 60% of our Glyphs as Music Glyphs, give us the Music Glyph color.
@@ -195,19 +201,15 @@ export default {
   methods: {
     update() {
       this.isColored = player.options.glyphTextColors;
-    },
-    percentPerGlyph() {
-      // We need to max glyphset length here because Doomed alters the active glyph slots to 0, which breaks stuff
-      // in the calculation because we're dividing by 0
-      return 100 / Math.max(Glyphs.activeSlotCount, this.glyphSet.length);
+      this.activeSlotCount = Glyphs.activeSlotCount;
     },
     calculateGlyphPercent(name) {
       // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %
-      return this.glyphSet.filter(i => i.type === name).length * this.percentPerGlyph();
+      return this.glyphSet.filter(i => i.type === name).length * this.percentPerGlyph;
     },
     musicGlyphPercent() {
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
-      return this.glyphSet.filter(i => i.symbol === "key266b").length * this.percentPerGlyph();
+      return this.glyphSet.filter(i => i.symbol === "key266b").length * this.percentPerGlyph;
     },
     sortGlyphList() {
       // Get the percent for each type, then sort it based on type and then default order, to make it consistent

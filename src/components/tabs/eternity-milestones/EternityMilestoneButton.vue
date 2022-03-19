@@ -45,10 +45,10 @@ export default {
   },
   methods: {
     update() {
-      this.isReached = this.milestone.isReached && !this.isLocked;
+      this.isDoomed = Pelle.isDoomed;
       this.isLocked = this.isDoomed && !this.config.pelleObsolete?.() &&
         Pelle.disabledEternityMilestones.includes(this.config.eternities);
-      this.isDoomed = Pelle.isDoomed;
+      this.isReached = this.milestone.isReached && !this.isLocked;
     }
   }
 };
@@ -68,7 +68,7 @@ export default {
     >
       <span v-if="disabledInDoomed">This milestone has no effect while in Doomed</span>
       <span v-else>
-        {{ reward }} {{ isLocked ? "(locked behind a Pelle Upgrade)" : "" }}
+        {{ reward }} {{ isLocked ? "(Locked behind a Pelle Upgrade)" : "" }}
       </span>
     </button>
   </div>

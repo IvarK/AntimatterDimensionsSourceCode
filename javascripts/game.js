@@ -427,6 +427,10 @@ export function gameLoop(passDiff, options = {}) {
   // We want to allow for a speedrunner to be able to adjust their visual settings before actually starting the run,
   // which means that we need to effectively halt the game loop until the official start
   if (Speedrun.isPausedAtStart()) {
+    // I don't know WHY, but despite the fact that offline time is only incremented when speedrun isn't paused
+    // someone managed to break this and get an offline time % of 3200 by not buying an AD and going offline
+    // This is just a last failsafe in case the code decides to break for some reason
+    player.speedrun.offlineTimeUsed = 0;
     GameUI.update();
     return;
   }

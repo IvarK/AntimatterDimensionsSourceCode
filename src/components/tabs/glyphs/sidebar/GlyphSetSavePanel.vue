@@ -94,6 +94,9 @@ export default {
       this.names[event.target.id] = player.reality.glyphs.sets[event.target.id].name;
       this.refreshGlyphSets();
     },
+    setLengthValid(set) {
+      return set.length && set.length <= Glyphs.activeSlotCount;
+    }
   }
 };
 </script>
@@ -178,7 +181,7 @@ export default {
           </button>
           <button
             class="c-glyph-set-save-button"
-            :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !set.length}"
+            :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !setLengthValid(set)}"
             @click="loadGlyphSet(set)"
           >
             Load

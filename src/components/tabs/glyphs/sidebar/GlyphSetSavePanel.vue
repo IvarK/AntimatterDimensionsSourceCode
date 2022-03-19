@@ -66,7 +66,7 @@ export default {
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     loadGlyphSet(set) {
-      if (this.hasEquipped || !set.length) return;
+      if (this.hasEquipped || !setLengthValid(set)) return;
       for (let i = 0; i < set.length; i++) {
         const level = this.level;
         const strength = this.rarity;

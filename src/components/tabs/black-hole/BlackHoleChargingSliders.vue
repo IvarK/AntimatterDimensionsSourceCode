@@ -8,6 +8,7 @@ export default {
   },
   data() {
     return {
+      isAdjustableChargingUnlocked: false,
       isNegativeBHUnlocked: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
@@ -22,6 +23,7 @@ export default {
   },
   methods: {
     update() {
+      this.isAdjustableChargingUnlocked = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
@@ -56,7 +58,10 @@ export default {
 
 <template>
   <div>
-    <div class="l-black-hole-sliders">
+    <div
+      v-if="isAdjustableChargingUnlocked"
+      class="l-black-hole-sliders"
+    >
       Black Hole charging rate: {{ storedTimeRate }}
       <SliderComponent
         v-bind="sliderProps(false)"

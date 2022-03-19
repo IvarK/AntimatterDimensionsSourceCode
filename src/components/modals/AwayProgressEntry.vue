@@ -38,7 +38,7 @@ export default {
     },
     classObject() {
       return {
-        [this.item.classObject]: true,
+        [this.item.classObject]: !this.removed,
         "c-modal-away-progress__disabled": this.removed,
       };
     },

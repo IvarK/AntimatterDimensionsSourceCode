@@ -6850,6 +6850,8 @@ kbd {
 .o-v-milestone--unlocked {
   background: var(--color-v--base);
   border-color: #b89c2e;
+}
+.c-v-unlock-button--enabled {
   cursor: pointer;
 }
 

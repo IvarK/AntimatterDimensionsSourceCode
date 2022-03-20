@@ -34,6 +34,7 @@ export default {
       return {
         "o-v-milestone": true,
         "o-v-milestone--unlocked": this.canUnlockCelestial,
+        "c-v-unlock-button--enabled": this.canUnlockCelestial
       };
     },
     // If V is flipped, change the layout of the grid

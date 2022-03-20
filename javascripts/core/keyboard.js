@@ -69,7 +69,7 @@ export class GameKeyboard {
 GameKeyboard.spins = [];
 
 function executeKey(action) {
-  if (ui.$viewModel.modal.progressBar !== undefined) {
+  if (ui.$viewModel.modal.progressBar !== undefined || Pelle.endState >= 4.5) {
     return undefined;
   }
   return action();

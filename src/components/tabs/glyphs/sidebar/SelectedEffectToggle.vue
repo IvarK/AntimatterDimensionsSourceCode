@@ -14,7 +14,6 @@ export default {
   data() {
     return {
       isActive: AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id],
-      isExcluded: false,
       noExclude: false,
       effarigSettings: {
         effarigrm: false,
@@ -52,6 +51,9 @@ export default {
       }
       return "";
     },
+    isExcluded() {
+      return this.exclusionTooltip !== "";
+    }
   },
   methods: {
     update() {
@@ -59,7 +61,6 @@ export default {
       this.effarigSettings.effarigrm = effarigSettings.effarigrm;
       this.effarigSettings.effarigglyph = effarigSettings.effarigglyph;
       this.noExclude = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT);
-      this.isExcluded = this.exclusionTooltip !== "";
     },
     toggleSelection() {
       this.isActive = !AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id];
@@ -105,8 +106,10 @@ export default {
   color: black;
   font-size: 1rem;
   position: absolute;
-  top: -1px;
-  right: -1px;
+  /* -0.1rem = 1px, needed because CSS renders a black border between the check and the border of the selector
+  otherwise */
+  top: -0.1rem;
+  right: -0.1rem;
   border-radius: 0 0.4rem;
   padding: 0.2rem;
   text-shadow: none;

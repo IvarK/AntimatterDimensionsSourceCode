@@ -1,4 +1,6 @@
-Vue.component("failable-ec-text", {
+<script>
+export default {
+  name: "FailableEcText",
   data() {
     return {
       currentResource: new Decimal(0),
@@ -50,6 +52,13 @@ Vue.component("failable-ec-text", {
       }
     },
   },
-  template:
-  `<span> - <span :style="textStyle">{{ text }}</span></span>`
-});
+};
+</script>
+
+<template>
+  <span> - <span :style="textStyle">{{ text }}</span></span>
+</template>
+
+<style scoped>
+
+</style>

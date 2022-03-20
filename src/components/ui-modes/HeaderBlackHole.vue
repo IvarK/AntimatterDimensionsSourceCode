@@ -1,14 +1,14 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import BlackHoleStatusText from "@/components/BlackHoleStatusText";
+import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 
 export default {
-  name: "BlackHoleHeaderRow",
+  name: "HeaderBlackHole",
   components: {
     PrimaryButton,
     PrimaryToggleButton,
-    BlackHoleStatusText
+    HeaderBlackHoleStatusText
   },
   data() {
     return {
@@ -91,7 +91,7 @@ export default {
       v-html="'🌀:' + singleState"
     />
     <span v-else>
-      <BlackHoleStatusText
+      <HeaderBlackHoleStatusText
         v-for="(blackHole, i) in blackHoles"
         :key="'state' + i"
         :black-hole="blackHole"

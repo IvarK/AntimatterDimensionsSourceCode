@@ -1,11 +1,11 @@
-import "./old-ui/old-ui.js";
-import "./new-ui/new-ui.js";
 import "./save-timer.js";
 import "./speedrun-status.js";
 import "./help-me.js";
 import "./tt-shop.js";
-import "./new-ui/sidebar.js";
 import "./background-animations";
+import ClassicUi from "@/components/ui-formats/classic/ClassicUi";
+import ModernUi from "@/components/ui-formats/modern/ModernUi";
+import ModernSidebar from "@/components/ui-formats/modern/ModernSidebar";
 import TabComponents from "@/components/tabs";
 import PopupModal from "@/components/modals/PopupModal";
 import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
@@ -15,6 +15,9 @@ import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 Vue.component("game-ui", {
   components: {
     ...TabComponents,
+    ClassicUi,
+    ModernUi,
+    ModernSidebar,
     PopupModal,
     FadeToBlack,
     CreditsContainer,
@@ -25,7 +28,7 @@ Vue.component("game-ui", {
       return this.$viewModel;
     },
     uiLayout() {
-      return this.view.newUI ? "new-ui" : "old-ui";
+      return this.view.newUI ? "ModernUi" : "ClassicUi";
     },
     containerClass() {
       return this.view.newUI ? "new-ui" : "old-ui";
@@ -57,7 +60,7 @@ Vue.component("game-ui", {
       </div>
       <div id="notification-container" class="l-notification-container" />
       <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
-      <sidebar v-if="view.newUI" />
+      <ModernSidebar v-if="view.newUI" />
       <save-timer />
       <speedrun-status />
       <FadeToBlack />

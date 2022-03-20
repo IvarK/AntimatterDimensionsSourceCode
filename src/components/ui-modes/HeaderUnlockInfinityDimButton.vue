@@ -1,6 +1,8 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("game-header-new-dim-button", {
+export default {
+  name: "HeaderUnlockInfinityDimButton",
   components: {
     PrimaryButton
   },
@@ -26,17 +28,24 @@ Vue.component("game-header-new-dim-button", {
       InfinityDimensions.unlockNext(true);
     }
   },
-  template: `
-    <PrimaryButton
-      v-if="isVisible"
-      :enabled="isAffordable"
-      class="o-primary-btn--new-dim l-game-header__new-dim-btn"
-      @click="tryUnlockNextInfinityDimension"
-    >
-      Get {{ format(requirement) }} antimatter
-      <br>
-      to unlock a new
-      <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span>
-      <span v-else>type of Dimension</span>.
-    </PrimaryButton>`
-});
+};
+</script>
+
+<template>
+  <PrimaryButton
+    v-if="isVisible"
+    :enabled="isAffordable"
+    class="o-primary-btn--new-dim l-game-header__new-dim-btn"
+    @click="tryUnlockNextInfinityDimension"
+  >
+    Get {{ format(requirement) }} antimatter
+    <br>
+    to unlock a new
+    <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span>
+    <span v-else>type of Dimension</span>.
+  </PrimaryButton>
+</template>
+
+<style scoped>
+
+</style>

@@ -20,6 +20,7 @@ export default {
       animationTimer: 0,
       alchemyCap: 0,
       capFactor: 0,
+      createdRealityGlyph: false,
     };
   },
   computed: {
@@ -38,7 +39,13 @@ export default {
     },
     orbitClass() {
       return this.focusedResourceId === -1 ? undefined : "o-alchemy-orbit--unfocused";
-    }
+    },
+    realityGlyphCreationClass() {
+      return {
+        "o-primary-btn--subtab-option": true,
+        "o-primary-btn--subtab-option tutorial--glow": this.realityCreationVisible && !this.createdRealityGlyph
+      };
+    },
   },
   methods: {
     update() {
@@ -47,6 +54,7 @@ export default {
       this.animationTimer += 35;
       this.alchemyCap = Ra.alchemyResourceCap;
       this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
+      this.createdRealityGlyph = player.reality.glyphs.createdRealityGlyph;
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -176,7 +184,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         v-if="realityCreationVisible"
-        class="o-primary-btn--subtab-option"
+        :class="realityGlyphCreationClass"
         onclick="Modal.realityGlyph.show()"
       >
         View Reality Glyph creation

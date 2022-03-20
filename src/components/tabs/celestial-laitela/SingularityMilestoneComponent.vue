@@ -123,7 +123,7 @@ export default {
       :style="barStyle"
     />
     <span v-if="isDoomed">
-      This Singularity milestone has no effect while in Doomed
+      This Singularity Milestone has no effect while in Doomed
     </span>
     <span v-else>
       <b v-if="!isMaxed">

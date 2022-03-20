@@ -129,9 +129,9 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   static createAccessor() {
     const accessor = super.createAccessor();
     /** @returns {boolean} */
-    accessor.allBought = () => accessor.zeroIndexed.some(x => x.isBought);
+    accessor.allBought = () => accessor.zeroIndexed.every(x => x.isBought);
     /** @returns {boolean} */
-    accessor.allUnlimitedBulk = () => accessor.zeroIndexed.some(x => x.hasUnlimitedBulk);
+    accessor.allUnlimitedBulk = () => accessor.zeroIndexed.every(x => x.hasUnlimitedBulk);
     accessor.bulkCap = accessor.zeroIndexed[0].bulkCap;
     return accessor;
   }

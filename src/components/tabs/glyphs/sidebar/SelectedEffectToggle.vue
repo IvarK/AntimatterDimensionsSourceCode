@@ -90,20 +90,20 @@ export default {
     </span>
     <i
       v-if="isActive"
-      class="fas fa-check"
+      class="fas fa-check c-selected-effect-toggle-indicator--active"
       :style="{ 'background-color': color }"
     />
   </div>
 </template>
 
 <style scoped>
-.fa-check {
+.c-selected-effect-toggle-indicator--active {
   color: black;
   font-size: 1rem;
   position: absolute;
   top: -1px;
   right: -1px;
-  border-radius: 0 0.3rem;
+  border-radius: 0 0.4rem;
   padding: 0.2rem;
   text-shadow: none;
 }

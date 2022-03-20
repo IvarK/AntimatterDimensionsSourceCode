@@ -936,7 +936,7 @@ export const GlyphTypes = {
     id: "effarig",
     symbol: GLYPH_SYMBOLS.effarig,
     effects: findGlyphTypeEffects("effarig"),
-    color: "#ef1717",
+    color: "#e21717",
     unlockedFn: () => EffarigUnlock.reality.isUnlocked,
     alchemyResource: ALCHEMY_RESOURCE.EFFARIG,
     hasRarity: true

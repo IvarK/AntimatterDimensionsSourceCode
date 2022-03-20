@@ -131,7 +131,8 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     /** @returns {boolean} */
     accessor.allBought = () => accessor.zeroIndexed.every(x => x.isBought);
     /** @returns {boolean} */
-    accessor.allUnlimitedBulk = () => accessor.zeroIndexed.every(x => x.hasUnlimitedBulk);
+    // We can get away with this since allUnlimitedBulk is the same for all AD autos
+    accessor.allUnlimitedBulk = () => accessor.zeroIndexed[0].hasUnlimitedBulk;
     accessor.bulkCap = accessor.zeroIndexed[0].bulkCap;
     return accessor;
   }

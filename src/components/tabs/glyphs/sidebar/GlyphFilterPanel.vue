@@ -187,12 +187,15 @@ export default {
       <br>
       <div class="c-glyph-filter-mode-container">
         <div
-          v-for="index in modes"
-          v-if="isUnlocked(index)"
+          v-for="index in Object.values(modes).filter(idx => isUnlocked(idx))"
           :key="index"
           :class="optionClass(index)"
           @click="setMode(index)"
         >
+          <span
+            v-if="mode === index"
+            class="fas fa-check c-glyph-filter-mode-checked"
+          />
           <div class="c-glyph-sacrifice-options__option__tooltip">
             {{ filterMode(index) }}
           </div>
@@ -345,5 +348,13 @@ export default {
 </template>
 
 <style scoped>
-
+.c-glyph-filter-mode-checked {
+  background-color: var(--color-reality-light);
+  color: black;
+  font-size: 0.6rem;
+  position: absolute;
+  top: -1px;
+  right: 0;
+  border-bottom-left-radius: 0.3rem;
+}
 </style>

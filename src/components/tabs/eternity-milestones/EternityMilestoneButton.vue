@@ -46,7 +46,7 @@ export default {
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
-      this.isLocked = this.isDoomed && !(this.config.pelleObsolete?.() ?? true);
+      this.isLocked = this.isDoomed && this.config.pelleObsolete !== undefined;
       this.isReached = this.milestone.isReached && !this.isLocked;
     }
   }

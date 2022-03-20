@@ -87,6 +87,10 @@ export default {
         class="fas fa-exclamation"
       />
       {{ description }}
+      <i
+        v-if="isExcluded"
+        class="fas fa-exclamation"
+      />
     </span>
     <i
       v-if="isActive"

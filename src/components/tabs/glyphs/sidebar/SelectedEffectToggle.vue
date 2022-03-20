@@ -68,16 +68,15 @@ export default {
 
 <template>
   <div
+    v-tooltip="exclusionTooltip()"
     :class="classObject"
     @click="toggleSelection()"
   >
-    <span
-      v-if="isExcluded"
-      v-tooltip="exclusionTooltip()"
-    >
-      <del>{{ description }}</del>
-    </span>
-    <span v-else>
+    <span>
+      <i
+        v-if="exclusionTooltip()"
+        class="fas fa-exclamation"
+      />
       {{ description }}
     </span>
     <i

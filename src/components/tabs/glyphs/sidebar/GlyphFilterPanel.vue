@@ -192,9 +192,9 @@ export default {
           :class="optionClass(index)"
           @click="setMode(index)"
         >
-          <span
+          <i
             v-if="mode === index"
-            class="fas fa-check c-glyph-filter-mode-checked"
+            class="fas fa-check"
           />
           <div class="c-glyph-sacrifice-options__option__tooltip">
             {{ filterMode(index) }}
@@ -348,13 +348,13 @@ export default {
 </template>
 
 <style scoped>
-.c-glyph-filter-mode-checked {
+.fa-check {
   background-color: var(--color-reality-light);
   color: black;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   position: absolute;
   top: -1px;
-  right: 0;
-  border-bottom-left-radius: 0.3rem;
+  right: -1px;
+  border-radius: 0 0.3rem;
 }
 </style>

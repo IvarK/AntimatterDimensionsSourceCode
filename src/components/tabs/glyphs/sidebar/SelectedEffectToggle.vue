@@ -18,6 +18,9 @@ export default {
     };
   },
   computed: {
+    color() {
+      return GlyphTypes[this.glyphType].color;
+    },
     description() {
       return typeof this.effect.genericDesc === "function"
         ? this.effect.genericDesc()
@@ -77,9 +80,23 @@ export default {
     <span v-else>
       {{ description }}
     </span>
+    <i
+      v-if="isActive"
+      class="fas fa-check"
+      :style="{ 'background-color': color }"
+    />
   </div>
 </template>
 
 <style scoped>
-
+.fa-check {
+  color: black;
+  font-size: 1rem;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  border-radius: 0 0.3rem;
+  padding: 0.2rem;
+  text-shadow: none;
+}
 </style>

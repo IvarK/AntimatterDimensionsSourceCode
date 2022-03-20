@@ -6850,6 +6850,7 @@ kbd {
 .o-v-milestone--unlocked {
   background: var(--color-v--base);
   border-color: #b89c2e;
+  cursor: pointer;
 }
 
 .l-v-hexagon {

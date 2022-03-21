@@ -195,7 +195,7 @@ export default {
 
 .l-overflow-hidden {
   overflow: hidden;
-  border: 0.2rem solid transparent;
+  border: 0.17rem solid transparent;
   width: 32rem;
   height: 5rem;
   border-radius: 5px;

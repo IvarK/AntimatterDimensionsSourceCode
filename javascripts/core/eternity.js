@@ -189,6 +189,9 @@ export class EternityMilestoneState {
   }
 
   get isReached() {
+    if (Pelle.isDoomed && this.config.pelleObsolete) {
+      return this.config.pelleObsolete();
+    }
     return Currency.eternities.gte(this.config.eternities);
   }
 }

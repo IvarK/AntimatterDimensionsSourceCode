@@ -359,7 +359,7 @@ GameDatabase.reality.automator = {
         for example 71, 72, and 73 before the Dimension Split Dilation upgrade is purchased.<br>
         The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
         spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
-        <blockquote><b>antimatter, infinity, time, active, passive, idle</b></blockquote>
+        <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
         A variable name may be used in place of Time Study list, see <b>define</b>.`,
       examples: [
         "studies nowait 11,21,31",

@@ -125,7 +125,7 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [143, 142, 141, 125, 118, 117, 111, 103, 92, 91, 76, 74, 65];
+    return [143, 142, 141, 125, 118, 117, 111, 104, 103, 92, 91, 78, 76, 74, 65, 55, 54, 37];
   },
 
   get uselessInfinityUpgrades() {

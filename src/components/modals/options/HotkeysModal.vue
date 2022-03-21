@@ -36,7 +36,7 @@ export default {
       return shortcuts.map(x => x.name);
     },
     shortcutKeys() {
-      return shortcuts.map(x => x.keys);
+      return shortcuts.map(x => x.keys.map(key => this.format(key)));
     }
   },
   created() {
@@ -57,6 +57,14 @@ export default {
       const progress = PlayerProgress.current;
       this.timeStudyUnlocked = progress.isEternityUnlocked;
       this.glyphSacUnlocked = RealityUpgrade(19).isBought;
+    },
+    format(x) {
+      switch (x) {
+        case "mod":
+          return "ctrl/⌘";
+        default:
+          return x;
+      }
     }
   },
 };

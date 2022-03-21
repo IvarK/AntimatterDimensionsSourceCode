@@ -6852,6 +6852,10 @@ kbd {
   border-color: #b89c2e;
 }
 
+.c-v-unlock-button--enabled {
+  cursor: pointer;
+}
+
 .l-v-hexagon {
   position: absolute;
   top: 0;

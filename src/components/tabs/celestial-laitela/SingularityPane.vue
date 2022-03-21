@@ -24,23 +24,22 @@ export default {
   },
   computed: {
     singularityFormText() {
-      const formText = this.singularitiesGained === 1 ? "condense all Dark Energy into a Singularity"
-        : `condense all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2)}`;
+      const formText = this.singularitiesGained === 1 ? "all Dark Energy into a Singularity"
+        : `all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2)}`;
       if (this.canPerformSingularity) {
-        // Capitalize the string
-        return `${formText.capitalize()}`;
+        return `Condense ${formText}`;
       }
-      return `Reach ${format(this.singularityCap)} Dark Energy to ${formText}`;
+      return `Reach ${format(this.singularityCap)} Dark Energy to condense ${formText}`;
     },
     singularityWaitText() {
       let singularityTime = this.currentTimeToSingularity;
       if (this.canPerformSingularity) {
         singularityTime += this.extraTimeAfterSingularity;
         return this.isAutoEnabled
-          ? `(auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`
+          ? `(Auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`
           : "";
       }
-      return `(enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`;
+      return `(Enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`;
     },
     baseSingularityTime() {
       return TimeSpan.fromSeconds(this.baseTimeToSingularity).toStringShort();
@@ -86,7 +85,7 @@ export default {
       this.singularitiesGained = Singularity.singularitiesGained;
       this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
       this.perStepFactor = Singularity.gainPerCapIncrease;
-      this.isAutoEnabled = laitela.automation.singularity && SingularityMilestone.autoCondense.isUnlocked;
+      this.isAutoEnabled = player.auto.singularity.isActive && SingularityMilestone.autoCondense.isUnlocked;
       this.hasAutoSingularity = Number.isFinite(this.autoSingularityFactor);
       this.nextLowerStep = this.singularityCap * this.autoSingularityFactor / 10;
       this.willCondenseOnDecrease = this.isAutoEnabled && this.darkEnergy > this.nextLowerStep;

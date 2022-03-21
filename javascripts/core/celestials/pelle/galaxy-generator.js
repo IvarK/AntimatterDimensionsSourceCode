@@ -6,7 +6,7 @@ export const GalaxyGenerator = {
   get generationCaps() {
     return PelleRifts.all
       .map(x => ({ rift: x.config.key, cap: x.config.galaxyGeneratorThreshold }))
-      .sort((a, b) => a.cap > b.cap);
+      .sort((a, b) => a.cap - b.cap);
   },
 
   get spentGalaxies() {
@@ -22,7 +22,9 @@ export const GalaxyGenerator = {
   },
 
   get gainPerSecond() {
-    if (!PelleRifts.war.milestones[2].canBeApplied) return 0;
+    if (!Pelle.hasGalaxyGenerator) return 0;
+    // Pretend it's here to avoid softlocks and not because the bottom code returns 1 when you don't have this upg
+    if (!GalaxyGeneratorUpgrades.additive.canBeApplied) return 0.1;
     return DC.D1.timesEffectsOf(
       GalaxyGeneratorUpgrades.additive,
       GalaxyGeneratorUpgrades.multiplicative,

@@ -3,6 +3,7 @@ import { BlackHoleAnimation } from "./black-hole-animation.js";
 import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
 import BlackHoleStateRow from "./BlackHoleStateRow";
 import BlackHoleChargingSliders from "./BlackHoleChargingSliders";
+import BlackHoleUnlockButton from "./BlackHoleUnlockButton";
 
 export default {
   name: "BlackHoleTab",
@@ -10,6 +11,7 @@ export default {
     BlackHoleUpgradeRow,
     BlackHoleStateRow,
     BlackHoleChargingSliders,
+    BlackHoleUnlockButton
   },
   data() {
     return {
@@ -141,7 +143,7 @@ export default {
       The physics of this Reality do not allow the existence of Black Holes.
     </div>
     <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
-      <black-hole-unlock-button @blackholeunlock="startAnimation" />
+      <BlackHoleUnlockButton @blackholeunlock="startAnimation" />
       The Black Hole makes the entire game run significantly faster for a short period of time.
       <br>
       Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.

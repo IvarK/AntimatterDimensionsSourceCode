@@ -18,7 +18,7 @@ Autobuyer.singularity = new class SingularityAutobuyerState extends AutobuyerSta
   }
 
   tick() {
-    if (Currency.darkEnergy.value <= Singularity.cap * SingularityMilestone.autoCondense.effectValue) {
+    if (Currency.darkEnergy.value >= Singularity.cap * SingularityMilestone.autoCondense.effectValue) {
       Singularity.perform();
     }
   }

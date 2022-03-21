@@ -57,7 +57,7 @@ export default {
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     costUnit() {
-      return `${AntimatterDimension(this.tier - 2).shortDisplayName} Dimensions`;
+      return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
     },
   },
   methods: {
@@ -147,8 +147,8 @@ export default {
       <span v-if="isCapped">Capped</span>
       <template v-else>
         <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
-        <span v-if="isCostsAD">{{ costUnit }} </span>
-        <span v-else> AM </span>
+        <span v-if="isCostsAD">{{ costUnit }}</span>
+        <span v-else>AM</span>
       </template>
     </PrimaryButton>
     <PrimaryButton
@@ -163,8 +163,8 @@ export default {
         Until {{ formatInt(10) }},
         <span v-if="showCostTitle(until10Cost)">Cost: </span>
         {{ format(until10Cost) }}
-        <span v-if="isCostsAD">{{ costUnit }} </span>
-        <span v-else> AM </span>
+        <span v-if="isCostsAD">{{ costUnit }}</span>
+        <span v-else>AM</span>
       </template>
     </PrimaryButton>
   </div>

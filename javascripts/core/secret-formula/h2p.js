@@ -1466,7 +1466,7 @@ the number of Singularities gained from resetting at the cap by <i>more than</i>
 higher caps worth more if you are willing to wait.
 <br>
 <br>
-The purpose of Singularities is to unlock Singularity milestones, which act similarly to Eternity milestones. Unlocking
+The purpose of Singularities is to unlock Singularity Milestones, which act similarly to Eternity Milestones. Unlocking
 these milestones simply requires you to reach the total number of Singularities specified; Singularities are not spent.
 There are three types of milestones - one-time milestones, milestones repeatable a limited number of times, and
 milestones which can be repeated indefinitely.

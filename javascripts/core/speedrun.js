@@ -31,7 +31,9 @@ export const Speedrun = {
     // We make a few assumptions on settings which are likely to be changed for all speedrunners
     for (const key of Object.keys(player.options.confirmations)) player.options.confirmations[key] = false;
     player.options.confirmations.glyphSelection = true;
-    for (const key of Object.keys(player.options.animations)) player.options.animations[key] = false;
+    for (const key of Object.keys(player.options.animations)) {
+      if (typeof player.options.animations[key] === "boolean") player.options.animations[key] = false;
+    }
 
     // "Fake News" Achievement, given for free to partially mitigate promoting weird strategies at the beginning of runs
     Achievement(22).unlock();

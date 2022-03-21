@@ -78,7 +78,7 @@ export default {
     >
       <GlyphSetPreview
         :show-name="false"
-        :text="'Upcoming glyph selection:'"
+        :text="'Upcoming Glyph selection:'"
         :glyphs="glyphs"
         :ignore-modified-level="true"
         :show-sacrifice="canSacrifice"

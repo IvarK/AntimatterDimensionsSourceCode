@@ -584,7 +584,7 @@ button:focus {
 #browser-warning {
   height: 100%;
   width: 100%;
-  z-index: 999;
+  z-index: 9999;
   align-items: center;
   justify-content: center;
   background-color: black;

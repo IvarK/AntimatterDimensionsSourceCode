@@ -63,6 +63,7 @@ export default {
     <div class="c-pelle-panel-title">
       <i
         :class="collapseIcon"
+        class="c-collapse-icon-clickable"
         @click="toggleCollapse"
       />
       Galaxy Generator
@@ -194,5 +195,9 @@ export default {
 .big-text {
   font-size: 3rem;
   text-shadow: 2px 2px 2px black;
+}
+
+.c-collapse-icon-clickable {
+  cursor: pointer;
 }
 </style>

@@ -57,6 +57,7 @@ export default {
     <div class="c-pelle-panel-title">
       <i
         :class="collapseIcon"
+        class="c-collapse-icon-clickable"
         @click="toggleCollapse"
       />
       Pelle Upgrades
@@ -148,5 +149,9 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   max-width: 110rem;
+}
+
+.c-collapse-icon-clickable {
+  cursor: pointer;
 }
 </style>

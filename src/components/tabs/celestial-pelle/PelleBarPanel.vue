@@ -39,6 +39,7 @@ export default {
     <div class="c-pelle-panel-title">
       <i
         :class="collapseIcon"
+        class="c-collapse-icon-clickable"
         @click="toggleCollapse"
       />
       Pelle Strikes and Rifts
@@ -99,5 +100,9 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   width: 27rem;
+}
+
+.c-collapse-icon-clickable {
+  cursor: pointer;
 }
 </style>

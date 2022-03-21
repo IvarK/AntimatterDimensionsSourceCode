@@ -2774,7 +2774,7 @@ screen and (max-width: 480px) {
 
 .s-base--dark .o-achievement__tooltip {
   border: 0.1rem solid var(--color-text);
-  background: #111111;
+  background-color: #111111;
 }
 
 .s-base--dark .o-achievement__tooltip:after {

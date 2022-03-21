@@ -97,7 +97,9 @@ GameStorage.migrations = {
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
       }
       player.options.newUI = false;
-      Modal.uiChoice.show();
+      // For god knows why sometimes the ui choice modal fails to show up, this is just to prevent whatever might be
+      // causing that. It's reasonably indistinguishable from having no delay so the side effects aren't that bad
+      requestAnimationFrame(() => Modal.uiChoice.show());
 
       GameStorage.migrations.normalizeTimespans(player);
       GameStorage.migrations.convertAutobuyerMode(player);

@@ -7754,7 +7754,7 @@ kbd {
 }
 
 .o-alchemy-node--locked {
-  opacity: 0.1;
+  opacity: 0.25;
   z-index: 4;
 }
 .o-alchemy-node--base {

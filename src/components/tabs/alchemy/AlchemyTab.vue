@@ -43,7 +43,7 @@ export default {
     realityGlyphCreationClass() {
       return {
         "o-primary-btn--subtab-option": true,
-        "o-primary-btn--subtab-option tutorial--glow": !this.createdRealityGlyph
+        "tutorial--glow": !this.createdRealityGlyph
       };
     },
   },

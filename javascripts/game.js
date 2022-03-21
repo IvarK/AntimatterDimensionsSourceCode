@@ -1090,7 +1090,7 @@ export function setShiftKey(isDown) {
 }
 
 export function setHoldingR(x) {
-  Replicanti.galaxies.isPlayerHoldingR = x;qqqqqqq
+  Replicanti.galaxies.isPlayerHoldingR = x;
 }
 
 export function browserCheck() {

@@ -16,6 +16,7 @@ export default {
       isActive: false,
       isMaxed: false,
       percentage: 0,
+      reducedTo: 0,
       hasEffectiveFill: false,
       selectedHoverMilestone: this.rift.milestones[0],
       // Converts 1 rem to number of px
@@ -46,10 +47,11 @@ export default {
   methods: {
     update() {
       const rift = this.rift;
-      this.effects = this.rift.effects;
+      this.effects = rift.effects;
       this.isActive = rift.isActive;
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.percentage = rift.percentage;
+      this.reducedTo = rift.reducedTo;
       this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
     hasMilestone(ms) {
@@ -122,10 +124,10 @@ export default {
         }"
       />
       <div
-        v-if="rift.reducedTo < 1"
+        v-if="reducedTo < 1"
         class="o-pelle-rift-bar-reducedto"
         :style="{
-          width: `${Math.clampMax(100 - rift.reducedTo * 100, 100)}%`,
+          width: `${Math.clampMax(100 - reducedTo * 100, 100)}%`,
         }"
       />
       <!-- This bar overlay adds the shadow within the bar so the ugly edges don't show -->
@@ -142,7 +144,7 @@ export default {
         class="o-pelle-rift-bar-milestone-line"
         :class="{
           'o-pelle-rift-bar-milestone-line--unlocked': hasMilestone(milestone),
-          'o-pelle-rift-bar-milestone-line--disabled': rift.reducedTo < milestone.requirement
+          'o-pelle-rift-bar-milestone-line--disabled': reducedTo < milestone.requirement
         }"
         :style="{
           left: `calc(${milestone.requirement * 100}% - 0.25rem)`

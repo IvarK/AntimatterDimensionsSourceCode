@@ -1,2 +1,3 @@
 public/**/*.js
 src/components/SliderComponent.vue
+javascripts/supportedBrowser.js

@@ -1061,8 +1061,9 @@ export function simulateTime(seconds, real, fast) {
 }
 
 window.onload = function() {
-  GameUI.initialized = true;
-  ui.view.initialized = browserCheck();
+  const supportedBrowser = browserCheck();
+  GameUI.initialized = supportedBrowser;
+  ui.view.initialized = supportedBrowser;
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();
@@ -1070,7 +1071,7 @@ window.onload = function() {
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";
   }, 500);
-  if (!ui.view.initialized) {
+  if (!supportedBrowser) {
     GameIntervals.stop();
     document.getElementById("loading").style.display = "none";
     document.getElementById("browser-warning").style.display = "flex";

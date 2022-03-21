@@ -222,6 +222,7 @@ export const GameStorage = {
     checkPerkValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
+    GameEnd.additionalEnd = 0;
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;

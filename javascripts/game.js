@@ -3,6 +3,7 @@ import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { supportedBrowsers } from "./supportedBrowsers";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1061,7 +1062,7 @@ export function simulateTime(seconds, real, fast) {
 
 window.onload = function() {
   GameUI.initialized = true;
-  ui.view.initialized = true;
+  ui.view.initialized = browserCheck();
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();
@@ -1069,6 +1070,11 @@ window.onload = function() {
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";
   }, 500);
+  if (!ui.view.initialized) {
+    GameIntervals.stop();
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("browser-warning").style.display = "flex";
+  }
 };
 
 window.onfocus = function() {
@@ -1084,7 +1090,11 @@ export function setShiftKey(isDown) {
 }
 
 export function setHoldingR(x) {
-  Replicanti.galaxies.isPlayerHoldingR = x;
+  Replicanti.galaxies.isPlayerHoldingR = x;qqqqqqq
+}
+
+export function browserCheck() {
+  return supportedBrowsers.test(navigator.userAgent);
 }
 
 export function init() {

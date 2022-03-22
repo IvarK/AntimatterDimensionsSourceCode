@@ -199,7 +199,7 @@ GameDatabase.speedrunMilestones = [
     key: "completeFullGame",
     name: "Game Completed!",
     description: "Complete the entire game",
-    checkRequirement: () => true,
-    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
+    checkRequirement: () => Achievement(188).isUnlocked,
+    checkEvent: GAME_EVENT.ACHIEVEMENT_UNLOCKED,
   },
 ];

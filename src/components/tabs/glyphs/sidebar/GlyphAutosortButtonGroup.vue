@@ -59,7 +59,7 @@ export default {
       >
         ?
       </div>
-      Automatic Glyph Arrangement:
+      Auto Glyph Arrangement:
     </div>
     <ButtonCycle
       v-model="autoSort"

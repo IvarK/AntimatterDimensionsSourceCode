@@ -16,14 +16,24 @@ export default {
 </script>
 
 <template>
-  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
-    <GlyphSortButtonGroup />
-    <br>
-    <GlyphProtectedRowButtonGroup />
-    <br>
-    <GlyphAutosortButtonGroup />
-    <br>
-    <GlyphCleanButtonGroup />
+  <div
+    class="
+      l-glyph-sacrifice-options c-glyph-sacrifice-options
+      l-glyph-sidebar-panel-size l-glyph-inventory-management
+      "
+  >
+    <div class="o-glyph-inventory-management-group">
+      <GlyphSortButtonGroup />
+    </div>
+    <div class="o-glyph-inventory-management-group">
+      <GlyphProtectedRowButtonGroup />
+    </div>
+    <div class="o-glyph-inventory-management-group">
+      <GlyphAutosortButtonGroup />
+    </div>
+    <div class="o-glyph-inventory-management-group">
+      <GlyphCleanButtonGroup />
+    </div>
   </div>
 </template>
 

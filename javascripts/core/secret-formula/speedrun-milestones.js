@@ -47,7 +47,7 @@ GameDatabase.speedrunMilestones = [
     name: "Break Infinity",
     description: "Break Infinity for the first time",
     checkRequirement: () => player.break,
-    checkEverokennt: GAME_EVENT.BREAK_INFINITY,
+    checkEvent: GAME_EVENT.BREAK_INFINITY,
   },
   {
     id: 7,

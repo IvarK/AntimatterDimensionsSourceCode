@@ -19,7 +19,7 @@ import Mousetrap from "mousetrap";
 
 export const shortcuts = [
   {
-    name: "Toggle Autobuyers",
+    name: "Enable/Disable Autobuyers",
     keys: ["a"],
     type: "bindHotkey",
     function: () => keyboardToggleAutobuyers(),
@@ -158,7 +158,7 @@ export const shortcuts = [
     },
     visible: true
   }, {
-    name: "Open the shortcut list",
+    name: "Open \"Hotkey List\" pop-up",
     keys: ["?"],
     type: "bind",
     function: () => {
@@ -167,7 +167,7 @@ export const shortcuts = [
     },
     visible: true
   }, {
-    name: "Open \"How to Play\" pop-up",
+    name: "Open \"How To Play\" pop-up",
     keys: ["h"],
     type: "bind",
     function: () => {

@@ -20,7 +20,7 @@ GameDatabase.celestials.pelle.quotes.INITIAL = [
   "Of course, the great [False-Deity-Destroyer] doesn't remember this.",
   "All those [Conflicts-Battles-Ends] that you hide every time."
 ];
- 
+
 GameDatabase.celestials.pelle.quotes.ARM = [
   "You probably caught on earlier this time.",
   "The imaginary machines, your own creations.",

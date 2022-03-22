@@ -21,7 +21,7 @@ export default {
   computed: {
     autobuyer: () => Autobuyer.galaxy,
     limitGalaxiesSlot() {
-      return this.isBuyMaxUnlocked ? "toggleSlot" : "intervalSlot";
+      return this.hasMaxedInterval && !this.isBuyMaxUnlocked ? "intervalSlot" : "toggleSlot";
     }
   },
   watch: {

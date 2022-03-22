@@ -28,13 +28,12 @@ export default {
       };
     },
     usePriority() {
-      return TimeStudy(201).isBought || this.dimensionPath.length === 2 ||
-        DilationUpgrade.timeStudySplit.isBought || PlayerProgress.realityUnlocked();
+      return TimeStudy.preferredPaths.dimension.usePriority;
     }
   },
   created() {
-    this.dimensionPath = [...TimeStudy.preferredPaths.dimensionPath.path];
-    this.pacePath = TimeStudy.preferredPaths.pacePath.path;
+    this.dimensionPath = [...TimeStudy.preferredPaths.dimension.path];
+    this.pacePath = TimeStudy.preferredPaths.pace.path;
   },
   methods: {
     isPreferred(name) {
@@ -49,8 +48,8 @@ export default {
       if (this.paceOptions[name]) this.pacePath = this.paceOptions[name];
     },
     confirmPrefs() {
-      TimeStudy.preferredPaths.dimensionPath = this.dimensionPath;
-      TimeStudy.preferredPaths.pacePath = this.pacePath;
+      TimeStudy.preferredPaths.dimension.path = this.dimensionPath;
+      TimeStudy.preferredPaths.pace.path = this.pacePath;
     },
     classList(name) {
       const pref = this.isPreferred(name);

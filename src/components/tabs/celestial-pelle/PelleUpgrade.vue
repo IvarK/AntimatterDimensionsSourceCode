@@ -143,7 +143,7 @@ export default {
   padding: 2rem;
   color: var(--color-text);
   background: var(--color-prestige--accent);
-  border: 1px solid var(--color-pelle-secondary);
+  border: 0.1rem solid var(--color-pelle-secondary);
   border-radius: .5rem;
   font-family: Typewriter;
   cursor: pointer;

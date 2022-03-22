@@ -137,7 +137,7 @@ and c-remnant-factors both didn't work. If anyone can fix this it would be great
 
 .s-base--metro .c-remnant-factors {
   border-width: 0.1rem;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .c-remnant-factors-text {

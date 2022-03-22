@@ -40,7 +40,7 @@ export default {
   background: var(--color-pelle--base);
   color: black;
   font-size: 1.3rem;
-  border: 2px solid black;
+  border: 0.2rem solid black;
   border-radius: 0.5rem;
   font-weight: bold;
   min-height: 3.8rem;

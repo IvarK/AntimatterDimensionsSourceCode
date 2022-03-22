@@ -182,7 +182,7 @@ export default {
   height: 5rem;
   border: 0.2rem solid var(--color-pelle-secondary);
   width: 32rem;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   position: relative;
   margin-bottom: 1rem;
   display: flex;
@@ -203,7 +203,7 @@ export default {
   border: 0.17rem solid transparent;
   width: 32rem;
   height: 5rem;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   position: absolute;
   top: -0.2rem;
   left: -0.2rem;

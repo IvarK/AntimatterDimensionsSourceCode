@@ -123,7 +123,7 @@ export default {
   padding: 1rem;
   margin: 1rem;
   border: 2px solid var(--color-pelle--base);
-  border-radius: 5px;
+  border-radius: 0.5rem;
   user-select: none;
 }
 
@@ -137,7 +137,7 @@ export default {
   background: var(--color-prestige--accent);
   color: var(--color-text);
   border: 1px solid var(--color-pelle--base);
-  border-radius: 5px;
+  border-radius: 0.5rem;
   padding: 1rem;
   font-family: Typewriter;
   margin: 0 1rem;

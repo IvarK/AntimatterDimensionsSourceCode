@@ -56,7 +56,7 @@ export default {
   display: block;
   font-family: Typewriter;
   background: var(--color-prestige--accent);
-  border: 1px solid var(--color-pelle--base);
+  border: 0.1rem solid var(--color-pelle--base);
   color: var(--color-text);
   border-radius: 0.5rem;
 }

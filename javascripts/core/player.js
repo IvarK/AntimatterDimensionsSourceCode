@@ -425,6 +425,7 @@ window.player = {
         glyphs: [],
       }),
       protectedRows: 2,
+      createdRealityGlyph: false,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,

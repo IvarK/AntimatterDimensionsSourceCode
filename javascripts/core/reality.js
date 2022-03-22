@@ -577,7 +577,7 @@ export function finishProcessReality(realityProps) {
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) player.challenge.eternity.unlocked = 0;
-  player.etercreq = 0;
+  player.challenge.eternity.requirementBits = 0;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;

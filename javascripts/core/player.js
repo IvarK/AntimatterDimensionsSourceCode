@@ -46,6 +46,7 @@ window.player = {
     eternity: {
       current: 0,
       unlocked: 0,
+      requirementBits: 0,
     }
   },
   infinity: {
@@ -378,7 +379,6 @@ window.player = {
     }),
   },
   eternityChalls: {},
-  etercreq: 0,
   respec: false,
   eterc8ids: 50,
   eterc8repl: 40,

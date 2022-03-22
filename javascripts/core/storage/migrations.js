@@ -147,6 +147,7 @@ GameStorage.migrations = {
       GameStorage.migrations.deleteFloatingTextOption(player);
       GameStorage.migrations.refactorDoubleIPRebuyable(player);
       GameStorage.migrations.convertNews(player);
+      GameStorage.migrations.etercreqConversion(player);
 
       kong.migratePurchases();
     }
@@ -899,6 +900,12 @@ GameStorage.migrations = {
   infMultNameConversion(player) {
     player.IPMultPurchases = player.infMult;
     delete player.infMult;
+  },
+
+  etercreqConversion(player) {
+    // eslint-disable-next-line no-bitwise
+    if (player.etercreq) player.challenge.eternity.requirementBits |= 1 << player.etercreq;
+    delete player.etercreq;
   },
 
   prePatch(saveData) {

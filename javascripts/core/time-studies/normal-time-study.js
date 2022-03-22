@@ -116,25 +116,34 @@ TimeStudy.boughtNormalTS = function() {
 };
 
 TimeStudy.preferredPaths = {
-  get dimensionPath() {
-    return {
-      path: player.timestudy.preferredPaths[0],
-      studies: player.timestudy.preferredPaths[0].reduce((acc, path) =>
-        acc.concat(NormalTimeStudies.paths[path]), [])
-    };
+  dimension: {
+    get path() {
+      return player.timestudy.preferredPaths[0];
+    },
+    set path(value) {
+      const options = [1, 2, 3];
+      player.timestudy.preferredPaths[0] = value.filter(id => options.includes(id));
+    },
+    get studies() {
+      return player.timestudy.preferredPaths[0].flatMap(path => NormalTimeStudies.paths[path]);
+    },
+    get usePriority() {
+      return this.path.length > 1 ||
+        TimeStudy(201).isBought ||
+        DilationUpgrade.timeStudySplit.isBought ||
+        PlayerProgress.realityUnlocked();
+    }
   },
-  set dimensionPath(value) {
-    const options = [1, 2, 3];
-    player.timestudy.preferredPaths[0] = value.filter(id => options.includes(id));
-  },
-  get pacePath() {
-    return {
-      path: player.timestudy.preferredPaths[1],
-      studies: NormalTimeStudies.paths[player.timestudy.preferredPaths[1]]
-    };
-  },
-  set pacePath(value) {
-    const options = [4, 5, 6];
-    player.timestudy.preferredPaths[1] = options.includes(value) ? value : 0;
+  pace: {
+    get path() {
+      return player.timestudy.preferredPaths[1];
+    },
+    set path(value) {
+      const options = [4, 5, 6];
+      player.timestudy.preferredPaths[1] = options.includes(value) ? value : 0;
+    },
+    get studies() {
+      return NormalTimeStudies.paths[player.timestudy.preferredPaths[1]];
+    }
   }
 };

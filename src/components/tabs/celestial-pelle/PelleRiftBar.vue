@@ -21,16 +21,18 @@ export default {
       selectedHoverMilestone: this.rift.milestones[0],
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
-      effects: []
+      effects: [],
+      isDark: false
     };
   },
   computed: {
     tooltipContentStyle() {
       const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
+      const baseColour = this.isDark ? "#111111" : "var(--color-base)";
       return {
         width: "18rem",
         border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : "var(--color-base)",
+        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColour,
         color: hasMilestone ? "black" : "var(--color-text)",
         fontSize: "1.1rem",
         fontWeight: "bold",
@@ -43,6 +45,9 @@ export default {
         borderTop: "0.55rem solid var(--color-pelle--base)"
       };
     }
+  },
+  created() {
+    this.isDark = Themes.find(player.options.theme).isDark();
   },
   methods: {
     update() {

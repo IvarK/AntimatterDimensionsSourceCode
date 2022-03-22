@@ -70,20 +70,23 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     }
   }
 
-  tick() {
-    let proc = false;
+  get willEternity() {
+    // We Eternity asap if we're in an Eternity Challenge and can't reach more completions.
+    if (EternityChallenge.current?.gainedCompletionStatus.hasMoreCompletions === false) return true;
+
     switch (this.mode) {
       case AUTO_ETERNITY_MODE.AMOUNT:
-        proc = EternityChallenge.isRunning || gainedEternityPoints().gte(this.amount);
-        break;
+        return gainedEternityPoints().gte(this.amount);
       case AUTO_ETERNITY_MODE.TIME:
-        proc = Time.thisEternityRealTime.totalSeconds > this.time;
-        break;
+        return Time.thisEternityRealTime.totalSeconds > this.time;
       case AUTO_ETERNITY_MODE.X_HIGHEST:
-        proc = gainedEternityPoints().gte(player.records.thisReality.maxEP.times(this.xHighest));
-        break;
+      default:
+        return gainedEternityPoints().gte(player.records.thisReality.maxEP.times(this.xHighest));
     }
-    if (proc) eternity(false, true);
+  }
+
+  tick() {
+    if (this.willEternity) eternity(false, true);
   }
 
   reset() {

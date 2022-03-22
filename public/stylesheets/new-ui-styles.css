@@ -898,6 +898,10 @@ body.t-s9 {
   transition-delay: 0s;
 }
 
+.l-information {
+  top: 7rem;
+}
+
 .s-base--metro .l-help-me {
   border-radius: 0;
 }

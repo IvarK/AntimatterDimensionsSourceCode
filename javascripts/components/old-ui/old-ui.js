@@ -2,7 +2,6 @@ import "./old-ui-subtab-bar.js";
 import "./old-ui-tab-bar.js";
 import "./header/game-header.js";
 import NewsTicker from "@/components/NewsTicker";
-import FooterLinks from "@/components/FooterLinks";
 import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
 import RealityMachinesHeader from "@/components/RealityMachinesHeader";
@@ -13,7 +12,6 @@ Vue.component("old-ui", {
       template: `<button class="o-tab-btn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
     },
     NewsTicker,
-    FooterLinks,
     InfinityPointsHeader,
     EternityPointsHeader,
     RealityMachinesHeader
@@ -60,7 +58,6 @@ Vue.component("old-ui", {
         <div class="l-old-ui-page l-old-ui__page">
           <slot />
         </div>
-        <FooterLinks class="l-old-ui__footer" />
       </template>
     </div>`
 });

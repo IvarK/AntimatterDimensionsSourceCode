@@ -214,8 +214,9 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .o-glyph-inventory-management-group {
-  width: 200px;
+  width: 20rem;
   margin-bottom: 1rem;
 }
 

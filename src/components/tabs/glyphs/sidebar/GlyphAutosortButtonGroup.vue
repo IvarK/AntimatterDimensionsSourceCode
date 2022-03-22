@@ -51,7 +51,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="o-glyph-inventory-management-group">
     <div class="l-glyph-sacrifice-options__header">
       <div
         class="o-questionmark"

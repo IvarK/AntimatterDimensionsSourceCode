@@ -269,7 +269,7 @@ export default {
   z-index: 1;
 }
 
-@keyframes pulse {
+@keyframes a-pelle-bar-overfill-pulse {
   /* #ed143d66 is the base pelle colour except transparent. */
   0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
   50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
@@ -277,12 +277,12 @@ export default {
 }
 
 .c-pelle-rift-bar-overfill-container {
-  animation: pulse 1s infinite linear;
+  animation: a-pelle-bar-overfill-pulse 1s infinite linear;
 }
 
 
 /* ACTIVE RIFT FILLING STYLES */
-@keyframes sweep {
+@keyframes a-pelle-bar-filling-sweep {
   0% { left: 0; width: 0; }
   10% { left: 0; width: 2rem; }
   90% { left: calc(100% - 2rem); width: 2rem;  }
@@ -295,7 +295,7 @@ export default {
   background: var(--color-pelle--base);
   z-index: 1;
   opacity: 0.3;
-  animation: sweep infinite 2s linear;
+  animation: a-pelle-bar-filling-sweep infinite 2s linear;
 }
 
 /* PERCENTAGE STYLES */
@@ -313,11 +313,11 @@ export default {
   height: 100%;
 }
 
-@keyframes flash {
+@keyframes a-pelle-bar-unfinished-milestone-flash {
   0% { opacity: 1 }
-  25% { opacity: 1 }
+  20% { opacity: 1 }
   50% { opacity: 0.3 }
-  75% { opacity: 1 }
+  80% { opacity: 1 }
   100% { opacity: 1 }
 }
 
@@ -327,7 +327,7 @@ export default {
   height: 100%;
   background: var(--color-pelle--base);
   z-index: 1;
-  animation: flash infinite 1s linear;
+  animation: a-pelle-bar-unfinished-milestone-flash infinite 1s linear;
 }
 
 .o-pelle-rift-bar-milestone-line--unlocked {

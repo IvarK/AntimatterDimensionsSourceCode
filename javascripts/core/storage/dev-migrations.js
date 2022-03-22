@@ -1292,6 +1292,7 @@ GameStorage.devMigrations = {
       delete player.celestials.laitela.darkAutobuyerTimer;
       delete player.celestials.laitela.autoAnnihilationSetting;
     },
+    GameStorage.migrations.etercreqConversion,
   ],
 
   patch(player) {

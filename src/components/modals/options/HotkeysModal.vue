@@ -103,7 +103,7 @@ export default {
     <div class="l-modal-hotkeys__column l-modal-hotkeys__column--right">
       <div style="height: 3rem;" />
       <div class="l-modal-hotkeys-row">
-        <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Modifier key</span>
+        <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Modifier Key</span>
         <kbd>shift</kbd>
       </div>
       <span class="c-modal-hotkeys__shift-description">
@@ -120,7 +120,7 @@ export default {
       </div>
       <span class="c-modal-hotkeys__shift-description">
         Alt is a modifier key that, when pressed in conjunction with any key that has a corresponding autobuyer,
-        will toggle said autobuyer. This works for all autobuyers in the Autobuyer tab, but only if they are active.
+        will toggle said autobuyer.
         <br>
         When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension
         and Tickspeed Autobuyers instead.

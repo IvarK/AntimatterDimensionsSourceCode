@@ -112,7 +112,7 @@ export default {
   position: relative;
 }
 
-.fa-expand-arrows-alt, .fa-compress-arrows-alt {
+.c-collapse-icon-clickable {
   position: absolute;
   left: 1.5rem;
   top: 50%;
@@ -125,8 +125,6 @@ export default {
   border: 2px solid var(--color-pelle--base);
   border-radius: 5px;
   user-select: none;
-  background-color: #1a1a1a;
-  color: #888888;
 }
 
 .l-pelle-content-container {

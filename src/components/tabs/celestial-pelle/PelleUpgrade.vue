@@ -108,7 +108,7 @@ export default {
   <button
     class="c-pelle-upgrade"
     :class="{
-      'c-pelle-upgrade--unavailable': !canBuy,
+      'c-pelle-upgrade--unavailable': !canBuy && !(isBought || isCapped),
       'c-pelle-upgrade--bought': isBought || isCapped,
       'c-pelle-upgrade--faded': faded,
       'c-pelle-upgrade--galaxyGenerator': galaxyGenerator
@@ -174,7 +174,8 @@ export default {
 }
 
 .c-pelle-upgrade--unavailable {
-  background: #565656;
+  background: #5f5f5f;
+  color: black;
   cursor: default;
   box-shadow: none;
 }
@@ -240,6 +241,10 @@ export default {
 
 .s-base--metro .c-pelle-upgrade {
   border-radius: 0;
+}
+
+.s-base--metro .c-pelle-upgrade--unavailable {
+  background-color: #9e9e9e;
 }
 </style>
 

@@ -89,7 +89,7 @@
   border: 0.2rem solid;
   transition-duration: 0.2s;
   border-radius: 0.5rem;
-  width: 3rem;
+  width: 4.6rem;
   height: 3rem;
 }
 
@@ -385,6 +385,7 @@
   border-style: solid;
   margin-bottom: -0.1rem;
   transition: color 0.2s;
+  position: relative;
 }
 
 .s-base--metro .c-glyph-auto-pick-options__option {

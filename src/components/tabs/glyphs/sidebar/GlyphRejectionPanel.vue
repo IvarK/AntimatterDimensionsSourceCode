@@ -21,6 +21,12 @@ export default {
         "l-glyph-auto-pick-options__option"
       ];
     },
+    optionVIf(idx) {
+      return idx === this.mode;
+    },
+    optionVIfStyle() {
+      return "fas fa-check";
+    },
     update() {
       this.mode = AutoGlyphProcessor.sacMode;
     },
@@ -44,22 +50,43 @@ export default {
       @click="setMode(modes.SACRIFICE)"
     >
       Always sacrifice
+      <i
+        v-if="optionVIf(modes.SACRIFICE)"
+        :class="optionVIfStyle()"
+      />
     </div>
     <div
       :class="optionClass(modes.REFINE)"
       @click="setMode(modes.REFINE)"
     >
       Always refine
+      <i
+        v-if="optionVIf(modes.REFINE)"
+        :class="optionVIfStyle()"
+      />
     </div>
     <div
       :class="optionClass(modes.REFINE_TO_CAP)"
       @click="setMode(modes.REFINE_TO_CAP)"
     >
       Refine to cap, then sacrifice
+      <i
+        v-if="optionVIf(modes.REFINE_TO_CAP)"
+        :class="optionVIfStyle()"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-
+  .fa-check {
+    background-color: var(--color-reality-light);
+    color: black;
+    font-size: 1rem;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    border-radius: 0 0.3rem;
+    padding: 0.1rem;
+  }
 </style>

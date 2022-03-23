@@ -566,7 +566,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.v.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "⌬",
-        symbolOffset: "0.25",
+        symbolOffset: "2",
         fill: "#ffe066",
         position: Positions.vUnlockAchievement,
         ring: {
@@ -992,7 +992,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.ra.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "\uf185",
-        symbolOffset: "0.25",
+        symbolOffset: "2",
         fill: "#9063de",
         position: Positions.raReality,
         ring: {

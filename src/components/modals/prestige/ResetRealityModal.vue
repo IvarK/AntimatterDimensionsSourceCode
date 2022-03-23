@@ -29,7 +29,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="resetReality"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to reset your {{ resetTerm }}
     </template>

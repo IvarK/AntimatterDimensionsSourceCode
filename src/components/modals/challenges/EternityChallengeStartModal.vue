@@ -55,15 +55,16 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="challenges"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ entranceLabel }}
     </template>
     <div class="c-modal-message__text">
       {{ message }}
-    </div>
-    <br>
-    <div class="c-modal-message__text">
+      <br><br>
       {{ condition }}
     </div>
     <div

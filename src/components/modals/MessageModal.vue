@@ -18,6 +18,9 @@ export default {
       return this.$viewModel.modal.current;
     },
   },
+  created() {
+    this.on$(GAME_EVENT.ENTER_PRESSED, this.handleClick);
+  },
   methods: {
     update() {
       this.message = this.modal.message;

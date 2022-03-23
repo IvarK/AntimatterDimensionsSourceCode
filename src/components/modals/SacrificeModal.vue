@@ -46,7 +46,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="sacrifice"
+    @confirm="handleYesClick"
+  >
     <template #header>
       Dimensional Sacrifice
     </template>

@@ -108,7 +108,7 @@ export function simulatedRealityCount(advancePartSimCounters) {
  */
 export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
-  if (player.options.confirmations.reality || player.options.confirmations.glyphSelection) {
+  if (player.options.confirmations.glyphSelection) {
     Modal.reality.show();
     return;
   }

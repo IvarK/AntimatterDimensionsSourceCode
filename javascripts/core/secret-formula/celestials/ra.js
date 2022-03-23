@@ -2,6 +2,7 @@ import { GameDatabase } from "../game-database.js";
 
 GameDatabase.celestials.ra = {
   teresa: {
+    id: "teresa",
     name: "Teresa",
     color: "#8596ea",
     chunkGain: "Eternity Points",
@@ -13,6 +14,7 @@ GameDatabase.celestials.ra = {
       : 1)
   },
   effarig: {
+    id: "effarig",
     name: "Effarig",
     color: "#ea8585",
     chunkGain: "Relic Shards gained",
@@ -24,6 +26,7 @@ GameDatabase.celestials.ra = {
       : 1)
   },
   enslaved: {
+    id: "enslaved",
     name: "Enslaved",
     color: "#f1aa7f",
     chunkGain: "Time Shards",
@@ -35,6 +38,7 @@ GameDatabase.celestials.ra = {
       : 1)
   },
   v: {
+    id: "v",
     name: "V",
     color: "#ead584",
     chunkGain: "Infinity Power",

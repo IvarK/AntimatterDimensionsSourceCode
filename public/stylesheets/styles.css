@@ -9127,39 +9127,6 @@ input.o-automator-block-input {
   top: 3.1rem;
 }
 
-.l-information-modal--text {
-  font-size: 1.6rem;
-  text-align: left;
-  margin: 0.5rem;
-}
-
-.l-information-modal {
-  display: flex;
-  flex-direction: column;
-  margin: 0.5rem;
-  width: calc(100vw - 50vh);
-  height: calc(100vh - 50vh);
-}
-
-.c-information-modal--title {
-  font-size: 2.5rem;
-  text-align: center;
-}
-
-.l-information-modal--tab-list {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  margin: 0.5rem;
-  flex: 1 0.8 40rem;
-}
-
-.l-information-modal--search-tab {
-  display: flex;
-  flex-direction: column;
-  width: 20rem;
-}
-
 .l-hide-modal-tab-container {
   margin: 0.5rem;
 }

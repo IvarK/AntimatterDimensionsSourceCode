@@ -39,4 +39,3 @@ import "./script-templates.js";
 import "./speedrun-milestones.js";
 
 import "./h2p.js";
-import "./information.js";

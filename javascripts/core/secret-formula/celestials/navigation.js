@@ -1300,7 +1300,7 @@ GameDatabase.celestials.navigation = (function() {
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "ᛝ",
         symbolScale: 1.6,
-        symbolOffset: "0.1",
+        symbolOffset: "0.3",
         fill: "white",
         position: Positions.laitelaFirstCenter,
         ring: {

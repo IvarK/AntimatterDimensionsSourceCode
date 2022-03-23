@@ -48,13 +48,19 @@ export default {
         <a
           href="changelog.html"
           target="_blank"
-        ><i class="fa-solid fa-arrows-rotate" /></a>
+        ><i class="fa-solid fa-file-lines" /></a>
       </span>
       <span ach-tooltip="Credits">
         <a
           href="https://example.com"
           target="_blank"
-        ><i class="fa-solid fa-users-line" /></a>
+        ><i class="fa-solid fa-users" /></a>
+      </span>
+      <span ach-tooltip="GitHub repository">
+        <a
+          href="https://github.com/IvarK/IvarK.github.io"
+          target="_blank"
+        ><i class="fa-brands fa-github" /></a>
       </span>
     </div>
   </div>
@@ -67,6 +73,14 @@ export default {
   align-items: center;
   font-size: 7.5rem;
   color: white;
+}
+
+span {
+  transition: all .2s ease-in-out;
+}
+
+span:hover {
+  transform: scale(1.1);
 }
 
 [ach-tooltip]:before {

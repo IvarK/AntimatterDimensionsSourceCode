@@ -1525,7 +1525,7 @@ reaching Infinity the first time within a Doomed Reality. More Strikes eventuall
 Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
 Each Pelle Strike also unlocks a Rift bar.
 <br>
-Rift bars can be filled by setting the button underneath them from "Idle" to "Filling". When active Rifts consume
+Rift bars can be filled by clicking them to toggle them between "Idle" and "Filling". When active, Rifts consume
 ${formatInt(3)}% of a Rift specific resource per second. Each Rift offers a Rift specific effect which are based
 on the total amount filled.
 ${PelleStrikes.eternity.hasStrike

@@ -5491,6 +5491,10 @@ screen and (max-width: 480px) {
   0 0 0.3rem #e67919;
 }
 
+.c-modal-away-progress__reality-shards {
+  color: var(--color-pelle--base);
+}
+
 .c-modal-away-progress__disabled b,
 .c-modal-away-progress__disabled {
   text-decoration: line-through;

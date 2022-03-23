@@ -26,41 +26,47 @@ export default {
       information about progressing.
     </div>
     <div class="socials">
-      <span ach-tooltip="Antimatter Dimensions Discord Server">
+      <span ach-tooltip="GitHub repository">
         <a
-          href="https://discord.gg/ST9NaXa"
+          href="https://github.com/IvarK/IvarK.github.io"
           target="_blank"
-        ><i class="fa-brands fa-discord" /></a>
-      </span>
-      <span ach-tooltip="r/AntimatterDimensions">
-        <a
-          href="https://www.reddit.com/r/antimatterdimensions"
-          target="_blank"
-        ><i class="fa-brands fa-reddit-alien" /></a>
-      </span>
-      <span ach-tooltip="Antimatter Dimensions on Google Play">
-        <a
-          href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
-          target="_blank"
-        ><i class="fa-brands fa-google-play" /></a>
+          class="socials--icon"
+        ><i class="fa-brands fa-github" /></a>
       </span>
       <span ach-tooltip="Game changelog">
         <a
           href="changelog.html"
           target="_blank"
+          class="socials--icon"
         ><i class="fa-solid fa-file-lines" /></a>
+      </span>
+      <span ach-tooltip="r/AntimatterDimensions">
+        <a
+          href="https://www.reddit.com/r/antimatterdimensions"
+          target="_blank"
+          class="socials--icon"
+        ><i class="fa-brands fa-reddit-alien" /></a>
+      </span>
+      <span ach-tooltip="Antimatter Dimensions Discord Server">
+        <a
+          href="https://discord.gg/ST9NaXa"
+          target="_blank"
+          class="socials--icon"
+        ><i class="fa-brands fa-discord" /></a>
+      </span>
+      <span ach-tooltip="Antimatter Dimensions on Google Play">
+        <a
+          href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
+          target="_blank"
+          class="socials--icon"
+        ><i class="fa-brands fa-google-play" /></a>
       </span>
       <span ach-tooltip="Credits">
         <a
           href="https://example.com"
           target="_blank"
+          class="socials--icon"
         ><i class="fa-solid fa-users" /></a>
-      </span>
-      <span ach-tooltip="GitHub repository">
-        <a
-          href="https://github.com/IvarK/IvarK.github.io"
-          target="_blank"
-        ><i class="fa-brands fa-github" /></a>
       </span>
     </div>
   </div>
@@ -72,7 +78,10 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   font-size: 7.5rem;
-  color: white;
+}
+
+.socials--icon {
+  color: var(--color-text)
 }
 
 span {
@@ -102,9 +111,5 @@ span:hover {
   padding: 0.5rem;
   text-align: left;
   font-size: 2rem;
-}
-
-a {
-  color: white;
 }
 </style>

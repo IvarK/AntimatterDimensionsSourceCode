@@ -5442,6 +5442,13 @@ screen and (max-width: 480px) {
 .c-modal-away-progress__tachyon-galaxies,
 .c-modal-away-progress__dilated-time {
   color: var(--color-dilation);
+  filter: brightness(0.8)
+}
+
+.t-dark .c-modal-away-progress__tachyon-particles,
+.t-dark .c-modal-away-progress__tachyon-galaxies,
+.t-dark .c-modal-away-progress__dilated-time {
+  filter: brightness(1)
 }
 
 .c-modal-away-progress__realities,
@@ -5485,6 +5492,20 @@ screen and (max-width: 480px) {
 
 .c-modal-away-progress__v-memories {
   color: var(--color-ra-pet-v);
+}
+
+.c-modal-away-progress__teresa-memories,
+.c-modal-away-progress__effarig-memories,
+.c-modal-away-progress__enslaved-memories,
+.c-modal-away-progress__v-memories {
+  filter: brightness(0.8);
+}
+
+.t-dark .c-modal-away-progress__teresa-memories,
+.t-dark .c-modal-away-progress__effarig-memories,
+.t-dark .c-modal-away-progress__enslaved-memories,
+.t-dark .c-modal-away-progress__v-memories {
+  filter: brightness(1)
 }
 
 .c-modal-away-progress__black-hole b,

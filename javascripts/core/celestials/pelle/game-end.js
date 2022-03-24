@@ -7,10 +7,10 @@ export const GameEnd = {
 
   _additionalEnd: 0,
   get additionalEnd() {
-    return player.gameEnd.isGameEnd || this.removeAdditionalEnd ? this._additionalEnd : 0;
+    return (player.gameEnd.isGameEnd || this.removeAdditionalEnd) ? this._additionalEnd : 0;
   },
   set additionalEnd(x) {
-    this._additionalEnd = player.gameEnd.isGameEnd || this.removeAdditionalEnd ? x : 0;
+    this._additionalEnd = (player.gameEnd.isGameEnd || this.removeAdditionalEnd) ? x : 0;
   },
 
   removeAdditionalEnd: false,

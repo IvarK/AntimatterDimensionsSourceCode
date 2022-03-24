@@ -158,7 +158,7 @@ export default {
           :none-text="noSet"
         />
       </div>
-      <div class="c-glyph-single-set-save-flexbox" style="width: 16rem">
+      <div class="c-glyph-single-set-save-flexbox">
         <div ach-tooltip="Set a custom name (up to 20 characters)">
           <input
             :id="id"
@@ -200,5 +200,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-glyph-single-set-save-flexbox {
+  width: 16rem;
+}
 </style>

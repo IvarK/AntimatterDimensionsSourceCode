@@ -1,4 +1,4 @@
-import "./tt-shop.js";
+<script>
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
@@ -14,7 +14,8 @@ import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import HelpMe from "@/components/HelpMe";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
-Vue.component("game-ui", {
+export default {
+  name: "GameUIComponent",
   components: {
     ...TabComponents,
     ClassicUi,
@@ -49,30 +50,54 @@ Vue.component("game-ui", {
       return `stylesheets/theme-${this.view.theme}.css`;
     }
   },
-  template: `
+};
+</script>
+
+<template>
+  <div
+    v-if="view.initialized"
+    id="ui-container"
+    :class="containerClass"
+    style="display: flex; justify-content: center;"
+  >
     <div
-      v-if="view.initialized"
-      id="ui-container"
-      :class="containerClass"
-      style="display: flex; justify-content: center;"
+      id="ui"
+      class="c-game-ui"
     >
-      <div id="ui" class="c-game-ui">
-        <component :is="uiLayout">
-          <component :is="page" />
-        </component>
-        <PopupModal v-if="view.modal.current" :modal="view.modal.current" />
-        <ModalProgressBar v-if="view.modal.progressBar" />
-        <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
-        <HelpMe />
-        <BackgroundAnimations />
-      </div>
-      <div id="notification-container" class="l-notification-container" />
-      <TimeTheoremShop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
-      <ModernSidebar v-if="view.newUI" />
-      <SaveTimer />
-      <SpeedrunStatus />
-      <FadeToBlack />
-      <CreditsContainer />
-      <NewGame />
-    </div>`
-});
+      <component :is="uiLayout">
+        <component :is="page" />
+      </component>
+      <PopupModal
+        v-if="view.modal.current"
+        :modal="view.modal.current"
+      />
+      <ModalProgressBar v-if="view.modal.progressBar" />
+      <link
+        v-if="view.theme !== 'Normal'"
+        type="text/css"
+        rel="stylesheet"
+        :href="themeCss"
+      >
+      <HelpMe />
+      <BackgroundAnimations />
+    </div>
+    <div
+      id="notification-container"
+      class="l-notification-container"
+    />
+    <TimeTheoremShop
+      v-if="view.subtab === 'studies'"
+      class="l-time-studies-tab__tt-shop"
+    />
+    <ModernSidebar v-if="view.newUI" />
+    <SaveTimer />
+    <SpeedrunStatus />
+    <FadeToBlack />
+    <CreditsContainer />
+    <NewGame />
+  </div>
+</template>
+
+<style scoped>
+
+</style>

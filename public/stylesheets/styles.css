@@ -407,15 +407,6 @@ button:focus {
   border: 0.1rem solid #3AACD6;
 }
 
-.ttshop-container {
-  padding: 0 0.5rem;
-  min-width: 60rem;
-  max-width: 80rem;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.25s ease-out;
-}
-
 .ttshop-minimize-btn {
   display: flex;
   justify-content: center;

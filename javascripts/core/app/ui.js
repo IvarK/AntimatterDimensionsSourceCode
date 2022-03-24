@@ -3,6 +3,7 @@ import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
 import { useLongPress, useRepeatingClick } from "./longpress";
 import VueGtag from "vue-gtag";
+import GameUIComponent from "@/components/GameUI";
 
 Vue.mixin({
   computed: {
@@ -186,6 +187,9 @@ Vue.use(VueGtag, {
 export const ui = new Vue({
   el: "#ui",
   data: state,
+  components: {
+    GameUIComponent
+  },
   computed: {
     notation() {
       return Notations.find(this.notationName);
@@ -229,5 +233,5 @@ export const ui = new Vue({
       }
     },
   },
-  template: "<game-ui />"
+  template: "<GameUIComponent />"
 });

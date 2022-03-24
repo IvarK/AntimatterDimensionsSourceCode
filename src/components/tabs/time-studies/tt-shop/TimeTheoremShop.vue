@@ -312,4 +312,13 @@ export default {
   padding-right: 1rem;
   min-width: 8rem;
 }
+
+.ttshop-container {
+  padding: 0 0.5rem;
+  min-width: 60rem;
+  max-width: 80rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease-out;
+}
 </style>

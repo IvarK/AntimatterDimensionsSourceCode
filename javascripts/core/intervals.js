@@ -51,7 +51,7 @@ export const GameIntervals = (function() {
       }
     },
     gameLoopUpdateRate: 25,
-    gameLoop: interval(() => gameLoop(), () => GameUI.gameLoopUpdateRate),
+    gameLoop: interval(() => gameLoop(), () => GameIntervals.gameLoopUpdateRate),
     uiUpdate: interval(() => {
       PerformanceStats.start("Frame Time");
       GameUI.update();

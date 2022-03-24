@@ -112,5 +112,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-sacrificed-glyphs__type-symbol {
+  margin-right: 0.7rem;
+}
 </style>

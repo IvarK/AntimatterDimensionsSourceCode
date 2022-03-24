@@ -29,6 +29,7 @@ import "./celestials/pelle-upgrades.js";
 import "./celestials/strikes.js";
 import "./celestials/rifts.js";
 import "./celestials/galaxy-generator.js";
+import "./celestials/ra.js";
 import "./celestials/pelle-quotes.js";
 import "./celestials/enslaved.js";
 export * from "./celestials/v.js";

@@ -47,7 +47,7 @@ GameDatabase.speedrunMilestones = [
     name: "Break Infinity",
     description: "Break Infinity for the first time",
     checkRequirement: () => player.break,
-    checkEverokennt: GAME_EVENT.BREAK_INFINITY,
+    checkEvent: GAME_EVENT.BREAK_INFINITY,
   },
   {
     id: 7,
@@ -199,7 +199,7 @@ GameDatabase.speedrunMilestones = [
     key: "completeFullGame",
     name: "Game Completed!",
     description: "Complete the entire game",
-    checkRequirement: () => true,
-    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
+    checkRequirement: () => Achievement(188).isUnlocked,
+    checkEvent: GAME_EVENT.ACHIEVEMENT_UNLOCKED,
   },
 ];

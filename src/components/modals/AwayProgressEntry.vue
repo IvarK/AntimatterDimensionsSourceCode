@@ -85,7 +85,12 @@ export default {
       if (!number) return "";
       // Surrounding text is formatted differently to specify that this is log10
       if (this.isVeryLarge) return formatInt(Math.floor(number.log10()));
-      if (Decimal.lt(number, 1e9)) return formatInt(number);
+      if (Decimal.lt(number, 1e9)) {
+        // Both numbers and decimals get passed in here so this is needed
+        // Not a fan of this solution but whatever
+        const numberAsDecimal = new Decimal(number);
+        return formatInt(numberAsDecimal.floor());
+      }
       return format(number, 2, 2);
     },
     hideEntry() {

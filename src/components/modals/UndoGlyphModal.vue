@@ -23,6 +23,7 @@ export default {
       Modal.message.show("Glyph Undo can only undo with a Reality!");
     },
     handleYesClick() {
+      this.emitClose();
       Glyphs.undo();
     },
   },
@@ -30,7 +31,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="glyphUndo"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to undo equipping a Glyph
     </template>

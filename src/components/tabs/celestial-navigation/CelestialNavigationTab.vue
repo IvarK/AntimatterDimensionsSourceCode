@@ -94,7 +94,7 @@ export default {
       fit: false,
       zoomScaleSensitivity: 0.3,
       minZoom: 0.64,
-      maxZoom: 3,
+      maxZoom: 1.5,
       beforePan: panLimiter,
     });
     if (CelestialNavigationViewportCache.pan) this.panZoom.pan(CelestialNavigationViewportCache.pan);

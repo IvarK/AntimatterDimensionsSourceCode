@@ -34,6 +34,7 @@ export default {
       return {
         "o-v-milestone": true,
         "o-v-milestone--unlocked": this.canUnlockCelestial,
+        "c-v-unlock-button--enabled": this.canUnlockCelestial
       };
     },
     // If V is flipped, change the layout of the grid
@@ -198,7 +199,7 @@ export default {
         Cursed Glyphs can be created in the Effarig tab<span v-if="!isDoomed">, and the
           Black Hole can now be used to slow down time</span>.
         <br>
-        Each Hard V-Achievement counts as two V-achievements and will award {{ formatInt(2) }} Space Theorems
+        Each Hard V-Achievement counts as two V-Achievements and will award {{ formatInt(2) }} Space Theorems
         instead of {{ formatInt(1) }}.
         <br>
         Goal reduction is significantly more expensive for Hard V-Achievements.

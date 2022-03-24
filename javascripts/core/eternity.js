@@ -34,7 +34,8 @@ function giveEternityRewards(auto) {
       AutomatorData.lastECCompletionCount = completionCount;
       if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
-    player.etercreq = 0;
+    // eslint-disable-next-line no-bitwise
+    player.challenge.eternity.requirementBits &= ~(1 << challenge.id);
     respecTimeStudies(auto);
   }
 
@@ -189,6 +190,9 @@ export class EternityMilestoneState {
   }
 
   get isReached() {
+    if (Pelle.isDoomed && this.config.pelleObsolete) {
+      return this.config.pelleObsolete();
+    }
     return Currency.eternities.gte(this.config.eternities);
   }
 }

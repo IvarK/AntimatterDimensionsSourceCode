@@ -102,3 +102,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.tickspeed-max-btn {
+  margin-left: 0.5rem;
+}
+</style>

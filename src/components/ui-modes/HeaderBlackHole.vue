@@ -1,14 +1,14 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import BlackHoleStatusText from "@/components/BlackHoleStatusText";
+import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 
 export default {
-  name: "BlackHoleHeaderRow",
+  name: "HeaderBlackHole",
   components: {
     PrimaryButton,
     PrimaryToggleButton,
-    BlackHoleStatusText
+    HeaderBlackHoleStatusText
   },
   data() {
     return {
@@ -67,14 +67,14 @@ export default {
 <template>
   <span v-if="hasBlackHoles">
     <PrimaryButton
-      class="o-primary-btn--buy-max"
+      class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
       onclick="BlackHoles.togglePause()"
     >
       {{ pauseText }}
     </PrimaryButton>
     <span v-if="canCharge">
       <PrimaryButton
-        class="o-primary-btn--buy-max"
+        class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
         onclick="Enslaved.toggleStoreBlackHole()"
       >
         <span v-if="isCharging">
@@ -85,11 +85,13 @@ export default {
         </span>
       </PrimaryButton>
     </span>
-    <span v-if="displaySingle">
-      🌀:<span v-html="singleState" />
-    </span>
+    <span
+      v-if="displaySingle"
+      class="c-black-hole-status-text"
+      v-html="'🌀:' + singleState"
+    />
     <span v-else>
-      <BlackHoleStatusText
+      <HeaderBlackHoleStatusText
         v-for="(blackHole, i) in blackHoles"
         :key="'state' + i"
         :black-hole="blackHole"
@@ -97,7 +99,7 @@ export default {
     </span>
     <span v-if="canCharge">
       <PrimaryButton
-        class="o-enslaved-release-header-button"
+        class="o-enslaved-release-header-button c-primary-btn--black-hole-header"
         onclick="Enslaved.useStoredTime(false)"
       >
         Discharge: {{ timeDisplayShort(storedTime) }}
@@ -106,7 +108,7 @@ export default {
     <span v-if="canAutoRelease">
       <PrimaryToggleButton
         v-model="isAutoReleasing"
-        class="o-primary-btn--buy-max"
+        class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
         label="Pulse:"
       />
     </span>
@@ -114,5 +116,11 @@ export default {
 </template>
 
 <style scoped>
-
+.c-primary-btn--black-hole-header {
+  margin: 0.2rem;
+  vertical-align: middle;
+}
+.c-black-hole-status-text {
+  margin: 0 0.8rem;
+}
 </style>

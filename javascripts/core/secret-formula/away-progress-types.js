@@ -123,5 +123,9 @@ GameDatabase.awayProgressTypes = [
     name: "singularities",
     reference: ["celestials", "laitela", "singularities"],
     isUnlocked: () => Laitela.isUnlocked,
+  }, {
+    name: "realityShards",
+    reference: ["celestials", "pelle", "realityShards"],
+    isUnlocked: () => Pelle.isDoomed,
   },
 ];

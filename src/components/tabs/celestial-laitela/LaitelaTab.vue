@@ -103,14 +103,13 @@ export default {
     <div class="o-laitela-matter-amount">
       Your maximum Dark Matter ever is
       <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span><span v-if="!isDoomed">,
-        giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum
-      </span>.
+        giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum</span>.
     </div>
     <h2
       v-if="!singularitiesUnlocked"
       class="c-laitela-singularity-container"
     >
-      Unlock singularities in {{ singularityWaitTime }}.
+      Unlock Singularities in {{ singularityWaitTime }}.
       ({{ format(darkEnergy, 2, 2) }}/{{ format(singularityCap, 2) }} Dark Energy)
     </h2>
     <SingularityPane v-if="singularitiesUnlocked" />

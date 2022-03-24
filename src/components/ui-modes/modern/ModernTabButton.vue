@@ -1,7 +1,15 @@
-Vue.component("tab-button", {
+<script>
+export default {
+  name: "ModernTabButton",
   props: {
-    tab: Object,
-    tabPosition: Number
+    tab: {
+      type: Object,
+      required: true
+    },
+    tabPosition: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
@@ -39,29 +47,52 @@ Vue.component("tab-button", {
       }
     }
   },
-  template: `
-    <div v-if="!isHidden && isAvailable" :class="[classObject, tab.config.UIClass]">
-      <div
-        class="l-tab-btn-inner"
-        @click="tab.show(true)"
+};
+</script>
+
+<template>
+  <div
+    v-if="!isHidden && isAvailable"
+    :class="[classObject, tab.config.UIClass]"
+  >
+    <div
+      class="l-tab-btn-inner"
+      @click="tab.show(true)"
+    >
+      {{ tabName }} <i
+        v-if="hasNotification"
+        class="fas fa-exclamation"
+      />
+    </div>
+    <div
+      v-if="showSubtabs"
+      class="subtabs"
+    >
+      <span
+        v-for="(subtab, index) in tab.subtabs"
+        :key="index"
       >
-        {{ tabName }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
-      </div>
-      <div class="subtabs" v-if="showSubtabs">
         <div
-          v-for="(subtab, index) in tab.subtabs"
           v-if="subtabVisibilities[index]"
           class="o-tab-btn o-tab-btn--subtab"
           :class="tab.config.UIClass"
           @click="subtab.show(true)"
         >
           <span v-html="subtab.symbol">
-            <i v-if="subtab.hasNotification" class="fas fa-exclamation"></i>
+            <i
+              v-if="subtab.hasNotification"
+              class="fas fa-exclamation"
+            />
           </span>
           <div class="o-subtab__tooltip">
             {{ subtab.name }}
           </div>
         </div>
-      </div>
-    </div>`
-});
+      </span>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

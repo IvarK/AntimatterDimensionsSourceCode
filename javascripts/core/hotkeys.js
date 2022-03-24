@@ -157,7 +157,7 @@ export const shortcuts = [
     },
     visible: true
   }, {
-    name: "Open the shortcut list",
+    name: "Open Hotkey List Modal",
     keys: ["?"],
     type: "bind",
     function: () => {
@@ -166,7 +166,7 @@ export const shortcuts = [
     },
     visible: true
   }, {
-    name: "Open \"How to Play\" pop-up",
+    name: "Open How To Play Modal",
     keys: ["h"],
     type: "bind",
     function: () => {
@@ -193,7 +193,7 @@ export const shortcuts = [
     },
     visible: true
   }, {
-    name: "Close pop-up or open options",
+    name: "Close Modal or open Options",
     keys: ["esc"],
     type: "bind",
     function: () => {

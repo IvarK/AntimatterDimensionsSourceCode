@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     entry() {
-      return ConfirmationTypes[this.index];
+      return ConfirmationTypes.index[this.index];
     },
     name() {
       return `${this.entry.name}:`;

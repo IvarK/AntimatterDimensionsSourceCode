@@ -34,10 +34,6 @@ GameDatabase.confirmationTypes = [
     option: "dilation",
     isUnlocked: () => PlayerProgress.realityUnlocked() || !Currency.tachyonParticles.eq(0),
   }, {
-    name: "Reality",
-    option: "reality",
-    isUnlocked: () => PlayerProgress.realityUnlocked(),
-  }, {
     name: "Reset Reality",
     option: "resetReality",
     isUnlocked: () => PlayerProgress.realityUnlocked(),

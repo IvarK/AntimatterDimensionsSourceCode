@@ -49,8 +49,8 @@ export default {
     },
     isFirstIrrelevant(idx) {
       const matches = this.matchingTabs;
-      const searchObjThis = matches[idx],
-        searchObjOther = matches[idx - 1];
+      const searchObjThis = matches[idx];
+      const searchObjOther = matches[idx - 1];
 
       return idx > 0 &&
         searchObjThis.relevance >= this.topThreshold &&

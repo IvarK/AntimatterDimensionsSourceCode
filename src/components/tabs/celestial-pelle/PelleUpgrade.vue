@@ -1,12 +1,14 @@
 <script>
-import CostDisplay from "../../CostDisplay";
-import DescriptionDisplay from "../../DescriptionDisplay";
+import CostDisplay from "@/components/CostDisplay";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip.vue";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 export default {
   name: "PelleUpgrade",
   components: {
     DescriptionDisplay,
-    CostDisplay
+    CostDisplay,
+    CustomizeableTooltip
   },
   props: {
     upgrade: {
@@ -55,7 +57,6 @@ export default {
     timeEstimate() {
       if (this.canBuy ||
         this.isBought ||
-        Pelle.realityShardGainPerSecond.eq(0) ||
         this.isCapped ||
         this.galaxyGenerator
       ) return null;
@@ -64,7 +65,6 @@ export default {
     shouldEstimateImprovement() {
       return !(this.canBuy ||
         this.isBought ||
-        Pelle.realityShardGainPerSecond.eq(0) ||
         this.isCapped ||
         this.galaxyGenerator
       );
@@ -113,17 +113,29 @@ export default {
       'c-pelle-upgrade--faded': faded,
       'c-pelle-upgrade--galaxyGenerator': galaxyGenerator
     }"
-    :ach-tooltip="timeEstimate"
     @click="!faded && upgrade.purchase()"
     @mouseover="hovering = true"
     @mouseleave="hovering = false"
   >
-    <div
-      :style="estimateImprovementTooltipStyle"
-      class="c-pelle-upgrade-time-tooltip"
+    <CustomizeableTooltip
+      :show="showImprovedEstimate && shouldEstimateImprovement"
+      left="50%"
+      top="0"
     >
-      {{ estimateImprovement }}
-    </div>
+      <template #tooltipContent>
+        {{ estimateImprovement }}
+      </template>
+    </CustomizeableTooltip>
+    <CustomizeableTooltip
+      left="50%"
+      top="0"
+      class="l-fill-container"
+      content-class="l-fill-container"
+    >
+      <template #tooltipContent>
+        {{ timeEstimate }}
+      </template>
+    </CustomizeableTooltip>
     <DescriptionDisplay :config="config" />
     <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">
@@ -196,41 +208,6 @@ export default {
 .c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
   box-shadow: 1px 1px 5px var(--color-pelle-secondary);
   transition-duration: 0.3s;
-}
-
-.c-pelle-upgrade-time-tooltip {
-  position: absolute;
-  visibility: visible;
-  bottom: 100%;
-  left: 50%;
-  margin-bottom: 0.5rem;
-  margin-left: -8.35rem;
-  padding: 0.7rem;
-  width: 16rem;
-  border-radius: 0.3rem;
-  background-color: hsla(0, 0%, 5%, 0.9);
-  color: #fff;
-  content: attr(ach-tooltip);
-  text-align: center;
-  font-size: 1.4rem;
-  line-height: 1.2;
-  transition-duration: 0.4s;
-  z-index: 3;
-}
-
-.c-pelle-upgrade-time-tooltip:after {
-  position: absolute;
-  bottom: -0.5rem;
-  left: 50%;
-  margin-left: -0.5rem;
-  width: 0;
-  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
-  border-right: 0.5rem solid transparent;
-  border-left: 0.5rem solid transparent;
-  content: " ";
-  font-size: 0;
-  line-height: 0;
-  transition-duration: 0.4s;
 }
 
 .l-pelle-upgrade-gap {

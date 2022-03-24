@@ -1,21 +1,23 @@
 <script>
+import ArmageddonButton from "./ArmageddonButton";
 import PelleUpgradeVue from "./PelleUpgrade";
+import RemnantGainFactor from "./RemnantGainFactor";
 
 export default {
   name: "PelleUpgradePanel",
   components: {
+    ArmageddonButton,
     PelleUpgradeVue,
-  },
-  props: {
-    isHovering: {
-      type: Boolean,
-      required: true
-    }
+    RemnantGainFactor,
   },
   data() {
     return {
       showBought: false,
       isCollapsed: false,
+      isHovering: false,
+      remnants: 0,
+      realityShards: new Decimal(0),
+      shardRate: new Decimal(0),
     };
   },
   computed: {
@@ -35,11 +37,17 @@ export default {
       upgrades = upgrades.concat(this.visibleUpgrades);
       return upgrades;
     },
+    showImprovedEstimate() {
+      return this.isHovering && !this.shardRate.eq(0);
+    }
   },
   methods: {
     update() {
       this.showBought = Pelle.cel.showBought;
       this.isCollapsed = player.celestials.pelle.collapsed.upgrades;
+      this.remnants = Pelle.cel.remnants;
+      this.realityShards.copyFrom(Pelle.cel.realityShards);
+      this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -66,12 +74,33 @@ export default {
       v-if="!isCollapsed"
       class="l-pelle-content-container"
     >
+      <div class="c-armageddon-container">
+        <div>
+          <div
+            class="c-armageddon-button-container"
+            @mouseover="isHovering = true"
+            @mouseleave="isHovering = false"
+          >
+            <ArmageddonButton />
+          </div>
+          <RemnantGainFactor :less-opaque="showImprovedEstimate" />
+        </div>
+        <div class="c-armageddon-resources-container">
+          <div>
+            You have <span class="c-remnants-amount">{{ format(remnants, 2) }}</span> Remnants.
+          </div>
+          <div>
+            You have <span class="c-remnants-amount">{{ format(realityShards, 2) }}</span> Reality Shards.
+            <span class="c-remnants-amount">+{{ format(shardRate, 2, 2) }}/s</span>
+          </div>
+        </div>
+      </div>
       <div class="c-pelle-upgrade-container">
         <PelleUpgradeVue
           v-for="upgrade in rebuyables"
           :key="upgrade.config.id + '-pelle-rebuyable-upgrade'"
           :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
+          :show-improved-estimate="showImprovedEstimate"
         />
       </div>
       <button
@@ -157,13 +186,41 @@ export default {
   max-width: 110rem;
 }
 
+.c-armageddon-container {
+  align-self: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 0.2rem solid var(--color-pelle--base);
+  padding: 1rem;
+}
+
+.c-armageddon-button-container {
+  width: 32rem;
+  margin-bottom: 0.5rem;
+}
+
+.c-armageddon-resources-container {
+  width: 41.5rem;
+}
+
+.c-remnants-amount {
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-pelle--base);
+}
+
 .c-collapse-icon-clickable {
   cursor: pointer;
 }
-</style>
 
-<style>
+
 .s-base--metro .o-pelle-button {
+  border-radius: 0;
+}
+
+.s-base--metro .c-armageddon-container {
   border-radius: 0;
 }
 </style>

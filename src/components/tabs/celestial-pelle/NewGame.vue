@@ -82,7 +82,7 @@ export default {
   flex-direction: column;
 }
 
-button {
+.c-new-game-button {
   margin-top: 1rem;
   padding: 1rem;
   font-family: Typewriter;

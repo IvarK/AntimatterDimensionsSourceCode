@@ -447,13 +447,15 @@ const people = [
       :style="cel.style"
       v-html="cel.symbol"
     />
-    <h1>Antimatter Dimensions</h1>
+    <h1 class="c-credits-header">
+      Antimatter Dimensions
+    </h1>
 
     <div
       v-for="role in roles.count"
       :key="role"
     >
-      <h2>
+      <h2 class="c-credits-section">
         {{ pluralize(roles[role], relevantPeople(role).length) }}
       </h2>
       <div :class="{ 'l-credits--bulk': relevantPeople(role).length > 10}">
@@ -471,7 +473,9 @@ const people = [
     </div>
 
     <br><br><br><br><br><br><br><br><br>
-    <h1>Thank you so much for playing!</h1>
+    <h1 class="c-credits-header">
+      Thank you so much for playing!
+    </h1>
   </div>
 </template>
 
@@ -487,11 +491,11 @@ const people = [
   transform: translateY(100%);
 }
 
-h1 {
+.c-credits-header {
   color: yellow;
 }
 
-h2 {
+.c-credits-section {
   margin-top: 10rem;
   margin-bottom: 2rem;
   color: white;
@@ -536,15 +540,18 @@ h2 {
   90% { transform: rotate(73deg); }
   100% { transform: rotate(61deg); }
 }
+
 @keyframes a-effarig-credits {
   0% { opacity: 0.8; text-shadow: 0 0 3rem; }
   50% { opacity: 1; text-shadow: 0 0 4rem, 0 0 4rem; }
   100% { opacity: 0.8; text-shadow: 0 0 3rem; }
 }
+
 @keyframes a-enslaved-credits {
   0% { transform: translateX(-50%) rotate(0); }
   100% { transform: translateX(-50%) rotate(360deg); }
 }
+
 /* We unfortunately have to do it this way, because due to how the benzene unicode symbol works, 0 and 120deg aren't
 perfectly the same. */
 @keyframes a-v-credits {
@@ -556,11 +563,13 @@ perfectly the same. */
   83.33% { transform: translateX(-50%) rotate(300deg) scale(1.2); }
   100% { transform: translateX(-50%) rotate(360deg) scale(0.8); }
 }
+
 @keyframes a-ra-credits {
   0% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
   50% { opacity: 0.4; transform: translateX(-50%) scale(0.9); }
   100% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
 }
+
 @keyframes a-laitela-credits {
   0% { transform: translate(-50%, 30%); }
   25% { transform: translate(-50%, -20%); }
@@ -568,6 +577,7 @@ perfectly the same. */
   75% { transform: translate(0%, 30%); }
   100% { transform: translate(-50%, 30%); }
 }
+
 @keyframes a-pelle-credits {
   0% { transform: translateX(-50%) rotate3d(0, 1, 0, 0) scaleY(1); }
   25% { transform: translateX(-50%) rotate3d(0, 1, 0, 90deg) scaleY(1.3); }

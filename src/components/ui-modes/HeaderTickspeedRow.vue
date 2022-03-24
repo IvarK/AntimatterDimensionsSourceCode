@@ -1,7 +1,9 @@
+<script>
 import PrimaryButton from "@/components/PrimaryButton";
 import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 
-Vue.component("game-header-tickspeed-row", {
+export default {
+  name: "HeaderTickspeedRow",
   components: {
     PrimaryButton,
     GameSpeedDisplay
@@ -67,32 +69,39 @@ Vue.component("game-header-tickspeed-row", {
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
-  template: `
-    <div :class="classObject">
-      <div>{{ multiplierDisplay }}</div>
-      <div>
-        <PrimaryButton
-          :enabled="isAffordable"
-          class="o-primary-btn--tickspeed"
-          :style="{ width: isContinuumActive ? '25rem' : ''}"
-          onclick="buyTickSpeed()"
-        >
-          <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
-          <span v-else-if="showCostTitle">Cost: {{ format(cost) }}</span>
-          <span v-else>{{ format(cost) }}<br></span>
-        </PrimaryButton>
-        <PrimaryButton
-          v-if="!isContinuumActive"
-          :enabled="isAffordable"
-          class="o-primary-btn--buy-max"
-          onclick="buyMaxTickSpeed()"
-        >
-          Buy Max
-        </PrimaryButton>
-      </div>
-      <div>
-        {{ tickspeedDisplay }}
-        <GameSpeedDisplay v-if="!isGameSpeedNormal" />
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div :class="classObject">
+    <div>{{ multiplierDisplay }}</div>
+    <div>
+      <PrimaryButton
+        :enabled="isAffordable"
+        class="o-primary-btn--tickspeed"
+        :style="{ width: isContinuumActive ? '25rem' : ''}"
+        onclick="buyTickSpeed()"
+      >
+        <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
+        <span v-else-if="showCostTitle">Cost: {{ format(cost) }}</span>
+        <span v-else>{{ format(cost) }}<br></span>
+      </PrimaryButton>
+      <PrimaryButton
+        v-if="!isContinuumActive"
+        :enabled="isAffordable"
+        class="o-primary-btn--buy-max"
+        onclick="buyMaxTickSpeed()"
+      >
+        Buy Max
+      </PrimaryButton>
+    </div>
+    <div>
+      {{ tickspeedDisplay }}
+      <GameSpeedDisplay v-if="!isGameSpeedNormal" />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

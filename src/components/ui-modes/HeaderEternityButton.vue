@@ -1,4 +1,6 @@
-Vue.component("game-header-eternity-button", {
+<script>
+export default {
+  name: "HeaderEternityButton",
   data() {
     return {
       isVisible: false,
@@ -148,84 +150,7 @@ Vue.component("game-header-eternity-button", {
       this.nextGoalAt.copyFrom(status.nextGoalAt);
     }
   },
-  template: `
-    <button
-      v-if="isVisible"
-      :class="buttonClassObject"
-      class="o-prestige-button l-game-header__eternity-btn"
-      onclick="eternityResetRequest()"
-      @mouseover="hover = true"
-      @mouseleave="hover = false"
-    >
-      <!-- Cannot Eternity -->
-      <template v-if="type === -1">
-        Reach {{ format(eternityGoal, 2, 2) }}
-        <br>
-        Infinity Points
-      </template>
-
-      <!-- First time -->
-      <template v-else-if="type === 0">
-        Other times await... I need to become Eternal
-      </template>
-
-      <!-- Normal -->
-      <template v-else-if="type === 1">
-        Eternity for
-        <span :style="amountStyle">{{ format(gainedEP, 2) }}</span> {{ pluralize("Eternity Point", gainedEP) }}.
-        <br>
-        <template v-if="showEPRate">
-          {{ format(currentEPRate, 2, 2) }} EP/min
-          <br>
-          Peaked at {{ format(peakEPRate, 2, 2) }} EP/min
-        </template>
-      </template>
-
-      <!-- Challenge -->
-      <template v-else-if="type === 2 || (type === 6 && !canEternity)">
-        Other challenges await... I need to become Eternal
-      </template>
-
-      <!-- Dilation -->
-      <template v-else-if="type === 3">
-        Eternity for <span :style="tachyonAmountStyle">{{ format(gainedTachyons, 2, 1) }}</span>
-        {{ pluralize("Tachyon Particle", gainedTachyons) }}
-      </template>
-
-      <!-- New content available -->
-      <template v-else-if="type === 4 || type === 5">
-        <template v-if="type === 4">
-          Eternity for <span :style="amountStyle">{{ format(gainedEP, 2, 2) }}</span> EP
-        </template>
-        <template v-else>
-          Eternity for <span :style="tachyonAmountStyle">{{ format(gainedTachyons, 2, 1) }}</span> TP
-        </template>
-        <br>
-        You should explore a bit and look at new content before clicking me!
-      </template>
-
-      <!-- Challenge with multiple completions -->
-      <template v-else-if="type === 6">
-        Other challenges await...
-        <template v-if="fullyCompleted">
-          <br>
-          (This challenge is already fully completed)
-        </template>
-        <template v-else>
-          <br>
-          {{ quantifyInt("completion", gainedCompletions) }} on Eternity
-          <template v-if="failedRestriction">
-            <br>
-            {{ failedRestriction }}
-          </template>
-          <template v-else-if="hasMoreCompletions">
-            <br>
-            Next goal at {{ format(nextGoalAt) }} IP
-          </template>
-        </template>
-      </template>
-    </button>`
-});
+};
 
 const EP_BUTTON_DISPLAY_TYPE = {
   CANNOT_ETERNITY: -1,
@@ -237,3 +162,87 @@ const EP_BUTTON_DISPLAY_TYPE = {
   DILATION_EXPLORE_NEW_CONTENT: 5,
   CHALLENGE_RUPG: 6
 };
+</script>
+
+<template>
+  <button
+    v-if="isVisible"
+    :class="buttonClassObject"
+    class="o-prestige-button l-game-header__eternity-btn"
+    onclick="eternityResetRequest()"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+  >
+    <!-- Cannot Eternity -->
+    <template v-if="type === -1">
+      Reach {{ format(eternityGoal, 2, 2) }}
+      <br>
+      Infinity Points
+    </template>
+
+    <!-- First time -->
+    <template v-else-if="type === 0">
+      Other times await... I need to become Eternal
+    </template>
+
+    <!-- Normal -->
+    <template v-else-if="type === 1">
+      Eternity for
+      <span :style="amountStyle">{{ format(gainedEP, 2) }}</span> {{ pluralize("Eternity Point", gainedEP) }}.
+      <br>
+      <template v-if="showEPRate">
+        {{ format(currentEPRate, 2, 2) }} EP/min
+        <br>
+        Peaked at {{ format(peakEPRate, 2, 2) }} EP/min
+      </template>
+    </template>
+
+    <!-- Challenge -->
+    <template v-else-if="type === 2 || (type === 6 && !canEternity)">
+      Other challenges await... I need to become Eternal
+    </template>
+
+    <!-- Dilation -->
+    <template v-else-if="type === 3">
+      Eternity for <span :style="tachyonAmountStyle">{{ format(gainedTachyons, 2, 1) }}</span>
+      {{ pluralize("Tachyon Particle", gainedTachyons) }}
+    </template>
+
+    <!-- New content available -->
+    <template v-else-if="type === 4 || type === 5">
+      <template v-if="type === 4">
+        Eternity for <span :style="amountStyle">{{ format(gainedEP, 2, 2) }}</span> EP
+      </template>
+      <template v-else>
+        Eternity for <span :style="tachyonAmountStyle">{{ format(gainedTachyons, 2, 1) }}</span> TP
+      </template>
+      <br>
+      You should explore a bit and look at new content before clicking me!
+    </template>
+
+    <!-- Challenge with multiple completions -->
+    <template v-else-if="type === 6">
+      Other challenges await...
+      <template v-if="fullyCompleted">
+        <br>
+        (This challenge is already fully completed)
+      </template>
+      <template v-else>
+        <br>
+        {{ quantifyInt("completion", gainedCompletions) }} on Eternity
+        <template v-if="failedRestriction">
+          <br>
+          {{ failedRestriction }}
+        </template>
+        <template v-else-if="hasMoreCompletions">
+          <br>
+          Next goal at {{ format(nextGoalAt) }} IP
+        </template>
+      </template>
+    </template>
+  </button>
+</template>
+
+<style scoped>
+
+</style>

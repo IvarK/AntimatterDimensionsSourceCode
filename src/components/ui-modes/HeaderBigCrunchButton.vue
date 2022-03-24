@@ -1,4 +1,6 @@
-Vue.component("game-header-big-crunch-button", {
+<script>
+export default {
+  name: "HeaderBigCrunchButton",
   data() {
     return {
       isVisible: false,
@@ -73,54 +75,61 @@ Vue.component("game-header-big-crunch-button", {
       else bigCrunchResetRequest();
     }
   },
-  template: `
-    <button
-      v-if="isVisible && !tesseractAffordable"
-      :class="buttonClassObject"
-      class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
-      @click="crunch"
-      @mouseover="hover = true"
-      @mouseleave="hover = false"
-    >
-      <!-- Cannot Crunch -->
-      <template v-if="!canCrunch">
-        Reach {{ format(infinityGoal, 2, 2) }}
-        <br>
-        antimatter
-      </template>
+};
+</script>
 
-      <!-- Can Crunch in challenge -->
-      <template v-else-if="inAntimatterChallenge">
-        Big Crunch to
-        <br>
-        complete the challenge
-      </template>
+<template>
+  <button
+    v-if="isVisible && !tesseractAffordable"
+    :class="buttonClassObject"
+    class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
+    @click="crunch"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+  >
+    <!-- Cannot Crunch -->
+    <template v-if="!canCrunch">
+      Reach {{ format(infinityGoal, 2, 2) }}
+      <br>
+      antimatter
+    </template>
 
-      <!-- Can Crunch -->
-      <template v-else>
-        <div v-if="!showIPRate" />
-        <b>
-          Big Crunch for
-          <span :style="amountStyle">{{ format(gainedIP, 2) }}</span>
-          Infinity {{ pluralize("Point", gainedIP) }}.
-        </b>
-        <template v-if="showIPRate">
-          <br>
-          {{ format(currentIPRate, 2) }} IP/min
-          <br>
-          Peaked at {{ format(peakIPRate, 2) }} IP/min
-        </template>
-        <div v-else />
-      </template>
-    </button>
+    <!-- Can Crunch in challenge -->
+    <template v-else-if="inAntimatterChallenge">
+      Big Crunch to
+      <br>
+      complete the challenge
+    </template>
 
-    <button
-      v-else-if="tesseractAffordable"
-      class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
-      @click="switchToInfinity"
-    >
+    <!-- Can Crunch -->
+    <template v-else>
+      <div v-if="!showIPRate" />
       <b>
-        You have enough Infinity Points to buy a Tesseract
+        Big Crunch for
+        <span :style="amountStyle">{{ format(gainedIP, 2) }}</span>
+        Infinity {{ pluralize("Point", gainedIP) }}.
       </b>
-    </button>`
-});
+      <template v-if="showIPRate">
+        <br>
+        {{ format(currentIPRate, 2) }} IP/min
+        <br>
+        Peaked at {{ format(peakIPRate, 2) }} IP/min
+      </template>
+      <div v-else />
+    </template>
+  </button>
+
+  <button
+    v-else-if="tesseractAffordable"
+    class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
+    @click="switchToInfinity"
+  >
+    <b>
+      You have enough Infinity Points to buy a Tesseract
+    </b>
+  </button>
+</template>
+
+<style scoped>
+
+</style>

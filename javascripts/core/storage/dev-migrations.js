@@ -1297,8 +1297,8 @@ GameStorage.devMigrations = {
       delete player.options.confirmations.reality;
     },
     player => {
-      const hasDimboost = player.celestials.pelle.upgrades.has(19),
-        hasDilUpg = player.celestials.pelle.upgrades.has(18);
+      const hasDimboost = player.celestials.pelle.upgrades.has(19);
+      const hasDilUpg = player.celestials.pelle.upgrades.has(18);
       player.celestials.pelle.upgrades.delete(18);
       player.celestials.pelle.upgrades.delete(19);
       if (hasDimboost) player.celestials.pelle.upgrades.add(18);

@@ -195,10 +195,6 @@ export default {
           :class="optionClass(index)"
           @click="setMode(index)"
         >
-          <i
-            v-if="mode === index"
-            class="fas fa-check"
-          />
           <div class="c-glyph-sacrifice-options__option__tooltip">
             {{ filterMode(index) }}
           </div>

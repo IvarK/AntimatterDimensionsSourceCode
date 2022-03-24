@@ -104,8 +104,9 @@
 }
 
 .c-glyph-sacrifice-options__option--active {
-  color: var(--color-reality-light);
+  color: black;
   border-color: var(--color-reality-light);
+  background-color: var(--color-reality-light);
   pointer-events: none;
 }
 
@@ -397,9 +398,11 @@
 }
 
 .c-glyph-auto-pick-options__option--active {
-  color: var(--color-reality-light);
-  border-color: var(--color-reality-light);
+  color: black;
+  background-color: var(--color-reality);
+  border-color: var(--color-reality);
   z-index: 1;
+  pointer-events: none;
 }
 
 .c-glyph-auto-pick-options__option--inactive {

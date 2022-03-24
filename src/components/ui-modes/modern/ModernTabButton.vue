@@ -28,6 +28,9 @@ export default {
         "o-tab-btn--subtabs": this.showSubtabs,
       };
     },
+    availableSubtabs() {
+      return this.tab.subtabs.filter((_, idx) => this.subtabVisibilities[idx]);
+    }
   },
   methods: {
     update() {
@@ -69,13 +72,13 @@ export default {
       class="subtabs"
     >
       <div
-        v-for="(subtab, index) in tab.subtabs"
+        v-for="(subtab, index) in availableSubtabs"
         :key="index"
         class="o-tab-btn o-tab-btn--subtab"
         :class="tab.config.UIClass"
         @click="subtab.show(true)"
       >
-        <span v-if="subtabVisibilities[index]">
+        <span>
           <span v-html="subtab.symbol">
             <i
               v-if="subtab.hasNotification"

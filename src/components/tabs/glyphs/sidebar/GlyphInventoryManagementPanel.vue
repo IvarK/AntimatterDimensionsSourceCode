@@ -14,8 +14,8 @@ export default {
   },
   computed: {
     groupClass() {
-      return "l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size" +
-        " l-glyph-inventory-management";
+      return `l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size
+        l-glyph-inventory-management`;
     }
   },
 };

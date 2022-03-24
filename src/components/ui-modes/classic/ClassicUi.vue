@@ -4,7 +4,6 @@ import ClassicBigCrunchButton from "./ClassicBigCrunchButton";
 import ClassicSubtabBar from "./ClassicSubtabBar";
 import ClassicTabBar from "./ClassicTabBar";
 import NewsTicker from "../NewsTicker";
-import FooterLinks from "@/components/FooterLinks";
 import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
 import RealityMachinesHeader from "@/components/RealityMachinesHeader";
@@ -17,7 +16,6 @@ export default {
     ClassicSubtabBar,
     ClassicTabBar,
     NewsTicker,
-    FooterLinks,
     InfinityPointsHeader,
     EternityPointsHeader,
     RealityMachinesHeader
@@ -80,7 +78,6 @@ export default {
       <div class="l-old-ui-page l-old-ui__page">
         <slot />
       </div>
-      <FooterLinks class="l-old-ui__footer" />
     </template>
   </div>
 </template>

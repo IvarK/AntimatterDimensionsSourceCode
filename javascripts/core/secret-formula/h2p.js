@@ -1631,18 +1631,12 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     for (let i = 1; i <= aLen; i++) {
       for (let j = 1; j <= bLen; j++) {
         const distance = keyboardDist(a[i - 1], b[j - 1], keyboard);
-        const cost = distance === 0 ? 0 : 0.3 + distance * distance * 0.2;
+        const cost = distance === 0 ? 0 : 0.3 + distance * distance * 0.25;
         d[i][j] = Math.min(
-          d[i - 1][j] + 0.5,
-          d[i][j - 1] + 0.5,
+          d[i - 1][j] + 0.55,
+          d[i][j - 1] + 0.7,
           d[i - 1][j - 1] + cost
         );
-        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
-          d[i][j] = Math.min(
-            d[i][j],
-            d[i - 2][j - 2] + 0.5
-          );
-        }
       }
     }
     return d[aLen][bLen];

@@ -5448,7 +5448,7 @@ screen and (max-width: 480px) {
 .t-dark .c-modal-away-progress__tachyon-particles,
 .t-dark .c-modal-away-progress__tachyon-galaxies,
 .t-dark .c-modal-away-progress__dilated-time {
-  filter: brightness(1)
+  filter: none
 }
 
 .c-modal-away-progress__realities,
@@ -5505,7 +5505,7 @@ screen and (max-width: 480px) {
 .t-dark .c-modal-away-progress__effarig-memories,
 .t-dark .c-modal-away-progress__enslaved-memories,
 .t-dark .c-modal-away-progress__v-memories {
-  filter: brightness(1)
+  filter: none
 }
 
 .c-modal-away-progress__black-hole b,

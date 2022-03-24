@@ -68,14 +68,16 @@ export default {
       v-if="showSubtabs"
       class="subtabs"
     >
-      <div
+      <span
         v-for="(subtab, index) in tab.subtabs"
         :key="index"
-        class="o-tab-btn o-tab-btn--subtab"
-        :class="tab.config.UIClass"
-        @click="subtab.show(true)"
       >
-        <span v-if="subtabVisibilities[index]">
+        <div
+          v-if="subtabVisibilities[index]"
+          class="o-tab-btn o-tab-btn--subtab"
+          :class="tab.config.UIClass"
+          @click="subtab.show(true)"
+        >
           <span v-html="subtab.symbol">
             <i
               v-if="subtab.hasNotification"
@@ -85,8 +87,8 @@ export default {
           <div class="o-subtab__tooltip">
             {{ subtab.name }}
           </div>
-        </span>
-      </div>
+        </div>
+      </span>
     </div>
   </div>
 </template>

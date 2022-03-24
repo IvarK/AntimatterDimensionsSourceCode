@@ -61,7 +61,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="glyphRefine"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to refine a Glyph
     </template>

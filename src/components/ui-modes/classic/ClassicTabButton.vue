@@ -1,7 +1,15 @@
-Vue.component("old-ui-tab-button", {
+<script>
+export default {
+  name: "ClassicTabButton",
   props: {
-    tab: Object,
-    tabPosition: Number
+    tab: {
+      type: Object,
+      required: true
+    },
+    tabPosition: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
@@ -25,14 +33,24 @@ Vue.component("old-ui-tab-button", {
       }
     }
   },
-  template: `
-    <button
-      v-if="isAvailable"
-      :class="tab.config.UIClass"
-      class="o-tab-btn"
-      style="margin: 0.2rem"
-      @click="tab.show(true)"
-    >
-      {{ tabName }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
-    </button>`
-});
+};
+</script>
+
+<template>
+  <button
+    v-if="isAvailable"
+    :class="tab.config.UIClass"
+    class="o-tab-btn"
+    style="margin: 0.2rem"
+    @click="tab.show(true)"
+  >
+    {{ tabName }} <i
+      v-if="hasNotification"
+      class="fas fa-exclamation"
+    />
+  </button>
+</template>
+
+<style scoped>
+
+</style>

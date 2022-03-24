@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "BlackHoleStatusText",
+  name: "HeaderBlackHoleStatusText",
   props: {
     blackHole: {
       type: Object,

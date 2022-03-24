@@ -1,30 +1,38 @@
+import { GameMechanicState } from "../../utils.js";
 import { CelestialQuotes } from "../quotes.js";
 
-class RaPetState {
-  /**
-   * @abstract
-   */
-  get data() { throw new NotImplementedError(); }
+class RaPetState extends GameMechanicState {
+  get data() {
+    return player.celestials.ra.pets[this.id];
+  }
 
-  /**
-   * @abstract
-   */
-  get name() { throw new NotImplementedError(); }
+  get name() {
+    return this.config.name;
+  }
 
-  /**
-   * @abstract
-   */
-  get chunkGain() { throw new NotImplementedError(); }
+  get chunkGain() {
+    return this.config.chunkGain;
+  }
 
-  /**
-   * @abstract
-   */
-  get memoryGain() { throw new NotImplementedError(); }
+  get memoryGain() {
+    return this.config.memoryGain;
+  }
 
-  /**
-   * @abstract
-   */
-  get requiredUnlock() { throw new NotImplementedError(); }
+  get color() {
+    return this.config.color;
+  }
+
+  get requiredUnlock() {
+    return this.config.requiredUnlock?.();
+  }
+
+  get rawMemoryChunksPerSecond() {
+    return this.config.rawMemoryChunksPerSecond();
+  }
+
+  get memoryProductionMultiplier() {
+    return this.config.memoryProductionMultiplier();
+  }
 
   get isUnlocked() {
     return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
@@ -62,16 +70,6 @@ class RaPetState {
     return Ra.requiredMemoriesForLevel(this.level);
   }
 
-  /**
-   * @abstract
-   */
-  get rawMemoryChunksPerSecond() { throw new NotImplementedError(); }
-
-  /**
-   * @abstract
-   */
-  get color() { throw new NotImplementedError(); }
-
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
     res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
@@ -94,7 +92,6 @@ class RaPetState {
 
   get chunkUpgradeCurrentMult() {
     return Math.pow(1.5, this.data.chunkUpgrades);
-
   }
 
   get memoryUpgradeCost() {
@@ -167,64 +164,10 @@ class RaPetState {
 
 export const Ra = {
   displayName: "Ra",
-  pets: {
-    teresa: new class TeresaRaPetState extends RaPetState {
-      get name() { return "Teresa"; }
-      get chunkGain() { return "Eternity Points"; }
-      get memoryGain() { return "current Reality Machines"; }
-      get data() { return player.celestials.ra.pets.teresa; }
-      get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.eternityPoints.value.pLog10() / 1e4, 3); }
-      get color() { return "#8596ea"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.TERESA_XP)
-          ? 1 + Math.pow(Currency.realityMachines.value.pLog10() / 100, 0.5)
-          : 1;
-      }
-    }(),
-    effarig: new class EffarigRaPetState extends RaPetState {
-      get name() { return "Effarig"; }
-      get chunkGain() { return "Relic Shards gained"; }
-      get memoryGain() { return "best Glyph level"; }
-      get data() { return player.celestials.ra.pets.effarig; }
-      get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
-      get color() { return "#ea8585"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.EFFARIG_XP)
-          ? 1 + player.records.bestReality.glyphLevel / 7000
-          : 1;
-      }
-    }(),
-    enslaved: new class EnslavedRaPetState extends RaPetState {
-      get name() { return "Enslaved"; }
-      get chunkGain() { return "Time Shards"; }
-      get memoryGain() { return "total time played"; }
-      get data() { return player.celestials.ra.pets.enslaved; }
-      get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.timeShards.value.pLog10() / 3e5, 2); }
-      get color() { return "#f1aa7f"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
-          ? 1 + Math.log10(player.records.totalTimePlayed) / 200
-          : 1;
-      }
-    }(),
-    v: new class VRaPetState extends RaPetState {
-      get name() { return "V"; }
-      get chunkGain() { return "Infinity Power"; }
-      get memoryGain() { return "total Memory levels"; }
-      get data() { return player.celestials.ra.pets.v; }
-      get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5); }
-      get color() { return "#ead584"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.V_XP)
-          ? 1 + Ra.totalPetLevel / 50
-          : 1;
-      }
-    }(),
-  },
+  pets: mapGameDataToObject(
+    GameDatabase.celestials.ra,
+    config => new RaPetState(config)
+  ),
   // Dev/debug function for easier testing
   reset() {
     const data = player.celestials.ra;
@@ -574,11 +517,6 @@ export const GlyphAlteration = {
       : undefined;
   },
 };
-
-/**
- * @type {RaPetState[]}
- */
-Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
 
 export const RA_UNLOCKS = {
   AUTO_TP: {

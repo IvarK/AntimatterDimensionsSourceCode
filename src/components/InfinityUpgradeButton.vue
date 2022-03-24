@@ -25,10 +25,14 @@ export default {
       isBought: false,
       isCharged: false,
       isDisabled: false,
-      showingCharged: false
+      showingCharged: false,
+      hasTS31: false
     };
   },
   computed: {
+    isBasedOnInfinities() {
+      return /(18|27|36|45)Mult/u.test(this.upgrade.id);
+    },
     shiftDown() {
       return ui.view.shiftDown;
     },
@@ -58,6 +62,9 @@ export default {
         return description().includes("has no effect");
       }
       return description.includes("has no effect");
+    },
+    isImprovedByTS31() {
+      return this.hasTS31 && this.isBasedOnInfinities && !this.isCharged && !this.showingCharged;
     }
   },
   methods: {
@@ -81,6 +88,7 @@ export default {
       // rebuyables, should never hide their effect.
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
+      this.hasTS31 = TimeStudy(31).canBeApplied;
     }
   }
 };
@@ -105,6 +113,10 @@ export default {
         br
         :config="config"
       />
+      <template v-if="!isDisabled && isImprovedByTS31">
+        <br>
+        After TS31: {{ formatX(config.effect().pow(4), 2, 2) }}
+      </template>
     </span>
     <CostDisplay
       v-if="!isBought"

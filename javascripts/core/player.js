@@ -799,7 +799,6 @@ window.player = {
       challenges: true,
       eternity: true,
       dilation: true,
-      reality: true,
       resetReality: true,
       glyphReplace: true,
       glyphSacrifice: true,
@@ -836,7 +835,8 @@ window.player = {
       darkEnergy: true,
       singularities: true,
       celestialMemories: true,
-      blackHole: true
+      blackHole: true,
+      realityShards: true
     },
     hiddenTabBits: 0,
     hiddenSubtabBits: Array.repeat(0, 11),

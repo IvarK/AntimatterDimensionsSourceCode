@@ -37,6 +37,13 @@ export default {
     },
     checkADAutoStatus() {
       const ad = Autobuyer.antimatterDimension;
+      // Since you don't need to buy autobuyers in Doomed and unbought ones are hidden, we can check if only the
+      // autobuyers you can see (ie, have unlocked) have been maxed.
+      if (Pelle.isDoomed) {
+        this.displayADAutobuyersIndividually = !ad.zeroIndexed.filter(x => x.isUnlocked)
+          .every(x => x.hasUnlimitedBulk && x.hasMaxedInterval);
+        return;
+      }
       const allMaxedInterval = ad.allMaxedInterval();
       const allUnlocked = ad.allUnlocked();
       const allUnlimitedBulk = ad.allUnlimitedBulk();
@@ -56,12 +63,13 @@ export default {
     <GalaxyAutobuyerBox />
     <DimensionBoostAutobuyerBox />
     <TickspeedAutobuyerBox v-if="!hasContinuum" />
-    <DimensionAutobuyerBox
-      v-for="tier in 8"
-      v-if="displayADAutobuyersIndividually"
-      :key="tier"
-      :tier="tier"
-    />
+    <template v-if="displayADAutobuyersIndividually">
+      <DimensionAutobuyerBox
+        v-for="tier in 8"
+        :key="tier"
+        :tier="tier"
+      />
+    </template>
     <SimpleAutobuyersMultiBox />
   </div>
 </template>

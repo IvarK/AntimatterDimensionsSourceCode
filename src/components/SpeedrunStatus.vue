@@ -1,6 +1,6 @@
-import { Modal } from "../core/app/modal";
-
-Vue.component("speedrun-status", {
+<script>
+export default {
+  name: "SpeedrunStatus",
   data() {
     return {
       isActive: false,
@@ -71,32 +71,56 @@ Vue.component("speedrun-status", {
       player.speedrun.hideInfo = !this.isCollapsed;
     }
   },
-  template: `
+};
+</script>
+
+<template>
+  <div
+    v-if="isActive"
+    class="speedrun-status"
+  >
+    <div v-if="!isCollapsed">
+      <b>Speedrun Status (<span v-html="statusText" />)</b>
+      <br>
+      <span @click="changeName">Player Name: {{ saveName }}</span>
+      <br>
+      <i>{{ segmentText }}</i>
+      <br>
+      Total real playtime since start: {{ timePlayedStr }}
+      <br>
+      Offline Progress: <span v-html="offlineText" />
+      <br>
+      Most Recent Milestone: {{ milestoneName(mostRecent) }}
+      <br>
+    </div>
     <div
-      v-if="isActive"
-      class="o-speedrun-status"
+      class="speedrun-collapse"
+      @click="toggleCollapse"
     >
-      <div v-if="!isCollapsed">
-        <b>Speedrun Status (<span v-html="statusText" />)</b>
-        <br>
-        <span @click="changeName">Player Name: {{ saveName }}</span>
-        <br>
-        <i>{{ segmentText }}</i>
-        <br>
-        Total real playtime since start: {{ timePlayedStr }}
-        <br>
-        Offline Progress: <span v-html="offlineText" />
-        <br>
-        Most Recent Milestone: {{ milestoneName(mostRecent) }}
-        <br>
-      </div>
-      <div
-        class="o-speedrun-collapse"
-        @click="toggleCollapse"
-      >
-        <i :class="collapseIcon()" />
-        {{ collapseText() }}
-        <i :class="collapseIcon()" />
-      </div>
-    </div>`
-});
+      <i :class="collapseIcon()" />
+      {{ collapseText() }}
+      <i :class="collapseIcon()" />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.speedrun-status {
+  font-size: 1.2rem;
+  color: var(--color-text);
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  background-color: var(--color-base);
+  white-space: nowrap;
+  border: 0.2rem solid var(--color-accent);
+  user-select: none;
+  padding: 0.8rem 2rem;
+  z-index: 5;
+}
+
+.speedrun-collapse {
+  cursor: pointer;
+  padding: 0.2rem;
+}
+</style>

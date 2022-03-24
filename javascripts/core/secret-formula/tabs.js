@@ -475,7 +475,7 @@ GameDatabase.tabs = [
         key: "shop",
         name: "Shop",
         symbol: "$",
-        component: "shop-tab",
+        component: "ShopTab",
         id: 0,
         hidable: true
       }

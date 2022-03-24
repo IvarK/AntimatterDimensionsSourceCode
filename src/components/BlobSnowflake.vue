@@ -1,6 +1,8 @@
+<script>
 import TWEEN from "tween.js";
 
-Vue.component("blob-snowflake", {
+export default {
+  name: "BlobSnowflake",
   props: {
     bounds: Object
   },
@@ -82,7 +84,24 @@ Vue.component("blob-snowflake", {
         return SNOW[Math.floor(Math.random() * SNOW.length)];
       }
     },
-  },
-  template:
-        `<text class="o-blob-snowflake"></text>`
-});
+  }
+};
+</script>
+
+<template>
+  <text class="blob-snowflake" />
+</template>
+
+<style scoped>
+.blob-snowflake {
+  fill: #fbc21b;
+  text-shadow: 0 0 5px #000,
+               0 0 5px #000,
+               0 0 5px #000;
+  opacity: 0.9;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+</style>

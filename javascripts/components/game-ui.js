@@ -1,8 +1,4 @@
-import "./save-timer.js";
-import "./speedrun-status.js";
-import "./help-me.js";
 import "./tt-shop.js";
-import "./background-animations";
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
@@ -11,6 +7,12 @@ import PopupModal from "@/components/modals/PopupModal";
 import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
+import SaveTimer from "@/components/SaveTimer";
+import SpeedrunStatus from "@/components/SpeedrunStatus";
+import BackgroundAnimations from "@/components/BackgroundAnimations";
+import ModalProgressBar from "@/components/modals/ModalProgressBar";
+import HelpMe from "@/components/HelpMe";
+import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 Vue.component("game-ui", {
   components: {
@@ -21,7 +23,13 @@ Vue.component("game-ui", {
     PopupModal,
     FadeToBlack,
     CreditsContainer,
-    NewGame
+    NewGame,
+    SaveTimer,
+    SpeedrunStatus,
+    BackgroundAnimations,
+    ModalProgressBar,
+    HelpMe,
+    TimeTheoremShop
   },
   computed: {
     view() {
@@ -53,16 +61,16 @@ Vue.component("game-ui", {
           <component :is="page" />
         </component>
         <PopupModal v-if="view.modal.current" :modal="view.modal.current" />
-        <modal-progress-bar v-if="view.modal.progressBar" />
+        <ModalProgressBar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
-        <help-me />
-        <background-animations />
+        <HelpMe />
+        <BackgroundAnimations />
       </div>
       <div id="notification-container" class="l-notification-container" />
-      <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
+      <TimeTheoremShop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
       <ModernSidebar v-if="view.newUI" />
-      <save-timer />
-      <speedrun-status />
+      <SaveTimer />
+      <SpeedrunStatus />
       <FadeToBlack />
       <CreditsContainer />
       <NewGame />

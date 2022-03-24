@@ -1549,7 +1549,7 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     const lowerCase = word.toLowerCase();
     for (let i = 0; i < lowerCase.length; i++) {
       const term = lowerCase.slice(0, i + 1);
-      addTerm(lowerCase.slice(0, i + 1), tab);
+      addTerm(term, tab);
       if (tab.searchTermsRelevance[term] === undefined) {
         tab.searchTermsRelevance[term] = ((i + 1) / lowerCase.length) ** 0.65;
       } else {
@@ -1579,8 +1579,8 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
 
   const map2dToObject = function(arr, keyFun, valueFun) {
     const out = {};
-    for (let idx1 = 0; idx1 < arr.length; ++idx1) {
-      for (let idx2 = 0; idx2 < arr[idx1].length; ++idx2) {
+    for (let idx1 = 0; idx1 < arr.length; idx1++) {
+      for (let idx2 = 0; idx2 < arr[idx1].length; idx2++) {
         out[keyFun(arr[idx1][idx2], idx1, idx2)] = valueFun(arr[idx1][idx2], idx1, idx2);
       }
     }
@@ -1615,7 +1615,8 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
   const howBadlyTypoedWithKeyboard = function(a, b, keyboard) {
     // If they're the same, skip all calculations
     if (a === b) return 0;
-    const aLen = a.length, bLen = b.length;
+    const aLen = a.length;
+    const bLen = b.length;
     // If they're way too different, don't bother
     if (Math.abs(aLen - bLen) > 3) return 100;
     // 2d Array with dimensions aLen + 1 x bLen + 1
@@ -1651,7 +1652,7 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
     return minTypoed;
   };
 
-  const specialChars = ["'", "\"", ",", "-", "."];
+  const specialChars = ["'", "\"", ",", "-", ".", "_"];
 
   const replaceSpecialChars = function(str) {
     let result = str;
@@ -1665,12 +1666,12 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
   // act as a placeholder for 'basically not found'?"
   // This will need some cleanup if possible.
   GameDatabase.h2p.search = query => {
-    const truncatedQuery = replaceSpecialChars(query.replaceAll("_", " "));
+    const truncatedQuery = replaceSpecialChars(query);
     if (truncatedQuery === "") return GameDatabase.h2p.tabs.map(x => ({ tab: x, relevance: 1.5 }));
     const searchTerms = truncatedQuery.toLowerCase().split(" ").filter(str => str !== "");
 
-    // A higher "Relevance" value actually means that has lower relevance.
-    const relevances = GameDatabase.h2p.tabs.map(() => 10000);
+    // A higher "Relevance" value actually means it's further away from the search, important to keep in mind
+    const relevances = Array.repeat(1e4, GameDatabase.h2p.tabs.length);
     for (const searchWord of searchTerms) {
       const minimumRequirement = Math.min(searchWord.length - 0.9, 3) * 0.5;
       for (const searchIndexStr in searchIndex) {

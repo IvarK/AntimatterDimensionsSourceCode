@@ -78,6 +78,7 @@ export default {
           v-model="searchValue"
           placeholder="Type to search..."
           class="c-h2p-search-bar"
+          @keyup.esc="emitClose"
         >
         <div class="l-h2p-tab-list">
           <div

@@ -3,7 +3,7 @@ import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
 import { useLongPress, useRepeatingClick } from "./longpress";
 import VueGtag from "vue-gtag";
-import GameUIComponent from "@/components/GameUI";
+import GameUIComponent from "@/components/GameUIComponent";
 
 Vue.mixin({
   computed: {
@@ -26,8 +26,7 @@ Vue.mixin({
 
     if (!watchers) return;
 
-    for (const key in watchers)
-      makeRecomputable(watchers[key], key, recomputed);
+    for (const key in watchers) makeRecomputable(watchers[key], key, recomputed);
 
     this.$recompute = key => recomputed[key] = !recomputed[key];
     Vue.observable(recomputed);

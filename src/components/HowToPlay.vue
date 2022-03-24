@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "HelpMe",
+  name: "HowToPlay",
   methods: {
     showModal() {
       Modal.h2p.show();

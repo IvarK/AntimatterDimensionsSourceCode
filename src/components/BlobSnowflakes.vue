@@ -43,7 +43,7 @@ export default {
 <template v-if="initialized">
   <svg
     v-if="animateBackground"
-    class="blob-snowflake-container"
+    class="c-blob-snowflake-container"
   >
     <blob-snowflake
       v-for="i in count"
@@ -53,7 +53,7 @@ export default {
   </svg>
   <svg
     v-else
-    class="blob-background-container"
+    class="c-blob-background-container"
   >
     <blob-background
       v-for="i in count"
@@ -64,7 +64,7 @@ export default {
 </template>
 
 <style scoped>
-.blob-snowflake-container {
+.c-blob-snowflake-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -77,7 +77,7 @@ export default {
   cursor: default;
 }
 
-.blob-background-container {
+.c-blob-background-container {
   position: fixed;
   top: 0;
   left: 0;

@@ -7,7 +7,10 @@ export default {
     HoverMenu,
   },
   props: {
-    saveslot: Number
+    saveslot: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
@@ -66,10 +69,10 @@ export default {
 </script>
 
 <template>
-  <HoverMenu class="tt-save-load-btn__wrapper">
+  <HoverMenu class="l-tt-save-load-btn__wrapper">
     <template #object>
       <button
-        class="tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+        class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
         @click.shift.exact="save"
         @click.exact="load"
       >
@@ -77,38 +80,38 @@ export default {
       </button>
     </template>
     <template #menu>
-      <div class="tt-save-load-btn__menu">
+      <div class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
         <span ach-tooltip="Set a custom name (up to 4 characters)">
           <input
             type="text"
             size="4"
             maxlength="4"
-            class="tt-save-load-btn__menu-rename"
+            class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
             :value="name"
             @keyup.esc="hideContextMenu"
             @blur="nicknameBlur"
           >
         </span>
         <div
-          class="tt-save-load-btn__menu-item"
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
           @click="edit"
         >
           Edit
         </div>
         <div
-          class="lt-save-load-btn__menu-item"
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
           @click="handleExport"
         >
           Export
         </div>
         <div
-          class="tt-save-load-btn__menu-item"
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
           @click="save"
         >
           Save
         </div>
         <div
-          class="tt-save-load-btn__menu-item"
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
           @click="load"
         >
           Load
@@ -119,21 +122,24 @@ export default {
 </template>
 
 <style scoped>
-.tt-save-load-btn__wrapper {
+.l-tt-save-load-btn__wrapper {
   margin: 0.3em;
   position: relative;
 }
 
-.tt-save-load-btn {
+.l-tt-save-load-btn {
   min-width: 2em;
 }
 
-.tt-save-load-btn__menu {
+.l-tt-save-load-btn__menu {
   position: absolute;
   top: -0.5rem;
   left: 50%;
   transform: translate(-50%, -100%);
   padding: 0.5rem 0;
+}
+
+.c-tt-save-load-btn__menu {
   color: white;
   background: black;
   border-radius: 0.5rem;
@@ -143,7 +149,7 @@ export default {
   font-size: 1.4rem;
 }
 
-.tt-save-load-btn__menu::after {
+.l-tt-save-load-btn__menu::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -154,8 +160,11 @@ export default {
   border-color: black transparent transparent;
 }
 
-.tt-save-load-btn__menu-rename {
+.l-tt-save-load-btn__menu-rename {
   margin: 0.3rem 0.5rem 0.5rem 0.7rem;
+}
+
+.c-tt-save-load-btn__menu-rename {
   text-align: left;
   font-weight: bold;
   font-family: Typewriter;
@@ -165,12 +174,12 @@ export default {
   padding: 0.2rem;
 }
 
-.tt-save-load-btn__menu-item {
+.l-tt-save-load-btn__menu-item {
   padding: 0.25rem 1rem;
   cursor: pointer;
 }
 
-.tt-save-load-btn__menu-item:hover {
+.c-tt-save-load-btn__menu-item:hover {
   background: white;
   color: black;
 }

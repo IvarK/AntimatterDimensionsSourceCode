@@ -29,7 +29,7 @@ export default {
 <template>
   <div
     v-if="showTimeSinceSave"
-    class="save-timer"
+    class="o-save-timer"
     @click="save"
   >
     Time since last save: {{ time }}
@@ -37,7 +37,7 @@ export default {
 </template>
 
 <style scoped>
-.save-timer {
+.o-save-timer {
   color: var(--color-text);
   position: fixed;
   left: 0;
@@ -52,16 +52,16 @@ export default {
   z-index: 5;
 }
 
-.t-inverted .save-timer,
-.t-inverted-metro .save-timer {
+.t-inverted .o-save-timer,
+.t-inverted-metro .o-save-timer {
   filter: invert(100%)
 }
 
-.t-s2 .save-timer {
+.t-s2 .o-save-timer {
   filter: sepia(100%) hue-rotate(180deg) saturate(250%);
 }
 
-.t-s3 .save-timer {
+.t-s3 .o-save-timer {
   animation: glasses 7s infinite;
 }
 </style>

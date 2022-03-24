@@ -40,11 +40,11 @@ export default {
 </script>
 
 <template>
-  <text class="blob-background" />
+  <text class="o-blob-background" />
 </template>
 
 <style scoped>
-.blob-background {
+.o-blob-background {
   fill: #fbc21b;
   text-shadow: 0 0 5px #000,
                0 0 5px #000,

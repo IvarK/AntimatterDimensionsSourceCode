@@ -23,16 +23,16 @@ export default {
 </script>
 
 <template>
-  <div class="shop-button-container">
+  <div class="c-shop-button-container">
     <div class="o-shop-button-description">
       {{ purchase.description }}
       <br>
-      <span class="shop-button-multiplier">
+      <span class="o-shop-button-multiplier">
         Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
       </span>
     </div>
     <button
-      class="shop-button-button"
+      class="o-shop-button-button"
       @click="purchase.purchase()"
     >
       Cost: {{ purchase.cost }}
@@ -45,7 +45,7 @@ export default {
 </template>
 
 <style scoped>
-.shop-button-container {
+.c-shop-button-container {
   width: 30rem;
   padding: 1rem;
   border: .2rem solid #1f7d1f;
@@ -55,7 +55,7 @@ export default {
   color: white;
 }
 
-.shop-button-button {
+.o-shop-button-button {
   background: turquoise;
   border: none;
   border-radius: .5rem;
@@ -68,11 +68,11 @@ export default {
   cursor: pointer;
 }
 
-.shop-button-button img {
+.o-shop-button-button img {
   margin-left: 1rem;
 }
 
-.shop-button-multiplier {
+.o-shop-button-multiplier {
   font-weight: bold;
   font-size: 1.5rem;
   margin: 0.5rem 0;

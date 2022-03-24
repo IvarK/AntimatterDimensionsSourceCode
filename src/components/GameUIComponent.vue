@@ -11,7 +11,7 @@ import SaveTimer from "@/components/SaveTimer";
 import SpeedrunStatus from "@/components/SpeedrunStatus";
 import BackgroundAnimations from "@/components/BackgroundAnimations";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
-import HelpMe from "@/components/HelpMe";
+import HowToPlay from "@/components/HowToPlay";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
@@ -29,7 +29,7 @@ export default {
     SpeedrunStatus,
     BackgroundAnimations,
     ModalProgressBar,
-    HelpMe,
+    HowToPlay,
     TimeTheoremShop
   },
   computed: {
@@ -58,7 +58,7 @@ export default {
     v-if="view.initialized"
     id="ui-container"
     :class="containerClass"
-    style="display: flex; justify-content: center;"
+    class="ui-wrapper"
   >
     <div
       id="ui"
@@ -78,7 +78,7 @@ export default {
         rel="stylesheet"
         :href="themeCss"
       >
-      <HelpMe />
+      <HowToPlay />
       <BackgroundAnimations />
     </div>
     <div
@@ -99,5 +99,8 @@ export default {
 </template>
 
 <style scoped>
-
+.ui-wrapper {
+  display: flex;
+  justify-content: center;
+}
 </style>

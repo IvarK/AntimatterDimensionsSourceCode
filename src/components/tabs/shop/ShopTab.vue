@@ -44,52 +44,54 @@ export default {
     id="shop"
     class="tab"
   >
-    <div class="shop-disclaimer">
+    <div class="c-shop-disclaimer">
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
       The game is balanced without the use of any microtranactions.
     </div>
-    <div class="shop-header">
+    <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img
         src="images/std_coin.png"
         height="40"
       >
       <button
-        class="shop-button-button"
+        class="o-shop-button-button"
         @click="showStore()"
       >
         {{ buySTDText }}
       </button>
     </div>
-    <div class="shop-buttons-container">
+    <div class="l-shop-buttons-container">
       <ShopButton
         v-for="purchase in purchases"
         :key="purchase.key"
         :purchase="purchase"
       />
-      <div class="shop-buttons-container">
+      <div class="l-shop-buttons-container">
         <div class="o-shop-button-description">
           Get 6 hours worth of offline production. (Autobuyers don't work full speed)
         </div>
         <button
-          class="shop-button-button"
+          class="o-shop-button-button"
           @click="buyTimeSkip()"
         >
-          Cost: 10 <img
+          Cost: 10
+          <img
             src="images/std_coin.png"
             height="40"
           >
         </button>
       </div>
-      <div class="shop-buttons-container">
+      <div class="l-shop-buttons-container">
         <div class="o-shop-button-description">
           Get 24 hours worth of offline production. (Autobuyers don't work full speed)
         </div>
         <button
-          class="shop-button-button"
+          class="o-shop-button-button"
           @click="buyLongerTimeSkip()"
         >
-          Cost: 20 <img
+          Cost: 20
+          <img
             src="images/std_coin.png"
             height="40"
           >
@@ -107,7 +109,7 @@ export default {
   align-items: center;
 }
 
-.shop-disclaimer {
+.c-shop-disclaimer {
   color: black;
   background: var(--color-bad);
   width: 100rem;
@@ -118,20 +120,20 @@ export default {
   margin-top: 0.8rem;
 }
 
-.s-base--metro .shop-disclaimer {
+.s-base--metro .c-shop-disclaimer {
   border-width: 0.1rem;
   border-radius: 0;
 }
 
-.t-s1 .shop-disclaimer,
-.t-s6 .shop-disclaimer,
-.t-s10 .shop-disclaimer {
+.t-s1 .c-shop-disclaimer,
+.t-s6 .c-shop-disclaimer,
+.t-s10 .c-shop-disclaimer {
   color: var(--color-bad);
   background: black;
   border-color: var(--color-bad);
 }
 
-.shop-header {
+.c-shop-header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,11 +141,11 @@ export default {
   margin: 1rem 0;
 }
 
-.shop-header img {
+.c-shop-header img {
   margin: 0 1rem;
 }
 
-.shop-button-button {
+.o-shop-button-button {
   background: turquoise;
   border: none;
   border-radius: .5rem;
@@ -156,14 +158,14 @@ export default {
   cursor: pointer;
 }
 
-.shop-buttons-container {
+.l-shop-buttons-container {
   display: flex;
   flex-wrap: wrap;
   width: 62rem;
   margin: auto;
 }
 
-.shop-header .shop-button-button {
+.c-shop-header .o-shop-button-button {
   margin: 0;
 }
 </style>

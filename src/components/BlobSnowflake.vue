@@ -92,11 +92,11 @@ export default {
 </script>
 
 <template>
-  <text class="blob-snowflake" />
+  <text class="o-blob-snowflake" />
 </template>
 
 <style scoped>
-.blob-snowflake {
+.o-blob-snowflake {
   fill: #fbc21b;
   text-shadow: 0 0 5px #000,
                0 0 5px #000,

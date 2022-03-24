@@ -67,7 +67,7 @@ export default {
       };
     },
     saveLoadText() {
-      return this.$viewModel.shiftDown ? "save:" : "load:";
+      return this.$viewModel.shiftDown ? "Save:" : "Load:";
     },
   },
   watch: {

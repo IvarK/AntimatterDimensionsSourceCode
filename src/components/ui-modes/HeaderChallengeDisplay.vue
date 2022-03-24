@@ -1,8 +1,11 @@
-import "./failable-ec-text.js";
+<script>
+import FailableEcText from "./FailableEcText";
 import PrimaryButton from "@/components/PrimaryButton";
 
-Vue.component("header-challenge-display", {
+export default {
+  name: "HeaderChallengeDisplay",
   components: {
+    FailableEcText,
     PrimaryButton
   },
   data() {
@@ -125,21 +128,28 @@ Vue.component("header-challenge-display", {
       return "Exit Reality";
     },
   },
-  template: `
-    <div
-      v-if="isVisible"
-      class="l-game-header__challenge-text"
+};
+</script>
+
+<template>
+  <div
+    v-if="isVisible"
+    class="l-game-header__challenge-text"
+  >
+    <span style="padding: 0.5rem;">
+      You are currently in {{ challengeDisplay }}
+    </span>
+    <FailableEcText v-if="isInFailableEC" />
+    <span style="padding: 0.3rem;" />
+    <PrimaryButton
+      v-if="showExit"
+      @click="exitButtonClicked"
     >
-      <span style="padding: 0.5rem;">
-        You are currently in {{ challengeDisplay }}
-      </span>
-      <failable-ec-text v-if="isInFailableEC" />
-      <span style="padding: 0.3rem;" />
-      <PrimaryButton
-        v-if="showExit"
-        @click="exitButtonClicked"
-      >
-        {{ exitText }}
-      </PrimaryButton>
-    </div>`
-});
+      {{ exitText }}
+    </PrimaryButton>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

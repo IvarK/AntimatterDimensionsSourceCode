@@ -55,7 +55,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="glyphSacrifice"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to sacrifice a Glyph
     </template>

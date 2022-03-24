@@ -56,7 +56,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="autoClean"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

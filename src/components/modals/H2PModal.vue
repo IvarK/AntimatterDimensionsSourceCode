@@ -42,6 +42,9 @@ export default {
     this.activeTab = ui.view.h2pForcedTab || matchedEntry || unlockedTabs[0];
     ui.view.h2pForcedTab = undefined;
   },
+  mounted() {
+    this.$refs.input.select();
+  },
   methods: {
     setActiveTab(tab) {
       this.activeTab = tab;
@@ -71,6 +74,7 @@ export default {
     <div class="l-h2p-container">
       <div class="l-h2p-search-tab">
         <input
+          ref="input"
           v-model="searchValue"
           placeholder="Type to search..."
           class="c-h2p-search-bar"

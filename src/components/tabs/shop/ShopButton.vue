@@ -2,7 +2,10 @@
 export default {
   name: "ShopButton",
   props: {
-    purchase: Object,
+    purchase: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

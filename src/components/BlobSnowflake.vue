@@ -4,7 +4,10 @@ import TWEEN from "tween.js";
 export default {
   name: "BlobSnowflake",
   props: {
-    bounds: Object
+    bounds: {
+      type: Object,
+      required: true,
+    }
   },
   mounted() {
     this.fly();

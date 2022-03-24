@@ -54,9 +54,6 @@ html {
 
   --color-v--base: #ead584;
 
-  --color-pelle--base: crimson;
-  --color-pelle-secondary: #00bcd4;
-
   --color-ra-base: #9575cd;
   --color-ra-pet-teresa: #8596ea;
   --color-ra-pet-effarig: #ea8585;
@@ -65,6 +62,9 @@ html {
 
   --color-laitela--base: white;
   --color-laitela--accent: black;
+
+  --color-pelle--base: crimson;
+  --color-pelle-secondary: #00bcd4;
 }
 
 .t-metro #ui-container, /* csslint allow: empty-rules */
@@ -254,6 +254,17 @@ button:focus {
 
 /*#region TT shop*/
 
+.TTbuttons {
+  color: var(--color-text);
+  position: fixed;
+  bottom: 0;
+  font-family: Typewriter, serif;
+  display: flex;
+  align-items: flex-end;
+  z-index: 2;
+  width: 55.5rem;
+}
+
 .l-tt-buy-button {
   width: 17rem;
   z-index: 1;
@@ -269,7 +280,7 @@ button:focus {
   font-size: 1.35rem;
 }
 
-.s-base--metro .c-tt-buy-button {
+.s-base--metro .c-tt-buy-button{
   border-radius: 0;
 }
 
@@ -291,6 +302,23 @@ button:focus {
 
 .c-tt-buy-button--locked:hover {
   background: #652F2F;
+}
+
+.timetheorems {
+  font-size: 15px;
+  text-align: center;
+  flex: 1 0 auto;
+}
+
+.ttbuttons-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.ttbuttons-top-row {
+  align-items: center;
 }
 
 .o-tt-top-row-button {
@@ -405,6 +433,15 @@ button:focus {
 .t-s6 .ttshop-background,
 .t-s10 .ttshop-background {
   border: 0.1rem solid #3AACD6;
+}
+
+.ttshop-container {
+  padding: 0 0.5rem;
+  min-width: 60rem;
+  max-width: 80rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease-out;
 }
 
 .ttshop-minimize-btn {

@@ -42,8 +42,8 @@ export default {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(
         ReplicantiUpgrade.chance,
-        (value) => `Replicate chance: ${formatPercents(value)}`,
-        (cost) => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
+        value => `Replicate chance: ${formatPercents(value)}`,
+        cost => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
       );
     },
     replicantiIntervalSetup() {
@@ -66,8 +66,8 @@ export default {
       }
       return new ReplicantiUpgradeButtonSetup(
         upgrade,
-        (value) => `Interval: ${formatInterval(value)}`,
-        (cost) =>
+        value => `Interval: ${formatInterval(value)}`,
+        cost =>
           `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost)} IP`
       );
     },
@@ -75,7 +75,7 @@ export default {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(
         upgrade,
-        (value) => {
+        value => {
           let description = `Max Replicanti Galaxies: ${formatInt(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
@@ -83,7 +83,7 @@ export default {
           }
           return description;
         },
-        (cost) => `+${formatInt(1)} Costs: ${format(cost)} IP`
+        cost => `+${formatInt(1)} Costs: ${format(cost)} IP`
       );
     },
     boostText() {

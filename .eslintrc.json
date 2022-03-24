@@ -33,11 +33,11 @@
       }
     ],
 
-    "vue/one-component-per-file": "off",
-    "vue/component-definition-name-casing": "off",
-    "vue/order-in-components": "off",
-    "vue/require-prop-type-constructor": "off",
-    "vue/require-default-prop": "off",
+    "vue/one-component-per-file": "error",
+    "vue/component-definition-name-casing": "warn",
+    "vue/order-in-components": "warn",
+    "vue/require-prop-type-constructor": "warn",
+    "vue/require-default-prop": "warn",
     "vue/html-comment-content-newline": "warn",
     "vue/html-comment-content-spacing": "warn",
     "vue/html-comment-indent": "warn",

@@ -2,7 +2,10 @@
 export default {
   name: "BlobBackground",
   props: {
-    bounds: Object
+    bounds: {
+      type: Object,
+      required: true,
+    }
   },
   mounted() {
     this.drop();

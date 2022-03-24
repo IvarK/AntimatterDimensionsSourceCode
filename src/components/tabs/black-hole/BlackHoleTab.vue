@@ -142,7 +142,10 @@ export default {
     <div v-if="isEnslaved || isDoomed">
       The physics of this Reality do not allow the existence of Black Holes.
     </div>
-    <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
+    <div
+      v-else-if="!isUnlocked"
+      style="display: flex; flex-direction: column; align-items: center;"
+    >
       <BlackHoleUnlockButton @blackholeunlock="startAnimation" />
       The Black Hole makes the entire game run significantly faster for a short period of time.
       <br>

@@ -33,6 +33,11 @@ export default {
         : `(${formatPercents(this.offlineFraction, 2)} time spent offline)`;
       return `${stateText} ${fractionText}`;
     },
+    collapseIcon() {
+      return this.isCollapsed
+        ? "fas fa-expand-arrows-alt"
+        : "fas fa-compress-arrows-alt";
+    }
   },
   methods: {
     update() {
@@ -58,11 +63,6 @@ export default {
     changeName() {
       if (this.hasStarted) return;
       Modal.changeName.show();
-    },
-    collapseIcon() {
-      return this.isCollapsed
-        ? "fas fa-expand-arrows-alt"
-        : "fas fa-compress-arrows-alt";
     },
     collapseText() {
       return `Click to ${this.isCollapsed ? "expand" : "collapse"} Speedrun info`;
@@ -97,9 +97,9 @@ export default {
       class="speedrun-collapse"
       @click="toggleCollapse"
     >
-      <i :class="collapseIcon()" />
+      <i :class="collapseIcon" />
       {{ collapseText() }}
-      <i :class="collapseIcon()" />
+      <i :class="collapseIcon" />
     </div>
   </div>
 </template>

@@ -34,11 +34,6 @@ export default {
       showTTGen: false
     };
   },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.timeTheorem.isActive = newValue;
-    }
-  },
   computed: {
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;
@@ -74,6 +69,11 @@ export default {
     saveLoadText() {
       return this.$viewModel.shiftDown ? "save:" : "load:";
     },
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeTheorem.isActive = newValue;
+    }
   },
   methods: {
     minimize() {
@@ -125,19 +125,19 @@ export default {
 </script>
 
 <template>
-  <div id="TTbuttons">
+  <div class="TTbuttons">
     <div class="ttshop-container ttshop-background">
       <div
         data-role="page"
         class="ttbuttons-row ttbuttons-top-row"
       >
         <button
-          class="tt-save-load-btn tt-buy-button tt-buy-button--unlocked"
+          class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
           onClick="Modal.preferredTree.show()"
         >
           <i class="fas fa-cog" />
         </button>
-        <p id="timetheorems">
+        <p class="timetheorems">
           <span class="c-tt-amount">
             {{ quantify("Time Theorem", theoremAmount, 2, 0, formatTimeTheoremType) }}
           </span>
@@ -146,9 +146,9 @@ export default {
             {{ quantifyInt("Space Theorem", STamount) }}
           </span>
         </p>
-        <div class="tree-load-tt-gen-area">
-          <div class="tree-load-buttons">
-            <span class="ttshop__save-load-text">{{ saveLoadText }}</span>
+        <div class="load-tree-area">
+          <div class="tree-load-button-wrapper">
+            <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
             <TimeStudySaveLoadButton
               v-for="saveslot in 6"
               :key="saveslot"
@@ -185,10 +185,10 @@ export default {
           :format-cost="formatEP"
           :action="buyWithEP"
         />
-        <div class="tt-buy-max-vbox">
+        <div class="l-tt-buy-max-vbox">
           <button
             v-if="!minimized"
-            class="tt-top-row-button tt-buy-button tt-buy-button--unlocked"
+            class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
             @click="buyMaxTheorems"
           >
             Buy max
@@ -196,7 +196,7 @@ export default {
           <PrimaryToggleButton
             v-if="!minimized && hasTTAutobuyer"
             v-model="isAutobuyerOn"
-            class="tt-autobuyer-button tt-buy-button tt-buy-button--unlocked"
+            class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
             label="Auto:"
           />
         </div>
@@ -216,109 +216,15 @@ export default {
 </template>
 
 <style scoped>
-#TTbuttons {
-  color: var(--color-text);
-  position: fixed;
-  bottom: 0;
-  font-family: Typewriter, serif;
-  display: flex;
-  align-items: flex-end;
-  z-index: 2;
-  width: 55.5rem;
-}
-
-#timetheorems {
-  font-size: 15px;
-  text-align: center;
-  flex: 1 0 auto;
-}
-
-.ttbuttons-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
-}
-
-.ttbuttons-top-row {
-  align-items: center;
-}
-
-.tt-save-load-btn {
-  min-width: 2em;
-}
-
-.tt-buy-button {
-  font-weight: bold;
-  font-family: Typewriter, serif;
-  border: 0.1rem solid #691fa5;
-  transition-duration: 0.2s;
-  border-radius: 4px;
-  font-size: 1.35rem;
-}
-
-.tt-buy-button--unlocked {
-  color: #3AACD6;
-  background: #232028;
-  cursor: pointer;
-}
-
-.tt-buy-button--unlocked:hover {
-  color: #232028;
-  background: #3AACD6;
-}
-
-.tree-load-tt-gen-area {
+.load-tree-area {
   display: flex;
   flex-direction: column;
   align-items: left;
 }
 
-.tree-load-buttons {
+.tree-load-button-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-.ttshop__save-load-text {
-  font-size: 10px;
-}
-
-.tt-buy-max-vbox {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.tt-top-row-button {
-  min-height: 3rem;
-  font-size: 1.2rem;
-  margin: 0.3rem;
-  flex-grow: 0;
-  flex-shrink: 0;
-  align-self: stretch;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.tt-autobuyer-button {
-  height: 2.5rem;
-  font-size: 1rem !important;
-  margin: 0.3rem;
-  flex-grow: 0;
-  flex-shrink: 0;
-  align-self: stretch;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  min-width: 8rem;
-}
-
-.ttshop-container {
-  padding: 0 0.5rem;
-  min-width: 60rem;
-  max-width: 80rem;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.25s ease-out;
 }
 </style>

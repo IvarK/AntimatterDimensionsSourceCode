@@ -7,8 +7,14 @@ export default {
     PrimaryButton,
   },
   props: {
-    button: Object,
-    progress: Object,
+    button: {
+      type: Object,
+      required: true
+    },
+    progress: {
+      type: Object,
+      required: true
+    },
   },
   computed: {
     canBeClicked() {

@@ -1,6 +1,17 @@
 <script>
 export default {
-  props: ["budget", "cost", "formatCost", "action"],
+  props: {
+    budget: Decimal,
+    cost: Decimal,
+    formatCost: {
+      type: Function,
+      required: true,
+    },
+    action: {
+      type: Function,
+      required: true
+    },
+  },
   computed: {
     isEnabled() {
       if (Pelle.isDoomed && player.eternities.eq(0)) return false;

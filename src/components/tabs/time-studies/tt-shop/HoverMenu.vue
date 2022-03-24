@@ -2,7 +2,10 @@
 export default {
   name: "HoverMenu",
   props: {
-    saveslot: Number
+    saveslot: {
+      type: Number,
+      default: 0
+    }
   },
   data: () => ({
     componentID: UIID.next(),

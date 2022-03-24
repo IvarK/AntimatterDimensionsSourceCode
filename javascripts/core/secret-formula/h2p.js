@@ -1684,13 +1684,13 @@ Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those up
         if (typoThreshold < minimumRequirement) {
           for (const tab of searchIndex[searchIndexStr]) {
             const maxRelevance = tab.searchTermsRelevance[searchIndexStr];
-            const decrease = Math.max(maxRelevance * 2.3 - 1.5, 0);
+            const decrease = Math.max(maxRelevance * 1.6 - 0.9, 0);
             relevances[tab.id] = Math.min(relevances[tab.id], Math.max(typoThreshold, 1 - maxRelevance) - decrease);
           }
         }
       }
     }
-    const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 1.5)
+    const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 0.9)
       .map(x => ({ tab: x, relevance: relevances[x.id] }));
     // Provide both the relevance and the tab itself
 

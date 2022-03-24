@@ -121,7 +121,7 @@ export default {
 
 .o-h2p-tab-button--first-irrelevant {
   border-top: 0.1rem solid black;
-  margin-top: 0.3rem;
+  margin-top: 0.8rem;
 }
 
 .s-base--dark .o-h2p-tab-button--first-irrelevant {

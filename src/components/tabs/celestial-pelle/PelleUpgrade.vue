@@ -55,19 +55,18 @@ export default {
       return `${prefix} ${value}`;
     },
     timeEstimate() {
-      if (this.canBuy ||
-        this.isBought ||
-        this.isCapped ||
-        this.galaxyGenerator
-      ) return null;
+      if (!this.hasTimeEstimate) return null;
       return this.currentTimeEstimate;
     },
-    shouldEstimateImprovement() {
+    hasTimeEstimate() {
       return !(this.canBuy ||
         this.isBought ||
         this.isCapped ||
         this.galaxyGenerator
       );
+    },
+    shouldEstimateImprovement() {
+      return this.showImprovedEstimate && this.hasTimeEstimate;
     },
     estimateImprovement() {
       if (!this.shouldEstimateImprovement) return "";
@@ -118,7 +117,7 @@ export default {
     @mouseleave="hovering = false"
   >
     <CustomizeableTooltip
-      :show="showImprovedEstimate && shouldEstimateImprovement"
+      :show="shouldEstimateImprovement"
       left="50%"
       top="0"
     >
@@ -127,9 +126,9 @@ export default {
       </template>
     </CustomizeableTooltip>
     <CustomizeableTooltip
+      v-if="timeEstimate"
       left="50%"
       top="0"
-      class="l-fill-container"
       content-class="l-fill-container"
     >
       <template #tooltipContent>

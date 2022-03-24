@@ -1303,7 +1303,10 @@ GameStorage.devMigrations = {
       player.celestials.pelle.upgrades.delete(19);
       if (hasDimboost) player.celestials.pelle.upgrades.add(18);
       if (hasDilUpg) player.celestials.pelle.upgrades.add(19);
-    }
+    },
+    player => {
+      delete player.auto.bulkOn;
+    },
   ],
 
   patch(player) {

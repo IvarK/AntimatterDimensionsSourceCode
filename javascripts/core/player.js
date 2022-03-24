@@ -53,7 +53,6 @@ window.player = {
     upgradeBits: 0
   },
   auto: {
-    bulkOn: true,
     autobuyersOn: true,
     disableContinuum: false,
     reality: {

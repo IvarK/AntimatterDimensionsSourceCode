@@ -816,7 +816,6 @@ GameStorage.migrations = {
   },
 
   migrateAutobuyers(player) {
-    player.auto.bulkOn = player.options.bulkOn;
     player.auto.autobuyerOn = player.options.autobuyerOn;
 
     delete player.options.bulkOn;

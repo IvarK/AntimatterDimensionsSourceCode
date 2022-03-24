@@ -93,7 +93,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
         buyOneDimension(tier);
         break;
       case AUTOBUYER_MODE.BUY_10:
-        buyMaxDimension(tier, player.auto.bulkOn ? this.bulk : 1);
+        buyMaxDimension(tier, this.bulk);
         break;
     }
   }

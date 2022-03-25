@@ -123,7 +123,7 @@ function galaxyReset() {
   player.galaxies++;
   if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
   softReset(0);
-  if (Notations.current === Notation.emoji) player.requirementChecks.permanent.cancerGalaxies++;
+  if (Notations.current === Notation.emoji) player.requirementChecks.permanent.emojiGalaxies++;
   // This is specifically reset here because the check is actually per-galaxy and not per-infinity
   player.requirementChecks.infinity.noSacrifice = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
@@ -146,7 +146,7 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
     limit);
   if (Notations.current === Notation.emoji) {
-    player.requirementChecks.permanent.cancerGalaxies += newGalaxies - player.galaxies;
+    player.requirementChecks.permanent.emojiGalaxies += newGalaxies - player.galaxies;
   }
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:
   player.galaxies = newGalaxies - 1;

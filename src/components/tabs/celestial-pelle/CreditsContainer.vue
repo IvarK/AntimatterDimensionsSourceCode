@@ -28,67 +28,25 @@ export default {
     celestialDisplays() {
       return {
         teresa: {
-          symbol: Teresa.symbol,
-          style: {
-            left: "65%",
-            top: "130rem",
-            color: "var(--color-teresa--base)",
-            animation: this.animName("teresa")
-          }
+          symbol: Teresa.symbol
         },
         effarig: {
-          symbol: Effarig.symbol,
-          style: {
-            left: "80%",
-            top: "50rem",
-            color: "#f40",
-            animation: this.animName("effarig", 4)
-          }
+          symbol: Effarig.symbol
         },
         enslaved: {
-          symbol: Enslaved.symbol,
-          style: {
-            left: "52%",
-            top: "220rem",
-            color: "var(--color-enslaved-base)",
-            animation: this.animName("enslaved", 10, "linear")
-          }
+          symbol: Enslaved.symbol
         },
         v: {
-          symbol: V.symbol,
-          style: {
-            left: "20%",
-            top: "170rem",
-            color: "var(--color-v--base)",
-            animation: this.animName("v", 15)
-          }
+          symbol: V.symbol
         },
         ra: {
-          symbol: Ra.symbol,
-          style: {
-            left: "44%",
-            top: "300rem",
-            color: "var(--color-ra-base)",
-            animation: this.animName("ra")
-          }
+          symbol: Ra.symbol
         },
         laitela: {
-          symbol: Laitela.symbol,
-          style: {
-            left: "13%",
-            top: "90rem",
-            color: "#ffffff",
-            animation: this.animName("laitela", 5)
-          }
+          symbol: Laitela.symbol
         },
         pelle: {
-          symbol: Pelle.symbol,
-          style: {
-            left: "30%",
-            top: "8rem",
-            color: "var(--color-pelle--base)",
-            animation: this.animName("pelle", 5, "linear")
-          }
+          symbol: Pelle.symbol
         }
       };
     }
@@ -121,7 +79,7 @@ export default {
       v-for="(cel, celIndex) in celestialDisplays"
       :key="celIndex + '-end-credit-symbol-disp'"
       class="c-credits-cel-symbol"
-      :style="cel.style"
+      :class="`c-${celIndex}-credits`"
       v-html="cel.symbol"
     />
     <h1 class="c-credits-header">
@@ -200,6 +158,55 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.c-teresa-credits {
+  left: 65%;
+  top: 130rem;
+  color: var(--color-teresa--base);
+  animation: a-teresa-credits 10s ease-in-out infinite;
+}
+
+.c-effarig-credits {
+  left: 80%;
+  top: 50rem;
+  color: #f40;
+  animation: a-effarig-credits 4s ease-in-out infinite;
+}
+
+.c-enslaved-credits {
+  left: 52%;
+  top: 220rem;
+  color: var(--color-enslaved-base);
+  animation: a-enslaved-credits 10s linear infinite;
+}
+
+.c-v-credits {
+  left: 20%;
+  top: 170rem;
+  color: var(--color-v--base);
+  animation: a-v-credits 15s ease-in-out infinite;
+}
+
+.c-ra-credits {
+  left: 44%;
+  top: 300rem;
+  color: var(--color-ra-base);
+  animation: a-ra-credits 10s ease-in-out infinite;
+}
+
+.c-laitela-credits {
+  left: 13%;
+  top: 90rem;
+  color: #ffffff;
+  animation: a-laitela-credits 5s ease-in-out infinite;
+}
+
+.c-pelle-credits {
+  left: 30%;
+  top: 8rem;
+  color: var(--color-pelle--base);
+  animation: a-pelle-credits 5s linear infinite;
 }
 </style>
 

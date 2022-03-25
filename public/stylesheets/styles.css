@@ -9115,7 +9115,7 @@ input.o-automator-block-input {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 0.5rem;
   flex: 1 0.8 40rem;
 }

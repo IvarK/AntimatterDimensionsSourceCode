@@ -85,12 +85,12 @@ export default {
     <span>
       <i
         v-if="isExcluded"
-        class="fas fa-exclamation"
+        class="fas fa-exclamation l-dock-left"
       />
       {{ description }}
       <i
         v-if="isExcluded"
-        class="fas fa-exclamation"
+        class="fas fa-exclamation l-dock-right"
       />
     </span>
     <i
@@ -106,12 +106,27 @@ export default {
   color: black;
   font-size: 1rem;
   position: absolute;
-  /* -0.1rem = 1px, needed because CSS renders a black border between the check and the border of the selector
+  /* -0.1rem = -1px, needed because CSS renders a black border between the check and the border of the selector
   otherwise */
   top: -0.1rem;
   right: -0.1rem;
   border-radius: 0 0.4rem;
   padding: 0.2rem;
   text-shadow: none;
+}
+
+.l-dock-left, .l-dock-right {
+  position: absolute;
+  margin: 0 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.l-dock-left {
+  left: 0;
+}
+
+.l-dock-right {
+  right: 0;
 }
 </style>

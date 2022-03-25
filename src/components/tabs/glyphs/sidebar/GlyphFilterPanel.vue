@@ -347,14 +347,5 @@ export default {
 </template>
 
 <style scoped>
-  .fa-check {
-    background-color: var(--color-reality-light);
-    color: black;
-    font-size: 1rem;
-    position: absolute;
-    top: -1px;
-    right: -1px;
-    border-radius: 0 0.3rem;
-    padding: 0.1rem;
-  }
+
 </style>

@@ -30,7 +30,7 @@ export default {
       const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
       const baseColour = this.isDark ? "#111111" : "var(--color-base)";
       return {
-        width: "18rem",
+        width: "20rem",
         border: "0.1rem solid var(--color-pelle--base)",
         backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColour,
         color: hasMilestone ? "black" : "var(--color-text)",
@@ -62,11 +62,12 @@ export default {
     hasMilestone(ms) {
       return ms.canBeApplied;
     },
-    milestoneText(rift, milestone) {
+    milestoneResourceText(rift, milestone) {
       return `${formatPercents(milestone.requirement)}
-      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource})
-      <br><br>
-      ${milestone.description}`;
+      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource})`;
+    },
+    milestoneDescriptionText(milestone) {
+      return milestone.description;
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
@@ -168,7 +169,9 @@ export default {
       content-class="o-pelle-rift-bar-milestone-hover-area"
     >
       <template #tooltipContent>
-        <span v-html="milestoneText(rift, selectedHoverMilestone)" />
+        {{ milestoneResourceText(rift, selectedHoverMilestone) }}
+        <br>
+        {{ milestoneDescriptionText(selectedHoverMilestone) }}
       </template>
     </CustomizeableTooltip>
   </div>

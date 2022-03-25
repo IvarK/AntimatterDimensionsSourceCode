@@ -5246,7 +5246,6 @@ screen and (max-width: 480px) {
   font-size: 1.4rem;
   padding: 1rem;
   transition-duration: 0.2s;
-  overflow: hidden;
 }
 
 .c-modal__title {
@@ -5273,13 +5272,101 @@ screen and (max-width: 480px) {
   justify-content: center;
 }
 
-.c-modal__confirmation-check {
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 1rem 0.5rem 0;
-  font-size: 2rem;
-  line-height: 2rem;
-  padding: 0;
+.c-modal__confirmation-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-gh-purple);
+  font-size: 1.9rem;
+  height: 3rem;
+  width: 3rem;
+  border: 0.3rem solid black;
+  border-top-right-radius: 0.3rem;
+  border-bottom-left-radius: 1rem;
+  color: black;
+  cursor: pointer;
+  user-select: none;
+  transition-duration: 0.2s;
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+}
+
+.c-modal__confirmation-toggle:hover {
+  transform: scale(1.1) translate(-0.15rem, 0.15rem);
+}
+
+.s-base--metro .c-modal__confirmation-toggle {
+  border-radius: 0;
+  border-width: 0.1rem;
+  top: -0.1rem;
+  right: -0.1rem;
+}
+
+.t-s6 .c-modal__confirmation-toggle,
+.t-s10 .c-modal__confirmation-toggle {
+  border: 0.1rem solid #1b5e20;
+  top: -0.1rem;
+  right: -0.1rem;
+}
+
+.c-modal__confirmation-toggle--active {
+  background: var(--color-good);
+}
+
+.c-modal__confirmation-toggle__tooltip {
+  opacity: 0;
+  transition-duration: 0.2s;
+  font-size: 1.4rem;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: 0.3rem solid black;
+  border-radius: 0.8rem;
+  min-width: 20rem;
+  margin-left: 0;
+  padding: 0.4rem;
+  pointer-events: none;
+  position: absolute;
+  bottom: 100%;
+}
+
+.s-base--metro .c-modal__confirmation-toggle__tooltip {
+  border-radius: 0;
+  border-width: 0.1rem;
+}
+
+.t-s6 .c-modal__confirmation-toggle__tooltip,
+.t-s10 .c-modal__confirmation-toggle__tooltip {
+  border: 0.1rem solid #1b5e20;
+}
+
+.c-modal__confirmation-toggle__tooltip:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.7rem;
+  margin-bottom: 0;
+  width: 0;
+  border-top: 0 solid black;
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
+  content: " ";
+  transition-duration: 0.2s;
+  z-index: 0;
+}
+
+.c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.8rem);
+}
+
+.s-base--metro .c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__tooltip {
+  bottom: calc(100% + 0.7rem);
+}
+
+.c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
 }
 
 .c-modal__confirm-btn {

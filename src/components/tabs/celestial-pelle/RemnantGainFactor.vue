@@ -44,7 +44,7 @@ export default {
       container-class="c-remnant-factors"
       label="Remnant Gain Factors"
       :style="{
-        opacity: lessOpaque ? 0.2 : 1
+        opacity: lessOpaque ? 0 : 1
       }"
     >
       <template #dropdown>

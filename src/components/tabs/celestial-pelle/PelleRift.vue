@@ -1,6 +1,6 @@
 <script>
-import PelleStrike from "./PelleStrike.vue";
-import PelleRiftBar from "./PelleRiftBar.vue";
+import PelleStrike from "./PelleStrike";
+import PelleRiftBar from "./PelleRiftBar";
 
 export default {
   name: "PelleRift",
@@ -56,11 +56,13 @@ export default {
   <div class="c-pelle-rift">
     <div class="c-pelle-rift-row">
       <div class="c-pelle-rift-column c-pelle-rift-status">
-        <h2>{{ rift.name }}</h2>
+        <h2 class="c-pelle-rift-name-header">
+          {{ rift.name }}
+        </h2>
         <div class="c-pelle-rift-rift-info-container">
           <div
             v-for="(effect, idx) in effects"
-            :key="'effect-' + idx"
+            :key="idx"
           >
             {{ effect || "" }}
           </div>
@@ -72,7 +74,9 @@ export default {
       </div>
       <div class="c-pelle-rift-status">
         <div class="c-pelle-rift-fill-status">
-          <h2>{{ rift.name }}</h2>
+          <h2 class="c-pelle-rift-name-header">
+            {{ rift.name }}
+          </h2>
           <div class="c-pelle-rift-rift-info-container">
             Drains {{ rift.drainResource }} to fill.
             <br>
@@ -96,8 +100,8 @@ export default {
   margin-top: 1rem;
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;
-  /* transparent crimson */
-  background-color: #ed143d15;
+  /* transparent crimson
+  background-color: #ed143d15; */
 }
 
 .c-pelle-rift-row {
@@ -127,7 +131,7 @@ export default {
   width: 26rem;
 }
 
-h2 {
+.c-pelle-rift-name-header {
   color: var(--color-pelle--base);
   font-weight: bold;
   padding: 0.2rem;

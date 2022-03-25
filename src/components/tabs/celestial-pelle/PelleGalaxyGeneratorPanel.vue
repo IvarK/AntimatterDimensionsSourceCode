@@ -261,9 +261,8 @@ export default {
 .c-collapse-icon-clickable {
   cursor: pointer;
 }
-</style>
 
-<style>
+
 .s-base--metro .c-increase-cap {
   border-radius: 0;
 }

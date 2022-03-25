@@ -338,15 +338,17 @@ export default {
   animation: none;
   filter: brightness(0.25);
 }
+
+
+.s-base--metro .c-pelle-rift-bar,
+.s-base--metro .l-overflow-hidden {
+  border-radius: 0;
+}
 </style>
 
 <style>
 .o-pelle-rift-bar-milestone-hover-area {
   width: 2rem;
   height: 100%;
-}
-
-.s-base--metro .c-pelle-rift-bar, .s-base--metro .l-overflow-hidden {
-  border-radius: 0;
 }
 </style>

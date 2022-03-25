@@ -1,6 +1,6 @@
 <script>
 import CostDisplay from "@/components/CostDisplay";
-import CustomizeableTooltip from "@/components/CustomizeableTooltip.vue";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 export default {

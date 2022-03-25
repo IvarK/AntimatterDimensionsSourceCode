@@ -18,9 +18,7 @@ export default {
       canEnterPelle: false,
       completedRows: 0,
       hasStrike: false,
-      hasGalaxyGenerator: false,
-      remnantsGain: 0,
-      realityShardGain: new Decimal(0)
+      hasGalaxyGenerator: false
     };
   },
   computed: {

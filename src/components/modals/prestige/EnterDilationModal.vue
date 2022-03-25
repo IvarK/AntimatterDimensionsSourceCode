@@ -44,7 +44,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="dilation"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ entranceLabel }}
     </template>

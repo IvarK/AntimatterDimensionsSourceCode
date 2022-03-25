@@ -5249,6 +5249,12 @@ screen and (max-width: 480px) {
   overflow: hidden;
 }
 
+.c-modal__title {
+  width: 50rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
 .c-modal__close-btn {
   position: absolute;
   top: 0.5rem;
@@ -5259,6 +5265,21 @@ screen and (max-width: 480px) {
   transform: scale(0.5);
   top: -0.5rem;
   right: -0.5rem;
+}
+
+.l-modal-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.c-modal__confirmation-check {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 1rem 0.5rem 0;
+  font-size: 2rem;
+  line-height: 2rem;
+  padding: 0;
 }
 
 .c-modal__confirm-btn {
@@ -5379,11 +5400,14 @@ screen and (max-width: 480px) {
   flex-direction: column;
   align-items: center;
   min-width: 40rem;
+}
+
+.t-dark .c-modal-away-progress {
   text-shadow:
-    0 0 0.2rem black,
-    0 0 0.2rem black,
-    0 0 0.2rem black,
-    0 0 0.2rem black;
+  0 0 0.2rem black,
+  0 0 0.2rem black,
+  0 0 0.2rem black,
+  0 0 0.2rem black;
 }
 
 .c-modal-away-progress__header {
@@ -5397,6 +5421,7 @@ screen and (max-width: 480px) {
   margin-bottom: 0.2rem;
   padding-bottom: 0.2rem;
   border-bottom: 0.1rem solid var(--color-text);
+  cursor: pointer;
 }
 
 .c-modal-away-progress__resources div:last-child {
@@ -5438,6 +5463,13 @@ screen and (max-width: 480px) {
 .c-modal-away-progress__tachyon-galaxies,
 .c-modal-away-progress__dilated-time {
   color: var(--color-dilation);
+  filter: brightness(0.8)
+}
+
+.t-dark .c-modal-away-progress__tachyon-particles,
+.t-dark .c-modal-away-progress__tachyon-galaxies,
+.t-dark .c-modal-away-progress__dilated-time {
+  filter: none
 }
 
 .c-modal-away-progress__realities,
@@ -5483,12 +5515,30 @@ screen and (max-width: 480px) {
   color: var(--color-ra-pet-v);
 }
 
+.c-modal-away-progress__teresa-memories,
+.c-modal-away-progress__effarig-memories,
+.c-modal-away-progress__enslaved-memories,
+.c-modal-away-progress__v-memories {
+  filter: brightness(0.8);
+}
+
+.t-dark .c-modal-away-progress__teresa-memories,
+.t-dark .c-modal-away-progress__effarig-memories,
+.t-dark .c-modal-away-progress__enslaved-memories,
+.t-dark .c-modal-away-progress__v-memories {
+  filter: none
+}
+
 .c-modal-away-progress__black-hole b,
 .c-modal-away-progress__black-hole {
   color: black;
   text-shadow:
   0 0 0.2rem #e67919,
   0 0 0.3rem #e67919;
+}
+
+.c-modal-away-progress__reality-shards {
+  color: var(--color-pelle--base);
 }
 
 .c-modal-away-progress__disabled b,
@@ -7754,7 +7804,7 @@ kbd {
 }
 
 .o-alchemy-node--locked {
-  opacity: 0.1;
+  opacity: 0.25;
   z-index: 4;
 }
 .o-alchemy-node--base {
@@ -9065,7 +9115,7 @@ input.o-automator-block-input {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 0.5rem;
   flex: 1 0.8 40rem;
 }

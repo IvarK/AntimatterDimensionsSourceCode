@@ -68,7 +68,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="eternity"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ exitingEC ? "Complete Eternity Challenge" :"You are about to Eternity" }}
     </template>

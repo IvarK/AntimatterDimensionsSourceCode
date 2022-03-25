@@ -38,7 +38,13 @@ class PelleStrikeState extends GameMechanicState {
     if (this.id === 5) {
       Pelle.cel.records.totalAntimatter = new Decimal("1e180000");
       Pelle.cel.records.totalInfinityPoints = new Decimal("1e60000");
-      Pelle.cel.records.totalEternityPoints = new Decimal("1e400");
+      Currency.eternityPoints.reset();
+      // Oddly specific number? Yes, it's roughly the amount of EP you have
+      // when starting dilation for the first time
+      // Since 5th strike previously did not reset your current EP the previous reset value was kind of useless which
+      // lead to some balancing problems, this hopefully prevents people starting dilation too early and getting
+      // softlocked, or starting it too late and getting not-softlocked.
+      Pelle.cel.records.totalEternityPoints = new Decimal("1e1050");
     }
   }
 

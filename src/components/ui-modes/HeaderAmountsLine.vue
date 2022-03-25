@@ -1,4 +1,6 @@
-Vue.component("game-header-amounts-line", {
+<script>
+export default {
+  name: "HeaderAmountsLine",
   data() {
     return {
       showInfinityPoints: false,
@@ -38,22 +40,35 @@ Vue.component("game-header-amounts-line", {
       return `(${formatPercents(progress, 2, 2)})`;
     },
   },
-  template: `
-    <div class="l-game-header__amounts-line">
-      <div
-        v-if="showInfinityPoints"
-        class="c-game-header__infinity-points l-game-header__infinity-points"
-      >
-        You have
-        <span class="c-game-header__ip-amount">{{ formatPoints(infinityPoints) }}</span>
-        {{ pluralize("Infinity Point", infinityPoints) }}.
-        <span v-if="isTesseractUnlocked" v-html="tesseractText"></span>
-      </div>
-      <div v-if="showEternityPoints" class="c-game-header__eternity-points l-game-header__eternity-points">
-        You have
-        <span class="c-game-header__ep-amount">{{ formatPoints(eternityPoints) }}</span>
-        {{ pluralize("Eternity Point", eternityPoints) }}.
-        <span v-if="showNextEP">(Next EP at {{ format(nextEP, 1) }} IP)</span>
-      </div>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div class="l-game-header__amounts-line">
+    <div
+      v-if="showInfinityPoints"
+      class="c-game-header__infinity-points l-game-header__infinity-points"
+    >
+      You have
+      <span class="c-game-header__ip-amount">{{ formatPoints(infinityPoints) }}</span>
+      {{ pluralize("Infinity Point", infinityPoints) }}.
+      <span
+        v-if="isTesseractUnlocked"
+        v-html="tesseractText"
+      />
+    </div>
+    <div
+      v-if="showEternityPoints"
+      class="c-game-header__eternity-points l-game-header__eternity-points"
+    >
+      You have
+      <span class="c-game-header__ep-amount">{{ formatPoints(eternityPoints) }}</span>
+      {{ pluralize("Eternity Point", eternityPoints) }}.
+      <span v-if="showNextEP">(Next EP at {{ format(nextEP, 1) }} IP)</span>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

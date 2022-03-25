@@ -566,7 +566,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.v.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "⌬",
-        symbolOffset: "0.25",
+        symbolOffset: "2",
         fill: "#ffe066",
         position: Positions.vUnlockAchievement,
         ring: {
@@ -992,7 +992,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.ra.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "\uf185",
-        symbolOffset: "0.25",
+        symbolOffset: "2",
         fill: "#9063de",
         position: Positions.raReality,
         ring: {
@@ -1300,7 +1300,7 @@ GameDatabase.celestials.navigation = (function() {
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "ᛝ",
         symbolScale: 1.6,
-        symbolOffset: "0.1",
+        symbolOffset: "0.6",
         fill: "white",
         position: Positions.laitelaFirstCenter,
         ring: {
@@ -1623,7 +1623,7 @@ GameDatabase.celestials.navigation = (function() {
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "ᛝ",
         symbolScale: 1.6,
-        symbolOffset: "0.1",
+        symbolOffset: "0.6",
         fill: "white",
         position: Positions.laitelaThirdCenter,
         ring: {

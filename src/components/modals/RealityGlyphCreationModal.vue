@@ -34,6 +34,7 @@ export default {
       }
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(this.realityGlyphLevel));
       AlchemyResource.reality.amount = 0;
+      player.reality.glyphs.createdRealityGlyph = true;
       this.emitClose();
     },
     formatGlyphEffect(effect) {

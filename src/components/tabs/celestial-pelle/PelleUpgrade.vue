@@ -44,15 +44,15 @@ export default {
       return this.upgrade.config;
     },
     effectText() {
-      if (!this.config.formatEffect) return "";
+      if (!this.config.formatEffect) return false;
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
-      let value = formattedEffect(this.purchases);
+      const value = [formattedEffect(this.purchases)];
+      // ➜
       if (!this.isCapped && this.hovering && this.canBuy) {
-        value = `${formattedEffect(this.purchases)}
-        ➜ <span class="c-improved-effect">${formattedEffect(this.purchases + 1)}</span>`;
+        value[1] = formattedEffect(this.purchases + 1);
       }
-      return `${prefix} ${value}`;
+      return { prefix, value };
     },
     timeEstimate() {
       if (!this.hasTimeEstimate) return null;
@@ -138,7 +138,12 @@ export default {
     <DescriptionDisplay :config="config" />
     <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">
-      <span v-html="effectText" />
+      {{ effectText.prefix }} {{ effectText.value[0] }}
+      <template v-if="effectText.value[1]">
+        ➜ <span class="c-improved-effect">
+          {{ effectText.value[1] }}
+        </span>
+      </template>
       <div class="l-pelle-upgrade-gap" />
     </div>
     <CostDisplay

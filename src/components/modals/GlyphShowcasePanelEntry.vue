@@ -47,18 +47,14 @@ export default {
     level() {
       return this.glyph.level;
     },
-    displayLevel() {
-      if (BASIC_GLYPH_TYPES.includes(this.type)) return this.level + this.realityGlyphBoost;
-      return this.level;
-    },
     effectiveLevel() {
-      return this.displayLevel ? this.displayLevel : this.level;
+      return getAdjustedGlyphLevel(this.glyph, this.realityGlyphBoost);
     },
     isLevelCapped() {
-      return this.displayLevel && this.displayLevel < this.level;
+      return this.effectiveLevel && this.effectiveLevel < this.level;
     },
     isLevelBoosted() {
-      return this.displayLevel && this.displayLevel > this.level;
+      return this.effectiveLevel && this.effectiveLevel > this.level;
     },
     levelText() {
       if (this.type === "companion") return "";
@@ -103,7 +99,8 @@ export default {
     },
     glyphEffectList() {
       const db = GameDatabase.reality.glyphEffects;
-      const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength, this.type)
+      const effects =
+      getGlyphEffectValuesFromBitmask(this.glyph.effects, this.effectiveLevel, this.glyph.strength, this.type)
         .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));
       const effectStrings = effects
         .map(e => this.formatEffectString(db[e.id], e.value));
@@ -138,10 +135,16 @@ export default {
       const alteredValue = dbEntry.conversion
         ? dbEntry.formatSecondaryEffect(dbEntry.conversion(value))
         : "";
-      return `${rawDesc}`
-        .replace("{value}", singleValue)
-        .replace("{value2}", alteredValue);
+      return {
+        text: `${rawDesc}`
+          .replace("{value}", singleValue)
+          .replace("{value2}", alteredValue),
+        isPelleDisabled: this.isPelleDisabled(dbEntry.id)
+      };
     },
+    isPelleDisabled(effect) {
+      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(effect);
+    }
   },
 };
 </script>
@@ -178,10 +181,13 @@ export default {
       :style="effectStyle"
     >
       <div
-        v-for="(effectText, index) in glyphEffectList"
+        v-for="(effectObj, index) in glyphEffectList"
         :key="index"
+        :style="{
+          textDecoration: effectObj.isPelleDisabled ? 'line-through' : null
+        }"
       >
-        {{ effectText }}
+        {{ effectObj.text }}
       </div>
     </div>
   </div>

@@ -219,6 +219,12 @@ export default {
   flex-shrink: 0;
 }
 
+.c-improved-effect {
+  color: #0b0;
+  font-weight: bold;
+  font-style: italic;
+}
+
 
 .s-base--metro .c-pelle-upgrade {
   border-radius: 0;
@@ -226,13 +232,5 @@ export default {
 
 .s-base--metro .c-pelle-upgrade--unavailable {
   background-color: #9e9e9e;
-}
-</style>
-
-<style>
-.c-improved-effect {
-  color: #0b0;
-  font-weight: bold;
-  font-style: italic;
 }
 </style>

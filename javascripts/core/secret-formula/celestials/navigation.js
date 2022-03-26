@@ -87,8 +87,8 @@ GameDatabase.celestials.navigation = (function() {
     },
     "teresa-reality-unlock": {
       visible: () => true,
-      complete: () => (Teresa.has(TERESA_UNLOCKS.RUN)
-        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.RUN.price)),
+      complete: () => (TeresaUnlocks.run.canBeApplied
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TeresaUnlocks.run.price)),
       node: {
         completeClass: "c-celestial-nav__test-complete",
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -101,7 +101,7 @@ GameDatabase.celestials.navigation = (function() {
           hideWhenCompleted: true,
           text: () => {
             const rm = Teresa.pouredAmount;
-            const cost = TERESA_UNLOCKS.RUN.price;
+            const cost = TeresaUnlocks.run.price;
             return `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`;
           },
           angle: 135,
@@ -147,8 +147,8 @@ GameDatabase.celestials.navigation = (function() {
     },
     "teresa-pp-shop": {
       visible: () => true,
-      complete: () => (Teresa.has(TERESA_UNLOCKS.SHOP)
-        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
+      complete: () => (TeresaUnlocks.shop.canBeApplied
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TeresaUnlocks.shop.price)),
       node: {
         clickAction: () => Tab.celestials.teresa.show(true),
         completeClass: "c-celestial-nav__test-complete",
@@ -162,7 +162,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Perk Point Shop";
             const rm = Teresa.pouredAmount;
-            const cost = TERESA_UNLOCKS.SHOP.price;
+            const cost = TeresaUnlocks.shop.price;
             return [
               "Perk Point Shop",
               `Pour ${format(rm, 2)} / ${format(cost, 2)} Reality Machines`
@@ -183,8 +183,8 @@ GameDatabase.celestials.navigation = (function() {
     },
     "effarig-shop": {
       visible: () => true,
-      complete: () => (Teresa.has(TERESA_UNLOCKS.EFFARIG)
-        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
+      complete: () => (TeresaUnlocks.effarig.canBeApplied
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TeresaUnlocks.effarig.price)),
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
         completeClass: "c-celestial-nav__effarig",
@@ -197,7 +197,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Effarig's Shop";
             const rm = Teresa.pouredAmount;
-            const cost = TERESA_UNLOCKS.EFFARIG.price;
+            const cost = TeresaUnlocks.effarig.price;
             return [
               "Effarig",
               `Pour ${format(rm, 2)} / ${format(cost, 2)} Reality Machines`
@@ -216,7 +216,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-reality-unlock": {
-      visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+      visible: () => TeresaUnlocks.effarig.canBeApplied,
       // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
       // even if the player has enough relic shards to buy it.
       complete: () => (EffarigUnlock.run.isUnlocked

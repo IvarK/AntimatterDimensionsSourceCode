@@ -268,7 +268,7 @@ function giveRealityRewards(realityProps) {
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   Currency.realities.add(realityAndPPMultiplier);
   Currency.perkPoints.add(realityAndPPMultiplier);
-  if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
+  if (TeresaUnlocks.effarig.canBeApplied) {
     Currency.relicShards.add(realityProps.gainedShards * multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {
@@ -647,7 +647,7 @@ export function finishProcessReality(realityProps) {
   ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
-  if (Teresa.has(TERESA_UNLOCKS.START_EU) && !Pelle.isDoomed) {
+  if (TeresaUnlocks.startEU.canBeApplied) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   }
 

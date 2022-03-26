@@ -77,7 +77,7 @@ GameDatabase.awayProgressTypes = [
   }, {
     name: "relicShards",
     reference: ["celestials", "effarig", "relicShards"],
-    isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+    isUnlocked: () => TeresaUnlocks.effarig.canBeApplied,
   }, {
     name: "celestialMemories",
     isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),

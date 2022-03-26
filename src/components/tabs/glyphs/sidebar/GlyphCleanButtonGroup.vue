@@ -34,7 +34,7 @@ export default {
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
-      this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
+      this.hasPerkShop = TeresaUnlocks.shop.canBeApplied;
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
       this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE ||

@@ -37,7 +37,7 @@ export default {
     };
   },
   computed: {
-    unlockInfos: () => Teresa.unlockInfo,
+    unlockInfos: () => TeresaUnlocks,
     pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
       const upgrades = [
@@ -91,9 +91,9 @@ export default {
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
       this.possibleFillPercentage = `${(Teresa.possibleFill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
-      this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
-      this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
-      this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
+      this.hasReality = TeresaUnlocks.run.isUnlocked;
+      this.hasEPGen = TeresaUnlocks.epGen.isUnlocked;
+      this.hasPerkShop = TeresaUnlocks.shop.isUnlocked;
       this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
@@ -102,20 +102,20 @@ export default {
       this.perkPoints = Currency.perkPoints.value;
       this.rm.copyFrom(Currency.realityMachines);
       this.isRunning = Teresa.isRunning;
-      this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)
-        .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
+      this.canUnlockNextPour = Object.values(TeresaUnlocks)
+        .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !unlock.isUnlocked).length > 0;
     },
     startRun() {
       if (this.isDoomed) return;
       Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
     unlockDescriptionHeight(unlockInfo) {
-      const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
+      const maxPrice = TeresaUnlocks[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return `calc(${(100 * pos).toFixed(2)}% - 0.1rem)`;
     },
     hasUnlock(unlockInfo) {
-      return this.pouredAmount >= unlockInfo.price;
+      return unlockInfo.isUnlocked;
     },
     unlockInfoTooltipContentStyle(unlockInfo) {
       const hasInfo = this.hasUnlock(unlockInfo);

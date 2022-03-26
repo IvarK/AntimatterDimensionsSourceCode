@@ -64,7 +64,7 @@ export const Effarig = {
     return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
-    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
+    if (!TeresaUnlocks.effarig.canBeApplied) return 0;
     return Math.floor(Math.pow(Currency.eternityPoints.exponent / 7500, this.glyphEffectAmount)) *
       AlchemyResource.effarig.effectValue;
   },

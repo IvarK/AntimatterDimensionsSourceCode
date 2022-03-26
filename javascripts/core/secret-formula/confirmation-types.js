@@ -56,11 +56,11 @@ GameDatabase.confirmationTypes = [
   }, {
     name: "Glyph Undo",
     option: "glyphUndo",
-    isUnlocked: () => Teresa.has(TERESA_UNLOCKS.UNDO),
+    isUnlocked: () => TeresaUnlocks.undo.canBeApplied,
   }, {
     name: "Reset Celestial",
     option: "resetCelestial",
-    isUnlocked: () => Teresa.has(TERESA_UNLOCKS.RUN),
+    isUnlocked: () => TeresaUnlocks.run.canBeApplied,
   }, {
     name: "Delete Glyph Set Save",
     option: "deleteGlyphSetSave",

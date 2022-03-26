@@ -1,11 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-
 export default {
   name: "HeaderUnlockInfinityDimButton",
-  components: {
-    PrimaryButton
-  },
   data() {
     return {
       isVisible: false,

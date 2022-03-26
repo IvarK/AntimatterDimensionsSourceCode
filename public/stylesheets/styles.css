@@ -1302,6 +1302,7 @@ screen and (max-width: 480px) {
 .o-primary-btn--tickspeed {
   width: 17rem;
   font-size: 1.2rem;
+  margin-right: 0.4rem;
 }
 
 .o-primary-btn--buy-max {
@@ -1932,7 +1933,7 @@ screen and (max-width: 480px) {
 
 .c-game-header__infinity-points {
   font-size: 1.2rem;
-  width: 21rem;
+  width: 22rem;
 }
 
 .c-game-header__tesseract-available {
@@ -1994,7 +1995,7 @@ screen and (max-width: 480px) {
 
 .c-game-header__eternity-points {
   font-size: 1.2rem;
-  width: 21rem;
+  width: 22rem;
 }
 
 .c-game-header__ep-amount {

@@ -9,41 +9,52 @@ export default {
   data() {
     return {
       isVisible: false,
-      requirement: new Decimal(0),
-      isAffordable: false,
-      anyInfinityDimensionUnlocked: false
+      canUnlock: false,
     };
+  },
+  computed: {
+    text() {
+      if (this.canUnlock) {
+        return "Unlock a new\nInfinity Dimension";
+      }
+      const nextDimension = InfinityDimensions.next();
+      const amDisplay = format(nextDimension.amRequirement);
+      const ipDisplay = format(nextDimension.ipRequirement);
+      if (nextDimension.hasIPUnlock) {
+        return `Reach ${ipDisplay} Infinity Points and ${amDisplay} antimatter to unlock Infinity Dimensions`;
+      }
+      return `Reach ${amDisplay} antimatter to unlock a new Infinity Dimension`;
+    },
+    buttonClassObject() {
+      return {
+        "o-infinity-button--unavailable": !this.canUnlock
+      };
+    },
   },
   methods: {
     update() {
-      this.isVisible = player.break && !InfinityDimension(8).isUnlocked && !Player.canEternity &&
+      this.isVisible = player.break && !InfinityDimension(8).isUnlocked &&
+        player.records.thisEternity.maxIP.lt(Decimal.NUMBER_MAX_VALUE) &&
         !EternityMilestone.autoUnlockID.isReached;
       if (!this.isVisible) return;
-      const requirement = InfinityDimensions.next().requirement;
-      this.requirement.copyFrom(requirement);
-      this.isAffordable = player.records.thisEternity.maxAM.gte(requirement);
-      this.anyInfinityDimensionUnlocked = InfinityDimension(1).isUnlocked;
+      this.canUnlock = InfinityDimensions.next().canUnlock;
     },
     tryUnlockNextInfinityDimension() {
-      InfinityDimensions.unlockNext(true);
+      InfinityDimensions.unlockNext();
     }
   },
 };
 </script>
 
 <template>
-  <PrimaryButton
+  <button
     v-if="isVisible"
-    :enabled="isAffordable"
-    class="o-primary-btn--new-dim l-game-header__new-dim-btn"
+    :class="buttonClassObject"
+    class="o-prestige-button o-infinity-button l-game-header__new-dim-btn"
     @click="tryUnlockNextInfinityDimension"
   >
-    Get {{ format(requirement) }} antimatter
-    <br>
-    to unlock a new
-    <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span>
-    <span v-else>type of Dimension</span>.
-  </PrimaryButton>
+    {{ text }}
+  </button>
 </template>
 
 <style scoped>

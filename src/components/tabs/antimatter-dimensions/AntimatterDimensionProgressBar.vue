@@ -95,14 +95,19 @@ export default {
         setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to Reality");
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity");
-      } else if (InfinityDimension(1).isUnlocked) {
-        setProgress(Currency.antimatter.value,
-          InfinityDimensions.next().requirement,
-          "Percentage to unlock a new Infinity Dimension");
       } else if (player.break) {
-        setProgress(Currency.antimatter.value,
-          InfinityDimensions.next().requirement,
-          "Percentage to unlock a new type of Dimension");
+        const text = `Percentage to unlock ${InfinityDimension(1).isUnlocked
+          ? "a new Infinity Dimension"
+          : "Infinity Dimensions"}`;
+        const nextID = InfinityDimensions.next();
+        if (nextID.hasIPUnlock) {
+          // The AM and IP parts both count for 50% each
+          const amUnlockPart = Math.min(player.records.thisEternity.maxAM.pLog10() / nextID.amRequirement.log10(), 1.0);
+          const ipUnlockPart = Math.min(player.infinityPoints.pLog10() / Math.log10(nextID.ipRequirement), 1.0);
+          setLinearProgress((amUnlockPart + ipUnlockPart) / 2, 1, text);
+        } else {
+          setProgress(player.records.thisEternity.maxAM, nextID.amRequirement, text);
+        }
       } else {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       }

@@ -27,11 +27,6 @@ export const Teresa = {
       }
     }
   },
-  has(info) {
-    if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
-  },
   initializeRun() {
     clearCelestialRuns();
     player.celestials.teresa.run = true;

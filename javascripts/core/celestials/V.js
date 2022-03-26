@@ -184,10 +184,6 @@ export const V = {
     GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
     V.quotes.show(V.quotes.UNLOCK);
   },
-  has(info) {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.v.unlockBits & (1 << info.id));
-  },
   initializeRun() {
     clearCelestialRuns();
     player.celestials.v.run = true;

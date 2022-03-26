@@ -113,7 +113,7 @@ export default {
       Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
-      return V.has(info);
+      return info.isUnlocked;
     },
     mode(hex) {
       return hex.config.mode === V_REDUCTION_MODE.SUBTRACTION ? "reduced" : "divided";

@@ -82,6 +82,8 @@ class VRunUnlockState extends GameMechanicState {
       this.completions++;
       GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
 
+      V.updateTotalRunUnlocks();
+
       for (const quote of Object.values(V.quotes)) {
         // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
         if (quote.requirement && quote.requirement()) {
@@ -90,8 +92,6 @@ class VRunUnlockState extends GameMechanicState {
           V.quotes.show(quote);
         }
       }
-
-      V.updateTotalRunUnlocks();
     }
   }
 }

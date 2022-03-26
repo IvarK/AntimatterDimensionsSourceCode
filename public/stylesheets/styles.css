@@ -9180,7 +9180,9 @@ input.o-automator-block-input {
 .l-hide-modal-subtab-container {
   display: flex;
   flex-wrap: wrap;
-  width: 62.6rem;
+  width: 70rem;
+  justify-content: center;
+  position: relative;
 }
 
 .c-hide-modal-all-subtab-container {
@@ -9231,12 +9233,14 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-button--always-visible {
+  color: var(--color-text-inverted);
   background-color: var(--color-disabled);
-  pointer-events: none;
+  cursor: default;
 }
 
-.c-hide-modal-button--current {
-  text-shadow: 0 0 0.3rem;
+.c-hide-modal-button--always-visible:hover {
+  color: var(--color-text-inverted);
+  background-color: var(--color-disabled);
 }
 
 .c-hide-modal-tab-button--infinity {

@@ -73,10 +73,6 @@ export default {
   height: 40px;
 }
 
-.o-shop-button-button img {
-  margin-left: 1rem;
-}
-
 .o-shop-button-multiplier {
   font-weight: bold;
   font-size: 1.5rem;

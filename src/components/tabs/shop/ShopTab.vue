@@ -143,10 +143,6 @@ export default {
   margin: 0 1rem;
 }
 
-.c-shop-header img {
-  margin: 0 1rem;
-}
-
 .o-shop-button-button {
   background: turquoise;
   border: none;

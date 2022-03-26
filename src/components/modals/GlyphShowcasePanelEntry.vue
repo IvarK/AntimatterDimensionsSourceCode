@@ -156,7 +156,7 @@ export default {
       />
       <GlyphComponent
         :key="idx"
-        style="margin: 0.1rem;"
+        class="c-glyph-component-container"
         :glyph="glyph"
         :show-sacrifice="showSacrifice && canSacrifice"
         :draggable="false"
@@ -186,3 +186,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-glyph-component-container {
+  margin: 0.1rem;
+}
+</style>

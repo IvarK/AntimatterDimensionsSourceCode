@@ -144,7 +144,7 @@ export default {
     </div>
     <div
       v-else-if="!isUnlocked"
-      style="display: flex; flex-direction: column; align-items: center;"
+      class="l-pre-unlock-text"
     >
       <BlackHoleUnlockButton @blackholeunlock="startAnimation" />
       The Black Hole makes the entire game run significantly faster for a short period of time.
@@ -164,8 +164,7 @@ export default {
         </button>
         <button
           v-if="!isPermanent"
-          class="o-primary-btn o-primary-btn--subtab-option"
-          style="width: 30rem"
+          class="o-primary-btn o-primary-btn--subtab-option l-auto-pause-button"
           @click="changePauseMode"
         >
           Auto-pause: {{ pauseModeString }}
@@ -212,5 +211,13 @@ export default {
 </template>
 
 <style scoped>
+.l-auto-pause-button {
+  width: 30rem
+}
 
+.l-pre-unlock-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>

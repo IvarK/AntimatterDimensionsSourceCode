@@ -58,8 +58,7 @@ export default {
       #intervalSlot
     >
       <div
-        class="c-autobuyer-box__small-text"
-        style="margin-top: 1.2rem;"
+        class="c-autobuyer-box__small-text l-top-margin"
       >
         Activates every X seconds:
       </div>
@@ -74,8 +73,7 @@ export default {
       #checkboxSlot
     >
       <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-        style="margin-top: 1.2rem;"
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-top-margin"
         @click="limitDimBoosts = !limitDimBoosts"
       >
         <input
@@ -92,8 +90,7 @@ export default {
     </template>
     <template #toggleSlot>
       <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-        style="height: 3rem;"
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-autobuyer-text-area"
         @click="limitUntilGalaxies = !limitUntilGalaxies"
       >
         <input
@@ -119,5 +116,11 @@ export default {
 </template>
 
 <style scoped>
+.l-top-margin {
+  margin-top: 1.2rem;
+}
 
+.l-dimboost-text-area {
+  height: 3rem;
+}
 </style>

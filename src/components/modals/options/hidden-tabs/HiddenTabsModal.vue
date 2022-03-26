@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions style="width: auto">
+  <ModalWrapperOptions class="l-wrapper">
     <template #header>
       Modify Visible Tabs
     </template>
@@ -53,3 +53,9 @@ export default {
     </div>
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.l-wrapper {
+  width: auto;
+}
+</style>

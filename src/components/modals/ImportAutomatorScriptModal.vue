@@ -79,7 +79,7 @@ export default {
       Line count: {{ lineCount }}
       <div
         v-if="hasErrors"
-        style="color: red;"
+        class="l-has-errors"
       >
         Warning: This script has errors which need to be fixed before it can be run!
       </div>
@@ -92,3 +92,9 @@ export default {
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.l-has-errors {
+  color: red;
+}
+</style>

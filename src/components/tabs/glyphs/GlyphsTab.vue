@@ -131,7 +131,7 @@ export default {
           width-source="content"
           label="Glyph Level Factors"
           container-class="c-glyph-level-factors-dropdown-header"
-          style="margin: 2rem;"
+          class="l-glyph-level-factors"
         >
           <template #dropdown>
             <GlyphLevelsAndWeights />
@@ -165,9 +165,8 @@ export default {
               class="c-glyph-info-options"
             >
               <div
-                class="c-glyph-info-button"
+                class="c-glyph-info-button l-current-glyph-effects"
                 :class="glyphInfoClass(false)"
-                style="border-right: 0.1rem solid #b8b8b8;"
                 @click="setInfoState(false)"
               >
                 Current Glyph effects
@@ -191,5 +190,11 @@ export default {
 </template>
 
 <style scoped>
+.l-glyph-level-factors {
+  margin: 2rem;
+}
 
+.l-current-glyph-effects {
+  border-right: 0.1rem solid #b8b8b8;
+}
 </style>

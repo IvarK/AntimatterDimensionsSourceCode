@@ -231,7 +231,7 @@ export const Ra = {
     return this.levelCap * this.pets.all.length;
   },
   checkForUnlocks() {
-    if (!V.has(V_UNLOCKS.RA_UNLOCK)) return;
+    if (!VUnlocks.raUnlock.canBeApplied) return;
     for (const unl of Object.values(RA_UNLOCKS)) {
       const isUnlockable = unl.totalLevels === undefined
         ? unl.pet.isUnlocked && unl.pet.level >= unl.level
@@ -295,7 +295,7 @@ export const Ra = {
     return this.totalCharges - player.celestials.ra.charged.size;
   },
   get chargeUnlocked() {
-    return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
+    return VUnlocks.raUnlock.canBeApplied && Ra.pets.teresa.level > 1;
   },
   get canBuyTriad() {
     return this.pets.v.level >= 5;

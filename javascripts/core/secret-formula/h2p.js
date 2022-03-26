@@ -1300,7 +1300,7 @@ ${Ra.has(RA_UNLOCKS.V_UNLOCK)
 <br>
 <br>
 Ra won't directly unlock the next Celestial.`,
-      isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      isUnlocked: () => VUnlocks.raUnlock.isUnlocked,
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v", "celestial"],
       tab: "celestials/ra"

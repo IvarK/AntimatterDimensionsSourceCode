@@ -80,7 +80,7 @@ GameDatabase.awayProgressTypes = [
     isUnlocked: () => TeresaUnlocks.effarig.canBeApplied,
   }, {
     name: "celestialMemories",
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => VUnlocks.raUnlock.isUnlocked,
     // Functions as the visible option for all Memories, never appears due to having no reference.
     appearsInAwayModal: false,
   }, {

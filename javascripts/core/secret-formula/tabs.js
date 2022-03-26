@@ -438,7 +438,7 @@ GameDatabase.tabs = [
         name: "Ra",
         symbol: "<i class='fas fa-sun'></i>",
         component: "RaTab",
-        condition: () => V.has(V_UNLOCKS.RA_UNLOCK),
+        condition: () => VUnlocks.raUnlock.isUnlocked,
         id: 5,
         hidable: true,
       },

@@ -336,9 +336,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.ACHIEVEMENT_BH)) {
-          factor *= V_UNLOCKS.ACHIEVEMENT_BH.effect();
-        }
+        factor *= VUnlocks.achievementBH.effectOrDefault(1);
       }
     }
   }

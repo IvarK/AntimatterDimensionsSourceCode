@@ -222,7 +222,7 @@ export class TimeStudyTree {
   // Buys the specified study; no requirement verification beyond cost, use hasRequirements() to verify proper structure
   buySingleStudy(study, checkCosts) {
     const config = study.config;
-    const stDiscount = V.has(V_UNLOCKS.RA_UNLOCK) ? 2 : 0;
+    const stDiscount = VUnlocks.raUnlock.canBeApplied ? 2 : 0;
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;

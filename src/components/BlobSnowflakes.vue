@@ -45,7 +45,7 @@ export default {
     v-if="animateBackground"
     class="c-blob-snowflake-container"
   >
-    <blob-snowflake
+    <BlobSnowflake
       v-for="i in count"
       :key="i"
       :bounds="bounds"
@@ -55,7 +55,7 @@ export default {
     v-else
     class="c-blob-background-container"
   >
-    <blob-background
+    <BlobBackground
       v-for="i in count"
       :key="i"
       :bounds="bounds"

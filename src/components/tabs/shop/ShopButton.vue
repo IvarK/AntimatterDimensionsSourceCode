@@ -38,7 +38,7 @@ export default {
       Cost: {{ purchase.cost }}
       <img
         src="images/std_coin.png"
-        height="40"
+        class="o-shop-button-button__img"
       >
     </button>
   </div>
@@ -66,6 +66,11 @@ export default {
   padding: .5rem 2rem;
   margin-top: 1rem;
   cursor: pointer;
+}
+
+.o-shop-button-button__img {
+  margin-left: 1rem;
+  height: 40px;
 }
 
 .o-shop-button-button img {

@@ -40,10 +40,7 @@ export default {
 </script>
 
 <template>
-  <div
-    id="shop"
-    class="tab"
-  >
+  <div class="tab shop">
     <div class="c-shop-disclaimer">
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
       The game is balanced without the use of any microtranactions.
@@ -52,7 +49,7 @@ export default {
       <span>You have {{ STD }}</span>
       <img
         src="images/std_coin.png"
-        height="40"
+        class="c-shop-header__img"
       >
       <button
         class="o-shop-button-button"
@@ -78,7 +75,7 @@ export default {
           Cost: 10
           <img
             src="images/std_coin.png"
-            height="40"
+            class="c-shop-header__img"
           >
         </button>
       </div>
@@ -93,7 +90,7 @@ export default {
           Cost: 20
           <img
             src="images/std_coin.png"
-            height="40"
+            class="c-shop-header__img"
           >
         </button>
       </div>
@@ -102,7 +99,7 @@ export default {
 </template>
 
 <style scoped>
-#shop {
+.shop {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -139,6 +136,11 @@ export default {
   align-items: center;
   font-size: 2rem;
   margin: 1rem 0;
+}
+
+.c-shop-header__img {
+  height: 40px;
+  margin: 0 1rem;
 }
 
 .c-shop-header img {

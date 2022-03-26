@@ -146,8 +146,8 @@ export default {
             {{ quantifyInt("Space Theorem", STamount) }}
           </span>
         </p>
-        <div class="load-tree-area">
-          <div class="tree-load-button-wrapper">
+        <div class="l-load-tree-area">
+          <div class="l-tree-load-button-wrapper">
             <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
             <TimeStudySaveLoadButton
               v-for="saveslot in 6"
@@ -216,13 +216,13 @@ export default {
 </template>
 
 <style scoped>
-.load-tree-area {
+.l-load-tree-area {
   display: flex;
   flex-direction: column;
   align-items: left;
 }
 
-.tree-load-button-wrapper {
+.l-tree-load-button-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;

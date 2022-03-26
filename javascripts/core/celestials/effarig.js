@@ -1,5 +1,5 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { BitUpgradeState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
 import { DC } from "../constants.js";
 
@@ -161,28 +161,16 @@ export const Effarig = {
   symbol: "Ϙ"
 };
 
-class EffarigUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
+class EffarigUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.effarig.unlockBits; }
+  set bits(value) { player.celestials.effarig.unlockBits = value; }
 
   get cost() {
     return this.config.cost;
   }
 
-  get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.effarig.unlockBits & (1 << this.id));
-  }
-
   get canBeApplied() {
     return this.isUnlocked && !Pelle.isDisabled("effarig");
-  }
-
-  unlock() {
-    // eslint-disable-next-line no-bitwise
-    player.celestials.effarig.unlockBits |= (1 << this.id);
   }
 
   purchase() {

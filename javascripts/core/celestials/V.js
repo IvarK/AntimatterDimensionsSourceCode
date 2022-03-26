@@ -1,5 +1,5 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState, BitUpgradeState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
 import { SpeedrunMilestones } from "../speedrun.js";
 
@@ -96,16 +96,9 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-class VUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
-
-  get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.v.unlockBits & (1 << this.id));
-  }
+class VUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.v.unlockBits; }
+  set bits(value) { player.celestials.v.unlockBits = value; }
 
   get pelleDisabled() {
     return Pelle.isDoomed && !this === VUnlocks.vAchievementUnlock;
@@ -125,7 +118,7 @@ class VUnlockState extends GameMechanicState {
       : this.config.reward;
   }
 
-  get canUnlock() {
+  get canBeUnlocked() {
     return this.config.requirement() && !this.isUnlocked;
   }
 
@@ -135,15 +128,7 @@ class VUnlockState extends GameMechanicState {
     return this.config.format(this.effectValue);
   }
 
-  attemptUnlock() {
-    if (this.canUnlock) {
-      this.unlock();
-    }
-  }
-
-  unlock() {
-    // eslint-disable-next-line no-bitwise
-    player.celestials.v.unlockBits |= (1 << this.id);
+  onUnlock() {
     GameUI.notify.success(this.description);
   }
 }
@@ -176,7 +161,7 @@ export const V = {
   checkForUnlocks() {
     for (const unl of Object.values(VUnlocks)) {
       if (unl === VUnlocks.vAchievementUnlock) continue;
-      unl.attemptUnlock();
+      unl.unlock();
     }
 
     if (this.isRunning) {

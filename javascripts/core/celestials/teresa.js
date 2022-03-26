@@ -1,5 +1,5 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState, RebuyableMechanicState } from "../game-mechanics/index.js";
+import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
 
 export const Teresa = {
@@ -142,19 +142,12 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 }
 
-class TeresaUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
+class TeresaUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.teresa.unlockBits; }
+  set bits(value) { player.celestials.teresa.unlockBits = value; }
 
   get price() {
     return this.config.price;
-  }
-
-  get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.teresa.unlockBits & (1 << this.id));
   }
 
   get pelleDisabled() {
@@ -173,9 +166,7 @@ class TeresaUnlockState extends GameMechanicState {
       : this.config.description;
   }
 
-  unlock() {
-    // eslint-disable-next-line no-bitwise
-    player.celestials.teresa.unlockBits |= (1 << this.id);
+  onUnlock() {
     EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, Teresa, this);
   }
 }

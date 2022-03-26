@@ -1,5 +1,5 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { BitUpgradeState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
 
 export const ENSLAVED_UNLOCKS = {
@@ -238,11 +238,9 @@ export const Enslaved = {
   symbol: "<i class='fas fa-link'></i>"
 };
 
-class EnslavedProgressState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
+class EnslavedProgressState extends BitUpgradeState {
+  get bits() { return player.celestials.enslaved.hintBits; }
+  set bits(value) { player.celestials.enslaved.hintBits = value; }
 
   get hasProgress() {
     // eslint-disable-next-line no-bitwise
@@ -251,7 +249,7 @@ class EnslavedProgressState extends GameMechanicState {
 
   get hasHint() {
     // eslint-disable-next-line no-bitwise
-    return this.hasProgress || Boolean(player.celestials.enslaved.hintBits & (1 << this.id));
+    return this.hasProgress || this.isUnlocked;
   }
 
   giveProgress() {
@@ -262,11 +260,6 @@ class EnslavedProgressState extends GameMechanicState {
     }
     // eslint-disable-next-line no-bitwise
     player.celestials.enslaved.progressBits |= (1 << this.id);
-  }
-
-  giveHint() {
-    // eslint-disable-next-line no-bitwise
-    player.celestials.enslaved.hintBits |= (1 << this.id);
   }
 }
 

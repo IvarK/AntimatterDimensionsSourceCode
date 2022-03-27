@@ -48,7 +48,7 @@ export default {
         max: negative ? this.maxNegativeBlackHole : 990,
         interval: 1,
         show: true,
-        width: "60rem",
+        width: "65rem",
         tooltip: false
       };
     },

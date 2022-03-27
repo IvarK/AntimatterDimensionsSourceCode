@@ -108,7 +108,7 @@ export function simulatedRealityCount(advancePartSimCounters) {
  */
 export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
-  if (player.options.confirmations.reality || player.options.confirmations.glyphSelection) {
+  if (player.options.confirmations.glyphSelection) {
     Modal.reality.show();
     return;
   }
@@ -577,7 +577,7 @@ export function finishProcessReality(realityProps) {
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) player.challenge.eternity.unlocked = 0;
-  player.etercreq = 0;
+  player.challenge.eternity.requirementBits = 0;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;

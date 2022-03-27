@@ -114,8 +114,7 @@ export default {
         </div>
         <PrimaryToggleButton
           v-model="automaticTabSwitching"
-          class="o-primary-btn--option l-options-grid__button"
-          style="font-size: 12px;"
+          class="o-primary-btn--option l-options-grid__button l-toggle-button"
           label="Switch tabs on some events (e.g. entering challenges):"
         />
       </div>
@@ -139,3 +138,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.l-toggle-button {
+  font-size: 12px;
+}
+</style>

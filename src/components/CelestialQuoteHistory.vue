@@ -76,7 +76,7 @@ export default {
       if (this.downButtonEnabled) this.lastVisibleIndex++;
     },
     removeQuoteSyntax(x) {
-      return Modal.celestialQuote.removeOverrideCel(x).replace("*", "");
+      return Modal.celestialQuote.removeOverrideCel(x);
     }
   }
 };

@@ -39,6 +39,7 @@ import PurgeAllUnprotectedGlyphsModal from "@/components/modals/glyph-management
 import PurgeAllRejectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllRejectedGlyphsModal";
 
 import H2PModal from "@/components/modals/H2PModal";
+import InformationModal from "@/components/modals/InformationModal";
 import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal";
@@ -170,6 +171,7 @@ Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
 Modal.glyphSetSaveDelete = new Modal(GlyphSetSaveDeleteModal);
 Modal.uiChoice = new Modal(UiChoiceModal);
 Modal.h2p = new Modal(H2PModal);
+Modal.information = new Modal(InformationModal);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);

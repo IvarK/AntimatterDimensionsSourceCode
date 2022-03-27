@@ -17,7 +17,9 @@ export default {
 <template>
   <div>
     <ModalCloseButton @click="closeModal" />
-    <h3><slot name="header" /></h3>
+    <span class="c-modal__title">
+      <slot name="header" />
+    </span>
     <slot />
   </div>
 </template>

@@ -1,12 +1,12 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import ModalWrapper from "@/components/modals/ModalWrapper";
+import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
 
 export default {
   name: "ModalWrapperChoice",
   components: {
     PrimaryButton,
-    ModalWrapper,
+    ModalConfirmationCheck,
   },
   props: {
     cancelClass: {
@@ -29,6 +29,11 @@ export default {
       required: false,
       default: true
     },
+    option: {
+      type: String,
+      required: false,
+      default: undefined
+    }
   },
   created() {
     this.on$(GAME_EVENT.ENTER_PRESSED, this.doConfirm);
@@ -47,14 +52,14 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper class="c-modal-message l-modal-content--centered">
-    <template #header>
+  <div class="c-modal-message l-modal-content--centered">
+    <span class="c-modal__title">
       <slot name="header" />
-    </template>
+    </span>
 
     <slot />
 
-    <div class="l-options-grid__row">
+    <div class="l-modal-buttons">
       <PrimaryButton
         v-if="showCancel"
         :class="cancelClass"
@@ -64,6 +69,8 @@ export default {
           Cancel
         </slot>
       </PrimaryButton>
+
+      <slot name="extra-buttons" />
 
       <PrimaryButton
         v-if="showConfirm"
@@ -75,5 +82,10 @@ export default {
         </slot>
       </PrimaryButton>
     </div>
-  </ModalWrapper>
+
+    <ModalConfirmationCheck
+      v-if="option"
+      :option="option"
+    />
+  </div>
 </template>

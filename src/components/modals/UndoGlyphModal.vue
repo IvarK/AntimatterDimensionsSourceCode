@@ -23,6 +23,7 @@ export default {
       Modal.message.show("Glyph Undo can only undo with a Reality!");
     },
     handleYesClick() {
+      this.emitClose();
       Glyphs.undo();
     },
   },
@@ -30,18 +31,20 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="glyphUndo"
+    @confirm="handleYesClick"
+  >
     <template #header>
       You are about to undo equipping a Glyph
     </template>
     <div
-      class="c-modal-message__text"
-      style="text-align: left"
+      class="c-modal-message__text c-text-wrapper"
     >
       The last equipped Glyph will be removed.
       Reality will be reset, but some things will be restored to what they were when it was equipped:
       <br>
-      <div style="text-align: left">
+      <div class="c-text-wrapper">
         <br>- Antimatter, Infinity Points, and Eternity Points
         <br>- Dilation Upgrades, Tachyon Particles, and Dilated Time
         <br>- Time Theorems and Eternity Challenge completions
@@ -56,3 +59,9 @@ export default {
     </div>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.c-text-wrapper {
+  text-align: left;
+}
+</style>

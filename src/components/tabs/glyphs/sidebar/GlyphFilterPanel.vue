@@ -270,14 +270,13 @@ export default {
         </span>
       </div>
       <br>
-      <div
-        class="l-glyph-sacrifice-options__rarity-slider-div"
-        @click="bumpRarity(advancedType)"
-      >
-        <GlyphComponent
-          :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
-          v-bind="glyphIconProps"
-        />
+      <div class="l-glyph-sacrifice-options__rarity-slider-div">
+        <span @click="bumpRarity(advancedType)">
+          <GlyphComponent
+            :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
+            v-bind="glyphIconProps"
+          />
+        </span>
         <SliderComponent
           v-bind="raritySliderProps"
           :value="rarityThresholds[advancedType]"

@@ -17,8 +17,6 @@ function mergeIntoGlobal(object) {
 import * as Utils from "../javascripts/core/utils";
 mergeIntoGlobal(Utils);
 
-import "../javascripts/components";
-
 import * as GameDB from "../javascripts/core/secret-formula";
 mergeIntoGlobal(GameDB);
 

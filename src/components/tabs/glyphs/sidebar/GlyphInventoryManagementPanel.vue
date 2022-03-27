@@ -11,18 +11,21 @@ export default {
     GlyphProtectedRowButtonGroup,
     GlyphAutosortButtonGroup,
     GlyphCleanButtonGroup
-  }
+  },
+  computed: {
+    groupClass() {
+      return `l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size
+        l-glyph-inventory-management`;
+    }
+  },
 };
 </script>
 
 <template>
-  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
+  <div :class="groupClass">
     <GlyphSortButtonGroup />
-    <br>
     <GlyphProtectedRowButtonGroup />
-    <br>
     <GlyphAutosortButtonGroup />
-    <br>
     <GlyphCleanButtonGroup />
   </div>
 </template>

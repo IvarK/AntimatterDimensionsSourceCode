@@ -6,8 +6,9 @@ GameDatabase.eternity.timeStudies.dilation = [
     description: "Unlock Time Dilation",
     cost: 5000,
     requirement: () => {
+      const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
       if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
-          Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
+          ttRequirement &&
           !isInCelestialReality() && !Pelle.isDoomed
       ) {
         return true;
@@ -15,7 +16,6 @@ GameDatabase.eternity.timeStudies.dilation = [
       const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
       if (Perk.bypassECDilation.isBought && !Pelle.isDoomed) return tsRequirement;
       const ecRequirement = EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted;
-      const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
       return tsRequirement && ecRequirement && ttRequirement;
     }
   },

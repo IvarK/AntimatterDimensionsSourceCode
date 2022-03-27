@@ -46,13 +46,13 @@ window.player = {
     eternity: {
       current: 0,
       unlocked: 0,
+      requirementBits: 0,
     }
   },
   infinity: {
     upgradeBits: 0
   },
   auto: {
-    bulkOn: true,
     autobuyersOn: true,
     disableContinuum: false,
     reality: {
@@ -232,7 +232,7 @@ window.player = {
       slowestBH: 1,
     },
     permanent: {
-      cancerGalaxies: 0,
+      emojiGalaxies: 0,
       singleTickspeed: 0,
       perkTreeDragging: 0
     }
@@ -378,7 +378,6 @@ window.player = {
     }),
   },
   eternityChalls: {},
-  etercreq: 0,
   respec: false,
   eterc8ids: 50,
   eterc8repl: 40,
@@ -425,6 +424,7 @@ window.player = {
         glyphs: [],
       }),
       protectedRows: 2,
+      createdRealityGlyph: false,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,
@@ -798,7 +798,6 @@ window.player = {
       challenges: true,
       eternity: true,
       dilation: true,
-      reality: true,
       resetReality: true,
       glyphReplace: true,
       glyphSacrifice: true,
@@ -835,7 +834,8 @@ window.player = {
       darkEnergy: true,
       singularities: true,
       celestialMemories: true,
-      blackHole: true
+      blackHole: true,
+      realityShards: true
     },
     hiddenTabBits: 0,
     hiddenSubtabBits: Array.repeat(0, 11),

@@ -57,7 +57,9 @@ export class TimeStudyTree {
     if (input.trim() === "") {
       return false;
     }
-    return /^(,?(\d+(-\d+)?|antimatter|infinity|time|active|passive|idle))*(\|\d+)?$/iu.test(input);
+    let test = input.replaceAll(/ +/gu, "");
+    TimeStudyTree.sets.forEach((_, x) => test = test.replaceAll(new RegExp(`${x},?`, "gu"), ""));
+    return /^,?((\d{2,3}(-\d{2,3})?)\b,?)*(\|\d{0,2})?$/iu.test(test);
   }
 
   // Getter for all the studies in the current game state
@@ -78,6 +80,46 @@ export class TimeStudyTree {
       if (study && !study.isBought) study.purchase(true);
     }
     GameCache.currentStudyTree.invalidate();
+  }
+
+  static get sets() {
+    // Grouping of studies. The key followed by an array of the studies the key is a shorthand for.
+    return new Map([
+      ["antimatter", [71, 81, 91, 101]],
+      ["infinity", [72, 82, 92, 102]],
+      ["time", [73, 83, 93, 103]],
+      ["active", [121, 131, 141]],
+      ["passive", [122, 132, 142]],
+      ["idle", [123, 133, 143]],
+      ["light", [221, 223, 225, 227, 231, 233]],
+      ["dark", [222, 224, 226, 228, 232, 234]],
+    ]);
+  }
+
+  static truncateInput(input) {
+    let internal = input.toLowerCase();
+    // Convert every name into the ids it is a shorthand for
+    this.sets.forEach((ids, name) => (internal = internal.replace(name, ids.join())));
+    return internal
+      .replace(/[|,]$/u, "")
+      .replaceAll(" ", "");
+  }
+
+  static formatStudyList(input) {
+    let internal = input.toLowerCase().replaceAll(" ", "");
+    // \\b means 0-width word boundry, meaning "target = 11" doesnt match 111
+    const testRegex = target => new RegExp(`\\b${target}\\b,?`, "gu");
+    // If the studylist has all IDs, replace the first instance with the shorthand, then remove the rest
+    this.sets.forEach((ids, name) => {
+      const hasAllIds = ids.every(x => testRegex(x).test(internal));
+      if (hasAllIds) {
+        internal = internal.replace(testRegex(ids[0]), `${name},`);
+        for (const i of ids) {
+          internal = internal.replace(testRegex(i), "");
+        }
+      }
+    });
+    return internal.replaceAll(",", ", ");
   }
 
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
@@ -117,33 +159,6 @@ export class TimeStudyTree {
     }
     if (ecID !== 0) output.push(TimeStudy.eternityChallenge(ecID));
     return output;
-  }
-
-  static truncateInput(input) {
-    return input
-      .toLowerCase()
-      .replaceAll("antimatter", "71,81,91,101")
-      .replaceAll("infinity", "72,82,92,102")
-      .replaceAll("time", "73,83,93,103")
-      .replaceAll("active", "121,131,141")
-      .replaceAll("passive", "122,132,142")
-      .replaceAll("idle", "123,133,143")
-      .replace(/[|,]$/u, "")
-      .replaceAll(" ", "")
-      .trim();
-  }
-
-  static formatStudyList(input) {
-    return input
-      .toLowerCase()
-      .replaceAll("71,81,91,101", "antimatter")
-      .replaceAll("72,82,92,102", "infinity")
-      .replaceAll("73,83,93,103", "time")
-      .replaceAll("121,131,141", "active")
-      .replaceAll("122,132,142", "passive")
-      .replaceAll("123,133,143", "idle")
-      .replaceAll(",", ", ")
-      .replace(/ +/gu, " ");
   }
 
   studyRangeToArray(firstNumber, lastNumber) {

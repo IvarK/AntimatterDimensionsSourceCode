@@ -51,15 +51,15 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="o-glyph-inventory-management-group">
     <div class="l-glyph-sacrifice-options__header">
       <div
+        v-tooltip="questionMarkTooltip"
         class="o-questionmark"
-        :ach-tooltip="questionMarkTooltip"
       >
         ?
       </div>
-      Automatic Glyph Arrangement:
+      Auto Glyph Arrangement:
     </div>
     <ButtonCycle
       v-model="autoSort"

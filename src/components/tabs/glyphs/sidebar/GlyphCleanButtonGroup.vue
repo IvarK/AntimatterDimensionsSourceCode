@@ -71,7 +71,10 @@ export default {
 </script>
 
 <template>
-  <div v-if="glyphSacrificeUnlocked">
+  <div
+    v-if="glyphSacrificeUnlocked"
+    class="o-glyph-inventory-management-group"
+  >
     <div class="l-glyph-sacrifice-options__header">
       Remove weaker Glyphs:
     </div>
@@ -106,8 +109,7 @@ export default {
     >
       {{ removeString }} all Glyphs rejected by filtering
       <div
-        class="c-glyph-inventory-option__tooltip"
-        style="width: 90%; left: 5%;"
+        class="c-glyph-inventory-option__tooltip l-rejected-tooltip"
       >
         {{ deleteRejectedTooltip }}
       </div>
@@ -116,5 +118,8 @@ export default {
 </template>
 
 <style scoped>
-
+.l-rejected-tooltip {
+  width: 90%;
+  left: 5%;
+}
 </style>

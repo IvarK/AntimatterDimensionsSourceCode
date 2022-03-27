@@ -10,8 +10,8 @@ export default {
   data() {
     return {
       isReached: false,
-      isObsoleteWithPelle: false,
-      isDoomed: false
+      isLocked: false,
+      isDoomed: false,
     };
   },
   computed: {
@@ -31,8 +31,8 @@ export default {
     rewardClassObject() {
       return {
         "o-eternity-milestone__reward": true,
-        "o-eternity-milestone__reward--locked": !this.isReached && !this.isObsoleteWithPelle,
-        "o-eternity-milestone__reward--reached": this.isReached || this.isObsoleteWithPelle,
+        "o-eternity-milestone__reward--locked": !this.isReached,
+        "o-eternity-milestone__reward--reached": this.isReached,
         "o-eternity-milestone__reward--small-font": this.reward.length > 80
       };
     },
@@ -45,9 +45,9 @@ export default {
   },
   methods: {
     update() {
-      this.isReached = this.milestone.isReached;
-      this.isObsoleteWithPelle = this.config.pelleObsolete?.();
       this.isDoomed = Pelle.isDoomed;
+      this.isLocked = this.isDoomed && this.config.pelleObsolete !== undefined;
+      this.isReached = this.milestone.isReached && !this.isLocked;
     }
   }
 };
@@ -65,9 +65,9 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      <span v-if="disabledInDoomed"> This milestone has no effect while in Doomed </span>
+      <span v-if="disabledInDoomed">This milestone has no effect while in Doomed</span>
       <span v-else>
-        {{ reward }} {{ isObsoleteWithPelle ? "(This is already granted by Pelle)" : "" }}
+        {{ reward }} {{ isLocked ? "(Locked behind a Pelle Upgrade)" : "" }}
       </span>
     </button>
   </div>

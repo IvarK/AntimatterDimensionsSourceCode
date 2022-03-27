@@ -208,6 +208,18 @@
   color: var(--color-reality-light);
 }
 
+.l-glyph-inventory-management {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.o-glyph-inventory-management-group {
+  width: 20rem;
+  margin-bottom: 1rem;
+}
+
 .c-auto-sac-type-tab__input {
   width: 2.5em;
   height: 1.5em;
@@ -585,8 +597,9 @@
 .c-glyph-set-save-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 1rem 7rem 0;
+  justify-content: center;
+  margin: 1rem auto 0;
+  max-width: 30rem;
 }
 
 .c-glyph-single-set-save {
@@ -594,7 +607,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: flex-end;
-  height: 7.5rem;
+  margin: 0 0 1.5rem;
 }
 
 .c-glyph-single-set-save-flexbox {
@@ -610,7 +623,7 @@
 }
 
 .c-glyph-sets-save-name__input {
-  width: 20rem;
+  width: 16rem;
   height: 1.5em;
   font-size: 1.35rem;
   background-color: black;
@@ -634,7 +647,7 @@
   color: var(--color-reality-light);
   border: 0.2rem solid var(--color-reality);
   border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0 0.4rem 1rem;
   transition-duration: 0.2s;
   cursor: pointer;
 }
@@ -977,7 +990,7 @@
 }
 
 .c-glyph-inventory-option {
-  width: auto;
+  width: 19rem;
   height: auto;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
@@ -1018,11 +1031,11 @@
   font-family: Typewriter;
   color: var(--color-reality);
   background: black;
-  width: 200%;
-  left: -50%;
+  width: 100%;
+  left: 0%;
   line-height: 1.8rem;
   padding: 0.3rem;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
   position: absolute;
   bottom: 100%;

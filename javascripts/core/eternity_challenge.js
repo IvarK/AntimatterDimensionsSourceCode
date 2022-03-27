@@ -95,6 +95,7 @@ export class EternityChallengeState extends GameMechanicState {
   get gainedCompletionStatus() {
     const status = {
       gainedCompletions: 0,
+      hasMoreCompletions: false,
       totalCompletions: this.completions,
     };
     if (this.isFullyCompleted) return status;

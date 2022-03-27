@@ -118,31 +118,26 @@ export function gainedInfinityPoints() {
 }
 
 function totalEPMult() {
-  return new Decimal(getAdjustedGlyphEffect("cursedEP"))
-    .times(ShopPurchase.EPPurchases.currentMult)
-    .timesEffectsOf(
-      EternityUpgrade.epMult,
-      TimeStudy(61),
-      TimeStudy(122),
-      TimeStudy(121),
-      TimeStudy(123),
-      RealityUpgrade(12),
-      GlyphEffect.epMult
-    );
+  const totalMult = new Decimal(NG.multiplier);
+  return Pelle.isDisabled("EPMults")
+    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]))
+    : totalMult.times(getAdjustedGlyphEffect("cursedEP"))
+      .times(ShopPurchase.EPPurchases.currentMult)
+      .timesEffectsOf(
+        EternityUpgrade.epMult,
+        TimeStudy(61),
+        TimeStudy(122),
+        TimeStudy(121),
+        TimeStudy(123),
+        RealityUpgrade(12),
+        GlyphEffect.epMult
+      );
 }
 
 export function gainedEternityPoints() {
   const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
-
-  ep = ep.times(NG.multiplier);
-
-  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(
-    PelleRifts.famine.milestones[2]
-  );
-
-  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -155,17 +150,11 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
-  ep = ep.pow(pow);
-  return ep.floor();
+  return ep.pow(pow).floor();
 }
 
 export function requiredIPForEP(epAmount) {
-  const pelleMults = Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]);
-
-  if (Pelle.isDoomed) return Decimal.pow10(308 * (Decimal.log(pelleMults.dividedBy(epAmount).reciprocal(), 5) + 0.7))
-    .clampMin(Number.MAX_VALUE);
-
-  return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalEPMult()), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 

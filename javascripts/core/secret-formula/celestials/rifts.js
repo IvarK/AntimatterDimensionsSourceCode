@@ -76,10 +76,9 @@ GameDatabase.celestials.pelle.rifts = {
       {
         resource: "pestilence",
         requirement: 0.6,
-        effectCondition: () => Replicanti.amount.gt(DC.E1300),
         description: () => `When Replicanti exceeds ${format(DC.E1300)},
           all Galaxies are ${formatPercents(0.1)} more effective`,
-        effect: 1.1
+        effect: () => (Replicanti.amount.gt(DC.E1300) ? 1.1 : 1)
       },
       {
         resource: "pestilence",

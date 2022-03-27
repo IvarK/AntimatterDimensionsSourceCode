@@ -147,6 +147,7 @@ GameStorage.migrations = {
       GameStorage.migrations.deleteFloatingTextOption(player);
       GameStorage.migrations.refactorDoubleIPRebuyable(player);
       GameStorage.migrations.convertNews(player);
+      GameStorage.migrations.etercreqConversion(player);
 
       kong.migratePurchases();
     }
@@ -364,6 +365,8 @@ GameStorage.migrations = {
       player.challenge.eternity.unlocked !== 0
     ) player.requirementChecks.reality.noPurchasedTT = false;
     if (player.sacrificed.gt(0)) player.requirementChecks.infinity.noSacrifice = false;
+    player.requirementChecks.permanent.emojiGalaxies = player.spreadingCancer;
+    delete player.spreadingCancer;
   },
 
   adjustThemes(player) {
@@ -815,7 +818,6 @@ GameStorage.migrations = {
   },
 
   migrateAutobuyers(player) {
-    player.auto.bulkOn = player.options.bulkOn;
     player.auto.autobuyerOn = player.options.autobuyerOn;
 
     delete player.options.bulkOn;
@@ -899,6 +901,12 @@ GameStorage.migrations = {
   infMultNameConversion(player) {
     player.IPMultPurchases = player.infMult;
     delete player.infMult;
+  },
+
+  etercreqConversion(player) {
+    // eslint-disable-next-line no-bitwise
+    if (player.etercreq) player.challenge.eternity.requirementBits |= 1 << player.etercreq;
+    delete player.etercreq;
   },
 
   prePatch(saveData) {

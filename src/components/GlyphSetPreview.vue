@@ -106,7 +106,7 @@ export default {
       <GlyphComponent
         v-for="(g, idx) in glyphs"
         :key="idx"
-        style="margin: 0.2rem;"
+        class="l-preview"
         :glyph="g"
         :show-sacrifice="showSacrifice"
         :draggable="false"
@@ -127,3 +127,9 @@ export default {
     </span>
   </div>
 </template>
+
+<style scoped>
+.l-preview {
+  margin: 0.2rem;
+}
+</style>

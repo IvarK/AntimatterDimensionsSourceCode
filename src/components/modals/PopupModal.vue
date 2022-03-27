@@ -10,6 +10,9 @@ export default {
   created() {
     this.on$(GAME_EVENT.CLOSE_MODAL, this.hide);
   },
+  destroyed() {
+    document.activeElement.blur();
+  },
   methods: {
     hide() {
       if (this.modal.hide) this.modal.hide();

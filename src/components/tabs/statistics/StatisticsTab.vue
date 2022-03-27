@@ -159,7 +159,7 @@ export default {
       </div>
       <div>
         <br>
-        <div style="height: 5rem;">
+        <div class="c-matter-scale-container">
           <div
             v-for="(line, i) in matterScale"
             :key="i"
@@ -264,3 +264,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-matter-scale-container {
+  height: 5rem;
+}
+</style>

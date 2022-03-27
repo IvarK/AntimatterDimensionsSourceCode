@@ -93,7 +93,13 @@ export default {
       <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
       <span v-else> for no gain</span>
     </PrimaryButton>
-    <div style="flex: 1 0" />
+    <div class="l-flex" />
     <AntimatterDimensionProgressBar class="l-antimatter-dim-tab__progress_bar" />
   </div>
 </template>
+
+<style scoped>
+.l-flex {
+  flex: 1 0;
+}
+</style>

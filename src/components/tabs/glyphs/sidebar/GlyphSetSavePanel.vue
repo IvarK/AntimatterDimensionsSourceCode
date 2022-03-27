@@ -149,7 +149,7 @@ export default {
       :key="id"
       class="c-glyph-single-set-save"
     >
-      <div style="width: 18rem">
+      <div class="c-glyph-set-preview-area">
         <GlyphSetPreview
           :text="setName(id)"
           :text-hidden="true"
@@ -158,7 +158,7 @@ export default {
           :none-text="noSet"
         />
       </div>
-      <div class="c-glyph-single-set-save-flexbox" style="width: 22rem">
+      <div class="c-glyph-single-set-save-flexbox">
         <div ach-tooltip="Set a custom name (up to 20 characters)">
           <input
             :id="id"
@@ -200,5 +200,11 @@ export default {
 </template>
 
 <style scoped>
+.c-glyph-single-set-save-flexbox {
+  width: 16rem;
+}
 
+.c-glyph-set-preview-area {
+  width: 18rem;
+}
 </style>

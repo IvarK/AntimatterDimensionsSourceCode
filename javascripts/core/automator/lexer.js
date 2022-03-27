@@ -230,6 +230,8 @@ export const AutomatorLexer = (() => {
   createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
   createInCategory(StudyPath, "Antimatter", /antimatter/i, { $studyPath: TIME_STUDY_PATH.ANTIMATTER_DIM });
   createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
+  createInCategory(StudyPath, "Light", /light/i, { $studyPath: TIME_STUDY_PATH.LIGHT });
+  createInCategory(StudyPath, "Dark", /dark/i, { $studyPath: TIME_STUDY_PATH.DARK });
 
   createInCategory(TimeUnit, "Milliseconds", /ms/i, {
     $autocomplete: "ms",

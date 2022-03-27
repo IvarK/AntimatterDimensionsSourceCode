@@ -52,14 +52,15 @@ export default {
   methods: {
     update() {
       const id = this.id;
-      this.hasRequirement = !Perk.studyECRequirement.isBought && player.etercreq !== id;
-      this.completions = EternityChallenge(id).completions;
-      this.showTotalCompletions = !Enslaved.isRunning || this.id !== 1;
-      this.isRunning = EternityChallenge.current?.id === this.study.id;
-      this.isUnlocked = EternityChallenge(this.study.id).isUnlocked;
+      const study = this.study;
+      const ec = EternityChallenge(id);
+      this.hasRequirement = !Perk.studyECRequirement.isBought && !study.wasRequirementPreviouslyMet;
+      this.completions = ec.completions;
+      this.showTotalCompletions = !Enslaved.isRunning || id !== 1;
+      this.isRunning = EternityChallenge.current?.id === id;
+      this.isUnlocked = ec.isUnlocked;
       if (!this.hasRequirement || id > 10) return;
       const requirement = this.requirement;
-      const study = this.study;
       if (this.hasNumberRequirement) {
         requirement.total = study.requirementTotal;
         requirement.current = Math.min(study.requirementCurrent, requirement.total);

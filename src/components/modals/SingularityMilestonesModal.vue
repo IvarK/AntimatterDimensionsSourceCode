@@ -17,23 +17,6 @@ export default {
       orderVal: 0
     };
   },
-  watch: {
-    resourceVal(newValue) {
-      player.celestials.laitela.singularitySorting.displayResource = newValue;
-    },
-    sortVal(newValue) {
-      player.celestials.laitela.singularitySorting.sortResource = newValue;
-    },
-    completedVal(newValue) {
-      player.celestials.laitela.singularitySorting.showCompleted = newValue;
-    },
-    orderVal(newValue) {
-      player.celestials.laitela.singularitySorting.sortOrder = newValue;
-    },
-  },
-  beforeDestroy() {
-    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
-  },
   computed: {
     resourceStr() {
       const states = ["Singularity Count", "Condense Count", "Manual Time", "Auto Time"];
@@ -52,6 +35,23 @@ export default {
       const states = ["Ascending", "Descending"];
       return states[this.orderVal];
     },
+  },
+  watch: {
+    resourceVal(newValue) {
+      player.celestials.laitela.singularitySorting.displayResource = newValue;
+    },
+    sortVal(newValue) {
+      player.celestials.laitela.singularitySorting.sortResource = newValue;
+    },
+    completedVal(newValue) {
+      player.celestials.laitela.singularitySorting.showCompleted = newValue;
+    },
+    orderVal(newValue) {
+      player.celestials.laitela.singularitySorting.sortOrder = newValue;
+    },
+  },
+  beforeDestroy() {
+    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   methods: {
     update() {

@@ -134,6 +134,11 @@ body.t-s9 {
   color: var(--color-reality)
 }
 
+.t-dark .o-sidebar-currency--reality,
+.t-dark-metro .o-sidebar-currency--reality {
+  color: var(--color-reality)
+}
+
 .o-sidebar-currency--pelle {
   color: var(--color-pelle--base)
 }
@@ -896,6 +901,10 @@ body.t-s9 {
   border-radius: 50%;
   font-size: 1.5rem;
   transition-delay: 0s;
+}
+
+.l-information {
+  top: 7rem;
 }
 
 .s-base--metro .l-help-me {

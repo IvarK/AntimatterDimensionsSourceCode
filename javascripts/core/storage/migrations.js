@@ -343,10 +343,8 @@ GameStorage.migrations = {
   },
 
   adjustWhy(player) {
-    if (player.why !== undefined) {
-      player.requirementChecks.permanent.singleTickspeed = player.why;
-      delete player.why;
-    }
+    player.requirementChecks.permanent.singleTickspeed = player.why ?? 0;
+    delete player.why;
   },
 
   adjustAchievementVars(player) {

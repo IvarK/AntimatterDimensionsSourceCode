@@ -6,9 +6,6 @@ export default {
   components: {
     ModalWrapperChoice
   },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   data() {
     return {
       isDoomed: false,
@@ -16,6 +13,9 @@ export default {
   },
   computed: {
     resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
+  },
+  created() {
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     handleYesClick() {

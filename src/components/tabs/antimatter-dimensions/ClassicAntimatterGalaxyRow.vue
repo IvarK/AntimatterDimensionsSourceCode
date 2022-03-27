@@ -100,12 +100,11 @@ export default {
 <template>
   <div class="c-antimatter-dim-row">
     <div
-      class="c-dim-row__label c-dim-row__label--growable"
-      style="height: 6rem;"
+      class="c-dim-row__label c-dim-row__label--growable l-text-wrapper"
     >
       {{ typeName }} ({{ sumText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
-      <div style="height: 2rem;">
+      <div class="l-scaling-text-wrapper">
         {{ hasIncreasedScaling ? costScalingText : "" }}
       </div>
     </div>
@@ -120,3 +119,13 @@ export default {
     </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+.l-text-wrapper {
+  height: 6rem;
+}
+
+.l-scaling-text-wrapper {
+  height: 2rem;
+}
+</style>

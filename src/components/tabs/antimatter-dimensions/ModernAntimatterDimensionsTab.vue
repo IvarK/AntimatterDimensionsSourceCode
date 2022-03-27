@@ -93,8 +93,7 @@ export default {
   <div class="l-antimatter-dim-tab">
     <div class="modes-container">
       <button
-        class="o-primary-btn"
-        style="width: 100px; height: 30px; padding: 0;"
+        class="o-primary-btn l-button-container"
         @click="changeBuyMode"
       >
         {{ getUntil10Display() }}
@@ -110,8 +109,7 @@ export default {
         <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </PrimaryButton>
       <button
-        class="o-primary-btn"
-        style="width: 100px; height: 30px; padding: 0;"
+        class="o-primary-btn l-button-container"
         @click="maxAll"
       >
         Max All (M)
@@ -142,3 +140,11 @@ export default {
     <AntimatterDimensionProgressBar />
   </div>
 </template>
+
+<style scoped>
+.l-button-container {
+  width: 100px;
+  height: 30px;
+  padding: 0;
+}
+</style>

@@ -1,6 +1,11 @@
-import "./blob-snowflakes";
+<script>
+import BlobSnowflakes from "@/components/BlobSnowflakes";
 
-Vue.component("background-animations", {
+export default {
+  name: "BackgroundAnimations",
+  components: {
+    BlobSnowflakes,
+  },
   data() {
     return {
       animateBackground: false,
@@ -13,6 +18,9 @@ Vue.component("background-animations", {
       this.blob = player.options.theme === "S11";
     }
   },
-  template: `
-    <blob-snowflakes v-if="blob" />`
-});
+};
+</script>
+
+<template>
+  <BlobSnowflakes v-if="blob" />
+</template>

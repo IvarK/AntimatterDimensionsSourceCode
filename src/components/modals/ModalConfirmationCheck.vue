@@ -12,9 +12,6 @@ export default {
       setting: true
     };
   },
-  created() {
-    this.setting = this.confirmation.option;
-  },
   computed: {
     confirmation() {
       return ConfirmationTypes[this.option];
@@ -28,6 +25,9 @@ export default {
     tooltipText() {
       return `${this.setting ? "Disable" : "Reenable"} the ${this.confirmation.name} confirmation`;
     },
+  },
+  created() {
+    this.setting = this.confirmation.option;
   },
   methods: {
     toggle() {

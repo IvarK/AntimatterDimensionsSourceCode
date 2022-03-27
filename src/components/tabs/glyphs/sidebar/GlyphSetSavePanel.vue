@@ -149,7 +149,7 @@ export default {
       :key="id"
       class="c-glyph-single-set-save"
     >
-      <div style="width: 18rem">
+      <div class="c-glyph-set-preview-area">
         <GlyphSetPreview
           :text="setName(id)"
           :text-hidden="true"
@@ -202,5 +202,9 @@ export default {
 <style scoped>
 .c-glyph-single-set-save-flexbox {
   width: 16rem;
+}
+
+.c-glyph-set-preview-area {
+  width: 18rem;
 }
 </style>

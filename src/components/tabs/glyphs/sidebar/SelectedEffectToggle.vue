@@ -85,12 +85,12 @@ export default {
     <span>
       <i
         v-if="isExcluded"
-        class="fas fa-exclamation l-dock-left"
+        class="fas fa-exclamation l-dock l-dock-left"
       />
       {{ description }}
       <i
         v-if="isExcluded"
-        class="fas fa-exclamation l-dock-right"
+        class="fas fa-exclamation l-dock l-dock-right"
       />
     </span>
     <i
@@ -115,7 +115,7 @@ export default {
   text-shadow: none;
 }
 
-.l-dock-left, .l-dock-right {
+.l-dock {
   position: absolute;
   margin: 0 4rem;
   top: 50%;

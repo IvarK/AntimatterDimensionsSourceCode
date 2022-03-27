@@ -190,7 +190,7 @@ export default {
       <br>
       <div class="c-glyph-filter-mode-container">
         <div
-          v-for="index in Object.values(modes).filter(idx => isUnlocked(idx))"
+          v-for="index in unlockedModes"
           :key="index"
           :class="optionClass(index)"
           @click="setMode(index)"

@@ -5365,7 +5365,11 @@ screen and (max-width: 480px) {
 }
 
 .c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__tooltip:after {
-  border-top-width: 0.7rem;
+  border-top-width: 0.6rem;
+  margin-bottom: -0.8rem;
+}
+
+.s-base--metro .c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__tooltip:after {
   margin-bottom: -0.7rem;
 }
 

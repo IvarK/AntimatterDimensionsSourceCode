@@ -9265,6 +9265,10 @@ input.o-automator-block-input {
   font-weight: 500;
 }
 
+.l-information {
+  top: 3.1rem;
+}
+
 .l-hide-modal-tab-container {
   margin: 0.5rem;
 }

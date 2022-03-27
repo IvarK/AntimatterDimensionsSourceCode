@@ -34,11 +34,6 @@
   flex: 1 0 auto;
 }
 
-.l-old-ui__footer {
-  padding-bottom: 1rem;
-  padding-top: 2.5rem;
-}
-
 .l-old-ui-page {
   display: flex;
   flex-direction: column;

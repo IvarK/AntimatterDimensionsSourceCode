@@ -1,6 +1,5 @@
 import "./save-timer.js";
 import "./speedrun-status.js";
-import "./help-me.js";
 import "./tt-shop.js";
 import "./background-animations";
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
@@ -11,6 +10,8 @@ import PopupModal from "@/components/modals/PopupModal";
 import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
+import InfoButton from "@/components/InfoButton";
+import HelpMe from "@/components/HelpMe";
 
 Vue.component("game-ui", {
   components: {
@@ -21,7 +22,9 @@ Vue.component("game-ui", {
     PopupModal,
     FadeToBlack,
     CreditsContainer,
-    NewGame
+    NewGame,
+    InfoButton,
+    HelpMe
   },
   computed: {
     view() {
@@ -55,7 +58,8 @@ Vue.component("game-ui", {
         <PopupModal v-if="view.modal.current" :modal="view.modal.current" />
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
-        <help-me />
+        <HelpMe />
+        <InfoButton />
         <background-animations />
       </div>
       <div id="notification-container" class="l-notification-container" />

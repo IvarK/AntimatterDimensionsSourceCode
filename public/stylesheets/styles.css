@@ -1257,7 +1257,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--subtab-option {
   border: 0.2rem solid var(--color-accent);
-  margin: 0 0.8rem;
+  margin: 0.4rem 0.8rem;
   line-height: 0;
 }
 
@@ -1268,6 +1268,7 @@ screen and (max-width: 480px) {
 .o-primary-btn--tickspeed {
   width: 17rem;
   font-size: 1.2rem;
+  margin-right: 0.4rem;
 }
 
 .o-primary-btn--buy-max {
@@ -1898,7 +1899,7 @@ screen and (max-width: 480px) {
 
 .c-game-header__infinity-points {
   font-size: 1.2rem;
-  width: 21rem;
+  width: 22rem;
 }
 
 .c-game-header__tesseract-available {
@@ -1960,7 +1961,7 @@ screen and (max-width: 480px) {
 
 .c-game-header__eternity-points {
   font-size: 1.2rem;
-  width: 21rem;
+  width: 22rem;
 }
 
 .c-game-header__ep-amount {
@@ -8980,7 +8981,7 @@ input.o-automator-block-input {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 0.5rem;
   flex: 1 0.8 40rem;
 }

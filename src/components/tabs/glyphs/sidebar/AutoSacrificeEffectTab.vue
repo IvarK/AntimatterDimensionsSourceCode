@@ -75,8 +75,8 @@ export default {
       effects total, which must include <i>all</i> of the following effects:
       (click to toggle effects on/off)
       <span
+        v-tooltip="questionmarkTooltip"
         class="o-questionmark"
-        :ach-tooltip="questionmarkTooltip"
       >
         ?
       </span>

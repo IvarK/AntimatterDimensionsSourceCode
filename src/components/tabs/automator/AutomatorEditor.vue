@@ -111,11 +111,9 @@ export default {
         // This saves the script after converting it.
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-        if (player.reality.automator.currentInfoPane === 4) player.reality.automator.currentInfoPane = 1;
       } else if (BlockAutomator.fromText(this.currentScriptContent)) {
         AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-        player.reality.automator.currentInfoPane = 4;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }

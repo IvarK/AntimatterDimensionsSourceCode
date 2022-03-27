@@ -1,11 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-
 export default {
   name: "ModalConfirmationCheck",
-  components: {
-    PrimaryButton
-  },
   props: {
     option: {
       type: String,
@@ -21,9 +16,15 @@ export default {
     confirmation() {
       return ConfirmationTypes[this.option];
     },
+    confirmationClass() {
+      return {
+        "c-modal__confirmation-toggle": true,
+        "c-modal__confirmation-toggle--active": this.setting
+      };
+    },
     tooltipText() {
       return `${this.setting ? "Disable" : "Reenable"} the ${this.confirmation.name} confirmation`;
-    }
+    },
   },
   created() {
     this.setting = this.confirmation.option;
@@ -38,13 +39,20 @@ export default {
 </script>
 
 <template>
-  <PrimaryButton
-    v-tooltip="tooltipText"
-    class="c-modal__confirmation-check"
+  <div
+    :class="confirmationClass"
     @click="toggle"
   >
-    <template v-if="!setting">
-      &times;
-    </template>
-  </PrimaryButton>
+    <span
+      v-if="setting"
+      class="fas fa-check"
+    />
+    <span
+      v-else
+      class="fas fa-times"
+    />
+    <div class="c-modal__confirmation-toggle__tooltip">
+      {{ tooltipText }}
+    </div>
+  </div>
 </template>

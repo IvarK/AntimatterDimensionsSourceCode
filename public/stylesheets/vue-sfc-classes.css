@@ -1,14 +1,5 @@
 /* Temporary inlined css classes from SFCs to prevent conflicts with old classes from styles.css */
 
-/* FooterLinks.vue */
-
-.o-footer {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  font-size: 1.5rem;
-}
-
 /* HintText.vue */
 
 .o-hint-text {

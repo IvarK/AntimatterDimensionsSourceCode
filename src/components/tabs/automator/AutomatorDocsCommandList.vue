@@ -1,10 +1,10 @@
 <script>
-import AutomatorManPage from "./AutomatorDocsManPage";
+import AutomatorDocsManPage from "./AutomatorDocsManPage";
 
 export default {
   name: "AutomatorDocsCommandList",
   components: {
-    AutomatorManPage
+    AutomatorDocsManPage
   },
   data() {
     return {
@@ -25,7 +25,7 @@ export default {
       class="fas fa-arrow-left"
       @click="selectedCommand = -1"
     />
-    <AutomatorManPage
+    <AutomatorDocsManPage
       v-if="selectedCommand !== -1"
       :command="commands[selectedCommand]"
     />

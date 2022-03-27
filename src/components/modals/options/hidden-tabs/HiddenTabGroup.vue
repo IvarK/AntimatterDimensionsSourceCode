@@ -125,5 +125,6 @@ export default {
 
 .c-hidden-tabs-background__always-visible {
   background-color: var(--color-disabled);
+  cursor: default;
 }
 </style>

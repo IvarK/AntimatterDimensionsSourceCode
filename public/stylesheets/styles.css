@@ -9189,6 +9189,7 @@ input.o-automator-block-input {
   border-radius: 0.8rem;
   border: 0.1rem solid black;
   padding: 0.2rem;
+  cursor: pointer;
 }
 
 .s-base--metro .c-hide-modal-all-subtab-container {

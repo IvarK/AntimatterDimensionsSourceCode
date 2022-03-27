@@ -365,6 +365,8 @@ GameStorage.migrations = {
       player.challenge.eternity.unlocked !== 0
     ) player.requirementChecks.reality.noPurchasedTT = false;
     if (player.sacrificed.gt(0)) player.requirementChecks.infinity.noSacrifice = false;
+    player.requirementChecks.permanent.emojiGalaxies = player.spreadingCancer;
+    delete player.spreadingCancer;
   },
 
   adjustThemes(player) {

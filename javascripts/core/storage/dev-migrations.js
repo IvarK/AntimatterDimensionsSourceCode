@@ -1307,6 +1307,10 @@ GameStorage.devMigrations = {
     player => {
       delete player.auto.bulkOn;
     },
+    player => {
+      player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks.permanent.cancerGalaxies;
+      delete player.requirementChecks.permanent.cancerGalaxies;
+    }
   ],
 
   patch(player) {

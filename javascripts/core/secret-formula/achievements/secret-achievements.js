@@ -57,8 +57,8 @@ GameDatabase.achievements.secret = [
   {
     id: 22,
     name: "Deep fried",
-    get description() { return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using cancer notation.`; },
-    checkRequirement: () => player.requirementChecks.permanent.cancerGalaxies >= 1e5,
+    get description() { return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using emoji notation.`; },
+    checkRequirement: () => player.requirementChecks.permanent.emojiGalaxies >= 1e5,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {

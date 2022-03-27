@@ -1291,7 +1291,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--subtab-option {
   border: 0.2rem solid var(--color-accent);
-  margin: 0 0.8rem;
+  margin: 0.4rem 0.8rem;
   line-height: 0;
 }
 

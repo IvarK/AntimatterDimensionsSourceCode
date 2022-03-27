@@ -54,9 +54,6 @@ export default {
         "fa-check": !this.isHidden,
         "fa-times": this.isHidden,
         "fa-exclamation": this.alwaysVisible,
-        "c-hidden-tabs-background__visible": !this.isHidden,
-        "c-hidden-tabs-background__hidden": this.isHidden,
-        "c-hidden-tabs-background__always-visible": this.alwaysVisible
       };
     },
     rowVisibleIndicatorTooltip() {

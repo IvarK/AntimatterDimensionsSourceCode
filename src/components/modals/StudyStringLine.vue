@@ -28,7 +28,7 @@ export default {
 
 <template>
   <div class="l-modal-import-tree__tree-info-line">
-    <div v-if="tree.timeTheorems === 0">
+    <div v-if="tree.timeTheorems === 0 && tree.spaceTheorems === 0">
       <i>Importing this {{ importDestString }} will not purchase any new Time Studies.</i>
     </div>
     <div v-else>

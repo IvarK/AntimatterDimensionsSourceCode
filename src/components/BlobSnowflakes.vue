@@ -40,27 +40,29 @@ export default {
 };
 </script>
 
-<template v-if="initialized">
-  <svg
-    v-if="animateBackground"
-    class="c-blob-snowflake-container"
-  >
-    <BlobSnowflake
-      v-for="i in count"
-      :key="i"
-      :bounds="bounds"
-    />
-  </svg>
-  <svg
-    v-else
-    class="c-blob-background-container"
-  >
-    <BlobBackground
-      v-for="i in count"
-      :key="i"
-      :bounds="bounds"
-    />
-  </svg>
+<template>
+  <div v-if="initialized">
+    <svg
+      v-if="animateBackground"
+      class="c-blob-snowflake-container"
+    >
+      <BlobSnowflake
+        v-for="i in count"
+        :key="i"
+        :bounds="bounds"
+      />
+    </svg>
+    <svg
+      v-else
+      class="c-blob-background-container"
+    >
+      <BlobBackground
+        v-for="i in count"
+        :key="i"
+        :bounds="bounds"
+      />
+    </svg>
+  </div>
 </template>
 
 <style scoped>

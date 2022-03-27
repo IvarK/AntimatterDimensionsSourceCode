@@ -12,6 +12,7 @@ import SpeedrunStatus from "@/components/SpeedrunStatus";
 import BackgroundAnimations from "@/components/BackgroundAnimations";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import HowToPlay from "@/components/HowToPlay";
+import InfoButton from "@/components/InfoButton";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
@@ -30,6 +31,7 @@ export default {
     BackgroundAnimations,
     ModalProgressBar,
     HowToPlay,
+    InfoButton,
     TimeTheoremShop
   },
   computed: {
@@ -79,6 +81,7 @@ export default {
         :href="themeCss"
       >
       <HowToPlay />
+      <InfoButton />
       <BackgroundAnimations />
     </div>
     <div

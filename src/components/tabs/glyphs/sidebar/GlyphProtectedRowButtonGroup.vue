@@ -42,7 +42,7 @@ export default {
   <div class="o-glyph-inventory-management-group">
     <div class="l-glyph-sacrifice-options__header">
       <div
-        :ach-tooltip="questionMarkTooltip"
+        v-tooltip="questionMarkTooltip"
         class="o-questionmark"
       >
         ?

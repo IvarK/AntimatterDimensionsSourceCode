@@ -2717,7 +2717,7 @@ GameDatabase.news = [
   {
     id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    get unlocked() { return player.requirementChecks.permanent.emojirGalaxies >= 3999; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies >= 3999; }
   },
   {
     id: "l46",

@@ -138,10 +138,6 @@ export default {
 }
 
 
-.s-base--metro .o-pelle-rift-milestone, .s-base--metro .o-pelle-rift-toggle {
-  border-radius: 0;
-}
-
 .s-base--metro .c-pelle-rift {
   border-radius: 0;
 }

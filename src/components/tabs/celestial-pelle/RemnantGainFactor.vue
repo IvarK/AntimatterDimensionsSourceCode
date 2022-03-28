@@ -7,7 +7,7 @@ export default {
     ExpandingControlBox
   },
   props: {
-    lessOpaque: {
+    hide: {
       type: Boolean,
       required: false,
       default: false
@@ -24,6 +24,11 @@ export default {
       remnants: 0,
       remnantsGain: 0
     };
+  },
+  computed: {
+    opacity() {
+      return Number(!this.hide);
+    }
   },
   methods: {
     update() {
@@ -43,9 +48,7 @@ export default {
     <ExpandingControlBox
       container-class="c-remnant-factors"
       label="Remnant Gain Factors"
-      :style="{
-        opacity: lessOpaque ? 0 : 1
-      }"
+      :style="{ opacity }"
     >
       <template #dropdown>
         <div class="c-remnant-factors-text">

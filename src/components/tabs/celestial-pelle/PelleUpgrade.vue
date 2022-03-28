@@ -47,12 +47,11 @@ export default {
       if (!this.config.formatEffect) return false;
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
-      const value = [formattedEffect(this.purchases)];
-      // ➜
-      if (!this.isCapped && this.hovering && this.canBuy) {
-        value[1] = formattedEffect(this.purchases + 1);
-      }
-      return { prefix, value };
+      const value = formattedEffect(this.purchases);
+      const next = (!this.isCapped && this.hovering && this.canBuy)
+        ? formattedEffect(this.purchases + 1)
+        : undefined;
+      return { prefix, value, next };
     },
     timeEstimate() {
       if (!this.hasTimeEstimate) return null;
@@ -138,10 +137,10 @@ export default {
     <DescriptionDisplay :config="config" />
     <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">
-      {{ effectText.prefix }} {{ effectText.value[0] }}
-      <template v-if="effectText.value[1]">
+      {{ effectText.prefix }} {{ effectText.value }}
+      <template v-if="effectText.next">
         ➜ <span class="c-improved-effect">
-          {{ effectText.value[1] }}
+          {{ effectText.next }}
         </span>
       </template>
       <div class="l-pelle-upgrade-gap" />
@@ -208,8 +207,10 @@ export default {
   color: black;
 }
 
-.c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover,
-.c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
+.c-pelle-upgrade--galaxyGenerator:hover,
+.c-pelle-upgrade--unavailable:hover,
+.c-pelle-upgrade--faded:hover,
+.c-pelle-upgrade--bought:hover {
   box-shadow: 1px 1px 5px var(--color-pelle-secondary);
   transition-duration: 0.3s;
 }

@@ -83,7 +83,7 @@ export default {
           >
             <ArmageddonButton />
           </div>
-          <RemnantGainFactor :less-opaque="showImprovedEstimate" />
+          <RemnantGainFactor :hide="showImprovedEstimate" />
         </div>
         <div class="c-armageddon-resources-container">
           <div>

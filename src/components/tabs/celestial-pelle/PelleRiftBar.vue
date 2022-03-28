@@ -28,11 +28,11 @@ export default {
   computed: {
     tooltipContentStyle() {
       const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
-      const baseColour = this.isDark ? "#111111" : "var(--color-base)";
+      const baseColor = this.isDark ? "#111111" : "var(--color-base)";
       return {
         width: "20rem",
         border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColour,
+        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColor,
         color: hasMilestone ? "black" : "var(--color-text)",
         fontSize: "1.1rem",
         fontWeight: "bold",
@@ -171,6 +171,7 @@ export default {
       <template #tooltipContent>
         {{ milestoneResourceText(rift, selectedHoverMilestone) }}
         <br>
+        <br>
         {{ milestoneDescriptionText(selectedHoverMilestone) }}
       </template>
     </CustomizeableTooltip>
@@ -193,11 +194,13 @@ export default {
   align-items: center;
   background: var(--color-bar-bg);
 }
-.c-pelle-rift-bar--filling, .c-pelle-rift-bar--idle {
+.c-pelle-rift-bar--filling,
+.c-pelle-rift-bar--idle {
   cursor: pointer;
 }
 
-.c-pelle-rift-bar--idle .l-overflow-hidden, .c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
+.c-pelle-rift-bar--idle .l-overflow-hidden,
+.c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
   opacity: 0.6;
 }
 

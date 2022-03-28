@@ -50,7 +50,7 @@ GameDatabase.credits = {
       roles: [6, 11]
     }, {
       name: "earth",
-      roles: [6, 9, 11]
+      roles: [6, 9, 11, 12]
     }, {
       name: "Hira",
       roles: [6, 11, 12]
@@ -68,6 +68,9 @@ GameDatabase.credits = {
     }, {
       name: "realrapidjazz",
       roles: [6, 7]
+    }, {
+      name: "Scarlet",
+      roles: [6, 11, 12]
     }, {
       name: "slabdrill",
       roles: 6
@@ -159,9 +162,6 @@ GameDatabase.credits = {
     }, {
       name: "Saturnus",
       roles: 11
-    }, {
-      name: "Scarlet",
-      roles: [11, 12]
     }, {
       name: "sirusi",
       name2: "Vinícius Oliveira Martins",

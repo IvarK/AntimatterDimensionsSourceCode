@@ -5227,6 +5227,11 @@ screen and (max-width: 480px) {
   right: -0.1rem;
 }
 
+.t-s11 .c-modal__confirmation-toggle {
+  border-color: #e1ae18;
+  top: -0.2rem;
+}
+
 .c-modal__confirmation-toggle--active {
   background: var(--color-good);
 }

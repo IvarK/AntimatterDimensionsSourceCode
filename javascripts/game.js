@@ -3,7 +3,7 @@ import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
 import { deepmergeAll } from "@/utility/deepmerge";
-import { supportedBrowsers } from "./supportedBrowsers";
+import { supportedBrowsers } from "./supported-browsers";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");

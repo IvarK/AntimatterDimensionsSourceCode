@@ -1,10 +1,1 @@
-> 1%
-not dead
-not ie > 0
-not ie_mob > 0
-# These are the versions that support the latest feature we use: .replaceAll().
-chrome >= 85
-edge >= 85
-ff >= 77
-opera >= 71
-safari >= 13.1
+> 0.1% and not dead and supports css-variables

@@ -343,6 +343,7 @@ GameStorage.migrations = {
   },
 
   adjustWhy(player) {
+    player.requirementChecks.permanent.singleTickspeed = player.why ?? 0;
     delete player.why;
   },
 

@@ -264,7 +264,6 @@ class InfinityDimensionState extends DimensionState {
   }
 
   buyMax() {
-    if (!this.isUnlocked) return this.unlock();
     if (!this.isAvailableForPurchase) return false;
 
     let purchasesUntilHardcap = this.purchaseCap - this.purchases;

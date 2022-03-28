@@ -100,13 +100,10 @@ export default {
           ? "a new Infinity Dimension"
           : "Infinity Dimensions"}`;
         const nextID = InfinityDimensions.next();
-        if (nextID.hasIPUnlock) {
-          // The AM and IP parts both count for 50% each
-          const amUnlockPart = Math.min(player.records.thisEternity.maxAM.pLog10() / nextID.amRequirement.log10(), 1.0);
-          const ipUnlockPart = Math.min(player.infinityPoints.pLog10() / Math.log10(nextID.ipRequirement), 1.0);
-          setLinearProgress((amUnlockPart + ipUnlockPart) / 2, 1, text);
-        } else {
+        if (nextID.ipRequirementReached) {
           setProgress(player.records.thisEternity.maxAM, nextID.amRequirement, text);
+        } else {
+          setProgress(player.infinityPoints, nextID.ipRequirement, text);
         }
       } else {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");

@@ -16,12 +16,15 @@ export default {
       const amDisplay = format(nextDimension.amRequirement);
       const ipDisplay = format(nextDimension.ipRequirement);
       if (nextDimension.hasIPUnlock) {
-        return `Reach ${ipDisplay} Infinity Points and ${amDisplay} antimatter to unlock Infinity Dimensions`;
+        return `Reach ${ipDisplay} Infinity Points and ${amDisplay} antimatter to unlock Infinity Dimensions.`;
       }
-      return `Reach ${amDisplay} antimatter to unlock a new Infinity Dimension`;
+      return `Reach ${amDisplay} antimatter to unlock a new Infinity Dimension.`;
     },
     buttonClassObject() {
       return {
+        "o-prestige-button": true,
+        "o-infinity-button": true,
+        "l-game-header__new-dim-btn": true,
         "o-infinity-button--unavailable": !this.canUnlock
       };
     },
@@ -45,7 +48,6 @@ export default {
   <button
     v-if="isVisible"
     :class="buttonClassObject"
-    class="o-prestige-button o-infinity-button l-game-header__new-dim-btn"
     @click="tryUnlockNextInfinityDimension"
   >
     {{ text }}

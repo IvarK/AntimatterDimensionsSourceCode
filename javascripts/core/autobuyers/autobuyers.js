@@ -71,10 +71,10 @@ export const Autobuyers = (function() {
     tick() {
       PerformanceStats.start("Autobuyers");
 
-      const autobuyers = Autobuyers.all.filter(a => a.canTick);
-
-      for (const autobuyer of autobuyers) {
-        autobuyer.tick();
+      // The canTick condition must be checked after the previous autobuyer has triggered
+      // in order to avoid slow dimension autobuyers.
+      for (const autobuyer of Autobuyers.all) {
+        if (autobuyer.canTick) autobuyer.tick();
       }
 
       PerformanceStats.end();

@@ -50,6 +50,7 @@ GameDatabase.credits = {
       roles: [6, 11]
     }, {
       name: "earth",
+      name2: "Jace Royer",
       roles: [6, 9, 11, 12]
     }, {
       name: "Hira",

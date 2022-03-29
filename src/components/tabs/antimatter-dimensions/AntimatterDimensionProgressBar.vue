@@ -96,9 +96,9 @@ export default {
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity");
       } else if (player.break) {
-        const text = `Percentage to unlock ${InfinityDimension(1).isUnlocked
-          ? "a new Infinity Dimension"
-          : "Infinity Dimensions"}`;
+        const text = `Percentage to unlock a new ${InfinityDimensions.next().hasIPUnlock
+          ? "type of Dimension"
+          : "Infinity Dimension"}`;
         const nextID = InfinityDimensions.next();
         if (nextID.ipRequirementReached) {
           setProgress(player.records.thisEternity.maxAM, nextID.amRequirement, text);

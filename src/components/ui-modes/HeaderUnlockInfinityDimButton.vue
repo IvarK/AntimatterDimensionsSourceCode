@@ -9,16 +9,17 @@ export default {
   },
   computed: {
     text() {
-      if (this.canUnlock) {
-        return "Unlock a new\nInfinity Dimension";
-      }
       const nextDimension = InfinityDimensions.next();
+      const dimensionText = `a new ${nextDimension.hasIPUnlock ? "type of Dimension" : "Infinity Dimension"}.`;
+      if (this.canUnlock) {
+        return `Unlock ${dimensionText}`;
+      }
       const amDisplay = format(nextDimension.amRequirement);
       const ipDisplay = format(nextDimension.ipRequirement);
       if (nextDimension.hasIPUnlock) {
-        return `Reach ${ipDisplay} Infinity Points and ${amDisplay} antimatter to unlock Infinity Dimensions.`;
+        return `Reach ${ipDisplay} Infinity Points and ${amDisplay} antimatter to unlock ${dimensionText}`;
       }
-      return `Reach ${amDisplay} antimatter to unlock a new Infinity Dimension.`;
+      return `Reach ${amDisplay} antimatter to unlock ${dimensionText}`;
     },
     buttonClassObject() {
       return {
@@ -31,8 +32,7 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = player.break && !InfinityDimension(8).isUnlocked &&
-        player.records.thisEternity.maxIP.lt(Decimal.NUMBER_MAX_VALUE) &&
+      this.isVisible = player.break && !InfinityDimension(8).isUnlocked && !Player.canEternity &&
         !EternityMilestone.autoUnlockID.isReached;
       if (!this.isVisible) return;
       this.canUnlock = InfinityDimensions.next().canUnlock;

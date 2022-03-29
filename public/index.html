@@ -24,6 +24,11 @@
 </head>
 
 <body>
+  <div id="browser-warning">
+    Your browser is not supported. 
+    <br>
+    Please update to a newer browser.
+  </div>
   <div id="loading"></div>
   <div id="ui"></div>
   <div id="background-animations">
@@ -43,4 +48,14 @@
 
   <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 </body>
+<script>
+  // We use an IE only document variable to check here to force it to show the browser warning.
+  // For some reason, IE really does *not* want to cooperate, even when you have a file as a <script> that you load
+  // in the body. 
+  // Other browsers will be checked whenever window.onload is ran.
+  if (document.documentMode) {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("browser-warning").style.display = "flex";
+  }
+</script>
 </html>

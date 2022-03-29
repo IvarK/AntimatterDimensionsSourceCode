@@ -581,6 +581,17 @@ button:focus {
   z-index: 999;
 }
 
+#browser-warning {
+  height: 100%;
+  width: 100%;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  font-size: 7rem;
+  display: none;
+}
+
 .l-reality-button {
   display: block;
   width: 50%;

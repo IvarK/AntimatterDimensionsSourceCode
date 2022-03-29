@@ -101,7 +101,7 @@ export default {
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;
   /* transparent crimson */
-  box-shadow: inset 0 0 10px 1px #ed143d70, 0 0 10px 1px #ed143d70;
+  box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45), 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45;
 }
 
 .c-pelle-rift-row {

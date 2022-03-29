@@ -113,8 +113,8 @@ export default {
 .o-pelle-button {
   background: var(--color-prestige--accent);
   color: var(--color-text);
-  border: 1px solid var(--color-pelle--base);
-  border-radius: 5px;
+  border: 0.1rem solid var(--color-pelle--base);
+  border-radius: 0.5rem;
   padding: 1rem;
   font-family: Typewriter;
   margin: 0 1rem;
@@ -124,7 +124,7 @@ export default {
 }
 
 .o-pelle-button:hover {
-  box-shadow: 1px 1px 3px var(--color-pelle--base);
+  box-shadow: 0.1rem 0.1rem 0.3rem var(--color-pelle--base);
 }
 
 .o-pelle-quotes-button {
@@ -153,8 +153,8 @@ export default {
   background: black;
   color: var(--color-pelle--base);
   font-size: 3rem;
-  border: 2px solid var(--color-pelle--base);
-  border-radius: 5px;
+  border: 0.2rem solid var(--color-pelle--base);
+  border-radius: 0.5rem;
   width: 20rem;
   cursor: pointer;
   transition-duration: 0.4s;
@@ -162,7 +162,7 @@ export default {
 }
 
 .pelle-doom-button:hover {
-  box-shadow: 0px 0px 20px var(--color-pelle--base);
+  box-shadow: 0 0 2rem var(--color-pelle--base);
 }
 
 .pelle-icon-container {
@@ -175,11 +175,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 4px solid var(--color-pelle--base);
+  border: 0.4rem solid var(--color-pelle--base);
   font-size: 10rem;
   transition-duration: 0.4s;
-  text-shadow: 0px 0px 15px #9b0101;
-  box-shadow: 0px 0px 15px #9b0101;
+  text-shadow: 0 0 1.5rem #9b0101;
+  box-shadow: 0 0 1.5rem #9b0101;
 }
 
 .pelle-doom-button:hover .pelle-icon-container {

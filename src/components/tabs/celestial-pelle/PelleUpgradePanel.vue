@@ -151,7 +151,7 @@ export default {
 .l-pelle-panel-container {
   padding: 1rem;
   margin: 1rem;
-  border: 2px solid var(--color-pelle--base);
+  border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;
   user-select: none;
 }
@@ -165,7 +165,7 @@ export default {
 .o-pelle-button {
   background: var(--color-prestige--accent);
   color: var(--color-text);
-  border: 1px solid var(--color-pelle--base);
+  border: 0.1rem solid var(--color-pelle--base);
   border-radius: 0.5rem;
   padding: 1rem;
   font-family: Typewriter;
@@ -176,7 +176,7 @@ export default {
 }
 
 .o-pelle-button:hover {
-  box-shadow: 1px 1px 3px var(--color-pelle--base);
+  box-shadow: 0.1rem 0.1rem 0.3rem var(--color-pelle--base);
 }
 
 .c-pelle-upgrade-container {

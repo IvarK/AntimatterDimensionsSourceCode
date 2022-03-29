@@ -220,12 +220,12 @@ export default {
   max-width: 70rem;
   height: 11.4rem;
   overflow: hidden;
-  box-shadow: inset 0 0 1px 1px var(--color-pelle--base);
+  box-shadow: inset 0 0 0.1rem 0.1rem var(--color-pelle--base);
   /* box-shadow is here to prevent a weird grey border forming around the background */
 }
 
 .c-increase-cap:hover {
-  box-shadow: inset 0 0 1px 1px var(--color-pelle--base), 1px 1px 5px var(--color-pelle--base);
+  box-shadow: inset 0 0 0.1rem 0.1rem var(--color-pelle--base), 0.1rem 0.1rem 0.5rem var(--color-pelle--base);
   transition-duration: 0.12s;
 }
 
@@ -250,12 +250,12 @@ export default {
 
 .c-big-text {
   font-size: 3rem;
-  text-shadow: 2px 2px 2px black;
+  text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 
 .c-medium-text {
   font-size: 2rem;
-  text-shadow: 2px 2px 2px black;
+  text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 
 .c-collapse-icon-clickable {

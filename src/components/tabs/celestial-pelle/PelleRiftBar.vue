@@ -37,7 +37,7 @@ export default {
         fontSize: "1.1rem",
         fontWeight: "bold",
         zIndex: 4,
-        boxShadow: hasMilestone ? " 0 0 1px 1px black" : ""
+        boxShadow: hasMilestone ? " 0 0 0.1rem 0.1rem black" : ""
       };
     },
     tooltipArrowStyle() {
@@ -223,11 +223,11 @@ export default {
   height: 100%;
   width: 100%;
   z-index: 0;
-  box-shadow: inset 0 0 3px 1px var(--color-bar-bg);
+  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-bar-bg);
 }
 
 .c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
-  box-shadow: inset 0 0 3px 1px var(--color-pelle-secondary);
+  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle-secondary);
 }
 
 
@@ -308,7 +308,7 @@ export default {
 .o-pelle-rift-bar-percentage {
   font-size: 1.5rem;
   color: white;
-  text-shadow: 1px 1px 2px var(--color-pelle--base);
+  text-shadow: 0.1rem 0.1rem 0.2rem var(--color-pelle--base);
   z-index: 2;
   /* This keeps the percentage from blocking the hover area */
   pointer-events: none;

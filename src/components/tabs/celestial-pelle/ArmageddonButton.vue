@@ -63,7 +63,7 @@ export default {
 
 .c-armageddon-button:hover {
   cursor: pointer;
-  box-shadow: 1px 1px 5px var(--color-pelle--base);
+  box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle--base);
   transition-duration: 0.12s;
 }
 

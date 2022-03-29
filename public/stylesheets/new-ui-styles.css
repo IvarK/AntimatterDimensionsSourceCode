@@ -10,6 +10,7 @@
 .t-normal #ui-container,
 .t-s9 #ui-container {
   --color-text: white;
+  --color-text-inverted: black;
   --color-base: #1d1b22;
   --color-accent: #df5050;
   --color-good: #1bbb36;

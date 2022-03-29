@@ -69,6 +69,7 @@ export const Autobuyers = (function() {
     },
 
     tick() {
+      if (!player.auto.autobuyersOn) return;
       PerformanceStats.start("Autobuyers");
 
       // The canTick condition must be checked after the previous autobuyer has triggered

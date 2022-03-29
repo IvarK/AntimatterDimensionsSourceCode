@@ -29,6 +29,9 @@ GameDatabase.credits = {
       name2: "Andrei Andreev",
       roles: 2
     }, {
+      name: "garnet420",
+      roles: 3
+    }, {
       name: "Omsi",
       roles: 3
     }, {
@@ -164,6 +167,12 @@ GameDatabase.credits = {
       name: "Saturnus",
       roles: 11
     }, {
+      name: "SereKabii",
+      roles: 11
+    }, {
+      name: "Sheer",
+      roles: 11
+    }, {
       name: "sirusi",
       name2: "Vinícius Oliveira Martins",
       roles: 11
@@ -272,6 +281,10 @@ GameDatabase.credits = {
       roles: 12
     }, {
       name: "Nani",
+      roles: 12
+    }, {
+      name: "NotBrewst",
+      name2: "Luc Leblanc",
       roles: 12
     }, {
       name: "opdollar",

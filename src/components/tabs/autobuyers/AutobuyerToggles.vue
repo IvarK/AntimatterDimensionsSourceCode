@@ -64,6 +64,7 @@ export default {
     <span v-if="isDoomed">
       <PrimaryButton
         v-if="showContinuum"
+        class="o-primary-btn--subtab-option"
       >
         Continuum is disabled
       </PrimaryButton>

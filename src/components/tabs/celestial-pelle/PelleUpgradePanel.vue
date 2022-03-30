@@ -117,7 +117,7 @@ export default {
           v-for="upgrade in allUpgrades"
           :key="upgrade.config.id"
           :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
+          :show-improved-estimate="showImprovedEstimate"
         />
         <PelleUpgradeVue
           v-for="upgrade in fadedUpgrades"

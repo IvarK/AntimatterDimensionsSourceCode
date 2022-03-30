@@ -61,7 +61,7 @@ export default {
       return !(this.canBuy ||
         this.isBought ||
         this.isCapped ||
-        this.galaxyGenerator
+        (this.galaxyGenerator && this.config.currencyLabel !== "Galaxy")
       );
     },
     shouldEstimateImprovement() {
@@ -89,14 +89,16 @@ export default {
       this.isCapped = this.upgrade.isCapped;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
       this.currentTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(Pelle.realityShardGainPerSecond).toNumber())
+        .fromSeconds(this.secondsUntilCost(this.galaxyGenerator ? GalaxyGenerator.gainPerSecond
+          : Pelle.realityShardGainPerSecond).toNumber())
         .toTimeEstimate();
       this.projectedTimeEstimate = TimeSpan
         .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
         .toTimeEstimate();
     },
     secondsUntilCost(rate) {
-      return Decimal.sub(this.upgrade.cost, Currency.realityShards.value).div(rate);
+      const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
+      return Decimal.sub(this.upgrade.cost, value).div(rate);
     },
   }
 };

@@ -14,7 +14,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
       cost: () => expWithIncreasedScale(...cost, player.celestials.pelle.rebuyables[id]),
       formatCost,
       cap,
-      effect: () => effect(player.celestials.pelle.rebuyables[id]),
+      effect: (x = player.celestials.pelle.rebuyables[id]) => effect(x),
       formatEffect,
       rebuyable: true
     };

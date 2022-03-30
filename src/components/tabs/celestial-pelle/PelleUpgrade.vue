@@ -1,12 +1,14 @@
 <script>
-import CostDisplay from "../../CostDisplay";
-import DescriptionDisplay from "../../DescriptionDisplay";
+import CostDisplay from "@/components/CostDisplay";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 export default {
   name: "PelleUpgrade",
   components: {
     DescriptionDisplay,
-    CostDisplay
+    CostDisplay,
+    CustomizeableTooltip
   },
   props: {
     upgrade: {
@@ -42,32 +44,28 @@ export default {
       return this.upgrade.config;
     },
     effectText() {
-      if (!this.config.formatEffect) return "";
+      if (!this.config.formatEffect) return false;
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
-      let value = formattedEffect(this.purchases);
-      if (!this.isCapped && this.hovering && this.canBuy) {
-        value = `${formattedEffect(this.purchases)}
-        ➜ <span class="c-improved-effect">${formattedEffect(this.purchases + 1)}</span>`;
-      }
-      return `${prefix} ${value}`;
+      const value = formattedEffect(this.purchases);
+      const next = (!this.isCapped && this.hovering && this.canBuy)
+        ? formattedEffect(this.purchases + 1)
+        : undefined;
+      return { prefix, value, next };
     },
     timeEstimate() {
-      if (this.canBuy ||
-        this.isBought ||
-        Pelle.realityShardGainPerSecond.eq(0) ||
-        this.isCapped ||
-        this.galaxyGenerator
-      ) return null;
+      if (!this.hasTimeEstimate) return null;
       return this.currentTimeEstimate;
     },
-    shouldEstimateImprovement() {
+    hasTimeEstimate() {
       return !(this.canBuy ||
         this.isBought ||
-        Pelle.realityShardGainPerSecond.eq(0) ||
         this.isCapped ||
-        this.galaxyGenerator
+        (this.galaxyGenerator && this.config.currencyLabel !== "Galaxy")
       );
+    },
+    shouldEstimateImprovement() {
+      return this.showImprovedEstimate && this.hasTimeEstimate;
     },
     estimateImprovement() {
       if (!this.shouldEstimateImprovement) return "";
@@ -91,14 +89,16 @@ export default {
       this.isCapped = this.upgrade.isCapped;
       this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
       this.currentTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(Pelle.realityShardGainPerSecond).toNumber())
+        .fromSeconds(this.secondsUntilCost(this.galaxyGenerator ? GalaxyGenerator.gainPerSecond
+          : Pelle.realityShardGainPerSecond).toNumber())
         .toTimeEstimate();
       this.projectedTimeEstimate = TimeSpan
         .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
         .toTimeEstimate();
     },
     secondsUntilCost(rate) {
-      return Decimal.sub(this.upgrade.cost, Currency.realityShards.value).div(rate);
+      const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
+      return Decimal.sub(this.upgrade.cost, value).div(rate);
     },
   }
 };
@@ -108,26 +108,43 @@ export default {
   <button
     class="c-pelle-upgrade"
     :class="{
-      'c-pelle-upgrade--unavailable': !canBuy,
+      'c-pelle-upgrade--unavailable': !canBuy && !(isBought || isCapped),
       'c-pelle-upgrade--bought': isBought || isCapped,
       'c-pelle-upgrade--faded': faded,
       'c-pelle-upgrade--galaxyGenerator': galaxyGenerator
     }"
-    :ach-tooltip="timeEstimate"
     @click="!faded && upgrade.purchase()"
     @mouseover="hovering = true"
     @mouseleave="hovering = false"
   >
-    <div
-      :style="estimateImprovementTooltipStyle"
-      class="c-pelle-upgrade-time-tooltip"
+    <CustomizeableTooltip
+      :show="shouldEstimateImprovement"
+      left="50%"
+      top="0"
     >
-      {{ estimateImprovement }}
-    </div>
+      <template #tooltipContent>
+        {{ estimateImprovement }}
+      </template>
+    </CustomizeableTooltip>
+    <CustomizeableTooltip
+      v-if="timeEstimate"
+      left="50%"
+      top="0"
+      content-class="l-fill-container"
+    >
+      <template #tooltipContent>
+        {{ timeEstimate }}
+      </template>
+    </CustomizeableTooltip>
     <DescriptionDisplay :config="config" />
     <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">
-      <span v-html="effectText" />
+      {{ effectText.prefix }} {{ effectText.value }}
+      <template v-if="effectText.next">
+        ➜ <span class="c-improved-effect">
+          {{ effectText.next }}
+        </span>
+      </template>
       <div class="l-pelle-upgrade-gap" />
     </div>
     <CostDisplay
@@ -141,17 +158,18 @@ export default {
 <style scoped>
 .c-pelle-upgrade {
   padding: 2rem;
-  color: white;
-  background: black;
-  border: 1px solid var(--color-pelle-secondary);
+  color: var(--color-text);
+  background: var(--color-prestige--accent);
+  border: 0.1rem solid var(--color-pelle-secondary);
   border-radius: .5rem;
   font-family: Typewriter;
   cursor: pointer;
-  width: 20rem;
+  width: 18.5rem;
   height: 12rem;
-  margin: 1rem;
-  font-size: 1rem;
-  box-shadow: inset 0px 0px 10px 1px var(--color-pelle-secondary);
+  margin: 0.6rem 0.3rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+  box-shadow: inset 0 0 1rem 0.1rem var(--color-pelle-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,7 +178,7 @@ export default {
 }
 
 .c-pelle-upgrade:hover {
-  box-shadow: inset 0px 0px 20px 1px var(--color-pelle-secondary);
+  box-shadow: inset 0 0 2rem 0.1rem var(--color-pelle-secondary);
   transition-duration: 0.3s;
 }
 
@@ -173,7 +191,8 @@ export default {
 }
 
 .c-pelle-upgrade--unavailable {
-  background: #565656;
+  background: #5f5f5f;
+  color: black;
   cursor: default;
   box-shadow: none;
 }
@@ -190,57 +209,31 @@ export default {
   color: black;
 }
 
-.c-pelle-upgrade--galaxyGenerator:hover, .c-pelle-upgrade--unavailable:hover,
-.c-pelle-upgrade--faded:hover, .c-pelle-upgrade--bought:hover {
-  box-shadow: 1px 1px 5px var(--color-pelle-secondary);
+.c-pelle-upgrade--galaxyGenerator:hover,
+.c-pelle-upgrade--unavailable:hover,
+.c-pelle-upgrade--faded:hover,
+.c-pelle-upgrade--bought:hover {
+  box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle-secondary);
   transition-duration: 0.3s;
 }
 
-.c-pelle-upgrade-time-tooltip {
-  position: absolute;
-  visibility: visible;
-  bottom: 100%;
-  left: 50%;
-  margin-bottom: 0.5rem;
-  margin-left: -8.35rem;
-  padding: 0.7rem;
-  width: 16rem;
-  border-radius: 0.3rem;
-  background-color: hsla(0, 0%, 5%, 0.9);
-  color: #fff;
-  content: attr(ach-tooltip);
-  text-align: center;
-  font-size: 1.4rem;
-  line-height: 1.2;
-  transition-duration: 0.4s;
-  z-index: 3;
-}
-
-.c-pelle-upgrade-time-tooltip:after {
-  position: absolute;
-  bottom: -0.5rem;
-  left: 50%;
-  margin-left: -0.5rem;
-  width: 0;
-  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
-  border-right: 0.5rem solid transparent;
-  border-left: 0.5rem solid transparent;
-  content: " ";
-  font-size: 0;
-  line-height: 0;
-  transition-duration: 0.4s;
-}
-
 .l-pelle-upgrade-gap {
-  height: 0.7em;
+  height: 0.5em;
   flex-shrink: 0;
 }
-</style>
 
-<style>
 .c-improved-effect {
-  color: #2f4;
+  color: #0b0;
   font-weight: bold;
   font-style: italic;
+}
+
+
+.s-base--metro .c-pelle-upgrade {
+  border-radius: 0;
+}
+
+.s-base--metro .c-pelle-upgrade--unavailable {
+  background-color: #9e9e9e;
 }
 </style>

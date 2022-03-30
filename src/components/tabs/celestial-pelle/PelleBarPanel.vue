@@ -1,11 +1,9 @@
 <script>
-import PelleStrike from "./PelleStrike";
 import PelleRift from "./PelleRift";
 
 export default {
   name: "PelleBarPanel",
   components: {
-    PelleStrike,
     PelleRift
   },
   data() {
@@ -57,8 +55,7 @@ export default {
           :key="strike.config.id"
           class="c-pelle-single-bar"
         >
-          <PelleStrike :strike="strike" />
-          <PelleRift :rift="strike.rift" />
+          <PelleRift :strike="strike" />
         </div>
       </div>
     </div>
@@ -70,16 +67,22 @@ export default {
   font-weight: bold;
   font-size: 3rem;
   color: var(--color-pelle--base);
+  position: relative;
+}
+
+.c-collapse-icon-clickable {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .l-pelle-panel-container {
   padding: 1rem;
   margin: 1rem;
-  border: 2px solid var(--color-pelle--base);
-  border-radius: 5px;
+  border: 0.2rem solid var(--color-pelle--base);
+  border-radius: 0.2rem;
   user-select: none;
-  background-color: #1a1a1a;
-  color: #888888;
 }
 
 .l-pelle-content-container {
@@ -90,16 +93,14 @@ export default {
 
 .c-pelle-bar-container {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .c-pelle-single-bar {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 27rem;
 }
 
 .c-collapse-icon-clickable {

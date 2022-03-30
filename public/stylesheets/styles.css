@@ -9418,3 +9418,8 @@ input.o-automator-block-input {
   background-color: var(--color-pelle--base);
   filter: grayscale(50%);
 }
+
+.l-fill-container {
+  width: 100%;
+  height: 100%;
+}

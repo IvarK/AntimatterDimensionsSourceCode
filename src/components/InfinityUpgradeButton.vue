@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      basedOnChallengeTime: false,
+      showWorstChallenge: false,
       isUseless: false,
       canBeBought: false,
       chargePossible: false,
@@ -66,11 +66,6 @@ export default {
     },
     isImprovedByTS31() {
       return this.hasTS31 && this.isBasedOnInfinities && !this.isCharged && !this.showingCharged;
-    },
-    worstChallengeString() {
-      const worstChallengeTime = player.challenge.normal.bestTimes.max();
-      const worstChallengeIndex = 2 + player.challenge.normal.bestTimes.indexOf(worstChallengeTime);
-      return `(Challenge ${worstChallengeIndex}: ${timeDisplayShort(worstChallengeTime)})`;
     }
   },
   methods: {
@@ -95,8 +90,11 @@ export default {
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
       this.hasTS31 = TimeStudy(31).canBeApplied;
-      this.basedOnChallengeTime = upgrade.id === "challengeMult" &&
+      this.showWorstChallenge = upgrade.id === "challengeMult" && upgrade.effectValue != upgrade.cap &&
         player.challenge.normal.bestTimes.sum() < Number.MAX_VALUE;
+      const worstChallengeTime = GameCache.worstChallengeTime.value;
+      const worstChallengeIndex = 2 + player.challenge.normal.bestTimes.indexOf(worstChallengeTime);
+      this.worstChallengeString = `(Challenge ${worstChallengeIndex}: ${timeDisplayShort(worstChallengeTime)})`;
     }
   }
 };
@@ -116,10 +114,10 @@ export default {
       <DescriptionDisplay
         :config="config"
       />
-      <template v-if="basedOnChallengeTime">
+      <span v-if="showWorstChallenge">
         <br>
         {{ worstChallengeString }}
-      </template>
+      </span>
       <EffectDisplay
         v-if="!isDisabled"
         br

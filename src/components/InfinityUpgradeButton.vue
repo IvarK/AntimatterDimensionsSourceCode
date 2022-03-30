@@ -90,7 +90,7 @@ export default {
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
       this.hasTS31 = TimeStudy(31).canBeApplied;
-      this.showWorstChallenge = upgrade.id === "challengeMult" && upgrade.effectValue != upgrade.cap &&
+      this.showWorstChallenge = upgrade.id === "challengeMult" && upgrade.effectValue !== upgrade.cap &&
         player.challenge.normal.bestTimes.sum() < Number.MAX_VALUE;
       const worstChallengeTime = GameCache.worstChallengeTime.value;
       const worstChallengeIndex = 2 + player.challenge.normal.bestTimes.indexOf(worstChallengeTime);

@@ -33,8 +33,8 @@ export default {
       this.count = player.options.animations.blobSnowflakes;
     },
     updateSize() {
-      this.bounds.x = document.getElementById("ui").clientWidth;
-      this.bounds.y = document.getElementById("ui").clientHeight;
+      this.bounds.x = document.documentElement.clientWidth;
+      this.bounds.y = document.documentElement.clientHeight;
     }
   },
 };

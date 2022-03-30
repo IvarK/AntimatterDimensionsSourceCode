@@ -159,7 +159,7 @@ export default {
 .c-pelle-upgrade {
   padding: 2rem;
   color: var(--color-text);
-  background: var(--color-prestige--accent);
+  background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle-secondary);
   border-radius: .5rem;
   font-family: Typewriter;

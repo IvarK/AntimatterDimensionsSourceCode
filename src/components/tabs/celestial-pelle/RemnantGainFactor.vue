@@ -138,7 +138,7 @@ export default {
 }
 
 .c-remnant-factors {
-  background-color: var(--color-prestige--accent);
+  background-color: var(--color-text-inverted);
   color: var(--color-text);
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;

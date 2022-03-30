@@ -1,6 +1,11 @@
-Vue.component("blob-background", {
+<script>
+export default {
+  name: "BlobBackground",
   props: {
-    bounds: Object
+    bounds: {
+      type: Object,
+      required: true,
+    }
   },
   mounted() {
     this.drop();
@@ -31,7 +36,23 @@ Vue.component("blob-background", {
       }
     },
   },
+};
+</script>
 
-  template:
-        `<text class="o-blob-background"></text>`
-});
+<template>
+  <text class="o-blob-background" />
+</template>
+
+<style scoped>
+.o-blob-background {
+  fill: #fbc21b;
+  text-shadow: 0 0 5px #000,
+               0 0 5px #000,
+               0 0 5px #000;
+  opacity: 0.3;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+</style>

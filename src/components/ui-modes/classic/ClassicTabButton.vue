@@ -41,7 +41,6 @@ export default {
     v-if="isAvailable"
     :class="tab.config.UIClass"
     class="o-tab-btn"
-    style="margin: 0.2rem"
     @click="tab.show(true)"
   >
     {{ tabName }} <i
@@ -52,5 +51,8 @@ export default {
 </template>
 
 <style scoped>
-
+.o-tab-btn {
+  margin: 0.2rem;
+  margin-bottom: 0.7rem;
+}
 </style>

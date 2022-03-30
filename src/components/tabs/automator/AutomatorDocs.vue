@@ -1,23 +1,25 @@
 <script>
 import AutomatorButton from "./AutomatorButton";
-import AutomatorDocsMainPage from "./AutomatorDocsMainPage";
+import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
 import AutomatorBlocks from "./AutomatorBlocks";
+import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 
 export default {
   name: "AutomatorDocs",
   components: {
     AutomatorButton,
-    AutomatorDocsMainPage,
+    AutomatorDocsCommandList,
     AutomatorErrorPage,
     AutomatorEventLog,
-    AutomatorBlocks
+    AutomatorBlocks,
+    AutomatorDocsTemplateList
   },
   data() {
     return {
+      isBlock: false,
       infoPaneID: 1,
-      isBlockAutomator: false,
       errorCount: 0,
       editingName: false,
       scripts: [],
@@ -41,6 +43,9 @@ export default {
     },
     fullScreenTooltip() {
       return this.fullScreen ? "Exit full screen" : "Expand to full screen";
+    },
+    blockTooltip() {
+      return this.isBlock ? "Command menu for Block editor mode" : "Template Creator List";
     },
     errorTooltip() {
       return `Your script has ${quantify("error", this.errorCount)}`;
@@ -66,13 +71,18 @@ export default {
         "color": this.infoPaneID === 1 ? "green" : ""
       };
     },
+    blockStyle() {
+      return {
+        "color": this.infoPaneID === 2 ? "green" : ""
+      };
+    },
     logStyle() {
       return {
-        "color": this.infoPaneID === 3 ? "green" : ""
+        "color": this.infoPaneID === 4 ? "green" : ""
       };
     },
     errorStyle() {
-      const errorlessColor = this.infoPaneID === 2 ? "green" : "";
+      const errorlessColor = this.infoPaneID === 3 ? "green" : "";
       return {
         "color": this.errorCount === 0 ? errorlessColor : "red"
       };
@@ -94,8 +104,8 @@ export default {
   },
   methods: {
     update() {
+      this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       this.infoPaneID = player.reality.automator.currentInfoPane;
-      this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       this.errorCount = AutomatorData.currentErrors().length;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.isRunning = AutomatorBackend.isRunning;
@@ -193,22 +203,22 @@ export default {
         @click="infoPaneID = 1"
       />
       <AutomatorButton
-        v-if="isBlockAutomator"
-        v-tooltip="'Command menu for Block editor mode'"
-        class="fa-cubes"
-        @click="infoPaneID = 4"
+        v-tooltip="blockTooltip"
+        :style="blockStyle"
+        :class="isBlock ? 'fa-cubes' : 'fa-file-code'"
+        @click="infoPaneID = 2"
       />
       <AutomatorButton
         v-tooltip="errorTooltip"
         :style="errorStyle"
         class="fa-exclamation-triangle"
-        @click="infoPaneID = 2"
+        @click="infoPaneID = 3"
       />
       <AutomatorButton
         v-tooltip="'View recently executed commands'"
         :style="logStyle"
         class="fa-eye"
-        @click="infoPaneID = 3"
+        @click="infoPaneID = 4"
       />
       <AutomatorButton
         v-tooltip="'Export automator script'"
@@ -264,10 +274,13 @@ export default {
       />
     </div>
     <div class="c-automator-docs l-automator-pane__content">
-      <AutomatorDocsMainPage v-if="infoPaneID === 1" />
-      <AutomatorErrorPage v-else-if="infoPaneID === 2" />
-      <AutomatorEventLog v-else-if="infoPaneID === 3" />
-      <AutomatorBlocks v-else-if="infoPaneID === 4" />
+      <AutomatorDocsCommandList v-if="infoPaneID === 1" />
+      <template v-else-if="infoPaneID === 2">
+        <AutomatorBlocks v-if="isBlock" />
+        <AutomatorDocsTemplateList v-else />
+      </template>
+      <AutomatorErrorPage v-else-if="infoPaneID === 3" />
+      <AutomatorEventLog v-else-if="infoPaneID === 4" />
     </div>
   </div>
 </template>

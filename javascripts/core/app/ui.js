@@ -3,12 +3,36 @@ import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
 import { useLongPress, useRepeatingClick } from "./longpress";
 import VueGtag from "vue-gtag";
+import GameUIComponent from "@/components/GameUIComponent";
 
 Vue.mixin({
   computed: {
     $viewModel() {
       return state.view;
     }
+  },
+  created() {
+    if (this.update) {
+      this.on$(GAME_EVENT.UPDATE, this.update);
+      if (GameUI.initialized) {
+        this.update();
+      }
+    }
+
+    // Following is used to force the recomputation of computed values
+    // from this fiddle https://codepen.io/sirlancelot/pen/JBeXeV
+    const recomputed = Object.create(null);
+    const watchers = this._computedWatchers;
+
+    if (!watchers) return;
+
+    for (const key in watchers) makeRecomputable(watchers[key], key, recomputed);
+
+    this.$recompute = key => recomputed[key] = !recomputed[key];
+    Vue.observable(recomputed);
+  },
+  destroyed() {
+    EventHub.ui.offAll(this);
   },
   methods: {
     emitClick() {
@@ -47,30 +71,6 @@ Vue.mixin({
     pluralize,
     quantify,
     quantifyInt
-  },
-  created() {
-    if (this.update) {
-      this.on$(GAME_EVENT.UPDATE, this.update);
-      if (GameUI.initialized) {
-        this.update();
-      }
-    }
-
-    // Following is used to force the recomputation of computed values
-    // from this fiddle https://codepen.io/sirlancelot/pen/JBeXeV
-    const recomputed = Object.create(null);
-    const watchers = this._computedWatchers;
-
-    if (!watchers) return;
-
-    for (const key in watchers)
-      makeRecomputable(watchers[key], key, recomputed);
-
-    this.$recompute = key => recomputed[key] = !recomputed[key];
-    Vue.observable(recomputed);
-  },
-  destroyed() {
-    EventHub.ui.offAll(this);
   }
 });
 
@@ -185,6 +185,9 @@ Vue.use(VueGtag, {
 
 export const ui = new Vue({
   el: "#ui",
+  components: {
+    GameUIComponent
+  },
   data: state,
   computed: {
     notation() {
@@ -199,15 +202,6 @@ export const ui = new Vue({
     newUI() {
       return this.view.newUI;
     },
-  },
-  methods: {
-    scroll(t) {
-      const now = Date.now();
-      if (this.view.scrollWindow) {
-        window.scrollBy(0, this.view.scrollWindow * (now - t) / 2);
-        setTimeout(() => this.scroll(now), 20);
-      }
-    }
   },
   watch: {
     currentGlyphTooltip(newVal) {
@@ -229,5 +223,14 @@ export const ui = new Vue({
       }
     },
   },
-  template: "<game-ui />"
+  methods: {
+    scroll(t) {
+      const now = Date.now();
+      if (this.view.scrollWindow) {
+        window.scrollBy(0, this.view.scrollWindow * (now - t) / 2);
+        setTimeout(() => this.scroll(now), 20);
+      }
+    }
+  },
+  template: "<GameUIComponent />"
 });

@@ -166,7 +166,7 @@ export default {
           :glyph="glyph"
           :circular="true"
           :is-active-glyph="true"
-          style="-webkit-user-drag: none;"
+          class="c-equipped-glyph"
           @clicked="clickGlyph(glyph, idx)"
         />
         <div
@@ -209,5 +209,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-equipped-glyph {
+  -webkit-user-drag: none;
+}
 </style>

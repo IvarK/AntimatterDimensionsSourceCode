@@ -134,7 +134,7 @@ export const Themes = {
     Theme.create("S4",              {                                           secret: true, }),
     Theme.create("S5",              {                                           secret: true, }),
     Theme.create("S6",              { dark: true,               animated: true, secret: true, }),
-    Theme.create("S7",              {                                           secret: true, }),
+    Theme.create("S7",              {              metro: true,                 secret: true, }),
     Theme.create("S8",              {              metro: true,                 secret: true, }),
     Theme.create("S9",              {                                           secret: true, }),
     Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),

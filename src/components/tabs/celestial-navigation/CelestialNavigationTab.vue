@@ -151,11 +151,13 @@ const CelestialNavigationViewportCache = {
       >
         <stop
           offset="0%"
-          style="stop-color:rgb(255,255,0);stop-opacity:1"
+          stop-color="#ffff00"
+          stop-opacity="1"
         />
         <stop
           offset="100%"
-          style="stop-color:rgb(255,0,0);stop-opacity:1"
+          stop-color="#ff0000"
+          stop-opacity="1"
         />
       </linearGradient>
       <linearGradient
@@ -166,11 +168,13 @@ const CelestialNavigationViewportCache = {
       >
         <stop
           offset="0"
-          style="stop-color: #888; stop-opacity: 0"
+          stop-color="#888"
+          stop-opacity="0"
         />
         <stop
           offset="8"
-          style="stop-color: #888; stop-opacity: 1.0"
+          stop-color="#888"
+          stop-opacity="1"
         />
       </linearGradient>
       <linearGradient

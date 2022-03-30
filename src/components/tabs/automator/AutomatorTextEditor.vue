@@ -3,7 +3,7 @@ export default {
   name: "AutomatorTextEditor",
   props: {
     currentScriptId: {
-      type: Number,
+      type: [Number, String],
       required: true
     },
   },

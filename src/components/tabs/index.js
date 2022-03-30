@@ -38,6 +38,7 @@ import PerksTab from "./perks/PerksTab";
 import BlackHoleTab from "./black-hole/BlackHoleTab";
 import AlchemyTab from "./alchemy/AlchemyTab";
 import CelestialNavigationTab from "./celestial-navigation/CelestialNavigationTab";
+import ShopTab from "./shop/ShopTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -79,6 +80,7 @@ const TabComponents = {
   BlackHoleTab,
   AlchemyTab,
   CelestialNavigationTab,
+  ShopTab,
 };
 
 export default TabComponents;

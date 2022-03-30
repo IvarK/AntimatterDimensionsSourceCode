@@ -16,10 +16,18 @@ export default {
 
 <template>
   <div>
-    <ModalCloseButton @click="closeModal" />
-    <span class="c-modal__title">
-      <slot name="header" />
-    </span>
+    <div class="c-modal__header">
+      <ModalCloseButton @click="closeModal" />
+      <span class="c-modal__title">
+        <slot name="header" />
+      </span>
+    </div>
     <slot />
   </div>
 </template>
+
+<style scoped>
+.c-modal__header {
+  margin-bottom: 0.5rem;
+}
+</style>

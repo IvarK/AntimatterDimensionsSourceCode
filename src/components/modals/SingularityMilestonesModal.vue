@@ -1,12 +1,12 @@
 <script>
 import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "SingularityMilestonesModal",
   components: {
     SingularityMilestoneComponent,
-    ModalWrapperChoice,
+    ModalWrapper,
   },
   data() {
     return {
@@ -91,10 +91,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    :show-cancel="false"
-    :show-confirm="false"
-  >
+  <ModalWrapper>
     <template #header>
       Singularity Milestones
     </template>
@@ -141,5 +138,5 @@ export default {
         {{ orderStr }}
       </button>
     </div>
-  </ModalWrapperChoice>
+  </ModalWrapper>
 </template>

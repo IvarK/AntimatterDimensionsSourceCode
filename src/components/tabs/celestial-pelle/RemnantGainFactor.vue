@@ -117,7 +117,7 @@ export default {
                 {{ format(remnants, 2, 0) }}
               </div>
               <div class="l-remnant-factors-item">
-                {{ format(remnantsGain, 2, 0) }}
+                {{ format(remnantsGain, 2, remnantsGain >= 1 ? 0 : 2) }}
               </div>
             </div>
           </div>

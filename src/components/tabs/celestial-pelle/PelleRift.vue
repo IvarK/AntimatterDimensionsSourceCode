@@ -104,6 +104,11 @@ export default {
   box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45), 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45);
 }
 
+.t-s1 .c-pelle-rift {
+  /* transparent grinch colour? */
+  box-shadow: inset 0 0 1rem 0.1rem rgba(102, 204, 85, 0.8), 0 0 1rem 0.1rem rgba(102, 204, 85, 0.8);
+}
+
 .c-pelle-rift-row {
   display: flex;
   justify-content: center;

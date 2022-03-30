@@ -139,6 +139,8 @@ html {
   --color-reality-light: #e8e3e4;
   --color-celestials: #F2D6C1;
   --color-prestige--accent: black;
+
+  --color-pelle--base: #66cc55;
 }
 
 .t-s4 #ui-container { /* csslint allow: empty-rules */

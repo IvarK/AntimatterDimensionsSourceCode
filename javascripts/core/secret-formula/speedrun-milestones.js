@@ -194,7 +194,6 @@ GameDatabase.speedrunMilestones = [
     // Destabilization isn't a reality reset because it shortcuts gameLoop; this is checked in laitelaRealityTick
   },
   {
-    // TODO: At the time of implementing speedrun mode, full game completion is still unimplemented - update this entry
     id: 25,
     key: "completeFullGame",
     name: "Game Completed!",

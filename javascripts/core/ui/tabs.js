@@ -16,11 +16,15 @@ class SubtabState {
     return this.config.hideAt <= Pelle.endState;
   }
 
+  get hidable() {
+    return this.config.hidable;
+  }
+
   get isHidden() {
     if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
     // eslint-disable-next-line no-bitwise
     return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
-      this.config.hidable;
+      this.hidable;
   }
 
   get isUnlocked() {
@@ -98,11 +102,15 @@ class TabState {
     return this.config.hideAt <= Pelle.endState;
   }
 
+  get hidable() {
+    return this.config.hidable;
+  }
+
   get isHidden() {
     if (Enslaved.isRunning || Pelle.isDoomed) return false;
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
-    return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
+    return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.hidable;
   }
 
   get isUnlocked() {

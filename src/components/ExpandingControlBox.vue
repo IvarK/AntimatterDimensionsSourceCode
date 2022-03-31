@@ -63,6 +63,24 @@ export default {
       };
       classes[this.containerClass] = true;
       return classes;
+    },
+    minimizeArrowStyle() {
+      switch (this.state) {
+        case this.states.CLOSED:
+          return { transform: "", };
+        case this.states.OPEN_REQUESTED:
+          return { transform: "", };
+        case this.states.OPENING:
+          return { transform: "rotate(180deg)", };
+        case this.states.OPEN:
+          return { transform: "rotate(180deg)", };
+        case this.states.CLOSE_REQUESTED:
+          return { transform: "", };
+        case this.states.CLOSING:
+          return { transform: "", };
+        default
+          : return { transform: "" };
+      }
     }
   },
   watch: {
@@ -160,7 +178,16 @@ export default {
         class="l-expanding-control-box__button"
         @click="openRequest = !openRequest"
       >
-        {{ label }} ▼
+        <span
+          class="l-expanding-control-box__button_text"
+        >
+          {{ label }}
+        </span>
+        <span
+          :style="minimizeArrowStyle"
+        >
+          ▼
+        </span>
       </div>
       <div
         v-else
@@ -204,10 +231,16 @@ export default {
 
 .l-expanding-control-box__button {
   cursor: pointer;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   white-space: nowrap;
   border: none !important;
   height: 2.5rem;
+}
+
+.l-expanding-control-box__button_text {
+  margin-right: 0.6rem;
 }
 </style>

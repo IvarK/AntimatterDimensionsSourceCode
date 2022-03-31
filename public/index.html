@@ -47,6 +47,33 @@
   <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
 
   <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
+  <script type="text/javascript" src="Steam/steam.js"></script>
+  <canvas id="forceRefreshCanvas" style="position: fixed; right: 0px; bottom: 0px; width: 100vw; height: 100%; opacity: 0.01; pointer-events: none; z-index: -20;"></canvas>
+  <script>
+    /*--Post GameLoad Steam Initialization--*/
+      var nodeOn = window.require!==undefined ? true : false
+      if(nodeOn){
+        var JQ = require('jquery');
+        var Steam = require('greenworks')
+        if (Steam) {
+          if (Steam.initAPI()) {
+            console.log("Steam is Functional!")
+            steamOn = true
+          } else {
+            console.log("Steam API not activated. Are you sure you opened the game in Steam?")
+          }
+        }
+        JQ(window).resize(function(){
+          SteamFunctions.UIZoom()
+        });
+        if(Steam){
+          if(Steam.initAPI()){
+            SteamFunctions.SteamInitialize()
+          }else{
+          }
+        }
+      }
+  </script>
 </body>
 <script>
   // We use an IE only document variable to check here to force it to show the browser warning.

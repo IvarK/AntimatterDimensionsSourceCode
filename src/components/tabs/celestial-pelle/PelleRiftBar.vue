@@ -283,9 +283,9 @@ export default {
 }
 
 @keyframes a-pelle-bar-overfill-pulse-but-green {
-  0% { box-shadow: 0 0 0.7rem 1rem rgba(102, 204, 85, 0.533); }
-  50% { box-shadow: 0 0 1.5rem 0rem rgba(102, 204, 85, 0.533); }
-  100% { box-shadow: 0 0 0.7rem 1rem rgba(102, 204, 85, 0.533); }
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 0.533); }
+  50% { box-shadow: 0 0 1.5rem 0rem rgba(124, 183, 39, 0.533); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 0.533); }
 }
 
 .c-pelle-rift-bar-overfill-container {

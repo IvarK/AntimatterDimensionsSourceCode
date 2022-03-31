@@ -105,8 +105,7 @@ export default {
 }
 
 .t-s1 .c-pelle-rift {
-  /* transparent grinch colour? */
-  box-shadow: inset 0 0 1rem 0.1rem rgba(102, 204, 85, 0.8), 0 0 1rem 0.1rem rgba(102, 204, 85, 0.8);
+  box-shadow: none;
 }
 
 .c-pelle-rift-row {

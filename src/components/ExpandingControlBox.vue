@@ -184,6 +184,7 @@ export default {
           {{ label }}
         </span>
         <span
+          class="a-spin"
           :style="minimizeArrowStyle"
         >
           ▼
@@ -242,5 +243,9 @@ export default {
 
 .l-expanding-control-box__button_text {
   margin-right: 0.6rem;
+}
+
+.a-spin {
+  transition: all 0.25s ease-out;
 }
 </style>

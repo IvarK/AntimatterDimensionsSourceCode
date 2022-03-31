@@ -14,4 +14,4 @@ const commit = {
 
 const json = JSON.stringify(commit);
 
-fs.writeFileSync(path.resolve(__dirname, "../dist/commit.json"), json);
+fs.writeFileSync(path.resolve(__dirname, "../../AppFiles/commit.json"), json);

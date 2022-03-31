@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "serve": "node build/check-npm.js && vue-cli-service serve",
-    "build": "node build/pre-build.js && vue-cli-service build && node build/post-build.js",
+    "build": "node build/pre-build.js && vue-cli-service build --dest ../AppFiles && node build/post-build.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

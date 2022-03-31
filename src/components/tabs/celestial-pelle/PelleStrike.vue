@@ -17,12 +17,10 @@ export default {
 
 <template>
   <div class="c-pelle-strike-container">
-    <ExpandingControlBox container-class="c-pelle-strike">
-      <template #header>
-        <div class="c-pelle-strike-text-padding c-pelle-strike-requirement-header">
-          ▼ {{ strike.requirement }} ▼
-        </div>
-      </template>
+    <ExpandingControlBox
+      :label="strike.requirement"
+      container-class="c-pelle-strike"
+    >
       <template #dropdown>
         <div class="c-pelle-strike-text-padding c-pelle-strike-description">
           Penalty: {{ strike.penalty }}

@@ -178,9 +178,7 @@ export default {
         class="l-expanding-control-box__button"
         @click="openRequest = !openRequest"
       >
-        <span
-          class="l-expanding-control-box__button_text"
-        >
+        <span class="l-expanding-control-box__button_text">
           {{ label }}
         </span>
         <span

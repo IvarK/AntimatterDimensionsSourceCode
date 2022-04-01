@@ -50,9 +50,9 @@ export default {
     this.$refs.input.select();
   },
   methods: {
+    // eslint-disable-next-line consistent-return
     importSave() {
-      if (!this.inputIsValid) return;
-      this.emitClose();
+      if (!this.inputIsValid) return this.emitClose();
       GameStorage.import(this.input);
     },
   },

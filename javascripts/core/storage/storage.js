@@ -54,6 +54,7 @@ export const GameStorage = {
     this.loadPlayerObject(this.saves[slot]);
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
     GameUI.notify.info("Game loaded");
+    SteamFunctions.BackfillAchievements()
   },
 
   import(saveData, overrideLastUpdate = undefined) {
@@ -70,6 +71,7 @@ export const GameStorage = {
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
     GameUI.notify.info("Game imported");
+    SteamFunctions.BackfillAchievements()
   },
 
   importAsFile() {

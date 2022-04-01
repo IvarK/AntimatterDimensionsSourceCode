@@ -17,7 +17,7 @@ export default {
       return ShopPurchase.all;
     },
     buySTDText() {
-      return this.kongEnabled ? "Buy More" : "Play in Kongregate to buy STDs";
+      return steamOn ? "Buy More" : "Play Online on Steam to buy STDs";
     }
   },
   methods: {
@@ -26,7 +26,7 @@ export default {
       this.kongEnabled = kong.enabled;
     },
     showStore() {
-      if (!this.kongEnabled) return;
+      if (!steamOn) return;
       Modal.shop.show();
     },
     buyTimeSkip() {

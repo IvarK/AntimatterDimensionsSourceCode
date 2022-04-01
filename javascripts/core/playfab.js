@@ -2,19 +2,20 @@ import LZString from "lz-string";
 
 export function playFabLogin() {
   try {
-    var authTicket = kongregate.services.getGameAuthToken();
-    var requestData = {
-        TitleId: titleId,
-        KongregateId: kongregate.services.getUserId(),
-        AuthTicket: authTicket,
-        CreateAccount: true
-    }
-    try {
-      PlayFab.ClientApi.LoginWithKongregate(requestData, playFabLoginCallback);
-    } catch (e) {
-      console.log("Unable to send login request to PlayFab.");
-    }
-
+    Steam.getAuthSessionTicket(function(ticket){
+      var SteamTicket = ticket.ticket.toString('hex')
+      PlayFab.settings.titleId = "59813";
+      var requestData = {
+          TitleId: PlayFab.settings.titleId,
+          SteamTicket: SteamTicket,
+          CreateAccount: true
+      };
+      try {
+        PlayFab.ClientApi.LoginWithSteam(requestData, playFabLoginCallback);
+      } catch (e) {
+        console.log("Unable to send login request to PlayFab.");
+      }
+    })
     /*
     // Dev playfab login
     titleId = "144";
@@ -34,21 +35,23 @@ export function playFabLogin() {
   }
 }
 
-var titleId = "5695";
+var titleId = "59813";
+PlayFab.settings.titleId = "59813";
 var playFabId = -1
 
 function playFabLoginCallback(data, error) {
   if (error) {
     console.log(error.errorMessage);
-    GameUI.notify.error("Couldn't log in to PlayFab Cloud. You need to be logged in to Kongregate.");
-    document.getElementById("cloudOptions").style.display = "none"
-    document.getElementById("cloud").style.display = "none"
+    GameUI.notify.error("Couldn't log in to PlayFab Cloud.");
+    //document.getElementById("cloudOptions").style.display = "none"
+    //document.getElementById("cloud").style.display = "none"
     return;
   }
   if (data) {
     //NOTE: SAVE 'playFabId' to a global variable somewhere, I just declare mine at the start of the playfab stuff. Use this variable to tell if your player is logged in to playfab or not.
     playFabId = data.data.PlayFabId;
     GameUI.notify.info("Logged in to PlayFab Cloud");
+    PlayFab.ClientApi.UpdateUserTitleDisplayName({"DisplayName": Steam.getSteamId().screenName})
 
     if (player.options.cloud) playFabLoadCheck()
     console.log("Logged in to playFab")
@@ -63,9 +66,9 @@ function saveToPlayFab(root) {
   if (chunks.length > 10) {
     GameUI.notify.error("Error saving to cloud: size limit exceeded");
   }
-
+  PlayFab.settings.titleId = "59813";
   var requestData = {
-    TitleId: titleId,
+    TitleId: PlayFab.settings.titleId,
     PlayFabId: playFabId,
     Data: chunks.mapToObject((_, index) => index, value => value)
   }
@@ -120,8 +123,9 @@ function loadFromPlayFabCallback(callback, data, error) {
     // Start: Migration
     if (data.data.Data.save) {
       var oldSave = JSON.parse(LZString.decompressFromEncodedURIComponent(data.data.Data.save.Value));
+      PlayFab.settings.titleId = "59813";
       var requestData = {
-        TitleId: titleId,
+        TitleId: PlayFab.settings.titleId,
         PlayFabId: playFabId,
         // convert array into object with numbers as keys
         Data: {

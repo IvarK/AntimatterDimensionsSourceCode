@@ -1054,8 +1054,10 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
-    if (kong.enabled) {
-      playFabLogin();
+    if(Steam){
+			if(Steam.initAPI()){
+        playFabLogin();
+      }
     }
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";
@@ -1093,6 +1095,7 @@ export function init() {
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
+  if(steamOn){SteamFunctions.UIZoom()}
 }
 
 window.tweenTime = 0;

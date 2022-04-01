@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     purchase() {
-      kong.buyMoreSTD(this.amount, this.cost);
+      SteamFunctions.PurchaseIAP(this.amount, this.cost);
     }
   },
 
@@ -29,7 +29,7 @@ export default {
       class="o-modal-store-btn"
       @click="purchase"
     >
-      <span>{{ cost }}</span><img src="images/kred_single.png">
+      <span>{{ cost }}</span><!--img src="images/kred_single.png"-->
     </button>
   </div>
 </template>

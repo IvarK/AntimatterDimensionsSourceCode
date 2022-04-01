@@ -72,6 +72,7 @@ class AchievementState extends GameMechanicState {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
       GameUI.notify.success(`Achievement: ${this.name}`);
+      SteamFunctions.GiveAchievement(this.id);
     }
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);

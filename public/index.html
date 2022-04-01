@@ -52,10 +52,11 @@
   <script>
     /*--Post GameLoad Steam Initialization--*/
       var nodeOn = window.require!==undefined ? true : false
-      steamOn=true //change to false!!
+      steamOn=false //change to false!!
       if(nodeOn){
         var JQ = require('jquery');
         var Steam = require('greenworks')
+        var shell = require('electron').shell;
         if (Steam) {
           if (Steam.initAPI()) {
             console.log("Steam is Functional!")

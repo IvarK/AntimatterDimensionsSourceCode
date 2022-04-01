@@ -7,7 +7,7 @@ const SteamFunctions = {
     macUser: false,
     SteamInitialize() {
         this.forceRefresh();
-        this.BackfillAchievements();
+        //this.BackfillAchievements();
         this.EventHandlers();
         if (window.navigator.platform === "MacIntel") {
           SteamFunctions.macUser = true;

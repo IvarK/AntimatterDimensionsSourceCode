@@ -5,18 +5,20 @@ export default {
     return {
       isVisible: false,
       canUnlock: false,
+      hasIPUnlock: true,
+      amRequirement: new Decimal(0),
+      ipRequirement: 0,
     };
   },
   computed: {
     text() {
-      const nextDimension = InfinityDimensions.next();
-      const dimensionText = `a new ${nextDimension.hasIPUnlock ? "type of Dimension" : "Infinity Dimension"}.`;
+      const dimensionText = `a new ${this.hasIPUnlock ? "type of Dimension" : "Infinity Dimension"}.`;
       if (this.canUnlock) {
         return `Unlock ${dimensionText}`;
       }
-      const amDisplay = format(nextDimension.amRequirement);
-      const ipDisplay = format(nextDimension.ipRequirement);
-      if (nextDimension.hasIPUnlock) {
+      const amDisplay = format(this.amRequirement);
+      const ipDisplay = format(this.ipRequirement);
+      if (this.hasIPUnlock) {
         return `Reach ${ipDisplay} Infinity Points and ${amDisplay} antimatter to unlock ${dimensionText}`;
       }
       return `Reach ${amDisplay} antimatter to unlock ${dimensionText}`;
@@ -35,7 +37,11 @@ export default {
       this.isVisible = player.break && !InfinityDimension(8).isUnlocked && !Player.canEternity &&
         !EternityMilestone.autoUnlockID.isReached;
       if (!this.isVisible) return;
-      this.canUnlock = InfinityDimensions.next().canUnlock;
+      const nextDimension = InfinityDimensions.next();
+      this.canUnlock = nextDimension.canUnlock;
+      this.hasIPUnlock = nextDimension.hasIPUnlock;
+      this.amRequirement = nextDimension.amRequirement;
+      this.ipRequirement = nextDimension.ipRequirement;
     },
     tryUnlockNextInfinityDimension() {
       InfinityDimensions.unlockNext();

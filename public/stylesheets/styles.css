@@ -1319,12 +1319,6 @@ screen and (max-width: 480px) {
   height: 4.5rem;
 }
 
-.o-primary-btn--new-dim {
-  font-weight: bold;
-  width: 22rem;
-  height: 7rem;
-}
-
 .o-primary-btn--quick-reset {
   font-size: 1.2rem;
   width: 20rem;

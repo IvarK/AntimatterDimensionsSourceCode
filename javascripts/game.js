@@ -576,7 +576,7 @@ export function gameLoop(passDiff, options = {}) {
 
   updateTachyonGalaxies();
   Currency.timeTheorems.add(getTTPerSecond().times(diff / 1000));
-  tryUnlockInfinityDimensions(true);
+  InfinityDimensions.tryAutoUnlock();
 
   BlackHoles.updatePhases(blackHoleDiff);
 

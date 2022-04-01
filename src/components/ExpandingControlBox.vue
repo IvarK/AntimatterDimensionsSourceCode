@@ -64,23 +64,10 @@ export default {
       classes[this.containerClass] = true;
       return classes;
     },
-    minimizeArrowStyle() {
-      switch (this.state) {
-        case this.states.CLOSED:
-          return { transform: "", };
-        case this.states.OPEN_REQUESTED:
-          return { transform: "", };
-        case this.states.OPENING:
-          return { transform: "rotate(180deg)", };
-        case this.states.OPEN:
-          return { transform: "rotate(180deg)", };
-        case this.states.CLOSE_REQUESTED:
-          return { transform: "", };
-        case this.states.CLOSING:
-          return { transform: "", };
-        default
-          : return { transform: "" };
-      }
+    classObject() {
+      return {
+        "a-transform": this.state === this.states.OPENING || this.state === this.states.OPEN,
+      };
     }
   },
   watch: {
@@ -182,8 +169,8 @@ export default {
           {{ label }}
         </span>
         <span
-          class="a-spin"
-          :style="minimizeArrowStyle"
+          :class="classObject"
+          class="a-transition"
         >
           ▼
         </span>
@@ -243,7 +230,11 @@ export default {
   margin-right: 0.6rem;
 }
 
-.a-spin {
+.a-transform {
+  transform: rotate(180deg);
+}
+
+.a-transition {
   transition: all 0.25s ease-out;
 }
 </style>

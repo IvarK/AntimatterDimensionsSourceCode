@@ -64,9 +64,9 @@ export default {
       classes[this.containerClass] = true;
       return classes;
     },
-    classObject() {
+    indicatorArrowClassObject() {
       return {
-        "a-transform": this.state === this.states.OPENING || this.state === this.states.OPEN,
+        "c-indicator-arrow__direction": this.state === this.states.OPENING || this.state === this.states.OPEN,
       };
     }
   },
@@ -169,8 +169,8 @@ export default {
           {{ label }}
         </span>
         <span
-          :class="classObject"
-          class="a-transition"
+          :class="indicatorArrowClassObject"
+          class="c-indicator-arrow"
         >
           ▼
         </span>
@@ -230,11 +230,11 @@ export default {
   margin-right: 0.6rem;
 }
 
-.a-transform {
+.c-indicator-arrow__direction {
   transform: rotate(180deg);
 }
 
-.a-transition {
+.c-indicator-arrow {
   transition: all 0.25s ease-out;
 }
 </style>

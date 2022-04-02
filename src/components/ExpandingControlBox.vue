@@ -67,6 +67,7 @@ export default {
     indicatorArrowClassObject() {
       return {
         "c-indicator-arrow__direction": this.state === this.states.OPENING || this.state === this.states.OPEN,
+        "c-indicator-arrow": true,
       };
     }
   },
@@ -170,7 +171,6 @@ export default {
         </span>
         <span
           :class="indicatorArrowClassObject"
-          class="c-indicator-arrow"
         >
           ▼
         </span>

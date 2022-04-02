@@ -231,7 +231,7 @@ export default {
 }
 
 .c-indicator-arrow__direction {
-  transform: rotate(180deg);
+  transform: rotate(-180deg);
 }
 
 .c-indicator-arrow {

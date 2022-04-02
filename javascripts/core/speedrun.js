@@ -40,6 +40,7 @@ export const Speedrun = {
 
     // Some time elapses after the reset and before the UI is actually ready, which ends up getting "counted" as offline
     player.speedrun.offlineTimeUsed = 0;
+    GameStorage.save();
   },
   // Speedruns are initially paused until startTimer is called, which happens as soon as the player purchases a AD or
   // uses the Konami code. Until then, they're free to do whatever they want with the UI

@@ -90,21 +90,26 @@ export default {
         rel="stylesheet"
         :href="themeCss"
       >
-      <HowToPlay />
-      <InfoButton />
       <BackgroundAnimations />
     </div>
     <div
-      id="notification-container"
-      class="l-notification-container"
-    />
-    <TimeTheoremShop
-      v-if="view.subtab === 'studies'"
-      class="l-time-studies-tab__tt-shop"
-    />
-    <ModernSidebar v-if="view.newUI" />
-    <SaveTimer />
-    <SpeedrunStatus />
+      id="ui-fixed"
+      class="c-game-ui--fixed"
+    >
+      <div
+        id="notification-container"
+        class="l-notification-container"
+      />
+      <TimeTheoremShop
+        v-if="view.subtab === 'studies'"
+        class="l-time-studies-tab__tt-shop"
+      />
+      <ModernSidebar v-if="view.newUI" />
+      <SaveTimer />
+      <SpeedrunStatus />
+    </div>
+    <HowToPlay />
+    <InfoButton />
     <FadeToBlack v-if="rollCredits" />
     <CreditsContainer v-if="rollCredits" />
     <NewGame v-if="rollCredits" />
@@ -115,5 +120,6 @@ export default {
 .ui-wrapper {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 </style>

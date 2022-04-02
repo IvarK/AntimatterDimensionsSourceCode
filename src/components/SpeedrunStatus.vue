@@ -108,9 +108,9 @@ export default {
 .speedrun-status {
   font-size: 1.2rem;
   color: var(--color-text);
-  position: fixed;
+  position: absolute;
   right: 1rem;
-  bottom: 1rem;
+  bottom: calc(1rem - 100vh);
   background-color: var(--color-base);
   white-space: nowrap;
   border: 0.2rem solid var(--color-accent);

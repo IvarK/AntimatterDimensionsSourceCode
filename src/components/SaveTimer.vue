@@ -39,9 +39,9 @@ export default {
 <style scoped>
 .o-save-timer {
   color: var(--color-text);
-  position: fixed;
+  position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: -100vh;
   background-color: var(--color-base);
   white-space: nowrap;
   border-top: 0.1rem solid var(--color-accent);

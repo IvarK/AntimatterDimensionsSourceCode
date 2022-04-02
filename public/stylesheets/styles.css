@@ -258,8 +258,8 @@ button:focus {
 
 .TTbuttons {
   color: var(--color-text);
-  position: fixed;
-  bottom: 0;
+  position: absolute;
+  bottom: -100vh;
   font-family: Typewriter, serif;
   display: flex;
   align-items: flex-end;
@@ -1225,6 +1225,16 @@ screen and (max-width: 480px) {
 .c-game-ui {
   width: 100%;
   height: 100%;
+}
+
+.c-game-ui--fixed {
+  width: 100%;
+  position: fixed;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  left: 0;
 }
 
 ._kong-test .c-game-ui {
@@ -5897,7 +5907,7 @@ kbd {
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   margin-top: 0.5rem;

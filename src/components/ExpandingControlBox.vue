@@ -66,7 +66,7 @@ export default {
     },
     indicatorArrowClassObject() {
       return {
-        "c-indicator-arrow__direction": this.state === this.states.OPENING || this.state === this.states.OPEN,
+        "c-indicator-arrow--flipped": this.state === this.states.OPENING || this.state === this.states.OPEN,
         "c-indicator-arrow": true,
       };
     }
@@ -230,7 +230,7 @@ export default {
   margin-right: 0.6rem;
 }
 
-.c-indicator-arrow__direction {
+.c-indicator-arrow--flipped {
   transform: rotate(-180deg);
 }
 

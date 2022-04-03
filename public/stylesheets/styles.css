@@ -259,12 +259,13 @@ button:focus {
 .TTbuttons {
   color: var(--color-text);
   position: absolute;
-  bottom: -100vh;
+  bottom: 0;
   font-family: Typewriter, serif;
   display: flex;
   align-items: flex-end;
   z-index: 2;
   width: 55.5rem;
+  pointer-events: all;
 }
 
 .l-tt-buy-button {
@@ -1229,7 +1230,10 @@ screen and (max-width: 480px) {
 
 .c-game-ui--fixed {
   width: 100%;
+  height: 100%;
   position: fixed;
+  pointer-events: none;
+
   z-index: 5;
   display: flex;
   justify-content: center;
@@ -5908,6 +5912,7 @@ kbd {
   flex-direction: column-reverse;
   align-items: flex-end;
   position: absolute;
+  pointer-events: all;
   top: 0;
   right: 0;
   margin-top: 0.5rem;

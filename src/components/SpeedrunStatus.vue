@@ -110,11 +110,12 @@ export default {
   color: var(--color-text);
   position: absolute;
   right: 1rem;
-  bottom: calc(1rem - 100vh);
+  bottom: 1rem;
   background-color: var(--color-base);
   white-space: nowrap;
   border: 0.2rem solid var(--color-accent);
   user-select: none;
+  pointer-events: all;
   padding: 0.8rem 2rem;
   z-index: 5;
 }

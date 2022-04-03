@@ -41,13 +41,14 @@ export default {
   color: var(--color-text);
   position: absolute;
   left: 0;
-  bottom: -100vh;
+  bottom: 0;
   background-color: var(--color-base);
   white-space: nowrap;
   border-top: 0.1rem solid var(--color-accent);
   border-right: 0.1rem solid var(--color-accent);
   cursor: pointer;
   user-select: none;
+  pointer-events: all;
   padding: 0 0.5rem;
   z-index: 5;
 }

@@ -825,11 +825,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--color-text);
   font-size: 1.2rem;
   width: 50%;
   cursor: pointer;
-  transition: font-size 0.2s;
+  background-color: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem 0.5rem 0 0;
+  color: var(--color-reality-light);
+  transition: All 0.2s, border-bottom 0ms, padding-bottom 0ms;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter;
+  font-weight: bold;
+  z-index: 1;
 }
 
 .t-s8 .c-glyph-info-button {
@@ -843,20 +851,6 @@
   align-items: center;
   width: 22rem;
   height: 3rem;
-}
-
-.c-glyph-info-button {
-  background-color: black;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem 0.5rem 0 0;
-  color: var(--color-reality-light);
-  cursor: pointer;
-  transition: All 0.2s, border-bottom 0ms, padding-bottom 0ms;
-  text-align: center;
-  font-size: 1rem;
-  font-family: Typewriter;
-  font-weight: bold;
-  z-index: 1;
 }
 
 .s-base--metro .c-glyph-info-button {

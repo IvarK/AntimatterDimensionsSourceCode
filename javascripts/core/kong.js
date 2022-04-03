@@ -17,14 +17,6 @@ kong.init = function() {
   } catch (err) { console.log("Couldn't load Kongregate API"); }
 };
 
-kong.submitStats = function(name, value) {
-  if (!kong.enabled) return;
-  try {
-    kongregate.stats.submit(name, value);
-    // eslint-disable-next-line no-console
-  } catch (e) { console.log(e); }
-};
-
 class ShopPurchaseState extends RebuyableMechanicState {
 
   get currency() {
@@ -95,17 +87,17 @@ kong.purchaseLongerTimeSkip = function(cost) {
 kong.buyMoreSTD = function(STD, kreds) {
   if (!kong.enabled) return;
   kongregate.mtx.purchaseItems([`${kreds}worthofstd`], result => {
-      if (result.success) {
-        player.IAP.totalSTD += STD;
-      }
+    if (result.success) {
+      player.IAP.totalSTD += STD;
+    }
   });
 };
 
 kong.updatePurchases = function() {
   if (!kong.enabled) return;
   try {
-      kongregate.mtx.requestUserItemList("", items);
-      // eslint-disable-next-line no-console
+    kongregate.mtx.requestUserItemList("", items);
+    // eslint-disable-next-line no-console
   } catch (e) { console.error(e); }
 
   function items(result) {
@@ -114,40 +106,40 @@ kong.updatePurchases = function() {
       const item = result.data[i];
       switch (item.identifier) {
         case "doublemult":
-        totalSTD += 30;
-        break;
+          totalSTD += 30;
+          break;
 
         case "doubleip":
-        totalSTD += 40;
-        break;
+          totalSTD += 40;
+          break;
 
         case "tripleep":
-        totalSTD += 50;
-        break;
+          totalSTD += 50;
+          break;
 
         case "alldimboost":
-        totalSTD += 60;
-        break;
+          totalSTD += 60;
+          break;
 
         case "20worthofstd":
-        totalSTD += 20;
-        break;
+          totalSTD += 20;
+          break;
 
         case "50worthofstd":
-        totalSTD += 60;
-        break;
+          totalSTD += 60;
+          break;
 
         case "100worthofstd":
-        totalSTD += 140;
-        break;
+          totalSTD += 140;
+          break;
 
         case "200worthofstd":
-        totalSTD += 300;
-        break;
+          totalSTD += 300;
+          break;
 
         case "500worthofstd":
-        totalSTD += 1000;
-        break;
+          totalSTD += 1000;
+          break;
 
       }
     }
@@ -162,41 +154,41 @@ kong.updatePurchases = function() {
 kong.migratePurchases = function() {
   if (!kong.enabled) return;
   try {
-      kongregate.mtx.requestUserItemList("", items);
-      // eslint-disable-next-line no-console
+    kongregate.mtx.requestUserItemList("", items);
+    // eslint-disable-next-line no-console
   } catch (e) { console.log(e); }
 
   function items(result) {
-      let ipPurchases = 0;
-      let dimPurchases = 0;
-      let epPurchases = 0;
-      let alldimPurchases = 0;
-      for (const item of result.data) {
-          if (item.identifier === "doublemult") {
-            player.IAP.totalSTD += 30;
-            player.IAP.spentSTD += 30;
-            dimPurchases++;
-          }
-          if (item.identifier === "doubleip") {
-            player.IAP.totalSTD += 40;
-            player.IAP.spentSTD += 40;
-            ipPurchases++;
-          }
-          if (item.identifier === "tripleep") {
-            player.IAP.totalSTD += 50;
-            player.IAP.spentSTD += 50;
-            epPurchases++;
-          }
-          if (item.identifier === "alldimboost") {
-            player.IAP.totalSTD += 60;
-            player.IAP.spentSTD += 60;
-            alldimPurchases++;
-          }
-
+    let ipPurchases = 0;
+    let dimPurchases = 0;
+    let epPurchases = 0;
+    let alldimPurchases = 0;
+    for (const item of result.data) {
+      if (item.identifier === "doublemult") {
+        player.IAP.totalSTD += 30;
+        player.IAP.spentSTD += 30;
+        dimPurchases++;
       }
-      player.IAP.dimPurchases = dimPurchases;
-      player.IAP.allDimPurchases = alldimPurchases;
-      player.IAP.IPPurchases = ipPurchases;
-      player.IAP.EPPurchases = epPurchases;
+      if (item.identifier === "doubleip") {
+        player.IAP.totalSTD += 40;
+        player.IAP.spentSTD += 40;
+        ipPurchases++;
+      }
+      if (item.identifier === "tripleep") {
+        player.IAP.totalSTD += 50;
+        player.IAP.spentSTD += 50;
+        epPurchases++;
+      }
+      if (item.identifier === "alldimboost") {
+        player.IAP.totalSTD += 60;
+        player.IAP.spentSTD += 60;
+        alldimPurchases++;
+      }
+
+    }
+    player.IAP.dimPurchases = dimPurchases;
+    player.IAP.allDimPurchases = alldimPurchases;
+    player.IAP.IPPurchases = ipPurchases;
+    player.IAP.EPPurchases = epPurchases;
   }
 };

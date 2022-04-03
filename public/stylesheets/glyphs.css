@@ -766,6 +766,7 @@
 
 .s-base--metro .c-current-glyph-effects {
   border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .t-s8 .c-current-glyph-effects {
@@ -846,6 +847,12 @@
   font-family: Typewriter;
   font-weight: bold;
   z-index: 1;
+}
+
+.s-base--metro .c-glyph-info-button {
+  border-radius: 0;
+  border-width: 0.1rem;
+  height: 2.9rem;
 }
 
 .c-glyph-info-button--active {
@@ -1228,6 +1235,7 @@
 
 .s-base--metro .o-glyph-color-checkbox {
   border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .t-s8 .o-glyph-color-checkbox {

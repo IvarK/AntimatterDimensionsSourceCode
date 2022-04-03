@@ -3,10 +3,7 @@ import { DC } from "./constants.js";
 import { SpeedrunMilestones } from "./speedrun.js";
 
 export function bigCrunchAnimation() {
-  document.body.style.animation = "implode 2s 1";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  AnimationHandler.display("implode", 2);
 }
 
 function handleChallengeCompletion() {
@@ -25,7 +22,7 @@ function handleChallengeCompletion() {
 
 export function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
-  if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
+  if (!disableAnimation && player.options.animations.bigCrunch && !AnimationHandler.isDisplaying) {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);
   } else {

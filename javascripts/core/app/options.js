@@ -65,10 +65,9 @@ export function isSecretImport(data) {
 
 export function tryImportSecret(data) {
   const index = secretImportIndex(data);
-  if (index === 0 && document.body.style.animation === "") {
-    document.body.style.animation = "barrelRoll 5s 1";
+  if (index === 0 && !AnimationHandler.isDisplaying) {
+    AnimationHandler.display("barrelRoll", 5);
     SecretAchievement(15).unlock();
-    setTimeout(() => document.body.style.animation = "", 5000);
     return true;
   }
   if (index === 1) {

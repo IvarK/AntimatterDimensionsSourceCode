@@ -57,10 +57,7 @@ function giveEternityRewards(auto) {
 }
 
 export function eternityAnimation() {
-  document.body.style.animation = "eternify 3s 1";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 3000);
+  AnimationHandler.display("eternify", 3);
 }
 
 export function eternityResetRequest() {
@@ -176,7 +173,7 @@ function applyRealityUpgradesAfterEternity() {
 function askEternityConfirmation() {
   if (player.options.confirmations.eternity) {
     Modal.eternity.show();
-  } else if (player.options.animations.eternity && document.body.style.animation === "") {
+  } else if (player.options.animations.eternity && !AnimationHandler.isDisplaying) {
     eternityAnimation();
     setTimeout(eternity, 2250);
   } else {

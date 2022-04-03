@@ -92,8 +92,7 @@ dev.tripleEverything = function() {
 };
 
 dev.barrelRoll = function() {
-  document.body.style.animation = "barrelRoll 5s 1";
-  setTimeout(() => document.body.style.animation = "", 5000);
+  AnimationHandler.display("barrelRoll", 5);
 };
 
 dev.spin3d = function() {

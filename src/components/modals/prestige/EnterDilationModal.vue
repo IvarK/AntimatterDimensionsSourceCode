@@ -32,7 +32,7 @@ export default {
   methods: {
     handleYesClick() {
       if (player.dilation.active) return;
-      if (player.options.animations.dilation && document.body.style.animation === "") {
+      if (player.options.animations.dilation && !AnimationHandler.isDisplaying) {
         animateAndDilate();
       } else {
         startDilatedEternity();

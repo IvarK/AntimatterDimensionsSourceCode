@@ -3,18 +3,12 @@ import { DC } from "./constants.js";
 import { SpeedrunMilestones } from "./speedrun.js";
 
 export function animateAndDilate() {
-  document.body.style.animation = "dilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  AnimationHandler.display("dilate", 2);
   setTimeout(startDilatedEternity, 1000);
 }
 
 export function animateAndUndilate() {
-  document.body.style.animation = "undilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  AnimationHandler.display("undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
   }, 1000);
@@ -22,7 +16,7 @@ export function animateAndUndilate() {
 
 export function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) return;
-  const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
+  const playAnimation = player.options.animations.dilation && !AnimationHandler.isDisplaying;
   if (player.dilation.active) {
     // TODO Dilation modal
     if (playAnimation) {

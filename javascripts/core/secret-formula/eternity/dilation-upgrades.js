@@ -143,7 +143,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e14,
       increment: 100,
       pelleOnly: true,
-      description: () => `Multiply Dilated Time gain by ${format(5)}`,
+      description: () => `${formatX(5)} Dilated Time gain`,
       effect: bought => Decimal.pow(5, bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),

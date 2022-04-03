@@ -8,14 +8,6 @@ export default {
       audio: null
     };
   },
-  watch: {
-    rolling(newVal, oldVal) {
-      if (!oldVal && newVal && this.audio === null) {
-        this.audio = new Audio(`audio/credits.mp3`);
-        this.audio.play();
-      }
-    }
-  },
   computed: {
     people() { return GameDatabase.credits.people; },
     roles() { return GameDatabase.credits.roles; },
@@ -49,6 +41,14 @@ export default {
           symbol: Pelle.symbol
         }
       };
+    }
+  },
+  watch: {
+    rolling(newVal, oldVal) {
+      if (!oldVal && newVal && this.audio === null) {
+        this.audio = new Audio(`audio/credits.mp3`);
+        this.audio.play();
+      }
     }
   },
   methods: {

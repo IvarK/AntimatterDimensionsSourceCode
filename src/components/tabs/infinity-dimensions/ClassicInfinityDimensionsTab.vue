@@ -62,8 +62,7 @@ export default {
       this.extraTesseracts = Tesseracts.extra;
     },
     maxAll() {
-      tryUnlockInfinityDimensions(false);
-      buyMaxInfinityDimensions();
+      InfinityDimensions.buyMax();
     },
     toggleAllAutobuyers() {
       toggleAllInfDims();

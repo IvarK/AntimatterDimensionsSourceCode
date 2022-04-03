@@ -1384,7 +1384,7 @@ GameDatabase.celestials.navigation = (function() {
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
-              ${format(upgrade.currency.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+              ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
               / ${format(upgrade.cost)}`
             ];
 
@@ -1455,7 +1455,7 @@ GameDatabase.celestials.navigation = (function() {
         const upgrade = DarkMatterDimension(3).unlockUpgrade;
         if (upgrade.canBeBought || upgrade.isBought) return 1;
         if (upgrade.isAvailableForPurchase) return upgrade.currency.value / upgrade.cost;
-        if (!player.celestials.laitela.automation.singularity) return 0.5;
+        if (!player.auto.singularity.isActive) return 0.5;
         return Math.clampMax(0.999, Singularity.singularitiesGained / 20);
       },
       node: {
@@ -1482,11 +1482,11 @@ GameDatabase.celestials.navigation = (function() {
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
-              ${format(upgrade.currency.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+              ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
               / ${format(upgrade.cost)}`
             ];
 
-            if (!player.celestials.laitela.automation.singularity) return [
+            if (!player.auto.singularity.isActive) return [
               dmdText,
               "Unlock Automatic Singularities",
               `${format(Currency.singularities.value)} / ${format(SingularityMilestone.autoCondense.start)}`
@@ -1554,7 +1554,7 @@ GameDatabase.celestials.navigation = (function() {
             if (upgrade.isAvailableForPurchase) return [
               dmdText,
               `Imaginary Machines
-              ${format(upgrade.currency.value.min(upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+              ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
               / ${format(upgrade.cost)}`
             ];
 

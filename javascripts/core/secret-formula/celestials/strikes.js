@@ -25,7 +25,7 @@ GameDatabase.celestials.pelle.strikes = {
   },
   ECs: {
     id: 4,
-    requirementDescription: () => `Reach ${formatInt(115)} Time Theorems`,
+    requirementDescription: () => `Reach ${formatInt(115)} TT`,
     penaltyDescription: "Famine IP multiplier is reduced in Eternity Challenges",
     rewardDescription: "Unlock War",
     rift: () => PelleRifts.war

@@ -35,11 +35,6 @@ export default {
       ttCost: 0
     };
   },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.timeDimension(this.tier).isActive = newValue;
-    }
-  },
   computed: {
     shiftDown() {
       return ui.view.shiftDown;
@@ -74,6 +69,11 @@ export default {
     },
     showCostTitle() {
       return this.cost.exponent < 1e6;
+    }
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeDimension(this.tier).isActive = newValue;
     }
   },
   methods: {

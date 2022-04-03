@@ -7,14 +7,13 @@
   <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." >
   <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
   <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="stylesheets/fontawesome/css/all.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/show-hint.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/lint.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/panda-syntax.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/liquibyte.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/vue-sfc-classes.css">
-  <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
@@ -25,6 +24,11 @@
 </head>
 
 <body>
+  <div id="browser-warning">
+    Your browser is not supported. 
+    <br>
+    Please update to a newer browser.
+  </div>
   <div id="loading"></div>
   <div id="ui"></div>
   <div id="background-animations">
@@ -44,4 +48,14 @@
 
   <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 </body>
+<script>
+  // We use an IE only document variable to check here to force it to show the browser warning.
+  // For some reason, IE really does *not* want to cooperate, even when you have a file as a <script> that you load
+  // in the body. 
+  // Other browsers will be checked whenever window.onload is ran.
+  if (document.documentMode) {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("browser-warning").style.display = "flex";
+  }
+</script>
 </html>

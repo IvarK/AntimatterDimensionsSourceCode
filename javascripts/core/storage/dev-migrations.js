@@ -1192,7 +1192,7 @@ GameStorage.devMigrations = {
       };
       delete player.options.showCondenseToMilestone;
     },
-    player => {
+    () => {
       // This is just an empty patch because some orders got really messed up. Sorry -Scar
     },
     player => {
@@ -1275,19 +1275,22 @@ GameStorage.devMigrations = {
     },
     player => {
       const from = player.celestials.laitela;
-      player.auto.darkMatterDims.isActive = from.automation.dimensions;
-      player.auto.ascension.isActive = from.automation.ascension;
-      player.auto.annihilation.isActive = from.automation.singularity;
-      player.auto.singularity.isActive = from.automation.annihilation;
+      if (from.automation) {
+        player.auto.darkMatterDims.isActive = from.automation.dimensions;
+        player.auto.ascension.isActive = from.automation.ascension;
+        player.auto.annihilation.isActive = from.automation.singularity;
+        player.auto.singularity.isActive = from.automation.annihilation;
+
+        delete player.celestials.laitela.automation.dimensions;
+        delete player.celestials.laitela.automation.ascension;
+        delete player.celestials.laitela.automation.singularity;
+        delete player.celestials.laitela.automation.annihilation;
+      }
 
       player.auto.darkMatterDims.lastTick = from.darkAutobuyerTimer;
       player.auto.ascension.lastTick = from.darkAutobuyerTimer;
       player.auto.annihilation.multiplier = from.autoAnnihilationSetting;
 
-      delete player.celestials.laitela.automation.dimensions;
-      delete player.celestials.laitela.automation.ascension;
-      delete player.celestials.laitela.automation.singularity;
-      delete player.celestials.laitela.automation.annihilation;
       delete player.celestials.laitela.darkAutobuyerTimer;
       delete player.celestials.laitela.darkAutobuyerTimer;
       delete player.celestials.laitela.autoAnnihilationSetting;
@@ -1296,6 +1299,21 @@ GameStorage.devMigrations = {
     player => {
       delete player.options.confirmations.reality;
     },
+    player => {
+      const hasDimboost = player.celestials.pelle.upgrades.has(19);
+      const hasDilUpg = player.celestials.pelle.upgrades.has(18);
+      player.celestials.pelle.upgrades.delete(18);
+      player.celestials.pelle.upgrades.delete(19);
+      if (hasDimboost) player.celestials.pelle.upgrades.add(18);
+      if (hasDilUpg) player.celestials.pelle.upgrades.add(19);
+    },
+    player => {
+      delete player.auto.bulkOn;
+    },
+    player => {
+      player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks.permanent.cancerGalaxies;
+      delete player.requirementChecks.permanent.cancerGalaxies;
+    }
   ],
 
   patch(player) {

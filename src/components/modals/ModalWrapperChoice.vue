@@ -1,13 +1,11 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
-import ModalWrapper from "@/components/modals/ModalWrapper";
 import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
 
 export default {
   name: "ModalWrapperChoice",
   components: {
     PrimaryButton,
-    ModalWrapper,
     ModalConfirmationCheck,
   },
   props: {
@@ -54,19 +52,14 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper class="c-modal-message l-modal-content--centered">
-    <template #header>
+  <div class="c-modal-message l-modal-content--centered">
+    <span class="c-modal__title">
       <slot name="header" />
-    </template>
+    </span>
 
     <slot />
 
     <div class="l-modal-buttons">
-      <ModalConfirmationCheck
-        v-if="option"
-        :option="option"
-      />
-
       <PrimaryButton
         v-if="showCancel"
         :class="cancelClass"
@@ -89,5 +82,10 @@ export default {
         </slot>
       </PrimaryButton>
     </div>
-  </ModalWrapper>
+
+    <ModalConfirmationCheck
+      v-if="option"
+      :option="option"
+    />
+  </div>
 </template>

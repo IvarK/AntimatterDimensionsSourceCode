@@ -10,15 +10,15 @@ export default {
   },
   data() {
     return {
-      tabs: null,
       isEnslaved: false,
       isDoomed: false,
     };
   },
+  computed: {
+    tabs: () => Tabs.currentUIFormat,
+  },
   methods: {
     update() {
-      // TODO: This makes the entire Tab structure reactive. Fix this.
-      this.tabs = Tab;
       this.isEnslaved = Enslaved.isRunning;
       this.isDoomed = Pelle.isDoomed;
     },
@@ -27,13 +27,16 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions style="width: auto">
+  <ModalWrapperOptions class="l-wrapper">
     <template #header>
       Modify Visible Tabs
     </template>
     Click a button to toggle showing a tab on/off.
     <br>
     Some tabs cannot be hidden, and you cannot hide your current tab.
+    <br>
+    Unhiding a tab in which all subtabs are hidden will also unhide all subtabs,
+    and hiding all subtabs will also hide the tab.
     <br>
     <div v-if="isDoomed">
       You cannot hide your tabs within Doomed.
@@ -44,12 +47,17 @@ export default {
       <br>
       (You cannot hide your tabs within this Reality)
     </div>
-    <div
+    <HiddenTabGroup
       v-for="(tab, index) in tabs"
       :key="index"
+      :tab="tab"
       class="l-hide-modal-tab-container"
-    >
-      <HiddenTabGroup :tab="tab" />
-    </div>
+    />
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.l-wrapper {
+  width: auto;
+}
+</style>

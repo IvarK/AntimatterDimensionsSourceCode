@@ -46,7 +46,7 @@ export default {
         "o-achievement--locked": !this.isUnlocked && !this.isDisabled,
         "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
-        "o-achievement--blink": !this.isUnlocked && this.id === 78,
+        "o-achievement--blink": !this.isUnlocked && this.id === 78 && !this.isDisabled,
         "o-achievement--normal": !this.isCancer,
         "o-achievement--cancer": this.isCancer
       };

@@ -58,6 +58,9 @@ export default {
     questionmarkTooltip() {
       return "All Glyph choices are given a score based on the chosen option, and the Glyph with the highest score " +
         "is picked. If this Glyph is below a mode-specific threshold, it will be Sacrificed instead.";
+    },
+    unlockedModes() {
+      return Object.values(this.modes).filter(idx => this.isUnlocked(idx));
     }
   },
   methods: {
@@ -187,8 +190,7 @@ export default {
       <br>
       <div class="c-glyph-filter-mode-container">
         <div
-          v-for="index in modes"
-          v-if="isUnlocked(index)"
+          v-for="index in unlockedModes"
           :key="index"
           :class="optionClass(index)"
           @click="setMode(index)"
@@ -270,14 +272,13 @@ export default {
         </span>
       </div>
       <br>
-      <div
-        class="l-glyph-sacrifice-options__rarity-slider-div"
-        @click="bumpRarity(advancedType)"
-      >
-        <GlyphComponent
-          :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
-          v-bind="glyphIconProps"
-        />
+      <div class="l-glyph-sacrifice-options__rarity-slider-div">
+        <span @click="bumpRarity(advancedType)">
+          <GlyphComponent
+            :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
+            v-bind="glyphIconProps"
+          />
+        </span>
         <SliderComponent
           v-bind="raritySliderProps"
           :value="rarityThresholds[advancedType]"

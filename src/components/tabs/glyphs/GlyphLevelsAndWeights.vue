@@ -469,8 +469,7 @@ function roundPreservingSum(data) {
     </div>
     <div
       :style="rowStyle('info')"
-      style="{ grid-column-start: 1; grid-column-end: 5; }"
-      class="l-glyph-levels-and-weights__factor"
+      class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
     >
       Note: All resources here are log10 of their actual values
     </div>
@@ -547,5 +546,8 @@ function roundPreservingSum(data) {
 </template>
 
 <style scoped>
-
+.l-glyph-level-and-weights-note {
+  grid-column-start: 1;
+  grid-column-end: 5;
+}
 </style>

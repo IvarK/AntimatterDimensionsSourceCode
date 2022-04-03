@@ -24,7 +24,7 @@ export default {
         `Reality Upgrade "Temporal Transcendence" is disabled`,
 
         // Initial QoL and automation
-        "All rewards which increase your starting resources are disabled",
+        "All rewards which increase your starting resources except Achievement 21 are disabled",
         "All rewards which prevent resources from being reset are disabled",
         "Perk rewards which reduce unlock costs have been disabled",
         "Automatic Infinity and Eternity Challenges are disabled",

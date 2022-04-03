@@ -1,12 +1,12 @@
 <script>
 import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "SingularityMilestonesModal",
   components: {
     SingularityMilestoneComponent,
-    ModalWrapperChoice,
+    ModalWrapper,
   },
   data() {
     return {
@@ -16,23 +16,6 @@ export default {
       completedVal: 0,
       orderVal: 0
     };
-  },
-  watch: {
-    resourceVal(newValue) {
-      player.celestials.laitela.singularitySorting.displayResource = newValue;
-    },
-    sortVal(newValue) {
-      player.celestials.laitela.singularitySorting.sortResource = newValue;
-    },
-    completedVal(newValue) {
-      player.celestials.laitela.singularitySorting.showCompleted = newValue;
-    },
-    orderVal(newValue) {
-      player.celestials.laitela.singularitySorting.sortOrder = newValue;
-    },
-  },
-  beforeDestroy() {
-    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   computed: {
     resourceStr() {
@@ -52,6 +35,23 @@ export default {
       const states = ["Ascending", "Descending"];
       return states[this.orderVal];
     },
+  },
+  watch: {
+    resourceVal(newValue) {
+      player.celestials.laitela.singularitySorting.displayResource = newValue;
+    },
+    sortVal(newValue) {
+      player.celestials.laitela.singularitySorting.sortResource = newValue;
+    },
+    completedVal(newValue) {
+      player.celestials.laitela.singularitySorting.showCompleted = newValue;
+    },
+    orderVal(newValue) {
+      player.celestials.laitela.singularitySorting.sortOrder = newValue;
+    },
+  },
+  beforeDestroy() {
+    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   methods: {
     update() {
@@ -91,10 +91,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    :show-cancel="false"
-    :show-confirm="false"
-  >
+  <ModalWrapper>
     <template #header>
       Singularity Milestones
     </template>
@@ -141,5 +138,5 @@ export default {
         {{ orderStr }}
       </button>
     </div>
-  </ModalWrapperChoice>
+  </ModalWrapper>
 </template>

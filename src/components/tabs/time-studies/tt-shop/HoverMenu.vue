@@ -1,10 +1,16 @@
+<script>
 /**
  * This slotted component manages a context menu that is accessible both
  * by right clicking and by hovering; this is mostly about wrangling timers.
  */
-Vue.component("hover-menu", {
+
+export default {
+  name: "HoverMenu",
   props: {
-    saveslot: Number
+    saveslot: {
+      type: Number,
+      default: 0
+    }
   },
   data: () => ({
     componentID: UIID.next(),
@@ -71,15 +77,29 @@ Vue.component("hover-menu", {
       }
     },
   },
-  template: `
-    <div
-      class="l-hover-menu__wrapper"
-      v-on="listeners"
-      @contextmenu.prevent="toggleContextMenu"
-    >
-      <slot name="object" ref="clown">
-      </slot>
-      <slot name="menu" v-if="contextMenuIsVisible">
-      </slot>
-    </div>`
-});
+};
+</script>
+
+<template>
+  <div
+    class="hover-menu__wrapper"
+    v-on="listeners"
+    @contextmenu.prevent="toggleContextMenu"
+  >
+    <slot
+      ref="clown"
+      name="object"
+    />
+    <slot
+      v-if="contextMenuIsVisible"
+      name="menu"
+    />
+  </div>
+</template>
+
+
+<style scoped>
+.hover-menu__wrapper {
+  position: relative;
+}
+</style>

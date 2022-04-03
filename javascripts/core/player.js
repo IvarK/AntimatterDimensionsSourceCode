@@ -53,7 +53,6 @@ window.player = {
     upgradeBits: 0
   },
   auto: {
-    bulkOn: true,
     autobuyersOn: true,
     disableContinuum: false,
     reality: {
@@ -233,7 +232,7 @@ window.player = {
       slowestBH: 1,
     },
     permanent: {
-      cancerGalaxies: 0,
+      emojiGalaxies: 0,
       singleTickspeed: 0,
       perkTreeDragging: 0
     }

@@ -6,6 +6,13 @@ export default {
   components: {
     ExpandingControlBox
   },
+  props: {
+    hide: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       best: {
@@ -17,6 +24,11 @@ export default {
       remnants: 0,
       remnantsGain: 0
     };
+  },
+  computed: {
+    opacity() {
+      return Number(!this.hide);
+    }
   },
   methods: {
     update() {
@@ -36,6 +48,7 @@ export default {
     <ExpandingControlBox
       container-class="c-remnant-factors"
       label="Remnant Gain Factors"
+      :style="{ opacity }"
     >
       <template #dropdown>
         <div class="c-remnant-factors-text">
@@ -116,23 +129,27 @@ export default {
 
 <style>
 .c-remnant-factors-container {
+  position: relative;
   z-index: 4;
 }
 
-/* I'm not sure why this bit is needed, but z-index on c-remnant-factors-container
-and c-remnant-factors both didn't work. If anyone can fix this it would be great. */
-.c-remnant-factors-container > .l-expanding-control-box {
-  z-index: 4;
+.c-remnant-factors-container .l-expanding-control-box {
+  transition: opacity 0.5s;
 }
 
 .c-remnant-factors {
-  background-color: #000;
-  color: #fbd0d8;
+  background-color: var(--color-prestige--accent);
+  color: var(--color-text);
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;
   padding: 0.3rem;
   font-weight: bold;
   z-index: 4;
+}
+
+.s-base--metro .c-remnant-factors {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-remnant-factors-text {

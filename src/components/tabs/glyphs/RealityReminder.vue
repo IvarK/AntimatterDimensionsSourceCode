@@ -108,7 +108,7 @@ export default {
       you may want to do before Reality. {{ clickText }}
       <div
         v-if="isExpanded"
-        style="font-size: 1rem;"
+        class="l-suggestions"
       >
         <br>
         <div
@@ -123,5 +123,7 @@ export default {
 </template>
 
 <style scoped>
-
+.l-suggestions {
+  font-size: 1rem;
+}
 </style>

@@ -625,25 +625,31 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const studies = ctx.$studies;
         if (ctx.Nowait === undefined) return () => {
+          let prePurchasedStudies = 0;
           let purchasedStudies = 0;
+          let finalPurchasedTS;
           for (const tsNumber of studies.normal) {
-            if (TimeStudy(tsNumber).isBought) continue;
-            if (!TimeStudy(tsNumber).purchase()) {
-              if (purchasedStudies > 0) {
-                AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)}
-                and stopped at study ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
-              }
-              return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+            if (TimeStudy(tsNumber).isBought) prePurchasedStudies++;
+            else if (TimeStudy(tsNumber).purchase()) purchasedStudies++;
+            else finalPurchasedTS = finalPurchasedTS ?? tsNumber;
+          }
+          if (prePurchasedStudies + purchasedStudies < studies.normal.length) {
+            if (prePurchasedStudies + purchasedStudies === 0) {
+              AutomatorData.logCommandEvent(`Could not purchase any of the specified Time Studies`, ctx.startLine);
             }
-            purchasedStudies++;
+            if (purchasedStudies > 0 && finalPurchasedTS) {
+              AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)} and stopped at
+              Time Study ${finalPurchasedTS}, waiting to attempt to purchase more Time Studies`, ctx.startLine);
+            }
+            return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
           }
           if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
-            AutomatorData.logCommandEvent(`Purchased all specified time studies`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Purchased all specified Time Studies`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(true);
           if (unlockedEC) {
-            AutomatorData.logCommandEvent(`Purchased all specified time studies and unlocked Eternity Challenge
+            AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
               ${studies.ec}`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }

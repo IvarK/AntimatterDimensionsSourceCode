@@ -134,9 +134,15 @@ export default {
     </div>
     <div
       v-else
-      style="height: 5.4rem;"
+      class="l-no-records"
     >
       You have no records for {{ plural }} yet.
     </div>
   </div>
 </template>
+
+<style scoped>
+.l-no-records {
+  height: 5.4rem;
+}
+</style>

@@ -3,6 +3,7 @@ import { DC } from "./core/constants.js";
 import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { supportedBrowsers } from "./supported-browsers";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -575,7 +576,7 @@ export function gameLoop(passDiff, options = {}) {
 
   updateTachyonGalaxies();
   Currency.timeTheorems.add(getTTPerSecond().times(diff / 1000));
-  tryUnlockInfinityDimensions(true);
+  InfinityDimensions.tryAutoUnlock();
 
   BlackHoles.updatePhases(blackHoleDiff);
 
@@ -1050,8 +1051,9 @@ export function simulateTime(seconds, real, fast) {
 }
 
 window.onload = function() {
-  GameUI.initialized = true;
-  ui.view.initialized = true;
+  const supportedBrowser = browserCheck();
+  GameUI.initialized = supportedBrowser;
+  ui.view.initialized = supportedBrowser;
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();
@@ -1059,6 +1061,11 @@ window.onload = function() {
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";
   }, 500);
+  if (!supportedBrowser) {
+    GameIntervals.stop();
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("browser-warning").style.display = "flex";
+  }
 };
 
 window.onfocus = function() {
@@ -1075,6 +1082,10 @@ export function setShiftKey(isDown) {
 
 export function setHoldingR(x) {
   Replicanti.galaxies.isPlayerHoldingR = x;
+}
+
+export function browserCheck() {
+  return supportedBrowsers.test(navigator.userAgent);
 }
 
 export function init() {

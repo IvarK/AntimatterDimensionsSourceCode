@@ -109,8 +109,7 @@ export default {
     >
       {{ removeString }} all Glyphs rejected by filtering
       <div
-        class="c-glyph-inventory-option__tooltip"
-        style="width: 90%; left: 5%;"
+        class="c-glyph-inventory-option__tooltip l-rejected-tooltip"
       >
         {{ deleteRejectedTooltip }}
       </div>
@@ -119,5 +118,8 @@ export default {
 </template>
 
 <style scoped>
-
+.l-rejected-tooltip {
+  width: 90%;
+  left: 5%;
+}
 </style>

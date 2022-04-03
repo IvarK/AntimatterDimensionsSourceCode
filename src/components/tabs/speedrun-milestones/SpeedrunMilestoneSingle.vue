@@ -8,11 +8,13 @@ export default {
     },
     time: {
       type: Number,
-      required: false
+      required: false,
+      default: 0,
     },
     gap: {
       type: Number,
-      required: false
+      required: false,
+      default: 0,
     }
   },
   computed: {

@@ -12,7 +12,6 @@ export default {
     return {
       isDoomed: false,
       autobuyersOn: false,
-      bulkOn: false,
       showContinuum: false,
       disableContinuum: false,
     };
@@ -20,9 +19,6 @@ export default {
   watch: {
     autobuyersOn(newValue) {
       player.auto.autobuyersOn = newValue;
-    },
-    bulkOn(newValue) {
-      player.auto.bulkOn = newValue;
     },
     disableContinuum(newValue) {
       Laitela.setContinuum(!newValue);
@@ -32,7 +28,6 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.autobuyersOn = player.auto.autobuyersOn;
-      this.bulkOn = player.auto.bulkOn;
       this.showContinuum = Laitela.isUnlocked;
       this.disableContinuum = player.auto.disableContinuum;
     },
@@ -66,12 +61,6 @@ export default {
     >
       Toggle all autobuyers
     </PrimaryButton>
-    <PrimaryToggleButton
-      v-model="bulkOn"
-      on="Disable bulk buy"
-      off="Enable bulk buy"
-      class="o-primary-btn--subtab-option"
-    />
     <span v-if="isDoomed">
       <PrimaryButton
         v-if="showContinuum"

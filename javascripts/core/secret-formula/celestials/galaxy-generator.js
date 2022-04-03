@@ -10,10 +10,10 @@ GameDatabase.celestials.pelle.galaxyGeneratorUpgrades = (function() {
       description,
       cost: () => cost(player.celestials.pelle.rebuyables[id]),
       formatCost,
-      effect: () => effect(player.celestials.pelle.rebuyables[id]),
+      effect: (x = player.celestials.pelle.rebuyables[id]) => effect(x),
       formatEffect,
       currency,
-      currencyLabel,
+      currencyLabel
     };
   };
   return {

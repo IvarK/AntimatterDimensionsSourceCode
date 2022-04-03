@@ -51,18 +51,19 @@ export default {
 
 <style scoped>
 .c-armageddon-button {
+  width: 100%;
   padding: 1.5rem;
   display: block;
   font-family: Typewriter;
-  background: black;
-  border: 1px solid var(--color-pelle--base);
-  color: white;
-  border-radius: 5px;
+  background: var(--color-prestige--accent);
+  border: 0.1rem solid var(--color-pelle--base);
+  color: var(--color-text);
+  border-radius: 0.5rem;
 }
 
 .c-armageddon-button:hover {
   cursor: pointer;
-  box-shadow: 1px 1px 5px var(--color-pelle--base);
+  box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle--base);
   transition-duration: 0.12s;
 }
 
@@ -84,5 +85,9 @@ export default {
 .c-reality-shard-gain {
   font-weight: bold;
   color: var(--color-pelle--base);
+}
+
+.s-base--metro .c-armageddon-button {
+  border-radius: 0;
 }
 </style>

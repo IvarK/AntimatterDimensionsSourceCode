@@ -40,7 +40,7 @@ export default {
   <div v-if="isVisible">
     <button
       :class="['l-reality-amplify-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
-      style="width: 100%"
+      class="c-button-wrapper"
       :ach-tooltip="tooltip"
       @click="toggleActive"
     >
@@ -61,5 +61,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-button-wrapper {
+  width: 100%;
+}
 </style>

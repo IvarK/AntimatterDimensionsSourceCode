@@ -67,6 +67,6 @@ export default {
         @something-happened="somethingHappened = true"
       />
     </div>
-    <span v-if="!nothingHappened">Note: Click an entry to hide it in the future.</span>
+    <span v-if="!nothingHappened && somethingHappened">Note: Click an entry to hide it in the future.</span>
   </ModalWrapper>
 </template>

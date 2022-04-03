@@ -136,11 +136,11 @@ export default {
     v-if="isVisible"
     class="l-game-header__challenge-text"
   >
-    <span style="padding: 0.5rem;">
+    <span class="l-challenge-display">
       You are currently in {{ challengeDisplay }}
     </span>
     <FailableEcText v-if="isInFailableEC" />
-    <span style="padding: 0.3rem;" />
+    <span class="l-padding-line" />
     <PrimaryButton
       v-if="showExit"
       @click="exitButtonClicked"
@@ -151,5 +151,11 @@ export default {
 </template>
 
 <style scoped>
+.l-challenge-display {
+  padding: 0.5rem;
+}
 
+.l-padding-line {
+  padding: 0.3rem;
+}
 </style>

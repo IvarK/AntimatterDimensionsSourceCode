@@ -168,10 +168,10 @@ export default {
   position: absolute;
   transform: translate(-50%, -100%);
   width: 0;
-  border-top: 0.5rem solid transparent;
-  border-right: 0.5rem solid transparent;
-  border-bottom: 0.5rem solid transparent;
-  border-left: 0.5rem solid transparent;
+  border-top: 0.55rem solid transparent;
+  border-right: 0.55rem solid transparent;
+  border-bottom: 0.55rem solid transparent;
+  border-left: 0.55rem solid transparent;
   content: " ";
   font-size: 0;
   line-height: 0;
@@ -184,7 +184,7 @@ export default {
 }
 
 .c-tooltip--top.c-tooltip-arrow {
-  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-top: 0.55rem solid hsla(0, 0%, 5%, 0.9);
   border-bottom: 0;
 }
 
@@ -193,7 +193,7 @@ export default {
 }
 
 .c-tooltip--bottom.c-tooltip-arrow {
-  border-bottom: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-bottom: 0.55rem solid hsla(0, 0%, 5%, 0.9);
   border-top: 0;
 }
 
@@ -202,7 +202,7 @@ export default {
 }
 
 .c-tooltip--right.c-tooltip-arrow {
-  border-right: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0.55rem solid hsla(0, 0%, 5%, 0.9);
   border-left: 0;
 }
 
@@ -211,7 +211,7 @@ export default {
 }
 
 .c-tooltip--left.c-tooltip-arrow {
-  border-left: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-left: 0.55rem solid hsla(0, 0%, 5%, 0.9);
   border-right: 0;
 }
 

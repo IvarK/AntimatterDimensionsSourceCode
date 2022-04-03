@@ -89,7 +89,7 @@
   border: 0.2rem solid;
   transition-duration: 0.2s;
   border-radius: 0.5rem;
-  width: 3rem;
+  width: 4.6rem;
   height: 3rem;
 }
 
@@ -104,8 +104,9 @@
 }
 
 .c-glyph-sacrifice-options__option--active {
-  color: var(--color-reality-light);
+  color: black;
   border-color: var(--color-reality-light);
+  background-color: var(--color-reality-light);
   pointer-events: none;
 }
 
@@ -309,8 +310,9 @@
 .c-auto-sac-type-tab__effect-desc {
   border-radius: 0.5em;
   border: 0.1rem solid;
-  padding: 0.25em 0.5em;
+  padding: 0.25em 1.5em;
   min-height: 3em;
+  position: relative;
 }
 
 .c-auto-sac-type-tab__effect-desc--active {
@@ -322,12 +324,12 @@
 
 .c-auto-sac-type-tab__effect-desc--inactive {
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.7;
   transition: opacity 0.2s;
 }
 
 .c-auto-sac-type-tab__effect-desc--inactive:hover {
-  opacity: 0.8;
+  opacity: 0.95;
   text-shadow: 0 0 0.3rem;
 }
 
@@ -396,6 +398,7 @@
   border-style: solid;
   margin-bottom: -0.1rem;
   transition: color 0.2s;
+  position: relative;
 }
 
 .s-base--metro .c-glyph-auto-pick-options__option {
@@ -407,9 +410,11 @@
 }
 
 .c-glyph-auto-pick-options__option--active {
-  color: var(--color-reality-light);
-  border-color: var(--color-reality-light);
+  color: black;
+  background-color: var(--color-reality);
+  border-color: var(--color-reality);
   z-index: 1;
+  pointer-events: none;
 }
 
 .c-glyph-auto-pick-options__option--inactive {

@@ -825,7 +825,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
   width: 50%;
   cursor: pointer;
   background-color: black;
@@ -834,7 +833,7 @@
   color: var(--color-reality-light);
   transition: All 0.2s, border-bottom 0ms, padding-bottom 0ms;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-family: Typewriter;
   font-weight: bold;
   z-index: 1;

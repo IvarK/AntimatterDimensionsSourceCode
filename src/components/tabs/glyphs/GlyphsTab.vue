@@ -195,8 +195,4 @@ export default {
 .l-glyph-level-factors {
   margin: 2rem;
 }
-
-.l-current-glyph-effects {
-  border-right: 0.1rem solid #b8b8b8;
-}
 </style>

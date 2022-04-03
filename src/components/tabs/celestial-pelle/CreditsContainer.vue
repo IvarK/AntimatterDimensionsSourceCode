@@ -140,6 +140,9 @@ export default {
 .l-credits--bulk {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  position: relative;
+  width: 76%;
+  left: 12%;
 }
 
 .c-credit-entry {

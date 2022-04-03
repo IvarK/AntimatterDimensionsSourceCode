@@ -79,8 +79,12 @@ export default {
       player.options.glyphTextColors = !player.options.glyphTextColors;
     },
     glyphInfoClass(isSacrificeOption) {
-      if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
-      return "";
+      return {
+        "l-glyph-info-button": true,
+        "c-glyph-info-button": true,
+        "c-glyph-info-button--active": isSacrificeOption,
+        "c-glyph-info-button--inactive": !isSacrificeOption
+      };
     },
     setInfoState(state) {
       player.reality.showGlyphSacrifice = state;
@@ -164,20 +168,18 @@ export default {
               v-if="sacrificeUnlocked"
               class="c-glyph-info-options"
             >
-              <div
-                class="c-glyph-info-button l-current-glyph-effects"
-                :class="glyphInfoClass(false)"
+              <button
+                :class="glyphInfoClass(!sacrificeDisplayed)"
                 @click="setInfoState(false)"
               >
                 Current Glyph effects
-              </div>
-              <div
-                class="c-glyph-info-button"
-                :class="glyphInfoClass(true)"
+              </button>
+              <button
+                :class="glyphInfoClass(sacrificeDisplayed)"
                 @click="setInfoState(true)"
               >
                 Glyph Sacrifice totals
-              </div>
+              </button>
             </div>
             <SacrificedGlyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />
             <CurrentGlyphEffects v-else />

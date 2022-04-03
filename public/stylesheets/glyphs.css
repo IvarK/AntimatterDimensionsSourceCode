@@ -755,16 +755,19 @@
 }
 
 .c-current-glyph-effects {
-  border: 0.1rem solid #b8b8b8;
-  border-radius: 0.5rem;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  padding: 1.2rem;
   margin-top: 0;
   margin-bottom: 0;
   height: 30rem;
   width: 45rem;
   overflow: auto;
+  color: var(--color-reality-light);
+  background: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 0.8rem 0.8rem 0.5rem;
+  position: relative;
 }
 
 .pelle-current-glyph-effects {
@@ -794,7 +797,6 @@
 .l-glyph-info-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .t-s6 .l-glyph-info-wrapper,
@@ -805,12 +807,9 @@
 .c-glyph-info-options {
   display: flex;
   flex-direction: row;
-  width: 45rem;
-  height: 3rem;
-  margin-bottom: -0.1rem;
-  border: 0.1rem solid #b8b8b8;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
+  justify-content: space-between;
+  height: 2.8rem;
+  width: 100%;
 }
 
 .s-base--metro .c-glyph-info-options {
@@ -836,15 +835,39 @@
   border-color: black !important;
 }
 
-.c-glyph-info-button--active {
-  font-size: 1.25rem;
-  font-weight: bold;
-  cursor: default;
-  width: 50%;
+.l-glyph-info-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 22rem;
+  height: 3rem;
 }
 
-.c-glyph-info-button:hover {
-  font-size: 1.25rem;
+.c-glyph-info-button {
+  background-color: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem 0.5rem 0 0;
+  color: var(--color-reality-light);
+  cursor: pointer;
+  transition: All 0.2s, border-bottom 0ms, padding-bottom 0ms;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.c-glyph-info-button--active {
+  border-bottom: none;
+  cursor: default;
+  padding-bottom: 0.3rem;
+  transition-duration: 0ms;
+}
+
+.c-glyph-info-button--inactive:hover {
+  color: black;
+  background-color: var(--color-reality-light);
 }
 
 .l-sacrificed-glyphs {
@@ -1106,6 +1129,9 @@
 .l-glyph-color-box {
   display: flex;
   position: relative;
+  left: -50%;
+  top: 27.9rem;
+  z-index: 2;
 }
 
 .l-glyph-color-position__top {
@@ -1204,9 +1230,9 @@
   font-size: 1rem;
   height: 2rem;
   width: 2rem;
-  border: 0.1rem solid #b8b8b8;
-  border-top-left-radius: 0.3rem;
-  border-bottom-right-radius: 1rem;
+  border: 0.2rem solid var(--color-reality);
+  border-top-right-radius: 1rem;
+  border-bottom-left-radius: 0.3rem;
   color: black;
   font-weight: bold;
   cursor: pointer;
@@ -1224,7 +1250,7 @@
 
 
 .o-glyph-color-checkbox:hover {
-  transform: scale(1.1) translate(0.1rem, 0.1rem);
+  transform: scale(1.1) translate(0.1rem, -0.1rem);
 }
 
 .o-glyph-color-checkbox--active {

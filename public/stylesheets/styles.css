@@ -1225,7 +1225,9 @@ screen and (max-width: 480px) {
 
 .c-game-ui {
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .c-game-ui--fixed {

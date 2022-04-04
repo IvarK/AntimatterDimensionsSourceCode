@@ -831,7 +831,7 @@
   border: 0.2rem solid var(--color-reality);
   border-radius: 0.5rem 0.5rem 0 0;
   color: var(--color-reality-light);
-  transition: All 0.2s, border-bottom 0ms, padding-bottom 0ms;
+  transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
   text-align: center;
   font-size: 1.2rem;
   font-family: Typewriter;
@@ -1168,7 +1168,7 @@
   border-radius: 0.5rem 0.5rem 0 0;
   color: var(--color-reality-light);
   cursor: pointer;
-  transition: All 0.2s, border-bottom 0ms, padding-bottom 0ms;
+  transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
   text-align: center;
   font-size: 1rem;
   font-family: Typewriter;

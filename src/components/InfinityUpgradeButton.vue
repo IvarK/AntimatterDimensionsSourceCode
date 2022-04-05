@@ -36,9 +36,12 @@ export default {
     shiftDown() {
       return ui.view.shiftDown;
     },
+    showChargedEffect() {
+      return this.chargePossible && (this.isCharged || this.showingCharged || this.shiftDown);
+    },
     config() {
       const config = this.upgrade.config;
-      return (this.chargePossible && (this.isCharged || this.showingCharged || this.shiftDown))
+      return this.showChargedEffect
         ? config.charged
         : config;
     },
@@ -64,7 +67,7 @@ export default {
       return description.includes("has no effect");
     },
     isImprovedByTS31() {
-      return this.hasTS31 && this.isBasedOnInfinities && !this.isCharged && !this.showingCharged;
+      return this.hasTS31 && this.isBasedOnInfinities && !this.showChargedEffect;
     }
   },
   methods: {

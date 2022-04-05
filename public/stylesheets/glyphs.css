@@ -962,6 +962,10 @@
   user-select: none;
 }
 
+.c-altered-glyphs-toggle-button {
+  cursor: pointer;
+}
+
 .l-glyph-inventory {
   display: flex;
   flex-direction: column;

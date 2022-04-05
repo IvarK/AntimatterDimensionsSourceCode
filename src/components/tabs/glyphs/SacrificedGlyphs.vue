@@ -95,9 +95,12 @@ export default {
       </span>
     </div>
     <div v-if="hasAlteration">
-      <span @click="toggleAlteration">
-        <b>Altered Glyphs </b>
+      <span
+        class="c-altered-glyphs-toggle-button"
+        @click="toggleAlteration"
+      >
         <i :class="dropDownIconClass" />
+        <b> Altered Glyphs</b>
       </span>
       <br>
       <div v-if="hideAlteration">

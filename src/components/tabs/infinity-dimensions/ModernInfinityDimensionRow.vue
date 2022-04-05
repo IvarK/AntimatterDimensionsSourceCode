@@ -18,6 +18,7 @@ export default {
     return {
       hasPrevTier: false,
       isUnlocked: false,
+      canUnlock: false,
       multiplier: new Decimal(0),
       baseAmount: 0,
       amount: new Decimal(0),
@@ -31,7 +32,6 @@ export default {
       isAutobuyerOn: false,
       isEC8Running: false,
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
-      requirementReached: false,
       eternityReached: false,
       enslavedRunning: false,
     };
@@ -47,17 +47,16 @@ export default {
       return ` (+${format(this.rateOfChange, 2, 2)}%/s)`;
     },
     costDisplay() {
-      const requirement = InfinityDimension(this.tier).requirement;
       if (this.isUnlocked || this.shiftDown) {
         if (this.isCapped) return "Capped";
         return this.showCostTitle ? `Cost: ${format(this.cost)} IP` : `${format(this.cost)} IP`;
       }
 
-      if (this.requirementReached) {
+      if (this.canUnlock) {
         return "Unlock";
       }
 
-      return `Reach ${formatPostBreak(requirement)} AM`;
+      return `Reach ${formatPostBreak(InfinityDimension(this.tier).amRequirement)} AM`;
     },
     capTooltip() {
       if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
@@ -65,7 +64,7 @@ export default {
       return `Purchased ${quantifyInt("time", this.purchases)}`;
     },
     showRow() {
-      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0) ||
+      return this.eternityReached || this.isUnlocked || this.canUnlock || this.amount.gt(0) ||
         this.hasPrevTier;
     },
     showCostTitle() {
@@ -83,6 +82,7 @@ export default {
       const dimension = InfinityDimension(tier);
       this.hasPrevTier = tier === 1 || InfinityDimension(tier - 1).isUnlocked;
       this.isUnlocked = dimension.isUnlocked;
+      this.canUnlock = dimension.canUnlock;
       this.multiplier.copyFrom(dimension.multiplier);
       this.baseAmount = dimension.baseAmount;
       this.purchases = dimension.purchases;
@@ -91,9 +91,6 @@ export default {
       this.isAutobuyerUnlocked = Autobuyer.infinityDimension(tier).isUnlocked;
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;
-      if (!this.isUnlocked) {
-        this.isAvailableForPurchase = dimension.requirementReached;
-      }
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
@@ -101,23 +98,14 @@ export default {
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
       this.isAutobuyerOn = Autobuyer.infinityDimension(tier).isActive;
-      this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
       this.enslavedRunning = Enslaved.isRunning;
     },
-    buyManyInfinityDimension() {
-      if (!this.isUnlocked) {
-        InfinityDimension(this.tier).tryUnlock();
-        return;
-      }
-      buyManyInfinityDimension(this.tier);
+    buySingleInfinityDimension() {
+      InfinityDimension(this.tier).buySingle();
     },
     buyMaxInfinityDimension() {
-      if (!this.isUnlocked) {
-        InfinityDimension(this.tier).tryUnlock();
-        return;
-      }
-      buyMaxInfDims(this.tier);
+      InfinityDimension(this.tier).buyMax();
     },
   }
 };
@@ -127,7 +115,7 @@ export default {
   <div
     v-show="showRow"
     class="c-infinity-dim-row"
-    :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
+    :class="{ 'c-dim-row--not-reached': !isUnlocked && !canUnlock }"
   >
     <div class="c-dim-row__label c-dim-row__name">
       {{ name }} Infinity D <span class="c-infinity-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
@@ -143,9 +131,9 @@ export default {
     </div>
     <PrimaryButton
       v-tooltip="capTooltip"
-      :enabled="isAvailableForPurchase && !isCapped"
+      :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
       class="o-primary-btn--buy-id l-dim-row__button o-primary-btn o-primary-btn--new"
-      @click="buyManyInfinityDimension"
+      @click="buySingleInfinityDimension"
     >
       {{ costDisplay }}
     </PrimaryButton>

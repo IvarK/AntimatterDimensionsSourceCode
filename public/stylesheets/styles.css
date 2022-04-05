@@ -1319,12 +1319,6 @@ screen and (max-width: 480px) {
   height: 4.5rem;
 }
 
-.o-primary-btn--new-dim {
-  font-weight: bold;
-  width: 22rem;
-  height: 7rem;
-}
-
 .o-primary-btn--quick-reset {
   font-size: 1.2rem;
   width: 20rem;
@@ -6327,7 +6321,6 @@ kbd {
 
 .c-effarig-run-button {
   font-size: 10rem;
-  font-family: sans-serif;
   font-weight: bold;
   user-select: none;
   cursor: pointer;
@@ -6370,6 +6363,11 @@ kbd {
 
 .c-effarig-run-button--running:hover {
   background: #400000;
+}
+
+.c-effarig-run-button__inner--running,
+.c-effarig-run-button__inner--not-running {
+  margin-top: -3rem;
 }
 
 .c-effarig-run-button__inner--running {
@@ -9157,13 +9155,16 @@ input.o-automator-block-input {
 .l-hide-modal-subtab-container {
   display: flex;
   flex-wrap: wrap;
-  width: 62.6rem;
+  width: 70rem;
+  justify-content: center;
+  position: relative;
 }
 
 .c-hide-modal-all-subtab-container {
   border-radius: 0.8rem;
   border: 0.1rem solid black;
   padding: 0.2rem;
+  cursor: pointer;
 }
 
 .s-base--metro .c-hide-modal-all-subtab-container {
@@ -9208,12 +9209,14 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-button--always-visible {
+  color: var(--color-text-inverted);
   background-color: var(--color-disabled);
-  pointer-events: none;
+  cursor: default;
 }
 
-.c-hide-modal-button--current {
-  text-shadow: 0 0 0.3rem;
+.c-hide-modal-button--always-visible:hover {
+  color: var(--color-text-inverted);
+  background-color: var(--color-disabled);
 }
 
 .c-hide-modal-tab-button--infinity {

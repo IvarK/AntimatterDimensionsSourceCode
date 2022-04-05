@@ -1,3 +1,4 @@
+import { InfinityDimensions } from "../globals.js";
 import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
@@ -5,8 +6,12 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
     return this.id;
   }
 
+  get dimension() {
+    return InfinityDimension(this.tier);
+  }
+
   get name() {
-    return InfinityDimension(this.tier).displayName;
+    return this.dimension.displayName;
   }
 
   get fullName() {
@@ -33,9 +38,13 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
     return true;
   }
 
+  get canTick() {
+    return InfinityDimensions.canAutobuy() && this.dimension.isAvailableForPurchase && super.canTick;
+  }
+
   tick() {
-    if (EternityChallenge(8).isRunning) return;
-    if (buyMaxInfDims(this.tier)) super.tick();
+    super.tick();
+    this.dimension.buyMax();
   }
 
   static get entryCount() { return 8; }

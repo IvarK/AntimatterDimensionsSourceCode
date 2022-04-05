@@ -14,51 +14,72 @@ export default {
   },
   data() {
     return {
-      tabName: "",
-      subtabs: {},
-      hidden: false,
+      isVisible: false,
+      isHidable: false,
+      isHidden: false,
+      unlockedSubtabs: [],
     };
   },
   computed: {
+    tabName() {
+      return this.tab.name;
+    },
+    subtabs() {
+      return this.tab.subtabs;
+    },
     styleObjectRow() {
       return {
-        "background-color": this.hidden ? "var(--color-bad)" : "var(--color-good)",
+        "background-color": this.isHidden ? "var(--color-gh-purple)" : "var(--color-good)",
       };
     },
     isCurrentTab() {
       return this.tab.id === Tabs.current.id;
     },
-    classObjectButton() {
+    alwaysVisible() {
+      return !this.isHidable || this.isCurrentTab;
+    },
+    rowClass() {
       return {
-        "c-hide-modal-tab-button": true,
-        "c-hide-modal-button--active": !this.hidden,
-        "c-hide-modal-button--inactive": this.hidden,
-        "c-hide-modal-button--always-visible": !this.tab.config.hidable || this.isCurrentTab,
-        "c-hide-modal-button--current": this.isCurrentTab,
-        [`c-hide-modal-tab-button--${this.tab.key}`]: !this.isCurrentTab,
+        "c-hide-modal-all-subtab-container": true,
+        "l-hide-modal-subtab-container": true,
+        "c-hidden-tabs-background__visible": !this.isHidden,
+        "c-hidden-tabs-background__hidden": this.isHidden,
+        "c-hidden-tabs-background__always-visible": this.alwaysVisible
       };
     },
-    unlockedSubtabs() {
-      return this.subtabs.filter(sub => sub.isUnlocked);
-    }
+    rowVisibleIndicatorClass() {
+      return {
+        "c-indicator-icon": true,
+        "fas": true,
+        "fa-check": !this.isHidden,
+        "fa-times": this.isHidden,
+        "fa-exclamation": this.alwaysVisible,
+      };
+    },
+    rowVisibleIndicatorTooltip() {
+      if (this.isHidden) return "Click to unhide tab";
+      if (!this.alwaysVisible) return "Click to hide tab";
+      return "This tab cannot be hidden";
+    },
   },
   methods: {
     update() {
-      this.tabName = this.tab.config.name;
-      this.subtabs = this.tab.subtabs;
-      this.hidden = this.tab.isHidden && this.tab.config.hidable;
+      const tab = this.tab;
+      this.isVisible = tab.isUnlocked;
+      this.isHidable = tab.hidable;
+      this.isHidden = tab.isHidden && this.isHidable;
+      this.unlockedSubtabs = this.subtabs.filter(sub => sub.isUnlocked);
     },
     toggleVisibility() {
-      // If this tab and all subtabs are hidden, unhide all subtabs too
-      if (this.tab.isHidden && this.subtabs.every(t => t.isHidden || !t.isUnlocked)) {
-        for (const subtab of this.subtabs) {
-          if (subtab.isUnlocked) subtab.toggleVisibility();
+      // If this tab and all unlocked subtabs are hidden, unhide all subtabs in addition to the tab
+      if (this.tab.isHidden && this.unlockedSubtabs.every(t => t.isHidden)) {
+        for (const subtab of this.unlockedSubtabs) {
+          subtab.toggleVisibility();
         }
         this.tab.unhideTab();
-      } else this.tab.toggleVisibility();
-    },
-    getKey(subtab) {
-      return `${this.tab.id} ${subtab.id} ${subtab.isHidden}`;
+      } else {
+        this.tab.toggleVisibility();
+      }
     }
   },
 };
@@ -66,24 +87,44 @@ export default {
 
 <template>
   <div
-    v-if="tab.isUnlocked"
-    class="c-hide-modal-all-subtab-container l-hide-modal-subtab-container"
-    :style="styleObjectRow"
+    v-if="isVisible"
+    :class="rowClass"
+    @click.self="toggleVisibility"
   >
-    <div
-      :class="classObjectButton"
-      @click="toggleVisibility()"
-    >
-      {{ tabName }}
-      <br>
-      (all subtabs)
-    </div>
-    <br>
     <HiddenSubtabsButton
-      v-for="subtab in unlockedSubtabs"
-      :key="getKey(subtab)"
+      v-for="(subtab, i) in unlockedSubtabs"
+      :key="i"
       :subtab="subtab"
       :tab="tab"
     />
+    <div
+      v-tooltip="rowVisibleIndicatorTooltip"
+      :class="rowVisibleIndicatorClass"
+      @click="toggleVisibility"
+    />
   </div>
 </template>
+
+<style scoped>
+.c-indicator-icon {
+  color: black;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.2rem;
+  text-shadow: none;
+}
+
+.c-hidden-tabs-background__visible {
+  background-color: var(--color-good);
+}
+
+.c-hidden-tabs-background__hidden {
+  background-color: var(--color-gh-purple);
+}
+
+.c-hidden-tabs-background__always-visible {
+  background-color: var(--color-disabled);
+  cursor: default;
+}
+</style>

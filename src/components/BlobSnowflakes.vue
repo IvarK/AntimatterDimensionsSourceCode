@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
 .c-blob-snowflake-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -80,7 +80,7 @@ export default {
 }
 
 .c-blob-background-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

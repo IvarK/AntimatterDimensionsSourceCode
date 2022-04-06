@@ -90,7 +90,6 @@ export default {
         rel="stylesheet"
         :href="themeCss"
       >
-      <BackgroundAnimations />
     </div>
     <div
       id="ui-fixed"
@@ -107,6 +106,7 @@ export default {
       <ModernSidebar v-if="view.newUI" />
       <SaveTimer />
       <SpeedrunStatus />
+      <BackgroundAnimations />
     </div>
     <HowToPlay />
     <InfoButton />

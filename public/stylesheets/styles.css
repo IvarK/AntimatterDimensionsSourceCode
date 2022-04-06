@@ -637,10 +637,6 @@ button:focus {
   padding: 1rem;
 }
 
-.c-reality-reminder-pointer {
-  cursor: pointer;
-}
-
 @keyframes a-celstial-reward-glow {
   0%   { box-shadow: inset 0 0 4rem var(--color-celestials) }
   50%  { box-shadow: inset 0 0 0 }

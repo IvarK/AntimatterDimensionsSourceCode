@@ -136,4 +136,8 @@ export default {
 .l-suggestions {
   font-size: 1rem;
 }
+
+.c-reality-reminder-pointer {
+  cursor: pointer;
+}
 </style>

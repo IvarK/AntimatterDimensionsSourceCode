@@ -64,7 +64,7 @@ export default {
     realityReminderClass() {
       return {
         "c-reality-reminder": true,
-        "c-reality-reminder-pointer": this.canReality && "this.suggestions.length !== 0",
+        "c-reality-reminder-pointer": this.canReality && this.suggestions.length !== 0,
       };
     },
     dropDownIconClass() {

@@ -66,8 +66,8 @@ export default {
     },
     indicatorArrowClassObject() {
       return {
-        "c-indicator-arrow--flipped": this.state === this.states.OPENING || this.state === this.states.OPEN,
         "c-indicator-arrow": true,
+        "c-indicator-arrow--flipped": this.state === this.states.OPENING || this.state === this.states.OPEN,
       };
     }
   },

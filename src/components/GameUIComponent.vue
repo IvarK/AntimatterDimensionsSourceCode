@@ -79,11 +79,8 @@ export default {
       <component :is="uiLayout">
         <component :is="page" />
       </component>
-      <PopupModal
-        v-if="view.modal.current"
-        :modal="view.modal.current"
-      />
-      <ModalProgressBar v-if="view.modal.progressBar" />
+      <HowToPlay />
+      <InfoButton />
       <link
         v-if="view.theme !== 'Normal'"
         type="text/css"
@@ -107,9 +104,12 @@ export default {
       <SaveTimer />
       <SpeedrunStatus />
       <BackgroundAnimations />
+      <PopupModal
+        v-if="view.modal.current"
+        :modal="view.modal.current"
+      />
+      <ModalProgressBar v-if="view.modal.progressBar" />
     </div>
-    <HowToPlay />
-    <InfoButton />
     <FadeToBlack v-if="rollCredits" />
     <CreditsContainer v-if="rollCredits" />
     <NewGame v-if="rollCredits" />

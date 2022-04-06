@@ -127,19 +127,22 @@ export class TimeStudyTree {
   parseStudyImport(input) {
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const output = [];
-    const studyCluster = TimeStudyTree.truncateInput(input).split("|")[0].split(",");
-    for (const studyRange of studyCluster) {
-      const studyRangeSplit = studyRange.split("-");
-      const studyArray = studyRangeSplit[1]
-        ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
-        : studyRangeSplit;
-      for (const study of studyArray) {
-        if (studyDB.includes(parseInt(study, 10))) {
-          const tsObject = TimeStudy(study);
-          this.selectedStudies.push(tsObject);
-          output.push(tsObject);
-        } else {
-          this.invalidStudies.push(study);
+    const studiesString = TimeStudyTree.truncateInput(input).split("|")[0];
+    if (studiesString.length) {
+      const studyCluster = studiesString.split(",");
+      for (const studyRange of studyCluster) {
+        const studyRangeSplit = studyRange.split("-");
+        const studyArray = studyRangeSplit[1]
+          ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
+          : studyRangeSplit;
+        for (const study of studyArray) {
+          if (studyDB.includes(parseInt(study, 10))) {
+            const tsObject = TimeStudy(study);
+            this.selectedStudies.push(tsObject);
+            output.push(tsObject);
+          } else {
+            this.invalidStudies.push(study);
+          }
         }
       }
     }

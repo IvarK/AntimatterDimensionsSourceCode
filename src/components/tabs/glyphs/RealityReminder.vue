@@ -60,6 +60,15 @@ export default {
     },
     clickText() {
       return `(click to ${this.isExpanded ? "collapse" : "expand"})`;
+    },
+    realityReminderClass() {
+      return {
+        "c-reality-reminder": true,
+        "c-reality-reminder-pointer": this.canReality && "this.suggestions.length !== 0",
+      };
+    },
+    dropDownIconClass() {
+      return this.isExpanded ? "far fa-minus-square" : "far fa-plus-square";
     }
   },
   created() {
@@ -93,7 +102,7 @@ export default {
 <template>
   <div
     v-if="isVisible"
-    class="c-reality-reminder"
+    :class="realityReminderClass"
     :style="styleObject"
     @click="clicked"
   >
@@ -104,6 +113,7 @@ export default {
       You are ready to complete this Reality!
     </span>
     <span v-else>
+      <i :class="dropDownIconClass" />
       You have {{ quantifyInt("thing", suggestions.length) }}
       you may want to do before Reality. {{ clickText }}
       <div

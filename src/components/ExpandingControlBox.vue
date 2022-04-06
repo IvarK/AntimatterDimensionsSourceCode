@@ -169,9 +169,7 @@ export default {
         <span class="l-expanding-control-box__button_text">
           {{ label }}
         </span>
-        <span
-          :class="indicatorArrowClassObject"
-        >
+        <span :class="indicatorArrowClassObject">
           ▼
         </span>
       </div>

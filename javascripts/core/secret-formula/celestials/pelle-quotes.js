@@ -28,7 +28,7 @@ GameDatabase.celestials.pelle.quotes.ARM = [
   "But, you never imagined that would be you, right?",
   "Incorrectly recollecting your exacting [Missing-Unseen-Erased] of memories.",
   `"Fabrication" of your own "ideology" just to fulfil your [Destiny-Mandate-Goals].`,
-  "[Amusing-Confusing-Laughter?].",
+  "[Amusing-Confusing-Laughter].",
   "And keep in mind I have no reason to [misconstrue-deceive-trick] you.",
   "After all, I've already won."
 ];
@@ -111,7 +111,7 @@ GameDatabase.celestials.pelle.quotes.STRIKE_5 = [
   "<15pelle-25effarig>The [Tired-Deity-Monarch].",
   "<15pelle-25effarig>In contrast, you usually ignore them.",
   "<15pelle-25effarig>They have power, but don't seem to irritate you.",
-  "<15pelle-25effarig>Is it that you know that they'll eventually destroy yourself?",
+  "<15pelle-25effarig>Is it that you know that they'll eventually destroy themselves?",
   "<15pelle-25effarig>And that you took so long this time, that they almost did?",
   "<15pelle-25effarig>Every time you rushed to the [Tired-Deity-Monarch], you lost.",
   "<15pelle-25effarig>Maybe this was your plan all along.",

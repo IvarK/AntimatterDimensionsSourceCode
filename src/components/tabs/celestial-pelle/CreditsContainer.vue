@@ -19,27 +19,13 @@ export default {
     },
     celestialDisplays() {
       return {
-        teresa: {
-          symbol: Teresa.symbol
-        },
-        effarig: {
-          symbol: Effarig.symbol
-        },
-        enslaved: {
-          symbol: Enslaved.symbol
-        },
-        v: {
-          symbol: V.symbol
-        },
-        ra: {
-          symbol: Ra.symbol
-        },
-        laitela: {
-          symbol: Laitela.symbol
-        },
-        pelle: {
-          symbol: Pelle.symbol
-        }
+        teresa: Teresa.symbol,
+        effarig: Effarig.symbol,
+        enslaved: Enslaved.symbol,
+        v: V.symbol,
+        ra: Ra.symbol,
+        laitela: Laitela.symbol,
+        pelle: Pelle.symbol
       };
     }
   },
@@ -57,9 +43,6 @@ export default {
       this.scroll = (GameEnd.endState - 4.5) * 48;
       if (this.audio) this.audio.volume = Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
     },
-    animName(x, duration = 10, type = "ease-in-out") {
-      return `a-${x}-credits ${duration}s ${type} infinite`;
-    },
     relevantPeople(role) {
       return this.people
         .filter(x => (typeof x.roles === "number" ? x.roles === role : x.roles.includes(role)))
@@ -76,11 +59,11 @@ export default {
     :style="creditStyles"
   >
     <div
-      v-for="(cel, celIndex) in celestialDisplays"
+      v-for="(celSymbol, celIndex) in celestialDisplays"
       :key="celIndex + '-end-credit-symbol-disp'"
       class="c-credits-cel-symbol"
       :class="`c-${celIndex}-credits`"
-      v-html="cel.symbol"
+      v-html="celSymbol"
     />
     <h1 class="c-credits-header">
       Antimatter Dimensions

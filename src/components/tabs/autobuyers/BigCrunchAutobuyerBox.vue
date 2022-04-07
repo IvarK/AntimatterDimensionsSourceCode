@@ -90,7 +90,7 @@ export default {
       <AutobuyerIntervalButton :autobuyer="autobuyer" />
     </template>
     <template
-      v-else
+      v-else-if="postBreak"
       #intervalSlot
     >
       <select

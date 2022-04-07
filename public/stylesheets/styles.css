@@ -1231,19 +1231,6 @@ screen and (max-width: 480px) {
   overflow-x: hidden;
 }
 
-.c-game-ui--fixed {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  pointer-events: none;
-
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  top: 0;
-  left: 0;
-}
-
 ._kong-test .c-game-ui {
   max-height: 100%;
 }

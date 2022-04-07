@@ -1,19 +1,10 @@
 <script>
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
-import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
 import TabComponents from "@/components/tabs";
-import PopupModal from "@/components/modals/PopupModal";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
-import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import NewGame from "@/components/tabs/celestial-pelle/NewGame";
-import SaveTimer from "@/components/SaveTimer";
-import SpeedrunStatus from "@/components/SpeedrunStatus";
-import BackgroundAnimations from "@/components/BackgroundAnimations";
-import ModalProgressBar from "@/components/modals/ModalProgressBar";
+import GameUIFixedComponents from "@/components/GameUIFixedComponents";
 import HowToPlay from "@/components/HowToPlay";
 import InfoButton from "@/components/InfoButton";
-import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
   name: "GameUIComponent",
@@ -21,23 +12,9 @@ export default {
     ...TabComponents,
     ClassicUi,
     ModernUi,
-    ModernSidebar,
-    PopupModal,
-    FadeToBlack,
-    CreditsContainer,
-    NewGame,
-    SaveTimer,
-    SpeedrunStatus,
-    BackgroundAnimations,
-    ModalProgressBar,
+    GameUIFixedComponents,
     HowToPlay,
-    InfoButton,
-    TimeTheoremShop
-  },
-  data() {
-    return {
-      rollCredits: false,
-    };
+    InfoButton
   },
   computed: {
     view() {
@@ -55,11 +32,6 @@ export default {
     },
     themeCss() {
       return `stylesheets/theme-${this.view.theme}.css`;
-    }
-  },
-  methods: {
-    update() {
-      this.rollCredits = GameEnd.endState >= 2.5;
     }
   }
 };
@@ -88,31 +60,7 @@ export default {
         :href="themeCss"
       >
     </div>
-    <div
-      id="ui-fixed"
-      class="c-game-ui--fixed"
-    >
-      <div
-        id="notification-container"
-        class="l-notification-container"
-      />
-      <TimeTheoremShop
-        v-if="view.subtab === 'studies'"
-        class="l-time-studies-tab__tt-shop"
-      />
-      <ModernSidebar v-if="view.newUI" />
-      <SaveTimer />
-      <SpeedrunStatus />
-      <BackgroundAnimations />
-      <PopupModal
-        v-if="view.modal.current"
-        :modal="view.modal.current"
-      />
-      <ModalProgressBar v-if="view.modal.progressBar" />
-    </div>
-    <FadeToBlack v-if="rollCredits" />
-    <CreditsContainer v-if="rollCredits" />
-    <NewGame v-if="rollCredits" />
+    <GameUIFixedComponents />
   </div>
 </template>
 

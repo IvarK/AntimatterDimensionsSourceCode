@@ -64,6 +64,7 @@ export default {
 <style scoped>
 .c-new-game-container {
   position: absolute;
+  pointer-events: auto;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

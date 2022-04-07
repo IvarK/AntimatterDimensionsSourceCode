@@ -54,7 +54,7 @@ export function buyStudiesUntil(id, ec = -1) {
     studyArray.push(...range(71, 103));
   } else if (TimeStudy.preferredPaths.dimension.path.length > 0) {
     studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
-  } else {
+  } else if (currTree.currDimPathCount < 1) {
     GameUI.notify.error("You haven't selected a preferred Dimension path.");
     return studyArray;
   }

@@ -55,7 +55,8 @@ export default {
       const progress = PlayerProgress.current;
       this.infinityUnlocked = progress.isInfinityUnlocked;
       this.eternityUnlocked = progress.isEternityUnlocked;
-      this.dilationUnlocked = progress.isRealityUnlocked || PlayerProgress.dilationUnlocked();
+      // 136 is given upon dilating
+      this.dilationUnlocked = progress.isRealityUnlocked || Achievement(136).canBeApplied;
       this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.value.gt(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;

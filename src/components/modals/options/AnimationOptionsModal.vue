@@ -1,6 +1,7 @@
 <script>
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
+import { PlayerProgress } from "../../../../javascripts/core/globals";
 
 export default {
   name: "AnimationOptionsModal",
@@ -13,6 +14,7 @@ export default {
       infinityUnlocked: false,
       eternityUnlocked: false,
       dilationUnlocked: false,
+      tachyonsUnlocked: false,
       realityUnlocked: false,
       animatedThemeUnlocked: false,
       bigCrunch: false,
@@ -53,7 +55,8 @@ export default {
       const progress = PlayerProgress.current;
       this.infinityUnlocked = progress.isInfinityUnlocked;
       this.eternityUnlocked = progress.isEternityUnlocked;
-      this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
+      this.dilationUnlocked = progress.isRealityUnlocked || PlayerProgress.dilationUnlocked();
+      this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.value.gt(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.isS11Active = player.options.theme === "S11";
@@ -93,7 +96,7 @@ export default {
         text="Dilation:"
       />
       <ModalOptionsToggleButton
-        v-if="dilationUnlocked"
+        v-if="tachyonsUnlocked"
         v-model="tachyonParticles"
         text="Tachyon particles:"
       />

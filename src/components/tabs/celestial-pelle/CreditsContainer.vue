@@ -194,9 +194,7 @@ export default {
   color: var(--color-pelle--base);
   animation: a-pelle-credits 5s linear infinite;
 }
-</style>
 
-<style>
 @keyframes a-teresa-credits {
   0% { transform: rotate(61deg); }
   10% { transform: rotate(322deg); }

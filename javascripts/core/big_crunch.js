@@ -1,9 +1,10 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
 import { SpeedrunMilestones } from "./speedrun.js";
+import { FullScreenAnimationHandler } from "./full-screen-animation-handler.js";
 
 export function bigCrunchAnimation() {
-  AnimationHandler.display("implode", 2);
+  FullScreenAnimationHandler.display("implode", 2);
 }
 
 function handleChallengeCompletion() {
@@ -22,7 +23,7 @@ function handleChallengeCompletion() {
 
 export function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
-  if (!disableAnimation && player.options.animations.bigCrunch && !AnimationHandler.isDisplaying) {
+  if (!disableAnimation && player.options.animations.bigCrunch && !FullScreenAnimationHandler.isDisplaying) {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);
   } else {

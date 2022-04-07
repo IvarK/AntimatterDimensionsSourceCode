@@ -1,4 +1,4 @@
-export const AnimationHandler = {
+export const FullScreenAnimationHandler = {
   isDisplaying: false,
   displayForce(name, duration) {
     document.getElementById("ui").style.animation = `${name} ${duration}s 1`;

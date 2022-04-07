@@ -12,5 +12,3 @@ import "./async-utils.js";
 import "./event-hub.js";
 
 export * from "./game-mechanics/index.js";
-
-export * from "./animations.js";

@@ -1,5 +1,6 @@
 import { DC } from "./constants.js";
 import { sha512_256 } from "js-sha512";
+import { FullScreenAnimationHandler } from "./full-screen-animation-handler.js";
 
 /* eslint-disable no-console */
 // Disabling no-console here seems
@@ -92,7 +93,7 @@ dev.tripleEverything = function() {
 };
 
 dev.barrelRoll = function() {
-  AnimationHandler.display("barrelRoll", 5);
+  FullScreenAnimationHandler.display("barrelRoll", 5);
 };
 
 dev.spin3d = function() {

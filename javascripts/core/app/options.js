@@ -1,4 +1,5 @@
 import { sha512_256 } from "js-sha512";
+import { FullScreenAnimationHandler } from "../full-screen-animation-handler";
 
 export class GameOptions {
 
@@ -65,8 +66,8 @@ export function isSecretImport(data) {
 
 export function tryImportSecret(data) {
   const index = secretImportIndex(data);
-  if (index === 0 && !AnimationHandler.isDisplaying) {
-    AnimationHandler.display("barrelRoll", 5);
+  if (index === 0 && !FullScreenAnimationHandler.isDisplaying) {
+    FullScreenAnimationHandler.display("barrelRoll", 5);
     SecretAchievement(15).unlock();
     return true;
   }

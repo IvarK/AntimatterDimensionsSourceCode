@@ -1,5 +1,6 @@
 import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
+import { FullScreenAnimationHandler } from "./full-screen-animation-handler.js";
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
@@ -57,7 +58,7 @@ function giveEternityRewards(auto) {
 }
 
 export function eternityAnimation() {
-  AnimationHandler.display("eternify", 3);
+  FullScreenAnimationHandler.display("eternify", 3);
 }
 
 export function eternityResetRequest() {
@@ -173,7 +174,7 @@ function applyRealityUpgradesAfterEternity() {
 function askEternityConfirmation() {
   if (player.options.confirmations.eternity) {
     Modal.eternity.show();
-  } else if (player.options.animations.eternity && !AnimationHandler.isDisplaying) {
+  } else if (player.options.animations.eternity && !FullScreenAnimationHandler.isDisplaying) {
     eternityAnimation();
     setTimeout(eternity, 2250);
   } else {

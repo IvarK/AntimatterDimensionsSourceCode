@@ -115,7 +115,7 @@ export default {
   white-space: nowrap;
   border: 0.2rem solid var(--color-accent);
   user-select: none;
-  pointer-events: all;
+  pointer-events: auto;
   padding: 0.8rem 2rem;
   z-index: 5;
 }

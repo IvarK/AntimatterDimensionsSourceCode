@@ -48,7 +48,7 @@ export default {
   border-right: 0.1rem solid var(--color-accent);
   cursor: pointer;
   user-select: none;
-  pointer-events: all;
+  pointer-events: auto;
   padding: 0 0.5rem;
   z-index: 5;
 }

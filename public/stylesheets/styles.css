@@ -5157,7 +5157,7 @@ screen and (max-width: 480px) {
 
 .l-modal-overlay {
   position: absolute;
-  pointer-events: all;
+  pointer-events: auto;
   left: 0;
   top: 0;
   width: 100vw;
@@ -5170,7 +5170,7 @@ screen and (max-width: 480px) {
 
 .l-modal {
   position: absolute;
-  pointer-events: all;
+  pointer-events: auto;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -5917,7 +5917,7 @@ kbd {
   flex-direction: column-reverse;
   align-items: flex-end;
   position: absolute;
-  pointer-events: all;
+  pointer-events: auto;
   top: 0;
   right: 0;
   margin-top: 0.5rem;

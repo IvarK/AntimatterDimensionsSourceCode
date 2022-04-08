@@ -102,7 +102,10 @@ export class TimeStudyTree {
     this.sets.forEach((ids, name) => (internal = internal.replace(name, ids.join())));
     return internal
       .replace(/[|,]$/u, "")
-      .replaceAll(" ", "");
+      .replaceAll(" ", "")
+      // Allows 11,,21 to be parsed as 11,21 and 11,|1 to be parsed as 11|1
+      .replaceAll(",,", "")
+      .replaceAll(",|", "");
   }
 
   static formatStudyList(input) {
@@ -119,7 +122,7 @@ export class TimeStudyTree {
         }
       }
     });
-    return internal.replaceAll(",", ", ");
+    return internal.replaceAll(",", ", ").replace("|", " | ");
   }
 
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on

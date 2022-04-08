@@ -24,8 +24,7 @@ export function buyStudiesUntil(id, ec = -1) {
 
   // Priority for behavior when buying in the Dimension split; we follow only the first applicable entry below:
   // - If we're buying a study within the split, we first buy just the requested path up to the requested study.
-  //   If we still have additional available paths at this point, we also buy others in order specified first by the
-  //   player's chosen priority and then numerically (stops buying)
+  //   (stops buying)
   // - If we want to buy EC11 or EC12 we only buy the required dimension path unless we have the EC requirement perk
   //   (continues onward)
   // - If we can't buy any additional paths or have 3 paths available, we attempt to buy everything here, prioritizing
@@ -35,13 +34,6 @@ export function buyStudiesUntil(id, ec = -1) {
   // - If the player doesn't have a preferred path, we say so and do nothing (stops buying)
   if (id < 111) {
     studyArray.push(...NormalTimeStudies.paths[requestedPath].filter(s => (s <= id)));
-    // The purchasing logic is doing the heavy lifting here; studies can't be double-bought, nor can they be bought
-    // if we don't have another available path
-    const pathBuyOrder = TimeStudy.preferredPaths.dimension.path
-      .concat([TIME_STUDY_PATH.ANTIMATTER_DIM, TIME_STUDY_PATH.INFINITY_DIM, TIME_STUDY_PATH.TIME_DIM]);
-    for (const path of pathBuyOrder) {
-      studyArray.push(...NormalTimeStudies.paths[path].filter(s => s <= lastInPrevRow));
-    }
     return studyArray;
   }
 
@@ -54,13 +46,19 @@ export function buyStudiesUntil(id, ec = -1) {
     studyArray.push(...range(71, 103));
   } else if (TimeStudy.preferredPaths.dimension.path.length > 0) {
     studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
-  } else if (currTree.currDimPathCount < 1) {
+  } else if (currTree.currDimPathCount === 0) {
     GameUI.notify.error("You haven't selected a preferred Dimension path.");
     return studyArray;
   }
 
   // Explicitly purchase 111 here if it's included and stop if applicable, as it isn't covered by logic in either split.
   if (id >= 111) studyArray.push(111);
+
+  // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
+  if (currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2) {
+    GameUI.notify.error("You haven't selected a second preferred Dimension path.");
+  }
+
   if (id < 121) return studyArray;
 
   // Priority for behavior when buying in the Pace split; we follow only the first applicable entry below. In contrast
@@ -106,12 +104,9 @@ export function buyStudiesUntil(id, ec = -1) {
     currTree = GameCache.currentStudyTree.value;
     studyArray = [];
 
-    // Buy the second preferred dimension path if we have one, otherwise show a warning if
-    // the player can choose the second preferred dimension path and hasn't yet done so.
+    // Buy the second preferred dimension path if we have one
     if (TimeStudy.preferredPaths.dimension.path.length > 1) {
       studyArray.push(...TimeStudy.preferredPaths.dimension.studies.filter(s => (s <= id)));
-    } else if (currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2) {
-      GameUI.notify.error("You haven't selected a second preferred Dimension path.");
     }
 
     studyArray.push(...range(211, Math.min(lastInPrevRow, 214)));

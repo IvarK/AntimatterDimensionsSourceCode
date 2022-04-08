@@ -2,7 +2,7 @@ import pako from "pako/dist/pako.esm.mjs";
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker.js";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase, ref, get, set } from "firebase/database";
 
 const firebaseConfig = {
@@ -31,6 +31,25 @@ export const Cloud = {
 
   async login() {
     await signInWithPopup(this.auth, this.provider);
+  },
+
+
+  async manualCloudLogin(EmailAddress,Password) {
+    //try{
+      await signInWithEmailAndPassword(this.auth, EmailAddress, Password)
+    /*}catch(error){
+      console.log(`Could Not Login (Error: ${error}`)
+      Cloud.manualCloudCreate(EmailAddress,Password)
+    }*/
+  },
+
+  async manualCloudCreate(EmailAddress,Password) {
+    //try{
+      await createUserWithEmailAndPassword(this.auth, EmailAddress, Password);
+    /*}catch(error){
+      console.log(`Could Not Create (Error: ${error}`)
+      Cloud.manualCloudLogin(EmailAddress,Password)
+    }*/
   },
 
   async loadMobile() {

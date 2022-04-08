@@ -2,6 +2,7 @@ import MessageModal from "@/components/modals/MessageModal";
 import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
+import CloudManualLoginModal from "@/components/modals/cloud/CloudManualLoginModal";
 import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
 import InfinityChallengeStartModal from "@/components/modals/challenges/InfinityChallengeStartModal";
 import NormalChallengeStartModal from "@/components/modals/challenges/NormalChallengeStartModal";
@@ -236,6 +237,7 @@ Modal.celestialQuote = new class extends Modal {
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
+Modal.manualCloud = new Modal(CloudManualLoginModal);
 // eslint-disable-next-line max-params
 Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
   Modal.hide();

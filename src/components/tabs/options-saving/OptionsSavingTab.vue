@@ -155,7 +155,7 @@ export default {
         <OptionsButton
           v-else
           v-tooltip="'This will connect your Google Account to your Antimatter Dimensions savefiles'"
-          onclick="GameOptions.login()"
+          onclick="Modal.manualCloud.show()"
         >
           Login with Google to enable Cloud Saving
         </OptionsButton>

@@ -1,7 +1,6 @@
 <script>
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
-import { PlayerProgress } from "../../../../javascripts/core/globals";
 
 export default {
   name: "AnimationOptionsModal",

@@ -56,7 +56,7 @@ export default {
       this.eternityUnlocked = progress.isEternityUnlocked;
       // 136 is given upon dilating
       this.dilationUnlocked = progress.isRealityUnlocked || Achievement(136).canBeApplied;
-      this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.value.gt(0);
+      this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.gt(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.isS11Active = player.options.theme === "S11";

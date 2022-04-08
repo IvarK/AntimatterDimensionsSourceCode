@@ -4955,8 +4955,8 @@ screen and (max-width: 480px) {
   font-weight: bold;
   font-size: 1.05rem;
   border: 0.1rem solid;
-  width: 17rem;
-  height: 9.5rem;
+  width: 19rem;
+  height: 10rem;
   transition-duration: 0.2s;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;

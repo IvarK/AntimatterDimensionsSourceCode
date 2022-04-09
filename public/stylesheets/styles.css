@@ -9155,7 +9155,7 @@ input.o-automator-block-input {
 .l-hide-modal-subtab-container {
   display: flex;
   flex-wrap: wrap;
-  width: 70rem;
+  width: 61rem;
   justify-content: center;
   position: relative;
 }

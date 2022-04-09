@@ -58,6 +58,6 @@ export default {
 
 <style scoped>
 .l-wrapper {
-  width: auto;
+  width: 62rem;
 }
 </style>

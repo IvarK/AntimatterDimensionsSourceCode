@@ -111,6 +111,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
+  width: 2rem;
   padding: 0.2rem;
   text-shadow: none;
 }

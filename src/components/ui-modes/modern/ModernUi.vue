@@ -99,8 +99,7 @@ export default {
           ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
         if (isIC8Running) powerArray.push(`Production: /
           ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
-        // Add space to stop it from showing "You have x matter.Matter: /" or derivatives
-        this.challengePower = ` ${powerArray.join(", ")}`;
+        this.challengePower = powerArray.join(", ");
       }
     },
   },
@@ -159,8 +158,12 @@ export default {
             Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
           </div>
           <br>
-          <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
-          <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
+          <span v-if="isInMatterChallenge">
+            There is {{ format(matter, 2, 1) }} matter.
+          </span>
+          <span v-if="isChallengePowerVisible">
+            {{ challengePower }}
+          </span>
           <br v-if="isInMatterChallenge || isChallengePowerVisible">
           <HeaderBlackHole />
         </div>

@@ -6,7 +6,7 @@ export function buyStudiesUntil(id, ec = -1) {
   let studyArray = [];
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const requestedPath = TimeStudy(id).path;
-  let currTree = GameCache.currentStudyTree.value;
+  const currTree = GameCache.currentStudyTree.value;
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
   const ecHasRequirement = !Perk.studyECRequirement.isBought;
@@ -32,6 +32,7 @@ export function buyStudiesUntil(id, ec = -1) {
   //   (continues onward)
   // - If the player has a preferred path, we attempt to buy it (continues onward)
   // - If the player doesn't have a preferred path, we say so and do nothing (stops buying)
+  // - Otherwise we do nothing (stops buying)
   if (id < 111) {
     studyArray.push(...NormalTimeStudies.paths[requestedPath].filter(s => (s <= id)));
     return studyArray;
@@ -48,6 +49,8 @@ export function buyStudiesUntil(id, ec = -1) {
     studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
   } else if (currTree.currDimPathCount === 0) {
     GameUI.notify.error("You haven't selected a preferred Dimension path.");
+    return studyArray;
+  } else {
     return studyArray;
   }
 
@@ -101,7 +104,6 @@ export function buyStudiesUntil(id, ec = -1) {
     // We need to commit what we have to the game state, because the check for priorityRequirement
     // requires us knowing if we have actually purchased 201.
     TimeStudyTree.commitToGameState(studyArray);
-    currTree = GameCache.currentStudyTree.value;
     studyArray = [];
 
     // Buy the second preferred dimension path if we have one

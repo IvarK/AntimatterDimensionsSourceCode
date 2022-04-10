@@ -2,9 +2,7 @@
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import TabComponents from "@/components/tabs";
-import GameUIFixedComponents from "@/components/GameUIFixedComponents";
-import HowToPlay from "@/components/HowToPlay";
-import InfoButton from "@/components/InfoButton";
+import GameUiFixedComponents from "@/components/GameUiFixedComponents";
 
 export default {
   name: "GameUIComponent",
@@ -12,9 +10,7 @@ export default {
     ...TabComponents,
     ClassicUi,
     ModernUi,
-    GameUIFixedComponents,
-    HowToPlay,
-    InfoButton
+    GameUiFixedComponents
   },
   computed: {
     view() {
@@ -51,8 +47,6 @@ export default {
       <component :is="uiLayout">
         <component :is="page" />
       </component>
-      <HowToPlay />
-      <InfoButton />
       <link
         v-if="view.theme !== 'Normal'"
         type="text/css"
@@ -60,7 +54,7 @@ export default {
         :href="themeCss"
       >
     </div>
-    <GameUIFixedComponents />
+    <GameUiFixedComponents />
   </div>
 </template>
 

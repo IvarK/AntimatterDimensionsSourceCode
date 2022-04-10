@@ -1,4 +1,6 @@
 <script>
+import HowToPlay from "@/components/HowToPlay";
+import InfoButton from "@/components/InfoButton";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
 import SaveTimer from "@/components/SaveTimer";
@@ -11,8 +13,10 @@ import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 
 export default {
-  name: "GameUIFixedComponents",
+  name: "GameUiFixedComponents",
   components: {
+    HowToPlay,
+    InfoButton,
     TimeTheoremShop,
     ModernSidebar,
     SaveTimer,
@@ -52,6 +56,8 @@ export default {
       id="notification-container"
       class="l-notification-container"
     />
+    <HowToPlay />
+    <InfoButton />
     <TimeTheoremShop
       v-if="view.subtab === 'studies'"
       class="l-time-studies-tab__tt-shop"

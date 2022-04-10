@@ -1,7 +1,7 @@
 import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
 import { DC } from "./constants.js";
 import { SpeedrunMilestones } from "./speedrun.js";
-import { FullScreenAnimationHandler } from "./full-screen-animation-handler.js";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 export function bigCrunchAnimation() {
   FullScreenAnimationHandler.display("implode", 2);

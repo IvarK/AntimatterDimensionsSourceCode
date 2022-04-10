@@ -17,12 +17,10 @@ export const GameEnd = {
 
   gameLoop(diff) {
     if (this.removeAdditionalEnd) {
-      if (this.additionalEnd > 0) {
-        this.additionalEnd -= 0.12;
-        if (this.additionalEnd < 0) {
-          this.additionalEnd = 0;
-          this.removeAdditionalEnd = false;
-        }
+      this.additionalEnd -= 0.12;
+      if (this.additionalEnd < 0) {
+        this.additionalEnd = 0;
+        this.removeAdditionalEnd = false;
       }
     }
     if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {

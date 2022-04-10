@@ -7,10 +7,10 @@ export const GameEnd = {
 
   _additionalEnd: 0,
   get additionalEnd() {
-    return (player.gameEnd.isGameEnd || this.removeAdditionalEnd) ? this._additionalEnd : 0;
+    return (player.isGameEnd || this.removeAdditionalEnd) ? this._additionalEnd : 0;
   },
   set additionalEnd(x) {
-    this._additionalEnd = (player.gameEnd.isGameEnd || this.removeAdditionalEnd) ? x : 0;
+    this._additionalEnd = (player.isGameEnd || this.removeAdditionalEnd) ? x : 0;
   },
 
   removeAdditionalEnd: false,
@@ -26,7 +26,7 @@ export const GameEnd = {
       }
     }
     if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {
-      player.gameEnd.isGameEnd = true;
+      player.isGameEnd = true;
       this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   }

@@ -337,6 +337,4 @@ GameDatabase.credits = {
   ]
 };
 
-GameDatabase.credits.people.sort((a, b) => a.name.localeCompare(b.name));
-
 GameDatabase.credits.roles.count = Object.keys(GameDatabase.credits.roles).length;

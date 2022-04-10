@@ -46,7 +46,7 @@ export default {
     relevantPeople(role) {
       return this.people
         .filter(x => (typeof x.roles === "number" ? x.roles === role : x.roles.includes(role)))
-        .sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase());
+        .sort((a, b) => a.name.localeCompare(b.name));
     }
   }
 };
@@ -54,7 +54,6 @@ export default {
 
 <template>
   <div
-    v-if="rolling"
     class="c-credits-container"
     :style="creditStyles"
   >

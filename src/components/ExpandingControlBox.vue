@@ -24,6 +24,11 @@ export default {
       required: false,
       default: undefined,
     },
+    css: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -50,6 +55,9 @@ export default {
       return {
         "l-expanding-control-box--controls-width": this.widthSource !== undefined
       };
+    },
+    buttonClassObject() {
+      return this.css === undefined ? "l-expanding-control-box__button" : this.css;
     },
     containerStyle() {
       return {
@@ -163,12 +171,10 @@ export default {
       <div
         v-if="!$slots.header"
         ref="expandButton"
-        class="l-expanding-control-box__button"
+        :class="buttonClassObject"
         @click="openRequest = !openRequest"
       >
-        <span class="l-expanding-control-box__button_text">
-          {{ label }}
-        </span>
+        {{ label }}
         <span :class="indicatorArrowClassObject">
           ▼
         </span>
@@ -224,15 +230,12 @@ export default {
   height: 2.5rem;
 }
 
-.l-expanding-control-box__button_text {
-  margin-right: 0.6rem;
-}
-
 .c-indicator-arrow--flipped {
   transform: rotate(-180deg);
 }
 
 .c-indicator-arrow {
-  transition: all 0.25s ease-out;
+  margin-left: 0.6rem;
+  transition: transform 0.25s ease-out;
 }
 </style>

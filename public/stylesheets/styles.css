@@ -2464,6 +2464,7 @@ screen and (max-width: 480px) {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
 }
 
 .c-options-grid__notations {

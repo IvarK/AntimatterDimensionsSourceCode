@@ -30,10 +30,10 @@ export default {
   },
   computed: {
     themeLabel() {
-      return `Theme: ${Themes.find(this.theme).displayName()} ▼`;
+      return `Theme: ${Themes.find(this.theme).displayName()}`;
     },
     notationLabel() {
-      return `Notation: ${this.notation} ▼`;
+      return `Notation: ${this.notation}`;
     },
     UILabel() {
       return `UI: ${this.$viewModel.newUI ? "Modern" : "Classic"}`;
@@ -79,22 +79,20 @@ export default {
         </OptionsButton>
       </div>
       <div class="l-options-grid__row">
-        <ExpandingControlBox class="l-options-grid__button c-options-grid__notations">
-          <template #header>
-            <div class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
-              {{ themeLabel }}
-            </div>
-          </template>
+        <ExpandingControlBox
+          class="l-options-grid__button c-options-grid__notations"
+          css="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
+          :label="themeLabel"
+        >
           <template #dropdown>
             <SelectThemeDropdown />
           </template>
         </ExpandingControlBox>
-        <ExpandingControlBox class="l-options-grid__button c-options-grid__notations">
-          <template #header>
-            <div class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
-              {{ notationLabel }}
-            </div>
-          </template>
+        <ExpandingControlBox
+          class="l-options-grid__button c-options-grid__notations"
+          css="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
+          :label="notationLabel"
+        >
           <template #dropdown>
             <SelectNotationDropdown />
           </template>

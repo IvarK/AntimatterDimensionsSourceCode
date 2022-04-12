@@ -24,7 +24,7 @@ export default {
       required: false,
       default: undefined,
     },
-    css: {
+    buttonStyle: {
       type: String,
       required: false,
       default: undefined,
@@ -57,7 +57,7 @@ export default {
       };
     },
     buttonClassObject() {
-      return this.css === undefined ? "l-expanding-control-box__button" : this.css;
+      return this.buttonStyle === undefined ? "l-expanding-control-box__button" : this.buttonStyle;
     },
     containerStyle() {
       return {

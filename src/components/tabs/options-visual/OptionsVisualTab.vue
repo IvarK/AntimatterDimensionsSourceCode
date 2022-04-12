@@ -81,7 +81,7 @@ export default {
       <div class="l-options-grid__row">
         <ExpandingControlBox
           class="l-options-grid__button c-options-grid__notations"
-          css="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
+          button-style="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
           :label="themeLabel"
         >
           <template #dropdown>
@@ -90,7 +90,7 @@ export default {
         </ExpandingControlBox>
         <ExpandingControlBox
           class="l-options-grid__button c-options-grid__notations"
-          css="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
+          button-style="o-primary-btn o-primary-btn--option l-options-grid__notations-header"
           :label="notationLabel"
         >
           <template #dropdown>

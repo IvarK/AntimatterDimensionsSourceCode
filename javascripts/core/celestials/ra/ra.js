@@ -618,7 +618,7 @@ export const RA_UNLOCKS = {
     reward: "Unlock Enslaved's Memories",
     pet: Ra.pets.effarig,
     level: 8,
-    displayIcon: `<span class="fas fa-link"></span>`
+    displayIcon: `<span></span>`
   },
   SHARD_LEVEL_BOOST: {
     id: 12,

@@ -50,7 +50,7 @@ export default {
       this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.generatedGalaxies / this.cap);
     },
     increaseCap() {
-      GalaxyGenerator.startSacrifice();
+      if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.galaxies = !this.isCollapsed;

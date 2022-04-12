@@ -321,7 +321,6 @@ export const Pelle = {
       const x = str.split("");
       for (let i = 0; i < x.length / 1.7; i++) {
         const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) % 964372 + i) * x.length);
-        // .splice should return the deleted index.
         x[randomIndex] = this.randomSymbol;
       }
       return x.join("");

@@ -111,7 +111,7 @@ export default {
 }
 
 .o-pelle-button {
-  background: var(--color-prestige--accent);
+  background: var(--color-text-inverted);
   color: var(--color-text);
   border: 0.1rem solid var(--color-pelle--base);
   border-radius: 0.5rem;

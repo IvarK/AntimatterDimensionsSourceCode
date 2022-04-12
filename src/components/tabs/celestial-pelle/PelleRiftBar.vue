@@ -277,13 +277,23 @@ export default {
 
 @keyframes a-pelle-bar-overfill-pulse {
   /* #ed143d66 is the base pelle colour except transparent. */
-  0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
-  50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
-  100% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 0.4); }
+  50% { box-shadow: 0 0 1.5rem 0 rgba(237, 20, 61, 0.4); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 0.4); }
+}
+
+@keyframes a-pelle-bar-overfill-pulse-but-green {
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 0.533); }
+  50% { box-shadow: 0 0 1.5rem 0rem rgba(124, 183, 39, 0.533); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 0.533); }
 }
 
 .c-pelle-rift-bar-overfill-container {
   animation: a-pelle-bar-overfill-pulse 1s infinite linear;
+}
+
+.t-s1 .c-pelle-rift-bar-overfill-container {
+  animation: a-pelle-bar-overfill-pulse-but-green 1s infinite linear;
 }
 
 

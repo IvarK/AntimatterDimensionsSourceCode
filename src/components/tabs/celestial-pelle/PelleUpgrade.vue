@@ -36,7 +36,8 @@ export default {
       currentTimeEstimate: new Decimal(0),
       projectedTimeEstimate: new Decimal(0),
       isCapped: false,
-      hovering: false
+      hovering: false,
+      hasRemnants: false
     };
   },
   computed: {
@@ -54,7 +55,7 @@ export default {
       return { prefix, value, next };
     },
     timeEstimate() {
-      if (!this.hasTimeEstimate) return null;
+      if (!this.hasTimeEstimate || !this.hasRemnants) return null;
       return this.currentTimeEstimate;
     },
     hasTimeEstimate() {
@@ -95,6 +96,7 @@ export default {
       this.projectedTimeEstimate = TimeSpan
         .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
         .toTimeEstimate();
+      this.hasRemnants = Pelle.cel.remnants > 0;
     },
     secondsUntilCost(rate) {
       const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
@@ -159,7 +161,7 @@ export default {
 .c-pelle-upgrade {
   padding: 2rem;
   color: var(--color-text);
-  background: var(--color-prestige--accent);
+  background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle-secondary);
   border-radius: .5rem;
   font-family: Typewriter;

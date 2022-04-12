@@ -6,16 +6,19 @@ GameDatabase.celestials.teresa = {
       id: 0,
       price: 1e14,
       description: "Unlock Teresa's Reality.",
+      onUnlocked: () => Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY),
     },
     epGen: {
       id: 1,
       price: 1e18,
       description: "Unlock passive Eternity Point generation.",
+      isDisabledInDoomed: true
     },
     effarig: {
       id: 2,
       price: 1e21,
       description: "Unlock Effarig, Celestial of Ancient Relics.",
+      onUnlocked: () => Teresa.quotes.show(Teresa.quotes.EFFARIG),
     },
     shop: {
       id: 3,
@@ -31,6 +34,7 @@ GameDatabase.celestials.teresa = {
       id: 5,
       price: 1e6,
       description: "You start Reality with all Eternity Upgrades unlocked.",
+      isDisabledInDoomed: true
     }
   }
 };

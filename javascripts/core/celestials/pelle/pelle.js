@@ -159,10 +159,6 @@ export const Pelle = {
       "companiondescription", "companionEP"];
   },
 
-  get uselessTeresaUnlocks() {
-    return ["epGen", "startEU"];
-  },
-
   get specialGlyphEffect() {
     const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
     let description;

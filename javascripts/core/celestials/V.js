@@ -104,7 +104,7 @@ class VUnlockState extends BitUpgradeState {
     return Pelle.isDoomed && !this === VUnlocks.vAchievementUnlock;
   }
 
-  get isEffectConditionSatisfied() {
+  get isEffectActive() {
     return this.isUnlocked && !this.pelleDisabled;
   }
 
@@ -123,7 +123,7 @@ class VUnlockState extends BitUpgradeState {
   }
 
   get formattedEffect() {
-    if (!this.config.effect) return "";
+    if (!this.config.effect || !this.config.format) return "";
 
     return this.config.format(this.effectValue);
   }
@@ -146,20 +146,16 @@ export const VRunUnlocks = {
   all: VRunUnlock.index.compact(),
 };
 
-export const VUnlocks = (function() {
-  const db = GameDatabase.celestials.v.unlocks;
-  const result = {};
-  for (const idx in db) {
-    result[idx] = new VUnlockState(db[idx]);
-  }
-  return result;
-}());
+export const VUnlocks = mapGameDataToObject(
+  GameDatabase.celestials.v.unlocks,
+  config => new VUnlockState(config)
+);
 
 export const V = {
   displayName: "V",
   spaceTheorems: 0,
   checkForUnlocks() {
-    for (const unl of Object.values(VUnlocks)) {
+    for (const unl of VUnlocks.all) {
       if (unl === VUnlocks.vAchievementUnlock) continue;
       unl.unlock();
     }

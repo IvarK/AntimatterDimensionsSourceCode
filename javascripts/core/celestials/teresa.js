@@ -20,11 +20,8 @@ export const Teresa = {
     this.checkForUnlocks();
   },
   checkForUnlocks() {
-    for (const info of Object.values(TeresaUnlocks)) {
-      if (!info.isUnlocked && this.pouredAmount >= info.price) {
-        // eslint-disable-next-line no-bitwise
-        info.unlock();
-      }
+    for (const info of TeresaUnlocks.all) {
+      info.unlock();
     }
   },
   initializeRun() {
@@ -146,11 +143,15 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   get pelleDisabled() {
-    return Pelle.isDoomed && Pelle.uselessTeresaUnlocks.includes(this.config.name);
+    return Pelle.isDoomed && this.isDisabledInDoomed;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isUnlocked && !this.pelleDisabled;
+  }
+
+  get canBeUnlocked() {
+    return !this.isUnlocked && Teresa.pouredAmount >= this.price;
   }
 
   get description() {
@@ -162,19 +163,14 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   onUnlock() {
-    EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, Teresa, this);
+    this.onUnlocked?.();
   }
 }
 
-export const TeresaUnlocks = (function() {
-  const db = GameDatabase.celestials.teresa.unlocks;
-  const result = {};
-  for (const idx in db) {
-    db[idx].name = idx;
-    result[idx] = new TeresaUnlockState(db[idx]);
-  }
-  return result;
-}());
+export const TeresaUnlocks = mapGameDataToObject(
+  GameDatabase.celestials.teresa.unlocks,
+  config => new TeresaUnlockState(config)
+);
 
 export const PerkShopUpgrade = (function() {
   const db = GameDatabase.celestials.perkShop;
@@ -190,13 +186,6 @@ export const PerkShopUpgrade = (function() {
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
-});
-
-EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
-  if (celestial === Teresa) {
-    if (upgradeInfo === TeresaUnlocks.run) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
-    if (upgradeInfo === TeresaUnlocks.effarig) Teresa.quotes.show(Teresa.quotes.EFFARIG);
-  }
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

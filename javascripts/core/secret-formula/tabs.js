@@ -411,7 +411,7 @@ GameDatabase.tabs = [
         name: "Effarig",
         symbol: "Ϙ",
         component: "EffarigTab",
-        condition: () => TeresaUnlocks.effarig.canBeApplied,
+        condition: () => TeresaUnlocks.effarig.isUnlocked,
         id: 2,
         hidable: true,
       },

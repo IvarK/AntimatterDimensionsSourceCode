@@ -72,7 +72,7 @@ export default {
           VUnlocks.fastAutoEC
         ],
         [
-          VUnlocks.autoAutoclean,
+          VUnlocks.autoAutoClean,
           VUnlocks.achievementBH,
           VUnlocks.raUnlock
         ],

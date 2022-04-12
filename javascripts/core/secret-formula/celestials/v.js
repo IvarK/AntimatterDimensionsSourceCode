@@ -227,7 +227,7 @@ GameDatabase.celestials.v = {
         : `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`),
       requirement: () => V.spaceTheorems >= 10
     },
-    autoAutoclean: {
+    autoAutoClean: {
       id: 4,
       reward: "Unlock the ability to Auto Purge on Reality.",
       description: () => `Have ${formatInt(16)} V-Achievements`,
@@ -248,6 +248,7 @@ GameDatabase.celestials.v = {
                 Unlock Ra, Celestial of the Forgotten.`;
       },
       description: () => `Have ${formatInt(36)} V-Achievements`,
+      effect: 2,
       requirement: () => V.spaceTheorems >= 36
     }
   }

@@ -37,7 +37,7 @@ export default {
     };
   },
   computed: {
-    unlockInfos: () => TeresaUnlocks,
+    unlockInfos: () => TeresaUnlocks.all,
     pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
       const upgrades = [
@@ -102,7 +102,7 @@ export default {
       this.perkPoints = Currency.perkPoints.value;
       this.rm.copyFrom(Currency.realityMachines);
       this.isRunning = Teresa.isRunning;
-      this.canUnlockNextPour = Object.values(TeresaUnlocks)
+      this.canUnlockNextPour = TeresaUnlocks.all
         .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !unlock.isUnlocked).length > 0;
     },
     startRun() {

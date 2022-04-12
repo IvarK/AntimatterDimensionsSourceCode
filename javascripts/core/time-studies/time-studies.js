@@ -1,5 +1,14 @@
 import { GameMechanicState } from "../game-mechanics/index.js";
 
+function showSecondPreferredWarning(currTree, warningShown = false) {
+  // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
+  if (!warningShown && currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2) {
+    GameUI.notify.error("You haven't selected a second preferred Dimension path.");
+    return true;
+  }
+  return false;
+}
+
 // This is only ever called from manual player actions, which means we can immediately commit them to the game state
 // eslint-disable-next-line complexity
 export function buyStudiesUntil(id, ec = -1) {
@@ -50,17 +59,12 @@ export function buyStudiesUntil(id, ec = -1) {
   } else if (currTree.currDimPathCount === 0) {
     GameUI.notify.error("You haven't selected a preferred Dimension path.");
     return studyArray;
-  } else {
-    return studyArray;
   }
 
   // Explicitly purchase 111 here if it's included and stop if applicable, as it isn't covered by logic in either split.
   if (id >= 111) studyArray.push(111);
 
-  // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
-  if (currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2) {
-    GameUI.notify.error("You haven't selected a second preferred Dimension path.");
-  }
+  const secondPreferredWarningShown = showSecondPreferredWarning(currTree);
 
   if (id < 121) return studyArray;
 
@@ -110,6 +114,8 @@ export function buyStudiesUntil(id, ec = -1) {
     if (TimeStudy.preferredPaths.dimension.path.length > 1) {
       studyArray.push(...TimeStudy.preferredPaths.dimension.studies.filter(s => (s <= id)));
     }
+
+    showSecondPreferredWarning(GameCache.currentStudyTree.value, secondPreferredWarningShown);
 
     studyArray.push(...range(211, Math.min(lastInPrevRow, 214)));
 

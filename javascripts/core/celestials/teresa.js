@@ -163,7 +163,7 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   onUnlock() {
-    this.onUnlocked?.();
+    this.config.onUnlock?.();
   }
 }
 

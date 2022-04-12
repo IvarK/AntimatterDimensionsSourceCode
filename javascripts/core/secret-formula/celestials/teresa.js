@@ -6,7 +6,7 @@ GameDatabase.celestials.teresa = {
       id: 0,
       price: 1e14,
       description: "Unlock Teresa's Reality.",
-      onUnlocked: () => Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY),
+      onUnlock: () => Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY),
     },
     epGen: {
       id: 1,
@@ -18,7 +18,7 @@ GameDatabase.celestials.teresa = {
       id: 2,
       price: 1e21,
       description: "Unlock Effarig, Celestial of Ancient Relics.",
-      onUnlocked: () => Teresa.quotes.show(Teresa.quotes.EFFARIG),
+      onUnlock: () => Teresa.quotes.show(Teresa.quotes.EFFARIG),
     },
     shop: {
       id: 3,

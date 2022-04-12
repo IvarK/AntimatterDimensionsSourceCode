@@ -97,7 +97,7 @@ export default {
             break;
         }
       }
-      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
+      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "").replaceAll(",", ", ")}`;
     },
     truncatedInput() {
       return TimeStudyTree.truncateInput(this.input);

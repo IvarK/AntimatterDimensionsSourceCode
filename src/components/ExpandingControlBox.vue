@@ -25,9 +25,10 @@ export default {
       default: undefined,
     },
     buttonStyle: {
+      // Default styling is used for Glyph Level Factors dropdown.
       type: String,
       required: false,
-      default: undefined,
+      default: "l-expanding-control-box__button",
     },
   },
   data() {
@@ -55,9 +56,6 @@ export default {
       return {
         "l-expanding-control-box--controls-width": this.widthSource !== undefined
       };
-    },
-    buttonClassObject() {
-      return this.buttonStyle === undefined ? "l-expanding-control-box__button" : this.buttonStyle;
     },
     containerStyle() {
       return {
@@ -171,7 +169,7 @@ export default {
       <div
         v-if="!$slots.header"
         ref="expandButton"
-        :class="buttonClassObject"
+        :class="buttonStyle"
         @click="openRequest = !openRequest"
       >
         {{ label }}

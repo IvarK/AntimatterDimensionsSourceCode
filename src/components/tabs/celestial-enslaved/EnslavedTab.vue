@@ -175,7 +175,9 @@ export default {
               :class="runButtonClassObject"
               @click="startRun"
             >
-              <div class="c-enslaved-run-button__icon__sigil fas fa-link" />
+              <div class="c-enslaved-run-button__icon__sigil">
+                
+              </div>
               <div
                 v-for="x in (isRunning ? 25 : 0)"
                 :key="x"

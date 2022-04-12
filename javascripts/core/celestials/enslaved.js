@@ -235,7 +235,8 @@ export const Enslaved = {
       ]
     },
   }),
-  symbol: "<i class='fas fa-link'></i>"
+  // Unicode f0c1.
+  symbol: ""
 };
 
 class EnslavedProgressState extends BitUpgradeState {

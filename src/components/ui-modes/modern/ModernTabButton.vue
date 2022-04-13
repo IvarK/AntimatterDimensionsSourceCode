@@ -46,8 +46,8 @@ export default {
         this.tabName = this.tab.name;
       }
     },
-    isCurrentTab(name) {
-      return name === Tabs.current._currentSubtab.name && player.options.theme !== "S9";
+    isCurrentSubtab(tab, name) {
+      return name === tab._currentSubtab.name && player.options.theme !== "S9";
     },
     isCurrentTabColored(id) {
       return id >= 6 && id <= 9;
@@ -83,7 +83,7 @@ export default {
           class="o-tab-btn o-tab-btn--subtab"
           :class="
             [tab.config.UIClass,
-             {'o-tab-btn-active': isCurrentTab(subtab.name)}]
+             {'o-tab-btn-active': isCurrentSubtab(tab, subtab.name)}]
           "
           @click="subtab.show(true)"
         >

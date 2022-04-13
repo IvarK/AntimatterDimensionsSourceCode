@@ -47,7 +47,7 @@ export default {
       // particularly sensible way to accurately display the actual ST spent other than tracing through buy order
       // of all current studies for every study, and even then it looks odd in practice because then a few studies
       // appear more expensive simply due to buy order.
-      this.showSTCost = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && !TimeStudy(this.study.id).isBought &&
+      this.showSTCost = VUnlocks.vAchievementUnlock.isUnlocked && !TimeStudy(this.study.id).isBought &&
         TimeStudy(this.study.id).costsST() && !Pelle.isDoomed;
     },
   }

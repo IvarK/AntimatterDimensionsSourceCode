@@ -1,15 +1,15 @@
-import { GameMechanicState } from "../../utils";
+import { BitUpgradeState } from "../../utils";
 
-// TODO: BitUpgradeState? wrapper for this + effarig + enslaved
-class PelleStrikeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
+class PelleStrikeState extends BitUpgradeState {
+  get bits() { return player.celestials.pelle.progressBits; }
+  set bits(value) { player.celestials.pelle.progressBits = value; }
 
   get hasStrike() {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.pelle.progressBits & (1 << this.id));
+    return this.isUnlocked;
+  }
+
+  get canBeUnlocked() {
+    return Pelle.isDoomed && !this.hasStrike;
   }
 
   get requirement() {
@@ -31,8 +31,14 @@ class PelleStrikeState extends GameMechanicState {
   }
 
   trigger() {
-    if (!Pelle.isDoomed || this.hasStrike) return;
-    this.unlockStrike();
+    this.unlock();
+  }
+
+  onUnlock() {
+    GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
+    player.celestials.pelle.collapsed.rifts = false;
+    Tab.celestials.pelle.show();
+    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
 
     // If it's death, reset the records
     if (this.id === 5) {
@@ -46,15 +52,7 @@ class PelleStrikeState extends GameMechanicState {
       // softlocked, or starting it too late and getting not-softlocked.
       Pelle.cel.records.totalEternityPoints = new Decimal("1e1050");
     }
-  }
 
-  unlockStrike() {
-    GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
-    player.celestials.pelle.collapsed.rifts = false;
-    Tab.celestials.pelle.show();
-    // eslint-disable-next-line no-bitwise
-    player.celestials.pelle.progressBits |= (1 << this.id);
-    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
 }
 

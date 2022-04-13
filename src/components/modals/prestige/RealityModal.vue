@@ -82,7 +82,7 @@ export default {
   methods: {
     update() {
       this.firstPerk = Perk.firstPerk.isEffectActive;
-      this.effarigUnlocked = Teresa.has(TERESA_UNLOCKS.EFFARIG);
+      this.effarigUnlocked = TeresaUnlocks.effarig.canBeApplied;
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
       this.simRealities = 1 + simulatedRealityCount(false);

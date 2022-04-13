@@ -48,9 +48,6 @@ export default {
     },
     isCurrentSubtab(tab, name) {
       return name === tab._currentSubtab.name && player.options.theme !== "S9";
-    },
-    isCurrentTabColored(id) {
-      return id >= 6 && id <= 9;
     }
   },
 };

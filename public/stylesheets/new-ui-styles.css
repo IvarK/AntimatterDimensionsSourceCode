@@ -300,6 +300,7 @@ body.t-s9 {
 }
 
 .o-tab-btn--subtab .o-tab-btn--cel3 {
+  font-weight: normal;
   transform: rotate(45deg)
 }
 

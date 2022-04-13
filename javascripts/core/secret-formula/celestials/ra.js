@@ -249,7 +249,7 @@ GameDatabase.celestials.ra = {
     },
     unlockHardV: {
       id: 24,
-      reward: () => `Unlock Hard V-Achievements and unlock a Triad Study every ${formatInt(5)} levels.
+      reward: () => `Unlock Hard V-Achievements and unlock a Triad Study every ${formatInt(6)} levels.
         Triad Studies are located at the bottom of the Time Studies page`,
       effect: () => Math.floor(Ra.pets.v.level / 6),
       pet: "v",

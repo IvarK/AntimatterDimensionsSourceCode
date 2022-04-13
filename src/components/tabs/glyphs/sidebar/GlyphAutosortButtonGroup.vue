@@ -43,7 +43,7 @@ export default {
       this.autoSort = player.reality.autoSort;
       this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.autoCollapse = player.reality.autoCollapse;
-      this.showAutoAutoClean = VUnlocks.autoAutoclean.canBeApplied;
+      this.showAutoAutoClean = VUnlocks.autoAutoClean.canBeApplied;
       this.autoAutoClean = player.reality.autoAutoClean;
     },
   }

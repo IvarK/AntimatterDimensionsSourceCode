@@ -7552,6 +7552,10 @@ kbd {
   background: var(--color-ra-pet-effarig);
 }
 
+.c-ra-pet-milestones-effarig-link {
+  font-weight: normal;
+}
+
 .c-ra-pet-btn--enslaved {
   color: var(--color-ra-pet-enslaved);
 }

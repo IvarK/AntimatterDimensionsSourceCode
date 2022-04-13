@@ -513,7 +513,7 @@ window.player = {
     },
     effarig: {
       relicShards: 0,
-      unlocksBits: 0,
+      unlockBits: 0,
       run: false,
       quotes: [],
       glyphWeights: {
@@ -614,7 +614,7 @@ window.player = {
       },
       quotes: [],
       momentumTime: 0,
-      unlocksBits: 0,
+      unlockBits: 0,
       run: false,
       charged: new Set(),
       disCharge: false,

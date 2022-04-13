@@ -27,7 +27,7 @@ class RaUnlockState extends BitUpgradeState {
   }
 
   get displayIcon() {
-    return this.config.displayIcon;
+    return this.disabledByPelle ? `<span class="fas fa-ban"></span>` : this.config.displayIcon;
   }
 
   get pet() {

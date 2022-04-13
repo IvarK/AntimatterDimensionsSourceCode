@@ -55,18 +55,21 @@ export default {
         {{ petName }} Level {{ formatInt(level) }}
       </div>
       <div class="c-ra-pet-upgrade__tooltip__description">
-        <span v-if="isUseless">
+        {{ description }}
+        <div v-if="isUseless" class="c-ra-effect-disabled">
           This has no effect while in Doomed
-        </span>
-        <span v-else>
-          {{ description }}
-        </span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.c-ra-effect-disabled {
+  font-style: italic;
+  color: var(--color-pelle--base);
+}
+
 .c-ra-upgrade-icon {
   font-weight: bold;
 }

@@ -1313,7 +1313,11 @@ GameStorage.devMigrations = {
     player => {
       player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks.permanent.cancerGalaxies;
       delete player.requirementChecks.permanent.cancerGalaxies;
-    }
+    },
+    player => {
+      delete player.celestials.effarig.unlocksBits;
+      delete player.celestials.ra.unlocksBits;
+    },
   ],
 
   patch(player) {

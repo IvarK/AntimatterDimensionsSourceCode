@@ -4,7 +4,9 @@ function showSecondPreferredWarning(currTree) {
   // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
   if (currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2) {
     GameUI.notify.error("You haven't selected a second preferred Dimension path.");
+    return true;
   }
+  return false;
 }
 
 // This is only ever called from manual player actions, which means we can immediately commit them to the game state

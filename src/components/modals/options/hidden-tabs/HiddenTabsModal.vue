@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       isEnslaved: false,
-      isDoomed: false,
+      isAlmostEnd: false,
     };
   },
   computed: {
@@ -20,7 +20,7 @@ export default {
   methods: {
     update() {
       this.isEnslaved = Enslaved.isRunning;
-      this.isDoomed = Pelle.isDoomed;
+      this.isAlmostEnd = Pelle.hasGalaxyGenerator;
     },
   },
 };
@@ -38,8 +38,8 @@ export default {
     Unhiding a tab in which all subtabs are hidden will also unhide all subtabs,
     and hiding all subtabs will also hide the tab.
     <br>
-    <div v-if="isDoomed">
-      You cannot hide your tabs within Doomed.
+    <div v-if="isAlmostEnd">
+      You cannot hide your tabs after unlocking the Galaxy Generator.
     </div>
     <div v-if="isEnslaved">
       <br>

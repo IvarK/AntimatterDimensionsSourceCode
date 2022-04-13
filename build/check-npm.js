@@ -1,8 +1,10 @@
-/* eslint-disable no-bitwise */
+/* eslint-disable no-bitwise, no-console */
 
 const fs = require("fs");
 const path = require("path");
 const proc = require("child_process");
+const readline = require("readline");
+
 
 function getHash(string) {
   let hash = 0;
@@ -31,9 +33,23 @@ if (newHash !== currentHash) {
     fs.mkdirSync(tmpPath);
   }
 
-  // eslint-disable-next-line no-console
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
   console.log("package-lock.json changes were detected");
-  console.log("Running 'npm ci' (this might take a while)...");
-  proc.execSync("npm ci");
-  fs.writeFileSync(hashPath, newHash, {});
+  const timeout = setTimeout(() => {
+    rl.close();
+    console.log("Running 'npm ci' (this might take a while)...");
+    proc.execSync("npm ci");
+    fs.writeFileSync(hashPath, newHash, {});
+  }, 5000);
+
+  // eslint-disable-next-line max-len
+  rl.question(`Press enter within the next five seconds to skip running 'npm ci' - this will leave your packages out of sync!`, () => {
+    console.log(`'npm ci' step skipped`);
+    rl.close();
+    clearTimeout(timeout);
+  });
 }

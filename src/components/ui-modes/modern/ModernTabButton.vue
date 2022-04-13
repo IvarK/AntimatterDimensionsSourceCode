@@ -26,6 +26,7 @@ export default {
       return {
         "o-tab-btn": true,
         "o-tab-btn--subtabs": this.showSubtabs,
+        "o-tab-btn--active": this.isCurrentTab(this.tab)
       };
     },
   },
@@ -46,8 +47,11 @@ export default {
         this.tabName = this.tab.name;
       }
     },
-    isCurrentSubtab(tab, name) {
-      return name === tab._currentSubtab.name && player.options.theme !== "S9";
+    isCurrentSubtab(name) {
+      return name === this.tab._currentSubtab.name && player.options.theme !== "S9";
+    },
+    isCurrentTab(tab) {
+      return tab.isOpen;
     }
   },
 };
@@ -80,7 +84,7 @@ export default {
           class="o-tab-btn o-tab-btn--subtab"
           :class="
             [tab.config.UIClass,
-             {'o-tab-btn-active': isCurrentSubtab(tab, subtab.name)}]
+             {'o-subtab-btn--active': isCurrentSubtab(subtab.name)}]
           "
           @click="subtab.show(true)"
         >
@@ -100,7 +104,11 @@ export default {
 </template>
 
 <style scoped>
-.o-tab-btn-active {
-  border-bottom-width: 0.5rem
+.o-tab-btn.o-tab-btn--active {
+  border-left-width: 0.5rem;
+}
+
+.o-subtab-btn--active {
+  border-bottom-width: 0.5rem;
 }
 </style>

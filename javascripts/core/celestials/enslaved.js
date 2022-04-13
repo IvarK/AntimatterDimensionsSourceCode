@@ -236,7 +236,7 @@ export const Enslaved = {
     },
   }),
   // Unicode f0c1.
-  symbol: ""
+  symbol: "\uf0c1"
 };
 
 class EnslavedProgressState extends GameMechanicState {

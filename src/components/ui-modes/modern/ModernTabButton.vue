@@ -45,6 +45,12 @@ export default {
       } else {
         this.tabName = this.tab.name;
       }
+    },
+    isCurrentTab(name) {
+      return name === Tabs.current._currentSubtab.name && player.options.theme !== "S9";
+    },
+    isCurrentTabColored(id) {
+      return id >= 6 && id <= 9;
     }
   },
 };
@@ -75,7 +81,9 @@ export default {
         <div
           v-if="subtabVisibilities[index]"
           class="o-tab-btn o-tab-btn--subtab"
-          :class="tab.config.UIClass"
+          :class="[tab.config.UIClass,
+                   {'o-tab-btn-active': isCurrentTab(subtab.name),
+                    'o-tab-colored-btn-active': isCurrentTab(subtab.name) && isCurrentTabColored(tab.config.id)}]"
           @click="subtab.show(true)"
         >
           <span v-html="subtab.symbol">
@@ -94,5 +102,11 @@ export default {
 </template>
 
 <style scoped>
+.o-tab-btn-active {
+  border-bottom: 0.5rem solid var(--color-accent) !important;
+}
 
+.o-tab-colored-btn-active {
+  border-bottom: 0.5rem solid !important;
+}
 </style>

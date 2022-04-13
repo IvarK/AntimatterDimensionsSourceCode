@@ -81,9 +81,10 @@ export default {
         <div
           v-if="subtabVisibilities[index]"
           class="o-tab-btn o-tab-btn--subtab"
-          :class="[tab.config.UIClass,
-                   {'o-tab-btn-active': isCurrentTab(subtab.name),
-                    'o-tab-colored-btn-active': isCurrentTab(subtab.name) && isCurrentTabColored(tab.config.id)}]"
+          :class="
+            [tab.config.UIClass,
+             {'o-tab-btn-active': isCurrentTab(subtab.name)}]
+          "
           @click="subtab.show(true)"
         >
           <span v-html="subtab.symbol">
@@ -103,10 +104,6 @@ export default {
 
 <style scoped>
 .o-tab-btn-active {
-  border-bottom: 0.5rem solid var(--color-accent) !important;
-}
-
-.o-tab-colored-btn-active {
-  border-bottom: 0.5rem solid !important;
+  border-bottom-width: 0.5rem
 }
 </style>

@@ -94,7 +94,7 @@ export default {
       this.hasReality = TeresaUnlocks.run.isUnlocked;
       this.hasEPGen = TeresaUnlocks.epGen.isUnlocked;
       this.hasPerkShop = TeresaUnlocks.shop.isUnlocked;
-      this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
+      this.raisedPerkShop = Ra.unlocks.perkShopIncrease.canBeApplied;
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
       this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);

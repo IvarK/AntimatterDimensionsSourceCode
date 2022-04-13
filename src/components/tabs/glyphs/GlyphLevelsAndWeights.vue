@@ -114,7 +114,7 @@ export default {
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.rowVisible = glyphFactors.rowFactor > 0;
       this.achievementVisible = glyphFactors.achievementFactor > 0;
-      this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
+      this.shardVisible = Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
       this.singularityVisible = SingularityMilestone.glyphLevelFromSingularities.isUnlocked;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;

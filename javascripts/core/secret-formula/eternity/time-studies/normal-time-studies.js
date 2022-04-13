@@ -422,7 +422,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         () => EternityChallenge(3).completions > 0 || Perk.bypassEC3Lock.isBought],
       reqType: TS_REQUIREMENT_TYPE.ALL,
       description: () => `You gain ${formatPercents(0.01)} of your Infinity Points gained on crunch each second`,
-      effect: () => gainedInfinityPoints().times(Time.deltaTime / 100).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige())
+      effect: () => gainedInfinityPoints().times(Time.deltaTime / 100)
+        .timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige)
     },
     {
       id: 191,

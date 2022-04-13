@@ -44,10 +44,10 @@ export default {
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
+        scalingUpgradeVisible: () => Ra.unlocks.improvedStoredTime.canBeApplied,
         scalingUpgradeText: () => `Stored game time
-          ${formatX(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2)} and real time
-          +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
+          ${formatX(Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectValue, 2)} and real time
+          +${formatInt(Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectValue / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
@@ -81,10 +81,10 @@ export default {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
-      this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
-      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
-      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
-      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
+      this.showRecollection = Ra.unlocks.effarigUnlock.canBeApplied;
+      this.hasRecollection = Ra.recollection.isUnlocked;
+      this.recollectionReq = Ra.recollection.requiredLevels;
+      this.recollectionMult = Ra.recollection.multiplier;
       this.petWithRecollection = Ra.petWithRecollection;
       this.isRunning = Ra.isRunning;
       this.memoryBoosts = Ra.memoryBoostResources;

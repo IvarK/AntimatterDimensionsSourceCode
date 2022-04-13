@@ -120,8 +120,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
   if (GlyphAlteration.isAdded("replication")) interval = interval.divide(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
-  interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
-  interval = interval.dividedByEffectOf(AlchemyResource.replication);
+  interval = interval.dividedByEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.

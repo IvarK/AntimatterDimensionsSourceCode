@@ -103,7 +103,7 @@ export default {
       this.isFlipped = V.isFlipped;
       this.wantsFlipped = player.celestials.v.wantsFlipped;
       this.isRunning = V.isRunning;
-      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.hasAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     unlockCelestial() {
       if (V.canUnlockCelestial) V.unlockCelestial();

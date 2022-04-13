@@ -12,12 +12,16 @@ export default {
       isUseless: false,
       isUnlocked: false,
       level: 0,
-      icon: "",
       description: "",
-      petName: ""
     };
   },
   computed: {
+    petName() {
+      return this.unlock.pet.name;
+    },
+    icon() {
+      return this.unlock.displayIcon;
+    },
     classObject() {
       return {
         "c-ra-upgrade-icon": true,
@@ -31,15 +35,11 @@ export default {
   },
   methods: {
     update() {
-      this.isUseless = Pelle.uselessRaMilestones.includes(this.unlock.id) && Pelle.isDoomed;
-      this.isUnlocked = Ra.has(this.unlock);
-      this.level = this.unlock.level;
-      this.icon = this.unlock.displayIcon;
-      const rewardText = typeof this.unlock.reward === "function"
-        ? this.unlock.reward()
-        : this.unlock.reward;
-      this.description = rewardText;
-      this.petName = this.unlock.pet.name;
+      const unlock = this.unlock;
+      this.isUseless = Pelle.uselessRaMilestones.includes(unlock.id) && Pelle.isDoomed;
+      this.isUnlocked = unlock.isUnlocked;
+      this.level = unlock.level;
+      this.description = unlock.reward;
     }
   }
 };

@@ -38,7 +38,7 @@ export const Enslaved = {
     if (Pelle.isDoomed) return;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
-    if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+    if (!Ra.unlocks.adjustableStoredTime.canBeApplied) {
       player.celestials.enslaved.storedFraction = 1;
     }
   },
@@ -62,9 +62,7 @@ export const Enslaved = {
     return 0.7;
   },
   get storedRealTimeCap() {
-    const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
-      : 0;
+    const addedCap = Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0);
     return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {

@@ -71,7 +71,7 @@ export default {
         this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.alchemyUnlocked = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     optionClass(idx) {
       const icon = this.modeIcon(idx);

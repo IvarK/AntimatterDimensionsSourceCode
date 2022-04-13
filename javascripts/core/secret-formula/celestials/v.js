@@ -222,7 +222,7 @@ GameDatabase.celestials.v = {
       description: () => `Have ${formatInt(10)} V-Achievements`,
       effect: () => Achievements.power,
       // Base rate is 60 ECs at 20 minutes each
-      format: x => (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)
+      format: x => (Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied
         ? "Instant (Ra upgrade)"
         : `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`),
       requirement: () => V.spaceTheorems >= 10
@@ -244,7 +244,7 @@ GameDatabase.celestials.v = {
     raUnlock: {
       id: 6,
       reward() {
-        return `Reduce the Space Theorem cost of Time Studies by ${formatInt(2)}. 
+        return `Reduce the Space Theorem cost of Time Studies by ${formatInt(2)}.
                 Unlock Ra, Celestial of the Forgotten.`;
       },
       description: () => `Have ${formatInt(36)} V-Achievements`,

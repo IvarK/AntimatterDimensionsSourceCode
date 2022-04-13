@@ -222,7 +222,7 @@ export function getGlyphLevelInputs() {
   adjustFactor(sources.dt, weights.dt / 100);
   adjustFactor(sources.eternities, weights.eternities / 100);
   const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
-  const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
+  const shardFactor = Ra.unlocks.relicShardGlyphLevelBoost.effectOrDefault(0);
   let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
     perkShopEffect + shardFactor;
 

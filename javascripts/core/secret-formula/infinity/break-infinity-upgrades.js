@@ -82,10 +82,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
         let infinities = DC.D1;
         infinities = infinities.timesEffectsOf(
           RealityUpgrade(5),
-          RealityUpgrade(7)
+          RealityUpgrade(7),
+          Ra.unlocks.continuousTTBoost.effects.infinity
         );
         infinities = infinities.times(getAdjustedGlyphEffect("infinityinfmult"));
-        infinities = infinities.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
         return `${quantify("Infinity", infinities)} every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },

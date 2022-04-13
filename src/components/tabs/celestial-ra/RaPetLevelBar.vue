@@ -22,7 +22,7 @@ export default {
       return ui.view.shiftDown;
     },
     unlocks() {
-      return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet === this.pet);
+      return this.pet.unlocks;
     },
     importantLevels() {
       return this.unlocks.map(u => u.level);
@@ -62,8 +62,8 @@ export default {
       };
     },
     nextUnlock() {
-      const unlock = Object.values(RA_UNLOCKS).find(unl => unl.pet === this.pet && unl.level === this.level + 1);
-      return unlock ? unlock : false;
+      const unlock = this.pet.unlocks.find(unl => unl.level === this.level + 1);
+      return unlock ?? false;
     },
     showNextScalingUpgrade() {
       switch (this.pet.name) {

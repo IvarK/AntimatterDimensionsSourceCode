@@ -282,10 +282,10 @@ export function gainedInfinities() {
     TimeStudy(32),
     RealityUpgrade(5),
     RealityUpgrade(7),
-    Achievement(164)
+    Achievement(164),
+    Ra.unlocks.continuousTTBoost.effects.infinity
   );
   infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
-  infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
   infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
   return infGain;
 }
@@ -487,9 +487,7 @@ export function gameLoop(passDiff, options = {}) {
       const reducedTimeFactor = getGameSpeedupFactor();
       const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
         GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
-      const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-        ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
-        : 1;
+      const amplification = Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1);
       const beforeStore = player.celestials.enslaved.stored;
       player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
         diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
@@ -581,7 +579,7 @@ export function gameLoop(passDiff, options = {}) {
   // Unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
   // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
   // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
-  if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
+  if (Ra.unlocks.autoUnlockDilation.canBeApplied &&
     Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
     !isInCelestialReality() &&
     !Pelle.isDoomed) {
@@ -592,7 +590,7 @@ export function gameLoop(passDiff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP) && !Pelle.isDoomed) rewardTP();
+  if (player.dilation.active && Ra.unlocks.autoTP.canBeApplied && !Pelle.isDoomed) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
@@ -647,10 +645,10 @@ function passivePrestigeGen() {
       infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
-        RealityUpgrade(7)
+        RealityUpgrade(7),
+        Ra.unlocks.continuousTTBoost.effects.infinity
       );
       infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
-      infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
     }
     if (RealityUpgrade(11).isBought) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
@@ -756,7 +754,7 @@ function applyAutoprestige(diff) {
 
   if (TeresaUnlocks.epGen.canBeApplied) {
     Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
-      .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
+      .times(getGameSpeedupFactor() * diff / 1000).timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
   }
 
   if (InfinityUpgrade.ipGen.isCharged) {
@@ -793,9 +791,11 @@ function updateTachyonGalaxies() {
 
 export function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
-  let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
-  ttMult *= Achievement(137).effectOrDefault(1);
-  if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+  let ttMult = Effects.product(
+    Ra.unlocks.continuousTTBoost.effects.ttGen,
+    Ra.unlocks.achievementTTMult,
+    Achievement(137),
+  );
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation

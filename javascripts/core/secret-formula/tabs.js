@@ -375,7 +375,7 @@ GameDatabase.tabs = [
         name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "AlchemyTab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+        condition: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
         id: 5,
         hidable: true,
       },

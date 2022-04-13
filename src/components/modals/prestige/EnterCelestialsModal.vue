@@ -33,7 +33,7 @@ export default {
       const effarigDone = effarigStage === EFFARIG_STAGES.COMPLETED;
       const effarigLayer = [null, "Infinity", "Eternity", "Reality"][effarigStage];
       const enslavedDone = Enslaved.isCompleted;
-      const vAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      const vAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
       const laitelaFastest = player.celestials.laitela.fastestCompletion;
       const laitalaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
 

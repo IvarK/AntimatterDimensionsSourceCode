@@ -1095,7 +1095,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-pet-to-effarig": {
-      visible: () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
+      visible: () => Ra.unlocks.effarigUnlock.isUnlocked,
       complete: () => Ra.pets.effarig.level / 25,
       drawOrder: -1,
       connector: {
@@ -1108,7 +1108,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "enslaved-pet": {
-      visible: () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
+      visible: () => Ra.unlocks.effarigUnlock.isUnlocked,
       complete: () => Ra.pets.effarig.level / 8,
       drawOrder: -1,
       node: {
@@ -1146,7 +1146,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "enslaved-pet-to-enslaved": {
-      visible: () => Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
+      visible: () => Ra.unlocks.enslavedUnlock.isUnlocked,
       complete: () => Ra.pets.enslaved.level / 25,
       drawOrder: -1,
       connector: {
@@ -1159,7 +1159,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-pet": {
-      visible: () => Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
+      visible: () => Ra.unlocks.enslavedUnlock.isUnlocked,
       complete: () => Ra.pets.enslaved.level / 8,
       drawOrder: -1,
       node: {
@@ -1197,7 +1197,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-pet-to-v": {
-      visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
+      visible: () => Ra.unlocks.vUnlock.isUnlocked,
       complete: () => Ra.pets.v.level / 25,
       drawOrder: -1,
       connector: {
@@ -1285,7 +1285,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-unlock": {
-      visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
+      visible: () => Ra.unlocks.vUnlock.isUnlocked,
       complete: () => {
         if (DarkMatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked) return 1;
         if (MachineHandler.isIMUnlocked) {

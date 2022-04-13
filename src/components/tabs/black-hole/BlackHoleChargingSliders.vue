@@ -23,11 +23,11 @@ export default {
   },
   methods: {
     update() {
-      this.isAdjustableChargingUnlocked = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.isAdjustableChargingUnlocked = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
-      this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
     },
     adjustSliderNegative(value) {

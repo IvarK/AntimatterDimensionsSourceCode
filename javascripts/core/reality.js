@@ -13,7 +13,7 @@ export const GlyphSelection = {
 
   get choiceCount() {
     return Effects.max(1, Perk.firstPerk) *
-      (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
+      Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.effectOrDefault(1);
   },
 
   glyphUncommonGuarantee(glyphList, rng) {
@@ -410,8 +410,8 @@ export function beginProcessReality(realityProps) {
             more than ${formatInt(glyphsToSample)} Glyphs remaining will speed up the calculation by automatically
             sacrificing all the remaining Glyphs you would get. Pressing "Skip Glyphs" will ignore all resources
             related to Glyphs and stop the simulation after giving all other resources.
-            ${Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ? "Pressing either button to speed up simulation will not update" +
-              " any resources within Glyph Alchemy." : ""}`,
+            ${Ra.unlocks.unlockGlyphAlchemy.canBeApplied ? `Pressing either button to speed up
+            simulation will not update any resources within Glyph Alchemy.` : ""}`,
           progressName: "Realities",
           current: doneSoFar,
           max: glyphsToProcess,

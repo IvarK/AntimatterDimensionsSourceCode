@@ -15,7 +15,7 @@ export class GameMechanicState extends Effect {
       for (const key in config.effects) {
         const nested = config.effects[key];
         let effect;
-        if (typeof nested === "number" || nested instanceof Decimal) {
+        if (typeof nested === "number" || typeof nested === "function" || nested instanceof Decimal) {
           effect = new Effect(nested);
         } else {
           effect = new Effect(nested.effect, nested.cap, nested.effectCondition);

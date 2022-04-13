@@ -26,9 +26,12 @@ export default {
       return {
         "o-tab-btn": true,
         "o-tab-btn--subtabs": this.showSubtabs,
-        "o-tab-btn--active": this.isCurrentTab(this.tab)
+        "o-tab-btn--active": this.isCurrentTab
       };
     },
+    isCurrentTab() {
+      return this.tab.isOpen;
+    }
   },
   methods: {
     update() {
@@ -49,9 +52,6 @@ export default {
     },
     isCurrentSubtab(name) {
       return name === this.tab._currentSubtab.name && player.options.theme !== "S9";
-    },
-    isCurrentTab(tab) {
-      return tab.isOpen;
     }
   },
 };

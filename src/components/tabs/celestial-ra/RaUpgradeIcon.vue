@@ -56,7 +56,10 @@ export default {
       </div>
       <div class="c-ra-pet-upgrade__tooltip__description">
         {{ description }}
-        <div v-if="isUseless" class="c-ra-effect-disabled">
+        <div
+          v-if="isUseless"
+          class="c-ra-effect-disabled"
+        >
           This has no effect while in Doomed
         </div>
       </div>

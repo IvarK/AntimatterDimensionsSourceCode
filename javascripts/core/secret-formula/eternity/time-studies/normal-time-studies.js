@@ -639,47 +639,47 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 301,
       cost: 0,
       STCost: 12,
-      requirement: [() => Ra.pets.v.level >= 5, 221, 222, 231],
+      requirement: [() => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 1, 221, 222, 231],
       reqType: TS_REQUIREMENT_TYPE.ALL,
       requiresST: [221, 222, 231],
       description: "Time Study 231 improves the effect of Time Study 221",
       effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
       formatEffect: value => formatX(value, 2, 1),
-      unlocked: () => Ra.pets.v.level >= 5
+      unlocked: () => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 1
     },
     {
       id: 302,
       cost: 0,
       STCost: 12,
-      requirement: [() => Ra.pets.v.level >= 10, 223, 224, 232],
+      requirement: [() => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 2, 223, 224, 232],
       reqType: TS_REQUIREMENT_TYPE.ALL,
       requiresST: [223, 224, 232],
       description: () => `Distant Galaxy scaling threshold starts another ${formatInt(3000)} Antimatter Galaxies later`,
       effect: 3000,
-      unlocked: () => Ra.pets.v.level >= 10
+      unlocked: () => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 2
     },
     {
       id: 303,
       cost: 0,
       STCost: 12,
-      requirement: [() => Ra.pets.v.level >= 15, 225, 226, 233],
+      requirement: [() => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 3, 225, 226, 233],
       reqType: TS_REQUIREMENT_TYPE.ALL,
       requiresST: [225, 226, 233],
       description: () => `Gain ${formatPercents(0.5)} more extra Replicanti Galaxies from Time Studies 225 and 226,
         and from Effarig's Infinity`,
       effect: 1.5,
-      unlocked: () => Ra.pets.v.level >= 15
+      unlocked: () => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 3
     },
     {
       id: 304,
       cost: 0,
       STCost: 12,
-      requirement: [() => Ra.pets.v.level >= 20, 227, 228, 234],
+      requirement: [() => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 4, 227, 228, 234],
       reqType: TS_REQUIREMENT_TYPE.ALL,
       requiresST: [227, 228, 234],
       description: "Dimensional Sacrifice multiplier is squared",
       effect: 2,
-      unlocked: () => Ra.pets.v.level >= 20
+      unlocked: () => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 4
     }
   ];
 }());

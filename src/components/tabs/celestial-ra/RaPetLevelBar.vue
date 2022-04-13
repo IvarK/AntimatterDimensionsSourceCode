@@ -74,7 +74,7 @@ export default {
         case "Enslaved":
           return true;
         case "V":
-          return Math.clampMax(Math.floor(this.level / 5), 4) !== Math.clampMax(Math.floor((this.level + 1) / 5), 4);
+          return Math.min(Math.floor(this.level / 6), 4) !== Math.min(Math.floor((this.level + 1) / 6), 4);
         default:
           return false;
       }

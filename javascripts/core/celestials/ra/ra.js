@@ -343,7 +343,7 @@ export const Ra = {
     return this.totalCharges - player.celestials.ra.charged.size;
   },
   get canBuyTriad() {
-    return this.pets.v.level >= 5;
+    return Ra.unlocks.unlockHardV.canBeApplied;
   },
   get petWithRecollection() {
     return player.celestials.ra.petWithRecollection;

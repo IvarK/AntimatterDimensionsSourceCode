@@ -213,7 +213,7 @@ export const V = {
     return player.celestials.v.run;
   },
   get isFlipped() {
-    return Ra.unlocks.unlockHardVAchievements.canBeApplied;
+    return Ra.unlocks.unlockHardV.canBeApplied;
   },
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;

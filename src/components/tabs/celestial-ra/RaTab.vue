@@ -44,17 +44,17 @@ export default {
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeVisible: () => Ra.unlocks.improvedStoredTime.canBeApplied,
+        scalingUpgradeVisible: () => Ra.unlocks.improvedStoredTime.isUnlocked,
         scalingUpgradeText: () => `Stored game time
-          ${formatX(Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectValue, 2)} and real time
-          +${formatInt(Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectValue / (1000 * 3600))} hours`,
+          ${formatX(Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1), 2)} and real time
+          +${formatInt(Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0) / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
-        scalingUpgradeText: level => {
-          const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${formatInt(triadCount)}/${formatInt(4)} Triad Studies.`;
+        scalingUpgradeVisible: () => Ra.unlocks.unlockHardV.isUnlocked,
+        scalingUpgradeText: () => {
+          const triadCount = Ra.unlocks.unlockHardV.effectOrDefault(0);
+          return `You have unlocked ${quantifyInt("Triad Study", triadCount)}.`;
         },
       }
     ],

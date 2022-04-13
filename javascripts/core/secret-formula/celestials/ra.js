@@ -241,19 +241,19 @@ GameDatabase.celestials.ra = {
     },
     vXP: {
       id: 23,
-      reward: () => `All Memory Chunks produce more Memories based on total Celestial levels,
-        and unlock a Triad Study every ${formatInt(5)} levels (to a maximum of ${formatInt(4)} Triad Studies).
-        Triad Studies are located at the bottom of the Time Studies page`,
+      reward: "All Memory Chunks produce more Memories based on total Celestial levels.",
       effect: () => 1 + Ra.totalPetLevel / 50,
       pet: "v",
       level: 5,
       displayIcon: `<span class="fas fa-book"></span>`
     },
-    unlockHardVAchievements: {
+    unlockHardV: {
       id: 24,
-      reward: "Unlock Hard V-Achievements",
+      reward: () => `Unlock Hard V-Achievements and unlock a Triad Study every ${formatInt(5)} levels.
+        Triad Studies are located at the bottom of the Time Studies page`,
+      effect: () => Math.floor(Ra.pets.v.level / 6),
       pet: "v",
-      level: 8,
+      level: 6,
       displayIcon: `<span class="fas fa-trophy"></span>`
     },
     continuousTTBoost: {

@@ -63,6 +63,12 @@ export default {
       };
       classes[this.containerClass] = true;
       return classes;
+    },
+    indicatorArrowClassObject() {
+      return {
+        "c-indicator-arrow": true,
+        "c-indicator-arrow--flipped": this.state === this.states.OPENING || this.state === this.states.OPEN,
+      };
     }
   },
   watch: {
@@ -160,7 +166,12 @@ export default {
         class="l-expanding-control-box__button"
         @click="openRequest = !openRequest"
       >
-        {{ label }} ▼
+        <span class="l-expanding-control-box__button_text">
+          {{ label }}
+        </span>
+        <span :class="indicatorArrowClassObject">
+          ▼
+        </span>
       </div>
       <div
         v-else
@@ -204,10 +215,24 @@ export default {
 
 .l-expanding-control-box__button {
   cursor: pointer;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   white-space: nowrap;
   border: none !important;
   height: 2.5rem;
+}
+
+.l-expanding-control-box__button_text {
+  margin-right: 0.6rem;
+}
+
+.c-indicator-arrow--flipped {
+  transform: rotate(-180deg);
+}
+
+.c-indicator-arrow {
+  transition: all 0.25s ease-out;
 }
 </style>

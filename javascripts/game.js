@@ -337,9 +337,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.ACHIEVEMENT_BH)) {
-          factor *= V_UNLOCKS.ACHIEVEMENT_BH.effect();
-        }
+        factor *= VUnlocks.achievementBH.effectOrDefault(1);
       }
     }
   }
@@ -757,7 +755,7 @@ function laitelaBeatText(disabledDim) {
 function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
-  if (Teresa.has(TERESA_UNLOCKS.EPGEN) && !Pelle.isDisabled("EPgen")) {
+  if (TeresaUnlocks.epGen.canBeApplied) {
     Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }

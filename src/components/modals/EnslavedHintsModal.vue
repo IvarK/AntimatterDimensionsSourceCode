@@ -82,7 +82,7 @@ export default {
     },
     giveRealityHint(available) {
       if (available <= 0 || !Enslaved.spendTimeForHint()) return;
-      Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().giveHint();
+      Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().unlock();
     },
     giveGlyphHint(available) {
       if (available <= 0 || !Enslaved.spendTimeForHint()) return;

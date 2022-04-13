@@ -27,8 +27,8 @@ GameDatabase.celestials.pelle.quotes.ARM = [
   "Things made of the remnants of your own thoughts, hinted at this.",
   "But, you never imagined that would be you, right?",
   "Incorrectly recollecting your exacting [Missing-Unseen-Erased] of memories.",
-  "“Fabrication” of your own “ideology” just to fulfil your [Destiny-Mandate-Goals].",
-  "[Amusing-Confusing-Laughter?].",
+  `"Fabrication" of your own "ideology" just to fulfil your [Destiny-Mandate-Goals].`,
+  "[Amusing-Confusing-Laughter].",
   "And keep in mind I have no reason to [misconstrue-deceive-trick] you.",
   "After all, I've already won."
 ];
@@ -111,7 +111,7 @@ GameDatabase.celestials.pelle.quotes.STRIKE_5 = [
   "<15pelle-25effarig>The [Tired-Deity-Monarch].",
   "<15pelle-25effarig>In contrast, you usually ignore them.",
   "<15pelle-25effarig>They have power, but don't seem to irritate you.",
-  "<15pelle-25effarig>Is it that you know that they'll eventually destroy yourself?",
+  "<15pelle-25effarig>Is it that you know that they'll eventually destroy themselves?",
   "<15pelle-25effarig>And that you took so long this time, that they almost did?",
   "<15pelle-25effarig>Every time you rushed to the [Tired-Deity-Monarch], you lost.",
   "<15pelle-25effarig>Maybe this was your plan all along.",
@@ -173,18 +173,25 @@ GameDatabase.celestials.pelle.quotes.GALAXY_GENERATOR_RIFTS = [
   "Destroy the 5 [Elementary-Inevitable-Irreversible]...",
   "Wait, what were they called?",
   "[Elementary-Inevitable-Irreversible]?",
-  "But I've already [Unbroken-Eternal-Connection] them...",
+  "But I've already [Unbroken-Eternal-Connection] them..."
+];
+
+GameDatabase.celestials.pelle.quotes.GALAXY_GENERATOR_PHASE_1 = [
   "Was this the actual plan?",
   "Slowly drain the [Elementary-Inevitable-Irreversible]?"
 ];
 
+GameDatabase.celestials.pelle.quotes.GALAXY_GENERATOR_PHASE_4 = [
+  "Give me time to bask in my own hubris!"
+];
+
 const flashCelestial = "<5teresa-5effarig-5enslaved-5v-5ra-5laitela-5pelle>";
 GameDatabase.celestials.pelle.quotes.END = [
-  `${flashCelestial}Give me time to bask in my own hubris!`,
-  `${flashCelestial}You! [False-Deity-Destroyer]!`,
-  `${flashCelestial}Do you have any idea what you've just made me do!`,
-  `${flashCelestial}I'm complicit in your [Destiny-Mandate-Goals]!`,
-  `${flashCelestial}And in doing so, you... won?`,
+  "...",
+  "You! [False-Deity-Destroyer]!",
+  "Do you have any idea what you've just made me do!",
+  "I'm complicit in your [Destiny-Mandate-Goals]!",
+  "And in doing so, you... won?",
   `${flashCelestial}The [Infinite-Forever-Eternal] struggle...`,
   `${flashCelestial}The [Conflict-Battle-End]...`,
   `${flashCelestial}Finally has the victor.`,

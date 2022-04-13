@@ -24,6 +24,7 @@ export * from "./reality/perks.js";
 import "./reality/automator.js";
 import "./reality/glyph-sacrifices.js";
 import "./celestials/perk-shop.js";
+import "./celestials/teresa.js";
 import "./celestials/effarig.js";
 import "./celestials/pelle-upgrades.js";
 import "./celestials/strikes.js";

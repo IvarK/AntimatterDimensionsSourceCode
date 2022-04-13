@@ -1,50 +1,10 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
-import { RebuyableMechanicState } from "../game-mechanics/index.js";
+import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
-
-export const TERESA_UNLOCKS = {
-  RUN: {
-    id: 0,
-    price: 1e14,
-    description: "Unlock Teresa's Reality.",
-  },
-  EPGEN: {
-    id: 1,
-    price: 1e18,
-    get description() {
-      if (Pelle.isDoomed) return "This has no effect while in Doomed.";
-      return "Unlock passive Eternity Point generation.";
-    },
-  },
-  EFFARIG: {
-    id: 2,
-    price: 1e21,
-    description: "Unlock Effarig, Celestial of Ancient Relics.",
-  },
-  SHOP: {
-    id: 3,
-    price: 1e24,
-    description: "Unlock the Perk Point Shop.",
-  },
-  UNDO: {
-    id: 4,
-    price: 1e10,
-    description: "Unlock \"Undo\" of equipping a Glyph.",
-  },
-  START_EU: {
-    id: 5,
-    price: 1e6,
-    get description() {
-      if (Pelle.isDoomed) return "This has no effect while in Doomed.";
-      return "You start Reality with all Eternity Upgrades unlocked.";
-    },
-  }
-};
 
 export const Teresa = {
   timePoured: 0,
-  unlockInfo: TERESA_UNLOCKS,
-  lastUnlock: "SHOP",
+  lastUnlock: "shop",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
   get isUnlocked() {
@@ -60,18 +20,9 @@ export const Teresa = {
     this.checkForUnlocks();
   },
   checkForUnlocks() {
-    for (const info of Object.values(Teresa.unlockInfo)) {
-      if (!this.has(info) && this.pouredAmount >= info.price) {
-        // eslint-disable-next-line no-bitwise
-        player.celestials.teresa.unlockBits |= (1 << info.id);
-        EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
-      }
+    for (const info of TeresaUnlocks.all) {
+      info.unlock();
     }
-  },
-  has(info) {
-    if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
   initializeRun() {
     clearCelestialRuns();
@@ -183,6 +134,44 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 }
 
+class TeresaUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.teresa.unlockBits; }
+  set bits(value) { player.celestials.teresa.unlockBits = value; }
+
+  get price() {
+    return this.config.price;
+  }
+
+  get pelleDisabled() {
+    return Pelle.isDoomed && this.isDisabledInDoomed;
+  }
+
+  get isEffectActive() {
+    return this.isUnlocked && !this.pelleDisabled;
+  }
+
+  get canBeUnlocked() {
+    return !this.isUnlocked && Teresa.pouredAmount >= this.price;
+  }
+
+  get description() {
+    if (this.pelleDisabled) {
+      return "This has no effect while in Doomed";
+    }
+    return typeof this.config.description === "function" ? this.config.description()
+      : this.config.description;
+  }
+
+  onUnlock() {
+    this.config.onUnlock?.();
+  }
+}
+
+export const TeresaUnlocks = mapGameDataToObject(
+  GameDatabase.celestials.teresa.unlocks,
+  config => new TeresaUnlockState(config)
+);
+
 export const PerkShopUpgrade = (function() {
   const db = GameDatabase.celestials.perkShop;
   return {
@@ -197,13 +186,6 @@ export const PerkShopUpgrade = (function() {
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
-});
-
-EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
-  if (celestial === Teresa) {
-    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
-    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
-  }
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

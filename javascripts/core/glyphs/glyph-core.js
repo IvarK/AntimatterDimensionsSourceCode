@@ -503,7 +503,7 @@ export const Glyphs = {
     }
   },
   processSortingAfterReality() {
-    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) this.autoClean();
+    if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) this.autoClean();
     switch (player.reality.autoSort) {
       case AUTO_SORT_MODE.NONE:
         break;

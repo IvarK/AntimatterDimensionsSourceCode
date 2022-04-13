@@ -91,7 +91,7 @@ export default {
       const isIC8Running = InfinityChallenge(8).isRunning;
       const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running || isIC8Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
-      if (this.isChallengePowerVisible) {
+      if (isChallengePowerVisible) {
         const powerArray = [];
         if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
         if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 3, 4)}`);
@@ -158,8 +158,13 @@ export default {
             Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
           </div>
           <br>
-          <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
-          <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
+          <span v-if="isInMatterChallenge">
+            There is {{ format(matter, 2, 1) }} matter.
+          </span>
+          <span v-if="isChallengePowerVisible">
+            {{ challengePower }}
+          </span>
+          <br v-if="isInMatterChallenge || isChallengePowerVisible">
           <HeaderBlackHole />
         </div>
         <button

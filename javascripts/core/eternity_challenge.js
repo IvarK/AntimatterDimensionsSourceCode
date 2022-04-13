@@ -324,7 +324,7 @@ export const EternityChallenges = {
         Perk.autocompleteEC2,
         Perk.autocompleteEC3
       );
-      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
+      minutes /= VUnlocks.fastAutoEC.effectOrDefault(1);
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;
     }
   }

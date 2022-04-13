@@ -85,7 +85,7 @@ export default {
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
       this.achMultToTP = RealityUpgrade(8).isBought;
-      this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
+      this.achMultToBH = VUnlocks.achievementBH.canBeApplied;
       this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
     },
     startRowRendering() {

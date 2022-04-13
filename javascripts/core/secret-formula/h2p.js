@@ -1009,7 +1009,7 @@ Teresa is the first Celestial. They are unlocked by Achievement 147, which requi
 <br>
 On the main screen, there is a bar with a button above it that says "Pour RM". This allows you to put your RM into the
 container for a Reality Machine multiplier. RM which has been poured into the container can't be retrieved.
-When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, you unlock Teresa's Reality.
+When you reach ${format(TeresaUnlocks.run.price)} RM inside of the container, you unlock Teresa's Reality.
 <br>
 <br>
 When you complete Teresa's Reality,
@@ -1017,7 +1017,7 @@ ${Teresa.runCompleted
     ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
     : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see the reward)</div>"}.
 Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
-you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you'll unlock the next Celestial.
+you are at ${format(TeresaUnlocks.effarig.price)} RM in the container, you'll unlock the next Celestial.
 <br>
 <br>
 ${Teresa.runCompleted
@@ -1033,7 +1033,7 @@ ${Teresa.runCompleted
       alias: "Effarig",
       info: () => `
 Effarig is the second Celestial you encounter.
-They are unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
+They are unlocked by pouring at least ${format(TeresaUnlocks.effarig.price)} RM into Teresa's container.
 <br>
 <br>
 Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of Glyph effects during
@@ -1065,7 +1065,7 @@ ${EffarigUnlock.reality.isUnlocked
       " effects. Lastly, the RM multiplier and Glyph instability effects can't appear together on the same Glyph."
     : "<span style='color: var(--color-effarig--base);'>(complete Effarig's Reality to see reward details)</span>"}
 `,
-      isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+      isUnlocked: () => TeresaUnlocks.effarig.canBeApplied,
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame", "celestial"],
       tab: "celestials/effarig"
     }, {
@@ -1300,7 +1300,7 @@ ${Ra.has(RA_UNLOCKS.V_UNLOCK)
 <br>
 <br>
 Ra won't directly unlock the next Celestial.`,
-      isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      isUnlocked: () => VUnlocks.raUnlock.isUnlocked,
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v", "celestial"],
       tab: "celestials/ra"

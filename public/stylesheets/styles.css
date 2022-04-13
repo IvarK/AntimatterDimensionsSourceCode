@@ -139,6 +139,8 @@ html {
   --color-reality-light: #e8e3e4;
   --color-celestials: #F2D6C1;
   --color-prestige--accent: black;
+
+  --color-pelle--base: #7cb727;
 }
 
 .t-s4 #ui-container { /* csslint allow: empty-rules */
@@ -4955,8 +4957,8 @@ screen and (max-width: 480px) {
   font-weight: bold;
   font-size: 1.05rem;
   border: 0.1rem solid;
-  width: 17rem;
-  height: 9.5rem;
+  width: 19rem;
+  height: 10rem;
   transition-duration: 0.2s;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;
@@ -9155,7 +9157,7 @@ input.o-automator-block-input {
 .l-hide-modal-subtab-container {
   display: flex;
   flex-wrap: wrap;
-  width: 70rem;
+  width: 61rem;
   justify-content: center;
   position: relative;
 }

@@ -170,9 +170,7 @@ function applyNDPowers(mult, tier) {
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 
-  if (V.has(V_UNLOCKS.ND_POW) && !Pelle.isDoomed) {
-    multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
-  }
+  multiplier = multiplier.pow(VUnlocks.adPow.effectOrDefault(1));
 
   if (PelleStrikes.infinity.hasStrike) {
     multiplier = multiplier.pow(0.5);

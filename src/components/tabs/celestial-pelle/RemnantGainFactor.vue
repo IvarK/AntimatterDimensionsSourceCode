@@ -117,7 +117,7 @@ export default {
                 {{ format(remnants, 2, 0) }}
               </div>
               <div class="l-remnant-factors-item">
-                {{ format(remnantsGain, 2, 0) }}
+                {{ format(remnantsGain, 2, remnantsGain >= 1 ? 0 : 2) }}
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default {
 }
 
 .c-remnant-factors {
-  background-color: var(--color-prestige--accent);
+  background-color: var(--color-text-inverted);
   color: var(--color-text);
   border: 0.2rem solid var(--color-pelle--base);
   border-radius: 0.5rem;

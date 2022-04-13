@@ -56,7 +56,7 @@ export default {
       this.respec = player.reality.respec;
       this.respecIntoProtected = player.options.respecIntoProtected;
       this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
-      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
+      this.undoVisible = TeresaUnlocks.undo.canBeApplied;
       // eslint-disable-next-line max-len
       this.undoAvailable = this.undoVisible &&
         this.undoSlotsAvailable &&

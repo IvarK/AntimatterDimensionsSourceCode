@@ -63,18 +63,18 @@ export default {
           {}
         ];
     },
-    vUnlock: () => V_UNLOCKS.V_ACHIEVEMENT_UNLOCK,
+    vUnlock: () => VUnlock.vAchievementUnlock,
     runMilestones() {
       return [
         [
-          V_UNLOCKS.SHARD_REDUCTION,
-          V_UNLOCKS.ND_POW,
-          V_UNLOCKS.FAST_AUTO_EC
+          VUnlocks.shardReduction,
+          VUnlocks.adPow,
+          VUnlocks.fastAutoEC
         ],
         [
-          V_UNLOCKS.AUTO_AUTOCLEAN,
-          V_UNLOCKS.ACHIEVEMENT_BH,
-          V_UNLOCKS.RA_UNLOCK
+          VUnlocks.autoAutoClean,
+          VUnlocks.achievementBH,
+          VUnlocks.raUnlock
         ],
       ];
     },
@@ -92,12 +92,12 @@ export default {
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
-      this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
+      this.mainUnlock = VUnlocks.vAchievementUnlock.isUnlocked;
       this.canUnlockCelestial = V.canUnlockCelestial;
       this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
       this.totalUnlocks = V.spaceTheorems;
       this.pp = Currency.perkPoints.value;
-      this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
+      this.showReduction = VUnlocks.shardReduction.isUnlocked;
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
@@ -113,7 +113,7 @@ export default {
       Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
-      return V.has(info);
+      return info.isUnlocked;
     },
     mode(hex) {
       return hex.config.mode === V_REDUCTION_MODE.SUBTRACTION ? "reduced" : "divided";
@@ -125,11 +125,6 @@ export default {
     },
     showRecord(hex) {
       return this.runRecords[hex.id] > 0 || hex.completions > 0;
-    },
-    rewardText(milestone) {
-      return typeof milestone.reward === "function"
-        ? milestone.reward()
-        : milestone.reward;
     },
     reduceGoals(hex) {
       if (!Currency.perkPoints.purchase(hex.reductionCost)) return;
@@ -178,7 +173,7 @@ export default {
           @click="unlockCelestial"
         >
           <p>{{ vUnlock.description }}</p>
-          <p>{{ rewardText(vUnlock) }}</p>
+          <p>{{ vUnlock.rewardText }}</p>
         </div>
       </div>
     </div>
@@ -318,9 +313,9 @@ export default {
             </div>
             <div v-else>
               <p>{{ milestone.description }}</p>
-              <p>Reward: {{ rewardText(milestone) }}</p>
-              <p v-if="milestone.effect">
-                Currently: <b>{{ milestone.format(milestone.effect()) }}</b>
+              <p>Reward: {{ milestone.rewardText }}</p>
+              <p v-if="milestone.formattedEffect">
+                Currently: <b>{{ milestone.formattedEffect }}</b>
               </p>
             </div>
           </div>

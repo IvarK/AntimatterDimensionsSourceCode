@@ -68,6 +68,14 @@ export const GalaxyGenerator = {
       if (this.capRift.reducedTo === 0) {
         player.celestials.pelle.galaxyGenerator.sacrificeActive = false;
         player.celestials.pelle.galaxyGenerator.phase++;
+
+        const phase = player.celestials.pelle.galaxyGenerator.phase;
+        if (phase === 1) {
+          Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_PHASE_1);
+        } else if (phase === 4) {
+          Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_PHASE_4);
+        }
+
         if (!this.capObj) {
           Pelle.quotes.show(Pelle.quotes.END);
         }

@@ -6,7 +6,7 @@ export function emphasizeEnd(fraction) {
 }
 
 export function vUnlockProgress(index) {
-  if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
+  if (VUnlocks.vAchievementUnlock.isUnlocked) return 1;
   const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
   return db.progress();
 }
@@ -87,8 +87,8 @@ GameDatabase.celestials.navigation = (function() {
     },
     "teresa-reality-unlock": {
       visible: () => true,
-      complete: () => (Teresa.has(TERESA_UNLOCKS.RUN)
-        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.RUN.price)),
+      complete: () => (TeresaUnlocks.run.canBeApplied
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TeresaUnlocks.run.price)),
       node: {
         completeClass: "c-celestial-nav__test-complete",
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -101,7 +101,7 @@ GameDatabase.celestials.navigation = (function() {
           hideWhenCompleted: true,
           text: () => {
             const rm = Teresa.pouredAmount;
-            const cost = TERESA_UNLOCKS.RUN.price;
+            const cost = TeresaUnlocks.run.price;
             return `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`;
           },
           angle: 135,
@@ -147,8 +147,8 @@ GameDatabase.celestials.navigation = (function() {
     },
     "teresa-pp-shop": {
       visible: () => true,
-      complete: () => (Teresa.has(TERESA_UNLOCKS.SHOP)
-        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
+      complete: () => (TeresaUnlocks.shop.canBeApplied
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TeresaUnlocks.shop.price)),
       node: {
         clickAction: () => Tab.celestials.teresa.show(true),
         completeClass: "c-celestial-nav__test-complete",
@@ -162,7 +162,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Perk Point Shop";
             const rm = Teresa.pouredAmount;
-            const cost = TERESA_UNLOCKS.SHOP.price;
+            const cost = TeresaUnlocks.shop.price;
             return [
               "Perk Point Shop",
               `Pour ${format(rm, 2)} / ${format(cost, 2)} Reality Machines`
@@ -183,8 +183,8 @@ GameDatabase.celestials.navigation = (function() {
     },
     "effarig-shop": {
       visible: () => true,
-      complete: () => (Teresa.has(TERESA_UNLOCKS.EFFARIG)
-        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
+      complete: () => (TeresaUnlocks.effarig.canBeApplied
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TeresaUnlocks.effarig.price)),
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
         completeClass: "c-celestial-nav__effarig",
@@ -197,7 +197,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Effarig's Shop";
             const rm = Teresa.pouredAmount;
-            const cost = TERESA_UNLOCKS.EFFARIG.price;
+            const cost = TeresaUnlocks.effarig.price;
             return [
               "Effarig",
               `Pour ${format(rm, 2)} / ${format(cost, 2)} Reality Machines`
@@ -216,7 +216,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-reality-unlock": {
-      visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+      visible: () => TeresaUnlocks.effarig.canBeApplied,
       // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
       // even if the player has enough relic shards to buy it.
       complete: () => (EffarigUnlock.run.isUnlocked
@@ -599,7 +599,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-1": {
-      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => vUnlockProgress(1),
       drawOrder: -1,
       node: {
@@ -627,7 +627,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-2": {
-      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => vUnlockProgress(2),
       drawOrder: -1,
       node: {
@@ -656,7 +656,7 @@ GameDatabase.celestials.navigation = (function() {
     },
 
     "v-unlock-3": {
-      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => vUnlockProgress(3),
       drawOrder: -1,
       node: {
@@ -684,7 +684,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-4": {
-      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => vUnlockProgress(4),
       drawOrder: -1,
       node: {
@@ -712,7 +712,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-5": {
-      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => vUnlockProgress(5),
       drawOrder: -1,
       node: {
@@ -740,7 +740,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-6": {
-      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => vUnlockProgress(6),
       drawOrder: -1,
       node: {
@@ -769,7 +769,7 @@ GameDatabase.celestials.navigation = (function() {
     },
 
     "v-achievement-0": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => VRunUnlocks.all[0].completions / 6,
       drawOrder: -1,
       node: {
@@ -805,7 +805,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-achievement-1": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => VRunUnlocks.all[1].completions / 6,
       drawOrder: -1,
       node: {
@@ -841,7 +841,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-achievement-2": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => VRunUnlocks.all[2].completions / 6,
       drawOrder: -1,
       node: {
@@ -877,7 +877,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-achievement-3": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => VRunUnlocks.all[3].completions / 6,
       drawOrder: -1,
       node: {
@@ -913,7 +913,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-achievement-4": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => VRunUnlocks.all[4].completions / 6,
       drawOrder: -1,
       node: {
@@ -949,7 +949,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-achievement-5": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      visible: () => VUnlocks.vAchievementUnlock.isUnlocked,
       complete: () => VRunUnlocks.all[5].completions / 6,
       drawOrder: -1,
       node: {
@@ -986,8 +986,8 @@ GameDatabase.celestials.navigation = (function() {
     },
 
     "ra": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1008,8 +1008,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "teresa-pet": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1044,7 +1044,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "teresa-pet-to-teresa": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
       complete: () => Ra.pets.teresa.level / 25,
       drawOrder: -1,
       connector: {
@@ -1057,7 +1057,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-pet": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
       complete: () => Ra.pets.teresa.level / 8,
       drawOrder: -1,
       node: {
@@ -1210,8 +1210,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "ra-ring-1": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1225,8 +1225,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "ra-ring-2": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1240,8 +1240,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "ra-ring-3": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1255,8 +1255,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "ra-ring-4": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1270,8 +1270,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "ra-ring-5": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
+      visible: () => VUnlocks.raUnlock.isUnlocked,
+      complete: () => (VUnlocks.raUnlock.isUnlocked ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",

@@ -1,5 +1,5 @@
 import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState, BitUpgradeState } from "../game-mechanics/index.js";
 import { CelestialQuotes } from "./quotes.js";
 import { SpeedrunMilestones } from "../speedrun.js";
 
@@ -31,7 +31,7 @@ class VRunUnlockState extends GameMechanicState {
 
   get isReduced() {
     if (player.celestials.v.goalReductionSteps[this.id] === 0) return false;
-    return (V.has(V_UNLOCKS.SHARD_REDUCTION) && this.reduction > 0);
+    return (VUnlocks.shardReduction.canBeApplied && this.reduction > 0);
   }
 
   get reductionCost() {
@@ -82,6 +82,8 @@ class VRunUnlockState extends GameMechanicState {
       this.completions++;
       GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
 
+      V.updateTotalRunUnlocks();
+
       for (const quote of Object.values(V.quotes)) {
         // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
         if (quote.requirement && quote.requirement()) {
@@ -90,9 +92,44 @@ class VRunUnlockState extends GameMechanicState {
           V.quotes.show(quote);
         }
       }
-
-      V.updateTotalRunUnlocks();
     }
+  }
+}
+
+class VUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.v.unlockBits; }
+  set bits(value) { player.celestials.v.unlockBits = value; }
+
+  get pelleDisabled() {
+    return Pelle.isDoomed && !this === VUnlocks.vAchievementUnlock;
+  }
+
+  get isEffectActive() {
+    return this.isUnlocked && !this.pelleDisabled;
+  }
+
+  get description() {
+    return typeof this.config.description === "function" ? this.config.description()
+      : this.config.description;
+  }
+
+  get rewardText() {
+    return typeof this.config.reward === "function" ? this.config.reward()
+      : this.config.reward;
+  }
+
+  get canBeUnlocked() {
+    return this.config.requirement() && !this.isUnlocked;
+  }
+
+  get formattedEffect() {
+    if (!this.config.effect || !this.config.format) return "";
+
+    return this.config.format(this.effectValue);
+  }
+
+  onUnlock() {
+    GameUI.notify.success(this.description);
   }
 }
 
@@ -109,75 +146,18 @@ export const VRunUnlocks = {
   all: VRunUnlock.index.compact(),
 };
 
-export const V_UNLOCKS = {
-  V_ACHIEVEMENT_UNLOCK: {
-    id: 0,
-    reward: "Unlock V, The Celestial Of Achievements",
-    description: "Meet all the above requirements simultaneously",
-    requirement: () => Object.values(GameDatabase.celestials.v.mainUnlock).every(e => e.progress() >= 1)
-  },
-  SHARD_REDUCTION: {
-    id: 1,
-    reward: () => `You can spend Perk Points to reduce the goal requirement of all tiers of each V-Achievement.`,
-    get description() { return `Have ${formatInt(2)} V-Achievements`; },
-    requirement: () => V.spaceTheorems >= 2
-  },
-  ND_POW: {
-    id: 2,
-    reward: "Antimatter Dimension power based on total Space Theorems.",
-    get description() { return `Have ${formatInt(5)} V-Achievements`; },
-    effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
-    format: x => formatPow(x, 3, 3),
-    requirement: () => V.spaceTheorems >= 5
-  },
-  FAST_AUTO_EC: {
-    id: 3,
-    reward: "Achievement multiplier reduces Auto-EC completion time.",
-    get description() { return `Have ${formatInt(10)} V-Achievements`; },
-    effect: () => Achievements.power,
-    // Base rate is 60 ECs at 20 minutes each
-    format: x => (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)
-      ? "Instant (Ra upgrade)"
-      : `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`),
-    requirement: () => V.spaceTheorems >= 10
-  },
-  AUTO_AUTOCLEAN: {
-    id: 4,
-    reward: "Unlock the ability to Auto Purge on Reality.",
-    get description() { return `Have ${formatInt(16)} V-Achievements`; },
-    requirement: () => V.spaceTheorems >= 16
-  },
-  ACHIEVEMENT_BH: {
-    id: 5,
-    reward: "Achievement multiplier affects Black Hole power.",
-    get description() { return `Have ${formatInt(30)} V-Achievements`; },
-    effect: () => Achievements.power,
-    format: x => formatX(x, 2, 0),
-    requirement: () => V.spaceTheorems >= 30
-  },
-  RA_UNLOCK: {
-    id: 6,
-    get reward() {
-      return `Reduce the Space Theorem cost of Time Studies by ${formatInt(2)}. 
-              Unlock Ra, Celestial of the Forgotten.`;
-    },
-    get description() { return `Have ${formatInt(36)} V-Achievements`; },
-    requirement: () => V.spaceTheorems >= 36
-  }
-};
+export const VUnlocks = mapGameDataToObject(
+  GameDatabase.celestials.v.unlocks,
+  config => new VUnlockState(config)
+);
 
 export const V = {
   displayName: "V",
   spaceTheorems: 0,
   checkForUnlocks() {
-    for (const key of Object.keys(V_UNLOCKS)) {
-      const unl = V_UNLOCKS[key];
-      if (unl.id === V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id) continue;
-      if (unl.requirement() && !this.has(unl)) {
-        // eslint-disable-next-line no-bitwise
-        player.celestials.v.unlockBits |= (1 << unl.id);
-        GameUI.notify.success(unl.description);
-      }
+    for (const unl of VUnlocks.all) {
+      if (unl === VUnlocks.vAchievementUnlock) continue;
+      unl.unlock();
     }
 
     if (this.isRunning) {
@@ -187,22 +167,18 @@ export const V = {
       if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
     }
 
-    if (V.has(V_UNLOCKS.RA_UNLOCK) && !Ra.has(RA_UNLOCKS.AUTO_TP)) {
+    if (VUnlocks.raUnlock.canBeApplied && !Ra.has(RA_UNLOCKS.AUTO_TP)) {
       Ra.checkForUnlocks();
     }
   },
   get canUnlockCelestial() {
-    return V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.requirement();
+    return VUnlocks.vAchievementUnlock.canUnlock;
   },
   unlockCelestial() {
     // eslint-disable-next-line no-bitwise
-    player.celestials.v.unlockBits |= (1 << V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id);
+    player.celestials.v.unlockBits |= (1 << VUnlocks.vAchievementUnlock.id);
     GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
     V.quotes.show(V.quotes.UNLOCK);
-  },
-  has(info) {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.v.unlockBits & (1 << info.id));
   },
   initializeRun() {
     clearCelestialRuns();

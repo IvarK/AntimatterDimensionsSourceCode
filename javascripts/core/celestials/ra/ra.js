@@ -5,8 +5,12 @@ class RaUnlockState extends BitUpgradeState {
   get bits() { return player.celestials.ra.unlockBits; }
   set bits(value) { player.celestials.ra.unlockBits = value; }
 
+  get disabledByPelle() {
+    return Pelle.isDoomed && this.config.disabledByPelle;
+  }
+
   get isEffectActive() {
-    return this.isUnlocked;
+    return this.isUnlocked && !this.disabledByPelle;
   }
 
   get requirementText() {

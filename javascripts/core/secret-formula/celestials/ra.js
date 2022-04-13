@@ -49,7 +49,8 @@ GameDatabase.celestials.ra = {
       reward: "Tachyon Particles are given immediately when Time Dilation is active",
       pet: "teresa",
       level: 1,
-      displayIcon: `<span class="fas fa-atom"></span>`
+      displayIcon: `<span class="fas fa-atom"></span>`,
+      disabledByPelle: true
     },
     chargedInfinityUpgrades: {
       id: 1,
@@ -58,7 +59,8 @@ GameDatabase.celestials.ra = {
       effect: () => Math.min(12, Math.floor(Ra.pets.teresa.level / 2)),
       pet: "teresa",
       level: 2,
-      displayIcon: `<span class="fas fa-infinity"></span>`
+      displayIcon: `<span class="fas fa-infinity"></span>`,
+      disabledByPelle: true
     },
     teresaXP: {
       id: 2,
@@ -159,7 +161,8 @@ GameDatabase.celestials.ra = {
       reward: "Unlock Black Hole power upgrade autobuyers",
       pet: "enslaved",
       level: 1,
-      displayIcon: `<span class="fas fa-circle"></span>`
+      displayIcon: `<span class="fas fa-circle"></span>`,
+      disabledByPelle: true
     },
     improvedStoredTime: {
       id: 15,
@@ -170,7 +173,8 @@ GameDatabase.celestials.ra = {
       },
       pet: "enslaved",
       level: 2,
-      displayIcon: `<span class="fas fa-history"></span>`
+      displayIcon: `<span class="fas fa-history"></span>`,
+      disabledByPelle: true
     },
     enslavedXP: {
       id: 16,
@@ -186,7 +190,8 @@ GameDatabase.celestials.ra = {
         pulsed every ${formatInt(5)} ticks. You can change these in the Black Hole and The Enslaved Ones' tabs`,
       pet: "enslaved",
       level: 10,
-      displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
+      displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`,
+      disabledByPelle: true
     },
     vUnlock: {
       id: 18,
@@ -201,7 +206,8 @@ GameDatabase.celestials.ra = {
       effect: () => Math.max(Math.pow(Math.log10(player.celestials.ra.peakGamespeed) - 90, 3), 1),
       pet: "enslaved",
       level: 15,
-      displayIcon: `<span class="fas fa-tachometer-alt"></span>`
+      displayIcon: `<span class="fas fa-tachometer-alt"></span>`,
+      disabledByPelle: true
     },
     allGamespeedGlyphs: {
       id: 20,
@@ -222,7 +228,8 @@ GameDatabase.celestials.ra = {
       reward: "Rebuyable Reality upgrades are bought automatically and Auto-Eternity Challenges happen instantly",
       pet: "v",
       level: 1,
-      displayIcon: `<span class="fas fa-sync-alt"></span>`
+      displayIcon: `<span class="fas fa-sync-alt"></span>`,
+      disabledByPelle: true
     },
     autoUnlockDilation: {
       id: 22,
@@ -264,7 +271,8 @@ GameDatabase.celestials.ra = {
       },
       pet: "v",
       level: 10,
-      displayIcon: `<span class="fas fa-university"></span>`
+      displayIcon: `<span class="fas fa-university"></span>`,
+      disabledByPelle: true
     },
     achievementTTMult: {
       id: 26,
@@ -272,7 +280,8 @@ GameDatabase.celestials.ra = {
       effect: () => Achievements.power,
       pet: "v",
       level: 15,
-      displayIcon: `<span class="fas fa-graduation-cap"></span>`
+      displayIcon: `<span class="fas fa-graduation-cap"></span>`,
+      disabledByPelle: true
     },
     achievementPower: {
       id: 27,
@@ -280,7 +289,8 @@ GameDatabase.celestials.ra = {
       effect: 1.5,
       pet: "v",
       level: 25,
-      displayIcon: `<i class="fab fa-buffer"></i>`
+      displayIcon: `<i class="fab fa-buffer"></i>`,
+      disabledByPelle: true
     }
   }
 };

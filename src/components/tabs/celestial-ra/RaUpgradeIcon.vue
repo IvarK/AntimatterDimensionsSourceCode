@@ -36,7 +36,7 @@ export default {
   methods: {
     update() {
       const unlock = this.unlock;
-      this.isUseless = Pelle.uselessRaMilestones.includes(unlock.id) && Pelle.isDoomed;
+      this.isUseless = unlock.disabledByPelle;
       this.isUnlocked = unlock.isUnlocked;
       this.level = unlock.level;
       this.description = unlock.reward;

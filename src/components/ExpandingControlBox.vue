@@ -24,7 +24,7 @@ export default {
       required: false,
       default: undefined,
     },
-    buttonStyle: {
+    buttonClass: {
       // Default styling is used for Glyph Level Factors dropdown.
       type: String,
       required: false,
@@ -169,7 +169,7 @@ export default {
       <div
         v-if="!$slots.header"
         ref="expandButton"
-        :class="buttonStyle"
+        :class="buttonClass"
         @click="openRequest = !openRequest"
       >
         {{ label }}

@@ -50,8 +50,8 @@ export default {
         this.tabName = this.tab.name;
       }
     },
-    isCurrentSubtab(name) {
-      return name === this.tab._currentSubtab.name && player.options.theme !== "S9";
+    isCurrentSubtab(id) {
+      return player.options.lastOpenSubtab[this.tab.id] === id && player.options.theme !== "S9";
     }
   },
 };
@@ -62,7 +62,6 @@ export default {
     v-if="!isHidden && isAvailable"
     :class="[classObject, tab.config.UIClass]"
   >
-    <div class="o-tab-btn-active-indicator" />
     <div
       class="l-tab-btn-inner"
       @click="tab.show(true)"
@@ -85,7 +84,7 @@ export default {
           class="o-tab-btn o-tab-btn--subtab"
           :class="
             [tab.config.UIClass,
-             {'o-subtab-btn--active': isCurrentSubtab(subtab.name)}]
+             {'o-subtab-btn--active': isCurrentSubtab(subtab.id)}]
           "
           @click="subtab.show(true)"
         >
@@ -132,7 +131,7 @@ export default {
   background-color: var(--color-reality);
 }
 
-.o-tab-btn--celestials::before {
+.o-tab-btn--celestial::before {
   background-color: var(--color-celestials);
 }
 

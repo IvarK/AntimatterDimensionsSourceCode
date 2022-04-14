@@ -502,7 +502,6 @@ button:focus {
 /*#region tab buttons*/
 
 .o-tab-btn {
-  margin-left: -0.1rem !important;
   color: var(--color-text);
   background-color: var(--color-base);
   white-space: nowrap;

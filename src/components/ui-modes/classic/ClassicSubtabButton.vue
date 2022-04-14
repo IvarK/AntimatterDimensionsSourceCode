@@ -10,13 +10,15 @@ export default {
   data() {
     return {
       isAvailable: false,
-      hasNotification: false
+      hasNotification: false,
+      isCurrentSubtab: false
     };
   },
   methods: {
     update() {
       this.isAvailable = this.subtab.isAvailable;
       this.hasNotification = this.subtab.hasNotification;
+      this.isCurrentSubtab = Tabs.current._currentSubtab === this.subtab;
     }
   },
 };
@@ -26,6 +28,7 @@ export default {
   <button
     v-if="isAvailable"
     class="o-tab-btn o-tab-btn--secondary"
+    :class="{ 'o-subtab-btn--active': isCurrentSubtab }"
     @click="subtab.show(true)"
   >
     {{ subtab.name }}
@@ -37,5 +40,14 @@ export default {
 </template>
 
 <style scoped>
+.o-tab-btn {
+  height: 3rem;
+  padding: 0 0.6rem;
+  vertical-align: middle;
+}
 
+.o-subtab-btn--active {
+  border-bottom-width: 0.5rem;
+  padding-top: 0.3rem;
+}
 </style>

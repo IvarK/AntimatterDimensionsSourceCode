@@ -64,7 +64,9 @@ export default {
       if (!this.offlineEnabled) return "Offline Progress is disabled";
       if (this.autoStoreReal) return "Offline time stored";
       return "Offline time used for production";
-    }
+    },
+    // Use this here since Enslaved has a fairly non-standard character, and SFCs don't support using \uf0c1
+    enslavedSymbol: () => Enslaved.symbol
   },
   watch: {
     autoRelease(newValue) {
@@ -176,7 +178,7 @@ export default {
               @click="startRun"
             >
               <div class="c-enslaved-run-button__icon__sigil">
-                
+                {{ enslavedSymbol }}
               </div>
               <div
                 v-for="x in (isRunning ? 25 : 0)"

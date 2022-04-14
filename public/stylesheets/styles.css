@@ -4365,6 +4365,7 @@ screen and (max-width: 480px) {
   text-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.5), -0.1rem 0.1rem 0.1rem black;
 }
 
+.t-dark .c-replicanti-description__accent,
 .t-s6 .c-replicanti-description__accent,
 .t-s10 .c-replicanti-description__accent {
   text-shadow: 0 0 0.7rem #03a9f4;

@@ -18,6 +18,11 @@ export default {
       tabName: ""
     };
   },
+  computed: {
+    isCurrentTab() {
+      return this.tab.isOpen;
+    }
+  },
   methods: {
     update() {
       this.isAvailable = this.tab.isAvailable;
@@ -39,7 +44,10 @@ export default {
 <template>
   <button
     v-if="isAvailable"
-    :class="tab.config.UIClass"
+    :class="
+      [tab.config.UIClass,
+       { 'o-tab-btn--active': isCurrentTab }]
+    "
     class="o-tab-btn"
     @click="tab.show(true)"
   >

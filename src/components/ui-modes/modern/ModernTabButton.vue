@@ -62,6 +62,7 @@ export default {
     v-if="!isHidden && isAvailable"
     :class="[classObject, tab.config.UIClass]"
   >
+    <div class="o-tab-btn-active-indicator" />
     <div
       class="l-tab-btn-inner"
       @click="tab.show(true)"
@@ -104,8 +105,35 @@ export default {
 </template>
 
 <style scoped>
-.o-tab-btn.o-tab-btn--active {
-  border-left-width: 0.5rem;
+.o-tab-btn::before {
+  content: '';
+  width: 0;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: var(--color-accent);
+  transition: width 0.15s;
+}
+
+.o-tab-btn--active::before {
+  width: 0.5rem;
+}
+
+.o-tab-btn--infinity::before {
+  background-color: var(--color-infinity);
+}
+
+.o-tab-btn--eternity::before {
+  background-color: var(--color-eternity);
+}
+
+.o-tab-btn--reality::before {
+  background-color: var(--color-reality);
+}
+
+.o-tab-btn--celestials::before {
+  background-color: var(--color-celestials);
 }
 
 .o-subtab-btn--active {

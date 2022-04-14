@@ -58,9 +58,20 @@ export default {
 
 <template>
   <div class="c-modal-message l-modal-content--centered">
-    <span class="c-modal__title">
-      <slot name="header" />
+    <span class="c-modal__header">
+      <ModalConfirmationCheck
+        v-if="option"
+        :option="option"
+      />
+      <ModalCloseButton
+        v-else
+        @click="closeModal"
+      />
+      <span class="c-modal__title">
+        <slot name="header" />
+      </span>
     </span>
+
 
     <slot />
 
@@ -87,20 +98,11 @@ export default {
         </slot>
       </PrimaryButton>
     </div>
-
-    <ModalConfirmationCheck
-      v-if="option"
-      :option="option"
-    />
-    <ModalCloseButton
-      v-else
-      @click="closeModal"
-    />
   </div>
 </template>
 
 <style scoped>
-.c-modal__title {
+.c-modal__header {
   margin-bottom: 0.5rem;
 }
 </style>

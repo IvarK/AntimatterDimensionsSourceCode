@@ -46,6 +46,8 @@ export default {
       player.reality.automator.scripts = shiftedScripts;
 
       EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
+
+      this.emitClose();
     },
   },
 };

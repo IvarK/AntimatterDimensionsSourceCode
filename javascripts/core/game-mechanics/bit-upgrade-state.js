@@ -20,8 +20,12 @@ export class BitUpgradeState extends GameMechanicState {
     return Boolean(this.bits & (1 << this.id));
   }
 
+  get isEffectActive() {
+    return true;
+  }
+
   get canBeApplied() {
-    return this.isUnlocked;
+    return this.isUnlocked && this.isEffectActive;
   }
 
   get canBeUnlocked() {

@@ -31,6 +31,11 @@ export default {
   computed: {
     view() {
       return this.$viewModel;
+    },
+    hideIfMatoFullscreen() {
+      return {
+        visibility: ui.view.tabs.reality.automator.fullScreen ? "hidden" : "visible"
+      };
     }
   }
 };
@@ -42,23 +47,23 @@ export default {
   <div
     id="ui-fixed"
     class="c-game-ui--fixed"
-    :style="{
-      visibility: view.tabs.reality.automator.fullScreen ? 'hidden' : 'visible'
-    }"
   >
     <div
       id="notification-container"
       class="l-notification-container"
     />
-    <HowToPlay />
-    <InfoButton />
+    <HowToPlay :style="hideIfMatoFullscreen" />
+    <InfoButton :style="hideIfMatoFullscreen" />
     <TimeTheoremShop
       v-if="view.subtab === 'studies'"
       class="l-time-studies-tab__tt-shop"
     />
-    <ModernSidebar v-if="view.newUI" />
-    <SaveTimer />
-    <SpeedrunStatus />
+    <ModernSidebar
+      v-if="view.newUI"
+      :style="hideIfMatoFullscreen"
+    />
+    <SaveTimer :style="hideIfMatoFullscreen" />
+    <SpeedrunStatus :style="hideIfMatoFullscreen" />
     <BackgroundAnimations />
     <PopupModal
       v-if="view.modal.current"

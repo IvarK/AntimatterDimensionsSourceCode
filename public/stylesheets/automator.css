@@ -245,6 +245,9 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  /* I'm honestly scared of CSS. Despite this element having static positioning,
+  z-index is required here to stop the scrollbar of this from intersecting with anything else */
+  z-index: 1;
 }
 
 .CodeMirror-hint {

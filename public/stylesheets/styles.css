@@ -6627,9 +6627,9 @@ kbd {
 }
 
 .o-enslaved-shop-button {
-  color: var(--color-text);
+  color: var(--color-text-inverted);
   padding: 1.7rem;
-  background: none;
+  background-color: var(--color-disabled);
   border: 0.2rem solid var(--color-bad);
   border-radius: 0.5rem;
   margin: 1rem;
@@ -6644,6 +6644,7 @@ kbd {
 }
 
 .o-enslaved-shop-button--available {
+  color: var(--color-text);
   background: none;
   border: 0.2rem solid #ffa337;
   cursor: pointer;

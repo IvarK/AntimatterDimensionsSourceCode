@@ -106,7 +106,7 @@ export const Cloud = {
     };
 
     set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
-    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
+    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);/* with user ${this.user.displayName}`);*/
   },
 
   async loadCheck() {
@@ -126,7 +126,7 @@ export const Cloud = {
       // eslint-disable-next-line no-loop-func
       const overwriteLocalSave = () => {
         GameStorage.overwriteSlot(saveId, cloudSave);
-        GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
+        GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded`);/* for user ${this.user.displayName}`);*/
       };
 
       // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther

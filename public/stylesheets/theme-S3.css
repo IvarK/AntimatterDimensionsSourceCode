@@ -4,10 +4,7 @@ body {
 
 .t-s3 #container,
 .t-s3 #page,
-.t-s3 .l-notification-container,
-.t-s3 .c-modal,
-.t-s3 #TTbuttons,
-.t-s3 .sidebar,
+.t-s3 #ui-fixed,
 .t-s3 .c-glyph-tooltip {
   animation: glasses 7s infinite;
 }

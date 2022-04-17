@@ -53,11 +53,6 @@ export default {
   z-index: 5;
 }
 
-.t-inverted .o-save-timer,
-.t-inverted-metro .o-save-timer {
-  filter: invert(100%)
-}
-
 .t-s2 .o-save-timer {
   filter: sepia(100%) hue-rotate(180deg) saturate(250%);
 }

@@ -38,9 +38,13 @@ export default {
 
 
 <template>
+  <!-- Hide the button if the automator is in fullscreen mode: Nothing here needs to be visible during fullscreen -->
   <div
     id="ui-fixed"
     class="c-game-ui--fixed"
+    :style="{
+      visibility: view.tabs.reality.automator.fullScreen ? 'hidden' : 'visible'
+    }"
   >
     <div
       id="notification-container"

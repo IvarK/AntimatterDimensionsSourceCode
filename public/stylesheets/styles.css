@@ -6627,9 +6627,10 @@ kbd {
 }
 
 .o-enslaved-shop-button {
+  color: var(--color-text);
   padding: 1.7rem;
-  background-color: #fdd3b0;
-  border: none;
+  background: none;
+  border: 0.2rem solid var(--color-bad);
   border-radius: 0.5rem;
   margin: 1rem;
   transition-duration: 0.2s;
@@ -6643,18 +6644,22 @@ kbd {
 }
 
 .o-enslaved-shop-button--available {
-  background-color: #ffa337;
-  box-shadow: 0 0 2rem #fdd3b0;
+  background: none;
+  border: 0.2rem solid #ffa337;
   cursor: pointer;
 }
 
 .o-enslaved-shop-button--available:hover {
-  background-color: #fdd3b0;
-  box-shadow: 0 0 2rem #ffa337;
+  color: var(--color-text-inverted);
+  background-color: #ffa337;
+  border: 0.2rem solid #ffa337;
+  transition: 0.2s;
 }
 
 .o-enslaved-shop-button--bought {
+  color: var(--color-text-inverted);
   background-color: #ffa337;
+  border: none;
   pointer-events: none;
 }
 

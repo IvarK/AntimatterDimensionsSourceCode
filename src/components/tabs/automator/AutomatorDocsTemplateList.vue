@@ -21,7 +21,7 @@ export default {
     <button
       v-for="template in templates"
       :key="template.name"
-      class="c-automator__button l-automator__button"
+      class="c-automator-docs-template--button l-automator__button"
       @click="showModal(template)"
     >
       Template: {{ template.name }}

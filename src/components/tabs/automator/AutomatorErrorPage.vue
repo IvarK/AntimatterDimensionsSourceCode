@@ -33,7 +33,7 @@ export default {
         <b>On line {{ error.startLine }}:</b>
         <button
           v-tooltip="'Jump to line'"
-          class="fas fa-arrow-circle-right"
+          class="c-automator-docs--button fas fa-arrow-circle-right"
           @click="scrollToLine(error.startLine)"
         />
         <div class="c-automator-docs-page__indented">

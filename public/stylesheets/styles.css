@@ -8864,6 +8864,7 @@ kbd {
 .o-automator-block-list {
   display: flex;
   justify-content: center;
+  text-align: center;
   align-items: center;
   height: 5.5rem;
 }

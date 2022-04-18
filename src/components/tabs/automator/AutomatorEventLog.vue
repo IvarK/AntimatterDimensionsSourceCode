@@ -24,6 +24,9 @@ export default {
     },
     clearTooltip() {
       return `Clear all entries (Max. ${this.maxEntries})`;
+    },
+    buttonClassObject() {
+      return "c-automator-docs--button fas";
     }
   },
   watch: {
@@ -120,30 +123,35 @@ const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
       <button
         v-tooltip="'Oldest results first'"
         :style="sortStyle(!newestFirst)"
-        class="fas fa-angle-down"
+        :class="buttonClassObject"
+        class="fa-angle-down"
         @click="newestFirst = false"
       />
       <button
         v-tooltip="'Newest results first'"
         :style="sortStyle(newestFirst)"
-        class="fas fa-angle-up"
+        :class="buttonClassObject"
+        class="fa-angle-up"
         @click="newestFirst = true"
       />
       <button
         v-tooltip="clearTooltip"
-        class="fas fa-trash"
+        :class="buttonClassObject"
+        class="fa-trash"
         @click="clearLog"
       />
       <button
         v-tooltip="'Clear event log every Reality'"
         :style="clearRealityStyle()"
-        class="fas fa-eraser"
+        :class="buttonClassObject"
+        class="fa-eraser"
         @click="clearOnReality = !clearOnReality"
       />
       <button
         v-tooltip="'Clear event log on script restart'"
         :style="clearRestartStyle()"
-        class="fas fa-backspace"
+        :class="buttonClassObject"
+        class="fa-backspace"
         @click="clearOnRestart = !clearOnRestart"
       />
     </div>
@@ -152,31 +160,36 @@ const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
       <button
         v-tooltip="'No timestamps'"
         :style="timestampStyle('DISABLED')"
-        class="fas fa-ban"
+        :class="buttonClassObject"
+        class="fa-ban"
         @click="setTimestampMode('DISABLED')"
       />
       <button
         v-tooltip="'Current time this Reality'"
         :style="timestampStyle('THIS_REALITY')"
-        class="fas fa-stopwatch"
+        :class="buttonClassObject"
+        class="fa-stopwatch"
         @click="setTimestampMode('THIS_REALITY')"
       />
       <button
         v-tooltip="'Time elapsed since event'"
         :style="timestampStyle('RELATIVE_NOW')"
-        class="fas fa-clock"
+        :class="buttonClassObject"
+        class="fa-clock"
         @click="setTimestampMode('RELATIVE_NOW')"
       />
       <button
         v-tooltip="'Time since last event'"
         :style="timestampStyle('RELATIVE_PREV')"
-        class="fas fa-arrow-left"
+        :class="buttonClassObject"
+        class="fa-arrow-left"
         @click="setTimestampMode('RELATIVE_PREV')"
       />
       <button
         v-tooltip="'Date and time'"
         :style="timestampStyle('DATE_TIME')"
-        class="fas fa-user-clock"
+        :class="buttonClassObject"
+        class="fa-user-clock"
         @click="setTimestampMode('DATE_TIME')"
       />
     </div>
@@ -187,7 +200,8 @@ const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
       <b>Line {{ event.line }}{{ timestamp(event) }}:</b>
       <button
         v-tooltip="'Jump to line'"
-        class="fas fa-arrow-circle-right"
+        :class="buttonClassObject"
+        class="fa-arrow-circle-right"
         @click="scrollToLine(event.line)"
       />
       <div class="c-automator-docs-page__indented">

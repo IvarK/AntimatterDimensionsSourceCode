@@ -173,6 +173,13 @@
   color: #45a047;
 }
 
+.c-automator__button-resume {
+  transform: rotate(90deg);
+  height: 3.3rem;
+  width: 2.31rem;
+  margin: -0.1rem 0.9rem -0.1rem 0.9rem;
+}
+
 .l-automator__script-names {
   flex-grow: 1;
   display: flex;

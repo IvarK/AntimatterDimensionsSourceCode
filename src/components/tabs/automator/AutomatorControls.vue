@@ -27,8 +27,9 @@ export default {
     playPauseClass() {
       return {
         "c-automator__button--active": this.isRunning,
-        "fa-play": !this.isRunning || this.isPaused,
-        "fa-pause": !this.isPaused,
+        "fa-play": !this.isRunning && !this.isPaused,
+        "fa-pause": this.isRunning,
+        "fa-eject c-automator__button-resume": this.isPaused,
       };
     },
   },

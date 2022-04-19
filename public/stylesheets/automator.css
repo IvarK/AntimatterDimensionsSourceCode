@@ -160,6 +160,7 @@
   width: 3.3rem;
   margin: 0.4rem;
   border-radius: 0.3rem;
+  border: 0.2rem solid #767676;
   cursor: pointer;
 }
 
@@ -169,8 +170,7 @@
 }
 
 .c-automator__button--active {
-  border-color: #45a047;
-  color: #45a047;
+  background-color: var(--color-reality);
 }
 
 .c-automator__button-resume {

@@ -60,22 +60,22 @@ export default {
     },
     sortStyle(selected) {
       return {
-        "color": selected ? "green" : ""
+        "background-color": selected ? "var(--color-reality)" : ""
       };
     },
     timestampStyle(key) {
       return {
-        "color": this.timestampMode === AUTOMATOR_EVENT_TIMESTAMP_MODE[key] ? "green" : ""
+        "background-color": this.timestampMode === AUTOMATOR_EVENT_TIMESTAMP_MODE[key] ? "var(--color-reality)" : ""
       };
     },
     clearRealityStyle() {
       return {
-        "color": this.clearOnReality ? "green" : ""
+        "background-color": this.clearOnReality ? "var(--color-reality)" : ""
       };
     },
     clearRestartStyle() {
       return {
-        "color": this.clearOnRestart ? "green" : ""
+        "background-color": this.clearOnRestart ? "var(--color-reality)" : ""
       };
     },
     setTimestampMode(key) {

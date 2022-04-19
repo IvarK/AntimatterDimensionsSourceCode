@@ -68,23 +68,23 @@ export default {
     },
     docStyle() {
       return {
-        "color": this.infoPaneID === 1 ? "green" : ""
+        "background-color": this.infoPaneID === 1 ? "var(--color-reality)" : ""
       };
     },
     blockStyle() {
       return {
-        "color": this.infoPaneID === 2 ? "green" : ""
+        "background-color": this.infoPaneID === 2 ? "var(--color-reality)" : ""
       };
     },
     logStyle() {
       return {
-        "color": this.infoPaneID === 4 ? "green" : ""
+        "background-color": this.infoPaneID === 4 ? "var(--color-reality)" : ""
       };
     },
     errorStyle() {
-      const errorlessColor = this.infoPaneID === 3 ? "green" : "";
+      const errorlessColor = this.infoPaneID === 3 ? "var(--color-reality)" : "";
       return {
-        "color": this.errorCount === 0 ? errorlessColor : "red"
+        "background-color": this.errorCount === 0 ? errorlessColor : "red"
       };
     }
   },

@@ -216,7 +216,13 @@ GameDatabase.credits = {
       name: "about:blank",
       roles: 12
     }, {
+      name: "ÆiOuF",
+      roles: 12
+    }, {
       name: "Anjinho01",
+      roles: 12
+    }, {
+      name: "Anthios",
       roles: 12
     }, {
       name: "Auti",
@@ -229,7 +235,14 @@ GameDatabase.credits = {
       name: "Barrin84",
       roles: 12
     }, {
+      name: "ChizuX",
+      roles: 12
+    }, {
       name: "Circle",
+      roles: 12
+    }, {
+      name: "Crinkly Weasel",
+      name2: "Aaryan Sarawgi",
       roles: 12
     }, {
       name: "DarthDie",
@@ -276,6 +289,9 @@ GameDatabase.credits = {
       name2: "Arthur",
       roles: 12
     }, {
+      name: "Mirai",
+      roles: 12
+    }, {
       name: "Monoma",
       name2: "ARoman Ruiz",
       roles: 12
@@ -317,6 +333,9 @@ GameDatabase.credits = {
       name2: "Hannah Pocks",
       roles: 12
     }, {
+      name: "Taylor Reeves",
+      roles: 12
+    }, {
       name: "Tim Wong",
       roles: 12
     }, {
@@ -328,6 +347,9 @@ GameDatabase.credits = {
       roles: 12
     }, {
       name: "vanadium_void",
+      roles: 12
+    }, {
+      name: "X3N0_32",
       roles: 12
     }, {
       name: "ZylaKat",

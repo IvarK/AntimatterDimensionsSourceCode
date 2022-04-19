@@ -5117,7 +5117,7 @@ screen and (max-width: 480px) {
 
 
 .c-tachyon-particle-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -9152,6 +9152,7 @@ input.o-automator-block-input {
 
 .l-help-me {
   position: absolute;
+  pointer-events: auto;
   top: 1rem;
   width: 2rem;
   right: 2rem;

@@ -1,14 +1,12 @@
 <script>
 import DilationButton from "./DilationButton";
 import DilationUpgradeButton from "./DilationUpgradeButton";
-import TachyonParticles from "./TachyonParticles";
 
 export default {
   name: "TimeDilationTab",
   components: {
     DilationButton,
-    DilationUpgradeButton,
-    TachyonParticles
+    DilationUpgradeButton
   },
   data() {
     return {
@@ -17,7 +15,6 @@ export default {
       dilatedTimeIncome: new Decimal(),
       galaxyThreshold: new Decimal(),
       galaxies: 0,
-      animateTachyons: true,
       tachyonGalaxyGain: 1,
       hasPelleDilationUpgrades: false
     };
@@ -85,7 +82,6 @@ export default {
       }
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
-      this.animateTachyons = player.options.animations.tachyonParticles;
       this.hasPelleDilationUpgrades = PelleRifts.death.milestones[0].canBeApplied;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
@@ -172,7 +168,6 @@ export default {
         />
       </div>
     </div>
-    <TachyonParticles v-if="animateTachyons" />
   </div>
 </template>
 

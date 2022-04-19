@@ -2,7 +2,8 @@
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import TabComponents from "@/components/tabs";
-import GameUiFixedComponents from "@/components/GameUiFixedComponents";
+import GameUiComponentFixed from "@/components/GameUiComponentFixed";
+import BackgroundAnimations from "@/components/BackgroundAnimations";
 
 export default {
   name: "GameUIComponent",
@@ -10,7 +11,8 @@ export default {
     ...TabComponents,
     ClassicUi,
     ModernUi,
-    GameUiFixedComponents
+    GameUiComponentFixed,
+    BackgroundAnimations
   },
   computed: {
     view() {
@@ -54,7 +56,8 @@ export default {
         :href="themeCss"
       >
     </div>
-    <GameUiFixedComponents />
+    <GameUiComponentFixed />
+    <BackgroundAnimations />
   </div>
 </template>
 

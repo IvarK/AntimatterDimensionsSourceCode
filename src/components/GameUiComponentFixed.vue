@@ -5,7 +5,6 @@ import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremS
 import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
 import SaveTimer from "@/components/SaveTimer";
 import SpeedrunStatus from "@/components/SpeedrunStatus";
-import BackgroundAnimations from "@/components/BackgroundAnimations";
 import PopupModal from "@/components/modals/PopupModal";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
@@ -13,7 +12,7 @@ import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 
 export default {
-  name: "GameUiFixedComponents",
+  name: "GameUiComponentFixed",
   components: {
     HowToPlay,
     InfoButton,
@@ -21,12 +20,16 @@ export default {
     ModernSidebar,
     SaveTimer,
     SpeedrunStatus,
-    BackgroundAnimations,
     PopupModal,
     ModalProgressBar,
     FadeToBlack,
     CreditsContainer,
     NewGame
+  },
+  data() {
+    return {
+      rollingCredits: false
+    };
   },
   computed: {
     view() {
@@ -36,6 +39,11 @@ export default {
       return {
         visibility: ui.view.tabs.reality.automator.fullScreen ? "hidden" : "visible"
       };
+    }
+  },
+  methods: {
+    update() {
+      this.rollingCredits = GameEnd.endState >= 2.5;
     }
   }
 };
@@ -64,15 +72,14 @@ export default {
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
     <SpeedrunStatus :style="hideIfMatoFullscreen" />
-    <BackgroundAnimations />
     <PopupModal
       v-if="view.modal.current"
       :modal="view.modal.current"
     />
     <ModalProgressBar v-if="view.modal.progressBar" />
-    <FadeToBlack />
-    <CreditsContainer />
-    <NewGame />
+    <FadeToBlack v-if="rollingCredits" />
+    <CreditsContainer v-if="rollingCredits" />
+    <NewGame v-if="rollingCredits" />
   </div>
 </template>
 

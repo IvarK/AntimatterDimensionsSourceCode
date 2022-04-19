@@ -151,13 +151,18 @@ export default {
 <style scoped>
 .not-selected {
   opacity: 0.3;
+  transition: 0.1s;
 }
 
 .remove-margin-left {
-  margin-left: -0.2rem; /* negate the border */
+  margin-left: -0.1rem; /* negate the border */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .remove-margin-right {
-  margin-right: -0.2rem; /* negate the border */
+  margin-right: -0.1rem; /* negate the border */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 </style>

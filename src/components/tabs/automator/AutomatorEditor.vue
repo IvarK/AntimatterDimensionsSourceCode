@@ -148,7 +148,6 @@ export default {
               <div class="knobs">
                 <span class="fas fa-cubes" />
               </div>
-              <div class="layer" />
             </div>
           </div>
         </div>
@@ -166,6 +165,7 @@ export default {
 .slider-toggle-button {
   width: 6.4rem;
   height: 2.33rem;
+  background-color: #626262;
   border: 0.2rem solid #767676;
   border-radius: 0.2rem;
   margin: 0.4rem;
@@ -243,7 +243,7 @@ export default {
 }
 
 #button-and-knob .knobs:after {
-  content: ""; /* \uF121 */
+  content: "\f121";
   top: -0.16rem;
   left: 3.2rem;
   width: 2rem;
@@ -271,10 +271,6 @@ export default {
 
 #button-and-knob .checkbox:checked + .knobs:after {
   color: black;
-}
-
-#button-and-knob .checkbox:checked ~ .layer {
-  background-color: #626262;
 }
 
 .tutorial--glow:after {

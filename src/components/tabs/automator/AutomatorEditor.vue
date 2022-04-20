@@ -178,8 +178,7 @@ export default {
 }
 
 .button-cover,
-.knobs,
-.layer {
+.knobs {
   position: absolute;
   top: 0;
   left: 0;
@@ -209,13 +208,6 @@ export default {
 
 .knobs {
   z-index: 2;
-}
-
-.layer {
-  width: 100%;
-  background-color: #626262;
-  transition: 0.3s ease all;
-  z-index: 1;
 }
 
 #button-and-knob .knobs:before,

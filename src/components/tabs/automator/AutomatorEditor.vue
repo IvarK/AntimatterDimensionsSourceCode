@@ -19,6 +19,7 @@ export default {
         lineNumber: 0,
         scriptID: 0,
       },
+      isBlock: false
     };
   },
   computed: {
@@ -39,8 +40,13 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    isTextAutomator() {
-      return this.automatorType === AUTOMATOR_TYPE.TEXT;
+    isTextAutomator: {
+      get() {
+        return this.automatorType === AUTOMATOR_TYPE.TEXT;
+      },
+      set() {
+        this.toggleAutomatorMode();
+      }
     },
     isBlockAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.BLOCK;
@@ -61,6 +67,7 @@ export default {
   created() {
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
     EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
     this.updateCurrentScriptID();
   },
   beforeDestroy() {
@@ -115,7 +122,6 @@ export default {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
       this.$recompute("currentScriptContent");
-      document.getElementById("toggle").checked = this.automatorType === AUTOMATOR_TYPE.TEXT;
       // Need this to remove focus from checkbox
       document.activeElement.blur();
     }
@@ -133,22 +139,13 @@ export default {
         :class="tutorialClass"
       >
         <div class="toggle-button-cover">
-          <div class="button-cover">
-            <div
-              id="button-and-knob"
-              class="button"
-            >
-              <input
-                id="toggle"
-                type="checkbox"
-                class="checkbox"
-                :checked="isTextAutomator"
-                @click="toggleAutomatorMode()"
-              >
-              <div class="knobs">
-                <span class="fas fa-cubes" />
-              </div>
-            </div>
+          <input
+            v-model="isTextAutomator"
+            type="checkbox"
+            class="checkbox"
+          >
+          <div class="knobs">
+            <span class="fas fa-cubes" />
           </div>
         </div>
       </div>
@@ -174,7 +171,11 @@ export default {
 .toggle-button-cover {
   display: table-cell;
   position: relative;
-  box-sizing: border-box;
+  top: 0;
+  width: 6rem;
+  height: 1.94rem;
+  margin: 0;
+  overflow: hidden;
 }
 
 .button-cover,
@@ -184,15 +185,6 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.button {
-  position: relative;
-  top: 0;
-  width: 6rem;
-  height: 1.94rem;
-  margin: 0;
-  overflow: hidden;
 }
 
 .checkbox {
@@ -210,9 +202,9 @@ export default {
   z-index: 2;
 }
 
-#button-and-knob .knobs:before,
-#button-and-knob .knobs:after,
-#button-and-knob .knobs span {
+.toggle-button-cover .knobs:before,
+.toggle-button-cover .knobs:after,
+.toggle-button-cover .knobs span {
   position: absolute;
   top: 0;
   width: 2rem;
@@ -228,13 +220,13 @@ export default {
   transition: 0.3s ease all;
 }
 
-#button-and-knob .knobs:before {
+.toggle-button-cover .knobs:before {
   content: "";
   left: 0.4rem;
   background-color: white;
 }
 
-#button-and-knob .knobs:after {
+.toggle-button-cover .knobs:after {
   content: "\f121";
   top: -0.16rem;
   left: 3.2rem;
@@ -245,23 +237,23 @@ export default {
   color: black;
 }
 
-#button-and-knob .knobs span {
+.toggle-button-cover .knobs span {
   display: inline-block;
   left: 0.4rem;
   color: black;
   z-index: 1;
 }
 
-#button-and-knob .checkbox:checked + .knobs span {
+.toggle-button-cover .checkbox:checked + .knobs span {
   color: black;
 }
 
-#button-and-knob .checkbox:checked + .knobs:before {
+.toggle-button-cover .checkbox:checked + .knobs:before {
   left: 3.5rem;
   background-color: white;
 }
 
-#button-and-knob .checkbox:checked + .knobs:after {
+.toggle-button-cover .checkbox:checked + .knobs:after {
   color: black;
 }
 

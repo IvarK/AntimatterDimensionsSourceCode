@@ -62,12 +62,9 @@ export default {
     }
   },
   created() {
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
-    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad());
     this.updateCurrentScriptID();
-  },
-  beforeDestroy() {
-    EventHub.ui.offAll(this);
   },
   methods: {
     update() {

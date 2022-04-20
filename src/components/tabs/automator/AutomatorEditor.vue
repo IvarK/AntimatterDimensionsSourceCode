@@ -2,7 +2,6 @@
 import AutomatorBlockEditor from "./AutomatorBlockEditor";
 import AutomatorTextEditor from "./AutomatorTextEditor";
 import AutomatorControls from "./AutomatorControls";
-import AutomatorButton from "./AutomatorButton";
 
 export default {
   name: "AutomatorEditor",
@@ -10,7 +9,6 @@ export default {
     AutomatorBlockEditor,
     AutomatorTextEditor,
     AutomatorControls,
-    AutomatorButton
   },
   data() {
     return {
@@ -41,9 +39,6 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    blockSelected() {
-      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
-    },
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
@@ -58,7 +53,9 @@ export default {
       return "Switch to the block editor";
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.AUTOMATOR);
+      return {
+        "tutorial--glow": ui.view.tutorialState === TUTORIAL_STATE.AUTOMATOR && ui.view.tutorialActive
+      };
     }
   },
   created() {
@@ -118,6 +115,9 @@ export default {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
       this.$recompute("currentScriptContent");
+      document.getElementById("toggle").checked = this.automatorType === AUTOMATOR_TYPE.TEXT;
+      // Need this to remove focus from checkbox
+      document.activeElement.blur();
     }
   }
 };
@@ -127,18 +127,32 @@ export default {
   <div class="l-automator-pane">
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <AutomatorControls />
-      <AutomatorButton
+      <div
         v-tooltip="automatorModeTooltip"
-        class="fa-cubes remove-margin-right"
-        :class="{ 'not-selected': !blockSelected, ...tutorialClass }"
-        @click="toggleAutomatorMode()"
-      />
-      <AutomatorButton
-        v-tooltip="automatorModeTooltip"
-        class="fa-code remove-margin-left"
-        :class="{ 'not-selected': blockSelected, ...tutorialClass }"
-        @click="toggleAutomatorMode()"
-      />
+        class="slider-toggle-button"
+        :class="tutorialClass"
+      >
+        <div class="toggle-button-cover">
+          <div class="button-cover">
+            <div
+              id="button-and-knob"
+              class="button"
+            >
+              <input
+                id="toggle"
+                type="checkbox"
+                class="checkbox"
+                :checked="isTextAutomator"
+                @click="toggleAutomatorMode()"
+              >
+              <div class="knobs">
+                <span class="fas fa-cubes" />
+              </div>
+              <div class="layer" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <AutomatorTextEditor
       v-if="isTextAutomator"
@@ -149,20 +163,121 @@ export default {
 </template>
 
 <style scoped>
-.not-selected {
-  opacity: 0.3;
-  transition: 0.1s;
+.slider-toggle-button {
+  width: 6.4rem;
+  height: 2.33rem;
+  border: 0.2rem solid #767676;
+  border-radius: 0.2rem;
+  margin: 0.4rem;
 }
 
-.remove-margin-left {
-  margin-left: -0.1rem; /* negate the border */
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+.toggle-button-cover {
+  display: table-cell;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.remove-margin-right {
-  margin-right: -0.1rem; /* negate the border */
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.button-cover,
+.knobs,
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.button {
+  position: relative;
+  top: 0;
+  width: 6rem;
+  height: 1.94rem;
+  margin: 0;
+  overflow: hidden;
+}
+
+.checkbox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.knobs {
+  z-index: 2;
+}
+
+.layer {
+  width: 100%;
+  background-color: #626262;
+  transition: 0.3s ease all;
+  z-index: 1;
+}
+
+#button-and-knob .knobs:before,
+#button-and-knob .knobs:after,
+#button-and-knob .knobs span {
+  position: absolute;
+  top: 0;
+  width: 2rem;
+  height: 1.32rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  line-height: 1;
+  margin-top: 0;
+  margin-left: -0.4rem;
+  padding: 0.3rem 0.2rem 0.3rem 0.7rem;
+  border-radius: 2px;
+  transition: 0.3s ease all;
+}
+
+#button-and-knob .knobs:before {
+  content: "";
+  left: 0.4rem;
+  background-color: white;
+}
+
+#button-and-knob .knobs:after {
+  content: ""; /* \uF121 */
+  top: -0.16rem;
+  left: 3.2rem;
+  width: 2rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 100;
+  color: black;
+}
+
+#button-and-knob .knobs span {
+  display: inline-block;
+  left: 0.4rem;
+  color: black;
+  z-index: 1;
+}
+
+#button-and-knob .checkbox:checked + .knobs span {
+  color: black;
+}
+
+#button-and-knob .checkbox:checked + .knobs:before {
+  left: 3.5rem;
+  background-color: white;
+}
+
+#button-and-knob .checkbox:checked + .knobs:after {
+  color: black;
+}
+
+#button-and-knob .checkbox:checked ~ .layer {
+  background-color: #626262;
+}
+
+.tutorial--glow:after {
+  z-index: 2;
 }
 </style>

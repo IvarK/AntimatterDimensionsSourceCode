@@ -101,7 +101,7 @@ class VUnlockState extends BitUpgradeState {
   set bits(value) { player.celestials.v.unlockBits = value; }
 
   get pelleDisabled() {
-    return Pelle.isDoomed && !this === VUnlocks.vAchievementUnlock;
+    return Pelle.isDoomed && this !== VUnlocks.vAchievementUnlock;
   }
 
   get isEffectActive() {

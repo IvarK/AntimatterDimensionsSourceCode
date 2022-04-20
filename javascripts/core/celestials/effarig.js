@@ -169,8 +169,8 @@ class EffarigUnlockState extends BitUpgradeState {
     return this.config.cost;
   }
 
-  get canBeApplied() {
-    return this.isUnlocked && !Pelle.isDisabled("effarig");
+  get isEffectActive() {
+    return !Pelle.isDisabled("effarig");
   }
 
   purchase() {

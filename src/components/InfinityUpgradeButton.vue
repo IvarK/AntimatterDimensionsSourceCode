@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      showWorstChallenge: false,
       isUseless: false,
       canBeBought: false,
       chargePossible: false,
@@ -85,6 +86,12 @@ export default {
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
       this.hasTS31 = TimeStudy(31).canBeApplied;
+      if (upgrade.id !== "challengeMult") return;
+      this.showWorstChallenge = upgrade.effectValue !== upgrade.cap &&
+        player.challenge.normal.bestTimes.sum() < Number.MAX_VALUE;
+      const worstChallengeTime = GameCache.worstChallengeTime.value;
+      const worstChallengeIndex = 2 + player.challenge.normal.bestTimes.indexOf(worstChallengeTime);
+      this.worstChallengeString = `(Challenge ${worstChallengeIndex}: ${timeDisplayShort(worstChallengeTime)})`;
     }
   }
 };
@@ -104,6 +111,10 @@ export default {
       <DescriptionDisplay
         :config="config"
       />
+      <span v-if="showWorstChallenge">
+        <br>
+        {{ worstChallengeString }}
+      </span>
       <EffectDisplay
         v-if="!isDisabled"
         br

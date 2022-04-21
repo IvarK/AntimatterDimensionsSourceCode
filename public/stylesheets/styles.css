@@ -6651,14 +6651,14 @@ kbd {
 }
 
 .o-enslaved-shop-button--available:hover {
-  color: var(--color-text-inverted);
+  color: black;
   background-color: #ffa337;
   border: 0.2rem solid #ffa337;
   transition: 0.2s;
 }
 
 .o-enslaved-shop-button--bought {
-  color: var(--color-text-inverted);
+  color: black;
   background-color: #ffa337;
   border: none;
   pointer-events: none;

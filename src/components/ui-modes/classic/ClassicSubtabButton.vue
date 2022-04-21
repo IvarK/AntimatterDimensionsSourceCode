@@ -41,10 +41,13 @@ export default {
 
 <style scoped>
 .o-tab-btn {
+  padding-top: 0.2rem;
   vertical-align: middle;
+  height: 2.5rem;
 }
 
 .o-subtab-btn--active {
   border-bottom-width: 0.4rem;
+  height: 2.5rem;
 }
 </style>

@@ -62,13 +62,12 @@ export default {
 .o-tab-btn {
   margin: 0.2rem;
   margin-bottom: 0.7rem;
-  height: 3.5rem;
-  padding: 0 0.6rem;
   vertical-align: middle;
+  height: 3.1rem;
 }
 
 .o-tab-btn--active {
   border-bottom-width: 0.5rem;
-  padding-top: 0.3rem;
+  height: 3.1rem;
 }
 </style>

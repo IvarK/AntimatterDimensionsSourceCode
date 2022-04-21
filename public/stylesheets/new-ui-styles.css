@@ -681,10 +681,6 @@ body.t-s9 {
   border: 0.1rem solid var(--color-accent);
 }
 
-.c-replicanti-description__accent {
-  color: #2196f3
-}
-
 .c-dim-row__name {
   font-size: 2rem;
 }

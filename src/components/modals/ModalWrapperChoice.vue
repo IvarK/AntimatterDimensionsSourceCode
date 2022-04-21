@@ -1,12 +1,14 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
 import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 export default {
   name: "ModalWrapperChoice",
   components: {
     PrimaryButton,
     ModalConfirmationCheck,
+    ModalCloseButton
   },
   props: {
     cancelClass: {
@@ -47,15 +49,29 @@ export default {
       this.$emit("cancel");
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
+    closeModal() {
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+    }
   }
 };
 </script>
 
 <template>
   <div class="c-modal-message l-modal-content--centered">
-    <span class="c-modal__title">
-      <slot name="header" />
+    <span class="c-modal__header">
+      <ModalConfirmationCheck
+        v-if="option"
+        :option="option"
+      />
+      <ModalCloseButton
+        v-else
+        @click="closeModal"
+      />
+      <span class="c-modal__title">
+        <slot name="header" />
+      </span>
     </span>
+
 
     <slot />
 
@@ -82,10 +98,11 @@ export default {
         </slot>
       </PrimaryButton>
     </div>
-
-    <ModalConfirmationCheck
-      v-if="option"
-      :option="option"
-    />
   </div>
 </template>
+
+<style scoped>
+.c-modal__header {
+  margin-bottom: 0.5rem;
+}
+</style>

@@ -26,7 +26,7 @@ export default {
       return {
         "o-tab-btn": true,
         "o-tab-btn--subtabs": this.showSubtabs,
-        "o-tab-btn--active": this.isCurrentTab
+        "o-tab-btn--active": this.isCurrentTab && player.options.theme !== "S9"
       };
     },
     isCurrentTab() {

@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     isCurrentTab() {
-      return this.tab.isOpen;
+      return this.tab.isOpen && player.options.theme !== "S9";
     }
   },
   methods: {

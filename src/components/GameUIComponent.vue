@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     update() {
-      this.rollCredits = GameEnd.endState >= 4.5;
+      this.rollCredits = GameEnd.endState >= 2.5;
     }
   }
 };
@@ -105,7 +105,7 @@ export default {
     <ModernSidebar v-if="view.newUI" />
     <SaveTimer />
     <SpeedrunStatus />
-    <FadeToBlack />
+    <FadeToBlack v-if="rollCredits" />
     <CreditsContainer v-if="rollCredits" />
     <NewGame v-if="rollCredits" />
   </div>

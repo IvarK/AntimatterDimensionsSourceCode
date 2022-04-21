@@ -26,18 +26,10 @@ export default {
     },
     playButtonClass() {
       return {
-        "c-automator__button": true,
-        "l-automator__button": true,
-        "fas": true,
         "c-automator__button--active": this.isRunning,
-      };
-    },
-    playButtonContentsClass() {
-      return {
         "fa-play": !this.isRunning && !this.isPaused,
         "fa-pause": this.isRunning,
-        "fa-eject": this.isPaused,
-        "c-text-rotation": this.isPaused,
+        "fa-eject": this.isPaused
       };
     },
   },
@@ -78,13 +70,11 @@ export default {
       class="fa-fast-backward"
       @click="rewind"
     />
-    <button
+    <AutomatorButton
       v-tooltip="playTooltip"
       :class="playButtonClass"
       @click="play"
-    >
-      <span :class="playButtonContentsClass" />
-    </button>
+    />
     <AutomatorButton
       v-tooltip="'Stop Automator and reset position'"
       class="fa-stop"
@@ -117,7 +107,12 @@ export default {
 </template>
 
 <style scoped>
-  .c-text-rotation {
-    transform: rotate(90deg);
-  }
+.c-automator__button--active {
+  background-color: var(--color-reality);
+  border-color: var(--color-reality-light);
+}
+
+.c-automator__button.fa-eject:before {
+  transform: rotate(90deg);
+}
 </style>

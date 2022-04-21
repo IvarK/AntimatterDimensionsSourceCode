@@ -66,25 +66,9 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    docStyle() {
-      return {
-        "background-color": this.infoPaneID === 1 ? "var(--color-reality)" : ""
-      };
-    },
-    blockStyle() {
-      return {
-        "background-color": this.infoPaneID === 2 ? "var(--color-reality)" : ""
-      };
-    },
-    logStyle() {
-      return {
-        "background-color": this.infoPaneID === 4 ? "var(--color-reality)" : ""
-      };
-    },
     errorStyle() {
-      const errorlessColor = this.infoPaneID === 3 ? "var(--color-reality)" : "";
       return {
-        "background-color": this.errorCount === 0 ? errorlessColor : "red"
+        "background-color": this.errorCount === 0 ? "" : "red"
       };
     }
   },
@@ -200,24 +184,31 @@ export default {
         v-tooltip="'Scripting Information'"
         :style="docStyle"
         class="fa-list"
+        :class="{ 'c-automator__button--active': infoPaneID === 1 }"
         @click="infoPaneID = 1"
       />
       <AutomatorButton
         v-tooltip="blockTooltip"
         :style="blockStyle"
-        :class="isBlock ? 'fa-cubes' : 'fa-file-code'"
+        :class="{
+          'fa-cubes': isBlock,
+          'fa-file-code': !isBlock,
+          'c-automator__button--active': infoPaneID === 2
+        }"
         @click="infoPaneID = 2"
       />
       <AutomatorButton
         v-tooltip="errorTooltip"
         :style="errorStyle"
         class="fa-exclamation-triangle"
+        :class="{ 'c-automator__button--active': infoPaneID === 3 }"
         @click="infoPaneID = 3"
       />
       <AutomatorButton
         v-tooltip="'View recently executed commands'"
         :style="logStyle"
         class="fa-eye"
+        :class="{ 'c-automator__button--active': infoPaneID === 4 }"
         @click="infoPaneID = 4"
       />
       <AutomatorButton
@@ -286,5 +277,8 @@ export default {
 </template>
 
 <style scoped>
-
+.c-automator__button--active {
+  background-color: var(--color-reality);
+  border-color: var(--color-reality-light);
+}
 </style>

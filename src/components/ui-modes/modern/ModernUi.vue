@@ -22,7 +22,6 @@ export default {
     return {
       bigCrunch: false,
       smallCrunch: false,
-      breakInfinity: false,
       realities: 0,
       antimatter: new Decimal(0),
       antimatterPerSec: new Decimal(0),
@@ -51,7 +50,6 @@ export default {
     update() {
       this.antimatter.copyFrom(Currency.antimatter);
       this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
-      this.breakInfinity = player.break;
       this.realities = Currency.realities.value;
 
       this.currentEternityChallenge = EternityChallenge.current;
@@ -134,10 +132,7 @@ export default {
         v-else
         class="tab-container"
       >
-        <div
-          v-if="breakInfinity"
-          class="l-reset-buttons-container"
-        >
+        <div class="l-reset-buttons-container">
           <HeaderEternityButton />
           <HeaderUnlockInfinityDimButton />
           <HeaderBigCrunchButton />

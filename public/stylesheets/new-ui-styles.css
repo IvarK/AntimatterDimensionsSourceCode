@@ -248,11 +248,6 @@ body.t-s9 {
   border-radius: 0 !important;
 }
 
-.l-reset-buttons-container {
-  position: relative;
-  min-height: 8rem;
-}
-
 .tab-container {
   display: flex;
   justify-content: center;
@@ -831,6 +826,7 @@ body.t-s9 {
   position: absolute;
   top: 0;
   width: 100%;
+  min-height: 8rem;
 }
 
 .l-game-header__antimatter-container {

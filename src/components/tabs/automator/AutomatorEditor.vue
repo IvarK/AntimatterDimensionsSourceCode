@@ -18,8 +18,7 @@ export default {
       activeLineInfo: {
         lineNumber: 0,
         scriptID: 0,
-      },
-      isBlock: false
+      }
     };
   },
   computed: {
@@ -40,13 +39,8 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    isTextAutomator: {
-      get() {
-        return this.automatorType === AUTOMATOR_TYPE.TEXT;
-      },
-      set() {
-        this.toggleAutomatorMode();
-      }
+    isTextAutomator() {
+      return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
     isBlockAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.BLOCK;
@@ -122,8 +116,6 @@ export default {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
       this.$recompute("currentScriptContent");
-      // Need this to remove focus from checkbox
-      document.activeElement.blur();
     }
   }
 };
@@ -133,22 +125,18 @@ export default {
   <div class="l-automator-pane">
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <AutomatorControls />
-      <div
+      <button
         v-tooltip="automatorModeTooltip"
-        class="slider-toggle-button"
-        :class="tutorialClass"
+        :class="{
+          'c-slider-toggle-button': true,
+          'c-slider-toggle-button--right': isTextAutomator,
+          ...tutorialClass
+        }"
+        @click="toggleAutomatorMode"
       >
-        <div class="toggle-button-cover">
-          <input
-            v-model="isTextAutomator"
-            type="checkbox"
-            class="checkbox"
-          >
-          <div class="knobs">
-            <span class="fas fa-cubes" />
-          </div>
-        </div>
-      </div>
+        <i class="fas fa-cubes" />
+        <i class="fas fa-code" />
+      </button>
     </div>
     <AutomatorTextEditor
       v-if="isTextAutomator"
@@ -159,102 +147,42 @@ export default {
 </template>
 
 <style scoped>
-.slider-toggle-button {
-  width: 6.4rem;
-  height: 2.33rem;
+.c-slider-toggle-button {
+  color: black;
   background-color: #626262;
   border: 0.2rem solid #767676;
   border-radius: 0.2rem;
   margin: 0.4rem;
-}
-
-.toggle-button-cover {
-  display: table-cell;
-  position: relative;
-  top: 0;
-  width: 6rem;
-  height: 1.94rem;
-  margin: 0;
   overflow: hidden;
-}
-
-.button-cover,
-.knobs {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.checkbox {
   position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  opacity: 0;
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  z-index: 3;
+  padding: 0.3rem 0;
 }
 
-.knobs {
-  z-index: 2;
-}
-
-.toggle-button-cover .knobs:before,
-.toggle-button-cover .knobs:after,
-.toggle-button-cover .knobs span {
-  position: absolute;
-  top: 0;
-  width: 2rem;
-  height: 1.32rem;
-  text-align: center;
-  font-size: 1.3rem;
-  font-weight: bold;
-  line-height: 1;
-  margin-top: 0;
-  margin-left: -0.4rem;
-  padding: 0.3rem 0.2rem 0.3rem 0.7rem;
-  border-radius: 2px;
-  transition: 0.3s ease all;
-}
-
-.toggle-button-cover .knobs:before {
-  content: "";
-  left: 0.4rem;
-  background-color: white;
-}
-
-.toggle-button-cover .knobs:after {
-  content: "\f121";
-  top: -0.16rem;
-  left: 3.2rem;
-  width: 2rem;
-  text-align: center;
-  font-size: 1.3rem;
-  font-weight: 100;
-  color: black;
-}
-
-.toggle-button-cover .knobs span {
-  display: inline-block;
-  left: 0.4rem;
-  color: black;
+.c-slider-toggle-button .fas {
+  width: 3rem;
+  position: relative;
   z-index: 1;
 }
 
-.toggle-button-cover .checkbox:checked + .knobs span {
-  color: black;
-}
-
-.toggle-button-cover .checkbox:checked + .knobs:before {
-  left: 3.5rem;
+.c-slider-toggle-button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3rem;
+  height: 100%;
+  border-radius: 0.2rem;
+  transition: 0.3s ease all;
   background-color: white;
+  z-index: 0;
 }
 
-.toggle-button-cover .checkbox:checked + .knobs:after {
-  color: black;
+.c-slider-toggle-button--right:before {
+  left: 3rem;
+  background-color: white;
 }
 
 .tutorial--glow:after {

@@ -25,7 +25,6 @@ export default {
       default: undefined,
     },
     buttonClass: {
-      // Default styling is used for Glyph Level Factors dropdown.
       type: String,
       required: false,
       default: "l-expanding-control-box__button",

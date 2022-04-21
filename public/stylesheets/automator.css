@@ -171,13 +171,7 @@
 
 .c-automator__button--active {
   background-color: var(--color-reality);
-}
-
-.c-automator__button-resume {
-  transform: rotate(90deg);
-  height: 3.3rem;
-  width: 2.31rem;
-  margin: -0.1rem 0.9rem;
+  border-color: var(--color-reality-light);
 }
 
 .l-automator__script-names {
@@ -298,7 +292,6 @@
 .c-automator-docs--button {
   width: 2.8rem;
   height: 2.2rem;
-  padding: 0;
   margin: 0.1rem;
   border-radius: 0.3rem;
   border-width: 0.1rem;

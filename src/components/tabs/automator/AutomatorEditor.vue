@@ -42,9 +42,6 @@ export default {
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
-    isBlockAutomator() {
-      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
-    },
     activeLine() {
       return AutomatorBackend.state.topLevelScript === this.currentScriptID ? this.activeLineRaw : 0;
     },
@@ -142,7 +139,7 @@ export default {
       v-if="isTextAutomator"
       :current-script-id="currentScriptID"
     />
-    <AutomatorBlockEditor v-if="isBlockAutomator" />
+    <AutomatorBlockEditor v-if="!isTextAutomator" />
   </div>
 </template>
 

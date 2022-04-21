@@ -18,7 +18,7 @@ export default {
     update() {
       this.isAvailable = this.subtab.isAvailable;
       this.hasNotification = this.subtab.hasNotification;
-      this.isCurrentSubtab = Tabs.current._currentSubtab === this.subtab;
+      this.isCurrentSubtab = this.subtab.isOpen;
     }
   },
 };
@@ -41,13 +41,10 @@ export default {
 
 <style scoped>
 .o-tab-btn {
-  height: 3rem;
-  padding: 0 0.6rem;
   vertical-align: middle;
 }
 
 .o-subtab-btn--active {
-  border-bottom-width: 0.5rem;
-  padding-top: 0.3rem;
+  border-bottom-width: 0.4rem;
 }
 </style>

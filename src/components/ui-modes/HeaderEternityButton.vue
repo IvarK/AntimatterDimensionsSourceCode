@@ -34,7 +34,7 @@ export default {
     // Show EP/min below this threshold, color the EP number above it
     rateThreshold: () => 1e100,
     showEPRate() {
-      return this.currentEPRate.lte(this.rateThreshold);
+      return this.currentEP.lte(this.rateThreshold);
     },
     isDilation() {
       return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||

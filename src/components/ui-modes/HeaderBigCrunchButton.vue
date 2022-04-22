@@ -25,7 +25,7 @@ export default {
     // Show IP/min below this threshold, color the IP number above it
     rateThreshold: () => 1e100,
     showIPRate() {
-      return this.peakIPRate.lte(this.rateThreshold);
+      return this.currentIP.lte(this.rateThreshold);
     },
     amountStyle() {
       if (!this.headerTextColored || this.currentIP.lt(this.rateThreshold)) return {};

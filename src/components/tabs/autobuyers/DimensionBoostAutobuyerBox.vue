@@ -58,8 +58,9 @@ export default {
       #intervalSlot
     >
       <div
-        class="c-autobuyer-box__small-text l-top-margin"
+        class="c-autobuyer-box__small-text"
       >
+        <br>
         Activates every X seconds:
       </div>
       <AutobuyerInput
@@ -117,7 +118,7 @@ export default {
 
 <style scoped>
 .l-top-margin {
-  margin-top: 1.2rem;
+  margin-top: 0.82rem;
 }
 
 .l-dimboost-text-area {

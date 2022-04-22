@@ -55,6 +55,10 @@
   position: relative;
 }
 
+.c-glyph-sacrifice-options-container {
+  border-radius: 0.5rem;
+}
+
 .s-base--metro .c-glyph-sacrifice-options {
   border-width: 0.1rem;
   border-radius: 0;

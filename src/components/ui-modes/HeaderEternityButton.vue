@@ -34,7 +34,7 @@ export default {
     // Show EP/min below this threshold, color the EP number above it
     rateThreshold: () => 1e100,
     showEPRate() {
-      return this.currentEP.lte(this.rateThreshold);
+      return this.peakEPRate.lte(this.rateThreshold);
     },
     isDilation() {
       return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
@@ -136,8 +136,8 @@ export default {
         this.currentEPRate.copyFrom(gainedEP.dividedBy(
           TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
         );
-        this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
       }
+      this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;

@@ -25,7 +25,7 @@ export default {
     // Show IP/min below this threshold, color the IP number above it
     rateThreshold: () => 1e100,
     showIPRate() {
-      return this.currentIP.lte(this.rateThreshold);
+      return this.peakIPRate.lte(this.rateThreshold);
     },
     amountStyle() {
       if (!this.headerTextColored || this.currentIP.lt(this.rateThreshold)) return {};
@@ -63,8 +63,8 @@ export default {
       this.gainedIP.copyFrom(gainedIP);
       if (this.showIPRate) {
         this.currentIPRate.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
-        this.peakIPRate.copyFrom(player.records.thisInfinity.bestIPmin);
       }
+      this.peakIPRate.copyFrom(player.records.thisInfinity.bestIPmin);
     },
     switchToInfinity() {
       Tab.dimensions.infinity.show(true);

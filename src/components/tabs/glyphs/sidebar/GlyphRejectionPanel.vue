@@ -38,7 +38,7 @@ export default {
       Glyphs in non-Alchemy modes:
     </span>
     <br>
-    <div class="l-glyph-auto-pick-options__option">
+    <div class="l-glyph-auto-pick-options__container">
       <div
         :class="optionClass(modes.SACRIFICE)"
         @click="setMode(modes.SACRIFICE)"

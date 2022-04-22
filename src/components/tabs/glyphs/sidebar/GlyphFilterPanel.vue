@@ -175,7 +175,7 @@ export default {
 
 <template>
   <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
-    <div class="c-glyph-sacrifice-options">
+    <div class="c-glyph-sacrifice-options c-glyph-sacrifice-options-container">
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div
           v-tooltip="questionmarkTooltip"

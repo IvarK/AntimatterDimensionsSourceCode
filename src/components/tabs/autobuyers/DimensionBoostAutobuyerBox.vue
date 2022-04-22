@@ -69,7 +69,7 @@ export default {
       />
     </template>
     <template
-      v-else
+      v-if="!isBuyMaxUnlocked"
       #checkboxSlot
     >
       <div

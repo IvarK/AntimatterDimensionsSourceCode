@@ -17,8 +17,7 @@ export default {
         idx === this.mode
           ? "c-glyph-auto-pick-options__option--active"
           : "c-glyph-auto-pick-options__option--inactive",
-        "c-glyph-auto-pick-options__option",
-        "l-glyph-auto-pick-options__option"
+        "c-glyph-auto-pick-options__option"
       ];
     },
     update() {
@@ -39,23 +38,26 @@ export default {
       Glyphs in non-Alchemy modes:
     </span>
     <br>
-    <div
-      :class="optionClass(modes.SACRIFICE)"
-      @click="setMode(modes.SACRIFICE)"
-    >
-      Always sacrifice
-    </div>
-    <div
-      :class="optionClass(modes.REFINE)"
-      @click="setMode(modes.REFINE)"
-    >
-      Always refine
-    </div>
-    <div
-      :class="optionClass(modes.REFINE_TO_CAP)"
-      @click="setMode(modes.REFINE_TO_CAP)"
-    >
-      Refine to cap, then sacrifice
+    <div class="l-glyph-auto-pick-options__option">
+      <div
+        :class="optionClass(modes.SACRIFICE)"
+        @click="setMode(modes.SACRIFICE)"
+      >
+        Always sacrifice
+      </div>
+      <div
+        :class="optionClass(modes.REFINE)"
+        @click="setMode(modes.REFINE)"
+      >
+        Always refine
+      </div>
+      <div
+        :class="optionClass(modes.REFINE_TO_CAP)"
+        @click="setMode(modes.REFINE_TO_CAP)"
+      >
+        Refine to cap,<br>
+        then sacrifice
+      </div>
     </div>
   </div>
 </template>

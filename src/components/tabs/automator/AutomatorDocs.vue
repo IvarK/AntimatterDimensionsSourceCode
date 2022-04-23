@@ -182,14 +182,12 @@ export default {
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <AutomatorButton
         v-tooltip="'Scripting Information'"
-        :style="docStyle"
         class="fa-list"
         :class="{ 'c-automator__button--active': infoPaneID === 1 }"
         @click="infoPaneID = 1"
       />
       <AutomatorButton
         v-tooltip="blockTooltip"
-        :style="blockStyle"
         :class="{
           'fa-cubes': isBlock,
           'fa-file-code': !isBlock,
@@ -206,7 +204,6 @@ export default {
       />
       <AutomatorButton
         v-tooltip="'View recently executed commands'"
-        :style="logStyle"
         class="fa-eye"
         :class="{ 'c-automator__button--active': infoPaneID === 4 }"
         @click="infoPaneID = 4"

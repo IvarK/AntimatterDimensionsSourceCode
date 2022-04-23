@@ -123,7 +123,10 @@ export default {
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <AutomatorControls />
       <button
-        v-tooltip="automatorModeTooltip"
+        v-tooltip="{
+          content: automatorModeTooltip,
+          hideOnTargetClick: false
+        }"
         :class="{
           'c-slider-toggle-button': true,
           'c-slider-toggle-button--right': isTextAutomator,

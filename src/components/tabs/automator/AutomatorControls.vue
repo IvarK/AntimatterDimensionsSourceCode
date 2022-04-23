@@ -71,7 +71,10 @@ export default {
       @click="rewind"
     />
     <AutomatorButton
-      v-tooltip="playTooltip"
+      v-tooltip="{
+        content: playTooltip,
+        hideOnTargetClick: false
+      }"
       :class="playButtonClass"
       @click="play"
     />

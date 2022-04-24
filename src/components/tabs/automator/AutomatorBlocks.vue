@@ -160,4 +160,12 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
   align-items: center;
   flex-wrap: wrap;
 }
+
+.o-automator-block-list {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  height: 5.5rem;
+}
 </style>

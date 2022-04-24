@@ -280,12 +280,6 @@
   cursor: pointer;
 }
 
-.c-automator-docs-template--button {
-  margin: 0.4rem;
-  border-radius: 0.3rem;
-  cursor: pointer;
-}
-
 .o-automator-error-underline {
   display: inline-block;
   position: relative;

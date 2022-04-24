@@ -55,8 +55,7 @@ export default {
         :class="optionClass(modes.REFINE_TO_CAP)"
         @click="setMode(modes.REFINE_TO_CAP)"
       >
-        Refine to cap,<br>
-        then sacrifice
+        Refine to cap, then sacrifice
       </div>
     </div>
   </div>

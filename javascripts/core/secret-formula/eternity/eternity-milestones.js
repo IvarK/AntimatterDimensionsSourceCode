@@ -41,7 +41,8 @@ GameDatabase.eternity.milestones = {
     eternities: 7,
     reward: `You complete Infinity Challenges as soon as you unlock them,
       and keep the Dimensional Sacrifice Autobuyer`,
-    pelleObsolete: () => PelleUpgrade.keepInfinityChallenges.isBought,
+    // Future note: This is not "pelleObsolete", no Pelle Upgrade gives this reward exactly
+    pelleUseless: true
   },
   keepBreakUpgrades: {
     eternities: 8,

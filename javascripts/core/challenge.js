@@ -190,7 +190,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.records.thisEternity.maxAM.gte(this.unlockAM) || Achievement(133).isUnlocked;
+    return player.records.thisEternity.maxAM.gte(this.unlockAM) || (Achievement(133).isUnlocked && !Pelle.isDoomed);
   }
 
   get isRunning() {

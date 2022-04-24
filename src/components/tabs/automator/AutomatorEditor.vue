@@ -58,7 +58,6 @@ export default {
   created() {
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
     EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
-    this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
     this.updateCurrentScriptID();
   },
   beforeDestroy() {

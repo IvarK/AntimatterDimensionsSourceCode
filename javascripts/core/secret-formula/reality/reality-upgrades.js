@@ -194,7 +194,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
-      requirement: () => `Eternity for ${format(DC.E10)} Eternity Points without purchasing
+      requirement: () => `Have ${format(DC.E10)} Eternity Points without purchasing
       the ${formatX(5)} Eternity Point upgrade`,
       hasFailed: () => player.epmultUpgrades !== 0,
       checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,

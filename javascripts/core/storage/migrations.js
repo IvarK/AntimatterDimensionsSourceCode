@@ -146,6 +146,7 @@ GameStorage.migrations = {
       GameStorage.migrations.deleteDimboostBulk(player);
       GameStorage.migrations.deleteFloatingTextOption(player);
       GameStorage.migrations.refactorDoubleIPRebuyable(player);
+      GameStorage.migrations.infMultNameConversion(player);
       GameStorage.migrations.convertNews(player);
       GameStorage.migrations.etercreqConversion(player);
 

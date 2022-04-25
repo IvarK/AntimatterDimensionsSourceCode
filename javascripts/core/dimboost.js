@@ -165,10 +165,11 @@ export class DimBoost {
   }
 }
 
-export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
+export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false) {
   if (Currency.antimatter.gt(Player.infinityLimit)) return;
+  const bulk = Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
-  player.dimensionBoosts = Math.min(Math.max(0, player.dimensionBoosts + bulk), DimBoost.maxBoosts);
+  player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
   if (
     forcedNDReset ||

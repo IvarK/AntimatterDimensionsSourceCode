@@ -68,7 +68,7 @@ GameDatabase.confirmationTypes = [
   }, {
     name: "Glyph Refine",
     option: "glyphRefine",
-    isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+    isUnlocked: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
   }, {
     name: "Armageddon",
     option: "armageddon",

@@ -53,9 +53,7 @@ export default {
       };
     },
     unlocks() {
-      return Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.pet)
-        .sort((a, b) => a.level - b.level);
+      return this.pet.unlocks;
     },
     chunkTooltip() {
       return `Based on ${this.pet.chunkGain}`;
@@ -105,8 +103,7 @@ export default {
       return "";
     },
     nextUnlockLevel() {
-      const missingUpgrades = Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.pet)
+      const missingUpgrades = this.pet.unlocks
         .map(u => u.level)
         .filter(goal => goal > this.level);
       return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();

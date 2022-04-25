@@ -44,17 +44,17 @@ export default {
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
+        scalingUpgradeVisible: () => Ra.unlocks.improvedStoredTime.isUnlocked,
         scalingUpgradeText: () => `Stored game time
-          ${formatX(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2)} and real time
-          +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
+          ${formatX(Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1), 2)} and real time
+          +${formatInt(Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0) / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
-        scalingUpgradeText: level => {
-          const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${formatInt(triadCount)}/${formatInt(4)} Triad Studies.`;
+        scalingUpgradeVisible: () => Ra.unlocks.unlockHardV.isUnlocked,
+        scalingUpgradeText: () => {
+          const triadCount = Ra.unlocks.unlockHardV.effectOrDefault(0);
+          return `You have unlocked ${quantifyInt("Triad Study", triadCount)}.`;
         },
       }
     ],
@@ -81,10 +81,10 @@ export default {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
-      this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
-      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
-      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
-      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
+      this.showRecollection = Ra.unlocks.effarigUnlock.canBeApplied;
+      this.hasRecollection = Ra.recollection.isUnlocked;
+      this.recollectionReq = Ra.recollection.requiredLevels;
+      this.recollectionMult = Ra.recollection.multiplier;
       this.petWithRecollection = Ra.petWithRecollection;
       this.isRunning = Ra.isRunning;
       this.memoryBoosts = Ra.memoryBoostResources;

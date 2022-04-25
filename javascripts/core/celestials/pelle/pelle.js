@@ -211,10 +211,6 @@ export const Pelle = {
     };
   },
 
-  get uselessRaMilestones() {
-    return [0, 1, 15, 18, 19, 21];
-  },
-
   get remnantRequirementForDilation() {
     return 3.8e7;
   },

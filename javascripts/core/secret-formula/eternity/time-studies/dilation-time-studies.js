@@ -7,7 +7,7 @@ GameDatabase.eternity.timeStudies.dilation = [
     cost: 5000,
     requirement: () => {
       const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
-      if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
+      if (Ra.unlocks.autoUnlockDilation.canBeApplied &&
           ttRequirement &&
           !isInCelestialReality() && !Pelle.isDoomed
       ) {

@@ -10,7 +10,7 @@ class BlackHolePowerAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER);
+    return Ra.unlocks.blackHolePowerAutobuyers.canBeApplied;
   }
 
   tick() {

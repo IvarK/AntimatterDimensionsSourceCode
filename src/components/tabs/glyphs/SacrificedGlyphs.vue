@@ -37,7 +37,7 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] && player.reality.glyphs.sac[e] !== 0);
-      this.hasAlteration = Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
+      this.hasAlteration = Ra.unlocks.alteredGlyphs.canBeApplied;
       this.hideAlteration = player.options.hideAlterationEffects;
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;

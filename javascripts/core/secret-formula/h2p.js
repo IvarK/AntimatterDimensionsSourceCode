@@ -1265,7 +1265,7 @@ Each previous Celestial within Ra gains levels by using memories, which are gene
 Memory Chunks. Memory Chunks can only be gained by entering Ra's Reality, but inside of the Reality Chunks will
 be generated passively based on certain resource totals. If you are storing real time, you will not gain any
 Chunks inside of Ra's Reality, but Memories will still be generated normally. Having a total of
-${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Celestials unlocks Recollection,
+${formatInt(Ra.recollection.multiplier.requiredLevels)} levels across all Celestials unlocks Recollection,
 which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
 <br>
 <br>
@@ -1279,20 +1279,20 @@ improve your Glyph effects once you reach certain thresholds in Glyph sacrifice 
 <br>
 <br>
 At level ${formatInt(2)}, Effarig unlocks
-${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
+${Ra.unlocks.effarigUnlock.canBeApplied
     ? "a new mechanic called Glyph Alchemy and later on also makes Effarig Glyphs stronger while gradually removing " +
       "almost all random elements of Glyph generation. Glyph Alchemy also has its own How To Play entry."
     : "<span style='color: var(--color-bad);'>(unlock Effarig within Ra to see unlock details)</span>"}
 <br>
 <br>
 The Enslaved Ones unlocks
-${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
+${Ra.unlocks.enslavedUnlock.canBeApplied
     ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
     : "<span style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see unlock details)</span>"}
 <br>
 <br>
 V unlocks
-${Ra.has(RA_UNLOCKS.V_UNLOCK)
+${Ra.unlocks.vUnlock.canBeApplied
     ? "Triad Studies, which are new Studies near the bottom of the tree which cost Space Theorems. Each Triad Study " +
       "requires you to also have the three nearby studies as well in order to purchase them. They also unlock a " +
       "smaller set of more difficult V Achievements to complete for additional Space Theorems."
@@ -1338,7 +1338,7 @@ To activate or deactivate a reaction, click the circle corresponding to the reac
 be applied, moving lines will be shown from all reagents to the product. If a connection is a solid line, that means
 that the reaction can't proceed due to not having enough of that reagent to get more of the product due to its cap.
 `,
-      isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+      isUnlocked: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
       // Oh god I'm so sorry this is so many words
       tags: ["reality", "lategame", "endgame", "ra", "effarig", "alchemy", "power", "infinity", "time", "replication",
         "dilation", "cardinality", "eternity", "dimensionality", "inflation", "alternation", "synergism", "momentum",

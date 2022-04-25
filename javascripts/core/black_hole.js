@@ -171,7 +171,7 @@ class BlackHoleState {
       return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
     }
     if (Enslaved.isStoringGameTime) {
-      if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+      if (Ra.unlocks.adjustableStoredTime.canBeApplied) {
         const storedTimeWeight = player.celestials.enslaved.storedFraction;
         if (storedTimeWeight !== 0) {
           return `<i class="fas fa-compress-arrows-alt"></i> Charging (${formatPercents(storedTimeWeight, 1)})`;

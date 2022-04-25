@@ -60,7 +60,7 @@ export default {
       const effarigSettings = AutoGlyphProcessor.types.effarig.effectChoices;
       this.effarigSettings.effarigrm = effarigSettings.effarigrm;
       this.effarigSettings.effarigglyph = effarigSettings.effarigglyph;
-      this.noExclude = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT);
+      this.noExclude = Ra.unlocks.glyphEffectCount.canBeApplied;
     },
     toggleSelection() {
       this.isActive = !AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id];

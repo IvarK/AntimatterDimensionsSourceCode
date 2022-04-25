@@ -600,7 +600,7 @@ GameStorage.devMigrations = {
         pet.level = Math.clampMax(pet.level, 25);
       }
       delete player.celestials.ra.compression;
-      if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+      if (Ra.unlocks.allGamespeedGlyphs.canBeApplied) {
         const allGlyphs = player.reality.glyphs.active
           .concat(player.reality.glyphs.inventory);
         for (const glyph of allGlyphs) {

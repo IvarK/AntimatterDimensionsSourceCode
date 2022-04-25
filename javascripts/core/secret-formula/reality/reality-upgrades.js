@@ -187,7 +187,7 @@ GameDatabase.reality.upgrades = (function() {
       description: "Gain Eternities per second equal to your Reality count",
       automatorPoints: 5,
       shortDescription: () => `Continuous Eternity generation`,
-      effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
+      effect: () => Currency.realities.value * Ra.unlocks.continuousTTBoost.effects.eternity.effectOrDefault(1),
       formatEffect: value => `${format(value)} per second`
     },
     {

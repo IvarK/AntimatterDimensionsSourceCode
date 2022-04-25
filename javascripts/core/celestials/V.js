@@ -167,7 +167,7 @@ export const V = {
       if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
     }
 
-    if (VUnlocks.raUnlock.canBeApplied && !Ra.has(RA_UNLOCKS.AUTO_TP)) {
+    if (VUnlocks.raUnlock.canBeApplied && !Ra.unlocks.autoTP.canBeApplied) {
       Ra.checkForUnlocks();
     }
   },
@@ -213,7 +213,7 @@ export const V = {
     return player.celestials.v.run;
   },
   get isFlipped() {
-    return Ra.has(RA_UNLOCKS.HARD_V);
+    return Ra.unlocks.unlockHardV.canBeApplied;
   },
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;

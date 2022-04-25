@@ -165,8 +165,9 @@ export class DimBoost {
   }
 }
 
-export function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
+export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false) {
   if (Currency.antimatter.gt(Player.infinityLimit)) return;
+  const bulk = Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
@@ -202,7 +203,7 @@ export function skipResetsIfPossible() {
 export function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
-  if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts(true);
+  if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts();
   else softReset(1);
 }
 

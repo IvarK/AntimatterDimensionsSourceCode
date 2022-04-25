@@ -950,10 +950,7 @@ GameDatabase.achievements.normal = [
       player.IPMultPurchases === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    get reward() {
-      if (Pelle.isDoomed) return "You start Eternities with all Infinity Challenges unlocked.";
-      return "You start Eternities with all Infinity Challenges unlocked and completed.";
-    }
+    reward: "You start Eternities with all Infinity Challenges unlocked and completed."
   },
   {
     id: 134,

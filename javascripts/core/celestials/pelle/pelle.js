@@ -55,14 +55,6 @@ export const Pelle = {
     return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
   },
 
-  additionalEnd: 0,
-  addAdditionalEnd: true,
-
-  get endState() {
-    return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
-      (Math.log10(9e15) - 8.7) + this.additionalEnd, 0);
-  },
-
   get isUnlocked() {
     return ImaginaryUpgrade(25).isBought;
   },
@@ -108,7 +100,6 @@ export const Pelle = {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1 && Pelle.addAdditionalEnd) this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   },
 
@@ -144,7 +135,7 @@ export const Pelle = {
 
   get uselessPerks() {
     return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
-      60, 61, 62, 80, 81, 82, 83, 100, 105, 106];
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204];
   },
 
   // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note

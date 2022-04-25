@@ -143,7 +143,6 @@ export const shortcuts = [
     keys: ["mod", "s"],
     type: "bind",
     function: () => {
-      if (Pelle.endState >= 4.5) return false;
       GameStorage.save(false, true);
       return false;
     },

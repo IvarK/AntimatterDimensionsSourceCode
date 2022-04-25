@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     update() {
-      this.opacity = (Pelle.endState - 2.5) / 2;
+      this.opacity = (GameEnd.endState - 2.5) / 2;
     }
   }
 };
@@ -17,7 +17,10 @@ export default {
 <template>
   <div
     class="black-overlay"
-    :style="{ opacity: opacity }"
+    :style="{
+      opacity,
+      pointerEvents: opacity > 1 ? 'auto' : 'none'
+    }"
   />
 </template>
 
@@ -28,8 +31,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
     background: black;
-    z-index: 6;
+    z-index: 8;
   }
 </style>

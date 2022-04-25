@@ -722,6 +722,7 @@ window.player = {
       showBought: false,
     }
   },
+  isGameEnd: false,
   newGame: {
     current: 0,
     plusRecord: 0,

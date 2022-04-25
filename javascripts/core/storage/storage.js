@@ -69,6 +69,12 @@ export const GameStorage = {
     this.loadPlayerObject(player, overrideLastUpdate);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
+
+    // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
+    // The options tab is the first one of those, which makes the player redirect to the Pelle tab
+    // You can doom your reality even if you haven't unlocked infinity yet if you import while the Pelle tab
+    // is showing
+    Tab.options.subtabs[0].show();
     GameUI.notify.info("Game imported");
   },
 
@@ -133,7 +139,7 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
-    if (Pelle.endState >= 4.5) return;
+    if (GameEnd.endState >= 4.5 && !GameEnd.removeAdditionalEnd) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
@@ -172,7 +178,7 @@ export const GameStorage = {
 
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
-    this.save();
+    this.save(true);
     Tab.dimensions.antimatter.show();
   },
 
@@ -216,6 +222,7 @@ export const GameStorage = {
     checkPerkValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
+    GameEnd.additionalEnd = 0;
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;

@@ -1,6 +1,6 @@
 window.format = function format(value, places, placesUnder1000) {
   if (Pelle.isDoomed) {
-    if ((Pelle.endState - 2.5) / 2 > Math.random()) return "END";
+    if ((GameEnd.endState - 2.5) / 2 > Math.random()) return "END";
   }
   return Notations.current.format(value, places, placesUnder1000);
 };

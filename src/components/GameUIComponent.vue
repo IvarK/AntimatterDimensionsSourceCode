@@ -34,6 +34,11 @@ export default {
     InfoButton,
     TimeTheoremShop
   },
+  data() {
+    return {
+      rollCredits: false,
+    };
+  },
   computed: {
     view() {
       return this.$viewModel;
@@ -52,6 +57,11 @@ export default {
       return `stylesheets/theme-${this.view.theme}.css`;
     }
   },
+  methods: {
+    update() {
+      this.rollCredits = GameEnd.endState >= 2.5;
+    }
+  }
 };
 </script>
 
@@ -95,9 +105,9 @@ export default {
     <ModernSidebar v-if="view.newUI" />
     <SaveTimer />
     <SpeedrunStatus />
-    <FadeToBlack />
-    <CreditsContainer />
-    <NewGame />
+    <FadeToBlack v-if="rollCredits" />
+    <CreditsContainer v-if="rollCredits" />
+    <NewGame v-if="rollCredits" />
   </div>
 </template>
 

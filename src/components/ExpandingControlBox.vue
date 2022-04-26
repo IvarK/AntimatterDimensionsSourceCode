@@ -220,11 +220,13 @@ export default {
   cursor: pointer;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   white-space: nowrap;
   border: none !important;
   height: 2.5rem;
+  position: relative;
+  top: -0.5rem;
 }
 
 .c-indicator-arrow--flipped {

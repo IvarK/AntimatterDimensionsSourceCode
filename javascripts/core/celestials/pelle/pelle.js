@@ -366,41 +366,37 @@ export const Pelle = {
     };
 
     const quotesObject = {};
-    let iterator = 0;
-    for (const i in GameDatabase.celestials.pelle.quotes) {
-      iterator++;
+    for (const i in GameDatabase.celestials.quotes.pelle) {
+      const quote = GameDatabase.celestials.quotes.pelle[i];
       quotesObject[i] = {
-        id: iterator,
-        lines: GameDatabase.celestials.pelle.quotes[i].map(x => p(x))
+        id: quote.id,
+        lines: quote.lines.map(x => p(x))
       };
     }
     return quotesObject;
   }())),
-  hasQuote(x) {
-    return player.celestials.pelle.quotes.includes(x);
-  },
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
   if (Currency.remnants.gte(1)) {
-    Pelle.quotes.show(Pelle.quotes.ARM);
+    Pelle.quotes.show(Pelle.quotes.arm);
   }
 });
 EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
   if (PelleStrikes.infinity.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_1);
+    Pelle.quotes.show(Pelle.quotes.strike1);
   }
   if (PelleStrikes.powerGalaxies.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_2);
+    Pelle.quotes.show(Pelle.quotes.strike2);
   }
   if (PelleStrikes.eternity.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_3);
+    Pelle.quotes.show(Pelle.quotes.strike3);
   }
   if (PelleStrikes.ECs.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_4);
+    Pelle.quotes.show(Pelle.quotes.strike4);
   }
   if (PelleStrikes.dilation.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_5);
+    Pelle.quotes.show(Pelle.quotes.strike5);
   }
 });
 

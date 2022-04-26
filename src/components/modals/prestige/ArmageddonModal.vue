@@ -68,7 +68,7 @@ export default {
       disChargeAll();
       player.buyUntil10 = true;
       player.records.realTimeDoomed = 0;
-      Pelle.quotes.show(Pelle.quotes.INITIAL);
+      Pelle.quotes.show(Pelle.quotes.initial);
     },
   },
 };

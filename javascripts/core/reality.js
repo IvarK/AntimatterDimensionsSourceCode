@@ -300,17 +300,17 @@ function giveRealityRewards(realityProps) {
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
-    Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
+    Teresa.quotes.show(Teresa.quotes.completeReality);
   }
 
   if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) {
     EffarigUnlock.reality.unlock();
-    Effarig.quotes.show(Effarig.quotes.COMPLETE_REALITY);
+    Effarig.quotes.show(Effarig.quotes.completeReality);
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
 
-  if (V.isRunning) V.quotes.show(V.quotes.REALITY_COMPLETE);
+  if (V.isRunning) V.quotes.show(V.quotes.realityComplete);
 }
 
 // Due to simulated realities taking a long time in late game, this function might not immediately

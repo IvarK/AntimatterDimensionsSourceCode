@@ -595,7 +595,7 @@ export function gameLoop(passDiff, options = {}) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
-      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+      Enslaved.quotes.show(Enslaved.quotes.hintUnlock);
     }
   }
 

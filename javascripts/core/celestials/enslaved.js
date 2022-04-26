@@ -125,7 +125,7 @@ export const Enslaved = {
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;
-    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.show(this.quotes.UNLOCK_RUN);
+    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.show(this.quotes.unlockRun);
     player.celestials.enslaved.stored -= info.price;
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
@@ -135,14 +135,14 @@ export const Enslaved = {
     player.celestials.enslaved.run = true;
     player.secretUnlocks.viewSecretTS = false;
     this.feltEternity = false;
-    this.quotes.show(this.quotes.START_RUN);
+    this.quotes.show(this.quotes.startRun);
   },
   get isRunning() {
     return player.celestials.enslaved.run;
   },
   completeRun() {
     player.celestials.enslaved.completed = true;
-    this.quotes.show(this.quotes.COMPLETE_REALITY);
+    this.quotes.show(this.quotes.completeReality);
   },
   get isCompleted() {
     return player.celestials.enslaved.completed;
@@ -192,53 +192,7 @@ export const Enslaved = {
     }
     return true;
   },
-  quotes: new CelestialQuotes("enslaved", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "A visitor? I have not had one... eons.",
-        "I... had a name. It has been lost... to this place.",
-        "The others... will not let me rest. I do their work with time...",
-        "Place time... into places... that need it...",
-        "Watch myself grow... pass and die.",
-        "Perhaps you... will break these chains... I will wait.",
-      ]
-    },
-    UNLOCK_RUN: {
-      id: 2,
-      lines: [
-        "The others... used me. They will use... or destroy you.",
-        "End my suffering... power will be yours...",
-      ]
-    },
-    START_RUN: {
-      id: 3,
-      lines: [
-        "So little space... but no... prison... is perfect.",
-        "They squeezed... this Reality... too tightly. Cracks appeared.",
-        "Search... everywhere. I will help... where I can.",
-      ]
-    },
-    COMPLETE_REALITY: {
-      id: 4,
-      lines: [
-        "All... fragments... clones... freed.",
-        "I have given... tools... of my imprisoning. Use them...",
-        "Freedom from torture... is torture itself.",
-      ]
-    },
-    EC6C10: CelestialQuotes.singleLine(
-      5, "... did not... underestimate you..."
-    ),
-    HINT_UNLOCK: {
-      id: 6,
-      lines: [
-        "... you need... to look harder...",
-        "I think... I can help...",
-        "* You have unlocked help from The Enslaved Ones."
-      ]
-    },
-  }),
+  quotes: new CelestialQuotes("enslaved", GameDatabase.celestials.quotes.enslaved),
   // Unicode f0c1.
   symbol: "\uf0c1"
 };
@@ -324,5 +278,5 @@ export const Tesseracts = {
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.INITIAL);
+  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.initial);
 });

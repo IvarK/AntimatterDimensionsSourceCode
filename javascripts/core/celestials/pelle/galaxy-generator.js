@@ -62,7 +62,7 @@ export const GalaxyGenerator = {
 
   loop(diff) {
     if (this.isCapped) {
-      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_RIFTS);
+      Pelle.quotes.show(Pelle.quotes.galaxyGeneratorRifts);
     }
     if (this.sacrificeActive) {
       this.capRift.reducedTo = Math.max(this.capRift.reducedTo - 0.03 * diff / 1000, 0);
@@ -72,13 +72,13 @@ export const GalaxyGenerator = {
 
         const phase = player.celestials.pelle.galaxyGenerator.phase;
         if (phase === 1) {
-          Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_PHASE_1);
+          Pelle.quotes.show(Pelle.quotes.galaxyGeneratorPhase1);
         } else if (phase === 4) {
-          Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_PHASE_4);
+          Pelle.quotes.show(Pelle.quotes.galaxyGeneratorPhase4);
         }
 
         if (!this.capObj) {
-          Pelle.quotes.show(Pelle.quotes.END);
+          Pelle.quotes.show(Pelle.quotes.end);
         }
       }
       PelleRifts.all.forEach(x => x.checkMilestoneStates());

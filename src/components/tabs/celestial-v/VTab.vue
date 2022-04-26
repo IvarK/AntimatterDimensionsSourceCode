@@ -63,7 +63,7 @@ export default {
           {}
         ];
     },
-    vUnlock: () => VUnlock.vAchievementUnlock,
+    vUnlock: () => VUnlocks.vAchievementUnlock,
     runMilestones() {
       return [
         [

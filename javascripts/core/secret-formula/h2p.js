@@ -1154,6 +1154,12 @@ ${format(5e12)} Relic Shards, ${formatInt(5)} Glyphs (subject to your filtering 
 and ${formatInt(5)} Perk Points.
 <br>
 <br>
+However, if your Reality has lasted for less than ${formatInt(1)} second, the amount of
+Realities simulated is capped by the seconds of stored real time you have. For example, if you have ${formatInt(1000)}
+seconds stored and amplify a Reality which has lasted ${format(0.2, 2, 2)} seconds, you will use ${formatInt(200)}
+seconds to simulate ${formatInt(1000)} equivalent Realities.
+<br>
+<br>
 You can toggle a setting to automatically store offline time as stored real time.
 <br>
 <br>

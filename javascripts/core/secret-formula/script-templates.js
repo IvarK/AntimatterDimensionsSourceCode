@@ -19,7 +19,10 @@ GameDatabase.reality.automator.templates = {
       isValidString: str => {
         const validImport = TimeStudyTree.isValidImportString(str);
         const presetName = str.match(/^PRESET (.{1,4})$/u);
-        const validPreset = presetName ? player.timestudy.presets.map(p => p.name).includes(presetName[1]) : false;
+        const validPreset = presetName ? (
+          player.timestudy.presets.some(p => p.name === presetName[1]) ||
+          (Number(presetName[1]) > 0 && Number(presetName[1]) < 7)
+        ) : false;
         return validImport || validPreset;
       },
     },

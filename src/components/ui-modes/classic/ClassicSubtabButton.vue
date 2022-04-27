@@ -50,4 +50,8 @@ export default {
   border-bottom-width: 0.4rem;
   height: 2.5rem;
 }
+
+.s-base--metro .o-subtab-btn--active {
+  border-bottom-width: 0.4rem;
+}
 </style>

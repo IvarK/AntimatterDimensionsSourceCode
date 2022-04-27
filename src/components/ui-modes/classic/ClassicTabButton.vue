@@ -70,4 +70,8 @@ export default {
   border-bottom-width: 0.5rem;
   height: 3.1rem;
 }
+
+.s-base--metro .o-tab-btn--active {
+  border-bottom-width: 0.5rem;
+}
 </style>

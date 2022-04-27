@@ -56,7 +56,6 @@ export default {
       },
       set(value) {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
-        EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
         if (AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
       }
     },
@@ -94,8 +93,8 @@ export default {
     }
   },
   created() {
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
-    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad());
     this.updateCurrentScriptID();
     this.updateScriptList();
   },

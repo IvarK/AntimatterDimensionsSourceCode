@@ -45,7 +45,7 @@ export default {
   },
   created() {
     AutomatorTextUI.initialize();
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+    this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
   },
   mounted() {
     this.$refs.container.appendChild(this.UI.container);
@@ -66,7 +66,6 @@ export default {
     this.unmarkActiveLine();
     AutomatorTextUI.savedVertPos = AutomatorTextUI.editor.doc.scrollTop;
     this.$refs.container.removeChild(this.UI.container);
-    EventHub.ui.offAll(this);
   },
   methods: {
     update() {

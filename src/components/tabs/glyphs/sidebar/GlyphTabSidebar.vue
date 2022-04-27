@@ -83,7 +83,10 @@ export default {
         Sacrifice Type
       </button>
     </div>
-    <GlyphInventoryManagementPanel v-if="type === sidebarEnum.INVENTORY_MANAGEMENT" />
+    <GlyphInventoryManagementPanel
+      v-if="type === sidebarEnum.INVENTORY_MANAGEMENT"
+      :has-more-options="hasMoreOptions"
+    />
     <GlyphFilterPanel v-else-if="type === sidebarEnum.FILTER_SETTINGS && unlockedFilter" />
     <GlyphSetSavePanel v-else-if="type === sidebarEnum.SAVED_SETS && unlockedSets" />
     <GlyphRejectionPanel v-else-if="type === sidebarEnum.SACRIFICE_TYPE && unlockedAlchemy" />

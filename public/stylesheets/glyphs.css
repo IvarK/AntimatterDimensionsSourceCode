@@ -774,8 +774,14 @@
   border-radius: 0.5rem;
 }
 
-.pelle-current-glyph-effects {
+.pelle-current-glyph-effects{
   color: var(--color-pelle--base);
+}
+
+.c-glyph-tooltip .pelle-current-glyph-effects {
+  /* Can't use css variables on components outside of ui-container */
+  color: crimson;
+  font-weight: bold;
 }
 
 .s-base--metro .c-current-glyph-effects {

@@ -152,30 +152,7 @@ export const Pelle = {
 
   get specialGlyphEffect() {
     const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
-    let description;
-    switch (Pelle.activeGlyphType) {
-      case "infinity":
-        description = "Infinity Point gain {value} (based on current IP)";
-        break;
-      case "time":
-        description = "Eternity Point gain {value} (based on current EP)";
-        break;
-      case "replication":
-        description = "Replication speed {value} (based on Famine)";
-        break;
-      case "dilation":
-        description = "Dilated Time gain {value} (based on Tachyon Galaxies)";
-        break;
-      case "power":
-        description = `Galaxies are ${formatPercents(0.02)} stronger`;
-        break;
-      case "companion":
-        description = `You feel ${formatPercents(0.34)} better`;
-        break;
-      default:
-        description = "No glyph equipped!";
-        break;
-    }
+    const description = this.getSpecialGlyphEffectDescription(this.activeGlyphType);
     const isActive = type => isUnlocked && this.activeGlyphType === type;
     return {
       isUnlocked,
@@ -200,6 +177,31 @@ export const Pelle = {
         : 1,
       isScaling: () => ["infinity", "time", "replication", "dilation"].includes(this.activeGlyphType),
     };
+  },
+  getSpecialGlyphEffectDescription(type) {
+    switch (type) {
+      case "infinity":
+        return `Infinity Point gain ${player.challenge.eternity.current <= 8
+          ? formatX(Currency.infinityPoints.value.pow(0.2), 2)
+          : formatX(DC.D1, 2)} (based on current IP)`;
+      case "time":
+        return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
+          (based on current EP)`;
+      case "replication":
+        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.famine.percentage), 2)} (based on Famine)`;
+      case "dilation":
+        return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
+          (based on Tachyon Galaxies)`;
+      case "power":
+        return `Galaxies are ${formatPercents(0.02)} stronger`;
+      case "companion":
+        return `You feel ${formatPercents(0.34)} better`;
+      // Undefined means that there is no glyph equipped, needs to be here since this function is used in
+      case undefined:
+        return "No glyph equipped!";
+      default:
+        return `${type.capitalize()} glyphs have no special effect in Doomed.`;
+    }
   },
 
   get remnantRequirementForDilation() {

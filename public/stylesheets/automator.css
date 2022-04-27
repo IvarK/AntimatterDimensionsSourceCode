@@ -157,21 +157,6 @@
   top: 0
 }
 
-.c-automator__button {
-  margin: 0.4rem;
-  border-radius: 0.3rem;
-}
-
-.c-automator__button-play--active {
-  border-color: #45a047;
-  color: #45a047;
-}
-
-.c-automator__button--active {
-  border-color: #45a047;
-  color: #45a047;
-}
-
 .l-automator__script-names {
   flex-grow: 1;
   display: flex;
@@ -287,6 +272,14 @@
   margin-left: 2rem;
 }
 
+.c-automator-docs--button {
+  width: 2.8rem;
+  height: 2.2rem;
+  margin: 0.1rem;
+  border-radius: 0.3rem;
+  border-width: 0.1rem;
+  cursor: pointer;
+}
 
 .o-automator-error-underline {
   display: inline-block;

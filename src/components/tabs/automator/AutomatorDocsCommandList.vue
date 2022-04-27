@@ -22,7 +22,7 @@ export default {
     <button
       v-if="selectedCommand !== -1"
       v-tooltip="'Back to Command List'"
-      class="fas fa-arrow-left"
+      class="c-automator-docs--button fas fa-arrow-left"
       @click="selectedCommand = -1"
     />
     <AutomatorDocsManPage

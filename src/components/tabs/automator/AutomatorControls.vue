@@ -24,11 +24,12 @@ export default {
       if (!this.isRunning) return "Start Automator";
       return "Pause Automator execution";
     },
-    playPauseClass() {
+    playButtonClass() {
       return {
         "c-automator__button--active": this.isRunning,
-        "fa-play": !this.isRunning || this.isPaused,
-        "fa-pause": !this.isPaused,
+        "fa-play": !this.isRunning && !this.isPaused,
+        "fa-pause": this.isRunning,
+        "fa-eject": this.isPaused
       };
     },
   },
@@ -70,8 +71,11 @@ export default {
       @click="rewind"
     />
     <AutomatorButton
-      v-tooltip="playTooltip"
-      :class="playPauseClass"
+      v-tooltip="{
+        content: playTooltip,
+        hideOnTargetClick: false
+      }"
+      :class="playButtonClass"
       @click="play"
     />
     <AutomatorButton
@@ -106,5 +110,12 @@ export default {
 </template>
 
 <style scoped>
+.c-automator__button--active {
+  background-color: var(--color-reality);
+  border-color: var(--color-reality-light);
+}
 
+.c-automator__button.fa-eject:before {
+  transform: rotate(90deg);
+}
 </style>

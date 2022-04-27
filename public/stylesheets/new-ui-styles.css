@@ -177,7 +177,7 @@ body.t-s9 {
 }
 
 .sidebar > .o-tab-btn {
-  border-left: none;
+  border-left-width: 0;
 }
 
 .l-tab-btn-inner {

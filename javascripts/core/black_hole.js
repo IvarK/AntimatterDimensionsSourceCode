@@ -355,6 +355,7 @@ export const BlackHoles = {
     Currency.realityMachines.purchase(100);
     SpeedrunMilestones(17).tryComplete();
     Achievement(144).unlock();
+    EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
   },
 
   togglePause: () => {

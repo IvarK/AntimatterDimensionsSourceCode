@@ -760,6 +760,10 @@
   position: relative;
 }
 
+.c-current-glyph-effects-with-top-border {
+  border-radius: 0.5rem;
+}
+
 .pelle-current-glyph-effects {
   color: var(--color-pelle--base);
 }

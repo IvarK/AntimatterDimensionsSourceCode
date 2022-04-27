@@ -91,7 +91,12 @@ export default {
     },
     glyphColorPosition() {
       return this.sacrificeUnlocked ? "l-glyph-color-position__low" : "l-glyph-color-position__top";
-    }
+    },
+    glyphInfoBorderClass() {
+      return {
+        "c-current-glyph-effects-with-top-border": !this.sacrificeUnlocked
+      };
+    },
   }
 };
 </script>
@@ -182,7 +187,10 @@ export default {
               </button>
             </div>
             <SacrificedGlyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />
-            <CurrentGlyphEffects v-else />
+            <CurrentGlyphEffects
+              v-else
+              :class="glyphInfoBorderClass()"
+            />
           </div>
         </div>
         <GlyphInventory />

@@ -12,10 +12,22 @@ export default {
     GlyphAutosortButtonGroup,
     GlyphCleanButtonGroup
   },
+  props: {
+    hasMoreOptions: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
+  },
   computed: {
     groupClass() {
-      return `l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size
-        l-glyph-inventory-management`;
+      return {
+        "l-glyph-sacrifice-options": true,
+        "c-glyph-sacrifice-options": true,
+        "l-glyph-sidebar-panel-size": true,
+        "l-glyph-inventory-management": true,
+        "c-glyph-inventory-management-with-border": !this.hasMoreOptions
+      };
     }
   },
 };

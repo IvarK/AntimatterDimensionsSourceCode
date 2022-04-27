@@ -55,6 +55,10 @@
   position: relative;
 }
 
+.c-glyph-inventory-management-with-border {
+  border-radius: 0.5rem;
+}
+
 .c-glyph-sacrifice-options-container {
   border-radius: 0.5rem;
 }

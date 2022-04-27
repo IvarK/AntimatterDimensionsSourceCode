@@ -139,7 +139,14 @@ export default {
 
 <template>
   <div class="l-black-hole-tab">
-    <div v-if="isEnslaved || isDoomed">
+    <div
+      v-if="isEnslaved || isDoomed"
+      class="c-black-hole-disabled-description"
+    >
+      <i v-if="isEnslaved">
+        You must... seek... other methods...
+        <br>
+      </i>
       The physics of this Reality do not allow the existence of Black Holes.
     </div>
     <div
@@ -219,5 +226,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.c-black-hole-disabled-description {
+  font-size: 2.5rem;
+  line-height: 1.5;
 }
 </style>

@@ -197,10 +197,11 @@ export const Pelle = {
       case "companion":
         return `You feel ${formatPercents(0.34)} better`;
       // Undefined means that there is no glyph equipped, needs to be here since this function is used in
+      // both Current Glyph Effects and Glyph Tooltip
       case undefined:
         return "No glyph equipped!";
       default:
-        return `${type.capitalize()} glyphs have no special effect in Doomed.`;
+        return "";
     }
   },
 

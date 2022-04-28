@@ -24,7 +24,7 @@ html {
   justify-content: center;
 }
 
-#ui-container {
+body {
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -67,9 +67,9 @@ html {
   --color-pelle-secondary: #00bcd4;
 }
 
-.t-metro #ui-container, /* csslint allow: empty-rules */
-.t-inverted-metro #ui-container,
-.t-s8 #ui-container {
+body.t-metro, /* csslint allow: empty-rules */
+body.t-inverted-metro,
+body.t-s8 {
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #eeeeee;
@@ -85,7 +85,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-dark #ui-container { /* csslint allow: empty-rules */
+body.t-dark { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -101,7 +101,7 @@ html {
   --color-laitela--accent: white;
 }
 
-.t-dark-metro #ui-container { /* csslint allow: empty-rules */
+body.t-dark-metro { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -123,7 +123,7 @@ html {
   --color-laitela--accent: white;
 }
 
-.t-s1 #ui-container { /* csslint allow: empty-rules */
+body.t-s1 { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: #dbd242;
   --color-base: #dbd242;
@@ -143,7 +143,7 @@ html {
   --color-pelle--base: #7cb727;
 }
 
-.t-s4 #ui-container { /* csslint allow: empty-rules */
+body.t-s4 { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #1b00ff;
@@ -152,8 +152,8 @@ html {
   --color-bad: #ff0000;
 }
 
-.t-s6 #ui-container, /* csslint allow: empty-rules */
-.t-s10 #ui-container {
+body.t-s6, /* csslint allow: empty-rules */
+body.t-s10 {
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;
@@ -167,7 +167,7 @@ html {
   --color-laitela--accent: white;
 }
 
-.t-s11 #ui-container { /* csslint allow: empty-rules */
+body.t-s11 { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;

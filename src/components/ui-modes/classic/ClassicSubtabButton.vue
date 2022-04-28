@@ -11,7 +11,8 @@ export default {
     return {
       isAvailable: false,
       hasNotification: false,
-      isCurrentSubtab: false
+      isCurrentSubtab: false,
+      tabName: ""
     };
   },
   methods: {
@@ -19,6 +20,11 @@ export default {
       this.isAvailable = this.subtab.isAvailable;
       this.hasNotification = this.subtab.hasNotification;
       this.isCurrentSubtab = this.subtab.isOpen && player.options.theme !== "S9";
+      this.tabName = Pelle.transitionText(
+        this.subtab.name,
+        this.subtab.name,
+        Math.max(Math.min(GameEnd.endState - (this.subtab.id) % 4 / 10, 1), 0)
+      );
     }
   },
 };
@@ -31,7 +37,7 @@ export default {
     :class="{ 'o-subtab-btn--active': isCurrentSubtab }"
     @click="subtab.show(true)"
   >
-    {{ subtab.name }}
+    {{ tabName }}
     <i
       v-if="hasNotification"
       class="fas fa-exclamation"

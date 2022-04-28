@@ -24,7 +24,7 @@ html {
   justify-content: center;
 }
 
-body {
+:root {
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -67,9 +67,9 @@ body {
   --color-pelle-secondary: #00bcd4;
 }
 
-body.t-metro, /* csslint allow: empty-rules */
-body.t-inverted-metro,
-body.t-s8 {
+:root .t-metro, /* csslint allow: empty-rules */
+:root .t-inverted-metro,
+:root .t-s8 {
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #eeeeee;
@@ -85,7 +85,7 @@ body.t-s8 {
   --color-celestials: #00bcd4;
 }
 
-body.t-dark { /* csslint allow: empty-rules */
+:root .t-dark { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -101,7 +101,7 @@ body.t-dark { /* csslint allow: empty-rules */
   --color-laitela--accent: white;
 }
 
-body.t-dark-metro { /* csslint allow: empty-rules */
+:root .t-dark-metro { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -123,7 +123,7 @@ body.t-dark-metro { /* csslint allow: empty-rules */
   --color-laitela--accent: white;
 }
 
-body.t-s1 { /* csslint allow: empty-rules */
+:root .t-s1 { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: #dbd242;
   --color-base: #dbd242;
@@ -143,7 +143,7 @@ body.t-s1 { /* csslint allow: empty-rules */
   --color-pelle--base: #7cb727;
 }
 
-body.t-s4 { /* csslint allow: empty-rules */
+:root .t-s4 { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #1b00ff;
@@ -152,8 +152,8 @@ body.t-s4 { /* csslint allow: empty-rules */
   --color-bad: #ff0000;
 }
 
-body.t-s6, /* csslint allow: empty-rules */
-body.t-s10 {
+:root .t-s6, /* csslint allow: empty-rules */
+:root .t-s10 {
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;
@@ -167,7 +167,7 @@ body.t-s10 {
   --color-laitela--accent: white;
 }
 
-body.t-s11 { /* csslint allow: empty-rules */
+:root .t-s11 { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;

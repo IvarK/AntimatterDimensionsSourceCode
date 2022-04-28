@@ -317,6 +317,7 @@ button:focus {
   flex-direction: row;
   justify-content: space-between;
   align-items: stretch;
+  transition: all 0.25s ease-out;
 }
 
 .ttbuttons-top-row {
@@ -454,7 +455,8 @@ button:focus {
   font-size: 2.1rem;
   width: 2.5rem;
   height: 2.5rem;
-  margin-left: -0.2rem
+  margin-left: -0.2rem;
+  cursor: pointer;
 }
 
 .t-s6 .ttshop-minimize-btn,
@@ -466,10 +468,6 @@ button:focus {
 .t-s6 .ttshop-minimize-btn,
 .t-s10 .ttshop-minimize-btn {
   color: #3AACD6;
-}
-
-.ttshop-minimize-btn span {
-  transition: all 0.25s ease-out;
 }
 
 .c-ttshop__save-load-text {
@@ -496,7 +494,7 @@ button:focus {
   transition-duration: 0.2s;
   border-radius: 0.4rem;
   font-size: 1.65rem;
-  position:relative;
+  position: relative;
 }
 
 /*#region tab buttons*/

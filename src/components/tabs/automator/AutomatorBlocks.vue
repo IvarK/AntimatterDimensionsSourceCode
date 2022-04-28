@@ -8,13 +8,13 @@ export default {
   },
   data() {
     return {
-      realBlocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd)),
+      allBlocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd)),
       blocks: []
     };
   },
   methods: {
     update() {
-      this.blocks = this.realBlocks.filter(b => (b.isUnlocked ?? true));
+      this.blocks = this.allBlocks.filter(b => (b.isUnlocked?.() ?? true));
     },
     clone(block) {
       const b = {
@@ -91,15 +91,11 @@ export const automatorBlocks = [
   }, {
     cmd: "BLACK HOLE",
     targets: ["ON", "OFF"],
-    get isUnlocked() {
-      return BlackHole(1).isUnlocked;
-    },
+    isUnlocked: () => BlackHole(1).isUnlocked
   }, {
     cmd: "STORE TIME",
     targets: ["ON", "OFF", "USE"],
-    get isUnlocked() {
-      return RealityUpgrade(25).isBought;
-    },
+    isUnlocked: () => Enslaved.isUnlocked
   }, {
     cmd: "TT",
     targets: ["AM", "IP", "EP", "ALL"],
@@ -120,9 +116,7 @@ export const automatorBlocks = [
     cmd: "REALITY",
     canRespec: true,
     canWait: true,
-    get isUnlocked() {
-      return Enslaved.isUnlocked;
-    },
+    isUnlocked: () => RealityUpgrade(25).isBought
   }, {
     cmd: "LOAD",
     hasInput: true,

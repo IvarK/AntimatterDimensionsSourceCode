@@ -117,7 +117,6 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get wasRequirementPreviouslyMet() {
-    if ((EternityChallenge(11) || EternityChallenge(12)) && !this.challenge.isUnlocked) return false;
     // eslint-disable-next-line no-bitwise
     return (player.challenge.eternity.requirementBits & (1 << this.id)) !== 0;
   }

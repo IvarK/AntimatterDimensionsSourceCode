@@ -141,6 +141,6 @@ export default {
 }
 
 .o-subtab-btn--active-lastopen {
-  border-bottom-style: dashed;
+  border-bottom-style: double;
 }
 </style>

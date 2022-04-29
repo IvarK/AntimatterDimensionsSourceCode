@@ -84,7 +84,8 @@ export default {
           class="o-tab-btn o-tab-btn--subtab"
           :class="
             [tab.config.UIClass,
-             {'o-subtab-btn--active': isCurrentSubtab(subtab.id)}]
+             {'o-subtab-btn--active': isCurrentSubtab(subtab.id),
+              'o-subtab-btn--active-lastopen': isCurrentSubtab(subtab.id) && !tab.isOpen}]
           "
           @click="subtab.show(true)"
         >
@@ -137,5 +138,9 @@ export default {
 
 .o-subtab-btn--active {
   border-bottom-width: 0.5rem;
+}
+
+.o-subtab-btn--active-lastopen {
+  border-bottom-style: dashed;
 }
 </style>

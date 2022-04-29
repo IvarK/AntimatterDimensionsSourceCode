@@ -184,7 +184,7 @@ export default {
 .c-pelle-rift-bar {
   --color-bar-bg: #1e1e1e;
   height: 5rem;
-  border: 0.2rem solid var(--color-pelle-secondary);
+  border: 0.2rem solid var(--color-pelle--secondary);
   width: 32rem;
   border-radius: 0.5rem;
   position: relative;
@@ -227,7 +227,7 @@ export default {
 }
 
 .c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle-secondary);
+  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
 }
 
 
@@ -237,7 +237,7 @@ export default {
   bottom: 0;
   left: 0;
   height: 100%;
-  background: var(--color-pelle-secondary);
+  background: var(--color-pelle--secondary);
   z-index: 0;
   opacity: 0.7;
 }
@@ -262,7 +262,7 @@ export default {
   height: 100%;
   width: 100%;
   filter: brightness(50%);
-  background: var(--color-pelle-secondary);
+  background: var(--color-pelle--secondary);
   z-index: 0;
 }
 

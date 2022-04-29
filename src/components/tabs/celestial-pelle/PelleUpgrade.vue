@@ -162,7 +162,7 @@ export default {
   padding: 2rem;
   color: var(--color-text);
   background: var(--color-text-inverted);
-  border: 0.1rem solid var(--color-pelle-secondary);
+  border: 0.1rem solid var(--color-pelle--secondary);
   border-radius: .5rem;
   font-family: Typewriter;
   cursor: pointer;
@@ -171,7 +171,7 @@ export default {
   margin: 0.6rem 0.3rem;
   font-size: 0.95rem;
   font-weight: bold;
-  box-shadow: inset 0 0 1rem 0.1rem var(--color-pelle-secondary);
+  box-shadow: inset 0 0 1rem 0.1rem var(--color-pelle--secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,13 +180,13 @@ export default {
 }
 
 .c-pelle-upgrade:hover {
-  box-shadow: inset 0 0 2rem 0.1rem var(--color-pelle-secondary);
+  box-shadow: inset 0 0 2rem 0.1rem var(--color-pelle--secondary);
   transition-duration: 0.3s;
 }
 
 
 .c-pelle-upgrade--galaxyGenerator {
-  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   color: black;
   font-weight: bold;
   box-shadow: none;
@@ -206,7 +206,7 @@ export default {
 }
 
 .c-pelle-upgrade--bought {
-  background: var(--color-pelle-secondary);
+  background: var(--color-pelle--secondary);
   cursor: default;
   color: black;
 }
@@ -215,7 +215,7 @@ export default {
 .c-pelle-upgrade--unavailable:hover,
 .c-pelle-upgrade--faded:hover,
 .c-pelle-upgrade--bought:hover {
-  box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle-secondary);
+  box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle--secondary);
   transition-duration: 0.3s;
 }
 

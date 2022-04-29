@@ -162,7 +162,7 @@ export default {
 .c-enslaved-credits {
   left: 52%;
   top: 220rem;
-  color: var(--color-enslaved-base);
+  color: var(--color-enslaved--base);
   animation: a-enslaved-credits 10s linear infinite;
 }
 
@@ -176,7 +176,7 @@ export default {
 .c-ra-credits {
   left: 44%;
   top: 300rem;
-  color: var(--color-ra-base);
+  color: var(--color-ra--base);
   animation: a-ra-credits 10s ease-in-out infinite;
 }
 

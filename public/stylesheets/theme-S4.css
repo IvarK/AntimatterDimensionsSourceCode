@@ -3,7 +3,8 @@
 }
 
 * {
-  font-family: "Comic Sans MS", cursive, sans-serif, Typewriter, 'Font Awesome 6 Brands' !important;
+  font-family: "Comic Sans MS", cursive, sans-serif, Typewriter,
+  fas, fab, 'Font Awesome 6 Brands', 'Font Awesome 6 Free' !important;
 }
 
 html{

@@ -1914,7 +1914,7 @@ screen and (max-width: 480px) {
   border-radius: 0;
   padding: 1rem;
   margin-bottom: 1.2rem;
-  font-family: TypeWriter, serif;
+  font-family: Typewriter, serif;
   background: #111117;
   color: #2ebce6;
   cursor: pointer;
@@ -2246,7 +2246,7 @@ screen and (max-width: 480px) {
 .c-infinity-dim-tab__tesseract-button {
   padding: 1rem;
   margin-bottom: 1.2rem;
-  font-family: TypeWriter, serif;
+  font-family: Typewriter, serif;
   background: #111117;
   color: #2ebce6;
   border: 0.2rem solid;
@@ -2650,7 +2650,7 @@ screen and (max-width: 480px) {
   border-radius: 0.8rem;
   margin: 0 auto;
   text-align: center;
-  font-family: TypeWriter, serif;
+  font-family: Typewriter, serif;
   color: black;
   font-size: 0.8rem;
   user-select: none;
@@ -5913,7 +5913,7 @@ kbd {
   color: black;
   background-color: white;
   font-size: 1.3rem;
-  font-family: TypeWriter, serif;
+  font-family: Typewriter, serif;
   font-weight: bold;
   white-space: nowrap;
   border: 0.1rem solid;
@@ -9277,7 +9277,7 @@ input.o-automator-block-input {
 
 /* Prevent any themes overriding font awesome */
 .fa, .far, .fas {
-  font-family: "Font Awesome 5 Free" !important;
+  font-family: "Font Awesome 6 Free" !important;
 }
 
 @keyframes opacity {

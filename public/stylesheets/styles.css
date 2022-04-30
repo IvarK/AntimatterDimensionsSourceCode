@@ -8129,7 +8129,6 @@ kbd {
   margin-bottom: 1rem;
   border: 0.2rem solid var(--color-laitela--accent);
   border-radius: .5rem;
-  cursor: pointer;
   font-family: Typewriter;
   font-size: 1.1rem;
   font-weight: bold;
@@ -8141,7 +8140,11 @@ kbd {
   border-radius: 0;
 }
 
-.c-laitela-singularity__cap-control:hover {
+.c-laitela-singularity__cap-control-available {
+  cursor: pointer;
+}
+
+.c-laitela-singularity__cap-control-available:hover {
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent);
 }

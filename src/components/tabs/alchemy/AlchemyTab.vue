@@ -21,6 +21,7 @@ export default {
       alchemyCap: 0,
       capFactor: 0,
       createdRealityGlyph: false,
+      allReactionsDisabled: false
     };
   },
   computed: {
@@ -46,6 +47,12 @@ export default {
         "tutorial--glow": !this.createdRealityGlyph
       };
     },
+    reactions() {
+      return AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);
+    }
+  },
+  created() {
+    this.updateReactionData();
   },
   methods: {
     update() {
@@ -79,6 +86,7 @@ export default {
       }
       if (resource.isBaseResource) return;
       resource.reaction.isActive = !resource.reaction.isActive;
+      this.updateReactionData();
       GameUI.update();
     },
     isUnlocked(reactionArrow) {
@@ -151,18 +159,22 @@ export default {
       Modal.h2p.show();
     },
     toggleAllReactions() {
-      const reactions = AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);
-      const allReactionsDisabled = reactions.every(reaction => !reaction.isActive);
-      if (allReactionsDisabled) {
-        for (const reaction of reactions) {
+      if (this.allReactionsDisabled) {
+        for (const reaction of this.reactions) {
           reaction.isActive = true;
         }
       } else {
-        for (const reaction of reactions) {
+        for (const reaction of this.reactions) {
           reaction.isActive = false;
         }
       }
-      this.$forceUpdate();
+      // This is moreso here to force an update than anything but it also adds some info to the "Toggle all reactions"
+      // button, since its behaviour is unclear to the player- Would it want to disable/enable all if only some were on?
+      // This switches it to outright say disabled/enabled instead of toggle and also updates the reaction path colours
+      this.updateReactionData();
+    },
+    updateReactionData() {
+      this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
     }
   }
 };
@@ -181,7 +193,7 @@ export default {
         class="o-primary-btn--subtab-option"
         @click="toggleAllReactions"
       >
-        Toggle all reactions
+        {{ allReactionsDisabled ? "Enable" : "Disable" }} all reactions
       </PrimaryButton>
       <PrimaryButton
         v-if="realityCreationVisible"

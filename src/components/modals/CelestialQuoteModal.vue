@@ -3,6 +3,7 @@ export default {
   name: "CelestialQuoteModal",
   data() {
     return {
+      noSpeedrun: true,
       index: 0,
       line: "",
       overrideCelestial: "",
@@ -68,6 +69,7 @@ export default {
       }
     },
     update() {
+      this.noSpeedrun = !player.speedrun.hasStarted;
       if (!this.currentQuote) {
         this.line = "";
         return;
@@ -90,7 +92,10 @@ export default {
 </script>
 
 <template>
-  <div class="l-modal-overlay c-modal-overlay">
+  <div
+    v-if="noSpeedrun"
+    class="l-modal-overlay c-modal-overlay"
+  >
     <div :class="modalClass">
       <i
         :style="prevStyle"

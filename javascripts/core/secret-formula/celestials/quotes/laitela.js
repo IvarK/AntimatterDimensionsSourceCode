@@ -2,7 +2,7 @@ import { GameDatabase } from "../../game-database";
 
 GameDatabase.celestials.quotes.laitela = {
   unlock: {
-    id: 1,
+    id: 0,
     lines: [
       "You finally reached me.",
       "I guess it is time to reveal to you,",
@@ -17,7 +17,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   firstDestabilize: {
-    id: 2,
+    id: 1,
     destabilize: 1,
     lines: [
       "It is fine. Unlike the others, I never had a Reality.",
@@ -28,7 +28,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   firstSingularity: {
-    id: 3,
+    id: 2,
     singularities: 1,
     lines: [
       "It is weird, how all beings question things.",
@@ -41,7 +41,7 @@ GameDatabase.celestials.quotes.laitela = {
   },
   // Note: This happens around e10-e11 singularities
   annihilation: {
-    id: 4,
+    id: 3,
     lines: [
       "Back to square one.",
       "We, the Celestials transcend time and existence.",
@@ -53,7 +53,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   halfDimensions: {
-    id: 5,
+    id: 4,
     destabilize: 4,
     lines: [
       "You seem to be having too much fun.",
@@ -65,7 +65,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   singularity1: {
-    id: 6,
+    id: 5,
     singularities: 1e8,
     lines: [
       "What was it again...? Antimatter?",
@@ -77,7 +77,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   singularity2: {
-    id: 7,
+    id: 6,
     singularities: 1e16,
     lines: [
       "Of those who tried to control dimensions...",
@@ -89,7 +89,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   singularity3: {
-    id: 8,
+    id: 7,
     singularities: 1e24,
     lines: [
       "Is this a cycle?",
@@ -102,7 +102,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   singularity4: {
-    id: 9,
+    id: 8,
     singularities: 1e32,
     lines: [
       "I don't know for how much... longer I can hold.",
@@ -114,7 +114,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   fullDestabilize: {
-    id: 10,
+    id: 9,
     destabilize: 8,
     lines: [
       "I feel... like I had something to say...",

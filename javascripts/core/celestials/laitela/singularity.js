@@ -267,7 +267,7 @@ export const Singularity = {
 
     for (const quote of Object.values(Laitela.quotes)) {
       if (Currency.singularities.value >= quote.singularities) {
-        Laitela.quotes.show(quote);
+        quote.show();
       }
     }
 

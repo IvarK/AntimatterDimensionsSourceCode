@@ -57,7 +57,7 @@ export default {
     },
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
-      Pelle.quotes.show(Pelle.quotes.galaxyGeneratorUnlock);
+      Pelle.quotes.galaxyGeneratorUnlock.show();
     }
   },
 };

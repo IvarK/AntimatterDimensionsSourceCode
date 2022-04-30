@@ -212,52 +212,21 @@ Modal.pelleEffects = new Modal(PelleEffectsModal);
 Modal.sacrifice = new Modal(SacrificeModal, 1);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1);
 Modal.celestialQuote = new class extends Modal {
-  show(celestial, lines) {
+  queue = [];
+
+  show(quote) {
     if (!GameUI.initialized || player.speedrun.isActive) return;
-    const newLines = lines.map(l => Modal.celestialQuote.getLineMapping(celestial, l));
-    if (ui.view.modal.queue.includes(this)) {
-      // This shouldn't come up often, but in case we do have a pile of quotes
-      // being shown in a row:
-      this.lines[this.lines.length - 1].isEndQuote = true;
-      this.lines.push(...newLines);
+    if (this.isOpen) {
+      this.queue.push(quote);
       return;
     }
+    this.quote = quote;
     super.show();
-    this.lines = newLines;
   }
 
-  getLineMapping(defaultCel, defaultLine) {
-    let overrideCelestial = "";
-    let l = defaultLine;
-    if (typeof l === "string") {
-      if (l.includes("<!")) {
-        overrideCelestial = this.getOverrideCel(l);
-        l = this.removeOverrideCel(l);
-      }
-    }
-    return {
-      celestial: defaultCel,
-      overrideCelestial,
-      line: l,
-      showName: l[0] !== "*",
-      isEndQuote: false
-    };
-  }
-
-  getOverrideCel(x) {
-    if (x.includes("<!")) {
-      const start = x.indexOf("<!"), end = x.indexOf("!>");
-      return x.substring(start + 2, end);
-    }
-    return "";
-  }
-
-  removeOverrideCel(x) {
-    if (x.includes("<!")) {
-      const start = x.indexOf("<!"), end = x.indexOf("!>");
-      return x.substring(0, start) + x.substring(end + 2);
-    }
-    return x;
+  hide() {
+    Modal.hide();
+    if (this.queue.length > 0) this.show(this.queue.shift());
   }
 }(CelestialQuoteModal, 2, true);
 

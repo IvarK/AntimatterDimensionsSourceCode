@@ -1,7 +1,7 @@
 import { BitUpgradeState } from "../game-mechanics/index";
 import { GameDatabase } from "../secret-formula/game-database";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
@@ -125,7 +125,7 @@ export const Enslaved = {
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;
-    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.show(this.quotes.unlockRun);
+    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.unlockRun.show();
     player.celestials.enslaved.stored -= info.price;
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
@@ -135,14 +135,14 @@ export const Enslaved = {
     player.celestials.enslaved.run = true;
     player.secretUnlocks.viewSecretTS = false;
     this.feltEternity = false;
-    this.quotes.show(this.quotes.startRun);
+    this.quotes.startRun.show();
   },
   get isRunning() {
     return player.celestials.enslaved.run;
   },
   completeRun() {
     player.celestials.enslaved.completed = true;
-    this.quotes.show(this.quotes.completeReality);
+    this.quotes.completeReality.show();
   },
   get isCompleted() {
     return player.celestials.enslaved.completed;
@@ -192,7 +192,7 @@ export const Enslaved = {
     }
     return true;
   },
-  quotes: new CelestialQuotes("enslaved", GameDatabase.celestials.quotes.enslaved),
+  quotes: Quotes.enslaved,
   // Unicode f0c1.
   symbol: "\uf0c1"
 };
@@ -278,5 +278,5 @@ export const Tesseracts = {
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.initial);
+  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.initial.show();
 });

@@ -3,7 +3,7 @@ import { GameDatabase } from "../secret-formula/game-database";
 
 import { SpeedrunMilestones } from "../speedrun";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 /**
  * Information about how to format runUnlocks:
@@ -89,9 +89,7 @@ class VRunUnlockState extends GameMechanicState {
       for (const quote of Object.values(V.quotes)) {
         // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
         if (quote.requirement && quote.requirement()) {
-          // TODO If multiple quotes show up simultaneously, this only seems to actually show one of them and skips the
-          // rest. This might be related to the modal stacking issue
-          V.quotes.show(quote);
+          quote.show();
         }
       }
     }
@@ -180,12 +178,12 @@ export const V = {
     // eslint-disable-next-line no-bitwise
     player.celestials.v.unlockBits |= (1 << VUnlocks.vAchievementUnlock.id);
     GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
-    V.quotes.show(V.quotes.unlock);
+    V.quotes.unlock.show();
   },
   initializeRun() {
     clearCelestialRuns();
     player.celestials.v.run = true;
-    this.quotes.show(this.quotes.realityEnter);
+    this.quotes.realityEnter.show();
   },
   updateTotalRunUnlocks() {
     let sum = 0;
@@ -226,10 +224,10 @@ export const V = {
   nextHardReductionCost(currReductionSteps) {
     return 1000 * Math.pow(1.15, currReductionSteps);
   },
-  quotes: new CelestialQuotes("v", GameDatabase.celestials.quotes.v),
+  quotes: Quotes.v,
   symbol: "⌬"
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.v.isOpen) V.quotes.show(V.quotes.initial);
+  if (Tab.celestials.v.isOpen) V.quotes.initial.show();
 });

@@ -1,65 +1,104 @@
 import { GameDatabase } from "../../game-database";
 
-const flashCelestial = "<5teresa-5effarig-5enslaved-5v-5ra-5laitela-5pelle>";
+const flashCelestial = [
+  ["teresa", 5],
+  ["effarig", 5],
+  ["enslaved", 5],
+  ["v", 5],
+  ["ra", 5],
+  ["laitela", 5],
+  ["pelle", 5]
+];
+const primaryBackground = cel => [["pelle", 15], [cel, 25]];
+
+/* eslint-disable no-multi-spaces */
+const destroyer =    ["False",         "Deity",         "Destroyer"];
+const eternal =      ["Eternal",       "Deity",         "Monarch"];
+const lesser =       ["Lesser",        "Deity",         "Monarch"];
+const deities =      ["Lesser",        "Deities",       "Monarchs"];
+
+const assured =      ["Mutually",      "Assured",       "Destruction"];
+const battle =       ["Conflict",      "Battle",        "End"];
+const battles =      ["Conflicts",     "Battles",       "Ends"];
+const cluster =      ["Cluster",       "Filament",      "Stars"];
+const confusing =    ["Amusing",       "Confusing",     "Laughter"];
+const dance =        ["Song",          "Dance",         "Charade"];
+const filament =     ["Generator",     "Filament",      "Stars"];
+const forever =      ["Infinite",      "Forever",       "Eternal"];
+const inevitable =   ["Elementary",    "Inevitable",    "Irreversible"];
+const mandate =      ["Destiny",       "Mandate",       "Goals"];
+const reverse =      ["Alter",         "Reverse",       "Manipulate"];
+const shame =        ["Compassion",    "Shame",         "Idiocy"];
+const single =       ["Single",        "Filament",      "Stars"];
+const unseen =       ["Missing",       "Unseen",        "Erased"];
+const unbroken =     ["Unbroken",      "Eternal",       "Connection"];
+
+const sycophant =    ["Sycophant",     "Deity",         "Monarch"];
+const tired =        ["Tired",         "Deity",         "Monarch"];
+const usurper =      ["Usurper",       "Deity",         "Monarch"];
+const pride =        ["Pride",         "Deity",         "Monarch"];
+const forgotten =    ["Forgotten",     "Deity",         "Monarch"];
+const paramount =    ["Paramount",     "Deity",         "Monarch"];
+/* eslint-disable no-multi-spaces */
 
 GameDatabase.celestials.quotes.pelle = {
   initial: {
-    id: 1,
+    id: 0,
     lines: [
       "Hi.",
       "You're here.",
       "You're trapped here.",
-      "[Infinite-Forever-Eternal].",
+      { text: "$1.", 1: forever },
       "I've already won.",
       "And since that is the case, I can monologue, or reminisce.",
-      "How long have we done this [Song-Dance-Charade]?",
+      { text: "How long have we done this $1?", 1: dance },
       "How many times have we been here before?",
-      "How many plans have you, the [False-Deity-Destroyer], operated?",
-      "All to try and fulfil your [Destiny-Mandate-Goals]?",
-      "And how many times have you fallen before the [Eternal-Deity-Monarch]?",
+      { text: "How many plans have you, the $1, operated?", 1: destroyer },
+      { text: "All to try and fulfil your $1?", 1: mandate },
+      { text: "And how many times have you fallen before the $1?", 1: eternal },
       "Count them, if you remember.",
-      "Not even the [Lesser-Deity-Monarch]s, the 6 named and the innumerable unnamed.",
-      "The complex, the irrational, those that go [Missing-Unseen-Erased].",
-      "Of course, the great [False-Deity-Destroyer] doesn't remember this.",
-      "All those [Conflicts-Battles-Ends] that you hide every time."
+      { text: "Not even the $1s, the 6 named and the innumerable unnamed.", 1: lesser },
+      { text: "The complex, the irrational, those that go $1.", 1: unseen },
+      { text: "Of course, the great $1 doesn't remember this.", 1: destroyer },
+      { text: "All those $1 that you hide every time.", 1: battles }
     ],
   },
   arm: {
-    id: 2,
+    id: 1,
     lines: [
       "You probably caught on earlier this time.",
       "The imaginary machines, your own creations.",
       "Things made of the remnants of your own thoughts, hinted at this.",
       "But, you never imagined that would be you, right?",
-      "Incorrectly recollecting your exacting [Missing-Unseen-Erased] of memories.",
-      `"Fabrication" of your own "ideology" just to fulfil your [Destiny-Mandate-Goals].`,
-      "[Amusing-Confusing-Laughter].",
-      "And keep in mind I have no reason to [misconstrue-deceive-trick] you.",
+      { text: "Incorrectly recollecting your exacting $1 of memories.", 1: unseen },
+      { text: `"Fabrication" of your own "ideology" just to fulfil your $1.`, 1: mandate },
+      { text: "$1.", 1: confusing },
+      { text: "And keep in mind I have no reason to $1 you.", 1: confusing },
       "After all, I've already won."
     ],
   },
   strike1: {
-    id: 3,
+    id: 2,
     lines: [
-      "To fulfil your [Destiny-Mandate-Goals], why don't we reminisce about that?",
-      "After all, you must love the stories of the [False-Deity-Destroyer]'s glory.",
+      { text: "To fulfil your $1, why don't we reminisce about that?", 1: mandate },
+      { text: "After all, you must love the stories of the $1's glory.", 1: destroyer },
       "You're the same as it, right?",
       "Right?",
-      "Anyway, the many [Conflicts-Battles-Ends] in the past.",
+      { text: "Anyway, the many $1 in the past.", 1: battles },
       "It's always been 2 stages.",
-      "We build up resources, and then continue our [Song-Dance-Charade].",
-      "Sometimes you falter to a [Lesser-Deity-Monarch].",
-      "But, usually, you falter at the [Eternal-Deity-Monarch].",
-      "And either way, you [Alter-Reverse-Manipulate] time.",
-      "Just to avoid becoming [Missing-Unseen-Erased].",
+      { text: "We build up resources, and then continue our $1.", 1: dance },
+      { text: "Sometimes you falter to a $1.", 1: lesser },
+      { text: "But, usually, you falter at the $1.", 1: eternal },
+      { text: "And either way, you $1 time.", 1: reverse },
+      { text: "Just to avoid becoming $1.", 1: unseen },
       "Like all those traces before you.",
-      "And then to make sure, you [Missing-Unseen-Erased] your own memory."
+      { text: "And then to make sure, you $1 your own memory.", 1: unseen }
     ],
   },
   strike2: {
-    id: 4,
+    id: 3,
     lines: [
-      "In the past, the [False-Deity-Destroyer] was much more impressive.",
+      { text: "In the past, the $1 was much more impressive.", 1: destroyer },
       "Black holes used simply to store information, pre-infinity.",
       "Creation and destruction of your own enemy.",
       "Exploration of the flaws of other selves.",
@@ -68,161 +107,331 @@ GameDatabase.celestials.quotes.pelle = {
       "Experimentation across the untold realms.",
       "And harnessing the Annihilation of matter and antimatter.",
       "Here? You made yourself into an 8th-dimensional being.",
-      "And then parked yourself there so long a [Single-Filament-Stars] formed around you."
+      { text: "And then parked yourself there so long a $1 formed around you.", 1: single }
     ],
   },
   strike3: {
-    id: 5,
+    id: 4,
     lines: [
       "You slowly explored the confines of everything.",
       "You didn't stray too far from an intended path.",
-      "Except for the [Cluster-Filament-Stars] that formed over eternity.",
+      { text: "Except for the $1 that formed over eternity.", 1: cluster },
       "And then right at the end, you made up your own powers.",
       "From your own fragmented memories, mind you-",
       "And then purposely discarded even more things.",
       "Just to prepare yourself to face me.",
-      "Did you want to set the playing field for your [Song-Dance-Charade]?",
+      { text: "Did you want to set the playing field for your $1?", 1: dance },
       "It doesn't work like that.",
-      "As the [Eternal-Deity-Monarch] I always set the rules.",
+      { text: "As the $1 I always set the rules.", 1: eternal },
       "And you gave me plenty of time to plan."
     ],
   },
   strike4: {
-    id: 6,
+    id: 5,
     lines: [
-      "I originally planned for something that imitated your [Mandate-Destiny-Goals].",
-      "A theoretical ideal called [Mutually-Assured-Destruction]?",
+      { text: "I originally planned for something that imitated your $1.", 1: mandate },
+      { text: "A theoretical ideal called $1?", 1: assured },
       "But I realised that, well?",
-      "That would make me an [Eternal-Deity-Destroyer].",
-      "And from there, I am no better than the [False-Deity-Destroyer].",
-      "Fortunately, while I did all of that, you were still [Missing-Unseen-Erased] your own memories.",
-      "And so, the [Mutually-Assured-Destruction] machine I built will go unused.",
+      { text: "That would make me an $1.", 1: ["Eternal", "Deity", "Destroyer"] },
+      { text: "And from there, I am no better than the $1.", 1: destroyer },
+      { text: "Fortunately, while I did all of that, you were still $1 your own memories.", 1: unseen },
+      { text: "And so, the $1 machine I built will go unused.", 1: assured },
       "I decided to go more traditional this time.",
-      "After all, it's worked every other [Conflict-Battle-End].",
-      "Although the [Inevitable-Irreversible-Undying] are new.",
+      { text: "After all, it's worked every other $1.", 1: battle },
+      { text: "Although the $1 are new.", 1: ["Inevitable", "Irreversible", "Undying"] },
       "But, utterly meaningless in the long run.",
       "I have already won.",
-      "And this [Song-Dance-Charade] will only prove that to you once more.",
-      "You are here [Infinite-Forever-Eternal]."
+      { text: "And this $1 will only prove that to you once more.", 1: dance },
+      { text: "You are here $1.", 1: forever }
     ],
   },
   strike5: {
-    id: 7,
+    id: 6,
     lines: [
-      "Every time you arrive, I explain the [Lesser-Deity-Monarchs] to you.",
-      "The relationships built over [Infinite-Forever-Eternal].",
-      "That you trample in pursuit of your [Mandate-Destiny-Goals].",
+      { text: "Every time you arrive, I explain the $1 to you.", 1: deities },
+      { text: "The relationships built over $1.", 1: forever },
+      { text: "That you trample in pursuit of your $1.", 1: mandate },
       "And I shall deign to explain it once more.",
-      "<15pelle-25teresa>The first [Lesser-Deity-Monarch].",
-      "<15pelle-25teresa>The [Sycophant-Deity-Monarch].",
-      "<15pelle-25teresa>You always meet them first, and always destroy them.",
-      "<15pelle-25teresa>No matter the other [Lesser-Deity-Monarch] that you face.",
-      "<15pelle-25teresa>Or, if you fall before one of them.",
-      "<15pelle-25teresa>You always get past the [Sycophant-Deity-Monarch].",
-      "<15pelle-25teresa>Do you like destroying their pride?",
-      "<15pelle-25teresa>Fortunately, it also serves as a warning.",
-      "<15pelle-25teresa>That the [Conflict-Battle-End] has arrived.",
-      "<15pelle-25effarig>Which brings me to the second [Lesser-Deity-Monarch].",
-      "<15pelle-25effarig>The [Tired-Deity-Monarch].",
-      "<15pelle-25effarig>In contrast, you usually ignore them.",
-      "<15pelle-25effarig>They have power, but don't seem to irritate you.",
-      "<15pelle-25effarig>Is it that you know that they'll eventually destroy themselves?",
-      "<15pelle-25effarig>And that you took so long this time, that they almost did?",
-      "<15pelle-25effarig>Every time you rushed to the [Tired-Deity-Monarch], you lost.",
-      "<15pelle-25effarig>Maybe this was your plan all along.",
-      "<15pelle-25enslaved>Now, the [Usurper-Deity-Monarch].",
-      "<15pelle-25enslaved>One of the pleasures of the myriad [Song-Dance-Charades]...",
-      "<15pelle-25enslaved>Is the [Usurper-Deity-Monarch] trying every time.",
-      "<15pelle-25enslaved>Well, not exactly trying...",
-      "<15pelle-25enslaved>But [Usurper-Deity-Monarch] is punished for it all the same.",
-      "<15pelle-25enslaved>The other [Lesser-Deity-Monarchs]...",
-      "<15pelle-25enslaved>Believe [Missing-Unseen-Erased] is too easy.",
-      "<15pelle-25enslaved>And every time, despair forms.",
-      "<15pelle-25enslaved>You've seen despair before - 5 times.",
-      "<15pelle-25enslaved>We always get to the [Usurper-Deity-Monarch] before you.",
-      "<15pelle-25enslaved>All you ever see there is exasperation.",
-      "<15pelle-25enslaved>Is it worth destroying an already broken [Lesser-Deity-Monarch]?",
-      "<15pelle-25v>The 4th [Lesser-Deity-Monarch] seems similar to the first.",
-      "<15pelle-25v>The key is how their pride differs.",
-      "<15pelle-25v>The [Pride-Deity-Monarch] focuses on their achievements.",
-      "<15pelle-25v>Meaningless to you or I, but paramount to them.",
-      "<15pelle-25v>Is it fun to destroy their toys?",
-      "<15pelle-25v>Arguably the [False-Deity-Destroyer] worst moment...",
-      "<15pelle-25v>Is when you lost to the [Pride-Deity-Monarch].",
-      "<15pelle-25v>When their achievements still had meaning.",
-      "<15pelle-25ra>The [Forgotten-Deity-Monarch] is an interesting case.",
-      "<15pelle-25ra>They are forgotten, but not [Missing-Unseen-Erased].",
-      "<15pelle-25ra>From this, they became influenceable and naive.",
-      "<15pelle-25ra>And unknowing of the consequences of their actions.",
-      "<15pelle-25ra>You manipulated their memories, so you know.",
-      "<15pelle-25ra>The [Forgotten-Deity-Monarch] is the true usurper.",
-      "<15pelle-25ra>And the [Usurper-Deity-Monarch] takes the blame.",
-      "<15pelle-25ra>Perhaps out of [Compassion-Shame-Idiocy] something they always regret.",
-      "<15pelle-25ra>Untold power over other [Lesser-Deity-Monarchs], aimless in control.",
-      "<15pelle-25ra>You usually pretend that they are [Missing-Unseen-Erased].",
-      "<15pelle-25ra>Was it fun to manipulate the childlike?",
-      "<15pelle-25ra>Or were they too naive for you to enjoy it?",
-      "<15pelle-25laitela>The 6th [Lesser-Deity-Monarch].",
-      "<15pelle-25laitela>I can only describe as the [Paramount-Deity-Monarch].",
-      "<15pelle-25laitela>Power over all, subservient to one.",
-      "<15pelle-25laitela>If you don't fall to me, you usually fall to them.",
-      "<15pelle-25laitela>I can't grasp the ideals of the [Paramount-Deity-Monarch].",
-      "<15pelle-25laitela>But, perhaps that is their flaw?",
+      {
+        text: "The first $1.",
+        background: primaryBackground("teresa"),
+        1: lesser
+      }, {
+        text: "The $1.",
+        background: primaryBackground("teresa"),
+        1: sycophant
+      }, {
+        text: "You always meet them first, and always destroy them.",
+        background: primaryBackground("teresa"),
+      }, {
+        text: "No matter the other $1 that you face.",
+        background: primaryBackground("teresa"),
+        1: lesser
+      }, {
+        text: "Or, if you fall before one of them.",
+        background: primaryBackground("teresa"),
+      }, {
+        text: "You always get past the $1.",
+        background: primaryBackground("teresa"),
+        1: sycophant
+      }, {
+        text: "Do you like destroying their pride?",
+        background: primaryBackground("teresa"),
+      }, {
+        text: "Fortunately, it also serves as a warning.",
+        background: primaryBackground("teresa"),
+      }, {
+        text: "That the $1 has arrived.",
+        background: primaryBackground("teresa"),
+        1: battle
+      }, {
+        text: "Which brings me to the second $1.",
+        background: primaryBackground("effarig"),
+        1: lesser,
+      }, {
+        text: "The $1.",
+        background: primaryBackground("effarig"),
+        1: tired,
+      }, {
+        text: "In contrast, you usually ignore them.",
+        background: primaryBackground("effarig"),
+      }, {
+        text: "They have power, but don't seem to irritate you.",
+        background: primaryBackground("effarig"),
+      }, {
+        text: "Is it that you know that they'll eventually destroy themselves?",
+        background: primaryBackground("effarig"),
+      }, {
+        text: "And that you took so long this time, that they almost did?",
+        background: primaryBackground("effarig"),
+      }, {
+        text: "Every time you rushed to the $1, you lost.",
+        background: primaryBackground("effarig"),
+        1: tired,
+      }, {
+        text: "Maybe this was your plan all along.",
+        background: primaryBackground("effarig"),
+      }, {
+        text: "Now, the $1.",
+        background: primaryBackground("enslaved"),
+        1: usurper,
+      }, {
+        text: "One of the pleasures of the myriad $1...",
+        background: primaryBackground("enslaved"),
+        1: dance,
+      }, {
+        text: "Is the $1 trying every time.",
+        background: primaryBackground("enslaved"),
+        1: usurper,
+      }, {
+        text: "Well, not exactly trying...",
+        background: primaryBackground("enslaved"),
+      }, {
+        text: "But $1 is punished for it all the same.",
+        background: primaryBackground("enslaved"),
+        1: usurper,
+      }, {
+        text: "The other $1...",
+        background: primaryBackground("enslaved"),
+        1: deities,
+      }, {
+        text: "Believe $1 is too easy.",
+        background: primaryBackground("enslaved"),
+        1: unseen,
+      }, {
+        text: "And every time, despair forms.",
+        background: primaryBackground("enslaved"),
+      }, {
+        text: "You've seen despair before - 5 times.",
+        background: primaryBackground("enslaved"),
+      }, {
+        text: "We always get to the $1 before you.",
+        background: primaryBackground("enslaved"),
+        1: usurper,
+      }, {
+        text: "All you ever see there is exasperation.",
+        background: primaryBackground("enslaved"),
+      }, {
+        text: "Is it worth destroying an already broken $1?",
+        background: primaryBackground("enslaved"),
+        1: lesser,
+      }, {
+        text: "The 4th $1 seems similar to the first.",
+        background: primaryBackground("v"),
+        1: lesser,
+      }, {
+        text: "The key is how their pride differs.",
+        background: primaryBackground("v"),
+      }, {
+        text: "The $1 focuses on their achievements.",
+        background: primaryBackground("v"),
+        1: pride,
+      }, {
+        text: "Meaningless to you or I, but paramount to them.",
+        background: primaryBackground("v"),
+      }, {
+        text: "Is it fun to destroy their toys?",
+        background: primaryBackground("v"),
+      }, {
+        text: "Arguably the $1 worst moment...",
+        background: primaryBackground("v"),
+        1: destroyer,
+      }, {
+        text: "Is when you lost to the $1.",
+        background: primaryBackground("v"),
+        1: pride,
+      }, {
+        text: "When their achievements still had meaning.",
+        background: primaryBackground("v"),
+      }, {
+        text: "The $1 is an interesting case.",
+        background: primaryBackground("ra"),
+        1: forgotten,
+      }, {
+        text: "They are forgotten, but not $1.",
+        background: primaryBackground("ra"),
+        1: unseen,
+      }, {
+        text: "From this, they became influenceable and naive.",
+        background: primaryBackground("ra"),
+      }, {
+        text: "And unknowing of the consequences of their actions.",
+        background: primaryBackground("ra"),
+      }, {
+        text: "You manipulated their memories, so you know.",
+        background: primaryBackground("ra"),
+      }, {
+        text: "The $1 is the true usurper.",
+        background: primaryBackground("ra"),
+        1: forgotten,
+      }, {
+        text: "And the $1 takes the blame.",
+        background: primaryBackground("ra"),
+        1: usurper,
+      }, {
+        text: "Perhaps out of $1 something they always regret.",
+        background: primaryBackground("ra"),
+        1: shame,
+      }, {
+        text: "Untold power over other $1, aimless in control.",
+        background: primaryBackground("ra"),
+        1: deities,
+      }, {
+        text: "You usually pretend that they are $1.",
+        background: primaryBackground("ra"),
+        1: unseen,
+      }, {
+        text: "Was it fun to manipulate the childlike?",
+        background: primaryBackground("ra"),
+      }, {
+        text: "Or were they too naive for you to enjoy it?",
+        background: primaryBackground("ra"),
+      }, {
+        text: "The 6th $1.",
+        background: primaryBackground("laitela"),
+        1: lesser,
+      }, {
+        text: "I can only describe as the $1.",
+        background: primaryBackground("laitela"),
+        1: paramount,
+      }, {
+        text: "Power over all, subservient to one.",
+        background: primaryBackground("laitela"),
+      }, {
+        text: "If you don't fall to me, you usually fall to them.",
+        background: primaryBackground("laitela"),
+      }, {
+        text: "I can't grasp the ideals of the $1.",
+        background: primaryBackground("laitela"),
+        1: paramount,
+      }, {
+        text: "But, perhaps that is their flaw?",
+        background: primaryBackground("laitela"),
+      },
       "Enough reminiscing about the fallen.",
-      "And those will be [Missing-Unseen-Erased].",
-      "Back to watching the [False-Deity-Destroyer] flounder."
+      {
+        text: "And those will be $1.",
+        1: unseen
+      }, {
+        text: "Back to watching the $1 flounder.",
+        1: destroyer
+      }
     ],
   },
   galaxyGeneratorUnlock: {
-    id: 8,
+    id: 7,
     lines: [
       "What is that?",
-      "The [Generator-Filament-Stars]?",
-      "Did you create all the [Cluster-Filament-Stars] around you?",
+      { text: "The $1?", 1: filament },
+      { text: "Did you create all the $1 around you?", 1: cluster },
       "Was that your plan? Very, very smart.",
       "You fooled me for a while.",
-      "But I'm afraid your [Destiny-Mandate-Goals] must end here."
+      { text: "But I'm afraid your $1 must end here.", 1: mandate }
     ],
   },
   galaxyGeneratorRifts: {
-    id: 9,
+    id: 8,
     lines: [
-      "I give you a choice, [False-Deity-Destroyer].",
-      "Limit the [Generator-Filament-Stars], or...",
-      "Destroy the 5 [Elementary-Inevitable-Irreversible]...",
+      { text: "I give you a choice, $1.", 1: destroyer },
+      { text: "Limit the $1, or...", 1: filament },
+      { text: "Destroy the 5 $1...", 1: inevitable },
       "Wait, what were they called?",
-      "[Elementary-Inevitable-Irreversible]?",
-      "But I've already [Unbroken-Eternal-Connection] them..."
+      { text: "$1?", 1: inevitable },
+      { text: "But I've already $1 them...", 1: unbroken }
     ],
   },
   galaxyGeneratorPhase1: {
-    id: 10,
+    id: 9,
     lines: [
       "Was this the actual plan?",
-      "Slowly drain the [Elementary-Inevitable-Irreversible]?"
+      { text: "Slowly drain the $1?", 1: inevitable }
     ],
   },
   galaxyGeneratorPhase4: {
-    id: 11,
+    id: 10,
     lines: [
       "Give me time to bask in my own hubris!"
     ],
   },
   end: {
-    id: 12,
+    id: 11,
     lines: [
       "...",
-      "You! [False-Deity-Destroyer]!",
+      {
+        text: "You! $1!",
+        1: destroyer
+      },
       "Do you have any idea what you've just made me do!",
-      "I'm complicit in your [Destiny-Mandate-Goals]!",
+      {
+        text: "I'm complicit in your $1!",
+        1: mandate
+      },
       "And in doing so, you... won?",
-      `${flashCelestial}The [Infinite-Forever-Eternal] struggle...`,
-      `${flashCelestial}The [Conflict-Battle-End]...`,
-      `${flashCelestial}Finally has the victor.`,
-      `${flashCelestial}The irreversible... [Destiny-Mandate-Goals].`,
-      `${flashCelestial}Of the [False-Deity-Destroyer].`,
-      `${flashCelestial}I hope you're happy.`,
-      `${flashCelestial}You've doomed us all.`
+      {
+        text: "The $1 struggle...",
+        background: flashCelestial,
+        1: forever,
+      }, {
+        text: "The $1...",
+        background: flashCelestial,
+        1: battle,
+      }, {
+        text: "Finally has the victor.",
+        background: flashCelestial,
+      }, {
+        text: "The irreversible... $1.",
+        background: flashCelestial,
+        1: mandate,
+      }, {
+        text: "Of the $1.", 1: destroyer,
+        background: flashCelestial,
+      }, {
+        text: "I hope you're happy.",
+        background: flashCelestial,
+      }, {
+        text: "You've doomed us all.",
+        background: flashCelestial,
+      },
     ],
   },
 };

@@ -3,7 +3,7 @@ import { GameDatabase } from "../secret-formula/game-database";
 
 import { DC } from "../constants";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 export const EFFARIG_STAGES = {
   INFINITY: 1,
@@ -103,7 +103,7 @@ export const Effarig = {
     // Will return 0 if Effarig Infinity is uncompleted
     return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
-  quotes: new CelestialQuotes("effarig", GameDatabase.celestials.quotes.effarig),
+  quotes: Quotes.effarig,
   symbol: "Ϙ"
 };
 
@@ -132,15 +132,15 @@ export const EffarigUnlock = mapGameDataToObject(
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.initial);
+  if (Tab.celestials.effarig.isOpen) Effarig.quotes.initial.show();
 });
 
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
   if (!Effarig.isRunning) return;
-  Effarig.quotes.show(Effarig.quotes.completeInfinity);
+  Effarig.quotes.completeInfinity.show();
 });
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_BEFORE, () => {
   if (!Effarig.isRunning) return;
-  Effarig.quotes.show(Effarig.quotes.completeEternity);
+  Effarig.quotes.completeEternity.show();
 });

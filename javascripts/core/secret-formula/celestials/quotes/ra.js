@@ -2,7 +2,7 @@ import { GameDatabase } from "../../game-database";
 
 GameDatabase.celestials.quotes.ra = {
   unlock: {
-    id: 1,
+    id: 0,
     lines: [
       "A... visitor?",
       "I am here! I am the one you are looking for... I think...",
@@ -11,7 +11,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   realityEnter: {
-    id: 2,
+    id: 1,
     lines: [
       "I have not seen the others in so long...",
       "Can you help me remember them?",
@@ -19,7 +19,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   teresaStart: {
-    id: 3,
+    id: 2,
     requirement: () => Ra.pets.teresa.level >= 2,
     lines: [
       "Te... re... sa...",
@@ -27,7 +27,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   teresaLate: {
-    id: 4,
+    id: 3,
     requirement: () => Ra.pets.teresa.level >= 15,
     lines: [
       "Teresa dealt with machines, I believe.",
@@ -36,7 +36,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   effarigStart: {
-    id: 5,
+    id: 4,
     requirement: () => Ra.pets.effarig.level >= 2,
     lines: [
       "Eff... a... rig",
@@ -44,7 +44,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   effarigLate: {
-    id: 6,
+    id: 5,
     requirement: () => Ra.pets.effarig.level >= 15,
     lines: [
       "Effarig was very particular?",
@@ -53,14 +53,14 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   enslavedStart: {
-    id: 7,
+    id: 6,
     requirement: () => Ra.pets.enslaved.level >= 2,
     lines: [
       "I cannot remember this one completely...",
     ]
   },
   enslavedLate: {
-    id: 8,
+    id: 7,
     requirement: () => Ra.pets.enslaved.level >= 15,
     lines: [
       "I am starting to remember...",
@@ -70,7 +70,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   vStart: {
-    id: 9,
+    id: 8,
     requirement: () => Ra.pets.v.level >= 2,
     lines: [
       "Had I met this one?",
@@ -78,7 +78,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   vLate: {
-    id: 10,
+    id: 9,
     requirement: () => Ra.pets.v.level >= 15,
     lines: [
       "I think I met V once...",
@@ -86,7 +86,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   recollection: {
-    id: 11,
+    id: 10,
     requirement: () => Ra.recollection.isUnlocked,
     lines: [
       "I remembered something!",
@@ -96,7 +96,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   midMemories: {
-    id: 12,
+    id: 11,
     requirement: () => Ra.totalPetLevel >= 50,
     lines: [
       "Realities are my homes, yet I cannot make my own Reality.",
@@ -106,7 +106,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   lateMemories: {
-    id: 13,
+    id: 12,
     requirement: () => Ra.totalPetLevel >= 80,
     lines: [
       "I think they are telling me to stop.",
@@ -116,7 +116,7 @@ GameDatabase.celestials.quotes.ra = {
     ]
   },
   maxLevels: {
-    id: 14,
+    id: 13,
     requirement: () => Ra.totalPetLevel === Ra.maxTotalPetLevel,
     lines: [
       "Finally, I remember everything.",

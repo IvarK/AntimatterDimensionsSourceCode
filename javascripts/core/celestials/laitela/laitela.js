@@ -1,5 +1,5 @@
-import { CelestialQuotes } from "../quotes";
 import { DC } from "../../constants";
+import { Quotes } from "../quotes";
 
 import { DarkMatterDimensions } from "./dark-matter-dimension";
 
@@ -79,7 +79,7 @@ export const Laitela = {
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     DarkMatterDimensions.reset();
     Currency.darkEnergy.reset();
-    Laitela.quotes.show(Laitela.quotes.annihilation);
+    Laitela.quotes.annihilation.show();
     Achievement(176).unlock();
     return true;
   },
@@ -120,10 +120,10 @@ export const Laitela = {
     this.celestial.difficultyTier = 0;
     this.celestial.singularityCapIncreases = 0;
   },
-  quotes: new CelestialQuotes("laitela", GameDatabase.celestials.quotes.laitela),
+  quotes: Quotes.laitela,
   symbol: "ᛝ"
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.laitela.isOpen) Laitela.quotes.show(Laitela.quotes.unlock);
+  if (Tab.celestials.laitela.isOpen) Laitela.quotes.unlock.show();
 });

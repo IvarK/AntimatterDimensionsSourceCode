@@ -1,7 +1,7 @@
 import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index";
 import { GameDatabase } from "../secret-formula/game-database";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
@@ -56,7 +56,7 @@ export const Teresa = {
   get runCompleted() {
     return player.celestials.teresa.bestRunAM.gt(0);
   },
-  quotes: new CelestialQuotes("teresa", GameDatabase.celestials.quotes.teresa),
+  quotes: Quotes.teresa,
   symbol: "Ϟ"
 };
 
@@ -158,7 +158,7 @@ export const PerkShopUpgrade = mapGameDataToObject(
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.initial);
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.initial.show();
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

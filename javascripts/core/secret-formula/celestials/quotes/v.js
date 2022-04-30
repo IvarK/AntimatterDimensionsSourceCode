@@ -2,13 +2,13 @@ import { GameDatabase } from "../../game-database";
 
 GameDatabase.celestials.quotes.v = {
   initial: {
-    id: 1,
+    id: 0,
     lines: [
       "How pathetic..."
     ],
   },
   unlock: {
-    id: 2,
+    id: 1,
     lines: [
       "Welcome to my Reality.",
       "I am surprised you could reach it.",
@@ -17,7 +17,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   realityEnter: {
-    id: 3,
+    id: 2,
     lines: [
       "Good luck with that!",
       "You will need it.",
@@ -25,7 +25,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   realityComplete: {
-    id: 4,
+    id: 3,
     lines: [
       "So fast...",
       "Do not think so much of yourself.",
@@ -34,7 +34,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   achievement1: {
-    id: 5,
+    id: 4,
     requirement: () => V.spaceTheorems >= 1,
     lines: [
       "Only one? Pathetic.",
@@ -42,7 +42,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   achievement6: {
-    id: 6,
+    id: 5,
     requirement: () => V.spaceTheorems >= 6,
     lines: [
       "This is nothing.",
@@ -50,7 +50,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   hex1: {
-    id: 7,
+    id: 6,
     requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 1,
     lines: [
       "Do not think it will get any easier from now on.",
@@ -58,7 +58,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   achievement12: {
-    id: 8,
+    id: 7,
     requirement: () => V.spaceTheorems >= 12,
     lines: [
       "How did you...",
@@ -67,7 +67,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   achievement24: {
-    id: 9,
+    id: 8,
     requirement: () => V.spaceTheorems >= 24,
     lines: [
       "Impossible...",
@@ -75,7 +75,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   hex3: {
-    id: 10,
+    id: 9,
     requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 3,
     lines: [
       "No... No... No...",
@@ -83,7 +83,7 @@ GameDatabase.celestials.quotes.v = {
     ],
   },
   allAchievements: {
-    id: 11,
+    id: 10,
     requirement: () => V.spaceTheorems >= 36,
     lines: [
       "I... how did you do it...",

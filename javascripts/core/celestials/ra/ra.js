@@ -1,5 +1,5 @@
 import { BitUpgradeState, GameMechanicState } from "../../game-mechanics/index";
-import { CelestialQuotes } from "../quotes";
+import { Quotes } from "../quotes";
 
 class RaUnlockState extends BitUpgradeState {
   get bits() { return player.celestials.ra.unlockBits; }
@@ -309,16 +309,14 @@ export const Ra = {
     for (const quote of Object.values(Ra.quotes)) {
       // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
       if (quote.requirement && quote.requirement()) {
-        // TODO If multiple quotes show up simultaneously, this only seems to actually show one of them and skips the
-        // rest. This might be related to the modal stacking issue
-        Ra.quotes.show(quote);
+        quote.show();
       }
     }
   },
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
-    this.quotes.show(this.quotes.realityEnter);
+    this.quotes.realityEnter.show();
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
@@ -375,7 +373,7 @@ export const Ra = {
     const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
     return Math.clampMax(1 + 0.002 * hoursFromUnlock, AlchemyResource.momentum.effectValue);
   },
-  quotes: new CelestialQuotes("ra", GameDatabase.celestials.quotes.ra),
+  quotes: Quotes.ra,
   symbol: "<i class='fas fa-sun'></i>"
 };
 
@@ -435,5 +433,5 @@ export const GlyphAlteration = {
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.ra.isOpen) Ra.quotes.show(Ra.quotes.unlock);
+  if (Tab.celestials.ra.isOpen) Ra.quotes.unlock.show();
 });

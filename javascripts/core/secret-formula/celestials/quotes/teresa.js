@@ -2,7 +2,7 @@ import { GameDatabase } from "../../game-database";
 
 GameDatabase.celestials.quotes.teresa = {
   initial: {
-    id: 1,
+    id: 0,
     lines: [
       "We have been observing you.",
       "You have shown promise with your bending of Reality.",
@@ -12,19 +12,19 @@ GameDatabase.celestials.quotes.teresa = {
     ]
   },
   unlockReality: {
-    id: 2,
+    id: 1,
     lines: [
       "I will let you inside my Reality, mortal. Do not get crushed by it."
     ]
   },
   completeReality: {
-    id: 3,
+    id: 2,
     lines: [
       "Why are you still here... you were supposed to fail."
     ]
   },
   effarig: {
-    id: 4,
+    id: 3,
     lines: [
       "You are still no match for us.",
       "I hope the others succeed where I have failed."

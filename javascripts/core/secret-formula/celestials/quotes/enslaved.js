@@ -2,7 +2,7 @@ import { GameDatabase } from "../../game-database";
 
 GameDatabase.celestials.quotes.enslaved = {
   initial: {
-    id: 1,
+    id: 0,
     lines: [
       "A visitor? I have not had one... eons.",
       "I... had a name. It has been lost... to this place.",
@@ -13,14 +13,14 @@ GameDatabase.celestials.quotes.enslaved = {
     ]
   },
   unlockRun: {
-    id: 2,
+    id: 1,
     lines: [
       "The others... used me. They will use... or destroy you.",
       "End my suffering... power will be yours...",
     ]
   },
   startRun: {
-    id: 3,
+    id: 2,
     lines: [
       "So little space... but no... prison... is perfect.",
       "They squeezed... this Reality... too tightly. Cracks appeared.",
@@ -28,7 +28,7 @@ GameDatabase.celestials.quotes.enslaved = {
     ]
   },
   completeReality: {
-    id: 4,
+    id: 3,
     lines: [
       "All... fragments... clones... freed.",
       "I have given... tools... of my imprisoning. Use them...",
@@ -36,17 +36,17 @@ GameDatabase.celestials.quotes.enslaved = {
     ]
   },
   ec6C10: {
-    id: 5,
+    id: 4,
     lines: [
       "... did not... underestimate you..."
     ]
   },
   hintUnlock: {
-    id: 6,
+    id: 5,
     lines: [
       "... you need... to look harder...",
       "I think... I can help...",
-      "* You have unlocked help from The Enslaved Ones."
+      { text: "You have unlocked help from The Enslaved Ones.", showCelestialName: false }
     ]
   },
 };

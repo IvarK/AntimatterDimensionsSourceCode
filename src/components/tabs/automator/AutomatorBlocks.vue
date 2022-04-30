@@ -8,10 +8,14 @@ export default {
   },
   data() {
     return {
-      blocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd))
+      allBlocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.includes(b.cmd)),
+      blocks: []
     };
   },
   methods: {
+    update() {
+      this.blocks = this.allBlocks.filter(b => (b.isUnlocked?.() ?? true));
+    },
     clone(block) {
       const b = {
         ...block,
@@ -87,9 +91,11 @@ export const automatorBlocks = [
   }, {
     cmd: "BLACK HOLE",
     targets: ["ON", "OFF"],
+    isUnlocked: () => BlackHole(1).isUnlocked
   }, {
     cmd: "STORE TIME",
     targets: ["ON", "OFF", "USE"],
+    isUnlocked: () => Enslaved.isUnlocked
   }, {
     cmd: "TT",
     targets: ["AM", "IP", "EP", "ALL"],
@@ -109,7 +115,8 @@ export const automatorBlocks = [
   }, {
     cmd: "REALITY",
     canRespec: true,
-    canWait: true
+    canWait: true,
+    isUnlocked: () => RealityUpgrade(25).isBought
   }, {
     cmd: "LOAD",
     hasInput: true,

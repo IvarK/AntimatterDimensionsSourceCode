@@ -69,7 +69,6 @@ export default {
       }
     },
     update() {
-      this.noSpeedrun = !player.speedrun.hasStarted;
       if (!this.currentQuote) {
         this.line = "";
         return;
@@ -92,10 +91,7 @@ export default {
 </script>
 
 <template>
-  <div
-    v-if="noSpeedrun"
-    class="l-modal-overlay c-modal-overlay"
-  >
+  <div class="l-modal-overlay c-modal-overlay">
     <div :class="modalClass">
       <i
         :style="prevStyle"

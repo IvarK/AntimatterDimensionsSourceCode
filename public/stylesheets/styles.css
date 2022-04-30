@@ -9297,7 +9297,7 @@ input.o-automator-block-input {
   border-radius: inherit;
 }
 
-.o-celestial-nav__hoverable .tooltiptext  { display: none; }
+.o-celestial-nav__hoverable .tooltiptext { display: none; }
 .o-celestial-nav__hoverable:hover .tooltiptext,
 .o-celestial-nav__force-hover .tooltiptext { display: block; }
 

@@ -89,7 +89,10 @@ export default {
 <template>
   <g
     class="o-celestial-nav__hoverable"
-    :class="forceHoverClass"
+    :class="[
+      forceHoverClass,
+      { 'o-celestial-nav__clickable' : clickAction }
+    ]"
     :transform="baseTransform"
     v-on="clickAction ? { click: clickAction } : {}"
   >
@@ -132,5 +135,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-celestial-nav__clickable {
+  cursor: pointer;
+}
 </style>

@@ -7,8 +7,8 @@
   outline: none;
 }
 
-.t-normal #ui-container,
-.t-s9 #ui-container {
+:root .t-normal,
+:root .t-s9 {
   --color-text: white;
   --color-text-inverted: black;
   --color-base: #1d1b22;

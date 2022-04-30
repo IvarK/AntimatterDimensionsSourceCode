@@ -778,6 +778,11 @@
   color: var(--color-pelle--base);
 }
 
+.c-glyph-tooltip .pelle-current-glyph-effects {
+  color: var(--color-pelle--base);
+  font-weight: bold;
+}
+
 .s-base--metro .c-current-glyph-effects {
   border-radius: 0;
   border-width: 0.1rem;

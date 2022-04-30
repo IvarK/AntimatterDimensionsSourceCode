@@ -66,6 +66,12 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      showChaosText: false,
+      chaosDescription: ""
+    };
+  },
   computed: {
     onTouchDevice() {
       return GameUI.touchDevice;
@@ -189,6 +195,12 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.showChaosText = Pelle.specialGlyphEffect.isUnlocked;
+      if (this.showChaosText) {
+        this.chaosDescription = Pelle.getSpecialGlyphEffectDescription(this.type);
+      }
+    },
     touchStart() {
       // We _don't_ preventDefault here because we want the event to turn into a local
       // dragstart that we can intercept
@@ -274,6 +286,12 @@ export default {
         :effect="e.id"
         :value="e.value"
       />
+      <div
+        v-if="showChaosText"
+        class="pelle-current-glyph-effects c-glyph-tooltip__effect"
+      >
+        {{ chaosDescription }}
+      </div>
     </div>
   </div>
 </template>

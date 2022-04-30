@@ -268,7 +268,7 @@ export const Pelle = {
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
   // Also adds more zalgo the bigger the stage
   transitionText(from, to, stage = 0) {
-    const len = (from.length * (1 - stage) + to.length * stage);
+    const len = Math.round((from.length * (1 - stage) + to.length * stage) * 1e8) / 1e8;
     const toInterval = len * (1 - stage);
     let req = toInterval;
     let str = "";

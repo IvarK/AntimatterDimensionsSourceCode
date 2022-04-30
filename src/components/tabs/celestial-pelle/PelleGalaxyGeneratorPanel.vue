@@ -180,7 +180,7 @@ export default {
   width: 25rem;
   height: 10rem;
   font-size: 2rem;
-  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   color: black;
   font-weight: bold;
 }
@@ -194,7 +194,7 @@ export default {
 .c-galaxies-amount {
   font-weight: bold;
   font-size: 2.5rem;
-  background: linear-gradient(var(--color-pelle-secondary), var(--color-pelle--base));
+  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

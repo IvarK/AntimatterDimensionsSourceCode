@@ -50,21 +50,21 @@ html {
 
   --color-effarig--base: #d13737;
 
-  --color-enslaved-base: #f1aa7f;
+  --color-enslaved--base: #f1aa7f;
 
   --color-v--base: #ead584;
 
-  --color-ra-base: #9575cd;
-  --color-ra-pet-teresa: #8596ea;
-  --color-ra-pet-effarig: #ea8585;
-  --color-ra-pet-enslaved: #f1aa7f;
-  --color-ra-pet-v: #ead584;
+  --color-ra--base: #9575cd;
+  --color-ra-pet--teresa: #8596ea;
+  --color-ra-pet--effarig: #ea8585;
+  --color-ra-pet--enslaved: #f1aa7f;
+  --color-ra-pet--v: #ead584;
 
   --color-laitela--base: white;
   --color-laitela--accent: black;
 
   --color-pelle--base: crimson;
-  --color-pelle-secondary: #00bcd4;
+  --color-pelle--secondary: #00bcd4;
 }
 
 .t-metro #ui-container, /* csslint allow: empty-rules */
@@ -3589,7 +3589,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--useless-available:hover {
-  background-color: var(--color-pelle-secondary);
+  background-color: var(--color-pelle--secondary);
   color: black;
 }
 
@@ -3673,7 +3673,7 @@ screen and (max-width: 480px) {
 
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available:hover {
   color: black;
-  background-color: var(--color-pelle-secondary);
+  background-color: var(--color-pelle--secondary);
 }
 
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
@@ -4500,7 +4500,7 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-upgrade--useless-available:hover {
-  background-color: var(--color-pelle-secondary);
+  background-color: var(--color-pelle--secondary);
   color:black;
 }
 
@@ -4971,7 +4971,7 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-upgrade--useless-available:hover {
-  color: var(--color-pelle-secondary);
+  color: var(--color-pelle--secondary);
 }
 
 .o-dilation-upgrade--useless-bought {
@@ -5518,20 +5518,20 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-away-progress__teresa-memories {
-  color: var(--color-ra-pet-teresa);
+  color: var(--color-ra-pet--teresa);
 }
 
 .c-modal-away-progress__relic-shards,
 .c-modal-away-progress__effarig-memories {
-  color: var(--color-ra-pet-effarig);
+  color: var(--color-ra-pet--effarig);
 }
 
 .c-modal-away-progress__enslaved-memories {
-  color: var(--color-ra-pet-enslaved);
+  color: var(--color-ra-pet--enslaved);
 }
 
 .c-modal-away-progress__v-memories {
-  color: var(--color-ra-pet-v);
+  color: var(--color-ra-pet--v);
 }
 
 .c-modal-away-progress__teresa-memories,
@@ -5827,10 +5827,10 @@ kbd {
 }
 
 .c-modal-celestial-quote--enslaved {
-  color: var(--color-enslaved-base);
+  color: var(--color-enslaved--base);
   background-color: black;
-  border-color: var(--color-enslaved-base);
-  box-shadow: 0 0 1rem var(--color-enslaved-base), 0 0 1rem var(--color-enslaved-base) inset;
+  border-color: var(--color-enslaved--base);
+  box-shadow: 0 0 1rem var(--color-enslaved--base), 0 0 1rem var(--color-enslaved--base) inset;
 }
 
 .c-modal-celestial-quote--v {
@@ -5841,10 +5841,10 @@ kbd {
 }
 
 .c-modal-celestial-quote--ra {
-  color: var(--color-ra-base);
+  color: var(--color-ra--base);
   background-color: black;
-  border-color: var(--color-ra-base);
-  box-shadow: 0 0 1rem var(--color-ra-base), 0 0 1rem var(--color-ra-base) inset;
+  border-color: var(--color-ra--base);
+  box-shadow: 0 0 1rem var(--color-ra--base), 0 0 1rem var(--color-ra--base) inset;
 }
 
 .c-modal-celestial-quote--laitela {
@@ -6694,7 +6694,7 @@ kbd {
   width: 16rem;
   height: 16rem;
   margin: 1.5rem;
-  color: var(--color-enslaved-base);
+  color: var(--color-enslaved--base);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -6702,14 +6702,14 @@ kbd {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border: 0.4rem solid var(--color-enslaved-base);
+  border: 0.4rem solid var(--color-enslaved--base);
   transition-duration: 0.2s;
   animation: a-enslaved-run-button--spin 120s infinite linear;
 }
 
 .c-enslaved-run-button__icon:hover {
   color: black;
-  background: var(--color-enslaved-base);
+  background: var(--color-enslaved--base);
   border-color: black;
 }
 
@@ -6724,7 +6724,7 @@ kbd {
 
 .c-enslaved-run-button__icon__glitch {
   position: absolute;
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, var(--color-enslaved-base) 20%, var(--color-enslaved-base) 80%, rgba(0,0,0,0) 100%);
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, var(--color-enslaved--base) 20%, var(--color-enslaved--base) 80%, rgba(0,0,0,0) 100%);
   border: none;
   width: 0.1rem;
 }
@@ -7301,11 +7301,11 @@ kbd {
 }
 
 @keyframes a-ra-color-shift {
-  0% { background-color: var(--color-ra-pet-teresa); }
-  25% { background-color: var(--color-ra-pet-effarig); }
-  50% { background-color: var(--color-ra-pet-enslaved); }
-  75% { background-color: var(--color-ra-pet-v); }
-  100% { background-color: var(--color-ra-pet-teresa); }
+  0% { background-color: var(--color-ra-pet--teresa); }
+  25% { background-color: var(--color-ra-pet--effarig); }
+  50% { background-color: var(--color-ra-pet--enslaved); }
+  75% { background-color: var(--color-ra-pet--v); }
+  100% { background-color: var(--color-ra-pet--teresa); }
 }
 
 .l-ra-all-pets-container {
@@ -7472,19 +7472,19 @@ kbd {
 }
 
 .c-ra-upgrade-icon--teresa .c-ra-pet-upgrade__tooltip {
-  color: var(--color-ra-pet-teresa);
+  color: var(--color-ra-pet--teresa);
 }
 
 .c-ra-upgrade-icon--effarig .c-ra-pet-upgrade__tooltip {
-  color: var(--color-ra-pet-effarig);
+  color: var(--color-ra-pet--effarig);
 }
 
 .c-ra-upgrade-icon--enslaved .c-ra-pet-upgrade__tooltip{
-  color: var(--color-ra-pet-enslaved);
+  color: var(--color-ra-pet--enslaved);
 }
 
 .c-ra-upgrade-icon--v .c-ra-pet-upgrade__tooltip {
-  color: var(--color-ra-pet-v);
+  color: var(--color-ra-pet--v);
 }
 
 .c-ra-upgrade-icon--inactive .c-ra-pet-upgrade__tooltip {
@@ -7543,19 +7543,19 @@ kbd {
 }
 
 .c-ra-pet-btn--teresa {
-  color: var(--color-ra-pet-teresa);
+  color: var(--color-ra-pet--teresa);
 }
 
 .c-ra-pet-btn--teresa:hover, .c-ra-pet-btn--teresa__capped {
-  background: var(--color-ra-pet-teresa);
+  background: var(--color-ra-pet--teresa);
 }
 
 .c-ra-pet-btn--effarig {
-  color: var(--color-ra-pet-effarig);
+  color: var(--color-ra-pet--effarig);
 }
 
 .c-ra-pet-btn--effarig:hover, .c-ra-pet-btn--effarig__capped {
-  background: var(--color-ra-pet-effarig);
+  background: var(--color-ra-pet--effarig);
 }
 
 .c-ra-pet-milestones-effarig-link {
@@ -7563,19 +7563,19 @@ kbd {
 }
 
 .c-ra-pet-btn--enslaved {
-  color: var(--color-ra-pet-enslaved);
+  color: var(--color-ra-pet--enslaved);
 }
 
 .c-ra-pet-btn--enslaved:hover, .c-ra-pet-btn--enslaved__capped {
-  background: var(--color-ra-pet-enslaved);
+  background: var(--color-ra-pet--enslaved);
 }
 
 .c-ra-pet-btn--v {
-  color: var(--color-ra-pet-v);
+  color: var(--color-ra-pet--v);
 }
 
 .c-ra-pet-btn--v:hover, .c-ra-pet-btn--v__capped {
-  background: var(--color-ra-pet-v);
+  background: var(--color-ra-pet--v);
 }
 
 .c-ra-pet-btn--available__capped {
@@ -9413,7 +9413,7 @@ input.o-automator-block-input {
 }
 
 .c-pelle-useless--available {
-  color: var(--color-pelle-secondary);
+  color: var(--color-pelle--secondary);
 }
 
 .c-pelle-useless--available:hover {

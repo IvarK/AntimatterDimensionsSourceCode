@@ -172,7 +172,7 @@ export const V = {
     }
   },
   get canUnlockCelestial() {
-    return VUnlocks.vAchievementUnlock.canUnlock;
+    return VUnlocks.vAchievementUnlock.canBeUnlocked;
   },
   unlockCelestial() {
     // eslint-disable-next-line no-bitwise

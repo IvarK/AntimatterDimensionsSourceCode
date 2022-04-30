@@ -117,6 +117,7 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get wasRequirementPreviouslyMet() {
+    if ([11, 12].includes(this.id)) return false;
     // eslint-disable-next-line no-bitwise
     return (player.challenge.eternity.requirementBits & (1 << this.id)) !== 0;
   }

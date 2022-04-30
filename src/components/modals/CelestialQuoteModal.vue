@@ -3,7 +3,6 @@ export default {
   name: "CelestialQuoteModal",
   data() {
     return {
-      noSpeedrun: true,
       index: 0,
       line: "",
       overrideCelestial: "",

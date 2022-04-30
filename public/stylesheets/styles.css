@@ -6675,6 +6675,7 @@ kbd {
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
 }
 
 .s-base--metro .c-enslaved-run-button {

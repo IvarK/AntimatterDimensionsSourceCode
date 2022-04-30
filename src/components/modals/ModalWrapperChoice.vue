@@ -59,14 +59,7 @@ export default {
 <template>
   <div class="c-modal-message l-modal-content--centered">
     <span class="c-modal__header">
-      <ModalConfirmationCheck
-        v-if="option"
-        :option="option"
-      />
-      <ModalCloseButton
-        v-else
-        @click="closeModal"
-      />
+      <ModalCloseButton @click="closeModal" />
       <span class="c-modal__title">
         <slot name="header" />
       </span>
@@ -74,6 +67,11 @@ export default {
 
 
     <slot />
+
+    <ModalConfirmationCheck
+      v-if="option"
+      :option="option"
+    />
 
     <div class="l-modal-buttons">
       <PrimaryButton

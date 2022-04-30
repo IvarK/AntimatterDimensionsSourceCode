@@ -52,7 +52,7 @@ export const Laitela = {
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
   get entropyGainPerSecond() {
-    return Math.clamp(Math.pow(Currency.antimatter.value.log10() / 1e11, 2), 0, 100) / 200;
+    return Math.clamp(Math.pow(Currency.antimatter.value.add(1).log10() / 1e11, 2), 0, 100) / 200;
   },
   get darkMatterMultGain() {
     return Decimal.pow(Currency.darkMatter.value.dividedBy(this.annihilationDMRequirement)

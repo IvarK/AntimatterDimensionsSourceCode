@@ -186,7 +186,7 @@ Modal.sacrifice = new Modal(SacrificeModal);
 Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
-    if (!GameUI.initialized) return;
+    if (!GameUI.initialized || player.speedrun.isActive) return;
     const newLines = lines.map(l => Modal.celestialQuote.getLineMapping(celestial, l));
     if (ui.view.modal.queue.includes(this)) {
       // This shouldn't come up often, but in case we do have a pile of quotes

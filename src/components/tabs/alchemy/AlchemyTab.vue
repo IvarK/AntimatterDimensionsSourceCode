@@ -162,6 +162,7 @@ export default {
           reaction.isActive = false;
         }
       }
+      this.$forceUpdate();
     }
   }
 };

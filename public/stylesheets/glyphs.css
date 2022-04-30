@@ -779,8 +779,7 @@
 }
 
 .c-glyph-tooltip .pelle-current-glyph-effects {
-  /* Can't use css variables on components outside of ui-container */
-  color: crimson;
+  color: var(--color-pelle--base);
   font-weight: bold;
 }
 

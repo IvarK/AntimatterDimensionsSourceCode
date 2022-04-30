@@ -117,7 +117,6 @@ export default {
   border-radius: 0.5rem;
   padding: 1rem;
   font-family: Typewriter;
-  margin: 0 1rem;
   margin-bottom: 1rem;
   cursor: pointer;
   transition-duration: 0.12s;

@@ -8141,11 +8141,11 @@ kbd {
   border-radius: 0;
 }
 
-.c-laitela-singularity__cap-control-available {
+.c-laitela-singularity__cap-control--available {
   cursor: pointer;
 }
 
-.c-laitela-singularity__cap-control-available:hover {
+.c-laitela-singularity__cap-control--available:hover {
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent);
 }

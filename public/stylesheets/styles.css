@@ -6839,7 +6839,7 @@ kbd {
 .c-v-unlock-bar {
   width: 40rem;
   padding: 0.6rem;
-  margin: 1rem 0 0;
+  margin-bottom: 1rem;
   border-radius: 0.5rem;
   border: 0.2rem solid;
   position: relative;
@@ -6861,12 +6861,13 @@ kbd {
   height: 10rem;
   padding: 1rem;
   border: 0.2rem solid #473f1f;
-  margin-right: 1rem;
+  margin: 0 0.5rem;
   border-radius: 0.5rem;
   font-size: 1.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  user-select: none;
 }
 
 .s-base--metro .o-v-milestone {

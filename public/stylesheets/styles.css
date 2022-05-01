@@ -5196,50 +5196,51 @@ screen and (max-width: 480px) {
 }
 
 .c-modal__confirmation-toggle {
-  display: flex;
+  cursor: pointer;
+}
+
+.c-modal__confirmation-toggle__checkbox {
+  display: inline-flex;
+  vertical-align: middle;
   justify-content: center;
   align-items: center;
   background: var(--color-gh-purple);
-  font-size: 1.9rem;
-  height: 3rem;
-  width: 3rem;
+  font-size: 1.3rem;
+  height: 2rem;
+  width: 2rem;
   border: 0.3rem solid black;
-  border-top-right-radius: 0.3rem;
-  border-bottom-left-radius: 1rem;
+  border-radius: 0.3rem;
   color: black;
-  cursor: pointer;
   user-select: none;
   transition-duration: 0.2s;
-  position: absolute;
-  top: -0.3rem;
-  right: -0.3rem;
+  position: relative;
 }
 
-.c-modal__confirmation-toggle:hover {
-  transform: scale(1.1) translate(-0.15rem, 0.15rem);
-}
-
-.s-base--metro .c-modal__confirmation-toggle {
+.s-base--metro .c-modal__confirmation-toggle__checkbox {
   border-radius: 0;
   border-width: 0.1rem;
   top: -0.1rem;
   right: -0.1rem;
 }
 
-.t-s6 .c-modal__confirmation-toggle,
-.t-s10 .c-modal__confirmation-toggle {
+.t-s6 .c-modal__confirmation-toggle__checkbox,
+.t-s10 .c-modal__confirmation-toggle__checkbox {
   border: 0.1rem solid #1b5e20;
   top: -0.1rem;
   right: -0.1rem;
 }
 
-.t-s11 .c-modal__confirmation-toggle {
+.t-s11 .c-modal__confirmation-toggle__checkbox {
   border-color: #e1ae18;
   top: -0.2rem;
 }
 
-.c-modal__confirmation-toggle--active {
+.c-modal__confirmation-toggle__checkbox--active {
   background: var(--color-good);
+}
+
+.c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__checkbox {
+  transform: scale(1.1);
 }
 
 .c-modal__confirmation-toggle__tooltip {
@@ -5299,6 +5300,11 @@ screen and (max-width: 480px) {
 
 .s-base--metro .c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__tooltip:after {
   margin-bottom: -0.7rem;
+}
+
+.c-modal__confirmation-toggle__text {
+  vertical-align: middle;
+  opacity: 0.7;
 }
 
 .c-modal__confirm-btn {

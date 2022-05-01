@@ -118,10 +118,10 @@ export default {
 
 .o-h2p-tab-button--relevant:hover, .o-h2p-tab-button--relevant.o-h2p-tab-button--selected {
   text-shadow: 0 0 5px,
-    0.1rem 0.1rem 0.1rem black,
-    -0.1rem -0.1rem 0.1rem black,
-    -0.1rem 0.1rem 0.1rem black,
-    0.1rem -0.1rem 0.1rem black;
+    0.1rem 0.1rem 0.1rem var(--color-text),
+    -0.1rem -0.1rem 0.1rem var(--color-text),
+    -0.1rem 0.1rem 0.1rem var(--color-text),
+    0.1rem -0.1rem 0.1rem var(--color-text);
 }
 
 .o-h2p-tab-button--first-irrelevant {

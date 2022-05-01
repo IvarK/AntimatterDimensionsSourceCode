@@ -3,6 +3,22 @@ html {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  scrollbar-color: grey transparent;
+}
+
+::-webkit-scrollbar {
+  width: 1.6rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: grey;
+  background-clip: content-box;
+  border-radius: 0.5rem;
+  border: 0.2rem solid transparent;
+}
+
+.s-base--metro::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 ._kong-test {
@@ -6755,6 +6771,18 @@ kbd {
   text-align: left;
 }
 
+.c-enslaved-hint-modal::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.c-enslaved-hint-modal::-webkit-scrollbar-thumb {
+  border: none;
+}
+
+.s-base--metro .c-enslaved-hint-modal::-webkit-scrollbar-thumb {
+  border-radius: 0;
+}
+
 /* #endregion enslaved tab*/
 
 /* #startregion v tab */
@@ -8165,8 +8193,11 @@ kbd {
 }
 
 .l-singularity-milestone-modal-container-outer::-webkit-scrollbar-thumb {
-  background: grey;
-  border-radius: 0.5rem;
+  border: none;
+}
+
+.s-base--metro .l-singularity-milestone-modal-container-outer::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .l-singularity-milestone-modal-container-inner {
@@ -9076,8 +9107,11 @@ input.o-automator-block-input {
 }
 
 .l-h2p-body::-webkit-scrollbar-thumb {
-  background: grey;
-  border-radius: 0.5rem;
+  border: none;
+}
+
+.s-base--metro .l-h2p-body::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .c-h2p-body--title {
@@ -9097,6 +9131,7 @@ input.o-automator-block-input {
   overflow-y: auto;
   margin: 0.5rem;
   flex: 1 0.8 40rem;
+  scrollbar-width: thin;
 }
 
 .l-h2p-tab-list::-webkit-scrollbar {
@@ -9104,8 +9139,11 @@ input.o-automator-block-input {
 }
 
 .l-h2p-tab-list::-webkit-scrollbar-thumb {
-  background: grey;
-  border-radius: 0.5rem;
+  border: none;
+}
+
+.s-base--metro .l-h2p-tab-list::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .o-h2p-tab-button {

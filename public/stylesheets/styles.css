@@ -9113,7 +9113,7 @@ input.o-automator-block-input {
   cursor: pointer;
   border-bottom: 0.1rem solid black;
   padding: 0.3rem 0.5rem 0.3rem 0;
-  transition: font-size 0.2s;
+  transition: all 0.2s;
 }
 
 .o-h2p-tab-button:hover {

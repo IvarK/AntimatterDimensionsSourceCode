@@ -9117,12 +9117,12 @@ input.o-automator-block-input {
 }
 
 .o-h2p-tab-button:hover {
-  color: white;
+  color: var(--color-text-inverted);
   text-shadow:
-    0.1rem 0.1rem 0.1rem black,
-    -0.1rem -0.1rem 0.1rem black,
-    -0.1rem 0.1rem 0.1rem black,
-    0.1rem -0.1rem 0.1rem black;
+    0.1rem 0.1rem 0.1rem var(--color-text),
+    -0.1rem -0.1rem 0.1rem var(--color-text),
+    -0.1rem 0.1rem 0.1rem var(--color-text),
+    0.1rem -0.1rem 0.1rem var(--color-text);
 }
 
 .s-base--dark .o-h2p-tab-button {
@@ -9130,13 +9130,12 @@ input.o-automator-block-input {
 }
 
 .o-h2p-tab-button--selected {
-  font-size: 1.5rem;
-  color: white;
+  color: var(--color-text-inverted);
   text-shadow:
-    0.1rem 0.1rem 0.1rem black,
-    -0.1rem -0.1rem 0.1rem black,
-    -0.1rem 0.1rem 0.1rem black,
-    0.1rem -0.1rem 0.1rem black;
+    0.1rem 0.1rem 0.1rem var(--color-text),
+    -0.1rem -0.1rem 0.1rem var(--color-text),
+    -0.1rem 0.1rem 0.1rem var(--color-text),
+    0.1rem -0.1rem 0.1rem var(--color-text);
 }
 
 .l-help-me {

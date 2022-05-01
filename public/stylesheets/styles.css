@@ -9166,12 +9166,14 @@ input.o-automator-block-input {
 }
 
 .o-h2p-tab-button:hover {
-  color: var(--color-text-inverted);
   text-shadow:
-    0.1rem 0.1rem 0.1rem var(--color-text),
-    -0.1rem -0.1rem 0.1rem var(--color-text),
-    -0.1rem 0.1rem 0.1rem var(--color-text),
-    0.1rem -0.1rem 0.1rem var(--color-text);
+    0 0 0.3rem var(--color-text);
+}
+
+.s-base--dark .o-h2p-tab-button:hover {
+  text-shadow:
+    0 0 0.2rem var(--color-text),
+    0 0 0.2rem var(--color-text);
 }
 
 .s-base--dark .o-h2p-tab-button {
@@ -9179,12 +9181,14 @@ input.o-automator-block-input {
 }
 
 .o-h2p-tab-button--selected {
-  color: var(--color-text-inverted);
   text-shadow:
-    0.1rem 0.1rem 0.1rem var(--color-text),
-    -0.1rem -0.1rem 0.1rem var(--color-text),
-    -0.1rem 0.1rem 0.1rem var(--color-text),
-    0.1rem -0.1rem 0.1rem var(--color-text);
+    0 0 0.6rem var(--color-text);
+}
+
+.s-base--dark .o-h2p-tab-button--selected {
+  text-shadow:
+    0 0 0.6rem var(--color-text),
+    0 0 0.6rem var(--color-text);
 }
 
 .l-help-me {

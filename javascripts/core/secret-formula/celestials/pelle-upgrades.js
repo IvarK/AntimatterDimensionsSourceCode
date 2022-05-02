@@ -116,7 +116,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
     },
     keepInfinityChallenges: {
       id: 9,
-      description: "You keep your Infinity Challenge completions through Armageddons",
+      description: "You keep your Infinity Challenge unlocks and completions through Armageddons",
       cost: 1e15,
       formatCost,
     },

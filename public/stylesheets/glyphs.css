@@ -754,6 +754,10 @@
   background: #08450b;
 }
 
+.s-base--metro .l-current-glyph-effects::-webkit-scrollbar-thumb {
+  border-radius: 0;
+}
+
 .c-current-glyph-effects {
   margin-top: 0;
   margin-bottom: 0;

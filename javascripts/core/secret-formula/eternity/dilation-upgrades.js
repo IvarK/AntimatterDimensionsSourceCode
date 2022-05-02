@@ -27,11 +27,17 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e5,
       increment: 10,
       description: () =>
-        (SingularityMilestone.dilatedTimeFromSingularities.canBeApplied
-          ? `${formatX(2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue, 2, 2)} Dilated Time gain`
+        ((SingularityMilestone.dilatedTimeFromSingularities.canBeApplied || Achievement(187).canBeApplied)
+          ? `${formatX(2 * Effects.product(
+            SingularityMilestone.dilatedTimeFromSingularities,
+            Achievement(187)
+          ), 2, 2)} Dilated Time gain`
           : "Double Dilated Time gain"),
       effect: bought => {
-        const base = 2 * SingularityMilestone.dilatedTimeFromSingularities.effectOrDefault(1);
+        const base = 2 * Effects.product(
+          SingularityMilestone.dilatedTimeFromSingularities,
+          Achievement(187)
+        );
         return Decimal.pow(base, bought);
       },
       formatEffect: value => formatX(value, 2),

@@ -23,6 +23,19 @@
   color: transparent !important;
 }
 
+.o-celestial-nav__symbol {
+  display: none;
+}
+
+.c-effarig-run-button__inner--running {
+  display: none;
+}
+
+.o-laitela-run-button__icon,
+.o-laitela-run-button__icon:hover {
+  background-image: none;
+}
+
 @keyframes a-reality-glyph-icon-cycle {
   0% { color: transparent; }
 }

@@ -8960,6 +8960,10 @@ kbd {
   -o-tab-size: 1.5em;
 }
 
+.s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
+  border-radius: 0;
+}
+
 .o-automator-block-input {
   border: 0.1rem solid #353535;
   padding: 0.5rem;

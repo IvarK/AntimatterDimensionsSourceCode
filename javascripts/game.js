@@ -343,9 +343,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
-    factor *= SingularityMilestone.gamespeedFromSingularities.canBeApplied
-      ? SingularityMilestone.gamespeedFromSingularities.effectValue
-      : 1;
+    factor *= SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1);
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {

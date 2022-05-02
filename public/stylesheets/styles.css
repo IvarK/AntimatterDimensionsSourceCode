@@ -9106,7 +9106,7 @@ input.o-automator-block-input {
 }
 
 .l-h2p-body {
-  flex: 0.8 0.8 30rem;
+  flex: 1 1 30rem;
   overflow-y: scroll;
   margin: 1rem;
   padding: 0.5rem;

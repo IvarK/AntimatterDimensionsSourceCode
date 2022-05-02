@@ -34,9 +34,9 @@ export default {
   },
   methods: {
     update() {
-      this.hasDimension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
-      this.hasAscension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
-      this.hasSingularity = SingularityMilestone.autoCondense.isUnlocked;
+      this.hasDimension = SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
+      this.hasAscension = SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
+      this.hasSingularity = SingularityMilestone.autoCondense.canBeApplied;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
       const auto = player.auto;
       this.dimension = auto.darkMatterDims.isActive;

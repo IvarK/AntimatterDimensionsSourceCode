@@ -85,7 +85,7 @@ export default {
       this.singularitiesGained = Singularity.singularitiesGained;
       this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
       this.perStepFactor = Singularity.gainPerCapIncrease;
-      this.isAutoEnabled = player.auto.singularity.isActive && SingularityMilestone.autoCondense.isUnlocked;
+      this.isAutoEnabled = player.auto.singularity.isActive && SingularityMilestone.autoCondense.canBeApplied;
       this.hasAutoSingularity = Number.isFinite(this.autoSingularityFactor);
       this.nextLowerStep = this.singularityCap * this.autoSingularityFactor / 10;
       this.willCondenseOnDecrease = this.isAutoEnabled && this.darkEnergy > this.nextLowerStep;

@@ -10,7 +10,7 @@ Autobuyer.singularity = new class SingularityAutobuyerState extends AutobuyerSta
   }
 
   get isUnlocked() {
-    return SingularityMilestone.autoCondense.isUnlocked;
+    return SingularityMilestone.autoCondense.canBeApplied;
   }
 
   get bulk() {

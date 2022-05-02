@@ -263,7 +263,7 @@ export const DarkMatterDimensions = {
         dim.timeSinceLastUpdate -= dim.interval * ticks;
       }
     }
-    if (SingularityMilestone.dim4Generation.isUnlocked && Laitela.annihilationUnlocked) {
+    if (SingularityMilestone.dim4Generation.canBeApplied && Laitela.annihilationUnlocked) {
       DarkMatterDimension(4).amount = DarkMatterDimension(4).amount
         .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
     }

@@ -115,7 +115,7 @@ export default {
       this.rowVisible = glyphFactors.rowFactor > 0;
       this.achievementVisible = glyphFactors.achievementFactor > 0;
       this.shardVisible = Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
-      this.singularityVisible = SingularityMilestone.glyphLevelFromSingularities.isUnlocked;
+      this.singularityVisible = SingularityMilestone.glyphLevelFromSingularities.canBeApplied;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
         this.lastInstability = Date.now();

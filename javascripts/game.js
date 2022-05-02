@@ -811,8 +811,8 @@ export function getTTPerSecond() {
 
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
-  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1) && !Pelle.isDoomed) {
-    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
+  if (finalTT.gt(1)) {
+    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1));
   }
 
   return finalTT;

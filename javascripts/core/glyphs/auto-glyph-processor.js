@@ -226,9 +226,7 @@ export function getGlyphLevelInputs() {
   let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
     perkShopEffect + shardFactor;
 
-  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.isUnlocked
-    ? SingularityMilestone.glyphLevelFromSingularities.effectValue
-    : 1;
+  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(1);
   baseLevel *= singularityEffect;
 
   let scaledLevel = baseLevel;

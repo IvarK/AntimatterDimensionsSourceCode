@@ -11,7 +11,7 @@ new class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyer
   }
 
   get isUnlocked() {
-    return SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
+    return SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
   }
 
   get interval() {

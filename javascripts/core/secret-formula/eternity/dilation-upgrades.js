@@ -27,13 +27,11 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e5,
       increment: 10,
       description: () =>
-        (SingularityMilestone.dilatedTimeFromSingularities.isUnlocked
+        (SingularityMilestone.dilatedTimeFromSingularities.canBeApplied
           ? `${formatX(2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue, 2, 2)} Dilated Time gain`
           : "Double Dilated Time gain"),
       effect: bought => {
-        const base = SingularityMilestone.dilatedTimeFromSingularities.isUnlocked
-          ? 2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue
-          : 2;
+        const base = 2 * SingularityMilestone.dilatedTimeFromSingularities.effectOrDefault(1);
         return Decimal.pow(base, bought);
       },
       formatEffect: value => formatX(value, 2),

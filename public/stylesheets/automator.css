@@ -127,6 +127,10 @@
   flex: 1 1 auto;
 }
 
+.s-base--metro .l-automator-pane__content::-webkit-scrollbar-thumb {
+  border-radius: 0;
+}
+
 .l-automator-pane__controls {
   flex: 0 0 auto;
 }
@@ -235,6 +239,10 @@
 .CodeMirror-hint {
   font-size: 1rem;
   font-family: Typewriter, serif;
+}
+
+.s-base--metro .CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .cm-s-liquibyte.CodeMirror,

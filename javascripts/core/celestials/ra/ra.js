@@ -39,7 +39,7 @@ class RaUnlockState extends BitUpgradeState {
   }
 
   get canBeUnlocked() {
-    return this.pet.level >= this.level && !this.isUnlocked;
+    return this.pet.level >= this.level && !this.isUnlocked && this.pet.isUnlocked;
   }
 
   onUnlock() {

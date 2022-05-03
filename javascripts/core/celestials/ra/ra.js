@@ -39,7 +39,7 @@ class RaUnlockState extends BitUpgradeState {
   }
 
   get canBeUnlocked() {
-    return this.pet.level >= this.level && !this.isUnlocked && this.pet.isUnlocked;
+    return this.pet.level >= this.level && !this.isUnlocked;
   }
 
   onUnlock() {
@@ -94,7 +94,7 @@ class RaPetState extends GameMechanicState {
   }
 
   get level() {
-    return this.data.level;
+    return this.isUnlocked ? this.data.level : 0;
   }
 
   set level(value) {

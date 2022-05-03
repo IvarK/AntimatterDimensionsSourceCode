@@ -9116,16 +9116,13 @@ input.o-automator-block-input {
   transition: all 0.2s;
 }
 
-.o-h2p-tab-button:hover {
+.o-h2p-tab-button:hover,
+.o-h2p-tab-button--selected {
   box-shadow: inset 0 0 0.8rem var(--color-text);
 }
 
 .s-base--dark .o-h2p-tab-button {
   border-bottom: 0.1rem solid white;
-}
-
-.o-h2p-tab-button--selected {
-  box-shadow: inset 0 0 0.8rem var(--color-text);
 }
 
 .l-help-me {

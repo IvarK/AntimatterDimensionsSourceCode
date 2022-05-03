@@ -2,13 +2,15 @@
 import { sha512_256 } from "js-sha512";
 
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import PrimaryButton from "@/components/PrimaryButton";
 import StudyStringLine from "@/components/modals/StudyStringLine";
 
 export default {
   name: "StudyStringModal",
   components: {
     ModalWrapperChoice,
-    StudyStringLine
+    StudyStringLine,
+    PrimaryButton
   },
   props: {
     modalConfig: {
@@ -131,6 +133,9 @@ export default {
       if (this.isImporting) this.importTree();
       else this.savePreset();
     },
+    convertInputShorthands() {
+      this.input = TimeStudyTree.collapseStudyShorthands(this.input);
+    },
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
@@ -215,6 +220,12 @@ export default {
       <div v-else-if="hasInput">
         Not a valid tree
       </div>
+    </div>
+    <div v-if="!isImporting && inputIsValidTree">
+      <br>
+      <PrimaryButton @click="convertInputShorthands">
+        Collapse Study ID list Shorthands
+      </PrimaryButton>
     </div>
     <template #confirm-text>
       {{ isImporting ? "Import" : "Save" }}

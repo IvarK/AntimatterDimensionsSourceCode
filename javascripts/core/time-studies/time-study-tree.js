@@ -109,12 +109,22 @@ export class TimeStudyTree {
   }
 
   static formatStudyList(input) {
-    let internal = input.toLowerCase().replaceAll(" ", "");
-    // If the studylist has the exact order of the ids, replace them with the shorthand
+    const internal = input.toLowerCase().replaceAll(" ", "");
+    return internal.replaceAll(",", ", ").replace("|", " | ");
+  }
+
+  static collapseStudyShorthands(input) {
+    let internal = input.replaceAll(" ", "");
+    // \\b means 0-width word boundry, meaning "target = 11" doesnt match 111
+    const testRegex = target => new RegExp(`\\b${target}\\b,?`, "gu");
+    // If the studylist has all IDs, replace the first instance with the shorthand, then remove the rest
     this.sets.forEach((ids, name) => {
-      const testString = ids.join(",");
-      if (internal.includes(testString)) {
-        internal = internal.replaceAll(testString, `${name}`);
+      const hasAllIds = ids.every(x => testRegex(x).test(internal));
+      if (hasAllIds) {
+        internal = internal.replace(testRegex(ids[0]), `${name},`);
+        for (const i of ids) {
+          internal = internal.replace(testRegex(i), "");
+        }
       }
     });
     return internal.replaceAll(",", ", ").replace("|", " | ");

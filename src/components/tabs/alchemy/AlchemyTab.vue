@@ -48,11 +48,8 @@ export default {
       };
     },
     reactions() {
-      return AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);
+      return AlchemyReactions.all.compact().filter(r => r.product.isUnlocked);
     }
-  },
-  created() {
-    this.updateReactionData();
   },
   methods: {
     update() {
@@ -62,6 +59,7 @@ export default {
       this.alchemyCap = Ra.alchemyResourceCap;
       this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
       this.createdRealityGlyph = player.reality.glyphs.createdRealityGlyph;
+      this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -86,7 +84,6 @@ export default {
       }
       if (resource.isBaseResource) return;
       resource.reaction.isActive = !resource.reaction.isActive;
-      this.updateReactionData();
       GameUI.update();
     },
     isUnlocked(reactionArrow) {
@@ -159,23 +156,11 @@ export default {
       Modal.h2p.show();
     },
     toggleAllReactions() {
-      if (this.allReactionsDisabled) {
-        for (const reaction of this.reactions) {
-          reaction.isActive = true;
-        }
-      } else {
-        for (const reaction of this.reactions) {
-          reaction.isActive = false;
-        }
+      const setIsActive = this.allReactionsDisabled;
+      for (const reaction of this.reactions) {
+        reaction.isActive = setIsActive;
       }
-      // This is moreso here to force an update than anything but it also adds some info to the "Toggle all reactions"
-      // button, since its behaviour is unclear to the player- Would it want to disable/enable all if only some were on?
-      // This switches it to outright say disabled/enabled instead of toggle and also updates the reaction path colours
-      this.updateReactionData();
     },
-    updateReactionData() {
-      this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
-    }
   }
 };
 </script>

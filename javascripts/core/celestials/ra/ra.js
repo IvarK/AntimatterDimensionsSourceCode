@@ -94,7 +94,7 @@ class RaPetState extends GameMechanicState {
   }
 
   get level() {
-    return this.data.level;
+    return this.isUnlocked ? this.data.level : 0;
   }
 
   set level(value) {

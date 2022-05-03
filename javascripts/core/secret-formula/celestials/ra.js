@@ -254,7 +254,8 @@ GameDatabase.celestials.ra = {
       effect: () => Math.floor(Ra.pets.v.level / 6),
       pet: "v",
       level: 6,
-      displayIcon: `<span class="fas fa-trophy"></span>`
+      displayIcon: `<span class="fas fa-trophy"></span>`,
+      disabledByPelle: true
     },
     continuousTTBoost: {
       id: 25,

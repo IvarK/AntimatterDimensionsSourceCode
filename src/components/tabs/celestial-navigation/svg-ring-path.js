@@ -15,7 +15,7 @@ export function svgRingPath(d) {
 a ${d.rMajor} ${d.rMajor} 0 1 0 0.2 0
 z
 m 0.2 ${d.rMajor - d.rMinor}
-a ${d.rMinor} ${d.rMinor} 0 1 1 -0.2 0
+a ${d.rMinor} ${d.rMinor} 0 1 1 -0.01 0
 z`;
   }
   const toRad = Math.PI / 180;

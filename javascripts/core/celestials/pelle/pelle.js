@@ -158,7 +158,7 @@ export const Pelle = {
       isUnlocked,
       description,
       infinity: (isActive("infinity") && player.challenge.eternity.current <= 8)
-        ? Currency.infinityPoints.value.pow(0.2)
+        ? Currency.infinityPoints.value.plus(1).pow(0.2)
         : DC.D1,
       time: isActive("time")
         ? Currency.eternityPoints.value.plus(1).pow(0.3)
@@ -182,7 +182,7 @@ export const Pelle = {
     switch (type) {
       case "infinity":
         return `Infinity Point gain ${player.challenge.eternity.current <= 8
-          ? formatX(Currency.infinityPoints.value.pow(0.2), 2)
+          ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
           : formatX(DC.D1, 2)} (based on current IP)`;
       case "time":
         return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}

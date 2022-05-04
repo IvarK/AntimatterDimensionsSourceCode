@@ -6937,6 +6937,7 @@ kbd {
   height: 3rem;
   border-radius: 50%;
   font-size: 1.5rem;
+  padding: 0;
 }
 
 .c-v-info-text {

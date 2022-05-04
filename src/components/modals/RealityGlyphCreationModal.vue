@@ -51,44 +51,59 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper class="c-reality-glyph-creation">
+  <ModalWrapper>
     <template #header>
       Reality Glyph Creation
     </template>
-    <div>
-      Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.
-      Rarity will always be {{ formatPercents(1) }}
-      and level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
-      be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
-      Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
-      you cannot equip more than one at the same time.
+    <div class="c-reality-glyph-creation">
+      <div>
+        Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.
+        Rarity will always be {{ formatPercents(1) }} and
+        level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
+        be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
+        Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
+        you cannot equip more than one at the same time.
+      </div>
+      <div class="o-available-effects-margin">
+        <div class="o-available-effects">
+          Available Effects:
+        </div>
+        <div
+          v-for="(effect, index) in possibleEffects"
+          :key="index"
+        >
+          {{ formatGlyphEffect(effect) }}
+        </div>
+      </div>
+      <PrimaryButton
+        v-if="isDoomed"
+        :enabled="false"
+      >
+        You cannot create Reality Glyphs while in Doomed
+      </PrimaryButton>
+      <PrimaryButton
+        v-else-if="realityGlyphLevel !== 0"
+        class="c-modal__confirm-btn"
+        @click="createRealityGlyph"
+      >
+        Create a Reality Glyph!
+      </PrimaryButton>
+      <PrimaryButton
+        v-else
+        :enabled="false"
+      >
+        Reality Glyph level must be higher than {{ formatInt(0) }}
+      </PrimaryButton>
     </div>
-    <div>
-      Available Effects:
-    </div>
-    <div
-      v-for="(effect, index) in possibleEffects"
-      :key="index"
-    >
-      {{ formatGlyphEffect(effect) }}
-    </div><br>
-    <PrimaryButton
-      v-if="isDoomed"
-      :enabled="false"
-    >
-      You cannot create Reality Glyphs while in Doomed
-    </PrimaryButton>
-    <PrimaryButton
-      v-else-if="realityGlyphLevel !== 0"
-      @click="createRealityGlyph"
-    >
-      Create a Reality Glyph!
-    </PrimaryButton>
-    <PrimaryButton
-      v-else
-      :enabled="false"
-    >
-      Reality Glyph level must be higher than {{ formatInt(0) }}
-    </PrimaryButton>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.o-available-effects-margin {
+  margin: 1.5rem 0 2rem;
+}
+
+.o-available-effects {
+  font-weight: bold;
+}
+</style>

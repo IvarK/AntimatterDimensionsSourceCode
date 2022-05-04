@@ -304,8 +304,8 @@ export const AutomatorLexer = (() => {
   createKeyword("BlackHole", /black[ \t]+hole/i, {
     $autocomplete: "black hole",
   });
-  createKeyword("StoreTime", /stored?[ \t]+time/i, {
-    $autocomplete: "store time",
+  createKeyword("StoreGameTime", /stored?[ \t]+game?[ \t]+time/i, {
+    $autocomplete: "store game time",
   });
 
   createKeyword("Dilation", /dilation/i);

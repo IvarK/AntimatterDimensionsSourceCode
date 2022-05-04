@@ -559,9 +559,9 @@ export const AutomatorCommands = ((() => {
       })
     },
     {
-      id: "storeTime",
+      id: "storeGameTime",
       rule: $ => () => {
-        $.CONSUME(T.StoreTime);
+        $.CONSUME(T.StoreGameTime);
         $.OR([
           { ALT: () => $.CONSUME(T.On) },
           { ALT: () => $.CONSUME(T.Off) },
@@ -569,9 +569,9 @@ export const AutomatorCommands = ((() => {
         ]);
       },
       validate: (ctx, V) => {
-        ctx.startLine = ctx.StoreTime[0].startLine;
+        ctx.startLine = ctx.StoreGameTime[0].startLine;
         if (!Enslaved.isUnlocked) {
-          V.addError(ctx.StoreTime[0], "You do not yet know how to store game time",
+          V.addError(ctx.StoreGameTime[0], "You do not yet know how to store game time",
             "Unlock the ability to store game time");
           return false;
         }
@@ -598,7 +598,7 @@ export const AutomatorCommands = ((() => {
       blockify: ctx => ({
         // eslint-disable-next-line no-nested-ternary
         target: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
-        ...automatorBlocksMap["STORE TIME"]
+        ...automatorBlocksMap["STORE GAME TIME"]
       })
     },
     {

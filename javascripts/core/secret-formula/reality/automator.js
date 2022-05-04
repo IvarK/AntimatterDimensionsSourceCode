@@ -137,8 +137,9 @@ GameDatabase.reality.automator = {
     {
       id: 5,
       isUnlocked: () => Enslaved.isUnlocked,
-      keyword: "store time",
-      name: "<b>store time</b> - either turns on/off the storing of game time or can be used to use stored game time",
+      keyword: "store game time",
+      name: `<b>store game time</b> - either turns on/off the storing of game time or can be used to use
+          stored game time`,
       syntax: "<b>store time</b> action",
       sections: [
         {

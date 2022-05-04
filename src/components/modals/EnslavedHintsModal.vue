@@ -117,12 +117,12 @@ export default {
       <br>
     </div>
     <div v-if="realityHintsLeft + glyphHintsLeft > 0">
-      You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
-      will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+      You can spend some time looking for some more cracks in the Reality, but every hint you spend stored game time on
+      will increase the stored game time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
       gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
       divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
       <br><br>
-      The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
+      The next hint will cost {{ hintCost }} stored game time. You currently have {{ formattedStored }} stored.
       <span v-if="currentStored < nextHintCost">
         You will reach this if you charge your Black Hole for {{ timeEstimate }}.
       </span>

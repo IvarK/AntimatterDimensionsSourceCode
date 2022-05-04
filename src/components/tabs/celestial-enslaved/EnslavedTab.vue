@@ -210,8 +210,8 @@ export default {
         <div class="l-enslaved-top-container">
           <div class="l-enslaved-top-container__half">
             While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
-            and the lost speed is converted into Stored Time. Discharging the Black Hole allows you to skip
-            forward in time. Stored Time is also used to unlock certain upgrades.
+            and the lost speed is converted into stored game time. Discharging the Black Hole allows you to skip
+            forward in time. Stored game time is also used to unlock certain upgrades.
             <button
               :class="['o-enslaved-mechanic-button',
                        {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"

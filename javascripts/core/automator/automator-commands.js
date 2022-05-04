@@ -571,8 +571,8 @@ export const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.StoreTime[0].startLine;
         if (!Enslaved.isUnlocked) {
-          V.addError(ctx.StoreTime[0], "You do not yet know how to store time",
-            "Unlock the ability to store time");
+          V.addError(ctx.StoreTime[0], "You do not yet know how to store game time",
+            "Unlock the ability to store game time");
           return false;
         }
         return true;
@@ -581,9 +581,9 @@ export const AutomatorCommands = ((() => {
         if (ctx.Use) return () => {
           if (Enslaved.isUnlocked) {
             Enslaved.useStoredTime(false);
-            AutomatorData.logCommandEvent(`Stored time used`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Stored game time used`, ctx.startLine);
           } else {
-            AutomatorData.logCommandEvent(`Attempted to use stored time, but failed (not unlocked yet)`,
+            AutomatorData.logCommandEvent(`Attempted to use stored game time, but failed (not unlocked yet)`,
               ctx.startLine);
           }
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
@@ -591,7 +591,7 @@ export const AutomatorCommands = ((() => {
         const on = Boolean(ctx.On);
         return () => {
           if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();
-          AutomatorData.logCommandEvent(`Storing time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
+          AutomatorData.logCommandEvent(`Storing game time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },

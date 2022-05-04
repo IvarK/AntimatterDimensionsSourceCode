@@ -94,55 +94,57 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper class="c-enslaved-hint-modal">
+  <ModalWrapper>
     <template #header>
       Cracks in The Enslaved Ones' Reality
     </template>
-    <div>
-      This Reality seems to be resisting your efforts to complete it. So far you have done the following:
-    </div>
-    <br>
-    <div
-      v-for="(entry, index) in shownEntries"
-      :key="index"
-    >
-      <div v-if="entry[0]">
-        <b>{{ entry[0] }}</b>
+    <div class="c-enslaved-hint-modal">
+      <div>
+        This Reality seems to be resisting your efforts to complete it. So far you have done the following:
+      </div>
+      <br>
+      <div
+        v-for="(entry, index) in shownEntries"
+        :key="index"
+      >
+        <div v-if="entry[0]">
+          <b>{{ entry[0] }}</b>
+          <br>
+          - {{ entry[1] }}
+        </div>
+        <div v-else>
+          * <i>Glyph hint: {{ entry[1] }}</i>
+        </div>
         <br>
-        - {{ entry[1] }}
+      </div>
+      <div v-if="realityHintsLeft + glyphHintsLeft > 0">
+        You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
+        will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+        gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
+        divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
+        <br><br>
+        The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
+        <span v-if="currentStored < nextHintCost">
+          You will reach this if you charge your Black Hole for {{ timeEstimate }}.
+        </span>
+        <br><br>
+        <PrimaryButton
+          :enabled="realityHintsLeft > 0 && canGetHint"
+          @click="giveRealityHint(realityHintsLeft)"
+        >
+          Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
+        </PrimaryButton>
+        <br>
+        <PrimaryButton
+          :enabled="glyphHintsLeft > 0 && canGetHint"
+          @click="giveGlyphHint(glyphHintsLeft)"
+        >
+          Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+        </PrimaryButton>
       </div>
       <div v-else>
-        * <i>Glyph hint: {{ entry[1] }}</i>
+        There are no more hints left!
       </div>
-      <br>
-    </div>
-    <div v-if="realityHintsLeft + glyphHintsLeft > 0">
-      You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
-      will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
-      gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
-      divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
-      <br><br>
-      The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
-      <span v-if="currentStored < nextHintCost">
-        You will reach this if you charge your Black Hole for {{ timeEstimate }}.
-      </span>
-      <br><br>
-      <PrimaryButton
-        :enabled="realityHintsLeft > 0 && canGetHint"
-        @click="giveRealityHint(realityHintsLeft)"
-      >
-        Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
-      </PrimaryButton>
-      <br>
-      <PrimaryButton
-        :enabled="glyphHintsLeft > 0 && canGetHint"
-        @click="giveGlyphHint(glyphHintsLeft)"
-      >
-        Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
-      </PrimaryButton>
-    </div>
-    <div v-else>
-      There are no more hints left!
     </div>
   </ModalWrapper>
 </template>

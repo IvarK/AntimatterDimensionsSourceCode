@@ -66,26 +66,31 @@ export class Modal {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
-    this._prioritize = false;
+    this._priority = 0;
   }
 
   show(modalConfig) {
     if (!GameUI.initialized) return;
     this._props = Object.assign({}, modalConfig || {});
-    if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
+    const modalQueue = ui.view.modal.queue;
     // New modals go to the back of the queue (shown last).
-    if (!ui.view.modal.queue.includes(this)) {
-      if (this._prioritize) {
-        ui.view.modal.queue.unshift(this);
-        ui.view.modal.current = this;
+    if (!modalQueue.includes(this)) {
+      if (!modalQueue.length || this._priority <= modalQueue.last()._priority) {
+        modalQueue.push(this);
       } else {
-        ui.view.modal.queue.push(this);
+        for (let i = 0; i < modalQueue.length; i++) {
+          if (modalQueue[i]._priority < this._priority) {
+            modalQueue.splice(i, 0, this);
+            break;
+          }
+        }
       }
+      ui.view.modal.current = modalQueue[0];
     }
   }
 
-  prioritize() {
-    this._prioritize = true;
+  setPriority(x) {
+    this._priority = x;
     return this;
   }
 
@@ -144,20 +149,20 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeS
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
 
-Modal.dimensionBoost = new Modal(DimensionBoostModal).prioritize();
-Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal).prioritize();
-Modal.bigCrunch = new Modal(BigCrunchModal).prioritize();
-Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal).prioritize();
-Modal.eternity = new Modal(EternityModal).prioritize();
-Modal.enterDilation = new Modal(EnterDilationModal).prioritize();
-Modal.reality = new Modal(RealityModal).prioritize();
-Modal.resetReality = new Modal(ResetRealityModal).prioritize();
-Modal.exitCelestialReality = new Modal(ExitCelestialModal).prioritize();
-Modal.celestials = new Modal(EnterCelestialsModal).prioritize();
-Modal.hardReset = new Modal(HardResetModal).prioritize();
+Modal.dimensionBoost = new Modal(DimensionBoostModal).setPriority(1);
+Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal).setPriority(1);
+Modal.bigCrunch = new Modal(BigCrunchModal).setPriority(1);
+Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal).setPriority(1);
+Modal.eternity = new Modal(EternityModal).setPriority(1);
+Modal.enterDilation = new Modal(EnterDilationModal).setPriority(1);
+Modal.reality = new Modal(RealityModal).setPriority(1);
+Modal.resetReality = new Modal(ResetRealityModal).setPriority(1);
+Modal.exitCelestialReality = new Modal(ExitCelestialModal).setPriority(1);
+Modal.celestials = new Modal(EnterCelestialsModal).setPriority(1);
+Modal.hardReset = new Modal(HardResetModal).setPriority(1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
-Modal.armageddon = new Modal(ArmageddonModal).prioritize();
+Modal.armageddon = new Modal(ArmageddonModal).setPriority(1);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
@@ -168,16 +173,16 @@ Modal.animationOptions = new Modal(AnimationOptionsModal);
 Modal.hiddenTabs = new Modal(HiddenTabsModal);
 Modal.preferredTree = new Modal(PreferredTreeModal);
 
-Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal).prioritize();
-Modal.glyphDelete = new Modal(DeleteGlyphModal).prioritize();
-Modal.glyphPurge = new Modal(PurgeGlyphModal).prioritize();
-Modal.glyphSacrifice = new Modal(SacrificeGlyphModal).prioritize();
-Modal.glyphRefine = new Modal(RefineGlyphModal).prioritize();
-Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal).prioritize();
-Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal).prioritize();
+Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal).setPriority(1);
+Modal.glyphDelete = new Modal(DeleteGlyphModal).setPriority(1);
+Modal.glyphPurge = new Modal(PurgeGlyphModal).setPriority(1);
+Modal.glyphSacrifice = new Modal(SacrificeGlyphModal).setPriority(1);
+Modal.glyphRefine = new Modal(RefineGlyphModal).setPriority(1);
+Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal).setPriority(1);
+Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal).setPriority(1);
 
 Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
-Modal.glyphUndo = new Modal(UndoGlyphModal).prioritize();
+Modal.glyphUndo = new Modal(UndoGlyphModal).setPriority(1);
 Modal.glyphReplace = new Modal(ReplaceGlyphModal);
 Modal.enslavedHints = new Modal(EnslavedHintsModal);
 Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
@@ -195,7 +200,7 @@ Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
-Modal.sacrifice = new Modal(SacrificeModal).prioritize();
+Modal.sacrifice = new Modal(SacrificeModal).setPriority(1);
 Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
@@ -245,7 +250,7 @@ Modal.celestialQuote = new class extends Modal {
     }
     return x;
   }
-}(CelestialQuoteModal, true);
+}(CelestialQuoteModal, true).setPriority(2);
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
@@ -319,4 +324,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal);
+}(MessageModal).setPriority(2);

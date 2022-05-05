@@ -109,7 +109,7 @@ export class TimeStudyTree {
   }
 
   static formatStudyList(input) {
-    let internal = input.replaceAll(" ", "");
+    let internal = input.toLowerCase().replaceAll(" ", "");
     // \\b means 0-width word boundry, meaning "target = 11" doesnt match 111
     const testRegex = target => new RegExp(`\\b${target}\\b,?`, "gu");
     // If the studylist has all IDs, replace the first instance with the shorthand, then remove the rest

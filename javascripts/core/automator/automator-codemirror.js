@@ -60,7 +60,7 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: /blob\s\s/ui, token: "blob" },
       {
         // eslint-disable-next-line max-len
-        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]+game?[ \t]+time\s|notify/ui,
+        regex: /(auto|if|pause|studies|tt|time[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
         token: "keyword",
         next: "commandArgs"
       },

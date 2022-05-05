@@ -224,7 +224,7 @@ export default {
               v-html="hex.formattedDescription"
             />
             <p
-              v-if="has(runMilestones[0]) && hex.isReduced"
+              v-if="has(runMilestones[0][0]) && hex.isReduced"
               class="o-v-unlock-goal-reduction"
             >
               Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}

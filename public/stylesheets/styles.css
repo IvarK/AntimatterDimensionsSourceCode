@@ -6772,7 +6772,7 @@ kbd {
   overflow-y: scroll;
   padding: 0.25rem 1rem;
   width: 60rem;
-  height: 60rem;
+  height: 57rem;
   font-size: 1.2rem;
   text-align: left;
 }
@@ -9162,30 +9162,16 @@ input.o-automator-block-input {
   cursor: pointer;
   border-bottom: 0.1rem solid black;
   padding: 0.3rem 0.5rem 0.3rem 0;
-  transition: font-size 0.2s;
+  transition: all 0.2s;
 }
 
-.o-h2p-tab-button:hover {
-  color: white;
-  text-shadow:
-    0.1rem 0.1rem 0.1rem black,
-    -0.1rem -0.1rem 0.1rem black,
-    -0.1rem 0.1rem 0.1rem black,
-    0.1rem -0.1rem 0.1rem black;
+.o-h2p-tab-button:hover,
+.o-h2p-tab-button--selected {
+  box-shadow: inset 0 0 0.8rem var(--color-text);
 }
 
 .s-base--dark .o-h2p-tab-button {
   border-bottom: 0.1rem solid white;
-}
-
-.o-h2p-tab-button--selected {
-  font-size: 1.5rem;
-  color: white;
-  text-shadow:
-    0.1rem 0.1rem 0.1rem black,
-    -0.1rem -0.1rem 0.1rem black,
-    -0.1rem 0.1rem 0.1rem black,
-    0.1rem -0.1rem 0.1rem black;
 }
 
 .l-help-me {

@@ -113,15 +113,6 @@ export default {
 <style scoped>
 .o-h2p-tab-button--relevant {
   background-color: #df505055;
-  text-shadow: 0 0 5px;
-}
-
-.o-h2p-tab-button--relevant:hover, .o-h2p-tab-button--relevant.o-h2p-tab-button--selected {
-  text-shadow: 0 0 5px,
-    0.1rem 0.1rem 0.1rem black,
-    -0.1rem -0.1rem 0.1rem black,
-    -0.1rem 0.1rem 0.1rem black,
-    0.1rem -0.1rem 0.1rem black;
 }
 
 .o-h2p-tab-button--first-irrelevant {

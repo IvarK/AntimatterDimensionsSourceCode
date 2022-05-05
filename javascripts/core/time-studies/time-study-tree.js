@@ -109,11 +109,6 @@ export class TimeStudyTree {
   }
 
   static formatStudyList(input) {
-    const internal = input.toLowerCase().replaceAll(" ", "");
-    return internal.replaceAll(",", ", ").replace("|", " | ");
-  }
-
-  static collapseStudyShorthands(input) {
     let internal = input.replaceAll(" ", "");
     // \\b means 0-width word boundry, meaning "target = 11" doesnt match 111
     const testRegex = target => new RegExp(`\\b${target}\\b,?`, "gu");

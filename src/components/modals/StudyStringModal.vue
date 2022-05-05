@@ -134,7 +134,7 @@ export default {
       else this.savePreset();
     },
     convertInputShorthands() {
-      this.input = TimeStudyTree.collapseStudyShorthands(this.input);
+      this.input = TimeStudyTree.formatStudyList(this.input);
     },
     importTree() {
       if (!this.inputIsValid) return;
@@ -146,7 +146,7 @@ export default {
     },
     savePreset() {
       if (this.inputIsValid) {
-        player.timestudy.presets[this.modalConfig.id].studies = TimeStudyTree.formatStudyList(this.input);
+        player.timestudy.presets[this.modalConfig.id].studies = this.input;
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }

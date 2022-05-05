@@ -114,10 +114,10 @@ export class TimeStudyTreeLayout {
       const vLevel = Ra.pets.v.level;
       this.rows.push(
         normalRow(
-          vLevel >= 5 ? TS(301) : null,
-          vLevel >= 10 ? TS(302) : null,
-          vLevel >= 15 ? TS(303) : null,
-          vLevel >= 20 ? TS(304) : null
+          vLevel >= 6 ? TS(301) : null,
+          vLevel >= 12 ? TS(302) : null,
+          vLevel >= 18 ? TS(303) : null,
+          vLevel >= 24 ? TS(304) : null
         )
       );
     }

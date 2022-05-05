@@ -64,7 +64,7 @@ export default {
         Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
         you cannot equip more than one at the same time.
       </div>
-      <div class="o-available-effects-margin">
+      <div class="o-available-effects-container">
         <div class="o-available-effects">
           Available Effects:
         </div>
@@ -83,7 +83,6 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         v-else-if="realityGlyphLevel !== 0"
-        class="c-modal__confirm-btn"
         @click="createRealityGlyph"
       >
         Create a Reality Glyph!
@@ -99,7 +98,7 @@ export default {
 </template>
 
 <style scoped>
-.o-available-effects-margin {
+.o-available-effects-container {
   margin: 1.5rem 0 2rem;
 }
 

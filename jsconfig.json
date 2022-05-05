@@ -1,7 +1,11 @@
 {
-    "compilerOptions": {
-      "module": "ES6",
-      "target": "es6"
-    },
-    "include": ["src/**/*", "javascripts/**/*"]
-  }
+  "compilerOptions": {
+    "module": "ES6",
+    "target": "es6"
+  },
+  "include": [
+    "src/**/*",
+    "javascripts/**/*"
+  ],
+  "noEmit": true
+}

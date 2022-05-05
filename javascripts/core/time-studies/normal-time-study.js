@@ -23,6 +23,10 @@ export class NormalTimeStudyState extends TimeStudyState {
     this._path = path?.path ?? TIME_STUDY_PATH.NONE;
   }
 
+  get isUnlocked() {
+    return this.config.unlocked?.() ?? true;
+  }
+
   get isTriad() {
     return this.id > 300;
   }

@@ -152,6 +152,9 @@ export const Enslaved = {
     return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
+  get canAmplify() {
+    return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
+  },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
     return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;

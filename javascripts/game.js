@@ -608,6 +608,10 @@ export function gameLoop(passDiff, options = {}) {
   GalaxyGenerator.loop(realDiff);
   GameEnd.gameLoop(realDiff);
 
+  if (!Enslaved.canAmplify) {
+    Enslaved.boostReality = false;
+  }
+
   if (Tabs.current.isPermanentlyHidden) {
     const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
     if (tab) tab.show(true);

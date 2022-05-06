@@ -25,7 +25,7 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get canBeReduced() {
-    return this.completions < this.config.values.length &&
+    return this.completions < this.config.values.length && this.completions !== 0 &&
       new Decimal(this.reduction).neq(this.config.maxShardReduction(this.conditionBaseValue));
   }
 

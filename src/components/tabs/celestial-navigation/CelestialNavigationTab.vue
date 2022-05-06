@@ -138,7 +138,7 @@ const CelestialNavigationViewportCache = {
 <template>
   <svg
     height="600"
-    width="960"
+    width="966"
     class="l-celestial-navigation"
   >
     <defs>

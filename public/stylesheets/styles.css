@@ -9185,6 +9185,7 @@ input.o-automator-block-input {
   font-size: 1.5rem;
   cursor: pointer;
   font-weight: 500;
+  z-index: 1;
 }
 
 .l-information {

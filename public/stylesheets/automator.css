@@ -172,7 +172,10 @@
 .l-automator__scripts-dropdown {
   width: 90%;
   height: 90%;
-  padding: 0.1rem;
+  padding: 0.2rem 0 0.3rem 0;
+  border-width: 0.1rem;
+  border-radius: 0;
+  margin: 0.4rem;
 }
 
 .l-automator__rename-input {

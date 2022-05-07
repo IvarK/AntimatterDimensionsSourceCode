@@ -52,13 +52,7 @@ export default {
     this.$nextTick(() => {
       this.UI.editor.refresh();
       this.UI.editor.performLint();
-      // Take the scroll attribute of the editor and convert into a line number, then use the scrollToLine function
-      // in order to move the editor back to the line it was on before switching tabs. I suspect this has a chance
-      // to be device-dependent somehow, but it seems to seems to have worked fairly accurately on all situations
-      // I was able to test personally - Chrome/FF, varying screen zoom settings, and varying monitor resolutions.
-      const UNITS_PER_LINE = 15.305;
-      const targetLine = Math.round(AutomatorTextUI.savedVertPos / UNITS_PER_LINE) + 24;
-      AutomatorTextUI.scrollToLine(Math.clampMax(targetLine, AutomatorTextUI.editor.lastLine() + 1));
+      this.UI.editor.scrollTo(null, AutomatorTextUI.savedVertPos);
     });
   },
   beforeDestroy() {

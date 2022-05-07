@@ -142,7 +142,7 @@ export default {
 .c-tt-save-load-btn__menu {
   color: white;
   background: black;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   text-align: left;
   font-weight: bold;
   font-family: Typewriter;
@@ -155,7 +155,7 @@ export default {
   top: 100%;
   left: 50%;
   margin-left: -0.5rem;
-  border-width: 0.5rem;
+  border-width: var(--var-border-width, 0.5rem);
   border-style: solid;
   border-color: black transparent transparent;
 }
@@ -170,7 +170,7 @@ export default {
   font-family: Typewriter;
   font-size: 1.4rem;
   border: none;
-  border-radius: 0.3rem;
+  border-radius: var(--var-border-radius, 0.3rem);
   padding: 0.2rem;
 }
 

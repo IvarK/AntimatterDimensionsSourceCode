@@ -40,15 +40,11 @@ export default {
   background: var(--color-pelle--base);
   color: black;
   font-size: 1.3rem;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 0.5rem);
   font-weight: bold;
   min-height: 3.8rem;
   z-index: 3;
-}
-
-.s-base--metro .c-pelle-strike {
-  border-radius: 0;
 }
 
 .c-pelle-strike-container {

@@ -64,8 +64,8 @@
 }
 
 .old-ui .c-news-ticker {
-  border: 0.2rem solid black;
-  border-radius: 0.4rem;
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 0.4rem);
   padding: 0.2rem 0;
   height: 3rem;
 }

@@ -48,8 +48,8 @@ export default {
 .c-shop-button-container {
   width: 30rem;
   padding: 1rem;
-  border: .2rem solid #1f7d1f;
-  border-radius: .5rem;
+  border: var(--var-border-width, 0.2rem) solid #1f7d1f;
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: .5rem;
   background: #3c3c3c;
   color: white;
@@ -58,7 +58,7 @@ export default {
 .o-shop-button-button {
   background: turquoise;
   border: none;
-  border-radius: .5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   display: flex;
   margin: auto;
   align-items: center;

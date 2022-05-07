@@ -110,7 +110,7 @@ export default {
   otherwise */
   top: -0.1rem;
   right: -0.1rem;
-  border-radius: 0 0.4rem;
+  border-radius: 0 var(--var-border-radius, 0.4rem);
   padding: 0.2rem;
   text-shadow: none;
 }

@@ -114,7 +114,7 @@ export default {
   background: var(--color-text-inverted);
   color: var(--color-text);
   border: 0.1rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
   font-family: Typewriter;
   margin-bottom: 1rem;
@@ -141,8 +141,8 @@ export default {
   font-size: 3rem;
   background: black;
   color: var(--color-pelle--base);
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   width: 40rem;
 }
 
@@ -152,8 +152,8 @@ export default {
   background: black;
   color: var(--color-pelle--base);
   font-size: 3rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   width: 20rem;
   cursor: pointer;
   transition-duration: 0.4s;
@@ -174,7 +174,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0.4rem solid var(--color-pelle--base);
+  border: var(--var-border-width, 0.4rem) solid var(--color-pelle--base);
   font-size: 10rem;
   transition-duration: 0.4s;
   text-shadow: 0 0 1.5rem #9b0101;
@@ -196,13 +196,5 @@ export default {
 
 .o-celestial-quote-history {
   align-self: center;
-}
-
-.s-base--metro .l-pelle-panel-container {
-  border-radius: 0;
-}
-
-.s-base--metro .o-pelle-button {
-  border-radius: 0;
 }
 </style>

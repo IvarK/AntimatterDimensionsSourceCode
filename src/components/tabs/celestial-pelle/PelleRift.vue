@@ -98,8 +98,8 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   /* transparent crimson */
   box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45), 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45);
 }
@@ -137,10 +137,5 @@ export default {
   color: var(--color-pelle--base);
   font-weight: bold;
   padding: 0.2rem;
-}
-
-
-.s-base--metro .c-pelle-rift {
-  border-radius: 0;
 }
 </style>

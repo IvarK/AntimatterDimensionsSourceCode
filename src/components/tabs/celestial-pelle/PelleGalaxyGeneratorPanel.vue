@@ -161,8 +161,8 @@ export default {
 .l-pelle-panel-container {
   padding: 1rem;
   margin: 1rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.2rem);
   user-select: none;
 }
 
@@ -174,7 +174,7 @@ export default {
 
 .c-generator-unlock-button {
   padding: 2rem;
-  border-radius: .5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   font-family: Typewriter;
   cursor: pointer;
   width: 25rem;
@@ -210,8 +210,8 @@ export default {
   padding: 2rem;
   color: white;
   background-color: #004b55;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: .5rem;
+  border: var(--var-border-width, 0.1rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   font-family: Typewriter;
   margin: 1rem;
   font-size: 1.1rem;
@@ -260,10 +260,5 @@ export default {
 
 .c-collapse-icon-clickable {
   cursor: pointer;
-}
-
-
-.s-base--metro .c-increase-cap {
-  border-radius: 0;
 }
 </style>

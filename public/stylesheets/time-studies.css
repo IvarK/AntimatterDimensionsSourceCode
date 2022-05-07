@@ -45,7 +45,7 @@
   width: 18rem;
   height: 10rem;
   transition-duration: 0.2s;
-  border-radius: 0.4rem;
+  border-radius: var(--var-border-radius, 0.4rem);
   font-size: 1.0rem;
 }
 
@@ -79,7 +79,7 @@
   width: 18rem;
   height: 10rem;
   transition-duration: 0.2s;
-  border-radius: 0.4rem;
+  border-radius: var(--var-border-radius, 0.4rem);
   font-size: 1.0rem;
 }
 
@@ -112,10 +112,6 @@
 .t-s1 .o-time-study--unavailable {
   color: black;
   border: none;
-}
-
-.s-base--metro .o-time-study {
-  border-radius: 0;
 }
 
 @keyframes a-time-study {

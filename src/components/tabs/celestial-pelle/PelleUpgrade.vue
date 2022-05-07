@@ -163,7 +163,7 @@ export default {
   color: var(--color-text);
   background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle--secondary);
-  border-radius: .5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   font-family: Typewriter;
   cursor: pointer;
   width: 18.5rem;
@@ -228,11 +228,6 @@ export default {
   color: #0b0;
   font-weight: bold;
   font-style: italic;
-}
-
-
-.s-base--metro .c-pelle-upgrade {
-  border-radius: 0;
 }
 
 .s-base--metro .c-pelle-upgrade--unavailable {

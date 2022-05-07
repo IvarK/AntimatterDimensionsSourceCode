@@ -140,16 +140,11 @@ export default {
 .c-remnant-factors {
   background-color: var(--color-text-inverted);
   color: var(--color-text);
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.3rem;
   font-weight: bold;
   z-index: 4;
-}
-
-.s-base--metro .c-remnant-factors {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-remnant-factors-text {

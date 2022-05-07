@@ -58,7 +58,7 @@ export default {
   background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle--base);
   color: var(--color-text);
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .c-armageddon-button:hover {
@@ -85,9 +85,5 @@ export default {
 .c-reality-shard-gain {
   font-weight: bold;
   color: var(--color-pelle--base);
-}
-
-.s-base--metro .c-armageddon-button {
-  border-radius: 0;
 }
 </style>

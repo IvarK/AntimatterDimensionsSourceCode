@@ -198,7 +198,7 @@ html {
 }
 
 
-.s-base--metro #ui-container { /* csslint allow: empty-rules */
+:root .s-base--metro { /* csslint allow: empty-rules */
   --var-border-width: 0.1rem;
   --var-border-radius: 0;
 }
@@ -2703,8 +2703,8 @@ screen and (max-width: 480px) {
   margin-bottom: 0;
   width: 0;
   border-top: 0 solid black;
-  border-right: var(--var-border-width, 0.7rem) solid transparent;
-  border-left: var(--var-border-width, 0.7rem) solid transparent;
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
   content: " ";
   transition-duration: 0.3s;
   z-index: 0;

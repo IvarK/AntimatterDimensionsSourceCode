@@ -1,4 +1,4 @@
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState } from "../game-mechanics/index";
 
 function showSecondPreferredWarning(currTree) {
   // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.

@@ -1,6 +1,6 @@
 <script>
-import RaUpgradeIcon from "./RaUpgradeIcon";
 import RaPetLevelBar from "./RaPetLevelBar";
+import RaUpgradeIcon from "./RaUpgradeIcon";
 
 export default {
   name: "RaPet",

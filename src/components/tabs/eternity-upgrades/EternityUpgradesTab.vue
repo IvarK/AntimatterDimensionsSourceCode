@@ -1,6 +1,6 @@
 <script>
-import EternityUpgradeButton from "./EternityUpgradeButton";
 import EPMultiplierButton from "./EPMultiplierButton";
+import EternityUpgradeButton from "./EternityUpgradeButton";
 
 export default {
   name: "EternityUpgradesTab",

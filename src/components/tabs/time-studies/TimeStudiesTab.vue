@@ -1,13 +1,14 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout";
-import NormalTimeStudy from "./NormalTimeStudy";
-import ECTimeStudy from "./ECTimeStudy";
+
 import DilationTimeStudy from "./DilationTimeStudy";
-import TriadTimeStudy from "./TriadTimeStudy";
+import ECTimeStudy from "./ECTimeStudy";
+import NormalTimeStudy from "./NormalTimeStudy";
+import PrimaryButton from "@/components/PrimaryButton";
 import SecretTimeStudy from "./SecretTimeStudy";
-import TimeStudyConnection from "./TimeStudyConnection";
 import SecretTimeStudyConnection from "./SecretTimeStudyConnection";
+import TimeStudyConnection from "./TimeStudyConnection";
+import TriadTimeStudy from "./TriadTimeStudy";
 
 export default {
   name: "TimeStudiesTab",

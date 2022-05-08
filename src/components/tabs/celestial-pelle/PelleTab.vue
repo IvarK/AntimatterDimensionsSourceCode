@@ -1,8 +1,8 @@
 <script>
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
 import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
-import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
-import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
 export default {
   name: "PelleTab",

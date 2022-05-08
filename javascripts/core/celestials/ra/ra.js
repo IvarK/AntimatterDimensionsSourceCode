@@ -1,5 +1,5 @@
-import { GameMechanicState, BitUpgradeState } from "../../game-mechanics/index.js";
-import { CelestialQuotes } from "../quotes.js";
+import { BitUpgradeState, GameMechanicState } from "../../game-mechanics/index";
+import { CelestialQuotes } from "../quotes";
 
 class RaUnlockState extends BitUpgradeState {
   get bits() { return player.celestials.ra.unlockBits; }

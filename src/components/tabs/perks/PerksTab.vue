@@ -1,5 +1,6 @@
 <script>
 import { DataSet, Network } from "vis-network";
+
 import PerkPointLabel from "./PerkPointLabel";
 
 export default {

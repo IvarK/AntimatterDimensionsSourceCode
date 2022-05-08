@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import ModalWrapper from "@/components/modals/ModalWrapper";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "PelleEffectsModal",

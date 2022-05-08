@@ -1,5 +1,6 @@
 <script>
-import CustomizeableTooltip from "@/components/CustomizeableTooltip.vue";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+
 export default {
   name: "PelleRiftBar",
   components: {

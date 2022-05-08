@@ -1,9 +1,9 @@
 <script>
-import { BlackHoleAnimation } from "./black-hole-animation.js";
-import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
-import BlackHoleStateRow from "./BlackHoleStateRow";
+import { BlackHoleAnimation } from "./black-hole-animation";
 import BlackHoleChargingSliders from "./BlackHoleChargingSliders";
+import BlackHoleStateRow from "./BlackHoleStateRow";
 import BlackHoleUnlockButton from "./BlackHoleUnlockButton";
+import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
 
 export default {
   name: "BlackHoleTab",

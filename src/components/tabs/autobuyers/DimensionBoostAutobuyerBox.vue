@@ -1,7 +1,7 @@
 <script>
 import AutobuyerBox from "./AutobuyerBox";
-import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
 import AutobuyerInput from "./AutobuyerInput";
+import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
 
 export default {
   name: "DimensionBoostAutobuyerBox",

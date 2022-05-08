@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {
@@ -130,7 +130,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       name: "Transience of Information",
       id: 13,
       cost: 5e7,
-      requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within 
+      requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within
       The Enslaved Ones' Reality`,
       hasFailed: () => !Enslaved.isRunning,
       checkRequirement: () => Enslaved.isRunning && MachineHandler.uncappedRM.gte(Number.MAX_VALUE),

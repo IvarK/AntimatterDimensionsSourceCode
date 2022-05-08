@@ -1,6 +1,6 @@
 <script>
-import TimeStudyButton from "./TimeStudyButton";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import TimeStudyButton from "./TimeStudyButton";
 
 export default {
   name: "DilationTimeStudy",

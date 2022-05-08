@@ -1,7 +1,8 @@
 <script>
+import { sha512_256 } from "js-sha512";
+
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import StudyStringLine from "@/components/modals/StudyStringLine";
-import { sha512_256 } from "js-sha512";
 
 export default {
   name: "StudyStringModal",

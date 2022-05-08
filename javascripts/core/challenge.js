@@ -1,5 +1,5 @@
-import { GameMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { DC } from "./constants";
+import { GameMechanicState } from "./game-mechanics/index";
 
 // This function does *not* reset anything. Only call it when you've already
 // done all the non-UI stuff. Right now the only UI thing to do is switch to

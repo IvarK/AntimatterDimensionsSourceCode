@@ -1,5 +1,5 @@
-import { DimensionState } from "../../dimensions/dimension.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { DimensionState } from "../../dimensions/dimension";
 
 /**
  * Constants for easily adjusting values

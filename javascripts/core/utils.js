@@ -1,14 +1,14 @@
 // Stuff to be loaded into global before anything else
 
-import "./polyfill.js";
-import "./extensions.js";
+import "./polyfill";
+import "./extensions";
 
-import "./crash.js";
-import "./timespan.js";
-import "./format.js";
-import "./constants.js";
-import "./math.js";
-import "./async-utils.js";
-import "./event-hub.js";
+import "./crash";
+import "./timespan";
+import "./format";
+import "./constants";
+import "./math";
+import "./async-utils";
+import "./event-hub";
 
-export * from "./game-mechanics/index.js";
+export * from "./game-mechanics/index";

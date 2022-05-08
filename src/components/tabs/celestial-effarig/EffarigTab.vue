@@ -1,7 +1,7 @@
 <script>
-import EffarigUnlockButton from "./EffarigUnlockButton";
-import EffarigRunUnlockReward from "./EffarigRunUnlockReward";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import EffarigRunUnlockReward from "./EffarigRunUnlockReward";
+import EffarigUnlockButton from "./EffarigUnlockButton";
 
 export default {
   name: "EffarigTab",

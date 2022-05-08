@@ -1,5 +1,5 @@
-import { TimeStudyState } from "./time-studies.js";
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
+import { TimeStudyState } from "./time-studies";
 
 export class DilationTimeStudyState extends TimeStudyState {
   constructor(config) {

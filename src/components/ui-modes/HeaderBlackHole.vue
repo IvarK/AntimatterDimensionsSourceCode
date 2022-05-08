@@ -1,7 +1,7 @@
 <script>
+import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 
 export default {
   name: "HeaderBlackHole",

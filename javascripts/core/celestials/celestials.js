@@ -1,10 +1,10 @@
-import { Teresa } from "./teresa.js";
-import { Effarig } from "./effarig.js";
-import { Enslaved } from "./enslaved.js";
-import { V } from "./V.js";
-import { Ra } from "./ra/ra.js";
-import { Laitela } from "./laitela/laitela.js";
+import { Effarig } from "./effarig";
+import { Enslaved } from "./enslaved";
+import { Laitela } from "./laitela/laitela";
 import { Pelle } from "./pelle/pelle";
+import { Ra } from "./ra/ra";
+import { Teresa } from "./teresa";
+import { V } from "./V";
 
 export const Celestials = {
   teresa: Teresa,

@@ -1,6 +1,6 @@
 <script>
-import ChallengeTabHeader from "@/components/ChallengeTabHeader";
 import ChallengeGrid from "@/components/ChallengeGrid";
+import ChallengeTabHeader from "@/components/ChallengeTabHeader";
 import EternityChallengeBox from "./EternityChallengeBox";
 
 export default {

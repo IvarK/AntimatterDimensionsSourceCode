@@ -1,6 +1,6 @@
 <script>
-import ToggleButton from "@/components/ToggleButton";
 import SliderComponent from "@/components/SliderComponent";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "GlyphLevelsAndWeights",

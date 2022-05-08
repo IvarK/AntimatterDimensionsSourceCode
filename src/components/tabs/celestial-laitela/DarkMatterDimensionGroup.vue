@@ -1,5 +1,6 @@
 <script>
 import DarkMatterDimensionRow from "./DarkMatterDimensionRow";
+
 export default {
   name: "DarkMatterDimensionGroup",
   components: {

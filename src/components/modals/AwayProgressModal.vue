@@ -1,6 +1,6 @@
 <script>
-import ModalWrapper from "@/components/modals/ModalWrapper";
 import AwayProgressEntry from "@/components/modals/AwayProgressEntry";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "AwayProgressModal",

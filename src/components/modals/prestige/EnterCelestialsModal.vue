@@ -1,6 +1,6 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import EnterCelestialsRaPet from "@/components/modals/prestige/EnterCelestialsRaPet";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "EnterCelestialsModal",

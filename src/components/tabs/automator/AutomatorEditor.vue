@@ -1,7 +1,7 @@
 <script>
 import AutomatorBlockEditor from "./AutomatorBlockEditor";
-import AutomatorTextEditor from "./AutomatorTextEditor";
 import AutomatorControls from "./AutomatorControls";
+import AutomatorTextEditor from "./AutomatorTextEditor";
 
 export default {
   name: "AutomatorEditor",

@@ -1,7 +1,7 @@
 <script>
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import TimeTheoremBuyButton from "./TimeTheoremBuyButton";
 import TimeStudySaveLoadButton from "./TimeStudySaveLoadButton";
+import TimeTheoremBuyButton from "./TimeTheoremBuyButton";
 
 export default {
   name: "TimeTheoremShop",

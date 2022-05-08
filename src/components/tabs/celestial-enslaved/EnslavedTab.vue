@@ -1,8 +1,8 @@
 <script>
+import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 
 export default {
   name: "EnslavedTab",

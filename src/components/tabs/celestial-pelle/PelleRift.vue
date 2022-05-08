@@ -1,6 +1,6 @@
 <script>
-import PelleStrike from "./PelleStrike";
 import PelleRiftBar from "./PelleRiftBar";
+import PelleStrike from "./PelleStrike";
 
 export default {
   name: "PelleRift",

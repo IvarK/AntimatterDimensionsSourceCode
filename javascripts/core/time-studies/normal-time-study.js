@@ -1,4 +1,4 @@
-import { TimeStudyState } from "./time-studies.js";
+import { TimeStudyState } from "./time-studies";
 
 export const NormalTimeStudies = {};
 

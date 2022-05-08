@@ -1,9 +1,10 @@
 <script>
 import { DC } from "../../../../javascripts/core/constants";
-import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
+
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import GlyphSetPreview from "@/components/GlyphSetPreview";
 import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
+import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 
 export default {
   name: "TeresaTab",

@@ -1,7 +1,7 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ModalWrapperChoice",

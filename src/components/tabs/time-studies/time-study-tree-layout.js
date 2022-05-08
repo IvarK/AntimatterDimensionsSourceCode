@@ -1,5 +1,5 @@
-import { TimeStudySetup } from "./TimeStudyButton";
 import { TimeStudyConnectionSetup } from "./TimeStudyConnection";
+import { TimeStudySetup } from "./TimeStudyButton";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {

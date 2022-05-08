@@ -1,6 +1,6 @@
-import { SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
+import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";

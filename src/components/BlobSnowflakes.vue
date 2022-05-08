@@ -1,6 +1,6 @@
 <script>
-import BlobSnowflake from "@/components/BlobSnowflake";
 import BlobBackground from "@/components/BlobBackground";
+import BlobSnowflake from "@/components/BlobSnowflake";
 
 export default {
   name: "BlobSnowflakes",

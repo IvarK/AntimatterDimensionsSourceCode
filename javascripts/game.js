@@ -1,8 +1,9 @@
-import { playFabLogin } from "./core/playfab.js";
-import { DC } from "./core/constants.js";
-import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
+
+import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { playFabLogin } from "./core/playfab";
+import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 if (GlobalErrorHandler.handled) {

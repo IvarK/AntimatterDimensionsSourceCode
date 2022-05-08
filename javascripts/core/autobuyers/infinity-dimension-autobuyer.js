@@ -1,5 +1,6 @@
-import { InfinityDimensions } from "../globals.js";
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { InfinityDimensions } from "../globals";
+
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {

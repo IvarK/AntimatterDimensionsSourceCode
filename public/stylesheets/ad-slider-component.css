@@ -76,7 +76,7 @@ SOFTWARE.
 }
 
 .c-ad-slider__bg {
-  border-radius: 1.5rem;
+  border-radius: var(--var-border-radius, 1.5rem);
   background-color: #ccc;
 }
 
@@ -96,7 +96,7 @@ SOFTWARE.
 }
 
 .c-ad-slider__process {
-  border-radius: 15px;
+  border-radius: var(--var-border-radius, 15px);
   background-color: #3498db;
 }
 
@@ -155,7 +155,7 @@ SOFTWARE.
 }
 
 .c-ad-slider__dot-handle {
-  border-radius: 50% !important;
+  border-radius: var(--var-border-radius, 50%) !important;
   background-color: #fff;
   box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
 }
@@ -195,7 +195,7 @@ SOFTWARE.
   justify-content: center;
   align-items: center;
   font-size: 1rem;
-  border-radius: 50%;
+  border-radius: var(--var-border-radius, 50%);
   border: 0.1rem solid var(--color-reality-light);
   cursor: pointer;
   transition-duration: 0.2s;
@@ -220,7 +220,7 @@ SOFTWARE.
   min-width: 20px;
   text-align: center;
   color: #fff;
-  border-radius: 5px;
+  border-radius: var(--var-border-radius, 5px);
   border: 0.1rem solid #3498db;
   background-color: #3498db;
 }
@@ -339,7 +339,7 @@ SOFTWARE.
   height: 100%;
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.16);
-  border-radius: 50%;
+  border-radius: var(--var-border-radius, 50%);
   transform: translate(-50%, -50%);
   z-index: 2;
   transition: all .3s;

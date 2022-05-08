@@ -18,7 +18,7 @@
   z-index: 5;
   color: black;
   background-color: #ffff00;
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.2rem);
   padding: 0.2rem;
 }
 
@@ -47,8 +47,8 @@
 .c-glyph-sacrifice-options {
   color: var(--color-reality-light);
   background: black;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   padding: 0.8rem 0.8rem 0.5rem;
@@ -56,16 +56,11 @@
 }
 
 .c-glyph-inventory-management-with-border {
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .c-glyph-sacrifice-options-container {
-  border-radius: 0.5rem;
-}
-
-.s-base--metro .c-glyph-sacrifice-options {
-  border-width: 0.1rem;
-  border-radius: 0;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .l-glyph-sacrifice-options__header {
@@ -94,16 +89,11 @@
   align-items: center;
   position: relative;
   cursor: pointer;
-  border: 0.2rem solid;
+  border: var(--var-border-width, 0.2rem) solid;
   transition-duration: 0.2s;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   width: 4.6rem;
   height: 3rem;
-}
-
-.s-base--metro .c-glyph-sacrifice-options__option {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-glyph-sacrifice-options__option:hover {
@@ -131,8 +121,8 @@
   transition-duration: 0.2s;
   font-size: 1.4rem;
   font-weight: bold;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   font-family: Typewriter;
   color: var(--color-reality);
   background: black;
@@ -143,11 +133,6 @@
   pointer-events: none;
   position: absolute;
   top: 100%;
-}
-
-.s-base--metro .c-glyph-sacrifice-options__option__tooltip {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-glyph-sacrifice-options__option__tooltip:after {
@@ -210,7 +195,7 @@
   color: var(--color-reality-light);
   background-color: black !important;
   box-shadow: 0 0 0 0.1rem var(--color-reality-light) !important;
-  border-radius: 0.8rem !important;
+  border-radius: var(--var-border-radius, 0.8rem) !important;
 }
 
 .c-glyph-sacrifice-options__advanced {
@@ -235,7 +220,7 @@
   font-size: 1.2rem;
   background-color: #333;
   color: var(--color-reality-light);
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
   text-align: center;
   -webkit-appearance: none;
@@ -256,7 +241,7 @@
   text-align: center;
   background-color: #333;
   color: var(--color-reality-light);
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
   -webkit-appearance: none;
   -moz-appearance: textfield;
@@ -266,7 +251,7 @@
 .c-auto-sac-effect-tab__checkbox {
   width: 1.5em;
   height: 1.5em;
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
 }
 
@@ -290,7 +275,7 @@
 
 .c-glyph-sacrifice-options__advanced-toggle {
   background: black;
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
   font-size: 1.2rem;
   font-family: Typewriter, serif
@@ -316,7 +301,7 @@
 }
 
 .c-auto-sac-type-tab__effect-desc {
-  border-radius: 0.5em;
+  border-radius: var(--var-border-radius, 0.5em);
   border: 0.1rem solid;
   padding: 0.25em 1.5em;
   min-height: 3em;
@@ -362,7 +347,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: var(--var-border-radius, 50%);
   margin-top: 0.4rem;
 }
 
@@ -404,15 +389,10 @@
   width: 12rem;
   height: 5rem;
   padding: 0 0.5rem;
-  border: 0.2rem solid;
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid;
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: 0 0.5rem 1rem;
   transition-duration: 0.2s;
-}
-
-.s-base--metro .c-glyph-auto-pick-options__option {
-  border-radius: 0;
-  border-width: 0.1rem;
 }
 
 .c-glyph-auto-pick-options__option:hover {
@@ -469,17 +449,12 @@
   font-size: 1.2rem;
   font-weight: normal;
   text-align: center;
-  border-radius: 0.6rem;
+  border-radius: var(--var-border-radius, 0.6rem);
   transition: opacity 0.3s;
   text-shadow: none;
   padding: 0.6rem;
   padding-bottom: 0.6rem;
-  border: 0.2rem solid black;
-}
-
-.s-base--metro .c-glyph-tooltip {
-  border-radius: 0;
-  border-width: 0.1rem;
+  border: var(--var-border-width, 0.2rem) solid black;
 }
 
 .c-glyph-tooltip__description {
@@ -494,17 +469,12 @@
   display: flex;
   flex-direction: column;
   width: calc(100% + 2.4rem);
-  border: 0.2rem solid;
+  border: var(--var-border-width, 0.2rem) solid;
   padding: 0.3rem 1rem 0.7rem;
   font-weight: bold;
   margin-top: -4rem;
   background-color: black;
-  border-radius: 0.8rem;
-}
-
-.s-base--metro .c-glyph-tooltip__header {
-  border-radius: 0;
-  border-width: 0.1rem;
+  border-radius: var(--var-border-radius, 0.8rem);
 }
 
 .l-glyph-tooltip__effects {
@@ -521,7 +491,7 @@
 .c-glyph-tooltip__sacrifice--touchable {
   color: #d4d4ff;
   border: 0.1rem solid #d4d4ff;
-  border-radius: 0.5em;
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.25em 1em;
 }
 
@@ -643,7 +613,7 @@
   font-size: 1.35rem;
   background-color: black;
   color: var(--color-reality-light);
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.2rem);
   border: none;
   border-bottom: 0.1rem solid;
   text-align: center;
@@ -660,16 +630,11 @@
   font-weight: bold;
   background-color: black;
   color: var(--color-reality-light);
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: 0 0.4rem 1rem;
   transition-duration: 0.2s;
   cursor: pointer;
-}
-
-.s-base--metro .c-glyph-set-save-setting-button {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-glyph-set-save-setting-button:hover {
@@ -690,8 +655,8 @@
   height: 2.5rem;
   color: var(--color-reality-light);
   background-color: black;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   cursor: pointer;
   transition-duration: 0.2s;
   text-align: center;
@@ -703,11 +668,6 @@
 .c-glyph-set-save-button:hover {
   color: black;
   background-color: var(--color-reality-light);
-}
-
-.s-base--metro .c-glyph-set-save-button {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-glyph-set-save-button--unavailable {
@@ -766,8 +726,8 @@
   overflow: auto;
   color: var(--color-reality-light);
   background: black;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border:var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   padding: 0.8rem 0.8rem 1.8rem;
@@ -775,7 +735,7 @@
 }
 
 .c-current-glyph-effects-with-top-border {
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .pelle-current-glyph-effects {
@@ -785,11 +745,6 @@
 .c-glyph-tooltip .pelle-current-glyph-effects {
   color: var(--color-pelle--base);
   font-weight: bold;
-}
-
-.s-base--metro .c-current-glyph-effects {
-  border-radius: 0;
-  border-width: 0.1rem;
 }
 
 .t-s8 .c-current-glyph-effects {
@@ -824,10 +779,6 @@
   justify-content: space-between;
   height: 2.8rem;
   width: 100%;
-}
-
-.s-base--metro .c-glyph-info-options {
-  border-radius: 0;
 }
 
 .t-s8 .c-glyph-info-options {
@@ -889,7 +840,7 @@
 
 .c-glyph-peek {
   border: 0.1rem solid #b8b8b8;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
   height: 9rem;
   width: calc(100% - 1rem);
@@ -907,7 +858,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: 0.5rem;
   height: 12rem;
   width: 36rem;
@@ -919,8 +870,8 @@
   justify-content: space-evenly;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.1);
-  border: 0.2rem solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--var-border-radius, 0.5rem);
   font-size: 1.2rem;
   height: 10rem;
   width: 10rem;
@@ -928,29 +879,15 @@
   box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5);
 }
 
-.s-base--metro .c-glyph-choice-icon {
-  border-radius: 0;
-  border-width: 0.1rem;
-}
-
 .c-glyph-choice-effect-list {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   background-color: rgba(0, 0, 0, 0.1);
-  border: 0.2rem solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--var-border-radius, 0.5rem);
   height: 11rem;
   width: 25rem;
-}
-
-.s-base--metro .c-glyph-choice-effect-list {
-  border-radius: 0;
-  border-width: 0.1rem;
-}
-
-.s-base--metro .c-glyph-peek {
-  border-radius: 0;
 }
 
 .t-s8 .c-glyph-peek {
@@ -1056,8 +993,8 @@
   font-weight: bold;
   color: var(--color-reality-light);
   background-color: black;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   transition-duration: 0.2s;
   text-align: center;
   font-size: 1rem;
@@ -1071,11 +1008,6 @@
   border-color: var(--color-reality-light);
 }
 
-.s-base--metro .c-glyph-inventory-option {
-  border-width: 0.1rem;
-  border-radius: 0;
-}
-
 .c-glyph-inventory-option__tooltip {
   display: flex;
   justify-content: center;
@@ -1084,8 +1016,8 @@
   transition-duration: 0.2s;
   font-size: 1.1rem;
   font-weight: bold;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem);
   font-family: Typewriter;
   color: var(--color-reality);
   background: black;
@@ -1097,11 +1029,6 @@
   pointer-events: none;
   position: absolute;
   bottom: 100%;
-}
-
-.s-base--metro .c-glyph-inventory-option__tooltip {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .c-glyph-inventory-option__tooltip:after {
@@ -1180,8 +1107,8 @@
 
 .c-glyph-sidebar-button {
   background-color: black;
-  border: 0.2rem solid var(--color-reality);
-  border-radius: 0.5rem 0.5rem 0 0;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
   color: var(--color-reality-light);
   cursor: pointer;
   transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
@@ -1193,8 +1120,6 @@
 }
 
 .s-base--metro .c-glyph-sidebar-button {
-  border-width: 0.1rem;
-  border-radius: 0;
   margin-bottom: 0.1rem;
 }
 
@@ -1246,19 +1171,14 @@
   font-size: 1rem;
   height: 2rem;
   width: 2rem;
-  border: 0.2rem solid var(--color-reality);
-  border-top-right-radius: 1rem;
-  border-bottom-left-radius: 0.3rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-top-right-radius: var(--var-border-radius, 1rem);
+  border-bottom-left-radius: var(--var-border-radius, 0.3rem);
   color: black;
   font-weight: bold;
   cursor: pointer;
   user-select: none;
   transition-duration: 0.2s;
-}
-
-.s-base--metro .o-glyph-color-checkbox {
-  border-radius: 0;
-  border-width: 0.1rem;
 }
 
 .t-s8 .o-glyph-color-checkbox {

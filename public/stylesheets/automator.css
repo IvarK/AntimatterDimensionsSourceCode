@@ -34,7 +34,7 @@
 
 .c-automator-points-list-col {
   position: relative;
-  border: 0.15rem solid var(--color-text);
+  border: var(--var-border-width, 0.15rem) solid var(--color-text);
   padding: 1rem;
   text-align: left;
 }
@@ -58,7 +58,7 @@
   width: 100%;
   height: 48%;
   padding: 1rem;
-  border: 0.15rem solid var(--color-text);
+  border: var(--var-border-width, 0.15rem) solid var(--color-text);
   text-align: left;
   overflow: hidden;
 }
@@ -172,7 +172,10 @@
 .l-automator__scripts-dropdown {
   width: 90%;
   height: 90%;
-  padding: 0.1rem;
+  padding: 0.2rem 0 0.3rem 0;
+  border-width: 0.1rem;
+  border-radius: 0;
+  margin: 0.4rem;
 }
 
 .l-automator__rename-input {
@@ -284,7 +287,7 @@
   width: 2.8rem;
   height: 2.2rem;
   margin: 0.1rem;
-  border-radius: 0.3rem;
+  border-radius: var(--var-border-radius, 0.3rem);
   border-width: 0.1rem;
   cursor: pointer;
 }

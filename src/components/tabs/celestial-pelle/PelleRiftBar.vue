@@ -184,9 +184,9 @@ export default {
 .c-pelle-rift-bar {
   --color-bar-bg: #1e1e1e;
   height: 5rem;
-  border: 0.2rem solid var(--color-pelle--secondary);
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
+  border-radius: var(--var-border-radius, 0.5rem);
   width: 32rem;
-  border-radius: 0.5rem;
   position: relative;
   margin-bottom: 1rem;
   display: flex;
@@ -206,10 +206,10 @@ export default {
 
 .l-overflow-hidden {
   overflow: hidden;
-  border: 0.16rem solid transparent;
+  border: var(--var-border-width, 0.16rem) solid transparent;
   width: 32rem;
   height: 5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   position: absolute;
   top: -0.2rem;
   left: -0.2rem;
@@ -353,12 +353,6 @@ export default {
 .o-pelle-rift-bar-milestone-line--disabled {
   animation: none;
   filter: brightness(0.25);
-}
-
-
-.s-base--metro .c-pelle-rift-bar,
-.s-base--metro .l-overflow-hidden {
-  border-radius: 0;
 }
 </style>
 

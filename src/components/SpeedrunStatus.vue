@@ -113,7 +113,7 @@ export default {
   bottom: 1rem;
   background-color: var(--color-base);
   white-space: nowrap;
-  border: 0.2rem solid var(--color-accent);
+  border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   user-select: none;
   padding: 0.8rem 2rem;
   z-index: 5;

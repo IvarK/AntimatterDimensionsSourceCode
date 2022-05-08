@@ -151,8 +151,8 @@ export default {
 .l-pelle-panel-container {
   padding: 1rem;
   margin: 1rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   user-select: none;
 }
 
@@ -166,7 +166,7 @@ export default {
   background: var(--color-text-inverted);
   color: var(--color-text);
   border: 0.1rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
   font-family: Typewriter;
   margin: 1rem 0 0.5rem;
@@ -190,8 +190,8 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  border-radius: 0.5rem;
-  border: 0.2rem solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   padding: 1rem;
 }
 
@@ -212,14 +212,5 @@ export default {
 
 .c-collapse-icon-clickable {
   cursor: pointer;
-}
-
-
-.s-base--metro .o-pelle-button {
-  border-radius: 0;
-}
-
-.s-base--metro .c-armageddon-container {
-  border-radius: 0;
 }
 </style>

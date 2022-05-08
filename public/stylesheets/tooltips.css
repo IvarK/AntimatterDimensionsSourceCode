@@ -7,7 +7,7 @@
 .general-tooltip .tooltip-inner {
   background: rgba(0, 0, 0, 0.9);
   color: white;
-  border-radius: 3px;
+  border-radius: var(--var-border-radius, 3px);
   width: 160px;
   text-align: center;
   padding: 5px 10px 4px;
@@ -115,7 +115,7 @@
   background: #f9f9f9;
   color: black;
   padding: 24px;
-  border-radius: 5px;
+  border-radius: var(--var-border-radius, 5px);
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
 }
 
@@ -136,5 +136,5 @@
 }
 
 .c-block-automator-error-container .tooltip-inner {
-  width: auto; 
+  width: auto;
 }

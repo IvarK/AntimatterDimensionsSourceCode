@@ -61,9 +61,7 @@
 }
 
 .s-base--metro .o-tab-btn {
-  border-width: 0.1rem;
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9E9E9E;
-  border-radius: 0;
 }
 
 .t-dark-metro .o-tab-btn {
@@ -87,10 +85,6 @@
 }
 
 .c-subtab-button-container {
-  border-bottom: 0.2rem solid var(--color-accent);
+  border-bottom: var(--var-border-width, 0.2rem) solid var(--color-accent);
   margin-bottom: 0.8rem;
-}
-
-.s-base--metro .c-subtab-button-container {
-  border-width: 0.1rem;
 }

@@ -150,7 +150,7 @@ export default {
   position: absolute;
   padding: 0.7rem;
   width: 16rem;
-  border-radius: 0.3rem;
+  border-radius: var(--var-border-radius, 0.3rem);
   background-color: hsla(0, 0%, 5%, 0.9);
   color: #fff;
   content: attr(ach-tooltip);
@@ -158,10 +158,6 @@ export default {
   font-size: 1.4rem;
   line-height: 1.2;
   z-index: 4;
-}
-
-.t-dark-metro .c-tooltip-content {
-  border-radius: 0;
 }
 
 .c-tooltip-arrow {

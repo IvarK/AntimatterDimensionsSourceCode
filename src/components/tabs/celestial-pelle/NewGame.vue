@@ -88,7 +88,7 @@ export default {
   font-family: Typewriter;
   background: grey;
   border: black;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   cursor: pointer;
 }
 </style>

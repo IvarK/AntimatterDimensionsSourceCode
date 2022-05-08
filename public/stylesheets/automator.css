@@ -1,6 +1,6 @@
 :root {
   --color-automator-controls-background: lightgray;
-  --color-automator-splitter: gray;
+  --color-automator-splitter: rgb(187, 187, 187);
   --color-automator-active-line-background: rgba(178, 151, 214, 0.527);
   --color-automator-active-line-outline: rgb(122, 73, 255);
   --color-automator-event-background: rgb(0, 127, 0);
@@ -24,7 +24,7 @@
 
 :root .s-base--dark {
   --color-automator-controls-background: #262626;
-  --color-automator-splitter: gray;
+  --color-automator-splitter: rgb(71, 71, 71);
   --color-automator-active-line-background: rgb(43, 6, 92);
   --color-automator-active-line-outline: rgb(68, 0, 255);
   --color-automator-event-background: rgb(0, 127, 0);

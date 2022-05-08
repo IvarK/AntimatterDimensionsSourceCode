@@ -8937,9 +8937,10 @@ kbd {
 .o-automator-command {
   display: inline-block;
   min-width: 8.5rem;
-  color: #c080ff;
-  background: #000115;
-  border: 0.1rem solid #353535;
+  border: 0.1rem solid var(--color-blockmator-block-border);
+  padding: 0.5rem;
+  background: var(--color-blockmator-block-background);
+  color: var(--color-blockmator-block-font);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
   -webkit-user-select: none;
@@ -8974,7 +8975,7 @@ kbd {
 }
 
 .c-automator-block-row-active {
-  background: #50316f;
+  background: var(--color-blockmator-active-background);
 }
 
 .c-automator-block-row-ghost {
@@ -8986,6 +8987,19 @@ kbd {
   padding: 0.3rem 0.6rem;
 }
 
+.c-automator-block-editor {
+  overflow-y: scroll;
+  height: 100%;
+  background-color: var(--color-blockmator-editor-background);
+  border-left: 0.1rem solid var(--color-automator-controls-background);
+  border-bottom: 0.1rem solid var(--color-automator-controls-background);
+  box-sizing: border-box;
+  padding: 0.5rem;
+  tab-size: 1.5em;
+  -moz-tab-size: 1.5em;
+  -o-tab-size: 1.5em;
+}
+
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
   border-radius: 0;
 }
@@ -8994,18 +9008,29 @@ kbd {
   display: inline-block;
   font-family: Typewriter, serif;
   font-size: 1.1rem;
-  color: #007f7f;
-  background: #000115;
-  border: 0.1rem solid #353535;
+  border: 0.1rem solid var(--color-blockmator-block-border);
+  padding: 0.5rem;
+  background: var(--color-blockmator-block-background);
+  color: var(--color-blockmator-editor-selection);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
 }
 
 input.o-automator-block-input {
-  color: #00ff00;
+  color: var(--color-blockmator-editor-input);
+}
+
+.l-automator-nested-block {
+  width: fit-content;
+  padding: 1rem;
+  border: var(--var-border-width, 2px) dotted var(--color-blockmator-nested-block-border);
+  margin-left: 3rem;
+  margin-top: 0.5rem;
+  min-widtH: 30rem;
 }
 
 .o-automator-block-delete {
+  color: var(--color-blockmator-block-delete);
   font-size: 1.7rem;
   color: #ff3333;
   cursor: pointer;
@@ -9038,7 +9063,7 @@ input.o-automator-block-input {
 
 .c-automator-template-textbox {
   text-align: center;
-  border: 0.1rem solid black;
+  border: 0.1rem solid var(--color-template-textbox-border);
   border-radius: var(--var-border-radius, 0.3rem);
 }
 

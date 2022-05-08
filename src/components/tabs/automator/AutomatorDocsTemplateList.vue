@@ -31,8 +31,9 @@ export default {
 
 <style scoped>
 .c-automator-docs-template--button {
-  border-radius: 0.3rem;
   margin: 0.4rem;
+  border-radius: var(--var-border-radius, 0.4rem);
+  border-width: var(--var-border-width, 0.2rem);
   cursor: pointer;
 }
 </style>

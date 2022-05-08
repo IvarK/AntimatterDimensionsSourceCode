@@ -1,6 +1,54 @@
+:root {
+  --color-automator-controls-background: lightgray;
+  --color-automator-splitter: gray;
+  --color-automator-active-line-background: rgba(178, 151, 214, 0.527);
+  --color-automator-active-line-outline: rgb(122, 73, 255);
+  --color-automator-event-background: rgb(0, 127, 0);
+  --color-automator-event-outline: rgb(25, 200, 25);
+  --color-automator-error-background: rgb(172, 6, 23);
+  --color-automator-error-outline: rgb(255, 0, 64);
+  --color-automator-docs-background: white;
+  --color-automator-docs-font: black;
+  --color-automator-error-underline: red;
+  --color-blockmator-block-border: #cfcfcf;
+  --color-blockmator-block-background: #f5f5f5;
+  --color-blockmator-block-font: #a142ff;
+  --color-blockmator-active-background: #b597d3;
+  --color-blockmator-editor-background: white;
+  --color-blockmator-editor-selection: #007f7f;
+  --color-blockmator-editor-input: rgb(0, 172, 0);
+  --color-blockmator-nested-block-border: #369b36;
+  --color-blockmator-block-delete: #ff3333;
+  --color-template-textbox-border: black;
+}
+
+:root .s-base--dark {
+  --color-automator-controls-background: #262626;
+  --color-automator-splitter: gray;
+  --color-automator-active-line-background: rgb(43, 6, 92);
+  --color-automator-active-line-outline: rgb(68, 0, 255);
+  --color-automator-event-background: rgb(0, 127, 0);
+  --color-automator-event-outline: rgb(25, 200, 25);
+  --color-automator-error-background: rgb(172, 6, 23);
+  --color-automator-error-outline: rgb(255, 0, 64);
+  --color-automator-docs-background: black;
+  --color-automator-docs-font: white;
+  --color-automator-error-underline: red;
+  --color-blockmator-block-border: #353535;
+  --color-blockmator-block-background: #000115;
+  --color-blockmator-block-font: #c080ff;
+  --color-blockmator-active-background: #50316f;
+  --color-blockmator-editor-background: black;
+  --color-blockmator-editor-selection: #01a1a1;
+  --color-blockmator-editor-input: #0f0;
+  --color-blockmator-nested-block-border: #55ff55;
+  --color-blockmator-block-delete: #ff3333;
+  --color-template-textbox-border: black;
+}
+
 ._-automator-split-pane-fix {
   width: 100%;
-  background-color: black;
+  background-color: var(--color-automator-splitter);
 }
 
 .c-automator-tab {
@@ -133,7 +181,7 @@
 }
 
 .c-automator__controls {
-  background-color: #262626;
+  background-color: var(--color-automator-controls-background);
 }
 
 .l-automator__controls {
@@ -169,46 +217,47 @@
 }
 
 .c-automator-editor__active-line {
-  background: rgb(43, 6, 92);
-  outline: 0.1rem solid rgb(68, 0, 255);
+  background: var(--color-automator-active-line-background);
+  outline: 0.1rem solid var(--color-automator-active-line-outline);
 }
 
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
-  background: rgb(43, 6, 92);
-  outline: 0.1rem solid rgb(68, 0, 255);
+  background: var(--color-automator-active-line-background);
   filter: brightness(200%);
+  outline: 0.1rem solid var(--color-automator-active-line-outline);
 }
 
 .c-automator-editor__event-line {
-  background: rgb(0, 127, 0);
-  outline: 0.1rem solid rgb(25, 200, 25);
+  background: var(--color-automator-event-background);
+  outline: 0.1rem solid var(--color-automator-event-outline);
 }
 
 .c-automator-editor__event-line-gutter {
   font-weight: bold;
-  background: rgb(0, 127, 0);
-  outline: 0.1rem solid rgb(25, 200, 25);
+  background: var(--color-automator-event-background);
   filter: brightness(200%);
+  outline: 0.1rem solid var(--color-automator-event-outline);
 }
 
 .c-automator-editor__error-line {
-  background: rgb(172, 6, 23);
-  outline: 0.1rem solid rgb(255, 0, 64);
+  background: var(--color-automator-error-background);
+  outline: 0.1rem solid var(--color-automator-event-outline);
 }
 
 .c-automator-editor__error-line-gutter {
   font-weight: bold;
-  background: rgb(172, 6, 23);
-  outline: 0.1rem solid rgb(255, 0, 64);
+  background: var(--color-automator-error-background);
   filter: brightness(200%);
+  outline: 0.1rem solid var(--color-automator-event-outline);
 }
 
 .c-automator-editor {
   text-align: left;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
-  border-bottom: 0.15rem solid #262626;
+  text-align: left;
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
 }
 
 .l-automator-editor {
@@ -246,12 +295,13 @@
 .c-automator-docs {
   overflow: auto;
   text-align: left;
-  font-size: 1.4rem;
-  color: black;
-  background-color: lightgray;
-  border-right: 0.15rem solid #262626;
-  border-bottom: 0.15rem solid #262626;
   padding-left: 1rem;
+  border-right: 0.15rem solid var(--color-automator-controls-background);
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
+  background-color: var(--color-automator-docs-background);
+  padding-left: 1rem;
+  font-size: 1.4rem;
+  color: var(--color-automator-docs-font);
 }
 
 .c-automator-docs-page {
@@ -286,6 +336,10 @@
 .o-automator-error-underline::before {
   content: "~~~~~~~~~~~~";
   overflow: hidden;
+  font-size: 0.6em;
+  font-weight: 700;
+  font-family: Times New Roman, Serif;
+  color: var(--color-automator-error-underline);
   width: 100%;
   position: absolute;
   top: 12px;

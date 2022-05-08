@@ -140,13 +140,13 @@ export default {
       <button
         v-for="(preset, presetNumber) in presets"
         :key="preset.name"
-        class="o-primary-btn"
+        class="o-primary-btn o-load-preset-button-margin"
         @click="loadPreset(preset.name, presetNumber + 1)"
       >
         {{ preset.name ? preset.name : presetNumber + 1 }}
       </button>
       <button
-        class="o-primary-btn"
+        class="o-primary-btn o-load-preset-button-margin"
         @click="loadCurrent"
       >
         <i>Current Tree</i>
@@ -209,3 +209,9 @@ export default {
     </button>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.o-load-preset-button-margin {
+  margin-right: 0.3rem;
+}
+</style>

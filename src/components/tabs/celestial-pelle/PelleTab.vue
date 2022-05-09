@@ -187,7 +187,7 @@ export default {
 }
 
 @keyframes roll {
-  100% { transform: rotateY(360deg) }
+  100% { transform: rotateY(360deg); }
 }
 
 .pelle-icon {

@@ -184,7 +184,7 @@ export default {
   transition-duration: 0.3s;
 }
 
-
+/* stylelint-disable-next-line selector-class-pattern */
 .c-pelle-upgrade--galaxyGenerator {
   background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   color: black;
@@ -211,6 +211,7 @@ export default {
   color: black;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 .c-pelle-upgrade--galaxyGenerator:hover,
 .c-pelle-upgrade--unavailable:hover,
 .c-pelle-upgrade--faded:hover,
@@ -220,12 +221,12 @@ export default {
 }
 
 .l-pelle-upgrade-gap {
-  height: 0.5em;
+  height: 0.5rem;
   flex-shrink: 0;
 }
 
 .c-improved-effect {
-  color: #0b0;
+  color: #00bb00;
   font-weight: bold;
   font-style: italic;
 }

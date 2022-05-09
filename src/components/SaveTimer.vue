@@ -47,6 +47,7 @@ export default {
   border-top: 0.1rem solid var(--color-accent);
   border-right: 0.1rem solid var(--color-accent);
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   padding: 0 0.5rem;
   z-index: 5;
@@ -54,7 +55,7 @@ export default {
 
 .t-inverted .o-save-timer,
 .t-inverted-metro .o-save-timer {
-  filter: invert(100%)
+  filter: invert(100%);
 }
 
 .t-s2 .o-save-timer {

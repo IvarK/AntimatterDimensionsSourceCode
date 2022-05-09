@@ -132,7 +132,6 @@ export default {
   font-size: 1.3rem;
 }
 
-
 .c-credits-cel-symbol {
   position: absolute;
   font-size: 14rem;
@@ -155,7 +154,7 @@ export default {
 .c-effarig-credits {
   left: 80%;
   top: 50rem;
-  color: #f40;
+  color: #ff4400;
   animation: a-effarig-credits 4s ease-in-out infinite;
 }
 
@@ -209,9 +208,20 @@ export default {
 }
 
 @keyframes a-effarig-credits {
-  0% { opacity: 0.8; text-shadow: 0 0 3rem; }
-  50% { opacity: 1; text-shadow: 0 0 4rem, 0 0 4rem; }
-  100% { opacity: 0.8; text-shadow: 0 0 3rem; }
+  0% {
+    opacity: 0.8;
+    text-shadow: 0 0 3rem;
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 4rem, 0 0 4rem;
+  }
+
+  100% {
+    opacity: 0.8;
+    text-shadow: 0 0 3rem;
+  }
 }
 
 @keyframes a-enslaved-credits {
@@ -232,9 +242,20 @@ perfectly the same. */
 }
 
 @keyframes a-ra-credits {
-  0% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
-  50% { opacity: 0.4; transform: translateX(-50%) scale(0.9); }
-  100% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
+  0% {
+    opacity: 0.1;
+    transform: translateX(-50%) scale(0.2);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 0.1;
+    transform: translateX(-50%) scale(0.2);
+  }
 }
 
 @keyframes a-laitela-credits {

@@ -114,6 +114,7 @@ export default {
   background-color: var(--color-base);
   white-space: nowrap;
   border: var(--var-border-width, 0.2rem) solid var(--color-accent);
+  -webkit-user-select: none;
   user-select: none;
   padding: 0.8rem 2rem;
   z-index: 5;

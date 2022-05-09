@@ -106,6 +106,7 @@ export default {
   color: black;
   font-size: 1rem;
   position: absolute;
+
   /* -0.1rem = -1px, needed because CSS renders a black border between the check and the border of the selector
   otherwise */
   top: -0.1rem;

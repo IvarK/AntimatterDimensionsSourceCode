@@ -120,6 +120,7 @@ export default {
   margin: 0.2rem;
   vertical-align: middle;
 }
+
 .c-black-hole-status-text {
   margin: 0 0.8rem;
 }

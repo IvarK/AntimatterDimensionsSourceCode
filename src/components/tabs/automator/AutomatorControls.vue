@@ -115,7 +115,7 @@ export default {
   border-color: var(--color-reality-light);
 }
 
-.c-automator__button.fa-eject:before {
+.c-automator__button.fa-eject::before {
   transform: rotate(90deg);
 }
 </style>

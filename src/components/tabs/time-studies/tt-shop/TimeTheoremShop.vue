@@ -131,7 +131,7 @@ export default {
 </script>
 
 <template>
-  <div class="TTbuttons">
+  <div class="time-theorem-buttons">
     <div class="ttshop-container ttshop-background">
       <div
         data-role="page"
@@ -219,7 +219,7 @@ export default {
       @click="minimize"
     >
       <span
-        id="minimizeArrow"
+        class="minimize-arrow"
         :style="minimizeArrowStyle"
       >▼</span>
     </button>
@@ -240,6 +240,6 @@ export default {
 }
 
 .ttbuttons-bottom-row-hide {
-  height: 0rem;
+  height: 0;
 }
 </style>

@@ -45,6 +45,7 @@
   white-space: nowrap;
   font-weight: bold;
   text-align: left;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -86,7 +87,7 @@
 }
 
 .old-ui .t-s1 .c-news-ticker {
-  background-color: #dbd242
+  background-color: #dbd242;
 }
 
 .old-ui .t-s6 .c-news-ticker,

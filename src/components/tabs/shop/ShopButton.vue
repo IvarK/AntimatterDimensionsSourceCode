@@ -50,7 +50,7 @@ export default {
   padding: 1rem;
   border: var(--var-border-width, 0.2rem) solid #1f7d1f;
   border-radius: var(--var-border-radius, 0.5rem);
-  margin: .5rem;
+  margin: 0.5rem;
   background: #3c3c3c;
   color: white;
 }
@@ -63,7 +63,7 @@ export default {
   margin: auto;
   align-items: center;
   font-family: Typewriter;
-  padding: .5rem 2rem;
+  padding: 0.5rem 2rem;
   margin-top: 1rem;
   cursor: pointer;
 }

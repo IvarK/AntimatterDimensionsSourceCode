@@ -29,6 +29,7 @@
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1rem;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -144,6 +145,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+
   /* for corner buttons */
   position: relative;
 }
@@ -152,13 +154,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.3rem 0.8rem 0.3rem 0.8rem;
+  padding: 0.3rem 0.8rem;
 }
 
 .l-automator__button--corner {
   position: absolute;
   right: 0;
-  top: 0
+  top: 0;
 }
 
 .l-automator__script-names {
@@ -172,7 +174,7 @@
 .l-automator__scripts-dropdown {
   width: 90%;
   height: 90%;
-  padding: 0.2rem 0 0.3rem 0;
+  padding: 0.2rem 0 0.3rem;
   border-width: 0.1rem;
   border-radius: 0;
   margin: 0.4rem;
@@ -253,6 +255,7 @@
   font-size: 1.4rem;
   font-family: Typewriter, serif;
   line-height: 1.6rem;
+
   /* required for expanding into pane */
   flex: 1 1 auto;
 }
@@ -297,11 +300,11 @@
   position: relative;
 }
 
-.o-automator-error-underline:before {
+.o-automator-error-underline::before {
   content: "~~~~~~~~~~~~";
-  font-size: 0.6em;
+  font-size: 0.6rem;
   font-weight: 700;
-  font-family: Times New Roman, Serif;
+  font-family: "Times New Roman", serif;
   color: red;
   width: 100%;
   position: absolute;

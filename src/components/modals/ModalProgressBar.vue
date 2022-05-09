@@ -81,7 +81,9 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 40rem;
+  /* stylelint-disable-next-line unit-allowed-list */
   left: 50vw;
+  /* stylelint-disable-next-line unit-allowed-list */
   top: 50vh;
   transform: translate(-50%, -50%);
 }

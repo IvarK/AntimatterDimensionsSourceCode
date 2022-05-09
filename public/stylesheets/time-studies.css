@@ -35,7 +35,7 @@
   z-index: 0;
 }
 
-/*#region o-time-study*/
+/* #region o-time-study */
 
 .c-pelle-useless {
   border: 0.1rem solid;
@@ -46,7 +46,7 @@
   height: 10rem;
   transition-duration: 0.2s;
   border-radius: var(--var-border-radius, 0.4rem);
-  font-size: 1.0rem;
+  font-size: 1rem;
 }
 
 .c-pelle-useless-available {
@@ -80,7 +80,7 @@
   height: 10rem;
   transition-duration: 0.2s;
   border-radius: var(--var-border-radius, 0.4rem);
-  font-size: 1.0rem;
+  font-size: 1rem;
 }
 
 .o-time-study--available {
@@ -115,9 +115,9 @@
 }
 
 @keyframes a-time-study {
-  0%   { box-shadow: inset 0 0 0.3rem 0 }
-  50%  { box-shadow: inset 0 0 2rem 0 }
-  100% { box-shadow: inset 0 0 0.3rem 0 }
+  0% { box-shadow: inset 0 0 0.3rem 0; }
+  50% { box-shadow: inset 0 0 2rem 0; }
+  100% { box-shadow: inset 0 0 0.3rem 0; }
 }
 
 .o-time-study--small {
@@ -231,7 +231,7 @@
 }
 
 .o-time-study-dilation--available:hover {
-  color: #64DD17;
+  color: #64dd17;
   background-color: white;
   animation: a-time-study-dilation 10s infinite;
 }
@@ -260,11 +260,11 @@
 }
 
 @keyframes a-time-study-dilation {
-  0%   { box-shadow: inset 0.5rem  0       2rem }
-  25%  { box-shadow: inset 0       0.5rem  2rem }
-  50%  { box-shadow: inset -0.5rem 0       2rem }
-  75%  { box-shadow: inset 0       -0.5rem 2rem }
-  100% { box-shadow: inset 0.5rem  0       2rem }
+  0% { box-shadow: inset 0.5rem  0       2rem; }
+  25% { box-shadow: inset 0       0.5rem  2rem; }
+  50% { box-shadow: inset -0.5rem 0       2rem; }
+  75% { box-shadow: inset 0       -0.5rem 2rem; }
+  100% { box-shadow: inset 0.5rem  0       2rem; }
 }
 
 .o-time-study-normal--unavailable {
@@ -394,11 +394,11 @@
 }
 
 @keyframes a-eternity-challenge-running {
-  0%   { box-shadow: inset 1rem  0       3rem #490066 }
-  25%  { box-shadow: inset 0     0.5rem  3rem #490066 }
-  50%  { box-shadow: inset -1rem 0       3rem #490066 }
-  75%  { box-shadow: inset 0     -0.5rem 3rem #490066 }
-  100% { box-shadow: inset 1rem  0       3rem #490066 }
+  0% { box-shadow: inset 1rem  0       3rem #490066; }
+  25% { box-shadow: inset 0     0.5rem  3rem #490066; }
+  50% { box-shadow: inset -1rem 0       3rem #490066; }
+  75% { box-shadow: inset 0     -0.5rem 3rem #490066; }
+  100% { box-shadow: inset 1rem  0       3rem #490066; }
 }
 
 .o-time-study-dilation--bought {
@@ -481,7 +481,7 @@
   cursor: default;
 }
 
-/*#endregion o-time-study*/
+/* #endregion o-time-study */
 
 .o-time-study-connection {
   /* This one should be px, because it rem svg behaves weirdly under scale */

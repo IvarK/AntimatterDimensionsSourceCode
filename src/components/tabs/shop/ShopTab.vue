@@ -146,7 +146,7 @@ export default {
   margin: auto;
   align-items: center;
   font-family: Typewriter;
-  padding: .5rem 2rem;
+  padding: 0.5rem 2rem;
   margin-top: 1rem;
   cursor: pointer;
 }

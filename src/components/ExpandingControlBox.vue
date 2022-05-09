@@ -208,12 +208,10 @@ export default {
   width: 100%;
   left: 50%;
   transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
 }
 
 .l-expanding-control-box__container--transition {
   transition: max-height 0.5s;
-  -webkit-transition: max-height 0.5s;
 }
 
 .l-expanding-control-box__button {

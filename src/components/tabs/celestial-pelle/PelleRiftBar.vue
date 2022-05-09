@@ -184,6 +184,7 @@ export default {
 
 .c-pelle-rift-bar {
   --color-bar-bg: #1e1e1e;
+
   height: 5rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
   border-radius: var(--var-border-radius, 0.5rem);
@@ -195,14 +196,10 @@ export default {
   align-items: center;
   background: var(--color-bar-bg);
 }
+
 .c-pelle-rift-bar--filling,
 .c-pelle-rift-bar--idle {
   cursor: pointer;
-}
-
-.c-pelle-rift-bar--idle .l-overflow-hidden,
-.c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
-  opacity: 0.6;
 }
 
 .l-overflow-hidden {
@@ -231,7 +228,6 @@ export default {
   box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
 }
 
-
 /* FILLING STYLES */
 .o-pelle-rift-bar-fill {
   position: absolute;
@@ -251,9 +247,7 @@ export default {
   background: var(--color-pelle--base);
   z-index: 0;
   filter: brightness(0.5);
-  z-index: 0;
 }
-
 
 /* SPECIAL BAR OVERLAY STYLES */
 .o-pelle-rift-bar-permanent {
@@ -278,15 +272,15 @@ export default {
 
 @keyframes a-pelle-bar-overfill-pulse {
   /* #ed143d66 is the base pelle colour except transparent. */
-  0% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 0.4); }
-  50% { box-shadow: 0 0 1.5rem 0 rgba(237, 20, 61, 0.4); }
-  100% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 0.4); }
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 40%); }
+  50% { box-shadow: 0 0 1.5rem 0 rgba(237, 20, 61, 40%); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 40%); }
 }
 
 @keyframes a-pelle-bar-overfill-pulse-but-green {
-  0% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 0.533); }
-  50% { box-shadow: 0 0 1.5rem 0rem rgba(124, 183, 39, 0.533); }
-  100% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 0.533); }
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 53.3%); }
+  50% { box-shadow: 0 0 1.5rem 0 rgba(124, 183, 39, 53.3%); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 53.3%); }
 }
 
 .c-pelle-rift-bar-overfill-container {
@@ -297,13 +291,27 @@ export default {
   animation: a-pelle-bar-overfill-pulse-but-green 1s infinite linear;
 }
 
-
 /* ACTIVE RIFT FILLING STYLES */
 @keyframes a-pelle-bar-filling-sweep {
-  0% { left: 0; width: 0; }
-  10% { left: 0; width: 2rem; }
-  90% { left: calc(100% - 2rem); width: 2rem;  }
-  100% { left: 100%; width: 0; }
+  0% {
+    left: 0;
+    width: 0;
+  }
+
+  10% {
+    left: 0;
+    width: 2rem;
+  }
+
+  90% {
+    left: calc(100% - 2rem);
+    width: 2rem;
+  }
+
+  100% {
+    left: 100%;
+    width: 0;
+  }
 }
 
 .o-pelle-rift-bar-active-fill {
@@ -321,8 +329,14 @@ export default {
   color: white;
   text-shadow: 0.1rem 0.1rem 0.2rem var(--color-pelle--base);
   z-index: 2;
+
   /* This keeps the percentage from blocking the hover area */
   pointer-events: none;
+}
+
+.c-pelle-rift-bar--idle .l-overflow-hidden,
+.c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
+  opacity: 0.6;
 }
 
 /* MILESTONE STYLES */
@@ -331,11 +345,11 @@ export default {
 }
 
 @keyframes a-pelle-bar-unfinished-milestone-flash {
-  0% { opacity: 1 }
-  20% { opacity: 1 }
-  50% { opacity: 0.3 }
-  80% { opacity: 1 }
-  100% { opacity: 1 }
+  0% { opacity: 1; }
+  20% { opacity: 1; }
+  50% { opacity: 0.3; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
 }
 
 .o-pelle-rift-bar-milestone-line {

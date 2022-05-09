@@ -75,6 +75,7 @@ export default {
   z-index: 9999;
   overflow: visible;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   cursor: default;
 }
@@ -88,6 +89,7 @@ export default {
   z-index: -9999;
   overflow: visible;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   cursor: default;
 }

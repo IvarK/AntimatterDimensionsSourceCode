@@ -151,8 +151,8 @@ export default {
   padding: 0.7rem;
   width: 16rem;
   border-radius: var(--var-border-radius, 0.3rem);
-  background-color: hsla(0, 0%, 5%, 0.9);
-  color: #fff;
+  background-color: hsla(0deg, 0%, 5%, 90%);
+  color: #ffffff;
   content: attr(ach-tooltip);
   text-align: center;
   font-size: 1.4rem;
@@ -180,7 +180,7 @@ export default {
 }
 
 .c-tooltip--top.c-tooltip-arrow {
-  border-top: 0.55rem solid hsla(0, 0%, 5%, 0.9);
+  border-top: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
   border-bottom: 0;
 }
 
@@ -189,7 +189,7 @@ export default {
 }
 
 .c-tooltip--bottom.c-tooltip-arrow {
-  border-bottom: 0.55rem solid hsla(0, 0%, 5%, 0.9);
+  border-bottom: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
   border-top: 0;
 }
 
@@ -198,7 +198,7 @@ export default {
 }
 
 .c-tooltip--right.c-tooltip-arrow {
-  border-right: 0.55rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
   border-left: 0;
 }
 
@@ -207,7 +207,7 @@ export default {
 }
 
 .c-tooltip--left.c-tooltip-arrow {
-  border-left: 0.55rem solid hsla(0, 0%, 5%, 0.9);
+  border-left: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
   border-right: 0;
 }
 

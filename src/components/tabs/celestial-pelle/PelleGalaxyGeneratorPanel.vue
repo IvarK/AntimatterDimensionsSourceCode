@@ -156,6 +156,7 @@ export default {
   left: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 
 .l-pelle-panel-container {
@@ -163,6 +164,7 @@ export default {
   margin: 1rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.2rem);
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -196,7 +198,6 @@ export default {
   font-size: 2.5rem;
   background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   background-clip: text;
-  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -221,6 +222,7 @@ export default {
   height: 11.4rem;
   overflow: hidden;
   box-shadow: inset 0 0 0.1rem 0.1rem var(--color-pelle--base);
+
   /* box-shadow is here to prevent a weird grey border forming around the background */
 }
 
@@ -256,9 +258,5 @@ export default {
 .c-medium-text {
   font-size: 2rem;
   text-shadow: 0.2rem 0.2rem 0.2rem black;
-}
-
-.c-collapse-icon-clickable {
-  cursor: pointer;
 }
 </style>

@@ -219,7 +219,7 @@ export default {
 
 <style scoped>
 .l-auto-pause-button {
-  width: 30rem
+  width: 30rem;
 }
 
 .l-pre-unlock-text {

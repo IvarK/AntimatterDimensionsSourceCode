@@ -123,12 +123,12 @@ export default {
 
 <style scoped>
 .l-tt-save-load-btn__wrapper {
-  margin: 0.3em;
+  margin: 0.3rem;
   position: relative;
 }
 
 .l-tt-save-load-btn {
-  min-width: 2em;
+  min-width: 2rem;
 }
 
 .l-tt-save-load-btn__menu {

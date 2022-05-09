@@ -153,7 +153,7 @@ export default {
 
 .l-remnant-factors-row {
   display: flex;
-  width: 100%
+  width: 100%;
 }
 
 .l-remnant-factors-col {

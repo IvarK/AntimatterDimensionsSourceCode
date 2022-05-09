@@ -1,0 +1,57 @@
+{
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-recommended-vue"
+    ],
+    "rules": {
+        "no-descending-specificity": null,
+        "font-family-no-missing-generic-family-keyword": null,
+        "no-empty-source": null,
+
+        "color-hex-length": "long",
+        "custom-property-empty-line-before": null,
+        "color-function-notation": null,
+
+
+        "property-no-vendor-prefix": [
+            true,
+            {
+                "ignoreProperties": ["appearance", "background-clip-text", "backdrop-filter", "clip-path", "user-select"]
+            }
+        ],
+
+        "unit-allowed-list": [
+            "rem",
+            "%",
+            "px",
+            "deg",
+            "s",
+            "ms",
+            "fr"
+        ],
+        "custom-property-pattern": [
+            "^([_a-z][a-z0-9]*)([-_]{1,2}[a-z0-9]+)*$",
+            {
+                "message": "Expected custom property name to be kebab-case"
+            }
+        ],
+        "selector-class-pattern": [
+            "^(CodeMirror.*|([_a-z][a-z0-9]*)([-_]{1,2}[a-z0-9]+)*)$",
+            {
+                "message": "Expected class selector name to be kebab-case"
+            }
+        ],
+        "keyframes-name-pattern": [
+            "^([_a-z][a-z0-9]*)([-_]{1,2}[a-z0-9]+)*$",
+            {
+                "message": "Expected keyframe name to be kebab-case"
+            }
+        ],
+        "selector-id-pattern": [
+            "^([_a-z][a-z0-9]*)([-_]{1,2}[a-z0-9]+)*$",
+            {
+                "message": "Expected id selector name to be kebab-case"
+            }
+        ]
+    }
+}

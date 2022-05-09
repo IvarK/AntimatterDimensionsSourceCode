@@ -105,7 +105,7 @@ export default {
 
 <style scoped>
 .o-tab-btn::before {
-  content: '';
+  content: "";
   width: 0;
   height: 100%;
   position: absolute;

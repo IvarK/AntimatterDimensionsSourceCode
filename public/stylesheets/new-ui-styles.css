@@ -1,6 +1,6 @@
 @font-face {
   font-family: Typewriter;
-  src: url('MonospaceTypewriter.ttf');
+  src: url("MonospaceTypewriter.ttf");
 }
 
 *:focus {
@@ -74,13 +74,13 @@ body.t-s9 {
 
 .resource h2 {
   margin: 0;
-  font-size: 1.7em;
+  font-size: 1.7rem;
   z-index: 1;
 }
 
 .t-dark .resource h2,
 .t-dark-metro .resource h2 {
-  text-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.5), -0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 0.1rem rgba(0, 0, 0, 50%), -0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 80%);
 }
 
 .resource-information {
@@ -89,16 +89,16 @@ body.t-s9 {
   align-items: flex-start;
   color: var(--color-text);
   justify-content: space-between;
-  font-size: 1.5em;
+  font-size: 1.5rem;
 }
 
 .resource-gain {
-  font-size: 0.7em;
+  font-size: 0.7rem;
   color: var(--color-text);
 }
 
 .resource-name {
-  font-size: 0.8em;
+  font-size: 0.8rem;
 }
 
 .o-sidebar-currency--antimatter {
@@ -123,25 +123,25 @@ body.t-s9 {
   color: #e0e0e0;
 }
 
-.o-sidebar-currency--infinity  {
-  color: var(--color-infinity)
+.o-sidebar-currency--infinity {
+  color: var(--color-infinity);
 }
 
-.o-sidebar-currency--eternity  {
-  color: var(--color-eternity)
+.o-sidebar-currency--eternity {
+  color: var(--color-eternity);
 }
 
 .o-sidebar-currency--reality {
-  color: var(--color-reality)
+  color: var(--color-reality);
 }
 
 .t-dark .o-sidebar-currency--reality,
 .t-dark-metro .o-sidebar-currency--reality {
-  color: var(--color-reality)
+  color: var(--color-reality);
 }
 
 .o-sidebar-currency--pelle {
-  color: var(--color-pelle--base)
+  color: var(--color-pelle--base);
 }
 
 .resource-infinity-canreset,
@@ -153,7 +153,7 @@ body.t-s9 {
 
 .resource-infinity-canreset:hover,
 .resource-eternity-canreset:hover {
-  background-color: rgb(49, 49, 49)
+  background-color: rgb(49, 49, 49);
 }
 
 .t-normal .c-modal {
@@ -166,7 +166,7 @@ body.t-s9 {
   border-width: 0.1rem;
   border-radius: 0;
   margin-top: -0.1rem;
-  font-size: 1.3em;
+  font-size: 1.3rem;
   position: relative;
   transition-duration: 0.15s;
   transition-delay: 0.2s;
@@ -197,7 +197,7 @@ body.t-s9 {
 }
 
 .o-tab-btn::after {
-  content: '';
+  content: "";
   position: absolute;
   left: calc(100% + 0.1rem);
   top: calc(0% + -0.1rem);
@@ -291,12 +291,13 @@ body.t-s9 {
   line-height: 4.5rem;
   cursor: pointer;
   transition-duration: 0.15s;
+  -webkit-user-select: none;
   user-select: none;
 }
 
 .o-tab-btn--subtab .o-tab-btn--cel3 {
   font-weight: normal;
-  transform: rotate(45deg)
+  transform: rotate(45deg);
 }
 
 .o-subtab__tooltip {
@@ -317,7 +318,7 @@ body.t-s9 {
   bottom: 100%;
 }
 
-.o-subtab__tooltip:after {
+.o-subtab__tooltip::after {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -334,10 +335,10 @@ body.t-s9 {
 
 .o-tab-btn--subtab:hover .o-subtab__tooltip {
   opacity: 1;
-  bottom: calc(100% + 0.7rem)
+  bottom: calc(100% + 0.7rem);
 }
 
-.o-tab-btn--subtab:hover .o-subtab__tooltip:after {
+.o-tab-btn--subtab:hover .o-subtab__tooltip::after {
   border-top-width: 0.7rem;
   margin-bottom: -0.7rem;
 }
@@ -348,7 +349,7 @@ body.t-s9 {
   border-color: var(--color-infinity);
 }
 
-.o-tab-btn--infinity .o-subtab__tooltip:after {
+.o-tab-btn--infinity .o-subtab__tooltip::after {
   border-top-color: var(--color-infinity);
 }
 
@@ -358,7 +359,7 @@ body.t-s9 {
   border-color: var(--color-eternity);
 }
 
-.o-tab-btn--eternity .o-subtab__tooltip:after {
+.o-tab-btn--eternity .o-subtab__tooltip::after {
   border-top-color: var(--color-eternity);
 }
 
@@ -368,7 +369,7 @@ body.t-s9 {
   border-color: var(--color-reality);
 }
 
-.o-tab-btn--reality .o-subtab__tooltip:after {
+.o-tab-btn--reality .o-subtab__tooltip::after {
   border-top-color: var(--color-reality);
 }
 
@@ -378,7 +379,7 @@ body.t-s9 {
   border-color: var(--color-celestials);
 }
 
-.o-tab-btn--celestial .o-subtab__tooltip:after {
+.o-tab-btn--celestial .o-subtab__tooltip::after {
   border-top-color: var(--color-celestials);
 }
 
@@ -503,14 +504,14 @@ body.t-s9 {
 }
 
 .tickspeed-labels span {
-  color: var(--color-text);;
+  color: var(--color-text);
   height: 3rem;
   padding: 0.5rem 1rem;
 }
 
 .particle {
   position: absolute;
-  color: var(--color-text);;
+  color: var(--color-text);
   height: 1rem;
   width: 1rem;
   background-image: url("../icon.png");
@@ -552,10 +553,9 @@ body.t-s9 {
 }
 
 .t-normal .c-game-header__tesseract-available {
-  background: #EEEEEE;
+  background: #eeeeee;
   animation: a-tesseract-shift-dark 5s infinite;
 }
-
 
 .l-new-ui-big-crunch__container {
   margin-top: 2rem;
@@ -566,7 +566,7 @@ body.t-s9 {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.1rem;
   border-bottom: 0.1rem solid var(--color-good);
   padding-bottom: 0.6rem;
 }
@@ -582,7 +582,7 @@ body.t-s9 {
   background: var(--color-base);
 }
 
-.t-normal .o-achievement__tooltip:after {
+.t-normal .o-achievement__tooltip::after {
   border-top-color: var(--color-accent);
 }
 
@@ -598,7 +598,10 @@ body.t-s9 {
   color: var(--color-text-inverted);
 }
 
-.o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {
+.o-primary-btn--option,
+.o-primary-btn--option-wide,
+.c-select-theme__item,
+.c-select-notation__item {
   background: var(--color-base);
   color: var(--color-text);
   border: 0.1rem solid var(--color-good);
@@ -650,7 +653,7 @@ body.t-s9 {
 .t-metro .o-autobuyer-input,
 .t-metro .c-autobuyer-box__mode-select {
   color: black;
-  border: 0.1rem solid #A9A9A9;
+  border: 0.1rem solid #a9a9a9;
   background: white;
 }
 
@@ -659,7 +662,7 @@ body.t-s9 {
 .t-dark .c-autobuyer-box__mode-select,
 .t-dark-metro .c-autobuyer-box__mode-select {
   color: black;
-  background-color: #455A64;
+  background-color: #455a64;
   border: 0.1rem solid black;
 }
 
@@ -675,7 +678,7 @@ body.t-s9 {
 .t-s10 .c-autobuyer-box__mode-select {
   color: white;
   background-color: black;
-  border: 0.1rem solid #888;
+  border: 0.1rem solid #888888;
 }
 
 .o-autobuyer-btn {
@@ -697,17 +700,17 @@ body.t-s9 {
 }
 
 .c-antimatter-dim-row:nth-child(even) {
-  background-color: rgba(223, 80, 80, 0.3);
+  background-color: rgba(223, 80, 80, 30%);
 }
 
 .t-metro .c-antimatter-dim-row:nth-child(even),
 .t-inverted-metro .c-antimatter-dim-row:nth-child(even),
 .t-s8 .c-antimatter-dim-row:nth-child(even) {
-  background-color: rgba(33, 150, 243, 0.3);
+  background-color: rgba(33, 150, 243, 30%);
 }
 
 .c-antimatter-dim-row__multiplier {
-  font-size: 1.4rem
+  font-size: 1.4rem;
 }
 
 .c-infinity-dim-description__accent {
@@ -715,15 +718,15 @@ body.t-s9 {
 }
 
 .c-infinity-dim-row:nth-child(even) {
-  background: rgba(182, 127, 51, 0.3);
+  background: rgba(182, 127, 51, 30%);
 }
 
 .s-base--metro .c-infinity-dim-row:nth-child(even) {
-  background: rgba(255, 152, 0, 0.3);
+  background: rgba(255, 152, 0, 30%);
 }
 
 .c-infinity-dim-row__multiplier {
-  font-size: 1.4rem
+  font-size: 1.4rem;
 }
 
 .o-primary-btn--buy-id-max,
@@ -736,15 +739,15 @@ body.t-s9 {
 }
 
 .c-time-dim-row:nth-child(even) {
-  background: rgba(179, 65, 224, 0.3);
+  background: rgba(179, 65, 224, 30%);
 }
 
 .s-base--metro .c-time-dim-row:nth-child(even) {
-  background: rgba(103, 58, 183, 0.3);
+  background: rgba(103, 58, 183, 30%);
 }
 
 .c-time-dim-row__multiplier {
-  font-size: 1.4rem
+  font-size: 1.4rem;
 }
 
 .o-primary-btn--buy-td-max,
@@ -752,7 +755,7 @@ body.t-s9 {
   height: 4.4rem;
 }
 
- .l-reality-upgrade-btn {
+.l-reality-upgrade-btn {
   width: 18rem;
   margin: 0.6rem 0.4rem;
 }
@@ -789,6 +792,7 @@ body.t-s9 {
   top: 15%;
   left: 72%;
 }
+
 .l-game-header__eternity-btn {
   top: 15%;
   right: 72%;
@@ -808,7 +812,6 @@ body.t-s9 {
   right: 72%;
   top: 8.5rem;
 }
-
 
 .l-reset-buttons-container__reality-button {
   margin-top: 1.7rem;
@@ -878,13 +881,13 @@ body.t-s9 {
 }
 
 .t-normal .c-glyph-choice-icon {
-  background-color: rgba(0, 0, 0, 0.3);
-  border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 30%);
+  border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 40%);
 }
 
 .t-normal .c-glyph-choice-effect-list {
-  background-color: rgba(0, 0, 0, 0.3);
-  border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 30%);
+  border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 40%);
 }
 
 .l-help-me {

@@ -547,7 +547,6 @@ function roundPreservingSum(data) {
 
 <style scoped>
 .l-glyph-level-and-weights-note {
-  grid-column-start: 1;
-  grid-column-end: 5;
+  grid-column: 1 / 5;
 }
 </style>

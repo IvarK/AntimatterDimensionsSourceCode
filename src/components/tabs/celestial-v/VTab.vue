@@ -335,6 +335,6 @@ export default {
 }
 
 .l-v-goal-reduction-spacer {
-  height :0.8rem;
+  height: 0.8rem;
 }
 </style>

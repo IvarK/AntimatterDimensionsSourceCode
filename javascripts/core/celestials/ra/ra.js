@@ -418,18 +418,33 @@ export const GlyphAlteration = {
     return Math.log10(Math.clampMin(capped / this.boostingThreshold, 1)) / 2;
   },
   getAdditionColor(type) {
+    if (Theme.current().isDark()) {
+      return this.isAdded(type)
+        ? "#CCCCCC"
+        : undefined;
+    }
     return this.isAdded(type)
-      ? "#CCCCCC"
+      ? "black"
       : undefined;
   },
   getEmpowermentColor(type) {
+    if (Theme.current().isDark()) {
+      return this.isAdded(type)
+        ? "#EEEE30"
+        : undefined;
+    }
     return this.isEmpowered(type)
-      ? "#EEEE30"
+      ? "#C6C610"
       : undefined;
   },
   getBoostColor(type) {
+    if (Theme.current().isDark()) {
+      return this.isAdded(type)
+        ? "#60DDDD"
+        : undefined;
+    }
     return this.isBoosted(type)
-      ? "#60DDDD"
+      ? "#28BDBD"
       : undefined;
   },
 };

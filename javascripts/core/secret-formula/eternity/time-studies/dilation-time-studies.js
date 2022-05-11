@@ -51,6 +51,7 @@ GameDatabase.eternity.timeStudies.dilation = [
     cost: () => 1,
     requirement: () => TimeStudy.timeDimension(8).isBought &&
       player.records.thisReality.maxEP.exponent >= 4000 &&
-      (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked))
+      (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked)) &&
+      !Pelle.isDoomed
   }
 ];

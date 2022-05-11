@@ -80,8 +80,8 @@ export default {
 
 <style scoped>
 .pelle-effects-container {
-  height: 40rem;
   overflow-y: scroll;
+  height: 40rem;
 }
 
 p {

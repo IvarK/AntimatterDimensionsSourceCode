@@ -180,96 +180,6 @@ export default {
 </template>
 
 <style scoped>
-/* CONTAINER STYLES */
-
-.c-pelle-rift-bar {
-  --color-bar-bg: #1e1e1e;
-
-  height: 5rem;
-  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
-  border-radius: var(--var-border-radius, 0.5rem);
-  width: 32rem;
-  position: relative;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--color-bar-bg);
-}
-
-.c-pelle-rift-bar--filling,
-.c-pelle-rift-bar--idle {
-  cursor: pointer;
-}
-
-.l-overflow-hidden {
-  overflow: hidden;
-  border: var(--var-border-width, 0.16rem) solid transparent;
-  width: 32rem;
-  height: 5rem;
-  border-radius: var(--var-border-radius, 0.5rem);
-  position: absolute;
-  top: -0.2rem;
-  left: -0.2rem;
-  z-index: 0;
-}
-
-.o-pelle-rift-bar-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 0;
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-bar-bg);
-}
-
-.c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
-}
-
-/* FILLING STYLES */
-.o-pelle-rift-bar-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  background: var(--color-pelle--secondary);
-  z-index: 0;
-  opacity: 0.7;
-}
-
-.o-pelle-rift-bar-reducedto {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 100%;
-  background: var(--color-pelle--base);
-  z-index: 0;
-  filter: brightness(0.5);
-}
-
-/* SPECIAL BAR OVERLAY STYLES */
-.o-pelle-rift-bar-permanent {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  filter: brightness(50%);
-  background: var(--color-pelle--secondary);
-  z-index: 0;
-}
-
-.o-pelle-rift-bar-overfilled {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: var(--color-pelle--base);
-  opacity: 0.5;
-  z-index: 1;
-}
-
 @keyframes a-pelle-bar-overfill-pulse {
   /* #ed143d66 is the base pelle colour except transparent. */
   0% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 40%); }
@@ -283,6 +193,126 @@ export default {
   100% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 53.3%); }
 }
 
+/* ACTIVE RIFT FILLING STYLES */
+@keyframes a-pelle-bar-filling-sweep {
+  0% {
+    width: 0;
+    left: 0;
+  }
+
+  10% {
+    width: 2rem;
+    left: 0;
+  }
+
+  90% {
+    width: 2rem;
+    left: calc(100% - 2rem);
+  }
+
+  100% {
+    width: 0;
+    left: 100%;
+  }
+}
+
+@keyframes a-pelle-bar-unfinished-milestone-flash {
+  0% { opacity: 1; }
+  20% { opacity: 1; }
+  50% { opacity: 0.3; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* CONTAINER STYLES */
+
+.c-pelle-rift-bar {
+  --color-bar-bg: #1e1e1e;
+  display: flex;
+  width: 32rem;
+  height: 5rem;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-bar-bg);
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin-bottom: 1rem;
+}
+
+.c-pelle-rift-bar--filling,
+.c-pelle-rift-bar--idle {
+  cursor: pointer;
+}
+
+.l-overflow-hidden {
+  overflow: hidden;
+  width: 32rem;
+  height: 5rem;
+  position: absolute;
+  top: -0.2rem;
+  left: -0.2rem;
+  z-index: 0;
+  border: var(--var-border-width, 0.16rem) solid transparent;
+  border-radius: var(--var-border-radius, 0.5rem);
+}
+
+.o-pelle-rift-bar-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-bar-bg);
+}
+
+.c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
+  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
+}
+
+/* FILLING STYLES */
+.o-pelle-rift-bar-fill {
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  opacity: 0.7;
+  background: var(--color-pelle--secondary);
+}
+
+.o-pelle-rift-bar-reducedto {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background: var(--color-pelle--base);
+  filter: brightness(0.5);
+}
+
+/* SPECIAL BAR OVERLAY STYLES */
+.o-pelle-rift-bar-permanent {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  background: var(--color-pelle--secondary);
+  filter: brightness(50%);
+}
+
+.o-pelle-rift-bar-overfilled {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  opacity: 0.5;
+  background: var(--color-pelle--base);
+}
+
 .c-pelle-rift-bar-overfill-container {
   animation: a-pelle-bar-overfill-pulse 1s infinite linear;
 }
@@ -291,44 +321,21 @@ export default {
   animation: a-pelle-bar-overfill-pulse-but-green 1s infinite linear;
 }
 
-/* ACTIVE RIFT FILLING STYLES */
-@keyframes a-pelle-bar-filling-sweep {
-  0% {
-    left: 0;
-    width: 0;
-  }
-
-  10% {
-    left: 0;
-    width: 2rem;
-  }
-
-  90% {
-    left: calc(100% - 2rem);
-    width: 2rem;
-  }
-
-  100% {
-    left: 100%;
-    width: 0;
-  }
-}
-
 .o-pelle-rift-bar-active-fill {
-  position: absolute;
   height: 100%;
-  background: var(--color-pelle--base);
+  position: absolute;
   z-index: 1;
   opacity: 0.3;
+  background: var(--color-pelle--base);
   animation: a-pelle-bar-filling-sweep infinite 2s linear;
 }
 
 /* PERCENTAGE STYLES */
 .o-pelle-rift-bar-percentage {
+  z-index: 2;
   font-size: 1.5rem;
   color: white;
   text-shadow: 0.1rem 0.1rem 0.2rem var(--color-pelle--base);
-  z-index: 2;
 
   /* This keeps the percentage from blocking the hover area */
   pointer-events: none;
@@ -344,20 +351,12 @@ export default {
   height: 100%;
 }
 
-@keyframes a-pelle-bar-unfinished-milestone-flash {
-  0% { opacity: 1; }
-  20% { opacity: 1; }
-  50% { opacity: 0.3; }
-  80% { opacity: 1; }
-  100% { opacity: 1; }
-}
-
 .o-pelle-rift-bar-milestone-line {
-  position: absolute;
   width: 0.25rem;
   height: 100%;
-  background: var(--color-pelle--base);
+  position: absolute;
   z-index: 1;
+  background: var(--color-pelle--base);
   animation: a-pelle-bar-unfinished-milestone-flash infinite 1s linear;
 }
 
@@ -366,8 +365,8 @@ export default {
 }
 
 .o-pelle-rift-bar-milestone-line--disabled {
-  animation: none;
   filter: brightness(0.25);
+  animation: none;
 }
 </style>
 

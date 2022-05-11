@@ -1,8 +1,8 @@
 .c-old-ui {
-  padding: 0.9rem 1.5rem 0;
-  box-sizing: border-box;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
+  padding: 0.9rem 1.5rem 0;
 }
 
 .l-old-ui {
@@ -21,8 +21,8 @@
 }
 
 .l-old-ui__big-crunch-btn {
-  margin-top: 1.9rem;
   flex-shrink: 0;
+  margin-top: 1.9rem;
 }
 
 .l-old-ui__big-crunch-btn--overlay {
@@ -30,15 +30,15 @@
 }
 
 .l-old-ui__page {
-  width: 100%;
   flex: 1 0 auto;
+  width: 100%;
 }
 
 .l-old-ui-page {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   width: 100%;
+  align-items: stretch;
 }
 
 .o-emptiness {
@@ -46,17 +46,17 @@
 }
 
 .o-big-crunch-btn {
-  font-family: Typewriter, serif;
-  font-size: 5rem;
   width: 36rem;
   height: 10rem;
   z-index: 1;
+  font-family: Typewriter, serif;
+  font-size: 5rem;
 }
 
 .l-old-ui-antimatter-dim-tab {
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
   align-items: center;
 }
 
@@ -77,9 +77,9 @@
 }
 
 .o-tab-btn--secondary {
-  font-size: 1.3rem;
   width: 17.5rem;
   height: 2.5rem;
+  font-size: 1.3rem;
   margin: 0.5rem 0.8rem;
   margin-bottom: 0.8rem;
 }

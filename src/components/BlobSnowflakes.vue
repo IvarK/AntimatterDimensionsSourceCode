@@ -67,13 +67,13 @@ export default {
 
 <style scoped>
 .c-blob-snowflake-container {
+  overflow: visible;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   z-index: 9999;
-  overflow: visible;
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
@@ -81,13 +81,13 @@ export default {
 }
 
 .c-blob-background-container {
+  overflow: visible;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   z-index: -9999;
-  overflow: visible;
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;

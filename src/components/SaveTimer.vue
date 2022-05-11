@@ -38,19 +38,19 @@ export default {
 
 <style scoped>
 .o-save-timer {
-  color: var(--color-text);
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  background-color: var(--color-base);
   white-space: nowrap;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  color: var(--color-text);
+  background-color: var(--color-base);
   border-top: 0.1rem solid var(--color-accent);
   border-right: 0.1rem solid var(--color-accent);
-  cursor: pointer;
+  padding: 0 0.5rem;
   -webkit-user-select: none;
   user-select: none;
-  padding: 0 0.5rem;
-  z-index: 5;
+  cursor: pointer;
 }
 
 .t-inverted .o-save-timer,

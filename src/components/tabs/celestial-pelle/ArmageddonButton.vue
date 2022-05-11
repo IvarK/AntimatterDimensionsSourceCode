@@ -51,30 +51,30 @@ export default {
 
 <style scoped>
 .c-armageddon-button {
-  width: 100%;
-  padding: 1.5rem;
   display: block;
+  width: 100%;
   font-family: Typewriter;
+  color: var(--color-text);
   background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle--base);
-  color: var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 1.5rem;
 }
 
 .c-armageddon-button:hover {
-  cursor: pointer;
   box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle--base);
   transition-duration: 0.12s;
+  cursor: pointer;
 }
 
 .c-armageddon-button--unavailable {
-  cursor: default;
   opacity: 0.5;
+  cursor: default;
 }
 
 .c-remnant-gain {
-  font-weight: bold;
   font-size: 1.5rem;
+  font-weight: bold;
   color: var(--color-pelle--base);
 }
 

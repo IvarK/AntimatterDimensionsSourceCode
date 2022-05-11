@@ -6,8 +6,8 @@
 body.t-s11 {
   color: #999999;
   background: black;
-  background-size: 100%;
   background-position: center;
+  background-size: 100%;
 }
 
 .t-s11 .c-tt-amount {
@@ -52,9 +52,9 @@ body.t-s11 {
 }
 
 .o-tachyon-particle {
+  fill: orange !important;
   font-family: Typewriter;
   font-size: 20px;
-  fill: orange !important;
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;

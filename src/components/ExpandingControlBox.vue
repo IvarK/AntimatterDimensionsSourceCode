@@ -201,11 +201,11 @@ export default {
 }
 
 .l-expanding-control-box__container {
-  position: absolute;
   display: block;
-  height: auto;
   overflow: hidden;
   width: 100%;
+  height: auto;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -215,16 +215,16 @@ export default {
 }
 
 .l-expanding-control-box__button {
-  cursor: pointer;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   white-space: nowrap;
-  border: none !important;
+  width: 100%;
   height: 2.5rem;
   position: relative;
   top: -0.5rem;
+  justify-content: center;
+  align-items: center;
+  border: none !important;
+  cursor: pointer;
 }
 
 .c-indicator-arrow--flipped {

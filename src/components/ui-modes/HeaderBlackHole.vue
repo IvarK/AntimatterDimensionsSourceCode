@@ -117,8 +117,8 @@ export default {
 
 <style scoped>
 .c-primary-btn--black-hole-header {
-  margin: 0.2rem;
   vertical-align: middle;
+  margin: 0.2rem;
 }
 
 .c-black-hole-status-text {

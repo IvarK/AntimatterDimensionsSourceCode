@@ -109,8 +109,8 @@ export default {
   width: 0;
   height: 100%;
   position: absolute;
-  left: 0;
   right: 0;
+  left: 0;
   background-color: var(--color-accent);
   transition: width 0.15s;
 }

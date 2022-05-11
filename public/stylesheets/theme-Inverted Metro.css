@@ -24,8 +24,8 @@ body.t-inverted-metro {
 }
 
 .t-inverted-metro .c-tt-buy-button--unlocked {
-  background: #212121;
   color: #00bcd4;
+  background: #212121;
   border: 0.1rem solid #00bcd4;
 }
 

@@ -1,13 +1,13 @@
 .t-s10 #stars {
   display: block;
 
-  /* Make video to at least 100% wide and tall */
-  min-width: 100%;
-  min-height: 100%;
-
   /* Setting width & height to auto prevents the browser from stretching or squishing the video */
   width: auto;
   height: auto;
+
+  /* Make video to at least 100% wide and tall */
+  min-width: 100%;
+  min-height: 100%;
 
   /* Center the video */
   position: absolute;
@@ -21,8 +21,8 @@ body.t-s10 {
   color: #999999;
   background: black;
   background-image: url("../images/stars-bg.png");
-  background-size: 100%;
   background-position: center;
+  background-size: 100%;
 }
 
 .t-s10 .c-tt-amount {

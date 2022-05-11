@@ -105,10 +105,10 @@ export default {
 }
 
 .c-info-body {
-  margin: 1rem;
-  padding: 0.5rem;
   text-align: left;
   font-size: 2rem;
+  margin: 1rem;
+  padding: 0.5rem;
 }
 
 .c-socials {
@@ -117,8 +117,8 @@ export default {
 
 .l-socials {
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
+  align-items: center;
 }
 
 .c-socials--icon {

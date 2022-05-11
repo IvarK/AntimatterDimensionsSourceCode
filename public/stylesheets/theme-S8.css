@@ -1,14 +1,14 @@
 body.t-s8 {
-  background: url("../images/s8-bg.jpg") no-repeat;
-  color: black;
-  background-color: white;
   height: 100%;
+  color: black;
+  background: url("../images/s8-bg.jpg") no-repeat;
+  background-attachment: fixed;
+  background-color: white;
 
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
 }
 
 .t-s8 .container {
@@ -23,8 +23,8 @@ body.t-s8 {
 }
 
 .t-s8 .c-tt-buy-button--unlocked {
-  background: #212121;
   color: #00bcd4;
+  background: #212121;
   border: 0.1rem solid #00bcd4;
 }
 

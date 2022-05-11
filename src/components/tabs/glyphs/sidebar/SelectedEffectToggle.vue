@@ -103,23 +103,23 @@ export default {
 
 <style scoped>
 .c-selected-effect-toggle-indicator--active {
-  color: black;
-  font-size: 1rem;
   position: absolute;
 
   /* -0.1rem = -1px, needed because CSS renders a black border between the check and the border of the selector
   otherwise */
   top: -0.1rem;
   right: -0.1rem;
+  font-size: 1rem;
+  color: black;
+  text-shadow: none;
   border-radius: 0 var(--var-border-radius, 0.4rem);
   padding: 0.2rem;
-  text-shadow: none;
 }
 
 .l-dock {
   position: absolute;
-  margin: 0 4rem;
   top: 50%;
+  margin: 0 4rem;
   transform: translateY(-50%);
 }
 

@@ -1,10 +1,10 @@
 html {
-  background: url("../images/s1-bg.svg") no-repeat;
   align-content: center;
-  background-size: 100%;
-  background-color: #d72621;
+  background: url("../images/s1-bg.svg") no-repeat;
   background-attachment: fixed;
+  background-color: #d72621;
   background-position: center bottom;
+  background-size: 100%;
 }
 
 body.t-s1 {
@@ -37,16 +37,16 @@ body.t-s1 {
 
 #snow {
   display: block !important;
-  background-image: url("../images/snow1.png"), url("../images/snow2.png"), url("../images/snow3.png");
-  height: 100%;
   width: 100%;
-  left: 0;
-  top: 0;
+  height: 100%;
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: 0;
   opacity: 1;
-  pointer-events: none;
+  background-image: url("../images/snow1.png"), url("../images/snow2.png"), url("../images/snow3.png");
   animation: snow 10s linear infinite, snowFade 10s cubic-bezier(0, 0.3, 1, 0.7) infinite;
+  pointer-events: none;
 }
 
 @keyframes snow {

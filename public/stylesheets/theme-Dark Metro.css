@@ -1,12 +1,12 @@
 body.t-dark-metro {
+  color: #757575;
   background-image: url("../images/dark-bg.png");
   background-position: center;
-  color: #757575;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked {
-  background: #212121;
   color: #00bcd4;
+  background: #212121;
   border: 0.1rem solid #00bcd4;
 }
 

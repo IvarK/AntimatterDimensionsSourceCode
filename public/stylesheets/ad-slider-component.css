@@ -30,9 +30,9 @@ SOFTWARE.
 
 .l-ad-slider {
   display: flex;
+  width: 100%;
   position: relative;
   align-items: center;
-  width: 100%;
 }
 
 .l-ad-slider--horizontal {
@@ -69,54 +69,54 @@ SOFTWARE.
 }
 
 .l-ad-slider__bg {
-  position: relative;
   display: block;
+  position: relative;
 }
 
 .c-ad-slider__bg {
-  border-radius: var(--var-border-radius, 1.5rem);
   background-color: #cccccc;
+  border-radius: var(--var-border-radius, 1.5rem);
 }
 
 .l-ad-slider__bg::after {
   content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .l-ad-slider__process {
   position: absolute;
-  transition: all 0s;
   z-index: 1;
+  transition: all 0s;
 }
 
 .c-ad-slider__process {
-  border-radius: var(--var-border-radius, 15px);
   background-color: #3498db;
+  border-radius: var(--var-border-radius, 15px);
 }
 
 .l-ad-slider__wrap .ad-slider-process.ad-slider-process-draggable {
-  cursor: pointer;
   z-index: 3;
+  cursor: pointer;
 }
 
 .l-ad-slider--horizontal .l-ad-slider__process {
   width: 0;
   height: 100%;
+  will-change: width;
   top: 0;
   left: 0;
-  will-change: width;
 }
 
 .l-ad-slider--vertical .l-ad-slider__process {
   width: 100%;
   height: 0;
+  will-change: height;
   bottom: 0;
   left: 0;
-  will-change: height;
 }
 
 .l-ad-slider--horizontal-reverse .l-ad-slider__process {
@@ -135,9 +135,9 @@ SOFTWARE.
 
 .l-ad-slider__dot {
   position: absolute;
-  transition: all 0s;
   will-change: transform;
   z-index: 2;
+  transition: all 0s;
 }
 
 .c-ad-slider__dot {
@@ -145,16 +145,16 @@ SOFTWARE.
 }
 
 .l-ad-slider__dot-handle {
+  display: flex;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .c-ad-slider__dot-handle {
-  border-radius: var(--var-border-radius, 50%) !important;
   background-color: #ffffff;
+  border-radius: var(--var-border-radius, 50%) !important;
   box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 32%);
 }
 
@@ -187,16 +187,16 @@ SOFTWARE.
 }
 
 .c-ad-slider__button {
-  height: 1.6rem;
-  width: 1.6rem;
   display: flex;
+  width: 1.6rem;
+  height: 1.6rem;
   justify-content: center;
   align-items: center;
   font-size: 1rem;
-  border-radius: var(--var-border-radius, 50%);
   border: 0.1rem solid var(--color-reality-light);
-  cursor: pointer;
+  border-radius: var(--var-border-radius, 50%);
   transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .c-ad-slider__button:hover {
@@ -212,15 +212,15 @@ SOFTWARE.
 
 .l-ad-slider__wrap .ad-slider-tooltip {
   display: block;
-  font-size: 14px;
   white-space: nowrap;
-  padding: 2px 5px;
   min-width: 20px;
   text-align: center;
+  font-size: 14px;
   color: #ffffff;
-  border-radius: var(--var-border-radius, 5px);
-  border: 0.1rem solid #3498db;
   background-color: #3498db;
+  border: 0.1rem solid #3498db;
+  border-radius: var(--var-border-radius, 5px);
+  padding: 2px 5px;
 }
 
 .l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-top {
@@ -250,11 +250,11 @@ SOFTWARE.
 .l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-top .ad-slider-tooltip::before,
 .l-ad-slider__wrap .ad-slider-tooltip-top .vue-merged-tooltip .ad-slider-tooltip::before {
   content: "";
+  width: 0;
+  height: 0;
   position: absolute;
   bottom: -10px;
   left: 50%;
-  width: 0;
-  height: 0;
   border: 5px solid transparent;
   border: 6px solid transparent\0;
   border-top-color: inherit;
@@ -269,11 +269,11 @@ SOFTWARE.
 .l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-bottom .ad-slider-tooltip::before,
 .l-ad-slider__wrap .ad-slider-tooltip-bottom .vue-merged-tooltip .ad-slider-tooltip::before {
   content: "";
+  width: 0;
+  height: 0;
   position: absolute;
   top: -10px;
   left: 50%;
-  width: 0;
-  height: 0;
   border: 5px solid transparent;
   border: 6px solid transparent\0;
   border-bottom-color: inherit;
@@ -283,11 +283,11 @@ SOFTWARE.
 .l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-left .ad-slider-tooltip::before,
 .l-ad-slider__wrap .ad-slider-tooltip-left .vue-merged-tooltip .ad-slider-tooltip::before {
   content: "";
+  width: 0;
+  height: 0;
   position: absolute;
   top: 50%;
   right: -10px;
-  width: 0;
-  height: 0;
   border: 5px solid transparent;
   border: 6px solid transparent\0;
   border-left-color: inherit;
@@ -297,11 +297,11 @@ SOFTWARE.
 .l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-right .ad-slider-tooltip::before,
 .l-ad-slider__wrap .ad-slider-tooltip-right .vue-merged-tooltip .ad-slider-tooltip::before {
   content: "";
+  width: 0;
+  height: 0;
   position: absolute;
   top: 50%;
   left: -10px;
-  width: 0;
-  height: 0;
   border: 5px solid transparent;
   border: 6px solid transparent\0;
   border-right-color: inherit;
@@ -317,33 +317,33 @@ SOFTWARE.
 }
 
 .l-ad-slider__wrap .ad-slider-piecewise {
-  position: absolute;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  left: 0;
-  top: 0;
-  height: 100%;
   list-style: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .l-ad-slider__wrap .ad-slider-piecewise-item {
-  position: absolute;
   width: 8px;
   height: 8px;
+  position: absolute;
 }
 
 .l-ad-slider__wrap .ad-slider-piecewise-dot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
+  display: inline-block;
   width: 100%;
   height: 100%;
-  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
   background-color: rgba(0, 0, 0, 16%);
   border-radius: var(--var-border-radius, 50%);
   transform: translate(-50%, -50%);
-  z-index: 2;
   transition: all 0.3s;
 }
 
@@ -354,26 +354,26 @@ SOFTWARE.
 
 .l-ad-slider--horizontal .ad-slider-piecewise-label,
 .l-ad-slider--horizontal-reverse .ad-slider-piecewise-label {
-  position: absolute;
   display: inline-block;
+  visibility: visible;
+  white-space: nowrap;
+  position: absolute;
   top: 100%;
   left: 50%;
-  white-space: nowrap;
   font-size: 12px;
   color: #333333;
   transform: translate(-50%, 8px);
-  visibility: visible;
 }
 
 .l-ad-slider--vertical .ad-slider-piecewise-label,
 .l-ad-slider--vertical-reverse .ad-slider-piecewise-label {
-  position: absolute;
   display: inline-block;
+  visibility: visible;
+  white-space: nowrap;
+  position: absolute;
   top: 50%;
   left: 100%;
-  white-space: nowrap;
   font-size: 12px;
   color: #333333;
   transform: translate(8px, -50%);
-  visibility: visible;
 }

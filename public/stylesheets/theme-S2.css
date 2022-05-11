@@ -1,9 +1,9 @@
 html {
   background: url("../images/s2-bg.svg") no-repeat;
+  background-color: white;
   background-position-x: 50%;
   background-position-y: 50%;
   background-size: 50%;
-  background-color: white;
 }
 
 body {

@@ -159,24 +159,24 @@ export default {
 
 <style scoped>
 .c-pelle-upgrade {
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 18.5rem;
+  height: 12rem;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  font-family: Typewriter;
+  font-size: 0.95rem;
+  font-weight: bold;
   color: var(--color-text);
   background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle--secondary);
   border-radius: var(--var-border-radius, 0.5rem);
-  font-family: Typewriter;
-  cursor: pointer;
-  width: 18.5rem;
-  height: 12rem;
-  margin: 0.6rem 0.3rem;
-  font-size: 0.95rem;
-  font-weight: bold;
   box-shadow: inset 0 0 1rem 0.1rem var(--color-pelle--secondary);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  margin: 0.6rem 0.3rem;
+  padding: 2rem;
+  cursor: pointer;
 }
 
 .c-pelle-upgrade:hover {
@@ -186,29 +186,29 @@ export default {
 
 /* stylelint-disable-next-line selector-class-pattern */
 .c-pelle-upgrade--galaxyGenerator {
-  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
-  color: black;
   font-weight: bold;
+  color: black;
+  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   box-shadow: none;
 }
 
 .c-pelle-upgrade--unavailable {
-  background: #5f5f5f;
   color: black;
-  cursor: default;
+  background: #5f5f5f;
   box-shadow: none;
+  cursor: default;
 }
 
 .c-pelle-upgrade--faded {
   opacity: 0.3;
-  cursor: default;
   box-shadow: none;
+  cursor: default;
 }
 
 .c-pelle-upgrade--bought {
+  color: black;
   background: var(--color-pelle--secondary);
   cursor: default;
-  color: black;
 }
 
 /* stylelint-disable-next-line selector-class-pattern */
@@ -221,14 +221,14 @@ export default {
 }
 
 .l-pelle-upgrade-gap {
-  height: 0.5rem;
   flex-shrink: 0;
+  height: 0.5rem;
 }
 
 .c-improved-effect {
-  color: #00bb00;
-  font-weight: bold;
   font-style: italic;
+  font-weight: bold;
+  color: #00bb00;
 }
 
 .s-base--metro .c-pelle-upgrade--unavailable {

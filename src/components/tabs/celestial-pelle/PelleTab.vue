@@ -106,20 +106,20 @@ export default {
 .l-pelle-all-content-container {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   width: 100%;
+  align-items: stretch;
 }
 
 .o-pelle-button {
-  background: var(--color-text-inverted);
+  font-family: Typewriter;
   color: var(--color-text);
+  background: var(--color-text-inverted);
   border: 0.1rem solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 1rem;
-  font-family: Typewriter;
   margin-bottom: 1rem;
-  cursor: pointer;
+  padding: 1rem;
   transition-duration: 0.12s;
+  cursor: pointer;
 }
 
 .o-pelle-button:hover {
@@ -128,36 +128,36 @@ export default {
 
 .o-pelle-quotes-button {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-pelle--base);
-  font-size: 5rem;
-  height: 7rem;
   width: 7rem;
+  height: 7rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
   font-weight: 900;
+  color: var(--color-pelle--base);
 }
 
 .pelle-unlock-requirements {
+  width: 40rem;
   font-size: 3rem;
-  background: black;
   color: var(--color-pelle--base);
+  background: black;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
-  width: 40rem;
 }
 
 .pelle-doom-button {
+  width: 20rem;
+  align-self: center;
   font-family: Typewriter;
-  padding: 1rem;
-  background: black;
-  color: var(--color-pelle--base);
   font-size: 3rem;
+  color: var(--color-pelle--base);
+  background: black;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
-  width: 20rem;
-  cursor: pointer;
+  padding: 1rem;
   transition-duration: 0.4s;
-  align-self: center;
+  cursor: pointer;
 }
 
 .pelle-doom-button:hover {
@@ -165,25 +165,25 @@ export default {
 }
 
 .pelle-icon-container {
-  background: white;
-  border-radius: 50%;
-  height: 15rem;
-  width: 15rem;
-  margin: auto;
-  margin-top: 3rem;
   display: flex;
+  width: 15rem;
+  height: 15rem;
   justify-content: center;
   align-items: center;
-  border: var(--var-border-width, 0.4rem) solid var(--color-pelle--base);
   font-size: 10rem;
-  transition-duration: 0.4s;
   text-shadow: 0 0 1.5rem #9b0101;
+  background: white;
+  border: var(--var-border-width, 0.4rem) solid var(--color-pelle--base);
+  border-radius: 50%;
   box-shadow: 0 0 1.5rem #9b0101;
+  margin: auto;
+  margin-top: 3rem;
+  transition-duration: 0.4s;
 }
 
 .pelle-doom-button:hover .pelle-icon-container {
-  background: black;
   color: var(--color-pelle--base);
+  background: black;
 }
 
 @keyframes roll {

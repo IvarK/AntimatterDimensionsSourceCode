@@ -1,7 +1,7 @@
 body.t-dark {
+  color: #888888;
   background-image: url("../images/dark-bg.png");
   background-position: center;
-  color: #888888;
 }
 
 input.t-dark {

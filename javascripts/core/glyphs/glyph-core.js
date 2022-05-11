@@ -679,7 +679,8 @@ export function calculateGlyph(glyph) {
 }
 
 export function getRarity(x) {
-  return GlyphRarities.find(e => x >= e.minStrength);
+  const rarities = Theme.current().isDark() ? GlyphRarities : GlyphRaritiesLight;
+  return rarities.find(e => x >= e.minStrength);
 }
 
 export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost) {

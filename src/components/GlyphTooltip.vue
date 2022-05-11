@@ -87,16 +87,25 @@ export default {
     rarityInfo() {
       return getRarity(this.strength);
     },
+    textShadowColor() {
+      return Theme.current().isDark() ? "black" : "white";
+    },
+    cursedColor() {
+      return Theme.current().isDark() ? "black" : "white";
+    },
+    cursedColorInverted() {
+      return Theme.current().isDark() ? "white" : "black";
+    },
     descriptionStyle() {
       let color = this.rarityInfo.color;
-      if (this.type === "cursed") color = "black";
+      if (this.type === "cursed") color = this.cursedColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         color,
         "text-shadow": this.type === "cursed"
           ? undefined
-          : `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
-            -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
+          : `-0.1rem 0.1rem 0.1rem ${this.textShadowColor}, 0.1rem 0.1rem 0.1rem ${this.textShadowColor},
+            -0.1rem -0.1rem 0.1rem ${this.textShadowColor}, 0.1rem -0.1rem 0.1rem ${this.textShadowColor},
             0 0 0.3rem ${color}`,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
@@ -155,8 +164,8 @@ export default {
         "border-color": GlyphTypes[this.type].color,
         "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
         animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
-        color: this.type === "cursed" ? "black" : undefined,
-        background: this.type === "cursed" ? "white" : undefined
+        color: this.type === "cursed" ? this.cursedColor : undefined,
+        background: this.type === "cursed" ? this.cursedColorInverted : undefined
       };
     },
     glyphHeaderStyle() {
@@ -164,14 +173,14 @@ export default {
       const isReality = this.type === "reality";
 
       let color = this.rarityInfo.color;
-      if (isCursed) color = "black";
+      if (isCursed) color = this.cursedColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
         animation: isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
-        color: isCursed ? "black" : undefined,
-        background: isCursed ? "white" : undefined
+        color: isCursed ? this.cursedColor : undefined,
+        background: isCursed ? this.cursedColorInverted : undefined
       };
     }
   },
@@ -218,11 +227,15 @@ export default {
     removeGlyph() {
       GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
+    getFontColor() {
+      return Theme.current().isDark() ? "#ccc" : "black";
+    },
     sacrificeText() {
       if (this.type === "companion" || this.type === "cursed") return "";
       const powerText = `${format(this.sacrificeReward, 2, 2)}`;
       const isCurrentAction = this.currentAction === "sacrifice";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};
+              color: ${isCurrentAction ? this.getFontColor() : ""}">
               Sacrifice: ${powerText}
               </span>`;
     },
@@ -234,7 +247,8 @@ export default {
         refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
       }
       const isCurrentAction = this.currentAction === "refine";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};
+              color: ${isCurrentAction ? this.getFontColor() : ""}">
               Refine: ${refinementText}
               </span>`;
     },

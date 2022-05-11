@@ -143,6 +143,12 @@ export default {
         "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
+    cursedColor() {
+      return Theme.current().isDark() ? "black" : "white";
+    },
+    cursedColorInverted() {
+      return Theme.current().isDark() ? "white" : "black";
+    },
     innerStyle() {
       const rarityColor = this.isRealityGlyph
         ? this.realityGlyphColor()
@@ -151,11 +157,13 @@ export default {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: this.isCursedGlyph ? "black" : rarityColor,
-        "text-shadow": this.isCursedGlyph ? "-0.04em 0.04em 0.08em black" : `-0.04em 0.04em 0.08em ${rarityColor}`,
+        color: this.isCursedGlyph ? this.cursedColor : rarityColor,
+        "text-shadow": this.isCursedGlyph
+          ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
+          : `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.isCursedGlyph ? "white" : undefined
+        background: this.isCursedGlyph ? this.cursedColorInverted : undefined
       };
     },
     mouseEventHandlers() {

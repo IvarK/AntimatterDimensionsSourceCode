@@ -257,7 +257,44 @@ window.GlyphRarities = [
   }, {
     minStrength: 1,
     name: "Common",
-    color: "white"
+    color: "White"
+  },
+];
+
+// These need to be in descending order for searching over them to work trivially
+window.GlyphRaritiesLight = [
+  {
+    minStrength: 3.5,
+    name: "Celestial",
+    color: "#5151ec"
+  }, {
+    minStrength: 3.25,
+    name: "Transcendent",
+    color: "#00F5E0"
+  }, {
+    minStrength: 3,
+    name: "Mythical",
+    color: "#d50000"
+  }, {
+    minStrength: 2.75,
+    name: "Legendary",
+    color: "#ff9800"
+  }, {
+    minStrength: 2.5,
+    name: "Epic",
+    color: "#9c27b0"
+  }, {
+    minStrength: 2,
+    name: "Rare",
+    color: "#2196f3"
+  }, {
+    minStrength: 1.5,
+    name: "Uncommon",
+    color: "#43a047"
+  }, {
+    minStrength: 1,
+    name: "Common",
+    color: "Black"
   },
 ];
 

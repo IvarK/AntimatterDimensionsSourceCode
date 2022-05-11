@@ -104,7 +104,8 @@ html {
 
   --color-infinity: #ff9800;
   --color-eternity: #673ab7;
-  --color-reality: #4caf50;
+  --color-reality: #3a823d;
+  --color-reality-light: #d5ffd7;
   --color-celestials: #00bcd4;
 }
 
@@ -742,7 +743,8 @@ button:focus {
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
-  background: black;
+  background: var(--color-background);
+  border-width: var(--var-border-width, 0.2rem);
   border-style: solid;
   border-width: var(--var-border-width, 0.2rem);
   border-radius: var(--var-border-radius, 0.4rem);
@@ -783,7 +785,7 @@ button:focus {
 
 .c-reality-button--locked {
   color: #181818;
-  background-color: #5f5f5f;
+  background-color: var(--color-gray-d85-l214);
   border-color: var(--color-bad);
 }
 
@@ -1420,7 +1422,11 @@ br {
 
 .infotooltip .infotooltiptext {
   visibility: hidden;
-  white-space: nowrap;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   position: absolute;
   left: 105%;
   z-index: 2;
@@ -8487,15 +8493,18 @@ kbd {
 }
 
 .c-glyph-level-factors-dropdown-header {
+  color: var(--color-reality);
   width: calc(100% - 1rem);
   text-align: center;
-  font-weight: bold;
-  color: var(--color-reality-light);
-  background: black;
+  background: var(--color-background);
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
   border-radius: var(--var-border-radius, 0.5rem);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
+}
+
+.s-base--dark .c-glyph-level-factors-dropdown-header {
+  color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights {
@@ -8506,7 +8515,7 @@ kbd {
 
 .c-glyph-levels-and-weights {
   font-weight: bold;
-  background: black;
+  background: var(--color-background);
 }
 
 .l-glyph-levels-and-weights__adjust-label {
@@ -8538,22 +8547,34 @@ kbd {
   position: relative;
 
   -ms-grid-column-span: 1;
+  -ms-grid-row: 1;
+  position: relative;
 }
 
 .l-glyph-levels-and-weights__adjust-outline::after {
   content: "";
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  bottom: -0.5rem;
-  left: -0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border-radius: var(--var-border-radius, 0.5em);
+  top: -0.5em;
+  bottom: -0.5em;
+  left: -0.5em;
+  right: -0.5em;
+}
+
+.s-base--dark .l-glyph-levels-and-weights__adjust-outline::after {
   border: var(--var-border-width, 0.2rem) solid var(--color-reality-light);
-  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .l-glyph-levels-and-weights__factor {
   display: flex;
   grid-column: 1;
+  -ms-grid-column: 1;
+  text-align: left;
+  padding-left: 1em;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  display: flex;
   align-items: center;
   text-align: left;
   padding-top: 0.3rem;
@@ -8564,6 +8585,8 @@ kbd {
 .l-glyph-levels-and-weights__operator {
   display: flex;
   grid-column: 2;
+  -ms-grid-column: 2;
+  display: flex;
   align-items: center;
   padding-left: 1rem;
 }
@@ -8587,19 +8610,32 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__slider-process {
+  background-color: var(--color-reality);
+}
+
+.s-base--dark .c-glyph-levels-and-weights__slider-process {
   background-color: var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__slider-bg {
+  background-color: var(--color-reality-light);
+}
+
+.s-base--dark .c-glyph-levels-and-weights__slider-bg {
   background-color: var(--color-reality);
 }
 
 .c-glyph-levels-and-weights__slider-handle {
-  color: var(--color-reality-light);
-  background-color: black;
+  color: var(--color-reality);
+  background-color: var(--color-background);
+  box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.8rem);
   box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   transition-duration: 0.2s;
+}
+
+.s-base--dark .c-glyph-levels-and-weights__slider-handle {
+  color: var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__slider-handle:hover {
@@ -8613,13 +8649,18 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__reset-btn {
-  color: var(--color-reality-light);
-  background-color: black;
+  color: var(--color-reality);
+  background-color: var(--color-background);
+  border-radius: var(--var-border-radius, 0.5rem);
   border: 0.1rem solid var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
   cursor: pointer;
+}
+
+.s-base--dark .c-glyph-levels-and-weights__reset-btn {
+  color: var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__reset-btn:hover {
@@ -8632,13 +8673,19 @@ kbd {
   font-family: Typewriter;
   font-size: 1rem;
   font-weight: bold;
-  color: var(--color-reality-light);
-  background-color: black;
+  color: var(--color-reality);
+  background-color: var(--color-background);
+  height: 2.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
   border: 0.1rem solid var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
   cursor: pointer;
+}
+
+.s-base--dark .c-glyph-levels-and-weights__auto-btn {
+  color: var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__auto-btn:hover {
@@ -8728,12 +8775,17 @@ kbd {
   text-align: center;
   font-family: Typewriter, serif;
   font-size: 1rem;
-  color: var(--color-reality-light);
-  background-color: black;
+  background-color: var(--color-background);
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
   border-radius: var(--var-border-radius, 0.5rem);
+  color: var(--color-reality);
+  cursor: pointer;
   transition-duration: 0.15s;
   cursor: pointer;
+}
+
+.s-base--dark .c-reality-upgrade-btn {
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn__requirement {
@@ -8746,13 +8798,14 @@ kbd {
 }
 
 .c-reality-upgrade-btn--unavailable {
-  background-color: #656565;
+  color: var(--color-reality-light);
+  background-color: var(--color-glyph-undo-disabled);
   cursor: default;
 }
 
 .c-reality-upgrade-btn--unavailable:hover {
   color: var(--color-reality-light);
-  background-color: #656565;
+  background-color: var(--color-glyph-undo-disabled);
 }
 
 .c-reality-upgrade-btn--useless {
@@ -8769,6 +8822,7 @@ kbd {
 }
 
 .c-reality-upgrade-btn--bought {
+  color: var(--color-reality-light);
   background-color: var(--color-reality);
   border-color: #094e0b;
   cursor: default;

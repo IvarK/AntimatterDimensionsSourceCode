@@ -66,13 +66,16 @@ export default {
         color: "#76EE76",
       };
     },
+    textShadowColor() {
+      return Theme.current().isDark() ? "white" : "black";
+    },
   },
   methods: {
     convertToHTML(string) {
       return string
         .replace("\n", "<br>")
         .replace("]", "</span>")
-        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0 0 0.6rem;">`);
+        .replace("[", `<span style="color: ${this.additionColor}; text-shadow: ${this.textShadowColor} 0 0 0.6rem;">`);
     }
   }
 };

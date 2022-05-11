@@ -16,7 +16,7 @@
         "property-no-vendor-prefix": [
             true,
             {
-                "ignoreProperties": ["appearance", "background-clip-text", "backdrop-filter", "clip-path", "user-select"]
+                "ignoreProperties": ["appearance", "background-clip", "backdrop-filter", "clip-path", "user-select"]
             }
         ],
 

@@ -74,7 +74,7 @@ body.t-s9 {
 
 .resource h2 {
   margin: 0;
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   z-index: 1;
 }
 
@@ -98,7 +98,7 @@ body.t-s9 {
 }
 
 .resource-name {
-  font-size: 0.8rem;
+  font-size: 1.2rem;
 }
 
 .o-sidebar-currency--antimatter {
@@ -166,7 +166,7 @@ body.t-s9 {
   border-width: 0.1rem;
   border-radius: 0;
   margin-top: -0.1rem;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   position: relative;
   transition-duration: 0.15s;
   transition-delay: 0.2s;
@@ -566,7 +566,7 @@ body.t-s9 {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-bottom: 0.1rem solid var(--color-good);
   padding-bottom: 0.6rem;
 }

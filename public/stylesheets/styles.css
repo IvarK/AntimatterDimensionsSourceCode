@@ -6047,7 +6047,7 @@ kbd {
 
 .l-celestial-quote-history__lines {
   font-size: 1.9rem;
-  line-height: 1.6rem;
+  line-height: 2.4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6435,6 +6435,7 @@ kbd {
 
 .c-effarig-run-button__inner--running {
   background-image: url("../images/noise.png");
+  -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: rgba(255, 0, 0, 50%);
   animation: a-effarig-run-button--running-noise 15s infinite alternate;

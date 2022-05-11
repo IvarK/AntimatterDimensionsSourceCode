@@ -222,12 +222,14 @@
   border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
   text-align: center;
-  appearance: textfield;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
 }
 
 .c-auto-sac-effect-tab__input::-webkit-inner-spin-button,
 .c-auto-sac-effect-tab__input::-webkit-outer-spin-button {
-  appearance: textfield;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
   margin: 0;
 }
 
@@ -240,7 +242,8 @@
   color: var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
-  appearance: textfield;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
   margin: 0;
 }
 
@@ -259,7 +262,8 @@
 
 .c-auto-sac-type-tab__input::-webkit-outer-spin-button,
 .c-auto-sac-type-tab__input::-webkit-inner-spin-button {
-  appearance: textfield;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
   margin: 0;
 }
 
@@ -614,7 +618,8 @@
   border-bottom: 0.1rem solid;
   text-align: center;
   margin-bottom: 0.5rem;
-  appearance: textfield;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
 }
 
 .c-glyph-set-save-setting-button {

@@ -93,7 +93,7 @@ export const automatorBlocks = [
     targets: ["ON", "OFF"],
     isUnlocked: () => BlackHole(1).isUnlocked
   }, {
-    cmd: "STORE TIME",
+    cmd: "STORE GAME TIME",
     targets: ["ON", "OFF", "USE"],
     isUnlocked: () => Enslaved.isUnlocked
   }, {
@@ -174,5 +174,6 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
   text-align: center;
   align-items: center;
   height: 5.5rem;
+  width: 8.7rem;
 }
 </style>

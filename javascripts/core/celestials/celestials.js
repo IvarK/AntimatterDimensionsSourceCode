@@ -44,7 +44,7 @@ GameDatabase.celestials.descriptions = [
       Tachyon Particle production and Dilated Time production are severely reduced
       Time Theorem generation from Dilation Glyphs is disabled
       Certain challenge goals have been increased
-      Stored Time is discharged at a reduced effectiveness (exponent^${format(0.55, 2, 2)}) `;
+      Stored game time is discharged at a reduced effectiveness (exponent^${format(0.55, 2, 2)}) `;
     }
   },
   {

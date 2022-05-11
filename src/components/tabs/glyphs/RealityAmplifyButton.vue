@@ -14,7 +14,7 @@ export default {
       if (this.isDoomed) return "You cannot amplify a Doomed Reality";
       if (this.isDisabled) return "You cannot amplify Celestial Realities";
       if (!this.canAmplify) {
-        return "Store more or complete the Reality faster to amplify";
+        return "Store more real time or complete the Reality faster to amplify";
       }
       return null;
     }

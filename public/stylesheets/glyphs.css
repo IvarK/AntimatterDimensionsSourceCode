@@ -107,7 +107,12 @@
 }
 
 .c-glyph-sacrifice-options__help {
+  color: var(--color-reality);
   font-size: 1.2rem;
+  color: var(--color-reality-light);
+}
+
+.s-base--dark .c-glyph-sacrifice-options__help {
   color: var(--color-reality-light);
 }
 

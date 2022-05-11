@@ -1418,32 +1418,62 @@
 @keyframes a-reality-glyph-name-cycle {
   0% {
     color: #b67f33;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px;
+    text-shadow:
+      var(--color-text-inverted) -1px 1px 1px,
+      var(--color-text-inverted) 1px 1px 1px,
+      var(--color-text-inverted) -1px -1px 1px,
+      var(--color-text-inverted) 1px -1px 1px,
+      #b67f33 0 0 3px
   }
 
   20% {
     color: #64dd17;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #64dd17 0 0 3px;
+    text-shadow:
+      var(--color-text-inverted) -1px 1px 1px,
+      var(--color-text-inverted) 1px 1px 1px,
+      var(--color-text-inverted) -1px -1px 1px,
+      var(--color-text-inverted) 1px -1px 1px,
+      #64dd17 0 0 3px
   }
 
   40% {
     color: #22aa48;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #22aa48 0 0 3px;
+    text-shadow:
+      var(--color-text-inverted) -1px 1px 1px,
+      var(--color-text-inverted) 1px 1px 1px,
+      var(--color-text-inverted) -1px -1px 1px,
+      var(--color-text-inverted) 1px -1px 1px,
+      #22aa48 0 0 3px
   }
 
   60% {
     color: #03a9f4;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #03a9f4 0 0 3px;
+    text-shadow:
+      var(--color-text-inverted) -1px 1px 1px,
+      var(--color-text-inverted) 1px 1px 1px,
+      var(--color-text-inverted) -1px -1px 1px,
+      var(--color-text-inverted) 1px -1px 1px,
+      #03a9f4 0 0 3px
   }
 
   80% {
     color: #b241e3;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b241e3 0 0 3px;
+    text-shadow:
+      var(--color-text-inverted) -1px 1px 1px,
+      var(--color-text-inverted) 1px 1px 1px,
+      var(--color-text-inverted) -1px -1px 1px,
+      var(--color-text-inverted) 1px -1px 1px,
+      #b241e3 0 0 3px
   }
 
   100% {
     color: #b67f33;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px;
+    text-shadow:
+      var(--color-text-inverted) -1px 1px 1px,
+      var(--color-text-inverted) 1px 1px 1px,
+      var(--color-text-inverted) -1px -1px 1px,
+      var(--color-text-inverted) 1px -1px 1px,
+      #b67f33 0 0 3px
   }
 }
 
@@ -1455,7 +1485,7 @@
       var(--color-text-base) 1px 1px 1px,
       var(--color-text-base) -1px -1px 1px,
       var(--color-text-base) 1px -1px 1px,
-      #b67f33 0 0 3px;
+      #b67f33 0 0 3px
   }
 
   20% {
@@ -1465,7 +1495,7 @@
       var(--color-text-base) 1px 1px 1px,
       var(--color-text-base) -1px -1px 1px,
       var(--color-text-base) 1px -1px 1px,
-      #64dd17 0 0 3px;
+      #64dd17 0 0 3px
   }
 
   40% {
@@ -1475,7 +1505,7 @@
       var(--color-text-base) 1px 1px 1px,
       var(--color-text-base) -1px -1px 1px,
       var(--color-text-base) 1px -1px 1px,
-      #22aa48 0 0 3px;
+      #22aa48 0 0 3px
   }
 
   60% {
@@ -1485,7 +1515,7 @@
       var(--color-text-base) 1px 1px 1px,
       var(--color-text-base) -1px -1px 1px,
       var(--color-text-base) 1px -1px 1px,
-      #03a9f4 0 0 3px;
+      #03a9f4 0 0 3px
   }
 
   80% {
@@ -1495,9 +1525,8 @@
       var(--color-text-base) 1px 1px 1px,
       var(--color-text-base) -1px -1px 1px,
       var(--color-text-base) 1px -1px 1px,
-      #b241e3 0 0 3px;
+      #b241e3 0 0 3px
   }
-
   100% {
     color: #b67f33;
     text-shadow:
@@ -1505,7 +1534,7 @@
       var(--color-text-base) 1px 1px 1px,
       var(--color-text-base) -1px -1px 1px,
       var(--color-text-base) 1px -1px 1px,
-      #b67f33 0 0 3px;
+      #b67f33 0 0 3px
   }
 }
 

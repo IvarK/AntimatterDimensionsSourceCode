@@ -1,6 +1,12 @@
 <script>
 export default {
   name: "CelestialQuoteModal",
+  props: {
+    modalConfig: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       index: 0,
@@ -15,14 +21,11 @@ export default {
         return this.index;
       },
       set(x) {
-        this.index = Math.clamp(x, 0, this.quote.totalLines - 1);
+        this.index = Math.clamp(x, 0, this.totalLines - 1);
       }
     },
-    modal() {
-      return this.$viewModel.modal.current;
-    },
     quote() {
-      return this.modal.quote;
+      return this.modalConfig.quote;
     },
     line() {
       return this.quote.line(this.currentLine);
@@ -30,11 +33,14 @@ export default {
     celestial() {
       return this.line.celestial;
     },
+    totalLines() {
+      return this.quote.totalLines;
+    },
     isQuoteStart() {
       return this.currentLine === 0;
     },
     isQuoteEnd() {
-      return this.quote.lastLine(this.currentLine);
+      return this.currentLine === this.totalLines - 1;
     },
     prevStyle() {
       return this.isQuoteStart ? { visibility: "hidden" } : {};
@@ -50,12 +56,19 @@ export default {
       ];
     }
   },
+  created() {
+    this.on$(GAME_EVENT.ARROW_KEY_PRESSED, this.progressIn);
+    this.on$(GAME_EVENT.ENTER_PRESSED, () => {
+      if (this.isQuoteEnd) this.close();
+    });
+  },
   methods: {
-    nextClick() {
-      this.currentLine++;
-    },
-    prevQuote() {
-      this.currentLine--;
+    progressIn(direction) {
+      switch (direction[0]) {
+        case "left": return this.currentLine--;
+        case "right": return this.currentLine++;
+        default: return false;
+      }
     },
     close() {
       this.index = 0;
@@ -75,6 +88,10 @@ export default {
   <div class="l-modal-overlay c-modal-overlay">
     <div :class="modalClass">
       <span
+        class="c-modal-cestial-quote__symbol"
+        v-html="celestialSymbol"
+      />
+      <span
         v-if="line.showCelestialName"
         class="c-modal-celestial-name"
       >
@@ -83,11 +100,7 @@ export default {
       <i
         :style="prevStyle"
         class="c-modal-celestial-quote__arrow fas fa-chevron-circle-left"
-        @click="prevQuote"
-      />
-      <span
-        class="c-modal-cestial-quote__symbol"
-        v-html="celestialSymbol"
+        @click="progressIn('left')"
       />
       <div class="l-modal-celestial-quote__text">
         {{ message }}
@@ -95,7 +108,7 @@ export default {
       <i
         :style="nextStyle"
         class="c-modal-celestial-quote__arrow fas fa-chevron-circle-right"
-        @click="nextClick"
+        @click="progressIn('right')"
       />
       <i
         v-if="isQuoteEnd"

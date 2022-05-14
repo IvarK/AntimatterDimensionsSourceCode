@@ -139,7 +139,7 @@ export class Modal {
   }
 
   static get isOpen() {
-    return ui.view.modal.current === this;
+    return ui.view.modal.current instanceof this;
   }
 }
 
@@ -220,8 +220,7 @@ Modal.celestialQuote = new class extends Modal {
       this.queue.push(quote);
       return;
     }
-    this.quote = quote;
-    super.show();
+    super.show({ quote });
   }
 
   hide() {

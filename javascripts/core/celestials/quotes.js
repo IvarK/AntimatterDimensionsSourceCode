@@ -12,14 +12,14 @@ function celCycle(cels) {
   return cels[index][0];
 }
 
-export class QuoteLine {
-  constructor(line, celestial) {
-    this._baseCelestial = celestial;
+class QuoteLine {
+  constructor(line, parent) {
+    this._parent = parent;
     this._showCelestialName = line.showCelestialName ?? true;
 
     this._celestial = line.background
       ? () => celCycle(line.background)
-      : celestial;
+      : parent.celestial;
 
     const replacementMatch = /\$(\d+)/gu;
 
@@ -46,19 +46,23 @@ export class QuoteLine {
   }
 
   get celestialName() {
-    return Celestials[this._baseCelestial].displayName;
+    return Celestials[this._parent.celestial].displayName;
   }
 }
 
-export class CelQuotes extends BitUpgradeState {
+class CelQuotes extends BitUpgradeState {
   constructor(config, celestial) {
     super(config);
     this._celestial = celestial;
-    this._lines = config.lines.map(line => new QuoteLine(line, celestial));
+    this._lines = config.lines.map(line => new QuoteLine(line, this));
   }
 
   get bits() { return player.celestials[this._celestial].quoteBits; }
   set bits(value) { player.celestials[this._celestial].quoteBits = value; }
+
+  get celestial() {
+    return this._celestial;
+  }
 
   line(id) {
     return this._lines[id];
@@ -66,10 +70,6 @@ export class CelQuotes extends BitUpgradeState {
 
   get totalLines() {
     return this._lines.length;
-  }
-
-  lastLine(id) {
-    return id + 1 === this.totalLines;
   }
 
   show() { this.unlock(); }

@@ -215,25 +215,25 @@ export const shortcuts = [
     name: "Change Tab",
     keys: ["up"],
     type: "bind",
-    function: () => keyboardTabChange("up"),
+    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "up"),
     visible: false
   }, {
     name: "Change Tab",
     keys: ["down"],
     type: "bind",
-    function: () => keyboardTabChange("down"),
+    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "down"),
     visible: false
   }, {
     name: "Change Subtab",
     keys: ["left"],
     type: "bind",
-    function: () => keyboardTabChange("left"),
+    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "left"),
     visible: false
   }, {
     name: "Change Subtab",
     keys: ["right"],
     type: "bind",
-    function: () => keyboardTabChange("right"),
+    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "right"),
     visible: false
   }, {
     name: "Doesn't exist",
@@ -406,7 +406,7 @@ function keyboardVisibleTabsToggle() {
   Modal.hiddenTabs.show();
 }
 
-function keyboardTabChange(direction) {
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, direction => {
   // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
   if (direction === "up" || direction === "down") {
@@ -438,7 +438,7 @@ function keyboardTabChange(direction) {
   }
   // Return false so the arrow keys don't do anything else
   return false;
-}
+});
 
 const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a", "enter"];
 let konamiStep = 0;

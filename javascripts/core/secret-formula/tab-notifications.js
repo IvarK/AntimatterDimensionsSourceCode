@@ -1,5 +1,6 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 GameDatabase.tabNotifications = {
   firstInfinity: {

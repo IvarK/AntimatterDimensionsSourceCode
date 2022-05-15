@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 export function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return DC.D1;

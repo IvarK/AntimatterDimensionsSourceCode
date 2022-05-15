@@ -60,15 +60,15 @@ export default {
 
 <style scoped>
 .o-tab-btn {
+  height: 3.1rem;
+  vertical-align: middle;
   margin: 0.2rem;
   margin-bottom: 0.7rem;
-  vertical-align: middle;
-  height: 3.1rem;
 }
 
 .o-tab-btn--active {
-  border-bottom-width: 0.5rem;
   height: 3.1rem;
+  border-bottom-width: 0.5rem;
 }
 
 .s-base--metro .o-tab-btn--active {

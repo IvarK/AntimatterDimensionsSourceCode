@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   get _upgradeName() { return ["dtGain", "galaxyThreshold", "tachyonGain"][this.id - 1]; }

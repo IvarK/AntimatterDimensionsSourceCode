@@ -2,7 +2,8 @@
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
 import { createToken, Lexer } from "chevrotain";
-import { DC } from "../constants.js";
+
+import { DC } from "../constants";
 
 export const AutomatorLexer = (() => {
   const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });

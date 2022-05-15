@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 Autobuyer.darkMatterDimsAscension =
 new class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyerState {

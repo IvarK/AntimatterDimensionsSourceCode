@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.celestials.pelle.galaxyGeneratorUpgrades = (function() {
   const formatCost = c => format(c, 2);

@@ -1,4 +1,4 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   get data() {

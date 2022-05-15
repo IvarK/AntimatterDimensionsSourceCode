@@ -1,4 +1,4 @@
-import { Autobuyer } from "./autobuyer.js";
+import { Autobuyer } from "./autobuyer";
 
 export const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;

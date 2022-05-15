@@ -1,7 +1,7 @@
 <script>
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import RaPet from "./RaPet";
 import RaPetRecollectionButton from "./RaPetRecollectionButton";
-import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
 export default {
   name: "RaTab",

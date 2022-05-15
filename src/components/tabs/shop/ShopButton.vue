@@ -47,36 +47,36 @@ export default {
 <style scoped>
 .c-shop-button-container {
   width: 30rem;
-  padding: 1rem;
+  color: white;
+  background: #3c3c3c;
   border: var(--var-border-width, 0.2rem) solid #1f7d1f;
   border-radius: var(--var-border-radius, 0.5rem);
-  margin: .5rem;
-  background: #3c3c3c;
-  color: white;
+  margin: 0.5rem;
+  padding: 1rem;
 }
 
 .o-shop-button-button {
+  display: flex;
+  align-items: center;
+  font-family: Typewriter;
   background: turquoise;
   border: none;
   border-radius: var(--var-border-radius, 0.5rem);
-  display: flex;
   margin: auto;
-  align-items: center;
-  font-family: Typewriter;
-  padding: .5rem 2rem;
   margin-top: 1rem;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 }
 
 .o-shop-button-button__img {
-  margin-left: 1rem;
   height: 40px;
+  margin-left: 1rem;
 }
 
 .o-shop-button-multiplier {
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin: 0.5rem 0;
   display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
 }
 </style>

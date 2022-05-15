@@ -180,6 +180,6 @@ export default {
 
 <style scoped>
 .c-laitela-singularity__cap-control {
-  margin: 0 0.3rem 1rem 0.3rem;
+  margin: 0 0.3rem 1rem;
 }
 </style>

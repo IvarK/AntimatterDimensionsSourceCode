@@ -162,18 +162,17 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
 
 <style scoped>
 .block-container {
-  margin: 1rem 0;
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
+  align-items: center;
+  margin: 1rem 0;
 }
 
 .o-automator-block-list {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  height: 5.5rem;
   width: 8.7rem;
+  height: 5.5rem;
+  justify-content: center;
+  align-items: center;
 }
 </style>

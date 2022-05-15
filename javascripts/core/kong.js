@@ -1,4 +1,4 @@
-import { RebuyableMechanicState } from "./game-mechanics/index.js";
+import { RebuyableMechanicState } from "./game-mechanics/index";
 
 export const kong = {};
 

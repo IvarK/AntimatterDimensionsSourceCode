@@ -123,30 +123,30 @@ export default {
 
 <style scoped>
 .l-tt-save-load-btn__wrapper {
-  margin: 0.3em;
   position: relative;
+  margin: 0.3rem;
 }
 
 .l-tt-save-load-btn {
-  min-width: 2em;
+  min-width: 2rem;
 }
 
 .l-tt-save-load-btn__menu {
   position: absolute;
   top: -0.5rem;
   left: 50%;
-  transform: translate(-50%, -100%);
   padding: 0.5rem 0;
+  transform: translate(-50%, -100%);
 }
 
 .c-tt-save-load-btn__menu {
+  text-align: left;
+  font-family: Typewriter;
+  font-size: 1.4rem;
+  font-weight: bold;
   color: white;
   background: black;
   border-radius: var(--var-border-radius, 0.5rem);
-  text-align: left;
-  font-weight: bold;
-  font-family: Typewriter;
-  font-size: 1.4rem;
 }
 
 .l-tt-save-load-btn__menu::after {
@@ -154,10 +154,10 @@ export default {
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -0.5rem;
-  border-width: var(--var-border-width, 0.5rem);
-  border-style: solid;
   border-color: black transparent transparent;
+  border-style: solid;
+  border-width: var(--var-border-width, 0.5rem);
+  margin-left: -0.5rem;
 }
 
 .l-tt-save-load-btn__menu-rename {
@@ -166,9 +166,9 @@ export default {
 
 .c-tt-save-load-btn__menu-rename {
   text-align: left;
-  font-weight: bold;
   font-family: Typewriter;
   font-size: 1.4rem;
+  font-weight: bold;
   border: none;
   border-radius: var(--var-border-radius, 0.3rem);
   padding: 0.2rem;
@@ -180,7 +180,7 @@ export default {
 }
 
 .c-tt-save-load-btn__menu-item:hover {
-  background: white;
   color: black;
+  background: white;
 }
 </style>

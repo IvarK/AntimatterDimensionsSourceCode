@@ -1,6 +1,6 @@
 <script>
-import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import LoadGameEntry from "@/components/modals/LoadGameEntry";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "LoadGameModal",

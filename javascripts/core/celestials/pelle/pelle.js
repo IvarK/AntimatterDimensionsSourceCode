@@ -1,9 +1,11 @@
-import { DC } from "../../constants";
 import { Currency } from "../../currency";
+import { DC } from "../../constants";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { SetPurchasableMechanicState } from "../../utils";
+
+import { CelestialQuotes } from "../quotes";
+
 import zalgo from "./zalgo";
-import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),

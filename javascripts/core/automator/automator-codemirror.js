@@ -1,5 +1,5 @@
-import { AutomatorGrammar } from "./parser.js";
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorGrammar } from "./parser";
+import { AutomatorLexer } from "./lexer";
 
 (function() {
   function walkSuggestion(suggestion, prefix, output) {

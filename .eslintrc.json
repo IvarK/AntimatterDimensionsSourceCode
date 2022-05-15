@@ -1,6 +1,7 @@
 {
   "extends": [
     "eslint:recommended",
+    "plugin:import/recommended",
     "plugin:vue/recommended"
   ],
   "env": {
@@ -14,7 +15,46 @@
     "sourceType": "module",
     "parser": "@babel/eslint-parser"
   },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@", "./src"]
+        ],
+        "extensions": [".js", ".vue"]
+      }
+    }
+  },
   "rules": {
+    "import/prefer-default-export": "off",
+
+    "import/no-unresolved": "error",
+    "import/named": "error",
+    "import/namespace": "error",
+    "import/default": "error",
+    "import/export": "error",
+    "import/no-named-as-default": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-duplicates": "warn",
+    "import/extensions": ["warn", "never"],
+    "import/first": "warn",
+    "import/newline-after-import": "warn",
+    "import/no-named-default": "warn",
+    "import/no-self-import": "warn",
+    "import/order": [
+      "warn",
+      {
+        "newlines-between": "always-and-inside-groups",
+        "pathGroups": [{ "pattern": "@/**", "group": "sibling" }]
+      }
+    ],
+    "sort-imports": [
+      "warn",
+      {
+        "ignoreCase": true,
+        "allowSeparatedGroups": true
+      }
+    ],
     "no-console": "warn",
     "no-template-curly-in-string": "warn",
     "array-callback-return": "error",
@@ -32,7 +72,6 @@
         "allowElseIf": false
       }
     ],
-
     "vue/one-component-per-file": "error",
     "vue/component-definition-name-casing": "warn",
     "vue/order-in-components": "warn",

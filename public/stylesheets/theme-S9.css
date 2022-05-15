@@ -1,10 +1,11 @@
 * {
   color: transparent !important;
   text-shadow: none !important;
+  -webkit-user-select: none;
   user-select: none;
 }
 
-[ach-tooltip]:before {
+[ach-tooltip]::before {
   color: transparent;
 }
 

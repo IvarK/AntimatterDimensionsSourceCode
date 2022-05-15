@@ -1,7 +1,7 @@
 <script>
+import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 
 export default {
   name: "HeaderBlackHole",
@@ -117,9 +117,10 @@ export default {
 
 <style scoped>
 .c-primary-btn--black-hole-header {
-  margin: 0.2rem;
   vertical-align: middle;
+  margin: 0.2rem;
 }
+
 .c-black-hole-status-text {
   margin: 0 0.8rem;
 }

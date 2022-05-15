@@ -1,4 +1,4 @@
-import { GameMechanicState } from "./game-mechanic.js";
+import { GameMechanicState } from "./game-mechanic";
 
 /**
  * @abstract

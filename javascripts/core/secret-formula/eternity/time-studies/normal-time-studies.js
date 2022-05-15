@@ -1,5 +1,5 @@
-import { GameDatabase } from "../../game-database.js";
-import { DC } from "../../../constants.js";
+import { DC } from "../../../constants";
+import { GameDatabase } from "../../game-database";
 
 /**
  * List of time study specifications and attributes

@@ -1,5 +1,5 @@
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { DC } from "./constants";
+import { SpeedrunMilestones } from "./speedrun";
 
 class BlackHoleUpgradeState {
   constructor(config) {

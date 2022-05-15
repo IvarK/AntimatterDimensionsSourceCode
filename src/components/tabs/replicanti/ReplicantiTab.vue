@@ -1,9 +1,7 @@
 <script>
+import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";
 import ReplicantiGainText from "./ReplicantiGainText";
-import ReplicantiUpgradeButton, {
-  ReplicantiUpgradeButtonSetup,
-} from "./ReplicantiUpgradeButton";
 import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton";
 
 export default {
@@ -217,4 +215,5 @@ export default {
 </template>
 
 <style scoped>
+
 </style>

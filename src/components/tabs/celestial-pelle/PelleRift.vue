@@ -1,6 +1,6 @@
 <script>
-import PelleStrike from "./PelleStrike";
 import PelleRiftBar from "./PelleRiftBar";
+import PelleStrike from "./PelleStrike";
 
 export default {
   name: "PelleRift",
@@ -97,11 +97,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
+
   /* transparent crimson */
-  box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45), 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45);
+  box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 45%), 0 0 1rem 0.1rem rgba(237, 20, 61, 45%);
+  margin-top: 1rem;
 }
 
 .t-s1 .c-pelle-rift {
@@ -122,20 +123,20 @@ export default {
 
 .c-pelle-rift-rift-info-container {
   height: 5rem;
-  color: var(--color-text);
   font-weight: 400;
+  color: var(--color-text);
 }
 
 .c-pelle-rift-status {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 26rem;
+  align-items: center;
 }
 
 .c-pelle-rift-name-header {
-  color: var(--color-pelle--base);
   font-weight: bold;
+  color: var(--color-pelle--base);
   padding: 0.2rem;
 }
 </style>

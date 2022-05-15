@@ -107,11 +107,11 @@ export default {
 }
 
 .c-shop-disclaimer {
-  color: black;
-  background: var(--color-bad);
   width: 100rem;
   font-size: 1.8rem;
   font-weight: bold;
+  color: black;
+  background: var(--color-bad);
   border: var(--var-border-width, 0.2rem) solid black;
   border-radius: var(--var-border-radius, 1rem);
   margin-top: 0.8rem;
@@ -139,15 +139,15 @@ export default {
 }
 
 .o-shop-button-button {
+  display: flex;
+  align-items: center;
+  font-family: Typewriter;
   background: turquoise;
   border: none;
   border-radius: var(--var-border-radius, 0.5rem);
-  display: flex;
   margin: auto;
-  align-items: center;
-  font-family: Typewriter;
-  padding: .5rem 2rem;
   margin-top: 1rem;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 }
 

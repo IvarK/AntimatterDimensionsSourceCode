@@ -1,6 +1,7 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
-import { Pelle, PelleStrikes } from "../globals.js";
+import { Pelle, PelleStrikes } from "../globals";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 GameDatabase.h2p = {
   /**

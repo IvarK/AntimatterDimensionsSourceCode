@@ -1,4 +1,4 @@
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorLexer } from "./lexer";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
@@ -723,7 +723,7 @@ export const AutomatorCommands = ((() => {
           if (missingStudyCount === 0) {
             AutomatorData.logCommandEvent(`Fully loaded study preset ${ctx.Preset[0].image}`, ctx.startLine);
           } else if (afterCount > beforeCount) {
-            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image} 
+            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image}
               (missing ${quantifyInt("study", missingStudyCount)})`, ctx.startLine);
           }
           return ctx.Nowait !== undefined || missingStudyCount === 0

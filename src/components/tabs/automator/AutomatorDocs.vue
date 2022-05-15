@@ -1,10 +1,10 @@
 <script>
+import AutomatorBlocks from "./AutomatorBlocks";
 import AutomatorButton from "./AutomatorButton";
 import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
+import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
-import AutomatorBlocks from "./AutomatorBlocks";
-import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 
 export default {
   name: "AutomatorDocs",

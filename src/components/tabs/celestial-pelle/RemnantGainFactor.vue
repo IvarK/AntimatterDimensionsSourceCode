@@ -138,13 +138,13 @@ export default {
 }
 
 .c-remnant-factors {
-  background-color: var(--color-text-inverted);
+  z-index: 4;
+  font-weight: bold;
   color: var(--color-text);
+  background-color: var(--color-text-inverted);
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.3rem;
-  font-weight: bold;
-  z-index: 4;
 }
 
 .c-remnant-factors-text {
@@ -153,15 +153,15 @@ export default {
 
 .l-remnant-factors-row {
   display: flex;
-  width: 100%
+  width: 100%;
 }
 
 .l-remnant-factors-col {
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
   flex-direction: column;
   margin-left: 2rem;
-  flex-shrink: 0;
-  flex-grow: 0;
 }
 
 .l-remnant-factors-col--first {

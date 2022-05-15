@@ -97,103 +97,6 @@ export default {
 </template>
 
 <style scoped>
-.c-credits-container {
-  position: absolute;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 9;
-  color: rgb(185, 185, 185);
-  pointer-events: none;
-  transform: translateY(100%);
-}
-
-.c-credits-header {
-  color: yellow;
-}
-
-.c-credits-section {
-  margin-top: 10rem;
-  margin-bottom: 2rem;
-  color: white;
-  text-shadow: 1px 1px 2px turquoise;
-}
-
-.l-credits--bulk {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  position: relative;
-  width: 76%;
-  left: 12%;
-}
-
-.c-credit-entry {
-  margin-top: 1rem;
-  font-size: 1.3rem;
-}
-
-
-.c-credits-cel-symbol {
-  position: absolute;
-  font-size: 14rem;
-  text-shadow: 0 0 3rem;
-  transform: translateX(-50%);
-  height: 14rem;
-  width: 14rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.c-teresa-credits {
-  left: 65%;
-  top: 130rem;
-  color: var(--color-teresa--base);
-  animation: a-teresa-credits 10s ease-in-out infinite;
-}
-
-.c-effarig-credits {
-  left: 80%;
-  top: 50rem;
-  color: #f40;
-  animation: a-effarig-credits 4s ease-in-out infinite;
-}
-
-.c-enslaved-credits {
-  left: 52%;
-  top: 220rem;
-  color: var(--color-enslaved--base);
-  animation: a-enslaved-credits 10s linear infinite;
-}
-
-.c-v-credits {
-  left: 20%;
-  top: 170rem;
-  color: var(--color-v--base);
-  animation: a-v-credits 15s ease-in-out infinite;
-}
-
-.c-ra-credits {
-  left: 44%;
-  top: 300rem;
-  color: var(--color-ra--base);
-  animation: a-ra-credits 10s ease-in-out infinite;
-}
-
-.c-laitela-credits {
-  left: 13%;
-  top: 90rem;
-  color: #ffffff;
-  animation: a-laitela-credits 5s ease-in-out infinite;
-}
-
-.c-pelle-credits {
-  left: 30%;
-  top: 8rem;
-  color: var(--color-pelle--base);
-  animation: a-pelle-credits 5s linear infinite;
-}
-
 @keyframes a-teresa-credits {
   0% { transform: rotate(61deg); }
   10% { transform: rotate(322deg); }
@@ -209,9 +112,20 @@ export default {
 }
 
 @keyframes a-effarig-credits {
-  0% { opacity: 0.8; text-shadow: 0 0 3rem; }
-  50% { opacity: 1; text-shadow: 0 0 4rem, 0 0 4rem; }
-  100% { opacity: 0.8; text-shadow: 0 0 3rem; }
+  0% {
+    opacity: 0.8;
+    text-shadow: 0 0 3rem;
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 4rem, 0 0 4rem;
+  }
+
+  100% {
+    opacity: 0.8;
+    text-shadow: 0 0 3rem;
+  }
 }
 
 @keyframes a-enslaved-credits {
@@ -232,9 +146,20 @@ perfectly the same. */
 }
 
 @keyframes a-ra-credits {
-  0% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
-  50% { opacity: 0.4; transform: translateX(-50%) scale(0.9); }
-  100% { opacity: 0.1; transform: translateX(-50%) scale(0.2); }
+  0% {
+    opacity: 0.1;
+    transform: translateX(-50%) scale(0.2);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 0.1;
+    transform: translateX(-50%) scale(0.2);
+  }
 }
 
 @keyframes a-laitela-credits {
@@ -251,5 +176,101 @@ perfectly the same. */
   50% { transform: translateX(-50%) rotate3d(0, 1, 0, 180deg) scaleY(1); }
   75% { transform: translateX(-50%) rotate3d(0, 1, 0, 270deg) scaleY(1.3); }
   100% { transform: translateX(-50%) rotate3d(0, 1, 0, 360deg) scaleY(1); }
+}
+
+.c-credits-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 9;
+  color: rgb(185, 185, 185);
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.c-credits-header {
+  color: yellow;
+}
+
+.c-credits-section {
+  color: white;
+  text-shadow: 1px 1px 2px turquoise;
+  margin-top: 10rem;
+  margin-bottom: 2rem;
+}
+
+.l-credits--bulk {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 76%;
+  position: relative;
+  left: 12%;
+}
+
+.c-credit-entry {
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+.c-credits-cel-symbol {
+  display: flex;
+  width: 14rem;
+  height: 14rem;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  font-size: 14rem;
+  text-shadow: 0 0 3rem;
+  transform: translateX(-50%);
+}
+
+.c-teresa-credits {
+  top: 130rem;
+  left: 65%;
+  color: var(--color-teresa--base);
+  animation: a-teresa-credits 10s ease-in-out infinite;
+}
+
+.c-effarig-credits {
+  top: 50rem;
+  left: 80%;
+  color: #ff4400;
+  animation: a-effarig-credits 4s ease-in-out infinite;
+}
+
+.c-enslaved-credits {
+  top: 220rem;
+  left: 52%;
+  color: var(--color-enslaved--base);
+  animation: a-enslaved-credits 10s linear infinite;
+}
+
+.c-v-credits {
+  top: 170rem;
+  left: 20%;
+  color: var(--color-v--base);
+  animation: a-v-credits 15s ease-in-out infinite;
+}
+
+.c-ra-credits {
+  top: 300rem;
+  left: 44%;
+  color: var(--color-ra--base);
+  animation: a-ra-credits 10s ease-in-out infinite;
+}
+
+.c-laitela-credits {
+  top: 90rem;
+  left: 13%;
+  color: #ffffff;
+  animation: a-laitela-credits 5s ease-in-out infinite;
+}
+
+.c-pelle-credits {
+  top: 8rem;
+  left: 30%;
+  color: var(--color-pelle--base);
+  animation: a-pelle-credits 5s linear infinite;
 }
 </style>

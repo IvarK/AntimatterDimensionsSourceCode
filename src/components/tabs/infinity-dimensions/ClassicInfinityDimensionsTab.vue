@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import InfinityDimensionRow from "./ClassicInfinityDimensionRow";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ClassicInfinityDimensionsTab",

@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 export const MachineHandler = {
   get baseRMCap() { return DC.E1000; },

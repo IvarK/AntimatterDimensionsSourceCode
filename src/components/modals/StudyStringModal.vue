@@ -13,8 +13,8 @@ export default {
     PrimaryButton
   },
   props: {
-    modalConfig: {
-      type: Object,
+    id: {
+      type: Number,
       required: true,
     }
   },
@@ -28,7 +28,7 @@ export default {
     // This modal is used by both study importing and preset editing but only has a prop actually passed in when
     // editing (which is the preset index). Needs to be an undefined check because index can be zero
     isImporting() {
-      return this.modalConfig.id === undefined;
+      return this.id === undefined;
     },
     // This represents the state reached from importing into an empty tree
     importedTree() {
@@ -121,7 +121,7 @@ export default {
   },
   // Needs to be assigned in created() or else they will end up being undefined when importing
   created() {
-    const preset = player.timestudy.presets[this.modalConfig.id];
+    const preset = player.timestudy.presets[this.id];
     this.input = preset ? preset.studies : "";
     this.name = preset ? preset.name : "";
   },
@@ -146,7 +146,7 @@ export default {
     },
     savePreset() {
       if (this.inputIsValid) {
-        player.timestudy.presets[this.modalConfig.id].studies = this.input;
+        player.timestudy.presets[this.id].studies = this.input;
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }

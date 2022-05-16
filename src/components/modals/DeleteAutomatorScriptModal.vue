@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    scriptID: {
+      type: [String, Number],
       required: true
     }
   },
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     handleYesClick() {
-      const script = this.modalConfig.scriptID;
+      const script = this.scriptID;
       const runningScriptID = AutomatorBackend.state.topLevelScript;
 
       AutomatorBackend.deleteScript(script);

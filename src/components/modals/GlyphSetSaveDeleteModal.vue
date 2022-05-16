@@ -9,8 +9,8 @@ export default {
     GlyphSetPreview
   },
   props: {
-    modalConfig: {
-      type: Object,
+    glyphSetId: {
+      type: Number,
       required: true
     }
   },
@@ -21,10 +21,10 @@ export default {
   },
   methods: {
     update() {
-      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.modalConfig.glyphSetId].glyphs);
+      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.glyphSetId].glyphs);
     },
     handleYesClick() {
-      player.reality.glyphs.sets[this.modalConfig.glyphSetId].glyphs = [];
+      player.reality.glyphs.sets[this.glyphSetId].glyphs = [];
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
   },

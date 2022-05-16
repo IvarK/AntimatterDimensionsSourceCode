@@ -9,20 +9,24 @@ export default {
     EnterCelestialsRaPet,
   },
   props: {
-    modalConfig: {
-      type: Object,
+    number: {
+      type: Number,
       required: true,
+    },
+    name: {
+      type: String,
+      required: true
     }
   },
   computed: {
     description() {
-      return GameDatabase.celestials.descriptions[this.modalConfig.number].description().split("\n");
+      return GameDatabase.celestials.descriptions[this.number].description().split("\n");
     },
     topLabel() {
-      return `${this.modalConfig.name} Reality`;
+      return `${this.name} Reality`;
     },
     message() {
-      return `Perform a Reality reset, and enter ${this.modalConfig.name} Reality, in which`;
+      return `Perform a Reality reset, and enter ${this.name} Reality, in which`;
     },
   },
   methods: {
@@ -37,7 +41,7 @@ export default {
       const laitelaFastest = player.celestials.laitela.fastestCompletion;
       const laitalaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
 
-      switch (this.modalConfig.number) {
+      switch (this.number) {
         case 0: return `Your highest Teresa completetion was for ${format(teresaBestAM, 2, 2)}
           antimatter, gaining you a ${formatX(teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
         case 1: return `${effarigDone
@@ -64,7 +68,7 @@ export default {
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-      switch (this.modalConfig.number) {
+      switch (this.number) {
         case 0: return Teresa.initializeRun();
         case 1: return Effarig.initializeRun();
         case 2: return Enslaved.initializeRun();
@@ -95,7 +99,7 @@ export default {
       <div>
         {{ extraLine() }}
       </div>
-      <span v-if="modalConfig.number === 4">
+      <span v-if="number === 4">
         <EnterCelestialsRaPet
           v-for="id in 4"
           :key="id"

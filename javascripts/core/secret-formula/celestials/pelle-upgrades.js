@@ -110,7 +110,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
     },
     IDAutobuyers: {
       id: 8,
-      description: "Gain Back Infinity Dimension Autobuyers",
+      description: "Gain back Infinity Dimension Autobuyers",
       cost: 1e14,
       formatCost,
     },
@@ -158,7 +158,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
     },
     TDAutobuyers: {
       id: 16,
-      description: "Gain Back Time Dimension Autobuyers",
+      description: "Gain back Time Dimension Autobuyers",
       cost: 1e25,
       formatCost,
     },

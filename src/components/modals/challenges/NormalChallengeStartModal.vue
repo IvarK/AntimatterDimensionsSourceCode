@@ -6,15 +6,18 @@ export default {
   components: {
     ModalWrapperChoice
   },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     challenge() {
-      return NormalChallenge(this.modal.id);
+      return NormalChallenge(this.id);
     },
     challengeIsCompleted() {
       return this.challenge.isCompleted;
-    },
-    modal() {
-      return this.$viewModel.modal.current;
     },
     message() {
       return `You will Big Crunch, if possible, and start a new Infinity within the Challenge, with all the
@@ -24,7 +27,7 @@ export default {
         You do not start with any Dimension Boosts or Galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
-      return `You are about to enter Challenge ${this.modal.id}`;
+      return `You are about to enter Challenge ${this.id}`;
     },
     reward() {
       return `The reward for completing this challenge is: ${this.challenge._config.reward}`;

@@ -132,8 +132,7 @@ export class Modal {
 
 class ChallengeConfirmationModal extends Modal {
   show(id) {
-    this.id = id;
-    super.show();
+    super.show({ id });
   }
 }
 

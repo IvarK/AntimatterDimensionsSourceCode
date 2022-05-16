@@ -12,11 +12,6 @@ export default {
       required: true
     }
   },
-  computed: {
-    modal() {
-      return this.$viewModel.modal.current;
-    },
-  },
   methods: {
     handleYesClick() {
       const script = this.scriptID;

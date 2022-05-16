@@ -6,15 +6,18 @@ export default {
   components: {
     ModalWrapperChoice
   },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     challenge() {
-      return EternityChallenge(this.modal.id);
+      return EternityChallenge(this.id);
     },
     challengeIsCompleted() {
       return this.challenge.isFullyCompleted;
-    },
-    modal() {
-      return this.$viewModel.modal.current;
     },
     message() {
       return `You will Eternity, if possible, and start a new Eternity within the Challenge, with all the
@@ -25,7 +28,7 @@ export default {
         ${formatInt(5)} times, with increasing goals and bonuses.`;
     },
     entranceLabel() {
-      return `You are about to enter Eternity Challenge ${this.modal.id}`;
+      return `You are about to enter Eternity Challenge ${this.id}`;
     },
     reward() {
       let rewardDescription = this.challenge._config.reward.description;

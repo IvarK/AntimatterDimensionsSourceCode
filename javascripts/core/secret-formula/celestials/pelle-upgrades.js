@@ -122,7 +122,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
     },
     replicantiAutobuyers: {
       id: 10,
-      description: "Gain back Replicanti Upgrade Autobuyer",
+      description: "Gain back Replicanti Upgrade Autobuyers",
       cost: 1e17,
       formatCost,
     },

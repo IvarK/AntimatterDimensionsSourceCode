@@ -68,7 +68,7 @@ GameDatabase.celestials.pelle.upgrades = (function() {
     },
     dimBoostAutobuyer: {
       id: 1,
-      description: "Gain back Autobuyer for Dimension Boosts",
+      description: "Gain back the Autobuyer for Dimension Boosts",
       cost: 5e5,
       formatCost,
     },
@@ -86,13 +86,13 @@ GameDatabase.celestials.pelle.upgrades = (function() {
     },
     galaxyAutobuyer: {
       id: 4,
-      description: "Gain back Autobuyer for Antimatter Galaxies",
+      description: "Gain back the Autobuyer for Antimatter Galaxies",
       cost: 1e8,
       formatCost,
     },
     tickspeedAutobuyer: {
       id: 5,
-      description: "Gain back Autobuyer for Tickspeed",
+      description: "Gain back the Autobuyer for Tickspeed",
       cost: 1e9,
       formatCost,
     },

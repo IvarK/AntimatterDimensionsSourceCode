@@ -34,7 +34,7 @@ export default {
         : this.lockText;
     },
     sumText() {
-      const parts = [this.galaxies.normal];
+      const parts = [Math.max(this.galaxies.normal, 0)];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
       const sum = parts.map(formatInt).join(" + ");

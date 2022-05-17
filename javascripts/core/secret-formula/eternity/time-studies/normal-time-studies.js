@@ -86,7 +86,7 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 33,
     cost: 2,
-    requirement: [21],
+    requirement: [22],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: "You keep half of your Replicanti Galaxies on Infinity"
   },

@@ -1305,7 +1305,8 @@ GameDatabase.achievements.normal = [
     id: 182,
     name: "One more time",
     description: "Gain back all Antimatter Dimension autobuyers.",
-    checkRequirement: () => player.celestials.pelle.upgrades.has(4),
+    checkRequirement: () => PelleUpgrade.antimatterDimAutobuyers1.canBeApplied &&
+      PelleUpgrade.antimatterDimAutobuyers2.canBeApplied,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {

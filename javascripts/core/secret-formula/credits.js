@@ -323,7 +323,7 @@ GameDatabase.credits = {
       roles: 12
     }, {
       name: "ReacTivity",
-      roles: 13
+      roles: 12
     }, {
       name: "Rukimix",
       roles: 12

@@ -509,7 +509,6 @@ button:focus {
   position: absolute;
   right: 0.5rem;
   bottom: 0.5rem;
-  animation: weee 4s infinite;
 }
 
 .o-time-study-selection-btn {
@@ -1130,26 +1129,25 @@ br {
   }
 }
 
-/* stylelint-disable-next-line keyframes-name-pattern */
-@keyframes barrelRoll {
+@keyframes a-barrel-roll {
   0% { transform: rotateZ(0deg); }
 
   50%,
   100% { transform: rotateZ(360deg); }
 }
 
-@keyframes spin3d {
+@keyframes a-spin3d {
   0% { transform: rotate3d(5.2, -2.8, 1.4, 0deg); }
   100% { transform: rotate3d(5.2, -2.8, 1.4, 360deg); }
 }
 
-@keyframes spin4d {
+@keyframes a-spin4d {
   0%,
   100% { transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg); }
   50% { transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg); }
 }
 
-@keyframes float {
+@keyframes a-float {
   0% {
     bottom: 0;
     opacity: 0;
@@ -1165,7 +1163,7 @@ br {
   }
 }
 
-@keyframes implode {
+@keyframes a-implode {
   0%,
   100% {
     transform: scale(1);
@@ -1178,7 +1176,7 @@ br {
   }
 }
 
-@keyframes eternify {
+@keyframes a-eternify {
   0% {
     opacity: 1;
     filter: blur(0);
@@ -1220,7 +1218,7 @@ br {
   }
 }
 
-@keyframes dilate {
+@keyframes a-dilate {
   0% {
     opacity: 1;
     transform: scaleX(1);
@@ -1242,7 +1240,7 @@ br {
   }
 }
 
-@keyframes undilate {
+@keyframes a-undilate {
   0% {
     opacity: 1;
     transform: scaleX(1);
@@ -1264,14 +1262,14 @@ br {
   }
 }
 
-@keyframes realize {
+@keyframes a-realize {
   0% { opacity: 1; }
   20% { opacity: 0; }
   80% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-@keyframes realizebg {
+@keyframes a-realizebg {
   0% { opacity: 0; }
   20% { opacity: 0; }
   30% { opacity: 1; }
@@ -1280,41 +1278,41 @@ br {
   100% { opacity: 0; }
 }
 
-@keyframes text-grow {
+@keyframes a-text-grow {
   0% { font-size: 1.3rem; }
   50% { font-size: 1.8rem; }
   100% { font-size: 1.3rem; }
 }
 
-@keyframes text-shrink {
+@keyframes a-text-shrink {
   0% { font-size: 1.8rem; }
   50% { font-size: 1.3rem; }
   100% { font-size: 1.8rem; }
 }
 
-@keyframes text-crunch {
+@keyframes a-text-crunch {
   0% { font-size: 1.5rem; }
   90% { font-size: 1.5rem; }
   100% { font-size: 0; }
 }
 
-@keyframes text-flash {
+@keyframes a-text-flash {
   0% { color: yellow; }
   50% { color: red; }
 }
 
-@keyframes fade-out {
+@keyframes a-fade-out {
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-@keyframes disappear {
+@keyframes a-disappear {
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
 
-@keyframes text-stretch {
+@keyframes a-text-stretch {
   0% { letter-spacing: 0; }
   100% { letter-spacing: 30rem; }
 }
@@ -9345,7 +9343,7 @@ input.o-automator-block-input {
   font-family: "Font Awesome 6 Free" !important;
 }
 
-@keyframes opacity {
+@keyframes a-opacity {
   0% { opacity: 0; }
   50% { opacity: 0.4; }
   100% { opacity: 0; }
@@ -9364,7 +9362,7 @@ input.o-automator-block-input {
   left: 0;
   background: gold;
   border-radius: var(--var-border-radius, inherit);
-  animation: opacity 3s infinite;
+  animation: a-opacity 3s infinite;
 }
 
 .o-celestial-nav__hoverable .tooltiptext {

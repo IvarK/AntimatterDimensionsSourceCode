@@ -3,7 +3,7 @@ import { DC } from "./constants";
 import { SpeedrunMilestones } from "./speedrun";
 
 export function bigCrunchAnimation() {
-  document.body.style.animation = "implode 2s 1";
+  document.body.style.animation = "a-implode 2s 1";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 2000);

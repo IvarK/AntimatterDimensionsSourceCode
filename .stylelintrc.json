@@ -46,9 +46,9 @@
             }
         ],
         "keyframes-name-pattern": [
-            "^([_a-z][a-z0-9]*)([-_]{1,2}[a-z0-9]+)*$",
+            "^a-([-_]{0,2}[a-z0-9]+)*$",
             {
-                "message": "Expected keyframe name to be kebab-case"
+                "message": "Keyframe name must begin with `a-` and be kebab-case"
             }
         ],
         "selector-id-pattern": [

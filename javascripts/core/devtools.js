@@ -93,17 +93,17 @@ dev.tripleEverything = function() {
 };
 
 dev.barrelRoll = function() {
-  document.body.style.animation = "barrelRoll 5s 1";
+  document.body.style.animation = "a-barrel-roll 5s 1";
   setTimeout(() => document.body.style.animation = "", 5000);
 };
 
 dev.spin3d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
+  if (document.body.style.animation === "") document.body.style.animation = "a-spin3d 3s infinite";
   else document.body.style.animation = "";
 };
 
 dev.spin4d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
+  if (document.body.style.animation === "") document.body.style.animation = "a-spin4d 3s infinite";
   else document.body.style.animation = "";
 };
 

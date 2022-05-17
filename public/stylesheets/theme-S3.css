@@ -9,10 +9,10 @@ body {
 .t-s3 .time-theorem-buttons,
 .t-s3 .sidebar,
 .t-s3 .c-glyph-tooltip {
-  animation: glasses 7s infinite;
+  animation: a-glasses 7s infinite;
 }
 
-@keyframes glasses {
+@keyframes a-glasses {
   0% { filter: blur(0); }
   10% { filter: blur(3px); }
   20% { filter: blur(0); }

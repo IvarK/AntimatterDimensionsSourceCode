@@ -186,12 +186,12 @@ export default {
   background: black;
 }
 
-@keyframes roll {
+@keyframes a-roll {
   100% { transform: rotateY(360deg); }
 }
 
 .pelle-icon {
-  animation: roll infinite 8s linear;
+  animation: a-roll infinite 8s linear;
 }
 
 .o-celestial-quote-history {

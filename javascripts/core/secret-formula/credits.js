@@ -322,6 +322,9 @@ GameDatabase.credits = {
       name: "Razvan Cercel",
       roles: 12
     }, {
+      name: "ReacTivity",
+      roles: 13
+    }, {
       name: "Rukimix",
       roles: 12
     }, {

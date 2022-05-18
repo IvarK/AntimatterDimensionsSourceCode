@@ -5,6 +5,7 @@ import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
+import AutomatorModeSwitch from "./AutomatorModeSwitch";
 
 export default {
   name: "AutomatorDocs",
@@ -14,7 +15,8 @@ export default {
     AutomatorErrorPage,
     AutomatorEventLog,
     AutomatorBlocks,
-    AutomatorDocsTemplateList
+    AutomatorDocsTemplateList,
+    AutomatorModeSwitch,
   },
   data() {
     return {
@@ -178,87 +180,93 @@ export default {
 
 <template>
   <div class="l-automator-pane">
-    <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-      <AutomatorButton
-        v-tooltip="'Scripting Information'"
-        class="fa-list"
-        :class="{ 'c-automator__button--active': infoPaneID === 1 }"
-        @click="infoPaneID = 1"
-      />
-      <AutomatorButton
-        v-tooltip="blockTooltip"
-        :class="{
-          'fa-cubes': isBlock,
-          'fa-file-code': !isBlock,
-          'c-automator__button--active': infoPaneID === 2
-        }"
-        @click="infoPaneID = 2"
-      />
-      <AutomatorButton
-        v-tooltip="errorTooltip"
-        :style="errorStyle"
-        class="fa-exclamation-triangle"
-        :class="{ 'c-automator__button--active': infoPaneID === 3 }"
-        @click="infoPaneID = 3"
-      />
-      <AutomatorButton
-        v-tooltip="'View recently executed commands'"
-        class="fa-eye"
-        :class="{ 'c-automator__button--active': infoPaneID === 4 }"
-        @click="infoPaneID = 4"
-      />
-      <AutomatorButton
-        v-tooltip="'Export automator script'"
-        class="fa-file-export"
-        @click="exportScript"
-      />
-      <AutomatorButton
-        v-tooltip="'Import automator script'"
-        class="fa-file-import"
-        @click="importScript"
-      />
-      <div class="l-automator__script-names">
-        <template v-if="!editingName">
-          <select
-            class="l-automator__scripts-dropdown"
-            @input="onScriptDropdown"
-          >
-            <option
-              v-for="script in scripts"
-              :key="script.id"
-              v-bind="selectedScriptAttribute(script.id)"
-              :value="script.id"
-            >
-              {{ dropdownLabel(script) }}
-            </option>
-            <option value="createNewScript">
-              Create new...
-            </option>
-          </select>
-          <AutomatorButton
-            v-tooltip="'Rename script'"
-            class="far fa-edit"
-            @click="rename"
-          />
-        </template>
-        <input
-          v-else
-          ref="renameInput"
-          class="l-automator__rename-input"
-          @blur="nameEdited"
-          @keyup.enter="$refs.renameInput.blur()"
-        >
+    <div class="c-automator__controls l-automator__controls">
+      <div class="l-automator-button-row">
+        <AutomatorButton
+          v-tooltip="'Scripting Information'"
+          class="fa-list"
+          :class="{ 'c-automator__button--active': infoPaneID === 1 }"
+          @click="infoPaneID = 1"
+        />
+        <AutomatorButton
+          v-tooltip="blockTooltip"
+          :class="{
+            'fa-cubes': isBlock,
+            'fa-file-code': !isBlock,
+            'c-automator__button--active': infoPaneID === 2
+          }"
+          @click="infoPaneID = 2"
+        />
+        <AutomatorButton
+          v-tooltip="errorTooltip"
+          :style="errorStyle"
+          class="fa-exclamation-triangle"
+          :class="{ 'c-automator__button--active': infoPaneID === 3 }"
+          @click="infoPaneID = 3"
+        />
+        <AutomatorButton
+          v-tooltip="'View recently executed commands'"
+          class="fa-eye"
+          :class="{ 'c-automator__button--active': infoPaneID === 4 }"
+          @click="infoPaneID = 4"
+        />
+        <AutomatorModeSwitch />
+        <AutomatorButton
+          v-tooltip="fullScreenTooltip"
+          class="l-automator__maximize-button"
+          :class="fullScreenIconClass"
+          @click="fullScreen = !fullScreen"
+        />
       </div>
-      <AutomatorButton
-        v-tooltip="'Delete this script'"
-        class="fas fa-trash"
-        @click="deleteScript"
-      />
-      <AutomatorButton
-        v-tooltip="fullScreenTooltip"
-        :class="fullScreenIconClass"
-        @click="fullScreen = !fullScreen"
-      />
+      <div class="l-automator-button-row">
+        <AutomatorButton
+          v-tooltip="'Export automator script'"
+          class="fa-file-export"
+          @click="exportScript"
+        />
+        <AutomatorButton
+          v-tooltip="'Import automator script'"
+          class="fa-file-import"
+          @click="importScript"
+        />
+        <div class="l-automator__script-names">
+          <template v-if="!editingName">
+            <select
+              class="l-automator__scripts-dropdown"
+              @input="onScriptDropdown"
+            >
+              <option
+                v-for="script in scripts"
+                :key="script.id"
+                v-bind="selectedScriptAttribute(script.id)"
+                :value="script.id"
+              >
+                {{ dropdownLabel(script) }}
+              </option>
+              <option value="createNewScript">
+                Create new...
+              </option>
+            </select>
+            <AutomatorButton
+              v-tooltip="'Rename script'"
+              class="far fa-edit"
+              @click="rename"
+            />
+          </template>
+          <input
+            v-else
+            ref="renameInput"
+            class="l-automator__rename-input"
+            @blur="nameEdited"
+            @keyup.enter="$refs.renameInput.blur()"
+          >
+        </div>
+        <AutomatorButton
+          v-tooltip="'Delete this script'"
+          class="fas fa-trash"
+          @click="deleteScript"
+        />
+      </div>
     </div>
     <div class="c-automator-docs l-automator-pane__content">
       <AutomatorDocsCommandList v-if="infoPaneID === 1" />
@@ -273,6 +281,28 @@ export default {
 </template>
 
 <style scoped>
+.l-automator__maximize-button {
+  position: absolute;
+  right: 0;
+}
+
+.l-automator__script-names {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.l-automator__scripts-dropdown {
+  width: 90%;
+  height: 90%;
+  border-width: 0.1rem;
+  border-radius: 0;
+  margin: 0.4rem;
+  padding: 0.2rem 0 0.3rem;
+}
+
 .c-automator__button--active {
   background-color: var(--color-reality);
   border-color: var(--color-reality-light);

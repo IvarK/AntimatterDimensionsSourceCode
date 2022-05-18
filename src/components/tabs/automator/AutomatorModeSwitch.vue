@@ -110,7 +110,7 @@ export default {
   background-color: #626262;
   border: 0.2rem solid #767676;
   border-radius: 0.2rem;
-  margin: 0.4rem;
+  margin: 0.2rem 0.4rem;
   padding: 0.3rem 0;
   cursor: pointer;
 }

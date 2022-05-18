@@ -243,6 +243,12 @@ export default {
 .c-pelle-rift-bar--filling,
 .c-pelle-rift-bar--idle {
   cursor: pointer;
+  transition: box-shadow 0.5s;
+}
+
+.c-pelle-rift-bar--filling:hover,
+.c-pelle-rift-bar--idle:hover {
+  box-shadow: 0 0 2rem var(--color-pelle--secondary);
 }
 
 .l-overflow-hidden {

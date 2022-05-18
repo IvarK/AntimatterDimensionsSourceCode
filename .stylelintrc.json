@@ -3,8 +3,7 @@
         "stylelint-order"
     ],
     "extends": [
-        "stylelint-config-standard",
-        "stylelint-config-recommended-vue"
+        "stylelint-config-standard"
     ],
     "rules": {
         "no-descending-specificity": null,
@@ -389,5 +388,38 @@
                 "emptyLineBeforeUnspecified": "always"
             }
         ]
-    }
+    },
+    "overrides": [
+        {
+            "files": [
+                "*.vue",
+                "**/*.vue"
+            ],
+            "extends": [
+                "stylelint-config-recommended",
+                "stylelint-config-html"
+            ],
+            "rules": {
+                "selector-pseudo-class-no-unknown": [
+                    true,
+                    {
+                        "ignorePseudoClasses": [
+                            "deep",
+                            "global"
+                        ]
+                    }
+                ],
+                "selector-pseudo-element-no-unknown": [
+                    true,
+                    {
+                        "ignorePseudoElements": [
+                            "v-deep",
+                            "v-global",
+                            "v-slotted"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
 }

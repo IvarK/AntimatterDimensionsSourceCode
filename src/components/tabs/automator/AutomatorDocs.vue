@@ -211,10 +211,11 @@ export default {
           @click="infoPaneID = 4"
         />
         <AutomatorModeSwitch />
-        Switching will stop scripts
+        <div class="l-automator__disclaimer-text">
+          Switching will stop scripts
+        </div>
         <AutomatorButton
           v-tooltip="fullScreenTooltip"
-          class="l-automator__maximize-button"
           :class="fullScreenIconClass"
           @click="fullScreen = !fullScreen"
         />
@@ -282,9 +283,9 @@ export default {
 </template>
 
 <style scoped>
-.l-automator__maximize-button {
-  position: absolute;
-  right: 0;
+.l-automator__disclaimer-text {
+  text-align: left;
+  flex: 1;
 }
 
 .l-automator__script-names {

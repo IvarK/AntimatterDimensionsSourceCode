@@ -169,8 +169,8 @@ export default {
 
 <style scoped>
 .c-automator__status-text {
-  color: var(--color-reality);
   font-size: 1.5rem;
+  color: var(--color-reality);
   font-weight: bold;
   padding: 0 0.5rem;
 }

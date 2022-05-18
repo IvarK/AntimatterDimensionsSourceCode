@@ -111,7 +111,6 @@ class AutomatorStackEntry {
 
 export class AutomatorScript {
   constructor(id) {
-    if (!id) throw new Error("Invalid Automator script ID");
     this._id = id;
     this.compile();
   }
@@ -183,7 +182,7 @@ export const AutomatorData = {
   createNewScript(newScript, name) {
     const newScriptID = Object.values(player.reality.automator.scripts).length + 1;
     player.reality.automator.scripts[newScriptID] = {
-      id: `${newScriptID}`,
+      id: newScriptID,
       name,
       content: newScript
     };
@@ -243,12 +242,22 @@ export const AutomatorBackend = {
     return this.isOn && this.mode === AUTOMATOR_MODE.RUN;
   },
 
+  get currentRunningScript() {
+    return player.reality.automator.scripts[this.state.topLevelScript];
+  },
+
+  get currentEditingScript() {
+    const saveIndex = Object.values(player.reality.automator.scripts)
+      .findIndex(s => s.id === player.reality.automator.state.editorScript);
+    return player.reality.automator.scripts[saveIndex];
+  },
+
   get scriptName() {
-    return this.findScript(this.state.topLevelScript).name;
+    return this.currentRunningScript?.name ?? "";
   },
 
   get currentLineNumber() {
-    if (this.stack.top === null)
+    if (!this.stack.top)
       return -1;
     return this.stack.top.lineNumber;
   },
@@ -257,8 +266,12 @@ export const AutomatorBackend = {
     return Math.clampMin(Math.pow(0.994, Currency.realities.value) * 500, 1);
   },
 
+  get currentRawText() {
+    return this.currentRunningScript?.content ?? "";
+  },
+
   get currentScriptLength() {
-    return player.reality.automator.scripts[this.state.topLevelScript].content.split("\n").length;
+    return this.currentRawText.split("\n").length;
   },
 
   update(diff) {
@@ -355,10 +368,7 @@ export const AutomatorBackend = {
   },
 
   findScript(id) {
-    // I tried really hard to convert IDs from strings into numbers for some cleanup but I just kept getting constant
-    // errors everywhere. It needs to be a number so that importing works properly without ID assignment being a mess,
-    // but apparently some deeper things seem to break in a way I can't easily fix.
-    return this._scripts.find(e => `${e.id}` === `${id}`);
+    return this._scripts.find(e => e.id === id);
   },
 
   _createDefaultScript() {
@@ -369,7 +379,7 @@ export const AutomatorBackend = {
   },
 
   initializeFromSave() {
-    const scriptIds = Object.keys(player.reality.automator.scripts);
+    const scriptIds = Object.keys(player.reality.automator.scripts).map(id => parseInt(id, 10));
     if (scriptIds.length === 0) {
       scriptIds.push(this._createDefaultScript());
     } else {
@@ -396,10 +406,14 @@ export const AutomatorBackend = {
     return newScript;
   },
 
+  // Note that deleting scripts leaves gaps in the automator script indexing since automator scripts can't be
+  // dynamically re-indexed while the automator is running without causing a stutter from recompiling scripts.
   deleteScript(id) {
+    // We need to delete scripts from two places - in the savefile and compiled AutomatorScript Objects
+    const saveId = Object.values(player.reality.automator.scripts).findIndex(s => s.id === id);
+    delete player.reality.automator.scripts[saveId];
     const idx = this._scripts.findIndex(e => e.id === id);
     this._scripts.splice(idx, 1);
-    delete player.reality.automator.scripts[id];
     if (this._scripts.length === 0) {
       this._createDefaultScript();
     }

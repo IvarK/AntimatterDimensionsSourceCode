@@ -13,7 +13,10 @@ export default {
       repeatOn: false,
       forceRestartOn: false,
       followExecution: false,
+      hasErrors: false,
       currentLine: 0,
+      runningName: "",
+      editingName: "",
     };
   },
   computed: {
@@ -34,17 +37,16 @@ export default {
       };
     },
     statusText() {
-      // TODO Check for correct script, add script name to running
-      const prefix = "Status: ";
       // Pad with leading zeroes based on script length to prevent text jitter on fast scripts. This technically fails
       // for scripts with more than 99999 lines, but scripts that long will be prevented elsewhere
-      const digits = Math.ceil(Math.log10(AutomatorBackend.currentScriptLength));
+      const digits = Math.clampMin(Math.ceil(Math.log10(AutomatorBackend.currentScriptLength)), 1);
       let lineNum = `0000${this.currentLine}`;
       lineNum = lineNum.slice(lineNum.length - digits);
 
-      if (this.isPaused) return `${prefix}Paused (Will run line ${lineNum} when resumed)`;
-      if (!this.isRunning) return `${prefix}Not running (Will start at beginning)`;
-      return `${prefix}Running (Last executed line ${lineNum})`;
+      if (this.isPaused) return `Paused: "${this.runningName}" (Resumes on Line ${lineNum})`;
+      if (this.isRunning) return `Running: "${this.runningName}" (Line ${lineNum})`;
+      if (this.hasErrors) return `Stopped: "${this.editingName}" has errors (Cannot run)`;
+      return `Stopped: Will start running "${this.editingName}"`;
     },
   },
   methods: {
@@ -54,10 +56,14 @@ export default {
       this.repeatOn = AutomatorBackend.state.repeat;
       this.forceRestartOn = AutomatorBackend.state.forceRestart;
       this.followExecution = AutomatorBackend.state.followExecution;
-      if (this.isRunning) this.currentLine = AutomatorBackend.currentLineNumber;
+      this.hasErrors = AutomatorData.currentErrors().length !== 0;
+      this.currentLine = AutomatorBackend.currentLineNumber;
+      this.runningName = AutomatorBackend.scriptName;
+      this.editingName = AutomatorBackend.currentEditingScript.name;
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
+      if (this.hasErrors) return;
       if (this.isRunning) {
         AutomatorBackend.pause();
         return;
@@ -122,8 +128,14 @@ export default {
         :class="{ 'c-automator__button--active' : followExecution }"
         @click="follow"
       />
+      <div class="c-automator__status-text c-automator__status-text--edit">
+        {{ editingName }}
+      </div>
     </div>
-    <div class="l-automator-button-row c-automator__status-text">
+    <div
+      class="l-automator-button-row c-automator__status-text"
+      :class="{ 'c-automator__status-text--error' : hasErrors && !isRunning }"
+    >
       {{ statusText }}
     </div>
   </div>
@@ -135,6 +147,14 @@ export default {
   font-size: 1.5rem;
   font-weight: bold;
   padding: 0 0.5rem;
+}
+
+.c-automator__status-text--edit {
+  color: var(--color-accent);
+}
+
+.c-automator__status-text--error {
+  color: var(--color-bad);
 }
 
 .c-automator__button--active {

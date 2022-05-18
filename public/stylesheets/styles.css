@@ -8982,7 +8982,7 @@ kbd {
   border-top-left-radius: var(--var-border-radius, 1rem);
   border-bottom-left-radius: var(--var-border-radius, 1rem);
   box-sizing: border-box;
-  padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 3.5rem;
 }
 
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
@@ -9009,7 +9009,8 @@ input.o-automator-block-input {
   min-width: 30rem;
   border: var(--var-border-width, 2px) dotted #55ff55;
   margin: 0.5rem 0 0.5rem 3rem;
-  padding: 1rem;
+  padding: 0.5rem;
+  padding-bottom: 0;
 }
 
 .o-automator-block-delete {

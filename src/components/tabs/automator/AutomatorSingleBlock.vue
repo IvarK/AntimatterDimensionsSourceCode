@@ -222,10 +222,10 @@ export default {
   position: absolute;
   left: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
   height: 2.85rem;
-  width: 2.5rem;
-  font-size: 1.4rem;
+  width: 3.5rem;
+  padding: 0.2rem;
+  font-size: 1.2rem;
 }
 </style>

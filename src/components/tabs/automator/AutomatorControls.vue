@@ -41,7 +41,7 @@ export default {
     statusText() {
       // Pad with leading zeroes based on script length to prevent text jitter on fast scripts. This technically fails
       // for scripts with more than 99999 lines, but scripts that long will be prevented elsewhere
-      const digits = Math.clampMin(Math.ceil(Math.log10(AutomatorBackend.currentScriptLength)), 1);
+      const digits = Math.clampMin(Math.ceil(Math.log10(AutomatorBackend.currentScriptLength + 1)), 1);
       let lineNum = `0000${this.currentLine}`;
       lineNum = lineNum.slice(lineNum.length - digits);
 

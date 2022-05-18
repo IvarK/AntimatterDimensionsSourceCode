@@ -138,8 +138,8 @@
 
 .l-automator__controls {
   display: flex;
-  flex-direction: column;
   flex: none;
+  flex-direction: column;
 }
 
 .l-automator-button-row {

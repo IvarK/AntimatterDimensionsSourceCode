@@ -284,8 +284,8 @@ export default {
 
 <style scoped>
 .l-automator__disclaimer-text {
-  text-align: left;
   flex: 1;
+  text-align: left;
 }
 
 .l-automator__script-names {

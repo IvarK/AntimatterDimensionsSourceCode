@@ -242,18 +242,27 @@ export const AutomatorBackend = {
     return this.isOn && this.mode === AUTOMATOR_MODE.RUN;
   },
 
+  findRawScriptObject(id) {
+    const auto = player.reality.automator;
+    const index = Object.values(auto.scripts).findIndex(s => s.id === id);
+    return auto.scripts[parseInt(Object.keys(auto.scripts)[index], 10)];
+  },
+
   get currentRunningScript() {
-    return player.reality.automator.scripts[this.state.topLevelScript];
+    return this.findRawScriptObject(this.state.topLevelScript);
   },
 
   get currentEditingScript() {
-    const saveIndex = Object.values(player.reality.automator.scripts)
-      .findIndex(s => s.id === player.reality.automator.state.editorScript);
-    return player.reality.automator.scripts[saveIndex];
+    return this.findRawScriptObject(player.reality.automator.state.editorScript);
   },
 
   get scriptName() {
     return this.currentRunningScript?.name ?? "";
+  },
+
+  hasDuplicateName(name) {
+    const nameArray = Object.values(player.reality.automator.scripts).map(s => s.name);
+    return nameArray.filter(n => n === name).length > 1;
   },
 
   get currentLineNumber() {
@@ -385,7 +394,7 @@ export const AutomatorBackend = {
     } else {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
-    if (!scriptIds.includes(`${this.state.topLevelScript}`)) this.state.topLevelScript = scriptIds[0];
+    if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
     const currentScript = this.findScript(this.state.topLevelScript);
     if (currentScript.commands) {
       const commands = currentScript.commands;
@@ -411,7 +420,7 @@ export const AutomatorBackend = {
   deleteScript(id) {
     // We need to delete scripts from two places - in the savefile and compiled AutomatorScript Objects
     const saveId = Object.values(player.reality.automator.scripts).findIndex(s => s.id === id);
-    delete player.reality.automator.scripts[saveId];
+    delete player.reality.automator.scripts[parseInt(Object.keys(player.reality.automator.scripts)[saveId], 10)];
     const idx = this._scripts.findIndex(e => e.id === id);
     this._scripts.splice(idx, 1);
     if (this._scripts.length === 0) {

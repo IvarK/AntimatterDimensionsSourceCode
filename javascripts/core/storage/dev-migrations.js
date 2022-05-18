@@ -1318,6 +1318,11 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.unlocksBits;
       delete player.celestials.ra.unlocksBits;
     },
+    player => {
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.id = parseInt(script.id, 10);
+      }
+    },
   ],
 
   patch(player) {

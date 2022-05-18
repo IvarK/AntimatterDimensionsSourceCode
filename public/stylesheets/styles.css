@@ -8974,6 +8974,7 @@ kbd {
 }
 
 .c-automator-block-editor {
+  position: relative;
   overflow-y: scroll;
   tab-size: 1.5rem;
   height: 100%;
@@ -8981,7 +8982,7 @@ kbd {
   border-top-left-radius: var(--var-border-radius, 1rem);
   border-bottom-left-radius: var(--var-border-radius, 1rem);
   box-sizing: border-box;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 2.5rem;
 }
 
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
@@ -9007,8 +9008,7 @@ input.o-automator-block-input {
   width: fit-content;
   min-width: 30rem;
   border: var(--var-border-width, 2px) dotted #55ff55;
-  margin-top: 0.5rem;
-  margin-left: 3rem;
+  margin: 0.5rem 0 0.5rem 3rem;
   padding: 1rem;
 }
 

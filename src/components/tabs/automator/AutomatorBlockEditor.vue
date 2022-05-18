@@ -10,9 +10,6 @@ export default {
     draggable
   },
   computed: {
-    lineNumbersCount() {
-      return Math.max(this.lines.length, 1);
-    },
     lines: {
       get() {
         return this.$viewModel.tabs.reality.automator.lines;
@@ -35,6 +32,16 @@ export default {
       this.lines.splice(idx, 1);
       this.parseRequest();
     },
+    numberOfLinesInBlock(block) {
+      return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
+    },
+    lineNumberAtPosition(x) {
+      let number = 1;
+      for (let i = 0; i < x; i++) {
+        number += this.numberOfLinesInBlock(this.lines[i]);
+      }
+      return number;
+    }
   }
 };
 
@@ -134,7 +141,7 @@ export const BlockAutomator = {
       <AutomatorSingleBlock
         v-for="(block, index) in lines"
         :key="block.id"
-        :line-number="index"
+        :line-number="lineNumberAtPosition(index)"
         :block="block"
         :update-block="updateBlock"
         :delete-block="deleteBlock"

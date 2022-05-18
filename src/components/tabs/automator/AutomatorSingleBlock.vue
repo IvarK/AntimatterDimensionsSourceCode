@@ -107,6 +107,16 @@ export default {
         errors: validator.errors,
         line: value
       };
+    },
+    numberOfLinesInBlock(block) {
+      return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
+    },
+    lineNumberAtPosition(x) {
+      let number = 1 + this.lineNumber;
+      for (let i = 0; i < x; i++) {
+        number += this.numberOfLinesInBlock(this.block.nest[i]);
+      }
+      return number;
     }
   }
 };
@@ -114,6 +124,9 @@ export default {
 
 <template>
   <div>
+    <div class="c-automator-block-line-number">
+      {{ lineNumber }}
+    </div>
     <div
       class="c-automator-block-row"
       :class="{ 'c-automator-block-row-active' : isCurrentLine }"
@@ -192,10 +205,10 @@ export default {
       class="l-automator-nested-block"
       group="code-blocks"
     >
-      <automator-single-block
+      <AutomatorSingleBlock
         v-for="(subblock, index) in block.nest"
         :key="subblock.id"
-        :line-number="index"
+        :line-number="lineNumberAtPosition(index)"
         :block="subblock"
         :update-block="updateBlockFromNest"
         :delete-block="deleteBlockFromNest"
@@ -205,5 +218,14 @@ export default {
 </template>
 
 <style scoped>
-
+.c-automator-block-line-number {
+  position: absolute;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.85rem;
+  width: 2.5rem;
+  font-size: 1.4rem;
+}
 </style>

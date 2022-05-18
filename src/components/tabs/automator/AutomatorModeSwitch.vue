@@ -4,17 +4,9 @@ export default {
   data() {
     return {
       automatorType: 0,
-      runningScriptID: 0,
-      activeLineInfo: {
-        lineNumber: 0,
-        scriptID: 0,
-      }
     };
   },
   computed: {
-    fullScreen() {
-      return this.$viewModel.tabs.reality.automator.fullScreen;
-    },
     currentScriptID: {
       get() {
         return this.$viewModel.tabs.reality.automator.editorScriptID;
@@ -49,20 +41,7 @@ export default {
   },
   methods: {
     update() {
-      this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.automatorType = player.reality.automator.type;
-      if (AutomatorBackend.isOn) {
-        this.activeLineInfo = {
-          lineNumber: AutomatorBackend.stack.top.lineNumber,
-          scriptID: AutomatorBackend.state.topLevelScript,
-        };
-      } else {
-        this.activeLineInfo = {
-          lineNumber: 0,
-          scriptID: "0",
-        };
-        if (AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
-      }
     },
     onGameLoad() {
       this.updateCurrentScriptID();

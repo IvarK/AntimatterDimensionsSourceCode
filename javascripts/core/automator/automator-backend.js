@@ -257,6 +257,10 @@ export const AutomatorBackend = {
     return Math.clampMin(Math.pow(0.994, Currency.realities.value) * 500, 1);
   },
 
+  get currentScriptLength() {
+    return player.reality.automator.scripts[this.state.topLevelScript].content.split("\n").length;
+  },
+
   update(diff) {
     if (!this.isOn) return;
     let stack;

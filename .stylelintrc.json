@@ -3,8 +3,13 @@
         "stylelint-order"
     ],
     "extends": [
-        "stylelint-config-standard",
-        "stylelint-config-recommended-vue"
+        "stylelint-config-recommended",
+        "stylelint-config-html",
+        "stylelint-config-standard"
+    ],
+    "files": [
+        "*.vue",
+        "**/*.vue"
     ],
     "rules": {
         "no-descending-specificity": null,
@@ -21,6 +26,25 @@
             true,
             {
                 "ignoreProperties": ["appearance", "background-clip", "backdrop-filter", "clip-path", "user-select"]
+            }
+        ],
+        "selector-pseudo-class-no-unknown": [
+            true,
+            {
+            "ignorePseudoClasses": [
+                    "deep",
+                    "global"
+                ]
+            }
+        ],
+        "selector-pseudo-element-no-unknown": [
+            true,
+            {
+            "ignorePseudoElements": [
+                    "v-deep",
+                    "v-global",
+                    "v-slotted"
+                ]
             }
         ],
 

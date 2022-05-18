@@ -45,6 +45,7 @@ export default {
   methods: {
     update() {
       this.automatorType = player.reality.automator.type;
+      if (!AutomatorBackend.isOn && AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
     },
     onGameLoad() {
       this.updateCurrentScriptID();

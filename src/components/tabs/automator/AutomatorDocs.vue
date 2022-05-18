@@ -211,6 +211,7 @@ export default {
           @click="infoPaneID = 4"
         />
         <AutomatorModeSwitch />
+        Switching will stop scripts
         <AutomatorButton
           v-tooltip="fullScreenTooltip"
           class="l-automator__maximize-button"

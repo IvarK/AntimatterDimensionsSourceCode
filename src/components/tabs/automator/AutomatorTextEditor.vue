@@ -179,7 +179,3 @@ export const AutomatorTextUI = {
     class="c-automator-editor l-automator-editor l-automator-pane__content"
   />
 </template>
-
-<style scoped>
-
-</style>

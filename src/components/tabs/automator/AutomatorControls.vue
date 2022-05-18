@@ -15,8 +15,10 @@ export default {
       followExecution: false,
       hasErrors: false,
       currentLine: 0,
-      runningName: "",
+      statusName: "",
       editingName: "",
+      duplicateStatus: false,
+      duplicateEditing: false,
     };
   },
   computed: {
@@ -43,10 +45,10 @@ export default {
       let lineNum = `0000${this.currentLine}`;
       lineNum = lineNum.slice(lineNum.length - digits);
 
-      if (this.isPaused) return `Paused: "${this.runningName}" (Resumes on Line ${lineNum})`;
-      if (this.isRunning) return `Running: "${this.runningName}" (Line ${lineNum})`;
-      if (this.hasErrors) return `Stopped: "${this.editingName}" has errors (Cannot run)`;
-      return `Stopped: Will start running "${this.editingName}"`;
+      if (this.isPaused) return `Paused: "${this.statusName}" (Resumes on Line ${lineNum})`;
+      if (this.isRunning) return `Running: "${this.statusName}" (Line ${lineNum})`;
+      if (this.hasErrors) return `Stopped: "${this.statusName}" has errors (Cannot run)`;
+      return `Stopped: Will start running "${this.statusName}"`;
     },
   },
   methods: {
@@ -58,8 +60,15 @@ export default {
       this.followExecution = AutomatorBackend.state.followExecution;
       this.hasErrors = AutomatorData.currentErrors().length !== 0;
       this.currentLine = AutomatorBackend.currentLineNumber;
-      this.runningName = AutomatorBackend.scriptName;
+
+      // When the automator isn't running, the script name contains the last run script instead of the
+      // to-be-run script, which is the currently displayed one in the editor
+      this.statusName = (this.isPaused || this.isRunning)
+        ? AutomatorBackend.scriptName
+        : AutomatorBackend.currentEditingScript.name;
       this.editingName = AutomatorBackend.currentEditingScript.name;
+      this.duplicateStatus = AutomatorBackend.hasDuplicateName(this.statusName);
+      this.duplicateEditing = AutomatorBackend.hasDuplicateName(this.editingName);
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
@@ -129,14 +138,31 @@ export default {
         @click="follow"
       />
       <div class="c-automator__status-text c-automator__status-text--edit">
+        <span
+          v-if="duplicateEditing"
+          v-tooltip="'More than one script has this name!'"
+          class="fas fa-exclamation-triangle c-automator__status-text--error"
+        />
         {{ editingName }}
       </div>
     </div>
-    <div
-      class="l-automator-button-row c-automator__status-text"
-      :class="{ 'c-automator__status-text--error' : hasErrors && !isRunning }"
-    >
-      {{ statusText }}
+    <div class="l-automator-button-row">
+      <span
+        v-if="duplicateStatus"
+        v-tooltip="'More than one script has this name!'"
+        class="fas fa-exclamation-triangle c-automator__status-text c-automator__status-text--error"
+      />
+      <span
+        v-if="statusName !== editingName"
+        v-tooltip="'The automator is running a different script than the editor is showing'"
+        class="fas fa-circle-exclamation c-automator__status-text c-automator__status-text--warning"
+      />
+      <span
+        class="c-automator__status-text"
+        :class="{ 'c-automator__status-text--error' : hasErrors && !isRunning }"
+      >
+        {{ statusText }}
+      </span>
     </div>
   </div>
 </template>
@@ -151,6 +177,10 @@ export default {
 
 .c-automator__status-text--edit {
   color: var(--color-accent);
+}
+
+.c-automator__status-text--warning {
+  color: var(--color-good-paused);
 }
 
 .c-automator__status-text--error {

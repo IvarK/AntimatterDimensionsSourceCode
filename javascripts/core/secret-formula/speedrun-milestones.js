@@ -86,7 +86,7 @@ GameDatabase.speedrunMilestones = [
     key: "allEternityMilestones",
     name: "All Eternity Milestones",
     description: "Unlock all Eternity Milestones",
-    checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
   {

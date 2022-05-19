@@ -60,17 +60,10 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 }
 
-export const ShopPurchase = (function() {
-  const db = GameDatabase.shopPurchases;
-  return {
-    dimPurchases: new ShopPurchaseState(db.dimPurchases),
-    IPPurchases: new ShopPurchaseState(db.IPPurchases),
-    EPPurchases: new ShopPurchaseState(db.EPPurchases),
-    allDimPurchases: new ShopPurchaseState(db.allDimPurchases)
-  };
-}());
-
-ShopPurchase.all = Object.values(ShopPurchase);
+export const ShopPurchase = mapGameDataToObject(
+  GameDatabase.shopPurchases,
+  config => new ShopPurchaseState(config)
+);
 
 kong.purchaseTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;

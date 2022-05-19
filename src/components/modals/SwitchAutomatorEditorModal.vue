@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       isCurrentlyBlocks: false
-    }
+    };
   },
   computed: {
     currentScriptID: {
@@ -56,8 +56,8 @@ export default {
 
 <template>
   <ModalWrapperChoice
-    @confirm="toggleAutomatorMode"
     option="switchAutomatorMode"
+    @confirm="toggleAutomatorMode"
   >
     <template #header>
       Change Automator to {{ isCurrentlyBlocks ? "text" : "block" }} editor

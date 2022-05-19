@@ -41,7 +41,6 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
-import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
 import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
@@ -58,6 +57,7 @@ import SacrificeModal from "@/components/modals/SacrificeModal";
 import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
 import StdStoreModal from "@/components/modals/StdStoreModal";
 import StudyStringModal from "@/components/modals/StudyStringModal";
+import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
 import UiChoiceModal from "@/components/modals/UiChoiceModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 

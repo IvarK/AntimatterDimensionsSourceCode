@@ -219,13 +219,17 @@ export default {
 
 <style scoped>
 .c-automator-block-line-number {
+  display: flex;
+  width: 2.5rem;
+  height: 2.85rem;
   position: absolute;
   left: 0;
-  display: flex;
+  z-index: 1;
   align-items: center;
-  height: 2.85rem;
-  width: 3.5rem;
-  padding: 0.2rem;
   font-size: 1.2rem;
+  color: #505050;
+  padding: 0.2rem;
+
+  direction: rtl;
 }
 </style>

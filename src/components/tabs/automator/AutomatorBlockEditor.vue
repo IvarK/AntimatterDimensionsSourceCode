@@ -130,26 +130,56 @@ export const BlockAutomator = {
 </script>
 
 <template>
-  <div class="c-automator-block-editor">
-    <draggable
-      v-model="lines"
-      group="code-blocks"
-      class="c-automator-blocks"
-      ghost-class="c-automator-block-row-ghost"
-      @end="parseRequest"
-    >
-      <AutomatorSingleBlock
-        v-for="(block, index) in lines"
-        :key="block.id"
-        :line-number="lineNumberAtPosition(index)"
-        :block="block"
-        :update-block="updateBlock"
-        :delete-block="deleteBlock"
-      />
-    </draggable>
+  <div class="c-automator-block-editor--container">
+    <div class="c-automator-block-editor--gutter" />
+    <div class="c-automator-block-editor">
+      <draggable
+        v-model="lines"
+        group="code-blocks"
+        class="c-automator-blocks"
+        ghost-class="c-automator-block-row-ghost"
+        @end="parseRequest"
+      >
+        <AutomatorSingleBlock
+          v-for="(block, index) in lines"
+          :key="block.id"
+          :line-number="lineNumberAtPosition(index)"
+          :block="block"
+          :update-block="updateBlock"
+          :delete-block="deleteBlock"
+        />
+      </draggable>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.c-automator-block-editor {
+  overflow-y: scroll;
+  tab-size: 1.5rem;
+  height: 100%;
+  position: relative;
+  background-color: black;
+  box-sizing: border-box;
+  padding: 0.5rem 0.5rem 0.5rem 4rem;
+}
 
+.c-automator-block-editor--container {
+  display: flex;
+  overflow-y: hidden;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.c-automator-block-editor--gutter {
+  width: 3.5rem;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: #262626;
+  border-right: 0.1rem solid #505050;
+}
 </style>

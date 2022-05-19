@@ -8973,18 +8973,6 @@ kbd {
   margin-left: 0;
 }
 
-.c-automator-block-editor {
-  position: relative;
-  overflow-y: scroll;
-  tab-size: 1.5rem;
-  height: 100%;
-  background-color: black;
-  border-top-left-radius: var(--var-border-radius, 1rem);
-  border-bottom-left-radius: var(--var-border-radius, 1rem);
-  box-sizing: border-box;
-  padding: 0.5rem 0.5rem 0.5rem 3.5rem;
-}
-
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
   border-radius: 0;
 }

@@ -257,6 +257,7 @@
 .o-time-study-triad--available:hover {
   color: black;
   background: var(--color-v--base);
+  animation: a-time-study 1.5s infinite;
 }
 
 @keyframes a-time-study-dilation {

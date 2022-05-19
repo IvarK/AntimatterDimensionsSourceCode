@@ -4,16 +4,17 @@ function rebuyableCost(initialCost, increment, id) {
   return initialCost * Math.pow(increment, player.celestials.teresa.perkShop[id]);
 }
 function rebuyable(config) {
+  const { id, otherReq, cap, costCap, description, formatEffect, formatCost } = config;
   return {
-    id: config.id,
+    id,
     cost: () => (config.cost ? config.cost() : rebuyableCost(config.initialCost, config.increment, config.id)),
-    otherReq: config.otherReq,
-    cap: config.cap,
-    costCap: config.costCap,
-    description: config.description,
+    otherReq,
+    cap,
+    costCap,
+    description,
     effect: () => config.effect(player.celestials.teresa.perkShop[config.id]),
-    formatEffect: config.formatEffect,
-    formatCost: config.formatCost,
+    formatEffect,
+    formatCost,
     rebuyable: true
   };
 }

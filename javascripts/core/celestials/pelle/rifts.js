@@ -170,11 +170,9 @@ class RiftState extends GameMechanicState {
   }
 }
 
-export const PelleRifts = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.rifts,
-    config => new RiftState(config)
-  );
-}());
+export const PelleRifts = mapGameDataToObject(
+  GameDatabase.celestials.pelle.rifts,
+  config => new RiftState(config)
+);
 
 PelleRifts.totalMilestones = () => PelleRifts.all.flatMap(x => x.milestones).countWhere(x => x.canBeApplied);

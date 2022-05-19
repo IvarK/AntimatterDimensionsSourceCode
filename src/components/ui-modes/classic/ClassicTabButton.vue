@@ -18,6 +18,11 @@ export default {
       tabName: ""
     };
   },
+  computed: {
+    isCurrentTab() {
+      return this.tab.isOpen && player.options.theme !== "S9";
+    }
+  },
   methods: {
     update() {
       this.isAvailable = this.tab.isAvailable;
@@ -39,7 +44,10 @@ export default {
 <template>
   <button
     v-if="isAvailable"
-    :class="tab.config.UIClass"
+    :class="
+      [tab.config.UIClass,
+       { 'o-tab-btn--active': isCurrentTab }]
+    "
     class="o-tab-btn"
     @click="tab.show(true)"
   >
@@ -52,7 +60,18 @@ export default {
 
 <style scoped>
 .o-tab-btn {
+  height: 3.1rem;
+  vertical-align: middle;
   margin: 0.2rem;
   margin-bottom: 0.7rem;
+}
+
+.o-tab-btn--active {
+  height: 3.1rem;
+  border-bottom-width: 0.5rem;
+}
+
+.s-base--metro .o-tab-btn--active {
+  border-bottom-width: 0.5rem;
 }
 </style>

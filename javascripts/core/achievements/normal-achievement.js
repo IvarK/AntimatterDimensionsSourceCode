@@ -1,4 +1,4 @@
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState } from "../game-mechanics/index";
 
 class AchievementState extends GameMechanicState {
   constructor(config) {

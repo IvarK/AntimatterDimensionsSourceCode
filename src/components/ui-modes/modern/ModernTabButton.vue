@@ -26,8 +26,12 @@ export default {
       return {
         "o-tab-btn": true,
         "o-tab-btn--subtabs": this.showSubtabs,
+        "o-tab-btn--active": this.isCurrentTab && player.options.theme !== "S9"
       };
     },
+    isCurrentTab() {
+      return this.tab.isOpen;
+    }
   },
   methods: {
     update() {
@@ -45,6 +49,9 @@ export default {
       } else {
         this.tabName = this.tab.name;
       }
+    },
+    isCurrentSubtab(id) {
+      return player.options.lastOpenSubtab[this.tab.id] === id && player.options.theme !== "S9";
     }
   },
 };
@@ -75,7 +82,10 @@ export default {
         <div
           v-if="subtabVisibilities[index]"
           class="o-tab-btn o-tab-btn--subtab"
-          :class="tab.config.UIClass"
+          :class="
+            [tab.config.UIClass,
+             {'o-subtab-btn--active': isCurrentSubtab(subtab.id)}]
+          "
           @click="subtab.show(true)"
         >
           <span v-html="subtab.symbol">
@@ -94,5 +104,38 @@ export default {
 </template>
 
 <style scoped>
+.o-tab-btn::before {
+  content: "";
+  width: 0;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  left: 0;
+  background-color: var(--color-accent);
+  transition: width 0.15s;
+}
 
+.o-tab-btn--active::before {
+  width: 0.5rem;
+}
+
+.o-tab-btn--infinity::before {
+  background-color: var(--color-infinity);
+}
+
+.o-tab-btn--eternity::before {
+  background-color: var(--color-eternity);
+}
+
+.o-tab-btn--reality::before {
+  background-color: var(--color-reality);
+}
+
+.o-tab-btn--celestial::before {
+  background-color: var(--color-celestials);
+}
+
+.o-subtab-btn--active {
+  border-bottom-width: 0.5rem;
+}
 </style>

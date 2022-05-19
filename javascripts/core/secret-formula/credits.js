@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.credits = {
   // Must be placed in the order it is desired they appear in the credits
@@ -320,6 +320,9 @@ GameDatabase.credits = {
       roles: 12
     }, {
       name: "Razvan Cercel",
+      roles: 12
+    }, {
+      name: "ReacTivity",
       roles: 12
     }, {
       name: "Rukimix",

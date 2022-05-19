@@ -1,4 +1,4 @@
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
 
 export class TimeStudyConnection {
   constructor(from, to, override) {

@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.achievements.normal = [
   {
@@ -950,10 +950,7 @@ GameDatabase.achievements.normal = [
       player.IPMultPurchases === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    get reward() {
-      if (Pelle.isDoomed) return "You start Eternities with all Infinity Challenges unlocked.";
-      return "You start Eternities with all Infinity Challenges unlocked and completed.";
-    }
+    reward: "You start Eternities with all Infinity Challenges unlocked and completed."
   },
   {
     id: 134,
@@ -1027,7 +1024,8 @@ GameDatabase.achievements.normal = [
     name: "How does this work?",
     description: "Unlock the automator.",
     checkRequirement: () => Player.automatorUnlocked,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_BOUGHT, GAME_EVENT.PERK_BOUGHT,
+      GAME_EVENT.BLACK_HOLE_BOUGHT],
     get reward() { return `Dimension Boosts are ${formatPercents(0.5)} stronger.`; },
     effect: 1.5,
   },
@@ -1307,7 +1305,8 @@ GameDatabase.achievements.normal = [
     id: 182,
     name: "One more time",
     description: "Gain back all Antimatter Dimension autobuyers.",
-    checkRequirement: () => player.celestials.pelle.upgrades.has(4),
+    checkRequirement: () => PelleUpgrade.antimatterDimAutobuyers1.canBeApplied &&
+      PelleUpgrade.antimatterDimAutobuyers2.canBeApplied,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {

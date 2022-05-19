@@ -72,8 +72,11 @@ export default {
         ? this.legend.text(this.complete) : this.legend.text;
       return typeof (data) === "string" ? [data] : data;
     },
-    forceHoverClass() {
-      return this.alwaysShowLegend ? "o-celestial-nav__force-hover" : "";
+    nodeClass() {
+      return {
+        "o-celestial-nav__force-hover": this.alwaysShowLegend,
+        "o-celestial-nav__clickable": this.clickAction !== undefined
+      };
     },
   },
   methods: {
@@ -89,7 +92,7 @@ export default {
 <template>
   <g
     class="o-celestial-nav__hoverable"
-    :class="forceHoverClass"
+    :class="nodeClass"
     :transform="baseTransform"
     v-on="clickAction ? { click: clickAction } : {}"
   >
@@ -132,5 +135,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-celestial-nav__clickable {
+  cursor: pointer;
+}
 </style>

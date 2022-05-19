@@ -1,8 +1,7 @@
 <script>
 import AutomatorBlockEditor from "./AutomatorBlockEditor";
-import AutomatorTextEditor from "./AutomatorTextEditor";
 import AutomatorControls from "./AutomatorControls";
-import AutomatorButton from "./AutomatorButton";
+import AutomatorTextEditor from "./AutomatorTextEditor";
 
 export default {
   name: "AutomatorEditor",
@@ -10,7 +9,6 @@ export default {
     AutomatorBlockEditor,
     AutomatorTextEditor,
     AutomatorControls,
-    AutomatorButton
   },
   data() {
     return {
@@ -20,7 +18,7 @@ export default {
       activeLineInfo: {
         lineNumber: 0,
         scriptID: 0,
-      },
+      }
     };
   },
   computed: {
@@ -41,14 +39,8 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
-    blockSelected() {
-      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
-    },
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
-    },
-    isBlockAutomator() {
-      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
     },
     activeLine() {
       return AutomatorBackend.state.topLevelScript === this.currentScriptID ? this.activeLineRaw : 0;
@@ -58,16 +50,15 @@ export default {
       return "Switch to the block editor";
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.AUTOMATOR);
+      return {
+        "tutorial--glow": ui.view.tutorialState === TUTORIAL_STATE.AUTOMATOR && ui.view.tutorialActive
+      };
     }
   },
   created() {
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
-    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
+    this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad());
     this.updateCurrentScriptID();
-  },
-  beforeDestroy() {
-    EventHub.ui.offAll(this);
   },
   methods: {
     update() {
@@ -127,37 +118,70 @@ export default {
   <div class="l-automator-pane">
     <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <AutomatorControls />
-      <AutomatorButton
-        v-tooltip="automatorModeTooltip"
-        class="fa-cubes remove-margin-right"
-        :class="{ 'not-selected': !blockSelected, ...tutorialClass }"
-        @click="toggleAutomatorMode()"
-      />
-      <AutomatorButton
-        v-tooltip="automatorModeTooltip"
-        class="fa-code remove-margin-left"
-        :class="{ 'not-selected': blockSelected, ...tutorialClass }"
-        @click="toggleAutomatorMode()"
-      />
+      <button
+        v-tooltip="{
+          content: automatorModeTooltip,
+          hideOnTargetClick: false
+        }"
+        :class="{
+          'c-slider-toggle-button': true,
+          'c-slider-toggle-button--right': isTextAutomator,
+          ...tutorialClass
+        }"
+        @click="toggleAutomatorMode"
+      >
+        <i class="fas fa-cubes" />
+        <i class="fas fa-code" />
+      </button>
     </div>
     <AutomatorTextEditor
       v-if="isTextAutomator"
       :current-script-id="currentScriptID"
     />
-    <AutomatorBlockEditor v-if="isBlockAutomator" />
+    <AutomatorBlockEditor v-if="!isTextAutomator" />
   </div>
 </template>
 
 <style scoped>
-.not-selected {
-  opacity: 0.3;
+.c-slider-toggle-button {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  align-items: center;
+  color: black;
+  background-color: #626262;
+  border: 0.2rem solid #767676;
+  border-radius: 0.2rem;
+  margin: 0.4rem;
+  padding: 0.3rem 0;
+  cursor: pointer;
 }
 
-.remove-margin-left {
-  margin-left: -0.2rem; /* negate the border */
+.c-slider-toggle-button .fas {
+  width: 3rem;
+  position: relative;
+  z-index: 1;
 }
 
-.remove-margin-right {
-  margin-right: -0.2rem; /* negate the border */
+.c-slider-toggle-button::before {
+  content: "";
+  width: 3rem;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background-color: white;
+  border-radius: 0.2rem;
+  transition: 0.3s ease all;
+}
+
+.c-slider-toggle-button--right::before {
+  left: 3rem;
+  background-color: white;
+}
+
+.tutorial--glow::after {
+  z-index: 2;
 }
 </style>

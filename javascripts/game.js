@@ -1,8 +1,9 @@
-import { playFabLogin } from "./core/playfab.js";
-import { DC } from "./core/constants.js";
-import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
+
+import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { playFabLogin } from "./core/playfab";
+import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 if (GlobalErrorHandler.handled) {
@@ -607,6 +608,10 @@ export function gameLoop(passDiff, options = {}) {
   Pelle.gameLoop(realDiff);
   GalaxyGenerator.loop(realDiff);
   GameEnd.gameLoop(realDiff);
+
+  if (!Enslaved.canAmplify) {
+    Enslaved.boostReality = false;
+  }
 
   if (Tabs.current.isPermanentlyHidden) {
     const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);

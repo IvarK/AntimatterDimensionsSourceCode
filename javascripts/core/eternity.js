@@ -1,5 +1,5 @@
-import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 function giveEternityRewards(auto) {

@@ -1,6 +1,6 @@
 <script>
-import GlyphSetName from "@/components/GlyphSetName";
 import CurrentGlyphEffect from "./CurrentGlyphEffect";
+import GlyphSetName from "@/components/GlyphSetName";
 
 const glyphEffectsOrder =
   ["powerpow", "powermult", "powerdimboost", "powerbuy10",
@@ -58,8 +58,7 @@ export default {
       return this.pelleChaosEffect.isUnlocked && !this.noEffects;
     },
     chaosEffect() {
-      return `${this.pelleChaosEffect.description
-        .replace("{value}", formatX(this.pelleChaosEffect[Pelle.activeGlyphType], 2))}`;
+      return this.pelleChaosEffect.description;
     },
   },
   watch: {

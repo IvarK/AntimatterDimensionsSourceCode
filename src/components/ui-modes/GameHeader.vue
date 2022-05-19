@@ -1,11 +1,11 @@
 <script>
-import HeaderEternityButton from "./HeaderEternityButton";
-import HeaderUnlockInfinityDimButton from "./HeaderUnlockInfinityDimButton";
-import HeaderBigCrunchButton from "./HeaderBigCrunchButton";
-import HeaderTickspeedRow from "./HeaderTickspeedRow";
 import HeaderAmountsLine from "./HeaderAmountsLine";
-import HeaderChallengeDisplay from "./HeaderChallengeDisplay";
+import HeaderBigCrunchButton from "./HeaderBigCrunchButton";
 import HeaderBlackHole from "./HeaderBlackHole";
+import HeaderChallengeDisplay from "./HeaderChallengeDisplay";
+import HeaderEternityButton from "./HeaderEternityButton";
+import HeaderTickspeedRow from "./HeaderTickspeedRow";
+import HeaderUnlockInfinityDimButton from "./HeaderUnlockInfinityDimButton";
 
 export default {
   name: "GameHeader",

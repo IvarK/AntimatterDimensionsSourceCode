@@ -38,19 +38,20 @@ export default {
 
 <style scoped>
 .o-save-timer {
-  color: var(--color-text);
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  background-color: var(--color-base);
   white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  color: var(--color-text);
+  background-color: var(--color-base);
   border-top: 0.1rem solid var(--color-accent);
   border-right: 0.1rem solid var(--color-accent);
-  cursor: pointer;
-  user-select: none;
-  pointer-events: auto;
   padding: 0 0.5rem;
-  z-index: 5;
+  pointer-events: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }
 
 .t-s2 .o-save-timer {

@@ -1,4 +1,4 @@
-import { GameStorage } from "./storage.js";
+import { GameStorage } from "./storage";
 
 function arrayToBits(array) {
   let bits = 0;

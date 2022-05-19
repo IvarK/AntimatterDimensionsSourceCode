@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import GameSpeedDisplay from "@/components/GameSpeedDisplay";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "HeaderTickspeedRow",

@@ -63,8 +63,9 @@ export class ScriptTemplate {
   storeTreeData(params) {
     const nowaitStr = params.treeNowait ? " nowait" : "";
     if (params.treePreset) {
-      const presetObj = player.timestudy.presets.find(p => p.name === params.treePreset);
-      this.storedTreeStr = `studies${nowaitStr} load preset ${presetObj.name}`;
+      const presetObj = player.timestudy.presets.map((p, i) => ({ ...p, id: i + 1 }))
+        .find(p => (p.name === params.treePreset || p.id === Number(params.treePreset)));
+      this.storedTreeStr = `studies${nowaitStr} load preset ${presetObj.name || presetObj.id}`;
       this.storedTreeObj = new TimeStudyTree(presetObj.studies);
     } else {
       this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;

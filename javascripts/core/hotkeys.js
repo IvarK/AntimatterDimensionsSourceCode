@@ -1,5 +1,6 @@
-import { GameKeyboard } from "./keyboard.js";
 import Mousetrap from "mousetrap";
+
+import { GameKeyboard } from "./keyboard";
 
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations

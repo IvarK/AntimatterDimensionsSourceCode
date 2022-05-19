@@ -1,8 +1,8 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "DilationUpgradeButton",

@@ -1,6 +1,7 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { BitUpgradeState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { CelestialQuotes } from "./quotes";
 
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
@@ -151,6 +152,9 @@ export const Enslaved = {
     const baseRealityBoostRatio = tempAmplifyToggle ? tempAmplifyFactor : 1;
     return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
+  },
+  get canAmplify() {
+    return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
   },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;

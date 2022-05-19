@@ -1,7 +1,7 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "NewsOptionsModal",

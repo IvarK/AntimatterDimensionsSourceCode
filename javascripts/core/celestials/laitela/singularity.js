@@ -1,4 +1,5 @@
-import { GameMechanicState } from "../../game-mechanics/index.js";
+import { GameMechanicState } from "../../game-mechanics/index";
+
 import { deepmergeAll } from "@/utility/deepmerge";
 
 class SingularityMilestoneState extends GameMechanicState {

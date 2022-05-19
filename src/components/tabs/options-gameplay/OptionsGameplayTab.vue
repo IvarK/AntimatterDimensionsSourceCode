@@ -1,7 +1,7 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "OptionsGameplayTab",

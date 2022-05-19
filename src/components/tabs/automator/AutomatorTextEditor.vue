@@ -45,20 +45,14 @@ export default {
   },
   created() {
     AutomatorTextUI.initialize();
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+    this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
   },
   mounted() {
     this.$refs.container.appendChild(this.UI.container);
     this.$nextTick(() => {
       this.UI.editor.refresh();
       this.UI.editor.performLint();
-      // Take the scroll attribute of the editor and convert into a line number, then use the scrollToLine function
-      // in order to move the editor back to the line it was on before switching tabs. I suspect this has a chance
-      // to be device-dependent somehow, but it seems to seems to have worked fairly accurately on all situations
-      // I was able to test personally - Chrome/FF, varying screen zoom settings, and varying monitor resolutions.
-      const UNITS_PER_LINE = 15.305;
-      const targetLine = Math.round(AutomatorTextUI.savedVertPos / UNITS_PER_LINE) + 24;
-      AutomatorTextUI.scrollToLine(Math.clampMax(targetLine, AutomatorTextUI.editor.lastLine() + 1));
+      this.UI.editor.scrollTo(null, AutomatorTextUI.savedVertPos);
     });
   },
   beforeDestroy() {
@@ -66,7 +60,6 @@ export default {
     this.unmarkActiveLine();
     AutomatorTextUI.savedVertPos = AutomatorTextUI.editor.doc.scrollTop;
     this.$refs.container.removeChild(this.UI.container);
-    EventHub.ui.offAll(this);
   },
   methods: {
     update() {
@@ -146,7 +139,9 @@ export const AutomatorTextUI = {
   // Used to return back to the same line the editor was on from before switching tabs
   savedVertPos: 0,
   scrollToLine(line) {
-    this.editor.scrollIntoView({ line, ch: 0 });
+    if (this.editor) {
+      this.editor.scrollIntoView({ line, ch: 0 });
+    }
   },
   // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
   // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative

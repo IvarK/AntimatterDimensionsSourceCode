@@ -12,5 +12,11 @@ export default {
 </template>
 
 <style scoped>
-
+.c-automator__button {
+  width: 3.3rem;
+  border: 0.2rem solid #767676;
+  border-radius: 0.3rem;
+  margin: 0.4rem;
+  cursor: pointer;
+}
 </style>

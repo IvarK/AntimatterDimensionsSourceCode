@@ -1,5 +1,5 @@
-import { TimeStudySetup } from "./TimeStudyButton";
 import { TimeStudyConnectionSetup } from "./TimeStudyConnection";
+import { TimeStudySetup } from "./TimeStudyButton";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -48,7 +48,7 @@ export class TimeStudyTreeLayout {
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
-    const TS = id => TimeStudy(id);
+    const TS = id => (TimeStudy(id).isUnlocked ? TimeStudy(id) : null);
     const EC = id => TimeStudy.eternityChallenge(id);
 
     /**
@@ -111,14 +111,8 @@ export class TimeStudyTreeLayout {
     );
 
     if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES && !Pelle.isDoomed) {
-      const vLevel = Ra.pets.v.level;
       this.rows.push(
-        normalRow(
-          vLevel >= 5 ? TS(301) : null,
-          vLevel >= 10 ? TS(302) : null,
-          vLevel >= 15 ? TS(303) : null,
-          vLevel >= 20 ? TS(304) : null
-        )
+        normalRow(                 TS(301), TS(302), TS(303), TS(304)                 )
       );
     }
 

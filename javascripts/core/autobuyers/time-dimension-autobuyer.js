@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {

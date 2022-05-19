@@ -1,11 +1,11 @@
 <script>
+import HeaderAmountsLine from "../HeaderAmountsLine";
+import HeaderBigCrunchButton from "../HeaderBigCrunchButton";
+import HeaderBlackHole from "../HeaderBlackHole";
 import HeaderChallengeDisplay from "../HeaderChallengeDisplay";
 import HeaderEternityButton from "../HeaderEternityButton";
-import HeaderBigCrunchButton from "../HeaderBigCrunchButton";
-import HeaderAmountsLine from "../HeaderAmountsLine";
 import HeaderUnlockInfinityDimButton from "../HeaderUnlockInfinityDimButton";
 import NewsTicker from "../NewsTicker";
-import HeaderBlackHole from "../HeaderBlackHole";
 
 export default {
   name: "ModernUi",

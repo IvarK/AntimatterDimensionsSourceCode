@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "MessageModal",

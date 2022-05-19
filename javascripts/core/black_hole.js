@@ -1,5 +1,5 @@
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { DC } from "./constants";
+import { SpeedrunMilestones } from "./speedrun";
 
 class BlackHoleUpgradeState {
   constructor(config) {
@@ -355,6 +355,7 @@ export const BlackHoles = {
     Currency.realityMachines.purchase(100);
     SpeedrunMilestones(17).tryComplete();
     Achievement(144).unlock();
+    EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
   },
 
   togglePause: () => {

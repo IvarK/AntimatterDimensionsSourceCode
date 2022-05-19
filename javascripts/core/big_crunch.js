@@ -1,7 +1,7 @@
-import { GameMechanicState, SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { GameMechanicState, RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
+import { SpeedrunMilestones } from "./speedrun";
 
 export function bigCrunchAnimation() {
   FullScreenAnimationHandler.display("implode", 2);
@@ -50,10 +50,10 @@ export function bigCrunchReset() {
   if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
 
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-  if (firstInfinity && !Pelle.isDoomed) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter
-  Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that
-  you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics
-  tab.`);
+  if (firstInfinity && !Pelle.isDoomed) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and
+  Antimatter Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple
+  upgrades that you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the
+  Statistics tab.`);
 }
 
 function bigCrunchUpdateStatistics() {

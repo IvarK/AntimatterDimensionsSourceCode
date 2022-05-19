@@ -1,7 +1,7 @@
 <script>
-import DimensionBulkButton from "./DimensionBulkButton";
 import AutobuyerBox from "./AutobuyerBox";
 import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
+import DimensionBulkButton from "./DimensionBulkButton";
 
 export default {
   name: "DimensionAutobuyerBox",

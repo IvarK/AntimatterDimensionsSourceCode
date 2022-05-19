@@ -25,13 +25,13 @@ export default {
 </template>
 
 <style scoped>
-  .black-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    z-index: 8;
-  }
+.black-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 8;
+  background: black;
+}
 </style>

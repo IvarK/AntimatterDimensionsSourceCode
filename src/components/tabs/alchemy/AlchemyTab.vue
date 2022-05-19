@@ -1,8 +1,8 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import { AlchemyCircleLayout } from "./alchemy-circle-layout";
 import AlchemyCircleNode from "./AlchemyCircleNode";
 import AlchemyResourceInfo from "./AlchemyResourceInfo";
-import { AlchemyCircleLayout } from "./alchemy-circle-layout";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "AlchemyTab",

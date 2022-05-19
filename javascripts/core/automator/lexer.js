@@ -2,7 +2,8 @@
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
 import { createToken, Lexer } from "chevrotain";
-import { DC } from "../constants.js";
+
+import { DC } from "../constants";
 
 export const AutomatorLexer = (() => {
   const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
@@ -304,8 +305,8 @@ export const AutomatorLexer = (() => {
   createKeyword("BlackHole", /black[ \t]+hole/i, {
     $autocomplete: "black hole",
   });
-  createKeyword("StoreTime", /stored?[ \t]+time/i, {
-    $autocomplete: "store time",
+  createKeyword("StoreGameTime", /stored?[ \t]+game[ \t]+time/i, {
+    $autocomplete: "store game time",
   });
 
   createKeyword("Dilation", /dilation/i);

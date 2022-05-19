@@ -106,22 +106,23 @@ export default {
 
 <style scoped>
 .speedrun-status {
-  font-size: 1.2rem;
-  color: var(--color-text);
+  white-space: nowrap;
   position: absolute;
   right: 1rem;
   bottom: 1rem;
-  background-color: var(--color-base);
-  white-space: nowrap;
-  border: 0.2rem solid var(--color-accent);
-  user-select: none;
-  pointer-events: auto;
-  padding: 0.8rem 2rem;
   z-index: 5;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: var(--var-border-width, 0.2rem) solid var(--color-accent);
+  padding: 0.8rem 2rem;
+  pointer-events: auto;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .speedrun-collapse {
-  cursor: pointer;
   padding: 0.2rem;
+  cursor: pointer;
 }
 </style>

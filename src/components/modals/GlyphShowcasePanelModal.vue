@@ -1,7 +1,7 @@
 <script>
 import GlyphSetName from "@/components/GlyphSetName";
-import ModalWrapper from "@/components/modals/ModalWrapper";
 import GlyphShowcasePanelEntry from "@/components/modals/GlyphShowcasePanelEntry";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "GlyphShowcasePanelModal",

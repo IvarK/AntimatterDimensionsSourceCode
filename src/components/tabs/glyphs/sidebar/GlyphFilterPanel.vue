@@ -1,8 +1,8 @@
 <script>
-import SliderComponent from "@/components/SliderComponent";
-import GlyphComponent from "@/components/GlyphComponent";
-import AutoSacrificeEffectTab from "./AutoSacrificeEffectTab";
 import AutoSacrificeAdvancedTab from "./AutoSacrificeAdvancedTab";
+import AutoSacrificeEffectTab from "./AutoSacrificeEffectTab";
+import GlyphComponent from "@/components/GlyphComponent";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "GlyphFilterPanel",

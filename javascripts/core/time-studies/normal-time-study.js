@@ -1,4 +1,4 @@
-import { TimeStudyState } from "./time-studies.js";
+import { TimeStudyState } from "./time-studies";
 
 export const NormalTimeStudies = {};
 
@@ -21,6 +21,10 @@ export class NormalTimeStudyState extends TimeStudyState {
     super(config, type);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
     this._path = path?.path ?? TIME_STUDY_PATH.NONE;
+  }
+
+  get isUnlocked() {
+    return this.config.unlocked?.() ?? true;
   }
 
   get isTriad() {

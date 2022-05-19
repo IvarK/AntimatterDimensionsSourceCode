@@ -1,6 +1,6 @@
 <script>
-import ToggleButton from "@/components/ToggleButton";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "GlyphSetSavePanel",

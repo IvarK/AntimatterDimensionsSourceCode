@@ -1,9 +1,9 @@
 <script>
+import BackgroundAnimations from "@/components/BackgroundAnimations";
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
+import GameUiComponentFixed from "@/components/GameUiComponentFixed";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import TabComponents from "@/components/tabs";
-import GameUiComponentFixed from "@/components/GameUiComponentFixed";
-import BackgroundAnimations from "@/components/BackgroundAnimations";
 
 export default {
   name: "GameUIComponent",

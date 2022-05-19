@@ -1,6 +1,6 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "GlyphSetSaveDeleteModal",

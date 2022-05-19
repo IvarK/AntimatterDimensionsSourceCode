@@ -60,7 +60,7 @@ export default {
 </script>
 
 <template>
-  <div class="l-spoon-btn-group">
+  <div class="l-spoon-btn-group l-margin-top">
     <button
       :class="classObject"
       @click="upgrade.purchase()"
@@ -92,5 +92,7 @@ export default {
 </template>
 
 <style scoped>
-
+.l-margin-top {
+  margin-top: 0.55rem;
+}
 </style>

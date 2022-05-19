@@ -87,7 +87,7 @@ export default {
       // We treat treeStudies as a special prop which will set treePreset iff it matches the format "PRESET [name]"
       const presetMatch = this.templateProps.treeStudies.match(/^PRESET (.{1,4})$/u);
       const presetStr = presetMatch ? presetMatch[1] : "";
-      this.currentPreset = this.presets.some(p => p.name === presetStr) ? presetStr : "";
+      this.currentPreset = this.presets.some((p, i) => p.name === presetStr || i === presetStr - 1) ? presetStr : "";
       this.templateProps.treePreset = this.currentPreset === "" ? null : this.currentPreset;
     },
     updateButton(input) {
@@ -118,12 +118,12 @@ export default {
       <br>
       Use a preset Study Tree:
       <button
-        v-for="preset in presets"
+        v-for="(preset, presetNumber) in presets"
         :key="preset.name"
         class="o-primary-btn"
-        @click="loadPreset(preset.name)"
+        @click="loadPreset(preset.name ? preset.name : presetNumber + 1)"
       >
-        {{ preset.name }}
+        {{ preset.name ? preset.name : presetNumber + 1 }}
       </button>
       <button
         class="o-primary-btn"

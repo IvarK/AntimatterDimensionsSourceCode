@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.celestials.enslaved = {
   // Note that "condition" isn't displayed in-game. These are meant to be indicators here of

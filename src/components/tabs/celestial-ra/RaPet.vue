@@ -1,6 +1,6 @@
 <script>
-import RaUpgradeIcon from "./RaUpgradeIcon";
 import RaPetLevelBar from "./RaPetLevelBar";
+import RaUpgradeIcon from "./RaUpgradeIcon";
 
 export default {
   name: "RaPet",
@@ -307,11 +307,13 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .c-ra-pet-upgrade-memory {
   border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
+
 .c-ra-pet-upgrade-chunk {
   border-top-left-radius: 0;
   border-top-right-radius: 0;

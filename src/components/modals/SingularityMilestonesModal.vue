@@ -1,6 +1,6 @@
 <script>
-import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
 import ModalWrapper from "@/components/modals/ModalWrapper";
+import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
 
 export default {
   name: "SingularityMilestonesModal",

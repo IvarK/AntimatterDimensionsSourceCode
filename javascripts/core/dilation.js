@@ -3,7 +3,7 @@ import { DC } from "./constants";
 import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
-  document.body.style.animation = "dilate 2s 1 linear";
+  document.body.style.animation = "a-dilate 2s 1 linear";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 2000);
@@ -11,7 +11,7 @@ export function animateAndDilate() {
 }
 
 export function animateAndUndilate() {
-  document.body.style.animation = "undilate 2s 1 linear";
+  document.body.style.animation = "a-undilate 2s 1 linear";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 2000);

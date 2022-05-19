@@ -12,9 +12,6 @@ export default {
     };
   },
   computed: {
-    modal() {
-      return this.$viewModel.modal.current;
-    },
     message() {
       switch (this.messageIndex) {
         case 0: return "Are you sure you want to get rid of your Companion Glyph?";

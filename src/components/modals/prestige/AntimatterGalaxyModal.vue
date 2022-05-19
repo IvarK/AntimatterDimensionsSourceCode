@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    bulk: {
+      type: Number,
       required: true,
     }
   },
@@ -21,7 +21,6 @@ export default {
     };
   },
   computed: {
-    bulk() { return this.modalConfig.bulk; },
     topLabel() {
       if (this.bulk) return `You are about to purchase ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}`;
       return `You are about to purchase an Antimatter Galaxy`;

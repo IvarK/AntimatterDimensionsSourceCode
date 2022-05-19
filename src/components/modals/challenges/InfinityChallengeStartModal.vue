@@ -6,26 +6,29 @@ export default {
   components: {
     ModalWrapperChoice
   },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     challenge() {
-      return InfinityChallenge(this.modal.id);
+      return InfinityChallenge(this.id);
     },
     challengeIsCompleted() {
       return this.challenge.isCompleted;
-    },
-    modal() {
-      return this.$viewModel.modal.current;
     },
     message() {
       return `You will Big Crunch, if possible, and start a new Infinity within the Challenge, with all the
         Challenge-specific restrictions and modifiers active.
         To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
         you must reach the Challenge goal of
-        ${format(InfinityChallenge(this.modal.id).goal)} Antimatter.
+        ${format(InfinityChallenge(this.id).goal)} Antimatter.
         You do not start with any Dimension Boosts or Galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
-      return `You are about to enter Infinity Challenge ${this.modal.id}`;
+      return `You are about to enter Infinity Challenge ${this.id}`;
     },
     reward() {
       let rewardDescription = this.challenge._config.reward.description;

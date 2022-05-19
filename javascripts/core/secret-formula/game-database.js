@@ -10,6 +10,7 @@ export const GameDatabase = {
     glyphSacrifice: {},
   },
   celestials: {
+    effarig: {},
     alchemy: {},
     pelle: {},
     descriptions: {},

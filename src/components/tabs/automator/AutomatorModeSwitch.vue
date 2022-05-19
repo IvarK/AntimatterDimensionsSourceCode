@@ -62,19 +62,25 @@ export default {
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      const scriptID = ui.view.tabs.reality.automator.editorScriptID;
-      Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
-      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
-        // This saves the script after converting it.
-        BlockAutomator.parseTextFromBlocks();
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else if (BlockAutomator.fromText(this.currentScriptContent)) {
-        AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
-        player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
+      if (AutomatorBackend.state.mode === AUTOMATOR_MODE.PAUSE || !player.options.confirmations.switchAutomatorMode) {
+        const scriptID = this.currentScriptID;
+        Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
+        if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
+          // This saves the script after converting it.
+          BlockAutomator.parseTextFromBlocks();
+          player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+        } else if (BlockAutomator.fromText(this.currentScriptContent)) {
+          AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
+          player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
+        } else {
+          Modal.message.show("Automator script has errors, cannot convert to blocks.");
+        }
+        this.$recompute("currentScriptContent");
       } else {
-        Modal.message.show("Automator script has errors, cannot convert to blocks.");
+        Modal.switchAutomatorEditorMode.show({
+          callBack: () => this.$recompute("currentScriptContent")
+        });
       }
-      this.$recompute("currentScriptContent");
     }
   }
 };

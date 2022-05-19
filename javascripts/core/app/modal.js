@@ -41,6 +41,7 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
 import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
@@ -191,6 +192,7 @@ Modal.import = new Modal(ImportSaveModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
+Modal.switchAutomatorEditorMode = new Modal(SwitchAutomatorEditorModal);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);

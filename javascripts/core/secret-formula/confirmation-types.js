@@ -58,6 +58,10 @@ GameDatabase.confirmationTypes = [
     option: "glyphUndo",
     isUnlocked: () => TeresaUnlocks.undo.canBeApplied,
   }, {
+    name: "Switch Automator Editor",
+    option: "switchAutomatorMode",
+    isUnlocked: () => Player.automatorUnlocked,
+  }, {
     name: "Reset Celestial",
     option: "resetCelestial",
     isUnlocked: () => TeresaUnlocks.run.canBeApplied,

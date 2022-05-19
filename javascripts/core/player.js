@@ -811,7 +811,8 @@ window.player = {
       bigCrunch: true,
       replicantiGalaxy: true,
       antimatterGalaxy: true,
-      dimensionBoost: true
+      dimensionBoost: true,
+      switchAutomatorMode: true
     },
     awayProgress: {
       antimatter: true,

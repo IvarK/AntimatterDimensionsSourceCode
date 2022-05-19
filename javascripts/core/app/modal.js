@@ -62,11 +62,11 @@ import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
 
 
 export class Modal {
-  constructor(component, bare = false) {
+  constructor(component, priority = 0, bare = false) {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
-    this._priority = 0;
+    this._priority = priority;
   }
 
   show(modalConfig) {
@@ -149,20 +149,20 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeS
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
 
-Modal.dimensionBoost = new Modal(DimensionBoostModal).setPriority(1);
-Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal).setPriority(1);
-Modal.bigCrunch = new Modal(BigCrunchModal).setPriority(1);
-Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal).setPriority(1);
-Modal.eternity = new Modal(EternityModal).setPriority(1);
-Modal.enterDilation = new Modal(EnterDilationModal).setPriority(1);
-Modal.reality = new Modal(RealityModal).setPriority(1);
-Modal.resetReality = new Modal(ResetRealityModal).setPriority(1);
-Modal.exitCelestialReality = new Modal(ExitCelestialModal).setPriority(1);
-Modal.celestials = new Modal(EnterCelestialsModal).setPriority(1);
-Modal.hardReset = new Modal(HardResetModal).setPriority(1);
+Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
+Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);
+Modal.bigCrunch = new Modal(BigCrunchModal, 1);
+Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal, 1);
+Modal.eternity = new Modal(EternityModal, 1);
+Modal.enterDilation = new Modal(EnterDilationModal, 1);
+Modal.reality = new Modal(RealityModal, 1);
+Modal.resetReality = new Modal(ResetRealityModal, 1);
+Modal.exitCelestialReality = new Modal(ExitCelestialModal, 1);
+Modal.celestials = new Modal(EnterCelestialsModal, 1);
+Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
-Modal.armageddon = new Modal(ArmageddonModal).setPriority(1);
+Modal.armageddon = new Modal(ArmageddonModal, 1);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
@@ -173,16 +173,16 @@ Modal.animationOptions = new Modal(AnimationOptionsModal);
 Modal.hiddenTabs = new Modal(HiddenTabsModal);
 Modal.preferredTree = new Modal(PreferredTreeModal);
 
-Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal).setPriority(1);
-Modal.glyphDelete = new Modal(DeleteGlyphModal).setPriority(1);
-Modal.glyphPurge = new Modal(PurgeGlyphModal).setPriority(1);
-Modal.glyphSacrifice = new Modal(SacrificeGlyphModal).setPriority(1);
-Modal.glyphRefine = new Modal(RefineGlyphModal).setPriority(1);
-Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal).setPriority(1);
-Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal).setPriority(1);
+Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal, 1);
+Modal.glyphDelete = new Modal(DeleteGlyphModal, 1);
+Modal.glyphPurge = new Modal(PurgeGlyphModal, 1);
+Modal.glyphSacrifice = new Modal(SacrificeGlyphModal, 1);
+Modal.glyphRefine = new Modal(RefineGlyphModal, 1);
+Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal, 1);
+Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal, 1);
 
 Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
-Modal.glyphUndo = new Modal(UndoGlyphModal).setPriority(1);
+Modal.glyphUndo = new Modal(UndoGlyphModal, 1);
 Modal.glyphReplace = new Modal(ReplaceGlyphModal);
 Modal.enslavedHints = new Modal(EnslavedHintsModal);
 Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
@@ -200,7 +200,7 @@ Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
-Modal.sacrifice = new Modal(SacrificeModal).setPriority(1);
+Modal.sacrifice = new Modal(SacrificeModal, 1);
 Modal.breakInfinity = new Modal(BreakInfinityModal);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
@@ -250,7 +250,7 @@ Modal.celestialQuote = new class extends Modal {
     }
     return x;
   }
-}(CelestialQuoteModal, true).setPriority(2);
+}(CelestialQuoteModal, 2, true);
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
@@ -324,4 +324,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal).setPriority(2);
+}(MessageModal, 2);

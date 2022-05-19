@@ -214,6 +214,7 @@ export default {
         <AutomatorButton
           v-tooltip="fullScreenTooltip"
           :class="fullScreenIconClass"
+          class="l-automator__expand-corner"
           @click="fullScreen = !fullScreen"
         />
       </div>
@@ -280,6 +281,11 @@ export default {
 </template>
 
 <style scoped>
+.l-automator__expand-corner {
+  position: absolute;
+  right: 0;
+}
+
 .l-automator__script-names {
   display: flex;
   flex-direction: row;

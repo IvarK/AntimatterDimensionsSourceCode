@@ -17,6 +17,11 @@ html {
   border-radius: 0.5rem;
 }
 
+::-webkit-scrollbar-corner {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .s-base--metro::-webkit-scrollbar-thumb {
   border-radius: 0;
 }

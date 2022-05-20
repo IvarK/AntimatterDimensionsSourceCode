@@ -96,6 +96,8 @@ export const GameCache = {
 
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
+  logTotalGlyphSacrifice: new Lazy(() => GlyphSacrificeHandler.logTotalSacrifice),
+
   totalIPMult: new Lazy(() => totalIPMult()),
 
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),

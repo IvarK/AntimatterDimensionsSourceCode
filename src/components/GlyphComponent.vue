@@ -93,12 +93,9 @@ export default {
       uncappedRefineReward: 0,
       refineReward: 0,
       displayLevel: 0,
-      isRealityGlyph: false,
-      isCursedGlyph: false,
-      glyphEffects: [],
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
-      logGlyphSacrifice: 0
+      logTotalSacrifice: 0
     };
   },
   computed: {
@@ -197,32 +194,9 @@ export default {
           return "";
       }
     },
-  },
-  watch: {
-    logGlyphSacrifice() {
-      this.tooltipLoaded = false;
-      if (this.isCurrentTooltip) this.showTooltip();
-    }
-  },
-  created() {
-    this.$on("tooltip-touched", () => this.hideTooltip());
-  },
-  beforeDestroy() {
-    if (this.isCurrentTooltip) this.hideTooltip();
-    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
-  },
-  methods: {
-    update() {
-      this.isRealityGlyph = this.glyph.type === "reality";
-      this.isCursedGlyph = this.glyph.type === "cursed";
-      this.glyphEffects = this.extractGlyphEffects();
-      this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
-      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
-        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
-    },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
-    extractGlyphEffects() {
+    glyphEffects() {
       let minEffectID = 0;
       switch (this.glyph.type) {
         case "time":
@@ -259,6 +233,33 @@ export default {
         remainingEffects >>= 1;
       }
       return effectIDs;
+    },
+    isRealityGlyph() {
+      return this.glyph.type === "reality";
+    },
+    isCursedGlyph() {
+      return this.glyph.type === "cursed";
+    },
+    showGlyphEffectDots() {
+      return player.options.showHintText.glyphEffectDots;
+    }
+  },
+  watch: {
+    logTotalSacrifice() {
+      this.tooltipLoaded = false;
+      if (this.isCurrentTooltip) this.showTooltip();
+    }
+  },
+  created() {
+    this.$on("tooltip-touched", () => this.hideTooltip());
+  },
+  beforeDestroy() {
+    if (this.isCurrentTooltip) this.hideTooltip();
+    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+  },
+  methods: {
+    update() {
+      this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
     },
     hideTooltip() {
       this.tooltipLoaded = false;
@@ -488,7 +489,7 @@ export default {
       :show-deletion-text="showSacrifice"
       :display-level="displayLevel"
       :component="componentID"
-      :change-watcher="logGlyphSacrifice"
+      :change-watcher="logTotalSacrifice"
     />
     <div
       v-if="isNew"

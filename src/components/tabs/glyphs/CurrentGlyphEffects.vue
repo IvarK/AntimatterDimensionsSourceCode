@@ -25,7 +25,7 @@ export default {
       effects: [],
       hasEffarig: false,
       hasReality: false,
-      logGlyphSacrifice: 0,
+      logTotalSacrifice: 0,
       pelleChaosEffect: {},
     };
   },
@@ -62,7 +62,7 @@ export default {
     },
   },
   watch: {
-    logGlyphSacrifice() {
+    logTotalSacrifice() {
       this.glyphsChanged();
     }
   },
@@ -75,8 +75,7 @@ export default {
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
 
-      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
-        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+      this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
 
       this.pelleChaosEffect = Pelle.specialGlyphEffect;
     },
@@ -112,7 +111,7 @@ export default {
     </div>
     <CurrentGlyphEffect
       v-for="effect in effects"
-      :key="effect.id + logGlyphSacrifice"
+      :key="effect.id + logTotalSacrifice"
       :effect="effect"
     />
     <div

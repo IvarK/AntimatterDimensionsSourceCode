@@ -2,6 +2,12 @@
 export const GlyphSacrificeHandler = {
   // Anything scaling on sacrifice caps at this value, even though the actual sacrifice values can go higher
   maxSacrificeForEffects: 1e100,
+  // This is used for glyph UI-related things in a few places, but is handled here as a getter which is only called
+  // sparingly - that is, whenever the cache is invalidated after a glyph is sacrificed. Thus it only gets recalculated
+  // when glyphs are actually sacrificed, rather than every render cycle.
+  get logTotalSacrifice() {
+    return BASIC_GLYPH_TYPES.reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+  },
   get canSacrifice() {
     return RealityUpgrade(19).isBought;
   },
@@ -50,6 +56,7 @@ export const GlyphSacrificeHandler = {
       return;
     }
     player.reality.glyphs.sac[glyph.type] += toGain;
+    GameCache.logTotalGlyphSacrifice.invalidate();
     Glyphs.removeFromInventory(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, glyph);
   },

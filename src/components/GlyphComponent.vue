@@ -115,6 +115,13 @@ export default {
       }
       return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
+    // RM multiplier and instability are the only mutually-exclusive pair, which occurs on effarig without a particular
+    // Ra upgrade. We hardcode that here - it's not worth the performance hit of diving into gameDB to do dynamically
+    hasMutuallyExclusiveEffect() {
+      const exclusionActive = this.glyph.type === "effarig" && !Ra.unlocks.glyphEffectCount.canBeApplied;
+      const hasExactlyOne = this.glyphEffects.includes(1) !== this.glyphEffects.includes(2);
+      return exclusionActive && hasExactlyOne;
+    },
     zIndexStyle() {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
@@ -391,8 +398,8 @@ export default {
         this.drag(t);
       }
     },
-    glyphEffectIcon(id) {
-      if (this.glyph.type === "companion") return {};
+    // Translates 0...3 into equally-spaced coordinates around a circle 90deg apart (0...6 and 45deg for effarig)
+    effectIconPos(id) {
       // Place dots clockwise starting from the bottom left
       const angle = this.glyph.type === "effarig"
         ? (Math.PI / 4) * (id + 1)
@@ -400,17 +407,37 @@ export default {
       const scale = 0.3 * this.size.replace("rem", "");
       const dx = -scale * Math.sin(angle);
       const dy = scale * (Math.cos(angle) + 0.15);
+      return { dx, dy };
+    },
+    // Note that the dot bigger for one of the mutually-exclusive effect pair (IDs of the only case are hardcoded)
+    glyphEffectIcon(id) {
+      if (this.glyph.type === "companion") return {};
+      const pos = this.effectIconPos(id);
+      const size = this.hasMutuallyExclusiveEffect && [1, 2].includes(id) ? 0.5 : 0.3;
       return {
         position: "absolute",
-        width: "0.3rem",
-        height: "0.3rem",
+        width: `${size}rem`,
+        height: `${size}rem`,
         "border-radius": "50%",
         background: this.isCursedGlyph ? "black" : `${this.glyph.color || getRarity(this.glyph.strength).color}`,
-        transform: `translate(${dx}rem, ${dy}rem)`,
+        transform: `translate(${pos.dx - 0.15 * size}rem, ${pos.dy - 0.15 * size}rem)`,
         animation: this.isRealityGlyph ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
-    }
+    },
+    // This adds an x on effarig effects which are mutually-exclusive with existing ones
+    exclusiveIcon() {
+      if (!this.hasMutuallyExclusiveEffect) return {};
+      const forbiddenEffect = this.glyphEffects.includes(1) ? 2 : 1;
+      const pos = this.effectIconPos(forbiddenEffect);
+      return {
+        position: "absolute",
+        "font-size": "1.2rem",
+        "text-align": "center",
+        transform: `translate(${pos.dx}rem, ${pos.dy - 0.15}rem)`,
+        opacity: Theme.current().name === "S9" ? 0 : 0.8
+      };
+    },
   }
 };
 </script>
@@ -438,25 +465,31 @@ export default {
           :key="x"
           :style="glyphEffectIcon(x)"
         />
+        <div
+          v-if="hasMutuallyExclusiveEffect"
+          :style="exclusiveIcon()"
+        >
+          &#x00d7;
+        </div>
       </template>
-      <GlyphTooltip
-        v-if="hasTooltip && tooltipLoaded"
-        v-show="isCurrentTooltip"
-        ref="tooltip"
-        v-bind="glyph"
-        :class="tooltipDirectionClass"
-        :style="zIndexStyle"
-        :sacrifice-reward="sacrificeReward"
-        :refine-reward="refineReward"
-        :uncapped-refine-reward="uncappedRefineReward"
-        :current-action="currentAction"
-        :score-mode="scoreMode"
-        :show-deletion-text="showSacrifice"
-        :display-level="displayLevel"
-        :component="componentID"
-        :change-watcher="logGlyphSacrifice"
-      />
     </div>
+    <GlyphTooltip
+      v-if="hasTooltip && tooltipLoaded"
+      v-show="isCurrentTooltip"
+      ref="tooltip"
+      v-bind="glyph"
+      :class="tooltipDirectionClass"
+      :style="zIndexStyle"
+      :sacrifice-reward="sacrificeReward"
+      :refine-reward="refineReward"
+      :uncapped-refine-reward="uncappedRefineReward"
+      :current-action="currentAction"
+      :score-mode="scoreMode"
+      :show-deletion-text="showSacrifice"
+      :display-level="displayLevel"
+      :component="componentID"
+      :change-watcher="logGlyphSacrifice"
+    />
     <div
       v-if="isNew"
       class="l-new-glyph"

@@ -64,7 +64,7 @@ GameDatabase.celestials.effarig.unlocks = {
     label: "Reality",
     get description() {
       if (Pelle.isDoomed) return "Any rewards from Effarig's Reality have been disabled.";
-      return " You have unlocked Effarig Glyphs (You may equip at most one)";
+      return " You have unlocked Effarig Glyphs (You may equip at most one and some effects are mutually exclusive)";
     },
   }
 };

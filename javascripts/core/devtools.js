@@ -166,7 +166,7 @@ dev.resetDilation = function() {
 // when making a special glyph, so no max-params
 // eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
-  if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
+  if (!Object.prototype.hasOwnProperty.call(specialGlyphSymbols, symbol)) return;
   if (Glyphs.freeInventorySpace === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;

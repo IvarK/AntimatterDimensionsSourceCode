@@ -159,7 +159,7 @@ html {
   --color-reality: #afa3a5;
   --color-reality-light: #e8e3e4;
   --color-celestials: #f2d6c1;
-  --color-prestige--accent: black;
+  --color-prestige--accent: #dbd242;
 
   --color-pelle--base: #7cb727;
 }
@@ -538,7 +538,7 @@ button:focus {
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--color-text);
-  background-color: var(--color-base);
+  background-color: var(--color-prestige--accent);
   border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
@@ -553,51 +553,43 @@ button:focus {
 }
 
 .o-tab-btn:hover {
-  color: var(--color-text-inverted);
+  color: var(--color-prestige--accent);
   background: var(--color-accent);
 }
 
 .o-tab-btn--infinity {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
 .o-tab-btn--infinity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-infinity);
 }
 
 .o-tab-btn--eternity {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
 .o-tab-btn--eternity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-eternity);
 }
 
 .o-tab-btn--reality {
   color: var(--color-reality);
-  background: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
 .o-tab-btn--reality:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-reality);
 }
 
 .o-tab-btn--celestial {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
 .o-tab-btn--celestial:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-celestials);
 }
 
@@ -9261,7 +9253,7 @@ input.o-automator-block-input {
   font: 1rem Typewriter, serif;
   font-weight: bold;
   color: var(--color-text);
-  background-color: var(--color-base);
+  background-color: var(--color-text-inverted);
   border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.4rem);
   box-shadow: none;
@@ -9297,45 +9289,37 @@ input.o-automator-block-input {
 
 .c-hide-modal-tab-button--infinity {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--infinity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--eternity {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
 .c-hide-modal-tab-button--eternity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-eternity);
 }
 
 .c-hide-modal-tab-button--reality {
   color: var(--color-reality);
-  background: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--reality:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--celestials {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
 .c-hide-modal-tab-button--celestials:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-celestials);
 }
 

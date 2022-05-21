@@ -112,6 +112,9 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 
   onPurchased() {
+    if (this.id === 0) {
+      GameCache.staticGlyphWeights.invalidate();
+    }
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }

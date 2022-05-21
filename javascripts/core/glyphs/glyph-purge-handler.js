@@ -6,7 +6,11 @@ export const GlyphSacrificeHandler = {
   // sparingly - that is, whenever the cache is invalidated after a glyph is sacrificed. Thus it only gets recalculated
   // when glyphs are actually sacrificed, rather than every render cycle.
   get logTotalSacrifice() {
-    return BASIC_GLYPH_TYPES.reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+    // We check elsewhere for this equalling zero to determine if the player has ever sacrificed. Technically this
+    // should check for -Infinity, but the clampMin works in practice because the minimum possible sacrifice
+    // value is greater than 1 for even the weakest possible glyph
+    return BASIC_GLYPH_TYPES.reduce(
+      (tot, type) => tot + Math.log10(Math.clampMin(player.reality.glyphs.sac[type], 1)), 0);
   },
   get canSacrifice() {
     return RealityUpgrade(19).isBought;

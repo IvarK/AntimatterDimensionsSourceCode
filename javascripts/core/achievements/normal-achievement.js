@@ -68,6 +68,9 @@ class AchievementState extends GameMechanicState {
       Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them.
       This is purely visual, and is there to prevent flickering.`);
     }
+    if (this.id === 148 || this.id === 166) {
+      GameCache.staticGlyphWeights.invalidate();
+    }
     if (auto) {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {

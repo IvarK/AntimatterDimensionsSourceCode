@@ -96,6 +96,8 @@ export const GameCache = {
 
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
+  staticGlyphWeights: new Lazy(() => staticGlyphWeights()),
+
   logTotalGlyphSacrifice: new Lazy(() => GlyphSacrificeHandler.logTotalSacrifice),
 
   totalIPMult: new Lazy(() => totalIPMult()),
@@ -107,6 +109,7 @@ export const GameCache = {
 
 EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
+  GameCache.staticGlyphWeights.invalidate();
 }, GameCache.glyphEffects);
 
 GameCache.antimatterDimensionFinalMultipliers.invalidate = function() {

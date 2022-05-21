@@ -455,15 +455,13 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
 
 }
 
-export const PelleUpgrade = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.upgrades,
-    config => (config.rebuyable
-      ? new RebuyablePelleUpgradeState(config)
-      : new PelleUpgradeState(config)
-    )
-  );
-}());
+export const PelleUpgrade = mapGameDataToObject(
+  GameDatabase.celestials.pelle.upgrades,
+  config => (config.rebuyable
+    ? new RebuyablePelleUpgradeState(config)
+    : new PelleUpgradeState(config)
+  )
+);
 
 PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
 PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable);

@@ -68,6 +68,8 @@ export * from "./time-studies/index";
 export * from "./dimboost";
 export * from "./sacrifice";
 export * from "./big_crunch";
+export * from "./infinity-upgrades";
+export * from "./break-infinity-upgrades";
 export * from "./challenge";
 export * from "./eternity";
 export * from "./eternity_challenge";

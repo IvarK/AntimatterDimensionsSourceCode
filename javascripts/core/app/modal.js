@@ -74,7 +74,11 @@ export class Modal {
     if (!GameUI.initialized) return;
     this._props = Object.assign({}, modalConfig || {});
     const modalQueue = ui.view.modal.queue;
-    if (modalQueue.includes(this)) return;
+    if (modalQueue.includes(this)) {
+      if (!this._showFirst) return;
+
+      modalQueue.splice(modalQueue.indexOf(this), 1);
+    }
 
     // Modals are first inserted into the front of the queue, then make their way back
     // until they see the next Modal in the queue has a lower priority

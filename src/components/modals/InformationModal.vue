@@ -1,6 +1,6 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
 import InformationModalButton from "@/components/modals/InformationModalButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 export default {
   name: "InformationModal",

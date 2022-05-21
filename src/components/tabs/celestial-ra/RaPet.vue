@@ -1,6 +1,6 @@
 <script>
-import RaUpgradeIcon from "./RaUpgradeIcon";
 import RaPetLevelBar from "./RaPetLevelBar";
+import RaUpgradeIcon from "./RaUpgradeIcon";
 
 export default {
   name: "RaPet",
@@ -53,9 +53,7 @@ export default {
       };
     },
     unlocks() {
-      return Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.pet)
-        .sort((a, b) => a.level - b.level);
+      return this.pet.unlocks;
     },
     chunkTooltip() {
       return `Based on ${this.pet.chunkGain}`;
@@ -105,8 +103,7 @@ export default {
       return "";
     },
     nextUnlockLevel() {
-      const missingUpgrades = Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.pet)
+      const missingUpgrades = this.pet.unlocks
         .map(u => u.level)
         .filter(goal => goal > this.level);
       return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
@@ -310,11 +307,13 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .c-ra-pet-upgrade-memory {
   border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
+
 .c-ra-pet-upgrade-chunk {
   border-top-left-radius: 0;
   border-top-right-radius: 0;

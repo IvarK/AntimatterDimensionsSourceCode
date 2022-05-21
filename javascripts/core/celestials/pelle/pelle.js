@@ -1,9 +1,11 @@
-import { DC } from "../../constants";
 import { Currency } from "../../currency";
+import { DC } from "../../constants";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { SetPurchasableMechanicState } from "../../utils";
+
+import { CelestialQuotes } from "../quotes";
+
 import zalgo from "./zalgo";
-import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -55,14 +57,6 @@ export const Pelle = {
     return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
   },
 
-  additionalEnd: 0,
-  addAdditionalEnd: true,
-
-  get endState() {
-    return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
-      (Math.log10(9e15) - 8.7) + this.additionalEnd, 0);
-  },
-
   get isUnlocked() {
     return ImaginaryUpgrade(25).isBought;
   },
@@ -108,7 +102,6 @@ export const Pelle = {
       this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
-      if (this.endState >= 1 && Pelle.addAdditionalEnd) this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }
   },
 
@@ -125,7 +118,7 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [143, 142, 141, 125, 118, 117, 111, 104, 103, 92, 91, 78, 76, 74, 65, 55, 54, 37];
+    return [143, 142, 141, 133, 125, 118, 117, 111, 104, 103, 92, 91, 78, 76, 74, 65, 55, 54, 37];
   },
 
   get uselessInfinityUpgrades() {
@@ -144,7 +137,7 @@ export const Pelle = {
 
   get uselessPerks() {
     return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
-      60, 61, 62, 80, 81, 82, 83, 100, 105, 106];
+      60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204];
   },
 
   // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
@@ -161,36 +154,13 @@ export const Pelle = {
 
   get specialGlyphEffect() {
     const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
-    let description;
-    switch (Pelle.activeGlyphType) {
-      case "infinity":
-        description = "Infinity Point gain {value} (based on current IP)";
-        break;
-      case "time":
-        description = "Eternity Point gain {value} (based on current EP)";
-        break;
-      case "replication":
-        description = "Replication speed {value} (based on Famine)";
-        break;
-      case "dilation":
-        description = "Dilated Time gain {value} (based on Tachyon Galaxies)";
-        break;
-      case "power":
-        description = `Galaxies are ${formatPercents(0.02)} stronger`;
-        break;
-      case "companion":
-        description = `You feel ${formatPercents(0.34)} better`;
-        break;
-      default:
-        description = "No glyph equipped!";
-        break;
-    }
+    const description = this.getSpecialGlyphEffectDescription(this.activeGlyphType);
     const isActive = type => isUnlocked && this.activeGlyphType === type;
     return {
       isUnlocked,
       description,
       infinity: (isActive("infinity") && player.challenge.eternity.current <= 8)
-        ? Currency.infinityPoints.value.pow(0.2)
+        ? Currency.infinityPoints.value.plus(1).pow(0.2)
         : DC.D1,
       time: isActive("time")
         ? Currency.eternityPoints.value.plus(1).pow(0.3)
@@ -210,9 +180,31 @@ export const Pelle = {
       isScaling: () => ["infinity", "time", "replication", "dilation"].includes(this.activeGlyphType),
     };
   },
-
-  get uselessRaMilestones() {
-    return [0, 1, 15, 18, 19, 21];
+  getSpecialGlyphEffectDescription(type) {
+    switch (type) {
+      case "infinity":
+        return `Infinity Point gain ${player.challenge.eternity.current <= 8
+          ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
+          : formatX(DC.D1, 2)} (based on current IP)`;
+      case "time":
+        return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
+          (based on current EP)`;
+      case "replication":
+        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.famine.percentage), 2)} (based on Famine)`;
+      case "dilation":
+        return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
+          (based on Tachyon Galaxies)`;
+      case "power":
+        return `Galaxies are ${formatPercents(0.02)} stronger`;
+      case "companion":
+        return `You feel ${formatPercents(0.34)} better`;
+      // Undefined means that there is no glyph equipped, needs to be here since this function is used in
+      // both Current Glyph Effects and Glyph Tooltip
+      case undefined:
+        return "No glyph equipped!";
+      default:
+        return "";
+    }
   },
 
   get remnantRequirementForDilation() {
@@ -281,7 +273,7 @@ export const Pelle = {
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
   // Also adds more zalgo the bigger the stage
   transitionText(from, to, stage = 0) {
-    const len = (from.length * (1 - stage) + to.length * stage);
+    const len = Math.round((from.length * (1 - stage) + to.length * stage) * 1e8) / 1e8;
     const toInterval = len * (1 - stage);
     let req = toInterval;
     let str = "";

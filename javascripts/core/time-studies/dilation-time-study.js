@@ -1,5 +1,5 @@
-import { TimeStudyState } from "./time-studies.js";
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
+import { TimeStudyState } from "./time-studies";
 
 export class DilationTimeStudyState extends TimeStudyState {
   constructor(config) {
@@ -40,8 +40,8 @@ export class DilationTimeStudyState extends TimeStudyState {
         for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
       }
       if (!Pelle.isDoomed) Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
-      if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality() && !Pelle.isDoomed) {
-        Currency.tachyonParticles.bumpTo(getTP(RA_UNLOCKS.START_TP.effect()));
+      if (Ra.unlocks.unlockDilationStartingTP.canBeApplied && !isInCelestialReality() && !Pelle.isDoomed) {
+        Currency.tachyonParticles.bumpTo(getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0)));
       }
       TabNotification.dilationAfterUnlock.tryTrigger();
     }

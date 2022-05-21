@@ -13,7 +13,7 @@ class SubtabState {
   }
 
   get isPermanentlyHidden() {
-    return this.config.hideAt <= Pelle.endState;
+    return this.config.hideAt <= GameEnd.endState;
   }
 
   get hidable() {
@@ -99,7 +99,7 @@ class TabState {
   }
 
   get isPermanentlyHidden() {
-    return this.config.hideAt <= Pelle.endState;
+    return this.config.hideAt <= GameEnd.endState;
   }
 
   get hidable() {
@@ -107,7 +107,7 @@ class TabState {
   }
 
   get isHidden() {
-    if (Enslaved.isRunning || Pelle.isDoomed) return false;
+    if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
     return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.hidable;

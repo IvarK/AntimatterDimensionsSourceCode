@@ -1,7 +1,7 @@
 <script>
+import NormalAchievementRow from "./NormalAchievementRow";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SwapAchievementImagesButton from "./SwapAchievementImagesButton";
-import NormalAchievementRow from "./NormalAchievementRow";
 
 export default {
   name: "NormalAchievementsTab",
@@ -86,7 +86,7 @@ export default {
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
       this.achMultToTP = RealityUpgrade(8).isBought;
       this.achMultToBH = VUnlocks.achievementBH.canBeApplied;
-      this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
+      this.achMultToTT = Ra.unlocks.achievementTTMult.canBeApplied;
     },
     startRowRendering() {
       const unlockedRows = [];

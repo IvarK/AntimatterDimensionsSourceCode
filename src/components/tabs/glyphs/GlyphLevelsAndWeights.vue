@@ -1,6 +1,6 @@
 <script>
-import ToggleButton from "@/components/ToggleButton";
 import SliderComponent from "@/components/SliderComponent";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "GlyphLevelsAndWeights",
@@ -114,7 +114,7 @@ export default {
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.rowVisible = glyphFactors.rowFactor > 0;
       this.achievementVisible = glyphFactors.achievementFactor > 0;
-      this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
+      this.shardVisible = Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
       this.singularityVisible = SingularityMilestone.glyphLevelFromSingularities.isUnlocked;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
@@ -547,7 +547,6 @@ function roundPreservingSum(data) {
 
 <style scoped>
 .l-glyph-level-and-weights-note {
-  grid-column-start: 1;
-  grid-column-end: 5;
+  grid-column: 1 / 5;
 }
 </style>

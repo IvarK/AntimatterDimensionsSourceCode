@@ -1,9 +1,7 @@
 <script>
+import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";
 import ReplicantiGainText from "./ReplicantiGainText";
-import ReplicantiUpgradeButton, {
-  ReplicantiUpgradeButtonSetup,
-} from "./ReplicantiUpgradeButton";
 import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton";
 
 export default {
@@ -137,7 +135,7 @@ export default {
       this.mult.copyFrom(replicantiMult());
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
-      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0;
+      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0 && !Pelle.isDoomed;
       this.multDT = Math.clampMin(
         Decimal.log10(Replicanti.amount) *
           getAdjustedGlyphEffect("replicationdtgain"),
@@ -217,4 +215,5 @@ export default {
 </template>
 
 <style scoped>
+
 </style>

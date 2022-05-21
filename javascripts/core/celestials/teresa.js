@@ -1,6 +1,7 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { CelestialQuotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,

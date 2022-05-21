@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
 import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
 import AntimatterGalaxyRow from "./ClassicAntimatterGalaxyRow";
-import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import DimensionBoostRow from "./ClassicDimensionBoostRow";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ClassicAntimatterDimensionsTab",
@@ -27,8 +27,15 @@ export default {
       isSacrificeUnlocked: false,
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
-      multiplierText: "",
     };
+  },
+  computed: {
+    multiplierText() {
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      return `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
+    },
   },
   methods: {
     update() {
@@ -57,10 +64,6 @@ export default {
       this.isSacrificeUnlocked = Sacrifice.isVisible;
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
-
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
-      if (this.isSacrificeUnlocked) this.multiplierText +=
-        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
     quickReset() {
       softReset(-1, true, true);

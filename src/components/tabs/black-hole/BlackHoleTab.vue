@@ -1,9 +1,9 @@
 <script>
-import { BlackHoleAnimation } from "./black-hole-animation.js";
-import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
-import BlackHoleStateRow from "./BlackHoleStateRow";
+import { BlackHoleAnimation } from "./black-hole-animation";
 import BlackHoleChargingSliders from "./BlackHoleChargingSliders";
+import BlackHoleStateRow from "./BlackHoleStateRow";
 import BlackHoleUnlockButton from "./BlackHoleUnlockButton";
+import BlackHoleUpgradeRow from "./BlackHoleUpgradeRow";
 
 export default {
   name: "BlackHoleTab",
@@ -55,7 +55,7 @@ export default {
       this.isEnslaved = Enslaved.isRunning;
       this.isPermanent = BlackHoles.arePermanent;
       this.pauseMode = player.blackHoleAutoPauseMode;
-      this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.hasBH2 = BlackHole(2).isUnlocked;
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];
@@ -139,7 +139,14 @@ export default {
 
 <template>
   <div class="l-black-hole-tab">
-    <div v-if="isEnslaved || isDoomed">
+    <div
+      v-if="isEnslaved || isDoomed"
+      class="c-black-hole-disabled-description"
+    >
+      <i v-if="isEnslaved">
+        You must... seek... other methods...
+        <br>
+      </i>
       The physics of this Reality do not allow the existence of Black Holes.
     </div>
     <div
@@ -212,12 +219,17 @@ export default {
 
 <style scoped>
 .l-auto-pause-button {
-  width: 30rem
+  width: 30rem;
 }
 
 .l-pre-unlock-text {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.c-black-hole-disabled-description {
+  font-size: 2.5rem;
+  line-height: 1.5;
 }
 </style>

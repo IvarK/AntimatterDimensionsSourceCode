@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.celestials.perkShop = (function() {
   function rebuyableCost(initialCost, increment, id) {
@@ -27,8 +27,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(1.05, bought),
       formatEffect: value => formatX(value, 2, 2),
       formatCost: value => format(value, 2),
-      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? Math.pow(1.05, 20) : Math.pow(1.05, 11))
+      costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
+      cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? Math.pow(1.05, 20) : Math.pow(1.05, 11))
     }),
     rmMult: rebuyable({
       id: 1,
@@ -38,8 +38,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
-      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
+      costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
+      cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048)
     }),
     bulkDilation: rebuyable({
       id: 2,
@@ -49,8 +49,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
-      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1638400 : 1600),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 16384 : 16),
+      costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1638400 : 1600),
+      cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 16384 : 16),
     }),
     autoSpeed: rebuyable({
       id: 3,
@@ -61,8 +61,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2),
       formatCost: value => format(value, 2),
-      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64000 : 4000),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64 : 4)
+      costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 64000 : 4000),
+      cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 64 : 4)
     }),
     musicGlyph: rebuyable({
       id: 4,

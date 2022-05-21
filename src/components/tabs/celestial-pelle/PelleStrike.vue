@@ -37,25 +37,21 @@ export default {
 
 <style>
 .c-pelle-strike {
-  background: var(--color-pelle--base);
-  color: black;
-  font-size: 1.3rem;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem;
-  font-weight: bold;
   min-height: 3.8rem;
   z-index: 3;
-}
-
-.s-base--metro .c-pelle-strike {
-  border-radius: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: black;
+  background: var(--color-pelle--base);
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .c-pelle-strike-container {
-  padding: 0.5rem 0.5rem 2rem;
+  width: 26rem;
   height: 5rem;
   z-index: 3;
-  width: 26rem;
+  padding: 0.5rem 0.5rem 2rem;
 }
 
 .c-pelle-strike-description {

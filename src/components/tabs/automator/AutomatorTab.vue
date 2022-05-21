@@ -1,8 +1,9 @@
 <script>
 import SplitPane from "vue-splitpane";
+
+import AutomatorDocs from "./AutomatorDocs";
 import AutomatorEditor from "./AutomatorEditor";
 import AutomatorPointsList from "./AutomatorPointsList";
-import AutomatorDocs from "./AutomatorDocs";
 
 export default {
   name: "AutomatorTab",

@@ -1,5 +1,6 @@
-import { DimensionState } from "./dimension.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { DimensionState } from "./dimension";
 
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
@@ -82,7 +83,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+  if (AlchemyResource.inflation.isUnlocked && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
   }
 

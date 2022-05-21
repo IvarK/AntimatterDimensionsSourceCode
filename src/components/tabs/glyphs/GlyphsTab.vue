@@ -1,16 +1,16 @@
 <script>
-import ExpandingControlBox from "@/components/ExpandingControlBox";
-import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
-import GlyphPeek from "./GlyphPeek";
-import RealityAmplifyButton from "./RealityAmplifyButton";
-import GlyphInventory from "./GlyphInventory";
-import SacrificedGlyphs from "./SacrificedGlyphs";
 import CurrentGlyphEffects from "./CurrentGlyphEffects";
 import EquippedGlyphs from "./EquippedGlyphs";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+import GlyphInventory from "./GlyphInventory";
 import GlyphLevelsAndWeights from "./GlyphLevelsAndWeights";
-import ResetRealityButton from "./ResetRealityButton";
+import GlyphPeek from "./GlyphPeek";
+import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
+import RealityAmplifyButton from "./RealityAmplifyButton";
 import RealityButton from "./RealityButton";
 import RealityReminder from "./RealityReminder";
+import ResetRealityButton from "./ResetRealityButton";
+import SacrificedGlyphs from "./SacrificedGlyphs";
 
 export default {
   name: "GlyphsTab",
@@ -79,15 +79,24 @@ export default {
       player.options.glyphTextColors = !player.options.glyphTextColors;
     },
     glyphInfoClass(isSacrificeOption) {
-      if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
-      return "";
+      return {
+        "l-glyph-info-button": true,
+        "c-glyph-info-button": true,
+        "c-glyph-info-button--active": isSacrificeOption,
+        "c-glyph-info-button--inactive": !isSacrificeOption
+      };
     },
     setInfoState(state) {
       player.reality.showGlyphSacrifice = state;
     },
     glyphColorPosition() {
       return this.sacrificeUnlocked ? "l-glyph-color-position__low" : "l-glyph-color-position__top";
-    }
+    },
+    glyphInfoBorderClass() {
+      return {
+        "c-current-glyph-effects-with-top-border": !this.sacrificeUnlocked
+      };
+    },
   }
 };
 </script>
@@ -164,23 +173,24 @@ export default {
               v-if="sacrificeUnlocked"
               class="c-glyph-info-options"
             >
-              <div
-                class="c-glyph-info-button l-current-glyph-effects"
-                :class="glyphInfoClass(false)"
+              <button
+                :class="glyphInfoClass(!sacrificeDisplayed)"
                 @click="setInfoState(false)"
               >
                 Current Glyph effects
-              </div>
-              <div
-                class="c-glyph-info-button"
-                :class="glyphInfoClass(true)"
+              </button>
+              <button
+                :class="glyphInfoClass(sacrificeDisplayed)"
                 @click="setInfoState(true)"
               >
                 Glyph Sacrifice totals
-              </div>
+              </button>
             </div>
             <SacrificedGlyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />
-            <CurrentGlyphEffects v-else />
+            <CurrentGlyphEffects
+              v-else
+              :class="glyphInfoBorderClass()"
+            />
           </div>
         </div>
         <GlyphInventory />
@@ -192,9 +202,5 @@ export default {
 <style scoped>
 .l-glyph-level-factors {
   margin: 2rem;
-}
-
-.l-current-glyph-effects {
-  border-right: 0.1rem solid #b8b8b8;
 }
 </style>

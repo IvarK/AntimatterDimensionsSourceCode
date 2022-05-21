@@ -64,24 +64,26 @@ export default {
 
 <style scoped>
 .c-pelle-panel-title {
-  font-weight: bold;
-  font-size: 3rem;
-  color: var(--color-pelle--base);
   position: relative;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--color-pelle--base);
 }
 
 .c-collapse-icon-clickable {
   position: absolute;
-  left: 1.5rem;
   top: 50%;
+  left: 1.5rem;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 
 .l-pelle-panel-container {
-  padding: 1rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.2rem);
   margin: 1rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.2rem;
+  padding: 1rem;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -101,9 +103,5 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-}
-
-.c-collapse-icon-clickable {
-  cursor: pointer;
 }
 </style>

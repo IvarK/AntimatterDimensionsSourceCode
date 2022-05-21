@@ -1,4 +1,4 @@
-import { GameDatabase } from "../../game-database.js";
+import { GameDatabase } from "../../game-database";
 
 GameDatabase.eternity.timeStudies.dilation = [
   {
@@ -7,7 +7,7 @@ GameDatabase.eternity.timeStudies.dilation = [
     cost: 5000,
     requirement: () => {
       const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
-      if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
+      if (Ra.unlocks.autoUnlockDilation.canBeApplied &&
           ttRequirement &&
           !isInCelestialReality() && !Pelle.isDoomed
       ) {
@@ -51,6 +51,7 @@ GameDatabase.eternity.timeStudies.dilation = [
     cost: () => 1,
     requirement: () => TimeStudy.timeDimension(8).isBought &&
       player.records.thisReality.maxEP.exponent >= 4000 &&
-      (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked))
+      (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked)) &&
+      !Pelle.isDoomed
   }
 ];

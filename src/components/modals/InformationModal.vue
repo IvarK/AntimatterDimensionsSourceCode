@@ -67,6 +67,7 @@ export default {
 .l-information-modal {
   display: flex;
   flex-direction: column;
+  /* stylelint-disable-next-line unit-allowed-list */
   width: calc(100vw - 50vh);
   justify-content: space-around;
 }
@@ -76,10 +77,10 @@ export default {
 }
 
 .c-info-body {
-  margin: 1rem;
-  padding: 0.5rem;
   text-align: left;
   font-size: 2rem;
+  margin: 1rem;
+  padding: 0.5rem;
 }
 
 .c-socials {
@@ -88,7 +89,7 @@ export default {
 
 .l-socials {
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
+  align-items: center;
 }
 </style>

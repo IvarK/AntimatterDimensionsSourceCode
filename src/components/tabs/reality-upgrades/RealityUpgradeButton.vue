@@ -1,9 +1,9 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
 import HintText from "@/components/HintText";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "RealityUpgradeButton",
@@ -66,7 +66,7 @@ export default {
       this.isRebuyable = upgrade.isRebuyable;
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
-      this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC);
+      this.isAutoUnlocked = Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
       this.isUseless = Pelle.disabledRUPGs.includes(upgrade.id) && Pelle.isDoomed;
     }

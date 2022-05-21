@@ -1,7 +1,9 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState, BitUpgradeState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
-import { SpeedrunMilestones } from "../speedrun.js";
+import { BitUpgradeState, GameMechanicState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { SpeedrunMilestones } from "../speedrun";
+
+import { CelestialQuotes } from "./quotes";
 
 /**
  * Information about how to format runUnlocks:
@@ -25,7 +27,7 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get canBeReduced() {
-    return this.completions < this.config.values.length &&
+    return this.completions < this.config.values.length && this.completions !== 0 &&
       new Decimal(this.reduction).neq(this.config.maxShardReduction(this.conditionBaseValue));
   }
 
@@ -167,12 +169,12 @@ export const V = {
       if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
     }
 
-    if (VUnlocks.raUnlock.canBeApplied && !Ra.has(RA_UNLOCKS.AUTO_TP)) {
+    if (VUnlocks.raUnlock.canBeApplied && !Ra.unlocks.autoTP.canBeApplied) {
       Ra.checkForUnlocks();
     }
   },
   get canUnlockCelestial() {
-    return VUnlocks.vAchievementUnlock.canUnlock;
+    return VUnlocks.vAchievementUnlock.canBeUnlocked;
   },
   unlockCelestial() {
     // eslint-disable-next-line no-bitwise
@@ -213,7 +215,7 @@ export const V = {
     return player.celestials.v.run;
   },
   get isFlipped() {
-    return Ra.has(RA_UNLOCKS.HARD_V);
+    return Ra.unlocks.unlockHardV.canBeApplied;
   },
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;

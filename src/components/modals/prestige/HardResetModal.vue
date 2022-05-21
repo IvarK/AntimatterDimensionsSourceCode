@@ -4,11 +4,11 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 export default {
   name: "HardResetModal",
   components: {
-    ModalWrapperChoice,
+    ModalWrapperChoice
   },
   data() {
     return {
-      input: "",
+      input: ""
     };
   },
   computed: {

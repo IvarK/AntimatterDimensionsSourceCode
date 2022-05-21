@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.tabs = [
   {
@@ -375,7 +375,7 @@ GameDatabase.tabs = [
         name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "AlchemyTab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+        condition: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
         id: 5,
         hidable: true,
       },
@@ -418,7 +418,7 @@ GameDatabase.tabs = [
       {
         key: "enslaved",
         name: "The Enslaved Ones",
-        symbol: "<i class='fas fa-link'></i>",
+        symbol: "<div class='o-tab-btn--cel3'>\uf0c1</div>",
         component: "EnslavedTab",
         condition: () => EffarigUnlock.eternity.isUnlocked,
         id: 3,

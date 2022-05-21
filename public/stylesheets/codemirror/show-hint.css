@@ -10,8 +10,8 @@
   -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
   -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
   box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  border-radius: 3px;
-  border: 1px solid silver;
+  border-radius: var(--var-border-radius, 3px);
+  border: var(--var-border-width, 1px) solid silver;
 
   background: white;
   font-size: 90%;
@@ -24,7 +24,7 @@
 .CodeMirror-hint {
   margin: 0;
   padding: 0 4px;
-  border-radius: 2px;
+  border-radius: var(--var-border-radius, 2px);
   white-space: pre;
   color: black;
   cursor: pointer;

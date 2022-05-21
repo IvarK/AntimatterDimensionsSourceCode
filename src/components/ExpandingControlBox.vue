@@ -24,6 +24,11 @@ export default {
       required: false,
       default: undefined,
     },
+    buttonClass: {
+      type: String,
+      required: false,
+      default: "l-expanding-control-box__button",
+    },
   },
   data() {
     return {
@@ -163,12 +168,10 @@ export default {
       <div
         v-if="!$slots.header"
         ref="expandButton"
-        class="l-expanding-control-box__button"
+        :class="buttonClass"
         @click="openRequest = !openRequest"
       >
-        <span class="l-expanding-control-box__button_text">
-          {{ label }}
-        </span>
+        {{ label }}
         <span :class="indicatorArrowClassObject">
           ▼
         </span>
@@ -198,34 +201,30 @@ export default {
 }
 
 .l-expanding-control-box__container {
-  position: absolute;
   display: block;
-  height: auto;
   overflow: hidden;
   width: 100%;
+  height: auto;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
 }
 
 .l-expanding-control-box__container--transition {
   transition: max-height 0.5s;
-  -webkit-transition: max-height 0.5s;
 }
 
 .l-expanding-control-box__button {
-  cursor: pointer;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
   white-space: nowrap;
-  border: none !important;
+  width: 100%;
   height: 2.5rem;
-}
-
-.l-expanding-control-box__button_text {
-  margin-right: 0.6rem;
+  position: relative;
+  top: -0.5rem;
+  justify-content: center;
+  align-items: center;
+  border: none !important;
+  cursor: pointer;
 }
 
 .c-indicator-arrow--flipped {
@@ -233,6 +232,7 @@ export default {
 }
 
 .c-indicator-arrow {
-  transition: all 0.25s ease-out;
+  margin-left: 0.6rem;
+  transition: transform 0.25s ease-out;
 }
 </style>

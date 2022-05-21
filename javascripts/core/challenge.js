@@ -1,5 +1,5 @@
-import { GameMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { DC } from "./constants";
+import { GameMechanicState } from "./game-mechanics/index";
 
 // This function does *not* reset anything. Only call it when you've already
 // done all the non-UI stuff. Right now the only UI thing to do is switch to
@@ -190,7 +190,8 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.records.thisEternity.maxAM.gte(this.unlockAM) || Achievement(133).isUnlocked;
+    return player.records.thisEternity.maxAM.gte(this.unlockAM) || (Achievement(133).isUnlocked && !Pelle.isDoomed) ||
+      (PelleUpgrade.keepInfinityChallenges.canBeApplied && Pelle.cel.records.totalAntimatter.gte(this.unlockAM));
   }
 
   get isRunning() {

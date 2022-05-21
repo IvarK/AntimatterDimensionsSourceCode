@@ -7,6 +7,11 @@ export default {
       required: true,
     }
   },
+  data() {
+    return {
+      forceDontShowModal: false
+    };
+  },
   created() {
     this.on$(GAME_EVENT.CLOSE_MODAL, this.hide);
   },
@@ -14,6 +19,10 @@ export default {
     document.activeElement.blur();
   },
   methods: {
+    update() {
+      // 2.5 is the cutoff point where the screen starts fading
+      this.forceDontShowModal = GameEnd.endState > 2.5;
+    },
     hide() {
       if (this.modal.hide) this.modal.hide();
       else Modal.hide();
@@ -25,15 +34,17 @@ export default {
 <template>
   <component
     :is="modal.component"
-    v-if="modal.isBare"
+    v-if="modal.isBare && !forceDontShowModal"
+    v-bind="modal.props"
     :modal-config="modal.props"
   />
   <div
-    v-else
+    v-else-if="!forceDontShowModal"
     class="c-modal l-modal"
   >
     <component
       :is="modal.component"
+      v-bind="modal.props"
       :modal-config="modal.props"
       @close="hide"
     />

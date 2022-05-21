@@ -57,7 +57,6 @@ export default {
         closeOn: GAME_EVENT.REALITY_RESET_AFTER,
         isGlyphSelection: true,
         showSetName: false,
-        displaySacrifice: true,
       });
     }
   }

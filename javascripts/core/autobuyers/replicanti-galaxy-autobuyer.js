@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
   get data() {

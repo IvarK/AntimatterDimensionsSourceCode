@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.eternity.milestones = {
   autobuyerIPMult: {
@@ -41,7 +41,7 @@ GameDatabase.eternity.milestones = {
     eternities: 7,
     reward: `You complete Infinity Challenges as soon as you unlock them,
       and keep the Dimensional Sacrifice Autobuyer`,
-    pelleObsolete: () => PelleUpgrade.keepInfinityChallenges.isBought,
+    pelleUseless: true
   },
   keepBreakUpgrades: {
     eternities: 8,

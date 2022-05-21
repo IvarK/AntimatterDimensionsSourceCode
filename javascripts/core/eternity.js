@@ -1,5 +1,5 @@
-import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
@@ -57,7 +57,7 @@ function giveEternityRewards(auto) {
 }
 
 export function eternityAnimation() {
-  document.body.style.animation = "eternify 3s 1";
+  document.body.style.animation = "a-eternify 3s 1";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 3000);
@@ -89,7 +89,7 @@ export function eternity(force, auto, specialConditions = {}) {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
 
-  if (!EternityMilestone.keepAutobuyers.isReached) {
+  if (!EternityMilestone.keepAutobuyers.isReached && !(Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied)) {
     // Fix infinity because it can only break after big crunch autobuyer interval is maxed
     player.break = false;
   }

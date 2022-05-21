@@ -1,8 +1,10 @@
-import { notify } from "./notify.js";
-import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
-import { useLongPress, useRepeatingClick } from "./longpress";
 import VueGtag from "vue-gtag";
+
+import { useLongPress, useRepeatingClick } from "./longpress";
+import { notify } from "./notify";
+import { state } from "./ui.init";
+
 import GameUIComponent from "@/components/GameUIComponent";
 
 Vue.mixin({

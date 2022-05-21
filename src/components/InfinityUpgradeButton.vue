@@ -1,7 +1,7 @@
 <script>
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
 
 export default {
   name: "InfinityUpgradeButton",
@@ -71,7 +71,8 @@ export default {
       // seems more likely to be read).
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
-      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect && !Pelle.isDoomed;
+      this.chargePossible = Ra.unlocks.chargedInfinityUpgrades.canBeApplied &&
+        upgrade.hasChargeEffect && !Pelle.isDoomed;
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;

@@ -48,7 +48,7 @@ export default {
     containerClass() {
       return {
         "c-laitela-milestone": true,
-        "o-dark-matter-dimension-button--ascend": !this.suppressGlow &&
+        "o-laitela-milestone--glow": !this.suppressGlow &&
           this.milestone.previousGoal > this.lastCheckedMilestones
       };
     },
@@ -142,3 +142,14 @@ export default {
     </span>
   </div>
 </template>
+
+<style scoped>
+.o-laitela-milestone--glow {
+  font-weight: bold;
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
+  border-color: var(--color-laitela--accent);
+  box-shadow: 0 0 0.5rem 0.1rem inset, 0 0 0.3rem 0;
+  animation: 3s a-laitela-flash infinite;
+}
+</style>

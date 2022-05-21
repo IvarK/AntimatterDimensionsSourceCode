@@ -1,7 +1,7 @@
 <script>
+import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 
 export default {
   name: "HeaderBlackHole",
@@ -43,7 +43,7 @@ export default {
       this.canCharge = Enslaved.isUnlocked;
       this.isCharging = Enslaved.isStoringGameTime;
       this.storedTime = player.celestials.enslaved.stored;
-      this.canAutoRelease = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.canAutoRelease = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
     },
     pauseButtonText() {
@@ -117,9 +117,10 @@ export default {
 
 <style scoped>
 .c-primary-btn--black-hole-header {
-  margin: 0.2rem;
   vertical-align: middle;
+  margin: 0.2rem;
 }
+
 .c-black-hole-status-text {
   margin: 0 0.8rem;
 }

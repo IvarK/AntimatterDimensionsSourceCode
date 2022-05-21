@@ -1,9 +1,10 @@
 <script>
 import { DC } from "../../../../javascripts/core/constants";
-import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
+
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import GlyphSetPreview from "@/components/GlyphSetPreview";
 import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
+import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 
 export default {
   name: "TeresaTab",
@@ -94,7 +95,7 @@ export default {
       this.hasReality = TeresaUnlocks.run.isUnlocked;
       this.hasEPGen = TeresaUnlocks.epGen.isUnlocked;
       this.hasPerkShop = TeresaUnlocks.shop.isUnlocked;
-      this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
+      this.raisedPerkShop = Ra.unlocks.perkShopIncrease.canBeApplied;
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
       this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);

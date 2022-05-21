@@ -1,9 +1,9 @@
-import { SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
+import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
-  document.body.style.animation = "dilate 2s 1 linear";
+  document.body.style.animation = "a-dilate 2s 1 linear";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 2000);
@@ -11,7 +11,7 @@ export function animateAndDilate() {
 }
 
 export function animateAndUndilate() {
-  document.body.style.animation = "undilate 2s 1 linear";
+  document.body.style.animation = "a-undilate 2s 1 linear";
   setTimeout(() => {
     document.body.style.animation = "";
   }, 2000);
@@ -127,14 +127,14 @@ export function getDilationGainPerSecond() {
       Achievement(132),
       Achievement(137),
       RealityUpgrade(1),
-      AlchemyResource.dilation
+      AlchemyResource.dilation,
+      Ra.unlocks.continuousTTBoost.effects.dilatedTime,
+      Ra.unlocks.peakGamespeedDT
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
-  dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   dtRate = dtRate.times(mult);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;

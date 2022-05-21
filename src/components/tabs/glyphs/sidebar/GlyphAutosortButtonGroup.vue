@@ -1,6 +1,6 @@
 <script>
-import ToggleButton from "@/components/ToggleButton";
 import ButtonCycle from "@/components/ButtonCycle";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "GlyphAutosortButtonGroup",

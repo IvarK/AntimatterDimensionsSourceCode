@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.reality.upgrades = (function() {
   const rebuyable = props => {
@@ -187,14 +187,14 @@ GameDatabase.reality.upgrades = (function() {
       description: "Gain Eternities per second equal to your Reality count",
       automatorPoints: 5,
       shortDescription: () => `Continuous Eternity generation`,
-      effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
+      effect: () => Currency.realities.value * Ra.unlocks.continuousTTBoost.effects.eternity.effectOrDefault(1),
       formatEffect: value => `${format(value)} per second`
     },
     {
       name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
-      requirement: () => `Eternity for ${format(DC.E10)} Eternity Points without purchasing
+      requirement: () => `Have ${format(DC.E10)} Eternity Points without purchasing
       the ${formatX(5)} Eternity Point upgrade`,
       hasFailed: () => player.epmultUpgrades !== 0,
       checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,

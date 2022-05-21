@@ -135,6 +135,7 @@ export default {
       <div v-if="unlockedBulkSingularity">
         <button
           class="c-laitela-singularity__cap-control"
+          :class="{ 'c-laitela-singularity__cap-control--available' : singularityCapIncreases > 0 }"
           :ach-tooltip="decreaseTooltip"
           @click="decreaseCap"
         >
@@ -142,6 +143,7 @@ export default {
         </button>
         <button
           class="c-laitela-singularity__cap-control"
+          :class="{ 'c-laitela-singularity__cap-control--available' : singularityCapIncreases < 50 }"
           :ach-tooltip="increaseTooltip"
           @click="increaseCap"
         >
@@ -178,6 +180,6 @@ export default {
 
 <style scoped>
 .c-laitela-singularity__cap-control {
-  margin: 0 0.3rem 1rem 0.3rem;
+  margin: 0 0.3rem 1rem;
 }
 </style>

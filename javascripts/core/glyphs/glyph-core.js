@@ -1,4 +1,4 @@
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState } from "../game-mechanics/index";
 
 export const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "timeshardpow", "powermult", "powerdimboost", "powerbuy10",
@@ -609,7 +609,7 @@ export const Glyphs = {
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
-    if (!Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) return;
+    if (!Ra.unlocks.allGamespeedGlyphs.canBeApplied) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
       // eslint-disable-next-line no-bitwise
       glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);

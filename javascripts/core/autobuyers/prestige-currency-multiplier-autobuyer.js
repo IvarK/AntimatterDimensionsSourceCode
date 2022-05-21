@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
   get data() {

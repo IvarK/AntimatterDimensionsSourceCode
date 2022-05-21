@@ -1,6 +1,6 @@
-import { GameMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { GameMechanicState } from "./game-mechanics/index";
 
 export function startEternityChallenge() {
   initializeChallengeCompletions();
@@ -292,7 +292,7 @@ export const EternityChallenges = {
   autoComplete: {
     tick() {
       if (!player.reality.autoEC || Pelle.isDisabled("autoec")) return;
-      if (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)) {
+      if (Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied) {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {

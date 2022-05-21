@@ -1,6 +1,6 @@
 <script>
-import ModalWrapper from "@/components/modals/ModalWrapper";
 import AwayProgressEntry from "@/components/modals/AwayProgressEntry";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "AwayProgressModal",
@@ -9,10 +9,18 @@ export default {
     ModalWrapper,
   },
   props: {
-    modalConfig: {
+    playerBefore: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    playerAfter: {
+      type: Object,
+      required: true,
+    },
+    seconds: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -23,17 +31,11 @@ export default {
     nothingHappened() {
       return Theme.current().name === "S9";
     },
-    before() {
-      return this.modalConfig.playerBefore;
-    },
-    after() {
-      return this.modalConfig.playerAfter;
-    },
     offlineStats() {
       return AwayProgressTypes.appearsInAwayModal;
     },
     headerText() {
-      const timeDisplay = TimeSpan.fromSeconds(this.modalConfig.seconds).toString();
+      const timeDisplay = TimeSpan.fromSeconds(this.seconds).toString();
       if (this.nothingHappened || !this.somethingHappened) {
         return `While you were away for ${timeDisplay}... Nothing happened.`;
       }
@@ -62,8 +64,8 @@ export default {
         v-for="name of offlineStats"
         :key="name"
         :name="name"
-        :player-before="before"
-        :player-after="after"
+        :player-before="playerBefore"
+        :player-after="playerAfter"
         @something-happened="somethingHappened = true"
       />
     </div>

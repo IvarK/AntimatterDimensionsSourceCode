@@ -1,10 +1,12 @@
 <script>
+import HintText from "@/components/HintText";
 import TimeStudyButton from "./TimeStudyButton";
 
 export default {
   name: "ECTimeStudy",
   components: {
-    TimeStudyButton
+    TimeStudyButton,
+    HintText
   },
   props: {
     setup: {
@@ -75,6 +77,12 @@ export default {
 
 <template>
   <TimeStudyButton :setup="setup">
+    <HintText
+      type="studies"
+      class="l-hint-text--time-study"
+    >
+      EC{{ id }}
+    </HintText>
     Eternity Challenge {{ id }}
     ({{ formatInt(completions) }}<span v-if="showTotalCompletions">/{{ formatInt(5) }}</span>)
     <template v-if="hasRequirement">

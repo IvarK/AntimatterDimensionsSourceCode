@@ -45,13 +45,15 @@ export default {
 
 <style scoped>
 .o-blob-background {
-  fill: #fbc21b;
-  text-shadow: 0 0 5px #000,
-               0 0 5px #000,
-               0 0 5px #000;
-  opacity: 0.3;
   overflow: visible;
+  fill: #fbc21b;
+  opacity: 0.3;
+  text-shadow:
+    0 0 5px #000000,
+    0 0 5px #000000,
+    0 0 5px #000000;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   cursor: default;
 }

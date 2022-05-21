@@ -1,5 +1,6 @@
-import { GameKeyboard } from "./keyboard.js";
 import Mousetrap from "mousetrap";
+
+import { GameKeyboard } from "./keyboard";
 
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
@@ -143,7 +144,6 @@ export const shortcuts = [
     keys: ["mod", "s"],
     type: "bind",
     function: () => {
-      if (Pelle.endState >= 4.5) return false;
       GameStorage.save(false, true);
       return false;
     },

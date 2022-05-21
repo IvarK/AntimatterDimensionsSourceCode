@@ -1,7 +1,7 @@
-import { GlyphTypes } from "./glyph-effects.js";
-import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
-import { DC } from "./constants.js";
+import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
+import { DC } from "./constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { GlyphTypes } from "./glyph-effects";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
@@ -722,6 +722,7 @@ window.player = {
       showBought: false,
     }
   },
+  isGameEnd: false,
   newGame: {
     current: 0,
     plusRecord: 0,

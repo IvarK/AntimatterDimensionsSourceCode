@@ -1,12 +1,12 @@
 <script>
-import LaitelaRunButton from "./LaitelaRunButton";
-import SingularityPane from "./SingularityPane";
-import SingularityMilestonePane from "./SingularityMilestonePane";
-import DarkMatterDimensionGroup from "./DarkMatterDimensionGroup";
 import AnnihilationButton from "./AnnihilationButton";
-import LaitelaAutobuyerPane from "./LaitelaAutobuyerPane";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import DarkMatterDimensionGroup from "./DarkMatterDimensionGroup";
+import LaitelaAutobuyerPane from "./LaitelaAutobuyerPane";
+import LaitelaRunButton from "./LaitelaRunButton";
 import PrimaryButton from "@/components/PrimaryButton";
+import SingularityMilestonePane from "./SingularityMilestonePane";
+import SingularityPane from "./SingularityPane";
 
 export default {
   name: "LaitelaTab",

@@ -1,18 +1,18 @@
 <script>
-import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
-import ModernUi from "@/components/ui-modes/modern/ModernUi";
-import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
-import TabComponents from "@/components/tabs";
-import PopupModal from "@/components/modals/PopupModal";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
-import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import NewGame from "@/components/tabs/celestial-pelle/NewGame";
-import SaveTimer from "@/components/SaveTimer";
-import SpeedrunStatus from "@/components/SpeedrunStatus";
 import BackgroundAnimations from "@/components/BackgroundAnimations";
-import ModalProgressBar from "@/components/modals/ModalProgressBar";
+import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
+import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
+import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
 import HowToPlay from "@/components/HowToPlay";
 import InfoButton from "@/components/InfoButton";
+import ModalProgressBar from "@/components/modals/ModalProgressBar";
+import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
+import ModernUi from "@/components/ui-modes/modern/ModernUi";
+import NewGame from "@/components/tabs/celestial-pelle/NewGame";
+import PopupModal from "@/components/modals/PopupModal";
+import SaveTimer from "@/components/SaveTimer";
+import SpeedrunStatus from "@/components/SpeedrunStatus";
+import TabComponents from "@/components/tabs";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
@@ -34,6 +34,11 @@ export default {
     InfoButton,
     TimeTheoremShop
   },
+  data() {
+    return {
+      rollCredits: false,
+    };
+  },
   computed: {
     view() {
       return this.$viewModel;
@@ -52,6 +57,11 @@ export default {
       return `stylesheets/theme-${this.view.theme}.css`;
     }
   },
+  methods: {
+    update() {
+      this.rollCredits = GameEnd.endState >= 2.5;
+    }
+  }
 };
 </script>
 
@@ -95,9 +105,9 @@ export default {
     <ModernSidebar v-if="view.newUI" />
     <SaveTimer />
     <SpeedrunStatus />
-    <FadeToBlack />
-    <CreditsContainer />
-    <NewGame />
+    <FadeToBlack v-if="rollCredits" />
+    <CreditsContainer v-if="rollCredits" />
+    <NewGame v-if="rollCredits" />
   </div>
 </template>
 

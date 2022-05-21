@@ -1,6 +1,7 @@
 <script>
-import AutomatorSingleBlock from "./AutomatorSingleBlock";
 import draggable from "vuedraggable";
+
+import AutomatorSingleBlock from "./AutomatorSingleBlock";
 
 export default {
   name: "AutomatorBlockEditor",

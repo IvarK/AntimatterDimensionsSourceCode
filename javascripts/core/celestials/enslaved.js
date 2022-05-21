@@ -1,6 +1,7 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { BitUpgradeState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { CelestialQuotes } from "./quotes";
 
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
@@ -38,7 +39,7 @@ export const Enslaved = {
     if (Pelle.isDoomed) return;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
-    if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+    if (!Ra.unlocks.adjustableStoredTime.canBeApplied) {
       player.celestials.enslaved.storedFraction = 1;
     }
   },
@@ -62,9 +63,7 @@ export const Enslaved = {
     return 0.7;
   },
   get storedRealTimeCap() {
-    const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
-      : 0;
+    const addedCap = Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0);
     return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {
@@ -154,6 +153,9 @@ export const Enslaved = {
     return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
+  get canAmplify() {
+    return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
+  },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
     return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
@@ -235,7 +237,8 @@ export const Enslaved = {
       ]
     },
   }),
-  symbol: "<i class='fas fa-link'></i>"
+  // Unicode f0c1.
+  symbol: "\uf0c1"
 };
 
 class EnslavedProgressState extends BitUpgradeState {

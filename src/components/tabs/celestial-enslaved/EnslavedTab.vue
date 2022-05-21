@@ -1,8 +1,8 @@
 <script>
+import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import BlackHoleChargingSliders from "@/components/tabs/black-hole/BlackHoleChargingSliders";
 
 export default {
   name: "EnslavedTab",
@@ -64,7 +64,9 @@ export default {
       if (!this.offlineEnabled) return "Offline Progress is disabled";
       if (this.autoStoreReal) return "Offline time stored";
       return "Offline time used for production";
-    }
+    },
+    // Use this here since Enslaved has a fairly non-standard character, and SFCs don't support using \uf0c1
+    enslavedSymbol: () => Enslaved.symbol
   },
   watch: {
     autoRelease(newValue) {
@@ -79,7 +81,7 @@ export default {
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.offlineEnabled = player.options.offlineProgress;
-      this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted && !this.isDoomed;
       this.storedReal = player.celestials.enslaved.storedReal;
@@ -175,7 +177,9 @@ export default {
               :class="runButtonClassObject"
               @click="startRun"
             >
-              <div class="c-enslaved-run-button__icon__sigil fas fa-link" />
+              <div class="c-enslaved-run-button__icon__sigil">
+                {{ enslavedSymbol }}
+              </div>
               <div
                 v-for="x in (isRunning ? 25 : 0)"
                 :key="x"
@@ -206,8 +210,8 @@ export default {
         <div class="l-enslaved-top-container">
           <div class="l-enslaved-top-container__half">
             While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
-            and the lost speed is converted into Stored Time. Discharging the Black Hole allows you to skip
-            forward in time. Stored Time is also used to unlock certain upgrades.
+            and the lost speed is converted into stored game time. Discharging the Black Hole allows you to skip
+            forward in time. Stored game time is also used to unlock certain upgrades.
             <button
               :class="['o-enslaved-mechanic-button',
                        {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"

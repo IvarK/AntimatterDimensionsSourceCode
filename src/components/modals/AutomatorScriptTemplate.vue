@@ -7,9 +7,21 @@ export default {
     ModalWrapper,
   },
   props: {
-    modalConfig: {
-      type: Object,
-      required: true
+    warnings: {
+      type: Function,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    inputs: {
+      type: Array,
+      required: true,
     }
   },
   data() {
@@ -24,14 +36,14 @@ export default {
   computed: {
     presets: () => player.timestudy.presets,
     params: () => GameDatabase.reality.automator.templates.paramTypes,
-    warnings() {
+    validWarnings() {
       return this.invalidInputCount === 0
-        ? this.modalConfig.warnings().concat(this.templateScript?.warnings)
-        : this.modalConfig.warnings();
+        ? this.warnings().concat(this.templateScript?.warnings)
+        : this.warnings();
     },
     templateScript() {
       if (this.invalidInputCount !== 0) return null;
-      return new ScriptTemplate(this.templateProps, this.modalConfig.name);
+      return new ScriptTemplate(this.templateProps, this.name);
     }
   },
   // Many props in this component are generated dynamically from a GameDB entry, but Vue can only give reactive
@@ -39,7 +51,7 @@ export default {
   // specifically $set them here on initialization; additionally we give them a default value so that later function
   // calls don't error out from undefined inputs.
   created() {
-    for (const input of this.modalConfig.inputs) {
+    for (const input of this.inputs) {
       const boolProp = this.paramTypeObject(input.type).boolDisplay;
       if (boolProp) {
         this.$set(this.templateInputs, input.name, false);
@@ -77,7 +89,7 @@ export default {
     updateTemplateProps() {
       this.templateProps = {};
       this.invalidInputCount = 0;
-      for (const input of this.modalConfig.inputs) {
+      for (const input of this.inputs) {
         const typeObj = this.paramTypeObject(input.type);
         const mapFn = x => (typeObj.map ? typeObj.map(x) : x);
         this.templateProps[input.name] = mapFn(this.templateInputs[input.name]);
@@ -87,7 +99,7 @@ export default {
       // We treat treeStudies as a special prop which will set treePreset iff it matches the format "PRESET [name]"
       const presetMatch = this.templateProps.treeStudies.match(/^PRESET (.{1,4})$/u);
       const presetStr = presetMatch ? presetMatch[1] : "";
-      this.currentPreset = this.presets.some(p => p.name === presetStr) ? presetStr : "";
+      this.currentPreset = this.presets.some((p, i) => p.name === presetStr || i === presetStr - 1) ? presetStr : "";
       this.templateProps.treePreset = this.currentPreset === "" ? null : this.currentPreset;
     },
     updateButton(input) {
@@ -108,22 +120,22 @@ export default {
 <template>
   <ModalWrapper class="c-automator-template-container">
     <template #header>
-      {{ modalConfig.name }} Template
+      {{ name }} Template
     </template>
     <div class="c-automator-template-description">
-      {{ modalConfig.description }}
+      {{ description }}
     </div>
     <div class="c-automator-template-inputs">
       <b>Required Information:</b>
       <br>
       Use a preset Study Tree:
       <button
-        v-for="preset in presets"
+        v-for="(preset, presetNumber) in presets"
         :key="preset.name"
         class="o-primary-btn"
-        @click="loadPreset(preset.name)"
+        @click="loadPreset(preset.name ? preset.name : presetNumber + 1)"
       >
-        {{ preset.name }}
+        {{ preset.name ? preset.name : presetNumber + 1 }}
       </button>
       <button
         class="o-primary-btn"
@@ -132,7 +144,7 @@ export default {
         <i>Current Tree</i>
       </button>
       <div
-        v-for="input in modalConfig.inputs"
+        v-for="input in inputs"
         :key="input.name"
         class="c-automator-template-entry"
       >
@@ -159,9 +171,9 @@ export default {
     </div>
     <div class="c-automator-template-warnings">
       <b>Possible things to consider:</b>
-      <div v-if="warnings.length !== 0">
+      <div v-if="validWarnings.length !== 0">
         <div
-          v-for="warning in warnings"
+          v-for="warning in validWarnings"
           :key="warning"
           class="c-automator-template-entry"
         >

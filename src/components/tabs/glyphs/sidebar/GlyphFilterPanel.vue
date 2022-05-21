@@ -1,8 +1,8 @@
 <script>
-import SliderComponent from "@/components/SliderComponent";
-import GlyphComponent from "@/components/GlyphComponent";
-import AutoSacrificeEffectTab from "./AutoSacrificeEffectTab";
 import AutoSacrificeAdvancedTab from "./AutoSacrificeAdvancedTab";
+import AutoSacrificeEffectTab from "./AutoSacrificeEffectTab";
+import GlyphComponent from "@/components/GlyphComponent";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "GlyphFilterPanel",
@@ -71,7 +71,7 @@ export default {
         this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.alchemyUnlocked = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     optionClass(idx) {
       const icon = this.modeIcon(idx);
@@ -175,7 +175,7 @@ export default {
 
 <template>
   <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
-    <div class="c-glyph-sacrifice-options">
+    <div class="c-glyph-sacrifice-options c-glyph-sacrifice-options-container">
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div
           v-tooltip="questionmarkTooltip"

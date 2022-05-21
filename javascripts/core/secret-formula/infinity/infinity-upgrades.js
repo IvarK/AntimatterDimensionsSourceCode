@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.infinity.upgrades = (function() {
   function dimInfinityMult() {
@@ -167,7 +167,8 @@ GameDatabase.infinity.upgrades = (function() {
         description: () =>
           `Gain a percentage of your Reality Machines gained on Reality each real-time second,
           percent increases with Teresa level`,
-        effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 * RA_UNLOCKS.TT_BOOST.effect.autoPrestige(),
+        effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 *
+          Ra.unlocks.continuousTTBoost.effects.autoPrestige.effectOrDefault(1),
         formatEffect: value => `${formatPercents(value, 2)}`
       }
     },

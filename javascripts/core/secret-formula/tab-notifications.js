@@ -1,5 +1,6 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 GameDatabase.tabNotifications = {
   firstInfinity: {
@@ -143,7 +144,7 @@ GameDatabase.tabNotifications = {
         tab: "teresa"
       }
     ],
-    condition: () => player.celestials.teresa.pouredAmount !== 0 && Teresa.isUnlocked,
+    condition: () => player.celestials.teresa.pouredAmount === 0 && Teresa.isUnlocked,
     events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT]
   },
   alchemyUnlock: {

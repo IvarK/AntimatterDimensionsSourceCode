@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.reality.automator = {
   commands: [
@@ -137,9 +137,10 @@ GameDatabase.reality.automator = {
     {
       id: 5,
       isUnlocked: () => Enslaved.isUnlocked,
-      keyword: "store time",
-      name: "<b>store time</b> - either turns on/off the storing of time or can be used to use stored time",
-      syntax: "<b>store time</b> action",
+      keyword: "store game time",
+      name: `<b>store game time</b> - either turns on/off the storing of game time or can be used to use
+          stored game time`,
+      syntax: "<b>store game time</b> action",
       sections: [
         {
           name: "ACTIONS",
@@ -147,13 +148,13 @@ GameDatabase.reality.automator = {
             {
               header: "<i>on/off</i>",
               description: `
-                Turns storing time on or off.
+                Turns storing game time on or off.
               `
             },
             {
               header: "<i>use</i>",
               description: `
-                Uses stored time.
+                Uses stored game time.
               `
             }
           ]

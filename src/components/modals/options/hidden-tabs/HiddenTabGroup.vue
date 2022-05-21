@@ -107,13 +107,13 @@ export default {
 
 <style scoped>
 .c-indicator-icon {
-  color: black;
-  position: absolute;
-  right: 0;
-  top: 0;
   width: 2rem;
-  padding: 0.2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: black;
   text-shadow: none;
+  padding: 0.2rem;
 }
 
 .c-hidden-tabs-background__visible {

@@ -1,7 +1,7 @@
 <script>
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import TimeTheoremBuyButton from "./TimeTheoremBuyButton";
 import TimeStudySaveLoadButton from "./TimeStudySaveLoadButton";
+import TimeTheoremBuyButton from "./TimeTheoremBuyButton";
 
 export default {
   name: "TimeTheoremShop",
@@ -63,12 +63,18 @@ export default {
     },
     minimizeArrowStyle() {
       return {
-        transform: this.minimized ? "rotateX(180deg)" : "",
+        transform: this.minimized ? "rotate(-180deg)" : "",
+        transition: "all 0.25s ease-out"
       };
     },
     saveLoadText() {
       return this.$viewModel.shiftDown ? "Save:" : "Load:";
     },
+    shopBottomRowHeightStyle() {
+      return {
+        height: this.hasTTAutobuyer ? "6.7rem" : "4.4rem",
+      };
+    }
   },
   watch: {
     isAutobuyerOn(newValue) {
@@ -125,7 +131,7 @@ export default {
 </script>
 
 <template>
-  <div class="TTbuttons">
+  <div class="time-theorem-buttons">
     <div class="ttshop-container ttshop-background">
       <div
         data-role="page"
@@ -166,6 +172,7 @@ export default {
       <div
         v-if="!minimized"
         class="ttbuttons-row"
+        :style="shopBottomRowHeightStyle"
       >
         <TimeTheoremBuyButton
           :budget="budget.am"
@@ -201,6 +208,10 @@ export default {
           />
         </div>
       </div>
+      <div
+        v-else
+        class="ttbuttons-row ttbuttons-bottom-row-hide"
+      />
     </div>
     <button
       v-if="minimizeAvailable"
@@ -208,7 +219,7 @@ export default {
       @click="minimize"
     >
       <span
-        id="minimizeArrow"
+        class="minimize-arrow"
         :style="minimizeArrowStyle"
       >▼</span>
     </button>
@@ -226,5 +237,9 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.ttbuttons-bottom-row-hide {
+  height: 0;
 }
 </style>

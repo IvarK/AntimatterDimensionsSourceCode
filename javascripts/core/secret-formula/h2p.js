@@ -1,6 +1,7 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
-import { Pelle, PelleStrikes } from "../globals.js";
+import { Pelle, PelleStrikes } from "../globals";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 GameDatabase.h2p = {
   /**
@@ -1136,11 +1137,11 @@ When unlocking The Enslaved Ones, you immediately gain access to two new mechani
 Stored game time is also used as a currency for purchasing unlocks from The Enslaved Ones.
 <br>
 <br>
-Charging your Black Hole gives you stored time, which it does at the expense of setting your game speed to
-${formatInt(1)}. The game is in effect using your increased game speed in order to store time itself. Its
-main use is to discharge the Black Hole, which takes uses your stored time to skip forward in time by a duration
-equal to the time stored. This is different than regular game speed multipliers in that discharging is not subject to
-any modifiers to game speed when it is used, only when it is stored.
+Charging your Black Hole gives you stored game time, which it does at the expense of setting your game speed to
+${formatInt(1)}. The game is in effect using your increased game speed in order to store game time itself. Its
+main use is to discharge the Black Hole, which takes uses your stored game time to skip forward in time by a duration
+equal to the game time stored. This is different than regular game speed multipliers in that discharging is not subject
+to any modifiers to game speed when it is used, only when it is stored.
 <br>
 <br>
 Storing real time completely stops all production, effectively pausing your game. For every real-time second that
@@ -1154,17 +1155,22 @@ ${format(5e12)} Relic Shards, ${formatInt(5)} Glyphs (subject to your filtering 
 and ${formatInt(5)} Perk Points.
 <br>
 <br>
+However, if your Reality has lasted for less than ${formatInt(1)} second, the amplification factor is capped by the
+amount of seconds stored. For example, if you have ${formatInt(1000)} seconds stored and amplify a Reality which has
+lasted ${format(0.2, 2, 2)} seconds, you will use ${formatInt(200)} seconds to simulate ${formatInt(1000)} Realities.
+<br>
+<br>
 You can toggle a setting to automatically store offline time as stored real time.
 <br>
 <br>
 Their first unlock costs ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP.price).totalYears)}
-years of stored time. It increases the softcap to Tickspeed Upgrades gained from Time Dimensions
+years of stored game time. It increases the softcap to Tickspeed Upgrades gained from Time Dimensions
 (the point at which their cost starts increasing faster)
 by ${format(1e5)} Tickspeed Upgrades.
 <br>
 <br>
-At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored time, you are able to
-finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
+At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored game time, you are able
+to finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
     : "<span style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see reward details)</span>"}
@@ -1265,7 +1271,7 @@ Each previous Celestial within Ra gains levels by using memories, which are gene
 Memory Chunks. Memory Chunks can only be gained by entering Ra's Reality, but inside of the Reality Chunks will
 be generated passively based on certain resource totals. If you are storing real time, you will not gain any
 Chunks inside of Ra's Reality, but Memories will still be generated normally. Having a total of
-${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Celestials unlocks Recollection,
+${formatInt(Ra.recollection.requiredLevels)} levels across all Celestials unlocks Recollection,
 which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
 <br>
 <br>
@@ -1279,20 +1285,20 @@ improve your Glyph effects once you reach certain thresholds in Glyph sacrifice 
 <br>
 <br>
 At level ${formatInt(2)}, Effarig unlocks
-${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
+${Ra.unlocks.effarigUnlock.canBeApplied
     ? "a new mechanic called Glyph Alchemy and later on also makes Effarig Glyphs stronger while gradually removing " +
       "almost all random elements of Glyph generation. Glyph Alchemy also has its own How To Play entry."
     : "<span style='color: var(--color-bad);'>(unlock Effarig within Ra to see unlock details)</span>"}
 <br>
 <br>
 The Enslaved Ones unlocks
-${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
+${Ra.unlocks.enslavedUnlock.canBeApplied
     ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
     : "<span style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see unlock details)</span>"}
 <br>
 <br>
 V unlocks
-${Ra.has(RA_UNLOCKS.V_UNLOCK)
+${Ra.unlocks.vUnlock.canBeApplied
     ? "Triad Studies, which are new Studies near the bottom of the tree which cost Space Theorems. Each Triad Study " +
       "requires you to also have the three nearby studies as well in order to purchase them. They also unlock a " +
       "smaller set of more difficult V Achievements to complete for additional Space Theorems."
@@ -1338,7 +1344,7 @@ To activate or deactivate a reaction, click the circle corresponding to the reac
 be applied, moving lines will be shown from all reagents to the product. If a connection is a solid line, that means
 that the reaction can't proceed due to not having enough of that reagent to get more of the product due to its cap.
 `,
-      isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+      isUnlocked: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
       // Oh god I'm so sorry this is so many words
       tags: ["reality", "lategame", "endgame", "ra", "effarig", "alchemy", "power", "infinity", "time", "replication",
         "dilation", "cardinality", "eternity", "dimensionality", "inflation", "alternation", "synergism", "momentum",

@@ -107,19 +107,14 @@ export default {
 }
 
 .c-shop-disclaimer {
-  color: black;
-  background: var(--color-bad);
   width: 100rem;
   font-size: 1.8rem;
   font-weight: bold;
-  border: 0.2rem solid black;
-  border-radius: 1rem;
+  color: black;
+  background: var(--color-bad);
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 1rem);
   margin-top: 0.8rem;
-}
-
-.s-base--metro .c-shop-disclaimer {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .t-s1 .c-shop-disclaimer,
@@ -144,15 +139,15 @@ export default {
 }
 
 .o-shop-button-button {
-  background: turquoise;
-  border: none;
-  border-radius: .5rem;
   display: flex;
-  margin: auto;
   align-items: center;
   font-family: Typewriter;
-  padding: .5rem 2rem;
+  background: turquoise;
+  border: none;
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: auto;
   margin-top: 1rem;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 }
 

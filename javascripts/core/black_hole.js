@@ -1,5 +1,5 @@
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { DC } from "./constants";
+import { SpeedrunMilestones } from "./speedrun";
 
 class BlackHoleUpgradeState {
   constructor(config) {
@@ -171,7 +171,7 @@ class BlackHoleState {
       return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
     }
     if (Enslaved.isStoringGameTime) {
-      if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+      if (Ra.unlocks.adjustableStoredTime.canBeApplied) {
         const storedTimeWeight = player.celestials.enslaved.storedFraction;
         if (storedTimeWeight !== 0) {
           return `<i class="fas fa-compress-arrows-alt"></i> Charging (${formatPercents(storedTimeWeight, 1)})`;
@@ -355,6 +355,7 @@ export const BlackHoles = {
     Currency.realityMachines.purchase(100);
     SpeedrunMilestones(17).tryComplete();
     Achievement(144).unlock();
+    EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
   },
 
   togglePause: () => {

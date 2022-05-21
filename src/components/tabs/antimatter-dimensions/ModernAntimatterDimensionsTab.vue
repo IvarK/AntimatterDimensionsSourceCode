@@ -1,9 +1,9 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterDimensionRow";
 import AntimatterGalaxyRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterGalaxyRow";
 import DimensionBoostRow from "@/components/tabs/antimatter-dimensions/ModernDimensionBoostRow";
+import PrimaryButton from "@/components/PrimaryButton";
 import TickspeedRow from "@/components/tabs/antimatter-dimensions/TickspeedRow";
 
 export default {
@@ -25,7 +25,6 @@ export default {
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
-      multiplierText: "",
       disabledCondition: "",
       isQuickResetAvailable: false,
       hasContinuum: false,
@@ -35,6 +34,12 @@ export default {
   computed: {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
+    },
+    multiplierText() {
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      return `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     },
   },
   methods: {
@@ -74,16 +79,13 @@ export default {
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
 
+      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
+
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
-      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
-
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
-      if (this.isSacrificeUnlocked) this.multiplierText +=
-        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     }
   }
 };

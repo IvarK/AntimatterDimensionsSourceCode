@@ -1,4 +1,4 @@
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorLexer } from "./lexer";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
@@ -559,9 +559,9 @@ export const AutomatorCommands = ((() => {
       })
     },
     {
-      id: "storeTime",
+      id: "storeGameTime",
       rule: $ => () => {
-        $.CONSUME(T.StoreTime);
+        $.CONSUME(T.StoreGameTime);
         $.OR([
           { ALT: () => $.CONSUME(T.On) },
           { ALT: () => $.CONSUME(T.Off) },
@@ -569,10 +569,10 @@ export const AutomatorCommands = ((() => {
         ]);
       },
       validate: (ctx, V) => {
-        ctx.startLine = ctx.StoreTime[0].startLine;
+        ctx.startLine = ctx.StoreGameTime[0].startLine;
         if (!Enslaved.isUnlocked) {
-          V.addError(ctx.StoreTime[0], "You do not yet know how to store time",
-            "Unlock the ability to store time");
+          V.addError(ctx.StoreGameTime[0], "You do not yet know how to store game time",
+            "Unlock the ability to store game time");
           return false;
         }
         return true;
@@ -581,9 +581,9 @@ export const AutomatorCommands = ((() => {
         if (ctx.Use) return () => {
           if (Enslaved.isUnlocked) {
             Enslaved.useStoredTime(false);
-            AutomatorData.logCommandEvent(`Stored time used`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Stored game time used`, ctx.startLine);
           } else {
-            AutomatorData.logCommandEvent(`Attempted to use stored time, but failed (not unlocked yet)`,
+            AutomatorData.logCommandEvent(`Attempted to use stored game time, but failed (not unlocked yet)`,
               ctx.startLine);
           }
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
@@ -591,14 +591,14 @@ export const AutomatorCommands = ((() => {
         const on = Boolean(ctx.On);
         return () => {
           if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();
-          AutomatorData.logCommandEvent(`Storing time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
+          AutomatorData.logCommandEvent(`Storing game time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
       blockify: ctx => ({
         // eslint-disable-next-line no-nested-ternary
         target: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
-        ...automatorBlocksMap["STORE TIME"]
+        ...automatorBlocksMap["STORE GAME TIME"]
       })
     },
     {
@@ -723,7 +723,7 @@ export const AutomatorCommands = ((() => {
           if (missingStudyCount === 0) {
             AutomatorData.logCommandEvent(`Fully loaded study preset ${ctx.Preset[0].image}`, ctx.startLine);
           } else if (afterCount > beforeCount) {
-            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image} 
+            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image}
               (missing ${quantifyInt("study", missingStudyCount)})`, ctx.startLine);
           }
           return ctx.Nowait !== undefined || missingStudyCount === 0

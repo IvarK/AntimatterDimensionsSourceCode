@@ -1,44 +1,44 @@
 body.t-s8 {
-  background: url('../images/s8-bg.jpg') no-repeat;
-  color: black;
-  background-color: white;
   height: 100%;
+  color: black;
+  background: url("../images/s8-bg.jpg") no-repeat;
+  background-attachment: fixed;
+  background-color: white;
 
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
 }
 
 .t-s8 .container {
   color: black;
 }
 
-/*metro  theme with less box shadows*/
+/* metro  theme with less box shadows */
 
-
-.t-s8 input, .t-s8 select {
-  border: 0.1rem solid #A9A9A9;
+.t-s8 input,
+.t-s8 select {
+  border: 0.1rem solid #a9a9a9;
 }
 
 .t-s8 .c-tt-buy-button--unlocked {
+  color: #00bcd4;
   background: #212121;
-  color: #00BCD4;
-  border: 0.1rem solid #00BCD4;
+  border: 0.1rem solid #00bcd4;
 }
 
 .t-s8 .c-tt-buy-button--unlocked:hover {
   color: #212121;
-  background: #00BCD4;
+  background: #00bcd4;
 }
 
 .t-s8 .c-tt-buy-button--locked {
-  background: #9E9E9E;
+  background: #9e9e9e;
   border: none;
-  box-shadow: 1px 1px 1px 0 #000;
+  box-shadow: 1px 1px 1px 0 #000000;
 }
 
 .t-s8 .c-tt-buy-button--locked:hover {
-  background: #EF5350;
+  background: #ef5350;
 }

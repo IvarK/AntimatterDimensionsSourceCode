@@ -53,11 +53,9 @@ export default {
         icon="fa-brands fa-google-play"
         link="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
       />
-      <!-- TODO: Add way to see credits here -->
       <InformationModalButton
         name="Credits"
         icon="fa-solid fa-users"
-        link="https://example.com"
       />
     </div>
   </div>

@@ -12,7 +12,14 @@ export default {
     },
     link: {
       type: String,
-      required: true
+      required: false,
+      default: null
+    },
+  },
+  methods: {
+    creditsModal() {
+      Modal.hide();
+      Modal.credits.show();
     }
   }
 };
@@ -24,9 +31,15 @@ export default {
     class="c-socials--icon__wrapper"
   >
     <a
+      v-if="name !== 'Credits'"
       :href="link"
       target="_blank"
       class="c-socials--icon"
+    ><i :class="icon" /></a>
+    <a
+      v-else
+      class="c-socials--icon"
+      @click="creditsModal"
     ><i :class="icon" /></a>
   </span>
 </template>
@@ -34,6 +47,7 @@ export default {
 <style scoped>
 .c-socials--icon {
   color: var(--color-text);
+  cursor: pointer;
 }
 
 .c-socials--icon__wrapper {

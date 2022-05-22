@@ -95,7 +95,11 @@ export default {
       displayLevel: 0,
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
-      logTotalSacrifice: 0
+      logTotalSacrifice: 0,
+      // This exists to dynamically adjust reality glyph colors over time - this used to use a keyframe animation, but
+      // applying that was causing large amounts of lag due to the number of independent and partially overlapping
+      // elements it was applying it to. Of note - null transform hacks did not seem to improve performance either.
+      colorTimer: 0,
     };
   },
   computed: {
@@ -123,6 +127,7 @@ export default {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
     borderColor() {
+      if (this.isRealityGlyph) return this.realityGlyphColor();
       return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
@@ -133,7 +138,6 @@ export default {
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "a-reality-glyph-over-cycle 10s infinite" : undefined,
       };
     },
     outerStyle() {
@@ -143,12 +147,13 @@ export default {
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
         "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
     innerStyle() {
-      const rarityColor = this.glyph.color || getRarity(this.glyph.strength).color;
+      const rarityColor = this.isRealityGlyph
+        ? this.realityGlyphColor()
+        : this.glyph.color || getRarity(this.glyph.strength).color;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
@@ -156,7 +161,6 @@ export default {
         color: this.isCursedGlyph ? "black" : rarityColor,
         "text-shadow": this.isCursedGlyph ? "-0.04em 0.04em 0.08em black" : `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
         "padding-bottom": this.bottomPadding,
         background: this.isCursedGlyph ? "white" : undefined
       };
@@ -260,6 +264,24 @@ export default {
   methods: {
     update() {
       this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
+      this.colorTimer = (this.colorTimer + 4) % 1000;
+    },
+    // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
+    // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
+    // order used is {infinity, dilation, power, replication, time, infinity, ... }
+    realityGlyphColor() {
+      // RGB values for the colors to interpolate between
+      const r = [182, 100, 34, 3, 178, 182];
+      const g = [127, 221, 170, 169, 65, 127];
+      const b = [51, 23, 72, 244, 227, 51];
+
+      // Integer and fractional parts for interpolation parameter
+      const i = Math.floor(this.colorTimer / 200);
+      const f = this.colorTimer / 200 - i;
+
+      return `rgb(${r[i] * (1 - f) + r[i + 1] * f},
+        ${g[i] * (1 - f) + g[i + 1] * f},
+        ${b[i] * (1 - f) + b[i + 1] * f})`;
     },
     hideTooltip() {
       this.tooltipLoaded = false;
@@ -415,14 +437,19 @@ export default {
       if (this.glyph.type === "companion") return {};
       const pos = this.effectIconPos(id);
       const size = this.hasMutuallyExclusiveEffect && [1, 2].includes(id) ? 0.5 : 0.3;
+
+      let color;
+      if (this.isCursedGlyph) color = "black";
+      else if (this.isRealityGlyph) color = this.realityGlyphColor();
+      else color = `${this.glyph.color || getRarity(this.glyph.strength).color}`;
+
       return {
         position: "absolute",
         width: `${size}rem`,
         height: `${size}rem`,
         "border-radius": "50%",
-        background: this.isCursedGlyph ? "black" : `${this.glyph.color || getRarity(this.glyph.strength).color}`,
+        background: color,
         transform: `translate(${pos.dx - 0.15 * size}rem, ${pos.dy - 0.15 * size}rem)`,
-        animation: this.isRealityGlyph ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     },

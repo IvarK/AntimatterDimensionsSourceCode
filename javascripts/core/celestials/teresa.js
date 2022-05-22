@@ -120,7 +120,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     }
     // Give a single music glyph
     if (this.id === 4) {
-      if (Glyphs.freeInventorySpace === 0) {
+      if (GameCache.glyphInventorySpace.value === 0) {
         // Refund the perk point if they didn't actually get a glyph
         Currency.perkPoints.add(1);
         GameUI.notify.error("You have no empty inventory space!");
@@ -131,7 +131,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     }
     // Fill the inventory with music glyphs
     if (this.id === 5) {
-      const toCreate = Glyphs.freeInventorySpace;
+      const toCreate = GameCache.glyphInventorySpace.value;
       for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
       GameUI.notify.success(`Created ${quantifyInt("Music Glyph", toCreate)}`);
     }

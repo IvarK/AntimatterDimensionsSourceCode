@@ -167,7 +167,7 @@ dev.resetDilation = function() {
 // eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   if (!Object.prototype.hasOwnProperty.call(specialGlyphSymbols, symbol)) return;
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;
   glyph.color = color;
@@ -175,12 +175,12 @@ dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
 };
 
 dev.giveGlyph = function(level, rawLevel = level) {
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
 dev.giveRealityGlyph = function(level) {
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 

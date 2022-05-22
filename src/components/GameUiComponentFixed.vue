@@ -10,6 +10,7 @@ import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 import PopupModal from "@/components/modals/PopupModal";
 import SaveTimer from "@/components/SaveTimer";
+import SpectateGame from "@/components/SpectateGame";
 import SpeedrunStatus from "@/components/SpeedrunStatus";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
@@ -28,6 +29,7 @@ export default {
     CelestialQuoteHistoryDisplay,
     FadeAway,
     CreditsContainer,
+    SpectateGame,
     NewGame
   },
   data() {
@@ -47,7 +49,7 @@ export default {
   },
   methods: {
     update() {
-      this.rollingCredits = GameEnd.endState >= 2.5;
+      this.rollingCredits = GameEnd.endState >= 2.5 && !player.celestials.pelle.creditsClosed;
     }
   }
 };
@@ -92,6 +94,7 @@ export default {
     <ModalProgressBar v-if="view.modal.progressBar" />
     <FadeAway v-if="rollingCredits" />
     <CreditsContainer v-if="rollingCredits" />
+    <SpectateGame />
     <NewGame v-if="rollingCredits" />
   </div>
 </template>

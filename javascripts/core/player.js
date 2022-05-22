@@ -746,6 +746,7 @@ window.player = {
         galaxies: false
       },
       showBought: false,
+      creditsClosed: false,
     }
   },
   isGameEnd: false,

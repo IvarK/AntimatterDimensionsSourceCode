@@ -76,7 +76,7 @@ export class Modal {
     const modalQueue = ui.view.modal.queue;
     // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
     modalQueue.unshift(this);
-    modalQueue.sort((x, y) => x.priority < y.priority);
+    modalQueue.sort((x, y) => y.priority - x.priority);
     // Filter out multiple instances of the same modal.
     const singleQueue = [...new Set(modalQueue)];
     ui.view.modal.queue = singleQueue;

@@ -452,7 +452,7 @@
   background-color: black;
   border: var(--var-border-width, 0.2rem) solid black;
   border-radius: var(--var-border-radius, 0.6rem);
-  padding: 0.6rem;
+  padding: 0 0.6rem;
   padding-bottom: 0.6rem;
   transition: opacity 0.3s;
 }
@@ -473,7 +473,7 @@
   background-color: black;
   border: var(--var-border-width, 0.2rem) solid;
   border-radius: var(--var-border-radius, 0.8rem);
-  margin-top: -4rem;
+  margin: -0.6rem;
   padding: 0.3rem 1rem 0.7rem;
 }
 

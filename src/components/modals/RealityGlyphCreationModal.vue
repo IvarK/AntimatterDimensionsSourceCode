@@ -21,7 +21,7 @@ export default {
       this.isDoomed = Pelle.isDoomed;
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
       const realityEffectConfigs = GlyphEffects.all
-        .filter(eff => eff.id.match("reality*"))
+        .filter(eff => eff.glyphTypes.includes("reality"))
         .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
       const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.bitmaskIndex).min();
       this.possibleEffects = realityEffectConfigs

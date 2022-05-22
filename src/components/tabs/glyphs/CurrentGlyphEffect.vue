@@ -23,9 +23,7 @@ export default {
       const value2 = this.effectConfig.conversion === undefined
         ? ""
         : this.effectConfig.formatSecondaryEffect(this.effectConfig.conversion(baseValue));
-      const desc = typeof this.effectConfig.totalDesc === "function"
-        ? this.effectConfig.totalDesc()
-        : this.effectConfig.totalDesc;
+      const desc = this.effectConfig.totalDesc;
       return desc
         .replace("{value}", value1)
         .replace("{value2}", value2);

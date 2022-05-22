@@ -98,7 +98,7 @@ export default {
         class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc"
         :style="descStyle"
       >
-        {{ typeof effect.genericDesc === "function" ? effect.genericDesc() : effect.genericDesc }}
+        {{ effect.genericDesc }}
       </div>
       <input
         type="number"

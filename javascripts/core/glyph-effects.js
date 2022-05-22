@@ -43,13 +43,13 @@ class GlyphEffectConfig {
     /** @type {string[]} the types of glyphs this effect can occur on */
     this.glyphTypes = setup.glyphTypes;
     /** @type {string} See info about setup, above */
-    this.singleDesc = setup.singleDesc;
+    this._singleDesc = setup.singleDesc;
     /** @type {string} See info about setup, above */
-    this.totalDesc = setup.totalDesc ?? setup.singleDesc;
+    this._totalDesc = setup.totalDesc ?? setup.singleDesc;
     /** @type {string} description of the effect without a specific value */
-    this.genericDesc = setup.genericDesc ?? setup.singleDesc.replace("{value}", "x");
+    this._genericDesc = setup.genericDesc ?? setup.singleDesc.replace("{value}", "x");
     /** @type {string} shortened description for use in glyph choice info modal */
-    this.shortDesc = setup.shortDesc;
+    this._shortDesc = setup.shortDesc;
     /**
     * @type {(function(number, number): number) | function(number, number): Decimal} Calculate effect
     *  value from level and strength
@@ -90,6 +90,26 @@ class GlyphEffectConfig {
   get biggerIsBetter() {
     if (this._biggerIsBetter === undefined) this._biggerIsBetter = this.checkBiggerIsBetter();
     return this._biggerIsBetter;
+  }
+
+  get singleDesc() {
+    const singleDesc = this._singleDesc;
+    return typeof singleDesc === "function" ? singleDesc() : singleDesc;
+  }
+
+  get totalDesc() {
+    const totalDesc = this._totalDesc;
+    return typeof totalDesc === "function" ? totalDesc() : totalDesc;
+  }
+
+  get genericDesc() {
+    const genericDesc = this._genericDesc;
+    return typeof genericDesc === "function" ? genericDesc() : genericDesc;
+  }
+
+  get shortDesc() {
+    const shortDesc = this._shortDesc;
+    return typeof shortDesc === "function" ? shortDesc() : shortDesc;
   }
 
   /** @returns {number} */

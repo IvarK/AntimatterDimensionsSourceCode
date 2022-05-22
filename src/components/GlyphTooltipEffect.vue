@@ -27,9 +27,7 @@ export default {
         : undefined;
     },
     effectStringTemplate() {
-      return typeof this.effectConfig.singleDesc === "function"
-        ? this.effectConfig.singleDesc()
-        : this.effectConfig.singleDesc;
+      return this.effectConfig.singleDesc;
     },
     primaryEffectText() {
       const value = this.effectConfig.formatSingleEffect(this.value);

@@ -126,9 +126,7 @@ export default {
       return heights[effects - 1];
     },
     formatEffectString(dbEntry, value) {
-      const rawDesc = typeof dbEntry.shortDesc === "function"
-        ? dbEntry.shortDesc()
-        : dbEntry.shortDesc;
+      const rawDesc = dbEntry.shortDesc;
       const singleValue = dbEntry.formatSingleEffect
         ? dbEntry.formatSingleEffect(value)
         : dbEntry.formatEffect(value);

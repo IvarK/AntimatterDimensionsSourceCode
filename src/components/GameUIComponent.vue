@@ -11,6 +11,7 @@ import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 import PopupModal from "@/components/modals/PopupModal";
 import SaveTimer from "@/components/SaveTimer";
+import SpectateGame from "@/components/SpectateGame";
 import SpeedrunStatus from "@/components/SpeedrunStatus";
 import TabComponents from "@/components/tabs";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
@@ -27,6 +28,7 @@ export default {
     CreditsContainer,
     NewGame,
     SaveTimer,
+    SpectateGame,
     SpeedrunStatus,
     BackgroundAnimations,
     ModalProgressBar,
@@ -59,8 +61,8 @@ export default {
   },
   methods: {
     update() {
-      this.rollCredits = GameEnd.endState >= 2.5;
-    }
+      this.rollCredits = GameEnd.endState >= 2.5 && !player.celestials.pelle.creditsClosed;
+    },
   }
 };
 </script>
@@ -108,6 +110,7 @@ export default {
     <FadeToBlack v-if="rollCredits" />
     <CreditsContainer v-if="rollCredits" />
     <NewGame v-if="rollCredits" />
+    <SpectateGame />
   </div>
 </template>
 

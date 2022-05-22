@@ -46,6 +46,7 @@ export default {
     :style="style"
   >
     <h1>Wanna start over?</h1>
+    <h3>You can use the button in the top-right to go back to the game, and vice-versa.</h3>
     Highest NG+: {{ plusRecord }}<br>
     Highest NG-: {{ minusRecord }}<br>
     <div class="c-new-game-button-container">

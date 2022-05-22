@@ -24,6 +24,8 @@ import "./reality/reality-upgrades";
 import "./reality/imaginary-upgrades";
 export * from "./reality/perks";
 import "./reality/automator";
+import "./reality/glyph-types";
+export * from "./reality/glyph-effects";
 import "./reality/glyph-sacrifices";
 import "./celestials/perk-shop";
 import "./celestials/teresa";

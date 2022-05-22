@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     effectConfig() {
-      return GameDatabase.reality.glyphEffects[this.effect.id];
+      return GlyphEffects[this.effect.id];
     },
     formatValue() {
       if (Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect.id)) return "";

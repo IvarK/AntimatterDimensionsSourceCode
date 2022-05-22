@@ -20,7 +20,7 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
-      const realityEffectConfigs = Object.values(GameDatabase.reality.glyphEffects)
+      const realityEffectConfigs = GlyphEffects.all
         .filter(eff => eff.id.match("reality*"))
         .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
       const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.bitmaskIndex).min();
@@ -39,7 +39,7 @@ export default {
     },
     formatGlyphEffect(effect) {
       if (this.realityGlyphLevel < effect[0]) return `(Requires Glyph level ${formatInt(effect[0])})`;
-      const config = GameDatabase.reality.glyphEffects[effect[1]];
+      const config = GlyphEffects[effect[1]];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
       const effectTemplate = typeof config.singleDesc === "function"
         ? config.singleDesc()

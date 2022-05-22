@@ -98,7 +98,7 @@ export default {
       };
     },
     glyphEffectList() {
-      const db = GameDatabase.reality.glyphEffects;
+      const db = GlyphEffects;
       const effects =
       getGlyphEffectValuesFromBitmask(this.glyph.effects, this.effectiveLevel, this.glyph.strength, this.type)
         .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));

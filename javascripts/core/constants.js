@@ -261,6 +261,65 @@ window.GlyphRarities = [
   },
 ];
 
+window.GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation",
+  "effarig",
+  "reality",
+  "cursed",
+  "companion"
+];
+
+window.BASIC_GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation"
+];
+
+window.ALCHEMY_BASIC_GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation",
+  "effarig"
+];
+
+window.GLYPH_SYMBOLS = {
+  power: "Ω",
+  infinity: "∞",
+  replication: "Ξ",
+  time: "Δ",
+  dilation: "Ψ",
+  effarig: "Ϙ",
+  reality: "Ϟ",
+  cursed: "⸸",
+  companion: "♥"
+};
+
+window.CANCER_GLYPH_SYMBOLS = {
+  power: "⚡",
+  infinity: "8",
+  replication: "⚤",
+  time: "🕟",
+  dilation: "☎",
+  effarig: "🦒",
+  reality: "⛧",
+  cursed: "☠",
+  companion: "³"
+};
+
+window.ALTERATION_TYPE = {
+  ADDITION: 1,
+  EMPOWER: 2,
+  BOOST: 3
+};
+
 window.BLACK_HOLE_PAUSE_MODE = {
   NO_PAUSE: 0,
   PAUSE_BEFORE_BH1: 1,

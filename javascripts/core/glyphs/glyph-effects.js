@@ -53,7 +53,7 @@ export function getAdjustedGlyphEffect(effectKey) {
  * @return {number | Decimal}
  */
 export function getSecondaryGlyphEffect(effectKey) {
-  return GameDatabase.reality.glyphEffects[effectKey].conversion(getAdjustedGlyphEffect(effectKey));
+  return GlyphEffects[effectKey].conversion(getAdjustedGlyphEffect(effectKey));
 }
 
 /**
@@ -67,14 +67,14 @@ export function getGlyphEffectValues(effectKey) {
   }
   return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise
-    .filter(glyph => ((1 << GameDatabase.reality.glyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
-    .filter(glyph => generatedTypes.includes(glyph.type) === GameDatabase.reality.glyphEffects[effectKey].isGenerated)
+    .filter(glyph => ((1 << GlyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
+    .filter(glyph => generatedTypes.includes(glyph.type) === GlyphEffects[effectKey].isGenerated)
     .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
 }
 
 // Combines all specified glyph effects, reduces some boilerplate
 function getTotalEffect(effectKey) {
-  return GameDatabase.reality.glyphEffects[effectKey].combine(getGlyphEffectValues(effectKey));
+  return GlyphEffects[effectKey].combine(getGlyphEffectValues(effectKey));
 }
 
 /**
@@ -109,7 +109,7 @@ export function getGlyphEffectValuesFromBitmask(bitmask, level, baseStrength, ty
 
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
 export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
-  const glyphEffect = GameDatabase.reality.glyphEffects[effectName];
+  const glyphEffect = GlyphEffects[effectName];
   // eslint-disable-next-line no-bitwise
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
@@ -137,7 +137,7 @@ export function getActiveGlyphEffects() {
     .filter(ev => ev.values.length > 0)
     .map(ev => ({
       id: ev.effect,
-      value: GameDatabase.reality.glyphEffects[ev.effect].combine(ev.values),
+      value: GlyphEffects[ev.effect].combine(ev.values),
     }));
   const effectNames = effectValues.map(e => e.id);
 

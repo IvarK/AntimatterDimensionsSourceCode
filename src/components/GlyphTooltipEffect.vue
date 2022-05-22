@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     effectConfig() {
-      return GameDatabase.reality.glyphEffects[this.effect];
+      return GlyphEffects[this.effect];
     },
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&

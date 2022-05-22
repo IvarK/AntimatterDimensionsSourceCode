@@ -359,7 +359,7 @@ GameStorage.devMigrations = {
           const typeEffect = separateEffectKey(effect);
           if (glyph.type === typeEffect[0] && glyph.effects[typeEffect[1]] !== undefined) {
             // eslint-disable-next-line no-bitwise
-            effectBitmask += 1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex;
+            effectBitmask += 1 << GlyphEffects[effect].bitmaskIndex;
           }
         }
         glyph.effects = effectBitmask;

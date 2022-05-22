@@ -17,13 +17,14 @@ class GlyphEffectConfig {
   *  glyphs.
   * @param {string} [setup.genericDesc] (Defaults to singleDesc with {value} replaced with "x") Generic
   *  description of the glyph's effect
+  * @param {string} [setup.shortDesc] Short and condensed version of the glyph's effect for use in the Modal
   * @param {(function(number, number): number) | function(number, number): Decimal} [setup.effect] Calculate effect
   *  value from level and strength
-  * @param {NumericToString<number | Decimal>} [setup.formatEffect] Format the effect's value into a string. Defaults
+  * @param {function(number | Decimal): string} [setup.formatEffect] Format the effect's value into a string. Defaults
   *  to format(x, 3, 3)
-  * @param {NumericToString<number | Decimal>} [setup.formatSingleEffect] Format the effect's value into a string, used
+  * @param {function(number | Decimal): string} [setup.formatSingleEffect] Format the effect's value into a string, used
   *  for effects which need to display different values in single values versus combined values (eg. power effects)
-  * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
+  * @param {function(number | Decimal): number | Decimal} [setup.softcap] An optional softcap to be applied after glyph
   *  effects are combined.
   * @param {((function(number[]): GlyphEffectConfig__combine_result) | function(number[]): number)} setup.combine
   *  Specification of how multiple glyphs combine. Can be GlyphCombiner.add or GlyphCombiner.multiply for most glyphs.
@@ -33,73 +34,74 @@ class GlyphEffectConfig {
   */
   constructor(setup) {
     GlyphEffectConfig.checkInputs(setup);
-    /** @member{string}   unique key for the effect -- powerpow, etc */
+    /** @type {string} unique key for the effect -- powerpow, etc */
     this.id = setup.id;
-    /** @member{number}   bit position for the effect in the effect bitmask */
+    /** @type {number} bit position for the effect in the effect bitmask */
     this.bitmaskIndex = setup.bitmaskIndex;
-    /** @member{boolean}  flag to separate "basic"/effarig glyphs from cursed/reality glyphs */
+    /** @type {boolean} flag to separate "basic"/effarig glyphs from cursed/reality glyphs */
     this.isGenerated = setup.isGenerated;
-    /** @member{string[]} the types of glyphs this effect can occur on */
+    /** @type {string[]} the types of glyphs this effect can occur on */
     this.glyphTypes = setup.glyphTypes;
-    /** @member{string} See info about setup, above*/
+    /** @type {string} See info about setup, above */
     this.singleDesc = setup.singleDesc;
-    /** @member{string} See info about setup, above*/
-    /** @member {string} genericDesc description of the effect without a specific value  */
-    /** @member {string} shortDesc shortened description for use in glyph choice info modal */
+    /** @type {string} See info about setup, above */
     this.totalDesc = setup.totalDesc ?? setup.singleDesc;
+    /** @type {string} description of the effect without a specific value */
     this.genericDesc = setup.genericDesc ?? setup.singleDesc.replace("{value}", "x");
+    /** @type {string} shortened description for use in glyph choice info modal */
     this.shortDesc = setup.shortDesc;
     /**
-    * @member {(function(number, number): number) | function(number, number): Decimal} effect Calculate effect
+    * @type {(function(number, number): number) | function(number, number): Decimal} Calculate effect
     *  value from level and strength
     */
     this.effect = setup.effect;
     /**
-    * @member {NumericToString<number | Decimal>} formatEffect formatting function for the effect
+    * @type {function(number | Decimal): string} formatting function for the effect
     * (just the number conversion). Combined with the description strings to make descriptions
     */
-    /** @member{NumericToString<number | Decimal>} See info about setup, above*/
     this.formatEffect = setup.formatEffect ?? (x => format(x, 3, 3));
+    /** @type {function(number | Decimal): string} See info about setup, above */
     this.formatSingleEffect = setup.formatSingleEffect || this.formatEffect;
     /**
-    *  @member {function(number[]): GlyphEffectConfig__combine_result} combine Function that combines
+    *  @type {function(number[]): GlyphEffectConfig__combine_result} combine Function that combines
     * multiple glyph effects into one value (adds up, applies softcaps, etc)
     */
     this.combine = GlyphEffectConfig.setupCombine(setup);
-    /** @member{function(number)} conversion function to produce altered glyph effect */
+    /** @type {function(number)} conversion function to produce altered glyph effect */
     this.conversion = setup.conversion;
     /**
-    * @member {NumericToString<number | Decimal>} formatSecondaryEffect formatting function for
+    * @type {function(number | Decimal): string} formatSecondaryEffect formatting function for
     * the secondary effect (if there is one)
     */
     this.formatSecondaryEffect = setup.formatSecondaryEffect || (x => format(x, 3, 3));
-    /** @member{NumericToString<number | Decimal>} See info about setup, above*/
+    /** @type {function(number | Decimal): string} See info about setup, above */
     this.formatSingleSecondaryEffect = setup.formatSingleSecondaryEffect || this.formatSecondaryEffect;
-    /** @member{string} color to show numbers in glyph tooltips if boosted */
+    /** @type {string} color to show numbers in glyph tooltips if boosted */
     this.alteredColor = setup.alteredColor;
-    /** @member{number} string passed along to tooltip code to ensure proper formatting */
+    /** @type {number} string passed along to tooltip code to ensure proper formatting */
     this.alterationType = setup.alterationType;
-    /** @member{Boolean} Indicates whether the effect grows with level or shrinks */
+    /** @type {boolean} Indicates whether the effect grows with level or shrinks */
     this._biggerIsBetter = undefined;
   }
 
   /**
-   * @returns{Boolean}
+   * @returns {boolean}
    */
   get biggerIsBetter() {
     if (this._biggerIsBetter === undefined) this._biggerIsBetter = this.checkBiggerIsBetter();
     return this._biggerIsBetter;
   }
 
-  /**
-   * @returns{Number}
-   */
+  /** @returns {number} */
   compareValues(effectValueA, effectValueB) {
     const result = Decimal.compare(effectValueA, effectValueB);
     return this.biggerIsBetter ? result : -result;
   }
 
-  /** @private */
+  /**
+   * @private
+   * @returns {boolean}
+   */
   checkBiggerIsBetter() {
     const baseEffect = new Decimal(this.effect(1, 1.01));
     const biggerEffect = new Decimal(this.effect(100, 2));
@@ -133,9 +135,7 @@ class GlyphEffectConfig {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   static setupCombine(setup) {
     let combine = setup.combine;
     const softcap = setup.softcap;
@@ -202,36 +202,35 @@ class GlyphType {
    * @param {string} setup.id
    * @param {string} setup.symbol
    * @param {string} setup.color
-   * @param {function} [setup.primaryEffect] All glyphs generated will have this effect, if specified
-   * @param {function} [setup.unlockedFn] If this glyph type is not available initially, this specifies
+   * @param {function(): string} [setup.primaryEffect] All glyphs generated will have this effect, if specified
+   * @param {function(): boolean} [setup.isUnlocked] If this glyph type is not available initially, this specifies
    * how to check to see if it is available
-   * @param {function(string):boolean} [setup.effectUnlockedFn] If certain effects of this glyph are not
-   * initially available, this is a function of the effect id that returns whether one is
    * @param {number} setup.alchemyResource Alchemy resource generated by sacrificing this glyph
    * @param {boolean} setup.hasRarity If the glyph can have rarity or not
    */
   constructor(setup) {
-    /** @member {string} id identifier for this type (time, power, etc)*/
+    /** @type {string} identifier for this type (time, power, etc)*/
     this.id = setup.id;
-    /** @member {string} symbol used to display glyphs of this type and as a UI shorthand */
+    /** @type {string} used to display glyphs of this type and as a UI shorthand */
     this.symbol = setup.symbol;
-    /** @member {GlyphEffectConfig[]} effects list of effects that this glyph can have */
+    /** @type {GlyphEffectConfig[]} list of effects that this glyph can have */
     this.effects = findGlyphTypeEffects(setup.id);
-    /** @member {string} color used for glyph borders and other places where color coding is needed */
+    /** @type {string} used for glyph borders and other places where color coding is needed */
     this.color = setup.color;
-    /** @member {string?} primaryEffect all glyphs generated will have at least this effect */
+    /** @type {string?} all glyphs generated will have at least this effect */
     this.primaryEffect = setup.primaryEffect;
-    /** @private @member {function?} unlockedFn */
-    /** @private @member {function(string):boolean?} effectUnlockedFn */
+    /** @type {undefined | function(): boolean} */
     this._isUnlocked = setup.isUnlocked;
+    /** @type {number} */
     this.alchemyResource = setup.alchemyResource;
+    /** @type {boolean} */
     this.hasRarity = setup.hasRarity;
     if (!GLYPH_TYPES.includes(this.id)) {
       throw new Error(`Id ${this.id} not found in GLYPH_TYPES`);
     }
   }
 
-  /** @property {boolean} */
+  /** @returns {boolean} */
   get isUnlocked() {
     return this._isUnlocked?.() ?? true;
   }

@@ -109,7 +109,7 @@ export default {
       };
     },
     numberOfLinesInBlock(block) {
-      return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
+      return BlockAutomator.numberOfLinesInBlock(block);
     },
     lineNumberAtPosition(x) {
       let number = 1 + this.lineNumber;
@@ -220,13 +220,13 @@ export default {
 <style scoped>
 .c-automator-block-line-number {
   display: flex;
-  width: 2.5rem;
+  width: 3rem;
   height: 2.85rem;
   position: absolute;
   left: 0;
   z-index: 1;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #505050;
   padding: 0.2rem;
 

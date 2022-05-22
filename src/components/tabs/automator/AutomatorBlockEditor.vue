@@ -33,7 +33,7 @@ export default {
       this.parseRequest();
     },
     numberOfLinesInBlock(block) {
-      return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
+      return BlockAutomator.numberOfLinesInBlock(block);
     },
     lineNumberAtPosition(x) {
       let number = 1;
@@ -125,7 +125,11 @@ export const BlockAutomator = {
 
   updateIdArray() {
     this._idArray = this.blockIdArray(this.lines);
-  }
+  },
+
+  numberOfLinesInBlock(block) {
+    return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
+  },
 };
 </script>
 

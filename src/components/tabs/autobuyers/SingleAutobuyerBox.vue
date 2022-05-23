@@ -1,7 +1,7 @@
 <script>
-import AutobuyerToggleLabel from "./AutobuyerToggleLabel";
-import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
 import AutobuyerInput from "./AutobuyerInput";
+import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
+import AutobuyerToggleLabel from "./AutobuyerToggleLabel";
 
 export default {
   name: "SingleAutobuyerBox",

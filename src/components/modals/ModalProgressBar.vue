@@ -74,15 +74,17 @@ export default {
 }
 
 .modal-progress-bar {
-  position: fixed;
-  z-index: 3;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   width: 40rem;
-  left: 50vw;
+  position: fixed;
+  /* stylelint-disable-next-line unit-allowed-list */
   top: 50vh;
+  /* stylelint-disable-next-line unit-allowed-list */
+  left: 50vw;
+  z-index: 3;
+  justify-content: space-between;
+  align-items: center;
   transform: translate(-50%, -50%);
 }
 
@@ -94,10 +96,10 @@ export default {
 
 .modal-progress-bar__bg {
   width: 20rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
   height: 2rem;
   background: black;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .modal-progress-bar__fg {

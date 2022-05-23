@@ -78,8 +78,6 @@ export default {
         name: this.text,
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,
-        isGlyphSelection: false,
-        showSetName: true,
         displaySacrifice: this.showSacrifice,
       });
     }

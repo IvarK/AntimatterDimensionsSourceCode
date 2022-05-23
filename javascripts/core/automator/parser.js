@@ -1,6 +1,7 @@
-import { Parser, EOF } from "chevrotain";
-import { AutomatorCommands } from "./automator-commands.js";
-import { AutomatorLexer } from "./lexer.js";
+import { EOF, Parser } from "chevrotain";
+
+import { AutomatorCommands } from "./automator-commands";
+import { AutomatorLexer } from "./lexer";
 
 export const AutomatorGrammar = (function() {
   const T = AutomatorLexer.tokenMap;

@@ -14,7 +14,7 @@ export default {
       if (this.isDoomed) return "You cannot amplify a Doomed Reality";
       if (this.isDisabled) return "You cannot amplify Celestial Realities";
       if (!this.canAmplify) {
-        return "Store more or complete the Reality faster to amplify";
+        return "Store more real time or complete the Reality faster to amplify";
       }
       return null;
     }
@@ -26,7 +26,7 @@ export default {
       this.isDisabled = isInCelestialReality();
       this.isActive = Enslaved.boostReality;
       this.ratio = Enslaved.realityBoostRatio;
-      this.canAmplify = !this.isDisabled && this.ratio > 1 && !this.isDoomed;
+      this.canAmplify = Enslaved.canAmplify;
     },
     toggleActive() {
       if (!this.canAmplify) return;

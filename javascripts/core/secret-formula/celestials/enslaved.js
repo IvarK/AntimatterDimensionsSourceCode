@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.celestials.enslaved = {
   // Note that "condition" isn't displayed in-game. These are meant to be indicators here of
@@ -60,7 +60,8 @@ GameDatabase.celestials.enslaved = {
   glyphHints: [
     "Infinity and Dilation Glyphs seem confined too tightly to be useful at all.",
     "Power and Time Glyphs are particularly strong here.",
-    "Effarig Glyphs are only useful with the right effects, but you can complete the Reality without one. " +
-      "A Replication Glyph is very helpful, but it's not strictly necessary or quite as strong " +
-      "as Power and Time."]
+    `Effarig Glyphs are only useful with the right effects, but you can complete the Reality without one.
+      A Replication Glyph is very helpful, but it's not strictly necessary or quite as strong
+      as Power and Time.`
+  ]
 };

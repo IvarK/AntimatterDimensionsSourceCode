@@ -1,5 +1,6 @@
 <script>
 import { DC } from "../../../../javascripts/core/constants";
+
 import TypeSacrifice from "./TypeSacrifice";
 
 export default {

@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.achievements.normal = [
   {
@@ -702,7 +702,7 @@ GameDatabase.achievements.normal = [
     id: 102,
     name: "This mile took an eternity",
     description: "Get all Eternity milestones.",
-    checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -1305,7 +1305,8 @@ GameDatabase.achievements.normal = [
     id: 182,
     name: "One more time",
     description: "Gain back all Antimatter Dimension autobuyers.",
-    checkRequirement: () => player.celestials.pelle.upgrades.has(4),
+    checkRequirement: () => PelleUpgrade.antimatterDimAutobuyers1.canBeApplied &&
+      PelleUpgrade.antimatterDimAutobuyers2.canBeApplied,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {

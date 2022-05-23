@@ -1,6 +1,7 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { BitUpgradeState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { CelestialQuotes } from "./quotes";
 
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
@@ -152,6 +153,9 @@ export const Enslaved = {
     return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
+  get canAmplify() {
+    return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
+  },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
     return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
@@ -262,19 +266,10 @@ class EnslavedProgressState extends BitUpgradeState {
   }
 }
 
-export const EnslavedProgress = (function() {
-  const db = GameDatabase.celestials.enslaved.progress;
-  return {
-    hintsUnlocked: new EnslavedProgressState(db.hintsUnlocked),
-    ec1: new EnslavedProgressState(db.ec1),
-    feelEternity: new EnslavedProgressState(db.feelEternity),
-    ec6: new EnslavedProgressState(db.ec6),
-    c10: new EnslavedProgressState(db.c10),
-    secretStudy: new EnslavedProgressState(db.secretStudy),
-    storedTime: new EnslavedProgressState(db.storedTime),
-    challengeCombo: new EnslavedProgressState(db.challengeCombo),
-  };
-}());
+export const EnslavedProgress = mapGameDataToObject(
+  GameDatabase.celestials.enslaved.progress,
+  config => new EnslavedProgressState(config)
+);
 
 export const Tesseracts = {
   get bought() {

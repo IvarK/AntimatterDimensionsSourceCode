@@ -1,10 +1,12 @@
 <script>
+import svgPanZoom from "svg-pan-zoom";
+
 import { CELESTIAL_NAV_DRAW_ORDER } from "../../../../javascripts/core/secret-formula/celestials/navigation";
-import NodeRing from "./NodeRing";
+
 import NodeBackground from "./NodeBackground";
 import NodeOverlay from "./NodeOverlay";
+import NodeRing from "./NodeRing";
 import ProgressConnector from "./ProgressConnector";
-import svgPanZoom from "svg-pan-zoom";
 
 export default {
   name: "CelestialNavigationTab",
@@ -138,7 +140,7 @@ const CelestialNavigationViewportCache = {
 <template>
   <svg
     height="600"
-    width="960"
+    width="966"
     class="l-celestial-navigation"
   >
     <defs>

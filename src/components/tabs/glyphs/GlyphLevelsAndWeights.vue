@@ -1,6 +1,6 @@
 <script>
-import ToggleButton from "@/components/ToggleButton";
 import SliderComponent from "@/components/SliderComponent";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "GlyphLevelsAndWeights",
@@ -547,7 +547,6 @@ function roundPreservingSum(data) {
 
 <style scoped>
 .l-glyph-level-and-weights-note {
-  grid-column-start: 1;
-  grid-column-end: 5;
+  grid-column: 1 / 5;
 }
 </style>

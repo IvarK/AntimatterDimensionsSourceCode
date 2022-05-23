@@ -1,7 +1,7 @@
-import { GlyphTypes } from "./glyph-effects.js";
-import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
-import { DC } from "./constants.js";
+import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
+import { DC } from "./constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { GlyphTypes } from "./glyph-effects";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
@@ -811,7 +811,8 @@ window.player = {
       bigCrunch: true,
       replicantiGalaxy: true,
       antimatterGalaxy: true,
-      dimensionBoost: true
+      dimensionBoost: true,
+      switchAutomatorMode: true
     },
     awayProgress: {
       antimatter: true,
@@ -984,7 +985,7 @@ export function guardFromNaNValues(obj) {
   }
 
   for (const key in obj) {
-    if (!obj.hasOwnProperty(key)) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
 
     // TODO: rework autobuyer saving
     if (key === "automator") continue;

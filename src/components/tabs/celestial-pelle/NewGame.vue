@@ -63,32 +63,33 @@ export default {
 
 <style scoped>
 .c-new-game-container {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9;
   display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 9;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   background-color: black;
   box-shadow: 0 0 20px 1px black;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
 }
 
 .c-new-game-button-container {
   display: flex;
-  align-items: stretch;
   flex-direction: column;
+  align-items: stretch;
 }
 
 .c-new-game-button {
-  margin-top: 1rem;
-  padding: 1rem;
   font-family: Typewriter;
   background: grey;
   border: black;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin-top: 1rem;
+  padding: 1rem;
   cursor: pointer;
 }
 </style>

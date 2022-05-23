@@ -1,9 +1,11 @@
-import { DC } from "../../constants";
 import { Currency } from "../../currency";
+import { DC } from "../../constants";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { SetPurchasableMechanicState } from "../../utils";
+
+import { CelestialQuotes } from "../quotes";
+
 import zalgo from "./zalgo";
-import { CelestialQuotes } from "../quotes.js";
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -116,7 +118,8 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [143, 142, 141, 133, 125, 118, 117, 111, 104, 103, 92, 91, 78, 76, 74, 65, 55, 54, 37];
+    return [164, 143, 142, 141, 137, 134, 133, 132, 125, 118, 117, 113, 111, 104, 103, 93, 92, 91, 87, 85, 78, 76,
+      74, 65, 55, 54, 37];
   },
 
   get uselessInfinityUpgrades() {
@@ -158,7 +161,7 @@ export const Pelle = {
       isUnlocked,
       description,
       infinity: (isActive("infinity") && player.challenge.eternity.current <= 8)
-        ? Currency.infinityPoints.value.pow(0.2)
+        ? Currency.infinityPoints.value.plus(1).pow(0.2)
         : DC.D1,
       time: isActive("time")
         ? Currency.eternityPoints.value.plus(1).pow(0.3)
@@ -182,7 +185,7 @@ export const Pelle = {
     switch (type) {
       case "infinity":
         return `Infinity Point gain ${player.challenge.eternity.current <= 8
-          ? formatX(Currency.infinityPoints.value.pow(0.2), 2)
+          ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
           : formatX(DC.D1, 2)} (based on current IP)`;
       case "time":
         return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
@@ -453,15 +456,13 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
 
 }
 
-export const PelleUpgrade = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.upgrades,
-    config => (config.rebuyable
-      ? new RebuyablePelleUpgradeState(config)
-      : new PelleUpgradeState(config)
-    )
-  );
-}());
+export const PelleUpgrade = mapGameDataToObject(
+  GameDatabase.celestials.pelle.upgrades,
+  config => (config.rebuyable
+    ? new RebuyablePelleUpgradeState(config)
+    : new PelleUpgradeState(config)
+  )
+);
 
 PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
 PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable);

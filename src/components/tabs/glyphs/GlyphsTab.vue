@@ -1,16 +1,16 @@
 <script>
-import ExpandingControlBox from "@/components/ExpandingControlBox";
-import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
-import GlyphPeek from "./GlyphPeek";
-import RealityAmplifyButton from "./RealityAmplifyButton";
-import GlyphInventory from "./GlyphInventory";
-import SacrificedGlyphs from "./SacrificedGlyphs";
 import CurrentGlyphEffects from "./CurrentGlyphEffects";
 import EquippedGlyphs from "./EquippedGlyphs";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+import GlyphInventory from "./GlyphInventory";
 import GlyphLevelsAndWeights from "./GlyphLevelsAndWeights";
-import ResetRealityButton from "./ResetRealityButton";
+import GlyphPeek from "./GlyphPeek";
+import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
+import RealityAmplifyButton from "./RealityAmplifyButton";
 import RealityButton from "./RealityButton";
 import RealityReminder from "./RealityReminder";
+import ResetRealityButton from "./ResetRealityButton";
+import SacrificedGlyphs from "./SacrificedGlyphs";
 
 export default {
   name: "GlyphsTab",

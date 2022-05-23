@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "SpeedrunModeModal",

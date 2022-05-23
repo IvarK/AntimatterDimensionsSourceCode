@@ -1,10 +1,10 @@
-import { Teresa } from "./teresa.js";
-import { Effarig } from "./effarig.js";
-import { Enslaved } from "./enslaved.js";
-import { V } from "./V.js";
-import { Ra } from "./ra/ra.js";
-import { Laitela } from "./laitela/laitela.js";
+import { Effarig } from "./effarig";
+import { Enslaved } from "./enslaved";
+import { Laitela } from "./laitela/laitela";
 import { Pelle } from "./pelle/pelle";
+import { Ra } from "./ra/ra";
+import { Teresa } from "./teresa";
+import { V } from "./V";
 
 export const Celestials = {
   teresa: Teresa,
@@ -44,7 +44,7 @@ GameDatabase.celestials.descriptions = [
       Tachyon Particle production and Dilated Time production are severely reduced
       Time Theorem generation from Dilation Glyphs is disabled
       Certain challenge goals have been increased
-      Stored Time is discharged at a reduced effectiveness (exponent^${format(0.55, 2, 2)}) `;
+      Stored game time is discharged at a reduced effectiveness (exponent^${format(0.55, 2, 2)}) `;
     }
   },
   {

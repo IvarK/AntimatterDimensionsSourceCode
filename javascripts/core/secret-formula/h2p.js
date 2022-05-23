@@ -1,6 +1,7 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
-import { Pelle, PelleStrikes } from "../globals.js";
+import { Pelle, PelleStrikes } from "../globals";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 GameDatabase.h2p = {
   /**
@@ -1136,11 +1137,11 @@ When unlocking The Enslaved Ones, you immediately gain access to two new mechani
 Stored game time is also used as a currency for purchasing unlocks from The Enslaved Ones.
 <br>
 <br>
-Charging your Black Hole gives you stored time, which it does at the expense of setting your game speed to
-${formatInt(1)}. The game is in effect using your increased game speed in order to store time itself. Its
-main use is to discharge the Black Hole, which takes uses your stored time to skip forward in time by a duration
-equal to the time stored. This is different than regular game speed multipliers in that discharging is not subject to
-any modifiers to game speed when it is used, only when it is stored.
+Charging your Black Hole gives you stored game time, which it does at the expense of setting your game speed to
+${formatInt(1)}. The game is in effect using your increased game speed in order to store game time itself. Its
+main use is to discharge the Black Hole, which takes uses your stored game time to skip forward in time by a duration
+equal to the game time stored. This is different than regular game speed multipliers in that discharging is not subject
+to any modifiers to game speed when it is used, only when it is stored.
 <br>
 <br>
 Storing real time completely stops all production, effectively pausing your game. For every real-time second that
@@ -1154,17 +1155,22 @@ ${format(5e12)} Relic Shards, ${formatInt(5)} Glyphs (subject to your filtering 
 and ${formatInt(5)} Perk Points.
 <br>
 <br>
+However, if your Reality has lasted for less than ${formatInt(1)} second, the amplification factor is capped by the
+amount of seconds stored. For example, if you have ${formatInt(1000)} seconds stored and amplify a Reality which has
+lasted ${format(0.2, 2, 2)} seconds, you will use ${formatInt(200)} seconds to simulate ${formatInt(1000)} Realities.
+<br>
+<br>
 You can toggle a setting to automatically store offline time as stored real time.
 <br>
 <br>
 Their first unlock costs ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP.price).totalYears)}
-years of stored time. It increases the softcap to Tickspeed Upgrades gained from Time Dimensions
+years of stored game time. It increases the softcap to Tickspeed Upgrades gained from Time Dimensions
 (the point at which their cost starts increasing faster)
 by ${format(1e5)} Tickspeed Upgrades.
 <br>
 <br>
-At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored time, you are able to
-finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
+At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored game time, you are able
+to finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
     : "<span style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see reward details)</span>"}

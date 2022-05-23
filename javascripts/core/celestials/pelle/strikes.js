@@ -56,9 +56,7 @@ class PelleStrikeState extends BitUpgradeState {
   }
 }
 
-export const PelleStrikes = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.strikes,
-    config => new PelleStrikeState(config)
-  );
-}());
+export const PelleStrikes = mapGameDataToObject(
+  GameDatabase.celestials.pelle.strikes,
+  config => new PelleStrikeState(config)
+);

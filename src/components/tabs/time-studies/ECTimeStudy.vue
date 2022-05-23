@@ -1,6 +1,6 @@
 <script>
-import TimeStudyButton from "./TimeStudyButton";
 import HintText from "@/components/HintText";
+import TimeStudyButton from "./TimeStudyButton";
 
 export default {
   name: "ECTimeStudy",

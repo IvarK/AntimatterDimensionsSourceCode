@@ -1,6 +1,6 @@
-import { AutomatorCommands } from "./automator-commands.js";
-import { AutomatorGrammar } from "./parser.js";
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorCommands } from "./automator-commands";
+import { AutomatorGrammar } from "./parser";
+import { AutomatorLexer } from "./lexer";
 
 (function() {
   if (AutomatorGrammar === undefined) {

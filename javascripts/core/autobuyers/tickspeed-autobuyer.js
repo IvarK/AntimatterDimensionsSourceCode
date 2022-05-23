@@ -1,5 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {

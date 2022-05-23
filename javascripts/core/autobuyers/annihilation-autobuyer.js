@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerState {
   get data() {

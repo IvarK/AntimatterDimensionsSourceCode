@@ -1,14 +1,14 @@
 <script>
 import AutobuyerToggles from "./AutobuyerToggles";
+import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox";
+import DimensionAutobuyerBox from "./DimensionAutobuyerBox";
+import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox";
+import EternityAutobuyerBox from "./EternityAutobuyerBox";
+import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import RealityAutobuyerBox from "./RealityAutobuyerBox";
-import EternityAutobuyerBox from "./EternityAutobuyerBox";
-import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox";
-import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
-import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox";
-import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
-import DimensionAutobuyerBox from "./DimensionAutobuyerBox";
 import SimpleAutobuyersMultiBox from "./SimpleAutobuyersMultiBox";
+import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
 
 export default {
   name: "AutobuyersTab",

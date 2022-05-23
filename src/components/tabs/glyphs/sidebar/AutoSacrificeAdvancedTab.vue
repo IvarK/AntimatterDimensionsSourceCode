@@ -33,7 +33,7 @@ export default {
       // Override some properties of the number input to match row style:
       return {
         "font-size": "larger",
-        "border-width": "0.2rem",
+        "border-width": "var(--var-border-width, 0.2rem)",
       };
     },
     questionmarkTooltip() {

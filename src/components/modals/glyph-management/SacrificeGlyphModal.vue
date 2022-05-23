@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    idx: {
+      type: Number,
       required: true
     }
   },
@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     glyph() {
-      return Glyphs.findByInventoryIndex(this.modalConfig.idx);
+      return Glyphs.findByInventoryIndex(this.idx);
     },
     message() {
       return `Do you really want to sacrifice this Glyph? Your total power of sacrificed ${this.glyph.type}
@@ -34,7 +34,7 @@ export default {
       this.currentGlyphSacrifice = player.reality.glyphs.sac[this.glyph.type];
       this.gain = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
 
-      const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
+      const newGlyph = Glyphs.findByInventoryIndex(this.idx);
       if (this.glyph !== newGlyph && !this.confirmedSacrifice) {
 
         // ConfirmedSacrifice is here because when you sac a glyph with confirmation it

@@ -1,7 +1,7 @@
 <script>
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
 
 export default {
   name: "InfinityUpgradeButton",

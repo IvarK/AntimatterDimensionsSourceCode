@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 /**
  * Object that manages the selection of glyphs offered to the player
@@ -180,8 +180,8 @@ function triggerManualReality(realityProps) {
 
 export function runRealityAnimation() {
   document.getElementById("ui").style.userSelect = "none";
-  document.getElementById("ui").style.animation = "realize 10s 1";
-  document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+  document.getElementById("ui").style.animation = "a-realize 10s 1";
+  document.getElementById("realityanimbg").style.animation = "a-realizebg 10s 1";
   document.getElementById("realityanimbg").style.display = "block";
   setTimeout(() => {
     document.getElementById("realityanimbg").play();

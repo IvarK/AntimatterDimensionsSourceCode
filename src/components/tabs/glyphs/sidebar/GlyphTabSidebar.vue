@@ -1,8 +1,8 @@
 <script>
-import GlyphInventoryManagementPanel from "./GlyphInventoryManagementPanel";
 import GlyphFilterPanel from "./GlyphFilterPanel";
-import GlyphSetSavePanel from "./GlyphSetSavePanel";
+import GlyphInventoryManagementPanel from "./GlyphInventoryManagementPanel";
 import GlyphRejectionPanel from "./GlyphRejectionPanel";
+import GlyphSetSavePanel from "./GlyphSetSavePanel";
 
 export default {
   name: "GlyphTabSidebar",

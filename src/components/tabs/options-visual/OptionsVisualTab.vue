@@ -1,12 +1,13 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import ExpandingControlBox from "@/components/ExpandingControlBox";
-import OptionsButton from "@/components/OptionsButton";
-import UpdateRateSlider from "./UpdateRateSlider";
-import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
-import SelectThemeDropdown from "@/components/tabs/options-visual/SelectThemeDropdown";
-import SelectNotationDropdown from "@/components/tabs/options-visual/SelectNotationDropdown";
 import * as ADNotations from "@antimatter-dimensions/notations";
+
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
+import OptionsButton from "@/components/OptionsButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SelectNotationDropdown from "@/components/tabs/options-visual/SelectNotationDropdown";
+import SelectThemeDropdown from "@/components/tabs/options-visual/SelectThemeDropdown";
+import UpdateRateSlider from "./UpdateRateSlider";
 
 export default {
   name: "OptionsVisualTab",

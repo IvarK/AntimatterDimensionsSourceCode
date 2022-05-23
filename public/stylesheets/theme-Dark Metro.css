@@ -1,28 +1,28 @@
 body.t-dark-metro {
-  background-image: url('../images/dark-bg.png');
-  background-position: center;
   color: #757575;
+  background-image: url("../images/dark-bg.png");
+  background-position: center;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked {
+  color: #00bcd4;
   background: #212121;
-  color: #00BCD4;
-  border: 0.1rem solid #00BCD4;
+  border: 0.1rem solid #00bcd4;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked:hover {
   color: #212121;
-  background: #00BCD4;
+  background: #00bcd4;
 }
 
 .t-dark-metro .c-tt-buy-button--locked {
-  background: #9E9E9E;
+  background: #9e9e9e;
   border: none;
-  box-shadow: 1px 1px 1px 0 #000;
+  box-shadow: 1px 1px 1px 0 #000000;
 }
 
 .t-dark-metro .c-tt-buy-button--locked:hover {
-  background: #E53935;
+  background: #e53935;
 }
 
 .t-dark-metro #realityanimbg {

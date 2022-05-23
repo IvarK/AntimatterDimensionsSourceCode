@@ -1,7 +1,7 @@
 <script>
+import NormalAchievementRow from "./NormalAchievementRow";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SwapAchievementImagesButton from "./SwapAchievementImagesButton";
-import NormalAchievementRow from "./NormalAchievementRow";
 
 export default {
   name: "NormalAchievementsTab",

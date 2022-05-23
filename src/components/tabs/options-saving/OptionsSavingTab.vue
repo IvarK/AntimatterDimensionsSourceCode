@@ -1,8 +1,8 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import AutosaveIntervalSlider from "./AutosaveIntervalSlider";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
-import AutosaveIntervalSlider from "./AutosaveIntervalSlider";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "OptionsSavingTab",

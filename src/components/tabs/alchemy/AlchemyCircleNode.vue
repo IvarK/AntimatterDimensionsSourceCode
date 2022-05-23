@@ -1,6 +1,6 @@
 <script>
-import HintText from "@/components/HintText";
 import AlchemyResourceArc from "./AlchemyResourceArc";
+import HintText from "@/components/HintText";
 
 export default {
   name: "AlchemyCircleNode",

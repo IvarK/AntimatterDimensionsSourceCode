@@ -1,4 +1,4 @@
-import { SetPurchasableMechanicState } from "./game-mechanics/index.js";
+import { SetPurchasableMechanicState } from "./game-mechanics/index";
 
 class PerkState extends SetPurchasableMechanicState {
   constructor(config) {
@@ -49,61 +49,13 @@ class PerkState extends SetPurchasableMechanicState {
   }
 }
 
-export const Perk = (function() {
-  const db = GameDatabase.reality.perks;
-  return {
-    firstPerk: new PerkState(db.firstPerk),
-    startAM: new PerkState(db.startAM),
-    startIP1: new PerkState(db.startIP1),
-    startIP2: new PerkState(db.startIP2),
-    startEP1: new PerkState(db.startEP1),
-    startEP2: new PerkState(db.startEP2),
-    startEP3: new PerkState(db.startEP3),
-    startTP: new PerkState(db.startTP),
-    antimatterNoReset: new PerkState(db.antimatterNoReset),
-    studyPassive: new PerkState(db.studyPassive),
-    autounlockEU1: new PerkState(db.autounlockEU1),
-    autounlockEU2: new PerkState(db.autounlockEU2),
-    autounlockDilation1: new PerkState(db.autounlockDilation1),
-    autounlockDilation2: new PerkState(db.autounlockDilation2),
-    autounlockDilation3: new PerkState(db.autounlockDilation3),
-    autounlockTD: new PerkState(db.autounlockTD),
-    autounlockReality: new PerkState(db.autounlockReality),
-    bypassIDAntimatter: new PerkState(db.bypassIDAntimatter),
-    bypassTGReset: new PerkState(db.bypassTGReset),
-    bypassECDilation: new PerkState(db.bypassECDilation),
-    bypassEC1Lock: new PerkState(db.bypassEC1Lock),
-    bypassEC2Lock: new PerkState(db.bypassEC2Lock),
-    bypassEC3Lock: new PerkState(db.bypassEC3Lock),
-    bypassEC5Lock: new PerkState(db.bypassEC5Lock),
-    autocompleteEC1: new PerkState(db.autocompleteEC1),
-    autocompleteEC2: new PerkState(db.autocompleteEC2),
-    autocompleteEC3: new PerkState(db.autocompleteEC3),
-    studyActiveEP: new PerkState(db.studyActiveEP),
-    studyIdleEP: new PerkState(db.studyIdleEP),
-    studyECRequirement: new PerkState(db.studyECRequirement),
-    studyECBulk: new PerkState(db.studyECBulk),
-    retroactiveTP1: new PerkState(db.retroactiveTP1),
-    retroactiveTP2: new PerkState(db.retroactiveTP2),
-    retroactiveTP3: new PerkState(db.retroactiveTP3),
-    retroactiveTP4: new PerkState(db.retroactiveTP4),
-    autobuyerDilation: new PerkState(db.autobuyerDilation),
-    autobuyerFasterID: new PerkState(db.autobuyerFasterID),
-    autobuyerFasterReplicanti: new PerkState(db.autobuyerFasterReplicanti),
-    autobuyerFasterDilation: new PerkState(db.autobuyerFasterDilation),
-    ttFree: new PerkState(db.ttFree),
-    ttBuySingle: new PerkState(db.ttBuySingle),
-    ttBuyMax: new PerkState(db.ttBuyMax),
-    achievementGroup1: new PerkState(db.achievementGroup1),
-    achievementGroup2: new PerkState(db.achievementGroup2),
-    achievementGroup3: new PerkState(db.achievementGroup3),
-    achievementGroup4: new PerkState(db.achievementGroup4),
-    achievementGroup5: new PerkState(db.achievementGroup5)
-  };
-}());
+export const Perk = mapGameDataToObject(
+  GameDatabase.reality.perks,
+  config => new PerkState(config)
+);
 
 export const Perks = {
-  all: Object.values(Perk),
+  all: Perk.all,
   /**
    * @param {number} id
    * @returns {PerkState}

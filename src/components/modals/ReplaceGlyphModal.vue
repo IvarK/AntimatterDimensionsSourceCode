@@ -7,21 +7,25 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    targetSlot: {
+      type: Number,
+      required: true
+    },
+    inventoryIndex: {
+      type: Number,
       required: true
     }
   },
   data() {
     return {
-      targetSlot: 0,
+      target: 0,
       idx: 0,
     };
   },
   methods: {
     update() {
-      this.targetSlot = this.modalConfig.targetSlot;
-      this.idx = this.modalConfig.inventoryIndex;
+      this.target = this.targetSlot;
+      this.idx = this.inventoryIndex;
       this.glyph = Glyphs.findByInventoryIndex(this.idx);
     },
     handleYesClick() {

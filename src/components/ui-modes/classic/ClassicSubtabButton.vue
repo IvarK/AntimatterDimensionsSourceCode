@@ -47,14 +47,14 @@ export default {
 
 <style scoped>
 .o-tab-btn {
-  padding-top: 0.2rem;
-  vertical-align: middle;
   height: 2.5rem;
+  vertical-align: middle;
+  padding-top: 0.2rem;
 }
 
 .o-subtab-btn--active {
-  border-bottom-width: 0.4rem;
   height: 2.5rem;
+  border-bottom-width: 0.4rem;
 }
 
 .s-base--metro .o-subtab-btn--active {

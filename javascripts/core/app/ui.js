@@ -1,8 +1,10 @@
-import { notify } from "./notify.js";
-import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
-import { useLongPress, useRepeatingClick } from "./longpress";
 import VueGtag from "vue-gtag";
+
+import { useLongPress, useRepeatingClick } from "./longpress";
+import { notify } from "./notify";
+import { state } from "./ui.init";
+
 import GameUIComponent from "@/components/GameUIComponent";
 
 Vue.mixin({
@@ -95,7 +97,7 @@ const ReactivityComplainer = {
       throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
-      if (!obj.hasOwnProperty(key)) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
       const prop = obj[key];
       if (typeof prop === "object") {
         this.checkReactivity(prop, `${path}.${key}`);

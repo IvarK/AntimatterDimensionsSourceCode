@@ -1,4 +1,4 @@
-import { GameStorage } from "./storage.js";
+import { GameStorage } from "./storage";
 
 function arrayToBits(array) {
   let bits = 0;
@@ -1317,6 +1317,11 @@ GameStorage.devMigrations = {
     player => {
       delete player.celestials.effarig.unlocksBits;
       delete player.celestials.ra.unlocksBits;
+    },
+    player => {
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.id = parseInt(script.id, 10);
+      }
     },
   ],
 

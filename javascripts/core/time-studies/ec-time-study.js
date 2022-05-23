@@ -1,5 +1,5 @@
-import { TimeStudyState } from "./time-studies.js";
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
+import { TimeStudyState } from "./time-studies";
 
 export class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
@@ -117,6 +117,7 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get wasRequirementPreviouslyMet() {
+    if (this.id === 11 || this.id === 12) return false;
     // eslint-disable-next-line no-bitwise
     return (player.challenge.eternity.requirementBits & (1 << this.id)) !== 0;
   }

@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.confirmationTypes = [
   {
@@ -57,6 +57,10 @@ GameDatabase.confirmationTypes = [
     name: "Glyph Undo",
     option: "glyphUndo",
     isUnlocked: () => TeresaUnlocks.undo.canBeApplied,
+  }, {
+    name: "Switch Automator Editor",
+    option: "switchAutomatorMode",
+    isUnlocked: () => Player.automatorUnlocked,
   }, {
     name: "Reset Celestial",
     option: "resetCelestial",

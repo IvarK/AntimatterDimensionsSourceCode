@@ -51,7 +51,7 @@ export default {
       return this.textSplits[2] !== undefined;
     },
     isPelleDisabled() {
-      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect);
+      return this.effectConfig.isDisabledByDoomed;
     },
     convertedParts() {
       const parts = [];

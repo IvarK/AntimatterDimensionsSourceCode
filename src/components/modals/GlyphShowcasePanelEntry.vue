@@ -137,11 +137,8 @@ export default {
         text: `${rawDesc}`
           .replace("{value}", singleValue)
           .replace("{value2}", alteredValue),
-        isPelleDisabled: this.isPelleDisabled(dbEntry.id)
+        isPelleDisabled: dbEntry.isDisabledByDoomed
       };
-    },
-    isPelleDisabled(effect) {
-      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(effect);
     }
   },
 };

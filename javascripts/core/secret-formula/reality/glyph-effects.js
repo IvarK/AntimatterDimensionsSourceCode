@@ -42,6 +42,7 @@ GameDatabase.reality.glyphEffects = {
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
+    enabledInDoomed: true,
   },
   timespeed: {
     id: "timespeed",
@@ -58,7 +59,8 @@ GameDatabase.reality.glyphEffects = {
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("time"),
-    alterationType: ALTERATION_TYPE.EMPOWER
+    alterationType: ALTERATION_TYPE.EMPOWER,
+    enabledInDoomed: true,
   },
   timeetermult: {
     id: "timeetermult",
@@ -136,6 +138,7 @@ GameDatabase.reality.glyphEffects = {
         ? { value: 0.4 - Math.pow(0.4 - prod, 1.7), capped: true }
         : { value: prod, capped: false };
     },
+    enabledInDoomed: true,
   },
   dilationTTgen: {
     // TTgen slowly generates TT, value amount is per second, displayed per hour
@@ -177,6 +180,7 @@ GameDatabase.reality.glyphEffects = {
     formatEffect: x => format(x, 2, 2),
     formatSingleEffect: x => format(x - 1, 2, 2),
     combine: GlyphCombiner.addExponents,
+    enabledInDoomed: true,
   },
   replicationspeed: {
     id: "replicationspeed",
@@ -209,7 +213,8 @@ GameDatabase.reality.glyphEffects = {
     formatSingleEffect: x => format(x - 1, 2, 2),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("replication"),
-    alterationType: ALTERATION_TYPE.BOOST
+    alterationType: ALTERATION_TYPE.BOOST,
+    enabledInDoomed: true,
   },
   replicationdtgain: {
     id: "replicationdtgain",
@@ -280,7 +285,8 @@ GameDatabase.reality.glyphEffects = {
     formatSingleEffect: x => format(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("infinity"),
-    alterationType: ALTERATION_TYPE.BOOST
+    alterationType: ALTERATION_TYPE.BOOST,
+    enabledInDoomed: true,
   },
   infinityrate: {
     id: "infinityrate",
@@ -296,6 +302,7 @@ GameDatabase.reality.glyphEffects = {
     effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.04,
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.add,
+    enabledInDoomed: true,
   },
   infinityIP: {
     id: "infinityIP",
@@ -365,7 +372,8 @@ GameDatabase.reality.glyphEffects = {
     conversion: x => 2 / (x + 1),
     formatSecondaryEffect: x => format(x, 3, 3),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
-    alterationType: ALTERATION_TYPE.ADDITION
+    alterationType: ALTERATION_TYPE.ADDITION,
+    enabledInDoomed: true,
   },
   powermult: {
     id: "powermult",
@@ -380,7 +388,8 @@ GameDatabase.reality.glyphEffects = {
     formatEffect: x => formatPostBreak(x, 2, 0),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("power"),
-    alterationType: ALTERATION_TYPE.EMPOWER
+    alterationType: ALTERATION_TYPE.EMPOWER,
+    enabledInDoomed: true,
   },
   powerdimboost: {
     id: "powerdimboost",
@@ -395,7 +404,8 @@ GameDatabase.reality.glyphEffects = {
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("power"),
-    alterationType: ALTERATION_TYPE.BOOST
+    alterationType: ALTERATION_TYPE.BOOST,
+    enabledInDoomed: true,
   },
   powerbuy10: {
     id: "powerbuy10",
@@ -409,6 +419,7 @@ GameDatabase.reality.glyphEffects = {
     effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.addExponents,
+    enabledInDoomed: true,
   },
   effarigblackhole: {
     id: "effarigblackhole",
@@ -534,6 +545,7 @@ GameDatabase.reality.glyphEffects = {
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
+    enabledInDoomed: true,
   },
   cursedgalaxies: {
     id: "cursedgalaxies",
@@ -650,6 +662,7 @@ GameDatabase.reality.glyphEffects = {
     effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
     formatEffect: x => formatPercents(x, 2, 2),
     combine: GlyphCombiner.add,
+    enabledInDoomed: true,
   },
   companionEP: {
     id: "companionEP",
@@ -665,5 +678,6 @@ GameDatabase.reality.glyphEffects = {
     effect: (level, strength) => Decimal.pow10(1e6 * strengthToRarity(strength)),
     formatEffect: x => formatPostBreak(x, 2),
     combine: GlyphCombiner.multiplyDecimal,
+    enabledInDoomed: true,
   }
 };

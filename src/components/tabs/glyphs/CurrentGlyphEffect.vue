@@ -17,7 +17,7 @@ export default {
       return GlyphEffects[this.effect.id];
     },
     formatValue() {
-      if (Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect.id)) return "";
+      if (this.effectConfig.isDisabledByDoomed) return "";
       const baseValue = this.effect.value.value;
       const value1 = this.effectConfig.formatEffect(baseValue);
       const value2 = this.effectConfig.conversion === undefined

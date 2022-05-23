@@ -30,7 +30,7 @@ class GlyphEffectConfig {
   *  Specification of how multiple glyphs combine. Can be GlyphCombiner.add or GlyphCombiner.multiply for most glyphs.
   *  Otherwise, should be a function that takes a potentially empty array of numbers (each glyph's effect value)
   *  and returns a combined effect or an object with the combined effect amd a capped indicator.
-  *
+  * @param {boolean} [setup.enabledInDoomed] Determines if this effect is enabled while doomed. Defaults to false
   */
   constructor(setup) {
     GlyphEffectConfig.checkInputs(setup);
@@ -82,6 +82,8 @@ class GlyphEffectConfig {
     this.alterationType = setup.alterationType;
     /** @type {boolean} Indicates whether the effect grows with level or shrinks */
     this._biggerIsBetter = undefined;
+    /** @type {boolean} Determines if effect is disabled while in doomed */
+    this._enabledInDoomed = setup.enabledInDoomed ?? false;
   }
 
   /**
@@ -112,6 +114,10 @@ class GlyphEffectConfig {
     return typeof shortDesc === "function" ? shortDesc() : shortDesc;
   }
 
+  get isDisabledByDoomed() {
+    return Pelle.isDoomed && !this._enabledInDoomed;
+  }
+
   /** @returns {number} */
   compareValues(effectValueA, effectValueB) {
     const result = Decimal.compare(effectValueA, effectValueB);
@@ -132,7 +138,7 @@ class GlyphEffectConfig {
   static checkInputs(setup) {
     const KNOWN_KEYS = ["id", "bitmaskIndex", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "effect",
       "formatEffect", "formatSingleEffect", "combine", "softcap", "conversion", "formatSecondaryEffect",
-      "formatSingleSecondaryEffect", "alteredColor", "alterationType", "isGenerated", "shortDesc"];
+      "formatSingleSecondaryEffect", "alteredColor", "alterationType", "isGenerated", "shortDesc", "enabledInDoomed"];
     const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
     if (unknownField !== undefined) {
       throw new Error(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);

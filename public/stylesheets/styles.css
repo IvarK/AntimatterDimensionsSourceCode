@@ -7861,7 +7861,7 @@ kbd {
   color: black;
   background-color: white;
   border: 0.1rem solid black;
-  border-radius: var(--var-border-radius, 50%);
+  border-radius: 50%;
   margin-top: -1.5rem;
   margin-left: -1.5rem;
   transition: all 0.2s, z-index 0s;
@@ -7878,7 +7878,7 @@ kbd {
   z-index: 4;
   background-color: #bbbbbb;
   border: 0.1rem solid black;
-  border-radius: var(--var-border-radius, 50%);
+  border-radius: 50%;
   margin-top: -1.2rem;
   margin-left: -1.2rem;
 }
@@ -7888,7 +7888,7 @@ kbd {
   height: 2.8rem;
   position: absolute;
   background: white;
-  border-radius: var(--var-border-radius, 50%);
+  border-radius: 50%;
 }
 
 .o-alchemy-resource-arc-circle {
@@ -7900,7 +7900,7 @@ kbd {
 
 .o-alchemy-resource-arc-spinner {
   z-index: 2;
-  border-radius: var(--var-border-radius, 1.4rem 0 0 1.4rem);
+  border-radius: 1.4rem 0 0 1.4rem;
   transform-origin: 100% 50%;
 }
 
@@ -7908,7 +7908,7 @@ kbd {
   left: 50%;
   z-index: 1;
   opacity: 0;
-  border-radius: var(--var-border-radius, 0 1.4rem 1.4rem 0);
+  border-radius: 0 1.4rem 1.4rem 0;
 }
 
 .o-alchemy-resource-arc-mask {
@@ -7918,7 +7918,7 @@ kbd {
   z-index: 3;
   opacity: 1;
   background: inherit;
-  border-radius: var(--var-border-radius, 1.4rem 0 0 1.4rem);
+  border-radius: 1.4rem 0 0 1.4rem;
 }
 
 .o-alchemy-node--unfocused {

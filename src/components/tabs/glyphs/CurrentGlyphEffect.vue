@@ -2,15 +2,14 @@
 export default {
   name: "CurrentGlyphEffect",
   props: {
+    isColored: {
+      type: Boolean,
+      default: true
+    },
     effect: {
       type: Object,
       required: true
     }
-  },
-  data() {
-    return {
-      isColored: true,
-    };
   },
   computed: {
     effectConfig() {
@@ -50,11 +49,6 @@ export default {
     valueClass() {
       return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
     }
-  },
-  methods: {
-    update() {
-      this.isColored = player.options.glyphTextColors;
-    },
   }
 };
 </script>

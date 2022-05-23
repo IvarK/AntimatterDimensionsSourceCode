@@ -179,7 +179,7 @@ GameDatabase.infinity.upgrades = {
         percent increases with Teresa level`,
       effect: () => Math.sqrt(Ra.pets.teresa.level) *
         Ra.unlocks.continuousTTBoost.effects.autoPrestige.effectOrDefault(1),
-      formatEffect: value => (value > 1 ? formatX(value, 2) : formatPercents(value, 2))
+      formatEffect: value => formatX(value, 2)
     }
   },
   skipReset1: {

@@ -6,13 +6,11 @@ export default {
   components: { ModalCloseButton },
   data() {
     return {
-      creditsClosed: Boolean,
       showSpectate: Boolean
     };
   },
   methods: {
     update() {
-      this.creditsClosed = player.celestials.pelle.creditsClosed;
       this.showSpectate = GameEnd.endState > 13.75;
     },
     swap() {
@@ -27,18 +25,7 @@ export default {
     v-if="showSpectate"
     class="c-spectate-game-container"
   >
-    <span
-      v-if="creditsClosed"
-      ach-tooltip="Go back to New Game selection"
-    >
-      <ModalCloseButton @click="swap" />
-    </span>
-    <span
-      v-if="!creditsClosed"
-      ach-tooltip="Go back to the game"
-    >
-      <ModalCloseButton @click="swap" />
-    </span>
+    <ModalCloseButton @click="swap" />
   </div>
 </template>
 

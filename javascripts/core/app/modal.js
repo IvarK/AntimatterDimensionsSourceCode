@@ -1,92 +1,88 @@
-import MessageModal from "@/components/modals/MessageModal";
 import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
-import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
+import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
 import InfinityChallengeStartModal from "@/components/modals/challenges/InfinityChallengeStartModal";
+import MessageModal from "@/components/modals/MessageModal";
 import NormalChallengeStartModal from "@/components/modals/challenges/NormalChallengeStartModal";
 
-import DimensionBoostModal from "@/components/modals/prestige/DimensionBoostModal";
 import AntimatterGalaxyModal from "@/components/modals/prestige/AntimatterGalaxyModal";
-import BigCrunchModal from "@/components/modals/prestige/BigCrunchModal";
-import ReplicantiGalaxyModal from "@/components/modals/prestige/ReplicantiGalaxyModal";
-import EternityModal from "@/components/modals/prestige/EternityModal";
-import EnterDilationModal from "@/components/modals/prestige/EnterDilationModal";
-import RealityModal from "@/components/modals/prestige/RealityModal";
-import ResetRealityModal from "@/components/modals/prestige/ResetRealityModal";
-import ExitCelestialModal from "@/components/modals/prestige/ExitCelestialModal";
-import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal";
-import HardResetModal from "@/components/modals/prestige/HardResetModal";
-import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
-import ChangeNameModal from "@/components/modals/ChangeNameModal";
 import ArmageddonModal from "@/components/modals/prestige/ArmageddonModal";
+import BigCrunchModal from "@/components/modals/prestige/BigCrunchModal";
+import ChangeNameModal from "@/components/modals/ChangeNameModal";
+import DimensionBoostModal from "@/components/modals/prestige/DimensionBoostModal";
+import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal";
+import EnterDilationModal from "@/components/modals/prestige/EnterDilationModal";
+import EternityModal from "@/components/modals/prestige/EternityModal";
+import ExitCelestialModal from "@/components/modals/prestige/ExitCelestialModal";
+import HardResetModal from "@/components/modals/prestige/HardResetModal";
+import RealityModal from "@/components/modals/prestige/RealityModal";
+import ReplicantiGalaxyModal from "@/components/modals/prestige/ReplicantiGalaxyModal";
+import ResetRealityModal from "@/components/modals/prestige/ResetRealityModal";
+import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
 
-import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
-import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
-import AwayProgressOptionsModal from "@/components/modals/options/AwayProgressOptionsModal";
-import HotkeysModal from "@/components/modals/options/HotkeysModal";
-import NewsOptionsModal from "@/components/modals/options/NewsOptionsModal";
 import AnimationOptionsModal from "@/components/modals/options/AnimationOptionsModal";
-import PreferredTreeModal from "@/components/modals/options/PreferredTreeModal";
+import AwayProgressOptionsModal from "@/components/modals/options/AwayProgressOptionsModal";
+import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
 import HiddenTabsModal from "@/components/modals/options/hidden-tabs/HiddenTabsModal";
+import HotkeysModal from "@/components/modals/options/HotkeysModal";
+import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
+import NewsOptionsModal from "@/components/modals/options/NewsOptionsModal";
+import PreferredTreeModal from "@/components/modals/options/PreferredTreeModal";
 
 import DeleteCompanionGlyphModal from "@/components/modals/glyph-management/DeleteCompanionGlyphModal";
 import DeleteGlyphModal from "@/components/modals/glyph-management/DeleteGlyphModal";
-import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModal";
-import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
-import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
-import PurgeAllUnprotectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllUnprotectedGlyphsModal";
 import PurgeAllRejectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllRejectedGlyphsModal";
+import PurgeAllUnprotectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllUnprotectedGlyphsModal";
+import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModal";
+import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
+import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
 
-import H2PModal from "@/components/modals/H2PModal";
-import InformationModal from "@/components/modals/InformationModal";
-import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
-import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
-import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal";
-import UiChoiceModal from "@/components/modals/UiChoiceModal";
-import AwayProgressModal from "@/components/modals/AwayProgressModal";
-import LoadGameModal from "@/components/modals/LoadGameModal";
-import ImportSaveModal from "@/components/modals/ImportSaveModal";
-import ImportAutomatorScriptModal from "@/components/modals/ImportAutomatorScriptModal";
-import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
+import AwayProgressModal from "@/components/modals/AwayProgressModal";
+import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
+import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
+import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
+import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
+import H2PModal from "@/components/modals/H2PModal";
+import ImportAutomatorScriptModal from "@/components/modals/ImportAutomatorScriptModal";
+import ImportSaveModal from "@/components/modals/ImportSaveModal";
+import InformationModal from "@/components/modals/InformationModal";
+import LoadGameModal from "@/components/modals/LoadGameModal";
+import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
+import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationModal";
+import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal";
+import SacrificeModal from "@/components/modals/SacrificeModal";
+import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
 import StdStoreModal from "@/components/modals/StdStoreModal";
 import StudyStringModal from "@/components/modals/StudyStringModal";
-import SacrificeModal from "@/components/modals/SacrificeModal";
-import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
-import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
-import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationModal";
-import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
-import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
-import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
+import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
+import UiChoiceModal from "@/components/modals/UiChoiceModal";
+import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 
 
 export class Modal {
-  constructor(component, bare = false) {
+  constructor(component, priority = 0, bare = false) {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
-    this._prioritize = false;
+    this._priority = priority;
   }
 
   show(modalConfig) {
     if (!GameUI.initialized) return;
     this._props = Object.assign({}, modalConfig || {});
-    if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
-    // New modals go to the back of the queue (shown last).
-    if (!ui.view.modal.queue.includes(this)) {
-      if (this._prioritize) {
-        ui.view.modal.queue.unshift(this);
-        ui.view.modal.current = this;
-      } else {
-        ui.view.modal.queue.push(this);
-      }
-    }
-  }
 
-  prioritize() {
-    this._prioritize = true;
-    return this;
+    const modalQueue = ui.view.modal.queue;
+    // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
+    modalQueue.unshift(this);
+    modalQueue.sort((x, y) => y.priority - x.priority);
+    // Filter out multiple instances of the same modal.
+    const singleQueue = [...new Set(modalQueue)];
+    ui.view.modal.queue = singleQueue;
+    // If the front of the queue is what is currently presented, we dont need to do anything.
+    if (!singleQueue[0].isOpen) ui.view.modal.current = singleQueue[0];
   }
 
   get isOpen() {
@@ -103,6 +99,10 @@ export class Modal {
 
   get props() {
     return this._props;
+  }
+
+  get priority() {
+    return this._priority;
   }
 
   static hide() {
@@ -132,8 +132,7 @@ export class Modal {
 
 class ChallengeConfirmationModal extends Modal {
   show(id) {
-    this.id = id;
-    super.show();
+    super.show({ id });
   }
 }
 
@@ -144,20 +143,20 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeS
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
 
-Modal.dimensionBoost = new Modal(DimensionBoostModal).prioritize();
-Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal).prioritize();
-Modal.bigCrunch = new Modal(BigCrunchModal).prioritize();
-Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal).prioritize();
-Modal.eternity = new Modal(EternityModal).prioritize();
-Modal.enterDilation = new Modal(EnterDilationModal).prioritize();
-Modal.reality = new Modal(RealityModal).prioritize();
-Modal.resetReality = new Modal(ResetRealityModal).prioritize();
-Modal.exitCelestialReality = new Modal(ExitCelestialModal).prioritize();
-Modal.celestials = new Modal(EnterCelestialsModal).prioritize();
-Modal.hardReset = new Modal(HardResetModal).prioritize();
+Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
+Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);
+Modal.bigCrunch = new Modal(BigCrunchModal, 1);
+Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal, 1);
+Modal.eternity = new Modal(EternityModal, 1);
+Modal.enterDilation = new Modal(EnterDilationModal, 1);
+Modal.reality = new Modal(RealityModal, 1);
+Modal.resetReality = new Modal(ResetRealityModal, 1);
+Modal.exitCelestialReality = new Modal(ExitCelestialModal, 1);
+Modal.celestials = new Modal(EnterCelestialsModal, 1);
+Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
-Modal.armageddon = new Modal(ArmageddonModal).prioritize();
+Modal.armageddon = new Modal(ArmageddonModal, 1);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
@@ -168,16 +167,16 @@ Modal.animationOptions = new Modal(AnimationOptionsModal);
 Modal.hiddenTabs = new Modal(HiddenTabsModal);
 Modal.preferredTree = new Modal(PreferredTreeModal);
 
-Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal).prioritize();
-Modal.glyphDelete = new Modal(DeleteGlyphModal).prioritize();
-Modal.glyphPurge = new Modal(PurgeGlyphModal).prioritize();
-Modal.glyphSacrifice = new Modal(SacrificeGlyphModal).prioritize();
-Modal.glyphRefine = new Modal(RefineGlyphModal).prioritize();
-Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal).prioritize();
-Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal).prioritize();
+Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal, 1);
+Modal.glyphDelete = new Modal(DeleteGlyphModal, 1);
+Modal.glyphPurge = new Modal(PurgeGlyphModal, 1);
+Modal.glyphSacrifice = new Modal(SacrificeGlyphModal, 1);
+Modal.glyphRefine = new Modal(RefineGlyphModal, 1);
+Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal, 1);
+Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal, 1);
 
 Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
-Modal.glyphUndo = new Modal(UndoGlyphModal).prioritize();
+Modal.glyphUndo = new Modal(UndoGlyphModal, 1);
 Modal.glyphReplace = new Modal(ReplaceGlyphModal);
 Modal.enslavedHints = new Modal(EnslavedHintsModal);
 Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
@@ -191,12 +190,13 @@ Modal.import = new Modal(ImportSaveModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
+Modal.switchAutomatorEditorMode = new Modal(SwitchAutomatorEditorModal);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
-Modal.sacrifice = new Modal(SacrificeModal).prioritize();
-Modal.breakInfinity = new Modal(BreakInfinityModal);
+Modal.sacrifice = new Modal(SacrificeModal, 1);
+Modal.breakInfinity = new Modal(BreakInfinityModal, 1);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized || player.speedrun.isActive) return;
@@ -245,7 +245,7 @@ Modal.celestialQuote = new class extends Modal {
     }
     return x;
   }
-}(CelestialQuoteModal, true);
+}(CelestialQuoteModal, 2, true);
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
@@ -319,4 +319,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal);
+}(MessageModal, 2);

@@ -139,7 +139,9 @@ export const AutomatorTextUI = {
   // Used to return back to the same line the editor was on from before switching tabs
   savedVertPos: 0,
   scrollToLine(line) {
-    this.editor.scrollIntoView({ line, ch: 0 });
+    if (this.editor) {
+      this.editor.scrollIntoView({ line, ch: 0 });
+    }
   },
   // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
   // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative
@@ -177,7 +179,3 @@ export const AutomatorTextUI = {
     class="c-automator-editor l-automator-editor l-automator-pane__content"
   />
 </template>
-
-<style scoped>
-
-</style>

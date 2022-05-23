@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   get _upgradeName() { return ["chance", "interval", "galaxies"][this.id - 1]; }

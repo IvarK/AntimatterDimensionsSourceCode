@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.singularity = new class SingularityAutobuyerState extends AutobuyerState {
   get data() {

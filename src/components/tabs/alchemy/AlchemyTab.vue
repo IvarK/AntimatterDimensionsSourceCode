@@ -1,8 +1,8 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import { AlchemyCircleLayout } from "./alchemy-circle-layout";
 import AlchemyCircleNode from "./AlchemyCircleNode";
 import AlchemyResourceInfo from "./AlchemyResourceInfo";
-import { AlchemyCircleLayout } from "./alchemy-circle-layout";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "AlchemyTab",
@@ -21,6 +21,7 @@ export default {
       alchemyCap: 0,
       capFactor: 0,
       createdRealityGlyph: false,
+      allReactionsDisabled: false
     };
   },
   computed: {
@@ -46,6 +47,9 @@ export default {
         "tutorial--glow": !this.createdRealityGlyph
       };
     },
+    reactions() {
+      return AlchemyReactions.all.compact().filter(r => r.product.isUnlocked);
+    }
   },
   methods: {
     update() {
@@ -55,6 +59,7 @@ export default {
       this.alchemyCap = Ra.alchemyResourceCap;
       this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
       this.createdRealityGlyph = player.reality.glyphs.createdRealityGlyph;
+      this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -151,18 +156,11 @@ export default {
       Modal.h2p.show();
     },
     toggleAllReactions() {
-      const reactions = AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);
-      const allReactionsDisabled = reactions.every(reaction => !reaction.isActive);
-      if (allReactionsDisabled) {
-        for (const reaction of reactions) {
-          reaction.isActive = true;
-        }
-      } else {
-        for (const reaction of reactions) {
-          reaction.isActive = false;
-        }
+      const setIsActive = this.allReactionsDisabled;
+      for (const reaction of this.reactions) {
+        reaction.isActive = setIsActive;
       }
-    }
+    },
   }
 };
 </script>
@@ -180,7 +178,7 @@ export default {
         class="o-primary-btn--subtab-option"
         @click="toggleAllReactions"
       >
-        Toggle all reactions
+        {{ allReactionsDisabled ? "Enable" : "Disable" }} all reactions
       </PrimaryButton>
       <PrimaryButton
         v-if="realityCreationVisible"

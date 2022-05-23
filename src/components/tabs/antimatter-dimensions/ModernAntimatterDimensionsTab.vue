@@ -1,9 +1,9 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterDimensionRow";
 import AntimatterGalaxyRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterGalaxyRow";
 import DimensionBoostRow from "@/components/tabs/antimatter-dimensions/ModernDimensionBoostRow";
+import PrimaryButton from "@/components/PrimaryButton";
 import TickspeedRow from "@/components/tabs/antimatter-dimensions/TickspeedRow";
 
 export default {

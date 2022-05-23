@@ -6,12 +6,6 @@ export default {
   components: {
     ModalCloseButton,
   },
-  props: {
-    modalConfig: {
-      required: true,
-      type: Object,
-    }
-  },
   data() {
     return {
       tabId: 0,

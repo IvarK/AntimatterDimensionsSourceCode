@@ -1,5 +1,6 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 // A = always there
 // L = locked
@@ -914,7 +915,7 @@ GameDatabase.news = [
     id: "a174",
     text:
       `<span style='font-family: runescape; color: yellow; text-shadow: 0.1rem 0.1rem black; letter-spacing: 0.1rem;
-      font-size: 2rem; line-height: 0; animation: text-flash 1s steps(1, end) infinite;'
+      font-size: 2rem; line-height: 0; animation: a-text-flash 1s steps(1, end) infinite;'
       >FREE RUNE ARMOR TRIMMING</span>`,
   },
   {
@@ -991,12 +992,12 @@ GameDatabase.news = [
   {
     id: "a184",
     text:
-      `<span style='animation: text-grow 1s infinite'>R̵̬̙͋͂̀̋͑̈́̇͠Ê̵͇͎͂̂̍̓̌̐̋̋̀̀̔M̶̨̲̯̘͙̬̥̮̣͚̱̫͛̽̃͌̚͝
-      "Ą̴͍̝͐Į̷̛̲̯̫̘͌́̄̏͌̀̈́͝͝Ṅ̶̛̻̠̠̤̦̞̞͗̎̊̌̊͝͠</span><span style='animation: text-shrink 1s infinite'>
+      `<span style='animation: a-text-grow 1s infinite'>R̵̬̙͋͂̀̋͑̈́̇͠Ê̵͇͎͂̂̍̓̌̐̋̋̀̀̔M̶̨̲̯̘͙̬̥̮̣͚̱̫͛̽̃͌̚͝
+      "Ą̴͍̝͐Į̷̛̲̯̫̘͌́̄̏͌̀̈́͝͝Ṅ̶̛̻̠̠̤̦̞̞͗̎̊̌̊͝͠</span><span style='animation: a-text-shrink 1s infinite'>
       Ḁ̷̛͂̈́͗̎̃̓͛́͘ͅW̶̡̖͓̗̦̃̇̌̀͝A̵͇̭͉̓̎̈̿̊́̄̚͜R̶̝͚̲̭͎͇͎͓͖͚͇̀̈́͗̃̏̂̌͝͝Ę̴̡̤͙͈̝̬̰͒͘</span><span style
-      ='animation: text-grow 1s infinite'> ̶̺̈́́̆̓͘͘Ồ̸̢̢̮͓̯̗͙͚̬̉͊̿F̶̠̤̱̱̱͊̂̍̔̃͆̆̑̿͘</span><span style='animation:
-      text-shrink 1s infinite'> ̴̨̞̠̮͚̱͉͋̔͗̽̈́́́̅ͅỴ̶̣̙̹͚̲͔̲̼̬̥̀͌̒̾͘͘O̵̪̠̗̝̗̘̜͚̮̊͒͆̃̀̌̒͝ͅU̸͎͗̍̑̎̅̅͝R̵̗͑̽̏̓͆͒̈́͌͘̕
-      </span><span style='animation: text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
+      ='animation: a-text-grow 1s infinite'> ̶̺̈́́̆̓͘͘Ồ̸̢̢̮͓̯̗͙͚̬̉͊̿F̶̠̤̱̱̱͊̂̍̔̃͆̆̑̿͘</span><span style='animation:
+      a-text-shrink 1s infinite'> ̴̨̞̠̮͚̱͉͋̔͗̽̈́́́̅ͅỴ̶̣̙̹͚̲͔̲̼̬̥̀͌̒̾͘͘O̵̪̠̗̝̗̘̜͚̮̊͒͆̃̀̌̒͝ͅU̸͎͗̍̑̎̅̅͝R̵̗͑̽̏̓͆͒̈́͌͘̕
+      </span><span style='animation: a-text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
       R̸̡̛̛̪̝̟̱̣̹̭̟̣̀̈̀̏̉̌͝͠Õ̶͙͈͖̠͇̬͍̟̰U̵̩̫͉̝͔̼͎̦̔̓̽͌͊̏̇̓̀̓̀Ņ̸͍͇̘̙̥̰͉̲͕͈̥̍͛̃̑͝Ḑ̵̤̻̖̱̘̯̝̖̈̌̄̕͝
       Ī̶̜̱̈́̑̃̉̄̋̔͐͋͠Ṅ̴͎̞͍̽͊͛̈́̅͛̈̅̚͠Ģ̸̢̾͊S̷̫̼̜̼͇̋͛̎͑͆̅̓̇</span>`,
   },
@@ -1013,10 +1014,10 @@ GameDatabase.news = [
   {
     id: "a186",
     text:
-      `<span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: text-grow 1s infinite
-      '>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
-      text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span
-      style='animation: text-grow 1s infinite'>\\(^_^)\\</span>`,
+      `<span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: a-text-grow 1s infinite
+      '>\\(^_^)\\</span> <span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
+      a-text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span
+      style='animation: a-text-grow 1s infinite'>\\(^_^)\\</span>`,
   },
   {
     id: "a187",
@@ -1082,7 +1083,7 @@ GameDatabase.news = [
       random *= 255;
       const color = `hsl(${random}, 90%, 60%)`;
       return `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color};
-        animation: text-grow 0.4s infinite;'>Disco Time!</span>`;
+        animation: a-text-grow 0.4s infinite;'>Disco Time!</span>`;
     },
   },
   {
@@ -1351,8 +1352,8 @@ GameDatabase.news = [
     id: "a238",
     get text() {
       return `AD Player: "How many orders of magnitude are you on?" Normal person: "Like, maybe 5 or 6 right now, my
-      dude." AD Player: "You are like a little baby. Watch this: <span style='animation: text-crunch ${newsAnimSpd(22)}s
-      1; font-size: 0;'>C R O N C H</span>"`;
+      dude." AD Player: "You are like a little baby. Watch this: <span style='animation: a-text-crunch
+      ${newsAnimSpd(22)}s 1; font-size: 0;'>C R O N C H</span>"`;
     },
   },
   {
@@ -1440,7 +1441,7 @@ GameDatabase.news = [
   },
   {
     id: "a246",
-    text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
+    text: "<span style='animation: a-fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
   },
   (function() {
     let isFlipped = false;
@@ -1504,7 +1505,7 @@ GameDatabase.news = [
   {
     id: "a252",
     get text() {
-      return `<span style='animation: text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
+      return `<span style='animation: a-text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
     },
   },
   {
@@ -2255,7 +2256,7 @@ GameDatabase.news = [
   {
     id: "a352",
     get text() {
-      return `<span style='opacity: 0; animation: disappear ${newsAnimSpd(20)}s 1'>
+      return `<span style='opacity: 0; animation: a-disappear ${newsAnimSpd(20)}s 1'>
       This news message is antimemetic. You will forget that it exists shortly.</span>`;
     }
   },

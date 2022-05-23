@@ -1,6 +1,6 @@
 <script>
-import GlyphSetName from "@/components/GlyphSetName";
 import CurrentGlyphEffect from "./CurrentGlyphEffect";
+import GlyphSetName from "@/components/GlyphSetName";
 
 const glyphEffectsOrder =
   ["powerpow", "powermult", "powerdimboost", "powerbuy10",

@@ -1,5 +1,6 @@
-import { InfinityDimensions } from "../globals.js";
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { InfinityDimensions } from "../globals";
+
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {
@@ -27,7 +28,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerID(this.tier).isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
+    return EternityMilestone[`autobuyerID${this.tier}`].isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
   }
 
   get resetTickOn() {

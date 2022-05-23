@@ -1,6 +1,7 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { CelestialQuotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
@@ -172,17 +173,10 @@ export const TeresaUnlocks = mapGameDataToObject(
   config => new TeresaUnlockState(config)
 );
 
-export const PerkShopUpgrade = (function() {
-  const db = GameDatabase.celestials.perkShop;
-  return {
-    glyphLevel: new PerkShopUpgradeState(db.glyphLevel),
-    rmMult: new PerkShopUpgradeState(db.rmMult),
-    bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
-    autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
-    musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
-    fillMusicGlyph: new PerkShopUpgradeState(db.fillMusicGlyph),
-  };
-}());
+export const PerkShopUpgrade = mapGameDataToObject(
+  GameDatabase.celestials.perkShop,
+  config => new PerkShopUpgradeState(config)
+);
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);

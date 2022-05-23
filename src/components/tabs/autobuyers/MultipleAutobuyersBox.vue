@@ -1,6 +1,6 @@
 <script>
-import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
+import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
 
 export default {
   name: "MultipleAutobuyersBox",

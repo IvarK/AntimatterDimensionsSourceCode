@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 // Used for UI purposes to give different theming for different kinds of upgrades
 export const LAITELA_UPGRADE_DIRECTION = {

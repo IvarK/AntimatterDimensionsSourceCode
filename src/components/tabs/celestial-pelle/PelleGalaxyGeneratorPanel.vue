@@ -145,24 +145,26 @@ export default {
 
 <style scoped>
 .c-pelle-panel-title {
-  font-weight: bold;
-  font-size: 3rem;
-  color: var(--color-pelle--base);
   position: relative;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--color-pelle--base);
 }
 
 .c-collapse-icon-clickable {
   position: absolute;
-  left: 1.5rem;
   top: 50%;
+  left: 1.5rem;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 
 .l-pelle-panel-container {
-  padding: 1rem;
-  margin: 1rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.2rem);
+  margin: 1rem;
+  padding: 1rem;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -173,16 +175,16 @@ export default {
 }
 
 .c-generator-unlock-button {
-  padding: 2rem;
-  border-radius: var(--var-border-radius, 0.5rem);
-  font-family: Typewriter;
-  cursor: pointer;
   width: 25rem;
   height: 10rem;
+  font-family: Typewriter;
   font-size: 2rem;
-  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
-  color: black;
   font-weight: bold;
+  color: black;
+  background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 2rem;
+  cursor: pointer;
 }
 
 .l-galaxy-generator-upgrades-container {
@@ -192,35 +194,36 @@ export default {
 }
 
 .c-galaxies-amount {
-  font-weight: bold;
   font-size: 2.5rem;
+  font-weight: bold;
   background: linear-gradient(var(--color-pelle--secondary), var(--color-pelle--base));
   background-clip: text;
-  -webkit-background-clip: text;
+
   -webkit-text-fill-color: transparent;
 }
 
 .highlight {
-  font-weight: bold;
   font-size: 2rem;
+  font-weight: bold;
   color: var(--color-pelle--base);
 }
 
 .c-increase-cap {
-  padding: 2rem;
+  overflow: hidden;
+  width: 100%;
+  height: 11.4rem;
+  max-width: 70rem;
+  position: relative;
+  font-family: Typewriter;
+  font-size: 1.1rem;
   color: white;
   background-color: #004b55;
   border: var(--var-border-width, 0.1rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
-  font-family: Typewriter;
-  margin: 1rem;
-  font-size: 1.1rem;
-  position: relative;
-  width: 100%;
-  max-width: 70rem;
-  height: 11.4rem;
-  overflow: hidden;
   box-shadow: inset 0 0 0.1rem 0.1rem var(--color-pelle--base);
+  margin: 1rem;
+  padding: 2rem;
+
   /* box-shadow is here to prevent a weird grey border forming around the background */
 }
 
@@ -239,12 +242,12 @@ export default {
 }
 
 .c-increase-cap-background {
-  background: linear-gradient(black, var(--color-pelle--base));
-  left: 0;
-  top: 0;
   height: 100%;
   position: absolute;
+  top: 0;
+  left: 0;
   z-index: 0;
+  background: linear-gradient(black, var(--color-pelle--base));
   transition: width 0.1s;
 }
 
@@ -256,9 +259,5 @@ export default {
 .c-medium-text {
   font-size: 2rem;
   text-shadow: 0.2rem 0.2rem 0.2rem black;
-}
-
-.c-collapse-icon-clickable {
-  cursor: pointer;
 }
 </style>

@@ -1,4 +1,4 @@
-import { GameMechanicState } from "../../game-mechanics/index.js";
+import { GameMechanicState } from "../../game-mechanics/index";
 
 /**
  * @abstract
@@ -224,44 +224,16 @@ class AlchemyReaction {
   }
 }
 
-export const AlchemyResource = (function() {
-  function createResource(resource) {
-    const config = GameDatabase.celestials.alchemy.resources[resource];
-    config.id = resource;
-    if (config.isBaseResource) {
-      return new BasicAlchemyResourceState(config);
-    }
-    return new AdvancedAlchemyResourceState(config);
-  }
-
-  return {
-    power: createResource(ALCHEMY_RESOURCE.POWER),
-    infinity: createResource(ALCHEMY_RESOURCE.INFINITY),
-    time: createResource(ALCHEMY_RESOURCE.TIME),
-    replication: createResource(ALCHEMY_RESOURCE.REPLICATION),
-    dilation: createResource(ALCHEMY_RESOURCE.DILATION),
-    cardinality: createResource(ALCHEMY_RESOURCE.CARDINALITY),
-    eternity: createResource(ALCHEMY_RESOURCE.ETERNITY),
-    dimensionality: createResource(ALCHEMY_RESOURCE.DIMENSIONALITY),
-    inflation: createResource(ALCHEMY_RESOURCE.INFLATION),
-    alternation: createResource(ALCHEMY_RESOURCE.ALTERNATION),
-    effarig: createResource(ALCHEMY_RESOURCE.EFFARIG),
-    synergism: createResource(ALCHEMY_RESOURCE.SYNERGISM),
-    momentum: createResource(ALCHEMY_RESOURCE.MOMENTUM),
-    decoherence: createResource(ALCHEMY_RESOURCE.DECOHERENCE),
-    exponential: createResource(ALCHEMY_RESOURCE.EXPONENTIAL),
-    force: createResource(ALCHEMY_RESOURCE.FORCE),
-    uncountability: createResource(ALCHEMY_RESOURCE.UNCOUNTABILITY),
-    boundless: createResource(ALCHEMY_RESOURCE.BOUNDLESS),
-    multiversal: createResource(ALCHEMY_RESOURCE.MULTIVERSAL),
-    unpredictability: createResource(ALCHEMY_RESOURCE.UNPREDICTABILITY),
-    reality: createResource(ALCHEMY_RESOURCE.REALITY)
-  };
-}());
+export const AlchemyResource = mapGameDataToObject(
+  GameDatabase.celestials.alchemy.resources,
+  config => (config.isBaseResource
+    ? new BasicAlchemyResourceState(config)
+    : new AdvancedAlchemyResourceState(config))
+);
 
 export const AlchemyResources = {
-  all: Object.values(AlchemyResource),
-  base: Object.values(AlchemyResource).filter(r => r.isBaseResource)
+  all: AlchemyResource.all,
+  base: AlchemyResource.all.filter(r => r.isBaseResource)
 };
 
 export const AlchemyReactions = (function() {
@@ -269,7 +241,7 @@ export const AlchemyReactions = (function() {
   function mapReagents(resource) {
     return resource.config.reagents
       .map(r => ({
-        resource: AlchemyResources.all[r.resource],
+        resource: AlchemyResources.all.find(x => x.id === r.resource),
         cost: r.amount
       }));
   }

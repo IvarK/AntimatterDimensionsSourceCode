@@ -1,7 +1,7 @@
 <script>
+import InfinityUpgradeButton from "@/components/InfinityUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import InfinityUpgradeButton from "@/components/InfinityUpgradeButton";
 
 export default {
   name: "IpMultiplierButton",

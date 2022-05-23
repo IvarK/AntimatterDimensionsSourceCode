@@ -1,8 +1,8 @@
 <script>
-import GlyphSortButtonGroup from "./GlyphSortButtonGroup";
-import GlyphProtectedRowButtonGroup from "./GlyphProtectedRowButtonGroup";
 import GlyphAutosortButtonGroup from "./GlyphAutosortButtonGroup";
 import GlyphCleanButtonGroup from "./GlyphCleanButtonGroup";
+import GlyphProtectedRowButtonGroup from "./GlyphProtectedRowButtonGroup";
+import GlyphSortButtonGroup from "./GlyphSortButtonGroup";
 
 export default {
   name: "GlyphInventoryManagementPanel",

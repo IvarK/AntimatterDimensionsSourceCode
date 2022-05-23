@@ -35,19 +35,17 @@ export const AutomatorPoints = {
   }
 };
 
-GameDatabase.reality.otherAutomatorPoints = (function() {
-  return [
-    {
-      name: "Reality Count",
-      automatorPoints: () => 2 * Math.clampMax(Currency.realities.value, 100),
-      shortDescription: () => `+${formatInt(2)} per Reality, up to ${formatInt(100)} Realities`,
-      symbol: "Ϟ",
-    },
-    {
-      name: "Black Hole",
-      automatorPoints: () => (BlackHole(1).isUnlocked ? 10 : 0),
-      shortDescription: () => `Unlocking gives ${formatInt(10)} AP`,
-      symbol: "<i class='fas fa-circle'></i>",
-    },
-  ];
-}());
+GameDatabase.reality.otherAutomatorPoints = [
+  {
+    name: "Reality Count",
+    automatorPoints: () => 2 * Math.clampMax(Currency.realities.value, 100),
+    shortDescription: () => `+${formatInt(2)} per Reality, up to ${formatInt(100)} Realities`,
+    symbol: "Ϟ",
+  },
+  {
+    name: "Black Hole",
+    automatorPoints: () => (BlackHole(1).isUnlocked ? 10 : 0),
+    shortDescription: () => `Unlocking gives ${formatInt(10)} AP`,
+    symbol: "<i class='fas fa-circle'></i>",
+  },
+];

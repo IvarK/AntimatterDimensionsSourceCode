@@ -1,7 +1,7 @@
 <script>
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import PrimaryButton from "@/components/PrimaryButton";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import PrimaryButton from "@/components/PrimaryButton";
 import VUnlockRequirement from "./VUnlockRequirement";
 
 export default {
@@ -335,6 +335,6 @@ export default {
 }
 
 .l-v-goal-reduction-spacer {
-  height :0.8rem;
+  height: 0.8rem;
 }
 </style>

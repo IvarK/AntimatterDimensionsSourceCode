@@ -1,5 +1,5 @@
 import { GameDatabase } from "./secret-formula/game-database";
-import { GameMechanicState } from "./game-mechanics/index.js";
+import { GameMechanicState } from "./game-mechanics/index";
 
 export const Speedrun = {
   unlock() {

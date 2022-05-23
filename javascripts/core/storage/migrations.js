@@ -1,5 +1,5 @@
-import { GameStorage } from "./storage.js";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { GameStorage } from "./storage";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {

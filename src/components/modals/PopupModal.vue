@@ -35,6 +35,7 @@ export default {
   <component
     :is="modal.component"
     v-if="modal.isBare && !forceDontShowModal"
+    v-bind="modal.props"
     :modal-config="modal.props"
   />
   <div
@@ -43,6 +44,7 @@ export default {
   >
     <component
       :is="modal.component"
+      v-bind="modal.props"
       :modal-config="modal.props"
       @close="hide"
     />

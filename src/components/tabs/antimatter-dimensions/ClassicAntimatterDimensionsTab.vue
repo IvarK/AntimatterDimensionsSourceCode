@@ -1,10 +1,10 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
 import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
 import AntimatterGalaxyRow from "./ClassicAntimatterGalaxyRow";
-import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import DimensionBoostRow from "./ClassicDimensionBoostRow";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ClassicAntimatterDimensionsTab",

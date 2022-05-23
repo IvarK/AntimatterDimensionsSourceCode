@@ -1,7 +1,7 @@
 <script>
 import GlyphSetName from "@/components/GlyphSetName";
-import ModalWrapper from "@/components/modals/ModalWrapper";
 import GlyphShowcasePanelEntry from "@/components/modals/GlyphShowcasePanelEntry";
+import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "GlyphShowcasePanelModal",
@@ -11,16 +11,30 @@ export default {
     GlyphShowcasePanelEntry,
   },
   props: {
-    modalConfig: {
-      type: Object,
-      required: true,
-      name: String,
-      glyphSet: Array,
-      closeOn: String,
-      isGlyphSelection: Boolean,
-      showSetName: Boolean,
-      displaySacrifice: Boolean,
-    }
+    name: {
+      type: String,
+      required: true
+    },
+    glyphSet: {
+      type: Array,
+      required: true
+    },
+    closeOn: {
+      type: String,
+      required: true
+    },
+    isGlyphSelection: {
+      type: Boolean,
+      default: false
+    },
+    showSetName: {
+      type: Boolean,
+      default: true
+    },
+    displaySacrifice: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
@@ -31,9 +45,6 @@ export default {
     };
   },
   computed: {
-    isGlyphSelection() {
-      return this.modalConfig.isGlyphSelection;
-    },
     maxGlyphEffects() {
       let maxEffects = 1;
       for (const glyph of this.glyphs) {
@@ -43,13 +54,13 @@ export default {
     },
   },
   created() {
-    this.on$(this.modalConfig.closeOn, this.emitClose);
+    this.on$(this.closeOn, this.emitClose);
   },
   methods: {
     update() {
       this.glyphs = this.isGlyphSelection
         ? GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false })
-        : this.modalConfig.glyphSet.filter(x => x);
+        : this.glyphSet.filter(x => x);
       this.gainedLevel = gainedGlyphLevel().actualLevel;
       // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
       const realityGlyph = this.glyphs.filter(g => g.type === "reality")[0];
@@ -64,13 +75,13 @@ export default {
 <template>
   <ModalWrapper>
     <template #header>
-      {{ modalConfig.name }}
+      {{ name }}
     </template>
     <div v-if="isGlyphSelection">
       Projected Glyph Level: {{ formatInt(gainedLevel) }}
     </div>
     <GlyphSetName
-      v-if="modalConfig.showSetName"
+      v-if="showSetName"
       :glyph-set="glyphs"
       :force-color="true"
     />
@@ -84,7 +95,7 @@ export default {
         :show-level="!isGlyphSelection"
         :reality-glyph-boost="realityGlyphBoost"
         :max-glyph-effects="maxGlyphEffects"
-        :show-sacrifice="modalConfig.displaySacrifice"
+        :show-sacrifice="displaySacrifice"
       />
     </div>
   </ModalWrapper>

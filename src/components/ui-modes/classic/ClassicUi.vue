@@ -1,11 +1,12 @@
 <script>
 import GameHeader from "../GameHeader";
+import NewsTicker from "../NewsTicker";
+
 import ClassicBigCrunchButton from "./ClassicBigCrunchButton";
 import ClassicSubtabBar from "./ClassicSubtabBar";
 import ClassicTabBar from "./ClassicTabBar";
-import NewsTicker from "../NewsTicker";
-import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
+import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 import RealityMachinesHeader from "@/components/RealityMachinesHeader";
 
 export default {

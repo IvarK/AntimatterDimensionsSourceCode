@@ -62,8 +62,8 @@ export default {
       this.canGetHint = this.currentStored >= this.nextHintCost;
       this.shownEntries = [];
 
-      this.realityHintsLeft = Object.values(EnslavedProgress).length;
-      for (const prog of Object.values(EnslavedProgress)) {
+      this.realityHintsLeft = EnslavedProgress.all.length;
+      for (const prog of EnslavedProgress.all) {
         if (prog.hasHint) {
           this.shownEntries.push([prog.hasProgress
             ? prog.config.progress
@@ -82,7 +82,7 @@ export default {
     },
     giveRealityHint(available) {
       if (available <= 0 || !Enslaved.spendTimeForHint()) return;
-      Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().unlock();
+      EnslavedProgress.all.filter(prog => !prog.hasHint).randomElement().unlock();
     },
     giveGlyphHint(available) {
       if (available <= 0 || !Enslaved.spendTimeForHint()) return;

@@ -7,13 +7,12 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    bulk: {
+      type: Number,
       required: true,
     }
   },
   computed: {
-    bulk() { return this.modalConfig.bulk; },
     topLabel() {
       return `You are about to do a Dimension Boost Reset`;
     },

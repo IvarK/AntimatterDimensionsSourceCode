@@ -178,41 +178,14 @@ class EffarigUnlockState extends BitUpgradeState {
   purchase() {
     if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return;
     this.unlock();
-    switch (this) {
-      case EffarigUnlock.adjuster:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
-        ui.view.tabs.reality.openGlyphWeights = true;
-        Tab.reality.glyphs.show();
-        break;
-      case EffarigUnlock.glyphFilter:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_GLYPH_FILTER);
-        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.FILTER_SETTINGS;
-        break;
-      case EffarigUnlock.setSaves:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_SET_SAVES);
-        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.SAVED_SETS;
-        break;
-      case EffarigUnlock.run:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
-        break;
-      default:
-        throw new Error("Unknown Effarig upgrade");
-    }
+    this.config.onPurchased?.();
   }
 }
 
-export const EffarigUnlock = (function() {
-  const db = GameDatabase.celestials.effarig.unlocks;
-  return {
-    adjuster: new EffarigUnlockState(db.adjuster),
-    glyphFilter: new EffarigUnlockState(db.glyphFilter),
-    setSaves: new EffarigUnlockState(db.setSaves),
-    run: new EffarigUnlockState(db.run),
-    infinity: new EffarigUnlockState(db.infinity),
-    eternity: new EffarigUnlockState(db.eternity),
-    reality: new EffarigUnlockState(db.reality),
-  };
-}());
+export const EffarigUnlock = mapGameDataToObject(
+  GameDatabase.celestials.effarig.unlocks,
+  config => new EffarigUnlockState(config)
+);
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.INITIAL);

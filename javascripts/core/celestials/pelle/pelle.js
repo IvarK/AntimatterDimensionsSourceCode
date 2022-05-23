@@ -118,7 +118,8 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [143, 142, 141, 133, 125, 118, 117, 111, 104, 103, 92, 91, 78, 76, 74, 65, 55, 54, 37];
+    return [164, 143, 142, 141, 137, 134, 133, 132, 125, 118, 117, 113, 111, 104, 103, 93, 92, 91, 87, 85, 78, 76,
+      74, 65, 55, 54, 37];
   },
 
   get uselessInfinityUpgrades() {
@@ -455,15 +456,13 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
 
 }
 
-export const PelleUpgrade = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.upgrades,
-    config => (config.rebuyable
-      ? new RebuyablePelleUpgradeState(config)
-      : new PelleUpgradeState(config)
-    )
-  );
-}());
+export const PelleUpgrade = mapGameDataToObject(
+  GameDatabase.celestials.pelle.upgrades,
+  config => (config.rebuyable
+    ? new RebuyablePelleUpgradeState(config)
+    : new PelleUpgradeState(config)
+  )
+);
 
 PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
 PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable);

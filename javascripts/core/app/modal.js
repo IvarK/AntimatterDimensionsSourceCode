@@ -57,36 +57,32 @@ import SacrificeModal from "@/components/modals/SacrificeModal";
 import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
 import StdStoreModal from "@/components/modals/StdStoreModal";
 import StudyStringModal from "@/components/modals/StudyStringModal";
+import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
 import UiChoiceModal from "@/components/modals/UiChoiceModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 
 
 export class Modal {
-  constructor(component, bare = false) {
+  constructor(component, priority = 0, bare = false) {
     this._component = component;
     this._bare = bare;
     this._modalConfig = {};
-    this._prioritize = false;
+    this._priority = priority;
   }
 
   show(modalConfig) {
     if (!GameUI.initialized) return;
     this._props = Object.assign({}, modalConfig || {});
-    if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
-    // New modals go to the back of the queue (shown last).
-    if (!ui.view.modal.queue.includes(this)) {
-      if (this._prioritize) {
-        ui.view.modal.queue.unshift(this);
-        ui.view.modal.current = this;
-      } else {
-        ui.view.modal.queue.push(this);
-      }
-    }
-  }
 
-  prioritize() {
-    this._prioritize = true;
-    return this;
+    const modalQueue = ui.view.modal.queue;
+    // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
+    modalQueue.unshift(this);
+    modalQueue.sort((x, y) => y.priority - x.priority);
+    // Filter out multiple instances of the same modal.
+    const singleQueue = [...new Set(modalQueue)];
+    ui.view.modal.queue = singleQueue;
+    // If the front of the queue is what is currently presented, we dont need to do anything.
+    if (!singleQueue[0].isOpen) ui.view.modal.current = singleQueue[0];
   }
 
   get isOpen() {
@@ -103,6 +99,10 @@ export class Modal {
 
   get props() {
     return this._props;
+  }
+
+  get priority() {
+    return this._priority;
   }
 
   static hide() {
@@ -132,8 +132,7 @@ export class Modal {
 
 class ChallengeConfirmationModal extends Modal {
   show(id) {
-    this.id = id;
-    super.show();
+    super.show({ id });
   }
 }
 
@@ -144,20 +143,20 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeS
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
 
-Modal.dimensionBoost = new Modal(DimensionBoostModal).prioritize();
-Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal).prioritize();
-Modal.bigCrunch = new Modal(BigCrunchModal).prioritize();
-Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal).prioritize();
-Modal.eternity = new Modal(EternityModal).prioritize();
-Modal.enterDilation = new Modal(EnterDilationModal).prioritize();
-Modal.reality = new Modal(RealityModal).prioritize();
-Modal.resetReality = new Modal(ResetRealityModal).prioritize();
-Modal.exitCelestialReality = new Modal(ExitCelestialModal).prioritize();
-Modal.celestials = new Modal(EnterCelestialsModal).prioritize();
-Modal.hardReset = new Modal(HardResetModal).prioritize();
+Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
+Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);
+Modal.bigCrunch = new Modal(BigCrunchModal, 1);
+Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal, 1);
+Modal.eternity = new Modal(EternityModal, 1);
+Modal.enterDilation = new Modal(EnterDilationModal, 1);
+Modal.reality = new Modal(RealityModal, 1);
+Modal.resetReality = new Modal(ResetRealityModal, 1);
+Modal.exitCelestialReality = new Modal(ExitCelestialModal, 1);
+Modal.celestials = new Modal(EnterCelestialsModal, 1);
+Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.changeName = new Modal(ChangeNameModal);
-Modal.armageddon = new Modal(ArmageddonModal).prioritize();
+Modal.armageddon = new Modal(ArmageddonModal, 1);
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
@@ -168,16 +167,16 @@ Modal.animationOptions = new Modal(AnimationOptionsModal);
 Modal.hiddenTabs = new Modal(HiddenTabsModal);
 Modal.preferredTree = new Modal(PreferredTreeModal);
 
-Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal).prioritize();
-Modal.glyphDelete = new Modal(DeleteGlyphModal).prioritize();
-Modal.glyphPurge = new Modal(PurgeGlyphModal).prioritize();
-Modal.glyphSacrifice = new Modal(SacrificeGlyphModal).prioritize();
-Modal.glyphRefine = new Modal(RefineGlyphModal).prioritize();
-Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal).prioritize();
-Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal).prioritize();
+Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal, 1);
+Modal.glyphDelete = new Modal(DeleteGlyphModal, 1);
+Modal.glyphPurge = new Modal(PurgeGlyphModal, 1);
+Modal.glyphSacrifice = new Modal(SacrificeGlyphModal, 1);
+Modal.glyphRefine = new Modal(RefineGlyphModal, 1);
+Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal, 1);
+Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal, 1);
 
 Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
-Modal.glyphUndo = new Modal(UndoGlyphModal).prioritize();
+Modal.glyphUndo = new Modal(UndoGlyphModal, 1);
 Modal.glyphReplace = new Modal(ReplaceGlyphModal);
 Modal.enslavedHints = new Modal(EnslavedHintsModal);
 Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
@@ -191,12 +190,13 @@ Modal.import = new Modal(ImportSaveModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
+Modal.switchAutomatorEditorMode = new Modal(SwitchAutomatorEditorModal);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
-Modal.sacrifice = new Modal(SacrificeModal).prioritize();
-Modal.breakInfinity = new Modal(BreakInfinityModal);
+Modal.sacrifice = new Modal(SacrificeModal, 1);
+Modal.breakInfinity = new Modal(BreakInfinityModal, 1);
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized || player.speedrun.isActive) return;
@@ -245,7 +245,7 @@ Modal.celestialQuote = new class extends Modal {
     }
     return x;
   }
-}(CelestialQuoteModal, true);
+}(CelestialQuoteModal, 2, true);
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
@@ -319,4 +319,4 @@ Modal.message = new class extends Modal {
       this.closeButton = this.queue[0].closeButton;
     }
   }
-}(MessageModal);
+}(MessageModal, 2);

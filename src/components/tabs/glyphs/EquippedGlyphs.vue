@@ -130,9 +130,6 @@ export default {
         name: "Equipped Glyphs",
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
-        isGlyphSelection: false,
-        showSetName: true,
-        displaySacrifice: true,
       });
     },
     clickGlyph(glyph, idx) {

@@ -94,16 +94,16 @@ dev.tripleEverything = function() {
 };
 
 dev.barrelRoll = function() {
-  FullScreenAnimationHandler.display("barrelRoll", 5);
+  FullScreenAnimationHandler.display("a-barrel-roll", 5);
 };
 
 dev.spin3d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
+  if (document.body.style.animation === "") document.body.style.animation = "a-spin3d 3s infinite";
   else document.body.style.animation = "";
 };
 
 dev.spin4d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
+  if (document.body.style.animation === "") document.body.style.animation = "a-spin4d 3s infinite";
   else document.body.style.animation = "";
 };
 
@@ -166,7 +166,7 @@ dev.resetDilation = function() {
 // when making a special glyph, so no max-params
 // eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
-  if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
+  if (!Object.prototype.hasOwnProperty.call(specialGlyphSymbols, symbol)) return;
   if (Glyphs.freeInventorySpace === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;

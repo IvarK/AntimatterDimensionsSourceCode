@@ -59,6 +59,6 @@ export default {
 }
 
 .t-s3 .o-save-timer {
-  animation: glasses 7s infinite;
+  animation: a-glasses 7s infinite;
 }
 </style>

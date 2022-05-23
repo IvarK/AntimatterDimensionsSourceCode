@@ -640,18 +640,10 @@ export const Glyphs = {
 
 class GlyphSacrificeState extends GameMechanicState { }
 
-export const GlyphSacrifice = (function() {
-  const db = GameDatabase.reality.glyphSacrifice;
-  return {
-    time: new GlyphSacrificeState(db.time),
-    dilation: new GlyphSacrificeState(db.dilation),
-    replication: new GlyphSacrificeState(db.replication),
-    infinity: new GlyphSacrificeState(db.infinity),
-    power: new GlyphSacrificeState(db.power),
-    effarig: new GlyphSacrificeState(db.effarig),
-    reality: new GlyphSacrificeState(db.reality),
-  };
-}());
+export const GlyphSacrifice = mapGameDataToObject(
+  GameDatabase.reality.glyphSacrifice,
+  config => new GlyphSacrificeState(config)
+);
 
 export function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {

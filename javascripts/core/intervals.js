@@ -30,7 +30,10 @@ export const GameIntervals = (function() {
     // Not a getter because getter will cause stack overflow
     all() {
       return Object.values(GameIntervals)
-        .filter(i => i.hasOwnProperty("start") && i.hasOwnProperty("stop"));
+        .filter(i =>
+          Object.prototype.hasOwnProperty.call(i, "start") &&
+          Object.prototype.hasOwnProperty.call(i, "stop")
+        );
     },
     start() {
       // eslint-disable-next-line no-shadow

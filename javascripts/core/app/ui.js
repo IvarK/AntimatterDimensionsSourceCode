@@ -97,7 +97,7 @@ const ReactivityComplainer = {
       throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
-      if (!obj.hasOwnProperty(key)) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
       const prop = obj[key];
       if (typeof prop === "object") {
         this.checkReactivity(prop, `${path}.${key}`);

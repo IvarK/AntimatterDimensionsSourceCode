@@ -8,9 +8,6 @@ export default {
     ModalWrapperChoice
   },
   computed: {
-    modal() {
-      return this.$viewModel.modal.current;
-    },
     message() {
       return `Dilating time will start a new Eternity, and all Dimension multiplier's exponents and
         tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,

@@ -67,7 +67,7 @@ body.t-s9 {
   height: 7rem;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-base);
+  background-color: var(--color-prestige--accent);
   border-right: 0.1rem solid var(--color-accent);
   border-bottom: 0.1rem solid var(--color-accent);
   padding: 1rem;
@@ -312,7 +312,7 @@ body.t-s9 {
   line-height: 2.8rem;
   opacity: 0;
   color: var(--color-text);
-  background: var(--color-base);
+  background: var(--color-prestige--accent);
   border: 0.1rem solid var(--color-accent);
   margin-left: -7.7rem;
   transition-duration: 0.2s;
@@ -346,7 +346,6 @@ body.t-s9 {
 
 .o-tab-btn--infinity .o-subtab__tooltip {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
@@ -356,7 +355,6 @@ body.t-s9 {
 
 .o-tab-btn--eternity .o-subtab__tooltip {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
@@ -366,7 +364,6 @@ body.t-s9 {
 
 .o-tab-btn--reality .o-subtab__tooltip {
   color: var(--color-reality);
-  background: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
@@ -376,7 +373,6 @@ body.t-s9 {
 
 .o-tab-btn--celestial .o-subtab__tooltip {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 

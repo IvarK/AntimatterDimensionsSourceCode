@@ -58,7 +58,7 @@ function giveEternityRewards(auto) {
 }
 
 export function eternityAnimation() {
-  FullScreenAnimationHandler.display("eternify", 3);
+  FullScreenAnimationHandler.display("a-eternify", 3);
 }
 
 export function eternityResetRequest() {
@@ -87,7 +87,7 @@ export function eternity(force, auto, specialConditions = {}) {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
 
-  if (!EternityMilestone.keepAutobuyers.isReached) {
+  if (!EternityMilestone.keepAutobuyers.isReached && !(Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied)) {
     // Fix infinity because it can only break after big crunch autobuyer interval is maxed
     player.break = false;
   }
@@ -194,44 +194,12 @@ export class EternityMilestoneState {
     return Currency.eternities.gte(this.config.eternities);
   }
 }
-
-export const EternityMilestone = (function() {
-  const db = GameDatabase.eternity.milestones;
-  const infinityDims = Array.dimensionTiers
-    .map(tier => new EternityMilestoneState(db[`autobuyerID${tier}`]));
-  return {
-    autobuyerIPMult: new EternityMilestoneState(db.autobuyerIPMult),
-    keepAutobuyers: new EternityMilestoneState(db.keepAutobuyers),
-    autobuyerReplicantiGalaxy: new EternityMilestoneState(db.autobuyerReplicantiGalaxy),
-    keepInfinityUpgrades: new EternityMilestoneState(db.keepInfinityUpgrades),
-    bigCrunchModes: new EternityMilestoneState(db.bigCrunchModes),
-    autoEP: new EternityMilestoneState(db.autoEP),
-    autoIC: new EternityMilestoneState(db.autoIC),
-    autobuyMaxGalaxies: new EternityMilestoneState(db.autobuyMaxGalaxies),
-    unlockReplicanti: new EternityMilestoneState(db.unlockReplicanti),
-    autobuyerID: tier => infinityDims[tier - 1],
-    keepBreakUpgrades: new EternityMilestoneState(db.keepBreakUpgrades),
-    autoUnlockID: new EternityMilestoneState(db.autoUnlockID),
-    unlockAllND: new EternityMilestoneState(db.unlockAllND),
-    replicantiNoReset: new EternityMilestoneState(db.replicantiNoReset),
-    autobuyerReplicantiChance: new EternityMilestoneState(db.autobuyerReplicantiChance),
-    autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
-    autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
-    autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
-    autoEternities: new EternityMilestoneState(db.autoEternities),
-    autoInfinities: new EternityMilestoneState(db.autoInfinities),
-  };
-}());
-
-export const EternityMilestones = {
-  // This is a bit of a hack because autobuyerID is a function that returns EternityMilestoneState objects instead of a
-  // EternityMilestoneState object itself
-  all: Object.values(EternityMilestone)
-    .filter(m => typeof m !== "function")
-    .concat(Array.dimensionTiers
-      .map(tier => new EternityMilestoneState(GameDatabase.eternity.milestones[`autobuyerID${tier}`]))
-    )
-};
+export const EternityMilestone = mapGameDataToObject(
+  GameDatabase.eternity.milestones,
+  config => (config.isBaseResource
+    ? new EternityMilestoneState(config)
+    : new EternityMilestoneState(config))
+);
 
 class EternityUpgradeState extends SetPurchasableMechanicState {
   get currency() {
@@ -319,16 +287,9 @@ class EPMultiplierState extends GameMechanicState {
   }
 }
 
+export const EternityUpgrade = mapGameDataToObject(
+  GameDatabase.eternity.upgrades,
+  config => new EternityUpgradeState(config)
+);
 
-export const EternityUpgrade = (function() {
-  const db = GameDatabase.eternity.upgrades;
-  return {
-    idMultEP: new EternityUpgradeState(db.idMultEP),
-    idMultEternities: new EternityUpgradeState(db.idMultEternities),
-    idMultICRecords: new EternityUpgradeState(db.idMultICRecords),
-    tdMultAchs: new EternityUpgradeState(db.tdMultAchs),
-    tdMultTheorems: new EternityUpgradeState(db.tdMultTheorems),
-    tdMultRealTime: new EternityUpgradeState(db.tdMultRealTime),
-    epMult: new EPMultiplierState(),
-  };
-}());
+EternityUpgrade.epMult = new EPMultiplierState();

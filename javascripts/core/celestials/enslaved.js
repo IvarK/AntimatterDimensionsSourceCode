@@ -266,19 +266,10 @@ class EnslavedProgressState extends BitUpgradeState {
   }
 }
 
-export const EnslavedProgress = (function() {
-  const db = GameDatabase.celestials.enslaved.progress;
-  return {
-    hintsUnlocked: new EnslavedProgressState(db.hintsUnlocked),
-    ec1: new EnslavedProgressState(db.ec1),
-    feelEternity: new EnslavedProgressState(db.feelEternity),
-    ec6: new EnslavedProgressState(db.ec6),
-    c10: new EnslavedProgressState(db.c10),
-    secretStudy: new EnslavedProgressState(db.secretStudy),
-    storedTime: new EnslavedProgressState(db.storedTime),
-    challengeCombo: new EnslavedProgressState(db.challengeCombo),
-  };
-}());
+export const EnslavedProgress = mapGameDataToObject(
+  GameDatabase.celestials.enslaved.progress,
+  config => new EnslavedProgressState(config)
+);
 
 export const Tesseracts = {
   get bought() {

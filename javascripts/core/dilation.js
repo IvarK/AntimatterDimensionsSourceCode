@@ -4,12 +4,12 @@ import FullScreenAnimationHandler from "./full-screen-animation-handler";
 import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
-  FullScreenAnimationHandler.display("dilate", 2);
+  FullScreenAnimationHandler.display("a-dilate", 2);
   setTimeout(startDilatedEternity, 1000);
 }
 
 export function animateAndUndilate() {
-  FullScreenAnimationHandler.display("undilate", 2);
+  FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
   }, 1000);
@@ -222,26 +222,12 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 }
 
-export const DilationUpgrade = (function() {
-  const db = GameDatabase.eternity.dilation;
-  return {
-    dtGain: new RebuyableDilationUpgradeState(db.dtGain),
-    galaxyThreshold: new RebuyableDilationUpgradeState(db.galaxyThreshold),
-    tachyonGain: new RebuyableDilationUpgradeState(db.tachyonGain),
-    doubleGalaxies: new DilationUpgradeState(db.doubleGalaxies),
-    tdMultReplicanti: new DilationUpgradeState(db.tdMultReplicanti),
-    ndMultDT: new DilationUpgradeState(db.ndMultDT),
-    ipMultDT: new DilationUpgradeState(db.ipMultDT),
-    timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
-    dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
-    ttGenerator: new DilationUpgradeState(db.ttGenerator),
-    dtGainPelle: new RebuyableDilationUpgradeState(db.dtGainPelle),
-    galaxyMultiplier: new RebuyableDilationUpgradeState(db.galaxyMultiplier),
-    tickspeedPower: new RebuyableDilationUpgradeState(db.tickspeedPower),
-    galaxyThresholdPelle: new DilationUpgradeState(db.galaxyThresholdPelle),
-    flatDilationMult: new DilationUpgradeState(db.flatDilationMult),
-  };
-}());
+export const DilationUpgrade = mapGameDataToObject(
+  GameDatabase.eternity.dilation,
+  config => (config.rebuyable
+    ? new RebuyableDilationUpgradeState(config)
+    : new DilationUpgradeState(config))
+);
 
 export const DilationUpgrades = {
   rebuyable: [
@@ -249,11 +235,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: (function() {
-    const upgradesById = [];
-    for (const upgrade of Object.values(DilationUpgrade)) {
-      upgradesById[upgrade.id] = upgrade;
-    }
-    return id => upgradesById[id];
-  }()),
+  fromId: id => DilationUpgrade.all.find(x => x.id === id)
 };

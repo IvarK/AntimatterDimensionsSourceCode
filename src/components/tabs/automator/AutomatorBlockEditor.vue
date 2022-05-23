@@ -19,7 +19,13 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$refs.blockEditorElement.scrollTo(0, BlockAutomator.previousScrollPosition);
+  },
   methods: {
+    setPreviousScroll() {
+      BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;
+    },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
     },
@@ -130,13 +136,19 @@ export const BlockAutomator = {
   numberOfLinesInBlock(block) {
     return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
   },
+
+  previousScrollPosition: 0
 };
 </script>
 
 <template>
   <div class="c-automator-block-editor--container">
     <div class="c-automator-block-editor--gutter" />
-    <div class="c-automator-block-editor">
+    <div
+      ref="blockEditorElement"
+      class="c-automator-block-editor"
+      @scroll="setPreviousScroll()"
+    >
       <draggable
         v-model="lines"
         group="code-blocks"

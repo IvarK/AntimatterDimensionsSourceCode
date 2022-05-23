@@ -36,6 +36,7 @@ export default {
       return {
         "o-achievement": true,
         "o-achievement--hidden": !this.isUnlocked,
+        "o-achievement--unachievable": this.config.isAchievable === false,
         "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--secret": true
       };
@@ -94,10 +95,10 @@ export default {
           {{ config.name }} (S{{ id }})
         </div>
         <div
-          v-if="isUnlocked"
+          v-if="isUnlocked || config.isAchievable === false"
           class="o-achievement__tooltip__description"
         >
-          {{ config.description }}
+          {{ isUnlocked ? config.description : "You need to progress further before you can unlock this Achievement." }}
         </div>
       </template>
     </div>

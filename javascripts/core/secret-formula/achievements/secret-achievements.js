@@ -35,7 +35,10 @@ GameDatabase.achievements.secret = [
     },
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get isAchievable() {
+      return PlayerProgress.eternityUnlocked();
+    }
   },
   {
     id: 17,
@@ -99,7 +102,13 @@ GameDatabase.achievements.secret = [
   {
     id: 28,
     name: "Nice.",
-    description: "Don't act like you don't know what you did."
+    description: "Don't act like you don't know what you did.",
+    get isAchievable() {
+      return Autobuyer.dimboost.isUnlocked ||
+        Autobuyer.galaxy.isUnlocked ||
+        Autobuyer.bigCrunch.isUnlocked ||
+        PlayerProgress.eternityUnlocked();
+    }
   },
   {
     id: 31,

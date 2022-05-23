@@ -2658,6 +2658,10 @@ screen and (max-width: 480px) {
   border-color: black;
 }
 
+.o-achievement--unachievable {
+  background-image: url("../images/achunachievable.png");
+}
+
 .o-achievement--blink {
   animation: a-achievement--blink 2s step-start 0s infinite;
 }

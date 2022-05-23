@@ -130,7 +130,7 @@ export default {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (!AutomatorGrammar.blockifyTextAutomator(this.currentScript)) {
+      if (this.isBlock && !AutomatorGrammar.blockifyTextAutomator(this.currentScript)) {
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
         Modal.message.show("Automator script has errors, cannot view in blocks.");
       }

@@ -1062,7 +1062,6 @@ window.onload = function() {
       playFabLogin();
     }
     document.getElementById("loading").style.display = "none";
-    document.body.style.overflowY = "auto";
   }, 500);
   if (!supportedBrowser) {
     GameIntervals.stop();

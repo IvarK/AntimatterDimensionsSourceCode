@@ -7,7 +7,8 @@
   animation: none !important;
 }
 
-#ui {
+#ui,
+#ui-fixed {
   filter: saturate(0) !important;
 }
 

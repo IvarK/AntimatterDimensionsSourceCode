@@ -302,12 +302,13 @@ button:focus {
 .time-theorem-buttons {
   display: flex;
   width: 55.5rem;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 2;
   align-items: flex-end;
   font-family: Typewriter, serif;
   color: var(--color-text);
+  pointer-events: all;
 }
 
 .l-tt-buy-button {
@@ -1341,8 +1342,12 @@ br {
  *******/
 
 .c-game-ui {
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
-  height: 100%;
+  /* stylelint-disable-next-line unit-allowed-list */
+  height: 100vh;
+  position: relative;
 }
 
 ._kong-test .c-game-ui {
@@ -5151,7 +5156,7 @@ br {
 .c-tachyon-particle-container {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
@@ -5179,22 +5184,24 @@ br {
   width: 100vw;
   /* stylelint-disable-next-line unit-allowed-list */
   height: 100vh;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 6;
   animation-name: a-modal-overlay-fadein;
   animation-duration: 2s;
   animation-fill-mode: forwards;
+  pointer-events: auto;
 }
 
 .l-modal {
   display: inline-block;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   z-index: 7;
   transform: translate(-50%, -50%);
+  pointer-events: auto;
 }
 
 /* #region c-modal */
@@ -5929,13 +5936,14 @@ kbd {
 .l-notification-container {
   display: flex;
   flex-direction: column-reverse;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   z-index: 1000;
   align-items: flex-end;
   margin-top: 0.5rem;
   margin-right: 1rem;
+  pointer-events: auto;
 }
 
 /* #region o-notification */
@@ -9217,6 +9225,7 @@ input.o-automator-block-input {
   font-weight: 500;
   line-height: 1.9rem;
   border-radius: var(--var-border-radius, 50%);
+  pointer-events: auto;
   cursor: pointer;
 }
 

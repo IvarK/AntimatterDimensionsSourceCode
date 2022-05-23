@@ -173,11 +173,12 @@ export const BlockAutomator = {
 .c-automator-block-editor {
   overflow-y: scroll;
   tab-size: 1.5rem;
+  width: 100%;
   height: 100%;
   position: relative;
   background-color: black;
   box-sizing: border-box;
-  padding: 0.5rem 0.5rem 0.5rem 4rem;
+  padding: 0.5rem 0.5rem 0.5rem 4.5rem;
 }
 
 .c-automator-block-editor--container {
@@ -189,7 +190,7 @@ export const BlockAutomator = {
 }
 
 .c-automator-block-editor--gutter {
-  width: 3.5rem;
+  width: 4rem;
   height: 100%;
   position: absolute;
   top: 0;

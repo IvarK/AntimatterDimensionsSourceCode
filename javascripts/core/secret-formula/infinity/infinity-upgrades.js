@@ -175,11 +175,11 @@ GameDatabase.infinity.upgrades = {
     },
     charged: {
       description: () =>
-        `Gain a percentage of your Reality Machines gained on Reality each real-time second,
-        percent increases with Teresa level`,
-      effect: () => Math.sqrt(Ra.pets.teresa.level) *
+        `Gain Reality Machines each real-time second proportional to amount gained on Reality,
+        proportion increases with Teresa level`,
+      effect: () => Ra.pets.teresa.level * Ra.pets.teresa.level *
         Ra.unlocks.continuousTTBoost.effects.autoPrestige.effectOrDefault(1),
-      formatEffect: value => formatX(value, 2)
+      formatEffect: value => formatX(value, 2, 1)
     }
   },
   skipReset1: {

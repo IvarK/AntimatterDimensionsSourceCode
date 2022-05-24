@@ -36,7 +36,6 @@ export default {
     :is="modal.component"
     v-if="modal.isBare && !forceDontShowModal"
     v-bind="modal.props"
-    :modal-config="modal.props"
   />
   <div
     v-else-if="!forceDontShowModal"
@@ -45,7 +44,6 @@ export default {
     <component
       :is="modal.component"
       v-bind="modal.props"
-      :modal-config="modal.props"
       @close="hide"
     />
   </div>

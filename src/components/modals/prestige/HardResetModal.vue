@@ -16,10 +16,12 @@ export default {
       return this.input === "Shrek is love, Shrek is life";
     },
   },
+  destroyed() {
+    if (this.willHardReset) SecretAchievement(38).unlock();
+  },
   methods: {
     hardReset() {
-      if (!this.willHardReset) return;
-      GameStorage.hardReset();
+      if (this.willHardReset) GameStorage.hardReset();
     },
   },
 };

@@ -51,6 +51,8 @@ export const Glyphs = {
     const isUsableIndex = index => (useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots);
     return this.inventory.findIndex((slot, index) => slot === null && isUsableIndex(index));
   },
+  // This is stored in GameCache and only invalidated if glyphs change; we check for free inventory space often in
+  // lots of places and this is an expensive operation
   get freeInventorySpace() {
     this.validate();
     return this.inventory.filter((e, idx) => e === null && idx >= this.protectedSlots).length;
@@ -380,7 +382,7 @@ export const Glyphs = {
   },
   sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
-    const freeSpace = this.freeInventorySpace;
+    const freeSpace = GameCache.glyphInventorySpace.value;
     const sortOrder = ["power", "infinity", "replication", "time", "dilation", "effarig",
       "reality", "cursed", "companion"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));

@@ -183,6 +183,7 @@ function getGlyphLevelSources() {
 
 export function getGlyphLevelInputs() {
   const sources = getGlyphLevelSources();
+  const staticFactors = GameCache.staticGlyphWeights.value;
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -221,53 +222,65 @@ export function getGlyphLevelInputs() {
   adjustFactor(sources.repl, weights.repl / 100);
   adjustFactor(sources.dt, weights.dt / 100);
   adjustFactor(sources.eternities, weights.eternities / 100);
-  const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
   const shardFactor = Ra.unlocks.relicShardGlyphLevelBoost.effectOrDefault(0);
   let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
-    perkShopEffect + shardFactor;
+    staticFactors.perkShop + shardFactor;
 
   const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(1);
   baseLevel *= singularityEffect;
 
   let scaledLevel = baseLevel;
-  // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const instabilityScaleBegin = Glyphs.instabilityThreshold;
-  const instabilityScaleRate = 500;
-  if (scaledLevel > instabilityScaleBegin) {
-    const excess = (scaledLevel - instabilityScaleBegin) / instabilityScaleRate;
-    scaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
-  }
-  const hyperInstabilityScaleBegin = Glyphs.hyperInstabilityThreshold;
-  const hyperInstabilityScaleRate = 400;
-  if (scaledLevel > hyperInstabilityScaleBegin) {
-    const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
-    scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
-  }
+  // The softcap starts at begin and rate determines how quickly level scales after the cap, turning a linear pre-cap
+  // increase to a quadratic post-cap increase with twice the scaling. For example, with begin = 1000 and rate = 400:
+  // - Scaled level 1400 requires +800 more base levels from the start of the cap (ie. level 1800)
+  // - Scaled level 1800 requires +1600 more base levels from scaled 1400 (ie. level 3400)
+  // - Each additional 400 scaled requires another +800 on top of the already-existing gap for base
+  // This is applied twice in a stacking way, using regular instability first and then again with hyperinstability
+  // if the newly reduced level is still above the second threshold
+  const instabilitySoftcap = (level, begin, rate) => {
+    if (level < begin) return level;
+    const excess = (level - begin) / rate;
+    return begin + 0.5 * rate * (Math.sqrt(1 + 4 * excess) - 1);
+  };
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, 500);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, 400);
+
   const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
-  const rowFactor = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
-    .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
-    .filter(x => x)
-    .length;
-  const achievementFactor = Effects.sum(Achievement(148), Achievement(166));
-  baseLevel += rowFactor + achievementFactor;
-  scaledLevel += rowFactor + achievementFactor;
-  // Temporary runaway prevention (?)
-  const levelHardcap = 1000000;
-  const levelCapped = scaledLevel > levelHardcap;
-  scaledLevel = Math.min(scaledLevel, levelHardcap);
+  const incAfterInstability = staticFactors.realityUpgrades + staticFactors.achievements;
+  baseLevel += incAfterInstability;
+  scaledLevel += incAfterInstability;
   return {
     ep: sources.ep,
     repl: sources.repl,
     dt: sources.dt,
     eter: sources.eternities,
-    perkShop: perkShopEffect,
+    perkShop: staticFactors.perkShop,
     scalePenalty,
-    rowFactor,
-    achievementFactor,
+    rowFactor: staticFactors.realityUpgrades,
+    achievementFactor: staticFactors.achievements,
     shardFactor,
     singularityEffect,
     rawLevel: baseLevel,
     actualLevel: Math.max(1, scaledLevel),
-    capped: levelCapped
+  };
+}
+
+// Calculates glyph weights which don't change over the course of a reality unless particular events occur; this is
+// stored in the GameCache and only invalidated as needed
+export function staticGlyphWeights() {
+  const perkShop = Effects.max(1, PerkShopUpgrade.glyphLevel);
+  const instability = Glyphs.instabilityThreshold;
+  const hyperInstability = Glyphs.hyperInstabilityThreshold;
+  const realityUpgrades = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
+    .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
+    .filter(x => x)
+    .length;
+  const achievements = Effects.sum(Achievement(148), Achievement(166));
+  return {
+    perkShop,
+    instability,
+    hyperInstability,
+    realityUpgrades,
+    achievements
   };
 }

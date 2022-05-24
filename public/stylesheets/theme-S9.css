@@ -37,17 +37,8 @@
   background-image: none;
 }
 
-@keyframes a-reality-glyph-icon-cycle {
-  0% { color: transparent; }
-}
-
 @keyframes a-reality-glyph-description-cycle {
   0% { color: transparent; }
-}
-
-@keyframes a-reality-glyph-dot-cycle {
-  from { background: none; }
-  to { background: none; }
 }
 
 .o-celestial-nav__legend-text {

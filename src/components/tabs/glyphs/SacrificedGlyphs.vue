@@ -10,14 +10,10 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       anySacrifices: false,
       hasDragover: false,
       hasAlteration: false,
       hideAlteration: false,
-      addThreshold: 0,
-      empowerThreshold: 0,
-      boostThreshold: 0,
       maxSacrifice: 0,
       teresaMult: 0,
       lastMachinesTeresa: new Decimal(0),
@@ -33,16 +29,24 @@ export default {
     dropDownIconClass() {
       return this.hideAlteration ? "far fa-plus-square" : "far fa-minus-square";
     },
+    isDoomed() {
+      return Pelle.isDoomed;
+    },
+    addThreshold() {
+      return GlyphAlteration.additionThreshold;
+    },
+    empowerThreshold() {
+      return GlyphAlteration.empowermentThreshold;
+    },
+    boostThreshold() {
+      return GlyphAlteration.boostingThreshold;
+    }
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
-      this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] && player.reality.glyphs.sac[e] !== 0);
+      this.anySacrifices = GameCache.logTotalGlyphSacrifice !== 0;
       this.hasAlteration = Ra.unlocks.alteredGlyphs.canBeApplied;
       this.hideAlteration = player.options.hideAlterationEffects;
-      this.addThreshold = GlyphAlteration.additionThreshold;
-      this.empowerThreshold = GlyphAlteration.empowermentThreshold;
-      this.boostThreshold = GlyphAlteration.boostingThreshold;
       this.maxSacrifice = GlyphSacrificeHandler.maxSacrificeForEffects;
       this.teresaMult = Teresa.runRewardMultiplier;
       this.lastMachinesTeresa.copyFrom(player.celestials.teresa.lastRepeatedMachines);

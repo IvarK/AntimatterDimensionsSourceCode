@@ -127,7 +127,12 @@ export const AutomatorTextUI = {
     });
     this.editor.on("change", editor => {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
-      AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
+      const scriptText = editor.getDoc().getValue();
+      AutomatorBackend.saveScript(scriptID, scriptText);
+
+      const errors = AutomatorData.currentErrors(scriptText).length;
+      if (errors > editor.doc.size) SecretAchievement(48).unlock();
+
       // Clear all line highlighting as soon as any text is changed. We can't use the locations of previously
       // highlighted lines because changes may shift the line numbers around before they're cleared.
       this.clearAllHighlightedLines("Active");

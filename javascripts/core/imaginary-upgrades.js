@@ -77,6 +77,12 @@ class RebuyableImaginaryUpgradeState extends RebuyableMechanicState {
   set boughtAmount(value) {
     player.reality.imaginaryRebuyables[this.id] = value;
   }
+
+  onPurchased() {
+    if (this.id === 7) {
+      GameCache.staticGlyphWeights.invalidate();
+    }
+  }
 }
 
 ImaginaryUpgradeState.index = mapGameData(

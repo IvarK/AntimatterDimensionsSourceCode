@@ -28,7 +28,7 @@ export default {
         .map(cfg => [realityGlyphEffectLevelThresholds[cfg.bitmaskIndex - minRealityEffectIndex], cfg.id]);
     },
     createRealityGlyph() {
-      if (Glyphs.freeInventorySpace === 0) {
+      if (GameCache.glyphInventorySpace.value === 0) {
         Modal.message.show("Inventory cannot hold new Glyphs. Purge some Glyphs.");
         return;
       }

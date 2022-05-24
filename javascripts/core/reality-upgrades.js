@@ -65,6 +65,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     if (id === 20 && player.blackHole[0].unlocked) {
       player.blackHole[1].unlocked = true;
     }
+    GameCache.staticGlyphWeights.invalidate();
   }
 }
 

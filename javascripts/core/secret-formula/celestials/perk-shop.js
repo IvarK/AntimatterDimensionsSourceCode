@@ -78,8 +78,8 @@ GameDatabase.celestials.perkShop = {
   fillMusicGlyph: rebuyable({
     id: 5,
     description: () => `Fill all empty slots in your inventory with Music Glyphs`,
-    cost: () => Math.clampMin(Glyphs.freeInventorySpace, 1),
-    otherReq: () => Glyphs.freeInventorySpace > 0,
+    cost: () => Math.clampMin(GameCache.glyphInventorySpace.value, 1),
+    otherReq: () => GameCache.glyphInventorySpace.value > 0,
     formatCost: value => formatInt(value),
     costCap: () => Number.MAX_VALUE,
     cap: () => Number.MAX_VALUE

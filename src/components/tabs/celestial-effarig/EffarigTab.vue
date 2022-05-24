@@ -74,7 +74,7 @@ export default {
       Modal.celestials.show({ name: "Effarig's", number: 1 });
     },
     createCursedGlyph() {
-      if (Glyphs.freeInventorySpace === 0) {
+      if (GameCache.glyphInventorySpace.value === 0) {
         Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.");
         return;
       }

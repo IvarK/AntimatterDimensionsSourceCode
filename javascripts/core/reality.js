@@ -112,7 +112,7 @@ export function requestManualReality() {
     Modal.reality.show();
     return;
   }
-  if (Glyphs.freeInventorySpace === 0) {
+  if (GameCache.glyphInventorySpace.value === 0) {
     Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
@@ -136,11 +136,11 @@ export function processManualReality(sacrifice, glyphID) {
       if (EffarigUnlock.glyphFilter.isUnlocked) {
         // If the player has the glyph filter, we apply the filter to the choices instead of picking randomly
         let newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
-        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
           AutoGlyphProcessor.getRidOfGlyph(newGlyph);
           newGlyph = null;
         }
-        if (newGlyph && Glyphs.freeInventorySpace > 0) {
+        if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
           Glyphs.addToInventory(newGlyph);
         }
       } else {
@@ -203,7 +203,7 @@ function processAutoGlyph(gainedLevel, rng) {
   const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
   if (EffarigUnlock.glyphFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
-    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
@@ -212,7 +212,7 @@ function processAutoGlyph(gainedLevel, rng) {
     // so we might as well take the first one.
     newGlyph = glyphs[0];
   }
-  if (newGlyph && Glyphs.freeInventorySpace > 0) {
+  if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
     Glyphs.addToInventory(newGlyph);
   }
 }

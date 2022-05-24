@@ -59,9 +59,7 @@ export default {
       let level = glyphState.actualLevel;
       if (!isFinite(level)) level = 0;
       const decimalPoints = this.glyphLevel > 1000 ? 0 : 1;
-      return glyphState.capped
-        ? "Capped"
-        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
+      return `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
     },
     update() {
       this.isDoomed = Pelle.isDoomed;

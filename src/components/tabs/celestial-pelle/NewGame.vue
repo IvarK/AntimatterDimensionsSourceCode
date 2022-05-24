@@ -74,6 +74,7 @@ export default {
   background-color: black;
   box-shadow: 0 0 20px 1px black;
   transform: translate(-50%, -50%);
+  pointer-events: auto;
 }
 
 .c-new-game-button-container {

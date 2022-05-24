@@ -811,7 +811,8 @@ window.player = {
       bigCrunch: true,
       replicantiGalaxy: true,
       antimatterGalaxy: true,
-      dimensionBoost: true
+      dimensionBoost: true,
+      switchAutomatorMode: true
     },
     awayProgress: {
       antimatter: true,
@@ -984,7 +985,7 @@ export function guardFromNaNValues(obj) {
   }
 
   for (const key in obj) {
-    if (!obj.hasOwnProperty(key)) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
 
     // TODO: rework autobuyer saving
     if (key === "automator") continue;

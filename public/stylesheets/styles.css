@@ -159,7 +159,7 @@ html {
   --color-reality: #afa3a5;
   --color-reality-light: #e8e3e4;
   --color-celestials: #f2d6c1;
-  --color-prestige--accent: black;
+  --color-prestige--accent: #dbd242;
 
   --color-pelle--base: #7cb727;
 }
@@ -302,12 +302,13 @@ button:focus {
 .time-theorem-buttons {
   display: flex;
   width: 55.5rem;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 2;
   align-items: flex-end;
   font-family: Typewriter, serif;
   color: var(--color-text);
+  pointer-events: all;
 }
 
 .l-tt-buy-button {
@@ -538,7 +539,7 @@ button:focus {
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--color-text);
-  background-color: var(--color-base);
+  background-color: var(--color-prestige--accent);
   border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
@@ -553,51 +554,43 @@ button:focus {
 }
 
 .o-tab-btn:hover {
-  color: var(--color-text-inverted);
+  color: var(--color-prestige--accent);
   background: var(--color-accent);
 }
 
 .o-tab-btn--infinity {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
 .o-tab-btn--infinity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-infinity);
 }
 
 .o-tab-btn--eternity {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
 .o-tab-btn--eternity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-eternity);
 }
 
 .o-tab-btn--reality {
   color: var(--color-reality);
-  background: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
 .o-tab-btn--reality:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-reality);
 }
 
 .o-tab-btn--celestial {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
 .o-tab-btn--celestial:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-celestials);
 }
 
@@ -1349,8 +1342,12 @@ br {
  *******/
 
 .c-game-ui {
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
-  height: 100%;
+  /* stylelint-disable-next-line unit-allowed-list */
+  height: 100vh;
+  position: relative;
 }
 
 ._kong-test .c-game-ui {
@@ -5159,7 +5156,7 @@ br {
 .c-tachyon-particle-container {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
@@ -5187,22 +5184,24 @@ br {
   width: 100vw;
   /* stylelint-disable-next-line unit-allowed-list */
   height: 100vh;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 6;
   animation-name: a-modal-overlay-fadein;
   animation-duration: 2s;
   animation-fill-mode: forwards;
+  pointer-events: auto;
 }
 
 .l-modal {
   display: inline-block;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   z-index: 7;
   transform: translate(-50%, -50%);
+  pointer-events: auto;
 }
 
 /* #region c-modal */
@@ -5937,13 +5936,14 @@ kbd {
 .l-notification-container {
   display: flex;
   flex-direction: column-reverse;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   z-index: 1000;
   align-items: flex-end;
   margin-top: 0.5rem;
   margin-right: 1rem;
+  pointer-events: auto;
 }
 
 /* #region o-notification */
@@ -7275,7 +7275,6 @@ kbd {
 .l-ra-pet-container {
   float: left;
   width: 50%;
-  height: 50%;
 }
 
 .c-ra-memory-header {
@@ -9225,6 +9224,7 @@ input.o-automator-block-input {
   font-weight: 500;
   line-height: 1.9rem;
   border-radius: var(--var-border-radius, 50%);
+  pointer-events: auto;
   cursor: pointer;
 }
 
@@ -9261,7 +9261,7 @@ input.o-automator-block-input {
   font: 1rem Typewriter, serif;
   font-weight: bold;
   color: var(--color-text);
-  background-color: var(--color-base);
+  background-color: var(--color-text-inverted);
   border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.4rem);
   box-shadow: none;
@@ -9297,45 +9297,37 @@ input.o-automator-block-input {
 
 .c-hide-modal-tab-button--infinity {
   color: var(--color-infinity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--infinity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-infinity);
 }
 
 .c-hide-modal-tab-button--eternity {
   color: var(--color-eternity);
-  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
 .c-hide-modal-tab-button--eternity:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-eternity);
 }
 
 .c-hide-modal-tab-button--reality {
   color: var(--color-reality);
-  background: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--reality:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-reality);
 }
 
 .c-hide-modal-tab-button--celestials {
   color: var(--color-celestials);
-  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
 .c-hide-modal-tab-button--celestials:hover {
-  color: var(--color-prestige--accent);
   background: var(--color-celestials);
 }
 

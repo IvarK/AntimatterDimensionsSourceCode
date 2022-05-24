@@ -115,9 +115,7 @@ export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
   }
 }
 
-export const GalaxyGeneratorUpgrades = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
-    config => new GalaxyGeneratorUpgrade(config)
-  );
-}());
+export const GalaxyGeneratorUpgrades = mapGameDataToObject(
+  GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
+  config => new GalaxyGeneratorUpgrade(config)
+);

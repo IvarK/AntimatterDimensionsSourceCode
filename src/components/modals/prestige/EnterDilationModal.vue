@@ -1,5 +1,6 @@
 <script>
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
 
 export default {
   name: "EnterDilationModal",
@@ -29,7 +30,7 @@ export default {
   methods: {
     handleYesClick() {
       if (player.dilation.active) return;
-      if (player.options.animations.dilation && document.body.style.animation === "") {
+      if (player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying) {
         animateAndDilate();
       } else {
         startDilatedEternity();

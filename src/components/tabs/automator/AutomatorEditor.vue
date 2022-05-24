@@ -12,13 +12,7 @@ export default {
   },
   data() {
     return {
-      activeLineRaw: 0,
       automatorType: 0,
-      runningScriptID: 0,
-      activeLineInfo: {
-        lineNumber: 0,
-        scriptID: 0,
-      }
     };
   },
   computed: {
@@ -42,18 +36,6 @@ export default {
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
-    activeLine() {
-      return AutomatorBackend.state.topLevelScript === this.currentScriptID ? this.activeLineRaw : 0;
-    },
-    automatorModeTooltip() {
-      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) return "Switch to the text editor";
-      return "Switch to the block editor";
-    },
-    tutorialClass() {
-      return {
-        "tutorial--glow": ui.view.tutorialState === TUTORIAL_STATE.AUTOMATOR && ui.view.tutorialActive
-      };
-    }
   },
   created() {
     this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
@@ -62,20 +44,8 @@ export default {
   },
   methods: {
     update() {
-      this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.automatorType = player.reality.automator.type;
-      if (AutomatorBackend.isOn) {
-        this.activeLineInfo = {
-          lineNumber: AutomatorBackend.stack.top.lineNumber,
-          scriptID: AutomatorBackend.state.topLevelScript,
-        };
-      } else {
-        this.activeLineInfo = {
-          lineNumber: 0,
-          scriptID: "0",
-        };
-        if (AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
-      }
+      if (!AutomatorBackend.isOn && AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
     },
     onGameLoad() {
       this.updateCurrentScriptID();
@@ -95,44 +65,14 @@ export default {
       }
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
-    toggleAutomatorMode() {
-      const scriptID = ui.view.tabs.reality.automator.editorScriptID;
-      Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
-      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
-        // This saves the script after converting it.
-        BlockAutomator.parseTextFromBlocks();
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else if (BlockAutomator.fromText(this.currentScriptContent)) {
-        AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
-        player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-      } else {
-        Modal.message.show("Automator script has errors, cannot convert to blocks.");
-      }
-      this.$recompute("currentScriptContent");
-    }
   }
 };
 </script>
 
 <template>
   <div class="l-automator-pane">
-    <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
+    <div class="c-automator__controls l-automator__controls">
       <AutomatorControls />
-      <button
-        v-tooltip="{
-          content: automatorModeTooltip,
-          hideOnTargetClick: false
-        }"
-        :class="{
-          'c-slider-toggle-button': true,
-          'c-slider-toggle-button--right': isTextAutomator,
-          ...tutorialClass
-        }"
-        @click="toggleAutomatorMode"
-      >
-        <i class="fas fa-cubes" />
-        <i class="fas fa-code" />
-      </button>
     </div>
     <AutomatorTextEditor
       v-if="isTextAutomator"
@@ -141,47 +81,3 @@ export default {
     <AutomatorBlockEditor v-if="!isTextAutomator" />
   </div>
 </template>
-
-<style scoped>
-.c-slider-toggle-button {
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  align-items: center;
-  color: black;
-  background-color: #626262;
-  border: 0.2rem solid #767676;
-  border-radius: 0.2rem;
-  margin: 0.4rem;
-  padding: 0.3rem 0;
-  cursor: pointer;
-}
-
-.c-slider-toggle-button .fas {
-  width: 3rem;
-  position: relative;
-  z-index: 1;
-}
-
-.c-slider-toggle-button::before {
-  content: "";
-  width: 3rem;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  background-color: white;
-  border-radius: 0.2rem;
-  transition: 0.3s ease all;
-}
-
-.c-slider-toggle-button--right::before {
-  left: 3rem;
-  background-color: white;
-}
-
-.tutorial--glow::after {
-  z-index: 2;
-}
-</style>

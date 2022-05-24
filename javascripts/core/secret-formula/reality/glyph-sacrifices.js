@@ -1,7 +1,7 @@
 import { GameDatabase } from "../game-database";
 
-GameDatabase.reality.glyphSacrifice = [
-  {
+GameDatabase.reality.glyphSacrifice = {
+  "power": {
     id: "power",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 0;
@@ -19,7 +19,8 @@ GameDatabase.reality.glyphSacrifice = [
         : "";
       return `Distant Galaxy scaling starts ${formatInt(amount)} later${nextGalaxyText}`;
     }
-  }, {
+  },
+  "infinity": {
     id: "infinity",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 1;
@@ -31,7 +32,8 @@ GameDatabase.reality.glyphSacrifice = [
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
       return `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension.`;
     }
-  }, {
+  },
+  "time": {
     id: "time",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 1;
@@ -43,7 +45,8 @@ GameDatabase.reality.glyphSacrifice = [
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
       return `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Time Dimension.`;
     }
-  }, {
+  },
+  "replication": {
     id: "replication",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 0;
@@ -61,7 +64,8 @@ GameDatabase.reality.glyphSacrifice = [
         : "";
       return `Replicanti Galaxy scaling starts ${formatInt(amount)} later${nextGalaxyText}`;
     }
-  }, {
+  },
+  "dilation": {
     id: "dilation",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 1;
@@ -75,7 +79,8 @@ GameDatabase.reality.glyphSacrifice = [
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
       return `Multiply Tachyon Particle gain by ${formatX(amount, 2, 2)}`;
     }
-  }, {
+  },
+  "effarig": {
     id: "effarig",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 0;
@@ -87,7 +92,8 @@ GameDatabase.reality.glyphSacrifice = [
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
       return `+${formatPercents(amount / 100, 2)} additional Glyph rarity`;
     }
-  }, {
+  },
+  "reality": {
     id: "reality",
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 0;
@@ -99,4 +105,4 @@ GameDatabase.reality.glyphSacrifice = [
       return `${formatPercents(amount - 1, 2)} increased Alchemy yield`;
     }
   }
-].mapToObject(g => g.id, g => g);
+};

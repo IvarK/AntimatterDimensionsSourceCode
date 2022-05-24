@@ -1,19 +1,9 @@
 <script>
 import BackgroundAnimations from "@/components/BackgroundAnimations";
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
-import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
-import HowToPlay from "@/components/HowToPlay";
-import InfoButton from "@/components/InfoButton";
-import ModalProgressBar from "@/components/modals/ModalProgressBar";
-import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
+import GameUiComponentFixed from "@/components/GameUiComponentFixed";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
-import NewGame from "@/components/tabs/celestial-pelle/NewGame";
-import PopupModal from "@/components/modals/PopupModal";
-import SaveTimer from "@/components/SaveTimer";
-import SpeedrunStatus from "@/components/SpeedrunStatus";
 import TabComponents from "@/components/tabs";
-import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
   name: "GameUIComponent",
@@ -21,23 +11,8 @@ export default {
     ...TabComponents,
     ClassicUi,
     ModernUi,
-    ModernSidebar,
-    PopupModal,
-    FadeToBlack,
-    CreditsContainer,
-    NewGame,
-    SaveTimer,
-    SpeedrunStatus,
-    BackgroundAnimations,
-    ModalProgressBar,
-    HowToPlay,
-    InfoButton,
-    TimeTheoremShop
-  },
-  data() {
-    return {
-      rollCredits: false,
-    };
+    GameUiComponentFixed,
+    BackgroundAnimations
   },
   computed: {
     view() {
@@ -55,11 +30,6 @@ export default {
     },
     themeCss() {
       return `stylesheets/theme-${this.view.theme}.css`;
-    }
-  },
-  methods: {
-    update() {
-      this.rollCredits = GameEnd.endState >= 2.5;
     }
   }
 };
@@ -79,35 +49,15 @@ export default {
       <component :is="uiLayout">
         <component :is="page" />
       </component>
-      <PopupModal
-        v-if="view.modal.current"
-        :modal="view.modal.current"
-      />
-      <ModalProgressBar v-if="view.modal.progressBar" />
       <link
         v-if="view.theme !== 'Normal'"
         type="text/css"
         rel="stylesheet"
         :href="themeCss"
       >
-      <HowToPlay />
-      <InfoButton />
-      <BackgroundAnimations />
     </div>
-    <div
-      id="notification-container"
-      class="l-notification-container"
-    />
-    <TimeTheoremShop
-      v-if="view.subtab === 'studies'"
-      class="l-time-studies-tab__tt-shop"
-    />
-    <ModernSidebar v-if="view.newUI" />
-    <SaveTimer />
-    <SpeedrunStatus />
-    <FadeToBlack v-if="rollCredits" />
-    <CreditsContainer v-if="rollCredits" />
-    <NewGame v-if="rollCredits" />
+    <GameUiComponentFixed />
+    <BackgroundAnimations />
   </div>
 </template>
 
@@ -115,5 +65,6 @@ export default {
 .ui-wrapper {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 </style>

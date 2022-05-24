@@ -1,20 +1,15 @@
 import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
 import { DC } from "./constants";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
-  document.body.style.animation = "a-dilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  FullScreenAnimationHandler.display("a-dilate", 2);
   setTimeout(startDilatedEternity, 1000);
 }
 
 export function animateAndUndilate() {
-  document.body.style.animation = "a-undilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
   }, 1000);
@@ -22,7 +17,7 @@ export function animateAndUndilate() {
 
 export function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) return;
-  const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
+  const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
   if (player.dilation.active) {
     // TODO Dilation modal
     if (playAnimation) {
@@ -227,26 +222,12 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 }
 
-export const DilationUpgrade = (function() {
-  const db = GameDatabase.eternity.dilation;
-  return {
-    dtGain: new RebuyableDilationUpgradeState(db.dtGain),
-    galaxyThreshold: new RebuyableDilationUpgradeState(db.galaxyThreshold),
-    tachyonGain: new RebuyableDilationUpgradeState(db.tachyonGain),
-    doubleGalaxies: new DilationUpgradeState(db.doubleGalaxies),
-    tdMultReplicanti: new DilationUpgradeState(db.tdMultReplicanti),
-    ndMultDT: new DilationUpgradeState(db.ndMultDT),
-    ipMultDT: new DilationUpgradeState(db.ipMultDT),
-    timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
-    dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
-    ttGenerator: new DilationUpgradeState(db.ttGenerator),
-    dtGainPelle: new RebuyableDilationUpgradeState(db.dtGainPelle),
-    galaxyMultiplier: new RebuyableDilationUpgradeState(db.galaxyMultiplier),
-    tickspeedPower: new RebuyableDilationUpgradeState(db.tickspeedPower),
-    galaxyThresholdPelle: new DilationUpgradeState(db.galaxyThresholdPelle),
-    flatDilationMult: new DilationUpgradeState(db.flatDilationMult),
-  };
-}());
+export const DilationUpgrade = mapGameDataToObject(
+  GameDatabase.eternity.dilation,
+  config => (config.rebuyable
+    ? new RebuyableDilationUpgradeState(config)
+    : new DilationUpgradeState(config))
+);
 
 export const DilationUpgrades = {
   rebuyable: [
@@ -254,11 +235,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: (function() {
-    const upgradesById = [];
-    for (const upgrade of Object.values(DilationUpgrade)) {
-      upgradesById[upgrade.id] = upgrade;
-    }
-    return id => upgradesById[id];
-  }()),
+  fromId: id => DilationUpgrade.all.find(x => x.id === id)
 };

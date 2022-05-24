@@ -104,6 +104,10 @@ export default {
 </template>
 
 <style scoped>
+.o-primary-btn {
+  vertical-align: middle;
+}
+
 .tickspeed-max-btn {
   margin-left: 0.5rem;
 }

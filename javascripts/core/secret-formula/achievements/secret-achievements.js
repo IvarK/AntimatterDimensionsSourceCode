@@ -147,7 +147,7 @@ GameDatabase.achievements.secret = [
   {
     id: 38,
     name: "Knife's edge",
-    description: "Be about to do a Hard Reset, but cancel out."
+    description: "Close the Hard Reset modal after typing in the confirmation."
   },
   {
     id: 41,
@@ -186,12 +186,12 @@ GameDatabase.achievements.secret = [
   },
   {
     id: 47,
-    name: "Clean Slate",
+    name: "ALT+",
     description: "Hide every possible tab."
   },
   {
     id: 48,
-    name: "Average programmer experience.jpg",
+    name: "Stack overflow",
     description: "Have more Automator errors than lines."
   },
 ];

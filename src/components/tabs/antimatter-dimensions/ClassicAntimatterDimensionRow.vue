@@ -36,8 +36,9 @@ export default {
     name() {
       return AntimatterDimension(this.tier).shortDisplayName;
     },
-    amountDisplay() {
-      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
+    amountText() {
+      const amount = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
+      return `${amount} (${formatInt(this.boughtBefore10)})`;
     },
     rateOfChangeDisplay() {
       return this.tier < 8
@@ -119,7 +120,7 @@ export default {
       return str.length > 15;
     },
     singlesClass() {
-      const small = { "o-primary-btn--buy-ad--small-text": this.isLongText(this.singleText) };
+      const small = { "l-condensed-text": this.isLongText(this.singleText) };
       let tutorial;
       switch (this.tier) {
         case 1:
@@ -148,9 +149,9 @@ export default {
         {{ formatX(multiplier, 1, 1) }}
       </span>
     </div>
-    <div class="c-dim-row__label c-dim-row__label--growable l-text-rows">
+    <div class="c-dim-row__label c-dim-row__label--amount l-text-rows">
       <span>
-        {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
+        {{ amountText }}
       </span>
       <span
         v-if="rateOfChange.neq(0)"
@@ -172,7 +173,7 @@ export default {
     <PrimaryButton
       :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
       class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
-      :class="{ 'o-primary-btn--buy-ad--small-text': isLongText(until10Text) }"
+      :class="{ 'l-condensed-text': isLongText(until10Text) }"
       :ach-tooltip="boughtTooltip"
       @click="buyUntil10"
     >
@@ -183,7 +184,13 @@ export default {
 
 <style scoped>
 .l-full-row-container {
-  height: 6rem;
+  height: 4.5rem;
+}
+
+.l-condensed-text {
+  vertical-align: middle;
+  font-size: 1rem;
+  line-height: 1rem;
 }
 
 .l-text-rows {

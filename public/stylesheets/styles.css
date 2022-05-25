@@ -1423,17 +1423,6 @@ br {
   font-size: 1.2rem;
 }
 
-.o-primary-btn--buy-ad--small-text {
-  vertical-align: middle;
-  font-size: 1rem;
-  line-height: 1rem;
-}
-
-.o-primary-btn--buy-ad--small-text-modern {
-  font-size: 1rem;
-  line-height: 1.2rem;
-}
-
 .o-primary-btn--buy-single-ad {
   width: 13.5rem;
 }
@@ -1461,18 +1450,8 @@ br {
 }
 
 .o-primary-btn--buy-id {
-  width: 21rem;
+  width: 13rem;
   height: 3rem;
-}
-
-.o-primary-btn--buy-id--small-text {
-  font-size: 1rem;
-  line-height: 1rem;
-}
-
-.o-primary-btn--buy-id--small-text-modern {
-  font-size: 1rem;
-  line-height: 1.2rem;
 }
 
 .o-primary-btn--buy-id-max,
@@ -1483,18 +1462,8 @@ br {
 }
 
 .o-primary-btn--buy-td {
-  width: 21rem;
+  width: 13rem;
   height: 3rem;
-}
-
-.o-primary-btn--buy-td--small-text {
-  font-size: 1rem;
-  line-height: 1rem;
-}
-
-.o-primary-btn--buy-td--small-text-modern {
-  font-size: 1rem;
-  line-height: 1.2rem;
 }
 
 .o-primary-btn--buy-td-max,
@@ -2219,9 +2188,9 @@ br {
   text-align: left;
 }
 
-.c-dim-row__label--growable {
-  flex-grow: 1;
-  width: 15rem;
+.c-dim-row__label--amount {
+  flex-grow: 2;
+  width: 60rem;
 }
 
 .c-dim-row__label--small {

@@ -124,7 +124,7 @@ export default {
       <span>{{ name }} Infinity D</span>
       <span class="c-infinity-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
     </div>
-    <div class="c-dim-row__label c-dim-row__label--growable l-text-rows">
+    <div class="c-dim-row__label c-dim-row__label--amount l-text-rows">
       <span>{{ format(amount, 2) }}</span>
       <span
         v-if="rateOfChange.neq(0)"
@@ -137,7 +137,7 @@ export default {
       v-tooltip="capTooltip"
       :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
       class="o-primary-btn--buy-id l-dim-row__button o-primary-btn o-primary-btn--new"
-      :class="{ 'o-primary-btn--buy-id--small-text-modern': hasLongText }"
+      :class="{ 'l-condensed-text': hasLongText }"
       @click="buySingleInfinityDimension"
     >
       {{ costDisplay }}
@@ -161,6 +161,16 @@ export default {
 
 <style scoped>
 .l-full-row-container {
-  height: 10rem;
+  height: 6.5rem;
+}
+
+.l-condensed-text {
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+.l-text-rows {
+  display: flex;
+  flex-direction: column;
 }
 </style>

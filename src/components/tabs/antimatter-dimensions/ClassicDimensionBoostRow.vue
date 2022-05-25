@@ -64,7 +64,7 @@ export default {
 
 <template>
   <div class="c-antimatter-dim-row">
-    <div class="c-dim-row__label c-dim-row__label--growable">
+    <div class="c-dim-row__label c-dim-row__label--amount">
       Dimension Boost ({{ boostCountText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
     </div>

@@ -138,7 +138,7 @@ export default {
       <span>{{ name }} Antimatter D</span>
       <span class="c-antimatter-dim-row__multiplier">{{ formatX(multiplier, 1, 1) }}</span>
     </div>
-    <div class="c-dim-row__label c-dim-row__label--growable l-text-rows">
+    <div class="c-dim-row__label c-dim-row__label--amount l-text-rows">
       <span>{{ amountDisplay }}</span>
       <span
         v-if="rateOfChange.neq(0)"
@@ -160,7 +160,7 @@ export default {
         <div>
           {{ buttonPrefix }}
         </div>
-        <div :class="{ 'o-primary-btn--buy-ad--small-text-modern': hasLongText }">
+        <div :class="{ 'l-condensed-text': hasLongText }">
           {{ buttonValue }}
         </div>
       </div>
@@ -183,7 +183,12 @@ export default {
 
 <style scoped>
 .l-full-row-container {
-  height: 10rem;
+  height: 6.5rem;
+}
+
+.l-condensed-text {
+  font-size: 1rem;
+  line-height: 1.2rem;
 }
 
 .l-text-rows {

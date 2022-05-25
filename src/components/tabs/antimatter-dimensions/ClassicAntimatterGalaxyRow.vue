@@ -100,7 +100,7 @@ export default {
 <template>
   <div class="c-antimatter-dim-row">
     <div
-      class="c-dim-row__label c-dim-row__label--growable l-text-wrapper"
+      class="c-dim-row__label c-dim-row__label--amount l-text-wrapper"
     >
       {{ typeName }} ({{ sumText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions

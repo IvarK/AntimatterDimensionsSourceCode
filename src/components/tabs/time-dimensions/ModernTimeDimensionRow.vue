@@ -126,7 +126,7 @@ export default {
       <span>{{ name }} Time D</span>
       <span class="c-time-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
     </div>
-    <div class="c-dim-row__label c-dim-row__label--growable l-text-rows">
+    <div class="c-dim-row__label c-dim-row__label--amount l-text-rows">
       <span>{{ format(amount, 2) }}</span>
       <span
         v-if="rateOfChange.neq(0)"
@@ -139,7 +139,7 @@ export default {
       v-tooltip="tooltipContents"
       :enabled="isAvailableForPurchase && !isCapped"
       class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
-      :class="{ 'o-primary-btn--buy-td--small-text-modern': hasLongText }"
+      :class="{ 'l-condensed-text': hasLongText }"
       @click="buyTimeDimension"
     >
       {{ buttonContents }}
@@ -163,7 +163,12 @@ export default {
 
 <style scoped>
 .l-full-row-container {
-  height: 10rem;
+  height: 6.5rem;
+}
+
+.l-condensed-text {
+  font-size: 1rem;
+  line-height: 1.2rem;
 }
 
 .l-text-rows {

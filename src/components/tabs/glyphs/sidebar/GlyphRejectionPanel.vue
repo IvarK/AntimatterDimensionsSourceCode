@@ -33,9 +33,7 @@ export default {
 <template>
   <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
     <span class="c-glyph-sacrifice-options__advanced">
-      Behavior for deleted and filtered
-      <br>
-      Glyphs in non-Alchemy modes:
+      Behavior for deleted and filtered Glyphs:
     </span>
     <br>
     <div class="l-glyph-auto-pick-options__container">

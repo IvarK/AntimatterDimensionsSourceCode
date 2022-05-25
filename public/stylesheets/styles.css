@@ -1419,13 +1419,14 @@ br {
 }
 
 .o-primary-btn--buy-ad {
+  height: 4rem;
   font-size: 1.2rem;
 }
 
 .o-primary-btn--buy-ad--small-text {
   vertical-align: middle;
   font-size: 1rem;
-  line-height: 0.55rem;
+  line-height: 1rem;
 }
 
 .o-primary-btn--buy-ad--small-text-modern {
@@ -1466,7 +1467,7 @@ br {
 
 .o-primary-btn--buy-id--small-text {
   font-size: 1rem;
-  line-height: 0.55rem;
+  line-height: 1rem;
 }
 
 .o-primary-btn--buy-id--small-text-modern {
@@ -1488,7 +1489,7 @@ br {
 
 .o-primary-btn--buy-td--small-text {
   font-size: 1rem;
-  line-height: 0.55rem;
+  line-height: 1rem;
 }
 
 .o-primary-btn--buy-td--small-text-modern {

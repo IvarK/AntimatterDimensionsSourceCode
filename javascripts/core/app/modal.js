@@ -88,16 +88,6 @@ export class Modal {
     }, Modal.sortModalQueue);
   }
 
-  static sortModalQueue() {
-    const modalQueue = ui.view.modal.queue;
-    modalQueue.sort((x, y) => y.priority - x.priority);
-    // Filter out multiple instances of the same modal.
-    const singleQueue = [...new Set(modalQueue)];
-    ui.view.modal.queue = singleQueue;
-    // If the front of the queue is what is currently presented, we dont need to do anything.
-    if (!singleQueue[0].isOpen) ui.view.modal.current = singleQueue[0];
-  }
-
   get isOpen() {
     return ui.view.modal.current === this;
   }
@@ -116,6 +106,16 @@ export class Modal {
 
   get priority() {
     return this._priority;
+  }
+
+  static sortModalQueue() {
+    const modalQueue = ui.view.modal.queue;
+    modalQueue.sort((x, y) => y.priority - x.priority);
+    // Filter out multiple instances of the same modal.
+    const singleQueue = [...new Set(modalQueue)];
+    ui.view.modal.queue = singleQueue;
+    // If the front of the queue is what is currently presented, we dont need to do anything.
+    if (!singleQueue[0].isOpen) ui.view.modal.current = singleQueue[0];
   }
 
   static hide() {

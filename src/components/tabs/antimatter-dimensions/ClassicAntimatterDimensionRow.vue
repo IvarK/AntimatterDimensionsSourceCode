@@ -139,14 +139,19 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-antimatter-dim-row"
+    class="c-antimatter-dim-row l-full-row-container"
     :class="{ 'c-dim-row--not-reached': !isUnlocked }"
   >
-    <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Antimatter Dimension {{ formatX(multiplier, 1, 1) }}
+    <div class="c-dim-row__label c-dim-row__name l-text-rows">
+      <span>{{ name }} Antimatter Dimension</span>
+      <span class="c-dim-row__label--small">
+        {{ formatX(multiplier, 1, 1) }}
+      </span>
     </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
+    <div class="c-dim-row__label c-dim-row__label--growable l-text-rows">
+      <span>
+        {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
+      </span>
       <span
         v-if="rateOfChange.neq(0)"
         class="c-dim-row__label--small"
@@ -175,3 +180,15 @@ export default {
     </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+.l-full-row-container {
+  height: 6rem;
+}
+
+.l-text-rows {
+  display: flex;
+  flex-direction: column;
+}
+</style>
+

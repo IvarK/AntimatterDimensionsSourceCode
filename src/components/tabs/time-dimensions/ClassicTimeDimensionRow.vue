@@ -117,14 +117,21 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-time-dim-row"
+    class="c-infinity-dim-row l-full-row-container"
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
   >
-    <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Time Dimension {{ formatX(multiplier, 2, 1) }}
+    <div class="c-dim-row__label c-dim-row__name l-text-rows">
+      <span>
+        {{ name }} Time Dimension
+      </span>
+      <span class="c-dim-row__label--small">
+        {{ formatX(multiplier, 2, 1) }}
+      </span>
     </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{ format(amount, 2, 0) }}
+    <div class="c-dim-row__label c-dim-row__label--growable l-text-rows">
+      <span>
+        {{ format(amount, 2) }}
+      </span>
       <span
         v-if="rateOfChange.neq(0)"
         class="c-dim-row__label--small"
@@ -157,3 +164,14 @@ export default {
     </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+.l-full-row-container {
+  height: 5rem;
+}
+
+.l-text-rows {
+  display: flex;
+  flex-direction: column;
+}
+</style>

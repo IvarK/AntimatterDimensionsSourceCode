@@ -24,6 +24,7 @@ export default {
       realityMachines: new Decimal(),
       shardsGained: 0,
       effarigUnlocked: false,
+      hasConfirmed: false
     };
   },
   computed: {
@@ -75,7 +76,7 @@ export default {
     this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
       this.canRefresh = false;
     });
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
     this.getGlyphs();
     GlyphSelection.realityProps = getRealityProps(false, false);
   },
@@ -118,7 +119,11 @@ export default {
     },
     confirmModal(sacrifice) {
       processManualReality(sacrifice, this.selectedGlyph);
+      this.hasConfirmed = true;
     },
+    closeIfOpen() {
+      if (!this.hasConfirmed) this.emitClose();
+    }
   },
 };
 </script>

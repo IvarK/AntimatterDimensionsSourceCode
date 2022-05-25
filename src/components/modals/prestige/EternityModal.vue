@@ -1,6 +1,4 @@
 <script>
-import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
-
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
@@ -13,6 +11,7 @@ export default {
       exitingEC: false,
       startingIP: new Decimal(),
       gainedEternityPoints: new Decimal(),
+      hasConfirmed: false
     };
   },
   computed: {
@@ -44,8 +43,8 @@ export default {
     }
   },
   created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
   },
   methods: {
     update() {
@@ -55,6 +54,10 @@ export default {
     },
     handleYesClick() {
       animateAndEternity();
+      this.hasConfirmed = true;
+    },
+    closeIfOpen() {
+      if (!this.hasConfirmed) this.emitClose();
     }
   },
 };

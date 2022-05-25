@@ -9,20 +9,25 @@ export default {
   data() {
     return {
       isDoomed: false,
+      hasConfirmed: false
     };
   },
   computed: {
     resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
   },
   created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
   },
   methods: {
-    handleYesClick() {
-      beginProcessReality(getRealityProps(true));
-    },
     update() {
       this.isDoomed = Pelle.isDoomed;
+    },
+    handleYesClick() {
+      beginProcessReality(getRealityProps(true));
+      this.hasConfirmed = true;
+    },
+    closeIfOpen() {
+      if (!this.hasConfirmed) this.emitClose();
     }
   },
 };

@@ -1,6 +1,7 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
+
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "EnterDilationModal",

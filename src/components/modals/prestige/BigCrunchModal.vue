@@ -10,6 +10,7 @@ export default {
     return {
       gainedInfinities: new Decimal(),
       gainedInfinityPoints: new Decimal(),
+      hasConfirmed: false
     };
   },
   computed: {
@@ -20,9 +21,9 @@ export default {
     },
   },
   created() {
-    this.$on(GAME_EVENT.INFINITY_RESET_AFTER, this.emitClose);
-    this.$on(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.$on(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.$on(GAME_EVENT.INFINITY_RESET_AFTER, () => this.closeIfOpen());
+    this.$on(GAME_EVENT.ETERNITY_RESET_AFTER, () => this.closeIfOpen());
+    this.$on(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
   },
   methods: {
     update() {
@@ -31,7 +32,11 @@ export default {
     },
     handleYesClick() {
       bigCrunchResetRequest();
+      this.hasConfirmed = true;
     },
+    closeIfOpen() {
+      if (!this.hasConfirmed) this.emitClose();
+    }
   },
 };
 </script>

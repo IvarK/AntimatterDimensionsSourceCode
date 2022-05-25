@@ -12,6 +12,11 @@ export default {
       required: true,
     }
   },
+  data() {
+    return {
+      hasConfirmed: false
+    };
+  },
   computed: {
     topLabel() {
       return `You are about to do a Dimension Boost Reset`;
@@ -26,16 +31,21 @@ export default {
     },
   },
   created() {
-    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.DIMBOOST_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.GALAXY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
   },
   methods: {
     handleYesClick() {
       requestDimensionBoost(this.bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
+      this.hasConfirmed = true;
     },
+    closeIfOpen() {
+      if (!this.hasConfirmed) this.emitClose();
+    }
   },
 };
 </script>

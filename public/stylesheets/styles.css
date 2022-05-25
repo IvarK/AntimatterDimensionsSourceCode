@@ -1419,9 +1419,18 @@ br {
 }
 
 .o-primary-btn--buy-ad {
+  font-size: 1.2rem;
+}
+
+.o-primary-btn--buy-ad--small-text {
   vertical-align: middle;
   font-size: 1rem;
-  line-height: 9px;
+  line-height: 0.55rem;
+}
+
+.o-primary-btn--buy-ad--small-text-modern {
+  font-size: 1rem;
+  line-height: 1.2rem;
 }
 
 .o-primary-btn--buy-single-ad {
@@ -1455,6 +1464,16 @@ br {
   height: 3rem;
 }
 
+.o-primary-btn--buy-id--small-text {
+  font-size: 1rem;
+  line-height: 0.55rem;
+}
+
+.o-primary-btn--buy-id--small-text-modern {
+  font-size: 1rem;
+  line-height: 1.2rem;
+}
+
 .o-primary-btn--buy-id-max,
 .o-primary-btn--id-autobuyer {
   width: 8rem;
@@ -1465,6 +1484,16 @@ br {
 .o-primary-btn--buy-td {
   width: 21rem;
   height: 3rem;
+}
+
+.o-primary-btn--buy-td--small-text {
+  font-size: 1rem;
+  line-height: 0.55rem;
+}
+
+.o-primary-btn--buy-td--small-text-modern {
+  font-size: 1rem;
+  line-height: 1.2rem;
 }
 
 .o-primary-btn--buy-td-max,

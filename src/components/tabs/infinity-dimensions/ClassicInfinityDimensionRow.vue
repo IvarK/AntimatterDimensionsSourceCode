@@ -58,6 +58,9 @@ export default {
 
       return `Reach ${formatPostBreak(InfinityDimension(this.tier).amRequirement)} AM`;
     },
+    hasLongText() {
+      return this.costDisplay.length > 15;
+    },
     hardcapPurchases() {
       return format(this.hardcap, 1, 1);
     },
@@ -137,6 +140,7 @@ export default {
       v-tooltip="capTooltip"
       :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
       class="o-primary-btn--buy-id l-dim-row__button"
+      :class="{ 'o-primary-btn--buy-id--small-text': hasLongText }"
       @click="buySingleInfinityDimension"
     >
       {{ costDisplay }}

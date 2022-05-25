@@ -67,6 +67,9 @@ export default {
     formattedEPCost() {
       return this.isCapped ? "Capped" : `${this.showCostTitle ? "Cost: " : ""}${format(this.cost, 2)} EP`;
     },
+    hasLongText() {
+      return this.buttonContents.length > 15;
+    },
     showCostTitle() {
       return this.cost.exponent < 1e6;
     }
@@ -135,6 +138,7 @@ export default {
       v-tooltip="tooltipContents"
       :enabled="isAvailableForPurchase && !isCapped"
       class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
+      :class="{ 'o-primary-btn--buy-td--small-text-modern': hasLongText }"
       @click="buyTimeDimension"
     >
       {{ buttonContents }}

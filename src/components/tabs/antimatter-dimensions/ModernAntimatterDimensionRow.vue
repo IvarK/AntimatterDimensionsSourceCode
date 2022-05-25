@@ -56,6 +56,21 @@ export default {
     costUnit() {
       return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
     },
+    buttonPrefix() {
+      if (this.isCapped) return "Shattered by Enslaved";
+      if (this.isContinuumActive) return "Continuum:";
+      return `Buy ${this.howManyCanBuy}`;
+    },
+    buttonValue() {
+      if (this.isCapped) return "";
+      if (this.isContinuumActive) return this.continuumString;
+      const prefix = this.showCostTitle(this.buyUntil10 ? this.until10Cost : this.singleCost) ? "Cost: " : "";
+      const suffix = this.isCostsAD ? this.costUnit : "AM";
+      return `${prefix}${this.costDisplay} ${suffix}`;
+    },
+    hasLongText() {
+      return this.buttonValue.length > 15;
+    },
   },
   methods: {
     update() {
@@ -138,31 +153,15 @@ export default {
     >
       <div
         v-tooltip="boughtTooltip"
-        class="button-content"
+        class="button-content l-cost-container"
         :class="tutorialClass()"
       >
-        <span v-if="isCapped">
-          Shattered by Enslaved
-        </span>
-        <span v-else-if="isContinuumActive">
-          Continuum:
-          <br>
-          {{ continuumString }}
-        </span>
-        <span v-else-if="isCostsAD">
-          Buy {{ howManyCanBuy }}
-          <br>
-          <span v-if="showCostTitle(buyUntil10 ? until10Cost : singleCost)">
-            Cost:
-          </span>{{ costDisplay }} {{ costUnit }}
-        </span>
-        <span v-else>
-          Buy {{ howManyCanBuy }}
-          <br>
-          <span v-if="showCostTitle(buyUntil10 ? until10Cost : singleCost)">
-            Cost:
-          </span>{{ costDisplay }} AM
-        </span>
+        <div>
+          {{ buttonPrefix }}
+        </div>
+        <div :class="{ 'o-primary-btn--buy-ad--small-text-modern': hasLongText }">
+          {{ buttonValue }}
+        </div>
       </div>
       <div
         v-if="!isContinuumActive && isUnlocked && !isCapped"
@@ -180,3 +179,10 @@ export default {
     </button>
   </div>
 </template>
+
+<style scoped>
+.l-cost-container {
+  display: flex;
+  flex-direction: column;
+}
+</style>

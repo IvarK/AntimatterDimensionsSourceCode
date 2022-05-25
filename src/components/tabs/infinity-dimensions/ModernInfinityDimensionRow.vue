@@ -58,6 +58,9 @@ export default {
 
       return `Reach ${formatPostBreak(InfinityDimension(this.tier).amRequirement)} AM`;
     },
+    hasLongText() {
+      return this.costDisplay.length > 15;
+    },
     capTooltip() {
       if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
       if (this.isCapped) return `Cap reached at ${format(this.capIP)} IP`;
@@ -133,6 +136,7 @@ export default {
       v-tooltip="capTooltip"
       :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
       class="o-primary-btn--buy-id l-dim-row__button o-primary-btn o-primary-btn--new"
+      :class="{ 'o-primary-btn--buy-id--small-text-modern': hasLongText }"
       @click="buySingleInfinityDimension"
     >
       {{ costDisplay }}

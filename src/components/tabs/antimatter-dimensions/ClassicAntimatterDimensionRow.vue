@@ -44,6 +44,20 @@ export default {
         ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
+    singleText() {
+      if (this.isCapped) return "Capped";
+      const prefix = this.showCostTitle(this.singleCost) ? "Cost: " : "";
+      const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
+      return `${prefix} ${format(this.singleCost)} ${suffix}`;
+    },
+    until10Text() {
+      if (this.isCapped) return "Capped";
+      if (this.isContinuumActive) return `Continuum: ${this.continuumString}`;
+
+      const prefix = `Until ${formatInt(10)},${this.showCostTitle(this.until10Cost) ? " Cost" : ""}`;
+      const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
+      return `${prefix} ${format(this.until10Cost)} ${suffix}`;
+    },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
     },
@@ -101,16 +115,22 @@ export default {
     showCostTitle(value) {
       return value.exponent < 1000000;
     },
-    tutorialClass() {
-      if (this.tier === 1) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
+    isLongText(str) {
+      return str.length > 15;
+    },
+    singlesClass() {
+      const small = { "o-primary-btn--buy-ad--small-text": this.isLongText(this.singleText) };
+      let tutorial;
+      switch (this.tier) {
+        case 1:
+          tutorial = Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
+          break;
+        case 2:
+          tutorial = Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
+          break;
       }
 
-      if (this.tier === 2) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
-      }
-
-      return {};
+      return { ...small, ...tutorial };
     }
   }
 };
@@ -139,31 +159,19 @@ export default {
       v-tooltip="boughtTooltip"
       :enabled="isAffordable && !isCapped && isUnlocked"
       class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
-      :class="tutorialClass()"
+      :class="singlesClass()"
       @click="buySingle"
     >
-      <span v-if="isCapped">Capped</span>
-      <template v-else>
-        <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
-        <span v-if="isCostsAD">{{ costUnit }}</span>
-        <span v-else>AM</span>
-      </template>
+      {{ singleText }}
     </PrimaryButton>
     <PrimaryButton
       :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
       class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
+      :class="{ 'o-primary-btn--buy-ad--small-text': isLongText(until10Text) }"
       :ach-tooltip="boughtTooltip"
       @click="buyUntil10"
     >
-      <span v-if="isCapped">Capped</span>
-      <span v-else-if="isContinuumActive">Continuum: {{ continuumString }}</span>
-      <template v-else>
-        Until {{ formatInt(10) }},
-        <span v-if="showCostTitle(until10Cost)">Cost: </span>
-        {{ format(until10Cost) }}
-        <span v-if="isCostsAD">{{ costUnit }}</span>
-        <span v-else>AM</span>
-      </template>
+      {{ until10Text }}
     </PrimaryButton>
   </div>
 </template>

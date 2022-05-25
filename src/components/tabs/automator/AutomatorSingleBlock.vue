@@ -189,7 +189,7 @@ export default {
       group="code-blocks"
     >
       <AutomatorSingleBlock
-        v-for="(subblock, index) in block.nest"
+        v-for="subblock in block.nest"
         :key="subblock.id"
         :block="subblock"
         :update-block="updateBlockFromNest"

@@ -168,7 +168,7 @@ export const BlockAutomator = {
         @end="parseRequest"
       >
         <AutomatorSingleBlock
-          v-for="(block, index) in lines"
+          v-for="block in lines"
           :key="block.id"
           :block="block"
           :update-block="updateBlock"

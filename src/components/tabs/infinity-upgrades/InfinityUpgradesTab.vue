@@ -86,6 +86,24 @@ export default {
         classObject[`o-infinity-upgrade-btn--color-${column + 1}`] = true;
       }
       return classObject;
+    },
+    backgroundOfColumnBg(col) {
+      // Infinity upgrades are 10 rem tall, if counting margins.
+      const INF_UPG_HEIGHT = 10;
+      // The "row" text is 2.5rem tall.
+      const HEADER_HEIGHT = 2.5;
+      const MAX_HEIGHT = INF_UPG_HEIGHT * col.length + HEADER_HEIGHT;
+
+      let boughtUpgrades = 0;
+      for (const upg of col) {
+        if (upg.isBought) boughtUpgrades++;
+      }
+
+      const heightUpper = boughtUpgrades >= 4 ? 1
+        : Math.max((boughtUpgrades - 1) * INF_UPG_HEIGHT + HEADER_HEIGHT, 0) / MAX_HEIGHT;
+      const heightLower = (boughtUpgrades * INF_UPG_HEIGHT + HEADER_HEIGHT) / MAX_HEIGHT;
+      return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
+        transparent ${heightLower * 100}%)`;
     }
   }
 };
@@ -114,22 +132,30 @@ export default {
       You cannot get any Charged Infinity Upgrades while in Doomed.
     </div>
     <br>
+    Within each column, the upgrades must be purchased from top to bottom.
+    <br>
     <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
       <div
         v-for="(column, columnId) in grid"
         :key="columnId"
-        class="l-infinity-upgrade-grid__column"
+        class="c-infinity-upgrade-grid__column"
       >
+        <span class="c-infinity-upgrade-grid__column-header-text">Column {{ columnId + 1 }}</span>
         <InfinityUpgradeButton
           v-for="upgrade in column"
           :key="upgrade.id"
           :upgrade="upgrade"
           :class="btnClassObject(columnId)"
         />
+        <div
+          class="c-infinity-upgrade-grid__column--background"
+          :style="{ background: backgroundOfColumnBg(column) }"
+        />
       </div>
     </div>
     <div
-      v-if="bottomRowUnlocked"
+      v-if="
+        bottomRowUnlocked"
       class="l-infinity-upgrades-bottom-row"
     >
       <IpMultiplierButton class="l-infinity-upgrades-tab__mult-btn" />
@@ -148,5 +174,36 @@ export default {
 </template>
 
 <style scoped>
+.c-infinity-upgrade-grid__column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 0.1rem solid black;
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0 0.3rem;
+}
 
+.c-infinity-upgrade-grid__column--background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.c-infinity-upgrade-grid__column-header-text {
+  display: flex;
+  height: 2.5rem;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 1.4rem;
+  color: var(--color-text);
+}
+
+.l-infinity-upgrades-bottom-row .l-infinity-upgrade-grid__cell,
+.l-infinity-upgrades-bottom-row .l-infinity-upgrades-tab__mult-btn {
+  margin: 0.5rem 1.2rem;
+}
 </style>

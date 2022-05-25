@@ -3610,11 +3610,6 @@ br {
   flex-direction: row;
 }
 
-.l-infinity-upgrade-grid__column {
-  display: flex;
-  flex-direction: column;
-}
-
 .l-infinity-upgrade-grid__cell {
   margin: 0.5rem 0.8rem;
 }

@@ -1345,7 +1345,14 @@ GameDatabase.achievements.normal = [
     name: "The One with Dilated Time",
     description: "Unlock Dilation in Doomed.",
     checkRequirement: () => PelleStrikes.dilation.hasStrike,
-    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED,
+    // We forgot to disable a singularity milestone while balancing Pelle; now it's disabled
+    // and this upgrade has the same effect as it used to.
+    get reward() {
+      return `Increase the multiplier per repeatable Dilated Time
+      multiplier upgrade by ${formatX(1.35, 0, 2)}.`;
+    },
+    effect: 1.35
   },
   {
     id: 188,

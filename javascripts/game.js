@@ -344,9 +344,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
-    factor *= SingularityMilestone.gamespeedFromSingularities.canBeApplied
-      ? SingularityMilestone.gamespeedFromSingularities.effectValue
-      : 1;
+    factor *= SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1);
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -816,8 +814,8 @@ export function getTTPerSecond() {
 
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
-  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1) && !Pelle.isDoomed) {
-    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
+  if (finalTT.gt(1)) {
+    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1));
   }
 
   return finalTT;

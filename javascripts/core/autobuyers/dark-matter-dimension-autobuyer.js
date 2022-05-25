@@ -10,7 +10,7 @@ Autobuyer.darkMatterDims = new class DarkMatterDimensionAutobuyerState extends I
   }
 
   get isUnlocked() {
-    return SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
+    return SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
   }
 
   get interval() {

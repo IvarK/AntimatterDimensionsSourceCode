@@ -84,7 +84,7 @@ export default {
       return Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
     },
     singularityVisible() {
-      return SingularityMilestone.glyphLevelFromSingularities.isUnlocked;
+      return SingularityMilestone.glyphLevelFromSingularities.canBeApplied;
     }
   },
   watch: {

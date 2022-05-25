@@ -18,10 +18,6 @@ export default {
     deleteBlock: {
       type: Function,
       required: true
-    },
-    lineNumber: {
-      type: Number,
-      required: true
     }
   },
   data() {
@@ -107,26 +103,13 @@ export default {
         errors: validator.errors,
         line: value
       };
-    },
-    numberOfLinesInBlock(block) {
-      return BlockAutomator.numberOfLinesInBlock(block);
-    },
-    lineNumberAtPosition(x) {
-      let number = 1 + this.lineNumber;
-      for (let i = 0; i < x; i++) {
-        number += this.numberOfLinesInBlock(this.block.nest[i]);
-      }
-      return number;
     }
   }
 };
 </script>
 
 <template>
-  <div>
-    <div class="c-automator-block-line-number">
-      {{ lineNumber }}
-    </div>
+  <div class="c-automator-block-row--container">
     <div
       class="c-automator-block-row"
       :class="{ 'c-automator-block-row-active' : isCurrentLine }"
@@ -208,7 +191,6 @@ export default {
       <AutomatorSingleBlock
         v-for="(subblock, index) in block.nest"
         :key="subblock.id"
-        :line-number="lineNumberAtPosition(index)"
         :block="subblock"
         :update-block="updateBlockFromNest"
         :delete-block="deleteBlockFromNest"
@@ -218,18 +200,17 @@ export default {
 </template>
 
 <style scoped>
-.c-automator-block-line-number {
-  display: flex;
-  width: 3rem;
-  height: 2.85rem;
-  position: absolute;
-  left: 0;
-  z-index: 1;
-  align-items: center;
-  font-size: 1.4rem;
-  color: #505050;
-  padding: 0.2rem;
+.c-automator-block-row--container {
+  margin: -0.002rem;
+  /* The only purpose of this is to prevent margin overlapping so the nested blocks can fit nicer */
+  padding: 0.002rem;
+}
 
-  direction: rtl;
+.l-automator-nested-block {
+  width: fit-content;
+  min-width: 30rem;
+  border: 0.1rem dotted #55ff55;
+  margin: -0.1rem 0 -0.1rem 3rem;
+  padding: 0 0.5rem;
 }
 </style>

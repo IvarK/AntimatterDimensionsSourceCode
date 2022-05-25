@@ -17,14 +17,21 @@ export default {
       set(value) {
         this.$viewModel.tabs.reality.automator.lines = value;
       }
-    }
+    },
+    numberOfLines() {
+      return this.lines.reduce((a, l) => a + BlockAutomator.numberOfLinesInBlock(l), 0);
+    },
   },
   mounted() {
     this.$refs.blockEditorElement.scrollTo(0, BlockAutomator.previousScrollPosition);
+    // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
+    this.$refs.editorGutter.style.bottom = `${BlockAutomator.previousScrollPosition}px`;
   },
   methods: {
     setPreviousScroll() {
       BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;
+      // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
+      this.$refs.editorGutter.style.bottom = `${BlockAutomator.previousScrollPosition}px`;
     },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
@@ -38,16 +45,6 @@ export default {
       this.lines.splice(idx, 1);
       this.parseRequest();
     },
-    numberOfLinesInBlock(block) {
-      return BlockAutomator.numberOfLinesInBlock(block);
-    },
-    lineNumberAtPosition(x) {
-      let number = 1;
-      for (let i = 0; i < x; i++) {
-        number += this.numberOfLinesInBlock(this.lines[i]);
-      }
-      return number;
-    }
   }
 };
 
@@ -143,7 +140,21 @@ export const BlockAutomator = {
 
 <template>
   <div class="c-automator-block-editor--container">
-    <div class="c-automator-block-editor--gutter" />
+    <div
+      ref="editorGutter"
+      class="c-automator-block-editor--gutter"
+    >
+      <div
+        v-for="i in numberOfLines"
+        :key="i"
+        class="c-automator-block-line-number"
+        :style="{
+          top: `${i * 3.45 - 3.45}rem`
+        }"
+      >
+        {{ i }}
+      </div>
+    </div>
     <div
       ref="blockEditorElement"
       class="c-automator-block-editor"
@@ -159,7 +170,6 @@ export const BlockAutomator = {
         <AutomatorSingleBlock
           v-for="(block, index) in lines"
           :key="block.id"
-          :line-number="lineNumberAtPosition(index)"
           :block="block"
           :update-block="updateBlock"
           :delete-block="deleteBlock"
@@ -171,14 +181,14 @@ export const BlockAutomator = {
 
 <style scoped>
 .c-automator-block-editor {
+  display: flex;
   overflow-y: scroll;
   tab-size: 1.5rem;
   width: 100%;
   height: 100%;
-  position: relative;
   background-color: black;
   box-sizing: border-box;
-  padding: 0.5rem 0.5rem 0.5rem 4.5rem;
+  padding: 0;
 }
 
 .c-automator-block-editor--container {
@@ -190,13 +200,22 @@ export const BlockAutomator = {
 }
 
 .c-automator-block-editor--gutter {
-  width: 4rem;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
+  height: max-content;
+  min-height: 100%;
+  position: relative;
   background-color: #262626;
   border-right: 0.1rem solid #505050;
+  /* left and right paddings are 1 to make space for text, bottom padding is 4 to make for a buffer
+  since a scrollbar might appear which would make it cut off abruptly at the end */
+  padding: 0.3rem 1rem 4rem;
+}
+
+.c-automator-block-line-number {
+  display: flex;
+  height: 3.45rem;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1.4rem;
+  color: #606060;
 }
 </style>

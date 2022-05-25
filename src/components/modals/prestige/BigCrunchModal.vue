@@ -20,9 +20,9 @@ export default {
     },
   },
   created() {
-    this.$on(GAME_EVENT.INFINITY_RESET_AFTER, this.emitClose);
-    this.$on(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.$on(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.INFINITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {

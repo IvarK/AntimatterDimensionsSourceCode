@@ -27,7 +27,7 @@ export default {
 <template>
   <div
     v-if="!isHidden"
-    class="sidebar"
+    class="c-modern-sidebar"
   >
     <ModernSidebarCurrency />
     <ModernTabButton

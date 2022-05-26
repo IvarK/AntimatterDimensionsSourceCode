@@ -92,10 +92,7 @@ export default {
       const INF_UPG_HEIGHT = 10;
       const MAX_HEIGHT = INF_UPG_HEIGHT * col.length;
 
-      let boughtUpgrades = 0;
-      for (const upg of col) {
-        if (upg.isBought) boughtUpgrades++;
-      }
+      const boughtUpgrades = col.countWhere(upg => upg.isBought);
 
       const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
       const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
@@ -150,8 +147,7 @@ export default {
       </div>
     </div>
     <div
-      v-if="
-        bottomRowUnlocked"
+      v-if="bottomRowUnlocked"
       class="l-infinity-upgrades-bottom-row"
     >
       <IpMultiplierButton class="l-infinity-upgrades-tab__mult-btn" />

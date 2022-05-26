@@ -34,9 +34,9 @@ export function replicantiGalaxy() {
   addReplicantiGalaxies(galaxyGain);
 }
 
-export function replicantiGalaxyRequest() {
+export function replicantiGalaxyRequest(forceNoConfirm = false) {
   if (!Replicanti.galaxies.canBuyMore) return;
-  if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+  if (player.options.confirmations.replicantiGalaxy && !forceNoConfirm) Modal.replicantiGalaxy.show();
   else replicantiGalaxy();
 }
 

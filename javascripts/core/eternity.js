@@ -131,6 +131,7 @@ export function eternity(force, auto, specialConditions = {}) {
 }
 
 export function animateAndEternity() {
+  if (!Player.canEternity) return;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
     ((player.dilation.active && player.options.animations.dilation) ||
     (!player.dilation.active && player.options.animations.eternity));

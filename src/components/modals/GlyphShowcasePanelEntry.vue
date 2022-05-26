@@ -85,7 +85,10 @@ export default {
     rarityStyle() {
       let color;
       if (this.glyph.type === "companion") color = GlyphTypes[this.type].color;
-      else color = getRarity(this.glyph.strength).color;
+      else {
+        const info = getRarity(this.glyph.strength);
+        color = Theme.current().isDark() ? info.darkColor : info.lightColor;
+      }
       return {
         "color": `${color}`,
         "font-weight": "bold"

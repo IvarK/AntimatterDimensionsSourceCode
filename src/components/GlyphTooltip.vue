@@ -97,7 +97,7 @@ export default {
       return Theme.current().isDark() ? "white" : "black";
     },
     descriptionStyle() {
-      let color = this.rarityInfo.color;
+      let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
       if (this.type === "cursed") color = this.cursedColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
@@ -172,7 +172,7 @@ export default {
       const isCursed = this.type === "cursed";
       const isReality = this.type === "reality";
 
-      let color = this.rarityInfo.color;
+      let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
       if (isCursed) color = this.cursedColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
@@ -228,7 +228,7 @@ export default {
       GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
     getFontColor() {
-      return Theme.current().isDark() ? "#ccc" : "black";
+      return Theme.current().isDark() ? "#cccccc" : "black";
     },
     sacrificeText() {
       if (this.type === "companion" || this.type === "cursed") return "";

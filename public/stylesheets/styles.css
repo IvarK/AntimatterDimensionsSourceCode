@@ -785,7 +785,7 @@ button:focus {
 
 .c-reality-button--locked {
   color: #181818;
-  background-color: var(--color-gray-d85-l214);
+  background-color: var(--color-glyph-sac-text-input--focused);
   border-color: var(--color-bad);
 }
 
@@ -1422,6 +1422,7 @@ br {
 
 .infotooltip .infotooltiptext {
   visibility: hidden;
+  white-space: nowrap;
   background-color: var(--color-background);
   color: var(--color-text);
   text-align: left;
@@ -8563,7 +8564,7 @@ kbd {
 }
 
 .s-base--dark .l-glyph-levels-and-weights__adjust-outline::after {
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality-light);
+  border-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__factor {

@@ -150,9 +150,9 @@ export default {
       return Theme.current().isDark() ? "white" : "black";
     },
     innerStyle() {
-      const rarityColor = this.isRealityGlyph
-        ? this.realityGlyphColor()
-        : this.glyph.color || getRarity(this.glyph.strength).color;
+      const info = getRarity(this.glyph.strength);
+      const baseColor = Theme.current().isDark() ? info.darkColor : info.lightColor;
+      const rarityColor = this.isRealityGlyph ? this.realityGlyphColor() : this.glyph.color || baseColor;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
@@ -436,7 +436,8 @@ export default {
     glyphColor() {
       if (this.isCursedGlyph) return "black";
       if (this.isRealityGlyph) return this.realityGlyphColor();
-      return `${this.glyph.color || getRarity(this.glyph.strength).color}`;
+      const info = getRarity(this.glyph.strength);
+      return `${this.glyph.color || (Theme.current().isDark() ? info.darkColor : info.lightColor)}`;
     },
     // Note that the dot bigger for one of the mutually-exclusive effect pair (IDs of the only case are hardcoded)
     glyphEffectIcon(id) {

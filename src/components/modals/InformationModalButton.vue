@@ -18,7 +18,6 @@ export default {
   },
   methods: {
     creditsModal() {
-      Modal.hide();
       Modal.credits.show();
     }
   }
@@ -35,12 +34,16 @@ export default {
       :href="link"
       target="_blank"
       class="c-socials--icon"
-    ><i :class="icon" /></a>
+    >
+      <i :class="icon" />
+    </a>
     <a
       v-else
       class="c-socials--icon"
       @click="creditsModal"
-    ><i :class="icon" /></a>
+    >
+      <i :class="icon" />
+    </a>
   </span>
 </template>
 

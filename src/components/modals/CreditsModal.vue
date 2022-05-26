@@ -8,18 +8,12 @@ export default {
     CreditsDisplay,
     ModalCloseButton
   },
-  methods: {
-    close() {
-      this.$emit("close");
-      Modal.information.show();
-    }
-  }
 };
 </script>
 
 <template>
   <div class="l-credits-modal c-credits-modal">
-    <ModalCloseButton @click="close" />
+    <ModalCloseButton @click="emitClose" />
     <CreditsDisplay />
   </div>
 </template>

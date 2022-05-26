@@ -58,12 +58,29 @@ export default {
         "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
-    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline,
+    backgroundOfColumnBg() {
+      // Infinity upgrades are 10 rem tall, if counting margins.
+      const INF_UPG_HEIGHT = 10;
+      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
+
+      return this.grid.map(col => {
+        const boughtUpgrades = col.countWhere(upg => upg.isBought);
+
+        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
+        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
+        return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
+          transparent ${heightLower * 100}%)`;
+      });
+    }
   },
   watch: {
     disCharge(newValue) {
       player.celestials.ra.disCharge = newValue;
     }
+  },
+  created() {
+    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.$recompute("backgroundOfColumnBg"));
   },
   methods: {
     update() {
@@ -120,13 +137,17 @@ export default {
       <div
         v-for="(column, columnId) in grid"
         :key="columnId"
-        class="l-infinity-upgrade-grid__column"
+        class="c-infinity-upgrade-grid__column"
       >
         <InfinityUpgradeButton
           v-for="upgrade in column"
           :key="upgrade.id"
           :upgrade="upgrade"
           :class="btnClassObject(columnId)"
+        />
+        <div
+          class="c-infinity-upgrade-grid__column--background"
+          :style="{ background: backgroundOfColumnBg[columnId] }"
         />
       </div>
     </div>
@@ -150,8 +171,27 @@ export default {
 </template>
 
 <style scoped>
-.l-infinity-upgrade-grid__column {
+.c-infinity-upgrade-grid__column {
   display: flex;
   flex-direction: column;
+  position: relative;
+  border: 0.1rem solid black;
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0 0.3rem;
+}
+
+.c-infinity-upgrade-grid__column--background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.l-infinity-upgrades-bottom-row .l-infinity-upgrade-grid__cell,
+.l-infinity-upgrades-bottom-row .l-infinity-upgrades-tab__mult-btn {
+  margin: 0.5rem 1.2rem;
 }
 </style>

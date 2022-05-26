@@ -86,6 +86,21 @@ export default {
         classObject[`o-infinity-upgrade-btn--color-${column + 1}`] = true;
       }
       return classObject;
+    },
+    backgroundOfColumnBg(col) {
+      // Infinity upgrades are 10 rem tall, if counting margins.
+      const INF_UPG_HEIGHT = 10;
+      const MAX_HEIGHT = INF_UPG_HEIGHT * col.length;
+
+      let boughtUpgrades = 0;
+      for (const upg of col) {
+        if (upg.isBought) boughtUpgrades++;
+      }
+
+      const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
+      const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
+      return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
+        transparent ${heightLower * 100}%)`;
     }
   }
 };
@@ -120,7 +135,7 @@ export default {
       <div
         v-for="(column, columnId) in grid"
         :key="columnId"
-        class="l-infinity-upgrade-grid__column"
+        class="c-infinity-upgrade-grid__column"
       >
         <InfinityUpgradeButton
           v-for="upgrade in column"
@@ -128,10 +143,15 @@ export default {
           :upgrade="upgrade"
           :class="btnClassObject(columnId)"
         />
+        <div
+          class="c-infinity-upgrade-grid__column--background"
+          :style="{ background: backgroundOfColumnBg(column) }"
+        />
       </div>
     </div>
     <div
-      v-if="bottomRowUnlocked"
+      v-if="
+        bottomRowUnlocked"
       class="l-infinity-upgrades-bottom-row"
     >
       <IpMultiplierButton class="l-infinity-upgrades-tab__mult-btn" />
@@ -150,8 +170,27 @@ export default {
 </template>
 
 <style scoped>
-.l-infinity-upgrade-grid__column {
+.c-infinity-upgrade-grid__column {
   display: flex;
   flex-direction: column;
+  position: relative;
+  border: 0.1rem solid black;
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0 0.3rem;
+}
+
+.c-infinity-upgrade-grid__column--background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.l-infinity-upgrades-bottom-row .l-infinity-upgrade-grid__cell,
+.l-infinity-upgrades-bottom-row .l-infinity-upgrades-tab__mult-btn {
+  margin: 0.5rem 1.2rem;
 }
 </style>

@@ -10,9 +10,6 @@ export default {
     draggable
   },
   computed: {
-    lineNumbersCount() {
-      return Math.max(this.lines.length, 1);
-    },
     lines: {
       get() {
         return this.$viewModel.tabs.reality.automator.lines;
@@ -20,9 +17,22 @@ export default {
       set(value) {
         this.$viewModel.tabs.reality.automator.lines = value;
       }
-    }
+    },
+    numberOfLines() {
+      return this.lines.reduce((a, l) => a + BlockAutomator.numberOfLinesInBlock(l), 0);
+    },
+  },
+  mounted() {
+    this.$refs.blockEditorElement.scrollTo(0, BlockAutomator.previousScrollPosition);
+    // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
+    this.$refs.editorGutter.style.bottom = `${this.$refs.blockEditorElement.scrollTop}px`;
   },
   methods: {
+    setPreviousScroll() {
+      BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;
+      // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
+      this.$refs.editorGutter.style.bottom = `${this.$refs.blockEditorElement.scrollTop}px`;
+    },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
     },
@@ -118,31 +128,97 @@ export const BlockAutomator = {
 
   updateIdArray() {
     this._idArray = this.blockIdArray(this.lines);
-  }
+  },
+
+  numberOfLinesInBlock(block) {
+    return block.nested ? Math.max(block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1), 2) : 1;
+  },
+
+  previousScrollPosition: 0
 };
 </script>
 
 <template>
-  <div class="c-automator-block-editor">
-    <draggable
-      v-model="lines"
-      group="code-blocks"
-      class="c-automator-blocks"
-      ghost-class="c-automator-block-row-ghost"
-      @end="parseRequest"
+  <div class="c-automator-block-editor--container">
+    <div
+      ref="editorGutter"
+      class="c-automator-block-editor--gutter"
     >
-      <AutomatorSingleBlock
-        v-for="(block, index) in lines"
-        :key="block.id"
-        :line-number="index"
-        :block="block"
-        :update-block="updateBlock"
-        :delete-block="deleteBlock"
-      />
-    </draggable>
+      <div
+        v-for="i in numberOfLines"
+        :key="i"
+        class="c-automator-block-line-number"
+        :style="{
+          top: `${i * 3.45 - 3.45}rem`
+        }"
+      >
+        {{ i }}
+      </div>
+    </div>
+    <div
+      ref="blockEditorElement"
+      class="c-automator-block-editor"
+      @scroll="setPreviousScroll()"
+    >
+      <draggable
+        v-model="lines"
+        group="code-blocks"
+        class="c-automator-blocks"
+        ghost-class="c-automator-block-row-ghost"
+        @end="parseRequest"
+      >
+        <AutomatorSingleBlock
+          v-for="block in lines"
+          :key="block.id"
+          :block="block"
+          :update-block="updateBlock"
+          :delete-block="deleteBlock"
+        />
+      </draggable>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.c-automator-block-editor {
+  display: flex;
+  overflow-y: auto;
+  tab-size: 1.5rem;
+  width: 100%;
+  background-color: black;
+  box-sizing: content-box;
+}
 
+.c-automator-block-editor--container {
+  display: flex;
+  overflow-y: hidden;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.c-automator-blocks {
+  width: 100%;
+  height: max-content;
+  padding: 0.3rem 0.6rem 5rem;
+}
+
+.c-automator-block-editor--gutter {
+  height: max-content;
+  min-height: 100%;
+  position: relative;
+  background-color: #262626;
+  border-right: 0.1rem solid #505050;
+  /* left and right paddings are 1 to make space for text, bottom padding is 20 to make for a buffer */
+  padding: 0.3rem 1rem 20rem;
+}
+
+.c-automator-block-line-number {
+  display: flex;
+  height: 3.45rem;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1.4rem;
+  color: #606060;
+}
 </style>

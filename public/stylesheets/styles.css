@@ -8911,14 +8911,9 @@ kbd {
 
 /* #endregion reality-tab */
 
-.c-automator-blocks {
-  width: 100%;
-  padding-bottom: 5rem;
-}
-
 .o-automator-command {
   display: inline-block;
-  width: 8.5rem;
+  min-width: 8.5rem;
   color: #c080ff;
   background: #000115;
   border: 0.1rem solid #353535;
@@ -8946,8 +8941,10 @@ kbd {
 
 .c-automator-block-row {
   display: flex;
+  min-height: 2.85rem;
+  max-height: 2.85rem;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin: 0.3rem 0;
 }
 
 .c-automator-block-row > * {
@@ -8960,20 +8957,11 @@ kbd {
 
 .c-automator-block-row-ghost {
   display: block;
+  width: 100%;
   margin: auto;
   margin-bottom: 0.5rem;
   margin-left: 0;
-}
-
-.c-automator-block-editor {
-  overflow-y: scroll;
-  tab-size: 1.5rem;
-  height: 100%;
-  background-color: black;
-  border-top-left-radius: var(--var-border-radius, 1rem);
-  border-bottom-left-radius: var(--var-border-radius, 1rem);
-  box-sizing: border-box;
-  padding: 0.5rem;
+  padding: 0.3rem 0.6rem;
 }
 
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
@@ -8993,15 +8981,6 @@ kbd {
 
 input.o-automator-block-input {
   color: #00ff00;
-}
-
-.l-automator-nested-block {
-  width: fit-content;
-  min-width: 30rem;
-  border: var(--var-border-width, 2px) dotted #55ff55;
-  margin-top: 0.5rem;
-  margin-left: 3rem;
-  padding: 1rem;
 }
 
 .o-automator-block-delete {

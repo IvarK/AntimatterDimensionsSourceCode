@@ -18,10 +18,6 @@ export default {
     deleteBlock: {
       type: Function,
       required: true
-    },
-    lineNumber: {
-      type: Number,
-      required: true
     }
   },
   data() {
@@ -113,7 +109,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="c-automator-block-row--container">
     <div
       class="c-automator-block-row"
       :class="{ 'c-automator-block-row-active' : isCurrentLine }"
@@ -192,10 +188,9 @@ export default {
       class="l-automator-nested-block"
       group="code-blocks"
     >
-      <automator-single-block
-        v-for="(subblock, index) in block.nest"
+      <AutomatorSingleBlock
+        v-for="subblock in block.nest"
         :key="subblock.id"
-        :line-number="index"
         :block="subblock"
         :update-block="updateBlockFromNest"
         :delete-block="deleteBlockFromNest"
@@ -205,5 +200,18 @@ export default {
 </template>
 
 <style scoped>
+.c-automator-block-row--container {
+  margin: -0.002rem;
+  /* The only purpose of this is to prevent margin overlapping so the nested blocks can fit nicer */
+  padding: 0.002rem;
+}
 
+.l-automator-nested-block {
+  width: fit-content;
+  min-width: 30rem;
+  min-height: 3.65rem;
+  border: 0.1rem dotted #55ff55;
+  margin: -0.1rem 0 -0.1rem 3rem;
+  padding: 0 0.5rem;
+}
 </style>

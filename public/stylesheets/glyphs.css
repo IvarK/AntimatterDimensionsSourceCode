@@ -1,9 +1,9 @@
 :root {
   --color-background: white;
-  --color-gray-d51-l240: rgb(240, 240, 240);
-  --color-gray-d85-l214: rgb(214, 214, 214);
-  --color-gray-d180-l50: #505050;
-  --color-gray-d173-l68: #444;
+  --color-glyph-sac-text-input: rgb(240, 240, 240);
+  --color-glyph-sac-text-input--focused: rgb(214, 214, 214);
+  --color-glyph-sac-text-tooltip: #505050;
+  --color-glyph-equipping: #444;
   --color-background-dark-green-gray: rgb(219, 230, 219);
   --color-text-light-blue-gray: #3b3b46;
   --color-glyph-selection: #a1a112;
@@ -14,10 +14,10 @@
 
 :root .s-base--dark {
   --color-background: black;
-  --color-gray-d51-l240: #333;
-  --color-gray-d85-l214: #555;
-  --color-gray-d180-l50: #b4b4b4;
-  --color-gray-d173-l68: rgb(173, 173, 173);
+  --color-glyph-sac-text-input: #333;
+  --color-glyph-sac-text-input--focused: #555;
+  --color-glyph-sac-text-tooltip: #b4b4b4;
+  --color-glyph-equipping: rgb(173, 173, 173);
   --color-background-dark-green-gray: #131;
   --color-text-light-blue-gray: #d4d4ff;
   --color-glyph-selection: #B4B420;
@@ -308,7 +308,7 @@
   height: 1.7rem;
   text-align: center;
   font-size: 1.2rem;
-  background-color: var(--color-gray-d51-l240);
+  background-color: var(--color-glyph-sac-text-input);
   color: var(--color-reality);
   border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
@@ -336,7 +336,7 @@
   height: 1.5rem;
   text-align: center;
   font-size: 1.2rem;
-  background-color: var(--color-gray-d51-l240);
+  background-color: var(--color-glyph-sac-text-input);
   color: var(--color-reality);
   border-radius: var(--var-border-radius, 0.2rem);
   border: solid 0.1rem;
@@ -361,7 +361,7 @@
 
 .c-auto-sac-type-tab__input:focus {
   font-weight: bold;
-  background-color: var(--color-gray-d85-l214);
+  background-color: var(--color-glyph-sac-text-input--focused);
   box-shadow: 0 0 0.4rem 0.1rem var(--color-reality);
 }
 
@@ -571,7 +571,6 @@
   color: var(--color-text);
   font-size: 1.2rem;
   font-weight: normal;
-  color: #ffffff;
   text-shadow: none;
   border-radius: var(--var-border-radius, 0.6rem);
   padding: 0 0.6rem;
@@ -607,7 +606,7 @@
 }
 
 .c-glyph-tooltip__sacrifice {
-  color: var(--color-gray-d180-l50);
+  color: var(--color-glyph-sac-text-tooltip);
   font-size: 1rem;
   font-weight: normal;
   color: #b4b4b4;
@@ -684,7 +683,7 @@
 }
 
 .c-equipped-glyphs__empty--dragover {
-  box-shadow: 0 0 0.5rem 0.25rem var(--color-gray-d173-l68);
+  box-shadow: 0 0 0.5rem 0.25rem var(--color-glyph-equipping);
 }
 
 .l-equipped-glyphs__buttons {

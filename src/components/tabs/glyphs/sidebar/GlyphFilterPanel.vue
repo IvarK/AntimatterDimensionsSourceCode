@@ -164,8 +164,7 @@ export default {
     },
     bumpRarity(type) {
       // Note: As the minimum of an empty array is zero, this wraps around to 0% again if clicked at 100% rarity
-      const rarities = Theme.current().isDark() ? GlyphRarities : GlyphRaritiesLight;
-      const newRarity = rarities
+      const newRarity = GlyphRarities
         .map(r => strengthToRarity(r.minStrength))
         .filter(s => s > this.rarityThresholds[type])
         .min();

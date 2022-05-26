@@ -29,6 +29,12 @@ export default {
       return `Armageddon will start a new Doomed Reality. You will gain
       ${quantify("Remnant", this.remnantsGain, 2, 0)} ${isFirstReset}`;
     },
+    optionsObject() {
+      if (!this.isDoomed) return {};
+      return {
+        option: "armageddon"
+      };
+    }
   },
   methods: {
     update() {
@@ -69,7 +75,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    v-bind="optionsObject"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

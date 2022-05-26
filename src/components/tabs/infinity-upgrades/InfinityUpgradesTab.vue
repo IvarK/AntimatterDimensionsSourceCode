@@ -114,6 +114,8 @@ export default {
       You cannot get any Charged Infinity Upgrades while in Doomed.
     </div>
     <br>
+    Within each column, the upgrades must be purchased from top to bottom.
+    <br>
     <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
       <div
         v-for="(column, columnId) in grid"
@@ -148,5 +150,8 @@ export default {
 </template>
 
 <style scoped>
-
+.l-infinity-upgrade-grid__column {
+  display: flex;
+  flex-direction: column;
+}
 </style>

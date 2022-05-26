@@ -7,6 +7,10 @@
   outline: none;
 }
 
+:root {
+  --sidebar-width: 12.8rem;
+}
+
 :root .t-normal,
 :root .t-s9 {
   --color-text: white;
@@ -43,27 +47,27 @@ body.t-s9 {
   margin: auto;
 }
 
-.sidebar {
+.c-modern-sidebar {
   display: flex;
   flex-direction: column;
-  width: 12rem;
+  width: var(--sidebar-width);
   position: absolute;
   left: 0;
   z-index: 5;
   pointer-events: auto;
 }
 
-.sidebar:hover .subtabs,
-.sidebar:hover .l-tab-btn-inner,
-.sidebar:hover .o-tab-btn,
-.sidebar:hover .o-tab-btn::after {
+.c-modern-sidebar:hover .subtabs,
+.c-modern-sidebar:hover .l-tab-btn-inner,
+.c-modern-sidebar:hover .o-tab-btn,
+.c-modern-sidebar:hover .o-tab-btn::after {
   transition-delay: 0s;
 }
 
-.resource {
+.c-sidebar-resource {
   display: flex;
   flex-direction: column;
-  width: 12rem;
+  width: var(--sidebar-width);
   height: 7rem;
   justify-content: center;
   align-items: center;
@@ -73,18 +77,18 @@ body.t-s9 {
   padding: 1rem;
 }
 
-.resource h2 {
+.c-sidebar-resource h2 {
   z-index: 1;
   font-size: 1.9rem;
   margin: 0;
 }
 
-.t-dark .resource h2,
-.t-dark-metro .resource h2 {
+.t-dark .c-sidebar-resource h2,
+.t-dark-metro .c-sidebar-resource h2 {
   text-shadow: 0 0 0.1rem rgba(0, 0, 0, 50%), -0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 80%);
 }
 
-.resource-information {
+.c-sidebar-resource__information {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -98,7 +102,7 @@ body.t-s9 {
   color: var(--color-text);
 }
 
-.resource-name {
+.c-sidebar-resource__name {
   font-size: 1.2rem;
 }
 
@@ -177,7 +181,7 @@ body.t-s9 {
   z-index: 1;
 }
 
-.sidebar > .o-tab-btn {
+.c-modern-sidebar > .o-tab-btn {
   border-left-width: 0;
 }
 
@@ -192,7 +196,7 @@ body.t-s9 {
 }
 
 .o-tab-btn:hover .subtabs {
-  left: 14.3rem;
+  left: calc(var(--sidebar-width) + 2.3rem);
   opacity: 1;
   pointer-events: all;
 }
@@ -241,8 +245,8 @@ body.t-s9 {
 }
 
 .game-container {
-  width: calc(100% - 12rem);
-  margin-left: 12rem;
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
 }
 
 .t-s4 .game-container {
@@ -274,7 +278,7 @@ body.t-s9 {
   display: flex;
   position: absolute;
   top: -0.6rem;
-  left: 12rem;
+  left: var(--sidebar-width);
   z-index: 4;
   opacity: 0;
   padding: 0.5rem;

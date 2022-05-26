@@ -58,12 +58,29 @@ export default {
         "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
-    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline,
+    backgroundOfColumnBg() {
+      // Infinity upgrades are 10 rem tall, if counting margins.
+      const INF_UPG_HEIGHT = 10;
+      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
+
+      return this.grid.map(col => {
+        const boughtUpgrades = col.countWhere(upg => upg.isBought);
+
+        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
+        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
+        return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
+          transparent ${heightLower * 100}%)`;
+      });
+    }
   },
   watch: {
     disCharge(newValue) {
       player.celestials.ra.disCharge = newValue;
     }
+  },
+  created() {
+    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.$recompute("backgroundOfColumnBg"));
   },
   methods: {
     update() {
@@ -86,18 +103,6 @@ export default {
         classObject[`o-infinity-upgrade-btn--color-${column + 1}`] = true;
       }
       return classObject;
-    },
-    backgroundOfColumnBg(col) {
-      // Infinity upgrades are 10 rem tall, if counting margins.
-      const INF_UPG_HEIGHT = 10;
-      const MAX_HEIGHT = INF_UPG_HEIGHT * col.length;
-
-      const boughtUpgrades = col.countWhere(upg => upg.isBought);
-
-      const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
-      const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
-      return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
-        transparent ${heightLower * 100}%)`;
     }
   }
 };
@@ -142,7 +147,7 @@ export default {
         />
         <div
           class="c-infinity-upgrade-grid__column--background"
-          :style="{ background: backgroundOfColumnBg(column) }"
+          :style="{ background: backgroundOfColumnBg[columnId] }"
         />
       </div>
     </div>

@@ -8919,11 +8919,6 @@ kbd {
 
 /* #endregion reality-tab */
 
-.c-automator-blocks {
-  width: 100%;
-  padding: 0.3rem 0.6rem 5rem;
-}
-
 .o-automator-command {
   display: inline-block;
   min-width: 8.5rem;

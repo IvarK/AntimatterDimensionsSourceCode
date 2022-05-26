@@ -131,7 +131,7 @@ export const BlockAutomator = {
   },
 
   numberOfLinesInBlock(block) {
-    return block.nested ? block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1) : 1;
+    return block.nested ? Math.max(block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1), 2) : 1;
   },
 
   previousScrollPosition: 0
@@ -185,10 +185,8 @@ export const BlockAutomator = {
   overflow-y: scroll;
   tab-size: 1.5rem;
   width: 100%;
-  height: 100%;
   background-color: black;
-  box-sizing: border-box;
-  padding: 0;
+  box-sizing: content-box;
 }
 
 .c-automator-block-editor--container {
@@ -199,15 +197,20 @@ export const BlockAutomator = {
   box-sizing: border-box;
 }
 
+.c-automator-blocks {
+  width: 100%;
+  height: max-content;
+  padding: 0.3rem 0.6rem 5rem;
+}
+
 .c-automator-block-editor--gutter {
   height: max-content;
   min-height: 100%;
   position: relative;
   background-color: #262626;
   border-right: 0.1rem solid #505050;
-  /* left and right paddings are 1 to make space for text, bottom padding is 4 to make for a buffer
-  since a scrollbar might appear which would make it cut off abruptly at the end */
-  padding: 0.3rem 1rem 4rem;
+  /* left and right paddings are 1 to make space for text, bottom padding is 20 to make for a buffer */
+  padding: 0.3rem 1rem 20rem;
 }
 
 .c-automator-block-line-number {

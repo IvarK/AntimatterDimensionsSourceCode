@@ -209,6 +209,7 @@ export default {
 .l-automator-nested-block {
   width: fit-content;
   min-width: 30rem;
+  min-height: 3.65rem;
   border: 0.1rem dotted #55ff55;
   margin: -0.1rem 0 -0.1rem 3rem;
   padding: 0 0.5rem;

@@ -25,13 +25,13 @@ export default {
   mounted() {
     this.$refs.blockEditorElement.scrollTo(0, BlockAutomator.previousScrollPosition);
     // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
-    this.$refs.editorGutter.style.bottom = `${BlockAutomator.previousScrollPosition}px`;
+    this.$refs.editorGutter.style.bottom = `${this.$refs.blockEditorElement.scrollTop}px`;
   },
   methods: {
     setPreviousScroll() {
       BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;
       // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
-      this.$refs.editorGutter.style.bottom = `${BlockAutomator.previousScrollPosition}px`;
+      this.$refs.editorGutter.style.bottom = `${this.$refs.blockEditorElement.scrollTop}px`;
     },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
@@ -182,7 +182,7 @@ export const BlockAutomator = {
 <style scoped>
 .c-automator-block-editor {
   display: flex;
-  overflow-y: scroll;
+  overflow-y: auto;
   tab-size: 1.5rem;
   width: 100%;
   background-color: black;

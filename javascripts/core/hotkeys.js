@@ -47,7 +47,7 @@ export const shortcuts = [
     name: "Dimensional Sacrifice",
     keys: ["s"],
     type: "bindRepeatableHotkey",
-    function: () => sacrificeBtnClick(),
+    function: () => sacrificeBtnClick(true),
     visible: true
   }, {
     name: "Dimension Boost",
@@ -83,13 +83,13 @@ export const shortcuts = [
     name: "Replicanti Galaxy",
     keys: ["r"],
     type: "bindRepeatableHotkey",
-    function: () => replicantiGalaxyRequest(),
+    function: () => replicantiGalaxyRequest(true),
     visible: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked()
   }, {
     name: "Eternity",
     keys: ["e"],
     type: "bindRepeatableHotkey",
-    function: () => eternityResetRequest(),
+    function: () => animateAndEternity(),
     visible: () => PlayerProgress.eternityUnlocked() || Player.canEternity
   }, {
     name: "Toggle Time Study respec",

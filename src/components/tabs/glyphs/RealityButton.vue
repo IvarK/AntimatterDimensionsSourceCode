@@ -5,6 +5,7 @@ export default {
     return {
       isDoomed: false,
       canReality: false,
+      showSpecialEffect: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(),
       projectedRM: new Decimal(),
@@ -51,6 +52,13 @@ export default {
     },
     shardsGainedText() {
       return quantify("Relic Shard", this.shardsGained, 2);
+    },
+    classObject() {
+      return {
+        "c-reality-button--unlocked": this.canReality,
+        "c-reality-button--locked": !this.canReality,
+        "c-reality-button--special": this.showSpecialEffect,
+      };
     }
   },
   methods: {
@@ -80,6 +88,7 @@ export default {
         return result;
       }
 
+      this.showSpecialEffect = this.hasSpecialReward();
       const multiplier = simulatedRealityCount(false) + 1;
       this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
       this.newIMCap = MachineHandler.projectedIMCap;
@@ -122,13 +131,6 @@ export default {
       }
       return Currency.eternityPoints.value.exponent > 4000 &&
         ((Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) || (Enslaved.isRunning && !Enslaved.isCompleted));
-    },
-    classObject() {
-      return {
-        "c-reality-button--unlocked": this.canReality,
-        "c-reality-button--locked": !this.canReality,
-        "c-reality-button--special": this.hasSpecialReward(),
-      };
     }
   }
 };
@@ -138,7 +140,7 @@ export default {
   <div class="l-reality-button l-reality-button-group-half">
     <button
       class="c-reality-button infotooltip"
-      :class="classObject()"
+      :class="classObject"
       @click="handleClick"
     >
       <div class="l-reality-button__contents">

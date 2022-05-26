@@ -709,12 +709,12 @@ button:focus {
 }
 
 .c-reset-reality-button {
-  height: 35%;
+  height: 100%;
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--color-bad);
-  background: white;
+  background: black;
   border-color: var(--color-bad);
   border-style: solid;
   border-width: var(--var-border-width, 0.2rem);
@@ -729,13 +729,8 @@ button:focus {
 .t-s6 .c-reset-reality-button.force-hover,
 .t-s10 .c-reset-reality-button:hover,
 .t-s10 .c-reset-reality-button.force-hover {
-  color: white;
+  color: black;
   background: var(--color-bad);
-}
-
-.t-s6 .c-reset-reality-button,
-.t-s10 .c-reset-reality-button {
-  background: black;
 }
 
 .c-reset-reality-button-celestial {
@@ -749,13 +744,8 @@ button:focus {
 .t-s6 .c-reset-reality-button-celestial.force-hover,
 .t-s10 .c-reset-reality-button-celestial:hover,
 .t-s10 .c-reset-reality-button-celestial.force-hover {
-  color: white;
+  color: black;
   background: var(--color-celestials);
-}
-
-.t-s6 .c-reset-reality-button-celestial,
-.t-s10 .c-reset-reality-button-celestial {
-  background: black;
 }
 
 .l-reality-amplify-button {

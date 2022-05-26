@@ -41,6 +41,7 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
 import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
@@ -184,6 +185,7 @@ Modal.glyphSetSaveDelete = new Modal(GlyphSetSaveDeleteModal);
 Modal.uiChoice = new Modal(UiChoiceModal);
 Modal.h2p = new Modal(H2PModal);
 Modal.information = new Modal(InformationModal);
+Modal.credits = new Modal(CreditsModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);

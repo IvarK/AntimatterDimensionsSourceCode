@@ -36,7 +36,7 @@ GameDatabase.celestials.descriptions = [
   {
     name: "The Enslaved Ones",
     description() {
-      return `\nGlyph levels will be boosted to a minimum of ${formatInt(5000)}
+      return `Glyph levels will be boosted to a minimum of ${formatInt(5000)}
       Infinity, Time, and 8th Antimatter Dimension purchases are limited to ${formatInt(1)} each
       Antimatter Dimension multipliers are always Dilated (the Glyph effect still only applies in actual Dilation)
       Time Study 192 (uncapped Replicanti) is locked

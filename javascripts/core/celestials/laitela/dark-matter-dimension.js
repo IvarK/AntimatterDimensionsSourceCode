@@ -50,7 +50,7 @@ export class DarkMatterDimensionState extends DimensionState {
     const perUpgrade = INTERVAL_PER_UPGRADE;
     const tierFactor = Math.pow(4, this.tier - 1);
     return 1000 * tierFactor * Math.pow(perUpgrade, this.data.intervalUpgrades) *
-      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectOrDefault(1), this.ascensions) *
+      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectOrDefault(1200), this.ascensions) *
       SingularityMilestone.darkDimensionIntervalReduction.effectOrDefault(1);
   }
 

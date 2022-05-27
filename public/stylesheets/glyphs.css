@@ -109,7 +109,6 @@
 .c-glyph-sacrifice-options__help {
   color: var(--color-reality);
   font-size: 1.2rem;
-  color: var(--color-reality-light);
 }
 
 .s-base--dark .c-glyph-sacrifice-options__help {
@@ -179,8 +178,6 @@
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
   border-radius: var(--var-border-radius, 0.5rem);
   background: var(--color-background);
-  width: 17rem;
-  line-height: 2rem;
   padding: 0.3rem 0;
   transition-duration: 0.2s;
   pointer-events: none;
@@ -194,14 +191,9 @@
   left: 50%;
   z-index: 0;
   margin-left: -0.7rem;
-  margin-bottom: 0;
-  width: 0;
   border-bottom: 0 solid var(--color-reality);
   border-right: 0.7rem solid transparent;
-  border-bottom: 0 solid var(--color-reality-light);
   border-left: 0.7rem solid transparent;
-  margin-bottom: 0;
-  margin-left: -0.7rem;
   transition-duration: 0.2s;
 }
 
@@ -219,7 +211,6 @@
 .s-base--dark .c-glyph-sacrifice-options__option:hover .c-glyph-sacrifice-options__option__tooltip {
   border-color: var(--color-reality-light);
   color: var(--color-reality-light);
-  border-color: var(--color-reality-light);
 }
 
 .s-base--metro .c-glyph-sacrifice-options__option:hover .c-glyph-sacrifice-options__option__tooltip {
@@ -310,12 +301,8 @@
   font-size: 1.2rem;
   background-color: var(--color-glyph-sac-text-input);
   color: var(--color-reality);
-  border-radius: var(--var-border-radius, 0.2rem);
-  border: solid 0.1rem;
-  text-align: center;
   -webkit-appearance: none;
   -moz-appearance: textfield;
-  background-color: #333333;
   border: solid 0.1rem;
   border-radius: var(--var-border-radius, 0.2rem);
 }
@@ -338,11 +325,8 @@
   font-size: 1.2rem;
   background-color: var(--color-glyph-sac-text-input);
   color: var(--color-reality);
-  border-radius: var(--var-border-radius, 0.2rem);
-  border: solid 0.1rem;
   -webkit-appearance: none;
   -moz-appearance: textfield;
-  background-color: #333333;
   border: solid 0.1rem;
   border-radius: var(--var-border-radius, 0.2rem);
   margin: 0;
@@ -593,7 +577,6 @@
   width: calc(100% + 2.4rem);
   font-weight: bold;
   border: var(--var-border-width, 0.2rem) solid;
-  margin-top: -4rem;
   background-color: var(--color-background);
   border-radius: var(--var-border-radius, 0.8rem);
   margin: -0.6rem;
@@ -609,7 +592,6 @@
   color: var(--color-glyph-sac-text-tooltip);
   font-size: 1rem;
   font-weight: normal;
-  color: #b4b4b4;
 }
 
 .c-glyph-tooltip__sacrifice--touchable {
@@ -740,7 +722,6 @@
   -moz-appearance: textfield;
   background-color: var(--color-background);
   color: var(--color-reality);
-  border-radius: var(--var-border-radius, 0.2rem);
   border: none;
   border-bottom: 0.1rem solid;
   border-radius: var(--var-border-radius, 0.2rem);
@@ -788,7 +769,6 @@
 .s-base--dark .c-glyph-set-save-setting-button--disabled:hover {
   background-color: var(--color-background);
   color: var(--color-reality-light);
-  background-color: black;
 }
 
 .c-glyph-set-save-button {
@@ -958,14 +938,12 @@
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
-  width: 50%;
   cursor: pointer;
   background-color: var(--color-background);
   border: 0.2rem solid var(--color-reality);
   border-radius: 0.5rem 0.5rem 0 0;
   color: var(--color-reality);
   transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
-  cursor: pointer;
 }
 
 .s-base--dark .c-glyph-info-button {
@@ -1043,8 +1021,6 @@
   background-color: rgba(0, 0, 0, 10%);
   border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 15%);
   border-radius: var(--var-border-radius, 0.5rem);
-  height: 10rem;
-  width: 10rem;
   text-shadow: 0.1rem 0.1rem 0.1rem var(--color-background), 0.1rem 0.1rem 0 var(--color-background);
   box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5);
 }
@@ -1216,9 +1192,6 @@
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
   border-radius: var(--var-border-radius, 0.5rem);
   background: var(--color-background);
-  width: 100%;
-  left: 0%;
-  line-height: 1.8rem;
   padding: 0.3rem;
   transition-duration: 0.2s;
   pointer-events: none;
@@ -1233,12 +1206,9 @@
   z-index: 0;
   margin-left: -0.7rem;
   margin-bottom: 0;
-  width: 0;
   border-top: 0 solid var(--color-reality);
   border-right: 0.7rem solid transparent;
   border-left: 0.7rem solid transparent;
-  margin-bottom: 0;
-  margin-left: -0.7rem;
   transition-duration: 0.2s;
 }
 
@@ -1254,7 +1224,6 @@
 }
 
 .s-base--dark .c-glyph-inventory-option:hover .c-glyph-inventory-option__tooltip {
-  border-color: var(--color-reality-light);
   color: var(--color-reality-light);
   border-color: var(--color-reality-light);
 }
@@ -1320,7 +1289,6 @@
   color: var(--color-reality);
   cursor: pointer;
   transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
-  cursor: pointer;
 }
 
 .s-base--dark .c-glyph-sidebar-button {

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 <script>
 import GlyphTooltip from "@/components/GlyphTooltip";
 

@@ -744,7 +744,6 @@ button:focus {
   font-size: 1.2rem;
   font-weight: bold;
   background: var(--color-background);
-  border-width: var(--var-border-width, 0.2rem);
   border-style: solid;
   border-width: var(--var-border-width, 0.2rem);
   border-radius: var(--var-border-radius, 0.4rem);
@@ -1431,12 +1430,7 @@ br {
   position: absolute;
   left: 105%;
   z-index: 2;
-  text-align: left;
   opacity: 0;
-  color: #ffffff;
-  background-color: #0d0d0d;
-  border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.5rem;
   transition: opacity 0.3s, visibility 0.3s;
 }
 
@@ -8549,7 +8543,6 @@ kbd {
 
   -ms-grid-column-span: 1;
   -ms-grid-row: 1;
-  position: relative;
 }
 
 .l-glyph-levels-and-weights__adjust-outline::after {
@@ -8575,19 +8568,13 @@ kbd {
   padding-left: 1em;
   padding-top: 0.3em;
   padding-bottom: 0.3em;
-  display: flex;
   align-items: center;
-  text-align: left;
-  padding-top: 0.3rem;
-  padding-bottom: 0.3rem;
-  padding-left: 1rem;
 }
 
 .l-glyph-levels-and-weights__operator {
   display: flex;
   grid-column: 2;
   -ms-grid-column: 2;
-  display: flex;
   align-items: center;
   padding-left: 1rem;
 }
@@ -8629,7 +8616,6 @@ kbd {
 .c-glyph-levels-and-weights__slider-handle {
   color: var(--color-reality);
   background-color: var(--color-background);
-  box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.8rem);
   box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   transition-duration: 0.2s;
@@ -8654,7 +8640,6 @@ kbd {
   background-color: var(--color-background);
   border-radius: var(--var-border-radius, 0.5rem);
   border: 0.1rem solid var(--color-reality-light);
-  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
   cursor: pointer;
@@ -8676,10 +8661,8 @@ kbd {
   font-weight: bold;
   color: var(--color-reality);
   background-color: var(--color-background);
-  height: 2.5rem;
   border-radius: var(--var-border-radius, 0.5rem);
   border: 0.1rem solid var(--color-reality-light);
-  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
   cursor: pointer;
@@ -8782,7 +8765,6 @@ kbd {
   color: var(--color-reality);
   cursor: pointer;
   transition-duration: 0.15s;
-  cursor: pointer;
 }
 
 .s-base--dark .c-reality-upgrade-btn {

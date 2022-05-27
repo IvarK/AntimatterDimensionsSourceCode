@@ -249,7 +249,6 @@
   text-align: left;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
-  text-align: left;
   border-bottom: 0.15rem solid var(--color-automator-controls-background);
 }
 
@@ -292,7 +291,6 @@
   border-right: 0.15rem solid var(--color-automator-controls-background);
   border-bottom: 0.15rem solid var(--color-automator-controls-background);
   background-color: var(--color-automator-docs-background);
-  padding-left: 1rem;
   font-size: 1.4rem;
   color: var(--color-automator-docs-font);
 }
@@ -337,8 +335,4 @@
   position: absolute;
   top: 12px;
   left: -1px;
-  font-family: "Times New Roman", serif;
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: red;
 }

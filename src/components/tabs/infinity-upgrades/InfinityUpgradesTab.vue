@@ -20,7 +20,9 @@ export default {
       ipMultSoftCap: 0,
       ipMultHardCap: 0,
       eternityUnlocked: false,
-      bottomRowUnlocked: false
+      bottomRowUnlocked: false,
+      boughtAllUpgradesAnimation: false,
+      showUpgradeColumnBackground: true
     };
   },
   computed: {
@@ -52,6 +54,9 @@ export default {
         ]
       ];
     },
+    allColumnUpgrades() {
+      return this.grid.reduce((a, col) => a.concat(col), []);
+    },
     disChargeClassObject() {
       return {
         "o-primary-btn--subtab-option": true,
@@ -59,19 +64,29 @@ export default {
       };
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline,
-    backgroundOfColumnBg() {
+    styleOfColumnBg() {
+      if (!this.showUpgradeColumnBackground) return;
       // Infinity upgrades are 10 rem tall, if counting margins.
       const INF_UPG_HEIGHT = 10;
       const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
 
+      // eslint-disable-next-line consistent-return
       return this.grid.map(col => {
         const boughtUpgrades = col.countWhere(upg => upg.isBought);
 
         const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
         const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
-        return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
-          transparent ${heightLower * 100}%)`;
+        return {
+          background: `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
+          transparent ${heightLower * 100}%)`
+        };
       });
+    },
+    columnBackgroundClassObject() {
+      return {
+        "c-infinity-upgrade-grid__column--background": true,
+        "c-infinity-upgrade-grid__column--background--animated": this.boughtAllUpgradesAnimation
+      };
     }
   },
   watch: {
@@ -80,7 +95,13 @@ export default {
     }
   },
   created() {
-    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.$recompute("backgroundOfColumnBg"));
+    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => {
+      this.$recompute("styleOfColumnBg");
+      this.testForBoughtAllUpgradesAnimation();
+    });
+    // This is here so that it only gets updated on load, and the columns show the proper disappearing animation.
+    this.showUpgradeColumnBackground = !PlayerProgress.eternityUnlocked() &&
+      this.allColumnUpgrades.countWhere(x => x.isBought) < 16;
   },
   methods: {
     update() {
@@ -103,6 +124,13 @@ export default {
         classObject[`o-infinity-upgrade-btn--color-${column + 1}`] = true;
       }
       return classObject;
+    },
+    testForBoughtAllUpgradesAnimation() {
+      if (PlayerProgress.eternityUnlocked()) return;
+      if (this.allColumnUpgrades.countWhere(x => x.isBought) === 16) {
+        this.boughtAllUpgradesAnimation = true;
+        this.$recompute("styleOfColumnBg");
+      }
     }
   }
 };
@@ -146,8 +174,9 @@ export default {
           :class="btnClassObject(columnId)"
         />
         <div
-          class="c-infinity-upgrade-grid__column--background"
-          :style="{ background: backgroundOfColumnBg[columnId] }"
+          v-if="showUpgradeColumnBackground"
+          :class="columnBackgroundClassObject"
+          :style="styleOfColumnBg[columnId]"
         />
       </div>
     </div>
@@ -173,9 +202,9 @@ export default {
 <style scoped>
 .c-infinity-upgrade-grid__column {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   position: relative;
-  border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0 0.3rem;
 }
@@ -187,11 +216,23 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
-  opacity: 0.4;
+  opacity: 0.6;
+}
+
+.c-infinity-upgrade-grid__column--background--animated {
+  animation: a-col-all-upgrades-bought 6s ease-in-out forwards;
+}
+
+@keyframes a-col-all-upgrades-bought {
+  0% { opacity: 0.6; background: var(--color-infinity); }
+  25% { opacity: 0.9; background: var(--color-antimatter); }
+  50% { opacity: 0.9; background: var(--color-good); }
+  75% { opacity: 0.5; background: var(--color-infinity); }
+  100% { opacity: 0; background: var(--color-infinity); }
 }
 
 .l-infinity-upgrades-bottom-row .l-infinity-upgrade-grid__cell,
 .l-infinity-upgrades-bottom-row .l-infinity-upgrades-tab__mult-btn {
-  margin: 0.5rem 1.2rem;
+  margin: 0.5rem 1.1rem;
 }
 </style>

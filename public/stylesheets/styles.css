@@ -8926,7 +8926,6 @@ kbd {
   background: var(--color-blockmator-block-background);
   color: var(--color-blockmator-block-font);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.5rem;
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
@@ -8997,7 +8996,6 @@ kbd {
   background: var(--color-blockmator-block-background);
   color: var(--color-blockmator-editor-selection);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.5rem;
 }
 
 input.o-automator-block-input {
@@ -9016,7 +9014,6 @@ input.o-automator-block-input {
 .o-automator-block-delete {
   color: var(--color-blockmator-block-delete);
   font-size: 1.7rem;
-  color: #ff3333;
   cursor: pointer;
 }
 

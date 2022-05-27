@@ -77,7 +77,7 @@ export default {
         const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
         const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
         return {
-          background: `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
+          background: `linear-gradient(to bottom, var(--color-good) 0% ${heightUpper * 100}%,
           transparent ${heightLower * 100}%)`
         };
       });
@@ -216,7 +216,11 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
-  opacity: 0.6;
+  opacity: 0.9;
+}
+
+.s-base--dark .c-infinity-upgrade-grid__column--background {
+  opacity: 0.5;
 }
 
 .c-infinity-upgrade-grid__column--background--animated {
@@ -224,7 +228,7 @@ export default {
 }
 
 @keyframes a-col-all-upgrades-bought {
-  0% { opacity: 0.6; background: var(--color-infinity); }
+  0% { background: var(--color-good); }
   25% { opacity: 0.9; background: var(--color-antimatter); }
   50% { opacity: 0.9; background: var(--color-good); }
   75% { opacity: 0.5; background: var(--color-infinity); }

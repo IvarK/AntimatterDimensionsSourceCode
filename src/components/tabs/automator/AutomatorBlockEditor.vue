@@ -149,7 +149,7 @@ export const BlockAutomator = {
         :key="i"
         class="c-automator-block-line-number"
         :style="{
-          top: `${i * 3.45 - 3.45}rem`
+          top: `${(i - 1) * 3.45}rem`
         }"
       >
         {{ i }}

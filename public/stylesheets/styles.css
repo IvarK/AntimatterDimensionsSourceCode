@@ -6747,7 +6747,7 @@ kbd {
 .c-enslaved-run-button {
   display: flex;
   flex-direction: column;
-  width: 40rem;
+  width: 34rem;
   align-items: center;
   font-family: Typewriter;
   font-size: 1.2rem;
@@ -6755,8 +6755,8 @@ kbd {
   border: var(--var-border-width, 0.2rem) solid #cd945c;
   border-radius: var(--var-border-radius, 0.5rem);
   margin-top: 1rem;
-  margin-bottom: 1rem;
-  padding: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem 1rem;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -8863,7 +8863,7 @@ kbd {
 }
 
 .l-black-hole-sliders {
-  width: 65rem;
+  width: 55rem;
   margin: 1rem auto;
 }
 

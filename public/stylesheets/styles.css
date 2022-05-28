@@ -8924,11 +8924,15 @@ kbd {
   border: 0.1rem solid var(--color-blockmator-block-border);
   padding: 0.5rem;
   background: var(--color-blockmator-block-background);
-  color: var(--color-blockmator-block-font);
+  color: #a142ff;
   border-radius: var(--var-border-radius, 0.5rem);
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
+}
+
+.o-automator-command {
+  color: #c080ff;
 }
 
 .c-automator-docs .o-automator-command {
@@ -8958,7 +8962,11 @@ kbd {
 }
 
 .c-automator-block-row-active {
-  background: var(--color-blockmator-active-background);
+  background: #d8caeb;
+}
+
+.c-automator-block-row-active {
+  background: #50316f;
 }
 
 .c-automator-block-row-ghost {
@@ -8994,25 +9002,37 @@ kbd {
   border: 0.1rem solid var(--color-blockmator-block-border);
   padding: 0.5rem;
   background: var(--color-blockmator-block-background);
-  color: var(--color-blockmator-editor-selection);
+  color: #007f7f;
   border-radius: var(--var-border-radius, 0.5rem);
 }
 
+.o-automator-block-input {
+  color: #01a1a1;
+}
+
 input.o-automator-block-input {
-  color: var(--color-blockmator-editor-input);
+  color: #00ac00;
+}
+
+.s-base--dark .o-automator-block-input {
+  color: #00ff00;
 }
 
 .l-automator-nested-block {
   width: fit-content;
   padding: 1rem;
-  border: var(--var-border-width, 2px) dotted var(--color-blockmator-nested-block-border);
+  border: var(--var-border-width, 2px) dotted #369b36;
   margin-left: 3rem;
   margin-top: 0.5rem;
   min-widtH: 30rem;
 }
 
+.s-base--dark .l-automator-nested-block {
+  border: var(--var-border-width, 2px) dotted #55ff55;
+}
+
 .o-automator-block-delete {
-  color: var(--color-blockmator-block-delete);
+  color: #ff3333;
   font-size: 1.7rem;
   cursor: pointer;
 }
@@ -9044,7 +9064,7 @@ input.o-automator-block-input {
 
 .c-automator-template-textbox {
   text-align: center;
-  border: 0.1rem solid var(--color-template-textbox-border);
+  border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.3rem);
 }
 

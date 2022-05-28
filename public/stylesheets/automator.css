@@ -5,35 +5,20 @@
   --color-automator-event-background: #007f00;
   --color-automator-event-outline: #19c819;
   --color-automator-error-background: #ac0617;
-  --color-automator-docs-background: white;
   --color-automator-docs-font: black;
-  --color-automator-error-underline: red;
   --color-blockmator-block-border: #cfcfcf;
   --color-blockmator-block-background: #f5f5f5;
-  --color-blockmator-block-font: #a142ff;
-  --color-blockmator-active-background: #d8caeb;
   --color-blockmator-editor-background: white;
-  --color-blockmator-editor-selection: #007f7f;
-  --color-blockmator-editor-input: #00ac00;
-  --color-blockmator-nested-block-border: #369b36;
-  --color-blockmator-block-delete: #ff3333;
-  --color-template-textbox-border: black;
 }
 
 :root .s-base--dark {
   --color-automator-controls-background: #262626;
   --color-automator-active-line-background: #2b065c;
   --color-automator-active-line-outline: #4400ff;
-  --color-automator-docs-background: black;
   --color-automator-docs-font: white;
   --color-blockmator-block-border: #353535;
   --color-blockmator-block-background: #000115;
-  --color-blockmator-block-font: #c080ff;
-  --color-blockmator-active-background: #50316f;
   --color-blockmator-editor-background: black;
-  --color-blockmator-editor-selection: #01a1a1;
-  --color-blockmator-editor-input: #00ff00;
-  --color-blockmator-nested-block-border: #55ff55;
 }
 
 ._-automator-split-pane-fix {
@@ -292,8 +277,13 @@
   padding-left: 1rem;
   border-right: 0.15rem solid var(--color-automator-controls-background);
   border-bottom: 0.15rem solid var(--color-automator-controls-background);
-  background-color: var(--color-automator-docs-background);
+  background-color: white;
   font-size: 1.4rem;
+  color: var(--color-automator-docs-font);
+}
+
+.s-base--dark .c-automator-docs {
+  background-color: black;
   color: var(--color-automator-docs-font);
 }
 
@@ -329,7 +319,7 @@
 .o-automator-error-underline::before {
   content: "~~~~~~~~~~~~";
   overflow: hidden;
-  color: var(--color-automator-error-underline);
+  color: red;
   width: 100%;
   position: absolute;
   top: 12px;

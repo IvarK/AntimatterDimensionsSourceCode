@@ -8931,7 +8931,7 @@ kbd {
   cursor: grab;
 }
 
-.o-automator-command {
+.s-base--dark .o-automator-command {
   color: #c080ff;
 }
 
@@ -8965,7 +8965,7 @@ kbd {
   background: #d8caeb;
 }
 
-.c-automator-block-row-active {
+.s-base--dark .c-automator-block-row-active {
   background: #50316f;
 }
 
@@ -9006,7 +9006,7 @@ kbd {
   border-radius: var(--var-border-radius, 0.5rem);
 }
 
-.o-automator-block-input {
+.s-base--dark .o-automator-block-input {
   color: #01a1a1;
 }
 

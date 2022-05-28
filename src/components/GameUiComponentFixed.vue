@@ -1,15 +1,16 @@
 <script>
+import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
+import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
 import HowToPlay from "@/components/HowToPlay";
 import InfoButton from "@/components/InfoButton";
-import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
-import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
-import SaveTimer from "@/components/SaveTimer";
-import SpeedrunStatus from "@/components/SpeedrunStatus";
-import PopupModal from "@/components/modals/PopupModal";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
-import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
+import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
+import PopupModal from "@/components/modals/PopupModal";
+import SaveTimer from "@/components/SaveTimer";
+import SpectateGame from "@/components/SpectateGame";
+import SpeedrunStatus from "@/components/SpeedrunStatus";
+import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
   name: "GameUiComponentFixed",
@@ -24,7 +25,8 @@ export default {
     ModalProgressBar,
     FadeToBlack,
     CreditsContainer,
-    NewGame
+    NewGame,
+    SpectateGame,
   },
   data() {
     return {
@@ -80,20 +82,20 @@ export default {
     <FadeToBlack v-if="rollingCredits" />
     <CreditsContainer v-if="rollingCredits" />
     <NewGame v-if="rollingCredits" />
+    <SpectateGame />
   </div>
 </template>
 
 <style scoped>
 .c-game-ui--fixed {
+  display: flex;
   width: 100%;
   height: 100%;
   position: fixed;
-  pointer-events: none;
-
-  z-index: 5;
-  display: flex;
-  justify-content: center;
   top: 0;
   left: 0;
+  z-index: 5;
+  justify-content: center;
+  pointer-events: none;
 }
 </style>

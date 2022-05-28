@@ -1,20 +1,15 @@
 import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
 import { DC } from "./constants";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
-  document.body.style.animation = "a-dilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  FullScreenAnimationHandler.display("a-dilate", 2);
   setTimeout(startDilatedEternity, 1000);
 }
 
 export function animateAndUndilate() {
-  document.body.style.animation = "a-undilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
   }, 1000);
@@ -22,7 +17,7 @@ export function animateAndUndilate() {
 
 export function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) return;
-  const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
+  const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
   if (player.dilation.active) {
     // TODO Dilation modal
     if (playAnimation) {

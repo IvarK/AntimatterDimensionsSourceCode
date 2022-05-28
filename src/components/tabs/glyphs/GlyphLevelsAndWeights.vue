@@ -10,14 +10,10 @@ export default {
   },
   data() {
     return {
-      adjustVisible: false,
-      eternityVisible: false,
       perkShopVisible: false,
       penaltyVisible: false,
       rowVisible: false,
       achievementVisible: false,
-      shardVisible: false,
-      singularityVisible: false,
       showAutoAdjustWeights: false,
       isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
@@ -78,6 +74,18 @@ export default {
       rows.push("info");
       return rows;
     },
+    adjustVisible() {
+      return EffarigUnlock.adjuster.isUnlocked;
+    },
+    eternityVisible() {
+      return RealityUpgrade(18).isBought;
+    },
+    shardVisible() {
+      return Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
+    },
+    singularityVisible() {
+      return SingularityMilestone.glyphLevelFromSingularities.canBeApplied;
+    }
   },
   watch: {
     isAutoAdjustWeightsOn(newValue) {
@@ -105,17 +113,13 @@ export default {
   },
   methods: {
     update() {
-      if (this.glyphWeightFields === undefined) {
+      if (this.glyphWeightFields === undefined || this.$parent.state.name === "CLOSED") {
         return;
       }
-      this.adjustVisible = EffarigUnlock.adjuster.isUnlocked;
-      this.eternityVisible = RealityUpgrade(18).isBought;
       const glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.rowVisible = glyphFactors.rowFactor > 0;
       this.achievementVisible = glyphFactors.achievementFactor > 0;
-      this.shardVisible = Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
-      this.singularityVisible = SingularityMilestone.glyphLevelFromSingularities.isUnlocked;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
         this.lastInstability = Date.now();

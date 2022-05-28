@@ -61,6 +61,8 @@ class SubtabState {
     if (this._parent.id === Tabs.current.id && this.id === Tabs.current._currentSubtab.id) return;
     // eslint-disable-next-line no-bitwise
     player.options.hiddenSubtabBits[this._parent.id] ^= (1 << this.id);
+
+    checkTabVisibilityForSecretAchievement();
   }
 
   get isOpen() {
@@ -161,6 +163,8 @@ class TabState {
     if (this.id === Tabs.current.id) return;
     // eslint-disable-next-line no-bitwise
     player.options.hiddenTabBits ^= (1 << this.id);
+
+    checkTabVisibilityForSecretAchievement();
   }
 
   resetToAvailable() {
@@ -218,6 +222,11 @@ export const Tabs = (function() {
     },
   };
 }());
+
+const checkTabVisibilityForSecretAchievement = () => {
+  // Checks if every unlocked tab that is hidable is hidden
+  if (Tabs.all.filter(t => t.isUnlocked && t.hidable).every(t => t.isHidden)) SecretAchievement(47).unlock();
+};
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   const currTab = Tabs.current.id;

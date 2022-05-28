@@ -94,7 +94,13 @@ export const GameCache = {
 
   timeDimensionCommonMultiplier: new Lazy(() => timeDimensionCommonMultiplier()),
 
+  glyphInventorySpace: new Lazy(() => Glyphs.freeInventorySpace),
+
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
+
+  staticGlyphWeights: new Lazy(() => staticGlyphWeights()),
+
+  logTotalGlyphSacrifice: new Lazy(() => GlyphSacrificeHandler.logTotalSacrifice),
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
@@ -104,7 +110,9 @@ export const GameCache = {
 };
 
 EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
+  GameCache.glyphInventorySpace.invalidate();
   GameCache.glyphEffects.invalidate();
+  GameCache.staticGlyphWeights.invalidate();
 }, GameCache.glyphEffects);
 
 GameCache.antimatterDimensionFinalMultipliers.invalidate = function() {

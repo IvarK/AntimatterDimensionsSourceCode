@@ -4,10 +4,7 @@ body.t-inverted {
 
 .t-inverted #container,
 .t-inverted #page,
-.t-inverted .l-notification-container,
-.t-inverted .c-modal,
-.t-inverted .time-theorem-buttons,
-.t-inverted .sidebar,
+.t-inverted #ui-fixed,
 .t-inverted .c-glyph-tooltip {
   filter: invert(100%);
 }

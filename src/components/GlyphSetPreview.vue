@@ -113,11 +113,10 @@ export default {
         :reality-glyph-boost="realityGlyphBoost"
         :flip-tooltip="flipTooltip"
         :is-in-modal="isInModal"
-        size="2.8rem"
-        :text-proportion="0.6"
+        size="3rem"
+        :text-proportion="0.5"
         glow-blur="0.2rem"
         glow-spread="0.1rem"
-        bottom-padding="0.4rem"
       />
     </span>
     <span v-else>

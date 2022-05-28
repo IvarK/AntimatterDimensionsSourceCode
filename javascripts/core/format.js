@@ -1,4 +1,4 @@
-window.format = function format(value, places, placesUnder1000) {
+window.format = function format(value, places = 0, placesUnder1000 = 0) {
   if (Pelle.isDoomed) {
     if ((GameEnd.endState - 2.5) / 2 > Math.random()) return "END";
   }

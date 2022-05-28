@@ -8,7 +8,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       glyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
@@ -25,7 +24,8 @@ export default {
       return this.glyphs.length;
     },
     arrangementRadius() {
-      return [0, 0, 0, 4, 5, 6][this.slotCount];
+      if (this.slotCount === 0) return 0;
+      return this.slotCount + 1;
     },
     respecTooltip() {
       const reset = Pelle.isDoomed ? "Armageddon" : "Reality";
@@ -44,6 +44,9 @@ export default {
     unequipText() {
       if (Pelle.isDoomed) return "Unequip Glyphs on Armageddon";
       return "Unequip Glyphs on Reality";
+    },
+    isDoomed() {
+      return Pelle.isDoomed;
     }
   },
   created() {
@@ -52,40 +55,25 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.respec = player.reality.respec;
       this.respecIntoProtected = player.options.respecIntoProtected;
-      this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
+      this.undoSlotsAvailable = this.respecIntoProtected
+        ? Glyphs.totalSlots - GameCache.glyphInventorySpace.value - Glyphs.inventoryList.length > 0
+        : GameCache.glyphInventorySpace.value > 0;
       this.undoVisible = TeresaUnlocks.undo.canBeApplied;
-      // eslint-disable-next-line max-len
-      this.undoAvailable = this.undoVisible &&
-        this.undoSlotsAvailable &&
-        player.reality.glyphs.undo.length > 0 &&
-        !this.isDoomed;
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable &&
+        player.reality.glyphs.undo.length > 0 && !this.isDoomed;
     },
     glyphPositionStyle(idx) {
+      const angle = 2 * Math.PI * idx / this.slotCount;
+      const dx = -this.GLYPH_SIZE / 2 + this.arrangementRadius * Math.sin(angle);
+      const dy = -this.GLYPH_SIZE / 2 + this.arrangementRadius * Math.cos(angle);
       return {
         position: "absolute",
-        left: `calc(50% + ${this.glyphX(idx, 1)}rem)`,
-        top: `calc(50% + ${this.glyphY(idx, 1)}rem)`,
+        left: `calc(50% + ${dx}rem)`,
+        top: `calc(50% + ${dy}rem)`,
         "z-index": 1,
       };
-    },
-    copyPositionStyle(glyph) {
-      return {
-        position: "absolute",
-        left: `calc(50% + ${this.glyphX(glyph.idx, 1.4)}rem)`,
-        top: `calc(50% + ${this.glyphY(glyph.idx, 1.4)}rem)`,
-        opacity: 0.4,
-      };
-    },
-    glyphX(idx, scale) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
-        Math.sin(2 * Math.PI * idx / this.slotCount);
-    },
-    glyphY(idx, scale) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
-        Math.cos(2 * Math.PI * idx / this.slotCount);
     },
     dragover(event, idx) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;

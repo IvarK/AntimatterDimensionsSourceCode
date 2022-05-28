@@ -1,6 +1,7 @@
 import { sha512_256 } from "js-sha512";
 
 import { DC } from "./constants";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 /* eslint-disable no-console */
 // Disabling no-console here seems
@@ -93,8 +94,7 @@ dev.tripleEverything = function() {
 };
 
 dev.barrelRoll = function() {
-  document.body.style.animation = "a-barrel-roll 5s 1";
-  setTimeout(() => document.body.style.animation = "", 5000);
+  FullScreenAnimationHandler.display("a-barrel-roll", 5);
 };
 
 dev.spin3d = function() {
@@ -167,7 +167,7 @@ dev.resetDilation = function() {
 // eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   if (!Object.prototype.hasOwnProperty.call(specialGlyphSymbols, symbol)) return;
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;
   glyph.color = color;
@@ -175,12 +175,12 @@ dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
 };
 
 dev.giveGlyph = function(level, rawLevel = level) {
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
 dev.giveRealityGlyph = function(level) {
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 

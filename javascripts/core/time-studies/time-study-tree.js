@@ -93,6 +93,9 @@ export class TimeStudyTree {
       ["idle", [123, 133, 143]],
       ["light", [221, 223, 225, 227, 231, 233]],
       ["dark", [222, 224, 226, 228, 232, 234]],
+      ...(Ra.unlocks.unlockHardV.canBeApplied
+        ? [["triad", [301, 302, 303, 304].slice(0, Ra.unlocks.unlockHardV.effectOrDefault(0))]]
+        : [])
     ]);
   }
 
@@ -109,19 +112,7 @@ export class TimeStudyTree {
   }
 
   static formatStudyList(input) {
-    let internal = input.toLowerCase().replaceAll(" ", "");
-    // \\b means 0-width word boundry, meaning "target = 11" doesnt match 111
-    const testRegex = target => new RegExp(`\\b${target}\\b,?`, "gu");
-    // If the studylist has all IDs, replace the first instance with the shorthand, then remove the rest
-    this.sets.forEach((ids, name) => {
-      const hasAllIds = ids.every(x => testRegex(x).test(internal));
-      if (hasAllIds) {
-        internal = internal.replace(testRegex(ids[0]), `${name},`);
-        for (const i of ids) {
-          internal = internal.replace(testRegex(i), "");
-        }
-      }
-    });
+    const internal = input.toLowerCase().replaceAll(" ", "");
     return internal.replaceAll(",", ", ").replace("|", " | ");
   }
 

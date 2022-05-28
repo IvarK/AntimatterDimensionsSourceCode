@@ -107,7 +107,7 @@ export default {
 <style scoped>
 .speedrun-status {
   white-space: nowrap;
-  position: fixed;
+  position: absolute;
   right: 1rem;
   bottom: 1rem;
   z-index: 5;
@@ -116,6 +116,7 @@ export default {
   background-color: var(--color-base);
   border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   padding: 0.8rem 2rem;
+  pointer-events: auto;
   -webkit-user-select: none;
   user-select: none;
 }

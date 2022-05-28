@@ -52,9 +52,9 @@ export default {
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
-      this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
-        SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
-        SingularityMilestone.autoCondense.isUnlocked ||
+      this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.canBeApplied ||
+        SingularityMilestone.darkDimensionAutobuyers.canBeApplied ||
+        SingularityMilestone.autoCondense.canBeApplied ||
         Laitela.darkMatterMult > 1;
       this.singularityPanelVisible = Currency.singularities.gt(0);
       this.singularitiesUnlocked = Singularity.capIsReached || this.singularityPanelVisible;

@@ -223,8 +223,11 @@ export default {
     </div>
     <div v-if="!isImporting && inputIsValidTree">
       <br>
-      <PrimaryButton @click="convertInputShorthands">
-        Collapse Study ID list Shorthands
+      <PrimaryButton
+        ach-tooltip="This will format the study preset text, for example, changing 'a,b,c|d' to 'a, b, c | d'."
+        @click="convertInputShorthands"
+      >
+        Format Preset Text
       </PrimaryButton>
     </div>
     <template #confirm-text>

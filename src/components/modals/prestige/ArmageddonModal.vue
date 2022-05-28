@@ -28,12 +28,6 @@ export default {
 
       return `Armageddon will start a new Doomed Reality. You will gain
       ${quantify("Remnant", this.remnantsGain, 2, 0)} ${isFirstReset}`;
-    },
-    optionsObject() {
-      if (!this.isDoomed) return {};
-      return {
-        option: "armageddon"
-      };
     }
   },
   methods: {
@@ -76,7 +70,7 @@ export default {
 
 <template>
   <ModalWrapperChoice
-    v-bind="optionsObject"
+    :option="isDoomed ? 'armageddon' : undefined"
     @confirm="handleYesClick"
   >
     <template #header>

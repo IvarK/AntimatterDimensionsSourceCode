@@ -76,8 +76,8 @@ export class Modal {
     this._props = Object.assign({}, modalConfig || {});
 
     const modalQueue = ui.view.modal.queue;
-    // Add this modal to the back of the queue and sort based on priority to ensure priority is maintained.
-    modalQueue.push(this);
+    // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
+    modalQueue.unshift(this);
 
     // Unfortunately, we can't do it directly because a lot of modal interactions depend on a modal
     // being shown that shows up at the back, followed by an immediate closing of the current modal.

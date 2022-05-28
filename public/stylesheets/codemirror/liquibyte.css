@@ -23,7 +23,7 @@
 	text-decoration-color: #404040;
 	text-decoration-style: dotted;
 }
-.cm-s-liquibyte .CodeMirror-gutters { background-color: #eee; border-right: 1px solid #999; padding-right: 0.8em; }
+.cm-s-liquibyte .CodeMirror-gutters { background-color: var(--color-automator-controls-background); border-right: 1px solid #999; padding-right: 0.8em; }
 .cm-s-liquibyte .CodeMirror-gutter-elt div { font-size: 1.2em; }
 .cm-s-liquibyte .CodeMirror-guttermarker {  }
 .cm-s-liquibyte .CodeMirror-guttermarker-subtle {  }
@@ -32,7 +32,7 @@
 
 .s-base--dark .cm-s-liquibyte .CodeMirror-cursor { border-left: 1px solid #eee; }
 
-.s-base--dark .cm-s-liquibyte .CodeMirror-gutters { background-color: #262626; border-right: 1px solid #505050; }
+.s-base--dark .cm-s-liquibyte .CodeMirror-gutters { border-right: 1px solid #505050; }
 
 .cm-s-liquibyte span.cm-comment     { color: #008000; }
 .cm-s-liquibyte span.cm-def         { color: #ffaf40; font-weight: bold; }

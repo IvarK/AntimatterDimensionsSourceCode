@@ -207,7 +207,7 @@ export const BlockAutomator = {
   height: max-content;
   min-height: 100%;
   position: relative;
-  background-color: #262626;
+  background-color: var(--color-automator-controls-background);
   border-right: 0.1rem solid #505050;
   /* left and right paddings are 1 to make space for text, bottom padding is 20 to make for a buffer */
   padding: 0.3rem 1rem 20rem;

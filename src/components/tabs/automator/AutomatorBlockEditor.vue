@@ -185,7 +185,7 @@ export const BlockAutomator = {
   overflow-y: auto;
   tab-size: 1.5rem;
   width: 100%;
-  background-color: black;
+  background-color: var(--color-blockmator-editor-background);
   box-sizing: content-box;
 }
 

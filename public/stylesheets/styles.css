@@ -9030,7 +9030,7 @@ input.o-automator-block-input {
   color: #00ac00;
 }
 
-.s-base--dark .o-automator-block-input {
+.s-base--dark input.o-automator-block-input {
   color: #00ff00;
 }
 

@@ -1,12 +1,10 @@
 :root {
   --color-automator-controls-background: #d3d3d3;
-  --color-automator-splitter: #bbbbbb;
   --color-automator-active-line-background: #d8caeb;
   --color-automator-active-line-outline: #7a49ff;
   --color-automator-event-background: #007f00;
   --color-automator-event-outline: #19c819;
   --color-automator-error-background: #ac0617;
-  --color-automator-error-outline: #ff0040;
   --color-automator-docs-background: white;
   --color-automator-docs-font: black;
   --color-automator-error-underline: red;
@@ -24,7 +22,6 @@
 
 :root .s-base--dark {
   --color-automator-controls-background: #262626;
-  --color-automator-splitter: #474747;
   --color-automator-active-line-background: #2b065c;
   --color-automator-active-line-outline: #4400ff;
   --color-automator-docs-background: black;
@@ -41,7 +38,12 @@
 
 ._-automator-split-pane-fix {
   width: 100%;
-  background-color: var(--color-automator-splitter);
+  background-color: #bbbbbb;
+}
+
+.s-base--dark ._-automator-split-pane-fix {
+  width: 100%;
+  background-color: #474747;
 }
 
 .c-automator-tab {
@@ -327,9 +329,6 @@
 .o-automator-error-underline::before {
   content: "~~~~~~~~~~~~";
   overflow: hidden;
-  font-size: 0.6em;
-  font-weight: 700;
-  font-family: Times New Roman, Serif;
   color: var(--color-automator-error-underline);
   width: 100%;
   position: absolute;

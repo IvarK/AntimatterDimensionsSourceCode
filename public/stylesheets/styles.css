@@ -8998,10 +8998,7 @@ kbd {
   overflow-y: scroll;
   height: 100%;
   background-color: var(--color-blockmator-editor-background);
-  border-left: 0.1rem solid var(--color-automator-controls-background);
-  border-bottom: 0.1rem solid var(--color-automator-controls-background);
   box-sizing: border-box;
-  padding: 0.5rem;
   tab-size: 1.5em;
   -moz-tab-size: 1.5em;
   -o-tab-size: 1.5em;

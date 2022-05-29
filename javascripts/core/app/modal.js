@@ -115,8 +115,7 @@ export class Modal {
     // Filter out multiple instances of the same modal.
     const singleQueue = [...new Set(modalQueue)];
     ui.view.modal.queue = singleQueue;
-    // If the front of the queue is what is currently presented, we dont need to do anything.
-    if (!singleQueue[0].isOpen) ui.view.modal.current = singleQueue[0];
+    ui.view.modal.current = singleQueue[0];
   }
 
   static hide() {

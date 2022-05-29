@@ -1422,16 +1422,16 @@ br {
 .infotooltip .infotooltiptext {
   visibility: hidden;
   white-space: nowrap;
-  background-color: var(--color-background);
-  color: var(--color-text);
-  text-align: left;
-  padding: 0.5rem;
-  border-radius: var(--var-border-radius, 0.5rem);
   position: absolute;
   left: 105%;
   z-index: 2;
   opacity: 0;
   transition: opacity 0.3s, visibility 0.3s;
+  text-align: left;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.5rem;
 }
 
 .s-base--dark .infotooltip .infotooltiptext {
@@ -8488,9 +8488,9 @@ kbd {
 }
 
 .c-glyph-level-factors-dropdown-header {
-  color: var(--color-reality);
   width: calc(100% - 1rem);
   text-align: center;
+  color: var(--color-reality);
   background: var(--color-background);
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
   border-radius: var(--var-border-radius, 0.5rem);
@@ -8520,8 +8520,6 @@ kbd {
   z-index: 2;
   font-weight: bold;
   padding: 0.25rem 0 0.25rem 1rem;
-
-  -ms-grid-column-span: 2;
 }
 
 .l-glyph-levels-and-weights__adjust-auto {
@@ -8531,29 +8529,23 @@ kbd {
   z-index: 2;
   font-weight: bold;
   padding: 0.25rem 0 0.25rem 1rem;
-
-  -ms-grid-column-span: 2;
 }
 
 .l-glyph-levels-and-weights__adjust-outline {
   grid-row: 1;
-  grid-column: 4 / 5;
   grid-column: 4;
   position: relative;
-
-  -ms-grid-column-span: 1;
-  -ms-grid-row: 1;
 }
 
 .l-glyph-levels-and-weights__adjust-outline::after {
   content: "";
   position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  bottom: -0.5rem;
+  left: -0.5rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
-  border-radius: var(--var-border-radius, 0.5em);
-  top: -0.5em;
-  bottom: -0.5em;
-  left: -0.5em;
-  right: -0.5em;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .s-base--dark .l-glyph-levels-and-weights__adjust-outline::after {
@@ -8563,18 +8555,16 @@ kbd {
 .l-glyph-levels-and-weights__factor {
   display: flex;
   grid-column: 1;
-  -ms-grid-column: 1;
-  text-align: left;
-  padding-left: 1em;
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
   align-items: center;
+  text-align: left;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  padding-left: 1rem;
 }
 
 .l-glyph-levels-and-weights__operator {
   display: flex;
   grid-column: 2;
-  -ms-grid-column: 2;
   align-items: center;
   padding-left: 1rem;
 }
@@ -8638,8 +8628,8 @@ kbd {
 .c-glyph-levels-and-weights__reset-btn {
   color: var(--color-reality);
   background-color: var(--color-background);
-  border-radius: var(--var-border-radius, 0.5rem);
   border: 0.1rem solid var(--color-reality-light);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
   cursor: pointer;
@@ -8661,8 +8651,8 @@ kbd {
   font-weight: bold;
   color: var(--color-reality);
   background-color: var(--color-background);
-  border-radius: var(--var-border-radius, 0.5rem);
   border: 0.1rem solid var(--color-reality-light);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
   cursor: pointer;
@@ -8759,12 +8749,12 @@ kbd {
   text-align: center;
   font-family: Typewriter, serif;
   font-size: 1rem;
+  color: var(--color-reality);
   background-color: var(--color-background);
   border: var(--var-border-width, 0.2rem) solid var(--color-reality);
   border-radius: var(--var-border-radius, 0.5rem);
-  color: var(--color-reality);
-  cursor: pointer;
   transition-duration: 0.15s;
+  cursor: pointer;
 }
 
 .s-base--dark .c-reality-upgrade-btn {

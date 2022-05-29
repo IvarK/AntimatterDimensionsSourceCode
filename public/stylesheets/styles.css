@@ -7832,9 +7832,16 @@ kbd {
   transition-duration: 0.2s;
 }
 
-.o-alchemy-reaction-path--limited {
+.o-alchemy-reaction-path--capped {
   stroke: #ff9800;
   stroke-width: 2;
+  opacity: 1;
+  transition-duration: 0.2s;
+}
+
+.o-alchemy-reaction-path--less-than-required {
+  stroke: #ff0000;
+  stroke-width: 1;
   opacity: 1;
   transition-duration: 0.2s;
 }

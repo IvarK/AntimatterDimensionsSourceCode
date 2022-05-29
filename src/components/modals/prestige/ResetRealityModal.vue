@@ -8,15 +8,14 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
-      hasConfirmed: false
+      isDoomed: false
     };
   },
   computed: {
     resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
   },
   created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {
@@ -24,10 +23,7 @@ export default {
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-      this.hasConfirmed = true;
-    },
-    closeIfOpen() {
-      if (!this.hasConfirmed) this.emitClose();
+      EventHub.ui.offAll(this);
     }
   },
 };

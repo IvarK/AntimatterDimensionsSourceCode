@@ -12,11 +12,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      hasConfirmed: false
-    };
-  },
   computed: {
     challenge() {
       return EternityChallenge(this.id);
@@ -51,16 +46,13 @@ export default {
     }
   },
   created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, () => this.closeIfOpen());
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     handleYesClick() {
       this.challenge.start(true);
-      this.hasConfirmed = true;
-    },
-    closeIfOpen() {
-      if (!this.hasConfirmed) this.emitClose();
+      EventHub.ui.offAll(this);
     }
   },
 };

@@ -17,8 +17,7 @@ export default {
       newGalaxies: 0,
       keepAntimatter: false,
       perkANRBought: false,
-      keepDimBoost: false,
-      hasConfirmed: false
+      keepDimBoost: false
     };
   },
   computed: {
@@ -54,10 +53,10 @@ export default {
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
       (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? undefined : this.closeIfOpen()));
-    this.on$(GAME_EVENT.GALAXY_RESET_AFTER, () => this.closeIfOpen());
-    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, () => this.closeIfOpen());
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, () => this.closeIfOpen());
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.GALAXY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {
@@ -79,10 +78,7 @@ export default {
     handleYesClick() {
       requestGalaxyReset(this.bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
-      this.hasConfirmed = true;
-    },
-    closeIfOpen() {
-      if (!this.hasConfirmed) this.emitClose();
+      EventHub.ui.offAll(this);
     }
   },
 };

@@ -10,8 +10,7 @@ export default {
     return {
       exitingEC: false,
       startingIP: new Decimal(),
-      gainedEternityPoints: new Decimal(),
-      hasConfirmed: false
+      gainedEternityPoints: new Decimal()
     };
   },
   computed: {
@@ -43,8 +42,8 @@ export default {
     }
   },
   created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, () => this.closeIfOpen());
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => this.closeIfOpen());
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {
@@ -54,10 +53,7 @@ export default {
     },
     handleYesClick() {
       animateAndEternity();
-      this.hasConfirmed = true;
-    },
-    closeIfOpen() {
-      if (!this.hasConfirmed) this.emitClose();
+      EventHub.ui.offAll(this);
     }
   },
 };

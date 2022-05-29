@@ -5218,9 +5218,11 @@ br {
 }
 
 .c-modal__title {
-  width: 50rem;
+  display: inline-block;
+  min-width: 50rem;
   font-size: 1.6rem;
   font-weight: bold;
+  margin: 0 3rem;
 }
 
 .c-modal__close-btn {

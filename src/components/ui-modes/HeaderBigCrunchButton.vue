@@ -71,8 +71,7 @@ export default {
     },
     crunch() {
       if (!Player.canCrunch) return;
-      if (player.options.confirmations.bigCrunch) Modal.bigCrunch.show();
-      else bigCrunchResetRequest();
+      manualBigCrunchResetRequest();
     }
   },
 };

@@ -19,6 +19,16 @@ function handleChallengeCompletion() {
   }
 }
 
+export function manualBigCrunchResetRequest() {
+  // Before the player has broken infinity, the confirmation modal should never be shown
+  if ((player.break || PlayerProgress.eternityUnlocked()) &&
+    player.options.confirmations.bigCrunch) {
+    Modal.bigCrunch.show();
+  } else {
+    bigCrunchResetRequest();
+  }
+}
+
 export function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
   if (!disableAnimation && player.options.animations.bigCrunch && !FullScreenAnimationHandler.isDisplaying) {

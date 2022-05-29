@@ -6,10 +6,8 @@ import { AutomatorLexer } from "./lexer";
 
 export const AutomatorCommands = ((() => {
   const T = AutomatorLexer.tokenMap;
-  // The splitter tries to get a number 1 through 6, or anything else. Note: eslint complains
-  // about lack of u flag here for some reason.
-  // eslint-disable-next-line require-unicode-regexp
-  const presetSplitter = new RegExp(/preset[ \t]+(?:([1-6]$)|(.+$))/ui);
+  const presetSplitter = /name[ \t]+(.+$)/ui;
+  const idSplitter = /id[ \t]+(\d)/ui;
 
   function prestigeNotify(flag) {
     if (!AutomatorBackend.isOn) return;
@@ -677,37 +675,53 @@ export const AutomatorCommands = ((() => {
         $.OPTION(() => $.CONSUME(T.Nowait));
         $.CONSUME(T.Load);
         $.CONSUME(T.Preset);
+        $.OR([
+          { ALT: () => $.CONSUME1(T.Id) },
+          { ALT: () => $.CONSUME1(T.Name) },
+        ]);
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.Studies[0].startLine;
-        if (!ctx.Preset || ctx.Preset[0].isInsertedInRecovery || ctx.Preset[0].image === "") {
-          V.addError(ctx, "Missing preset and preset name",
-            `Provide the name of a saved study preset from the Time Studies page. Note this command will not work
-              with presets with purely numerical names.`);
-          return false;
+
+        if (ctx.Id) {
+          const split = idSplitter.exec(ctx.Id[0].image);
+
+          if (!split || ctx.Id[0].isInsertedInRecovery) {
+            V.addError(ctx, "Missing preset id",
+              "Provide the id of a saved study preset slot from the Time Studies page");
+            return false;
+          }
+
+          const id = parseInt(split[1], 10);
+          if (id < 1 || id > 6) {
+            V.addError(ctx.Id[0], `Could not find a preset with an id of ${id}`,
+              "Type in a valid id (1 - 6) for your study preset");
+            return false;
+          }
+          ctx.$presetIndex = id;
+          return true;
         }
-        const split = presetSplitter.exec(ctx.Preset[0].image);
-        if (!split) {
-          V.addError(ctx.Preset[0], "Missing preset name or number",
-            "Provide the name or index (1-6) of a saved study preset from the Time Studies page");
-          return false;
-        }
-        ctx.Preset[0].splitPresetResult = split;
-        let presetIndex;
-        if (split[2]) {
-          // We don't need to do any verification if it's a number; if it's a name, we
-          // check to make sure it exists:
-          presetIndex = player.timestudy.presets.findIndex(e => e.name === split[2]) + 1;
+
+        if (ctx.Name) {
+          const split = presetSplitter.exec(ctx.Name[0].image);
+
+          if (!split || ctx.Name[0].isInsertedInRecovery) {
+            V.addError(ctx, "Missing preset name",
+              "Provide the name of a saved study preset from the Time Studies page");
+            return false;
+          }
+
+          // If it's a name, we check to make sure it exists:
+          const presetIndex = player.timestudy.presets.findIndex(e => e.name === split[1]) + 1;
           if (presetIndex === 0) {
-            V.addError(ctx.Preset[0], `Could not find preset named ${split[2]} (Note: Names are case-sensitive)`,
+            V.addError(ctx.Name[0], `Could not find preset named ${split[1]} (Note: Names are case-sensitive)`,
               "Check to make sure you typed in the correct name for your study preset");
             return false;
           }
-        } else {
-          presetIndex = parseInt(split[1], 10);
+          ctx.$presetIndex = presetIndex;
+          return true;
         }
-        ctx.$presetIndex = presetIndex;
-        return true;
+        return false;
       },
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
@@ -720,10 +734,13 @@ export const AutomatorCommands = ((() => {
           // if there are then we keep trying on this line until there aren't, unless we are given nowait
           const missingStudyCount = imported.purchasedStudies
             .filter(s => !GameCache.currentStudyTree.value.purchasedStudies.includes(s)).length;
+
+          const presetRepresentation = ctx.Name ? ctx.Name[0].image : ctx.Id[0].image;
+
           if (missingStudyCount === 0) {
-            AutomatorData.logCommandEvent(`Fully loaded study preset ${ctx.Preset[0].image}`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Fully loaded study preset ${presetRepresentation}`, ctx.startLine);
           } else if (afterCount > beforeCount) {
-            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image}
+            AutomatorData.logCommandEvent(`Partially loaded study preset ${presetRepresentation}
               (missing ${quantifyInt("study", missingStudyCount)})`, ctx.startLine);
           }
           return ctx.Nowait !== undefined || missingStudyCount === 0

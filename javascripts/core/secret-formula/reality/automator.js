@@ -331,9 +331,12 @@ GameDatabase.reality.automator = {
       isUnlocked: () => true,
       keyword: "studies load preset",
       name: "<b>studies load preset</b> - Load a saved Time Study preset",
-      syntax: `<b>studies [nowait] load preset [name | number]</b>`,
-      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time Study tab.
-        Number is 1 to 6 (corresponding to slot), but the given name can also be used.
+      syntax: `<b>studies [nowait] load preset [id | name] [selector]</b>
+        <b>selector</b>: [1-6] for id, preset name for name<br>`,
+      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time Study tab.<br>
+        If it is loaded by id, the Number must be between 1 to 6 (corresponding to slot).<br>
+        If it is instead loaded by name, the <b>case sensitive</b> name given to the preset by the player must be used.
+        <br>
         If <b>nowait</b> is present, then the Automator will purchase as many Time Studies as
         possible from the preset before moving on to the next command, even if some cannot be bought.<br>
         If <b>nowait</b> is <i>not</i> present, then the Automator will repeatedly attempt to buy the studies in order.
@@ -341,7 +344,9 @@ GameDatabase.reality.automator = {
         stuck indefinitely if the preset contains studies in a configuration which cannot be bought simultaneously,
         for example 71, 72, and 73 before the Dimension Split Dilation upgrade is purchased.`,
       examples: [
-        `studies load preset 2`,
+        `studies load preset id 2`,
+        `studies nowait load preset id 6`,
+        `studies load preset ANTI`,
         `studies nowait load preset dil`,
       ]
     },

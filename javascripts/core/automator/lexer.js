@@ -289,10 +289,12 @@ export const AutomatorLexer = (() => {
   createKeyword("Off", /off/i);
   createKeyword("On", /on/i);
   createKeyword("Pause", /pause/i);
-  // Presets are a little special, because they can be named anything (like ec12 or wait)
+  createKeyword("Preset", /preset/i);
+  // Names are a little special, because they can be named anything (like ec12 or wait)
   // So, we consume the label at the same time as we consume the preset. In order to report
   // errors, we also match just the word preset. And, we have to not match comments.
-  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
+  createKeyword("Name", /name([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
+  createKeyword("Id", /id\b([ \t]+\d)?/i);
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);

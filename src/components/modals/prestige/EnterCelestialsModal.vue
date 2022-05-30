@@ -26,7 +26,7 @@ export default {
       effarigLayer: "",
       enslavedDone: false,
       vAlchemy: false,
-      laitalaTime: "",
+      laitelaTime: "",
     };
   },
   computed: {
@@ -56,7 +56,7 @@ export default {
           for a specific Celestial Memory based on their amount.`;
         case 5: return this.laitelaFastest >= 300
           ? "You have not completed Lai'tela at this tier."
-          : `Your fastest completion on this tier is ${this.laitalaTime}.`;
+          : `Your fastest completion on this tier is ${this.laitelaTime}.`;
         // TODO: Address pelle being its own modal instead of here
         case 6: return `Pe-lle is Dea-th. You is Doo-med.`;
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
@@ -73,7 +73,7 @@ export default {
       this.enslavedDone = Enslaved.isCompleted;
       this.vAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
       const laitelaFastest = player.celestials.laitela.fastestCompletion;
-      this.laitalaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
+      this.laitelaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));

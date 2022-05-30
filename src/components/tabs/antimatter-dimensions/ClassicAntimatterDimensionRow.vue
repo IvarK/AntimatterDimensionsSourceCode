@@ -1,9 +1,11 @@
 <script>
+import GenericDimensionRowText from "@/components/GenericDimensionRowText";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ClassicAntimatterDimensionRow",
   components: {
+    GenericDimensionRowText,
     PrimaryButton
   },
   props: {
@@ -34,16 +36,11 @@ export default {
   },
   computed: {
     name() {
-      return AntimatterDimension(this.tier).shortDisplayName;
+      return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter Dimension`;
     },
     amountText() {
       const amount = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
       return `${amount} (${formatInt(this.boughtBefore10)})`;
-    },
-    rateOfChangeDisplay() {
-      return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
     },
     singleText() {
       if (this.isCapped) return "Capped";
@@ -117,10 +114,10 @@ export default {
       return value.exponent < 1000000;
     },
     isLongText(str) {
-      return str.length > 15;
+      return str.length > 20;
     },
     singlesClass() {
-      const small = { "l-condensed-text": this.isLongText(this.singleText) };
+      const small = { "l-dim-row-small-text": this.isLongText(this.singleText) };
       let tutorial;
       switch (this.tier) {
         case 1:
@@ -140,62 +137,40 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-antimatter-dim-row l-full-row-container"
+    class="c-antimatter-dim-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked }"
   >
-    <div class="c-dim-row__label c-dim-row__name l-text-rows">
-      <span>{{ name }} Antimatter Dimension</span>
-      <span class="c-dim-row__label--small">
-        {{ formatX(multiplier, 1, 1) }}
-      </span>
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--amount l-text-rows">
-      <span>
-        {{ amountText }}
-      </span>
-      <span
-        v-if="rateOfChange.neq(0)"
-        class="c-dim-row__label--small"
+    <GenericDimensionRowText
+      :tier="tier"
+      :name="name"
+      :multiplier-text="formatX(multiplier, 1, 1)"
+      :amount-text="amountText"
+      :rate="rateOfChange"
+    />
+    <div class="l-dim-row-multi-button-container">
+      <PrimaryButton
+        v-if="!isContinuumActive"
+        v-tooltip="boughtTooltip"
+        :enabled="isAffordable && !isCapped && isUnlocked"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad"
+        :class="singlesClass()"
+        @click="buySingle"
       >
-        {{ rateOfChangeDisplay }}
-      </span>
+        {{ singleText }}
+      </PrimaryButton>
+      <PrimaryButton
+        :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
+        class="o-primary-btn--buy-ad"
+        :class="{
+          'o-primary-btn--buy-10-ad': !isContinuumActive,
+          'o-primary-btn--continuum-ad': isContinuumActive,
+          'l-dim-row-small-text': isLongText(until10Text) && !isContinuumActive
+        }"
+        :ach-tooltip="boughtTooltip"
+        @click="buyUntil10"
+      >
+        {{ until10Text }}
+      </PrimaryButton>
     </div>
-    <PrimaryButton
-      v-if="!isContinuumActive"
-      v-tooltip="boughtTooltip"
-      :enabled="isAffordable && !isCapped && isUnlocked"
-      class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
-      :class="singlesClass()"
-      @click="buySingle"
-    >
-      {{ singleText }}
-    </PrimaryButton>
-    <PrimaryButton
-      :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
-      class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
-      :class="{ 'l-condensed-text': isLongText(until10Text) }"
-      :ach-tooltip="boughtTooltip"
-      @click="buyUntil10"
-    >
-      {{ until10Text }}
-    </PrimaryButton>
   </div>
 </template>
-
-<style scoped>
-.l-full-row-container {
-  height: 4.5rem;
-}
-
-.l-condensed-text {
-  vertical-align: middle;
-  font-size: 1rem;
-  line-height: 1rem;
-}
-
-.l-text-rows {
-  display: flex;
-  flex-direction: column;
-}
-</style>
-

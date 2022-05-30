@@ -1,10 +1,12 @@
 <script>
+import GenericDimensionRowText from "@/components/GenericDimensionRowText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "ClassicTimeDimensionRow",
   components: {
+    GenericDimensionRowText,
     PrimaryButton,
     PrimaryToggleButton
   },
@@ -40,12 +42,7 @@ export default {
       return ui.view.shiftDown;
     },
     name() {
-      return TimeDimension(this.tier).shortDisplayName;
-    },
-    rateOfChangeDisplay() {
-      return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
+      return `${TimeDimension(this.tier).shortDisplayName} Time Dimension`;
     },
     buttonContents() {
       if (this.showTTCost) return this.formattedTTCost;
@@ -66,7 +63,7 @@ export default {
       return this.isCapped ? "Capped" : `${this.showCostTitle ? "Cost: " : ""}${format(this.cost, 2)} EP`;
     },
     hasLongText() {
-      return this.buttonContents.length > 15;
+      return this.buttonContents.length > 20;
     },
     showCostTitle() {
       return this.cost.exponent < 1e6;
@@ -117,66 +114,40 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-infinity-dim-row l-full-row-container"
+    class="c-time-dim-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
   >
-    <div class="c-dim-row__label c-dim-row__name l-text-rows">
-      <span>
-        {{ name }} Time Dimension
-      </span>
-      <span class="c-dim-row__label--small">
-        {{ formatX(multiplier, 2, 1) }}
-      </span>
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--amount l-text-rows">
-      <span>
-        {{ format(amount, 2) }}
-      </span>
-      <span
-        v-if="rateOfChange.neq(0)"
-        class="c-dim-row__label--small"
-      >
-        {{ rateOfChangeDisplay }}
-      </span>
-    </div>
-    <PrimaryButton
-      v-tooltip="tooltipContents"
-      :enabled="isAvailableForPurchase && !isCapped"
-      class="o-primary-btn--buy-td l-dim-row__button"
-      :class="{ 'l-condensed-text': hasLongText }"
-      @click="buyTimeDimension"
-    >
-      {{ buttonContents }}
-    </PrimaryButton>
-    <PrimaryToggleButton
-      v-if="areAutobuyersUnlocked"
-      v-model="isAutobuyerOn"
-      class="o-primary-btn--td-autobuyer l-dim-row__button"
-      label="Auto:"
+    <GenericDimensionRowText
+      :tier="tier"
+      :name="name"
+      :multiplier-text="formatX(multiplier, 2, 1)"
+      :amount-text="format(amount, 2)"
+      :rate="rateOfChange"
     />
-    <PrimaryButton
-      v-else
-      :enabled="isAvailableForPurchase && !isCapped"
-      class="o-primary-btn--buy-td-max l-dim-row__button"
-      @click="buyMaxTimeDimension"
-    >
-      Buy Max
-    </PrimaryButton>
+    <div class="l-dim-row-multi-button-container">
+      <PrimaryButton
+        v-tooltip="tooltipContents"
+        :enabled="isAvailableForPurchase && !isCapped"
+        class="o-primary-btn--buy-td"
+        :class="{ 'l-dim-row-small-text': hasLongText }"
+        @click="buyTimeDimension"
+      >
+        {{ buttonContents }}
+      </PrimaryButton>
+      <PrimaryToggleButton
+        v-if="areAutobuyersUnlocked"
+        v-model="isAutobuyerOn"
+        class="o-primary-btn--buy-td-auto"
+        label="Auto:"
+      />
+      <PrimaryButton
+        v-else
+        :enabled="isAvailableForPurchase && !isCapped"
+        class="o-primary-btn--buy-td-auto"
+        @click="buyMaxTimeDimension"
+      >
+        Buy Max
+      </PrimaryButton>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.l-full-row-container {
-  height: 4.5rem;
-}
-
-.l-condensed-text {
-  font-size: 1rem;
-  line-height: 1rem;
-}
-
-.l-text-rows {
-  display: flex;
-  flex-direction: column;
-}
-</style>

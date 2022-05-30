@@ -66,7 +66,7 @@ export class ScriptTemplate {
       const presetObj = player.timestudy.presets.map((p, i) => ({ ...p, id: i + 1 }))
         .find(p => (p.name === params.treePreset || p.id === Number(params.treePreset)));
       const preset = presetObj.name ? `name ${presetObj.name}` : `id ${presetObj.id}`;
-      this.storedTreeStr = `studies${nowaitStr} load preset ${preset}`;
+      this.storedTreeStr = `studies${nowaitStr} load ${preset}`;
       this.storedTreeObj = new TimeStudyTree(presetObj.studies);
     } else {
       this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;

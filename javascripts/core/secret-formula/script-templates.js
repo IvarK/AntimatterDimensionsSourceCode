@@ -18,7 +18,7 @@ GameDatabase.reality.automator.templates = {
       name: "tree",
       isValidString: str => {
         const validImport = TimeStudyTree.isValidImportString(str);
-        const preset = str.match(/^PRESET (NAME (.{1,4})|ID (\d))$/u);
+        const preset = str.match(/^(NAME (.{1,4})|ID (\d))$/u);
         const validPreset = preset ? (
           player.timestudy.presets.some(p => p.name === preset[2]) ||
           (Number(preset[3]) > 0 && Number(preset[3]) < 7)

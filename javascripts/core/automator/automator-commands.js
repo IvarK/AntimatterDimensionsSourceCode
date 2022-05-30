@@ -674,7 +674,6 @@ export const AutomatorCommands = ((() => {
         $.CONSUME(T.Studies);
         $.OPTION(() => $.CONSUME(T.Nowait));
         $.CONSUME(T.Load);
-        $.CONSUME(T.Preset);
         $.OR([
           { ALT: () => $.CONSUME1(T.Id) },
           { ALT: () => $.CONSUME1(T.Name) },

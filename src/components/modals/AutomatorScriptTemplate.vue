@@ -79,7 +79,7 @@ export default {
         : "c-automator-template-textbox--invalid";
     },
     loadPreset(name, id) {
-      this.templateInputs.treeStudies = `PRESET ${name ? `NAME ${name}` : `ID ${id}`}`;
+      this.templateInputs.treeStudies = name ? `NAME ${name}` : `ID ${id}`;
       this.updateTemplateProps();
     },
     loadCurrent() {
@@ -96,9 +96,9 @@ export default {
         if (!this.isValid(input)) this.invalidInputCount++;
       }
 
-      // We treat treeStudies as a special prop which will set treePreset if it matches the format "PRESET NAME [name]"
-      const nameMatch = this.templateProps.treeStudies.match(/^PRESET NAME (.{1,4})$/u);
-      const idMatch = this.templateProps.treeStudies.match(/^PRESET ID (\d)$/u);
+      // We treat treeStudies as a special prop which will set treePreset if it matches the format "NAME [name]"
+      const nameMatch = this.templateProps.treeStudies.match(/^NAME (.{1,4})$/u);
+      const idMatch = this.templateProps.treeStudies.match(/^ID (\d)$/u);
 
       if (nameMatch) {
         const nameStr = nameMatch ? nameMatch[1] : "";

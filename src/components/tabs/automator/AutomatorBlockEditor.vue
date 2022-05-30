@@ -83,7 +83,7 @@ export const BlockAutomator = {
     let parsed = "\t".repeat(indentation) + block.cmd;
 
     parsed = parsed
-      .replace("LOAD", "STUDIES LOAD PRESET")
+      .replace("LOAD", "STUDIES LOAD")
       .replace("RESPEC", "STUDIES RESPEC")
       .replace("COMMENT", "//")
       .replace("BLOB", "blob  ");
@@ -91,7 +91,7 @@ export const BlockAutomator = {
     if (block.canWait && block.wait === false) {
       if (block.cmd === "LOAD") {
         parsed = parsed
-          .replace("STUDIES LOAD PRESET", "STUDIES NOWAIT LOAD PRESET");
+          .replace("STUDIES LOAD", "STUDIES NOWAIT LOAD");
       } else parsed += ` NOWAIT`;
     }
     if (block.respec) parsed += ` RESPEC`;

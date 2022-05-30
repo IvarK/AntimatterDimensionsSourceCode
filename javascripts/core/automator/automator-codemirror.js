@@ -83,7 +83,7 @@ import { AutomatorLexer } from "./lexer";
     studiesArgs: [
       commentRule,
       { sol: true, next: "start" },
-      { regex: /load[ \t]preset(\s+|$)/ui, token: "variable-2", next: "studiesLoad" },
+      { regex: /load(\s+|$)/ui, token: "variable-2", next: "studiesLoad" },
       { regex: /respec/ui, token: "variable-2", next: "commandDone" },
       { regex: /nowait(\s+|$)/ui, token: "property" },
       { regex: /(?=\S)/ui, next: "studiesList" },
@@ -150,7 +150,7 @@ import { AutomatorLexer } from "./lexer";
       { regex: /nowait(\s|$)/ui, token: "property" },
       { regex: /".*"/ui, token: "string", next: "commandDone" },
       { regex: /(on|off|dilation|load|respec)(\s|$)/ui, token: "variable-2" },
-      { regex: /(preset|eternity|reality|use)(\s|$)/ui, token: "variable-2" },
+      { regex: /(eternity|reality|use)(\s|$)/ui, token: "variable-2" },
       { regex: /(antimatter|infinity|time)(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /(active|passive|idle)(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /(light|dark)(\s|$|(?=,))/ui, token: "variable-2" },

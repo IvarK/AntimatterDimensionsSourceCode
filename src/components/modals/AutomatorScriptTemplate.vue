@@ -78,8 +78,8 @@ export default {
         ? undefined
         : "c-automator-template-textbox--invalid";
     },
-    loadPreset(name) {
-      this.templateInputs.treeStudies = `PRESET ${name}`;
+    loadPreset(name, id) {
+      this.templateInputs.treeStudies = `PRESET ${name ? `NAME ${name}` : `ID ${id}`}`;
       this.updateTemplateProps();
     },
     loadCurrent() {
@@ -96,10 +96,18 @@ export default {
         if (!this.isValid(input)) this.invalidInputCount++;
       }
 
-      // We treat treeStudies as a special prop which will set treePreset iff it matches the format "PRESET [name]"
-      const presetMatch = this.templateProps.treeStudies.match(/^PRESET (.{1,4})$/u);
-      const presetStr = presetMatch ? presetMatch[1] : "";
-      this.currentPreset = this.presets.some((p, i) => p.name === presetStr || i === presetStr - 1) ? presetStr : "";
+      // We treat treeStudies as a special prop which will set treePreset if it matches the format "PRESET NAME [name]"
+      const nameMatch = this.templateProps.treeStudies.match(/^PRESET NAME (.{1,4})$/u);
+      const idMatch = this.templateProps.treeStudies.match(/^PRESET ID (\d)$/u);
+
+      if (nameMatch) {
+        const nameStr = nameMatch ? nameMatch[1] : "";
+        this.currentPreset = this.presets.find(x => x.name === nameStr).name;
+      } else if (idMatch) {
+        const idStr = idMatch ? idMatch[1] : "";
+        this.currentPreset = this.presets.some((x, y) => y === idStr - 1) ? idStr : "";
+      }
+
       this.templateProps.treePreset = this.currentPreset === "" ? null : this.currentPreset;
     },
     updateButton(input) {
@@ -133,7 +141,7 @@ export default {
         v-for="(preset, presetNumber) in presets"
         :key="preset.name"
         class="o-primary-btn"
-        @click="loadPreset(preset.name ? preset.name : presetNumber + 1)"
+        @click="loadPreset(preset.name, presetNumber + 1)"
       >
         {{ preset.name ? preset.name : presetNumber + 1 }}
       </button>

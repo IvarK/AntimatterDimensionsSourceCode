@@ -749,7 +749,8 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        inputValue: ctx.$presetIndex,
+        target: ctx.Name ? "NAME" : "ID",
+        inputValue: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
         wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.LOAD
       })

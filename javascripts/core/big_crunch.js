@@ -20,6 +20,7 @@ function handleChallengeCompletion() {
 }
 
 export function manualBigCrunchResetRequest() {
+  if (!Player.canCrunch) return;
   // Before the player has broken infinity, the confirmation modal should never be shown
   if ((player.break || PlayerProgress.eternityUnlocked()) &&
     player.options.confirmations.bigCrunch) {

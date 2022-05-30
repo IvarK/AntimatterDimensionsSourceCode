@@ -135,12 +135,10 @@ export function processManualReality(sacrifice, glyphID) {
     if (glyphID === undefined) {
       if (EffarigUnlock.glyphFilter.isUnlocked) {
         // If the player has the glyph filter, we apply the filter to the choices instead of picking randomly
-        let newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
-        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
+        const newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
+        if (sacrifice || GameCache.glyphInventorySpace.value === 0) {
           AutoGlyphProcessor.getRidOfGlyph(newGlyph);
-          newGlyph = null;
-        }
-        if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
+        } else {
           Glyphs.addToInventory(newGlyph);
         }
       } else {

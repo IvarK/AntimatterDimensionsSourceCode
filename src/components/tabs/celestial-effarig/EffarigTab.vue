@@ -53,6 +53,11 @@ export default {
       return this.currentShardsRate;
     }
   },
+  watch: {
+    isRunning() {
+      this.$recompute("runDescription");
+    }
+  },
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;

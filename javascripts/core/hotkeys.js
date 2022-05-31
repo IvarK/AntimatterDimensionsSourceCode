@@ -215,25 +215,37 @@ export const shortcuts = [
     name: "Change Tab",
     keys: ["up"],
     type: "bind",
-    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "up"),
+    function: () => {
+      EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "up");
+      return false;
+    },
     visible: false
   }, {
     name: "Change Tab",
     keys: ["down"],
     type: "bind",
-    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "down"),
+    function: () => {
+      EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "down");
+      return false;
+    },
     visible: false
   }, {
     name: "Change Subtab",
     keys: ["left"],
     type: "bind",
-    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "left"),
+    function: () => {
+      EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "left");
+      return false;
+    },
     visible: false
   }, {
     name: "Change Subtab",
     keys: ["right"],
     type: "bind",
-    function: () => EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "right"),
+    function: () => {
+      EventHub.dispatch(GAME_EVENT.ARROW_KEY_PRESSED, "right");
+      return false;
+    },
     visible: false
   }, {
     name: "Doesn't exist",
@@ -406,22 +418,23 @@ function keyboardVisibleTabsToggle() {
   Modal.hiddenTabs.show();
 }
 
-EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, direction => {
+EventHub.logic.on(GAME_EVENT.ARROW_KEY_PRESSED, direction => {
+  if (Modal.celestialQuote.isOpen) return;
   // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
-  if (direction === "up" || direction === "down") {
+  if (direction[0] === "up" || direction[0] === "down") {
     // Make an array of the keys of all the unlocked and visible tabs
     const tabs = Tabs.currentUIFormat.flatMap(i => (i.isAvailable ? [i.key] : []));
     // Find the index of the tab we are on
     let top = tabs.indexOf(currentTab);
     // Move in the desired direction
-    if (direction === "up") top--;
+    if (direction[0] === "up") top--;
     else top++;
     // Loop around if needed
     top = (top + tabs.length) % tabs.length;
     // And now we go there.
     Tab[tabs[top]].show(true);
-  } else if (direction === "left" || direction === "right") {
+  } else if (direction[0] === "left" || direction[0] === "right") {
     // Current subtabs
     const currentSubtab = Tabs.current._currentSubtab.key;
     // Make an array of the keys of all the unlocked and visible subtabs
@@ -429,15 +442,13 @@ EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, direction => {
     // Find the index of the subtab we are on
     let sub = subtabs.indexOf(currentSubtab);
     // Move in the desired direction
-    if (direction === "left") sub--;
+    if (direction[0] === "left") sub--;
     else sub++;
     // Loop around if needed
     sub = (sub + subtabs.length) % subtabs.length;
     // And now we go there.
     Tab[currentTab][subtabs[sub]].show(true);
   }
-  // Return false so the arrow keys don't do anything else
-  return false;
 });
 
 const konamiCode = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a", "enter"];

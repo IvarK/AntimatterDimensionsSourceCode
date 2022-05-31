@@ -147,8 +147,19 @@ export function replicantiLoop(diff) {
   const interval = getReplicantiInterval(false);
   const isUncapped = Replicanti.isUncapped;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
-  if (diff > 500 || interval.lessThan(diff) || isUncapped) {
-    // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
+
+  // Figure out how many ticks to calculate for and roll over any leftover time to the next tick. The rollover
+  // calculation is skipped if there's more than 100 replicanti ticks per game tick to reduce round-off problems.
+  let tickCount = Decimal.divide(diff + player.replicanti.timer, interval);
+  if (tickCount.lt(100)) player.replicanti.timer = tickCount.minus(tickCount.floor()).times(interval).toNumber();
+  else player.replicanti.timer = 0;
+  tickCount = tickCount.floor();
+
+  const singleTickAvg = Replicanti.amount.times(player.replicanti.chance);
+  if (tickCount.gte(100) || (singleTickAvg.gte(10) && tickCount.gte(1))) {
+    // Fast gain: If we're doing a very large number of ticks or each tick produces a lot, then continuous growth
+    // is a good approximation and less intensive than distribution samples. This path will always happen above 1000
+    // replicanti due to how singleTickAvg is calculated, so the over-cap math is only present on this path
     let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
     if (V.isRunning) {
       postScale *= 2;
@@ -171,15 +182,29 @@ export function replicantiLoop(diff) {
         Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale +
         Replicanti.amount.clampMin(1).ln());
     }
-    player.replicanti.timer = 0;
-  } else if (interval.lte(player.replicanti.timer)) {
+  } else if (tickCount.gt(1)) {
+    // Multiple ticks but "slow" gain: This happens at low replicanti chance and amount with a fast interval, which
+    // can happen often in early cel7. In this case we "batch" ticks together as full doubling events and then draw
+    // from a Poisson distribution for how many times to do that. Any leftover ticks are used as binomial samples
+    const batchTicks = Math.floor(tickCount.toNumber() * player.replicanti.chance);
+    const binomialTicks = tickCount.toNumber() - batchTicks / player.replicanti.chance;
+
+    Replicanti.amount = Replicanti.amount.times(DC.D2.pow(poissonDistribution(batchTicks)));
+    for (let t = 0; t < binomialTicks; t++) {
+      const reproduced = binomialDistribution(Replicanti.amount, player.replicanti.chance);
+      Replicanti.amount = Replicanti.amount.plus(reproduced);
+    }
+
+    // The batching might use partial ticks; we add the rest back to the timer so it gets used next loop
+    const leftover = binomialTicks - Math.floor(binomialTicks);
+    player.replicanti.timer += interval.times(leftover).toNumber();
+  } else if (tickCount.eq(1)) {
+    // Single tick: Take a single binomial sample to properly simulate replicanti growth with randomness
     const reproduced = binomialDistribution(Replicanti.amount, player.replicanti.chance);
     Replicanti.amount = Replicanti.amount.plus(reproduced);
-    if (!isUncapped) Replicanti.amount = Decimal.min(replicantiCap(), Replicanti.amount);
-    player.replicanti.timer += diff - interval.toNumber();
-  } else {
-    player.replicanti.timer += diff;
   }
+
+  if (!isUncapped) Replicanti.amount = Decimal.min(replicantiCap(), Replicanti.amount);
 
   if (Pelle.isDoomed && Replicanti.amount.log10() - replicantiBeforeLoop.log10() > 308) {
     Replicanti.amount = replicantiBeforeLoop.times(1e308);

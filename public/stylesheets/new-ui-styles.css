@@ -403,6 +403,7 @@ body.t-s9 {
 
 .o-primary-btn--dimension-reset {
   display: flex;
+  width: 25rem;
   height: 6rem;
   justify-content: center;
   align-items: center;

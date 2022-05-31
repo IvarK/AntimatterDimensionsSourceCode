@@ -23,6 +23,11 @@ export default {
       required: true
     },
   },
+  data() {
+    return {
+      width: 0,
+    };
+  },
   computed: {
     rateText() {
       return this.tier < 8
@@ -31,12 +36,17 @@ export default {
     },
   },
   methods: {
+    update() {
+      // Needs to be reactive or else rows that don't have changing values (eg. the highest dimension and any higher
+      // locked ones) won't change layout when the window size changes
+      this.width = window.innerWidth;
+    },
     adjustableTextStyle() {
       return {
         display: "flex",
         "text-align": "left",
         width: "100%",
-        "flex-direction": window.innerWidth < 1450 ? "column" : "row",
+        "flex-direction": this.width < 1450 ? "column" : "row",
         "justify-content": "space-between",
         "align-items": "center",
       };

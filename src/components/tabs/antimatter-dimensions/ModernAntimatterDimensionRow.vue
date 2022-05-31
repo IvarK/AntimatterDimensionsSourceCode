@@ -40,7 +40,7 @@ export default {
       return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
     },
     amountDisplay() {
-      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
+      return this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
@@ -58,8 +58,8 @@ export default {
     },
     buttonPrefix() {
       if (this.isCapped) return "Shattered by Enslaved";
-      if (this.isContinuumActive) return "Continuum:";
-      return `Buy ${this.howManyCanBuy}`;
+      if (this.isContinuumActive) return "Continuum: ";
+      return `Buy ${this.howManyCanBuy}, `;
     },
     buttonValue() {
       if (this.isCapped) return "";
@@ -149,7 +149,7 @@ export default {
       >
         <div
           v-tooltip="boughtTooltip"
-          class="button-content"
+          class="button-content l-modern-buy-ad-text"
           :class="tutorialClass()"
         >
           <div>
@@ -176,3 +176,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.l-modern-buy-ad-text {
+  display: flex;
+  flex-direction: column;
+}
+</style>

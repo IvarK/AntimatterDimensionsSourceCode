@@ -58,7 +58,7 @@ export default {
       return `Reach ${formatPostBreak(InfinityDimension(this.tier).amRequirement)} AM`;
     },
     hasLongText() {
-      return this.costDisplay.length > 20;
+      return this.costDisplay.length > 15;
     },
     capTooltip() {
       if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;

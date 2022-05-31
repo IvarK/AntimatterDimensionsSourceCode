@@ -17,6 +17,8 @@ export default {
     return {
       automatorUnlocked: false,
       interval: 0,
+      currentChars: 0,
+      withinLimit: false,
     };
   },
   computed: {
@@ -37,12 +39,22 @@ export default {
         ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
         : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second.
           ${speedupText}`;
-    }
+    },
+    maxChars() {
+      return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
+    },
+    overlimitStyle() {
+      return {
+        color: this.withinLimit ? "" : "var(--color-bad)",
+      };
+    },
   },
   methods: {
     update() {
       this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
+      this.currentChars = AutomatorData.totalScriptCharacters();
+      this.withinLimit = AutomatorData.isWithinLimit();
     }
   }
 };
@@ -62,6 +74,18 @@ export default {
       in which case the next command will be immediately processed after the slower command is run.
       <br>
       The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
+      <br>
+      You are using
+      <span :style="overlimitStyle">
+        {{ formatInt(currentChars) }} / {{ formatInt(maxChars) }}
+      </span>
+      characters of your limit across all scripts.
+      <span
+        v-if="!withinLimit"
+        :style="overlimitStyle"
+      >
+        Your changes are not being saved right now!
+      </span>
       <SplitPane
         :min-percent="40"
         :default-percent="50"

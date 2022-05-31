@@ -140,7 +140,7 @@ export class AutomatorScript {
   }
 
   save(content) {
-    this.persistent.content = content;
+    if (AutomatorData.isWithinLimit()) this.persistent.content = content;
     this.compile();
   }
 
@@ -211,6 +211,19 @@ export const AutomatorData = {
   clearEventLog() {
     this.eventLog = [];
     this.lastEvent = 0;
+  },
+  MAX_ALLOWED_TOTAL_CHARACTERS: 60000,
+  // We need to get the current character count from the editor itself instead of the player object, because otherwise
+  // any changes made after getting above the limit will never be saved
+  totalScriptCharacters() {
+    return Object.values(player.reality.automator.scripts)
+      .filter(s => s.id !== this.scriptIndex())
+      .map(s => s.content.length)
+      .reduce((sum, len) => sum + len, 0) +
+      AutomatorTextUI.editor.getDoc().getValue().length;
+  },
+  isWithinLimit() {
+    return this.totalScriptCharacters() <= this.MAX_ALLOWED_TOTAL_CHARACTERS;
   }
 };
 

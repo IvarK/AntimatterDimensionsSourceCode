@@ -186,11 +186,11 @@ export function replicantiLoop(diff) {
     // Multiple ticks but "slow" gain: This happens at low replicanti chance and amount with a fast interval, which
     // can happen often in early cel7. In this case we "batch" ticks together as full doubling events and then draw
     // from a Poisson distribution for how many times to do that. Any leftover ticks are used as binomial samples
-    const batchTicks = Math.floor(tickCount.toNumber() * player.replicanti.chance);
-    const binomialTicks = tickCount.toNumber() - batchTicks / player.replicanti.chance;
+    const batchTicks = Math.floor(tickCount.toNumber() * Math.log2(1 + player.replicanti.chance));
+    const binomialTicks = tickCount.toNumber() - batchTicks / Math.log2(1 + player.replicanti.chance);
 
     Replicanti.amount = Replicanti.amount.times(DC.D2.pow(poissonDistribution(batchTicks)));
-    for (let t = 0; t < binomialTicks; t++) {
+    for (let t = 0; t < Math.floor(binomialTicks); t++) {
       const reproduced = binomialDistribution(Replicanti.amount, player.replicanti.chance);
       Replicanti.amount = Replicanti.amount.plus(reproduced);
     }

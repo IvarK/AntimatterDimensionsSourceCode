@@ -329,8 +329,8 @@ GameDatabase.reality.automator = {
     {
       id: 13,
       isUnlocked: () => true,
-      keyword: "studies load preset",
-      name: "<b>studies load preset</b> - Load a saved Time Study preset",
+      keyword: "studies load (name / id)",
+      name: "<b>studies load (name / id)</b> - Load a saved Time Study preset",
       syntax: `<b>studies [nowait] load [id | name] [selector]</b><br>
         <b>selector</b>: [1-6] for id, preset name for name`,
       description: `Loads a Time Study preset, as if you'd clicked on the button in the Time Study tab.<br>

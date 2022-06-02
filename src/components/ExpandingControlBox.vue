@@ -104,7 +104,7 @@ export default {
   },
   created() {
     this.state = this.states.CLOSED;
-    this.$on("openrequest", () => this.openRequest = true);
+    this.on$("openrequest", () => this.openRequest = true);
   },
   mounted() {
     // Set the root and container elements to match the height of the button

@@ -255,7 +255,7 @@ export default {
     }
   },
   created() {
-    this.$on("tooltip-touched", () => this.hideTooltip());
+    this.on$("tooltip-touched", () => this.hideTooltip());
   },
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();

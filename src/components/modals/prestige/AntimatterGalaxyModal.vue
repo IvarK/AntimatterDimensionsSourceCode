@@ -52,7 +52,7 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
-      (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? undefined : this.closeIfOpen()));
+      (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? undefined : this.emitClose()));
     this.on$(GAME_EVENT.GALAXY_RESET_AFTER, this.emitClose);
     this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);

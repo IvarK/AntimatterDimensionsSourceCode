@@ -12,6 +12,6 @@ export default {
 
 <template>
   <div class="o-celestial-quote-history">
-    WIP: Button will appear here
+    <!-- WIP: Button will appear here -->
   </div>
 </template>

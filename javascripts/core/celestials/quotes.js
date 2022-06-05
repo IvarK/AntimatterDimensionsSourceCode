@@ -1,6 +1,24 @@
 import { BitUpgradeState } from "../game-mechanics/index";
 import wordShift from "../wordShift";
 
+export const Quote = {
+  addToQueue(quote) {
+    ui.view.quotes.queue.push(quote);
+    if (!ui.view.quotes.current) this.advanceQueue();
+  },
+  advanceQueue() {
+    ui.view.quotes.current = ui.view.quotes.queue.shift();
+  },
+  clearAll() {
+    ui.view.quotes.queue = [];
+    ui.view.quotes.current = undefined;
+  },
+  get isOpen() {
+    return ui.view.quotes.current !== undefined;
+  }
+};
+
+
 function celCycle(cels) {
   const totalTime = cels.map(cel => cel[1]).sum();
   let tick = (Date.now() / 100) % totalTime;
@@ -76,7 +94,7 @@ class CelQuotes extends BitUpgradeState {
   onUnlock() { this.present(); }
 
   present() {
-    Modal.celestialQuote.show(this);
+    Quote.addToQueue(this);
   }
 }
 

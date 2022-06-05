@@ -2,7 +2,7 @@
 export default {
   name: "CelestialQuoteModal",
   props: {
-    modalConfig: {
+    quote: {
       type: Object,
       required: true
     }
@@ -23,9 +23,6 @@ export default {
       set(x) {
         this.index = Math.clamp(x, 0, this.totalLines - 1);
       }
-    },
-    quote() {
-      return this.modalConfig.quote;
     },
     line() {
       return this.quote.line(this.currentLine);
@@ -74,7 +71,7 @@ export default {
     },
     close() {
       this.index = 0;
-      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      Quote.advanceQueue();
     },
     update() {
       const line = this.line;

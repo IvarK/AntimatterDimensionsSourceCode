@@ -1,4 +1,3 @@
-import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
@@ -211,23 +210,6 @@ Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
 Modal.sacrifice = new Modal(SacrificeModal, 1);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1);
-Modal.celestialQuote = new class extends Modal {
-  queue = [];
-
-  show(quote) {
-    if (!GameUI.initialized || player.speedrun.isActive) return;
-    if (this.isOpen) {
-      this.queue.push(quote);
-      return;
-    }
-    super.show({ quote });
-  }
-
-  hide() {
-    Modal.hide();
-    if (this.queue.length > 0) this.show(this.queue.shift());
-  }
-}(CelestialQuoteModal, 2, true);
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);

@@ -384,11 +384,9 @@ function armageddonRequest() {
 }
 
 function keyboardPressEscape() {
-  if (ui.view.modal.queue.length === 0) {
-    Tab.options.show(true);
-  } else {
-    Modal.hideAll();
-  }
+  if (Quote.isOpen) Quote.clearAll();
+  else if (Modal.isOpen) Modal.hideAll();
+  else Tab.options.show(true);
 }
 
 function keyboardPressQuestionMark() {
@@ -419,7 +417,7 @@ function keyboardVisibleTabsToggle() {
 }
 
 EventHub.logic.on(GAME_EVENT.ARROW_KEY_PRESSED, direction => {
-  if (Modal.celestialQuote.isOpen) return;
+  if (Quote.isOpen) return;
   // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
   if (direction[0] === "up" || direction[0] === "down") {

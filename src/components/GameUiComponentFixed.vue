@@ -1,15 +1,16 @@
 <script>
+import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
+import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
+import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
 import HowToPlay from "@/components/HowToPlay";
 import InfoButton from "@/components/InfoButton";
-import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
+import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
+import NewGame from "@/components/tabs/celestial-pelle/NewGame";
+import PopupModal from "@/components/modals/PopupModal";
 import SaveTimer from "@/components/SaveTimer";
 import SpeedrunStatus from "@/components/SpeedrunStatus";
-import PopupModal from "@/components/modals/PopupModal";
-import ModalProgressBar from "@/components/modals/ModalProgressBar";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
-import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import NewGame from "@/components/tabs/celestial-pelle/NewGame";
+import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
 
 export default {
   name: "GameUiComponentFixed",
@@ -22,6 +23,7 @@ export default {
     SpeedrunStatus,
     PopupModal,
     ModalProgressBar,
+    CelestialQuoteModal,
     FadeToBlack,
     CreditsContainer,
     NewGame
@@ -72,11 +74,15 @@ export default {
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
     <SpeedrunStatus :style="hideIfMatoFullscreen" />
+    <ModalProgressBar v-if="view.modal.progressBar" />
+    <CelestialQuoteModal
+      v-else-if="view.quotes.current"
+      :quote="view.quotes.current"
+    />
     <PopupModal
-      v-if="view.modal.current"
+      v-else-if="view.modal.current"
       :modal="view.modal.current"
     />
-    <ModalProgressBar v-if="view.modal.progressBar" />
     <FadeToBlack v-if="rollingCredits" />
     <CreditsContainer v-if="rollingCredits" />
     <NewGame v-if="rollingCredits" />

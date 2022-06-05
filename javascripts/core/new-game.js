@@ -36,6 +36,7 @@ export const NG = {
     const prevGameEnd = GameEnd.additionalEnd;
     GameEnd.removeAdditionalEnd = true;
     Modal.hideAll();
+    Quote.clearAll();
     GameStorage.hardReset();
     player.newGame = JSON.parse(newGameBackup);
     player.newGame.current = i;

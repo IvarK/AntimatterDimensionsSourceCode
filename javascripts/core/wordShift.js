@@ -8,7 +8,11 @@ export default {
     if (tick % 5 < 1 || tick % 5 > 3) {
       v = this.randomCrossWords(v);
     }
-    return v;
+    const maxWordLen = Math.max(...list.map(x => x.length));
+    const bufferSpace = (maxWordLen - v.length) / 2;
+
+    // Buffer the result with spaces on either side to prevent the ui from twitching.
+    return " ".repeat(Math.ceil(bufferSpace)) + v + " ".repeat(Math.floor(bufferSpace));
   },
   randomCrossWords(str) {
     const x = str.split("");

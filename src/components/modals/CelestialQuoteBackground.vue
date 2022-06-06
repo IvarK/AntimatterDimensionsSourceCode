@@ -19,8 +19,9 @@ export default {
     modalClass() {
       return {
         "l-modal-celestial-quote": true,
+        "c-modal-celestial-quote": true,
         [`c-modal-celestial-quote--${this.celestial}`]: true,
-        [`c-modal-celestial-quote-primary--${this.celestial}`]: this.primary,
+        "c-modal-celestial-quote-primary": this.primary,
       };
     }
   },
@@ -39,6 +40,8 @@ export default {
 
 <style scoped>
 .l-modal-celestial-quote {
+  --scoped-quote-color: var(--color-text);
+
   display: flex;
   flex-direction: row;
   width: 30rem;
@@ -55,6 +58,48 @@ export default {
   transform: translate(-50%, -50%);
 }
 
+.c-modal-celestial-quote--teresa {
+  --scoped-quote-color: var(--color-teresa--base)
+}
+
+.c-modal-celestial-quote--effarig {
+  --scoped-quote-color: var(--color-effarig--base)
+}
+
+.c-modal-celestial-quote--enslaved {
+  --scoped-quote-color: var(--color-enslaved--base)
+}
+
+.c-modal-celestial-quote--v {
+  --scoped-quote-color: var(--color-v--base)
+}
+
+.c-modal-celestial-quote--ra {
+  --scoped-quote-color: var(--color-ra--base)
+}
+
+.c-modal-celestial-quote--laitela {
+  --scoped-quote-color: var(--color-laitela--accent)
+}
+
+.c-modal-celestial-quote--pelle {
+  --scoped-quote-color: var(--color-pelle--base)
+}
+
+.c-modal-celestial-quote {
+  color: var(--scoped-quote-color);
+  background-color: black;
+  box-shadow: 0 0 1rem 0.3rem var(--scoped-quote-color), 0 0 1rem 0.3rem var(--scoped-quote-color) inset;
+}
+
+.s-base--metro .c-modal-celestial-quote {
+  box-shadow: 0 0 0.3rem 0.3rem var(--scoped-quote-color), 0 0 0.3rem 0.3rem var(--scoped-quote-color) inset;
+}
+
+.c-modal-celestial-quote-primary {
+  border-color: var(--scoped-quote-color);
+}
+
 .c-modal-cestial-quote__symbol {
   display: flex;
   width: 100%;
@@ -67,75 +112,5 @@ export default {
   opacity: 0.2;
   text-shadow: 0 0 2rem;
   pointer-events: none;
-}
-
-.c-modal-celestial-quote--teresa {
-  color: var(--color-teresa--base);
-  background-color: black;
-  box-shadow: 0 0 1rem var(--color-teresa--base), 0 0 1rem var(--color-teresa--base) inset;
-}
-
-.c-modal-celestial-quote-primary--teresa {
-  border-color: var(--color-teresa--base);
-}
-
-.c-modal-celestial-quote--effarig {
-  color: var(--color-effarig--base);
-  background-color: black;
-  box-shadow: 0 0 1rem var(--color-effarig--base), 0 0 1rem var(--color-effarig--base) inset;
-}
-
-.c-modal-celestial-quote-primary--effarig {
-  border-color: var(--color-effarig--base);
-}
-
-.c-modal-celestial-quote--enslaved {
-  color: var(--color-enslaved--base);
-  background-color: black;
-  box-shadow: 0 0 1rem var(--color-enslaved--base), 0 0 1rem var(--color-enslaved--base) inset;
-}
-
-.c-modal-celestial-quote-primary--enslaved {
-  border-color: var(--color-enslaved--base);
-}
-
-.c-modal-celestial-quote--v {
-  color: var(--color-v--base);
-  background-color: black;
-  box-shadow: 0 0 1rem var(--color-v--base), 0 0 1rem var(--color-v--base) inset;
-}
-
-.c-modal-celestial-quote-primary--v {
-  border-color: var(--color-v--base);
-}
-
-.c-modal-celestial-quote--ra {
-  color: var(--color-ra--base);
-  background-color: black;
-  box-shadow: 0 0 1rem var(--color-ra--base), 0 0 1rem var(--color-ra--base) inset;
-}
-
-.c-modal-celestial-quote-primary--ra {
-  border-color: var(--color-ra--base);
-}
-
-.c-modal-celestial-quote--laitela {
-  color: var(--color-laitela--accent);
-  background-color: var(--color-laitela--base);
-  box-shadow: 0 0 1rem var(--color-laitela--accent), 0 0 1rem var(--color-laitela--accent) inset;
-}
-
-.c-modal-celestial-quote-primary--laitela {
-  border-color: var(--color-laitela--accent);
-}
-
-.c-modal-celestial-quote--pelle {
-  color: var(--color-pelle--base);
-  background-color: black;
-  box-shadow: 0 0 1rem var(--color-pelle--base), 0 0 1rem var(--color-pelle--base) inset;
-}
-
-.c-modal-celestial-quote-primary--pelle {
-  border-color: var(--color-pelle--base);
 }
 </style>

@@ -1,6 +1,13 @@
 <script>
 export default {
   name: "CreditsDisplay",
+  props: {
+    afterGameEnd: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
+  },
   computed: {
     people() { return GameDatabase.credits.people; },
     roles() { return GameDatabase.credits.roles; },
@@ -16,7 +23,15 @@ export default {
 </script>
 
 <template>
-  <div>
+  <!--
+    Using s-base--dark if the modal is displayed after finishing the game is perhaps a bit hacky,
+    but it saves a significant amount of CSS code later on
+  -->
+  <div
+    :class="{
+      's-base--dark': afterGameEnd
+    }"
+  >
     <h1 class="c-credits-header">
       Antimatter Dimensions
     </h1>
@@ -42,23 +57,33 @@ export default {
       </div>
     </div>
 
-    <br><br><br><br><br><br><br><br><br>
-    <h1 class="c-credits-header">
-      Thank you so much for playing!
-    </h1>
+    <span v-if="afterGameEnd">
+      <br><br><br><br><br><br><br><br><br>
+      <h1 class="c-credits-header">
+        Thank you so much for playing!
+      </h1>
+    </span>
   </div>
 </template>
 
 <style scoped>
 .c-credits-header {
+  color: #a33abd;
+}
+
+.s-base--dark .c-credits-header {
   color: yellow;
 }
 
 .c-credits-section {
-  color: white;
+  color: var(--color-text);
   text-shadow: 1px 1px 2px turquoise;
   margin-top: 10rem;
   margin-bottom: 2rem;
+}
+
+.s-base--dark {
+  color: white;
 }
 
 .l-credits--bulk {

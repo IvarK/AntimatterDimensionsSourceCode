@@ -14,7 +14,7 @@ export default {
 <template>
   <div class="l-credits-modal c-credits-modal">
     <ModalCloseButton @click="emitClose" />
-    <CreditsDisplay />
+    <CreditsDisplay :after-game-end="false" />
   </div>
 </template>
 

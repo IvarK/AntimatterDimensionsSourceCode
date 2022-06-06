@@ -83,7 +83,9 @@ export default {
       <b>Speedrun Status (<span v-html="statusText" />)</b>
       <br>
       <span
-        class="c-speedrun-status--change-name"
+        :class="{
+          'c-speedrun-status--change-name': !hasStarted
+        }"
         @click="changeName"
       >
         Player Name: {{ saveName }}
@@ -127,6 +129,7 @@ export default {
 }
 
 .c-speedrun-status--change-name {
+  text-decoration: underline;
   cursor: pointer;
 }
 

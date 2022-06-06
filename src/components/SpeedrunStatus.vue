@@ -77,12 +77,17 @@ export default {
 <template>
   <div
     v-if="isActive"
-    class="speedrun-status"
+    class="c-speedrun-status"
   >
     <div v-if="!isCollapsed">
       <b>Speedrun Status (<span v-html="statusText" />)</b>
       <br>
-      <span @click="changeName">Player Name: {{ saveName }}</span>
+      <span
+        class="c-speedrun-status--change-name"
+        @click="changeName"
+      >
+        Player Name: {{ saveName }}
+      </span>
       <br>
       <i>{{ segmentText }}</i>
       <br>
@@ -94,7 +99,7 @@ export default {
       <br>
     </div>
     <div
-      class="speedrun-collapse"
+      class="c-speedrun-status--collapse"
       @click="toggleCollapse"
     >
       <i :class="collapseIcon" />
@@ -105,7 +110,7 @@ export default {
 </template>
 
 <style scoped>
-.speedrun-status {
+.c-speedrun-status {
   white-space: nowrap;
   position: absolute;
   right: 1rem;
@@ -121,7 +126,11 @@ export default {
   user-select: none;
 }
 
-.speedrun-collapse {
+.c-speedrun-status--change-name {
+  cursor: pointer;
+}
+
+.c-speedrun-status--collapse {
   padding: 0.2rem;
   cursor: pointer;
 }

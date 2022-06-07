@@ -6,14 +6,6 @@ html {
   background-size: 50%;
 }
 
-.c-background-overlay {
-  background: url("../images/s2-bg.svg") no-repeat;
-  background-color: white;
-  background-position-x: 50%;
-  background-position-y: 50%;
-  background-size: 50%;
-}
-
 body {
   color: white;
   text-shadow: 1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black;

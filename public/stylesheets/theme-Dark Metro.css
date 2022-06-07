@@ -4,11 +4,6 @@ body.t-dark-metro {
   background-position: center;
 }
 
-.t-dark-metro .c-background-overlay {
-  background-image: url("../images/dark-bg.png");
-  background-position: center;
-}
-
 .t-dark-metro .c-tt-buy-button--unlocked {
   color: #00bcd4;
   background: #212121;

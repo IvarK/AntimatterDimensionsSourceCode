@@ -29,22 +29,6 @@ body {
   border: 0.1rem solid white !important;
 }
 
-.c-background-overlay {
-  background: #ff00ff;
-  border-radius: 0 !important;
-}
-
-.c-background-overlay::after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #0fff0f;
-  border-radius: 40%;
-}
-
 .o-achievement {
   border-radius: 0.8rem !important;
 }

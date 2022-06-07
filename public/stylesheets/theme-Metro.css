@@ -4,10 +4,6 @@
   border: 0.1rem solid #00bcd4;
 }
 
-.t-metro .c-background-overlay {
-  background: #212121;
-}
-
 .t-metro .c-tt-buy-button--unlocked:hover {
   color: #212121;
   background: #00bcd4;

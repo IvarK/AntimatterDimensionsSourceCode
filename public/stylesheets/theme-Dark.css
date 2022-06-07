@@ -4,11 +4,6 @@ body.t-dark {
   background-position: center;
 }
 
-.t-dark .c-background-overlay {
-  background-image: url("../images/dark-bg.png");
-  background-position: center;
-}
-
 input.t-dark {
   background-color: #455a64;
   border: 0.1rem solid black;

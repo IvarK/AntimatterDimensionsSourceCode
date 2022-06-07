@@ -2,10 +2,6 @@ body.t-inverted-metro {
   background-color: black;
 }
 
-.t-inverted-metro .c-background-overlay {
-  background-color: black;
-}
-
 .t-inverted-metro #container,
 .t-inverted-metro #page,
 .t-inverted-metro #ui-fixed,

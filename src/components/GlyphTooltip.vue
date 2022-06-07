@@ -82,7 +82,7 @@ export default {
     sortedEffects() {
       return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength, this.type)
         .filter(effect =>
-          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
+          GlyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);

@@ -858,6 +858,10 @@ body.t-s9 {
   color: var(--color-accent);
 }
 
+.t-normal .c-credits-header {
+  color: var(--color-accent);
+}
+
 .c-dilation-tab__tachyons,
 .c-dilation-tab__dilated-time,
 .c-dilation-tab__dilated-time-income,

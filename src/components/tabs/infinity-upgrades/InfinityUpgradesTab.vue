@@ -22,7 +22,8 @@ export default {
       eternityUnlocked: false,
       bottomRowUnlocked: false,
       boughtAllUpgradesAnimation: false,
-      showUpgradeColumnBackground: true
+      showUpgradeColumnBackground: true,
+      styleOfColumnBg: undefined
     };
   },
   computed: {
@@ -55,7 +56,7 @@ export default {
       ];
     },
     allColumnUpgrades() {
-      return this.grid.reduce((a, col) => a.concat(col), []);
+      return this.grid.flat();
     },
     disChargeClassObject() {
       return {
@@ -64,24 +65,6 @@ export default {
       };
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline,
-    styleOfColumnBg() {
-      if (!this.showUpgradeColumnBackground) return;
-      // Infinity upgrades are 10 rem tall, if counting margins.
-      const INF_UPG_HEIGHT = 10;
-      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
-
-      // eslint-disable-next-line consistent-return
-      return this.grid.map(col => {
-        const boughtUpgrades = col.countWhere(upg => upg.isBought);
-
-        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
-        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
-        return {
-          background: `linear-gradient(to bottom, var(--color-good) 0% ${heightUpper * 100}%,
-          transparent ${heightLower * 100}%)`
-        };
-      });
-    },
     columnBackgroundClassObject() {
       return {
         "c-infinity-upgrade-grid__column--background": true,
@@ -96,12 +79,14 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => {
-      this.$recompute("styleOfColumnBg");
+      this.setStyleOfColumnBg();
       this.testForBoughtAllUpgradesAnimation();
     });
     // This is here so that it only gets updated on load, and the columns show the proper disappearing animation.
-    this.showUpgradeColumnBackground = !PlayerProgress.eternityUnlocked() &&
-      this.allColumnUpgrades.countWhere(x => x.isBought) < 16;
+    this.showUpgradeColumnBackground = (!PlayerProgress.eternityUnlocked() || Pelle.isDoomed) &&
+      this.allColumnUpgrades.some(x => !x.isBought);
+
+    this.setStyleOfColumnBg();
   },
   methods: {
     update() {
@@ -126,12 +111,26 @@ export default {
       return classObject;
     },
     testForBoughtAllUpgradesAnimation() {
-      if (PlayerProgress.eternityUnlocked()) return;
-      if (this.allColumnUpgrades.countWhere(x => x.isBought) === 16) {
-        this.boughtAllUpgradesAnimation = true;
-        this.$recompute("styleOfColumnBg");
-      }
-    }
+      if (PlayerProgress.eternityUnlocked() && !Pelle.isDoomed) return;
+      this.boughtAllUpgradesAnimation = this.allColumnUpgrades.every(x => x.isBought);
+    },
+    setStyleOfColumnBg() {
+      if (!this.showUpgradeColumnBackground) return;
+      // Infinity upgrades are 10 rem tall, if counting margins.
+      const INF_UPG_HEIGHT = 10;
+      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
+
+      this.styleOfColumnBg = this.grid.map(col => {
+        const boughtUpgrades = col.countWhere(upg => upg.isBought);
+
+        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
+        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
+        return {
+          background: `linear-gradient(to bottom, var(--color-good) 0% ${heightUpper * 100}%,
+          transparent ${heightLower * 100}%)`
+        };
+      });
+    },
   }
 };
 </script>

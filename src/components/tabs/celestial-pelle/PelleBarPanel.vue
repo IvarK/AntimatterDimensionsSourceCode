@@ -10,6 +10,7 @@ export default {
     return {
       decayRate: 0,
       isCollapsed: false,
+      strikes: []
     };
   },
   computed: {
@@ -17,16 +18,13 @@ export default {
       return this.isCollapsed
         ? "fas fa-expand-arrows-alt"
         : "fas fa-compress-arrows-alt";
-    },
-    strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
-  },
-  created() {
-    this.on$(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => this.$recompute("strikes"));
+    }
   },
   methods: {
     update() {
       this.decayRate = Pelle.riftDrainPercent;
       this.isCollapsed = player.celestials.pelle.collapsed.rifts;
+      this.strikes = PelleStrikes.all.filter(s => s.hasStrike);
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.rifts = !this.isCollapsed;

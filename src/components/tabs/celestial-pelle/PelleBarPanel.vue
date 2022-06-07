@@ -20,6 +20,9 @@ export default {
     },
     strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
   },
+  created() {
+    this.on$(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => this.$recompute("strikes"));
+  },
   methods: {
     update() {
       this.decayRate = Pelle.riftDrainPercent;

@@ -41,6 +41,9 @@ export default {
       return this.isHovering && !this.shardRate.eq(0);
     }
   },
+  created() {
+    this.on$(GAME_EVENT.PELLE_UPGRADE_BOUGHT, () => this.recomputeUpgradeDisplays());
+  },
   methods: {
     update() {
       this.showBought = Pelle.cel.showBought;
@@ -49,9 +52,15 @@ export default {
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
     },
-    toggleBought() {
+    toggleShowBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
+      this.recomputeUpgradeDisplays();
+    },
+    recomputeUpgradeDisplays() {
       this.$recompute("upgrades");
+      this.$recompute("boughtUpgrades");
+      this.$recompute("visibleUpgrades");
+      this.$recompute("fadedUpgrades");
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.upgrades = !this.isCollapsed;
@@ -105,7 +114,7 @@ export default {
       </div>
       <button
         class="o-pelle-button"
-        @click="toggleBought"
+        @click="toggleShowBought"
       >
         {{ showBought ? "Showing bought upgrades" : "Bought upgrades hidden" }}
       </button>

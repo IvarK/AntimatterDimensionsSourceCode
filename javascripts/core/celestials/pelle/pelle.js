@@ -442,6 +442,9 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
     return Pelle.isDoomed;
   }
 
+  onPurchased() {
+    EventHub.dispatch(GAME_EVENT.PELLE_UPGRADE_BOUGHT);
+  }
 }
 
 export const PelleUpgrade = mapGameDataToObject(

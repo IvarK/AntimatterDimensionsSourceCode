@@ -18,7 +18,10 @@ export default {
   <div>
     <div class="c-modal__header">
       <ModalCloseButton @click="closeModal" />
-      <span class="c-modal__title">
+      <span
+        v-if="$slots.header"
+        class="c-modal__title"
+      >
         <slot name="header" />
       </span>
     </div>

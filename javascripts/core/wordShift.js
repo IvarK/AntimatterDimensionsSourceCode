@@ -11,8 +11,9 @@ export default {
     const maxWordLen = Math.max(...list.map(x => x.length));
     const bufferSpace = (maxWordLen - v.length) / 2;
 
-    // Buffer the result with spaces on either side to prevent the ui from twitching.
-    return " ".repeat(Math.ceil(bufferSpace)) + v + " ".repeat(Math.floor(bufferSpace));
+    // Buffer the result with ALT+255 on either side to prevent the ui from twitching.
+    // Spaces do not work due to being automatically collapsed, and css fixing this causes other issues.
+    return " ".repeat(Math.ceil(bufferSpace)) + v + " ".repeat(Math.floor(bufferSpace));
   },
   randomCrossWords(str) {
     const x = str.split("");

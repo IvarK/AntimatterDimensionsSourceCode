@@ -139,7 +139,6 @@ export default {
 
 .l-modal-celestial-quote__text {
   display: flex;
-  white-space: pre-wrap;
   flex-direction: column;
   height: 100%;
   justify-content: center;

@@ -25,6 +25,13 @@ body.t-s10 {
   background-size: 100%;
 }
 
+.c-background-overlay {
+  background: black;
+  background-image: url("../images/stars-bg.png");
+  background-position: center;
+  background-size: 100%;
+}
+
 .t-s10 .c-tt-amount {
   color: #64dd17;
   text-shadow: 0 0 7px #64dd17;

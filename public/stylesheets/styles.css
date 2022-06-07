@@ -224,6 +224,10 @@ body {
   padding: 0;
 }
 
+.c-background-overlay {
+  background-color: #ffffff;
+}
+
 ._kong-test body {
   overflow-y: auto;
   width: 1150px;

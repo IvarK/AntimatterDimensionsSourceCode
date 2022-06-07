@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "FadeToBlack",
+  name: "FadeAway",
   data() {
     return {
       opacity: 0
@@ -16,7 +16,7 @@ export default {
 
 <template>
   <div
-    class="black-overlay"
+    class="c-background-overlay"
     :style="{
       opacity,
       pointerEvents: opacity > 1 ? 'auto' : 'none'
@@ -25,13 +25,12 @@ export default {
 </template>
 
 <style scoped>
-.black-overlay {
+.c-background-overlay {
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 8;
-  background: black;
 }
 </style>

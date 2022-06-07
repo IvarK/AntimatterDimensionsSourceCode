@@ -2,6 +2,10 @@ body.t-inverted {
   background-color: black;
 }
 
+.t-inverted .c-background-overlay {
+  background-color: black;
+}
+
 .t-inverted #container,
 .t-inverted #page,
 .t-inverted #ui-fixed,

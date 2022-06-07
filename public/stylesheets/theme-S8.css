@@ -11,6 +11,14 @@ body.t-s8 {
   background-size: cover;
 }
 
+.c-background-overlay {
+  background: url("../images/s8-bg.jpg") no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .t-s8 .container {
   color: black;
 }

@@ -10,6 +10,12 @@ body.t-s11 {
   background-size: 100%;
 }
 
+.c-background-overlay {
+  background: black;
+  background-position: center;
+  background-size: 100%;
+}
+
 .t-s11 .c-tt-amount {
   color: #64dd17;
   text-shadow: 0 0 7px #64dd17;

@@ -87,23 +87,21 @@ export default {
 </script>
 
 <template>
-  <div class="c-automator__controls l-automator__controls">
-    <button
-      v-tooltip="{
-        content: automatorModeTooltip,
-        hideOnTargetClick: false
-      }"
-      :class="{
-        'c-slider-toggle-button': true,
-        'c-slider-toggle-button--right': isTextAutomator,
-        ...tutorialClass
-      }"
-      @click="toggleAutomatorMode"
-    >
-      <i class="fas fa-cubes" />
-      <i class="fas fa-code" />
-    </button>
-  </div>
+  <button
+    v-tooltip="{
+      content: automatorModeTooltip,
+      hideOnTargetClick: false
+    }"
+    :class="{
+      'c-slider-toggle-button': true,
+      'c-slider-toggle-button--right': isTextAutomator,
+      ...tutorialClass
+    }"
+    @click="toggleAutomatorMode"
+  >
+    <i class="fas fa-cubes" />
+    <i class="fas fa-code" />
+  </button>
 </template>
 
 <style scoped>
@@ -116,7 +114,7 @@ export default {
   background-color: #626262;
   border: 0.2rem solid #767676;
   border-radius: 0.2rem;
-  margin: 0.2rem 0.4rem;
+  margin: 0.2rem 0.4rem 0.2rem auto;
   padding: 0.3rem 0;
   cursor: pointer;
 }

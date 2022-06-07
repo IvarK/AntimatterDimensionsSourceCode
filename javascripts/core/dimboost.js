@@ -200,6 +200,16 @@ export function skipResetsIfPossible() {
   else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
 }
 
+export function manualRequestDimensionBoost(bulk) {
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
+  if (!DimBoost.canBeBought) return;
+  if (player.options.confirmations.dimensionBoost) {
+    Modal.dimensionBoost.show({ bulk });
+    return;
+  }
+  requestDimensionBoost(bulk);
+}
+
 export function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;

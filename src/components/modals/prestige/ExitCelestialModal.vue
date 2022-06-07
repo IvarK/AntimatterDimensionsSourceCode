@@ -8,7 +8,7 @@ export default {
   },
   data() {
     return {
-      isRestarting: false,
+      isRestarting: false
     };
   },
   created() {
@@ -20,7 +20,8 @@ export default {
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>

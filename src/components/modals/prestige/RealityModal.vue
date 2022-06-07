@@ -23,7 +23,7 @@ export default {
       simRealities: 0,
       realityMachines: new Decimal(),
       shardsGained: 0,
-      effarigUnlocked: false,
+      effarigUnlocked: false
     };
   },
   computed: {
@@ -118,7 +118,8 @@ export default {
     },
     confirmModal(sacrifice) {
       processManualReality(sacrifice, this.selectedGlyph);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>

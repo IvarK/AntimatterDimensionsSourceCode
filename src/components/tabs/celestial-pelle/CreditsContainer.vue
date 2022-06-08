@@ -1,6 +1,11 @@
 <script>
+import CreditsDisplay from "@/components/CreditsDisplay";
+
 export default {
   name: "CreditsContainer",
+  components: {
+    CreditsDisplay
+  },
   data() {
     return {
       rolling: false,
@@ -9,8 +14,6 @@ export default {
     };
   },
   computed: {
-    people() { return GameDatabase.credits.people; },
-    roles() { return GameDatabase.credits.roles; },
     creditStyles() {
       return {
         bottom: `${this.scroll}rem`,
@@ -42,11 +45,6 @@ export default {
       this.rolling = GameEnd.endState > 4.5;
       this.scroll = (GameEnd.endState - 4.5) * 48;
       if (this.audio) this.audio.volume = Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
-    },
-    relevantPeople(role) {
-      return this.people
-        .filter(x => (typeof x.roles === "number" ? x.roles === role : x.roles.includes(role)))
-        .sort((a, b) => a.name.localeCompare(b.name));
     }
   }
 };
@@ -64,35 +62,7 @@ export default {
       :class="`c-${celIndex}-credits`"
       v-html="celSymbol"
     />
-    <h1 class="c-credits-header">
-      Antimatter Dimensions
-    </h1>
-
-    <div
-      v-for="role in roles.count"
-      :key="role"
-    >
-      <h2 class="c-credits-section">
-        {{ pluralize(roles[role], relevantPeople(role).length) }}
-      </h2>
-      <div :class="{ 'l-credits--bulk': relevantPeople(role).length > 10}">
-        <div
-          v-for="person in relevantPeople(role)"
-          :key="person.name"
-          class="c-credit-entry"
-        >
-          {{ person.name }}
-          <span v-if="person.name2">
-            ({{ person.name2 }})
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <br><br><br><br><br><br><br><br><br>
-    <h1 class="c-credits-header">
-      Thank you so much for playing!
-    </h1>
+    <CreditsDisplay />
   </div>
 </template>
 
@@ -187,30 +157,6 @@ perfectly the same. */
   color: rgb(185, 185, 185);
   transform: translateY(100%);
   pointer-events: none;
-}
-
-.c-credits-header {
-  color: yellow;
-}
-
-.c-credits-section {
-  color: white;
-  text-shadow: 1px 1px 2px turquoise;
-  margin-top: 10rem;
-  margin-bottom: 2rem;
-}
-
-.l-credits--bulk {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 76%;
-  position: relative;
-  left: 12%;
-}
-
-.c-credit-entry {
-  font-size: 1.3rem;
-  margin-top: 1rem;
 }
 
 .c-credits-cel-symbol {

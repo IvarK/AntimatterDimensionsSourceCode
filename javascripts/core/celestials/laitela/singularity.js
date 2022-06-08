@@ -219,7 +219,7 @@ export const Singularity = {
   },
 
   get gainPerCapIncrease() {
-    return SingularityMilestone.improvedSingularityCap.effectValue;
+    return SingularityMilestone.improvedSingularityCap.effectOrDefault(11);
   },
 
   get singularitiesGained() {
@@ -240,7 +240,7 @@ export const Singularity = {
 
   // Total additional time auto-condense will wait after reaching the condensing requirement
   get timeDelayFromAuto() {
-    return this.timePerCondense * (SingularityMilestone.autoCondense.effectValue - 1);
+    return this.timePerCondense * (SingularityMilestone.autoCondense.effectOrDefault(Infinity) - 1);
   },
 
   get capIsReached() {

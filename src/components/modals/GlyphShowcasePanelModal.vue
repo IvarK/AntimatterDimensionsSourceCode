@@ -65,7 +65,7 @@ export default {
       // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
       const realityGlyph = this.glyphs.filter(g => g.type === "reality")[0];
       this.realityGlyphBoost = realityGlyph
-        ? GameDatabase.reality.glyphEffects.realityglyphlevel.effect(realityGlyph.level)
+        ? GlyphEffects.realityglyphlevel.effect(realityGlyph.level)
         : 0;
     },
   },

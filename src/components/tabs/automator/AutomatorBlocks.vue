@@ -119,6 +119,7 @@ export const automatorBlocks = [
     isUnlocked: () => RealityUpgrade(25).isBought
   }, {
     cmd: "LOAD",
+    targets: ["ID", "NAME"],
     hasInput: true,
     canWait: true
   }, {

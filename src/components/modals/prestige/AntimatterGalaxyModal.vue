@@ -8,7 +8,7 @@ export default {
   },
   props: {
     bulk: {
-      type: Number,
+      type: Boolean,
       required: true,
     }
   },
@@ -17,7 +17,7 @@ export default {
       newGalaxies: 0,
       keepAntimatter: false,
       perkANRBought: false,
-      keepDimBoost: false,
+      keepDimBoost: false
     };
   },
   computed: {
@@ -53,6 +53,7 @@ export default {
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
       (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? undefined : this.emitClose()));
+    this.on$(GAME_EVENT.GALAXY_RESET_AFTER, this.emitClose);
     this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
     this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
@@ -77,7 +78,8 @@ export default {
     handleYesClick() {
       requestGalaxyReset(this.bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>

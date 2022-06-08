@@ -28,7 +28,7 @@ export default {
 
       return `Armageddon will start a new Doomed Reality. You will gain
       ${quantify("Remnant", this.remnantsGain, 2, 0)} ${isFirstReset}`;
-    },
+    }
   },
   methods: {
     update() {
@@ -69,7 +69,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    :option="isDoomed ? 'armageddon' : undefined"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

@@ -2,30 +2,27 @@
 export default {
   name: "CurrentGlyphEffect",
   props: {
+    isColored: {
+      type: Boolean,
+      default: true
+    },
     effect: {
       type: Object,
       required: true
     }
   },
-  data() {
-    return {
-      isColored: true,
-    };
-  },
   computed: {
     effectConfig() {
-      return GameDatabase.reality.glyphEffects[this.effect.id];
+      return GlyphEffects[this.effect.id];
     },
     formatValue() {
-      if (Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect.id)) return "";
+      if (this.effectConfig.isDisabledByDoomed) return "";
       const baseValue = this.effect.value.value;
       const value1 = this.effectConfig.formatEffect(baseValue);
       const value2 = this.effectConfig.conversion === undefined
         ? ""
         : this.effectConfig.formatSecondaryEffect(this.effectConfig.conversion(baseValue));
-      const desc = typeof this.effectConfig.totalDesc === "function"
-        ? this.effectConfig.totalDesc()
-        : this.effectConfig.totalDesc;
+      const desc = this.effectConfig.totalDesc;
       return desc
         .replace("{value}", value1)
         .replace("{value2}", value2);
@@ -50,11 +47,6 @@ export default {
     valueClass() {
       return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
     }
-  },
-  methods: {
-    update() {
-      this.isColored = player.options.glyphTextColors;
-    },
   }
 };
 </script>

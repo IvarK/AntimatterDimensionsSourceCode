@@ -51,11 +51,7 @@ export default {
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
-      if (player.options.confirmations.dimensionBoost) {
-        Modal.dimensionBoost.show({ bulk });
-        return;
-      }
-      requestDimensionBoost(bulk);
+      manualRequestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   }

@@ -8,7 +8,7 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
+      isDoomed: false
     };
   },
   computed: {
@@ -18,11 +18,12 @@ export default {
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
-    handleYesClick() {
-      beginProcessReality(getRealityProps(true));
-    },
     update() {
       this.isDoomed = Pelle.isDoomed;
+    },
+    handleYesClick() {
+      beginProcessReality(getRealityProps(true));
+      EventHub.ui.offAll(this);
     }
   },
 };

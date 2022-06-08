@@ -93,6 +93,10 @@ export default {
       return reactionArrow.product.resource.amount > 0 &&
         reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
+    isLessThanRequired(reactionArrow) {
+      return reactionArrow.product.resource.amount > 0 &&
+        reactionArrow.reagent.cost < reactionArrow.reagent.resource.cap;
+    },
     isActiveReaction(reactionArrow) {
       return reactionArrow.reaction.isActive && !Pelle.isDoomed;
     },
@@ -140,7 +144,9 @@ export default {
     reactionPathClass(reactionArrow) {
       return {
         "o-alchemy-reaction-path": this.isUnlocked(reactionArrow),
-        "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
+        "o-alchemy-reaction-path--capped": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
+        "o-alchemy-reaction-path--less-than-required": this.isLessThanRequired(reactionArrow) &&
+          this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
         "o-alchemy-reaction-path--not-focused": !this.isFocusedReaction(reactionArrow) && this.focusedResourceId !== -1
       };

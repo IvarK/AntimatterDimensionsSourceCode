@@ -22,6 +22,7 @@ export default {
   methods: {
     hardReset() {
       if (this.willHardReset) GameStorage.hardReset();
+      this.input = "";
     },
   },
 };

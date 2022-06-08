@@ -71,9 +71,7 @@ export default {
 
 <template>
   <div class="l-automator-pane">
-    <div class="c-automator__controls l-automator__controls">
-      <AutomatorControls />
-    </div>
+    <AutomatorControls />
     <AutomatorTextEditor
       v-if="isTextAutomator"
       :current-script-id="currentScriptID"

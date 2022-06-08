@@ -110,21 +110,23 @@ export default {
         <div class="l-reality-button-group">
           <div class="l-reality-button-group-half">
             <ResetRealityButton v-if="resetRealityDisplayed" />
-
-            <div v-if="isInCelestialReality">
-              <input
-                id="autoRestart"
-                v-model="autoRestartCelestialRuns"
-                type="checkbox"
-                :value="autoRestartCelestialRuns"
-                @input="toggleAutoRestartCelestial()"
-              >
-              <label for="autoRestart">Repeat this Celestial's Reality</label>
-            </div>
-            <RealityAmplifyButton v-else />
           </div>
           <RealityButton />
         </div>
+
+        <div v-if="isInCelestialReality">
+          <input
+            id="autoRestart"
+            v-model="autoRestartCelestialRuns"
+            type="checkbox"
+            :value="autoRestartCelestialRuns"
+            @input="toggleAutoRestartCelestial()"
+          >
+          <label for="autoRestart">Repeat this Celestial's Reality</label>
+        </div>
+        <RealityAmplifyButton v-else />
+
+        <br>
 
         <RealityReminder />
 

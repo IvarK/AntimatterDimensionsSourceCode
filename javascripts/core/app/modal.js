@@ -41,6 +41,7 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
 import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
@@ -77,12 +78,7 @@ export class Modal {
     const modalQueue = ui.view.modal.queue;
     // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
     modalQueue.unshift(this);
-    modalQueue.sort((x, y) => y.priority - x.priority);
-    // Filter out multiple instances of the same modal.
-    const singleQueue = [...new Set(modalQueue)];
-    ui.view.modal.queue = singleQueue;
-    // If the front of the queue is what is currently presented, we dont need to do anything.
-    if (!singleQueue[0].isOpen) ui.view.modal.current = singleQueue[0];
+    Modal.sortModalQueue();
   }
 
   get isOpen() {
@@ -103,6 +99,15 @@ export class Modal {
 
   get priority() {
     return this._priority;
+  }
+
+  static sortModalQueue() {
+    const modalQueue = ui.view.modal.queue;
+    modalQueue.sort((x, y) => y.priority - x.priority);
+    // Filter out multiple instances of the same modal.
+    const singleQueue = [...new Set(modalQueue)];
+    ui.view.modal.queue = singleQueue;
+    ui.view.modal.current = singleQueue[0];
   }
 
   static hide() {
@@ -184,6 +189,7 @@ Modal.glyphSetSaveDelete = new Modal(GlyphSetSaveDeleteModal);
 Modal.uiChoice = new Modal(UiChoiceModal);
 Modal.h2p = new Modal(H2PModal);
 Modal.information = new Modal(InformationModal);
+Modal.credits = new Modal(CreditsModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);

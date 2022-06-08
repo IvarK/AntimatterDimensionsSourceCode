@@ -1,6 +1,5 @@
 <script>
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
-import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
 
 export default {
   name: "EternityModal",
@@ -11,7 +10,7 @@ export default {
     return {
       exitingEC: false,
       startingIP: new Decimal(),
-      gainedEternityPoints: new Decimal(),
+      gainedEternityPoints: new Decimal()
     };
   },
   computed: {
@@ -53,15 +52,8 @@ export default {
       this.gainedEternityPoints = gainedEternityPoints();
     },
     handleYesClick() {
-      if (player.dilation.active && player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying) {
-        animateAndUndilate();
-        setTimeout(eternity, 1000);
-      } else if (!player.dilation.active && player.options.animations.eternity && !AnimationHander.isDisplaying) {
-        eternityAnimation();
-        setTimeout(eternity, 2250);
-      } else {
-        eternity();
-      }
+      animateAndEternity();
+      EventHub.ui.offAll(this);
     }
   },
 };

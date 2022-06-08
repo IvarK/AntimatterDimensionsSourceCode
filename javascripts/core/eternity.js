@@ -130,6 +130,24 @@ export function eternity(force, auto, specialConditions = {}) {
   return true;
 }
 
+export function animateAndEternity() {
+  if (!Player.canEternity) return;
+  const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
+    ((player.dilation.active && player.options.animations.dilation) ||
+    (!player.dilation.active && player.options.animations.eternity));
+
+  if (hasAnimation) {
+    if (player.dilation.active) {
+      animateAndUndilate();
+    } else {
+      eternityAnimation();
+      setTimeout(eternity, 2250);
+    }
+  } else {
+    eternity();
+  }
+}
+
 export function initializeChallengeCompletions(isReality) {
   NormalChallenges.clearCompletions();
   if (!PelleUpgrade.keepInfinityChallenges.canBeApplied) InfinityChallenges.clearCompletions();
@@ -174,11 +192,8 @@ function applyRealityUpgradesAfterEternity() {
 function askEternityConfirmation() {
   if (player.options.confirmations.eternity) {
     Modal.eternity.show();
-  } else if (player.options.animations.eternity && !FullScreenAnimationHandler.isDisplaying) {
-    eternityAnimation();
-    setTimeout(eternity, 2250);
   } else {
-    eternity();
+    animateAndEternity();
   }
 }
 

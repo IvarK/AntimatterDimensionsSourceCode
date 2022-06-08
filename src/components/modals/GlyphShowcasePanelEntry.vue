@@ -98,7 +98,7 @@ export default {
       };
     },
     glyphEffectList() {
-      const db = GameDatabase.reality.glyphEffects;
+      const db = GlyphEffects;
       const effects =
       getGlyphEffectValuesFromBitmask(this.glyph.effects, this.effectiveLevel, this.glyph.strength, this.type)
         .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));
@@ -126,9 +126,7 @@ export default {
       return heights[effects - 1];
     },
     formatEffectString(dbEntry, value) {
-      const rawDesc = typeof dbEntry.shortDesc === "function"
-        ? dbEntry.shortDesc()
-        : dbEntry.shortDesc;
+      const rawDesc = dbEntry.shortDesc;
       const singleValue = dbEntry.formatSingleEffect
         ? dbEntry.formatSingleEffect(value)
         : dbEntry.formatEffect(value);
@@ -139,11 +137,8 @@ export default {
         text: `${rawDesc}`
           .replace("{value}", singleValue)
           .replace("{value2}", alteredValue),
-        isPelleDisabled: this.isPelleDisabled(dbEntry.id)
+        isPelleDisabled: dbEntry.isDisabledByDoomed
       };
-    },
-    isPelleDisabled(effect) {
-      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(effect);
     }
   },
 };

@@ -129,6 +129,15 @@ function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 
+export function manualRequestGalaxyReset(bulk) {
+  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
+  if (player.options.confirmations.antimatterGalaxy) {
+    Modal.antimatterGalaxy.show({ bulk });
+    return;
+  }
+  requestGalaxyReset(bulk);
+}
+
 export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
   if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;

@@ -1409,17 +1409,23 @@ br {
 }
 
 .o-primary-btn--buy-ad {
-  vertical-align: middle;
-  font-size: 1rem;
-  line-height: 9px;
+  height: 4rem;
+  font-size: 1.2rem;
 }
 
 .o-primary-btn--buy-single-ad {
-  width: 13.5rem;
+  grid-column: 1 / 5;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-10-ad {
-  width: 21rem;
+  grid-column: 5 / 11;
+  margin: 0 0.5rem;
+}
+
+.o-primary-btn--continuum-ad {
+  grid-column: 1 / 11;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--dimboost {
@@ -1441,26 +1447,28 @@ br {
 }
 
 .o-primary-btn--buy-id {
-  width: 21rem;
-  height: 3rem;
+  grid-column: 1 / 8;
+  height: 3.5rem;
+  margin: 0 0.5rem;
 }
 
-.o-primary-btn--buy-id-max,
-.o-primary-btn--id-autobuyer {
-  width: 8rem;
-  height: 3rem;
+.o-primary-btn--id-auto {
+  grid-column: 8 / 11;
+  height: 3.5rem;
+  margin: 0 0.5rem;
   font-size: 1rem;
 }
 
 .o-primary-btn--buy-td {
-  width: 21rem;
-  height: 3rem;
+  grid-column: 1 / 8;
+  height: 3.5rem;
+  margin: 0 0.5rem;
 }
 
-.o-primary-btn--buy-td-max,
-.o-primary-btn--td-autobuyer {
-  width: 8rem;
-  height: 3rem;
+.o-primary-btn--buy-td-auto {
+  grid-column: 8 / 11;
+  height: 3.5rem;
+  margin: 0 0.5rem;
   font-size: 1rem;
 }
 
@@ -2167,34 +2175,29 @@ br {
   width: 100%;
 }
 
+.l-dimension-single-row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  height: 3.5rem;
+  width: 100%;
+  align-content: center;
+}
+
 .c-dim-row--not-reached {
   opacity: 0.5;
 }
 
-.c-dim-row__name {
-  width: 40%;
+.l-dim-row-multi-button-container {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-column: 7 / 9;
+  width: 100%;
 }
 
-.c-dim-row__label {
-  text-align: left;
-}
-
-.c-dim-row__label--growable {
-  flex-grow: 1;
-  width: 15rem;
-}
-
-.c-dim-row__label--small {
-  font-size: 1.2rem;
-}
-
-.l-dim-row__button {
-  flex-shrink: 0;
-  margin-left: 1.6rem;
-}
-
-.l-dim-row__button--right-offset {
-  margin-right: 10rem;
+.l-dim-row-small-text {
+  vertical-align: middle;
+  font-size: 1rem;
+  line-height: 1rem;
 }
 
 /* #endregion Dimensions */
@@ -2228,13 +2231,28 @@ br {
 /* #region c-antimatter-dim-row */
 
 .c-antimatter-dim-row {
-  display: flex;
-  flex-direction: row;
   /* relative because floating text is 'position: absolute' */
   position: relative;
   align-items: center;
   font-size: 1.5rem;
   margin-top: 1rem;
+}
+
+.c-antimatter-prestige-row {
+  display: grid;
+  flex-direction: row;
+  text-align: left;
+  grid-template-columns: repeat(7, 1fr);
+  height: 5rem;
+  align-content: center;
+}
+
+.l-dim-row__prestige-text {
+  grid-column: 1 / 6;
+}
+
+.l-dim-row__prestige-button {
+  grid-column: 6 / 8;
 }
 
 /* #endregion c-dimension-row */
@@ -2424,8 +2442,6 @@ br {
 /* #region c-infinity-dim-row */
 
 .c-infinity-dim-row {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   font-size: 1.6rem;
   margin-top: 1rem;
@@ -2478,8 +2494,6 @@ br {
 /* #region c-time-dim-row */
 
 .c-time-dim-row {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   font-size: 1.6rem;
   margin-top: 1rem;

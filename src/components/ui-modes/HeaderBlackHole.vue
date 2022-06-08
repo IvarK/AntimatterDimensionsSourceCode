@@ -28,6 +28,12 @@ export default {
     id() {
       return this.blackHole.id;
     },
+    dischargeText() {
+      return `Discharge: ${timeDisplayShort(this.storedTime)}`;
+    },
+    hasLongText() {
+      return this.dischargeText.length > 15;
+    },
   },
   watch: {
     isAutoReleasing(newValue) {
@@ -100,9 +106,10 @@ export default {
     <span v-if="canCharge">
       <PrimaryButton
         class="o-enslaved-release-header-button c-primary-btn--black-hole-header"
+        :class="{ 'o-small-discharge-text': hasLongText }"
         onclick="Enslaved.useStoredTime(false)"
       >
-        Discharge: {{ timeDisplayShort(storedTime) }}
+        {{ dischargeText }}
       </PrimaryButton>
     </span>
     <span v-if="canAutoRelease">
@@ -123,5 +130,10 @@ export default {
 
 .c-black-hole-status-text {
   margin: 0 0.8rem;
+}
+
+.o-small-discharge-text {
+  font-size: 1rem;
+  line-height: 1rem;
 }
 </style>

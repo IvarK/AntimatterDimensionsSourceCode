@@ -93,9 +93,9 @@ export default {
 </script>
 
 <template>
-  <div class="c-antimatter-dim-row">
+  <div class="c-antimatter-dim-row c-antimatter-prestige-row">
     <div
-      class="c-dim-row__label c-dim-row__label--growable l-text-wrapper"
+      class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount l-text-wrapper"
     >
       {{ typeName }} ({{ sumText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
@@ -105,7 +105,7 @@ export default {
     </div>
     <PrimaryButton
       :enabled="canBeBought"
-      class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
+      class="o-primary-btn--galaxy l-dim-row__prestige-button"
       :class="tutorialClass"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"

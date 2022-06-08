@@ -179,7 +179,7 @@ export default {
 }
 
 .c-automator__button--active {
-  background-color: var(--color-reality);
+  background-color: var(--color-automator-controls-active);
   border-color: var(--color-reality-light);
 }
 

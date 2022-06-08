@@ -17,6 +17,9 @@ export default {
     return {
       automatorUnlocked: false,
       interval: 0,
+      currentChars: 0,
+      totalChars: 0,
+      withinLimit: false,
     };
   },
   computed: {
@@ -37,12 +40,21 @@ export default {
         ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
         : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second.
           ${speedupText}`;
-    }
+    },
+    maxScriptChars() {
+      return AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS;
+    },
+    maxTotalChars() {
+      return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
+    },
   },
   methods: {
     update() {
       this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
+      this.currentChars = AutomatorData.singleScriptCharacters();
+      this.totalChars = AutomatorData.totalScriptCharacters();
+      this.withinLimit = AutomatorData.isWithinLimit();
     }
   }
 };
@@ -62,6 +74,19 @@ export default {
       in which case the next command will be immediately processed after the slower command is run.
       <br>
       The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
+      <br>
+      There are two character limits to reduce lag. If either is exceeded,
+      <span :class="{ 'c-overlimit': !withinLimit }">
+        changes to your scripts will not be saved!
+      </span>
+      <br>
+      <span :class="{ 'c-overlimit': currentChars > maxScriptChars }">
+        This script: {{ formatInt(currentChars) }} / {{ formatInt(maxScriptChars) }}
+      </span>
+      |
+      <span :class="{ 'c-overlimit': totalChars > maxTotalChars }">
+        Across all scripts: {{ formatInt(totalChars) }} / {{ formatInt(maxTotalChars) }}
+      </span>
       <SplitPane
         :min-percent="40"
         :default-percent="50"
@@ -81,5 +106,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-overlimit {
+  color: var(--color-bad);
+}
 </style>

@@ -20,8 +20,9 @@ export default {
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval(false)).dividedBy(Math.LN10);
 
       const replicantiAmount = Replicanti.amount;
+      const isAbove308 = Replicanti.isUncapped && replicantiAmount.log10() > LOG10_MAX_VALUE;
 
-      if (Replicanti.isUncapped && replicantiAmount.log10() > 308) {
+      if (isAbove308) {
         const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
         const gainFactorPerSecond = logGainFactorPerTick
           .times(postScale)
@@ -75,8 +76,8 @@ export default {
         }
       }
 
-      // If the player can get RG, this text is redundant with text below.
-      if (Replicanti.galaxies.max === 0) {
+      // If the player can get RG, this text is redundant with text below. It denotes total time from 1 to e308
+      if (Replicanti.galaxies.max === 0 && !isAbove308) {
         this.remainingTimeText += ` (${TimeSpan.fromSeconds(totalTime)} total)`;
       }
 

@@ -12,20 +12,27 @@ export default {
       required: true
     },
   },
+  data() {
+    return {
+      isLimitedByPelle: false
+    };
+  },
   computed: {
     isEnabled() {
-      if (Pelle.isDoomed && player.eternities.eq(0)) return false;
+      if (this.isLimitedByPelle) return false;
       return this.budget.gte(this.cost);
     },
     enabledClass() {
       if (!this.isEnabled || this.isLimitedByPelle) return "c-tt-buy-button--locked";
 
       return "c-tt-buy-button--unlocked";
-    },
-    isLimitedByPelle() {
-      return Pelle.isDoomed && player.eternities.eq(0);
     }
   },
+  methods: {
+    update() {
+      this.isLimitedByPelle = Pelle.isDoomed && player.eternities.eq(0);
+    }
+  }
 };
 </script>
 

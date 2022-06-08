@@ -5,7 +5,6 @@ import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
-import AutomatorModeSwitch from "./AutomatorModeSwitch";
 
 export default {
   name: "AutomatorDocs",
@@ -16,7 +15,6 @@ export default {
     AutomatorEventLog,
     AutomatorBlocks,
     AutomatorDocsTemplateList,
-    AutomatorModeSwitch,
   },
   data() {
     return {
@@ -214,7 +212,6 @@ export default {
           :class="{ 'c-automator__button--active': infoPaneID === 4 }"
           @click="infoPaneID = 4"
         />
-        <AutomatorModeSwitch />
         <AutomatorButton
           v-tooltip="fullScreenTooltip"
           :class="fullScreenIconClass"

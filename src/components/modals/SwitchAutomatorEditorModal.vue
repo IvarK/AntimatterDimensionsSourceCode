@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    callback: {
+      type: Function,
       required: false,
       default: () => ({})
     }
@@ -48,7 +48,7 @@ export default {
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
-      this.modalConfig.callback?.();
+      this.callback?.();
     }
   }
 };

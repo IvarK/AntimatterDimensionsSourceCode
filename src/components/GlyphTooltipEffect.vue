@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     effectConfig() {
-      return GameDatabase.reality.glyphEffects[this.effect];
+      return GlyphEffects[this.effect];
     },
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&
@@ -27,9 +27,7 @@ export default {
         : undefined;
     },
     effectStringTemplate() {
-      return typeof this.effectConfig.singleDesc === "function"
-        ? this.effectConfig.singleDesc()
-        : this.effectConfig.singleDesc;
+      return this.effectConfig.singleDesc;
     },
     primaryEffectText() {
       const value = this.effectConfig.formatSingleEffect(this.value);
@@ -53,7 +51,7 @@ export default {
       return this.textSplits[2] !== undefined;
     },
     isPelleDisabled() {
-      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect);
+      return this.effectConfig.isDisabledByDoomed;
     },
     convertedParts() {
       const parts = [];

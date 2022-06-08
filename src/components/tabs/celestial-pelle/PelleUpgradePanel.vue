@@ -18,6 +18,8 @@ export default {
       remnants: 0,
       realityShards: new Decimal(0),
       shardRate: new Decimal(0),
+      upgrades: [],
+      boughtUpgrades: []
     };
   },
   computed: {
@@ -27,8 +29,6 @@ export default {
         : "fas fa-compress-arrows-alt";
     },
     rebuyables: () => PelleUpgrade.rebuyables,
-    upgrades() { return PelleUpgrade.singles.filter(u => !u.isBought); },
-    boughtUpgrades() { return PelleUpgrade.singles.filter(u => u.isBought); },
     visibleUpgrades() { return this.upgrades.slice(0, 5); },
     fadedUpgrades() { return this.upgrades.slice(5, 10); },
     allUpgrades() {
@@ -48,6 +48,8 @@ export default {
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
+      this.upgrades = PelleUpgrade.singles.filter(u => !u.isBought);
+      this.boughtUpgrades = PelleUpgrade.singles.filter(u => u.isBought);
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;

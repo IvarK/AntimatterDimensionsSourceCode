@@ -138,9 +138,9 @@ export function sacrificeReset() {
   return true;
 }
 
-export function sacrificeBtnClick(forceNoConfirm = false) {
+export function sacrificeBtnClick() {
   if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return;
-  if (player.options.confirmations.sacrifice && !forceNoConfirm) {
+  if (player.options.confirmations.sacrifice) {
     Modal.sacrifice.show();
   } else {
     sacrificeReset();

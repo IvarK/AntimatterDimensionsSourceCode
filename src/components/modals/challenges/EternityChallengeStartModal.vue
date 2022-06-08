@@ -52,7 +52,8 @@ export default {
   methods: {
     handleYesClick() {
       this.challenge.start(true);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>

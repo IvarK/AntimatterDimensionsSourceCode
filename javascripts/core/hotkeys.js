@@ -47,49 +47,52 @@ export const shortcuts = [
     name: "Dimensional Sacrifice",
     keys: ["s"],
     type: "bindRepeatableHotkey",
-    function: () => sacrificeBtnClick(true),
+    function: () => sacrificeBtnClick(),
     visible: true
   }, {
     name: "Dimension Boost",
     keys: ["d"],
     type: "bindRepeatableHotkey",
-    function: () => requestDimensionBoost(true),
+    function: () => manualRequestDimensionBoost(true),
     visible: true
   }, {
     name: "Single Dimension Boost",
     keys: ["shift", "d"],
     type: "bindRepeatableHotkey",
-    function: () => requestDimensionBoost(false),
+    function: () => manualRequestDimensionBoost(false),
     visible: false
   }, {
     name: "Antimatter Galaxy",
     keys: ["g"],
     type: "bindRepeatableHotkey",
-    function: () => requestGalaxyReset(true),
+    function: () => manualRequestGalaxyReset(true),
     visible: true
   }, {
     name: "Single Antimatter Galaxy",
     keys: ["shift", "g"],
     type: "bindRepeatableHotkey",
-    function: () => requestGalaxyReset(false),
+    function: () => manualRequestGalaxyReset(false),
     visible: false
   }, {
     name: "Big Crunch",
     keys: ["c"],
     type: "bindRepeatableHotkey",
-    function: () => bigCrunchResetRequest(),
+    function: () => manualBigCrunchResetRequest(),
     visible: true
   }, {
     name: "Replicanti Galaxy",
     keys: ["r"],
-    type: "bindRepeatableHotkey",
-    function: () => replicantiGalaxyRequest(true),
+    type: "bindHotkey",
+    function: () => {
+      replicantiGalaxyRequest();
+      setHoldingR(true);
+    },
     visible: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked()
   }, {
     name: "Eternity",
     keys: ["e"],
     type: "bindRepeatableHotkey",
-    function: () => animateAndEternity(),
+    function: () => eternityResetRequest(),
     visible: () => PlayerProgress.eternityUnlocked() || Player.canEternity
   }, {
     name: "Toggle Time Study respec",
@@ -254,9 +257,8 @@ for (const hotkey of shortcuts) {
   GameKeyboard[hotkey.type](keys, hotkey.function);
 }
 
-// We need to know whether the player is holding R or not for the
-// replicanti galaxy
-GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
+// We need to know whether the player is holding R or not for the replicanti galaxy
+// The keydown version is above, with the replicantiGalaxyRequest, as otherwise it would be overridden
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 // Same thing with Shift; we need to double-up on ctrl-shift as well since they're technically different keybinds

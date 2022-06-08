@@ -614,10 +614,10 @@ export const Glyphs = {
     if (!Ra.unlocks.allGamespeedGlyphs.canBeApplied) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
       // eslint-disable-next-line no-bitwise
-      glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);
+      glyph.effects |= (1 << GlyphEffects.timespeed.bitmaskIndex);
       if (glyph.type === "time") {
         // eslint-disable-next-line no-bitwise
-        glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
+        glyph.effects |= (1 << GlyphEffects.timeshardpow.bitmaskIndex);
       }
     }
   },

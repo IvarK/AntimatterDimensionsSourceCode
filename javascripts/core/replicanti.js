@@ -34,9 +34,9 @@ export function replicantiGalaxy() {
   addReplicantiGalaxies(galaxyGain);
 }
 
-export function replicantiGalaxyRequest(forceNoConfirm = false) {
+export function replicantiGalaxyRequest() {
   if (!Replicanti.galaxies.canBuyMore) return;
-  if (player.options.confirmations.replicantiGalaxy && !forceNoConfirm) Modal.replicantiGalaxy.show();
+  if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
   else replicantiGalaxy();
 }
 
@@ -512,7 +512,9 @@ export const Replicanti = {
     },
     get areBeingBought() {
       const buyer = Autobuyer.replicantiGalaxy;
-      return (buyer.canTick && buyer.isEnabled) || this.isPlayerHoldingR;
+      // If the confirmation is enabled, we presume the player wants to confirm each Replicanti Galaxy purchase
+      return (buyer.canTick && buyer.isEnabled) ||
+        (!player.options.confirmations.replicantiGalaxy && this.isPlayerHoldingR);
     },
     get gain() {
       if (!this.canBuyMore) return 0;

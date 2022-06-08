@@ -26,9 +26,7 @@ export default {
       return GlyphTypes[this.glyphType].color;
     },
     description() {
-      return typeof this.effect.genericDesc === "function"
-        ? this.effect.genericDesc()
-        : this.effect.genericDesc;
+      return this.effect.genericDesc;
     },
     classObject() {
       return this.isActive ? "c-auto-sac-type-tab__effect-desc--active" : "c-auto-sac-type-tab__effect-desc--inactive";

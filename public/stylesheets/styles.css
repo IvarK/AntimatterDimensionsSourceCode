@@ -8948,8 +8948,7 @@ kbd {
 
 .c-automator-block-row {
   display: flex;
-  min-height: 2.85rem;
-  max-height: 2.85rem;
+  height: 2.85rem;
   align-items: center;
   margin: 0.3rem 0;
 }

@@ -1,6 +1,4 @@
 <script>
-import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
-
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
@@ -12,7 +10,7 @@ export default {
     return {
       exitingEC: false,
       startingIP: new Decimal(),
-      gainedEternityPoints: new Decimal(),
+      gainedEternityPoints: new Decimal()
     };
   },
   computed: {
@@ -55,6 +53,7 @@ export default {
     },
     handleYesClick() {
       animateAndEternity();
+      EventHub.ui.offAll(this);
     }
   },
 };

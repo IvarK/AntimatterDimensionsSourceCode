@@ -151,8 +151,8 @@ export const GlyphGenerator = {
   // These Glyphs are given on entering Doomed to prevent the player
   // from having none of each basic glyphs which are requied to beat pelle
   doomedGlyph(type) {
-    const effectList = Object.values(GameDatabase.reality.glyphEffects).filter(e => e.id.startsWith(type));
-    effectList.push(GameDatabase.reality.glyphEffects.timespeed);
+    const effectList = GlyphEffects.all.filter(e => e.id.startsWith(type));
+    effectList.push(GlyphEffects.timespeed);
     let bitmask = 0;
     // eslint-disable-next-line no-bitwise
     for (const effect of effectList) bitmask |= 1 << effect.bitmaskIndex;
@@ -249,8 +249,8 @@ export const GlyphGenerator = {
   // Populate a list of reality glyph effects based on level
   generateRealityEffects(level) {
     const numberOfEffects = realityGlyphEffectLevelThresholds.filter(lv => lv <= level).length;
-    const sortedRealityEffects = Object.values(GameDatabase.reality.glyphEffects)
-      .filter(eff => eff.id.match("reality*"))
+    const sortedRealityEffects = GlyphEffects.all
+      .filter(eff => eff.glyphTypes.includes("reality"))
       .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex)
       .map(eff => eff.id);
     return sortedRealityEffects.slice(0, numberOfEffects);

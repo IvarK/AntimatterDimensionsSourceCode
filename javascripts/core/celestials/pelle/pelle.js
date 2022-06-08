@@ -141,18 +141,6 @@ export const Pelle = {
       60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204];
   },
 
-  // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
-  // that this field is NEGATED, describing an effect allowlist instead of a blocklist, as most of the effects are
-  // already disabled by virtue of the glyph type being unequippable and many of the remaining ones are also disabled.
-  get enabledGlyphEffects() {
-    return ["timepow", "timespeed", "timeshardpow",
-      "dilationpow", "dilationgalaxyThreshold",
-      "replicationpow",
-      "powerpow", "powermult", "powerdimboost", "powerbuy10",
-      "infinitypow", "infinityrate",
-      "companiondescription", "companionEP"];
-  },
-
   get specialGlyphEffect() {
     const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
     const description = this.getSpecialGlyphEffectDescription(this.activeGlyphType);

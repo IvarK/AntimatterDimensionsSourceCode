@@ -1,10 +1,14 @@
 :root {
   --color-automator-controls-background: #d3d3d3;
+  --color-automator-controls-active: #0ba00e;
+  --color-automator-controls-inactive: #eeeeee;
+  --color-automator-controls-border: #767676;
   --color-automator-active-line-background: #d8caeb;
   --color-automator-active-line-outline: #7a49ff;
   --color-automator-event-background: #007f00;
-  --color-automator-event-outline: #19c819;
+  --color-automator-event-outline: #094e09;
   --color-automator-error-background: #ac0617;
+  --color-automator-error-outline: #440108;
   --color-automator-docs-font: black;
   --color-blockmator-block-border: #cfcfcf;
   --color-blockmator-block-background: #f5f5f5;
@@ -13,8 +17,12 @@
 
 :root .s-base--dark {
   --color-automator-controls-background: #262626;
+  --color-automator-controls-active: #007c00;
+  --color-automator-controls-inactive: #273757;
+  --color-automator-controls-border: #929292;
   --color-automator-active-line-background: #2b065c;
   --color-automator-active-line-outline: #4400ff;
+  --color-automator-event-background: #004b00;
   --color-automator-docs-font: white;
   --color-blockmator-block-border: #353535;
   --color-blockmator-block-background: #000115;
@@ -162,6 +170,7 @@
 
 .c-automator__controls {
   background-color: var(--color-automator-controls-background);
+  border-bottom: 0.3rem solid var(--color-automator-active-line-outline);
 }
 
 .l-automator__controls {
@@ -222,14 +231,14 @@
 
 .c-automator-editor__error-line {
   background: var(--color-automator-error-background);
-  outline: 0.1rem solid var(--color-automator-event-outline);
+  outline: 0.1rem solid var(--color-automator-error-outline);
 }
 
 .c-automator-editor__error-line-gutter {
   font-weight: bold;
   background: var(--color-automator-error-background);
   filter: brightness(200%);
-  outline: 0.1rem solid var(--color-automator-event-outline);
+  outline: 0.1rem solid var(--color-automator-error-outline);
 }
 
 .c-automator-editor {

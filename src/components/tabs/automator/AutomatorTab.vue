@@ -18,6 +18,7 @@ export default {
       automatorUnlocked: false,
       interval: 0,
       currentChars: 0,
+      totalChars: 0,
       withinLimit: false,
     };
   },
@@ -40,20 +41,19 @@ export default {
         : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second.
           ${speedupText}`;
     },
-    maxChars() {
-      return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
+    maxScriptChars() {
+      return AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS;
     },
-    overlimitStyle() {
-      return {
-        color: this.withinLimit ? "" : "var(--color-bad)",
-      };
+    maxTotalChars() {
+      return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
     },
   },
   methods: {
     update() {
       this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
-      this.currentChars = AutomatorData.totalScriptCharacters();
+      this.currentChars = AutomatorData.singleScriptCharacters();
+      this.totalChars = AutomatorData.totalScriptCharacters();
       this.withinLimit = AutomatorData.isWithinLimit();
     }
   }
@@ -75,16 +75,17 @@ export default {
       <br>
       The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
       <br>
-      You are using
-      <span :style="overlimitStyle">
-        {{ formatInt(currentChars) }} / {{ formatInt(maxChars) }}
+      There are two character limits to reduce lag. If either is exceeded,
+      <span :class="{ 'c-overlimit': !withinLimit }">
+        changes to your scripts will not be saved!
       </span>
-      characters of your limit across all scripts.
-      <span
-        v-if="!withinLimit"
-        :style="overlimitStyle"
-      >
-        Your changes are not being saved right now!
+      <br>
+      <span :class="{ 'c-overlimit': currentChars > maxScriptChars }">
+        This script: {{ formatInt(currentChars) }} / {{ formatInt(maxScriptChars) }}
+      </span>
+      |
+      <span :class="{ 'c-overlimit': totalChars > maxTotalChars }">
+        Across all scripts: {{ formatInt(totalChars) }} / {{ formatInt(maxTotalChars) }}
       </span>
       <SplitPane
         :min-percent="40"
@@ -105,5 +106,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-overlimit {
+  color: var(--color-bad);
+}
 </style>

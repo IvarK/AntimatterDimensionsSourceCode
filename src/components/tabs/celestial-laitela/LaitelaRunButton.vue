@@ -49,7 +49,7 @@ export default {
 
 <template>
   <button :class="classObject()">
-    <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
       <b>Start Lai'tela's Reality</b>
     </span>
     <div

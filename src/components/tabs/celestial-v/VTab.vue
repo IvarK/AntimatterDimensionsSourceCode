@@ -262,7 +262,7 @@ export default {
           >
             <b
               class="o-v-start-text"
-              :style="{ textDecoration: isDoomed ? 'line-through' : null }"
+              :class="{ 'o-pelle-disabled': isDoomed }"
             >
               <span v-if="isRunning">You are in </span>
               <span v-else>Start </span>
@@ -309,7 +309,7 @@ export default {
             :class="{'o-v-milestone--unlocked':
               has(milestone)}"
           >
-            <div :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+            <div :class="{ 'o-pelle-disabled': isDoomed }">
               <p>{{ milestone.description }}</p>
               <p>Reward: {{ milestone.rewardText }}</p>
               <p v-if="milestone.formattedEffect">

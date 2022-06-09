@@ -57,7 +57,7 @@ export default {
       </div>
       <div
         class="c-ra-pet-upgrade__tooltip__description"
-        :style="{ textDecoration: isUseless ? 'line-through' : null }"
+        :class="{ 'o-pelle-disabled': isUseless }"
       >
         {{ description }}
       </div>

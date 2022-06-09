@@ -100,7 +100,7 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <span :style="{ textDecoration: isUseless ? 'line-through' : null }">
+      <span :class="{ 'o-pelle-disabled': isUseless }">
         <DescriptionDisplay
           :config="upgrade.config"
           :length="70"

@@ -64,7 +64,7 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <div :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+      <div :class="{ 'o-pelle-disabled': isDoomed }">
         Multiply Eternity Points from all sources by {{ formatX(5) }}
         <br>
         Currently: {{ formatX(multiplier, 2, 0) }}

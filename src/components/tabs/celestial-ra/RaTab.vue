@@ -130,7 +130,7 @@ export default {
     </div>
     <div class="l-ra-non-pets">
       <button class="c-ra-run-button">
-        <h2 :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+        <h2 :class="{ 'o-pelle-disabled': isDoomed }">
           <span v-if="isRunning">You are in </span>
           <span v-else>Start </span>
           Ra's Reality

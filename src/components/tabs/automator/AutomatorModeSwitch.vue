@@ -110,7 +110,7 @@ export default {
   overflow: hidden;
   position: relative;
   align-items: center;
-  color: black;
+  color: var(--color-automator-docs-font);
   background-color: #626262;
   border: 0.2rem solid #767676;
   border-radius: 0.2rem;
@@ -133,14 +133,14 @@ export default {
   top: 0;
   left: 0;
   z-index: 0;
-  background-color: white;
+  background-color: var(--color-automator-controls-inactive);
   border-radius: 0.2rem;
   transition: 0.3s ease all;
 }
 
 .c-slider-toggle-button--right::before {
   left: 3rem;
-  background-color: white;
+  background-color: var(--color-automator-controls-inactive);
 }
 
 .tutorial--glow::after {

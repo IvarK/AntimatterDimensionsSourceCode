@@ -229,7 +229,7 @@ export default {
               />
             </template>
             <template #tooltipContent>
-              <b :class="{ 'o-pelle-disabled': isDoomed }">
+              <b :class="{ 'o-pelle-disabled': unlockInfo.pelleDisabled }">
                 {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
               </b>
             </template>

@@ -59,9 +59,8 @@ export default {
       this.undoSlotsAvailable = this.respecIntoProtected
         ? Glyphs.totalSlots - GameCache.glyphInventorySpace.value - Glyphs.inventoryList.length > 0
         : GameCache.glyphInventorySpace.value > 0;
-      this.undoVisible = TeresaUnlocks.undo.canBeApplied && !this.isDoomed;
-      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable &&
-        player.reality.glyphs.undo.length > 0 && !this.isDoomed;
+      this.undoVisible = TeresaUnlocks.undo.canBeApplied;
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
     },
     glyphPositionStyle(idx) {
       const angle = 2 * Math.PI * idx / this.slotCount;

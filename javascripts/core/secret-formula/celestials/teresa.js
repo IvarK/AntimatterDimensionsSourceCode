@@ -29,6 +29,7 @@ GameDatabase.celestials.teresa = {
       id: 4,
       price: 1e10,
       description: "Unlock \"Undo\" of equipping a Glyph.",
+      isDisabledInDoomed: true
     },
     startEU: {
       id: 5,

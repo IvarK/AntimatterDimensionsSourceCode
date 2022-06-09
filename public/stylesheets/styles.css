@@ -64,10 +64,10 @@ html {
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
   --color-celestials: #5151ec;
-  --color-prestige--accent: white;
+  --color-prestige--accent: #dfe7e9;
 
   --color-teresa--base: #5151ec;
-  --color-teresa--accent: white;
+  --color-teresa--accent: #dfe7e9;
 
   --color-effarig--base: #d13737;
 
@@ -81,7 +81,7 @@ html {
   --color-ra-pet--enslaved: #f1aa7f;
   --color-ra-pet--v: #ead584;
 
-  --color-laitela--base: white;
+  --color-laitela--base: #eeeeee;
   --color-laitela--accent: black;
 
   --color-pelle--base: crimson;
@@ -93,7 +93,7 @@ html {
 :root .t-s8 {
   --color-text: black;
   --color-text-inverted: white;
-  --color-base: #eeeeee;
+  --color-base: #dfe7e9;
   --color-disabled: #9e9e9e;
   --color-accent: #2196f3;
   --color-good: #66bb6a;
@@ -219,7 +219,7 @@ body {
   font-weight: 300;
   line-height: 1.5;
   color: #4f5957;
-  background-color: #ffffff;
+  background-color: #dfe7e9;
   margin: 0;
   padding: 0;
 }
@@ -1455,8 +1455,8 @@ br {
 .o-primary-btn--id-auto {
   grid-column: 8 / 11;
   height: 3.5rem;
-  margin: 0 0.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td {
@@ -1468,8 +1468,8 @@ br {
 .o-primary-btn--buy-td-auto {
   grid-column: 8 / 11;
   height: 3.5rem;
-  margin: 0 0.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--option {
@@ -2178,8 +2178,8 @@ br {
 .l-dimension-single-row {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  height: 3.5rem;
   width: 100%;
+  height: 3.5rem;
   align-content: center;
 }
 
@@ -2241,10 +2241,10 @@ br {
 .c-antimatter-prestige-row {
   display: grid;
   flex-direction: row;
-  text-align: left;
   grid-template-columns: repeat(7, 1fr);
   height: 5rem;
   align-content: center;
+  text-align: left;
 }
 
 .l-dim-row__prestige-text {
@@ -4181,7 +4181,7 @@ br {
 }
 
 .t-s5 .c-autobuyer-box {
-  background: #dddddd;
+  background: #dfe7e9;
 }
 
 .t-s8 .c-autobuyer-box {

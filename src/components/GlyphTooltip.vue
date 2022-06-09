@@ -96,10 +96,13 @@ export default {
     cursedColorInverted() {
       return Theme.current().isDark() ? "white" : "black";
     },
+    mainBorderColor() {
+      if (this.type === "cursed") return this.cursedColor;
+      if (this.type === "companion") return GlyphTypes[this.type].color;
+      return getColor(this.strength);
+    },
     descriptionStyle() {
-      let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
-      if (this.type === "cursed") color = this.cursedColor;
-      if (this.type === "companion") color = GlyphTypes[this.type].color;
+      const color = this.mainBorderColor;
       return {
         color,
         "text-shadow": this.type === "cursed"

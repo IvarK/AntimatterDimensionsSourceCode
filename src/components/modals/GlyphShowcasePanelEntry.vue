@@ -83,14 +83,8 @@ export default {
       };
     },
     rarityStyle() {
-      let color;
-      if (this.glyph.type === "companion") color = GlyphTypes[this.type].color;
-      else {
-        const info = getRarity(this.glyph.strength);
-        color = Theme.current().isDark() ? info.darkColor : info.lightColor;
-      }
       return {
-        "color": `${color}`,
+        "color": `${this.glyph.type === "companion" ? GlyphTypes[this.type].color : getColor(this.glyph.strength)}`,
         "font-weight": "bold"
       };
     },

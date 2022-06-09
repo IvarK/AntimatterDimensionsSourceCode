@@ -743,7 +743,7 @@ button:focus {
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
-  background: var(--color-background);
+  background: black;
   border-style: solid;
   border-width: var(--var-border-width, 0.2rem);
   border-radius: var(--var-border-radius, 0.4rem);
@@ -1431,6 +1431,7 @@ br {
   color: var(--color-text);
   background-color: var(--color-background);
   border-radius: var(--var-border-radius, 0.5rem);
+  border: 0.3rem solid var(--color-text);
   padding: 0.5rem;
 }
 

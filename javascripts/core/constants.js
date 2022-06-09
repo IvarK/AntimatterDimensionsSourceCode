@@ -230,12 +230,12 @@ window.GlyphRarities = [
     minStrength: 3.5,
     name: "Celestial",
     darkColor: "#5151ec",
-    lightColor: "#5151ec"
+    lightColor: "#0000ee"
   }, {
     minStrength: 3.25,
     name: "Transcendent",
     darkColor: "#03ffec",
-    lightColor: "#00f5e0"
+    lightColor: "#00ad9f"
   }, {
     minStrength: 3,
     name: "Mythical",
@@ -245,7 +245,7 @@ window.GlyphRarities = [
     minStrength: 2.75,
     name: "Legendary",
     darkColor: "#ff9800",
-    lightColor: "#ff9800"
+    lightColor: "#d68100"
   }, {
     minStrength: 2.5,
     name: "Epic",
@@ -255,7 +255,7 @@ window.GlyphRarities = [
     minStrength: 2,
     name: "Rare",
     darkColor: "#2196f3",
-    lightColor: "#2196f3"
+    lightColor: "#1872f3"
   }, {
     minStrength: 1.5,
     name: "Uncommon",

@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 <script>
 import GlyphTooltip from "@/components/GlyphTooltip";
 
@@ -122,6 +121,7 @@ export default {
     },
     borderColor() {
       if (this.isRealityGlyph) return this.realityGlyphColor();
+      if (this.isCursedGlyph) return this.cursedColor;
       return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
@@ -151,9 +151,9 @@ export default {
       return Theme.current().isDark() ? "white" : "black";
     },
     innerStyle() {
-      const info = getRarity(this.glyph.strength);
-      const baseColor = Theme.current().isDark() ? info.darkColor : info.lightColor;
-      const rarityColor = this.isRealityGlyph ? this.realityGlyphColor() : this.glyph.color || baseColor;
+      const rarityColor = this.isRealityGlyph
+        ? this.realityGlyphColor()
+        : (this.glyph.color || getColor(this.glyph.strength));
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
@@ -435,10 +435,9 @@ export default {
       return { dx, dy };
     },
     glyphColor() {
-      if (this.isCursedGlyph) return "black";
+      if (this.isCursedGlyph) return this.cursedColor;
       if (this.isRealityGlyph) return this.realityGlyphColor();
-      const info = getRarity(this.glyph.strength);
-      return `${this.glyph.color || (Theme.current().isDark() ? info.darkColor : info.lightColor)}`;
+      return `${this.glyph.color || getColor(this.glyph.strength)}`;
     },
     // Note that the dot bigger for one of the mutually-exclusive effect pair (IDs of the only case are hardcoded)
     glyphEffectIcon(id) {

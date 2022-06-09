@@ -215,9 +215,10 @@ export const AutomatorData = {
   MAX_ALLOWED_SCRIPT_CHARACTERS: 10000,
   MAX_ALLOWED_TOTAL_CHARACTERS: 60000,
   // We need to get the current character count from the editor itself instead of the player object, because otherwise
-  // any changes made after getting above either limit will never be saved
+  // any changes made after getting above either limit will never be saved. Note that if the player is on the automator
+  // subtab before the automator is unlocked, editor is undefined
   singleScriptCharacters() {
-    return AutomatorTextUI.editor.getDoc().getValue().length;
+    return AutomatorTextUI.editor?.getDoc().getValue().length ?? 0;
   },
   totalScriptCharacters() {
     return Object.values(player.reality.automator.scripts)

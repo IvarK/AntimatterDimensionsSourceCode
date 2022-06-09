@@ -123,14 +123,20 @@ export const PerkNetwork = {
   makeNetwork() {
     // Just for a bit of fun, tangle it up a bit unless the player specifically chooses not to
     const defaultPos = player.options.fixedPerkStartingPos;
+    const isDisabled = perk => Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
     this.nodes = new DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
       shape: perk.config.automatorPoints ? "diamond" : "dot",
-      title: `${Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id)
-        ? "This perk has no effect while in Doomed"
-        : perk.config.description}
-      ${perk.config.automatorPoints ? `(+${formatInt(perk.config.automatorPoints)} AP)` : ""}`,
+      // As far as I am aware, vis.js doesn't support arbitrary CSS styling; nevertheless, we still want the original
+      // description to be visible instead of being hidden by disable/lock text
+      title: `${perk.config.description}
+        ${isDisabled(perk)
+        ? "(Disabled while Doomed)"
+        : ""}
+        ${perk.config.automatorPoints && !isDisabled(perk)
+        ? `(+${formatInt(perk.config.automatorPoints)} AP)`
+        : ""}`,
       x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
       y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));

@@ -13,7 +13,6 @@ export default {
     BlackHoleChargingSliders
   },
   data: () => ({
-    isDoomed: false,
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
@@ -47,7 +46,6 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isDoomed) return "You can't start Enslaved Ones' Reality while in Doomed";
       if (this.isRunning) return "You're inside Enslaved Ones' Reality";
       return "Start Enslaved One's Reality";
     },
@@ -66,7 +64,8 @@ export default {
       return "Offline time used for production";
     },
     // Use this here since Enslaved has a fairly non-standard character, and SFCs don't support using \uf0c1
-    enslavedSymbol: () => Enslaved.symbol
+    enslavedSymbol: () => Enslaved.symbol,
+    isDoomed: () => Pelle.isDoomed,
   },
   watch: {
     autoRelease(newValue) {
@@ -75,7 +74,6 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.isStoringBlackHole = Enslaved.isStoringGameTime;
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
@@ -167,7 +165,10 @@ export default {
       <div class="l-enslaved-run-container">
         <div v-if="hasUnlock(unlocksInfo.RUN)">
           <div class="c-enslaved-run-button">
-            <div class="c-enslaved-run-button__title">
+            <div
+              class="c-enslaved-run-button__title"
+              :style="{ textDecoration: isDoomed ? 'line-through' : null }"
+            >
               {{ realityTitle }}
             </div>
             <div v-if="completed">
@@ -229,8 +230,7 @@ export default {
               class="o-enslaved-mechanic-button"
               @click="useStored"
             >
-              <span v-if="isDoomed">You can't discharge Black Hole while in Doomed</span>
-              <span v-else>Discharge Black Hole</span>
+              <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">Discharge Black Hole</span>
               <p v-if="isRunning">
                 {{ timeDisplayShort(nerfedBlackHoleTime) }} in this Reality
               </p>

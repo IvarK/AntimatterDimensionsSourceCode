@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       relicShards: 0,
       shardRarityBoost: 0,
       shardsGained: 0,
@@ -51,7 +50,8 @@ export default {
     },
     showShardsRate() {
       return this.currentShardsRate;
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   watch: {
     isRunning() {
@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost / 100;
       this.shardsGained = Effarig.shardsGained;
@@ -154,12 +153,11 @@ export default {
             You are in Effarig's Reality - give up?
           </div>
           <br>
-          <span v-if="!isDoomed">
-            Enter Effarig's Reality, in which {{ runDescription }}
+          <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+            Enter Effarig's Reality.
           </span>
-          <span v-else>
-            You can't start Effarig's Reality, in which {{ runDescription }}
-          </span>
+          <br>
+          {{ runDescription }}
         </div>
         <div
           :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"

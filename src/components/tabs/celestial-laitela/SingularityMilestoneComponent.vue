@@ -12,7 +12,6 @@ export default {
     }
   },
   data: () => ({
-    isDoomed: false,
     isMaxed: false,
     progressToNext: "",
     remainingSingularities: 0,
@@ -86,11 +85,11 @@ export default {
         default:
           throw new Error("Unrecognized Singularity Milestone mode");
       }
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.isMaxed = this.milestone.isMaxed;
       this.progressToNext = this.milestone.progressToNext;
       this.remainingSingularities = this.milestone.remainingSingularities;
@@ -122,10 +121,7 @@ export default {
       :class="barClass"
       :style="barStyle"
     />
-    <span v-if="isDoomed">
-      This Singularity Milestone has no effect while in Doomed
-    </span>
-    <span v-else>
+    <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
       <b v-if="!isMaxed">
         {{ progressDisplay }}
       </b>

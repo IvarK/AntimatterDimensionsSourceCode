@@ -36,15 +36,15 @@ GameDatabase.celestials.descriptions = [
   {
     name: "The Enslaved Ones",
     description() {
-      return `Glyph levels will be boosted to a minimum of ${formatInt(5000)}
-      Infinity, Time, and 8th Antimatter Dimension purchases are limited to ${formatInt(1)} each
-      Antimatter Dimension multipliers are always Dilated (the Glyph effect still only applies in actual Dilation)
-      Time Study 192 (uncapped Replicanti) is locked
-      The Black Hole is disabled
-      Tachyon Particle production and Dilated Time production are severely reduced
-      Time Theorem generation from Dilation Glyphs is disabled
-      Certain challenge goals have been increased
-      Stored game time is discharged at a reduced effectiveness (exponent^${format(0.55, 2, 2)}) `;
+      return `Glyph levels are boosted to a minimum of ${formatInt(5000)}.
+      Infinity, Time, and 8th Antimatter Dimension purchases are limited to ${formatInt(1)} each.
+      Antimatter Dimension multipliers are always Dilated (the Glyph effect still only applies in actual Dilation).
+      Time Study 192 (uncapped Replicanti) is locked.
+      The Black Hole is disabled.
+      Tachyon Particle production and Dilated Time production are severely reduced.
+      Time Theorem generation from Dilation Glyphs is disabled.
+      Certain challenge goals are increased.
+      Stored game time is discharged at a reduced effectiveness (exponent^${format(0.55, 2, 2)}).`;
     }
   },
   {

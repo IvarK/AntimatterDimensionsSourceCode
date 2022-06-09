@@ -682,6 +682,10 @@ export function getRarity(x) {
   return GlyphRarities.find(e => x >= e.minStrength);
 }
 
+export function getColor(strength) {
+  return getRarity(strength)[Theme.current().isDark() ? "darkColor" : "lightColor"];
+}
+
 export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost) {
   const level = glyph.level;
   if (Pelle.isDoomed) return Math.min(level, Pelle.glyphMaxLevel);

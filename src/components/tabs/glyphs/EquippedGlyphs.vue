@@ -34,7 +34,6 @@ export default {
         : `Your currently-equipped Glyphs will stay equipped on ${reset}.`;
     },
     undoTooltip() {
-      if (Pelle.isDoomed) return "Undo is not available while in Doomed";
       if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
       return this.undoAvailable
         ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
@@ -60,7 +59,7 @@ export default {
       this.undoSlotsAvailable = this.respecIntoProtected
         ? Glyphs.totalSlots - GameCache.glyphInventorySpace.value - Glyphs.inventoryList.length > 0
         : GameCache.glyphInventorySpace.value > 0;
-      this.undoVisible = TeresaUnlocks.undo.canBeApplied;
+      this.undoVisible = TeresaUnlocks.undo.canBeApplied && !this.isDoomed;
       this.undoAvailable = this.undoVisible && this.undoSlotsAvailable &&
         player.reality.glyphs.undo.length > 0 && !this.isDoomed;
     },
@@ -177,8 +176,7 @@ export default {
         :ach-tooltip="undoTooltip"
         @click="undo"
       >
-        <span v-if="!isDoomed">Rewind to <b>undo</b> the last equipped Glyph</span>
-        <span v-if="isDoomed">You can't <b>undo</b> Armageddon</span>
+        <span>Rewind to <b>undo</b> the last equipped Glyph</span>
       </button>
       <button
         class="l-glyph-equip-button c-reality-upgrade-btn"

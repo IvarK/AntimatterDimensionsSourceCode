@@ -42,6 +42,6 @@ export default {
     :class="enabledClass"
     @click="action"
   >
-    {{ isLimitedByPelle ? "Locked in Doomed before Eternity" : formatCost(cost) }}
+    {{ isLimitedByPelle ? "Requires Eternity to unlock" : formatCost(cost) }}
   </button>
 </template>

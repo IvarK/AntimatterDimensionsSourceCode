@@ -105,10 +105,7 @@ export default {
     @mouseleave="showingCharged = false"
     @click="upgrade.purchase()"
   >
-    <span v-if="isUseless">
-      This upgrade has no effect while in Doomed
-    </span>
-    <span v-else>
+    <span :style="{ textDecoration: isUseless ? 'line-through' : null }">
       <DescriptionDisplay
         :config="config"
       />

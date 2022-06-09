@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isBought: false,
       isCapped: false,
       isAffordable: false,
@@ -61,6 +60,9 @@ export default {
       }
       return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
         .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+    },
+    isUseless() {
+      return Pelle.isDoomed && this.upgrade.id === 7;
     }
   },
   watch: {
@@ -86,7 +88,6 @@ export default {
       if (!this.isBought) {
         this.isAffordable = upgrade.isAffordable;
       }
-      this.isUseless = (upgrade.id === 7) && Pelle.isDoomed;
     }
   }
 };
@@ -99,10 +100,7 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <span v-if="isUseless">
-        This upgrade has no effect while in Doomed
-      </span>
-      <span v-else>
+      <span :style="{ textDecoration: isUseless ? 'line-through' : null }">
         <DescriptionDisplay
           :config="upgrade.config"
           :length="70"

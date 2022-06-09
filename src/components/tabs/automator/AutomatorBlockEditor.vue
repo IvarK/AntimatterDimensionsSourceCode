@@ -219,6 +219,6 @@ export const BlockAutomator = {
   justify-content: flex-end;
   align-items: center;
   font-size: 1.4rem;
-  color: #606060;
+  color: var(--color-automator-docs-font);
 }
 </style>

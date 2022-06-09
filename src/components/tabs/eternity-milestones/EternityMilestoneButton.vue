@@ -64,7 +64,7 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      <span :style="{ textDecoration: isUseless ? 'line-through' : null }">
+      <span :class="{ 'o-pelle-disabled': isUseless }">
         {{ reward }} {{ (isLocked && !isReached) ? "(Locked behind a Pelle Upgrade)" : "" }}
       </span>
     </button>

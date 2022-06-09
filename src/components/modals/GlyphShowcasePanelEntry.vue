@@ -178,9 +178,7 @@ export default {
       <div
         v-for="(effectObj, index) in glyphEffectList"
         :key="index"
-        :style="{
-          textDecoration: effectObj.isPelleDisabled ? 'line-through' : null
-        }"
+        :class="{ 'o-pelle-disabled': effectObj.isPelleDisabled }"
       >
         {{ effectObj.text }}
       </div>

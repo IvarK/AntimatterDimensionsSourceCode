@@ -167,7 +167,7 @@ export default {
           <div class="c-enslaved-run-button">
             <div
               class="c-enslaved-run-button__title"
-              :style="{ textDecoration: isDoomed ? 'line-through' : null }"
+              :class="{ 'o-pelle-disabled': isDoomed }"
             >
               {{ realityTitle }}
             </div>
@@ -230,7 +230,7 @@ export default {
               class="o-enslaved-mechanic-button"
               @click="useStored"
             >
-              <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">Discharge Black Hole</span>
+              <span :class="{ 'o-pelle-disabled': isDoomed }">Discharge Black Hole</span>
               <p v-if="isRunning">
                 {{ timeDisplayShort(nerfedBlackHoleTime) }} in this Reality
               </p>

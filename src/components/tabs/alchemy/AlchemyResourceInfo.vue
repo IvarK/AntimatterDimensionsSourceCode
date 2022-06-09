@@ -104,7 +104,7 @@ export default {
     </span>
     <span v-if="isBaseResource">Base Resource</span>
     <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-    <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
       <EffectDisplay
         label="Effect"
         :config="effectConfig"

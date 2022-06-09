@@ -42,7 +42,7 @@ export default {
         class="c-effarig-tab__reward-description"
       >
         <span class="c-effarig-tab__reward-symbol">{{ symbol }}</span>
-        <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">{{ description }}</span>
+        <span :class="{ 'o-pelle-disabled': isDoomed }">{{ description }}</span>
       </div>
     </div>
     <span

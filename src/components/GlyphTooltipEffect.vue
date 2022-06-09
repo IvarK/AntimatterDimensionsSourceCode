@@ -81,9 +81,7 @@ export default {
 <template>
   <div
     class="c-glyph-tooltip__effect"
-    :style="{
-      textDecoration: isPelleDisabled ? 'line-through' : null,
-    }"
+    :class="{ 'o-pelle-disabled': isPelleDisabled }"
   >
     <span v-html="convertedParts[0]" />
     <span

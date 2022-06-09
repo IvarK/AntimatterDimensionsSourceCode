@@ -115,7 +115,7 @@ export default {
           v-if="config.reward"
           class="o-achievement__tooltip__reward"
         >
-          <span :style="{ textDecoration: isDisabled ? 'line-through' : null }">
+          <span :class="{ 'o-pelle-disabled': isDisabled }">
             Reward: {{ config.reward }}
             <EffectDisplay
               v-if="config.formatEffect"

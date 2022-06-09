@@ -149,7 +149,7 @@ export default {
           >
             Ϟ
           </div>
-          <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
             Start Teresa's Reality.
           </span>
           {{ runDescription }}
@@ -179,7 +179,7 @@ export default {
           v-if="hasEPGen"
           class="c-teresa-unlock"
         >
-          <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
             Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </span>
         </div>
@@ -229,7 +229,7 @@ export default {
               />
             </template>
             <template #tooltipContent>
-              <b :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+              <b :class="{ 'o-pelle-disabled': isDoomed }">
                 {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
               </b>
             </template>

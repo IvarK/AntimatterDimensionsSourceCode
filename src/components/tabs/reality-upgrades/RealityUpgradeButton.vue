@@ -88,7 +88,7 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <span :style="{ textDecoration: isUseless ? 'line-through' : null }">
+      <span :class="{ 'o-pelle-disabled': isUseless }">
         <DescriptionDisplay :config="config" />
         <template v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable">
           <br>

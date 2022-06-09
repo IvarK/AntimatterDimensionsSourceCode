@@ -153,7 +153,7 @@ export default {
             You are in Effarig's Reality - give up?
           </div>
           <br>
-          <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
             Enter Effarig's Reality.
           </span>
           <br>

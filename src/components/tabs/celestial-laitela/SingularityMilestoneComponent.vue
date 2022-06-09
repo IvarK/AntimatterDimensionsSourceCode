@@ -121,7 +121,7 @@ export default {
       :class="barClass"
       :style="barStyle"
     />
-    <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
       <b v-if="!isMaxed">
         {{ progressDisplay }}
       </b>

@@ -62,7 +62,7 @@ export default {
     >
       {{ hintText }}
     </HintText>
-    <span :style="{ textDecoration: isUseless ? 'line-through' : null }">
+    <span :class="{ 'o-pelle-disabled': isUseless }">
       <DescriptionDisplay
         :config="study.config"
       />

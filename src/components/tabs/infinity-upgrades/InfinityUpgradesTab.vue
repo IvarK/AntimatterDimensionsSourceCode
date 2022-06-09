@@ -128,7 +128,7 @@ export default {
       Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
     </div>
     <div v-if="isUseless">
-      You cannot get any Charged Infinity Upgrades while in Doomed.
+      You cannot Charge Infinity Upgrades while Doomed.
     </div>
     <br>
     Within each column, the upgrades must be purchased from top to bottom.

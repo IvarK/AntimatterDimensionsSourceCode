@@ -1503,7 +1503,7 @@ Celestial rewards, Perks, and other game mechanics are disabled or grant no rewa
 You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
 <br>
 <br>
-Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity-
+Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity,
 and Eternity Points across all Doomed Realities. Remnants produce Reality Shards which can be spent on Pelle Upgrades.
 <br>
 <br>
@@ -1550,8 +1550,8 @@ When you reach ${formatInt(100)}% War, you unlock the <b>Galaxy Generator</b>, w
 Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect Tickspeed as if
 they were Antimatter Galaxies but they don't increase the cost of your next Antimatter Galaxy. You also unlock five
 new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades then give
-a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter- and Generated
-Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
+a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and Generated
+Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
       isUnlocked: () => Pelle.hasGalaxyGenerator,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
         "galaxies", "generator", "celestial"],

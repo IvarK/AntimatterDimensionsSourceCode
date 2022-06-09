@@ -3,7 +3,6 @@ export default {
   name: "LaitelaRunButton",
   data() {
     return {
-      isDoomed: false,
       realityTime: 0,
       maxDimTier: 0,
       isRunning: false,
@@ -17,11 +16,11 @@ export default {
     },
     runDescription() {
       return GameDatabase.celestials.descriptions[5].description().split("\n");
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.realityTime = player.celestials.laitela.fastestCompletion;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
@@ -50,8 +49,9 @@ export default {
 
 <template>
   <button :class="classObject()">
-    <span v-if="isDoomed"><b>You can't start Lai'tela's Reality</b></span>
-    <span v-else><b>Start Lai'tela's Reality</b></span>
+    <span :style="{ textDecoration: isDoomed ? 'line-through' : null }">
+      <b>Start Lai'tela's Reality</b>
+    </span>
     <div
       :class="runButtonClassObject()"
       @click="startRun"

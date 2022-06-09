@@ -77,7 +77,7 @@ export default {
         v-if="isDoomed"
         :enabled="false"
       >
-        You cannot create Reality Glyphs while in Doomed
+        You cannot create Reality Glyphs while Doomed
       </PrimaryButton>
       <PrimaryButton
         v-else-if="realityGlyphLevel !== 0"

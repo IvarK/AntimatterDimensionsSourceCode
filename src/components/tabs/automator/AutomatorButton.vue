@@ -18,6 +18,7 @@ export default {
   border-radius: 0.3rem;
   margin: 0.4rem;
   cursor: pointer;
+  color: var(--color-automator-docs-font);
   background-color: var(--color-automator-controls-inactive);
 }
 </style>

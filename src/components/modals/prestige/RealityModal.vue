@@ -117,6 +117,10 @@ export default {
       this.selectedGlyph = index;
     },
     confirmModal(sacrifice) {
+      if (sacrifice) {
+        // Sac isn't passed through confirm so we have to close it manually
+        this.emitClose();
+      }
       processManualReality(sacrifice, this.selectedGlyph);
       EventHub.ui.offAll(this);
     }

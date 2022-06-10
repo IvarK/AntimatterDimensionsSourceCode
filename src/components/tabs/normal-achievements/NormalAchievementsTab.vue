@@ -31,7 +31,8 @@ export default {
     };
   },
   computed: {
-    rows: () => Achievements.allRows,
+    // We don't need to update Pelle.isDoomed since you can't Doom in the Achievements tab
+    rows: () => Achievements.allRows.filter((_, row) => (Pelle.isDoomed ? true : row < 17)),
     renderedRows() {
       return this.rows.filter((_, i) => this.renderedRowIndices.includes(i));
     },

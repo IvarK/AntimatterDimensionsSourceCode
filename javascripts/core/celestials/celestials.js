@@ -20,8 +20,8 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Teresa",
     description() {
-      return `Glyph Time Theorem generation is disabled and\
-      you gain less Infinity Points and Eternity Points (x^${format(0.55, 2, 2)}).`;
+      return `Glyph Time Theorem generation is disabled.
+      You gain less Infinity Points and Eternity Points (x^${format(0.55, 2, 2)}).`;
     },
   },
   {
@@ -51,14 +51,15 @@ GameDatabase.celestials.descriptions = [
     name: "V",
     description() {
       return `All Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second\
-      are square-rooted, and Replicanti interval is squared.`;
+      are square-rooted. 
+      The Replicanti interval is squared.`;
     }
   },
   {
     name: "Ra",
     description() {
-      return `You only have ${formatInt(4)} Dimension Boosts and can't gain any more, and the Tickspeed purchase\
-      multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
+      return `You only have ${formatInt(4)} Dimension Boosts and can't gain any more.
+      The Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
     },
   },
   {

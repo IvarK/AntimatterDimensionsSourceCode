@@ -37,7 +37,7 @@ export default {
       return `${this.name} Reality`;
     },
     message() {
-      return `Perform a Reality reset, and enter ${this.name} Reality, in which`;
+      return `Perform a Reality reset, and enter ${this.name} Reality, in which:`;
     },
     extraLine() {
       switch (this.number) {
@@ -99,12 +99,18 @@ export default {
     </template>
     <div class="c-modal-message__text">
       {{ message }}
-      <span
-        v-for="(desc, i) in description"
-        :key="i"
-      >
-        {{ desc }} <br>
-      </span>
+      <br>
+      <br>
+      <div class="c-modal-celestial__run-description">
+        <span
+          v-for="(desc, i) in description"
+          :key="i"
+        >
+          <b v-if="desc.trim()"> &bull; </b>
+          {{ desc }} <br>
+        </span>
+      </div>
+      <br>
       <div>
         {{ extraLine }}
       </div>
@@ -121,3 +127,9 @@ export default {
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.c-modal-celestial__run-description {
+  text-align: left;
+}
+</style>

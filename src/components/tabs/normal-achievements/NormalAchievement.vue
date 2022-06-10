@@ -13,6 +13,10 @@ export default {
       type: Object,
       required: true
     },
+    isObscured: {
+      type: Boolean,
+      required: false
+    }
   },
   data() {
     return {
@@ -21,7 +25,9 @@ export default {
       isMouseOver: false,
       isCancer: false,
       showUnlockState: false,
-      realityUnlocked: false
+      realityUnlocked: false,
+      textTimer: 0,
+      garbledText: "",
     };
   },
   computed: {
@@ -48,7 +54,8 @@ export default {
         "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
         "o-achievement--blink": !this.isUnlocked && this.id === 78 && !this.isDisabled,
         "o-achievement--normal": !this.isCancer,
-        "o-achievement--cancer": this.isCancer
+        "o-achievement--cancer": this.isCancer,
+        "c-blurred": this.isObscured,
       };
     },
     indicatorIconClass() {
@@ -78,6 +85,17 @@ export default {
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
+      if (this.isObscured) {
+        this.textTimer++;
+        this.garbledText = "";
+        // JS doesn't let you directly seed the built-in RNG, so we write something that *looks* like randomness
+        const state = this.displayId + 35 * Math.floor(this.textTimer / 30);
+        for (let l = 0; l < 45; l++) {
+          // 32 to 126 is the range of all printable non-space ASCII characters
+          this.garbledText += String.fromCharCode(Math.floor(32 + ((state + l * l) % 95)));
+          if (l % 10 === 0) this.garbledText += "\n";
+        }
+      }
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
@@ -85,7 +103,7 @@ export default {
     },
     onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
-    }
+    },
   }
 };
 </script>
@@ -105,24 +123,29 @@ export default {
     </HintText>
     <div class="o-achievement__tooltip">
       <template v-if="isMouseOver">
-        <div class="o-achievement__tooltip__name">
-          {{ config.name }} ({{ displayId }})
+        <div v-if="isObscured">
+          {{ garbledText }}
         </div>
-        <div class="o-achievement__tooltip__description">
-          {{ config.description }}
-        </div>
-        <div
-          v-if="config.reward"
-          class="o-achievement__tooltip__reward"
-        >
-          <span :class="{ 'o-pelle-disabled': isDisabled }">
-            Reward: {{ config.reward }}
-            <EffectDisplay
-              v-if="config.formatEffect"
-              br
-              :config="config"
-            />
-          </span>
+        <div v-else>
+          <div class="o-achievement__tooltip__name">
+            {{ config.name }} ({{ displayId }})
+          </div>
+          <div class="o-achievement__tooltip__description">
+            {{ config.description }}
+          </div>
+          <div
+            v-if="config.reward"
+            class="o-achievement__tooltip__reward"
+          >
+            <span :class="{ 'o-pelle-disabled': isDisabled }">
+              Reward: {{ config.reward }}
+              <EffectDisplay
+                v-if="config.formatEffect"
+                br
+                :config="config"
+              />
+            </span>
+          </div>
         </div>
       </template>
     </div>
@@ -134,3 +157,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-blurred {
+  filter: blur(0.35rem);
+  z-index: 1;
+}
+</style>

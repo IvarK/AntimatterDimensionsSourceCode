@@ -11,6 +11,10 @@ export default {
       type: Array,
       required: true
     },
+    isObscured: {
+      type: Boolean,
+      required: false
+    }
   },
   data() {
     return {
@@ -44,6 +48,7 @@ export default {
       v-for="(achievement, i) in row"
       :key="i"
       :achievement="achievement"
+      :is-obscured="isObscured"
       class="l-achievement-grid__cell"
     />
   </div>

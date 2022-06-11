@@ -2192,6 +2192,7 @@ br {
   grid-template-columns: repeat(10, 1fr);
   grid-column: 7 / 9;
   width: 100%;
+  max-width: 20rem;
 }
 
 .l-dim-row-small-text {

@@ -35,6 +35,11 @@ export default {
       type: String,
       required: false,
       default: undefined
+    },
+    closeOnConfirm: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   created() {
@@ -43,7 +48,7 @@ export default {
   methods: {
     doConfirm() {
       this.$emit("confirm");
-      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      if (this.closeOnConfirm) EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     doCancel() {
       this.$emit("cancel");

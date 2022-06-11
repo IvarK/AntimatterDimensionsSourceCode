@@ -26,10 +26,7 @@ export default {
       set(value) {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
-    },
-    currentScriptContent() {
-      return player.reality.automator.scripts[this.currentScriptID].content;
-    },
+    }
   },
   methods: {
     update() {
@@ -38,11 +35,12 @@ export default {
     toggleAutomatorMode() {
       const scriptID = this.currentScriptID;
       Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
+      this.emitClose();
       if (this.isCurrentlyBlocks) {
         // This saves the script after converting it.
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else if (BlockAutomator.fromText(this.currentScriptContent)) {
+      } else if (BlockAutomator.fromText(player.reality.automator.scripts[this.currentScriptID].content)) {
         AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
@@ -57,6 +55,7 @@ export default {
 <template>
   <ModalWrapperChoice
     option="switchAutomatorMode"
+    :close-on-confirm="false"
     @confirm="toggleAutomatorMode"
   >
     <template #header>

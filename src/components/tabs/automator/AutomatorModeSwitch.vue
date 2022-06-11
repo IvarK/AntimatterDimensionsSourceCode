@@ -69,7 +69,9 @@ export default {
           // This saves the script after converting it.
           BlockAutomator.parseTextFromBlocks();
           player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-        } else if (BlockAutomator.fromText(this.currentScriptContent)) {
+          // Don't use this.currentScriptContent here due to reactivity issues, but on the other hand reactively
+          // updating content might lead to decreased performance.
+        } else if (BlockAutomator.fromText(player.reality.automator.scripts[this.currentScriptID].content)) {
           AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
           player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
         } else {

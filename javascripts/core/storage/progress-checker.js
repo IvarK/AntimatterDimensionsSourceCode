@@ -1,27 +1,28 @@
 // These "progress stages" are roughly defined in a way to separate different parts of the game where different
-// resources are the main indicator of progress. They aren't necessarily equally spaced in time.
-const PROGRESS_STAGE = {
-  PRE_INFINITY: 0,
+// resources are the main indicator of progress. They aren't necessarily equally spaced in time, and the enum is
+// one-indexed in order to simplify code elsewhere.
+export const PROGRESS_STAGE = {
+  PRE_INFINITY: 1,
 
-  EARLY_INFINITY: 1,
-  BREAK_INFINITY: 2,
-  REPLICANTI: 3,
+  EARLY_INFINITY: 2,
+  BREAK_INFINITY: 3,
+  REPLICANTI: 4,
 
-  EARLY_ETERNITY: 4,
-  ETERNITY_CHALLENGES: 5,
-  EARLY_DILATION: 6,
-  LATE_ETERNITY: 7,
+  EARLY_ETERNITY: 5,
+  ETERNITY_CHALLENGES: 6,
+  EARLY_DILATION: 7,
+  LATE_ETERNITY: 8,
 
-  EARLY_REALITY: 8,
+  EARLY_REALITY: 9,
 
-  TERESA: 9,
-  EFFARIG: 10,
-  ENSLAVED: 11,
-  V: 12,
-  RA: 13,
-  IMAGINARY_MACHINES: 14,
-  LAITELA: 15,
-  PELLE: 16,
+  TERESA: 10,
+  EFFARIG: 11,
+  ENSLAVED: 12,
+  V: 13,
+  RA: 14,
+  IMAGINARY_MACHINES: 15,
+  LAITELA: 16,
+  PELLE: 17,
 };
 
 export const ProgressChecker = {
@@ -113,9 +114,56 @@ export const ProgressChecker = {
     }
   },
 
+  // Used in catchup modal to determine a header for collapsible catchup resource groups
+  getStageName(stage) {
+    switch (stage) {
+      case PROGRESS_STAGE.PRE_INFINITY:
+        return "Before Infinity";
+
+      case PROGRESS_STAGE.EARLY_INFINITY:
+        return "Infinity";
+      case PROGRESS_STAGE.BREAK_INFINITY:
+        return "Broken Infinity";
+      case PROGRESS_STAGE.REPLICANTI:
+        return "Replicanti";
+
+      case PROGRESS_STAGE.EARLY_ETERNITY:
+        return "Eternity";
+      case PROGRESS_STAGE.ETERNITY_CHALLENGES:
+        return "Eternity Challenges";
+      case PROGRESS_STAGE.EARLY_DILATION:
+        return "Time Dilation";
+      case PROGRESS_STAGE.LATE_ETERNITY:
+        // There is no additional content in this range, so technically this string is never used
+        return "Late Eternity";
+
+      case PROGRESS_STAGE.EARLY_REALITY:
+        return "Reality";
+
+      case PROGRESS_STAGE.TERESA:
+        return "Teresa (1st Celestial)";
+      case PROGRESS_STAGE.EFFARIG:
+        return "Effarig (2nd Celestial)";
+      case PROGRESS_STAGE.ENSLAVED:
+        return "The Enslaved Ones (3rd Celestial)";
+      case PROGRESS_STAGE.V:
+        return "V (4th Celestial)";
+      case PROGRESS_STAGE.RA:
+        return "Ra (5th Celestial)";
+      case PROGRESS_STAGE.IMAGINARY_MACHINES:
+        return "Imaginary Machines";
+      case PROGRESS_STAGE.LAITELA:
+        return "Lai'tela (6th Celestial)";
+      case PROGRESS_STAGE.PELLE:
+        return "Pelle (7th Celestial)";
+      default:
+        throw Error("Unrecognized progress stage in getStageName");
+    }
+  },
+
   // For catchup modal - returns an appropriate resource that would be useful to increase at that point of the game
-  getSuggestedResource(save) {
-    switch (this.getProgressStage(save)) {
+  getSuggestedResource(stage) {
+    switch (stage) {
       case PROGRESS_STAGE.PRE_INFINITY:
         return "Antimatter";
 

@@ -1,3 +1,6 @@
+import { DC } from "../constants";
+import { PROGRESS_STAGE } from "../storage/progress-checker";
+
 import { GameDatabase } from "./game-database";
 
 GameDatabase.catchupResources = [

@@ -92,7 +92,6 @@ export default {
           :min-percent="40"
           :default-percent="50"
           split="vertical"
-          class="_-automator-split-pane-fix"
         >
           <template #paneL>
             <AutomatorEditor />

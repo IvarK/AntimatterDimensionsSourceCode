@@ -41,6 +41,7 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import CatchupModal from "@/components/modals/catchup/CatchupModal";
 import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
@@ -191,6 +192,7 @@ Modal.h2p = new Modal(H2PModal);
 Modal.information = new Modal(InformationModal);
 Modal.credits = new Modal(CreditsModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
+Modal.catchup = new Modal(CatchupModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);

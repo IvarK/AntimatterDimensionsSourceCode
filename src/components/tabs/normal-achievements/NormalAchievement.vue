@@ -26,8 +26,8 @@ export default {
       isCancer: false,
       showUnlockState: false,
       realityUnlocked: false,
-      textTimer: 0,
-      garbledText: "",
+      garbleTimer: 0,
+      garbleKey: 0,
     };
   },
   computed: {
@@ -49,13 +49,13 @@ export default {
       return {
         "o-achievement": true,
         "o-achievement--disabled": this.isDisabled,
-        "o-achievement--locked": !this.isUnlocked && !this.isDisabled,
+        "o-achievement--locked": !this.isUnlocked && !this.isDisabled && !this.isObscured,
         "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
         "o-achievement--blink": !this.isUnlocked && this.id === 78 && !this.isDisabled,
-        "o-achievement--normal": !this.isCancer,
-        "o-achievement--cancer": this.isCancer,
-        "c-blurred": this.isObscured,
+        "o-achievement--normal": !this.isCancer && !this.isObscured,
+        "o-achievement--cancer": this.isCancer && !this.isObscured,
+        "o-achievement--hidden": this.isObscured,
       };
     },
     indicatorIconClass() {
@@ -73,7 +73,17 @@ export default {
     },
     isPreRealityAchievement() {
       return this.realityUnlocked && this.achievement.row <= 13;
-    }
+    },
+    // The garble templates themselves can be static, and shouldn't be recreated every render tick
+    garbledNameTemplate() {
+      return this.makeGarbledTemplate(this.config.name);
+    },
+    garbledIDTemplate() {
+      return this.makeGarbledTemplate(this.displayId);
+    },
+    garbledDescriptionTemplate() {
+      return this.makeGarbledTemplate(this.config.description);
+    },
   },
   beforeDestroy() {
     clearTimeout(this.mouseOverInterval);
@@ -85,16 +95,18 @@ export default {
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
+
+      this.processedName = this.processText(this.config.name, this.garbledNameTemplate);
+      this.processedId = this.processText(this.displayId, this.garbledIDTemplate);
+      this.processedDescription = this.processText(this.config.description, this.garbledDescriptionTemplate);
+
+      // This uses key-swapping to force the garbled achievements to re-render their text, because otherwise they
+      // would remain static. Keys for non-garbled achievements won't change, and all keys remain unique.
+      this.garbleTimer++;
       if (this.isObscured) {
-        this.textTimer++;
-        this.garbledText = "";
-        // JS doesn't let you directly seed the built-in RNG, so we write something that *looks* like randomness
-        const state = this.displayId + 35 * Math.floor(this.textTimer / 30);
-        for (let l = 0; l < 45; l++) {
-          // 32 to 126 is the range of all printable non-space ASCII characters
-          this.garbledText += String.fromCharCode(Math.floor(32 + ((state + l * l) % 95)));
-          if (l % 10 === 0) this.garbledText += "\n";
-        }
+        this.garbleKey = 10 * this.id + Math.floor(this.garbleTimer / 3);
+      } else {
+        this.garbleKey = this.id;
       }
     },
     onMouseEnter() {
@@ -104,6 +116,32 @@ export default {
     onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
     },
+    // Create 5 new randomized strings with the same space structure as the original text
+    makeGarbledTemplate(input) {
+      const text = `${input}`;
+      const template = [];
+      for (let s = 0; s < 5; s++) {
+        let garbled = "";
+        for (let i = 0; i < text.length; i++) {
+          if (text[i] === " ") garbled += " ";
+          else {
+            const n = text[i].charCodeAt();
+            // This is a slightly restricted ASCII range because Pelle garbling relies on the text not having hyphens
+            garbled += String.fromCharCode(48 + ((s * s + n * n + i * i) % 78));
+          }
+        }
+        template.push(garbled);
+      }
+      return template.join("-");
+    },
+    // When appropriate, garbles input text for achievements on the last row. Otherwise leaves it unchanged
+    processText(unmodified, garbledTemplate) {
+      if (!this.isObscured) return unmodified;
+
+      // This normally puts brackets around the text, but we want to get rid of those here
+      const untrimmed = Pelle.modalTools.wordCycle(garbledTemplate);
+      return `${untrimmed.substring(1, untrimmed.length - 1)}`;
+    }
   }
 };
 </script>
@@ -116,36 +154,35 @@ export default {
     @mouseleave="onMouseLeave"
   >
     <HintText
+      :key="garbleKey"
       type="achievements"
       class="l-hint-text--achievement"
     >
-      {{ displayId }}
+      {{ processedId }}
     </HintText>
     <div class="o-achievement__tooltip">
       <template v-if="isMouseOver">
-        <div v-if="isObscured">
-          {{ garbledText }}
+        <div class="o-achievement__tooltip__name">
+          {{ processedName }} ({{ processedId }})
         </div>
-        <div v-else>
-          <div class="o-achievement__tooltip__name">
-            {{ config.name }} ({{ displayId }})
-          </div>
-          <div class="o-achievement__tooltip__description">
-            {{ config.description }}
-          </div>
-          <div
-            v-if="config.reward"
-            class="o-achievement__tooltip__reward"
+        <div class="o-achievement__tooltip__description">
+          {{ processedDescription }}
+        </div>
+        <div
+          v-if="config.reward"
+          class="o-achievement__tooltip__reward"
+        >
+          <span
+            v-if="!isObscured"
+            :class="{ 'o-pelle-disabled': isDisabled }"
           >
-            <span :class="{ 'o-pelle-disabled': isDisabled }">
-              Reward: {{ config.reward }}
-              <EffectDisplay
-                v-if="config.formatEffect"
-                br
-                :config="config"
-              />
-            </span>
-          </div>
+            Reward: {{ config.reward }}
+            <EffectDisplay
+              v-if="config.formatEffect"
+              br
+              :config="config"
+            />
+          </span>
         </div>
       </template>
     </div>
@@ -159,8 +196,5 @@ export default {
 </template>
 
 <style scoped>
-.c-blurred {
-  filter: blur(0.35rem);
-  z-index: 1;
-}
+
 </style>

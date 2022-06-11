@@ -174,14 +174,20 @@ GameDatabase.celestials.pelle.upgrades = {
     cost: 1e30,
     formatCost,
   },
-  dilationUpgradesNoReset: {
+  galaxyNoResetDimboost: {
     id: 19,
+    description: "Galaxies no longer reset Dimension Boosts.",
+    cost: 1e32,
+    formatCost
+  },
+  dilationUpgradesNoReset: {
+    id: 20,
     description: "Keep Dilation Upgrades on Armageddon",
     cost: 1e45,
     formatCost,
   },
   tachyonParticlesNoReset: {
-    id: 20,
+    id: 21,
     description: "Keep Tachyon Particles on Armageddon",
     cost: 1e50,
     formatCost,

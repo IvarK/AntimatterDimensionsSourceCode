@@ -121,7 +121,9 @@ export class Galaxy {
 function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
   player.galaxies++;
-  if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
+  if (!Achievement(143).isUnlocked || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)) {
+    player.dimensionBoosts = 0;
+  }
   softReset(0);
   if (Notations.current === Notation.emoji) player.requirementChecks.permanent.emojiGalaxies++;
   // This is specifically reset here because the check is actually per-galaxy and not per-infinity

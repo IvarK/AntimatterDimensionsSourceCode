@@ -1331,7 +1331,15 @@ GameStorage.devMigrations = {
       player.reality.automator.state.editorScript = Number(player.reality.automator.state.editorScript);
       // I'm not sure if there's any error with the type of topLevelScript, but better safe than sorry
       player.reality.automator.state.topLevelScript = Number(player.reality.automator.state.topLevelScript);
-    }
+    },
+    player => {
+      const hasDilUpg = player.celestials.pelle.upgrades.has(19);
+      const hasTachyonUpg = player.celestials.pelle.upgrades.has(20);
+      player.celestials.pelle.upgrades.delete(19);
+      player.celestials.pelle.upgrades.delete(20);
+      if (hasDilUpg) player.celestials.pelle.upgrades.add(20);
+      if (hasTachyonUpg) player.celestials.pelle.upgrades.add(21);
+    },
   ],
 
   patch(player) {

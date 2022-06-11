@@ -42,13 +42,14 @@ export default {
       this.width = window.innerWidth;
     },
     adjustableTextStyle() {
+      const isSmall = this.width < 1450;
       return {
         display: "flex",
         "text-align": "left",
         width: "100%",
-        "flex-direction": this.width < 1450 ? "column" : "row",
-        "justify-content": "space-between",
-        "align-items": "center",
+        "flex-direction": isSmall ? "column" : "row",
+        "justify-content": "flex-start",
+        "align-items": isSmall ? "flex-start" : "center",
       };
     }
   }
@@ -88,12 +89,11 @@ export default {
 }
 
 .c-dim-row__large {
-  width: 100%;
   text-align: left;
+  margin-right: 1rem;
 }
 
 .c-dim-row__small {
-  width: 100%;
   font-size: 1.2rem;
 }
 </style>

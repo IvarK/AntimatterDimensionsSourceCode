@@ -697,9 +697,9 @@ body.t-s9 {
 }
 
 .c-dim-row__name {
-  font-size: 2rem;
   flex-grow: 1;
   width: 55rem;
+  font-size: 2rem;
 }
 
 .c-antimatter-dim-row,

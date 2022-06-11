@@ -47,7 +47,10 @@ export default {
       class="c-game-ui"
     >
       <component :is="uiLayout">
-        <component :is="page" />
+        <component
+          :is="page"
+          class="c-game-tab"
+        />
       </component>
       <link
         v-if="view.theme !== 'Normal'"
@@ -64,7 +67,7 @@ export default {
 <style scoped>
 .ui-wrapper {
   display: flex;
-  justify-content: center;
   position: relative;
+  justify-content: center;
 }
 </style>

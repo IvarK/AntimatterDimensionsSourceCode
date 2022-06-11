@@ -1340,6 +1340,10 @@ br {
   position: relative;
 }
 
+.c-game-tab {
+  padding-bottom: 2rem;
+}
+
 ._kong-test .c-game-ui {
   max-height: 100%;
 }
@@ -1424,14 +1428,14 @@ br {
 
 .o-primary-btn--buy-10-ad {
   width: 60%;
-  margin: 0 0.5rem;
   max-width: 20rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--continuum-ad {
   width: 100%;
-  margin: 0 0.5rem;
   max-width: 20rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--dimboost {
@@ -1459,10 +1463,11 @@ br {
 }
 
 .o-primary-btn--id-auto {
-  height: 3.5rem;
   width: 9rem;
-  margin: 0 0.5rem;
+  height: 3.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td {
@@ -1472,10 +1477,11 @@ br {
 }
 
 .o-primary-btn--buy-td-auto {
-  height: 3.5rem;
   width: 9rem;
-  margin: 0 0.5rem;
+  height: 3.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--option {
@@ -2184,8 +2190,9 @@ br {
 .l-dimension-single-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  height: 3.5rem;
   width: 100%;
+  height: 3.5rem;
+  height: 3.5rem;
   align-content: center;
 }
 
@@ -2195,9 +2202,9 @@ br {
 
 .l-dim-row-multi-button-container {
   display: flex;
-  justify-content: flex-end;
   grid-column: 5 / 8;
   min-width: 25rem;
+  justify-content: flex-end;
 }
 
 .l-dim-row-small-text {
@@ -2247,10 +2254,10 @@ br {
 .c-antimatter-prestige-row {
   display: grid;
   flex-direction: row;
-  text-align: left;
   grid-template-columns: repeat(7, 1fr);
   height: 5rem;
   align-content: center;
+  text-align: left;
 }
 
 .l-dim-row__prestige-text {
@@ -8943,11 +8950,11 @@ kbd {
 .o-automator-command {
   display: inline-block;
   min-width: 8.5rem;
-  border: 0.1rem solid var(--color-blockmator-block-border);
-  padding: 0.5rem;
-  background: var(--color-blockmator-block-background);
   color: #a142ff;
+  background: var(--color-blockmator-block-background);
+  border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.5rem;
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
@@ -9002,12 +9009,12 @@ kbd {
 
 .c-automator-block-editor {
   overflow-y: scroll;
+  tab-size: 1.5em;
+  tab-size: 1.5em;
+  tab-size: 1.5em;
   height: 100%;
   background-color: var(--color-blockmator-editor-background);
   box-sizing: border-box;
-  tab-size: 1.5em;
-  -moz-tab-size: 1.5em;
-  -o-tab-size: 1.5em;
 }
 
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
@@ -9018,11 +9025,11 @@ kbd {
   display: inline-block;
   font-family: Typewriter, serif;
   font-size: 1.1rem;
-  border: 0.1rem solid var(--color-blockmator-block-border);
-  padding: 0.5rem;
-  background: var(--color-blockmator-block-background);
   color: #007f7f;
+  background: var(--color-blockmator-block-background);
+  border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.5rem;
 }
 
 .s-base--dark .o-automator-block-input {
@@ -9039,11 +9046,12 @@ input.o-automator-block-input {
 
 .l-automator-nested-block {
   width: fit-content;
-  padding: 1rem;
   border: var(--var-border-width, 2px) dotted #369b36;
-  margin-left: 3rem;
   margin-top: 0.5rem;
-  min-widtH: 30rem;
+  margin-left: 3rem;
+  padding: 1rem;
+
+  min-width: 30rem;
 }
 
 .s-base--dark .l-automator-nested-block {
@@ -9051,8 +9059,8 @@ input.o-automator-block-input {
 }
 
 .o-automator-block-delete {
-  color: #ff3333;
   font-size: 1.7rem;
+  color: #ff3333;
   cursor: pointer;
 }
 

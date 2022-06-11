@@ -87,19 +87,21 @@ export default {
       <span :class="{ 'c-overlimit': totalChars > maxTotalChars }">
         Across all scripts: {{ formatInt(totalChars) }} / {{ formatInt(maxTotalChars) }}
       </span>
-      <SplitPane
-        :min-percent="40"
-        :default-percent="50"
-        split="vertical"
-        class="_-automator-split-pane-fix"
-      >
-        <template #paneL>
-          <AutomatorEditor />
-        </template>
-        <template #paneR>
-          <AutomatorDocs />
-        </template>
-      </SplitPane>
+      <div class="c-automator-split-pane">
+        <SplitPane
+          :min-percent="40"
+          :default-percent="50"
+          split="vertical"
+          class="_-automator-split-pane-fix"
+        >
+          <template #paneL>
+            <AutomatorEditor />
+          </template>
+          <template #paneR>
+            <AutomatorDocs />
+          </template>
+        </SplitPane>
+      </div>
     </div>
     <AutomatorPointsList v-else />
   </div>

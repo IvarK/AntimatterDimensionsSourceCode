@@ -30,12 +30,8 @@
 }
 
 .l-old-ui__page {
-  flex: 1 0 auto;
-  width: 100%;
-}
-
-.l-old-ui-page {
   display: flex;
+  flex: 1 0 auto;
   flex-direction: column;
   width: 100%;
   align-items: stretch;

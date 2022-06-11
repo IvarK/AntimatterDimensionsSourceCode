@@ -138,9 +138,18 @@ export default {
     processText(unmodified, garbledTemplate) {
       if (!this.isObscured) return unmodified;
 
-      // This normally puts brackets around the text, but we want to get rid of those here
-      const untrimmed = Pelle.modalTools.wordCycle(garbledTemplate);
-      return `${untrimmed.substring(1, untrimmed.length - 1)}`;
+      // This normally puts brackets around the text, but we want to get rid of those here. Additionally, the garbling
+      // animation often replaces spaces with non-spaces which affects line length and can cause text overflow. To
+      // address that, we take part of the template as a reference and put spaces back in, ensuring that text can't
+      // overflow any worse than the original text would
+      const raw = Pelle.modalTools.wordCycle(garbledTemplate);
+      const spacingTemplate = garbledTemplate.split("-")[0];
+      let modified = "";
+      for (let i = 0; i < raw.length; i++) {
+        if (spacingTemplate[i] === " ") modified += " ";
+        else modified += raw[i];
+      }
+      return `${modified.substring(1, modified.length - 1)}`;
     }
   }
 };

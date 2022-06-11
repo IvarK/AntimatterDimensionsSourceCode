@@ -142,12 +142,20 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
+class TimeModal extends Modal {
+  show(diff) {
+    super.show({ diff });
+  }
+}
+
 // If a new modal which can be shown in the same queue multiple times needs to be added
 // Additional code needs to be written to account for that
 
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
+
+Modal.catchup = new TimeModal(CatchupModal);
 
 Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
 Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);
@@ -192,7 +200,6 @@ Modal.h2p = new Modal(H2PModal);
 Modal.information = new Modal(InformationModal);
 Modal.credits = new Modal(CreditsModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
-Modal.catchup = new Modal(CatchupModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);

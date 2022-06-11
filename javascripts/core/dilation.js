@@ -235,5 +235,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: id => DilationUpgrade.all.find(x => x.id === id)
+  fromId: id => DilationUpgrade.all.find(x => x.id === Number(id))
 };

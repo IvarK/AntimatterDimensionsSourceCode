@@ -46,33 +46,33 @@ GameDatabase.catchupResources = [
   },
   {
     name: "Challenges",
-    requiredStage: PROGRESS_STAGE.INFINITY,
+    requiredStage: PROGRESS_STAGE.EARLY_INFINITY,
     description: () => `Challenges are sections of the game which have modified rules to make reaching
       ${format(Number.MAX_VALUE, 2)} Antimatter more difficult, possibly requiring some Infinity upgrades to complete
       in a reasonable amount of time. Completing challenges allows you to upgrade your Autobuyers.`
   },
   {
     name: "Break Infinity",
-    requiredStage: PROGRESS_STAGE.INFINITY,
+    requiredStage: PROGRESS_STAGE.BREAK_INFINITY,
     description: () => `Upgrading your Big Crunch Autobuyer allows you to surpass ${format(Number.MAX_VALUE, 2)}
       Antimatter, giving increasing amounts of Infinity Points. Infinitying is no longer forced at
       ${format(Number.MAX_VALUE, 2)} Antimatter.`
   },
   {
     name: "Infinity Dimensions",
-    requiredStage: PROGRESS_STAGE.INFINITY,
+    requiredStage: PROGRESS_STAGE.BREAK_INFINITY,
     description: `Infinity Dimensions Produce in a cascading fashion like Antimatter Dimensions. The lowest tier of
       Infinity Dimension produces Infinity Power, which applies a large multiplier to all Antimatter Dimensions.`
   },
   {
     name: "Infinity Challenges",
-    requiredStage: PROGRESS_STAGE.INFINITY,
+    requiredStage: PROGRESS_STAGE.BREAK_INFINITY,
     description: () => `Infinity Challenges are Challenges with an Antimatter goal above ${format(Number.MAX_VALUE, 2)},
       which only become available after you Break Infinity. Completing them rewards upgrades and production boosts.`
   },
   {
     name: "Replicanti",
-    requiredStage: PROGRESS_STAGE.INFINITY,
+    requiredStage: PROGRESS_STAGE.REPLICANTI,
     description: () => `Replicanti is a resource which produces itself passively over time, giving a multiplier to all
       Infinity Dimensions. At ${format(Number.MAX_VALUE, 2)} Replicanti, they can be reset for an additional Galaxy
       which does not increase the cost of Antimatter Galaxies. They reset to ${formatInt(1)} after every Infinity.`
@@ -83,6 +83,12 @@ GameDatabase.catchupResources = [
     description: () => `Eternity is the second main reset layer. Reaching ${format(Number.MAX_VALUE, 2)} Infinity Points
       allows you to everything you have done up to this point in exchange for access to new content and resources.
       You are not limited ${format(Number.MAX_VALUE, 2)} Infinity Points and can freely pass it.`
+  },
+  {
+    name: "Eternity Points",
+    requiredStage: PROGRESS_STAGE.EARLY_ETERNITY,
+    description: `Infinity Points are the primary resource after completing your first Eternity. They can be spent on
+      upgrades, Time Theorems, and Time Dimensions.`
   },
   {
     name: "Time Studies",
@@ -106,7 +112,7 @@ GameDatabase.catchupResources = [
   },
   {
     name: "Eternity Challenges",
-    requiredStage: PROGRESS_STAGE.ETERNITY,
+    requiredStage: PROGRESS_STAGE.ETERNITY_CHALLENGES,
     description: `Eternity Challenges are modified Eternities with an Infinity Point goal which must be reached for
       completion. They can be completed up to five times, getting more difficult each repetition in exchange for
       increasingly powerful rewards.`
@@ -124,6 +130,12 @@ GameDatabase.catchupResources = [
     description: () => `Reality is the third and final main reset layer. Reaching ${format(DC.E4000)} Eternity Points
       gives you the option to reset the whole game up to this point in exchange for unlocking new content and gaining
       access to new resources.`
+  },
+  {
+    name: "Reality Machines",
+    requiredStage: PROGRESS_STAGE.EARLY_REALITY,
+    description: `Reality Machines are the primary resource after completing your first Reality. They can be spent on
+      upgrades and the Black Hole.`
   },
   {
     name: "Perks",
@@ -147,35 +159,35 @@ GameDatabase.catchupResources = [
   },
   {
     name: "Black Hole",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.EARLY_REALITY,
     description: `The Black Hole is an unlockable feature which runs the entire game faster in a periodic cycle. This
       affects everything in the game up to this point and will give similar results to actually leaving the game open
       for an equivalent amount of time.`
   },
   {
     name: "Teresa",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.TERESA,
     description: `Teresa is the first Celestial, who has a more difficult Reality which gives a massive boost to Glyph
       Sacrifice depending upon completion. They unlock upgrades which focus on testing and automating Realities more
       easily.`
   },
   {
     name: "Effarig",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.EFFARIG,
     description: `Effarig is the second Celestial, whose Reality limits your Glyphs and has scaling nerfs but gives
       rewards for each new reset layer reached. They unlock upgrades which focus on automatically selecting and
       filtering the large number of Glyphs you are receiving, purchased with a new resource called Relic Shards.`
   },
   {
     name: "The Enslaved Ones",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.ENSLAVED,
     description: `The Enslaved Ones are the third Celestial, whose Reality is extremely punishing with a long list of
       nerfs, but unlocks a new mechanic called Tesseracts for those who can figure out how to prevail. They also modify
       your Black Hole to allow it to store time.`
   },
   {
     name: "Stored Time",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.ENSLAVED,
     description: `Your Black Hole has the ability to store time in two ways, game time and real time. Storing game time
       allows you to hold on to sped-up time and release it later as a single skip-forward burst. Storing real time lets
       you effectively pause the game entirely in order to later repeat a Reality as if you had spent the paused time
@@ -183,14 +195,14 @@ GameDatabase.catchupResources = [
   },
   {
     name: "Tesseracts",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.ENSLAVED,
     description: `Infinity Dimensions cannot be upgrade indefinitely, and all but the 8th have a hard limit for how many
       times they can be upgraded. Tesseracts increase this limit significantly, and are permanently unlocked by reaching
       certain amounts of Infinity Points.`
   },
   {
     name: "V",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.V,
     description: `V is the fourth Celestial, with a modified Reality which is similar to Teresa's Reality but only gives
       rewards by reaching certain milestones of resources within which may not be related to completing the Reality.
       They give a new resource called Space Theorems, which eventually allow the entire Time Study tree to be purchased
@@ -198,41 +210,41 @@ GameDatabase.catchupResources = [
   },
   {
     name: "Ra",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.RA,
     description: `Ra is the fifth Celestial, with a modified Reality which produces a resource called memory chunks
       based on your resource totals within. They focus highly on taking older upgrades and themes from the previous
       four Celestials and improving upon them, as well as filling out some final gaps in automation and convenience.`
   },
   {
     name: "Memories",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.RA,
     description: `Ra has the previous four Celestials under their control, producing memories over time based on memory
       chunk count. These memories are used to level up the precious Celestials, providing upgrades when certain levels
       are reached.`
   },
   {
     name: "Charged Infinity Upgrades",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.RA,
     description: `Teresa's Memories allow you to Charge your Infinity Upgrades, significantly strengthening them in a
       way similar to their original effects. Which upgrades are charged can only be changed between Realities, like
       Glyphs.`
   },
   {
     name: "Glyph Alchemy",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.RA,
     description: `Effarig's Memories unlocks Glyph Alchemy, which gives minor boosts to various parts of the game,
       using a modified version of Glyph Sacrifice. The resources gained from giving up Glyphs in this way must be
       combined together in alchemy reactions, which trigger once per Reality, in order to fully upgrade their effects.`
   },
   {
     name: "Amplified Black Hole",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.RA,
     description: `Enslaved's Memories amplifies stored time so that the amount of game time stored is larger than the
       actual game time elapsed. This stored time can also be released repeatedly and automatically.`
   },
   {
     name: "Harder V",
-    requiredStage: PROGRESS_STAGE.REALITY,
+    requiredStage: PROGRESS_STAGE.RA,
     description: `V's Memories unlocks a modified version of V's original Reality with even harder goals, and a new set
       of Time Studies called Triad Studies.`
   },
@@ -245,48 +257,48 @@ GameDatabase.catchupResources = [
   },
   {
     name: "Lai'tela",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.LAITELA,
     description: `Lai'tela is the sixth Celestial, whose Reality massively reduces the speed of your game and gives a
       scaling reward based on how quickly you can reach its modified completion condition. They unlock a new set of
       mechanics, related to a new resource called Dark Matter.`
   },
   {
     name: "Continuum",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.LAITELA,
     description: `Continuum is a modified type of production which allows your Antimatter Dimensions to produce as if
       they could purchase fractional amounts of upgrades, without actually purchasing them. At this point, nothing on
       the Antimatter Dimension tab will ever decrease unless you perform a reset.`
   },
   {
     name: "Dark Matter Dimensions",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.LAITELA,
     description: `Dark Matter Dimensions are cascading production which operate on a tick-based system instead of
       continuously. The lowest tier produces Dark Matter which is used to upgrade the Dimensions further, and all
       tiers produce Dark Energy. They can later on be reset for permanent multipliers using Annihiliation.`
   },
   {
     name: "Singularities",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.LAITELA,
     description: `Dark Energy can be used to produce Singularities, which give boosts based on their total amount.
       Singularities do not need to be spent; simply having enough of them is sufficient to give boosts. When producing
       Singularities, any extra Dark Energy above the condensing threshold is wasted.`
   },
   {
     name: "Pelle",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.PELLE,
     description: `Pelle is the seventh and final Celestial, who permanently Dooms your game, throwing you into a very
       difficult modified Reality which you cannot escape. Completing this Doomed Reality will beat the game.`
   },
   {
     name: "Armageddon",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.PELLE,
     description: `Armageddon is a Pelle-specific reset which you can perform at any time. This resets your progress to
       the beginning of the Doomed Reality, but gives Remnants which produce Reality Shards. Reality Shards can be used
       to purchase upgrades which provide production boosts and allow for less things to be reset after Armageddon.`
   },
   {
     name: "Pelle Strikes and Rifts",
-    requiredStage: PROGRESS_STAGE.IMAGINARY_MACHINES,
+    requiredStage: PROGRESS_STAGE.PELLE,
     description: `Upon reaching certain progress milestones within Pelle, a Strike may occur which permanently applies
       another nerf to the Doomed Reality. Accompanying every Strike is a Rift, which is a mechanic which lets you drain
       a different resource in exchange for a boost. These are permanent and remain unlocked after Armageddon.`

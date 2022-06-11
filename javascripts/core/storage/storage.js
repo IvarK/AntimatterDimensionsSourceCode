@@ -235,8 +235,9 @@ export const GameStorage = {
     if (overrideLastUpdate) {
       player.lastUpdate = overrideLastUpdate;
     }
+    const rawDiff = Date.now() - player.lastUpdate;
     if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
-      let diff = Date.now() - player.lastUpdate;
+      let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
         diff = Enslaved.autoStoreRealTime(diff);
@@ -257,6 +258,13 @@ export const GameStorage = {
       if (!Speedrun.isPausedAtStart()) Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();
       this.postLoadStuff();
+    }
+
+    // 2-week threshold for showing the catchup modal. We want to show this even if offline progress is disabled
+    // because its presence and usefulness is tied to what the player experiences, not the game. Needs to be delayed
+    // slightly because all the modal code hasn't loaded at this point yet; attempting to immediately show does nothing
+    if (rawDiff > 1000 * 86400 * 14) {
+      setTimeout(() => Modal.catchup.show(rawDiff), 1500);
     }
   },
   postLoadStuff() {

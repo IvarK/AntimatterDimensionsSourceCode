@@ -9,6 +9,7 @@ const flashCelestial = [
   ["laitela", 5],
   ["pelle", 5]
 ];
+/** @param {string} cel */
 const primaryBackground = cel => [["pelle", 15], [cel, 25]];
 
 /* eslint-disable no-multi-spaces */
@@ -39,7 +40,7 @@ const usurper =      ["Usurper",       "Deity",         "Monarch"];
 const pride =        ["Pride",         "Deity",         "Monarch"];
 const forgotten =    ["Forgotten",     "Deity",         "Monarch"];
 const paramount =    ["Paramount",     "Deity",         "Monarch"];
-/* eslint-disable no-multi-spaces */
+/* eslint-enable no-multi-spaces */
 
 GameDatabase.celestials.quotes.pelle = {
   initial: {

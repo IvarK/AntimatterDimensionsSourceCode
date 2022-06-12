@@ -40,15 +40,13 @@ export default {
     return {
       message: "",
       celestialSymbol: "",
+      celestial: "",
       celestialName: ""
     };
   },
   computed: {
     line() {
       return this.quote.line(this.currentLine);
-    },
-    celestial() {
-      return this.line.celestial;
     },
     leftClass() {
       return {
@@ -74,6 +72,7 @@ export default {
       const line = this.line;
       this.celestialSymbol = line.celestialSymbol;
       this.message = line.line;
+      this.celestial = line.celestial;
       this.celestialName = line.celestialName;
     }
   },

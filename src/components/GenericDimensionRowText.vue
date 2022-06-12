@@ -85,7 +85,7 @@ export default {
   display: flex;
   height: 3.5rem;
   align-content: center;
-  grid-column: 1 / 7;
+  grid-column: 1 / 5;
 }
 
 .c-dim-row__large {

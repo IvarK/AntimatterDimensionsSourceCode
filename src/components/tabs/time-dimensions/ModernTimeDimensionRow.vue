@@ -130,7 +130,7 @@ export default {
       <PrimaryButton
         v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
-        class="o-primary-btn--buy-td o-primary-btn o-primary-btn--new"
+        class="o-primary-btn--buy-td o-primary-btn o-primary-btn--new o-primary-btn--buy-dim"
         :class="{ 'l-dim-row-small-text': hasLongText }"
         @click="buyTimeDimension"
       >

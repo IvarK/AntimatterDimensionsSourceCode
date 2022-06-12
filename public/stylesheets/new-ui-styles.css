@@ -403,6 +403,7 @@ body.t-s9 {
   overflow: hidden;
   grid-column: 1 / 11;
   height: 4.4rem;
+  width: 25rem;
   position: relative;
   font-family: Typewriter, serif;
   color: var(--color-text);
@@ -410,6 +411,7 @@ body.t-s9 {
   border: 0.1rem solid var(--color-good);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
+  margin: 0.5rem;
 }
 
 .o-primary-btn--dimension-reset {
@@ -712,7 +714,7 @@ body.t-s9 {
 
 .l-dimension-single-row {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   height: 5.5rem;
   align-content: center;
 }
@@ -747,14 +749,18 @@ body.t-s9 {
   font-size: 1.4rem;
 }
 
+.o-primary-btn--buy-dim {
+  max-width: 25rem;
+}
+
 .o-primary-btn--buy-id {
-  grid-column: 1 / 8;
+  width: 80%;
   height: 4.4rem;
   margin: 0 0.5rem;
 }
 
 .o-primary-btn--id-auto {
-  grid-column: 8 / 11;
+  width: 20%;
   height: 4.4rem;
 }
 
@@ -775,13 +781,13 @@ body.t-s9 {
 }
 
 .o-primary-btn--buy-td {
-  grid-column: 1 / 8;
+  width: 80%;
   height: 4.4rem;
   margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td-auto {
-  grid-column: 8 / 11;
+  width: 20%;
   height: 4.4rem;
 }
 

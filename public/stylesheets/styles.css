@@ -1408,24 +1408,30 @@ br {
   margin-right: 0.8rem;
 }
 
+.o-primary-btn--buy-dim {
+  max-width: 25rem;
+}
+
 .o-primary-btn--buy-ad {
   height: 4rem;
   font-size: 1.2rem;
 }
 
 .o-primary-btn--buy-single-ad {
-  grid-column: 1 / 5;
+  width: 40%;
   margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-10-ad {
-  grid-column: 5 / 11;
+  width: 60%;
   margin: 0 0.5rem;
+  max-width: 20rem;
 }
 
 .o-primary-btn--continuum-ad {
-  grid-column: 1 / 11;
+  width: 100%;
   margin: 0 0.5rem;
+  max-width: 20rem;
 }
 
 .o-primary-btn--dimboost {
@@ -1450,23 +1456,24 @@ br {
   grid-column: 1 / 8;
   height: 3.5rem;
   margin: 0 0.5rem;
+  width: 20rem;
 }
 
 .o-primary-btn--id-auto {
-  grid-column: 8 / 11;
   height: 3.5rem;
+  width: 20%;
   margin: 0 0.5rem;
   font-size: 1rem;
 }
 
 .o-primary-btn--buy-td {
-  grid-column: 1 / 8;
+  width: 80%;
   height: 3.5rem;
   margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td-auto {
-  grid-column: 8 / 11;
+  width: 20%;
   height: 3.5rem;
   margin: 0 0.5rem;
   font-size: 1rem;
@@ -2177,7 +2184,7 @@ br {
 
 .l-dimension-single-row {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   height: 3.5rem;
   width: 100%;
   align-content: center;
@@ -2188,11 +2195,10 @@ br {
 }
 
 .l-dim-row-multi-button-container {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-column: 7 / 9;
-  width: 100%;
-  max-width: 20rem;
+  display: flex;
+  justify-content: flex-end;
+  grid-column: 5 / 6;
+  min-width: 25rem;
 }
 
 .l-dim-row-small-text {

@@ -28,7 +28,7 @@ export default {
     },
     tabClass() {
       if (!this.fullScreen) return undefined;
-      return ["c-automator-tab--full-screen", "l-automator-tab--full-screen"];
+      return "c-automator-tab--full-screen";
     },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";

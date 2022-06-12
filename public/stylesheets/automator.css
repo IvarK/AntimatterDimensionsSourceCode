@@ -49,9 +49,17 @@
   background-color: black;
 }
 
-.c-automator-tab--full-screen {
-  width: auto;
-  height: auto;
+.c-automator-tab--full-screen .c-automator-split-pane {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  margin-top: 0;
+  padding-bottom: 0;
 }
 
 .l-automator-tab {
@@ -137,21 +145,6 @@
   right: 1rem;
   font-size: 1.8rem;
   opacity: 0.6;
-}
-
-.l-automator-tab--full-screen {
-  position: fixed;
-  top: -6.5rem;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 4;
-  margin-top: 0;
-}
-
-.l-automator-tab--full-screen > div {
-  width: 100%;
-  height: calc(100% - 6.5rem);
 }
 
 .l-automator-pane {

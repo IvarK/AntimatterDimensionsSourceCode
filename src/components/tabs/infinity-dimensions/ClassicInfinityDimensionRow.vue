@@ -134,7 +134,7 @@ export default {
       <PrimaryButton
         v-tooltip="capTooltip"
         :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
-        class="o-primary-btn--buy-id"
+        class="o-primary-btn--buy-id o-primary-btn--buy-dim"
         :class="{ 'l-dim-row-small-text': hasLongText }"
         @click="buySingleInfinityDimension"
       >

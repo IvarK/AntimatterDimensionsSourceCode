@@ -117,7 +117,9 @@ export default {
       return str.length > 20;
     },
     singlesClass() {
-      const small = { "l-dim-row-small-text": this.isLongText(this.singleText) };
+      const small = {
+        "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost)
+      };
       let tutorial;
       switch (this.tier) {
         case 1:
@@ -160,7 +162,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
-        class="o-primary-btn--buy-ad"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-dim"
         :class="{
           'o-primary-btn--buy-10-ad': !isContinuumActive,
           'o-primary-btn--continuum-ad': isContinuumActive,

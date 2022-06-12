@@ -30,7 +30,7 @@ GameDatabase.reality.glyphSacrifice = {
     },
     description: amount => {
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
-      return `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension.`;
+      return `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension`;
     }
   },
   "time": {
@@ -43,7 +43,7 @@ GameDatabase.reality.glyphSacrifice = {
     },
     description: amount => {
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
-      return `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Time Dimension.`;
+      return `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Time Dimension`;
     }
   },
   "replication": {
@@ -98,11 +98,11 @@ GameDatabase.reality.glyphSacrifice = {
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 0;
       const sac = player.reality.glyphs.sac.reality + (added ?? 0);
-      return 1 + Math.sqrt(sac) / 25;
+      return 1 + Math.sqrt(sac) / 15;
     },
     description: amount => {
       if (Pelle.isDisabled("glyphsac")) return `Glyph Sacrifice is disabled in Pelle`;
-      return `${formatPercents(amount - 1, 2)} increased Alchemy yield`;
+      return `Multiply Memory Chunk gain by ${formatX(amount, 2, 3)}`;
     }
   }
 };

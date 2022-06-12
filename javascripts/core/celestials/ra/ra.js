@@ -306,9 +306,9 @@ export const Ra = {
     Ra.checkForQuotes();
   },
   checkForQuotes() {
-    for (const quote of Object.values(Ra.quotes)) {
-      // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
-      if (quote.requirement && quote.requirement()) {
+    for (const quote of Ra.quotes.all) {
+      // Quotes without requirements will be shown in other ways
+      if (quote.requirement) {
         quote.show();
       }
     }

@@ -711,8 +711,8 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
-      for (const quote of Object.values(Laitela.quotes)) {
-        if (laitelaInfo.difficultyTier >= quote.destabilize) {
+      for (const quote of Laitela.quotes.all) {
+        if (quote.requirement) {
           quote.show();
         }
       }

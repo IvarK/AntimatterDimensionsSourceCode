@@ -78,6 +78,11 @@ class CelQuotes extends BitUpgradeState {
   get bits() { return player.celestials[this._celestial].quoteBits; }
   set bits(value) { player.celestials[this._celestial].quoteBits = value; }
 
+  get requirement() {
+    // If requirement is defined, it is always a function returning a boolean.
+    return this.config.requirement?.();
+  }
+
   get celestial() {
     return this._celestial;
   }

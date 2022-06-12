@@ -48,7 +48,7 @@ export default {
         "text-align": "left",
         width: "100%",
         "flex-direction": isSmall ? "column" : "row",
-        "justify-content": "flex-start",
+        "justify-content": isSmall ? "center" : "flex-start",
         "align-items": isSmall ? "flex-start" : "center",
       };
     }

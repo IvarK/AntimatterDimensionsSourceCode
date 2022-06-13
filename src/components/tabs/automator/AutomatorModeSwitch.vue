@@ -62,7 +62,7 @@ export default {
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      if (AutomatorBackend.state.mode === AUTOMATOR_MODE.PAUSE || !player.options.confirmations.switchAutomatorMode) {
+      if (AutomatorBackend.mode !== AUTOMATOR_MODE.RUN || !player.options.confirmations.switchAutomatorMode) {
         const scriptID = this.currentScriptID;
         Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
         if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {

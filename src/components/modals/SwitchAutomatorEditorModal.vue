@@ -35,7 +35,6 @@ export default {
     toggleAutomatorMode() {
       const scriptID = this.currentScriptID;
       Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
-      this.emitClose();
       if (this.isCurrentlyBlocks) {
         // This saves the script after converting it.
         BlockAutomator.parseTextFromBlocks();
@@ -55,7 +54,6 @@ export default {
 <template>
   <ModalWrapperChoice
     option="switchAutomatorMode"
-    :close-on-confirm="false"
     @confirm="toggleAutomatorMode"
   >
     <template #header>

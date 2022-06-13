@@ -89,7 +89,7 @@ export default {
       </span>
       <div class="c-automator-split-pane">
         <SplitPane
-          :min-percent="40"
+          :min-percent="fullScreen ? 33 : 40"
           :default-percent="50"
           split="vertical"
         >

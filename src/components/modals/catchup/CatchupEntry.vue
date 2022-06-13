@@ -19,6 +19,13 @@ export default {
   <div
     class="c-modal-away-progress__resources"
   >
-    <b>{{ info.name }}</b>: {{ description }}
+    <span class="c-resource-name">{{ info.name }}</span>: {{ description }}
   </div>
 </template>
+
+<style scoped>
+.c-resource-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+</style>

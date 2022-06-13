@@ -54,6 +54,7 @@ export default {
 <style scoped>
 .o-catchup-group-title {
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .l-left {

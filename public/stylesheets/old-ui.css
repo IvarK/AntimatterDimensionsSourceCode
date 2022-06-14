@@ -76,6 +76,10 @@
   box-shadow: none;
 }
 
+.t-s10 .o-tab-btn {
+  box-shadow: none;
+}
+
 .o-tab-btn--secondary {
   width: 17.5rem;
   height: 2.5rem;

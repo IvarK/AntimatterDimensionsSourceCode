@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     name() {
-      return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter D`;
+      return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter Dimension`;
     },
     costDisplay() {
       return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);

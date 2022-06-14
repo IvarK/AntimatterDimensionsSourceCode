@@ -707,7 +707,7 @@ body.t-s9 {
 
 .l-dimension-single-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   height: 5.5rem;
   align-content: center;
 }
@@ -747,13 +747,13 @@ body.t-s9 {
 }
 
 .o-primary-btn--buy-id {
-  width: 80%;
+  width: 30rem;
   height: 4.4rem;
   margin: 0 0.5rem;
 }
 
 .o-primary-btn--id-auto {
-  width: 20%;
+  width: 9rem;
   height: 4.4rem;
 }
 
@@ -774,13 +774,13 @@ body.t-s9 {
 }
 
 .o-primary-btn--buy-td {
-  width: 80%;
+  width: 30rem;
   height: 4.4rem;
   margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td-auto {
-  width: 20%;
+  width: 9rem;
   height: 4.4rem;
 }
 

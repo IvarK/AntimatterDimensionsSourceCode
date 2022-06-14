@@ -73,7 +73,12 @@ export default {
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
-      if (this.hasErrors) return;
+      if (this.hasErrors) {
+        // This shouldn't be needed but someone's save was still on MODE.RUN when the script had errors so this
+        // is just an additional layer of failsafe in case something goes wrong
+        AutomatorBackend.mode = AUTOMATOR_MODE.PAUSED;
+        return;
+      }
       if (this.isRunning) {
         AutomatorBackend.pause();
         return;

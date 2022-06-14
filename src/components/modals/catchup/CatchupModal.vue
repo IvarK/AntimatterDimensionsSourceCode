@@ -53,7 +53,7 @@ export default {
     <div class="c-modal-away-progress__header">
       Content Catch-up
     </div>
-    It has been {{ timeString }} since you last opened the game.
+    It has been {{ timeString }} since you last loaded up the game.
     If you need a refresher, here is a quick summary of all the content you have unlocked so far from the beginning of
     the game, separated into different stages of progression. These are only very brief descriptions; you may want to
     check the related How To Play entries if you want more detailed information.

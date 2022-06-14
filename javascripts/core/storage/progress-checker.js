@@ -54,7 +54,7 @@ export const ProgressChecker = {
 
     // Infinity
     if (save.replicanti.unl) return PROGRESS_STAGE.REPLICANTI;
-    if (save.auto.bigCrunch.interval > 100) return PROGRESS_STAGE.BREAK_INFINITY;
+    if (save.auto.bigCrunch.interval <= 100) return PROGRESS_STAGE.BREAK_INFINITY;
     const infinities = new Decimal(save.infinities);
     if (infinities.gt(0)) return PROGRESS_STAGE.EARLY_INFINITY;
 

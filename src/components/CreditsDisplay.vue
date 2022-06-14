@@ -51,11 +51,39 @@ export default {
 
 <style scoped>
 .c-credits-header {
-  color: yellow;
+  color: black;
+}
+
+.t-dark .c-credits-header,
+.t-s6 .c-credits-header,
+.t-s10 .c-credits-header {
+  animation: a-credits-header--glow 25s infinite;
+}
+
+@keyframes a-credits-header--glow {
+  0% { color: #2196f3; }
+  33% { color: #673ab7; }
+  66% { color: #00bcd4; }
+  100% { color: #2196f3; }
+}
+
+.t-s11 .c-credits-header {
+  animation: a-credits-header--glow-blob 25s infinite;
+}
+
+@keyframes a-credits-header--glow-blob {
+  0% { color: #fbc21b; }
+  33% { color: #caa32c; }
+  66% { color: #fba11b; }
+  100% { color: #fbc21b; }
+}
+
+.t-dark-metro .c-credits-header {
+  color: #e0e0e0;
 }
 
 .c-credits-section {
-  color: white;
+  color: var(--color-text);
   text-shadow: 1px 1px 2px turquoise;
   margin-top: 10rem;
   margin-bottom: 2rem;

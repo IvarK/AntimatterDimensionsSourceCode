@@ -36,6 +36,13 @@ body.t-s9 {
   background-color: #111014;
 }
 
+.t-normal .c-background-overlay,
+.t-s9 .c-background-overlay {
+  background: black;
+  background-position: center;
+  background-size: 100%;
+}
+
 #page {
   display: flex;
   width: 100%;
@@ -870,6 +877,10 @@ body.t-s9 {
 }
 
 .t-normal .c-game-header__antimatter {
+  color: var(--color-accent);
+}
+
+.t-normal .c-credits-header {
   color: var(--color-accent);
 }
 

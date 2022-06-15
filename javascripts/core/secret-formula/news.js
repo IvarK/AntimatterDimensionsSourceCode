@@ -647,7 +647,7 @@ GameDatabase.news = [
   },
   {
     id: "a123",
-    text: "Finland declares that it's starting to import Cancer."
+    text: "Finland declares that it's starting to import Design."
   },
   {
     id: "a124",

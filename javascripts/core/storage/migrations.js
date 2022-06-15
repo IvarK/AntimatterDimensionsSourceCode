@@ -149,6 +149,7 @@ GameStorage.migrations = {
       GameStorage.migrations.infMultNameConversion(player);
       GameStorage.migrations.convertNews(player);
       GameStorage.migrations.etercreqConversion(player);
+      GameStorage.migrations.renameCancer(player);
 
       kong.migratePurchases();
     }
@@ -909,6 +910,11 @@ GameStorage.migrations = {
     // eslint-disable-next-line no-bitwise
     if (player.etercreq) player.challenge.eternity.requirementBits |= 1 << player.etercreq;
     delete player.etercreq;
+  },
+
+  renameCancer(player) {
+    player.secretUnlocks.themes.delete("S4Cancer");
+    player.secretUnlocks.themes.add("S4Design");
   },
 
   prePatch(saveData) {

@@ -1323,6 +1323,10 @@ GameStorage.devMigrations = {
         script.id = parseInt(script.id, 10);
       }
     },
+    player => {
+      player.secretUnlocks.themes.delete("S4Cancer");
+      player.secretUnlocks.themes.add("S4Design");
+    }
   ],
 
   patch(player) {

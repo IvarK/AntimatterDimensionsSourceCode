@@ -29,8 +29,8 @@ GameDatabase.celestials.descriptions = [
     description() {
       return `All Dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
       Infinity Power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
-      Glyph levels are temporarily capped to ${Effarig.glyphLevelCap},\
-      rarity is unaffected. You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
+      Glyph levels are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected.\n
+      You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
     }
   },
   {

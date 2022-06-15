@@ -117,6 +117,7 @@ export const Glyphs = {
 
     player.reality.glyphs.protectedRows = newRows;
     this.validate();
+    GameCache.glyphInventorySpace.invalidate();
   },
   // Move all glyphs from the origin row to the destination row, does nothing if a column-preserving move operation
   // isn't possible. Returns a boolean indicating success/failure on glyph moving. Row is 0-indexed

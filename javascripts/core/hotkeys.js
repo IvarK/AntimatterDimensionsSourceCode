@@ -321,7 +321,7 @@ function toggleBuySingles(buyer) {
 
 function keyboardToggleAutobuyers() {
   Autobuyers.toggle();
-  GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "enabled" : "disabled"}`);
+  GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "resumed" : "paused"}`);
 }
 
 function keyboardToggleContinuum() {

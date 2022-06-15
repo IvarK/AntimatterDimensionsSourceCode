@@ -930,7 +930,7 @@ GameDatabase.news = [
   },
   {
     id: "a176",
-    text: "I've been using cancer notation so long that I can actually read it now, please send help."
+    text: "I've been using emoji notation so long that I can actually read it now, please send help."
   },
   {
     id: "a177",
@@ -5218,7 +5218,7 @@ GameDatabase.news = [
   },
   {
     id: "ai529",
-    text: "Cancer is said to be America's new measuring system for everything. What does this mean for us? We don't know. But we will know in 5 hours."
+    text: "Emoji is said to be America's new measuring system for everything. What does this mean for us? We don't know. But we will know in 5 hours."
   },
   {
     id: "ai530",

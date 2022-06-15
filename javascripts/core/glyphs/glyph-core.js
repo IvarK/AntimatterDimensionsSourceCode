@@ -326,7 +326,7 @@ export const Glyphs = {
   },
   addToInventory(glyph, requestedInventoryIndex, isExistingGlyph = false) {
     this.validate();
-    glyph.id = GlyphGenerator.makeID();
+    if (!isExistingGlyph) glyph.id = GlyphGenerator.makeID();
     const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
     let index = this.findFreeIndex(isProtectedIndex);
     if (index < 0) return;

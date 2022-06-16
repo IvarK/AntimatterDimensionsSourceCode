@@ -197,18 +197,17 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Synergism",
     symbol: "π",
     isBaseResource: false,
-    effect: amount => Math.clampMax(0.3 + Math.sqrt(amount / 15000), 1),
+    effect: amount => {
+      const rawValue = 0.3 + Math.sqrt(amount / 15000);
+      return Achievement(175).isUnlocked ? rawValue : Math.min(rawValue, 1);
+    },
     tier: 3,
     uiOrder: 2,
     unlockedAt: 13,
     description: "increases the effectiveness of Alchemy Reactions",
     formatEffect(value) {
-      const baseEffect = `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}`;
-      if (player.reality.glyphs.sac.reality === 0) {
-        return baseEffect;
-      }
-      const increasedYield = formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2);
-      return `${baseEffect} (${increasedYield} after Glyph Sacrifice)`;
+      return `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}
+      ${Achievement(175).isUnlocked ? "" : " (Capped)"}`;
     },
     reagents: [
       {

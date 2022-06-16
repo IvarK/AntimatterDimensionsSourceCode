@@ -263,7 +263,7 @@ export const GameStorage = {
     // 2-week threshold for showing the catchup modal. We want to show this even if offline progress is disabled
     // because its presence and usefulness is tied to what the player experiences, not the game. Needs to be delayed
     // slightly because all the modal code hasn't loaded at this point yet; attempting to immediately show does nothing
-    if (rawDiff > 1000 * 86400 * 14) {
+    if (rawDiff > 1000 * 86400 * 14 * 0) {
       setTimeout(() => Modal.catchup.show(rawDiff), 1500);
     }
   },

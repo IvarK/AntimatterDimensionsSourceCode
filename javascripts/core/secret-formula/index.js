@@ -5,6 +5,7 @@ import "./game-database";
 import "./tabs";
 import "./away-progress-types";
 import "./catchup-resources";
+import "./progress-checker";
 import "./confirmation-types";
 import "./tab-notifications";
 import "./news";

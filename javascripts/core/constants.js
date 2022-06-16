@@ -430,3 +430,28 @@ window.SORT_ORDER = {
   ASCENDING: 0,
   DESCENDING: 1,
 };
+
+// One-indexed and ordered to simplify code elsewhere, do not change to be zero-indexed or reorder
+window.PROGRESS_STAGE = {
+  PRE_INFINITY: 1,
+
+  EARLY_INFINITY: 2,
+  BREAK_INFINITY: 3,
+  REPLICANTI: 4,
+
+  EARLY_ETERNITY: 5,
+  ETERNITY_CHALLENGES: 6,
+  EARLY_DILATION: 7,
+  LATE_ETERNITY: 8,
+
+  EARLY_REALITY: 9,
+
+  TERESA: 10,
+  EFFARIG: 11,
+  ENSLAVED: 12,
+  V: 13,
+  RA: 14,
+  IMAGINARY_MACHINES: 15,
+  LAITELA: 16,
+  PELLE: 17,
+};

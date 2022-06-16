@@ -1317,8 +1317,10 @@ Ra won't directly unlock the next Celestial.`,
       name: "Glyph Alchemy",
       info: () => `
 Glyph Alchemy is a mechanic unlocked by reaching Effarig level ${formatInt(2)} in Ra. It unlocks the ability to
-use up your glyphs by refining them into alchemy resources associated with their type. Each resource gives some
-kind of a boost to certain parts of the game based on how much of them you have.
+use up your glyphs by refining them into alchemy resources associated with their type. You can refine glyphs by 
+setting your Sacrifice Type to something other than "Always Sacrifice" in the Glyphs tab, and doing the normal
+procedure for a sacrifice.
+Each Alchemy Resource has a unique effect, which you can view on the Alchemy tab.
 <br>
 <br>
 In addition to all their other properties, Glyphs now have a <i>refinement value</i> which determines how much of

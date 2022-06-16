@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      width: 0,
+      isSmall: 0,
     };
   },
   computed: {
@@ -39,17 +39,12 @@ export default {
     update() {
       // Needs to be reactive or else rows that don't have changing values (eg. the highest dimension and any higher
       // locked ones) won't change layout when the window size changes
-      this.width = window.innerWidth;
+      this.isSmall = window.innerWidth < 1450;
     },
-    adjustableTextStyle() {
-      const isSmall = this.width < 1450;
+    adjustableTextClass() {
       return {
-        display: "flex",
-        "text-align": "left",
-        width: "100%",
-        "flex-direction": isSmall ? "column" : "row",
-        "justify-content": isSmall ? "center" : "flex-start",
-        "align-items": isSmall ? "flex-start" : "center",
+        "l-narrow-box": this.isSmall,
+        "l-wide-box": !this.isSmall,
       };
     }
   }
@@ -58,7 +53,7 @@ export default {
 
 <template>
   <div class="l-dimension-text-container">
-    <div :style="adjustableTextStyle()">
+    <div :class="adjustableTextClass()">
       <span class="c-dim-row__large">
         {{ name }}
       </span>
@@ -66,7 +61,7 @@ export default {
         {{ multiplierText }}
       </span>
     </div>
-    <div :style="adjustableTextStyle()">
+    <div :class="adjustableTextClass()">
       <span class="c-dim-row__large">
         {{ amountText }}
       </span>
@@ -86,6 +81,24 @@ export default {
   height: 3.5rem;
   align-content: center;
   grid-column: 1 / 5;
+}
+
+.l-narrow-box {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.l-wide-box {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .c-dim-row__large {

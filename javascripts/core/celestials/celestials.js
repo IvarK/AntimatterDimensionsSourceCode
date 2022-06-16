@@ -67,7 +67,7 @@ GameDatabase.celestials.descriptions = [
     description() {
       return `Infinity Point and Eternity Point gain are Dilated.
       Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes.
-      Black Hole storing, discharging, and pulsing are disabled.
+      Black Hole storing, discharging, and pulsing are disabled.\n
       Antimatter generates entropy inside of this Reality.\
       At ${formatPercents(1)} entropy, the Reality becomes destabilized\
       and you gain a reward based on how quickly you reached ${formatPercents(1)}.

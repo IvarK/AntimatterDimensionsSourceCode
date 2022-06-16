@@ -101,18 +101,13 @@ export default {
       {{ message }}
       <br>
       <br>
-      <div class="c-modal-celestial__run-description">
-        <div
-          v-for="(desc, i) in description"
-          :key="i"
-          class="c-modal-celestial__run-description__line"
-        >
-          <b v-if="desc.trim()">&bull;</b>
-          <b>&nbsp;</b>
-          {{ desc }}
-        </div>
+      <div
+        v-for="(desc, i) in description"
+        :key="i"
+        class="c-modal-celestial__run-description__line"
+      >
+        {{ desc }}
       </div>
-      <br>
       <br>
       <div>
         {{ extraLine }}
@@ -132,14 +127,10 @@ export default {
 </template>
 
 <style scoped>
-.c-modal-celestial__run-description {
-  display: inline-block;
-  max-width: 45rem;
-  text-align: left;
-}
-
 .c-modal-celestial__run-description__line {
-  display: flex;
-  margin-bottom: 0.5rem;
+  width: 45rem;
+  min-height: 0.4rem;
+  text-align: center;
+  margin: 0 auto 0.8rem;
 }
 </style>

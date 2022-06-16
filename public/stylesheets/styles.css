@@ -1467,7 +1467,6 @@ br {
   height: 3.5rem;
   font-size: 1rem;
   margin: 0 0.5rem;
-  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td {
@@ -1480,7 +1479,6 @@ br {
   width: 9rem;
   height: 3.5rem;
   font-size: 1rem;
-  margin: 0 0.5rem;
   margin: 0 0.5rem;
 }
 
@@ -2191,7 +2189,6 @@ br {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   width: 100%;
-  height: 3.5rem;
   height: 3.5rem;
   align-content: center;
 }
@@ -9009,8 +9006,7 @@ kbd {
 
 .c-automator-block-editor {
   overflow-y: scroll;
-  tab-size: 1.5em;
-  tab-size: 1.5em;
+  /* stylelint-disable-next-line unit-allowed-list */
   tab-size: 1.5em;
   height: 100%;
   background-color: var(--color-blockmator-editor-background);
@@ -9046,12 +9042,11 @@ input.o-automator-block-input {
 
 .l-automator-nested-block {
   width: fit-content;
+  min-width: 30rem;
   border: var(--var-border-width, 2px) dotted #369b36;
   margin-top: 0.5rem;
   margin-left: 3rem;
   padding: 1rem;
-
-  min-width: 30rem;
 }
 
 .s-base--dark .l-automator-nested-block {

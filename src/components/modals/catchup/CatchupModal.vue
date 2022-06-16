@@ -23,9 +23,9 @@ export default {
     };
   },
   computed: {
-    progressStage: () => ProgressChecker.getProgressStage(player),
+    progressStage: () => ProgressChecker.getProgressStage(player).id,
     suggestedResource() {
-      return ProgressChecker.getSuggestedResource(this.progressStage);
+      return GameDatabase.progressStages.find(s => s.id === this.progressStage).suggestedResource;
     },
     timeString() {
       return TimeSpan.fromMilliseconds(this.diff).toStringShort();
@@ -42,7 +42,7 @@ export default {
       this.remainingTime = Math.clampMin(Math.floor((this.startTime - Date.now() + 5000) / 1000), 0);
     },
     stageName(stage) {
-      return ProgressChecker.getStageName(stage);
+      return GameDatabase.progressStages.find(s => s.id === stage).name;
     }
   }
 };

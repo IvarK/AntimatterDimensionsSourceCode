@@ -21,8 +21,6 @@ export default {
       ipMultHardCap: 0,
       eternityUnlocked: false,
       bottomRowUnlocked: false,
-      boughtAllUpgradesAnimation: false,
-      showUpgradeColumnBackground: true,
       styleOfColumnBg: undefined
     };
   },
@@ -64,13 +62,7 @@ export default {
         "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
-    offlineIpUpgrade: () => InfinityUpgrade.ipOffline,
-    columnBackgroundClassObject() {
-      return {
-        "c-infinity-upgrade-grid__column--background": true,
-        "c-infinity-upgrade-grid__column--background--animated": this.boughtAllUpgradesAnimation
-      };
-    }
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
   watch: {
     disCharge(newValue) {
@@ -78,13 +70,7 @@ export default {
     }
   },
   created() {
-    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => {
-      this.setStyleOfColumnBg();
-      this.testForBoughtAllUpgradesAnimation();
-    });
-    // This is here so that it only gets updated on load, and the columns show the proper disappearing animation.
-    this.showUpgradeColumnBackground = (!PlayerProgress.eternityUnlocked() || Pelle.isDoomed) &&
-      this.allColumnUpgrades.some(x => !x.isBought);
+    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.setStyleOfColumnBg());
 
     this.setStyleOfColumnBg();
   },
@@ -110,12 +96,7 @@ export default {
       }
       return classObject;
     },
-    testForBoughtAllUpgradesAnimation() {
-      if (PlayerProgress.eternityUnlocked() && !Pelle.isDoomed) return;
-      this.boughtAllUpgradesAnimation = this.allColumnUpgrades.every(x => x.isBought);
-    },
     setStyleOfColumnBg() {
-      if (!this.showUpgradeColumnBackground) return;
       // Infinity upgrades are 10 rem tall, if counting margins.
       const INF_UPG_HEIGHT = 10;
       const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
@@ -173,8 +154,7 @@ export default {
           :class="btnClassObject(columnId)"
         />
         <div
-          v-if="showUpgradeColumnBackground"
-          :class="columnBackgroundClassObject"
+          class="c-infinity-upgrade-grid__column--background"
           :style="styleOfColumnBg[columnId]"
         />
       </div>
@@ -220,18 +200,6 @@ export default {
 
 .s-base--dark .c-infinity-upgrade-grid__column--background {
   opacity: 0.5;
-}
-
-.c-infinity-upgrade-grid__column--background--animated {
-  animation: a-col-all-upgrades-bought 6s ease-in-out forwards;
-}
-
-@keyframes a-col-all-upgrades-bought {
-  0% { background: var(--color-good); }
-  25% { opacity: 0.9; background: var(--color-antimatter); }
-  50% { opacity: 0.9; background: var(--color-good); }
-  75% { opacity: 0.5; background: var(--color-infinity); }
-  100% { opacity: 0; background: var(--color-infinity); }
 }
 
 .l-infinity-upgrades-bottom-row .l-infinity-upgrade-grid__cell,

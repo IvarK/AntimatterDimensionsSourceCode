@@ -40,6 +40,8 @@ export default {
       this.userName = Cloud.user.displayName;
     },
     importAsFile(event) {
+      // This happens if the file dialog is canceled instead of a file being selected
+      if (event.target.files.length === 0) return;
       const reader = new FileReader();
       reader.onload = function() {
         GameStorage.import(reader.result);

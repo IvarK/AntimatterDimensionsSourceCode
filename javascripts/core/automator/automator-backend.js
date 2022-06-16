@@ -263,7 +263,7 @@ export const AutomatorBackend = {
 
   findRawScriptObject(id) {
     const auto = player.reality.automator;
-    const index = Object.values(auto.scripts).findIndex(s => s.id === id);
+    const index = Object.values(auto.scripts).findIndex(s => s.id === Number(id));
     return auto.scripts[parseInt(Object.keys(auto.scripts)[index], 10)];
   },
 

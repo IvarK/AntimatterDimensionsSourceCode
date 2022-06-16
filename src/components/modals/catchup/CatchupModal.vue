@@ -1,5 +1,5 @@
 <script>
-import { ProgressChecker } from "../../../../javascripts/core/storage/progress-checker";
+import { GameProgress, ProgressChecker } from "../../../../javascripts/core/storage/progress-checker";
 
 import CatchupGroup from "@/components/modals/catchup/CatchupGroup";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -25,7 +25,7 @@ export default {
   computed: {
     progressStage: () => ProgressChecker.getProgressStage(player).id,
     suggestedResource() {
-      return GameDatabase.progressStages.find(s => s.id === this.progressStage).suggestedResource;
+      return GameProgress(this.progressStage).suggestedResource;
     },
     timeString() {
       return TimeSpan.fromMilliseconds(this.diff).toStringShort();
@@ -44,7 +44,7 @@ export default {
       this.remainingTime = Math.max(Math.floor(5 - timeSinceOpen / 1000), 0);
     },
     stageName(stage) {
-      return GameDatabase.progressStages.find(s => s.id === stage).name;
+      return GameProgress(stage).name;
     }
   }
 };

@@ -7,17 +7,12 @@ export default {
       required: true
     },
   },
-  computed: {
-    description() {
-      return typeof this.info.description === "function" ? this.info.description() : this.info.description;
-    }
-  }
 };
 </script>
 
 <template>
   <div class="c-modal-catchup-entry">
-    <span class="c-resource-name">{{ info.name }}</span>: {{ description }}
+    <span class="c-resource-name">{{ info.name }}</span>: {{ info.description }}
   </div>
 </template>
 

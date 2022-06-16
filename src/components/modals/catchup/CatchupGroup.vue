@@ -1,4 +1,6 @@
 <script>
+import { CatchupResources } from "../../../../javascripts/core/storage/progress-checker";
+
 import CatchupEntry from "@/components/modals/catchup/CatchupEntry";
 
 export default {
@@ -23,7 +25,7 @@ export default {
   },
   computed: {
     shownResources() {
-      return GameDatabase.catchupResources.filter(r => r.requiredStage === this.group);
+      return CatchupResources.all.filter(r => r.requiredStage === this.group);
     },
     dropDownIconClass() {
       return this.collapsed ? "far fa-plus-square" : "far fa-minus-square";

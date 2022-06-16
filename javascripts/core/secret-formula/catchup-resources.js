@@ -25,7 +25,8 @@ GameDatabase.catchupResources = [
     name: "Dimension Boosts",
     requiredStage: PROGRESS_STAGE.PRE_INFINITY,
     description: `Dimension Boosts are gained by resetting all your Antimatter Dimensions and Tickspeed after
-      reaching a certain point. They provide a multiplier to your Antimatter Dimensions.`
+      reaching a certain amount of the highest available Antimatter Dimension. They provide a multiplier to your
+      Antimatter Dimensions.`
   },
   {
     name: "Antimatter Galaxies",
@@ -124,8 +125,8 @@ GameDatabase.catchupResources = [
   {
     name: "Tachyon Particles",
     requiredStage: PROGRESS_STAGE.EARLY_DILATION,
-    description: () => `Tachyon Particles are a resource which cannot be farmed and require you to perform better
-      Dilated Eternities than previously in order to increase your amount. Tachyon Particles produce Dilated Time.`
+    description: () => `Tachyon Particles are a resource which cannot be farmed and require you to get a higher amount
+      of Antimatter in a Dilated Eternity in order to increase your amount. Tachyon Particles produce Dilated Time.`
   },
   {
     name: "Reality",
@@ -144,7 +145,7 @@ GameDatabase.catchupResources = [
     name: "Perks",
     requiredStage: PROGRESS_STAGE.EARLY_REALITY,
     description: `Perks are unlockable features similar to Eternity Milestones which primarily focus on convenience and
-      automation. They are purchased using perk points, which are gained after every Reality.`
+      automation. They are purchased using Perk Points, which are gained after every Reality.`
   },
   {
     name: "Glyphs",

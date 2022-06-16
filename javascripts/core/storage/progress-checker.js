@@ -1,6 +1,44 @@
+import { GameMechanicState } from "../game-mechanics/index";
+
+class GameProgressState extends GameMechanicState {
+  get id() {
+    return this.config.id;
+  }
+
+  get name() {
+    return this.config.name;
+  }
+
+  get suggestedResource() {
+    return this.config.suggestedResource;
+  }
+}
+
+export const GameProgress = GameProgressState.createAccessor(GameDatabase.progressStages);
+GameProgress.all = GameDatabase.progressStages;
+
+class CatchupResource extends GameMechanicState {
+  get requiredStage() {
+    return this.config.requiredStage;
+  }
+
+  get name() {
+    return this.config.name;
+  }
+
+  get description() {
+    return typeof this.config.description === "function" ? this.config.description() : this.config.description;
+  }
+}
+
+export const CatchupResources = mapGameDataToObject(
+  GameDatabase.catchupResources,
+  config => new CatchupResource(config)
+);
+
 export const ProgressChecker = {
   getProgressStage(save) {
-    const db = GameDatabase.progressStages;
+    const db = GameProgress.all;
     for (let stage = db.length - 1; stage >= 0; stage--) {
       if (db[stage].hasReached(save)) return db[stage];
     }
@@ -11,7 +49,7 @@ export const ProgressChecker = {
   getCompositeProgress(save) {
     if (!save) return 0;
     const stage = this.getProgressStage(save);
-    return this.getProgressStage(save).id + Math.clampMax(stage.subProgressValue(save), 1);
+    return stage.id + Math.clampMax(stage.subProgressValue(save), 1);
   },
 
   // Returns -1 or 1 when one save is very likely to be farther than the other, otherwise returns 0 if they're close

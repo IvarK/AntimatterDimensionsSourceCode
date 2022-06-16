@@ -401,11 +401,14 @@ If you reach your specified Galaxy threshold, the autobuyer will ignore your max
 <b>Sacrifice Autobuyer:</b> This autobuyer starts with a maxed interval, potentially triggering every tick.
 <br>
 <br>
-<b>Toggle All Autobuyers:</b> This button will turn all of your autobuyers on or off. This won't change your
-individual autobuyer settings.
+<b>Pause/Resume Autobuyers:</b> This button will pause or resume autobuyers which are turned on.
+It does not change individual autobuyer settings. Think of it like a master switch.
 <br>
 <br>
-<b>Hotkey: A</b> (for toggle all autobuyers).
+<b>Enable/Disable All Autobuyers:</b> This button will turn all of your autobuyers on or off individually.
+<br>
+<br>
+<b>Hotkey: A</b> (for pausing/resuming autobuyers).
 Additionally, holding <b>Alt</b> when pressing a hotkey associated with an upgrade, dimension, or prestige will
 toggle the associated autobuyer.
 `,

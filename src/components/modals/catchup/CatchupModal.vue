@@ -39,7 +39,9 @@ export default {
   },
   methods: {
     update() {
-      this.remainingTime = Math.clampMin(Math.floor((this.startTime - Date.now() + 5000) / 1000), 0);
+      const timeSinceOpen = Date.now() - this.startTime;
+      // Track remainingTime in seconds, starting at 5 and counting down to 0
+      this.remainingTime = Math.max(Math.floor(5 - timeSinceOpen / 1000), 0);
     },
     stageName(stage) {
       return GameDatabase.progressStages.find(s => s.id === stage).name;
@@ -57,7 +59,10 @@ export default {
     If you need a refresher, here is a quick summary of all the content you have unlocked so far from the beginning of
     the game, separated into different stages of progression. These are only very brief descriptions; you may want to
     check the related How To Play entries if you want more detailed information.
-    <div class="l-catchup-group-container">
+    <div
+      class="l-catchup-group-container"
+      :style="{ 'height' : `${Math.clamp(5 * progressStage, 15, 40)}rem` }"
+    >
       <CatchupGroup
         v-for="group of progressStage"
         :key="group"
@@ -65,20 +70,23 @@ export default {
         :name="stageName(group)"
       />
     </div>
-    Based on your current progression, it will probably be useful to try to increase your {{ suggestedResource }}.
-    <br>
-    <PrimaryButton
-      v-if="remainingTime === 0"
-      @click="emitClose"
-    >
-      Confirm
-    </PrimaryButton>
-    <PrimaryButton
-      v-else
-      :enabled="false"
-    >
-      Confirm ({{ formatInt(remainingTime) }})
-    </PrimaryButton>
+    <span class="c-suggestion-text">
+      Based on your current progression, it will probably be useful to try to increase your {{ suggestedResource }}.
+    </span>
+    <div class="l-confirm-padding">
+      <PrimaryButton
+        v-if="remainingTime === 0"
+        @click="emitClose"
+      >
+        Confirm
+      </PrimaryButton>
+      <PrimaryButton
+        v-else
+        :enabled="false"
+      >
+        Confirm ({{ formatInt(remainingTime) }})
+      </PrimaryButton>
+    </div>
   </div>
 </template>
 
@@ -89,7 +97,15 @@ export default {
   margin: 1rem;
   padding: 2rem;
   overflow-y: scroll;
-  height: 50rem;
   border: 0.1rem solid var(--color-text);
+}
+
+.l-confirm-padding {
+  margin: 1rem;
+}
+
+.c-suggestion-text {
+  font-size: 1.6rem;
+  font-weight: bold;
 }
 </style>

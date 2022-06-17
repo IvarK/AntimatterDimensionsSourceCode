@@ -1326,6 +1326,11 @@ GameStorage.devMigrations = {
     player => {
       player.secretUnlocks.themes.delete("S4Cancer");
       player.secretUnlocks.themes.add("S4Design");
+    },
+    player => {
+      player.reality.automator.state.editorScript = Number(player.reality.automator.state.editorScript);
+      // I'm not sure if there's any error with the type of topLevelScript, but better safe than sorry
+      player.reality.automator.state.topLevelScript = Number(player.reality.automator.state.topLevelScript);
     }
   ],
 

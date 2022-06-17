@@ -192,7 +192,8 @@ GameDatabase.catchupResources = [
     requiredStage: PROGRESS_STAGE.ENSLAVED,
     description: `Your Black Hole has the ability to store time in two ways. Charging it allows you to hold on to
       sped-up time and release it later as a single skip-forward burst. Storing real time lets you use actual time
-      to repeat a single Reality over and over, or as a stand-in for offline progress.`
+      to simulate Realities (giving you the resources of that Reality but multiplied), or as a stand-in for
+      offline progress.`
   },
   {
     name: "Tesseracts",
@@ -210,22 +211,22 @@ GameDatabase.catchupResources = [
   {
     name: "Ra",
     requiredStage: PROGRESS_STAGE.RA,
-    description: `Ra is the fifth Celestial, with a modified Reality which produces a resource called memory chunks
+    description: `Ra is the fifth Celestial, with a modified Reality which produces a resource called Memory Chunks
       based on your resource totals within. They focus highly on taking older upgrades and themes from the previous
       four Celestials and improving upon them, as well as filling out some final gaps in automation and convenience.`
   },
   {
     name: "Memories",
     requiredStage: PROGRESS_STAGE.RA,
-    description: `Ra has the previous four Celestials under their control, producing memories over time based on memory
-      chunk count. These memories are used to level up the previous Celestials, providing upgrades when certain levels
+    description: `Ra has the previous four Celestials under their control, producing Memories over time based on Memory
+      Chunk count. These Memories are used to level up the previous Celestials, providing upgrades when certain levels
       are reached.`
   },
   {
     name: "Charged Infinity Upgrades",
     requiredStage: PROGRESS_STAGE.RA,
     description: `Teresa's Memories allow you to Charge your Infinity Upgrades, maintaining a similar effect but
-      strengthening them significantly. Which upgrades are charged can only be changed between Realities, like Glyphs.`
+      strengthening them significantly. Which upgrades are charged can only be changed between Realities.`
   },
   {
     name: "Glyph Alchemy",
@@ -237,7 +238,7 @@ GameDatabase.catchupResources = [
   {
     name: "Amplified Black Hole",
     requiredStage: PROGRESS_STAGE.RA,
-    description: `Enslaved's Memories amplify charging so that the amount of time stored is larger than the actual
+    description: `Enslaved's Memories amplify charging so that the amount of game time stored is larger than the actual
       game time elapsed. Discharging can now also be done repeatedly and automatically.`
   },
   {

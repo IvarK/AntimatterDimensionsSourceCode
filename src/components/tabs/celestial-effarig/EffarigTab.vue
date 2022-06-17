@@ -46,7 +46,8 @@ export default {
       return this.isRunning ? "c-effarig-run-button__inner--running" : "c-effarig-run-button__inner--not-running";
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[1].description();
+      return `${GameDatabase.celestials.descriptions[1].effects()}\n
+      ${GameDatabase.celestials.descriptions[1].description()}`;
     },
     showShardsRate() {
       return this.currentShardsRate;

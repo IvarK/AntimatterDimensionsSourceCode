@@ -19,23 +19,25 @@ export const Celestials = {
 GameDatabase.celestials.descriptions = [
   {
     name: "Teresa",
-    description() {
-      return `Glyph Time Theorem generation is disabled and\
-      you gain less Infinity Points and Eternity Points (x^${format(0.55, 2, 2)}).`;
+    effects() {
+      return `Glyph Time Theorem generation is disabled.
+      You gain less Infinity Points and Eternity Points (x^${format(0.55, 2, 2)}).`;
     },
   },
   {
     name: "Effarig",
-    description() {
+    effects() {
       return `All Dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
       Infinity Power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
-      Glyph levels are temporarily capped to ${Effarig.glyphLevelCap},\
-      rarity is unaffected. You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
+      Glyph levels are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected.`;
+    },
+    description() {
+      return `You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
     }
   },
   {
     name: "The Enslaved Ones",
-    description() {
+    effects() {
       return `Glyph levels are boosted to a minimum of ${formatInt(5000)}.
       Infinity, Time, and 8th Antimatter Dimension purchases are limited to ${formatInt(1)} each.
       Antimatter Dimension multipliers are always Dilated (the Glyph effect still only applies in actual Dilation).
@@ -49,29 +51,32 @@ GameDatabase.celestials.descriptions = [
   },
   {
     name: "V",
-    description() {
+    effects() {
       return `All Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second\
-      are square-rooted, and Replicanti interval is squared.`;
+      are square-rooted. 
+      The Replicanti interval is squared.`;
     }
   },
   {
     name: "Ra",
-    description() {
-      return `You only have ${formatInt(4)} Dimension Boosts and can't gain any more, and the Tickspeed purchase\
-      multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
+    effects() {
+      return `You only have ${formatInt(4)} Dimension Boosts and can't gain any more.
+      The Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.`;
     },
   },
   {
     name: "Lai'tela",
+    effects() {
+      return `Infinity Point and Eternity Point gain are Dilated.
+      Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes.
+      Black Hole storing, discharging, and pulsing are disabled.`;
+    },
     description() {
-      return `Infinity Point and Eternity Point gain are Dilated.\
-      Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes,\
-      and Black Hole storing/discharging/pulsing are disabled.\n
-      Antimatter generates entropy inside of this Reality.\
+      return `Antimatter generates entropy inside of this Reality.\
       At ${formatPercents(1)} entropy, the Reality becomes destabilized\
-      and you gain a reward based on how quickly you reached ${formatPercents(1)}.\
-      If you can destabilize in less than ${formatInt(30)} seconds, the Reality gives a stronger reward,\
-      but becomes significantly more difficult.`;
+      and you gain a reward based on how quickly you reached ${formatPercents(1)}.
+      Destabilizing the Reality in less than ${formatInt(30)} seconds makes it become significantly more difficult,\
+      in exchange for giving a much stronger reward.`;
     }
   },
 

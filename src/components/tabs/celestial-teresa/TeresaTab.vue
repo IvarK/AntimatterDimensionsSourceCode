@@ -65,7 +65,7 @@ export default {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[0].description();
+      return GameDatabase.celestials.descriptions[0].effects();
     },
     lastMachinesString() {
       return this.lastMachines.lt(DC.E10000)

@@ -30,14 +30,18 @@ export default {
     };
   },
   computed: {
+    effects() {
+      return GameDatabase.celestials.descriptions[this.number].effects().split("\n");
+    },
     description() {
-      return GameDatabase.celestials.descriptions[this.number].description().split("\n");
+      const description = GameDatabase.celestials.descriptions[this.number].description;
+      return description ? description() : "";
     },
     topLabel() {
       return `${this.name} Reality`;
     },
     message() {
-      return `Perform a Reality reset, and enter ${this.name} Reality, in which`;
+      return `Perform a Reality reset, and enter ${this.name} Reality, in which:`;
     },
     extraLine() {
       switch (this.number) {
@@ -99,12 +103,27 @@ export default {
     </template>
     <div class="c-modal-message__text">
       {{ message }}
-      <span
-        v-for="(desc, i) in description"
-        :key="i"
+      <br>
+      <br>
+      <div class="c-modal-celestial__run-effects">
+        <div
+          v-for="(effect, i) in effects"
+          :key="i"
+          class="c-modal-celestial__run-effects__line"
+        >
+          <b v-if="effect.trim()">&bull;</b>
+          <b>&nbsp;</b>
+          {{ effect }}
+        </div>
+      </div>
+      <div
+        v-if="description"
+        class="reality-description"
       >
-        {{ desc }} <br>
-      </span>
+        <br><br>
+        {{ description }}
+      </div>
+      <br><br>
       <div>
         {{ extraLine }}
       </div>
@@ -121,3 +140,19 @@ export default {
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.c-modal-celestial__run-effects {
+  display: inline-block;
+  max-width: 45rem;
+  text-align: left;
+}
+.c-modal-celestial__run-effects__line {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.reality-description {
+  padding: 0 2rem;
+}
+</style>

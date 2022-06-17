@@ -85,7 +85,7 @@ export default {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/u, c => c.toUpperCase());
+      return GameDatabase.celestials.descriptions[3].effects().replace(/^\w/u, c => c.toUpperCase());
     },
     isDoomed: () => Pelle.isDoomed,
   },

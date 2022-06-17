@@ -6623,6 +6623,9 @@ kbd {
 }
 
 .c-effarig-tab__reward-label {
+  /* stylelint-disable-next-line unit-allowed-list */
+  min-width: 11ch;
+  text-align: left;
   font-weight: bold;
   padding-right: 1rem;
 }

@@ -8059,10 +8059,8 @@ kbd {
 
 .c-dark-matter-dimension-buttons {
   display: flex;
-  flex-direction: row;
-  width: 47.5rem;
   height: 6rem;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .o-dark-matter-dimension-button {

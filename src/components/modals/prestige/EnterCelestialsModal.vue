@@ -35,7 +35,6 @@ export default {
     },
     description() {
       const description = GameDatabase.celestials.descriptions[this.number].description;
-      console.log(description)
       return description ? description() : "";
     },
     topLabel() {

@@ -30,8 +30,13 @@ export default {
     };
   },
   computed: {
+    effects() {
+      return GameDatabase.celestials.descriptions[this.number].effects().split("\n");
+    },
     description() {
-      return GameDatabase.celestials.descriptions[this.number].description().split("\n");
+      const description = GameDatabase.celestials.descriptions[this.number].description;
+      console.log(description)
+      return description ? description() : "";
     },
     topLabel() {
       return `${this.name} Reality`;
@@ -101,14 +106,25 @@ export default {
       {{ message }}
       <br>
       <br>
-      <div
-        v-for="(desc, i) in description"
-        :key="i"
-        class="c-modal-celestial__run-description__line"
-      >
-        {{ desc }}
+      <div class="c-modal-celestial__run-effects">
+        <div
+          v-for="(effect, i) in effects"
+          :key="i"
+          class="c-modal-celestial__run-effects__line"
+        >
+          <b v-if="effect.trim()">&bull;</b>
+          <b>&nbsp;</b>
+          {{ effect }}
+        </div>
       </div>
-      <br>
+      <div
+        v-if="description"
+        class="reality-description"
+      >
+        <br><br>
+        {{ description }}
+      </div>
+      <br><br>
       <div>
         {{ extraLine }}
       </div>
@@ -127,10 +143,17 @@ export default {
 </template>
 
 <style scoped>
-.c-modal-celestial__run-description__line {
-  width: 45rem;
-  min-height: 0.4rem;
-  text-align: center;
-  margin: 0 auto 0.8rem;
+.c-modal-celestial__run-effects {
+  display: inline-block;
+  max-width: 45rem;
+  text-align: left;
+}
+.c-modal-celestial__run-effects__line {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.reality-description {
+  padding: 0 2rem;
 }
 </style>

@@ -71,7 +71,7 @@ export default {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/u, c => c.toUpperCase()).split("\n");
+      return GameDatabase.celestials.descriptions[4].effects().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     },
     isDoomed: () => Pelle.isDoomed,
   },

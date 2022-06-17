@@ -396,7 +396,7 @@ export const AutomatorBackend = {
   },
 
   findScript(id) {
-    return this._scripts.find(e => e.id === id);
+    return this._scripts.find(e => e.id === Number(id));
   },
 
   _createDefaultScript() {
@@ -438,9 +438,9 @@ export const AutomatorBackend = {
   // dynamically re-indexed while the automator is running without causing a stutter from recompiling scripts.
   deleteScript(id) {
     // We need to delete scripts from two places - in the savefile and compiled AutomatorScript Objects
-    const saveId = Object.values(player.reality.automator.scripts).findIndex(s => s.id === id);
+    const saveId = Object.values(player.reality.automator.scripts).findIndex(s => s.id === Number(id));
     delete player.reality.automator.scripts[parseInt(Object.keys(player.reality.automator.scripts)[saveId], 10)];
-    const idx = this._scripts.findIndex(e => e.id === id);
+    const idx = this._scripts.findIndex(e => e.id === Number(id));
     this._scripts.splice(idx, 1);
     if (this._scripts.length === 0) {
       this._createDefaultScript();

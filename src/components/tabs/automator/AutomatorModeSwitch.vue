@@ -62,7 +62,11 @@ export default {
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      if (AutomatorBackend.mode !== AUTOMATOR_MODE.RUN || !player.options.confirmations.switchAutomatorMode) {
+      if (AutomatorData.currentErrors().length) {
+        Modal.message.show("Automator script has errors, cannot convert to blocks.");
+        return;
+      }
+      if (!AutomatorBackend.isRunning || !player.options.confirmations.switchAutomatorMode) {
         const scriptID = this.currentScriptID;
         Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
         if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {

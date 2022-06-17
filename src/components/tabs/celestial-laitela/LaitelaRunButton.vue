@@ -14,8 +14,11 @@ export default {
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
     },
+    runEffects() {
+      return GameDatabase.celestials.descriptions[5].effects().split("\n");
+    },
     runDescription() {
-      return GameDatabase.celestials.descriptions[5].description().split("\n");
+      return GameDatabase.celestials.descriptions[5].description();
     },
     isDoomed: () => Pelle.isDoomed,
   },
@@ -79,10 +82,12 @@ export default {
       <br><br>
     </div>
     <div
-      v-for="(line, lineId) in runDescription"
+      v-for="(line, lineId) in runEffects"
       :key="lineId + '-laitela-run-desc'"
     >
       {{ line }} <br>
     </div>
+    <br>
+    <div>{{ runDescription }}</div>
   </button>
 </template>

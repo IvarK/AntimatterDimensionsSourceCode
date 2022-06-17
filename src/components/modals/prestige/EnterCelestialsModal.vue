@@ -115,6 +115,10 @@ export default {
           <b>&nbsp;</b>
           {{ effect }}
         </div>
+        <div v-if="number === 3 && extraLine.trim()">
+          <b>&bull;</b>
+          {{ extraLine }}
+        </div>
       </div>
       <div
         v-if="description"
@@ -124,7 +128,7 @@ export default {
         {{ description }}
       </div>
       <br><br>
-      <div>
+      <div v-if="number !== 3">
         {{ extraLine }}
       </div>
       <span v-if="number === 4">

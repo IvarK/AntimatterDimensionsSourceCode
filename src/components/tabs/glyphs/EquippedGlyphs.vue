@@ -118,11 +118,9 @@ export default {
         closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
       });
     },
-    clickGlyph(glyph, idx) {
+    clickGlyph(glyph, idx, increaseSound = false) {
       if (glyph.symbol === "key266b") {
-        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is true, so increase by 6
-        const increase = Math.round(Math.random()) ? 6 : 1;
-        const sound = idx + increase;
+        const sound = idx + (increaseSound ? 6 : 1);
         new Audio(`audio/note${sound}.mp3`).play();
       }
     }
@@ -151,6 +149,8 @@ export default {
           :is-active-glyph="true"
           class="c-equipped-glyph"
           @clicked="clickGlyph(glyph, idx)"
+          @shiftClicked="clickGlyph(glyph, idx, true)"
+          @ctrlShiftClicked="clickGlyph(glyph, idx, true)"
         />
         <div
           v-else

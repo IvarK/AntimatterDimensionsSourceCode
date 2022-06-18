@@ -1333,8 +1333,21 @@ GameStorage.devMigrations = {
       player.reality.automator.state.topLevelScript = Number(player.reality.automator.state.topLevelScript);
     },
     player => {
+      // Move dil upg no reset and tachyon particles no reset
       if (player.celestials.pelle.upgrades.delete(20)) player.celestials.pelle.upgrades.add(21);
       if (player.celestials.pelle.upgrades.delete(19)) player.celestials.pelle.upgrades.add(20);
+
+      // Dimboost upgrade id was moved from 18 to 7 -- Make the corresponding change
+      // Galaxy upgrade was inserted at 11. 7-10 should only be moved forward 1 place
+      // and 10-17 2 places forward.
+      const hasDimboostsResetNothing = player.celestials.pelle.upgrades.delete(18);
+      for (let i = 17; i >= 10; i--) {
+        if (player.celestials.pelle.upgrades.delete(i)) player.celestials.pelle.upgrades.add(i + 2);
+      }
+      for (let i = 9; i >= 7; i--) {
+        if (player.celestials.pelle.upgrades.delete(i)) player.celestials.pelle.upgrades.add(i + 1);
+      }
+      if (hasDimboostsResetNothing) player.celestials.pelle.upgrades.add(7);
     },
   ],
 

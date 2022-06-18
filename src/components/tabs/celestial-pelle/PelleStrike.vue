@@ -11,6 +11,16 @@ export default {
       type: Object,
       required: true
     },
+  },
+  data() {
+    return {
+      strikeReward: ""
+    };
+  },
+  methods: {
+    update() {
+      this.strikeReward = this.strike.reward();
+    }
   }
 };
 </script>
@@ -27,7 +37,7 @@ export default {
         <div class="c-pelle-strike-text-padding c-pelle-strike-description">
           Penalty: {{ strike.penalty }}
           <br><br>
-          Reward: {{ strike.reward }}
+          Reward: {{ strikeReward }}
           <br>
         </div>
       </template>

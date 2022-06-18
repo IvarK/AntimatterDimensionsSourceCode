@@ -69,7 +69,7 @@ export default {
       this.tachyons.copyFrom(Currency.tachyonParticles);
       this.dilatedTime.copyFrom(Currency.dilatedTime);
       const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
-      if (PelleRifts.death.isActive) {
+      if (PelleRifts.paradox.isActive) {
         // The number can be small and either positive or negative with the rift active, which means that extra care
         // needs to be taken to get the calculation as close to correct as possible. This relies on some details
         // related to tick microstructure to make things accurate, and it seems to be to roughly 1 part in 5e6
@@ -82,7 +82,7 @@ export default {
       }
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
-      this.hasPelleDilationUpgrades = PelleRifts.death.milestones[0].canBeApplied;
+      this.hasPelleDilationUpgrades = PelleRifts.paradox.milestones[0].canBeApplied;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {

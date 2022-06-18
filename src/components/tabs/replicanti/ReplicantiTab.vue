@@ -122,7 +122,7 @@ export default {
   methods: {
     update() {
       this.isUnlocked = Replicanti.areUnlocked;
-      this.unlockCost = new Decimal(1e140).dividedByEffectOf(PelleRifts.famine.milestones[1]);
+      this.unlockCost = new Decimal(1e140).dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
       if (!this.isUnlocked) {
         this.isUnlockAffordable = Currency.infinityPoints.gte(this.unlockCost);
         return;
@@ -142,7 +142,7 @@ export default {
         1
       );
       this.isDoomed = Pelle.isDoomed;
-      this.isUncapped = PelleRifts.famine.milestones[1].canBeApplied;
+      this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
@@ -177,7 +177,7 @@ export default {
       </div>
       <div v-if="isDoomed">
         <div v-if="isUncapped">
-          Your Replicanti cap has been removed due to the second Famine milestone.
+          Your Replicanti cap has been removed due to the second Vacuum milestone.
         </div>
         Any rewards from Effarig's Infinity have been disabled.
       </div>

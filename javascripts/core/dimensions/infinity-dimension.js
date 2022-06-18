@@ -18,7 +18,7 @@ export function infinityDimensionCommonMultiplier() {
       EternityUpgrade.idMultICRecords,
       AlchemyResource.dimensionality,
       ImaginaryUpgrade(8),
-      PelleRifts.war.milestones[1]
+      PelleRifts.recursion.milestones[1]
     );
 
 
@@ -156,7 +156,7 @@ class InfinityDimensionState extends DimensionState {
 
 
     if (tier === 1) {
-      mult = mult.times(PelleRifts.pestilence.milestones[0].effectOrDefault(1));
+      mult = mult.times(PelleRifts.decay.milestones[0].effectOrDefault(1));
     }
 
 
@@ -167,7 +167,7 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.infinity);
     mult = mult.pow(Ra.momentumValue);
-    mult = mult.powEffectOf(PelleRifts.death);
+    mult = mult.powEffectOf(PelleRifts.paradox);
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
@@ -389,7 +389,7 @@ export const InfinityDimensions = {
   },
 
   get powerConversionRate() {
-    const multiplier = PelleRifts.death.milestones[2].effectOrDefault(1);
+    const multiplier = PelleRifts.paradox.milestones[2].effectOrDefault(1);
     return (7 + getAdjustedGlyphEffect("infinityrate") + PelleUpgrade.infConversion.effectOrDefault(0)) * multiplier;
   }
 };

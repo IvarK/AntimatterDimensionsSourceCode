@@ -20,7 +20,7 @@ class RiftMilestoneState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    if (this.resource === "pestilence" && PelleRifts.chaos.milestones[0].isEffectActive) return true;
+    if (this.resource === "decay" && PelleRifts.chaos.milestones[0].isEffectActive) return true;
     return this.requirement <= PelleRifts[this.resource].percentage;
   }
 
@@ -131,6 +131,10 @@ class RiftState extends GameMechanicState {
     return this.percentage >= 1;
   }
 
+  get galaxyGeneratorText() {
+    return this.config.galaxyGeneratorText;
+  }
+
   toggle() {
     const active = PelleRifts.all.filter(r => r.isActive).length;
     if (!this.isActive && active === 2) GameUI.notify.error(`You can only have 2 rifts active at the same time!`);
@@ -165,7 +169,7 @@ class RiftState extends GameMechanicState {
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
       this.totalFill = Math.clampMax(this.totalFill + spent, this.maxValue);
     }
-    if (PelleRifts.famine.milestones[0].canBeApplied) Glyphs.refreshActive();
+    if (PelleRifts.vacuum.milestones[0].canBeApplied) Glyphs.refreshActive();
     this.checkMilestoneStates();
   }
 }

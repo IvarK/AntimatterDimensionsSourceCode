@@ -89,7 +89,7 @@ export function gainedInfinityPoints() {
   const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine)
+      .timesEffectsOf(PelleRifts.vacuum)
       .times(Pelle.specialGlyphEffect.infinity)
       .times(mult)
       .pow(pow)
@@ -121,7 +121,7 @@ export function gainedInfinityPoints() {
 function totalEPMult() {
   const totalMult = new Decimal(NG.multiplier);
   return Pelle.isDisabled("EPMults")
-    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]))
+    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.vacuum.milestones[2]))
     : totalMult.times(getAdjustedGlyphEffect("cursedEP"))
       .times(ShopPurchase.EPPurchases.currentMult)
       .timesEffectsOf(
@@ -138,7 +138,7 @@ function totalEPMult() {
 export function gainedEternityPoints() {
   const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);

@@ -37,7 +37,7 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.setValue("totalFill", rift.totalFill);
       this.setValue("resource", rift.fillCurrency.value);
-      this.hasEffectiveFill = rift.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
+      this.hasEffectiveFill = rift.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {
@@ -47,6 +47,9 @@ export default {
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+    },
+    riftName() {
+      return Pelle.modalTools.wordCycle(this.rift.name);
     }
   },
 };
@@ -57,7 +60,7 @@ export default {
     <div class="c-pelle-rift-row">
       <div class="c-pelle-rift-column c-pelle-rift-status">
         <h2 class="c-pelle-rift-name-header">
-          {{ rift.name }}
+          {{ riftName() }}
         </h2>
         <div class="c-pelle-rift-rift-info-container">
           <div
@@ -75,7 +78,7 @@ export default {
       <div class="c-pelle-rift-status">
         <div class="c-pelle-rift-fill-status">
           <h2 class="c-pelle-rift-name-header">
-            {{ rift.name }}
+            {{ riftName() }}
           </h2>
           <div class="c-pelle-rift-rift-info-container">
             Drains {{ rift.drainResource }} to fill.

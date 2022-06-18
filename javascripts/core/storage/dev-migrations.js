@@ -1326,6 +1326,31 @@ GameStorage.devMigrations = {
     player => {
       player.secretUnlocks.themes.delete("S4Cancer");
       player.secretUnlocks.themes.add("S4Design");
+    },
+    player => {
+      player.celestials.pelle.rifts.vacuum = {
+        ...player.celestials.pelle.rifts.famine,
+        fill: new Decimal(player.celestials.pelle.rifts.famine.fill)
+      };
+      delete player.celestials.pelle.rifts.famine;
+
+      player.celestials.pelle.rifts.decay = {
+        ...player.celestials.pelle.rifts.pestilence,
+        fill: new Decimal(player.celestials.pelle.rifts.pestilence.fill)
+      };
+      delete player.celestials.pelle.rifts.pestilence;
+
+      player.celestials.pelle.rifts.recursion = {
+        ...player.celestials.pelle.rifts.war,
+        fill: new Decimal(player.celestials.pelle.rifts.war.fill)
+      };
+      delete player.celestials.pelle.rifts.war;
+
+      player.celestials.pelle.rifts.paradox = {
+        ...player.celestials.pelle.rifts.death,
+        fill: new Decimal(player.celestials.pelle.rifts.death.fill)
+      };
+      delete player.celestials.pelle.rifts.death;
     }
   ],
 

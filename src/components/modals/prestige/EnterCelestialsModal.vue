@@ -25,7 +25,6 @@ export default {
       effarigDone: false,
       effarigLayer: "",
       enslavedDone: false,
-      vAlchemy: false,
       laitelaTime: "",
     };
   },
@@ -53,9 +52,7 @@ export default {
         case 2: return this.enslavedDone
           ? "Have... I... not helped enough..."
           : "I... can help... Let me... help...";
-        case 3: return this.vAlchemy
-          ? "The Exponential Glyph Alchemy effect is disabled."
-          : "";
+        case 3: return "";
         case 4: return `Inside of Ra's Reality, some resources will generate Memory Chunks
           for a specific Celestial Memory based on their amount.`;
         case 5: return this.laitelaFastest >= 300
@@ -75,7 +72,6 @@ export default {
       this.effarigDone = effarigStage === EFFARIG_STAGES.COMPLETED;
       this.effarigLayer = [null, "Infinity", "Eternity", "Reality"][effarigStage];
       this.enslavedDone = Enslaved.isCompleted;
-      this.vAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
       const laitelaFastest = player.celestials.laitela.fastestCompletion;
       this.laitelaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
     },
@@ -115,10 +111,6 @@ export default {
           <b>&nbsp;</b>
           {{ effect }}
         </div>
-        <div v-if="number === 3 && extraLine.trim()">
-          <b>&bull;</b>
-          {{ extraLine }}
-        </div>
       </div>
       <div
         v-if="description"
@@ -128,7 +120,7 @@ export default {
         {{ description }}
       </div>
       <br><br>
-      <div v-if="number !== 3">
+      <div>
         {{ extraLine }}
       </div>
       <span v-if="number === 4">

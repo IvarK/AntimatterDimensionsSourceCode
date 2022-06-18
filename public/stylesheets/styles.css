@@ -9006,8 +9006,6 @@ kbd {
 
 .c-automator-block-editor {
   overflow-y: scroll;
-  /* stylelint-disable-next-line unit-allowed-list */
-  tab-size: 1.5em;
   height: 100%;
   background-color: var(--color-blockmator-editor-background);
   box-sizing: border-box;

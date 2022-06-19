@@ -98,7 +98,7 @@ GameDatabase.celestials.pelle.rifts = {
     id: 3,
     key: "chaos",
     name: "Chaos-Disorder-Impurity",
-    drainResource: "Decay",
+    drainResource: "Decay-Collapse-Disarray",
     baseEffect: x => `Time Dimensions ${formatX(x, 2, 2)}`,
     strike: () => PelleStrikes.eternity,
     percentage: totalFill => totalFill / 10,

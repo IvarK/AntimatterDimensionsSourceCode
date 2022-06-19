@@ -50,6 +50,11 @@ export default {
     },
     riftName() {
       return Pelle.modalTools.wordCycle(this.rift.name);
+    },
+    drainResource() {
+      if (this.rift.id !== 3) return this.rift.drainResource;
+
+      return Pelle.modalTools.wordCycle(this.rift.drainResource);
     }
   },
 };
@@ -81,7 +86,7 @@ export default {
             {{ riftName() }}
           </h2>
           <div class="c-pelle-rift-rift-info-container">
-            Drains {{ rift.drainResource }} to fill.
+            Drains {{ drainResource() }} to fill.
             <br>
             <template v-if="!isMaxed">
               Current Amount: {{ formatRift(resource) }}

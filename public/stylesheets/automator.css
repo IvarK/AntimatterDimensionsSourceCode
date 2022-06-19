@@ -29,29 +29,29 @@
   --color-blockmator-editor-background: black;
 }
 
-._-automator-split-pane-fix {
+.c-automator-tab {
+  width: 100rem;
+}
+
+.c-automator-split-pane {
   width: 100%;
+  height: 57rem;
   background-color: #bbbbbb;
 }
 
-.s-base--dark ._-automator-split-pane-fix {
+.s-base--dark .c-automator-split-pane {
   width: 100%;
   background-color: #474747;
 }
 
-.c-automator-tab {
-  width: 100rem;
-  height: 57rem;
-}
-
-.c-automator-tab > div {
-  width: 100rem;
-  height: 50rem;
-}
-
-.c-automator-tab--full-screen {
-  width: auto;
-  height: auto;
+.c-automator-tab--full-screen .c-automator-split-pane {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  margin-top: 0;
+  padding-bottom: 0;
 }
 
 .l-automator-tab {
@@ -139,21 +139,6 @@
   opacity: 0.6;
 }
 
-.l-automator-tab--full-screen {
-  position: fixed;
-  top: -6.5rem;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 4;
-  margin-top: 0;
-}
-
-.l-automator-tab--full-screen > div {
-  width: 100%;
-  height: calc(100% - 6.5rem);
-}
-
 .l-automator-pane {
   display: flex;
   flex-direction: column;
@@ -213,8 +198,8 @@
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
   background: var(--color-automator-active-line-background);
-  filter: brightness(200%);
   outline: 0.1rem solid var(--color-automator-active-line-outline);
+  filter: brightness(200%);
 }
 
 .c-automator-editor__event-line {
@@ -225,8 +210,8 @@
 .c-automator-editor__event-line-gutter {
   font-weight: bold;
   background: var(--color-automator-event-background);
-  filter: brightness(200%);
   outline: 0.1rem solid var(--color-automator-event-outline);
+  filter: brightness(200%);
 }
 
 .c-automator-editor__error-line {
@@ -237,8 +222,8 @@
 .c-automator-editor__error-line-gutter {
   font-weight: bold;
   background: var(--color-automator-error-background);
-  filter: brightness(200%);
   outline: 0.1rem solid var(--color-automator-error-outline);
+  filter: brightness(200%);
 }
 
 .c-automator-editor {
@@ -283,17 +268,17 @@
 .c-automator-docs {
   overflow: auto;
   text-align: left;
-  padding-left: 1rem;
-  border-right: 0.15rem solid var(--color-automator-controls-background);
-  border-bottom: 0.15rem solid var(--color-automator-controls-background);
-  background-color: white;
   font-size: 1.4rem;
   color: var(--color-automator-docs-font);
+  background-color: white;
+  border-right: 0.15rem solid var(--color-automator-controls-background);
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
+  padding-left: 1rem;
 }
 
 .s-base--dark .c-automator-docs {
-  background-color: black;
   color: var(--color-automator-docs-font);
+  background-color: black;
 }
 
 .c-automator-docs-page {
@@ -328,9 +313,9 @@
 .o-automator-error-underline::before {
   content: "~~~~~~~~~~~~";
   overflow: hidden;
-  color: red;
   width: 100%;
   position: absolute;
   top: 12px;
   left: -1px;
+  color: red;
 }

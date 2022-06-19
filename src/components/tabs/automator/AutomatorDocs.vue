@@ -25,7 +25,8 @@ export default {
       scripts: [],
       runningScriptID: 0,
       isRunning: false,
-      isPaused: false
+      isPaused: false,
+      totalChars: 0,
     };
   },
   computed: {
@@ -69,7 +70,10 @@ export default {
       return {
         "background-color": this.errorCount === 0 ? "" : "red"
       };
-    }
+    },
+    maxTotalChars() {
+      return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
+    },
   },
   watch: {
     infoPaneID(newValue) {
@@ -93,6 +97,8 @@ export default {
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
+
+      this.totalChars = AutomatorData.totalScriptCharacters();
     },
     exportScript() {
       // Cut off leading and trailing whitespace
@@ -268,6 +274,13 @@ export default {
           @click="deleteScript"
         />
       </div>
+      <div
+        v-if="fullScreen"
+        class="l-automator-button-row c-automator__status-text"
+        :class="{ 'c-automator__status-text--error' : totalChars > maxTotalChars }"
+      >
+        Total script characters: {{ totalChars }}/{{ maxTotalChars }}
+      </div>
     </div>
     <div class="c-automator-docs l-automator-pane__content">
       <AutomatorDocsCommandList v-if="infoPaneID === 1" />
@@ -328,5 +341,16 @@ export default {
 .c-automator__button--active {
   background-color: var(--color-automator-controls-active);
   border-color: var(--color-reality-light);
+}
+
+.c-automator__status-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-reality);
+  padding: 0 0.5rem;
+}
+
+.c-automator__status-text--error {
+  color: var(--color-bad);
 }
 </style>

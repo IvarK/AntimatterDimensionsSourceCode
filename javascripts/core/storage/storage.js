@@ -265,7 +265,7 @@ export const GameStorage = {
     // the only way to get this to display, as it won't display even if called after init() entirely nor is it getting
     // actively hidden by Modal.hideAll(), so delaying it asynchronously gets past whatever is causing it to not appear.
     // Delay time is relatively long to make it more likely to work on much slower computers.
-    if (rawDiff > 1000 * 86400 * 14 * 0) {
+    if (rawDiff > 1000 * 86400 * 14) {
       setTimeout(() => Modal.catchup.show(rawDiff), 5000);
     }
   },

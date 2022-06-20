@@ -5,6 +5,10 @@ export default {
     subtab: {
       type: Object,
       required: true
+    },
+    tab: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -14,6 +18,17 @@ export default {
       isCurrentSubtab: false,
       tabName: ""
     };
+  },
+  computed: {
+    classObject() {
+      return {
+        "o-subtab-btn--active": this.isCurrentSubtab,
+        "o-tab-btn--infinity": this.tab.name === "Infinity",
+        "o-tab-btn--eternity": this.tab.name === "Eternity",
+        "o-tab-btn--reality": this.tab.name === "Reality",
+        "o-tab-btn--celestial": this.tab.name === "Celestials"
+      };
+    },
   },
   methods: {
     update() {
@@ -34,7 +49,7 @@ export default {
   <button
     v-if="isAvailable"
     class="o-tab-btn o-tab-btn--secondary"
-    :class="{ 'o-subtab-btn--active': isCurrentSubtab }"
+    :class="classObject"
     @click="subtab.show(true)"
   >
     {{ tabName }}

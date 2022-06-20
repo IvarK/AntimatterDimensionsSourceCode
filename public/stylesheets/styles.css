@@ -539,7 +539,7 @@ button:focus {
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--color-text);
-  background-color: var(--color-prestige--accent);
+  background-color: var(--color-base);
   border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
@@ -560,6 +560,7 @@ button:focus {
 
 .o-tab-btn--infinity {
   color: var(--color-infinity);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
@@ -569,6 +570,7 @@ button:focus {
 
 .o-tab-btn--eternity {
   color: var(--color-eternity);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
@@ -578,6 +580,7 @@ button:focus {
 
 .o-tab-btn--reality {
   color: var(--color-reality);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
@@ -587,6 +590,7 @@ button:focus {
 
 .o-tab-btn--celestial {
   color: var(--color-celestials);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 

@@ -37,7 +37,9 @@ export default {
       projectedTimeEstimate: new Decimal(0),
       isCapped: false,
       hovering: false,
-      hasRemnants: false
+      hasRemnants: false,
+      galaxyCap: 0,
+      notAffordable: false
     };
   },
   computed: {
@@ -56,6 +58,7 @@ export default {
     },
     timeEstimate() {
       if (!this.hasTimeEstimate || !this.hasRemnants) return null;
+      if (this.notAffordable) return "Never affordable due to generated Galaxy limit";
       return this.currentTimeEstimate;
     },
     hasTimeEstimate() {
@@ -97,6 +100,10 @@ export default {
         .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
         .toTimeEstimate();
       this.hasRemnants = Pelle.cel.remnants > 0;
+      this.galaxyCap = GalaxyGenerator.generationCap;
+      const genDB = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
+      this.notAffordable = (this.config === genDB.additive || this.config === genDB.multiplicative) &&
+        (Decimal.gt(this.upgrade.cost, this.galaxyCap - GalaxyGenerator.generatedGalaxies + player.galaxies));
     },
     secondsUntilCost(rate) {
       const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;

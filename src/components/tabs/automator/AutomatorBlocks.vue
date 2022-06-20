@@ -70,7 +70,7 @@ export const automatorBlocks = [
     targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
     nested: true
   }, {
-    cmd: "STUDIES",
+    cmd: "STUDIES PURCHASE",
     hasInput: true,
     canWait: true
   }, {
@@ -103,7 +103,7 @@ export const automatorBlocks = [
     cmd: "PAUSE",
     hasInput: true
   }, {
-    cmd: "RESPEC"
+    cmd: "STUDIES RESPEC"
   }, {
     cmd: "INFINITY",
     canRespec: true,
@@ -118,7 +118,7 @@ export const automatorBlocks = [
     canWait: true,
     isUnlocked: () => RealityUpgrade(25).isBought
   }, {
-    cmd: "LOAD",
+    cmd: "STUDIES LOAD",
     targets: ["ID", "NAME"],
     hasInput: true,
     canWait: true

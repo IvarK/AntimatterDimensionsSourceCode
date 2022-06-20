@@ -85,8 +85,8 @@ import { AutomatorLexer } from "./lexer";
       { sol: true, next: "start" },
       { regex: /load(\s+|$)/ui, token: "variable-2", next: "studiesLoad" },
       { regex: /respec/ui, token: "variable-2", next: "commandDone" },
+      { regex: /purchase/ui, token: "variable-2", next: "studiesList" },
       { regex: /nowait(\s+|$)/ui, token: "property" },
-      { regex: /(?=\S)/ui, next: "studiesList" },
     ],
     studiesList: [
       commentRule,

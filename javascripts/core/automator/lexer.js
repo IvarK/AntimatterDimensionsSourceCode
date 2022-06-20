@@ -294,6 +294,7 @@ export const AutomatorLexer = (() => {
   // errors, we also match just the word name. And, we have to not match comments.
   createKeyword("Name", /name([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
   createKeyword("Id", /id\b([ \t]+\d)?/i);
+  createKeyword("Purchase", /purchase/i);
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);

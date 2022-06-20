@@ -878,6 +878,12 @@
   box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 50%);
 }
 
+.t-s6 .c-glyph-choice-icon,
+.t-s10 .c-glyph-choice-icon {
+  border: 0.1rem solid white;
+  box-shadow: 0 0 0.5rem;
+}
+
 .c-glyph-choice-effect-list {
   display: flex;
   flex-direction: column;
@@ -887,6 +893,11 @@
   background-color: rgba(0, 0, 0, 10%);
   border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 15%);
   border-radius: var(--var-border-radius, 0.5rem);
+}
+
+.t-s6 .c-glyph-choice-effect-list,
+.t-s10 .c-glyph-choice-effect-list {
+  border: 0.1rem solid white;
 }
 
 .t-s8 .c-glyph-peek {

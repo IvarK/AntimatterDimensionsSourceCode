@@ -22,6 +22,7 @@ export default {
       infoPaneID: 1,
       errorCount: 0,
       editingName: false,
+      isNameTooLong: false,
       scripts: [],
       runningScriptID: 0,
       isRunning: false,
@@ -51,6 +52,11 @@ export default {
     errorTooltip() {
       return `Your script has ${quantify("error", this.errorCount)}`;
     },
+    nameTooltip() {
+      return this.isNameTooLong
+        ? `Names cannot be longer than ${formatInt(this.maxScriptNameLength)} characters!`
+        : "";
+    },
     currentScriptID: {
       get() {
         return this.$viewModel.tabs.reality.automator.editorScriptID;
@@ -73,6 +79,9 @@ export default {
     },
     maxTotalChars() {
       return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
+    },
+    maxScriptNameLength() {
+      return 15;
     },
   },
   watch: {
@@ -168,10 +177,16 @@ export default {
     nameEdited() {
       // Trim off leading and trailing whitespace
       const trimmed = this.$refs.renameInput.value.match(/^\s*(.*?)\s*$/u);
-      if (trimmed.length === 2 && trimmed[1].length > 0) {
-        player.reality.automator.scripts[this.currentScriptID].name = trimmed[1];
-        this.updateScriptList();
+      let newName = "";
+      if (trimmed.length === 2 && trimmed[1].length > 0) newName = trimmed[1];
+
+      if (newName.length > this.maxScriptNameLength) {
+        this.isNameTooLong = true;
+        return;
       }
+      this.isNameTooLong = false;
+      player.reality.automator.scripts[this.currentScriptID].name = newName;
+      this.updateScriptList();
       this.$nextTick(() => this.editingName = false);
     },
     dropdownLabel(script) {
@@ -270,7 +285,9 @@ export default {
           <input
             v-else
             ref="renameInput"
+            v-tooltip="nameTooltip"
             class="l-automator__rename-input c-automator__rename-input"
+            :class="{ 'c-long-name-box' : isNameTooLong }"
             @blur="nameEdited"
             @keyup.enter="$refs.renameInput.blur()"
           >
@@ -356,5 +373,10 @@ export default {
 
 .c-automator__status-text--error {
   color: var(--color-bad);
+}
+
+.c-long-name-box {
+  background-color: var(--color-automator-error-background);
+  border-color: var(--color-automator-error-outline);
 }
 </style>

@@ -52,6 +52,7 @@ export default {
       this.lastMachinesTeresa.copyFrom(player.celestials.teresa.lastRepeatedMachines);
     },
     dragover(event) {
+      if (Pelle.isDoomed) return;
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
       event.preventDefault();
       this.hasDragover = true;

@@ -63,9 +63,8 @@ export default {
       <span :class="autobuyerToggleClass" />
     </label>
     <input
-      :checked="isActive && globalToggle"
+      :checked="allAutobuyersOn && globalToggle"
       :disabled="!globalToggle"
-      :name="name"
       type="checkbox"
     >
   </div>

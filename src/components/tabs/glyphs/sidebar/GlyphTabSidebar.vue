@@ -29,7 +29,7 @@ export default {
       this.sidebarEnum = GLYPH_SIDEBAR_MODE;
       this.unlockedFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.unlockedSets = EffarigUnlock.setSaves.isUnlocked;
-      this.unlockedAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied && !Pelle.isDoomed;
+      this.unlockedAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
       // We always have inventory management available, but there's no point in showing options if it's the only one
       this.hasMoreOptions = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
       this.hasRefined = AlchemyResources.all.map(res => res.amount).some(a => a > 0);

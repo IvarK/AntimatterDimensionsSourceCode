@@ -322,6 +322,8 @@ GameDatabase.reality.automator = {
       keyword: "studies respec",
       name: "<b>studies respec</b> - respec Time Studies on next Eternity",
       syntax: `<b>studies respec</b>`,
+      description: `Note that this does not actually perform an Eternity, but only turns on the respec option on
+        to trigger on the next manual or automatic Eternity.`,
       examples: [
         `studies respec`,
       ]
@@ -352,9 +354,9 @@ GameDatabase.reality.automator = {
     {
       id: 14,
       isUnlocked: () => true,
-      keyword: "studies",
+      keyword: "studies purchase",
       name: "<b>studies</b> - Purchase Time Studies",
-      syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
+      syntax: `<b>studies [nowait] purchase <i>[study list]</i></b>`,
       description: `Purchase Time Studies specified from a list formatted like a Tree export.
         If <b>nowait</b> is present, then the Automator will purchase as many Time Studies as
         possible from the text string before moving on to the next command, even if some cannot be bought.<br>

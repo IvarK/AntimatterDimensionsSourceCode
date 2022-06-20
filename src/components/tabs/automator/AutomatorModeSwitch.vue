@@ -32,6 +32,9 @@ export default {
       return {
         "tutorial--glow": ui.view.tutorialState === TUTORIAL_STATE.AUTOMATOR && ui.view.tutorialActive
       };
+    },
+    destinationType() {
+      return this.automatorType === AUTOMATOR_TYPE.TEXT ? "blocks" : "text";
     }
   },
   created() {
@@ -63,7 +66,7 @@ export default {
     },
     toggleAutomatorMode() {
       if (AutomatorData.currentErrors().length) {
-        Modal.message.show("Automator script has errors, cannot convert to blocks.");
+        Modal.message.show(`Automator script has errors, cannot convert to ${this.destinationType}.`);
         return;
       }
       if (!AutomatorBackend.isRunning || !player.options.confirmations.switchAutomatorMode) {
@@ -79,7 +82,7 @@ export default {
           AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
           player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
         } else {
-          Modal.message.show("Automator script has errors, cannot convert to blocks.");
+          Modal.message.show(`Automator script has errors, cannot convert to ${this.destinationType}.`);
         }
         this.$recompute("currentScriptContent");
       } else {

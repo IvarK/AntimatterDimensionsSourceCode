@@ -604,6 +604,7 @@ export const AutomatorCommands = ((() => {
       rule: $ => () => {
         $.CONSUME(T.Studies);
         $.OPTION(() => $.CONSUME(T.Nowait));
+        $.CONSUME(T.Purchase);
         $.OR([
           { ALT: () => $.SUBRULE($.studyList) },
           { ALT: () => $.CONSUME1(T.Identifier) },
@@ -665,7 +666,7 @@ export const AutomatorCommands = ((() => {
       blockify: ctx => ({
         inputValue: ctx.$studies.image,
         wait: ctx.Nowait === undefined,
-        ...automatorBlocksMap.STUDIES
+        ...automatorBlocksMap["STUDIES PURCHASE"]
       })
     },
     {
@@ -751,7 +752,7 @@ export const AutomatorCommands = ((() => {
         target: ctx.Name ? "NAME" : "ID",
         inputValue: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
         wait: ctx.Nowait === undefined,
-        ...automatorBlocksMap.LOAD
+        ...automatorBlocksMap["STUDIES LOAD"]
       })
     },
     {
@@ -769,7 +770,7 @@ export const AutomatorCommands = ((() => {
         AutomatorData.logCommandEvent(`Turned study respec ON`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       },
-      blockify: () => automatorBlocksMap.RESPEC
+      blockify: () => automatorBlocksMap["STUDIES RESPEC"]
     },
     {
       id: "tt",

@@ -26,6 +26,9 @@ export default {
       set(value) {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
+    },
+    destinationType() {
+      return player.reality.automator.type === AUTOMATOR_TYPE.TEXT ? "blocks" : "text";
     }
   },
   methods: {
@@ -43,7 +46,7 @@ export default {
         AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
-        Modal.message.show("Automator script has errors, cannot convert to blocks.");
+        Modal.message.show(`Automator script has errors, cannot convert to ${this.destinationType}.`);
       }
       this.callback?.();
     }

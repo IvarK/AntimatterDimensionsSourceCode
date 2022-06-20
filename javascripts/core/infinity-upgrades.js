@@ -49,6 +49,7 @@ export class InfinityUpgradeState extends SetPurchasableMechanicState {
     }
     if (this.canCharge) {
       this.charge();
+      EventHub.dispatch(GAME_EVENT.INFINITY_UPGRADE_CHARGED);
       return true;
     }
     return false;

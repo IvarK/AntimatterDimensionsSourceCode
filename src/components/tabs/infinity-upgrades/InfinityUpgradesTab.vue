@@ -71,6 +71,8 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.setStyleOfColumnBg());
+    this.on$(GAME_EVENT.INFINITY_UPGRADE_CHARGED, () => this.setStyleOfColumnBg());
+    this.on$(GAME_EVENT.INFINITY_UPGRADES_DISCHARGED, () => this.setStyleOfColumnBg());
 
     this.setStyleOfColumnBg();
   },
@@ -96,21 +98,20 @@ export default {
       }
       return classObject;
     },
+    getColumnColor(location) {
+      if (location.isCharged) return "var(--color-teresa--base)";
+      if (location.isBought) return "var(--color-infinity)";
+      return "transparent";
+    },
     setStyleOfColumnBg() {
-      // Infinity upgrades are 10 rem tall, if counting margins.
-      const INF_UPG_HEIGHT = 10;
-      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
-
-      this.styleOfColumnBg = this.grid.map(col => {
-        const boughtUpgrades = col.countWhere(upg => upg.isBought);
-
-        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
-        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
-        return {
-          background: `linear-gradient(to bottom, var(--color-good) 0% ${heightUpper * 100}%,
-          transparent ${heightLower * 100}%)`
-        };
-      });
+      this.styleOfColumnBg = this.grid.map(col => ({
+        background:
+          `linear-gradient(to bottom,
+          ${this.getColumnColor(col[0])} 15%,
+          ${this.getColumnColor(col[1])} 35% 40%,
+          ${this.getColumnColor(col[2])} 60% 65%,
+          ${this.getColumnColor(col[3])} 85% 100%`
+      }));
     },
   }
 };

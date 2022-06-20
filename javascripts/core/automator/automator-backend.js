@@ -215,7 +215,9 @@ export const AutomatorData = {
   // any changes made after getting above either limit will never be saved. Note that if the player is on the automator
   // subtab before the automator is unlocked, editor is undefined
   singleScriptCharacters() {
-    return AutomatorTextUI.editor?.getDoc().getValue().length ?? 0;
+    return player.reality.automator.type === AUTOMATOR_TYPE.TEXT
+      ? AutomatorTextUI.editor?.getDoc().getValue().length ?? 0
+      : BlockAutomator.parseLines(BlockAutomator.lines).join("\n").length;
   },
   totalScriptCharacters() {
     return Object.values(player.reality.automator.scripts)

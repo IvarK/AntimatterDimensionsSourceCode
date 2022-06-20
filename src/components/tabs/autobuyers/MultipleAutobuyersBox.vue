@@ -1,5 +1,6 @@
 <script>
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
+import MultipleAutobuyersToggleLabel from "./MultipleAutobuyersToggleLabel";
 import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
 
 export default {
@@ -7,6 +8,7 @@ export default {
   components: {
     SingleAutobuyerInRow,
     AutobuyerIntervalLabel,
+    MultipleAutobuyersToggleLabel
   },
   props: {
     type: {
@@ -93,6 +95,7 @@ export default {
           :key="id"
         >
       </template>
+      <MultipleAutobuyersToggleLabel :autobuyers="autobuyers" />
     </div>
   </span>
   <span

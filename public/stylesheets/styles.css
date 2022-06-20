@@ -4351,6 +4351,7 @@ br {
   flex-grow: 1;
   flex-wrap: wrap;
   width: 80rem;
+  padding: 0 0.6rem;
 }
 
 .l-autobuyer-box__autobuyers-internal {

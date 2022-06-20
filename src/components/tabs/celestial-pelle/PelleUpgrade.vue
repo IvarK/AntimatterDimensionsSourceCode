@@ -58,7 +58,7 @@ export default {
     },
     timeEstimate() {
       if (!this.hasTimeEstimate || !this.hasRemnants) return null;
-      if (this.notAffordable) return "Never affordable due to generated Galaxy limit";
+      if (this.notAffordable) return "Never affordable due to Generated Galaxy cap";
       return this.currentTimeEstimate;
     },
     hasTimeEstimate() {

@@ -525,7 +525,10 @@ export function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
-    if (player.celestials.ra.disCharge) disChargeAll();
+    if (player.celestials.ra.disCharge) {
+      EventHub.dispatch(GAME_EVENT.INFINITY_UPGRADES_DISCHARGED);
+      disChargeAll();
+    }
   }
   if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();

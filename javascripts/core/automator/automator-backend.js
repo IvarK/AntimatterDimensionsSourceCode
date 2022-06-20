@@ -397,7 +397,7 @@ export const AutomatorBackend = {
   },
 
   _createDefaultScript() {
-    const defaultScript = AutomatorScript.create("Untitled");
+    const defaultScript = AutomatorScript.create("New Script");
     this._scripts = [defaultScript];
     this.state.topLevelScript = defaultScript.id;
     return defaultScript.id;
@@ -426,7 +426,7 @@ export const AutomatorBackend = {
   },
 
   newScript() {
-    const newScript = AutomatorScript.create("Untitled");
+    const newScript = AutomatorScript.create("New Script");
     this._scripts.push(newScript);
     return newScript;
   },

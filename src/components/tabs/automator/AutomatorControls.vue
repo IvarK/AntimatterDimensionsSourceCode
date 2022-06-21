@@ -1,10 +1,12 @@
 <script>
 import AutomatorButton from "./AutomatorButton";
+import AutomatorModeSwitch from "./AutomatorModeSwitch";
 
 export default {
   name: "AutomatorControls",
   components: {
-    AutomatorButton
+    AutomatorButton,
+    AutomatorModeSwitch
   },
   data() {
     return {
@@ -17,8 +19,7 @@ export default {
       currentLine: 0,
       statusName: "",
       editingName: "",
-      duplicateStatus: false,
-      duplicateEditing: false,
+      editingDifferentScript: false,
     };
   },
   computed: {
@@ -66,13 +67,18 @@ export default {
       this.statusName = (this.isPaused || this.isRunning)
         ? AutomatorBackend.scriptName
         : AutomatorBackend.currentEditingScript.name;
-      this.editingName = AutomatorBackend.currentEditingScript.name;
       this.duplicateStatus = AutomatorBackend.hasDuplicateName(this.statusName);
-      this.duplicateEditing = AutomatorBackend.hasDuplicateName(this.editingName);
+      this.editingDifferentScript =
+        AutomatorBackend.currentEditingScript.id !== AutomatorBackend.currentRunningScript.id;
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
-      if (this.hasErrors) return;
+      if (this.hasErrors) {
+        // This shouldn't be needed but someone's save was still on MODE.RUN when the script had errors so this
+        // is just an additional layer of failsafe in case something goes wrong
+        AutomatorBackend.mode = AUTOMATOR_MODE.PAUSED;
+        return;
+      }
       if (this.isRunning) {
         AutomatorBackend.pause();
         return;
@@ -137,14 +143,8 @@ export default {
         :class="{ 'c-automator__button--active' : followExecution }"
         @click="follow"
       />
-      <div class="c-automator__status-text c-automator__status-text--edit">
-        <span
-          v-if="duplicateEditing"
-          v-tooltip="'More than one script has this name!'"
-          class="fas fa-exclamation-triangle c-automator__status-text--error"
-        />
-        {{ editingName }}
-      </div>
+      <br>
+      <AutomatorModeSwitch />
     </div>
     <div class="l-automator-button-row">
       <span
@@ -153,7 +153,7 @@ export default {
         class="fas fa-exclamation-triangle c-automator__status-text c-automator__status-text--error"
       />
       <span
-        v-if="statusName !== editingName"
+        v-if="editingDifferentScript"
         v-tooltip="'The automator is running a different script than the editor is showing'"
         class="fas fa-circle-exclamation c-automator__status-text c-automator__status-text--warning"
       />
@@ -170,13 +170,9 @@ export default {
 <style scoped>
 .c-automator__status-text {
   font-size: 1.5rem;
-  color: var(--color-reality);
   font-weight: bold;
+  color: var(--color-reality);
   padding: 0 0.5rem;
-}
-
-.c-automator__status-text--edit {
-  color: var(--color-accent);
 }
 
 .c-automator__status-text--warning {
@@ -188,7 +184,7 @@ export default {
 }
 
 .c-automator__button--active {
-  background-color: var(--color-reality);
+  background-color: var(--color-automator-controls-active);
   border-color: var(--color-reality-light);
 }
 

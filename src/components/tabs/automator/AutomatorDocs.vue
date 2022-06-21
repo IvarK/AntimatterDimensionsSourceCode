@@ -5,7 +5,6 @@ import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
-import AutomatorModeSwitch from "./AutomatorModeSwitch";
 
 export default {
   name: "AutomatorDocs",
@@ -16,7 +15,6 @@ export default {
     AutomatorEventLog,
     AutomatorBlocks,
     AutomatorDocsTemplateList,
-    AutomatorModeSwitch,
   },
   data() {
     return {
@@ -127,7 +125,7 @@ export default {
       this.currentScriptID = player.reality.automator.state.editorScript;
       // This shouldn't happen if things are loaded in the right order, but might as well be sure.
       if (storedScripts[this.currentScriptID] === undefined) {
-        this.currentScriptID = Object.keys(storedScripts)[0];
+        this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
       if (this.isBlock && !AutomatorGrammar.blockifyTextAutomator(this.currentScript)) {
@@ -214,7 +212,6 @@ export default {
           :class="{ 'c-automator__button--active': infoPaneID === 4 }"
           @click="infoPaneID = 4"
         />
-        <AutomatorModeSwitch />
         <AutomatorButton
           v-tooltip="fullScreenTooltip"
           :class="fullScreenIconClass"
@@ -308,7 +305,7 @@ export default {
 }
 
 .c-automator__button--active {
-  background-color: var(--color-reality);
+  background-color: var(--color-automator-controls-active);
   border-color: var(--color-reality-light);
 }
 </style>

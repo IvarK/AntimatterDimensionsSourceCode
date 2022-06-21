@@ -36,6 +36,13 @@ body.t-s9 {
   background-color: #111014;
 }
 
+.t-normal .c-background-overlay,
+.t-s9 .c-background-overlay {
+  background: black;
+  background-position: center;
+  background-size: 100%;
+}
+
 #page {
   display: flex;
   width: 100%;
@@ -394,8 +401,9 @@ body.t-s9 {
 
 .o-primary-btn--new {
   overflow: hidden;
-  width: 21rem;
+  grid-column: 1 / 11;
   height: 4.4rem;
+  width: 25rem;
   position: relative;
   font-family: Typewriter, serif;
   color: var(--color-text);
@@ -403,10 +411,12 @@ body.t-s9 {
   border: 0.1rem solid var(--color-good);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
+  margin: 0.5rem;
 }
 
 .o-primary-btn--dimension-reset {
   display: flex;
+  width: 25rem;
   height: 6rem;
   justify-content: center;
   align-items: center;
@@ -687,6 +697,8 @@ body.t-s9 {
 }
 
 .c-dim-row__name {
+  flex-grow: 1;
+  width: 55rem;
   font-size: 2rem;
 }
 
@@ -698,6 +710,13 @@ body.t-s9 {
   border-radius: var(--var-border-radius, 0.5rem);
   margin: 0;
   padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.l-dimension-single-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 5.5rem;
+  align-content: center;
 }
 
 .c-antimatter-dim-row:nth-child(even) {
@@ -730,8 +749,18 @@ body.t-s9 {
   font-size: 1.4rem;
 }
 
-.o-primary-btn--buy-id-max,
-.o-primary-btn--id-autobuyer {
+.o-primary-btn--buy-dim {
+  max-width: 25rem;
+}
+
+.o-primary-btn--buy-id {
+  width: 30rem;
+  height: 4.4rem;
+  margin: 0 0.5rem;
+}
+
+.o-primary-btn--id-auto {
+  width: 9rem;
   height: 4.4rem;
 }
 
@@ -751,8 +780,14 @@ body.t-s9 {
   font-size: 1.4rem;
 }
 
-.o-primary-btn--buy-td-max,
-.o-primary-btn--td-autobuyer {
+.o-primary-btn--buy-td {
+  width: 30rem;
+  height: 4.4rem;
+  margin: 0 0.5rem;
+}
+
+.o-primary-btn--buy-td-auto {
+  width: 9rem;
   height: 4.4rem;
 }
 
@@ -848,6 +883,10 @@ body.t-s9 {
 }
 
 .t-normal .c-game-header__antimatter {
+  color: var(--color-accent);
+}
+
+.t-normal .c-credits-header {
   color: var(--color-accent);
 }
 

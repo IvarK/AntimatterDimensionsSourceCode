@@ -9,7 +9,7 @@ export default {
   data() {
     return {
       gainedInfinities: new Decimal(),
-      gainedInfinityPoints: new Decimal(),
+      gainedInfinityPoints: new Decimal()
     };
   },
   computed: {
@@ -31,7 +31,8 @@ export default {
     },
     handleYesClick() {
       bigCrunchResetRequest();
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>

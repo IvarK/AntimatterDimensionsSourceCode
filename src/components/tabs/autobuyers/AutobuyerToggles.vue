@@ -14,6 +14,7 @@ export default {
       autobuyersOn: false,
       showContinuum: false,
       disableContinuum: false,
+      allAutobuyersDisabled: false
     };
   },
   watch: {
@@ -30,17 +31,11 @@ export default {
       this.autobuyersOn = player.auto.autobuyersOn;
       this.showContinuum = Laitela.isUnlocked;
       this.disableContinuum = player.auto.disableContinuum;
+      this.allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
     },
     toggleAllAutobuyers() {
-      const allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
-      if (allAutobuyersDisabled) {
-        for (const autobuyer of Autobuyers.unlocked) {
-          autobuyer.isActive = true;
-        }
-      } else {
-        for (const autobuyer of Autobuyers.unlocked) {
-          autobuyer.isActive = false;
-        }
+      for (const autobuyer of Autobuyers.unlocked) {
+        autobuyer.isActive = this.allAutobuyersDisabled;
       }
     }
   }
@@ -51,15 +46,15 @@ export default {
   <div class="c-subtab-option-container">
     <PrimaryToggleButton
       v-model="autobuyersOn"
-      on="Disable autobuyers"
-      off="Enable autobuyers"
+      on="Pause autobuyers"
+      off="Resume autobuyers"
       class="o-primary-btn--subtab-option"
     />
     <PrimaryButton
       class="o-primary-btn--subtab-option"
       @click="toggleAllAutobuyers()"
     >
-      Toggle all autobuyers
+      {{ allAutobuyersDisabled ? "Enable" : "Disable" }} all autobuyers
     </PrimaryButton>
     <span v-if="isDoomed">
       <PrimaryButton

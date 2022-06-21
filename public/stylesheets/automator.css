@@ -1,21 +1,57 @@
-._-automator-split-pane-fix {
-  width: 100%;
-  background-color: black;
+:root {
+  --color-automator-controls-background: #d3d3d3;
+  --color-automator-controls-active: #0ba00e;
+  --color-automator-controls-inactive: #eeeeee;
+  --color-automator-controls-border: #767676;
+  --color-automator-active-line-background: #d8caeb;
+  --color-automator-active-line-outline: #7a49ff;
+  --color-automator-event-background: #007f00;
+  --color-automator-event-outline: #094e09;
+  --color-automator-error-background: #ac0617;
+  --color-automator-error-outline: #440108;
+  --color-automator-docs-font: black;
+  --color-blockmator-block-border: #cfcfcf;
+  --color-blockmator-block-background: #f5f5f5;
+  --color-blockmator-editor-background: white;
+}
+
+:root .s-base--dark {
+  --color-automator-controls-background: #262626;
+  --color-automator-controls-active: #007c00;
+  --color-automator-controls-inactive: #273757;
+  --color-automator-controls-border: #929292;
+  --color-automator-active-line-background: #2b065c;
+  --color-automator-active-line-outline: #4400ff;
+  --color-automator-event-background: #004b00;
+  --color-automator-docs-font: white;
+  --color-blockmator-block-border: #353535;
+  --color-blockmator-block-background: #000115;
+  --color-blockmator-editor-background: black;
 }
 
 .c-automator-tab {
   width: 100rem;
+}
+
+.c-automator-split-pane {
+  width: 100%;
   height: 57rem;
+  background-color: #bbbbbb;
 }
 
-.c-automator-tab > div {
-  width: 100rem;
-  height: 50rem;
+.s-base--dark .c-automator-split-pane {
+  width: 100%;
+  background-color: #474747;
 }
 
-.c-automator-tab--full-screen {
-  width: auto;
-  height: auto;
+.c-automator-tab--full-screen .c-automator-split-pane {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  margin-top: 0;
+  padding-bottom: 0;
 }
 
 .l-automator-tab {
@@ -103,21 +139,6 @@
   opacity: 0.6;
 }
 
-.l-automator-tab--full-screen {
-  position: fixed;
-  top: -6.5rem;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 4;
-  margin-top: 0;
-}
-
-.l-automator-tab--full-screen > div {
-  width: 100%;
-  height: calc(100% - 6.5rem);
-}
-
 .l-automator-pane {
   display: flex;
   flex-direction: column;
@@ -133,7 +154,8 @@
 }
 
 .c-automator__controls {
-  background-color: #262626;
+  background-color: var(--color-automator-controls-background);
+  border-bottom: 0.3rem solid var(--color-automator-active-line-outline);
 }
 
 .l-automator__controls {
@@ -169,38 +191,38 @@
 }
 
 .c-automator-editor__active-line {
-  background: rgb(43, 6, 92);
-  outline: 0.1rem solid rgb(68, 0, 255);
+  background: var(--color-automator-active-line-background);
+  outline: 0.1rem solid var(--color-automator-active-line-outline);
 }
 
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
-  background: rgb(43, 6, 92);
-  outline: 0.1rem solid rgb(68, 0, 255);
+  background: var(--color-automator-active-line-background);
+  outline: 0.1rem solid var(--color-automator-active-line-outline);
   filter: brightness(200%);
 }
 
 .c-automator-editor__event-line {
-  background: rgb(0, 127, 0);
-  outline: 0.1rem solid rgb(25, 200, 25);
+  background: var(--color-automator-event-background);
+  outline: 0.1rem solid var(--color-automator-event-outline);
 }
 
 .c-automator-editor__event-line-gutter {
   font-weight: bold;
-  background: rgb(0, 127, 0);
-  outline: 0.1rem solid rgb(25, 200, 25);
+  background: var(--color-automator-event-background);
+  outline: 0.1rem solid var(--color-automator-event-outline);
   filter: brightness(200%);
 }
 
 .c-automator-editor__error-line {
-  background: rgb(172, 6, 23);
-  outline: 0.1rem solid rgb(255, 0, 64);
+  background: var(--color-automator-error-background);
+  outline: 0.1rem solid var(--color-automator-error-outline);
 }
 
 .c-automator-editor__error-line-gutter {
   font-weight: bold;
-  background: rgb(172, 6, 23);
-  outline: 0.1rem solid rgb(255, 0, 64);
+  background: var(--color-automator-error-background);
+  outline: 0.1rem solid var(--color-automator-error-outline);
   filter: brightness(200%);
 }
 
@@ -208,7 +230,7 @@
   text-align: left;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
-  border-bottom: 0.15rem solid #262626;
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
 }
 
 .l-automator-editor {
@@ -247,11 +269,16 @@
   overflow: auto;
   text-align: left;
   font-size: 1.4rem;
-  color: black;
-  background-color: lightgray;
-  border-right: 0.15rem solid #262626;
-  border-bottom: 0.15rem solid #262626;
+  color: var(--color-automator-docs-font);
+  background-color: white;
+  border-right: 0.15rem solid var(--color-automator-controls-background);
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
   padding-left: 1rem;
+}
+
+.s-base--dark .c-automator-docs {
+  color: var(--color-automator-docs-font);
+  background-color: black;
 }
 
 .c-automator-docs-page {
@@ -290,8 +317,5 @@
   position: absolute;
   top: 12px;
   left: -1px;
-  font-family: "Times New Roman", serif;
-  font-size: 0.6rem;
-  font-weight: 700;
   color: red;
 }

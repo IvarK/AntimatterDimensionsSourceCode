@@ -14,9 +14,10 @@ export default {
   },
   computed: {
     descriptionLines() {
-      return this.unlock.config.description.split("\n");
+      return this.unlock.config.description.split("\n").map(x => x.trim());
     },
     symbol: () => GLYPH_SYMBOLS.effarig,
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
@@ -40,7 +41,12 @@ export default {
         :key="descriptionKey + '-effarig-reward-description'"
         class="c-effarig-tab__reward-description"
       >
-        <span class="c-effarig-tab__reward-symbol">{{ symbol }}</span>{{ description }}
+        <span class="c-effarig-tab__reward-symbol">
+          {{ symbol }}
+        </span>
+        <span :class="{ 'o-pelle-disabled': isDoomed }">
+          {{ description }}
+        </span>
       </div>
     </div>
     <span

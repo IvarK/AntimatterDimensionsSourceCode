@@ -108,7 +108,7 @@ dev.spin4d = function() {
 };
 
 dev.cancerize = function() {
-  Theme.tryUnlock("Cancer");
+  Theme.tryUnlock("Design");
   Notation.emoji.setAsCurrent();
 };
 

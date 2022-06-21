@@ -15,15 +15,10 @@ export const EFFARIG_STAGES = {
 export const Effarig = {
   displayName: "Effarig",
   initializeRun() {
-    const isRestarting = player.celestials.effarig.run;
     clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show(false);
-    if (!isRestarting) {
-      Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. Infinity Power
-        reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to tickspeed.`);
-    }
   },
   get isRunning() {
     return player.celestials.effarig.run;

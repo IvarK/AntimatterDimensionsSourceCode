@@ -401,11 +401,14 @@ If you reach your specified Galaxy threshold, the autobuyer will ignore your max
 <b>Sacrifice Autobuyer:</b> This autobuyer starts with a maxed interval, potentially triggering every tick.
 <br>
 <br>
-<b>Toggle All Autobuyers:</b> This button will turn all of your autobuyers on or off. This won't change your
-individual autobuyer settings.
+<b>Pause/Resume Autobuyers:</b> This button will pause or resume autobuyers which are turned on.
+It does not change individual autobuyer settings. Think of it like a master switch.
 <br>
 <br>
-<b>Hotkey: A</b> (for toggle all autobuyers).
+<b>Enable/Disable All Autobuyers:</b> This button will turn all of your autobuyers on or off individually.
+<br>
+<br>
+<b>Hotkey: A</b> (for pausing/resuming autobuyers).
 Additionally, holding <b>Alt</b> when pressing a hotkey associated with an upgrade, dimension, or prestige will
 toggle the associated autobuyer.
 `,
@@ -1314,8 +1317,10 @@ Ra won't directly unlock the next Celestial.`,
       name: "Glyph Alchemy",
       info: () => `
 Glyph Alchemy is a mechanic unlocked by reaching Effarig level ${formatInt(2)} in Ra. It unlocks the ability to
-use up your glyphs by refining them into alchemy resources associated with their type. Each resource gives some
-kind of a boost to certain parts of the game based on how much of them you have.
+use up your Glyphs by refining them into Alchemy Resources associated with their type. You can refine Glyphs by 
+setting your Sacrifice Type to something other than "Always Sacrifice" in the Glyphs tab, and doing the normal
+procedure for a sacrifice.
+Each Alchemy Resource has a unique effect, which you can view on the Alchemy tab.
 <br>
 <br>
 In addition to all their other properties, Glyphs now have a <i>refinement value</i> which determines how much of
@@ -1503,7 +1508,7 @@ Celestial rewards, Perks, and other game mechanics are disabled or grant no rewa
 You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
 <br>
 <br>
-Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity-
+Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity,
 and Eternity Points across all Doomed Realities. Remnants produce Reality Shards which can be spent on Pelle Upgrades.
 <br>
 <br>
@@ -1550,8 +1555,8 @@ When you reach ${formatInt(100)}% War, you unlock the <b>Galaxy Generator</b>, w
 Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect Tickspeed as if
 they were Antimatter Galaxies but they don't increase the cost of your next Antimatter Galaxy. You also unlock five
 new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades then give
-a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter- and Generated
-Galaxies. Replicanti- or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
+a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and Generated
+Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
       isUnlocked: () => Pelle.hasGalaxyGenerator,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
         "galaxies", "generator", "celestial"],

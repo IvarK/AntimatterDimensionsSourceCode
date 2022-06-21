@@ -117,6 +117,23 @@ perfectly the same. */
 
 @keyframes a-ra-credits {
   0% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.2);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.2);
+  }
+}
+
+@keyframes a-ra-credits--dark {
+  0% {
     opacity: 0.1;
     transform: translateX(-50%) scale(0.2);
   }
@@ -154,7 +171,6 @@ perfectly the same. */
   position: absolute;
   left: 0;
   z-index: 9;
-  color: rgb(185, 185, 185);
   transform: translateY(100%);
   pointer-events: none;
 }
@@ -204,6 +220,10 @@ perfectly the same. */
   left: 44%;
   color: var(--color-ra--base);
   animation: a-ra-credits 10s ease-in-out infinite;
+}
+
+.s-base--dark .c-ra-credits {
+  animation: a-ra-credits--dark 10s ease-in-out infinite;
 }
 
 .c-laitela-credits {

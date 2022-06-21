@@ -117,6 +117,7 @@ export const Glyphs = {
 
     player.reality.glyphs.protectedRows = newRows;
     this.validate();
+    GameCache.glyphInventorySpace.invalidate();
   },
   // Move all glyphs from the origin row to the destination row, does nothing if a column-preserving move operation
   // isn't possible. Returns a boolean indicating success/failure on glyph moving. Row is 0-indexed
@@ -325,7 +326,7 @@ export const Glyphs = {
   },
   addToInventory(glyph, requestedInventoryIndex, isExistingGlyph = false) {
     this.validate();
-    glyph.id = GlyphGenerator.makeID();
+    if (!isExistingGlyph) glyph.id = GlyphGenerator.makeID();
     const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
     let index = this.findFreeIndex(isProtectedIndex);
     if (index < 0) return;
@@ -614,10 +615,10 @@ export const Glyphs = {
     if (!Ra.unlocks.allGamespeedGlyphs.canBeApplied) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
       // eslint-disable-next-line no-bitwise
-      glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);
+      glyph.effects |= (1 << GlyphEffects.timespeed.bitmaskIndex);
       if (glyph.type === "time") {
         // eslint-disable-next-line no-bitwise
-        glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
+        glyph.effects |= (1 << GlyphEffects.timeshardpow.bitmaskIndex);
       }
     }
   },

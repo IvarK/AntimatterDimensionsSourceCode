@@ -121,7 +121,7 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [164, 143, 142, 141, 137, 134, 133, 132, 125, 118, 117, 113, 111, 104, 103, 93, 92, 91, 87, 85, 78, 76,
+    return [164, 143, 142, 141, 137, 134, 133, 132, 125, 118, 117, 111, 104, 103, 93, 92, 91, 87, 85, 78, 76,
       74, 65, 55, 54, 37];
   },
 
@@ -142,18 +142,6 @@ export const Pelle = {
   get uselessPerks() {
     return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 53,
       60, 61, 62, 80, 81, 82, 83, 100, 105, 106, 201, 202, 203, 204];
-  },
-
-  // Glyph effects are controlled through other means, but are also enumerated here for accessing to improve UX. Note
-  // that this field is NEGATED, describing an effect allowlist instead of a blocklist, as most of the effects are
-  // already disabled by virtue of the glyph type being unequippable and many of the remaining ones are also disabled.
-  get enabledGlyphEffects() {
-    return ["timepow", "timespeed", "timeshardpow",
-      "dilationpow", "dilationgalaxyThreshold",
-      "replicationpow",
-      "powerpow", "powermult", "powerdimboost", "powerbuy10",
-      "infinitypow", "infinityrate",
-      "companiondescription", "companionEP"];
   },
 
   get specialGlyphEffect() {

@@ -14,9 +14,11 @@ export default {
 <style scoped>
 .c-automator__button {
   width: 3.3rem;
-  border: 0.2rem solid #767676;
+  border: 0.2rem solid var(--color-automator-controls-border);
   border-radius: 0.3rem;
   margin: 0.4rem;
   cursor: pointer;
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-inactive);
 }
 </style>

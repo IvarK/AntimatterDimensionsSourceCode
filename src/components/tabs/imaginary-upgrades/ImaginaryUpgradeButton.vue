@@ -22,7 +22,6 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isAvailableForPurchase: false,
       canBeBought: false,
       isRebuyable: false,
@@ -38,8 +37,8 @@ export default {
     },
     classObject() {
       return {
-        "c-reality-upgrade-btn--useless": this.isUseless,
-        "c-reality-upgrade-btn--bought": this.isBought && !this.isUseless,
+        "c-reality-upgrade-btn--useless": this.isDoomed,
+        "c-reality-upgrade-btn--bought": this.isBought && !this.isDoomed,
         "c-reality-upgrade-btn--unavailable": !this.isBought && !this.canBeBought && this.isAvailableForPurchase,
         "c-reality-upgrade-btn--possible": !this.isAvailableForPurchase && this.isPossible,
         "c-reality-upgrade-btn--locked": !this.isAvailableForPurchase && !this.isPossible,
@@ -49,7 +48,8 @@ export default {
       return {
         description: this.config.requirement
       };
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   watch: {
     isAutobuyerOn(newValue) {
@@ -66,7 +66,6 @@ export default {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = ImaginaryUpgrade(20).isBought;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
-      this.isUseless = Pelle.isDoomed;
     }
   }
 };
@@ -85,10 +84,7 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <span v-if="isUseless">
-        This upgrade has no effect while in Doomed
-      </span>
-      <span v-else>
+      <span :class="{ 'o-pelle-disabled': isDoomed }">
         <DescriptionDisplay :config="config" />
         <template v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable">
           <br>

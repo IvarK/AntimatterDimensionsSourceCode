@@ -55,7 +55,7 @@ export default {
       this.currentScriptID = player.reality.automator.state.editorScript;
       // This shouldn't happen if things are loaded in the right order, but might as well be sure.
       if (storedScripts[this.currentScriptID] === undefined) {
-        this.currentScriptID = Object.keys(storedScripts)[0];
+        this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
       if (AutomatorData.currentErrors().length !== 0 && player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
@@ -71,9 +71,7 @@ export default {
 
 <template>
   <div class="l-automator-pane">
-    <div class="c-automator__controls l-automator__controls">
-      <AutomatorControls />
-    </div>
+    <AutomatorControls />
     <AutomatorTextEditor
       v-if="isTextAutomator"
       :current-script-id="currentScriptID"
@@ -81,3 +79,51 @@ export default {
     <AutomatorBlockEditor v-if="!isTextAutomator" />
   </div>
 </template>
+
+<style scoped>
+.c-slider-toggle-button {
+  color: black;
+  background-color: #626262;
+  border: 0.2rem solid #767676;
+  border-radius: 0.2rem;
+  margin: 0.4rem;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.3rem 0;
+}
+
+.s.base--dark .c-slider-toggle-button {
+  background-color: #626262;
+}
+
+.c-slider-toggle-button .fas {
+  width: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.c-slider-toggle-button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3rem;
+  height: 100%;
+  border-radius: 0.2rem;
+  transition: 0.3s ease all;
+  background-color: white;
+  z-index: 0;
+}
+
+.c-slider-toggle-button--right:before {
+  left: 3rem;
+  background-color: white;
+}
+
+.tutorial--glow:after {
+  z-index: 2;
+}
+</style>

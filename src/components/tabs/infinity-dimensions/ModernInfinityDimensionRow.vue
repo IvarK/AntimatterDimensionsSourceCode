@@ -1,10 +1,12 @@
 <script>
+import GenericDimensionRowText from "@/components/GenericDimensionRowText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "ModernInfinityDimensionRow",
   components: {
+    GenericDimensionRowText,
     PrimaryButton,
     PrimaryToggleButton
   },
@@ -41,10 +43,7 @@ export default {
       return ui.view.shiftDown;
     },
     name() {
-      return InfinityDimension(this.tier).shortDisplayName;
-    },
-    rateOfChangeDisplay() {
-      return ` (+${format(this.rateOfChange, 2, 2)}%/s)`;
+      return `${InfinityDimension(this.tier).shortDisplayName} Infinity Dimension`;
     },
     costDisplay() {
       if (this.isUnlocked || this.shiftDown) {
@@ -57,6 +56,9 @@ export default {
       }
 
       return `Reach ${formatPostBreak(InfinityDimension(this.tier).amRequirement)} AM`;
+    },
+    hasLongText() {
+      return this.costDisplay.length > 15;
     },
     capTooltip() {
       if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
@@ -114,42 +116,40 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-infinity-dim-row"
+    class="c-infinity-dim-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !canUnlock }"
   >
-    <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Infinity D <span class="c-infinity-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{ format(amount, 2, 0) }}
-      <span
-        v-if="rateOfChange.neq(0)"
-        class="c-dim-row__label--small"
-      >
-        {{ rateOfChangeDisplay }}
-      </span>
-    </div>
-    <PrimaryButton
-      v-tooltip="capTooltip"
-      :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
-      class="o-primary-btn--buy-id l-dim-row__button o-primary-btn o-primary-btn--new"
-      @click="buySingleInfinityDimension"
-    >
-      {{ costDisplay }}
-    </PrimaryButton>
-    <PrimaryToggleButton
-      v-if="isAutobuyerUnlocked && !isEC8Running"
-      v-model="isAutobuyerOn"
-      class="o-primary-btn--id-autobuyer l-dim-row__button"
-      label="Auto:"
+    <GenericDimensionRowText
+      :tier="tier"
+      :name="name"
+      :multiplier-text="formatX(multiplier, 2, 1)"
+      :amount-text="format(amount, 2)"
+      :rate="rateOfChange"
     />
-    <PrimaryButton
-      v-else
-      :enabled="isAvailableForPurchase"
-      class="o-primary-btn--buy-id-max l-dim-row__button"
-      @click="buyMaxInfinityDimension"
-    >
-      Buy Max
-    </PrimaryButton>
+    <div class="l-dim-row-multi-button-container">
+      <PrimaryButton
+        v-tooltip="capTooltip"
+        :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
+        class="o-primary-btn--buy-id o-primary-btn o-primary-btn--new o-primary-btn--buy-dim"
+        :class="{ 'l-dim-row-small-text': hasLongText }"
+        @click="buySingleInfinityDimension"
+      >
+        {{ costDisplay }}
+      </PrimaryButton>
+      <PrimaryToggleButton
+        v-if="isAutobuyerUnlocked && !isEC8Running"
+        v-model="isAutobuyerOn"
+        class="o-primary-btn--id-auto"
+        label="Auto:"
+      />
+      <PrimaryButton
+        v-else
+        :enabled="isAvailableForPurchase"
+        class="o-primary-btn--id-auto"
+        @click="buyMaxInfinityDimension"
+      >
+        Buy Max
+      </PrimaryButton>
+    </div>
   </div>
 </template>

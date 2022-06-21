@@ -71,8 +71,6 @@ export default {
   z-index: 9;
   justify-content: center;
   align-items: center;
-  background-color: black;
-  box-shadow: 0 0 20px 1px black;
   transform: translate(-50%, -50%);
   pointer-events: auto;
 }

@@ -52,6 +52,7 @@ export default {
       this.lastMachinesTeresa.copyFrom(player.celestials.teresa.lastRepeatedMachines);
     },
     dragover(event) {
+      if (Pelle.isDoomed) return;
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
       event.preventDefault();
       this.hasDragover = true;
@@ -93,7 +94,12 @@ export default {
     @drop="drop"
   >
     <div class="l-sacrificed-glyphs__help">
-      <span v-if="isDoomed">You cannot sacrifice Glyphs while in Doomed.</span>
+      <span
+        v-if="isDoomed"
+        :style="{'color': hasDragover ? 'var(--color-bad)' : null}"
+      >
+        You cannot sacrifice Glyphs while Doomed.
+      </span>
       <span v-else>
         <div>Drag Glyphs here or shift-click to Sacrifice.</div>
         <div>The confirmation can be disabled in Options or by holding Ctrl.</div>

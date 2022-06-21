@@ -24,6 +24,7 @@ export default {
       this.forceDontShowModal = GameEnd.endState > 2.5;
     },
     hide() {
+      if (!this.modal.isOpen) return;
       if (this.modal.hide) this.modal.hide();
       else Modal.hide();
     }

@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       memoriesPerChunk: 0,
       showReality: false,
       isRaCapped: false,
@@ -72,12 +71,12 @@ export default {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/u, c => c.toUpperCase()).split("\n");
-    }
+      return GameDatabase.celestials.descriptions[4].effects().replace(/^\w/u, c => c.toUpperCase()).split("\n");
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
@@ -131,9 +130,8 @@ export default {
     </div>
     <div class="l-ra-non-pets">
       <button class="c-ra-run-button">
-        <h2>
-          <span v-if="isDoomed">You can't start<br></span>
-          <span v-else-if="isRunning">You are in </span>
+        <h2 :class="{ 'o-pelle-disabled': isDoomed }">
+          <span v-if="isRunning">You are in </span>
           <span v-else>Start </span>
           Ra's Reality
         </h2>

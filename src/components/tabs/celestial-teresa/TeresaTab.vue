@@ -16,7 +16,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       pour: false,
       time: new Date().getTime(),
       pouredAmount: 0,
@@ -66,7 +65,7 @@ export default {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[0].description();
+      return GameDatabase.celestials.descriptions[0].effects();
     },
     lastMachinesString() {
       return this.lastMachines.lt(DC.E10000)
@@ -77,11 +76,11 @@ export default {
       return {
         borderRight: "0.5rem solid var(--color-teresa--base)"
       };
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const now = new Date().getTime();
       if (this.pour) {
         const diff = (now - this.time) / 1000;
@@ -150,8 +149,9 @@ export default {
           >
             Ϟ
           </div>
-          <span v-if="!isDoomed">Start Teresa's Reality.</span>
-          <span v-else>You can't start Teresa's Reality while in Doomed.<br></span>
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
+            Start Teresa's Reality.
+          </span>
           {{ runDescription }}
           <br><br>
           <div v-if="bestAM.gt(0)">
@@ -179,10 +179,7 @@ export default {
           v-if="hasEPGen"
           class="c-teresa-unlock"
         >
-          <span v-if="isDoomed">
-            This has no effect while in Doomed
-          </span>
-          <span v-else>
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
             Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </span>
         </div>
@@ -232,7 +229,9 @@ export default {
               />
             </template>
             <template #tooltipContent>
-              <b>{{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}</b>
+              <b :class="{ 'o-pelle-disabled': unlockInfo.pelleDisabled }">
+                {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
+              </b>
             </template>
           </CustomizeableTooltip>
         </div>

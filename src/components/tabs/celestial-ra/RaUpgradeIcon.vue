@@ -9,7 +9,6 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isUnlocked: false,
       level: 0,
       description: "",
@@ -31,12 +30,14 @@ export default {
         "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
         "c-ra-upgrade-icon--v": this.petName === "V"
       };
+    },
+    isUseless() {
+      return this.unlock.disabledByPelle;
     }
   },
   methods: {
     update() {
       const unlock = this.unlock;
-      this.isUseless = unlock.disabledByPelle;
       this.isUnlocked = unlock.isUnlocked;
       this.level = unlock.level;
       this.description = unlock.reward;
@@ -54,25 +55,17 @@ export default {
       <div class="c-ra-pet-upgrade__tooltip__name">
         {{ petName }} Level {{ formatInt(level) }}
       </div>
-      <div class="c-ra-pet-upgrade__tooltip__description">
+      <div
+        class="c-ra-pet-upgrade__tooltip__description"
+        :class="{ 'o-pelle-disabled': isUseless }"
+      >
         {{ description }}
-        <div
-          v-if="isUseless"
-          class="c-ra-effect-disabled"
-        >
-          This has no effect while in Doomed
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.c-ra-effect-disabled {
-  font-style: italic;
-  color: var(--color-pelle--base);
-}
-
 .c-ra-upgrade-icon {
   font-weight: bold;
 }

@@ -1,7 +1,7 @@
 <script>
 import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
+import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import HowToPlay from "@/components/HowToPlay";
 import InfoButton from "@/components/InfoButton";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
@@ -24,7 +24,7 @@ export default {
     PopupModal,
     ModalProgressBar,
     CelestialQuoteModal,
-    FadeToBlack,
+    FadeAway,
     CreditsContainer,
     NewGame
   },
@@ -83,7 +83,8 @@ export default {
       v-else-if="view.modal.current"
       :modal="view.modal.current"
     />
-    <FadeToBlack v-if="rollingCredits" />
+    <ModalProgressBar v-if="view.modal.progressBar" />
+    <FadeAway v-if="rollingCredits" />
     <CreditsContainer v-if="rollingCredits" />
     <NewGame v-if="rollingCredits" />
   </div>
@@ -91,15 +92,14 @@ export default {
 
 <style scoped>
 .c-game-ui--fixed {
+  display: flex;
   width: 100%;
   height: 100%;
   position: fixed;
-  pointer-events: none;
-
-  z-index: 5;
-  display: flex;
-  justify-content: center;
   top: 0;
   left: 0;
+  z-index: 5;
+  justify-content: center;
+  pointer-events: none;
 }
 </style>

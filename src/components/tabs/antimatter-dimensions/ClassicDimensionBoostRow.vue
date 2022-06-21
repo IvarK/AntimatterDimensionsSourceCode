@@ -51,11 +51,7 @@ export default {
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
-      if (player.options.confirmations.dimensionBoost) {
-        Modal.dimensionBoost.show({ bulk });
-        return;
-      }
-      requestDimensionBoost(bulk);
+      manualRequestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   }
@@ -63,14 +59,14 @@ export default {
 </script>
 
 <template>
-  <div class="c-antimatter-dim-row">
-    <div class="c-dim-row__label c-dim-row__label--growable">
+  <div class="c-antimatter-dim-row c-antimatter-prestige-row">
+    <div class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount">
       Dimension Boost ({{ boostCountText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
     </div>
     <PrimaryButton
       :enabled="isBuyable"
-      class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
+      class="o-primary-btn--dimboost l-dim-row__prestige-button"
       :class="tutorialClass"
       @click.exact="dimensionBoost(true)"
       @click.shift.exact="dimensionBoost(false)"

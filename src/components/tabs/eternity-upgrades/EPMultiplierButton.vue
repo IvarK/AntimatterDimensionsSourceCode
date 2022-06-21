@@ -10,7 +10,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       isAutobuyerActive: false,
       isAutoUnlocked: false,
       isAffordable: false,
@@ -38,7 +37,8 @@ export default {
         "o-eternity-upgrade--available": this.isAffordable,
         "o-eternity-upgrade--unavailable": !this.isAffordable
       };
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   watch: {
     isAutobuyerActive(newValue) {
@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const upgrade = this.upgrade;
       this.isAutoUnlocked = this.autobuyer.isUnlocked;
       this.isAutobuyerActive = this.autobuyer.isActive;
@@ -65,10 +64,7 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <div v-if="isDoomed">
-        This upgrade has no effect while in Doomed
-      </div>
-      <div v-else>
+      <div :class="{ 'o-pelle-disabled': isDoomed }">
         Multiply Eternity Points from all sources by {{ formatX(5) }}
         <br>
         Currently: {{ formatX(multiplier, 2, 0) }}

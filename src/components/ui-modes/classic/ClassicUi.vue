@@ -76,7 +76,7 @@ export default {
         v-show="smallCrunch"
         class="l-old-ui__big-crunch-btn l-old-ui__big-crunch-btn--overlay"
       />
-      <div class="l-old-ui-page l-old-ui__page">
+      <div class="l-old-ui__page">
         <slot />
       </div>
     </template>

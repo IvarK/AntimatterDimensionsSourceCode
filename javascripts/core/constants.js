@@ -261,6 +261,65 @@ window.GlyphRarities = [
   },
 ];
 
+window.GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation",
+  "effarig",
+  "reality",
+  "cursed",
+  "companion"
+];
+
+window.BASIC_GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation"
+];
+
+window.ALCHEMY_BASIC_GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation",
+  "effarig"
+];
+
+window.GLYPH_SYMBOLS = {
+  power: "Ω",
+  infinity: "∞",
+  replication: "Ξ",
+  time: "Δ",
+  dilation: "Ψ",
+  effarig: "Ϙ",
+  reality: "Ϟ",
+  cursed: "⸸",
+  companion: "♥"
+};
+
+window.CANCER_GLYPH_SYMBOLS = {
+  power: "⚡",
+  infinity: "8",
+  replication: "⚤",
+  time: "🕟",
+  dilation: "☎",
+  effarig: "🦒",
+  reality: "⛧",
+  cursed: "☠",
+  companion: "³"
+};
+
+window.ALTERATION_TYPE = {
+  ADDITION: 1,
+  EMPOWER: 2,
+  BOOST: 3
+};
+
 window.BLACK_HOLE_PAUSE_MODE = {
   NO_PAUSE: 0,
   PAUSE_BEFORE_BH1: 1,
@@ -370,4 +429,29 @@ window.COMPLETED_MILESTONES = {
 window.SORT_ORDER = {
   ASCENDING: 0,
   DESCENDING: 1,
+};
+
+// One-indexed and ordered to simplify code elsewhere, do not change to be zero-indexed or reorder
+window.PROGRESS_STAGE = {
+  PRE_INFINITY: 1,
+
+  EARLY_INFINITY: 2,
+  BREAK_INFINITY: 3,
+  REPLICANTI: 4,
+
+  EARLY_ETERNITY: 5,
+  ETERNITY_CHALLENGES: 6,
+  EARLY_DILATION: 7,
+  LATE_ETERNITY: 8,
+
+  EARLY_REALITY: 9,
+
+  TERESA: 10,
+  EFFARIG: 11,
+  ENSLAVED: 12,
+  V: 13,
+  RA: 14,
+  IMAGINARY_MACHINES: 15,
+  LAITELA: 16,
+  PELLE: 17,
 };

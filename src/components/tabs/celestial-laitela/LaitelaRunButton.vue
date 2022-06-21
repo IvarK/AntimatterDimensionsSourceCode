@@ -3,7 +3,6 @@ export default {
   name: "LaitelaRunButton",
   data() {
     return {
-      isDoomed: false,
       realityTime: 0,
       maxDimTier: 0,
       isRunning: false,
@@ -15,13 +14,16 @@ export default {
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
     },
+    runEffects() {
+      return GameDatabase.celestials.descriptions[5].effects().split("\n");
+    },
     runDescription() {
-      return GameDatabase.celestials.descriptions[5].description().split("\n");
-    }
+      return GameDatabase.celestials.descriptions[5].description();
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.realityTime = player.celestials.laitela.fastestCompletion;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
@@ -50,8 +52,9 @@ export default {
 
 <template>
   <button :class="classObject()">
-    <span v-if="isDoomed"><b>You can't start Lai'tela's Reality</b></span>
-    <span v-else><b>Start Lai'tela's Reality</b></span>
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
+      <b>Start Lai'tela's Reality</b>
+    </span>
     <div
       :class="runButtonClassObject()"
       @click="startRun"
@@ -79,10 +82,12 @@ export default {
       <br><br>
     </div>
     <div
-      v-for="(line, lineId) in runDescription"
+      v-for="(line, lineId) in runEffects"
       :key="lineId + '-laitela-run-desc'"
     >
       {{ line }} <br>
     </div>
+    <br>
+    <div>{{ runDescription }}</div>
   </button>
 </template>

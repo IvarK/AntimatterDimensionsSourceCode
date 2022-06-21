@@ -149,7 +149,7 @@ export const BlockAutomator = {
         :key="i"
         class="c-automator-block-line-number"
         :style="{
-          top: `${i * 3.45 - 3.45}rem`
+          top: `${(i - 1) * 3.45}rem`
         }"
       >
         {{ i }}
@@ -185,7 +185,7 @@ export const BlockAutomator = {
   overflow-y: auto;
   tab-size: 1.5rem;
   width: 100%;
-  background-color: black;
+  background-color: var(--color-blockmator-editor-background);
   box-sizing: content-box;
 }
 
@@ -207,7 +207,7 @@ export const BlockAutomator = {
   height: max-content;
   min-height: 100%;
   position: relative;
-  background-color: #262626;
+  background-color: var(--color-automator-controls-background);
   border-right: 0.1rem solid #505050;
   /* left and right paddings are 1 to make space for text, bottom padding is 20 to make for a buffer */
   padding: 0.3rem 1rem 20rem;
@@ -219,6 +219,6 @@ export const BlockAutomator = {
   justify-content: flex-end;
   align-items: center;
   font-size: 1.4rem;
-  color: #606060;
+  color: var(--color-automator-docs-font);
 }
 </style>

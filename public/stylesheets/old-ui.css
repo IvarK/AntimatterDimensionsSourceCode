@@ -30,12 +30,8 @@
 }
 
 .l-old-ui__page {
-  flex: 1 0 auto;
-  width: 100%;
-}
-
-.l-old-ui-page {
   display: flex;
+  flex: 1 0 auto;
   flex-direction: column;
   width: 100%;
   align-items: stretch;
@@ -76,8 +72,12 @@
   box-shadow: none;
 }
 
+.t-s10 .o-tab-btn {
+  box-shadow: none;
+}
+
 .o-tab-btn--secondary {
-  width: 17.5rem;
+  width: 18.5rem;
   height: 2.5rem;
   font-size: 1.3rem;
   margin: 0.5rem 0.8rem;

@@ -135,11 +135,7 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   get description() {
-    if (this.pelleDisabled) {
-      return "This has no effect while in Doomed";
-    }
-    return typeof this.config.description === "function" ? this.config.description()
-      : this.config.description;
+    return typeof this.config.description === "function" ? this.config.description() : this.config.description;
   }
 
   onUnlock() {

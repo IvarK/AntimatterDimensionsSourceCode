@@ -1340,6 +1340,10 @@ br {
   position: relative;
 }
 
+.c-game-tab {
+  padding-bottom: 2rem;
+}
+
 ._kong-test .c-game-ui {
   max-height: 100%;
 }
@@ -1408,18 +1412,30 @@ br {
   margin-right: 0.8rem;
 }
 
+.o-primary-btn--buy-dim {
+  max-width: 25rem;
+}
+
 .o-primary-btn--buy-ad {
-  vertical-align: middle;
-  font-size: 1rem;
-  line-height: 9px;
+  height: 4rem;
+  font-size: 1.2rem;
 }
 
 .o-primary-btn--buy-single-ad {
-  width: 13.5rem;
+  width: 40%;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-10-ad {
-  width: 21rem;
+  width: 60%;
+  max-width: 20rem;
+  margin: 0 0.5rem;
+}
+
+.o-primary-btn--continuum-ad {
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--dimboost {
@@ -1441,27 +1457,29 @@ br {
 }
 
 .o-primary-btn--buy-id {
-  width: 21rem;
-  height: 3rem;
+  width: 30rem;
+  height: 3.5rem;
+  margin: 0 0.5rem;
 }
 
-.o-primary-btn--buy-id-max,
-.o-primary-btn--id-autobuyer {
-  width: 8rem;
-  height: 3rem;
+.o-primary-btn--id-auto {
+  width: 9rem;
+  height: 3.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td {
-  width: 21rem;
-  height: 3rem;
+  width: 30rem;
+  height: 3.5rem;
+  margin: 0 0.5rem;
 }
 
-.o-primary-btn--buy-td-max,
-.o-primary-btn--td-autobuyer {
-  width: 8rem;
-  height: 3rem;
+.o-primary-btn--buy-td-auto {
+  width: 9rem;
+  height: 3.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--option {
@@ -2167,34 +2185,29 @@ br {
   width: 100%;
 }
 
+.l-dimension-single-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+  height: 3.5rem;
+  align-content: center;
+}
+
 .c-dim-row--not-reached {
   opacity: 0.5;
 }
 
-.c-dim-row__name {
-  width: 40%;
+.l-dim-row-multi-button-container {
+  display: flex;
+  grid-column: 5 / 8;
+  min-width: 25rem;
+  justify-content: flex-end;
 }
 
-.c-dim-row__label {
-  text-align: left;
-}
-
-.c-dim-row__label--growable {
-  flex-grow: 1;
-  width: 15rem;
-}
-
-.c-dim-row__label--small {
-  font-size: 1.2rem;
-}
-
-.l-dim-row__button {
-  flex-shrink: 0;
-  margin-left: 1.6rem;
-}
-
-.l-dim-row__button--right-offset {
-  margin-right: 10rem;
+.l-dim-row-small-text {
+  vertical-align: middle;
+  font-size: 1rem;
+  line-height: 1rem;
 }
 
 /* #endregion Dimensions */
@@ -2228,13 +2241,28 @@ br {
 /* #region c-antimatter-dim-row */
 
 .c-antimatter-dim-row {
-  display: flex;
-  flex-direction: row;
   /* relative because floating text is 'position: absolute' */
   position: relative;
   align-items: center;
   font-size: 1.5rem;
   margin-top: 1rem;
+}
+
+.c-antimatter-prestige-row {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: repeat(7, 1fr);
+  height: 5rem;
+  align-content: center;
+  text-align: left;
+}
+
+.l-dim-row__prestige-text {
+  grid-column: 1 / 6;
+}
+
+.l-dim-row__prestige-button {
+  grid-column: 6 / 8;
 }
 
 /* #endregion c-dimension-row */
@@ -2424,8 +2452,6 @@ br {
 /* #region c-infinity-dim-row */
 
 .c-infinity-dim-row {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   font-size: 1.6rem;
   margin-top: 1rem;
@@ -2478,8 +2504,6 @@ br {
 /* #region c-time-dim-row */
 
 .c-time-dim-row {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   font-size: 1.6rem;
   margin-top: 1rem;
@@ -5204,9 +5228,11 @@ br {
 }
 
 .c-modal__title {
+  display: inline-block;
   width: 50rem;
   font-size: 1.6rem;
   font-weight: bold;
+  padding: 0 3rem;
 }
 
 .c-modal__close-btn {
@@ -5442,6 +5468,7 @@ br {
   flex-direction: column;
   min-width: 40rem;
   align-items: center;
+  user-select: none;
 }
 
 .t-dark .c-modal-away-progress {
@@ -6494,6 +6521,9 @@ kbd {
 }
 
 .c-effarig-tab__reward-label {
+  /* stylelint-disable-next-line unit-allowed-list */
+  min-width: 11ch;
+  text-align: left;
   font-weight: bold;
   padding-right: 1rem;
 }
@@ -7930,10 +7960,8 @@ kbd {
 
 .c-dark-matter-dimension-buttons {
   display: flex;
-  flex-direction: row;
-  width: 47.5rem;
   height: 6rem;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .o-dark-matter-dimension-button {
@@ -8814,14 +8842,18 @@ kbd {
 .o-automator-command {
   display: inline-block;
   min-width: 8.5rem;
-  color: #c080ff;
-  background: #000115;
-  border: 0.1rem solid #353535;
+  color: #a142ff;
+  background: var(--color-blockmator-block-background);
+  border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
+}
+
+.s-base--dark .o-automator-command {
+  color: #c080ff;
 }
 
 .c-automator-docs .o-automator-command {
@@ -8841,8 +8873,7 @@ kbd {
 
 .c-automator-block-row {
   display: flex;
-  min-height: 2.85rem;
-  max-height: 2.85rem;
+  height: 2.85rem;
   align-items: center;
   margin: 0.3rem 0;
 }
@@ -8852,6 +8883,10 @@ kbd {
 }
 
 .c-automator-block-row-active {
+  background: #d8caeb;
+}
+
+.s-base--dark .c-automator-block-row-active {
   background: #50316f;
 }
 
@@ -8864,6 +8899,13 @@ kbd {
   padding: 0.3rem 0.6rem;
 }
 
+.c-automator-block-editor {
+  overflow-y: scroll;
+  height: 100%;
+  background-color: var(--color-blockmator-editor-background);
+  box-sizing: border-box;
+}
+
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
   border-radius: 0;
 }
@@ -8873,14 +8915,35 @@ kbd {
   font-family: Typewriter, serif;
   font-size: 1.1rem;
   color: #007f7f;
-  background: #000115;
-  border: 0.1rem solid #353535;
+  background: var(--color-blockmator-block-background);
+  border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
 }
 
+.s-base--dark .o-automator-block-input {
+  color: #01a1a1;
+}
+
 input.o-automator-block-input {
+  color: #00ac00;
+}
+
+.s-base--dark input.o-automator-block-input {
   color: #00ff00;
+}
+
+.l-automator-nested-block {
+  width: fit-content;
+  min-width: 30rem;
+  border: var(--var-border-width, 2px) dotted #369b36;
+  margin-top: 0.5rem;
+  margin-left: 3rem;
+  padding: 1rem;
+}
+
+.s-base--dark .l-automator-nested-block {
+  border: var(--var-border-width, 2px) dotted #55ff55;
 }
 
 .o-automator-block-delete {
@@ -9354,6 +9417,10 @@ input.o-automator-block-input {
 .c-pelle-useless--bought {
   background-color: var(--color-pelle--base);
   filter: grayscale(50%);
+}
+
+.o-pelle-disabled {
+  text-decoration: line-through;
 }
 
 .l-fill-container {

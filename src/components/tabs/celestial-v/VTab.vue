@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       mainUnlock: false,
       canUnlockCelestial: false,
       mainUnlockDB: [],
@@ -86,12 +85,12 @@ export default {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/u, c => c.toUpperCase());
+      return GameDatabase.celestials.descriptions[3].effects().replace(/^\w/u, c => c.toUpperCase());
     },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.mainUnlock = VUnlocks.vAchievementUnlock.isUnlocked;
       this.canUnlockCelestial = V.canUnlockCelestial;
       this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
@@ -261,9 +260,11 @@ export default {
             :class="runButtonClassObject"
             @click="startRun()"
           >
-            <b class="o-v-start-text">
-              <span v-if="isDoomed">You can't start<br></span>
-              <span v-else-if="isRunning">You are in </span>
+            <b
+              class="o-v-start-text"
+              :class="{ 'o-pelle-disabled': isDoomed }"
+            >
+              <span v-if="isRunning">You are in </span>
               <span v-else>Start </span>
               V's Reality.
             </b>
@@ -308,10 +309,7 @@ export default {
             :class="{'o-v-milestone--unlocked':
               has(milestone)}"
           >
-            <div v-if="isDoomed">
-              Disabled while in Doomed
-            </div>
-            <div v-else>
+            <div :class="{ 'o-pelle-disabled': isDoomed }">
               <p>{{ milestone.description }}</p>
               <p>Reward: {{ milestone.rewardText }}</p>
               <p v-if="milestone.formattedEffect">

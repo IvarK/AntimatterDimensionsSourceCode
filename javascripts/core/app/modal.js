@@ -40,6 +40,7 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import CatchupModal from "@/components/modals/catchup/CatchupModal";
 import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
@@ -75,17 +76,9 @@ export class Modal {
     this._props = Object.assign({}, modalConfig || {});
 
     const modalQueue = ui.view.modal.queue;
-    // Add this modal to the back of the queue and sort based on priority to ensure priority is maintained.
-    modalQueue.push(this);
-
-    // Unfortunately, we can't do it directly because a lot of modal interactions depend on a modal
-    // being shown that shows up at the back, followed by an immediate closing of the current modal.
-    // This will not work if, say, a modal of priority 2 is shown right before a modal of priority 1 is closed.
-    // So we have to wait just a little while.
-    EventHub.ui.on(GAME_EVENT.UPDATE, () => {
-      Modal.sortModalQueue();
-      EventHub.ui.offAll(Modal.sortModalQueue);
-    }, Modal.sortModalQueue);
+    // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
+    modalQueue.unshift(this);
+    Modal.sortModalQueue();
   }
 
   get isOpen() {
@@ -148,12 +141,20 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
+class TimeModal extends Modal {
+  show(diff) {
+    super.show({ diff });
+  }
+}
+
 // If a new modal which can be shown in the same queue multiple times needs to be added
 // Additional code needs to be written to account for that
 
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
+
+Modal.catchup = new TimeModal(CatchupModal);
 
 Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
 Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);

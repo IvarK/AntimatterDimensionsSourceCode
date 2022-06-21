@@ -115,10 +115,7 @@ export default {
           v-if="config.reward"
           class="o-achievement__tooltip__reward"
         >
-          <span v-if="isDisabled">
-            This achievement reward is disabled while in Doomed
-          </span>
-          <span v-else>
+          <span :class="{ 'o-pelle-disabled': isDisabled }">
             Reward: {{ config.reward }}
             <EffectDisplay
               v-if="config.formatEffect"

@@ -20,7 +20,8 @@ export default {
       ipMultSoftCap: 0,
       ipMultHardCap: 0,
       eternityUnlocked: false,
-      bottomRowUnlocked: false
+      bottomRowUnlocked: false,
+      styleOfColumnBg: undefined
     };
   },
   computed: {
@@ -52,27 +53,16 @@ export default {
         ]
       ];
     },
+    allColumnUpgrades() {
+      return this.grid.flat();
+    },
     disChargeClassObject() {
       return {
         "o-primary-btn--subtab-option": true,
         "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
-    offlineIpUpgrade: () => InfinityUpgrade.ipOffline,
-    backgroundOfColumnBg() {
-      // Infinity upgrades are 10 rem tall, if counting margins.
-      const INF_UPG_HEIGHT = 10;
-      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
-
-      return this.grid.map(col => {
-        const boughtUpgrades = col.countWhere(upg => upg.isBought);
-
-        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
-        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
-        return `linear-gradient(to bottom, var(--color-infinity) 0% ${heightUpper * 100}%,
-          transparent ${heightLower * 100}%)`;
-      });
-    }
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
   watch: {
     disCharge(newValue) {
@@ -80,7 +70,9 @@ export default {
     }
   },
   created() {
-    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.$recompute("backgroundOfColumnBg"));
+    this.on$(GAME_EVENT.INFINITY_UPGRADE_BOUGHT, () => this.setStyleOfColumnBg());
+
+    this.setStyleOfColumnBg();
   },
   methods: {
     update() {
@@ -103,7 +95,23 @@ export default {
         classObject[`o-infinity-upgrade-btn--color-${column + 1}`] = true;
       }
       return classObject;
-    }
+    },
+    setStyleOfColumnBg() {
+      // Infinity upgrades are 10 rem tall, if counting margins.
+      const INF_UPG_HEIGHT = 10;
+      const MAX_HEIGHT = INF_UPG_HEIGHT * 4;
+
+      this.styleOfColumnBg = this.grid.map(col => {
+        const boughtUpgrades = col.countWhere(upg => upg.isBought);
+
+        const heightUpper = boughtUpgrades * INF_UPG_HEIGHT / MAX_HEIGHT;
+        const heightLower = Math.min((boughtUpgrades + 1) * INF_UPG_HEIGHT / MAX_HEIGHT, 1);
+        return {
+          background: `linear-gradient(to bottom, var(--color-good) 0% ${heightUpper * 100}%,
+          transparent ${heightLower * 100}%)`
+        };
+      });
+    },
   }
 };
 </script>
@@ -128,7 +136,7 @@ export default {
       Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
     </div>
     <div v-if="isUseless">
-      You cannot get any Charged Infinity Upgrades while in Doomed.
+      You cannot Charge Infinity Upgrades while Doomed.
     </div>
     <br>
     Within each column, the upgrades must be purchased from top to bottom.
@@ -147,7 +155,7 @@ export default {
         />
         <div
           class="c-infinity-upgrade-grid__column--background"
-          :style="{ background: backgroundOfColumnBg[columnId] }"
+          :style="styleOfColumnBg[columnId]"
         />
       </div>
     </div>
@@ -173,9 +181,9 @@ export default {
 <style scoped>
 .c-infinity-upgrade-grid__column {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   position: relative;
-  border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0 0.3rem;
 }
@@ -187,11 +195,15 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
-  opacity: 0.4;
+  opacity: 0.9;
+}
+
+.s-base--dark .c-infinity-upgrade-grid__column--background {
+  opacity: 0.5;
 }
 
 .l-infinity-upgrades-bottom-row .l-infinity-upgrade-grid__cell,
 .l-infinity-upgrades-bottom-row .l-infinity-upgrades-tab__mult-btn {
-  margin: 0.5rem 1.2rem;
+  margin: 0.5rem 1.1rem;
 }
 </style>

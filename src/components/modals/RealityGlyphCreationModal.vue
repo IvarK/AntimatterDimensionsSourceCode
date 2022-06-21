@@ -20,8 +20,8 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
-      const realityEffectConfigs = Object.values(GameDatabase.reality.glyphEffects)
-        .filter(eff => eff.id.match("reality*"))
+      const realityEffectConfigs = GlyphEffects.all
+        .filter(eff => eff.glyphTypes.includes("reality"))
         .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
       const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.bitmaskIndex).min();
       this.possibleEffects = realityEffectConfigs
@@ -39,11 +39,9 @@ export default {
     },
     formatGlyphEffect(effect) {
       if (this.realityGlyphLevel < effect[0]) return `(Requires Glyph level ${formatInt(effect[0])})`;
-      const config = GameDatabase.reality.glyphEffects[effect[1]];
+      const config = GlyphEffects[effect[1]];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
-      const effectTemplate = typeof config.singleDesc === "function"
-        ? config.singleDesc()
-        : config.singleDesc;
+      const effectTemplate = config.singleDesc;
       return effectTemplate.replace("{value}", config.formatEffect(value));
     }
   },
@@ -79,7 +77,7 @@ export default {
         v-if="isDoomed"
         :enabled="false"
       >
-        You cannot create Reality Glyphs while in Doomed
+        You cannot create Reality Glyphs while Doomed
       </PrimaryButton>
       <PrimaryButton
         v-else-if="realityGlyphLevel !== 0"

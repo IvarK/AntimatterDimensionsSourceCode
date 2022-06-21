@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       amount: 0,
       cap: 0,
       capped: false,
@@ -70,11 +69,11 @@ export default {
       const resourceText = `${sign}${format(Math.abs(this.flow), 2, 2)}/sec`;
       const color = this.flow > 0 ? "9CCC65" : "CC6666";
       return `<span style="color:#${color}">${resourceText}</span>`;
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const resource = this.resource;
       this.amount = resource.amount;
       this.cap = resource.cap;
@@ -105,8 +104,7 @@ export default {
     </span>
     <span v-if="isBaseResource">Base Resource</span>
     <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-    <span v-if="isDoomed">Alchemy effects are disabled while in Doomed</span>
-    <span v-else>
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
       <EffectDisplay
         label="Effect"
         :config="effectConfig"

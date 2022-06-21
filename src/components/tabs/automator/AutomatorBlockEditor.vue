@@ -216,4 +216,9 @@ export const BlockAutomator = {
   font-size: 1.4rem;
   color: var(--color-automator-docs-font);
 }
+
+.null-block {
+  display: none;
+  visibility: hidden;
+}
 </style>

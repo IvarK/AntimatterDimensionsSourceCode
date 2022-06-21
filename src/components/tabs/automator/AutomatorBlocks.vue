@@ -141,7 +141,11 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
 </script>
 
 <template>
-  <div>
+  <draggable
+    class="o-drag-cancel-region"
+    group="code-blocks"
+    ghost-class="null-block"
+  >
     <p>Drag and drop these blocks to the area on the left!</p>
     <draggable
       class="block-container"
@@ -159,7 +163,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
       </div>
     </draggable>
     <p>Note: For technical reasons, blocks and their contents count towards the character limits.</p>
-  </div>
+  </draggable>
 </template>
 
 <style scoped>
@@ -177,5 +181,15 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
   height: 5.5rem;
   justify-content: center;
   align-items: center;
+}
+
+.o-drag-cancel-region {
+  width: 100%;
+  height: 100%;
+}
+
+.null-block {
+  display: none;
+  visibility: hidden;
 }
 </style>

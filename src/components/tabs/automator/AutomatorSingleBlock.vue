@@ -30,6 +30,7 @@ export default {
       },
       // For errors
       idxOffset: 0,
+      suppressTooltip: false,
     };
   },
   computed: {
@@ -48,7 +49,7 @@ export default {
       return this.validatorErrors.errors.length > 0;
     },
     errorTooltip() {
-      if (!this.hasError) return undefined;
+      if (!this.hasError || this.suppressTooltip) return undefined;
       const span = "<span class='o-automator-error-underline'>";
       const content = this.validatorErrors.line
         .splice(this.validatorErrors.errors[0].startOffset - this.idxOffset, 0, span)
@@ -64,7 +65,7 @@ export default {
         show: true,
         classes: ["c-block-automator-error-container", "general-tooltip"]
       };
-    }
+    },
   },
   mounted() {
     this.b = this.block;
@@ -103,6 +104,9 @@ export default {
         errors: validator.errors,
         line: value
       };
+    },
+    handleFocus(focusState) {
+      this.suppressTooltip = !focusState;
     }
   }
 };
@@ -172,8 +176,11 @@ export default {
         v-model="b.inputValue"
         v-tooltip="errorTooltip"
         class="o-automator-block-input"
+        :class="{ 'l-error-textbox' : hasError }"
         @change="updateBlock(b, b.id)"
         @keyup="validateInput(b.inputValue)"
+        @focusin="handleFocus(true)"
+        @focusout="handleFocus(false)"
       >
       <div
         class="o-automator-block-delete"
@@ -213,5 +220,9 @@ export default {
   border: 0.1rem dotted #55ff55;
   margin: -0.1rem 0 -0.1rem 3rem;
   padding: 0 0.5rem;
+}
+
+.l-error-textbox {
+  background: var(--color-automator-error-background);
 }
 </style>

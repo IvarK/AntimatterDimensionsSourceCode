@@ -8922,7 +8922,8 @@ kbd {
 
 .o-automator-command {
   display: inline-block;
-  min-width: 8.5rem;
+  min-width: 9.5rem;
+  height: 3rem;
   color: #a142ff;
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);

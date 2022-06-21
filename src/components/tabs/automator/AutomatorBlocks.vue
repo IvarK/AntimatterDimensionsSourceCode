@@ -162,7 +162,10 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
         {{ block.cmd }}
       </div>
     </draggable>
-    <p>Note: For technical reasons, blocks and their contents count towards the character limits.</p>
+    <p>
+      Note: For technical reasons, blocks and their contents count towards the character limits as if the
+      command was typed in text mode.
+    </p>
   </draggable>
 </template>
 

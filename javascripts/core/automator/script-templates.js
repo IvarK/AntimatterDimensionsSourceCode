@@ -69,7 +69,7 @@ export class ScriptTemplate {
       this.storedTreeStr = `studies${nowaitStr} load ${preset}`;
       this.storedTreeObj = new TimeStudyTree(presetObj.studies);
     } else {
-      this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;
+      this.storedTreeStr = `studies${nowaitStr} purchase ${params.treeStudies}`;
       this.storedTreeObj = new TimeStudyTree(params.treeStudies);
     }
     if (this.storedTreeObj.invalidStudies.length > 0) this.warnings.push("Tree contains invalid Study IDs");

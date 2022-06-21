@@ -1418,6 +1418,23 @@ GameStorage.devMigrations = {
     player => {
       player.celestials.ra.petWithRemembrance = player.celestials.ra.petWithRecollection;
       delete player.celestials.ra.petWithRecollection;
+    },
+    player => {
+      for (const key of Object.keys(player.reality.automator.scripts)) {
+        const lines = player.reality.automator.scripts[key].content.split("\n");
+        for (let num = 0; num < lines.length; num++) {
+          let rawLine = lines[num];
+          // TT command removed
+          rawLine = rawLine.replace(/^\s*tt.*$/ui, "");
+          // Changes to "studies" commands
+          rawLine = rawLine.replace(/studies (\d)/ui, "studies purchase $1");
+          rawLine = rawLine.replace(/studies load preset (\S+)/ui, "studies load name $1");
+          // Autobuyer mode change (this is a much older change which wasn't migrated at the time)
+          rawLine = rawLine.replace(/x current/ui, "x highest");
+          lines[num] = rawLine;
+        }
+        player.reality.automator.scripts[key].content = lines.join("\n");
+      }
     }
   ],
 

@@ -97,34 +97,6 @@ GameDatabase.reality.automator = {
     },
     {
       id: 3,
-      isUnlocked: () => true,
-      keyword: "tt",
-      name: "<b>tt</b> - purchases Time Theorems with a resource or buys one of each resource",
-      syntax:
-        "<b>tt</b> action",
-      sections: [
-        {
-          name: "ACTIONS",
-          items: [
-            {
-              header: "<i>resources</i>",
-              description: `
-                Buys with a specific resource.<br>
-                <b>Resources</b>: am (Antimatter), ip (Infinity Points), ep (Eternity Points)
-              `
-            },
-            {
-              header: "<i>all</i>",
-              description: `
-                Buys one of each time theorem from all resources.
-              `
-            },
-          ]
-        }
-      ]
-    },
-    {
-      id: 4,
       isUnlocked: () => BlackHole(1).isUnlocked,
       keyword: "black hole",
       name: "<b>black hole</b> - turns the Black Hole on and off",
@@ -135,7 +107,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 5,
+      id: 4,
       isUnlocked: () => Enslaved.isUnlocked,
       keyword: "store game time",
       name: `<b>store game time</b> - either turns on/off the storing of game time or can be used to use
@@ -162,7 +134,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 6,
+      id: 5,
       isUnlocked: () => true,
       keyword: "unlock",
       name: "<b>unlock</b> - can be used to unlock certain features",
@@ -186,7 +158,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 7,
+      id: 6,
       isUnlocked: () => true,
       keyword: "auto",
       name: "<b>auto</b> - turn Infinity/Eternity/Reality autobuyers on or off and change their modes",
@@ -227,7 +199,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 8,
+      id: 7,
       isUnlocked: () => true,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
@@ -241,7 +213,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 9,
+      id: 8,
       isUnlocked: () => true,
       keyword: "pause",
       name: "<b>pause</b> - pauses the Automator for a set amount of time",
@@ -271,7 +243,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 10,
+      id: 9,
       isUnlocked: () => true,
       keyword: "until",
       name: "<b>until</b> - repeats commands until a condition or event",
@@ -294,7 +266,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 11,
+      id: 10,
       isUnlocked: () => true,
       keyword: "while",
       name: "<b>while</b> - repeats commands while a condition is met",
@@ -317,7 +289,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 12,
+      id: 11,
       isUnlocked: () => true,
       keyword: "studies respec",
       name: "<b>studies respec</b> - respec Time Studies on next Eternity",
@@ -329,7 +301,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 13,
+      id: 12,
       isUnlocked: () => true,
       keyword: "studies load (name / id)",
       name: "<b>studies load (name / id)</b> - Load a saved Time Study preset",
@@ -352,7 +324,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 14,
+      id: 13,
       isUnlocked: () => true,
       keyword: "studies purchase",
       name: "<b>studies</b> - Purchase Time Studies",
@@ -375,7 +347,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 15,
+      id: 14,
       isUnlocked: () => true,
       keyword: "define",
       name: "<b>define</b> - defining constants",
@@ -387,7 +359,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 16,
+      id: 15,
       isUnlocked: () => true,
       keyword: "currencies",
       name: "List of <b>currencies</b>",
@@ -426,7 +398,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 17,
+      id: 16,
       isUnlocked: () => true,
       keyword: "notify",
       name: "<b>notify</b> - send a progress notification",
@@ -441,7 +413,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 18,
+      id: 17,
       isUnlocked: () => true,
       keyword: "(Comments)",
       name: "<b>#|//</b> - leaves a comment in your script",

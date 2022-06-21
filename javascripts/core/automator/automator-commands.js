@@ -773,36 +773,6 @@ export const AutomatorCommands = ((() => {
       blockify: () => automatorBlocksMap["STUDIES RESPEC"]
     },
     {
-      id: "tt",
-      rule: $ => () => {
-        $.OPTION(() => $.CONSUME(T.Buy));
-        $.CONSUME(T.TT);
-        $.CONSUME(T.TTCurrency);
-      },
-      validate: ctx => {
-        ctx.startLine = (ctx.Buy || ctx.TT)[0].startLine;
-        return true;
-      },
-      compile: ctx => {
-        const buyFunction = ctx.TTCurrency[0].tokenType.$buyTT;
-        return () => {
-          const boughtTT = buyFunction();
-          if (boughtTT) {
-            AutomatorData.logCommandEvent(`${formatInt(boughtTT)} TT purchased with ${ctx.TTCurrency[0].image}`,
-              ctx.startLine);
-            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-          }
-          AutomatorData.logCommandEvent(`Attempted to purchase TT with ${ctx.TTCurrency[0].image}
-            but could not afford any`, ctx.startLine);
-          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
-        };
-      },
-      blockify: ctx => ({
-        target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
-        ...automatorBlocksMap.TT
-      })
-    },
-    {
       id: "unlockDilation",
       rule: $ => () => {
         $.CONSUME(T.Unlock);

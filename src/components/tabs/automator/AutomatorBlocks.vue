@@ -97,9 +97,6 @@ export const automatorBlocks = [
     targets: ["ON", "OFF", "USE"],
     isUnlocked: () => Enslaved.isUnlocked
   }, {
-    cmd: "TT",
-    targets: ["AM", "IP", "EP", "ALL"],
-  }, {
     cmd: "PAUSE",
     hasInput: true
   }, {

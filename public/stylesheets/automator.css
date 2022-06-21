@@ -73,6 +73,7 @@
   position: relative;
   text-align: left;
   border: var(--var-border-width, 0.15rem) solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
 }
 
@@ -97,6 +98,7 @@
   position: relative;
   text-align: left;
   border: var(--var-border-width, 0.15rem) solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
 }
 

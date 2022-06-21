@@ -89,15 +89,14 @@ export default {
 .c-modal-celestial-quote {
   color: var(--scoped-quote-color);
   background-color: black;
-  box-shadow: 0 0 1.5rem 0.1rem var(--scoped-quote-color), 0 0 1rem 0.1rem var(--scoped-quote-color) inset;
-}
-
-.s-base--metro .c-modal-celestial-quote {
-  box-shadow: 0 0 0.3rem 0.1rem var(--scoped-quote-color), 0 0 1.5rem 0.1rem var(--scoped-quote-color) inset;
 }
 
 .c-modal-celestial-quote-primary {
-  border-color: var(--scoped-quote-color);
+  box-shadow: 0 0 1.5rem 0.1rem var(--scoped-quote-color), 0 0 1rem 0.1rem var(--scoped-quote-color) inset;
+}
+
+.s-base--metro .c-modal-celestial-quote-primary {
+  box-shadow: 0 0 1rem 0.2rem var(--scoped-quote-color), 0 0 1rem 0.1rem var(--scoped-quote-color) inset
 }
 
 .c-modal-cestial-quote__symbol {

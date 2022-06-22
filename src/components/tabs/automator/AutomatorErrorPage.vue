@@ -1,4 +1,6 @@
 <script>
+import { BlockAutomator } from "./AutomatorBlockEditor.vue";
+
 export default {
   name: "AutomatorErrorPage",
   data() {
@@ -11,8 +13,12 @@ export default {
       this.errors = AutomatorData.currentErrors();
     },
     scrollToLine(line) {
-      AutomatorTextUI.scrollToLine(line - 1);
-      AutomatorTextUI.updateHighlightedLine(line, "Error");
+      if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+        AutomatorTextUI.scrollToLine(line - 1);
+        AutomatorTextUI.updateHighlightedLine(line, "Error");
+      } else {
+        BlockAutomator.scrollToLine(line);
+      }
     }
   }
 };

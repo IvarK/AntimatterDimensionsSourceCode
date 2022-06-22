@@ -38,14 +38,15 @@ export function startDilatedEternityRequest() {
 }
 
 export function startDilatedEternity(auto) {
-  if (!PlayerProgress.dilationUnlocked()) return;
+  if (!PlayerProgress.dilationUnlocked()) return false;
   if (player.dilation.active) {
     eternity(false, auto, { switchingDilation: true });
-    return;
+    return false;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
+  return true;
 }
 
 const DIL_UPG_NAMES = [

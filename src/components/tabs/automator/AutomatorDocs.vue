@@ -312,7 +312,6 @@ export default {
 }
 
 .l-automator__rename-input {
-  font-size: 1.2rem;
   width: 100%;
   height: 2.333rem;
   border: 0.2rem solid var(--color-reality-light);
@@ -322,6 +321,7 @@ export default {
 }
 
 .c-automator__rename-input {
+  font-size: 1.2rem;
   color: var(--color-automator-docs-font);
   background-color: var(--color-automator-controls-active);
 }

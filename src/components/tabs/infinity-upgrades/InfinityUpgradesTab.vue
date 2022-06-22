@@ -196,7 +196,7 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
-  opacity: 0.9;
+  opacity: 0.7;
 }
 
 .s-base--dark .c-infinity-upgrade-grid__column--background {

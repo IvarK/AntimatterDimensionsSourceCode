@@ -233,7 +233,7 @@ export default {
         <div class="l-automator__script-names">
           <template v-if="!editingName">
             <select
-              class="l-automator__scripts-dropdown"
+              class="l-automator__scripts-dropdown c-automator__scripts-dropdown"
               @input="onScriptDropdown"
             >
               <option
@@ -257,7 +257,7 @@ export default {
           <input
             v-else
             ref="renameInput"
-            class="l-automator__rename-input"
+            class="l-automator__rename-input c-automator__rename-input"
             @blur="nameEdited"
             @keyup.enter="$refs.renameInput.blur()"
           >
@@ -297,11 +297,32 @@ export default {
 
 .l-automator__scripts-dropdown {
   width: 90%;
-  height: 90%;
-  border-width: 0.1rem;
-  border-radius: 0;
+  height: 2.333rem;
+  border: 0.2rem solid var(--color-automator-controls-border);
+  border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.4rem;
   padding: 0.2rem 0 0.3rem;
+}
+
+.c-automator__scripts-dropdown {
+  font-size: 1.2rem;
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-inactive);
+}
+
+.l-automator__rename-input {
+  font-size: 1.2rem;
+  width: 100%;
+  height: 2.333rem;
+  border: 0.2rem solid var(--color-reality-light);
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0.4rem;
+  padding: 0.4rem;
+}
+
+.c-automator__rename-input {
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-active);
 }
 
 .c-automator__button--active {

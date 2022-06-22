@@ -186,12 +186,6 @@
   right: 0;
 }
 
-.l-automator__rename-input {
-  width: 90%;
-  height: 90%;
-  padding: 0.1rem;
-}
-
 .c-automator-editor__active-line {
   background: var(--color-automator-active-line-background);
   outline: 0.1rem solid var(--color-automator-active-line-outline);

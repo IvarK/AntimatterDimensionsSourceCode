@@ -154,6 +154,11 @@ import { AutomatorLexer } from "./lexer";
         modifiedErrors.push(err);
         lastLine = err.startLine;
       }
+
+      for (const err of modifiedErrors) {
+        err.startLine = AutomatorBackend.translateLineNumber(err.startLine);
+      }
+
       this.errors = modifiedErrors;
     }
 

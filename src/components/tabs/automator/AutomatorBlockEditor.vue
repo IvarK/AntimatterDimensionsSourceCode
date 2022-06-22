@@ -62,7 +62,15 @@ export const BlockAutomator = {
 
   get currentBlockId() {
     if (AutomatorBackend.stack.isEmpty) return false;
-    return this._idArray[AutomatorBackend.currentLineNumber - 1];
+    return this._idArray[AutomatorBackend.stack.top.lineNumber - 1];
+  },
+
+  // _idArray contains a mapping from all text lines to block IDs in the blockmato, where only lines with
+  // actual commands have defined values. This means that every time a closing curly brace } occurs, all further
+  // line numbers between on block will be one less than the corresponding text line number
+  lineNumber(textLine) {
+    const skipLines = this._idArray.map((id, index) => (id ? -1 : index + 1)).filter(v => v !== -1);
+    return textLine - skipLines.countWhere(line => line <= textLine);
   },
 
   parseTextFromBlocks() {

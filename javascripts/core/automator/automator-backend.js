@@ -196,7 +196,7 @@ export const AutomatorData = {
     this.eventLog.push({
       // Messages often overflow the 120 col limit and extra spacing gets included in the message - remove it
       message: message.replaceAll(/\s?\n\s+/gu, " "),
-      line,
+      line: AutomatorBackend.translateLineNumber(line),
       thisReality: Time.thisRealityRealTime.totalSeconds,
       timestamp: currTime,
       timegap: currTime - this.lastEvent
@@ -283,10 +283,17 @@ export const AutomatorBackend = {
     return nameArray.filter(n => n === name).length > 1;
   },
 
+  // Scripts are internally stored and run as text, but block mode has a different layout for loops that
+  // shifts a lot of commands around. Therefore we need to conditionally change it based on mode in order
+  // to make sure the player is presented with the correct line number
+  translateLineNumber(num) {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) return num;
+    return BlockAutomator.lineNumber(num);
+  },
+
   get currentLineNumber() {
-    if (!this.stack.top)
-      return -1;
-    return this.stack.top.lineNumber;
+    if (!this.stack.top) return -1;
+    return this.translateLineNumber(this.stack.top.lineNumber);
   },
 
   get currentInterval() {

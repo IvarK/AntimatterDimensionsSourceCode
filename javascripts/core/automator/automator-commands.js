@@ -26,13 +26,13 @@ export const AutomatorCommands = ((() => {
     return {
       run: () => {
         if (!evalComparison()) {
-          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
-            exiting loop at line ${ctx.RCurly[0].startLine + 1} (end of loop)`, ctx.startLine);
+          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), exiting loop at
+            line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)} (end of loop)`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         AutomatorBackend.push(commands);
-        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true),
-          moving to line ${ctx.LCurly[0].startLine + 1} (start of loop)`, ctx.startLine);
+        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), moving to
+          line ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)} (start of loop)`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
       blockCommands: commands,
@@ -342,7 +342,7 @@ export const AutomatorCommands = ((() => {
             };
             if (!evalComparison()) {
               AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
-                skipping to line ${ctx.RCurly[0].startLine + 1}`, ctx.startLine);
+                skipping to line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)}`, ctx.startLine);
               return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             }
             AutomatorBackend.push(commands);
@@ -475,15 +475,15 @@ export const AutomatorCommands = ((() => {
           const available = prestigeToken.$prestigeAvailable();
           if (!available) {
             if (!nowait) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
-            AutomatorData.logCommandEvent(`Auto-${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
+            AutomatorData.logCommandEvent(`${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
               ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           if (respec) prestigeToken.$respec();
           prestigeToken.$prestige();
           const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
-          AutomatorData.logCommandEvent(`Auto-${prestigeName} triggered
-            (${findLastPrestigeRecord(prestigeName)})`, ctx.startLine);
+          AutomatorData.logCommandEvent(`${prestigeName} triggered (${findLastPrestigeRecord(prestigeName)})`,
+            ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
       },
@@ -896,8 +896,9 @@ export const AutomatorCommands = ((() => {
               return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             }
             AutomatorBackend.push(commands);
-            AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet,
-              moving to line ${ctx.LCurly[0].startLine + 1} (start of until loop)`, ctx.startLine);
+            AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet, moving to line
+              ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)} (start of until loop)`,
+            ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
           blockCommands: commands

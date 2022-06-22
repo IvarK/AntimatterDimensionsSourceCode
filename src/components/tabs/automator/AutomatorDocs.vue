@@ -308,6 +308,7 @@ export default {
   font-size: 1.2rem;
   color: var(--color-automator-docs-font);
   background-color: var(--color-automator-controls-inactive);
+  cursor: pointer;
 }
 
 .l-automator__rename-input {

@@ -4215,6 +4215,7 @@ br {
   font-size: 1.2rem;
   color: black;
   border-radius: var(--var-border-radius, 0.4rem);
+  cursor: pointer;
 }
 
 .t-metro .c-autobuyer-box__mode-select {

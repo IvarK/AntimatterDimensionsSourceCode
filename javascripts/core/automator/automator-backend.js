@@ -474,7 +474,11 @@ export const AutomatorBackend = {
     const state = this.state;
     const focusedScript = state.topLevelScript === state.editorScript;
     if (focusedScript && this.isRunning && state.followExecution) {
-      AutomatorTextUI.scrollToLine(AutomatorBackend.stack.top.lineNumber - 1);
+      if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+        AutomatorTextUI.scrollToLine(AutomatorBackend.stack.top.lineNumber - 1);
+      } else {
+        BlockAutomator.scrollToLine(AutomatorBackend.translateLineNumber(AutomatorBackend.stack.top.lineNumber));
+      }
     }
   },
 

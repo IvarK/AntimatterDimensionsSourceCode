@@ -99,8 +99,12 @@ export default {
       }
     },
     scrollToLine(line) {
-      AutomatorTextUI.scrollToLine(line);
-      AutomatorTextUI.updateHighlightedLine(line, "Event");
+      if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+        AutomatorTextUI.scrollToLine(line - 1);
+        AutomatorTextUI.updateHighlightedLine(line, "Event");
+      } else {
+        BlockAutomator.scrollToLine(line);
+      }
     }
   }
 };

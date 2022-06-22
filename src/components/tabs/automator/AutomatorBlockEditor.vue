@@ -23,15 +23,17 @@ export default {
     },
   },
   mounted() {
-    this.$refs.blockEditorElement.scrollTo(0, BlockAutomator.previousScrollPosition);
-    // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
-    this.$refs.editorGutter.style.bottom = `${this.$refs.blockEditorElement.scrollTop}px`;
+    BlockAutomator.initialize();
+    BlockAutomator.editor.scrollTo(0, BlockAutomator.previousScrollPosition);
+    BlockAutomator.scrollGutter();
   },
   methods: {
+    update() {
+      AutomatorBackend.jumpToActiveLine();
+    },
     setPreviousScroll() {
       BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;
-      // We want to set it here directly instead of through v-bind because it's slightly faster and less jittery
-      this.$refs.editorGutter.style.bottom = `${this.$refs.blockEditorElement.scrollTop}px`;
+      BlockAutomator.scrollGutter();
     },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
@@ -49,6 +51,13 @@ export default {
 };
 
 export const BlockAutomator = {
+  editor: null,
+  gutter: null,
+  initialize() {
+    this.editor = document.getElementsByClassName("c-automator-block-editor")[0];
+    this.gutter = document.getElementsByClassName("c-automator-block-editor--gutter")[0];
+  },
+
   _idArray: [],
 
   get lines() {
@@ -137,7 +146,14 @@ export const BlockAutomator = {
     return block.nested ? Math.max(block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1), 2) : 1;
   },
 
-  previousScrollPosition: 0
+  previousScrollPosition: 0,
+  scrollToLine(line) {
+    this.editor.scrollTo(0, 34.5 * (line - 1));
+    this.scrollGutter();
+  },
+  scrollGutter() {
+    BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
+  }
 };
 </script>
 

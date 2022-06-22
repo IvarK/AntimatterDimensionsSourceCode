@@ -3984,6 +3984,7 @@ br {
   border: 0.1rem solid #c2c2c2;
   box-sizing: border-box;
   padding: 0.5rem;
+  border-radius: var(--var-border-radius, 0.4rem);
 }
 
 .t-metro .o-autobuyer-input {
@@ -4209,6 +4210,7 @@ br {
   font-family: Typewriter, serif;
   font-size: 1.2rem;
   color: black;
+  border-radius: var(--var-border-radius, 0.4rem);
 }
 
 .t-metro .c-autobuyer-box__mode-select {

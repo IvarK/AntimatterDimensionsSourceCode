@@ -526,7 +526,6 @@ export function finishProcessReality(realityProps) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
     if (player.celestials.ra.disCharge) {
-      EventHub.dispatch(GAME_EVENT.INFINITY_UPGRADES_DISCHARGED);
       disChargeAll();
     }
   }

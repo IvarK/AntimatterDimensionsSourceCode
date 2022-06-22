@@ -6,8 +6,8 @@ export default {
       type: Object,
       required: true
     },
-    tab: {
-      type: Object,
+    parentName: {
+      type: String,
       required: true
     }
   },
@@ -22,11 +22,13 @@ export default {
   computed: {
     classObject() {
       return {
+        "o-tab-btn": true,
+        "o-tab-btn--secondary": true,
         "o-subtab-btn--active": this.isCurrentSubtab,
-        "o-tab-btn--infinity": this.tab.name === "Infinity",
-        "o-tab-btn--eternity": this.tab.name === "Eternity",
-        "o-tab-btn--reality": this.tab.name === "Reality",
-        "o-tab-btn--celestial": this.tab.name === "Celestials"
+        "o-tab-btn--infinity": this.parentName === "Infinity",
+        "o-tab-btn--eternity": this.parentName === "Eternity",
+        "o-tab-btn--reality": this.parentName === "Reality",
+        "o-tab-btn--celestial": this.parentName === "Celestials"
       };
     },
   },
@@ -48,7 +50,6 @@ export default {
 <template>
   <button
     v-if="isAvailable"
-    class="o-tab-btn o-tab-btn--secondary"
     :class="classObject"
     @click="subtab.show(true)"
   >

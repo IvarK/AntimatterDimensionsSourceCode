@@ -198,6 +198,11 @@
   box-shadow: 0 0 0 0.1rem var(--color-reality-light) !important;
 }
 
+.c-glyph-sacrifice-options__rarity-slider-handle:hover {
+  color: black;
+  background-color: var(--color-reality-light) !important;
+}
+
 .c-glyph-sacrifice-options__advanced {
   color: var(--color-reality-light);
 }

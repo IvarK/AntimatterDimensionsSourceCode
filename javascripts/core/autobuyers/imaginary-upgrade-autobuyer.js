@@ -6,7 +6,7 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get data() {
-    return player.auto.imaginaryUpgrades[this.id - 1];
+    return player.auto.imaginaryUpgrades.all[this.id - 1];
   }
 
   get isUnlocked() {
@@ -19,6 +19,8 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
 
   static get entryCount() { return 10; }
   static get autobuyerGroupName() { return "Imaginary Upgrade"; }
+  static get isActive() { return player.auto.imaginaryUpgrades.isActive; }
+  static set isActive(value) { player.auto.imaginaryUpgrades.isActive = value; }
 }
 
 Autobuyer.imaginaryUpgrade = ImaginaryUpgradeAutobuyerState.createAccessor();

@@ -547,7 +547,7 @@ GameStorage.migrations = {
     for (let i = 0; i < 8; i++) {
       const old = player.autobuyers[i];
       if (old % 1 === 0) continue;
-      const autobuyer = player.auto.antimatterDims[i];
+      const autobuyer = player.auto.antimatterDims.all[i];
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.bulk = old.bulk;
@@ -836,10 +836,10 @@ GameStorage.migrations = {
 
   consolidateAuto(player) {
     for (let i = 0; i < 8; i++) {
-      player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+      player.auto.infinityDims.all[i].isActive = player.infDimBuyers[i];
     }
     for (let i = 0; i < 3; i++) {
-      player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+      player.auto.replicantiUpgrades.all[i].isActive = player.replicanti.auto[i];
     }
     player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
     player.auto.ipMultBuyer.isActive = player.infMultBuyer;

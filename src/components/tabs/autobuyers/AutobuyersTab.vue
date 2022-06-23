@@ -44,9 +44,9 @@ export default {
           .every(x => x.hasUnlimitedBulk && x.hasMaxedInterval);
         return;
       }
-      const allMaxedInterval = ad.allMaxedInterval();
-      const allUnlocked = ad.allUnlocked();
-      const allUnlimitedBulk = ad.allUnlimitedBulk();
+      const allMaxedInterval = ad.allMaxedInterval;
+      const allUnlocked = ad.allUnlocked;
+      const allUnlimitedBulk = ad.allUnlimitedBulk;
       this.displayADAutobuyersIndividually = !(allMaxedInterval && allUnlocked && allUnlimitedBulk);
     },
   }

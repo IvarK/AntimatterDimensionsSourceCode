@@ -34,7 +34,7 @@ export default {
       v-for="(subtab, i) in subtabs"
       :key="i"
       :subtab="subtab"
-      :parentName="tab.name"
+      :parent-name="tab.name"
     />
   </div>
 </template>

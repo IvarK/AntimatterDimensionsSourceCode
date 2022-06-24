@@ -7,6 +7,13 @@ function startChallengeUI() {
   if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
+export function tryCompleteInfinityChallenges() {
+  if (EternityMilestone.autoIC.isReached) {
+    const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
+    for (const challenge of toComplete) challenge.complete();
+  }
+}
+
 class InfinityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
     super(config);
@@ -139,7 +146,13 @@ export const InfinityChallenges = {
   get nextICUnlockAM() {
     return this.nextIC?.unlockAM;
   },
+  /**
+   * Displays a notification if the antimatter gained will surpass the next unlockAM requirement.
+   * @param value {Decimal} - total antimatter
+   */
   ICsToUnlock(value) {
+    // Disable the popup if the user will automatically complete the IC, or if all ICs should already be complete.
+    if (Achievement(133).isUnlocked || EternityMilestone.autoIC.isReached) return;
     if (InfinityChallenges.nextIC === undefined) return;
     for (const ic of InfinityChallenges.all) {
       if (ic.isUnlocked) continue;

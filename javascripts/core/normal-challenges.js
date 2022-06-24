@@ -8,13 +8,6 @@ function startChallengeUI() {
   if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
-export function tryCompleteInfinityChallenges() {
-  if (EternityMilestone.autoIC.isReached) {
-    const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
-    for (const challenge of toComplete) challenge.complete();
-  }
-}
-
 export function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {

@@ -201,6 +201,7 @@
 .c-glyph-sacrifice-options__rarity-slider-handle:hover {
   color: black;
   background-color: var(--color-reality-light) !important;
+  border-color: var(--color-reality-light);
 }
 
 .c-glyph-sacrifice-options__advanced {

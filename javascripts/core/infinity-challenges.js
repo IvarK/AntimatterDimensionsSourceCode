@@ -139,6 +139,14 @@ export const InfinityChallenges = {
   get nextICUnlockAM() {
     return this.nextIC?.unlockAM;
   },
+  ICsToUnlock(value) {
+    if (InfinityChallenges.nextIC === undefined) return;
+    for (const ic of InfinityChallenges.all) {
+      if (ic.isUnlocked) continue;
+      if (value.lt(ic.unlockAM)) break;
+      GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`);
+    }
+  },
   /**
    * @returns {InfinityChallengeState[]}
    */

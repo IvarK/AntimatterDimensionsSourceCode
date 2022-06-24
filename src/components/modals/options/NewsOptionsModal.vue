@@ -2,13 +2,15 @@
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import PrimaryButton from "@/components/PrimaryButton";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "NewsOptionsModal",
   components: {
     ModalOptionsToggleButton,
-    PrimaryButton,
     ModalWrapperOptions,
+    PrimaryButton,
+    SliderComponent
   },
   data() {
     return {
@@ -49,6 +51,57 @@ export default {
       this.AIChance = options.AIChance;
       this.speed = options.speed;
       this.includeAnimated = options.includeAnimated;
+    },
+    adjustSliderStoring(select, value) {
+      switch (select) {
+        case 0:
+          this.repeatBuffer = value;
+          player.options.repeatBuffer = this.repeatBuffer;
+          break;
+        case 1:
+          this.AIChance = value;
+          player.options.AIChance = this.AIChance;
+          break;
+        case 2:
+          this.speed = value;
+          player.options.speed = this.speed;
+          break;
+        default:
+          throw new Error("Unrecognized News Options selection");
+      }
+    },
+    sliderProps(select) {
+      switch (select) {
+        case 0:
+          return {
+            min: 0,
+            max: 80,
+            interval: 1,
+            show: true,
+            width: "98%",
+            tooltip: false
+          };
+        case 1:
+          return {
+            min: 0,
+            max: 1,
+            interval: 0.01,
+            show: true,
+            width: "98%",
+            tooltip: false
+          };
+        case 2:
+          return {
+            min: 0.5,
+            max: 2,
+            interval: 0.01,
+            show: true,
+            width: "98%",
+            tooltip: false
+          };
+        default:
+          throw new Error("Unrecognized News Options selection");
+      }
     }
   },
 };
@@ -67,36 +120,30 @@ export default {
     </PrimaryButton>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
       <b>{{ formatInt(parseInt(repeatBuffer)) }} message repeat buffer</b>
-      <input
-        v-model="repeatBuffer"
+      <SliderComponent
         class="o-primary-btn--slider__slider"
-        type="range"
-        min="0"
-        step="1"
-        max="80"
-      >
+        v-bind="sliderProps(0)"
+        :value="repeatBuffer"
+        @input="adjustSliderStoring(0, $event)"
+      />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
       <b>{{ formatPercents(parseFloat(AIChance)) }} AI messages</b>
-      <input
-        v-model="AIChance"
+      <SliderComponent
         class="o-primary-btn--slider__slider"
-        type="range"
-        min="0"
-        step="0.01"
-        max="1"
-      >
+        v-bind="sliderProps(1)"
+        :value="AIChance"
+        @input="adjustSliderStoring(1, $event)"
+      />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
       <b>{{ formatPercents(parseFloat(speed)) }} scroll speed</b>
-      <input
-        v-model="speed"
+      <SliderComponent
         class="o-primary-btn--slider__slider"
-        type="range"
-        min="0.5"
-        step="0.01"
-        max="2"
-      >
+        v-bind="sliderProps(2)"
+        :value="speed"
+        @input="adjustSliderStoring(2, $event)"
+      />
     </div>
     <ModalOptionsToggleButton
       v-model="includeAnimated"

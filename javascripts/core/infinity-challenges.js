@@ -151,8 +151,8 @@ export const InfinityChallenges = {
    * @param value {Decimal} - total antimatter
    */
   ICsToUnlock(value) {
-    // Disable the popup if the user will automatically complete the IC, or if all ICs should already be complete.
-    if (Achievement(133).isUnlocked || EternityMilestone.autoIC.isReached) return;
+    // Disable the popup if the user will automatically complete the IC.
+    if (EternityMilestone.autoIC.isReached) return;
     if (InfinityChallenges.nextIC === undefined) return;
     for (const ic of InfinityChallenges.all) {
       if (ic.isUnlocked) continue;

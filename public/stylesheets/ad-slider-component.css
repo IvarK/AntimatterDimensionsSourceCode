@@ -156,6 +156,7 @@ SOFTWARE.
 
 .c-ad-slider__dot-handle {
   background-color: #ffffff;
+  border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 50%) !important;
   box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 32%);
   transition-duration: 0.2s;

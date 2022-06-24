@@ -2,13 +2,15 @@
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "OptionsGameplayTab",
   components: {
-    PrimaryToggleButton,
     OpenModalHotkeysButton,
-    OptionsButton
+    OptionsButton,
+    PrimaryToggleButton,
+    SliderComponent
   },
   data() {
     return {
@@ -67,6 +69,44 @@ export default {
     parseOfflineSlider(str) {
       const value = parseInt(str, 10);
       return (1 + value % 9) * Math.pow(10, Math.floor(value / 9));
+    },
+    adjustSliderStoring(select, value) {
+      switch (select) {
+        case 0:
+          this.offlineSlider = value;
+          player.options.offlineTicks = this.parseOfflineSlider(value);
+          break;
+        case 1:
+          this.automatorLogSize = value;
+          player.options.automatorEvents.maxEntries = this.automatorLogSize;
+          break;
+        default:
+          throw new Error("Unrecognized Gameplay Options selection");
+      }
+    },
+    sliderProps(select) {
+      switch (select) {
+        case 0:
+          return {
+            min: 22,
+            max: 54,
+            interval: 1,
+            show: true,
+            width: "100%",
+            tooltip: false
+          };
+        case 1:
+          return {
+            min: 50,
+            max: 500,
+            interval: 50,
+            show: true,
+            width: "100%",
+            tooltip: false
+          };
+        default:
+          throw new Error("Unrecognized Gameplay Options selection");
+      }
     }
   }
 };
@@ -103,14 +143,12 @@ export default {
         </OptionsButton>
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
           <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>
-          <input
-            v-model="offlineSlider"
+          <SliderComponent
             class="o-primary-btn--slider__slider"
-            type="range"
-            min="22"
-            step="1"
-            max="54"
-          >
+            v-bind="sliderProps(0)"
+            :value="offlineSlider"
+            @input="adjustSliderStoring(0, $event)"
+          />
         </div>
         <PrimaryToggleButton
           v-model="automaticTabSwitching"
@@ -124,14 +162,12 @@ export default {
           class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"
         >
           <b>Automator Log Max: {{ formatInt(parseInt(automatorLogSize)) }}</b>
-          <input
-            v-model="automatorLogSize"
+          <SliderComponent
             class="o-primary-btn--slider__slider"
-            type="range"
-            min="50"
-            step="50"
-            max="500"
-          >
+            v-bind="sliderProps(1)"
+            :value="automatorLogSize"
+            @input="adjustSliderStoring(1, $event)"
+          />
         </div>
       </div>
       <OpenModalHotkeysButton />

@@ -1515,7 +1515,8 @@ br {
 }
 
 .o-primary-btn--slider__slider {
-  width: 100%;
+  height: 1.6rem;
+  margin: 0.2rem;
 }
 
 .o-primary-btn--slider {

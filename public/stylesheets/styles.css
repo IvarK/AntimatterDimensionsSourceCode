@@ -8533,6 +8533,7 @@ kbd {
 .c-glyph-levels-and-weights__slider-handle:hover {
   color: black;
   background-color: var(--color-reality-light);
+  border-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__reset-btn-outer {

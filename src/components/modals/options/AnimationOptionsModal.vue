@@ -72,7 +72,7 @@ export default {
       this.background = options.background;
       this.blobSnowflakes = options.blobSnowflakes;
     },
-    adjustSliderStoring(value) {
+    adjustSliderValue(value) {
       this.blobSnowflakes = value;
       player.options.blobSnowflakes = this.blobSnowflakes;
     },
@@ -146,7 +146,7 @@ export default {
           class="o-primary-btn--slider__slider"
           v-bind="sliderProps()"
           :value="blobSnowflakes"
-          @input="adjustSliderStoring($event)"
+          @input="adjustSliderValue($event)"
         />
       </div>
     </div>

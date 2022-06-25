@@ -70,7 +70,7 @@ export default {
       const value = parseInt(str, 10);
       return (1 + value % 9) * Math.pow(10, Math.floor(value / 9));
     },
-    adjustSliderStoring(select, value) {
+    adjustSliderValue(select, value) {
       switch (select) {
         case 0:
           this.offlineSlider = value;
@@ -147,7 +147,7 @@ export default {
             class="o-primary-btn--slider__slider"
             v-bind="sliderProps(0)"
             :value="offlineSlider"
-            @input="adjustSliderStoring(0, $event)"
+            @input="adjustSliderValue(0, $event)"
           />
         </div>
         <PrimaryToggleButton
@@ -166,7 +166,7 @@ export default {
             class="o-primary-btn--slider__slider"
             v-bind="sliderProps(1)"
             :value="automatorLogSize"
-            @input="adjustSliderStoring(1, $event)"
+            @input="adjustSliderValue(1, $event)"
           />
         </div>
       </div>

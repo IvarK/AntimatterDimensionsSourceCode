@@ -15,7 +15,7 @@ export default {
     update() {
       this.updateRate = player.options.updateRate;
     },
-    adjustSliderStoring(value) {
+    adjustSliderValue(value) {
       this.updateRate = value;
       player.options.updateRate = this.updateRate;
       GameOptions.refreshUpdateRate();
@@ -41,7 +41,7 @@ export default {
       class="o-primary-btn--slider__slider"
       v-bind="sliderProps()"
       :value="updateRate"
-      @input="adjustSliderStoring($event)"
+      @input="adjustSliderValue($event)"
     />
   </div>
 </template>

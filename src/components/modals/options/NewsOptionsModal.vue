@@ -52,7 +52,7 @@ export default {
       this.speed = options.speed;
       this.includeAnimated = options.includeAnimated;
     },
-    adjustSliderStoring(select, value) {
+    adjustSliderValue(select, value) {
       switch (select) {
         case 0:
           this.repeatBuffer = value;
@@ -124,7 +124,7 @@ export default {
         class="o-primary-btn--slider__slider"
         v-bind="sliderProps(0)"
         :value="repeatBuffer"
-        @input="adjustSliderStoring(0, $event)"
+        @input="adjustSliderValue(0, $event)"
       />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
@@ -133,7 +133,7 @@ export default {
         class="o-primary-btn--slider__slider"
         v-bind="sliderProps(1)"
         :value="AIChance"
-        @input="adjustSliderStoring(1, $event)"
+        @input="adjustSliderValue(1, $event)"
       />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
@@ -142,7 +142,7 @@ export default {
         class="o-primary-btn--slider__slider"
         v-bind="sliderProps(2)"
         :value="speed"
-        @input="adjustSliderStoring(2, $event)"
+        @input="adjustSliderValue(2, $event)"
       />
     </div>
     <ModalOptionsToggleButton

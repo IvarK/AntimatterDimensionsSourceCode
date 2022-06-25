@@ -15,7 +15,7 @@ export default {
     update() {
       this.autosaveInterval = player.options.autosaveInterval / 1000;
     },
-    adjustSliderStoring(value) {
+    adjustSliderValue(value) {
       this.autosaveInterval = value;
       player.options.autosaveInterval = this.autosaveInterval * 1000;
       GameOptions.refreshAutosaveInterval();
@@ -41,7 +41,7 @@ export default {
       class="o-primary-btn--slider__slider"
       v-bind="sliderProps()"
       :value="autosaveInterval"
-      @input="adjustSliderStoring($event)"
+      @input="adjustSliderValue($event)"
     />
   </div>
 </template>

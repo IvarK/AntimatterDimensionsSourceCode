@@ -28,6 +28,18 @@ export default {
       isS11Active: false
     };
   },
+  computed: {
+    sliderProps() {
+      return {
+        min: 1,
+        max: 500,
+        interval: 1,
+        show: true,
+        width: "100%",
+        tooltip: false
+      };
+    }
+  },
   watch: {
     bigCrunch(newValue) {
       player.options.animations.bigCrunch = newValue;
@@ -75,18 +87,8 @@ export default {
     adjustSliderValue(value) {
       this.blobSnowflakes = value;
       player.options.blobSnowflakes = this.blobSnowflakes;
-    },
-    sliderProps() {
-      return {
-        min: 1,
-        max: 500,
-        interval: 1,
-        show: true,
-        width: "100%",
-        tooltip: false
-      };
     }
-  },
+  }
 };
 </script>
 
@@ -144,7 +146,7 @@ export default {
         <b>{{ quantifyInt("Blobflake", parseInt(blobSnowflakes)) }}</b>
         <SliderComponent
           class="o-primary-btn--slider__slider"
-          v-bind="sliderProps()"
+          v-bind="sliderProps"
           :value="blobSnowflakes"
           @input="adjustSliderValue($event)"
         />

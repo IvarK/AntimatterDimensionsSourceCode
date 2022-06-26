@@ -11,15 +11,7 @@ export default {
       updateRate: 0
     };
   },
-  methods: {
-    update() {
-      this.updateRate = player.options.updateRate;
-    },
-    adjustSliderValue(value) {
-      this.updateRate = value;
-      player.options.updateRate = this.updateRate;
-      GameOptions.refreshUpdateRate();
-    },
+  computed: {
     sliderProps() {
       return {
         min: 33,
@@ -30,6 +22,16 @@ export default {
         tooltip: false
       };
     }
+  },
+  methods: {
+    update() {
+      this.updateRate = player.options.updateRate;
+    },
+    adjustSliderValue(value) {
+      this.updateRate = value;
+      player.options.updateRate = this.updateRate;
+      GameOptions.refreshUpdateRate();
+    }
   }
 };
 </script>
@@ -39,7 +41,7 @@ export default {
     <b>Update rate: {{ formatInt(updateRate) }} ms</b>
     <SliderComponent
       class="o-primary-btn--slider__slider"
-      v-bind="sliderProps()"
+      v-bind="sliderProps"
       :value="updateRate"
       @input="adjustSliderValue($event)"
     />

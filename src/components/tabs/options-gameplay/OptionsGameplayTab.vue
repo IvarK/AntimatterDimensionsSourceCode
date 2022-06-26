@@ -25,6 +25,28 @@ export default {
       automatorLogSize: 0,
     };
   },
+  computed: {
+    sliderPropsOfflineTicks() {
+      return {
+        min: 22,
+        max: 54,
+        interval: 1,
+        show: true,
+        width: "100%",
+        tooltip: false
+      };
+    },
+    sliderPropsAutomatorLogSize() {
+      return {
+        min: 50,
+        max: 500,
+        interval: 50,
+        show: true,
+        width: "100%",
+        tooltip: false
+      };
+    }
+  },
   watch: {
     retryChallenge(newValue) {
       player.options.retryChallenge = newValue;
@@ -83,30 +105,6 @@ export default {
         default:
           throw new Error("Unrecognized Gameplay Options selection");
       }
-    },
-    sliderProps(select) {
-      switch (select) {
-        case 0:
-          return {
-            min: 22,
-            max: 54,
-            interval: 1,
-            show: true,
-            width: "100%",
-            tooltip: false
-          };
-        case 1:
-          return {
-            min: 50,
-            max: 500,
-            interval: 50,
-            show: true,
-            width: "100%",
-            tooltip: false
-          };
-        default:
-          throw new Error("Unrecognized Gameplay Options selection");
-      }
     }
   }
 };
@@ -145,7 +143,7 @@ export default {
           <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>
           <SliderComponent
             class="o-primary-btn--slider__slider"
-            v-bind="sliderProps(0)"
+            v-bind="sliderPropsOfflineTicks"
             :value="offlineSlider"
             @input="adjustSliderValue(0, $event)"
           />
@@ -164,7 +162,7 @@ export default {
           <b>Automator Log Max: {{ formatInt(parseInt(automatorLogSize)) }}</b>
           <SliderComponent
             class="o-primary-btn--slider__slider"
-            v-bind="sliderProps(1)"
+            v-bind="sliderPropsAutomatorLogSize"
             :value="automatorLogSize"
             @input="adjustSliderValue(1, $event)"
           />

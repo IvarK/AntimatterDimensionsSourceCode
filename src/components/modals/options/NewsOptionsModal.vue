@@ -24,7 +24,37 @@ export default {
   computed: {
     newsOnOffLabel() {
       return `News: ${this.enabled ? "On" : "Off"}`;
-    }
+    },
+    sliderPropsRepeatBuffer() {
+      return {
+        min: 0,
+        max: 80,
+        interval: 1,
+        show: true,
+        width: "98%",
+        tooltip: false
+      };
+    },
+    sliderPropsAIChance() {
+      return {
+        min: 0,
+        max: 1,
+        interval: 0.01,
+        show: true,
+        width: "98%",
+        tooltip: false
+      };
+    },
+    sliderPropsSpeed() {
+      return {
+        min: 0.5,
+        max: 2,
+        interval: 0.01,
+        show: true,
+        width: "98%",
+        tooltip: false
+      };
+    },
   },
   watch: {
     type(newValue) {
@@ -69,41 +99,8 @@ export default {
         default:
           throw new Error("Unrecognized News Options selection");
       }
-    },
-    sliderProps(select) {
-      switch (select) {
-        case 0:
-          return {
-            min: 0,
-            max: 80,
-            interval: 1,
-            show: true,
-            width: "98%",
-            tooltip: false
-          };
-        case 1:
-          return {
-            min: 0,
-            max: 1,
-            interval: 0.01,
-            show: true,
-            width: "98%",
-            tooltip: false
-          };
-        case 2:
-          return {
-            min: 0.5,
-            max: 2,
-            interval: 0.01,
-            show: true,
-            width: "98%",
-            tooltip: false
-          };
-        default:
-          throw new Error("Unrecognized News Options selection");
-      }
     }
-  },
+  }
 };
 </script>
 
@@ -122,7 +119,7 @@ export default {
       <b>{{ formatInt(parseInt(repeatBuffer)) }} message repeat buffer</b>
       <SliderComponent
         class="o-primary-btn--slider__slider"
-        v-bind="sliderProps(0)"
+        v-bind="sliderPropsRepeatBuffer"
         :value="repeatBuffer"
         @input="adjustSliderValue(0, $event)"
       />
@@ -131,7 +128,7 @@ export default {
       <b>{{ formatPercents(parseFloat(AIChance)) }} AI messages</b>
       <SliderComponent
         class="o-primary-btn--slider__slider"
-        v-bind="sliderProps(1)"
+        v-bind="sliderPropsAIChance"
         :value="AIChance"
         @input="adjustSliderValue(1, $event)"
       />
@@ -140,7 +137,7 @@ export default {
       <b>{{ formatPercents(parseFloat(speed)) }} scroll speed</b>
       <SliderComponent
         class="o-primary-btn--slider__slider"
-        v-bind="sliderProps(2)"
+        v-bind="sliderPropsSpeed"
         :value="speed"
         @input="adjustSliderValue(2, $event)"
       />

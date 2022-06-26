@@ -11,15 +11,7 @@ export default {
       autosaveInterval: 10
     };
   },
-  methods: {
-    update() {
-      this.autosaveInterval = player.options.autosaveInterval / 1000;
-    },
-    adjustSliderValue(value) {
-      this.autosaveInterval = value;
-      player.options.autosaveInterval = this.autosaveInterval * 1000;
-      GameOptions.refreshAutosaveInterval();
-    },
+  computed: {
     sliderProps() {
       return {
         min: 10,
@@ -30,6 +22,16 @@ export default {
         tooltip: false
       };
     }
+  },
+  methods: {
+    update() {
+      this.autosaveInterval = player.options.autosaveInterval / 1000;
+    },
+    adjustSliderValue(value) {
+      this.autosaveInterval = value;
+      player.options.autosaveInterval = this.autosaveInterval * 1000;
+      GameOptions.refreshAutosaveInterval();
+    }
   }
 };
 </script>
@@ -39,7 +41,7 @@ export default {
     <b>Autosave interval: {{ formatInt(autosaveInterval) }}s</b>
     <SliderComponent
       class="o-primary-btn--slider__slider"
-      v-bind="sliderProps()"
+      v-bind="sliderProps"
       :value="autosaveInterval"
       @input="adjustSliderValue($event)"
     />

@@ -11,7 +11,7 @@
   font-size: 1.4rem;
   line-height: 1.2;
   color: white;
-  background: rgba(0, 0, 0, 90%);
+  background: #0d0d0d;
   border-radius: var(--var-border-radius, 0.3rem);
   padding: 0.5rem 1rem 0.4rem;
   -webkit-user-select: none;
@@ -19,7 +19,7 @@
 }
 
 .s-base--dark .general-tooltip .tooltip-inner {
-  border: 0.1rem solid rgba(222, 222, 222, 90%);
+  border: 0.1rem solid #dddddd;
 }
 
 .tooltip-inner.automator-tooltip {
@@ -52,12 +52,12 @@
   height: 0;
   position: absolute;
   z-index: 1;
-  border: solid rgba(0, 0, 0, 90%);
+  border: solid #0d0d0d;
   margin: 5px;
 }
 
 .s-base--dark .general-tooltip .tooltip-arrow {
-  border: solid rgba(222, 222, 222, 90%);
+  border: solid #dddddd;
 }
 
 .general-tooltip[x-placement^="top"] {

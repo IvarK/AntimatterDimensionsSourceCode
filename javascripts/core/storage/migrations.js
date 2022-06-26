@@ -913,11 +913,7 @@ GameStorage.migrations = {
   },
 
   moveTS33(player) {
-    if (
-      player.timestudy.studies.includes(21) &&
-      player.timestudy.studies.includes(33) &&
-      !player.timestudy.studies.includes(22)
-    ) {
+    if (player.timestudy.studies.includes(33) && !player.timestudy.studies.includes(22)) {
       player.timestudy.studies.splice(player.timestudy.studies.indexOf(33), 1);
       player.timestudy.theorem = new Decimal(player.timestudy.theorem).plus(2);
     }

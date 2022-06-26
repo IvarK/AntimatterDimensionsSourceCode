@@ -1368,7 +1368,8 @@ GameStorage.devMigrations = {
       delete player.celestials.ra.quotes;
       delete player.celestials.laitela.quotes;
       delete player.celestials.pelle.quotes;
-    }
+    },
+    GameStorage.migrations.moveTS33,
   ],
 
   patch(player) {

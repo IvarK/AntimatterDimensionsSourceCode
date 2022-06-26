@@ -149,6 +149,7 @@ GameStorage.migrations = {
       GameStorage.migrations.infMultNameConversion(player);
       GameStorage.migrations.convertNews(player);
       GameStorage.migrations.etercreqConversion(player);
+      GameStorage.migrations.moveTS33(player);
 
       kong.migratePurchases();
     }
@@ -909,6 +910,17 @@ GameStorage.migrations = {
     // eslint-disable-next-line no-bitwise
     if (player.etercreq) player.challenge.eternity.requirementBits |= 1 << player.etercreq;
     delete player.etercreq;
+  },
+
+  moveTS33(player) {
+    if (
+      player.timestudy.studies.includes(21) &&
+      player.timestudy.studies.includes(33) &&
+      !player.timestudy.studies.includes(22)
+    ) {
+      player.timestudy.studies.splice(player.timestudy.studies.indexOf(33), 1);
+      player.timestudy.theorem = new Decimal(player.timestudy.theorem).plus(2);
+    }
   },
 
   prePatch(saveData) {

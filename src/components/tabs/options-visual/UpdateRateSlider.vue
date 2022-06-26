@@ -17,7 +17,6 @@ export default {
         min: 33,
         max: 200,
         interval: 1,
-        show: true,
         width: "100%",
         tooltip: false
       };

@@ -30,7 +30,6 @@ export default {
         min: 0,
         max: 80,
         interval: 1,
-        show: true,
         width: "98%",
         tooltip: false
       };
@@ -40,7 +39,6 @@ export default {
         min: 0,
         max: 1,
         interval: 0.01,
-        show: true,
         width: "98%",
         tooltip: false
       };
@@ -50,7 +48,6 @@ export default {
         min: 0.5,
         max: 2,
         interval: 0.01,
-        show: true,
         width: "98%",
         tooltip: false
       };

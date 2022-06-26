@@ -34,7 +34,6 @@ export default {
         min: 1,
         max: 500,
         interval: 1,
-        show: true,
         width: "100%",
         tooltip: false
       };

@@ -45,7 +45,6 @@ export default {
         min: 0,
         max: 100,
         interval: 1,
-        show: true,
         "dot-width": "2.2rem",
         "dot-height": "1.6rem",
         width: "13.5rem",
@@ -54,8 +53,7 @@ export default {
         "plus-minus-buttons": true,
         "dot-class": "c-glyph-levels-and-weights__slider-handle",
         "bg-class": "c-glyph-levels-and-weights__slider-bg",
-        "process-class": "c-glyph-levels-and-weights__slider-process",
-        direction: "horizontal",
+        "process-class": "c-glyph-levels-and-weights__slider-process"
       };
     },
     totalWeights() {

@@ -1,4 +1,5 @@
 <script>
+import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
 import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import HowToPlay from "@/components/HowToPlay";
@@ -22,6 +23,7 @@ export default {
     SpeedrunStatus,
     PopupModal,
     ModalProgressBar,
+    CelestialQuoteModal,
     FadeAway,
     CreditsContainer,
     NewGame
@@ -72,8 +74,13 @@ export default {
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
     <SpeedrunStatus :style="hideIfMatoFullscreen" />
+    <ModalProgressBar v-if="view.modal.progressBar" />
+    <CelestialQuoteModal
+      v-else-if="view.quotes.current"
+      :quote="view.quotes.current"
+    />
     <PopupModal
-      v-if="view.modal.current"
+      v-else-if="view.modal.current"
       :modal="view.modal.current"
     />
     <ModalProgressBar v-if="view.modal.progressBar" />

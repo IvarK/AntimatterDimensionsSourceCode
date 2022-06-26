@@ -1,7 +1,7 @@
 import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index";
 import { GameDatabase } from "../secret-formula/game-database";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
@@ -56,31 +56,7 @@ export const Teresa = {
   get runCompleted() {
     return player.celestials.teresa.bestRunAM.gt(0);
   },
-  quotes: new CelestialQuotes("teresa", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "We have been observing you.",
-        "You have shown promise with your bending of Reality.",
-        "We are the Celestials, and we want you to join us.",
-        "My name is Teresa, the Celestial Of Reality.",
-        "Prove your worth.",
-      ]
-    },
-    UNLOCK_REALITY: CelestialQuotes.singleLine(
-      2, "I will let you inside my Reality, mortal. Do not get crushed by it."
-    ),
-    COMPLETE_REALITY: CelestialQuotes.singleLine(
-      3, "Why are you still here... you were supposed to fail."
-    ),
-    EFFARIG: {
-      id: 4,
-      lines: [
-        "You are still no match for us.",
-        "I hope the others succeed where I have failed."
-      ]
-    }
-  }),
+  quotes: Quotes.teresa,
   symbol: "Ϟ"
 };
 
@@ -178,7 +154,7 @@ export const PerkShopUpgrade = mapGameDataToObject(
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.initial.show();
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

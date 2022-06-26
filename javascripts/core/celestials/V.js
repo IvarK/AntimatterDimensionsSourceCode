@@ -3,7 +3,7 @@ import { GameDatabase } from "../secret-formula/game-database";
 
 import { SpeedrunMilestones } from "../speedrun";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 /**
  * Information about how to format runUnlocks:
@@ -86,12 +86,10 @@ class VRunUnlockState extends GameMechanicState {
 
       V.updateTotalRunUnlocks();
 
-      for (const quote of Object.values(V.quotes)) {
-        // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
-        if (quote.requirement && quote.requirement()) {
-          // TODO If multiple quotes show up simultaneously, this only seems to actually show one of them and skips the
-          // rest. This might be related to the modal stacking issue
-          V.quotes.show(quote);
+      for (const quote of V.quotes.all) {
+        // Quotes without requirements will be shown in other ways
+        if (quote.requirement) {
+          quote.show();
         }
       }
     }
@@ -180,12 +178,12 @@ export const V = {
     // eslint-disable-next-line no-bitwise
     player.celestials.v.unlockBits |= (1 << VUnlocks.vAchievementUnlock.id);
     GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
-    V.quotes.show(V.quotes.UNLOCK);
+    V.quotes.unlock.show();
   },
   initializeRun() {
     clearCelestialRuns();
     player.celestials.v.run = true;
-    this.quotes.show(this.quotes.REALITY_ENTER);
+    this.quotes.realityEnter.show();
   },
   updateTotalRunUnlocks() {
     let sum = 0;
@@ -226,100 +224,10 @@ export const V = {
   nextHardReductionCost(currReductionSteps) {
     return 1000 * Math.pow(1.15, currReductionSteps);
   },
-  quotes: new CelestialQuotes("v", {
-    INITIAL: CelestialQuotes.singleLine(
-      1, "How pathetic..."
-    ),
-    UNLOCK: {
-      id: 2,
-      lines: [
-        "Welcome to my Reality.",
-        "I am surprised you could reach it.",
-        "This is my realm after all...",
-        "Not everyone is as great as me.",
-      ]
-    },
-    REALITY_ENTER: {
-      id: 3,
-      lines: [
-        "Good luck with that!",
-        "You will need it.",
-        "My reality is flawless. You will fail.",
-      ]
-    },
-    REALITY_COMPLETE: {
-      id: 4,
-      lines: [
-        "So fast...",
-        "Do not think so much of yourself.",
-        "This is just the beginning.",
-        "You will never be better than me.",
-      ]
-    },
-    ACHIEVEMENT_1: {
-      id: 5,
-      requirement: () => V.spaceTheorems >= 1,
-      lines: [
-        "Only one? Pathetic.",
-        "Your accomplishments pale in comparison to mine.",
-      ]
-    },
-    ACHIEVEMENT_6: {
-      id: 6,
-      requirement: () => V.spaceTheorems >= 6,
-      lines: [
-        "This is nothing.",
-        "Do not be so full of yourself.",
-      ]
-    },
-    HEX_1: {
-      id: 7,
-      requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 1,
-      lines: [
-        "Do not think it will get any easier from now on.",
-        "You are awfully proud for such a little achievement.",
-      ]
-    },
-    ACHIEVEMENT_12: {
-      id: 8,
-      requirement: () => V.spaceTheorems >= 12,
-      lines: [
-        "How did you...",
-        "This barely amounts to anything!",
-        "You will never complete them all.",
-      ]
-    },
-    ACHIEVEMENT_24: {
-      id: 9,
-      requirement: () => V.spaceTheorems >= 24,
-      lines: [
-        "Impossible...",
-        "After how difficult it was for me...",
-      ]
-    },
-    HEX_3: {
-      id: 10,
-      requirement: () => player.celestials.v.runUnlocks.filter(a => a === 6).length >= 3,
-      lines: [
-        "No... No... No...",
-        "This cannot be...",
-      ]
-    },
-    ALL_ACHIEVEMENTS: {
-      id: 11,
-      requirement: () => V.spaceTheorems >= 36,
-      lines: [
-        "I... how did you do it...",
-        "I worked so hard to get them...",
-        "I am the greatest...",
-        "No one is better than me...",
-        "No one... no one... no on-",
-      ]
-    }
-  }),
+  quotes: Quotes.v,
   symbol: "⌬"
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.v.isOpen) V.quotes.show(V.quotes.INITIAL);
+  if (Tab.celestials.v.isOpen) V.quotes.initial.show();
 });

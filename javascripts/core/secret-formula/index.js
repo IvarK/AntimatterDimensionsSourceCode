@@ -37,7 +37,6 @@ import "./celestials/strikes";
 import "./celestials/rifts";
 import "./celestials/galaxy-generator";
 import "./celestials/ra";
-import "./celestials/pelle-quotes";
 import "./celestials/enslaved";
 export * from "./celestials/v";
 import "./celestials/alchemy";
@@ -45,6 +44,8 @@ import "./shop-purchases";
 export * from "./celestials/singularity-milestones";
 import "./script-templates";
 import "./speedrun-milestones";
+
+import "./celestials/quotes/index";
 
 import "./h2p";
 

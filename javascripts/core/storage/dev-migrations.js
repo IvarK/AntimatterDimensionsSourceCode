@@ -1349,6 +1349,26 @@ GameStorage.devMigrations = {
       }
       if (hasDimboostsResetNothing) player.celestials.pelle.upgrades.add(7);
     },
+    player => {
+      const cel = player.celestials;
+      // eslint-disable-next-line no-bitwise
+      const convToBit = x => x.toBitmask() >> 1;
+      if (cel.teresa.quotes) player.celestials.teresa.quoteBits = convToBit(cel.teresa.quotes);
+      if (cel.effarig.quotes) player.celestials.effarig.quoteBits = convToBit(cel.effarig.quotes);
+      if (cel.enslaved.quotes) player.celestials.enslaved.quoteBits = convToBit(cel.enslaved.quotes);
+      if (cel.v.quotes) player.celestials.v.quoteBits = convToBit(cel.v.quotes);
+      if (cel.ra.quotes) player.celestials.ra.quoteBits = convToBit(cel.ra.quotes);
+      if (cel.laitela.quotes) player.celestials.laitela.quoteBits = convToBit(cel.laitela.quotes);
+      if (cel.pelle.quotes) player.celestials.pelle.quoteBits = convToBit(cel.pelle.quotes);
+
+      delete player.celestials.teresa.quotes;
+      delete player.celestials.effarig.quotes;
+      delete player.celestials.enslaved.quotes;
+      delete player.celestials.v.quotes;
+      delete player.celestials.ra.quotes;
+      delete player.celestials.laitela.quotes;
+      delete player.celestials.pelle.quotes;
+    }
   ],
 
   patch(player) {

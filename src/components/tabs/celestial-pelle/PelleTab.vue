@@ -56,12 +56,7 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <CelestialQuoteHistory
-        celestial="pelle"
-        :visible-lines="4"
-        font-size="1.6rem"
-        line-height="2.56rem"
-      />
+      <CelestialQuoteHistory celestial="pelle" />
       <div class="button-container">
         <button
           class="o-pelle-button"

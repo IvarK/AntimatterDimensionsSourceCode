@@ -350,11 +350,11 @@ dev.printResourceTotals = function() {
 };
 
 dev.unlockCelestialQuotes = function(celestial) {
-  const quotes = Celestials[celestial].quotes;
-  for (const q of quotes.quotesById) {
-    if (q === undefined) continue;
-    quotes.show(q);
-  }
+  Quotes[celestial].all.forEach(x => x.show());
+};
+
+dev.presentCelestialQuotes = function(celestial) {
+  Quotes[celestial].all.forEach(x => x.present());
 };
 
 // This doesn't check everything but hopefully it gets some of the more obvious ones.

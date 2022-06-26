@@ -82,23 +82,17 @@ export default {
       this.speed = options.speed;
       this.includeAnimated = options.includeAnimated;
     },
-    adjustSliderValue(select, value) {
-      switch (select) {
-        case 0:
-          this.repeatBuffer = value;
-          player.options.repeatBuffer = this.repeatBuffer;
-          break;
-        case 1:
-          this.AIChance = value;
-          player.options.AIChance = this.AIChance;
-          break;
-        case 2:
-          this.speed = value;
-          player.options.speed = this.speed;
-          break;
-        default:
-          throw new Error("Unrecognized News Options selection");
-      }
+    adjustSliderValueRepeatBuffer(value) {
+      this.repeatBuffer = value;
+      player.options.repeatBuffer = this.repeatBuffer;
+    },
+    adjustSliderValueAIChance(value) {
+      this.AIChance = value;
+      player.options.AIChance = this.AIChance;
+    },
+    adjustSliderValueSpeed(value) {
+      this.speed = value;
+      player.options.speed = this.speed;
     }
   }
 };
@@ -121,7 +115,7 @@ export default {
         class="o-primary-btn--slider__slider"
         v-bind="sliderPropsRepeatBuffer"
         :value="repeatBuffer"
-        @input="adjustSliderValue(0, $event)"
+        @input="adjustSliderValueRepeatBuffer($event)"
       />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
@@ -130,7 +124,7 @@ export default {
         class="o-primary-btn--slider__slider"
         v-bind="sliderPropsAIChance"
         :value="AIChance"
-        @input="adjustSliderValue(1, $event)"
+        @input="adjustSliderValueAIChance($event)"
       />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
@@ -139,7 +133,7 @@ export default {
         class="o-primary-btn--slider__slider"
         v-bind="sliderPropsSpeed"
         :value="speed"
-        @input="adjustSliderValue(2, $event)"
+        @input="adjustSliderValueSpeed($event)"
       />
     </div>
     <ModalOptionsToggleButton

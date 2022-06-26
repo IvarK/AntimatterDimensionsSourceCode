@@ -92,19 +92,13 @@ export default {
       const value = parseInt(str, 10);
       return (1 + value % 9) * Math.pow(10, Math.floor(value / 9));
     },
-    adjustSliderValue(select, value) {
-      switch (select) {
-        case 0:
-          this.offlineSlider = value;
-          player.options.offlineTicks = this.parseOfflineSlider(value);
-          break;
-        case 1:
-          this.automatorLogSize = value;
-          player.options.automatorEvents.maxEntries = this.automatorLogSize;
-          break;
-        default:
-          throw new Error("Unrecognized Gameplay Options selection");
-      }
+    adjustSliderValueOfflineTicks(value) {
+      this.offlineSlider = value;
+      player.options.offlineTicks = this.parseOfflineSlider(value);
+    },
+    adjustSliderValueAutomatorLogSize(value) {
+      this.automatorLogSize = value;
+      player.options.automatorEvents.maxEntries = this.automatorLogSize;
     }
   }
 };
@@ -145,7 +139,7 @@ export default {
             class="o-primary-btn--slider__slider"
             v-bind="sliderPropsOfflineTicks"
             :value="offlineSlider"
-            @input="adjustSliderValue(0, $event)"
+            @input="adjustSliderValueOfflineTicks($event)"
           />
         </div>
         <PrimaryToggleButton
@@ -164,7 +158,7 @@ export default {
             class="o-primary-btn--slider__slider"
             v-bind="sliderPropsAutomatorLogSize"
             :value="automatorLogSize"
-            @input="adjustSliderValue(1, $event)"
+            @input="adjustSliderValueAutomatorLogSize($event)"
           />
         </div>
       </div>

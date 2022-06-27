@@ -402,23 +402,23 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Faster Dilation Autobuyers",
     defaultPosition: new Vector(490, 450)
   },
-  ttFree: {
-    id: 104,
-    label: "TTF",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
-      return `Purchasing Time Theorems no longer spends your Antimatter, Infinity Points, or Eternity Points.`;
-    },
-    defaultPosition: new Vector(190, -410)
-  },
   ttBuySingle: {
-    id: 105,
+    id: 104,
     label: "TTS",
     family: PERK_FAMILY.AUTOMATION,
     description: "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
     automatorPoints: 5,
     shortDescription: () => "Single TT Autobuyer",
     defaultPosition: new Vector(255, -540)
+  },
+  ttFree: {
+    id: 105,
+    label: "TTF",
+    family: PERK_FAMILY.AUTOMATION,
+    get description() {
+      return `Purchasing Time Theorems no longer spends your Antimatter, Infinity Points, or Eternity Points.`;
+    },
+    defaultPosition: new Vector(190, -410)
   },
   ttBuyMax: {
     id: 106,
@@ -515,7 +515,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.studyPassive, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
-    [p.studyActiveEP, p.bypassEC2Lock, p.ttFree],
+    [p.studyActiveEP, p.bypassEC2Lock, p.ttBuySingle],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],
     [p.retroactiveTP1, p.bypassTGReset, p.startTP, p.retroactiveTP2],
@@ -523,8 +523,8 @@ GameDatabase.reality.perkConnections = (function() {
     [p.retroactiveTP3, p.retroactiveTP4],
     [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassTGReset],
     [p.autobuyerFasterID],
-    [p.ttFree, p.ttBuySingle],
-    [p.ttBuySingle, p.ttBuyMax],
+    [p.ttBuySingle, p.ttFree],
+    [p.ttFree, p.ttBuyMax],
     [p.achievementGroup1, p.achievementGroup2],
     [p.achievementGroup2, p.achievementGroup3],
     [p.achievementGroup3, p.achievementGroup4],

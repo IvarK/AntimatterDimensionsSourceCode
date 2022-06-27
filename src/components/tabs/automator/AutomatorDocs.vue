@@ -313,7 +313,7 @@ export default {
 
 .l-automator__rename-input {
   width: 100%;
-  height: 2.333rem;
+  height: calc(2rem + 1rem/3);
   border: 0.2rem solid var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.4rem;

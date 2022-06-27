@@ -3,18 +3,11 @@ export default {
   name: "NewGame",
   data() {
     return {
-      plusRecord: 0,
-      minusRecord: 0,
       opacity: 0,
       visible: false,
     };
   },
   computed: {
-    ngRange() {
-      return [...Array(3 + this.plusRecord - this.minusRecord).keys()]
-        .map(x => x - 1 + this.minusRecord)
-        .filter(Boolean);
-    },
     style() {
       return {
         opacity: this.opacity,
@@ -24,17 +17,11 @@ export default {
   },
   methods: {
     update() {
-      this.plusRecord = NG.plusRecord;
-      this.minusRecord = NG.minusRecord;
       this.visible = GameEnd.endState > 13.75 && !GameEnd.removeAdditionalEnd;
       this.opacity = (GameEnd.endState - 13.75) * 2;
     },
-    ngString(i) {
-      if (!i) return "";
-      return `NewGame${i > 0 ? "+" : "-"}${Math.abs(i) > 1 ? Math.abs(i) : ""}`;
-    },
-    startNewGame(i) {
-      NG.startNewGame(i);
+    startNewGame() {
+      NG.startNewGame();
     }
   }
 };
@@ -45,17 +32,15 @@ export default {
     class="c-new-game-container"
     :style="style"
   >
-    <h1>Wanna start over?</h1>
-    Highest NG+: {{ plusRecord }}<br>
-    Highest NG-: {{ minusRecord }}<br>
+    <h2>
+      Reset the entire game, but keep Secret Themes, Secret Achievements, and Options
+    </h2>
     <div class="c-new-game-button-container">
       <button
-        v-for="i in ngRange"
-        :key="i"
         class="c-new-game-button"
-        @click="startNewGame(i)"
+        @click="startNewGame"
       >
-        Start a {{ ngString(i) }}
+        Start over?
       </button>
     </div>
   </div>

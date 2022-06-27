@@ -1393,7 +1393,10 @@ GameStorage.devMigrations = {
         fill: new Decimal(player.celestials.pelle.rifts.death.fill)
       };
       delete player.celestials.pelle.rifts.death;
-    }
+    },
+    player => {
+      delete player.newGame;
+    },
   ],
 
   patch(player) {

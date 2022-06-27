@@ -723,11 +723,6 @@ window.player = {
     }
   },
   isGameEnd: false,
-  newGame: {
-    current: 0,
-    plusRecord: 0,
-    minusRecord: 0,
-  },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,
   tutorialState: 0,

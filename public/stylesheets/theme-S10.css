@@ -60,3 +60,8 @@ body.t-s10 {
 .t-s10 #realityanimbg {
   filter: invert(1);
 }
+
+.t-s10 .c-alchemy-resource-info {
+  color: white;
+  border-color: white;
+}

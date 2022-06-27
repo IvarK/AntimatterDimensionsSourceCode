@@ -150,12 +150,12 @@ export const InfinityChallenges = {
    * Displays a notification if the antimatter gained will surpass the next unlockAM requirement.
    * @param value {Decimal} - total antimatter
    */
-  ICsToUnlock(value) {
+  notifyICUnlock(value) {
     // Disable the popup if the user will automatically complete the IC.
     if (EternityMilestone.autoIC.isReached) return;
     if (InfinityChallenges.nextIC === undefined) return;
     for (const ic of InfinityChallenges.all) {
-      if (ic.isUnlocked) continue;
+      if (ic.isUnlocked || ic.isCompleted) continue;
       if (value.lt(ic.unlockAM)) break;
       GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`);
     }

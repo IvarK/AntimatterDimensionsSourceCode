@@ -200,7 +200,7 @@ Currency.antimatter = new class extends DecimalCurrency {
   get value() { return player.antimatter; }
 
   set value(value) {
-    if (InfinityChallenges.nextIC) InfinityChallenges.ICsToUnlock(value);
+    if (InfinityChallenges.nextIC) InfinityChallenges.notifyICUnlock(value);
     player.antimatter = value;
     player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
     player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);

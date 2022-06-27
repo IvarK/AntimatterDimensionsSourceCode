@@ -130,7 +130,8 @@ export const AutomatorTextUI = {
       const scriptText = editor.getDoc().getValue();
       AutomatorBackend.saveScript(scriptID, scriptText);
 
-      const errors = AutomatorData.currentErrors(scriptText).length;
+      AutomatorData.needsRecompile = true;
+      const errors = AutomatorData.currentErrors().length;
       if (errors > editor.doc.size) SecretAchievement(48).unlock();
 
       // Clear all line highlighting as soon as any text is changed. We can't use the locations of previously

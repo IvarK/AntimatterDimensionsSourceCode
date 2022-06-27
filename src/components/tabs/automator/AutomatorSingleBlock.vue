@@ -67,6 +67,12 @@ export default {
       };
     },
   },
+  created() {
+    this.recalculateErrorCount();
+  },
+  destroyed() {
+    this.recalculateErrorCount();
+  },
   mounted() {
     this.b = this.block;
   },
@@ -87,15 +93,14 @@ export default {
     },
     validateInput(value) {
       let validator, lines;
-      const defines = BlockAutomator.lines.filter(line => line.cmd === "DEFINE");
       if (this.b.nest) {
         const clone = Object.assign({}, this.b);
         clone.nest = [];
-        lines = BlockAutomator.parseLines([...defines, clone]);
+        lines = BlockAutomator.parseLines([clone]);
         validator = AutomatorGrammar.validateLine(lines.join("\n"));
       } else {
-        lines = BlockAutomator.parseLines([...defines, this.b]);
-        validator = AutomatorGrammar.validateLine(lines.join("\n"));
+        lines = BlockAutomator.parseLines([this.b]);
+        validator = AutomatorGrammar.validateLine(lines[0]);
       }
 
       this.idxOffset = lines[0].indexOf(value);
@@ -107,6 +112,22 @@ export default {
     },
     handleFocus(focusState) {
       this.suppressTooltip = !focusState;
+    },
+
+    // Not entirely sure why, but updating error count only seems to work if it's done exactly here in the execution
+    // stack; moving it to the definition of updateBlock seems to stop it from working
+    changeBlock(block, id) {
+      this.updateBlock(block, id);
+      this.recalculateErrorCount();
+    },
+    removeBlock(block, id) {
+      this.deleteBlock(block, id);
+      this.recalculateErrorCount();
+    },
+
+    recalculateErrorCount() {
+      AutomatorData.needsRecompile = true;
+      AutomatorData.currentErrors();
     }
   }
 };
@@ -125,7 +146,7 @@ export default {
         v-if="b.canWait"
         v-model="b.wait"
         class="o-automator-block-input"
-        @change="updateBlock(block, b.id)"
+        @change="changeBlock(block, b.id)"
       >
         <option :value="true" />
         <option :value="false">
@@ -136,7 +157,7 @@ export default {
         v-if="b.canRespec"
         v-model="b.respec"
         class="o-automator-block-input"
-        @change="updateBlock(block, b.id)"
+        @change="changeBlock(block, b.id)"
       >
         <option :value="false" />
         <option :value="true">
@@ -147,7 +168,7 @@ export default {
         v-if="b.targets"
         v-model="b.target"
         class="o-automator-block-input"
-        @change="updateBlock(block, b.id)"
+        @change="changeBlock(block, b.id)"
       >
         <option
           v-for="target in b.targets"
@@ -161,7 +182,7 @@ export default {
         v-if="hasSecondaryTargets"
         v-model="b.secondaryTarget"
         class="o-automator-block-input"
-        @change="updateBlock(block, b.id)"
+        @change="changeBlock(block, b.id)"
       >
         <option
           v-for="target in b.secondaryTargets"
@@ -177,14 +198,14 @@ export default {
         v-tooltip="errorTooltip"
         class="o-automator-block-input"
         :class="{ 'l-error-textbox' : hasError }"
-        @change="updateBlock(b, b.id)"
+        @change="changeBlock(b, b.id)"
         @keyup="validateInput(b.inputValue)"
         @focusin="handleFocus(true)"
         @focusout="handleFocus(false)"
       >
       <div
         class="o-automator-block-delete"
-        @click="deleteBlock(b.id)"
+        @click="removeBlock(b.id)"
       >
         X
       </div>

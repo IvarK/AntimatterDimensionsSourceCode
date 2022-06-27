@@ -8259,6 +8259,7 @@ kbd {
   position: relative;
   left: -0.5rem;
   border: 0.1rem solid var(--color-laitela--accent);
+  border-radius: var(--var-border-radius, 0.6rem);
   margin-top: 0.5rem;
   padding: 1rem 0.5rem;
 }

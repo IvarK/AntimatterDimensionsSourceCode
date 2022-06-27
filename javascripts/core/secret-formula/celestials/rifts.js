@@ -1,11 +1,12 @@
 import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
+import wordShift from "../../wordShift";
 
 GameDatabase.celestials.pelle.rifts = {
   vacuum: {
     id: 1,
     key: "vacuum",
-    name: "Vacuum-Hollow-Void",
+    name: ["Vacuum", "Hollow", "Void"],
     drainResource: "IP",
     baseEffect: x => `IP gain ${formatX(x, 2, 2)}`,
     additionalEffects: () => [PelleRifts.vacuum.milestones[2]],
@@ -39,7 +40,7 @@ GameDatabase.celestials.pelle.rifts = {
       {
         resource: "vacuum",
         requirement: 0.4,
-        description: () => `${Pelle.modalTools.wordCycle(PelleRifts.vacuum.name)} also affects EP gain`,
+        description: () => `${wordShift.wordCycle(PelleRifts.vacuum.name)} also affects EP gain`,
         effect: () => Decimal.pow(4, PelleRifts.vacuum.totalFill.log10() / 2 / 308 + 3),
         formatEffect: x => `EP gain ${formatX(x, 2, 2)}`
       },
@@ -49,7 +50,7 @@ GameDatabase.celestials.pelle.rifts = {
   decay: {
     id: 2,
     key: "decay",
-    name: "Decay-Collapse-Disarray",
+    name: ["Decay", "Collapse", "Disarray"],
     drainResource: "Replicanti",
     spendable: true,
     baseEffect: x => `Replicanti speed ${formatX(x, 2, 2)}`,
@@ -97,8 +98,8 @@ GameDatabase.celestials.pelle.rifts = {
   chaos: {
     id: 3,
     key: "chaos",
-    name: "Chaos-Disorder-Impurity",
-    drainResource: "Decay-Collapse-Disarray",
+    name: ["Chaos", "Disorder", "Impurity"],
+    drainResource: ["Decay", "Collapse", "Disarray"],
     baseEffect: x => `Time Dimensions ${formatX(x, 2, 2)}`,
     strike: () => PelleStrikes.eternity,
     percentage: totalFill => totalFill / 10,
@@ -125,7 +126,7 @@ GameDatabase.celestials.pelle.rifts = {
       {
         resource: "chaos",
         requirement: 0.09,
-        description: () => `${Pelle.modalTools.wordCycle(PelleRifts.decay.name)} \
+        description: () => `${wordShift.wordCycle(PelleRifts.decay.name)} \
         effect is always maxed and milestones always active`
       },
       {
@@ -144,7 +145,7 @@ GameDatabase.celestials.pelle.rifts = {
   recursion: {
     id: 4,
     key: "recursion",
-    name: "Recursion-Dispersion-Destruction",
+    name: ["Recursion", "Dispersion", "Destruction"],
     drainResource: "EP",
     baseEffect: x => `EP formula: log(x)/${formatInt(308)} ➜ log(x)/${formatFloat(308 - x.toNumber(), 2)}`,
     additionalEffects: () => [PelleRifts.recursion.milestones[0], PelleRifts.recursion.milestones[1]],
@@ -181,7 +182,7 @@ GameDatabase.celestials.pelle.rifts = {
   paradox: {
     id: 5,
     key: "paradox",
-    name: "Paradox-Contradiction-Fallacy",
+    name: ["Paradox", "Contradiction", "Fallacy"],
     drainResource: "Dilated Time",
     baseEffect: x => `All Dimensions ${formatPow(x, 2, 3)}`,
     additionalEffects: () => [PelleRifts.paradox.milestones[2]],

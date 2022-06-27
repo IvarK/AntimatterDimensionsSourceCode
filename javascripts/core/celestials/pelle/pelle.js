@@ -183,7 +183,7 @@ export const Pelle = {
           (based on current EP)`;
       case "replication":
         return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
-        (based on ${Pelle.modalTools.wordCycle(PelleRifts.vacuum.name)})`;
+        (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
       case "dilation":
         return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
           (based on Tachyon Galaxies)`;

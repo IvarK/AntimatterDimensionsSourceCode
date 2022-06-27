@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
@@ -63,7 +65,7 @@ export default {
 
       // If it's chaos, update decay text
       if (rift.id !== 3) return;
-      this.decayText = Pelle.modalTools.wordCycle(PelleRifts.decay.name);
+      this.decayText = wordShift.wordCycle(PelleRifts.decay.name);
     },
     hasMilestone(ms) {
       return ms.canBeApplied;

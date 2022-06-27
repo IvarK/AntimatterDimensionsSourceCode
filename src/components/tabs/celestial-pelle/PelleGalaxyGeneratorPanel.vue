@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import PelleUpgrade from "./PelleUpgrade";
 
 export default {
@@ -52,7 +54,7 @@ export default {
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
       this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.generatedGalaxies / this.cap);
-      this.capRiftName = Pelle.modalTools.wordCycle(this.capRift.name);
+      this.capRiftName = wordShift.wordCycle(this.capRift.name);
     },
     increaseCap() {
       if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();

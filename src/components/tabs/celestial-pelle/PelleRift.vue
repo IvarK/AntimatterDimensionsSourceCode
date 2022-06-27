@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import PelleRiftBar from "./PelleRiftBar";
 import PelleStrike from "./PelleStrike";
 
@@ -49,12 +51,12 @@ export default {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
     },
     riftName() {
-      return Pelle.modalTools.wordCycle(this.rift.name);
+      return wordShift.wordCycle(this.rift.name);
     },
     drainResource() {
       if (this.rift.id !== 3) return this.rift.drainResource;
 
-      return Pelle.modalTools.wordCycle(this.rift.drainResource);
+      return wordShift.wordCycle(this.rift.drainResource);
     }
   },
 };

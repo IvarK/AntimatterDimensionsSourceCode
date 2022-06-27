@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import EffectDisplay from "@/components/EffectDisplay";
 import HintText from "@/components/HintText";
 
@@ -116,40 +118,36 @@ export default {
     onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
     },
-    // Create 5 new randomized strings with the same space structure as the original text
+    // We don't want to expose the original text for Pelle achievements, so we generate a random string with the same
+    // length of the original text in order to make something that fits reasonably within their respective places
     makeGarbledTemplate(input) {
+      // Input might be either text or number
       const text = `${input}`;
-      const template = [];
-      for (let s = 0; s < 5; s++) {
-        let garbled = "";
-        for (let i = 0; i < text.length; i++) {
-          if (text[i] === " ") garbled += " ";
-          else {
-            const n = text[i].charCodeAt();
-            // This is a slightly restricted ASCII range because Pelle garbling relies on the text not having hyphens
-            garbled += String.fromCharCode(48 + ((s * s + n * n + i * i) % 78));
-          }
+      let garbled = "";
+      for (let i = 0; i < text.length; i++) {
+        if (text[i] === " ") garbled += " ";
+        else {
+          const n = text[i].charCodeAt();
+          // Essentially seeded randomness so that the static parts of the randomized text are deterministic
+          garbled += String.fromCharCode(33 + ((n * n + i * i) % 93));
         }
-        template.push(garbled);
       }
-      return template.join("-");
+      return garbled;
     },
     // When appropriate, garbles input text for achievements on the last row. Otherwise leaves it unchanged
     processText(unmodified, garbledTemplate) {
       if (!this.isObscured) return unmodified;
 
-      // This normally puts brackets around the text, but we want to get rid of those here. Additionally, the garbling
-      // animation often replaces spaces with non-spaces which affects line length and can cause text overflow. To
-      // address that, we take part of the template as a reference and put spaces back in, ensuring that text can't
-      // overflow any worse than the original text would
-      const raw = Pelle.modalTools.wordCycle(garbledTemplate);
-      const spacingTemplate = garbledTemplate.split("-")[0];
+      // The garbling effect often replaces spaces with non-spaces, which affects line length and can cause individual
+      // lines to become long enough that they can't word-wrap. To address that, we take the template as a reference
+      // and put spaces back into the same spots, ensuring that text can't overflow any worse than the original text
+      const raw = wordShift.randomCrossWords(garbledTemplate);
       let modified = "";
       for (let i = 0; i < raw.length; i++) {
-        if (spacingTemplate[i] === " ") modified += " ";
+        if (garbledTemplate[i] === " ") modified += " ";
         else modified += raw[i];
       }
-      return `${modified.substring(1, modified.length - 1)}`;
+      return modified;
     }
   }
 };

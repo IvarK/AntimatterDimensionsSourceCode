@@ -539,7 +539,7 @@ button:focus {
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--color-text);
-  background-color: var(--color-prestige--accent);
+  background-color: var(--color-base);
   border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
@@ -560,6 +560,7 @@ button:focus {
 
 .o-tab-btn--infinity {
   color: var(--color-infinity);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
@@ -569,6 +570,7 @@ button:focus {
 
 .o-tab-btn--eternity {
   color: var(--color-eternity);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
@@ -578,6 +580,7 @@ button:focus {
 
 .o-tab-btn--reality {
   color: var(--color-reality);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
@@ -587,6 +590,7 @@ button:focus {
 
 .o-tab-btn--celestial {
   color: var(--color-celestials);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
@@ -1340,6 +1344,10 @@ br {
   position: relative;
 }
 
+.c-game-tab {
+  padding-bottom: 2rem;
+}
+
 ._kong-test .c-game-ui {
   max-height: 100%;
 }
@@ -1424,14 +1432,14 @@ br {
 
 .o-primary-btn--buy-10-ad {
   width: 60%;
-  margin: 0 0.5rem;
   max-width: 20rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--continuum-ad {
   width: 100%;
-  margin: 0 0.5rem;
   max-width: 20rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--dimboost {
@@ -1459,10 +1467,10 @@ br {
 }
 
 .o-primary-btn--id-auto {
-  height: 3.5rem;
   width: 9rem;
-  margin: 0 0.5rem;
+  height: 3.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--buy-td {
@@ -1472,10 +1480,10 @@ br {
 }
 
 .o-primary-btn--buy-td-auto {
-  height: 3.5rem;
   width: 9rem;
-  margin: 0 0.5rem;
+  height: 3.5rem;
   font-size: 1rem;
+  margin: 0 0.5rem;
 }
 
 .o-primary-btn--option {
@@ -1507,7 +1515,8 @@ br {
 }
 
 .o-primary-btn--slider__slider {
-  width: 100%;
+  height: 1.6rem;
+  margin: 0.2rem;
 }
 
 .o-primary-btn--slider {
@@ -2184,8 +2193,8 @@ br {
 .l-dimension-single-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  height: 3.5rem;
   width: 100%;
+  height: 3.5rem;
   align-content: center;
 }
 
@@ -2195,9 +2204,9 @@ br {
 
 .l-dim-row-multi-button-container {
   display: flex;
-  justify-content: flex-end;
   grid-column: 5 / 8;
   min-width: 25rem;
+  justify-content: flex-end;
 }
 
 .l-dim-row-small-text {
@@ -2247,10 +2256,10 @@ br {
 .c-antimatter-prestige-row {
   display: grid;
   flex-direction: row;
-  text-align: left;
   grid-template-columns: repeat(7, 1fr);
   height: 5rem;
   align-content: center;
+  text-align: left;
 }
 
 .l-dim-row__prestige-text {
@@ -3980,6 +3989,7 @@ br {
   border: 0.1rem solid #c2c2c2;
   box-sizing: border-box;
   padding: 0.5rem;
+  border-radius: var(--var-border-radius, 0.4rem);
 }
 
 .t-metro .o-autobuyer-input {
@@ -4205,6 +4215,8 @@ br {
   font-family: Typewriter, serif;
   font-size: 1.2rem;
   color: black;
+  border-radius: var(--var-border-radius, 0.4rem);
+  cursor: pointer;
 }
 
 .t-metro .c-autobuyer-box__mode-select {
@@ -5464,6 +5476,7 @@ br {
   flex-direction: column;
   min-width: 40rem;
   align-items: center;
+  user-select: none;
 }
 
 .t-dark .c-modal-away-progress {
@@ -5829,113 +5842,6 @@ kbd {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-.l-modal-celestial-quote {
-  display: flex;
-  flex-direction: row;
-  width: 30rem;
-  height: 30rem;
-  position: fixed;
-  /* stylelint-disable-next-line unit-allowed-list */
-  top: 50vh;
-  /* stylelint-disable-next-line unit-allowed-list */
-  left: 50vw;
-  z-index: 3;
-  justify-content: space-between;
-  align-items: center;
-  transform: translate(-50%, -50%);
-}
-
-.c-modal-cestial-quote__symbol {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  justify-content: center;
-  align-items: center;
-  font-size: 25rem;
-  opacity: 0.2;
-  text-shadow: 0 0 2rem;
-  pointer-events: none;
-}
-
-.c-modal-celestial-quote--teresa {
-  color: var(--color-teresa--base);
-  background-color: black;
-  border-color: var(--color-teresa--base);
-  box-shadow: 0 0 1rem var(--color-teresa--base), 0 0 1rem var(--color-teresa--base) inset;
-}
-
-.c-modal-celestial-quote--effarig {
-  color: var(--color-effarig--base);
-  background-color: black;
-  border-color: var(--color-effarig--base);
-  box-shadow: 0 0 1rem var(--color-effarig--base), 0 0 1rem var(--color-effarig--base) inset;
-}
-
-.c-modal-celestial-quote--enslaved {
-  color: var(--color-enslaved--base);
-  background-color: black;
-  border-color: var(--color-enslaved--base);
-  box-shadow: 0 0 1rem var(--color-enslaved--base), 0 0 1rem var(--color-enslaved--base) inset;
-}
-
-.c-modal-celestial-quote--v {
-  color: var(--color-v--base);
-  background-color: black;
-  border-color: var(--color-v--base);
-  box-shadow: 0 0 1rem var(--color-v--base), 0 0 1rem var(--color-v--base) inset;
-}
-
-.c-modal-celestial-quote--ra {
-  color: var(--color-ra--base);
-  background-color: black;
-  border-color: var(--color-ra--base);
-  box-shadow: 0 0 1rem var(--color-ra--base), 0 0 1rem var(--color-ra--base) inset;
-}
-
-.c-modal-celestial-quote--laitela {
-  color: var(--color-laitela--accent);
-  background-color: var(--color-laitela--base);
-  border-color: var(--color-laitela--accent);
-  box-shadow: 0 0 1rem var(--color-laitela--accent), 0 0 1rem var(--color-laitela--accent) inset;
-}
-
-.c-modal-celestial-quote--pelle {
-  color: var(--color-pelle--base);
-  background-color: black;
-  border-color: var(--color-pelle--base);
-  box-shadow: 0 0 1rem var(--color-pelle--base), 0 0 1rem var(--color-pelle--base) inset;
-}
-
-.c-modal-celestial-quote__arrow {
-  font-size: 150%;
-  margin: 0.5rem;
-  cursor: pointer;
-}
-
-.c-modal-celestial-quote__end {
-  position: absolute;
-  bottom: 1.5rem;
-  left: calc(50% - 1rem);
-  font-size: 150%;
-  cursor: pointer;
-}
-
-.l-modal-celestial-quote__text {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-}
-
-.l-modal-celestial-quote__buttons {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
 }
 
 /* #endregion Modals */
@@ -8627,6 +8533,7 @@ kbd {
 .c-glyph-levels-and-weights__slider-handle:hover {
   color: black;
   background-color: var(--color-reality-light);
+  border-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__reset-btn-outer {
@@ -8944,11 +8851,11 @@ kbd {
 .o-automator-command {
   display: inline-block;
   min-width: 8.5rem;
-  border: 0.1rem solid var(--color-blockmator-block-border);
-  padding: 0.5rem;
-  background: var(--color-blockmator-block-background);
   color: #a142ff;
+  background: var(--color-blockmator-block-background);
+  border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.5rem;
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
@@ -9006,9 +8913,6 @@ kbd {
   height: 100%;
   background-color: var(--color-blockmator-editor-background);
   box-sizing: border-box;
-  tab-size: 1.5em;
-  -moz-tab-size: 1.5em;
-  -o-tab-size: 1.5em;
 }
 
 .s-base--metro .c-automator-block-editor::-webkit-scrollbar-thumb {
@@ -9019,11 +8923,11 @@ kbd {
   display: inline-block;
   font-family: Typewriter, serif;
   font-size: 1.1rem;
-  border: 0.1rem solid var(--color-blockmator-block-border);
-  padding: 0.5rem;
-  background: var(--color-blockmator-block-background);
   color: #007f7f;
+  background: var(--color-blockmator-block-background);
+  border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.5rem;
 }
 
 .s-base--dark .o-automator-block-input {
@@ -9040,11 +8944,11 @@ input.o-automator-block-input {
 
 .l-automator-nested-block {
   width: fit-content;
-  padding: 1rem;
+  min-width: 30rem;
   border: var(--var-border-width, 2px) dotted #369b36;
-  margin-left: 3rem;
   margin-top: 0.5rem;
-  min-widtH: 30rem;
+  margin-left: 3rem;
+  padding: 1rem;
 }
 
 .s-base--dark .l-automator-nested-block {
@@ -9052,8 +8956,8 @@ input.o-automator-block-input {
 }
 
 .o-automator-block-delete {
-  color: #ff3333;
   font-size: 1.7rem;
+  color: #ff3333;
   cursor: pointer;
 }
 

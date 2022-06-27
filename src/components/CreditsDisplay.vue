@@ -1,6 +1,13 @@
 <script>
 export default {
   name: "CreditsDisplay",
+  props: {
+    isModal: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   computed: {
     people() { return GameDatabase.credits.people; },
     roles() { return GameDatabase.credits.roles; },
@@ -17,7 +24,10 @@ export default {
 
 <template>
   <div>
-    <h1 class="c-credits-header">
+    <h1
+      v-if="!isModal"
+      class="c-credits-header"
+    >
       Antimatter Dimensions
     </h1>
 

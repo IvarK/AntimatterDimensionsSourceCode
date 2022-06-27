@@ -14,6 +14,7 @@ export const GameDatabase = {
     alchemy: {},
     pelle: {},
     descriptions: {},
+    quotes: {},
   }
 };
 

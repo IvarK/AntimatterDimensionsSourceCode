@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     update() {
-      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice && !Pelle.isDoomed;
       this.hasPerkShop = TeresaUnlocks.shop.canBeApplied;
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);

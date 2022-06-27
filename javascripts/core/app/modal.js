@@ -1,4 +1,3 @@
-import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
@@ -41,6 +40,7 @@ import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeG
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
+import CatchupModal from "@/components/modals/catchup/CatchupModal";
 import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
@@ -131,7 +131,7 @@ export class Modal {
   }
 
   static get isOpen() {
-    return ui.view.modal.current === this;
+    return ui.view.modal.current instanceof this;
   }
 }
 
@@ -141,12 +141,20 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
+class TimeModal extends Modal {
+  show(diff) {
+    super.show({ diff });
+  }
+}
+
 // If a new modal which can be shown in the same queue multiple times needs to be added
 // Additional code needs to be written to account for that
 
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
+
+Modal.catchup = new TimeModal(CatchupModal);
 
 Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
 Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);
@@ -203,55 +211,6 @@ Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
 Modal.sacrifice = new Modal(SacrificeModal, 1);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1);
-Modal.celestialQuote = new class extends Modal {
-  show(celestial, lines) {
-    if (!GameUI.initialized || player.speedrun.isActive) return;
-    const newLines = lines.map(l => Modal.celestialQuote.getLineMapping(celestial, l));
-    if (ui.view.modal.queue.includes(this)) {
-      // This shouldn't come up often, but in case we do have a pile of quotes
-      // being shown in a row:
-      this.lines[this.lines.length - 1].isEndQuote = true;
-      this.lines.push(...newLines);
-      return;
-    }
-    super.show();
-    this.lines = newLines;
-  }
-
-  getLineMapping(defaultCel, defaultLine) {
-    let overrideCelestial = "";
-    let l = defaultLine;
-    if (typeof l === "string") {
-      if (l.includes("<!")) {
-        overrideCelestial = this.getOverrideCel(l);
-        l = this.removeOverrideCel(l);
-      }
-    }
-    return {
-      celestial: defaultCel,
-      overrideCelestial,
-      line: l,
-      showName: l[0] !== "*",
-      isEndQuote: false
-    };
-  }
-
-  getOverrideCel(x) {
-    if (x.includes("<!")) {
-      const start = x.indexOf("<!"), end = x.indexOf("!>");
-      return x.substring(start + 2, end);
-    }
-    return "";
-  }
-
-  removeOverrideCel(x) {
-    if (x.includes("<!")) {
-      const start = x.indexOf("<!"), end = x.indexOf("!>");
-      return x.substring(0, start) + x.substring(end + 2);
-    }
-    return x;
-  }
-}(CelestialQuoteModal, 2, true);
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);

@@ -7,7 +7,7 @@ GameDatabase.celestials.effarig.unlocks = {
     description: "Adjustable Glyph level factor weights",
     cost: 1e7,
     onPurchased: () => {
-      Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
+      Effarig.quotes.unlockWeights.show();
       ui.view.tabs.reality.openGlyphWeights = true;
       Tab.reality.glyphs.show();
     }
@@ -17,7 +17,7 @@ GameDatabase.celestials.effarig.unlocks = {
     description: "Glyph Filtering",
     cost: 2e8,
     onPurchased: () => {
-      Effarig.quotes.show(Effarig.quotes.UNLOCK_GLYPH_FILTER);
+      Effarig.quotes.unlockGlyphFilter.show();
       player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.FILTER_SETTINGS;
     }
   },
@@ -26,7 +26,7 @@ GameDatabase.celestials.effarig.unlocks = {
     description: "Glyph Set Saves",
     cost: 3e9,
     onPurchased: () => {
-      Effarig.quotes.show(Effarig.quotes.UNLOCK_SET_SAVES);
+      Effarig.quotes.unlockSetSaves.show();
       player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.SAVED_SETS;
     }
   },
@@ -35,7 +35,7 @@ GameDatabase.celestials.effarig.unlocks = {
     description: "Effarig's Reality",
     cost: 5e11,
     onPurchased: () => {
-      Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
+      Effarig.quotes.unlockRun.show();
     }
   },
   infinity: {

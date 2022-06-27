@@ -52,9 +52,15 @@ GameDatabase.celestials.descriptions = [
   {
     name: "V",
     effects() {
-      return `All Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second\
-      are square-rooted. 
+      const vEffect = `All Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain\
+      per second are square-rooted. 
       The Replicanti interval is squared.`;
+      const vEffectAdditional = `
+      The Exponential Glyph Alchemy effect is disabled.`;
+
+      return Ra.unlocks.unlockGlyphAlchemy.canBeApplied
+        ? vEffect + vEffectAdditional
+        : vEffect;
     }
   },
   {

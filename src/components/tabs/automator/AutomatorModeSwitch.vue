@@ -62,7 +62,11 @@ export default {
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      if (AutomatorBackend.mode !== AUTOMATOR_MODE.RUN || !player.options.confirmations.switchAutomatorMode) {
+      if (AutomatorData.currentErrors().length) {
+        Modal.message.show("Automator script has errors, cannot convert to blocks.");
+        return;
+      }
+      if (!AutomatorBackend.isRunning || !player.options.confirmations.switchAutomatorMode) {
         const scriptID = this.currentScriptID;
         Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
         if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
@@ -115,7 +119,7 @@ export default {
   color: var(--color-automator-docs-font);
   background-color: #626262;
   border: 0.2rem solid #767676;
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.2rem 0.4rem 0.2rem auto;
   padding: 0.3rem 0;
   cursor: pointer;
@@ -136,7 +140,7 @@ export default {
   left: 0;
   z-index: 0;
   background-color: var(--color-automator-controls-inactive);
-  border-radius: 0.2rem;
+  border-radius: var(--var-border-radius, 0.3rem);
   transition: 0.3s ease all;
 }
 

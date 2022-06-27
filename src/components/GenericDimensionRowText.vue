@@ -39,7 +39,7 @@ export default {
     update() {
       // Needs to be reactive or else rows that don't have changing values (eg. the highest dimension and any higher
       // locked ones) won't change layout when the window size changes
-      this.isSmall = window.innerWidth < 1450;
+      this.isSmall = window.innerWidth < 1500;
     },
     adjustableTextClass() {
       return {
@@ -108,5 +108,6 @@ export default {
 
 .c-dim-row__small {
   font-size: 1.2rem;
+  margin-right: 1rem;
 }
 </style>

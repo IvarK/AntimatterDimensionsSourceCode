@@ -55,7 +55,7 @@ export default {
       this.currentScriptID = player.reality.automator.state.editorScript;
       // This shouldn't happen if things are loaded in the right order, but might as well be sure.
       if (storedScripts[this.currentScriptID] === undefined) {
-        this.currentScriptID = Object.keys(storedScripts)[0];
+        this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
       if (AutomatorData.currentErrors().length !== 0 && player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {

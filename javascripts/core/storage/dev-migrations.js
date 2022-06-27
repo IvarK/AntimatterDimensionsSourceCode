@@ -1328,6 +1328,48 @@ GameStorage.devMigrations = {
       player.secretUnlocks.themes.add("S4Design");
     },
     player => {
+      player.reality.automator.state.editorScript = Number(player.reality.automator.state.editorScript);
+      // I'm not sure if there's any error with the type of topLevelScript, but better safe than sorry
+      player.reality.automator.state.topLevelScript = Number(player.reality.automator.state.topLevelScript);
+    },
+    player => {
+      // Move dil upg no reset and tachyon particles no reset
+      if (player.celestials.pelle.upgrades.delete(20)) player.celestials.pelle.upgrades.add(21);
+      if (player.celestials.pelle.upgrades.delete(19)) player.celestials.pelle.upgrades.add(20);
+
+      // Dimboost upgrade id was moved from 18 to 7 -- Make the corresponding change
+      // Galaxy upgrade was inserted at 11. 7-10 should only be moved forward 1 place
+      // and 10-17 2 places forward.
+      const hasDimboostsResetNothing = player.celestials.pelle.upgrades.delete(18);
+      for (let i = 17; i >= 10; i--) {
+        if (player.celestials.pelle.upgrades.delete(i)) player.celestials.pelle.upgrades.add(i + 2);
+      }
+      for (let i = 9; i >= 7; i--) {
+        if (player.celestials.pelle.upgrades.delete(i)) player.celestials.pelle.upgrades.add(i + 1);
+      }
+      if (hasDimboostsResetNothing) player.celestials.pelle.upgrades.add(7);
+    },
+    player => {
+      const cel = player.celestials;
+      // eslint-disable-next-line no-bitwise
+      const convToBit = x => x.toBitmask() >> 1;
+      if (cel.teresa.quotes) player.celestials.teresa.quoteBits = convToBit(cel.teresa.quotes);
+      if (cel.effarig.quotes) player.celestials.effarig.quoteBits = convToBit(cel.effarig.quotes);
+      if (cel.enslaved.quotes) player.celestials.enslaved.quoteBits = convToBit(cel.enslaved.quotes);
+      if (cel.v.quotes) player.celestials.v.quoteBits = convToBit(cel.v.quotes);
+      if (cel.ra.quotes) player.celestials.ra.quoteBits = convToBit(cel.ra.quotes);
+      if (cel.laitela.quotes) player.celestials.laitela.quoteBits = convToBit(cel.laitela.quotes);
+      if (cel.pelle.quotes) player.celestials.pelle.quoteBits = convToBit(cel.pelle.quotes);
+
+      delete player.celestials.teresa.quotes;
+      delete player.celestials.effarig.quotes;
+      delete player.celestials.enslaved.quotes;
+      delete player.celestials.v.quotes;
+      delete player.celestials.ra.quotes;
+      delete player.celestials.laitela.quotes;
+      delete player.celestials.pelle.quotes;
+    },
+    player => {
       player.celestials.pelle.rifts.vacuum = {
         ...player.celestials.pelle.rifts.famine,
         fill: new Decimal(player.celestials.pelle.rifts.famine.fill)

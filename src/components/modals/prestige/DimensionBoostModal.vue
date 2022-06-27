@@ -8,7 +8,7 @@ export default {
   },
   props: {
     bulk: {
-      type: Number,
+      type: Boolean,
       required: true,
     }
   },

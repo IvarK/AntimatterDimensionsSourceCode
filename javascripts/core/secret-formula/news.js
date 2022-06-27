@@ -2006,7 +2006,7 @@ GameDatabase.news = [
   {
     id: "a321",
     text:
-      `It must be hard being on your phone all alone. But don't worry; we are still here.
+      `It must be hard being on your PC all alone. But don't worry; we are still here.
       Listening and watching your every step.`
   },
   {

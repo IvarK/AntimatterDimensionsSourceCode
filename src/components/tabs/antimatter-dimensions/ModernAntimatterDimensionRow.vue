@@ -137,7 +137,7 @@ export default {
     <GenericDimensionRowText
       :tier="tier"
       :name="name"
-      :multiplier-text="formatX(multiplier, 1, 1)"
+      :multiplier-text="formatX(multiplier, 2, 2)"
       :amount-text="amountDisplay"
       :rate="rateOfChange"
     />

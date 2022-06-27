@@ -62,8 +62,8 @@ export default {
     },
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
-      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_UNLOCK);
-    },
+      Pelle.quotes.galaxyGeneratorUnlock.show();
+    }
   },
 };
 </script>
@@ -166,7 +166,7 @@ export default {
 
 .l-pelle-panel-container {
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
-  border-radius: var(--var-border-radius, 0.2rem);
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: 1rem;
   padding: 1rem;
   -webkit-user-select: none;

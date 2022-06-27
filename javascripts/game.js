@@ -595,7 +595,7 @@ export function gameLoop(passDiff, options = {}) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
-      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+      Enslaved.quotes.hintUnlock.show();
     }
   }
 
@@ -711,9 +711,9 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
-      for (const quote of Object.values(Laitela.quotes)) {
-        if (laitelaInfo.difficultyTier >= quote.destabilize) {
-          Laitela.quotes.show(quote);
+      for (const quote of Laitela.quotes.all) {
+        if (quote.requirement) {
+          quote.show();
         }
       }
     }

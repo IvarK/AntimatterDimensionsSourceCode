@@ -178,8 +178,9 @@ export const AutomatorData = {
   currentScriptName() {
     return player.reality.automator.scripts[this.scriptIndex()].name;
   },
-  currentScriptText() {
-    return player.reality.automator.scripts[this.scriptIndex()].content;
+  currentScriptText(index) {
+    const toCheck = index || this.scriptIndex();
+    return player.reality.automator.scripts[toCheck].content;
   },
   createNewScript(content, name) {
     const newScript = AutomatorScript.create(name, content);
@@ -187,9 +188,15 @@ export const AutomatorData = {
     player.reality.automator.state.editorScript = newScript.id;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
+  needsRecompile: true,
+  cachedErrors: 0,
   currentErrors(script) {
     const toCheck = script || this.currentScriptText();
-    return AutomatorGrammar.compile(toCheck).errors;
+    if (this.needsRecompile) {
+      this.cachedErrors = AutomatorGrammar.compile(toCheck).errors;
+      this.needsRecompile = false;
+    }
+    return this.cachedErrors;
   },
   logCommandEvent(message, line) {
     const currTime = Date.now();

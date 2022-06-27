@@ -24,6 +24,16 @@ import { AutomatorLexer } from "./lexer";
           if (ownMethod) ownMethod.call(this, ctx);
         };
       }
+
+      const lexResult = AutomatorLexer.lexer.tokenize(rawText);
+      const tokens = lexResult.tokens;
+      parser.input = tokens;
+      this.parseResult = parser.script();
+      this.visit(this.parseResult);
+      this.addLexerErrors(lexResult.errors);
+      this.addParserErrors(parser.errors, tokens);
+      this.modifyErrorMessages();
+      this.errorCount = lexResult.errors.length + this.errors.length + parser.errors.length;
     }
 
     addLexerErrors(errors) {
@@ -537,18 +547,10 @@ import { AutomatorLexer } from "./lexer";
   function compile(input, validateOnly = false) {
     // The lexer and codemirror choke on the last line of the script, so we pad it with an invisible newline
     const script = `${input}\n `;
-    const lexResult = AutomatorLexer.lexer.tokenize(script);
-    const tokens = lexResult.tokens;
-    parser.input = tokens;
-    const parseResult = parser.script();
     const validator = new Validator(script);
-    validator.visit(parseResult);
-    validator.addLexerErrors(lexResult.errors);
-    validator.addParserErrors(parser.errors, tokens);
-    validator.modifyErrorMessages();
     let compiled;
-    if (validator.errors.length === 0 && !validateOnly) {
-      compiled = new Compiler().visit(parseResult);
+    if (validator.errorCount === 0 && !validateOnly) {
+      compiled = new Compiler().visit(validator.parseResult);
     }
     return {
       errors: validator.errors,
@@ -558,16 +560,10 @@ import { AutomatorLexer } from "./lexer";
   AutomatorGrammar.compile = compile;
 
   function blockifyTextAutomator(input) {
-    const lexResult = AutomatorLexer.lexer.tokenize(input);
-    const tokens = lexResult.tokens;
-
-    AutomatorGrammar.parser.input = tokens;
-    const parseResult = AutomatorGrammar.parser.script();
     const validator = new Validator(input);
-    validator.visit(parseResult);
-    if (lexResult.errors.length === 0 && AutomatorGrammar.parser.errors.length === 0 && validator.errors.length === 0) {
+    if (validator.errorCount === 0) {
       const b = new Blockifier();
-      const blocks = b.visit(parseResult);
+      const blocks = b.visit(validator.parseResult);
       return blocks;
     }
 
@@ -576,15 +572,7 @@ import { AutomatorLexer } from "./lexer";
   AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
 
   function validateLine(input) {
-    const lexResult = AutomatorLexer.lexer.tokenize(input);
-    const tokens = lexResult.tokens;
-    AutomatorGrammar.parser.input = tokens;
-    const parseResult = AutomatorGrammar.parser.script();
     const validator = new Validator(input);
-    validator.visit(parseResult);
-    validator.addLexerErrors(lexResult.errors);
-    validator.addParserErrors(parser.errors, tokens);
-    validator.modifyErrorMessages();
     return validator;
   }
 

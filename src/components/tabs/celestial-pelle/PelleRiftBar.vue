@@ -64,8 +64,7 @@ export default {
       this.hasEffectiveFill = rift.config.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
 
       // If it's chaos, update decay text
-      if (rift.id !== 3) return;
-      this.decayText = wordShift.wordCycle(PelleRifts.decay.name);
+      if (rift.id === 3) this.decayText = wordShift.wordCycle(PelleRifts.decay.name);
     },
     hasMilestone(ms) {
       return ms.canBeApplied;

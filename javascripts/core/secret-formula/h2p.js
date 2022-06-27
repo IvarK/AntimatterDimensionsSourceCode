@@ -1540,7 +1540,7 @@ Rift bars can be filled by clicking them to toggle between "Idle" and "Filling".
 ${formatInt(3)}% of a Rift specific resource per second. Each Rift offers a Rift specific effect which are based
 on the total amount filled.
 ${PelleStrikes.eternity.hasStrike
-    ? `An exception for this is Decay, which effect gets capped once you have drained a total of
+    ? `An exception for this is Decay/Collapse/Disarray, which effect gets capped once you have drained a total of
     ${formatPostBreak(DC.E2000)} replicanti.`
     : ""}
 In addition each Rift offers three rewards for filling them up to a certain percentage.
@@ -1551,11 +1551,11 @@ In addition each Rift offers three rewards for filling them up to a certain perc
     }, {
       name: "The Galaxy Generator",
       info: () => `
-When you reach ${formatInt(100)}% Recursion, you unlock the <b>Galaxy Generator</b>, which can passively generate
-Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect Tickspeed as if
-they were Antimatter Galaxies but they don't increase the cost of your next Antimatter Galaxy. You also unlock five
-new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades then give
-a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and Generated
+When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can 
+passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect 
+Tickspeed as if they were Antimatter Galaxies but they don't increase the cost of your next Antimatter Galaxy. You also 
+unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades
+then give a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and Generated
 Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
       isUnlocked: () => Pelle.hasGalaxyGenerator,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",

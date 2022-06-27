@@ -27,7 +27,8 @@ GameDatabase.celestials.pelle.strikes = {
   ECs: {
     id: 4,
     requirementDescription: () => `Reach ${formatInt(115)} TT`,
-    penaltyDescription: "Vacuum IP multiplier is reduced in Eternity Challenges",
+    penaltyDescription: () =>
+      `${wordShift.wordCycle(PelleRifts.vacuum.name)} IP multiplier is reduced in Eternity Challenges`,
     rewardDescription: () => `Unlock ${wordShift.wordCycle(PelleRifts.recursion.name)}`,
     rift: () => PelleRifts.recursion
   },

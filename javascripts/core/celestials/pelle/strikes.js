@@ -22,8 +22,8 @@ class PelleStrikeState extends BitUpgradeState {
     return typeof x === "function" ? x() : x;
   }
 
-  get reward() {
-    return this.config.rewardDescription;
+  reward() {
+    return this.config.rewardDescription();
   }
 
   get rift() {
@@ -40,7 +40,7 @@ class PelleStrikeState extends BitUpgradeState {
     Tab.celestials.pelle.show();
     EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
 
-    // If it's death, reset the records
+    // If it's paradox, reset the records
     if (this.id === 5) {
       Pelle.cel.records.totalAntimatter = new Decimal("1e180000");
       Pelle.cel.records.totalInfinityPoints = new Decimal("1e60000");

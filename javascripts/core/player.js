@@ -678,12 +678,12 @@ window.player = {
         galaxyGeneratorEPMult: 0,
       },
       rifts: {
-        famine: {
+        vacuum: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
         },
-        pestilence: {
+        decay: {
           fill: DC.D0,
           active: false,
           percentageSpent: 0,
@@ -694,12 +694,12 @@ window.player = {
           active: false,
           reducedTo: 1
         },
-        war: {
+        recursion: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
         },
-        death: {
+        paradox: {
           fill: DC.D0,
           active: false,
           reducedTo: 1

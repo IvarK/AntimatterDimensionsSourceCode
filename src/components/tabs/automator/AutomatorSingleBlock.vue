@@ -125,9 +125,15 @@ export default {
       this.recalculateErrorCount();
     },
 
+    // This gets called whenever blocks are changed, but we also need to halt execution if the currently visible script
+    // is also the one being run
     recalculateErrorCount() {
       AutomatorData.needsRecompile = true;
       AutomatorData.currentErrors();
+
+      if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
+        AutomatorBackend.stop();
+      }
     }
   }
 };

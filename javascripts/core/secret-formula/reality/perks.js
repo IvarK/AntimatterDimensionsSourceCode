@@ -409,7 +409,7 @@ GameDatabase.reality.perks = {
     description: "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
     automatorPoints: 5,
     shortDescription: () => "Single TT Autobuyer",
-    defaultPosition: new Vector(255, -540)
+    defaultPosition: new Vector(190, -410)
   },
   ttFree: {
     id: 105,
@@ -418,7 +418,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Purchasing Time Theorems no longer spends your Antimatter, Infinity Points, or Eternity Points.`;
     },
-    defaultPosition: new Vector(190, -410)
+    defaultPosition: new Vector(255, -540)
   },
   ttBuyMax: {
     id: 106,

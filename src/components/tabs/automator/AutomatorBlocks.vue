@@ -27,7 +27,7 @@ export default {
       if (block.hasInput) b.inputValue = "";
       if (block.secondaryTargets) b.secondaryTarget = "";
       return b;
-    }
+    },
   }
 };
 
@@ -142,8 +142,11 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     class="o-drag-cancel-region"
     group="code-blocks"
     ghost-class="null-block"
+    draggable=".draggable-blocks"
   >
-    <p>Drag and drop these blocks to the area on the left!</p>
+    <p>
+      Drag and drop these blocks to the area on the left!
+    </p>
     <draggable
       class="block-container"
       :list="blocks"
@@ -154,7 +157,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
       <div
         v-for="block in blocks"
         :key="block.id"
-        class="o-automator-command o-automator-block-list"
+        class="o-automator-command o-automator-block-list draggable-blocks"
       >
         {{ block.cmd }}
       </div>

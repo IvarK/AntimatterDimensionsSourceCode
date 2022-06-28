@@ -241,6 +241,7 @@ export const AutomatorData = {
 
 export const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
+  hasJustCompleted: false,
   _scripts: [],
 
   get state() {
@@ -497,6 +498,7 @@ export const AutomatorBackend = {
   stop() {
     this.stack.clear();
     this.state.mode = AUTOMATOR_MODE.PAUSE;
+    this.hasJustCompleted = true;
   },
 
   pause() {
@@ -504,6 +506,7 @@ export const AutomatorBackend = {
   },
 
   start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
+    this.hasJustCompleted = false;
     this.state.topLevelScript = scriptID;
     const scriptObject = this.findScript(scriptID);
     if (compile) scriptObject.compile();

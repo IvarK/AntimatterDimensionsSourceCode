@@ -13,6 +13,7 @@ export default {
       isRunning: false,
       isPaused: false,
       repeatOn: false,
+      justCompleted: false,
       forceRestartOn: false,
       followExecution: false,
       hasErrors: false,
@@ -64,6 +65,7 @@ export default {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.repeatOn = AutomatorBackend.state.repeat;
+      this.justCompleted = AutomatorBackend.hasJustCompleted;
       this.forceRestartOn = AutomatorBackend.state.forceRestart;
       this.followExecution = AutomatorBackend.state.followExecution;
       this.hasErrors = AutomatorData.currentErrors().length !== 0;
@@ -75,7 +77,7 @@ export default {
         ? AutomatorBackend.scriptName
         : AutomatorBackend.currentEditingScript.name;
       this.duplicateStatus = AutomatorBackend.hasDuplicateName(this.statusName);
-      this.editingDifferentScript =
+      this.editingDifferentScript = (this.isRunning || this.isPaused) &&
         AutomatorBackend.currentEditingScript.id !== AutomatorBackend.currentRunningScript.id;
 
 
@@ -174,8 +176,13 @@ export default {
         class="fas fa-circle-exclamation c-automator__status-text c-automator__status-text--warning"
       />
       <span
+        v-if="justCompleted"
+        v-tooltip="'The automator completed running the previous script'"
+        class="fas fa-circle-check c-automator__status-text"
+      />
+      <span
         class="c-automator__status-text"
-        :class="{ 'c-automator__status-text--error' : hasErrors && !isRunning }"
+        :class="{ 'c-automator__status-text--error' : hasErrors && !(isRunning || isPaused) }"
       >
         {{ statusText }}
       </span>

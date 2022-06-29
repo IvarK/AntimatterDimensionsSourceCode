@@ -198,6 +198,7 @@ export default {
       :key="infoResourceId"
       :resource="infoResource"
     />
+    <br>
     Glyphs can now be refined using your Glyph filter in the Glyphs tab.
     <br>
     When refining a Glyph, it will only give you resources up to a cap

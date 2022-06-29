@@ -28,6 +28,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+:root {
+  --color-slider-blue: #0075ff;
+}
+
 .l-ad-slider {
   display: flex;
   width: 100%;
@@ -85,6 +89,7 @@ SOFTWARE.
   position: absolute;
   top: 0;
   left: 0;
+  cursor: pointer;
 }
 
 .l-ad-slider__process {
@@ -94,8 +99,9 @@ SOFTWARE.
 }
 
 .c-ad-slider__process {
-  background-color: #3498db;
+  background-color: var(--color-slider-blue);
   border-radius: var(--var-border-radius, 15px);
+  cursor: pointer;
 }
 
 .l-ad-slider__wrap .ad-slider-process.ad-slider-process-draggable {
@@ -154,12 +160,18 @@ SOFTWARE.
 
 .c-ad-slider__dot-handle {
   background-color: #ffffff;
+  border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 50%) !important;
   box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 32%);
+  transition-duration: 0.2s;
+}
+
+.c-ad-slider__dot-handle:hover {
+  background-color: var(--color-slider-blue);
 }
 
 .l-ad-slider__dot--focus .c-ad-slider__dot-handle {
-  box-shadow: 0 0 2px 1px #3498db;
+  box-shadow: 0 0 2px 1px var(--color-slider-blue);
 }
 
 .l-ad-slider__dot--dragging {
@@ -217,8 +229,8 @@ SOFTWARE.
   text-align: center;
   font-size: 14px;
   color: #ffffff;
-  background-color: #3498db;
-  border: 0.1rem solid #3498db;
+  background-color: var(--color-slider-blue);
+  border: 0.1rem solid var(--color-slider-blue);
   border-radius: var(--var-border-radius, 5px);
   padding: 2px 5px;
 }

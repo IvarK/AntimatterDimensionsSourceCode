@@ -68,7 +68,7 @@ export const MatterScale = {
     { amount: new Decimal("9e-17"), name: "red blood cells", verb: "make" },
     { amount: new Decimal("6.2e-11"), name: "grains of sand", verb: "make" },
     { amount: new Decimal("5e-8"), name: "grains of rice", verb: "make" },
-    { amount: new Decimal("3.555e-"), name: "teaspoons", verb: "fill" },
+    { amount: new Decimal("3.555e-6"), name: "teaspoons", verb: "fill" },
     { amount: new Decimal("7.5e-4"), name: "wine bottles", verb: "fill" },
     { amount: DC.D1, name: "fridge-freezers", verb: "fill" },
     { amount: new Decimal("2.5e3"), name: "Olympic-sized swimming pools", verb: "fill" },

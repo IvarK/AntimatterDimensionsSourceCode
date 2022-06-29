@@ -109,7 +109,7 @@ export default {
       </span>
     </button>
     <PrimaryToggleButton
-      v-if="isRebuyable && isAutoUnlocked"
+      v-if="isRebuyable && isAutoUnlocked && !isDoomed"
       v-model="isAutobuyerOn"
       label="Auto:"
       class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"

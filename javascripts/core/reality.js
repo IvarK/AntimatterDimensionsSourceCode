@@ -300,17 +300,17 @@ function giveRealityRewards(realityProps) {
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
-    Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
+    Teresa.quotes.completeReality.show();
   }
 
   if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) {
     EffarigUnlock.reality.unlock();
-    Effarig.quotes.show(Effarig.quotes.COMPLETE_REALITY);
+    Effarig.quotes.completeReality.show();
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
 
-  if (V.isRunning) V.quotes.show(V.quotes.REALITY_COMPLETE);
+  if (V.isRunning) V.quotes.realityComplete.show();
 }
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
@@ -525,7 +525,9 @@ export function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
-    if (player.celestials.ra.disCharge) disChargeAll();
+    if (player.celestials.ra.disCharge) {
+      disChargeAll();
+    }
   }
   if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();

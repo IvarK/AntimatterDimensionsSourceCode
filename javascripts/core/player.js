@@ -527,7 +527,7 @@ window.player = {
   celestials: {
     teresa: {
       pouredAmount: 0,
-      quotes: [],
+      quoteBits: 0,
       unlockBits: 0,
       run: false,
       bestRunAM: DC.D1,
@@ -539,7 +539,7 @@ window.player = {
       relicShards: 0,
       unlockBits: 0,
       run: false,
-      quotes: [],
+      quoteBits: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
@@ -568,7 +568,7 @@ window.player = {
       autoStoreReal: false,
       isAutoReleasing: false,
       storedFraction: 1,
-      quotes: [],
+      quoteBits: 0,
       unlocks: [],
       run: false,
       completed: false,
@@ -583,7 +583,7 @@ window.player = {
     v: {
       unlockBits: 0,
       run: false,
-      quotes: [],
+      quoteBits: 0,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
@@ -636,7 +636,7 @@ window.player = {
         dilation: 0,
         effarig: 0
       },
-      quotes: [],
+      quoteBits: 0,
       momentumTime: 0,
       unlockBits: 0,
       run: false,
@@ -649,7 +649,7 @@ window.player = {
       darkMatter: DC.D0,
       maxDarkMatter: DC.D0,
       run: false,
-      quotes: [],
+      quoteBits: 0,
       dimensions: Array.range(0, 4).map(() =>
         ({
           amount: DC.D0,
@@ -702,12 +702,12 @@ window.player = {
         galaxyGeneratorEPMult: 0,
       },
       rifts: {
-        famine: {
+        vacuum: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
         },
-        pestilence: {
+        decay: {
           fill: DC.D0,
           active: false,
           percentageSpent: 0,
@@ -718,12 +718,12 @@ window.player = {
           active: false,
           reducedTo: 1
         },
-        war: {
+        recursion: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
         },
-        death: {
+        paradox: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
@@ -737,7 +737,7 @@ window.player = {
         phase: 0,
         sacrificeActive: false
       },
-      quotes: [],
+      quoteBits: 0,
       collapsed: {
         upgrades: false,
         rifts: false,
@@ -747,11 +747,6 @@ window.player = {
     }
   },
   isGameEnd: false,
-  newGame: {
-    current: 0,
-    plusRecord: 0,
-    minusRecord: 0,
-  },
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,
   tutorialState: 0,

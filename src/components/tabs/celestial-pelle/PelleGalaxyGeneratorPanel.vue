@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import PelleUpgrade from "./PelleUpgrade";
 
 export default {
@@ -17,7 +19,8 @@ export default {
       capRift: null,
       sacrificeActive: false,
       isCollapsed: false,
-      barWidth: 0
+      barWidth: 0,
+      capRiftName: "",
     };
   },
   computed: {
@@ -33,6 +36,9 @@ export default {
       let text = format(Math.max(this.galaxies, 0), 2);
       if (this.galaxies < 0) text += ` [${format(this.galaxies, 2)}]`;
       return text;
+    },
+    sacrificeText() {
+      return this.capRift.galaxyGeneratorText.replace("$value", this.capRiftName);
     }
   },
   methods: {
@@ -48,6 +54,7 @@ export default {
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
       this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.generatedGalaxies / this.cap);
+      this.capRiftName = wordShift.wordCycle(this.capRift.name);
     },
     increaseCap() {
       if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();
@@ -57,7 +64,7 @@ export default {
     },
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
-      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_UNLOCK);
+      Pelle.quotes.galaxyGeneratorUnlock.show();
     }
   },
 };
@@ -101,18 +108,18 @@ export default {
               v-if="isCapped && capRift"
               class="c-increase-cap-text"
             >
-              To generate more Galaxies, you need to get rid of all that {{ capRift.name }}. <br><br>
+              {{ sacrificeText }}. <br><br>
               <span
                 v-if="!sacrificeActive"
                 class="c-big-text"
               >
-                Sacrifice your {{ capRift.name }}
+                Sacrifice your {{ capRiftName }}
               </span>
               <span
                 v-else
                 class="c-big-text"
               >
-                Getting rid of all that {{ capRift.name }}...
+                Getting rid of all that {{ capRiftName }}...
               </span>
             </div>
             <div
@@ -161,7 +168,7 @@ export default {
 
 .l-pelle-panel-container {
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
-  border-radius: var(--var-border-radius, 0.2rem);
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: 1rem;
   padding: 1rem;
   -webkit-user-select: none;
@@ -252,7 +259,7 @@ export default {
 }
 
 .c-big-text {
-  font-size: 3rem;
+  font-size: 2.5rem;
   text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 

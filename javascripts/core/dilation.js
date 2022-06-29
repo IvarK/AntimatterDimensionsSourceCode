@@ -109,12 +109,11 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 }
 
 export function getDilationGainPerSecond() {
-  const mult = NG.multiplier;
   if (Pelle.isDoomed) {
-    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.death.milestones[1].effectOrDefault(1));
+    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
-      .times(Pelle.specialGlyphEffect.dilation).div(3e4).times(mult);
+      .times(Pelle.specialGlyphEffect.dilation).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
@@ -130,7 +129,6 @@ export function getDilationGainPerSecond() {
   dtRate = dtRate.times(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  dtRate = dtRate.times(mult);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }

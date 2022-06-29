@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import EffectDisplay from "@/components/EffectDisplay";
 import HintText from "@/components/HintText";
 
@@ -13,6 +15,10 @@ export default {
       type: Object,
       required: true
     },
+    isObscured: {
+      type: Boolean,
+      required: false
+    }
   },
   data() {
     return {
@@ -21,7 +27,9 @@ export default {
       isMouseOver: false,
       isCancer: false,
       showUnlockState: false,
-      realityUnlocked: false
+      realityUnlocked: false,
+      garbleTimer: 0,
+      garbleKey: 0,
     };
   },
   computed: {
@@ -43,12 +51,13 @@ export default {
       return {
         "o-achievement": true,
         "o-achievement--disabled": this.isDisabled,
-        "o-achievement--locked": !this.isUnlocked && !this.isDisabled,
+        "o-achievement--locked": !this.isUnlocked && !this.isDisabled && !this.isObscured,
         "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
         "o-achievement--blink": !this.isUnlocked && this.id === 78 && !this.isDisabled,
-        "o-achievement--normal": !this.isCancer,
-        "o-achievement--cancer": this.isCancer
+        "o-achievement--normal": !this.isCancer && !this.isObscured,
+        "o-achievement--cancer": this.isCancer && !this.isObscured,
+        "o-achievement--hidden": this.isObscured,
       };
     },
     indicatorIconClass() {
@@ -66,7 +75,17 @@ export default {
     },
     isPreRealityAchievement() {
       return this.realityUnlocked && this.achievement.row <= 13;
-    }
+    },
+    // The garble templates themselves can be static, and shouldn't be recreated every render tick
+    garbledNameTemplate() {
+      return this.makeGarbledTemplate(this.config.name);
+    },
+    garbledIDTemplate() {
+      return this.makeGarbledTemplate(this.displayId);
+    },
+    garbledDescriptionTemplate() {
+      return this.makeGarbledTemplate(this.config.description);
+    },
   },
   beforeDestroy() {
     clearTimeout(this.mouseOverInterval);
@@ -78,6 +97,19 @@ export default {
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
       this.showUnlockState = player.options.showHintText.achievementUnlockStates;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
+
+      this.processedName = this.processText(this.config.name, this.garbledNameTemplate);
+      this.processedId = this.processText(this.displayId, this.garbledIDTemplate);
+      this.processedDescription = this.processText(this.config.description, this.garbledDescriptionTemplate);
+
+      // This uses key-swapping to force the garbled achievements to re-render their text, because otherwise they
+      // would remain static. Keys for non-garbled achievements won't change, and all keys remain unique.
+      this.garbleTimer++;
+      if (this.isObscured) {
+        this.garbleKey = 10 * this.id + Math.floor(this.garbleTimer / 3);
+      } else {
+        this.garbleKey = this.id;
+      }
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
@@ -85,6 +117,37 @@ export default {
     },
     onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 300);
+    },
+    // We don't want to expose the original text for Pelle achievements, so we generate a random string with the same
+    // length of the original text in order to make something that fits reasonably within their respective places
+    makeGarbledTemplate(input) {
+      // Input might be either text or number
+      const text = `${input}`;
+      let garbled = "";
+      for (let i = 0; i < text.length; i++) {
+        if (text[i] === " ") garbled += " ";
+        else {
+          const n = text[i].charCodeAt();
+          // Essentially seeded randomness so that the static parts of the randomized text are deterministic
+          garbled += String.fromCharCode(33 + ((n * n + i * i) % 93));
+        }
+      }
+      return garbled;
+    },
+    // When appropriate, garbles input text for achievements on the last row. Otherwise leaves it unchanged
+    processText(unmodified, garbledTemplate) {
+      if (!this.isObscured) return unmodified;
+
+      // The garbling effect often replaces spaces with non-spaces, which affects line length and can cause individual
+      // lines to become long enough that they can't word-wrap. To address that, we take the template as a reference
+      // and put spaces back into the same spots, ensuring that text can't overflow any worse than the original text
+      const raw = wordShift.randomCrossWords(garbledTemplate);
+      let modified = "";
+      for (let i = 0; i < raw.length; i++) {
+        if (garbledTemplate[i] === " ") modified += " ";
+        else modified += raw[i];
+      }
+      return modified;
     }
   }
 };
@@ -98,24 +161,28 @@ export default {
     @mouseleave="onMouseLeave"
   >
     <HintText
+      :key="garbleKey"
       type="achievements"
       class="l-hint-text--achievement"
     >
-      {{ displayId }}
+      {{ processedId }}
     </HintText>
     <div class="o-achievement__tooltip">
       <template v-if="isMouseOver">
         <div class="o-achievement__tooltip__name">
-          {{ config.name }} ({{ displayId }})
+          {{ processedName }} ({{ processedId }})
         </div>
         <div class="o-achievement__tooltip__description">
-          {{ config.description }}
+          {{ processedDescription }}
         </div>
         <div
           v-if="config.reward"
           class="o-achievement__tooltip__reward"
         >
-          <span :class="{ 'o-pelle-disabled': isDisabled }">
+          <span
+            v-if="!isObscured"
+            :class="{ 'o-pelle-disabled': isDisabled }"
+          >
             Reward: {{ config.reward }}
             <EffectDisplay
               v-if="config.formatEffect"
@@ -134,3 +201,7 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+
+</style>

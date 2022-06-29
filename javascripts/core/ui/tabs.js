@@ -132,7 +132,7 @@ class TabState {
   }
 
   show(manual, subtab = undefined) {
-    if (!manual && !player.options.automaticTabSwitching) return;
+    if (!manual && !player.options.automaticTabSwitching || Quote.isOpen) return;
     ui.view.tab = this.key;
     if (subtab === undefined) {
       this._currentSubtab = findLastOpenSubtab(this.id, this.subtabs);

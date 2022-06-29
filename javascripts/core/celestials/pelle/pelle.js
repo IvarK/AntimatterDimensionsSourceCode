@@ -3,9 +3,12 @@ import { DC } from "../../constants";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { SetPurchasableMechanicState } from "../../utils";
 
-import { CelestialQuotes } from "../quotes";
+import { Quotes } from "../quotes";
+
+import wordShift from "../../wordShift";
 
 import zalgo from "./zalgo";
+
 
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
@@ -21,7 +24,7 @@ const disabledMechanicUnlocks = {
   autoec: () => ({}),
   replicantiIntervalMult: () => ({}),
   tpMults: () => ({}),
-  glyphs: () => !PelleRifts.famine.milestones[0].canBeApplied,
+  glyphs: () => !PelleRifts.vacuum.milestones[0].canBeApplied,
   V: () => ({}),
   singularity: () => ({}),
   continuum: () => ({}),
@@ -54,7 +57,7 @@ export const Pelle = {
   symbol: "♅",
 
   get displayName() {
-    return Date.now() % 4000 > 500 ? "Pelle" : Pelle.modalTools.randomCrossWords("Pelle");
+    return Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle");
   },
 
   get isUnlocked() {
@@ -155,7 +158,7 @@ export const Pelle = {
         ? Currency.eternityPoints.value.plus(1).pow(0.3)
         : DC.D1,
       replication: isActive("replication")
-        ? 10 ** 53 ** (PelleRifts.famine.percentage)
+        ? 10 ** 53 ** (PelleRifts.vacuum.percentage)
         : 1,
       dilation: isActive("dilation")
         ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
@@ -179,7 +182,8 @@ export const Pelle = {
         return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
           (based on current EP)`;
       case "replication":
-        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.famine.percentage), 2)} (based on Famine)`;
+        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
+        (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
       case "dilation":
         return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
           (based on Tachyon Galaxies)`;
@@ -281,114 +285,29 @@ export const Pelle = {
 
   endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye".split(" "),
 
-  modalTools: {
-    bracketOrder: ["()", "[]", "{}", "<>", "||"],
-    wordCycle(x) {
-      const list = x.split("-");
-      const len = list.length;
-      const maxWordLen = list.reduce((acc, str) => Math.max(acc, str.length), 0);
-      const tick = Math.floor(Date.now() / 200) % (len * 5);
-      const largeTick = Math.floor(tick / 5);
-      const bP = this.bracketOrder[largeTick];
-      let v = list[largeTick];
-      if (tick % 5 < 1 || tick % 5 > 3) {
-        v = this.randomCrossWords(v);
-      }
-      // Stands for Bracket Pair.
-      const space = (maxWordLen - v.length) / 2;
-      return bP[0] + ".".repeat(Math.floor(space)) + v + ".".repeat(Math.ceil(space)) + bP[1];
-    },
-    randomCrossWords(str) {
-      const x = str.split("");
-      for (let i = 0; i < x.length / 1.7; i++) {
-        const randomIndex = Math.floor(this.predictableRandom(Math.floor(Date.now() / 500) % 964372 + i) * x.length);
-        x[randomIndex] = this.randomSymbol;
-      }
-      return x.join("");
-    },
-    predictableRandom(x) {
-      let start = Math.pow(x % 97, 4.3) * 232344573;
-      const a = 15485863;
-      const b = 521791;
-      start = (start * a) % b;
-      for (let i = 0; i < (x * x) % 90 + 90; i++) {
-        start = (start * a) % b;
-      }
-      return start / b;
-    },
-    celCycle(x) {
-      //                                   Gets trailing number and removes it
-      const cels = x.split("-").map(cel => [parseInt(cel, 10), cel.replace(/\d+/u, "")]);
-      const totalTime = cels.reduce((acc, cel) => acc + cel[0], 0);
-      let tick = (Date.now() / 100) % totalTime;
-      let index = -1;
-      while (tick >= 0 && index < cels.length - 1) {
-        index++;
-        tick -= cels[index][0];
-      }
-      return `<!${cels[index][1]}!>`;
-    },
-    get randomSymbol() {
-      return String.fromCharCode(Math.floor(Math.random() * 50) + 192);
-    }
-  },
-  quotes: new CelestialQuotes("pelle", (function() {
-    const wc = function(x) {
-      return Pelle.modalTools.wordCycle.bind(Pelle.modalTools)(x);
-    };
-    const cc = function(x) {
-      return Pelle.modalTools.celCycle.bind(Pelle.modalTools)(x);
-    };
-    const p = function(line) {
-      if (!line.includes("[") && !line.includes("<")) return line;
-
-      const sep = "  ---TEMPSEPERATOR---  ";
-      const ops = [];
-      for (let i = 0; i < line.length; i++) {
-        if (line[i] === "[") ops.push(wc);
-        else if (line[i] === "<") ops.push(cc);
-      }
-      let l = line.replace("[", sep).replace("]", sep);
-      l = l.replace("<", sep).replace(">", sep).split(sep);
-      return () => l.map((v, x) => ((x % 2) ? ops[x / 2 - 0.5](v) : v)).join("");
-    };
-
-    const quotesObject = {};
-    let iterator = 0;
-    for (const i in GameDatabase.celestials.pelle.quotes) {
-      iterator++;
-      quotesObject[i] = {
-        id: iterator,
-        lines: GameDatabase.celestials.pelle.quotes[i].map(x => p(x))
-      };
-    }
-    return quotesObject;
-  }())),
-  hasQuote(x) {
-    return player.celestials.pelle.quotes.includes(x);
-  },
+  quotes: Quotes.pelle,
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
   if (Currency.remnants.gte(1)) {
-    Pelle.quotes.show(Pelle.quotes.ARM);
+    Pelle.quotes.arm.show();
   }
 });
 EventHub.logic.on(GAME_EVENT.PELLE_STRIKE_UNLOCKED, () => {
   if (PelleStrikes.infinity.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_1);
+    Pelle.quotes.strike1.show();
   }
   if (PelleStrikes.powerGalaxies.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_2);
+    Pelle.quotes.strike2.show();
   }
   if (PelleStrikes.eternity.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_3);
+    Pelle.quotes.strike3.show();
   }
   if (PelleStrikes.ECs.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_4);
+    Pelle.quotes.strike4.show();
   }
   if (PelleStrikes.dilation.hasStrike) {
-    Pelle.quotes.show(Pelle.quotes.STRIKE_5);
+    Pelle.quotes.strike5.show();
   }
 });
 

@@ -97,7 +97,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     }
   }
 
-  interval = interval.div(PelleRifts.pestilence.effectValue);
+  interval = interval.div(PelleRifts.decay.effectValue);
   interval = interval.div(Pelle.specialGlyphEffect.replication);
 
   if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
@@ -290,7 +290,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.chanceCost.dividedByEffectOf(PelleRifts.famine.milestones[1]);
+      return player.replicanti.chanceCost.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.chanceCost; }
@@ -341,7 +341,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.intervalCost.dividedByEffectOf(PelleRifts.famine.milestones[1]);
+      return player.replicanti.intervalCost.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.intervalCost; }
@@ -376,7 +376,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return this.baseCost.dividedByEffectsOf(TimeStudy(233), PelleRifts.famine.milestones[1]);
+      return this.baseCost.dividedByEffectsOf(TimeStudy(233), PelleRifts.vacuum.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.galCost; }
@@ -409,7 +409,7 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      return Effects.max(0, TimeStudy(131)) + PelleRifts.pestilence.milestones[2].effectOrDefault(0);
+      return Effects.max(0, TimeStudy(131)) + PelleRifts.decay.milestones[2].effectOrDefault(0);
     }
 
     autobuyerTick() {
@@ -471,7 +471,7 @@ export const Replicanti = {
     };
   },
   unlock(freeUnlock = false) {
-    const cost = DC.E140.dividedByEffectOf(PelleRifts.famine.milestones[1]);
+    const cost = DC.E140.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     if (player.replicanti.unl) return;
     if (freeUnlock || Currency.infinityPoints.gte(cost)) {
       if (!freeUnlock) Currency.infinityPoints.subtract(cost);
@@ -527,6 +527,6 @@ export const Replicanti = {
     },
   },
   get isUncapped() {
-    return TimeStudy(192).isBought || PelleRifts.famine.milestones[1].canBeApplied;
+    return TimeStudy(192).isBought || PelleRifts.vacuum.milestones[1].canBeApplied;
   }
 };

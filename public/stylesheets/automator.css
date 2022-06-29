@@ -5,7 +5,7 @@
   --color-automator-controls-border: #767676;
   --color-automator-active-line-background: #d8caeb;
   --color-automator-active-line-outline: #7a49ff;
-  --color-automator-event-background: #007f00;
+  --color-automator-event-background: #9afa9a;
   --color-automator-event-outline: #094e09;
   --color-automator-error-background: #ac0617;
   --color-automator-error-outline: #440108;
@@ -184,12 +184,6 @@
   position: absolute;
   top: 0;
   right: 0;
-}
-
-.l-automator__rename-input {
-  width: 90%;
-  height: 90%;
-  padding: 0.1rem;
 }
 
 .c-automator-editor__active-line {

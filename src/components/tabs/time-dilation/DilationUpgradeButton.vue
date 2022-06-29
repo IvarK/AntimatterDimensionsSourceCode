@@ -50,7 +50,7 @@ export default {
     },
     timeEstimate() {
       if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
-      if (PelleRifts.death.isActive) {
+      if (PelleRifts.paradox.isActive) {
         const drain = Pelle.riftDrainPercent;
         const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
         const goalNetRate = rawDTGain.minus(Decimal.multiply(this.upgrade.cost, drain));

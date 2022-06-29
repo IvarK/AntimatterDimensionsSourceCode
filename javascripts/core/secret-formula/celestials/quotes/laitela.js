@@ -29,7 +29,7 @@ GameDatabase.celestials.quotes.laitela = {
   },
   firstSingularity: {
     id: 2,
-    requirement: () => Current.singularities.gte(1),
+    requirement: () => Currency.singularities.gte(1),
     lines: [
       "It is weird, how all beings question things.",
       "You are different. You can build and manipulate Dimensions.",
@@ -66,7 +66,7 @@ GameDatabase.celestials.quotes.laitela = {
   },
   singularity1: {
     id: 5,
-    requirement: () => Current.singularities.gte(1e8),
+    requirement: () => Currency.singularities.gte(1e8),
     lines: [
       "What was it again...? Antimatter?",
       "That was the first thing you turned into Dimensions?",
@@ -78,7 +78,7 @@ GameDatabase.celestials.quotes.laitela = {
   },
   singularity2: {
     id: 6,
-    requirement: () => Current.singularities.gte(1e16),
+    requirement: () => Currency.singularities.gte(1e16),
     lines: [
       "Of those who tried to control dimensions...",
       "Who were they? I cannot seem to remember...",
@@ -90,7 +90,7 @@ GameDatabase.celestials.quotes.laitela = {
   },
   singularity3: {
     id: 7,
-    requirement: () => Current.singularities.gte(1e24),
+    requirement: () => Currency.singularities.gte(1e24),
     lines: [
       "Is this a cycle?",
       "Will our existence just end and start anew...",
@@ -103,7 +103,7 @@ GameDatabase.celestials.quotes.laitela = {
   },
   singularity4: {
     id: 8,
-    requirement: () => Current.singularities.gte(1e32),
+    requirement: () => Currency.singularities.gte(1e32),
     lines: [
       "I don't know for how much... longer I can hold.",
       "There is... next to nothing left...",

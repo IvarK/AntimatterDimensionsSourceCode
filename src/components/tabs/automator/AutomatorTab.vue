@@ -89,7 +89,7 @@ export default {
       </span>
       <div class="c-automator-split-pane">
         <SplitPane
-          :min-percent="43"
+          :min-percent="44"
           :default-percent="50"
           split="vertical"
         >
@@ -108,6 +108,7 @@ export default {
 
 <style scoped>
 .c-overlimit {
+  font-weight: bold;
   color: var(--color-bad);
 }
 </style>

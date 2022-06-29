@@ -4289,7 +4289,7 @@ br {
   border: var(--var-border-width, 0.2rem) solid #383232;
   border-radius: var(--var-border-radius, 0.5rem);
   margin: 0.5rem;
-  padding: 1rem;
+  padding: 1rem 2rem;
 }
 
 .s-base--metro .c-autobuyer-box-row {

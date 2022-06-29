@@ -114,47 +114,71 @@ window.player = {
       multiplier: DC.D2,
       isActive: true
     },
-    antimatterDims: Array.range(0, 8).map(tier => ({
-      isUnlocked: false,
-      cost: 1,
-      interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
-      bulk: 1,
-      mode: AUTOBUYER_MODE.BUY_10,
+    antimatterDims: {
+      all: Array.range(0, 8).map(tier => ({
+        isUnlocked: false,
+        cost: 1,
+        interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
+        bulk: 1,
+        mode: AUTOBUYER_MODE.BUY_10,
+        isActive: true,
+        lastTick: 0,
+        isBought: false
+      })),
       isActive: true,
-      lastTick: 0,
-      isBought: false
-    })),
-    infinityDims: Array.range(0, 8).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
-    timeDims: Array.range(0, 8).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
+    },
+    infinityDims: {
+      all: Array.range(0, 8).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
+    timeDims: {
+      all: Array.range(0, 8).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
     replicantiGalaxies: {
       isActive: false,
     },
-    replicantiUpgrades: Array.range(0, 3).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
+    replicantiUpgrades: {
+      all: Array.range(0, 3).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
     timeTheorems: {
       isActive: false,
     },
-    dilationUpgrades: Array.range(0, 3).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
-    blackHolePower: Array.range(0, 2).map(() => ({
-      isActive: false,
-    })),
-    realityUpgrades: Array.range(0, 5).map(() => ({
-      isActive: false,
-    })),
-    imaginaryUpgrades: Array.range(0, 10).map(() => ({
-      isActive: false,
-    })),
+    dilationUpgrades: {
+      all: Array.range(0, 3).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
+    blackHolePower: {
+      all: Array.range(0, 2).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
+    realityUpgrades: {
+      all: Array.range(0, 5).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
+    imaginaryUpgrades: {
+      all: Array.range(0, 10).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
     darkMatterDims: {
       isActive: false,
       lastTick: 0,

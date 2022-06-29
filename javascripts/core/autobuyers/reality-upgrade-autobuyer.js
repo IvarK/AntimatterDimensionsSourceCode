@@ -6,7 +6,7 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get data() {
-    return player.auto.realityUpgrades[this.id - 1];
+    return player.auto.realityUpgrades.all[this.id - 1];
   }
 
   get isUnlocked() {
@@ -19,6 +19,8 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
 
   static get entryCount() { return 5; }
   static get autobuyerGroupName() { return "Reality Upgrade"; }
+  static get isActive() { return player.auto.realityUpgrades.isActive; }
+  static set isActive(value) { player.auto.realityUpgrades.isActive = value; }
 }
 
 Autobuyer.realityUpgrade = RealityUpgradeAutobuyerState.createAccessor();

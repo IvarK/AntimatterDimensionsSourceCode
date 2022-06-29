@@ -20,7 +20,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.infinityDims[this.tier - 1];
+    return player.auto.infinityDims.all[this.tier - 1];
   }
 
   get interval() {
@@ -50,6 +50,8 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Infinity Dimension"; }
+  static get isActive() { return player.auto.infinityDims.isActive; }
+  static set isActive(value) { player.auto.infinityDims.isActive = value; }
 }
 
 Autobuyer.infinityDimension = InfinityDimensionAutobuyerState.createAccessor();

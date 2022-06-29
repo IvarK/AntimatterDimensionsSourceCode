@@ -1406,6 +1406,15 @@ GameStorage.devMigrations = {
       delete player.newGame;
     },
     GameStorage.migrations.moveTS33,
+    player => {
+      const toMove = ["antimatterDims", "infinityDims", "timeDims", "replicantiUpgrades", "dilationUpgrades",
+        "blackHolePower", "realityUpgrades", "imaginaryUpgrades"];
+      for (const x of toMove) {
+        const all = player.auto[x];
+        delete player.auto[x];
+        player.auto[x] = { all, isActive: true };
+      }
+    }
   ],
 
   patch(player) {

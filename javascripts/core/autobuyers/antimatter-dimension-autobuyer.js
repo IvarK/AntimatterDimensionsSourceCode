@@ -16,7 +16,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get data() {
-    return player.auto.antimatterDims[this.tier - 1];
+    return player.auto.antimatterDims.all[this.tier - 1];
   }
 
   get baseInterval() {
@@ -127,14 +127,17 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Antimatter Dimension"; }
+  static get isActive() { return player.auto.antimatterDims.isActive; }
+  static set isActive(value) { player.auto.antimatterDims.isActive = value; }
+
   static createAccessor() {
     const accessor = super.createAccessor();
-    /** @returns {boolean} */
-    accessor.allBought = () => accessor.zeroIndexed.every(x => x.isBought);
-    /** @returns {boolean} */
-    // We can get away with this since allUnlimitedBulk is the same for all AD autos
-    accessor.allUnlimitedBulk = () => accessor.zeroIndexed[0].hasUnlimitedBulk;
-    accessor.bulkCap = accessor.zeroIndexed[0].bulkCap;
+    Object.defineProperties(accessor, {
+      allBought: { get: () => accessor.zeroIndexed.every(x => x.isBought) },
+      // We can get away with this since allUnlimitedBulk is the same for all AD autos
+      allUnlimitedBulk: { get: () => accessor.zeroIndexed[0].hasUnlimitedBulk },
+      bulkCap: { get: () => accessor.zeroIndexed[0].bulkCap }
+    });
     return accessor;
   }
 }

@@ -687,7 +687,7 @@ export function applyRUPG10() {
   }
   if (Pelle.isDisabled("rupg10")) return;
 
-  player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
+  player.auto.antimatterDims.all = player.auto.antimatterDims.all.map(current => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 1e14,

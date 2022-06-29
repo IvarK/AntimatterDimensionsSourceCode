@@ -4016,9 +4016,9 @@ br {
   font-family: typewriter;
   font-size: 1.3rem;
   border: 0.1rem solid #c2c2c2;
+  border-radius: var(--var-border-radius, 0.4rem);
   box-sizing: border-box;
   padding: 0.5rem;
-  border-radius: var(--var-border-radius, 0.4rem);
 }
 
 .t-metro .o-autobuyer-input {
@@ -9112,7 +9112,7 @@ input.o-automator-block-input {
 }
 
 .l-h2p-body {
-  overflow-y: scroll;
+  overflow-y: auto;
   flex: 1 1 30rem;
   margin: 1rem 1rem 0;
   padding: 0.5rem;

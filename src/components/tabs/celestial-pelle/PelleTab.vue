@@ -34,7 +34,7 @@ export default {
         this.completedRows = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked));
       }
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
-      this.hasGalaxyGenerator = PelleRifts.war.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
+      this.hasGalaxyGenerator = PelleRifts.recursion.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;

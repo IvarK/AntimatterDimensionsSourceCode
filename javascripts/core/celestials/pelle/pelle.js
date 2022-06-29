@@ -24,7 +24,7 @@ const disabledMechanicUnlocks = {
   autoec: () => ({}),
   replicantiIntervalMult: () => ({}),
   tpMults: () => ({}),
-  glyphs: () => !PelleRifts.famine.milestones[0].canBeApplied,
+  glyphs: () => !PelleRifts.vacuum.milestones[0].canBeApplied,
   V: () => ({}),
   singularity: () => ({}),
   continuum: () => ({}),
@@ -158,7 +158,7 @@ export const Pelle = {
         ? Currency.eternityPoints.value.plus(1).pow(0.3)
         : DC.D1,
       replication: isActive("replication")
-        ? 10 ** 53 ** (PelleRifts.famine.percentage)
+        ? 10 ** 53 ** (PelleRifts.vacuum.percentage)
         : 1,
       dilation: isActive("dilation")
         ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
@@ -182,7 +182,8 @@ export const Pelle = {
         return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
           (based on current EP)`;
       case "replication":
-        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.famine.percentage), 2)} (based on Famine)`;
+        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
+        (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
       case "dilation":
         return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
           (based on Tachyon Galaxies)`;

@@ -55,7 +55,7 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "How long have we done this $1?", 1: dance },
       "How many times have we been here before?",
       { text: "How many plans have you, the $1, operated?", 1: destroyer },
-      { text: "All to try and fulfil your $1?", 1: mandate },
+      { text: "All to try and fulfill your $1?", 1: mandate },
       { text: "And how many times have you fallen before the $1?", 1: eternal },
       "Count them, if you remember.",
       { text: "Not even the $1s, the 6 named and the innumerable unnamed.", 1: lesser },
@@ -72,7 +72,7 @@ GameDatabase.celestials.quotes.pelle = {
       "Things made of the remnants of your own thoughts, hinted at this.",
       "But, you never imagined that would be you, right?",
       { text: "Incorrectly recollecting your exacting $1 of memories.", 1: unseen },
-      { text: `"Fabrication" of your own "ideology" just to fulfil your $1.`, 1: mandate },
+      { text: `"Fabrication" of your own "ideology" just to fulfill your $1.`, 1: mandate },
       { text: "$1.", 1: confusing },
       { text: "And keep in mind I have no reason to $1 you.", 1: confusing },
       "After all, I've already won."
@@ -81,7 +81,7 @@ GameDatabase.celestials.quotes.pelle = {
   strike1: {
     id: 2,
     lines: [
-      { text: "To fulfil your $1, why don't we reminisce about that?", 1: mandate },
+      { text: "To fulfill your $1, why don't we reminisce about that?", 1: mandate },
       { text: "After all, you must love the stories of the $1's glory.", 1: destroyer },
       "You're the same as it, right?",
       "Right?",

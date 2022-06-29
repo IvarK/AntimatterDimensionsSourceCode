@@ -85,14 +85,10 @@ export function gainedInfinityPoints() {
     Achievement(103),
     TimeStudy(111)
   );
-  const mult = NG.multiplier;
-  const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine)
+      .timesEffectsOf(PelleRifts.vacuum)
       .times(Pelle.specialGlyphEffect.infinity)
-      .times(mult)
-      .pow(pow)
       .floor();
   }
   let ip = player.break
@@ -101,7 +97,6 @@ export function gainedInfinityPoints() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
-  ip = ip.times(mult);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -114,15 +109,13 @@ export function gainedInfinityPoints() {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
 
-  ip = ip.pow(pow);
   return ip.floor();
 }
 
 function totalEPMult() {
-  const totalMult = new Decimal(NG.multiplier);
   return Pelle.isDisabled("EPMults")
-    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]))
-    : totalMult.times(getAdjustedGlyphEffect("cursedEP"))
+    ? Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.vacuum.milestones[2])
+    : getAdjustedGlyphEffect("cursedEP")
       .times(ShopPurchase.EPPurchases.currentMult)
       .timesEffectsOf(
         EternityUpgrade.epMult,
@@ -136,9 +129,8 @@ function totalEPMult() {
 }
 
 export function gainedEternityPoints() {
-  const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -151,11 +143,11 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
-  return ep.pow(pow).floor();
+  return ep.floor();
 }
 
 export function requiredIPForEP(epAmount) {
-  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalEPMult()), 5) + 0.7))
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(epAmount, totalEPMult()), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 

@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
@@ -23,7 +25,8 @@ export default {
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
       effects: [],
-      isDark: false
+      isDark: false,
+      decayText: ""
     };
   },
   computed: {
@@ -58,17 +61,22 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.percentage = rift.percentage;
       this.reducedTo = rift.reducedTo;
-      this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
+      this.hasEffectiveFill = rift.config.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
+
+      // If it's chaos, update decay text
+      if (rift.id === 3) this.decayText = wordShift.wordCycle(PelleRifts.decay.name);
     },
     hasMilestone(ms) {
       return ms.canBeApplied;
     },
     milestoneResourceText(rift, milestone) {
       return `${formatPercents(milestone.requirement)}
-      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource})`;
+      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} \
+      ${rift.id === 3 ? this.decayText : rift.drainResource})`;
     },
     milestoneDescriptionText(milestone) {
-      return milestone.description;
+      if (typeof milestone.description === "string") return milestone.description;
+      return milestone.description();
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {

@@ -2,13 +2,15 @@
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "OptionsGameplayTab",
   components: {
-    PrimaryToggleButton,
     OpenModalHotkeysButton,
-    OptionsButton
+    OptionsButton,
+    PrimaryToggleButton,
+    SliderComponent
   },
   data() {
     return {
@@ -22,6 +24,26 @@ export default {
       automatorUnlocked: false,
       automatorLogSize: 0,
     };
+  },
+  computed: {
+    sliderPropsOfflineTicks() {
+      return {
+        min: 22,
+        max: 54,
+        interval: 1,
+        width: "100%",
+        tooltip: false
+      };
+    },
+    sliderPropsAutomatorLogSize() {
+      return {
+        min: 50,
+        max: 500,
+        interval: 50,
+        width: "100%",
+        tooltip: false
+      };
+    }
   },
   watch: {
     retryChallenge(newValue) {
@@ -67,6 +89,14 @@ export default {
     parseOfflineSlider(str) {
       const value = parseInt(str, 10);
       return (1 + value % 9) * Math.pow(10, Math.floor(value / 9));
+    },
+    adjustSliderValueOfflineTicks(value) {
+      this.offlineSlider = value;
+      player.options.offlineTicks = this.parseOfflineSlider(value);
+    },
+    adjustSliderValueAutomatorLogSize(value) {
+      this.automatorLogSize = value;
+      player.options.automatorEvents.maxEntries = this.automatorLogSize;
     }
   }
 };
@@ -103,14 +133,12 @@ export default {
         </OptionsButton>
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
           <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>
-          <input
-            v-model="offlineSlider"
+          <SliderComponent
             class="o-primary-btn--slider__slider"
-            type="range"
-            min="22"
-            step="1"
-            max="54"
-          >
+            v-bind="sliderPropsOfflineTicks"
+            :value="offlineSlider"
+            @input="adjustSliderValueOfflineTicks($event)"
+          />
         </div>
         <PrimaryToggleButton
           v-model="automaticTabSwitching"
@@ -124,14 +152,12 @@ export default {
           class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"
         >
           <b>Automator Log Max: {{ formatInt(parseInt(automatorLogSize)) }}</b>
-          <input
-            v-model="automatorLogSize"
+          <SliderComponent
             class="o-primary-btn--slider__slider"
-            type="range"
-            min="50"
-            step="50"
-            max="500"
-          >
+            v-bind="sliderPropsAutomatorLogSize"
+            :value="automatorLogSize"
+            @input="adjustSliderValueAutomatorLogSize($event)"
+          />
         </div>
       </div>
       <OpenModalHotkeysButton />

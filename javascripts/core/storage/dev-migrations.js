@@ -1405,6 +1405,7 @@ GameStorage.devMigrations = {
     player => {
       delete player.newGame;
     },
+    GameStorage.migrations.moveTS33,
   ],
 
   patch(player) {

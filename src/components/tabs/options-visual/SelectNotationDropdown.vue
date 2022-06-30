@@ -12,6 +12,9 @@ export default {
     <div
       v-for="notation in notations"
       :key="notation.name"
+      :style="{
+        'border-bottom-width': notation === notations.last() ? '0' : ''
+      }"
       class="o-primary-btn l-select-notation__item c-select-notation__item"
       @click="notation.setAsCurrent()"
     >

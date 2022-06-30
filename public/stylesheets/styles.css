@@ -2744,8 +2744,22 @@ br {
 .l-select-notation,
 .l-select-theme {
   display: flex;
+  overflow-y: auto;
   flex-direction: column;
+  max-height: 25rem;
+  z-index: 2;
   align-items: stretch;
+  scrollbar-width: thin;
+  background-color: var(--color-base);
+  border-right: 0.1rem solid var(--color-good);
+  border-bottom: 0.1rem solid var(--color-good);
+  border-left: 0.1rem solid var(--color-good);
+  border-radius: var(--var-border-radius, 0.4rem);
+}
+
+.l-select-notation::-webkit-scrollbar,
+.l-select-theme::-webkit-scrollbar {
+  width: 0.8rem;
 }
 
 .l-select-notation__item,
@@ -2757,7 +2771,11 @@ br {
 
 .o-primary-btn.c-select-notation__item,
 .o-primary-btn.c-select-theme__item {
+  z-index: 1;
   border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0;
   box-shadow: none;
 }
 

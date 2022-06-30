@@ -1,12 +1,12 @@
 <script>
 import draggable from "vuedraggable";
 
-import AutomatorSingleBlock from "./AutomatorSingleBlock";
+import AutomatorBlockSingleRow from "./AutomatorBlockSingleRow";
 
 export default {
   name: "AutomatorBlockEditor",
   components: {
-    AutomatorSingleBlock,
+    AutomatorBlockSingleRow,
     draggable
   },
   computed: {
@@ -103,7 +103,7 @@ export const BlockAutomator = {
       .replace("COMMENT", "//")
       .replace("BLOB", "blob  ");
 
-    if (block.canWait && block.wait === false) {
+    if (block.canWait && block.nowait) {
       parsed = parsed.replace(/(\S+)/u, "$1 NOWAIT");
     }
     if (block.respec) parsed += ` RESPEC`;
@@ -186,7 +186,7 @@ export const BlockAutomator = {
         ghost-class="c-automator-block-row-ghost"
         @end="parseRequest"
       >
-        <AutomatorSingleBlock
+        <AutomatorBlockSingleRow
           v-for="block in lines"
           :key="block.id"
           :block="block"

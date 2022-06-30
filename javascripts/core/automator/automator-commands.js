@@ -491,7 +491,7 @@ export const AutomatorCommands = ((() => {
         ...automatorBlocksMap[
           ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
         ],
-        wait: ctx.Nowait === undefined,
+        nowait: ctx.Nowait !== undefined,
         respec: ctx.Respec !== undefined
       })
     },

@@ -24,6 +24,9 @@ export default {
     <div
       v-for="theme in themes"
       :key="theme.name"
+      :style="{
+        'border-bottom-width': theme.name === availableThemeNames.last() ? '0' : ''
+      }"
       class="o-primary-btn l-select-theme__item c-select-theme__item"
       @click="theme.set()"
     >

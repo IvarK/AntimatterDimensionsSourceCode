@@ -46,25 +46,25 @@ const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 export const automatorBlocks = [
   {
     cmd: "WAIT",
-    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS, "USER INPUT..."],
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
     cmd: "IF",
-    targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "USER INPUT..."],
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
     cmd: "WHILE",
-    targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "USER INPUT..."],
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
     cmd: "UNTIL",
-    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS, "USER INPUT..."],
     secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
@@ -103,7 +103,6 @@ export const automatorBlocks = [
     cmd: "STUDIES RESPEC"
   }, {
     cmd: "INFINITY",
-    canRespec: true,
     canWait: true
   }, {
     cmd: "ETERNITY",

@@ -1,10 +1,13 @@
 <script>
 import draggable from "vuedraggable";
 
+import AutomatorBlockSingleInput from "./AutomatorBlockSingleInput";
+
 export default {
-  name: "AutomatorSingleBlock",
+  name: "AutomatorBlockSingleRow",
   components: {
-    draggable
+    draggable,
+    AutomatorBlockSingleInput
   },
   props: {
     block: {
@@ -30,7 +33,6 @@ export default {
       },
       // For errors
       idxOffset: 0,
-      suppressTooltip: false,
     };
   },
   computed: {
@@ -45,27 +47,6 @@ export default {
     isCurrentLine() {
       return this.b.id === this.currentBlockId;
     },
-    hasError() {
-      return this.validatorErrors.errors.length > 0;
-    },
-    errorTooltip() {
-      if (!this.hasError || this.suppressTooltip) return undefined;
-      const span = "<span class='o-automator-error-underline'>";
-      const content = this.validatorErrors.line
-        .splice(this.validatorErrors.errors[0].startOffset - this.idxOffset, 0, span)
-        .splice(this.validatorErrors.errors[0].endOffset + span.length + 1 - this.idxOffset, 0, "</span>");
-      return {
-        content:
-          `<div class="c-block-automator-error">
-          <div>${content}</div>
-          <div>${this.validatorErrors.errors[0].info}</div>
-        </div>`,
-        html: true,
-        trigger: "manual",
-        show: true,
-        classes: ["c-block-automator-error-container", "general-tooltip"]
-      };
-    },
   },
   created() {
     this.recalculateErrorCount();
@@ -77,6 +58,9 @@ export default {
     this.b = this.block;
   },
   methods: {
+    update() {
+      this.currentBlockId = BlockAutomator.currentBlockId;
+    },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
     },
@@ -88,38 +72,9 @@ export default {
       this.$set(this.b.nest, this.b.nest.findIndex(x => x.id === id), block);
       this.parseRequest();
     },
-    update() {
-      this.currentBlockId = BlockAutomator.currentBlockId;
-    },
-    validateInput(value) {
-      let validator, lines;
-      if (this.b.nest) {
-        const clone = Object.assign({}, this.b);
-        clone.nest = [];
-        lines = BlockAutomator.parseLines([clone]);
-        validator = AutomatorGrammar.validateLine(lines.join("\n"));
-      } else {
-        lines = BlockAutomator.parseLines([this.b]);
-        validator = AutomatorGrammar.validateLine(lines[0]);
-      }
-
-      this.idxOffset = lines[0].indexOf(value);
-
-      this.validatorErrors = {
-        errors: validator.errors,
-        line: value
-      };
-    },
-    handleFocus(focusState) {
-      this.suppressTooltip = !focusState;
-    },
 
     // Not entirely sure why, but updating error count only seems to work if it's done exactly here in the execution
     // stack; moving it to the definition of updateBlock seems to stop it from working
-    changeBlock(block, id) {
-      this.updateBlock(block, id);
-      this.recalculateErrorCount();
-    },
     removeBlock(block, id) {
       this.deleteBlock(block, id);
       this.recalculateErrorCount();
@@ -148,67 +103,51 @@ export default {
       <div class="o-automator-command">
         {{ b.cmd }}
       </div>
-      <select
+      <AutomatorBlockSingleInput
         v-if="b.canWait"
-        v-model="b.wait"
-        class="o-automator-block-input"
-        @change="changeBlock(block, b.id)"
-      >
-        <option :value="true" />
-        <option :value="false">
-          NOWAIT
-        </option>
-      </select>
-      <select
+        :block="b"
+        block-target="nowait"
+        :is-bool-target="true"
+        :options="['NOWAIT']"
+        :initial-selection="b.nowait ? 'NOWAIT' : ''"
+        :update-function="updateBlock"
+      />
+      <AutomatorBlockSingleInput
         v-if="b.canRespec"
-        v-model="b.respec"
-        class="o-automator-block-input"
-        @change="changeBlock(block, b.id)"
-      >
-        <option :value="false" />
-        <option :value="true">
-          RESPEC
-        </option>
-      </select>
-      <select
+        :block="b"
+        block-target="respec"
+        :is-bool-target="true"
+        :options="['RESPEC']"
+        :initial-selection="b.respec ? 'RESPEC' : ''"
+        :update-function="updateBlock"
+      />
+      <AutomatorBlockSingleInput
         v-if="b.targets"
-        v-model="b.target"
-        class="o-automator-block-input"
-        @change="changeBlock(block, b.id)"
-      >
-        <option
-          v-for="target in b.targets"
-          :key="target"
-          :value="target"
-        >
-          {{ target }}
-        </option>
-      </select>
-      <select
+        :block="b"
+        block-target="target"
+        :is-bool-target="false"
+        :options="b.targets"
+        :initial-selection="b.target"
+        :update-function="updateBlock"
+      />
+      <AutomatorBlockSingleInput
         v-if="hasSecondaryTargets"
-        v-model="b.secondaryTarget"
-        class="o-automator-block-input"
-        @change="changeBlock(block, b.id)"
-      >
-        <option
-          v-for="target in b.secondaryTargets"
-          :key="target"
-          :value="target"
-        >
-          {{ target }}
-        </option>
-      </select>
-      <input
+        :block="b"
+        block-target="secondaryTarget"
+        :is-bool-target="false"
+        :options="b.secondaryTargets"
+        :initial-selection="b.secondaryTarget"
+        :update-function="updateBlock"
+      />
+      <AutomatorBlockSingleInput
         v-if="hasInput"
-        v-model="b.inputValue"
-        v-tooltip="errorTooltip"
-        class="o-automator-block-input"
-        :class="{ 'l-error-textbox' : hasError }"
-        @change="changeBlock(b, b.id)"
-        @keyup="validateInput(b.inputValue)"
-        @focusin="handleFocus(true)"
-        @focusout="handleFocus(false)"
-      >
+        :block="b"
+        block-target="inputValue"
+        :is-bool-target="false"
+        :options="b.targets"
+        :initial-selection="b.inputValue"
+        :update-function="updateBlock"
+      />
       <div
         class="o-automator-block-delete"
         @click="removeBlock(b.id)"
@@ -222,7 +161,7 @@ export default {
       class="l-automator-nested-block"
       group="code-blocks"
     >
-      <AutomatorSingleBlock
+      <AutomatorBlockSingleRow
         v-for="subblock in block.nest"
         :key="subblock.id"
         :block="subblock"

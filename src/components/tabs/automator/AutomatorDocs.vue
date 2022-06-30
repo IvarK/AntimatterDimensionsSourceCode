@@ -297,11 +297,10 @@ export default {
 
 .l-automator__scripts-dropdown {
   width: 90%;
-  height: calc(2rem + 1rem/3);
-  border: 0.2rem solid var(--color-automator-controls-border);
+  height: calc(2rem + 1rem / 3 - var(--var-border-width, 0rem) * 2);
+  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.4rem;
-  padding: 0.2rem 0 0.3rem;
 }
 
 .c-automator__scripts-dropdown {
@@ -313,8 +312,8 @@ export default {
 
 .l-automator__rename-input {
   width: 100%;
-  height: calc(2rem + 1rem/3);
-  border: 0.2rem solid var(--color-reality-light);
+  height: calc(2rem + 1rem / 3 - var(--var-border-width, 0rem) * 2);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-light);
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.4rem;
   padding: 0.4rem;

@@ -118,7 +118,7 @@ export default {
   align-items: center;
   color: var(--color-automator-docs-font);
   background-color: #626262;
-  border: 0.2rem solid #767676;
+  border: var(--var-border-width, 0.2rem) solid #767676;
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.2rem 0.4rem 0.2rem auto;
   padding: 0.3rem 0;

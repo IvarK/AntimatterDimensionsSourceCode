@@ -28,7 +28,8 @@ export default {
       isBought: false,
       isPossible: false,
       isAutoUnlocked: false,
-      isAutobuyerOn: false
+      isAutobuyerOn: false,
+      etaText: ""
     };
   },
   computed: {
@@ -66,13 +67,23 @@ export default {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = ImaginaryUpgrade(20).isBought;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
+      this.etaText = this.getETAText();
+    },
+    getETAText() {
+      if (this.canBeBought || !this.isAvailableForPurchase || this.isBought) return "";
+      const time = MachineHandler.estimateIMTimer(this.upgrade.cost);
+      if (isFinite(time)) return TimeSpan.fromSeconds(time).toString();
+      return "Never affordable";
     }
   }
 };
 </script>
 
 <template>
-  <div class="l-spoon-btn-group">
+  <div
+    v-tooltip="etaText"
+    class="l-spoon-btn-group"
+  >
     <button
       :class="classObject"
       class="l-reality-upgrade-btn c-reality-upgrade-btn"

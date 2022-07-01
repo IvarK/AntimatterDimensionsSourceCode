@@ -20,7 +20,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get baseInterval() {
-    return Player.defaultStart.auto.antimatterDims[this.tier - 1].interval;
+    return Player.defaultStart.auto.antimatterDims.all[this.tier - 1].interval;
   }
 
   get isUnlocked() {

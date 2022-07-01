@@ -2,6 +2,11 @@
 export default {
   name: "AutomatorBlockSingleInput",
   props: {
+    constant: {
+      type: String,
+      required: false,
+      default: ""
+    },
     block: {
       type: Object,
       required: true
@@ -12,7 +17,7 @@ export default {
     },
     options: {
       type: Array,
-      required: true
+      required: true,
     },
     blockTarget: {
       type: String,
@@ -27,6 +32,17 @@ export default {
       required: false,
       default: ""
     },
+
+    // These props are solely for the input pattern matching
+    recursive: {
+      type: Boolean,
+      required: true
+    },
+    currentPath: {
+      type: String,
+      required: false,
+      default: ""
+    }
   },
   data() {
     return {
@@ -41,8 +57,13 @@ export default {
       suppressTooltip: false,
 
       isTextInput: false,
+      dropdownOptions: [],
       dropdownSelection: "",
       textContents: "",
+      pathRef: {},
+      currentNodeOnPath: "",
+      unknownNext: false,
+      nextNodeCount: false,
     };
   },
   computed: {
@@ -69,10 +90,28 @@ export default {
     },
   },
   created() {
-    if (this.options.includes(this.initialSelection)) this.dropdownSelection = this.initialSelection;
-    else {
-      this.dropdownSelection = "USER INPUT...";
-      this.textContents = this.initialSelection;
+    if (this.constant) return;
+    if (this.recursive) {
+      const availableOptions = this.options
+        .filter(s => s.startsWith(this.currentPath) && s.length > this.currentPath.length)
+        .map(s => s.charAt(this.currentPath.length));
+      for (const node of availableOptions) {
+        if (this.pathRef[node]) continue;
+        const entries = this.block[node];
+        this.pathRef[node] = entries;
+        this.dropdownOptions.push(...entries);
+      }
+      this.calculatePath();
+    } else {
+      this.dropdownOptions = [...this.options];
+      if (this.options.includes(this.initialSelection)) this.dropdownSelection = this.initialSelection;
+    }
+
+    if (this.dropdownOptions[0] === "input" && this.dropdownOptions.length === 1) {
+      this.isTextInput = true;
+      this.textContents = "blob";
+    } else {
+      this.dropdownOptions = this.dropdownOptions.map(o => (o === "input" ? "USER INPUT..." : o));
     }
   },
   mounted() {
@@ -81,7 +120,17 @@ export default {
   methods: {
     update() {
       this.currentBlockId = BlockAutomator.currentBlockId;
-      this.isTextInput = this.dropdownSelection === "USER INPUT...";
+      if (this.dropdownSelection === "USER INPUT...") this.isTextInput = true;
+      this.calculatePath();
+    },
+    calculatePath() {
+      this.currentNodeOnPath = " ";
+      for (const node of Object.keys(this.pathRef)) {
+        if (this.pathRef[node].includes(this.dropdownSelection)) this.currentNodeOnPath = node;
+      }
+      const fullPath = this.currentPath + this.currentNodeOnPath;
+      this.nextNodeCount = this.options.filter(p => p.length > fullPath.length && p.startsWith(fullPath)).length;
+      this.unknownNext = this.nextNodeCount > 1 || this.dropdownSelection === "";
     },
     validateInput(value) {
       let validator, lines;
@@ -139,8 +188,14 @@ export default {
 
 <template>
   <div class="c-automator-single-block">
+    <div
+      v-if="constant"
+      class="o-automator-command"
+    >
+      {{ constant }}
+    </div>
     <input
-      v-if="isTextInput"
+      v-else-if="isTextInput"
       v-model="textContents"
       v-tooltip="errorTooltip"
       class="o-automator-block-input"
@@ -156,18 +211,35 @@ export default {
       @change="changeBlock(block, block.id)"
     >
       <option
-        v-for="target in ['', ...options]"
+        v-for="target in ['', ...dropdownOptions]"
         :key="target"
         :value="target"
       >
         {{ target }}
       </option>
     </select>
+    <AutomatorBlockSingleInput
+      v-if="recursive && nextNodeCount > 0 && !constant"
+      :key="currentNodeOnPath"
+      :constant="unknownNext ? '...' : ''"
+      :block="block"
+      block-target="target"
+      :is-bool-target="false"
+      :options="options"
+      :initial-selection="b.targets ? b[b.targets[currentPath.length]] : ''"
+      :update-function="updateFunction"
+      :recursive="true"
+      :current-path="currentPath + currentNodeOnPath"
+    />
   </div>
 </template>
 
 <style scoped>
 .c-automator-single-block {
-  margin: 0.2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 0.1rem;
+  height: 2.8rem;
 }
 </style>

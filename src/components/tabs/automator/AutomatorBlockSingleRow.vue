@@ -36,14 +36,6 @@ export default {
     };
   },
   computed: {
-    hasInput() {
-      return this.b.hasInput &&
-        (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true);
-    },
-    hasSecondaryTargets() {
-      return this.b.secondaryTargets &&
-        (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true);
-    },
     isCurrentLine() {
       return this.b.id === this.currentBlockId;
     },
@@ -100,9 +92,15 @@ export default {
       class="c-automator-block-row"
       :class="{ 'c-automator-block-row-active' : isCurrentLine }"
     >
-      <div class="o-automator-command">
-        {{ b.cmd }}
-      </div>
+      <AutomatorBlockSingleInput
+        :constant="b.cmd"
+        :block="b"
+        block-target=" "
+        :is-bool-target="true"
+        :options="[]"
+        :update-function="updateBlock"
+        :recursive="false"
+      />
       <AutomatorBlockSingleInput
         v-if="b.canWait"
         :block="b"
@@ -111,6 +109,7 @@ export default {
         :options="['NOWAIT']"
         :initial-selection="b.nowait ? 'NOWAIT' : ''"
         :update-function="updateBlock"
+        :recursive="false"
       />
       <AutomatorBlockSingleInput
         v-if="b.canRespec"
@@ -120,33 +119,17 @@ export default {
         :options="['RESPEC']"
         :initial-selection="b.respec ? 'RESPEC' : ''"
         :update-function="updateBlock"
+        :recursive="false"
       />
       <AutomatorBlockSingleInput
-        v-if="b.targets"
+        v-if="b.allowedPatterns"
         :block="b"
-        block-target="target"
+        :block-target="b.targets[0]"
         :is-bool-target="false"
-        :options="b.targets"
-        :initial-selection="b.target"
+        :options="b.allowedPatterns"
+        :initial-selection="b.targets ? b[b.targets[0]] : ''"
         :update-function="updateBlock"
-      />
-      <AutomatorBlockSingleInput
-        v-if="hasSecondaryTargets"
-        :block="b"
-        block-target="secondaryTarget"
-        :is-bool-target="false"
-        :options="b.secondaryTargets"
-        :initial-selection="b.secondaryTarget"
-        :update-function="updateBlock"
-      />
-      <AutomatorBlockSingleInput
-        v-if="hasInput"
-        :block="b"
-        block-target="inputValue"
-        :is-bool-target="false"
-        :options="b.targets"
-        :initial-selection="b.inputValue"
-        :update-function="updateBlock"
+        :recursive="true"
       />
       <div
         class="o-automator-block-delete"

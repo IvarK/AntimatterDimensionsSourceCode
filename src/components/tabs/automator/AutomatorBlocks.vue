@@ -25,13 +25,13 @@ export default {
       if (block.nested && !block.nest) b.nest = [];
       if (block.targets) b.target = "";
       if (block.hasInput) b.inputValue = "";
-      if (block.secondaryTargets) b.secondaryTarget = "";
+      if (block.compOperators) b.compOperator = "";
       return b;
     },
   }
 };
 
-const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<=", "!="];
+const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<="];
 const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
   "AM", "IP", "EP", "RM", "INFINITIES", "BANKED INFINITIES", "ETERNITIES", "REALITIES",
   "PENDING IP", "PENDING EP", "PENDING TP", "PENDING RM", "PENDING GLYPH LEVEL",
@@ -43,90 +43,123 @@ const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
 
 const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
+// Capital letter props must be mutually exclusive, or else block patterns will be inconsistent
 export const automatorBlocks = [
   {
     cmd: "WAIT",
-    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS, "USER INPUT..."],
-    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
-    hasInput: true
+    allowedPatterns: ["A", "BCB"],
+    A: AUTOMATOR_BLOCKS_RESETS,
+    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["target", "compOperator", "inputValue"]
   }, {
     cmd: "IF",
-    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "USER INPUT..."],
-    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    hasInput: true,
+    allowedPatterns: ["ABA"],
+    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["target", "compOperator", "inputValue"],
     nested: true
   }, {
     cmd: "WHILE",
-    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "USER INPUT..."],
-    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    hasInput: true,
+    allowedPatterns: ["ABA"],
+    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["target", "compOperator", "inputValue"],
     nested: true
   }, {
     cmd: "UNTIL",
-    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS, "USER INPUT..."],
-    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    hasInput: true,
-    targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
+    allowedPatterns: ["A", "BCB"],
+    A: AUTOMATOR_BLOCKS_RESETS,
+    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["target", "compOperator", "inputValue"],
     nested: true
   }, {
     cmd: "STUDIES PURCHASE",
-    hasInput: true,
+    allowedPatterns: ["A"],
+    A: ["input"],
+    targets: ["target"],
     canWait: true
   }, {
     cmd: "UNLOCK",
-    targets: ["EC", "DILATION"],
-    hasInput: true,
-    targetsWithoutInput: ["DILATION"],
+    allowedPatterns: ["AB", "C"],
+    A: ["EC"],
+    B: ["input"],
+    C: ["DILATION"],
+    targets: ["", "target"],
     canWait: true
   }, {
     cmd: "START",
-    targets: ["EC", "DILATION"],
-    hasInput: true,
-    targetsWithoutInput: ["DILATION"]
+    allowedPatterns: ["AB", "C"],
+    A: ["EC"],
+    B: ["input"],
+    C: ["DILATION"],
+    targets: ["", "target"],
   }, {
     cmd: "AUTO",
-    targets: AUTOMATOR_BLOCKS_RESETS,
-    hasInput: true
+    allowedPatterns: ["ABC"],
+    A: AUTOMATOR_BLOCKS_RESETS,
+    B: ["ON", "OFF"],
+    C: ["input"],
+    targets: ["target"],
   }, {
     cmd: "BLACK HOLE",
-    targets: ["ON", "OFF"],
+    allowedPatterns: ["A"],
+    A: ["ON", "OFF"],
+    targets: ["target"],
     isUnlocked: () => BlackHole(1).isUnlocked
   }, {
     cmd: "STORE GAME TIME",
-    targets: ["ON", "OFF", "USE"],
+    allowedPatterns: ["A"],
+    A: ["ON", "OFF", "USE"],
+    targets: ["target"],
     isUnlocked: () => Enslaved.isUnlocked
   }, {
     cmd: "PAUSE",
+    allowedPatterns: ["A"],
+    A: ["input"],
+    targets: ["target"],
     hasInput: true
   }, {
-    cmd: "STUDIES RESPEC"
+    cmd: "STUDIES RESPEC",
   }, {
     cmd: "INFINITY",
+    targets: ["target"],
     canWait: true
   }, {
     cmd: "ETERNITY",
+    targets: ["target"],
     canRespec: true,
     canWait: true
   }, {
     cmd: "REALITY",
+    targets: ["target"],
     canRespec: true,
     canWait: true,
     isUnlocked: () => RealityUpgrade(25).isBought
   }, {
     cmd: "STUDIES LOAD",
-    targets: ["ID", "NAME"],
-    hasInput: true,
+    allowedPatterns: ["AB"],
+    A: ["ID", "NAME"],
+    B: ["input"],
+    targets: ["", "target"],
     canWait: true
   }, {
     cmd: "NOTIFY",
-    hasInput: true
+    allowedPatterns: ["A"],
+    A: ["input"],
+    targets: ["target"],
   }, {
     cmd: "COMMENT",
-    hasInput: true
+    allowedPatterns: ["A"],
+    A: ["input"],
+    targets: ["target"],
   }, {
     cmd: "DEFINE",
-    hasInput: true
+    allowedPatterns: ["ABA"],
+    A: ["input"],
+    B: ["="],
+    targets: ["target", "", "inputValue"],
   }, {
     cmd: "BLOB"
   }

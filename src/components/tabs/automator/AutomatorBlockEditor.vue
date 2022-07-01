@@ -108,7 +108,7 @@ export const BlockAutomator = {
     }
     if (block.respec) parsed += ` RESPEC`;
     if (block.target) parsed += ` ${block.target}`;
-    if (block.secondaryTarget) parsed += ` ${block.secondaryTarget}`;
+    if (block.compOperator) parsed += ` ${block.compOperator}`;
     if (block.inputValue) parsed += ` ${block.inputValue}`;
     if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") parsed += " {";
 

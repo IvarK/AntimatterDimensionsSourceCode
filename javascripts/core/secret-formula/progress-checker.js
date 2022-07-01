@@ -95,28 +95,28 @@ GameDatabase.progressStages = [
   {
     id: PROGRESS_STAGE.TERESA,
     name: "Teresa (1st Celestial)",
-    hasReached: save => save.celestials.teresa.quotes > 0,
+    hasReached: save => save.celestials.teresa.quoteBits > 0,
     suggestedResource: "Reality Machines",
     subProgressValue: save => Math.log10(1 + save.celestials.teresa.pouredAmount) / 21,
   },
   {
     id: PROGRESS_STAGE.EFFARIG,
     name: "Effarig (2nd Celestial)",
-    hasReached: save => save.celestials.effarig.quotes > 0,
+    hasReached: save => save.celestials.effarig.quoteBits > 0,
     suggestedResource: "Reality Machines and Relic Shards",
     subProgressValue: save => Math.log10(1 + save.celestials.effarig.relicShards) / 14,
   },
   {
     id: PROGRESS_STAGE.ENSLAVED,
     name: "The Enslaved Ones (3rd Celestial)",
-    hasReached: save => save.celestials.enslaved.quotes > 0,
+    hasReached: save => save.celestials.enslaved.quoteBits > 0,
     suggestedResource: "Reality Machines and Glyph Level",
     subProgressValue: save => Math.sqrt((new Decimal(save.reality.realityMachines).log10() - 30) / 30),
   },
   {
     id: PROGRESS_STAGE.V,
     name: "V (4th Celestial)",
-    hasReached: save => save.celestials.v.quotes > 0,
+    hasReached: save => save.celestials.v.quoteBits > 0,
     suggestedResource: "Number of V-Achievements",
     subProgressValue: save => 0.0277 * Object.values(save.celestials.v.runUnlocks)
       .reduce((total, ach) => total + ach, 0),
@@ -124,7 +124,7 @@ GameDatabase.progressStages = [
   {
     id: PROGRESS_STAGE.RA,
     name: "Ra (5th Celestial)",
-    hasReached: save => save.celestials.ra.quotes > 0,
+    hasReached: save => save.celestials.ra.quoteBits > 0,
     suggestedResource: "Celestial Memories",
     subProgressValue: save => Object.values(save.celestials.ra.pets).reduce((sum, pet) => sum + pet.level, 0) / 100,
   },
@@ -138,7 +138,7 @@ GameDatabase.progressStages = [
   {
     id: PROGRESS_STAGE.LAITELA,
     name: "Lai'tela (6th Celestial)",
-    hasReached: save => save.celestials.laitela.quotes > 0,
+    hasReached: save => save.celestials.laitela.quoteBits > 0,
     suggestedResource: "Dark Matter and Singularities",
     subProgressValue: save => new Decimal(save.celestials.laitela.darkMatter).log10() / 308.25,
   },

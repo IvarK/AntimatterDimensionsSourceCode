@@ -2978,6 +2978,10 @@ br {
   background: #9e9e9e;
 }
 
+.o-achievement--hidden .o-achievement__indicator--locked {
+  border-color: black;
+}
+
 .o-achievement__indicator--waiting {
   background: #d1d161;
   border-color: #acac39;
@@ -2991,11 +2995,6 @@ br {
 .t-dark-metro .o-achievement__indicator--waiting {
   background: #b9b946;
   border-color: #7d7d36;
-}
-
-.o-achievement__indicator--secret {
-  background: #555555;
-  border-color: black;
 }
 
 /* #region themes */

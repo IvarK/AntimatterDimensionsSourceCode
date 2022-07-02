@@ -148,14 +148,16 @@ export class AutomatorScript {
     this._compiled = AutomatorGrammar.compile(this.text).compiled;
   }
 
-  static create(name) {
-    let id = Object.keys(player.reality.automator.scripts).length + 1;
+  static create(name, content = "") {
+    const scripts = Object.keys(player.reality.automator.scripts);
+    const missingIndex = scripts.findIndex((x, y) => y + 1 !== Number(x));
+    let id = 1 + (missingIndex === -1 ? scripts.length : missingIndex);
     // On a fresh save, this executes before player is properly initialized
     if (!player.reality.automator.scripts || id === 0) id = 1;
     player.reality.automator.scripts[id] = {
       id,
       name,
-      content: "",
+      content,
     };
     return new AutomatorScript(id);
   }
@@ -179,15 +181,10 @@ export const AutomatorData = {
   currentScriptText() {
     return player.reality.automator.scripts[this.scriptIndex()].content;
   },
-  createNewScript(newScript, name) {
-    const newScriptID = Object.values(player.reality.automator.scripts).length + 1;
-    player.reality.automator.scripts[newScriptID] = {
-      id: newScriptID,
-      name,
-      content: newScript
-    };
+  createNewScript(content, name) {
+    const newScript = AutomatorScript.create(name, content);
     GameUI.notify.info(`Imported Script "${name}"`);
-    player.reality.automator.state.editorScript = newScriptID;
+    player.reality.automator.state.editorScript = newScript.id;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
   currentErrors(script) {

@@ -9,16 +9,15 @@ export default {
 
 <template>
   <div class="l-select-notation">
-    <div
-      v-for="notation in notations"
-      :key="notation.name"
-      :style="{
-        'border-bottom-width': notation === notations.last() ? '0' : ''
-      }"
-      class="o-primary-btn l-select-notation__item c-select-notation__item"
-      @click="notation.setAsCurrent()"
-    >
-      {{ notation.name }}
+    <div class="l-select-notation__inner">
+      <div
+        v-for="notation in notations"
+        :key="notation.name"
+        class="o-primary-btn l-select-notation__item c-select-notation__item"
+        @click="notation.setAsCurrent()"
+      >
+        {{ notation.name }}
+      </div>
     </div>
   </div>
 </template>

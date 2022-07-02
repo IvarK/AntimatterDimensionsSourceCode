@@ -2743,23 +2743,37 @@ br {
 
 .l-select-notation,
 .l-select-theme {
-  display: flex;
-  overflow-y: auto;
-  flex-direction: column;
-  max-height: 25rem;
-  z-index: 2;
-  align-items: stretch;
-  scrollbar-width: thin;
+  overflow: hidden;
   background-color: var(--color-base);
-  border-right: 0.1rem solid var(--color-good);
-  border-bottom: 0.1rem solid var(--color-good);
-  border-left: 0.1rem solid var(--color-good);
+  border: 0.1rem var(--color-good);
+  border-style: none solid solid;
   border-radius: var(--var-border-radius, 0.4rem);
 }
 
-.l-select-notation::-webkit-scrollbar,
-.l-select-theme::-webkit-scrollbar {
+.l-select-notation__inner,
+.l-select-theme__inner {
+  display: flex;
+  /*
+    Overflow-y is duplicated here. Auto works on most browsers-- overlay doesn't.
+    Overlay makes the scrollbar display on top of the element, which is what we want. Auto is there in case
+    overlay isn't available. The order must stay the same.
+  */
+  overflow-y: auto;
+  overflow-y: overlay;
+  flex-direction: column;
+  max-height: 24.9rem;
+  align-items: stretch;
+  scrollbar-width: thin;
+}
+
+.l-select-notation__inner::-webkit-scrollbar,
+.l-select-theme__inner::-webkit-scrollbar {
   width: 0.8rem;
+}
+
+.l-select-notation__item:last-child,
+.l-select-theme__item:last-child {
+  border: 0;
 }
 
 .l-select-notation__item,
@@ -2771,10 +2785,7 @@ br {
 
 .o-primary-btn.c-select-notation__item,
 .o-primary-btn.c-select-theme__item {
-  z-index: 1;
-  border-top: none;
-  border-right: none;
-  border-left: none;
+  border-style: none none solid;
   border-radius: 0;
   box-shadow: none;
 }

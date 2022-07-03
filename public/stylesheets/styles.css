@@ -13,7 +13,7 @@ html {
   background-clip: content-box;
   background-color: grey;
   border: 0.2rem solid transparent;
-  border-radius: 0.5rem;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 ::-webkit-scrollbar-corner {

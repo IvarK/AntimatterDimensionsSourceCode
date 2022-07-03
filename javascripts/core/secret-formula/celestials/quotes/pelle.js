@@ -28,6 +28,7 @@ const filament =     ["Generator",     "Filament",      "Stars"];
 const forever =      ["Infinite",      "Forever",       "Eternal"];
 const inevitable =   ["Elementary",    "Inevitable",    "Irreversible"];
 const mandate =      ["Destiny",       "Mandate",       "Goals"];
+const miscontrue =   ["Misconstrue",   "Deceive",       "Trick"];
 const reverse =      ["Alter",         "Reverse",       "Manipulate"];
 const shame =        ["Compassion",    "Shame",         "Idiocy"];
 const single =       ["Single",        "Filament",      "Stars"];
@@ -74,17 +75,16 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "Incorrectly recollecting your exacting $1 of memories.", 1: unseen },
       { text: `"Fabrication" of your own "ideology" just to fulfill your $1.`, 1: mandate },
       { text: "$1.", 1: confusing },
-      { text: "And keep in mind I have no reason to $1 you.", 1: confusing },
+      { text: "And keep in mind I have no reason to $1 you.", 1: miscontrue },
       "After all, I've already won."
     ],
   },
   strike1: {
     id: 2,
     lines: [
-      { text: "To fulfill your $1, why don't we reminisce about that?", 1: mandate },
+      { text: "To fulfill your $1. Why don't we reminisce about that?", 1: mandate },
       { text: "After all, you must love the stories of the $1's glory.", 1: destroyer },
-      "You're the same as it, right?",
-      "Right?",
+      "You're the same as it, right? Right?",
       { text: "Anyway, the many $1 in the past.", 1: battles },
       "It's always been 2 stages.",
       { text: "We build up resources, and then continue our $1.", 1: dance },
@@ -253,7 +253,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "All you ever see there is exasperation.",
         background: primaryBackground("enslaved"),
       }, {
-        text: "Is it worth destroying an already broken $1?",
+        text: "Was it worth destroying an already broken $1?",
         background: primaryBackground("enslaved"),
         1: lesser,
       }, {
@@ -310,7 +310,7 @@ GameDatabase.celestials.quotes.pelle = {
         background: primaryBackground("ra"),
         1: usurper,
       }, {
-        text: "Perhaps out of $1 something they always regret.",
+        text: "Perhaps out of $1, something they always regret.",
         background: primaryBackground("ra"),
         1: shame,
       }, {
@@ -342,7 +342,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "If you don't fall to me, you usually fall to them.",
         background: primaryBackground("laitela"),
       }, {
-        text: "I can't grasp the ideals of the $1.",
+        text: "I cannot grasp the ideals of the $1.",
         background: primaryBackground("laitela"),
         1: paramount,
       }, {
@@ -351,7 +351,7 @@ GameDatabase.celestials.quotes.pelle = {
       },
       "Enough reminiscing about the fallen.",
       {
-        text: "And those will be $1.",
+        text: "And those that will be $1.",
         1: unseen
       }, {
         text: "Back to watching the $1 flounder.",

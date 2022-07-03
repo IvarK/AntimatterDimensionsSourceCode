@@ -1,5 +1,4 @@
 html {
-  overflow: hidden;
   width: 100%;
   height: 100%;
   scrollbar-color: grey transparent;
@@ -40,6 +39,7 @@ html {
 /* css vars */
 
 #ui {
+  overflow: overlay;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2758,7 +2758,7 @@ br {
 .l-speedrun-milestone-tab {
   display: flex;
   flex-flow: row wrap;
-  width: 100%;
+  width: 95%;
   justify-content: center;
   align-items: center;
   margin: auto;
@@ -3244,6 +3244,7 @@ br {
   flex-flow: row wrap;
   width: 90rem;
   justify-content: center;
+  padding-right: 1rem;
 }
 
 .l-challenge-grid__cell {

@@ -82,7 +82,7 @@ export default {
 .l-pelle-panel-container {
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
-  margin: 1rem;
+  margin: 1.6rem;
   padding: 1rem;
   -webkit-user-select: none;
   user-select: none;

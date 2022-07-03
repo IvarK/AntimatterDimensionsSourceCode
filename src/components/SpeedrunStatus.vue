@@ -115,7 +115,7 @@ export default {
 .c-speedrun-status {
   white-space: nowrap;
   position: absolute;
-  right: 1rem;
+  right: 2rem;
   bottom: 1rem;
   z-index: 5;
   font-size: 1.2rem;

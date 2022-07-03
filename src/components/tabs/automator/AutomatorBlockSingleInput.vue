@@ -88,6 +88,15 @@ export default {
         classes: ["c-block-automator-error-container", "general-tooltip"]
       };
     },
+    nextInputKey() {
+      return this.block.targets[this.currentPath.length + 1];
+    },
+    nextInputValue() {
+      const targetList = this.block.targets;
+      const value = targetList ? this.block[this.nextInputKey] : "";
+      // Sometimes the target might be a Number or undefined but the prop type-checks for it to be a String
+      return value ? `${value}` : "";
+    }
   },
   created() {
     if (this.constant) return;
@@ -104,12 +113,20 @@ export default {
       this.calculatePath();
     } else {
       this.dropdownOptions = [...this.options];
-      if (this.options.includes(this.initialSelection)) this.dropdownSelection = this.initialSelection;
     }
 
+    // Set the initial state properly
+    if (this.dropdownOptions.includes(this.initialSelection)) {
+      this.dropdownSelection = this.initialSelection;
+    } else if (this.initialSelection) {
+      this.isTextInput = true;
+      this.textContents = this.initialSelection;
+    }
+
+    // Special handling for text-input-only fields, which will have single-element array specifications
     if (this.dropdownOptions[0] === "input" && this.dropdownOptions.length === 1) {
       this.isTextInput = true;
-      this.textContents = "blob";
+      this.textContents = this.initialSelection;
     } else {
       this.dropdownOptions = this.dropdownOptions.map(o => (o === "input" ? "USER INPUT..." : o));
     }
@@ -126,11 +143,14 @@ export default {
     calculatePath() {
       this.currentNodeOnPath = " ";
       for (const node of Object.keys(this.pathRef)) {
-        if (this.pathRef[node].includes(this.dropdownSelection)) this.currentNodeOnPath = node;
+        const isValidText = this.dropdownSelection === "input" && this.isTextInput;
+        if (this.pathRef[node].includes(this.dropdownSelection) || isValidText) {
+          this.currentNodeOnPath = node;
+        }
       }
       const fullPath = this.currentPath + this.currentNodeOnPath;
       this.nextNodeCount = this.options.filter(p => p.length > fullPath.length && p.startsWith(fullPath)).length;
-      this.unknownNext = this.nextNodeCount > 1 || this.dropdownSelection === "";
+      this.unknownNext = this.nextNodeCount > 1 || (this.dropdownSelection === "" && !this.isTextInput);
     },
     validateInput(value) {
       let validator, lines;
@@ -219,14 +239,14 @@ export default {
       </option>
     </select>
     <AutomatorBlockSingleInput
-      v-if="recursive && nextNodeCount > 0 && !constant"
+      v-if="recursive && nextNodeCount > 0"
       :key="currentNodeOnPath"
       :constant="unknownNext ? '...' : ''"
       :block="block"
-      block-target="target"
+      :block-target="nextInputKey"
       :is-bool-target="false"
       :options="options"
-      :initial-selection="b.targets ? b[b.targets[currentPath.length]] : ''"
+      :initial-selection="nextInputValue"
       :update-function="updateFunction"
       :recursive="true"
       :current-path="currentPath + currentNodeOnPath"

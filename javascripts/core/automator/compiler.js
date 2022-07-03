@@ -523,9 +523,9 @@ import { AutomatorLexer } from "./lexer";
         }
       }
       return {
-        target: ctx.compareValue[currencyIndex].children.AutomatorCurrency[0].image,
+        genericInput1: ctx.compareValue[currencyIndex].children.AutomatorCurrency[0].image,
         compOperator: operator,
-        inputValue: value,
+        genericInput2: value,
       };
     }
 

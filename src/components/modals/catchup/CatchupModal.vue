@@ -98,6 +98,7 @@ export default {
   padding: 2rem;
   overflow-y: scroll;
   border: 0.1rem solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.4rem);
 }
 
 .l-confirm-padding {

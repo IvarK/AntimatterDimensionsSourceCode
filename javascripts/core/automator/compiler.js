@@ -495,37 +495,19 @@ import { AutomatorLexer } from "./lexer";
     }
 
     comparison(ctx) {
-      const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.AutomatorCurrency));
-      // eslint-disable-next-line no-bitwise
-      if (!(isCurrency[0] ^ isCurrency[1])) {
-        throw new Error("arbitrary comparisons are not supported in block mode yet");
-      }
-      const currencyIndex = isCurrency[0] ? 0 : 1;
-      const flipped = currencyIndex === 1;
-      const valueChildren = ctx.compareValue[1 - currencyIndex].children;
-      const isDecimalValue = Boolean(valueChildren.$value);
-      const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image;
-      let operator = ctx.ComparisonOperator[0].image;
-      if (flipped) {
-        switch (operator) {
-          case ">":
-            operator = "<";
-            break;
-          case "<":
-            operator = ">";
-            break;
-          case ">=":
-            operator = "<=";
-            break;
-          case "<=":
-            operator = ">=";
-            break;
+      const getValue = index => {
+        const isCurrency = Boolean(ctx.compareValue[index].children.AutomatorCurrency);
+        if (isCurrency) {
+          return ctx.compareValue[index].children.AutomatorCurrency[0].image;
         }
-      }
+        const valueChildren = ctx.compareValue[index].children;
+        const isDecimalValue = Boolean(ctx.compareValue[index].children.$value);
+        return isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image;
+      };
       return {
-        genericInput1: ctx.compareValue[currencyIndex].children.AutomatorCurrency[0].image,
-        compOperator: operator,
-        genericInput2: value,
+        genericInput1: getValue(0),
+        compOperator: ctx.ComparisonOperator[0].image,
+        genericInput2: getValue(1),
       };
     }
 

@@ -24,7 +24,6 @@ export default {
 
       if (block.nested && !block.nest) b.nest = [];
       if (block.targets) b.target = "";
-      if (block.hasInput) b.inputValue = "";
       if (block.compOperators) b.compOperator = "";
       return b;
     },
@@ -51,20 +50,20 @@ export const automatorBlocks = [
     A: AUTOMATOR_BLOCKS_RESETS,
     B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["target", "compOperator", "inputValue"]
+    targets: ["genericInput1", "compOperator", "genericInput2"]
   }, {
     cmd: "IF",
     allowedPatterns: ["ABA"],
     A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["target", "compOperator", "inputValue"],
+    targets: ["genericInput1", "compOperator", "genericInput2"],
     nested: true
   }, {
     cmd: "WHILE",
     allowedPatterns: ["ABA"],
     A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["target", "compOperator", "inputValue"],
+    targets: ["genericInput1", "compOperator", "genericInput2"],
     nested: true
   }, {
     cmd: "UNTIL",
@@ -72,13 +71,13 @@ export const automatorBlocks = [
     A: AUTOMATOR_BLOCKS_RESETS,
     B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["target", "compOperator", "inputValue"],
+    targets: ["genericInput1", "compOperator", "genericInput2"],
     nested: true
   }, {
     cmd: "STUDIES PURCHASE",
     allowedPatterns: ["A"],
     A: ["input"],
-    targets: ["target"],
+    targets: ["singleTextInput"],
     canWait: true
   }, {
     cmd: "UNLOCK",
@@ -86,7 +85,7 @@ export const automatorBlocks = [
     A: ["EC"],
     B: ["input"],
     C: ["DILATION"],
-    targets: ["", "target"],
+    targets: ["singleSelectionInput", "singleTextInput"],
     canWait: true
   }, {
     cmd: "START",
@@ -94,46 +93,42 @@ export const automatorBlocks = [
     A: ["EC"],
     B: ["input"],
     C: ["DILATION"],
-    targets: ["", "target"],
+    targets: ["singleSelectionInput", "singleTextInput"],
   }, {
     cmd: "AUTO",
-    allowedPatterns: ["ABC"],
+    allowedPatterns: ["AB"],
     A: AUTOMATOR_BLOCKS_RESETS,
-    B: ["ON", "OFF"],
-    C: ["input"],
-    targets: ["target"],
+    B: ["ON", "OFF", "input"],
+    targets: ["singleSelectionInput", "singleTextInput"],
   }, {
     cmd: "BLACK HOLE",
     allowedPatterns: ["A"],
     A: ["ON", "OFF"],
-    targets: ["target"],
+    targets: ["singleSelectionInput"],
     isUnlocked: () => BlackHole(1).isUnlocked
   }, {
     cmd: "STORE GAME TIME",
     allowedPatterns: ["A"],
     A: ["ON", "OFF", "USE"],
-    targets: ["target"],
+    targets: ["singleSelectionInput"],
     isUnlocked: () => Enslaved.isUnlocked
   }, {
     cmd: "PAUSE",
     allowedPatterns: ["A"],
     A: ["input"],
-    targets: ["target"],
+    targets: ["singleTextInput"],
     hasInput: true
   }, {
     cmd: "STUDIES RESPEC",
   }, {
     cmd: "INFINITY",
-    targets: ["target"],
     canWait: true
   }, {
     cmd: "ETERNITY",
-    targets: ["target"],
     canRespec: true,
     canWait: true
   }, {
     cmd: "REALITY",
-    targets: ["target"],
     canRespec: true,
     canWait: true,
     isUnlocked: () => RealityUpgrade(25).isBought
@@ -142,29 +137,29 @@ export const automatorBlocks = [
     allowedPatterns: ["AB"],
     A: ["ID", "NAME"],
     B: ["input"],
-    targets: ["", "target"],
+    targets: ["singleSelectionInput", "singleTextInput"],
     canWait: true
   }, {
     cmd: "NOTIFY",
     allowedPatterns: ["A"],
     A: ["input"],
-    targets: ["target"],
+    targets: ["singleTextInput"],
   }, {
     cmd: "COMMENT",
     allowedPatterns: ["A"],
     A: ["input"],
-    targets: ["target"],
+    targets: ["singleTextInput"],
   }, {
     cmd: "DEFINE",
     allowedPatterns: ["ABA"],
     A: ["input"],
     B: ["="],
-    targets: ["target", "", "inputValue"],
+    targets: ["genericInput1", "compOperator", "genericInput2"],
   }, {
     cmd: "BLOB"
   }
 ];
-const AUTOMATOR_BLOCKS_BLACKLIST = ["DEFINE", "BLOB"];
+const AUTOMATOR_BLOCKS_BLACKLIST = ["BLOB"];
 
 export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 </script>

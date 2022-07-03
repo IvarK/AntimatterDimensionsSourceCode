@@ -200,8 +200,8 @@ export const AutomatorCommands = ((() => {
         else input = (on ? "ON" : "OFF");
 
         return {
-          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
-          inputValue: input,
+          singleSelectionInput: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          singleTextInput: input,
           ...automatorBlocksMap.AUTO
         };
       }
@@ -233,7 +233,7 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: ctx.On ? "ON" : "OFF",
+        singleSelectionInput: ctx.On ? "ON" : "OFF",
         ...automatorBlocksMap["BLACK HOLE"]
       })
     },
@@ -265,7 +265,7 @@ export const AutomatorCommands = ((() => {
       compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
       blockify: ctx => ({
         ...automatorBlocksMap.COMMENT,
-        inputValue: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
+        singleTextInput: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
       })
     },
     {
@@ -310,7 +310,10 @@ export const AutomatorCommands = ((() => {
         }
         return {
           ...automatorBlocksMap.DEFINE,
-          inputValue: `${ctx.Identifier[0].image} = ${studyList.join(",")}`,
+          genericInput1: `${ctx.Identifier[0].image}`,
+          // No equality-checking actually happens; this is only here to simplify reverse-parsing back into text
+          compOperator: "=",
+          genericInput2: `${studyList.join(",")}`,
         };
       }
     },
@@ -361,7 +364,7 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.IF,
           ...comparison,
-          target: standardizeAutomatorCurrencyName(comparison.target)
+          genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
         };
       }
     },
@@ -385,7 +388,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         ...automatorBlocksMap.NOTIFY,
-        inputValue: ctx.StringLiteral[0].image,
+        singleTextInput: ctx.StringLiteral[0].image,
       })
     },
     {
@@ -433,7 +436,7 @@ export const AutomatorCommands = ((() => {
         const c = ctx.duration[0].children;
         return {
           ...automatorBlocksMap.PAUSE,
-          inputValue: `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`
+          singleTextInput: `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`
         };
       }
     },
@@ -517,7 +520,7 @@ export const AutomatorCommands = ((() => {
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
-      blockify: () => ({ target: "DILATION", ...automatorBlocksMap.START })
+      blockify: () => ({ singleSelectionInput: "DILATION", ...automatorBlocksMap.START })
     },
     {
       id: "startEC",
@@ -551,8 +554,8 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: "EC",
-        inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+        singleSelectionInput: "EC",
+        singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
         ...automatorBlocksMap.START
       })
     },
@@ -595,7 +598,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         // eslint-disable-next-line no-nested-ternary
-        target: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
+        singleSelectionInput: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
         ...automatorBlocksMap["STORE GAME TIME"]
       })
     },
@@ -664,7 +667,7 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        inputValue: ctx.$studies.image,
+        singleTextInput: ctx.$studies.image,
         wait: ctx.Nowait === undefined,
         ...automatorBlocksMap["STUDIES PURCHASE"]
       })
@@ -749,8 +752,8 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: ctx.Name ? "NAME" : "ID",
-        inputValue: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
+        singleSelectionInput: ctx.Name ? "NAME" : "ID",
+        singleTextInput: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
         wait: ctx.Nowait === undefined,
         ...automatorBlocksMap["STUDIES LOAD"]
       })
@@ -804,7 +807,7 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: "DILATION",
+        singleSelectionInput: "DILATION",
         wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.UNLOCK
       })
@@ -841,8 +844,8 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: "EC",
-        inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+        singleSelectionInput: "EC",
+        singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
         wait: ctx.Nowait === undefined,
         ...automatorBlocksMap.UNLOCK
       })
@@ -913,11 +916,11 @@ export const AutomatorCommands = ((() => {
             nest: commands,
             ...automatorBlocksMap.UNTIL,
             ...comparison,
-            target: standardizeAutomatorCurrencyName(comparison.target)
+            genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
           };
         }
         return {
-          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          genericInput1: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           nest: commands,
           ...automatorBlocksMap.UNTIL
         };
@@ -963,7 +966,7 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WAIT,
           ...comparison,
-          target: standardizeAutomatorCurrencyName(comparison.target)
+          genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
         };
       }
     },
@@ -1001,7 +1004,7 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+        genericInput1: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
         ...automatorBlocksMap.WAIT
       })
     },
@@ -1028,7 +1031,7 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WHILE,
           ...comparison,
-          target: standardizeAutomatorCurrencyName(comparison.target)
+          genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
         };
       }
     }

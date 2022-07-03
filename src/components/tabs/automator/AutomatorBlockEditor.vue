@@ -107,9 +107,12 @@ export const BlockAutomator = {
       parsed = parsed.replace(/(\S+)/u, "$1 NOWAIT");
     }
     if (block.respec) parsed += ` RESPEC`;
-    if (block.target) parsed += ` ${block.target}`;
-    if (block.compOperator) parsed += ` ${block.compOperator}`;
-    if (block.inputValue) parsed += ` ${block.inputValue}`;
+
+    const propsToCheck = ["genericInput1", "compOperator", "genericInput2", "singleSelectionInput", "singleTextInput"];
+    for (const prop of propsToCheck) {
+      if (block[prop]) parsed += ` ${block[prop]}`;
+    }
+
     if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") parsed += " {";
 
     return parsed;

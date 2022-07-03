@@ -95,38 +95,27 @@ export default {
       <AutomatorBlockSingleInput
         :constant="b.cmd"
         :block="b"
-        block-target=" "
-        :is-bool-target="true"
-        :options="[]"
         :update-function="updateBlock"
-        :recursive="false"
       />
       <AutomatorBlockSingleInput
         v-if="b.canWait"
         :block="b"
         block-target="nowait"
-        :is-bool-target="true"
-        :options="['NOWAIT']"
         :initial-selection="b.nowait ? 'NOWAIT' : ''"
         :update-function="updateBlock"
-        :recursive="false"
       />
       <AutomatorBlockSingleInput
         v-if="b.canRespec"
         :block="b"
         block-target="respec"
-        :is-bool-target="true"
-        :options="['RESPEC']"
         :initial-selection="b.respec ? 'RESPEC' : ''"
         :update-function="updateBlock"
-        :recursive="false"
       />
       <AutomatorBlockSingleInput
         v-if="b.allowedPatterns"
         :block="b"
         :block-target="b.targets[0]"
-        :is-bool-target="false"
-        :options="b.allowedPatterns"
+        :patterns="b.allowedPatterns"
         :initial-selection="b.targets ? b[b.targets[0]] : ''"
         :update-function="updateBlock"
         :recursive="true"

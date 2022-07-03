@@ -42,7 +42,18 @@ const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
 
 const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
-// Capital letter props must be mutually exclusive, or else block patterns will be inconsistent
+/**
+ *  @property {String} cmd          Name of automator command
+ *  @property {Array: String} allowedPatterns   Allowed patterns for input types, specified single-capital-letter props
+ *  @property {Array: String} [A-Z]             Classes of allowed inputs, to be used in allowedPatterns
+ *  @property {Array: String} targets           List of keys to be used for assigning inputs to props of automator
+ *    commands. Each entry is associated with the index of the character in allowedPatterns
+ *  @property {Boolean} nested      Whether or not the command is the header of a loop in the automator
+ *  @property {Boolean} canWait     Whether or not the command can be run in a non-blocking way
+ *  @property {Boolean} canRespec   Whether or not the command has an associated respec option
+ *  @property {Function @return Boolean} isUnlocked    Function returning the unlock state of the command; if false,
+ *    the command will not appear. Assumed to be true if prop is not present
+ */
 export const automatorBlocks = [
   {
     cmd: "WAIT",
@@ -117,7 +128,6 @@ export const automatorBlocks = [
     allowedPatterns: ["A"],
     A: ["input"],
     targets: ["singleTextInput"],
-    hasInput: true
   }, {
     cmd: "STUDIES RESPEC",
   }, {

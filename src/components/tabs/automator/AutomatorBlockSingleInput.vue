@@ -11,20 +11,13 @@ export default {
       type: Object,
       required: true
     },
-    updateFunction: {
-      type: Function,
-      required: true
-    },
-    options: {
-      type: Array,
-      required: true,
-    },
     blockTarget: {
       type: String,
-      required: true
+      required: false,
+      default: ""
     },
-    isBoolTarget: {
-      type: Boolean,
+    updateFunction: {
+      type: Function,
       required: true
     },
     initialSelection: {
@@ -32,11 +25,15 @@ export default {
       required: false,
       default: ""
     },
-
-    // These props are solely for the input pattern matching
+    patterns: {
+      type: Array,
+      required: false,
+      default: () => []
+    },
     recursive: {
       type: Boolean,
-      required: true
+      required: false,
+      default: false
     },
     currentPath: {
       type: String,
@@ -88,6 +85,9 @@ export default {
         classes: ["c-block-automator-error-container", "general-tooltip"]
       };
     },
+    isBoolTarget() {
+      return this.blockTarget === "nowait" || this.blockTarget === "respec";
+    },
     nextInputKey() {
       return this.block.targets[this.currentPath.length + 1];
     },
@@ -100,8 +100,15 @@ export default {
   },
   created() {
     if (this.constant) return;
+    if (this.isBoolTarget) {
+      this.dropdownOptions = [this.blockTarget.toUpperCase()];
+      this.dropdownSelection = this.block[this.blockTarget] ? this.blockTarget.toUpperCase() : "";
+      return;
+    }
+
+    // This is used for sequences of inputs, which are traversed by recursion
     if (this.recursive) {
-      const availableOptions = this.options
+      const availableOptions = this.patterns
         .filter(s => s.startsWith(this.currentPath) && s.length > this.currentPath.length)
         .map(s => s.charAt(this.currentPath.length));
       for (const node of availableOptions) {
@@ -111,11 +118,9 @@ export default {
         this.dropdownOptions.push(...entries);
       }
       this.calculatePath();
-    } else {
-      this.dropdownOptions = [...this.options];
     }
 
-    // Set the initial state properly
+    // Set the initial display state properly
     if (this.dropdownOptions.includes(this.initialSelection)) {
       this.dropdownSelection = this.initialSelection;
     } else if (this.initialSelection) {
@@ -149,7 +154,7 @@ export default {
         }
       }
       const fullPath = this.currentPath + this.currentNodeOnPath;
-      this.nextNodeCount = this.options.filter(p => p.length > fullPath.length && p.startsWith(fullPath)).length;
+      this.nextNodeCount = this.patterns.filter(p => p.length > fullPath.length && p.startsWith(fullPath)).length;
       this.unknownNext = this.nextNodeCount > 1 || (this.dropdownSelection === "" && !this.isTextInput);
     },
     validateInput(value) {
@@ -244,8 +249,7 @@ export default {
       :constant="unknownNext ? '...' : ''"
       :block="block"
       :block-target="nextInputKey"
-      :is-bool-target="false"
-      :options="options"
+      :patterns="patterns"
       :initial-selection="nextInputValue"
       :update-function="updateFunction"
       :recursive="true"

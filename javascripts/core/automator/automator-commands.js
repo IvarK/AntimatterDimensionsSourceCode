@@ -364,7 +364,8 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.IF,
           ...comparison,
-          genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
+          genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+          genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
     },
@@ -916,7 +917,8 @@ export const AutomatorCommands = ((() => {
             nest: commands,
             ...automatorBlocksMap.UNTIL,
             ...comparison,
-            genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
+            genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+            genericInput2: standardizeAutomatorValues(comparison.genericInput2)
           };
         }
         return {
@@ -966,7 +968,8 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WAIT,
           ...comparison,
-          genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
+          genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+          genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
     },
@@ -1031,7 +1034,8 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WHILE,
           ...comparison,
-          genericInput1: standardizeAutomatorCurrencyName(comparison.genericInput1)
+          genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+          genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
     }

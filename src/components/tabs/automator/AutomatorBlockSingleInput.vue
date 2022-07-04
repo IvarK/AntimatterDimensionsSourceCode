@@ -1,4 +1,6 @@
 <script>
+import { AutomatorData } from "../../../../javascripts/core/globals";
+
 export default {
   name: "AutomatorBlockSingleInput",
   props: {
@@ -44,14 +46,8 @@ export default {
   data() {
     return {
       b: {},
-      currentBlockId: -1,
-      validatorErrors: {
-        errors: [],
-        line: ""
-      },
-      // For errors
-      idxOffset: 0,
       suppressTooltip: false,
+      hasError: false,
 
       isTextInput: false,
       dropdownOptions: [],
@@ -64,26 +60,14 @@ export default {
     };
   },
   computed: {
-    hasError() {
-      return this.validatorErrors.errors.length > 0;
+    lineNumber() {
+      return BlockAutomator._idArray.indexOf(this.b.id);
     },
-    errorTooltip() {
-      if (!this.hasError || this.suppressTooltip) return undefined;
-      const span = "<span class='o-automator-error-underline'>";
-      const content = this.validatorErrors.line
-        .splice(this.validatorErrors.errors[0].startOffset - this.idxOffset, 0, span)
-        .splice(this.validatorErrors.errors[0].endOffset + span.length + 1 - this.idxOffset, 0, "</span>");
-      return {
-        content:
-          `<div class="c-block-automator-error">
-          <div>${content}</div>
-          <div>${this.validatorErrors.errors[0].info}</div>
-        </div>`,
-        html: true,
-        trigger: "manual",
-        show: true,
-        classes: ["c-block-automator-error-container", "general-tooltip"]
-      };
+    displayedConstant() {
+      if (this.constant) return this.constant;
+      return (this.dropdownOptions.length === 1 && !this.isBoolTarget && !this.isTextInput)
+        ? this.dropdownOptions[0]
+        : "";
     },
     isBoolTarget() {
       return this.blockTarget === "nowait" || this.blockTarget === "respec";
@@ -129,11 +113,19 @@ export default {
     }
 
     // Special handling for text-input-only fields, which will have single-element array specifications
-    if (this.dropdownOptions[0] === "input" && this.dropdownOptions.length === 1) {
+    if (this.dropdownOptions.length === 1 && this.dropdownOptions[0].startsWith("*")) {
       this.isTextInput = true;
       this.textContents = this.initialSelection;
-    } else {
-      this.dropdownOptions = this.dropdownOptions.map(o => (o === "input" ? "USER INPUT..." : o));
+    }
+  },
+  // Delete associated props if this component was removed by changing an earlier input, but skip if the component
+  // was removed by changing editor modes because that would basically wipe the script
+  destroyed() {
+    this.recalculateErrorCount();
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) return;
+    if (this.blockTarget) {
+      // eslint-disable-next-line vue/no-mutating-props
+      this.block[this.blockTarget] = undefined;
     }
   },
   mounted() {
@@ -141,14 +133,14 @@ export default {
   },
   methods: {
     update() {
-      this.currentBlockId = BlockAutomator.currentBlockId;
-      if (this.dropdownSelection === "USER INPUT...") this.isTextInput = true;
+      this.hasError = AutomatorData.cachedErrors.some(e => e.startLine === this.lineNumber);
+      if (this.dropdownSelection.startsWith("*")) this.isTextInput = true;
       this.calculatePath();
     },
     calculatePath() {
       this.currentNodeOnPath = " ";
       for (const node of Object.keys(this.pathRef)) {
-        const isValidText = this.dropdownSelection === "input" && this.isTextInput;
+        const isValidText = this.pathRef[node].some(o => o.startsWith("*")) && this.isTextInput;
         if (this.pathRef[node].includes(this.dropdownSelection) || isValidText) {
           this.currentNodeOnPath = node;
         }
@@ -157,7 +149,7 @@ export default {
       this.nextNodeCount = this.patterns.filter(p => p.length > fullPath.length && p.startsWith(fullPath)).length;
       this.unknownNext = this.nextNodeCount > 1 || (this.dropdownSelection === "" && !this.isTextInput);
     },
-    validateInput(value) {
+    validateInput() {
       let validator, lines;
       if (this.b.nest) {
         const clone = Object.assign({}, this.b);
@@ -169,30 +161,38 @@ export default {
         validator = AutomatorGrammar.validateLine(lines[0]);
       }
 
-      this.idxOffset = lines[0].indexOf(value);
-
-      this.validatorErrors = {
-        errors: validator.errors,
-        line: value
-      };
+      // We're actually validating only this single line, so we reconstruct the error list by removing everything on
+      // this line and adding anything new that was found
+      const newErrors = [];
+      for (const error of AutomatorData.cachedErrors) {
+        if (error.startLine !== this.lineNumber) newErrors.push(error);
+      }
+      for (const error of validator.errors) {
+        error.startLine = this.lineNumber;
+        newErrors.push(error);
+      }
+      AutomatorData.cachedErrors = newErrors;
     },
     handleFocus(focusState) {
       this.suppressTooltip = !focusState;
       // Validate input only after unfocus
-      if (!focusState) {
-        this.updateFunction(this.block, this.block.id);
-        // eslint-disable-next-line vue/no-mutating-props
-        this.block[this.blockTarget] = this.textContents;
-        this.recalculateErrorCount();
-      }
+      if (!focusState) this.changeBlock();
+      this.recalculateErrorCount();
     },
-
-    // Not entirely sure why, but updating error count only seems to work if it's done exactly here in the execution
-    // stack; moving it to the definition of updateBlock seems to stop it from working
-    changeBlock(block, id) {
-      this.updateFunction(this.block, id);
+    changeBlock() {
+      this.updateFunction(this.block, this.block.id);
+      if (this.textContents === "*") {
+        this.isTextInput = false;
+        this.dropdownSelection = "";
+      }
       if (this.blockTarget) {
-        block[this.blockTarget] = this.isBoolTarget ? this.dropdownSelection !== "" : this.dropdownSelection;
+        let newValue;
+        if (this.isBoolTarget) newValue = this.dropdownSelection !== "";
+        else if (this.isTextInput) newValue = this.textContents;
+        else newValue = this.dropdownSelection;
+
+        // eslint-disable-next-line vue/no-mutating-props
+        this.block[this.blockTarget] = newValue;
       }
       this.recalculateErrorCount();
     },
@@ -200,12 +200,37 @@ export default {
     // This gets called whenever blocks are changed, but we also need to halt execution if the currently visible script
     // is also the one being run
     recalculateErrorCount() {
-      AutomatorData.needsRecompile = true;
-      AutomatorData.currentErrors();
-
+      this.validateInput();
       if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
         AutomatorBackend.stop();
       }
+    },
+    errorTooltip() {
+      if (!this.hasError || this.suppressTooltip) return undefined;
+      return {
+        content:
+          `<div class="c-block-automator-error">
+          <div>${AutomatorData.cachedErrors.find(e => e.startLine === this.lineNumber).info}</div>
+        </div>`,
+        html: true,
+        trigger: "manual",
+        show: true,
+        classes: ["c-block-automator-error-container", "general-tooltip"]
+      };
+    },
+    textInputClassObject() {
+      return {
+        "o-automator-block-input": true,
+        "l-error-textbox": this.hasError,
+        "c-automator-input-required": !this.hasError,
+      };
+    },
+    dropdownClassObject() {
+      return {
+        "o-automator-block-input": true,
+        "c-automator-input-required": !this.isBoolTarget,
+        "c-automator-input-optional": this.isBoolTarget,
+      };
     }
   }
 };
@@ -214,26 +239,25 @@ export default {
 <template>
   <div class="c-automator-single-block">
     <div
-      v-if="constant"
-      class="o-automator-command"
+      v-if="displayedConstant"
+      class="o-automator-command c-automator-input-required"
     >
-      {{ constant }}
+      {{ displayedConstant }}
     </div>
     <input
       v-else-if="isTextInput"
       v-model="textContents"
-      v-tooltip="errorTooltip"
-      class="o-automator-block-input"
-      :class="{ 'l-error-textbox' : hasError }"
-      @keyup="validateInput(textContents)"
+      v-tooltip="errorTooltip()"
+      :class="textInputClassObject()"
+      @keyup="validateInput()"
       @focusin="handleFocus(true)"
       @focusout="handleFocus(false)"
     >
     <select
       v-else
       v-model="dropdownSelection"
-      class="o-automator-block-input"
-      @change="changeBlock(block, block.id)"
+      :class="dropdownClassObject()"
+      @change="changeBlock()"
     >
       <option
         v-for="target in ['', ...dropdownOptions]"
@@ -265,5 +289,9 @@ export default {
   align-items: center;
   margin: 0 0.1rem;
   height: 2.8rem;
+}
+
+.l-error-textbox {
+  background: var(--color-automator-error-background);
 }
 </style>

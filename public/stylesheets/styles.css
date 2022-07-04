@@ -8924,7 +8924,7 @@ kbd {
   display: inline-block;
   min-width: 9.5rem;
   height: 3rem;
-  color: #a142ff;
+  color: var(--color-blockmator-block-command);
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
@@ -8996,7 +8996,6 @@ kbd {
   display: inline-block;
   font-family: Typewriter, serif;
   font-size: 1.1rem;
-  color: #007f7f;
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);

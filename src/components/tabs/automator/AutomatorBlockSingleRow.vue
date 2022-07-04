@@ -27,12 +27,6 @@ export default {
     return {
       b: {},
       currentBlockId: -1,
-      validatorErrors: {
-        errors: [],
-        line: ""
-      },
-      // For errors
-      idxOffset: 0,
     };
   },
   computed: {
@@ -75,9 +69,7 @@ export default {
     // This gets called whenever blocks are changed, but we also need to halt execution if the currently visible script
     // is also the one being run
     recalculateErrorCount() {
-      AutomatorData.needsRecompile = true;
-      AutomatorData.currentErrors();
-
+      AutomatorData.recalculateErrors();
       if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
         AutomatorBackend.stop();
       }
@@ -158,9 +150,5 @@ export default {
   border: 0.1rem dotted #55ff55;
   margin: -0.1rem 0 -0.1rem 3rem;
   padding: 0 0.5rem;
-}
-
-.l-error-textbox {
-  background: var(--color-automator-error-background);
 }
 </style>

@@ -190,10 +190,13 @@ export const AutomatorData = {
   },
   needsRecompile: true,
   cachedErrors: 0,
-  currentErrors(script) {
-    const toCheck = script || this.currentScriptText();
+  recalculateErrors() {
+    const toCheck = this.currentScriptText();
+    this.cachedErrors = AutomatorGrammar.compile(toCheck).errors;
+  },
+  currentErrors() {
     if (this.needsRecompile) {
-      this.cachedErrors = AutomatorGrammar.compile(toCheck).errors;
+      this.recalculateErrors();
       this.needsRecompile = false;
     }
     return this.cachedErrors;

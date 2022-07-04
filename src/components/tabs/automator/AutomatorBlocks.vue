@@ -23,8 +23,8 @@ export default {
       };
 
       if (block.nested && !block.nest) b.nest = [];
-      if (block.targets) b.target = "";
-      if (block.compOperators) b.compOperator = "";
+      if (block.cmd === "DEFINE") b.compOperator = "=";
+      AutomatorData.recalculateErrors();
       return b;
     },
   }
@@ -45,7 +45,9 @@ const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 /**
  *  @property {String} cmd          Name of automator command
  *  @property {Array: String} allowedPatterns   Allowed patterns for input types, specified single-capital-letter props
- *  @property {Array: String} [A-Z]             Classes of allowed inputs, to be used in allowedPatterns
+ *  @property {Array: String} [A-Z]             Classes of allowed inputs, to be used in allowedPatterns. Note that
+ *    elements which begin with an asterisk are replaced with text inputs upon selection, and single-entry classes will
+ *    be automatically replaced with a text input or unmodifiable text as appropriate
  *  @property {Array: String} targets           List of keys to be used for assigning inputs to props of automator
  *    commands. Each entry is associated with the index of the character in allowedPatterns
  *  @property {Boolean} nested      Whether or not the command is the header of a loop in the automator
@@ -59,20 +61,20 @@ export const automatorBlocks = [
     cmd: "WAIT",
     allowedPatterns: ["A", "BCB"],
     A: AUTOMATOR_BLOCKS_RESETS,
-    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"]
   }, {
     cmd: "IF",
     allowedPatterns: ["ABA"],
-    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"],
     nested: true
   }, {
     cmd: "WHILE",
     allowedPatterns: ["ABA"],
-    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"],
     nested: true
@@ -80,21 +82,21 @@ export const automatorBlocks = [
     cmd: "UNTIL",
     allowedPatterns: ["A", "BCB"],
     A: AUTOMATOR_BLOCKS_RESETS,
-    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "input"],
+    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"],
     nested: true
   }, {
     cmd: "STUDIES PURCHASE",
     allowedPatterns: ["A"],
-    A: ["input"],
+    A: ["*"],
     targets: ["singleTextInput"],
     canWait: true
   }, {
     cmd: "UNLOCK",
     allowedPatterns: ["AB", "C"],
     A: ["EC"],
-    B: ["input"],
+    B: ["*"],
     C: ["DILATION"],
     targets: ["singleSelectionInput", "singleTextInput"],
     canWait: true
@@ -102,14 +104,14 @@ export const automatorBlocks = [
     cmd: "START",
     allowedPatterns: ["AB", "C"],
     A: ["EC"],
-    B: ["input"],
+    B: ["*"],
     C: ["DILATION"],
     targets: ["singleSelectionInput", "singleTextInput"],
   }, {
     cmd: "AUTO",
     allowedPatterns: ["AB"],
     A: AUTOMATOR_BLOCKS_RESETS,
-    B: ["ON", "OFF", "input"],
+    B: ["ON", "OFF", "* AUTOBUYER SETTING"],
     targets: ["singleSelectionInput", "singleTextInput"],
   }, {
     cmd: "BLACK HOLE",
@@ -126,7 +128,7 @@ export const automatorBlocks = [
   }, {
     cmd: "PAUSE",
     allowedPatterns: ["A"],
-    A: ["input"],
+    A: ["*"],
     targets: ["singleTextInput"],
   }, {
     cmd: "STUDIES RESPEC",
@@ -146,23 +148,23 @@ export const automatorBlocks = [
     cmd: "STUDIES LOAD",
     allowedPatterns: ["AB"],
     A: ["ID", "NAME"],
-    B: ["input"],
+    B: ["*"],
     targets: ["singleSelectionInput", "singleTextInput"],
     canWait: true
   }, {
     cmd: "NOTIFY",
     allowedPatterns: ["A"],
-    A: ["input"],
+    A: ["*"],
     targets: ["singleTextInput"],
   }, {
     cmd: "COMMENT",
     allowedPatterns: ["A"],
-    A: ["input"],
+    A: ["*"],
     targets: ["singleTextInput"],
   }, {
     cmd: "DEFINE",
     allowedPatterns: ["ABA"],
-    A: ["input"],
+    A: ["*"],
     B: ["="],
     targets: ["genericInput1", "compOperator", "genericInput2"],
   }, {
@@ -183,6 +185,16 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
   >
     <p>
       Drag and drop these blocks to the area on the left!
+    </p>
+    <br>
+    <p>
+      Inputs with a <span class="c-automator-input-optional">gray</span> color are optional, while inputs with a
+      <span class="c-automator-input-required">teal</span> color are required. For more details, check the Scripting
+      Information pane.
+    </p>
+    <p>
+      Options in dropdown menus which start with a * will be replaced with a text box. This can be turned back into a
+      dropdown by typing a single *
     </p>
     <draggable
       class="block-container"

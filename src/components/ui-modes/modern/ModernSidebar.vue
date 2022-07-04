@@ -11,14 +11,13 @@ export default {
   data() {
     return {
       isHidden: false,
+      tabs: Object
     };
-  },
-  computed: {
-    tabs: () => Tabs.newUI
   },
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
+      this.tabs = Tabs.newUI.filter(x => x.isAvailable).filter(x => !x.isHidden);
     },
   },
 };
@@ -35,10 +34,17 @@ export default {
       :key="tab.name"
       :tab="tab"
       :tab-position="tabPosition"
+      class="o-tab-btn--moderntab"
     />
   </div>
 </template>
 
 <style scoped>
+.o-tab-btn--moderntab:last-child {
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
+}
 
+.o-tab-btn--moderntab:last-child:hover {
+  border-bottom-right-radius: 0rem;
+}
 </style>

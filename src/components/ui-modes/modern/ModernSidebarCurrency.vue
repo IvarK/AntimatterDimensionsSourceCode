@@ -14,6 +14,7 @@ export default {
       showEP: false,
       showRM: false,
       showRS: false,
+      noTabs: false
     };
   },
   methods: {
@@ -29,13 +30,17 @@ export default {
       this.showEP = PlayerProgress.eternityUnlocked();
       this.showRM = PlayerProgress.realityUnlocked();
       this.showRS = Pelle.isDoomed;
+      this.noTabs = Tabs.all.filter(x => x.isAvailable).filter(x => !x.isHidden).length === 0;
     }
   },
 };
 </script>
 
 <template>
-  <div class="c-sidebar-resource">
+  <div
+    class="c-sidebar-resource"
+    :class="{'c-sidebar-resource-border-radius': noTabs}"
+  >
     <template v-if="showRS">
       <h2 class="o-sidebar-currency--pelle">
         {{ format(RS, 2) }}
@@ -90,5 +95,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-sidebar-resource-border-radius {
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
+}
 </style>

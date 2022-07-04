@@ -13,8 +13,6 @@ export default {
   },
   data() {
     return {
-      isAvailable: false,
-      isHidden: false,
       subtabs: Object,
       showSubtabs: false,
       hasNotification: false,
@@ -35,8 +33,6 @@ export default {
   },
   methods: {
     update() {
-      this.isAvailable = this.tab.isAvailable;
-      this.isHidden = this.tab.isHidden;
       this.subtabs = this.tab.subtabs.filter(x => x.isAvailable);
       this.showSubtabs = this.subtabs.length >= 1;
       this.hasNotification = this.tab.hasNotification;
@@ -59,7 +55,6 @@ export default {
 
 <template>
   <div
-    v-if="!isHidden && isAvailable"
     :class="[classObject, tab.config.UIClass]"
   >
     <div

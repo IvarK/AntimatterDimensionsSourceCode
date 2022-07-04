@@ -15,7 +15,7 @@ export default {
     return {
       isAvailable: false,
       isHidden: false,
-      subtabVisibilities: [],
+      subtabs: Object,
       showSubtabs: false,
       hasNotification: false,
       tabName: ""
@@ -37,8 +37,8 @@ export default {
     update() {
       this.isAvailable = this.tab.isAvailable;
       this.isHidden = this.tab.isHidden;
-      this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
-      this.showSubtabs = this.isAvailable && this.subtabVisibilities.length >= 1;
+      this.subtabs = this.tab.subtabs.filter(x => x.isAvailable);
+      this.showSubtabs = this.subtabs.length >= 1;
       this.hasNotification = this.tab.hasNotification;
       if (this.tabPosition < Pelle.endTabNames.length) {
         this.tabName = Pelle.transitionText(
@@ -76,27 +76,23 @@ export default {
       class="subtabs"
     >
       <span
-        v-for="(subtab, index) in tab.subtabs"
+        v-for="(subtab, index) in subtabs"
         :key="index"
+        class="o-tab-btn o-tab-btn--subtab"
+        :class="
+          [tab.config.UIClass,
+           {'o-subtab-btn--active': isCurrentSubtab(subtab.id)}]
+        "
+        @click="subtab.show(true)"
       >
-        <div
-          v-if="subtabVisibilities[index]"
-          class="o-tab-btn o-tab-btn--subtab"
-          :class="
-            [tab.config.UIClass,
-             {'o-subtab-btn--active': isCurrentSubtab(subtab.id)}]
-          "
-          @click="subtab.show(true)"
-        >
-          <span v-html="subtab.symbol">
-            <i
-              v-if="subtab.hasNotification"
-              class="fas fa-exclamation"
-            />
-          </span>
-          <div class="o-subtab__tooltip">
-            {{ subtab.name }}
-          </div>
+        <span v-html="subtab.symbol">
+          <i
+            v-if="subtab.hasNotification"
+            class="fas fa-exclamation"
+          />
+        </span>
+        <div class="o-subtab__tooltip">
+          {{ subtab.name }}
         </div>
       </span>
     </div>
@@ -137,5 +133,15 @@ export default {
 
 .o-subtab-btn--active {
   border-bottom-width: 0.5rem;
+}
+
+.o-tab-btn--subtab:first-child {
+  border-top-left-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-left-radius: var(--var-border-radius, 0.5rem);
+}
+
+.o-tab-btn--subtab:last-child {
+  border-top-right-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
 }
 </style>

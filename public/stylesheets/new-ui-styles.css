@@ -325,6 +325,7 @@ body.t-s9 {
   color: var(--color-text);
   background: var(--color-prestige--accent);
   border: 0.1rem solid var(--color-accent);
+  border-radius: var(--var-border-radius, 0.4rem);
   margin-left: -7.7rem;
   transition-duration: 0.2s;
   pointer-events: none;

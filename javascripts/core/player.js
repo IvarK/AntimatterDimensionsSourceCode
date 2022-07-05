@@ -503,6 +503,7 @@ window.player = {
       },
       scripts: {
       },
+      constants: {},
       execTimer: 0,
       type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,

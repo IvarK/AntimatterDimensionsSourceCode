@@ -384,7 +384,12 @@ export const AutomatorLexer = (() => {
     tokenIds,
     tokenMap,
     standardizeAutomatorValues,
+    allowedConstantPatterns: lexer.lexerDefinition
+      .filter(p => p.name !== "NumberLiteral" && p.name !== "Identifier")
+      .map(p => p.PATTERN),
   };
 })();
 
 export const standardizeAutomatorValues = AutomatorLexer.standardizeAutomatorValues;
+
+export const allowedConstantPatterns = AutomatorLexer.allowedConstantPatterns;

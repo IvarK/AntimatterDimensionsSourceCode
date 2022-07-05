@@ -1,6 +1,7 @@
 <script>
 import AutomatorBlocks from "./AutomatorBlocks";
 import AutomatorButton from "./AutomatorButton";
+import AutomatorDefinePage from "./AutomatorDefinePage";
 import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
@@ -15,6 +16,7 @@ export default {
     AutomatorEventLog,
     AutomatorBlocks,
     AutomatorDocsTemplateList,
+    AutomatorDefinePage,
   },
   data() {
     return {
@@ -234,6 +236,12 @@ export default {
           :class="{ 'c-automator__button--active': infoPaneID === 4 }"
           @click="infoPaneID = 4"
         />
+        <AutomatorButton
+          v-tooltip="'Modify defined constants'"
+          class="fa-book"
+          :class="{ 'c-automator__button--active': infoPaneID === 5 }"
+          @click="infoPaneID = 5"
+        />
         <span
           v-if="fullScreen"
           class="c-automator__status-text c-automator__status-text--small"
@@ -308,6 +316,7 @@ export default {
       </template>
       <AutomatorErrorPage v-else-if="infoPaneID === 3" />
       <AutomatorEventLog v-else-if="infoPaneID === 4" />
+      <AutomatorDefinePage v-else-if="infoPaneID === 5" />
     </div>
   </div>
 </template>

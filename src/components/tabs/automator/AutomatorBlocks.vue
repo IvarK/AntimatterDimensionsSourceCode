@@ -23,7 +23,6 @@ export default {
       };
 
       if (block.nested && !block.nest) b.nest = [];
-      if (block.cmd === "DEFINE") b.compOperator = "=";
       AutomatorData.recalculateErrors();
       return b;
     },
@@ -161,12 +160,6 @@ export const automatorBlocks = [
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
-  }, {
-    cmd: "DEFINE",
-    allowedPatterns: ["ABA"],
-    A: ["*"],
-    B: ["="],
-    targets: ["genericInput1", "compOperator", "genericInput2"],
   }, {
     cmd: "BLOB"
   }

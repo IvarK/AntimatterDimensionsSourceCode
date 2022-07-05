@@ -349,18 +349,6 @@ GameDatabase.reality.automator = {
     {
       id: 14,
       isUnlocked: () => true,
-      keyword: "define",
-      name: "<b>define</b> - defining constants",
-      syntax: `<b>define [constant_name] = [constant]</b>`,
-      description: `Define constants for either numbers or Time Study tree imports`,
-      examples: [
-        "define inf = 1e308",
-        "define studytree = 11,21,22,31,32,33"
-      ]
-    },
-    {
-      id: 15,
-      isUnlocked: () => true,
       keyword: "currencies",
       name: "List of <b>currencies</b>",
       syntax: "You can use these in any if, while, until, or wait command.",
@@ -398,7 +386,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 16,
+      id: 15,
       isUnlocked: () => true,
       keyword: "notify",
       name: "<b>notify</b> - send a progress notification",
@@ -413,7 +401,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 17,
+      id: 16,
       isUnlocked: () => true,
       keyword: "(Comments)",
       name: "<b>#|//</b> - leaves a comment in your script",

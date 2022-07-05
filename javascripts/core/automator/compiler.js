@@ -190,31 +190,27 @@ import { AutomatorLexer } from "./lexer";
 
     lookupVar(identifier, type) {
       const varName = identifier.image;
-      const varInfo = this.variables[varName];
-      if (varInfo === undefined) {
+      const varInfo = {};
+      const value = player.reality.automator.constants[varName];
+      if (value === undefined) {
         this.addError(identifier, `Variable ${varName} has not been defined`,
-          `Use DEFINE to define ${varName} in order to reference it, or check for typos`);
+          `Use the definition panel to define it ${varName} in order to reference it, or check for typos`);
         return undefined;
       }
-      if (varInfo.type === AUTOMATOR_VAR_TYPES.UNKNOWN) {
-        varInfo.firstUseLineNumber = identifier.image.startLine;
-        varInfo.type = type;
-        if (type === AUTOMATOR_VAR_TYPES.STUDIES) {
-          // The only time we have an unknown studies is if there was only one listed
+
+      switch (type) {
+        case AUTOMATOR_VAR_TYPES.NUMBER:
+        case AUTOMATOR_VAR_TYPES.DURATION:
+          varInfo.value = new Decimal(value);
+          break;
+        case AUTOMATOR_VAR_TYPES.STUDIES:
           varInfo.value = {
-            normal: [varInfo.value.toNumber()],
+            normal: value,
             ec: 0
           };
-        }
-      } else if (varInfo.type !== type) {
-        const inferenceMessage = varInfo.firstUseLineNumber
-          ? `\nIts use on line ${varInfo.firstUseLineNumber} identified it as a ${varInfo.type.name}`
-          : "";
-        this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`,
-          "Defined variables cannot be used as both studies and numbers - define a second variable instead");
-        return undefined;
+          break;
       }
-      if (varInfo.value === undefined) throw new Error("Unexpected undefined Automator variable value");
+
       return varInfo;
     }
 
@@ -251,50 +247,6 @@ import { AutomatorLexer } from "./lexer";
       }
       ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       return ctx.$value;
-    }
-
-    define(ctx) {
-      const varName = ctx.Identifier[0].image;
-      if (this.variables[varName] !== undefined) {
-        this.addError(ctx.Identifier[0],
-          `Variable ${varName} already defined on line ${this.variables[varName].definitionLineNumber}`,
-          "Variables cannot be defined twice; remove or rename the second DEFINE");
-        return;
-      }
-      if (!ctx.duration && !ctx.studyList) return;
-      const def = {
-        name: varName,
-        definitionLineNumber: ctx.Identifier[0].startLine,
-        firstUseLineNumber: 0,
-        type: AUTOMATOR_VAR_TYPES.UNKNOWN,
-        value: undefined,
-      };
-      this.variables[varName] = def;
-      if (ctx.duration) {
-        def.type = AUTOMATOR_VAR_TYPES.DURATION;
-        def.value = this.visit(ctx.duration);
-        return;
-      }
-      // We don't visit studyList because it might actually be just a number in this case
-      const studies = ctx.studyList[0].children.studyListEntry;
-      if (
-        studies.length > 1 ||
-        studies[0].children.studyRange ||
-        studies[0].children.StudyPath ||
-        studies[0].children.Comma
-      ) {
-        def.type = AUTOMATOR_VAR_TYPES.STUDIES;
-        def.value = this.visit(ctx.studyList);
-        return;
-      }
-
-      // We assume the value is a number; in some cases, we might overwrite it if we see
-      // this variable used in studies
-      def.value = new Decimal(studies[0].children.NumberLiteral[0].image);
-      if (!/^[1-9][0-9]*[1-9]$/u.test(studies[0].children.NumberLiteral[0].image)) {
-        // Study numbers are pretty specific number patterns
-        def.type = AUTOMATOR_VAR_TYPES.NUMBER;
-      }
     }
 
     studyRange(ctx, studiesOut) {

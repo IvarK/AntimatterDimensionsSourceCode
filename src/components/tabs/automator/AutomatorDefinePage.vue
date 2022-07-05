@@ -16,7 +16,8 @@ export default {
       // Right after deleting a constant, the list of keys will contain the empty string. This isn't functionally
       // problematic, but leaves the "new constant" input in that spot instead of placing it at the end of the list.
       // The filter operation removes it (if it exists) and then we manually place it at the end
-      this.constants = [...Object.keys(player.reality.automator.constants).filter(k => k), ""];
+      const existingValues = Object.keys(player.reality.automator.constants).filter(k => k);
+      this.constants = existingValues.length < 30 ? [...existingValues, ""] : [...existingValues];
     }
   }
 };
@@ -25,7 +26,7 @@ export default {
 <template>
   <div class="l-panel-padding">
     This panel allows you to define constant values which can be used in place of numbers or Time Study import
-    strings.
+    strings. These definitions are shared across all of your scripts and are limited to a maximum of 30.
     <br>
     <br>
     As a usage example, defining

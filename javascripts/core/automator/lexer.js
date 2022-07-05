@@ -276,7 +276,6 @@ export const AutomatorLexer = (() => {
   createKeyword("Auto", /auto/i);
   createKeyword("Buy", /buy/i);
   createKeyword("Blob", /blob\s\s/i);
-  createKeyword("Define", /define/i);
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
   createKeyword("Notify", /notify/i);

@@ -269,55 +269,6 @@ export const AutomatorCommands = ((() => {
       })
     },
     {
-      id: "define",
-      block: null,
-      rule: $ => () => {
-        $.CONSUME(T.Define);
-        $.CONSUME(T.Identifier);
-        $.CONSUME(T.EqualSign);
-        $.OR([
-          { ALT: () => $.SUBRULE($.duration) },
-          { ALT: () => $.SUBRULE($.studyList) },
-        ]);
-      },
-      validate: (ctx, V) => {
-        ctx.startLine = ctx.Define[0].startLine;
-        if (!ctx.Identifier || ctx.Identifier[0].isInsertedInRecovery || ctx.Identifier[0].image === "") {
-          V.addError(ctx.Define, "Missing variable name",
-            "Provide a variable name that isn't a command name between DEFINE and =");
-          return false;
-        }
-        return true;
-      },
-      // Since define creates constants, they are all resolved at compile. The actual define instruction
-      // doesn't have to do anything.
-      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
-      blockify: ctx => {
-        const studyListData = ctx.studyList[0].children.studyListEntry;
-        const studyList = [];
-        for (const entry of studyListData) {
-          if (entry.children.NumberLiteral) {
-            // Single study ID or numerical value
-            studyList.push(entry.children.NumberLiteral[0].image);
-          } else if (entry.children.StudyPath) {
-            // Study path (eg. "time")
-            studyList.push(entry.children.StudyPath[0].image);
-          } else {
-            // Study range (eg. "41-71")
-            const range = entry.children.studyRange[0].children;
-            studyList.push(`${range.firstStudy[0].image}-${range.lastStudy[0].image}`);
-          }
-        }
-        return {
-          ...automatorBlocksMap.DEFINE,
-          genericInput1: `${ctx.Identifier[0].image}`,
-          // No equality-checking actually happens; this is only here to simplify reverse-parsing back into text
-          compOperator: "=",
-          genericInput2: `${studyList.join(",")}`,
-        };
-      }
-    },
-    {
       id: "ifBlock",
       rule: $ => () => {
         $.CONSUME(T.If);

@@ -1431,6 +1431,12 @@ GameStorage.devMigrations = {
           rawLine = rawLine.replace(/studies( nowait)? load preset (\S+)/ui, "studies$1 load name $2");
           // Autobuyer mode change (this is a much older change which wasn't migrated at the time)
           rawLine = rawLine.replace(/x current/ui, "x highest");
+          // Variable definitions
+          const defineMatch = rawLine.match("define (.*) = (.*)");
+          if (defineMatch) {
+            player.reality.automator.constants[defineMatch[1]] = defineMatch[2];
+            rawLine = "";
+          }
           lines[num] = rawLine;
         }
         player.reality.automator.scripts[key].content = lines.join("\n");

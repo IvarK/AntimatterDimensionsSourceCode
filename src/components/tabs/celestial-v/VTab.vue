@@ -82,6 +82,7 @@ export default {
         "l-v-hexagon": true,
         "c-v-run-button": true,
         "c-v-run-button--running": this.isRunning,
+        "c-celestial-run-button-pointer": !this.isDoomed
       };
     },
     runDescription() {

@@ -68,6 +68,7 @@ export default {
       return {
         "c-ra-run-button__icon": true,
         "c-ra-run-button__icon--running": this.isRunning,
+        "c-celestial-run-button-pointer": !this.isDoomed
       };
     },
     runDescription() {

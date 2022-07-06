@@ -6146,7 +6146,6 @@ kbd {
   margin: 1.5rem auto;
   transition-duration: 0.2s;
   animation: a-teresa-run-button__icon--glow 3s infinite;
-  cursor: pointer;
 }
 
 .c-teresa-run-button__icon:hover {
@@ -6159,6 +6158,10 @@ kbd {
   background-color: var(--color-teresa--base);
   border-color: var(--color-teresa--accent);
   animation: a-teresa-run-button__icon--super-glow 1.2s infinite, a-teresa-run-button__icon--spin 5s infinite;
+}
+
+.c-celestial-run-button-pointer {
+  cursor: pointer;
 }
 
 @keyframes a-teresa-run-button__icon--glow {
@@ -6321,7 +6324,6 @@ kbd {
   transition-duration: 0.2s;
   -webkit-user-select: none;
   user-select: none;
-  cursor: pointer;
 }
 
 .c-effarig-run-button--not-running {
@@ -6742,7 +6744,6 @@ kbd {
   margin: 1.5rem;
   transition-duration: 0.2s;
   animation: a-enslaved-run-button--spin 120s infinite linear;
-  cursor: pointer;
 }
 
 .c-enslaved-run-button__icon:hover {
@@ -6951,6 +6952,8 @@ kbd {
   justify-content: center;
   align-items: center;
   transform: skewY(-30deg) rotate(60deg);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .l-v-reduction {
@@ -6973,7 +6976,6 @@ kbd {
   background: var(--color-v--base);
   padding: 0.5rem;
   transition-duration: 0.2s;
-  cursor: pointer;
 }
 
 .c-v-run-button:hover,
@@ -7290,7 +7292,6 @@ kbd {
   box-shadow: 0 0 0.7rem #9575cd, 0 0 0.7rem #9575cd inset;
   margin: 1.5rem 0;
   transition-duration: 0.2s;
-  cursor: pointer;
 }
 
 .c-ra-run-button__icon:hover {
@@ -8343,7 +8344,6 @@ kbd {
   margin: 1.5rem auto;
   transition-duration: 0.2s;
   animation: a-laitela-run-button__icon--scroll 15s infinite linear;
-  cursor: pointer;
 }
 
 .o-laitela-run-button__icon:hover {

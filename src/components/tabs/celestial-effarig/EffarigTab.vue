@@ -40,7 +40,13 @@ export default {
     ],
     symbol: () => GLYPH_SYMBOLS.effarig,
     runButtonOuterClass() {
-      return this.isRunning ? "c-effarig-run-button--running" : "c-effarig-run-button--not-running";
+      return {
+        "l-effarig-run-button": true,
+        "c-effarig-run-button": true,
+        "c-effarig-run-button--running": this.isRunning,
+        "c-effarig-run-button--not-running": !this.isRunning,
+        "c-celestial-run-button-pointer": !this.isDoomed
+      };
     },
     runButtonInnerClass() {
       return this.isRunning ? "c-effarig-run-button__inner--running" : "c-effarig-run-button__inner--not-running";
@@ -161,7 +167,7 @@ export default {
           {{ runDescription }}
         </div>
         <div
-          :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
+          :class="runButtonOuterClass"
           @click="startRun"
         >
           <div

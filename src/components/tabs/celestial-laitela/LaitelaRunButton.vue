@@ -44,6 +44,7 @@ export default {
       return {
         "o-laitela-run-button__icon": true,
         "o-laitela-run-button__icon--running": this.isRunning,
+        "c-celestial-run-button-pointer": !this.isDoomed
       };
     },
   }

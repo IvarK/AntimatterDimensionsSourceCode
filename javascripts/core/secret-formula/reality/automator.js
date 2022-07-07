@@ -5,59 +5,48 @@ GameDatabase.reality.automator = {
     {
       id: 0,
       isUnlocked: () => true,
-      keyword: "wait",
-      name: "<b>wait</b> - wait for something",
-      syntax: "<b>wait</b> condition",
-      description: "Forces Automator to wait for some condition or event",
+      keyword: "WAIT",
+      syntax: "<b>wait</b> <u>condition</u>",
+      description: `Forces Automator to wait for some condition or event. To wait for a certain duration of time,
+        use the PAUSE command instead.`,
       sections: [
         {
           name: "CONDITIONS",
           items: [
             {
-              header: "<i>resource</i> <i>comparison</i> <i>number</i>",
+              header: "<i>comparison</i>",
               description: `
-                Wait until resource amount satisfies the comparison.<br>
-                <b>Resources</b>: am (Antimatter), ip (Infinity Points), ep (Eternity Points), dt (Dilated Time),
-                tp (Tachyon Particles), rg (Replicanti Galaxies), rep/replicanti, tt/time theorems, total tt<br>
-                <b>Comparisons</b>: <, <=, > >=<br>
-                <b>Number</b> should be in scientific format, e.g. 1000, 1e100, 1.8e308
-              `
-            },
-            {
-              header: "<b>pending completions</b> <i>comparison</i> <i>number</i>",
-              description: `
-                Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.
-              `
-            },
-            {
-              header: "<b>EC</b><i>number</i> <b>completions</b> <i>comparison</i> <i>number</i>",
-              description: `
-                Wait for a certain <b>total</b> number of completions of that EC.
+                Wait until the comparison statement is true. Check the entry for "Formatting Comparisons" for details
+                on how to properly input this option.
               `
             },
             {
               header: "<i>prestige</i>",
               description: `
-                Wait until that prestige has been triggered.<br>
-                <b>Prestiges</b>: infinity, eternity, reality
+                Wait until the specified prestige (Infinity, Eternity, or Reality) has been triggered by its respective
+                Autobuyer. This must happen <i>after</i> this command is reached; if the Autobuyer triggers
+                <i>before</i> the command is reached, your script may get stuck.
               `
             }
           ]
         }
       ],
       examples: [
-        "wait infinity",
         "wait am >= 1e308",
         "wait pending completions >= 5",
         "wait ec9 completions >= 4",
+        "wait infinity",
       ]
     },
     {
       id: 1,
       isUnlocked: () => true,
-      keyword: "start",
-      name: "<b>start</b> - start Eternity Challenge (this also unlocks said EC) or Time Dilation",
-      syntax: "<b>start</b> [ec<i>X</i>|dilation]",
+      keyword: "START",
+      syntax: `
+        <b>start</b> ec<u>N</u><br>
+        <b>start</b> dilation`,
+      description: `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
+        to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).`,
       examples: [
         "start ec12",
         "start dilation"
@@ -66,9 +55,13 @@ GameDatabase.reality.automator = {
     {
       id: 2,
       isUnlocked: () => true,
-      keyword: "infinity / eternity / reality",
-      name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
-      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [nowait] [respec]</b>,<br> <b>reality [nowait] [respec]</b>",
+      keyword: "PRESTIGE",
+      syntax: `
+        <b>infinity</b> [nowait]<br>
+        <b>eternity</b> [nowait] [respec]<br>
+        <b>reality</b> [nowait] [respec]`,
+      description: `Triggers an Infinity, Eternity, or Reality reset if possible, otherwise the automator will wait at
+        this command until it becomes possible.`,
       sections: [
         {
           name: "MODIFIERS",
@@ -76,14 +69,14 @@ GameDatabase.reality.automator = {
             {
               header: "<i>nowait</i>",
               description: `
-                If it is not possible to prestige, move on to the next command.
+                If it is not possible to prestige, move on to the next command instead of waiting.
               `
             },
             {
               header: "<i>respec</i>",
               description: `
-                Eternity: respec Time Studies and Eternity.<br>
-                Reality: unequip Glyphs and Reality.
+                Eternity: Respec Time Studies and Eternity.<br>
+                Reality: Unequip Glyphs and Reality.
               `
             },
           ]
@@ -98,9 +91,9 @@ GameDatabase.reality.automator = {
     {
       id: 3,
       isUnlocked: () => BlackHole(1).isUnlocked,
-      keyword: "black hole",
-      name: "<b>black hole</b> - turns the Black Hole on and off",
-      syntax: "<b>black hole</b> on/off",
+      keyword: "BLACK HOLE",
+      syntax: "<b>black hole</b> <u>state</u>",
+      description: `Toggles the speedup effect from the Black Hole on or off.`,
       examples: [
         "black hole on",
         "black hole off",
@@ -109,16 +102,15 @@ GameDatabase.reality.automator = {
     {
       id: 4,
       isUnlocked: () => Enslaved.isUnlocked,
-      keyword: "store game time",
-      name: `<b>store game time</b> - either turns on/off the storing of game time or can be used to use
-          stored game time`,
-      syntax: "<b>store game time</b> action",
+      keyword: "STORE GAME TIME",
+      syntax: "<b>store game time</b> <u>action</u>",
+      description: `Changes whether or not the Black Hole is storing time. Also allows usage of stored time.`,
       sections: [
         {
           name: "ACTIONS",
           items: [
             {
-              header: "<i>on/off</i>",
+              header: "<i>on | off</i>",
               description: `
                 Turns storing game time on or off.
               `
@@ -126,19 +118,24 @@ GameDatabase.reality.automator = {
             {
               header: "<i>use</i>",
               description: `
-                Uses stored game time.
+                Uses all stored game time. Does not alter the on/off state of time storage.
               `
             }
           ]
         }
+      ],
+      examples: [
+        "store time on",
+        "store time off",
+        "store time use",
       ]
     },
     {
       id: 5,
       isUnlocked: () => true,
-      keyword: "unlock",
-      name: "<b>unlock</b> - can be used to unlock certain features",
-      syntax: "<b>unlock [nowait]</b> feature",
+      keyword: "UNLOCK",
+      syntax: "<b>unlock</b> [nowait] <u>feature</u>",
+      description: "Unlocks the specified Eternity Challenge or Time Dilation.",
       sections: [
         {
           name: "MODIFIERS",
@@ -154,38 +151,42 @@ GameDatabase.reality.automator = {
       ],
       examples: [
         "unlock dilation",
-        "unlock ec<i>X</i>"
+        "unlock ec7"
       ]
     },
     {
       id: 6,
       isUnlocked: () => true,
-      keyword: "auto",
-      name: "<b>auto</b> - turn Infinity/Eternity/Reality autobuyers on or off and change their modes",
-      syntax: "<b>auto</b> [infinity|eternity|reality] [setting]",
+      keyword: "AUTO",
+      syntax: `<b>auto infinity</b> [setting]<br>
+        <b>auto eternity</b> [setting]<br>
+        <b>auto reality</b> [setting]`,
+      description: `Turns prestige Autobuyers on or off and allows you to change their settings. If the setting option
+        is not present, this command will toggle the Autobuyer state, turning it off if it is on and turning it on if
+        it is off.`,
       sections: [
         {
           name: "SETTINGS",
           items: [
             {
               header: "<i>on</i> | <i>off</i>",
-              description: "Turns autobuyer on or off.",
+              description: "Turns specified Autobuyer on or off.",
             },
             {
-              header: "<i>number</i> <i>time units</i>",
-              description: `Usable with infinity/eternity only.
-                Turns the autobuyer on and set it to trigger at the given interval`
+              header: "<u><i>number</i></u> <u><i>time units</i></u>",
+              description: `Usable with Infinity and Eternity only.
+                Turns the Autobuyer on and set it to trigger at the given interval.`
             },
             {
-              header: "<i>number</i> x highest",
-              description: `Usable with infinity/eternity only. Turns the autobuyer on and sets it to
+              header: "<u><i>number</i></u> x highest",
+              description: `Usable with Infinity and Eternity only. Turns the Autobuyer on and sets it to
                 "X times highest" mode`
             },
             {
-              header: "<i>number currency</i>",
-              description: `Turns the autobuyer on and sets it to trigger at a specific amount. The currency must
-                match the autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality
-                machines" mode`,
+              header: "<i><u>number</u> <u>currency</u></i>",
+              description: `Turns the Autobuyer on and sets it to trigger at a specific amount. The currency must
+                match the autobuyer type (IP, EP, or RM). For the Reality Autobuyer, this will select "Reality
+                Machines" mode`,
             },
           ]
         }
@@ -201,23 +202,26 @@ GameDatabase.reality.automator = {
     {
       id: 7,
       isUnlocked: () => true,
-      keyword: "if",
-      name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: `<b>if</b> [am|ip|ep|dt|tp|rg|rep|infinities|banked infinities|eternities|realities|tt|total tt|
-      pending glyph level|pending completions|ec[number] completions] (comparison) [number]`,
+      keyword: "IF",
+      syntax: `<b>if</b> <u>condition</u> {<br>
+        <blockquote>commands</blockquote>
+        }`,
+      description: `Defines an inner block of block of the automator script which will only be executed if the specified
+        comparison is true when this line is reached. If the comparison is false, the automator will instead skip to the
+        first line after the block and continue execution from there.`,
       examples: [
-        "if ep <= 1e3000",
-        "if dt >= 1e50",
-        "if ip < 1e1500000",
-        "if ec10 completions < 5"
+        "if ec10 completions < 5",
+        "if ep > 1e6000"
       ]
     },
     {
       id: 8,
       isUnlocked: () => true,
-      keyword: "pause",
-      name: "<b>pause</b> - pauses the Automator for a set amount of time",
-      syntax: "<b>pause</b> [interval]",
+      keyword: "PAUSE",
+      syntax: "<b>pause</b> <u>interval</u>",
+      description: `Tells the automator to stop moving forward and executing commands for a certain amount of time.
+        Note that if the pause duration is shorter than the automator's execution speed, the automator will wait until
+        the next execution tick before moving on.`,
       examples: [
         "pause 10s",
         "pause 1 minute",
@@ -225,18 +229,35 @@ GameDatabase.reality.automator = {
       ],
       sections: [
         {
+          name: "INTERVAL FORMATTING",
+          items: [
+            {
+              header: "Specified Interval",
+              description: `This command accepts time units of milliseconds ("ms"), seconds ("s", "sec", or "seconds"),
+                minutes ("m", "min", or "minutes"), and hours ("h" or "hours"). You cannot provide just a number and
+                nothing else; a unit of time must be specified.`,
+            },
+            {
+              header: "Defined Constant",
+              description: `A defined constant may be used instead, see the definition panel. The defined value will
+                be assumed to be in units of seconds.`
+            },
+          ]
+        },
+        {
           name: "OTHER",
           items: [
             {
-              header: "<b>Undesirable effects</b>",
+              header: "<b>Offine side-effects</b>",
               description: `This command may behave undesirably when it runs during offline progress due to limited
                 tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing 8
-                hours of offline progress, which might not be enough for the resources needed for the next line of the
-                script`,
+                hours of offline progress, which might not be enough for the resources needed for the rest of the
+                script.`,
             },
             {
               header: "<b>Alternatives</b>",
-              description: "Using something like 'wait' will allow you to set it for a certain resource amount."
+              description: `Using another command like 'WAIT' will allow you to set it for a certain resource amount,
+                in order to ensure that the game has the proper state before moving onward.`
             }
           ]
         }
@@ -245,57 +266,47 @@ GameDatabase.reality.automator = {
     {
       id: 9,
       isUnlocked: () => true,
-      keyword: "until",
-      name: "<b>until</b> - repeats commands until a condition or event",
-      syntax: `<b>until</b> [condition | event] {<br>
+      keyword: "UNTIL",
+      syntax: `<b>until</b> <u>comparison</u> {<br>
+        <blockquote>commands</blockquote>
+        }<br><b>until</b> <u>prestige_event</u> {<br>
           <blockquote>commands</blockquote>
-        }<br>
-        <b>condition</b>: [quantity] (comparison) [number]<br>
-        <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ecx completions]<br>
-        <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
-      description: `Commands are repeated; the condition is checked at the start and every
-        time the loop repeats. If an event is specified, then the loop will repeat until the
-        event occurs. (The event has to happen after the loop begins).<br>
-        A variable name may be used in place of <b>number</b>, see <b>define</b>`,
-      examples: [
-        `until ep > 1e500 {<br>
-          <blockquote>
-          tt all<br>
-          studies nowait 11-62</blockquote>
         }`,
+      description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
+        start and every time the loop repeats. If the condition is false when the UNTIL statement is first reached, the
+        inner block of commands will be skipped entirely.
+        <br><br>
+        If an prestige event (ie. Infinity, Eternity, or Reality) is specified instead of a condition, then the block
+        will always be entered and the commands within the block will repeat until the event occurs for the first time
+        <i>after</i> entering the block.`,
+      examples: [
+        "until ep > 1e500",
+        "until reality",
       ]
     },
     {
       id: 10,
       isUnlocked: () => true,
-      keyword: "while",
-      name: "<b>while</b> - repeats commands while a condition is met",
-      syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
-          <blockquote>commands</blockquote>
-        }<br>
-        <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions]<br>
-        <b>comparison</b>: [<|<=|>=|>]<br>
-        <b>number</b>: Number in normal or scientific notation`,
-      description: `Commands are repeated; the condition is checked at the start and every
-        time the loop repeats.<br>
-        A variable name may be used in place of <b>number</b>, see <b>define</b>`,
+      keyword: "WHILE",
+      syntax: `<b>while</b> <u>comparison</u> {<br>
+        <blockquote>commands</blockquote>
+      }`,
+      description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
+        start and every time the loop repeats. If the condition is false when the WHILE statement is first reached, the
+        inner block of commands will be skipped entirely.`,
       examples: [
-        `while ep < 1e500 {<br>
-          <blockquote>
-          tt all<br>
-          studies nowait 11-62</blockquote>
-        }`,
-        `while myThreshold > am { ...`,
+        `while ep < 1e500`,
+        `while myThreshold > am`,
       ]
     },
     {
       id: 11,
       isUnlocked: () => true,
-      keyword: "studies respec",
-      name: "<b>studies respec</b> - respec Time Studies on next Eternity",
+      keyword: "STUDIES RESPEC",
       syntax: `<b>studies respec</b>`,
-      description: `Note that this does not actually perform an Eternity, but only turns on the respec option on
-        to trigger on the next manual or automatic Eternity.`,
+      description: `This command turns on the respec option on to respec your Time Studies on the next manual or
+        automatic Eternity. Note that this does not actually perform an Eternity on its own; make sure to eventually
+        follow it up with an ETERNITY command or ensure your Autobuyer is on.`,
       examples: [
         `studies respec`,
       ]
@@ -303,20 +314,35 @@ GameDatabase.reality.automator = {
     {
       id: 12,
       isUnlocked: () => true,
-      keyword: "studies load (name / id)",
-      name: "<b>studies load (name / id)</b> - Load a saved Time Study preset",
-      syntax: `<b>studies [nowait] load [id | name] [selector]</b><br>
-        <b>selector</b>: [1-6] for id, preset name for name`,
-      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time Study tab.<br>
-        If it is loaded by id, the Number must be between 1 to 6 (corresponding to slot).<br>
-        If it is instead loaded by name, the <b>case sensitive</b> name given to the preset by the player must be used.
-        <br>
-        If <b>nowait</b> is present, then the Automator will purchase as many Time Studies as
-        possible from the preset before moving on to the next command, even if some cannot be bought.<br>
-        If <b>nowait</b> is <i>not</i> present, then the Automator will repeatedly attempt to buy the studies in order.
-        It will repeat this line indefinitely until all of the studies in the preset are bought; the automator may get
-        stuck indefinitely if the preset contains studies in a configuration which cannot be bought simultaneously,
-        for example 71, 72, and 73 before the Dimension Split Dilation upgrade is purchased.`,
+      keyword: "STUDIES LOAD",
+      syntax: `<b>studies</b> [nowait] <b>load id</b> <u>selector</u><br>
+        <b>studies</b> [nowait] <b>load name</b> <u>name</u>`,
+      description: `Loads a Time Study preset, as if you had clicked on the button in the Time Study tab.`,
+      sections: [
+        {
+          name: "INPUTS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If present, the Automator will purchase as many studies as possible before continuing onward. By default
+                (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
+                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
+              `
+            },
+            {
+              header: "<i>selector</i>",
+              description: `
+                Finds and loads the specified Time Study preset by its slot number. This is numbered one through six,
+                ordered from left to right.`
+            },
+            {
+              header: "<i>name</i>",
+              description: "Finds and loads the specified Time Study preset by its given name. This is case-sensitive."
+            },
+          ]
+        }
+      ],
       examples: [
         `studies load id 2`,
         `studies load name ANTI`,
@@ -326,56 +352,82 @@ GameDatabase.reality.automator = {
     {
       id: 13,
       isUnlocked: () => true,
-      keyword: "studies purchase",
-      name: "<b>studies</b> - Purchase Time Studies",
-      syntax: `<b>studies [nowait] purchase <i>[study list]</i></b>`,
-      description: `Purchase Time Studies specified from a list formatted like a Tree export.
-        If <b>nowait</b> is present, then the Automator will purchase as many Time Studies as
-        possible from the text string before moving on to the next command, even if some cannot be bought.<br>
-        If <b>nowait</b> is <i>not</i> present, then the Automator will repeatedly attempt to buy the studies in order.
-        It will repeat this line indefinitely until all of the studies in the preset are bought; the automator may get
-        stuck indefinitely if the preset contains studies in a configuration which cannot be bought simultaneously,
-        for example 71, 72, and 73 before the Dimension Split Dilation upgrade is purchased.<br>
-        The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
-        spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
-        <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
-        A variable name may be used in place of Time Study list, see <b>define</b>.`,
+      keyword: "STUDIES PURCHASE",
+      syntax: `<b>studies</b> [nowait] <b>purchase <u>study_list</u></b>`,
+      description: "Purchase Time Studies specified from a list formatted like a Tree export.",
+      sections: [
+        {
+          name: "INPUTS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If present, the Automator will purchase as many studies as possible before continuing onward. By default
+                (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
+                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
+              `
+            },
+            {
+              header: "<i>study_list</i>",
+              description: `
+              The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
+              spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
+              <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
+              A variable name may be used in place of Time Study list as well (see the definition panel),
+              although in that case the shorthand aliases are not allowed.`
+            },
+          ]
+        }
+      ],
       examples: [
-        "studies nowait 11,21,31",
-        "studies 11-62, antimatter, 111, idle",
-        "studies nowait ec6Studies",
+        "studies nowait purchase 11,21,31",
+        "studies purchase 11-62, antimatter, 111, idle",
+        "studies nowait purchase ec6Studies",
       ]
     },
     {
       id: 14,
       isUnlocked: () => true,
-      keyword: "currencies",
-      name: "List of <b>currencies</b>",
-      syntax: "You can use these in any if, while, until, or wait command.",
-      description: `This is a list of "currencies" or numbers that you can use.<br>
+      keyword: "NOTIFY",
+      syntax: "<b>notify</b> \"<u>text</u>\"",
+      description: `Takes the specified text and posts it in the top-right corner as
+        a text notification, in the same spot and style as other notifications such as auto-save
+        and achievement/upgrade unlocks. Can be useful for seeing automator status while
+        on tabs other than the Automator tab.`,
+      examples: [
+        "notify \"Dilation reached\"",
+        "notify \"ECs completed\""
+      ]
+    },
+    {
+      id: 15,
+      isUnlocked: () => true,
+      keyword: "Currency List",
+      syntax: "<i>You can use these in any IF, WHILE, UNTIL, or WAIT command</i>",
+      description: `This is a list of "currencies" or numbers that you can use within the Automator.<br>
         Note that when used, most currencies will need to be in scientific notation.<br>
-        <b>am</b> - antimatter amount  <br>
-        <b>ip</b> - current infinity point amount  <br>
-        <b>ep</b> - current eternity point amount  <br>
-        <b>rm</b> - current reality machine amount  <br>
-        <b>infinities</b> - current infinity amount <br>
-        <b>banked infinities</b> - current banked infinity amount <br>
-        <b>eternities</b> - current eternity amount <br>
-        <b>realities</b> - current reality amount <br>
-        <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
-        <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
-        <b>pending tp</b> - TP gained on exiting dilation<br>
-        <b>pending rm</b> - RM gained on reality (0 if not available)<br>
-        <b>pending glyph level</b> - glyph level gained on reality (0 if not available)<br>
-        <b>dt</b> - dilated time amount  <br>
-        <b>tp</b> - tachyon particle amount  <br>
-        <b>rg</b> - replicanti galaxy amount (does not use scientific)<br>
-        <b>rep</b> - replicanti amount <br>
-        <b>tt</b> - time theorem amount <br>
-        <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
-        <b>total completions</b> - total completions of all eternity challenges <br>
-        <b>pending completions</b> - total completions of current EC at eternity <br>
-        <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
+        <b>am</b> - Current Antimatter amount  <br>
+        <b>ip</b> - Current Infinity Point amount  <br>
+        <b>ep</b> - Current Eternity Point amount  <br>
+        <b>rm</b> - Current Reality Machine amount  <br>
+        <b>infinities</b> - Current Infinity amount <br>
+        <b>banked infinities</b> - Current Banked Infinity amount <br>
+        <b>eternities</b> - Current Eternity amount <br>
+        <b>realities</b> - Current Reality amount <br>
+        <b>pending ip</b> - IP gained on Infinity (0 if not available)<br>
+        <b>pending ep</b> - EP gained on Eternity (0 if not available)<br>
+        <b>pending tp</b> - TP gained on exiting Dilation<br>
+        <b>pending rm</b> - RM gained on Reality (0 if not available)<br>
+        <b>pending glyph level</b> - Glyph Level gained on Reality (0 if not available)<br>
+        <b>dt</b> - Current Dilated Time amount <br>
+        <b>tp</b> - Current Tachyon Particle amount  <br>
+        <b>rg</b> - Current Replicanti Galaxy amount (does not use scientific)<br>
+        <b>rep</b> - Current Replicanti amount <br>
+        <b>tt</b> - Current Time Theorem amount <br>
+        <b>total tt</b> - TOTAL Time Theorems, includes all forms of generated TT and any spent on Studies <br>
+        <b>total completions</b> - Total completions of all Eternity Challenges <br>
+        <b>pending completions</b> - Total completions of current EC at Eternity <br>
+        <b>ec<u>X</u> completions</b> - Amount of EC completions for a certain EC <br>
       `,
       examples: [
         `if total tt >= 5
@@ -386,25 +438,78 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 15,
+      id: 16,
       isUnlocked: () => true,
-      keyword: "notify",
-      name: "<b>notify</b> - send a progress notification",
-      syntax: "<b>notify</b> \"text\"",
-      description: `Takes the specified text and posts it in the top-right corner as
-        a text notification, in the same spot as other notifications such as auto-save
-        and achievement/upgrade unlocks. Can be useful for seeing automator status while
-        on tabs other than the Automator tab.`,
+      keyword: "Formatting Comparisons",
+      syntax: "resource1 condition resource2",
+      description: `
+        Comparisons are used within certain commands, which allow you to control the behavior of the automator based
+        on the game's current state. They have a standard format with two value inputs and a comparison operator, but
+        the value inputs can be anything as long as it is formatted correctly overall.`,
+      sections: [
+        {
+          name: "CONDITIONS",
+          items: [
+            {
+              header: "<i>resource</i>",
+              description: `
+                This can be any Automator Currency, a defined constant, or a number which must be formatted in
+                scientific notation (eg. 1000, 1e100, 1.8e308). Unlike more general programming languages, this must
+                be a single value (ie. math expressions such as "ip + pending ip" are not allowed).
+              `
+            },
+            {
+              header: "<b>condition</i>",
+              description: `
+                This must be an inequality operator (<, <=, > >=), which takes on its typical mathematical meaning.
+                Equality operators (==, !=) are not allowed, as the nature of the game means that numbers will often
+                never be exactly equal and thus checking based on direct equality may lead to unexpected script
+                behavior.
+              `
+            },
+          ]
+        }
+      ],
       examples: [
-        "notify \"Dilation reached\"",
-        "notify \"ECs completed\""
+        "ep < 1e20",
+        "total tt > 14000",
       ]
     },
     {
-      id: 16,
+      id: 17,
       isUnlocked: () => true,
-      keyword: "(Comments)",
-      name: "<b>#|//</b> - leaves a comment in your script",
+      keyword: "Commands with inner blocks",
+      syntax: `<b>header_command</b> {<br>
+        <blockquote>inner_commands</blockquote>
+        }`,
+      description: `Some commands are associated with an "inner block" of commands. This inner block can contain still
+        contain any other valid command, but may or may not actually get executed based on what the state of the game is
+        when <b>header_command</b> is executed. This allows you to repeat some commands over and over (eg. Time Study
+        purchasing), or to skip them entirely (eg. not entering an EC if it already has full completions). These blocks
+        can be nested if desired, with inner blocks being placed within one another.
+        <br><br>
+        In the text editor mode: Specify the inner block with curly braces, with the opening brace { on the same line as
+        the comparison and the closing brace } on its own line after the last line you want inside the block
+        <br><br>
+        In the block editor mode: These commands come with an empty dotted rectangle which indicates which commands are
+        within the inner block. Subsequent blocks can then be dragged inside the dotted rectangle.
+        `,
+      examples: [
+        `if ec10 completions < 5 {<br>
+          <blockquote>
+          unlock ec10<br>
+          start ec10</blockquote>
+        }`,
+        `until ep > 1e500 {<br>
+          <blockquote>
+          studies nowait 11-62</blockquote>
+        }`
+      ]
+    },
+    {
+      id: 18,
+      isUnlocked: () => true,
+      keyword: "Adding Comments",
       syntax: "<b>#</b> text<br><b>//</b> text",
       description: `Allows you to leave a note to yourself within your script. This may be
         useful for organizing or keeping track of which parts of your script do various things,

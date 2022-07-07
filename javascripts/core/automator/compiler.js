@@ -198,16 +198,20 @@ import { AutomatorLexer } from "./lexer";
         return undefined;
       }
 
+      let studyParts;
       switch (type) {
         case AUTOMATOR_VAR_TYPES.NUMBER:
-        case AUTOMATOR_VAR_TYPES.DURATION:
           varInfo.value = new Decimal(value);
           break;
         case AUTOMATOR_VAR_TYPES.STUDIES:
+          studyParts = value.split("|");
           varInfo.value = {
-            normal: value,
-            ec: 0
+            normal: studyParts[0].split(",").map(ts => parseInt(ts, 10)),
+            ec: parseInt(studyParts[1], 10)
           };
+          break;
+        case AUTOMATOR_VAR_TYPES.DURATION:
+          varInfo.value = parseInt(1000 * value, 10);
           break;
       }
 
@@ -315,7 +319,7 @@ import { AutomatorLexer } from "./lexer";
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
         const varLookup = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER);
-        if (varLookup) ctx.$value = varLookup.value;
+        if (varLookup) ctx.$value = ctx.Identifier[0].image;
       }
     }
 
@@ -331,7 +335,7 @@ import { AutomatorLexer } from "./lexer";
       }
       const T = AutomatorLexer.tokenMap;
       if (ctx.ComparisonOperator[0].tokenType === T.OpEQ || ctx.ComparisonOperator[0].tokenType === T.EqualSign) {
-        this.addError(ctx, "Please use an inequality comparison (>,<,>=,<=)",
+        this.addError(ctx, "Please use an inequality comparison (>, <, >=, <=)",
           "Comparisons cannot be done with equality, only with inequality operators");
       }
     }
@@ -405,9 +409,12 @@ import { AutomatorLexer } from "./lexer";
     }
 
     comparison(ctx) {
-      const getters = ctx.compareValue.map(cv => (
-        cv.children.AutomatorCurrency ? cv.children.AutomatorCurrency[0].tokenType.$getter : () => cv.children.$value
-      ));
+      const getters = ctx.compareValue.map(cv => {
+        if (cv.children.AutomatorCurrency) return cv.children.AutomatorCurrency[0].tokenType.$getter;
+        const val = cv.children.$value;
+        if (typeof val === "string") return () => player.reality.automator.constants[val];
+        return () => val;
+      });
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
       return () => compareFun(getters[0](), getters[1]());
     }
@@ -447,19 +454,17 @@ import { AutomatorLexer } from "./lexer";
     }
 
     comparison(ctx) {
-      const getValue = index => {
-        const isCurrency = Boolean(ctx.compareValue[index].children.AutomatorCurrency);
-        if (isCurrency) {
-          return ctx.compareValue[index].children.AutomatorCurrency[0].image;
-        }
-        const valueChildren = ctx.compareValue[index].children;
-        const isDecimalValue = Boolean(ctx.compareValue[index].children.$value);
-        return isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image;
+      const parseInput = index => {
+        const comp = ctx.compareValue[index];
+        const isCurrency = Boolean(comp.children.AutomatorCurrency);
+        if (isCurrency) return comp.children.AutomatorCurrency[0].image;
+        return comp.children.$value;
       };
+
       return {
-        genericInput1: getValue(0),
         compOperator: ctx.ComparisonOperator[0].image,
-        genericInput2: getValue(1),
+        genericInput1: parseInput(0),
+        genericInput2: parseInput(1),
       };
     }
 

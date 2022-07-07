@@ -25,8 +25,8 @@ export default {
 
 <template>
   <div class="l-panel-padding">
-    This panel allows you to define constant values which can be used in place of numbers or Time Study import
-    strings. These definitions are shared across all of your scripts and are limited to a maximum of 30.
+    This panel allows you to define case-sensitive constant values which can be used in place of numbers or Time Study
+    import strings. These definitions are shared across all of your scripts and are limited to a maximum of 30.
     <br>
     <br>
     As a usage example, defining

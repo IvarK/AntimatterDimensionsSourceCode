@@ -240,7 +240,7 @@ export default {
   <div class="c-automator-single-block">
     <div
       v-if="displayedConstant"
-      class="o-automator-command c-automator-input-required"
+      class="o-automator-command c-automator-input-required c-automator-single-block-constant"
     >
       {{ displayedConstant }}
     </div>
@@ -289,6 +289,10 @@ export default {
   align-items: center;
   margin: 0 0.1rem;
   height: 2.8rem;
+}
+
+.c-automator-single-block-constant {
+  display: inline-block;
 }
 
 .l-error-textbox {

@@ -8976,6 +8976,7 @@ kbd {
 .o-automator-command {
   display: inline-block;
   min-width: 9.5rem;
+  width: fit-content;
   height: 3rem;
   color: var(--color-blockmator-block-command);
   background: var(--color-blockmator-block-background);
@@ -9053,6 +9054,7 @@ kbd {
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
+  max-width: 10rem;
 }
 
 .s-base--dark .o-automator-block-input {

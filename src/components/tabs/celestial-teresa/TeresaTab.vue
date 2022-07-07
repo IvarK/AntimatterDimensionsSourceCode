@@ -54,7 +54,7 @@ export default {
       return {
         "c-teresa-run-button__icon": true,
         "c-teresa-run-button__icon--running": this.isRunning,
-        "c-celestial-run-button-pointer": !this.isDoomed
+        "c-celestial-run-button--clickable": !this.isDoomed
       };
     },
     pourButtonClassObject() {

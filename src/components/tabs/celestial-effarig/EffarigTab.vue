@@ -45,7 +45,7 @@ export default {
         "c-effarig-run-button": true,
         "c-effarig-run-button--running": this.isRunning,
         "c-effarig-run-button--not-running": !this.isRunning,
-        "c-celestial-run-button-pointer": !this.isDoomed
+        "c-celestial-run-button--clickable": !this.isDoomed
       };
     },
     runButtonInnerClass() {

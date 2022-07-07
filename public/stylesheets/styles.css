@@ -6160,7 +6160,7 @@ kbd {
   animation: a-teresa-run-button__icon--super-glow 1.2s infinite, a-teresa-run-button__icon--spin 5s infinite;
 }
 
-.c-celestial-run-button-pointer {
+.c-celestial-run-button--clickable {
   cursor: pointer;
 }
 

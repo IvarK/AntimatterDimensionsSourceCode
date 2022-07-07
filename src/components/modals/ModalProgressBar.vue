@@ -121,6 +121,6 @@ export default {
 }
 
 .modal-progress-bar__margin {
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 </style>

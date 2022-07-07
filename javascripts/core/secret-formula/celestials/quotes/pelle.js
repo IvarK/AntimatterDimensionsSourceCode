@@ -28,7 +28,7 @@ const filament =     ["Generator",     "Filament",      "Stars"];
 const forever =      ["Infinite",      "Forever",       "Eternal"];
 const inevitable =   ["Elementary",    "Inevitable",    "Irreversible"];
 const mandate =      ["Destiny",       "Mandate",       "Goals"];
-const miscontrue =   ["Misconstrue",   "Deceive",       "Trick"];
+const misconstrue =   ["Misconstrue",   "Deceive",       "Trick"];
 const reverse =      ["Alter",         "Reverse",       "Manipulate"];
 const shame =        ["Compassion",    "Shame",         "Idiocy"];
 const single =       ["Single",        "Filament",      "Stars"];
@@ -75,7 +75,7 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "Incorrectly recollecting your exacting $1 of memories.", 1: unseen },
       { text: `"Fabrication" of your own "ideology" just to fulfill your $1.`, 1: mandate },
       { text: "$1.", 1: confusing },
-      { text: "And keep in mind I have no reason to $1 you.", 1: miscontrue },
+      { text: "And keep in mind I have no reason to $1 you.", 1: misconstrue },
       "After all, I've already won."
     ],
   },
@@ -84,7 +84,7 @@ GameDatabase.celestials.quotes.pelle = {
     lines: [
       { text: "To fulfill your $1. Why don't we reminisce about that?", 1: mandate },
       { text: "After all, you must love the stories of the $1's glory.", 1: destroyer },
-      "You're the same as it, right? Right?",
+      "You're the same as it, right?",
       { text: "Anyway, the many $1 in the past.", 1: battles },
       "It's always been 2 stages.",
       { text: "We build up resources, and then continue our $1.", 1: dance },
@@ -221,7 +221,7 @@ GameDatabase.celestials.quotes.pelle = {
         background: primaryBackground("enslaved"),
         1: dance,
       }, {
-        text: "Is the $1 trying every time.",
+        text: "Is that the $1 trying every time.",
         background: primaryBackground("enslaved"),
         1: usurper,
       }, {
@@ -342,7 +342,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "If you don't fall to me, you usually fall to them.",
         background: primaryBackground("laitela"),
       }, {
-        text: "I cannot grasp the ideals of the $1.",
+        text: "I can'f grasp the ideals of the $1.",
         background: primaryBackground("laitela"),
         1: paramount,
       }, {

@@ -65,11 +65,6 @@ import { AutomatorLexer } from "./lexer";
         next: "commandArgs"
       },
       {
-        regex: /define\s/ui,
-        token: "keyword",
-        next: "defineIdentifier"
-      },
-      {
         regex: /start\s|unlock\s/ui,
         token: "keyword",
         next: "startUnlock"
@@ -128,11 +123,6 @@ import { AutomatorLexer } from "./lexer";
       { regex: /\}/ui, dedent: true },
       { regex: /\S+/ui, token: "error" },
     ],
-    defineIdentifier: [
-      commentRule,
-      { sol: true, next: "start" },
-      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandArgs" },
-    ],
     startUnlock: [
       commentRule,
       { sol: true, next: "start" },
@@ -166,6 +156,7 @@ import { AutomatorLexer } from "./lexer";
       { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
       { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
+      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable" },
       { regex: /\{/ui, indent: true, next: "commandDone" },
       // This seems necessary to have a closing curly brace de-indent automatically in some cases
       { regex: /\}/ui, dedent: true },

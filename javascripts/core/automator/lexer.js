@@ -364,16 +364,21 @@ export const AutomatorLexer = (() => {
   const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
 
   const standardizeAutomatorValues = function(x) {
-    // This first line exists for this function to usually return quickly;
-    // otherwise it's called enough to cause lag.
-    if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+    try {
+      if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+    } catch {
+      // This only happens if the input is a number or Decimal, in which case we don't attempt to change any formatting
+      // and simply return
+      return x;
+    }
     for (const i of tokenLists.AutomatorCurrency) {
       // Check for a match of the full string.
       if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {
         return i.$autocomplete.toUpperCase();
       }
     }
-    // If we get to this point, we haven't matched a currency name and instead assume it's a constant and return it
+    // If we get to this point, we haven't matched a currency name and instead assume it's a defined constant and
+    // return it without any format changes since these are case-sensitive
     return x;
   };
 

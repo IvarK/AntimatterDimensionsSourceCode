@@ -42,11 +42,12 @@ export const AutomatorCommands = ((() => {
   // Extracts the conditional out of a command and returns it as text
   function parseConditionalIntoText(ctx) {
     const comp = ctx.comparison[0].children;
-    const getters = comp.compareValue.map(cv => (
-      cv.children.AutomatorCurrency
-        ? () => cv.children.AutomatorCurrency[0].image
-        : () => format(cv.children.$value, 2, 2)
-    ));
+    const getters = comp.compareValue.map(cv => {
+      if (cv.children.AutomatorCurrency) return () => cv.children.AutomatorCurrency[0].image;
+      const val = cv.children.$value;
+      if (typeof val === "string") return () => val;
+      return () => format(val, 2, 2);
+    });
     const compareFn = comp.ComparisonOperator[0].image;
     return `${getters[0]()} ${compareFn} ${getters[1]()}`;
   }
@@ -368,8 +369,14 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const duration = ctx.$duration;
         return S => {
-          const dur = ctx.duration[0].children;
-          const timeString = `${dur.NumberLiteral[0].image} ${dur.TimeUnit[0].image.replace("\\s", "")}`;
+          let timeString;
+          if (ctx.duration) {
+            const c = ctx.duration[0].children;
+            timeString = `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`;
+          } else {
+            // This is the case for a defined constant; its value was parsed out during validation
+            timeString = TimeSpan.fromMilliseconds(duration);
+          }
           if (S.commandState === null) {
             S.commandState = { timeMs: 0 };
             AutomatorData.logCommandEvent(`Pause started (waiting ${timeString})`, ctx.startLine);
@@ -385,10 +392,16 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        const c = ctx.duration[0].children;
+        let blockArg;
+        if (ctx.duration) {
+          const c = ctx.duration[0].children;
+          blockArg = `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`;
+        } else {
+          blockArg = `${ctx.Identifier[0].image}`;
+        }
         return {
           ...automatorBlocksMap.PAUSE,
-          singleTextInput: `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`
+          singleTextInput: blockArg
         };
       }
     },

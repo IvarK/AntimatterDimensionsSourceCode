@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     descriptionDisplayConfig() {
-      if (this.challenge.isUnlocked) {
+      if (this.isUnlocked) {
         return this.challenge.config;
       }
       return {

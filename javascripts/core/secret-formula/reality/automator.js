@@ -1,61 +1,108 @@
 import { GameDatabase } from "../game-database";
 
 GameDatabase.reality.automator = {
+  categoryNames: [
+    "Time Studies",
+    "Event Triggers",
+    "Alter Settings",
+    "Information",
+    "Script Flow",
+  ],
   commands: [
     {
       id: 0,
       isUnlocked: () => true,
-      keyword: "WAIT",
-      syntax: "<b>wait</b> <u>condition</u>",
-      description: `Forces Automator to wait for some condition or event. To wait for a certain duration of time,
-        use the PAUSE command instead.`,
-      sections: [
-        {
-          name: "CONDITIONS",
-          items: [
-            {
-              header: "<i>comparison</i>",
-              description: `
-                Wait until the comparison statement is true. Check the entry for "Formatting Comparisons" for details
-                on how to properly input this option.
-              `
-            },
-            {
-              header: "<i>prestige</i>",
-              description: `
-                Wait until the specified prestige (Infinity, Eternity, or Reality) has been triggered by its respective
-                Autobuyer. This must happen <i>after</i> this command is reached; if the Autobuyer triggers
-                <i>before</i> the command is reached, your script may get stuck.
-              `
-            }
-          ]
-        }
-      ],
+      keyword: "STUDIES RESPEC",
+      category: 0,
+      syntax: `<b>studies respec</b>`,
+      description: `This command turns on the respec option on to respec your Time Studies on the next manual or
+        automatic Eternity. Note that this does not actually perform an Eternity on its own; make sure to eventually
+        follow it up with an ETERNITY command or ensure your Autobuyer is on.`,
       examples: [
-        "wait am >= 1e308",
-        "wait pending completions >= 5",
-        "wait ec9 completions >= 4",
-        "wait infinity",
+        `studies respec`,
       ]
     },
     {
       id: 1,
       isUnlocked: () => true,
-      keyword: "START",
-      syntax: `
-        <b>start</b> ec<u>N</u><br>
-        <b>start</b> dilation`,
-      description: `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
-        to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).`,
+      keyword: "STUDIES LOAD",
+      category: 0,
+      syntax: `<b>studies</b> [nowait] <b>load id</b> <u>selector</u><br>
+        <b>studies</b> [nowait] <b>load name</b> <u>name</u>`,
+      description: `Loads a Time Study preset, as if you had clicked on the button in the Time Study tab.`,
+      sections: [
+        {
+          name: "INPUTS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If present, the Automator will purchase as many studies as possible before continuing onward. By default
+                (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
+                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
+              `
+            },
+            {
+              header: "<i>selector</i>",
+              description: `
+                Finds and loads the specified Time Study preset by its slot number. This is numbered one through six,
+                ordered from left to right.`
+            },
+            {
+              header: "<i>name</i>",
+              description: "Finds and loads the specified Time Study preset by its given name. This is case-sensitive."
+            },
+          ]
+        }
+      ],
       examples: [
-        "start ec12",
-        "start dilation"
+        `studies load id 2`,
+        `studies load name ANTI`,
+        `studies nowait load name dil`,
       ]
     },
     {
       id: 2,
       isUnlocked: () => true,
+      keyword: "STUDIES PURCHASE",
+      category: 0,
+      syntax: `<b>studies</b> [nowait] <b>purchase <u>study_list</u></b>`,
+      description: "Purchase Time Studies specified from a list formatted like a Tree export.",
+      sections: [
+        {
+          name: "INPUTS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If present, the Automator will purchase as many studies as possible before continuing onward. By default
+                (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
+                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
+              `
+            },
+            {
+              header: "<i>study_list</i>",
+              description: `
+              The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
+              spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
+              <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
+              A variable name may be used in place of Time Study list as well (see the definition panel),
+              although in that case the shorthand aliases are not allowed.`
+            },
+          ]
+        }
+      ],
+      examples: [
+        "studies nowait purchase 11,21,31",
+        "studies purchase 11-62, antimatter, 111, idle",
+        "studies nowait purchase ec6Studies",
+      ]
+    },
+    {
+      id: 3,
+      isUnlocked: () => true,
       keyword: "PRESTIGE",
+      category: 1,
       syntax: `
         <b>infinity</b> [nowait]<br>
         <b>eternity</b> [nowait] [respec]<br>
@@ -89,51 +136,10 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 3,
-      isUnlocked: () => BlackHole(1).isUnlocked,
-      keyword: "BLACK HOLE",
-      syntax: "<b>black hole</b> <u>state</u>",
-      description: `Toggles the speedup effect from the Black Hole on or off.`,
-      examples: [
-        "black hole on",
-        "black hole off",
-      ]
-    },
-    {
       id: 4,
-      isUnlocked: () => Enslaved.isUnlocked,
-      keyword: "STORE GAME TIME",
-      syntax: "<b>store game time</b> <u>action</u>",
-      description: `Changes whether or not the Black Hole is storing time. Also allows usage of stored time.`,
-      sections: [
-        {
-          name: "ACTIONS",
-          items: [
-            {
-              header: "<i>on | off</i>",
-              description: `
-                Turns storing game time on or off.
-              `
-            },
-            {
-              header: "<i>use</i>",
-              description: `
-                Uses all stored game time. Does not alter the on/off state of time storage.
-              `
-            }
-          ]
-        }
-      ],
-      examples: [
-        "store time on",
-        "store time off",
-        "store time use",
-      ]
-    },
-    {
-      id: 5,
       isUnlocked: () => true,
       keyword: "UNLOCK",
+      category: 1,
       syntax: "<b>unlock</b> [nowait] <u>feature</u>",
       description: "Unlocks the specified Eternity Challenge or Time Dilation.",
       sections: [
@@ -155,9 +161,25 @@ GameDatabase.reality.automator = {
       ]
     },
     {
+      id: 5,
+      isUnlocked: () => true,
+      keyword: "START",
+      category: 1,
+      syntax: `
+        <b>start</b> ec<u>N</u><br>
+        <b>start</b> dilation`,
+      description: `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
+        to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).`,
+      examples: [
+        "start ec12",
+        "start dilation"
+      ]
+    },
+    {
       id: 6,
       isUnlocked: () => true,
       keyword: "AUTO",
+      category: 2,
       syntax: `<b>auto infinity</b> [setting]<br>
         <b>auto eternity</b> [setting]<br>
         <b>auto reality</b> [setting]`,
@@ -201,23 +223,121 @@ GameDatabase.reality.automator = {
     },
     {
       id: 7,
-      isUnlocked: () => true,
-      keyword: "IF",
-      syntax: `<b>if</b> <u>condition</u> {<br>
-        <blockquote>commands</blockquote>
-        }`,
-      description: `Defines an inner block of block of the automator script which will only be executed if the specified
-        comparison is true when this line is reached. If the comparison is false, the automator will instead skip to the
-        first line after the block and continue execution from there.`,
+      isUnlocked: () => BlackHole(1).isUnlocked,
+      keyword: "BLACK HOLE",
+      category: 2,
+      syntax: "<b>black hole</b> <u>state</u>",
+      description: `Toggles the speedup effect from the Black Hole on or off.`,
       examples: [
-        "if ec10 completions < 5",
-        "if ep > 1e6000"
+        "black hole on",
+        "black hole off",
       ]
     },
     {
       id: 8,
+      isUnlocked: () => Enslaved.isUnlocked,
+      keyword: "STORE GAME TIME",
+      category: 2,
+      syntax: "<b>store game time</b> <u>action</u>",
+      description: `Changes whether or not the Black Hole is storing time. Also allows usage of stored time.`,
+      sections: [
+        {
+          name: "ACTIONS",
+          items: [
+            {
+              header: "<i>on | off</i>",
+              description: `
+                Turns storing game time on or off.
+              `
+            },
+            {
+              header: "<i>use</i>",
+              description: `
+                Uses all stored game time. Does not alter the on/off state of time storage.
+              `
+            }
+          ]
+        }
+      ],
+      examples: [
+        "store time on",
+        "store time off",
+        "store time use",
+      ]
+    },
+    {
+      id: 9,
+      isUnlocked: () => true,
+      keyword: "NOTIFY",
+      category: 3,
+      syntax: "<b>notify</b> \"<u>text</u>\"",
+      description: `Takes the specified text and posts it in the top-right corner as
+        a text notification, in the same spot and style as other notifications such as auto-save
+        and achievement/upgrade unlocks. Can be useful for seeing automator status while
+        on tabs other than the Automator tab.`,
+      examples: [
+        "notify \"Dilation reached\"",
+        "notify \"ECs completed\""
+      ]
+    },
+    {
+      id: 10,
+      isUnlocked: () => true,
+      keyword: "Adding Comments",
+      category: 3,
+      syntax: "<b>#</b> text<br><b>//</b> text",
+      description: `Allows you to leave a note to yourself within your script. This may be
+        useful for organizing or keeping track of which parts of your script do various things,
+        in a way that appears more readable than just the commands. These commands will do nothing
+        positive or negative for the automator's functionality, and only serve as a tool to
+        help you keep the steps of your scripts easier to follow if desired.`,
+      examples: [
+        "# get 1e20 before starting ec1",
+        "// this loop alternates dilation and pushing"
+      ]
+    },
+    {
+      id: 11,
+      isUnlocked: () => true,
+      keyword: "WAIT",
+      category: 4,
+      syntax: "<b>wait</b> <u>condition</u>",
+      description: `Forces Automator to wait for some condition or event. To wait for a certain duration of time,
+        use the PAUSE command instead.`,
+      sections: [
+        {
+          name: "CONDITIONS",
+          items: [
+            {
+              header: "<i>comparison</i>",
+              description: `
+                Wait until the comparison statement is true. Check the entry for "Formatting Comparisons" for details
+                on how to properly input this option.
+              `
+            },
+            {
+              header: "<i>prestige</i>",
+              description: `
+                Wait until the specified prestige (Infinity, Eternity, or Reality) has been triggered by its respective
+                Autobuyer. This must happen <i>after</i> this command is reached; if the Autobuyer triggers
+                <i>before</i> the command is reached, your script may get stuck.
+              `
+            }
+          ]
+        }
+      ],
+      examples: [
+        "wait am >= 1e308",
+        "wait pending completions >= 5",
+        "wait ec9 completions >= 4",
+        "wait infinity",
+      ]
+    },
+    {
+      id: 12,
       isUnlocked: () => true,
       keyword: "PAUSE",
+      category: 4,
       syntax: "<b>pause</b> <u>interval</u>",
       description: `Tells the automator to stop moving forward and executing commands for a certain amount of time.
         Note that if the pause duration is shorter than the automator's execution speed, the automator will wait until
@@ -264,9 +384,26 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 9,
+      id: 13,
+      isUnlocked: () => true,
+      keyword: "IF",
+      category: 4,
+      syntax: `<b>if</b> <u>condition</u> {<br>
+        <blockquote>commands</blockquote>
+        }`,
+      description: `Defines an inner block of block of the automator script which will only be executed if the specified
+        comparison is true when this line is reached. If the comparison is false, the automator will instead skip to the
+        first line after the block and continue execution from there.`,
+      examples: [
+        "if ec10 completions < 5",
+        "if ep > 1e6000"
+      ]
+    },
+    {
+      id: 14,
       isUnlocked: () => true,
       keyword: "UNTIL",
+      category: 4,
       syntax: `<b>until</b> <u>comparison</u> {<br>
         <blockquote>commands</blockquote>
         }<br><b>until</b> <u>prestige_event</u> {<br>
@@ -285,9 +422,10 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 10,
+      id: 15,
       isUnlocked: () => true,
       keyword: "WHILE",
+      category: 4,
       syntax: `<b>while</b> <u>comparison</u> {<br>
         <blockquote>commands</blockquote>
       }`,
@@ -300,109 +438,10 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 11,
-      isUnlocked: () => true,
-      keyword: "STUDIES RESPEC",
-      syntax: `<b>studies respec</b>`,
-      description: `This command turns on the respec option on to respec your Time Studies on the next manual or
-        automatic Eternity. Note that this does not actually perform an Eternity on its own; make sure to eventually
-        follow it up with an ETERNITY command or ensure your Autobuyer is on.`,
-      examples: [
-        `studies respec`,
-      ]
-    },
-    {
-      id: 12,
-      isUnlocked: () => true,
-      keyword: "STUDIES LOAD",
-      syntax: `<b>studies</b> [nowait] <b>load id</b> <u>selector</u><br>
-        <b>studies</b> [nowait] <b>load name</b> <u>name</u>`,
-      description: `Loads a Time Study preset, as if you had clicked on the button in the Time Study tab.`,
-      sections: [
-        {
-          name: "INPUTS",
-          items: [
-            {
-              header: "<i>nowait</i>",
-              description: `
-                If present, the Automator will purchase as many studies as possible before continuing onward. By default
-                (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
-                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
-              `
-            },
-            {
-              header: "<i>selector</i>",
-              description: `
-                Finds and loads the specified Time Study preset by its slot number. This is numbered one through six,
-                ordered from left to right.`
-            },
-            {
-              header: "<i>name</i>",
-              description: "Finds and loads the specified Time Study preset by its given name. This is case-sensitive."
-            },
-          ]
-        }
-      ],
-      examples: [
-        `studies load id 2`,
-        `studies load name ANTI`,
-        `studies nowait load name dil`,
-      ]
-    },
-    {
-      id: 13,
-      isUnlocked: () => true,
-      keyword: "STUDIES PURCHASE",
-      syntax: `<b>studies</b> [nowait] <b>purchase <u>study_list</u></b>`,
-      description: "Purchase Time Studies specified from a list formatted like a Tree export.",
-      sections: [
-        {
-          name: "INPUTS",
-          items: [
-            {
-              header: "<i>nowait</i>",
-              description: `
-                If present, the Automator will purchase as many studies as possible before continuing onward. By default
-                (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
-                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
-              `
-            },
-            {
-              header: "<i>study_list</i>",
-              description: `
-              The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
-              spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
-              <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
-              A variable name may be used in place of Time Study list as well (see the definition panel),
-              although in that case the shorthand aliases are not allowed.`
-            },
-          ]
-        }
-      ],
-      examples: [
-        "studies nowait purchase 11,21,31",
-        "studies purchase 11-62, antimatter, 111, idle",
-        "studies nowait purchase ec6Studies",
-      ]
-    },
-    {
-      id: 14,
-      isUnlocked: () => true,
-      keyword: "NOTIFY",
-      syntax: "<b>notify</b> \"<u>text</u>\"",
-      description: `Takes the specified text and posts it in the top-right corner as
-        a text notification, in the same spot and style as other notifications such as auto-save
-        and achievement/upgrade unlocks. Can be useful for seeing automator status while
-        on tabs other than the Automator tab.`,
-      examples: [
-        "notify \"Dilation reached\"",
-        "notify \"ECs completed\""
-      ]
-    },
-    {
-      id: 15,
+      id: 16,
       isUnlocked: () => true,
       keyword: "Currency List",
+      category: 4,
       syntax: "<i>You can use these in any IF, WHILE, UNTIL, or WAIT command</i>",
       description: `This is a list of "currencies" or numbers that you can use within the Automator.<br>
         Note that when used, most currencies will need to be in scientific notation.<br>
@@ -438,9 +477,10 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 16,
+      id: 17,
       isUnlocked: () => true,
       keyword: "Formatting Comparisons",
+      category: 4,
       syntax: "resource1 condition resource2",
       description: `
         Comparisons are used within certain commands, which allow you to control the behavior of the automator based
@@ -476,9 +516,10 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 17,
+      id: 18,
       isUnlocked: () => true,
       keyword: "Commands with inner blocks",
+      category: 4,
       syntax: `<b>header_command</b> {<br>
         <blockquote>inner_commands</blockquote>
         }`,
@@ -504,21 +545,6 @@ GameDatabase.reality.automator = {
           <blockquote>
           studies nowait 11-62</blockquote>
         }`
-      ]
-    },
-    {
-      id: 18,
-      isUnlocked: () => true,
-      keyword: "Adding Comments",
-      syntax: "<b>#</b> text<br><b>//</b> text",
-      description: `Allows you to leave a note to yourself within your script. This may be
-        useful for organizing or keeping track of which parts of your script do various things,
-        in a way that appears more readable than just the commands. These commands will do nothing
-        positive or negative for the automator's functionality, and only serve as a tool to
-        help you keep the steps of your scripts easier to follow if desired.`,
-      examples: [
-        "# get 1e20 before starting ec1",
-        "// this loop alternates dilation and pushing"
       ]
     },
   ]

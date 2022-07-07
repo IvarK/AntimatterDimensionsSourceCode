@@ -57,40 +57,32 @@ const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
  */
 export const automatorBlocks = [
   {
-    cmd: "WAIT",
-    allowedPatterns: ["A", "BCB"],
-    A: AUTOMATOR_BLOCKS_RESETS,
-    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
-    C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["genericInput1", "compOperator", "genericInput2"]
+    cmd: "STUDIES RESPEC",
   }, {
-    cmd: "IF",
-    allowedPatterns: ["ABA"],
-    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
-    B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["genericInput1", "compOperator", "genericInput2"],
-    nested: true
-  }, {
-    cmd: "WHILE",
-    allowedPatterns: ["ABA"],
-    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
-    B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["genericInput1", "compOperator", "genericInput2"],
-    nested: true
-  }, {
-    cmd: "UNTIL",
-    allowedPatterns: ["A", "BCB"],
-    A: AUTOMATOR_BLOCKS_RESETS,
-    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
-    C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
-    targets: ["genericInput1", "compOperator", "genericInput2"],
-    nested: true
+    cmd: "STUDIES LOAD",
+    allowedPatterns: ["AB"],
+    A: ["ID", "NAME"],
+    B: ["*"],
+    targets: ["singleSelectionInput", "singleTextInput"],
+    canWait: true
   }, {
     cmd: "STUDIES PURCHASE",
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
     canWait: true
+  }, {
+    cmd: "INFINITY",
+    canWait: true
+  }, {
+    cmd: "ETERNITY",
+    canRespec: true,
+    canWait: true
+  }, {
+    cmd: "REALITY",
+    canRespec: true,
+    canWait: true,
+    isUnlocked: () => RealityUpgrade(25).isBought
   }, {
     cmd: "UNLOCK",
     allowedPatterns: ["AB", "C"],
@@ -125,32 +117,6 @@ export const automatorBlocks = [
     targets: ["singleSelectionInput"],
     isUnlocked: () => Enslaved.isUnlocked
   }, {
-    cmd: "PAUSE",
-    allowedPatterns: ["A"],
-    A: ["*"],
-    targets: ["singleTextInput"],
-  }, {
-    cmd: "STUDIES RESPEC",
-  }, {
-    cmd: "INFINITY",
-    canWait: true
-  }, {
-    cmd: "ETERNITY",
-    canRespec: true,
-    canWait: true
-  }, {
-    cmd: "REALITY",
-    canRespec: true,
-    canWait: true,
-    isUnlocked: () => RealityUpgrade(25).isBought
-  }, {
-    cmd: "STUDIES LOAD",
-    allowedPatterns: ["AB"],
-    A: ["ID", "NAME"],
-    B: ["*"],
-    targets: ["singleSelectionInput", "singleTextInput"],
-    canWait: true
-  }, {
     cmd: "NOTIFY",
     allowedPatterns: ["A"],
     A: ["*"],
@@ -160,6 +126,40 @@ export const automatorBlocks = [
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
+  }, {
+    cmd: "WAIT",
+    allowedPatterns: ["A", "BCB"],
+    A: AUTOMATOR_BLOCKS_RESETS,
+    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
+    C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["genericInput1", "compOperator", "genericInput2"]
+  }, {
+    cmd: "PAUSE",
+    allowedPatterns: ["A"],
+    A: ["*"],
+    targets: ["singleTextInput"],
+  }, {
+    cmd: "IF",
+    allowedPatterns: ["ABA"],
+    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
+    B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["genericInput1", "compOperator", "genericInput2"],
+    nested: true
+  }, {
+    cmd: "UNTIL",
+    allowedPatterns: ["A", "BCB"],
+    A: AUTOMATOR_BLOCKS_RESETS,
+    B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
+    C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["genericInput1", "compOperator", "genericInput2"],
+    nested: true
+  }, {
+    cmd: "WHILE",
+    allowedPatterns: ["ABA"],
+    A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
+    B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targets: ["genericInput1", "compOperator", "genericInput2"],
+    nested: true
   }, {
     cmd: "BLOB"
   }

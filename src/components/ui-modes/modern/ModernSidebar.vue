@@ -17,7 +17,7 @@ export default {
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
-      this.tabs = Tabs.newUI.filter(x => x.isAvailable).filter(x => !x.isHidden);
+      this.tabs = Tabs.newUI.filter(x => x.isAvailable && !x.isHidden);
     },
   },
 };
@@ -45,6 +45,6 @@ export default {
 }
 
 .o-tab-btn--moderntab:last-child:hover {
-  border-bottom-right-radius: 0rem;
+  border-bottom-right-radius: 0;
 }
 </style>

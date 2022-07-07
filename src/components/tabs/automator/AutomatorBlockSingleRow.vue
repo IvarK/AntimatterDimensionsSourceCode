@@ -85,7 +85,7 @@ export default {
       :class="{ 'c-automator-block-row-active' : isCurrentLine }"
     >
       <AutomatorBlockSingleInput
-        :constant="b.cmd"
+        :constant="b.alias ? b.alias : b.cmd"
         :block="b"
         :update-function="updateBlock"
       />

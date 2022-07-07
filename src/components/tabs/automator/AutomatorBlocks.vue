@@ -43,6 +43,8 @@ const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
 /**
  *  @property {String} cmd          Name of automator command
+ *  @property {String} alias        Displayed name of automator command, acting as a more natural-sounding variant. Uses
+ *    cmd if undefined.
  *  @property {Array: String} allowedPatterns   Allowed patterns for input types, specified single-capital-letter props
  *  @property {Array: String} [A-Z]             Classes of allowed inputs, to be used in allowedPatterns. Note that
  *    elements which begin with an asterisk are replaced with text inputs upon selection, and single-entry classes will
@@ -58,8 +60,10 @@ const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 export const automatorBlocks = [
   {
     cmd: "STUDIES RESPEC",
+    alias: "RESPEC TIME STUDIES"
   }, {
     cmd: "STUDIES LOAD",
+    alias: "LOAD STUDY PRESET",
     allowedPatterns: ["AB"],
     A: ["ID", "NAME"],
     B: ["*"],
@@ -67,6 +71,7 @@ export const automatorBlocks = [
     canWait: true
   }, {
     cmd: "STUDIES PURCHASE",
+    alias: "PURCHASE STUDIES",
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
@@ -100,34 +105,40 @@ export const automatorBlocks = [
     targets: ["singleSelectionInput", "singleTextInput"],
   }, {
     cmd: "AUTO",
+    alias: "CHANGE AUTOBUYER SETTING",
     allowedPatterns: ["AB"],
     A: AUTOMATOR_BLOCKS_RESETS,
     B: ["ON", "OFF", "* AUTOBUYER SETTING"],
     targets: ["singleSelectionInput", "singleTextInput"],
   }, {
     cmd: "BLACK HOLE",
+    alias: "TURN BLACK HOLE",
     allowedPatterns: ["A"],
     A: ["ON", "OFF"],
     targets: ["singleSelectionInput"],
     isUnlocked: () => BlackHole(1).isUnlocked
   }, {
     cmd: "STORE GAME TIME",
+    alias: "SET GAME TIME STORAGE TO",
     allowedPatterns: ["A"],
     A: ["ON", "OFF", "USE"],
     targets: ["singleSelectionInput"],
     isUnlocked: () => Enslaved.isUnlocked
   }, {
     cmd: "NOTIFY",
+    alias: "GAME NOTIFICATION:",
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
   }, {
     cmd: "COMMENT",
+    alias: "NOTE:",
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
   }, {
     cmd: "WAIT",
+    alias: "PAUSE AUTOMATOR UNTIL",
     allowedPatterns: ["A", "BCB"],
     A: AUTOMATOR_BLOCKS_RESETS,
     B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
@@ -135,11 +146,13 @@ export const automatorBlocks = [
     targets: ["genericInput1", "compOperator", "genericInput2"]
   }, {
     cmd: "PAUSE",
+    alias: "PAUSE AUTOMATOR FOR",
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
   }, {
     cmd: "IF",
+    alias: "ENTER BLOCK IF",
     allowedPatterns: ["ABA"],
     A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
@@ -147,6 +160,7 @@ export const automatorBlocks = [
     nested: true
   }, {
     cmd: "UNTIL",
+    alias: "REPEAT BLOCK UNTIL",
     allowedPatterns: ["A", "BCB"],
     A: AUTOMATOR_BLOCKS_RESETS,
     B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
@@ -155,6 +169,7 @@ export const automatorBlocks = [
     nested: true
   }, {
     cmd: "WHILE",
+    alias: "REPEAT BLOCK WHILE",
     allowedPatterns: ["ABA"],
     A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
@@ -177,7 +192,8 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     draggable=".draggable-blocks"
   >
     <p>
-      Drag and drop these blocks to the area on the left!
+      Drag and drop these blocks to the area on the left! The blocks have names matching the commands in the reference
+      page, but may change appearance after being placed to describe what they do in a more natural-sounding manner.
     </p>
     <br>
     <p>

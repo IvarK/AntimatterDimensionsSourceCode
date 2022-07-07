@@ -84,6 +84,10 @@ body.t-s9 {
   padding: 1rem;
 }
 
+.c-sidebar-resource:last-child {
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
+}
+
 .c-sidebar-resource h2 {
   z-index: 1;
   font-size: 1.9rem;

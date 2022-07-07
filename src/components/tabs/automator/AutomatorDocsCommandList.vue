@@ -12,7 +12,13 @@ export default {
     };
   },
   computed: {
+    categoryNames: () => GameDatabase.reality.automator.categoryNames,
     commands: () => GameDatabase.reality.automator.commands,
+  },
+  methods: {
+    commandsInCategory(category) {
+      return this.commands.filter(c => c.category === category && c.isUnlocked());
+    }
   }
 };
 </script>
@@ -34,15 +40,23 @@ export default {
       class="c-automator-docs-page"
     >
       <span>Command List:</span>
-      <span
-        v-for="command in commands"
-        v-if="command.isUnlocked()"
-        :key="command.id"
-        class="c-automator-docs-page__link"
-        @click="selectedCommand = command.id"
+      <br>
+      <div
+        v-for="(category, i) in categoryNames"
+        :key="i"
       >
-        {{ command.keyword }}
-      </span>
+        {{ category }} ({{ commandsInCategory(i).length }} commands)
+        <div
+          v-for="command in commandsInCategory(i)"
+          :key="command.id"
+          class="c-automator-docs-page__link l-command-group"
+          @click="selectedCommand = command.id"
+        >
+          <span v-if="command.isUnlocked()">
+            {{ command.keyword }}
+          </span>
+        </div>
+      </div>
       <br>
       <span>
         Note: In the SYNTAX note on each command, <u>underlined</u> inputs are <i>required</i> inputs which you must
@@ -55,5 +69,9 @@ export default {
 </template>
 
 <style scoped>
-
+.l-command-group {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
 </style>

@@ -39,6 +39,9 @@ export default {
     },
     sacrificeText() {
       return this.capRift.galaxyGeneratorText.replace("$value", this.capRiftName);
+    },
+    emphasisedStart() {
+      return Math.pow(this.generatedGalaxies / this.cap, 0.45);
     }
   },
   methods: {
@@ -53,8 +56,8 @@ export default {
       this.cap = GalaxyGenerator.generationCap;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
-      this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.generatedGalaxies / this.cap);
-      this.capRiftName = wordShift.wordCycle(this.capRift.name);
+      this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.emphasisedStart);
+      if (this.capRift) this.capRiftName = wordShift.wordCycle(this.capRift.name);
     },
     increaseCap() {
       if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();
@@ -95,7 +98,7 @@ export default {
           <button
             class="c-increase-cap"
             :class="{
-              'c-increase-cap-available': isCapped && capRift,
+              'c-increase-cap-available': isCapped && capRift && !sacrificeActive,
               'tutorial--glow': cap === Infinity
             }"
             @click="increaseCap"

@@ -179,6 +179,8 @@ html {
   --color-text-inverted: black;
   --color-base: black;
   --color-accent: #1565c0;
+  --color-good: #2f9e35;
+  --color-good-dark: #08510b;
 
   --color-prestige--accent: black;
 
@@ -1743,7 +1745,7 @@ br {
 
 .t-s6 .o-primary-btn--disabled,
 .t-s10 .o-primary-btn--disabled {
-  color: grey;
+  color: #bbbbbb;
   background-color: var(--color-base);
 }
 

@@ -142,7 +142,7 @@ export default {
       }));
     },
     updateCurrentScriptID() {
-      AutomatorData.needsRecompile = true;
+      AutomatorData.recalculateErrors();
       const storedScripts = player.reality.automator.scripts;
       this.currentScriptID = player.reality.automator.state.editorScript;
       // This shouldn't happen if things are loaded in the right order, but might as well be sure.

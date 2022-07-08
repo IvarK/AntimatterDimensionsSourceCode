@@ -36,6 +36,8 @@ export default {
       BlockAutomator.scrollGutter();
     },
     parseRequest() {
+      BlockAutomator.updateIdArray();
+      AutomatorData.recalculateErrors();
       BlockAutomator.parseTextFromBlocks();
     },
     updateBlock(block, id) {
@@ -190,8 +192,8 @@ export const BlockAutomator = {
         @end="parseRequest"
       >
         <AutomatorBlockSingleRow
-          v-for="block in lines"
-          :key="block.id"
+          v-for="(block, lineNum) in lines"
+          :key="block.id + 10000 * lineNum"
           :block="block"
           :update-block="updateBlock"
           :delete-block="deleteBlock"

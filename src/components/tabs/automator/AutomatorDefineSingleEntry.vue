@@ -70,6 +70,11 @@ export default {
       if (this.currentError()) return;
       if (this.aliasString) player.reality.automator.constants[this.aliasString] = this.valueString;
       this.oldAlias = this.aliasString;
+
+      // This makes scripts respond immediately to newly-defined constants if the player types them into the
+      // script before defining them here
+      AutomatorData.recalculateErrors();
+      if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) BlockAutomator.parseTextFromBlocks();
     }
   }
 };

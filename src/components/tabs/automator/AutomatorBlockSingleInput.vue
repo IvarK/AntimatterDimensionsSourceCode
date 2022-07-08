@@ -47,6 +47,7 @@ export default {
     return {
       b: {},
       suppressTooltip: false,
+      errors: [],
       hasError: false,
 
       isTextInput: false,
@@ -57,12 +58,10 @@ export default {
       currentNodeOnPath: "",
       unknownNext: false,
       nextNodeCount: false,
+      lineNumber: 0,
     };
   },
   computed: {
-    lineNumber() {
-      return BlockAutomator._idArray.indexOf(this.b.id);
-    },
     displayedConstant() {
       if (this.constant) return this.constant;
       return (this.dropdownOptions.length === 1 && !this.isBoolTarget && !this.isTextInput)
@@ -83,6 +82,9 @@ export default {
     }
   },
   created() {
+    this.b = this.block;
+    this.lineNumber = BlockAutomator.lineNumber(BlockAutomator._idArray.indexOf(this.block.id) + 1);
+    BlockAutomator.updateIdArray();
     if (this.constant) return;
     if (this.isBoolTarget) {
       this.dropdownOptions = [this.blockTarget.toUpperCase()];
@@ -117,23 +119,42 @@ export default {
       this.isTextInput = true;
       this.textContents = this.initialSelection;
     }
-  },
-  // Delete associated props if this component was removed by changing an earlier input, but skip if the component
-  // was removed by changing editor modes because that would basically wipe the script
-  destroyed() {
+
+    // This forces errors to show up immediately when the block is created instead of requiring user interaction
     this.recalculateErrorCount();
+  },
+  // Destroying single inputs need to be handled carefully because there are three situations under which they will
+  // be removed, and they all require different behavior:
+  // * An earlier input in the command chain makes this input unnecessary (eg. changing "unlock ec 8" to
+  //   "unlock dilation" makes the 8 unnecessary) - in that case we also need to blank out the block prop
+  // * Blocks are dragged and reordered, causing a parent component to key-swap and force a rerender on this
+  //   component - in that case we need to remove the errors corresponding to the old line number
+  // * The player changes to the text editor, wiping the entire block editor - we do nothing here
+  destroyed() {
     if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) return;
+
+    this.recalculateErrorCount();
+    const newLineNum = BlockAutomator.lineNumber(BlockAutomator._idArray.indexOf(this.block.id) + 1);
+    if (this.lineNumber !== newLineNum) {
+      const newErrors = [];
+      for (const error of AutomatorData.cachedErrors) {
+        if (error.startLine !== this.lineNumber) newErrors.push(error);
+      }
+      newErrors.sort((a, b) => a.startLine - b.startLine);
+      AutomatorData.cachedErrors = newErrors;
+      return;
+    }
+
     if (this.blockTarget) {
       // eslint-disable-next-line vue/no-mutating-props
       this.block[this.blockTarget] = undefined;
     }
-  },
-  mounted() {
-    this.b = this.block;
+    BlockAutomator.parseTextFromBlocks();
   },
   methods: {
     update() {
-      this.hasError = AutomatorData.cachedErrors.some(e => e.startLine === this.lineNumber);
+      this.errors = AutomatorData.cachedErrors;
+      this.hasError = this.errors.some(e => e.startLine === this.lineNumber);
       if (this.dropdownSelection.startsWith("*")) this.isTextInput = true;
       this.calculatePath();
     },
@@ -161,22 +182,29 @@ export default {
         validator = AutomatorGrammar.validateLine(lines[0]);
       }
 
+      // Yes, the odd structure of this check is intentional. Something odd happens within parseLines under certain
+      // conditions which seem hard to pin down, which causes this evaluate to an array with the string "undefined"
+      // being its only element. These cases all seem to be false positives
+      if (lines[0] === "undefined") return;
+
       // We're actually validating only this single line, so we reconstruct the error list by removing everything on
-      // this line and adding anything new that was found
+      // this line and adding anything new that was found. We only take the first error from this line (if there are
+      // any) because multiple errors on the same line are generally redundant
       const newErrors = [];
       for (const error of AutomatorData.cachedErrors) {
         if (error.startLine !== this.lineNumber) newErrors.push(error);
       }
-      for (const error of validator.errors) {
+      if (validator.errors.length > 0) {
+        const error = validator.errors[0];
         error.startLine = this.lineNumber;
         newErrors.push(error);
       }
+      newErrors.sort((a, b) => a.startLine - b.startLine);
       AutomatorData.cachedErrors = newErrors;
     },
     handleFocus(focusState) {
       this.suppressTooltip = !focusState;
-      // Validate input only after unfocus
-      if (!focusState) this.changeBlock();
+      this.changeBlock();
       this.recalculateErrorCount();
     },
     changeBlock() {
@@ -184,6 +212,7 @@ export default {
       if (this.textContents === "*") {
         this.isTextInput = false;
         this.dropdownSelection = "";
+        this.textContents = "";
       }
       if (this.blockTarget) {
         let newValue;
@@ -204,13 +233,14 @@ export default {
       if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
         AutomatorBackend.stop();
       }
+      BlockAutomator.parseTextFromBlocks();
     },
     errorTooltip() {
       if (!this.hasError || this.suppressTooltip) return undefined;
       return {
         content:
           `<div class="c-block-automator-error">
-          <div>${AutomatorData.cachedErrors.find(e => e.startLine === this.lineNumber).info}</div>
+          <div>${this.errors.find(e => e.startLine === this.lineNumber).info}</div>
         </div>`,
         html: true,
         trigger: "manual",

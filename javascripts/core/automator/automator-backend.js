@@ -21,6 +21,7 @@ export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   NEXT_TICK_NEXT_INSTRUCTION: 2,
   // This is used to handle some special cases, like branches/loops:
   SAME_INSTRUCTION: 3,
+  SKIP_INSTRUCTION: 4,
 });
 
 export const AUTOMATOR_MODE = Object.freeze({
@@ -354,18 +355,30 @@ export const AutomatorBackend = {
 
   step() {
     if (this.stack.isEmpty) return false;
-    switch (this.runCurrentCommand()) {
-      case AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION:
-        return true;
-      case AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION:
-        return this.nextCommand();
-      case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION:
-        return false;
-      case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION:
-        this.nextCommand();
-        return false;
+    for (let steps = 0; steps < 100; steps++) {
+      switch (this.runCurrentCommand()) {
+        case AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION:
+          return true;
+        case AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION:
+          return this.nextCommand();
+        case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION:
+          return false;
+        case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION:
+          this.nextCommand();
+          return false;
+        case AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION:
+          this.nextCommand();
+      }
     }
-    throw new Error("Unrecognized return code from command");
+
+    // This should in practice never happen by accident due to it requiring 100 consecutive commands that don't do
+    // anything (looping a smaller group of no-ops will instead trigger the loop check every tick). Nevertheless,
+    // better to not have an explicit infinite loop so that the game doesn't hang if the player decides to be funny
+    // and input 3000 comments in a row
+    GameUI.notify.error("Automator halted - too many consecutive no-ops detected");
+    AutomatorData.logCommandEvent("Automator halted due to excessive no-op commands", this.currentLineNumber);
+    this.stop();
+    return false;
   },
 
   singleStep() {

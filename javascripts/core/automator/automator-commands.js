@@ -248,7 +248,7 @@ export const AutomatorCommands = ((() => {
         return true;
       },
       // This is an easter egg, it shouldn't do anything
-      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION,
       blockify: () => ({
         ...automatorBlocksMap.BLOB,
       })
@@ -263,7 +263,7 @@ export const AutomatorCommands = ((() => {
         return true;
       },
       // Comments should be no-ops
-      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION,
       blockify: ctx => ({
         ...automatorBlocksMap.COMMENT,
         singleTextInput: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),

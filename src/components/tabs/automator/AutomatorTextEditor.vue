@@ -130,7 +130,7 @@ export const AutomatorTextUI = {
       const scriptText = editor.getDoc().getValue();
       AutomatorBackend.saveScript(scriptID, scriptText);
 
-      AutomatorData.needsRecompile = true;
+      AutomatorData.recalculateErrors();
       const errors = AutomatorData.currentErrors().length;
       if (errors > editor.doc.size) SecretAchievement(48).unlock();
 

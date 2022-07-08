@@ -193,6 +193,7 @@ export const AutomatorData = {
   recalculateErrors() {
     const toCheck = this.currentScriptText();
     this.cachedErrors = AutomatorGrammar.compile(toCheck).errors;
+    this.cachedErrors.sort((a, b) => a.startLine - b.startLine);
   },
   currentErrors() {
     if (this.needsRecompile) {

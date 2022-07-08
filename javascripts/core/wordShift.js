@@ -14,14 +14,16 @@ function randomSymbol() {
 }
 
 export default {
-  wordCycle(list) {
+  wordCycle(list, buffer = true) {
     const len = list.length;
-    const tick = Math.floor(Date.now() / 200) % (len * 5);
+    const tick = Math.floor(Date.now() / 250) % (len * 5);
     const largeTick = Math.floor(tick / 5);
     let v = list[largeTick];
     if (tick % 5 < 1 || tick % 5 > 3) {
       v = this.randomCrossWords(v);
     }
+    if (!buffer) return v;
+
     const maxWordLen = Math.max(...list.map(x => x.length));
     const bufferSpace = (maxWordLen - v.length) / 2;
 

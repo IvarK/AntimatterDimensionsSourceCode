@@ -51,7 +51,7 @@ export default {
       return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
     },
     riftName() {
-      return wordShift.wordCycle(this.rift.name);
+      return wordShift.wordCycle(this.rift.name, false);
     },
     drainResource() {
       if (this.rift.id !== 3) return this.rift.drainResource;

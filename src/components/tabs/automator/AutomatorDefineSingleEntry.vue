@@ -34,6 +34,7 @@ export default {
         return matchObj ? matchObj[0] === this.aliasString : false;
       });
 
+      if (this.aliasString.length >= 20) return "Constant name must be shorter than 20 characters";
       if (!isValidName) return "Constant name must be alphanumeric and cannot start with a number";
       if (alreadyExists) return "You have already defined a constant with this name";
       if (hasCommandConflict) return "Constant name conflicts with a command key word";
@@ -45,6 +46,8 @@ export default {
       const isStudyString = this.valueString.match(/^\d{2,3}(,\d{2,3})*(\|\d\d?)?$/u);
 
       if (!isNumber && !isStudyString) return "Constant value must either be a number or Time Study string";
+      // Note that a study string with ALL studies is ~230 characters
+      if (this.valueString.length >= 250) return "Constant name must be shorter than 250 characters";
       return null;
     },
     errorTooltip() {
@@ -126,7 +129,7 @@ export default {
 }
 
 .c-alias {
-  width: 12rem;
+  width: 14rem;
 }
 
 .c-value {

@@ -26,7 +26,8 @@ export default {
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
       effects: [],
       isDark: false,
-      decayText: ""
+      selectedMilestoneResourceText: "",
+      selectedMilestoneDescriptionText: "",
     };
   },
   computed: {
@@ -63,16 +64,17 @@ export default {
       this.reducedTo = rift.reducedTo;
       this.hasEffectiveFill = rift.config.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
 
-      // If it's chaos, update decay text
-      if (rift.id === 3) this.decayText = wordShift.wordCycle(PelleRifts.decay.name);
+      this.selectedMilestoneResourceText = this.milestoneResourceText(this.selectedHoverMilestone);
+      this.selectedMilestoneDescriptionText = this.milestoneDescriptionText(this.selectedHoverMilestone);
     },
     hasMilestone(ms) {
       return ms.canBeApplied;
     },
-    milestoneResourceText(rift, milestone) {
+    milestoneResourceText(milestone) {
+      const rift = this.rift;
       return `${formatPercents(milestone.requirement)}
       (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} \
-      ${rift.id === 3 ? this.decayText : rift.drainResource})`;
+      ${rift.id === 3 ? wordShift.wordCycle(PelleRifts.decay.name) : rift.drainResource})`;
     },
     milestoneDescriptionText(milestone) {
       if (typeof milestone.description === "string") return milestone.description;
@@ -178,10 +180,10 @@ export default {
       content-class="o-pelle-rift-bar-milestone-hover-area"
     >
       <template #tooltipContent>
-        {{ milestoneResourceText(rift, selectedHoverMilestone) }}
+        {{ selectedMilestoneResourceText }}
         <br>
         <br>
-        {{ milestoneDescriptionText(selectedHoverMilestone) }}
+        {{ selectedMilestoneDescriptionText }}
       </template>
     </CustomizeableTooltip>
   </div>
@@ -250,8 +252,8 @@ export default {
 
 .c-pelle-rift-bar--filling,
 .c-pelle-rift-bar--idle {
-  cursor: pointer;
   transition: box-shadow 0.5s;
+  cursor: pointer;
 }
 
 .c-pelle-rift-bar--filling:hover,

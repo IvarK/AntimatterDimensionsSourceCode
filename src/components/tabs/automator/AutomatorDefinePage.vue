@@ -11,13 +11,18 @@ export default {
       constants: [],
     };
   },
+  computed: {
+    maxConstantCount() {
+      return 30;
+    },
+  },
   methods: {
     update() {
       // Right after deleting a constant, the list of keys will contain the empty string. This isn't functionally
       // problematic, but leaves the "new constant" input in that spot instead of placing it at the end of the list.
       // The filter operation removes it (if it exists) and then we manually place it at the end
       const existingValues = Object.keys(player.reality.automator.constants).filter(k => k);
-      this.constants = existingValues.length < 30 ? [...existingValues, ""] : [...existingValues];
+      this.constants = existingValues.length < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
     }
   }
 };
@@ -26,7 +31,8 @@ export default {
 <template>
   <div class="l-panel-padding">
     This panel allows you to define case-sensitive constant values which can be used in place of numbers or Time Study
-    import strings. These definitions are shared across all of your scripts and are limited to a maximum of 30.
+    import strings. These definitions are shared across all of your scripts and are limited to a maximum of
+    {{ maxConstantCount }} defined constants.
     <br>
     <br>
     As a usage example, defining

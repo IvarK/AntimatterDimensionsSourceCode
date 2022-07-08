@@ -30,6 +30,7 @@ export default {
       isRunning: false,
       isPaused: false,
       totalChars: 0,
+      canMakeNewScript: true
     };
   },
   computed: {
@@ -85,6 +86,9 @@ export default {
     maxScriptNameLength() {
       return 15;
     },
+    maxScriptCount() {
+      return 20;
+    },
   },
   watch: {
     infoPaneID(newValue) {
@@ -108,8 +112,8 @@ export default {
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
-
       this.totalChars = AutomatorData.totalScriptCharacters();
+      this.canMakeNewScript = Object.keys(player.reality.automator.scripts).length < this.maxScriptCount;
     },
     exportScript() {
       // Cut off leading and trailing whitespace
@@ -173,7 +177,7 @@ export default {
     },
     onScriptDropdown(event) {
       const menu = event.target;
-      if (menu.selectedIndex === menu.length - 1) this.createNewScript();
+      if (menu.selectedIndex === menu.length - 1 && this.canMakeNewScript) this.createNewScript();
       else player.reality.automator.state.editorScript = this.scripts[menu.selectedIndex].id;
       this.updateCurrentScriptID();
     },
@@ -281,8 +285,14 @@ export default {
               >
                 {{ dropdownLabel(script) }}
               </option>
-              <option value="createNewScript">
-                Create new...
+              <option
+                value="createNewScript"
+                :disabled="!canMakeNewScript"
+              >
+                {{ canMakeNewScript
+                  ? "Create new script..."
+                  : `You cannot have more than ${maxScriptCount} scripts!`
+                }}
               </option>
             </select>
             <AutomatorButton

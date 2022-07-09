@@ -1274,7 +1274,7 @@ Each previous Celestial within Ra gains levels by using memories, which are gene
 Memory Chunks. Memory Chunks can only be gained by entering Ra's Reality, but inside of the Reality Chunks will
 be generated passively based on certain resource totals. If you are storing real time, you will not gain any
 Chunks inside of Ra's Reality, but Memories will still be generated normally. Having a total of
-${formatInt(Ra.recollection.requiredLevels)} levels across all Celestials unlocks Recollection,
+${formatInt(Ra.remembrance.requiredLevels)} levels across all Celestials unlocks Remembrance,
 which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
 <br>
 <br>

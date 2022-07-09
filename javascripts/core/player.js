@@ -643,7 +643,7 @@ window.player = {
       charged: new Set(),
       disCharge: false,
       peakGamespeed: 1,
-      petWithRecollection: ""
+      petWithRemembrance: ""
     },
     laitela: {
       darkMatter: DC.D0,

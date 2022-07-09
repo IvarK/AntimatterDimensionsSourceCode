@@ -125,7 +125,7 @@ class RaPetState extends GameMechanicState {
     if (!this.canGetMemoryChunks) return 0;
     let res = this.rawMemoryChunksPerSecond * this.chunkUpgradeCurrentMult *
       Effects.product(Ra.unlocks.continuousTTBoost.effects.memoryChunks, GlyphSacrifice.reality);
-    if (this.hasRecollection) res *= Ra.recollection.multiplier;
+    if (this.hasRemembrance) res *= Ra.remembrance.multiplier;
     return res;
   }
 
@@ -133,8 +133,8 @@ class RaPetState extends GameMechanicState {
     return this.isUnlocked && Ra.isRunning;
   }
 
-  get hasRecollection() {
-    return Ra.petWithRecollection === this.name;
+  get hasRemembrance() {
+    return Ra.petWithRemembrance === this.name;
   }
 
   get memoryUpgradeCurrentMult() {
@@ -228,7 +228,7 @@ export const Ra = {
   displayName: "Ra",
   unlocks,
   pets,
-  recollection: {
+  remembrance: {
     multiplier: 3,
     requiredLevels: 20,
     get isUnlocked() {
@@ -343,11 +343,11 @@ export const Ra = {
   get canBuyTriad() {
     return Ra.unlocks.unlockHardV.canBeApplied;
   },
-  get petWithRecollection() {
-    return player.celestials.ra.petWithRecollection;
+  get petWithRemembrance() {
+    return player.celestials.ra.petWithRemembrance;
   },
-  set petWithRecollection(name) {
-    player.celestials.ra.petWithRecollection = name;
+  set petWithRemembrance(name) {
+    player.celestials.ra.petWithRemembrance = name;
   },
   updateAlchemyFlow(realityRealTime) {
     const perSecond = 1000 / realityRealTime;

@@ -85,13 +85,13 @@ GameDatabase.celestials.quotes.ra = {
       "I can remember the achievements.",
     ]
   },
-  recollection: {
+  remembrance: {
     id: 10,
-    requirement: () => Ra.recollection.isUnlocked,
+    requirement: () => Ra.remembrance.isUnlocked,
     lines: [
       "I remembered something!",
       "Watch this!",
-      "Recollection!",
+      "Remembrance!",
       "I can focus even harder on remembering them now!",
     ]
   },

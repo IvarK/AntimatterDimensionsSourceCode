@@ -1414,6 +1414,10 @@ GameStorage.devMigrations = {
         delete player.auto[x];
         player.auto[x] = { all, isActive: true };
       }
+    },
+    player => {
+      player.celestials.ra.petWithRemembrance = player.celestials.ra.petWithRecollection;
+      delete player.celestials.ra.petWithRecollection;
     }
   ],
 

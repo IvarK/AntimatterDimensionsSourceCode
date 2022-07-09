@@ -7231,7 +7231,7 @@ kbd {
 .c-ra-run-button {
   display: flex;
   flex-direction: column;
-  width: 30rem;
+  width: 31rem;
   height: 33rem;
   justify-content: center;
   align-items: center;
@@ -7306,11 +7306,11 @@ kbd {
   margin: 0 1rem;
 }
 
-.c-ra-recollection-unlock {
+.c-ra-remembrance-unlock {
   display: flex;
   flex-direction: column;
-  width: 30rem;
-  height: 25rem;
+  width: 31rem;
+  height: 33rem;
   justify-content: center;
   align-items: center;
   color: white;
@@ -7320,20 +7320,20 @@ kbd {
   padding: 1rem;
 }
 
-.s-base--metro .c-ra-recollection-unlock {
+.s-base--metro .c-ra-remembrance-unlock {
   border: 0.1rem solid black;
 }
 
-.c-ra-recollection-unlock-inner {
+.c-ra-remembrance-unlock-inner {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 1rem;
 }
 
-.c-ra-pet-recollection-button {
-  width: 10rem;
-  height: 6rem;
+.c-ra-pet-remembrance-button {
+  width: 12rem;
+  height: 6.5rem;
   text-align: center;
   font-family: Typewriter;
   font-size: 1.2rem;
@@ -7344,7 +7344,7 @@ kbd {
   user-select: none;
 }
 
-.s-base--metro .c-ra-pet-recollection-button {
+.s-base--metro .c-ra-pet-remembrance-button {
   border-color: black;
 }
 

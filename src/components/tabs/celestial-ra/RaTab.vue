@@ -1,13 +1,13 @@
 <script>
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import RaPet from "./RaPet";
-import RaPetRecollectionButton from "./RaPetRecollectionButton";
+import RaPetRemembranceButton from "./RaPetRemembranceButton";
 
 export default {
   name: "RaTab",
   components: {
     RaPet,
-    RaPetRecollectionButton,
+    RaPetRemembranceButton,
     CelestialQuoteHistory
   },
   data() {
@@ -16,11 +16,11 @@ export default {
       showReality: false,
       isRaCapped: false,
       totalLevels: 0,
-      showRecollection: false,
-      hasRecollection: false,
-      recollectionReq: 0,
-      recollectionMult: 1,
-      petWithRecollection: "",
+      showRemembrance: false,
+      hasRemembrance: false,
+      remembranceReq: 0,
+      remembranceMult: 1,
+      petWithRemembrance: "",
       isRunning: false,
       memoryBoosts: "",
     };
@@ -59,9 +59,9 @@ export default {
     ],
     petStyle() {
       return {
-        color: (this.petWithRecollection === "")
+        color: (this.petWithRemembrance === "")
           ? "white"
-          : this.pets.find(pet => pet.pet.name === this.petWithRecollection).pet.color,
+          : this.pets.find(pet => pet.pet.name === this.petWithRemembrance).pet.color,
       };
     },
     runButtonClassObject() {
@@ -81,11 +81,11 @@ export default {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
-      this.showRecollection = Ra.unlocks.effarigUnlock.canBeApplied;
-      this.hasRecollection = Ra.recollection.isUnlocked;
-      this.recollectionReq = Ra.recollection.requiredLevels;
-      this.recollectionMult = Ra.recollection.multiplier;
-      this.petWithRecollection = Ra.petWithRecollection;
+      this.showRemembrance = Ra.unlocks.effarigUnlock.canBeApplied;
+      this.hasRemembrance = Ra.remembrance.isUnlocked;
+      this.remembranceReq = Ra.remembrance.requiredLevels;
+      this.remembranceMult = Ra.remembrance.multiplier;
+      this.petWithRemembrance = Ra.petWithRemembrance;
       this.isRunning = Ra.isRunning;
       this.memoryBoosts = Ra.memoryBoostResources;
     },
@@ -150,20 +150,20 @@ export default {
         </span>
       </button>
       <div
-        v-if="showRecollection && !isRaCapped"
-        class="c-ra-recollection-unlock"
+        v-if="showRemembrance && !isRaCapped"
+        class="c-ra-remembrance-unlock"
       >
         <h1 :style="petStyle">
-          Recollection
+          Remembrance
         </h1>
         <span :style="petStyle">
-          Whichever Celestial has Recollection will get {{ formatX(recollectionMult) }} Memory Chunk gain.
+          Whichever Celestial has Remembrance will get {{ formatX(remembranceMult) }} Memory Chunk gain.
         </span>
         <div
-          v-if="hasRecollection"
-          class="c-ra-recollection-unlock-inner"
+          v-if="hasRemembrance"
+          class="c-ra-remembrance-unlock-inner"
         >
-          <RaPetRecollectionButton
+          <RaPetRemembranceButton
             v-for="(pet, i) in pets"
             :key="i"
             :pet-config="pet"
@@ -171,10 +171,10 @@ export default {
         </div>
         <div
           v-else
-          class="c-ra-recollection-unlock-inner"
+          class="c-ra-remembrance-unlock-inner"
         >
-          Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
-          (you need {{ formatInt(recollectionReq - totalLevels) }} more)
+          Unlocked by getting {{ formatInt(remembranceReq) }} total Celestial Memory levels
+          (you need {{ formatInt(remembranceReq - totalLevels) }} more)
         </div>
       </div>
     </div>

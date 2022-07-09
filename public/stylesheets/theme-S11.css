@@ -53,7 +53,7 @@ body.t-s11 {
 
 .t-s11 .c-modal__confirmation-toggle__checkbox {
   top: 0.05rem;
-  border: 0.3rem solid black;
+  border-color: black;
 }
 
 .o-tachyon-particle {

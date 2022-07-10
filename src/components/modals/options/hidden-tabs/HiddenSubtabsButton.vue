@@ -50,6 +50,43 @@ export default {
     :class="classObject"
     @click="toggleVisibility"
   >
-    {{ subtab.name }}
+    <div class="l-hide-modal-button--subtab-container">
+      <div
+        class="l-hide-modal-button--subtab-icon"
+        v-html="subtab.symbol"
+      />
+      <div class="l-hide-modal-button--subtab-name">
+        {{ subtab.name }}
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.l-hide-modal-button--subtab-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.l-hide-modal-button--subtab-icon {
+  filter: opacity(40%);
+  font-size: 2rem;
+  position: absolute;
+  width: 2.6rem;
+  height: 100%;
+  left: -5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.l-hide-modal-button--subtab-name {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

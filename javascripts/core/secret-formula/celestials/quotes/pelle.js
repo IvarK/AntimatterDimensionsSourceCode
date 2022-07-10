@@ -342,7 +342,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "If you don't fall to me, you usually fall to them.",
         background: primaryBackground("laitela"),
       }, {
-        text: "I can'f grasp the ideals of the $1.",
+        text: "I can't grasp the ideals of the $1.",
         background: primaryBackground("laitela"),
         1: paramount,
       }, {

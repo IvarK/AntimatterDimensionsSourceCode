@@ -40,22 +40,22 @@ export default {
       <div>
         {{ progress.info() }}
       </div>
-      <br>
-      <div>
-        {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
-      </div>
-      <div>
-        Remaining: {{ remaining }} seconds
-      </div>
-      <div class="modal-progress-bar__hbox">
-        <div class="modal-progress-bar__bg">
-          <div
-            class="modal-progress-bar__fg"
-            :style="foregroundStyle"
-          />
+      <div class="modal-progress-bar__margin">
+        <div>
+          {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
+        </div>
+        <div>
+          Remaining: {{ remaining }} seconds
+        </div>
+        <div class="modal-progress-bar__hbox">
+          <div class="modal-progress-bar__bg">
+            <div
+              class="modal-progress-bar__fg"
+              :style="foregroundStyle"
+            />
+          </div>
         </div>
       </div>
-      <br>
       <div class="modal-progress-bar__buttons">
         <OfflineSpeedupButton
           v-for="(button, id) in buttons"
@@ -118,5 +118,9 @@ export default {
 .modal-progress-bar__label {
   font-size: large;
   padding-bottom: 0.5rem;
+}
+
+.modal-progress-bar__margin {
+  margin: 1rem 0;
 }
 </style>

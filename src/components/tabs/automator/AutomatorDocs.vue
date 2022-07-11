@@ -49,9 +49,6 @@ export default {
     fullScreenTooltip() {
       return this.fullScreen ? "Exit full screen" : "Expand to full screen";
     },
-    blockTooltip() {
-      return this.isBlock ? "Command menu for Block editor mode" : "Template Creator List";
-    },
     errorTooltip() {
       return `Your script has ${quantify("error", this.errorCount)}`;
     },
@@ -215,36 +212,40 @@ export default {
         <AutomatorButton
           v-tooltip="'Scripting Information'"
           class="fa-list"
-          :class="{ 'c-automator__button--active': infoPaneID === 1 }"
+          :class="{ 'c-automator__button--active': infoPaneID === 1 || (infoPaneID === 6 && !isBlock) }"
           @click="infoPaneID = 1"
-        />
-        <AutomatorButton
-          v-tooltip="blockTooltip"
-          :class="{
-            'fa-cubes': isBlock,
-            'fa-file-code': !isBlock,
-            'c-automator__button--active': infoPaneID === 2
-          }"
-          @click="infoPaneID = 2"
         />
         <AutomatorButton
           v-tooltip="errorTooltip"
           :style="errorStyle"
           class="fa-exclamation-triangle"
-          :class="{ 'c-automator__button--active': infoPaneID === 3 }"
-          @click="infoPaneID = 3"
+          :class="{ 'c-automator__button--active': infoPaneID === 2 }"
+          @click="infoPaneID = 2"
         />
         <AutomatorButton
           v-tooltip="'View recently executed commands'"
           class="fa-eye"
-          :class="{ 'c-automator__button--active': infoPaneID === 4 }"
-          @click="infoPaneID = 4"
+          :class="{ 'c-automator__button--active': infoPaneID === 3 }"
+          @click="infoPaneID = 3"
         />
         <AutomatorButton
           v-tooltip="'Modify defined constants'"
           class="fa-book"
+          :class="{ 'c-automator__button--active': infoPaneID === 4 }"
+          @click="infoPaneID = 4"
+        />
+        <AutomatorButton
+          v-tooltip="'Template Creator List'"
+          class="fa-file-code"
           :class="{ 'c-automator__button--active': infoPaneID === 5 }"
           @click="infoPaneID = 5"
+        />
+        <AutomatorButton
+          v-if="isBlock"
+          v-tooltip="'Command menu for Block editor mode'"
+          class="fa-cubes"
+          :class="{ 'c-automator__button--active': infoPaneID === 6 }"
+          @click="infoPaneID = 6"
         />
         <span
           v-if="fullScreen"
@@ -320,13 +321,12 @@ export default {
     </div>
     <div class="c-automator-docs l-automator-pane__content">
       <AutomatorDocsCommandList v-if="infoPaneID === 1" />
-      <template v-else-if="infoPaneID === 2">
-        <AutomatorBlocks v-if="isBlock" />
-        <AutomatorDocsTemplateList v-else />
-      </template>
-      <AutomatorErrorPage v-else-if="infoPaneID === 3" />
-      <AutomatorEventLog v-else-if="infoPaneID === 4" />
-      <AutomatorDefinePage v-else-if="infoPaneID === 5" />
+      <AutomatorErrorPage v-else-if="infoPaneID === 2" />
+      <AutomatorEventLog v-else-if="infoPaneID === 3" />
+      <AutomatorDefinePage v-else-if="infoPaneID === 4" />
+      <AutomatorDocsTemplateList v-else-if="infoPaneID === 5" />
+      <AutomatorBlocks v-else-if="infoPaneID === 6 && isBlock" />
+      <AutomatorDocsCommandList v-else />
     </div>
   </div>
 </template>

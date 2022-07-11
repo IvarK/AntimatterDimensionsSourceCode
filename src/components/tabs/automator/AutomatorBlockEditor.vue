@@ -25,15 +25,19 @@ export default {
   mounted() {
     BlockAutomator.initialize();
     BlockAutomator.editor.scrollTo(0, BlockAutomator.previousScrollPosition);
-    BlockAutomator.scrollGutter();
+    BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
   },
   methods: {
     update() {
-      AutomatorBackend.jumpToActiveLine();
+      if (AutomatorBackend.state.followExecution) AutomatorBackend.jumpToActiveLine();
+      const targetLine = AutomatorBackend.isOn
+        ? BlockAutomator.lineNumberFromBlockID(BlockAutomator.currentBlockId)
+        : -1;
+      AutomatorHighlighter.updateHighlightedLine(targetLine, "Active");
     },
     setPreviousScroll() {
       BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;
-      BlockAutomator.scrollGutter();
+      BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
     },
     parseRequest() {
       BlockAutomator.updateIdArray();
@@ -82,6 +86,10 @@ export const BlockAutomator = {
   lineNumber(textLine) {
     const skipLines = this._idArray.map((id, index) => (id ? -1 : index + 1)).filter(v => v !== -1);
     return textLine - skipLines.countWhere(line => line <= textLine);
+  },
+
+  lineNumberFromBlockID(id) {
+    return this.lineNumber(this._idArray.indexOf(id) + 1);
   },
 
   parseTextFromBlocks() {
@@ -152,13 +160,6 @@ export const BlockAutomator = {
   },
 
   previousScrollPosition: 0,
-  scrollToLine(line) {
-    this.editor.scrollTo(0, 34.5 * (line - 1));
-    this.scrollGutter();
-  },
-  scrollGutter() {
-    BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
-  }
 };
 </script>
 

@@ -68,24 +68,24 @@ export default {
       if (AutomatorBackend.isOn) {
         this.setActiveState(`${AutomatorBackend.state.topLevelScript}`, AutomatorBackend.stack.top.lineNumber);
       } else {
-        this.setActiveState("", 0);
+        this.setActiveState("", -1);
       }
     },
     onGameLoad() {
       this.UI.documents = {};
     },
     unmarkActiveLine() {
-      this.UI.removeHighlightedLine("Active");
+      AutomatorHighlighter.updateHighlightedLine(-1, "Active");
     },
     markActiveLine(lineNumber) {
-      this.UI.updateHighlightedLine(lineNumber, "Active");
+      AutomatorHighlighter.updateHighlightedLine(lineNumber, "Active");
       this.unclearedLines = true;
     },
     // This only runs once when a script is interrupted and stops during execution because of the player editing the
     // text, but it needs to loop through and clear all lines since editing text may cause arbitrarily shifts of the
     // active line index via pasting/deleting large code blocks
     clearAllActiveLines() {
-      this.UI.clearAllHighlightedLines("Active");
+      AutomatorHighlighter.clearAllHighlightedLines();
       this.unclearedLines = false;
     },
     setActiveState(scriptID, lineNumber) {
@@ -136,46 +136,12 @@ export const AutomatorTextUI = {
 
       // Clear all line highlighting as soon as any text is changed. We can't use the locations of previously
       // highlighted lines because changes may shift the line numbers around before they're cleared.
-      this.clearAllHighlightedLines("Active");
-      this.clearAllHighlightedLines("Error");
-      this.clearAllHighlightedLines("Event");
+      AutomatorHighlighter.clearAllHighlightedLines();
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   },
   // Used to return back to the same line the editor was on from before switching tabs
   savedVertPos: 0,
-  scrollToLine(line) {
-    if (this.editor) {
-      this.editor.scrollIntoView({ line, ch: 0 });
-    }
-  },
-  // Line highlighting requires a reference to the row in order to clear it, so keep track of the lines currently
-  // being highlighted for errors or events so that they can be referenced to be cleared instead of the alternative
-  // of looping through and clearing every line (bad for performance)
-  currentActiveLine: -1,
-  currentErrorLine: -1,
-  currentEventLine: -1,
-  updateHighlightedLine(line, key) {
-    this.removeHighlightedLine(key);
-    this.addHighlightedLine(line, key);
-  },
-  removeHighlightedLine(key) {
-    const removedLine = this[`current${key}Line`] - 1;
-    this.editor.removeLineClass(removedLine, "background", `c-automator-editor__${key.toLowerCase()}-line`);
-    this.editor.removeLineClass(removedLine, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
-    this[`current${key}Line`] = -1;
-  },
-  addHighlightedLine(line, key) {
-    this.editor.addLineClass(line - 1, "background", `c-automator-editor__${key.toLowerCase()}-line`);
-    this.editor.addLineClass(line - 1, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
-    this[`current${key}Line`] = line;
-  },
-  clearAllHighlightedLines(key) {
-    for (let line = 0; line < this.editor.doc.size; line++) {
-      this.editor.removeLineClass(line, "background", `c-automator-editor__${key.toLowerCase()}-line`);
-      this.editor.removeLineClass(line, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
-    }
-  }
 };
 </script>
 

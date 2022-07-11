@@ -244,6 +244,76 @@ export const AutomatorData = {
   }
 };
 
+// Manages line highlighting in a way which is agnostic to the current editor mode (line or block). Ironically this is
+// actually easier to manage in block mode as the Vue components render each line individually and we can just
+// conditionally add classes in the template. The highlighting in text mode needs to be spliced and removed inline in
+// the CodeMirror editor for text mode
+export const AutomatorHighlighter = {
+  currentActiveLine: -1,
+  currentErrorLine: -1,
+  currentEventLine: -1,
+
+  updateHighlightedLine(line, key) {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+      if (!AutomatorTextUI.editor) return;
+      this.removeHighlightedTextLine(key);
+      this.addHighlightedTextLine(line, key);
+    } else {
+      this[`current${key}Line`] = line;
+    }
+  },
+
+  // We need to specifically remove the highlighting class from the old line before splicing it in for the new line
+  removeHighlightedTextLine(key) {
+    const removedLine = this[`current${key}Line`] - 1;
+    AutomatorTextUI.editor.removeLineClass(removedLine, "background", `c-automator-editor__${key.toLowerCase()}-line`);
+    AutomatorTextUI.editor.removeLineClass(removedLine,
+      "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+    this[`current${key}Line`] = -1;
+  },
+  addHighlightedTextLine(line, key) {
+    AutomatorTextUI.editor.addLineClass(line - 1, "background", `c-automator-editor__${key.toLowerCase()}-line`);
+    AutomatorTextUI.editor.addLineClass(line - 1, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+    this[`current${key}Line`] = line;
+  },
+
+  clearAllHighlightedLines() {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+      const keysToClear = ["Active", "Event", "Error"];
+      for (const key of keysToClear) {
+        for (let line = 0; line < AutomatorTextUI.editor.doc.size; line++) {
+          AutomatorTextUI.editor.removeLineClass(line, "background", `c-automator-editor__${key.toLowerCase()}-line`);
+          AutomatorTextUI.editor.removeLineClass(line, "gutter",
+            `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+        }
+      }
+    }
+    this.currentActiveLine = -1;
+    this.currentEventLine = -1;
+    this.currentErrorLine = -1;
+  }
+};
+
+// Manages line highlighting in a way which is agnostic to the current editor mode (line or block)
+export const AutomatorScroller = {
+  // Block editor counts lines differently due to modified loop structure; this method handles that internally
+  scrollToRawLine(line) {
+    const targetLine = player.reality.automator.type === AUTOMATOR_TYPE.TEXT
+      ? line
+      : AutomatorBackend.translateLineNumber(line);
+    this.scrollToLine(targetLine);
+  },
+
+  scrollToLine(line) {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+      if (AutomatorTextUI.editor) AutomatorTextUI.editor.scrollIntoView({ line: line - 1, ch: 0 });
+    } else {
+      BlockAutomator.editor.scrollTo(0, 34.5 * (line - 1));
+      BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
+    }
+  }
+};
+
 export const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
   hasJustCompleted: false,
@@ -332,7 +402,7 @@ export const AutomatorBackend = {
         stack = AutomatorBackend.stack.top;
         // If single step completes the last line and repeat is off, the command stack will be empty and
         // scrolling will cause an error
-        if (stack) AutomatorTextUI.scrollToLine(stack.lineNumber - 1);
+        if (stack) AutomatorScroller.scrollToRawLine(stack.lineNumber);
         this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
       case AUTOMATOR_MODE.RUN:
@@ -499,11 +569,7 @@ export const AutomatorBackend = {
     const state = this.state;
     const focusedScript = state.topLevelScript === state.editorScript;
     if (focusedScript && this.isRunning && state.followExecution) {
-      if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
-        AutomatorTextUI.scrollToLine(AutomatorBackend.stack.top.lineNumber - 1);
-      } else {
-        BlockAutomator.scrollToLine(AutomatorBackend.translateLineNumber(AutomatorBackend.stack.top.lineNumber));
-      }
+      AutomatorScroller.scrollToRawLine(AutomatorBackend.stack.top.lineNumber);
     }
   },
 

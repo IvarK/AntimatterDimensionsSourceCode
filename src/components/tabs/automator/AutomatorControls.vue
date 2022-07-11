@@ -99,7 +99,10 @@ export default {
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
       else AutomatorBackend.start(this.currentScriptID);
     },
-    stop: () => AutomatorBackend.stop(),
+    stop() {
+      AutomatorBackend.stop();
+      AutomatorHighlighter.clearAllHighlightedLines();
+    },
     step() {
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.SINGLE_STEP;
       else AutomatorBackend.start(this.currentScriptID, AUTOMATOR_MODE.SINGLE_STEP);

@@ -270,11 +270,8 @@ export default {
               V's Reality.
             </b>
             <br>
-            <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+            <div :style="{ 'font-size': hasAlchemy ? '1.2rem' : '' }">
               {{ runDescription }}
-              <span v-if="hasAlchemy">
-                Exponential Glyph Alchemy effect is disabled.
-              </span>
             </div>
             <div class="c-v-run-button__line c-v-run-button__line--1" />
             <div class="c-v-run-button__line c-v-run-button__line--2" />

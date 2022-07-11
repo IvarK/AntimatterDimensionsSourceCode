@@ -241,7 +241,9 @@ export const AutomatorData = {
   isWithinLimit() {
     return this.singleScriptCharacters() <= this.MAX_ALLOWED_SCRIPT_CHARACTERS &&
       this.totalScriptCharacters() <= this.MAX_ALLOWED_TOTAL_CHARACTERS;
-  }
+  },
+  // This is to hold finished script templates as text in order to make the custom blocks for blockmato
+  blockTemplates: [],
 };
 
 // Manages line highlighting in a way which is agnostic to the current editor mode (line or block). Ironically this is

@@ -1,13 +1,34 @@
 <script>
 export default {
   name: "AutomatorDocsTemplateList",
+  data() {
+    return {
+      isBlock: false,
+      blockTemplates: [],
+    };
+  },
   computed: {
-    templates: () => GameDatabase.reality.automator.templates.scripts
+    templates: () => GameDatabase.reality.automator.templates.scripts,
+    pasteText() {
+      return this.isBlock
+        ? `create a special block you can drag into your Automator where you would like it to be placed. It will then
+          automatically fill in all of the individual blocks needed for the template`
+        : `copy the template as text onto your clipboard. You can directly paste the template text into your Automator
+          wherever you would like it`;
+    }
   },
   methods: {
+    update() {
+      this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
+      this.blockTemplates = AutomatorData.blockTemplates;
+    },
     showModal(template) {
       Modal.automatorScriptTemplate.show(template);
     },
+    unpackTemplateBlocks(template) {
+      BlockAutomator.lines.push(...template.blocks);
+      BlockAutomator.updateIdArray();
+    }
   }
 };
 </script>
@@ -16,8 +37,8 @@ export default {
   <div>
     These templates will let you do some more common things within the Automator. They may be slightly slower than
     manually-written scripts, but don't require you to have any previous programming experience to use. Clicking any
-    of these buttons will open up a prompt with some input fields, which will generate text you can copy and paste
-    directly into the Automator.
+    of these buttons will open up a prompt with some input fields, which will generate a template you can place into
+    your Automator.
     <button
       v-for="template in templates"
       :key="template.name"
@@ -26,6 +47,26 @@ export default {
     >
       Template: {{ template.name }}
     </button>
+    Since you are currently in the {{ isBlock ? "Block" : "Text" }} editor, this panel will {{ pasteText }}.
+    <br>
+    <br>
+    <draggable
+      v-if="isBlock"
+      :key="blockTemplates.length"
+      class="block-container"
+      :list="blockTemplates"
+      :group="{ name: 'code-blocks', pull: 'clone', put: false }"
+      :sort="false"
+      :clone="unpackTemplateBlocks"
+    >
+      <div
+        v-for="(block, i) in blockTemplates"
+        :key="i"
+        class="o-automator-command o-automator-block-list draggable-blocks"
+      >
+        {{ block.name }}
+      </div>
+    </draggable>
   </div>
 </template>
 

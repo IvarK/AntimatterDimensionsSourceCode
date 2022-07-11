@@ -31,6 +31,7 @@ export default {
       invalidInputCount: 0,
       templateProps: null,
       currentPreset: "",
+      isBlock: false,
     };
   },
   computed: {
@@ -63,6 +64,9 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
+    },
     paramTypeObject(name) {
       return this.params.find(p => p.name === name);
     },
@@ -117,8 +121,17 @@ export default {
       this.updateTemplateProps();
     },
     copyAndClose() {
-      copyToClipboard(this.templateScript.script);
-      GameUI.notify.info("Template copied to clipboard");
+      if (this.isBlock) {
+        const newTemplateBlock = {
+          name: `Template: ${this.name}`,
+          blocks: AutomatorGrammar.blockifyTextAutomator(this.templateScript.script)
+        };
+        AutomatorData.blockTemplates.push(newTemplateBlock);
+        GameUI.notify.info("Custom template block created");
+      } else {
+        copyToClipboard(this.templateScript.script);
+        GameUI.notify.info("Template copied to clipboard");
+      }
       this.emitClose();
     }
   }
@@ -199,7 +212,7 @@ export default {
       class="o-primary-btn"
       @click="copyAndClose"
     >
-      Copy this template to your clipboard and close this modal
+      {{ isBlock ? "Create custom template block" : "Copy this template to your clipboard" }} and close this modal
     </button>
     <button
       v-else

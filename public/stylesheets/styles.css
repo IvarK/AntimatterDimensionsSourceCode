@@ -5323,11 +5323,6 @@ br {
   border: 0.1rem solid #1b5e20;
 }
 
-.t-s11 .c-modal__confirmation-toggle__checkbox {
-  top: -0.2rem;
-  border-color: #e1ae18;
-}
-
 .c-modal__confirmation-toggle__checkbox--active {
   background: var(--color-good);
 }

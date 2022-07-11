@@ -17,7 +17,7 @@ export default {
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
-      this.tabs = Tabs.newUI.filter(x => x.isAvailable && !x.isHidden);
+      this.tabs = Tabs.newUI.filter(x => x.isAvailable);
     },
   },
 };

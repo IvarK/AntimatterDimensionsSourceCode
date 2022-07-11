@@ -34,10 +34,10 @@ export default {
   },
   methods: {
     update() {
-      this.hasDimension = SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
-      this.hasAscension = SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
-      this.hasSingularity = SingularityMilestone.autoCondense.canBeApplied;
-      this.hasAnnihilated = Laitela.darkMatterMult > 1;
+      this.hasDimension = Autobuyer.darkMatterDims.isUnlocked;
+      this.hasAscension = Autobuyer.darkMatterDimsAscension.isUnlocked;
+      this.hasSingularity = Autobuyer.singularity.isUnlocked;
+      this.hasAnnihilated = Autobuyer.annihilation.isUnlocked;
       const auto = player.auto;
       this.dimension = auto.darkMatterDims.isActive;
       this.ascension = auto.ascension.isActive;
@@ -49,7 +49,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-laitela-singularity-container">
+  <div
+    v-if="hasDimension || hasAscension || hasSingularity || hasAnnihilated"
+    class="c-laitela-singularity-container"
+  >
     <PrimaryToggleButton
       v-if="hasDimension"
       v-model="dimension"

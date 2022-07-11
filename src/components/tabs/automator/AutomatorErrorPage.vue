@@ -13,12 +13,8 @@ export default {
       this.errors = AutomatorData.currentErrors();
     },
     scrollToLine(line) {
-      if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
-        AutomatorTextUI.scrollToLine(line - 1);
-        AutomatorTextUI.updateHighlightedLine(line, "Error");
-      } else {
-        BlockAutomator.scrollToLine(line);
-      }
+      AutomatorScroller.scrollToLine(line);
+      AutomatorHighlighter.updateHighlightedLine(line, "Error");
     }
   }
 };

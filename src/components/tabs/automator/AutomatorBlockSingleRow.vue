@@ -26,12 +26,23 @@ export default {
   data() {
     return {
       b: {},
-      currentBlockId: -1,
+      activeLine: -1,
+      eventLine: -1,
+      errorLine: -1,
     };
   },
   computed: {
-    isCurrentLine() {
-      return this.b.id === this.currentBlockId;
+    lineNumber() {
+      return BlockAutomator.lineNumberFromBlockID(this.b.id);
+    },
+    isActiveLine() {
+      return this.lineNumber === this.activeLine;
+    },
+    isEventLine() {
+      return this.lineNumber === this.eventLine;
+    },
+    isErrorLine() {
+      return this.lineNumber === this.errorLine;
     },
   },
   created() {
@@ -45,7 +56,9 @@ export default {
   },
   methods: {
     update() {
-      this.currentBlockId = BlockAutomator.currentBlockId;
+      this.activeLine = AutomatorHighlighter.currentActiveLine;
+      this.eventLine = AutomatorHighlighter.currentEventLine;
+      this.errorLine = AutomatorHighlighter.currentErrorLine;
     },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();
@@ -73,6 +86,14 @@ export default {
       if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
         AutomatorBackend.stop();
       }
+    },
+
+    highlightClass() {
+      return {
+        "c-automator-block-row-active": this.isActiveLine,
+        "c-automator-block-row-event": this.isEventLine,
+        "c-automator-block-row-error": this.isErrorLine
+      };
     }
   }
 };
@@ -82,7 +103,7 @@ export default {
   <div class="c-automator-block-row--container">
     <div
       class="c-automator-block-row"
-      :class="{ 'c-automator-block-row-active' : isCurrentLine }"
+      :class="highlightClass()"
     >
       <AutomatorBlockSingleInput
         :constant="b.alias ? b.alias : b.cmd"

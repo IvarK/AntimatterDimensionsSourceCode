@@ -8965,14 +8965,6 @@ kbd {
   margin-right: 0.5rem;
 }
 
-.c-automator-block-row-active {
-  background: #d8caeb;
-}
-
-.s-base--dark .c-automator-block-row-active {
-  background: #50316f;
-}
-
 .c-automator-block-row-ghost {
   display: block;
   width: 100%;

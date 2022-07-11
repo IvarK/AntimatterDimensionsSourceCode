@@ -47,7 +47,7 @@ export default {
 
       if (!isNumber && !isStudyString) return "Constant value must either be a number or Time Study string";
       // Note that a study string with ALL studies is ~230 characters
-      if (this.valueString.length >= 250) return "Constant name must be shorter than 250 characters";
+      if (this.valueString.length >= 250) return "Constant value must be shorter than 250 characters";
       return null;
     },
     errorTooltip() {

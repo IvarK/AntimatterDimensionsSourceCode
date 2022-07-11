@@ -329,3 +329,15 @@
 .c-automator-input-optional {
   background: var(--color-blockmator-block-optional);
 }
+
+.c-automator-block-row-active {
+  background: var(--color-automator-active-line-background);
+}
+
+.c-automator-block-row-event {
+  background: var(--color-automator-event-background);
+}
+
+.c-automator-block-row-error {
+  background: var(--color-automator-error-background);
+}

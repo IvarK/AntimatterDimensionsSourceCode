@@ -9234,6 +9234,7 @@ input.o-automator-block-input {
   padding: 0.3rem 1rem;
   transition-duration: 0.2s;
   cursor: pointer;
+  user-select: none;
 }
 
 .c-hide-modal-tab-button:hover {

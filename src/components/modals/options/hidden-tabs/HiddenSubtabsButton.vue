@@ -31,6 +31,9 @@ export default {
         [`c-hide-modal-tab-button--${this.tab.key}`]: !this.isCurrentSubtab,
       };
     },
+    isModernUI() {
+      return this.$viewModel.newUI;
+    },
   },
   methods: {
     update() {
@@ -50,12 +53,13 @@ export default {
     :class="classObject"
     @click="toggleVisibility"
   >
-    <div class="l-hide-modal-button--subtab-container">
+    <div class="l-hide-modal-button">
       <div
-        class="l-hide-modal-button--subtab-icon"
+        v-if="isModernUI"
+        class="l-hide-modal-button--icon"
         v-html="subtab.symbol"
       />
-      <div class="l-hide-modal-button--subtab-name">
+      <div class="l-hide-modal-button--name">
         {{ subtab.name }}
       </div>
     </div>
@@ -63,30 +67,19 @@ export default {
 </template>
 
 <style scoped>
-.l-hide-modal-button--subtab-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.l-hide-modal-button {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
 }
 
-.l-hide-modal-button--subtab-icon {
-  filter: opacity(40%);
-  font-size: 2rem;
-  position: absolute;
-  width: 2.6rem;
-  height: 100%;
-  left: -5%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.l-hide-modal-button--icon {
+  font-size: 1.5rem;
+  width: 2rem;
+  margin: 0.2rem;
 }
 
-.l-hide-modal-button--subtab-name {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.l-hide-modal-button--name {
+  width: 8.2rem;
 }
 </style>

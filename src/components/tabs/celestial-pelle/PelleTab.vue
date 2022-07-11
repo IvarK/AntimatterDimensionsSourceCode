@@ -102,7 +102,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: stretch;
+  align-items: center;
 }
 
 .o-pelle-button {

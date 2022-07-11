@@ -1,4 +1,5 @@
 html {
+  overflow: hidden;
   width: 100%;
   height: 100%;
   scrollbar-color: grey transparent;
@@ -39,7 +40,7 @@ html {
 /* css vars */
 
 #ui {
-  overflow: overlay;
+  scrollbar-gutter: stable;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9460,6 +9461,29 @@ input.o-automator-block-input {
 
 .o-pelle-disabled {
   text-decoration: line-through;
+}
+
+.c-pelle-panel-title {
+  position: relative;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--color-pelle--base);
+}
+
+.l-pelle-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-pelle-panel-container {
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  width: 98rem;
+  margin: 1rem;
+  padding: 1rem;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .l-fill-container {

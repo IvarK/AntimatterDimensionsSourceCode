@@ -419,7 +419,7 @@ function keyboardVisibleTabsToggle() {
 }
 
 EventHub.logic.on(GAME_EVENT.ARROW_KEY_PRESSED, direction => {
-  if (Quote.isOpen) return;
+  if (Quote.isOpen || Modal.celestialQuoteHistory.isOpen) return;
   // Current tabs. Defined here as both tab and subtab movements require knowing your current tab.
   const currentTab = Tabs.current.key;
   if (direction[0] === "up" || direction[0] === "down") {

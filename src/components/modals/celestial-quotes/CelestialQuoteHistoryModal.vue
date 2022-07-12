@@ -38,13 +38,26 @@ export default {
       };
     },
   },
+  created() {
+    this.$nextTick(() => {
+      this.on$(GAME_EVENT.ARROW_KEY_PRESSED, arrow => {
+        switch (arrow[0]) {
+          case "up":
+            this.progressUp();
+            break;
+          case "down":
+            this.progressDown();
+        }
+      });
+    });
+  },
   methods: {
     update() {
       this.unlockedQuotes = this.quotes.filter(x => x.isUnlocked);
     },
     quoteStyle(id) {
       return {
-        top: `calc(50vh + ${(id - this.focusedQuote) * 10}rem)`,
+        top: `calc(50vh + ${easeOut(id - this.focusedQuote) * 15}rem)`,
         transform: `translate(-50%, -50%) scale(${Math.max(1 - Math.abs(id - this.focusedQuote) / 4, 0)})`,
         "z-index": 6 - Math.abs(id - this.focusedQuote)
       };
@@ -57,6 +70,10 @@ export default {
     }
   }
 };
+
+function easeOut(x) {
+  return Math.sign(x) * (Math.abs(x) ** 0.6);
+}
 </script>
 
 <template>
@@ -79,15 +96,19 @@ export default {
         @click="progressDown"
       />
     </div>
-    <CelestialQuoteLineBasicInteractable
+    <div
       v-for="(quote, quoteId) in unlockedQuotes"
       :key="quoteId"
-      class="c-quote-overlay"
-      :style="quoteStyle(quoteId)"
-      :quote="quote"
-      :is-focused="focusedQuote === quoteId"
-      :close-visible="false"
-    />
+      @click="focusedQuote = quoteId"
+    >
+      <CelestialQuoteLineBasicInteractable
+        class="c-quote-overlay"
+        :style="quoteStyle(quoteId)"
+        :quote="quote"
+        :is-focused="focusedQuote === quoteId"
+        :close-visible="false"
+      />
+    </div>
   </div>
 </template>
 

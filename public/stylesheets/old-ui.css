@@ -1,3 +1,7 @@
+#ui {
+  scrollbar-gutter: stable both-edges;
+}
+
 .c-old-ui {
   width: 100%;
   height: 100%;

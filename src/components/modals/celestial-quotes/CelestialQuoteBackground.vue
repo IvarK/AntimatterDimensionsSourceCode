@@ -41,6 +41,7 @@ export default {
 <style scoped>
 .l-modal-celestial-quote {
   --scoped-quote-color: var(--color-text);
+  --scoped-quote-background: black;
 
   display: flex;
   flex-direction: row;
@@ -59,36 +60,37 @@ export default {
 }
 
 .c-modal-celestial-quote--teresa {
-  --scoped-quote-color: var(--color-teresa--base)
+  --scoped-quote-color: var(--color-teresa--base);
 }
 
 .c-modal-celestial-quote--effarig {
-  --scoped-quote-color: var(--color-effarig--base)
+  --scoped-quote-color: var(--color-effarig--base);
 }
 
 .c-modal-celestial-quote--enslaved {
-  --scoped-quote-color: var(--color-enslaved--base)
+  --scoped-quote-color: var(--color-enslaved--base);
 }
 
 .c-modal-celestial-quote--v {
-  --scoped-quote-color: var(--color-v--base)
+  --scoped-quote-color: var(--color-v--base);
 }
 
 .c-modal-celestial-quote--ra {
-  --scoped-quote-color: var(--color-ra--base)
+  --scoped-quote-color: var(--color-ra--base);
 }
 
 .c-modal-celestial-quote--laitela {
-  --scoped-quote-color: var(--color-laitela--accent)
+  --scoped-quote-color: var(--color-laitela--accent);
+  --scoped-quote-background: var(--color-laitela--base);
 }
 
 .c-modal-celestial-quote--pelle {
-  --scoped-quote-color: var(--color-pelle--base)
+  --scoped-quote-color: var(--color-pelle--base);
 }
 
 .c-modal-celestial-quote {
   color: var(--scoped-quote-color);
-  background-color: black;
+  background-color: var(--scoped-quote-background);
 }
 
 .c-modal-celestial-quote-primary {

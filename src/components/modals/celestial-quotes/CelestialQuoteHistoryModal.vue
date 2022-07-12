@@ -15,7 +15,8 @@ export default {
   data() {
     return {
       focusedQuote: 0,
-      unlockedQuotes: []
+      unlockedQuotes: [],
+      lastProgress: Date.now()
     };
   },
   computed: {
@@ -57,22 +58,26 @@ export default {
     },
     quoteStyle(id) {
       return {
-        top: `calc(50vh + ${easeOut(id - this.focusedQuote) * 15}rem)`,
-        transform: `translate(-50%, -50%) scale(${Math.max(1 - Math.abs(id - this.focusedQuote) / 4, 0)})`,
+        top: `calc(50vh + ${easeOut(id - this.focusedQuote) * 16}rem)`,
+        transform: `translate(-50%, -50%) scale(${Math.max(1 - Math.abs(id - this.focusedQuote) / 8, 0)})`,
         "z-index": 6 - Math.abs(id - this.focusedQuote)
       };
     },
     progressUp() {
+      if (Date.now() - this.lastProgress < 150) return;
       this.focusedQuote = Math.max(0, this.focusedQuote - 1);
+      this.lastProgress = Date.now();
     },
     progressDown() {
+      if (Date.now() - this.lastProgress < 150) return;
       this.focusedQuote = Math.min(this.unlockedQuotes.length - 1, this.focusedQuote + 1);
+      this.lastProgress = Date.now();
     }
   }
 };
 
 function easeOut(x) {
-  return Math.sign(x) * (Math.abs(x) ** 0.6);
+  return Math.sign(x) * Math.pow(Math.abs(x), 0.4);
 }
 </script>
 
@@ -103,6 +108,7 @@ function easeOut(x) {
     >
       <CelestialQuoteLineBasicInteractable
         class="c-quote-overlay"
+        :class="{ 'c-quote-overlay--background': focusedQuote !== quoteId }"
         :style="quoteStyle(quoteId)"
         :quote="quote"
         :is-focused="focusedQuote === quoteId"
@@ -113,14 +119,21 @@ function easeOut(x) {
 </template>
 
 <style scoped>
-.c-modal-overlay {
-  cursor: pointer;
-}
-
 .c-quote-overlay {
   font-size: 1.4rem;
   padding: 1rem;
-  transition: all 0.2s, top 0.3s ease, transform 0.3s ease, z-index 0s;
+  transition: all 0.2s, top 0.3s ease, transform 0.3s ease, z-index 0.3s;
+}
+
+.c-quote-overlay--background {
+  opacity: 0.8;
+  filter: grayscale(0.5);
+  cursor: pointer;
+}
+
+.c-quote-overlay--background:hover {
+  opacity: 1;
+  filter: grayscale(0.3) drop-shadow(0 0 2rem);
 }
 
 .c-modal-celestial-quote-history__arrow,
@@ -167,6 +180,7 @@ function easeOut(x) {
   position: absolute;
   inset: 0;
   z-index: 0;
+  cursor: pointer;
 }
 
 @keyframes a-fade-in {

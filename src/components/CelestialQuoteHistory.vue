@@ -14,6 +14,10 @@ export default {
   },
   methods: {
     show() {
+      if (Celestials[this.celestial].quotes.all.every(x => !x.isUnlocked)) {
+        GameUI.notify.error(`You have not spoken with ${this.celestial.capitalize()} yet.`);
+        return;
+      }
       Modal.celestialQuoteHistory.show(Celestials[this.celestial].quotes.all);
     },
   }

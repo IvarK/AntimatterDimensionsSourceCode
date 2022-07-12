@@ -8,7 +8,7 @@ export default {
     }
   },
   computed: {
-    borderColor() {
+    color() {
       return this.celestial === "laitela" ? `var(--color-laitela--accent)` : `var(--color-${this.celestial}--base)`;
     }
   },
@@ -24,7 +24,7 @@ export default {
   <button
     class="c-celestial-quote-history--button"
     :style="{
-      'border-color': borderColor
+      '--scoped-cel-color': color
     }"
     @click="show"
   >
@@ -41,10 +41,17 @@ export default {
   font-weight: bold;
   color: var(--color-text);
   background-color: var(--color-base);
-  border: var(--var-border-width, 0.2rem) solid;
+  border: var(--var-border-width, 0.2rem) solid var(--scoped-cel-color);
   border-radius: var(--var-border-radius, 0.5rem);
   margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
+  transition: 0.2s;
+  transition-property: color, background-color;
   cursor: pointer;
+}
+
+.c-celestial-quote-history--button:hover {
+  color: var(--color-text-inverted);
+  background-color: var(--scoped-cel-color);
 }
 </style>

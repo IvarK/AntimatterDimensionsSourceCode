@@ -1,5 +1,5 @@
 <script>
-import CelestialQuoteModal from "@/components/modals/CelestialQuoteModal";
+import CelestialQuoteModal from "@/components/modals/celestial-quotes/CelestialQuoteModal";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
 import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import HowToPlay from "@/components/HowToPlay";

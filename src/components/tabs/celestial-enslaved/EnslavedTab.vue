@@ -292,11 +292,6 @@ export default {
 </template>
 
 <style scoped>
-.o-celestial-quote-history {
-  width: 60rem;
-  margin: 1rem;
-}
-
 .c-enslaved-run-description-line {
   margin-bottom: 1rem;
 }

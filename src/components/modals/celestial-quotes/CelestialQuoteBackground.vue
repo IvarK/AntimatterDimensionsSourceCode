@@ -31,7 +31,7 @@ export default {
 <template>
   <div :class="modalClass">
     <span
-      class="c-modal-cestial-quote__symbol"
+      class="c-modal-celestial-quote__symbol"
       v-html="celestialSymbol"
     />
     <slot />
@@ -46,7 +46,7 @@ export default {
   flex-direction: row;
   width: 30rem;
   height: 30rem;
-  position: fixed;
+  position: absolute;
   /* stylelint-disable-next-line unit-allowed-list */
   top: 50vh;
   /* stylelint-disable-next-line unit-allowed-list */
@@ -99,7 +99,7 @@ export default {
   box-shadow: 0 0 1rem 0.2rem var(--scoped-quote-color), 0 0 1rem 0.1rem var(--scoped-quote-color) inset
 }
 
-.c-modal-cestial-quote__symbol {
+.c-modal-celestial-quote__symbol {
   display: flex;
   width: 100%;
   height: 100%;

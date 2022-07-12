@@ -41,6 +41,7 @@ import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
 import CatchupModal from "@/components/modals/catchup/CatchupModal";
+import CelesitalQuoteHistoryModal from "@/components/modals/celestial-quotes/CelestialQuoteHistoryModal";
 import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
@@ -285,3 +286,9 @@ Modal.message = new class extends Modal {
     }
   }
 }(MessageModal, 2);
+
+Modal.celestialQuoteHistory = new class extends Modal {
+  show(quotes) {
+    super.show({ quotes });
+  }
+}(CelesitalQuoteHistoryModal, 2, true);

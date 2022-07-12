@@ -5990,49 +5990,6 @@ kbd {
 
 /* #endregion component */
 
-.o-celestial-quote-history {
-  display: flex;
-  flex-direction: row;
-  width: 70rem;
-  justify-content: space-evenly;
-  align-items: stretch;
-  margin: 1rem 0;
-}
-
-.l-celestial-quote-history__lines {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  align-items: center;
-  font-size: 1.9rem;
-  line-height: 2.4rem;
-}
-
-.c-celestial-quote-history__line {
-  font-style: italic;
-  font-weight: bold;
-}
-
-.l-celestial-quote-history__buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 1rem 0 0.5rem 1.5rem;
-}
-
-.c-celestial-quote-history__button {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.c-celestial-quote-history__button--enabled {
-  cursor: pointer;
-}
-
-.c-celestial-quote-history__button--disabled {
-  opacity: 0.6;
-}
-
 /* #region Teresa tab */
 .l-teresa-celestial-tab {
   display: flex;

@@ -33,8 +33,14 @@ export default {
 </script>
 
 <template>
+  <component
+    :is="modal.component"
+    v-if="modal.isBare && !forceDontShowModal"
+    v-bind="modal.props"
+    @close="hide"
+  />
   <div
-    v-if="!forceDontShowModal"
+    v-else-if="!forceDontShowModal"
     class="c-modal l-modal"
   >
     <component

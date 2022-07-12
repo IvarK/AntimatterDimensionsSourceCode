@@ -188,8 +188,4 @@ export default {
 .pelle-icon {
   animation: a-roll infinite 8s linear;
 }
-
-.o-celestial-quote-history {
-  align-self: center;
-}
 </style>

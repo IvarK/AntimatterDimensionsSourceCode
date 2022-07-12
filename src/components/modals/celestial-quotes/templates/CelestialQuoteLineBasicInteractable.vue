@@ -1,8 +1,8 @@
 <script>
-import CelestialQuoteLine from "./CelestialQuoteLine";
+import CelestialQuoteLine from "@/components/modals/celestial-quotes/CelestialQuoteLine";
 
 export default {
-  name: "CelestialQuoteModal",
+  name: "CelestialQuoteBasicInteractable",
   components: {
     CelestialQuoteLine
   },
@@ -10,7 +10,32 @@ export default {
     quote: {
       type: Object,
       required: true
-    }
+    },
+    isFocused: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    primary: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    leftVisible: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    rightVisible: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    closeVisible: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
   },
   data() {
     return {
@@ -46,6 +71,7 @@ export default {
   },
   methods: {
     progressIn(direction) {
+      if (!this.isFocused) return false;
       switch (direction) {
         case "left": return this.currentLine--;
         case "right": return this.currentLine++;
@@ -53,6 +79,7 @@ export default {
       }
     },
     close() {
+      if (!this.isFocused) return;
       this.index = 0;
       Quote.advanceQueue();
     },
@@ -61,25 +88,14 @@ export default {
 </script>
 
 <template>
-  <div class="l-modal-overlay c-modal-overlay">
-    <CelestialQuoteLine
-      class="c-quote-overlay"
-      :quote="quote"
-      :current-line="currentLine"
-      :left-visible="!isQuoteStart"
-      :right-visible="!isQuoteEnd"
-      :close-visible="isQuoteEnd"
-      primary
-      @close="close"
-      @progress-in="progressIn"
-    />
-  </div>
+  <CelestialQuoteLine
+    :quote="quote"
+    :current-line="currentLine"
+    :left-visible="!isQuoteStart && leftVisible"
+    :right-visible="!isQuoteEnd && rightVisible"
+    :close-visible="isQuoteEnd && closeVisible"
+    primary
+    @close="close"
+    @progress-in="progressIn"
+  />
 </template>
-
-<style scoped>
-.c-quote-overlay {
-  font-size: 1.4rem;
-  padding: 1rem;
-  transition-duration: 0.2s;
-}
-</style>

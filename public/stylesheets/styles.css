@@ -40,10 +40,11 @@ html {
 /* css vars */
 
 #ui {
-  scrollbar-gutter: stable;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  scrollbar-gutter: stable;
 }
 
 :root {
@@ -9479,9 +9480,9 @@ input.o-automator-block-input {
 }
 
 .l-pelle-panel-container {
+  width: 98rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
-  width: 98rem;
   margin: 1rem;
   padding: 1rem;
   -webkit-user-select: none;

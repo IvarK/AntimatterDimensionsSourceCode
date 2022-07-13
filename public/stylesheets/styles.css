@@ -301,6 +301,89 @@ button:focus {
   outline: none;
 }
 
+/* #region CustomizeableTooltip */
+
+.c-tooltip-content,
+.c-tooltip-arrow {
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.4s linear;
+  transition-property: opacity, visibility;
+  pointer-events: none;
+}
+
+.c-tooltip-content {
+  content: attr(ach-tooltip);
+  width: 16rem;
+  position: absolute;
+  z-index: 4;
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  color: #ffffff;
+  background-color: hsla(0deg, 0%, 5%, 90%);
+  border-radius: var(--var-border-radius, 0.3rem);
+  padding: 0.7rem;
+}
+
+.c-tooltip-arrow {
+  content: " ";
+  width: 0;
+  position: absolute;
+  z-index: 4;
+  font-size: 0;
+  line-height: 0;
+  border-top: 0.55rem solid transparent;
+  border-right: 0.55rem solid transparent;
+  border-bottom: 0.55rem solid transparent;
+  border-left: 0.55rem solid transparent;
+  transform: translate(-50%, -100%);
+  transition-duration: 0.4s;
+}
+
+.c-tooltip--top.c-tooltip-content {
+  margin-top: -0.5rem;
+}
+
+.c-tooltip--top.c-tooltip-arrow {
+  border-top: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+  border-bottom: 0;
+}
+
+.c-tooltip--bottom.c-tooltip-content {
+  margin-bottom: -0.5rem;
+}
+
+.c-tooltip--bottom.c-tooltip-arrow {
+  border-top: 0;
+  border-bottom: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+}
+
+.c-tooltip--right.c-tooltip-content {
+  margin-right: -0.5rem;
+}
+
+.c-tooltip--right.c-tooltip-arrow {
+  border-right: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+  border-left: 0;
+}
+
+.c-tooltip--left.c-tooltip-content {
+  margin-left: -0.5rem;
+}
+
+.c-tooltip--left.c-tooltip-arrow {
+  border-right: 0;
+  border-left: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+}
+
+.c-tooltip-show {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* #endregion CustomizeableTooltip */
+
 /* #region TT shop */
 
 .time-theorem-buttons {
@@ -5974,23 +6057,44 @@ kbd {
   color: black;
 }
 
-.c-teresa-unlock-description {
+.c-teresa-unlock-description--hover-area {
   display: flex;
   width: 100%;
   height: 3rem;
   position: absolute;
   align-items: center;
-  color: var(--color-text);
+}
+
+.c-teresa-unlock-description {
+  width: 14rem;
+  font-size: 1rem;
+  color: var(--color-teresa--base);
+  background-color: var(--color-teresa--accent);
+  border: 0.1rem solid var(--color-teresa--base);
+}
+
+.c-teresa-unlock-description--unlocked {
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
 }
 
 .c-teresa-milestone-line {
   width: 100%;
   height: 0.2rem;
   background-color: var(--color-teresa--base);
+  animation: a-teresa-unfinished-milestone-flash 2s infinite;
 }
 
-.c-teresa-milestone-line--attained {
-  background-color: rgba(0, 0, 0, 50%);
+@keyframes a-teresa-unfinished-milestone-flash {
+  0% { opacity: 0.8; }
+  20% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+  80% { opacity: 0.8; }
+  100% { opacity: 0.8; }
+}
+
+.c-teresa-milestone-line--unlocked {
+  animation: none;
 }
 
 .o-teresa-quotes {

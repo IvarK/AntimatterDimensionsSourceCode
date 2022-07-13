@@ -118,14 +118,10 @@ export default {
     hasUnlock(unlockInfo) {
       return unlockInfo.isUnlocked;
     },
-    unlockInfoTooltipContentStyle(unlockInfo) {
-      const hasInfo = this.hasUnlock(unlockInfo);
+    unlockInfoTooltipClass(unlockInfo) {
       return {
-        border: "0.1rem solid var(--color-teresa--base)",
-        backgroundColor: hasInfo ? "var(--color-teresa--base)" : "var(--color-teresa--accent)",
-        fontSize: "1rem",
-        color: hasInfo ? "black" : "var(--color-teresa--base)",
-        width: "14rem"
+        "c-teresa-unlock-description": true,
+        "c-teresa-unlock-description--unlocked": this.hasUnlock(unlockInfo)
       };
     }
   }
@@ -213,20 +209,19 @@ export default {
           </div>
           <CustomizeableTooltip
             v-for="unlockInfo in unlockInfos"
-            :id="unlockInfo.id"
             :key="unlockInfo.id"
-            content-class="c-teresa-unlock-description"
+            content-class="c-teresa-unlock-description--hover-area"
             :bottom="unlockDescriptionHeight(unlockInfo)"
             right="0"
             mode="right"
             :show="true"
             :tooltip-arrow-style="unlockInfoTooltipArrowStyle"
-            :tooltip-content-style="unlockInfoTooltipContentStyle(unlockInfo)"
+            :tooltip-class="unlockInfoTooltipClass(unlockInfo)"
           >
             <template #mainContent>
               <div
                 class="c-teresa-milestone-line"
-                :class="{ 'c-teresa-milestone-line--attained': hasUnlock(unlockInfo) }"
+                :class="{ 'c-teresa-milestone-line--unlocked': hasUnlock(unlockInfo) }"
               />
             </template>
             <template #tooltipContent>

@@ -1427,7 +1427,7 @@ GameStorage.devMigrations = {
           // TT command removed
           rawLine = rawLine.replace(/^\s*tt.*$/ui, "");
           // Changes to "studies" commands
-          rawLine = rawLine.replace(/studies( nowait)? (?!respec)(\S+)$/ui, "studies$1 purchase $2");
+          rawLine = rawLine.replace(/studies( nowait)? (?!respec|load)(\S.+)$/ui, "studies$1 purchase $2");
           rawLine = rawLine.replace(/studies( nowait)? load preset (\S+)/ui, "studies$1 load name $2");
           // Autobuyer mode change (this is a much older change which wasn't migrated at the time)
           rawLine = rawLine.replace(/x current/ui, "x highest");

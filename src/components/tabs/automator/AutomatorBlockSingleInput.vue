@@ -129,9 +129,11 @@ export default {
   //   "unlock dilation" makes the 8 unnecessary) - in that case we also need to blank out the block prop
   // * Blocks are dragged and reordered, causing a parent component to key-swap and force a rerender on this
   //   component - in that case we need to remove the errors corresponding to the old line number
-  // * The player changes to the text editor, wiping the entire block editor - we do nothing here
+  // * The player changes to the text editor or switches tabs, wiping the entire block editor - we do nothing here
   destroyed() {
-    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) return;
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT || Tabs.current._currentSubtab.key !== "automator") {
+      return;
+    }
 
     this.recalculateErrorCount();
     const newLineNum = BlockAutomator.lineNumber(BlockAutomator._idArray.indexOf(this.block.id) + 1);
@@ -148,6 +150,7 @@ export default {
     if (this.blockTarget) {
       // eslint-disable-next-line vue/no-mutating-props
       this.block[this.blockTarget] = undefined;
+      this.recalculateErrorCount();
     }
     BlockAutomator.parseTextFromBlocks();
   },

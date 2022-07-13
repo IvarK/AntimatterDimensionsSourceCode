@@ -443,11 +443,17 @@ import { AutomatorLexer } from "./lexer";
         // eslint-disable-next-line no-loop-func
         this[cmd.id] = (ctx, output) => {
           if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
-          const block = blockify(ctx, this);
-          output.push({
-            ...block,
-            id: UIID.next()
-          });
+          try {
+            const block = blockify(ctx, this);
+            output.push({
+              ...block,
+              id: UIID.next()
+            });
+          } catch {
+            // If a command is invalid, it will throw an exception in blockify and fail to assign a value to block
+            // We can't, generally, make good guesses to fill in any missing values in order to avoid the exception,
+            // so we instead just ignore that block
+          }
         };
       }
       this.validateVisitor();

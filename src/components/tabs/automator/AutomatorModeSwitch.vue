@@ -62,13 +62,14 @@ export default {
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      const currScriptContent = player.reality.automator.scripts[this.currentScriptID].content;
-      const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScriptContent);
+      const currScript = player.reality.automator.scripts[this.currentScriptID].content;
+      const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScript);
 
       if (player.options.confirmations.switchAutomatorMode && (AutomatorBackend.isRunning || hasInvalidCommands)) {
+        const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
         Modal.switchAutomatorEditorMode.show({
           callBack: () => this.$recompute("currentScriptContent"),
-          hasInvalidCommands
+          lostBlocks: blockified.validatedBlocks - blockified.visitedBlocks,
         });
       } else {
         const scriptID = this.currentScriptID;
@@ -80,10 +81,14 @@ export default {
           // Don't use this.currentScriptContent here due to reactivity issues, but on the other hand reactively
           // updating content might lead to decreased performance.
         } else {
-          AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
+          const toConvert = AutomatorTextUI.editor.getDoc().getValue();
+          // Needs to be called to update the lines prop in the BlockAutomator object
+          BlockAutomator.fromText(toConvert);
+          AutomatorBackend.saveScript(scriptID, toConvert);
           player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
         }
         this.$recompute("currentScriptContent");
+        AutomatorHighlighter.clearAllHighlightedLines();
       }
     }
   }

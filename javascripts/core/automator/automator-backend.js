@@ -256,7 +256,7 @@ export const AutomatorHighlighter = {
   currentEventLine: -1,
 
   updateHighlightedLine(line, key) {
-    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT && line !== -1) {
       if (!AutomatorTextUI.editor) return;
       this.removeHighlightedTextLine(key);
       this.addHighlightedTextLine(line, key);
@@ -280,7 +280,7 @@ export const AutomatorHighlighter = {
   },
 
   clearAllHighlightedLines() {
-    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT && AutomatorTextUI.editor) {
       const keysToClear = ["Active", "Event", "Error"];
       for (const key of keysToClear) {
         for (let line = 0; line < AutomatorTextUI.editor.doc.size; line++) {

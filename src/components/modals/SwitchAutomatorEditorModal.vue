@@ -1,4 +1,6 @@
 <script>
+import { BlockAutomator } from "../tabs/automator/AutomatorBlockEditor.vue";
+
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
@@ -12,10 +14,10 @@ export default {
       required: false,
       default: () => ({})
     },
-    hasInvalidCommands: {
-      type: Boolean,
+    lostBlocks: {
+      type: Number,
       required: false,
-      default: false,
+      default: 0,
     }
   },
   data() {
@@ -45,7 +47,10 @@ export default {
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
       } else {
-        AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
+        const toConvert = AutomatorTextUI.editor.getDoc().getValue();
+        // Needs to be called to update the lines prop in the BlockAutomator object
+        BlockAutomator.fromText(toConvert);
+        AutomatorBackend.saveScript(scriptID, toConvert);
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       }
       this.callback?.();
@@ -64,10 +69,14 @@ export default {
     </template>
     <div class="c-modal-message__text">
       This will stop your current script if it is running!
-      <div v-if="hasInvalidCommands">
+      <div v-if="lostBlocks">
         Additionally, your script currently has some lines which cannot interpreted as particular commands. Switching
         to the block editor will cause these lines to be automatically deleted, since blocks only exist for valid
         commands.
+        <b>
+          Warning: If these errors are caused by malformed loops or IFs, this may end up deleting large portions of
+          your script! Changing editor modes currently will delete {{ quantifyInt("block", lostBlocks) }}!
+        </b>
       </div>
       <br>
       Are you sure you want to change to the {{ isCurrentlyBlocks ? "text" : "block" }} editor?

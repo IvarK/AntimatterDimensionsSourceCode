@@ -61,7 +61,8 @@ export const AutoGlyphProcessor = {
       // to make them picked last, because we can't refine them.
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
-        return resource.isUnlocked && (!resource.capped || resource.cap === 0)
+        const refinementGain = GlyphSacrificeHandler.glyphRefinementGain(glyph);
+        return resource.isUnlocked && (!resource.capped || resource.cap === 0 || refinementGain > 0)
           ? -resource.amount
           : Number.NEGATIVE_INFINITY;
       }

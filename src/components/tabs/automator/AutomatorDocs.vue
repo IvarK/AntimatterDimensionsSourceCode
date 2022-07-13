@@ -147,10 +147,14 @@ export default {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (this.isBlock && !AutomatorGrammar.blockifyTextAutomator(this.currentScript)) {
+
+      // Unsure if this will ever happen in practice any more short of save editing and loading up old saves which
+      // were sitting on errored scripts when last opened, but better safe than sorry?
+      if (this.isBlock && BlockAutomator.hasUnparsableCommands(this.currentScript)) {
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-        Modal.message.show("Automator script has errors, cannot view in blocks.");
+        Modal.message.show("Some script commands were unrecognizable - defaulting to text editor.");
       }
+
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     rename() {

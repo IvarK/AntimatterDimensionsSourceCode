@@ -99,11 +99,14 @@ export const BlockAutomator = {
   },
 
   fromText(scriptText) {
-    const lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
-    if (lines) {
-      this.lines = lines;
-    }
+    const lines = AutomatorGrammar.blockifyTextAutomator(scriptText).blocks;
+    this.lines = lines;
     return lines;
+  },
+
+  hasUnparsableCommands(text) {
+    const blockified = AutomatorGrammar.blockifyTextAutomator(text);
+    return blockified.validatedBlocks !== blockified.visitedBlocks;
   },
 
   generateText(block, indentation = 0) {

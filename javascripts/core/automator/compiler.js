@@ -500,13 +500,39 @@ import { AutomatorLexer } from "./lexer";
 
   function blockifyTextAutomator(input) {
     const validator = new Validator(input);
-    if (validator.errorCount === 0) {
-      const b = new Blockifier();
-      const blocks = b.visit(validator.parseResult);
-      return blocks;
-    }
+    const blockifier = new Blockifier();
+    const blocks = blockifier.visit(validator.parseResult);
 
-    return null;
+    // The Validator grabs all the lines from the visible script, but the Blockifier will fail to visit any lines
+    // associated with unparsable commands. This results in a discrepancy in line count whenever a line can't be
+    // parsed as a specific command, and in general this is a problem we can't try to guess a fix for, so we just
+    // don't convert it at all. In both cases nested commands are stored recursively, but with different structure.
+    const validatedCount = entry => {
+      if (!entry) return 0;
+      const commandDepth = entry.children;
+      let foundChildren = 0;
+      // Inner nested commands are found within a prop given the same name as the command itself - this should only
+      // actually evaluate to nonzero for at most one key, and will be undefined for all others
+      for (const key of Object.keys(commandDepth)) {
+        const nestedBlock = commandDepth[key][0]?.children.block;
+        const nestedCommands = nestedBlock ? nestedBlock[0].children.command : [];
+        foundChildren += nestedCommands
+          ? nestedCommands.map(c => validatedCount(c) + 1).reduce((sum, val) => sum + val, 0)
+          : 0;
+      }
+      return foundChildren;
+    };
+    const visitedCount = block => {
+      if (!block.nest) return 1;
+      return 1 + block.nest.map(b => visitedCount(b)).reduce((sum, val) => sum + val, 0);
+    };
+    // Note: top-level structure is slightly different than the nesting structure
+    const validatedBlocks = validator.parseResult.children.block[0].children.command
+      .map(c => validatedCount(c) + 1)
+      .reduce((sum, val) => sum + val, 0);
+    const visitedBlocks = blocks.map(b => visitedCount(b)).reduce((sum, val) => sum + val, 0);
+
+    return { blocks, validatedBlocks, visitedBlocks };
   }
   AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
 

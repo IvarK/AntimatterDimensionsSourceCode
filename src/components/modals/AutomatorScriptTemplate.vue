@@ -124,7 +124,7 @@ export default {
       if (this.isBlock) {
         const newTemplateBlock = {
           name: `Template: ${this.name}`,
-          blocks: AutomatorGrammar.blockifyTextAutomator(this.templateScript.script)
+          blocks: AutomatorGrammar.blockifyTextAutomator(this.templateScript.script).blocks
         };
         AutomatorData.blockTemplates.push(newTemplateBlock);
         GameUI.notify.info("Custom template block created");

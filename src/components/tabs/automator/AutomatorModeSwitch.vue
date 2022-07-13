@@ -33,9 +33,6 @@ export default {
         "tutorial--glow": ui.view.tutorialState === TUTORIAL_STATE.AUTOMATOR && ui.view.tutorialActive
       };
     },
-    destinationType() {
-      return this.automatorType === AUTOMATOR_TYPE.TEXT ? "blocks" : "text";
-    }
   },
   created() {
     this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
@@ -57,19 +54,23 @@ export default {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (AutomatorData.currentErrors().length !== 0 && player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
-        Modal.message.show(`Switched to text editor mode; this script has errors
-          which cannot be converted to block mode.`);
+      if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&
+        player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+        Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
       }
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      if (AutomatorData.currentErrors().length) {
-        Modal.message.show(`Automator script has errors, cannot convert to ${this.destinationType}.`);
-        return;
-      }
-      if (!AutomatorBackend.isRunning || !player.options.confirmations.switchAutomatorMode) {
+      const currScriptContent = player.reality.automator.scripts[this.currentScriptID].content;
+      const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScriptContent);
+
+      if (player.options.confirmations.switchAutomatorMode && (AutomatorBackend.isRunning || hasInvalidCommands)) {
+        Modal.switchAutomatorEditorMode.show({
+          callBack: () => this.$recompute("currentScriptContent"),
+          hasInvalidCommands
+        });
+      } else {
         const scriptID = this.currentScriptID;
         Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
         if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
@@ -78,17 +79,11 @@ export default {
           player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
           // Don't use this.currentScriptContent here due to reactivity issues, but on the other hand reactively
           // updating content might lead to decreased performance.
-        } else if (BlockAutomator.fromText(player.reality.automator.scripts[this.currentScriptID].content)) {
+        } else {
           AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
           player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-        } else {
-          Modal.message.show(`Automator script has errors, cannot convert to ${this.destinationType}.`);
         }
         this.$recompute("currentScriptContent");
-      } else {
-        Modal.switchAutomatorEditorMode.show({
-          callBack: () => this.$recompute("currentScriptContent")
-        });
       }
     }
   }

@@ -57,11 +57,11 @@ export const AutoGlyphProcessor = {
         return strengthToRarity(glyph.strength) + effectScore;
       }
       // Picked glyphs are never kept in Alchemy modes.
-      // Glyphs for non-unlocked or capped Alchemy Resources are assigned NEGATIVE_INFINITY
+      // Glyphs for non-unlocked Alchemy Resources are assigned NEGATIVE_INFINITY
       // to make them picked last, because we can't refine them.
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
-        return resource.isUnlocked && !resource.capped
+        return resource.isUnlocked
           ? -resource.amount
           : Number.NEGATIVE_INFINITY;
       }

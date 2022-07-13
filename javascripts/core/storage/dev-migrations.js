@@ -1427,12 +1427,18 @@ GameStorage.devMigrations = {
           // TT command removed
           rawLine = rawLine.replace(/^\s*tt.*$/ui, "");
           // Changes to "studies" commands
-          rawLine = rawLine.replace(/studies( nowait)? (?!respec|load)(\S.+)$/ui, "studies$1 purchase $2");
+          // For some reason `studies nowait load` would get caught by the following system without explicitly defining
+          // that "nowait load" should not be captured. Probably because it treats nowait as nonexisting and then sees
+          // that nowait is neither respec nor load. I tried consuming the nowait if it existed but that messed up the
+          // replace function so this is the best I've got for now
+          rawLine = rawLine.replace(/studies( nowait)? (?!respec|load|nowait respec|nowait load)(\S.+)$/ui,
+            "studies$1 purchase $2");
+          rawLine = rawLine.replace(/studies( nowait)? load preset ([1-6])/ui, "studies$1 load id $2");
           rawLine = rawLine.replace(/studies( nowait)? load preset (\S+)/ui, "studies$1 load name $2");
           // Autobuyer mode change (this is a much older change which wasn't migrated at the time)
           rawLine = rawLine.replace(/x current/ui, "x highest");
           // Variable definitions
-          const defineMatch = rawLine.match("define (.*) = (.*)");
+          const defineMatch = rawLine.match(/define (.*) = (.*)/ui);
           if (defineMatch) {
             player.reality.automator.constants[defineMatch[1]] = defineMatch[2];
             rawLine = "";

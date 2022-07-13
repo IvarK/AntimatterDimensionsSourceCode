@@ -234,20 +234,27 @@ export default {
   100% { opacity: 1; }
 }
 
-/* CONTAINER STYLES */
-
+/* #region CONTAINER STYLES */
 .c-pelle-rift-bar {
-  --color-bar-bg: #1e1e1e;
   display: flex;
   width: 32rem;
   height: 5rem;
   position: relative;
   justify-content: center;
   align-items: center;
-  background: var(--color-bar-bg);
+  background: linear-gradient(45deg, #ffffff, #e6e6e6);
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
   border-radius: var(--var-border-radius, 0.5rem);
   margin-bottom: 1rem;
+}
+
+.s-base--metro .c-pelle-rift-bar {
+  width: 31.9rem;
+  height: 4.8rem;
+}
+
+.s-base--dark .c-pelle-rift-bar {
+  background: linear-gradient(45deg, #1e1e1e, #262626);
 }
 
 .c-pelle-rift-bar--filling,
@@ -280,14 +287,15 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 0;
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-bar-bg);
+  box-shadow: inset 0 0 0.3rem 0.1rem #222222;
 }
 
 .c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
   box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
 }
+/* #endregion CONTAINER STYLES */
 
-/* FILLING STYLES */
+/* #region FILLING STYLES */
 .o-pelle-rift-bar-fill {
   height: 100%;
   position: absolute;
@@ -307,8 +315,9 @@ export default {
   background: var(--color-pelle--base);
   filter: brightness(0.5);
 }
+/* #endregion FILLING STYLES */
 
-/* SPECIAL BAR OVERLAY STYLES */
+/* #region SPECIAL BAR OVERLAY STYLES */
 .o-pelle-rift-bar-permanent {
   width: 100%;
   height: 100%;
@@ -316,8 +325,9 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 0;
+  opacity: 0.5;
   background: var(--color-pelle--secondary);
-  filter: brightness(50%);
+  filter: grayscale(0.6);
 }
 
 .o-pelle-rift-bar-overfilled {
@@ -345,13 +355,14 @@ export default {
   background: var(--color-pelle--base);
   animation: a-pelle-bar-filling-sweep infinite 2s linear;
 }
+/* #endregion SPECIAL BAR OVERLAY STYLES */
 
-/* PERCENTAGE STYLES */
+/* #region PERCENTAGE STYLES */
 .o-pelle-rift-bar-percentage {
   z-index: 2;
   font-size: 1.5rem;
-  color: white;
-  text-shadow: 0.1rem 0.1rem 0.2rem var(--color-pelle--base);
+  color: var(--color-text);
+  filter: drop-shadow(0.1rem 0.1rem 0.1rem var(--color-pelle--base));
 
   /* This keeps the percentage from blocking the hover area */
   pointer-events: none;
@@ -361,8 +372,9 @@ export default {
 .c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
   opacity: 0.6;
 }
+/* #endregion PERCENTAGE STYLES */
 
-/* MILESTONE STYLES */
+/* #region MILESTONE STYLES */
 .o-pelle-rift-bar-milestone-hover-container {
   height: 100%;
 }
@@ -384,6 +396,7 @@ export default {
   filter: brightness(0.25);
   animation: none;
 }
+/* #endregion MILESTONE STYLES */
 </style>
 
 <style>

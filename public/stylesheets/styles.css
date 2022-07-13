@@ -321,9 +321,13 @@ button:focus {
   font-size: 1.4rem;
   line-height: 1.2;
   color: #ffffff;
-  background-color: hsla(0deg, 0%, 5%, 90%);
+  background-color: #0d0d0d;
   border-radius: var(--var-border-radius, 0.3rem);
   padding: 0.7rem;
+}
+
+.c-tooltip-content--dark {
+  border: 0.1rem solid #dddddd;
 }
 
 .c-tooltip-arrow {
@@ -333,12 +337,13 @@ button:focus {
   z-index: 4;
   font-size: 0;
   line-height: 0;
-  border-top: 0.55rem solid transparent;
-  border-right: 0.55rem solid transparent;
-  border-bottom: 0.55rem solid transparent;
-  border-left: 0.55rem solid transparent;
+  border: 0.55rem solid #0d0d0d;
   transform: translate(-50%, -100%);
   transition-duration: 0.4s;
+}
+
+.c-tooltip-arrow--dark {
+  border-color: #dddddd;
 }
 
 .c-tooltip--top.c-tooltip-content {
@@ -346,8 +351,9 @@ button:focus {
 }
 
 .c-tooltip--top.c-tooltip-arrow {
-  border-top: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+  border-right-color: transparent;
   border-bottom: 0;
+  border-left-color: transparent;
 }
 
 .c-tooltip--bottom.c-tooltip-content {
@@ -356,7 +362,8 @@ button:focus {
 
 .c-tooltip--bottom.c-tooltip-arrow {
   border-top: 0;
-  border-bottom: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+  border-right-color: transparent;
+  border-left-color: transparent;
 }
 
 .c-tooltip--right.c-tooltip-content {
@@ -364,7 +371,8 @@ button:focus {
 }
 
 .c-tooltip--right.c-tooltip-arrow {
-  border-right: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+  border-top-color: transparent;
+  border-bottom-color: transparent;
   border-left: 0;
 }
 
@@ -373,8 +381,9 @@ button:focus {
 }
 
 .c-tooltip--left.c-tooltip-arrow {
+  border-top-color: transparent;
   border-right: 0;
-  border-left: 0.55rem solid hsla(0deg, 0%, 5%, 90%);
+  border-bottom-color: transparent;
 }
 
 .c-tooltip-show {

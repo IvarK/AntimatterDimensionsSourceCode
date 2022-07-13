@@ -58,7 +58,8 @@ export default {
   data() {
     return {
       hovering: false,
-      mainContent: null
+      mainContent: null,
+      isDarkTheme: false
     };
   },
   computed: {
@@ -93,9 +94,33 @@ export default {
     },
     showTooltip() {
       return this.show || this.hovering;
+    },
+    // Manual light-dark differentiation instead of just slapping on a .s-base--dark .c-tooltip is needed
+    // to minimise specificity to make the custom class specify more styles
+    tooltipContentLightDarkClass() {
+      return this.isDarkTheme ? "c-tooltip-content--dark" : "";
+    },
+    tooltipArrowLightDarkClass() {
+      return this.isDarkTheme ? "c-tooltip-arrow--dark" : "";
+    },
+    tooltipContentClass() {
+      return [
+        { "c-tooltip-show": this.showTooltip, [this.tooltipType]: true },
+        this.tooltipClass,
+        this.tooltipContentLightDarkClass
+      ];
+    },
+    tooltipArrowClass() {
+      return [
+        { "c-tooltip-show": this.showTooltip, [this.tooltipType]: true },
+        this.tooltipArrowLightDarkClass
+      ];
     }
   },
   methods: {
+    update() {
+      this.isDarkTheme = Theme.current().isDark();
+    },
     showNegativeSign(axis) {
       if (axis === "X") {
         return this.left ? "-" : "";
@@ -119,14 +144,14 @@ export default {
     </div>
     <div
       class="c-tooltip-content"
-      :class="[{'c-tooltip-show': showTooltip, [tooltipType]: true }, tooltipClass]"
+      :class="tooltipContentClass"
       :style="[tooltipContentStyle, positionStyle, { transform: tooltipTransform }]"
     >
       <slot name="tooltipContent" />
     </div>
     <div
       class="c-tooltip-arrow"
-      :class="{'c-tooltip-show': showTooltip, [tooltipType]: true }"
+      :class="tooltipArrowClass"
       :style="[tooltipArrowStyle, positionStyle, { transform: tooltipTransform }]"
     />
   </div>

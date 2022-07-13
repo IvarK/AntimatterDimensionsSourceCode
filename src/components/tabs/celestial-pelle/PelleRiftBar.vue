@@ -25,24 +25,16 @@ export default {
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
       effects: [],
-      isDark: false,
       selectedMilestoneResourceText: "",
       selectedMilestoneDescriptionText: "",
     };
   },
   computed: {
-    tooltipContentStyle() {
+    tooltipContentClass() {
       const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
-      const baseColor = this.isDark ? "#111111" : "var(--color-base)";
       return {
-        width: "20rem",
-        border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColor,
-        color: hasMilestone ? "black" : "var(--color-text)",
-        fontSize: "1.1rem",
-        fontWeight: "bold",
-        zIndex: 4,
-        boxShadow: hasMilestone ? " 0 0 0.1rem 0.1rem black" : ""
+        "c-pelle-milestone-tooltip": true,
+        "c-pelle-milestone-tooltip--unlocked": hasMilestone
       };
     },
     tooltipArrowStyle() {
@@ -50,9 +42,6 @@ export default {
         borderTop: "0.55rem solid var(--color-pelle--base)"
       };
     }
-  },
-  created() {
-    this.isDark = Themes.find(player.options.theme).isDark();
   },
   methods: {
     update() {
@@ -174,7 +163,7 @@ export default {
     </div>
     <CustomizeableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
-      :tooltip-content-style="tooltipContentStyle"
+      :tooltip-class="tooltipContentClass"
       :tooltip-arrow-style="tooltipArrowStyle"
       :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
       content-class="o-pelle-rift-bar-milestone-hover-area"
@@ -403,5 +392,25 @@ export default {
 .o-pelle-rift-bar-milestone-hover-area {
   width: 2rem;
   height: 100%;
+}
+
+.c-pelle-milestone-tooltip {
+  width: 20rem;
+  z-index: 4;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: 0.1rem solid var(--color-pelle--base);
+}
+
+.s-base--dark .c-pelle-milestone-tooltip {
+  background-color: #111111;
+}
+
+.c-pelle-milestone-tooltip.c-pelle-milestone-tooltip--unlocked {
+  color: black;
+  background-color: var(--color-pelle--base);
+  box-shadow: 0 0 0 0.1rem black;
 }
 </style>

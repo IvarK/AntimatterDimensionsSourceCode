@@ -1,6 +1,4 @@
 <script>
-import { AutomatorData } from "../../../../javascripts/core/globals";
-
 export default {
   name: "AutomatorBlockSingleInput",
   props: {
@@ -63,7 +61,10 @@ export default {
   },
   computed: {
     displayedConstant() {
-      if (this.constant) return this.constant;
+      if (this.constant) {
+        // \uE010 is :blob:
+        return this.constant === "BLOB" ? "\uE010" : this.constant;
+      }
       return (this.dropdownOptions.length === 1 && !this.isBoolTarget && !this.isTextInput)
         ? this.dropdownOptions[0]
         : "";
@@ -79,6 +80,11 @@ export default {
       const value = targetList ? this.block[this.nextInputKey] : "";
       // Sometimes the target might be a Number or undefined but the prop type-checks for it to be a String
       return value ? `${value}` : "";
+    },
+    // Most of the time the input is just a number or constant but these ones will typically lead to longer
+    // phrases in String format, so we want to give some extra room
+    hasLongTextInput() {
+      return this.block.cmd === "NOTIFY" || this.block.cmd === "COMMENT";
     }
   },
   created() {
@@ -259,6 +265,7 @@ export default {
     textInputClassObject() {
       return {
         "o-automator-block-input": true,
+        "o-long-text-input": this.hasLongTextInput,
         "l-error-textbox": this.hasError,
         "c-automator-input-required": !this.hasError,
       };
@@ -278,7 +285,8 @@ export default {
   <div class="c-automator-single-block">
     <div
       v-if="displayedConstant"
-      class="o-automator-command c-automator-input-required c-automator-single-block-constant"
+      class="c-automator-single-block o-automator-command c-automator-constant-block"
+      :class="{ 'l-blob' : constant === 'BLOB' }"
     >
       {{ displayedConstant }}
     </div>
@@ -324,16 +332,29 @@ export default {
 .c-automator-single-block {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
-  margin: 0 0.1rem;
   height: 2.8rem;
+  white-space: nowrap;
 }
 
-.c-automator-single-block-constant {
-  display: inline-block;
+.c-automator-constant-block {
+  background: var(--color-blockmator-block-command);
+  color: var(--color-blockmator-editor-background);
+}
+
+.o-long-text-input {
+  width: 30rem;
 }
 
 .l-error-textbox {
   background: var(--color-automator-error-background);
+  color: yellow;
+}
+
+.l-blob {
+  font-size: 1.8rem;
+  background: black;
+  color: #fc2;
 }
 </style>

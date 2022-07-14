@@ -8921,15 +8921,14 @@ kbd {
 /* #endregion reality-tab */
 
 .o-automator-command {
-  display: inline-block;
-  min-width: 9.5rem;
+  min-width: 4.5rem;
   width: fit-content;
   height: 3rem;
+  padding: 0 1rem;
   color: var(--color-blockmator-block-command);
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.5rem;
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
@@ -8987,13 +8986,14 @@ kbd {
 
 .o-automator-block-input {
   display: inline-block;
+  width: fit-content;
   font-family: Typewriter, serif;
   font-size: 1.1rem;
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
-  max-width: 10rem;
+  margin-right: 0.3rem;
 }
 
 .s-base--dark .o-automator-block-input {
@@ -9001,11 +9001,8 @@ kbd {
 }
 
 input.o-automator-block-input {
-  color: #00ac00;
-}
-
-.s-base--dark input.o-automator-block-input {
-  color: #00ff00;
+  width: 10rem;
+  color: var(--color-blockmator-block-command);
 }
 
 .l-automator-nested-block {

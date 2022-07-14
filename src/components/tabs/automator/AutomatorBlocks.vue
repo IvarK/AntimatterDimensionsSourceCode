@@ -203,7 +203,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     </p>
     <p>
       Options in dropdown menus which start with a * will be replaced with a text box. This can be turned back into a
-      dropdown by typing a single *
+      dropdown by typing a single * and clicking away from the text box.
     </p>
     <draggable
       class="block-container"
@@ -221,8 +221,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
       </div>
     </draggable>
     <p>
-      Note: For technical reasons, blocks and their contents count towards the character limits as if the
-      command was typed in text mode.
+      Note: Blocks and their contents count towards the character limits as if the command was typed in text mode.
     </p>
   </draggable>
 </template>
@@ -240,6 +239,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
   width: 8.7rem;
   text-align: center;
   height: 5.5rem;
+  font-size: 1.2rem;
   justify-content: center;
   align-items: center;
 }

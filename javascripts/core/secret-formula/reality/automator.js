@@ -15,9 +15,9 @@ GameDatabase.reality.automator = {
       keyword: "STUDIES RESPEC",
       category: 0,
       syntax: `<b>studies respec</b>`,
-      description: `This command turns on the respec option on to respec your Time Studies on the next manual or
-        automatic Eternity. Note that this does not actually perform an Eternity on its own; make sure to eventually
-        follow it up with an ETERNITY command or ensure your Autobuyer is on.`,
+      description: `This command turns on the respec option, which will respec your Time Studies on the next manual or
+        automatic Eternity. Note that this does not actually perform an Eternity on its own; make sure your Autobuyer
+        is on or you manually run the ETERNITY command (although ETERNITY has its own built-in respec option).`,
       examples: [
         `studies respec`,
       ]
@@ -67,7 +67,7 @@ GameDatabase.reality.automator = {
       keyword: "STUDIES PURCHASE",
       category: 0,
       syntax: `<b>studies</b> [nowait] <b>purchase <u>study_list</u></b>`,
-      description: "Purchase Time Studies specified from a list formatted like a Tree export.",
+      description: "Purchase Time Studies specified from a list of Time Studies.",
       sections: [
         {
           name: "INPUTS",
@@ -83,11 +83,12 @@ GameDatabase.reality.automator = {
             {
               header: "<i>study_list</i>",
               description: `
-              The Time Study list here has more flexibility and can consist of Time Study numbers, separated by
-              spaces or commas, ranges of studies (for example, <i>11-62</i>) and the following aliases:<br>
-              <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
-              A variable name may be used in place of Time Study list as well (see the definition panel),
-              although in that case the shorthand aliases are not allowed.`
+                The exported Time Study tree format is supported here, which is simply a list of Time Study IDs
+                separated by commas. This command also supports a more flexible formatting, additionally allowing
+                ranges of studies (for example, <u>11-62</u>) and the following aliases:<br>
+                <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
+                A variable name may be used in place of the entire Time Study list as well (see the definition panel),
+                although in that case the shorthand ranges and aliases are not allowed.`
             },
           ]
         }
@@ -108,7 +109,9 @@ GameDatabase.reality.automator = {
         <b>eternity</b> [nowait] [respec]<br>
         <b>reality</b> [nowait] [respec]`,
       description: `Triggers an Infinity, Eternity, or Reality reset if possible, otherwise the automator will wait at
-        this command until it becomes possible.`,
+        this command until it becomes possible. If you find that your script often gets stuck on this command, an
+        Autobuyer may be triggering a prestige before the Automator reaches this line - consider using <i>nowait</i> or
+        adjusting your Autobuyer settings using AUTO.`,
       sections: [
         {
           name: "MODIFIERS",
@@ -116,12 +119,14 @@ GameDatabase.reality.automator = {
             {
               header: "<i>nowait</i>",
               description: `
-                If it is not possible to prestige, move on to the next command instead of waiting.
+                If present, the Automator will move on to the next command instead of repeatedly trying on this
+                command in situations where the prestige is not possible (eg. within an EC below the goal).
               `
             },
             {
               header: "<i>respec</i>",
               description: `
+                For non-Infinity prestiges, also does the related respec action when triggering prestige.
                 Eternity: Respec Time Studies and Eternity.<br>
                 Reality: Unequip Glyphs and Reality.
               `
@@ -149,7 +154,8 @@ GameDatabase.reality.automator = {
             {
               header: "<i>nowait</i>",
               description: `
-                If it is not possible to unlock, move on to the next command.
+                If present, the Automator will move on to the next command even if unlocking the feature fails. By
+                default, the Automator will keep running this command until the unlock succeeds.
               `
             },
           ]
@@ -169,7 +175,9 @@ GameDatabase.reality.automator = {
         <b>start</b> ec<u>N</u><br>
         <b>start</b> dilation`,
       description: `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
-        to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).`,
+        to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).
+        If you are already in the specified EC or Dilated Eternity, running this command again will do nothing;
+        otherwise, the Automator will keep attempting to start the Eternity until it succeeds.`,
       examples: [
         "start ec12",
         "start dilation"
@@ -202,13 +210,13 @@ GameDatabase.reality.automator = {
             {
               header: "<u><i>number</i></u> x highest",
               description: `Usable with Infinity and Eternity only. Turns the Autobuyer on and sets it to
-                "X times highest" mode`
+                "X times highest" mode.`
             },
             {
               header: "<i><u>number</u> <u>currency</u></i>",
               description: `Turns the Autobuyer on and sets it to trigger at a specific amount. The currency must
-                match the autobuyer type (IP, EP, or RM). For the Reality Autobuyer, this will select "Reality
-                Machines" mode`,
+                match the autobuyer type (IP, EP, or RM). This will select "Reality Machines" mode for the Reality
+                Autobuyer. Glyph Level mode cannot be changed or set via the Automator, only manually.`,
             },
           ]
         }
@@ -227,7 +235,9 @@ GameDatabase.reality.automator = {
       keyword: "BLACK HOLE",
       category: 2,
       syntax: "<b>black hole</b> <u>state</u>",
-      description: `Toggles the speedup effect from the Black Hole on or off.`,
+      description: `Toggles the speedup effect from the Black Hole on or off. Turning the Black Hole on via the
+        Automator does not bypass the gradual acceleration from off to max speed which occurs before they are
+        permanent.`,
       examples: [
         "black hole on",
         "black hole off",
@@ -245,7 +255,7 @@ GameDatabase.reality.automator = {
           name: "ACTIONS",
           items: [
             {
-              header: "<i>on | off</i>",
+              header: "<i>on</i> | <i>off</i>",
               description: `
                 Turns storing game time on or off.
               `
@@ -352,13 +362,13 @@ GameDatabase.reality.automator = {
           name: "INTERVAL FORMATTING",
           items: [
             {
-              header: "Specified Interval",
+              header: "<i>Specified Interval</i>",
               description: `This command accepts time units of milliseconds ("ms"), seconds ("s", "sec", or "seconds"),
                 minutes ("m", "min", or "minutes"), and hours ("h" or "hours"). You cannot provide just a number and
                 nothing else; a unit of time must be specified.`,
             },
             {
-              header: "Defined Constant",
+              header: "<i>Defined Constant</i>",
               description: `A defined constant may be used instead, see the definition panel. The defined value will
                 be assumed to be in units of seconds.`
             },
@@ -368,14 +378,14 @@ GameDatabase.reality.automator = {
           name: "OTHER",
           items: [
             {
-              header: "<b>Offine side-effects</b>",
+              header: "<i>Offline Side-effects</i>",
               description: `This command may behave undesirably when it runs during offline progress due to limited
-                tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing 8
+                tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing
                 hours of offline progress, which might not be enough for the resources needed for the rest of the
                 script.`,
             },
             {
-              header: "<b>Alternatives</b>",
+              header: "<i>Alternatives</i>",
               description: `Using another command like 'WAIT' will allow you to set it for a certain resource amount,
                 in order to ensure that the game has the proper state before moving onward.`
             }
@@ -415,7 +425,8 @@ GameDatabase.reality.automator = {
         <br><br>
         If an prestige event (ie. Infinity, Eternity, or Reality) is specified instead of a condition, then the block
         will always be entered and the commands within the block will repeat until the event occurs for the first time
-        <i>after</i> entering the block.`,
+        <i>after</i> entering the block. Note that the Automator will finish the rest of the loop and then exit after
+        the prestige event occurs - it will not immediately exit the loop in the middle.`,
       examples: [
         "until ep > 1e500",
         "until reality",
@@ -466,22 +477,15 @@ GameDatabase.reality.automator = {
         <b>total tt</b> - TOTAL Time Theorems, includes all forms of generated TT and any spent on Studies <br>
         <b>total completions</b> - Total completions of all Eternity Challenges <br>
         <b>pending completions</b> - Total completions of current EC at Eternity <br>
-        <b>ec<u>X</u> completions</b> - Amount of EC completions for a certain EC <br>
-      `,
-      examples: [
-        `if total tt >= 5
-        <blockquote>commands</blockquote>
-        `,
-        `while ec10 completions >= 1
-        <blockquote>commands</blockquote>`
-      ]
+        <b>ec<u>X</u> completions</b> - Amount of EC completions for a certain EC (eg. "ec6 completions")<br>
+      `
     },
     {
       id: 17,
       isUnlocked: () => true,
       keyword: "Formatting Comparisons",
       category: 4,
-      syntax: "resource1 condition resource2",
+      syntax: "<u>resource1</u> <u>condition</u> <u>resource2</u>",
       description: `
         Comparisons are used within certain commands, which allow you to control the behavior of the automator based
         on the game's current state. They have a standard format with two value inputs and a comparison operator, but
@@ -499,7 +503,7 @@ GameDatabase.reality.automator = {
               `
             },
             {
-              header: "<b>condition</i>",
+              header: "<i>condition</i>",
               description: `
                 This must be an inequality operator (<, <=, > >=), which takes on its typical mathematical meaning.
                 Equality operators (==, !=) are not allowed, as the nature of the game means that numbers will often
@@ -530,7 +534,8 @@ GameDatabase.reality.automator = {
         can be nested if desired, with inner blocks being placed within one another.
         <br><br>
         In the text editor mode: Specify the inner block with curly braces, with the opening brace { on the same line as
-        the comparison and the closing brace } on its own line after the last line you want inside the block
+        the comparison and the closing brace } on its own line after the last line you want inside the block. Inner
+        commands do not need to be indented, although it may be visually helpful to do so.
         <br><br>
         In the block editor mode: These commands come with an empty dotted rectangle which indicates which commands are
         within the inner block. Subsequent blocks can then be dragged inside the dotted rectangle.
@@ -541,9 +546,11 @@ GameDatabase.reality.automator = {
           unlock ec10<br>
           start ec10</blockquote>
         }`,
-        `until ep > 1e500 {<br>
+        `until ep > 1e8 {<br>
           <blockquote>
-          studies nowait 11-62</blockquote>
+          studies nowait purchase 11-62<br>
+          pause 10s<br>
+          eternity respec</blockquote>
         }`
       ]
     },

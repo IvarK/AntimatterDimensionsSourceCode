@@ -81,9 +81,7 @@ export default {
       AutomatorHighlighter.updateHighlightedLine(lineNumber, "Active");
       this.unclearedLines = true;
     },
-    // This only runs once when a script is interrupted and stops during execution because of the player editing the
-    // text, but it needs to loop through and clear all lines since editing text may cause arbitrarily shifts of the
-    // active line index via pasting/deleting large code blocks
+    // This only runs when a script is interrupted and stops during execution because of the player editing the text
     clearAllActiveLines() {
       AutomatorHighlighter.clearAllHighlightedLines();
       this.unclearedLines = false;
@@ -134,8 +132,7 @@ export const AutomatorTextUI = {
       const errors = AutomatorData.currentErrors().length;
       if (errors > editor.doc.size) SecretAchievement(48).unlock();
 
-      // Clear all line highlighting as soon as any text is changed. We can't use the locations of previously
-      // highlighted lines because changes may shift the line numbers around before they're cleared.
+      // Clear all line highlighting as soon as any text is changed because that might have shifted lines around
       AutomatorHighlighter.clearAllHighlightedLines();
     });
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});

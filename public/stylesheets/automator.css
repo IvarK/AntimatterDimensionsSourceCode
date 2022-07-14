@@ -275,7 +275,7 @@
   background-color: white;
   border-right: 0.15rem solid var(--color-automator-controls-background);
   border-bottom: 0.15rem solid var(--color-automator-controls-background);
-  padding-left: 1rem;
+  padding: 1rem;
 }
 
 .s-base--dark .c-automator-docs {

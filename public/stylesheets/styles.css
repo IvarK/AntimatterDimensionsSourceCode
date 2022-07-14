@@ -558,6 +558,14 @@ button:focus {
   background: var(--color-accent);
 }
 
+.o-tab-btn--modern-tabs:last-child {
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
+}
+
+.o-tab-btn--modern-tabs:last-child:hover {
+  border-bottom-right-radius: 0;
+}
+
 .o-tab-btn--infinity {
   color: var(--color-infinity);
   background-color: var(--color-prestige--accent);

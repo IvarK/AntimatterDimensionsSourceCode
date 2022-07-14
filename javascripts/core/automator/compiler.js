@@ -194,7 +194,7 @@ import { AutomatorLexer } from "./lexer";
       const value = player.reality.automator.constants[varName];
       if (value === undefined) {
         this.addError(identifier, `Variable ${varName} has not been defined`,
-          `Use the definition panel to define it ${varName} in order to reference it, or check for typos`);
+          `Use the definition panel to define ${varName} in order to reference it, or check for typos`);
         return undefined;
       }
 

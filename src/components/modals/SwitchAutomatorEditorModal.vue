@@ -1,6 +1,4 @@
 <script>
-import { BlockAutomator } from "../tabs/automator/AutomatorBlockEditor.vue";
-
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {

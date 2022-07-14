@@ -248,8 +248,8 @@ export const AutomatorData = {
 
 // Manages line highlighting in a way which is agnostic to the current editor mode (line or block). Ironically this is
 // actually easier to manage in block mode as the Vue components render each line individually and we can just
-// conditionally add classes in the template. The highlighting in text mode needs to be spliced and removed inline in
-// the CodeMirror editor for text mode
+// conditionally add classes in the template. The highlighting in text mode needs to be spliced and removed inline
+// within the CodeMirror editor
 export const AutomatorHighlighter = {
   currentActiveLine: -1,
   currentErrorLine: -1,

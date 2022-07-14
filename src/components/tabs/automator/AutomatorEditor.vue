@@ -60,7 +60,7 @@ export default {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      // This may happen if the player has errored textmato saves and switches to them while in blockmato mode
+      // This may happen if the player has errored textmato scripts and switches to them while in blockmato mode
       if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&
         player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
         Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);

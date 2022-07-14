@@ -5,6 +5,7 @@ export default {
     return {
       isBlock: false,
       blockTemplates: [],
+      selectedTemplateID: -1,
     };
   },
   computed: {
@@ -25,9 +26,29 @@ export default {
     showModal(template) {
       Modal.automatorScriptTemplate.show(template);
     },
-    unpackTemplateBlocks(template) {
-      BlockAutomator.lines.push(...template.blocks);
+    unpackTemplateBlocks(event) {
+      const templateBlocks = this.blockTemplates[this.selectedTemplateID].blocks;
+      const beforeBlocks = BlockAutomator.lines.slice(0, event.newIndex);
+      // Note that slice will also pick up the Vue observer, so we need to remove that as well
+      const afterBlocks = BlockAutomator.lines.slice(event.newIndex).filter(b => b.cmd);
+
+      // Remap IDs, in case the template gets added more than once
+      const maxExistingID = Math.max(...BlockAutomator._idArray.filter(id => id));
+      const minTemplateID = Math.min(...templateBlocks.map(b => b.id));
+      const blocksToAdd = [];
+      for (const block of templateBlocks) {
+        blocksToAdd.push({
+          ...block,
+          id: block.id + maxExistingID - minTemplateID + 1
+        });
+      }
+      BlockAutomator.lines = beforeBlocks;
+      BlockAutomator.lines.push(...blocksToAdd);
+      BlockAutomator.lines.push(...afterBlocks);
       BlockAutomator.updateIdArray();
+    },
+    setIndex(index) {
+      this.selectedTemplateID = index;
     }
   }
 };
@@ -53,18 +74,19 @@ export default {
     <draggable
       v-if="isBlock"
       :key="blockTemplates.length"
-      class="block-container"
+      class="template-container"
       :list="blockTemplates"
       :group="{ name: 'code-blocks', pull: 'clone', put: false }"
       :sort="false"
-      :clone="unpackTemplateBlocks"
+      @end="unpackTemplateBlocks"
     >
       <div
-        v-for="(block, i) in blockTemplates"
+        v-for="(template, i) in blockTemplates"
         :key="i"
         class="o-automator-command o-automator-block-list draggable-blocks"
+        @dragstart="setIndex(i)"
       >
-        {{ block.name }}
+        {{ template.name }}
       </div>
     </draggable>
   </div>
@@ -76,5 +98,10 @@ export default {
   border-radius: var(--var-border-radius, 0.4rem);
   border-width: var(--var-border-width, 0.2rem);
   cursor: pointer;
+}
+
+.template-container {
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -1,6 +1,4 @@
 <script>
-import { BlockAutomator } from "./AutomatorBlockEditor.vue";
-
 export default {
   name: "AutomatorErrorPage",
   data() {

@@ -18,8 +18,6 @@ export default {
     petStyle() {
       return {
         backgroundColor: this.hasRemembrance ? this.petConfig.pet.color : "#555",
-        cursor: this.hasRemembrance ? "" : "pointer",
-        "pointer-events": this.hasRemembrance ? "none" : "",
         "box-shadow": this.hasRemembrance ? "0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7)" : "",
         "border-color": this.hasRemembrance ? "black" : ""
       };
@@ -33,8 +31,8 @@ export default {
       this.name = pet.name;
       this.hasRemembrance = pet.hasRemembrance;
     },
-    turnOnRemembrance() {
-      Ra.petWithRemembrance = this.petConfig.pet.name;
+    toggleRemembrance() {
+      Ra.petWithRemembrance = Ra.petWithRemembrance === this.petConfig.pet.name ? "" : this.petConfig.pet.name;
     }
   },
 };
@@ -45,7 +43,7 @@ export default {
     v-if="isUnlocked"
     class="c-ra-pet-remembrance-button"
     :style="petStyle"
-    @click="turnOnRemembrance"
+    @click="toggleRemembrance"
   >
     <span v-if="hasRemembrance">
       Remembrance given to {{ name }}

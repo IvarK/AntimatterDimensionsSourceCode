@@ -51,7 +51,7 @@ export default {
       Remembrance given to {{ name }}
     </span>
     <span v-else>
-      Concentrate on {{ name }}
+      Give Remembrance to {{ name }}
     </span>
   </button>
 </template>

@@ -147,7 +147,8 @@ export default {
       return;
     }
 
-    if (this.blockTarget) {
+    // Only wipe later inputs if they're in an indeterminate state due to earlier ones not being specified yet
+    if (this.blockTarget && this.key === " ") {
       // eslint-disable-next-line vue/no-mutating-props
       this.block[this.blockTarget] = undefined;
       this.recalculateErrorCount();
@@ -192,10 +193,14 @@ export default {
 
       // We're actually validating only this single line, so we reconstruct the error list by removing everything on
       // this line and adding anything new that was found. We only take the first error from this line (if there are
-      // any) because multiple errors on the same line are generally redundant
+      // any) because multiple errors on the same line are generally redundant, and sometimes the parser hiccups and
+      // duplicates errors onto the last line of the script (which we explicitly ignore)
       const newErrors = [];
+      const lastLine = BlockAutomator._idArray.filter(id => id).length;
       for (const error of AutomatorData.cachedErrors) {
-        if (error.startLine !== this.lineNumber) newErrors.push(error);
+        if (error.startLine !== this.lineNumber && error.startLine < lastLine) {
+          newErrors.push(error);
+        }
       }
       if (validator.errors.length > 0) {
         const error = validator.errors[0];

@@ -7373,8 +7373,7 @@ kbd {
   border: 0.1rem solid #222222;
   border-radius: var(--var-border-radius, 1rem);
   margin: 0.2rem;
-  -webkit-user-select: none;
-  user-select: none;
+  cursor: pointer;
 }
 
 .s-base--metro .c-ra-pet-remembrance-button {

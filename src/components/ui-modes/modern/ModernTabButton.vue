@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      subtabs: Object,
+      subtabs: Array,
       showSubtabs: false,
       hasNotification: false,
       tabName: ""
@@ -23,6 +23,7 @@ export default {
     classObject() {
       return {
         "o-tab-btn": true,
+        "o-tab-btn--modern-tabs": true,
         "o-tab-btn--subtabs": this.showSubtabs,
         "o-tab-btn--active": this.isCurrentTab && player.options.theme !== "S9"
       };

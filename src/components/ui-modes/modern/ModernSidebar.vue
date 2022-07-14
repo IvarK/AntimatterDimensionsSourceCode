@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       isHidden: false,
-      tabs: Object
+      tabs: Array
     };
   },
   methods: {
@@ -34,17 +34,10 @@ export default {
       :key="tab.name"
       :tab="tab"
       :tab-position="tabPosition"
-      class="o-tab-btn--moderntab"
     />
   </div>
 </template>
 
 <style scoped>
-.o-tab-btn--moderntab:last-child {
-  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
-}
 
-.o-tab-btn--moderntab:last-child:hover {
-  border-bottom-right-radius: 0;
-}
 </style>

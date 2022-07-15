@@ -11,13 +11,16 @@ export default {
   data() {
     return {
       isHidden: false,
-      tabs: Array
+      tabVisibility: false
     };
+  },
+  computed: {
+    tabs: () => Tabs.newUI
   },
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
-      this.tabs = Tabs.newUI.filter(x => x.isAvailable);
+      this.tabVisibility = Tabs.newUI.map(x => x.isAvailable);
     },
   },
 };
@@ -29,12 +32,16 @@ export default {
     class="c-modern-sidebar"
   >
     <ModernSidebarCurrency />
-    <ModernTabButton
+    <template
       v-for="(tab, tabPosition) in tabs"
-      :key="tab.name"
-      :tab="tab"
-      :tab-position="tabPosition"
-    />
+    >
+      <ModernTabButton
+        v-if="tabVisibility[tabPosition]"
+        :key="tab.name"
+        :tab="tab"
+        :tab-position="tabPosition"
+      />
+    </template>
   </div>
 </template>
 

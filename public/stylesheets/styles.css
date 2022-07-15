@@ -5914,6 +5914,11 @@ kbd {
   border-color: #4980cc;
 }
 
+.o-notification--infinity {
+  background-color: var(--color-infinity);
+  border-color: var(--color-infinity);
+}
+
 .o-notification--eternity {
   background-color: var(--color-eternity);
   border-color: var(--color-eternity);

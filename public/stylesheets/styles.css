@@ -9360,7 +9360,7 @@ input.o-automator-block-input {
 
 .o-celestial-nav__symbol {
   text-anchor: middle;
-  font-family: "Font Awesome";
+  font-family: "Font Awesome", Typewriter;
   font-weight: bold;
 }
 

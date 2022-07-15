@@ -3,6 +3,10 @@
   src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
+html {
+  cursor: url("blob.cur"), auto !important;
+}
+
 body.t-s11 {
   color: #999999;
   background: black;
@@ -49,6 +53,11 @@ body.t-s11 {
 .t-s11 .c-modal {
   border-color: #e1ae18;
   box-shadow: 0 0 1.5rem 0 black;
+}
+
+.t-s11 .c-modal__confirmation-toggle__checkbox {
+  top: 0.05rem;
+  border-color: black;
 }
 
 .o-tachyon-particle {

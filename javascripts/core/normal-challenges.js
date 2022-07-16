@@ -63,6 +63,10 @@ class NormalChallengeState extends GameMechanicState {
     return Currency.infinitiesTotal.gte(ip);
   }
 
+  get isDisabled() {
+    return this.config.isDisabledInDoomed && Pelle.isDoomed;
+  }
+
   get lockedAt() {
     return GameDatabase.challenges.normal[this.id].lockedAt;
   }

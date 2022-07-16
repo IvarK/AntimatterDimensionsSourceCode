@@ -173,6 +173,14 @@ export const AutomatorData = {
   lastEvent: 0,
   eventLog: [],
   isEditorFullscreen: false,
+  needsRecompile: true,
+  cachedErrors: 0,
+  // This is to hold finished script templates as text in order to make the custom blocks for blockmato
+  blockTemplates: [],
+
+  MAX_ALLOWED_SCRIPT_CHARACTERS: 10000,
+  MAX_ALLOWED_TOTAL_CHARACTERS: 60000,
+
   scriptIndex() {
     return player.reality.automator.state.editorScript;
   },
@@ -189,8 +197,6 @@ export const AutomatorData = {
     player.reality.automator.state.editorScript = newScript.id;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
-  needsRecompile: true,
-  cachedErrors: 0,
   recalculateErrors() {
     const toCheck = this.currentScriptText();
     this.cachedErrors = AutomatorGrammar.compile(toCheck).errors;
@@ -221,8 +227,6 @@ export const AutomatorData = {
     this.eventLog = [];
     this.lastEvent = 0;
   },
-  MAX_ALLOWED_SCRIPT_CHARACTERS: 10000,
-  MAX_ALLOWED_TOTAL_CHARACTERS: 60000,
   // We need to get the current character count from the editor itself instead of the player object, because otherwise
   // any changes made after getting above either limit will never be saved. Note that if the player is on the automator
   // subtab before the automator is unlocked, editor is undefined
@@ -242,18 +246,20 @@ export const AutomatorData = {
     return this.singleScriptCharacters() <= this.MAX_ALLOWED_SCRIPT_CHARACTERS &&
       this.totalScriptCharacters() <= this.MAX_ALLOWED_TOTAL_CHARACTERS;
   },
-  // This is to hold finished script templates as text in order to make the custom blocks for blockmato
-  blockTemplates: [],
 };
+
+export const LineEnum = { Active: "active", Event: "event", Error: "error" };
 
 // Manages line highlighting in a way which is agnostic to the current editor mode (line or block). Ironically this is
 // actually easier to manage in block mode as the Vue components render each line individually and we can just
 // conditionally add classes in the template. The highlighting in text mode needs to be spliced and removed inline
 // within the CodeMirror editor
 export const AutomatorHighlighter = {
-  currentActiveLine: -1,
-  currentErrorLine: -1,
-  currentEventLine: -1,
+  lines: {
+    active: -1,
+    event: -1,
+    error: -1,
+  },
 
   updateHighlightedLine(line, key) {
     if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT && line !== -1) {
@@ -261,38 +267,33 @@ export const AutomatorHighlighter = {
       this.removeHighlightedTextLine(key);
       this.addHighlightedTextLine(line, key);
     } else {
-      this[`current${key}Line`] = line;
+      this.lines[key] = line;
     }
   },
 
   // We need to specifically remove the highlighting class from the old line before splicing it in for the new line
   removeHighlightedTextLine(key) {
-    const removedLine = this[`current${key}Line`] - 1;
-    AutomatorTextUI.editor.removeLineClass(removedLine, "background", `c-automator-editor__${key.toLowerCase()}-line`);
-    AutomatorTextUI.editor.removeLineClass(removedLine,
-      "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
-    this[`current${key}Line`] = -1;
+    const removedLine = this.lines[key] - 1;
+    AutomatorTextUI.editor.removeLineClass(removedLine, "background", `c-automator-editor__${key}-line`);
+    AutomatorTextUI.editor.removeLineClass(removedLine, "gutter", `c-automator-editor__${key}-line-gutter`);
+    this.lines[key] = -1;
   },
   addHighlightedTextLine(line, key) {
-    AutomatorTextUI.editor.addLineClass(line - 1, "background", `c-automator-editor__${key.toLowerCase()}-line`);
-    AutomatorTextUI.editor.addLineClass(line - 1, "gutter", `c-automator-editor__${key.toLowerCase()}-line-gutter`);
-    this[`current${key}Line`] = line;
+    AutomatorTextUI.editor.addLineClass(line - 1, "background", `c-automator-editor__${key}-line`);
+    AutomatorTextUI.editor.addLineClass(line - 1, "gutter", `c-automator-editor__${key}-line-gutter`);
+    this.lines[key] = line;
   },
 
   clearAllHighlightedLines() {
     if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT && AutomatorTextUI.editor) {
-      const keysToClear = ["Active", "Event", "Error"];
-      for (const key of keysToClear) {
+      for (const lineType of Object.values(LineEnum)) {
         for (let line = 0; line < AutomatorTextUI.editor.doc.size; line++) {
-          AutomatorTextUI.editor.removeLineClass(line, "background", `c-automator-editor__${key.toLowerCase()}-line`);
-          AutomatorTextUI.editor.removeLineClass(line, "gutter",
-            `c-automator-editor__${key.toLowerCase()}-line-gutter`);
+          AutomatorTextUI.editor.removeLineClass(line, "background", `c-automator-editor__${lineType}-line`);
+          AutomatorTextUI.editor.removeLineClass(line, "gutter", `c-automator-editor__${lineType}-line-gutter`);
         }
+        this.lines[lineType] = -1;
       }
     }
-    this.currentActiveLine = -1;
-    this.currentEventLine = -1;
-    this.currentErrorLine = -1;
   }
 };
 

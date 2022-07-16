@@ -18,10 +18,7 @@ export default {
   },
   methods: {
     update() {
-      // Right after deleting a constant, the list of keys will contain the empty string. This isn't functionally
-      // problematic, but leaves the "new constant" input in that spot instead of placing it at the end of the list.
-      // The filter operation removes it (if it exists) and then we manually place it at the end
-      const existingValues = Object.keys(player.reality.automator.constants).filter(k => k);
+      const existingValues = Object.keys(player.reality.automator.constants);
       this.constants = existingValues.length < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
     }
   }

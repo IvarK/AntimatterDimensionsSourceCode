@@ -223,11 +223,6 @@ export default {
     },
     changeBlock() {
       this.updateFunction(this.block, this.block.id);
-      if (this.textContents === "*") {
-        this.isTextInput = false;
-        this.dropdownSelection = "";
-        this.textContents = "";
-      }
       if (this.blockTarget) {
         let newValue;
         if (this.isBoolTarget) newValue = this.dropdownSelection !== "";
@@ -276,6 +271,11 @@ export default {
         "c-automator-input-required": !this.isBoolTarget,
         "c-automator-input-optional": this.isBoolTarget,
       };
+    },
+    revertToDropdown() {
+      this.isTextInput = false;
+      this.dropdownSelection = "";
+      this.textContents = "";
     }
   }
 };
@@ -290,15 +290,24 @@ export default {
     >
       {{ displayedConstant }}
     </div>
-    <input
+    <div
       v-else-if="isTextInput"
-      v-model="textContents"
-      v-tooltip="errorTooltip()"
-      :class="textInputClassObject()"
-      @keyup="validateInput()"
-      @focusin="handleFocus(true)"
-      @focusout="handleFocus(false)"
+      class="c-automator-text-input-container"
     >
+      <input
+        v-model="textContents"
+        v-tooltip="errorTooltip()"
+        :class="textInputClassObject()"
+        @keyup="validateInput()"
+        @focusin="handleFocus(true)"
+        @focusout="handleFocus(false)"
+      >
+      <div
+        v-if="dropdownOptions.length > 1"
+        class="c-automator-close-text-input fa-solid fa-circle-xmark"
+        @click="revertToDropdown"
+      />
+    </div>
     <select
       v-else
       v-model="dropdownSelection"
@@ -343,8 +352,21 @@ export default {
   color: var(--color-blockmator-editor-background);
 }
 
+.c-automator-text-input-container {
+  position: relative;
+}
+
 .o-long-text-input {
   width: 30rem;
+}
+
+.c-automator-close-text-input {
+  position: absolute;
+  color: var(--color-automator-error-outline);
+  font-size: 1.5rem;
+  z-index: 1;
+  right: 0.8rem;
+  top: 0.6rem;
 }
 
 .l-error-textbox {

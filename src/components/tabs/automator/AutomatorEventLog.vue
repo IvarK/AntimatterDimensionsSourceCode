@@ -100,7 +100,7 @@ export default {
     },
     scrollToLine(line) {
       AutomatorScroller.scrollToLine(line);
-      AutomatorHighlighter.updateHighlightedLine(line, "Event");
+      AutomatorHighlighter.updateHighlightedLine(line, LineEnum.Event);
     }
   }
 };

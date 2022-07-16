@@ -33,7 +33,7 @@ export default {
       const targetLine = AutomatorBackend.isOn
         ? BlockAutomator.lineNumberFromBlockID(BlockAutomator.currentBlockId)
         : -1;
-      AutomatorHighlighter.updateHighlightedLine(targetLine, "Active");
+      AutomatorHighlighter.updateHighlightedLine(targetLine, LineEnum.Active);
     },
     setPreviousScroll() {
       BlockAutomator.previousScrollPosition = this.$refs.blockEditorElement.scrollTop;

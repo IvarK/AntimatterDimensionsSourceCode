@@ -19,6 +19,7 @@ GameDatabase.challenges.normal = [
     name: "1st Antimatter Dimension Autobuyer",
     reward: "Upgradeable 1st Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ GameDatabase.challenges.normal = [
     name: "2nd Antimatter Dimension Autobuyer",
     reward: "Upgradeable 2nd Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 3,
@@ -41,6 +43,7 @@ GameDatabase.challenges.normal = [
     name: "3rd Antimatter Dimension",
     reward: "Upgradeable 3rd Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 4,
@@ -51,6 +54,7 @@ GameDatabase.challenges.normal = [
     name: "4th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 4th Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 5,
@@ -61,6 +65,7 @@ GameDatabase.challenges.normal = [
     name: "5th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 5th Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 6,
@@ -71,6 +76,7 @@ GameDatabase.challenges.normal = [
     name: "6th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 6th Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 7,
@@ -82,6 +88,7 @@ GameDatabase.challenges.normal = [
     name: "7th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 7th Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 8,
@@ -92,6 +99,7 @@ GameDatabase.challenges.normal = [
     name: "8th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 8th Antimatter Dimension Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 9,
@@ -102,6 +110,7 @@ GameDatabase.challenges.normal = [
     name: "Tickspeed Autobuyer",
     reward: "Upgradeable Tickspeed Autobuyer",
     lockedAt: DC.D0,
+    isDisabledInDoomed: true,
   },
   {
     id: 10,
@@ -112,6 +121,7 @@ GameDatabase.challenges.normal = [
     name: "Automated Dimension Boosts",
     reward: "Dimension Boosts Autobuyer",
     lockedAt: DC.D16,
+    isDisabledInDoomed: true,
   },
   {
     id: 11,
@@ -122,6 +132,7 @@ GameDatabase.challenges.normal = [
     name: "Automated Antimatter Galaxies",
     reward: "Antimatter Galaxies Autobuyer",
     lockedAt: DC.D16,
+    isDisabledInDoomed: true,
   },
   {
     id: 12,

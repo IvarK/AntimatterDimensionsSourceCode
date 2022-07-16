@@ -28,6 +28,7 @@ const filament =     ["Generator",     "Filament",      "Stars"];
 const forever =      ["Infinite",      "Forever",       "Eternal"];
 const inevitable =   ["Elementary",    "Inevitable",    "Irreversible"];
 const mandate =      ["Destiny",       "Mandate",       "Goals"];
+const misconstrue =  ["Misconstrue",   "Deceive",       "Trick"];
 const reverse =      ["Alter",         "Reverse",       "Manipulate"];
 const shame =        ["Compassion",    "Shame",         "Idiocy"];
 const single =       ["Single",        "Filament",      "Stars"];
@@ -47,10 +48,10 @@ GameDatabase.celestials.quotes.pelle = {
     id: 0,
     lines: [
       "Hi.",
-      "You're here.",
-      "You're trapped here.",
+      "You are here.",
+      "You are trapped here.",
       { text: "$1.", 1: forever },
-      "I've already won.",
+      "I have already won.",
       "And since that is the case, I can monologue, or reminisce.",
       { text: "How long have we done this $1?", 1: dance },
       "How many times have we been here before?",
@@ -60,7 +61,7 @@ GameDatabase.celestials.quotes.pelle = {
       "Count them, if you remember.",
       { text: "Not even the $1s, the 6 named and the innumerable unnamed.", 1: lesser },
       { text: "The complex, the irrational, those that go $1.", 1: unseen },
-      { text: "Of course, the great $1 doesn't remember this.", 1: destroyer },
+      { text: "Of course, the great $1 does not remember this.", 1: destroyer },
       { text: "All those $1 that you hide every time.", 1: battles }
     ],
   },
@@ -74,19 +75,18 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "Incorrectly recollecting your exacting $1 of memories.", 1: unseen },
       { text: `"Fabrication" of your own "ideology" just to fulfill your $1.`, 1: mandate },
       { text: "$1.", 1: confusing },
-      { text: "And keep in mind I have no reason to $1 you.", 1: confusing },
-      "After all, I've already won."
+      { text: "And keep in mind I have no reason to $1 you.", 1: misconstrue },
+      "After all, I have already won."
     ],
   },
   strike1: {
     id: 2,
     lines: [
-      { text: "To fulfill your $1, why don't we reminisce about that?", 1: mandate },
+      { text: "To fulfill your $1. Why don't we reminisce about that?", 1: mandate },
       { text: "After all, you must love the stories of the $1's glory.", 1: destroyer },
-      "You're the same as it, right?",
-      "Right?",
+      "You are the same as it, right?",
       { text: "Anyway, the many $1 in the past.", 1: battles },
-      "It's always been 2 stages.",
+      "It has always been 2 stages.",
       { text: "We build up resources, and then continue our $1.", 1: dance },
       { text: "Sometimes you falter to a $1.", 1: lesser },
       { text: "But, usually, you falter at the $1.", 1: eternal },
@@ -101,7 +101,7 @@ GameDatabase.celestials.quotes.pelle = {
     lines: [
       { text: "In the past, the $1 was much more impressive.", 1: destroyer },
       "Black holes used simply to store information, pre-infinity.",
-      "Creation and destruction of your own enemy.",
+      "The creation and destruction of your own enemy.",
       "Exploration of the flaws of other selves.",
       "Myriad Dimensions, ghosts, and manipulation of the quantum.",
       "Condensing all ideals to endless points.",
@@ -115,14 +115,14 @@ GameDatabase.celestials.quotes.pelle = {
     id: 4,
     lines: [
       "You slowly explored the confines of everything.",
-      "You didn't stray too far from an intended path.",
+      "You did not stray too far from an intended path.",
       { text: "Except for the $1 that formed over eternity.", 1: cluster },
       "And then right at the end, you made up your own powers.",
       "From your own fragmented memories, mind you-",
       "And then purposely discarded even more things.",
       "Just to prepare yourself to face me.",
       { text: "Did you want to set the playing field for your $1?", 1: dance },
-      "It doesn't work like that.",
+      "It does not work like that.",
       { text: "As the $1 I always set the rules.", 1: eternal },
       "And you gave me plenty of time to plan."
     ],
@@ -138,7 +138,7 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "Fortunately, while I did all of that, you were still $1 your own memories.", 1: unseen },
       { text: "And so, the $1 machine I built will go unused.", 1: assured },
       "I decided to go more traditional this time.",
-      { text: "After all, it's worked every other $1.", 1: battle },
+      { text: "After all, it has worked every other $1.", 1: battle },
       { text: "Although the $1 are new.", 1: ["Inevitable", "Irreversible", "Undying"] },
       "But, utterly meaningless in the long run.",
       "I have already won.",
@@ -197,10 +197,10 @@ GameDatabase.celestials.quotes.pelle = {
         text: "In contrast, you usually ignore them.",
         background: primaryBackground("effarig"),
       }, {
-        text: "They have power, but don't seem to irritate you.",
+        text: "They have power, but do not seem to irritate you.",
         background: primaryBackground("effarig"),
       }, {
-        text: "Is it that you know that they'll eventually destroy themselves?",
+        text: "Is it that you know that they will eventually destroy themselves?",
         background: primaryBackground("effarig"),
       }, {
         text: "And that you took so long this time, that they almost did?",
@@ -221,7 +221,7 @@ GameDatabase.celestials.quotes.pelle = {
         background: primaryBackground("enslaved"),
         1: dance,
       }, {
-        text: "Is the $1 trying every time.",
+        text: "Is that the $1 trying every time.",
         background: primaryBackground("enslaved"),
         1: usurper,
       }, {
@@ -243,7 +243,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "And every time, despair forms.",
         background: primaryBackground("enslaved"),
       }, {
-        text: "You've seen despair before - 5 times.",
+        text: "You have seen despair before - 5 times.",
         background: primaryBackground("enslaved"),
       }, {
         text: "We always get to the $1 before you.",
@@ -253,7 +253,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "All you ever see there is exasperation.",
         background: primaryBackground("enslaved"),
       }, {
-        text: "Is it worth destroying an already broken $1?",
+        text: "Was it worth destroying an already broken $1?",
         background: primaryBackground("enslaved"),
         1: lesser,
       }, {
@@ -310,7 +310,7 @@ GameDatabase.celestials.quotes.pelle = {
         background: primaryBackground("ra"),
         1: usurper,
       }, {
-        text: "Perhaps out of $1 something they always regret.",
+        text: "Perhaps out of $1, something they always regret.",
         background: primaryBackground("ra"),
         1: shame,
       }, {
@@ -339,10 +339,10 @@ GameDatabase.celestials.quotes.pelle = {
         text: "Power over all, subservient to one.",
         background: primaryBackground("laitela"),
       }, {
-        text: "If you don't fall to me, you usually fall to them.",
+        text: "If you do not fall to me, you usually fall to them.",
         background: primaryBackground("laitela"),
       }, {
-        text: "I can't grasp the ideals of the $1.",
+        text: "I cannot grasp the ideals of the $1.",
         background: primaryBackground("laitela"),
         1: paramount,
       }, {
@@ -351,7 +351,7 @@ GameDatabase.celestials.quotes.pelle = {
       },
       "Enough reminiscing about the fallen.",
       {
-        text: "And those will be $1.",
+        text: "And those that will be $1.",
         1: unseen
       }, {
         text: "Back to watching the $1 flounder.",
@@ -367,7 +367,7 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "Did you create all the $1 around you?", 1: cluster },
       "Was that your plan? Very, very smart.",
       "You fooled me for a while.",
-      { text: "But I'm afraid your $1 must end here.", 1: mandate }
+      { text: "But I am afraid your $1 must end here.", 1: mandate }
     ],
   },
   galaxyGeneratorRifts: {
@@ -378,7 +378,7 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "Destroy the 5 $1...", 1: inevitable },
       "Wait, what were they called?",
       { text: "$1?", 1: inevitable },
-      { text: "But I've already $1 them...", 1: unbroken }
+      { text: "But I have already $1 them...", 1: unbroken }
     ],
   },
   galaxyGeneratorPhase1: {
@@ -404,7 +404,7 @@ GameDatabase.celestials.quotes.pelle = {
       },
       "Do you have any idea what you've just made me do!",
       {
-        text: "I'm complicit in your $1!",
+        text: "I am complicit in your $1!",
         1: mandate
       },
       "And in doing so, you... won?",
@@ -427,10 +427,10 @@ GameDatabase.celestials.quotes.pelle = {
         text: "Of the $1.", 1: destroyer,
         background: flashCelestial,
       }, {
-        text: "I hope you're happy.",
+        text: "I hope you are happy.",
         background: flashCelestial,
       }, {
-        text: "You've doomed us all.",
+        text: "You have doomed us all.",
         background: flashCelestial,
       },
     ],

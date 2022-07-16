@@ -172,6 +172,7 @@ export default {
       ref="input"
       v-model="input"
       type="text"
+      maxlength="1500"
       class="c-modal-input c-modal-import-tree__input"
       @keyup.enter="confirm"
       @keyup.esc="emitClose"

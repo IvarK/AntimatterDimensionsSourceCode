@@ -20,9 +20,13 @@ export default {
       statusName: "",
       editingName: "",
       editingDifferentScript: false,
+      currentChars: 0
     };
   },
   computed: {
+    fullScreen() {
+      return this.$viewModel.tabs.reality.automator.fullScreen;
+    },
     currentScriptID() {
       return this.$viewModel.tabs.reality.automator.editorScriptID;
     },
@@ -51,6 +55,9 @@ export default {
       if (this.hasErrors) return `Stopped: "${this.statusName}" has errors (Cannot run)`;
       return `Stopped: Will start running "${this.statusName}"`;
     },
+    maxScriptChars() {
+      return AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS;
+    },
   },
   methods: {
     update() {
@@ -70,6 +77,9 @@ export default {
       this.duplicateStatus = AutomatorBackend.hasDuplicateName(this.statusName);
       this.editingDifferentScript =
         AutomatorBackend.currentEditingScript.id !== AutomatorBackend.currentRunningScript.id;
+
+
+      this.currentChars = AutomatorData.singleScriptCharacters();
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
@@ -143,7 +153,13 @@ export default {
         :class="{ 'c-automator__button--active' : followExecution }"
         @click="follow"
       />
-      <br>
+      <span
+        v-if="fullScreen"
+        class="c-automator__status-text c-automator__status-text--small"
+        :class="{ 'c-automator__status-text--error' : currentChars > maxScriptChars }"
+      >
+        This script: {{ formatInt(currentChars) }}/{{ formatInt(maxScriptChars) }}
+      </span>
       <AutomatorModeSwitch />
     </div>
     <div class="l-automator-button-row">
@@ -173,6 +189,10 @@ export default {
   font-weight: bold;
   color: var(--color-reality);
   padding: 0 0.5rem;
+}
+
+.c-automator__status-text--small {
+  font-size: 1.1rem;
 }
 
 .c-automator__status-text--warning {

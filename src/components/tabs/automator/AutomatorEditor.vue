@@ -82,17 +82,17 @@ export default {
 
 <style scoped>
 .c-slider-toggle-button {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  align-items: center;
   color: black;
   background-color: #626262;
   border: 0.2rem solid #767676;
   border-radius: 0.2rem;
   margin: 0.4rem;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
   padding: 0.3rem 0;
+  cursor: pointer;
 }
 
 .s.base--dark .c-slider-toggle-button {
@@ -107,15 +107,15 @@ export default {
 
 .c-slider-toggle-button:before {
   content: "";
+  width: 3rem;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  width: 3rem;
-  height: 100%;
+  z-index: 0;
+  background-color: white;
   border-radius: 0.2rem;
   transition: 0.3s ease all;
-  background-color: white;
-  z-index: 0;
 }
 
 .c-slider-toggle-button--right:before {

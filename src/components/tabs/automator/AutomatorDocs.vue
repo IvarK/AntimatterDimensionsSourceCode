@@ -7,6 +7,15 @@ import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
 
+export const AutomatorPanels = {
+  COMMANDS: 1,
+  ERRORS: 2,
+  EVENTS: 3,
+  CONSTANTS: 4,
+  TEMPLATES: 5,
+  BLOCKS: 6
+};
+
 export default {
   name: "AutomatorDocs",
   components: {
@@ -86,6 +95,9 @@ export default {
     maxScriptCount() {
       return 20;
     },
+    panelEnum() {
+      return AutomatorPanels;
+    }
   },
   watch: {
     infoPaneID(newValue) {
@@ -148,9 +160,10 @@ export default {
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
 
-      // Unsure if this will ever happen in practice any more short of save editing and loading up old saves which
-      // were sitting on errored scripts when last opened, but better safe than sorry?
-      if (this.isBlock && BlockAutomator.hasUnparsableCommands(this.currentScript)) {
+      // This gets checked whenever the editor pane is foricibly changed to a different script, which may or may not
+      // have block-parsable commands. It additionally also gets checked on new script creation, where we need to
+      // suppress the error modal instead
+      if (this.isBlock && BlockAutomator.hasUnparsableCommands(this.currentScript) && this.currentScript !== "") {
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
         Modal.message.show("Some script commands were unrecognizable - defaulting to text editor.");
       }
@@ -205,6 +218,11 @@ export default {
       }
       return label;
     },
+    activePanelClass(id) {
+      return {
+        "c-automator__button--active": this.infoPaneID === id,
+      };
+    }
   }
 };
 </script>
@@ -216,40 +234,40 @@ export default {
         <AutomatorButton
           v-tooltip="'Scripting Information'"
           class="fa-list"
-          :class="{ 'c-automator__button--active': infoPaneID === 1 || (infoPaneID === 6 && !isBlock) }"
-          @click="infoPaneID = 1"
+          :class="activePanelClass(panelEnum.COMMANDS)"
+          @click="infoPaneID = panelEnum.COMMANDS"
         />
         <AutomatorButton
           v-tooltip="errorTooltip"
           :style="errorStyle"
           class="fa-exclamation-triangle"
-          :class="{ 'c-automator__button--active': infoPaneID === 2 }"
-          @click="infoPaneID = 2"
+          :class="activePanelClass(panelEnum.ERRORS)"
+          @click="infoPaneID = panelEnum.ERRORS"
         />
         <AutomatorButton
           v-tooltip="'View recently executed commands'"
           class="fa-eye"
-          :class="{ 'c-automator__button--active': infoPaneID === 3 }"
-          @click="infoPaneID = 3"
+          :class="activePanelClass(panelEnum.EVENTS)"
+          @click="infoPaneID = panelEnum.EVENTS"
         />
         <AutomatorButton
           v-tooltip="'Modify defined constants'"
           class="fa-book"
-          :class="{ 'c-automator__button--active': infoPaneID === 4 }"
-          @click="infoPaneID = 4"
+          :class="activePanelClass(panelEnum.CONSTANTS)"
+          @click="infoPaneID = panelEnum.CONSTANTS"
         />
         <AutomatorButton
           v-tooltip="'Template Creator List'"
           class="fa-file-code"
-          :class="{ 'c-automator__button--active': infoPaneID === 5 }"
-          @click="infoPaneID = 5"
+          :class="activePanelClass(panelEnum.TEMPLATES)"
+          @click="infoPaneID = panelEnum.TEMPLATES"
         />
         <AutomatorButton
           v-if="isBlock"
           v-tooltip="'Command menu for Block editor mode'"
           class="fa-cubes"
-          :class="{ 'c-automator__button--active': infoPaneID === 6 }"
-          @click="infoPaneID = 6"
+          :class="activePanelClass(panelEnum.BLOCKS)"
+          @click="infoPaneID = panelEnum.BLOCKS"
         />
         <span
           v-if="fullScreen"
@@ -324,13 +342,12 @@ export default {
       </div>
     </div>
     <div class="c-automator-docs l-automator-pane__content">
-      <AutomatorDocsCommandList v-if="infoPaneID === 1" />
-      <AutomatorErrorPage v-else-if="infoPaneID === 2" />
-      <AutomatorEventLog v-else-if="infoPaneID === 3" />
-      <AutomatorDefinePage v-else-if="infoPaneID === 4" />
-      <AutomatorDocsTemplateList v-else-if="infoPaneID === 5" />
-      <AutomatorBlocks v-else-if="infoPaneID === 6 && isBlock" />
-      <AutomatorDocsCommandList v-else />
+      <AutomatorDocsCommandList v-if="infoPaneID === panelEnum.COMMANDS" />
+      <AutomatorErrorPage v-else-if="infoPaneID === panelEnum.ERRORS" />
+      <AutomatorEventLog v-else-if="infoPaneID === panelEnum.EVENTS" />
+      <AutomatorDefinePage v-else-if="infoPaneID === panelEnum.CONSTANTS" />
+      <AutomatorDocsTemplateList v-else-if="infoPaneID === panelEnum.TEMPLATES" />
+      <AutomatorBlocks v-else-if="infoPaneID === panelEnum.BLOCKS" />
     </div>
   </div>
 </template>

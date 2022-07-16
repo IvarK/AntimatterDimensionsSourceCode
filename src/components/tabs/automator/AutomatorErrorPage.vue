@@ -12,7 +12,7 @@ export default {
     },
     scrollToLine(line) {
       AutomatorScroller.scrollToLine(line);
-      AutomatorHighlighter.updateHighlightedLine(line, "Error");
+      AutomatorHighlighter.updateHighlightedLine(line, LineEnum.Error);
     }
   }
 };

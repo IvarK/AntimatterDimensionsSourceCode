@@ -203,7 +203,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     </p>
     <p>
       Options in dropdown menus which start with a * will be replaced with a text box. This can be turned back into a
-      dropdown by typing a single * and clicking away from the text box.
+      dropdown by clicking the <i class="fa-solid fa-circle-xmark" /> on the right side of the text box.
     </p>
     <draggable
       class="block-container"

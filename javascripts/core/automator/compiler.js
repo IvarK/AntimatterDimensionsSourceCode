@@ -520,7 +520,7 @@ import { AutomatorLexer } from "./lexer";
       // Inner nested commands are found within a prop given the same name as the command itself - this should only
       // actually evaluate to nonzero for at most one key, and will be undefined for all others
       for (const key of Object.keys(commandDepth)) {
-        const nestedBlock = commandDepth[key][0]?.children.block;
+        const nestedBlock = commandDepth[key][0]?.children?.block;
         const nestedCommands = nestedBlock ? nestedBlock[0].children.command : [];
         foundChildren += nestedCommands
           ? nestedCommands.map(c => validatedCount(c) + 1).reduce((sum, val) => sum + val, 0)

@@ -75,10 +75,10 @@ export default {
       this.UI.documents = {};
     },
     unmarkActiveLine() {
-      AutomatorHighlighter.updateHighlightedLine(-1, "Active");
+      AutomatorHighlighter.updateHighlightedLine(-1, LineEnum.Active);
     },
     markActiveLine(lineNumber) {
-      AutomatorHighlighter.updateHighlightedLine(lineNumber, "Active");
+      AutomatorHighlighter.updateHighlightedLine(lineNumber, LineEnum.Active);
       this.unclearedLines = true;
     },
     // This only runs when a script is interrupted and stops during execution because of the player editing the text

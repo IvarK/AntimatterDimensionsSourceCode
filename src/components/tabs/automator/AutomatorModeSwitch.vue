@@ -1,4 +1,6 @@
 <script>
+import { AutomatorPanels } from "./AutomatorDocs";
+
 export default {
   name: "AutomatorModeSwitch",
   data() {
@@ -65,7 +67,9 @@ export default {
       const currScript = player.reality.automator.scripts[this.currentScriptID].content;
       const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScript);
 
-      if (player.options.confirmations.switchAutomatorMode && (AutomatorBackend.isRunning || hasInvalidCommands)) {
+      // While we normally have the player option override the modal, script deletion due to failed parsing can have a
+      // big enough adverse impact on the gameplay experience that we force the modal here regardless of the setting
+      if (hasInvalidCommands || (player.options.confirmations.switchAutomatorMode && AutomatorBackend.isRunning)) {
         const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
         Modal.switchAutomatorEditorMode.show({
           callBack: () => this.$recompute("currentScriptContent"),
@@ -78,6 +82,9 @@ export default {
           // This saves the script after converting it.
           BlockAutomator.parseTextFromBlocks();
           player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+          if (player.reality.automator.currentInfoPane === AutomatorPanels.BLOCKS) {
+            player.reality.automator.currentInfoPane = AutomatorPanels.COMMANDS;
+          }
           // Don't use this.currentScriptContent here due to reactivity issues, but on the other hand reactively
           // updating content might lead to decreased performance.
         } else {
@@ -86,6 +93,7 @@ export default {
           BlockAutomator.fromText(toConvert);
           AutomatorBackend.saveScript(scriptID, toConvert);
           player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
+          player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;
         }
         this.$recompute("currentScriptContent");
         AutomatorHighlighter.clearAllHighlightedLines();

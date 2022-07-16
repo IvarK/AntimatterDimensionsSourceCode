@@ -153,6 +153,13 @@ export default {
         :class="{ 'c-automator__button--active' : followExecution }"
         @click="follow"
       />
+      <span
+        v-if="fullScreen"
+        class="c-automator__status-text c-automator__status-text--small"
+        :class="{ 'c-automator__status-text--error' : currentChars > maxScriptChars }"
+      >
+        This script: {{ formatInt(currentChars) }}/{{ formatInt(maxScriptChars) }}
+      </span>
       <AutomatorModeSwitch />
     </div>
     <div class="l-automator-button-row">
@@ -173,13 +180,6 @@ export default {
         {{ statusText }}
       </span>
     </div>
-    <div
-      v-if="fullScreen"
-      class="l-automator-button-row c-automator__status-text"
-      :class="{ 'c-automator__status-text--error' : currentChars > maxScriptChars }"
-    >
-      Current script characters: {{ currentChars }}/{{ maxScriptChars }}
-    </div>
   </div>
 </template>
 
@@ -189,6 +189,10 @@ export default {
   font-weight: bold;
   color: var(--color-reality);
   padding: 0 0.5rem;
+}
+
+.c-automator__status-text--small {
+  font-size: 1.1rem;
 }
 
 .c-automator__status-text--warning {

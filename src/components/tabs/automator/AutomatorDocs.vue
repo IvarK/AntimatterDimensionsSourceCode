@@ -218,6 +218,13 @@ export default {
           :class="{ 'c-automator__button--active': infoPaneID === 4 }"
           @click="infoPaneID = 4"
         />
+        <span
+          v-if="fullScreen"
+          class="c-automator__status-text c-automator__status-text--small"
+          :class="{ 'c-automator__status-text--error' : totalChars > maxTotalChars }"
+        >
+          Across all scripts: {{ formatInt(totalChars) }}/{{ formatInt(maxTotalChars) }}
+        </span>
         <AutomatorButton
           v-tooltip="fullScreenTooltip"
           :class="fullScreenIconClass"
@@ -273,13 +280,6 @@ export default {
           class="fas fa-trash"
           @click="deleteScript"
         />
-      </div>
-      <div
-        v-if="fullScreen"
-        class="l-automator-button-row c-automator__status-text"
-        :class="{ 'c-automator__status-text--error' : totalChars > maxTotalChars }"
-      >
-        Total script characters: {{ totalChars }}/{{ maxTotalChars }}
       </div>
     </div>
     <div class="c-automator-docs l-automator-pane__content">
@@ -348,6 +348,10 @@ export default {
   font-weight: bold;
   color: var(--color-reality);
   padding: 0 0.5rem;
+}
+
+.c-automator__status-text--small {
+  font-size: 1.1rem;
 }
 
 .c-automator__status-text--error {

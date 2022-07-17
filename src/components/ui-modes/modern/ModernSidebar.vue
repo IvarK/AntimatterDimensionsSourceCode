@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       isHidden: false,
-      tabVisibility: false
+      tabVisibilities: []
     };
   },
   computed: {
@@ -20,7 +20,7 @@ export default {
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
-      this.tabVisibility = Tabs.newUI.map(x => x.isAvailable);
+      this.tabVisibilities = Tabs.newUI.map(x => x.isAvailable);
     },
   },
 };
@@ -36,7 +36,7 @@ export default {
       v-for="(tab, tabPosition) in tabs"
     >
       <ModernTabButton
-        v-if="tabVisibility[tabPosition]"
+        v-if="tabVisibilities[tabPosition]"
         :key="tab.name"
         :tab="tab"
         :tab-position="tabPosition"

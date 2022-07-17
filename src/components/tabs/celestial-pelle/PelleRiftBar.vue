@@ -395,9 +395,13 @@ export default {
   background-color: #111111;
 }
 
-.c-pelle-milestone-tooltip.c-pelle-milestone-tooltip--unlocked {
+.c-pelle-milestone-tooltip--unlocked {
   color: black;
   background-color: var(--color-pelle--base);
   box-shadow: 0 0 0 0.1rem black;
+}
+
+.s-base--dark .c-pelle-milestone-tooltip--unlocked {
+  background-color: var(--color-pelle--base);
 }
 </style>

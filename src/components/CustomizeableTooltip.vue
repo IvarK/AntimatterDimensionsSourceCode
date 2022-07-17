@@ -103,16 +103,22 @@ export default {
     tooltipArrowLightDarkClass() {
       return this.isDarkTheme ? "c-tooltip-arrow--dark" : "";
     },
+    tooltipInternalClass() {
+      return {
+        "c-tooltip-show": this.showTooltip,
+        [this.tooltipType]: true
+      };
+    },
     tooltipContentClass() {
       return [
-        { "c-tooltip-show": this.showTooltip, [this.tooltipType]: true },
+        this.tooltipInternalClass,
         this.tooltipClass,
         this.tooltipContentLightDarkClass
       ];
     },
     tooltipArrowClass() {
       return [
-        { "c-tooltip-show": this.showTooltip, [this.tooltipType]: true },
+        this.tooltipInternalClass,
         this.tooltipArrowLightDarkClass
       ];
     }

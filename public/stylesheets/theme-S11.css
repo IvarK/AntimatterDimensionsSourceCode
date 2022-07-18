@@ -3,10 +3,6 @@
   src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
-html {
-  cursor: url("blob.cur"), auto !important;
-}
-
 body.t-s11 {
   color: #999999;
   background: black;

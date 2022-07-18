@@ -1,6 +1,4 @@
 <script>
-import { AutomatorPanels } from "./AutomatorDocs";
-
 export default {
   name: "AutomatorModeSwitch",
   data() {
@@ -65,38 +63,25 @@ export default {
     },
     toggleAutomatorMode() {
       const currScript = player.reality.automator.scripts[this.currentScriptID].content;
-      const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScript);
+      const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScript) &&
+        this.automatorType === AUTOMATOR_TYPE.TEXT;
 
       // While we normally have the player option override the modal, script deletion due to failed parsing can have a
       // big enough adverse impact on the gameplay experience that we force the modal here regardless of the setting
       if (hasInvalidCommands || (player.options.confirmations.switchAutomatorMode && AutomatorBackend.isRunning)) {
         const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
+
+        // We explicitly pass in 0 for lostBlocks if converting from block to text since nothing is ever lost in that
+        // conversion direction
+        const lostBlocks = this.automatorType === AUTOMATOR_TYPE.TEXT
+          ? blockified.validatedBlocks - blockified.visitedBlocks
+          : 0;
         Modal.switchAutomatorEditorMode.show({
           callBack: () => this.$recompute("currentScriptContent"),
-          lostBlocks: blockified.validatedBlocks - blockified.visitedBlocks,
+          lostBlocks,
         });
       } else {
-        const scriptID = this.currentScriptID;
-        Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
-        if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
-          // This saves the script after converting it.
-          BlockAutomator.parseTextFromBlocks();
-          player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-          if (player.reality.automator.currentInfoPane === AutomatorPanels.BLOCKS) {
-            player.reality.automator.currentInfoPane = AutomatorPanels.COMMANDS;
-          }
-          // Don't use this.currentScriptContent here due to reactivity issues, but on the other hand reactively
-          // updating content might lead to decreased performance.
-        } else {
-          const toConvert = AutomatorTextUI.editor.getDoc().getValue();
-          // Needs to be called to update the lines prop in the BlockAutomator object
-          BlockAutomator.fromText(toConvert);
-          AutomatorBackend.saveScript(scriptID, toConvert);
-          player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-          player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;
-        }
-        this.$recompute("currentScriptContent");
-        AutomatorHighlighter.clearAllHighlightedLines();
+        AutomatorBackend.changeModes(this.currentScriptID);
       }
     }
   }

@@ -14,7 +14,7 @@
   --color-blockmator-block-background: #f5f5f5;
   --color-blockmator-block-command: #401090;
   --color-blockmator-block-required: #50aaaa;
-  --color-blockmator-block-optional: #bbbbbb;
+  --color-blockmator-block-optional: #684700;
   --color-blockmator-editor-background: white;
 }
 
@@ -31,7 +31,7 @@
   --color-blockmator-block-background: #000115;
   --color-blockmator-block-command: #a142ff;
   --color-blockmator-block-required: #005050;
-  --color-blockmator-block-optional: #555555;
+  --color-blockmator-block-optional: #684700;
   --color-blockmator-editor-background: black;
 }
 

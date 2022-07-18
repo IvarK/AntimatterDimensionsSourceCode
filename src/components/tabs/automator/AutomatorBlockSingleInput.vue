@@ -234,7 +234,6 @@ export default {
       }
       this.recalculateErrorCount();
     },
-
     // This gets called whenever blocks are changed, but we also need to halt execution if the currently visible script
     // is also the one being run
     recalculateErrorCount() {
@@ -246,10 +245,17 @@ export default {
     },
     errorTooltip() {
       if (!this.hasError || this.suppressTooltip) return undefined;
+
+      // We want to keep the verbose error info for the error panel, but we need to shorten it for the tooltips here
+      // The problematic errors all seem to have the same format, which we can explicitly modify
+      let errorInfo = this.errors.find(e => e.startLine === this.lineNumber).info;
+      errorInfo = errorInfo
+        .replaceAll("\n", "")
+        .replace(/Expecting: one of these possible Token sequences:.*but found: (.*)/ui, "Unexpected input format: $1");
       return {
         content:
           `<div class="c-block-automator-error">
-          <div>${this.errors.find(e => e.startLine === this.lineNumber).info}</div>
+          <div>${errorInfo}</div>
         </div>`,
         html: true,
         trigger: "manual",
@@ -298,7 +304,7 @@ export default {
         v-model="textContents"
         v-tooltip="errorTooltip()"
         :class="textInputClassObject()"
-        @keyup="validateInput()"
+        @keyup="changeBlock()"
         @focusin="handleFocus(true)"
         @focusout="handleFocus(false)"
       >

@@ -38,19 +38,7 @@ export default {
       this.isCurrentlyBlocks = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
     },
     toggleAutomatorMode() {
-      const scriptID = this.currentScriptID;
-      Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
-      if (this.isCurrentlyBlocks) {
-        // This saves the script after converting it.
-        BlockAutomator.parseTextFromBlocks();
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else {
-        const toConvert = AutomatorTextUI.editor.getDoc().getValue();
-        // Needs to be called to update the lines prop in the BlockAutomator object
-        BlockAutomator.fromText(toConvert);
-        AutomatorBackend.saveScript(scriptID, toConvert);
-        player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-      }
+      AutomatorBackend.changeModes(this.currentScriptID);
       this.callback?.();
     }
   }
@@ -73,7 +61,8 @@ export default {
         commands.
         <b>
           Warning: If these errors are caused by malformed loops or IFs, this may end up deleting large portions of
-          your script! Changing editor modes currently will delete {{ quantifyInt("block", lostBlocks) }}!
+          your script! Changing editor modes currently will cause {{ quantifyInt("line", lostBlocks) }} of code to be
+          lost!
         </b>
       </div>
       <br>

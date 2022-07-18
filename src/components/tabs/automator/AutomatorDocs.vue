@@ -63,7 +63,7 @@ export default {
     },
     nameTooltip() {
       return this.isNameTooLong
-        ? `Names cannot be longer than ${formatInt(this.maxScriptNameLength)} characters!`
+        ? `Names cannot be longer than ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_NAME_LENGTH)} characters!`
         : "";
     },
     currentScriptID: {
@@ -89,14 +89,14 @@ export default {
     maxTotalChars() {
       return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
     },
-    maxScriptNameLength() {
-      return 15;
-    },
     maxScriptCount() {
-      return 20;
+      return AutomatorData.MAX_ALLOWED_SCRIPT_COUNT;
     },
     panelEnum() {
       return AutomatorPanels;
+    },
+    importTooltip() {
+      return this.canMakeNewScript ? "Import automator script" : "You have too many scripts to import another!";
     }
   },
   watch: {
@@ -138,6 +138,7 @@ export default {
       }
     },
     importScript() {
+      if (!this.canMakeNewScript) return;
       Modal.importScript.show();
     },
     onGameLoad() {
@@ -201,7 +202,7 @@ export default {
       let newName = "";
       if (trimmed.length === 2 && trimmed[1].length > 0) newName = trimmed[1];
 
-      if (newName.length > this.maxScriptNameLength) {
+      if (newName.length > AutomatorData.MAX_ALLOWED_SCRIPT_NAME_LENGTH) {
         this.isNameTooLong = true;
         return;
       }
@@ -290,8 +291,9 @@ export default {
           @click="exportScript"
         />
         <AutomatorButton
-          v-tooltip="'Import automator script'"
+          v-tooltip="importTooltip"
           class="fa-file-import"
+          :class="{ 'c-automator__status-text--error' : !canMakeNewScript }"
           @click="importScript"
         />
         <div class="l-automator__script-names">

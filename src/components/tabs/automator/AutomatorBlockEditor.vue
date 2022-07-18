@@ -24,6 +24,7 @@ export default {
   },
   mounted() {
     BlockAutomator.initialize();
+    AutomatorData.recalculateErrors();
     BlockAutomator.editor.scrollTo(0, BlockAutomator.previousScrollPosition);
     BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
   },

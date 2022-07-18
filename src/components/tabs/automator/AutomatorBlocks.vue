@@ -197,7 +197,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     </p>
     <br>
     <p>
-      Inputs with a <span class="c-automator-input-optional">gray</span> color are optional, while inputs with a
+      Inputs with a <span class="c-automator-input-optional">brown</span> color are optional, while inputs with a
       <span class="c-automator-input-required">teal</span> color are required. For more details, check the Scripting
       Information pane.
     </p>

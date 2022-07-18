@@ -13,7 +13,13 @@ export default {
   },
   computed: {
     maxConstantCount() {
-      return 30;
+      return AutomatorData.MAX_ALLOWED_CONSTANT_COUNT;
+    },
+    maxNameLength() {
+      return AutomatorData.MAX_ALLOWED_CONSTANT_NAME_LENGTH;
+    },
+    maxValueLength() {
+      return AutomatorData.MAX_ALLOWED_CONSTANT_VALUE_LENGTH;
     },
   },
   methods: {
@@ -29,7 +35,8 @@ export default {
   <div class="l-panel-padding">
     This panel allows you to define case-sensitive constant values which can be used in place of numbers or Time Study
     import strings. These definitions are shared across all of your scripts and are limited to a maximum of
-    {{ maxConstantCount }} defined constants.
+    {{ maxConstantCount }} defined constants. Additionally, constant names and values are limited to lengths of
+    {{ maxNameLength }} and {{ maxValueLength }} characters respectively.
     <br>
     <br>
     As a usage example, defining
@@ -59,6 +66,7 @@ export default {
   display: flex;
   flex-direction: column;
   border: solid 0.1rem var(--color-automator-docs-font);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
   margin-top: 1rem;
 }

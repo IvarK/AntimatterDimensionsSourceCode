@@ -525,6 +525,10 @@ import { AutomatorLexer } from "./lexer";
         foundChildren += nestedCommands
           ? nestedCommands.map(c => validatedCount(c) + 1).reduce((sum, val) => sum + val, 0)
           : 0;
+
+        // Trailing newlines get turned into a command with a single EOF argument; we return -1 because one level up
+        // on the recursion this looks like an otherwise valid command and would be counted as such
+        if (key === "EOF") return -1;
       }
       return foundChildren;
     };

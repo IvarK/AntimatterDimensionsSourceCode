@@ -25,10 +25,9 @@ export default {
     };
   },
   computed: {
-    // This modal is used by both study importing and preset editing but only has a prop actually passed in when
-    // editing (which is the preset index). Needs to be an undefined check because index can be zero
+    // This modal is used by both study importing and preset editing, but is given an id of -1 when importing
     isImporting() {
-      return this.id === undefined;
+      return this.id === -1;
     },
     // This represents the state reached from importing into an empty tree
     importedTree() {

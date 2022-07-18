@@ -1447,6 +1447,15 @@ GameStorage.devMigrations = {
         }
         player.reality.automator.scripts[key].content = lines.join("\n");
       }
+
+      // Migrate IDs for all saves made during wave 3 testing, to prevent odd overwriting behavior on importing
+      const newScripts = {};
+      const oldScriptKeys = Object.keys(player.reality.automator.scripts);
+      for (let newID = 1; newID <= oldScriptKeys.length; newID++) {
+        newScripts[newID] = player.reality.automator.scripts[oldScriptKeys[newID - 1]];
+        newScripts[newID].id = newID;
+      }
+      player.reality.automator.scripts = newScripts;
     }
   ],
 

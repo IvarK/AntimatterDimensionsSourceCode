@@ -874,32 +874,42 @@ simply completing more Realities.
 <br>
 <br>
 The Automator uses a scripting language that allows you to automate nearly the entire game.
-The interface has two panes, a script pane on the left where you enter the commands to automate the game, and a
-multiple function pane on the right.
+The interface has two panes, a script pane on the left where you enter the commands to automate the game and a
+pane on the right which has multiple panels which do many different things. The panels on the right side include:
 <br>
-These functions include:
+- The command list, with information on all the commands available to you (some may not be available until you have
+  unlocked certain things)
 <br>
-- a brief introduction to the Automator
+- The template creator, which allows you to generate premade script templates to accomplish certain tasks
 <br>
-- the command list, with information on all the commands available to you
+- All errors in the current Automator script, as well as possible suggestions on how to fix them; the button for
+  this panel will light up if you have any errors in your current script
 <br>
-- the template creator, which allows you to fill in premade templates to suit your own purposes
+- All recently executed commands, what those commands did, and how recently they were executed
 <br>
-- a list of all errors in the current Automator script
+- A constant definition panel where you can define as shorthand for values within the automator (eg. special numbers
+  or certain Time Study trees)
 <br>
-- a list of recently executed commands and what those commands did
-<br>
-- if you are in the Block mode of the Automator, the command blocks used to write the script
-<br>
-<br>
-You can use as many rows as you need.
-<br>
-Some commands are gated behind unlocks, which will only become visible once you have unlocked them.
+- If you are in the block mode of the Automator, there will also be a panel for the command blocks used to write the
+  script
 <br>
 <br>
-You are able to create new scripts by clicking on the dropdown, and then clicking the "Create New..." option.
-To rename a script, click the pencil next to the dropdown. Scripts are automatically saved as you edit them.
-You can create as many scripts as you want.
+There are a few limitations to scripts in order to reduce lag and prevent save file size from getting too large.
+Individual scripts are limited to a maximum of ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS)}
+characters each, and all your scripts together cannot exceed a <i>total</i> character count of
+${formatInt(AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS)}. Any changes made to scripts while above these limits
+will not be saved if you refresh the page.
+<br>
+<br>
+You are able to create new scripts by clicking on the dropdown, and then clicking the "Create new script..." option.
+To rename a script, click the pencil next to the dropdown and edit the name to whatever you with the script to be
+called (max ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_NAME_LENGTH)} characters). You are allowed to create a
+maximum of ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_COUNT)} scripts.
+<br>
+<br>
+Scripts are automatically saved as you edit them, but are not saved to your game save until the global autosave timer
+(ie. "Time since last save") triggers a full game save. If you make changes to scripts right before closing the game,
+you should wait until the game saves afterwards in order to not lose your changes.
 <br>
 <br>
 If you want a larger workspace, you can press the button in the top right corner of the documentation pane of the
@@ -908,11 +918,15 @@ panes if you want more room to write your script or read documentation.
 <br>
 <br>
 By pressing the top-right button on the script pane, you can switch to block mode, which may be more approachable if
-you are unfamiliar with programming. To enter commands in block mode, drag the box for the relevant command from the
-documentation pane into the script pane and drop it where you want the command to go. Commands can be freely
-rearranged by dragging the blocks around if needed. Clicking the top-right button in block mode will switch back to
-text mode, and switching between block and text mode will automatically translate your script as well.
-Note that scripts can only be converted into block mode if they have no errors!
+you are unfamiliar with programming. To enter commands in block mode, select the command block pane on the right and
+drag the box for the relevant command into the script pane and drop it where you want the command to go. Commands can be
+freely rearranged by dragging the blocks around if needed.
+<br>
+<br>
+Clicking the top-right button in block mode will switch back to text mode, and switching between block and text mode
+will automatically translate your script as well. If you have a script in text mode which has errors, the Automator
+may not be able to figure out what blocks to convert the lines with errors into. This may result in part of your
+script being lost if you attempt to convert a text script with errors into a bock script. 
 <br>
 <br>
 Just like your entire savefile, individual Automator scripts can be imported and exported from the game.

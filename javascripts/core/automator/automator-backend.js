@@ -1,3 +1,5 @@
+import { AutomatorPanels } from "../../../src/components/tabs/automator/AutomatorDocs";
+
 /** @abstract */
 class AutomatorCommandInterface {
   constructor(id) {
@@ -180,6 +182,12 @@ export const AutomatorData = {
 
   MAX_ALLOWED_SCRIPT_CHARACTERS: 10000,
   MAX_ALLOWED_TOTAL_CHARACTERS: 60000,
+  MAX_ALLOWED_SCRIPT_NAME_LENGTH: 15,
+  MAX_ALLOWED_SCRIPT_COUNT: 20,
+  MAX_ALLOWED_CONSTANT_NAME_LENGTH: 20,
+  // Note that a study string with ALL studies in unshortened form without duplicated studies is ~230 characters
+  MAX_ALLOWED_CONSTANT_VALUE_LENGTH: 250,
+  MAX_ALLOWED_CONSTANT_COUNT: 30,
 
   scriptIndex() {
     return player.reality.automator.state.editorScript;
@@ -428,7 +436,7 @@ export const AutomatorBackend = {
 
   step() {
     if (this.stack.isEmpty) return false;
-    for (let steps = 0; steps < 100; steps++) {
+    for (let steps = 0; steps < 100 && !this.hasJustCompleted; steps++) {
       switch (this.runCurrentCommand()) {
         case AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION:
           return true;
@@ -442,14 +450,22 @@ export const AutomatorBackend = {
         case AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION:
           this.nextCommand();
       }
+
+      // We need to break out of the loop if the last commands are all SKIP_INSTRUCTION, or else it'll start
+      // trying to execute from an undefined stack if it isn't set to automatically repeat
+      if (!this.stack.top) this.hasJustCompleted = true;
     }
 
     // This should in practice never happen by accident due to it requiring 100 consecutive commands that don't do
     // anything (looping a smaller group of no-ops will instead trigger the loop check every tick). Nevertheless,
     // better to not have an explicit infinite loop so that the game doesn't hang if the player decides to be funny
-    // and input 3000 comments in a row
-    GameUI.notify.error("Automator halted - too many consecutive no-ops detected");
-    AutomatorData.logCommandEvent("Automator halted due to excessive no-op commands", this.currentLineNumber);
+    // and input 3000 comments in a row. If hasJustCompleted is true, then we actually broke out because the end of
+    // the script has no-ops and we just looped through them, and therefore shouldn't show these messages
+    if (!this.hasJustCompleted) {
+      GameUI.notify.error("Automator halted - too many consecutive no-ops detected");
+      AutomatorData.logCommandEvent("Automator halted due to excessive no-op commands", this.currentLineNumber);
+    }
+
     this.stop();
     return false;
   },
@@ -610,6 +626,26 @@ export const AutomatorBackend = {
     this.start(this.state.topLevelScript, AUTOMATOR_MODE.RUN);
     if (this.stack.isEmpty) return;
     this.reset(this.stack._data[0].commands);
+  },
+
+  changeModes(scriptID) {
+    Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
+    if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+      // This saves the script after converting it.
+      BlockAutomator.parseTextFromBlocks();
+      player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+      if (player.reality.automator.currentInfoPane === AutomatorPanels.BLOCKS) {
+        player.reality.automator.currentInfoPane = AutomatorPanels.COMMANDS;
+      }
+    } else {
+      const toConvert = AutomatorTextUI.editor.getDoc().getValue();
+      // Needs to be called to update the lines prop in the BlockAutomator object
+      BlockAutomator.fromText(toConvert);
+      AutomatorBackend.saveScript(scriptID, toConvert);
+      player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
+      player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;
+    }
+    AutomatorHighlighter.clearAllHighlightedLines();
   },
 
   stack: {

@@ -14,6 +14,14 @@ export default {
       valueString: "",
     };
   },
+  computed: {
+    maxNameLength() {
+      return AutomatorData.MAX_ALLOWED_CONSTANT_NAME_LENGTH;
+    },
+    maxValueLength() {
+      return AutomatorData.MAX_ALLOWED_CONSTANT_VALUE_LENGTH;
+    },
+  },
   created() {
     this.aliasString = this.constant;
     this.oldAlias = this.aliasString;
@@ -34,7 +42,6 @@ export default {
         return matchObj ? matchObj[0] === this.aliasString : false;
       });
 
-      if (this.aliasString.length >= 20) return "Constant name must be shorter than 20 characters";
       if (!isValidName) return "Constant name must be alphanumeric and cannot start with a number";
       if (alreadyExists) return "You have already defined a constant with this name";
       if (hasCommandConflict) return "Constant name conflicts with a command key word";
@@ -43,11 +50,9 @@ export default {
 
       const isNumber = this.valueString.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
       // Note: Does not do validation for studies existing
-      const isStudyString = this.valueString.match(/^\d{2,3}(,\d{2,3})*(\|\d\d?)?$/u);
+      const isStudyString = TimeStudyTree.isValidImportString(this.valueString);
 
       if (!isNumber && !isStudyString) return "Constant value must either be a number or Time Study string";
-      // Note that a study string with ALL studies is ~230 characters
-      if (this.valueString.length >= 250) return "Constant value must be shorter than 250 characters";
       return null;
     },
     errorTooltip() {
@@ -85,7 +90,9 @@ export default {
     <input
       v-model="aliasString"
       class="c-define-textbox c-alias"
+      :class="{ 'l-limit-textbox' : aliasString.length === maxNameLength }"
       placeholder="New constant..."
+      :maxlength="maxNameLength"
       @focusin="handleFocus(true)"
       @focusout="handleFocus(false)"
     >
@@ -100,7 +107,9 @@ export default {
       v-if="aliasString"
       v-model="valueString"
       class="c-define-textbox c-value"
+      :class="{ 'l-limit-textbox' : valueString && valueString.length === maxValueLength }"
       placeholder="Value for constant..."
+      :maxlength="maxValueLength"
       @focusin="handleFocus(true)"
       @focusout="handleFocus(false)"
     >
@@ -115,6 +124,9 @@ export default {
 }
 
 .o-arrow-padding {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 0 1rem;
 }
 
@@ -133,11 +145,16 @@ export default {
   background: var(--color-automator-error-background);
 }
 
+.l-limit-textbox {
+  border-style: dotted;
+  border-color: var(--color-automator-error-outline);
+}
+
 .c-alias {
-  width: 14rem;
+  min-width: 14.5rem;
 }
 
 .c-value {
-  width: 30rem;
+  width: 100%;
 }
 </style>

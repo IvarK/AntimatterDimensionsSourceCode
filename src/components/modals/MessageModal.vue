@@ -28,6 +28,7 @@ export default {
     handleClick() {
       this.modal.callback?.();
       this.emitClose();
+      EventHub.ui.offAll(this);
     }
   },
 };

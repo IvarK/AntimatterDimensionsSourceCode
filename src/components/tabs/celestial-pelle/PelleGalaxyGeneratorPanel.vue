@@ -204,15 +204,18 @@ export default {
   position: relative;
   font-family: Typewriter;
   font-size: 1.1rem;
-  color: white;
-  background-color: #004b55;
+  color: var(--color-text);
+  background-color: #c1eaf0;
   border: var(--var-border-width, 0.1rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
+  /* box-shadow is here to prevent a weird grey border forming around the background */
   box-shadow: inset 0 0 0.1rem 0.1rem var(--color-pelle--base);
   margin: 1rem;
   padding: 2rem;
+}
 
-  /* box-shadow is here to prevent a weird grey border forming around the background */
+.s-base--dark .c-increase-cap {
+  background-color: #004b55;
 }
 
 .c-increase-cap:hover {
@@ -235,17 +238,25 @@ export default {
   top: 0;
   left: 0;
   z-index: 0;
-  background: linear-gradient(black, var(--color-pelle--base));
+  background: linear-gradient(var(--color-text-inverted), var(--color-pelle--base));
   transition: width 0.1s;
 }
 
 .c-big-text {
   font-size: 2.5rem;
+  text-shadow: 0.2rem 0.2rem 0.2rem #888888;
+}
+
+.s-base--dark .c-big-text {
   text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 
 .c-medium-text {
   font-size: 2rem;
+  text-shadow: 0.2rem 0.2rem 0.2rem #888888;
+}
+
+.s-base--dark .c-medium-text {
   text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 </style>

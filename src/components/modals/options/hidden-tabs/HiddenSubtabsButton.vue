@@ -56,10 +56,10 @@ export default {
     <div class="l-hide-modal-button">
       <div
         v-if="isModernUI"
-        class="l-hide-modal-button--icon"
+        class="l-hide-modal-button__subtab-icon"
         v-html="subtab.symbol"
       />
-      <div class="l-hide-modal-button--name">
+      <div class="l-hide-modal-button__subtab-name">
         {{ subtab.name }}
       </div>
     </div>
@@ -73,13 +73,13 @@ export default {
   align-items: center;
 }
 
-.l-hide-modal-button--icon {
+.l-hide-modal-button__subtab-icon {
   font-size: 1.5rem;
   width: 2rem;
   margin: 0.2rem;
 }
 
-.l-hide-modal-button--name {
+.l-hide-modal-button__subtab-name {
   width: 8.2rem;
 }
 </style>

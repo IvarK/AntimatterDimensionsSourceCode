@@ -1846,7 +1846,7 @@ br {
 .o-infinity-button {
   font-weight: bold;
   color: var(--color-infinity);
-  background-color: black;
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
@@ -1881,7 +1881,7 @@ br {
 .o-eternity-button {
   font-weight: bold;
   color: var(--color-eternity);
-  background-color: black;
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
@@ -3288,14 +3288,14 @@ br {
 
 .c-challenge-box--infinity {
   height: 18rem;
-  color: white;
-  background-color: #181818;
+  color: var(--color-text);
+  background-color: var(--color-base);
 }
 
 .c-challenge-box--eternity {
   height: 18rem;
   color: var(--color-eternity);
-  background-color: black;
+  background-color: var(--color-prestige--accent);
   border: var(--var-border-width, 0.3rem) solid var(--color-eternity);
   border-radius: var(--var-border-radius, 1rem);
 }
@@ -4150,8 +4150,8 @@ br {
   font-family: Typewriter;
   font-size: 0.9rem;
   font-weight: bold;
-  color: white;
-  background: #1f1f1f;
+  color: var(--color-text);
+  background: var(--color-base);
   border: 0.1rem solid #ed85df;
   border-radius: var(--var-border-radius, 0.4rem);
   margin-bottom: -0.1rem;

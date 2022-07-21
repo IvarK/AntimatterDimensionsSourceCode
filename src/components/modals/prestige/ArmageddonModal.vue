@@ -62,6 +62,7 @@ export default {
       disChargeAll();
       player.buyUntil10 = true;
       player.records.realTimeDoomed = 0;
+      for (const res of AlchemyResources.all) res.amount = 0;
       Pelle.quotes.initial.show();
     },
   },

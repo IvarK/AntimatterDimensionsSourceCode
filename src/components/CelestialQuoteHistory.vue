@@ -7,18 +7,22 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      isShown: false
+    };
+  },
   computed: {
     color() {
       return this.celestial === "laitela" ? `var(--color-laitela--accent)` : `var(--color-${this.celestial}--base)`;
-    }
+    },
   },
   methods: {
+    update() {
+      this.isShown = Celestials[this.celestial].quotes.all.some(x => x.isUnlocked);
+    },
     show() {
-      if (Celestials[this.celestial].quotes.all.every(x => !x.isUnlocked)) {
-        GameUI.notify.error(`You have not spoken with ${this.celestial.capitalize()} yet.`);
-        return;
-      }
-      Modal.celestialQuoteHistory.show(Celestials[this.celestial].quotes.all);
+      Quote.showHistory(Celestials[this.celestial].quotes.all);
     },
   }
 };
@@ -26,19 +30,19 @@ export default {
 
 <template>
   <button
+    v-if="isShown"
     class="c-celestial-quote-history--button"
     :style="{
       '--scoped-cel-color': color
     }"
     @click="show"
   >
-    {{ celestial.capitalize() }}'s Dialogue
+    {{ celestial.capitalize() }}'s Quotes
   </button>
 </template>
 
 <style scope>
 .c-celestial-quote-history--button {
-  width: fit-content;
   align-self: center;
   font-family: Typewriter;
   font-size: 1.8rem;

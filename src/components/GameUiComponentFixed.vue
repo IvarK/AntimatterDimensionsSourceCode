@@ -1,4 +1,5 @@
 <script>
+import CelestialQuoteHistoryDisplay from "@/components/modals/celestial-quotes/CelestialQuoteHistoryDisplay";
 import CelestialQuoteModal from "@/components/modals/celestial-quotes/CelestialQuoteModal";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
 import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
@@ -24,6 +25,7 @@ export default {
     PopupModal,
     ModalProgressBar,
     CelestialQuoteModal,
+    CelestialQuoteHistoryDisplay,
     FadeAway,
     CreditsContainer,
     NewGame
@@ -78,6 +80,10 @@ export default {
     <CelestialQuoteModal
       v-else-if="view.quotes.current"
       :quote="view.quotes.current"
+    />
+    <CelestialQuoteHistoryDisplay
+      v-else-if="view.quotes.history"
+      :quotes="view.quotes.history"
     />
     <PopupModal
       v-else-if="view.modal.current"

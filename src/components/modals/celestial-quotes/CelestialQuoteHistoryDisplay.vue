@@ -2,7 +2,7 @@
 import CelestialQuoteLineBasicInteractable from "./templates/CelestialQuoteLineBasicInteractable";
 
 export default {
-  name: "CelestialQuoteHistoryModal",
+  name: "CelestialQuoteHistoryDisplay",
   components: {
     CelestialQuoteLineBasicInteractable
   },
@@ -72,6 +72,9 @@ export default {
       if (Date.now() - this.lastProgress < 150) return;
       this.focusedQuote = Math.min(this.unlockedQuotes.length - 1, this.focusedQuote + 1);
       this.lastProgress = Date.now();
+    },
+    close() {
+      Quote.clearHistory();
     }
   }
 };
@@ -85,11 +88,11 @@ function easeOut(x) {
   <div class="l-modal-overlay c-modal-overlay">
     <i
       class="c-modal-celestial-quote-history__close fas fa-circle-xmark"
-      @click="emitClose"
+      @click="close"
     />
     <div
       class="c-quote-history-modal__clickable-background"
-      @click="emitClose"
+      @click="close"
     />
     <div class="c-quote-history-modal__controls">
       <i
@@ -126,7 +129,6 @@ function easeOut(x) {
 }
 
 .c-quote-overlay--background {
-  opacity: 0.8;
   filter: grayscale(0.5);
   cursor: pointer;
 }
@@ -155,23 +157,11 @@ function easeOut(x) {
   /* stylelint-disable-next-line unit-allowed-list */
   left: calc(50vw + 16rem);
   z-index: 1;
-  animation: 0.5s a-fade-in;
+  animation: a-fade-in 0.5s;
 }
 
 .c-quote-history-modal__controls {
-  display: flex;
-  flex-direction: column;
-  height: 10rem;
-  position: absolute;
-  /* stylelint-disable-next-line unit-allowed-list */
-  top: 50vh;
-  /* stylelint-disable-next-line unit-allowed-list */
-  right: calc(50vw + 16rem);
-  z-index: 1;
-  justify-content: space-between;
-  padding: 1rem;
-  transform: translateY(-50%);
-  animation: 0.5s a-fade-in;
+  animation: a-fade-in 0.5s;
 }
 
 .c-quote-history-modal__clickable-background {
@@ -180,7 +170,7 @@ function easeOut(x) {
   position: absolute;
   inset: 0;
   z-index: 0;
-  cursor: pointer;
+  cursor: zoom-out;
 }
 
 @keyframes a-fade-in {

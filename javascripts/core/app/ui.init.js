@@ -9,6 +9,7 @@ export const state = {
     quotes: {
       queue: [],
       current: undefined,
+      history: undefined
     },
     tabs: {
       reality: {

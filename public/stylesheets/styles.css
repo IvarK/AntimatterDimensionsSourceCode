@@ -3278,20 +3278,21 @@ br {
 .c-challenge-box--normal {
   font-size: 1.05rem;
   color: var(--color-text);
-  background-color: #f2f2f2;
+  background-color: var(--color-base);
 }
 
 .c-challenge-box--infinity {
   height: 18rem;
   color: var(--color-text);
   background-color: var(--color-base);
+  border-color: var(--color-infinity);
 }
 
 .c-challenge-box--eternity {
   height: 18rem;
-  color: var(--color-eternity);
-  background-color: var(--color-prestige--accent);
-  border: var(--var-border-width, 0.3rem) solid var(--color-eternity);
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border-color: var(--color-eternity);
   border-radius: var(--var-border-radius, 1rem);
 }
 
@@ -3300,76 +3301,6 @@ br {
 }
 
 /* #region themes */
-
-/* #region t-dark */
-
-.t-dark .c-challenge-box--normal {
-  background-color: #27343b;
-}
-
-/* #endregion t-dark */
-
-/* #region t-metro t-dark-metro t-inverted-metro t-s8 */
-
-.s-base--metro .c-challenge-box--normal {
-  border-color: black;
-}
-
-.s-base--metro .c-challenge-box--infinity {
-  border-color: var(--color-infinity);
-}
-
-.s-base--metro .c-challenge-box--eternity {
-  border-color: var(--color-eternity);
-}
-
-.t-dark-metro .c-challenge-box--normal {
-  background-color: #27343b;
-}
-
-/* #endregion t-metro t-dark-metro t-inverted-metro */
-
-/* #region t-s1 */
-
-.t-s1 .c-challenge-box--normal,
-.t-s1 .c-challenge-box--infinity {
-  background-color: #dbd242;
-}
-
-/* #endregion t-s1 */
-
-/* #region t-s2 */
-
-.t-s2 .c-challenge-box--normal {
-  color: white;
-}
-
-/* #endregion t-s2 */
-
-/* #region t-s6 t-s10 */
-
-.t-s6 .c-challenge-box--normal,
-.t-s6 .c-challenge-box--infinity,
-.t-s10 .c-challenge-box--normal,
-.t-s10 .c-challenge-box--infinity,
-.t-s11 .c-challenge-box--normal,
-.t-s11 .c-challenge-box--infinity {
-  background-color: black;
-  border: 0.1rem solid;
-}
-
-.t-s6 .c-challenge-box--normal,
-.t-s10 .c-challenge-box--normal {
-  color: #e0e0e0;
-  border-color: grey;
-}
-
-.t-s6 .c-challenge-box--infinity,
-.t-s10 .c-challenge-box--infinity {
-  border-color: white;
-}
-
-/* #endregion t-s6 t-s10 */
 
 /* #region t-s7 */
 

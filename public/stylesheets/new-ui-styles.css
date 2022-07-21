@@ -402,16 +402,16 @@ body.t-s9 {
 .o-primary-btn--new {
   overflow: hidden;
   grid-column: 1 / 11;
-  height: 4.4rem;
   width: 25rem;
+  height: 4.4rem;
   position: relative;
   font-family: Typewriter, serif;
   color: var(--color-text);
   background-color: var(--color-base);
   border: 0.1rem solid var(--color-good);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 1rem;
   margin: 0.5rem;
+  padding: 1rem;
 }
 
 .o-primary-btn--dimension-reset {
@@ -649,9 +649,7 @@ body.t-s9 {
 }
 
 .c-challenge-box--normal {
-  color: var(--color-text);
-  background: var(--color-base);
-  border: 0.1rem solid var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .o-autobuyer-input,

@@ -96,6 +96,8 @@ export const Pelle = {
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
+    player.celestials.enslaved.isStoringReal = false;
+    player.celestials.enslaved.autoStoreReal = false;
     this.cel.armageddonDuration = 0;
     EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },

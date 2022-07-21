@@ -35,11 +35,12 @@ export default {
       const size = this.layout.size * this.sizeMultiplier;
       return {
         width: `${size}rem`,
-        height: `${size}rem`
+        height: `${size}rem`,
+        opacity: this.isDoomed ? 0.8 : 1
       };
     },
     orbitClass() {
-      return this.focusedResourceId === -1 ? undefined : "o-alchemy-orbit--unfocused";
+      return (this.focusedResourceId === -1 || this.isDoomed) ? undefined : "o-alchemy-orbit--unfocused";
     },
     realityGlyphCreationClass() {
       return {
@@ -49,6 +50,12 @@ export default {
     },
     reactions() {
       return AlchemyReactions.all.compact().filter(r => r.product.isUnlocked);
+    },
+    isDoomed() {
+      return Pelle.isDoomed;
+    },
+    pelleSymbol() {
+      return Pelle.symbol;
     }
   },
   methods: {
@@ -98,9 +105,10 @@ export default {
         reactionArrow.reagent.cost < reactionArrow.reagent.resource.cap;
     },
     isActiveReaction(reactionArrow) {
-      return reactionArrow.reaction.isActive && !Pelle.isDoomed;
+      return reactionArrow.reaction.isActive && !this.isDoomed;
     },
     isFocusedReaction(reactionArrow) {
+      if (this.isDoomed) return false;
       return this.isUnlocked(reactionArrow) && reactionArrow.reaction.product.id === this.focusedResourceId;
     },
     isDisplayed(reactionArrow) {
@@ -108,7 +116,7 @@ export default {
         (this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow));
     },
     isFocusedNode(node) {
-      if (this.focusedResourceId === -1) return true;
+      if (this.focusedResourceId === -1 || this.isDoomed) return true;
       const focusedResource = this.resources[this.focusedResourceId];
       if (focusedResource === node.resource) return true;
       if (focusedResource.isBaseResource) return false;
@@ -148,7 +156,8 @@ export default {
         "o-alchemy-reaction-path--less-than-required": this.isLessThanRequired(reactionArrow) &&
           this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
-        "o-alchemy-reaction-path--not-focused": !this.isFocusedReaction(reactionArrow) && this.focusedResourceId !== -1
+        "o-alchemy-reaction-path--not-focused": !this.isFocusedReaction(reactionArrow) && this.focusedResourceId !== -1,
+        "o-alchemy-reaction-path--doomed": this.isDoomed
       };
     },
     reactionArrowClass(reactionArrow) {
@@ -187,6 +196,7 @@ export default {
         Click for alchemy info
       </PrimaryButton>
       <PrimaryButton
+        v-if="!isDoomed"
         class="o-primary-btn--subtab-option"
         @click="toggleAllReactions"
       >
@@ -216,6 +226,11 @@ export default {
       class="l-alchemy-circle"
       :style="circleStyle"
     >
+      <span
+        v-if="isDoomed"
+        class="c-pelle-symbol-overlay"
+        v-html="pelleSymbol"
+      />
       <svg class="l-alchemy-orbit-canvas">
         <circle
           v-for="(orbit, i) in layout.orbits"
@@ -258,5 +273,23 @@ export default {
 <style scoped>
 .o-clickable {
   cursor: pointer;
+}
+
+.c-pelle-symbol-overlay {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 60rem;
+  color: var(--color-pelle--base);
+  text-shadow: 0 0 3rem;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.8;
+  z-index: 2;
 }
 </style>

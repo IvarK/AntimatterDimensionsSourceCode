@@ -82,7 +82,7 @@ export default {
       this.isUnlocked = resource.isUnlocked;
       this.unlockRequirement = resource.lockText;
       if (!this.isBaseResource) {
-        this.isReactionActive = this.reaction.isActive;
+        this.isReactionActive = !this.isDoomed && this.reaction.isActive;
         this.reactionProduction = this.reaction.production;
       }
     }
@@ -98,7 +98,10 @@ export default {
     <span class="c-alchemy-resource-info__title">
       {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
     </span>
-    <span>
+    <span v-if="isDoomed">
+      Destroyed by Pelle
+    </span>
+    <span v-else>
       {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
       (Recent change: <span v-html="formattedFlow" />)
     </span>

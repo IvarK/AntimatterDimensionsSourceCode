@@ -7877,6 +7877,11 @@ kbd {
   opacity: 0.5;
 }
 
+.o-alchemy-reaction-path--doomed {
+  stroke: var(--color-pelle--base);
+  opacity: 0.6;
+}
+
 .o-alchemy-node {
   width: 3rem;
   height: 3rem;
@@ -7963,10 +7968,6 @@ kbd {
 
 .o-alchemy-node--active {
   background-color: #9ccc65;
-}
-
-.o-alchemy-node--doomed {
-  background-color: crimson;
 }
 
 .c-ra-unlock-unlocked {

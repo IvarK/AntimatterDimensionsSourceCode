@@ -198,16 +198,16 @@ import { AutomatorLexer } from "./lexer";
         return undefined;
       }
 
-      let studyParts;
+      let tree;
       switch (type) {
         case AUTOMATOR_VAR_TYPES.NUMBER:
           varInfo.value = new Decimal(value);
           break;
         case AUTOMATOR_VAR_TYPES.STUDIES:
-          studyParts = value.split("|");
+          tree = new TimeStudyTree(value);
           varInfo.value = {
-            normal: studyParts[0].split(",").map(ts => parseInt(ts, 10)),
-            ec: parseInt(studyParts[1], 10)
+            normal: tree.selectedStudies.map(ts => ts.id),
+            ec: tree.ec
           };
           break;
         case AUTOMATOR_VAR_TYPES.DURATION:

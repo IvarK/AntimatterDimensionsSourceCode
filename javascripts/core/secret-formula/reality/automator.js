@@ -388,6 +388,12 @@ GameDatabase.reality.automator = {
               header: "<i>Alternatives</i>",
               description: `Using another command like 'WAIT' will allow you to set it for a certain resource amount,
                 in order to ensure that the game has the proper state before moving onward.`
+            },
+            {
+              header: "<i>Manual Skip</i>",
+              description: `You can manually force the Automator to continue execution past a PAUSE command without
+                waiting the entire specified time by stepping forward one line (to put it on the next one) and then
+                resuming execution. If you find yourself doing this regularly, consider modifying your script.`
             }
           ]
         }
@@ -505,7 +511,7 @@ GameDatabase.reality.automator = {
             {
               header: "<i>condition</i>",
               description: `
-                This must be an inequality operator (<, <=, > >=), which takes on its typical mathematical meaning.
+                This must be an inequality operator (<, <=, >, >=), which takes on its typical mathematical meaning.
                 Equality operators (==, !=) are not allowed, as the nature of the game means that numbers will often
                 never be exactly equal and thus checking based on direct equality may lead to unexpected script
                 behavior.

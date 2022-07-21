@@ -633,7 +633,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         singleTextInput: ctx.$studies.image,
-        wait: ctx.Nowait === undefined,
+        nowait: ctx.Nowait !== undefined,
         ...automatorBlocksMap["STUDIES PURCHASE"]
       })
     },
@@ -719,7 +719,7 @@ export const AutomatorCommands = ((() => {
       blockify: ctx => ({
         singleSelectionInput: ctx.Name ? "NAME" : "ID",
         singleTextInput: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
-        wait: ctx.Nowait === undefined,
+        nowait: ctx.Nowait !== undefined,
         ...automatorBlocksMap["STUDIES LOAD"]
       })
     },
@@ -773,7 +773,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         singleSelectionInput: "DILATION",
-        wait: ctx.Nowait === undefined,
+        nowait: ctx.Nowait !== undefined,
         ...automatorBlocksMap.UNLOCK
       })
     },
@@ -811,7 +811,7 @@ export const AutomatorCommands = ((() => {
       blockify: ctx => ({
         singleSelectionInput: "EC",
         singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
-        wait: ctx.Nowait === undefined,
+        nowait: ctx.Nowait !== undefined,
         ...automatorBlocksMap.UNLOCK
       })
     },

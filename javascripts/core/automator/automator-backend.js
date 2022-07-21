@@ -316,11 +316,29 @@ export const AutomatorScroller = {
   },
 
   scrollToLine(line) {
+    let editor, textHeight, lineToScroll;
     if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) {
-      if (AutomatorTextUI.editor) AutomatorTextUI.editor.scrollIntoView({ line: line - 1, ch: 0 });
+      // We can't use CodeMirror's scrollIntoView() method as that forces the entire viewport to keep the line in view.
+      // This can potentially cause a softlock with "follow execution" enabled on sufficiently short screens.
+      editor = document.querySelector(".CodeMirror-scroll");
+      textHeight = AutomatorTextUI.editor.defaultTextHeight();
+      lineToScroll = line + 1;
     } else {
-      BlockAutomator.editor.scrollTo(0, 34.5 * (line - 1));
-      BlockAutomator.gutter.style.bottom = `${BlockAutomator.editor.scrollTop}px`;
+      editor = BlockAutomator.editor;
+      textHeight = 34.5;
+      lineToScroll = line;
+    }
+
+    // In both cases we might potentially try to scroll before the editor has properly initialized (ie. the automator
+    // itself ends up loading up faster than the editor UI element)
+    if (!editor) return;
+
+    const paddedHeight = editor.clientHeight - 40;
+    const newScrollPos = textHeight * (lineToScroll - 1);
+    if (newScrollPos > editor.scrollTop + paddedHeight) editor.scrollTo(0, newScrollPos - paddedHeight);
+    if (newScrollPos < editor.scrollTop) editor.scrollTo(0, newScrollPos);
+    if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+      BlockAutomator.gutter.style.bottom = `${editor.scrollTop}px`;
     }
   }
 };
@@ -413,7 +431,7 @@ export const AutomatorBackend = {
         stack = AutomatorBackend.stack.top;
         // If single step completes the last line and repeat is off, the command stack will be empty and
         // scrolling will cause an error
-        if (stack) AutomatorScroller.scrollToRawLine(stack.lineNumber);
+        if (stack && this.state.followExecution) AutomatorScroller.scrollToRawLine(stack.lineNumber);
         this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
       case AUTOMATOR_MODE.RUN:

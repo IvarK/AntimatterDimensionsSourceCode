@@ -84,9 +84,9 @@ export default {
       v-else
       class="pelle-unlock-requirements"
     >
-      You must have 17 rows of achievements to unlock Doomed.
+      You must have {{ formatInt(17) }} rows of achievements to unlock Doomed.
       <br>
-      {{ completedRows }} / 17
+      Currently: {{ formatInt(completedRows) }} / {{ formatInt(17) }}
     </div>
   </div>
 </template>

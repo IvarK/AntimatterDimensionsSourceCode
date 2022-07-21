@@ -17,6 +17,7 @@ export default {
       isDoomed: false,
       canEnterPelle: false,
       completedRows: 0,
+      cappedResources: 0,
       hasStrike: false,
       hasGalaxyGenerator: false
     };
@@ -24,14 +25,22 @@ export default {
   computed: {
     symbol() {
       return Pelle.symbol;
+    },
+    totalRows() {
+      return Achievements.prePelleRows.length;
+    },
+    totalAlchemyResources() {
+      return AlchemyResources.all.length;
     }
   },
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
       if (!this.isDoomed) {
-        this.canEnterPelle = Achievements.prePelle.every(a => a.isUnlocked);
         this.completedRows = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked));
+        this.cappedResources = AlchemyResources.all.countWhere(r => r.capped);
+        this.canEnterPelle = this.completedRows === this.totalRows &&
+          this.cappedResources === this.totalAlchemyResources;
       }
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
       this.hasGalaxyGenerator = PelleRifts.recursion.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
@@ -84,9 +93,13 @@ export default {
       v-else
       class="pelle-unlock-requirements"
     >
-      You must have {{ formatInt(17) }} rows of achievements to unlock Doomed.
+      You must have {{ formatInt(totalRows) }} rows of achievements
+      and all of your Glyph Alchemy resources capped to unlock Doomed.
       <br>
-      Currently: {{ formatInt(completedRows) }} / {{ formatInt(17) }}
+      <br>
+      {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows
+      <br>
+      {{ formatInt(cappedResources) }} / {{ formatInt(totalAlchemyResources) }} Capped resources
     </div>
   </div>
 </template>
@@ -133,7 +146,8 @@ export default {
 }
 
 .pelle-unlock-requirements {
-  width: 40rem;
+  width: 50rem;
+  padding: 0.5rem;
   font-size: 3rem;
   color: var(--color-pelle--base);
   background: black;

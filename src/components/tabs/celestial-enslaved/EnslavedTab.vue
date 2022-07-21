@@ -152,6 +152,7 @@ export default {
 
 <template>
   <div class="l-enslaved-celestial-tab">
+    <CelestialQuoteHistory celestial="enslaved" />
     <div
       v-if="canAdjustStoredTime"
       class="c-subtab-option-container"
@@ -202,7 +203,6 @@ export default {
         </div>
       </div>
       <div class="l-enslaved-upgrades-column">
-        <CelestialQuoteHistory celestial="enslaved" />
         <PrimaryButton
           v-if="hintsUnlocked"
           class="o-primary-btn"

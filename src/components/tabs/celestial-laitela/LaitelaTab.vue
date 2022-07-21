@@ -79,6 +79,7 @@ export default {
 
 <template>
   <div class="l-laitela-celestial-tab">
+    <CelestialQuoteHistory celestial="laitela" />
     <div class="c-subtab-option-container">
       <PrimaryButton
         class="o-primary-btn--subtab-option"
@@ -93,7 +94,6 @@ export default {
         Max all Dark Matter Dimensions
       </PrimaryButton>
     </div>
-    <CelestialQuoteHistory celestial="laitela" />
     <div class="o-laitela-matter-amount">
       You have
       <span :style="styleObject">{{ format(darkMatter, 2) }}</span>

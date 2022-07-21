@@ -9,12 +9,25 @@ export const Quote = {
   advanceQueue() {
     ui.view.quotes.current = ui.view.quotes.queue.shift();
   },
-  clearAll() {
+  showHistory(history) {
+    ui.view.quotes.history = history;
+  },
+  clearQueue() {
     ui.view.quotes.queue = [];
     ui.view.quotes.current = undefined;
   },
+  clearHistory() {
+    ui.view.quotes.history = undefined;
+  },
+  clearAll() {
+    this.clearQueue();
+    this.clearHistory();
+  },
   get isOpen() {
     return ui.view.quotes.current !== undefined;
+  },
+  get isHistoryOpen() {
+    return ui.view.quotes.history !== undefined;
   }
 };
 

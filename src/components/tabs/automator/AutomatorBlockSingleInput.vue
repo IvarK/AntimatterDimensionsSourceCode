@@ -154,7 +154,7 @@ export default {
     }
 
     // Only wipe later inputs if they're in an indeterminate state due to earlier ones not being specified yet
-    if (this.blockTarget && this.key === " ") {
+    if (this.blockTarget && (this.key === " " || !this.key)) {
       // eslint-disable-next-line vue/no-mutating-props
       this.block[this.blockTarget] = undefined;
       this.recalculateErrorCount();

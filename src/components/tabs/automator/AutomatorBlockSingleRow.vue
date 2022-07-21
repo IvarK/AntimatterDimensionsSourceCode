@@ -56,9 +56,10 @@ export default {
   },
   methods: {
     update() {
-      this.activeLine = AutomatorHighlighter.currentActiveLine;
-      this.eventLine = AutomatorHighlighter.currentEventLine;
-      this.errorLine = AutomatorHighlighter.currentErrorLine;
+      const lines = AutomatorHighlighter.lines;
+      this.activeLine = lines.active;
+      this.eventLine = lines.event;
+      this.errorLine = lines.error;
     },
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();

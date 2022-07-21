@@ -1903,6 +1903,10 @@ br {
   border-color: black;
 }
 
+.s-base--metro .o-eternity-button {
+  box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
+}
+
 .o-eternity-button--dilation {
   font-weight: bold;
   color: var(--color-dilation);

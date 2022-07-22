@@ -120,7 +120,7 @@ GameDatabase.achievements.secret = [
   {
     id: 33,
     name: "A sound financial decision",
-    description: "Click on the donate link."
+    description: "Click on the button to purchase STD coins."
   },
   {
     id: 34,

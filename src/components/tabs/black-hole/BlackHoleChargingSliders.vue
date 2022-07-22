@@ -61,7 +61,7 @@ export default {
       v-if="isAdjustableChargingUnlocked"
       class="l-black-hole-sliders"
     >
-      Black Hole charging rate: {{ storedTimeRate }}
+      <b>Black Hole charging rate: {{ storedTimeRate }}</b>
       <SliderComponent
         v-bind="sliderProps(false)"
         :value="storedFraction"
@@ -72,13 +72,15 @@ export default {
       v-if="isNegativeBHUnlocked"
       class="l-black-hole-sliders"
     >
-      Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-      This requires both Black Holes to be permanent and only works when paused.
+      <b>Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.</b>
       <SliderComponent
         v-bind="sliderProps(true)"
         :value="negativeSlider"
         @input="adjustSliderNegative($event)"
       />
+      <br>
+      Inverting the Black Hole only affects its own speedup, no other upgrades or effects, although
+      it will also indirectly affect the Effarig Game speed power effect.
     </div>
   </div>
 </template>

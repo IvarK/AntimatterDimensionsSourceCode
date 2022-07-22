@@ -71,6 +71,7 @@ export default {
       if (this.achievementVisible) rows.push("achievements");
       rows.push("level");
       rows.push("info");
+      rows.push("info2");
       return rows;
     },
     adjustVisible() {
@@ -475,7 +476,13 @@ function roundPreservingSum(data) {
       :style="rowStyle('info')"
       class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
     >
-      Note: All resources here are log10 of their actual values
+      Note: All resources here are log10 of their actual values.
+    </div>
+    <div
+      :style="rowStyle('info2')"
+      class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
+    >
+      Replicanti and DT use their highest values this Reality.
     </div>
     <template v-if="adjustVisible">
       <div

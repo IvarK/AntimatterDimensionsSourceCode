@@ -190,10 +190,11 @@ export default {
           <span v-else>Show</span>
           Hard V
         </PrimaryButton>
-        <br><br>
-        Cursed Glyphs can be created in the Effarig tab<span v-if="!isDoomed">, and the
-          Black Hole can now be used to slow down time</span>.
         <br>
+        Cursed Glyphs can be created in the Effarig tab.
+        <br>
+        <span v-if="!isDoomed">The Black Hole can now be used to slow down time if they are both permanent.</span>
+        <br><br>
         Each Hard V-Achievement counts as two V-Achievements and will award {{ formatInt(2) }} Space Theorems
         instead of {{ formatInt(1) }}.
         <br>

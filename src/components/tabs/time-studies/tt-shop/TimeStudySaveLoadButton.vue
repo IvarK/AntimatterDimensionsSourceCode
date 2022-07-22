@@ -27,11 +27,19 @@ export default {
   },
   methods: {
     nicknameBlur(event) {
-      this.preset.name = event.target.value.slice(0, 4);
+      const newName = event.target.value.slice(0, 4);
+      if (!this.isASCII(newName)) return;
+      this.preset.name = newName;
       this.name = this.preset.name;
     },
     hideContextMenu() {
       this.$viewModel.currentContextMenu = null;
+    },
+    // This is largely done because of UI reasons - there is no Unicode specification for character width, which means
+    // that arbitrary Unicode inputs can allow for massive text overflow
+    isASCII(input) {
+      // eslint-disable-next-line no-control-regex
+      return !/[^\u0000-\u00ff]/u.test(input);
     },
     save() {
       this.hideContextMenu();
@@ -81,7 +89,7 @@ export default {
     </template>
     <template #menu>
       <div class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
-        <span ach-tooltip="Set a custom name (up to 4 characters)">
+        <span ach-tooltip="Set a custom name (up to 4 ASCII characters)">
           <input
             type="text"
             size="4"

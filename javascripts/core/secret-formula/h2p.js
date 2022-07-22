@@ -1097,17 +1097,27 @@ compared to is specified by your input in the text box.
 can be set individually per Glyph type.
 <br>
 <br>
-Additionally, there are two more advanced modes with some additional flexibility:
+Additionally, there are two more advanced modes with some additional flexibility. You may not need these initially, but
+they can come in handy later on:
 <br>
 <b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
 you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
 number of effects and having all of the effects you choose, and its score is lowered by ${formatInt(200)} for every
-missing effect. This guarantees that any Glyph that doesn't have the effects you want will be below the threshold.
+missing effect. This guarantees that any Glyph that doesn't have the effects you want will be below the threshold. You
+can forbid specific Glyph <i>types</i> by setting impossible conditions (eg. at least ${formatInt(6)} effects on a Power
+Glyph will prevent Power Glyphs from being selected).
 <br>
-<b>Effect Score Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
-your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
-the threshold to any value you want. One possible way you can use this behavior is to give a weaker effect a value of
-${formatInt(5)}, which allows you to keep Glyphs without that effect as long as they are rarer.
+<b>Effect Score Mode</b> - The score of a Glyph is calculated from its rarity plus the score of each effect it has,
+and you can set the threshold and values of each effect individually. Some possible ways this could be used:
+<br>
+- Giving a weaker effect a value of ${formatInt(5)} allows you to keep Glyphs without that effect as long as they are
+rarer to compensate for being weaker
+<br>
+- Assigning a large negative score to a certain effect you do <i>not</i> want will forbid Glyphs with that effect from
+being selected; this can be useful for effect testing and other more limited situations
+<br>
+- Setting an impossible condition (eg. a threshold score of ${formatInt(999)} and all effects worth ${formatInt(0)})
+will let you forbid entire types like Specified Effect Mode as well
 <br>
 <br>
 Glyph Set Saves are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
@@ -1117,12 +1127,6 @@ If any are not found, it will display a warning, but equip all the rest regardle
 there are no equipped Glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best Glyph from
 the possible Glyphs will always be the one equipped. Just like other groups of circular Glyphs, you can click
 any of them in order to bring up a modal summarizing the whole set of Glyphs.
-<br>
-<br>
-<i>Note: If desired, "Specified Effect Mode" and "Effect Score Mode" can be used to filter out some Glyph types
-entirely; for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score
-${formatInt(999)} and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is
-never picked.</i>
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "threshold", "set", "save", "reality", "lategame",

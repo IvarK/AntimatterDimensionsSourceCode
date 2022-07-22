@@ -56,8 +56,8 @@ export default {
       };
     },
     questionmarkTooltip() {
-      return "All Glyph choices are given a score based on the chosen option, and the Glyph with the highest score " +
-        "is picked. If this Glyph is below a mode-specific threshold, it will be Sacrificed instead.";
+      return "All Glyph choices are given a score and compared to a threshold based on the chosen mode. " +
+        "The Glyph with the highest score is picked, but will still be Sacrificed if below the threshold.";
     },
     unlockedModes() {
       return Object.values(this.modes).filter(idx => this.isUnlocked(idx));
@@ -168,7 +168,11 @@ export default {
         .filter(s => s > this.rarityThresholds[type])
         .min();
       this.setRarityThreshold(type, newRarity);
-    }
+    },
+    showFilterHowTo() {
+      ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Advanced Glyph Mechanics")[0];
+      Modal.h2p.show();
+    },
   }
 };
 </script>
@@ -180,6 +184,7 @@ export default {
         <div
           v-tooltip="questionmarkTooltip"
           class="o-questionmark"
+          @click="showFilterHowTo"
         >
           ?
         </div>

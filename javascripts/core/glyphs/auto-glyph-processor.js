@@ -124,6 +124,12 @@ export const AutoGlyphProcessor = {
       default:
         throw new Error("Unknown auto Glyph Sacrifice mode");
     }
+  },
+  // Generally only used for UI in order to notify the player that they might end up retroactively getting rid of
+  // some glyphs they otherwise want to keep
+  hasNegativeEffectScore() {
+    return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE &&
+      Object.values(this.types).map(t => Object.values(t.effectScores)).flat().some(v => v < 0);
   }
 };
 

@@ -1,16 +1,45 @@
 <script>
-// If you change this, try to keep the syntaxes and tenses the same to avoid solecisms
 const GLYPH_NAMES = {
-  companion: { name: "Huggable" },
-  reality: { name: "Real" },
-  music: { major: "Melodic", middling: "Chordal", minor: "Tuned" },
-  effarig: { both: "Meta", glyph: "Stable", rm: "Mechanical", none: "Fragmented" },
-  cursed: { major: "Cursed", middling: "Hexed", minor: "Jinxed" },
-  power: { major: "Power", middling: "Mastered", minor: "Potential" },
-  infinity: { major: "Infinity", middling: "Boundless", minor: "Immense" },
-  replication: { major: "Replication", middling: "Simulated", minor: "Replicated" },
-  time: { major: "Time", middling: "Chronal", minor: "Temporal" },
-  dilation: { major: "Dilation", middling: "Attenuated", minor: "Diluted" },
+  companion: {
+    adjective: "Huggable",
+    noun: "Companion"
+  },
+  reality: {
+    adjective: "Real",
+    noun: "Reality"
+  },
+  music: {
+    adjective: { high: "Melodic", mid: "Chordal", low: "Tuned" }
+    // This doesn't need noun entries because music glyphs also apply their actual types
+  },
+  effarig: {
+    adjective: { both: "Meta", glyph: "Stable", rm: "Mechanical", none: "Fragmented" },
+    noun: { both: "Effarig", glyph: "Stability", rm: "Mechanism", none: "Fragmentation" }
+  },
+  cursed: {
+    adjective: { high: "Cursed", mid: "Hexed", low: "Jinxed" },
+    noun: "Curse"
+  },
+  power: {
+    adjective: { high: "Powerful", mid: "Mastered", low: "Potential" },
+    noun: "Power"
+  },
+  infinity: {
+    adjective: { high: "Infinite", mid: "Boundless", low: "Immense" },
+    noun: "Infinity"
+  },
+  replication: {
+    adjective: { high: "Replicated", mid: "Simulated", low: "Duplicated" },
+    noun: "Replication"
+  },
+  time: {
+    adjective: { high: "Temporal", mid: "Chronal", low: "Transient" },
+    noun: "Time"
+  },
+  dilation: {
+    adjective: { high: "Dilated", mid: "Attenuated", low: "Diluted" },
+    noun: "Dilation"
+  },
 };
 
 export default {
@@ -29,153 +58,133 @@ export default {
   data() {
     return {
       isColored: true,
-      defaultOrder: ["power", "infinity", "replication", "time", "dilation"],
-      multipleGlyphList: [
-        { type: "power", perc: 0 },
-        { type: "infinity", perc: 0 },
-        { type: "replication", perc: 0 },
-        { type: "time", perc: 0 },
-        { type: "dilation", perc: 0 }
+      // Adjectives are added in descending order of adjOrder (basic glyphs are handled together)
+      glyphTypeList: [
+        { type: "power", perc: 0, adjOrder: 1 },
+        { type: "infinity", perc: 0, adjOrder: 1 },
+        { type: "replication", perc: 0, adjOrder: 1 },
+        { type: "time", perc: 0, adjOrder: 1 },
+        { type: "dilation", perc: 0, adjOrder: 1 },
+        { type: "effarig", perc: 0, adjOrder: 2 },
+        { type: "music", perc: 0, adjOrder: 3 },
+        { type: "reality", perc: 0, adjOrder: 4 },
+        { type: "companion", perc: 0, adjOrder: 5 },
+        { type: "cursed", perc: 0, adjOrder: 6 },
       ],
+      sortedGlyphs: [],
       activeSlotCount: 0
     };
   },
   computed: {
     setName() {
       this.sortGlyphList();
-      let nameString = "";
+      if (this.sortedGlyphs.length === 0) return "Void";
+      if (this.sortedGlyphs.length === 1) return this.singletonName;
 
-      // Start with Companion and Reality, add those to the start
-      if (this.calculateGlyphPercent("companion")) {
-        nameString += `${GLYPH_NAMES.companion.name} `;
-      }
-      if (this.calculateGlyphPercent("reality")) {
-        nameString += `${GLYPH_NAMES.reality.name} `;
-      }
-
-      // Now on to Music Glyphs - seperate from the others as they can be both Music and [type]
-      if (this.musicGlyphPercent() === 100) {
-        nameString += `${GLYPH_NAMES.music.major} `;
-      } else if (this.musicGlyphPercent() >= 40) {
-        nameString += `${GLYPH_NAMES.music.middling} `;
-      } else if (this.musicGlyphPercent()) {
-        nameString += `${GLYPH_NAMES.music.minor} `;
+      // Figure out the noun part of the name first. If we have basic glyphs, this is generated through examining those
+      // specifically. Otherwise, we take the lowest-priority special glyph and turn it into its noun form
+      let adjList, nounPhrase;
+      if (this.sortedGlyphs.some(t => t.adjOrder === 1)) {
+        adjList = this.sortedGlyphs.filter(t => t.adjOrder !== 1);
+        nounPhrase = this.basicTypePhrase;
+      } else {
+        adjList = [...this.sortedGlyphs];
+        nounPhrase = this.getNoun(adjList.pop());
       }
 
-      // Both, RM, Glyph, Neither each have unique results
+      const adjectives = [];
+      for (const listEntry of adjList) adjectives.push(this.getAdjective(listEntry));
+      return `${adjectives.join(" ")} ${nounPhrase}`;
+    },
+    basicTypePhrase() {
+      const basicGlyphList = this.sortedGlyphs.filter(t => BASIC_GLYPH_TYPES.includes(t.type) && t.perc !== 0);
+      switch (basicGlyphList.length) {
+        case 1:
+          return GLYPH_NAMES[basicGlyphList[0].type].noun;
+        case 2:
+          // Call it a mixture if they're equal and apply adjectives of appropriate magnitude
+          if (basicGlyphList[0].perc === basicGlyphList[1].perc) {
+            return [this.getAdjective(basicGlyphList[0]),
+              this.getAdjective(basicGlyphList[1]),
+              "Mixture"
+            ].join(" ");
+          }
+          // Otherwise, give it a noun from the largest component
+          return `${this.getAdjective(basicGlyphList[1])} ${this.getNoun(basicGlyphList[0])}`;
+        case 3:
+          // Give it a noun if there's a clear majority
+          if (basicGlyphList[0].perc > basicGlyphList[1].perc) {
+            return [this.getAdjective(basicGlyphList[1]),
+              this.getAdjective(basicGlyphList[2]),
+              this.getNoun(basicGlyphList[0]),
+            ].join(" ");
+          }
+          // This is relatively rare; we have 1/1/1, which means that we may also already have 3 other adjectives.
+          // In this case we make an exception and shorten the name instead of providing another 4 words
+          if (basicGlyphList[0].perc === basicGlyphList[2].perc) return "Mixed Irregularity";
+          // The only case left is 2/2/1, where we have plenty of room for words
+          return [this.getAdjective(basicGlyphList[0]),
+            this.getAdjective(basicGlyphList[1]),
+            this.getAdjective(basicGlyphList[2]),
+            "Irregularity"
+          ].join(" ");
+        case 4:
+          // Don't bother filling the name with excessive adjectives if we have an equal proportion (1/1/1/1),
+          // otherwise we take the largest component and ignore all the others (2/1/1/1)
+          if (basicGlyphList[0].perc === basicGlyphList[1].perc) return "Irregular Jumble";
+          return `${this.getAdjective(basicGlyphList[0])} Jumble`;
+        case 5:
+          // This is in reference to the achievement name, and can only occur with exactly one of every basic glyph.
+          // Due to music glyphs doubling-up contributions, this may result in a "Melodic Royal Flush" or similar
+          return "Royal Flush";
+        default:
+          throw new Error("Unexpected glyph set configuration in GlyphSetName");
+      }
+    },
+    // Check for single-type sets and give them a special name based on how much of the full equipped slots they take up
+    singletonName() {
+      if (this.sortedGlyphs[0].type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp];
+      const singleGlyphTypes = ["reality", "companion"];
+      for (const key of singleGlyphTypes) {
+        if (this.sortedGlyphs[0].type === key) return GLYPH_NAMES[key].noun;
+      }
+
+      // We want a bit of additional flavor for partially-filled sets
+      const word = GLYPH_NAMES[this.sortedGlyphs[0].type].noun;
+      const perc = this.sortedGlyphs[0].perc;
+      if (perc === 100) return `Full ${word}`;
+      if (perc >= 75) return `Strengthened ${word}`;
+      if (perc >= 40) return `Partial ${word}`;
+      return `Weak ${word}`;
+    },
+    getEffarigProp() {
       const effarigRM = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigrm", i));
       const effarigGlyph = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigglyph", i));
-      if (this.calculateGlyphPercent("effarig")) {
-        if (effarigRM && effarigGlyph) nameString += `${GLYPH_NAMES.effarig.both} `;
-        else if (effarigRM) nameString += `${GLYPH_NAMES.effarig.rm} `;
-        else if (effarigGlyph) nameString += `${GLYPH_NAMES.effarig.glyph} `;
-        else nameString += `${GLYPH_NAMES.effarig.none} `;
-      }
-
-      // Cursed needs a special additional method of generating its names
-      if (this.calculateGlyphPercent("cursed")) nameString += this.cursedName;
-      else if (this.multipleGlyphList[0].perc) nameString += this.normalName;
-
-      return nameString;
-    },
-    cursedName() {
-      const cursedPerc = this.calculateGlyphPercent("cursed");
-      const main = GLYPH_NAMES.cursed;
-      const fir = this.multipleGlyphList[0];
-      const sec = this.multipleGlyphList[1];
-      const thr = this.multipleGlyphList[2];
-      if (cursedPerc === 100) {
-        // All Cursed Glyphs should get something special.
-        return `Fully ${main.major}`;
-      }
-      if (cursedPerc >= 75) {
-        // Mostly Cursed Glyphs, but should mention the other.
-        return `${main.major} ${this.getName(fir, "minor")}`;
-      }
-      if (cursedPerc >= 60) {
-        // Have less Cursed Glyphs, so the name's changed, and might have a second now so need a case for that.
-        return `${main.middling} ${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
-      }
-      if (cursedPerc >= 40) {
-        // If we have a third normal Glyph, lets call it an Irregularity, otherwise specify the types.
-        if (fir.perc >= 40) {
-          return `${main.middling} ${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
-        }
-        if (thr.perc) {
-          return `${main.middling} Irregularity`;
-        }
-      }
-      // If we only have the one Cursed Glyph, lets just add the normal name to it and avoid repetition.
-      return `${main.minor} ${this.normalName}`;
-    },
-    normalName() {
-      const fir = this.multipleGlyphList[0];
-      const sec = this.multipleGlyphList[1];
-      const thr = this.multipleGlyphList[2];
-      if (fir.perc === 100) {
-        // The only Glyph here is the one type so it should get a special name.
-        return `Full ${this.getName(fir, "major")}`;
-      }
-      if (fir.perc >= 75) {
-        // Two Glyphs, but its mainly the one type.
-        return `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
-      }
-      if (fir.perc >= 60) {
-        // Room for 2 other Glyphs off the main, so theres a case for each of them.
-        return `${thr.perc
-          ? `${this.getName(sec, "minor")}${this.getName(thr, "minor")}`
-          : `${this.getName(sec, "middling")}`
-        }${this.getName(fir, "major")}`;
-      }
-      if (fir.perc >= 40) {
-        if (sec.perc >= 40) {
-          if (thr.perc) {
-            // If we have a 3rd type, lets also call it an Irregularity
-            return `${this.getName(fir, "minor")}${this.getName(sec, "minor")}Irregularity`;
-          }
-          // Essentially means the same amount for both, so give them the same name.
-          return `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
-        }
-        // Second Glyph is less than the first meaning a different name, and if we also have a third, call it Blend.
-        return `${this.getName(fir, "middling")}${thr.perc ? "Blend" : `${this.getName(sec, "minor")}`}`;
-      }
-      if (thr.perc) {
-        // This means we have 3 different Glyphs, with only one Glyph of each.
-        if (!(this.calculateGlyphPercent("reality") || this.calculateGlyphPercent("effarig") ||
-          this.calculateGlyphPercent("cursed"))) {
-          // If it doesn't have Reality, Effarig, or Cursed Glyphs, call it Irregular Jumble, otherwise call it Jumble.
-          return "Irregular Jumble";
-        }
-        return "Jumble";
-      }
-      // This means we don't have 3 different Glyphs, but dont have 2 of one type.
-      return `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
+      if (effarigRM && effarigGlyph) return "both";
+      if (effarigRM) return "rm";
+      if (effarigGlyph) return "glyph";
+      return "none";
     },
     mainGlyphName() {
       // This returns the type of Glyph that we want for color determinations.
-      // The priority is Cursed > Companion > Reality > 60% or more of normal Glyphs > Effarig > any normal Glyph.
+      // The priority is Empty > Cursed > Companion > Reality > 50% or more normal Glyphs > Effarig > any normal Glyph
+      if (this.sortedGlyphs.length === 0) return { id: "none", color: "#888888" };
       if (this.calculateGlyphPercent("cursed")) return GlyphTypes.cursed;
       if (this.calculateGlyphPercent("companion")) return GlyphTypes.companion;
       if (this.calculateGlyphPercent("reality")) return GlyphTypes.reality;
-      if (this.multipleGlyphList[0].perc >= 60) return GlyphTypes[this.multipleGlyphList[0].type];
+      if (this.calculateGlyphPercent("music") >= 50) return { id: "music", color: "#FF80AB" };
+      const primaryType = this.sortedGlyphs.filter(t => t.adjOrder === 1)[0];
+      if (primaryType?.perc >= 50) return GlyphTypes[primaryType.type];
       if (this.calculateGlyphPercent("effarig")) return GlyphTypes.effarig;
-      return GlyphTypes[this.multipleGlyphList[0].type];
-    },
-    percentPerGlyph() {
-      // We need to max glyphset length here because Doomed alters the active glyph slots to 0, which breaks stuff
-      // in the calculation because we're dividing by 0
-      return 100 / Math.max(this.activeSlotCount, this.glyphSet.length);
+      return GlyphTypes[primaryType.type];
     },
     textColor() {
       // If its cursed, we want its color to be #5151EC, because by default its black, which can be unreadable.
-      // If we have greater than or equal to 60% of our Glyphs as Music Glyphs, give us the Music Glyph color.
-      // If we have 3 types of Glyphs, and none of them have more than 25% total, lets get a copper color.
+      // If we have 3 types of Glyphs, and none of them have more than 30% total, lets get a copper color.
       // And if we have none of the above (which is most common), lets get the color of the main Glyph.
       if (this.mainGlyphName.id === "cursed") return "#5151EC";
-      if (this.musicGlyphPercent() >= 60) return "#FF80AB";
-      if (this.multipleGlyphList[1].perc && this.multipleGlyphList[2].perc && this.multipleGlyphList[0].perc <= 25) {
-        return "#C46200";
-      }
+      if (this.mainGlyphName.id === "music") return "#FF80AB";
+      if (this.sortedGlyphs.length >= 3 && this.sortedGlyphs[0].perc <= 30) return "#C46200";
       return this.mainGlyphName.color;
     },
     textStyle() {
@@ -204,25 +213,34 @@ export default {
       this.activeSlotCount = Glyphs.activeSlotCount;
     },
     calculateGlyphPercent(name) {
-      // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %
-      return this.glyphSet.filter(i => i.type === name).length * this.percentPerGlyph;
-    },
-    musicGlyphPercent() {
+      const percentPerGlyph = this.activeSlotCount ? 100 / this.activeSlotCount : 0;
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
-      return this.glyphSet.filter(i => i.symbol === "key266b").length * this.percentPerGlyph;
+      if (name === "music") return this.glyphSet.filter(i => i.symbol === "key266b").length * percentPerGlyph;
+      // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %
+      return this.glyphSet.filter(i => i.type === name).length * percentPerGlyph;
     },
     sortGlyphList() {
-      // Get the percent for each type, then sort it based on type and then default order, to make it consistent
       this.$recompute("textColor");
-      this.multipleGlyphList.forEach(i => i.perc = this.calculateGlyphPercent(i.type));
-      this.multipleGlyphList.sort((a, b) => (a.perc === b.perc
-        ? this.defaultOrder.indexOf(a.type) - this.defaultOrder.indexOf(b.type)
-        : b.perc - a.perc));
+      this.glyphTypeList.forEach(t => t.perc = this.calculateGlyphPercent(t.type));
+      this.sortedGlyphs = this.glyphTypeList.filter(t => t.perc !== 0);
+      // This composite function is required in order to ensure consistent names with equal percentages, as JS doesn't
+      // guarantee .sort() operations are stable sorts. Sorts by adjOrder, followed by perc, followed by alphabetical.
+      const sortFn = t => 100 * t.adjOrder + t.perc + t.type.charCodeAt(0) / 1000;
+      this.sortedGlyphs.sort((a, b) => sortFn(b) - sortFn(a));
     },
-    getName(position, type) {
-      // If the position.perc is 0, return an empty string, and if it does, return a string from GLYPH_NAMES
-      if (!position.perc) return ``;
-      return `${GLYPH_NAMES[position.type][type]} `;
+    getAdjective(listEntry) {
+      if (listEntry.type === "effarig") return GLYPH_NAMES.effarig.adjective[this.getEffarigProp];
+      const adjFn = val => {
+        if (val >= 60) return "high";
+        if (val >= 40) return "mid";
+        return "low";
+      };
+      const adj = GLYPH_NAMES[listEntry.type].adjective;
+      return typeof adj === "string" ? adj : adj[adjFn(listEntry.perc)];
+    },
+    getNoun(listEntry) {
+      if (listEntry.type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp];
+      return GLYPH_NAMES[listEntry.type].noun;
     },
   }
 };

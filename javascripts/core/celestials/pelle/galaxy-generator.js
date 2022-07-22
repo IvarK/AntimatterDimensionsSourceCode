@@ -1,4 +1,3 @@
-import { DC } from "../../constants";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 
 import { PelleRifts } from "./rifts";
@@ -24,10 +23,7 @@ export const GalaxyGenerator = {
 
   get gainPerSecond() {
     if (!Pelle.hasGalaxyGenerator) return 0;
-    // Pretend it's here to avoid softlocks and not because the bottom code returns 1 when you don't have this upg
-    if (!GalaxyGeneratorUpgrades.additive.canBeApplied) return 0.1;
-    return DC.D1.timesEffectsOf(
-      GalaxyGeneratorUpgrades.additive,
+    return new Decimal(GalaxyGeneratorUpgrades.additive.effectValue).timesEffectsOf(
       GalaxyGeneratorUpgrades.multiplicative,
       GalaxyGeneratorUpgrades.antimatterMult,
       GalaxyGeneratorUpgrades.IPMult,

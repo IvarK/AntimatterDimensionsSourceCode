@@ -36,7 +36,8 @@ export default {
     },
     questionmarkTooltip() {
       return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect.
-        Glyphs with less than the specified rarity are sacrificed.`;
+        Glyphs with less than the specified rarity are sacrificed. Additional effects
+        beyond ones specified will not increase Glyph score.`;
     }
   },
   created() {
@@ -62,6 +63,12 @@ export default {
 <template>
   <div class="c-glyph-sacrifice-options__advanced">
     <div>
+      <span
+        v-tooltip="questionmarkTooltip"
+        class="o-questionmark"
+      >
+        ?
+      </span>
       Selected Glyphs will have at least
       <input
         ref="effectCount"
@@ -73,13 +80,6 @@ export default {
         @blur="setEffectCount"
       >
       effects total, which must include <i>all</i> of the following effects:
-      (click to toggle effects on/off)
-      <span
-        v-tooltip="questionmarkTooltip"
-        class="o-questionmark"
-      >
-        ?
-      </span>
     </div>
     <div
       v-for="effect in effects"
@@ -93,6 +93,7 @@ export default {
         :style="descStyle"
       />
     </div>
+    Click to toggle individual effects on/off
   </div>
 </template>
 

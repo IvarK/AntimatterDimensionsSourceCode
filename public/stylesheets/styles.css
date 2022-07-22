@@ -8615,8 +8615,8 @@ kbd {
 
 .o-questionmark {
   display: inline-flex;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.4rem;
+  height: 1.4rem;
   z-index: 2;
   justify-content: center;
   align-items: center;

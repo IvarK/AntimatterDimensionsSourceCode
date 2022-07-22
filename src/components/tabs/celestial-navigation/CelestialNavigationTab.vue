@@ -142,9 +142,7 @@ const CelestialNavigationViewportCache = {
   <div>
     <svg
       ref="celestialNavigationSVG"
-      height="600"
-      width="966"
-      class="l-celestial-navigation"
+      class="c-wide-canvas-element l-celestial-navigation"
     >
       <defs>
         <linearGradient

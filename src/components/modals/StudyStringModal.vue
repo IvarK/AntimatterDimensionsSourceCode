@@ -115,8 +115,13 @@ export default {
       return TimeStudyTree.isValidImportString(this.truncatedInput);
     },
     inputIsSecret() {
-      return sha512_256(this.truncatedInput.toLowerCase()) ===
-        "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
+      // The button to open the modal and the actual modal itself display two different strings;
+      // we should allow either to unlock the secret achievement
+      const secretStrings = [
+        "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608",
+        "bb450c2a3869bae412ed0b4304dc229521fc69f0fdcc95b3b61460aaf5658fc4"
+      ];
+      return secretStrings.includes(sha512_256(this.input.toLowerCase()));
     },
   },
   // Needs to be assigned in created() or else they will end up being undefined when importing

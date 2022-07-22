@@ -26,6 +26,7 @@ export default {
       this.kongEnabled = kong.enabled;
     },
     showStore() {
+      SecretAchievement(33).unlock();
       if (!this.kongEnabled) return;
       Modal.shop.show();
     },

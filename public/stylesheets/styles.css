@@ -1381,6 +1381,11 @@ br {
   padding-bottom: 2rem;
 }
 
+.c-wide-canvas-element {
+  height: 600px;
+  width: 950px;
+}
+
 ._kong-test .c-game-ui {
   max-height: 100%;
 }
@@ -9043,8 +9048,6 @@ input.o-automator-block-input {
 
 .c-perk-network {
   overflow: hidden;
-  width: 60rem;
-  height: 60rem;
   position: relative;
   border: var(--var-border-width, 0.2rem) solid black;
   border-radius: var(--var-border-radius, 0.4rem);

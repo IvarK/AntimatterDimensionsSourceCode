@@ -185,12 +185,10 @@ export const PerkNetwork = {
     };
 
     const container = document.createElement("div");
-    container.className = "vis-network c-perk-network";
+    container.className = "c-wide-canvas-element vis-network c-perk-network";
     container.tabIndex = 900;
     const canvas = document.createElement("canvas");
     canvas.className = "c-perk-network__canvas";
-    canvas.width = 900;
-    canvas.height = 500;
     container.appendChild(canvas);
     this.container = container;
 

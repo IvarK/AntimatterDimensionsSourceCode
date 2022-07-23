@@ -3284,14 +3284,14 @@ br {
 .c-challenge-box--infinity {
   height: 18rem;
   color: var(--color-text);
-  background-color: var(--color-base);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
 .c-challenge-box--eternity {
   height: 18rem;
   color: var(--color-text);
-  background-color: var(--color-base);
+  background-color: var(--color-prestige--accent);
   border-color: var(--color-eternity);
   border-radius: var(--var-border-radius, 1rem);
 }

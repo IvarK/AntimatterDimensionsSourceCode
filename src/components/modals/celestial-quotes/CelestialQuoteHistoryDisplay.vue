@@ -75,6 +75,13 @@ export default {
             break;
           case "down":
             this.progressDown();
+            break;
+          case "left":
+            this.progressLeft();
+            break;
+          case "right":
+            this.progressRight();
+            break;
         }
       });
     });
@@ -200,11 +207,11 @@ function easeOut(x) {
 
 .c-modal-celestial-quote-history__arrow,
 .c-modal-celestial-quote-history__close {
+  position: absolute;
+  z-index: 1;
   font-size: 2.5rem;
   color: var(--color-text);
   cursor: pointer;
-  position: absolute;
-  z-index: 1;
 }
 
 .c-modal-celestial-quote-history__arrow--disabled {

@@ -27,8 +27,8 @@ export default {
   },
   methods: {
     nicknameBlur(event) {
-      const newName = event.target.value.slice(0, 4);
-      if (!this.isASCII(newName)) return;
+      const newName = event.target.value.slice(0, 4).trim();
+      if (!this.isASCII(newName) || newName === "") return;
       this.preset.name = newName;
       this.name = this.preset.name;
     },

@@ -70,9 +70,9 @@ export default {
       <br>
       by anything which may alter how fast the game itself is running.
     </div>
-    <RealityAutobuyerBox />
-    <EternityAutobuyerBox />
-    <BigCrunchAutobuyerBox />
+    <RealityAutobuyerBox class="c-reality-pos" />
+    <EternityAutobuyerBox class="c-eternity-pos" />
+    <BigCrunchAutobuyerBox class="c-infinity-pos" />
     <GalaxyAutobuyerBox />
     <DimensionBoostAutobuyerBox />
     <TickspeedAutobuyerBox v-if="!hasContinuum" />
@@ -88,5 +88,19 @@ export default {
 </template>
 
 <style scoped>
+/* This is necessary for the ExpandingControlBox within these components to render in the right stacking order
+when they're open. It looks slightly hacky but actually can't be done any other way; each AutobuyerBox creates
+its own stacking context, which means that all z-indices specified within are essentially scoped and the
+AutobuyerBox components will always render in page order regardless of internal z-indices without these. */
+.c-reality-pos {
+  z-index: 3;
+}
 
+.c-eternity-pos {
+  z-index: 2;
+}
+
+.c-infinity-pos {
+  z-index: 1;
+}
 </style>

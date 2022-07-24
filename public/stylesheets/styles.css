@@ -4327,8 +4327,16 @@ br {
   font-size: 0.9rem;
 }
 
+.c-autobuyer-box__mode-select-header {
+  height: 4rem;
+}
+
 .c-autobuyer-box__mode-select {
-  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 2rem;
+  width: 100%;
   text-align: center;
   text-align-last: center;
   font-family: Typewriter, serif;

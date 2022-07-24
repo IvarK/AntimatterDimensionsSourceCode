@@ -6,6 +6,8 @@ import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
+import AutomatorScriptDropdownEntryList from "./AutomatorScriptDropdownEntryList";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export const AutomatorPanels = {
   COMMANDS: 1,
@@ -26,6 +28,8 @@ export default {
     AutomatorBlocks,
     AutomatorDocsTemplateList,
     AutomatorDefinePage,
+    AutomatorScriptDropdownEntryList,
+    ExpandingControlBox,
   },
   data() {
     return {
@@ -36,8 +40,6 @@ export default {
       isNameTooLong: false,
       scripts: [],
       runningScriptID: 0,
-      isRunning: false,
-      isPaused: false,
       totalChars: 0,
       canMakeNewScript: true
     };
@@ -97,7 +99,10 @@ export default {
     },
     importTooltip() {
       return this.canMakeNewScript ? "Import automator script" : "You have too many scripts to import another!";
-    }
+    },
+    currentEditorScriptName() {
+      return this.scripts.find(s => s.id === this.currentScriptID).name;
+    },
   },
   watch: {
     infoPaneID(newValue) {
@@ -119,10 +124,9 @@ export default {
       this.infoPaneID = player.reality.automator.currentInfoPane;
       this.errorCount = AutomatorData.currentErrors().length;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
-      this.isRunning = AutomatorBackend.isRunning;
-      this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
       this.totalChars = AutomatorData.totalScriptCharacters();
       this.canMakeNewScript = Object.keys(player.reality.automator.scripts).length < this.maxScriptCount;
+      this.currentScriptID = player.reality.automator.state.editorScript;
     },
     exportScript() {
       // Cut off leading and trailing whitespace
@@ -181,24 +185,8 @@ export default {
         this.$refs.renameInput.focus();
       });
     },
-    selectedScriptAttribute(id) {
-      return `${id}` === `${this.currentScriptID}` ? { selected: "selected" } : {};
-    },
-    createNewScript() {
-      const newScript = AutomatorBackend.newScript();
-      player.reality.automator.state.editorScript = newScript.id;
-      this.updateCurrentScriptID();
-      this.rename();
-    },
     deleteScript() {
       Modal.automatorScriptDelete.show({ scriptID: this.currentScriptID });
-    },
-    onScriptDropdown(event) {
-      const menu = event.target;
-      if (menu.selectedIndex === menu.length - 1 && this.canMakeNewScript) this.createNewScript();
-      else player.reality.automator.state.editorScript = this.scripts[menu.selectedIndex].id;
-      AutomatorHighlighter.clearAllHighlightedLines();
-      this.updateCurrentScriptID();
     },
     nameEdited() {
       // Trim off leading and trailing whitespace
@@ -215,19 +203,6 @@ export default {
       this.updateScriptList();
       this.$nextTick(() => this.editingName = false);
     },
-    dropdownLabel(script) {
-      let label = script.name;
-      if (`${script.id}` === `${this.runningScriptID}`) {
-        if (this.isRunning) label += " (Running)";
-        else if (this.isPaused) label += " (Paused)";
-      }
-      return label;
-    },
-    activePanelClass(id) {
-      return {
-        "c-automator__button--active": this.infoPaneID === id,
-      };
-    }
   }
 };
 </script>
@@ -302,28 +277,16 @@ export default {
         />
         <div class="l-automator__script-names">
           <template v-if="!editingName">
-            <select
-              class="l-automator__scripts-dropdown c-automator__scripts-dropdown"
-              @input="onScriptDropdown"
-            >
-              <option
-                v-for="script in scripts"
-                :key="script.id"
-                v-bind="selectedScriptAttribute(script.id)"
-                :value="script.id"
-              >
-                {{ dropdownLabel(script) }}
-              </option>
-              <option
-                value="createNewScript"
-                :disabled="!canMakeNewScript"
-              >
-                {{ canMakeNewScript
-                  ? "Create new script..."
-                  : `You cannot have more than ${maxScriptCount} scripts!`
-                }}
-              </option>
-            </select>
+            <ExpandingControlBox>
+              <template #header>
+                <div class="c-automator-docs-script-select">
+                  ▼ Current Script: {{ currentEditorScriptName }}
+                </div>
+              </template>
+              <template #dropdown>
+                <AutomatorScriptDropdownEntryList />
+              </template>
+            </ExpandingControlBox>
             <AutomatorButton
               v-tooltip="'Rename script'"
               class="far fa-edit"
@@ -367,7 +330,7 @@ export default {
 .l-automator__script-names {
   display: flex;
   flex-direction: row;
-  width: 50%;
+  width: 80%;
   justify-content: space-evenly;
   align-items: center;
 }

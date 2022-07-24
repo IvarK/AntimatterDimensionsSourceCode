@@ -15,12 +15,10 @@ export default {
         width: `${this.progress.current / this.progress.max * 100}%`,
       };
     },
-    remaining() {
+    remainingTime() {
       const timeSinceStart = Date.now() - this.progress.startTime;
-      return formatFloat(
-        TimeSpan.fromMilliseconds(timeSinceStart / (this.progress.current / this.progress.max)).totalSeconds -
-        TimeSpan.fromMilliseconds(timeSinceStart).totalSeconds
-        , 1);
+      const ms = timeSinceStart * (this.progress.max - this.progress.current) / this.progress.current;
+      return TimeSpan.fromMilliseconds(ms).toStringShort();
     },
     buttons() {
       return this.progress.buttons || [];
@@ -45,7 +43,7 @@ export default {
           {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
         </div>
         <div>
-          Remaining: {{ remaining }} seconds
+          Remaining: {{ remainingTime }}
         </div>
         <div class="modal-progress-bar__hbox">
           <div class="modal-progress-bar__bg">

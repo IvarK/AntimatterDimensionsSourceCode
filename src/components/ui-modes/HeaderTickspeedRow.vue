@@ -10,6 +10,8 @@ export default {
   },
   data() {
     return {
+      purchasedTickspeed: 0,
+      freeTickspeed: 0,
       isVisible: false,
       mult: new Decimal(0),
       cost: new Decimal(0),
@@ -52,10 +54,16 @@ export default {
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
+    },
+    upgradeCount() {
+      if (this.freeTickspeed === 0) return `Purchased ${quantifyInt("time", this.purchasedTickspeed)}`;
+      return `${formatInt(this.purchasedTickspeed)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
     }
   },
   methods: {
     update() {
+      this.purchasedTickspeed = player.totalTickBought;
+      this.freeTickspeed = FreeTickspeed.amount;
       const isEC9Running = EternityChallenge(9).isRunning;
       this.isVisible = Tickspeed.isUnlocked || isEC9Running;
       if (!this.isVisible) return;
@@ -77,6 +85,7 @@ export default {
     <div>{{ multiplierDisplay }}</div>
     <div>
       <PrimaryButton
+        v-tooltip="upgradeCount"
         :enabled="isAffordable"
         class="o-primary-btn--tickspeed"
         :style="{ width: isContinuumActive ? '25rem' : ''}"

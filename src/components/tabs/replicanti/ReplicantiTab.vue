@@ -77,7 +77,8 @@ export default {
           let description = `Max Replicanti Galaxies: ${formatInt(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
-            description += `+${formatInt(extra)}`;
+            const total = value + extra;
+            description += ` + ${formatInt(extra)} = ${formatInt(total)}`;
           }
           return description;
         },

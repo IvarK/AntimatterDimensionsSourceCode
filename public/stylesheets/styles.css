@@ -1655,6 +1655,10 @@ br {
   margin: 0.2rem;
 }
 
+.o-primary-btn--input {
+  cursor: default;
+}
+
 .o-primary-btn--slider {
   cursor: default;
 }

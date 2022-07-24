@@ -26,6 +26,9 @@ export default {
     progress() {
       return PlayerProgress.of(this.player);
     },
+    fileName() {
+      return this.player.options.saveFileName;
+    },
     antimatter() {
       return this.player.antimatter || this.player.money;
     },
@@ -82,6 +85,9 @@ export default {
         ???
       </div>
       <template v-else-if="inputIsValidSave">
+        <div v-if="fileName">
+          File name: {{ fileName }}
+        </div>
         <div>Antimatter: {{ formatPostBreak(antimatter, 2, 1) }}</div>
         <div v-if="progress.isInfinityUnlocked">
           Infinities: {{ formatPostBreak(infinities, 2) }}

@@ -42,7 +42,7 @@ In addition to importing and exporting to your clipboard, you can also import an
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
 intents and purposes, completely separate from each other. Importing and exporting will only affect the current save
-slot. <b>The only exception is clearing your broswer data, in which case all three saves will be completely reset.</b>
+slot. <b>The only exception is clearing your broswer data, in which case all three saves will be reset.</b>
 <br>
 <br>
 The game automatically saves periodically, by default once every ${formatInt(30)} seconds, and it will notify you in

@@ -27,11 +27,6 @@ export default {
     subtabs() {
       return this.tab.subtabs;
     },
-    styleObjectRow() {
-      return {
-        "background-color": this.isHidden ? "var(--color-gh-purple)" : "var(--color-good)",
-      };
-    },
     isCurrentTab() {
       return this.tab.id === Tabs.current.id;
     },

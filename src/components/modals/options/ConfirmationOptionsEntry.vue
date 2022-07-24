@@ -25,6 +25,11 @@ export default {
     name() {
       return `${this.entry.name}:`;
     },
+    styleObject() {
+      return {
+        "background-color": this.option ? "var(--color-good)" : "var(--color-gh-purple)",
+      };
+    },
   },
   watch: {
     option(newValue) {
@@ -48,5 +53,6 @@ export default {
     v-if="isUnlocked"
     v-model="option"
     :text="name"
+    :style="styleObject"
   />
 </template>

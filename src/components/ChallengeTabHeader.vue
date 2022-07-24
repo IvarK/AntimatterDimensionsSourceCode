@@ -10,6 +10,7 @@ export default {
   },
   data() {
     return {
+      retryChallenge: false,
       isInChallenge: false,
       isShowAllVisible: false,
       isAutoECVisible: false,
@@ -18,6 +19,9 @@ export default {
     };
   },
   watch: {
+    retryChallenge(newValue) {
+      player.options.retryChallenge = newValue;
+    },
     autoEC(newValue) {
       player.reality.autoEC = newValue;
     },
@@ -27,6 +31,7 @@ export default {
   },
   methods: {
     update() {
+      this.retryChallenge = player.options.retryChallenge;
       this.showAllChallenges = player.options.showAllChallenges;
       this.isInChallenge = Player.isInAnyChallenge;
       this.isShowAllVisible = PlayerProgress.eternityUnlocked();
@@ -56,6 +61,11 @@ export default {
       v-if="isShowAllVisible || isAutoECVisible || isInChallenge"
       class="c-subtab-option-container"
     >
+      <PrimaryToggleButton
+        v-model="retryChallenge"
+        class="o-primary-btn--subtab-option"
+        label="Automatically retry challenges:"
+      />
       <PrimaryToggleButton
         v-if="isShowAllVisible"
         v-model="showAllChallenges"

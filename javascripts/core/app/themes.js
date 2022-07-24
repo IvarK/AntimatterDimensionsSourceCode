@@ -103,7 +103,7 @@ Theme.tryUnlock = function(name) {
   Theme.set(prefix);
   SecretAchievement(25).unlock();
   if (!isAlreadyUnlocked) {
-    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
+    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`, 5000);
   }
   return true;
 };

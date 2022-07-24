@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      retryChallenge: false,
       offlineProgress: false,
       hotkeys: false,
       offlineSlider: 0,
@@ -46,9 +45,6 @@ export default {
     }
   },
   watch: {
-    retryChallenge(newValue) {
-      player.options.retryChallenge = newValue;
-    },
     offlineProgress(newValue) {
       player.options.offlineProgress = newValue;
     },
@@ -75,7 +71,6 @@ export default {
   methods: {
     update() {
       const options = player.options;
-      this.retryChallenge = options.retryChallenge;
       this.offlineProgress = options.offlineProgress;
       this.hotkeys = options.hotkeys;
       this.offlineTicks = player.options.offlineTicks;
@@ -107,11 +102,6 @@ export default {
     <div class="l-options-grid">
       <div class="l-options-grid__row">
         <PrimaryToggleButton
-          v-model="retryChallenge"
-          class="o-primary-btn--option l-options-grid__button"
-          label="Automatically retry challenges:"
-        />
-        <PrimaryToggleButton
           v-model="offlineProgress"
           class="o-primary-btn--option l-options-grid__button"
           label="Offline progress:"
@@ -122,6 +112,11 @@ export default {
           label="Hotkeys:"
           on="Enabled"
           off="Disabled"
+        />
+        <PrimaryToggleButton
+          v-model="automaticTabSwitching"
+          class="o-primary-btn--option l-options-grid__button l-toggle-button"
+          label="Switch tabs on some events (e.g. entering challenges):"
         />
       </div>
       <div class="l-options-grid__row">
@@ -140,13 +135,6 @@ export default {
             @input="adjustSliderValueOfflineTicks($event)"
           />
         </div>
-        <PrimaryToggleButton
-          v-model="automaticTabSwitching"
-          class="o-primary-btn--option l-options-grid__button l-toggle-button"
-          label="Switch tabs on some events (e.g. entering challenges):"
-        />
-      </div>
-      <div class="l-options-grid__row">
         <div
           v-if="automatorUnlocked"
           class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"

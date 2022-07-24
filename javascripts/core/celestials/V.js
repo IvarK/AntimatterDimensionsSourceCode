@@ -177,7 +177,7 @@ export const V = {
   unlockCelestial() {
     // eslint-disable-next-line no-bitwise
     player.celestials.v.unlockBits |= (1 << VUnlocks.vAchievementUnlock.id);
-    GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
+    GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!", 10000);
     V.quotes.unlock.show();
   },
   initializeRun() {

@@ -307,6 +307,20 @@
   cursor: pointer;
 }
 
+.c-automator-docs-script-select {
+  height: 2.2rem;
+  width: 100%;
+  padding: 0 0.5rem;
+  text-align: left;
+  font-family: Typewriter, serif;
+  font-size: 1.2rem;
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-inactive);
+  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
+  border-radius: var(--var-border-radius, 0.4rem);
+  cursor: pointer;
+}
+
 .o-automator-error-underline {
   display: inline-block;
   position: relative;

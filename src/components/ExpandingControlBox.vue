@@ -193,6 +193,7 @@ export default {
 <style scoped>
 .l-expanding-control-box {
   position: relative;
+  width: 100%;
   z-index: 3;
 }
 

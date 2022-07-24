@@ -57,7 +57,7 @@ export default {
     <template v-if="bigCrunch">
       <ClassicBigCrunchButton class="l-old-ui__big-crunch-btn" />
       <div class="o-emptiness">
-        The world has collapsed on itself due to excess of antimatter.
+        The world has collapsed due to excess of antimatter.
       </div>
     </template>
     <template v-else>

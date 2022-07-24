@@ -100,6 +100,10 @@ export default {
         this.challengePower = powerArray.join(", ");
       }
     },
+    handleClick() {
+      if (PlayerProgress.infinityUnlocked()) bigCrunchResetRequest();
+      else Modal.bigCrunch.show();
+    }
   },
 };
 </script>
@@ -123,7 +127,7 @@ export default {
         <h3>The world has collapsed due to excess antimatter.</h3>
         <button
           class="btn-big-crunch"
-          onclick="bigCrunchResetRequest()"
+          @click="handleClick"
         >
           Big Crunch
         </button>

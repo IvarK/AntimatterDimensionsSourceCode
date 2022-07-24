@@ -157,7 +157,9 @@ export const InfinityChallenges = {
     for (const ic of InfinityChallenges.all) {
       if (ic.isUnlocked || ic.isCompleted) continue;
       if (value.lt(ic.unlockAM)) break;
-      GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`);
+      // This has a reasonably high likelihood of happening when the player isn't looking at the game, so
+      // we leave it there for 5 minutes unless they click it away early
+      GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`, 300000);
     }
   },
   /**

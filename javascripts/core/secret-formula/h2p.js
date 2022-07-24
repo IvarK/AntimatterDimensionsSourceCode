@@ -808,7 +808,7 @@ The percentage is effectively a quality
 rating, higher values are better. Specific ranges of rarities are given names, such as Common or Uncommon.
 <br>
 <b>Effects</b> - These are the boosts that equipping the Glyph will give you, and can contain up to four effects.
-Stronger Glyphs will generally have more effects than weaker Glyphs.
+Glyphs with higher level or rarity will generally have more effects than weaker Glyphs.
 <br>
 <b>Note: Your first Glyph will have a fixed effect and rarity, but its level will scale based on your progress before
 any Reality content. Once you receive a Glyph, its attributes can't be changed.</b>
@@ -944,6 +944,9 @@ and effects which are boosted purely on time spent (eg. idle path IP/EP multipli
 While most features in the game are boosted by this increased game speed, there are some which remain unaffected.
 In these cases, it will be specifically mentioned that a given time is stated as <i>real time</i> as opposed to
 <i>game time</i>. One such example is the set of perks which automatically completes Eternity Challenges over time.
+Otherwise, it should be assumed from this point onward that all references to time are for <i>game time</i>.
+Note that this also includes situations where you may want to have a <i>lower</i> amount of time spent, like
+the Reality Upgrade "Replicative Rapidity" for example.
 <br>
 <br>
 You can buy upgrades for the Black Hole by using Reality Machines. There are three upgrades for the Black Hole:
@@ -958,15 +961,8 @@ Duration - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
-Once you reach ${formatInt(1)} year of game playtime, you unlock a Reality upgrade that allows you to have
-a second Black Hole. The time spent for this requirement is itself affected by the first Black Hole, so it
-takes much less than ${formatInt(1)} actual real-time year.
-<br>
-<br>
-Once the Black Hole is active at least ${formatPercents(0.9999, 2)} of the time, it becomes permanently active.
-This is tracked separately for the two Black Holes.
-<br>
-<br>
+Once you have a ${formatInt(1)} year of <i>game time</i> on your save, you unlock a Reality upgrade that allows
+you to have a second Black Hole. 
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first
 Black Hole has a duration of ${formatInt(4)} minutes and the second has an interval of ${formatInt(8)} minutes, the
 second Black Hole will only activate once every two cycles of the first Black Hole regardless of how short the
@@ -975,9 +971,15 @@ the actual time until the second Black Hole activates; in the Black Hole tab, yo
 the first Black Hole active needed for the second Black Hole to activate.
 <br>
 <br>
+When a Black Hole is active at least ${formatPercents(0.9999, 2)} of the time, it becomes permanently active.
+This is tracked separately for the two Black Holes.
+<br>
+<br>
 The Black Holes can be paused, completely halting their interval/duration cycle. However, when unpausing them, it will
 take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to reach maximum speed if they were paused while their
-speed boost was active. Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently.
+speed boost was active. This acceleration time will still advance the cycle as if it were running at full speed; so
+while pausing gives some more control, it also ultimately results in some boosted time being lost.
+Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently.
 <br>
 <br>
 <b>Hotkey: B</b> will pause/unpause the Black Holes.

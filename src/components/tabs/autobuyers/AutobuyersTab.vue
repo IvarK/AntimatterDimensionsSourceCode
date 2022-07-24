@@ -57,6 +57,9 @@ export default {
   <div class="l-autobuyers-tab">
     <AutobuyerToggles />
     <OpenModalHotkeysButton />
+    Autobuyers intervals are real time and therefore unaffected
+    <br>
+    by anything which may alter how fast the game itself is running.
     <RealityAutobuyerBox />
     <EternityAutobuyerBox />
     <BigCrunchAutobuyerBox />

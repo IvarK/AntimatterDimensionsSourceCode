@@ -33,6 +33,12 @@ class BlackHoleUpgradeState {
 
   purchase() {
     if (!this.isAffordable || this.value === 0) return;
+
+    // Keep the cycle phase consistent before and after purchase so that upgrading doesn't cause weird behavior
+    // such as immediately activating it when inactive (or worse, skipping past the active segment entirely).
+    const bh = BlackHole(this.id);
+    const beforeProg = bh.isCharged ? 1 - bh.stateProgress : bh.stateProgress;
+
     Currency.realityMachines.purchase(this.cost);
     this.incrementAmount();
     this._lazyValue.invalidate();
@@ -40,6 +46,13 @@ class BlackHoleUpgradeState {
     if (this.onPurchase) {
       this.onPurchase();
     }
+
+    // Adjust the phase to what it was before purchase by changing it directly. This will often result in passing
+    // in a negative argument to updatePhase(), but this shouldn't cause any problems because it'll never make
+    // the phase itself negative. In very rare cases this may result in a single auto-pause getting skipped
+    const stateTime = bh.isCharged ? bh.duration : bh.interval;
+    bh.updatePhase(stateTime * beforeProg - bh.phase);
+
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }

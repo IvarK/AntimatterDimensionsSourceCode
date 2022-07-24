@@ -1043,10 +1043,10 @@ GameDatabase.news = [
   },
   {
     id: "a192",
-    text:
-      `17976931348623159077293051907890247336179769789423065727343008115773267580550096313270847732240753602112011
-      38798713933576587897688144166224928474306394741243777678934248654852763022196012460941194530829520850057688
-      38150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216`
+    // This ticker needs to be an unbroken string; using backtick strings and linebreaking will add spaces in the
+    // ticker itself where the linebreaks are
+    // eslint-disable-next-line max-len
+    text: "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216"
   },
   {
     id: "a193",
@@ -1505,7 +1505,7 @@ GameDatabase.news = [
   {
     id: "a252",
     get text() {
-      return `<span style='animation: a-text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
+      return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1'>This message is dilated.</span>`;
     },
   },
   {
@@ -2838,7 +2838,7 @@ GameDatabase.news = [
       and smote Slabdrill with his godlike power. As Slabdrill's corpse fell into the earth, he cried “ this will
       not be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with
       Eternity upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest
-      gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times.
+      gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 50 times.
       Use them wisely. And Humanity journeyed off with their new power, as Slabdrill's words echoed in their heads.`,
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },

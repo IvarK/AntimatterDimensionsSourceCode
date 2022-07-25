@@ -10,6 +10,7 @@ export default {
     return {
       isAdjustableChargingUnlocked: false,
       isNegativeBHUnlocked: false,
+      isInverted: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
@@ -25,6 +26,7 @@ export default {
     update() {
       this.isAdjustableChargingUnlocked = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
+      this.isInverted = BlackHoles.areNegative;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
@@ -72,7 +74,10 @@ export default {
       v-if="isNegativeBHUnlocked"
       class="l-black-hole-sliders"
     >
-      <b>Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.</b>
+      <b>
+        Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
+        (Currently {{ isInverted ? "active" : "inactive" }})
+      </b>
       <SliderComponent
         v-bind="sliderProps(true)"
         :value="negativeSlider"

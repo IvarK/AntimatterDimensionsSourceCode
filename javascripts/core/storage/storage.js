@@ -166,7 +166,7 @@ export const GameStorage = {
   exportAsFile() {
     player.options.exportedFileCount++;
     this.save(true);
-    const saveFileName = player.options.saveFileName ? ` ${player.options.saveFileName}` : "";
+    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
     const dateObj = new Date();
     const y = dateObj.getFullYear();
     const m = dateObj.getMonth() + 1;
@@ -174,8 +174,8 @@ export const GameStorage = {
     const segmented = player.speedrun.isSegmented;
     Speedrun.setSegmented(true);
     download(
-      `AD Save ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
-      GameSaveSerializer.serialize(player));
+      `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
+(${y}-${m}-${d}).txt`, GameSaveSerializer.serialize(player));
     Speedrun.setSegmented(segmented);
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },

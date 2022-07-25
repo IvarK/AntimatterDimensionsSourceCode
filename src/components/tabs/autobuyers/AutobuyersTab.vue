@@ -30,6 +30,14 @@ export default {
       displayADAutobuyersIndividually: false,
     };
   },
+  computed: {
+    // It only makes sense to show this if the player has seen gamespeed-altering effects, but we should keep it there
+    // permanently as soon as they have
+    hasSeenGamespeedAlteringEffects() {
+      const ec12 = EternityChallenge(12);
+      return PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+    }
+  },
   methods: {
     update() {
       this.hasContinuum = Laitela.continuumActive;
@@ -57,9 +65,11 @@ export default {
   <div class="l-autobuyers-tab">
     <AutobuyerToggles />
     <OpenModalHotkeysButton />
-    Autobuyers intervals are real time and therefore unaffected
-    <br>
-    by anything which may alter how fast the game itself is running.
+    <div v-if="hasSeenGamespeedAlteringEffects">
+      Autobuyers intervals are real time and therefore unaffected
+      <br>
+      by anything which may alter how fast the game itself is running.
+    </div>
     <RealityAutobuyerBox />
     <EternityAutobuyerBox />
     <BigCrunchAutobuyerBox />

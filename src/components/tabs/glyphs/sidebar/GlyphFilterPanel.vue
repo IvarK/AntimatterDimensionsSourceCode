@@ -56,8 +56,9 @@ export default {
       };
     },
     questionmarkTooltip() {
-      return "All Glyph choices are given a score and compared to a threshold based on the chosen mode. " +
-        "The Glyph with the highest score is picked, but will still be Sacrificed if below the threshold.";
+      return `All Glyph choices are given a score and compared to a threshold based on the chosen mode. 
+        The Glyph with the highest score is picked, but will still be Sacrificed if below the threshold.
+        (click for more detail)`;
     },
     unlockedModes() {
       return Object.values(this.modes).filter(idx => this.isUnlocked(idx));
@@ -183,7 +184,7 @@ export default {
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div
           v-tooltip="questionmarkTooltip"
-          class="o-questionmark"
+          class="o-questionmark o-clickable"
           @click="showFilterHowTo"
         >
           ?
@@ -351,5 +352,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

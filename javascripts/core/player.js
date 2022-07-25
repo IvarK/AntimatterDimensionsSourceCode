@@ -777,6 +777,7 @@ window.player = {
     showLastTenResourceGain: true,
     autosaveInterval: 30000,
     showTimeSinceSave: true,
+    saveFileName: "",
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,

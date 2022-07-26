@@ -160,7 +160,7 @@ export default {
         </h1>
         <span :style="petStyle">
           Whichever Celestial has Remembrance will get {{ formatX(remembranceMult) }} Memory Chunk gain. The other
-          Celestials will get {{ formatX(rememberanceNerf) }} Memory Chunk gain.
+          Celestials will get {{ formatX(remembranceNerf, 1, 1) }} Memory Chunk gain.
         </span>
         <div
           v-if="hasRemembrance"

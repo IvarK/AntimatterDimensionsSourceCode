@@ -3,10 +3,10 @@ import { AutomatorLexer } from "./lexer";
 
 (function() {
   function walkSuggestion(suggestion, prefix, output) {
-    if (suggestion.$autocomplete &&
-      suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix) {
-      output.add(suggestion.$autocomplete);
-    }
+    const hasAutocomplete = suggestion.$autocomplete &&
+      suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix;
+    const isUnlocked = suggestion.$unlocked ? suggestion.$unlocked() : true;
+    if (hasAutocomplete && isUnlocked) output.add(suggestion.$autocomplete);
     for (const s of suggestion.categoryMatches) {
       walkSuggestion(AutomatorLexer.tokenIds[s], prefix, output);
     }

@@ -69,11 +69,8 @@ export default {
       <div class="c-automator-tab__interval-info">
         {{ intervalText }}
       </div>
-      At higher speeds, certain commands may take too long to execute while still maintaining this speed,
-      <br>
-      in which case the next command will be immediately processed after the slower command is run.
-      <br>
-      The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
+      Script changes are not immediately saved to your computer under all conditions,
+      check the Automator How To Play entries for more details.
       <br>
       There are two character limits to reduce lag. If either is exceeded,
       <span :class="{ 'c-overlimit': !withinLimit }">

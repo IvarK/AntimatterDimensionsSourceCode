@@ -71,7 +71,6 @@ export const AutomatorLexer = (() => {
   const PrestigeEvent = createCategory("PrestigeEvent");
   const StudyPath = createCategory("StudyPath");
   const TimeUnit = createCategory("TimeUnit");
-  const TTCurrency = createCategory("TTCurrency");
 
   createInCategory(ComparisonOperator, "OpGTE", />=/, {
     $autocomplete: ">=",
@@ -103,17 +102,14 @@ export const AutomatorLexer = (() => {
   EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
   createInCategory(AutomatorCurrency, "EP", /ep/i, {
-    extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyOne(true, "ep"),
     $getter: () => Currency.eternityPoints.value
   });
   createInCategory(AutomatorCurrency, "IP", /ip/i, {
-    extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyOne(true, "ip"),
     $getter: () => Currency.infinityPoints.value
   });
   createInCategory(AutomatorCurrency, "AM", /am/i, {
-    extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyOne(true, "am"),
     $getter: () => Currency.antimatter.value
   });
@@ -275,7 +271,10 @@ export const AutomatorLexer = (() => {
 
   createKeyword("Auto", /auto/i);
   createKeyword("Buy", /buy/i);
-  createKeyword("Blob", /blob\s\s/i);
+  // Necessary to hide it from Codemirror's tab auto-completion
+  createKeyword("Blob", /blob\s\s/i, {
+    $unlocked: () => false,
+  });
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
   createKeyword("Notify", /notify/i);
@@ -300,9 +299,11 @@ export const AutomatorLexer = (() => {
   createKeyword("While", /while/i);
   createKeyword("BlackHole", /black[ \t]+hole/i, {
     $autocomplete: "black hole",
+    $unlocked: () => BlackHole(1).isUnlocked,
   });
   createKeyword("StoreGameTime", /stored?[ \t]+game[ \t]+time/i, {
     $autocomplete: "store game time",
+    $unlocked: () => Enslaved.isUnlocked,
   });
 
   createKeyword("Dilation", /dilation/i);
@@ -336,7 +337,6 @@ export const AutomatorLexer = (() => {
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
-    TTCurrency,
     TimeUnit, ...tokenLists.TimeUnit,
     Identifier,
   ];

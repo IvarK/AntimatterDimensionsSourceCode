@@ -904,7 +904,7 @@ different colors, roughly indicating which part of the game they affect the most
       tags: ["pp", "reality", "tree", "endgame", "lategame"],
       tab: "reality/perks"
     }, {
-      name: "Automator",
+      name: "Automator Overview",
       info: () => `
 The Automator is unlocked upon reaching a total of ${formatInt(AutomatorPoints.pointsForAutomator)} Automator Points.
 Automator Points are given when unlocking various Perks or Reality Upgrades, by unlocking the Black Hole, or by
@@ -932,22 +932,9 @@ pane on the right which has multiple panels which do many different things. The 
   script
 <br>
 <br>
-There are a few limitations to scripts in order to reduce lag and prevent save file size from getting too large.
-Individual scripts are limited to a maximum of ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS)}
-characters each, and all your scripts together cannot exceed a <i>total</i> character count of
-${formatInt(AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS)}. Any changes made to scripts while above these limits
-will not be saved if you refresh the page.
-<br>
-<br>
 You are able to create new scripts by clicking on the dropdown, and then clicking the "Create new script..." option.
 To rename a script, click the pencil next to the dropdown and edit the name to whatever you with the script to be
-called (max ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_NAME_LENGTH)} characters). You are allowed to create a
-maximum of ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_COUNT)} scripts.
-<br>
-<br>
-Scripts are automatically saved as you edit them, but are not saved to your game save until the global autosave timer
-(ie. "Time since last save") triggers a full game save. If you make changes to scripts right before closing the game,
-you should wait until the game saves afterwards in order to not lose your changes.
+called.
 <br>
 <br>
 If you want a larger workspace, you can press the button in the top right corner of the documentation pane of the
@@ -964,7 +951,7 @@ freely rearranged by dragging the blocks around if needed.
 Clicking the top-right button in block mode will switch back to text mode, and switching between block and text mode
 will automatically translate your script as well. If you have a script in text mode which has errors, the Automator
 may not be able to figure out what blocks to convert the lines with errors into. This may result in part of your
-script being lost if you attempt to convert a text script with errors into a bock script. 
+script being lost if you attempt to convert a text script with errors into a block script.
 <br>
 <br>
 Just like your entire savefile, individual Automator scripts can be imported and exported from the game.
@@ -975,6 +962,62 @@ won't be lost or overwritten.
 <br>
 <br>
 <b>Hotkey: U</b> will pause/unpause the Automator.
+`,
+      isUnlocked: () => Player.automatorUnlocked,
+      tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
+      tab: "automation/automator"
+    }, {
+      name: "Automator Technical Details",
+      info: () => `
+<b>Technical Limits</b>
+<br>
+<br>
+There are a few limitations to scripts in order to reduce lag and prevent save file size from getting too large.
+These limits are as follows:
+<br>
+- Individual scripts are limited to a maximum of ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS)}
+characters each and all scripts combined together cannot exceed ${formatInt(AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS)}
+characters total.
+<br>
+- Script names cannot exceed ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_NAME_LENGTH)} characters.
+<br>
+- Defined constants cannot have names longer than ${formatInt(AutomatorData.MAX_ALLOWED_CONSTANT_NAME_LENGTH)}
+characters, or values longer than ${formatInt(AutomatorData.MAX_ALLOWED_CONSTANT_VALUE_LENGTH)} characters.
+<br>
+- You cannot have more than a total of ${formatInt(AutomatorData.MAX_ALLOWED_SCRIPT_COUNT)} scripts or
+${formatInt(AutomatorData.MAX_ALLOWED_CONSTANT_COUNT)} defined constants.
+<br>
+<br>
+<b>Script Saving</b>
+<br>
+<br>
+Scripts are automatically saved as you edit them, but are not saved to your game save until the global autosave timer
+(ie. "Time since last save") triggers a full game save. If you make changes to scripts right before closing the game,
+you should wait until the game saves afterwards in order to not lose your changes. Any edits made to your scripts
+while above the length limits will not be saved until you shorten your scripts to be below them again.
+<br>
+<br>
+<b>Automator Ticks</b>
+<br>
+<br>
+The Automator's "execution timer" is based on real time, and is therefore unaffected by things such as the Black Hole,
+Time Glyph effects, and EC12's negative effect. However this execution timer runs entirely independently from the main
+game's production loop, meaning that at faster speeds the Automator can run multiple commands per production tick.
+<br>
+<br>
+Some commands are more intensive on the game's internal code and may take longer than a single Automator tick in order
+to process on slower computers. In that case, the Automator will execute those commands and then attempt to "catch up"
+by executing the following commands as quickly as possible until it has run as many commands as it should have at a
+constant execution speed.
+<br>
+<br>
+<b>Interactions with Offline Progress</b>
+<br>
+<br>
+Longer production ticks during Offline Progress simulation means that all of your resources are effectively given
+in large chunks instead of more continuously. This may have potentially adverse effects on your script's
+behavior while offline, depending on how exactly your script depends on the game state to work properly.
+Additionally, the PAUSE command may behave oddly due to it also being based on real time.
 `,
       isUnlocked: () => Player.automatorUnlocked,
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],

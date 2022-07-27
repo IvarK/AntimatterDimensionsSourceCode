@@ -6104,6 +6104,7 @@ kbd {
 
 .c-teresa-milestone-line--unlocked {
   animation: none;
+  filter: brightness(50%);
 }
 
 .o-teresa-quotes {

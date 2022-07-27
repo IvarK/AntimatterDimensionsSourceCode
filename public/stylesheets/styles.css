@@ -2750,16 +2750,13 @@ br {
   border-radius: var(--var-border-radius, 0.4rem);
 }
 
+/* We need scrollbar-color in this rule as well as identical color specifications in the following two; some
+   modern browsers only support one or the other for scrollbar styling */
 .l-select-notation__inner,
 .l-select-theme__inner {
   display: flex;
-  /*
-    Overflow-y is duplicated here. Auto works on most browsers-- overlay doesn't.
-    Overlay makes the scrollbar display on top of the element, which is what we want. Auto is there in case
-    overlay isn't available. The order must stay the same.
-  */
   overflow-y: auto;
-  overflow-y: overlay;
+  scrollbar-color: var(--color-good-dark) var(--color-disabled);
   flex-direction: column;
   max-height: 24.9rem;
   align-items: stretch;
@@ -2769,6 +2766,12 @@ br {
 .l-select-notation__inner::-webkit-scrollbar,
 .l-select-theme__inner::-webkit-scrollbar {
   width: 0.8rem;
+  background-color: var(--color-disabled);
+}
+
+.l-select-notation__inner::-webkit-scrollbar-thumb,
+.l-select-theme__inner::-webkit-scrollbar-thumb {
+  background-color: var(--color-good-dark);
 }
 
 .l-select-notation__item:last-child,

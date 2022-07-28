@@ -167,6 +167,12 @@ export default {
         reaction.isActive = setIsActive;
       }
     },
+    nodeClass(node) {
+      const resource = node.resource;
+      return {
+        "o-clickable": resource.isUnlocked && !resource.isBaseResource
+      };
+    },
   }
 };
 </script>
@@ -226,6 +232,7 @@ export default {
         :key="i"
         :node="node"
         :is-focused="isFocusedNode(node)"
+        :class="nodeClass(node)"
         @mouseenter="handleMouseEnter(node)"
         @mouseleave="handleMouseLeave"
         @click="handleClick(node)"
@@ -249,5 +256,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

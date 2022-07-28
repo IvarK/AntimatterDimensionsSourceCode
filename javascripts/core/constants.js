@@ -255,7 +255,7 @@ window.GlyphRarities = [
     minStrength: 2,
     name: "Rare",
     darkColor: "#2196f3",
-    lightColor: "#1872f3"
+    lightColor: "#2090f0"
   }, {
     minStrength: 1.5,
     name: "Uncommon",

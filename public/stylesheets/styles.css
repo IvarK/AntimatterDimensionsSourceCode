@@ -65,6 +65,7 @@ html {
   --color-dilation: #64dd17;
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
+  --color-reality-dark: #0a790c;
   --color-celestials: #5151ec;
   --color-prestige--accent: white;
 
@@ -117,6 +118,7 @@ html {
   --color-accent: #1565c0;
 
   --color-infinity: #ff9800;
+  --color-reality-dark: #0ba00e;
   --color-prestige--accent: black;
 
   --color-teresa--accent: black;
@@ -138,6 +140,7 @@ html {
   --color-infinity: #ff9800;
   --color-eternity: #673ab7;
   --color-reality: #4caf50;
+  --color-reality-dark: #0ba00e;
   --color-celestials: #00bcd4;
   --color-prestige--accent: black;
 
@@ -161,6 +164,7 @@ html {
   --color-eternity: #639565;
   --color-reality: #afa3a5;
   --color-reality-light: #e8e3e4;
+  --color-reality-dark: #7a7273;
   --color-celestials: #f2d6c1;
   --color-prestige--accent: #dbd242;
 
@@ -743,7 +747,7 @@ button:focus {
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
-  background: black;
+  background: var(--color-background);
   border-style: solid;
   border-width: var(--var-border-width, 0.2rem);
   border-radius: var(--var-border-radius, 0.4rem);
@@ -777,8 +781,8 @@ button:focus {
 }
 
 .c-reality-button--unlocked {
-  color: var(--color-reality);
-  border-color: var(--color-reality);
+  color: var(--color-reality-dark);
+  border-color: var(--color-reality-dark);
   cursor: pointer;
 }
 
@@ -815,7 +819,7 @@ button:focus {
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--color-bad);
-  background: black;
+  background: var(--color-background);
   border-color: var(--color-bad);
   border-style: solid;
   border-width: var(--var-border-width, 0.2rem);
@@ -8491,9 +8495,9 @@ kbd {
 .c-glyph-level-factors-dropdown-header {
   width: calc(100% - 1rem);
   text-align: center;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
@@ -8545,7 +8549,7 @@ kbd {
   right: -0.5rem;
   bottom: -0.5rem;
   left: -0.5rem;
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
 }
 
@@ -8597,7 +8601,7 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__slider-bg {
-  background-color: var(--color-reality-light);
+  background-color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-levels-and-weights__slider-bg {
@@ -8750,9 +8754,9 @@ kbd {
   text-align: center;
   font-family: Typewriter, serif;
   font-size: 1rem;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   transition-duration: 0.15s;
   cursor: pointer;

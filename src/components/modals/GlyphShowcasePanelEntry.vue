@@ -84,7 +84,7 @@ export default {
     },
     rarityStyle() {
       return {
-        "color": `${this.glyph.type === "companion" ? GlyphTypes[this.type].color : getColor(this.glyph.strength)}`,
+        "color": this.glyph.type === "companion" ? GlyphTypes[this.type].color : getColor(this.glyph.strength),
         "font-weight": "bold"
       };
     },

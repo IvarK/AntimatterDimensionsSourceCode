@@ -54,7 +54,6 @@ export function antimatterDimensionCommonMultiplier() {
 
 export function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
-  if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) return DC.D0;
   if (NormalChallenge(10).isRunning && tier > 6) return DC.D1;
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
@@ -564,6 +563,7 @@ class AntimatterDimensionState extends DimensionState {
 
   get productionPerSecond() {
     const tier = this.tier;
+    if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) return DC.D0;
     let amount = this.totalAmount;
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);

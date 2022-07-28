@@ -251,6 +251,7 @@ export default {
           <GlyphComponent
             :glyph="{type: type.id, strength: strengthThreshold(type.id) }"
             v-bind="glyphIconProps"
+            class="o-clickable"
           />
         </span>
         <SliderComponent
@@ -283,6 +284,7 @@ export default {
           <GlyphComponent
             :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
             v-bind="glyphIconProps"
+            class="o-clickable"
           />
         </span>
         <SliderComponent

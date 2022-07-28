@@ -69,9 +69,9 @@ export default {
       if (typeof milestone.description === "string") return milestone.description;
       return milestone.description();
     },
-    // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
+    // One-off formatting function; needs to format large Decimals and a small number assumed to be an integer percent
     formatRift(value) {
-      return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+      return typeof value === "number" ? `${formatInt(100 * value)}%` : format(value, 2);
     },
     toggle() {
       if (!this.isMaxed) this.rift.toggle();

@@ -37,16 +37,6 @@ export default {
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
-    isGameSpeedNormal() {
-      return this.gameSpeedMult === 1;
-    },
-    isGameSpeedSlow() {
-      return this.gameSpeedMult < 1;
-    },
-    formattedFastSpeed() {
-      const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
-    },
     showCostTitle() {
       return this.cost.exponent < 1000000;
     },
@@ -91,7 +81,7 @@ export default {
     <div class="tickspeed-labels">
       <span>
         {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-        <GameSpeedDisplay v-if="!isGameSpeedNormal" />
+        <GameSpeedDisplay :is-standalone="false" />
       </span>
     </div>
     <div class="tickspeed-buttons">

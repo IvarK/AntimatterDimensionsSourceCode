@@ -141,15 +141,15 @@ export class DimBoost {
     if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
 
     let boostEffects;
-    if (NormalChallenge(8).isRunning) boostEffects = newUnlock === "" ? "" : ` to ${newUnlock}`;
-    else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
-    else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+    if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
+    else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
+    else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
-    const areDimensionsReset = `Reset
-    ${((Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
-      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought)) ? "nothing" : "your Dimensions"}`;
-
-    return `${areDimensionsReset}${boostEffects}`;
+    if (boostEffects === "") return "Dimension Boosts are currently useless";
+    const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
+      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
+    if (areDimensionsKept) return boostEffects.capitalize();
+    return `Reset your Dimensions to ${boostEffects}`;
   }
 
   static get purchasedBoosts() {

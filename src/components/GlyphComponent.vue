@@ -267,6 +267,13 @@ export default {
     update() {
       this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
       this.colorTimer = (this.colorTimer + 4) % 1000;
+      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
+        : 0;
+      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        : 0;
     },
     // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
     // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
@@ -300,13 +307,6 @@ export default {
       glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
-        : 0;
-      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
-        : 0;
       if (
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
         (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward === 0)

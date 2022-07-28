@@ -135,6 +135,7 @@ export function getDilationGainPerSecond() {
 
 function tachyonGainMultiplier() {
   if (Pelle.isDisabled("tpMults")) return new Decimal(1);
+  const pow = Enslaved.isRunning ? Enslaved.tachyonNerf : 1;
   return DC.D1.timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
@@ -142,7 +143,7 @@ function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
-  );
+  ).pow(pow);
 }
 
 export function rewardTP() {
@@ -150,13 +151,22 @@ export function rewardTP() {
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
+// This function exists to apply Teresa-25 in a consistent way; TP multipliers can be very volatile and
+// applying the reward only once upon unlock promotes min-maxing the upgrade by unlocking dilation with
+// TP multipliers as large as possible. Applying the reward to a base TP value and letting the multipliers
+// act dynamically on this fixed base value elsewhere solves that issue
+export function getBaseTP(antimatter) {
+  const am = (isInCelestialReality() || Pelle.isDoomed)
+    ? antimatter
+    : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
+  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5);
+  if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
+  return baseTP;
+}
+
 // Returns the TP that would be gained this run
 export function getTP(antimatter) {
-  let tachyon = Decimal
-    .pow(Decimal.log10(antimatter) / 400, 1.5)
-    .times(tachyonGainMultiplier());
-  if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
-  return tachyon;
+  return getBaseTP(antimatter).times(tachyonGainMultiplier());
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP

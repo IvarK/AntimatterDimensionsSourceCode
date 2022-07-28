@@ -13,7 +13,7 @@
 
 :root .t-normal,
 :root .t-s9 {
-  --color-text: white;
+  --color-text: #ffffff;
   --color-text-inverted: black;
   --color-base: #1d1b22;
   --color-accent: #df5050;

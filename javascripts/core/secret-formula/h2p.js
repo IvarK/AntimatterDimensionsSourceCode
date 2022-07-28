@@ -1,4 +1,3 @@
-import { Pelle, PelleStrikes } from "../globals";
 import { DC } from "../constants";
 
 import { GameDatabase } from "./game-database";
@@ -131,8 +130,47 @@ the game closed.
       isUnlocked: () => true,
       tags: ["offline", "away", "progress"],
       tab: "options/gameplay"
-    },
-    {
+    }, {
+      name: "Effect Stacking",
+      info: () => `
+Most of the effects and upgrades in Antimatter Dimensions largely fall into three categories:
+<br>
+- <b>Additive:</b> These effects are typically denoted with a + followed by a number, and add their value to some
+base amount. Multiple additive effects are summed up. These can also sometimes show up as subtractive effects which
+reduce resource costs.
+<br>
+- <b>Multiplicative:</b> These effects are shown either by a × followed by a number or, more rarely, as two numbers
+separated by a ➜. Diffrent multiplicative sources always combine by multiplying, never by adding. In some situations,
+there may be negative effects or cost reductions that apply in this category as division.
+<br>
+- <b>Power</b>: These effects are much rarer and appear as ^ followed by a number. Multiple power effects apply
+sequentially, or equivalently by multiplying the values of the power effects together and applying the final value
+as a single power. In rare situations, negative effects may apply here in this category as powers which are less
+than ${formatInt(1)}.
+<br>
+<br>
+Unless otherwise noted when an upgrade or reward <i>replaces</i> an older value, all of these effects stack
+with each other. In the case of an upgrade replacing an older value with a newer value, the replacement occurs before
+any of the above effects are applied. To determine the final value of a set of effects, the effects from each category
+are individually combined, and then applied in the order of additive, multiplicative, then power effects.
+<br>
+<br>
+${PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked()
+    ? "Dilation and any Dilation-like effects apply <i>after</i> all of these other effects are stacked together."
+    : ""}
+<br>
+<br>
+${PlayerProgress.realityUnlocked()
+    ? `Glyph Effects effectively have two stacking attributes; their internal way of stacking together and the way
+      they stack with all other game effects. These may not necessarily be the same - for example, the "Antimatter
+      Dimension Power" effect will stack <i>additively with itself</i>, but then the total effect will be added to
+      a base value of ${formatInt(1)} and then applied as a <i>power effect</i> to Antimatter Dimensions.`
+    : ""}
+`,
+      isUnlocked: () => true,
+      tags: ["offline", "away", "progress"],
+      tab: "options/gameplay"
+    }, {
       name: "Antimatter Dimensions",
       info: () => `
 Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
@@ -1063,12 +1101,10 @@ ${EffarigUnlock.run.isUnlocked
 <br>
 Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
-  // Can't really make a nested template here without generally making a mess of the code
-  // eslint-disable-next-line prefer-template
-    ? "a new Glyph type, <span style='color: var(--color-effarig--base);'>Effarig</span> Glyphs. Effarig Glyphs have " +
-      formatInt(7) + " different possible effects, which you can view in the Glyph filter settings. You can only" +
-      " have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) +
-      " effects. Lastly, the RM multiplier and Glyph instability effects can't appear together on the same Glyph."
+    ? `a new Glyph type, <span style='color: var(--color-effarig--base);'>Effarig</span> Glyphs. Effarig Glyphs have
+      ${formatInt(7)} different possible effects, which you can view in the Glyph filter settings. You can only
+      have one Effarig Glyph equipped at a time, and they can still only have at most ${formatInt(4)}
+      effects. Lastly, the RM multiplier and Glyph instability effects can't appear together on the same Glyph.`
     : "<span style='color: var(--color-effarig--base);'>(complete Effarig's Reality to see reward details)</span>"}
 `,
       isUnlocked: () => TeresaUnlocks.effarig.canBeApplied,
@@ -1234,34 +1270,38 @@ ${format(GameDatabase.celestials.v.mainUnlock.dilatedTime.requirement)} Dilated 
 ${format(GameDatabase.celestials.v.mainUnlock.replicanti.requirement)} Replicanti, all in the same Reality.
 <br>
 <br>
-When you meet all of those requirements, you'll be able to access V's Reality. However, completing the
-Reality itself is only the beginning. V has six different requirements, each of which require you to make a
-certain amount of progress within V's Reality. Completing a requirement rewards you with a V-Achievement.
-V-Achievements are permanent and persist after exiting V's reality, and don't all need to be done simultaneously.
-<br>
-<br>
-After completing the requirement, the V-Achievement threshold then increases and can be completed again
-if you can reach the new goal.  You can complete each category of V-Achievement up to six times.
-Completed V-Achievements do two things:
-<br>
-- Upon reaching certain totals of V-Achievements, you automatically unlock upgrades on the V tab without needing
-to spend any resources.
-<br>
-- Each V-Achievement also gives you one Space Theorem.
-<br>
-<br>
-The goal reduction unlocked by having ${formatInt(2)} V-Achievements allows you to make some V-Achievement requirements
-easier to complete by spending Perk Points, down to a limit of whatever the easiest tier requires.
-The cost of reducing a goal does not increase as it is used, and will also reduce future tiers as well.
-<br>
-<br>
-Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
-split after the improved IP formula, or both Time Studies within a dark/light pair near the bottom. Like Time
-Theorems, they are freely given back every time you respec your studies.
-With enough Space Theorems you'll eventually be able to purchase every single Time Study at once!
-<br>
-<br>
-Reaching ${formatInt(36)} V-Achievements (and therefore completing all of V's Achievements) unlocks the next Celestial.
+When you meet all of those requirements, you'll be able to access V's Reality.
+${VUnlocks.vAchievementUnlock.isUnlocked
+    ? `However, completing the Reality itself is only the beginning. V has six different requirements, each of which
+      require you to make a certain amount of progress within V's Reality. Completing a requirement rewards you with a
+      V-Achievement.
+      V-Achievements are permanent and persist after exiting V's reality, and don't all need to be done simultaneously.
+      <br>
+      <br>
+      After completing the requirement, the V-Achievement threshold then increases and can be completed again
+      if you can reach the new goal.  You can complete each category of V-Achievement up to six times.
+      Completed V-Achievements do two things:
+      <br>
+      - Upon reaching certain totals of V-Achievements, you automatically unlock upgrades on the V tab without needing
+      to spend any resources.
+      <br>
+      - Each V-Achievement also gives you one Space Theorem.
+      <br>
+      <br>
+      The goal reduction unlocked by having ${formatInt(2)} V-Achievements allows you to make some V-Achievement
+      requirements easier to complete by spending Perk Points, down to a limit of whatever the easiest tier requires.
+      The cost of reducing a goal does not increase as it is used, and will also reduce future tiers as well.
+      <br>
+      <br>
+      Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
+      split after the improved IP formula, or both Time Studies within a dark/light pair near the bottom. Like Time
+      Theorems, they are freely given back every time you respec your studies.
+      With enough Space Theorems you'll eventually be able to purchase every single Time Study at once!
+      <br>
+      <br>
+      Reaching ${formatInt(36)} V-Achievements (and therefore completing all of V's Achievements) unlocks the next
+      Celestial.`
+    : "<span style='color: var(--color-bad);'>(unlock V's Reality to see further details)</span>"}
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
       tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",
@@ -1505,51 +1545,62 @@ Independently of the milestone type, milestones also have an icon indicating wha
       alias: "Pelle",
       info: () => `
 When you purchase the last Imaginary Upgrade and unlock Pelle, you unlock their tab, where you can find a button to
-"Doom your Reality". Dooming your Reality will start a new <b>Doomed Reality</b>, resetting almost the entire game up to
-Reality, not giving you any rewards from your progress in your current Reality.
-<br>
-When you enter the Doomed Reality, you'll keep all values under the General- and Reality header in the Statistics
-tab and all of your best Challenge times. Inside Doomed Realities, multiple upgrades, Time Studies, Challenge and
-Celestial rewards, Perks, and other game mechanics are disabled or grant no reward.
-You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
+"Doom your Reality". In order to Doom your Reality, you must have completed all ${formatInt(17)} rows of achievements
+available to you at this point.
 <br>
 <br>
-Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter, Infinity,
-and Eternity Points across all Doomed Realities. Remnants produce Reality Shards which can be spent on Pelle Upgrades.
-<br>
-<br>
-Pelle Upgrades can be divided into two categories. The five upgrades in the first row can be repeatedly bought, but
-eventually reach a cap. They grant boosts to different aspects of the game, making progression within Doomed Realities
-easier.
-<br>
-The other upgrades in the bottom rows offer automation and QoL (quality of life) improvements. Everything unlocked from
-these upgrades, can't be unlocked by anything else in the game. So for example completing a Normal Challenge won't
-give you the corresponding Antimatter Dimension autobuyer back as these are locked behind Pelle Upgrades.
-You can toggle a button above upgrade to hide bought upgrades or click the
-<i class="fas fa-compress-arrows-alt"></i>-icon to collapse and hide the entire panel.
-<br>
-<br>
-<b>Hotkey: Z</b> will try to perform an Armageddon reset.
+${Pelle.isDoomed
+    ? `Dooming your Reality will start a new <b>Doomed Reality</b>, resetting almost the entire game up to
+      Reality, not giving you any rewards from your progress in your current Reality.
+      <br>
+      <br>
+      When you enter the Doomed Reality, you keep all values under the General and Reality headers in the Statistics
+      tab and all of your best Challenge times. Inside Doomed Realities, multiple upgrades, Time Studies, Challenge and
+      Celestial rewards, Perks, and other game mechanics are disabled or grant no reward.
+      You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
+      <br>
+      <br>
+      Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter,
+      Infinity Points, and Eternity Points across all Doomed Realities. Remnants produce Reality Shards which can be
+      spent on Pelle Upgrades.
+      <br>
+      <br>
+      Pelle Upgrades can be divided into two categories. The five upgrades in the first row can be repeatedly bought,
+      but eventually reach a cap. They grant boosts to different aspects of the game, making progression within Doomed
+      Realities easier.
+      <br>
+      <br>
+      The other upgrades in the bottom rows offer automation and QoL (quality of life) improvements. Everything unlocked
+      from these upgrades can't be unlocked by anything else in the game; for example, completing a Normal Challenge
+      won't give you the corresponding Antimatter Dimension autobuyer back as these are locked behind Pelle Upgrades.
+      You can toggle a button above upgrade to hide bought upgrades or click the
+      <i class="fas fa-compress-arrows-alt"></i>-icon to collapse and hide the entire panel.
+      <br>
+      <br>
+      <b>Hotkey: Z</b> will try to perform an Armageddon reset.`
+    : "<span style='color: var(--color-bad);'><b>You must Doom your Reality to read the rest of this entry.</b></span>"
+}
 `,
-      isUnlocked: () => Pelle.isDoomed,
-      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle", "celestial"],
+      isUnlocked: () => Pelle.isUnlocked,
+      tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle", "celestial", "doom"],
       tab: "celestials/pelle"
     }, {
       name: "Pelle Strikes",
       info: () => `
 Pelle Strikes are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
-reaching Infinity the first time within a Doomed Reality. More Strikes eventually occur by further progression.
+reaching Infinity for the first time within a Doomed Reality. More Strikes eventually occur by further progression.
 Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
 Each Pelle Strike also unlocks a Rift bar.
 <br>
-Rift bars can be filled by clicking them to toggle between "Idle" and "Filling". When active, Rifts consume
-${formatInt(3)}% of a Rift specific resource per second. Each Rift offers a Rift specific effect which are based
-on the total amount filled.
+<br>
+Rift bars can be filled by clicking them to toggle between "Idle" and "Filling", although only two Rifts can be
+"Filling" at any given time. When active, Rifts consume ${formatInt(3)}% of a Rift-specific resource per second. Each
+Rift offers a Rift-specific effect which are based on the total amount filled.
 ${PelleStrikes.eternity.hasStrike
-    ? `An exception for this is Decay/Collapse/Disarray, which effect gets capped once you have drained a total of
+    ? `An exception for this is Decay/Collapse/Disarray, whose effect gets capped once you have drained a total of
     ${formatPostBreak(DC.E2000)} replicanti.`
     : ""}
-In addition each Rift offers three rewards for filling them up to a certain percentage.
+In addition, each Rift offers three milestone rewards for filling them up to a certain percentage.
 `,
       isUnlocked: () => PelleStrikes.infinity.hasStrike,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "strike", "rift", "celestial"],
@@ -1559,10 +1610,14 @@ In addition each Rift offers three rewards for filling them up to a certain perc
       info: () => `
 When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can 
 passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect 
-Tickspeed as if they were Antimatter Galaxies but they don't increase the cost of your next Antimatter Galaxy. You also 
-unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four upgrades
-then give a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and Generated
-Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.`,
+Tickspeed as if they were Antimatter Galaxies, but they don't increase the cost of your next Antimatter Galaxy. You
+also  unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
+upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and
+Generated Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.
+<br>
+<br>
+The <b>Galaxy Generator</b> has a maximum number of Galaxies it can generate, which can only be increased by draining
+Rifts once the current cap has been reached.`,
       isUnlocked: () => Pelle.hasGalaxyGenerator,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
         "galaxies", "generator", "celestial"],

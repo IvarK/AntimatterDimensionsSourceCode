@@ -182,11 +182,6 @@ class TimeDimensionState extends DimensionState {
   get multiplier() {
     const tier = this._tier;
 
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
-      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
-      return DC.D0;
-    }
-
     if (EternityChallenge(11).isRunning) return DC.D1;
     let mult = GameCache.timeDimensionCommonMultiplier.value
       .timesEffectsOf(
@@ -221,6 +216,10 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
+    (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
+      return DC.D0;
+    }
     if (EternityChallenge(11).isRunning) {
       return this.amount;
     }

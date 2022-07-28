@@ -114,15 +114,24 @@ export default {
           <RealityButton />
         </div>
 
-        <div v-if="isInCelestialReality">
+        <div
+          v-if="isInCelestialReality"
+          class="l-celestial-auto-restart-checkbox"
+        >
           <input
             id="autoRestart"
             v-model="autoRestartCelestialRuns"
             type="checkbox"
             :value="autoRestartCelestialRuns"
+            class="o-clickable"
             @input="toggleAutoRestartCelestial()"
           >
-          <label for="autoRestart">Repeat this Celestial's Reality</label>
+          <label
+            for="autoRestart"
+            class="o-clickable"
+          >
+            Repeat this Celestial's Reality
+          </label>
         </div>
         <RealityAmplifyButton v-else />
 
@@ -204,5 +213,16 @@ export default {
 <style scoped>
 .l-glyph-level-factors {
   margin: 2rem;
+}
+
+.o-clickable {
+  cursor: pointer;
+}
+
+.l-celestial-auto-restart-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  user-select: none;
 }
 </style>

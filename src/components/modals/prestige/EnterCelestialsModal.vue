@@ -44,7 +44,7 @@ export default {
     },
     extraLine() {
       switch (this.number) {
-        case 0: return `Your highest Teresa completetion was for ${format(this.teresaBestAM, 2, 2)}
+        case 0: return `Your highest Teresa completion was for ${format(this.teresaBestAM, 2, 2)}
           antimatter, gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
         case 1: return this.effarigDone
           ? "Effarig is completed!"

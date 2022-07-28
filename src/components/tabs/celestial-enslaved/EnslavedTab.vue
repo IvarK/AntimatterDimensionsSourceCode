@@ -46,8 +46,8 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isRunning) return "You're inside Enslaved Ones' Reality";
-      return "Start Enslaved One's Reality";
+      if (this.isRunning) return "You are inside The Enslaved Ones' Reality";
+      return "Start The Enslaved Ones' Reality";
     },
     runButtonClassObject() {
       return {

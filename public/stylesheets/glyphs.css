@@ -74,9 +74,9 @@
 
 .c-glyph-sacrifice-options {
   position: relative;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -108,7 +108,7 @@
 
 .c-glyph-sacrifice-options__help {
   font-size: 1.2rem;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-sacrifice-options__help {
@@ -133,9 +133,9 @@
 }
 
 .c-glyph-sacrifice-options__option:hover {
-  color: var(--color-reality-);
+  color: var(--color-reality-dark);
   background-color: var(--color-reality-light);
-  border-color: var(--color-reality);
+  border-color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-sacrifice-options__option:hover {
@@ -146,8 +146,8 @@
 
 .c-glyph-sacrifice-options__option--active {
   color: var(--color-text-inverted);
-  background-color: var(--color-reality);
-  border-color: var(--color-reality);
+  background-color: var(--color-reality-dark);
+  border-color: var(--color-reality-dark);
   pointer-events: none;
 }
 
@@ -157,8 +157,8 @@
 }
 
 .c-glyph-sacrifice-options__option--inactive {
-  color: var(--color-reality);
-  border-color: var(--color-reality);
+  color: var(--color-reality-dark);
+  border-color: var(--color-reality-dark);
 }
 
 .c-glyph-sacrifice-options__option__tooltip {
@@ -248,7 +248,7 @@
 }
 
 .c-glyph-sacrifice-options__rarity-slider-bg {
-  background-color: var(--color-reality-light);
+  background-color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-sacrifice-options__rarity-slider-bg {
@@ -256,10 +256,10 @@
 }
 
 .c-glyph-sacrifice-options__rarity-slider-handle {
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background) !important;
   border-radius: var(--var-border-radius, 0.8rem) !important;
-  box-shadow: 0 0 0 0.1rem var(--color-reality) !important;
+  box-shadow: 0 0 0 0.1rem var(--color-reality-dark) !important;
 }
 
 .s-base--dark .c-glyph-sacrifice-options__rarity-slider-handle {
@@ -276,7 +276,7 @@
 }
 
 .c-glyph-sacrifice-options__advanced {
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-sacrifice-options__advanced {
@@ -299,7 +299,7 @@
   height: 1.7rem;
   text-align: center;
   font-size: 1.2rem;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   -webkit-appearance: none;
   -moz-appearance: textfield;
   background-color: var(--color-glyph-sac-text-input);
@@ -323,7 +323,7 @@
   height: 1.5rem;
   text-align: center;
   font-size: 1.2rem;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   -webkit-appearance: none;
   -moz-appearance: textfield;
   background-color: var(--color-glyph-sac-text-input);
@@ -346,7 +346,7 @@
 .c-auto-sac-type-tab__input:focus {
   font-weight: bold;
   background-color: var(--color-glyph-sac-text-input--focused);
-  box-shadow: 0 0 0.4rem 0.1rem var(--color-reality);
+  box-shadow: 0 0 0.4rem 0.1rem var(--color-reality-dark);
 }
 
 .s-base--dark .c-auto-sac-type-tab__input:focus {
@@ -398,6 +398,11 @@
   border: 0.1rem solid;
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.25rem 1.5rem;
+  filter: brightness(60%);
+}
+
+.s-base--dark .c-auto-sac-type-tab__effect-desc {
+  filter: none;
 }
 
 .c-auto-sac-type-tab__effect-desc--active {
@@ -489,9 +494,9 @@
 }
 
 .c-glyph-auto-pick-options__option:hover {
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-reality-light);
-  border-color: var(--color-reality);
+  border-color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-auto-pick-options__option:hover {
@@ -502,8 +507,8 @@
 
 .c-glyph-auto-pick-options__option--active {
   color: var(--color-text-inverted);
-  background-color: var(--color-reality);
-  border-color: var(--color-reality);
+  background-color: var(--color-reality-dark);
+  border-color: var(--color-reality-dark);
   pointer-events: none;
 }
 
@@ -514,8 +519,8 @@
 }
 
 .c-glyph-auto-pick-options__option--inactive {
-  color: var(--color-reality);
-  border-color: var(--color-reality);
+  color: var(--color-reality-dark);
+  border-color: var(--color-reality-dark);
 }
 
 .c-glyph-tooltip__effect {
@@ -718,7 +723,7 @@
   height: 1.5rem;
   text-align: center;
   font-size: 1.35rem;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   -webkit-appearance: none;
   -moz-appearance: textfield;
   background-color: var(--color-background);
@@ -738,9 +743,9 @@
   font-family: Typewriter, serif;
   font-size: 0.9rem;
   font-weight: bold;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   margin: 0 0.4rem 1rem;
   transition-duration: 0.2s;
@@ -762,7 +767,7 @@
 }
 
 .c-glyph-set-save-setting-button--disabled:hover {
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
 }
 
@@ -777,9 +782,9 @@
   font-family: Typewriter, serif;
   font-size: 1rem;
   font-weight: bold;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   transition-duration: 0.2s;
   cursor: pointer;
@@ -791,7 +796,7 @@
 
 .c-glyph-set-save-button:hover {
   color: var(--color-background);
-  background-color: var(--color-reality);
+  background-color: var(--color-reality-dark);
 }
 
 .s-base--dark .c-glyph-set-save-button:hover {
@@ -862,9 +867,9 @@
   width: 45rem;
   height: 30rem;
   position: relative;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -938,9 +943,9 @@
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
-  border: 0.2rem solid var(--color-reality);
+  border: 0.2rem solid var(--color-reality-dark);
   border-radius: 0.5rem 0.5rem 0 0;
   transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
   cursor: pointer;
@@ -1150,9 +1155,9 @@
   font-family: Typewriter, serif;
   font-size: 1rem;
   font-weight: bold;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem);
   margin-bottom: 0.5rem;
   padding: 0.5rem;
@@ -1283,9 +1288,9 @@
   font-family: Typewriter;
   font-size: 1rem;
   font-weight: bold;
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-reality);
+  border: var(--var-border-width, 0.2rem) solid var(--color-reality-dark);
   border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
   transition: all 0.2s, border-bottom 0ms, padding-bottom 0ms;
   cursor: pointer;
@@ -1312,7 +1317,7 @@
 }
 
 .c-glyph-sidebar-button--active:hover {
-  color: var(--color-reality);
+  color: var(--color-reality-dark);
   background-color: var(--color-background);
 }
 
@@ -1568,4 +1573,5 @@
     border-color: #b67f33;
     box-shadow: 0 0 0.5rem 0.1rem #b67f33, 0 0 0.8rem #b67f33 inset;
   }
+}
 }

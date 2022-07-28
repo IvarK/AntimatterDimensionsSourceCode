@@ -73,6 +73,7 @@ export default {
       this.isDoomed = Pelle.isDoomed;
       this.hasRealityStudy = TimeStudy.reality.isBought;
       this.canReality = isRealityAvailable() && !this.isDoomed;
+      this.showSpecialEffect = this.hasSpecialReward();
       if (!this.canReality) {
         this.shardsGained = 0;
         return;
@@ -88,7 +89,6 @@ export default {
         return result;
       }
 
-      this.showSpecialEffect = this.hasSpecialReward();
       const multiplier = simulatedRealityCount(false) + 1;
       this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
       this.newIMCap = MachineHandler.projectedIMCap;

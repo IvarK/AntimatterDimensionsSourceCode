@@ -284,6 +284,10 @@ function giveRealityRewards(realityProps) {
     const current = Teresa.runRewardMultiplier;
     const newMultiplier = Teresa.rewardMultiplier(player.antimatter);
     const isHigher = newMultiplier > current;
+    // If the RealityModal for glyph choices shows up because the player hasn't disabled it, at this point of the code
+    // it's still on the queue. If we don't specifically remove it before showing this message modal, it gets pushed
+    // back and then isn't removed properly once reality processing is done
+    ui.view.modal.queue.shift();
     Modal.message.show(`You have completed Teresa's Reality! ${isHigher
       ? `Since you gained more Antimatter, you increased your
       Glyph Sacrifice multiplier from ${format(current, 2, 2)} to ${format(newMultiplier, 2, 2)}`

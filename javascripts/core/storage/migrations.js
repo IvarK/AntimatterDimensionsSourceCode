@@ -701,34 +701,38 @@ GameStorage.migrations = {
   convertAchievementsToBits(player) {
     // Also switches achievement positions
     const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3", "10,1": "11,7", "11,7": "10,1" };
-    const convertAchievementArray = (newAchievements, oldAchievements) => {
+    const convertAchievementArray = (newAchievements, oldAchievements, isSecret) => {
       for (const oldId of oldAchievements) {
         let row = Math.floor(oldId / 10);
         let column = oldId % 10;
-        // eslint-disable-next-line no-bitwise
-        if (
-          [row, column].join(",") in swaps) {
+        if (!isSecret && [row, column].join(",") in swaps) {
           [row, column] = swaps[[row, column].join(",")].split(",");
         }
         // eslint-disable-next-line no-bitwise
         newAchievements[row - 1] |= (1 << (column - 1));
       }
       // Handle the changed achievement "No DLC Required" correctly (otherwise saves could miss it).
-      if (player.infinityUpgrades.size >= 16 || player.eternities.gt(0) || player.realities > 0) {
+      if (!isSecret && (player.infinityUpgrades.size >= 16 || player.eternities.gt(0) || player.realities > 0)) {
         // eslint-disable-next-line no-bitwise
         newAchievements[3] |= 1;
       } else {
         // eslint-disable-next-line no-bitwise
         newAchievements[3] &= ~1;
       }
+
+      // "Professional Bodybuilder" (s38) was changed and shouldn't be migrated
+      if (isSecret) {
+        // eslint-disable-next-line no-bitwise
+        newAchievements[2] &= ~128;
+      }
     };
 
     player.achievementBits = Array.repeat(0, 15);
-    convertAchievementArray(player.achievementBits, player.achievements);
+    convertAchievementArray(player.achievementBits, player.achievements, false);
     delete player.achievements;
 
     player.secretAchievementBits = Array.repeat(0, 4);
-    convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
+    convertAchievementArray(player.secretAchievementBits, player.secretAchievements, true);
     delete player.secretAchievements;
   },
 

@@ -1505,7 +1505,7 @@ GameDatabase.news = [
   {
     id: "a252",
     get text() {
-      return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1'>This message is dilated.</span>`;
+      return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1 forwards'>This message is dilated.</span>`;
     },
   },
   {

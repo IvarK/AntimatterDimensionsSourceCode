@@ -17,7 +17,6 @@ export default {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1,
       galaxyCount: 0,
       isContinuumActive: false,
       continuumValue: 0
@@ -38,16 +37,6 @@ export default {
     },
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
-    },
-    isGameSpeedNormal() {
-      return this.gameSpeedMult === 1;
-    },
-    isGameSpeedSlow() {
-      return this.gameSpeedMult < 1;
-    },
-    formattedFastSpeed() {
-      const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
     },
     showCostTitle() {
       return this.cost.exponent < 1000000;
@@ -71,7 +60,6 @@ export default {
       this.cost.copyFrom(Tickspeed.cost);
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.perSecond);
-      this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
@@ -111,7 +99,7 @@ export default {
     </div>
     <div>
       {{ tickspeedDisplay }}
-      <GameSpeedDisplay v-if="!isGameSpeedNormal" />
+      <GameSpeedDisplay :is-standalone="false" />
     </div>
   </div>
 </template>

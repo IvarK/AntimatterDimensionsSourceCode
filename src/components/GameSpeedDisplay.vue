@@ -1,6 +1,12 @@
 <script>
 export default {
   name: "GameSpeedDisplay",
+  props: {
+    isStandalone: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       baseSpeed: 0,
@@ -47,8 +53,13 @@ export default {
 </script>
 
 <template>
-  <span>
-    | Game speed: {{ baseSpeedText }}
+  <span v-if="baseSpeed !== 1">
+    <span v-if="isStandalone">
+      The game is running at a different speed than normal: {{ baseSpeedText }}
+    </span>
+    <span v-else>
+      | Game speed: {{ baseSpeedText }}
+    </span>
     <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding" /> {{ pulseSpeedText }})</span>
   </span>
 </template>

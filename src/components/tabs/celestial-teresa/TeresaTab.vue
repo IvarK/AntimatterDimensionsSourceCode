@@ -19,6 +19,7 @@ export default {
       pour: false,
       time: new Date().getTime(),
       pouredAmount: 0,
+      isPouredAmountCapped: false,
       rm: new Decimal(0),
       percentage: "",
       possibleFillPercentage: "",
@@ -60,8 +61,9 @@ export default {
     pourButtonClassObject() {
       return {
         "o-teresa-shop-button": true,
-        "o-teresa-shop-button--available": true,
         "c-teresa-pour": true,
+        "o-teresa-shop-button--available": !this.isPouredAmountCapped,
+        "o-teresa-shop-button--capped": this.isPouredAmountCapped,
         "c-teresa-pour--unlock-available": this.canUnlockNextPour
       };
     },
@@ -89,6 +91,7 @@ export default {
       }
       this.time = now;
       this.pouredAmount = player.celestials.teresa.pouredAmount;
+      this.isPouredAmountCapped = this.pouredAmount === this.pouredAmountCap;
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
       this.possibleFillPercentage = `${(Teresa.possibleFill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;

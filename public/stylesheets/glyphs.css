@@ -613,10 +613,12 @@
 
 .l-modal-glyph-selection__glyph {
   margin: 1rem;
+  cursor: pointer;
 }
 
 .l-modal-glyph-selection__glyph--selected {
   box-shadow: var(--color-glyph-selection) 0 0 1rem 0.5rem !important;
+  cursor: auto;
 }
 
 .l-equipped-glyphs {

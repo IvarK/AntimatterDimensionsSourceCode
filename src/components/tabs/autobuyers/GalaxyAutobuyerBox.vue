@@ -65,16 +65,16 @@ export default {
       />
     </template>
     <template #[limitGalaxiesSlot]>
-      <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-        @click="limitGalaxies = !limitGalaxies"
+      <label
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text o-clickable"
       >
         <input
           type="checkbox"
           :checked="limitGalaxies"
+          class="o-clickable"
         >
-        <span>Limit Antimatter Galaxies to:</span>
-      </div>
+        Limit Antimatter Galaxies to:
+      </label>
       <AutobuyerInput
         :autobuyer="autobuyer"
         type="int"
@@ -85,5 +85,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

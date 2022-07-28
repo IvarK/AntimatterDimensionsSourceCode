@@ -101,20 +101,22 @@ export default {
       />
     </template>
     <template #checkboxSlot>
-      <span>Dynamic amount:</span>
-      <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-        @click="increaseWithMult = !increaseWithMult"
+      <label
+        class="o-autobuyer-toggle-checkbox o-clickable"
       >
         <input
           type="checkbox"
           :checked="increaseWithMult"
+          class="o-clickable"
         >
-      </div>
+        Dynamic amount
+      </label>
     </template>
   </AutobuyerBox>
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

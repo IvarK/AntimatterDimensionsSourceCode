@@ -8,6 +8,7 @@ export const Teresa = {
   lastUnlock: "shop",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
+  possessiveName: "Teresa's",
   get isUnlocked() {
     return Achievement(147).isUnlocked;
   },

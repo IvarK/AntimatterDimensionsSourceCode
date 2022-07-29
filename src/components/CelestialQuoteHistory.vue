@@ -16,10 +16,8 @@ export default {
     color() {
       return this.celestial === "laitela" ? `var(--color-laitela--accent)` : `var(--color-${this.celestial}--base)`;
     },
-    // This needs to be special-cased for Enslaved, since all other in-game mentions of them use "The Enslaved Ones'"
-    // and displaying "The Enslaved Ones's" here would be inconsistent
     possessiveForm() {
-      return this.celestial === "enslaved" ? "The Enslaved Ones'" : `${this.celestial.capitalize()}'s`;
+      return Celestials[this.celestial].possessiveName;
     }
   },
   methods: {

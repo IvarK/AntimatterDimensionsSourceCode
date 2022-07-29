@@ -60,6 +60,10 @@ export const Pelle = {
     return Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle");
   },
 
+  get possessiveName() {
+    return `${Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle")}'s`;
+  },
+
   get isUnlocked() {
     return ImaginaryUpgrade(25).isBought;
   },

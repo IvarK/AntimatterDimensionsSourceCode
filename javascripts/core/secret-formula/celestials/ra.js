@@ -24,7 +24,7 @@ GameDatabase.celestials.ra = {
     },
     enslaved: {
       id: "enslaved",
-      name: "Enslaved",
+      name: "The Enslaved Ones",
       color: "#f1aa7f",
       chunkGain: "Time Shards",
       memoryGain: "total time played",

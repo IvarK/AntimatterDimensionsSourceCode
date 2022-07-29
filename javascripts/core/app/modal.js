@@ -149,7 +149,7 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeS
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
 
-Modal.catchup = new TimeModal(CatchupModal);
+Modal.catchup = new TimeModal(CatchupModal, -1);
 
 Modal.dimensionBoost = new Modal(DimensionBoostModal, 1);
 Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1);

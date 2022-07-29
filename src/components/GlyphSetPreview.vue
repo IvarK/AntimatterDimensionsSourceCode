@@ -61,8 +61,16 @@ export default {
   },
   data() {
     return {
+      sortedOrder: [],
       realityGlyphBoost: 0,
     };
+  },
+  created() {
+    const standardOrder = ["reality", "effarig", "power", "infinity", "replication", "time", "dilation",
+      "cursed", "companion"];
+    this.sortedOrder = Glyphs.copyForRecords(this.glyphs);
+    // Technically doesn't stable sort between glyphs of the same type, probably fine though
+    this.sortedOrder.sort((a, b) => standardOrder.indexOf(a.type) - standardOrder.indexOf(b.type));
   },
   methods: {
     update() {
@@ -102,7 +110,7 @@ export default {
         :force-color="forceNameColor"
       />
       <GlyphComponent
-        v-for="(g, idx) in glyphs"
+        v-for="(g, idx) in sortedOrder"
         :key="idx"
         class="l-preview"
         :glyph="g"
@@ -120,6 +128,11 @@ export default {
       />
     </span>
     <span v-else>
+      <GlyphSetName
+        v-if="showName"
+        :glyph-set="glyphs"
+        :force-color="forceNameColor"
+      />
       {{ noneText }}
     </span>
   </div>

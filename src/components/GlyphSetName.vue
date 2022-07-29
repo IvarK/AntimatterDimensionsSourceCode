@@ -143,7 +143,7 @@ export default {
     },
     // Check for single-type sets and give them a special name based on how much of the full equipped slots they take up
     singletonName() {
-      if (this.sortedGlyphs[0].type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp];
+      if (this.sortedGlyphs[0].type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp()];
       const singleGlyphTypes = ["reality", "companion"];
       for (const key of singleGlyphTypes) {
         if (this.sortedGlyphs[0].type === key) return GLYPH_NAMES[key].noun;
@@ -156,14 +156,6 @@ export default {
       if (perc >= 75) return `Strengthened ${word}`;
       if (perc >= 40) return `Partial ${word}`;
       return `Weak ${word}`;
-    },
-    getEffarigProp() {
-      const effarigRM = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigrm", i));
-      const effarigGlyph = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigglyph", i));
-      if (effarigRM && effarigGlyph) return "both";
-      if (effarigRM) return "rm";
-      if (effarigGlyph) return "glyph";
-      return "none";
     },
     mainGlyphName() {
       // This returns the type of Glyph that we want for color determinations.
@@ -212,6 +204,14 @@ export default {
       this.isColored = player.options.glyphTextColors;
       this.activeSlotCount = Glyphs.activeSlotCount;
     },
+    getEffarigProp() {
+      const effarigRM = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigrm", i));
+      const effarigGlyph = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigglyph", i));
+      if (effarigRM && effarigGlyph) return "both";
+      if (effarigRM) return "rm";
+      if (effarigGlyph) return "glyph";
+      return "none";
+    },
     calculateGlyphPercent(name) {
       const percentPerGlyph = this.activeSlotCount ? 100 / this.activeSlotCount : 0;
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
@@ -229,7 +229,7 @@ export default {
       this.sortedGlyphs.sort((a, b) => sortFn(b) - sortFn(a));
     },
     getAdjective(listEntry) {
-      if (listEntry.type === "effarig") return GLYPH_NAMES.effarig.adjective[this.getEffarigProp];
+      if (listEntry.type === "effarig") return GLYPH_NAMES.effarig.adjective[this.getEffarigProp()];
       const adjFn = val => {
         if (val >= 60) return "high";
         if (val >= 40) return "mid";
@@ -239,7 +239,7 @@ export default {
       return typeof adj === "string" ? adj : adj[adjFn(listEntry.perc)];
     },
     getNoun(listEntry) {
-      if (listEntry.type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp];
+      if (listEntry.type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp()];
       return GLYPH_NAMES[listEntry.type].noun;
     },
   }

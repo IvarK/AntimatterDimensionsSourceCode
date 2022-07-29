@@ -583,9 +583,9 @@ export function gameLoop(passDiff, options = {}) {
 
   // There are some external checks which prevent excessive resource gain with Teresa-25; it may give TP outside of
   // dilation, but the TP gain function is also coded to behave differently if it's active
-  const teresa2 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
+  const teresa1 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
   const teresa25 = !isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
-  if ((teresa2 || teresa25) && !Pelle.isDoomed) rewardTP();
+  if ((teresa1 || teresa25) && !Pelle.isDoomed) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;

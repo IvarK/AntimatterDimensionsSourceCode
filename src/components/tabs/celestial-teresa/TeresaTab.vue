@@ -64,8 +64,12 @@ export default {
         "c-teresa-pour": true,
         "o-teresa-shop-button--available": !this.isPouredAmountCapped,
         "o-teresa-shop-button--capped": this.isPouredAmountCapped,
-        "c-teresa-pour--unlock-available": this.canUnlockNextPour
+        "c-teresa-pour--unlock-available": this.canUnlockNextPour,
+        "c-disabled-pour": this.isPouredAmountCapped
       };
+    },
+    pourText() {
+      return this.isFilled ? "Filled" : "Pour RM";
     },
     runDescription() {
       return GameDatabase.celestials.descriptions[0].effects();
@@ -193,7 +197,7 @@ export default {
           @touchend="pour = false"
           @mouseleave="pour = false"
         >
-          Pour RM
+          {{ pourText }}
         </button>
         <div class="c-rm-store">
           <div
@@ -255,3 +259,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-disabled-pour {
+  opacity: 0.8;
+  pointer-events: none;
+}
+</style>

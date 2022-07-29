@@ -8027,7 +8027,7 @@ kbd {
   width: 22rem;
   height: 84rem;
   font-family: Typewriter;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   border: var(--var-border-width, 0.2rem) solid var(--color-laitela--accent);

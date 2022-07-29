@@ -107,6 +107,7 @@ export default {
           name="o-dilation-upgrade__description"
         />
         <EffectDisplay
+          :key="boughtAmount"
           br
           :config="upgrade.config"
         />

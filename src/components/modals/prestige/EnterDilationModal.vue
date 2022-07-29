@@ -22,6 +22,10 @@ export default {
       if (player.dilation.lastEP.eq(-1)) {
         return "This is your first Dilation";
       }
+      if (!isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied) {
+        return `You already have the maximum feasible amount of Tachyon Particles you can attain due to
+          Teresa's Level ${formatInt(25)} reward.`;
+      }
       return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points.`;
     }
   },
@@ -52,6 +56,7 @@ export default {
     </template>
     <div class="c-modal-message__text">
       {{ EPSinceLabel }}
+      <br>
       <br>
       {{ message }}
     </div>

@@ -1,6 +1,11 @@
 <script>
+import GlyphSetPreview from "@/components/GlyphSetPreview";
+
 export default {
   name: "LaitelaRunButton",
+  components: {
+    GlyphSetPreview
+  },
   data() {
     return {
       realityTime: 0,
@@ -8,6 +13,7 @@ export default {
       isRunning: false,
       realityReward: 1,
       singularitiesUnlocked: false,
+      bestSet: [],
     };
   },
   computed: {
@@ -29,6 +35,7 @@ export default {
       this.realityReward = Laitela.realityReward;
       this.isRunning = Laitela.isRunning;
       this.singularitiesUnlocked = Currency.singularities.gt(0);
+      this.bestSet = Glyphs.copyForRecords(player.records.bestReality.laitelaSet);
     },
     startRun() {
       if (this.isDoomed) return;
@@ -71,6 +78,14 @@ export default {
         <span v-if="maxDimTier <= 7">
           Highest active dimension: {{ formatInt(maxDimTier) }}
         </span>
+        <br><br>
+        Glyph Set:
+        <GlyphSetPreview
+          text="Fastest Destabilization Glyph Set"
+          :text-hidden="true"
+          :force-name-color="false"
+          :glyphs="bestSet"
+        />
       </span>
       <span v-else>
         <br>

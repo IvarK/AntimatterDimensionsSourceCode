@@ -152,7 +152,7 @@ export default {
     <div class="l-dim-row-multi-button-container">
       <PrimaryButton
         v-if="!isContinuumActive"
-        v-tooltip="boughtTooltip"
+        :ach-tooltip="boughtTooltip"
         :enabled="isAffordable && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad"
         :class="singlesClass()"

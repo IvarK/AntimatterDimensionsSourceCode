@@ -113,6 +113,14 @@ export default {
     showCostTitle(value) {
       return value.exponent < 1000000;
     },
+    buttonClass() {
+      return {
+        "o-primary-btn": true,
+        "o-primary-btn--new": true,
+        "o-primary-btn--disabled": (!this.isAffordable && !this.isContinuumActive) || !this.isUnlocked || this.isCapped,
+        "o-non-clickable": this.isContinuumActive
+      };
+    },
     tutorialClass() {
       if (this.tier === 1) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
@@ -143,8 +151,7 @@ export default {
     />
     <div class="l-dim-row-multi-button-container">
       <button
-        class="o-primary-btn o-primary-btn--new"
-        :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isCapped}"
+        :class="buttonClass()"
         @click="buy"
       >
         <div
@@ -181,5 +188,9 @@ export default {
 .l-modern-buy-ad-text {
   display: flex;
   flex-direction: column;
+}
+
+.o-non-clickable {
+  cursor: auto;
 }
 </style>

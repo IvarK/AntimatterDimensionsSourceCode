@@ -75,6 +75,12 @@ export default {
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
+    },
+    buttonClass() {
+      return {
+        "o-primary-btn--tickspeed": true,
+        "o-continuum": this.isContinuumActive
+      };
     }
   },
 };
@@ -86,9 +92,8 @@ export default {
     <div>
       <PrimaryButton
         v-tooltip="upgradeCount"
-        :enabled="isAffordable"
-        class="o-primary-btn--tickspeed"
-        :style="{ width: isContinuumActive ? '25rem' : ''}"
+        :enabled="isAffordable || isContinuumActive"
+        :class="buttonClass()"
         onclick="buyTickSpeed()"
       >
         <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
@@ -112,5 +117,9 @@ export default {
 </template>
 
 <style scoped>
-
+.o-continuum {
+  width: 25rem;
+  transition: width 0s;
+  cursor: auto;
+}
 </style>

@@ -73,6 +73,14 @@ export default {
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
+    },
+    buttonClass() {
+      return {
+        "o-primary-btn": true,
+        "tickspeed-btn": true,
+        "o-primary-btn--disabled": !this.isAffordable && !this.isContinuumActive,
+        "o-non-clickable": this.isContinuumActive
+      };
     }
   }
 };
@@ -89,8 +97,7 @@ export default {
     <div class="tickspeed-buttons">
       <button
         v-tooltip="upgradeCount"
-        class="o-primary-btn tickspeed-btn"
-        :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
+        :class="buttonClass()"
         onclick="buyTickSpeed()"
       >
         <span v-if="isContinuumActive">
@@ -119,5 +126,9 @@ export default {
 
 .tickspeed-max-btn {
   margin-left: 0.5rem;
+}
+
+.o-non-clickable {
+  cursor: auto;
 }
 </style>

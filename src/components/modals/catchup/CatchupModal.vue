@@ -28,7 +28,12 @@ export default {
       return GameProgress(this.progressStage).suggestedResource;
     },
     timeString() {
-      return TimeSpan.fromMilliseconds(this.diff).toStringShort();
+      // If diff is zero, that means we opened it up via the button and don't need the text for last opening
+      if (!this.diff) return null;
+      return `It has been ${TimeSpan.fromMilliseconds(this.diff).toStringShort()} since you last loaded up the game.`;
+    },
+    titleText() {
+      return this.diff ? "Content Catch-up" : "Content Summary";
     }
   },
   created() {
@@ -53,9 +58,9 @@ export default {
 <template>
   <div class="c-modal-away-progress">
     <div class="c-modal-away-progress__header">
-      Content Catch-up
+      {{ titleText }}
     </div>
-    It has been {{ timeString }} since you last loaded up the game.
+    {{ timeString }}
     If you need a refresher, here is a quick summary of all the content you have unlocked so far from the beginning of
     the game, separated into different stages of progression. These are only very brief descriptions; you may want to
     check the related How To Play entries if you want more detailed information.

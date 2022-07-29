@@ -71,6 +71,8 @@ export default {
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
       this.name = pet.name;
+      // This one needs to be special-case shortened here in order to keep the UI nice-looking
+      if (this.name === "The Enslaved Ones") this.name = "Enslaved";
       this.level = pet.level;
       this.memories = pet.memories;
       this.requiredMemories = pet.requiredMemories;

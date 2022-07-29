@@ -1547,6 +1547,7 @@ br {
   width: 17rem;
   font-size: 1.2rem;
   margin-right: 0.4rem;
+  transition: width 0s
 }
 
 .o-primary-btn--buy-max {
@@ -1584,6 +1585,7 @@ br {
   width: 100%;
   max-width: 20rem;
   margin: 0 0.5rem;
+  cursor: auto;
 }
 
 .o-primary-btn--dimboost {

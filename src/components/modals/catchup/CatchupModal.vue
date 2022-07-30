@@ -39,8 +39,9 @@ export default {
   created() {
     // This is a particularly important modal which cannot be opened again, so we make the close button unclickable
     // for the first few seconds to reduce the chance of a player instinctively clicking through and not reading it.
-    // It can still be closed preemptively with escape, but that should be likely significantly less likely to happen
-    this.startTime = Date.now();
+    // It can still be closed preemptively with escape, but that should be likely significantly less likely to happen.
+    // Additionally, if diff is 0 then we assume that this was manually opened and remove the delay
+    this.startTime = this.diff ? Date.now() : 0;
   },
   methods: {
     update() {

@@ -140,7 +140,7 @@ base amount. Multiple additive effects are summed up. These can also sometimes s
 reduce resource costs.
 <br>
 - <b>Multiplicative:</b> These effects are shown either by a × followed by a number or, more rarely, as two numbers
-separated by a ➜. Diffrent multiplicative sources always combine by multiplying, never by adding. In some situations,
+separated by a ➜. Different multiplicative sources always combine by multiplying, never by adding. In some situations,
 there may be negative effects or cost reductions that apply in this category as division.
 <br>
 - <b>Power</b>: These effects are much rarer and appear as ^ followed by a number. Multiple power effects apply
@@ -1103,9 +1103,15 @@ Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
     ? `a new Glyph type, <span style='color: var(--color-effarig--base);'>Effarig</span> Glyphs. Effarig Glyphs have
       ${formatInt(7)} different possible effects, which you can view in the Glyph filter settings. You can only
-      have one Effarig Glyph equipped at a time, and they can still only have at most ${formatInt(4)}
-      effects. Lastly, the RM multiplier and Glyph instability effects can't appear together on the same Glyph.`
+      have one Effarig Glyph equipped at a time.`
     : "<span style='color: var(--color-effarig--base);'>(complete Effarig's Reality to see reward details)</span>"}
+<br>
+<br>
+${Ra.unlocks.glyphEffectCount.canBeApplied
+    ? `Due to having Effarig at level 10 within Ra, there are no longer any restrictions on effects that appear on
+      Effarig Glyphs. Any given Effarig Glyph can now have up to all ${formatInt(7)} effects at the same time.`
+    : `Effarig Glyphs can only have at most ${formatInt(4)} effects, and the RM multiplier and Glyph instability
+      effects can't appear together on the same Glyph.`}
 `,
       isUnlocked: () => TeresaUnlocks.effarig.canBeApplied,
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame", "celestial"],
@@ -1611,7 +1617,7 @@ In addition, each Rift offers three milestone rewards for filling them up to a c
 When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can 
 passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect 
 Tickspeed as if they were Antimatter Galaxies, but they don't increase the cost of your next Antimatter Galaxy. You
-also  unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
+also unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
 upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and
 Generated Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.
 <br>

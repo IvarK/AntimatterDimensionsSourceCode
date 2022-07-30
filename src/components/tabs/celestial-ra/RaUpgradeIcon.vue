@@ -15,6 +15,9 @@ export default {
     };
   },
   computed: {
+    petID() {
+      return this.unlock.pet.id;
+    },
     petName() {
       return this.unlock.pet.name;
     },
@@ -25,10 +28,10 @@ export default {
       return {
         "c-ra-upgrade-icon": true,
         "c-ra-upgrade-icon--inactive": !this.isUnlocked,
-        "c-ra-upgrade-icon--teresa": this.petName === "Teresa",
-        "c-ra-upgrade-icon--effarig": this.petName === "Effarig",
-        "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
-        "c-ra-upgrade-icon--v": this.petName === "V"
+        "c-ra-upgrade-icon--teresa": this.petID === "teresa",
+        "c-ra-upgrade-icon--effarig": this.petID === "effarig",
+        "c-ra-upgrade-icon--enslaved": this.petID === "enslaved",
+        "c-ra-upgrade-icon--v": this.petID === "v"
       };
     },
     isUseless() {

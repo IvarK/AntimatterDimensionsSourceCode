@@ -65,7 +65,9 @@ export default {
     tachyonAmountStyle() {
       // Hovering over the button makes all the text on the button black; this text inherits that
       // without us needing to specify a color.
-      if (!this.headerTextColored || this.hover) return {};
+      if (!this.headerTextColored || this.hover) return {
+        "transition-duration": "0s"
+      };
       // Note that Infinity and 0 can show up here. We have a special case for
       // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
       let ratio;

@@ -28,7 +28,9 @@ export default {
       return this.peakIPRate.lte(this.rateThreshold);
     },
     amountStyle() {
-      if (!this.headerTextColored || this.currentIP.lt(this.rateThreshold)) return {};
+      if (!this.headerTextColored || this.currentIP.lt(this.rateThreshold)) return {
+        "transition-duration": "0s"
+      };
       if (this.hover) return {
         color: "black",
         "transition-duration": "0.2s"

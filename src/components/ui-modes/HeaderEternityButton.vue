@@ -41,7 +41,9 @@ export default {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (!this.headerTextColored || this.currentEP.lt(this.rateThreshold)) return {};
+      if (!this.headerTextColored || this.currentEP.lt(this.rateThreshold)) return {
+        "transition-duration": "0s"
+      };
       if (this.hover) return {
         color: "black",
         "transition-duration": "0.2s"

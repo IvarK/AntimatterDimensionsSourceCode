@@ -50,8 +50,8 @@ export default {
           ? "Effarig is completed!"
           : `You are currently on the ${this.effarigLayer} Layer.`;
         case 2: return this.enslavedDone
-          ? "Have... I... not helped enough..."
-          : "I... can help... Let me... help...";
+          ? "Have... we... not helped enough..."
+          : "We... can help... Let us... help...";
         case 3: return "";
         case 4: return `Inside of Ra's Reality, some resources will generate Memory Chunks
           for a specific Celestial Memory based on their amount.`;

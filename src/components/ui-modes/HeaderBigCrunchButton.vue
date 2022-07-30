@@ -36,11 +36,10 @@ export default {
         "transition-duration": "0.2s"
       };
 
-      // Dynamically generate red-text-green based on the CSS entry for text color. This returns a string
-      // as " #xxxxxx" (Yes, there's a leading space). stepRGB is an array specifying the three RGB codes,
-      // which is then interpolated in order to generate the final color; only ratios between 0.9-1.1 give
-      // a color gradient
-      const textHexCode = getComputedStyle(document.body).getPropertyValue("--color-text").substring(2);
+      // Dynamically generate red-text-green based on the CSS entry for text color, returning a raw 6-digit hex color
+      // code. stepRGB is an array specifying the three RGB codes, which are then interpolated between in order to
+      // generate the final color; only ratios between 0.9-1.1 give a color gradient
+      const textHexCode = getComputedStyle(document.body).getPropertyValue("--color-text").split("#")[1];
       const stepRGB = [
         [255, 0, 0],
         [

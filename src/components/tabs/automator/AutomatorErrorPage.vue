@@ -44,8 +44,10 @@ export default {
         </div>
       </span>
       <i>
-        Note: Sometimes errors may cause the automator to be unable to scan the rest of the script.
-        This may result in some errors "disappearing" due to other errors occurring in earlier lines.
+        Note: Sometimes errors may cause the automator to be unable to scan the rest of the script properly.
+        This may result in some errors "disappearing" due to other errors occurring in earlier lines, or
+        errors in a command which has an inner block (eg. commands like IF or WHILE) causing errors to appear
+        on correctly-formatted later commands.
         Additionally, some of the suggested fixes may be potentially misleading due to the cause of
         the error being unclear.
       </i>

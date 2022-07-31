@@ -57,18 +57,18 @@ export default {
       if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&
         player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
         Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+        AutomatorBackend.changeModes(this.currentScriptID);
       }
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
       const currScript = player.reality.automator.scripts[this.currentScriptID].content;
-      const hasInvalidCommands = BlockAutomator.hasUnparsableCommands(currScript) &&
-        this.automatorType === AUTOMATOR_TYPE.TEXT;
+      const hasTextErrors = this.automatorType === AUTOMATOR_TYPE.TEXT &&
+        (BlockAutomator.hasUnparsableCommands(currScript) || AutomatorData.currentErrors().length !== 0);
 
       // While we normally have the player option override the modal, script deletion due to failed parsing can have a
       // big enough adverse impact on the gameplay experience that we force the modal here regardless of the setting
-      if (hasInvalidCommands || (player.options.confirmations.switchAutomatorMode && AutomatorBackend.isRunning)) {
+      if (hasTextErrors || (player.options.confirmations.switchAutomatorMode && AutomatorBackend.isRunning)) {
         const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
 
         // We explicitly pass in 0 for lostBlocks if converting from block to text since nothing is ever lost in that

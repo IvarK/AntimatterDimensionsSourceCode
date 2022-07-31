@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      errorCount: 0,
       isCurrentlyBlocks: false
     };
   },
@@ -32,9 +33,13 @@ export default {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
+    otherMode() {
+      return this.isCurrentlyBlocks ? "Text" : "Block";
+    }
   },
   methods: {
     update() {
+      this.errorCount = AutomatorData.currentErrors().length;
       this.isCurrentlyBlocks = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
     },
     toggleAutomatorMode() {
@@ -51,25 +56,39 @@ export default {
     @confirm="toggleAutomatorMode"
   >
     <template #header>
-      Change Automator to {{ isCurrentlyBlocks ? "text" : "block" }} editor
+      Change Automator to {{ otherMode }} editor
     </template>
     <div class="c-modal-message__text">
       This will stop your current script if it is running!
-      <div v-if="lostBlocks">
-        Additionally, your script currently has some lines which cannot interpreted as particular commands. Switching
-        to the block editor will cause these lines to be automatically deleted, since blocks only exist for valid
-        commands.
-        <b>
-          Warning: If these errors are caused by malformed loops or IFs, this may end up deleting large portions of
-          your script! Changing editor modes currently will cause {{ quantifyInt("line", lostBlocks) }} of code to be
-          lost!
-        </b>
+      <div v-if="errorCount">
+        <br>
+        Your script has some errors which may not get converted properly to {{ otherMode }} mode. Continuing on will
+        make the Automator attempt to parse these lines anyway, although some information may get lost or not be
+        converted properly.
       </div>
+      <!-- Note: this can only ever appear on text-to-block -->
+      <b v-if="lostBlocks">
+        <br>
+        Warning: Your script also currently has some lines which cannot interpreted as particular commands. These
+        lines will end up being deleted since there is no block they can be converted into.
+        If an error occurs at the start of a loop or IF, this may end up deleting large portions of your script!
+        <span class="l-lost-text">
+          Changing editor modes right now will cause {{ quantifyInt("line", lostBlocks) }} of code to be irreversibly
+          lost!
+        </span>
+      </b>
       <br>
-      Are you sure you want to change to the {{ isCurrentlyBlocks ? "text" : "block" }} editor?
+      <br>
+      Are you sure you want to change to the {{ otherMode }} editor?
     </div>
     <template #confirm-text>
       Change Modes
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.l-lost-text {
+  color: var(--color-bad);
+}
+</style>

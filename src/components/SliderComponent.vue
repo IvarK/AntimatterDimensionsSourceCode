@@ -831,6 +831,7 @@ export default {
       }
     },
     increment(dir) {
+      if (this.boolDisabled) return;
       const newVal = this.getValue() + dir * this.interval;
       if (newVal > this.max || newVal < this.min) return;
       this.setValue(newVal);

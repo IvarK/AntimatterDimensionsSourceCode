@@ -45,6 +45,7 @@ export default {
         min: 0,
         max: 100,
         interval: 1,
+        disabled: this.isAutoAdjustWeightsOn,
         "dot-width": "2.2rem",
         "dot-height": "1.6rem",
         width: "13.5rem",

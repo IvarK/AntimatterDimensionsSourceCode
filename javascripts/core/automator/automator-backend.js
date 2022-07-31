@@ -293,14 +293,14 @@ export const AutomatorHighlighter = {
   },
 
   clearAllHighlightedLines() {
-    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT && AutomatorTextUI.editor) {
-      for (const lineType of Object.values(LineEnum)) {
+    for (const lineType of Object.values(LineEnum)) {
+      if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT && AutomatorTextUI.editor) {
         for (let line = 0; line < AutomatorTextUI.editor.doc.size; line++) {
           AutomatorTextUI.editor.removeLineClass(line, "background", `c-automator-editor__${lineType}-line`);
           AutomatorTextUI.editor.removeLineClass(line, "gutter", `c-automator-editor__${lineType}-line-gutter`);
         }
-        this.lines[lineType] = -1;
       }
+      this.lines[lineType] = -1;
     }
   }
 };

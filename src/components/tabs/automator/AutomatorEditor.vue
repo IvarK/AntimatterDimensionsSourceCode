@@ -64,7 +64,7 @@ export default {
       if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&
         player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
         Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+        AutomatorBackend.changeModes(this.currentScriptID);
       }
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },

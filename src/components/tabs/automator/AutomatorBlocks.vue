@@ -198,8 +198,9 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     <br>
     <p>
       Inputs with a <span class="c-automator-input-optional">brown</span> color are optional, while inputs with a
-      <span class="c-automator-input-required">teal</span> color are required. For more details, check the Scripting
-      Information pane.
+      <span class="c-automator-input-required">teal</span> color are required.
+      <span class="c-automator-block-row-error">Red</span> inputs are causing errors and must be changed before the
+      script can be run. For more details, check the Scripting Information pane.
     </p>
     <p>
       Options in dropdown menus which start with a * will be replaced with a text box. This can be turned back into a

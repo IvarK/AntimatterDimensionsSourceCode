@@ -165,11 +165,14 @@ export default {
       // have block-parsable commands. It additionally also gets checked on new script creation, where we need to
       // suppress the error modal instead
       if (this.isBlock && BlockAutomator.hasUnparsableCommands(this.currentScript) && this.currentScript !== "") {
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+        AutomatorBackend.changeModes(this.currentScriptID);
         Modal.message.show("Some script commands were unrecognizable - defaulting to text editor.");
       }
 
-      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
+      this.$nextTick(() => {
+        BlockAutomator.fromText(this.currentScript);
+        if (!this.isBlock) AutomatorTextUI.editor.performLint();
+      });
     },
     rename() {
       this.editingName = true;
@@ -194,6 +197,7 @@ export default {
       const menu = event.target;
       if (menu.selectedIndex === menu.length - 1 && this.canMakeNewScript) this.createNewScript();
       else player.reality.automator.state.editorScript = this.scripts[menu.selectedIndex].id;
+      AutomatorHighlighter.clearAllHighlightedLines();
       this.updateCurrentScriptID();
     },
     nameEdited() {

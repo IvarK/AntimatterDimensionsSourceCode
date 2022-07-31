@@ -96,6 +96,7 @@ export const BlockAutomator = {
   parseTextFromBlocks() {
     const content = this.parseLines(BlockAutomator.lines).join("\n");
     const automatorID = ui.view.tabs.reality.automator.editorScriptID;
+    AutomatorData.recalculateErrors();
     AutomatorBackend.saveScript(automatorID, content);
   },
 

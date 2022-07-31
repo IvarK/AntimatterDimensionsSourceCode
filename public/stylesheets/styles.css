@@ -9010,7 +9010,7 @@ kbd {
   display: flex;
   height: 2.85rem;
   align-items: center;
-  margin: 0.3rem 0;
+  padding: 1.73rem 0;
 }
 
 .c-automator-block-row > * {

@@ -126,8 +126,10 @@ export default {
       this.textContents = this.initialSelection;
     }
 
-    // This forces errors to show up immediately when the block is created instead of requiring user interaction
+    // This forces errors to show up immediately when the block is created instead of requiring user interaction, but
+    // we also want to hide tooltips because this causes poor UI if there are a lot of nearby errors upon conversion
     this.recalculateErrorCount();
+    this.suppressTooltip = true;
   },
   // Destroying single inputs need to be handled carefully because there are three situations under which they will
   // be removed, and they all require different behavior:
@@ -237,11 +239,11 @@ export default {
     // This gets called whenever blocks are changed, but we also need to halt execution if the currently visible script
     // is also the one being run
     recalculateErrorCount() {
+      BlockAutomator.parseTextFromBlocks();
       this.validateInput();
       if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
         AutomatorBackend.stop();
       }
-      BlockAutomator.parseTextFromBlocks();
     },
     errorTooltip() {
       if (!this.hasError || this.suppressTooltip) return undefined;
@@ -276,6 +278,7 @@ export default {
         "o-automator-block-input": true,
         "c-automator-input-required": !this.isBoolTarget,
         "c-automator-input-optional": this.isBoolTarget,
+        "l-error-textbox": this.hasError && !this.isBoolTarget && this.dropdownSelection === "",
       };
     },
     revertToDropdown() {

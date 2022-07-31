@@ -101,7 +101,7 @@ export default {
     </span>
     <span
       v-if="glyphs.length !== 0"
-      class="l-glyph-set-preview"
+      :class="{ 'l-glyph-set-preview': !isInModal}"
       @click="showModal"
     >
       <GlyphSetName

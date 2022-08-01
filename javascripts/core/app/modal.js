@@ -62,7 +62,7 @@ import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEdito
 import UiChoiceModal from "@/components/modals/UiChoiceModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 
-
+let nextModalID = 0;
 export class Modal {
   constructor(component, priority = 0) {
     this._component = component;
@@ -72,6 +72,7 @@ export class Modal {
 
   show(modalConfig) {
     if (!GameUI.initialized) return;
+    this._uniqueID = nextModalID++;
     this._props = Object.assign({}, modalConfig || {});
 
     const modalQueue = ui.view.modal.queue;
@@ -94,6 +95,12 @@ export class Modal {
 
   get priority() {
     return this._priority;
+  }
+
+  removeFromQueue() {
+    ui.view.modal.queue = ui.view.modal.queue.filter(m => m._uniqueID !== this._uniqueID);
+    if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
+    else ui.view.modal.current = ui.view.modal.queue[0];
   }
 
   static sortModalQueue() {
@@ -251,16 +258,30 @@ Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, 
 };
 
 Modal.message = new class extends Modal {
-  show(text, callback, closeButton = false) {
+  show(text, props = {}) {
     if (!GameUI.initialized) return;
     super.show();
     if (this.message === undefined) {
       this.message = text;
-      this.callback = callback;
-      this.closeButton = closeButton;
+      this.callback = props.callback;
+      this.closeButton = props.closeButton ?? false;
     }
     if (!this.queue) this.queue = [];
-    this.queue.push({ text, callback, closeButton });
+    this.queue.push({ text, callback: props.callback, closeButton: props.closeButton });
+
+    // In general, if a modal should be closed by prestige X, it should also be closed by all higher prestiges as well.
+    // The larger, more structured modals generally already have these events specified in the created() hook in their
+    // respective Vue components, but the generic message modals don't have innate support for this
+    if (props.closeEvent) {
+      const prestigeOrder = [GAME_EVENT.DIMBOOST_AFTER, GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.BIG_CRUNCH_AFTER,
+        GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER];
+      let shouldClose = false;
+      for (const prestige of prestigeOrder) {
+        if (prestige === props.closeEvent) shouldClose = true;
+        if (shouldClose) EventHub.logic.on(props.closeEvent, () => this.removeFromQueue());
+      }
+    }
+
     // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
     // TODO: remove this console.log
     // eslint-disable-next-line no-console

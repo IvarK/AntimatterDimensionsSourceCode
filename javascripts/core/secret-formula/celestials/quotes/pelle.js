@@ -59,7 +59,7 @@ GameDatabase.celestials.quotes.pelle = {
       { text: "All to try and fulfill your $1?", 1: mandate },
       { text: "And how many times have you fallen before the $1?", 1: eternal },
       "Count them, if you remember.",
-      { text: "Not even the $1s, the 6 named and the innumerable unnamed.", 1: lesser },
+      { text: "Not even the $1, the 6 named and the innumerable unnamed.", 1: deities },
       { text: "The complex, the irrational, those that go $1.", 1: unseen },
       { text: "Of course, the great $1 does not remember this.", 1: destroyer },
       { text: "All those $1 that you hide every time.", 1: battles }

@@ -23,6 +23,11 @@ export default {
       hasRefined: false,
     };
   },
+  computed: {
+    isDoomed() {
+      return Pelle.isDoomed;
+    }
+  },
   methods: {
     update() {
       this.type = player.reality.showSidebarPanel;
@@ -42,7 +47,8 @@ export default {
         "l-glyph-sidebar-button": true,
         "c-glyph-sidebar-button": true,
         "c-glyph-sidebar-button--active": index === player.reality.showSidebarPanel,
-        "l-glyph-sidebar-button--attention": index === this.sidebarEnum.SACRIFICE_TYPE && !this.hasRefined
+        "l-glyph-sidebar-button--attention": index === this.sidebarEnum.SACRIFICE_TYPE &&
+          !this.hasRefined && !this.isDoomed
       };
     }
   }

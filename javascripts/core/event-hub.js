@@ -19,7 +19,6 @@ window.EventHub = class EventHub {
     }
   }
 
-  // eslint-disable-next-line max-params
   dispatch(event, args) {
     const handlers = this._handlers[event];
     if (handlers === undefined) return;
@@ -28,7 +27,6 @@ window.EventHub = class EventHub {
     }
   }
 
-  // eslint-disable-next-line max-params
   static dispatch(event, ...args) {
     EventHub.logic.dispatch(event, args);
     GameUI.dispatch(event, args);

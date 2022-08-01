@@ -20,7 +20,7 @@ export function updateNormalAndInfinityChallenges(diff) {
     if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       Modal.hideAll();
       Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
-        `${format(Currency.matter.value, 2, 2)} matter.`, { closeEvent: GAME_EVENT.BIG_CRUNCH_AFTER });
+        `${format(Currency.matter.value, 2, 2)} matter.`, { closeEvent: GAME_EVENT.DIMBOOST_AFTER });
       softReset(0);
     }
   }

@@ -86,7 +86,8 @@ export default {
     },
     createCursedGlyph() {
       if (GameCache.glyphInventorySpace.value === 0) {
-        Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.",
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       const cursedCount = player.reality.glyphs.active

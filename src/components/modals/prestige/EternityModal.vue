@@ -41,10 +41,6 @@ export default {
       return `You will gain ${quantifyInt("completion", gainedCompletions)} for Eternity Challenge ${ec.id}.`;
     }
   },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     update() {
       this.exitingEC = EternityChallenge.isRunning;

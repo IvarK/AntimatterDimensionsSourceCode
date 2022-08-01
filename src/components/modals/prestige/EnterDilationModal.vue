@@ -29,9 +29,6 @@ export default {
       return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points.`;
     }
   },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     handleYesClick() {
       if (player.dilation.active) return;

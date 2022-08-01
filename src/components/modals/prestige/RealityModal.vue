@@ -75,7 +75,6 @@ export default {
     this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
       this.canRefresh = false;
     });
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
     this.getGlyphs();
     GlyphSelection.realityProps = getRealityProps(false, false);
   },
@@ -122,7 +121,6 @@ export default {
         this.emitClose();
       }
       processManualReality(sacrifice, this.selectedGlyph);
-      EventHub.ui.offAll(this);
     }
   },
 };

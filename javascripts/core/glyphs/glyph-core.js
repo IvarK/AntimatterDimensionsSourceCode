@@ -229,7 +229,8 @@ export const Glyphs = {
     }
     if (this.active[targetSlot] === null) {
       if (sameSpecialTypeIndex >= 0) {
-        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`);
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`,
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       this.removeFromInventory(glyph);
@@ -245,7 +246,8 @@ export const Glyphs = {
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
-        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`);
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`,
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       if (!player.options.confirmations.glyphReplace) {
@@ -710,7 +712,8 @@ export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoo
 
 export function respecGlyphs() {
   if (!Glyphs.unequipAll()) {
-    Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
+    Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.",
+      { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
   }
   player.reality.respec = false;
 }

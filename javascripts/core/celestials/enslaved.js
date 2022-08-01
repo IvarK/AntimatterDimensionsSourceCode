@@ -168,7 +168,7 @@ export const Enslaved = {
       EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
       Modal.message.show(`Time in this Eternity will be multiplied by number of Eternities,
-        up to a maximum of ${formatX(1e66)}.`);
+        up to a maximum of ${formatX(1e66)}.`, { closeEvent: GAME_EVENT.REALITY_RESET_AFTER });
     }
   },
   get feltEternity() {

@@ -25,13 +25,6 @@ export default {
       return `This will ${areDimensionsReset}. Are you sure you want to do this?`;
     },
   },
-  created() {
-    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.GALAXY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     handleYesClick() {
       requestDimensionBoost(this.bulk);

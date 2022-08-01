@@ -1438,7 +1438,7 @@ GameStorage.devMigrations = {
           // Autobuyer mode change (this is a much older change which wasn't migrated at the time)
           rawLine = rawLine.replace(/x current/ui, "x highest");
           // Variable definitions
-          const defineMatch = rawLine.match(/define (.*) = (.*)/ui);
+          const defineMatch = rawLine.match(/define (\S*)\s*=\s*(\S*)/ui);
           if (defineMatch) {
             player.reality.automator.constants[defineMatch[1]] = defineMatch[2];
             rawLine = "";

@@ -29,7 +29,8 @@ export default {
     },
     createRealityGlyph() {
       if (GameCache.glyphInventorySpace.value === 0) {
-        Modal.message.show("Inventory cannot hold new Glyphs. Purge some Glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Purge some Glyphs.",
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(this.realityGlyphLevel));

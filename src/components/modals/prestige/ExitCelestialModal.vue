@@ -11,9 +11,6 @@ export default {
       isRestarting: false
     };
   },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     update() {
       this.isRestarting = player.options.retryCelestial;

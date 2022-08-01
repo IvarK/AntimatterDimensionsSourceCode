@@ -14,9 +14,6 @@ export default {
   computed: {
     resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
   },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;

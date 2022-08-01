@@ -69,7 +69,7 @@ export const GameIntervals = (function() {
         .then(response => response.json())
         .then(json => {
           if (json.version > player.version) {
-            Modal.message.show(json.message, updateRefresh);
+            Modal.message.show(json.message, { callback: updateRefresh });
           }
         });
     }, 60000)

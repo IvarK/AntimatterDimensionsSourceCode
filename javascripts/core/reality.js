@@ -289,17 +289,12 @@ function giveRealityRewards(realityProps) {
     const current = Teresa.runRewardMultiplier;
     const newMultiplier = Teresa.rewardMultiplier(player.antimatter);
     const isHigher = newMultiplier > current;
-    // If the RealityModal for glyph choices shows up because the player hasn't disabled it, at this point of the code
-    // it's still on the queue. If we don't specifically remove it before showing this message modal, it gets pushed
-    // back and then isn't removed properly once reality processing is done
-    // TODO This needs to be fixed properly; it only works in the most common case where no other modals appear while
-    // the player is dawdling on the choice modal. Behavior is a lot weirder if other modals also appear (eg. EC4 fail)
-    ui.view.modal.queue.shift();
-    Modal.message.show(`You have completed Teresa's Reality! ${isHigher
+    const modalText = `You have completed Teresa's Reality! ${isHigher
       ? `Since you gained more Antimatter, you increased your
       Glyph Sacrifice multiplier from ${format(current, 2, 2)} to ${format(newMultiplier, 2, 2)}`
       : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier
-      from Teresa did not increase`}.`);
+      from Teresa did not increase`}.`;
+    Modal.message.show(modalText);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));

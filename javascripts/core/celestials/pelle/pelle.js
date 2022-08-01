@@ -55,13 +55,11 @@ const disabledMechanicUnlocks = {
 
 export const Pelle = {
   symbol: "♅",
+  // Suppress the randomness for this form
+  possessiveName: "Pelle's",
 
   get displayName() {
     return Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle");
-  },
-
-  get possessiveName() {
-    return `${Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle")}'s`;
   },
 
   get isUnlocked() {

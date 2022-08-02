@@ -234,7 +234,7 @@ export class EternityChallengeState extends GameMechanicState {
     }
     Modal.message.show(`You failed Eternity Challenge ${this.id} due to
       ${reason(this.config.restriction(this.completions))}; you have now exited it.`,
-    { closeEvent: GAME_EVENT.REALITY_RESET_AFTER });
+    { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 

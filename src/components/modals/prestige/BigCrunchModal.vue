@@ -41,7 +41,7 @@ export default {
       if (this.isFirstInfinity) {
         setTimeout(() => Modal.message.show(`This animation will occur after every manually-triggered Infinity. If
           you would like to disable it, there is a setting to do so in the Options tab. This can be done for any
-          visual animation effect in the game after seeing it for the first time.`), 2000);
+          visual animation effect in the game after seeing it for the first time.`, {}, 3), 2000);
       }
     }
   },

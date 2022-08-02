@@ -72,7 +72,7 @@ export default {
         { type: "cursed", perc: 0, adjOrder: 6 },
       ],
       sortedGlyphs: [],
-      activeSlotCount: 0
+      slotCount: 0
     };
   },
   computed: {
@@ -202,7 +202,10 @@ export default {
   methods: {
     update() {
       this.isColored = player.options.glyphTextColors;
-      this.activeSlotCount = Glyphs.activeSlotCount;
+      // Without max, Doomed may retroactively zero the slot count of older sets in records and mess up their names
+      // This can retroactively change names on old sets when gaining new slots in reality upgrades, but this is
+      // probably acceptable since the old names may have become unattainable with the new slot count anyway
+      this.slotCount = Math.max(Glyphs.activeSlotCount, this.glyphSet.length);
     },
     getEffarigProp() {
       const effarigRM = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigrm", i));
@@ -213,7 +216,7 @@ export default {
       return "none";
     },
     calculateGlyphPercent(name) {
-      const percentPerGlyph = this.activeSlotCount ? 100 / this.activeSlotCount : 0;
+      const percentPerGlyph = this.slotCount ? 100 / this.slotCount : 0;
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
       if (name === "music") return this.glyphSet.filter(i => i.symbol === "key266b").length * percentPerGlyph;
       // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %

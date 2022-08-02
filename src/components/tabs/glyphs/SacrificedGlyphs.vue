@@ -59,6 +59,7 @@ export default {
     },
     dragleave(event) {
       if (
+        this.isDoomed ||
         !event.relatedTarget.classList ||
         event.relatedTarget.classList.contains("c-current-glyph-effects") ||
         event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||
@@ -70,7 +71,7 @@ export default {
       this.hasDragover = false;
     },
     drop(event) {
-      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      if (this.isDoomed || !event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
       const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
       if (isNaN(id)) return;
       const glyph = Glyphs.findById(id);

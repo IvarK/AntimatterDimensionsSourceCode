@@ -134,9 +134,14 @@ export function processManualReality(sacrifice, glyphID) {
     // modal showed up and the player decided not to pick anything
     if (glyphID === undefined) {
       if (EffarigUnlock.glyphFilter.isUnlocked) {
-        // If the player has the glyph filter, we apply the filter to the choices instead of picking randomly
+        // Note that this code path is eventually followed regardless of the glyph selection popping up - if it did, we
+        // pass through the option selected there; if it didn't, then we apply the filter. If we don't handle it this
+        // way, manual realities without the modal will never sacrifice and may give bad glyphs you don't care about
         const newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
-        if (sacrifice || GameCache.glyphInventorySpace.value === 0) {
+        const shouldSacrifice = player.options.confirmations.glyphSelection
+          ? sacrifice
+          : !AutoGlyphProcessor.wouldKeep(newGlyph);
+        if (shouldSacrifice || GameCache.glyphInventorySpace.value === 0) {
           AutoGlyphProcessor.getRidOfGlyph(newGlyph);
         } else {
           Glyphs.addToInventory(newGlyph);

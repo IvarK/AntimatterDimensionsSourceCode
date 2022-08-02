@@ -63,6 +63,7 @@ export default {
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length) return;
       player.reality.glyphs.sets[id].glyphs = Glyphs.active.compact();
+      this.refreshGlyphSets();
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     loadGlyphSet(set) {
@@ -86,6 +87,7 @@ export default {
       if (player.options.confirmations.deleteGlyphSetSave) Modal.glyphSetSaveDelete.show({ glyphSetId: id });
       else {
         player.reality.glyphs.sets[id].glyphs = [];
+        this.refreshGlyphSets();
         EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
       }
     },
@@ -96,6 +98,9 @@ export default {
     },
     setLengthValid(set) {
       return set.length && set.length <= Glyphs.activeSlotCount;
+    },
+    glyphSetKey(set, index) {
+      return `${index} ${Glyphs.hash(set)}`;
     }
   }
 };
@@ -151,6 +156,7 @@ export default {
     >
       <div class="c-glyph-set-preview-area">
         <GlyphSetPreview
+          :key="glyphSetKey(set, id)"
           :text="setName(id)"
           :text-hidden="true"
           :glyphs="set"

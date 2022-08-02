@@ -638,6 +638,19 @@ export const Glyphs = {
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
+  },
+  // Mostly used for key-swapping glyph set UI elements; composites the entire glyph set together in a way which is
+  // relatively unlikely to cause collisions between different glyph sets unless they're actually the same glyphs.
+  // Different permutations of the same glyphs should produce the same hash, but aren't guaranteed to
+  hash(glyphSet) {
+    let hash = 1;
+    for (const glyph of glyphSet) {
+      // This should be at most around e23 or so in practice
+      const singleGlyphHash = Math.pow(glyph.level, 2) * Math.pow(glyph.strength, 4) * glyph.effects *
+        glyph.type.charCodeAt(0);
+      hash *= singleGlyphHash;
+    }
+    return hash;
   }
 };
 

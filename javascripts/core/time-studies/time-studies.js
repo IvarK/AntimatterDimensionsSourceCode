@@ -1,8 +1,9 @@
 import { GameMechanicState } from "../game-mechanics/index";
 
 function showSecondPreferredWarning(currTree) {
+  const canPickSecond = currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2;
   // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
-  if (currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2) {
+  if (canPickSecond && TimeStudy.preferredPaths.dimension.path.length < 2) {
     GameUI.notify.error("You haven't selected a second preferred Dimension path.");
     return true;
   }

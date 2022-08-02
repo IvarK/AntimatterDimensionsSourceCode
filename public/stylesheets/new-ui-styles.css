@@ -327,7 +327,7 @@ body.t-s9 {
   line-height: 2.8rem;
   opacity: 0;
   color: var(--color-text);
-  background: var(--color-prestige--accent);
+  background: var(--color-base);
   border: 0.1rem solid var(--color-accent);
   border-radius: var(--var-border-radius, 0.4rem);
   margin-left: -7.7rem;
@@ -363,6 +363,7 @@ body.t-s9 {
 .o-tab-btn--infinity .o-subtab__tooltip {
   color: var(--color-infinity);
   border-color: var(--color-infinity);
+  background: var(--color-prestige--accent);
 }
 
 .o-tab-btn--infinity .o-subtab__tooltip::after {
@@ -372,6 +373,7 @@ body.t-s9 {
 .o-tab-btn--eternity .o-subtab__tooltip {
   color: var(--color-eternity);
   border-color: var(--color-eternity);
+  background: var(--color-prestige--accent);
 }
 
 .o-tab-btn--eternity .o-subtab__tooltip::after {
@@ -381,6 +383,7 @@ body.t-s9 {
 .o-tab-btn--reality .o-subtab__tooltip {
   color: var(--color-reality);
   border-color: var(--color-reality);
+  background: var(--color-prestige--accent);
 }
 
 .o-tab-btn--reality .o-subtab__tooltip::after {
@@ -390,6 +393,7 @@ body.t-s9 {
 .o-tab-btn--celestial .o-subtab__tooltip {
   color: var(--color-celestials);
   border-color: var(--color-celestials);
+  background: var(--color-prestige--accent);
 }
 
 .o-tab-btn--celestial .o-subtab__tooltip::after {

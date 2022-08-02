@@ -51,6 +51,7 @@ export default {
       v-for="(tab, index) in tabs"
       :key="index"
       :tab="tab"
+      :change-enabled="!isEnslaved && !isAlmostEnd"
       class="l-hide-modal-tab-container"
     />
   </ModalWrapperOptions>

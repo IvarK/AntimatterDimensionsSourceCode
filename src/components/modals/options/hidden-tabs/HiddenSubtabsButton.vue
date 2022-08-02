@@ -9,6 +9,10 @@ export default {
     tab: {
       type: Object,
       required: true
+    },
+    changeEnabled: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -41,6 +45,7 @@ export default {
       this.hidden = this.subtab.isHidden && this.hidable;
     },
     toggleVisibility() {
+      if (!this.changeEnabled) return;
       this.subtab.toggleVisibility();
     },
   },

@@ -65,16 +65,14 @@ export default {
       this.realityHintsLeft = EnslavedProgress.all.length;
       for (const prog of EnslavedProgress.all) {
         if (prog.hasHint) {
-          this.shownEntries.push([prog.hasProgress
-            ? prog.config.progress
-            : "(You haven't figured this hint out yet)", prog.config.hint]);
+          this.shownEntries.push([false, prog]);
           this.realityHintsLeft--;
         }
       }
 
       const glyphHintCount = player.celestials.enslaved.glyphHintsGiven;
       for (let hintNum = 0; hintNum < glyphHintCount; hintNum++) {
-        this.shownEntries.push(["", GameDatabase.celestials.enslaved.glyphHints[hintNum]]);
+        this.shownEntries.push([true, GameDatabase.celestials.enslaved.glyphHints[hintNum]]);
       }
       this.glyphHintsLeft = GameDatabase.celestials.enslaved.glyphHints.length - glyphHintCount;
 
@@ -107,10 +105,19 @@ export default {
         v-for="(entry, index) in shownEntries"
         :key="index"
       >
-        <div v-if="entry[0]">
-          <b>{{ entry[0] }}</b>
+        <div v-if="!entry[0]">
+          <span v-if="entry[1].hasHint && !entry[1].hasProgress">
+            <i class="c-icon-wrapper fas fa-question-circle" />
+            <b>You have not figured out what this hint means yet.</b>
+          </span>
+          <span v-else>
+            <i class="c-icon-wrapper fa-solid fa-house-crack" />
+            <b>You have exposed a crack in the Reality:</b>
+          </span>
           <br>
-          - {{ entry[1] }}
+          - {{ entry[1].hintInfo }}
+          <br>
+          - {{ entry[1].hasProgress ? entry[1].completedInfo : "?????" }}
         </div>
         <div v-else>
           * <i>Glyph hint: {{ entry[1] }}</i>
@@ -123,7 +130,7 @@ export default {
         gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
         divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
         <br><br>
-        The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
+        The next hint will cost {{ hintCost }} of Stored Time. You currently have {{ formattedStored }}.
         <span v-if="currentStored < nextHintCost">
           You will reach this if you charge your Black Hole for {{ timeEstimate }}.
         </span>
@@ -143,8 +150,14 @@ export default {
         </PrimaryButton>
       </div>
       <div v-else>
-        There are no more hints left!
+        <b>There are no more hints left!</b>
       </div>
     </div>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.c-icon-wrapper {
+  margin-right: 1rem;
+}
+</style>

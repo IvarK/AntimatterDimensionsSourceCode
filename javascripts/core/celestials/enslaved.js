@@ -167,7 +167,8 @@ export const Enslaved = {
     if (!this.feltEternity) {
       EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
-      Modal.message.show("Time in Eternity will be scaled by number of Eternities");
+      Modal.message.show(`Time in this Eternity will be multiplied by number of Eternities,
+        up to a maximum of ${formatX(1e66)}.`);
     }
   },
   get feltEternity() {
@@ -212,11 +213,19 @@ class EnslavedProgressState extends BitUpgradeState {
     return this.hasProgress || this.isUnlocked;
   }
 
+  get hintInfo() {
+    return this.config.hint;
+  }
+
+  get completedInfo() {
+    return typeof this.config.condition === "function" ? this.config.condition() : this.config.condition;
+  }
+
   giveProgress() {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
       player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
-      GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!");
+      GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!", 10000);
     }
     // eslint-disable-next-line no-bitwise
     player.celestials.enslaved.progressBits |= (1 << this.id);

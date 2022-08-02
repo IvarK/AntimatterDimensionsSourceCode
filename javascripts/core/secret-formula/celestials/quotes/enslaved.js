@@ -27,12 +27,12 @@ GameDatabase.celestials.quotes.enslaved = {
       "Search... everywhere. We will help... where we can.",
     ]
   },
-  completeReality: {
+  hintUnlock: {
     id: 3,
     lines: [
-      "All... fragments... clones... freed.",
-      "We have given... tools... of our imprisoning. Use them...",
-      "Freedom from torture... is torture itself.",
+      "... you need... to look harder...",
+      "We think... we can help...",
+      { text: "You have unlocked help from The Enslaved Ones.", showCelestialName: false }
     ]
   },
   ec6C10: {
@@ -41,12 +41,12 @@ GameDatabase.celestials.quotes.enslaved = {
       "... did not... underestimate you..."
     ]
   },
-  hintUnlock: {
+  completeReality: {
     id: 5,
     lines: [
-      "... you need... to look harder...",
-      "We think... we can help...",
-      { text: "You have unlocked help from The Enslaved Ones.", showCelestialName: false }
+      "All... fragments... clones... freed.",
+      "We have given... tools... of our imprisoning. Use them...",
+      "Freedom from torture... is torture itself.",
     ]
   },
 };

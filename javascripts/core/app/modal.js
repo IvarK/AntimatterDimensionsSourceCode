@@ -68,7 +68,7 @@ export class Modal {
     this._component = component;
     this._modalConfig = {};
     this._priority = priority;
-    if (closeEvent) this.applyCloseListeners(closeEvent);
+    this._closeEvent = closeEvent;
   }
 
   // We can't handle this in the Vue components because if the modal order changes, all the event listeners from the
@@ -82,18 +82,19 @@ export class Modal {
     let shouldClose = false;
     for (const prestige of prestigeOrder) {
       if (prestige === closeEvent) shouldClose = true;
-      if (shouldClose) EventHub.ui.on(prestige, () => this.removeFromQueue(), this);
+      if (shouldClose) EventHub.ui.on(prestige, () => this.removeFromQueue(), this._component);
     }
 
     // In a few cases we want to trigger a close based on a non-prestige event, so if the specified event wasn't in
     // the prestige array above, we just add it on its own
-    if (!shouldClose) EventHub.ui.on(closeEvent, () => this.removeFromQueue(), this);
+    if (!shouldClose) EventHub.ui.on(closeEvent, () => this.removeFromQueue(), this._component);
   }
 
   show(modalConfig) {
     if (!GameUI.initialized) return;
     this._uniqueID = nextModalID++;
     this._props = Object.assign({}, modalConfig || {});
+    if (this._closeEvent) this.applyCloseListeners(this._closeEvent);
 
     const modalQueue = ui.view.modal.queue;
     // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
@@ -118,7 +119,7 @@ export class Modal {
   }
 
   removeFromQueue() {
-    EventHub.ui.offAll(this);
+    EventHub.ui.offAll(this._component);
     ui.view.modal.queue = ui.view.modal.queue.filter(m => m._uniqueID !== this._uniqueID);
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
     else ui.view.modal.current = ui.view.modal.queue[0];

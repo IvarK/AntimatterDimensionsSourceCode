@@ -18,10 +18,11 @@ export function updateNormalAndInfinityChallenges(diff) {
       Currency.matter.multiply(Decimal.pow(cappedBase, diff / 20));
     }
     if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
-      Modal.hideAll();
-      Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
-        `${format(Currency.matter.value, 2, 2)} matter.`, { closeEvent: GAME_EVENT.DIMBOOST_AFTER });
+      const values = [Currency.antimatter.value, Currency.matter.value];
       softReset(0);
+      Modal.hideAll();
+      Modal.message.show(`Your ${format(values[0], 2, 2)} antimatter was annhiliated by ${format(values[1], 2, 2)}
+        matter.`, { closeEvent: GAME_EVENT.DIMBOOST_AFTER }, 1);
     }
   }
 

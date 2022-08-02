@@ -51,7 +51,7 @@ export class DilationTimeStudyState extends TimeStudyState {
         Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} Eternity
           Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
           update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
-          scaling above ${format("1e6000")}.`);
+          scaling above ${format("1e6000")}.`, {}, 3);
         EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
       }
       if (!Perk.autounlockReality.isBought) Tab.reality.glyphs.show();

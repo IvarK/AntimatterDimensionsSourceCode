@@ -281,36 +281,27 @@ Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, 
 };
 
 Modal.message = new class extends Modal {
-  show(text, props = {}) {
+  show(text, props = {}, messagePriority = 0) {
     if (!GameUI.initialized) return;
-    super.show();
-    if (this.message === undefined) {
-      this.message = text;
-      this.callback = props.callback;
-      this.closeButton = props.closeButton ?? false;
-    }
-    if (!this.queue) this.queue = [];
-    this.queue.push({ text, callback: props.callback, closeButton: props.closeButton });
+    // It might be zero, so explicitly check for undefined
+    if (this.currPriority === undefined) this.currPriority = messagePriority;
+    else if (messagePriority < this.currPriority) return;
 
+    super.show();
+    this.message = text;
+    this.callback = props.callback;
+    this.closeButton = props.closeButton ?? false;
+    EventHub.ui.offAll(this._component);
     if (props.closeEvent) this.applyCloseListeners(props.closeEvent);
 
-    // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
     // TODO: remove this console.log
     // eslint-disable-next-line no-console
     console.log(`Modal message: ${text}`);
   }
 
   hide() {
-    EventHub.ui.offAll(this);
-    if (this.queue.length <= 1) {
-      Modal.hide();
-    }
-    this.queue.shift();
-    if (this.queue && this.queue.length === 0) this.message = undefined;
-    else {
-      this.message = this.queue[0].text;
-      this.callback = this.queue[0].callback;
-      this.closeButton = this.queue[0].closeButton;
-    }
+    EventHub.ui.offAll(this._component);
+    this.currPriority = undefined;
+    Modal.hide();
   }
 }(MessageModal, 2);

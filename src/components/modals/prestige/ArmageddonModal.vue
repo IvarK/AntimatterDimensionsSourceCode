@@ -47,7 +47,7 @@ export default {
       Glyphs.harshAutoClean();
       if (!Glyphs.unequipAll()) {
         Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
-        Glyphs could not be unequipped due to lack of inventory space.`);
+          Glyphs could not be unequipped due to lack of inventory space.`, 1);
         return;
       }
       Glyphs.harshAutoClean();

@@ -8,7 +8,7 @@ export const Speedrun = {
     Modal.message.show(`You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
       changes which can be helpful if you're trying to complete the game as quickly as possible. The option to
       start a Speedrun Save is now available in the Options tab, under Saving. Choosing to start a Speedrun Save
-      will provide you with another modal with more in-depth information.`);
+      will provide you with another modal with more in-depth information.`, {}, 3);
     player.speedrun.isUnlocked = true;
   },
   // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead

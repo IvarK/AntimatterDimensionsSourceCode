@@ -726,7 +726,7 @@ function laitelaRealityTick(realDiff) {
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
     if (Laitela.isFullyDestabilized) SpeedrunMilestones(24).tryComplete();
-    Modal.message.show(completionText);
+    Modal.message.show(completionText, {}, 2);
   }
 }
 

@@ -67,6 +67,9 @@ export default {
     // Use this here since Enslaved has a fairly non-standard character, and SFCs don't support using \uf0c1
     enslavedSymbol: () => Enslaved.symbol,
     isDoomed: () => Pelle.isDoomed,
+    doomedDisabledClass() {
+      return { "o-pelle-disabled": this.isDoomed };
+    }
   },
   watch: {
     autoRelease(newValue) {
@@ -169,7 +172,7 @@ export default {
           <div class="c-enslaved-run-button">
             <div
               class="c-enslaved-run-button__title"
-              :class="{ 'o-pelle-disabled': isDoomed }"
+              :class="doomedDisabledClass"
             >
               {{ realityTitle }}
             </div>
@@ -220,7 +223,10 @@ export default {
                        {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
               @click="toggleStoreBlackHole"
             >
-              <div class="o-enslaved-stored-time">
+              <div
+                class="o-enslaved-stored-time"
+                :class="doomedDisabledClass"
+              >
                 {{ timeDisplayShort(storedBlackHole) }}
               </div>
               <div>
@@ -231,7 +237,7 @@ export default {
               class="o-enslaved-mechanic-button"
               @click="useStored"
             >
-              <span :class="{ 'o-pelle-disabled': isDoomed }">Discharge Black Hole</span>
+              <span :class="doomedDisabledClass">Discharge Black Hole</span>
               <p v-if="isRunning">
                 {{ timeDisplayShort(nerfedBlackHoleTime) }} in this Reality
               </p>
@@ -242,7 +248,8 @@ export default {
             You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
             Amplified Realities give all the rewards that normal Realities do.
             <button
-              :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
+              :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isStoringReal},
+                       doomedDisabledClass]"
               @click="toggleStoreReal"
             >
               <div class="o-enslaved-stored-time">
@@ -254,7 +261,8 @@ export default {
             </button>
             <button
               :class="['o-enslaved-mechanic-button',
-                       {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled}]"
+                       {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled},
+                       doomedDisabledClass]"
               @click="toggleAutoStoreReal"
             >
               {{ realTimeButtonText }}

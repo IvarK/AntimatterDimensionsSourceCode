@@ -125,7 +125,7 @@ const Positions = Object.freeze({
   laitelaSecondRight: new Vector(200, 600),
   laitelaThirdCenter: new Vector(150, 650),
 
-  pelleUnlock: new Vector(400, 700),
+  pelleUnlock: new Vector(450, 580),
   pelleAchievementRequirement: pelleStarPosition(0, 0),
   pelleVacuum: pelleStarPosition(0, 150),
   pelleDecay: pelleStarPosition(1, 150),
@@ -932,8 +932,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 45,
-        diagonal: 16,
+        angle: 315,
+        diagonal: 25,
         horizontal: 16,
       },
     },
@@ -968,8 +968,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 45,
-        diagonal: 16,
+        angle: 135,
+        diagonal: 25,
         horizontal: 16,
       },
     },
@@ -1004,8 +1004,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 45,
-        diagonal: 16,
+        angle: 60,
+        diagonal: 25,
         horizontal: 16,
       },
     },
@@ -1040,8 +1040,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 100,
-        diagonal: 16,
+        angle: 260,
+        diagonal: 30,
         horizontal: 16,
       },
     },
@@ -1360,9 +1360,9 @@ GameDatabase.celestials.navigation = {
       if (DarkMatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked) return 1;
       if (MachineHandler.isIMUnlocked) {
         if (player.requirementChecks.reality.maxID1.neq(0)) return 0.5;
-        return Math.clampMax(0.999, player.antimatter.exponent / 1.5e12);
+        return 0.5 + 0.5 * Math.clampMax(0.999, player.antimatter.exponent / 1.5e12);
       }
-      return Math.clampMax(0.25, Currency.realityMachines.value.pLog10() / MachineHandler.baseRMCap.exponent);
+      return Math.clampMax(0.5, Currency.realityMachines.value.pLog10() / MachineHandler.baseRMCap.exponent);
     },
     drawOrder: -1,
     node: {
@@ -1534,7 +1534,7 @@ GameDatabase.celestials.navigation = {
       fill: "white",
       position: Positions.laitelaSecondCenter,
       ring: {
-        rMajor: 8,
+        rMajor: 15,
       },
       legend: {
         text: complete => {
@@ -1635,7 +1635,7 @@ GameDatabase.celestials.navigation = {
             `${format(Math.clampMax(allGalaxies, 80000))} / ${format(80000)}`
           ];
         },
-        angle: 135,
+        angle: 225,
         diagonal: 30,
         horizontal: 16,
       },
@@ -1691,7 +1691,6 @@ GameDatabase.celestials.navigation = {
     complete: () => Laitela.difficultyTier / 8,
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
-      symbol: "ᛝ",
       symbolScale: 1.6,
       symbolOffset: "0.6",
       fill: "white",
@@ -1699,7 +1698,6 @@ GameDatabase.celestials.navigation = {
       ring: {
         rMajor: 15,
       },
-      alwaysShowLegend: true,
       legend: {
         text: complete => {
           if (complete < 1) return [
@@ -1738,9 +1736,15 @@ GameDatabase.celestials.navigation = {
   },
   "pelle-unlock": {
     visible: () => Laitela.difficultyTier > 4,
-    complete: () => (Pelle.isUnlocked ? 1 : 0),
+    complete: () => {
+      if (Pelle.isUnlocked) return 1;
+      const imCost = Math.clampMax(emphasizeEnd(Math.log10(Currency.imaginaryMachines.value) / Math.log10(1.6e15)), 1);
+      let laitelaProgress = Laitela.isRunning ? Currency.eternityPoints.value.log10() / 4000 : 0;
+      if (Laitela.difficultyTier !== 8) laitelaProgress = 0;
+      else if (ImaginaryUpgrade(25).isAvailableForPurchase) laitelaProgress = 1;
+      return (imCost + laitelaProgress) / 2;
+    },
     node: {
-      clickAction: () => Tab.celestials.laitela.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "crimson",
       position: Positions.pelleUnlock,
@@ -1748,13 +1752,29 @@ GameDatabase.celestials.navigation = {
         rMajor: 8,
       },
       legend: {
-        text: [
-          "Unlock Pelle",
-          "The Celestial of Antimatter"
-        ],
-        angle: 45,
-        diagonal: 30,
-        horizontal: 16,
+        text: complete => {
+          if (complete === 1) {
+            return [
+              "Unlock Pelle",
+              "The Celestial of Antimatter"
+            ];
+          }
+          let laitelaString = `${format(Currency.imaginaryMachines.value)} / ${format("1e4000")} EP`;
+          if (!Laitela.isRunning || Laitela.difficultyTier !== 8) {
+            laitelaString = "Lai'tela's Reality is still intact";
+          } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
+            laitelaString = "Lai'tela's Reality has been destroyed";
+          }
+          return [
+            "Unlock Pelle",
+            "The Celestial of Antimatter",
+            `${format(Currency.imaginaryMachines.value, 2)} / ${format(1.6e15, 2)} iM`,
+            laitelaString
+          ];
+        },
+        angle: 60,
+        diagonal: 40,
+        horizontal: 10,
       },
     },
     connector: {
@@ -1768,22 +1788,35 @@ GameDatabase.celestials.navigation = {
   },
   "pelle-achievement-requirement": {
     visible: () => Pelle.isUnlocked,
-    complete: () => Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)) / 17,
+    complete: () => {
+      const achievements = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)) /
+        Achievements.prePelleRows.length;
+      const alchemy = AlchemyResources.all.countWhere(r => r.capped) / AlchemyResources.all.length;
+      return (emphasizeEnd(achievements) + emphasizeEnd(alchemy)) / 2;
+    },
     node: {
-      clickAction: () => Tab.celestials.laitela.show(true),
+      clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "♅",
       fill: "crimson",
       position: Positions.pelleAchievementRequirement,
       ring: {
-        rMajor: 8,
+        rMajor: 20,
       },
+      alwaysShowLegend: true,
       legend: {
-        text: () => [
-          `Complete ${formatInt(17)}`,
-          "rows of achievements"
-        ],
-        angle: 315,
-        diagonal: 30,
+        text: complete => {
+          if (complete >= 1) return "Doomed Reality";
+          const achievements = [Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)),
+            Achievements.prePelleRows.length];
+          const alchemy = [AlchemyResources.all.countWhere(r => r.capped), AlchemyResources.all.length];
+          return [
+            `Complete ${formatInt(achievements[0])} / ${formatInt(achievements[1])} rows of achievements`,
+            `Fill ${formatInt(alchemy[0])} / ${formatInt(alchemy[1])} alchemy resources`,
+          ];
+        },
+        angle: 290,
+        diagonal: 40,
         horizontal: 16,
       },
     },

@@ -41,6 +41,7 @@ export default {
       scripts: [],
       runningScriptID: 0,
       totalChars: 0,
+      scriptCount: 0,
       canMakeNewScript: true
     };
   },
@@ -125,7 +126,8 @@ export default {
       this.errorCount = AutomatorData.currentErrors().length;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.totalChars = AutomatorData.totalScriptCharacters();
-      this.canMakeNewScript = Object.keys(player.reality.automator.scripts).length < this.maxScriptCount;
+      this.scriptCount = Object.keys(player.reality.automator.scripts).length;
+      this.canMakeNewScript = this.scriptCount < this.maxScriptCount;
       this.currentScriptID = player.reality.automator.state.editorScript;
     },
     exportScript() {
@@ -181,6 +183,7 @@ export default {
     rename() {
       this.editingName = true;
       this.$nextTick(() => {
+        this.updateCurrentScriptID();
         this.$refs.renameInput.value = player.reality.automator.scripts[this.currentScriptID].name;
         this.$refs.renameInput.focus();
       });
@@ -203,6 +206,11 @@ export default {
       this.updateScriptList();
       this.$nextTick(() => this.editingName = false);
     },
+    activePanelClass(id) {
+      return {
+        "c-automator__button--active": this.infoPaneID === id,
+      };
+    }
   }
 };
 </script>
@@ -284,7 +292,7 @@ export default {
                 </div>
               </template>
               <template #dropdown>
-                <AutomatorScriptDropdownEntryList />
+                <AutomatorScriptDropdownEntryList :key="scriptCount" />
               </template>
             </ExpandingControlBox>
             <AutomatorButton

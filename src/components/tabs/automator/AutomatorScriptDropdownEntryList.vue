@@ -6,7 +6,8 @@ export default {
       currentScriptID: 0,
       runningScriptID: 0,
       isRunning: false,
-      isPaused: false
+      isPaused: false,
+      canMakeNewScript: false,
     };
   },
   computed: {
@@ -22,6 +23,9 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
+    maxScriptCount() {
+      return AutomatorData.MAX_ALLOWED_SCRIPT_COUNT;
+    },
   },
   created() {
     this.currentScriptID = player.reality.automator.state.editorScript;
@@ -31,6 +35,7 @@ export default {
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
+      this.canMakeNewScript = Object.keys(player.reality.automator.scripts).length < this.maxScriptCount;
     },
     changeScriptID(newID) {
       this.currentScriptID = newID;
@@ -38,9 +43,10 @@ export default {
       this.updateCurrentScriptID();
     },
     createNewScript() {
-      // This does nothing right now, will be fixed during rebase after automato branch is merged
-      // this.$parent.rename();
-      this.$parent.openRequest = false;
+      const newScript = AutomatorBackend.newScript();
+      player.reality.automator.state.editorScript = newScript.id;
+      this.updateCurrentScriptID();
+      this.$parent.$parent.rename();
     },
     updateCurrentScriptID() {
       const storedScripts = player.reality.automator.scripts;
@@ -58,12 +64,14 @@ export default {
       this.$parent.openRequest = false;
     },
     dropdownLabel(script) {
-      let label = script.name;
+      const labels = [];
+      if (script.id === this.currentScriptID) labels.push("viewing");
       if (script.id === this.runningScriptID) {
-        if (this.isRunning) label += " (Running)";
-        else if (this.isPaused) label += " (Paused)";
+        if (this.isRunning) labels.push("running");
+        else if (this.isPaused) labels.push("paused");
       }
-      return label;
+      const status = labels.length ? `(${labels.join(", ").capitalize()})` : "";
+      return `${script.name} ${status}`;
     },
     labelClassObject(id) {
       const highlightRunning = this.isRunning || this.isPaused;
@@ -88,10 +96,17 @@ export default {
       {{ dropdownLabel(script) }}
     </div>
     <div
+      v-if="canMakeNewScript"
       class="c-automator-docs-script-select"
       @click="createNewScript()"
     >
-      New Script
+      <i>Create a new script...</i>
+    </div>
+    <div
+      v-else
+      class="c-automator-docs-script-select l-max-scripts"
+    >
+      <i>You can only have {{ formatInt(maxScriptCount) }} scripts!</i>
     </div>
   </div>
 </template>
@@ -103,5 +118,9 @@ export default {
 
 .l-selected-script {
   background-color: var(--color-automator-active-line-background);
+}
+
+.l-max-scripts {
+  background-color: var(--color-automator-error-background);
 }
 </style>

@@ -19,10 +19,9 @@ export function updateNormalAndInfinityChallenges(diff) {
     }
     if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       const values = [Currency.antimatter.value, Currency.matter.value];
-      softReset(0);
-      Modal.hideAll();
-      Modal.message.show(`Your ${format(values[0], 2, 2)} antimatter was annhiliated by ${format(values[1], 2, 2)}
-        matter.`, { closeEvent: GAME_EVENT.DIMBOOST_AFTER }, 1);
+      softReset(0, true, true);
+      Modal.message.show(`Your ${format(values[0], 2, 2)} antimatter was annihilated
+        by ${format(values[1], 2, 2)} matter.`, { closeEvent: GAME_EVENT.BIG_CRUNCH_AFTER }, 1);
     }
   }
 

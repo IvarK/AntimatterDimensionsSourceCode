@@ -20,6 +20,68 @@ export function vUnlockLegendLabel(complete, index) {
   ];
 }
 
+// Angle is defined/rescaled so that 0 is the first rift, 4 is the last one, and all 5 are equally spaced around
+// a circle. Starts at top-left and goes clockwise, reference point is that 3 is directly down. It's allowed to be
+// non-integer since it's also used for off-center curve control points
+function pelleStarPosition(angle, scale) {
+  const pelleCenter = new Vector(750, 550);
+  const theta = (0.7 - 0.4 * angle) * Math.PI;
+  return new Vector(scale * Math.cos(theta), -scale * Math.sin(theta)).plus(pelleCenter);
+}
+
+// Makes curved spokes connecting the center of Pelle to all the outer nodes corresponding to rifts
+function pelleStarConnector(index) {
+  return (function() {
+    // This should be half of the second argument used in pelleStarPosition when used to define rift node positions
+    const pelleSize = 75;
+    const pathStart = (0.4 * index + 0.5) * Math.PI;
+
+    // Technically 2 should be about 1.929 and 4/3 should be about 1.328; exact values for both of these leave a small
+    // gap between the path and the node, so we round up a bit to make those go away
+    const pathEnd = pathStart + 2;
+    const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(index + 0.5, pelleSize),
+      pathStart, pelleSize, pathEnd, 4 / 3 * pelleSize);
+    const pathPadStart = path.angleFromRadius(pelleSize) - pathStart;
+    const pathPadEnd = pathEnd - path.angleFromRadius(4 / 3 * pelleSize);
+    return {
+      pathStart,
+      pathEnd,
+      path,
+      pathPadStart,
+      pathPadEnd,
+      fill: "crimson",
+    };
+  }());
+}
+
+// Reduces some boilerplate for rift line objects
+function pelleRiftObject(name, index, textAngle) {
+  return {
+    visible: () => Pelle.isDoomed && PelleRifts[name.toLowerCase()].realPercentage > 0,
+    complete: () => PelleRifts[name.toLowerCase()].realPercentage,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      position: Positions[`pelle${name}`],
+      fill: "crimson",
+      ring: {
+        rMajor: 8,
+      },
+      legend: {
+        text: complete => {
+          const formattedPercent = complete >= 1 ? formatPercents(1) : formatPercents(complete, 1);
+          return [
+            `${formattedPercent} ${name}`
+          ];
+        },
+        angle: textAngle,
+        diagonal: 30,
+        horizontal: 16,
+      },
+    },
+    connector: pelleStarConnector(index),
+  };
+}
+
 export const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
@@ -62,6 +124,14 @@ const Positions = Object.freeze({
   laitelaSecondLeft: new Vector(100, 600),
   laitelaSecondRight: new Vector(200, 600),
   laitelaThirdCenter: new Vector(150, 650),
+
+  pelleUnlock: new Vector(400, 700),
+  pelleAchievementRequirement: pelleStarPosition(0, 0),
+  pelleVacuum: pelleStarPosition(0, 150),
+  pelleDecay: pelleStarPosition(1, 150),
+  pelleChaos: pelleStarPosition(2, 150),
+  pelleRecursion: pelleStarPosition(3, 150),
+  pelleParadox: pelleStarPosition(4, 150),
 });
 
 GameDatabase.celestials.navigation = {
@@ -1643,7 +1713,7 @@ GameDatabase.celestials.navigation = {
             "Lai'tela's Reality",
           ];
         },
-        angle: 0,
+        angle: 180,
         diagonal: 15,
         horizontal: 8,
       },
@@ -1666,4 +1736,69 @@ GameDatabase.celestials.navigation = {
       }
     ]
   },
+  "pelle-unlock": {
+    visible: () => Laitela.difficultyTier > 4,
+    complete: () => (Pelle.isUnlocked ? 1 : 0),
+    node: {
+      clickAction: () => Tab.celestials.laitela.show(true),
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "crimson",
+      position: Positions.pelleUnlock,
+      ring: {
+        rMajor: 8,
+      },
+      legend: {
+        text: [
+          "Unlock Pelle",
+          "The Celestial of Antimatter"
+        ],
+        angle: 45,
+        diagonal: 30,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: new LinearPath(Positions.laitelaThirdCenter, Positions.pelleUnlock),
+      fill: "url(#gradLaitelaPelle)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    },
+  },
+  "pelle-achievement-requirement": {
+    visible: () => Pelle.isUnlocked,
+    complete: () => Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)) / 17,
+    node: {
+      clickAction: () => Tab.celestials.laitela.show(true),
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "crimson",
+      position: Positions.pelleAchievementRequirement,
+      ring: {
+        rMajor: 8,
+      },
+      legend: {
+        text: () => [
+          `Complete ${formatInt(17)}`,
+          "rows of achievements"
+        ],
+        angle: 315,
+        diagonal: 30,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: new LinearPath(Positions.pelleUnlock, Positions.pelleAchievementRequirement),
+      fill: "crimson",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    },
+  },
+  "pelle-vacuum": pelleRiftObject("Vacuum", 0, 225),
+  "pelle-decay": pelleRiftObject("Decay", 1, 315),
+  "pelle-chaos": pelleRiftObject("Chaos", 2, 45),
+  "pelle-recursion": pelleRiftObject("Recursion", 3, 135),
+  "pelle-paradox": pelleRiftObject("Paradox", 4, 135)
 };

@@ -14,6 +14,12 @@ export default {
       showRequirement: false
     };
   },
+  computed: {
+    disableText() {
+      // Doesn't need to be reactive or check strike status; it's always permanent once entered in Doomed
+      return Pelle.isDoomed ? "Dilation is permanent." : "Disable Dilation.";
+    }
+  },
   methods: {
     update() {
       this.isUnlocked = PlayerProgress.dilationUnlocked();
@@ -49,17 +55,17 @@ export default {
       </div>
     </span>
     <span v-else-if="canEternity && hasGain">
-      Disable Dilation.
+      {{ disableText }}
       <br>
       Gain {{ quantify("Tachyon Particle", tachyonGain, 2, 1) }}.
     </span>
     <span v-else-if="hasGain">
-      Disable Dilation.
+      {{ disableText }}
       <br>
       Reach {{ quantify("Infinity Point", eternityGoal, 1, 0) }} to Eternity and gain Tachyon Particles.
     </span>
     <span v-else>
-      Disable Dilation.
+      {{ disableText }}
       <br>
       Reach {{ format(requiredForGain, 2, 1) }} antimatter to gain more Tachyon Particles.
     </span>

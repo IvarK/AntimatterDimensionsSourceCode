@@ -101,6 +101,7 @@ export const Pelle = {
     player.celestials.enslaved.isStoringReal = false;
     player.celestials.enslaved.autoStoreReal = false;
     this.cel.armageddonDuration = 0;
+    if (PelleStrikes.dilation.hasStrike) player.dilation.active = true;
     EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 

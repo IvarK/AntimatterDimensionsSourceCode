@@ -71,7 +71,6 @@ export default {
         <input
           v-model="limitGalaxies"
           type="checkbox"
-          :value="limitGalaxies"
           class="o-clickable"
         >
         Limit Antimatter Galaxies to:

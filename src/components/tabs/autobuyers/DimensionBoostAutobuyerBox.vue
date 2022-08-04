@@ -79,7 +79,6 @@ export default {
         <input
           v-model="limitDimBoosts"
           type="checkbox"
-          :value="limitDimBoosts"
           class="o-clickable"
         >
         Limit Dimension Boosts to:
@@ -97,7 +96,6 @@ export default {
         <input
           v-model="limitUntilGalaxies"
           type="checkbox"
-          :value="limitUntilGalaxies"
           class="o-clickable"
         >
         <span v-if="isBuyMaxUnlocked">

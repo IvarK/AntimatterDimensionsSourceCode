@@ -2,7 +2,6 @@ import { GameStorage } from "./storage";
 
 function arrayToBits(array) {
   let bits = 0;
-  // eslint-disable-next-line no-bitwise
   for (const id of array) bits |= (1 << id);
   return bits;
 }
@@ -288,7 +287,6 @@ GameStorage.devMigrations = {
         player.reality.upgradeBits = arrayToBits(player.reality.upg);
         delete player.reality.upg;
       }
-      // eslint-disable-next-line no-bitwise
       if ((player.reality.upgradeBits & (1 << 25)) === 0) {
         player.realityBuyer.isOn = false;
       }
@@ -358,7 +356,6 @@ GameStorage.devMigrations = {
         for (const effect of orderedEffectList) {
           const typeEffect = separateEffectKey(effect);
           if (glyph.type === typeEffect[0] && glyph.effects[typeEffect[1]] !== undefined) {
-            // eslint-disable-next-line no-bitwise
             effectBitmask += 1 << GlyphEffects[effect].bitmaskIndex;
           }
         }
@@ -751,7 +748,6 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      // eslint-disable-next-line no-bitwise
       player.celestials.ra.unlockBits &= ~(1 << 29);
     },
     player => {
@@ -975,7 +971,6 @@ GameStorage.devMigrations = {
 
       let reqBitmask = 0;
       for (let i = 0; i <= player.reality.upgReqs.length; i++) {
-        // eslint-disable-next-line no-bitwise
         if (player.reality.upgReqs[i]) reqBitmask |= (1 << i);
       }
       player.reality.upgReqs = reqBitmask;
@@ -1218,42 +1213,29 @@ GameStorage.devMigrations = {
       player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
     },
     player => {
-      // eslint-disable-next-line no-bitwise
       if (player.celestials.pelle.doomed) player.achievementBits[17] |= 1;
-      // eslint-disable-next-line no-bitwise
       if (player.celestials.pelle.upgrades.has(4)) player.achievementBits[17] |= 2;
       if (player.celestials.pelle.doomed && player.challenge.infinity.completedBits === 510) {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[17] |= (1 << 2);
       }
-      // eslint-disable-next-line no-bitwise
       if (player.timestudy.studies.compact().includes(181)) player.achievementBits[17] |= (1 << 5);
     },
     player => {
-      // eslint-disable-next-line no-bitwise
       player.achievementBits[16] |= (player.achievementBits[16] & (1 << 4)) << 3;
-      // eslint-disable-next-line no-bitwise
       player.achievementBits[16] &= ~(1 << 4);
-      // eslint-disable-next-line no-bitwise
       player.achievementBits[16] |= (player.achievementBits[16] & (1 << 2)) << 2;
-      // eslint-disable-next-line no-bitwise
       player.achievementBits[16] &= ~(1 << 2);
     },
     player => {
-      // eslint-disable-next-line no-bitwise
       player.achievementBits[17] &= ~(1 << 5);
       if (player.timestudy.studies.compact().includes(181) && player.celestials.pelle.doomed) {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[17] |= (1 << 5);
       }
     },
     player => {
-      // eslint-disable-next-line no-bitwise
       if (player.celestials.pelle.doomed && (player.challenge.infinity.completedBits & (1 << 5)) !== 0) {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[17] |= (1 << 2);
       } else {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[17] &= ~(1 << 2);
       }
     },
@@ -1351,7 +1333,6 @@ GameStorage.devMigrations = {
     },
     player => {
       const cel = player.celestials;
-      // eslint-disable-next-line no-bitwise
       const convToBit = x => x.toBitmask() >> 1;
       if (cel.teresa.quotes) player.celestials.teresa.quoteBits = convToBit(cel.teresa.quotes);
       if (cel.effarig.quotes) player.celestials.effarig.quoteBits = convToBit(cel.effarig.quotes);

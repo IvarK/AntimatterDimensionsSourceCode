@@ -325,7 +325,6 @@ GameStorage.migrations = {
     if (player.challenges) {
       for (const fullID of player.challenges) {
         const parsed = parseChallengeName(fullID);
-        // eslint-disable-next-line no-bitwise
         player.challenge[parsed.type].completedBits |= 1 << parsed.id;
       }
       delete player.challenges;
@@ -665,7 +664,6 @@ GameStorage.migrations = {
       const number = parseInt(groups[2], 10);
       if (!player.news.seen[type]) player.news.seen[type] = [];
       while (maskLength * player.news.seen[type].length < number) player.news.seen[type].push(0);
-      // eslint-disable-next-line no-bitwise
       player.news.seen[type][Math.floor(number / maskLength)] |= 1 << (number % maskLength);
     }
 
@@ -708,21 +706,17 @@ GameStorage.migrations = {
         if (!isSecret && [row, column].join(",") in swaps) {
           [row, column] = swaps[[row, column].join(",")].split(",");
         }
-        // eslint-disable-next-line no-bitwise
         newAchievements[row - 1] |= (1 << (column - 1));
       }
       // Handle the changed achievement "No DLC Required" correctly (otherwise saves could miss it).
       if (!isSecret && (player.infinityUpgrades.size >= 16 || player.eternities.gt(0) || player.realities > 0)) {
-        // eslint-disable-next-line no-bitwise
         newAchievements[3] |= 1;
       } else {
-        // eslint-disable-next-line no-bitwise
         newAchievements[3] &= ~1;
       }
 
       // "Professional Bodybuilder" (s38) was changed and shouldn't be migrated
       if (isSecret) {
-        // eslint-disable-next-line no-bitwise
         newAchievements[2] &= ~128;
       }
     };
@@ -911,7 +905,6 @@ GameStorage.migrations = {
   },
 
   etercreqConversion(player) {
-    // eslint-disable-next-line no-bitwise
     if (player.etercreq) player.challenge.eternity.requirementBits |= 1 << player.etercreq;
     delete player.etercreq;
   },

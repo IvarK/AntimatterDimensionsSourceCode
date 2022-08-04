@@ -22,7 +22,6 @@ class SubtabState {
 
   get isHidden() {
     if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
-    // eslint-disable-next-line no-bitwise
     return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
       this.hidable;
   }
@@ -53,13 +52,11 @@ class SubtabState {
 
   unhideTab() {
     this._parent.unhideTab();
-    // eslint-disable-next-line no-bitwise
     player.options.hiddenSubtabBits[this._parent.id] &= ~(1 << this.id);
   }
 
   toggleVisibility() {
     if (this._parent.id === Tabs.current.id && this.id === Tabs.current._currentSubtab.id) return;
-    // eslint-disable-next-line no-bitwise
     player.options.hiddenSubtabBits[this._parent.id] ^= (1 << this.id);
 
     checkTabVisibilityForSecretAchievement();
@@ -111,7 +108,6 @@ class TabState {
   get isHidden() {
     if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
-    // eslint-disable-next-line no-bitwise
     return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.hidable;
   }
 
@@ -155,13 +151,11 @@ class TabState {
   }
 
   unhideTab() {
-    // eslint-disable-next-line no-bitwise
     player.options.hiddenTabBits &= ~(1 << this.id);
   }
 
   toggleVisibility() {
     if (this.id === Tabs.current.id) return;
-    // eslint-disable-next-line no-bitwise
     player.options.hiddenTabBits ^= (1 << this.id);
 
     checkTabVisibilityForSecretAchievement();

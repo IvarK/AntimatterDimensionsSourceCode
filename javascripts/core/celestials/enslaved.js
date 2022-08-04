@@ -204,12 +204,10 @@ class EnslavedProgressState extends BitUpgradeState {
   set bits(value) { player.celestials.enslaved.hintBits = value; }
 
   get hasProgress() {
-    // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));
   }
 
   get hasHint() {
-    // eslint-disable-next-line no-bitwise
     return this.hasProgress || this.isUnlocked;
   }
 
@@ -227,7 +225,6 @@ class EnslavedProgressState extends BitUpgradeState {
       player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
       GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!", 10000);
     }
-    // eslint-disable-next-line no-bitwise
     player.celestials.enslaved.progressBits |= (1 << this.id);
   }
 }

@@ -516,13 +516,11 @@ window.logFactorial = (function() {
 
 /** 32 bit XORSHIFT generator */
 window.xorshift32Update = function xorshift32Update(state) {
-  /* eslint-disable no-bitwise */
   /* eslint-disable no-param-reassign */
   state ^= state << 13;
   state ^= state >>> 17;
   state ^= state << 5;
   /* eslint-enable no-param-reassign */
-  /* eslint-enable no-bitwise */
   return state;
 };
 

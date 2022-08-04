@@ -417,19 +417,16 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[8] |= 16;
       }
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 8;
       }
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 128;
       }
     ],
@@ -459,7 +456,6 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.reality.upgReqs = (1 << 6);
         player.reality.upgradeBits = 64;
       }

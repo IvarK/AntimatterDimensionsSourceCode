@@ -53,11 +53,9 @@ export const Effarig = {
   get glyphEffectAmount() {
     const genEffectBitmask = Glyphs.activeList
       .filter(g => generatedTypes.includes(g.type))
-      // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
     const nongenEffectBitmask = Glyphs.activeList
       .filter(g => !generatedTypes.includes(g.type))
-      // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
     return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },

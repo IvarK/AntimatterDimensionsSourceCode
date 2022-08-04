@@ -230,12 +230,9 @@ export default {
           throw new Error(`Unrecognized glyph type "${this.glyph.type}" in glyph effect icons`);
       }
       const effectIDs = [];
-      // eslint-disable-next-line no-bitwise
       let remainingEffects = this.glyph.effects >> minEffectID;
       for (let id = 0; remainingEffects > 0; id++) {
-        // eslint-disable-next-line no-bitwise
         if ((remainingEffects & 1) === 1) effectIDs.push(id);
-        // eslint-disable-next-line no-bitwise
         remainingEffects >>= 1;
       }
       return effectIDs;

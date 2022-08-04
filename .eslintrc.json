@@ -200,7 +200,6 @@
     ],
     "new-parens": "error",
     "no-array-constructor": "warn",
-    "no-bitwise": "warn",
     "no-inline-comments": "error",
     "no-lonely-if": "error",
     "no-mixed-spaces-and-tabs": "error",

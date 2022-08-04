@@ -424,7 +424,6 @@ export const Glyphs = {
   },
   sortByEffect() {
     function reverseBitstring(eff) {
-      // eslint-disable-next-line no-bitwise
       return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
     }
     // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
@@ -449,7 +448,6 @@ export const Glyphs = {
         g.type === glyph.type &&
         g.id !== glyph.id &&
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
-        // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
     let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
     compareThreshold = Math.clampMax(compareThreshold, threshold);
@@ -614,10 +612,8 @@ export const Glyphs = {
   applyGamespeed(glyph) {
     if (!Ra.unlocks.allGamespeedGlyphs.canBeApplied) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
-      // eslint-disable-next-line no-bitwise
       glyph.effects |= (1 << GlyphEffects.timespeed.bitmaskIndex);
       if (glyph.type === "time") {
-        // eslint-disable-next-line no-bitwise
         glyph.effects |= (1 << GlyphEffects.timeshardpow.bitmaskIndex);
       }
     }

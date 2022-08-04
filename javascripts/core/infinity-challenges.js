@@ -64,12 +64,10 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isCompleted() {
-    // eslint-disable-next-line no-bitwise
     return (player.challenge.infinity.completedBits & (1 << this.id)) !== 0;
   }
 
   complete() {
-    // eslint-disable-next-line no-bitwise
     player.challenge.infinity.completedBits |= 1 << this.id;
     EventHub.dispatch(GAME_EVENT.INFINITY_CHALLENGE_COMPLETED);
   }

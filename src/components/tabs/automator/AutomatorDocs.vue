@@ -285,7 +285,7 @@ export default {
         />
         <div class="l-automator__script-names">
           <template v-if="!editingName">
-            <ExpandingControlBox>
+            <ExpandingControlBox class="l-automator__scripts-dropdown">
               <template #header>
                 <div class="c-automator-docs-script-select">
                   ▼ Current Script: {{ currentEditorScriptName }}
@@ -344,18 +344,8 @@ export default {
 }
 
 .l-automator__scripts-dropdown {
-  width: 90%;
-  height: calc(2rem + 1rem / 3 - var(--var-border-width, 0rem) * 2);
-  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
-  border-radius: var(--var-border-radius, 0.3rem);
+  width: 100%;
   margin: 0.4rem;
-}
-
-.c-automator__scripts-dropdown {
-  font-size: 1.2rem;
-  color: var(--color-automator-docs-font);
-  background-color: var(--color-automator-controls-inactive);
-  cursor: pointer;
 }
 
 .l-automator__rename-input {

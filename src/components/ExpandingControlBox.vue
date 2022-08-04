@@ -29,6 +29,11 @@ export default {
       required: false,
       default: "l-expanding-control-box__button",
     },
+    autoClose: {
+      type: Boolean,
+      required: false,
+      default: false,
+    }
   },
   data() {
     return {
@@ -36,6 +41,8 @@ export default {
       openRequest: false,
       closedHeight: "1em",
       openHeight: "1em",
+      hasMouse: false,
+      closeTime: 0,
     };
   },
   computed: {
@@ -113,6 +120,10 @@ export default {
     this.updateBaseWidth();
   },
   methods: {
+    update() {
+      const secSinceMouseOff = this.hasMouse ? 0 : (Date.now() - this.closeTime) / 1000;
+      if (this.autoClose && this.state === this.states.OPEN && secSinceMouseOff > 1) this.openRequest = false;
+    },
     processRequest(state, request) {
       if (request && (state === this.states.CLOSED || state === this.states.CLOSE_REQUESTED)) {
         this.state = this.states.OPEN_REQUESTED;
@@ -142,6 +153,17 @@ export default {
         this.state = this.states.CLOSED;
       }
     },
+    handleClick() {
+      this.openRequest = !this.openRequest;
+      this.hasMouse = this.openRequest;
+    },
+    mouseOn() {
+      this.hasMouse = true;
+    },
+    mouseOff() {
+      this.hasMouse = false;
+      this.closeTime = Date.now();
+    }
   }
 };
 </script>
@@ -164,12 +186,14 @@ export default {
       :class="containerClassObject"
       :style="containerStyle"
       @transitionend="transitionEnd"
+      @mouseenter="mouseOn"
+      @mouseleave="mouseOff"
     >
       <div
         v-if="!$slots.header"
         ref="expandButton"
         :class="buttonClass"
-        @click="openRequest = !openRequest"
+        @click="handleClick"
       >
         {{ label }}
         <span :class="indicatorArrowClassObject">
@@ -179,7 +203,7 @@ export default {
       <div
         v-else
         ref="expandButton"
-        @click="openRequest = !openRequest"
+        @click="handleClick"
       >
         <slot name="header" />
       </div>
@@ -193,7 +217,6 @@ export default {
 <style scoped>
 .l-expanding-control-box {
   position: relative;
-  width: 100%;
   z-index: 3;
 }
 

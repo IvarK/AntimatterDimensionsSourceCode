@@ -32,6 +32,7 @@ export default {
       isAutobuyerOn: false,
       boughtAmount: 0,
       currentDT: new Decimal(0),
+      currentDTGain: new Decimal(0),
     };
   },
   computed: {
@@ -49,17 +50,17 @@ export default {
       };
     },
     timeEstimate() {
-      if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
+      if (this.isAffordable || this.isCapped || this.upgrade.isBought || this.currentDTGain.eq(0)) return null;
       if (PelleRifts.paradox.isActive) {
         const drain = Pelle.riftDrainPercent;
-        const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
+        const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
         const goalNetRate = rawDTGain.minus(Decimal.multiply(this.upgrade.cost, drain));
         const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
         if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
         return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
       }
       return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
-        .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+        .div(this.currentDTGain.times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
     },
     isUseless() {
       return Pelle.isDoomed && this.upgrade.id === 7;
@@ -74,6 +75,7 @@ export default {
     update() {
       const upgrade = this.upgrade;
       this.currentDT.copyFrom(Currency.dilatedTime.value);
+      this.currentDTGain.copyFrom(Currency.dilatedTime.value);
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;

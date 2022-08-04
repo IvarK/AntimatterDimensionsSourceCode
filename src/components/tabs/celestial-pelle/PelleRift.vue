@@ -48,7 +48,7 @@ export default {
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
-      return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+      return typeof value === "number" ? `${formatInt(100 * value)}%` : format(value, 2);
     },
     riftName() {
       return wordShift.wordCycle(this.rift.name, true);

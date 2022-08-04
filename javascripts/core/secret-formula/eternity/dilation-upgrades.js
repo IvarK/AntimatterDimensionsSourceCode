@@ -40,7 +40,11 @@ GameDatabase.eternity.dilation = {
       );
       return Decimal.pow(base, bought);
     },
-    formatEffect: value => formatX(value, 2),
+    formatEffect: value => {
+      const nonInteger = SingularityMilestone.dilatedTimeFromSingularities.canBeApplied ||
+        Achievement(187).canBeApplied;
+      return formatX(value, 2, nonInteger ? 2 : 0);
+    },
     formatCost: value => format(value, 2),
     purchaseCap: Number.MAX_VALUE
   }),

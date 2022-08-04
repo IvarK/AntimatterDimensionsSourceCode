@@ -402,7 +402,7 @@ GameDatabase.celestials.quotes.pelle = {
         text: "You! $1!",
         1: destroyer
       },
-      "Do you have any idea what you've just made me do!",
+      "Do you have any idea what you have just made me do!",
       {
         text: "I am complicit in your $1!",
         1: mandate

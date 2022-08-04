@@ -93,7 +93,7 @@ GameDatabase.celestials.pelle.rifts = {
         formatEffect: x => `Max RG count +${formatInt(x)}`
       },
     ],
-    galaxyGeneratorText: "There's not enough antimatter to form new galaxies, you need to reverse the $value"
+    galaxyGeneratorText: "There's not enough antimatter to form new Galaxies, you need to reverse the $value"
   },
   chaos: {
     id: 3,
@@ -140,7 +140,7 @@ GameDatabase.celestials.pelle.rifts = {
         description: () => `You gain ${formatPercents(0.01)} of your EP gained on Eternity per second`,
       },
     ],
-    galaxyGeneratorText: "The galaxies/reality you have are too fragmented, you must stabilize the $value"
+    galaxyGeneratorText: "The Galaxies/Reality you have are too fragmented, you must stabilize the $value"
   },
   recursion: {
     id: 4,
@@ -177,7 +177,7 @@ GameDatabase.celestials.pelle.rifts = {
         description: "Unlock the Galaxy Generator",
       },
     ],
-    galaxyGeneratorText: "Creating more galaxies is unsustainable, you must focus the $value to allow more"
+    galaxyGeneratorText: "Creating more Galaxies is unsustainable, you must focus the $value to allow more"
   },
   paradox: {
     id: 5,

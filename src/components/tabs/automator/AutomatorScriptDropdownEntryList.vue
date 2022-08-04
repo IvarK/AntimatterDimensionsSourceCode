@@ -90,6 +90,7 @@ export default {
     <div
       v-for="script in scripts"
       :key="script.id"
+      class="l-script-option"
       :class="labelClassObject(script.id)"
       @click="changeScriptID(script.id)"
     >
@@ -97,14 +98,14 @@ export default {
     </div>
     <div
       v-if="canMakeNewScript"
-      class="c-automator-docs-script-select"
+      class="l-create-script c-automator-docs-script-select"
       @click="createNewScript()"
     >
       <i>Create a new script...</i>
     </div>
     <div
       v-else
-      class="c-automator-docs-script-select l-max-scripts"
+      class="l-create-script c-automator-docs-script-select l-max-scripts"
     >
       <i>You can only have {{ formatInt(maxScriptCount) }} scripts!</i>
     </div>
@@ -112,6 +113,19 @@ export default {
 </template>
 
 <style scoped>
+.l-script-option {
+  border-radius: 0;
+  border-bottom: 0;
+}
+
+.l-script-option:first-child {
+  border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
+}
+
+.l-create-script {
+  border-radius: 0 0 var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem);
+}
+
 .l-active-script {
   background-color: var(--color-automator-controls-active);
 }

@@ -95,9 +95,12 @@ export default {
       v-else-if="postBreak"
       #intervalSlot
     >
-      <ExpandingControlBox v-if="hasAdditionalModes">
+      <ExpandingControlBox
+        v-if="hasAdditionalModes"
+        :auto-close="true"
+      >
         <template #header>
-          <div class="c-autobuyer-box__mode-select c-autobuyer-box__mode-select-header">
+          <div class="o-primary-btn c-autobuyer-box__mode-select c-autobuyer-box__mode-select-header">
             ▼ Current Setting: ▼
             <br>
             {{ modeName(mode) }}

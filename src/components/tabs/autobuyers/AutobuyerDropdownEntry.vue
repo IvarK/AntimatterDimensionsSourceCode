@@ -39,7 +39,7 @@ export default {
     <div
       v-for="optionMode in modes"
       :key="optionMode"
-      class="c-autobuyer-box__mode-select"
+      class="o-primary-btn c-autobuyer-box__mode-select l-autobuyer-choice"
       :value="optionMode"
       @click="changeMode(optionMode)"
     >
@@ -49,5 +49,16 @@ export default {
 </template>
 
 <style scoped>
+.l-autobuyer-choice {
+  border-radius: 0;
+  border-top: 0;
+}
 
+.l-autobuyer-choice:first-child {
+  border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
+}
+
+.l-autobuyer-choice:last-child {
+  border-radius: 0 0 var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem);
+}
 </style>

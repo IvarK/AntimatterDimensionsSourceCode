@@ -77,9 +77,11 @@ export default {
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-top-margin o-clickable"
       >
         <input
+          v-model="limitDimBoosts"
           type="checkbox"
-          :checked="limitDimBoosts"
+          :value="limitDimBoosts"
           class="o-clickable"
+          @input="limitDimBoosts = !limitDimBoosts"
         >
         Limit Dimension Boosts to:
       </label>
@@ -94,9 +96,11 @@ export default {
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-autobuyer-text-area o-clickable"
       >
         <input
+          v-model="limitUntilGalaxies"
           type="checkbox"
-          :checked="limitUntilGalaxies"
+          :value="limitUntilGalaxies"
           class="o-clickable"
+          @input="limitUntilGalaxies = !limitUntilGalaxies"
         >
         <span v-if="isBuyMaxUnlocked">
           Only Dimboost to unlock new<br>

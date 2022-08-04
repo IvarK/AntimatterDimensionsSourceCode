@@ -88,6 +88,7 @@ export default {
       } else {
         this.tachyonGalaxyGain = 1;
       }
+      this.tachyonGalaxyGain *= DilationUpgrade.galaxyMultiplier.effectValue;
     }
   }
 };
@@ -108,8 +109,8 @@ export default {
       <span class="c-dilation-tab__dilated-time-income">{{ dilatedTimeGainText }}/s</span>
     </span>
     <span>
-      Next <span v-if="tachyonGalaxyGain === 2"> pair of </span>
-      <span v-else-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
+      Next
+      <span v-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
       {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
       <span class="c-dilation-tab__galaxy-threshold">{{ format(galaxyThreshold, 2, 1) }}</span>
       Dilated Time, gained total of

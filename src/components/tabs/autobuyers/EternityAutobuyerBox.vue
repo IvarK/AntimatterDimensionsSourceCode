@@ -105,8 +105,8 @@ export default {
         class="o-autobuyer-toggle-checkbox o-clickable"
       >
         <input
+          v-model="increaseWithMult"
           type="checkbox"
-          :checked="increaseWithMult"
           class="o-clickable"
         >
         Dynamic amount

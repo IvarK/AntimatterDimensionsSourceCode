@@ -73,7 +73,6 @@ export default {
           type="checkbox"
           :value="limitGalaxies"
           class="o-clickable"
-          @input="limitGalaxies = !limitGalaxies"
         >
         Limit Antimatter Galaxies to:
       </label>

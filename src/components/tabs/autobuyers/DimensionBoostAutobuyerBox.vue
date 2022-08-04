@@ -81,7 +81,6 @@ export default {
           type="checkbox"
           :value="limitDimBoosts"
           class="o-clickable"
-          @input="limitDimBoosts = !limitDimBoosts"
         >
         Limit Dimension Boosts to:
       </label>
@@ -100,7 +99,6 @@ export default {
           type="checkbox"
           :value="limitUntilGalaxies"
           class="o-clickable"
-          @input="limitUntilGalaxies = !limitUntilGalaxies"
         >
         <span v-if="isBuyMaxUnlocked">
           Only Dimboost to unlock new<br>

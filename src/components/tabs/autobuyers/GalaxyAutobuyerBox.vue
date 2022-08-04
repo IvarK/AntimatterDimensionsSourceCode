@@ -69,8 +69,8 @@ export default {
         class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text o-clickable"
       >
         <input
+          v-model="limitGalaxies"
           type="checkbox"
-          :checked="limitGalaxies"
           class="o-clickable"
         >
         Limit Antimatter Galaxies to:

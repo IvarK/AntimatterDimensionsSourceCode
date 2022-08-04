@@ -22,7 +22,6 @@ export const NewsHandler = {
     // If the bit array isn't large enough (ie. the numerical ID is the largest we've seen so far by a long shot), then
     // we pad the array with zeroes until we can fit the new ID in before actually adding it.
     while (this.BITS_PER_MASK * player.news.seen[type].length <= number) player.news.seen[type].push(0);
-    // eslint-disable-next-line no-bitwise
     player.news.seen[type][Math.floor(number / this.BITS_PER_MASK)] |= 1 << (number % this.BITS_PER_MASK);
   },
 
@@ -33,7 +32,6 @@ export const NewsHandler = {
     const bitArray = player.news.seen[type];
 
     if (!bitArray || this.BITS_PER_MASK * bitArray.length < number) return false;
-    // eslint-disable-next-line no-bitwise
     return (bitArray[Math.floor(number / this.BITS_PER_MASK)] |= 1 << (number % this.BITS_PER_MASK)) !== 0;
   },
 

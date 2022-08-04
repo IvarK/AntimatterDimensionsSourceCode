@@ -201,14 +201,12 @@ export function findGlyphTypeEffects(glyphType) {
 }
 
 export function makeGlyphEffectBitmask(effectList) {
-  // eslint-disable-next-line no-bitwise
   return effectList.reduce((mask, eff) => mask + (1 << GlyphEffects[eff].bitmaskIndex), 0);
 }
 
 export function getGlyphEffectsFromBitmask(bitmask) {
   return orderedEffectList
     .map(effectName => GlyphEffects[effectName])
-    // eslint-disable-next-line no-bitwise
     .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0);
 }
 

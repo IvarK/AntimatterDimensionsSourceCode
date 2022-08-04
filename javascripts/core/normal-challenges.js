@@ -94,12 +94,10 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get isCompleted() {
-    // eslint-disable-next-line no-bitwise
     return (player.challenge.normal.completedBits & (1 << this.id)) !== 0;
   }
 
   complete() {
-    // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
     // Since breaking infinity maxes even autobuyers that aren't unlocked,
     // it's possible to get r52 or r53 from completing a challenge

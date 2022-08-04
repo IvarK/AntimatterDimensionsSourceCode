@@ -66,7 +66,6 @@ export function getGlyphEffectValues(effectKey) {
     throw new Error(`Unknown Glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
-  // eslint-disable-next-line no-bitwise
     .filter(glyph => ((1 << GlyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
     .filter(glyph => generatedTypes.includes(glyph.type) === GlyphEffects[effectKey].isGenerated)
     .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
@@ -110,7 +109,6 @@ export function getGlyphEffectValuesFromBitmask(bitmask, level, baseStrength, ty
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
 export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   const glyphEffect = GlyphEffects[effectName];
-  // eslint-disable-next-line no-bitwise
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
@@ -122,9 +120,7 @@ export function countValuesFromBitmask(bitmask) {
   let numEffects = 0;
   let bits = bitmask;
   while (bits !== 0) {
-    // eslint-disable-next-line no-bitwise
     numEffects += bits & 1;
-    // eslint-disable-next-line no-bitwise
     bits >>= 1;
   }
   return numEffects;

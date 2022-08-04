@@ -24,7 +24,6 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    // eslint-disable-next-line no-bitwise
     return (player.reality.imaginaryUpgReqs & (1 << this.id)) !== 0;
   }
 
@@ -42,7 +41,6 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
 
   tryUnlock() {
     if (!MachineHandler.isIMUnlocked || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
-    // eslint-disable-next-line no-bitwise
     player.reality.imaginaryUpgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked an Imaginary Upgrade: ${this.config.name}`);
   }
@@ -114,7 +112,6 @@ export const ImaginaryUpgrades = {
     return this.all.countWhere(u => u.isBought);
   },
   get allBought() {
-    // eslint-disable-next-line no-bitwise
     return (player.reality.imaginaryUpgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.imaginaryUpgrades.length - 5);
   }
 };

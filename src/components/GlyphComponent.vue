@@ -317,9 +317,10 @@ export default {
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
       const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-      const adjustedLevel = this.isActiveGlyph
+      let adjustedLevel = this.isActiveGlyph
         ? getAdjustedGlyphLevel(this.glyph)
         : this.glyph.level + levelBoost;
+      if (Pelle.isDoomed) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
       this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {

@@ -35,8 +35,9 @@ GameDatabase.celestials.pelle.strikes = {
   dilation: {
     id: 5,
     requirementDescription: "Dilate Time",
-    penaltyDescription: "Time Dilation nerfs are always active",
-    rewardDescription: () => `Unlock ${wordShift.wordCycle(PelleRifts.paradox.name)}`,
+    penaltyDescription: "Time Dilation is permanently active",
+    rewardDescription: () => `Keep access to Time Dilation upgrades across Armageddon and unlock
+      ${wordShift.wordCycle(PelleRifts.paradox.name)}`,
     rift: () => PelleRifts.paradox
   }
 };

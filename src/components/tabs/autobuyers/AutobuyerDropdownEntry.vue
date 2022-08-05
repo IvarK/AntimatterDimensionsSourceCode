@@ -52,6 +52,11 @@ export default {
 .l-autobuyer-choice {
   border-radius: 0;
   border-top: 0;
+  box-shadow: none;
+}
+
+.l-autobuyer-choice:hover {
+  background-color: var(--color-good);
 }
 
 .l-autobuyer-choice:first-child {

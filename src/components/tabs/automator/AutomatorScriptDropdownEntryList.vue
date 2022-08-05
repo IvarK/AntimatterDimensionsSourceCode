@@ -118,6 +118,11 @@ export default {
   border-bottom: 0;
 }
 
+.l-script-option:hover {
+  filter: brightness(70%);
+  background-color: var(--color-automator-active-line-background);
+}
+
 .l-script-option:first-child {
   border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
 }
@@ -131,7 +136,7 @@ export default {
 }
 
 .l-selected-script {
-  background-color: var(--color-automator-active-line-background);
+  background-color: var(--color-automator-active-line-outline);
 }
 
 .l-max-scripts {

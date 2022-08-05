@@ -346,6 +346,7 @@ export default {
 .l-automator__scripts-dropdown {
   width: 100%;
   margin: 0.4rem;
+  user-select: none;
 }
 
 .l-automator__rename-input {

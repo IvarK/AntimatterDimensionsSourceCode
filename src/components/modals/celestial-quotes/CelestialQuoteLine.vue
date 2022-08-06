@@ -39,8 +39,8 @@ export default {
   data() {
     return {
       message: "",
-      celestialSymbol: "",
-      celestial: "",
+      celestialSymbols: [],
+      celestials: [],
       celestialName: ""
     };
   },
@@ -70,9 +70,9 @@ export default {
   methods: {
     update() {
       const line = this.line;
-      this.celestialSymbol = line.celestialSymbol;
+      this.celestialSymbols = line.celestialSymbols;
       this.message = line.line;
-      this.celestial = line.celestial;
+      this.celestials = line.celestials;
       this.celestialName = line.celestialName;
     }
   },
@@ -81,8 +81,8 @@ export default {
 
 <template>
   <CelestialQuoteBackground
-    :celestial-symbol="celestialSymbol"
-    :celestial="celestial"
+    :celestial-symbols="celestialSymbols"
+    :celestials="celestials"
     :primary="primary"
   >
     <span
@@ -126,6 +126,16 @@ export default {
   font-size: 150%;
   margin: 0.5rem;
   cursor: pointer;
+}
+
+.c-modal-celestial-quote__arrow-left {
+  position: absolute;
+  left: 1rem;
+}
+
+.c-modal-celestial-quote__arrow-right {
+  position: absolute;
+  right: 1rem;
 }
 
 .c-modal-celestial-quote__end {

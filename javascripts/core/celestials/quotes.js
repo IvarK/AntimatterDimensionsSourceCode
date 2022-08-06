@@ -31,16 +31,39 @@ export const Quote = {
   }
 };
 
-
-function celCycle(cels) {
+// Gives an array specifying proportions of celestials to blend together on the modal, as a function of time, to
+// provide a smoother transition between different celestials to reduce potential photosensitivity issues
+function blendCel(cels) {
   const totalTime = cels.map(cel => cel[1]).sum();
-  let tick = (Date.now() / 100) % totalTime;
-  let index = -1;
-  while (tick >= 0 && index < cels.length - 1) {
-    index++;
-    tick -= cels[index][1];
+  const tick = (Date.now() / 1000) % totalTime;
+
+  // Blend the first blendTime seconds with the previous celestial and the last blendTime seconds with the next;
+  // note that this results in a total transition time of 2*blendTime
+  const blendTime = 0.3;
+  let start = 0;
+  for (let index = 0; index < cels.length; index++) {
+    const prevCel = cels[(index + cels.length - 1) % cels.length], currCel = cels[index],
+      nextCel = cels[(index + 1) % cels.length];
+
+    // Durations of time from after last transition and after next transition. May be negative, which is how we
+    // check to see if we're in the correct time interval (last should be positive, next should be negative)
+    const lastTime = tick - start, nextTime = lastTime - currCel[1];
+    if (nextTime > 0) {
+      start += currCel[1];
+      continue;
+    }
+
+    if (lastTime < blendTime) {
+      const t = 0.5 * lastTime / blendTime;
+      return [[prevCel[0], 0.5 - t], [currCel[0], 0.5 + t]];
+    }
+    if (-nextTime < blendTime) {
+      const t = 0.5 * nextTime / blendTime;
+      return [[currCel[0], 0.5 - t], [nextCel[0], 0.5 + t]];
+    }
+    return [[currCel[0], 1]];
   }
-  return cels[index][0];
+  throw new Error("Could not blend celestial fractions in Quote modal");
 }
 
 class QuoteLine {
@@ -48,9 +71,9 @@ class QuoteLine {
     this._parent = parent;
     this._showCelestialName = line.showCelestialName ?? true;
 
-    this._celestial = line.background
-      ? () => celCycle(line.background)
-      : parent.celestial;
+    this._celestialArray = line.background
+      ? () => blendCel(line.background)
+      : [[parent.celestial, 1]];
 
     const replacementMatch = /\$(\d+)/gu;
 
@@ -64,12 +87,12 @@ class QuoteLine {
     return typeof this._line === "function" ? this._line() : this._line;
   }
 
-  get celestial() {
-    return typeof this._celestial === "function" ? this._celestial() : this._celestial;
+  get celestials() {
+    return typeof this._celestialArray === "function" ? this._celestialArray() : this._celestialArray;
   }
 
-  get celestialSymbol() {
-    return Celestials[this.celestial].symbol;
+  get celestialSymbols() {
+    return this.celestials.map(c => Celestials[c[0]].symbol);
   }
 
   get showCelestialName() {

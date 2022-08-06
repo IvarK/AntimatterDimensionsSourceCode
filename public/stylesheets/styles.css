@@ -6770,6 +6770,9 @@ kbd {
   padding-top: 1rem;
   padding-bottom: 1rem;
   transition-duration: 0.2s;
+}
+
+.o-enslaved-mechanic-button--clickable {
   cursor: pointer;
 }
 

@@ -285,7 +285,10 @@ export default {
         />
         <div class="l-automator__script-names">
           <template v-if="!editingName">
-            <ExpandingControlBox class="l-automator__scripts-dropdown">
+            <ExpandingControlBox
+              class="l-automator__scripts-dropdown"
+              :auto-close="true"
+            >
               <template #header>
                 <div class="c-automator-docs-script-select">
                   ▼ Current Script: {{ currentEditorScriptName }}
@@ -336,9 +339,9 @@ export default {
 }
 
 .l-automator__script-names {
+  flex-grow: 1;
   display: flex;
   flex-direction: row;
-  width: 80%;
   justify-content: space-evenly;
   align-items: center;
 }
@@ -359,6 +362,7 @@ export default {
 }
 
 .c-automator__rename-input {
+  font-family: Typewriter;
   font-size: 1.2rem;
   color: var(--color-automator-docs-font);
   background-color: var(--color-automator-controls-active);

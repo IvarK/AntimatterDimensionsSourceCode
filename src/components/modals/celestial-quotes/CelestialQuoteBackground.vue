@@ -2,12 +2,14 @@
 export default {
   name: "CelestialQuoteBackground",
   props: {
-    celestialSymbol: {
-      type: String,
+    celestialSymbols: {
+      // Array elements are String
+      type: Array,
       required: true
     },
-    celestial: {
-      type: String,
+    celestials: {
+      // Array elements are [String, Number]
+      type: Array,
       required: true
     },
     primary: {
@@ -19,11 +21,24 @@ export default {
     modalClass() {
       return {
         "l-modal-celestial-quote": true,
-        "c-modal-celestial-quote": true,
-        [`c-modal-celestial-quote--${this.celestial}`]: true,
-        "c-modal-celestial-quote-primary": this.primary,
       };
-    }
+    },
+  },
+  methods: {
+    styleObject(celEntry, opac, isText) {
+      const baseCol = `var(--color-${celEntry[0]}--base)`;
+      if (celEntry[0] === "laitela") {
+        return {
+          color: `var(--color-${celEntry[0]}--accent)`,
+          background: isText ? undefined : baseCol,
+          opacity: opac * celEntry[1]
+        };
+      }
+      return {
+        color: baseCol,
+        opacity: opac * celEntry[1]
+      };
+    },
   },
 };
 </script>
@@ -31,18 +46,31 @@ export default {
 <template>
   <div :class="modalClass">
     <span
-      class="c-modal-celestial-quote__symbol"
-      v-html="celestialSymbol"
+      v-for="(celestial, index) in celestials"
+      :key="index"
+      class="c-modal-celestial-quote c-modal-celestial-quote__symbol"
+      :style="styleObject(celestial, 0.2, true)"
+      v-html="celestialSymbols[index]"
     />
-    <slot />
+    <span
+      v-for="(celestial, index) in celestials"
+      :key="index + 10"
+      class="c-modal-celestial-quote c-modal-celestial-quote__shadow"
+      :style="styleObject(celestial, 1, false)"
+    />
+    <span
+      v-for="(celestial, index) in celestials"
+      :key="index + 20"
+      class="c-modal-celestial-quote c-modal-celestial-quote__text"
+      :style="styleObject(celestial, 1, true)"
+    >
+      <slot />
+    </span>
   </div>
 </template>
 
 <style scoped>
 .l-modal-celestial-quote {
-  --scoped-quote-color: var(--color-text);
-  --scoped-quote-background: black;
-
   display: flex;
   flex-direction: row;
   width: 30rem;
@@ -52,66 +80,41 @@ export default {
   top: 50vh;
   /* stylelint-disable-next-line unit-allowed-list */
   left: 50vw;
-  z-index: 3;
   justify-content: space-between;
   align-items: center;
   border-radius: var(--var-border-radius, 1rem);
   transform: translate(-50%, -50%);
-}
-
-.c-modal-celestial-quote--teresa {
-  --scoped-quote-color: var(--color-teresa--base);
-}
-
-.c-modal-celestial-quote--effarig {
-  --scoped-quote-color: var(--color-effarig--base);
-}
-
-.c-modal-celestial-quote--enslaved {
-  --scoped-quote-color: var(--color-enslaved--base);
-}
-
-.c-modal-celestial-quote--v {
-  --scoped-quote-color: var(--color-v--base);
-}
-
-.c-modal-celestial-quote--ra {
-  --scoped-quote-color: var(--color-ra--base);
-}
-
-.c-modal-celestial-quote--laitela {
-  --scoped-quote-color: var(--color-laitela--accent);
-  --scoped-quote-background: var(--color-laitela--base);
-}
-
-.c-modal-celestial-quote--pelle {
-  --scoped-quote-color: var(--color-pelle--base);
+  background-color: black;
 }
 
 .c-modal-celestial-quote {
-  color: var(--scoped-quote-color);
-  background-color: var(--scoped-quote-background);
-}
-
-.c-modal-celestial-quote-primary {
-  box-shadow: 0 0 1.5rem 0.1rem var(--scoped-quote-color), 0 0 1rem 0.1rem var(--scoped-quote-color) inset;
-}
-
-.s-base--metro .c-modal-celestial-quote-primary {
-  box-shadow: 0 0 1rem 0.2rem var(--scoped-quote-color), 0 0 1rem 0.1rem var(--scoped-quote-color) inset
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  border-radius: var(--var-border-radius, 1rem);
 }
 
 .c-modal-celestial-quote__symbol {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  justify-content: center;
-  align-items: center;
+  z-index: 1;
   font-size: 25rem;
-  opacity: 0.2;
   text-shadow: 0 0 2rem;
-  pointer-events: none;
+}
+
+.c-modal-celestial-quote__shadow {
+  box-shadow: 0 0 1.5rem 0.1rem, 0 0 1rem 0.1rem inset;
+}
+
+.s-base--metro .c-modal-celestial-quote__shadow {
+  box-shadow: 0 0 1rem 0.2rem, 0 0 1rem 0.1rem inset
+}
+
+.c-modal-celestial-quote__text {
+  z-index: 2;
+  padding: 5rem;
 }
 </style>

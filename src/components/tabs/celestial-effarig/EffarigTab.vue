@@ -14,6 +14,7 @@ export default {
     return {
       relicShards: 0,
       shardRarityBoost: 0,
+      shardPower: 0,
       shardsGained: 0,
       currentShardsRate: 0,
       amplification: 0,
@@ -69,6 +70,7 @@ export default {
     update() {
       this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost / 100;
+      this.shardPower = Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.effectOrDefault(1);
       this.shardsGained = Effarig.shardsGained;
       this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalSeconds);
       this.amplification = simulatedRealityCount(false);
@@ -114,7 +116,10 @@ export default {
           You have {{ quantify("Relic Shard", relicShards, 2, 0) }}, which increases
           <br>
           the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
-          +{{ formatPercents(shardRarityBoost, 2) }}.
+          +{{ formatPercents(shardRarityBoost, 2) }}
+          <span v-if="shardPower > 1">
+            <br> and is raising Glyph Sacrifice gain to {{ formatPow(shardPower, 0, 2) }}
+          </span>
         </div>
         <div class="c-effarig-relic-description">
           You will gain {{ quantify("Relic Shard", shardsGained, 2) }} next Reality

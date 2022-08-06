@@ -93,7 +93,7 @@ GameDatabase.celestials.ra = {
     },
     unlockDilationStartingTP: {
       id: 6,
-      reward: `In non-celestial Realities, gain Tachyon Particles as if you reached the square root of your total
+      reward: `In non-Celestial Realities, gain Tachyon Particles as if you reached the square root of your total
         antimatter in Dilation. Any multipliers to TP gain are applied retroactively, even outside Dilation`,
       effect: () => player.records.totalAntimatter.pow(0.5),
       pet: "teresa",
@@ -233,8 +233,8 @@ GameDatabase.celestials.ra = {
     },
     autoUnlockDilation: {
       id: 22,
-      reward: () => `Time Dilation is unlocked automatically for free at
-        ${formatInt(TimeStudy.dilation.totalTimeTheoremRequirement)} Time Theorems outside of Celestial Realities`,
+      reward: () => `In non-Celestial Realities, Time Dilation is unlocked automatically for free at
+        ${formatInt(TimeStudy.dilation.totalTimeTheoremRequirement)} Time Theorems`,
       pet: "v",
       level: 2,
       displayIcon: `<span class="fas fa-fast-forward"></span>`

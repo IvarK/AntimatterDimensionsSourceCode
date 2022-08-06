@@ -141,5 +141,6 @@ export default {
 
 .l-max-scripts {
   background-color: var(--color-automator-error-background);
+  cursor: auto;
 }
 </style>

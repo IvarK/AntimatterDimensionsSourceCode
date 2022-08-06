@@ -309,7 +309,7 @@
 }
 
 .c-automator-docs-script-select {
-  height: 2.2rem;
+  height: calc(2.1rem + 1rem / 3 - var(--var-border-width, 0rem) * 2);
   width: 100%;
   padding: 0 0.5rem;
   text-align: left;
@@ -318,7 +318,7 @@
   color: var(--color-automator-docs-font);
   background-color: var(--color-automator-controls-inactive);
   border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
-  border-radius: var(--var-border-radius, 0.4rem);
+  border-radius: var(--var-border-radius, 0.3rem);
   cursor: pointer;
 }
 

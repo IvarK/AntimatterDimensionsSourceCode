@@ -77,6 +77,7 @@ export default {
   <div class="l-pelle-panel-container">
     <div class="c-pelle-panel-title">
       <i
+        v-if="!isCapped"
         :class="collapseIcon"
         class="c-collapse-icon-clickable"
         @click="toggleCollapse"
@@ -158,6 +159,8 @@ export default {
   position: absolute;
   top: 50%;
   left: 1.5rem;
+  width: 3rem;
+  align-content: center;
   transform: translateY(-50%);
   cursor: pointer;
 }

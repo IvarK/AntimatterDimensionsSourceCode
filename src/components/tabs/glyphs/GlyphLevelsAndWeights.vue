@@ -171,6 +171,12 @@ export default {
         "-ms-grid-row": r,
       };
     },
+    resetWeightsButtonClass() {
+      return {
+        "c-glyph-levels-and-weights__reset-btn": true,
+        "c-glyph-levels-and-weights__reset-btn-clickable": !this.isAutoAdjustWeightsOn
+      };
+    },
     resetWeights() {
       this.glyphWeightFields.forEach(e => player.celestials.effarig.glyphWeights[e] = 25);
       this.resetSavedWeights();
@@ -494,7 +500,7 @@ function roundPreservingSum(data) {
         Adjust weights
         <div class="l-glyph-levels-and-weights__reset-btn-outer">
           <div
-            class="c-glyph-levels-and-weights__reset-btn"
+            :class="resetWeightsButtonClass()"
             @click="resetWeights"
           >
             Reset

@@ -484,6 +484,7 @@ window.player = {
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,
+    applyFilterToPurge: false,
     moveGlyphsOnProtection: false,
     perkPoints: 0,
     autoEC: true,

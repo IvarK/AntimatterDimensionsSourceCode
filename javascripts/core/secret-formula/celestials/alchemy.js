@@ -198,7 +198,7 @@ GameDatabase.celestials.alchemy.resources = {
     symbol: "π",
     isBaseResource: false,
     effect: amount => {
-      const rawValue = 0.3 + Math.sqrt(amount / 15000);
+      const rawValue = 0.3 + 1.3 * Math.sqrt(amount / 25000);
       return Achievement(175).isUnlocked ? rawValue : Math.min(rawValue, 1);
     },
     tier: 3,
@@ -257,7 +257,7 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Decoherence",
     symbol: "ξ",
     isBaseResource: false,
-    effect: amount => 0.10 * Math.sqrt(amount / 10000),
+    effect: amount => 0.15 * Math.sqrt(amount / 25000),
     tier: 3,
     uiOrder: 4,
     unlockedAt: 14,
@@ -326,7 +326,7 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Uncountability",
     symbol: "Θ",
     isBaseResource: false,
-    effect: amount => Math.sqrt(amount),
+    effect: amount => 160 * Math.sqrt(amount / 25000),
     tier: 4,
     uiOrder: 3,
     unlockedAt: 19,
@@ -374,7 +374,7 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Multiversal",
     symbol: "Σ",
     isBaseResource: false,
-    effect: amount => 5 * Math.pow(amount / 10000, 2),
+    effect: amount => 32 * Math.pow(amount / 25000, 2),
     tier: 4,
     uiOrder: 5,
     unlockedAt: 16,
@@ -397,7 +397,8 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Unpredictability",
     symbol: "Λ",
     isBaseResource: false,
-    effect: amount => amount / (10000 + amount),
+    // Somewhat ugly number to make this show 70.00% at cap
+    effect: amount => amount / (10714.28 + amount),
     tier: 4,
     uiOrder: 4,
     unlockedAt: 21,

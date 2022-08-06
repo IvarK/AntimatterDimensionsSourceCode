@@ -68,6 +68,8 @@ export default {
   position: absolute;
   top: 50%;
   left: 1.5rem;
+  width: 3rem;
+  align-content: center;
   transform: translateY(-50%);
   cursor: pointer;
 }

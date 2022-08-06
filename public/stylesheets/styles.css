@@ -3975,6 +3975,10 @@ br {
   background-color: #f7f7f7;
 }
 
+.o-infinity-upgrade-btn--unclickable {
+  cursor: auto;
+}
+
 .o-infinity-upgrade-btn--unavailable:hover {
   color: var(--color-text);
   background-color: var(--color-text-inverted);

@@ -85,7 +85,8 @@ GameDatabase.reality.glyphSacrifice = {
     effect: added => {
       if (Pelle.isDisabled("glyphsac")) return 0;
       const sac = player.reality.glyphs.sac.effarig + (added ?? 0);
-      const capped = Math.clampMax(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
+      // This doesn't use the GlyphSacrificeHandler cap because it hits its cap (+100%) earlier
+      const capped = Math.clampMax(sac, 1e70);
       return 2 * Math.log10(capped / 1e20 + 1);
     },
     description: amount => {

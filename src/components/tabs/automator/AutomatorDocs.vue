@@ -386,6 +386,7 @@ export default {
 
 .c-automator__status-text--error {
   color: var(--color-bad);
+  cursor: auto;
 }
 
 .c-long-name-box {

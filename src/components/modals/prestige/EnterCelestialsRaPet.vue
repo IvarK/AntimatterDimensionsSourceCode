@@ -22,6 +22,15 @@ export default {
     color() {
       return `color: ${this.pet.color}`;
     },
+    gainText() {
+      // We need to special-case the grammar for Enslaved
+      const isPlural = this.pet.id === "enslaved";
+      const gain = isPlural ? "gain" : "gains";
+      const has = isPlural ? "have" : "has";
+      return this.pet.level === 25
+        ? `${has} regained all Memories`
+        : `${gain} Memory Chunks based on ${this.chunkGain}`;
+    },
     chunkGain() {
       return this.pet.chunkGain;
     },
@@ -39,7 +48,7 @@ export default {
     v-if="isUnlocked"
     :style="color"
   >
-    {{ name }} gains Memory Chunks based on {{ chunkGain }}.
+    {{ name }} {{ gainText }}.
     <br>
   </span>
 </template>

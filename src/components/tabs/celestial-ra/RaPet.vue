@@ -71,8 +71,6 @@ export default {
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
       this.name = pet.name;
-      // This one needs to be special-case shortened here in order to keep the UI nice-looking
-      if (this.name === "The Enslaved Ones") this.name = "Enslaved";
       this.level = pet.level;
       this.memories = pet.memories;
       this.requiredMemories = pet.requiredMemories;
@@ -121,15 +119,9 @@ export default {
         "c-ra-pet-upgrade-memory": type === "memory",
         "c-ra-pet-upgrade-chunk": type === "chunk",
         "c-ra-pet-btn--available": available,
-        "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
-        "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
-        "c-ra-pet-btn--enslaved": available && pet.name === "Enslaved",
-        "c-ra-pet-btn--v": available && pet.name === "V",
+        [`c-ra-pet-btn--${pet.id}`]: available,
         "c-ra-pet-btn--available__capped": capped,
-        "c-ra-pet-btn--teresa__capped": capped && pet.name === "Teresa",
-        "c-ra-pet-btn--effarig__capped": capped && pet.name === "Effarig",
-        "c-ra-pet-btn--enslaved__capped": capped && pet.name === "Enslaved",
-        "c-ra-pet-btn--v__capped": capped && pet.name === "V"
+        [`c-ra-pet-btn--${pet.id}__capped`]: capped
       };
     },
     barStyle(type) {
@@ -156,7 +148,8 @@ export default {
       :style="petStyle"
     >
       <div class="c-ra-pet-title">
-        {{ name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}
+        <!-- The full name doesn't fit here, so we shorten it as a special case -->
+        {{ pet.id === "enslaved" ? "Enslaved" : name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}
       </div>
       <div
         v-if="showScalingUpgrade"
@@ -167,7 +160,7 @@ export default {
       <br v-else>
       <div v-if="!isCapped">
         <div>
-          {{ name }} has {{ quantify("Memory", memories, 2) }}
+          {{ name }} {{ pet.id === "enslaved" ? "have" : "has" }} {{ quantify("Memory", memories, 2) }}
         </div>
       </div>
       <div

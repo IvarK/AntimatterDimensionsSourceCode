@@ -8674,6 +8674,10 @@ kbd {
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.2rem 0.5rem;
   transition-duration: 0.2s;
+  user-select: none;
+}
+
+.c-glyph-levels-and-weights__reset-btn-clickable {
   cursor: pointer;
 }
 

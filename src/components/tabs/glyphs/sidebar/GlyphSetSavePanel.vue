@@ -207,7 +207,7 @@ export default {
 
 <style scoped>
 .c-glyph-single-set-save-flexbox {
-  width: 16rem;
+  width: 17rem;
 }
 
 .c-glyph-set-preview-area {

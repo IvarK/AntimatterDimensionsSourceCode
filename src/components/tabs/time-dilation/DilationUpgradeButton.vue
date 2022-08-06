@@ -75,7 +75,7 @@ export default {
     update() {
       const upgrade = this.upgrade;
       this.currentDT.copyFrom(Currency.dilatedTime.value);
-      this.currentDTGain.copyFrom(Currency.dilatedTime.value);
+      this.currentDTGain.copyFrom(getDilationGainPerSecond());
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;

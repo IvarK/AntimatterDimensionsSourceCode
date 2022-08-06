@@ -38,8 +38,10 @@ function blendCel(cels) {
   const tick = (Date.now() / 1000) % totalTime;
 
   // Blend the first blendTime seconds with the previous celestial and the last blendTime seconds with the next;
-  // note that this results in a total transition time of 2*blendTime
-  const blendTime = 0.3;
+  // note that this results in a total transition time of 2*blendTime. We specifically set this to be half the duration
+  // of the first entry - this is because in the case of all intervals having the same duration, this guarantees two
+  // blended entries at all points in time.
+  const blendTime = cels[0][1] / 2;
   let start = 0;
   for (let index = 0; index < cels.length; index++) {
     const prevCel = cels[(index + cels.length - 1) % cels.length], currCel = cels[index],
@@ -53,14 +55,18 @@ function blendCel(cels) {
       continue;
     }
 
-    if (lastTime < blendTime) {
+    if (lastTime <= blendTime) {
       const t = 0.5 * lastTime / blendTime;
       return [[prevCel[0], 0.5 - t], [currCel[0], 0.5 + t]];
     }
-    if (-nextTime < blendTime) {
+    if (-nextTime <= blendTime) {
       const t = 0.5 * nextTime / blendTime;
       return [[currCel[0], 0.5 - t], [nextCel[0], 0.5 + t]];
     }
+
+    // In principle the animation properties should never get to this return case, but we leave it here just in case -
+    // the worst side-effect of reaching here is that some UI elements may appear to lose click detection for a
+    // fraction of a second when transitioning from two blended entries to one
     return [[currCel[0], 1]];
   }
   throw new Error("Could not blend celestial fractions in Quote modal");

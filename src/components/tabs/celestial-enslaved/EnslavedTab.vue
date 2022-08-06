@@ -69,6 +69,12 @@ export default {
     isDoomed: () => Pelle.isDoomed,
     doomedDisabledClass() {
       return { "o-pelle-disabled": this.isDoomed };
+    },
+    mechanicButtonClass() {
+      return {
+        "o-enslaved-mechanic-button": true,
+        "o-enslaved-mechanic-button--clickable": !this.isDoomed
+      };
     }
   },
   watch: {
@@ -219,8 +225,8 @@ export default {
             and the lost speed is converted into stored game time. Discharging the Black Hole allows you to skip
             forward in time. Stored game time is also used to unlock certain upgrades.
             <button
-              :class="['o-enslaved-mechanic-button',
-                       {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
+              :class="[mechanicButtonClass,
+                       {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole}]"
               @click="toggleStoreBlackHole"
             >
               <div
@@ -234,7 +240,7 @@ export default {
               </div>
             </button>
             <button
-              class="o-enslaved-mechanic-button"
+              :class="mechanicButtonClass"
               @click="useStored"
             >
               <span :class="doomedDisabledClass">Discharge Black Hole</span>
@@ -248,7 +254,7 @@ export default {
             You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
             Amplified Realities give all the rewards that normal Realities do.
             <button
-              :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isStoringReal},
+              :class="[mechanicButtonClass, {'o-enslaved-mechanic-button--storing-time': isStoringReal},
                        doomedDisabledClass]"
               @click="toggleStoreReal"
             >
@@ -260,7 +266,7 @@ export default {
               </div>
             </button>
             <button
-              :class="['o-enslaved-mechanic-button',
+              :class="[mechanicButtonClass,
                        {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled},
                        doomedDisabledClass]"
               @click="toggleAutoStoreReal"

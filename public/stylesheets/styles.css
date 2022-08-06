@@ -870,6 +870,9 @@ button:focus {
   border-radius: var(--var-border-radius, 0.5rem);
   box-shadow: 0 0 2rem inset rgba(244, 164, 96, 50%);
   transition-duration: 0.2s;
+}
+
+.l-reality-amplify-button--clickable {
   cursor: pointer;
 }
 

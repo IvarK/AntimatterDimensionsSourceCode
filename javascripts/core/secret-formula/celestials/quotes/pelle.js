@@ -3,16 +3,16 @@ import { GameDatabase } from "../../game-database";
 // These entries describe the special flash-between-celestial effect on some quotes, with the numbers being
 // durations of each celestial in seconds
 const flashCelestial = [
-  ["teresa", 0.7],
-  ["effarig", 0.7],
-  ["enslaved", 0.7],
-  ["v", 0.7],
-  ["ra", 0.7],
-  ["laitela", 0.7],
-  ["pelle", 0.7]
+  ["teresa", 0.8],
+  ["effarig", 0.8],
+  ["enslaved", 0.8],
+  ["v", 0.8],
+  ["ra", 0.8],
+  ["laitela", 0.8],
+  ["pelle", 0.8]
 ];
 /** @param {string} cel */
-const primaryBackground = cel => [["pelle", 1.5], [cel, 2.5]];
+const primaryBackground = cel => [["pelle", 1.5], [cel, 1.5]];
 
 /* eslint-disable no-multi-spaces */
 const destroyer =    ["False",         "Deity",         "Destroyer"];

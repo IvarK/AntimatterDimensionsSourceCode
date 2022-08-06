@@ -721,9 +721,10 @@
 }
 
 .c-glyph-sets-save-name__input {
-  width: 16rem;
+  width: 17rem;
   height: 1.5rem;
   text-align: center;
+  font-family: Typewriter, serif;
   font-size: 1.35rem;
   color: var(--color-reality-dark);
   -webkit-appearance: none;

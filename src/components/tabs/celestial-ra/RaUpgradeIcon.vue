@@ -28,10 +28,7 @@ export default {
       return {
         "c-ra-upgrade-icon": true,
         "c-ra-upgrade-icon--inactive": !this.isUnlocked,
-        "c-ra-upgrade-icon--teresa": this.petID === "teresa",
-        "c-ra-upgrade-icon--effarig": this.petID === "effarig",
-        "c-ra-upgrade-icon--enslaved": this.petID === "enslaved",
-        "c-ra-upgrade-icon--v": this.petID === "v"
+        [`c-ra-upgrade-icon--${this.petID}`]: true
       };
     },
     isUseless() {

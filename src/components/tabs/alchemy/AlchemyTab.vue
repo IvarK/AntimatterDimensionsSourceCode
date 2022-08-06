@@ -179,7 +179,7 @@ export default {
     nodeClass(node) {
       const resource = node.resource;
       return {
-        "o-clickable": resource.isUnlocked && !resource.isBaseResource
+        "o-clickable": resource.isUnlocked && !resource.isBaseResource && !this.isDoomed
       };
     },
   }

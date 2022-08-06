@@ -7885,7 +7885,7 @@ kbd {
 }
 
 .o-alchemy-reaction-path--not-focused {
-  opacity: 0.5;
+  opacity: 0.35;
 }
 
 .o-alchemy-reaction-path--doomed {
@@ -7965,7 +7965,7 @@ kbd {
 
 .o-alchemy-node--unfocused {
   z-index: 4;
-  opacity: 0.5;
+  opacity: 0.35;
 }
 
 .o-alchemy-node--locked {

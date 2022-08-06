@@ -24,6 +24,8 @@ export default {
       multTD: new Decimal(),
       hasDTMult: false,
       multDT: new Decimal(),
+      hasIPMult: false,
+      multIP: new Decimal(),
       hasRaisedCap: false,
       replicantiCap: new Decimal(),
       distantRG: 0,
@@ -87,37 +89,24 @@ export default {
     },
     boostText() {
       const boostList = [];
-      boostList.push(`a <span class="c-replicanti-description__accent">${formatX(
-        this.mult,
-        2,
-        2
-      )}</span>
+      boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.mult, 2, 2)}</span>
         multiplier on all Infinity Dimensions`);
       if (this.hasTDMult) {
-        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(
-          this.multTD,
-          2,
-          2
-        )}</span>
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multTD, 2, 2)}</span>
           multiplier on all Time Dimensions from a Dilation Upgrade`);
       }
       if (this.hasDTMult) {
-        const additionalEffect = GlyphAlteration.isAdded("replication")
-          ? "and Replicanti speed "
-          : "";
-        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(
-          this.multDT,
-          2,
-          2
-        )}</span>
+        const additionalEffect = GlyphAlteration.isAdded("replication") ? "and Replicanti speed " : "";
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
           multiplier to Dilated Time ${additionalEffect}from Glyphs`);
       }
+      if (this.hasIPMult) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multIP)}</span>
+          multiplier to Infinity Points from Glyph Alchemy`);
+      }
       if (boostList.length === 1) return `${boostList[0]}.`;
-      if (boostList.length === 2)
-        return `${boostList[0]}<br> and ${boostList[1]}.`;
-      return `${boostList.slice(0, -1).join(",<br>")},<br> and ${
-        boostList[boostList.length - 1]
-      }.`;
+      if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;
+      return `${boostList.slice(0, -1).join(",<br>")},<br> and ${boostList[boostList.length - 1]}.`;
     },
   },
   methods: {
@@ -142,6 +131,8 @@ export default {
           getAdjustedGlyphEffect("replicationdtgain"),
         1
       );
+      this.hasIPMult = AlchemyResource.exponential.amount > 0;
+      this.multIP = Replicanti.amount.powEffectOf(AlchemyResource.exponential);
       this.isDoomed = Pelle.isDoomed;
       this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;

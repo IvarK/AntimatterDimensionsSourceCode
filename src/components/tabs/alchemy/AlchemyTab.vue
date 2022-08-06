@@ -109,7 +109,8 @@ export default {
     },
     isFocusedReaction(reactionArrow) {
       if (this.isDoomed) return false;
-      return this.isUnlocked(reactionArrow) && reactionArrow.reaction.product.id === this.focusedResourceId;
+      return this.isUnlocked(reactionArrow) && (reactionArrow.product.resource.id === this.focusedResourceId ||
+        reactionArrow.reagent.resource.id === this.focusedResourceId);
     },
     isDisplayed(reactionArrow) {
       return this.isUnlocked(reactionArrow) &&
@@ -119,9 +120,8 @@ export default {
       if (this.focusedResourceId === -1 || this.isDoomed) return true;
       const focusedResource = this.resources[this.focusedResourceId];
       if (focusedResource === node.resource) return true;
-      if (focusedResource.isBaseResource) return false;
-      return focusedResource.reaction.reagents
-        .some(r => r.resource === node.resource);
+      return focusedResource.reaction?.reagents.some(r => r.resource === node.resource) ||
+        node.resource.reaction?.reagents.some(r => r.resource === focusedResource);
     },
     reactionArrowPositions(reactionArrow) {
       if (!this.isDisplayed(reactionArrow) || this.isCapped(reactionArrow)) return undefined;

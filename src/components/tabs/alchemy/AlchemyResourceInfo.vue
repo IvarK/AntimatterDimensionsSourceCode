@@ -42,7 +42,7 @@ export default {
       const reagents = this.reaction.reagents
         .map(r => `${format(r.cost)}${r.resource.symbol}`)
         .join(" + ");
-      return `${reagents} ➜ ${format(this.reaction.reactionProduction, 2, 2)}${this.resource.symbol}`;
+      return `${reagents} ➜ ${format(this.reactionProduction, 2, 2)}${this.resource.symbol}`;
     },
     realityReactionText() {
       const reagents = this.reaction.reagents
@@ -83,7 +83,7 @@ export default {
       this.unlockRequirement = resource.lockText;
       if (!this.isBaseResource) {
         this.isReactionActive = !this.isDoomed && this.reaction.isActive;
-        this.reactionProduction = this.reaction.production;
+        this.reactionProduction = this.reaction.reactionProduction;
       }
     }
   }

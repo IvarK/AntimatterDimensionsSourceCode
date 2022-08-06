@@ -186,8 +186,8 @@ GameDatabase.celestials.alchemy.resources = {
     symbol: "Ϙ",
     isBaseResource: true,
     effect: amount => Math.pow(10, amount / 2500),
-    tier: 2,
-    uiOrder: 3.5,
+    tier: 1,
+    uiOrder: 1.5,
     unlockedAt: 7,
     description: "increases Relic Shard gain",
     formatEffect: value => `Relic Shard gain is multiplied ${formatX(value, 2, 2)}`
@@ -207,7 +207,7 @@ GameDatabase.celestials.alchemy.resources = {
     description: "increases the yield of Alchemy Reactions",
     formatEffect(value) {
       return `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}
-      ${Achievement(175).isUnlocked ? "" : " (Capped)"}`;
+        ${(!Achievement(175).isUnlocked && value >= 1) ? " (Capped)" : ""}`;
     },
     reagents: [
       {

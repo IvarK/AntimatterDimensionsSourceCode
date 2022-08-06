@@ -1271,7 +1271,9 @@ GameDatabase.achievements.normal = [
     get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
     checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    get reward() { return `Synergism is uncapped and Momentum increases ${formatX(10)} faster.`; },
+    get reward() {
+      return `Synergism can go above ${formatPercents(1)} and Momentum increases ${formatX(10)} faster.`;
+    },
     effect: 10,
   },
   {

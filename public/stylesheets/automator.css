@@ -36,7 +36,8 @@
 }
 
 .c-automator-tab {
-  width: 100rem;
+  width: 80%;
+  min-width: 100rem;
 }
 
 .c-automator-split-pane {

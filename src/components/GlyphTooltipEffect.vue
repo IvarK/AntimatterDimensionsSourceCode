@@ -31,12 +31,12 @@ export default {
     },
     primaryEffectText() {
       const value = this.effectConfig.formatSingleEffect(this.value);
-      return this.boostColor ? `⯅${value}⯅` : value;
+      return this.boostColor ? `⯅${value}` : value;
     },
     secondaryEffectText() {
       const value = this.effectConfig.formatSingleSecondaryEffect(
         this.effectConfig.conversion(this.value));
-      return this.boostColor ? `⯅${value}⯅` : value;
+      return this.boostColor ? `⯅${value}` : value;
     },
     textSplits() {
       const firstSplit = this.effectStringTemplate.split("{value}");
@@ -87,19 +87,16 @@ export default {
     :class="{ 'o-pelle-disabled': isPelleDisabled }"
   >
     <span v-html="convertedParts[0]" />
+    <!-- Do not "fix" the spacing on these spans; moving effectText to its own line causes extra spaces to appear -->
     <span
       v-if="hasValue"
       :style="valueStyle"
-    >
-      {{ primaryEffectText }}
-    </span>
+    >{{ primaryEffectText }}</span>
     <span v-html="convertedParts[1]" />
     <span
       v-if="hasSecondaryValue"
       :style="valueStyle"
-    >
-      {{ secondaryEffectText }}
-    </span>
+    >{{ secondaryEffectText }}</span>
     <span
       v-if="hasSecondaryValue"
       v-html="convertedParts[2]"

@@ -934,7 +934,7 @@ pane on the right which has multiple panels which do many different things. The 
   script
 <br>
 <br>
-You are able to create new scripts by clicking on the dropdown, and then clicking the "Create new script..." option.
+You are able to create new scripts by clicking on the dropdown, and then clicking the "Create a new script" option.
 To rename a script, click the pencil next to the dropdown and edit the name to whatever you with the script to be
 called.
 <br>

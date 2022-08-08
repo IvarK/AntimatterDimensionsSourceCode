@@ -311,7 +311,7 @@
 .c-automator-docs-script-select {
   height: calc(2.1rem + 1rem / 3 - var(--var-border-width, 0rem) * 2);
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 0.1rem 0.5rem 0;
   text-align: left;
   font-family: Typewriter, serif;
   font-size: 1.2rem;

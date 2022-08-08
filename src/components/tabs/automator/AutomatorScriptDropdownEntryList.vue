@@ -23,6 +23,9 @@ export default {
     currentScript() {
       return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
+    scriptCount() {
+      return Object.keys(player.reality.automator.scripts).length;
+    },
     maxScriptCount() {
       return AutomatorData.MAX_ALLOWED_SCRIPT_COUNT;
     },
@@ -35,7 +38,7 @@ export default {
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
-      this.canMakeNewScript = Object.keys(player.reality.automator.scripts).length < this.maxScriptCount;
+      this.canMakeNewScript = this.scriptCount < this.maxScriptCount;
     },
     changeScriptID(newID) {
       this.currentScriptID = newID;
@@ -90,7 +93,7 @@ export default {
     <div
       v-for="script in scripts"
       :key="script.id"
-      class="l-script-option"
+      class="l-script-option c-script-option-hover-effect"
       :class="labelClassObject(script.id)"
       @click="changeScriptID(script.id)"
     >
@@ -98,10 +101,10 @@ export default {
     </div>
     <div
       v-if="canMakeNewScript"
-      class="l-create-script c-automator-docs-script-select"
+      class="l-create-script c-automator-docs-script-select c-script-option-hover-effect"
       @click="createNewScript()"
     >
-      <i>Create a new script...</i>
+      <i>Create a new script (you have {{ formatInt(scriptCount) }} / {{ formatInt(maxScriptCount) }})</i>
     </div>
     <div
       v-else
@@ -118,7 +121,7 @@ export default {
   border-bottom: 0;
 }
 
-.l-script-option:hover {
+.c-script-option-hover-effect:hover {
   filter: brightness(70%);
   background-color: var(--color-automator-active-line-background);
 }

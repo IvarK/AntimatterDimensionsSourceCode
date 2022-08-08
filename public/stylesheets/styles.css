@@ -2912,6 +2912,34 @@ br {
 
 /* #endregion Challenge Records */
 
+/* #region Glyph Set Records */
+
+.l-glyph-set-tab {
+  display: flex;
+  flex-flow: row wrap;
+  width: 75%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 0;
+}
+
+.l-glyph-set-entry {
+  display: flex;
+  flex-direction: column;
+  width: 35rem;
+  height: 12rem;
+  font-size: 1.4rem;
+  justify-content: space-between;
+  color: var(--color-text);
+  border: var(--var-border-width, 0.2rem) solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0.2rem;
+  padding: 0.2rem;
+}
+
+/* #endregion Glyph Set Records */
+
 /* #region Speedrun Stats */
 
 .l-speedrun-milestone-tab {
@@ -2931,6 +2959,7 @@ br {
   justify-content: space-between;
   color: var(--color-text);
   border: var(--var-border-width, 0.2rem) solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
   margin: 0.2rem;
   padding: 0.2rem;
 }

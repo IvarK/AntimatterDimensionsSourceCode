@@ -495,8 +495,8 @@ GameDatabase.reality.glyphEffects = {
       ? `"Buy ${formatInt(10)}" and Dimension Boost multipliers ^x`
       : `"Buy ${formatInt(10)}" multiplier ^x`),
     shortDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `"Buy ${formatInt(10)}" mult. ^{value}, Dimboost mult. ^{value2}`
-      : `"Buy ${formatInt(10)}" mult. ^{value}`),
+      ? `Buy ${formatInt(10)} mult. ^{value}, Dimboost mult. ^{value2}`
+      : `Buy ${formatInt(10)} mult. ^{value}`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,

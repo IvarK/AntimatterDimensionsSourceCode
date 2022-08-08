@@ -78,6 +78,12 @@ export const GalaxyGenerator = {
         }
       }
       PelleRifts.all.forEach(x => x.checkMilestoneStates());
+
+      // Force-unequip glyphs when the player loses the respective milestone
+      if (!PelleRifts.vacuum.milestones[0].canBeApplied && Glyphs.active.filter(g => g).length > 0) {
+        Glyphs.unequipAll();
+      }
+
     }
     player.celestials.pelle.galaxyGenerator.generatedGalaxies += this.gainPerSecond * diff / 1000;
     player.celestials.pelle.galaxyGenerator.generatedGalaxies = Math.min(

@@ -556,7 +556,7 @@ GameDatabase.reality.glyphEffects = {
     totalDesc: "All Galaxy strength -{value}",
     shortDesc: "Galaxy Strength -{value}",
     // Multiplies by 0.768 per glyph
-    effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.03),
+    effect: level => Math.pow(level, -0.03),
     formatEffect: x => formatPercents(1 - x, 2),
     combine: GlyphCombiner.multiply,
   },
@@ -568,7 +568,7 @@ GameDatabase.reality.glyphEffects = {
     singleDesc: "All Dimension multipliers ^{value}",
     shortDesc: "All Dimensions ^{value}",
     // Multiplies by 0.734 per glyph
-    effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.035),
+    effect: level => Math.pow(level, -0.035),
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.multiply,
   },
@@ -581,7 +581,7 @@ GameDatabase.reality.glyphEffects = {
     totalDesc: "The threshold for Tickspeed Upgrades from Time Dimensions is increased by ×{value}",
     shortDesc: "TD Tickspeed threshold ×{value}",
     // Additive 3.82 per glyph
-    effect: (level, strength) => Math.log10(level) * (strength / 3.5),
+    effect: level => Math.clampMin(Math.log10(level), 1),
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.add,
   },
@@ -594,7 +594,7 @@ GameDatabase.reality.glyphEffects = {
     totalDesc: "Eternity Point gain / {value}",
     shortDesc: "EP / {value}",
     // Divides e666.6 per glyph
-    effect: (level, strength) => Decimal.pow10(-level / 10 * (strength / 3.5)),
+    effect: level => Decimal.pow10(-level / 10),
     formatEffect: x => format(x.reciprocal()),
     combine: GlyphCombiner.multiplyDecimal,
   },

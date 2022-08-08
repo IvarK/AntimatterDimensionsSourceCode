@@ -76,6 +76,7 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     setName() {
       this.sortGlyphList();
       if (this.sortedGlyphs.length === 0) return "Void";
@@ -152,6 +153,7 @@ export default {
       // We want a bit of additional flavor for partially-filled sets
       const word = GLYPH_NAMES[this.sortedGlyphs[0].type].noun;
       const perc = this.sortedGlyphs[0].perc;
+      if (this.isDoomed) return `Doomed ${word}`;
       if (perc === 100) return `Full ${word}`;
       if (perc >= 75) return `Strengthened ${word}`;
       if (perc >= 40) return `Partial ${word}`;
@@ -171,9 +173,11 @@ export default {
       return GlyphTypes[primaryType.type];
     },
     textColor() {
+      // If it's the singular equipped glyph in Doomed, we color it crimson
       // If its cursed, we want its color to be #5151EC, because by default its black, which can be unreadable.
       // If we have 3 types of Glyphs, and none of them have more than 30% total, lets get a copper color.
       // And if we have none of the above (which is most common), lets get the color of the main Glyph.
+      if (this.isDoomed && this.glyphSet.length === 1) return "var(--color-pelle--base)";
       if (this.mainGlyphName.id === "cursed") return "#5151EC";
       if (this.mainGlyphName.id === "music") return "#FF80AB";
       if (this.sortedGlyphs.length >= 3 && this.sortedGlyphs[0].perc <= 30) return "#C46200";

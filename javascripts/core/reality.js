@@ -56,7 +56,6 @@ export const GlyphSelection = {
   },
 
   generate(count, level = gainedGlyphLevel()) {
-    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.glyphs = this.glyphList(count, level, { isChoosingGlyph: true });
   },
 

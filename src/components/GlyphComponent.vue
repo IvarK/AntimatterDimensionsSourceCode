@@ -271,6 +271,16 @@ export default {
       this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : 0;
+
+      // A few things need to be updated continuously, but only when the tooltip is visible
+      if (this.tooltipLoaded) {
+        const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+        let adjustedLevel = this.isActiveGlyph
+          ? getAdjustedGlyphLevel(this.glyph)
+          : this.glyph.level + levelBoost;
+        if (Pelle.isDoomed) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
+        this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
+      }
     },
     // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
     // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
@@ -313,12 +323,6 @@ export default {
         this.currentAction = "refine";
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
-      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-      let adjustedLevel = this.isActiveGlyph
-        ? getAdjustedGlyphLevel(this.glyph)
-        : this.glyph.level + levelBoost;
-      if (Pelle.isDoomed) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
-      this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.

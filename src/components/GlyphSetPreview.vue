@@ -57,20 +57,33 @@ export default {
       type: String,
       required: false,
       default: "(No Glyphs equipped)"
+    },
+    sort: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data() {
     return {
-      sortedOrder: [],
       realityGlyphBoost: 0,
     };
   },
-  created() {
-    const standardOrder = ["reality", "effarig", "power", "infinity", "replication", "time", "dilation",
-      "cursed", "companion"];
-    this.sortedOrder = Glyphs.copyForRecords(this.glyphs);
-    // Technically doesn't stable sort between glyphs of the same type, probably fine though
-    this.sortedOrder.sort((a, b) => standardOrder.indexOf(a.type) - standardOrder.indexOf(b.type));
+  computed: {
+    orderedGlyphs() {
+      if (!this.sort) return this.glyphs;
+      const standardOrder = ["reality", "effarig", "power", "infinity", "replication", "time", "dilation",
+        "cursed", "companion"];
+      const order = Glyphs.copyForRecords(this.glyphs);
+      // Technically doesn't stable sort between glyphs of the same type, probably fine though
+      order.sort((a, b) => standardOrder.indexOf(a.type) - standardOrder.indexOf(b.type));
+      return order;
+    },
+  },
+  watch: {
+    glyphs() {
+      this.$recompute("orderedGlyphs");
+    }
   },
   methods: {
     update() {
@@ -110,7 +123,7 @@ export default {
         :force-color="forceNameColor"
       />
       <GlyphComponent
-        v-for="(g, idx) in sortedOrder"
+        v-for="(g, idx) in orderedGlyphs"
         :key="idx"
         class="l-preview"
         :glyph="g"

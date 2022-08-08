@@ -111,6 +111,8 @@ export default {
     },
     symbol() {
       const symbol = this.glyph.symbol;
+      // \uE019 = :blobheart:
+      if (this.$viewModel.theme === "S11" && this.glyph.type === "companion") return "\uE019";
       if (symbol) {
         return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
       }

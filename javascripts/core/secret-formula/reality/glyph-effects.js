@@ -659,7 +659,12 @@ GameDatabase.reality.glyphEffects = {
       "and plot the demise of all who stand against you. This one-of-a-kind Glyph will never leave you.",
     totalDesc: "+{value} happiness",
     shortDesc: "Doesn't want to hurt you",
-    effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
+    effect: () => {
+      if (Enslaved.isRunning) return 0;
+      const cursedCount = Glyphs.active.countWhere(g => g?.type === "cursed");
+      if (cursedCount > 0) return Math.pow(0.2 + 0.2 * Math.random(), cursedCount);
+      return 0.4 + 0.6 * Math.random();
+    },
     formatEffect: x => formatPercents(x, 2, 2),
     combine: GlyphCombiner.add,
     enabledInDoomed: true,
@@ -671,7 +676,7 @@ GameDatabase.reality.glyphEffects = {
     glyphTypes: ["companion"],
     singleDesc: "Thanks for your dedication for the game! You reached {value} Eternity Points on your first Reality.",
     shortDesc: "It loves you very, very much",
-    totalDesc: () => (Enslaved.isRunning ? "Help me" : "Yay!"),
+    totalDesc: () => ((Enslaved.isRunning || Glyphs.active.countWhere(g => g?.type === "cursed")) ? "Help me" : "Yay!"),
     // The EP value for this is entirely encoded in rarity, but level needs to be present to
     // make sure the proper parameter is being used. The actual glyph level shouldn't do anything.
     // eslint-disable-next-line no-unused-vars

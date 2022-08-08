@@ -81,6 +81,9 @@ export default {
     },
     toggleAlteration() {
       player.options.hideAlterationEffects = !player.options.hideAlterationEffects;
+    },
+    glyphSymbol(type) {
+      return GlyphTypes[type].symbol;
     }
   }
 };
@@ -97,7 +100,7 @@ export default {
     <div class="l-sacrificed-glyphs__help">
       <span
         v-if="isDoomed"
-        :style="{'color': hasDragover ? 'var(--color-bad)' : null}"
+        class="pelle-current-glyph-effects"
       >
         You cannot sacrifice Glyphs while Doomed.
       </span>
@@ -133,11 +136,11 @@ export default {
     <div class="c-sacrificed-glyphs__header">
       Glyph Sacrifice Boosts:
     </div>
-    <div v-if="teresaMult > 1">
-      Glyph sacrifice values are multiplied by {{ formatX(teresaMult, 2, 2) }};
-      Teresa was last done at {{ lastMachines }}.
-    </div>
-    <div v-if="anySacrifices">
+    <div v-if="anySacrifices && !isDoomed">
+      <div v-if="teresaMult > 1">
+        Glyph sacrifice values are multiplied by {{ formatX(teresaMult, 2, 2) }};
+        Teresa was last done at {{ lastMachines }}.
+      </div>
       <template v-for="type in types">
         <TypeSacrifice
           :key="type"
@@ -145,6 +148,12 @@ export default {
           :has-dragover="hasDragover"
         />
       </template>
+    </div>
+    <div
+      v-else-if="isDoomed"
+      class="pelle-current-glyph-effects"
+    >
+      All boosts from Glyph Sacrifice are disabled while Doomed, including changes to effects due to Altered Glyphs.
     </div>
     <div v-else>
       You haven't Sacrificed any Glyphs yet!

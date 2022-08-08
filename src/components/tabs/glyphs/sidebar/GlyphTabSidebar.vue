@@ -79,7 +79,7 @@ export default {
         :class="sidebarClass(sidebarEnum.SAVED_SETS)"
         @click="setSidebarState(sidebarEnum.SAVED_SETS)"
       >
-        Saved Glyph Sets
+        Glyph Presets
       </button>
       <button
         v-if="unlockedAlchemy"

@@ -23,7 +23,7 @@ GameDatabase.celestials.effarig.unlocks = {
   },
   setSaves: {
     id: 2,
-    description: "Glyph Set Saves",
+    description: "Glyph Presets",
     cost: 3e9,
     onPurchased: () => {
       Effarig.quotes.unlockSetSaves.show();

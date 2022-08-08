@@ -20,12 +20,11 @@ export default {
   },
   computed: {
     questionmarkTooltip() {
-      return `Save copies your current Glyphs. Delete clears the set for a new save. Load searches through your
-      inventory, and equips the best Glyph matching its search.
-      You can only load a set when you have no Glyphs equipped.`;
+      return `Glyph Presets work like Time Study Loadouts, allowing you to equip a
+        full set of previously-saved Glyphs`;
     },
     noSet() {
-      return `No Glyph Set saved in this slot`;
+      return `No Glyph Preset saved in this slot`;
     },
   },
   watch: {
@@ -40,6 +39,7 @@ export default {
     },
   },
   created() {
+    this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.refreshGlyphSets);
     this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
     this.refreshGlyphSets();
     for (let i = 0; i < player.reality.glyphs.sets.length; i++) {
@@ -58,7 +58,23 @@ export default {
     },
     setName(id) {
       const name = this.names[id] === "" ? "" : `: ${this.names[id]}`;
-      return `Glyph Set Save #${id + 1}${name}`;
+      return `Glyph Preset #${id + 1}${name}`;
+    },
+    // Let the player load if the currently equipped glyphs are a subset of the preset
+    canLoadSet(set) {
+      let toLoad = [...set];
+      let currActive = [...Glyphs.active.filter(g => g)];
+      for (const targetGlyph of currActive) {
+        const matchingGlyph = Glyphs.findByValues(targetGlyph, toLoad, {
+          level: this.level ? -1 : 0,
+          strength: this.rarity ? -1 : 0,
+          effects: this.effects ? -1 : 0
+        });
+        if (!matchingGlyph) return false;
+        toLoad = toLoad.filter(g => g !== matchingGlyph);
+        currActive = currActive.filter(g => g !== targetGlyph);
+      }
+      return toLoad.length > 0;
     },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length) return;
@@ -67,18 +83,40 @@ export default {
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     loadGlyphSet(set) {
-      if (this.hasEquipped || !this.setLengthValid(set)) return;
-      for (let i = 0; i < set.length; i++) {
-        const level = this.level;
-        const strength = this.rarity;
-        const effects = this.effects;
-        const glyph = Glyphs.findByValues(set[i], { level, strength, effects });
-        if (!glyph) {
-          GameUI.notify.error(`Could not fully load the Glyph Set due to missing Glyph!`);
+      if (!this.canLoadSet(set) || !this.setLengthValid(set)) return;
+
+      // If we already have a subset of the preset loaded, don't try to load glyphs from that subset again
+      let toLoad = [...set];
+      let currActive = [...Glyphs.active.filter(g => g)];
+      for (const targetGlyph of currActive) {
+        const matchingGlyph = Glyphs.findByValues(targetGlyph, toLoad, {
+          level: this.level ? -1 : 0,
+          strength: this.rarity ? -1 : 0,
+          effects: this.effects ? -1 : 0
+        });
+        if (!matchingGlyph) continue;
+        toLoad = toLoad.filter(g => g !== matchingGlyph);
+        currActive = currActive.filter(g => g !== targetGlyph);
+      }
+
+      // Try to load the rest from the inventory
+      let missingGlyphs = 0;
+      for (const targetGlyph of toLoad) {
+        const matchingGlyph = Glyphs.findByValues(targetGlyph, Glyphs.sortedInventoryList, {
+          level: this.level ? 1 : 0,
+          strength: this.rarity ? 1 : 0,
+          effects: this.effects ? 1 : 0
+        });
+        if (!matchingGlyph) {
+          missingGlyphs++;
           continue;
         }
         const idx = Glyphs.active.indexOf(null);
-        if (idx !== -1) Glyphs.equip(glyph, idx);
+        if (idx !== -1) Glyphs.equip(matchingGlyph, idx);
+      }
+      if (missingGlyphs) {
+        GameUI.notify.error(`Could not find ${missingGlyphs} ${pluralize("Glyph", missingGlyphs)} to load from
+          Glyph preset.`);
       }
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
@@ -117,9 +155,9 @@ export default {
       </div>
     </div>
     <div class="l-glyph-set-save__header">
-      When searching for Glyphs to load, try to match the following. "Exact" will only count Glyphs
-      with identical properties to be part of the set. The other settings will, loosely speaking, allow
-      for "better" Glyphs to match as well.
+      When loading a preset, try to match the following attributes. "Exact" will only equip Glyphs
+      identical to the ones in the preset. The other settings will, loosely speaking, allow "better" Glyphs to be
+      equipped in their place.
     </div>
     <div class="c-glyph-set-save-container">
       <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
@@ -148,7 +186,6 @@ export default {
         off="Exact"
       />
     </div>
-    Your saved Glyph sets:
     <div
       v-for="(set, id) in glyphSets"
       :key="id"
@@ -187,7 +224,7 @@ export default {
           </button>
           <button
             class="c-glyph-set-save-button"
-            :class="{'c-glyph-set-save-button--unavailable': hasEquipped || !setLengthValid(set)}"
+            :class="{'c-glyph-set-save-button--unavailable': !canLoadSet(set) || !setLengthValid(set)}"
             @click="loadGlyphSet(set)"
           >
             Load

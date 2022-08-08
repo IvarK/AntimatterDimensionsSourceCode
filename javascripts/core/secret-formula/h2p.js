@@ -1223,7 +1223,7 @@ being selected; this can be useful for effect testing and other more limited sit
 will let you forbid entire types like Specified Effect Mode as well
 <br>
 <br>
-Glyph Set Saves are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
+Glyph Presets are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
 Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped Glyphs into sets.
 You can't overwrite a set, you must delete it first. When you load a set, each Glyph in it is found and equipped.
 If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when

@@ -459,6 +459,7 @@ export const Glyphs = {
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
+  // Note that this same function is called with different parameters for purge (5), harsh purge (1), and sac all (0)
   autoClean(threshold = 5, deleteGlyphs = true) {
     const isHarsh = threshold < 5;
     let toBeDeleted = 0;
@@ -467,7 +468,8 @@ export const Glyphs = {
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
-      if (glyph === null || glyph.type === "companion") continue;
+      // Never clean companion, and only clean cursed if we choose to sacrifice all
+      if (glyph === null || glyph.type === "companion" || (glyph.type === "cursed" && threshold !== 0)) continue;
       // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
       const isCustomGlyph = glyph.color !== undefined || glyph.symbol !== undefined;
       if (isCustomGlyph && !isHarsh) continue;

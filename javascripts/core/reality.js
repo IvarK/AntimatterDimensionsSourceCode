@@ -396,6 +396,9 @@ export function beginProcessReality(realityProps) {
       addToStats(glyphSample.totalStats, sacGain);
     } else {
       processAutoGlyph(realityProps.gainedGlyphLevel, rng);
+      // We'd normally run processSortingAfterReality() here, but also sorting after every glyph is extremely intensive
+      // at this scale and largely useless if autoClean is getting run every time too
+      if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) Glyphs.autoClean();
     }
   };
   const glyphsToSample = 10000;

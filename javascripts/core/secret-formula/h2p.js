@@ -135,11 +135,13 @@ the game closed.
       info: () => `
 Most of the effects and upgrades in Antimatter Dimensions largely fall into three categories:
 <br>
-- <b>Additive:</b> These effects are typically denoted with a + followed by a number, and add their value to some
+- <b>Additive:</b> These effects are typically denoted with a + (or the word "increase") followed by a number,
+and add their value to some
 base amount. Multiple additive effects are summed up. These can also sometimes show up as subtractive effects which
 reduce resource costs.
 <br>
-- <b>Multiplicative:</b> These effects are shown either by a × followed by a number or, more rarely, as two numbers
+- <b>Multiplicative:</b> These effects are shown either by a × (or the word "multiply") followed by a number or,
+more rarely, as two numbers
 separated by a ➜. Different multiplicative sources always combine by multiplying, never by adding. In some situations,
 there may be negative effects or cost reductions that apply in this category as division.
 <br>

@@ -84,7 +84,7 @@ GameDatabase.reality.glyphEffects = {
     isGenerated: true,
     glyphTypes: ["time"],
     singleDesc: () => (GlyphAlteration.isAdded("time")
-      ? "Eternity Point gain ×{value} [and ^]{value2}"
+      ? "Eternity Point gain \n×{value} [and ^]{value2}"
       : "Multiply Eternity Point gain by {value}"),
     totalDesc: () => (GlyphAlteration.isAdded("time")
       ? "Eternity Point gain ×{value} and ^{value2}"
@@ -147,7 +147,7 @@ GameDatabase.reality.glyphEffects = {
     isGenerated: true,
     glyphTypes: ["dilation"],
     singleDesc: () => (GlyphAlteration.isAdded("dilation")
-      ? "Generates {value} Time Theorems/hour [and\nmultiplies Time Theorem generation by] {value2}"
+      ? "Generates {value} Time Theorems/hour \n[and multiplies Time Theorem \ngeneration by] {value2}"
       : "Generates {value} Time Theorems per hour"),
     totalDesc: () => (GlyphAlteration.isAdded("dilation")
       ? "Generating {value} Time Theorems/hour and Time Theorem generation ×{value2}"
@@ -222,7 +222,7 @@ GameDatabase.reality.glyphEffects = {
     isGenerated: true,
     glyphTypes: ["replication"],
     singleDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "Multiply Dilated Time [and Replicanti speed] by \nlog₁₀(replicanti)×{value}"
+      ? "Multiply Dilated Time \n[and Replicanti speed] by \nlog₁₀(replicanti)×{value}"
       : "Multiply Dilated Time gain by \nlog₁₀(replicanti)×{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("replication")
       ? "Dilated Time gain and Replication speed ×(log₁₀(replicanti)×{value})"
@@ -255,11 +255,11 @@ GameDatabase.reality.glyphEffects = {
     bitmaskIndex: 11,
     isGenerated: true,
     glyphTypes: ["replication"],
-    singleDesc: () => `Replicanti scaling for next Glyph level: \n^${format(0.4, 1, 1)}
+    singleDesc: () => `Replicanti factor for Glyph level:\n ^${format(0.4, 1, 1)}
       ➜ ^(${format(0.4, 1, 1)} + {value})`,
-    totalDesc: () => `Replicanti scaling for next Glyph level: ^${format(0.4, 1, 1)}
+    totalDesc: () => `Replicanti factor for Glyph level: ^${format(0.4, 1, 1)}
       ➜ ^(${format(0.4, 1, 1)} + {value})`,
-    genericDesc: "Replicanti scaling for Glyph level",
+    genericDesc: "Replicanti factor for Glyph level",
     shortDesc: "Replicanti pow. for level +{value}",
     effect: (level, strength) => Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5) / 50,
     formatEffect: x => format(x, 3, 3),
@@ -310,7 +310,7 @@ GameDatabase.reality.glyphEffects = {
     isGenerated: true,
     glyphTypes: ["infinity"],
     singleDesc: () => (GlyphAlteration.isAdded("infinity")
-      ? "Infinity Point gain ×{value} [and ^]{value2}"
+      ? "Infinity Point gain \n×{value} [and ^]{value2}"
       : "Multiply Infinity Point gain by {value}"),
     totalDesc: () => (GlyphAlteration.isAdded("infinity")
       ? "Infinity Point gain ×{value} and ^{value2}"
@@ -415,7 +415,7 @@ GameDatabase.reality.glyphEffects = {
     singleDesc: () => `Increase the bonus from buying ${formatInt(10)} Antimatter Dimensions by {value}`,
     totalDesc: () => `Multiplier from "Buy ${formatInt(10)}" ×{value}`,
     genericDesc: () => `"Buy ${formatInt(10)}" bonus increase`,
-    shortDesc: () => `AD Buy ${formatInt(10)} mult. ×{value}`,
+    shortDesc: () => `AD "Buy ${formatInt(10)}" mult. ×{value}`,
     effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.addExponents,
@@ -486,7 +486,7 @@ GameDatabase.reality.glyphEffects = {
     isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `Buy ${formatInt(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
+      ? `"Buy ${formatInt(10)}" multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
       : `Bonus from buying ${formatInt(10)} Dimensions ^{value}`),
     totalDesc: () => (GlyphAlteration.isAdded("effarig")
       ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and Dimension Boost multiplier ^{value2}`
@@ -495,8 +495,8 @@ GameDatabase.reality.glyphEffects = {
       ? `"Buy ${formatInt(10)}" and Dimension Boost multipliers ^x`
       : `"Buy ${formatInt(10)}" multiplier ^x`),
     shortDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `Buy ${formatInt(10)} mult. ^{value}, Dimboost mult. ^{value2}`
-      : `Buy ${formatInt(10)} mult. ^{value}`),
+      ? `"Buy ${formatInt(10)}" mult. ^{value}, Dimboost mult. ^{value2}`
+      : `"Buy ${formatInt(10)}" mult. ^{value}`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
@@ -510,9 +510,9 @@ GameDatabase.reality.glyphEffects = {
     bitmaskIndex: 25,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: "All dimension power +{value}",
-    totalDesc: "All dimension multipliers ^{value}",
-    genericDesc: "All dimension multipliers ^x",
+    singleDesc: "All Dimension power +{value}",
+    totalDesc: "All Dimension multipliers ^{value}",
+    genericDesc: "All Dimension multipliers ^x",
     shortDesc: "All Dimension power +{value}",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500,
     formatEffect: x => format(x, 3, 3),
@@ -524,8 +524,8 @@ GameDatabase.reality.glyphEffects = {
     bitmaskIndex: 26,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: () => `Antimatter production: ${formatInt(10)}^x ➜ ${formatInt(10)}^(x^{value})`,
-    genericDesc: "Antimatter production exponent",
+    singleDesc: () => `Antimatter production:\n${formatInt(10)}^x ➜ ${formatInt(10)}^(x^{value})`,
+    genericDesc: "Antimatter production exponent power",
     shortDesc: "AM production exponent ^{value}",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => format(x, 4, 4),
@@ -639,11 +639,11 @@ GameDatabase.reality.glyphEffects = {
     bitmaskIndex: 7,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: () => `Dilated Time scaling for next Glyph level: \n^${format(1.3, 1, 1)}
+    singleDesc: () => `Dilated Time factor for Glyph level: \n^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
-    totalDesc: () => `Dilated Time scaling for next Glyph level: ^${format(1.3, 1, 1)}
+    totalDesc: () => `Dilated Time factor for Glyph level: ^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
-    genericDesc: "Dilated Time scaling for Glyph level",
+    genericDesc: "Dilated Time factor for Glyph level",
     shortDesc: "DT pow. for level +{value}",
     // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
     effect: () => 0.1,

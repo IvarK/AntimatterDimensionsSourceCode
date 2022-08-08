@@ -66,7 +66,7 @@ GameDatabase.confirmationTypes = [
     option: "resetCelestial",
     isUnlocked: () => TeresaUnlocks.run.canBeApplied,
   }, {
-    name: "Delete Glyph Set Save",
+    name: "Delete Glyph Preset",
     option: "deleteGlyphSetSave",
     isUnlocked: () => EffarigUnlock.setSaves.isUnlocked,
   }, {

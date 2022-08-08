@@ -187,15 +187,38 @@ export const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, ignore = { level, strength, effects }) {
-    for (const glyph of this.sortedInventoryList) {
-      const type = glyph.type === finding.type;
-      const effects = glyph.effects === finding.effects ||
-            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
-      const str = ignore.strength || glyph.strength === finding.strength;
-      const lvl = ignore.level || glyph.level === finding.level;
-      const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
-      if (type && effects && str && lvl && sym) return glyph;
+  findByValues(targetGlyph, searchList, fuzzyMatch = { level, strength, effects }) {
+    // We need comparison to go both ways for normal matching and subset matching for partially-equipped sets
+    const compFn = (op, comp1, comp2) => {
+      switch (op) {
+        case -1:
+          return comp1 <= comp2;
+        case 0:
+          return comp1 === comp2;
+        case 1:
+          return comp1 >= comp2;
+      }
+      return false;
+    };
+
+    for (const glyph of searchList) {
+      const type = glyph.type === targetGlyph.type;
+      let eff = false;
+      switch (fuzzyMatch.effects) {
+        case -1:
+          eff = hasAtLeastGlyphEffects(targetGlyph.effects, glyph.effects);
+          break;
+        case 0:
+          eff = glyph.effects === targetGlyph.effects;
+          break;
+        case 1:
+          eff = hasAtLeastGlyphEffects(glyph.effects, targetGlyph.effects);
+          break;
+      }
+      const str = compFn(fuzzyMatch.strength, glyph.strength, targetGlyph.strength);
+      const lvl = compFn(fuzzyMatch.level, glyph.level, targetGlyph.level);
+      const sym = glyph.symbol === targetGlyph.symbol;
+      if (type && eff && str && lvl && sym) return glyph;
     }
     return undefined;
   },

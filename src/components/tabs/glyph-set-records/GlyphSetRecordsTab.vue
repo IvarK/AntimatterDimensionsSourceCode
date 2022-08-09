@@ -47,17 +47,21 @@ export default {
     <div
       v-for="(set, idx) in recordGlyphInfo"
       :key="idx"
-      class="l-glyph-set-entry"
     >
-      {{ set[2] }}:
-      <GlyphSetPreview
+      <div
         v-if="set[0]"
-        :key="idx"
-        :glyphs="set[1]"
-        :text-hidden="true"
-      />
-      {{ set[3] }}
-      <br>
+        class="l-glyph-set-entry"
+      >
+        {{ set[2] }}:
+        <GlyphSetPreview
+          v-if="set[0]"
+          :key="idx"
+          :glyphs="set[1]"
+          :text-hidden="true"
+        />
+        {{ set[3] }}
+        <br>
+      </div>
     </div>
   </div>
 </template>

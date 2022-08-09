@@ -194,7 +194,7 @@ export class EternityChallengeState extends GameMechanicState {
     }
     if (Enslaved.isRunning) {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
-      if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
+      if (!auto && EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
     }
     startEternityChallenge();
     return true;

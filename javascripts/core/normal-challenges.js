@@ -1,13 +1,6 @@
 import { DC } from "./constants";
 import { GameMechanicState } from "./game-mechanics/index";
 
-// This function does *not* reset anything. Only call it when you've already
-// done all the non-UI stuff. Right now the only UI thing to do is switch to
-// the AD tab.
-function startChallengeUI() {
-  if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
-}
-
 export function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
@@ -90,7 +83,7 @@ class NormalChallengeState extends GameMechanicState {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.ec6C10.show();
     }
-    startChallengeUI();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 
   get isCompleted() {

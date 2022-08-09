@@ -109,10 +109,13 @@ export default {
     typeConfig() {
       return GlyphTypes[this.glyph.type];
     },
+    isBlobHeart() {
+      return this.$viewModel.theme === "S11" && this.glyph.type === "companion";
+    },
     symbol() {
       const symbol = this.glyph.symbol;
       // \uE019 = :blobheart:
-      if (this.$viewModel.theme === "S11" && this.glyph.type === "companion") return "\uE019";
+      if (this.isBlobHeart) return "\uE019";
       if (symbol) {
         return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
       }
@@ -156,14 +159,15 @@ export default {
       const rarityColor = this.isRealityGlyph
         ? this.realityGlyphColor()
         : (this.glyph.color || getColor(this.glyph.strength));
+      const textShadow = this.isCursedGlyph
+        ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
+        : `-0.04em 0.04em 0.08em ${rarityColor}`;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
         color: this.isCursedGlyph ? this.cursedColor : rarityColor,
-        "text-shadow": this.isCursedGlyph
-          ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
-          : `-0.04em 0.04em 0.08em ${rarityColor}`,
+        "text-shadow": this.isBlobHeart ? undefined : textShadow,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
         background: this.isCursedGlyph ? this.cursedColorInverted : undefined

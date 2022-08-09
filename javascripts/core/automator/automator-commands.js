@@ -90,12 +90,6 @@ export const AutomatorCommands = ((() => {
       // eslint-disable-next-line complexity
       validate: (ctx, V) => {
         ctx.startLine = ctx.Auto[0].startLine;
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xHighest)) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
-            "Auto Reality cannot be set to a duration or x highest",
-            "Use RM for Auto Reality");
-          return false;
-        }
         if (ctx.PrestigeEvent && ctx.currencyAmount) {
           const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
           const specified$ = ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
@@ -106,41 +100,51 @@ export const AutomatorCommands = ((() => {
           }
         }
 
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
-          (ctx.duration || ctx.xHighest) && !EternityMilestone.bigCrunchModes.isReached) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
-            "Advanced Infinity autobuyer settings are not unlocked",
-            `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)} to use this command`);
-          return false;
+        if (!ctx.PrestigeEvent) return true;
+        const advSetting = ctx.duration || ctx.xHighest;
+        // Do not change to switch statement; T.XXX are Objects, not primitive values
+        if (ctx.PrestigeEvent[0].tokenType === T.Infinity) {
+          if (!Autobuyer.bigCrunch.isUnlocked) {
+            V.addError(ctx.PrestigeEvent, "Infinity autobuyer is not unlocked",
+              "Complete the Big Crunch Autobuyer challenge to use this command");
+            return false;
+          }
+          if (advSetting && !EternityMilestone.bigCrunchModes.isReached) {
+            V.addError((ctx.duration || ctx.xHighest)[0],
+              "Advanced Infinity autobuyer settings are not unlocked",
+              `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)}
+              to use this command`);
+            return false;
+          }
+        }
+        if (ctx.PrestigeEvent[0].tokenType === T.Eternity) {
+          if (!EternityMilestone.autobuyerEternity.isReached) {
+            V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
+              `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
+              to use this command`);
+            return false;
+          }
+          if (advSetting && !RealityUpgrade(13).isBought) {
+            V.addError((ctx.duration || ctx.xHighest)[0],
+              "Advanced Eternity autobuyer settings are not unlocked",
+              "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
+            return false;
+          }
+        }
+        if (ctx.PrestigeEvent[0].tokenType === T.Reality) {
+          if (!RealityUpgrade(25).isBought) {
+            V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
+              "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
+            return false;
+          }
+          if (advSetting) {
+            V.addError((ctx.duration || ctx.xHighest)[0],
+              "Auto Reality cannot be set to a duration or x highest",
+              "Use RM for Auto Reality");
+            return false;
+          }
         }
 
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
-          (ctx.duration || ctx.xHighest) && !RealityUpgrade(13).isBought) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
-            "Advanced Eternity autobuyer settings are not unlocked",
-            "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
-          return false;
-        }
-
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
-          !EternityMilestone.autobuyerEternity.isReached) {
-          V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
-            to use this command`);
-          return false;
-        }
-
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && !NormalChallenge(12).isCompleted) {
-          V.addError(ctx.PrestigeEvent, "Infinity autobuyer is not unlocked",
-            "Complete the Big Crunch Autobuyer challenge to use this command");
-          return false;
-        }
-
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && !RealityUpgrade(25).isBought) {
-          V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
-            "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
-          return false;
-        }
         return true;
       },
       compile: ctx => {

@@ -1439,14 +1439,14 @@ br {
   position: absolute;
   left: 105%;
   z-index: 2;
-  opacity: 0;
-  transition: opacity 0.3s, visibility 0.3s;
   text-align: left;
+  opacity: 0;
   color: var(--color-text);
   background-color: var(--color-background);
-  border-radius: var(--var-border-radius, 0.5rem);
   border: 0.3rem solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
+  transition: opacity 0.3s, visibility 0.3s;
 }
 
 .s-base--dark .infotooltip .infotooltiptext {
@@ -1490,8 +1490,8 @@ br {
 }
 
 .c-wide-canvas-element {
-  height: 600px;
   width: 950px;
+  height: 600px;
 }
 
 ._kong-test .c-game-ui {
@@ -1549,7 +1549,7 @@ br {
   width: 17rem;
   font-size: 1.2rem;
   margin-right: 0.4rem;
-  transition: width 0s
+  transition: width 0s;
 }
 
 .o-primary-btn--buy-max {
@@ -2782,10 +2782,10 @@ br {
 .l-select-theme__inner {
   display: flex;
   overflow-y: auto;
-  scrollbar-color: var(--color-good-dark) var(--color-disabled);
   flex-direction: column;
   max-height: 24.9rem;
   align-items: stretch;
+  scrollbar-color: var(--color-good-dark) var(--color-disabled);
   scrollbar-width: thin;
 }
 
@@ -4333,18 +4333,18 @@ br {
 
 .c-autobuyer-box__mode-select {
   display: flex;
+  width: 100%;
+  min-height: 2rem;
   justify-content: center;
   align-items: center;
-  min-height: 2rem;
-  width: 100%;
   text-align: center;
   text-align-last: center;
   font-family: Typewriter, serif;
   font-size: 1.2rem;
   color: black;
   border-radius: var(--var-border-radius, 0.4rem);
-  cursor: pointer;
   user-select: none;
+  cursor: pointer;
 }
 
 .t-metro .c-autobuyer-box__mode-select {
@@ -5737,6 +5737,14 @@ br {
     0 0 0.3rem #e67919;
 }
 
+.s-base--dark .c-modal-away-progress__black-hole b,
+.s-base--dark .c-modal-away-progress__black-hole {
+  color: #de5a1d;
+  text-shadow:
+    0 0 0.2rem black,
+    0 0 0.3rem black;
+}
+
 .c-modal-away-progress__reality-shards {
   color: var(--color-pelle--base);
 }
@@ -6170,8 +6178,8 @@ kbd {
 }
 
 .c-teresa-milestone-line--unlocked {
-  animation: none;
   filter: brightness(50%);
+  animation: none;
 }
 
 .o-teresa-quotes {
@@ -8983,14 +8991,14 @@ kbd {
 /* #endregion reality-tab */
 
 .o-automator-command {
-  min-width: 4.5rem;
   width: fit-content;
   height: 3rem;
-  padding: 0 1rem;
+  min-width: 4.5rem;
   color: var(--color-blockmator-block-command);
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0 1rem;
   -webkit-user-select: none;
   user-select: none;
   cursor: grab;
@@ -9054,8 +9062,8 @@ kbd {
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.5rem;
   margin-right: 0.3rem;
+  padding: 0.5rem;
 }
 
 .s-base--dark .o-automator-block-input {
@@ -9327,8 +9335,8 @@ input.o-automator-block-input {
   margin: 0.2rem;
   padding: 0.3rem 1rem;
   transition-duration: 0.2s;
-  cursor: pointer;
   user-select: none;
+  cursor: pointer;
 }
 
 .c-hide-modal-tab-button:hover {

@@ -168,7 +168,7 @@ ${PlayerProgress.realityUnlocked()
     : ""}
 `,
       isUnlocked: () => true,
-      tags: ["offline", "away", "progress"],
+      tags: ["effect", "stack", "combine", "add", "reduce", "multiply", "divide", "power", "dilation", "glyph"],
       tab: "options/gameplay"
     }, {
       name: "Antimatter Dimensions",
@@ -1085,9 +1085,9 @@ Pausing and unpausing affects both Black Holes; they can't be paused or unpaused
     }, {
       name: "Celestials",
       info: () => `
-Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab to the right of
-Reality. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as you
-progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually
+Once you get all of the Reality upgrades, the first Celestial is unlocked. This opens up a new tab for Celestials, next
+to the Reality tab. The first subtab under the Celestials tab shows a map called "Celestial Navigation" which updates as
+you progress through the game. Only part of the map will be visible when first unlocked, but new content will gradually
 be revealed as you approach it, generally with a visual indication of your progress towards the next step.
 <br>
 <br>

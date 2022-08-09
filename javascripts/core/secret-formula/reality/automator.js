@@ -193,7 +193,7 @@ GameDatabase.reality.automator = {
         <b>auto reality</b> [setting]`,
       description: `Turns prestige Autobuyers on or off and allows you to change their settings. If the setting option
         is not present, this command will toggle the Autobuyer state, turning it off if it is on and turning it on if
-        it is off.`,
+        it is off. <b>This command will not work if you try to modify an Autobuyer or setting you do not have.</b>`,
       sections: [
         {
           name: "SETTINGS",
@@ -298,9 +298,33 @@ GameDatabase.reality.automator = {
       syntax: "<b>#</b> text<br><b>//</b> text",
       description: `Allows you to leave a note to yourself within your script. This may be
         useful for organizing or keeping track of which parts of your script do various things,
-        in a way that appears more readable than just the commands. These commands will do nothing
-        positive or negative for the automator's functionality, and only serve as a tool to
+        in a way that appears more readable than just the commands. These commands mainly serve as a tool to
         help you keep the steps of your scripts easier to follow if desired.`,
+      sections: [
+        {
+          name: "NOTES",
+          items: [
+            {
+              header: "<i>Inline comments</i>",
+              description: `
+                The Automator does not support comments which are placed after an already functional
+                line of code, on the same line. As an example, the single line "studies load name TDI // Load push"
+                will be an invalid command. In this case, you will need to move the comment to a separate line
+                in the automator.
+              `
+            },
+            {
+              header: "<i>Execution speed</i>",
+              description: `
+                Having comments will not slow down your script, as they are completely skipped during
+                execution and do not count as a command for the purposes of running. For example, even if you have
+                a really long explanation in the form of comments on lines 20-40, the Automator will still
+                <i>immediately</i> skip from line 19 to 41 during execution.
+              `
+            },
+          ]
+        }
+      ],
       examples: [
         "# get 1e20 before starting ec1",
         "// this loop alternates dilation and pushing"

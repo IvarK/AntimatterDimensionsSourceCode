@@ -7,7 +7,8 @@ GameDatabase.celestials.pelle.strikes = {
     id: 1,
     requirementDescription: "Reach Infinity",
     penaltyDescription: () => `Antimatter Dimensions are raised to ${formatPow(0.5, 1, 1)}`,
-    rewardDescription: () => `Unlock ${wordShift.wordCycle(PelleRifts.vacuum.name)}`,
+    rewardDescription: () => `Unlock ${wordShift.wordCycle(PelleRifts.vacuum.name)}
+      and get a permanent Infinity Autobuyer`,
     rift: () => PelleRifts.vacuum
   },
   powerGalaxies: {

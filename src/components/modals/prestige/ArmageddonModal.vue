@@ -46,7 +46,7 @@ export default {
 
       Glyphs.harshAutoClean();
       if (!Glyphs.unequipAll()) {
-        Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
+        Modal.message.show(`Dooming your Reality will unequip your Glyphs. Some of your
           Glyphs could not be unequipped due to lack of inventory space.`, 1);
         return;
       }
@@ -63,6 +63,7 @@ export default {
       player.buyUntil10 = true;
       player.records.realTimeDoomed = 0;
       for (const res of AlchemyResources.all) res.amount = 0;
+      AutomatorBackend.stop();
       Pelle.quotes.initial.show();
     },
   },
@@ -81,9 +82,9 @@ export default {
       v-if="!isDoomed"
       class="c-modal-message__text"
     >
-      Entering Doomed will reset everything except Challenge records, Celestial progress and anything under
+      Dooming your Reality will reset everything except Challenge records, Celestial progress and anything under
       the General and Reality header on the Statistics tab. You will not gain any rewards from your progress
-      in your current Reality. Entering Doomed will also disable certain game mechanics.
+      in your current Reality. Dooming your Reality will also disable certain game mechanics.
       <br>
       <br>
       Are you sure you want to do this?

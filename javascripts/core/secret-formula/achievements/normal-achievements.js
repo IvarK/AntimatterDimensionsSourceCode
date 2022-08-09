@@ -1306,7 +1306,7 @@ GameDatabase.achievements.normal = [
   {
     id: 182,
     name: "One more time",
-    description: "Gain back all Antimatter Dimension autobuyers.",
+    description: "Permanently gain back all Antimatter Dimension autobuyers.",
     checkRequirement: () => PelleUpgrade.antimatterDimAutobuyers1.canBeApplied &&
       PelleUpgrade.antimatterDimAutobuyers2.canBeApplied,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
@@ -1345,7 +1345,7 @@ GameDatabase.achievements.normal = [
   {
     id: 187,
     name: "The One with Dilated Time",
-    description: "Unlock Dilation in Doomed.",
+    description: "Unlock Dilation while Doomed.",
     checkRequirement: () => PelleStrikes.dilation.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED,
     // We forgot to disable a singularity milestone while balancing Pelle; now it's disabled

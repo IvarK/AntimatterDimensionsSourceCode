@@ -51,7 +51,7 @@ export default {
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
       const value = formattedEffect(this.purchases);
-      const next = (!this.isCapped && this.hovering && this.canBuy)
+      const next = (!this.isCapped && this.hovering)
         ? formattedEffect(this.purchases + 1)
         : undefined;
       return { prefix, value, next };
@@ -150,7 +150,12 @@ export default {
     <div v-if="effectText">
       {{ effectText.prefix }} {{ effectText.value }}
       <template v-if="effectText.next">
-        ➜ <span class="c-improved-effect">
+        ➜ <span
+          :class="{
+            'c-improved-effect': canBuy,
+            'c-improved-effect--unavailable': !canBuy,
+          }"
+        >
           {{ effectText.next }}
         </span>
       </template>
@@ -233,9 +238,13 @@ export default {
 }
 
 .c-improved-effect {
-  font-style: italic;
   font-weight: bold;
   color: #00bb00;
+}
+
+.c-improved-effect--unavailable {
+  font-weight: bold;
+  color: #bb0000;
 }
 
 .s-base--metro .c-pelle-upgrade--unavailable {

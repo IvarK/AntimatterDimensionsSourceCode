@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";
 import ReplicantiGainText from "./ReplicantiGainText";
@@ -31,7 +33,6 @@ export default {
       distantRG: 0,
       remoteRG: 0,
       effarigInfinityBonusRG: 0,
-      isDoomed: false,
       isUncapped: false,
       nextEffarigRGThreshold: 0,
       canSeeGalaxyButton: false,
@@ -39,6 +40,7 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(
         ReplicantiUpgrade.chance,
@@ -131,9 +133,8 @@ export default {
           getAdjustedGlyphEffect("replicationdtgain"),
         1
       );
-      this.hasIPMult = AlchemyResource.exponential.amount > 0;
+      this.hasIPMult = AlchemyResource.exponential.amount > 0 && !this.isDoomed;
       this.multIP = Replicanti.amount.powEffectOf(AlchemyResource.exponential);
-      this.isDoomed = Pelle.isDoomed;
       this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
@@ -146,6 +147,9 @@ export default {
       this.canSeeGalaxyButton =
         Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
     },
+    vacuumText() {
+      return wordShift.wordCycle(PelleRifts.vacuum.name);
+    }
   },
 };
 </script>
@@ -169,7 +173,7 @@ export default {
       </div>
       <div v-if="isDoomed">
         <div v-if="isUncapped">
-          Your Replicanti cap has been removed due to the second Vacuum milestone.
+          Your Replicanti cap has been removed due to the second {{ vacuumText() }} milestone.
         </div>
         Any rewards from Effarig's Infinity have been disabled.
       </div>

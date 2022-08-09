@@ -73,16 +73,41 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Lai'tela",
     effects() {
+      let disabledDims;
+      const highestActive = 8 - Laitela.difficultyTier;
+      switch (highestActive) {
+        case 0:
+          disabledDims = "Dimensions";
+          break;
+        case 1:
+          disabledDims = "2nd or higher Dimensions";
+          break;
+        case 2:
+          disabledDims = "3rd or higher Dimensions";
+          break;
+        case 7:
+          disabledDims = "8th Dimensions";
+          break;
+        default:
+          disabledDims = `${highestActive + 1}th or higher Dimensions`;
+          break;
+      }
+      const disabledText = highestActive === 8
+        ? ""
+        : `Production from all ${disabledDims} is disabled.`;
+
       return `Infinity Point and Eternity Point gain are Dilated.
       Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes.
-      Black Hole storing, discharging, and pulsing are disabled.`;
+      Black Hole storing, discharging, and pulsing are disabled.
+      ${disabledText}`;
     },
     description() {
       return `Antimatter generates entropy inside of this Reality.\
       At ${formatPercents(1)} entropy, the Reality becomes destabilized\
       and you gain a reward based on how quickly you reached ${formatPercents(1)}.
       Destabilizing the Reality in less than ${formatInt(30)} seconds makes it become significantly more difficult,\
-      in exchange for giving a much stronger reward.`;
+      in exchange for giving a much stronger reward.\
+      Doing this ${formatInt(8)} times will also give a ${formatX(8)} to Dark Energy gain.`;
     }
   },
 

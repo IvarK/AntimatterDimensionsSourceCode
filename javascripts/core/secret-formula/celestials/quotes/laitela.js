@@ -39,9 +39,21 @@ GameDatabase.celestials.quotes.laitela = {
       "What... ARE you?",
     ]
   },
+  singularity1: {
+    id: 3,
+    requirement: () => Currency.singularities.gte(1e4),
+    lines: [
+      "What was it again...? Antimatter?",
+      "That was the first thing you turned into Dimensions?",
+      "It could not have been an accident.",
+      "How did you... attain the power to control it?",
+      "This never happened in all of existence... or did it?",
+      "My endless knowledge... is it waning?",
+    ]
+  },
   // Note: This happens around e10-e11 singularities
   annihilation: {
-    id: 3,
+    id: 4,
     lines: [
       "Back to square one.",
       "We, the Celestials transcend time and existence.",
@@ -52,8 +64,21 @@ GameDatabase.celestials.quotes.laitela = {
       "I feel like I should know the answer...",
     ]
   },
+  singularity2: {
+    id: 5,
+    requirement: () => Currency.singularities.gte(1e14),
+    lines: [
+      "Of those who tried to control dimensions...",
+      "Who were they? I cannot seem to remember...",
+      "And how... did they vanish?",
+      "Are they... us? Simply transcending existence?",
+      "Did they surpass us and become something we can't comprehend?",
+      "Are we all imprisoned in this falsity...",
+    ]
+  },
+  // Note: This happens near e18 singularities
   halfDimensions: {
-    id: 4,
+    id: 6,
     requirement: () => player.celestials.laitela.difficultyTier >= 4,
     lines: [
       "You seem to be having too much fun.",
@@ -64,33 +89,10 @@ GameDatabase.celestials.quotes.laitela = {
       "But I digress. Let's keep constricting this Reality.",
     ]
   },
-  singularity1: {
-    id: 5,
-    requirement: () => Currency.singularities.gte(1e8),
-    lines: [
-      "What was it again...? Antimatter?",
-      "That was the first thing you turned into Dimensions?",
-      "It could not have been an accident.",
-      "How did you... attain the power to control it?",
-      "This never happened in all of existence... or did it?",
-      "My endless knowledge... is it waning?",
-    ]
-  },
-  singularity2: {
-    id: 6,
-    requirement: () => Currency.singularities.gte(1e16),
-    lines: [
-      "Of those who tried to control dimensions...",
-      "Who were they? I cannot seem to remember...",
-      "And how... did they vanish?",
-      "Are they... us? Simply transcending existence?",
-      "Did they surpass us and become something we can't comprehend?",
-      "Are we all imprisoned in this falsity...",
-    ]
-  },
+  // Note: This about when the player starts on the last row of iM upgrades
   singularity3: {
     id: 7,
-    requirement: () => Currency.singularities.gte(1e24),
+    requirement: () => Currency.singularities.gte(1e26),
     lines: [
       "Is this a cycle?",
       "Will our existence just end and start anew...",
@@ -101,9 +103,10 @@ GameDatabase.celestials.quotes.laitela = {
       "Your power... is it... erasing mine...?",
     ]
   },
+  // Note: This is around when all infinite milestones hit increased scaling
   singularity4: {
     id: 8,
-    requirement: () => Currency.singularities.gte(1e32),
+    requirement: () => Currency.singularities.gte(1e40),
     lines: [
       "I don't know for how much... longer I can hold.",
       "There is... next to nothing left...",

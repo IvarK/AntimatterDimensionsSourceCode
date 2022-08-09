@@ -1,12 +1,5 @@
 import { GameMechanicState } from "./game-mechanics/index";
 
-// This function does *not* reset anything. Only call it when you've already
-// done all the non-UI stuff. Right now the only UI thing to do is switch to
-// the AD tab.
-function startChallengeUI() {
-  if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
-}
-
 export function tryCompleteInfinityChallenges() {
   if (EternityMilestone.autoIC.isReached) {
     const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
@@ -58,7 +51,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
     bigCrunchResetValues();
-    startChallengeUI();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
     player.break = true;
     if (EternityChallenge.isRunning) Achievement(115).unlock();
   }

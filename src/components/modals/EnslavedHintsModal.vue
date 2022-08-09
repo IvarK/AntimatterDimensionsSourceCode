@@ -120,7 +120,9 @@ export default {
           - {{ entry[1].hasProgress ? entry[1].completedInfo : "?????" }}
         </div>
         <div v-else>
-          * <i>Glyph hint: {{ entry[1] }}</i>
+          <i class="fa-solid fa-shapes" /> <b>Glyph hint:</b>
+          <br>
+          {{ entry[1] }}
         </div>
         <br>
       </div>

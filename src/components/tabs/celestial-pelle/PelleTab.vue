@@ -94,7 +94,7 @@ export default {
       class="pelle-unlock-requirements"
     >
       You must have {{ formatInt(totalRows) }} rows of achievements
-      and all of your Glyph Alchemy resources capped to unlock Doomed.
+      and all of your Glyph Alchemy resources capped to unlock Pelle.
       <br>
       <br>
       {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows

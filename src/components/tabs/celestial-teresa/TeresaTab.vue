@@ -69,7 +69,7 @@ export default {
       };
     },
     pourText() {
-      return this.isFilled ? "Filled" : "Pour RM";
+      return this.isPouredAmountCapped ? "Filled" : "Pour RM";
     },
     runDescription() {
       return GameDatabase.celestials.descriptions[0].effects();

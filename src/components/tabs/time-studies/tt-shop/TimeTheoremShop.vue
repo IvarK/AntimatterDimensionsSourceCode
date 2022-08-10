@@ -231,11 +231,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: left;
+  width: 50%;
 }
 
 .l-tree-load-button-wrapper {
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
 }
 

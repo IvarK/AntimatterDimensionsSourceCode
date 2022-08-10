@@ -16,6 +16,11 @@ export default {
     id: {
       type: Number,
       required: true,
+    },
+    deleting: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   data() {
@@ -76,6 +81,7 @@ export default {
       };
     },
     modalTitle() {
+      if (this.deleting) return `Deleting Study Preset "${this.name}"`;
       return this.isImporting ? "Input your tree" : `Editing Study Preset "${this.name}"`;
     },
     invalidMessage() {
@@ -122,6 +128,14 @@ export default {
       ];
       return secretStrings.includes(sha512_256(this.input.toLowerCase()));
     },
+    treeInfoHeader() {
+      if (this.deleting) return "Study Preset contains";
+      return `Tree status after ${this.isImporting ? "importing" : "loading"}`;
+    },
+    confirmText() {
+      if (this.deleting) return "Delete";
+      return this.isImporting ? "Import" : "Save";
+    }
   },
   // Needs to be assigned in created() or else they will end up being undefined when importing
   created() {
@@ -134,7 +148,8 @@ export default {
   },
   methods: {
     confirm() {
-      if (this.isImporting) this.importTree();
+      if (this.deleting) this.deletePreset();
+      else if (this.isImporting) this.importTree();
       else this.savePreset();
     },
     convertInputShorthands() {
@@ -154,6 +169,13 @@ export default {
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }
+    },
+    deletePreset() {
+      const name = player.timestudy.presets[this.id].name;
+      const presetName = name ? `Study preset "${name}"` : "Study preset";
+      player.timestudy.presets[this.id].studies = "";
+      player.timestudy.presets[this.id].name = "";
+      GameUI.notify.eternity(`${presetName} deleted from slot ${this.id + 1}`);
     },
     studyString(study) {
       return study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`;
@@ -178,6 +200,8 @@ export default {
       type="text"
       maxlength="1500"
       class="c-modal-input c-modal-import-tree__input"
+      :class="{ 'l-delete-input' : deleting }"
+      :disabled="deleting"
       @keyup.enter="confirm"
       @keyup.esc="emitClose"
     >
@@ -201,7 +225,7 @@ export default {
           :into-empty="true"
         />
         <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
-          <b>Tree status after {{ isImporting ? "importing" : "loading" }}:</b>
+          <b>{{ treeInfoHeader }}:</b>
         </div>
         <div
           v-if="treeStatus.firstPaths"
@@ -229,6 +253,7 @@ export default {
     <div v-if="!isImporting && inputIsValidTree">
       <br>
       <PrimaryButton
+        v-if="!deleting"
         ach-tooltip="This will format the study preset text, for example, changing 'a,b,c|d' to 'a, b, c | d'."
         @click="convertInputShorthands"
       >
@@ -236,7 +261,16 @@ export default {
       </PrimaryButton>
     </div>
     <template #confirm-text>
-      {{ isImporting ? "Import" : "Save" }}
+      {{ confirmText }}
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.l-delete-input {
+  color: var(--color-text);
+  background-color: var(--color-disabled);
+  pointer-events: none;
+  user-select: none;
+}
+</style>

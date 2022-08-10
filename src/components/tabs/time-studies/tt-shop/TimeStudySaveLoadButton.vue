@@ -14,21 +14,23 @@ export default {
   },
   data() {
     return {
-      name: player.timestudy.presets[this.saveslot - 1].name,
+      name: "",
+      displayName: "",
     };
   },
   computed: {
     preset() {
       return player.timestudy.presets[this.saveslot - 1];
     },
-    displayName() {
-      return this.name === "" ? this.saveslot : this.name;
-    }
   },
   methods: {
+    update() {
+      this.name = player.timestudy.presets[this.saveslot - 1].name;
+      this.displayName = this.name === "" ? this.saveslot : this.name;
+    },
     nicknameBlur(event) {
       const newName = event.target.value.slice(0, 4).trim();
-      if (!this.isASCII(newName) || newName === "") return;
+      if (!this.isASCII(newName)) return;
       this.preset.name = newName;
       this.name = this.preset.name;
     },
@@ -62,6 +64,11 @@ export default {
       } else {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
+    },
+    deletePreset() {
+      this.hideContextMenu();
+      if (this.preset.studies) Modal.studyString.show({ id: this.saveslot - 1, deleting: true });
+      else Modal.message.show("This Time Study list currently contains no Time Studies.");
     },
     handleExport() {
       this.hideContextMenu();
@@ -123,6 +130,12 @@ export default {
           @click="load"
         >
           Load
+        </div>
+        <div
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
+          @click="deletePreset"
+        >
+          Delete
         </div>
       </div>
     </template>

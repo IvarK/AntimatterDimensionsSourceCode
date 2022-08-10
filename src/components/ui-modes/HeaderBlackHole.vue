@@ -1,4 +1,6 @@
 <script>
+import { Laitela } from "../../../javascripts/core/globals";
+
 import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
@@ -21,6 +23,7 @@ export default {
       storedTime: 0,
       canAutoRelease: false,
       isAutoReleasing: false,
+      canChangePulse: false,
     };
   },
   computed: {
@@ -51,6 +54,7 @@ export default {
       this.storedTime = player.celestials.enslaved.stored;
       this.canAutoRelease = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
+      this.canChangePulse = !Laitela.isRunning;
     },
     pauseButtonText() {
       if (BlackHoles.arePaused && player.blackHoleNegative < 1) return "Uninvert BH";
@@ -62,9 +66,6 @@ export default {
     },
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
-    },
-    toggleAutoRelease() {
-      player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
     },
   }
 };
@@ -114,10 +115,16 @@ export default {
     </span>
     <span v-if="canAutoRelease">
       <PrimaryToggleButton
+        v-if="canChangePulse"
         v-model="isAutoReleasing"
         class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
         label="Pulse:"
       />
+      <!-- Odd formatting of this element is necessary to prevent extra spaces from being inserted -->
+      <span
+        v-else
+        class="o-primary-btn o-primary-btn--buy-max c-primary-btn--black-hole-header l-disabled-pulse"
+      >Pulse: Disabled</span>
     </span>
   </span>
 </template>
@@ -135,5 +142,11 @@ export default {
 .o-small-discharge-text {
   font-size: 1rem;
   line-height: 1rem;
+}
+
+.l-disabled-pulse {
+  cursor: pointer;
+  pointer-events: none;
+  background: var(--color-disabled);
 }
 </style>

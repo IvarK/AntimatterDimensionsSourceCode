@@ -449,6 +449,11 @@ export default {
         position: "relative"
       }
     },
+    draggableStyle() {
+      return {
+        cursor: this.boolDisabled ? "default" : "pointer"
+      };
+    },
     dotStyles() {
       let ret = {
         width: this.dotWidthVal,
@@ -1031,7 +1036,8 @@ export default {
          :class="['l-ad-slider__wrap', stateClass]"
          :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
          @click="wrapClick">
-      <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]" :style="[elemStyles, bgStyle]"
+      <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]"
+        :style="[elemStyles, bgStyle, draggableStyle]"
         @mousedown="moveStart($event, 0, true)"
         @touchstart="moveStart($event, 0, true)"
       >
@@ -1141,7 +1147,7 @@ export default {
         <div
           ref="process"
           :class="['l-ad-slider__process', 'c-ad-slider__process', { 'ad-slider-process-draggable': isRange && processDraggable }, processClass]"
-          :style="processStyle"
+          :style="[elemStyles, bgStyle, draggableStyle]"
           @click="processClick"
         >
           <div

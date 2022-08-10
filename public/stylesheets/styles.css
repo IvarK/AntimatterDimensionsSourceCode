@@ -2000,12 +2000,12 @@ br {
   color: var(--color-eternity);
   background-color: var(--color-prestige--accent);
   border-color: var(--color-eternity);
+  cursor: pointer;
 }
 
 .o-eternity-button:hover {
   color: black;
   background-color: var(--color-eternity);
-  cursor: pointer;
 }
 
 .o-eternity-button span {

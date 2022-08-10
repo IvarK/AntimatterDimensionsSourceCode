@@ -37,7 +37,7 @@ export const Enslaved = {
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
-    if (Pelle.isDoomed) return;
+    if (!this.canModifyGameTimeStorage) return;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
     if (!Ra.unlocks.adjustableStoredTime.canBeApplied) {
@@ -45,20 +45,28 @@ export const Enslaved = {
     }
   },
   toggleStoreReal() {
-    if (Pelle.isDoomed) return;
+    if (!this.canModifyRealTimeStorage) return;
     player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;
     player.celestials.enslaved.isStoring = false;
   },
   toggleAutoStoreReal() {
-    if (Pelle.isDoomed) return;
+    if (!this.canModifyRealTimeStorage) return;
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
+  get canModifyGameTimeStorage() {
+    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused && !EternityChallenge(12).isRunning &&
+      !Enslaved.isRunning && !Laitela.isRunning;
+  },
+  get canModifyRealTimeStorage() {
+    return Enslaved.isUnlocked && !Pelle.isDoomed && player.celestials.enslaved.storedReal < this.storedRealTimeCap;
+  },
+  // We assume that the situations where you can't modify time storage settings (of either type) are exactly the cases
+  // where they have also been explicitly disabled via other game mechanics. This also reduces UI boilerplate code.
   get isStoringGameTime() {
-    return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused &&
-      !EternityChallenge(12).isRunning && !Enslaved.isRunning && !Laitela.isRunning;
+    return this.canModifyGameTimeStorage && player.celestials.enslaved.isStoring;
   },
   get isStoringRealTime() {
-    return Enslaved.isUnlocked && player.celestials.enslaved.isStoringReal;
+    return this.canModifyRealTimeStorage && player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
     return 0.7;
@@ -98,9 +106,7 @@ export const Enslaved = {
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
-    if (Pelle.isDoomed) return;
     if (!this.canRelease(autoRelease)) return;
-    if (EternityChallenge(12).isRunning) return;
     player.requirementChecks.reality.slowestBH = 1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {

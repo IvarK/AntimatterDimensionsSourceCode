@@ -46,6 +46,19 @@ export default {
     },
     isDoomed() {
       return Pelle.isDoomed;
+    },
+    glyphRespecStyle() {
+      if (this.respec) {
+        return {
+          color: "var(--color-reality-light)",
+          "background-color": "var(--color-reality)",
+          "border-color": "#094e0b",
+          cursor: "pointer",
+        };
+      }
+      return {
+        cursor: "pointer",
+      };
     }
   },
   created() {
@@ -162,7 +175,7 @@ export default {
     <div class="l-equipped-glyphs__buttons">
       <button
         class="l-glyph-equip-button c-reality-upgrade-btn"
-        :class="{'c-reality-upgrade-btn--bought': respec}"
+        :style="glyphRespecStyle"
         :ach-tooltip="respecTooltip"
         @click="toggleRespec"
       >

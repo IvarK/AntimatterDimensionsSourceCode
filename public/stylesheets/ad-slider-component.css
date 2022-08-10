@@ -89,7 +89,6 @@ SOFTWARE.
   position: absolute;
   top: 0;
   left: 0;
-  cursor: pointer;
 }
 
 .l-ad-slider__process {
@@ -101,10 +100,9 @@ SOFTWARE.
 .c-ad-slider__process {
   background-color: var(--color-slider-blue);
   border-radius: var(--var-border-radius, 15px);
-  cursor: pointer;
 }
 
-.l-ad-slider__wrap .ad-slider-process.ad-slider-process-draggable {
+.l-ad-slider__wrap .ad-slider-process-draggable {
   z-index: 3;
   cursor: pointer;
 }

@@ -139,7 +139,7 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-antimatter-dim-row l-dimension-single-row"
+    class="c-dimension-row c-antimatter-dim-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked }"
   >
     <GenericDimensionRowText

@@ -93,7 +93,7 @@ export default {
 </script>
 
 <template>
-  <div class="c-antimatter-dim-row c-antimatter-prestige-row">
+  <div class="c-dimension-row c-antimatter-dim-row c-antimatter-prestige-row">
     <div
       class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount l-text-wrapper"
     >

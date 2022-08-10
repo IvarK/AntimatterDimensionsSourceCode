@@ -2405,12 +2405,15 @@ br {
 
 /* #region c-antimatter-dim-row */
 
+.c-dimension-row {
+  align-items: center;
+  font-size: 1.6rem;
+  margin-top: 1rem;
+}
+
 .c-antimatter-dim-row {
   /* relative because floating text is 'position: absolute' */
   position: relative;
-  align-items: center;
-  font-size: 1.5rem;
-  margin-top: 1rem;
 }
 
 .c-antimatter-prestige-row {
@@ -2614,16 +2617,6 @@ br {
 
 /* #endregion c-infinity-dim-description__accent */
 
-/* #region c-infinity-dim-row */
-
-.c-infinity-dim-row {
-  align-items: center;
-  font-size: 1.6rem;
-  margin-top: 1rem;
-}
-
-/* #endregion c-infinity-dim-row */
-
 /* #endregion Infinity Dimensions */
 
 /* #region Time Dimensions */
@@ -2665,16 +2658,6 @@ br {
 }
 
 /* #endregion c-time-dim-description__accent */
-
-/* #region c-time-dim-row */
-
-.c-time-dim-row {
-  align-items: center;
-  font-size: 1.6rem;
-  margin-top: 1rem;
-}
-
-/* #endregion c-time-dim-row */
 
 /* #endregion Time Dimensions */
 
@@ -6398,7 +6381,8 @@ kbd {
   width: 35rem;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.4rem;
+  font-family: Typewriter;
   line-height: 1.5;
   color: black;
   background: var(--color-disabled);

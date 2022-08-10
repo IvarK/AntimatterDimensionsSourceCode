@@ -709,9 +709,7 @@ body.t-s9 {
   font-size: 2rem;
 }
 
-.c-antimatter-dim-row,
-.c-infinity-dim-row,
-.c-time-dim-row {
+.c-dimension-row {
   font-weight: bold;
   color: var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
@@ -726,18 +724,14 @@ body.t-s9 {
   align-content: center;
 }
 
-.c-antimatter-dim-row:nth-child(even) {
+.c-dimension-row:nth-child(even) {
   background-color: rgba(223, 80, 80, 30%);
 }
 
-.t-metro .c-antimatter-dim-row:nth-child(even),
-.t-inverted-metro .c-antimatter-dim-row:nth-child(even),
-.t-s8 .c-antimatter-dim-row:nth-child(even) {
+.t-metro .c-dimension-row:nth-child(even),
+.t-inverted-metro .c-dimension-row:nth-child(even),
+.t-s8 .c-dimension-row:nth-child(even) {
   background-color: rgba(33, 150, 243, 30%);
-}
-
-.c-antimatter-dim-row__multiplier {
-  font-size: 1.4rem;
 }
 
 .c-infinity-dim-description__accent {

@@ -55,7 +55,7 @@ export default {
         const combinedTree = new TimeStudyTree();
         combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
         combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.preset.studies), true);
-        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies);
+        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies, false);
 
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);

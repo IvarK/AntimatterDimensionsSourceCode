@@ -74,10 +74,10 @@ export class TimeStudyTree {
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // This method attempts to take the parameter array and purchase all the studies specified, using the current game
   // state to determine if they are affordable. Input array may be either an id array or a TimeStudyState array
-  static commitToGameState(studyArray) {
+  static commitToGameState(studyArray, auto = true) {
     for (const item of studyArray) {
       const study = typeof item === "number" ? TimeStudy(item) : item;
-      if (study && !study.isBought) study.purchase(true);
+      if (study && !study.isBought) study.purchase(auto);
     }
     GameCache.currentStudyTree.invalidate();
   }

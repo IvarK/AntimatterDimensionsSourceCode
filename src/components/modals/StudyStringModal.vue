@@ -146,7 +146,7 @@ export default {
       this.emitClose();
       // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
       // tree are only reachable if the current tree is already bought
-      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies);
+      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies, false);
     },
     savePreset() {
       if (this.inputIsValid) {

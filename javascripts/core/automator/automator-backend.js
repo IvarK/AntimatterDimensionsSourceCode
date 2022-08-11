@@ -619,6 +619,7 @@ export const AutomatorBackend = {
     this.stack.clear();
     this.state.mode = AUTOMATOR_MODE.PAUSE;
     this.hasJustCompleted = true;
+    AutomatorHighlighter.clearAllHighlightedLines();
   },
 
   pause() {

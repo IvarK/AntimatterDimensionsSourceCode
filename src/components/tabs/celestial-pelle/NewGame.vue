@@ -17,8 +17,8 @@ export default {
   },
   methods: {
     update() {
-      this.visible = GameEnd.endState > 13.75 && !GameEnd.removeAdditionalEnd;
-      this.opacity = (GameEnd.endState - 13.75) * 2;
+      this.visible = GameEnd.endState > 13 && !GameEnd.removeAdditionalEnd;
+      this.opacity = (GameEnd.endState - 13) * 2;
     },
     startNewGame() {
       NG.startNewGame();

@@ -30,13 +30,6 @@ export default {
     };
   },
   computed: {
-    tooltipContentClass() {
-      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
-      return {
-        "c-pelle-milestone-tooltip": true,
-        "c-pelle-milestone-tooltip--unlocked": hasMilestone
-      };
-    },
     tooltipArrowStyle() {
       return {
         borderTop: "0.55rem solid var(--color-pelle--base)"
@@ -103,7 +96,14 @@ export default {
       if (milestonesCloseTo.length) {
         this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
       }
-    }
+    },
+    tooltipContentClass() {
+      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
+      return {
+        "c-pelle-milestone-tooltip": true,
+        "c-pelle-milestone-tooltip--unlocked": hasMilestone
+      };
+    },
   }
 };
 </script>
@@ -163,7 +163,7 @@ export default {
     </div>
     <CustomizeableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
-      :tooltip-class="tooltipContentClass"
+      :tooltip-class="tooltipContentClass()"
       :tooltip-arrow-style="tooltipArrowStyle"
       :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
       content-class="o-pelle-rift-bar-milestone-hover-area"

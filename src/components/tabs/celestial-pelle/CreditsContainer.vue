@@ -43,7 +43,7 @@ export default {
   methods: {
     update() {
       this.rolling = GameEnd.endState > 4.5;
-      this.scroll = (GameEnd.endState - 4.5) * 48;
+      this.scroll = (GameEnd.endState - 4.5) * 53;
       if (this.audio) this.audio.volume = Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
     }
   }

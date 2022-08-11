@@ -141,7 +141,12 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
-    if (GameEnd.endState >= 4.5 && !GameEnd.removeAdditionalEnd) return;
+    if (GameEnd.endState >= 4 && !GameEnd.removeAdditionalEnd) return;
+    if (GameEnd.endState >= 2.5) {
+      // Fade-out starts at 2.5
+      GameUI.notify.error("There is nothing left to save");
+      return;
+    }
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();

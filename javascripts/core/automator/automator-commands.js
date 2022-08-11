@@ -223,8 +223,13 @@ export const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.BlackHole[0].startLine;
         if (!BlackHole(1).isUnlocked) {
-          V.addError(ctx.BlackHole[0], "Black Hole is not unlocked",
-            "Unlock the Black Hole in order to pause or unpause it");
+          if (Enslaved.isRunning || Pelle.isDisabled("blackhole")) {
+            V.addError(ctx.BlackHole[0], "Black Hole is disabled in your current Reality",
+              "Return to normal Reality conditions to use this command again");
+          } else {
+            V.addError(ctx.BlackHole[0], "Black Hole is not unlocked",
+              "Unlock the Black Hole in order to pause or unpause it");
+          }
           return false;
         }
         return true;

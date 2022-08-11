@@ -142,6 +142,16 @@ export const Enslaved = {
     player.celestials.enslaved.run = true;
     player.secretUnlocks.viewSecretTS = false;
     this.feltEternity = false;
+
+    // Re-validation needs to be done here because this code gets called after the automator attempts to start.
+    // This is a special case for Enslaved because it's one of the only two cases where a command becomes locked
+    // again (the other being Pelle entry, which just force-stops the automator entirely).
+    AutomatorData.recalculateErrors();
+    if (AutomatorBackend.state.mode === AUTOMATOR_MODE.RUN && AutomatorData.currentErrors().length) {
+      AutomatorBackend.stop();
+      GameUI.notify.error("This Reality forbids Black Holes! (Automator stopped)");
+    }
+
     this.quotes.startRun.show();
   },
   get isRunning() {

@@ -738,6 +738,9 @@ export function clearCelestialRuns() {
   if (Enslaved.isRunning) {
     player.celestials.enslaved.run = false;
     if (Tabs.current.isHidden || Tabs.current._currentSubtab.isHidden) Tab.celestials.enslaved.show();
+    // We specifically revalidate here and nowhere else because Enslaved changes the unlock state of the BLACK HOLE
+    // command, which changes the validity of existing scripts when entering/exiting
+    AutomatorData.recalculateErrors();
   }
   player.celestials.v.run = false;
   player.celestials.ra.run = false;

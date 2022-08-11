@@ -1,64 +1,57 @@
 <script>
+// This component is used for every instance of interval/bulk display; uses passed-in values, only defaulting to
+// autobuyer attributes if there isn't anything passed in
 export default {
   name: "AutobuyerIntervalLabel",
   props: {
     autobuyer: {
       type: Object,
-      required: true
-    },
-    showInterval: {
-      type: Boolean,
       required: false,
-      default: true
+      default: null
     },
-    showBulk: {
-      type: Boolean,
+    intervalIn: {
+      type: Number,
       required: false,
-      default: true
+      default: null
+    },
+    bulkIn: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
   data() {
     return {
       interval: 0,
       bulk: 0,
-      bulkUnlimited: false,
-      displayInterval: false,
+      isShowingBulk: false,
     };
   },
   computed: {
-    // Rounds UP to the nearest 0.01 so that eg. 0.103 doesn't display as 0.10, appearing maxed when it isn't
-    intervalDisplay() {
-      const sec = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
-      return format(Math.ceil(100 * sec) / 100, 2, 2);
+    intervalText() {
+      if (this.interval < player.options.updateRate) return "Instant";
+      return `${format(TimeSpan.fromMilliseconds(this.interval).totalSeconds, 2, 2)} seconds`;
     },
     bulkText() {
-      if (!this.bulkUnlimited && this.bulk === 0) return "";
-      return `Current bulk: ${this.bulkUnlimited ? "Unlimited" : formatX(this.bulk, 2)}`;
+      return `Current bulk: ${Number.isFinite(this.bulk) ? formatX(this.bulk, 2) : "Unlimited"}`;
     },
   },
   methods: {
     update() {
       const buyer = this.autobuyer;
-      this.interval = buyer.interval;
-      this.bulk = buyer.bulk;
-      this.bulkUnlimited = buyer.hasUnlimitedBulk;
-      // We should only be displaying the interval if the interval is greater than 0 and we are told to show it
-      this.displayInterval = this.showInterval && this.interval > 0;
+      this.interval = (this.intervalIn || buyer?.interval) ?? 0;
+      this.bulk = this.bulkIn ?? (buyer.hasUnlimitedBulk ? Infinity : buyer.bulk);
+      this.isShowingBulk = this.bulk !== 0 && Number.isFinite(this.bulk);
     }
   }
 };
 </script>
 
 <template>
-  <div
-    v-if="displayInterval || showBulk"
-    class="c-autobuyer-box__small-text"
-  >
-    <span v-if="displayInterval">
-      Current interval: {{ intervalDisplay }} seconds
-    </span>
-    <span v-if="showBulk">
-      <br v-if="displayInterval">
+  <div class="c-autobuyer-box__small-text">
+    Current interval: {{ intervalText }}
+    <span v-if="isShowingBulk">
+      <br>
       {{ bulkText }}
     </span>
   </div>

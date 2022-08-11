@@ -1,6 +1,7 @@
 <script>
 import SingleAutobuyerBox from "./SingleAutobuyerBox";
 
+// This component contains all of the "special" autobuyers which don't fit within existing groups (eg. RG, TT, etc.)
 export default {
   name: "MultipleSingleAutobuyersGroup",
   components: {

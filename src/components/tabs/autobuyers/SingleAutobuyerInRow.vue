@@ -3,6 +3,8 @@ import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
 import AutobuyerModeButton from "./AutobuyerModeButton";
 import AutobuyerSingleToggleLabel from "./AutobuyerSingleToggleLabel";
 
+// This component contains individual autobuyers within groups of related autobuyers (eg. an individual AD autobuyer
+// within the all-ADs-in-a-row layout)
 export default {
   name: "SingleAutobuyerInRow",
   components: {
@@ -15,11 +17,7 @@ export default {
       type: Object,
       required: true
     },
-    // You may notice that there are no autobuyers where showInterval or showBulk would apply -
-    // they are always the same. This is for future-proofing,
-    // also for the sunk costs fallacy after trying to fully integrate ADs into this system
-    showInterval: Boolean,
-    showBulk: Boolean,
+    showIndividual: Boolean,
     parentDisabled: Boolean,
   },
   data() {
@@ -55,9 +53,8 @@ export default {
     />
     {{ name }}
     <AutobuyerIntervalLabel
+      v-if="showIndividual"
       :autobuyer="autobuyer"
-      :show-interval="showInterval"
-      :show-bulk="showBulk"
     />
     <AutobuyerModeButton
       v-if="hasMode"

@@ -13,8 +13,13 @@ class BlackHolePowerAutobuyerState extends AutobuyerState {
     return Ra.unlocks.blackHolePowerAutobuyers.canBeApplied;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
-    BlackHole(this.id).powerUpgrade.purchase();
+    const bh = BlackHole(this.id);
+    while (Currency.realityMachines.gte(bh.powerUpgrade.cost)) bh.powerUpgrade.purchase();
   }
 
   static get entryCount() { return 2; }

@@ -82,7 +82,7 @@ export default {
   /* stylelint-disable-next-line unit-allowed-list */
   width: calc(100vw - 20vh);
   /* stylelint-disable-next-line unit-allowed-list */
-  height: calc(100vh - 20vh);
+  height: 80vh;
   margin: 0.5rem;
 }
 

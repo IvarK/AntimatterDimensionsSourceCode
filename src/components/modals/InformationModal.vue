@@ -54,7 +54,7 @@ export default {
         show-modal="credits"
       />
       <InformationModalButton
-        name="Game changelog"
+        name="Game Changelog"
         icon="fa-solid fa-file-lines"
         show-modal="changelog"
       />

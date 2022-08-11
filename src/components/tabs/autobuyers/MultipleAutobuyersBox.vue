@@ -3,6 +3,8 @@ import AutobuyerGroupToggleLabel from "./AutobuyerGroupToggleLabel";
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
 import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
 
+// This component is the container for an individual group of autobuyers, such as all of the AD autobuyers in the
+// single-row layout once they're all maxed and have the same parameters
 export default {
   name: "MultipleAutobuyersBox",
   components: {
@@ -20,8 +22,7 @@ export default {
     return {
       continuumActive: false,
       anyUnlocked: false,
-      displayIntervalAsGroup: false,
-      displayBulkAsGroup: false,
+      displayLabelAsGroup: false,
       parentActive: false,
     };
   },
@@ -50,7 +51,7 @@ export default {
     },
     showAutobuyers() {
       // Only display the Antimatter Dimension Autobuyers if the bulk is the same and there are any of them unlocked
-      if (this.isADBox) return this.anyUnlocked && this.displayBulkAsGroup && this.displayIntervalAsGroup;
+      if (this.isADBox) return this.anyUnlocked && this.displayLabelAsGroup;
       return this.anyUnlocked;
     },
   },
@@ -59,8 +60,7 @@ export default {
       this.continuumActive = Laitela.continuumActive;
       const type = this.type;
       this.anyUnlocked = type.anyUnlocked;
-      this.displayIntervalAsGroup = type.allMaxedInterval ?? true;
-      this.displayBulkAsGroup = type.allUnlimitedBulk ?? true;
+      this.displayLabelAsGroup = (type.allMaxedInterval ?? true) && (type.allUnlimitedBulk ?? true);
       this.parentActive = type.isActive;
     },
     toggleGroup() {
@@ -82,10 +82,10 @@ export default {
     />
     <div class="l-autobuyer-box__title">
       {{ name }}<br>Autobuyers
+      <!-- If we're showing as a group, then all attributes are the same and we can arbitrarily take the first one -->
       <AutobuyerIntervalLabel
+        v-if="displayLabelAsGroup"
         :autobuyer="autobuyers[0]"
-        :show-interval="displayIntervalAsGroup"
-        :show-bulk="displayBulkAsGroup"
       />
     </div>
     <div class="l-autobuyer-box__autobuyers">
@@ -97,8 +97,7 @@ export default {
           class="l-autobuyer-box__autobuyers-internal"
           :style="boxSize"
           :autobuyer="autobuyer"
-          :show-interval="!displayIntervalAsGroup"
-          :show-bulk="!displayBulkAsGroup"
+          :show-individual="!displayLabelAsGroup"
           :parent-disabled="!parentActive"
         />
         <br

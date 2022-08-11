@@ -13,8 +13,13 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
     return Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
-    RealityUpgrade(this.id).purchase();
+    const upg = RealityUpgrade(this.id);
+    while (Currency.realityMachines.gte(upg.cost)) upg.purchase();
   }
 
   static get entryCount() { return 5; }

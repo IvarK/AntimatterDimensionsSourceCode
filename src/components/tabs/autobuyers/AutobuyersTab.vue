@@ -36,6 +36,9 @@ export default {
     hasSeenGamespeedAlteringEffects() {
       const ec12 = EternityChallenge(12);
       return PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+    },
+    gameTickLength() {
+      return `${formatInt(player.options.updateRate)} ms`;
     }
   },
   methods: {
@@ -70,6 +73,8 @@ export default {
       <br>
       by anything which may alter how fast the game itself is running.
     </div>
+    <b>Autobuyers with no displayed bulk have unlimited bulk by default.</b>
+    <b>Autobuyers with "Instant" interval will trigger every game tick ({{ gameTickLength }}).</b>
     <RealityAutobuyerBox class="c-reality-pos" />
     <EternityAutobuyerBox class="c-eternity-pos" />
     <BigCrunchAutobuyerBox class="c-infinity-pos" />

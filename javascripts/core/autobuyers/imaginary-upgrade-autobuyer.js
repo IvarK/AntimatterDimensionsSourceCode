@@ -13,8 +13,13 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
     return ImaginaryUpgrade(20).canBeApplied;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
-    ImaginaryUpgrade(this.id).purchase();
+    const upg = ImaginaryUpgrade(this.id);
+    while (Currency.imaginaryMachines.gte(upg.cost)) upg.purchase();
   }
 
   static get entryCount() { return 10; }

@@ -18,7 +18,7 @@ export const GameEnd = {
   gameLoop(diff) {
     if (this.removeAdditionalEnd) {
       this.additionalEnd -= 0.12;
-      if (this.additionalEnd < 0) {
+      if (this.additionalEnd < 4) {
         this.additionalEnd = 0;
         this.removeAdditionalEnd = false;
       }
@@ -26,6 +26,8 @@ export const GameEnd = {
     if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {
       player.isGameEnd = true;
       this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
+      // If we don't cap this, it keeps accumulating the longer the player stays on the final New Game screen
+      if (this.additionalEnd >= 12.5) this.additionalEnd = 12.5;
     }
   }
 };

@@ -48,7 +48,7 @@ export default {
       return this.glyph.level;
     },
     effectiveLevel() {
-      return getAdjustedGlyphLevel(this.glyph, this.realityGlyphBoost);
+      return getAdjustedGlyphLevel(this.glyph, this.realityGlyphBoost, true);
     },
     isLevelCapped() {
       return this.effectiveLevel && this.effectiveLevel < this.level;

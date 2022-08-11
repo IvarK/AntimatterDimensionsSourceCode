@@ -57,6 +57,7 @@ export default {
           v-if="set[0]"
           :key="idx"
           :glyphs="set[1]"
+          :text="set[2]"
           :text-hidden="true"
         />
         {{ set[3] }}

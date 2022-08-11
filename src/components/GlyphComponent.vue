@@ -36,6 +36,11 @@ export default {
       required: false,
       default: 0
     },
+    isInventoryGlyph: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     isActiveGlyph: {
       type: Boolean,
       required: false,
@@ -284,7 +289,7 @@ export default {
         let adjustedLevel = this.isActiveGlyph
           ? getAdjustedGlyphLevel(this.glyph)
           : this.glyph.level + levelBoost;
-        if (Pelle.isDoomed) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
+        if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
         this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
       }
     },

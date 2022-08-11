@@ -77,24 +77,24 @@ GameDatabase.celestials.descriptions = [
       const highestActive = 8 - Laitela.difficultyTier;
       switch (highestActive) {
         case 0:
-          disabledDims = "Dimensions";
+          disabledDims = "all Dimensions";
           break;
         case 1:
-          disabledDims = "2nd or higher Dimensions";
+          disabledDims = "2nd and higher Dimensions";
           break;
         case 2:
-          disabledDims = "3rd or higher Dimensions";
+          disabledDims = "3rd and higher Dimensions";
           break;
         case 7:
           disabledDims = "8th Dimensions";
           break;
         default:
-          disabledDims = `${highestActive + 1}th or higher Dimensions`;
+          disabledDims = `${highestActive + 1}th and higher Dimensions`;
           break;
       }
       const disabledText = highestActive === 8
         ? ""
-        : `Production from all ${disabledDims} is disabled.`;
+        : `Production from ${disabledDims} is disabled.`;
 
       return `Infinity Point and Eternity Point gain are Dilated.
       Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes.

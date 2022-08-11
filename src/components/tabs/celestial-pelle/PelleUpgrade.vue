@@ -244,7 +244,7 @@ export default {
 
 .c-improved-effect--unavailable {
   font-weight: bold;
-  color: #bb0000;
+  color: #990000;
 }
 
 .s-base--metro .c-pelle-upgrade--unavailable {

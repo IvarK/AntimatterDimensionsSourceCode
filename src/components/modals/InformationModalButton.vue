@@ -15,10 +15,15 @@ export default {
       required: false,
       default: null
     },
+    showModal: {
+      type: String,
+      required: false,
+      default: null
+    },
   },
   methods: {
-    creditsModal() {
-      Modal.credits.show();
+    openAssociatedModal() {
+      Modal[this.showModal].show();
     }
   }
 };
@@ -30,7 +35,7 @@ export default {
     class="c-socials--icon__wrapper"
   >
     <a
-      v-if="name !== 'Credits'"
+      v-if="link"
       :href="link"
       target="_blank"
       class="c-socials--icon"
@@ -40,7 +45,7 @@ export default {
     <a
       v-else
       class="c-socials--icon"
-      @click="creditsModal"
+      @click="openAssociatedModal"
     >
       <i :class="icon" />
     </a>

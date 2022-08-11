@@ -34,11 +34,6 @@ export default {
         link="https://github.com/IvarK/IvarK.github.io"
       />
       <InformationModalButton
-        name="Game changelog"
-        icon="fa-solid fa-file-lines"
-        link="changelog.html"
-      />
-      <InformationModalButton
         name="r/AntimatterDimensions"
         icon="fa-brands fa-reddit-alien"
         link="https://www.reddit.com/r/AntimatterDimensions/"
@@ -56,6 +51,12 @@ export default {
       <InformationModalButton
         name="Credits"
         icon="fa-solid fa-users"
+        show-modal="credits"
+      />
+      <InformationModalButton
+        name="Game changelog"
+        icon="fa-solid fa-file-lines"
+        show-modal="changelog"
       />
     </div>
   </div>

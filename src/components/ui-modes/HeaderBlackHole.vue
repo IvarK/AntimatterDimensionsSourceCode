@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      hasBlackHoles: false,
+      canModifyBlackHoles: false,
       displaySingle: false,
       singleState: "",
       pauseText: "",
@@ -23,7 +23,6 @@ export default {
       storedTime: 0,
       canAutoRelease: false,
       isAutoReleasing: false,
-      canChangePulse: false,
     };
   },
   computed: {
@@ -45,7 +44,9 @@ export default {
   },
   methods: {
     update() {
-      this.hasBlackHoles = BlackHoles.areUnlocked;
+      // Technically not entirely accurate (you can still invert within Laitela), but it's cleaner to just hide it all
+      // because Laitela disables everything else and it technically still displays as pulsing even if it isn't
+      this.canModifyBlackHoles = BlackHoles.areUnlocked && !Laitela.isRunning;
       this.displaySingle = BlackHoles.arePermanent;
       if (this.displaySingle) this.singleState = BlackHole(1).displayState;
       this.pauseText = this.pauseButtonText();
@@ -54,7 +55,6 @@ export default {
       this.storedTime = player.celestials.enslaved.stored;
       this.canAutoRelease = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
-      this.canChangePulse = !Laitela.isRunning;
     },
     pauseButtonText() {
       if (BlackHoles.arePaused && player.blackHoleNegative < 1) return "Uninvert BH";
@@ -72,7 +72,7 @@ export default {
 </script>
 
 <template>
-  <span v-if="hasBlackHoles">
+  <span v-if="canModifyBlackHoles">
     <PrimaryButton
       class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
       onclick="BlackHoles.togglePause()"
@@ -106,7 +106,7 @@ export default {
     </span>
     <span v-if="canCharge">
       <PrimaryButton
-        class="o-enslaved-release-header-button c-primary-btn--black-hole-header"
+        class="o-discharge-btn c-primary-btn--black-hole-header"
         :class="{ 'o-small-discharge-text': hasLongText }"
         onclick="Enslaved.useStoredTime(false)"
       >
@@ -115,16 +115,10 @@ export default {
     </span>
     <span v-if="canAutoRelease">
       <PrimaryToggleButton
-        v-if="canChangePulse"
         v-model="isAutoReleasing"
         class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
         label="Pulse:"
       />
-      <!-- Odd formatting of this element is necessary to prevent extra spaces from being inserted -->
-      <span
-        v-else
-        class="o-primary-btn o-primary-btn--buy-max c-primary-btn--black-hole-header l-disabled-pulse"
-      >Pulse: Disabled</span>
     </span>
   </span>
 </template>
@@ -139,14 +133,13 @@ export default {
   margin: 0 0.8rem;
 }
 
+.o-discharge-btn {
+  width: 20rem;
+  font-size: 1rem;
+}
+
 .o-small-discharge-text {
   font-size: 1rem;
   line-height: 1rem;
-}
-
-.l-disabled-pulse {
-  cursor: pointer;
-  pointer-events: none;
-  background: var(--color-disabled);
 }
 </style>

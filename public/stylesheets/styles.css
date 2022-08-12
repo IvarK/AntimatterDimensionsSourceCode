@@ -2330,7 +2330,8 @@ br {
 }
 
 .u-fa-padding {
-  width: 1rem;
+  width: 1.2rem;
+  align-content: center;
 }
 
 /* #endregion Header */

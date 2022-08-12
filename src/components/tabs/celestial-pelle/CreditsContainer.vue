@@ -10,7 +10,8 @@ export default {
     return {
       rolling: false,
       scroll: 0,
-      audio: null
+      audio: null,
+      isMuted: false,
     };
   },
   computed: {
@@ -19,6 +20,15 @@ export default {
         bottom: `${this.scroll}rem`,
         display: this.rolling ? "block" : "none"
       };
+    },
+    muteStyle() {
+      return {
+        top: `calc(${this.scroll + 2}rem - 100vh)`,
+        display: this.rolling ? "block" : "none"
+      };
+    },
+    muteIconClass() {
+      return this.isMuted ? "fa-volume-xmark" : "fa-volume-high";
     },
     celestialDisplays() {
       return {
@@ -43,9 +53,9 @@ export default {
   methods: {
     update() {
       this.rolling = GameEnd.endState > 4.5;
-      this.scroll = (GameEnd.endState - 4.5) * 53;
-      if (this.audio) this.audio.volume = Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
-    }
+      this.scroll = (Math.clampMax(GameEnd.endState, 14) - 4.5) * 53;
+      if (this.audio) this.audio.volume = this.isMuted ? 0 : Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
+    },
   }
 };
 </script>
@@ -55,6 +65,12 @@ export default {
     class="c-credits-container"
     :style="creditStyles"
   >
+    <i
+      class="c-mute-button fa-solid"
+      :class="muteIconClass"
+      :style="muteStyle"
+      @click="isMuted = !isMuted"
+    />
     <div
       v-for="(celSymbol, celIndex) in celestialDisplays"
       :key="celIndex + '-end-credit-symbol-disp'"
@@ -67,6 +83,15 @@ export default {
 </template>
 
 <style scoped>
+.c-mute-button {
+  position: fixed;
+  left: 2rem;
+  font-size: 5rem;
+  opacity: 0.5;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 @keyframes a-teresa-credits {
   0% { transform: rotate(61deg); }
   10% { transform: rotate(322deg); }

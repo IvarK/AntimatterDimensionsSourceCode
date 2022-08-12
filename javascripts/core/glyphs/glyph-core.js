@@ -283,9 +283,10 @@ export const Glyphs = {
     // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
     this.removeNewFlag(glyph);
   },
-  unequipAll() {
+  unequipAll(forceToUnprotected = false) {
+    const targetRegion = forceToUnprotected ? false : player.options.respecIntoProtected;
     while (player.reality.glyphs.active.length) {
-      const freeIndex = this.findFreeIndex(player.options.respecIntoProtected);
+      const freeIndex = this.findFreeIndex(targetRegion);
       if (freeIndex < 0) break;
       const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;

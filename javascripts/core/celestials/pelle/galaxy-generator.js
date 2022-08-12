@@ -79,14 +79,11 @@ export const GalaxyGenerator = {
       }
       PelleRifts.all.forEach(x => x.checkMilestoneStates());
 
-      // Force-unequip glyphs when the player loses the respective milestone. There's the possibility they might
-      // have the respec option set to protected slots with all of them filled, in which case we also foricibly
-      // change the setting too in order to remove the glyph
+      // Force-unequip glyphs when the player loses the respective milestone. We call the respec option as normally
+      // except for one particular case - when we want to respec into protected slots but have no room to do so. In
+      // that case, we force-respec into the inventory instead
       if (!PelleRifts.vacuum.milestones[0].canBeApplied && Glyphs.active.filter(g => g).length > 0) {
-        if (Glyphs.findFreeIndex(player.options.respecIntoProtected) === -1) {
-          player.options.respecIntoProtected = !player.options.respecIntoProtected;
-        }
-        Glyphs.unequipAll();
+        Glyphs.unequipAll(player.options.respecIntoProtected && Glyphs.findFreeIndex(true) === -1);
         Glyphs.refreshActive();
       }
 
